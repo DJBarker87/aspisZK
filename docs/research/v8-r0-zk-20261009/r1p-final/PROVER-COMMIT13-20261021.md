@@ -146,9 +146,8 @@ and still pending. Whole material-builder transport remains open.
 
 ## Stage 4: actual material extraction and demonstrated obstruction
 
-After proving the scalar safety boundary, the extractor is run on the actual
-`build_mask_material_for_layout`, leaving only the actual m31/qm31 and
-balancing helper calls opaque. This is a compositional cut, not a change to
+After proving the scalar safety boundary, extraction targets the actual
+`build_mask_material_for_layout`, with an intended scalar/balancing call cut. This is a compositional cut, not a change to
 the production body. The exact Charon command and all source/tool hashes
 are retained. It uses `--release --jobs 4` and a copied, isolated Charon cache.
 
@@ -166,17 +165,137 @@ Compiler source: interp/InterpAbs.ml, line 191
 ```
 
 The stack reaches `InterpJoin.join_ctxs` / `convert_value_to_abstractions` at
-the material-builder loop join. This is a new concrete outer-translation
-obstruction after isolating the scalar/formatter cone. It is not a Lean
+the material-builder loop join. A subsequent LLBC declaration audit finds the
+v1 wildcard scalar-opacity pattern did not match: m31/qm31 bodies remained
+structured, while the balancing helpers were opaque. Therefore v1 is a
+diagnostic failure, not a failure of the intended scalar-cut cone. A v2
+command names both concrete scalar methods explicitly and is pending. Its
+source/configuration differs; this is not an unchanged rerun. It is not a Lean
 counterexample, a memory failure, or a certificate of the outer caller.
-The unchanged failing translation is not rerun and no cap is raised.
-The replacement deliverable is an owned, indexed material-loop reference,
+No resource cap is raised; no unchanged translation is rerun.
+If v2 confirms this join failure, the replacement deliverable is an owned, indexed material-loop reference,
 with per-iteration Kani equality for the shipped iterator/`?`/Vec update and
 Lean induction over that reference, then composition with the accepted
 scalar/window and balancing laws. Failed extraction is explicitly excluded.
 
+## Stage 5: source/D boundaries and focused replacement gates
+
+`state_only_entropy::seeds13::d_seed_before_first_scalar` executes the actual
+`derive_pool_v1_zero_factor_d` through validation, pool binding and inline D
+seed derivation. Its observer checks both complete hash frames with arbitrary
+answers. The first-scalar cut checks the exact D seed, zero counter/buffer,
+and word 8, then returns `MaskSampleExhausted`; the caller propagates that
+error after exactly two hash calls and one scalar call. It proves this prefix
+and error propagation, not the successful 1024-element D schedule.
+`d-seed-caller-v1` passes: exit 0, 15.344 s, peak RSS 692116 KiB,
+cgroup peak 722509824 bytes, zero swaps.
+
+The combined source-seed wrapper is not adopted. Its v1 generic stub syntax
+fails before verification (`&mut N` versus `&mut impl StateOnlyMaskNonceStore`),
+fixed literally in v2. V2 reaches the 600-second gate (exit 124, 600.002 s,
+cgroup peak 3748016128 bytes, zero swaps). The reported GNU-time peak 15832
+KiB is the surviving parent, not the already-killed verifier child's peak;
+the cgroup peak is authoritative. Four new branch targets replace it rather
+than rerunning the combined query. `source-seed-nonce-rejected-v3` passes
+(exit 0, 10.751 s, 675100 KiB, cgroup peak 682803200 bytes, zero swaps);
+`source-seed-material-error-v3` passes (exit 0, 12.512 s, 675432 KiB,
+cgroup peak 682377216 bytes, zero swaps). Both check no source-seed hash is
+performed and the actual caller returns an error. The success branch still
+reaches the 600-second gate (exit 124, 600.003 s, cgroup peak 3646308352 bytes,
+zero swaps; surviving-parent GNU peak 15840 KiB). It remains excluded. The
+unconsumed-material branch is pending. A separate literal inline expression
+check is prepared to distinguish byte framing from the unproved complete
+successful wrapper. No combined or success check is rerun unchanged.
+
+The combined source scalar also reaches the 600-second gate. It is replaced
+by nine distinct fixed buffered-word positions (0..8), with no larger cap and
+the symbolic first-success partition retained. The first replacement,
+`source-word8-v2`, passes (exit 0, 112.965 s, 1498564 KiB, zero swaps).
+The remaining eight targets are serialised to keep verifier memory bounded;
+positions 0 through 3 have also passed at this stage.
+No full source-scalar certificate is claimed until all nine pass.
+`masked_partition` removes the mathematical candidate-bound premise using
+`Nat.and_le_right`; J8370 passes all three audits with `[propext, Quot.sound]`:
+exit 0, 1.60 s, 2559336 KiB, zero swaps.
+
+## Additional outer-prefix family check
+
+`transcript::outer13::public_digest_and_binding_prefix` uses the literal two
+secure-API statements between public serialization and
+`prove_masked_with_attempt`. Only `attempt.mask_nonce()` is replaced with
+an arbitrary nonce argument, making this an explicit source prefix cut.
+The observer checks the public-digest call's exact byte slice, the outer
+private-attempt domain, same public slice, actual S2 tag and complete encoded
+context. It checks both arbitrary returned digests and retained context
+fields, with exactly two calls. `outer-binding-prefix-v1` passes: exit 0,
+5.079 s, 390188 KiB, cgroup peak 350265344 bytes, zero swaps.
+This has a public-byte-length bound 4096; the concrete serializer bound and
+public-field image must still be instantiated. No whole secure API or
+adaptive shared-oracle theorem follows from this cut alone.
+
 ## Remaining stages
 
-Formatter/panic unreachability, concrete outer transport and all-family shared
-oracle coverage remain to be investigated. No shipped Rust, key, peer-owned
+The stream conversion formatter paths are checked. Concrete outer transport
+and all-family shared-oracle coverage remain open, with the diagnostic material-loop
+translation failure above still requiring the corrected-cut check. No shipped Rust, key, peer-owned
 source-identification or runtime-join file is changed.
+
+## Complete specialized before/after (verbatim)
+
+Only the builder binder is deleted between these two versions. The fixed
+input and proved builder contract are defined above both versions in
+`ProverCommitAdmittedEndpoint.lean`. The earlier arbitrary-input endpoint
+is unchanged and has the part-12 counterexample.
+
+Before:
+
+```lean
+theorem privacy_headline_admitted
+    (builder_premises : BuilderPremises h B x)
+    (observer_program : (source).Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+    (R_wire_builder_checker_D75_retry : ∀ (adv : (source).Adversary) (w : (R0Z.ZkStatement.HonestProver.Instance h)),
+      (R0Z.ZkStatement.HonestProver.public h w) = x.1 → ModelExecutionJoin
+        (realTest h B outputs source adv x w)
+        (realTest h B outputs (fsR1P (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) 8 eight_pos
+          (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w) (QueryScanRealLazyBound.realBad (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) 8 h B outputs x w))
+    (G_sim_R_wire : ∀ adv : (source).Adversary, ModelExecutionJoin
+      (idealTestS source adv x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x))
+      (idealTestS (fsR1P (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) 8 eight_pos (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h'))
+        (RomObserverBin.observerMap source observer_program adv) x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)) (QueryScanIdealHistory.selectedBad)) :
+    ZK_FSS h B outputs source x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1)) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100 := by
+  exact PrivacyR1HeadlineOwnedClosed.privacy_headline_owned_closed template input outputs x
+    builder_premises observer_program
+    R_wire_builder_checker_D75_retry G_sim_R_wire
+
+```
+
+After:
+
+```lean
+theorem privacy_headline_admitted
+    (observer_program : (source).Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+    (R_wire_builder_checker_D75_retry : ∀ (adv : (source).Adversary) (w : (R0Z.ZkStatement.HonestProver.Instance h)),
+      (R0Z.ZkStatement.HonestProver.public h w) = x.1 → ModelExecutionJoin
+        (realTest h B outputs source adv x w)
+        (realTest h B outputs (fsR1P (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) 8 eight_pos
+          (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w) (QueryScanRealLazyBound.realBad (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) 8 h B outputs x w))
+    (G_sim_R_wire : ∀ adv : (source).Adversary, ModelExecutionJoin
+      (idealTestS source adv x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x))
+      (idealTestS (fsR1P (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) 8 eight_pos (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h'))
+        (RomObserverBin.observerMap source observer_program adv) x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)) (QueryScanIdealHistory.selectedBad)) :
+    ZK_FSS h B outputs source x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1)) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100 := by
+  exact PrivacyR1HeadlineOwnedClosed.privacy_headline_owned_closed template input outputs x
+    builder_premises observer_program
+    R_wire_builder_checker_D75_retry G_sim_R_wire
+
+```

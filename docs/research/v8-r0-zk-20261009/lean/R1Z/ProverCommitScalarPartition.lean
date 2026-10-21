@@ -35,6 +35,15 @@ theorem sixteen_partition (c : Nat → Nat)
       (stop < 16 → c stop < 2147483647) :=
   first_accept_partition 16 2147483647 c bounded
 
+/-- The 31-bit mask supplies the bound, with no candidate-range premise. -/
+theorem masked_partition (raw : Nat → Nat) :
+    ∃ stop, stop ≤ 16 ∧
+      (∀ i, i < stop → raw i &&& 2147483647 = 2147483647) ∧
+      (stop < 16 → raw stop &&& 2147483647 < 2147483647) :=
+  sixteen_partition (fun i => raw i &&& 2147483647)
+    (fun _ _ => Nat.and_le_right)
+
+#print axioms masked_partition
 #print axioms first_accept_partition
 #print axioms sixteen_partition
 end R1Z.ProverCommitScalarPartition

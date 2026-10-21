@@ -146,3 +146,45 @@ mod query13 {
         }
     }
 }
+
+#[cfg(kani)]
+mod outer13 {
+    use super::*;
+    use aspis_core::state_only_hiding::StateOnlyHidingContext;
+    static mut CALLS:usize=0;
+    static mut PUBLIC:*const u8=core::ptr::null();
+    static mut LENGTH:usize=0;
+    static mut NONCE:[u8;32]=[0;32];
+    static mut ANSWERS:[[u8;32];2]=[[0;32];2];
+    fn observer(parts:&[&[u8]])->[u8;32] {
+        unsafe {
+            let call=CALLS;CALLS+=1;assert!(call<2);
+            if call==0 {
+                assert_eq!(parts.len(),1);assert_eq!(parts[0].as_ptr(),PUBLIC);assert_eq!(parts[0].len(),LENGTH);
+            } else {
+                assert_eq!(parts.len(),4);assert_eq!(parts[0],b"UNPROVED:R1:P3:PRIVATE-ATTEMPT");
+                assert_eq!(parts[1].as_ptr(),PUBLIC);assert_eq!(parts[1].len(),LENGTH);
+                assert_eq!(parts[2],&[Variant::S2.tag()]);
+                let expected=StateOnlyHidingContext::pool_v1_pair_forest_v1(ANSWERS[0],NONCE);
+                assert_eq!(parts[3],&expected.encode());
+            }
+            ANSWERS[call]
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(170)]
+    fn public_digest_and_binding_prefix() {
+        let backing:[u8;4096]=kani::any();
+        let len:usize=kani::any();kani::assume(len<=4096);
+        let public_bytes=&backing[..len];let mask_nonce:[u8;32]=kani::any();
+        let variant=Variant::S2;let hash:aspis_core::HashFn=observer;
+        unsafe{CALLS=0;PUBLIC=backing.as_ptr();LENGTH=len;NONCE=mask_nonce;ANSWERS=kani::any();}
+    let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),mask_nonce);
+    let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
+
+        unsafe {
+            assert_eq!(CALLS,2);assert_eq!(binding,ANSWERS[1]);
+            assert_eq!(context.statement_digest,ANSWERS[0]);assert_eq!(context.mask_nonce,NONCE);
+        }
+    }
+}

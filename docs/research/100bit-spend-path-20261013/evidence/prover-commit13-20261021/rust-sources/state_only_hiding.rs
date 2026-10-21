@@ -1826,7 +1826,7 @@ mod prover_commit_four8 {
 #[cfg(kani)]
 mod safety13 {
     use super::*;
-    fn arbitrary_hash(_: &[&[u8]]) -> [u8; 32] { kani::any() }
+
     // A reachable formatter stub fails verification before diverging.
     fn formatter_never(_: &core::array::TryFromSliceError,
         _: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -1834,14 +1834,16 @@ mod safety13 {
         loop {}
     }
     #[kani::proof]
-    #[kani::unwind(34)]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, crate::prover_commit_oracle::expander_query)]
     fn mask_next_no_panic() {
         let seed: [u8;32] = kani::any();
         let counter: u64 = kani::any();
         let word: usize = kani::any();
         kani::assume(word <= 8);
         let block: [u8;32] = kani::any();
-        let mut actual = SeedExpander {hash: arbitrary_hash, seed:seed,counter,block,word};
+        crate::prover_commit_oracle::reset_expander(b"aspis:state-only:private-mask-expand:v1", seed, counter);
+        let mut actual = SeedExpander {hash: crate::HOST_HASH, seed:seed,counter,block,word};
         let raw = actual.next_word();
         assert!(actual.word >= 1 && actual.word <= 8);
         assert_eq!(actual.counter, if word == 8 {counter.wrapping_add(1)} else {counter});
@@ -1850,7 +1852,64 @@ mod safety13 {
         assert_eq!(raw, u32::from_le_bytes([actual.block[at],actual.block[at+1],actual.block[at+2],actual.block[at+3]]));
     }
     #[kani::proof]
-    #[kani::unwind(34)]
+    #[kani::unwind(84)]
     #[kani::stub(<core::array::TryFromSliceError as core::fmt::Debug>::fmt, formatter_never)]
+    #[kani::stub(crate::host_hashv, crate::prover_commit_oracle::expander_query)]
     fn mask_next_no_formatter() { mask_next_no_panic(); }
+}
+
+#[cfg(kani)]
+mod scalar13 {
+    use super::*;
+    use crate::prover_commit_oracle as rom;
+    fn candidate(block: [u8;32], word: usize, counter: u64, i: usize) -> u32 {
+        let linear = word + i;
+        let bytes = if linear < 8 {block}
+            else {rom::expander_block(counter.wrapping_add((linear / 8 - 1) as u64))};
+        let offset = 4 * (linear % 8);
+        u32::from_le_bytes([bytes[offset],bytes[offset+1],bytes[offset+2],bytes[offset+3]]) & 0x7fff_ffff
+    }
+    fn formatter_never(_: &core::array::TryFromSliceError,
+        _: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        kani::assert(false, "scalar slice formatter is unreachable"); loop {}
+    }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub(<core::array::TryFromSliceError as core::fmt::Debug>::fmt, formatter_never)]
+    fn mask_scalar_partition() {
+        let seed: [u8;32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8;32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        let stop: usize = kani::any();
+        kani::assume(stop <= 16);
+        rom::reset_expander(b"aspis:state-only:private-mask-expand:v1", seed, counter);
+        for i in 0..16 {
+            let c = candidate(block,word,counter,i);
+            if i < stop { kani::assume(c == aspis_core::field::P); }
+            if i == stop { kani::assume(c < aspis_core::field::P); }
+        }
+        let consumed = if stop < 16 {stop+1} else {16};
+        let linear = word + consumed - 1;
+        let reloads = linear / 8;
+        let expected_block = if reloads == 0 {block}
+            else {rom::expander_block(counter.wrapping_add((reloads - 1) as u64))};
+        let expected = if stop < 16 {Ok(aspis_core::field::M31(candidate(block,word,counter,stop)))}
+            else {Err(StateOnlyMaskBuildError::MaskSampleExhausted)};
+        let mut actual = SeedExpander {hash: crate::HOST_HASH,seed:seed,counter,block,word};
+        let result = actual.m31();
+        assert_eq!(result,expected);
+        assert_eq!(actual.seed,seed);
+        assert_eq!(actual.counter,counter.wrapping_add(reloads as u64));
+        assert_eq!(actual.block,expected_block);
+        assert_eq!(actual.word,linear % 8 + 1);
+    }
+}
+
+#[cfg(kani)]
+pub(crate) fn empty_material13(mask_nonce:[u8;32]) -> StateOnlyMaskMaterial {
+    StateOnlyMaskMaterial {c1:Vec::new(),mask_only_c1:core::array::from_fn(|_|Vec::new()),
+        g:Vec::new(),h1_padding:Vec::new(),mask_nonce}
 }

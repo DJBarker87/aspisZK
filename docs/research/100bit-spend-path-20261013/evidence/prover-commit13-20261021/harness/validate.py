@@ -38,7 +38,7 @@ for name in accepted_rust:
  assert not unresolved,(name,unresolved)
  checks.append(dict(name=name,status='accepted',source_count=len(x['source_hashes']),wall_seconds=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],cgroup_peak=r['cgroup_memory_peak_bytes']))
 lean_rows={r["attempt"]:r for p in (E/"lean").glob("attempts-*.jsonl") for line in p.read_text().splitlines() if (r:=json.loads(line))}
-for attempt in [8365,8367,8368,8369]:
+for attempt in [8365,8367,8368,8369,8370]:
  x=lean_rows[attempt]
  assert x['exit_status']==0 and x['swaps']==0,attempt
  for line in x['axioms']:

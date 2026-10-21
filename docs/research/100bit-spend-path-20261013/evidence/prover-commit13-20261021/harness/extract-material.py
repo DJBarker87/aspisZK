@@ -24,13 +24,13 @@ def run(name,cmd):
  rc=subprocess.run(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'harness/capped.py'),str(H/'receipts'/name),'Optimized compilation and owned reference translation; no dense arithmetic','--',*cmd]).returncode
  if rc:raise SystemExit(rc)
 (H/'extraction').mkdir(exist_ok=True)
-run('material-charon-v1',[CHARON,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--start-from','crate::state_only_hiding::build_mask_material_for_layout',
- '--opaque','crate::state_only_hiding::{_}::m31',
- '--opaque','crate::state_only_hiding::{_}::qm31',
+run('material-charon-v2',[CHARON,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--start-from','crate::state_only_hiding::build_mask_material_for_layout',
+ '--opaque','aspis_prover::state_only_hiding::{aspis_prover::state_only_hiding::SeedExpander}::m31',
+ '--opaque','aspis_prover::state_only_hiding::{aspis_prover::state_only_hiding::SeedExpander}::qm31',
  '--opaque','crate::state_only_hiding::balance_m31_copy_inactive',
  '--opaque','crate::state_only_hiding::balance_qm31_copy_inactive',
  '--include','core::result::Result','--include','aspis_core::field::M31','--include','aspis_core::field::CM31','--include','aspis_core::field::QM31','--include','aspis_core::state_only_hiding::StateOnlyHidingContext','--include','aspis_core::state_only_hiding::{_}::encode','--include','aspis_statement::TraceCell',
- '--opaque','aspis_core','--opaque','aspis_statement','--dest-file',str(H/'extraction/ProverMaterial13.llbc'),'--','--manifest-path',str(H/'src/crates/aspis-prover/Cargo.toml'),'--locked','--offline','--release','--lib','--features','r0','--jobs','4'])
-p=H/'extraction/ProverMaterial13.llbc';data=json.loads(p.read_text());(H/'material-llbc-v1.json').write_text(json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),size_bytes=p.stat().st_size,has_errors=data.get('has_errors')),indent=2)+'\n')
+ '--opaque','aspis_core','--opaque','aspis_statement','--dest-file',str(H/'extraction/ProverMaterial13-v2.llbc'),'--','--manifest-path',str(H/'src/crates/aspis-prover/Cargo.toml'),'--locked','--offline','--release','--lib','--features','r0','--jobs','4'])
+p=H/'extraction/ProverMaterial13-v2.llbc';data=json.loads(p.read_text());(H/'material-llbc-v2.json').write_text(json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),size_bytes=p.stat().st_size,has_errors=data.get('has_errors')),indent=2)+'\n')
 assert data['has_errors'] is False
-run('material-aeneas-v1',[AENEAS,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR1ProverMaterial13','-dest',str(H/'extraction/generated-v1'),'-subdir','AspisR1ProverMaterial13','-split-files','-emit-json',str(p)])
+run('material-aeneas-v2',[AENEAS,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR1ProverMaterial13','-dest',str(H/'extraction/generated-v2'),'-subdir','AspisR1ProverMaterial13','-split-files','-emit-json',str(p)])
