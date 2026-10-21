@@ -1,0 +1,103 @@
+import Aeneas
+
+/-! R22 totality corollary. This small operational tree represents a finite
+successful extracted execution, not arbitrary Rust syntax. Each primitive
+carries its checked/wrapping success law. Extraction, source identity, complete
+primitive coverage and preservation of branch/control behavior are P6 joins.
+There is no catch constructor: a checked failure cannot be recovered as ok.
+An explicit Rust checked_* Option, wrapping_* operation or truncating cast
+must instead be modelled with its own actual semantics. -/
+set_option autoImplicit false
+namespace AspisR1.R22TotalCheckedComposition
+open Aeneas Aeneas.Std Result
+
+structure Primitive (α : Type) where
+  checked : Result α
+  wrapping : α
+  safe : Prop
+  success : ∀ v, checked = ok v → safe ∧ wrapping = v
+
+inductive Code (α : Type) where
+  | ret (value : α)
+  | fail (error : Error)
+  | diverge
+  | step {β : Type} (op : Primitive β) (next : β → Code α)
+
+def checked {α : Type} : Code α → Result α
+  | .ret v => ok v
+  | .fail e => fail e
+  | .diverge => div
+  | .step op next => do
+      let v ← op.checked
+      checked (next v)
+
+def wrapping {α : Type} : Code α → Result α
+  | .ret v => ok v
+  | .fail e => fail e
+  | .diverge => div
+  | .step op next => wrapping (next op.wrapping)
+
+/-- Safety quantifies only over operations actually executed, including every
+iteration of an unrolled successful loop, not untaken branches. -/
+def NoOverflow {α : Type} : Code α → Prop
+  | .ret _ => True
+  | .fail _ => True
+  | .diverge => True
+  | .step op next => op.safe ∧ NoOverflow (next op.wrapping)
+
+/-- General semantic corollary; its hypotheses are primitive success laws,
+not a whole-cone checked/wrapping equivalence assumption. -/
+theorem success_noOverflow_agrees {α : Type} (c : Code α) (v : α)
+    (h : checked c = ok v) : NoOverflow c ∧ wrapping c = ok v := by
+  induction c with
+  | ret a => exact ⟨True.intro, h⟩
+  | fail e => cases h
+  | diverge => cases h
+  | @step β op next ih =>
+      cases ho : op.checked with
+      | fail e => simp only [checked, ho, bind_tc_fail] at h; cases h
+      | div => simp only [checked, ho, bind_tc_div] at h; cases h
+      | ok b =>
+          have hs := op.success b ho
+          have hn : checked (next b) = ok v := by
+            simpa only [checked, ho, bind_tc_ok] using h
+          have hi := ih b hn
+          simpa only [NoOverflow, wrapping, hs.2] using And.intro hs.1 hi
+
+theorem total_refinement_R22 {ι α : Type} (code : ι → Code α) (model : ι → α)
+    (total : ∀ x, checked (code x) = ok (model x)) :
+    ∀ x, NoOverflow (code x) ∧ wrapping (code x) = ok (model x) := by
+  intro x
+  exact success_noOverflow_agrees _ _ (total x)
+
+/-- The accepted path version requires a checked-execution/caller-domain join.
+Acceptance of a wrapping execution alone is deliberately insufficient. -/
+theorem reached_refinement_R22 {ι α : Type} (code : ι → Code α) (domain : ι → Prop)
+    (total : ∀ x, domain x → ∃ v, checked (code x) = ok v) :
+    ∀ x, domain x → NoOverflow (code x) ∧ wrapping (code x) = checked (code x) := by
+  intro x hx
+  obtain ⟨v, hv⟩ := total x hx
+  obtain ⟨hs, hw⟩ := success_noOverflow_agrees (code x) v hv
+  exact ⟨hs, hw.trans hv.symm⟩
+
+/-- A reusable interface for concrete extracted functions. Producing this
+interface requires the P6 operational interpretation, never totality alone. -/
+structure Translation {ι α : Type} (f : ι → Result α) where
+  code : ι → Code α
+  source : ∀ x, checked (code x) = f x
+
+theorem extracted_total_R22 {ι α : Type} (f : ι → Result α)
+    (translation : Translation f) (total : ∀ x, ∃ v, f x = ok v) :
+    ∀ x, NoOverflow (translation.code x) ∧
+      wrapping (translation.code x) = f x := by
+  intro x
+  obtain ⟨v, hv⟩ := total x
+  have hc := (translation.source x).trans hv
+  obtain ⟨hs, hw⟩ := success_noOverflow_agrees _ _ hc
+  exact ⟨hs, hw.trans hv.symm⟩
+
+#print axioms success_noOverflow_agrees
+#print axioms total_refinement_R22
+#print axioms reached_refinement_R22
+#print axioms extracted_total_R22
+end AspisR1.R22TotalCheckedComposition
