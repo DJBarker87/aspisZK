@@ -1,0 +1,122 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortOpeningRewordC6.lean:32:9: error: unsolved goals
+case none
+w : CanonicalCutEnrichedTranscript.Words
+rs : TranscriptRounds
+v : LiteralOpeningView.View
+c1 : LiteralTranscript.c1At rs = some v.c1
+c2 : LiteralTranscript.c2At rs = some v.c2
+sem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) = some v.semantic
+word : v.word = LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK v.c1 v.c2
+length : (List.take 25 rs).length = 25
+semantic : List (R0P.Mask.SemMsgZ LiteralSemanticPrefix.E × LiteralSemanticPrefix.E)
+hsemantic : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (reword w (List.take 25 rs)) = some semantic
+same : scalarPairs semantic = scalarPairs v.semantic
+cs : List.map Prod.snd semantic = List.map Prod.snd v.semantic
+first : LiteralTranscript.c1At (reword w rs) = some w.c1
+second : LiteralTranscript.c2At (reword w rs) = some w.c2
+hz0 : LiteralChallengeRead.ordinaryAt rs 25 = none
+read :
+  (match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) with
+    | none => none
+    | some semantic => none) =
+    some v
+⊢ ∃ v',
+    LiteralOpeningView.read (reword w rs) = some v' ∧
+      scalarPairs v'.semantic = scalarPairs v.semantic ∧
+        v'.functionals = v.functionals ∧
+          v'.baseFunctional = v.baseFunctional ∧
+            v'.circlePoints = v.circlePoints ∧
+              v'.word = LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK w.c1 w.c2
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortOpeningRewordC6.lean:35:11: error: unsolved goals
+case some.none
+w : CanonicalCutEnrichedTranscript.Words
+rs : TranscriptRounds
+v : LiteralOpeningView.View
+c1 : LiteralTranscript.c1At rs = some v.c1
+c2 : LiteralTranscript.c2At rs = some v.c2
+sem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) = some v.semantic
+word : v.word = LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK v.c1 v.c2
+length : (List.take 25 rs).length = 25
+semantic : List (R0P.Mask.SemMsgZ LiteralSemanticPrefix.E × LiteralSemanticPrefix.E)
+hsemantic : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (reword w (List.take 25 rs)) = some semantic
+same : scalarPairs semantic = scalarPairs v.semantic
+cs : List.map Prod.snd semantic = List.map Prod.snd v.semantic
+first : LiteralTranscript.c1At (reword w rs) = some w.c1
+second : LiteralTranscript.c2At (reword w rs) = some w.c2
+z0 : LiteralChallengeRead.E
+hz0 : LiteralChallengeRead.ordinaryAt rs 25 = some z0
+hz1 : LiteralChallengeRead.ordinaryAt rs 26 = none
+read :
+  (match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) with
+    | none => none
+    | some semantic => none) =
+    some v
+⊢ ∃ v',
+    LiteralOpeningView.read (reword w rs) = some v' ∧
+      scalarPairs v'.semantic = scalarPairs v.semantic ∧
+        v'.functionals = v.functionals ∧
+          v'.baseFunctional = v.baseFunctional ∧
+            v'.circlePoints = v.circlePoints ∧
+              v'.word = LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK w.c1 w.c2
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortOpeningRewordC6.lean:38:62: error: Application type mismatch: The argument
+  read
+has type
+  (match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) with
+    | none => none
+    | some semantic =>
+      pure
+        { c1 := v.c1, c2 := v.c2,
+          word := LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK v.c1 v.c2,
+          semantic := semantic, semantic_length := ⋯, challenge25 := z0, challenge26 := z1,
+          circlePoints := fun i =>
+            if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+            else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+          functionals :=
+            SelectedOpeningFunctionals.functionals (List.map Prod.snd semantic) fun i =>
+              if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+              else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+          baseFunctional :=
+            SelectedOpeningFunctionals.rawBase (List.map Prod.snd semantic) fun i =>
+              if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+              else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1) }) =
+    some v
+but is expected to have type
+  ?m.223 = ?m.224
+in the application
+  congrArg LiteralOpeningView.View.functionals read
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortOpeningRewordC6.lean:30:50: warning: This simp argument is unused:
+  sem
+
+Hint: Omit it from the simp argument list.
+  simp only [Option.bind_eq_bind, ̲Option.bind_some,̵s̵e̵m̵] at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortOpeningRewordC6.lean:32:44: warning: This simp argument is unused:
+  reduceCtorEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵z̵0̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵]̵[̲h̲z̲0̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲n̲o̲n̲e̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortOpeningRewordC6.lean:35:67: warning: This simp argument is unused:
+  reduceCtorEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵z̵0̵,̵h̵z̵1̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵]̵[̲h̲z̲0̲,̲ ̲h̲z̲1̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲n̲o̲n̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortOpeningRewordC6.lean:37:25: warning: This simp argument is unused:
+  Option.bind_eq_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵z̵0̵,̵h̵z̵1̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵e̵q̵_̵b̵i̵n̵d̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵]̵[̲h̲z̲0̲,̲ ̲h̲z̲1̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲s̲o̲m̲e̲.̲i̲n̲j̲E̲q̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortOpeningRewordC6.lean:37:62: warning: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵z̵0̵,̵h̵z̵1̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵e̵q̵_̵b̵i̵n̵d̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵]̵[̲h̲z̲0̲,̲ ̲h̲z̲1̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲e̲q̲_̲b̲i̲n̲d̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.OraclePortOpeningRewordC6.opening' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
