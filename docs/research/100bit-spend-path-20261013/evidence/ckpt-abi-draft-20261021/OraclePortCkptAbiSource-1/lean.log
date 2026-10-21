@@ -1,0 +1,30 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiSource.lean:121:2: error: Tactic `subst` failed: did not find equation for eliminating 'b0'
+
+ops : ResumeOps
+ck : Slice U8
+entry : Entry ops ck
+unwrap : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError → Result (Std.Array U8 32#usize)
+unwrap_ok : ∀ (b : Std.Array U8 32#usize), unwrap (core.result.Result.Ok b) = ok b
+raw_adoption : ∀ (r : verifier.Reader), ops.raw 32#usize r = verifier.Reader.rawWithUnwrap 32#usize unwrap r
+length : (↑ck).length = 1768
+b0 : Std.Array U8 32#usize
+r0 : verifier.Reader
+call0 : verifier.Reader.rawWithUnwrap 32#usize unwrap { bytes := ck, «at» := 80#usize } = ok (b0, r0)
+bytes0 :
+  ↑b0 = List.take (↑32#usize) (List.drop ↑{ bytes := ck, «at» := 80#usize }.at ↑{ bytes := ck, «at» := 80#usize }.bytes)
+cursor0 : ↑r0.at = ↑{ bytes := ck, «at» := 80#usize }.at + ↑32#usize
+backing0 : r0.bytes = { bytes := ck, «at» := 80#usize }.bytes
+eq0 : ok (b0, r0) = ok (entry.state, entry.r0)
+pair0 : (b0, r0) = (entry.state, entry.r0)
+b0eq : (b0, r0).1 = (entry.state, entry.r0).1
+r0eq : (b0, r0).2 = (entry.state, entry.r0).2
+⊢ ↑entry.state = List.take 32 (List.drop 80 ↑ck) ∧
+    ↑entry.root0 = List.take 32 (List.drop 112 ↑ck) ∧
+      ↑entry.root1 = List.take 32 (List.drop 144 ↑ck) ∧
+        entry.r0.bytes = ck ∧
+          entry.r1.bytes = ck ∧ entry.r2.bytes = ck ∧ ↑entry.r0.at = 112 ∧ ↑entry.r1.at = 144 ∧ ↑entry.r2.at = 176
+'_private.OraclePortCkptAbiSource.0.AspisR1.OraclePortCkptAbiSource.resume_bind_success' depends on axioms: [propext]
+'_private.OraclePortCkptAbiSource.0.AspisR1.OraclePortCkptAbiSource.checkpoint_guard' does not depend on any axioms
+'_private.OraclePortCkptAbiSource.0.AspisR1.OraclePortCkptAbiSource.checkpoint_guard_prop' does not depend on any axioms
+'AspisR1.OraclePortCkptAbiSource.successful_entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbiSource.entry_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

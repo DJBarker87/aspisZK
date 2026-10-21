@@ -30,7 +30,7 @@ def lean_processes():
 module = sys.argv[1]
 source = PACKET / 'lean' / (module + '.lean')
 baseline = json.loads((HERE.parent / 'oracle-port-draft-20261021/OraclePortHeadlineDVC7-1/command.json').read_text())
-config = {'OraclePortCkptAbiReader': 'overflow-freedom-s2-20261020/receipts/R22Stage2ReaderTotal-20261020T141933Z/receipt.json'}
+config = {m: 'overflow-freedom-s2-20261020/receipts/R22Stage2ReaderTotal-20261020T141933Z/receipt.json' for m in ['OraclePortCkptAbiReader', 'OraclePortCkptAbiReadSequence', 'OraclePortCkptAbiFreeze', 'OraclePortCkptAbiSource']}
 selected = config.get(module)
 selected_path = json.loads((HERE.parent / selected).read_text())['lean_path'] if selected else ''
 path = str(OBJECTS) + ':/tmp/codex-cx-frozen-order-draft-20261021-objects:/tmp/codex-cx-acclog-draft-20261021-objects:/tmp/codex-cx-refine-join-draft-20261021-objects:/tmp/codex-cx-inner-order-draft-20261021-objects:/tmp/codex-cx-shortcircuit-draft-20261021-objects:/tmp/codex-cx-join-split-draft-20261021-objects:' + selected_path + ':' + baseline['lean_path']

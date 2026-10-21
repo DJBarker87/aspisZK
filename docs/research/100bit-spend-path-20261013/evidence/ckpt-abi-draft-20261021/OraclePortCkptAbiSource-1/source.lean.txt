@@ -1,0 +1,156 @@
+import RawTx2ResumeDigestCalls
+import OraclePortCkptAbiReader
+
+/-! Successful extracted resume enters the field reader on exactly the input
+checkpoint. Atomic raw-body adoption remains an explicit hypothesis. No
+writer/model identification or whole-cone join is asserted. -/
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result ControlFlow
+namespace AspisR1.OraclePortCkptAbiSource
+open AspisR1Stage2 OraclePortCkptAbiReader
+
+private theorem resume_bind_success {A B : Type} (m : Result A) (k : A → Result B) (v : B)
+    (h : (do let x ← m; k x) = ok v) : ∃ x, m = ok x ∧ k x = ok v := by
+  cases m with
+  | ok x => exact ⟨x, rfl, h⟩
+  | fail e => simp only [bind_tc_fail] at h; cases h
+  | div => simp only [bind_tc_div] at h; cases h
+
+private theorem checkpoint_guard {T : Type} (b : Bool)
+    (tail : Result (core.result.Result T verifier.Error)) (out : T)
+    (h : (if b then ok (.Err verifier.Error.Checkpoint) else tail) = ok (.Ok out)) :
+    b = false ∧ tail = ok (.Ok out) := by
+  cases b
+  · exact ⟨rfl,h⟩
+  · cases h
+
+private theorem checkpoint_guard_prop {T : Type} (b : Prop) [Decidable b]
+    (tail : Result (core.result.Result T verifier.Error)) (out : T)
+    (h : (if b then ok (.Err verifier.Error.Checkpoint) else tail) = ok (.Ok out)) :
+    tail = ok (.Ok out) := by
+  split at h
+  · cases h
+  · exact h
+
+structure Entry (ops : ResumeOps) (ck : Slice U8) where
+  state : Array U8 32#usize
+  root0 : Array U8 32#usize
+  root1 : Array U8 32#usize
+  r0 : verifier.Reader
+  r1 : verifier.Reader
+  r2 : verifier.Reader
+  stateCall : ops.raw 32#usize ⟨ck,80#usize⟩ = ok (state,r0)
+  root0Call : ops.raw 32#usize r0 = ok (root0,r1)
+  root1Call : ops.raw 32#usize r1 = ok (root1,r2)
+
+/-- No comparison, canonicality, byte-codec or backend assumption is needed
+for the emitted decoder's first three ordered raw calls. -/
+theorem successful_entry (ops : ResumeOps) {H : Type}
+    (digestInst : aspis_core.digest.Digest32 H)
+    (bytes proof public1 : Slice U8) (v : transport.Variant) (hash : H)
+    (p : verifier.Prepared) (acc : verifier.Accumulator)
+    (success : verifier.resumeWithOps ops digestInst bytes proof public1 v hash =
+      ok (.Ok (p,acc))) : Nonempty (Entry ops bytes) := by
+  unfold verifier.resumeWithOps at success
+  obtain ⟨size, _, h⟩ := resume_bind_success _ _ _ success
+  obtain ⟨_, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨header, _, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨magicBad, _, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨_, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨tagByte, _, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨tag, _, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨_, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨nextByte, _, h⟩ := resume_bind_success _ _ _ h
+  have h := checkpoint_guard_prop _ _ _ h
+  obtain ⟨version, _, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨_, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨reserved, _, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨iter, _, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨anyResult, _, h⟩ := resume_bind_success _ _ _ h
+  rcases anyResult with ⟨anyBad, iterOut⟩
+  obtain ⟨_, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨end1, hend, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨stored, hstored, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨chunks, hchunks, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨digest, hdigest, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨bad, hbad, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨hb, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨storedPublic, hsp, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨publicParts, hpp, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨publicDigest, hpd, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨publicBad, hpb, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨hpublicBad, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨storedChecksum, hsc, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨domain, hdomain, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨body, hbody, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨checksumParts, hcp, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨checksumDigest, hcd, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨checksumBad, hcb, h⟩ := resume_bind_success _ _ _ h
+  obtain ⟨_, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨first, firstCall, h⟩ := resume_bind_success _ _ _ h
+  rcases first with ⟨state,r0⟩
+  obtain ⟨second, secondCall, h⟩ := resume_bind_success _ _ _ h
+  rcases second with ⟨root0,r1⟩
+  obtain ⟨third, thirdCall, _⟩ := resume_bind_success _ _ _ h
+  rcases third with ⟨root1,r2⟩
+  exact ⟨⟨state,root0,root1,r0,r1,r2,firstCall,secondCall,thirdCall⟩⟩
+
+/-- Pointwise identification of the emitted raw body is sufficient for exact
+state/root input bytes and an immutable checkpoint through this prefix. The
+hypothesis is deliberately only the atomic raw operation, not whole resume. -/
+theorem entry_exact (ops : ResumeOps) (ck : Slice U8) (entry : Entry ops ck)
+    (unwrap : core.result.Result (Array U8 32#usize) core.array.TryFromSliceError →
+      Result (Array U8 32#usize))
+    (unwrap_ok : ∀ b, unwrap (.Ok b) = ok b)
+    (raw_adoption : ∀ r, ops.raw 32#usize r =
+      verifier.Reader.rawWithUnwrap 32#usize unwrap r)
+    (length : ck.val.length = 1768) :
+    entry.state.val = (ck.val.drop 80).take 32 ∧
+    entry.root0.val = (ck.val.drop 112).take 32 ∧
+    entry.root1.val = (ck.val.drop 144).take 32 ∧
+    entry.r0.bytes = ck ∧ entry.r1.bytes = ck ∧ entry.r2.bytes = ck ∧
+    entry.r0.at.val = 112 ∧ entry.r1.at.val = 144 ∧ entry.r2.at.val = 176 := by
+  obtain ⟨b0,r0,call0,bytes0,cursor0,backing0⟩ :=
+    raw_total_exact ⟨ck,80#usize⟩ 32#usize unwrap unwrap_ok
+      (by change 80+32 ≤ ck.val.length; omega)
+  have eq0 := entry.stateCall
+  rw [raw_adoption,call0] at eq0
+  have pair0 := Result.ok.inj eq0
+  have b0eq := congrArg Prod.fst pair0
+  have r0eq := congrArg Prod.snd pair0
+  subst b0 r0
+  change entry.r0.at.val = 112 at cursor0
+  change entry.r0.bytes = ck at backing0
+  obtain ⟨b1,r1,call1,bytes1,cursor1,backing1⟩ :=
+    raw_total_exact entry.r0 32#usize unwrap unwrap_ok
+      (by rw [backing0,cursor0]; change 112+32 ≤ ck.val.length; omega)
+  have eq1 := entry.root0Call
+  rw [raw_adoption,call1] at eq1
+  have pair1 := Result.ok.inj eq1
+  have b1eq := congrArg Prod.fst pair1
+  have r1eq := congrArg Prod.snd pair1
+  subst b1 r1
+  rw [backing0,cursor0] at bytes1
+  rw [cursor0] at cursor1
+  change entry.r1.at.val = 144 at cursor1
+  rw [backing0] at backing1
+  obtain ⟨b2,r2,call2,bytes2,cursor2,backing2⟩ :=
+    raw_total_exact entry.r1 32#usize unwrap unwrap_ok
+      (by rw [backing1,cursor1]; change 144+32 ≤ ck.val.length; omega)
+  have eq2 := entry.root1Call
+  rw [raw_adoption,call2] at eq2
+  have pair2 := Result.ok.inj eq2
+  have b2eq := congrArg Prod.fst pair2
+  have r2eq := congrArg Prod.snd pair2
+  subst b2 r2
+  rw [backing1,cursor1] at bytes2
+  rw [cursor1] at cursor2
+  rw [backing1] at backing2
+  exact ⟨bytes0,bytes1,bytes2,backing0,backing1,backing2,cursor0,cursor1,cursor2⟩
+
+#print axioms resume_bind_success
+#print axioms checkpoint_guard
+#print axioms checkpoint_guard_prop
+#print axioms successful_entry
+#print axioms entry_exact
+end AspisR1.OraclePortCkptAbiSource

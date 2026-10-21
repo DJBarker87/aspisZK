@@ -1,0 +1,106 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiReadSequence.lean:37:27: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 1
+  b ≥ 0
+  a ≥ 0
+  a - b - c ≥ 0
+where
+ a := ↑(↑r.bytes).length
+ b := ↑↑r.at
+ c := ↑(width [])
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiReadSequence.lean:44:4: error: unsolved goals
+case cons.refine_1
+unwrap : Unwrap
+unwrap_ok : ∀ (n : Usize) (b : Std.Array U8 n), unwrap n (core.result.Result.Ok b) = ok b
+n : Usize
+ns : List Usize
+ih :
+  ∀ (r : verifier.Reader),
+    ↑r.at + width ns ≤ (↑r.bytes).length →
+      ∃ out,
+        readMany unwrap r ns = ok (blocks (↑r.bytes) (↑r.at) ns, out) ∧ ↑out.at = ↑r.at + width ns ∧ out.bytes = r.bytes
+r : verifier.Reader
+bounds : ↑r.at + (↑n + width ns) ≤ (↑r.bytes).length
+b : Std.Array U8 n
+r1 : verifier.Reader
+hr : verifier.Reader.rawWithUnwrap n (unwrap n) r = ok (b, r1)
+bytes : ↑b = List.take (↑n) (List.drop ↑r.at ↑r.bytes)
+cursor : ↑r1.at = ↑r.at + ↑n
+backing : r1.bytes = r.bytes
+out : verifier.Reader
+tail : readMany unwrap r1 ns = ok (blocks (↑r1.bytes) (↑r1.at) ns, out)
+last : ↑out.at = ↑r1.at + width ns
+unchanged : out.bytes = r1.bytes
+⊢ (let (b, r1) := (b, r1)
+    do
+    let (rest, r2) ← readMany unwrap r1 ns
+    ok (↑b :: rest, r2)) =
+    ok (List.take (↑n) (List.drop ↑r.at ↑r.bytes) :: blocks (↑r.bytes) (↑r.at + ↑n) ns, out)
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiReadSequence.lean:44:40: warning: This simp argument is unused:
+  tail
+
+Hint: Omit it from the simp argument list.
+  simp only [readMany, ̲hr, ̲bind_tc_ok,t̵a̵i̵l̵,̵ ̲blocks, ̲bytes, ̲backing, ̲cursor]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiReadSequence.lean:44:52: warning: This simp argument is unused:
+  bytes
+
+Hint: Omit it from the simp argument list.
+  simp only [readMany, ̲hr, ̲bind_tc_ok, ̲tail, ̲blocks, ̲by̵t̵e̵s̵,̵b̵acking, ̲cursor]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiReadSequence.lean:44:58: warning: This simp argument is unused:
+  backing
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵M̵a̵n̵y̵,̵h̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵t̵a̵i̵l̵,̵b̵l̵o̵c̵k̵s̵,̵b̵y̵t̵e̵s̵,̵b̵a̵c̵k̵i̵n̵g̵,̵c̵u̵r̵s̵o̵r̵]̵[̲r̲e̲a̲d̲M̲a̲n̲y̲,̲ ̲h̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲t̲a̲i̲l̲,̲ ̲b̲l̲o̲c̲k̲s̲,̲ ̲b̲y̲t̲e̲s̲,̲ ̲c̲u̲r̲s̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiReadSequence.lean:44:66: warning: This simp argument is unused:
+  cursor
+
+Hint: Omit it from the simp argument list.
+  simp only [readMany, ̲hr, ̲bind_tc_ok, ̲tail, ̲blocks, ̲bytes, ̲backing,̵c̵u̵r̵s̵o̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiReadSequence.lean:57:11: error: Tactic `rfl` failed: The left-hand side
+  width ([] ++ ys)
+is not definitionally equal to the right-hand side
+  width [] + width ys
+
+case nil
+ys : List Usize
+⊢ width ([] ++ ys) = width [] + width ys
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiReadSequence.lean:62:12: error: Tactic `rfl` failed: The left-hand side
+  width (List.replicate 0 w)
+is not definitionally equal to the right-hand side
+  0 * ↑w
+
+case zero
+w : Usize
+⊢ width (List.replicate 0 w) = 0 * ↑w
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiReadSequence.lean:63:59: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b + c ≤ -1
+where
+ a := ↑n * ↑↑w
+ b := ↑(n + 1) * ↑↑w
+ c := ↑↑w
+'AspisR1.OraclePortCkptAbiReadSequence.readMany_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortCkptAbiReadSequence.width_append' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OraclePortCkptAbiReadSequence.width_replicate' depends on axioms: [sorryAx]
+'AspisR1.OraclePortCkptAbiReadSequence.savedTen_width' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortCkptAbiReadSequence.savedTen_reads_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
