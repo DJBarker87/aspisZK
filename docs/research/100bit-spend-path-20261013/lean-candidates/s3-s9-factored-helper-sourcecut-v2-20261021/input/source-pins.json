@@ -1,0 +1,97 @@
+{
+  "additional_source_snapshots": [
+    {
+      "enabled_feature_mode": "prover feature disabled; this is the selected no-op trace path",
+      "path": "trace.rs",
+      "sha256": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd"
+    }
+  ],
+  "candidate_method_end_byte_exclusive": 9210,
+  "candidate_method_sha256": "666d137b00f58b39bb5bece6d65265de1f4d833993bb8880c087561f956892df",
+  "candidate_method_start_byte": 4741,
+  "candidate_method_text": "    pub fn pair(&self,alpha:&[E],f:&[u8],kappa:E)->Result<E,Error> {\n        let n=f.len()/32; let folds=alpha.len();\n        if n!=1024>>(2*folds) {return Err(Error::Parse);}\n        let ap0=powers::<4>(alpha[0]);\n        let ap1=if folds==2 {powers::<4>(alpha[1])}else{[E::ONE;4]};\n        let mut scratch=aspis_core::r0::heap::filled(n,K::ZERO).map_err(|_|Error::Allocation)?;\n        let mut parts=[E::ZERO;7];\n        // On S2's two-fold path the high tensor factors for point rows 0 and\n        // 2 are identical. Keep the equality guard so arbitrary constructed\n        // `Weights` values retain the original per-row fallback.\n        let shared_two_point = self.variant==Variant::S2 && folds==2\n            && eq4(&self.factors[0][2],&self.factors[2][2])\n            && eq4(&self.factors[0][3],&self.factors[2][3]);\n        // Preserve the original finite row order while moving every `?` out\n        // of the row iterator. The shared-row skip remains at kinds 1 and 3.\n        if !shared_two_point { process_kind(self,1,alpha,f,folds,n,&ap0,&ap1,&mut scratch,&mut parts)?; }\n        process_kind(self,2,alpha,f,folds,n,&ap0,&ap1,&mut scratch,&mut parts)?;\n        if !shared_two_point { process_kind(self,3,alpha,f,folds,n,&ap0,&ap1,&mut scratch,&mut parts)?; }\n        process_kind(self,5,alpha,f,folds,n,&ap0,&ap1,&mut scratch,&mut parts)?;\n        process_kind(self,6,alpha,f,folds,n,&ap0,&ap1,&mut scratch,&mut parts)?;\n        if shared_two_point {\n            // The two point rows share the d2/d3 coefficients. Preserve the\n            // tensor's least-significant-first order: d2 is j mod 4 and d3\n            // is j / 4. Each d4 slice then contracts one 16-term EbyKDot.\n            let common:[K;16]=core::array::from_fn(|j|\n                self.factors[0][2][j&3].mul(self.factors[0][3][j>>2]));\n            let mut partials=[E::ZERO;4];\n            partials[0]=partial_dot(f,&common,0)?;\n            partials[1]=partial_dot(f,&common,1)?;\n            partials[2]=partial_dot(f,&common,2)?;\n            partials[3]=partial_dot(f,&common,3)?;\n            let high0=high_dot(&partials,&self.factors[0][4])?;\n            let scale0=Self::scalar_factor(&self.factors[0][0],&ap0)\n                .mul(Self::scalar_factor(&self.factors[0][1],&ap1));\n            parts[1]=scale0.mul(high0);\n            let high2=high_dot(&partials,&self.factors[2][4])?;\n            let scale2=Self::scalar_factor(&self.factors[2][0],&ap0)\n                .mul(Self::scalar_factor(&self.factors[2][1],&ap1));\n            parts[3]=scale2.mul(high2);\n        }\n        if folds==1 {\n            let dual:[E;16]=core::array::from_fn(|mask|(0..4).filter(|&s|mask&(1<<s)!=0).fold(E::ZERO,|v,s|v.add(ap0[PERM[s]])).mul_m31(QUARTER));\n            let mut groups=[E::ZERO;16];\n            for j in 0..n {\n                let mut mask=0;\n                for s in 0..4 {if self.raw(0,4*j+s)==K::ONE {mask|=1<<s;}}\n                groups[mask]=groups[mask].add(field(f,j));\n            }\n            for m in 1..16 {parts[0]=parts[0].add(groups[m].mul(dual[m]));}\n            for side in 0..2 {\n                let p=kpowers::<5>(self.extra[side]);\n                let scale=Self::scalar_factor(&[p[0],p[1],p[2],p[3]],&ap0);\n                let mut power=K::ONE; let mut pair=E::ZERO;\n                for j in 0..7 {pair=pair.add(field(f,j+7*side).mul_qm31(power));power=power.mul(p[4]);}\n                parts[4]=parts[4].add(pair.mul(scale));\n            }\n        } else {\n            // Two-fold 0/1 row: compute the sixteen challenge products once.\n            // Coefficients with the same inactive mask share one subset sum.\n            let low:[E;16]=core::array::from_fn(|s|ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)));\n            parts[0]=grouped_inactive_pair(self,f,&low);\n            let libra=if self.variant==Variant::S2 {factored_s2_libra_weights(&ap0,&ap1,self.extra)}else{twofold_libra_weights(&low,self.extra)};\n            for j in 0..4 {parts[4]=parts[4].add(field(f,j).mul(libra[j]));}\n        }\n        #[cfg(feature=\"prover\")]\n        for kind in 0..7 {\n            for j in 0..1024 {crate::trace::value(6,kind*1024+j,E::from_qm31(self.raw(kind,j)));}\n            for j in 0..n {crate::trace::value(7,kind*n+j,self.dual_raw(kind,j,alpha));}\n        }\n        let k=powers::<7>(kappa);let mut sum=E::ZERO;\n        for kind in 0..7 {crate::trace::value(8,kind,parts[kind]);sum=sum.add(k[kind].mul(parts[kind]));}\n        Ok(sum)\n    }",
+  "candidate_normalization": {
+    "basis_source_sha256": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+    "changes": [
+      "push_byte_products isolates original pair.push loop",
+      "partial_dot isolates original dot.push loop",
+      "high_dot isolates original high.push loop",
+      "unroll fixed [(kind=1,k=0),(kind=3,k=2)] high-row loop into two ordered calls",
+      "extract process_kind for one row and replace fixed five-element row iterator by ordered calls with original shared-row skips",
+      "unroll the fixed four-slice partial_dot loop in ascending s order",
+      "add extraction-only free function pair_root as Charon --start-from target; it only calls Weights::pair",
+      "replace whole-array PartialEq guards with explicit left-to-right component equality for the fixed four QM31 entries"
+    ],
+    "equivalence_obligation": "Prove helper extraction preserves first-error propagation and mutation order; prove two-iteration unroll is equivalent to array iteration in original order. No production adoption/equivalence theorem claimed. Additionally prove the ordered five call expansion preserves the original iterator order, conditional skips, mutations, and first-error return. Additionally prove fixed four-call expansion equals the original ascending s loop, including first-error stopping. The added free-function root shim must be related to the unchanged candidate method call; it does not establish the method caller context. Prove each derived QM31/array equality is equivalent to the four left-to-right limb equalities; short-circuit order stays left-to-right, with no eager conjunction or moved fallible read."
+  },
+  "classification": "focused source-cut harness: kpowers, factored_s2_libra_weights and Weights::scalar_factor copied from frozen current weights.rs; other pair functions remain explicit diagnostic stubs",
+  "features": [
+    "r0",
+    "private-leaf-salts"
+  ],
+  "kit_files": {
+    "Cargo.lock": "4a4993efcf607784ef7d5ed17f826e18bedcb20a5f6e7c2a62fde7a3791be832",
+    "Cargo.toml": "40204456548f291a86c6b2c2e17d7851d7b13c83c9bb2fd1c46ef8a15cb20c92",
+    "lib.rs": "e494e1c31b82af5641d6b4369d0329d6791d62ab9b5b07cf79288c3bc4fe3a0f",
+    "source.rs": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+    "trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd"
+  },
+  "method_end_byte_exclusive": 9210,
+  "method_sha256": "621bac7455d57fe7f8438d5ece894a48352b87e197c869ec8df31569426cf445",
+  "method_start_byte": 4741,
+  "method_text": "    pub fn pair(&self,alpha:&[E],f:&[u8],kappa:E)->Result<E,Error> {\n        let n=f.len()/32; let folds=alpha.len();\n        if n!=1024>>(2*folds) {return Err(Error::Parse);}\n        let ap0=powers::<4>(alpha[0]);\n        let ap1=if folds==2 {powers::<4>(alpha[1])}else{[E::ONE;4]};\n        let mut scratch=aspis_core::r0::heap::filled(n,K::ZERO).map_err(|_|Error::Allocation)?;\n        let mut parts=[E::ZERO;7];\n        // On S2's two-fold path the high tensor factors for point rows 0 and\n        // 2 are identical. Keep the equality guard so arbitrary constructed\n        // `Weights` values retain the original per-row fallback.\n        let shared_two_point = self.variant==Variant::S2 && folds==2\n            && eq4(&self.factors[0][2],&self.factors[2][2])\n            && eq4(&self.factors[0][3],&self.factors[2][3]);\n        // Preserve the original finite row order while moving every `?` out\n        // of the row iterator. The shared-row skip remains at kinds 1 and 3.\n        if !shared_two_point { process_kind(self,1,alpha,f,folds,n,&ap0,&ap1,&mut scratch,&mut parts)?; }\n        process_kind(self,2,alpha,f,folds,n,&ap0,&ap1,&mut scratch,&mut parts)?;\n        if !shared_two_point { process_kind(self,3,alpha,f,folds,n,&ap0,&ap1,&mut scratch,&mut parts)?; }\n        process_kind(self,5,alpha,f,folds,n,&ap0,&ap1,&mut scratch,&mut parts)?;\n        process_kind(self,6,alpha,f,folds,n,&ap0,&ap1,&mut scratch,&mut parts)?;\n        if shared_two_point {\n            // The two point rows share the d2/d3 coefficients. Preserve the\n            // tensor's least-significant-first order: d2 is j mod 4 and d3\n            // is j / 4. Each d4 slice then contracts one 16-term EbyKDot.\n            let common:[K;16]=core::array::from_fn(|j|\n                self.factors[0][2][j&3].mul(self.factors[0][3][j>>2]));\n            let mut partials=[E::ZERO;4];\n            partials[0]=partial_dot(f,&common,0)?;\n            partials[1]=partial_dot(f,&common,1)?;\n            partials[2]=partial_dot(f,&common,2)?;\n            partials[3]=partial_dot(f,&common,3)?;\n            let high0=high_dot(&partials,&self.factors[0][4])?;\n            let scale0=Self::scalar_factor(&self.factors[0][0],&ap0)\n                .mul(Self::scalar_factor(&self.factors[0][1],&ap1));\n            parts[1]=scale0.mul(high0);\n            let high2=high_dot(&partials,&self.factors[2][4])?;\n            let scale2=Self::scalar_factor(&self.factors[2][0],&ap0)\n                .mul(Self::scalar_factor(&self.factors[2][1],&ap1));\n            parts[3]=scale2.mul(high2);\n        }\n        if folds==1 {\n            let dual:[E;16]=core::array::from_fn(|mask|(0..4).filter(|&s|mask&(1<<s)!=0).fold(E::ZERO,|v,s|v.add(ap0[PERM[s]])).mul_m31(QUARTER));\n            let mut groups=[E::ZERO;16];\n            for j in 0..n {\n                let mut mask=0;\n                for s in 0..4 {if self.raw(0,4*j+s)==K::ONE {mask|=1<<s;}}\n                groups[mask]=groups[mask].add(field(f,j));\n            }\n            for m in 1..16 {parts[0]=parts[0].add(groups[m].mul(dual[m]));}\n            for side in 0..2 {\n                let p=kpowers::<5>(self.extra[side]);\n                let scale=Self::scalar_factor(&[p[0],p[1],p[2],p[3]],&ap0);\n                let mut power=K::ONE; let mut pair=E::ZERO;\n                for j in 0..7 {pair=pair.add(field(f,j+7*side).mul_qm31(power));power=power.mul(p[4]);}\n                parts[4]=parts[4].add(pair.mul(scale));\n            }\n        } else {\n            // Two-fold 0/1 row: compute the sixteen challenge products once.\n            // Coefficients with the same inactive mask share one subset sum.\n            let low:[E;16]=core::array::from_fn(|s|ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)));\n            parts[0]=grouped_inactive_pair(self,f,&low);\n            let libra=if self.variant==Variant::S2 {factored_s2_libra_weights(&ap0,&ap1,self.extra)}else{twofold_libra_weights(&low,self.extra)};\n            for j in 0..4 {parts[4]=parts[4].add(field(f,j).mul(libra[j]));}\n        }\n        #[cfg(feature=\"prover\")]\n        for kind in 0..7 {\n            for j in 0..1024 {crate::trace::value(6,kind*1024+j,E::from_qm31(self.raw(kind,j)));}\n            for j in 0..n {crate::trace::value(7,kind*n+j,self.dual_raw(kind,j,alpha));}\n        }\n        let k=powers::<7>(kappa);let mut sum=E::ZERO;\n        for kind in 0..7 {crate::trace::value(8,kind,parts[kind]);sum=sum.add(k[kind].mul(parts[kind]));}\n        Ok(sum)\n    }",
+  "opaque_paths": [
+    "crate::weights::powers",
+    "crate::weights::field",
+    "crate::weights::grouped_inactive_pair",
+    "crate::weights::twofold_libra_weights",
+    "crate::weights::Weights::raw",
+    "crate::weights::Weights::tensor",
+    "crate::weights::Weights::dense_point_pair",
+    "crate::r0::heap::filled",
+    "crate::fast_pairing::EbyKDot",
+    "crate::field::M31::mul",
+    "crate::field::QM31::mul",
+    "crate::field::WideExact::add",
+    "crate::field::WideExact::mul",
+    "crate::field::WideExact::mul_m31",
+    "crate::field::WideExact::mul_qm31",
+    "crate::field::QM31::square"
+  ],
+  "retained_functions": {
+    "Weights::scalar_factor": "7fd91d4bc2a81941dbb5131875750801842fb368d45659e51316057ec6b1f7a0",
+    "factored_s2_libra_weights": "741b0a147a82edfbc47b363e50e5163662cd82be8af21f769699e1d3c9506f2a",
+    "kpowers": "c0f734ff7faedd0325d2b3dca6d92f6406b9ce76a6655811f327db108042e376"
+  },
+  "root_shim": {
+    "role": "Charon --start-from target; thin forwarding shim only",
+    "source": "pub fn pair_root(w:&Weights,alpha:&[E],f:&[u8],kappa:E)->Result<E,Error>{ w.pair(alpha,f,kappa) }"
+  },
+  "source_cuts": {
+    "Weights::scalar_factor": {
+      "end_byte_exclusive": 6777,
+      "sha256": "7fd91d4bc2a81941dbb5131875750801842fb368d45659e51316057ec6b1f7a0",
+      "start_byte": 6647
+    },
+    "factored_s2_libra_weights": {
+      "end_byte_exclusive": 4677,
+      "sha256": "741b0a147a82edfbc47b363e50e5163662cd82be8af21f769699e1d3c9506f2a",
+      "start_byte": 3769
+    },
+    "kpowers": {
+      "end_byte_exclusive": 545,
+      "sha256": "c0f734ff7faedd0325d2b3dca6d92f6406b9ce76a6655811f327db108042e376",
+      "start_byte": 434
+    }
+  },
+  "source_path": "crates/aspis-r1-cost-probe/src/weights.rs",
+  "source_revision": "bfee54548199495aaa8fc554cd4e88ecc9a9daf1",
+  "source_sha256": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+  "source_snapshot": {
+    "path": "../source-snapshot/weights.rs",
+    "sha256": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca"
+  },
+  "start_from": "crate::weights::factored_s2_libra_weights",
+  "frozen_pair_method_sha256": "1a56a621c8fe09855427e242a59f876b61d48d1d5f1c06ec99db342d6ac75510",
+  "pair_source_equivalence": "OPEN: candidate method differs from frozen method"
+}
