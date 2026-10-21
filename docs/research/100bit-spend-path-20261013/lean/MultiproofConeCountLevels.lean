@@ -1,0 +1,94 @@
+import MultiproofConeCountGroups
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeCountLevels
+open OraclePortFrozenOrder MultiproofConeCountGroups
+attribute [local instance] Classical.propDecidable
+
+theorem members (fuel : Nat) (is : List Nat) (p : Nat)
+    (mem : p∈(countLevel fuel is).1) : ∃ i∈is, p=i/2 := by
+  induction fuel generalizing is with
+  | zero => cases mem
+  | succ fuel ih =>
+    cases is with
+    | nil => cases mem
+    | cons i rest =>
+      simp only [countLevel,List.mem_cons] at mem
+      rcases mem with eq | mem
+      · exact ⟨i,by simp,eq⟩
+      · obtain ⟨j,hj,eq⟩ := ih _ mem
+        refine ⟨j,List.mem_cons_of_mem _ ?_,eq⟩
+        cases rest with
+        | nil => simpa using hj
+        | cons k tail =>
+          by_cases both : paired i k
+          · simp only [both,decide_true,↓reduceIte] at hj
+            exact List.mem_of_mem_drop hj
+          · simpa only [both,decide_false,Bool.false_eq_true,↓reduceIte] using hj
+
+theorem gap (i : Nat) (rest : List Nat) (sorted : (i::rest).Pairwise (·<·)) :
+    ∀ j∈(if (match rest with | k::_ => decide (paired i k) | [] => false)
+      then rest.drop 1 else rest), i/2<j/2 := by
+  cases rest with
+  | nil => simp
+  | cons k tail =>
+    obtain ⟨first,later⟩ := List.pairwise_cons.mp sorted
+    have ik := first k (by simp)
+    by_cases both : paired i k
+    · simp only [both,decide_true,↓reduceIte,List.drop_succ_cons,List.drop_zero]
+      intro j mem
+      have kj := (List.pairwise_cons.mp later).1 j mem
+      unfold paired at both
+      omega
+    · simp only [both,decide_false,Bool.false_eq_true,↓reduceIte]
+      intro j mem
+      have ij := first j mem
+      have kj : k≤j := by
+        rcases List.mem_cons.mp mem with rfl | h
+        · omega
+        · exact Nat.le_of_lt ((List.pairwise_cons.mp later).1 j h)
+      have neq : i/2≠k/2 := by intro eq;exact both ((same_parent i k ik).mp eq)
+      omega
+
+theorem sorted (fuel : Nat) (is : List Nat) (order : is.Pairwise (·<·)) :
+    ((countLevel fuel is).1).Pairwise (·<·) := by
+  induction fuel generalizing is with
+  | zero => simp [countLevel]
+  | succ fuel ih =>
+    cases is with
+    | nil => simp [countLevel]
+    | cons i rest =>
+      have later := (List.pairwise_cons.mp order).2
+      have tailOrder : (if (match rest with | k::_ => decide (paired i k) | [] => false)
+          then rest.drop 1 else rest).Pairwise (·<·) := by
+        cases rest with
+        | nil => simp
+        | cons k tail =>
+          by_cases both : paired i k
+          · simpa only [both,decide_true,↓reduceIte] using later.drop (i:=1)
+          · simpa only [both,decide_false,Bool.false_eq_true,↓reduceIte] using later
+      simp only [countLevel,List.pairwise_cons]
+      refine ⟨?_,ih _ tailOrder⟩
+      intro p hp
+      obtain ⟨j,hj,rfl⟩ := members fuel _ p hp
+      exact gap i rest order j hj
+
+def sourceCount : Nat → List Nat → Nat
+  | 0,_ => 0
+  | h+1,is => let out := sourceLevel is.length is
+             out.2+sourceCount h out.1
+
+/-- Complete eighteen-level index-only count is independent of oracle values.
+The source equal-parent inner while is identified with frozen nodeCount. -/
+theorem count_eq (height : Nat) (is : List Nat) (order : is.Pairwise (·<·)) :
+    sourceCount height is=nodeCount height is := by
+  induction height generalizing is with
+  | zero => rfl
+  | succ height ih =>
+    simp only [sourceCount,nodeCount,source_level_eq _ _ order,ih _ (sorted _ _ order)]
+
+#print axioms members
+#print axioms gap
+#print axioms sorted
+#print axioms count_eq
+end AspisR1.MultiproofConeCountLevels

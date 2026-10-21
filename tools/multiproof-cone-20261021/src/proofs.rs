@@ -145,6 +145,22 @@ impl Digest32 for LeafOracle {
  assert_eq!(next_w,w+1);assert_eq!(contribution,if paired {0}else{1});assert_eq!(level[w],index/2);
 }
 
+// Consumed, unoverwritten scratch cells need not remain sorted. Only the
+// unread suffix is scanned by this source group; observe every other cell too.
+#[kani::proof] #[kani::unwind(18)] fn node_count_unread_group(){
+ let mut level:[u32;16]=kani::any();let before=level;
+ let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();
+ kani::assume(n>0 && n<=16 && i<n && w<=i);
+ kani::assume(f::multiproof::well_formed(&level[i..n]));
+ let index=level[i];
+ let paired=i+1<n && index%2==0 && level[i+1]==index+1;
+ let (j,next_w,contribution)=f::multiproof::count_group(&mut level,n,i,w);
+ assert_eq!(j,if paired {i+2}else{i+1});
+ assert_eq!(next_w,w+1);assert_eq!(contribution,if paired {0}else{1});
+ let coordinate:usize=kani::any();kani::assume(coordinate<16);
+ assert_eq!(level[coordinate],if coordinate==w {index/2}else{before[coordinate]});
+}
+
 #[kani::proof] #[kani::unwind(34)] fn semantic_zero_high_field(){
  let compact:[u8;16]=kani::any();let row:u8=kani::any();
  let expanded=r::expand_chunk(compact);

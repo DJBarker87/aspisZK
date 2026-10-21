@@ -953,3 +953,29 @@ the exact frozen leaf address, whose opening adapter was previously proved;
 the initial packed-key and physical/Parsed.wire carrier equations remain
 caller cuts. This does not yet supply the count/padding/root tail or either
 three-slot accepted-run cone join. No shipped file changed.
+
+## Continuation 6, stage 2a: sibling count and certificate-domain repair
+
+The full-array `well_formed` premise in the original count-group gate fails
+at intermediate consumed scratch cells; the concrete seven-index example is
+retained in `tools/multiproof-cone-20261021/COUNT-DOMAIN.md`. No source bug or
+counterexample to the frozen model is claimed. The replacement
+`node_count_unread_group` checks only the unread suffix, with exact i/w,
+contribution and every scratch coordinate. Host `cone6-count-unread-2` passes:
+242 checks, exit 0, wall 19.236359 s, peak RSS 642792 KiB, zero swaps,
+MemoryHigh=6G/MemoryMax=8G/MemorySwapMax=0/TasksMax=64; optimization level 3.
+The first attempt failed before compilation because the new independent host
+workspace lacked Cargo inheritance; its receipt is retained. The second uses
+the minimal workspace metadata in `host-workspace.toml.txt`. Proof source pins,
+solver/flags, reservation and complete logs are under `host-cone6/`.
+
+`MultiproofConeCountGroups.source_level_eq` proves equal-parent group counting
+matches frozen countLevel on strictly ascending unread indices.
+`MultiproofConeCountLevels.count_eq` composes this through arbitrary height,
+proving strict parent order independently of any oracle. Groups attempt 2:
+exit 0, wall 12.273788 s, peak RSS 3593928704 bytes; Levels attempt 3:
+exit 0, wall 16.528861 s, peak RSS 3588947968 bytes; both zero swap. All seven
+reports are standard. Receipts record full hashes/revisions and dependencies.
+The physical source array/list control relation remains distinct from these
+logical count facts. Padding/root and batch composition remain in progress.
+No shipped source changed; no frozen ELF rebuild is triggered.

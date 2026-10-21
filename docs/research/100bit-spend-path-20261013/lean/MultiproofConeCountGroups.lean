@@ -1,0 +1,78 @@
+import MultiproofConeModelBoundary
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeCountGroups
+open OraclePortFrozenOrder
+attribute [local instance] Classical.propDecidable
+
+/-- Binary source node_count groups equal parent indices, rather than using
+the verifier's XOR test. Strict order is necessary for their equivalence. -/
+theorem same_parent (i j : Nat) (ascending : i<j) : i/2=j/2 ↔ paired i j := by
+  unfold paired
+  omega
+
+theorem drop_group (i : Nat) (rest : List Nat)
+    (sorted : (i::rest).Pairwise (·<·)) :
+    (i::rest).dropWhile (fun j => decide (j/2=i/2)) =
+      if (match rest with | j::_ => decide (paired i j) | [] => false)
+      then rest.drop 1 else rest := by
+  cases rest with
+  | nil => simp
+  | cons j tail =>
+    obtain ⟨first,later⟩ := List.pairwise_cons.mp sorted
+    have ij := first j (by simp)
+    have pair := same_parent i j ij
+    by_cases eq : j/2=i/2
+    · have both : paired i j := pair.mp eq.symm
+      cases tail with
+      | nil => simp [eq,both]
+      | cons k more =>
+        have jk := (List.pairwise_cons.mp later).1 k (by simp)
+        have different : k/2≠i/2 := by
+          have ik := first k (by simp)
+          unfold paired at both
+          omega
+        simp [eq,both,different]
+    · have single : ¬paired i j := by intro h;exact eq (pair.mpr h).symm
+      simp [eq,single]
+
+/-- Source-shaped index-only counting: the inner while consumes the complete
+equal-parent group, then contributes width minus occupied children. -/
+def sourceLevel : Nat → List Nat → List Nat × Nat
+  | 0,_ => ([],0)
+  | _+1,[] => ([],0)
+  | fuel+1,i::rest =>
+      let tail := (i::rest).dropWhile (fun j => decide (j/2=i/2))
+      let out := sourceLevel fuel tail
+      (i/2::out.1,out.2+(2-((i::rest).length-tail.length)))
+
+theorem source_level_eq (fuel : Nat) (is : List Nat)
+    (sorted : is.Pairwise (·<·)) : sourceLevel fuel is=countLevel fuel is := by
+  induction fuel generalizing is with
+  | zero => rfl
+  | succ fuel ih =>
+    cases is with
+    | nil => rfl
+    | cons i rest =>
+      rw [sourceLevel,drop_group i rest sorted]
+      cases rest with
+      | nil => simp [countLevel,ih [] (by simp)]
+      | cons j tail =>
+        have later := (List.pairwise_cons.mp sorted).2
+        by_cases both : paired i j
+        · simp only [both,decide_true,↓reduceIte,List.drop_succ_cons,List.drop_zero]
+          rw [ih tail (List.pairwise_cons.mp later).2]
+          simp only [countLevel,both,decide_true,↓reduceIte,List.drop_succ_cons,List.drop_zero,
+            List.length_cons]
+          congr 1
+          omega
+        · simp only [both,decide_false,Bool.false_eq_true,↓reduceIte]
+          rw [ih (j::tail) later]
+          simp only [countLevel,both,decide_false,Bool.false_eq_true,↓reduceIte,List.length_cons]
+          congr 1
+          omega
+
+#print axioms same_parent
+#print axioms drop_group
+#print axioms source_level_eq
+end AspisR1.MultiproofConeCountGroups
