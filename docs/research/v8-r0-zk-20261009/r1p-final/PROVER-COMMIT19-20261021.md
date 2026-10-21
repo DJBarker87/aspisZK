@@ -61,3 +61,47 @@ The numerical proof is symbolic: at q ≤ 2^64, one seed charge is at most
 bound plus these terms is at most 8·2^-109 = 2^-106 < 2^-100. No old loss is
 removed or hidden. Connecting this result to the deployed signature is the
 next stage; concrete shipped execution and full simulator history remain open.
+
+## Stage 2 — deployed endpoint with explicit seed events
+
+`RustProverRefinement` now uses `ProverCommitSeedJoin19.RunJoin`: its model
+randomness is the existing model randomness times an independent uniform
+32-byte seed. Its agreement includes the whole ROMView and observer decision
+outside `augmented oldBad fixedQueries`. The query suffix functions fix the
+ordered source observer and include abort exits. `LegacyRustProverRefinement`
+is the verbatim old premise; `legacy_refinement_implies` proves its implication
+to the new premise with unchanged observations, using product extension.
+No source refinement has been assumed or discharged by this transport.
+
+The privacy error and its upper bound now explicitly add
+`2 * ProverCommitSeedEvent19.budget (2^64)` = 2^-191: one global seed charge
+for each of the real and ideal coupling comparisons. Each charge covers the
+entire eight-attempt run. Keeping the real-side allowance too is conservative;
+neither charge is multiplied by eight. All old error terms are retained.
+The result remains strictly below 2^-100.
+
+J8688 passes: exit 0, 12.70 s, peak RSS 4,203,096 KiB, swaps 0, revision
+`b1978fda4` plus exact source snapshot hash; standard axioms only. J8686–8687
+are excluded local annotation errors. The shared deployed source/object was
+snapshotted under the part-19 host workspace before replacement. New consumers
+must use this new dependency; this is not evidence for an unchanged old olean.
+No concurrent-owner module is edited or replayed.
+
+The exact before/after full files are `endpoint-before.lean.txt` and
+`endpoint-after.lean.txt`, and the complete change is `endpoint.diff` in this
+pass's evidence directory. The following are the verbatim new top statements.
+
+```lean
+theorem legacy_refinement_implies
+    (old : LegacyRustProverRefinement template outputs x rust observer_program) :
+    RustProverRefinement template outputs x rust observer_program
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64)) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) < 1 / 2^100
+```

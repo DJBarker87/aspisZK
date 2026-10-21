@@ -1,0 +1,157 @@
+diff --git a/docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployed.lean b/docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployed.lean
+index d38a88b65..79a3261ca 100644
+--- a/docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployed.lean
++++ b/docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployed.lean
+@@ -1,3 +1,5 @@
++import R1Z.ProverCommitSeedJoin19
++import R1Z.ProverCommitObserverQueries19
+ import R1Z.ProverCommitFixedEndpoint
+ import R1Z.ProverCommitReencode16
+ import R1Z.ProverCommitModelCore16
+@@ -87,7 +89,7 @@ variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
+ /-- The explicit deployed obligation. Both sides include the complete public
+ view, ordered observer history and observer decision. The exceptions are the
+ existing realBad/selectedBad, not predicates chosen by the implementation. -/
+-def RustProverRefinement : Prop :=
++def LegacyRustProverRefinement : Prop :=
+   (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+     Nonempty (WholeRunJoin
+       (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+@@ -103,15 +105,66 @@ def RustProverRefinement : Prop :=
+                 (v, (source).observe a v))
+       QueryScanIdealHistory.selectedBad))
+ 
++/-- Exact adversary-only query suffix of the underlying ordered source. -/
++def realSeedQueries (adv : rust.Adversary) (w : (h).Instance) : (source).RealRand →
++    List ProverCommitSeedEvent19.Entry :=
++  ProverCommitObserverQueries19.real W Pr 8
++    (P_R1 (h).transport B hB) (fun h' => VR1 h') h B outputs
++    (ProverCommitReencode16.observer ProverCommitReencode16.encode
++      (RomObserverBin.observerMap rust observer_program adv)) x w
++
++def idealSeedQueries (adv : rust.Adversary) : (source).IdealRand →
++    List ProverCommitSeedEvent19.Entry :=
++  ProverCommitObserverQueries19.ideal W 8 eight_pos
++    (P_R1 (h).transport B hB) (simE (h).transport B outputs x)
++    (ProverCommitReencode16.observer ProverCommitReencode16.encode
++      (RomObserverBin.observerMap rust observer_program adv)) x
++
++/-- The explicit deployed obligation. Both sides include the complete public
++view, ordered observer history and observer decision. The exceptions are the
++fixed parser events augmented with a single global seed-guess event on an
++independently retained model seed. Query functions are fixed by the model. -/
++def RustProverRefinement : Prop :=
++  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
++    Nonempty (ProverCommitSeedJoin19.RunJoin
++      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
++      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
++                let v := (source).real h B outputs a x w r
++                (v, (source).observe a v))
++      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
++      (realSeedQueries template outputs x rust observer_program adv w))) ∧
++  (∀ adv : rust.Adversary, Nonempty (ProverCommitSeedJoin19.RunJoin
++      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
++                (v, rust.observe adv v))
++      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
++                let v := (source).ideal (simE (h).transport B outputs x) a x r
++                (v, (source).observe a v))
++      QueryScanIdealHistory.selectedBad
++      (idealSeedQueries template outputs x rust observer_program adv)))
++
++/-- Every previous certificate still suffices. The independent seed is added
++by product extension, so this is an actual implication between premises. -/
++theorem legacy_refinement_implies
++    (old : LegacyRustProverRefinement template outputs x rust observer_program) :
++    RustProverRefinement template outputs x rust observer_program := by
++  constructor
++  · intro adv w hw
++    let join := Classical.choice (old.1 adv w hw)
++    exact ⟨ProverCommitSeedJoin19.of_old _ _ _ _ join.cp join.agreement⟩
++  · intro adv
++    let join := Classical.choice (old.2 adv)
++    exact ⟨ProverCommitSeedJoin19.of_old _ _ _ _ join.cp join.agreement⟩
++
++
+ attribute [local irreducible] PrivacyR1AcctBasis.basis
+ theorem privacy_headline_deployed
+     (refinement : RustProverRefinement template outputs x rust observer_program)
+  :
+     ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+-      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1)) ∧
+-    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ≤
+-      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ∧
+-    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100 := by
++      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64)) ∧
++    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) ≤
++      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) ∧
++    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) < 1 / 2^100 := by
+   have model := PrivacyR1HeadlineOwnedClosed.Admitted.FixedObserver.privacy_headline_admitted
+     template outputs x
+   have caller := ProverCommitOwnedEndpoint.caller_law template input outputs x
+@@ -121,15 +174,28 @@ theorem privacy_headline_deployed
+     (Nat.succ_le_succ (Nat.zero_le (8 * n1 W Pr)))
+   constructor
+   · intro adv w hw
+-    have hr := QueryScanRealLazyJoin.join_le _ _ _
+-      (Classical.choice (refinement.1 adv w hw)).tests
+-      (QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr))
+-      (ProverCommitModelCore16.real_bad_mass base h B outputs x seed hc₁ hc₂ w)
+-      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (fun _ => ⟨bit_nonneg _, bit_le_one _⟩)
+-    have hi := scan_coupling_le _ _
+-      ((Classical.choice (refinement.2 adv)).tests.toScanCoupling
+-        (fun i => QueryScanIdealHistory.selected_bad_mass i))
+-      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (fun _ => ⟨bit_nonneg _, bit_le_one _⟩)
++    have hr₀ := ProverCommitSeedJoin19.test_bound
++      (Classical.choice (refinement.1 adv w hw)) (fun run => bit run.2)
++      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (2^64)
++      (fun r => ProverCommitObserverQueries19.real_bound W Pr 8
++        (P_R1 (h).transport B hB) (fun h' => VR1 h') h B outputs _ x w r)
++    have hi₀ := ProverCommitSeedJoin19.test_bound
++      (Classical.choice (refinement.2 adv)) (fun run => bit run.2)
++      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (2^64)
++      (fun r => ProverCommitObserverQueries19.ideal_bound W 8 eight_pos
++        (P_R1 (h).transport B hB) (simE (h).transport B outputs x) _ x r)
++    have hscan : 8 * scanProbability ≤ 8 / (2 : ℚ)^486 := by
++      simpa only [mul_one_div] using
++        mul_le_mul_of_nonneg_left scan_probability_le (by norm_num : (0 : ℚ) ≤ 8)
++    have hr := hr₀.trans (add_le_add
++      ((ProverCommitModelCore16.real_bad_mass base h B outputs x seed hc₁ hc₂ w).trans
++        (add_le_add (le_refl _) hscan)) (le_refl (ProverCommitSeedEvent19.budget (2^64))))
++    have idealMass : eventMass (fun r : (source).IdealRand => ∃ i : Fin 8, QueryScanIdealHistory.selectedBad i r) ≤
++        8 * scanProbability := by
++      exact R0Z.FsAbortBounds.mass_exists_le_card _ _
++        (fun i => QueryScanIdealHistory.selected_bad_mass i)
++    have hi := hi₀.trans (add_le_add (idealMass.trans hscan)
++      (le_refl (ProverCommitSeedEvent19.budget (2^64))))
+     obtain ⟨hpub, hs⟩ := PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises (x := x) w hw
+     have core := ProverCommitModelCore16.core_privacy base h B outputs x seed hB hpub hs
+       ProverCommitSourceDecoder.quotientFibreSize (by
+@@ -155,15 +221,21 @@ theorem privacy_headline_deployed
+         (simE (h).transport B outputs x)))
+       (mean (idealTestS rust adv x (simE (h).transport B outputs x)))
+     rw [abs_sub_comm] at hi
+-    calc _ ≤ ((QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) + 8 / (2 : ℚ)^486) +
+-        modelError W Pr L₁ L₂) + 8 / (2 : ℚ)^486 :=
+-          t₂.trans (add_le_add (t₁.trans (add_le_add hr hmid)) hi)
++    calc _ ≤ ((QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) + 8 / (2 : ℚ)^486 +
++          ProverCommitSeedEvent19.budget (2^64)) + modelError W Pr L₁ L₂) +
++          (8 / (2 : ℚ)^486 + ProverCommitSeedEvent19.budget (2^64)) :=
++            t₂.trans (add_le_add (t₁.trans (add_le_add hr hmid)) hi)
+          _ = modelError W Pr L₁ L₂ + 16 / (2 : ℚ)^486 +
+-           QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) :=
+-          QueryScanFreshNumerics.amount_identity _ _ _
+-         _ ≤ _ := add_le_add (le_refl _) hk
+-  · exact model.2
++           QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) +
++           2 * ProverCommitSeedEvent19.budget (2^64) := by ring
++         _ ≤ _ := add_le_add (add_le_add (le_refl _) hk) (le_refl _)
++  · constructor
++    · exact add_le_add model.2.1 (le_refl _)
++    · apply (add_le_add model.2.1 (le_refl _)).trans_lt
++      exact ProverCommitSeedJoin19.total_lt_target
++        (Nat.le_trans (Nat.add_le_add_right hM 1) (by norm_num)) (Nat.le_refl _)
+ 
+ #print axioms WholeRunJoin.tests
++#print axioms legacy_refinement_implies
+ #print axioms privacy_headline_deployed
+ end R1Z.PrivacyR1HeadlineDeployed
