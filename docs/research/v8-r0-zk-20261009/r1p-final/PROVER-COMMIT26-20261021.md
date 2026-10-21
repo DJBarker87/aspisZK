@@ -45,3 +45,49 @@ binding still relies on the separately checked control skeleton and P6;
 it is not a new Aeneas theorem identifying the original iterator body with
 the extracted indexed body. This distinction must remain visible at the
 whole-source boundary. No endpoint premise is removed at this stage.
+
+## Stage 2 — concrete query callback and extracted continuation
+
+`ProverCommitQuery26.policy` installs the concrete query callback along with
+all three scalar policies from part 25; no query callback parameter remains.
+It uses the retained concrete LE/mask decoder, list scanner and first-stop
+driver, starting at the explicit zero scanner. `success` supplies both the
+selected-state driver trace and the full concrete Q22-valid per-block chain.
+`rejection` maps scan failure to Transcript. `caller` factors the *actual
+extracted* eager sixteen-read schedule from this concrete callback and the
+literal 22-entry trace continuation; it retains all failure/divergence cases.
+`finish_rejection` proves that query failure retains the absorbed state and
+previous trace. These are owned-source/model facts, not a shipped FS experiment.
+
+J7615 passes all six top-level audits: exit 0, wall 4.35 s, peak RSS
+4030576 KiB, swap 0; only [propext, Classical.choice, Quot.sound].
+The source factorization is checked byte-for-byte by `harness/check-query26.py`.
+The proof uses shallow bind congruence with explicit tuple normalization;
+it does not raise depth/heartbeat options. J7601–7614 retain all failed
+elaboration/normalization diagnostics and exact snapshots.
+
+Thirteen retained query owners are now compiled from pinned source into Env J,
+coherently with the installed scalar/source closure. J7586–7589, J7592–7600
+pass. J7590 is an excluded monadic elaboration port failure; J7591 is a
+preflight-only missing dependency. The driver proof port replaces inferred
+pair-bind elimination with explicit bind elimination; no statement or
+executable body changes. `query-owners.json` and `query-ports/` pin every port.
+
+Source/library gates: `query-iterator-v1` proves all eight actual IntoIter
+values and exact exhaustion (0.598 s, 145840 KiB); `query-decoder-v1` proves
+source from_fn/map versus ordered LE/mask parsing (0.789 s, 168940 KiB);
+`query-driver-v1` proves outer loop versus first-stop unrolling, including
+all observed block bytes and selected advance bytes, for arbitrary stop
+responses (6.572 s, 389884 KiB). Every gate exits 0 with zero swap.
+The driver's scan callback is abstract: this is a control theorem, not an
+assertion that the complete native scanner equals its model.
+
+The direct complete eight-word scanner comparison timed out at 90 s;
+its variable-prefix membership diagnostic timed out at 60 s. Neither counts
+as verification. Replacing the symbolic slice length by *every* fixed length
+0 through 22 yields 23 successful source-contains/explicit-membership gates:
+1.18–1.65 s each, under 267000 KiB, zero swap, with unwinding assertions.
+The complete old scanner gate is not rerun. These fine-grained gates close
+library/control obligations; their full source-to-Q22 composition still needs
+an exact scanner execution transport theorem. The standard trust list is not
+expanded to include that desired conclusion.
