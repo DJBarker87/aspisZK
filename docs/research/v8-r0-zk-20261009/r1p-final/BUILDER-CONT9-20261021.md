@@ -90,7 +90,23 @@ The complete semantic admission obligation remains open.
 
 ## Stage 3: Parts content
 
-In progress.
+`BuilderInverse` proves the actual modular-exponentiation loop by induction
+on the symbolic exponent, with bounds preventing u64 multiplication wrap.
+`BuilderInverseResult.inverse` identifies the actual `inv_r` with `invR` for
+all u32 storage words. J9343 and J9345 pass (2.31 s / 3,751,128 KiB and
+1.78 s / 3,736,720 KiB, zero swaps). The failed monolithic specialization
+J9342 reached kernel memory pressure at 7,169,680 KiB; it was replaced by
+separate symbolic field-power and scalar-conversion lemmas, not a limit
+increase. The generic loop was checked before its concrete specialization.
+
+`BuilderPrimitiveDigests` supplies 46 identities between the actual aggregate
+and component block-writer/Poseidon extractions, including all recursive
+loops, round constants and full permutation. Recurrences use symbolic suffix
+induction with bounds 4, 8, 10, 15 or 16; no concrete permutation cell is
+reduced. Its deterministic generator `--check` passes. J9347 passes in
+4.55 s, 3,791,660 KiB, zero swap; all 46 axioms audits use only the allowed
+standard axioms. This removes duplicated primitive computation as a source
+of mismatch; the caller argument correspondence remains the next target.
 
 ## Stages 4–5: runtime and checker/retry
 
