@@ -1,0 +1,53 @@
+/tmp/root-s4-installed-reverse-helper-v2-20261021/sources/S4InstalledReverseHelperRootV1.lean:38:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-s4-installed-reverse-helper-v2-20261021/sources/S4InstalledReverseHelperRootV1.lean:59:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-s4-installed-reverse-helper-v2-20261021/sources/S4InstalledReverseHelperRootV1.lean:86:6: error: Tactic `subst` failed: did not find equation for eliminating 'x'
+
+case refine_2.inr.inr.inr
+base : Ops
+q : Slice U8
+a : Std.Array U8 608#usize
+g : Std.Array Wide 29#usize
+hq : 608 ≤ q.length
+ha : ↑a = List.slice 0 ↑608#usize ↑q
+hcoords : ∀ (j : Fin 29), AspisR1FastDotsWideLimbCanonical.CoordinateBound (↑g)[↑j]
+hslots : ∀ (slot : Usize), ↑slot < 4 → SlotInput a g slot
+hreverse : ∀ (slot : Usize), ↑slot < 4 → ReverseHeadSuccess (install base) a g slot
+s : Slice U8
+hs : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) q { «end» := 608#usize } = ok s
+hcopy : core.array.TryFromSharedArraySlice.try_from 608#usize s = ok (core.result.Result.Ok a)
+v0 : Wide
+h0 : fast_dots.four_dots_one (install base) a g 0#usize = ok v0
+hc0 : AspisR1CurrentWide.Proof.CanonicalWide (AspisR1FastDotsTailWideAddCurrentV1.s4ToCurrentE v0)
+v1 : Wide
+h1 : fast_dots.four_dots_one (install base) a g 1#usize = ok v1
+hc1 : AspisR1CurrentWide.Proof.CanonicalWide (AspisR1FastDotsTailWideAddCurrentV1.s4ToCurrentE v1)
+v2 : Wide
+h2 : fast_dots.four_dots_one (install base) a g 2#usize = ok v2
+hc2 : AspisR1CurrentWide.Proof.CanonicalWide (AspisR1FastDotsTailWideAddCurrentV1.s4ToCurrentE v2)
+v3 : Wide
+h3 : fast_dots.four_dots_one (install base) a g 3#usize = ok v3
+hc3 : AspisR1CurrentWide.Proof.CanonicalWide (AspisR1FastDotsTailWideAddCurrentV1.s4ToCurrentE v3)
+x : Wide
+h : x = v3 ∨ x ∈ []
+⊢ AspisR1CurrentWide.Proof.CanonicalWide (AspisR1FastDotsTailWideAddCurrentV1.s4ToCurrentE x)
+/tmp/root-s4-installed-reverse-helper-v2-20261021/sources/S4InstalledReverseHelperRootV1.lean:81:29: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [List.mem_cons,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵] at hx
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1FastDotsInstalledReverseHelperRootV1.fixed_four_total_on_slots' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsInstalledReverseHelperRootV1.installed_old_callback_success_fixed_helper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsInstalledReverseHelperRootV1.fixed_helper_total_on_slot' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
