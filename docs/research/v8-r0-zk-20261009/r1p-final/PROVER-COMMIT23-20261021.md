@@ -166,3 +166,28 @@ supply the concrete remaining gamma/ordinary/query policies, circle-caller
 reachability, nominal caller carriers, retry/error/serialization assembly
 or full native trace identification. The generic history theorem below
 does not prove these source equations.
+
+## Stage 3 addendum — complete ordered-history law
+
+`ProverCommitAdaptiveHistory23.complete_joint` strengthens the marked-vector
+law to **every rational test of the full ordered query/answer history and
+terminal output**. It equates the one-uniform-complete-oracle expectation
+with an interpreter supplied an independent marked vector, memoizing those
+marked values for all later reads while sampling other first reads lazily.
+Repeated reads, their positions/answers, errors, retry/abort outcomes and
+final state may all be observed. No acceptance-only projection or history
+reordering is used. The source-shaped Fresh invariant is a visible premise.
+The proof's unmarked-fresh branch commutes independent expectations; its
+marked branch uses Fin.cons to expose one coordinate. No universe is
+concretely enumerated.
+
+J7484 is an excluded missing induction-generalization failure. J7485 passes
+both `lazy_joint` and `complete_joint`: exit 0, 2.06 s, peak 4020004 KiB,
+swaps 0, standard three axioms only. Exact source/dependency fingerprints
+are in `lean/attempts-7484-7486.jsonl`.
+
+This closes the **generic joint adaptive-history law**, and strengthens the
+previous partial fuel reasoning. It does not construct the shipped Marked
+program, prove its Fresh invariant/counter room, or give the concrete
+finite coupling/marginal factorization required by FuelJoin22.RunJoin.
+Neither WholeRunJoin is inferred merely from equality of interpreter laws.
