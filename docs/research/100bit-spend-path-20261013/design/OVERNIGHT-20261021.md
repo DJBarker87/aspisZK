@@ -1,5 +1,10 @@
 # Overnight summary, 20→21 October 2026
 
+> **Correction (10:55, 21 Oct):** the binding completion criterion is the user's
+> per-attempt target (100-bit per attempt, no grinding credit, plus the plain
+> query-dependent repeated-attempt bound). It is in `SECURITY-CONTRACT-20261021.md`.
+> The "(Q+1)·2^-100 per query" wording below is a derived corollary, not the target.
+
 Lead coordinator summary of the overnight Codex run (about 21:30 to 07:00).
 The detail sits in the addenda of `design/C3-BIN-20261021.md` (soundness)
 and in LOG D85–D119 of `docs/research/v8-r0-zk-20261009/LOG.md` (privacy).
