@@ -10,7 +10,7 @@ sub=ev/f'submission-{attempt}.json';sub.write_text(json.dumps(r,indent=2)+'\n')
 def run(args,**kw):return subprocess.run(args,check=True,**kw)
 run(['ssh',host,f'mkdir -p {remote}'])
 # Upload branch-owned new names only; failed source versions may be replaced.
-assert module in {'R1Z/SimCostLazyBytes', 'R1Z/SimCostFixedOperations', 'R1Z/SimCostPreparationBoundary', 'R1Z/SimCostLazyBoundedBytes'}
+assert module in {'R1Z/SimCostLazyBytes', 'R1Z/SimCostFixedOperations', 'R1Z/SimCostPreparationAudit', 'R1Z/SimCostLazyBoundedBytes'}
 run(['ssh',host,f'test ! -f /home/dombarker/project-offloads/aspis-joint-20261019/sources/{module}.lean || mkdir -p {remote}/snapshots/{attempt} && cp -p /home/dombarker/project-offloads/aspis-joint-20261019/sources/{module}.lean {remote}/snapshots/{attempt}/ 2>/dev/null || true'])
 run(['scp',str(src),f'{host}:/home/dombarker/project-offloads/aspis-joint-20261019/sources/{module}.lean'])
 run(['scp',str(sub),str(ev/'host-attempt.py'),f'{host}:{remote}/'])
