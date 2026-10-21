@@ -29,3 +29,21 @@ outer recurrence with concrete double=subsequent M31.add and ONE=1.
 M31 arithmetic, including the production width 64 / six levels instance.
 The basis's mathematical monomial identity/canonical prefix invariant is not
 yet joined; totality and schedule equality alone do not establish it.
+
+Stage 3: `S7Kani3CanonicalBackend` proves checked remainder/canonicalisation
+for arbitrary U32 coordinates and mixed multiplication with arbitrary rhs.
+`S7Kani3WideBackend` proves concrete CM/QM subtraction, mul_by_r/mul_u, and
+the complete Karatsuba WideExact product/subtraction on canonical coordinates.
+The general product retains the real ac/bd/cross/sub/sub operation order; the
+proof derives both tower-coordinate formulas with the inherited actual QM31
+multiply. No multiplication stub or backend law is assumed. The new QM31.sub
+port is explicit because that method was absent from the inherited selection.
+`backend-bindings.json` preserves each frozen body, source hashes, port names
+and representation/configuration limits. These are source ports, not claims
+that the full original extraction cone or SBF ABI has been checked. M31
+inverse, domain lookups, dot kernels, bytes and observers remain separate joins.
+
+No headline premise is deleted. The local mixed law strictly improves its
+predecessor by eliminating the canonical rhs premise; it does not alter the
+headline signature. The initial canonical attempt used a namespace as a
+filename and failed before invoking Lean; its null resource fields are marked.

@@ -1,0 +1,45 @@
+{
+  "frozen_revision": "b2727acd3",
+  "field_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+  "wide_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+  "items": [
+    {
+      "rust": "fn canonical_qm31(value: QM31) -> QM31 {\n    let reduce = |x: M31| M31(x.0 % P);\n    QM31 {\n        c0: CM31 {\n            a: reduce(value.c0.a),\n            b: reduce(value.c0.b),\n        },\n        c1: CM31 {\n            a: reduce(value.c1.a),\n            b: reduce(value.c1.b),\n        },\n    }\n}",
+      "sha256": "5cc339b12c5b4cc11876e623b2695b698fde8c2163195bc97b70beeea4cd9aef",
+      "lean_port": "S7Kani3CanonicalBackend.canonicalQM"
+    },
+    {
+      "rust": "pub fn sub(self, rhs: Self) -> Self {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::ESub);\n        Self {\n            c0: self.c0.sub(rhs.c0),\n            c1: self.c1.sub(rhs.c1),\n        }\n    }",
+      "sha256": "e0a1d4011e654d261d01cabecd894a96242bb583d4a4363c0f6f1f1ed232e493",
+      "lean_port": "S7Kani3WideBackend.subWide"
+    },
+    {
+      "rust": "pub fn mul(self, rhs: Self) -> Self {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMul);\n        #[cfg(all(feature = \"r0-e4-reference\", not(target_os = \"solana\")))]\n        if crate::r0::equality_trace::is_reference() {\n            return self.mul_re3(rhs);\n        }\n        let ac = self.c0.mul(rhs.c0);\n        let bd = self.c1.mul(rhs.c1);\n        let cross = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));\n        Self {\n            c0: ac.add(mul_u(bd)),\n            c1: cross.sub(ac).sub(bd),\n        }\n    }",
+      "sha256": "47c8044c02a35cb46e284c30597906a748a2e8904b3ed811189c5f19855b3462",
+      "lean_port": "S7Kani3WideBackend.mulWide"
+    },
+    {
+      "rust": "pub fn mul_qm31(self, rhs: QM31) -> Self {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMulK);\n        let rhs = canonical_qm31(rhs);\n        Self {\n            c0: self.c0.mul(rhs),\n            c1: self.c1.mul(rhs),\n        }\n    }",
+      "sha256": "617f4bfe9aaaabf3129ada726faaf601dfac8e1d978eb62ba007dcc6032fdf9f",
+      "lean_port": "S7Kani3CanonicalBackend.mulMixed"
+    },
+    {
+      "rust": "fn mul_u(value: QM31) -> QM31 {\n    QM31 {\n        c0: super::mul_by_r(value.c1),\n        c1: value.c0,\n    }\n}",
+      "sha256": "104606eef8608190dc318b2c65344184f19cf827d80c0938563e23dd2f9c4cc2",
+      "lean_port": "S7Kani3WideBackend.mulU"
+    },
+    {
+      "rust": "pub fn sub(self, rhs: QM31) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSub);\n        QM31 {\n            c0: self.c0.sub(rhs.c0),\n            c1: self.c1.sub(rhs.c1),\n        }\n    }",
+      "sha256": "0f63921f7c69f3e6f428453d7a326af1c1d4319409ac45469aeeca84a1160c49",
+      "lean_port": "S7Kani3WideBackend.qmSub"
+    }
+  ],
+  "scope": "Explicit additive ports of production feature-off arithmetic. Canonical carriers and ordered field-call dependencies are proved. Full ABI/extracted-cone/observer and SBF correspondence are separate P6 boundaries.",
+  "changes": [
+    "private Wide coordinates represented by existing two-QM31 record",
+    "QM31.sub port added because inherited extraction omitted that method",
+    "canonical_qm31 closure flattened in coordinate order",
+    "mulWide evaluates independent sx/sy sums before cross and mul_u; operand order and each dependent operation retained",
+    "instrumentation/reference-only cfg branches excluded as in inherited selected extraction"
+  ]
+}
