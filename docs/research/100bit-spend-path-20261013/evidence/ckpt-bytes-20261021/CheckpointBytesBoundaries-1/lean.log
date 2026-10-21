@@ -1,0 +1,185 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBoundaries.lean:10:55: error: unsolved goals
+q : aspis_core.field.wide_exact.WideExact
+⊢ (do
+      let i1 ← 32#usize / 4#usize
+      let i2 ←
+        match
+            (↑(Array.make 8#usize
+                  [q.c0.c0.a, q.c0.c0.b, q.c0.c1.a, q.c0.c1.b, q.c1.c0.a, q.c1.c0.b, q.c1.c1.a, q.c1.c1.b]
+                  ⋯))[↑i1]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let i3 ← 32#usize % 4#usize
+      let i4 ← 8#usize * i3
+      let i5 ← i2 >>> i4
+      ok (UScalar.cast UScalarTy.U8 i5)) =
+    fail Error.arrayOutOfBounds
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBoundaries.lean:18:49: error: Tactic `decide` failed for proposition
+  (List.replicate 17 0#u8).length ≤ Usize.max
+because its `Decidable` instance
+  (List.replicate 17 0#u8).length.decLe Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match (List.replicate 17 0#u8).length.ble Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBoundaries.lean:17:59: error: unsolved goals
+b : Slice U8 := ⟨List.replicate 17 0#u8, ⋯⟩
+⊢ (do
+      let x ← lift (UScalar.cast UScalarTy.U32 0#u8)
+      let x_1 ← 0#usize + 1#usize
+      let x_2 ←
+        match
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8][↑x_1]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let x_3 ← lift (UScalar.cast UScalarTy.U32 x_2)
+      let x_4 ← x_3 <<< 8#i32
+      let x ← lift (x ||| x_4)
+      let x_5 ← 0#usize + 2#usize
+      let x_6 ←
+        match
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8][↑x_5]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let x_7 ← lift (UScalar.cast UScalarTy.U32 x_6)
+      let x_8 ← x_7 <<< 16#i32
+      let x ← lift (x ||| x_8)
+      let x_9 ← 0#usize + 3#usize
+      let x_10 ←
+        match
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8][↑x_9]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let x_11 ← lift (UScalar.cast UScalarTy.U32 x_10)
+      let x_12 ← x_11 <<< 24#i32
+      let x_13 ← lift (UScalar.cast UScalarTy.U32 0#u8)
+      let x_14 ← 4#usize + 1#usize
+      let x_15 ←
+        match
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8][↑x_14]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let x_16 ← lift (UScalar.cast UScalarTy.U32 x_15)
+      let x_17 ← x_16 <<< 8#i32
+      let x_18 ← lift (x_13 ||| x_17)
+      let x_19 ← 4#usize + 2#usize
+      let x_20 ←
+        match
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8][↑x_19]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let x_21 ← lift (UScalar.cast UScalarTy.U32 x_20)
+      let x_22 ← x_21 <<< 16#i32
+      let x_23 ← lift (x_18 ||| x_22)
+      let x_24 ← 4#usize + 3#usize
+      let x_25 ←
+        match
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8][↑x_24]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let x_26 ← lift (UScalar.cast UScalarTy.U32 x_25)
+      let x_27 ← x_26 <<< 24#i32
+      let x_28 ← lift (UScalar.cast UScalarTy.U32 0#u8)
+      let x_29 ← 8#usize + 1#usize
+      let x_30 ←
+        match
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8][↑x_29]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let x_31 ← lift (UScalar.cast UScalarTy.U32 x_30)
+      let x_32 ← x_31 <<< 8#i32
+      let x_33 ← lift (x_28 ||| x_32)
+      let x_34 ← 8#usize + 2#usize
+      let x_35 ←
+        match
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8][↑x_34]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let x_36 ← lift (UScalar.cast UScalarTy.U32 x_35)
+      let x_37 ← x_36 <<< 16#i32
+      let x_38 ← lift (x_33 ||| x_37)
+      let x_39 ← 8#usize + 3#usize
+      let x_40 ←
+        match
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8][↑x_39]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let x_41 ← lift (UScalar.cast UScalarTy.U32 x_40)
+      let x_42 ← x_41 <<< 24#i32
+      let x_43 ← lift (UScalar.cast UScalarTy.U32 0#u8)
+      let x_44 ← 12#usize + 1#usize
+      let x_45 ←
+        match
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8][↑x_44]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let x_46 ← lift (UScalar.cast UScalarTy.U32 x_45)
+      let x_47 ← x_46 <<< 8#i32
+      let x_48 ← lift (x_43 ||| x_47)
+      let x_49 ← 12#usize + 2#usize
+      let x_50 ←
+        match
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8][↑x_49]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let x_51 ← lift (UScalar.cast UScalarTy.U32 x_50)
+      let x_52 ← x_51 <<< 16#i32
+      let x_53 ← lift (x_48 ||| x_52)
+      let x_54 ← 12#usize + 3#usize
+      let x_55 ←
+        match
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8][↑x_54]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let x_56 ← lift (UScalar.cast UScalarTy.U32 x_55)
+      let x_57 ← x_56 <<< 24#i32
+      if 2147483647 ≤ ↑(↑(Array.make 4#usize [x ||| x_12, x_23 ||| x_27, x_38 ||| x_42, x_53 ||| x_57] ⋯))[0] then
+          ok none
+        else
+          if 2147483647 ≤ ↑(↑(Array.make 4#usize [x ||| x_12, x_23 ||| x_27, x_38 ||| x_42, x_53 ||| x_57] ⋯))[1] then
+            ok none
+          else
+            if 2147483647 ≤ ↑(↑(Array.make 4#usize [x ||| x_12, x_23 ||| x_27, x_38 ||| x_42, x_53 ||| x_57] ⋯))[2] then
+              ok none
+            else
+              if
+                  2147483647 ≤
+                    ↑(↑(Array.make 4#usize [x ||| x_12, x_23 ||| x_27, x_38 ||| x_42, x_53 ||| x_57] ⋯))[3] then
+                ok none
+              else
+                ok
+                  (some
+                    {
+                      c0 :=
+                        { a := (↑(Array.make 4#usize [x ||| x_12, x_23 ||| x_27, x_38 ||| x_42, x_53 ||| x_57] ⋯))[0],
+                          b := (↑(Array.make 4#usize [x ||| x_12, x_23 ||| x_27, x_38 ||| x_42, x_53 ||| x_57] ⋯))[1] },
+                      c1 :=
+                        { a := (↑(Array.make 4#usize [x ||| x_12, x_23 ||| x_27, x_38 ||| x_42, x_53 ||| x_57] ⋯))[2],
+                          b :=
+                            (↑(Array.make 4#usize [x ||| x_12, x_23 ||| x_27, x_38 ||| x_42, x_53 ||| x_57]
+                                  ⋯))[3] } })) =
+    ok (some { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } })
+'AspisR1.CheckpointBytesBoundaries.e_byte_out_of_range' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CheckpointBytesBoundaries.k_accepts_trailing_byte' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

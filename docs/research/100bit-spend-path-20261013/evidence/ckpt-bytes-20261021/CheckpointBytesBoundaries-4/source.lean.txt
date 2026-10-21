@@ -1,0 +1,30 @@
+import CheckpointBytesArithmetic
+
+set_option autoImplicit false
+namespace AspisR1.CheckpointBytesBoundaries
+open Aeneas Aeneas.Std Result
+open OraclePortCkptAbi2Extracted CheckpointBytesArithmetic
+
+/-- The sparse selector is partial outside its 32-byte field. -/
+theorem e_byte_out_of_range (q : aspis_core.field.wide_exact.WideExact) :
+    e_byte q 32#usize = fail Error.arrayOutOfBounds := by
+  simp only [e_byte,aspis_core.field.wide_exact.WideExact.to_limbs,bind_tc_ok]
+  rw [div_four _ (by scalar_tac)]
+  simp [Array.index_usize]
+
+/-- K decoding checks four words, but does not reject a trailing byte.
+Production must pass an exact-width section before this decoder is strict. -/
+theorem k_accepts_trailing_byte :
+    ∃ (b : Slice U8) (q : aspis_core.field.QM31),
+      b.val.length = 17 ∧ decode_k_spec b = ok (some q) := by
+  let b : Slice U8 := ⟨List.replicate 17 0#u8,by simp; scalar_tac⟩
+  refine ⟨b,⟨⟨0#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩,rfl,?_⟩
+  dsimp only [decode_k_spec,word_spec,k_from_limbs,b,Slice.index_usize,Array.index_usize,
+    lift,HAdd.hAdd,instHAddUScalarResult,HShiftLeft.hShiftLeft,instHShiftLeftUScalarIScalarResult]
+  rcases System.Platform.numBits_eq with hn | hn <;>
+    simp [UScalar.cast,UScalar.add,UScalar.tryMk,UScalar.shiftLeft,
+      UScalar.shiftLeft_IScalar,UScalar.tryMkOpt,Array.make,hn] <;> rfl
+
+#print axioms e_byte_out_of_range
+#print axioms k_accepts_trailing_byte
+end AspisR1.CheckpointBytesBoundaries
