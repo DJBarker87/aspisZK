@@ -1,0 +1,6 @@
+import AspisR1S9HelperP6.Funs
+#print axioms AspisR1S9HelperP6.weights.kpowers
+#print axioms AspisR1S9HelperP6.weights.Weights.scalar_factor
+#print axioms AspisR1S9HelperP6.weights.factored_s2_libra_weights_loop.body
+#print axioms AspisR1S9HelperP6.weights.factored_s2_libra_weights_loop
+#print axioms AspisR1S9HelperP6.weights.factored_s2_libra_weights
