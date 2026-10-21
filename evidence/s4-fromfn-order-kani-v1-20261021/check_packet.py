@@ -24,10 +24,16 @@ assert "JSONDecodeError" in (root/"kani-v8/scope.stderr.log").read_text()
 assert json.loads((root/"kani-q-v1/receipt.json").read_text())["exit_status"]==1
 subprocess.run(["python3",str(root/"check-q-source.py")],check=True,stdout=subprocess.DEVNULL)
 subprocess.run(["python3",str(root/"check-critical-bodies.py")],check=True,stdout=subprocess.DEVNULL)
+subprocess.run(["python3",str(root/"compare-std-bodies.py")],check=True,stdout=subprocess.DEVNULL)
 audit=json.loads((root/"source-availability.json").read_text())
 assert audit["kani"]["pinned_upstream_source"]["commit"]=="53732d5e076329a62f71d3c6901886ce8a71e812"
 assert audit["frozen_sbf"]["array_source"].startswith("not installed")
 assert audit["frozen_aeneas_extraction"]["body_comparison"].startswith("The retained Aeneas extraction")
+cmp=json.loads((root/"upstream-body-comparison.json").read_text()) if (root/"upstream-body-comparison.json").exists() else None
+if cmp is None:
+    subprocess.run(["python3",str(root/"compare-std-bodies.py")],check=True,stdout=subprocess.DEVNULL)
+    cmp=json.loads((root/"upstream-body-comparison.json").read_text())
+assert all(v["same_normalized_body"] for v in cmp["comparisons"].values())
 for p in root.rglob("*"):
     if not p.is_file() or p.name in {"SHA256SUMS","check_packet.py"}: continue
     assert p.suffix not in {".o",".a",".so",".dylib",".rlib",".rmeta",".olean",".olean.private",".olean.server"}, p
