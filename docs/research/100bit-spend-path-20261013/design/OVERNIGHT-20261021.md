@@ -69,9 +69,18 @@ Each was byte-identical, every time.
      (strictly weaker), the ≤1161 accepted-run bound, and guard erasure on
      accepted runs. Log containment alone does not transfer the extractor
      (countermodels), so
-   - `cx-acclog-draft` (running at 05:40) targets equal logs on frozen-accepted
-     runs. That is the weakest join that transfers the extractor's input
-     exactly.
+   - `cx-acclog-draft`: proves the conditional `OraclePortHeadlineAccLog`
+     whose only join is `AcceptedRunJoin`: equal logs and outputs on
+     frozen-accepted runs, covering both annotation passes. It is strictly
+     weaker than ExecutionJoin. It also proves the model's recursive
+     multiproof order differs from the frozen ascending-level order on
+     accepting slots, and that this permutation changes recovery. So the model
+     must adopt the frozen order.
+   - `cx-frozen-order-draft` (running at 06:00): dV_frozen with the exact
+     frozen slot order, re-proving leaf recovery, budgets and
+     checked_acceptance for level-order logs. Once the model order equals the
+     frozen order, the per-cone joins are exactly the refinement statements
+     the S-cone re-pins prove.
    Recommendation: adopt. The whole soundness gap then becomes one
    Rust-equals-dV execution join plus the runtime carrier binding, which is
    exactly what the S-cone re-pins establish. Nothing merges without your yes.
