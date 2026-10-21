@@ -197,3 +197,26 @@ Focused successful attempts: strengthened RowsTrace-7, QueryRows-3 and
 Accumulation-2. Every axiom audit is standard and every swap count is zero.
 The earlier accumulation attempt passed but lacked coefficient semantics;
 the strengthened source and dependencies were compiled in order.
+
+## Final focused verification
+
+Final compatible union: `S7JoinFreeze`, attempt 2, exit 0, wall
+46.61255524959415 seconds, peak RSS 2,777,186,304 bytes, zero swaps;
+source revision f348246dcd866369ed148f9ec0b3e51c653aeed7. All nine union
+`#print axioms` reports contain only propext/Classical.choice/Quot.sound.
+The final source/import/overlay/scope/R17-reuse audit passes: 21 current
+modules, 77 reports including the union's repeated audits; accepted packet
+peak RSS 3,601,596,416 bytes, zero swaps. `audit-result.json` retains exact
+per-target metrics, revisions, source hashes and complete axiom lines.
+Historical provider-interrupted attempts are listed explicitly and excluded
+from accepted evidence. `remaining.tsv` is the authoritative current split
+between proved ports/reference and still-unproved frozen source adoption.
+`git-log.txt` records f458169f7..f348246dc before this evidence commit.
+
+No complete frozen release replay or headline premise deletion is claimed.
+The final remaining work is the original frozen gather/lookup/allocation and
+opaque-inv binding; opening/four_dots/fold and physical carriers; the original
+query/TX/observer/caller adoption, initial/resumed state provenance and
+concrete cone/tree/order instance. RHS/power/next/terms arithmetic and all
+64 owned-row coefficient effects are proved at the new carrier port, so
+those are adoption/provenance obligations rather than missing local algebra.

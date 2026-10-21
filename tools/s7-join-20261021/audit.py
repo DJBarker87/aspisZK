@@ -50,6 +50,15 @@ for name in changed:
             name.startswith('docs/research/100bit-spend-path-20261013/evidence/s7-join-20261021/') or
             re.fullmatch(r'docs/research/100bit-spend-path-20261013/lean/S7Join\w+\.lean',name) or
             name=='docs/research/100bit-spend-path-20261013/design/CONE-AUDIT-20261021.md'), name
+bindings=json.loads((EVIDENCE/'source-bindings.json').read_text())
+for row in bindings['source_files']:
+    assert sha(ROOT/row['path'])==row['sha256'],row['path']
+overlay=EVIDENCE/'cache-overlay.json'
+if overlay.exists():
+    for row in json.loads(overlay.read_text())['objects']:
+        assert sha(row['source_object'])==row['sha256']
+        assert sha(row['selected_object'])==row['sha256']
+        assert Path(row['selected_object']).is_symlink()
 r17 = PACKET / 'evidence/r17-geometry-20261021/rust/receipt-1.json'
 r17receipt = json.loads(r17.read_text())
 for path,pin in r17receipt['source_pins'].items():
