@@ -1,0 +1,99 @@
+{
+  "schema": "candidate-extraction-feasibility-packet-v1",
+  "status": "CANDIDATE ONLY; production unchanged; new generated N=29 body is not independently Lean-proved",
+  "purpose": "Test whether initialized Copy array plus bounded while extracts without core::array::from_fn/try_from_fn.",
+  "candidate_proof_owner": {
+    "path": "docs/research/100bit-spend-path-20261013/lean-candidates/s1-explicit-loop-powers-proved-candidate-20261020",
+    "theorem": "AspisR1LoopPowers.LoopPowersCandidateTotal.powers_total_exact",
+    "source_checker": "check-source-model.py (PASS)",
+    "claim": "generic all-N totality, canonical entries, and entry j decodes to x^j under the pinned current field backend",
+    "source_order": "out declared before p; while body writes out[i]=p, then p=p.mul(x), then i+=1"
+  },
+  "probe": {
+    "candidate_input": "docs/research/100bit-spend-path-20261013/lean-candidates/s1-fromfn-fixed-array-probe-v1-20261021/input",
+    "base_revision": "d8cb8b0081f55a6a3d63f0f34ab790082f8d0ad0",
+    "source_patch_sha256": "d653a30571c6540742759df127a76e1d8b16879be57761540d638f34dcea07a7",
+    "source_pins_sha256": "c289d2da5dc48626b0484a21a00747a41d80eb932e2a131c6f31171a24f76142",
+    "candidate_lib_sha256": "6c56c6d319a67921915b2eb4ecf152a2ad2f1a0d99fe7b012b6d9f7e7a325d10",
+    "generated_entry": "AspisR1CurrentPowers.weights.powers_loop.body",
+    "generated_N": 29,
+    "generated_funs_sha256": "d4de1ffa5472c677c5457c45ff636a8b78de2024e5fece196774e5762754094a",
+    "generated_types_sha256": "b48877d13aab633a8feaa97a9092e11aa2bfc8d6d6dc7d7f065743153822b361",
+    "llbc_sha256": "e745845c35d3b3fb226483dd8391bb5160a67d00eaea452d826bc957a38f8f18",
+    "tuple_order_difference": "probe extraction uses state (p,out,i); retained proved generic candidate source declares (out,p,i). No definal equality theorem for these monomorphic constants is claimed.",
+    "generated_std_from_fn_dependency": false,
+    "lean_proof_for_probe_output": false
+  },
+  "runs": {
+    "charon": {
+      "exit_status": 0,
+      "wall_seconds": 0.20129128894768655,
+      "peak_process_rss_kib": 145024,
+      "process_swaps": 0,
+      "limits": {
+        "memory.high": "2147483648",
+        "memory.max": "3221225472",
+        "memory.swap.max": "0"
+      },
+      "tool_pins": {
+        "bin/aeneas": "4632746db1bf6c3953f2971078965a2a5a8ad6cf5f75636b46b397bc50c550b5",
+        "charon-target/release/charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+        "charon-target/release/charon-driver": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45"
+      },
+      "runner_sha256": "d343a59a8c4625605b4c285ffd30d4e9ca13b4ad71042665e351fedae73b62c4",
+      "outputs": {
+        "CurrentPowers.llbc": "e745845c35d3b3fb226483dd8391bb5160a67d00eaea452d826bc957a38f8f18"
+      }
+    },
+    "aeneas": {
+      "exit_status": 0,
+      "wall_seconds": 0.40206543100066483,
+      "peak_process_rss_kib": 65120,
+      "process_swaps": 0,
+      "limits": {
+        "memory.high": "2147483648",
+        "memory.max": "3221225472",
+        "memory.swap.max": "0"
+      },
+      "tool_pins": {
+        "bin/aeneas": "4632746db1bf6c3953f2971078965a2a5a8ad6cf5f75636b46b397bc50c550b5",
+        "charon-target/release/charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+        "charon-target/release/charon-driver": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45"
+      },
+      "runner_sha256": "d343a59a8c4625605b4c285ffd30d4e9ca13b4ad71042665e351fedae73b62c4",
+      "outputs": {
+        "CurrentPowers.llbc": "e745845c35d3b3fb226483dd8391bb5160a67d00eaea452d826bc957a38f8f18",
+        "generated/AspisR1CurrentPowers/Funs.lean": "d4de1ffa5472c677c5457c45ff636a8b78de2024e5fece196774e5762754094a",
+        "generated/AspisR1CurrentPowers/FunsExternal_Template.lean": "c5d9b82063d3c59aeb6c4da5120b9d70e2c67b5d3a0f6f1dbf705eab3b800012",
+        "generated/AspisR1CurrentPowers/Types.lean": "b48877d13aab633a8feaa97a9092e11aa2bfc8d6d6dc7d7f065743153822b361",
+        "generated/translation.json": "fc5cfc1b25b59da4660aac488d71064d83f2ad7a1011eaa52f273ed7cd0be067"
+      }
+    }
+  },
+  "open_gates": [
+    "exact source-to-generated correspondence for adopted ordering",
+    "caller binding and dependent declaration re-pins",
+    "Rust std/from_fn correspondence or removal through adopted helper",
+    "optimized SBF/ELF and per-fixture CU/runtime measurements",
+    "lead adoption and frozen-order gates"
+  ],
+  "files": {
+    "CurrentPowers.llbc": "e745845c35d3b3fb226483dd8391bb5160a67d00eaea452d826bc957a38f8f18",
+    "README.md": "6d2c802281e0b0b62277b81fad80c983bf2cdfcb5c1583530919b416fd29e415",
+    "check-probe.py": "dc819652b808840c79a7330b85ca4c7d3b0c04810208692029b72717ec00b935",
+    "generated/AspisR1CurrentPowers/Funs.lean": "d4de1ffa5472c677c5457c45ff636a8b78de2024e5fece196774e5762754094a",
+    "generated/AspisR1CurrentPowers/FunsExternal_Template.lean": "c5d9b82063d3c59aeb6c4da5120b9d70e2c67b5d3a0f6f1dbf705eab3b800012",
+    "generated/AspisR1CurrentPowers/Types.lean": "b48877d13aab633a8feaa97a9092e11aa2bfc8d6d6dc7d7f065743153822b361",
+    "generated/translation.json": "fc5cfc1b25b59da4660aac488d71064d83f2ad7a1011eaa52f273ed7cd0be067",
+    "receipts/aeneas/command.json": "7b46bad633f19bce437a9b556b4682f74750fd70de16a076927b0a8b64f40ad5",
+    "receipts/aeneas/environment.json": "4bbdc89f14ecc361a18e4fce6cffe21772656bb501cd1cfbe66a53f7ec2d521f",
+    "receipts/aeneas/receipt.json": "bffd949aa1baf31cf65641cfec00ff2dadca84a35de0838d59e63504d99186e1",
+    "receipts/aeneas/stdout.log": "57f63fa02a038a271cc7de480da88d3a2302c8b5a090cdebc450b2bbce596f40",
+    "receipts/aeneas/time.log": "ebb087f8dfb1016ad179f411cdd17baa78a3130d19f3f3921c8c03c736f9aff6",
+    "receipts/charon/command.json": "a7964451c5ad8406cdf30902c39d7da72689e352608e8c72f2cd335b8584d170",
+    "receipts/charon/environment.json": "4bbdc89f14ecc361a18e4fce6cffe21772656bb501cd1cfbe66a53f7ec2d521f",
+    "receipts/charon/receipt.json": "68e38504c50e18f6f28139c0ec6e628565a737b1bb43c1cfaaa9581dd68aa081",
+    "receipts/charon/stdout.log": "c11ec5450d0d4a72ca8fe056ad400fd2551403e13142a75a225540c071c09da0",
+    "receipts/charon/time.log": "23a4fcf29cb5caeb0ad031e24e52dc8fa5e1681f8f1161893c1e16a4909e3e06"
+  }
+}
