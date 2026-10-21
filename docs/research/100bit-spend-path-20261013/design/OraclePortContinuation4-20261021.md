@@ -109,3 +109,33 @@ new recorded run and carry stored-byte identity. Frozen proof-account ABI
 and checkpoint field encodings do not need to change. The logical
 finite-support codec can retain the larger checkpoint without claiming a
 physical ABI implementation. No runtime or shipped source was edited.
+
+## Stage 3: positive parser witness and Pool packet
+
+`OraclePortHonestRowsC4` proves a generic semantic encoder/parser roundtrip.
+Each row has the expected tag and length, with compact zero-field payloads.
+Canonicality of any divisible-by-four zero buffer is proved by a generic
+fold lemma; no 57,607-byte list is normalized in the kernel.
+`OraclePortHonestStoredC4.wire` is an explicit 57607-byte header/root/semantic
+encoding plus zero field/opening/node suffix. `parse_honest` proves successful
+strict parsing, and `parser_nonvacuous` proves parser inhabitation. This is
+an honest *layout*, not a valid spend or a Merkle-accepted execution.
+The nonvacuity theorem is unconditional; header, scan and semantic success
+are proved rather than given as hypotheses. Alignment to a reached public
+transcript and full-verifier acceptance remain different obligations.
+
+`OraclePortStoredPoolC4` adds `stored` to the logical raw/saved-ten packet.
+Preparation records the prover's calls before projecting its public/proof
+pair; these calls remain in the commitment-cut log. `stage1_stored` and
+`resume_stored` prove exact carrier identity across the handoff;
+`persisted_output` proves lossless storage with the existing symbolic
+finite-support codec. `resume_matching` retains the existing saved-ten /
+resumed-twelve matching law. None of these claims physical ABI encoding or
+the complete resumed observation equals the new recorded experiment.
+
+Honest rows attempt 1 failed from ambiguous `Byte` and an unfolded size
+abbreviation; attempt 2 passes. Honest stored attempts 1–2 had small
+elaboration errors and a recursion-limit failure: default simp tried to
+expand long zero lists. Attempt 3 replaces that with symbolic slices and
+bounded 16-byte header reduction, and passes. No limits were raised.
+Pool attempt 1 had a dependent-case equation mismatch; attempt 2 passes.
