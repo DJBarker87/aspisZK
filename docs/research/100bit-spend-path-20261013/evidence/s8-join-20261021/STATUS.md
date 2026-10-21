@@ -121,3 +121,20 @@ This is reference composition, not a source-storage/checkpoint identity.
 Successful final-source checks: representation-02 and s7-reference-01, ten
 standard-axiom audits, zero swap. The named upstream file was read only with
 `git show`; the task uses its private cached object directory read-only.
+
+## Stage 8 — minimal exact source-finish adapter
+
+`S8JoinRawCongruence.raw_mod_eq` recovers lane congruence from equality of
+raw field values, and `modelValue_eq` upgrades that to literal canonical
+QM31 equality. `finish_eq` and `mutable_finish_eq` identify complete owned
+and mutable source finalization with the canonical logical reference.
+The remaining assumptions are destination length=64, enough raw rows, and
+field meaning of just those 64 rows. Unused raw suffixes, old destination
+contents, terms, phase and unreduced raw magnitude are unconstrained.
+
+This is weaker than the original whole-raw CallerInvariant interface where
+unused suffix congruence was also requested. The conclusion is exact finish
+output equality, not a new security event or altered acceptance contract.
+It does not assert that S7 source/query/checkpoint execution supplies the
+field-meaning relation. Final source raw-congruence-03 passes all five
+standard-axiom audits, zero swap.
