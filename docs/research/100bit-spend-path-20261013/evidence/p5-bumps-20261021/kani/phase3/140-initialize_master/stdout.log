@@ -1,0 +1,16 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+error[E0412]: cannot find type `ProgramResult` in this scope
+    --> lib.rs:1273:75
+     |
+1273 | fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey) -> ProgramResult {
+     |                                                                           ^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `readonly_meta_ok` in this scope
+    --> lib.rs:1274:5
+     |
+1274 |     readonly_meta_ok(account.owner, owner, account.is_signer, account.is_writable, account.executable)
+     |     ^^^^^^^^^^^^^^^^ not found in this scope
+
+Some errors have detailed explanations: E0412, E0425.
+For more information about an error, try `rustc --explain E0412`.
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.

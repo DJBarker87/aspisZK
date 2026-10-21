@@ -1,0 +1,55 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+Checking harness unused_vault_hints::unused_vault_hints...
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-p5-bumps-20261021/phase4/generated/target/kani/x86_64-unknown-linux-gnu/debug/deps/p5_frozen_guards-7baeb4d3396244bd__RNvNtCs9Alf4XGifz0_16p5_frozen_guards18unused_vault_hints18unused_vault_hints.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+Runtime Symex: 0.0177801s
+size of program expression: 989 steps
+slicing removed 580 assignments
+Generated 17 VCC(s), 3 remaining after simplification
+Runtime Postprocess Equation: 0.000101766s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.00065195s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 2.975e-06s
+Solving with CaDiCaL 2.0.0
+290 variables, 389 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 3.8018e-05s
+Runtime decision procedure: 0.000727107s
+
+** Results:
+/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs function std::result::Result::<(), ProgramError>::is_ok
+[std::result::Result::<(), ProgramError>::is_ok.pointer_dereference.1] line 594 dereference failure: pointer NULL in *((unsigned char *)&(*self)): SUCCESS
+[std::result::Result::<(), ProgramError>::is_ok.pointer_dereference.2] line 594 dereference failure: pointer invalid in *((unsigned char *)&(*self)): SUCCESS
+[std::result::Result::<(), ProgramError>::is_ok.pointer_dereference.3] line 594 dereference failure: deallocated dynamic object in *((unsigned char *)&(*self)): SUCCESS
+[std::result::Result::<(), ProgramError>::is_ok.pointer_dereference.4] line 594 dereference failure: dead object in *((unsigned char *)&(*self)): SUCCESS
+[std::result::Result::<(), ProgramError>::is_ok.pointer_dereference.5] line 594 dereference failure: pointer outside object bounds in *((unsigned char *)&(*self)): SUCCESS
+[std::result::Result::<(), ProgramError>::is_ok.pointer_dereference.6] line 594 dereference failure: invalid integer address in *((unsigned char *)&(*self)): SUCCESS
+
+lib.rs function reset
+[reset.pointer_dereference.1] line 26 dereference failure: dead object in ((unsigned char *)&temp_0)[304]: SUCCESS
+[reset.pointer_dereference.2] line 26 dereference failure: pointer NULL in *var_2: SUCCESS
+[reset.pointer_dereference.3] line 26 dereference failure: pointer invalid in *var_2: SUCCESS
+[reset.pointer_dereference.4] line 26 dereference failure: deallocated dynamic object in *var_2: SUCCESS
+[reset.pointer_dereference.5] line 26 dereference failure: dead object in *var_2: SUCCESS
+[reset.pointer_dereference.6] line 26 dereference failure: pointer outside object bounds in *var_2: SUCCESS
+[reset.pointer_dereference.7] line 26 dereference failure: invalid integer address in *var_2: SUCCESS
+[reset.safety_check.1] line 26 misaligned pointer dereference: address must be a multiple of its type's alignment: SUCCESS
+[reset.safety_check.2] line 26 null pointer dereference occurred: SUCCESS
+
+lib.rs function unused_vault_hints::unused_vault_hints
+[unused_vault_hints::unused_vault_hints.assertion.1] line 1575 assertion failed: hints.vault_authority == 0: SUCCESS
+[unused_vault_hints::unused_vault_hints.assertion.2] line 1575 assertion failed: hints.vault_token_account == 0: SUCCESS
+
+** 0 of 17 failed (1 iterations)
+VERIFICATION SUCCESSFUL
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

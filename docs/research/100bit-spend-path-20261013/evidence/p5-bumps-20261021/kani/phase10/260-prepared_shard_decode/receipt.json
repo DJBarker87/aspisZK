@@ -1,0 +1,63 @@
+{
+  "schema": "p5-kani-attempt-v1",
+  "attempt": "260-prepared_shard_decode",
+  "module": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=10s",
+    "180s",
+    "cargo",
+    "kani",
+    "--lib",
+    "--exact",
+    "--harness",
+    "prepared_shard_decode::prepared_shard_decode",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "old"
+  ],
+  "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "source_sha256": "7116bd3d69e8cedbad4380766d68d5fc6f50e37315e6ca3cab06ec52827fb330",
+  "deps_fingerprint": "53715b0d8ad85913a433f8c54b6ee209aa11bf365b3c24b1890b8e95b24eaff4",
+  "command": [
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=10s",
+    "180s",
+    "cargo",
+    "kani",
+    "--lib",
+    "--exact",
+    "--harness",
+    "prepared_shard_decode::prepared_shard_decode",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "old"
+  ],
+  "cwd": "/home/dombarker/project-offloads/codex-cx-p5-bumps-20261021/phase10/generated",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rdbe97af6674e4601be19bc0097eb1c32.scope",
+  "inputs": {
+    "lib.rs": "895d01b9d78fa922f3c0a520b3c4a63ccd5c5031d6a862c00ab941a9ae0880c9"
+  },
+  "print_axioms": "N/A: Kani proof, no Lean theorem",
+  "expected_time": "Compile optimized isolated frozen guard slices, then CBMC symbolic address checks; no proof generation or elimination",
+  "kani_version": "cargo-kani 0.67.0",
+  "exit_status": 1,
+  "wall_seconds": 5.331750781042501,
+  "peak_rss_kib": 279636,
+  "swaps": 0,
+  "cgroup_memory_peak_bytes": 290570240,
+  "verification_success": false,
+  "errors": [
+    "[<usize as kani::rustc_intrinsics::ToISize>::to_isize.assertion.1] line 57 internal error: entered unreachable code: SUCCESS",
+    "[prepared_shard_decode::prepared_shard_decode.assertion.1] line 1721 assertion failed: owner.to_bytes() == program: FAILURE",
+    "[prepared_shard_decode::prepared_shard_decode.assertion.2] line 1721 assertion failed: memo().answer == Some(key): FAILURE",
+    "[prepared_shard_decode::prepared_shard_decode.assertion.3] line 1721 assertion failed: bytes[6] == unsafe{CANON_BUMP}: FAILURE"
+  ]
+}

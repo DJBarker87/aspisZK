@@ -1,0 +1,61 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+error[E0425]: cannot find value `verifier_program` in this scope
+   --> lib.rs:297:9
+    |
+297 |         verifier_program,
+    |         ^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `registry_account` in this scope
+   --> lib.rs:301:9
+    |
+301 |         registry_account,
+    |         ^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `entry_account` in this scope
+   --> lib.rs:302:9
+    |
+302 |         entry_account,
+    |         ^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `current_slot` in this scope
+   --> lib.rs:303:9
+    |
+303 |         current_slot,
+    |         ^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `decode_pool_v1_pair_forest_checkpoint_v1` in this scope
+   --> lib.rs:221:22
+    |
+221 |     let checkpoint = decode_pool_v1_pair_forest_checkpoint_v1(&account.try_borrow_data()?)
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0599]: no variant or associated item named `InvalidAccountType` found for enum `Errors` in the current scope
+   --> lib.rs:222:42
+    |
+ 31 | #[derive(Clone,Copy)]enum Errors{InvalidRootPageAddress,StateHistoryMismatch,InvalidVaultAuthority,InvalidVaultTokenAddress,Invalid...
+    |                      ----------- variant or associated item `InvalidAccountType` not found for this enum
+...
+222 |         .map_err(|_| PoolV1ProgramError::InvalidAccountType)?;
+    |                                          ^^^^^^^^^^^^^^^^^^ variant or associated item not found in `Errors`
+
+error[E0425]: cannot find function `authenticate_invariant_release_registry` in this scope
+   --> lib.rs:296:5
+    |
+296 |     authenticate_invariant_release_registry(
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `decode_checkpoint_box` in this scope
+   --> lib.rs:306:22
+    |
+306 |     let checkpoint = decode_checkpoint_box(&checkpoint_account.try_borrow_data()?)?;
+    |                      ^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `decode_lane_from_pool_release` in this scope
+   --> lib.rs:351:25
+    |
+351 |     let selected_lane = decode_lane_from_pool_release(&lane_account.try_borrow_data()?)?;
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+Some errors have detailed explanations: E0425, E0599.
+For more information about an error, try `rustc --explain E0425`.
+error: Failed to execute cargo (exit status: 101). Found 9 compilation errors.
