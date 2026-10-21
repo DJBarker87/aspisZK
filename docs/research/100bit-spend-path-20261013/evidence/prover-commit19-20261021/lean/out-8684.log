@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitObserverQueries19.lean:31:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CommitHandle Aux
+Pr : R1ProverP K CommitHandle Aux F W
+N : ℕ
+P : Challenges K → Prop
+Vp : (h : HonestProver K) → Challenges K → h.Instance → Prop
+h : HonestProver K
+B : PackBasis F
+outputs : Statement K CommitHandle → Challenges K → Aux
+adv : R1Adv K CommitHandle Aux
+x : Statement K CommitHandle
+w : h.Instance
+r : W.Tab × (Fin N → SecP)
+⊢ (have H := W.look r.1;
+      have out := realOut W Pr h B outputs x w H r.2;
+      match firstGood (fun o => P o.ch ∧ Vp h o.ch w ∧ o.exh = false) out with
+      | none => runLog (adv.prog W.failView []) H W.qmax
+      | some k => runLog (adv.prog (out k).view (out k).log) H W.qmax).length ≤
+    W.qmax
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitObserverQueries19.lean:33:67: error(lean.unknownIdentifier): Unknown identifier `R1Bat`
+
+Note: It is not possible to treat `R1Bat` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitObserverQueries19.lean:43:77: error(lean.unknownIdentifier): Unknown identifier `R1Bat`
+
+Note: It is not possible to treat `R1Bat` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+'R1Z.ProverCommitObserverQueries19.real_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitObserverQueries19.ideal_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
