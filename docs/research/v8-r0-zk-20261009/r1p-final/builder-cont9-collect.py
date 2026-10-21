@@ -9,6 +9,8 @@ for p in R.rglob('receipt.json'):
  if any(x in p.parts for x in ['source','kani-source','extraction-target','kani-target']):continue
  e=p.parent
  result[str(e.relative_to(R))]=dict(receipt=json.loads(p.read_text()),logs={n:(e/n).read_text() for n in ['stdout.log','stderr.log','time.log'] if (e/n).exists()})
+result['drop-input-pins']={p.name:json.loads(p.read_text()) for p in (R/'drop').glob('*-sources.json')}
+result['rust-reservations']={str(p.relative_to(R)):json.loads(p.read_text()) for p in R.rglob('*-reservation.json') if 'source' not in p.parts and 'kani-target' not in p.parts}
 for e in R.glob('drop-opaque*'):
  if not e.is_dir():continue
  result[str(e.relative_to(R))+'/metadata']={p.name:json.loads(p.read_text()) for p in e.glob('*.json')}

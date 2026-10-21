@@ -2,6 +2,10 @@
 
 Branch `codex/cx-builder-ref9-20261021`, base `a2b628d7d`.
 
+**Parts content is complete; the shipped source release remains open.**
+The whole-destructor frame and validator/source-admission certificates are
+not complete. Source4 retains the runtime and fixed-event execution joins.
+
 ## Scope
 
 Continue the D103 destructor boundary, semantic admission, Parts content,
@@ -188,7 +192,55 @@ diff has zero deletions; no weakening or completed source release is claimed.
 All task jobs use MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64,
 with reservation guards below the host's 55 GiB allowance and the required
 linker flag. No other worker is interrupted. No wallet or key cleanup is
-performed. No frozen ELF rebuild is required unless a shipped file changes.
+performed. No shipped crate/program file changed against the base, so the ELF rule is
+not triggered and no unchanged SBF rebuild is repeated. No binary, object,
+LLBC, archive or key is committed. No push, merge or full frozen-manifest
+replay is performed. The new conditional endpoint receives its own focused
+build and axioms audit; no unconditional release verification is claimed.
+
+The early bounded behavior experiment preceded per-run Rust source-pin
+capture. Its retained harness bodies are unchanged in the final source,
+but no complete input-tree digest was captured at launch; it is supplemental
+bounded evidence. The accepted projected volatile-word contract has the
+per-run input pins in `builder-cont9-host-evidence.json`. The full forest
+input/tool pins and all unsuccessful receipts are retained there too.
+
+## Final focused verification
+
+The read-only audit validates 16 current sources/objects, their direct-import
+fingerprints, 129 complete named axioms results and zero swaps. Every accepted
+axiom set is a subset of propext, Classical.choice and Quot.sound. Failed
+elaborations remain in the JSONL and are excluded by source SHA and dependency
+fingerprint. No proof/resource limit was raised. All original privacy,
+quotient, runtime-join and release modules are unchanged.
+
+| Target in R1Z | attempt | exit | wall | peak RSS KiB |
+|---|---:|---:|---:|---:|
+| `BuilderDropObservation` | 9338 | 0 | 0:01.26 | 2533612 |
+| `BuilderInverse` | 9343 | 0 | 0:02.31 | 3751128 |
+| `BuilderInverseResult` | 9345 | 0 | 0:01.78 | 3736720 |
+| `BuilderPrimitiveDigests` | 9347 | 0 | 0:04.55 | 3791660 |
+| `BuilderDigestArguments` | 9356 | 0 | 0:02.92 | 4023840 |
+| `BuilderDigestTotal` | 9357 | 0 | 0:01.95 | 4015268 |
+| `BuilderAuxContent` | 9359 | 0 | 0:02.03 | 4013772 |
+| `BuilderTreeArguments` | 9361 | 0 | 0:01.96 | 4018700 |
+| `BuilderPathContent` | 9363 | 0 | 0:03.11 | 4018648 |
+| `BuilderAppendArguments` | 9365 | 0 | 0:02.11 | 4018816 |
+| `BuilderBlockArguments` | 9369 | 0 | 0:04.40 | 4034672 |
+| `BuilderBlockResult` | 9372 | 0 | 0:02.14 | 4020580 |
+| `BuilderBlockCollect` | 9374 | 0 | 0:02.01 | 4029068 |
+| `BuilderPartsComplete` | 9375 | 0 | 0:01.82 | 4008464 |
+| `BuilderRuntimeBoundary` | 9354 | 0 | 0:01.83 | 4089108 |
+| `PrivacyR1FinalReleaseSource4` | 9376 | 0 | 0:03.28 | 4117480 |
+
+The exact source revisions (including dirty-input flags), SHA-256s, tool and
+environment pins, caps, full audits and receipt bindings are committed in
+`builder-cont9-final-audit.json` and `builder-cont9-attempts.jsonl`.
+No task-owned Rust/Kani/Aeneas build is left running. Remaining work is the
+universal source destructor/owned-validator correspondence, the 24 forest
+externals and semantic admission, then the concrete runtime and actual
+checker/retry/observer couplings. The complete Parts handoff needs no further
+Content assumption.
 
 ## Verbatim endpoint signature audit
 
