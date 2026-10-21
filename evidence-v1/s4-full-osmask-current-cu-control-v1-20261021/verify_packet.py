@@ -79,6 +79,8 @@ bad = load("diagnostics/current-invalid-pool-gate/measurement.json")
 assert bad["verifier_completed"] is False
 assert bad["execution"]["error"] == "InstructionError(2, InvalidInstructionData)"
 assert bad["execution"]["cu"] == 1052
+assert bad["verifier_cu"] == 696
+assert any("consumed 696 of" in line for line in bad["execution"]["logs"])
 assert "Error: wrong frozen proof" in (ROOT / "diagnostics/old-wire-r18/stderr.log").read_text()
 assert "reused proof public statement differs" in (ROOT / "diagnostics/adopt-poolgate-mismatch/output.log").read_text()
 assert "failed to parse manifest" in (ROOT / "diagnostics/build-manifest-failure/output.log").read_text()

@@ -34,7 +34,7 @@ The build wrapper's initial post-build assertion failed because the driver's `--
 
 - `old-wire-r18/`: the wrong pre-adoption frozen proof was rejected as “wrong frozen proof.” It is not the current 57,607-byte wire and is excluded from all cost claims.
 - `adopt-poolgate-mismatch/`: `pool_gate_adopt` rejected the reused proof/public pair because its locally constructed fixture statement differed. It failed before a measured transaction.
-- `current-invalid-pool-gate/`: the earlier native driver used a fixture path that was absent and its attempt had `verifier_completed=false`, `InvalidInstructionData`, and only 696 CU before failure. This is not a successful verifier/settlement measurement.
+- `current-invalid-pool-gate/`: the earlier native driver used a fixture path that was absent and its attempt had `verifier_completed=false`, `InvalidInstructionData`, and failed with `InvalidInstructionData`. The measurement record reports 1,052 transaction-level CU, while the program log reports 696 CU consumed by the verifier before failure (`verifier_cu=696`). These are distinct fields; neither is a successful verifier/settlement measurement.
 - `build-manifest-failure/`: an earlier isolated driver manifest failed to parse; no binary or CU result came from that attempt.
 
 These records are kept to prevent them being mistaken for a pass or merged into the valid comparison.
