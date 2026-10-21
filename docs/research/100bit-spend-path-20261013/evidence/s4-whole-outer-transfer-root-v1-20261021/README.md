@@ -1,0 +1,3 @@
+PROVED complete installed fixed-call four-dot function success transfers to the original generated P6 function on identical query/coefficient inputs and returned array.
+
+Limitations: Accepted-run direction only: the single execution premise is successful complete fixed-call four-dot execution under the concrete retained operation installation. Four callback successes construct the exact P6 array by an ordered four-step trace; no independent old callback, constructor or parent success is assumed. Does not yet establish raw V10 typed-source correspondence, source Std array semantics, candidate adoption, all-rejection equivalence, concrete caller/artifact linkage or global soundness. No production source or proof format changed.
