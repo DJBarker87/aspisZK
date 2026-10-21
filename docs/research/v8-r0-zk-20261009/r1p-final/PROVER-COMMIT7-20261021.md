@@ -20,3 +20,15 @@ refused before compilation; the proof was then corrected and 8243 used
 normally. The refusal is not accepted verification evidence.
 
 Further stage results, exact checklist changes and final audit follow below.
+
+`ProverCommitSourceExhaustion.quotient_exhausted` transports the result to
+exactly the existing two `wordsE` block carriers. Failure of the quotient
+is **equivalent** to either stream's exhaustion. `caller_exhausted` shows
+that the same caller equation required by the fibre transfer also suffices
+for source exhaustion; there is no independent cursor premise once that
+equation is proved. This does not prove the caller equation.
+
+Accepted J **8245**: exit **0**, wall **2.76 s**, peak RSS
+**4,170,036 KiB**, **zero swaps**, two standard-axiom audits. J8244 is an
+excluded syntax draft. This closes the exact finite-decoder/cursor
+classification sub-obligation, conditional source transfer stated explicitly.
