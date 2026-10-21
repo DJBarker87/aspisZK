@@ -1,0 +1,34 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCheckpointResumeC5.lean:108:22: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+H : Bytes → State
+stored pub : Bytes
+c : Context
+d : MatchingSupport.Data E
+rho : K
+q : Fin 22 → Fin 262144
+decoded :
+  decodeAccumulator
+      (encode H stored pub (prepared c d rho q) (OraclePortCheckpointStateC3.write (model d rho q)).accumulator) =
+    some (OraclePortCheckpointStateC3.write (model d rho q)).accumulator
+eq :
+  (OraclePortCheckpointStateC3.resume (OraclePortCheckpointStateC3.write (model d rho q))).accumulator =
+    QueryAccumulator.run22 (model d rho q).iota (model d rho q).rho (model d rho q).values (model d rho q).basis
+⊢ some
+      (OraclePortCheckpointStateC3.advance (model d rho q) 12
+        (OraclePortCheckpointStateC3.write (model d rho q)).accumulator) =
+    some
+      (QueryAccumulator.run22 LiteralOpeningView.eK rho (QueryResidualBridge.values d q) (QueryResidualBridge.basis q))
+'AspisR1.OraclePortCheckpointResumeC5.decode_written' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCheckpointResumeC5.stored_retained' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCheckpointResumeC5.save_hash_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCheckpointResumeC5.physical_resume' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortCheckpointResumeC5.physical_finish' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

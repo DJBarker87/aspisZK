@@ -1,0 +1,43 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCheckpointSlicesC5.lean:21:6: error: Type mismatch: After simplification, term
+  slice_block [] head rest.flatten
+ has type
+  @Eq Bytes (slice ([] ++ head ++ rest.flatten) [].length (List.length head)) head
+but is expected to have type
+  @Eq Bytes (slice (head ++ rest.flatten) 0 (List.length head)) head
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCheckpointSlicesC5.lean:45:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.take ?m.34 (List.map ?m.32 ?m.33)
+in the target expression
+  slice (blocks p a (H stored) (H pub)).flatten (List.map List.length (List.take i (blocks p a (H stored) (H pub)))).sum
+      (List.length field) =
+    field
+
+H : Bytes → State
+stored pub : Bytes
+p : Prepared
+a : QueryAccumulator.State K E
+i offset width : ℕ
+field : Bytes
+entry : (blocks p a (H stored) (H pub))[i]? = some field
+start : (List.take i widths).sum = offset
+length : List.length field = width
+bound : offset + width ≤ 1736
+extracted :
+  slice (blocks p a (H stored) (H pub)).flatten (List.map List.length (List.take i (blocks p a (H stored) (H pub)))).sum
+      (List.length field) =
+    field
+⊢ slice (encode H stored pub p a) offset width = field
+'AspisR1.OraclePortCheckpointSlicesC5.slice_index' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OraclePortCheckpointSlicesC5.slice_prefix' depends on axioms: [propext, Quot.sound]
+'AspisR1.OraclePortCheckpointSlicesC5.field_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCheckpointSlicesC5.accumulator_slices' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortCheckpointSlicesC5.accumulator_decodes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortCheckpointSlicesC5.prepared_slices' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
