@@ -357,3 +357,23 @@ old/new comparison is not a weakening proof. The documentation and receipts
 intentionally report the frozen dV construction and remaining model joins as
 unfinished, rather than treating the existence of a generic conditional
 soundness theorem as completion of the requested port.
+
+## Continuation: byte parser and prefix completion (in progress)
+
+New modules have the distinct `OraclePort*Draft` names. The compact parser
+now checks all fixed offsets, expands the 426 semantic and 29 y1 compact
+values, scans canonical limbs, aligns rows 0–32 with the reached erased
+transcript, and binds byte 8 to `Public.tag`. The sparse builder selects its
+indices from the row-31 query result, divides folded indices by four, and
+builds depth-18 trees from the 66 stored leaf preimages. Occupancy and generic
+opened-path lemmas are proved without reducing a concrete depth-18 tree.
+The batch executor retains its actual leaf digests, checks duplicates by
+digest equality, and checks committed roots from the parsed bytes.
+
+This continuation is not yet a completed dV. In particular physical
+checkpoint construction, the typed arithmetic checker and its transfer to
+compiled rows are not supplied by merely parsing bytes and authenticating
+leaves. The previously quoted `TypedBinding` uses the retained R16 source
+chooser; its predicate does not constrain `SourceInputs.data`. A new audit
+module makes that fact explicit rather than assuming a selected opening
+identifies the full reader data.
