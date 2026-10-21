@@ -139,3 +139,26 @@ peak RSS 3655057408 bytes, zero swaps, revision 0e57b8b1d (full SHA and
 object/source/import pins in receipt). All five reports are standard.
 Attempt 1's dependent-proof map/ofFn rewrite failed; induction replaces it.
 No full byte buffer or long vector is evaluated, and no cap is raised.
+
+## Stage 6: six extracted sparse wide intervals
+
+CheckpointBytesSparseE proves the source dispatch and exact C5 bytes for
+all six wide-field intervals: gamma at 176, kappa at 208, alpha0 at 240,
+alpha1 at 272, claim at 632 and RHS at 664. Every byte index inside each
+32-byte interval is symbolic. Each C5 theorem requires only that particular
+raw field's canonicality; dispatch itself needs no canonicality or supplied
+source-call success. No header/whole-writer equality is assumed.
+
+generate_sparse.py --check validates the named intervals against the actual
+extracted threshold schedule. It emits six separate symbolic theorem
+applications/branch proofs, never concrete checkpoint reduction. The prior
+aggregate declaration timed out at the default heartbeat limit (attempts
+2..4). The replacement isolates one interval, proves its guards explicitly,
+then composes the named E theorem; no cap is raised. Attempt 1's reserved
+binder, attempt 5's redundant trailing tactic and attempt 6's missing
+normalized division rewrite are retained as failed evidence.
+
+Final attempt 7: exit 0, wall 35.868560292292386 s, peak RSS 3536617472
+bytes, zero swaps, revision 0a83ad804. All twelve axiom reports are standard.
+This closes six sparse intervals, not all body bytes. K sections, literal/
+digest/query byte sections and a complete body/C5 aggregate remain separate.
