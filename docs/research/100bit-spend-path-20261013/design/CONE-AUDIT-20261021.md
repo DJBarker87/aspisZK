@@ -79,3 +79,37 @@ not measured proof estimates):
    inverse construction or the multiproof's 18-level mutable-array schedule.
    Source byte provenance and ordered calls remain mandatory; runtime sameness
    is a separate obligation.
+
+## Checkpoint ABI worker addendum — 21 October 2026
+
+Draft on `codex/cx-ckpt-abi-draft-20261021`; no source adoption, merge or
+premise removal. The original table's whole-cone classification remains open.
+
+| Cone | New checked statements | Updated classification | Remaining complete-cone obligation |
+|---|---|---|---|
+| Checkpoint ABI | `OraclePortCkptAbiSourceFields.successful_fields`: all emitted resume Prepared/Accumulator outputs, 22 query reads, validation, semantic-alpha/weights inputs, allocation, final cursor and saved-next cast have producing-call witnesses. `OraclePortCkptAbiSourceBacking.all_fields_same_backing`: all 16 field cursor boundaries retain the same checkpoint under atomic reader-preservation contracts. `OraclePortCkptAbiReader.raw_total_exact` and `OraclePortCkptAbiReadSequence.savedTen_reads_total`: total checked raw-body simulation with exact bytes, immutable backing and final offset 1736, under unwrap-on-Ok. `OraclePortCkptAbiCodec.decode_encode`: total saved-ten reference result including duplicate rejection. `OraclePortCkptAbiReference.accepted_saved_fields` / `writeResume_trace`: complete reference fields, reached-ten/resumed-twelve state and exact six ordered digest reads. | **(c), source fragments** for successful emitted resume and atomic reader contracts; **(b), local/reference** for total saved-ten Option codec and raw-read schedule. **Whole-cone (d)** remains. Reference results are not relabelled frozen source refinement. | Instantiate the concrete current `ResumeOps`/unwrap and field-codec laws; prove frozen writer bytes equal the reference and reached prepared/query/accumulator provenance; allocation/owned-Vec and both caller identities; assemble the driver checkpoint site and source adoption. `dV_frozen` itself contains no checkpoint stage. Same-snapshot runtime binding remains separate. |
+
+The attempted unconditional C5 resumer substitution is **false on rejection
+paths**: `OraclePortCkptAbiRejection.c5_eager_log_mismatch` proves one versus
+three reads after a failed proof digest. The new reference short-circuits
+proof, public and checksum comparisons, and its exact `resume_eval` handles
+all inputs. It specializes S2 saved.next=10; it does not claim to model every
+other next value accepted by Rust resume. Repeated model queries reject;
+uniqueness must be supplied by reached source sampling/caller provenance.
+
+The retained R22 Kani raw-reader contract establishes cursor bounds and
+canonicality, but does not state byte-value equality. The existing Lean raw
+body abstracts the debug-bearing unwrap because the emitted concrete debug
+instance depends on a nonstandard Formatter axiom. This packet retains that
+boundary and uses only standard axioms. R9's codec is explicitly logical,
+not the physical 1768-byte ABI. No complete existing physical codec theorem
+was found in the inspected R9/R22/source proof inventory.
+
+Evidence and reproducible focused audits:
+`evidence/ckpt-abi-draft-20261021/manifest.json`, `STATUS.md`,
+`source-pins.json`, `audit-result.json`; run
+`python3 -B tools/oracle-port-ckpt-abi/generate.py --check` and
+`python3 -B tools/oracle-port-ckpt-abi/audit.py`.
+R19 and the frozen headline are byte-identical to the base; both retained
+signature diffs are empty. This records **zero** premise deletions, rather
+than claiming that the missing source join has been discharged.

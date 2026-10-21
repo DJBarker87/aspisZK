@@ -30,13 +30,15 @@ def lean_processes():
 module = sys.argv[1]
 source = PACKET / 'lean' / (module + '.lean')
 baseline = json.loads((HERE.parent / 'oracle-port-draft-20261021/OraclePortHeadlineDVC7-1/command.json').read_text())
-config = {m: 'overflow-freedom-s2-20261020/receipts/R22Stage2ReaderTotal-20261020T141933Z/receipt.json' for m in ['OraclePortCkptAbiReader', 'OraclePortCkptAbiReadSequence', 'OraclePortCkptAbiFreeze', 'OraclePortCkptAbiSource']}
+config = {m: 'overflow-freedom-s2-20261020/receipts/R22Stage2ReaderTotal-20261020T141933Z/receipt.json' for m in ['OraclePortCkptAbiReader', 'OraclePortCkptAbiReadSequence', 'OraclePortCkptAbiSource']}
 selected = config.get(module)
 selected_path = json.loads((HERE.parent / selected).read_text())['lean_path'] if selected else ''
 path = str(OBJECTS) + ':/tmp/codex-cx-frozen-order-draft-20261021-objects:/tmp/codex-cx-acclog-draft-20261021-objects:/tmp/codex-cx-refine-join-draft-20261021-objects:/tmp/codex-cx-inner-order-draft-20261021-objects:/tmp/codex-cx-shortcircuit-draft-20261021-objects:/tmp/codex-cx-join-split-draft-20261021-objects:' + selected_path + ':' + baseline['lean_path']
 if module == 'OraclePortJoinSplitFreeze':
     for command in dict.fromkeys(config.values()):
         path += ':' + json.loads((HERE.parent / command).read_text())['lean_path']
+if module == 'OraclePortCkptAbiFreeze':
+    path += ':' + json.loads((HERE.parent / 'overflow-freedom-s2-20261020/receipts/R22Stage2ReaderTotal-20261020T141933Z/receipt.json').read_text())['lean_path']
 # Additional historical focused paths are supplied explicitly, and all selected
 # direct import hashes are recorded below; shared objects are never overwritten.
 path += ':' + os.environ.get('JOIN_SPLIT_EXTRA_PATH', '')
