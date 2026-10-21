@@ -80,9 +80,34 @@ Complete semantic admission
 (RspendPlus, append/public/empty-root correspondence and sentinel) is still
 not established by these validator control-flow facts.
 
-## Stage 3: shipped runtime inhabitant
+## Stage 3: shipped runtime inhabitant — blocked by source admission
 
-Pending.
+The exact `RustRuntimeJoin` was checked against its actual definition. It
+requires the same source instance's `publicInput`, raw witness/public records,
+`WitnessOk`, `PubCorr`, embedded `RspendPlus`, public equality, raw trace equality
+and S2 transport equality. This stage does not construct it.
+
+The new validator theorem supplies only the actual frontier-check sequence.
+Neither that result nor std totality supplies successful forest caller
+admission, digest-check identity, append/root/carry semantics, D50's sentinel,
+or the source instance/public map. The raw aggregate cannot currently be used
+as the missing evidence: J9383 records concrete ill-typed callback interfaces,
+and the records/Drop source declarations remain opaque outside the focused
+slice. Silently choosing callback outputs would change the caller semantics.
+
+There is also an already checked type-level obstruction to deleting the join
+at the inherited arbitrary-h endpoint: `BuilderRuntimeBoundary.zero_padding`
+forces all padding columns to zero, while
+`BuilderRuntimeBoundary.no_mismatch_runtime_join` rules out the unit-instance
+constant-one prover. Parts content and validator results do not constrain
+that arbitrary h. Replacing this with a canonical prover or a subtype assuming
+RspendPlus would not construct the shipped inhabitant. These existing targets
+were not rerun unchanged. No runtime binder is removed.
+
+This is an explicit unsuccessful stage, not a claim that the shipped compiler
+violates its intended relation. Next concrete source target is the forest
+caller with sound callback state threading, followed by semantic admission
+and the successful compiler's actual instance/public projection.
 
 ## Stage 4: checker/retry coupling and Source5
 
