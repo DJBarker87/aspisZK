@@ -7901,3 +7901,21 @@ the indexed reference (which replaces the mismatched retained packet). J7583:
 arithmetic gates timed out (600/180 s), the concrete query/source composition,
 `shippedProverExperiment`, both WholeRunJoins and the endpoint
 specialisation.
+
+## D136 — prover commitment part 26; CoinOracle is stateful (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit26-20261021` (`r1p-final/PROVER-COMMIT26-20261021.md`):
+low-digit arithmetic split into verified cells with a symbolic induction
+(replacing the timed-out gates); the concrete query policy installed and
+total, including first-stop; complete record validation transported into the
+circle caller; the coupled finite oracle installed in the concrete digest
+APIs. J7635: 40 standard-axiom checks, zero swap; no shipped change. Finding:
+the native `CoinOracle` advances a `RefCell` cursor and can return different
+answers for identical inputs, which makes it a coin tape, while the extracted
+`Digest32` interface returns no updated state. A native counterexample and a
+Lean determinism theorem show a stateless interpretation is invalid. Not a
+privacy issue. Lead ruling: interpret CoinOracle as a state-passing coin tape
+(cursor threaded explicitly), the same tape as the coin component of the D134
+product coupling. Extend the extracted interface so each call returns
+(digest, updated cursor, recording/collision effects), prove the extracted
+calls preserve exactly those effects, then assemble shippedProverExperiment.
