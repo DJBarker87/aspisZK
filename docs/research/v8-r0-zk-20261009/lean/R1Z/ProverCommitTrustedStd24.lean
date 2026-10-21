@@ -1,0 +1,121 @@
+import R1Z.ProverCommitTreeOps23
+import R1Z.ProverCommitTLS23
+/-! D133 trusted standard-library boundary, alongside P6 (runtime) and P7
+(compiler/artifact). These are named hypotheses, never Lean axioms. No field
+mentions privacy, a prover experiment, a coupling, or a source caller law.
+The model instance below witnesses consistency; it is not a Rust proof. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitTrustedStd24
+variable {Key Value MapState Thread Slot Output : Type}
+variable {cmp : Key → Key → Ordering} [Std.TransCmp cmp] [Std.LawfulEqCmp cmp]
+
+/-- The used successful ordered-map API. Allocation failure remains in P6;
+this API does not assert an allocator's totality or identify raw pointers. -/
+structure MapAPI (Key Value MapState : Type) (cmp : Key → Key → Ordering) where
+  decode : MapState → Std.TreeMap Key Value cmp
+  empty : MapState
+  insert : MapState → Key → Value → MapState × Option Value
+  get : MapState → Key → Option Value
+  entries : MapState → List (Key × Value)
+
+/-- One live TLS key, with thread/key lifetime fixed for the invocation.
+Different keys must be instantiated separately, without type-erased casts. -/
+structure TLSAPI (Thread Slot Output : Type) where
+  access : Thread → ProverCommitTLS23.Access Slot Output →
+    (Thread → Slot) → (Thread → Slot) × Output
+
+/-- Explicit named trust list: std BTreeMap insert/get/iter, and live-key
+single-thread TLS. Only the designated schedule is assumed single-threaded;
+map operation laws quantify over every map state and key, including repeats. -/
+structure TrustedStd [DecidableEq Thread]
+    (map : MapAPI Key Value MapState cmp) (tls : TLSAPI Thread Slot Output)
+    (thread : Thread) (schedule : List (Thread × ProverCommitTLS23.Access Slot Output)) : Prop where
+  btree_empty : map.decode map.empty = ∅
+  btree_insert_state : ∀ s k v, map.decode (map.insert s k v).1 = (map.decode s).insert k v
+  btree_insert_previous : ∀ s k v, (map.insert s k v).2 = (map.decode s)[k]?
+  btree_get : ∀ s k, map.get s k = (map.decode s)[k]?
+  btree_iter_ordered : ∀ s, map.entries s = (map.decode s).toList
+  tls_live_key : ∀ t f store, tls.access t f store = ProverCommitTLS23.native t f store
+  tls_single_thread : ProverCommitTLS23.SingleThreaded thread schedule
+
+variable [DecidableEq Thread]
+variable (map : MapAPI Key Value MapState cmp) (tls : TLSAPI Thread Slot Output)
+  (thread : Thread) (schedule : List (Thread × ProverCommitTLS23.Access Slot Output))
+  (trusted : TrustedStd map tls thread schedule)
+
+include trusted
+
+/-- Universal write induction now consumes exactly the named trusted list. -/
+theorem writes (entries : List (Key × Value)) (state : MapState) :
+    (map.decode (ProverCommitTreeOps23.runWrites map.insert state entries).1,
+      (ProverCommitTreeOps23.runWrites map.insert state entries).2) =
+    ProverCommitTreeOps23.runWrites ProverCommitTreeOps23.treeInsert (map.decode state) entries :=
+  ProverCommitTreeOps23.writes_decode map.decode map.insert
+    trusted.btree_insert_state trusted.btree_insert_previous entries state
+
+theorem lookup [DecidableEq Key] [DecidableEq Value] (state : MapState) (key : Key) :
+    map.get state key = ProverCommitTable20.lookup (map.decode state).toList key :=
+  ProverCommitTreeOps23.get_decode map.decode map.get trusted.btree_get state key
+
+/-- Exact iterator order and remaining suffix, including exhaustion. -/
+theorem iteration (state : MapState) (n : Nat) :
+    ProverCommitTreeOps23.iterSteps n (map.entries state) =
+      ((map.decode state).toList.take n,(map.decode state).toList.drop n) := by
+  rw [trusted.btree_iter_ordered,ProverCommitTreeOps23.iterSteps_spec]
+
+omit trusted
+
+def tlsRun (tls : TLSAPI Thread Slot Output) (store : Thread → Slot) :
+    List (Thread × ProverCommitTLS23.Access Slot Output) → (Thread → Slot) × List Output
+  | [] => (store,[])
+  | (t,f)::tail =>
+    let step := tls.access t f store
+    let rest := tlsRun tls step.1 tail
+    (rest.1,step.2::rest.2)
+
+include trusted
+
+theorem tls_run_native (store : Thread → Slot)
+    (calls : List (Thread × ProverCommitTLS23.Access Slot Output)) :
+    tlsRun tls store calls = ProverCommitTLS23.nativeRun store calls := by
+  induction calls generalizing store with
+  | nil => rfl
+  | cons entry tail ih =>
+    rcases entry with ⟨t,f⟩
+    simp only [tlsRun,ProverCommitTLS23.nativeRun,trusted.tls_live_key,ih]
+
+theorem tls_schedule (store : Thread → Slot) :
+    ((tlsRun tls store schedule).1 thread,(tlsRun tls store schedule).2) =
+      ProverCommitTLS23.singleRun (store thread) (schedule.map Prod.snd) := by
+  rw [tls_run_native map tls thread schedule trusted]
+  exact ProverCommitTLS23.schedule_simulates thread schedule trusted.tls_single_thread store
+
+omit trusted
+
+/-- Satisfiability witness in the mathematical std model, with a real empty
+schedule. This does not manufacture evidence about the compiled Rust API. -/
+def modelMap : MapAPI Key Value (Std.TreeMap Key Value cmp) cmp where
+  decode := id
+  empty := ∅
+  insert := ProverCommitTreeOps23.treeInsert
+  get := fun s k => s[k]?
+  entries := Std.TreeMap.toList
+
+def modelTLS : TLSAPI Thread Slot Output where
+  access := ProverCommitTLS23.native
+
+theorem model_consistent (t : Thread) :
+    TrustedStd (modelMap (Key := Key) (Value := Value) (cmp := cmp))
+      (modelTLS (Thread := Thread) (Slot := Slot) (Output := Output)) t [] := by
+  refine ⟨rfl, fun _ _ _ => rfl, fun _ _ _ => rfl, fun _ _ => rfl,
+    fun _ => rfl, fun _ _ _ => rfl, ?_⟩
+  intro entry h
+  exact False.elim (List.not_mem_nil h)
+
+#print axioms writes
+#print axioms lookup
+#print axioms iteration
+#print axioms tls_run_native
+#print axioms tls_schedule
+#print axioms model_consistent
+end R1Z.ProverCommitTrustedStd24

@@ -1,0 +1,58 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTrustedStd24.lean:52:4: error(lean.unknownIdentifier): Unknown identifier `trusted.btree_insert_state`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTrustedStd24.lean:52:31: error(lean.unknownIdentifier): Unknown identifier `trusted.btree_insert_previous`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTrustedStd24.lean:56:54: error(lean.unknownIdentifier): Unknown identifier `trusted.btree_get`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTrustedStd24.lean:62:6: error(lean.unknownIdentifier): Unknown identifier `trusted.btree_iter_ordered`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTrustedStd24.lean:61:77: error: unsolved goals
+Key Value MapState : Type
+cmp : Key → Key → Ordering
+inst✝¹ : Std.TransCmp cmp
+inst✝ : Std.LawfulEqCmp cmp
+map : MapAPI Key Value MapState cmp
+state : MapState
+n : ℕ
+⊢ ProverCommitTreeOps23.iterSteps n (map.entries state) =
+    (List.take n (map.decode state).toList, List.drop n (map.decode state).toList)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTrustedStd24.lean:79:50: error(lean.unknownIdentifier): Unknown identifier `trusted.tls_live_key`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTrustedStd24.lean:77:23: error: unsolved goals
+case cons
+Thread Slot Output : Type
+inst✝ : DecidableEq Thread
+tls : TLSAPI Thread Slot Output
+tail : List (Thread × ProverCommitTLS23.Access Slot Output)
+ih : ∀ (store : Thread → Slot), tlsRun tls store tail = ProverCommitTLS23.nativeRun store tail
+store : Thread → Slot
+t : Thread
+f : ProverCommitTLS23.Access Slot Output
+⊢ ((ProverCommitTLS23.nativeRun (tls.access t f store).1 tail).1,
+      (tls.access t f store).2 :: (ProverCommitTLS23.nativeRun (tls.access t f store).1 tail).2) =
+    ((ProverCommitTLS23.nativeRun (ProverCommitTLS23.native t f store).1 tail).1,
+      (ProverCommitTLS23.native t f store).2 ::
+        (ProverCommitTLS23.nativeRun (ProverCommitTLS23.native t f store).1 tail).2)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTrustedStd24.lean:84:21: error(lean.unknownIdentifier): Unknown identifier `map`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTrustedStd24.lean:83:76: error: unsolved goals
+Thread Slot Output : Type
+inst✝ : DecidableEq Thread
+tls : TLSAPI Thread Slot Output
+thread : Thread
+schedule : List (Thread × ProverCommitTLS23.Access Slot Output)
+store : Thread → Slot
+⊢ ((tlsRun tls store schedule).1 thread, (tlsRun tls store schedule).2) =
+    ProverCommitTLS23.singleRun (store thread) (List.map Prod.snd schedule)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTrustedStd24.lean:102:43: error: Tactic `contradiction` failed
+
+case tls_single_thread
+Key Value Thread Slot Output : Type
+cmp : Key → Key → Ordering
+inst✝² : Std.TransCmp cmp
+inst✝¹ : Std.LawfulEqCmp cmp
+inst✝ : DecidableEq Thread
+t : Thread
+⊢ ProverCommitTLS23.SingleThreaded t []
+'R1Z.ProverCommitTrustedStd24.writes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTrustedStd24.lookup' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTrustedStd24.iteration' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTrustedStd24.tls_run_native' depends on axioms: [sorryAx]
+'R1Z.ProverCommitTrustedStd24.tls_schedule' depends on axioms: [sorryAx]
+'R1Z.ProverCommitTrustedStd24.model_consistent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
