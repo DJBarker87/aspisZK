@@ -24,3 +24,7 @@ fn s2_row_equals_d18() {
 #[cfg(kani)]
 #[path = "../drop.rs"]
 mod trace_drop;
+
+#[cfg(kani)]
+#[path = "../drop_iterator.rs"]
+mod trace_drop_iterator;
