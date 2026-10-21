@@ -97,3 +97,37 @@ host receipts. All host scopes retain 6G/8G/0 swap/64-task limits; zero swaps.
 The first extractor attempt failed on an absent raw-input `address` field;
 v2 correctly decodes the address component of the pinned ELF identifier.
 Both receipts and the old script are retained. `#print axioms`: N/A.
+
+## Stage 4: kernel-checked CFG chronology
+
+`cfg-host.py` re-extracts the complete edges behind all 140 retained block
+dominance observations, checks each frozen MIR body hash, and independently
+computes reachability with the preceding call block removed. `cfg.json`
+retains the exact source coordinates, graphs and cut sets. Six distinct
+graph/cut shapes cover both verifier builds; `dominance-map.json` maps every
+one of the 140 observations to its exact Lean theorem.
+
+`OraclePortS10CFG.dominates_of_cut` proves the generic finite-path result.
+The six generated `OraclePortS10Dominance*` modules instantiate it using
+explicit edge constructors and sparse Boolean marks, with one symbolic
+forward-closure proof per cut. Each proof case is a direct edge/cut fact;
+there is no large numeral, recurrence unfolding, `decide`, `norm_num`, or
+broad simplification. The largest graph has 83 blocks. The generic theorem
+compiled first, then one chunk, the remaining chunks, and the combined
+`OraclePortS10StdFreeze` bridge/axioms audit. All final targets exit 0 with
+standard axioms and zero swaps. The two initial generic elaboration failures
+(reserved identifiers/constructor case binders) are retained, not accepted.
+
+The largest generated chunk takes 6.777 seconds and 1,342,881,792-byte peak
+RSS. The final combined audit takes 18.395 seconds and 3,492,872,192-byte peak
+RSS. Exact targets, revisions, source/import hashes, exits, wall/RSS/swap and
+all new theorem axiom lines are in the focused receipts and `manifest.json`.
+
+These theorems establish chronology for paths in the exact extracted CFGs.
+They do **not** construct mutable source execution or prove the `source_order`
+and `model_order` fields of `OraclePortJoinSplitStdFrozen.OrderingJoin`.
+In particular, source TX1/TX2 arithmetic interleaving, checkpoint/digest reads,
+ordinary errors and full carriers still require a semantic caller simulation.
+Coverage of the forty-label list cannot establish those identities. No final
+whole-source `S10Join` or frozen `AcceptedRunJoin` instance is claimed, and no
+headline premise is removed. The requested end-to-end target remains open.
