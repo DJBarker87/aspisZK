@@ -7657,3 +7657,19 @@ protocol's admitted input domain), and the direct shipped extraction pulls in
 `core::fmt::Formatter` (as in the checkpoint cone: stub the panic path after
 proving it unreachable). Open: shipped outer execution transport and
 all-family shared-oracle coverage.
+
+## D122 — builder premise discharged on the canonical admitted domain (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit13-20261021` (`r1p-final/PROVER-COMMIT13-20261021.md`).
+Per D121, the endpoint is specialised to D96's canonical admitted spend inputs,
+and `privacy_headline_admitted` (`docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitAdmittedEndpoint.lean`) removes `builder_premises` with a
+deletion-only diff after the specialisation (checked by the lead). Also
+proved, by 20 focused Kani checks: shipped stream-conversion safety with the
+formatter stubbed unreachable, both complete scalar result/state laws,
+query-caller result and retained-state transport around the sampler cut, and
+the seed and outer binding boundaries. J8372, standard axioms. This is the
+current privacy headline. Remaining premises: the two execution joins
+(`R_wire_builder_checker_D75_retry` and the ideal-side `G_sim_R_wire`), i.e.
+outer execution transport and all-family shared-oracle coverage. Blocker: the
+outer material loop (source lines 471–489) fails at Aeneas's loop-context join.
+Next: an owned indexed material-loop reference with per-iteration P6 equality.
