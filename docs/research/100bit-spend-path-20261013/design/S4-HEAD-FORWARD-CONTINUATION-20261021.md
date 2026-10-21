@@ -922,3 +922,33 @@ Thus the common byte interface for the head/tail projection workers is now
 derived from execution's scanner and opening read. Its identification with
 the global recovered Merkle words and the final width29 arithmetic join are
 still required; no commitment-source closure or candidate adoption is implied.
+
+
+## Same returned coefficients now have their semantic gamma-power equations
+
+`evidence/s4-same-caller-powers-semantic-v1-20261022` reuses the existing
+`powers_total_exact` theorem, identifies its output with the same successful
+Claim powers call, and transports its values through `claimArrayToFast`.
+`successful_powers_exact` gives every index's decoded coefficient as
+`Concrete.decode gamma ^ index`; `caller_powers_exact` applies this to the
+same caller array identity. The fieldwise decode identity is definitionally
+proved, but all three axiom reports include standard axioms from their
+imported definitions. Focused exit0,7.724s,peak RSS3,270,443,008 bytes,zero
+swaps. No new mathematical power-law contract is assumed.
+
+`evidence/s4-actual-resume-powers-semantic-v1-20261022` then removes the
+independent gamma-canonicality and Claim-array premises at the concrete
+settlement operation boundary. From the same successful concrete-reader
+resume returning Prepared p and the same successful sourceP6WeightsPowers
+call returning g, `S4ResumedPowersSemanticV1.same_resume_source_powers_exact`
+derives every decoded entry of `fullArrayToCurrent g` equals
+`Concrete.decode (stage2ToClaim p.gamma) ^ index`. It reuses the concrete
+reader canonicality and source-to-Claim array identity already established
+by the complete settlement consumer. There is no independent successful
+Claim call, fresh coefficient array or assumed coefficient equation.
+Focused exit0,26.150s,peak RSS3,991,224,320 bytes,zero swaps,standard axioms.
+
+The remaining source powers installation obligation and non-S4 operation
+boundaries are not discharged here. The arithmetic lane joins, recovered
+model word binding and candidate adoption remain open, as does the full
+implementation-linked100-bit target.
