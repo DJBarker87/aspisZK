@@ -721,3 +721,23 @@ misplaced local option (as the parser error confirms), but it is excluded from
 all accepted evidence. compile5 now additionally checks source identity after
 compilation before marking any result current. No limits were raised, no
 shared objects were overwritten and no shipped files changed.
+
+## Continuation 5, stage 1c: instrumented physical height induction
+
+`MultiproofConePhysicalLevels` composes the new physical-node Program through
+bounded rows, levels and height induction. `eighteen_result` proves the exact
+returned Result/scratch equals extracted `reference.levels ... 18`; each hash
+answer remains in the Program continuation and is read by subsequent nodes.
+The oracle interpretation equation and the independently specified initial
+Domain are explicit; no complete-level equality/preservation premise is added.
+Attempt 1: exit 0, 14.788892 s, 3607789568-byte RSS, zero swaps; all five
+reports are standard. This supplies an instrumented physical endpoint but does
+not yet identify its raw ordered log with the frozen Bytes/State runLevels.
+
+`MultiproofConePhysicalLive` proves exact single-cell, appended parent-prefix
+and untouched unread-suffix laws for simultaneous index/digest writes on the
+actual extracted arrays. Attempt 6: exit 0, 26.090698 s, 3562110976-byte RSS,
+zero swaps; all three reports are standard. The read-side child provenance and
+whole physical/frozen Live/log composition remain under construction. A digest
+type abbreviation avoids re-elaborating bounded scalar-literal proof arguments
+inside the prefix congruence; no kernel or resource limit is changed.
