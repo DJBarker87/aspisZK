@@ -65,3 +65,35 @@ This is improved frozen-MIR provenance, not complete final-machine inlining
 or an owner source refinement. Final LLVM/ELF reachability correspondence and
 source exclusion/adoption are still explicit OPEN fields. No completeness
 status has been promoted by treating a compiler occurrence as a source join.
+
+## Stage 3: constant callback operand flow
+
+`indirect.json` retains all 152 ELF callx sites. Exact function-level raw
+symbols connect 21 owned callback sites to their frozen LLVM operands and
+incoming arguments; the other 131 library/vtable/formatting sites have no
+emitted-source operand witness in these crate outputs. Multiple LLVM calls
+are never paired to machine addresses by textual order.
+
+`resolved.json` closes **eight compiler-level operand flows**: the three
+observer sites in each verifier build have only null incoming values; Pool
+sites 0x76ef8 and 0x77370 have the unique incoming function
+`processor::solana_sha256` (`_ZN10aspis_pool9processor13solana_sha25617h4a996967945c4283E`).
+Every forwarding function is linked, has nonempty final direct callers,
+its LLVM incoming caller multiset equals the final ELF direct-caller
+multiset, and its address is absent from the relocated address-taken census.
+All candidate operands for each closed function agree, so no LLVM call is
+assigned to an ELF callx by position. This uses the pinned compiler calling
+convention/SSA boundary; it is not a Lean source refinement or an all-path
+machine simulation. In particular null operand flow does not by itself prove
+a source accepted-run theorem.
+
+The remaining **144 ELF sites stay OPEN**, including context-field loads and
+library formatting/vtables. The 1,602 generic/native LLBC residuals remain
+separate; no generic trait is invented as a deployed call target. The
+independent local replay matches every classification and 24 negative checks
+reject missing incoming callers, escaping callback addresses and unknown SSA
+operands. Exact resources and results are in `callback-validation.json` and
+host receipts. All host scopes retain 6G/8G/0 swap/64-task limits; zero swaps.
+The first extractor attempt failed on an absent raw-input `address` field;
+v2 correctly decodes the address component of the pinned ELF identifier.
+Both receipts and the old script are retained. `#print axioms`: N/A.
