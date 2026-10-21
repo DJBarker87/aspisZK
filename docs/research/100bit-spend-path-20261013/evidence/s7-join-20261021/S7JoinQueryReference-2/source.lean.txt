@@ -1,0 +1,47 @@
+import S7JoinGeometry
+import S7JoinBasisIdentity
+import HchecksAccumulator
+
+/-! The exact S7 field reference consumed by dV_frozen. These functions are
+total mathematical references, not assertions of complete Rust extraction. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.S7JoinQueryReference
+open AspisCircleGroupOrder AspisCircleTensorBinding
+open FoldGeometryBridge
+open AspisV5FriDegreeThreeCorrelatedAgreement
+variable {K : Type} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod P) K]
+
+def queryValue (alpha : K) (V : Fin 262144 → K) (u : Fin 65536) : K :=
+  FoldRuntimeAlgebra.lineWithInverses alpha (lx u)⁻¹ (ly u)⁻¹ (lz u)⁻¹
+    (fun s => V (childIndex u s))
+
+theorem query_value_eq (alpha : K) (V : Fin 262144 → K) (u : Fin 65536) :
+    queryValue alpha V u=curveValue (SecondFoldRestoration.channels V) alpha u := by
+  rw [queryValue,S7JoinGeometry.line_total_join]
+  simp only [AspisV5ComponentCConcreteFoldLinearity.lineFoldValue,
+    AspisV5ComponentCConcreteFoldLinearity.pairFoldValue,
+    curveValue,AspisV5FunctionalBatching.batchedDiscrepancy,
+    SecondFoldRestoration.channels,SecondFoldRestoration.transform,
+    AspisV5FriConcreteEncoderCommutation.radix4Decode,Matrix.cons_val_zero,
+    Matrix.cons_val_one,Matrix.cons_val_two,Matrix.cons_val_three,
+    Matrix.vecHead,Matrix.vecTail]
+  ring
+
+def queryBasis (q : Fin 22 → Fin 262144) (j : Fin 22) (l : Fin 64) : K :=
+  S7JoinBasisIdentity.value 6
+    (2*(lz (parentIndex (q j)))^2-1) l.val
+
+theorem query_basis_eq (q : Fin 22 → Fin 262144) (j : Fin 22) (l : Fin 64) :
+    queryBasis (K:=K) q j l=QueryResidualBridge.basis q j l := by
+  rw [queryBasis,S7JoinBasisIdentity.production_basis,S7JoinGeometry.query_node]
+  rfl
+
+theorem query_values_eq (data : MatchingSupport.Data K) (q : Fin 22 → Fin 262144)
+    (j : Fin 22) : queryValue data.alpha1 data.V (parentIndex (q j))=
+      QueryResidualBridge.values data q j := query_value_eq _ _ _
+
+#print axioms query_value_eq
+#print axioms query_basis_eq
+#print axioms query_values_eq
+end AspisR1.S7JoinQueryReference
