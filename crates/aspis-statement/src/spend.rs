@@ -649,3 +649,8 @@ mod tests {
         );
     }
 }
+
+// Proof-only owned callback route; production code above is unchanged.
+#[cfg(any(kani, aeneas_ref))]
+#[path = "../../../tools/r1-builder-reference/nullifier.rs"]
+mod nullifier_reference;

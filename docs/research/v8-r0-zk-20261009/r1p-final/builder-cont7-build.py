@@ -24,7 +24,7 @@ else:
     # Snapshots retained on host; never overwrite the first snapshot.
     ssh(f'mkdir -p {J}/snapshots/codex-cx-builder-ref7-20261021/{m.rsplit("/",1)[0]}; for p in sources/{m}.lean objects/{m}.olean; do if [ -f {J}/$p ]; then dest={J}/snapshots/codex-cx-builder-ref7-20261021/$(basename $p); [ -e "$dest" ] || cp {J}/$p "$dest"; fi; done')
     subprocess.run(['scp','-q',str(src),f'{HOST}:{J}/sources/{m}.lean'],check=True)
-script='''import pathlib, hashlib, re, subprocess, json, datetime
+script='''import pathlib, hashlib, re, subprocess, json, datetime, time
 J=pathlib.Path(JJ); H=pathlib.Path(HH); T=pathlib.Path(TT); m=MM
 p=J/'sources'/f'{m}.lean'
 imports=re.findall(r'^import (\\S+)',p.read_text(),re.M)
@@ -34,7 +34,10 @@ fp=hashlib.sha256(';'.join(f'{x}={sha(J/"objects"/(x.replace(".","/")+".olean"))
 sent=(H/'evidence/sent.txt').read_text()
 used={int(x.split()[2]) for x in sent.splitlines() if len(x.split())>=3}
 a=next(n for n in range(9200,9400) if n not in used and not (T/f'evidence/out-{n}.log').exists())
-r=subprocess.run(['sh','/home/dombarker/project-offloads/codex-cx-builder-ref7-20261021/run-joint.sh',str(a),m,'J','7000','8',fp],capture_output=True,text=True)
+while True:
+ r=subprocess.run(['sh','/home/dombarker/project-offloads/codex-cx-builder-ref7-20261021/run-joint.sh',str(a),m,'J','7000','8',fp],capture_output=True,text=True)
+ if r.returncode != 78: break
+ time.sleep(20)
 out=(T/f'evidence/out-{a}.log').read_text() if (T/f'evidence/out-{a}.log').exists() else r.stdout+r.stderr
 t=(T/f'evidence/time-{a}.log').read_text() if (T/f'evidence/time-{a}.log').exists() else ''
 def tv(pat):
