@@ -3,11 +3,12 @@
 import os, sys, json, subprocess, hashlib, time, fcntl
 from pathlib import Path
 H=Path('/home/dombarker/project-offloads/codex-cx-prover-commit14-20261021')
-worker_lock=(H/'rust-worker.lock').open('a')
+lane=int(os.environ.get('PROVER_KANI_LANE','0')); assert lane in range(3)
+worker_lock=(H/f'rust-worker-lane{lane}.lock').open('a')
 fcntl.flock(worker_lock,fcntl.LOCK_EX)
 name,target=sys.argv[1:3]
 os.chdir(H/'src')
-os.environ.update(PATH='/home/dombarker/.cargo/bin:'+os.environ['PATH'], CARGO_TARGET_DIR=str(H/'kani-contract-target'), CARGO_BUILD_JOBS='4', CARGO_NET_OFFLINE='true', RUSTFLAGS='-C link-arg=-Wl,--threads=4')
+os.environ.update(PATH='/home/dombarker/.cargo/bin:'+os.environ['PATH'], CARGO_TARGET_DIR=str(H/('kani-contract-target' if lane==0 else f'kani-lane{lane}-target')), CARGO_BUILD_JOBS='4', CARGO_NET_OFFLINE='true', RUSTFLAGS='-C link-arg=-Wl,--threads=4')
 def reservation():
     caps=[]
     for p in Path('/sys/fs/cgroup').rglob('memory.max'):

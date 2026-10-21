@@ -25,6 +25,12 @@ for f in (E/'lean').glob('attempts-*.jsonl'):
    for ax in x['axioms']:
     found=re.search(r'\[([^]]*)\]',ax)
     if found:assert set(re.findall(r'[\w.]+',found[1])) <= {'propext','Classical.choice','Quot.sound'},(x['attempt'],ax)
+if (E/'rust-attempts.json').exists():
+ for x in json.loads((E/'rust-attempts.json').read_text()):
+  assert x['accepted'] == (x['exit_status']==0),x['name']
+  assert x['swaps']==0 and x['limits']['memory.swap.max']=='0',x['name']
+  assert x['env']['RUSTFLAGS']=='-C link-arg=-Wl,--threads=4',x['name']
+  assert sum(r['bytes'] for r in json.loads((E/(x['name']+'-inputs.json')).read_text())['reservations'])+8*2**30<=55*2**30,x['name']
 for p in E.rglob('*'):
  if p.is_file():assert p.suffix not in ['.olean','.llbc','.tar','.gz','.elf','.bin'],str(p)
 assert not m['all_family_coverage_closed'] and not m['real_execution_join_closed'] and not m['ideal_execution_join_closed']

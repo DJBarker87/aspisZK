@@ -1924,14 +1924,15 @@ mod material14 {
         Ok(())
     }
     // Actual m31 body, verified next-word callee, and actual Vec/? update.
-    #[kani::proof]
-    #[kani::unwind(84)]
-    #[kani::stub(crate::host_hashv, rom::expander_query)]
-    #[kani::stub_verified(SeedExpander::next_word)]
-    fn m31_iteration() {
-        let state: reference::State = kani::any();
-        kani::assume(state.word <= 8);
+    fn iteration_at(word: usize) {
+        let state = reference::State {seed:kani::any(),counter:kani::any(),block:kani::any(),word};
         rom::reset_expander(b"aspis:state-only:private-mask-expand:v1", state.seed, state.counter);
+        let stop: usize = kani::any(); kani::assume(stop <= 16);
+        for i in 0..16 {
+            let c = candidate(state.block, word, state.counter, i);
+            if i < stop { kani::assume(c == aspis_core::field::P); }
+            if i == stop { kani::assume(c < aspis_core::field::P); }
+        }
         let len: usize = kani::any(); kani::assume(len <= 2);
         let raw: [u32;2] = kani::any();
         let mut values = Vec::new();
@@ -1952,4 +1953,56 @@ mod material14 {
         assert_eq!(expander.block, expected.2.block);
         assert_eq!(expander.word, expected.2.word);
     }
+    fn candidate(block: [u8;32], word: usize, counter: u64, i: usize) -> u32 {
+        let linear = word + i;
+        let bytes = if linear < 8 {block}
+            else {rom::expander_block(counter.wrapping_add((linear / 8 - 1) as u64))};
+        let offset = 4 * (linear % 8);
+        u32::from_le_bytes([bytes[offset],bytes[offset+1],bytes[offset+2],bytes[offset+3]]) & 0x7fff_ffff
+    }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(SeedExpander::next_word)]
+    fn word_0() { iteration_at(0); }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(SeedExpander::next_word)]
+    fn word_1() { iteration_at(1); }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(SeedExpander::next_word)]
+    fn word_2() { iteration_at(2); }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(SeedExpander::next_word)]
+    fn word_3() { iteration_at(3); }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(SeedExpander::next_word)]
+    fn word_4() { iteration_at(4); }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(SeedExpander::next_word)]
+    fn word_5() { iteration_at(5); }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(SeedExpander::next_word)]
+    fn word_6() { iteration_at(6); }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(SeedExpander::next_word)]
+    fn word_7() { iteration_at(7); }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(SeedExpander::next_word)]
+    fn word_8() { iteration_at(8); }
 }

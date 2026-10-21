@@ -198,3 +198,60 @@ not a fresh shipped-runtime or frozen-ELF security certificate. Existing
 adversarial/runtime/SBF evidence is reused because those covered production
 inputs are unchanged. No local Lean compile, wallet/key cleanup, push or
 merge is performed. Host caches and keys are retained.
+
+## Source-iteration gate and precise remaining scope
+
+The column theorem retains the extraction's wrapping `Usize` successor.
+A nonwrapping ascending-column specialization additionally needs the
+canonical initial index/count bounds; it is not silently asserted for
+arbitrary indices. Padding's 1024-row bound is explicit in its theorem.
+The owned reference also has its own vector clones/allocation operations;
+its error-preservation theorem concerns those reference operations. A
+shipped-source refinement must identify its allocator/capacity model rather
+than infer source allocation equivalence from equal field outputs.
+
+The lifted M31 cell uses the literal `for _ in 0..1 { values.push(expander.m31()?); }`
+body. It executes the actual shipped scalar with the accepted verified
+next-word contract, compares the owned collector, and checks returned error,
+vector contents and every retained scalar field. Its vector prefix bound
+is explicitly **two** entries. This does not yet certify arbitrary source
+prefix lengths, whole columns, QM31 cell P6, or returned-material assembly.
+The generic Lean one-iteration equations cover arbitrary owned prefixes,
+but do not manufacture the missing shipped-source instantiation.
+
+The first combined trial (`m31-iteration-v1`) times out: exit 124,
+600.193 s, cgroup peak 6609170432 bytes, zero swaps. The recorded GNU-time
+15836 KiB is the surviving parent, not peak verifier RSS. V2 removes the
+nested reference next-word stub; it is deliberately stopped to replace
+whole-vector equality with indexed checks (exit 1 from CBMC signal 15,
+170.170 s, peak RSS 6378024 KiB, cgroup peak 6548205568 bytes, zero swaps).
+`m31-iteration-v2-stop.json` records that own-process stop. It is neither
+an assertion counterexample nor a successful check. V3 uses exact length
+and three bounded element comparisons; it also times out (exit 124,
+600.003 s, cgroup peak 4949897216 bytes, zero swaps; parent RSS 16012 KiB).
+Each replacement changes the checked formulation; no cap is raised.
+
+A final replacement splits the nine legal starting word positions and
+uses part 13's first-accepted-candidate partition (including all sixteen
+rejections). This partition does not alter the underlying sampler or
+oracle answers. The first gate is the constructor position, word 8;
+its completed result is recorded below. The exact earlier formulations and
+all source/input hashes are retained, including excluded trials.
+
+
+The first split check **`m31-word8-v4` passes**: exit **0**, wall
+**343.771 s**, peak RSS **4275328 KiB**, zero swaps. It uses the actual
+shipped m31 method with `stub_verified(SeedExpander::next_word)`, not an
+unproved scalar summary. Initial seed, counter (including wrapping), buffer,
+first-acceptance case and vector prefix contents remain symbolic; only the
+legal starting word position is fixed to 8. Both successful and exhausted
+scalar returns are included. Other starting positions are separate gates;
+word 8 alone is not promoted to universal cell P6.
+
+The remaining positions run in at most three independent scopes, each
+6G/8G/no-swap/64-task, with separate pinned compiler caches and a reservation
+check before every gate. Scope maxima total at most 24 GiB for this worker;
+the host-wide populated reservation receipts enforce the 55 GiB limit.
+All gates keep four compiler jobs and the required linker flag. The common
+Rust source stays immutable while these gates run. The final Lean sources
+are unchanged by this Rust-only harness split, so J8389 is not rerun.
