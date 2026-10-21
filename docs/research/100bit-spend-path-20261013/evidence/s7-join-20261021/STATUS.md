@@ -40,3 +40,21 @@ The pre-stop successful `S7JoinGeometry` and `S7JoinQueryReference` receipts
 establish total stored-domain line inverses/nonzero denominators, query-node
 identity, and exact agreement with dV's query values and basis. They do not
 establish constructor table bytes, opening decoding, or query/TX membership.
+
+## Stage 3 — provider-stop recovery
+
+`S7JoinInverseBackend` attempt 4 completes all four standard-axiom audits:
+the concrete multiply-based chain decodes to x^(P-2), hence inverse in ZMod P.
+Attempt 3 had no completed log/time/receipt after the provider interruption;
+attempt 4 supplies the missing evidence, not an unchanged regression.
+The chain alone does not model the source zero assertion or bind opaque inv.
+
+`S7JoinAccumulatorReference` attempt 2 fixes the draft's incorrect
+`Aeneas.Result.ok` namespace to `Aeneas.Std.Result.ok`. Its three audits
+prove total reference-state equality, both directions of the exact
+`HchecksAccumulator.ClosedSum` check, and embedding of every emitted basis
+cell. These discharge reference algebra; source query/TX membership and
+backend/ABI remain separate. Failed attempt 1 is retained, not accepted.
+Both successful compiles used the fixed local flags, task object directory
+and shared mkdir lock; exact revision/hash/exit/wall/RSS/swap/axioms are in
+the manifest. No shared objects or shipped sources changed.

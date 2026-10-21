@@ -42,7 +42,7 @@ theorem check_iff_closed_sum (iota : K →+* E) (data : MatchingSupport.Data E)
 /-- The exact emitted basis is also valid after embedding into the challenge
 field. This conclusion is total over U32, not just canonical input words. -/
 theorem emitted_basis (node : Aeneas.Std.U32) : ∃ out,
-    S7JoinProductionBasis.basis_owned node=Aeneas.Result.ok out ∧
+    S7JoinProductionBasis.basis_owned node=Aeneas.Std.Result.ok out ∧
     ∀ l : Fin 64,
       algebraMap (ZMod P) K
         (S7JoinBasisMachine.decode (S7JoinBasisBlock.cell out l.val)) =
