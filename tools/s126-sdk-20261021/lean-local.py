@@ -42,6 +42,6 @@ try:
  rec=dict(**meta,exit_status=p.returncode,wall_seconds=wall,peak_rss_bytes=metric('maximum resident set size'),swaps=metric('swaps'),print_axioms=audits)
  if p.returncode==0:rec['object_sha256']=sha(objects/(module+'.olean'))
  (E/'receipt.json').write_text(json.dumps(rec,indent=2)+'\n')
- print(json.dumps({k:rec[k] for k in ['target','exit_status','wall_seconds','peak_rss_bytes','swaps','print_axioms']}));print(log);raise SystemExit(p.returncode)
+ print(json.dumps({k:rec[k] for k in ['target','exit_status','wall_seconds','peak_rss_bytes','swaps','print_axioms']}));print(log[:3000]);raise SystemExit(p.returncode)
 finally:
  (lock/'owner.json').unlink();lock.rmdir()

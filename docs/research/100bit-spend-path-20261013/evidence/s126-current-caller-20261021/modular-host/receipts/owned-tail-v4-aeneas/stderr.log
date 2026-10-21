@@ -1,0 +1,74 @@
+Uncaught exception:
+  
+  (Invalid_argument
+    "Can't get the list of fields of this adt:\
+   \n{ Generated_Types.def_id = 20;\
+   \n  item_meta =\
+   \n  { Generated_Types.name =\
+   \n    [(Generated_Types.PeIdent (\"aspis_s126_owned_stage1\", 0));\
+   \n      (Generated_Types.PeIdent (\"SolanaDigest\", 0))];\
+   \n    span =\
+   \n    { Generated_Meta.data =\
+   \n      { Generated_Meta.file =\
+   \n        { Generated_Meta.name = (Generated_Meta.Local \"src/lib.rs\");\
+   \n          crate_name = \"aspis_s126_owned_stage1\";\
+   \n          contents =\
+   \n          (Some \"#![allow(dead_code,unexpected_cfgs)]\\nuse aspis_r1_cost_probe::{verifier,transport::Variant};\\nuse aspis_statement::pool_v1::{PoolV1PairForestTerminalStatementV1,POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES,decode_pool_v1_pair_forest_terminal_statement_v1,validate_pool_v1_pair_forest_terminal_statement_v1,encode_pool_v1_pair_verified_afterstate_v1};\\nuse solana_program::{program_error::ProgramError,entrypoint::ProgramResult,hash::hashv,msg};\\n#[derive(Clone,Copy)] struct SolanaDigest;\\nimpl aspis_core::Digest32 for SolanaDigest {\\n fn digest(&self,parts:&[&[u8]])->[u8;32] {hashv(parts).to_bytes()}\\n}\\n// The exact cfg-off observer body. Error logging remains a distinct child.\\nfn observer()->verifier::Observer {None}\\nfn error(e:verifier::Error)->ProgramError{msg!(\\\"r1:error:{:?}\\\",e);ProgramError::InvalidInstructionData}\\nfn first_decoded(public:aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize)->Result<Vec<u8>,ProgramError>{\\n    verifier::tx1(public,public_bytes,proof,k,SolanaDigest,observer()).map_err(error)\\n}\\nfn decode_public_statement_box(\\n    bytes: &[u8],\\n) -> Result<Box<PoolV1PairForestTerminalStatementV1>, ProgramError> {\\n    Ok(Box::new(\\n        decode_pool_v1_pair_forest_terminal_statement_v1(bytes)\\n            .map_err(|_| ProgramError::InvalidAccountData)?,\\n    ))\\n}\\n// Ordered SDK IO child signatures. Their implementations are supplied by the\\n// live guard-retaining wrapper; these panic bodies are never translated.\\nfn read_public_snapshot()->Result<Vec<u8>,ProgramError>{panic!(\\\"SDK IO boundary\\\")}\\nfn read_proof_snapshot()->Result<Vec<u8>,ProgramError>{panic!(\\\"SDK IO boundary\\\")}\\npub fn owned_stage1_tail(checkpoint_data:&mut [u8], data:&[u8])->ProgramResult {\\n    let public_data = read_public_snapshot()?;\\n    let statement = decode_public_statement_box(&public_data)?;\\n    validate_pool_v1_pair_forest_terminal_statement_v1(&statement)\\n        .map_err(|_| ProgramError::InvalidAccountData)?;\\n    let candidate = encode_pool_v1_pair_verified_afterstate_v1(\\n        &statement.common().lane_transition.candidate_afterstate,\\n    )\\n    .map_err(|_| ProgramError::InvalidAccountData)?;\\n\\n    let proof_data = read_proof_snapshot()?;\\n    let proof_length = verifier::PROOF_BYTES;\\n    let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;\\n    let proof_end = proof_start.checked_add(proof_length)\\n        .ok_or(ProgramError::InvalidAccountData)?;\\n    if proof_data.len() != proof_end\\n        || proof_data[..proof_start] != candidate\\n        || proof_data[proof_start + 8] != Variant::S2.tag()\\n    {\\n        return Err(ProgramError::InvalidAccountData);\\n    }\\n    let checkpoint = first_decoded(statement.semantic_public(), &public_data, &proof_data[proof_start..proof_end], data[1] as usize)?;\\n    if checkpoint.len() != checkpoint_data.len() {\\n        return Err(ProgramError::InvalidAccountData);\\n    }\\n    checkpoint_data.copy_from_slice(&checkpoint);\\n    #[cfg(feature=\\\"cu-profiling\\\")]\\n    {\\n    msg!(\\\"r1:pool-adapter-stage1-checkpoint-written\\\");\\n    solana_program::log::sol_log_compute_units();\\n    }\\n    Ok(())\\n}\")\
+   \n          };\
+   \n        beg_loc = { Generated_Meta.line = 5; col = 22 };\
+   \n        end_loc = { Generated_Meta.line = 5; col = 42 } };\
+   \n      generated_from_span = None };\
+   \n    source_text = (Some \"struct SolanaDigest;\");\
+   \n    attr_info =\
+   \n    { Generated_Meta.attributes = []; inline = None; rename = None;\
+   \n      public = false };\
+   \n    is_local = true; opacity = Generated_Types.ItemOpaque; lang_item = None };\
+   \n  generics =\
+   \n  { Generated_Types.regions = []; types = []; const_generics = [];\
+   \n    trait_clauses = []; regions_outlive = []; types_outlive = [];\
+   \n    trait_type_constraints = [] };\
+   \n  src = Generated_Types.TopLevelItem; kind = Generated_Types.Opaque;\
+   \n  layout =\
+   \n  [(\"x86_64-unknown-linux-gnu\",\
+   \n    { Generated_Types.size = (Some 0); align = (Some 1);\
+   \n      discriminator = (Some (Generated_Types.Known 0)); uninhabited = false;\
+   \n      variant_layouts =\
+   \n      [(Some { Generated_Types.field_offsets = []; uninhabited = false;\
+   \n               tagger = [] })\
+   \n        ];\
+   \n      repr =\
+   \n      { Generated_Types.repr_algo = Generated_Types.Rust; align_modif = None;\
+   \n        transparent = false; explicit_discr_type = false }\
+   \n      })\
+   \n    ];\
+   \n  ptr_metadata = Generated_Types.NoMetadata }")
+
+Raised at Charon__TypesUtils.type_decl_get_fields in file "charon-ml/src/TypesUtils.ml", lines 66-68, characters 6-80
+Called from Charon__Substitute.type_decl_get_instantiated_field_types in file "charon-ml/src/Substitute.ml", line 392, characters 15-54
+Called from Aeneas__Contexts.ctx_type_get_instantiated_field_types in file "llbc/Contexts.ml" (inlined), line 635, characters 2-79
+Called from Aeneas__Contexts.ctx_type_get_instantiated_field_etypes in file "llbc/Contexts.ml" (inlined), lines 643-644, characters 4-14
+Called from Aeneas__InterpExpressions.eval_rvalue_aggregate in file "interp/InterpExpressions.ml", lines 1329-1330, characters 14-39
+Called from Aeneas__InterpExpressions.eval_rvalue_not_global in file "interp/InterpExpressions.ml", line 1501, characters 21-79
+Called from Aeneas__InterpStatements.eval_statement_raw.(fun) in file "interp/InterpStatements.ml", line 922, characters 27-75
+Called from Aeneas__InterpStatements.eval_statement.(fun) in file "interp/InterpStatements.ml", line 866, characters 10-44
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", line 875, characters 29-57
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Aeneas__InterpStatements.eval_function_body.(fun) in file "interp/InterpStatements.ml", line 1842, characters 26-52
+Called from Aeneas__Interp.evaluate_function_symbolic in file "interp/Interp.ml", line 605, characters 25-64
+Called from Aeneas__Translate.translate_function_to_symbolics in file "Translate.ml", line 35, characters 8-71
+Called from Aeneas__Translate.translate_function_to_pure_aux in file "Translate.ml", line 132, characters 4-61
+Called from Aeneas__Translate.translate_function_to_pure in file "Translate.ml", lines 288-289, characters 6-41
+Called from Aeneas__Translate.translate_crate_to_pure.process.(fun) in file "Translate.ml", lines 501-502, characters 16-45
+Called from Stdlib__List.filter_map in file "list.ml", line 280, characters 12-15
+Called from Stdlib__List.filter_map in file "list.ml", line 282, characters 23-37
+Called from Aeneas__Parallel.catch_reraise in file "Parallel.ml", line 17, characters 6-9
+Called from Aeneas__Translate.translate_crate_to_pure in file "Translate.ml", line 519, characters 22-62
+Called from Aeneas__Translate.translate_crate in file "Translate.ml", line 2199, characters 31-71
+Called from Dune__exe__Main in file "Main.ml", lines 743-744, characters 8-37

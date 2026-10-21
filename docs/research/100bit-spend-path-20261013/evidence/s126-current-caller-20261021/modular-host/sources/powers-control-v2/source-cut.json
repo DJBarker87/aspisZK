@@ -1,0 +1,12 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "path": "crates/aspis-r1-cost-probe/src/weights.rs",
+  "source_sha256": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+  "original": "pub fn powers<const N:usize>(x:E)->[E;N] { let mut p=E::ONE;core::array::from_fn(|_| {let a=p;p=p.mul(x);a}) }",
+  "original_sha256": "3919d83b539f8819c40251a84625b582ac88338fed2fa14b18951a69c0e1d018",
+  "candidate": "pub fn candidate_powers<const N:usize>(x:E)->[E;N]{\n let mut out=[E::ZERO;N];\n let mut p=E::ONE;\n let mut i=0usize;\n while i<N {\n  out[i]=p;\n  i+=1;\n  if i==N { return out; }\n  p=p.mul(x);\n }\n out\n}",
+  "candidate_sha256": "c6c16630b74a3755bed4a6a783bf848ecb21cd6ca58d0d7d0ec6590020832a93",
+  "code_sha256": "aa68e1f6ba6b1954417b9f253c1f53847a50a8802aeb2dcb8340b4d968807f5f",
+  "qualification": "Parametric original/candidate callback-control and full actual carrier certificate at N0,N7,N29. Actual multiplication is an explicit total-pure child contract; this result alone does not install it or prove whole source equivalence."
+}

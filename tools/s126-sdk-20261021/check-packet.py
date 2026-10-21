@@ -11,6 +11,13 @@ with tempfile.TemporaryDirectory(prefix='s126-packet-check-') as d:
   (i/p.name[:-4]).write_bytes(p.read_bytes())
  subprocess.run(['python3',str(R/'tools/s126-sdk-20261021/adapt-caller.py'),str(i),str(o)],check=True,capture_output=True)
  for p in o.iterdir():assert p.read_bytes()==(S/p.name).read_bytes(),p.name
+owned=E/'modular-host/sources/owned-tail-v8/generated/AspisS2OwnedStage1'
+if owned.exists():
+ with tempfile.TemporaryDirectory(prefix='s126-owned-check-') as d:
+  i=Path(d)/'in';o=Path(d)/'out';i.mkdir()
+  for p in owned.glob('*.lean.txt'):(i/p.name[:-4]).write_bytes(p.read_bytes())
+  subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/adapt-owned-tail.py'),str(i),str(o)],check=True,capture_output=True)
+  for p in o.iterdir():assert p.read_bytes()==(S/p.name).read_bytes(),p.name
 freeze=json.loads((E/'extraction-source-freeze.json').read_text())
 assert all(r['matches'] and r['frozen_sha256']==r['extraction_workspace_sha256'] for r in freeze['files'])
 receipts=[(p,json.loads(p.read_text())) for p in E.glob('*/receipt.json')]

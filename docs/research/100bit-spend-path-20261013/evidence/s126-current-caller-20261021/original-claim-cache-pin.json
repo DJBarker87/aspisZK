@@ -1,0 +1,12 @@
+{
+  "body": "fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {\n        let k=powers::<7>(kappa);\n        let mut parts=[E::ZERO;7];parts[0]=inactive;\n        for point in 0..6 {\n            let mut dot=crate::fast_pairing::EbyKDot::new();\n            for l in 0..29 {\n                let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};\n                dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n            }\n            parts[point+1]=dot.finish();\n        }\n        let mut claim=E::ZERO;\n        for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}\n        crate::trace::value(14,7,claim);\n        Ok(claim)\n}",
+  "lib_sha256": "78fe84dbf482a442ab8ea254b5a3bd9502f11bc4abe24854ddc1d7ca2ade7972",
+  "llbc_path": "/home/dombarker/project-offloads/s1-current-claim-extraction-v2-20261020/CurrentPowers.llbc",
+  "llbc_sha256": "325e6f76f93e5861fbbaed7e8f7caecaee86e7949ff453453e6f3f319b5b1555",
+  "has_errors": false,
+  "freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "source_path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+  "frozen_body": "fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {\n        let k=powers::<7>(kappa);\n        let mut parts=[E::ZERO;7];parts[0]=inactive;\n        for point in 0..6 {\n            let mut dot=crate::fast_pairing::EbyKDot::new();\n            for l in 0..29 {\n                let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};\n                dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n            }\n            parts[point+1]=dot.finish();\n        }\n        let mut claim=E::ZERO;\n        for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}\n        crate::trace::value(14,7,claim);\n        Ok(claim)\n}",
+  "whitespace_erased_body_equal": true,
+  "qualification": "Exact original nested claim body in retained source cut, modulo whitespace. Carrier/child bindings still require their reviewed source inventories; reusing LLBC does not close those gates."
+}

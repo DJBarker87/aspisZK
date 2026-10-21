@@ -1,0 +1,137 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "raw_types_sha256": "7886591bbc41acbfcf8f064f80d802473da9aa28df29c5b763a15e6b3f8d14a8",
+  "raw_funs_sha256": "832228230256d60a87a2ef28a16e5c4ea736f7f45eb944cfbde8f8701c3bd343",
+  "external_sha256": "ff55274ec825ae5b79b29fb8888a93bcec8d807294677e159937ace0d1720da2",
+  "types_sha256": "c4a72dbdee6ff0207ee58fee2b7706391a2c2e5ae0b3f348b7fbd503056cfc0c",
+  "model_sha256": "522365b0ab4037e04a7317c1001bd9edb0b3ac2902711e38b1940e6f51ac5346",
+  "boundaries": {
+    "Slice.Insts.CoreCmpPartialEqArray.ne": "op0",
+    "core.option.Option.ok_or": "op1",
+    "aspis_r1_cost_probe.verifier.candidate.tx1": "op2",
+    "aspis_r1_cost_probe.verifier.PROOF_BYTES": "op3",
+    "aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1": "op4",
+    "aspis_statement.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1": "op5",
+    "aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES": "op6",
+    "aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1": "op7",
+    "SolanaDigest.Insts.CoreCloneClone.clone": "op8",
+    "SolanaDigest.Insts.Aspis_coreDigestDigest32.digest": "op9",
+    "error": "op10",
+    "read_public_snapshot": "op11",
+    "read_proof_snapshot": "op12"
+  },
+  "discriminants": [
+    {
+      "name": "aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public",
+      "before": "@[discriminant isize, rust_type\n  \"aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public\"]\ninductive aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public where\n| Transfer :\n  aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 \u2192\n  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 \u2192\n  aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public\n| Withdrawal :\n  aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 \u2192\n  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 \u2192\n  aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public\n",
+      "after": "@[rust_type\n  \"aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public\"]\ninductive aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public where\n| Transfer :\n  aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 \u2192\n  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 \u2192\n  aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public\n| Withdrawal :\n  aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 \u2192\n  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 \u2192\n  aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public\n\ndef aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.read_discriminant (x : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) : Isize :=\n  match x with\n  | .Transfer _ _ => 0#isize\n  | .Withdrawal _ _ => 1#isize\n\ninstance _root_.AspisS2OwnedStage1.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.instDiscriminant :\n    Aeneas.Std.Discriminant aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public Isize where\n  read_discriminant := aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.read_discriminant\n",
+      "codes": {
+        "Transfer": 0,
+        "Withdrawal": 1
+      }
+    },
+    {
+      "name": "aspis_r1_cost_probe.verifier.Phase",
+      "before": "@[discriminant isize, rust_type \"aspis_r1_cost_probe::verifier::Phase\"]\ninductive aspis_r1_cost_probe.verifier.Phase where\n| Parsed : aspis_r1_cost_probe.verifier.Phase\n| Semantic : aspis_r1_cost_probe.verifier.Phase\n| SemanticPart : Std.U8 \u2192 aspis_r1_cost_probe.verifier.Phase\n| Prepare : aspis_r1_cost_probe.verifier.Phase\n| CheckpointRead : aspis_r1_cost_probe.verifier.Phase\n| Merkle : Std.Usize \u2192 aspis_r1_cost_probe.verifier.Phase\n| Query : Std.Usize \u2192 aspis_r1_cost_probe.verifier.Phase\n| QueryPart : Std.Usize \u2192 Std.U8 \u2192 aspis_r1_cost_probe.verifier.Phase\n| CheckpointWrite : aspis_r1_cost_probe.verifier.Phase\n| Relation : aspis_r1_cost_probe.verifier.Phase\n| Final : aspis_r1_cost_probe.verifier.Phase\n",
+      "after": "@[rust_type \"aspis_r1_cost_probe::verifier::Phase\"]\ninductive aspis_r1_cost_probe.verifier.Phase where\n| Parsed : aspis_r1_cost_probe.verifier.Phase\n| Semantic : aspis_r1_cost_probe.verifier.Phase\n| SemanticPart : Std.U8 \u2192 aspis_r1_cost_probe.verifier.Phase\n| Prepare : aspis_r1_cost_probe.verifier.Phase\n| CheckpointRead : aspis_r1_cost_probe.verifier.Phase\n| Merkle : Std.Usize \u2192 aspis_r1_cost_probe.verifier.Phase\n| Query : Std.Usize \u2192 aspis_r1_cost_probe.verifier.Phase\n| QueryPart : Std.Usize \u2192 Std.U8 \u2192 aspis_r1_cost_probe.verifier.Phase\n| CheckpointWrite : aspis_r1_cost_probe.verifier.Phase\n| Relation : aspis_r1_cost_probe.verifier.Phase\n| Final : aspis_r1_cost_probe.verifier.Phase\n\ndef aspis_r1_cost_probe.verifier.Phase.read_discriminant (x : aspis_r1_cost_probe.verifier.Phase) : Isize :=\n  match x with\n  | .Parsed => 0#isize\n  | .Semantic => 1#isize\n  | .SemanticPart _ => 2#isize\n  | .Prepare => 3#isize\n  | .CheckpointRead => 4#isize\n  | .Merkle _ => 5#isize\n  | .Query _ => 6#isize\n  | .QueryPart _ _ => 7#isize\n  | .CheckpointWrite => 8#isize\n  | .Relation => 9#isize\n  | .Final => 10#isize\n\ninstance _root_.AspisS2OwnedStage1.aspis_r1_cost_probe.verifier.Phase.instDiscriminant :\n    Aeneas.Std.Discriminant aspis_r1_cost_probe.verifier.Phase Isize where\n  read_discriminant := aspis_r1_cost_probe.verifier.Phase.read_discriminant\n",
+      "codes": {
+        "Parsed": 0,
+        "Semantic": 1,
+        "SemanticPart": 2,
+        "Prepare": 3,
+        "CheckpointRead": 4,
+        "Merkle": 5,
+        "Query": 6,
+        "QueryPart": 7,
+        "CheckpointWrite": 8,
+        "Relation": 9,
+        "Final": 10
+      }
+    },
+    {
+      "name": "aspis_r1_cost_probe.verifier.Error",
+      "before": "@[discriminant isize, rust_type \"aspis_r1_cost_probe::verifier::Error\"]\ninductive aspis_r1_cost_probe.verifier.Error where\n| Parse : aspis_r1_cost_probe.verifier.Error\n| Semantic : aspis_r1_cost_probe.verifier.Error\n| Transcript : aspis_r1_cost_probe.verifier.Error\n| Relation : aspis_r1_cost_probe.verifier.Error\n| Merkle : aspis_r1_cost_probe.verifier.Error\n| Query : aspis_r1_cost_probe.verifier.Error\n| Checkpoint : aspis_r1_cost_probe.verifier.Error\n| Allocation : aspis_r1_cost_probe.verifier.Error\n",
+      "after": "@[rust_type \"aspis_r1_cost_probe::verifier::Error\"]\ninductive aspis_r1_cost_probe.verifier.Error where\n| Parse : aspis_r1_cost_probe.verifier.Error\n| Semantic : aspis_r1_cost_probe.verifier.Error\n| Transcript : aspis_r1_cost_probe.verifier.Error\n| Relation : aspis_r1_cost_probe.verifier.Error\n| Merkle : aspis_r1_cost_probe.verifier.Error\n| Query : aspis_r1_cost_probe.verifier.Error\n| Checkpoint : aspis_r1_cost_probe.verifier.Error\n| Allocation : aspis_r1_cost_probe.verifier.Error\n\ndef aspis_r1_cost_probe.verifier.Error.read_discriminant (x : aspis_r1_cost_probe.verifier.Error) : Isize :=\n  match x with\n  | .Parse => 0#isize\n  | .Semantic => 1#isize\n  | .Transcript => 2#isize\n  | .Relation => 3#isize\n  | .Merkle => 4#isize\n  | .Query => 5#isize\n  | .Checkpoint => 6#isize\n  | .Allocation => 7#isize\n\ninstance _root_.AspisS2OwnedStage1.aspis_r1_cost_probe.verifier.Error.instDiscriminant :\n    Aeneas.Std.Discriminant aspis_r1_cost_probe.verifier.Error Isize where\n  read_discriminant := aspis_r1_cost_probe.verifier.Error.read_discriminant\n",
+      "codes": {
+        "Parse": 0,
+        "Semantic": 1,
+        "Transcript": 2,
+        "Relation": 3,
+        "Merkle": 4,
+        "Query": 5,
+        "Checkpoint": 6,
+        "Allocation": 7
+      }
+    },
+    {
+      "name": "aspis_r1_cost_probe.transport.Variant",
+      "before": "@[discriminant isize, rust_type \"aspis_r1_cost_probe::transport::Variant\"]\ninductive aspis_r1_cost_probe.transport.Variant where\n| S1 : aspis_r1_cost_probe.transport.Variant\n| S2 : aspis_r1_cost_probe.transport.Variant\n| D : aspis_r1_cost_probe.transport.Variant\n",
+      "after": "@[rust_type \"aspis_r1_cost_probe::transport::Variant\"]\ninductive aspis_r1_cost_probe.transport.Variant where\n| S1 : aspis_r1_cost_probe.transport.Variant\n| S2 : aspis_r1_cost_probe.transport.Variant\n| D : aspis_r1_cost_probe.transport.Variant\n\ndef aspis_r1_cost_probe.transport.Variant.read_discriminant (x : aspis_r1_cost_probe.transport.Variant) : Isize :=\n  match x with\n  | .S1 => 0#isize\n  | .S2 => 1#isize\n  | .D => 2#isize\n\ninstance _root_.AspisS2OwnedStage1.aspis_r1_cost_probe.transport.Variant.instDiscriminant :\n    Aeneas.Std.Discriminant aspis_r1_cost_probe.transport.Variant Isize where\n  read_discriminant := aspis_r1_cost_probe.transport.Variant.read_discriminant\n",
+      "codes": {
+        "S1": 0,
+        "S2": 1,
+        "D": 2
+      }
+    },
+    {
+      "name": "aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError",
+      "before": "@[discriminant isize, rust_type\n  \"aspis_statement::pool_v1::incremental_merkle::PoolV1TreeError\"]\ninductive aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError where\n| TreeFull : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| InsufficientCapacity :\n  aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| IndexOutOfRange : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| RootMismatch : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| NonCanonicalFrontier :\n  aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| WrongLength : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| WrongMagic : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| WrongVersion : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| WrongDepth : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| WrongTreeHash : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| WrongDigestEncoding :\n  aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| NonCanonicalDigest :\n  aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| NonZeroReserved : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n",
+      "after": "@[rust_type\n  \"aspis_statement::pool_v1::incremental_merkle::PoolV1TreeError\"]\ninductive aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError where\n| TreeFull : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| InsufficientCapacity :\n  aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| IndexOutOfRange : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| RootMismatch : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| NonCanonicalFrontier :\n  aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| WrongLength : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| WrongMagic : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| WrongVersion : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| WrongDepth : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| WrongTreeHash : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| WrongDigestEncoding :\n  aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| NonCanonicalDigest :\n  aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n| NonZeroReserved : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError\n\ndef aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.read_discriminant (x : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError) : Isize :=\n  match x with\n  | .TreeFull => 0#isize\n  | .InsufficientCapacity => 1#isize\n  | .IndexOutOfRange => 2#isize\n  | .RootMismatch => 3#isize\n  | .NonCanonicalFrontier => 4#isize\n  | .WrongLength => 5#isize\n  | .WrongMagic => 6#isize\n  | .WrongVersion => 7#isize\n  | .WrongDepth => 8#isize\n  | .WrongTreeHash => 9#isize\n  | .WrongDigestEncoding => 10#isize\n  | .NonCanonicalDigest => 11#isize\n  | .NonZeroReserved => 12#isize\n\ninstance _root_.AspisS2OwnedStage1.aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.instDiscriminant :\n    Aeneas.Std.Discriminant aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError Isize where\n  read_discriminant := aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError.read_discriminant\n",
+      "codes": {
+        "TreeFull": 0,
+        "InsufficientCapacity": 1,
+        "IndexOutOfRange": 2,
+        "RootMismatch": 3,
+        "NonCanonicalFrontier": 4,
+        "WrongLength": 5,
+        "WrongMagic": 6,
+        "WrongVersion": 7,
+        "WrongDepth": 8,
+        "WrongTreeHash": 9,
+        "WrongDigestEncoding": 10,
+        "NonCanonicalDigest": 11,
+        "NonZeroReserved": 12
+      }
+    },
+    {
+      "name": "solana_program_error.ProgramError",
+      "before": "@[discriminant isize, rust_type \"solana_program_error::ProgramError\"]\ninductive solana_program_error.ProgramError where\n| Custom : Std.U32 \u2192 solana_program_error.ProgramError\n| InvalidArgument : solana_program_error.ProgramError\n| InvalidInstructionData : solana_program_error.ProgramError\n| InvalidAccountData : solana_program_error.ProgramError\n| AccountDataTooSmall : solana_program_error.ProgramError\n| InsufficientFunds : solana_program_error.ProgramError\n| IncorrectProgramId : solana_program_error.ProgramError\n| MissingRequiredSignature : solana_program_error.ProgramError\n| AccountAlreadyInitialized : solana_program_error.ProgramError\n| UninitializedAccount : solana_program_error.ProgramError\n| NotEnoughAccountKeys : solana_program_error.ProgramError\n| AccountBorrowFailed : solana_program_error.ProgramError\n| MaxSeedLengthExceeded : solana_program_error.ProgramError\n| InvalidSeeds : solana_program_error.ProgramError\n| BorshIoError : String \u2192 solana_program_error.ProgramError\n| AccountNotRentExempt : solana_program_error.ProgramError\n| UnsupportedSysvar : solana_program_error.ProgramError\n| IllegalOwner : solana_program_error.ProgramError\n| MaxAccountsDataAllocationsExceeded : solana_program_error.ProgramError\n| InvalidRealloc : solana_program_error.ProgramError\n| MaxInstructionTraceLengthExceeded : solana_program_error.ProgramError\n| BuiltinProgramsMustConsumeComputeUnits : solana_program_error.ProgramError\n| InvalidAccountOwner : solana_program_error.ProgramError\n| ArithmeticOverflow : solana_program_error.ProgramError\n| Immutable : solana_program_error.ProgramError\n| IncorrectAuthority : solana_program_error.ProgramError\n",
+      "after": "@[rust_type \"solana_program_error::ProgramError\"]\ninductive solana_program_error.ProgramError where\n| Custom : Std.U32 \u2192 solana_program_error.ProgramError\n| InvalidArgument : solana_program_error.ProgramError\n| InvalidInstructionData : solana_program_error.ProgramError\n| InvalidAccountData : solana_program_error.ProgramError\n| AccountDataTooSmall : solana_program_error.ProgramError\n| InsufficientFunds : solana_program_error.ProgramError\n| IncorrectProgramId : solana_program_error.ProgramError\n| MissingRequiredSignature : solana_program_error.ProgramError\n| AccountAlreadyInitialized : solana_program_error.ProgramError\n| UninitializedAccount : solana_program_error.ProgramError\n| NotEnoughAccountKeys : solana_program_error.ProgramError\n| AccountBorrowFailed : solana_program_error.ProgramError\n| MaxSeedLengthExceeded : solana_program_error.ProgramError\n| InvalidSeeds : solana_program_error.ProgramError\n| BorshIoError : String \u2192 solana_program_error.ProgramError\n| AccountNotRentExempt : solana_program_error.ProgramError\n| UnsupportedSysvar : solana_program_error.ProgramError\n| IllegalOwner : solana_program_error.ProgramError\n| MaxAccountsDataAllocationsExceeded : solana_program_error.ProgramError\n| InvalidRealloc : solana_program_error.ProgramError\n| MaxInstructionTraceLengthExceeded : solana_program_error.ProgramError\n| BuiltinProgramsMustConsumeComputeUnits : solana_program_error.ProgramError\n| InvalidAccountOwner : solana_program_error.ProgramError\n| ArithmeticOverflow : solana_program_error.ProgramError\n| Immutable : solana_program_error.ProgramError\n| IncorrectAuthority : solana_program_error.ProgramError\n\ndef solana_program_error.ProgramError.read_discriminant (x : solana_program_error.ProgramError) : Isize :=\n  match x with\n  | .Custom _ => 0#isize\n  | .InvalidArgument => 1#isize\n  | .InvalidInstructionData => 2#isize\n  | .InvalidAccountData => 3#isize\n  | .AccountDataTooSmall => 4#isize\n  | .InsufficientFunds => 5#isize\n  | .IncorrectProgramId => 6#isize\n  | .MissingRequiredSignature => 7#isize\n  | .AccountAlreadyInitialized => 8#isize\n  | .UninitializedAccount => 9#isize\n  | .NotEnoughAccountKeys => 10#isize\n  | .AccountBorrowFailed => 11#isize\n  | .MaxSeedLengthExceeded => 12#isize\n  | .InvalidSeeds => 13#isize\n  | .BorshIoError _ => 14#isize\n  | .AccountNotRentExempt => 15#isize\n  | .UnsupportedSysvar => 16#isize\n  | .IllegalOwner => 17#isize\n  | .MaxAccountsDataAllocationsExceeded => 18#isize\n  | .InvalidRealloc => 19#isize\n  | .MaxInstructionTraceLengthExceeded => 20#isize\n  | .BuiltinProgramsMustConsumeComputeUnits => 21#isize\n  | .InvalidAccountOwner => 22#isize\n  | .ArithmeticOverflow => 23#isize\n  | .Immutable => 24#isize\n  | .IncorrectAuthority => 25#isize\n\ninstance _root_.AspisS2OwnedStage1.solana_program_error.ProgramError.instDiscriminant :\n    Aeneas.Std.Discriminant solana_program_error.ProgramError Isize where\n  read_discriminant := solana_program_error.ProgramError.read_discriminant\n",
+      "codes": {
+        "Custom": 0,
+        "InvalidArgument": 1,
+        "InvalidInstructionData": 2,
+        "InvalidAccountData": 3,
+        "AccountDataTooSmall": 4,
+        "InsufficientFunds": 5,
+        "IncorrectProgramId": 6,
+        "MissingRequiredSignature": 7,
+        "AccountAlreadyInitialized": 8,
+        "UninitializedAccount": 9,
+        "NotEnoughAccountKeys": 10,
+        "AccountBorrowFailed": 11,
+        "MaxSeedLengthExceeded": 12,
+        "InvalidSeeds": 13,
+        "BorshIoError": 14,
+        "AccountNotRentExempt": 15,
+        "UnsupportedSysvar": 16,
+        "IllegalOwner": 17,
+        "MaxAccountsDataAllocationsExceeded": 18,
+        "InvalidRealloc": 19,
+        "MaxInstructionTraceLengthExceeded": 20,
+        "BuiltinProgramsMustConsumeComputeUnits": 21,
+        "InvalidAccountOwner": 22,
+        "ArithmeticOverflow": 23,
+        "Immutable": 24,
+        "IncorrectAuthority": 25
+      }
+    }
+  ],
+  "changes": [
+    "remove generated resource settings",
+    "qualify enum discriminant instances with unchanged codes",
+    "explicit complete Ops signatures in place of external function template axioms",
+    "Ops threaded only to consumers"
+  ],
+  "qualification": "Complete owned reference emission; SDK IO and child implementations remain explicit. No TypesExternal or FunsExternal axiom imported."
+}

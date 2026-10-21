@@ -181,3 +181,102 @@ tracked files in the four relevant source/package trees at the frozen revision;
 all matched (`extraction-source-freeze.json`). SDK tool hashes were collected
 after the runs and are labelled retrospective; historical commands/versions and
 exact per-run source hashes remain in the original receipts/inputs.
+
+## Active continuation: S2 first, modular SDK and owned reference
+
+The goal remains active. This is a checkpoint of continuing proof work, not
+completion of S1/S2/S6. The authoritative source freeze remains
+`b2727acd3abf79315d18b754a260f58f4b1c6326`. No shipped source is changed.
+
+The earlier statement that original `Prepared::new` transport was unproved is
+superseded at the following explicit child-interpretation scope:
+
+- `CurrentOriginalPreparedNativeV1.eq_prepare` proves TOTAL complete Result
+  and scratch equality between the fresh original body and retained preparation.
+- `CurrentOriginalPreparedCarrierTransportV1.prepare_transport` proves TOTAL
+  equality on the complete fresh current carriers, including Transcript/hash
+  state. No opaque Prepared replacement or chosen successful output is used.
+- `CurrentOriginalPreparedInstallationV1.first_original_new_claim_and_rank`
+  installs that original body in the enclosing first caller. One enclosing
+  success derives the decoder, selected View/semantic execution, scratch,
+  canonical gamma/kappa, original-payload claim meaning and joint rank trace.
+  The original nested claim implementation and RustStd/powers/serializer
+  installation are still separate obligations. S1 is not closed by this join.
+
+S2 now has passing checks on actual SDK code, not only the old observer model:
+
+| Concrete target | Attempt | Exit | Wall s | RSS KiB | Swap |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Metadata guards, accept/borrow/metadata covers | sdk-metadata-guards-v5b | 0 | 2.655 | 121556 | 0 |
+| Distinct keys, duplicate/distinct covers | sdk-distinct-guards-v5 | 0 | 4.161 | 326984 | 0 |
+| Complete stage1 prefix through exclusive checkpoint acquisition | sdk-stage1-prefix-guards-v1 | 0 | 6.608 | 393148 | 0 |
+| Checkpoint iterator next at every cursor 0..1768 | sdk-buffer-next-step-v1 | 0 | 4.971 | 367608 | 0 |
+| Actual std any on every 0..16-byte chunk | sdk-buffer-chunk-v1 | 0 | 1.647 | 279708 | 0 |
+| Owned checkpoint snapshot with live exclusive guard | sdk-owned-snapshot-v1 | 0 | 9.910 | 382416 | 0 |
+| Arbitrary checkpoint copy/writeback, any selected index | sdk-checkpoint-copy-v5 | 0 | 3.761 | 375352 | 0 |
+| Verbatim SDK suffix after zero scan; child argument provenance | sdk-stage1-tail-v1 | 0 | 15.490 | 2155952 | 0 |
+| Suffix after proof guards; child errors and successful writeback | sdk-stage1-tail-v2 | 0 | 34.428 | 1562572 | 0 |
+
+The first suffix check keeps the real SDK borrows, the full statement and
+Public carriers, both statement variants, validation/afterstate-encoding
+pointer correspondence, original public-byte pointer/length, exact proof
+suffix pointer/length, split index and release `None`. The verifier child
+returns Err after the argument assertions. Its reached-call cover passes.
+The second suffix check admits successful children and tests checkpoint
+writeback, with two earlier proof comparisons explicitly cut at its entry.
+Neither is mislabeled as a whole-stage certificate. The output fill pattern
+in that root is bounded; the independent arbitrary-byte copy certificate
+supplies the general copy operation. SDK alias, failure-domain and entry-cut
+conditions remain explicit in the individual source-cut manifests.
+
+Following the owner's continuation instruction, the long zero scan is handled
+by a symbolic SDK next step and Lean induction rather than a larger whole-stage
+Kani job. `S2OwnedCheckpointScanTotalV1.scan_total` proves the **actual emitted**
+owned Vec scan TOTAL for every representable length and all U8 contents,
+including checked index/addition totality. It uses a decreasing remaining-byte
+measure, not concrete normalization of 1768 iterations. The separate
+`S2CheckpointScanCompositionV1` preserves short-circuit suffixes under arbitrary
+chunk composition. Kani's Rust compiler version and upstream slice iterator
+source are pinned in `modular-host/std/`; the symbolic SDK step tests the real
+compiled iterator and all empty/continue/return cases. The Kani tool boundary
+is named P6 evidence, not a Lean axiom.
+
+The owned stage1 continuation extracts successfully. Its complete emitted
+body is kernel-checked in `S2OwnedStage1ModelV1`, with full ProgramError,
+statement and verifier types. There are no imported external-template axioms.
+Its thirteen named Ops fields expose remaining child interpretations:
+slice/array inequality, Option.ok_or, actual tx1, proof-length constant,
+statement validation, actual decoder, afterstate-size constant, encoder,
+digest clone/digest, error/log mapper, ordered public snapshot and ordered
+proof snapshot. Public read, decoder/validator/encoder, proof read, child
+call and writeback remain in the shipped order. No premature SDK borrow or
+snapshot acquisition is silently substituted.
+
+`S2OwnedStage1ReachabilityV1.tail_success` removes separately supplied public
+snapshot, decoder-box result, selected statement/Public, proof snapshot,
+selected proof slice, split-byte cast, child success/None and checkpoint-copy
+premises from this enclosing **owned-reference** theorem. They are derived
+from the same success. Exact snapshot/range/index/cast/copy equations are in
+the conclusion. This is ACCEPTED-ONLY reachability; the owned scan's TOTAL
+result must not be promoted to totality of the complete SDK stage.
+
+**Remaining S2 deliverable:** install the actual decoder and current tx1 in
+this emitted reference, then finish the concrete ordered SDK snapshot/borrow
+and source-cut composition certificate so the enclosing actual SDK theorem
+consumes it. Account-data alias partitions, retained guard lifetimes, rejected
+paths, full byte-copy correspondence and observable errors/log effects must
+remain covered. The owned model by itself does not discharge those SDK IO
+fields. The parser and compact expansion cone is owned by the other live
+session; import its landed total/frame certificates rather than reprove it.
+No new source-adoption decision is requested for this reference-only route.
+
+All 18 current accepted Lean targets pass the source-only checker; all audits
+use subsets of propext/Classical.choice/Quot.sound. Receipts and exact import
+pins are authoritative for timings. Failed local drafts, timed-out broad
+SDK roots and unsupported generic-trait stubbing preflights are retained and
+excluded. The old Kani output format reports satisfied covers as raw FAILURE
+properties; the accepted terse-mode rerun explicitly reports all covers
+SATISFIED and exit0. No exit1 run is accepted merely by interpreting its log.
+No unchanged full Lean replay, production verifier rewrite, SBF rebuild or
+security-contract reduction was performed. The 100-bit target is not yet
+established.
