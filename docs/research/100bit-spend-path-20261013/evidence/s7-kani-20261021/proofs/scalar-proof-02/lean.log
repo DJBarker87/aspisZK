@@ -1,0 +1,79 @@
+/Users/dominic/ZK/.worktrees/cx-s7-kani/docs/research/100bit-spend-path-20261013/lean/S7OwnedP6ScalarProof.lean:23:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i2 ← core.convert.num.FromU64U32.from limb * core.convert.num.FromU64U32.from basis
+    let updated ← raw1 + i2
+    if false = true then do
+        let i4 ← updated >>> 31#i32
+        (updated &&& 2147483647#u64) + i4
+      else ok updated
+is not definitionally equal to the right-hand side
+  if false = true then foldExecution sum else ok sum
+
+case false
+raw1 : U64
+limb basis : U32
+product sum : U64
+hmul : UScalar.mul (core.convert.num.FromU64U32.from limb) (core.convert.num.FromU64U32.from basis) = ok product
+hadd : UScalar.add raw1 product = ok sum
+⊢ (do
+      let i2 ← core.convert.num.FromU64U32.from limb * core.convert.num.FromU64U32.from basis
+      let updated ← raw1 + i2
+      if false = true then do
+          let i4 ← updated >>> 31#i32
+          (updated &&& 2147483647#u64) + i4
+        else ok updated) =
+    if false = true then foldExecution sum else ok sum
+/Users/dominic/ZK/.worktrees/cx-s7-kani/docs/research/100bit-spend-path-20261013/lean/S7OwnedP6ScalarProof.lean:25:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i2 ← core.convert.num.FromU64U32.from limb * core.convert.num.FromU64U32.from basis
+    let updated ← raw1 + i2
+    if True then do
+        let i4 ← updated >>> 31#i32
+        (updated &&& 2147483647#u64) + i4
+      else ok updated
+is not definitionally equal to the right-hand side
+  if True then do
+    let high ← UScalar.shiftRight sum 31
+    (UScalar.and sum (UScalar.cast UScalarTy.U64 (UScalar.ofNatCore P mask32._proof_1))).add high
+  else ok sum
+
+case true
+raw1 : U64
+limb basis : U32
+product sum : U64
+hmul : UScalar.mul (core.convert.num.FromU64U32.from limb) (core.convert.num.FromU64U32.from basis) = ok product
+hadd : UScalar.add raw1 product = ok sum
+⊢ (do
+      let i2 ← core.convert.num.FromU64U32.from limb * core.convert.num.FromU64U32.from basis
+      let updated ← raw1 + i2
+      if True then do
+          let i4 ← updated >>> 31#i32
+          (updated &&& 2147483647#u64) + i4
+        else ok updated) =
+    if True then do
+      let high ← UScalar.shiftRight sum 31
+      (UScalar.and sum (UScalar.cast UScalarTy.U64 (UScalar.ofNatCore P mask32._proof_1))).add high
+    else ok sum
+/Users/dominic/ZK/.worktrees/cx-s7-kani/docs/research/100bit-spend-path-20261013/lean/S7OwnedP6ScalarProof.lean:21:69: warning: This simp argument is unused:
+  hmul
+
+Hint: Omit it from the simp argument list.
+  simp only [S7OwnedP6Scalar.residue_scalar_owned, lift, bind_tc_ok, hm̵u̵l̵,̵ ̵h̵add]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s7-kani/docs/research/100bit-spend-path-20261013/lean/S7OwnedP6ScalarProof.lean:21:75: warning: This simp argument is unused:
+  hadd
+
+Hint: Omit it from the simp argument list.
+  simp only [S7OwnedP6Scalar.residue_scalar_owned, lift, bind_tc_ok, hmul,̵ ̵h̵a̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s7-kani/docs/research/100bit-spend-path-20261013/lean/S7OwnedP6ScalarProof.lean:50:24: error: Type mismatch: After simplification, term
+  hv
+ has type
+  @Eq ℕ (↑result) (foldBits (↑raw1 + ↑limb * ↑basis))
+but is expected to have type
+  @Eq ℕ (↑result) (if True then foldBits (↑raw1 + ↑limb * ↑basis) else ↑raw1 + ↑limb * ↑basis)
+'S7OwnedP6ScalarProof.emitted_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'S7OwnedP6ScalarProof.scalar_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'S7OwnedP6ScalarProof.phase_bound' depends on axioms: [propext, Quot.sound]

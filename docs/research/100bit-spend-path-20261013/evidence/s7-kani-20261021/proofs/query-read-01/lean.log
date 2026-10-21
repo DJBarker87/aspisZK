@@ -1,0 +1,32 @@
+theorem Aeneas.Std.alloc.vec.Vec.index_usize_spec.{u} : ∀ {α : Type u} (v : alloc.vec.Vec α) (i : Usize)
+  (hbound : ↑i < v.length), v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄ :=
+fun {α} v i hbound =>
+  id
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg WP.spec
+            (congrArg
+              (fun x =>
+                match x with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x)
+              (alloc.vec.Vec.getElem?_Nat_eq v ↑i)))
+          fun x => x = (↑v)[↑i]))
+      (of_eq_true
+        (Eq.trans
+          (Eq.trans
+            (congrFun'
+              (congrArg WP.spec
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | none => fail Error.arrayOutOfBounds
+                    | some x => ok x)
+                  (getElem?_pos (↑v) (↑i) hbound)))
+              fun x => x = (↑v)[↑i])
+            (WP.spec_ok._simp_1 (↑v)[↑i]))
+          (eq_self (↑v)[↑i]))))
+def Aeneas.Std.alloc.vec.Vec.index : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → alloc.vec.Vec T → I → Result Output :=
+fun {T I Output} inst self i => inst.index i self

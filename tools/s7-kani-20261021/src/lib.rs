@@ -3,6 +3,7 @@ use aspis_core::r0::CodeField;
 include!("frozen.rs");
 use compact::OPENING;
 include!("owned.rs");
+include!("frozen_steps.rs");
 include!("geometry_owned.rs");
 #[cfg(any(test,kani))]
 mod support;

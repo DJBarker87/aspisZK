@@ -45,7 +45,16 @@ query=query.replace('let q = opening(proof, i);','let q = candidate::opening(pro
 query=query.replace('candidate::opening(proof, i)','opening(proof, i)')
 loop='pub fn query_loop_owned(proof:&[u8],p:&Prepared,a:Accumulator,g:&[E;29],obs:Observer,geometry:&QueryGeometry,pending:BatchedWeights,end:usize)->Result<(Accumulator,BatchedWeights),Error> {\n    if a.next>=end {return Ok((a,pending));}\n    match query_owned(proof,p,a,g,obs,geometry,pending) {\n        Err(error)=>Err(error),\n        Ok((a,pending))=>query_loop_owned(proof,p,a,g,obs,geometry,pending,end)\n    }\n}\n'
 owned+='\n'+item(C,'fn opening(')+'\n'+query+'\n'+loop
-outputs={'src/frozen.rs':frozen,'src/owned.rs':owned}
+update=item(V,'fn update_residue_row')
+a=update.index('        let old=');b=update.index('\n    }',a)
+body=update[a:b]
+a=update.index('*limb=');b=update.index(';',a)+1
+fold=update[a:b]
+steps='// Exact frozen loop-body fragments, wrapped for independent per-step Kani.\nfn frozen_update_limb(row:&mut [u64;4],power:K,basis:M31,j:usize) {\n    let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];\n'+body+'\n}\nfn frozen_fold_limb(limb:&mut u64) {'+fold+'}\n'
+group='core::array::from_fn(|j|flat_inverse[5*i+j])'
+assert group in V.read_text()
+steps+='fn frozen_group(flat_inverse:&[M31],i:usize)->[M31;5] {'+group+'}\n'
+outputs={'src/frozen.rs':frozen,'src/owned.rs':owned,'src/frozen_steps.rs':steps}
 for rel,s in outputs.items():
  p=T/rel
  if '--check' in sys.argv: assert p.read_text()==s, rel

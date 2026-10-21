@@ -12,7 +12,8 @@ fn residue_row_correspondence() {
  let bound=(1u64<<34)+phase*2147483646u64*2147483646u64;
  for limb in row {kani::assume(limb<=bound);}
  let mut shipped=row;update_residue_row(&mut shipped,power,basis,flush);
- assert_eq!(shipped,residue_owned(row,power,basis,flush));
+ let owned=residue_owned(row,power,basis,flush);
+ for j in 0..4 {assert_eq!(shipped[j],owned[j]);}
 }
 #[kani::proof]
 #[kani::unwind(70)]
@@ -48,7 +49,8 @@ fn row_correspondence_under_checked_products() {
  let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
  for j in 0..4 {let product=u64::from(limbs[j])*u64::from(basis.0);kani::assume(row[j]<=u64::MAX-product);}
  let mut shipped=row;update_residue_row(&mut shipped,power,basis,flush);
- assert_eq!(shipped,residue_owned(row,power,basis,flush));
+ let owned=residue_owned(row,power,basis,flush);
+ for j in 0..4 {assert_eq!(shipped[j],owned[j]);}
 }
 
 #[kani::proof]
@@ -60,3 +62,78 @@ fn accumulate_first_query_real_width() {
  let mut s=copy_a(&a);let mut t=copy_b(&b);accumulate_batched_with_node(&p,&mut s,node,E::ZERO,&mut t);
  let (u,v)=accumulate_owned(p.rho,a,node,E::ZERO,b);same(&s,&u,&t,&v);
 }
+
+fn one_lane(lane:usize) {
+ use aspis_core::field::CM31;
+ let limb=m31();let basis=m31();let old:u64=kani::any();let flush:bool=kani::any();
+ let product=u64::from(limb.0)*u64::from(basis.0);
+ kani::assume(old<=u64::MAX-product);
+ let mut limbs=[M31::ZERO;4];limbs[lane]=limb;
+ let power=K{c0:CM31{a:limbs[0],b:limbs[1]},c1:CM31{a:limbs[2],b:limbs[3]}};
+ let mut row=[0u64;4];row[lane]=old;
+ let mut shipped=row;update_residue_row(&mut shipped,power,basis,flush);
+ let owned=residue_owned(row,power,basis,flush);
+ for j in 0..4 {assert_eq!(shipped[j],owned[j]);}
+}
+#[kani::proof] #[kani::unwind(6)] fn scalar_lane0(){one_lane(0);}
+#[kani::proof] #[kani::unwind(6)] fn scalar_lane1(){one_lane(1);}
+#[kani::proof] #[kani::unwind(6)] fn scalar_lane2(){one_lane(2);}
+#[kani::proof] #[kani::unwind(6)] fn scalar_lane3(){one_lane(3);}
+
+// Each source fragment is lifted literally by generate.py from the frozen
+// loop. Other lanes are arbitrary and frame preservation is asserted.
+fn fragment_lane(j:usize) {
+ let power=qm31();let basis=m31();let raw:[u64;4]=kani::any();let flush:bool=kani::any();
+ let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
+ let product=u64::from(limbs[j])*u64::from(basis.0);
+ kani::assume(raw[j]<=u64::MAX-product);
+ let mut row=raw;frozen_update_limb(&mut row,power,basis,j);
+ if flush {frozen_fold_limb(&mut row[j]);}
+ let expected=residue_scalar_owned(raw[j],limbs[j],basis.0,flush);
+ assert_eq!(row[j],expected);
+ for k in 0..4 {if k!=j {assert_eq!(row[k],raw[k]);}}
+}
+#[kani::proof] #[kani::unwind(6)] fn fragment_lane0(){fragment_lane(0);}
+#[kani::proof] #[kani::unwind(6)] fn fragment_lane1(){fragment_lane(1);}
+#[kani::proof] #[kani::unwind(6)] fn fragment_lane2(){fragment_lane(2);}
+#[kani::proof] #[kani::unwind(6)] fn fragment_lane3(){fragment_lane(3);}
+
+#[kani::proof]
+#[kani::unwind(112)]
+fn grouping_step_correspondence() {
+ let values:[u32;110]=kani::any();
+ let mut inverse=Vec::new();for value in values {inverse.push(M31(value));}
+ let i:usize=kani::any();kani::assume(i<22);
+ let expected=frozen_group(&inverse,i);
+ let grouped=groups_owned(inverse,Vec::new(),i,i+1);
+ assert_eq!(grouped.len(),1);
+ for j in 0..5 {assert_eq!(grouped[0][j],expected[j]);}
+}
+
+fn grouping_fixed_ordinal(i:usize) {
+ let values:[u32;110]=kani::any();let mut inverse=Vec::new();for value in values {inverse.push(M31(value));}
+ let expected=frozen_group(&inverse,i);let grouped=groups_owned(inverse,Vec::new(),i,i+1);
+ assert_eq!(grouped.len(),1);for j in 0..5 {assert_eq!(grouped[0][j],expected[j]);}
+}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_0(){grouping_fixed_ordinal(0);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_1(){grouping_fixed_ordinal(1);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_2(){grouping_fixed_ordinal(2);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_3(){grouping_fixed_ordinal(3);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_4(){grouping_fixed_ordinal(4);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_5(){grouping_fixed_ordinal(5);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_6(){grouping_fixed_ordinal(6);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_7(){grouping_fixed_ordinal(7);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_8(){grouping_fixed_ordinal(8);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_9(){grouping_fixed_ordinal(9);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_10(){grouping_fixed_ordinal(10);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_11(){grouping_fixed_ordinal(11);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_12(){grouping_fixed_ordinal(12);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_13(){grouping_fixed_ordinal(13);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_14(){grouping_fixed_ordinal(14);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_15(){grouping_fixed_ordinal(15);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_16(){grouping_fixed_ordinal(16);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_17(){grouping_fixed_ordinal(17);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_18(){grouping_fixed_ordinal(18);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_19(){grouping_fixed_ordinal(19);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_20(){grouping_fixed_ordinal(20);}
+#[kani::proof] #[kani::unwind(112)] fn grouping_ordinal_21(){grouping_fixed_ordinal(21);}
