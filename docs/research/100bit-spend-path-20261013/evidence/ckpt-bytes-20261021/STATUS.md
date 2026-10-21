@@ -162,3 +162,23 @@ Final attempt 7: exit 0, wall 35.868560292292386 s, peak RSS 3536617472
 bytes, zero swaps, revision 0a83ad804. All twelve axiom reports are standard.
 This closes six sparse intervals, not all body bytes. K sections, literal/
 digest/query byte sections and a complete body/C5 aggregate remain separate.
+
+## Stage 7: extracted K selector and every sparse K field interval
+
+CheckpointBytesK.k_byte_c5 composes the full nested emitted encode_k with
+the actual extracted k_byte index operation, deriving success and exact C5
+bytes for every in-range index on canonical raw words. CheckpointBytesSparseK
+adds exact source dispatch and C5 byte laws for rho, power, every semantic
+alpha, all four coordinates, and each of 64 weights. The indexed sections
+quantify over their ordinal rather than reducing the vector. The weights
+require its physical content length=64; the decoder/allocator producer is
+not assumed proved. Each C5 theorem names that selected field's canonicality.
+
+generate_sparse_k.py --check validates the generator and source threshold
+schedule. No section call-success or body equality premise is supplied.
+Final K attempt 2: exit 0, 15.872148500289768 s, RSS 3644260352 bytes, zero
+swaps, revision 0a83ad804. Initial K attempt missed the explicit list lookup
+rewrite and is retained as failed. SparseK attempt 1: exit 0,
+26.897038583643734 s, RSS 3604922368 bytes, zero swaps, revision 7d0b16eea.
+All seventeen new axiom reports are standard. Full revisions and resource,
+source, object and dependency pins are in the receipts. No cap was raised.

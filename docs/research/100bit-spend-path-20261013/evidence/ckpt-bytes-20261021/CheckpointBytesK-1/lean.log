@@ -1,0 +1,42 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesK.lean:19:2: error: unsolved goals
+case refine_1
+q : RawK
+canonical : Canonical q
+i : Usize
+bound : ↑i < 16
+out : Std.Array U8 16#usize
+run : encode_k q = ok out
+bytes : bytesOf ↑out = OraclePortCheckpointAbiC5.encodeK (exactK q canonical)
+inside : ↑i < (↑out).length
+⊢ (match (↑out)[↑i]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (↑out)[↑i]
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesK.lean:20:2: error: unsolved goals
+case refine_2
+q : RawK
+canonical : Canonical q
+i : Usize
+bound : ↑i < 16
+out : Std.Array U8 16#usize
+run : encode_k q = ok out
+bytes : bytesOf ↑out = OraclePortCheckpointAbiC5.encodeK (exactK q canonical)
+inside : ↑i < (↑out).length
+⊢ ∃ a,
+    (↑out)[↑i]? = some a ∧
+      AspisV8R19.SqueezeOracleBridge.decodeByte a = AspisV8R19.SqueezeOracleBridge.decodeByte (↑out)[↑i]
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesK.lean:19:39: warning: This simp argument is unused:
+  inside
+
+Hint: Omit it from the simp argument list.
+  simp [̵k̵_̵b̵y̵t̵e̵,̵r̵u̵n̵,̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵i̵n̵s̵i̵d̵e̵]̵[̲k̲_̲b̲y̲t̲e̲,̲ ̲r̲u̲n̲,̲ ̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesK.lean:21:18: warning: This simp argument is unused:
+  inside
+
+Hint: Omit it from the simp argument list.
+  simp [bytesOf,̵i̵n̵s̵i̵d̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CheckpointBytesK.k_byte_c5' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
