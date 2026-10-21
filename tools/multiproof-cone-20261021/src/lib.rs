@@ -12,3 +12,4 @@ pub use frozen::r1_wire;
 
 #[cfg(kani)] pub mod adoption_node;
 #[cfg(kani)] pub mod live_order;
+#[cfg(kani)] pub mod physical_node;

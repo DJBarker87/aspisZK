@@ -521,3 +521,23 @@ index carrier, reached packed-key/index/opening provenance, physical window
 adoption, and ordered model/log/batch simulation. The new induction does not
 silently assert that the frozen production loop inhabits its Runs relation.
 No complete multiproof AcceptedRunJoin or headline premise removal is claimed.
+
+## Continuation 4, stage 2: physical `.get` and cursor rebase
+
+`cone4-physical-1` verifies all three occupied/sibling/short physical node
+roots: three completed solver results, exit 0, 127.791414 s, 990972 KiB peak
+RSS, zero swaps. Scope: 6G/8G/no-swap/64 tasks; reservation and all immutable
+source snapshots are retained. The gate compares the exact generated frozen
+binary_group on arbitrary 5504-byte physical storage with that same body on
+the borrowed 0..32-byte window, with relative cursor zero. It checks ordinary
+short rejection, success, all scratch coordinates, i/w, exact cursor rebase,
+call count and all hash-input bytes through arbitrary coordinate observations.
+The sole verified stub is the unchanged hash observer; no reader/row/level is
+stubbed. This closes the previously missing bounded P6 physical/window cut;
+it does not claim a kernel-generated proof of Kani/library correspondence.
+
+The retained kernel window/read32 lemmas and prior exact window-node gates
+are reused unchanged. No full regression was repeated. Concrete extracted
+live-array induction and ordered source/model log, leaf/count/padding/root
+and two-batch composition remain open. No shipped file changed, so the frozen
+ELF rebuild condition was not triggered; no byte-identity run is claimed.

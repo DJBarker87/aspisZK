@@ -312,3 +312,10 @@ fn node_domain_preservation() {
 fn live_order_step() {super::live_order::check_step();}
 #[kani::proof] #[kani::unwind(34)]
 fn live_order_leaf() {super::live_order::check_leaf();}
+
+#[kani::proof] #[kani::stub_verified(super::adoption_node::hash_parts)] #[kani::unwind(34)]
+fn physical_node_occupied() {super::physical_node::check(0);}
+#[kani::proof] #[kani::stub_verified(super::adoption_node::hash_parts)] #[kani::unwind(34)]
+fn physical_node_sibling() {super::physical_node::check(1);}
+#[kani::proof] #[kani::stub_verified(super::adoption_node::hash_parts)] #[kani::unwind(34)]
+fn physical_node_short() {super::physical_node::check(2);}

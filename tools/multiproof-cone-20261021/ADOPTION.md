@@ -90,3 +90,25 @@ scratch-suffix representation; ordered list-model row simulation; initial
 keys/openings, leaf/count/padding/root adapters; and both three-slot batches.
 Caller lowering waits on S2. No whole-cone completion follows from the new
 local gates or conditional height theorem.
+
+## Continuation 4: physical cursor adoption
+
+`physical_node.rs` now compares the exact generated binary_group on the full
+physical slot against the same body on its separated window, with relative
+cursor zero. The physical array has 5504 arbitrary bytes; physical length,
+cursor, n/i/w, scratch, reply and event/array observation coordinates are
+symbolic. Occupied, sufficient-sibling and short-sibling roots are separate.
+The window is borrowed directly from the physical slice, never filled with
+replacement bytes. Both sides use actual `.get` and cursor updates. There is
+no read32, row or level stub; the sole stub is the unchanged verified hash
+observer. Rebase checks all indices/digest bytes extensionally, exact cursor
+translation, success/rejection, i/w, hash count and every address coordinate.
+
+All three roots passed in `cone4-physical-1`. This closes the bounded P6
+physical-to-window cut that was missing in continuation 3. The independent
+kernel `physical_read`/`short_iff` facts and prior window-to-owned-reference
+gates are retained. Kani certificates remain the explicit P6 source/library
+boundary; they are not automatically imported into Lean as proof terms.
+Whole-loop source factoring, ordered list-model simulation and both batch
+callers still require their own composition. No complete source ConeJoin or
+AcceptedRunJoin is constructed by the physical cut.
