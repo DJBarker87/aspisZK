@@ -81,4 +81,70 @@ headline theorem, simulator, experiment and error bound are unchanged.
 
 ## Stage 3: universal shipped reads and headline
 
-Work in progress; no shipped read-coverage premise has been removed.
+No universal **shipped** read-completeness theorem is established. The
+already accepted universal scalar/tower reference support theorem remains
+valid; it restricts the callback support of that reference, not the actual
+runtime's complete tree/binding/seed/salt/expander log. The new balancing
+recursion has no hash callback and therefore cannot fill that execution gap.
+
+`source-frontier.json` checks all four actual aggregate function bodies and
+both tool binaries against the earlier failed source-lowering receipts.
+They are unchanged. The unsupported shipped outer iterations and the missing
+raw-array/cursor/source join are still outside the adopted certificate.
+No unchanged aggregate lowering, timed-out whole-loop comparison, or full
+regression is repeated. The new success replaces only the owned-balancing
+loop failure; it does not convert prior failed shipped lowering into evidence.
+
+D112 has no separate named universal shipped read-coverage binder to delete.
+The remaining real/ideal execution joins are retained. Deleting those would
+assert a source execution identity not proved here. In particular, proving
+all model addresses well-formed cannot establish containment of every actual
+runtime callback in those addresses.
+
+The stopping point is the source execution/interface join: a full shipped
+CallerLaw must first be stated at a concrete shipped-execution decoder and
+joined to its raw sample producer, and source coverage must identify its
+actual callback log. The exact D112 counterexample rules out obtaining that
+join merely from its current abstract decoder/constructor. This does not
+prove that the intended concrete-source refinement is false. The shipped
+producer transport, raw pre-balance coordinate equivalence and all-family
+runtime coverage remain open. No complete source checklist row or endpoint
+premise is discharged. `PrivacyR1HeadlineCallerScope` is the new D112-based
+module; it contains the checked scope facts, not a weakened privacy theorem.
+
+## Verbatim before/after of the targeted headline premise
+
+The full before/after source is retained verbatim in `headline-before.lean.txt`
+and `headline-after.lean.txt`. Their SHA-256 values agree and
+`headline-deletions.diff` is empty: there is no justified deletion.
+
+Before:
+
+```lean
+    (R_commit_caller : ProverCommitCallerInstance.CallerLaw
+      (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)))
+```
+
+After:
+
+```lean
+    (R_commit_caller : ProverCommitCallerInstance.CallerLaw
+      (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)))
+```
+
+## Frozen ELF check after the final Rust edit
+
+| Artifact | SHA-256 | Bytes | Wall s | Peak RSS KiB |
+| --- | --- | ---: | ---: | ---: |
+| default | dfc2a91ab24e1ec4f57debd8f124cb4f6a3c38ba2662b7318e2e4f3b4acdde34 | 1507400 | 24.363 | 648728 |
+| devnet | fb2fc048f6499a4775051d0267c76e8ca273b28f557bfd3b5fb65b2f687c8b78 | 1507400 | 2.240 | 202800 |
+| pool | 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548 | 605704 | 24.211 | 644656 |
+
+All builds and exact `cmp` calls exit 0, zero swaps. `frozen-elf-final-check.json`
+and the three build receipts retain the exact features, source pins,
+commands, cgroup settings and compiler/linker flags. No executable, ELF,
+LLBC, `.olean`, archive or key is committed; caches and keys are retained.
+
+## Final audit
+
+Pending the one frozen combined audit; focused targets above are complete.
