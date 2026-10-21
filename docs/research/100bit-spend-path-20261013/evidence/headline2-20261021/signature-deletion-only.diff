@@ -1,0 +1,27 @@
+--- v1-specialized
++++ v2
+@@ -23,7 +23,6 @@
+   S8 : Prop
+   S9 : Prop
+   S10 : Prop
+-  M10_uniform : Prop
+ 
+ structure BoundaryEvidence (s : BoundaryStatements) : Prop where
+   h_P1 : s.P1
+@@ -50,7 +49,6 @@
+   h_S8 : s.S8
+   h_S9 : s.S9
+   h_S10 : s.S10
+-  h_M10_uniform : s.M10_uniform
+ 
+ theorem final_soundness
+     (D : LiteralByteProtocol.Decoder)
+@@ -82,8 +80,6 @@
+       HchecksReaderComposition.SemanticEndpoint (source H).decoded
+         (compiledRows D d P H) (source H).data)
+     (h_Rwire_tag : BoundaryEvidence s → InitialTagDecision.CheckedRejects D d P (Q + 1161))
+-    (h_M10_ledger : RawExtractorCostComposedBin.LedgerRefinement
+-      ActualCostedExtractorM10.extractor (CostedAllocationLedgerM10.params Q) Q)
+     (h_M10_log_length : BoundaryEvidence s → ∀ H,
+       (eval H (recorded D d P)).2.2 = true →
+         (eval H (recorded D d P)).1.length ≤ Q + 1161) :

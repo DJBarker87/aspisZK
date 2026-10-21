@@ -1,0 +1,22 @@
+--- v1
++++ v1-specialized
+@@ -28,15 +28,15 @@
+       HchecksReaderComposition.SemanticEndpoint (source H).decoded
+         (compiledRows D d P H) (source H).data)
+     (h_Rwire_tag : BoundaryEvidence s → InitialTagDecision.CheckedRejects D d P (Q + 1161))
+-    (e : RawExtractorCostComposedBin.CostedExtractor) (p : Parameters)
+-    (h_M10_ledger : RawExtractorCostComposedBin.LedgerRefinement e p Q)
++    (h_M10_ledger : RawExtractorCostComposedBin.LedgerRefinement
++      ActualCostedExtractorM10.extractor (CostedAllocationLedgerM10.params Q) Q)
+     (h_M10_log_length : BoundaryEvidence s → ∀ H,
+       (eval H (recorded D d P)).2.2 = true →
+         (eval H (recorded D d P)).1.length ≤ Q + 1161) :
+     (∀ H : Bytes → State, (eval H (recorded D d P)).2.2 = true →
+       AspisV8R19.OracleResampling.mean (fun coins : Coins =>
+-        ((e.eval (eval H (recorded D d P)) coins).2.total : ℚ)) ≤ (p.attemptBudget : ℚ)) ∧
+-    (∀ run coins w, (e.eval run coins).1 = some w → LiteralProtocol.relation run.2.1.1 w) ∧
++        ((ActualCostedExtractorM10.extractor.eval (eval H (recorded D d P)) coins).2.total : ℚ)) ≤ ((CostedAllocationLedgerM10.params Q).attemptBudget : ℚ)) ∧
++    (∀ run coins w, (ActualCostedExtractorM10.extractor.eval run coins).1 = some w → LiteralProtocol.relation run.2.1.1 w) ∧
+     (1 / (2 : ℚ)^126 + 1 / (2 : ℚ)^454 ≤ 1 / (2 : ℚ)^120) ∧
+     ((deployedFailureModel (tx1 D P tape) (poolTx2 D d P policy)) ≤ totalBound Q) ∧
+     (Q ≤ Qmax → (deployedFailureModel (tx1 D P tape) (poolTx2 D d P policy)) ≤ (Q+1 : ℚ) * (1/(2:ℚ)^100))

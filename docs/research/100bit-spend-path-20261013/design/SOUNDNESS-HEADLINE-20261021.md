@@ -185,3 +185,199 @@ The corrected-environment focused compile succeeded. No proof change was needed.
 The full argv, ordered search path, direct object hashes, exit, timing, errors and complete axioms output for **both** invocations are in `evidence/headline-20261021/manifest.json` and the `R1FinalSoundnessHeadline-{1,2}` receipts/logs. Object files remain outside the repository; only their size and SHA-256 are recorded. Only one invocation reached theorem checking; the earlier failed invocation is retained rather than omitted.
 
 Consolidation is complete. Remaining work belongs to the named source/model, runtime and M10 owners above; the oracle-decision port is not performed here. No existing Lean module, candidate re-pin, or concurrent M10 instrumentation file was edited.
+
+
+## Headline v2: closed concrete M10 extractor (2026-10-21)
+
+`AspisR1.R1FinalSoundnessHeadlineV2.final_soundness` is the new logical soundness headline. It fixes `e := ActualCostedExtractorM10.extractor` and `p := CostedAllocationLedgerM10.params Q`, deletes `h_M10_ledger`, and removes `h_M10_uniform` from the evidence inventory. Every other evidence field and source law is retained. `h_M10_log_length` remains a recorded-experiment obligation, including accepted colliding runs.
+
+### Composition and the embedded uniformity field
+
+The latest C3 addendum describes an R19 ancestry, but the actual checked-in `R1FinalSoundnessBinPerQueryM10Closed.final_soundness` already calls `R1FinalSoundnessHeadline.final_soundness`. It therefore includes the Tag/NoColl and constructed R9Pool reductions with exactly the headline's collision-restricted source laws. There is no incompatible R19 premise to restore.
+
+M10Closed itself still accepts the old evidence structure, including its opaque `h_M10_uniform`. V2 defines fresh local structures with precisely that proposition and field deleted; no existing module is edited. `legacyStatements` internally sets the obsolete field to `True`, and `legacyEvidence` copies all 24 retained proofs and supplies `True.intro`. The existing endpoint is universal in the boundary inventory, so it applies to that inventory. The three evidence-dependent laws are forwarded using the supplied v2 evidence; no old uniformity proof is requested or inferred. `ofLegacy` proves the old evidence requirement implies the new one by field projection. The concrete family's uniform coordinate bound is separately already proved by `ClosedAllocationLedgerM10.uniform`; the opaque old field is not misrepresented as that theorem.
+
+Here is the exact weaker inventory used by all v2 evidence-dependent binders:
+
+```lean
+/-- The v1 boundary inventory with only M10_uniform deleted. -/
+structure BoundaryStatements where
+  P1 : Prop
+  P2 : Prop
+  P2_prime : Prop
+  P3 : Prop
+  P4 : Prop
+  P5 : Prop
+  P6 : Prop
+  P7 : Prop
+  R10 : Prop
+  R22 : Prop
+  R4_transport : Prop
+  R17 : Prop
+  R20 : Prop
+  R21 : Prop
+  S1 : Prop
+  S2 : Prop
+  S3 : Prop
+  S4 : Prop
+  S5 : Prop
+  S6 : Prop
+  S7 : Prop
+  S8 : Prop
+  S9 : Prop
+  S10 : Prop
+
+/-- The v1 evidence inventory with only h_M10_uniform deleted. -/
+structure BoundaryEvidence (s : BoundaryStatements) : Prop where
+  h_P1 : s.P1
+  h_P2 : s.P2
+  h_P2_prime : s.P2_prime
+  h_P3 : s.P3
+  h_P4 : s.P4
+  h_P5 : s.P5
+  h_P6 : s.P6
+  h_P7 : s.P7
+  h_R10 : s.R10
+  h_R22 : s.R22
+  h_R4_transport : s.R4_transport
+  h_R17 : s.R17
+  h_R20 : s.R20
+  h_R21 : s.R21
+  h_S1 : s.S1
+  h_S2 : s.S2
+  h_S3 : s.S3
+  h_S4 : s.S4
+  h_S5 : s.S5
+  h_S6 : s.S6
+  h_S7 : s.S7
+  h_S8 : s.S8
+  h_S9 : s.S9
+  h_S10 : s.S10
+```
+
+### Verbatim v2 statement
+
+This uses the namespace openings and `totalBound`, `Qmax` abbreviations in `lean/R1FinalSoundnessHeadlineV2.lean`.
+
+```lean
+theorem final_soundness
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover)
+    (Q : Nat) (tape : Tape) (policy : Policy)
+    (hqueries : DecoderQueryAccounting.AdversaryQueries P Q)
+    (s : BoundaryStatements) (evidence : BoundaryEvidence s)
+    (source : (Bytes → State) → SourceInputs)
+    /- R16: construct the authenticated decoder/decision map, public bytes and
+       exact row-31/32 placements. DECODER-INSTANCE, owner Codex/lead. -/
+    (h_R16_instance : BoundaryEvidence s → ∀ H,
+      ¬ binaryCollision (Q + 1161) (eval H (recorded D d P)) →
+      FS2.accepts (eval H (original D d P)) → InstanceFields D d P H (source H))
+    /- R13: accepted binary reads give literal matching data; R13-CLOSE,
+       batch A on S7, owner Codex. -/
+    (h_R13 : ∀ H,
+      ¬ binaryCollision (Q + 1161) (eval H (recorded D d P)) → FS2.accepts (eval H (original D d P)) →
+      LiteralMatchingData.read (compiledRows D d P H) = some (source H).data)
+    /- R14 backend: pairing and finalized accumulator; R14-FINISH,
+       S4/S5/S8/S9 boundaries, owner Codex. -/
+    (h_R14_backend : ∀ H,
+      ¬ binaryCollision (Q + 1161) (eval H (recorded D d P)) → FS2.accepts (eval H (original D d P)) →
+      LiteralPairingChecks.checks (compiledRows D d P H) ∧
+      ∀ q : Fin 22 → Fin 262144,
+        LiteralQueryRead.decode (source H).queryBytes = some q →
+        HchecksAccumulator.ClosedSum LiteralOpeningView.eK (source H).data q
+          (SelectedChallengeMap.rhoOf (source H).rho))
+    /- R15 writer: authenticated first-match state; TX1-FINISH and read/write
+       audits, unconditional frozen-writer preservation still owed, owner Codex. -/
+    (h_R15_writer : ∀ H,
+      ¬ binaryCollision (Q + 1161) (eval H (recorded D d P)) → FS2.accepts (eval H (original D d P)) →
+      ∀ q : Fin 22 → Fin 262144,
+        LiteralQueryRead.decode (source H).queryBytes = some q →
+        ∀ j, MatchingSupport.match0 (source H).data (q j))
+    /- R3/R2: actual semantic endpoint with arithmetic/allocation/circle
+       boundaries; HCHECKS field table, owner Codex. -/
+    (h_R3_semantic : ∀ H,
+      ¬ binaryCollision (Q + 1161) (eval H (recorded D d P)) → FS2.accepts (eval H (original D d P)) →
+      HchecksReaderComposition.SemanticEndpoint (source H).decoded
+        (compiledRows D d P H) (source H).data)
+    /- R-wire: binary causal decoder completion, distinct from collision mass;
+       BIN model §6, WIRE-TX1/TX2, owner Codex/privacy. -/
+    (h_Rwire_tag : BoundaryEvidence s → InitialTagDecision.CheckedRejects D d P (Q + 1161))
+    (h_M10_log_length : BoundaryEvidence s → ∀ H,
+      (eval H (recorded D d P)).2.2 = true →
+        (eval H (recorded D d P)).1.length ≤ Q + 1161) :
+    (∀ H : Bytes → State, (eval H (recorded D d P)).2.2 = true →
+      AspisV8R19.OracleResampling.mean (fun coins : Coins =>
+        ((ActualCostedExtractorM10.extractor.eval (eval H (recorded D d P)) coins).2.total : ℚ)) ≤ ((CostedAllocationLedgerM10.params Q).attemptBudget : ℚ)) ∧
+    (∀ run coins w, (ActualCostedExtractorM10.extractor.eval run coins).1 = some w → LiteralProtocol.relation run.2.1.1 w) ∧
+    (1 / (2 : ℚ)^126 + 1 / (2 : ℚ)^454 ≤ 1 / (2 : ℚ)^120) ∧
+    ((deployedFailureModel (tx1 D P tape) (poolTx2 D d P policy)) ≤ totalBound Q) ∧
+    (Q ≤ Qmax → (deployedFailureModel (tx1 D P tape) (poolTx2 D d P policy)) ≤ (Q+1 : ℚ) * (1/(2:ℚ)^100))
+```
+
+### Revised premise table
+
+The data are `D`, `d`, `P`, `Q`, `tape`, `policy`, `s`, and `source`. The free extractor and parameter data are removed. There is no new restriction on the prover, decision, tape or Pool policy.
+
+| Premise | Plain-English meaning | Kind | Owner |
+|---|---|---|---|
+| `hqueries` | The adversary uses at most Q oracle queries. This is the experiment restriction replacing the separate decoder-start restriction. | Model fact / experiment restriction; oracle-decision port must preserve accounting | Adversary caller; lead / oracle-decision prerequisite worker |
+| `evidence : BoundaryEvidence s` | Evidence for every named field listed below; no field was deleted by consolidation. | Mixed release boundary, expanded below | Lead and field owners |
+| `h_R16_instance` | On accepted non-collision runs, source-selected decoder/public data and rows 31/32 match the compiled instance. | Model fact pending oracle-decision port, then Rust/source join | DECODER-INSTANCE / lead |
+| `h_R13` | On accepted non-collision runs, the literal matching-data reader returns the chosen source data. | Model fact pending oracle-decision port, then Rust/source join | R13 / S7 owner |
+| `h_R14_backend` | On accepted non-collision runs, pairing checks and the finalized Hchecks accumulator hold for decoded queries. | Model fact pending oracle-decision port, then Rust/source join | R14 / S4, S5, S8, S9 owners |
+| `h_R15_writer` | On accepted non-collision runs, every selected query has authenticated first-match data. | Model fact pending oracle-decision port, then Rust/source join | R15 / tx1 writer owner |
+| `h_R3_semantic` | On accepted non-collision runs, the parsed rows satisfy the semantic endpoint for the selected data. | Model fact pending oracle-decision port, then Rust/source join | R3/R2 / HCHECKS owner |
+| `h_Rwire_tag` | The decision rejects reachable, non-collision, format-checked transcripts with public tag other than 2. | Rust/source join (S2 header check); decision model fact | R-wire / S2 verifier owner |
+| `h_M10_log_length` | Every accepted recorded run, including colliding runs, has log length at most Q+1161. | M10 cost / recorded-experiment accounting | M10 / oracle-decision log prerequisite worker |
+
+The retained boundary evidence fields and their owners are:
+
+| Evidence field | Intended meaning | Kind | Owner |
+|---|---|---|---|
+| `h_P1 : s.P1` | SHA-256 ROM, collision and target-preimage trust assumption. | Rust/source release boundary (cryptographic model trust) | Lead / release premise acceptance |
+| `h_P2 : s.P2` | Ownership, permissions, locks, rollback and persistence. | Runtime P2′ family | Lead / runtime |
+| `h_P2_prime : s.P2_prime` | Matching checkpoint digests imply the same complete proof and public bytes. | Runtime P2′ | Lead / runtime / R15 read audit |
+| `h_P3 : s.P3` | Concatenated SHA, stored-bump PDA and System semantics. | Runtime P2′ family | Lead / runtime |
+| `h_P4 : s.P4` | Observed metadata equals runtime owner/signer/writable/executable metadata. | Runtime P2′ family | R16 / runtime |
+| `h_P5 : s.P5` | Stored bumps and hints have canonical initializer provenance. | Rust/source join | Initializer / lead |
+| `h_P6 : s.P6` | Correct pinned Charon/Aeneas/Lean/mathlib translation and proof toolchain. | Rust/source release boundary (toolchain trust) | Lead / C2 replay |
+| `h_P7 : s.P7` | Correct pinned source-to-SBF compilation. | Rust/source release boundary (toolchain trust) | Lead / reproducible-build owner |
+| `h_R10 : s.R10` | One complete consistent tx1/tx2 byte log. | Rust/source join | LOG-TX2 / instrumentation owner |
+| `h_R22 : s.R22` | Wrapping-source acceptance implies checked-source acceptance in both cones. | Rust/source join | Overflow-freedom owner |
+| `h_R4_transport : s.R4_transport` | Scalar/circle carriers and full prefix transport agree with source. | Rust/source join | Sampler rows 25–32 owner |
+| `h_R17 : s.R17` | Source fold geometry and stored-domain tables agree. | Rust/source join | Fold geometry / S7 owner |
+| `h_R20 : s.R20` | Pool reconstruction and CPI handoff agree for both variants. | Rust/source join | R20 / Pool adapter owner |
+| `h_R21 : s.R21` | Source, features, extraction and ELF identify the selected freeze. | Rust/source join | Lead / C1 release owner |
+| `h_S1 : s.S1` | Gamma powers, Prepared and tx1-body refinement. | Rust/source join | Concurrent S1 re-pin session |
+| `h_S2 : s.S2` | Observer-off verifier and adapter caller correspondence. | Rust/source join | S2 / adapter audit owner |
+| `h_S3 : s.S3` | Inactive group/table bits and source classification. | Rust/source join | Concurrent S3 re-pin session |
+| `h_S4 : s.S4` | Actual four_dots loop/batch and prefix correspondence. | Rust/source join | Concurrent S4 re-pin session |
+| `h_S5 : s.S5` | Canonical pairing/dot kernels and their actual callers. | Rust/source join | Concurrent S5 re-pin session |
+| `h_S6 : s.S6` | first/first_decoded and same-byte caller binding. | Rust/source join / runtime P2′ | S6 / read-audit owner |
+| `h_S7 : s.S7` | Production query_values/accumulate_batched_with_node correspondence. | Rust/source join | S7 re-pin owner |
+| `h_S8 : s.S8` | Accumulator/residue finish and compact check_values correspondence. | Rust/source join | S8 re-pin owner |
+| `h_S9 : s.S9` | Factored S2 Libra machine arithmetic and loops. | Rust/source join | Concurrent S9 re-pin session |
+| `h_S10 : s.S10` | Complete frozen declaration inventory reconciled with production owners. | Rust/source join | Concurrent S10 inventory session |
+
+Frozen Rust correspondence and the verifier-equals-decision join remain open exactly as in v1. The conclusion is still about the constructed logical tx1/Pool experiment; no Rust correspondence premise is silently discharged by M10 composition.
+
+### Exact cubic cost and unchanged soundness bound
+
+The first conjunct retains the existing parameter-budget conclusion at `CostedAllocationLedgerM10.params Q`; the numerical soundness conjuncts and witness correctness are unchanged after fixing the extractor. In addition, the same module's `accepted_cost_cubic` composes `ClosedAllocationLedgerM10.direct_bound` with finite-tape averaging to give
+
+```
+mean_coins (ActualCostedExtractorM10.extractor.eval recordedRun coins).cost
+  ≤ 4·CostedAllocationLedgerM10.scale³·(Q+1162)³.
+```
+
+This holds for every accepted recorded run using only its retained log-length bound. It has degree three in Q and one fixed concrete scale. It is a separate corollary so the headline's conclusion stays textually identical to v1 after the displayed extractor/parameter specialization. The parameter attempt budget is not claimed to equal this sharper direct bound. The unchanged soundness conclusions remain `F ≤ totalBound Q` and `Q ≤ Qmax → F ≤ (Q+1)/2^100` with the exact constants above.
+
+### Deletion-only signature audit against v1
+
+Run `python3 docs/research/100bit-spend-path-20261013/evidence/headline2-20261021/audit.py`. `data-specialization.diff` explicitly fixes `e` and `p` in v1. `signature-deletion-only.diff` then compares the specialized statement and expanded evidence inventories with v2: its only changes are deletion of `h_M10_ledger`, `h_M10_uniform`, and the unused `M10_uniform` proposition data. Every other binder is textually identical with the local structure names resolved by those inventories; all 24 retained evidence fields have identical names and types. There are no added lines or replacement hypotheses. Both expanded statements are retained as `v1-specialized-before.lean.txt` and `v2-after.lean.txt`; the mechanical result is `audit.json`.
+
+The evidence-domain change in `h_R16_instance`, `h_Rwire_tag` and `h_M10_log_length` uses exactly the weaker inventory quoted above. It does not require a caller to supply any additional proof: the theorem already has `evidence : BoundaryEvidence s`, which those functions receive. Internally, the old endpoint's evidence arguments are ignored in favor of that supplied evidence. No general old-uniformity proof is being fabricated.
+
+### V2 focused validation
+
+Source and signature audit are prepared. A single focused local compile is scheduled with the successful M10Closed cache environment, private `/tmp/codex-cx-headline2-20261021-objects`, shared mkdir lock, `-j1 -M4400 -DElab.async=false`, and `/usr/bin/time -l`. The committed receipt will record all AGENTS.md formal-workflow section 6 fields, dependency fingerprint and full axioms lines. No manifest replay or dependency rebuild is requested.
