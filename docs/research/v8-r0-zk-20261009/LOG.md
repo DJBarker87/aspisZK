@@ -7885,3 +7885,19 @@ ABI mismatch (`into_iter_back back`). Re-extract that function on its own
 with the pinned kit, or use an owned reference with Kani shipped = reference,
 and install unconditional gamma/ordinary/query policies from it.
 `shippedProverExperiment` and the endpoint are not built yet.
+
+## D135 — prover commitment part 25: product coupling built (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit25-20261021` (`r1p-final/PROVER-COMMIT25-20261021.md`).
+Per D134: the rejection-sampling coupling is built on independent product coins,
+with a product RunJoin for the retained rejection component state, adaptive
+rejection windows packed into the uniform source oracle, the finite-oracle
+marginal, and adaptive observer-history transport. Also: the circle caller is
+extracted with a total coordinate policy; total owned gamma/ordinary/rho
+scalar policies are installed; circle discriminants are namespaced for
+coherent imports; and the shipped add-small traversal is Kani-verified against
+the indexed reference (which replaces the mismatched retained packet). J7583:
+52 standard-axiom checks, zero swap; no shipped change. Open: the low-digit
+arithmetic gates timed out (600/180 s), the concrete query/source composition,
+`shippedProverExperiment`, both WholeRunJoins and the endpoint
+specialisation.
