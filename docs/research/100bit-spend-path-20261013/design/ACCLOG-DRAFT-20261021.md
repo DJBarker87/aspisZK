@@ -10,7 +10,7 @@ All new proof modules have the `OraclePortAccLog` prefix.
 `OraclePortAccLogSlot.accepted_slot_logs_differ` is an accepted **raw slot**
 counterexample at height 18, batch 0, kind 1, with zero query indices, zero
 oracle answers and a complete zero-filled slot. Both helper verifiers accept;
-the frozen second read is another leaf (domain 0x11), while the recursive
+the frozen second read is another leaf (domain 0x10), while the recursive
 model's second read is a parent (domain 0x12). Padding passes. Consequently
 padding guard erasure cannot prove equality of the two accepted logs.
 `levels_singleton` proves success symbolically by height induction; no concrete
@@ -36,6 +36,30 @@ This is a recovery-table counterexample, not a full frozen accepted protocol
 run, and makes no claim against soundness outside the collision event.
 Unconditional permutation invariance is false; collision-free invariance
 would be a different theorem and would not supply literal log equality.
+
+The follow-up modules strengthen that example without changing the endpoint:
+
+- `OraclePortAccLogRecoveryLog.byte_log_recovery_not_invariant` uses actual
+  encoded byte logs and `RawCutRecordedWordsExecutableBin.recoverAtExec`,
+  with the existing parsers. It is not just an abstract table lookup.
+- `OraclePortAccLogRecoveryWorld.consistent_byte_log_counterexample` proves
+  both logs are consistent with one explicitly constructed total oracle.
+  The shared digest is an intentional collision, never inconsistent answers
+  at one address.
+- `OraclePortAccLogParentSchedules.source_parent_schedule` and
+  `recursive_parent_schedule` evaluate the actual generic `runLevels` and
+  recursive `OracleDecisionMultiTree.execute`, at height three with prehashed
+  leaves. They produce exactly the displayed seven-parent orders and the same
+  root 13. Thus this is the specific level-versus-recursive permutation.
+- `OraclePortAccLogCuts.same_frame_recovery_obstruction` puts the same frame
+  after either block and proves the actual first-frame cuts recover exactly
+  the respective logs; recovery still differs. Its empty frame isolates the
+  cut primitive and is not claimed to be a complete protocol transcript.
+
+These focused witnesses do not establish a full frozen accepting protocol
+counterexample or refute a collision-charged recovery transport theorem.
+They establish why unconditional permutation invariance cannot repair literal
+accepted-log equality to the existing recursive model.
 
 For the target's literal accepted-log equality, the model must adopt the
 frozen order: stable ascending (index, source-position) leaf hashing including

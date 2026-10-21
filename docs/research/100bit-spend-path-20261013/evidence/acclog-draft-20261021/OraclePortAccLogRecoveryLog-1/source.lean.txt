@@ -1,0 +1,101 @@
+import OraclePortAccLogPermutation
+
+/-! Lift the height-three table permutation to the exact byte-log recovery
+entry point. All parent records are genuine encodings; no parser is replaced.
+This remains a small recovery counterexample, not a full protocol proof. -/
+set_option autoImplicit false
+namespace AspisR1.OraclePortAccLogRecoveryLog
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open OracleDecisionMultiTree BinMerkleTable BinMerkle32Path
+open OraclePortAccLogPermutation
+
+abbrev salt : Bytes := List.replicate 32 0
+abbrev leaf : Bytes := BinMerkle32Leaf.leafInput 0x71 [] salt
+
+def encodeNodes (ns : Nodes) : BinMerkleRecordedLog.Log :=
+  ns.map fun n => (nodeInput n.1,n.2)
+
+def levelLog : BinMerkleRecordedLog.Log := (leaf,d 0) :: encodeNodes level
+def recursiveLog : BinMerkleRecordedLog.Log := (leaf,d 0) :: encodeNodes recursive
+
+theorem node_not_leaf (cs : Children) : BinMerkleLeafCodec.parse 0x71 0 (nodeInput cs) = none := by
+  cases hp : BinMerkleLeafCodec.parse 0x71 0 (nodeInput cs) with
+  | none => rfl
+  | some data =>
+    have eq := (BinMerkleLeafCodec.parse_sound 0x71 0 (nodeInput cs) data hp).2.2
+    have first := congrArg List.head? eq
+    change some (0x11 : AspisV8R19.DuplexFrames.Byte) = some 0x12 at first
+    contradiction
+
+theorem leaf_not_node : BinMerkleNodeCodec.parse leaf = none := by
+  cases hp : BinMerkleNodeCodec.parse leaf with
+  | none => rfl
+  | some cs =>
+    have eq := BinMerkleNodeCodec.parse_sound hp
+    have first := congrArg List.head? eq
+    change some (0x12 : AspisV8R19.DuplexFrames.Byte) = some 0x11 at first
+    contradiction
+
+theorem nodes_encode (ns : Nodes) : BinMerkleRecordedLog.nodes (encodeNodes ns) = ns := by
+  induction ns with
+  | nil => rfl
+  | cons n ns ih =>
+    simp only [encodeNodes,List.map_cons,BinMerkleRecordedLog.nodes,List.filterMap_cons,
+      BinMerkleNodeCodec.parse_nodeInput,Option.map_some]
+    exact congrArg (List.cons n) ih
+
+theorem leaves_encode (ns : Nodes) :
+    BinMerkleRecordedLog.leaves 0x71 0 (encodeNodes ns) = [] := by
+  induction ns with
+  | nil => rfl
+  | cons n ns ih =>
+    simp only [encodeNodes,List.map_cons,BinMerkleRecordedLog.leaves,List.filterMap_cons,
+      node_not_leaf,Option.map_none]
+    exact ih
+
+theorem log_nodes (ns : Nodes) :
+    BinMerkleRecordedLog.nodes ((leaf,d 0) :: encodeNodes ns) = ns := by
+  simp only [BinMerkleRecordedLog.nodes,List.filterMap_cons,leaf_not_node,Option.map_none]
+  exact nodes_encode ns
+
+theorem log_leaves (ns : Nodes) :
+    BinMerkleRecordedLog.leaves 0x71 0 ((leaf,d 0) :: encodeNodes ns) =
+      [(([],salt),d 0)] := by
+  have hp := BinMerkleLeafCodec.parse_leafInput (0x71 : AspisV8R19.DuplexFrames.Byte)
+    [] salt 0 rfl (List.length_replicate ..)
+  simp only [BinMerkleRecordedLog.leaves,List.filterMap_cons,leaf,hp,Option.map_some]
+  exact congrArg (List.cons (([],salt),d 0)) (leaves_encode ns)
+
+theorem equal_log_multisets : levelLog.Perm recursiveLog :=
+  List.Perm.cons _ (same_multiset.map _)
+
+theorem level_log_recovers :
+    RawCutRecordedWordsExecutableBin.recoverAtExec 0x71 0 levelLog [0,0,0] (d 13) = none := by
+  rw [RawCutRecordedWordsExecutableBin.recoverAtExec,levelLog,log_nodes,log_leaves]
+  simp [BinMerkleLeafRecovery.recover,walk,lookup,level,A,B,C,D,E,F,G,digest_eq,children]
+
+theorem recursive_log_recovers :
+    RawCutRecordedWordsExecutableBin.recoverAtExec 0x71 0 recursiveLog [0,0,0] (d 13) =
+      some ([],salt) := by
+  rw [RawCutRecordedWordsExecutableBin.recoverAtExec,recursiveLog,log_nodes,log_leaves]
+  simp [BinMerkleLeafRecovery.recover,walk,lookup,recursive,A,B,C,D,E,F,G,
+    digest_eq,children,BinMerkleLeafRecovery.lookupLeaf]
+
+theorem byte_log_recovery_not_invariant : levelLog.Perm recursiveLog ∧
+    RawCutRecordedWordsExecutableBin.recoverAtExec 0x71 0 levelLog [0,0,0] (d 13) ≠
+      RawCutRecordedWordsExecutableBin.recoverAtExec 0x71 0 recursiveLog [0,0,0] (d 13) := by
+  refine ⟨equal_log_multisets,?_⟩
+  rw [level_log_recovers,recursive_log_recovers]
+  simp only [ne_eq,reduceCtorEq,not_false_eq_true]
+
+#print axioms node_not_leaf
+#print axioms leaf_not_node
+#print axioms nodes_encode
+#print axioms leaves_encode
+#print axioms log_nodes
+#print axioms log_leaves
+#print axioms equal_log_multisets
+#print axioms level_log_recovers
+#print axioms recursive_log_recovers
+#print axioms byte_log_recovery_not_invariant
+end AspisR1.OraclePortAccLogRecoveryLog
