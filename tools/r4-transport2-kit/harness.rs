@@ -21,6 +21,20 @@ mod transport2 {
  }
  #[kani::proof]
  #[kani::unwind(10)]
+ fn division_pass() {
+  let input:[u32;8]=kani::any();let mut quotient=input;
+  let mut remainder=0u64;
+  for limb in quotient.iter_mut().rev() {
+   let dividend=(remainder<<32)|u64::from(*limb);
+   *limb=(dividend/u64::from(P)) as u32;
+   remainder=dividend%u64::from(P);
+  }
+  let (reference,digit)=qm31_div_pass(input);
+  for i in 0..8 {assert_eq!(quotient[i],reference[i]);}
+  assert_eq!(remainder,u64::from(digit));
+ }
+ #[kani::proof]
+ #[kani::unwind(10)]
  fn wide_iterator_order() {
   let rank:[u32;8]=kani::any();let mut q=rank;let mut j=8;
   for limb in q.iter_mut().rev() {
@@ -48,6 +62,73 @@ mod transport2 {
   assert_eq!(wrapped,carry==1);assert!(carry<=1);
   for i in 0..8 {assert_eq!(actual[i],reference[i]);assert!(actual[i]<P);}
  }
+ fn division_position<const N:usize>() {
+  let input:[u32;8]=kani::any();let r:u64=kani::any();kani::assume(r<u64::from(P));
+  let mut actual=input;let mut remainder=r;
+  let limb=actual.iter_mut().rev().nth(N).unwrap();
+  let dividend=(remainder<<32)|u64::from(*limb);
+  *limb=(dividend/u64::from(P)) as u32;
+  remainder=dividend%u64::from(P);
+  let mut reference=input;
+  let (q,rem)=division_step(reference[7-N],r);reference[7-N]=q;
+  assert_eq!(remainder,rem);
+  for j in 0..8 {assert_eq!(actual[j],reference[j]);}
+ }
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_position_0(){division_position::<0>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_position_1(){division_position::<1>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_position_2(){division_position::<2>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_position_3(){division_position::<3>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_position_4(){division_position::<4>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_position_5(){division_position::<5>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_position_6(){division_position::<6>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_position_7(){division_position::<7>();}
+ // Array frame/alias contract, separated from the already-proved scalar divider.
+ fn division_address<const N:usize>() {
+  let input:[u32;8]=kani::any();let q:u32=kani::any();let mut actual=input;
+  let limb=actual.iter_mut().rev().nth(N).unwrap();
+  assert_eq!(*limb,input[7-N]);*limb=q;
+  for j in 0..8 {assert_eq!(actual[j],if j==7-N{q}else{input[j]});}
+ }
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_address_0(){division_address::<0>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_address_1(){division_address::<1>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_address_2(){division_address::<2>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_address_3(){division_address::<3>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_address_4(){division_address::<4>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_address_5(){division_address::<5>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_address_6(){division_address::<6>();}
+ #[kani::proof]
+ #[kani::unwind(10)]
+ fn division_address_7(){division_address::<7>();}
  // Every array write, stop branch and unchanged cell for one actual source word.
  fn scan_step<const N:usize>() {
   let accepted:[u32;22]=kani::any();let draws:usize=kani::any();let x:u32=kani::any();

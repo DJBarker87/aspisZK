@@ -42,6 +42,9 @@ path = ':'.join([str(OBJECTS), '/tmp/codex-cx-r4-transport-20261021-objects', st
     '/tmp/codex-cx-sampler-20261020-objects', baseline['lean_path'],
     '/tmp/codex-cx-r14-finish-20261020-objects'])
 
+if module.startswith('R4Transport2Add'):
+    path = '/tmp/codex-cx-r4-transport2-add-reference-objects:' + path
+
 imports = []
 for name in re.findall(r'^import (\S+)', source.read_text(), re.M):
     obj = next((Path(p) / (name.replace('.', '/') + '.olean')

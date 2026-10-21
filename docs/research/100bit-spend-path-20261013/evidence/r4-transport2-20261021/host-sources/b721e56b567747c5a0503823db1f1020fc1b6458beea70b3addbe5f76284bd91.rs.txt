@@ -1,0 +1,12 @@
+#![allow(dead_code)]
+struct View<'a>{folded_root:Option<&'a [u8;32]>,round1:&'a [u8]}
+fn source_row30(v:&View)->Vec<u8>{let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(v.folded_root.unwrap());bytes.extend_from_slice(v.round1); bytes}
+#[cfg(kani)] mod proofs {use super::*;
+#[kani::proof] #[kani::unwind(258)] fn root_round1_bytes(){
+let root:[u8;32]=kani::any();let round1:[u8;224]=kani::any();
+let i:usize=kani::any();kani::assume(i<256);
+let v=View{folded_root:Some(&root),round1:&round1};
+let payload=source_row30(&v);
+assert_eq!(payload.len(),256);
+assert_eq!(payload[i],if i<32{root[i]}else{round1[i-32]});
+}}

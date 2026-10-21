@@ -6,6 +6,7 @@ E=ROOT/'docs/research/100bit-spend-path-20261013/evidence/r4-transport2-20261021
 H='dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-r4-transport2-20261021/'
 subprocess.run(['rsync','-a',H+'receipts/',str(E/'host-receipts')+'/'],check=True)
 subprocess.run(['rsync','-a','--include=*-inputs.json','--include=*-reservation.json','--exclude=*',H,str(E/'host-inputs')+'/'],check=True)
+subprocess.run(['rsync','-a',H+'source-snapshots/',str(E/'host-sources')+'/'],check=True)
 rows=[]
 for p in sorted((E/'host-receipts').glob('*/receipt.json')):
  rec=json.loads(p.read_text());rec['attempt']=p.parent.name

@@ -1,0 +1,25 @@
+{
+  "source_revision": "2b1158f9db18b8c4099c4902e6e66a3c8201c570",
+  "sources": {
+    "crates/aspis-r1-cost-probe/src/verifier.rs": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+    "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+    "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+    "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+    "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0"
+  },
+  "exact_fragments": {
+    "circle25": "let state_before_z0 = transcript.state();\nlet z0 = transcript.circle_validated(prefix.validated_record(25)?)?;",
+    "circle26": "let before_z1 = prefix.validated_record(26)?.decode_k::<29>(0)?;\nlet z1 = transcript.circle_validated(prefix.validated_record(26)?)?;",
+    "reseed": "let mut t=Transcript::new(hash,sem.transcript.state(),v.variant);",
+    "row27": "let gamma=t.scalar(27,v.y1,true);",
+    "row28": "let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);",
+    "row29": "let alpha0=t.scalar(29,v.round0,false);",
+    "row30": "let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(v.folded_root.unwrap());bytes.extend_from_slice(v.round1);",
+    "s2_rows": "([alpha0,t.scalar(30,&bytes,false)],31)",
+    "row31_32": "let queries=t.queries(row,v.final_message)?;\nlet rho=t.scalar_k(row+1,&[]);",
+    "absorb": "self.state=self.hash.digest(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);",
+    "selected_return": "let (q,state)=aspis_core::r0_transcript::queries_from_pairs(&blocks,&advances).map_err(|_|crate::verifier::Error::Transcript)?;\nself.state=state;"
+  },
+  "eager_pairs": 8,
+  "scope": "Source identity and reached call expressions only; binding these observations to the compiled caller, parsers and literal words is not inferred."
+}

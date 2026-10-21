@@ -47,3 +47,47 @@ relation their embedding must supply. The source splice checker and all 23
 Kani partitions are evidence for the source step, not a newly accepted Lean
 axiom for generated IntoIter methods. The existing extraction's external
 iterator implementation boundary is still not a kernel-checked theorem.
+
+## Stage 3: prefix composition and caller obstruction
+
+R4Transport2CirclePrefix threads the first-25 checkpoint state through both
+actual retained circle block calls and the S2/P3 reseed. OpeningChain threads
+that state through reached ordinary block calls, constructing length/label
+bytes rather than asking for them anew. It permits the correct literal
+row30 constructor via each call's explicit erase relation. These are sampler
+prefixes; the theorem does not assert the row30 word is the frozen parsed word.
+
+QueryPrefix identifies all sixteen actual source digest successes with the
+model's eager eight-pair chain and the selected scan state. QueryAbsorb
+discharges its absorb preimage from the actual source row31 absorb and
+canonical message. QueryRho composes that query result with the actual row32
+scalar_k call and its empty frame. Its hscan is the exact remaining relation
+between the shipped scanner and the checked reference driver; the theorem
+never replaces the selected state by advance7.
+
+The exact row30 append cut passes Kani for arbitrary root32, round1[224]
+and arbitrary selected byte: length256 and every byte is root || round1.
+prefix-source.json pins the reached row25–32 expressions, opening reseed,
+all eight eager source pairs and the selected state assignment. This is
+source identity, not an extracted whole-verifier execution theorem.
+
+CallerObstruction proves that PreparedModel.Boundaries can return arbitrary
+query state and arbitrary inactive serialization. Thus success at this free
+interface cannot establish either missing source fact. These are interface
+countermodels, not implementation counterexamples. No premise was removed.
+
+## Wide follow-up
+
+AddReference composes the existing indexed carry extraction with positional
+mod/div, with exact pinned reference source and object hashes. WideBounds
+derives canonical digits and quotient+1 <=257 from the extracted eight-pass
+reference and the input byte rank.
+
+A new whole division-pass comparison times out at120s. The first attempt to
+partition it into eight arithmetic+array roots also times out at120s total
+(two roots finish, the next is interrupted). Neither job is accepted as a
+passing batch or rerun. The replacement separates the already-passing scalar
+divider contract from eight arbitrary-write iterator/address/frame contracts;
+all eight pass in4.238s. This removes repeated nonlinear division from the
+array-write proof. The exact iterator traversal and the extracted loop's
+inductive theorem provide the composition structure. No cap is increased.

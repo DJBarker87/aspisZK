@@ -35,6 +35,8 @@ assert canon(item(s,'fn scan('))==canon('fn scan(&mut self, block: &[u8;32])->bo
 # Reference pass is the existing extracted, proved owned-array loop.
 pass_body=item(w,'fn qm31_div_pass(')
 assert canon(div.replace('*limb','rank[j]')) in canon(pass_body)
+reference=ROOT/'docs/research/100bit-spend-path-20261013/lean-candidates/post25-indexed-addsmall-source-model-20261020/extraction/candidate-input/lib.rs'
+assert canon(item(reference.read_text(),'fn add_small_base_p(')) == canon('fn add_small_base_p(digits: &mut [u32;8],mut addend:u32)->bool {let mut i:usize=0;while i<8 {'+add.replace('*digit','digits[i]')+'i+=1;} debug_assert!(addend<=1);addend!=0}')
 code='''#![allow(dead_code)]
 const P:u32=2147483647;
 const QUERY_COUNT:usize=22;
@@ -48,5 +50,5 @@ code+=item(w,'fn add_small_base_p(')+'\n'+item(w,'fn low_base_p_digits(')+'\n'
 code+=(ROOT/'tools/r4-transport2-kit/harness.rs').read_text()
 (out/'src/lib.rs').write_text(code)
 (out/'Cargo.toml').write_text('[package]\nname="r4-transport2-steps"\nversion="0.0.0"\nedition="2021"\n[workspace]\n')
-manifest=dict(schema='r4-step-source-splice-v1',sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [wide,scan]},crate_sha256=hashlib.sha256(code.encode()).hexdigest(),steps=dict(division=div,addition=add,scan=step),checks=['division body exact in optimized helper and extracted indexed reference','addition body exact in optimized helper','complete scanner body equals eight-word iteration of exact single step'],qualification='Syntactic decomposition plus Kani components. Not a compiler-certified whole-loop extraction equivalence.')
+manifest=dict(schema='r4-step-source-splice-v1',sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [wide,scan]},crate_sha256=hashlib.sha256(code.encode()).hexdigest(),indexed_add_reference=dict(path=str(reference.relative_to(ROOT)),sha256=hashlib.sha256(reference.read_bytes()).hexdigest()),steps=dict(division=div,addition=add,scan=step),checks=['division body exact in optimized helper and extracted indexed reference','addition body exact in optimized helper','complete scanner body equals eight-word iteration of exact single step'],qualification='Syntactic decomposition plus Kani components. Not a compiler-certified whole-loop extraction equivalence.')
 (out/'source-cut.json').write_text(json.dumps(manifest,indent=2)+'\n')

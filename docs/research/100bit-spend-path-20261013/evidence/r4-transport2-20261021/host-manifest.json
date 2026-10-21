@@ -270,6 +270,284 @@
     }
   },
   {
+    "source_revision": "2b1158f9db18b8c4099c4902e6e66a3c8201c570",
+    "command": [
+      "timeout",
+      "120",
+      "cargo",
+      "kani",
+      "--harness",
+      "division_address_",
+      "-Z",
+      "unstable-options",
+      "--output-format",
+      "terse",
+      "--cbmc-args",
+      "--unwinding-assertions"
+    ],
+    "cwd": "/home/dombarker/project-offloads/codex-cx-r4-transport2-20261021/crate",
+    "expected_time": "Kani compilation then division_address_ bounded single-step comparison; no dense arithmetic; timeout 120s",
+    "exit_status": 0,
+    "wall_seconds": 4.238,
+    "peak_rss_kib": 191880,
+    "swaps": 0,
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rb412711e66704c539c3c4c0475ca4979.scope",
+    "limits": {
+      "memory.high": "6442450944",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "pids.max": "64"
+    },
+    "cgroup_memory_peak_bytes": 98893824,
+    "env": {
+      "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-r4-transport2-20261021/target",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_NET_OFFLINE": "true",
+      "SBF_TRACE_DIR": null
+    },
+    "print_axioms": "N/A: no Lean compilation",
+    "attempt": "division-addresses-1",
+    "inputs": {
+      "source_revision": "2b1158f9db18b8c4099c4902e6e66a3c8201c570",
+      "source_sha256": "1d390c594174a5bf3eda79da858ea5d826406e5e962f4eebbcd25fa6a223acde",
+      "source_cut": {
+        "schema": "r4-step-source-splice-v1",
+        "sources": {
+          "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+          "crates/aspis-core/src/r0_transcript.rs": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1"
+        },
+        "crate_sha256": "1d390c594174a5bf3eda79da858ea5d826406e5e962f4eebbcd25fa6a223acde",
+        "steps": {
+          "division": "let dividend = (remainder << 32) | u64::from(*limb);\n*limb = (dividend / u64::from(P)) as u32;\nremainder = dividend % u64::from(P);",
+          "addition": "let sum = u64::from(*digit) + u64::from(addend);\n*digit = (sum % u64::from(P)) as u32;\naddend = (sum / u64::from(P)) as u32;",
+          "scan": "if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {\nreturn true;\n}\nself.draws += 1;\nif !self.accepted[..self.accepted_len].contains(&candidate) {\nself.accepted[self.accepted_len] = candidate;\nself.accepted_len += 1;\n}"
+        },
+        "checks": [
+          "division body exact in optimized helper and extracted indexed reference",
+          "addition body exact in optimized helper",
+          "complete scanner body equals eight-word iteration of exact single step"
+        ],
+        "qualification": "Syntactic decomposition plus Kani components. Not a compiler-certified whole-loop extraction equivalence."
+      },
+      "command": [
+        "cargo",
+        "kani",
+        "--harness",
+        "division_address_"
+      ]
+    }
+  },
+  {
+    "source_revision": "2b1158f9db18b8c4099c4902e6e66a3c8201c570",
+    "command": [
+      "timeout",
+      "120",
+      "cargo",
+      "kani",
+      "--harness",
+      "division_pass",
+      "-Z",
+      "unstable-options",
+      "--output-format",
+      "terse",
+      "--cbmc-args",
+      "--unwinding-assertions"
+    ],
+    "cwd": "/home/dombarker/project-offloads/codex-cx-r4-transport2-20261021/crate",
+    "expected_time": "Kani compilation then division_pass bounded single-step comparison; no dense arithmetic; timeout 120s",
+    "exit_status": 124,
+    "wall_seconds": 120.002,
+    "peak_rss_kib": 15112,
+    "swaps": 0,
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r362c8bcb64224a2bb070729f65dad42c.scope",
+    "limits": {
+      "memory.high": "6442450944",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "pids.max": "64"
+    },
+    "cgroup_memory_peak_bytes": 234090496,
+    "env": {
+      "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-r4-transport2-20261021/target",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_NET_OFFLINE": "true",
+      "SBF_TRACE_DIR": null
+    },
+    "print_axioms": "N/A: no Lean compilation",
+    "attempt": "division-pass-1",
+    "inputs": {
+      "source_revision": "2b1158f9db18b8c4099c4902e6e66a3c8201c570",
+      "source_sha256": "6bb5200e75065da8239941b4f6113be01fb5820426fde3b2e3109f5e22d17414",
+      "source_cut": {
+        "schema": "r4-step-source-splice-v1",
+        "sources": {
+          "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+          "crates/aspis-core/src/r0_transcript.rs": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1"
+        },
+        "crate_sha256": "6bb5200e75065da8239941b4f6113be01fb5820426fde3b2e3109f5e22d17414",
+        "steps": {
+          "division": "let dividend = (remainder << 32) | u64::from(*limb);\n*limb = (dividend / u64::from(P)) as u32;\nremainder = dividend % u64::from(P);",
+          "addition": "let sum = u64::from(*digit) + u64::from(addend);\n*digit = (sum % u64::from(P)) as u32;\naddend = (sum / u64::from(P)) as u32;",
+          "scan": "if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {\nreturn true;\n}\nself.draws += 1;\nif !self.accepted[..self.accepted_len].contains(&candidate) {\nself.accepted[self.accepted_len] = candidate;\nself.accepted_len += 1;\n}"
+        },
+        "checks": [
+          "division body exact in optimized helper and extracted indexed reference",
+          "addition body exact in optimized helper",
+          "complete scanner body equals eight-word iteration of exact single step"
+        ],
+        "qualification": "Syntactic decomposition plus Kani components. Not a compiler-certified whole-loop extraction equivalence."
+      },
+      "command": [
+        "cargo",
+        "kani",
+        "--harness",
+        "division_pass"
+      ]
+    }
+  },
+  {
+    "source_revision": "2b1158f9db18b8c4099c4902e6e66a3c8201c570",
+    "command": [
+      "timeout",
+      "120",
+      "cargo",
+      "kani",
+      "--harness",
+      "division_position_",
+      "-Z",
+      "unstable-options",
+      "--output-format",
+      "terse",
+      "--cbmc-args",
+      "--unwinding-assertions"
+    ],
+    "cwd": "/home/dombarker/project-offloads/codex-cx-r4-transport2-20261021/crate",
+    "expected_time": "Kani compilation then division_position_ bounded single-step comparison; no dense arithmetic; timeout 120s",
+    "exit_status": 124,
+    "wall_seconds": 120.002,
+    "peak_rss_kib": 15312,
+    "swaps": 0,
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rf403b609a7734dde83034f66e7bd51df.scope",
+    "limits": {
+      "memory.high": "6442450944",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "pids.max": "64"
+    },
+    "cgroup_memory_peak_bytes": 106811392,
+    "env": {
+      "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-r4-transport2-20261021/target",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_NET_OFFLINE": "true",
+      "SBF_TRACE_DIR": null
+    },
+    "print_axioms": "N/A: no Lean compilation",
+    "attempt": "division-positions-1",
+    "inputs": {
+      "source_revision": "2b1158f9db18b8c4099c4902e6e66a3c8201c570",
+      "source_sha256": "a1c659ca36075af4841d9a1525ba2749c9f72fb03cae037f07c837cea390e9e6",
+      "source_cut": {
+        "schema": "r4-step-source-splice-v1",
+        "sources": {
+          "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+          "crates/aspis-core/src/r0_transcript.rs": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1"
+        },
+        "crate_sha256": "a1c659ca36075af4841d9a1525ba2749c9f72fb03cae037f07c837cea390e9e6",
+        "steps": {
+          "division": "let dividend = (remainder << 32) | u64::from(*limb);\n*limb = (dividend / u64::from(P)) as u32;\nremainder = dividend % u64::from(P);",
+          "addition": "let sum = u64::from(*digit) + u64::from(addend);\n*digit = (sum % u64::from(P)) as u32;\naddend = (sum / u64::from(P)) as u32;",
+          "scan": "if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {\nreturn true;\n}\nself.draws += 1;\nif !self.accepted[..self.accepted_len].contains(&candidate) {\nself.accepted[self.accepted_len] = candidate;\nself.accepted_len += 1;\n}"
+        },
+        "checks": [
+          "division body exact in optimized helper and extracted indexed reference",
+          "addition body exact in optimized helper",
+          "complete scanner body equals eight-word iteration of exact single step"
+        ],
+        "qualification": "Syntactic decomposition plus Kani components. Not a compiler-certified whole-loop extraction equivalence."
+      },
+      "command": [
+        "cargo",
+        "kani",
+        "--harness",
+        "division_position_"
+      ]
+    }
+  },
+  {
+    "source_revision": "2b1158f9db18b8c4099c4902e6e66a3c8201c570",
+    "command": [
+      "timeout",
+      "120",
+      "cargo",
+      "kani",
+      "--harness",
+      "root_round1_bytes",
+      "-Z",
+      "unstable-options",
+      "--output-format",
+      "terse",
+      "--cbmc-args",
+      "--unwinding-assertions"
+    ],
+    "cwd": "/home/dombarker/project-offloads/codex-cx-r4-transport2-20261021/prefix",
+    "expected_time": "Kani compilation then root_round1_bytes bounded single-step comparison; no dense arithmetic; timeout 120s",
+    "exit_status": 0,
+    "wall_seconds": 1.27,
+    "peak_rss_kib": 173052,
+    "swaps": 0,
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rc84db93b7df3496896d187b79996dd34.scope",
+    "limits": {
+      "memory.high": "6442450944",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "pids.max": "64"
+    },
+    "cgroup_memory_peak_bytes": 102158336,
+    "env": {
+      "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-r4-transport2-20261021/target",
+      "CARGO_BUILD_JOBS": "4",
+      "CARGO_NET_OFFLINE": "true",
+      "SBF_TRACE_DIR": null
+    },
+    "print_axioms": "N/A: no Lean compilation",
+    "attempt": "prefix-append-1",
+    "inputs": {
+      "source_revision": "2b1158f9db18b8c4099c4902e6e66a3c8201c570",
+      "source_sha256": "b721e56b567747c5a0503823db1f1020fc1b6458beea70b3addbe5f76284bd91",
+      "source_cut": {
+        "source_revision": "2b1158f9db18b8c4099c4902e6e66a3c8201c570",
+        "sources": {
+          "crates/aspis-r1-cost-probe/src/verifier.rs": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+          "crates/aspis-r1-cost-probe/src/transcript.rs": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+          "crates/aspis-r1-cost-probe/src/r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+          "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+          "crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0"
+        },
+        "exact_fragments": {
+          "circle25": "let state_before_z0 = transcript.state();\nlet z0 = transcript.circle_validated(prefix.validated_record(25)?)?;",
+          "circle26": "let before_z1 = prefix.validated_record(26)?.decode_k::<29>(0)?;\nlet z1 = transcript.circle_validated(prefix.validated_record(26)?)?;",
+          "reseed": "let mut t=Transcript::new(hash,sem.transcript.state(),v.variant);",
+          "row27": "let gamma=t.scalar(27,v.y1,true);",
+          "row28": "let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);",
+          "row29": "let alpha0=t.scalar(29,v.round0,false);",
+          "row30": "let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(v.folded_root.unwrap());bytes.extend_from_slice(v.round1);",
+          "s2_rows": "([alpha0,t.scalar(30,&bytes,false)],31)",
+          "row31_32": "let queries=t.queries(row,v.final_message)?;\nlet rho=t.scalar_k(row+1,&[]);",
+          "absorb": "self.state=self.hash.digest(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);",
+          "selected_return": "let (q,state)=aspis_core::r0_transcript::queries_from_pairs(&blocks,&advances).map_err(|_|crate::verifier::Error::Transcript)?;\nself.state=state;"
+        },
+        "eager_pairs": 8,
+        "scope": "Source identity and reached call expressions only; binding these observations to the compiled caller, parsers and literal words is not inferred."
+      },
+      "command": [
+        "cargo",
+        "kani",
+        "--harness",
+        "root_round1_bytes"
+      ]
+    }
+  },
+  {
     "source_revision": "54054b9050c7ae8f124596cc5b1edcee2f1b60dc",
     "command": [
       "timeout",
