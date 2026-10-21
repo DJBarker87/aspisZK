@@ -1,6 +1,6 @@
 # Parser and multiproof source refinement
 
-Current continuation branch: `codex/cx-multiproof-cone5-20261021`, base `902ae095f` (prior continuation branches: cone2, cone3 and cone4; original packet: `codex/cx-multiproof-cone-20261021`). The oracle-decision port
+Current continuation branch: `codex/cx-multiproof-cone6-20261021`, base `26ed8e339` (prior continuation branches: cone2, cone3 and cone4; original packet: `codex/cx-multiproof-cone-20261021`). The oracle-decision port
 is approved for this work. Target: `OraclePortHeadlineFrozen` at
 `OraclePortFrozenOrder.dV_frozen`, not the superseded recursive schedule.
 
@@ -914,3 +914,18 @@ AcceptedRunJoin remain unfinished as listed above. No claim of 100-bit release
 closure or headline premise removal is made. No shipped file changed, so the
 conditional SBF/ELF rebuild was not triggered and no byte-identity measurement
 is claimed. No wallet/key was touched; no push or merge occurred.
+
+## Continuation 6, stage 1a: exact extracted leaf digest content
+
+`MultiproofConeLeafContent.step_exact` identifies the actual extracted
+`reference.leaf_step` with its exact physical transition, including unequal
+duplicate rejection and every untouched scratch coordinate. `next_content`
+proves the full reversed index/digest prefix equation. It assumes only room
+for the next leaf (`s.n.val < 16`); no duplicate consistency is assumed.
+Attempt 5: exit 0, wall 26.442781 s, peak RSS 3199156224 bytes, zero swaps,
+source revision `26ed8e339` (full revision, source/import hashes, command and
+three standard axiom reports in the receipt and manifest). Attempts 1–4 are
+retained elaboration diagnostics, never current evidence. The first errors
+were notation/structure layout, then missing scalar/content normalization;
+no memory limit was raised. The whole leaf induction and batch tail remain
+in progress. No shipped or inherited Lean module changed.

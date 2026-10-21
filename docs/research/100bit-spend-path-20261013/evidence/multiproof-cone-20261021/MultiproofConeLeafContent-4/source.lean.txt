@@ -1,0 +1,87 @@
+import MultiproofConeLiveBatch
+import MultiproofConePhysicalViews
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.MultiproofConeLeafContent
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConePhysicalLive MultiproofConePhysicalViews
+open AspisV8R19.SqueezeOracleBridge
+attribute [local instance] Classical.propDecidable
+attribute [local step] MultiproofConeLeaf.digest_eq_spec
+
+/-- Exact physical insertion, including duplicate digest rejection. -/
+def next (s : reference.Scratch) (index : U32) (leaf : MultiproofConePhysicalLive.Digest)
+    (bound : s.n.val<16) : Option reference.Scratch :=
+  if 0<s.n.val ∧ s.idx.val[s.n.val-1]! = index then
+    if s.val.val[s.n.val-1]! = leaf then some s else none
+  else some {s with idx:=s.idx.set s.n index,val:=s.val.set s.n leaf,n:=UScalar.ofNat (s.n.val+1) (by scalar_tac)}
+
+theorem step_exact (s : reference.Scratch) (index : U32)
+    (leaf : MultiproofConePhysicalLive.Digest) (bound : s.n.val<16) :
+    reference.leaf_step s index leaf=ok (next s index leaf bound) := by
+  have ilen : s.idx.val.length=16 := s.idx.property
+  have vlen : s.val.val.length=16 := s.val.property
+  have getLast : ∀ (h : 0<s.n.val), s.idx.val[s.n.val-1]! =
+      s.idx.val[s.n.val-1]'(by omega) := by
+    intro h;exact getElem!_pos _ _ (by omega)
+  have spec : reference.leaf_step s index leaf ⦃ out => out=next s index leaf bound ⦄ := by
+    unfold reference.leaf_step
+    step* <;> scalar_tac_preprocess <;>
+      simp_all [next,getLast]
+    all_goals trace_state
+  obtain ⟨out,eq,post⟩ := WP.spec_imp_exists spec
+  exact eq.trans (congrArg ok post)
+
+def insert (index : Nat) (leaf : MultiproofConePhysicalLive.Digest) :
+    List Entry → Option (List Entry)
+  | [] => some [(index,leaf)]
+  | (j,v)::tail => if index=j then
+      if leaf=v then some ((j,v)::tail) else none
+    else some ((index,leaf)::(j,v)::tail)
+
+theorem view_snoc (s : reference.Scratch) (n : Nat) :
+    view s 0 (n+1)=view s 0 n ++ [cell s n] := by
+  simp only [view,List.range_succ,List.map_append,List.map_cons,List.map_nil,Nat.zero_add]
+
+/-- Full digest-front law, rather than merely the deduplicated index order. -/
+theorem next_content (s : reference.Scratch) (index : U32)
+    (leaf : MultiproofConePhysicalLive.Digest) (bound : s.n.val<16) :
+    (next s index leaf bound).map (fun t => (view t 0 t.n.val).reverse)=
+      insert index.val leaf (view s 0 s.n.val).reverse := by
+  by_cases nonempty : 0<s.n.val
+  · have size : s.n.val=s.n.val-1+1 := by omega
+    have front : (view s 0 s.n.val).reverse=
+        cell s (s.n.val-1)::(view s 0 (s.n.val-1)).reverse := by
+      conv_lhs => rw [size,view_snoc]
+      simp only [List.reverse_append,List.reverse_singleton,List.singleton_append]
+    rw [front]
+    unfold next insert cell
+    by_cases same : s.idx.val[s.n.val-1]! = index
+    · have sameval : index.val=s.idx.val[s.n.val-1]!.val := by rw [same]
+      simp only [nonempty,same,and_self,↓reduceIte,sameval]
+      by_cases digest : s.val.val[s.n.val-1]! = leaf
+      · simp only [digest,eq_self_iff_true,↓reduceIte,Option.map_some]
+        simpa only [cell,digest] using congrArg some front
+      · simp only [if_neg digest,if_neg (Ne.symm digest),Option.map_none]
+    · have ne : index.val≠s.idx.val[s.n.val-1]!.val := by
+        intro eq;exact same (UScalar.eq_of_val_eq eq.symm)
+      simp only [nonempty,same,and_false,↓reduceIte,if_neg ne,Option.map_some]
+      have write := write_prefix s s.n index leaf s.«at» bound
+      apply congrArg some
+      change (view {s with idx:=s.idx.set s.n index,val:=s.val.set s.n leaf,«at»:=s.«at»} 0
+        (s.n.val+1)).reverse = _
+      rw [write]
+      simp only [List.reverse_append,List.reverse_singleton,List.singleton_append]
+      rw [front]
+  · have zero : s.n.val=0 := by omega
+    simp only [next,zero,Nat.lt_irrefl,false_and,↓reduceIte,Option.map_some]
+    change some ([cell {s with idx:=s.idx.set s.n index,val:=s.val.set s.n leaf,«at»:=s.«at»} 0]) = some [(index.val,leaf)]
+    congr 2
+    exact write_cell s s.n index leaf s.«at» bound 0 (by omega) |>.trans (if_pos zero.symm)
+
+#print axioms step_exact
+#print axioms view_snoc
+#print axioms next_content
+end AspisR1.MultiproofConeLeafContent
+end
