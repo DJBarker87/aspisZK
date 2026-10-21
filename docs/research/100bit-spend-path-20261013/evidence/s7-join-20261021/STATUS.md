@@ -145,3 +145,30 @@ Only owned new Lean modules, their evidence/tooling and the requested S7
 audit row changed. S1–S6, protected candidates, sibling S7/S8, checkpoint ABI,
 parser/multiproof, shipped crates and frozen ELFs are unchanged. No wallet
 operation, host build, shared-object rewrite, push or merge was performed.
+
+## Stage 7 — derive the complete 64-row push trace
+
+`S7JoinRowsTrace.rows_exact` now proves the full emitted 64-row loop total
+with the actual owned Vec push and an explicit observer-off carrier backend.
+Given the preceding query's reached PushTrace and phase invariant, it derives
+every push's success, the resulting PushTrace, frame preservation and the
+advanced phase of every row. Bounded next*64+j trace-index arithmetic and
+output Vec reads are proved. No per-row success law is assumed.
+
+`S7JoinQueryRows.initial_progress` derives phase safety from concrete raw
+initialization even for arbitrary U32 old limbs (they fit below 2^34); only
+the production width is required. `initial_query_rows` needs no initial
+PushTrace/phase hypothesis. `query_rows_exact` composes total canonical basis
+construction, all 64 source pushes and the checked terms increment, returning
+the exact next-query phase. The pure trace/embedding backend is an explicit
+carrier port, not proof of original source/backend/observer adoption. Original
+query/TX membership and rhs/power/next effects remain separate.
+
+Successful attempts: RowsTrace-5 and QueryRows-1; all seven theorem audits use
+standard axioms, zero swaps and unchanged caps. RowsTrace attempts 1–2 exposed
+partial inherited AspisV8R19/AspisR72Sampler cache namespaces. The private
+hash-pinned symlink unions retain first-found modules in the recorded path,
+including their companions; no shared file was rewritten. The accepted
+attempts record the overlay hash and snapshot. `stage-cache.py` validates or
+recreates these private links. Later failures were local proof elaboration,
+not memory pressure.
