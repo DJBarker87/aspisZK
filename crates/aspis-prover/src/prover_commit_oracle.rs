@@ -3,7 +3,7 @@
 //! digest; collisions are permitted. Both sides use this one table, never a
 //! reset between sides. This is an oracle model, not a SHA-256 theorem.
 const POINTS: usize = 4;
-const BYTES: usize = 512;
+const BYTES: usize = 514;
 #[derive(Clone, Copy)]
 struct Entry { input: [u8; BYTES], len: usize, digest: [u8; 32] }
 const EMPTY: Entry = Entry { input: [0; BYTES], len: 0, digest: [0; 32] };
@@ -46,7 +46,7 @@ pub(crate) fn query(parts: &[&[u8]]) -> [u8; 32] {
 }
 
 #[kani::proof]
-#[kani::unwind(514)]
+#[kani::unwind(516)]
 fn regrouping_and_repeated_points() {
     reset(3);
     let a: [u8; 32] = kani::any();
@@ -60,7 +60,7 @@ fn regrouping_and_repeated_points() {
 }
 
 #[kani::proof]
-#[kani::unwind(514)]
+#[kani::unwind(516)]
 #[kani::stub(crate::host_hashv, query)]
 fn private_leaf_c1() {
     reset(2);
@@ -76,7 +76,7 @@ fn private_leaf_c1() {
 }
 
 #[kani::proof]
-#[kani::unwind(514)]
+#[kani::unwind(516)]
 #[kani::stub(crate::host_hashv, query)]
 fn private_leaf_c2() {
     reset(2);
@@ -92,7 +92,7 @@ fn private_leaf_c2() {
 }
 
 #[kani::proof]
-#[kani::unwind(514)]
+#[kani::unwind(516)]
 #[kani::stub(crate::host_hashv, query)]
 fn private_leaf_folded() {
     reset(2);
@@ -110,7 +110,7 @@ fn private_leaf_folded() {
 /// Check the actual global function-pointer route is replaced by the shared
 /// oracle, rather than merely checking the oracle through direct calls.
 #[kani::proof]
-#[kani::unwind(514)]
+#[kani::unwind(516)]
 #[kani::stub(crate::host_hashv, query)]
 fn callback_stub_is_active() {
     reset(2);
@@ -138,6 +138,8 @@ static mut EXPANDER: ExpanderOracle = ExpanderOracle {
 pub(crate) fn reset_expander(domain: &'static [u8], seed: [u8;32], counter: u64) {
     unsafe { EXPANDER = ExpanderOracle { domain, seed, counter, answers: kani::any() }; }
 }
+#[kani::requires(expander_frame(parts))]
+#[kani::ensures(|result| *result == expander_answer(parts))]
 pub(crate) fn expander_query(parts: &[&[u8]]) -> [u8;32] {
     // Both shipped expanders and the owned reference use exactly these
     // three slices. Assert the complete frame at every reachable call.
@@ -179,4 +181,82 @@ fn expander_rom_memo() {
         let answer = expander_query(&[domain, &seed, &counter.to_le_bytes()]);
         assert_eq!(answer, expander_query(&[domain, &seed, &counter.to_le_bytes()]));
     }
+}
+
+// The selected binary R1 tree encodes 26 base lanes and lane D in C1,
+// and two QM31 lanes in C2. These are not the legacy 416/192-byte cases.
+#[kani::proof]
+#[kani::unwind(516)]
+#[kani::stub(crate::host_hashv, query)]
+fn selected_c1_leaf_frame() {
+    reset(2);
+    let value: [u8;480] = kani::any();
+    let salt: [u8;32] = kani::any();
+    let actual = aspis_core::state_only_private_merkle::private_leaf_hash(
+        crate::HOST_HASH, 0x71, &value, &salt);
+    let mut bytes = [0u8;514];
+    bytes[0] = 0x10; bytes[1] = 0x71;
+    bytes[2..482].copy_from_slice(&value);
+    bytes[482..].copy_from_slice(&salt);
+    assert_eq!(actual, crate::HOST_HASH(&[&bytes]));
+}
+#[kani::proof]
+#[kani::unwind(516)]
+#[kani::stub(crate::host_hashv, query)]
+fn selected_c2_leaf_frame() {
+    reset(2);
+    let value: [u8;128] = kani::any();
+    let salt: [u8;32] = kani::any();
+    let actual = aspis_core::state_only_private_merkle::private_leaf_hash(
+        crate::HOST_HASH, 0xf1, &value, &salt);
+    let mut bytes = [0u8;162];
+    bytes[0] = 0x10; bytes[1] = 0xf1;
+    bytes[2..130].copy_from_slice(&value);
+    bytes[130..].copy_from_slice(&salt);
+    assert_eq!(actual, crate::HOST_HASH(&[&bytes]));
+}
+
+pub(crate) fn known_domain(domain: &[u8]) -> bool {
+    domain == b"aspis:state-only:private-mask-expand:v1" ||
+        domain == b"aspis:state-only:profile21:source-expand:v1"
+}
+pub(crate) fn scalar_domain(domain: &[u8], seed: [u8;32], counter: u64) -> bool {
+    unsafe {
+        let table = &*core::ptr::addr_of!(EXPANDER);
+        table.domain == domain && table.seed == seed && counter.wrapping_sub(table.counter) <= 6
+    }
+}
+pub(crate) fn expander_block(counter: u64) -> [u8;32] {
+    unsafe {
+        let table = &*core::ptr::addr_of!(EXPANDER);
+        let index = counter.wrapping_sub(table.counter);
+        assert!(index < 9);
+        table.answers[index as usize]
+    }
+}
+
+fn expander_frame(parts: &[&[u8]]) -> bool {
+    if parts.len() != 3 || parts[1].len() != 32 || parts[2].len() != 8 { return false; }
+    unsafe {
+        let table = &*core::ptr::addr_of!(EXPANDER);
+        known_domain(parts[0]) && parts[0] == table.domain && parts[1] == table.seed.as_slice() &&
+            u64::from_le_bytes(parts[2].try_into().unwrap()).wrapping_sub(table.counter) < 9
+    }
+}
+fn expander_answer(parts: &[&[u8]]) -> [u8;32] {
+    expander_block(u64::from_le_bytes(parts[2].try_into().unwrap()))
+}
+#[kani::proof_for_contract(expander_query)]
+#[kani::unwind(84)]
+fn expander_query_contract() {
+    let source: bool = kani::any();
+    let domain: &'static [u8] = if source { b"aspis:state-only:profile21:source-expand:v1" }
+        else { b"aspis:state-only:private-mask-expand:v1" };
+    let seed: [u8;32] = kani::any();
+    let base: u64 = kani::any();
+    let delta: u8 = kani::any();
+    kani::assume(delta < 9);
+    let counter = base.wrapping_add(u64::from(delta));
+    reset_expander(domain, seed, base);
+    let _ = expander_query(&[domain, &seed, &counter.to_le_bytes()]);
 }

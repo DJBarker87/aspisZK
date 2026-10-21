@@ -106,3 +106,61 @@ body. The first four-coordinate trial was deliberately stopped after
 **68.969 s** (exit 143, excluded) to replace nested scalar unfolding with
 checked scalar summaries. Its receipt and the own-process orchestration
 record are retained; no peer job was stopped.
+
+## Owned reference extraction and remaining caller obstruction
+
+The adopted reference is extracted alone, not the obstructed aggregate
+source caller. Charon v3 and Aeneas v3 both exit 0 (24.597 / 0.481 s,
+670,856 / 82,192 KiB RSS, zero swaps). The LLBC reports `has_errors=false`.
+The generated namespace `AspisR1ProverCaller7` contains the exact next-word,
+early-return scalar and left-to-right four-coordinate bodies. P is concrete;
+there is no external CM31 constructor or other opaque generated callee.
+The only Types port is the existing Aeneas discriminant attribute migration.
+The hash function remains a parameter; this does not extract SHA-256.
+
+J8254/8256 compile Types/Funs separately. J8260 proves explicit state-carrier
+roundtrips and equality of the new and previous next-word extraction,
+including Aeneas fail/div. J8265 proves the actual signed-range early-return
+loop equals a structurally recursive finite evaluator and specializes it to
+sixteen attempts. No recurrence or concrete oracle digest is normalized.
+J8255 separately proves coverage of the nine valid initial word slots and
+seven counter offsets; these are index facts, not source read completeness.
+Every new theorem has an accepted standard-axiom audit. Draft failures
+8257–8259, 8261, 8263–8264 are excluded; 8262 is the accepted iterator-only
+predecessor. Exact source, dependency, time and audit records accompany all
+attempts in the evidence directory.
+
+The reference next-word and read-only hash callback contracts also pass
+(34.792 / 17.242 s, 1,133,848 / 763,376 KiB, zero swaps). The attempted scalar
+summary and nine-case variants each reach the 600-second review limit
+without a verdict. Their unverified contracts and checkers were removed
+from adopted Rust. The actual four-coordinate comparison with only the
+verified hash callback also times out at 600.030 s; the actual 1024-row
+balancing-helper comparison times out at 600.108 s. Neither is accepted.
+The earlier direct four-coordinate trial stopped at 68.969 s is likewise
+excluded. No source scalar summary is used as `stub_verified` without a
+passing proof. The later source four-coordinate and four-coordinate
+balancing targets were not run after these obstructions.
+
+These experiments demonstrate the remaining compositional obstruction:
+the passing scalar certificates have not yet been promoted to reusable
+scalar contracts that cover all successive stream states. The extraction
+and finite evaluator do not themselves prove the owned-reference-to-wordsE
+carrier/cursor equation, the outer material loop identity, or its coordinate
+bijection. `CallerLaw` therefore remains a named hypothesis, not a theorem
+about the shipped caller.
+
+## Selected leaf frames and read coverage boundary
+
+The memoised concatenated-byte oracle now accommodates the selected binary
+C1 leaf frame: 480 value bytes plus tag prefix and 32-byte salt (514 bytes
+total). The selected C2 frame uses 128 value bytes (162 total). Both actual
+private-leaf helper comparisons pass, including the actual HOST_HASH route:
+C1 148.458 s / 1,790,756 KiB; C2 26.450 s / 656,568 KiB. Generic regrouping
+and callback tests pass at 30.926 s / 810,016 KiB and 8.605 s / 504,636 KiB.
+All exit 0 with zero swaps. These add the selected widths to the earlier
+416/192-byte fixtures. They prove helper framing, not that every outer
+producer has the expected packed value, typed address, and complete read
+coverage. In particular a salt derivation can repeat a binding read;
+physical callback count is not a bijection with distinct typed coordinates.
+No universal read-coverage theorem is claimed.

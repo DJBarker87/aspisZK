@@ -1263,7 +1263,7 @@ mod prover_commit_rom {
     use crate::prover_commit_oracle as rom;
 
     #[kani::proof]
-    #[kani::unwind(514)]
+    #[kani::unwind(516)]
     #[kani::stub(crate::host_hashv, rom::query)]
     fn source_block() {
         rom::reset(2);
@@ -1274,7 +1274,7 @@ mod prover_commit_rom {
     }
 
     #[kani::proof]
-    #[kani::unwind(514)]
+    #[kani::unwind(516)]
     #[kani::stub(crate::host_hashv, rom::query)]
     fn source_next_word() {
         rom::reset(2);
@@ -1297,7 +1297,7 @@ mod prover_commit_rom {
     }
 
     #[kani::proof]
-    #[kani::unwind(514)]
+    #[kani::unwind(516)]
     #[kani::stub(crate::host_hashv, rom::query)]
     fn pool_binding() {
         rom::reset(2);
@@ -1316,7 +1316,7 @@ mod prover_commit_rom {
         assert_eq!(pool_v1_private_attempt_binding(crate::HOST_HASH, &binding, context), expected);
     }
     #[kani::proof]
-    #[kani::unwind(514)]
+    #[kani::unwind(516)]
     #[kani::stub(crate::host_hashv, rom::query)]
     fn pool_leaf_salt() {
         rom::reset(4);
@@ -1353,7 +1353,7 @@ mod prover_commit_rom {
     // Exact m31 try body, with its return carried as an absorbing result.
     // The source m31 body is pinned and checked by harness/check-step-source.py.
     #[kani::proof]
-    #[kani::unwind(514)]
+    #[kani::unwind(516)]
     #[kani::stub(crate::host_hashv, rom::query)]
     fn source_try_step() {
         rom::reset(2);
@@ -1389,7 +1389,7 @@ mod prover_commit_rom {
     }
 
     #[kani::proof]
-    #[kani::unwind(514)]
+    #[kani::unwind(516)]
     #[kani::stub(crate::host_hashv, rom::query)]
     fn source_limb() {
         // At most three fresh blocks per side from any valid word slot.
@@ -1439,7 +1439,7 @@ mod prover_commit_caller7 {
     #[kani::proof]
     #[kani::unwind(84)]
     #[kani::stub(crate::host_hashv, rom::expander_query)]
-    #[kani::stub_verified(Profile21SourceExpander::next_word)]
+    #[kani::stub_verified(rom::expander_query)]
     fn source_qm31_caller() {
         let seed: [u8;32] = kani::any();
         let counter: u64 = kani::any();
@@ -1472,5 +1472,6 @@ mod prover_commit_caller7 {
         let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH, seed: Zeroizing::new(seed), counter, block, word };
         let _ = actual.next_word();
     }
+
 
 }

@@ -1504,7 +1504,7 @@ mod prover_commit_rom {
     use crate::prover_commit_oracle as rom;
 
     #[kani::proof]
-    #[kani::unwind(514)]
+    #[kani::unwind(516)]
     #[kani::stub(crate::host_hashv, rom::query)]
     fn mask_block() {
         rom::reset(2);
@@ -1518,7 +1518,7 @@ mod prover_commit_rom {
     }
 
     #[kani::proof]
-    #[kani::unwind(514)]
+    #[kani::unwind(516)]
     #[kani::stub(crate::host_hashv, rom::query)]
     fn mask_next_word() {
         rom::reset(2);
@@ -1545,7 +1545,7 @@ mod prover_commit_rom {
     // Exact m31 try body, with its return carried as an absorbing result.
     // The source m31 body is pinned and checked by harness/check-step-source.py.
     #[kani::proof]
-    #[kani::unwind(514)]
+    #[kani::unwind(516)]
     #[kani::stub(crate::host_hashv, rom::query)]
     fn mask_try_step() {
         rom::reset(2);
@@ -1581,7 +1581,7 @@ mod prover_commit_rom {
     }
 
     #[kani::proof]
-    #[kani::unwind(514)]
+    #[kani::unwind(516)]
     #[kani::stub(crate::host_hashv, rom::query)]
     fn mask_limb() {
         // At most three fresh blocks per side from any valid word slot.
@@ -1631,7 +1631,7 @@ mod prover_commit_caller7 {
     #[kani::proof]
     #[kani::unwind(84)]
     #[kani::stub(crate::host_hashv, rom::expander_query)]
-    #[kani::stub_verified(SeedExpander::next_word)]
+    #[kani::stub_verified(rom::expander_query)]
     fn mask_qm31_caller() {
         let seed: [u8;32] = kani::any();
         let counter: u64 = kani::any();
@@ -1665,4 +1665,55 @@ mod prover_commit_caller7 {
         let _ = actual.next_word();
     }
 
+
+}
+
+#[cfg(kani)]
+mod prover_commit_balance7 {
+    use super::*;
+    fn canonical(raw: u32) -> M31 {
+        let value = raw & 0x7fff_ffff;
+        M31(if value == P { 0 } else { value })
+    }
+    #[kani::proof]
+    #[kani::unwind(1026)]
+    fn balance_m31_caller() {
+        let raw: [u32;1024] = kani::any();
+        let table: Vec<M31> = raw.into_iter().map(canonical).collect();
+        let mut active: [bool;1024] = kani::any();
+        let dependent: usize = kani::any();
+        let probe: usize = kani::any();
+        kani::assume(dependent < 1024 && probe < 1024);
+        active[dependent] = false;
+        let mut actual = table.clone();
+        let observed = balance_m31_copy_inactive(&mut actual, dependent, &active);
+        let (expected, table) = crate::prover_commit_reference::balance_m31_owned(table, dependent, &active);
+        assert_eq!(observed, expected);
+        assert_eq!(actual.len(), table.len());
+        assert_eq!(actual[probe].0, table[probe].0);
+    }
+    #[kani::proof]
+    #[kani::unwind(4098)]
+    fn balance_qm31_caller() {
+        let raw: [u32;4096] = kani::any();
+        let mut table = Vec::with_capacity(1024);
+        for row in 0..1024 {
+            table.push(QM31 { c0: CM31::new(canonical(raw[4*row]), canonical(raw[4*row+1])),
+                c1: CM31::new(canonical(raw[4*row+2]), canonical(raw[4*row+3])) });
+        }
+        let mut active: [bool;1024] = kani::any();
+        let dependent: usize = kani::any();
+        let probe: usize = kani::any();
+        kani::assume(dependent < 1024 && probe < 1024);
+        active[dependent] = false;
+        let mut actual = table.clone();
+        let observed = balance_qm31_copy_inactive(&mut actual, dependent, &active);
+        let (expected, table) = crate::prover_commit_reference::balance_qm31_owned(table, dependent, &active);
+        assert_eq!(observed, expected);
+        assert_eq!(actual.len(), table.len());
+        assert_eq!(actual[probe].c0.a.0, table[probe].c0.a.0);
+        assert_eq!(actual[probe].c0.b.0, table[probe].c0.b.0);
+        assert_eq!(actual[probe].c1.a.0, table[probe].c1.a.0);
+        assert_eq!(actual[probe].c1.b.0, table[probe].c1.b.0);
+    }
 }
