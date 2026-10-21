@@ -164,3 +164,52 @@ exit, wall time, peak RSS, swaps, errors and full axiom reports. Failed
 elaborations are retained and do not count as accepted proofs. Focused local
 compilation uses the prescribed toolchain, -j1, -M4400 and shared mkdir lock;
 objects are written only to this worker's private directory. No push or merge.
+
+The final focused packet contains 11 new modules and 54 new theorems. Every
+new theorem has its own successful `#print axioms`; the current receipts
+contain 68 reports, all subsets of {propext, Classical.choice, Quot.sound}.
+There were 21 focused attempts: 11 successes and 10 corrected elaboration
+failures. The failed logs retain compiler-recovery `sorryAx` reports only;
+they are not current proof evidence. No attempt exhausted the memory cap.
+Peak RSS was 3,673,341,952 bytes; all attempts reported zero swaps.
+
+Final import target `OraclePortAccLogFreeze`, attempt 1: exit 0, wall
+8.513715334236622 seconds, peak RSS 3,594,878,976 bytes, zero swaps,
+source revision `2ca21f905ee1002303ca24338feaf2c8c0b6b551`. Full source hashes,
+import fingerprints and axiom lines are in its receipt and the manifest.
+No unchanged Lean target or full regression was rerun.
+
+Run `python3 -B tools/oracle-port-acclog/audit.py` for the additive-scope,
+source/object hash, receipt, declaration/axiom and exact signature-diff checks.
+`audit-result.json` records the passing result; `source-pins.json` pins the
+new modules and unchanged design/model/R19 inputs. This audit reuses existing
+compiled imports and does not certify a coherent frozen release closure.
+No package-wide Lean replay, generated certificate build, Aeneas/SBF/Rust
+rebuild, wallet/key operation, production change, push or merge occurred.
+
+## Remaining work and the demonstrated stopping point
+
+The advertised conditional headline, exact signature replacement, strictness,
+composition rules and extractor-input/failure transfer are proved. The actual
+frozen verifier is **not** proved to satisfy `AcceptedRunJoin`.
+
+The requested unconditional raw-slot accepted-log equality against the current
+recursive model is refuted by `accepted_slot_logs_differ`. Unconditional
+recovery invariance under its actual parent permutation is also refuted by
+the one-oracle byte-log witness, including fixed-cut recovery. This is the
+demonstrated obstruction to closing the requested source join on the present
+model, not a missing tactic or resource problem. The full upstream caller
+might exclude a raw helper witness; this packet does not prove a full-verifier
+counterexample or claim that exclusion.
+
+The next port must use a new model with the exact frozen leaf/duplicate,
+padding, level/ascending-parent and sequential sibling-consumption order,
+while retaining the outer slot short circuit. Its owner must prove the
+indexed live-prefix/frontier correspondence and root/output laws by height
+induction, then instantiate the parser/caller/per-cone source joins. Finally,
+prove the two accepted annotation passes have equal logs and enriched outputs
+(or prove the sufficient raw join and enrichment-verdict stability rule).
+Those facts instantiate the already compiled headline. A separate coherent
+frozen release-manifest replay is still necessary before a release claim.
+User approval of the port remains a prerequisite to merging this draft;
+nothing here authorizes changing the R19 release endpoint.
