@@ -92,7 +92,12 @@ theorem privacy_headline_v2
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100 := by
   have legacy := PrivacyR1HeadlineWire2.privacy_headline_wire2 template input outputs x decode
     builder_premises ProverCommitSourceDecoder.quotientFibreSize
-    (ProverCommitCallerInstance.fibres _ R_commit_caller)
+    (by
+      intro τ
+      convert ProverCommitCallerInstance.fibres _ R_commit_caller τ using 2
+      ext e
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+      rfl)
     (ProverCommitCallerInstance.exhaustion _ R_commit_caller)
     observer_program R_wire_builder_checker_D75_retry G_sim_R_wire
   constructor
