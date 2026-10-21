@@ -161,3 +161,73 @@ It explicitly leaves public digest/outer binding, the inline intermediate
 source and D seeds, concrete material/D/salt/packing/tree schedules,
 full query result-state transport, and retry/abort histories open. A local
 framing check is not promoted to an all-family or whole-shipped certificate.
+
+## Frozen audit and adoption boundary
+
+Preflight validates all adopted focused receipts, source/dependency hashes,
+axiom whitelist, exact callback-prefix source, resource scopes and Rust
+input identities. The single final replay is **J8363**, exact target
+**R1Z.ProverCommit12Audit**, importing the part-11 audit and the three new
+adopted proof modules. It exits **0**, wall **1.82 s**, peak RSS
+**4096956 KiB**, **zero swaps**, source revision **f693ccc0f** plus the
+literal additive audit source pinned by SHA-256. All **13** printed new
+theorem audits contain only `propext`, `Classical.choice`, `Quot.sound`.
+The dependency fingerprint and exact target list are retained in the
+manifest and receipt. This is one replay against the pinned existing cache,
+not a claim that every unchanged imported source was recompiled. The
+formatter diagnostic is excluded, despite its successful compiler exit.
+No unchanged full regression or final Lean audit is repeated.
+
+The production Rust/Cargo/program diff against `3ac016af1` is empty.
+`adopted-rust-identity.json` records this assessment. The part-10 exact frozen
+ELF comparisons are reused; no SBF source/input changed and no unchanged
+ELF build is repeated. Only proof-only Rust snapshots and text/hash evidence
+are committed. No object, ELF, archive, LLBC, wallet or account key is
+committed or destroyed; caches and keys are retained.
+
+## Headline before/after and remaining deliverable
+
+No builder or execution premise was discharged by this continuation.
+`headline-before.lean.txt` and `headline-after.lean.txt` are the complete,
+verbatim, byte-identical `PrivacyR1HeadlineOwnedClosed.lean` texts;
+`headline-deletions.diff` is empty. There is no premise-removal claim.
+The bound, experiment, simulator, failure event and all quantifiers remain
+unchanged. In particular the declaration begins identically before/after:
+
+```lean
+-- Before (verbatim)
+theorem privacy_headline_owned_closed
+    (builder_premises : BuilderPremises h B x)
+    (observer_program : (source).Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+```
+
+```lean
+-- After (verbatim)
+theorem privacy_headline_owned_closed
+    (builder_premises : BuilderPremises h B x)
+    (observer_program : (source).Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+```
+
+**Target not yet established.** The fixed decoder CallerLaw remains proved
+from part 11. This continuation adds genuine one-iteration/state-schedule
+and callback-framing evidence, plus a concrete counterexample to a blanket
+builder-premise discharge. It does not prove the shipped outer execution
+join or all-family shared-oracle completeness. No cryptographic assumption,
+source join, or builder identity is silently added.
+
+The next concrete deliverable is a formatter-free source cut with the
+verified next-word contract exposed, instantiated (not merely assumed)
+through the actual material/D/tower/array schedules, followed by the inline
+binding/source/D seed call sites and retained salt/packing/tree/retry
+execution history. The query-prefix buffers must be joined to the existing
+sampler/state law without expanding two complete sampler executions.
+The arbitrary-input builder counterexample additionally requires concrete
+source identification before any deletion at the unchanged endpoint can
+be justified. These are demonstrated interface/axiom and statement
+obstructions, not evidence that the concrete Rust protocol is false.
+
+No peer-owned SourceIdentification, RustRuntimeJoin or PrivacyR1FinalRelease
+file is edited. No push or merge is performed. Env J attempts are consumed
+through **8363**; next available **8364**.

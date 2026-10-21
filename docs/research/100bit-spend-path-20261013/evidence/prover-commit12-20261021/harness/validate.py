@@ -59,7 +59,6 @@ for r in c['rows']:assert sha(Path(r['source']))==r['source_sha256']
 if (E/'headline-before.lean.txt').exists():
  assert (E/'headline-before.lean.txt').read_bytes()==(E/'headline-after.lean.txt').read_bytes()
  assert (E/'headline-deletions.diff').read_bytes()==b''
-print(json.dumps(dict(result='passed',passed_rust=passed,axioms=sorted(allowed),coverage_closed=False),indent=2))
 
 m=json.loads((E/'manifest.json').read_text())
 for f,h in m['adopted_lean'].items():assert sha(Path(f))==h
@@ -71,3 +70,5 @@ original=Path('crates/aspis-r1-cost-probe/src/transcript.rs')
 assert sha(original)==q['source_sha256']
 assert q['prefix'] in original.read_text()
 assert q['prefix'].replace('self.','actual.') in (E/'rust-sources/transcript.rs').read_text()
+
+print(json.dumps(dict(result='passed',passed_rust=passed,axioms=sorted(allowed),coverage_closed=False),indent=2))
