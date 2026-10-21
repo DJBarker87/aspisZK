@@ -1,6 +1,6 @@
 # Parser and multiproof source refinement
 
-Assigned continuation branch: `codex/cx-multiproof-cone2-20261021` (prior packet: `codex/cx-multiproof-cone-20261021`). The oracle-decision port
+Current continuation branch: `codex/cx-multiproof-cone4-20261021`, base `01b350ddf` (prior continuation branches: cone2 and cone3; original packet: `codex/cx-multiproof-cone-20261021`). The oracle-decision port
 is approved for this work. Target: `OraclePortHeadlineFrozen` at
 `OraclePortFrozenOrder.dV_frozen`, not the superseded recursive schedule.
 
@@ -617,3 +617,38 @@ No complete multiproof ConeLogJoin/AcceptedRunJoin is constructed and no
 headline premise is removed. The CONE-AUDIT whole-cone classification remains
 (d). The focused sorted-index and physical-rebase gates are closed at their
 stated boundaries; the complete accepted-run target is not yet established.
+
+
+## Continuation 4 final focused audit
+
+`MultiproofConeLiveFreeze`, attempt 1, imports the new dependency closure plus
+the unchanged frozen2 cone consumer: exit 0; wall 23.831808 s; peak RSS
+3535912960 bytes; zero swaps; source revision
+`6a4b840ee` (full revision/source SHA/direct-import fingerprint in receipt).
+All twelve final reports are standard; every new theorem also has its own
+report. This is focused compatible-cache compilation, not a coherent frozen
+release manifest replay. The new audit verifies all eight current modules,
+41 standard reports, six newly completed Kani roots, and the unchanged reused
+hash/window certificates and callees. It records failed elaborations as
+historical diagnostics, not accepted proofs. No unchanged full regression ran.
+
+Reproduce the deterministic source/evidence audit with:
+
+```sh
+python3 -B tools/multiproof-cone-20261021/audit-live.py
+```
+
+`audit-live-result.json` records the result and the precise retained boundary;
+its `complete_multiproof_source_cone` and `accepted_run_join_constructed` fields
+remain false. Stage 1/2 local goals have new successful certificates and
+concrete extracted order induction. Full reached-source adoption still needs
+the caller/key/opening projection. Stage 3 is logical-level ordered Program
+closure only; physical Live/log identification and stage 4's slot/batch join
+remain blocked at the interface described above. No conclusion about a whole
+source cone or security headline is inferred from these focused results.
+
+Shipped crates, Session A candidates, sibling modules and inherited Lean files
+are unchanged from this worktree's base. No frozen ELF rebuild was triggered
+or byte-identity measurement claimed. No keys or wallets were touched; no push
+or merge occurred. Source snapshots identify tested edits precisely even when
+the receipt's checkout revision predates their reporting commit.

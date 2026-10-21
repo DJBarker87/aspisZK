@@ -1,0 +1,21 @@
+import MultiproofConeLiveFold
+import MultiproofConeOrderedLevel
+import MultiproofConeNodeFreeze
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeLiveFreeze
+
+-- Focused final import audit; no new AcceptedRunJoin inhabitant is asserted.
+#print axioms MultiproofConeLiveOrder.step
+#print axioms MultiproofConeLiveLeaves.batch_levels_sorted
+#print axioms MultiproofConeLiveReference.binary_shape
+#print axioms MultiproofConeLivePreservation.binary_preserves
+#print axioms MultiproofConeLivePreservation.level_sorted
+#print axioms MultiproofConeLiveBatch.leaf_projection
+#print axioms MultiproofConeLiveBatch.eighteen_sorted
+#print axioms MultiproofConeLiveFold.sorted_batch
+#print axioms MultiproofConeOrderedLevel.level_log
+#print axioms MultiproofConeNodeWindow.physical_read
+#print axioms MultiproofConeNodeAdoption.eighteen_eq
+#print axioms OraclePortFrozen2Join.acceptedRunJoin_of_cones
+end AspisR1.MultiproofConeLiveFreeze
