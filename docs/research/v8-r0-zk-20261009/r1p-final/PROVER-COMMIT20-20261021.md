@@ -157,3 +157,92 @@ theorem extracted_finite (remaining : Nat) (row : U8) (payload : Bytes) (value :
     r1_wire.fields20.validate row payload value = finite row payload value remaining
 
 ```
+
+## Stage 3 — source table gate, history composition, and experiment obstruction
+
+The actual `ProgramOne` empty-entry target now passes. Broad unwind 34
+was stopped for shape review (70.135 s, 6367108 KiB, exit 1, swaps 0).
+CBMC loop inspection identifies separate tree, allocator and memcmp loops.
+The changed harness uses unwind 4 and `memcmp.0:33`, **with unwinding
+assertions enabled**. `table-source-empty-v2` passes: exit 0, 18.620 s,
+1187524 KiB, swaps 0. It checks the actual BTreeMap/RefCell source call,
+returned answer, stored value, one-entry cardinality and unchanged flag for
+one arbitrary one-byte address and arbitrary 32-byte answer/initial flag.
+This is a bounded source gate, not universal address-length/tree transport.
+
+The overwritten-entry check still grows to the MemoryHigh region. Splitting
+value and flag projections, and removing the harness's irrelevant final
+map destructor, have not yet supplied an accepted overwrite certificate.
+All stopped trials and their exact commands/metrics are retained. No
+memory cap is raised; no stopped result is counted as passed or as a
+counterexample. The successful pure per-entry collision checks are retained
+in their narrower scope. Thus the requested **whole table-source equality
+is still open**, despite the finite Lean induction and empty-entry gate.
+
+`ProverCommitTableHistory20` connects the entry/write induction to the
+existing `programmedOracle` and `runLog`: arbitrary finite writes, repeated
+addresses, common fallback, all adaptive query ordering and early exits.
+J8730 passes: exit 0, 1.97 s, 4043548 KiB, swaps 0; standard axioms only.
+J8727–8729 are excluded local BEq proof/elaboration failures.
+
+### Why the bounded adapter cannot yet construct the shipped experiment
+
+The source `Coins::nonzero` loops until a nonzero hash answer and increments
+a wrapping U64 counter. `ProverCommitNonzero20.search` is a finite unfolding
+of the **actual extracted** `sim.coin_owned18`, not an independent-coin
+replacement. `zero_prefix` proves every finite unfolding on a single
+consistent zero-answer oracle returns no result; `no_uniform_finite_bound`
+proves no fixed fuel works for every callback. Its zero token is a parameter,
+so the result applies in particular to the zero byte block without kernel
+normalization of array-constructor proofs. `empty_observer_no_seed_guess`
+checks that a no-query observer has no seed-query exception.
+
+J8726 passes: exit 0, 1.83 s, 4045720 KiB, swaps 0, standard axioms only.
+J8722–8725 are excluded local computability/normalization errors; the final
+proof uses symbolic array/counter parameters and no new resource options.
+
+**Scope:** this is an obstruction to using a uniformly bounded coordinate
+schedule for every source run. It is not a nonexistence theorem for an
+ideal WholeRunJoin, does not show that all selectedBad events vanish, does
+not calculate the zero-oracle event's probability, and does not establish a
+privacy attack. The requested total FSExperiments object needs an explicit
+source termination/divergence treatment and its actual coupling/law. Merely
+returning an invented abort after an arbitrary coin cap would alter the
+source execution. No such cap, abort convention or new bad event is added.
+
+The source cone for the semantic 25 rows is extracted, but source identification
+of its owned recursion still needs the iterator/control/caller transport;
+the per-chunk Kani result alone is not that theorem. Later rows 25–32,
+opening/programming traversal, all source error/retry assembly, and the
+shipped randomness/history identification also remain. Existing independent
+component proofs are reused at their stated scope, not promoted to these joins.
+Consequently **no shippedProverExperiment or ideal/real WholeRunJoin is
+claimed**. RustProverRefinement remains unchanged and explicit.
+
+Verbatim new top statements:
+
+```lean
+theorem lookup_std (table : List Entry) (query : List UInt8) :
+    List.lookup query table = lookup table query
+
+theorem programmed_writes (entries table : List Entry) (collision : Bool)
+    (fallback : List UInt8 → OracleAnswer) :
+    programmedOracle (writes table collision entries).1 fallback =
+      (fun query => (oracleWrites (lookup table) entries query).getD (fallback query))
+
+theorem programmed_writes_history (entries table : List Entry) (collision : Bool)
+    (fallback : List UInt8 → OracleAnswer) (program : OProg) (fuel : Nat) :
+    runLog program (programmedOracle (writes table collision entries).1 fallback) fuel =
+      runLog program (fun query => (oracleWrites (lookup table) entries query).getD (fallback query)) fuel
+
+theorem zero_prefix (zero : Bytes32) (n : Nat) (seed : Bytes32) (attempt : U32) (stream : U8) (counter : U64) :
+    search zero (zeroHash zero) seed attempt stream n counter=ok none
+
+theorem no_uniform_finite_bound (zero : Bytes32) (n : Nat) (seed : Bytes32) (attempt : U32) (stream : U8)
+    (counter : U64) :
+    ¬ (∀ hash : Hash, ∃ result, search zero hash seed attempt stream n counter=ok (some result))
+
+theorem empty_observer_no_seed_guess (seed : R0Z.FsStatement.OracleAnswer) :
+    ¬ ProverCommitSeedEvent19.seedGuess [] seed
+
+```

@@ -1,0 +1,47 @@
+import R1Z.ProverCommitTable20
+import R1Z.ProverCommitJointHistory19
+/-! Finite table writes are connected to the already proved joint adaptive
+history interface. Production BTreeMap and Vec/List transport are separate. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitTableHistory20
+open R0Z.FsStatement R1Z.GamesR1 R1Z.ProverCommitJointHistory19
+open R1Z.ProverCommitTable20
+attribute [local instance] Classical.propDecidable
+abbrev Entry := List UInt8 × OracleAnswer
+
+theorem lookup_std (table : List Entry) (query : List UInt8) :
+    List.lookup query table = lookup table query := by
+  induction table with
+  | nil => rfl
+  | cons entry tail ih =>
+    rcases entry with ⟨key,value⟩
+    simp only [List.lookup_cons,lookup,ih]
+    by_cases same : key=query
+    · subst key
+      simp
+    · have reverse : query≠key := Ne.symm same
+      simp [same,reverse]
+
+/-- Entire programmed oracle after an arbitrary finite write sequence, with
+one common fallback and last-write semantics even for repeated addresses. -/
+theorem programmed_writes (entries table : List Entry) (collision : Bool)
+    (fallback : List UInt8 → OracleAnswer) :
+    programmedOracle (writes table collision entries).1 fallback =
+      (fun query => (oracleWrites (lookup table) entries query).getD (fallback query)) := by
+  funext query
+  unfold programmedOracle
+  rw [lookup_std,writes_lookup]
+
+/-- Exact adaptive histories, including repeats and early exits. No marginal
+coin substitution or acceptance-only projection is used. -/
+theorem programmed_writes_history (entries table : List Entry) (collision : Bool)
+    (fallback : List UInt8 → OracleAnswer) (program : OProg) (fuel : Nat) :
+    runLog program (programmedOracle (writes table collision entries).1 fallback) fuel =
+      runLog program (fun query => (oracleWrites (lookup table) entries query).getD (fallback query)) fuel := by
+  rw [programmed_writes]
+
+#print axioms lookup_std
+#print axioms programmed_writes
+#print axioms programmed_writes_history
+end R1Z.ProverCommitTableHistory20
