@@ -33,7 +33,24 @@ assert 'checkpoint' not in decision.lower() and 'resume' not in decision.lower()
 assert 'slotPrograms p q slots' in decision
 s10=P/'evidence/s10-inventory3-20261021'
 reused=[dict(path=str(p.relative_to(ROOT)),sha256=sha(p.read_bytes())) for p in [s10/'ordering-facts.json',s10/'ordering-observations.json',s10/'generic-instantiation-review.json',s10/'STATUS.md']]
-body=dict(schema='checkpoint-abi4-caller-observations-v1',records=records,reused_s10=reused,
+observations=json.loads((s10/'ordering-observations.json').read_text())
+checkpoint_cfg=[]
+for f in observations['functions']:
+    name=next((n for n in ['tx1','tx2_common'] if f['header'].startswith('fn '+n+'(')),None)
+    if name is None: continue
+    def call(fragment):
+        matches=[c for c in f['calls'] if fragment in c['text']]
+        assert len(matches)==1, (name,fragment)
+        return matches[0]
+    chain=(['candidate::prepare', 'Accumulator::new', 'batch_merkle::<', 'QueryGeometry::for_range', 'BatchedWeights::new', 'BatchedWeights::finish', 'verifier::checkpoint'] if name=='tx1' else ['verifier::resume', 'batch_merkle::<', 'QueryGeometry::for_range', 'BatchedWeights::new', 'BatchedWeights::finish', 'verifier::finish_relation'])
+    selected=[call(x) for x in chain]
+    for before,after in zip(selected,selected[1:]):
+        fact=next(d for d in f['dominance'] if d['before_block']==before['block'] and d['after_block']==after['block'])
+        checkpoint_cfg.append(dict(mode=f['mode'],function=name,before=before,after=after,fact=fact,body_sha256=f['body_sha256']))
+    query=call('query_values(')
+    endpoint=selected[-1]
+    assert not any(d['before_block']==query['block'] and d['after_block']==endpoint['block'] for d in f['dominance'])
+body=dict(schema='checkpoint-abi4-caller-observations-v1',records=records,reused_s10=reused,checkpoint_cfg=checkpoint_cfg,loop_boundary='query_values does not statically dominate the endpoint in either TX1 or TX2 CFG. Dynamic next/end and error-sensitive loop simulation is needed to establish ten/twelve iterations.',
  model=dict(path=model,sha256=sha((ROOT/model).read_bytes()),decision_excerpt_sha256=sha(decision.encode()),has_checkpoint_stage=False),
  tx1_order=['parse_shape','canonical_scan','prepare','Accumulator::new','batch_merkle(batch=0)','QueryGeometry::for_range(0,k)','BatchedWeights::new','query_loop(end=k)','pending.finish','checkpoint'],
  tx2_order=['resume','a.next == SPLIT guard','powers<29>','inactive decode','batch_merkle(batch=1)','QueryGeometry::for_range(next,22)','BatchedWeights::new','query_loop(end=22)','pending.finish','finish_relation'],

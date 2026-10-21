@@ -88,3 +88,64 @@ the four- and eight-limb parts. Failed attempts 1 and 4 retain the unresolved
 branch/let and inferred list-cast goals; corrected elimination, explicit Nat
 lambda domain and let reduction resolve those errors. Their compiler recovery
 axioms are not accepted. Manifest/source snapshots preserve every attempt.
+
+## Stage 4: precise remainder, audit row and focused union
+
+`callers.json` now selects 22 checked checkpoint-relevant dominance relations
+from S10 pass 3 across both frozen verifier modes. Preparation, accumulator
+construction, batch-0 authentication, geometry, pending construction/finish
+and checkpoint are ordered along TX1's reached endpoint; TX2 has resume
+before batch 1, geometry, pending construction/finish and final relation.
+The evidence also explicitly checks the limit: query_values does **not**
+match a static dominator of the final endpoint in either body. A dynamic
+next/end invariant is necessary to derive ten/twelve iterations, the reached
+rhs/power/weights, and the lazy pending.finish result. CFG evidence does not
+prove those values or connect Rust Prepared to the model's p,q,i.
+
+`remainder.json` pins all 18 body blocks plus checksum, their exact offsets,
+source expressions and specific provenance requirements. It lists reader
+adoption, complete extracted-byte/C5 identification, reached preparation,
+reached accumulator, physical/std boundary, callers, enriched two-pass join
+and separate runtime binding. All remain explicitly open at whole-cone
+level. For accepted-run refinement, unconditional allocation availability
+is unnecessary: derive exact contents from successful allocations and show
+allocation errors do not reach acceptance. The existing std content model
+still does not supply the source success/error correspondence or a physical
+capacity/allocator/Drop proof.
+
+CONE-AUDIT's checkpoint row is updated and remains **(d)** for the complete
+cone. The instruction's supposed checkpoint stage is absent from the actual
+pinned dV_frozen. The next caller deliverable is a typed complete-program
+read accounting/transport that includes these six reads, or a separately
+reviewed checkpoint-aware model/consumer change. Simply inserting write/resume
+between unchanged model batches is ruled out by interleaved_not_erased.
+Neither an endpoint assumption nor an aggregate source join premise was
+introduced to conceal this residual. **AcceptedRunJoin is not established.**
+
+`OraclePortCkptAbi4Freeze`, attempt 1: exit 0; wall 21.395504791 s; peak RSS
+3,478,421,504 bytes; swaps 0; source revision `d3b4fe980`. Ten full axiom
+reports cover every new theorem and use only `{propext, Classical.choice,
+Quot.sound}`. `manifest.json` records exact argv, source/dependency hashes,
+revision, exit, wall, peak RSS and swaps for every attempt. This is one
+focused union audit, not a frozen release replay. All compiles use the
+prescribed shared mkdir lock, private object directory, -j1 -M4400 and
+-DElab.async=false; no shared object is overwritten.
+
+`audit.py` passes: final source snapshots, successful receipt equality,
+current direct-import hashes, all accepted axiom lines, caller/model/S10
+pins, field/obligation pins and absence of shipped/protected module changes.
+Failed attempts remain retained and excluded from proof claims. Pass-3 Rust
+and ELF evidence is not rerun or relabelled as new verification. S10 pass 4
+has not landed on research as of the final check (research `5cc69c97d`), so
+none of its unmerged work is imported. No shipped file, existing Lean module,
+protected lean-candidate, sibling module, wallet/key or ELF changed. No host
+rebuild, full manifest, runtime suite or adversarial suite was triggered.
+No binary, object, tarball or local target directory is committed.
+
+Recheck without compiling:
+
+```
+python3 -B tools/oracle-port-ckpt-abi4/audit.py
+```
+
+Local commits only; no push or merge. Zero headline premises removed.
