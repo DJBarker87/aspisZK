@@ -1,0 +1,3 @@
+PROVED accepted generated P6 four-dot run supplies its exact prefix and inherits canonical outputs and same-output literal field equations from the owned scanner and same ClaimPowers.
+
+Limitations: This accepted-run theorem assumes the selected installed P6 four-dot call succeeds; it is separate from the forward construction theorem. Prefix identity is derived from that same call, not assumed independently. Canonical gamma, successful ClaimPowers, its explicit same-array carrier identity, proof length57607, j<22, exact indexed opening slice and owned scanner acceptance remain explicit. No actual frozen caller reachability, production scanner/source correspondence, P6 to Rust Std, runtime or final artifact binding is claimed; S4 and global soundness remain open.
