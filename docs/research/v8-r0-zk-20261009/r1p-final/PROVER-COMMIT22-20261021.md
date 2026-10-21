@@ -2,7 +2,7 @@
 
 Base `d9865ba52`; branch `codex/cx-prover-commit22-20261021`.
 
-Work in progress. Target not yet established; the deployed theorem remains conditional on explicit source refinement.
+Target not yet established; the deployed theorem remains conditional on explicit source refinement.
 
 ## Scope
 
@@ -11,7 +11,7 @@ The shipped `Coins::nonzero` tests a 32-byte hash answer against all zero,
 not an M31 field element. Its uniform-answer zero mass is 2^-256; the
 requested M31 reciprocal is a conservative upper bound, subject to fresh
 oracle addresses and the ROM transport. Three calls per attempt, eight
-attempts give at most 24 instances. Model fuel will be five draws.
+attempts give at most 24 instances. Model fuel is five draws.
 
 ## Stage 1 — fixed fuel and conditional deployed endpoint
 
@@ -210,3 +210,49 @@ theorem privacy_headline_deployed
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
 ```
+
+## Shared-oracle window and final verification
+
+`ProverCommitFuelOracle22` proves injectivity and the exact uniform joint
+law of any fixed five-word window at the existing concatenated source
+addresses, in **one retained global finite oracle**. It then proves exact
+all-zero window mass without enumerating an answer or address universe.
+The start counter has explicit room before wraparound. This is not an
+adaptive stopping-time theorem: the fixed-window marginal law does not by
+itself identify successive source search instances with the retained fuel
+tape. J8770 is excluded; J8771 passes (exit 0, 1.85 s,
+4044780 KiB, zero swap, standard axioms).
+
+The final focused target is `R1Z/ProverCommit22Audit.lean`, J8772:
+exit 0, wall 1.77 s, peak RSS 4133480 KiB, swaps 0,
+source revision `735e4959b` plus exact source SHA-256 and dependency
+fingerprint in `lean/lean-8772.json` and
+`lean/attempts-8772-8773.jsonl`. Its 42 complete #print axioms lines are
+retained in `lean/out-8772.log`; every set is a subset of
+[propext, Classical.choice, Quot.sound]. It covers every new theorem,
+the old and enlarged-event deployed endpoints, and the reused circle
+parameter/fallback boundaries. It also proves agreement of both fuel/count
+constants and the finite fifteen-counter bound.
+
+`harness/final-audit.py` passes and writes `final-audit.json`. It validates
+all exact source snapshots, accepted/excluded receipts, source and reuse
+pins, scope limits, all new theorem audits, and the unchanged original
+endpoint and shipped files. The metadata utility is evidence tooling,
+not a security theorem. No full frozen release replay is run: the concrete
+source closure is not green. No unchanged regression is repeated.
+
+No local file under crates/ or programs/ changed, including cfg-gated
+modules. The D129 three-ELF equivalence evidence is therefore reused for
+unchanged shipped source; no new ELF equivalence claim is made.
+`source-prefix-binding.json` verifies the host instrumentation against the
+shipped source prefix, with exactly the inherited coin18 projection already
+documented in part 21. All new Rust additions are host-only cfg(kani)
+harnesses. The retained wrapper cache and 40 added Env J objects are listed
+by SHA-256 and size only, with no binaries committed. No concurrent-owner
+source, wallet, account key or authority changed. No pushes. No SSH session
+approached twenty minutes without output.
+
+Consumed Env J attempts: **8748–8772**. Next available candidate:
+**8773**, within 8773–8799, subject to receipt checks. The allocation is
+not exhausted. Work stops at the demonstrated Rust tree/TLS obstructions;
+the security target remains unchanged and **not yet established**.
