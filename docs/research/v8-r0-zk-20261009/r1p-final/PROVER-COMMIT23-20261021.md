@@ -134,3 +134,35 @@ No successful universal insertion certificate or arbitrary-height library
 representation proof is available. The one-entry get/iterator results do
 not discharge the universal hypotheses of writes_decode. No map source
 equation is installed from a finite fixture.
+
+## Stage 4 — concrete rho policy and remaining caller boundary
+
+`ProverCommitPolicy23.policy` replaces the extracted suffix's QM31 callback
+with the actual previously proved source sampler and a reversible nominal
+carrier conversion. `installed_total` supplies its output and exact selected
+model meaning for every block. `rho_after_block` installs that output in the
+actual extracted row-32 caller, preserving subsequent cast, embedding and
+Vec-push errors/divergence. This discharges the **QM31 policy parameter** of
+the owned suffix. Gamma, ordinary and query policies remain explicit; no
+model-defined sampler is substituted for those source operations.
+
+J7482 passes the initial four-theorem policy module. J7483 passes the
+strengthened five-theorem module: exit 0, 1.95 s, 3955840 KiB, swaps 0,
+standard axioms only. Exact source snapshots and dependency fingerprints
+are in `lean/attempts-7482-7484.jsonl`.
+
+`tls-programmed-v1` applies the same live-key single-thread contract to the
+exact PROGRAMMED slot type, separately from the trace slot. The unchanged
+source install/uninstall bodies pass an empty-table install, retained Some,
+uninstall to None, and repeat-uninstall gate: exit 0, 4.219 s,
+538884 KiB, swaps 0. This is a key-specific harness, not a global type-erased
+TLS replacement; timing/test TLS keys are outside it. Its generic pointer
+cast must only be instantiated with this exact PROGRAMMED type.
+
+The concrete source obstruction remains insertion/representation, already
+reached in the split gate. No universal library contract is available to
+instantiate writes_decode. The partial owned sampler integration does not
+supply the concrete remaining gamma/ordinary/query policies, circle-caller
+reachability, nominal caller carriers, retry/error/serialization assembly
+or full native trace identification. The generic history theorem below
+does not prove these source equations.
