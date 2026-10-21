@@ -34,6 +34,9 @@ config = json.loads((Path(__file__).with_name('cache-paths.json')).read_text())
 selected = config.get(module)
 selected_path = json.loads((HERE.parent / selected).read_text())['lean_path'] if selected else ''
 path = str(OBJECTS) + ':' + selected_path + ':' + baseline['lean_path']
+if module == 'OraclePortJoinSplitFreeze':
+    for command in dict.fromkeys(config.values()):
+        path += ':' + json.loads((HERE.parent / command).read_text())['lean_path']
 # Additional historical focused paths are supplied explicitly, and all selected
 # direct import hashes are recorded below; shared objects are never overwritten.
 path += ':' + os.environ.get('JOIN_SPLIT_EXTRA_PATH', '')
@@ -45,7 +48,10 @@ for name in re.findall(r'^import (\S+)', source.read_text(), re.M):
     if obj is None:
         raise SystemExit('Missing cached import: ' + name)
     imports.append({'module': name, 'path': str(obj), 'sha256': sha(obj)})
-fp = hashlib.sha256(json.dumps(imports, sort_keys=True).encode()).hexdigest()
+overlay = HERE / 'cache-overlay.json'
+environment_artifacts = {'private_cache_overlay_sha256': sha(overlay)} if overlay.exists() else {}
+fp = hashlib.sha256(json.dumps({'imports': imports, 'lean_path': path,
+                               'environment_artifacts': environment_artifacts}, sort_keys=True).encode()).hexdigest()
 manifest = HERE / 'manifest.json'
 data = json.loads(manifest.read_text()) if manifest.exists() else {
     'schema': 'focused-extractor-proof-packet-v1', 'attempts': [],
@@ -57,12 +63,16 @@ n = 1 + max([int(p.name.rsplit('-', 1)[1]) for p in HERE.glob(module + '-*') if 
 out = HERE / (module + '-' + str(n))
 out.mkdir()
 (out / 'source.lean.txt').write_text(source.read_text())
+if overlay.exists():
+    (out / 'cache-overlay.json').write_bytes(overlay.read_bytes())
 OBJECTS.mkdir(exist_ok=True)
 argv = [LEAN, '-j1', '-M4400', '-DElab.async=false', '-R', str(PACKET / 'lean'),
         '-o', str(OBJECTS / (module + '.olean')), str(source)]
 receipt = {'module': module, 'attempt': n, 'argv': argv, 'lean_path': path,
            'source_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
-           'source_sha256': sha(source), 'direct_imports': imports, 'deps_fingerprint': fp}
+           'source_sha256': sha(source), 'direct_imports': imports, 'deps_fingerprint': fp,
+           'deps_fingerprint_kind': 'imports-and-environment-v2',
+           'environment_artifacts': environment_artifacts}
 (out / 'command.json').write_text(json.dumps(receipt, indent=2) + '\n')
 while True:
     try:

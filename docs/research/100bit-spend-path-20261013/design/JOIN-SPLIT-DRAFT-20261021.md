@@ -200,3 +200,67 @@ and remains exactly as in C7. Total program equality alone does not establish
 checked arithmetic safety: R22 additionally requires outer Aeneas success
 and the operational P6 `Translation` (or the precise Kani harness domain).
 Focused cached-object checks are not a coherent frozen release replay.
+
+## Final focused verification and handoff
+
+All **12 new modules** check in their compatible groups, with **23 distinct
+new theorems**, **35 accepted axiom reports**, standard axioms only. The
+manifest retains **21 attempts: 12 successful, 9 failed**. Peak RSS across
+all attempts is **3,663,839,232 bytes**; every attempt reports zero swaps.
+No cap, recursion limit or heartbeat limit was raised.
+
+| Final compatible group | Attempt | Exit | Wall seconds | Peak RSS bytes | Swaps |
+|---|---:|---:|---:|---:|---:|
+| `OraclePortJoinSplitFreeze` (headline, decision, ordering, S2/S7/S8/R17/R22) | 5 | 0 | 11.988543 | 3,599,613,952 | 0 |
+| `OraclePortJoinSplitASQ8Freeze` | 1 | 0 | 1.865637 | 2,219,900,928 | 0 |
+
+The five earlier local elaboration failures were corrected by explicit
+definitional equality, the actual ASQ8 error type, separate structure fields
+and the existing stored-domain namespace. Their compiler-recovery `sorryAx`
+lines are retained only in failed receipts, never accepted proof evidence.
+
+Main freeze attempts 1–3 identified cache integration dependencies: Lean
+selected a partial `AspisV8R17` namespace directory lacking `RawReducerNat`,
+then required its `.olean.server`/`.olean.private` and IR companions. The
+private task object directory now contains a hash-pinned symlink union of
+36 existing namespace objects and 15 companions; no object was compiled,
+changed or placed in a shared cache. `cache-overlay.json` records every
+selected source/hash/size, and attempts 2 onward preserve the overlay
+snapshot/fingerprint used. `stage-cache.py` validates/recreates only those
+private symlinks. Each retry resolved a specifically diagnosed environment
+dependency; no unchanged source/environment pair was rerun.
+
+Attempt 4 then exposed a **real declaration collision**, not a missing file:
+`AspisR20Request.Types` and `AspisR1AdapterReconstruct.Types` both export
+`instDiscriminantPoolV1PairLatePublicStatementErrorV1Isize`. Existing modules
+are read-only, so the changed final audit imports ASQ8 in its own compatible
+group. This is an additional explicit **S10/integration residual**. The final
+main and ASQ8 checks are not a successful union import and are not advertised
+as the coherent frozen release replay.
+
+The raw logs, exact commands/targets, source revisions/SHA-256, import
+object fingerprints, exit/wall/RSS/swaps, complete axioms and failed output
+are committed under `evidence/join-split-draft-20261021/`. The original C7
+M10 import remains historical cached-object reuse, without any instrumentation
+source or object change. `frozen-sources.json` pins every final new source;
+`audit-summary.json` records the accepted counts and limitations.
+
+```sh
+python3 -B tools/oracle-port-join-split/audit.py
+```
+
+This validates every receipt/snapshot/import hash, theorem axiom coverage,
+controlled deletion diff, read-only owner signatures, original endpoint
+identity, source freeze, private overlay and allowed change scope. It runs
+no Lean compiler, solver or build. `git diff --check` passes. No full frozen
+manifest, Rust/runtime suite, SBF rebuild, wallet operation, push or merge
+was run for these additive proofs and documents.
+
+The exact remaining handoff is therefore: Session A's six re-pins; the S2/S6
+source/adapter, S7/S8, parser/multiproof and checkpoint/Pool joins in the table;
+concrete carriers/sites/tree/inventory and both caller-order identities;
+resolution of the proven eager/short-circuit interface obstruction and source
+read-order questions; S10's generated declaration collision; the unchanged
+stored-runtime binding; and the eventual approved, coherent release replay.
+The split is proved conditionally; **none of those remaining source joins is
+asserted proved by this packet**.
