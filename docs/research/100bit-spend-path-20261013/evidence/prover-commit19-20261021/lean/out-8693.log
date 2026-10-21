@@ -1,0 +1,78 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitJointHistory19.lean:29:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverCommitJointHistory19.replace_at`:
+  [DecidableEq A]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq A] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitJointHistory19.lean:37:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverCommitJointHistory19.replace_off`:
+  [DecidableEq A]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq A] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitJointHistory19.lean:216:2: error: Tactic `apply` failed: could not unify the conclusion of `runLog_agrees`
+  runLog ?program ?source ?fuel = runLog ?program ?model ?fuel
+with the goal
+  runLog
+      (program
+        (view fun i => ((seededCoupling key injective).toR p).2 (key ((seededCoupling key injective).toR p).1 i)))
+      (programmedOracle
+        (entries fun i => ((seededCoupling key injective).toR p).2 (key ((seededCoupling key injective).toR p).1 i))
+        (lookup ((seededCoupling key injective).toR p).2))
+      fuel =
+    runLog (program (view ((seededCoupling key injective).toM p).1.1))
+      (programmedOracle (entries ((seededCoupling key injective).toM p).1.1)
+        (lookup ((seededCoupling key injective).toM p).1.2))
+      fuel
+
+Note: The full type of `runLog_agrees` is
+  ∀ (program : OProg) (model source : List UInt8 → OracleAnswer) (fuel : ℕ),
+    (∀ e ∈ runLog program model fuel, source e.1 = model e.1) → runLog program source fuel = runLog program model fuel
+
+A I U : Type
+inst✝² : DecidableEq A
+inst✝¹ : Fintype A
+inst✝ : Fintype I
+key : OracleAnswer → I → A
+injective : ∀ (seed : OracleAnswer), Function.Injective (key seed)
+lookup : (A → OracleAnswer) → List UInt8 → OracleAnswer
+off :
+  ∀ (seed : OracleAnswer) (coins : I → OracleAnswer) (table : A → OracleAnswer) (a : List UInt8),
+    ¬seedPoint a seed → lookup (replaceTable (key seed) ⋯ coins table) a = lookup table a
+V : Type
+view : (I → OracleAnswer) → V
+entries : (I → OracleAnswer) → List Entry
+program : V → OProg
+fuel : ℕ
+p : (seededCoupling key injective).S
+hn :
+  ¬∃ i,
+      augmented (fun x x_1 => False)
+        (fun m => runLog (program (view m.1)) (programmedOracle (entries m.1) (lookup m.2)) fuel) i
+        ((seededCoupling key injective).toM p)
+hc : (fun i => replaceTable (key p.1) ⋯ p.2.1 p.2.2 (key p.1 i)) = p.2.1
+⊢ runLog
+      (program
+        (view fun i => ((seededCoupling key injective).toR p).2 (key ((seededCoupling key injective).toR p).1 i)))
+      (programmedOracle
+        (entries fun i => ((seededCoupling key injective).toR p).2 (key ((seededCoupling key injective).toR p).1 i))
+        (lookup ((seededCoupling key injective).toR p).2))
+      fuel =
+    runLog (program (view ((seededCoupling key injective).toM p).1.1))
+      (programmedOracle (entries ((seededCoupling key injective).toM p).1.1)
+        (lookup ((seededCoupling key injective).toM p).1.2))
+      fuel
+'R1Z.ProverCommitJointHistory19.exchange' does not depend on any axioms
+'R1Z.ProverCommitJointHistory19.swapCoordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitJointHistory19.replace_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitJointHistory19.replace_off' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitJointHistory19.replacement_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitJointHistory19.runLog_agrees' depends on axioms: [propext]
+'R1Z.ProverCommitJointHistory19.byte_history_agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitJointHistory19.seededCoupling' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitJointHistory19.joint_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitJointHistory19.byte_oracle_agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitJointHistory19.programmed_history_agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitJointHistory19.componentJoin' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

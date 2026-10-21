@@ -105,3 +105,74 @@ theorem privacy_headline_deployed
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) ∧
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) < 1 / 2^100
 ```
+
+## Stage 3 — joint histories rather than marginal coins
+
+`ProverCommitJointHistory19.swapCoordinates` is an actual equivalence: it
+exchanges the independent coin vector with the corresponding entries of the
+single shared oracle table. `seededCoupling` retains the seed and proves both
+whole marginal laws exactly. `replace_at` recovers every source coin from the
+same replaced table; `replace_off` retains all other oracle answers.
+
+`runLog_agrees` inducts over the adaptive program, preserving the complete
+ordered address/answer history, repeated queries and early exits.
+`byte_history_agrees` specializes this to the actual 65-byte simulator coin
+frames, all eight attempts, all four streams and any bounded counter schedule.
+`programmed_history_agrees` additionally retains an arbitrary coin-dependent
+programming table before the shared-oracle fallback. `joint_observation`
+retains an arbitrary public view of all the coins, so deterministic bounded
+retry, acceptance, error and serialization projections can be included in it.
+
+`componentJoin` constructs the complete component RunJoin with only the
+single seed exception; its pointwise lookup obligation is discharged for the
+source byte table by `byte_oracle_agrees`. This is the joint law missing in
+part 18. It is not yet a source identification of the full simulator: the
+bounded coordinate schedule, actual view calculation and uncapped source
+nonzero loop still need their source certificates. No RustProverRefinement
+premise is removed, and no shippedProverExperiment is claimed.
+
+J8694 passes the final enhanced module: exit 0, wall 2.27 s, peak RSS
+4,043,648 KiB, swaps 0, revision `59790da74` plus exact source hash; all
+printed axioms standard (exchange has none). J8689/J8690 checked earlier
+versions; J8691–8693 exposed local elaboration issues, retained and excluded.
+The replacement avoids reducing concrete finite address/coin enumerations;
+no recursion or heartbeat limit was changed. These are focused component
+checks, not a coherent frozen release replay.
+
+Verbatim joint equality and coupling statements follow; the full RunJoin
+constructor is in the source snapshot.
+
+```lean
+def seededCoupling {S : Type} [Fintype S] [Nonempty S]
+    [Fintype A] [Fintype I] [Fintype U] [Nonempty U]
+    (key : S → I → A) (injective : ∀ seed, Function.Injective (key seed)) :
+    Coupling (S × (A → U)) (((I → U) × (A → U)) × S)
+
+theorem joint_observation {count : Nat} (room : count ≤ 2^64)
+    (bound : Nat) [Fintype (RomFiniteBin.Address bound)] (fits : 65 ≤ bound)
+    {V : Type} (view : (ProverCommitSimulatorOracle18.Index count → OracleAnswer) → V)
+    (program : V → OProg) (fuel : Nat)
+    (seed : OracleAnswer) (coins : ProverCommitSimulatorOracle18.Index count → OracleAnswer)
+    (table : RomFiniteBin.Address bound → OracleAnswer)
+    (fresh : ¬ seedGuess (runLog (program (view coins)) (RomFiniteBin.lookup bound table) fuel) seed) :
+    let key := ProverCommitSimulatorOracle18.key (count := count) bound fits seed
+    let hinj := ProverCommitSimulatorOracle18.key_injective room bound fits seed
+    let sourceTable := replaceTable key hinj coins table
+    let sourceCoins := fun i => sourceTable (key i)
+    (view sourceCoins, runLog (program (view sourceCoins))
+      (RomFiniteBin.lookup bound sourceTable) fuel) =
+    (view coins, runLog (program (view coins)) (RomFiniteBin.lookup bound table) fuel)
+
+theorem programmed_history_agrees {count : Nat} (room : count ≤ 2^64)
+    (bound : Nat) [Fintype (RomFiniteBin.Address bound)] (fits : 65 ≤ bound)
+    (seed : OracleAnswer) (coins : ProverCommitSimulatorOracle18.Index count → OracleAnswer)
+    (table : RomFiniteBin.Address bound → OracleAnswer) (entries : List Entry)
+    (program : OProg) (fuel : Nat)
+    (fresh : ¬ seedGuess (runLog program
+      (programmedOracle entries (RomFiniteBin.lookup bound table)) fuel) seed) :
+    runLog program (programmedOracle entries (RomFiniteBin.lookup bound (replaceTable
+      (ProverCommitSimulatorOracle18.key (count := count) bound fits seed)
+      (ProverCommitSimulatorOracle18.key_injective room bound fits seed) coins table))) fuel =
+      runLog program (programmedOracle entries (RomFiniteBin.lookup bound table)) fuel
+
+```
