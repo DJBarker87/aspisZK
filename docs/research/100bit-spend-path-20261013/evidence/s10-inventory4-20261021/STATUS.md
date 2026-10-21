@@ -36,3 +36,32 @@ accepted evidence. Standard axioms only in successful attempts. Shared
 objects and existing Lean modules are never overwritten. No shipped Rust,
 wallet keys or ELF changed; the conditional shipped-change rebuild is not
 triggered. No push or merge.
+
+## Stage 2: complete trait-alias observation scan
+
+The new scan matches explicit `<Type as Trait>::method` compiler spellings,
+including the closing `)` of an inline scope. This recovers 1,972 added
+location-preserving observations: 692 in each verifier build and 588 in Pool.
+Now 39/40 affected verifier declarations have explicit call/inline/mono
+observations. The remaining `trace::value` body is one `return` block under
+the frozen non-prover cfg; its source explicitly compiles out native tracing.
+Pool has 29 observed core declarations; the eleven verifier-crate-only
+labels have no Pool body and are not claimed as Pool instances.
+
+All forty labels in all three modes remain represented in `instances.json`.
+The full derived JSON is 5,643,623 bytes and stays on the host: SHA-256, size
+and generator are in `instances-pin.json`. The compact committed file retains
+all added observations and refers to pass-three evidence for unchanged ones.
+The earlier scan and receipt are retained as a superseded matcher; v2 fixes
+its missed closing-parenthesis case, rather than replaying unchanged work.
+
+Both scoped analyses exit 0, use below 210 MiB peak RSS and zero swaps;
+commands, reservations, limits and exact timing are retained. The inherited
+host wrapper's `source_revision` records the frozen Rust revision; each
+`*-invocation.json` separately pins the analysis script SHA and this worktree
+revision. `#print axioms`: N/A, compiler evidence only.
+
+This is improved frozen-MIR provenance, not complete final-machine inlining
+or an owner source refinement. Final LLVM/ELF reachability correspondence and
+source exclusion/adoption are still explicit OPEN fields. No completeness
+status has been promoted by treating a compiler occurrence as a source join.
