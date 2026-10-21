@@ -1,0 +1,244 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2StdAnySourceTotalV1.lean:34:14: error: Tactic `rfl` failed: The left-hand side
+  match
+    match (ptr, endp, state) with
+    | (nn1, p1, f1) => anyBody next callback nn1 p1 f1 with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop
+        (fun x =>
+          match x with
+          | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+        x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  do
+    let step ← fail e
+    match step with
+      | done out => ok out
+      | cont (ptr', endp', state') =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          (ptr', endp', state')
+
+case fail
+T P Q F : Type
+next : SourceIter P Q → Result (Option T × SourceIter P Q)
+callback : core.ops.function.FnMut F T Bool
+ptr : P
+endp : Q
+state : F
+e : Error
+hstep : anyBody next callback ptr endp state = fail e
+⊢ (match
+      match (ptr, endp, state) with
+      | (nn1, p1, f1) => anyBody next callback nn1 p1 f1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let step ← fail e
+    match step with
+      | done out => ok out
+      | cont (ptr', endp', state') =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          (ptr', endp', state')
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2StdAnySourceTotalV1.lean:35:11: error: Tactic `rfl` failed: The left-hand side
+  match
+    match (ptr, endp, state) with
+    | (nn1, p1, f1) => anyBody next callback nn1 p1 f1 with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop
+        (fun x =>
+          match x with
+          | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+        x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  do
+    let step ← div
+    match step with
+      | done out => ok out
+      | cont (ptr', endp', state') =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          (ptr', endp', state')
+
+case div
+T P Q F : Type
+next : SourceIter P Q → Result (Option T × SourceIter P Q)
+callback : core.ops.function.FnMut F T Bool
+ptr : P
+endp : Q
+state : F
+hstep : anyBody next callback ptr endp state = div
+⊢ (match
+      match (ptr, endp, state) with
+      | (nn1, p1, f1) => anyBody next callback nn1 p1 f1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let step ← div
+    match step with
+      | done out => ok out
+      | cont (ptr', endp', state') =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          (ptr', endp', state')
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2StdAnySourceTotalV1.lean:38:18: error: Tactic `rfl` failed: The left-hand side
+  match
+    match (ptr, endp, state) with
+    | (nn1, p1, f1) => anyBody next callback nn1 p1 f1 with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop
+        (fun x =>
+          match x with
+          | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+        x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  do
+    let step ← ok (done out)
+    match step with
+      | done out => ok out
+      | cont (ptr', endp', state') =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          (ptr', endp', state')
+
+case ok.done
+T P Q F : Type
+next : SourceIter P Q → Result (Option T × SourceIter P Q)
+callback : core.ops.function.FnMut F T Bool
+ptr : P
+endp : Q
+state : F
+out : P × Q × Option Bool
+hstep : anyBody next callback ptr endp state = ok (done out)
+⊢ (match
+      match (ptr, endp, state) with
+      | (nn1, p1, f1) => anyBody next callback nn1 p1 f1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let step ← ok (done out)
+    match step with
+      | done out => ok out
+      | cont (ptr', endp', state') =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          (ptr', endp', state')
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2StdAnySourceTotalV1.lean:39:57: error: Tactic `rfl` failed: The left-hand side
+  match
+    match (ptr, endp, state) with
+    | (nn1, p1, f1) => anyBody next callback nn1 p1 f1 with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop
+        (fun x =>
+          match x with
+          | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+        x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  do
+    let step ← ok (cont (ptr', endp', state'))
+    match step with
+      | done out => ok out
+      | cont (ptr', endp', state') =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          (ptr', endp', state')
+
+case ok.cont
+T P Q F : Type
+next : SourceIter P Q → Result (Option T × SourceIter P Q)
+callback : core.ops.function.FnMut F T Bool
+ptr : P
+endp : Q
+state : F
+ptr' : P
+endp' : Q
+state' : F
+hstep : anyBody next callback ptr endp state = ok (cont (ptr', endp', state'))
+⊢ (match
+      match (ptr, endp, state) with
+      | (nn1, p1, f1) => anyBody next callback nn1 p1 f1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let step ← ok (cont (ptr', endp', state'))
+    match step with
+      | done out => ok out
+      | cont (ptr', endp', state') =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          (ptr', endp', state')
+'AspisS2StdAnySource.anyLoop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS2StdAnySource.sourceAny_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS2StdAnySource.guard_eq_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

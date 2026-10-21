@@ -648,3 +648,99 @@ Std iterator/copy bindings and the adopted dV_frozen2 ordered-log join remain
 explicit obligations. Native step certificates plus this parent theorem do
 not by themselves instantiate that join. S6 and S1 retain the previously
 recorded source/caller obligations; the 100-bit target is not yet established.
+
+
+## Actual std-any body and complete SDK-reference scan installation
+
+This continuation replaces the previously hand-written std-any sequence-body
+boundary with an extraction of the actual reached Rust std method. The warm
+full-MIR Charon sysroot was essential: distributed-sysroot extraction had
+already inlined next into raw pointer/global operations despite --mir built.
+The full-MIR extraction std-any-v5 (Charon exit0,.255s,143792KiB; Aeneas
+exit0,.368s,69344KiB; both swap0) emits the real any body, loop, predicate,
+trait implementations and caller. The exact method text is byte-identical
+between the pinned Kani compiler's upstream std source and the Aeneas std
+source, checked in std-any-source/source-pins.json. This is method identity,
+not a claim that the two compiler/sysroot binaries are identical.
+
+The emission adapter retains both native Iter pointer fields and its Unit
+marker, all callback state, short circuit and returned iterator. The otherwise
+uninterpreted NonNull/ConstRawPtr carriers and reached next/constructor are
+explicit parameters, never custom axioms or an asserted native implementation.
+S2StdAnySourceTotalV1 checks the loop induction and contextual guard transport.
+The next contract explicitly requires the constructor-established valid
+iterator domain and preserves it; it does not demand sensible results from
+arbitrary malformed pointer pairs. This correction adds no restriction on
+verifier inputs: validity is derived by the concrete constructor below.
+
+The missing instance is now supplied at the full owned SDK-reference level:
+S2SdkSourceIteratorV1 retains all four exact SDK rows (accounts, complete data
+and lamport heaps, counters and Rc metadata), plus the concrete slot/offset
+pointer fields and the complete emitted source_begin/source_next functions.
+S2SdkSourceIteratorTotalV1.next_reads proves every assertion, selected-cell/
+byte index and checked cursor increment total from the constructed invariant;
+begin_total establishes that invariant and the byte view. No native-next,
+constructor-success or cursor-range premise remains in its enclosing guard.
+The logical pointer identity is a data-heap slot plus offset. Its native
+physical-pointer correspondence is a separately checked operation boundary,
+not inferred from this representation or from equal booleans.
+
+That boundary is checked by sdk-iterator-reference-join-v3: the actual SDK
+AccountInfo RefMut remains live, with every1768-byte value and cursor0..1768.
+Both the actual iterator constructor and one actual next call are compared
+to the exact owned functions later extracted by Aeneas. Result byte, physical
+next pointer, remaining length, logical object identity/end and lamport value
+agree. Kani exit0,6.094s,420412KiB RSS,swap0;0/1053 failed and3/3 covers.
+The native and extracted constructor/next bodies are identical even though
+v3 adds constructor harness assertions; no unchanged extraction was replayed.
+Native Rc counts in this fixture start at constructor values; reuse the
+separately checked all-signed-counter/all-valid-Rc write-frame certificates
+and native next byte-frame certificate for those independent boundaries.
+The three-account alias/heap construction is still an enclosing obligation.
+
+S2SdkSourceScanV1.snapshotScan_eq_sourceScan now proves all-outcome equality
+of the complete emitted read/clone/owned-scan block and the actual std-any
+body with those concrete SDK constructor/next functions installed, including
+invalid slots. There are no scan, iterator, copy-success, all-zero, byte-value
+or native-step semantic premises in this reference theorem. This is equality
+in the checked Aeneas Result/library semantics; allocation abort/runtime and
+compiler/SDK interpretation remain the named P2/P6 boundaries.
+
+Crucially this is lifted through the complete parent, not left as a leaf:
+S2SdkNativeScanParentV1.body_factor checks the exact fission of both scan sites
+in the whole emitted owned_stage1_body. body_eq_source installs sourceScan
+for both admitted instruction branches. stage1_eq preserves the complete
+status and every SDK field, including failure/divergence in the denotation.
+body_return_finalizes derives safe release for every ordinary returned body
+status. stage1_current_first_split derives actual same-byte decoder/first
+execution with fixed compact split10 and release None from a single complete
+source-scan-parent accepted execution. It retains the existing concrete child
+Ops/digest/runtime boundaries; it adds no child-success or scanner premise.
+
+Focused local receipts (one mkdir lock, -j1 -M4400):
+- s2-std-any-source-v2: exit0, 3.007280s, 2255519744 bytes RSS, swap0.
+- s2-std-any-source-total-v7: exit0, 5.150989s, 2260893696 bytes RSS, swap0.
+- s2-sdk-source-iterator-v1: exit0, 11.417362s, 2243936256 bytes RSS, swap0.
+- s2-sdk-source-iterator-total-v2: exit0, 4.603860s, 2257747968 bytes RSS, swap0.
+- s2-sdk-source-scan-v1: exit0, 4.126406s, 2245017600 bytes RSS, swap0.
+- s2-sdk-native-scan-parent-v5: exit0, 17.208499s, 3271688192 bytes RSS, swap0.
+All successful audits use only propext/Classical.choice/Quot.sound. Failed
+elaborations/extractions are excluded. check-sdk-iterator-packet.py validates
+native command/source/optimized flags/resource limits, exact native/extracted
+body identity, both emission adapters and complete parent regeneration. The
+normal packet check invokes it. No unchanged full manifest replay was run.
+
+Research was rechecked read-only at d9865ba52cfe0dc617f4ff97a3677b1e330e9b87;
+the two frozen program files still have no source diff against b2727acd3.
+No production source or other cone was changed, and no adoption/re-pin is
+implied by the isolated reference/verification sources.
+
+S2 remains OPEN. The std-any control-flow and concrete SDK-reference scan
+installation obligations above are closed at their stated source/leaf scope.
+What remains is the actual AccountInfo heap/alias/snapshot construction and
+ordered correspondence of the enclosing shipped stage1 steps, including
+error/drop/writeback timing, followed by the current dV_frozen2 source/log
+join. Concrete syscall/library/runtime boundaries must be kept distinct from
+that missing refinement. S6 retains the shared shipped-caller gap. S1 retains
+its original nested claim/powers/preparation-trace premises. No whole S1/S2/S6
+or global 100-bit conclusion is asserted: target not yet established.

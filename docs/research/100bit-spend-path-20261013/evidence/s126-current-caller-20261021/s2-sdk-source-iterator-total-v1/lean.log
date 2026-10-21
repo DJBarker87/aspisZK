@@ -1,0 +1,153 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:37:6: error(lean.unknownIdentifier): Unknown constant `List.getElem?_eq_none.mpr`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:67:4: error: unsolved goals
+case pos.refine_1
+sdk : OwnedSdk
+ptr endp : DataPointer
+sameSlot : ptr.slot = endp.slot
+ordered : ↑ptr.offset ≤ ↑endp.offset
+cell : OwnedDataCell
+which : (↑sdk.data_cells)[↑ptr.slot]? = some cell
+last : ↑endp.offset = (↑cell.bytes).length
+hcell : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells ptr.slot = ok cell
+hle : ptr.offset ≤ endp.offset
+hend : endp.offset ≤ cell.bytes.len
+equal : ptr.offset = endp.offset
+empty : remaining sdk ptr endp = []
+⊢ (do
+      let (out, iter') ←
+        do
+          if endp.offset ≤ endp.offset then ok () else fail Error.assertionFailure
+          let odc ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells endp.slot
+          if endp.offset ≤ odc.bytes.len then ok () else fail Error.assertionFailure
+          ok (none, { ptr := ptr, end_or_len := endp })
+      ok (out, { ptr := iter'.ptr, end_or_len := iter'.end_or_len, _marker := () })) =
+    ok (none, { ptr := ptr, end_or_len := endp, _marker := () })
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:92:4: error: unsolved goals
+case neg.refine_1
+sdk : OwnedSdk
+ptr endp : DataPointer
+sameSlot : ptr.slot = endp.slot
+ordered : ↑ptr.offset ≤ ↑endp.offset
+cell : OwnedDataCell
+which : (↑sdk.data_cells)[↑ptr.slot]? = some cell
+last : ↑endp.offset = (↑cell.bytes).length
+hcell : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells ptr.slot = ok cell
+hle : ptr.offset ≤ endp.offset
+hend : endp.offset ≤ cell.bytes.len
+equal : ¬ptr.offset = endp.offset
+less : ↑ptr.offset < (↑cell.bytes).length
+byte : U8
+hbyte : cell.bytes.index_usize ptr.offset = ok byte
+hvalue : byte = (↑cell.bytes)[↑ptr.offset]
+readByte : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U8) cell.bytes ptr.offset = ok byte
+offset' : Usize
+hadd : ptr.offset + 1#usize = ok offset'
+hoffset : ↑offset' = ↑ptr.offset + 1
+ptr' : DataPointer := { slot := ptr.slot, offset := offset' }
+head : (remaining sdk ptr endp).head? = some byte
+⊢ (do
+      let (out, iter') ←
+        do
+          let odc ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells endp.slot
+          if endp.offset ≤ odc.bytes.len then ok () else fail Error.assertionFailure
+          let byte ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U8) odc.bytes ptr.offset
+          ok (some byte, { ptr := { slot := endp.slot, offset := offset' }, end_or_len := endp })
+      ok (out, { ptr := iter'.ptr, end_or_len := iter'.end_or_len, _marker := () })) =
+    ok (some byte, { ptr := { slot := endp.slot, offset := offset' }, end_or_len := endp, _marker := () })
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:72:43: warning: This simp argument is unused:
+  hle
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵x̵t̵,̵s̵o̵u̵r̵c̵e̵_̵n̵e̵x̵t̵,̵s̵a̵m̵e̵S̵l̵o̵t̵,̵h̵l̵e̵,̵h̵c̵e̵l̵l̵,̵h̵e̵n̵d̵,̵e̵q̵u̵a̵l̵,̵m̵a̵s̵s̵e̵r̵t̵,̵i̵f̵_̵p̵o̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵w̵r̵a̵p̵,̵L̵i̵s̵t̵.̵h̵e̵a̵d̵?̵_̵n̵i̵l̵]̵[̲n̲e̲x̲t̲,̲ ̲s̲o̲u̲r̲c̲e̲_̲n̲e̲x̲t̲,̲ ̲s̲a̲m̲e̲S̲l̲o̲t̲,̲ ̲h̲c̲e̲l̲l̲,̲ ̲h̲e̲n̲d̲,̲ ̲e̲q̲u̲a̲l̲,̲ ̲m̲a̲s̲s̲e̲r̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲w̲r̲a̲p̲,̲ ̲L̲i̲s̲t̲.̲h̲e̲a̲d̲?̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:72:47: warning: This simp argument is unused:
+  hcell
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵x̵t̵,̵s̵o̵u̵r̵c̵e̵_̵n̵e̵x̵t̵,̵s̵a̵m̵e̵S̵l̵o̵t̵,̵h̵l̵e̵,̵h̵c̵e̵l̵l̵,̵h̵e̵n̵d̵,̵e̵q̵u̵a̵l̵,̵m̵a̵s̵s̵e̵r̵t̵,̵i̵f̵_̵p̵o̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵w̵r̵a̵p̵,̵L̵i̵s̵t̵.̵h̵e̵a̵d̵?̵_̵n̵i̵l̵]̵[̲n̲e̲x̲t̲,̲ ̲s̲o̲u̲r̲c̲e̲_̲n̲e̲x̲t̲,̲ ̲s̲a̲m̲e̲S̲l̲o̲t̲,̲ ̲h̲l̲e̲,̲ ̲h̲e̲n̲d̲,̲ ̲e̲q̲u̲a̲l̲,̲ ̲m̲a̲s̲s̲e̲r̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲w̲r̲a̲p̲,̲ ̲L̲i̲s̲t̲.̲h̲e̲a̲d̲?̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:72:53: warning: This simp argument is unused:
+  hend
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵x̵t̵,̵s̵o̵u̵r̵c̵e̵_̵n̵e̵x̵t̵,̵s̵a̵m̵e̵S̵l̵o̵t̵,̵h̵l̵e̵,̵h̵c̵e̵l̵l̵,̵h̵e̵n̵d̵,̵e̵q̵u̵a̵l̵,̵m̵a̵s̵s̵e̵r̵t̵,̵i̵f̵_̵p̵o̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵w̵r̵a̵p̵,̵L̵i̵s̵t̵.̵h̵e̵a̵d̵?̵_̵n̵i̵l̵]̵[̲n̲e̲x̲t̲,̲ ̲s̲o̲u̲r̲c̲e̲_̲n̲e̲x̲t̲,̲ ̲s̲a̲m̲e̲S̲l̲o̲t̲,̲ ̲h̲l̲e̲,̲ ̲h̲c̲e̲l̲l̲,̲ ̲e̲q̲u̲a̲l̲,̲ ̲m̲a̲s̲s̲e̲r̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲w̲r̲a̲p̲,̲ ̲L̲i̲s̲t̲.̲h̲e̲a̲d̲?̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:73:19: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵n̵e̵x̵t̵,̵s̵o̵u̵r̵c̵e̵_̵n̵e̵x̵t̵,̵s̵a̵m̵e̵S̵l̵o̵t̵,̵h̵l̵e̵,̵h̵c̵e̵l̵l̵,̵h̵e̵n̵d̵,̵e̵q̵u̵a̵l̵,̵m̵a̵s̵s̵e̵r̵t̵,̵i̵f̵_̵p̵o̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵w̵r̵a̵p̵,̵L̵i̵s̵t̵.̵h̵e̵a̵d̵?̵_̵n̵i̵l̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲n̲e̲x̲t̲,̲ ̲s̲o̲u̲r̲c̲e̲_̲n̲e̲x̲t̲,̲ ̲s̲a̲m̲e̲S̲l̲o̲t̲,̲ ̲h̲l̲e̲,̲ ̲h̲c̲e̲l̲l̲,̲ ̲h̲e̲n̲d̲,̲ ̲e̲q̲u̲a̲l̲,̲ ̲m̲a̲s̲s̲e̲r̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲w̲r̲a̲p̲,̲ ̲L̲i̲s̲t̲.̲h̲e̲a̲d̲?̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:96:47: warning: This simp argument is unused:
+  hcell
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵x̵t̵,̵s̵o̵u̵r̵c̵e̵_̵n̵e̵x̵t̵,̵s̵a̵m̵e̵S̵l̵o̵t̵,̵h̵l̵e̵,̵h̵c̵e̵l̵l̵,̵h̵e̵n̵d̵,̵m̵a̵s̵s̵e̵r̵t̵,̵i̵f̵_̵p̵o̵s̵,̵[̲n̲e̲x̲t̲,̲ ̲s̲o̲u̲r̲c̲e̲_̲n̲e̲x̲t̲,̲ ̲s̲a̲m̲e̲S̲l̲o̲t̲,̲ ̲h̲l̲e̲,̲ ̲h̲e̲n̲d̲,̲ ̲m̲a̲s̲s̲e̲r̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲,̲ if_neg e̵q̵u̵a̵l̵,̵r̵e̵a̵d̵B̵y̵t̵e̵,̵h̵a̵d̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵w̵r̵a̵p̵,̵p̵t̵r̵'̵]̵e̲q̲u̲a̲l̲,̲ ̲r̲e̲a̲d̲B̲y̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲a̲d̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲w̲r̲a̲p̲,̲ ̲p̲t̲r̲'̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:96:53: warning: This simp argument is unused:
+  hend
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵x̵t̵,̵s̵o̵u̵r̵c̵e̵_̵n̵e̵x̵t̵,̵s̵a̵m̵e̵S̵l̵o̵t̵,̵h̵l̵e̵,̵h̵c̵e̵l̵l̵,̵h̵e̵n̵d̵,̵m̵a̵s̵s̵e̵r̵t̵,̵i̵f̵_̵p̵o̵s̵,̵[̲n̲e̲x̲t̲,̲ ̲s̲o̲u̲r̲c̲e̲_̲n̲e̲x̲t̲,̲ ̲s̲a̲m̲e̲S̲l̲o̲t̲,̲ ̲h̲l̲e̲,̲ ̲h̲c̲e̲l̲l̲,̲ ̲m̲a̲s̲s̲e̲r̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲,̲ if_neg e̵q̵u̵a̵l̵,̵r̵e̵a̵d̵B̵y̵t̵e̵,̵h̵a̵d̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵w̵r̵a̵p̵,̵p̵t̵r̵'̵]̵e̲q̲u̲a̲l̲,̲ ̲r̲e̲a̲d̲B̲y̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲a̲d̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲w̲r̲a̲p̲,̲ ̲p̲t̲r̲'̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:97:21: warning: This simp argument is unused:
+  readByte
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵n̵e̵x̵t̵,̵s̵o̵u̵r̵c̵e̵_̵n̵e̵x̵t̵,̵s̵a̵m̵e̵S̵l̵o̵t̵,̵h̵l̵e̵,̵h̵c̵e̵l̵l̵,̵h̵e̵n̵d̵,̵m̵a̵s̵s̵e̵r̵t̵,̵i̵f̵_̵p̵o̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵i̵f̵_̵n̵e̵g̵ ̵e̵q̵u̵a̵l̵,̵r̵e̵a̵d̵B̵y̵t̵e̵,̵h̵a̵d̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵w̵r̵a̵p̵,̵p̵t̵r̵'̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲n̲e̲x̲t̲,̲ ̲s̲o̲u̲r̲c̲e̲_̲n̲e̲x̲t̲,̲ ̲s̲a̲m̲e̲S̲l̲o̲t̲,̲ ̲h̲l̲e̲,̲ ̲h̲c̲e̲l̲l̲,̲ ̲h̲e̲n̲d̲,̲ ̲m̲a̲s̲s̲e̲r̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲e̲q̲u̲a̲l̲,̲ ̲h̲a̲d̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲w̲r̲a̲p̲,̲ ̲p̲t̲r̲'̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:97:46: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵x̵t̵,̵s̵o̵u̵r̵c̵e̵_̵n̵e̵x̵t̵,̵s̵a̵m̵e̵S̵l̵o̵t̵,̵h̵l̵e̵,̵h̵c̵e̵l̵l̵,̵h̵e̵n̵d̵,̵m̵a̵s̵s̵e̵r̵t̵,̵i̵f̵_̵p̵o̵s̵,̵[̲n̲e̲x̲t̲,̲ ̲s̲o̲u̲r̲c̲e̲_̲n̲e̲x̲t̲,̲ ̲s̲a̲m̲e̲S̲l̲o̲t̲,̲ ̲h̲l̲e̲,̲ ̲h̲c̲e̲l̲l̲,̲ ̲h̲e̲n̲d̲,̲ ̲m̲a̲s̲s̲e̲r̲t̲,̲ ̲i̲f̲_̲p̲o̲s̲,̲ if_neg e̵q̵u̵a̵l̵,̵r̵e̵a̵d̵B̵y̵t̵e̵,̵h̵a̵d̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵w̵r̵a̵p̵,̵p̵t̵r̵'̵]̵e̲q̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲e̲a̲d̲B̲y̲t̲e̲,̲ ̲h̲a̲d̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲w̲r̲a̲p̲,̲ ̲p̲t̲r̲'̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:119:36: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_ofNat`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:119:2: error: unsolved goals
+case refine_3
+sdk : OwnedSdk
+slot : Usize
+cell : OwnedDataCell
+which : (↑sdk.data_cells)[↑slot]? = some cell
+hcell : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+iter : SourceIterator :=
+  { ptr := { slot := slot, offset := 0#usize }, end_or_len := { slot := slot, offset := cell.bytes.len } }
+⊢ List.drop ↑0#usize ↑cell.bytes = ↑cell.bytes
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:119:54: warning: This simp argument is unused:
+  List.drop_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵m̵a̵i̵n̵i̵n̵g̵,̵i̵t̵e̵r̵,̵w̵h̵i̵c̵h̵,̵U̵S̵c̵a̵l̵a̵r̵.̵v̵a̵l̵_̵o̵f̵N̵a̵t̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵]̵[̲r̲e̲m̲a̲i̲n̲i̲n̲g̲,̲ ̲i̲t̲e̲r̲,̲ ̲w̲h̲i̲c̲h̲,̲ ̲U̲S̲c̲a̲l̲a̲r̲.̲v̲a̲l̲_̲o̲f̲N̲a̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSourceIteratorTotalV1.lean:138:13: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS2SdkIterator.next_reads' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS2SdkIterator.begin_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS2SdkIterator.source_guard_eq_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

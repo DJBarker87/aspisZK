@@ -1,0 +1,25 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "protocol_freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "extraction_parent_revision": "9b6ba762d",
+  "functions": {
+    "source_begin": {
+      "source": "pub fn source_begin(sdk:&OwnedSdk,slot:usize)->SourceIterator {\n SourceIterator {ptr:DataPointer{slot,offset:0},end_or_len:DataPointer{slot,offset:sdk.data_cells[slot].bytes.len()}}\n}",
+      "sha256": "e8b9435020cb1fb53ad7fea915928a4fc4154e93e1a49c80860ea943857b61b8",
+      "all_native_and_extracted_bodies_identical": true
+    },
+    "source_next": {
+      "source": "pub fn source_next(sdk:&OwnedSdk,iter:&mut SourceIterator)->Option<u8> {\n assert!(iter.ptr.slot==iter.end_or_len.slot);\n assert!(iter.ptr.offset<=iter.end_or_len.offset);\n assert!(iter.end_or_len.offset<=sdk.data_cells[iter.ptr.slot].bytes.len());\n if iter.ptr.offset==iter.end_or_len.offset {return None;}\n let byte=sdk.data_cells[iter.ptr.slot].bytes[iter.ptr.offset];\n iter.ptr.offset+=1;\n Some(byte)\n}",
+      "sha256": "cba65f236596e2199803a3207f7afdc31f3b4e328d6d33fdf9d388057e8817b1",
+      "all_native_and_extracted_bodies_identical": true
+    }
+  },
+  "llbc": [
+    {
+      "tag": "sdk-iterator-reference-v2",
+      "sha256": "8e86aad95b01400756bff6b34566aaaa8f4fee87e30f673e4e3f2de379fca18b",
+      "has_errors": false
+    }
+  ],
+  "qualification": "Native join v3 checks constructor plus one next step, every1768-byte value/cursor0..1768, full OwnedSdk rows and live AccountInfo RefMut. Exact bodies equal extraction v2; no unchanged extraction replay. Pointer-slot heap construction and complete shipped parent remain outside this leaf certificate."
+}

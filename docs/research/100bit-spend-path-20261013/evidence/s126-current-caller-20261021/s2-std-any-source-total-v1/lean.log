@@ -1,0 +1,165 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2StdAnySourceTotalV1.lean:33:2: error: Tactic `rfl` failed: The left-hand side
+  match
+    match (ptr, endp, state) with
+    | (nn1, p1, f1) => anyBody next callback nn1 p1 f1 with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop
+        (fun x =>
+          match x with
+          | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+        x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  do
+    let step ← anyBody next callback ptr endp state
+    match step with
+      | done out => ok out
+      | cont (ptr', endp', state') =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          (ptr', endp', state')
+
+T P Q F : Type
+next : SourceIter P Q → Result (Option T × SourceIter P Q)
+callback : core.ops.function.FnMut F T Bool
+ptr : P
+endp : Q
+state : F
+⊢ (match
+      match (ptr, endp, state) with
+      | (nn1, p1, f1) => anyBody next callback nn1 p1 f1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let step ← anyBody next callback ptr endp state
+    match step with
+      | done out => ok out
+      | cont (ptr', endp', state') =>
+        loop
+          (fun x =>
+            match x with
+            | (nn1, p1, f1) => anyBody next callback nn1 p1 f1)
+          (ptr', endp', state')
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2StdAnySourceTotalV1.lean:44:8: error: unsolved goals
+case nil
+P Q : Type
+next : SourceIter P Q → Result (Option U8 × SourceIter P Q)
+remaining : P → Q → List U8
+reads : NextReads next remaining
+ptr : P
+endp : Q
+view : remaining ptr endp = []
+ptr' : P
+endp' : Q
+hnext :
+  next { ptr := ptr, end_or_len := endp, _marker := () } =
+    ok ([].head?, { ptr := ptr', end_or_len := endp', _marker := () })
+right✝ : remaining ptr' endp' = (remaining ptr endp).tail
+⊢ (do
+      let step ←
+        let (o, self) := (none, { ptr := ptr', end_or_len := endp', _marker := () })
+          match o with
+          | none => ok (done (self.ptr, self.end_or_len, none))
+          | some x => do
+            let (b, f1) ← nonzeroPredicate.call_mut () x
+            if b = true then ok (done (self.ptr, self.end_or_len, some true))
+              else ok (cont (self.ptr, self.end_or_len, f1))
+      match step with
+        | done out => ok out
+        | cont (ptr', endp', state') => anyLoop next nonzeroPredicate ptr' endp' state') =
+    ok (ptr', endp', if false = true then some true else none)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2StdAnySourceTotalV1.lean:58:6: error: Type mismatch: After simplification, term
+  hrun
+ has type
+  @Eq (Result (P × Q × Option Bool))
+    (anyLoop next
+      { FnOnceInst := { call_once := fun x byte => ok (byte != 0#u8) },
+        call_mut := fun state byte => ok (byte != 0#u8, state) }
+      ptr' endp' ())
+    (ok (ptrOut, endOut, if stdAny rest = true then some true else none))
+but is expected to have type
+  @Eq (Result (P × Q × Option Bool))
+    (do
+      let step ←
+        let (o, self) := (some 0#u8, { ptr := ptr', end_or_len := endp', _marker := () })
+          match o with
+          | none => ok (done (self.ptr, self.end_or_len, none))
+          | some x =>
+            let (b, f1) := (x != 0#u8, ())
+            if b = true then ok (done (self.ptr, self.end_or_len, some true))
+            else ok (cont (self.ptr, self.end_or_len, f1))
+      match step with
+        | done out => ok out
+        | cont (ptr', endp', state') =>
+          anyLoop next
+            { FnOnceInst := { call_once := fun x byte => ok (byte != 0#u8) },
+              call_mut := fun state byte => ok (byte != 0#u8, state) }
+            ptr' endp' state')
+    (ok (ptrOut, endOut, if (if True then stdAny rest else true) = true then some true else none))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2StdAnySourceTotalV1.lean:60:4: error: unsolved goals
+case neg
+P Q : Type
+next : SourceIter P Q → Result (Option U8 × SourceIter P Q)
+remaining : P → Q → List U8
+reads : NextReads next remaining
+byte : U8
+rest : List U8
+ih :
+  ∀ (ptr : P) (endp : Q),
+    remaining ptr endp = rest →
+      ∃ ptr' endp',
+        anyLoop next nonzeroPredicate ptr endp () = ok (ptr', endp', if stdAny rest = true then some true else none)
+ptr : P
+endp : Q
+view : remaining ptr endp = byte :: rest
+ptr' : P
+endp' : Q
+hnext :
+  next { ptr := ptr, end_or_len := endp, _marker := () } =
+    ok ((byte :: rest).head?, { ptr := ptr', end_or_len := endp', _marker := () })
+hrest : remaining ptr' endp' = rest
+zero : ¬byte = 0#u8
+⊢ (do
+      let step ←
+        let (o, self) := (some byte, { ptr := ptr', end_or_len := endp', _marker := () })
+          match o with
+          | none => ok (done (self.ptr, self.end_or_len, none))
+          | some x =>
+            let (b, f1) := (x != 0#u8, ())
+            if b = true then ok (done (self.ptr, self.end_or_len, some true))
+            else ok (cont (self.ptr, self.end_or_len, f1))
+      match step with
+        | done out => ok out
+        | cont (ptr', endp', state') =>
+          anyLoop next
+            { FnOnceInst := { call_once := fun x byte => ok (byte != 0#u8) },
+              call_mut := fun state byte => ok (byte != 0#u8, state) }
+            ptr' endp' state') =
+    ok (ptr', endp', some true)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2StdAnySourceTotalV1.lean:63:8: warning: This simp argument is unused:
+  bne_iff_ne.mpr zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵n̵y̵B̵o̵d̵y̵,̵h̵n̵e̵x̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵L̵i̵s̵t̵.̵h̵e̵a̵d̵?̵_̵c̵o̵n̵s̵,̵n̵o̵n̵z̵e̵r̵o̵P̵r̵e̵d̵i̵c̵a̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵n̵e̵_̵i̵f̵f̵_̵n̵e̵.̵m̵p̵r̵ ̵z̵e̵r̵o̵,̵i̵f̵_̵t̵r̵u̵e̵,̵s̵t̵d̵A̵n̵y̵,̵i̵f̵_̵n̵e̵g̵[̲a̲n̲y̲B̲o̲d̲y̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲L̲i̲s̲t̲.̲h̲e̲a̲d̲?̲_̲c̲o̲n̲s̲,̲ ̲n̲o̲n̲z̲e̲r̲o̲P̲r̲e̲d̲i̲c̲a̲t̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲s̲t̲d̲A̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲n̲e̲g̲ zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS2StdAnySource.anyLoop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS2StdAnySource.sourceAny_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS2StdAnySource.guard_eq_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
