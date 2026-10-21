@@ -62,3 +62,15 @@ listed in the S10 evidence (`evidence/s10-inventory2-20261021/`, see
 `design/S10-INVENTORY-20261021.md`), with 57 ownership corrections. Please
 review the lists for your cones and confirm or correct them. Your proved cone
 joins should cover exactly those declarations.
+
+## Target update (13:05)
+
+The model now covers both transactions. The headline is
+`OraclePortHeadlineFrozen2PerAttempt.final_soundness`, and its
+`AcceptedRunJoin` is stated against `dV_frozen2`: stage 1, checkpoint save,
+then Pool stage 2, with the six checkpoint digest reads in place. The
+per-cone targets for S1–S6 and S9 are the matching stages of `dV_frozen2`.
+For the non-checkpoint stages these are the same as the `dV_frozen` stages,
+because only the checkpoint stage was inserted (`design/DV-TWOTX-20261021.md`).
+The contract you are proving toward is `design/SECURITY-CONTRACT-20261021.md`:
+100-bit per attempt, no grinding credit.
