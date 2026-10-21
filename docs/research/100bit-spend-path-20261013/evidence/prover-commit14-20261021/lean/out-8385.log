@@ -1,0 +1,79 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialWindow.lean:24:80: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [prover_commit_reference.next,
+  ̵  ̵ ̵ ̵AspisR1ProverStep8.prover_commit_reference.next,
+  ̲  ̲ ̲ ̲toOldState, bind_assoc_eq,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialWindow.lean:28:71: warning: This simp argument is unused:
+  toOldState
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry_apply_pair, bind_assoc_eq, bind_tc_ok,̵ ̵t̵o̵O̵l̵d̵S̵t̵a̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialWindow.lean:78:81: error: Application type mismatch: The argument
+  word
+has type
+  U32
+but is expected to have type
+  ProverCommitStepLoop.State
+in the application
+  ProverCommitOwnedDecoder.next_progress answers domain after word
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialWindow.lean:88:4: error: Tactic `split_ifs` failed: no if-then-else conditions to split
+
+case succ
+blocks : ℕ
+answers : Fin blocks → R0Z.FsStatement.OracleAnswer
+right : Hash
+domain : Slice U8
+capacity : blocks < 2 ^ 64
+start finish : ℕ
+endbound : finish ≤ blocks * 8
+same :
+  ∀ (seed : Bytes32) (counter : U64),
+    start ≤ 8 * ↑counter →
+      8 * ↑counter < finish →
+        blockHash answers (ProverCommitMaterialSupport.blockSlices domain seed counter) =
+          right (ProverCommitMaterialSupport.blockSlices domain seed counter)
+r : ℕ
+ih :
+  ∀ (state : State),
+    valid blocks (toOldState state) →
+      start ≤ position (toOldState state) →
+        position (toOldState state) + r ≤ finish →
+          ProverCommitMaterialSupport.finite (blockHash answers) domain r state =
+            ProverCommitMaterialSupport.finite right domain r state
+state : State
+before : valid blocks (toOldState state)
+lower : start ≤ position (toOldState state)
+upper : position (toOldState state) + (r + 1) ≤ finish
+word : U32
+after : AspisR1ProverStep8.prover_commit_reference.State
+oldnext :
+  AspisR1ProverStep8.prover_commit_reference.next (blockHash answers) domain (toOldState state) = ok (word, after)
+fresh : prover_commit_reference.State
+next : prover_commit_reference.next (blockHash answers) domain state = ok (word, fresh)
+mapped : toOldState fresh = after
+progress :
+  AspisR1ProverStep8.prover_commit_reference.next (blockHash answers) domain (toOldState fresh) = ok (sorry, sorry) →
+    valid blocks sorry ∧ position sorry = position (toOldState fresh) + 1
+eq : prover_commit_reference.next (blockHash answers) domain state = prover_commit_reference.next right domain state
+⊢ (do
+      let candidate ← lift (word &&& 2147483647#u32)
+      if candidate < aspis_core.field.P then ok (fresh, some (core.result.Result.Ok candidate, fresh))
+        else ProverCommitMaterialSupport.finite (blockHash answers) domain r fresh) =
+    do
+    let candidate ← lift (word &&& 2147483647#u32)
+    if candidate < aspis_core.field.P then ok (fresh, some (core.result.Result.Ok candidate, fresh))
+      else ProverCommitMaterialSupport.finite right domain r fresh
+'R1Z.ProverCommitMaterialWindow.state_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaterialWindow.old_state_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaterialWindow.next_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaterialWindow.next_success_from_old' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaterialWindow.next_local_support' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaterialWindow.finite_window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -88,3 +88,28 @@ salts/tree traversal, retries, aborts and callback-history identification
 still need actual source joins. Existing local callback checks cannot supply
 these by name alone. No peer-owned source-identification, runtime-join or
 final-release module is edited.
+
+## Stage 3: global-window bridge into the new extraction
+
+`ProverCommitMaterialWindow` explicitly transports the new extraction's
+state to the existing global cursor/cache carrier. Roundtrips and
+`next_bridge` preserve success, fail and divergence. `finite_window` proves
+that a local scalar-prefix backend may replace the retained global backend
+only when their answers agree on refill positions in its symbolic window.
+`scalar_window` specializes to all sixteen rejection attempts, including
+exhaustion, at the current mapped cursor. No new oracle reset, independence
+claim, or probability assumption is introduced. This supplies the window
+bridge for the new material extraction; it is not the full real execution join.
+
+J8385 is an excluded argument/elaboration draft. J8386 checks the carrier
+and finite-window bridge. J8387 adds `scalar_window`, exit 0, wall 2.19 s,
+peak RSS 4051652 KiB, zero swaps; all seven printed audits use only standard
+axioms. `ProverCommitMaterialIteration` states exact one-iteration equations
+for both collectors, with arbitrary vector prefixes and named scalar callees;
+J8388 checks both standard-axiom audits. No concrete large term is reduced.
+
+Only this worker's newly introduced Env J sources/objects are replaced in
+these stages, with snapshots in its branch-owned host directory. The
+predecessor cache is reused. Every host job uses 6G/8G/no-swap/64-task limits;
+Rust uses four jobs and the required linker flag, with expected work in
+translation/compilation/bounded verification rather than dense arithmetic.
