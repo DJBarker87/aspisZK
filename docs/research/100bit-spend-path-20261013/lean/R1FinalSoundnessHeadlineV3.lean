@@ -33,7 +33,7 @@ theorem recorded_log_eq
   change (eval H (experiment
     (compiled D d (BinCompiledRunWordStability.wordsFromRun D) P) (verifier D d))).1 = _
   rw [compiled_experiment_eval]
-  simp only [experiment_eval]
+  simp only [RawCutProverCompiler.experiment_eval]
 
 /-- The prover executes once; each verifier pass costs at most 561 queries.
 No acceptance or boundary evidence is needed. -/
