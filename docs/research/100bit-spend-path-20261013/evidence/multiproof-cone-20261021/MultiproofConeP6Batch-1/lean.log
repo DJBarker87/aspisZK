@@ -1,0 +1,110 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Batch.lean:19:81: error(lean.unknownIdentifier): Unknown identifier `encodeState`
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Batch.lean:47:7: error(lean.unknownIdentifier): Unknown identifier `encodeState`
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Batch.lean:51:9: error(lean.unknownIdentifier): Unknown identifier `encodeState`
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Batch.lean:52:11: error: unsolved goals
+case cons.none
+H : Bytes → State
+source : Leaf
+gate : LeafGate H source
+p : Parsed
+q : Fin 22 → Fin 262144
+kind pos : ℕ
+rest : List ℕ
+ih :
+  ∀ (s : reference.Scratch),
+    ↑s.n + rest.length ≤ 16 →
+      eval H (leaves source p q kind rest s) = eval H (MultiproofConeLeafFold.leaves p q kind rest s)
+s : reference.Scratch
+room : ↑s.n + (pos :: rest).length ≤ 16
+bound : ↑s.n < 16
+step : reference.leaf_step s (key q kind pos) sorry = ok (MultiproofConeLeafContent.next s (key q kind pos) sorry bound)
+result : MultiproofConeLeafContent.next s (key q kind pos) sorry bound = none
+⊢ ([(leaf p kind pos, H (leaf p kind pos))], ok none) =
+    ((leaf p kind pos, H (leaf p kind pos)) ::
+        (eval H
+            (match
+              reference.leaf_step s (key q kind pos)
+                (AspisV8R19.SqueezeOracleBridge.encodeState (H (leaf p kind pos))) with
+            | fail e => Program.done (fail e)
+            | div => Program.done div
+            | ok none => Program.done (ok none)
+            | ok (some t) => MultiproofConeLeafFold.leaves p q kind rest t)).1,
+      (eval H
+          (match
+            reference.leaf_step s (key q kind pos)
+              (AspisV8R19.SqueezeOracleBridge.encodeState (H (leaf p kind pos))) with
+          | fail e => Program.done (fail e)
+          | div => Program.done div
+          | ok none => Program.done (ok none)
+          | ok (some t) => MultiproofConeLeafFold.leaves p q kind rest t)).2)
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Batch.lean:54:48: error(lean.unknownIdentifier): Unknown identifier `encodeState`
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Batch.lean:53:13: error: unsolved goals
+case cons.some
+H : Bytes → State
+source : Leaf
+gate : LeafGate H source
+p : Parsed
+q : Fin 22 → Fin 262144
+kind pos : ℕ
+rest : List ℕ
+ih :
+  ∀ (s : reference.Scratch),
+    ↑s.n + rest.length ≤ 16 →
+      eval H (leaves source p q kind rest s) = eval H (MultiproofConeLeafFold.leaves p q kind rest s)
+s : reference.Scratch
+room : ↑s.n + (pos :: rest).length ≤ 16
+bound : ↑s.n < 16
+step : reference.leaf_step s (key q kind pos) sorry = ok (MultiproofConeLeafContent.next s (key q kind pos) sorry bound)
+t : reference.Scratch
+result : MultiproofConeLeafContent.next s (key q kind pos) sorry bound = some t
+tb : ↑t.n ≤ ↑s.n + 1
+⊢ ((leaf p kind pos, H (leaf p kind pos)) :: (eval H (MultiproofConeLeafFold.leaves p q kind rest t)).1,
+      (eval H (MultiproofConeLeafFold.leaves p q kind rest t)).2) =
+    ((leaf p kind pos, H (leaf p kind pos)) ::
+        (eval H
+            (match
+              reference.leaf_step s (key q kind pos)
+                (AspisV8R19.SqueezeOracleBridge.encodeState (H (leaf p kind pos))) with
+            | fail e => Program.done (fail e)
+            | div => Program.done div
+            | ok none => Program.done (ok none)
+            | ok (some t) => MultiproofConeLeafFold.leaves p q kind rest t)).1,
+      (eval H
+          (match
+            reference.leaf_step s (key q kind pos)
+              (AspisV8R19.SqueezeOracleBridge.encodeState (H (leaf p kind pos))) with
+          | fail e => Program.done (fail e)
+          | div => Program.done div
+          | ok none => Program.done (ok none)
+          | ok (some t) => MultiproofConeLeafFold.leaves p q kind rest t)).2)
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Batch.lean:52:25: warning: This simp argument is unused:
+  result
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵s̵u̵l̵t̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Batch.lean:55:17: warning: This simp argument is unused:
+  result
+
+Hint: Omit it from the simp argument list.
+  simp only [r̵e̵s̵u̵l̵t̵,̵List.singleton_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Batch.lean:48:58: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Batch.lean:68:9: error(lean.unknownIdentifier): Unknown identifier `encodeState`
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Batch.lean:85:12: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ?m.57
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑?m.57
+'AspisR1.MultiproofConeP6Batch.leaves_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Batch.tailState_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Batch.batch_tree_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
