@@ -211,3 +211,93 @@ replacement in the old headline. No old signature or premise was changed.
 
 **Headline premise deletions: zero.** Neither parser nonvacuity nor R16
 admission is labelled CheckedAcceptance at a completed frozen verifier.
+
+## Stage 5: exact selected recovery and arithmetic transport
+
+`OraclePortStoredLeafRecoveryC4` extracts authenticated paths from the actual
+shared-tree execution and its duplicate digest checks, using one explicitly
+containing collision-free trace. The containing-trace/root-frame/budget
+premises are stated, not silently assumed from an old fixed experiment.
+
+A necessary strengthening was found: an existential path of length 18 does
+not identify the public queried leaf. `OraclePortRouteIndexC4` proves
+periodicity and high-bit decomposition of binary routes by generic height
+induction, then `opened_exact` identifies the sparse build route with
+`(BinMultiproof.slots h (i-base)).reverse`. `OraclePortIndexedRecoveryC4`
+uses that route to recover at the **exact public query index**, including
+source positions handled by duplicate checks. It does not issue independent
+path hash calls; the authentication path consists of inputs already read by
+the shared execution. The folded commitment is correctly padded to the
+same depth 18 as the frozen Rust multiproof implementation.
+
+`OraclePortPackedChoiceC4.packed_agrees` converts per-position authenticated
+maps to the candidate's global first-occurrence map at selected indices.
+`repeated_payloads` includes folded indices repeated across the 10/12 split.
+`OraclePortStoredWidthsC4` derives opening lengths, packed/salt widths and
+canonical regions directly from successful strict parsing.
+
+`OraclePortSelectedArithmeticC4` proves the precise local arithmetic laws:
+batching and first-fold equality use only the queried four-entry initial
+fibres; first matching also uses the queried folded value; the second-fold
+value and R14 closed sum use only the queried folded four-entry fibres.
+Pairing and the R3 terminal expression ignore replacement of W/V. No
+whole-word equality is claimed at unqueried coordinates. The complete R3
+EquationEndpoint reader transport remains to be proved.
+
+`OraclePortCandidateChecksC4.accepted_checks` derives HCHECKS on the
+candidate's byte-derived rows from its acceptance, with no typed-acceptance
+hypothesis. Public parsing, query decoding, row-31/32 fields and all four
+typed check components are obtained from that accepted candidate. This
+statement deliberately does **not** call those rows the compiler rows.
+
+`OraclePortStoredProjectionC4` gives exact original/recorded projection
+identities at each fixed oracle, allowing existing pointwise frame/replay
+lemmas to be reused. The old fixed decision is instantiated in a theorem
+at that H; no oracle-dependent experiment is installed under a probability
+law. `frame_eq` identifies the actual transcript frame from the larger
+carrier's run.
+
+| Stage (c) item | Latest result | Still required |
+|---|---|---|
+| R16 | Constructed at the new admitted/canonical experiment | Completed dV endpoint instantiation |
+| R13 / selected bytes | Exact-index shared-path recovery, width/canonicality and first-occurrence selection proved | Instantiate containing trace, three commitment frames/roots and packed maps at the new compiled run |
+| R15 | Local queried-fibre arithmetic transport and saved-ten/resumed-twelve matching proved | Compose those values with the actual compiled reader |
+| R14 | Local second-fold/closed-sum transport and pairing independence proved | Same reader composition and physical prepared-field encoding |
+| R3 | Candidate checks equations; terminal ignores W/V replacement | Full parsed-view/equation transport between byte-derived and compiler rows |
+| HCHECKS | Acceptance gives Checks on byte-derived candidate rows | Checks / CheckedAcceptance on the compiler's cut-recovered rows |
+| Pool | Accepted logical resume equals new recorded experiment | Physical proof-account/checkpoint encoding and runtime caller refinement |
+| Headline | Existing R19 source and signature remain byte-identical | No premise deletion claimed |
+
+The demonstrated source-choice countermodel still rules out inferring typed
+acceptance from visible R16 fields alone. The reader-bound source repairs
+that choice issue; it does not prove the remaining selected-reader transport.
+Thus the report does not relabel ReaderBinding as merely Rust-equals-dV, and
+it does not emit a soundness theorem at an unfinished or all-rejecting dV.
+The candidate's nonvacuity evidence is strict parser inhabitation, not a
+claim that an accepted spend fixture or full verifier acceptance was proved.
+
+## Evidence freeze
+
+`evidence/oracle-port-draft-20261021/OraclePortContinuation4Manifest.json`
+records **39 attempts**, **19 successful final modules**, and **93** final
+standard-axiom reports. All attempts used the pinned local Lean binary,
+`-j1 -M4400 -DElab.async=false`, the private object directory, shared mkdir
+lock and `/usr/bin/time -l`. Peak attempt RSS was **4258463744 bytes**;
+all attempts reported **zero swaps**. Twenty unsuccessful attempts are
+retained with their source snapshots, exact errors and resource fields.
+They were local syntax/elaboration/rewrite failures, including the recorded
+zero-list simp recursion failure; no memory cap was raised and no unchanged
+source/dependency attempt was replayed.
+
+The static audit verifies final source and direct-import hashes, every
+attempt receipt/snapshot, compiler flags, all theorem axiom reports, the
+new-module-only scope and the unchanged old endpoint. The empty
+`OraclePortC4-existing-headline-signature.diff` records **zero premise
+changes/deletions**. No complete frozen manifest was replayed: the completed
+frozen dV bridge remains unproved, and these are focused draft receipts,
+not a formal release. No existing Lean module, concurrent worker file,
+shipped source, key or deployed artifact was changed. No push was performed.
+
+```sh
+python3 -B docs/research/100bit-spend-path-20261013/evidence/oracle-port-draft-20261021/OraclePortContinuation4Audit.py
+```
