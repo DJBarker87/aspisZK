@@ -97,7 +97,7 @@ theorem privacy_headline_v2
       convert ProverCommitCallerInstance.fibres _ R_commit_caller τ using 2
       ext e
       simp only [Finset.mem_filter, Finset.mem_univ, true_and]
-      rfl)
+      )
     (ProverCommitCallerInstance.exhaustion _ R_commit_caller)
     observer_program R_wire_builder_checker_D75_retry G_sim_R_wire
   constructor
