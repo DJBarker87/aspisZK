@@ -767,6 +767,16 @@ impl Profile21SourceExpander {
         }
     }
 
+    #[cfg_attr(kani, kani::requires(self.word <= 8))]
+    #[cfg_attr(kani, kani::requires(self.hash == crate::HOST_HASH))]
+    #[cfg_attr(kani, kani::requires(crate::prover_commit_oracle::expander_domain(
+        b"aspis:state-only:profile21:source-expand:v1", *self.seed, self.counter, self.word)))]
+    #[cfg_attr(kani, kani::modifies(&mut self.counter, &mut self.block, &mut self.word))]
+    #[cfg_attr(kani, kani::ensures(|result| crate::prover_commit_reference::next_matches(
+        b"aspis:state-only:profile21:source-expand:v1",
+        crate::prover_commit_reference::State { seed: old(*self.seed), counter: old(self.counter), block: old(self.block), word: old(self.word) },
+        *result,
+        crate::prover_commit_reference::State { seed: *self.seed, counter: self.counter, block: self.block, word: self.word })))]
     fn next_word(&mut self) -> u32 {
         if self.word == 8 {
             let hash = self.hash;
@@ -1397,6 +1407,70 @@ mod prover_commit_rom {
         assert_eq!(actual.counter, after.counter);
         assert_eq!(actual.block, after.block);
         assert_eq!(actual.word, after.word);
+    }
+
+}
+
+#[cfg(kani)]
+mod prover_commit_caller7 {
+    use super::*;
+    use crate::prover_commit_oracle as rom;
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(Profile21SourceExpander::next_word)]
+    fn source_limb_caller() {
+        let seed: [u8;32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8;32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        rom::reset_expander(b"aspis:state-only:profile21:source-expand:v1", seed, counter);
+        let state = crate::prover_commit_reference::State { seed, counter, block, word };
+        let (expected, after) = crate::prover_commit_reference::limb_caller(
+            crate::HOST_HASH, b"aspis:state-only:profile21:source-expand:v1", state);
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH, seed: Zeroizing::new(seed), counter, block, word };
+        assert_eq!(actual.m31(), expected);
+        assert_eq!(*actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+    }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(Profile21SourceExpander::next_word)]
+    fn source_qm31_caller() {
+        let seed: [u8;32] = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8;32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        rom::reset_expander(b"aspis:state-only:profile21:source-expand:v1", seed, counter);
+        let state = crate::prover_commit_reference::State { seed, counter, block, word };
+        let (expected, after) = crate::prover_commit_reference::qm31_caller(
+            crate::HOST_HASH, b"aspis:state-only:profile21:source-expand:v1", state);
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH, seed: Zeroizing::new(seed), counter, block, word };
+        assert_eq!(actual.qm31(), expected);
+        assert_eq!(*actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+    }
+    #[kani::proof_for_contract(Profile21SourceExpander::next_word)]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    fn source_next_contract() {
+        let seed: [u8;32] = kani::any();
+        let base_counter: u64 = kani::any();
+        let counter: u64 = kani::any();
+        let block: [u8;32] = kani::any();
+        let word: usize = kani::any();
+        kani::assume(word <= 8);
+        kani::assume(word < 8 || counter.wrapping_sub(base_counter) < 9);
+        rom::reset_expander(b"aspis:state-only:profile21:source-expand:v1", seed, base_counter);
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH, seed: Zeroizing::new(seed), counter, block, word };
+        let _ = actual.next_word();
     }
 
 }

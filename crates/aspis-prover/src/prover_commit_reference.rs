@@ -57,3 +57,42 @@ pub(crate) fn try_step(hash: HashFn, domain: &[u8], state: State,
         }
     }
 }
+
+/// Same early-return control flow as the shipped scalar callers. This avoids
+/// comparing a short-circuit loop with the carried-result normal form.
+#[cfg(any(kani, aeneas_ref))]
+pub(crate) fn limb_caller(hash: HashFn, domain: &[u8], mut state: State)
+    -> (Result<M31, StateOnlyMaskBuildError>, State)
+{
+    for _ in 0..16 {
+        let (word, after) = next(hash, domain, state);
+        state = after;
+        let candidate = word & 0x7fff_ffff;
+        if candidate < P { return (Ok(M31(candidate)), state); }
+    }
+    (Err(StateOnlyMaskBuildError::MaskSampleExhausted), state)
+}
+
+#[cfg(kani)]
+pub(crate) fn next_matches(domain: &[u8], before: State, value: u32, after: State) -> bool {
+    let (expected, state) = next(crate::HOST_HASH, domain, before);
+    value == expected && after.seed == state.seed && after.counter == state.counter &&
+        after.block == state.block && after.word == state.word
+}
+
+/// Four scalar calls in Rust's left-to-right tower coordinate order.
+#[cfg(any(kani, aeneas_ref))]
+pub(crate) fn qm31_caller(hash: HashFn, domain: &[u8], state: State)
+    -> (Result<aspis_core::field::QM31, StateOnlyMaskBuildError>, State)
+{
+    let (a, state) = limb_caller(hash, domain, state);
+    let a = match a { Ok(v) => v, Err(e) => return (Err(e), state) };
+    let (b, state) = limb_caller(hash, domain, state);
+    let b = match b { Ok(v) => v, Err(e) => return (Err(e), state) };
+    let (c, state) = limb_caller(hash, domain, state);
+    let c = match c { Ok(v) => v, Err(e) => return (Err(e), state) };
+    let (d, state) = limb_caller(hash, domain, state);
+    let d = match d { Ok(v) => v, Err(e) => return (Err(e), state) };
+    (Ok(aspis_core::field::QM31 { c0: aspis_core::field::CM31::new(a,b),
+        c1: aspis_core::field::CM31::new(c,d) }), state)
+}

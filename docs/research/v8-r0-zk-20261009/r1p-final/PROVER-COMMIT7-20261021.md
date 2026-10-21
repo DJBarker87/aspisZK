@@ -59,3 +59,41 @@ explicitly supports the required coordinate bijection. Other drafts
 8246–8248 and 8251–8252 are excluded. All literal attempted sources are
 retained. Only this branch's new modules/objects are installed or replaced;
 SourceIdentification, RustRuntimeJoin and PrivacyR1FinalRelease are untouched.
+
+## P6 caller route: verified scalar callees
+
+The shipped `SeedExpander::next_word` and `Profile21SourceExpander::next_word`
+now have proof-only contracts. Each checks the whole owned-state reference,
+including cached/refill cases, wrapping counter, block, word cursor and
+unchanged seed. Both `proof_for_contract` harnesses pass. The
+`mask_limb_caller` harness then directly executes the **actual shipped
+sixteen-try m31 method**, using `stub_verified(next_word)`, and compares its
+result and every state field to the owned early-return `limb_caller`.
+It passes, including the exhaustion return. This advances beyond the old
+copied single-try/Lean-composition boundary. It does not certify the outer
+material-building loops.
+
+The shared read-only memoised oracle assigns unconstrained digests to nine
+distinct consecutive counter messages, enough for four scalar calls from
+any valid initial slot. Both sides use the same table without resetting it.
+The finite-oracle harness checks every slot, arbitrary seed/base counter,
+wrapping, and repeated queries. Digest collisions remain permitted. Every
+hash call asserts its complete domain/seed/counter frame and range. This is
+a classical-ROM function certificate, not a SHA-256 algorithm proof.
+
+Accepted normal-exit receipts: mask/source next-word contracts
+**19.935/19.702 s**, finite oracle **139.916 s**, mask m31 caller
+**382.619 s**. Peak RSS respectively **2,072,924 / 2,065,152 / 6,159,052 /
+2,175,164 KiB**; zero swaps. All checks use 6G/8G/zero-swap/64-task scopes,
+four compiler jobs, and the four-thread linker flag. Time is in proof
+compilation and CBMC, not native arithmetic. Kani has no `#print axioms`;
+its external soundness boundary is kept distinct from the Lean theorems.
+
+Two excluded 600-second trials are retained verbatim: a general-table
+caller comparison and the first next-word contract formulation. The
+replacement removes repeated generic input flattening and disables only
+optional assertion-reachability analysis; assertion validity, safety and
+explicit unwinding checks remain enabled. It also uses CBMC's embedded
+CaDiCaL. No cap increase or unchanged aggregate extraction occurs. Timeout
+GNU-time parent RSS is incomplete; the recorded cgroup peak is authoritative.
+The source/D scalar and four-coordinate comparisons continue separately.

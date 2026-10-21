@@ -123,3 +123,60 @@ fn callback_stub_is_active() {
         assert_eq!(ORACLE.used, 1);
     }
 }
+
+// Exact finite ROM for one QM31 call from an arbitrary valid word slot.
+// Its four scalar calls can touch at most nine consecutive blocks. Preassigning independent
+// arbitrary answers to these distinct messages is the memoised oracle law;
+// no digest distinctness or SHA property is assumed.
+struct ExpanderOracle {
+    domain: &'static [u8], seed: [u8; 32], counter: u64,
+    answers: [[u8; 32]; 9],
+}
+static mut EXPANDER: ExpanderOracle = ExpanderOracle {
+    domain: &[], seed: [0;32], counter: 0, answers: [[0;32];9],
+};
+pub(crate) fn reset_expander(domain: &'static [u8], seed: [u8;32], counter: u64) {
+    unsafe { EXPANDER = ExpanderOracle { domain, seed, counter, answers: kani::any() }; }
+}
+pub(crate) fn expander_query(parts: &[&[u8]]) -> [u8;32] {
+    // Both shipped expanders and the owned reference use exactly these
+    // three slices. Assert the complete frame at every reachable call.
+    assert_eq!(parts.len(), 3);
+    unsafe {
+        let table = &*core::ptr::addr_of!(EXPANDER);
+        assert_eq!(parts[0].len(), table.domain.len());
+        assert_eq!(parts[1].len(), 32);
+        assert_eq!(parts[2].len(), 8);
+        for i in 0..table.domain.len() { assert_eq!(parts[0][i], table.domain[i]); }
+        for i in 0..32 { assert_eq!(parts[1][i], table.seed[i]); }
+        let counter = u64::from_le_bytes(parts[2].try_into().unwrap());
+        let index = counter.wrapping_sub(table.counter);
+        assert!(index < 9, "QM31 call oracle domain");
+        table.answers[index as usize]
+    }
+}
+
+pub(crate) fn expander_domain(domain: &[u8], seed: [u8;32], counter: u64, word: usize) -> bool {
+    unsafe {
+        let table = &*core::ptr::addr_of!(EXPANDER);
+        table.domain == domain && table.seed == seed &&
+            (word < 8 || counter.wrapping_sub(table.counter) < 9)
+    }
+}
+
+#[kani::proof]
+#[kani::unwind(84)]
+fn expander_rom_memo() {
+    let source: bool = kani::any();
+    let domain: &'static [u8] = if source { b"aspis:state-only:profile21:source-expand:v1" }
+        else { b"aspis:state-only:private-mask-expand:v1" };
+    let seed: [u8;32] = kani::any();
+    let base: u64 = kani::any();
+    reset_expander(domain, seed, base);
+    for i in 0u64..9 {
+        let counter = base.wrapping_add(i);
+        assert_eq!(counter.wrapping_sub(base), i);
+        let answer = expander_query(&[domain, &seed, &counter.to_le_bytes()]);
+        assert_eq!(answer, expander_query(&[domain, &seed, &counter.to_le_bytes()]));
+    }
+}
