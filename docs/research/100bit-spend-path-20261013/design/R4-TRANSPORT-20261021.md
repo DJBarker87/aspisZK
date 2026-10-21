@@ -234,3 +234,120 @@ instrumentation file, shipped crate or program source was changed. No ELF
 rebuild was needed, no keys/accounts were touched, and no push was made.
 No full frozen manifest, adversarial/runtime suite, or unrelated reproducible
 build was repeated for this open source boundary.
+
+## Continuation: R4_transport2 (2026-10-21)
+
+Branch `codex/cx-r4-transport2-20261021`, base `54054b905`. **R4_transport
+remains open.** No boundary premise is removed or replaced. Both Headline
+and R19 are byte-identical to that base (`r4-transport2-20261021/audit.json`).
+This continuation adds ten modules with23 standard-axiom theorem audits and
+36 accepted Kani roots; all current successful receipts record zero swap.
+Evidence is under `evidence/r4-transport2-20261021/`.
+
+### Wide machine and reference
+
+The exact optimized scalar division step passes for every u32 limb and
+remainder<P. The exact scalar carry step passes for canonical digit<P and
+addend<=257. The **complete** shipped carry helper passes against an indexed
+reference, including all output digits and final carry. Eight arbitrary-write
+reverse-iterator position/frame checks pass separately from the nonlinear
+division proof, and the reverse traversal and from_fn callback order pass.
+The source splice checker checks the divider occurs identically in both the
+optimized helper and the existing extracted indexed division reference. It
+also checks the exact indexed carry candidate associated with its retained
+extraction; the candidate and its owner files are only read.
+
+`R4Transport2WideReference` proves total execution of eight applications of
+that actual extracted division pass, retaining the entire quotient array,
+and proves its low digits and remaining value equal the byte-rank model.
+`R4Transport2WideBounds` proves the canonical-digit and quotient+1<=257
+bounds used by the step checks. `R4Transport2AddReference` proves the actual
+extracted indexed carry reference's positional mod/div result. Its cached
+objects are fetched read-only with exact existing source/object pins into a
+private directory. No shared owner is overwritten.
+
+The remaining wide join is the optimized outer iterator/from_fn shell and
+its final quotient-array/debug-assertion embedding into these checked
+references, followed by binding `B.gamma`/`B.ordinary`. This packet does not
+silently import the earlier extraction's external library axioms.
+
+### Scan, selected state, and prefix chain
+
+The timed-out whole scanner is replaced by23 successful single-source-word
+partitions for lengths0..22: arbitrary candidate/stored words/draws<=64,
+full stop flag, length/draw update, membership and all array cells. Lean's
+`R4Transport2ScanComposition.scan_loop_refines` lifts the exact single-step
+relation to the whole loop, and its invariant preserves count/draw caps and
+distinctness. `eight_pairs_selected` proves the materialized driver equals
+Q22.scanOut with its reached8-word budget, including next-block detection of
+success on an eighth word; it assumes no distinctness of advance states.
+
+`R4Transport2CirclePrefix` threads one first-25 checkpoint-state equality
+through the two actual retained circle block calls and the S2/P3 reseed.
+`OpeningChain.trace_transport` threads ordinary opening calls while deriving
+labels and using source length/payload bytes, eliminating repeated per-row
+state/byte equalities. `QueryPrefix.source_query_chain` identifies sixteen
+actual source digest successes with the eager model chain and selected scan
+state. `QueryAbsorb.source_query_prefix` derives the row31 absorb address
+from the actual source absorb. `QueryRho.rho_after_selected_query` feeds that
+selected result to the actual row32 scalar_k call with its empty frame.
+Its remaining `hscan` is explicitly the source/reference-driver result join.
+
+The exact current row30 append expression also passes Kani: arbitrary
+root32, round1[224] and arbitrary byte index; output length256 and every byte
+is root||round1. `prefix-source.json` checks the reached row25–32 expressions,
+all eight eager source pairs, and assignment of the **selected** returned
+state. These checks do not construct the frozen parser's literal words.
+
+### Exact remaining obligations
+
+| Row | Remaining source obligation after this continuation |
+|---|---|
+| 25–26 | Instantiate the successful retained circle calls with the reached frozen validated records and their selected literal messages; connect the first25 checkpoint to that reached caller. The state/reseed composition itself is now proved. |
+| 27 | Bind optimized wide helper shells to the checked extracted references and then `B.gamma`; instantiate the reached y1 call/message. |
+| 28 | Same ordinary-helper binding; bind actual canonical inactive serialization to `B.toBytes` and the parsed literal payload. |
+| 29 | Same ordinary-helper binding; connect reached round0 bytes and model message. |
+| 30 | Same ordinary-helper binding; connect the proved root||round1 byte append and S2 branch to the parsed `.second` literal word and caller. |
+| 31 | Instantiate the whole scanner's single-step embedding (including its generated iterator owner), finish/error/result-array mapping and materialized caller with the proved reference driver; discharge `hscan` and bind the actual query boundary. Digest-chain/selected-state composition is now proved. |
+| 32 | Instantiate the successful empty-payload rho call from that actual returned query state; the query-to-rho model/source composition is now proved conditional on `hscan`. |
+
+These remaining caller bindings cannot be inferred from the current free
+Prepared interface. `R4Transport2CallerObstruction.arbitrary_query_state`
+and `universal_query_state_property` prove that the query boundary can return
+any state for the same query vector and incoming transcript.
+`arbitrary_inactive_bytes` proves that its serialization boundary can return
+any32 bytes for a fixed inactive element. These are compiled interface
+countermodels, not counterexamples to shipped Rust. Consequently a universal
+Prepared-boundary success theorem cannot supply these missing source joins.
+Neither a boundary chosen to make R4 true nor a new source-law axiom is used.
+
+### Attempts and validation
+
+The new whole division-pass comparison times out after120s. A batch of eight
+arithmetic+array position checks also reaches its120s total deadline after
+two roots finish; that batch is not accepted as passing evidence. Neither is
+rerun. The replacement separates the already-verified scalar arithmetic from
+eight arbitrary-write address/frame contracts; all eight pass in4.238s.
+Earlier scanner timeouts are never rerun. No memory cap increases.
+The CLI preflight failure before adding Kani's required unstable-options
+flag is retained separately. All failures retain exact commands and logs.
+
+`manifest.json` records each Lean attempt's target, source/revision hashes,
+dependencies, exit, wall, RSS, swaps and full axioms lines; `host-manifest.json`
+and its per-attempt inputs/receipts do the same for Kani (axioms N/A). Host
+limits are always MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64 with
+reservation checks. Timeout GNU-time RSS may omit killed descendants; use
+the separately recorded cgroup memory peak for charged aggregate memory.
+Every historical generated host-source SHA has an exact text snapshot.
+
+The final offline audit is:
+
+```sh
+python3 -B docs/research/100bit-spend-path-20261013/evidence/r4-transport2-20261021/audit.py
+```
+
+This is focused cached-object and source-step evidence, **not** a coherent
+frozen release replay or R4 discharge. No existing Lean module, protected
+candidate/M10 instrumentation file, shipped crate/program, wallet/key or ELF
+is changed; no push is made. The R4 design note is the only existing tracked
+file edited by this continuation.
