@@ -1,0 +1,19 @@
+def Aeneas.Std.alloc.vec.Vec.with_capacity : (T : Type) → Aeneas.Std.Usize → Aeneas.Std.alloc.vec.Vec T :=
+fun T x => Aeneas.Std.alloc.vec.Vec.new T
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi3/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi3StdInspection.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.vec.Vec.try_reserve`
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi3/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi3StdInspection.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.vec.Vec.into_iter`
+def Aeneas.Std.alloc.vec.into_iter.IntoIter : Type → Type :=
+fun T => Aeneas.Std.alloc.vec.Vec T
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi3/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi3StdInspection.lean:10:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.vec.into_iter.IntoIter.next`
+def Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  Aeneas.Std.core.clone.Clone T →
+    Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T) :=
+fun {T} cloneInst v s =>
+  if h : v.length + s.length ≤ Aeneas.Std.Usize.max then
+    match h' : Aeneas.Std.Slice.clone cloneInst.clone s with
+    | Aeneas.Std.Result.ok s' => Aeneas.Std.Result.ok ⟨↑v ++ ↑s', ⋯⟩
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+'AspisR1.OraclePortCkptAbi2Vec.push_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbi2Vec.append_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
