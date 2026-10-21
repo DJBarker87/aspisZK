@@ -26,3 +26,17 @@ Final local attempt 2: exit 0, wall 13.111534 seconds, peak RSS 2,240,479,232
 bytes, zero swaps, source revision ec56a3486. All four axiom audits are
 standard; the first failed attempt used a nonexistent scalar extensionality
 lemma and is retained as failed evidence. No existing Lean module changed.
+
+## Stage 2 — reached model inputs
+
+`OraclePortCkptAbi2Reached.accepted_inputs` extracts the parsed proof, query
+function and SourceInputs from acceptance of `dV_frozen`, and derives the
+query decode and injectivity from that reached sampler row. The matching
+support data are the data read from the actual typedRows. No query uniqueness
+premise is supplied externally. `accepted_reference_resume` then proves that
+saving and resuming the recurrence from those data and the reached rho always
+returns the complete saved-ten model state. Retained semantic Context remains
+an explicit parameter; this does not identify Rust preparation or query_loop.
+
+Focused attempt 1: exit 0, wall 22.648015 seconds, peak RSS 3,572,154,368
+bytes, zero swaps, revision 118175311; both axiom reports standard.
