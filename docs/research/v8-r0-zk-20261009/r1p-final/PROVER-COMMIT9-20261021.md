@@ -53,7 +53,31 @@ created or removed.
 
 ## Stage 2: exact D112 caller interface
 
-Work in progress; no caller premise has been removed.
+`PrivacyR1HeadlineCallerScope` imports the current D112 `PrivacyR1HeadlineV2`
+and checks the exact constructed prover in its signature. `tapeOf_eq_decode`
+proves definitionally that this endpoint retains `decode`. The new
+`all_none_decode_not_caller` is an unconditional counterexample to automatically
+supplying CallerLaw at this constructor: use the allowed all-`none` decoder,
+with the same block counts and constructed address/opening data. It applies
+the existing symbolic successful-input witness, without enumerating any
+stream or tape. `failed_decode_not_caller` is the corresponding general form.
+
+J8286 checks the first two lemmas; J8287 checks the three final lemmas: exit 0,
+6.25 s, 4148288 KiB peak RSS, zero swaps, standard axioms only. Source revision
+is `7c2b4b9e1` plus the exact attempted additive source SHA in the receipt.
+
+This is an obstruction to a premise deletion **at the present universally
+quantified decoder interface**, not a refutation of the shipped prover and
+not a claim that the full privacy conclusion is false. A future endpoint can
+specialize `decode` to a shipped-execution decoder. That specialization needs
+the complete raw pre-balance sample/cursor execution and coordinate transport;
+neither the new balancing extraction nor the Kani row tests identify this
+independently supplied function. Specializing to `representativeDecoder`
+would trivially prove a model CallerLaw, but would not certify shipped code.
+No such substitution or replacement premise is adopted.
+
+Accordingly the requested full shipped CallerLaw is not proved. The current
+headline theorem, simulator, experiment and error bound are unchanged.
 
 ## Stage 3: universal shipped reads and headline
 
