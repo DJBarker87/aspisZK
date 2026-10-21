@@ -1,0 +1,3 @@
+PROVED all-Result typed V10 tail transport into the complete fixed-v6 tail with the exact fieldwise carrier maps, same Ops, query bytes, coefficient array, slot and starting head value.
+
+Limitations: No parser/canonicality/child-success/independent-output premise; all three source parser Option branches and three push-return pair continuations are represented, including errors and divergence. The typed tail is a source-shaped adapter using CurrentOps and current Dot state; raw emitted source installation and source/type/operation binding remain separate. This is a necessary whole-helper transport component, not complete frozen S4 closure, candidate adoption or global soundness. No production or protocol-format changes.
