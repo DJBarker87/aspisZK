@@ -1,0 +1,52 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortStoredDecisionDraftC4.lean:70:14: error: unsolved goals
+case pos
+w : CanonicalCutEnrichedTranscript.Words
+row : ℕ
+b : LiteralTranscript.BytesMessage
+h2 : ¬row = 2
+h30 : row = 30
+⊢ (match if 30 = 2 then LiteralTranscript.Message.c2 b w.c2 else LiteralTranscript.Message.second b w.final with
+    | LiteralTranscript.Message.initial root word => TranscriptView.Message.initial root
+    | LiteralTranscript.Message.payload bytes => TranscriptView.Message.payload bytes
+    | LiteralTranscript.Message.c2 bytes word => TranscriptView.Message.payload bytes
+    | LiteralTranscript.Message.second bytes word => TranscriptView.Message.payload bytes) =
+    TranscriptView.Message.payload b
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortStoredDecisionDraftC4.lean:84:48: error: Application type mismatch: The argument
+  read
+has type
+  LiteralMatchingData.read (typedRows p q tr) = some data
+but is expected to have type
+  some data = some (OraclePortDataChoiceDraft.withData (Classical.choose existsFields) data).data
+in the application
+  ⟨Classical.choose_spec existsFields, read⟩
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortStoredDecisionDraftC4.lean:118:17: error: unsolved goals
+case pos.none
+stored : Bytes
+tr : ErasedPrefix
+m : ErasedMessage
+H : Bytes → State
+ha : (eval H (decision stored tr m)).2 = true
+guard : OraclePortAdmission.Guard tr
+p : Parsed
+hp : OraclePortStoredParserC4.parseReached stored tr = some p
+q : Fin 22 → Fin 262144
+hq : queries tr = some q
+pad : Padding p q
+hi : input p q tr = none
+both : (eval H (verifySlots p q slots)).2 = true ∧ False
+⊢ ∃ p_1 q_1 i,
+    some p = some p_1 ∧
+      some q = some q_1 ∧
+        Padding p_1 q_1 ∧
+          (eval H (verifySlots p_1 q_1 slots)).2 = true ∧
+            input p_1 q_1 tr = some i ∧ D0TypedChecks.verify (typedRows p_1 q_1 tr) i = true
+'AspisR1.OraclePortStoredDecisionDraftC4.restore_erases' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortStoredDecisionDraftC4.input_fields' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortStoredDecisionDraftC4.decision_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortStoredDecisionDraftC4.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
