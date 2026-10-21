@@ -632,3 +632,49 @@ it must be composed for the global theorem, but is distinct from an open S4
 arithmetic law. Candidate adoption also still conflicts with the historical
 B1 fixture CU criterion. The implementation-linked100-bit target is not
 yet established.
+
+## Candidate execution no longer requires a from_fn interpretation
+
+`AspisR1S4V10NoFromFnKernelRootV1.no_from_fn_outer_eq` proves full-Result
+equality after replacing both the unused arrayFromFn slot and the unused
+wideLimbCount slot with divergence.
+`no_from_fn_outer_total_and_field_results_from_scan` nevertheless proves
+complete candidate execution, mapped canonical values and all four field
+results on the scanner/ClaimPowers input contract.
+`no_from_fn_dots_eq_concrete` identifies that no-fromFn callback with the
+concrete candidate query callback for every input. Thus no Rust-to-custom-P6
+from_fn assumption is needed for actual V10 execution; P6 is used only as a
+mathematical reference inside the proof. The original frozen implementation
+still has that distinct source boundary.
+
+Focused compile: exit0,35.423s,peak process RSS3,896,279,040 bytes,zero swaps,
+standard axioms, captured launch revision57ca9c452. Packet:
+`evidence/s4-v10-no-fromfn-kernel-root-v1-20261021`. The supporting all-result
+slot proofs are retained in
+`evidence/s4-v10-dead-arrayfromfn-slot-v1-20261021` and
+`evidence/s4-v10-wide-limb-count-irrelevance-v1-20261021`. The concrete
+checked-Q push record projection is retained in
+`evidence/s4-concrete-candidate-push-slot-v1-20261021`; it reuses the already
+committed full-result candidate-to-QRaw theorem.
+
+The actual returned Stage2 FullWide array now also carries its eight explicit
+raw-coordinate bounds, derived from the same CandidateQueryFieldEvidence
+without new scalar premises, in
+`evidence/s4-candidate-query-fullwide-bounds-v1-20261021`.
+
+NUC standing-runner-v2 evidence was read and archived without new builds or
+regression reruns. Its thirty command receipts all exit0 against artifact
+40dc7574, under capped zero-swap scopes. Six retained fixture reports confirm
+maxima1,210,100/1,189,265 CU and the actual1,400,000 transaction limit.
+`evidence/s4-combined-standing-retained-v2-20261021` contains the whitelisted
+metadata/public fixture evidence and output-log hashes; no keys, proofs or
+program binaries were copied or deleted. The old exit127 runner attempt is
+not accepted evidence. Fixture success and cost measurements do not establish
+an all-input cost bound or the cryptographic soundness theorem.
+
+`design/S4-NEXT-FREEZE-RECOMMENDATION-20261021.md` makes the source tradeoff
+concrete: the proof-friendly candidate avoids the custom from_fn gap and
+fits the measured transaction budget, but fails the historical B1 criterion.
+It remains unadopted; no security criterion or performance gate was silently
+relaxed. Complete source/driver instances, remaining other-cone obligations
+and final release replay/artifact binding still prevent a100-bit claim.
