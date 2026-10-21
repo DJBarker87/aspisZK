@@ -1,0 +1,69 @@
+import MultiproofConePhysicalDigest
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConePhysicalNode
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConeNodeDomain MultiproofConeLiveReference MultiproofConePhysicalDigest
+attribute [local step] write_observed
+
+@[local step] theorem read_observed (bytes : Slice U8) (bound : 32≤bytes.val.length) :
+    reference.read32 bytes ⦃ out => out.val=bytes.val.take 32 ⦄ := by
+  obtain ⟨out,eq,val⟩ := MultiproofConeRead32.read32_total bytes bound
+  simp only [eq,WP.spec_ok];exact val
+
+/-- Actual child reads and the physical cursor rebase for one parent. -/
+def Input (physical : Slice U8) (s : reference.Scratch) (i : Usize)
+    (left right : Array U8 32#usize) (ni cursor : Usize) : Prop :=
+  if SourcePair s i then
+    left=s.val.val[i.val]! ∧ right=s.val.val[i.val+1]! ∧
+      ni.val=i.val+2 ∧ cursor=s.«at»
+  else ∃ sibling : Array U8 32#usize,
+    sibling.val=(physical.val.drop s.«at».val).take 32 ∧
+    (if s.idx.val[i.val]!.val%2=0 then
+      left=s.val.val[i.val]! ∧ right=sibling
+     else left=sibling ∧ right=s.val.val[i.val]!) ∧
+    ni.val=i.val+1 ∧ cursor.val=s.«at».val+32
+
+def Observed {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (physical : Slice U8) (s : reference.Scratch) (i w : Usize) : reference.Row → Prop
+  | .Stop stopped => stopped=s ∧ ¬SourcePair s i ∧ physical.val.length-s.«at».val<32
+  | .Next next ni nw => ∃ left right digest parent cursor,
+      Input physical s i left right ni cursor ∧
+      D.digest hash (parts left right)=ok digest ∧ parent.val=s.idx.val[i.val]!.val/2 ∧
+      nw.val=w.val+1 ∧
+      next={s with idx:=s.idx.set w parent,val:=s.val.set w digest,«at»:=cursor}
+
+set_option backward.isDefEq.respectTransparency false in
+/-- Complete successful or short-rejected extracted node, retaining both
+actual child bytes and the actual hash equation before the overwrite. -/
+theorem binary_observed {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (physical : Slice U8) (s : reference.Scratch)
+    (i w : Usize) (domain : RowDomain physical s i w) (active : i.val<s.n.val) :
+    ∃ out, reference.binary_step D hash s physical i w=ok out ∧
+      Observed D hash physical s i w out := by
+  have ilen : s.idx.val.length=16 := s.idx.property
+  have vlen : s.val.val.length=16 := s.val.property
+  have ib : i.val<16 := by obtain ⟨_,_,_,_,_⟩ := domain;omega
+  have gi := getElem!_pos s.idx.val i.val (by omega)
+  have gv := getElem!_pos s.val.val i.val (by omega)
+  have gn : ∀ (h : i.val+1<s.n.val), s.idx.val[i.val+1]! = s.idx.val[i.val+1]'(by have := domain.2.1;omega) := by
+    intro h;exact getElem!_pos _ _ _
+  have gr : ∀ (h : i.val+1<s.n.val), s.val.val[i.val+1]! = s.val.val[i.val+1]'(by have := domain.2.1;omega) := by
+    intro h;exact getElem!_pos _ _ _
+  have spec : reference.binary_step D hash s physical i w
+      ⦃ out => Observed D hash physical s i w out ⦄ := by
+    unfold reference.binary_step
+    have dom := domain
+    simp only [RowDomain] at dom
+    step*
+    all_goals first | (have _ := out_post4; skip) | (simp only [Observed,SourcePair]; scalar_tac_preprocess; simp_all [gi,gn,Slice.len] <;> scalar_tac)
+    all_goals simp only [out_post4,Observed]
+    all_goals refine ⟨_,_,_,_,_,?_,out_post1,?_,out_post3,rfl⟩
+    all_goals try (simpa only [gi,index_post] using out_post2)
+    all_goals try simp only [Input]
+    all_goals trace_state
+  exact WP.spec_imp_exists spec
+
+#print axioms read_observed
+#print axioms binary_observed
+end AspisR1.MultiproofConePhysicalNode

@@ -1,0 +1,47 @@
+import MultiproofConePhysicalLevels
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConePhysicalTransport
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConePhysicalProgram MultiproofConePhysicalDigest
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.SqueezeOracleBridge
+
+/-- Change only the oracle representation. Every request and every answer is
+retained in place; no deduplication, permutation or rejected suffix is erased. -/
+def transport {α : Type} : Program Address Digest α → Program Bytes State α
+  | .done x => .done x
+  | .ask input next => .ask (flatten input) fun answer => transport (next (encodeState answer))
+
+def rawOracle (H : Bytes → State) : Address → Digest := fun input => encodeState (H (flatten input))
+
+theorem transport_observation {α : Type} (H : Bytes → State) (p : Program Address Digest α) :
+    eval H (transport p)=
+      ((eval (rawOracle H) p).1.map (fun e => (flatten e.1,decodeState e.2)),
+        (eval (rawOracle H) p).2) := by
+  induction p with
+  | done x => rfl
+  | ask input next ih =>
+    simp only [transport,eval,rawOracle,ih,List.map_cons,state_roundtrip]
+
+theorem digest_bytes (digest : Digest) : bytes (decodeState digest)=MultiproofConeCanonical.bytesOf digest.val := by
+  have round := array_roundtrip digest
+  have eq : MultiproofConeCanonical.bytesOf (encodeState (decodeState digest)).val=
+      bytes (decodeState digest) := by
+    simp [MultiproofConeCanonical.bytesOf,encodeState,List.map_map,Function.comp_def,byte_roundtrip]
+  rw [round] at eq
+  exact eq.symm
+
+/-- Explicit ordered observation for the actual instrumented parent writer. -/
+theorem writer_observation (H : Bytes → State) (s : reference.Scratch) (left right : Digest)
+    (ni cursor : Usize) (index : U32) (w : Usize) :
+    eval H (transport (writer s left right ni cursor index w)) =
+      ([(flatten (parts left right),H (flatten (parts left right)))],
+       finish s (encodeState (H (flatten (parts left right)))) ni cursor index w) := by
+  rfl
+
+#print axioms transport_observation
+#print axioms digest_bytes
+#print axioms writer_observation
+end AspisR1.MultiproofConePhysicalTransport

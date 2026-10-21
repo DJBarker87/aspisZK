@@ -741,3 +741,48 @@ zero swaps; all three reports are standard. The read-side child provenance and
 whole physical/frozen Live/log composition remain under construction. A digest
 type abbreviation avoids re-elaborating bounded scalar-literal proof arguments
 inside the prefix congruence; no kernel or resource limit is changed.
+
+## Continuation 5, stage 1d: actual child provenance and level digest invariant
+
+`MultiproofConePhysicalNode.binary_observed` checks the actual extracted node
+on its reached cursor domain. Occupied children are the actual two scratch
+reads; supplied children are exactly physical.drop(at).take(32), placed by the
+source parity branch; the hash equation and full simultaneous scratch write
+are retained. Short rejection has no invented digest. Attempt 14: exit 0,
+19.216545 s, 3627057152-byte RSS, zero swaps, standard individual reports.
+Earlier attempts are elaboration/heartbeat diagnostics; no limit was raised.
+The final proof splits data/cursor branches, uses named byte/window facts and
+explicit arithmetic; it does not reduce a concrete tree.
+
+`MultiproofConePhysicalTrace.rows_trace` constructs a chronological event
+witness from ACTUAL extracted successful rows, not a trace hypothesis.
+`prefix_exact` proves the entire parent prefix (index AND digest) equals the
+initial written prefix followed by the exact event outputs. Every event retains
+its source child reads before overwrite and its actual callback equation.
+`level_trace` starts at i=w=0. Attempt 1: exit 0, 7.239523 s,
+3618897920-byte RSS, zero swaps, four standard reports.
+
+`MultiproofConePhysicalInvariant.eighteen_accounts` proves by height induction
+that every successful one of the actual 18 extracted levels has exactly this
+physical digest-prefix/content account. Only HashTotal, initial Domain and the
+actual successful Result remain. No per-level content/preservation/log premise
+is assumed. Attempt 1: exit 0, 6.198776 s, 3601547264-byte RSS, zero swaps,
+two standard reports.
+
+`MultiproofConePhysicalTransport.transport_observation` maps the instrumented
+raw physical Program to Bytes/State and preserves the complete ordered
+read/answer list, including repeated requests, and its exact Result.
+`writer_observation` retains the one actual parent request and answer.
+`MultiproofConePhysicalAddress.parent_address` identifies that physical hashv
+address with frozen nodeInput(children ...), including child-major byte order.
+Transport attempt 2: exit 0, 23.732665 s, 3567124480-byte RSS, zero swaps.
+Address attempt 2: exit 0, 12.089883 s, 3634135040-byte RSS, zero swaps.
+All five individual reports are standard; complete hashes/revisions and logs
+are retained in receipts/manifest.
+
+This closes the actual extracted per-level DIGEST-content invariant and
+provides an instrumented physical endpoint plus exact address/answer transport.
+It does NOT yet prove that the physical Program's full log equals the event
+witness and the frozen sourceLevel/runLevels log. That final observation
+comparison remains a distinct theorem, as do batch leaf/count/padding/root and
+both three-slot callers. No whole-cone accepted-run join is claimed.
