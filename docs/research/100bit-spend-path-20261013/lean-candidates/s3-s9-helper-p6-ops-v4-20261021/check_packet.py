@@ -9,6 +9,8 @@ for rel, expected in [(m['target_source'], m['target_source_sha256']),
                       (m['differential']['source'], m['differential']['source_sha256'])]:
     got = hashlib.sha256((D / rel).read_bytes()).hexdigest()
     assert got == expected, (rel, got, expected)
+dep = m['direct_import_source_map']['Aeneas.Std.RangeIter']
+assert hashlib.sha256((D / dep['source_path']).read_bytes()).hexdigest() == dep['source_sha256']
 r = json.loads((D / 'evidence/attempt/receipt.json').read_text())
 assert r['exit_status'] == 0 and r['source_sha256'] == m['target_source_sha256']
 assert r['object_sha256'] == m['target_object_sha256']
