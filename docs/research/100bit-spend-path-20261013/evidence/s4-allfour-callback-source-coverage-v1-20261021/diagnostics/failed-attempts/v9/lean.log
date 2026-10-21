@@ -1,0 +1,185 @@
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s4-current-repin-20261020/s4-allfour-callback-source-coverage-v1/S4AllFourCallbackSourceCoverageV1.lean:130:82: error: unsolved goals
+ops : Ops
+a : Std.Array U8 608#usize
+g : Std.Array Wide 29#usize
+slot : Usize
+it✝ : AspisR1FastDotsOuterFoldTraceV2.StepBy
+limbs✝ out✝ : Std.Array U64 8#usize
+ds : List (List Contribution)
+starts✝ : List ℕ
+it it' : AspisR1FastDotsOuterFoldTraceV2.StepBy
+limbs limbs' out : Std.Array AspisR1FastDotsOuterFoldTraceV2.U64 8#usize
+cs : List AspisR1FastDotsOuterFoldTraceV2.Contribution
+tail : List (List AspisR1FastDotsOuterFoldTraceV2.Contribution)
+starts : List ℕ
+hstep4 : it.step_by = 4#usize
+hnextStep4 : it'.step_by = 4#usize
+hstart : ↑it.iter.start < ↑it.iter.end
+hcursor : ↑it'.iter.start = min (↑it.iter.start + ↑it.step_by) ↑it.iter.end
+hend : it'.iter.end = it.iter.end
+hbody :
+  AspisR1FastDotsOuterFoldTraceV2.Body
+      (AspisR1FastDotsOuterFoldTraceV2.BatchOps (AspisR1FastDotsOuterFoldTraceV2.LimbOps ops)) a g slot it limbs =
+    ok (ControlFlow.cont (it', limbs'))
+hbatch : AspisR1FastDotsOuterFoldTraceV2.BatchWitness ops a g slot it it' limbs limbs' cs
+htail : AspisR1FastDotsOuterFoldTraceV2.ExactTrace ops a g slot it' limbs' out tail starts
+ih :
+  ↑it'.iter.end = 26 → List.map (fun c => ↑c.term) tail.flatten = List.range' (↑it'.iter.start) (26 - ↑it'.iter.start)
+hend26 : ↑it.iter.end = 26
+hstepVal : ↑it.step_by = 4
+start : UScalar UScalarTy.Usize
+hnext :
+  core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      it =
+    ok (some start, it')
+hstartEq : start = it.iter.start
+hcursorBody : ↑it'.iter.start = min (↑it.iter.start + ↑it.step_by) ↑it.iter.end
+hendBody : it'.iter.end = it.iter.end
+hstepBody : it'.step_by = it.step_by
+hpair : (some hbatch.start, it') = (some start, it')
+hstartBatch : hbatch.start = it.iter.start
+haddSpec : UScalar.add hbatch.start 4#usize ⦃ z => ↑z = ↑hbatch.start + 4 ⦄
+z : UScalar UScalarTy.Usize
+hz : UScalar.add hbatch.start 4#usize = ok z
+hzval : ↑z = ↑hbatch.start + 4
+hzeq : z = hbatch.batchEndArg
+hbatchEndVal : ↑hbatch.batchEndArg = ↑it.iter.start + 4
+hminEq : hbatch.rangeEnd = if hbatch.batchEndArg < 26#usize then hbatch.batchEndArg else 26#usize
+⊢ ↑(if ↑hbatch.batchEndArg < 26 then hbatch.batchEndArg else 26#usize) =
+    if ↑hbatch.batchEndArg < 26 then ↑hbatch.batchEndArg else 26
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s4-current-repin-20261020/s4-allfour-callback-source-coverage-v1/S4AllFourCallbackSourceCoverageV1.lean:139:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  min (↑it.iter.start + 4).succ 26
+in the target expression
+  ↑hbatch.rangeEnd = min (↑it.iter.start + 4) 26
+
+case pos
+ops : Ops
+a : Std.Array U8 608#usize
+g : Std.Array Wide 29#usize
+slot : Usize
+it✝ : AspisR1FastDotsOuterFoldTraceV2.StepBy
+limbs✝ out✝ : Std.Array U64 8#usize
+ds : List (List Contribution)
+starts✝ : List ℕ
+it it' : AspisR1FastDotsOuterFoldTraceV2.StepBy
+limbs limbs' out : Std.Array AspisR1FastDotsOuterFoldTraceV2.U64 8#usize
+cs : List AspisR1FastDotsOuterFoldTraceV2.Contribution
+tail : List (List AspisR1FastDotsOuterFoldTraceV2.Contribution)
+starts : List ℕ
+hstep4 : it.step_by = 4#usize
+hnextStep4 : it'.step_by = 4#usize
+hstart : ↑it.iter.start < ↑it.iter.end
+hcursor : ↑it'.iter.start = min (↑it.iter.start + ↑it.step_by) ↑it.iter.end
+hend : it'.iter.end = it.iter.end
+hbody :
+  AspisR1FastDotsOuterFoldTraceV2.Body
+      (AspisR1FastDotsOuterFoldTraceV2.BatchOps (AspisR1FastDotsOuterFoldTraceV2.LimbOps ops)) a g slot it limbs =
+    ok (ControlFlow.cont (it', limbs'))
+hbatch : AspisR1FastDotsOuterFoldTraceV2.BatchWitness ops a g slot it it' limbs limbs' cs
+htail : AspisR1FastDotsOuterFoldTraceV2.ExactTrace ops a g slot it' limbs' out tail starts
+ih :
+  ↑it'.iter.end = 26 → List.map (fun c => ↑c.term) tail.flatten = List.range' (↑it'.iter.start) (26 - ↑it'.iter.start)
+hend26 : ↑it.iter.end = 26
+hstepVal : ↑it.step_by = 4
+start : UScalar UScalarTy.Usize
+hnext :
+  core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      it =
+    ok (some start, it')
+hstartEq : start = it.iter.start
+hcursorBody : ↑it'.iter.start = min (↑it.iter.start + ↑it.step_by) ↑it.iter.end
+hendBody : it'.iter.end = it.iter.end
+hstepBody : it'.step_by = it.step_by
+hpair : (some hbatch.start, it') = (some start, it')
+hstartBatch : hbatch.start = it.iter.start
+haddSpec : UScalar.add hbatch.start 4#usize ⦃ z => ↑z = ↑hbatch.start + 4 ⦄
+z : UScalar UScalarTy.Usize
+hz : UScalar.add hbatch.start 4#usize = ok z
+hzval : ↑z = ↑hbatch.start + 4
+hzeq : z = hbatch.batchEndArg
+hbatchEndVal : ↑hbatch.batchEndArg = ↑it.iter.start + 4
+hminEq : hbatch.rangeEnd = if hbatch.batchEndArg < 26#usize then hbatch.batchEndArg else 26#usize
+hminVal : ↑hbatch.rangeEnd = ↑it.iter.start + 4
+hlt : hbatch.batchEndArg < 26#usize
+hltNat : ↑it.iter.start + 4 < 26
+⊢ ↑hbatch.rangeEnd = min (↑it.iter.start + 4) 26
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s4-current-repin-20261020/s4-allfour-callback-source-coverage-v1/S4AllFourCallbackSourceCoverageV1.lean:176:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.range' ?m.1324 ?m.1325 ++ List.range' (?m.1324 + ?m.1325) ?m.1326
+in the target expression
+  List.range' (↑it.iter.start) (↑it.iter.start + (↑it'.iter.start - ↑it.iter.start) - ↑it.iter.start) ++
+      List.range' (↑it.iter.start + (↑it'.iter.start - ↑it.iter.start))
+        (26 - (↑it.iter.start + (↑it'.iter.start - ↑it.iter.start))) =
+    List.range' (↑it.iter.start)
+      (↑it.iter.start + (↑it'.iter.start - ↑it.iter.start) - ↑it.iter.start +
+        (26 - (↑it.iter.start + (↑it'.iter.start - ↑it.iter.start))))
+
+ops : Ops
+a : Std.Array U8 608#usize
+g : Std.Array Wide 29#usize
+slot : Usize
+it✝ : AspisR1FastDotsOuterFoldTraceV2.StepBy
+limbs✝ out✝ : Std.Array U64 8#usize
+ds : List (List Contribution)
+starts✝ : List ℕ
+it it' : AspisR1FastDotsOuterFoldTraceV2.StepBy
+limbs limbs' out : Std.Array AspisR1FastDotsOuterFoldTraceV2.U64 8#usize
+cs : List AspisR1FastDotsOuterFoldTraceV2.Contribution
+tail : List (List AspisR1FastDotsOuterFoldTraceV2.Contribution)
+starts : List ℕ
+hstep4 : it.step_by = 4#usize
+hnextStep4 : it'.step_by = 4#usize
+hstart : ↑it.iter.start < ↑it.iter.end
+hcursor : ↑it'.iter.start = min (↑it.iter.start + ↑it.step_by) ↑it.iter.end
+hend : it'.iter.end = it.iter.end
+hbody :
+  AspisR1FastDotsOuterFoldTraceV2.Body
+      (AspisR1FastDotsOuterFoldTraceV2.BatchOps (AspisR1FastDotsOuterFoldTraceV2.LimbOps ops)) a g slot it limbs =
+    ok (ControlFlow.cont (it', limbs'))
+hbatch : AspisR1FastDotsOuterFoldTraceV2.BatchWitness ops a g slot it it' limbs limbs' cs
+htail : AspisR1FastDotsOuterFoldTraceV2.ExactTrace ops a g slot it' limbs' out tail starts
+ih :
+  ↑it'.iter.end = 26 → List.map (fun c => ↑c.term) tail.flatten = List.range' (↑it'.iter.start) (26 - ↑it'.iter.start)
+hend26 : ↑it.iter.end = 26
+hstepVal : ↑it.step_by = 4
+start : UScalar UScalarTy.Usize
+hnext :
+  core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      it =
+    ok (some start, it')
+hstartEq : start = it.iter.start
+hcursorBody : ↑it'.iter.start = min (↑it.iter.start + ↑it.step_by) ↑it.iter.end
+hendBody : it'.iter.end = it.iter.end
+hstepBody : it'.step_by = it.step_by
+hpair : (some hbatch.start, it') = (some start, it')
+hstartBatch : hbatch.start = it.iter.start
+haddSpec : UScalar.add hbatch.start 4#usize ⦃ z => ↑z = ↑hbatch.start + 4 ⦄
+z : UScalar UScalarTy.Usize
+hz : UScalar.add hbatch.start 4#usize = ok z
+hzval : ↑z = ↑hbatch.start + 4
+hzeq : z = hbatch.batchEndArg
+hbatchEndVal : ↑hbatch.batchEndArg = ↑it.iter.start + 4
+hminEq : hbatch.rangeEnd = if hbatch.batchEndArg < 26#usize then hbatch.batchEndArg else 26#usize
+hminVal : ↑hbatch.rangeEnd = if hbatch.batchEndArg < 26#usize then ↑hbatch.batchEndArg else 26
+hrangeMin : ↑hbatch.rangeEnd = min (↑it.iter.start + 4) 26
+hcursor' : ↑it'.iter.start = min (↑it.iter.start + 4) 26
+hrangeNext : ↑hbatch.rangeEnd = ↑it'.iter.start
+hcs : List.map (fun c => ↑c.term) cs = List.range' (↑it.iter.start) (↑it'.iter.start - ↑it.iter.start)
+hendNext : ↑it'.iter.end = 26
+htailIndices : List.map (fun c => ↑c.term) tail.flatten = List.range' (↑it'.iter.start) (26 - ↑it'.iter.start)
+hbounds : ↑it.iter.start ≤ ↑it'.iter.start ∧ ↑it'.iter.start ≤ 26
+hlength : ↑it'.iter.start - ↑it.iter.start + (26 - ↑it'.iter.start) = 26 - ↑it.iter.start
+hsplit : ↑it.iter.start + (↑it'.iter.start - ↑it.iter.start) = ↑it'.iter.start
+⊢ List.range' (↑it.iter.start) (↑it.iter.start + (↑it'.iter.start - ↑it.iter.start) - ↑it.iter.start) ++
+      List.range' (↑it.iter.start + (↑it'.iter.start - ↑it.iter.start))
+        (26 - (↑it.iter.start + (↑it'.iter.start - ↑it.iter.start))) =
+    List.range' (↑it.iter.start)
+      (↑it.iter.start + (↑it'.iter.start - ↑it.iter.start) - ↑it.iter.start +
+        (26 - (↑it.iter.start + (↑it'.iter.start - ↑it.iter.start))))
+'AspisR1FastDotsAllFourCallbackSourceCoverageV1.exact_trace_flattened_term_indices' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsAllFourCallbackSourceCoverageV1.callback_trace_exact_source_coverage' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
