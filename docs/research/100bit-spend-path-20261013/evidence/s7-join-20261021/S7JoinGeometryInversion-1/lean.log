@@ -1,0 +1,167 @@
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinGeometryInversion.lean:29:55: error: Tactic `rfl` failed: The left-hand side
+  ↑0#usize + (↑flat).length
+is not definitionally equal to the right-hand side
+  (↑flat).length
+
+flat empty inverse : alloc.vec.Vec U32
+bound : (↑flat).length ≤ 110
+he : ↑empty = []
+hi : (↑inverse).length = (↑flat).length
+hx : ∀ x ∈ ↑flat, decode x ≠ 0
+⊢ ↑0#usize + (↑flat).length = (↑flat).length
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinGeometryInversion.lean:37:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑ps, p).2
+in the target expression
+  decode p = product ↑flat
+
+flat empty inverse : alloc.vec.Vec U32
+bound : (↑flat).length ≤ 110
+he : ↑empty = []
+hi : (↑inverse).length = (↑flat).length
+hx : ∀ x ∈ ↑flat, decode x ≠ 0
+ps : alloc.vec.Vec U32
+p : U32
+hpref : S7Kani2PrefixLoop.prefixes_owned flat empty 1#u32 0#usize = ok (flat, ps, p)
+hmodel : (↑ps, p) = S7Kani2PrefixLoop.model (List.drop ↑0#usize ↑flat) (↑empty) 1#u32
+hm : (↑ps, p) = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat)
+hps : (↑ps, p).1 = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat).1
+hp : (↑ps, p).2 = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat).2
+⊢ decode p = product ↑flat
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    flat
+  has type
+    alloc.vec.Vec U32
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑flat
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinGeometryInversion.lean:48:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑ps, p).1
+in the target expression
+  ↑flat.len ≤ (↑ps).length
+
+flat empty inverse : alloc.vec.Vec U32
+bound : (↑flat).length ≤ 110
+he : ↑empty = []
+hi : (↑inverse).length = (↑flat).length
+hx : ∀ x ∈ ↑flat, decode x ≠ 0
+ps : alloc.vec.Vec U32
+p : U32
+hpref : S7Kani2PrefixLoop.prefixes_owned flat empty 1#u32 0#usize = ok (flat, ps, p)
+hmodel : (↑ps, p) = S7Kani2PrefixLoop.model (List.drop ↑0#usize ↑flat) (↑empty) 1#u32
+hm : (↑ps, p) = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat)
+hps : (↑ps, p).1 = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat).1
+hp : (↑ps, p).2 = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat).2
+hpd : decode p = product ↑flat
+hpz : p ≠ 0#u32
+suffix : U32
+hs : S7JoinInverseExecution.inverse_owned p = ok suffix
+hsv : decode suffix = (decode p)⁻¹
+⊢ ↑flat.len ≤ (↑ps).length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ps
+  has type
+    alloc.vec.Vec U32
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑ps
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinGeometryInversion.lean:50:2: error: unsolved goals
+case refine_1
+flat empty inverse : alloc.vec.Vec U32
+bound : (↑flat).length ≤ 110
+he : ↑empty = []
+hi : (↑inverse).length = (↑flat).length
+hx : ∀ x ∈ ↑flat, decode x ≠ 0
+ps : alloc.vec.Vec U32
+p : U32
+hpref : S7Kani2PrefixLoop.prefixes_owned flat empty 1#u32 0#usize = ok (flat, ps, p)
+hmodel : (↑ps, p) = S7Kani2PrefixLoop.model (List.drop ↑0#usize ↑flat) (↑empty) 1#u32
+hm : (↑ps, p) = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat)
+hps : (↑ps, p).1 = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat).1
+hp : (↑ps, p).2 = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat).2
+hpd : decode p = product ↑flat
+hpz : p ≠ 0#u32
+suffix : U32
+hs : S7JoinInverseExecution.inverse_owned p = ok suffix
+hsv : decode suffix = (decode p)⁻¹
+out : alloc.vec.Vec U32
+ho : S7Kani3InverseLoop.inverse_owned flat ps inverse suffix flat.len = ok out
+hout : ↑out = S7Kani3InverseLoop.model (↑flat) (↑ps) (↑flat.len) (↑inverse) suffix
+hlen : (↑out).length = (↑inverse).length
+⊢ (let (_, ps, p) := (flat, ps, p)
+    do
+    let suffix ← S7JoinInverseExecution.inverse_owned p
+    S7Kani3InverseLoop.inverse_owned flat ps inverse suffix flat.len) =
+    ok out
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinGeometryInversion.lean:56:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑ps, p).1
+in the target expression
+  decode (cell (↑ps) k) = product (List.take k ↑flat)
+
+flat empty inverse : alloc.vec.Vec U32
+bound : (↑flat).length ≤ 110
+he : ↑empty = []
+hi : (↑inverse).length = (↑flat).length
+hx : ∀ x ∈ ↑flat, decode x ≠ 0
+ps : alloc.vec.Vec U32
+p : U32
+hpref : S7Kani2PrefixLoop.prefixes_owned flat empty 1#u32 0#usize = ok (flat, ps, p)
+hmodel : (↑ps, p) = S7Kani2PrefixLoop.model (List.drop ↑0#usize ↑flat) (↑empty) 1#u32
+hm : (↑ps, p) = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat)
+hps : (↑ps, p).1 = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat).1
+hp : (↑ps, p).2 = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat).2
+hpd : decode p = product ↑flat
+hpz : p ≠ 0#u32
+suffix : U32
+hs : S7JoinInverseExecution.inverse_owned p = ok suffix
+hsv : decode suffix = (decode p)⁻¹
+out : alloc.vec.Vec U32
+ho : S7Kani3InverseLoop.inverse_owned flat ps inverse suffix flat.len = ok out
+hout : ↑out = S7Kani3InverseLoop.model (↑flat) (↑ps) (↑flat.len) (↑inverse) suffix
+hlen : (↑out).length = (↑inverse).length
+j : ℕ
+hj : j < (↑flat).length
+k : ℕ
+hk : k < (↑flat).length
+⊢ decode (cell (↑ps) k) = product (List.take k ↑flat)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ps
+  has type
+    alloc.vec.Vec U32
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑ps
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinGeometryInversion.lean:60:4: error: Type mismatch: After simplification, term
+  hb
+ has type
+  @Eq (ZMod P) (decode (cell (S7Kani3InverseLoop.model (↑flat) (↑ps) (↑flat).length (↑inverse) suffix) j))
+    (decode (cell (↑flat) j))⁻¹
+but is expected to have type
+  @Eq (ZMod P) (decode (cell (S7Kani3InverseLoop.model (↑flat) (↑ps) (↑flat.len) (↑inverse) suffix) j))
+    (decode (cell (↑flat) j))⁻¹
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinGeometryInversion.lean:50:34: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [invert_owned, ̲hpref, ̲hs̵,̵h̵o, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinGeometryInversion.lean:50:37: warning: This simp argument is unused:
+  ho
+
+Hint: Omit it from the simp argument list.
+  simp only [invert_owned, ̲hpref, ̲hs,h̵o̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S7JoinGeometryInversion.total_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

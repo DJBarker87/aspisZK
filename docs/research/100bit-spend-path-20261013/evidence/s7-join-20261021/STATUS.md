@@ -58,3 +58,28 @@ backend/ABI remain separate. Failed attempt 1 is retained, not accepted.
 Both successful compiles used the fixed local flags, task object directory
 and shared mkdir lock; exact revision/hash/exit/wall/RSS/swap/axioms are in
 the manifest. No shared objects or shipped sources changed.
+
+## Stage 4 — inverse storage semantics and canonical basis
+
+`S7JoinBatchInverse.backward_exact` proves the backward loop model writes
+each reciprocal and frames untouched cells. Its prefix-model, prefix-value,
+product and nonzero lemmas are symbolic inductions.
+`S7JoinInverseExecution.inverse_result` preserves the raw-zero assertion and
+every checked frozen multiply in the source-shaped fixed chain. It is an
+additive body port, not an identity to the inherited opaque inv declaration.
+`S7JoinGeometryInversion.total_exact` composes the concrete emitted prefix
+and backward Vec loops with this guarded inverse port: at most 110 inputs,
+empty prefix storage and correctly sized inverse storage imply total success
+and every reciprocal, provided input field values are nonzero. No successful
+helper or inverse-value premise is retained. Gathering, allocations, literal
+domain operations and original iterator/extraction binding remain open.
+
+`S7JoinBasisCanonical.total_exact` joins the actual initialized six-level
+basis's semantic identity with canonicality of all 256 cells, for arbitrary
+input U32. This supplies the basis-word bound required by residue updates.
+Successful attempts: BatchInverse-6, InverseExecution-2, GeometryInversion-4,
+BasisCanonical-1. All use standard axioms, zero swap and fixed local caps.
+`S7JoinReferenceCheck.check_iff` isolates the abstract check before specializing
+the concrete tower, avoiding large dictionary normalization in the consumer
+bridge under development. The consumer has not passed yet; its failed
+recursion-depth attempts remain explicit and no resource limit was raised.

@@ -1,0 +1,37 @@
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinGeometryInversion.lean:52:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  S7JoinInverseExecution.inverse_owned p
+in the target expression
+  (let (_, ps, p) := (flat, ps, p)
+    do
+    let suffix ← S7JoinInverseExecution.inverse_owned p
+    S7Kani3InverseLoop.inverse_owned flat ps inverse suffix flat.len) =
+    ok out
+
+case refine_1
+flat empty inverse : alloc.vec.Vec U32
+bound : (↑flat).length ≤ 110
+he : ↑empty = []
+hi : (↑inverse).length = (↑flat).length
+hx : ∀ x ∈ ↑flat, decode x ≠ 0
+ps : alloc.vec.Vec U32
+p : U32
+hpref : S7Kani2PrefixLoop.prefixes_owned flat empty 1#u32 0#usize = ok (flat, ps, p)
+hmodel : (↑ps, p) = S7Kani2PrefixLoop.model (List.drop ↑0#usize ↑flat) (↑empty) 1#u32
+hm : (↑ps, p) = (prefixes (↑flat) 1#u32, List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat)
+hps : ↑ps = prefixes (↑flat) 1#u32
+hp : p = List.foldl S7Kani2PrefixLoop.wordMul 1#u32 ↑flat
+hpd : decode p = product ↑flat
+hpz : p ≠ 0#u32
+suffix : U32
+hs : S7JoinInverseExecution.inverse_owned p = ok suffix
+hsv : decode suffix = (decode p)⁻¹
+out : alloc.vec.Vec U32
+ho : S7Kani3InverseLoop.inverse_owned flat ps inverse suffix flat.len = ok out
+hlen : (↑out).length = (↑inverse).length
+hout : ↑out = S7Kani3InverseLoop.model (↑flat) (↑ps) (↑flat).length (↑inverse) suffix
+⊢ (let (_, ps, p) := (flat, ps, p)
+    do
+    let suffix ← S7JoinInverseExecution.inverse_owned p
+    S7Kani3InverseLoop.inverse_owned flat ps inverse suffix flat.len) =
+    ok out
+'AspisR1.S7JoinGeometryInversion.total_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,117 @@
+import S7JoinInverseBackend
+import S7Kani3GeometryStorage
+
+/-! Field meaning of the already checked emitted prefix/backward loops.
+No inverse-value premise or concrete recurrence normalization is used. -/
+set_option autoImplicit false
+namespace AspisR1.S7JoinBatchInverse
+open Aeneas.Std
+open AspisCircleGroupOrder
+open S7Kani2PrefixLoop (wordMul)
+open S7JoinBasisMachine (decode word_mul)
+
+def cell (xs : List U32) (i : Nat) : U32 := xs[i]?.getD 0#u32
+def product (xs : List U32) : ZMod P := (xs.map decode).prod
+
+def prefixes : List U32 → U32 → List U32
+ | [],_ => []
+ | x::xs,p => p::prefixes xs (wordMul p x)
+
+theorem prefixes_length (xs : List U32) (p : U32) :
+    (prefixes xs p).length=xs.length := by
+  induction xs generalizing p with
+  | nil => rfl
+  | cons x xs ih => simp only [prefixes,List.length_cons,ih]
+
+theorem prefix_model (xs ps : List U32) (p : U32) :
+    S7Kani2PrefixLoop.model xs ps p =
+      (ps++prefixes xs p,xs.foldl wordMul p) := by
+  induction xs generalizing ps p with
+  | nil => simp only [S7Kani2PrefixLoop.model,prefixes,List.append_nil,List.foldl_nil]
+  | cons x xs ih =>
+      rw [S7Kani2PrefixLoop.model,ih]
+      simp only [prefixes,List.foldl_cons,List.append_assoc,List.singleton_append]
+
+theorem product_decode (xs : List U32) (p : U32) :
+    decode (xs.foldl wordMul p)=decode p*product xs := by
+  induction xs generalizing p with
+  | nil => simp [product]
+  | cons x xs ih => simp only [List.foldl_cons,ih,word_mul,product,List.map_cons,List.prod_cons,mul_assoc]
+
+theorem prefix_decode (xs : List U32) (p : U32) (i : Nat) (h : i<xs.length) :
+    decode (cell (prefixes xs p) i)=decode p*product (xs.take i) := by
+  induction xs generalizing p i with
+  | nil => simp at h
+  | cons x xs ih =>
+      cases i with
+      | zero => simp [prefixes,cell,product]
+      | succ i =>
+          have hi : i<xs.length := by simpa only [List.length_cons,Nat.succ_lt_succ_iff] using h
+          simpa only [prefixes,cell,List.getElem?_cons_succ,List.take_succ_cons,
+            ih (wordMul p x) i hi,word_mul,product,List.map_cons,List.prod_cons,mul_assoc]
+            using ih (wordMul p x) i hi
+
+theorem product_step (xs : List U32) (n : Nat) (h : n<xs.length) :
+    product (xs.take (n+1))=product (xs.take n)*decode (cell xs n) := by
+  rw [List.take_succ_eq_append_getElem h]
+  simp only [product,List.map_append,List.prod_append,List.map_singleton,List.prod_singleton,
+    cell,List.getElem?_eq_getElem h,Option.getD_some]
+
+theorem product_nonzero (xs : List U32) (h : ∀ x ∈ xs, decode x≠0) :
+    product xs≠0 := by
+  induction xs with
+  | nil => simp [product]
+  | cons x xs ih =>
+      simp only [product,List.map_cons,List.prod_cons]
+      exact mul_ne_zero (h x (by simp)) (ih (fun y hy => h y (by simp [hy])))
+
+/-- Every visited cell is reciprocal and every unvisited cell is preserved.
+The initial suffix is tied to the prefix product, rather than postulated as
+an unrelated inverse vector. -/
+theorem backward_exact (xs ps inv : List U32) (suffix : U32) (n : Nat)
+    (hn : n≤xs.length) (hi : n≤inv.length)
+    (hp : ∀ j, j<n → decode (cell ps j)=product (xs.take j))
+    (hx : ∀ x ∈ xs, decode x≠0)
+    (hs : decode suffix=(product (xs.take n))⁻¹) :
+    ∀ j, decode (cell (S7Kani3InverseLoop.model xs ps n inv suffix) j)=
+      if j<n then (decode (cell xs j))⁻¹ else decode (cell inv j) := by
+  induction n generalizing inv suffix with
+  | zero => intro j; simp [S7Kani3InverseLoop.model]
+  | succ n ih =>
+      have hn' : n<xs.length := by omega
+      have hnz : product (xs.take n)≠0 :=
+        product_nonzero _ (fun x h => hx x (List.mem_of_mem_take h))
+      have hxz : decode (cell xs n)≠0 := by
+        simp only [cell,List.getElem?_eq_getElem hn',Option.getD_some]
+        exact hx _ (List.getElem_mem hn')
+      have hcell : decode (wordMul suffix (cell ps n))=(decode (cell xs n))⁻¹ := by
+        rw [word_mul,hp n (by omega),hs,product_step xs n hn',mul_inv_rev]
+        field_simp
+      have hs' : decode (wordMul suffix (cell xs n))=(product (xs.take n))⁻¹ := by
+        rw [word_mul,hs,product_step xs n hn',mul_inv_rev]
+        field_simp
+      intro j
+      rw [S7Kani3InverseLoop.model]
+      have he := ih (inv.set n (wordMul suffix (cell ps n)))
+        (wordMul suffix (cell xs n)) (by omega) (by simp only [List.length_set]; omega)
+        (fun j hj => hp j (by omega)) hs' j
+      change decode (cell (S7Kani3InverseLoop.model xs ps n
+        (inv.set n (wordMul suffix (cell ps n))) (wordMul suffix (cell xs n))) j)=_ at he
+      rw [he]
+      by_cases hj : j<n
+      · simp only [hj,if_pos,show j<n+1 by omega]
+      · by_cases hjn : j=n
+        · subst j
+          simp only [Nat.lt_irrefl,if_false,show n<n+1 by omega,if_pos,cell,
+            List.getElem?_set_self (by omega : n<inv.length),Option.getD_some,hcell]
+        · simp only [hj,if_false,show ¬j<n+1 by omega,cell,
+            List.getElem?_set_ne (Ne.symm hjn)]
+
+#print axioms prefixes_length
+#print axioms prefix_model
+#print axioms product_decode
+#print axioms prefix_decode
+#print axioms product_step
+#print axioms product_nonzero
+#print axioms backward_exact
+end AspisR1.S7JoinBatchInverse
