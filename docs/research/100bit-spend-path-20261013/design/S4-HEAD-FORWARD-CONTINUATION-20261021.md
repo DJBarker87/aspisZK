@@ -288,3 +288,68 @@ adoption versus frozen-source correspondence; then the concrete component and
 driver interfaces with the appropriate source/artifact pins and one coherent
 closure replay. The S10 model placeholder remains a placeholder. The two-hour
 checkpoint did not meet full S4 closure, and no new closure ETA is asserted.
+
+## 19:48 UTC — complete selected arithmetic, caller dataflow and library evidence
+
+The reverse execution gap is now discharged for the selected operation chain.
+The original eight-coordinate accumulation loop and the eight-coordinate limb
+fold each supply ordered successful segment traces. Their concrete reverse
+bridges feed the term loop, complete batch body, StepBy head loop, complete
+helper and all four outer calls. `S4ConcreteReverseClosureRootV1` therefore
+proves `installed_reverse_head` and `fixed_four_total_on_slots` without the
+former reverse-loop or independent successful-helper premises. Its checked
+composition exited 0 in 23.846s, peak process RSS 3,602,808,832B, zero swaps;
+all five printed declarations report standard axioms. This is committed at
+`68580ee4f`; the supporting trace packets are retained at `fd299254f`.
+
+`S4TotalScannedFieldResultsRootV1.fixed_four_total_and_field_results_from_scan`
+now derives **both execution and all four exact field-result witnesses** from
+the strict scan, a canonical gamma, its successful ClaimPowers result and the
+same caller coefficient array. It constructs the exact 608-byte prefix and
+derives all coordinate/read/parser witnesses internally. No successful dot
+call, reverse-loop law, independent prefix or per-slot acceptance premise is
+assumed. Focused exit 0, 18.682s, peak process RSS 3,856,334,848B, zero swaps,
+standard axioms. The packet and the literal-V10 totality consumer are committed
+at `1ce5cc09b`. The literal consumer preserves the mapped four-element output;
+its own unmeasured swap is explicitly recorded UNKNOWN.
+
+The current frozen tx1 parent extraction already existed and has been reused:
+caller-v4 has transparent `tx1` and `prepare`, with `has_errors=false`, against
+the frozen `candidate.rs` SHA-256
+`5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794`.
+The complete-body Ops cut retains all branches and Std Try/residual handling;
+its checker expands the factored suffix and verifies all tokens after 15
+explicit child/constant substitutions. The theorem
+`tx1_success_same_prepare_and_query` derives a successful query-loop call with
+the **same prepared value and scratch array** returned by that run's prepare.
+It does not assume the query call succeeds independently. Its exact operation
+bindings remain open. Packet `s4-current-tx1-same-prepare-query-v1-20261021`,
+commit `da9c08428`, records standard axioms, child time 15.56s, runner elapsed
+15.829s, peak RSS 2,222,800,896B and zero swaps. The receipt documents its argv
+metadata recovery; no unchanged proof was rerun to recover those fields.
+
+The NUC Kani checks cover actual Std array-constructor call order/output/state
+threading at sizes 4, 8 and 29, and the original four-limb Q predicate versus
+the explicit four comparisons. These are bounded Rust operational results,
+not Lean source-join inhabitants. Seven relevant upstream Std bodies match
+between the pinned upstream 1.89 and Kani 1.93 source versions; identity with
+the Solana SBF fork and the Aeneas external declaration is still unproved.
+The evidence-only packet was integrated at `484174233`, preserving that
+limitation rather than adopting the three-file source candidate.
+
+The isolated candidate has now passed all 30 standing commands and its
+default/devnet-ID builds have identical `.text`; only the two ID data slots
+change. It still fails the existing B1 fixture CU criterion. No adoption,
+budget relaxation, deployment or all-input CU claim is made. A retained
+57,607-byte full-mask OS-random corpus proof has been identified for a
+same-proof frozen/candidate cost control; that control is not yet accepted.
+
+**S4 remains open at the source and caller boundary.** The next composition
+maps all actual caller Prepared/scratch/accumulator/pending fields into the
+retained query-loop carriers, installs that actual child slot, and connects
+the resulting same-call loop witness to the existing ten-query field theorem.
+The independent primitive/library, upstream preparation and final driver
+bindings must still be installed at the frozen source/artifact pin. None of
+the above replaces the S10 placeholder or constructs the complete
+`OraclePortFrozen2Join.AcceptedRunJoin`; the deployed 100-bit target remains
+unestablished. Production source and wire format remain unchanged.
