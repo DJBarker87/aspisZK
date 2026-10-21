@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,hashlib,subprocess,difflib
 E=Path(__file__).resolve().parent.parent
-rows=json.loads(Path('/tmp/p25-imports.json').read_text())
+rows=json.loads((E/'sampler-owners.json').read_text())
 L=Path('docs/research/v8-r0-zk-20261009/lean')
 for row in rows:
  p=L/(row['module'].replace('.','/')+'.lean');assert not p.exists(),p

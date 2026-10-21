@@ -63,7 +63,6 @@ structure aspis_core.field.wide_exact.WideExact where
 /-- [aspis_r1_cost_probe::r1_wire::Error]
     Source: 'crates/aspis-r1-cost-probe/src/r1_wire.rs', lines 24:0-36:1
     Visibility: public -/
-@[discriminant isize]
 inductive r1_wire.Error where
 | Allocation : r1_wire.Error
 | RowOrder : Std.U8 → Std.U8 → r1_wire.Error
@@ -92,5 +91,21 @@ structure r1_wire.SemanticTranscript (H : Type) where
 structure r1_wire.circle25.Policy (Self : Type) where
   point : (Array Std.U8 32#usize) → Bool → Result (Array
     aspis_core.field.QM31 2#usize)
+
+def r1_wire.Error.read_discriminant : r1_wire.Error → Isize
+  | .Allocation => 0#isize
+  | .RowOrder _ _ => 1#isize
+  | .InvalidRow => 2#isize
+  | .Tag _ => 3#isize
+  | .Length _ => 4#isize
+  | .NonCanonical _ _ => 5#isize
+  | .Boundary _ => 6#isize
+  | .Terminal => 7#isize
+  | .EqualCirclePoints => 8#isize
+  | .TrailingBytes => 9#isize
+  | .Public => 10#isize
+  | .ActivePole => 11#isize
+instance r1_wire.errorDiscriminant : Discriminant r1_wire.Error Isize where
+  read_discriminant := r1_wire.Error.read_discriminant
 
 end AspisR1CircleCaller25
