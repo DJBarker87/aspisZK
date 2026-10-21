@@ -2,8 +2,8 @@
 // computation is certified separately, so these roots isolate storage effects.
 use super::*;
 fn symbolic_prefix<const N:usize>(n:usize)->Vec<u32> {
- let values:[u32;N]=kani::any();let mut out=Vec::with_capacity(N);
- for i in 0..n {out.push(values[i]);} out
+ let values:[u32;N]=kani::any();let mut out=values.to_vec();
+ out.truncate(n); out
 }
 #[kani::proof] #[kani::unwind(112)]
 fn constructor_gather_vec_step() {

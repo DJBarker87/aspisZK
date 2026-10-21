@@ -1,0 +1,57 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unused import: `super::*`
+ --> src/steps.rs:1:5
+  |
+1 | use super::*;
+  |     ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `wide_exact::WideExact`
+  --> src/field.rs:16:9
+   |
+16 | pub use wide_exact::WideExact;
+   |         ^^^^^^^^^^^^^^^^^^^^^
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Thread 2: Checking harness certificate::vectors::constructor_zero_resize...
+Thread 1: Checking harness certificate::vectors::constructor_inverse_write_step...
+Thread 0: Checking harness certificate::vectors::batched_constructor_write_step...
+Thread 3: Checking harness certificate::vectors::constructor_group_push_step...
+Thread 1: 
+VERIFICATION RESULT:
+ ** 0 of 257 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.5795101s
+
+Thread 1: Checking harness certificate::vectors::constructor_prefix_push_step...
+Thread 1: 
+VERIFICATION RESULT:
+ ** 0 of 360 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 3.1042452s
+
+Thread 1: Checking harness certificate::vectors::constructor_zero_check...
+Thread 1: 
+VERIFICATION RESULT:
+ ** 0 of 67 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.15647401s
+
+Thread 1: Checking harness certificate::vectors::constructor_gather_vec_step...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 399 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 8.424719s
+

@@ -64,6 +64,15 @@ fn accumulator_row_step() {
  assert_eq!(weights.raw.len(),64); assert_eq!(weights.terms,terms);
 }
 '''
+# Exhaustive fixed-index replacement if the symbolic-index Vec mux is costly.
+start=out.index('fn accumulator_row_step() {')
+body_start=out.index('\n',start)+1
+body_end=out.index('\n}',body_start)
+fixed=out[body_start:body_end]
+fixed=fixed.replace('let j:usize=kani::any();','let j=J;')
+out+='fn fixed_accumulator_step<const J:usize>() {\n'+fixed+'\n}\n'
+for j in range(64):
+ out+=f'#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(row_step)] fn accumulator_slot_{j:02}() {{fixed_accumulator_step::<{j}>();}}\n'
 for label,stmt in [('basis-block','basis[n+j]=basis[j].mul(node);'),('prefix-push','prefixes.push(product);'),('prefix-mul','product=product.mul(value);'),('inverse-write','flat_inverse[i]=suffix_inverse.mul(prefixes[i]);'),('inverse-suffix','suffix_inverse=suffix_inverse.mul(flat[i]);')]:cut(label,stmt)
 files={'src/steps.rs':out}
 pins=dict(frozen_revision='b2727acd3',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_sha256=hashlib.sha256(V.read_bytes()).hexdigest(),cuts=pins,scope='Fixed 64-weight production row step; scalar calls are contract cuts, fusion is separately checked in Lean. No full accumulator claim.',generated={k:hashlib.sha256(v.encode()).hexdigest() for k,v in files.items()})

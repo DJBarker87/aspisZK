@@ -471,9 +471,7 @@ impl PreparedQm31Multiplier {
     }
 
     #[inline(always)]
-    #[kani::requires(s7_spec::canonical_q(self) && s7_spec::canonical_q(rhs))]
-#[kani::ensures(|out:&QM31| s7_spec::canonical_q(*out) && *out==s7_spec::qm(self,rhs))]
-pub fn mul(self, rhs: QM31) -> QM31 {
+    pub fn mul(self, rhs: QM31) -> QM31 {
         let multiply = |left: [M31; 3], right: CM31| {
             let m0 = left[0].mul(right.a);
             let m1 = left[1].mul(right.b);
@@ -952,7 +950,9 @@ pub fn sub(self, rhs: QM31) -> QM31 {
 
     /// Karatsuba extension multiplication: 3 CM31 muls + one mul-by-R.
     #[inline(always)]
-    pub fn mul(self, rhs: QM31) -> QM31 {
+    #[kani::requires(s7_spec::canonical_q(self) && s7_spec::canonical_q(rhs))]
+#[kani::ensures(|out:&QM31| s7_spec::canonical_q(*out) && *out==s7_spec::qm(self,rhs))]
+pub fn mul(self, rhs: QM31) -> QM31 {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMul);
         let m0 = self.c0.mul(rhs.c0);

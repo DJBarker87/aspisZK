@@ -8,7 +8,9 @@ const P:u32=0x7fffffff;
 #[derive(Clone,Copy,Debug,kani::Arbitrary)] struct K{c0:CM31,c1:CM31}
 fn k_ok(k:K)->bool{k.c0.a.0<P && k.c0.b.0<P && k.c1.a.0<P && k.c1.b.0<P}
 fn scalar_spec(raw:u64,limb:u32,basis:u32,flush:bool)->u64 {
- let v=raw+u64::from(limb)*u64::from(basis);
+ // Specification arithmetic is total; row_safe establishes equality with
+ // the source checked sum. Source arithmetic remains checked.
+ let v=raw.wrapping_add(u64::from(limb)*u64::from(basis));
  if flush {(v&0x7fffffff)+(v>>31)} else {v}
 }
 fn row_equal(a:[u64;4],b:[u64;4])->bool{a[0]==b[0] && a[1]==b[1] && a[2]==b[2] && a[3]==b[3]}
@@ -23,6 +25,8 @@ fn row_spec(row:[u64;4],power:K,basis:M31,flush:bool)->[u64;4]{
 }
 include!("steps.rs");
 mod vectors {include!("vectors.rs");}
+mod vectors_fixed {include!("vectors_fixed.rs");}
+mod control {include!("control.rs");}
 }
 
 #[cfg(kani)] mod field;

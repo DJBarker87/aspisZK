@@ -1,5 +1,5 @@
 {
-  "pattern_branch": "codex/cx-freeze-prep-20261020",
+  "pattern_branch": "ce345a4bd",
   "pattern_path": "docs/research/100bit-spend-path-20261013/evidence/freeze-prep-20261020/prep9/harness/tower.py",
   "pattern_sha256": "7147090f1fe64ac5db5257225ebe2cf2d379997e8018c9e7b190a14342a02054",
   "source_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
@@ -7,66 +7,78 @@
     {
       "old": "#[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]",
       "new": "#[derive(Clone, Copy, PartialEq, Eq, Debug, Default,kani::Arbitrary)]",
-      "count": 3
+      "count": 3,
+      "owner": null
     },
     {
       "old": "fn reduce_u64(x: u64) -> u32 {",
       "new": "#[kani::ensures(|out:&u32| *out<P && u64::from(*out)==x % u64::from(P))]\nfn reduce_u64(x: u64) -> u32 {",
-      "count": 1
+      "count": 1,
+      "owner": null
     },
     {
       "old": "pub fn add(self, rhs: M31) -> M31 {",
       "new": "#[kani::requires(self.0<P && rhs.0<P)]\n#[kani::ensures(|out:&M31| out.0<P && u64::from(out.0)==(u64::from(self.0)+u64::from(rhs.0)) % u64::from(P))]\npub fn add(self, rhs: M31) -> M31 {",
-      "count": 1
+      "count": 1,
+      "owner": null
     },
     {
       "old": "pub fn sub(self, rhs: M31) -> M31 {",
       "new": "#[kani::requires(self.0<P && rhs.0<P)]\n#[kani::ensures(|out:&M31| out.0<P && u64::from(out.0)==(u64::from(self.0)+u64::from(P)-u64::from(rhs.0)) % u64::from(P))]\npub fn sub(self, rhs: M31) -> M31 {",
-      "count": 1
+      "count": 1,
+      "owner": null
     },
     {
       "old": "pub fn mul(self, rhs: M31) -> M31 {",
       "new": "#[kani::requires(self.0<P && rhs.0<P)]\n#[kani::ensures(|out:&M31| out.0<P && u64::from(out.0)==(u64::from(self.0)*u64::from(rhs.0)) % u64::from(P))]\npub fn mul(self, rhs: M31) -> M31 {",
-      "count": 1
+      "count": 1,
+      "owner": null
     },
     {
       "old": "pub fn reduce_u64(value: u64) -> M31 {",
       "new": "#[kani::ensures(|out:&M31| out.0<P && u64::from(out.0)==value % u64::from(P))]\npub fn reduce_u64(value: u64) -> M31 {",
-      "count": 1
+      "count": 1,
+      "owner": null
     },
     {
       "old": "pub fn add(self, rhs: CM31) -> CM31 {",
       "new": "#[kani::requires(s7_spec::canonical_c(self) && s7_spec::canonical_c(rhs))]\n#[kani::ensures(|out:&CM31| s7_spec::canonical_c(*out) && *out==s7_spec::ca(self,rhs))]\npub fn add(self, rhs: CM31) -> CM31 {",
-      "count": 1
+      "count": 1,
+      "owner": "CM31"
     },
     {
       "old": "pub fn sub(self, rhs: CM31) -> CM31 {",
       "new": "#[kani::requires(s7_spec::canonical_c(self) && s7_spec::canonical_c(rhs))]\n#[kani::ensures(|out:&CM31| s7_spec::canonical_c(*out) && *out==s7_spec::cs(self,rhs))]\npub fn sub(self, rhs: CM31) -> CM31 {",
-      "count": 1
+      "count": 1,
+      "owner": "CM31"
     },
     {
       "old": "pub fn mul(self, rhs: CM31) -> CM31 {",
       "new": "#[kani::requires(s7_spec::canonical_c(self) && s7_spec::canonical_c(rhs))]\n#[kani::ensures(|out:&CM31| s7_spec::canonical_c(*out) && *out==s7_spec::cm(self,rhs))]\npub fn mul(self, rhs: CM31) -> CM31 {",
-      "count": 1
+      "count": 1,
+      "owner": "CM31"
     },
     {
       "old": "pub fn add(self, rhs: QM31) -> QM31 {",
       "new": "#[kani::requires(s7_spec::canonical_q(self) && s7_spec::canonical_q(rhs))]\n#[kani::ensures(|out:&QM31| s7_spec::canonical_q(*out) && *out==s7_spec::qa(self,rhs))]\npub fn add(self, rhs: QM31) -> QM31 {",
-      "count": 1
+      "count": 1,
+      "owner": "QM31"
     },
     {
       "old": "pub fn sub(self, rhs: QM31) -> QM31 {",
       "new": "#[kani::requires(s7_spec::canonical_q(self) && s7_spec::canonical_q(rhs))]\n#[kani::ensures(|out:&QM31| s7_spec::canonical_q(*out) && *out==s7_spec::qs(self,rhs))]\npub fn sub(self, rhs: QM31) -> QM31 {",
-      "count": 1
+      "count": 1,
+      "owner": "QM31"
     },
     {
       "old": "pub fn mul(self, rhs: QM31) -> QM31 {",
       "new": "#[kani::requires(s7_spec::canonical_q(self) && s7_spec::canonical_q(rhs))]\n#[kani::ensures(|out:&QM31| s7_spec::canonical_q(*out) && *out==s7_spec::qm(self,rhs))]\npub fn mul(self, rhs: QM31) -> QM31 {",
-      "count": 1
+      "count": 1,
+      "owner": "QM31"
     }
   ],
   "generated": {
-    "src/field.rs": "02ad5114aeacecffc00ea23fc15cfef4ea959c2352b05b1bfc4aa0c6056a7125",
+    "src/field.rs": "6bda3c68294b34179870fb96bc442da2ff3f8512de3d0ae7460d04550560dbed",
     "src/field/wide_exact.rs": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
   },
   "scope": "Source bodies untouched. Kani attributes, derives and independent modular specification only. Arithmetic cfg matches no-r91/no-prover S7 harness. Contract roots are eligible only when all consumed contracts have accepted receipts."

@@ -1,0 +1,45 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unused import: `super::*`
+ --> src/steps.rs:1:5
+  |
+1 | use super::*;
+  |     ^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `wide_exact::WideExact`
+  --> src/field.rs:16:9
+   |
+16 | pub use wide_exact::WideExact;
+   |         ^^^^^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+    --> src/field.rs:474:43
+     |
+ 474 |     #[kani::requires(s7_spec::canonical_q(self) && s7_spec::canonical_q(rhs))]
+     |                      -------------------- ^^^^ expected `QM31`, found `PreparedQm31Multiplier`
+     |                      |
+     |                      arguments to this function are incorrect
+     |
+note: function defined here
+    --> src/field.rs:3294:9
+     |
+3294 |  pub fn canonical_q(x:QM31)->bool {canonical_c(x.c0)&&canonical_c(x.c1)}
+     |         ^^^^^^^^^^^ ------
+
+error[E0308]: mismatched types
+    --> src/field.rs:475:77
+     |
+ 475 | #[kani::ensures(|out:&QM31| s7_spec::canonical_q(*out) && *out==s7_spec::qm(self,rhs))]
+     |                                                                 ----------- ^^^^ expected `QM31`, found `PreparedQm31Multiplier`
+     |                                                                 |
+     |                                                                 arguments to this function are incorrect
+     |
+note: function defined here
+    --> src/field.rs:3308:9
+     |
+3308 |  pub fn qm(a:QM31,b:QM31)->QM31 {
+     |         ^^ ------
+
+For more information about this error, try `rustc --explain E0308`.
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.

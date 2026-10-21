@@ -3,15 +3,20 @@
 from pathlib import Path
 import subprocess,ast,hashlib,json,sys
 T=Path(__file__).resolve().parent;R=T.parents[1]
-base='codex/cx-freeze-prep-20261020';prefix='docs/research/100bit-spend-path-20261013/evidence/freeze-prep-20261020/prep9/'
+base='ce345a4bd';prefix='docs/research/100bit-spend-path-20261013/evidence/freeze-prep-20261020/prep9/'
 pattern=subprocess.check_output(['git','show',base+':'+prefix+'harness/tower.py'],cwd=R,text=True)
 spec=next(ast.literal_eval(n.value) for n in ast.parse(pattern).body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='spec' for t in n.targets))
 spec=spec.replace('prep9_spec','s7_spec')
 source=R/'crates/aspis-core/src/field.rs';s=source.read_text();edits=[]
-def replace(old,new,count=1):
+def replace(old,new,count=1,owner=None):
  global s
  assert s.count(old)>=count,old
- s=s.replace(old,new,count);edits.append(dict(old=old,new=new,count=count))
+ if owner:
+  a=s.index('impl '+owner+' {'); b=s.index('\n}',a)+2
+  assert old in s[a:b]
+  s=s[:a]+s[a:b].replace(old,new,count)+s[b:]
+ else:s=s.replace(old,new,count)
+ edits.append(dict(old=old,new=new,count=count,owner=owner))
 replace('#[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]','#[derive(Clone, Copy, PartialEq, Eq, Debug, Default,kani::Arbitrary)]',3)
 replace('fn reduce_u64(x: u64) -> u32 {','#[kani::ensures(|out:&u32| *out<P && u64::from(*out)==x % u64::from(P))]\nfn reduce_u64(x: u64) -> u32 {')
 for op,formula in [('add','u64::from(self.0)+u64::from(rhs.0)'),('sub','u64::from(self.0)+u64::from(P)-u64::from(rhs.0)'),('mul','u64::from(self.0)*u64::from(rhs.0)')]:
@@ -21,7 +26,7 @@ replace('pub fn reduce_u64(value: u64) -> M31 {','#[kani::ensures(|out:&M31| out
 for ty,pref in [('CM31','c'),('QM31','q')]:
  for op,suffix in [('add','a'),('sub','s'),('mul','m')]:
   sig=f'pub fn {op}(self, rhs: {ty}) -> {ty} {{'
-  replace(sig,f'#[kani::requires(s7_spec::canonical_{pref}(self) && s7_spec::canonical_{pref}(rhs))]\n#[kani::ensures(|out:&{ty}| s7_spec::canonical_{pref}(*out) && *out==s7_spec::{pref}{suffix}(self,rhs))]\n'+sig)
+  replace(sig,f'#[kani::requires(s7_spec::canonical_{pref}(self) && s7_spec::canonical_{pref}(rhs))]\n#[kani::ensures(|out:&{ty}| s7_spec::canonical_{pref}(*out) && *out==s7_spec::{pref}{suffix}(self,rhs))]\n'+sig,owner=ty)
 roots='\n#[cfg(kani)] mod s7_backend {use super::*;\n'
 for name,target,deps,args in [('reduce','reduce_u64',[],'kani::any()'),('add','M31::add',[],'M31(kani::any()),M31(kani::any())'),('sub','M31::sub',[],'M31(kani::any()),M31(kani::any())'),('mul','M31::mul',['reduce_u64'],'M31(kani::any()),M31(kani::any())'),('reduce_public','M31::reduce_u64',['reduce_u64'],'kani::any()')]:
  roots+=f'#[kani::proof_for_contract({target})]\n'+''.join(f'#[kani::stub_verified({d})]\n' for d in deps)+f'#[kani::unwind(1)] fn backend_{name}() {{{target}({args});}}\n'
