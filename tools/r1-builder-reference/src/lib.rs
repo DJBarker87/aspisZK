@@ -20,3 +20,7 @@ fn s2_row_equals_d18() {
     assert!(shipped < 1024);
     assert_eq!(shipped_transport::Variant::S2.row(shipped), j);
 }
+
+#[cfg(kani)]
+#[path = "../drop.rs"]
+mod trace_drop;

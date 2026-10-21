@@ -41,9 +41,52 @@ reference-source extraction with the inherited P6 substitutions/opaque
 records and external layer, and the metadata-only PairLeaf constructor
 rename. No successful aggregate source certificate is claimed.
 
+Kani actual destructor behavior: `trace_drop_small-scalar` passes 459 checks
+(six unreachable), 146.605 s, 3,941,440 KiB, zero swap, arbitrary lengths
+0..2 in all 16 columns and arbitrary stored u32 words. It checks unit return,
+no panic and an unchanged separately owned output word. This bounded result
+is **not** a universal write-set certificate.
+
+The `volatile_zero_word` contract projects exactly the shipped volatile
+store through M31's transparent u32 representation. Dynamic frame checking
+proves the only permitted target is that word and it becomes zero; 57 checks
+(two unreachable) pass, 0.540 s, 168,276 KiB, zero swap. No destructor is
+stubbed. This supplies a projected P6 store certificate, composable with the
+arbitrary-length heap-model theorem, but a complete actual-Drop/loop mapping
+has not been supplied.
+
+Three whole-destructor dynamic-frame experiments were stopped at the 6 GiB
+MemoryHigh review, without verdicts: arbitrary small lengths (233.861 s,
+6,402,728 KiB), fixed two-word columns (85.461 s, 6,384,000 KiB), and one
+symbolically selected two-word column (83.215 s, 6,370,368 KiB). All swaps 0.
+Each narrowed a different source shape; none was rerun unchanged or with a
+larger cap. SIGTERM was sent only to that task's CBMC child; Kani reported no
+successful verification. The earlier explicit-destructor call failed Rust
+compilation, the renamed harness selector matched no harness, and the
+32-byte output comparison failed a memcmp unwinding assertion. All remain
+in the receipts. The final scalar comparison corrects that harness issue
+without changing the destructor unwind bound.
+
 ## Stage 2: admission
 
-In progress. The next isolated target is the frontier-validator early return.
+A control-flow reference replaces the frontier loop's early return with a
+carried Result and guarded while. It is added only to the existing cfg-only
+reference file. Substituting it in the isolated owned constructor advances
+forest translation to code generation. Two further constructor name clashes
+are fixed in LLBC metadata: enum constructors and tuple struct constructors
+receive distinct function names. Function bodies, IDs, calls and type layout
+are not changed by those renames. Aeneas then succeeds: 5.667 s,
+455,440 KiB, zero swap, 6,625 generated Lean lines. This raw output contains
+unsupported externals (including Drop, records, lazy external, iterator,
+array, Option/Result and slice operations) and is not admitted or compiled as
+a certificate.
+
+The full Kani validator comparison with explicit shared-root argument
+checks timed out at 240 s with no verdict. Its GNU-time parent RSS is
+incomplete (14,960 KiB); it is not the child peak. The replacement projects
+the common pure root-helper result. Both callers pass the same immutable
+tree and empty table, so this isolates control flow, not root reconstruction.
+The complete semantic admission obligation remains open.
 
 ## Stage 3: Parts content
 
