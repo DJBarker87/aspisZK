@@ -1,0 +1,119 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialRecursion.lean:58:31: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵,̵ ̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialRecursion.lean:59:28: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵,̵ ̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialRecursion.lean:61:21: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵,̵ ̵bind_tc_ok, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialRecursion.lean:104:31: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵,̵ ̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialRecursion.lean:105:28: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵,̵ ̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialRecursion.lean:107:21: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵,̵ ̵bind_tc_ok, lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialRecursion.lean:174:14: error: unsolved goals
+case succ
+hash : Hash
+domain : Slice U8
+dependent : Usize
+active : Std.Array Bool 1024#usize
+n : ℕ
+ih :
+  ∀ (remaining index : Usize) (columns : alloc.vec.Vec (alloc.vec.Vec U32)) (state : State),
+    ↑remaining = n →
+      prover_commit_reference.material_columns_owned hash domain state columns index remaining dependent active =
+        columnsFinite hash domain state columns index n dependent active
+remaining index : Usize
+columns : alloc.vec.Vec (alloc.vec.Vec U32)
+state : State
+count : ↑remaining = n + 1
+more : remaining ≠ 0#usize
+next : ↑(remaining.wrapping_sub 1#usize) = n
+ih' :
+  ∀ (state : State) (columns : alloc.vec.Vec (alloc.vec.Vec U32)) (index : Usize),
+    prover_commit_reference.material_columns_owned hash domain state columns index (remaining.wrapping_sub 1#usize)
+        dependent active =
+      columnsFinite hash domain state columns index n dependent active
+⊢ (do
+      let v ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec aspis_core.field.M31)) columns index
+      let v1 ← alloc.vec.CloneVec.clone aspis_core.field.M31.Insts.CoreCloneClone v
+      let (result, column, state1) ← prover_commit_reference.collect_m31_owned hash domain state 1024#usize v1
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec aspis_core.field.M31)) columns
+            index
+      match result with
+        | core.result.Result.Ok a => do
+          let v2 ←
+            alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec aspis_core.field.M31))
+                (index_mut_back column) index
+          let v3 ← alloc.vec.CloneVec.clone aspis_core.field.M31.Insts.CoreCloneClone v2
+          let (result1, column1) ← prover_commit_reference.balance_m31_owned v3 dependent active
+          let (_, index_mut_back1) ←
+            alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec aspis_core.field.M31))
+                (index_mut_back column) index
+          match result1 with
+            | core.result.Result.Ok a =>
+              columnsFinite hash domain state1 (index_mut_back1 column1) (index.wrapping_add 1#usize) n dependent active
+            | core.result.Result.Err a => ok (result1, index_mut_back1 column1, state1)
+        | core.result.Result.Err a => ok (result, index_mut_back column, state1)) =
+    do
+    let v ←
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec aspis_core.field.M31)) columns index
+    let v1 ← alloc.vec.CloneVec.clone aspis_core.field.M31.Insts.CoreCloneClone v
+    let (result, column, state1) ← prover_commit_reference.collect_m31_owned hash domain state 1024#usize v1
+    let (_, index_mut_back) ←
+      alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec aspis_core.field.M31)) columns index
+    match result with
+      | core.result.Result.Ok a => do
+        let v2 ←
+          alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec aspis_core.field.M31))
+              (index_mut_back column) index
+        let v3 ← alloc.vec.CloneVec.clone aspis_core.field.M31.Insts.CoreCloneClone v2
+        let (result1, column1) ← prover_commit_reference.balance_m31_owned v3 dependent active
+        let (_, index_mut_back1) ←
+          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec aspis_core.field.M31))
+              (index_mut_back column) index
+        match result1 with
+          | core.result.Result.Ok a =>
+            columnsFinite hash domain state1 (index_mut_back1 column1) (index.wrapping_add 1#usize) n dependent active
+          | core.result.Result.Err a => ok (result1, index_mut_back1 column1, state1)
+      | core.result.Result.Err a => ok (result, index_mut_back column, state1)
+'R1Z.ProverCommitMaterialRecursion.columns_extracted_finite' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitMaterialRecursion.sub_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaterialRecursion.extracted_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaterialRecursion.qm_extracted_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
