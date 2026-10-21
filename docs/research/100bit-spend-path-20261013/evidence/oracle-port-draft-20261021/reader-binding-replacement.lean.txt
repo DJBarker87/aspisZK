@@ -1,0 +1,9 @@
+def ReaderBinding (D : LiteralByteProtocol.Decoder) (core : Decision) (P : Prover)
+    (Q : Nat) (fallback : (Bytes → State) → SourceInputs) : Prop :=
+  ∀ H : Bytes → State,
+    ¬ RecordedBinaryExperimentBin.binaryCollision Q
+      (eval H (recorded D (admit core) (R16CanonReduction.canon P))) →
+    FS2.accepts (eval H (original D (admit core) (R16CanonReduction.canon P))) →
+    D0TypedChecks.verify (compiledRows D (admit core) (R16CanonReduction.canon P) H)
+      (readerSource D core P fallback H) = true
+
