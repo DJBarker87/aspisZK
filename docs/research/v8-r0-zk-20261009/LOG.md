@@ -7798,3 +7798,17 @@ the three frozen programs from the research tip, including the cfg-gated
 `sim.rs` addition. Default verifier `dfc2a91a…`, devnet `fb2fc048…` and Pool
 `121f3e29…` all **MATCH** (SHA-256 and byte-for-byte cmp; the unstripped
 linked ELFs also match). Capped builds, zero swap.
+
+## D130 — simulator semantic cone extracted (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit20-20261021` (`r1p-final/PROVER-COMMIT20-20261021.md`).
+The Aeneas `Not_found` is isolated to `validate_record_fields`. An owned
+validator, and the complete 25-row semantic cone, are extracted with no
+external templates. Proved: finite validator and row schedules, table-write
+semantics, per-entry table composition, and adaptive programmed-history
+composition. Focused Kani checks and the semantic differential fixtures pass.
+J8732: 21 standard-axiom audits, zero swap; no shipped change (D129 ELF
+evidence stands). Open: the actual overwrite-flag Kani check timed out at
+600 s; universal table/source transport; the later simulator traversal; and
+uncapped nonzero-loop treatment. `shippedProverExperiment` and the
+WholeRunJoins are not yet constructed.
