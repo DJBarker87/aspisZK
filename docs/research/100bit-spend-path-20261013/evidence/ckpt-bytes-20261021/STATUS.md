@@ -96,3 +96,24 @@ by the current E object. No memory/heartbeat/recursion cap was raised.
 
 Exact next byte consumer: a new sparse body_byte/C5 theorem over canonical
 Prepared/Accumulator fields, saved.next=10, bounded queries and 64 weights.
+
+## Stage 4: sparse-body arithmetic and explicit allocation boundary
+
+CheckpointBytesBodyArithmetic proves exact checked subtraction, division and
+remainder for the bounded sparse-index domain. Final attempt 2 exits 0,
+5.958834458142519 s, peak RSS 3648323584 bytes, zero swaps, revision
+0e57b8b1d. Its three axiom reports are standard. Attempt 1's subtraction
+postcondition/bound errors are retained and excluded.
+
+CheckpointBytesAllocationBoundary proves reservation rejection and the
+absence of an all-reservation-state successful roundtrip for the inherited
+fallible allocatedOverwrite model. Attempt 1 exits 0, 14.55853445827961 s,
+peak RSS 3631251456 bytes, zero swaps, revision 0e57b8b1d. Both reports are
+standard. This is a model-step impossibility, not a physical allocator
+counterexample or a refutation of success-conditioned source refinement.
+It records why allocation success cannot be inferred from canonical bytes.
+The exact source files/model boundary are pinned in source-pins.json.
+
+NEXT.md states the separate S2S10CallerBinding and S1S7S8StateProvenance
+interfaces and identifies reached_stage/strictStage as the retained consumer.
+Neither premise is hidden in P6, and no unproved source equality is assumed.
