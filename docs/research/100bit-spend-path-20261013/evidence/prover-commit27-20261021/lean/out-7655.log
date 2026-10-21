@@ -1,0 +1,50 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCoinCall27.lean:56:6: error: unsolved goals
+case neg
+s : Machine
+parts : ProverCommitOracleEffect26.Parts
+table : Table
+rec : s.record = some table
+old : Bytes32
+previous : table (ProverCommitStreamBytes.wireBytes parts) = some old
+same : ¬old = answer s
+⊢ (if old = (↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8) then
+      ok
+        ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8),
+          { coins := s.coins, next := s.next.wrapping_add 1#usize,
+            record :=
+              some fun q =>
+                if q = ProverCommitStreamBytes.wireBytes parts then
+                  some ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8))
+                else table q,
+            collision := s.collision })
+    else
+      ok
+        ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8),
+          { coins := s.coins, next := s.next.wrapping_add 1#usize,
+            record :=
+              some fun q =>
+                if q = ProverCommitStreamBytes.wireBytes parts then
+                  some ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8))
+                else table q,
+            collision := true })) =
+    ok
+      ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8),
+        { coins := s.coins, next := s.next.wrapping_add 1#usize,
+          record :=
+            some fun q =>
+              if q = ProverCommitStreamBytes.wireBytes parts then
+                some ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8))
+              else table q,
+          collision := s.collision || !decide (old = (↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8)) })
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCoinCall27.lean:56:107: warning: This simp argument is unused:
+  same
+
+Hint: Omit it from the simp argument list.
+  simp [core.option.Option.take, ̲rec, ̲mapRecording, ̲ProverCommitCoinTape27.insert, ̲previous,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲different_eq,s̵a̵m̵ ̲e,̵e̵xpected, ̲view, ̲reference, ̲answer]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitCoinCall27.read_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCoinCall27.call_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

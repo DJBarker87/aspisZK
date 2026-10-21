@@ -1,0 +1,32 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+error[E0753]: expected outer doc comment
+ --> src/effect.rs:1:1
+  |
+1 | //! Owned explicit-state oracle interface. The recording callback is the
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: inner doc comments like this (starting with `//!` or `/*!`) can only appear before items
+help: you might have meant to write a regular comment
+  |
+1 - //! Owned explicit-state oracle interface. The recording callback is the
+1 + // Owned explicit-state oracle interface. The recording callback is the
+  |
+
+error[E0753]: expected outer doc comment
+ --> src/effect.rs:2:1
+  |
+2 |   //! named D133 map contract, not a source/model execution-equality premise.
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 | / pub trait Recording {
+4 | |     fn insert(self, parts: &[&[u8]], answer: [u8;32]) -> (Option<[u8;32]>,Self);
+5 | | }
+  | |_- the inner doc comment doesn't annotate this trait
+  |
+help: to annotate the trait, change the doc comment from inner to outer style
+  |
+2 - //! named D133 map contract, not a source/model execution-equality premise.
+2 + /// named D133 map contract, not a source/model execution-equality premise.
+  |
+
+For more information about this error, try `rustc --explain E0753`.
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.

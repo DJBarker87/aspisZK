@@ -33,27 +33,23 @@ impl Digest32 for CoinOracle<'_> {
     }
 }
 
-fn reference(mut s:CoinState,parts:&[&[u8]])->([u8;32],CoinState) {
- let answer=if s.next<s.coins.len() {s.coins[s.next]} else {[0;32]};
- let next=s.next+1;
- let (record,collision)=match s.record {
-  None=>(None,s.collision),
-  Some(mut t)=>{
-   let old=t.previous;
-   let key=concat(parts);
-   t.previous=Some(answer);t.written=Some((key,answer));
-   (Some(t),s.collision || old.map(|v|v!=answer).unwrap_or(false))
-  }
- };
- s.next=next;s.record=record;s.collision=collision;(answer,s)
+#[path="effect.rs"] mod effect;
+impl effect::Recording for Table {
+ fn insert(mut self,parts:&[&[u8]],answer:[u8;32])->(Option<[u8;32]>,Self) {
+  let previous=Table::insert(&mut self,concat(parts),answer);(previous,self)
+ }
 }
+fn reference(s:CoinState,parts:&[&[u8]])->([u8;32],CoinState) {
+ let state=effect::CoinState{coins:s.coins,next:s.next,record:s.record,collision:s.collision};
+ let (answer,s)=<effect::CoinOracle as effect::EffectDigest32<_>>::digest(state,parts);
+ (answer,CoinState{coins:s.coins,next:s.next,record:s.record,collision:s.collision})
+}
+
 #[cfg(kani)]
 mod proofs {
  use super::*;
- #[kani::proof]
- #[kani::unwind(36)]
- fn call_effects() {
-  let coins:[[u8;32];2]=kani::any();let len:usize=2;
+ fn check<const N:usize>() {
+  let coins:[[u8;32];2]=kani::any();let len:usize=N;
   let next:usize=kani::any();kani::assume(next<usize::MAX);
   let previous:Option<[u8;32]>=kani::any();let recording:bool=kani::any();let collision:bool=kani::any();
   let bytes:[u8;1]=kani::any();let parts:[&[u8];1]=[&bytes];
@@ -63,7 +59,14 @@ mod proofs {
   let heap=RefCell::new(a);let digest=CoinOracle(&heap).digest(&parts);
   let (expected,result)=reference(b,&parts);let actual=heap.into_inner();
   assert_eq!(digest,expected);assert_eq!(actual.next,result.next);
-  assert_eq!(actual.coins,result.coins);assert_eq!(actual.record,result.record);
+  assert_eq!(actual.coins.len(),result.coins.len());
+  for i in 0..N {for j in 0..32 {assert_eq!(actual.coins[i][j],result.coins[i][j]);}}assert_eq!(actual.record,result.record);
   assert_eq!(actual.collision,result.collision);
  }
+ #[kani::proof] #[kani::stub_verified(effect::different)] #[kani::unwind(36)] fn call_empty(){check::<0>()}
+ #[kani::proof] #[kani::stub_verified(effect::different)] #[kani::unwind(36)] fn call_one(){check::<1>()}
+ #[kani::proof] #[kani::stub_verified(effect::different)] #[kani::unwind(36)] fn call_two(){check::<2>()}
+ #[kani::proof_for_contract(effect::different)]
+ #[kani::unwind(36)]
+ fn different_contract(){effect::different(kani::any(),kani::any());}
 }

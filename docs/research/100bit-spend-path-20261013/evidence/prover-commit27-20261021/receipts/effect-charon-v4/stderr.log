@@ -1,0 +1,18 @@
+   Compiling effect27 v0.1.0 (/home/dombarker/project-offloads/codex-cx-prover-commit27-20261021/effect)
+warning: unexpected `cfg` condition name: `kani`
+  --> src/lib.rs:56:12
+   |
+56 | #[cfg_attr(kani,kani::ensures(|out: &bool| *out == (a != b)))]
+   |            ^^^^
+   |
+   = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: `effect27` (lib) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 0.11s
