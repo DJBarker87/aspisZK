@@ -49,7 +49,7 @@ none of the source cones below.
 | **S10** — all sites and all continuations, including errors | [OraclePortJoinSplitCore.lean](../lean/OraclePortJoinSplitCore.lean), `AspisR1.OraclePortJoinSplit.S10Join` / `Covered` definitions; [current inventory report](../evidence/s10-current-repin-20261020/REPORT.md) | **(d)**. No concrete `S10Join inventory tree` inhabitant found. An inventory is not a source execution theorem or R22 theorem. The retained reconciliation reports 29 unresolved declaration records; these are not 29 independent proof obligations. | Instantiate current declarations/tree, include candidate query and adopted helper owners/opaque callbacks, reconcile errors and source/toolchain pins, resolve generated-name collisions across import groups. Session A. |
 | **Parser / compact codec** — `parseReached` (and source compact expansion/strict scan) | [OraclePortStoredParserC4.lean](../lean/OraclePortStoredParserC4.lean), `AspisR1.OraclePortStoredParserC4.parsed`, `parse_of_parts`; [OraclePortCompactDraft.lean](../lean/OraclePortCompactDraft.lean), `AspisR1.OraclePortCompactDraft.parse_header`; local fixed-field `ActualDecodeKStrictQM31Parser.source_refines` above | **(d)** for whole source parser/codec. `parsed` assumes model `parseReached = some p` and yields model parse/alignment; `parse_of_parts` assumes header, canonical scan, semantic rows and alignment. Neither compares extracted scanning/parsing to the model. **(b), local** only for the fixed 16-byte field decoder, not arbitrary stored slices. | All offsets/length/canonical guards, scanner/semantic rows/compact expansion and exact rejection Results; construct decoder D binding and stored-to-reached projection. |
 | **Multiproof** — six short-circuited `verifySlot_frozen` programs | [R13CloseDedup.lean](../lean/R13CloseDedup.lean), `AspisR1Stage2.R13Close.Dedup.dedup_step_pairs`; [R13CloseLevelRun.lean](../lean/R13CloseLevelRun.lean), `AspisR1Stage2.R13Close.Level.binary_loop_write_fold`; [OraclePortFrozenOrderSlotPath.lean](../lean/OraclePortFrozenOrderSlotPath.lean), `AspisR1.OraclePortFrozenOrder.slot_path` | **(c), local** source facts: successful dedup step preserves exact pair support; successful binary level loop expresses arrays as a write fold. **(d)** for source-to-frozen slot refinement. `slot_path` gives an indexed root witness and containment in the accepted **model** log, not equality to extracted execution. Old recursive `execute_trace`/root facts do not target this schedule. | Sorted leaf/duplicate scan, post-leaf padding and node consumption, safe live-array overwrite, all 18 ascending levels/parents, byte adapters and exact ordered digest reads, then six-slot caller composition. No permutation to the recursive log is required. |
-| **Checkpoint ABI** — writer/resume driver and prepared/accumulator bytes | [RawTx2ResumeDigestCalls.lean](../lean/RawTx2ResumeDigestCalls.lean), `AspisR1Stage2.Tx2ResumeDigests.successful_resume_calls`; [WireTx2ResumeCalls.lean](../lean/WireTx2ResumeCalls.lean), `AspisR1Stage2.WireTx2.resume_three_inputs`; [OraclePortCheckpointResumeC5.lean](../lean/OraclePortCheckpointResumeC5.lean), `AspisR1.OraclePortCheckpointResumeC5.physical_resume`; [OraclePortCheckpointAbiC5.lean](../lean/OraclePortCheckpointAbiC5.lean), `AspisR1.OraclePortCheckpointAbiC5.encode_length` | **(c), local** source resume witnesses: successful resume and, for `successful_resume_calls`, comparison soundness expose digest-call obligations. **(d)** whole byte/source join. `physical_resume` is an unconditional model save/resume equation; `encode_length = 1768` is model layout, not totality of the Rust writer/resumer. | Extracted field/slice/cursor-to-byte model, full state equality, three-digest order and error timing, stored/public/proof provenance and source adoption; same-snapshot runtime binding remains separate. |
+| **Checkpoint ABI** — writer/resume driver and prepared/accumulator bytes | `OraclePortCkptAbi2Unwrap.raw_panic_unreachable` / `savedTen_panic_unreachable`; `OraclePortCkptAbi2Reached.accepted_inputs` / `accepted_reference_resume`; `OraclePortCkptAbi2Vec.append_exact`; linked Kani `proofs::frozen_writer_exact_byte_and_reads` and four field-codec roots. See [continuation status](../evidence/ckpt-abi2-20261021/STATUS.md). | **(b), local** checked raw reads, bounded-list Vec content and reached-model save/resume; **P6, bounded** frozen writer byte/digest-call equality (S2, next=10, 64 weights, proof/public lengths 3/5). Whole-cone **(d)** remains. No concrete `AcceptedRunJoin` or full reader theorem is supplied. | Complete frozen reader/codec adoption and kernel byte-model identification; arbitrary proof/public lengths; Rust Prepared/query-loop/pending-finish provenance; physical allocation/owned iteration; actual stage-1/stage-2 entry/driver identity with all checkpoint reads. Runtime same-snapshot binding remains separate. |
 | **Pool caller / ASQ8** — external handoff to verifier driver | [OraclePortJoinSplitASQ8.lean](../lean/OraclePortJoinSplitASQ8.lean), `AspisR1.OraclePortJoinSplitASQ8.pool_handoff`; [ASQ8Normalization.lean](../lean/ASQ8Normalization.lean), `AspisR20Request.ASQ8Normalization.success_bytes`; [ASQ8PoolHandoff.lean](../lean/ASQ8PoolHandoff.lean), `AspisR20Request.ASQ8PoolHandoff.handoff_bytes` | **(c)**. `pool_handoff` assumes all-input `P6Normalization source`, successful normalization and a four-byte hint suffix, and proves extracted stripping returns the normalized body. `success_bytes` is identity after reference normalization success. Retained full-Result Kani normalization equivalence supports the named P6 boundary, not a Lean full Pool total-refinement theorem. | CPI program/accounts/payload, PDA/ownership/AccountInfo guards, public reconstruction for both variants, checkpoint/proof/public same-snapshot and transaction order. Whole-cone join **(d)**; ASQ8 is 320 bytes, reconstructed ASF8 1880 bytes. |
 
 Local **(b)** results supply local R22 only through the checked operational/source
@@ -113,3 +113,33 @@ Evidence and reproducible focused audits:
 R19 and the frozen headline are byte-identical to the base; both retained
 signature diffs are empty. This records **zero** premise deletions, rather
 than claiming that the missing source join has been discharged.
+
+## Checkpoint ABI continuation — 21 October 2026
+
+Branch `codex/cx-ckpt-abi2-20261021` links the actual unmodified verifier in
+its Kani proof crate. Four field-codec contracts and a symbolic-byte writer
+comparison passed. The writer checks all output bytes and all checksum-body
+bytes by independently arbitrary indices, with exact three-call hash order.
+The precise bounded domain and fixed proof/public lengths are recorded in
+`tools/oracle-port-ckpt-abi2/README.md`; no all-length or whole-cone claim is
+made. Pinned Charon/Aeneas extraction of the sparse byte reference succeeds.
+
+The Formatter boundary is isolated by a kernel proof that any panic
+continuation is unreachable on the complete bounded saved-ten raw schedule.
+Acceptance of `dV_frozen` supplies query uniqueness and its model recurrence
+inputs, rather than an externally chosen query function. Rust preparation,
+query-loop and pending-weight-finish identification is still required. The
+bounded-list Vec model gives exact push/append content, not physical allocator
+availability, Drop, or a source-owned iterator theorem.
+
+Broad reader composition attempts, including verified decoder adapters,
+remain unproved after capped timeouts. They are retained as diagnostics,
+not counted as successful contracts. No failed proof's recovery axioms are
+accepted. The complete stage-1/stage-2 driver is not instantiated.
+`OraclePortCkptAbi2DriverObstruction.checkpointThen_not_erased` proves that
+inserting authentic write/resume before an unchanged tail preserves its Bool
+but adds six reads; this particular erasure cannot discharge the ordered-log
+join. It is not a counterexample to an independently constructed full frozen
+Rust/model driver identity. The cone stays **(d)** and no headline premise is
+removed. No shipped source changed, so the conditional ELF rebuild gate was
+not triggered. Complete receipts are under `evidence/ckpt-abi2-20261021/`.

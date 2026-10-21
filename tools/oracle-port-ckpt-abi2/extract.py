@@ -2,7 +2,8 @@
 """Host-only pinned extraction of the actual correspondence reference."""
 from pathlib import Path
 import hashlib,json,os,subprocess,sys
-R=Path(__file__).resolve().parents[2];O=R/'extraction-reference-v6';O.mkdir(exist_ok=True)
+R=Path(__file__).resolve().parents[2];version=sys.argv[2] if len(sys.argv)>2 else 'v6'
+O=R/('extraction-reference-'+version);O.mkdir(exist_ok=True)
 C=Path('/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon')
 A=Path('/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static')
 pins={str(C):'daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8',str(C.with_name('charon-driver')):'efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45',str(A):'4632746db1bf6c3953f2971078965a2a5a8ad6cf5f75636b46b397bc50c550b5'}
@@ -20,4 +21,4 @@ env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',RUSTUP_TOOLC
 for n in ['RUSTC_WRAPPER','RUSTC_WORKSPACE_WRAPPER','CARGO_ENCODED_RUSTFLAGS','CHARON_TOOLCHAIN_IS_IN_PATH']:env.pop(n,None)
 (O/(phase+'-command.json')).write_text(json.dumps(dict(command=cmd,tool_pins=pins,source_sha256=hashlib.sha256((R/'tools/oracle-port-ckpt-abi2/src/lib.rs').read_bytes()).hexdigest()),indent=2)+'\n')
 subprocess.run(['python3',str(R/'tools/oracle-port-ckpt-abi2/reservation.py'),str(R/('reservation-'+phase+'.json'))],check=True,stdout=subprocess.DEVNULL)
-sys.exit(subprocess.run(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3','tools/oracle-port-ckpt-abi2/host-run.py',phase+'-reference-v6','timeout','240',*cmd],cwd=R,env=env).returncode)
+sys.exit(subprocess.run(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3','tools/oracle-port-ckpt-abi2/host-run.py',phase+'-reference-'+version,'timeout','240',*cmd],cwd=R,env=env).returncode)
