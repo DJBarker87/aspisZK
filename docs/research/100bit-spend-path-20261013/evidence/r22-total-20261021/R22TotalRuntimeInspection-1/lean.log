@@ -1,0 +1,32 @@
+def Aeneas.Std.UScalar.shiftRight : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → ℕ → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun {ty} x s =>
+  if s < ty.numBits then Aeneas.Std.Result.ok (x.bv.ushiftRight s#uscalar)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.integerOverflow
+def Aeneas.Std.UScalar.cast : {src_ty : Aeneas.Std.UScalarTy} →
+  (tgt_ty : Aeneas.Std.UScalarTy) → Aeneas.Std.UScalar src_ty → Aeneas.Std.UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+def AspisR1Qm31ArithmeticProbe.field.reduce_u64 : Aeneas.Std.U64 → Aeneas.Std.Result Aeneas.Std.U32 :=
+fun x => do
+  let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 AspisR1Qm31ArithmeticProbe.field.P)
+  let i1 ← Aeneas.Std.lift (x &&& i)
+  let i2 ← x >>> 31#u32
+  let x1 ← i1 + i2
+  let i3 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 AspisR1Qm31ArithmeticProbe.field.P)
+  let i4 ← Aeneas.Std.lift (x1 &&& i3)
+  let i5 ← x1 >>> 31#u32
+  let x2 ← i4 + i5
+  let x3 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 x2)
+  if x3 ≥ AspisR1Qm31ArithmeticProbe.field.P then x3 - AspisR1Qm31ArithmeticProbe.field.P else Aeneas.Std.Result.ok x3
+def AspisR1Qm31ArithmeticProbe.field.M31.mul : AspisR1Qm31ArithmeticProbe.field.M31 →
+  AspisR1Qm31ArithmeticProbe.field.M31 → Aeneas.Std.Result AspisR1Qm31ArithmeticProbe.field.M31 :=
+fun self rhs => do
+  let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 self)
+  let i1 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 rhs)
+  let i2 ← i * i1
+  let i3 ← AspisR1Qm31ArithmeticProbe.field.reduce_u64 i2
+  Aeneas.Std.Result.ok i3
+'Aeneas.Std.UScalar.shiftRight' depends on axioms: [propext]
+'Aeneas.Std.UScalar.cast' does not depend on any axioms
+'AspisR1Qm31ArithmeticProbe.field.reduce_u64' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1Qm31ArithmeticProbe.field.M31.mul' depends on axioms: [propext, Classical.choice, Quot.sound]

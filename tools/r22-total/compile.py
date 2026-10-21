@@ -19,7 +19,7 @@ for name in re.findall(r'^import (\S+)',source.read_text(),re.M):
   p=pathlib.Path(d)/(name.replace('.','/')+'.olean')
   if p.exists(): imports.append({'module':name,'path':str(p),'sha256':sha(p),'size':p.stat().st_size}); break
  else: imports.append({'module':name,'missing':True})
-deps=hashlib.sha256(json.dumps(imports,sort_keys=True).encode()).hexdigest()
+deps=hashlib.sha256(json.dumps({'imports':imports,'lean_path':path},sort_keys=True).encode()).hexdigest()
 out=BASE/'evidence/r22-total-20261021'/f'{module}-{attempt}'
 if out.exists(): raise SystemExit('Attempt exists; use a changed source or new dependency fingerprint and a new attempt.')
 out.mkdir()
@@ -31,12 +31,12 @@ while True:
  try: LOCK.mkdir(); break
  except FileExistsError:
   if time.time()-LOCK.stat().st_mtime>1800:
-   ps=subprocess.run(['pgrep','-fl','lean'],capture_output=True,text=True).stdout
+   ps=subprocess.run(['pgrep','-fl','-x','lean'],capture_output=True,text=True).stdout
    if not any('-M4400' in l for l in ps.splitlines()): LOCK.rmdir(); continue
   print('Waiting for local Lean lock',flush=True); time.sleep(15)
 try:
  while True:
-  ps=subprocess.run(['pgrep','-fl','lean'],capture_output=True,text=True).stdout
+  ps=subprocess.run(['pgrep','-fl','-x','lean'],capture_output=True,text=True).stdout
   if not any('-M4400' in l for l in ps.splitlines()): break
   print('Waiting for another capped Lean process',flush=True); time.sleep(15)
  (out/'preflight-processes.txt').write_text(ps)
@@ -47,7 +47,7 @@ try:
  log=(out/'lean.log').read_text(); timing=(out/'time.log').read_text()
  rss=re.search(r'(\d+)\s+maximum resident set size',timing)
  swaps=re.search(r'(\d+)\s+swaps',timing)
- record.update(schema='focused-extractor-proof-packet-v1',target=module,exit=proc.returncode,wall_seconds=wall,peak_rss_bytes=int(rss[1]) if rss else None,swaps=int(swaps[1]) if swaps else None,axiom_lines=re.findall(r"'[^'\n]+' (?:depends on axioms: \[[^]]*\]|does not depend on any axioms)", log),errors=[l for l in log.splitlines() if 'error:' in l])
+ record.update(schema='focused-extractor-proof-packet-v1',target=module,exit=proc.returncode,wall_seconds=wall,peak_rss_bytes=int(rss[1]) if rss else None,swaps=int(swaps[1]) if swaps else None,axiom_lines=re.findall(r"'[^'\n]+' (?:depends on axioms: \[[^]]*\]|does not depend on any axioms)", log),errors=[l for l in log.splitlines() if re.search(r'error(?:\([^)]*\))?:',l)])
  (out/'receipt.json').write_text(json.dumps(record,indent=2)+'\n')
  manifests=BASE/'evidence/r22-total-20261021/manifest.json'
  old=json.loads(manifests.read_text()) if manifests.exists() else {'schema':'focused-extractor-proof-packet-v1','attempts':[]}

@@ -1,0 +1,49 @@
+import R22TotalUnsignedPrimitives
+import ExtractedCurrentM31AddSub
+
+/-! Obstructions to dropping real hypotheses in the R22 audit. The field add
+counterexample uses noncanonical public storage words, not a reached canonical
+verifier input. No deployed overflow counterexample is asserted. -/
+set_option autoImplicit false
+namespace AspisR1.R22TotalDomainObstructions
+open Aeneas Aeneas.Std Result R22TotalUnsignedPrimitives
+
+theorem field_add_noncanonical_no_success :
+    ¬ ∃ z, AspisR1Qm31ArithmeticProbe.field.M31.add (4294967295#u32) (1#u32) = ok z := by
+  rintro ⟨z, hz⟩
+  simp only [AspisR1Qm31ArithmeticProbe.field.M31.add] at hz
+  cases h : UScalar.add (4294967295#u32) (1#u32) with
+  | ok sum =>
+      have hb := (add_success _ _ _ h).2
+      change 4294967295 + 1 < 4294967296 at hb
+      omega
+  | fail e => simp only [h, bind_tc_fail] at hz; cases hz
+  | div => simp only [h, bind_tc_div] at hz; cases hz
+
+theorem field_add_all_storage_total_is_false :
+    ¬ (∀ x y : AspisR1Qm31ArithmeticProbe.field.M31,
+      ∃ z, AspisR1Qm31ArithmeticProbe.field.M31.add x y = ok z) := by
+  intro h
+  exact field_add_noncanonical_no_success (h (4294967295#u32) (1#u32))
+
+/-- An explicit recovery API is outside the no-catch operational theorem. -/
+def recoverAdd (x y : U8) : Result (Option U8) :=
+  match UScalar.add x y with
+  | ok z => ok (some z)
+  | fail _ => ok none
+  | div => ok none
+
+theorem recovered_outer_total (x y : U8) : ∃ z, recoverAdd x y = ok z := by
+  unfold recoverAdd
+  cases UScalar.add x y <;> exact ⟨_, rfl⟩
+
+theorem recovery_hides_checked_overflow :
+    recoverAdd (255#u8) (1#u8) = ok none ∧
+    UScalar.add (255#u8) (1#u8) = fail .integerOverflow := by
+  constructor <;> rfl
+
+#print axioms field_add_noncanonical_no_success
+#print axioms field_add_all_storage_total_is_false
+#print axioms recovered_outer_total
+#print axioms recovery_hides_checked_overflow
+end AspisR1.R22TotalDomainObstructions

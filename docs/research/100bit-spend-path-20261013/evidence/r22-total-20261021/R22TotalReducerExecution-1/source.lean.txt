@@ -1,0 +1,92 @@
+import R22TotalUnsignedPrimitives
+import ExtractedCurrentReducer
+
+/-! Concrete operational instantiation: no supplied Translation or arithmetic
+bounds. Every checked scalar operation in the emitted reducer/multiply is
+represented below. Pure masks, constants, casts and the final comparison are
+the actual runtime operations shared by the two interpreters. -/
+set_option autoImplicit false
+namespace AspisR1.R22TotalReducerExecution
+open Aeneas Aeneas.Std Result R22TotalCheckedComposition R22TotalUnsignedPrimitives
+open ExtractedCurrentReducer
+
+def shiftPrimitive {ty : UScalarTy} (x : UScalar ty) (s : Nat) : Primitive (UScalar ty) where
+  checked := UScalar.shiftRight x s
+  wrapping := ⟨x.bv.ushiftRight s⟩
+  safe := s < ty.numBits
+  success v h := by
+    unfold UScalar.shiftRight at h
+    split at h
+    · rename_i hs
+      exact ⟨hs, Result.ok.inj h⟩
+    · cases h
+
+def foldCode {α : Type} (x : U64) (next : U64 → Code α) : Code α :=
+  .step (shiftPrimitive x 31) (fun high =>
+    .step (addPrimitive (UScalar.and x mask64) high) next)
+
+def reduceCode (x : U64) : Code U32 :=
+  foldCode x (fun first => foldCode first (fun second =>
+    let narrowed := UScalar.cast .U32 second
+    if AspisV8R17.RawReducer.P ≤ narrowed.val then
+      .step (subPrimitive narrowed mask32) .ret
+    else .ret narrowed))
+
+theorem checked_reduceCode (x : U64) :
+    checked (reduceCode x) = AspisR1Qm31ArithmeticProbe.field.reduce_u64 x := by
+  rw [current_reducer_eq]
+  simp only [reduceCode, foldCode, checked, shiftPrimitive, addPrimitive,
+    subPrimitive, reduceExecution, foldExecution, bind_assoc_eq]
+  congr 1
+  funext first
+  congr 1
+  funext second
+  split <;> simp only [checked, bind_tc_ok]
+
+def reducerTranslation : Translation AspisR1Qm31ArithmeticProbe.field.reduce_u64 where
+  code := reduceCode
+  source := checked_reduceCode
+
+theorem reducer_R22 : ∀ x : U64, NoOverflow (reduceCode x) ∧
+    wrapping (reduceCode x) = AspisR1Qm31ArithmeticProbe.field.reduce_u64 x := by
+  apply extracted_total_R22 _ reducerTranslation
+  intro x
+  obtain ⟨z, hz, _, _⟩ := current_reduce_mod x
+  exact ⟨z, hz⟩
+
+def multiplyCode (x y : U32) : Code U32 :=
+  .step (castPrimitive x .U64) (fun a =>
+    .step (castPrimitive y .U64) (fun b =>
+      .step (mulPrimitive a b) reduceCode))
+
+theorem checked_multiplyCode (x y : U32) :
+    checked (multiplyCode x y) = AspisR1Qm31ArithmeticProbe.field.M31.mul x y := by
+  simp only [multiplyCode, checked, castPrimitive, bind_tc_ok,
+    mulPrimitive, AspisR1Qm31ArithmeticProbe.field.M31.mul,
+    lift, bind_assoc_eq]
+  congr 1
+  funext product
+  rw [checked_reduceCode]
+  simp only [bind_tc_ok]
+
+theorem multiply_R22 (x y : U32) : NoOverflow (multiplyCode x y) ∧
+    wrapping (multiplyCode x y) = AspisR1Qm31ArithmeticProbe.field.M31.mul x y := by
+  obtain ⟨z, hz, _, _⟩ := current_mul_mod x y
+  obtain ⟨hs, hw⟩ := success_noOverflow_agrees (multiplyCode x y) z
+    ((checked_multiplyCode x y).trans hz)
+  exact ⟨hs, hw.trans hz.symm⟩
+
+theorem wrapping_multiply_exact (x y : U32) :
+    ∃ z, NoOverflow (multiplyCode x y) ∧ wrapping (multiplyCode x y) = ok z ∧
+      z.val = x.val*y.val % AspisV8R17.RawReducer.P ∧
+      z.val < AspisV8R17.RawReducer.P := by
+  obtain ⟨z, hz, hm, hc⟩ := current_mul_mod x y
+  obtain ⟨hs, hw⟩ := multiply_R22 x y
+  exact ⟨z, hs, hw.trans hz, hm, hc⟩
+
+#print axioms checked_reduceCode
+#print axioms reducer_R22
+#print axioms checked_multiplyCode
+#print axioms multiply_R22
+#print axioms wrapping_multiply_exact
+end AspisR1.R22TotalReducerExecution

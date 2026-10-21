@@ -1,0 +1,74 @@
+import R22TotalCheckedComposition
+import ActualDecodeKStrictQM31Parser
+import ExtractedCurrentReducer
+import ExtractedQM31SamplerCorrect
+
+/-! Each corollary supplies totality from an existing proved refinement.
+The sole new parameter is the explicit P6 interpretation of the extracted
+function as a faithful checked/wrapping operational tree. It is not a new
+hypothesis about arithmetic bounds or accepted inputs. -/
+set_option autoImplicit false
+namespace AspisR1.R22TotalCoreCones
+open Aeneas Aeneas.Std Result R22TotalCheckedComposition
+
+def ConeR22 {ι α : Type} {f : ι → Result α} (t : Translation f) : Prop :=
+  ∀ x, NoOverflow (t.code x) ∧ wrapping (t.code x) = f x
+
+theorem strict_field_parser_R22
+    (t : Translation (fun arr : Array U8 16#usize =>
+      AspisR1DecodeKFullV10.aspis_core.field.QM31.from_le_bytes (Array.to_slice arr))) :
+    ConeR22 t := by
+  apply extracted_total_R22
+  intro arr
+  exact ⟨_, ActualDecodeKStrictQM31Parser.source_refines arr⟩
+
+theorem reducer_R22
+    (t : Translation AspisR1Qm31ArithmeticProbe.field.reduce_u64) : ConeR22 t := by
+  apply extracted_total_R22
+  intro x
+  obtain ⟨z, hz, _, _⟩ := ExtractedCurrentReducer.current_reduce_mod x
+  exact ⟨z, hz⟩
+
+theorem m31_multiply_R22
+    (t : Translation (fun xy : AspisR1Qm31ArithmeticProbe.field.M31 ×
+        AspisR1Qm31ArithmeticProbe.field.M31 =>
+      AspisR1Qm31ArithmeticProbe.field.M31.mul xy.1 xy.2)) : ConeR22 t := by
+  apply extracted_total_R22
+  intro xy
+  obtain ⟨z, hz, _, _⟩ := ExtractedCurrentReducer.current_mul_mod xy.1 xy.2
+  exact ⟨z, hz⟩
+
+theorem m31_reduce_wrapper_R22
+    (t : Translation AspisR1Qm31ArithmeticProbe.field.M31.reduce_u64) : ConeR22 t := by
+  apply extracted_total_R22
+  intro x
+  obtain ⟨z, hz, _, _⟩ := ExtractedCurrentReducer.current_wrapper_mod x
+  exact ⟨z, hz⟩
+
+theorem fixed_block_sampler_R22
+    (t : Translation AspisR1Qm31SamplerIndex.sampler.qm31_sample) : ConeR22 t := by
+  apply extracted_total_R22
+  intro block
+  obtain ⟨q, hq, _, _⟩ := ExtractedQM31SamplerCorrect.sample_total block
+  exact ⟨q, hq⟩
+
+/-- A canonical postcondition from the existing refinement is preserved too. -/
+theorem wrapping_multiply_model
+    (t : Translation (fun xy : AspisR1Qm31ArithmeticProbe.field.M31 ×
+        AspisR1Qm31ArithmeticProbe.field.M31 =>
+      AspisR1Qm31ArithmeticProbe.field.M31.mul xy.1 xy.2))
+    (x y : AspisR1Qm31ArithmeticProbe.field.M31) :
+    ∃ z, NoOverflow (t.code (x,y)) ∧ wrapping (t.code (x,y)) = ok z ∧
+      z.val = x.val*y.val % AspisV8R17.RawReducer.P ∧
+      z.val < AspisV8R17.RawReducer.P := by
+  obtain ⟨z, hz, hm, hc⟩ := ExtractedCurrentReducer.current_mul_mod x y
+  obtain ⟨hs, hw⟩ := m31_multiply_R22 t (x,y)
+  exact ⟨z, hs, hw.trans hz, hm, hc⟩
+
+#print axioms strict_field_parser_R22
+#print axioms reducer_R22
+#print axioms m31_multiply_R22
+#print axioms m31_reduce_wrapper_R22
+#print axioms fixed_block_sampler_R22
+#print axioms wrapping_multiply_model
+end AspisR1.R22TotalCoreCones
