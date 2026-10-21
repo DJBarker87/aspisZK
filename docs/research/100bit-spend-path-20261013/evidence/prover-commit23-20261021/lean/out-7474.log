@@ -1,0 +1,49 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTLS23.lean:21:20: error(lean.unknownIdentifier): Unknown identifier `Function.update_same`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTLS23.lean:20:88: error: unsolved goals
+Thread Value Output : Type
+inst✝ : DecidableEq Thread
+thread : Thread
+f : Access Value Output
+store : Thread → Value
+⊢ (Function.update store thread (f (store thread)).fst thread, (f (store thread)).snd) = f (store thread)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTLS23.lean:26:20: error(lean.unknownIdentifier): Unknown identifier `Function.update_noteq`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTLS23.lean:25:53: error: unsolved goals
+Thread Value Output : Type
+inst✝ : DecidableEq Thread
+thread other : Thread
+different : other ≠ thread
+f : Access Value Output
+store : Thread → Value
+⊢ Function.update store thread (f (store thread)).fst other = store other
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTLS23.lean:64:24: error(lean.unknownIdentifier): Unknown identifier `Function.update_same`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTLS23.lean:63:8: error: unsolved goals
+Thread Value Output : Type
+inst✝ : DecidableEq Thread
+thread : Thread
+tail : List (Thread × Access Value Output)
+ih :
+  SingleThreaded thread tail →
+    ∀ (store : Thread → Value),
+      ((nativeRun store tail).fst thread, (nativeRun store tail).snd) =
+        singleRun (store thread) (List.map Prod.snd tail)
+store : Thread → Value
+f : Access Value Output
+oneThread : SingleThreaded thread ((thread, f) :: tail)
+rest :
+  ((nativeRun (native thread f store).fst tail).fst thread, (nativeRun (native thread f store).fst tail).snd) =
+    singleRun ((native thread f store).fst thread) (List.map Prod.snd tail)
+⊢ Function.update store thread (f (store thread)).fst thread = (f (store thread)).fst
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTLS23.lean:71:20: error(lean.unknownIdentifier): Unknown identifier `Function.update_same`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTLS23.lean:70:66: error: unsolved goals
+Thread Value : Type
+inst✝ : DecidableEq Thread
+thread : Thread
+store : Thread → Value
+value : Value
+⊢ Function.update store thread value thread = value
+'R1Z.ProverCommitTLS23.access_simulates' depends on axioms: [sorryAx]
+'R1Z.ProverCommitTLS23.access_frame' depends on axioms: [sorryAx]
+'R1Z.ProverCommitTLS23.schedule_simulates' depends on axioms: [sorryAx]
+'R1Z.ProverCommitTLS23.read_after_store' depends on axioms: [sorryAx]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
