@@ -217,3 +217,109 @@ theorem privacy_headline_admitted
 #print axioms privacy_headline_admitted
 end R1Z.PrivacyR1HeadlineOwnedClosed.Admitted.FixedObserver
 ```
+
+## Stage 3 — candidate step and arbitrary owned prefixes
+
+The new Kani `state_only_hiding::material15::candidate_step` checks one
+literal iteration body of shipped `SeedExpander::m31` against the owned
+`try_step`, with arbitrary seed, wrapping counter, buffered bytes and any
+legal initial word 0–8. It uses the previously accepted verified next-word
+contract; the reference transition is executed. It does not use a scalar
+summary stub or constrain the first acceptance index. No vector occurs in
+this check. Both candidate acceptance and rejection are included.
+
+`candidate-step-v1` passes: exit 0, wall **15.104 s**, peak RSS **671648 KiB**,
+zero swaps. All 1795 checks pass with unwinding assertions. Time is spent in
+Kani compilation and one bounded transition verification, not arithmetic
+elimination. The proof-only source derives from part 14's immutable host
+snapshot, plus the appended `material15` harness; its production prefix
+remains byte-identical to `542fe958f`. The inherited proof-only callee
+annotations and local ROM trust boundary are reused. Receipt revision is
+the research base; exact proof-input source hashes distinguish the harness.
+The host proof binary is recorded by SHA256 and size in `kani-artifacts.json`;
+no binary is committed. `#print axioms` is N/A for Kani.
+
+`R1Z.ProverCommitMaterialPrefix` proves `arbitrary_prefix` for a generic
+owned vector accumulator with any scalar result/state transition and any
+vector element type. Its capacity premise is explicit:
+`values.val.length + n ≤ Usize.max`. Errors preserve their final state;
+unpublished partial vector contents are erased. The successful result is
+exactly the original prefix followed by the collected suffix. `prepend_assoc`
+is proved by induction over the existing prefix; `m31_prefix` and
+`qm31_prefix` specialize the generic accumulator to the material scalar and
+tower callers. No numeric prefix-length restriction is imposed.
+
+**Boundary:** these are generic accumulator specializations. They do not
+assert equality with the extracted material collectors or instantiate a
+shipped mutable-source vector loop. The attempted direct accumulator
+identifications fail in J8397 and J8398 despite printing superficially
+identical monadic expressions. Both diagnostics, including generated
+`sorryAx`, are excluded. The final source removes those attempted bridges;
+it does not assume or rename them into source-refinement certificates.
+The accepted per-candidate law and generic prefix lemmas therefore constitute
+separate components, not the requested universal source-cell P6 theorem.
+Part 14's nine bounded M31 source-cell checks and earlier four-call QM31
+control-flow checks remain valid within their original domains; they are
+reused without an unchanged rerun.
+
+## Final cached Lean audit
+
+The smallest changed generic module was checked first (J8397, J8398), with
+the failed bridges excluded as above. The final **J8399** compiles the adopted
+`R1Z.ProverCommitMaterialPrefix` against the prior `ProverCommit14Audit` and
+the new fixed endpoint, and prints all prior 33 and all new 7 axiom audits.
+It is the single final cached dependency audit for this addition, not a
+package-wide rebuild or a shipped-runtime release certificate.
+
+Exact target: `R1Z/ProverCommitMaterialPrefix.lean`; exit **0**;
+wall **2.07 s**; peak RSS **4153408 KiB**; swaps **0**;
+source revision **`0a1cb4d79`** plus the exact additive source SHA retained in
+`lean/sources/attempt-8399-ProverCommitMaterialPrefix.lean.txt` and the JSONL
+receipt. All **40** `#print axioms` lines contain only subsets of
+`[propext, Classical.choice, Quot.sound]`. Cgroup limits remain
+MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64.
+No unchanged full regression is repeated.
+
+## Demonstrated limits and next deliverable
+
+1. **Source-prefix and QM31 transport remains open.** The universal owned
+   accumulator lemmas have no accepted bridge to the actual mutable source
+   loop. The previously recorded Aeneas borrowed-loop context-join failure
+   is not rerun unchanged. Fixing that extraction or proving an explicit
+   source iteration/context refinement is required before claiming arbitrary
+   source-prefix or whole-column transport.
+2. **Returned-material assembly remains open.** The source consumes the
+   nonce store, derives a seed, builds c1 and every mask-only column, builds
+   and balances g, fills and balances h1 padding, and then moves those fields
+   into `StateOnlyMaskMaterial` (`state_only_hiding.rs:438–489`). The new
+   generic lemmas do not cover those callers, balancing integration, nonce
+   reservation, allocator semantics or returned-object disposal.
+3. **The actual builder/checker/retry history remains open.** The current
+   endpoint's `source` is the constructed `fsR1P`, not an independently
+   represented Rust execution. `ModelExecutionJoin` contains equality of
+   rational Boolean tests, not equality of histories. The fixed observer
+   removes the previous observer counterexample but cannot manufacture the
+   missing source execution carrier and its refinement. In addition,
+   `GamesR1PBin.realOut` evaluates `runC` over the full N-attempt carrier,
+   whereas `prove_masked_retrying_with` returns immediately on the first
+   success or non-rejection error. D52.3 explicitly calls this conservative.
+   A stopped-prefix/shared-table transport is needed; this is not reported
+   as a counterexample to public-view equivalence or model privacy.
+4. **All-family shared-oracle coverage remains open.** Neither the local
+   candidate ROM nor the vector-prefix algebra instantiates the complete
+   seed, packing, D, salt, tree, verifier, retry and abort callback sequence.
+   The part-14 callback obligation ledger is reused, not marked discharged.
+
+The literal deletion removes both named *model* joins in the new endpoint.
+It does **not** close the shipped obligations formerly described by their
+names. The unqualified old `privacy_headline_admitted` remains unchanged.
+No production source, frozen ELF, public game, query budget, bad event,
+security target, or numerical error term is changed. The actual shipped
+privacy target is **not yet established**.
+
+The assigned Env J range is exhausted at **8399**, including the retained
+failed diagnostics. No attempt 8400 or another worker's number is used.
+Further Lean development needs another allocated range; the next concrete
+proof is the explicit material-collector/accumulator bridge, followed by the
+actual source context refinement and returned assembly. No unchecked bridge
+or failed diagnostic is adopted merely because the allocation ended.

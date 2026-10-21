@@ -4,10 +4,8 @@ from pathlib import Path
 import hashlib,json,re
 H=Path('/home/dombarker/project-offloads/codex-cx-prover-commit15-20261021')
 rows=[]
-for name in ['kani-contract-target','kani-lane1-target','kani-lane2-target']:
- for p in (H/name).rglob('*material146word_*.out'):
-  match=re.search(r'material146word_(\d+)\.out$',p.name)
-  if match:
-   rows.append(dict(word=int(match[1]),path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
+for p in (H/'kani-contract-target').rglob('*material1514candidate_step.out'):
+ rows.append(dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
+assert len(rows)==1,rows
 (H/'kani-artifacts.json').write_text(json.dumps(rows,indent=2)+'\n')
 print('Hashed',len(rows),'host proof inputs; no binary copied')

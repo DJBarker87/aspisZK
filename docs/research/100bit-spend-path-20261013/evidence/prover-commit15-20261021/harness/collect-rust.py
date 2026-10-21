@@ -24,6 +24,4 @@ for name in sys.argv[1:]:
  assert hashlib.sha256((E/'rust-sources/prover_commit_reference.rs').read_bytes()).hexdigest()==pins['source_hashes']['crates/aspis-prover/src/prover_commit_reference.rs'],name
  rows.append(x)
 (E/'rust-attempts.json').write_text(json.dumps(rows,indent=2)+'\n')
-try:subprocess.run(['scp',host+H+'/m31-iteration-v2-stop.json',str(E/'m31-iteration-v2-stop.json')],check=True)
-except subprocess.CalledProcessError:pass
 print([(x['name'],x['exit_status'],x['wall_seconds']) for x in rows])
