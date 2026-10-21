@@ -1,0 +1,250 @@
+import OraclePortCkptAbiTry
+
+/-! Complete successful emitted resume: every Prepared/Accumulator output is
+bound to the exact read call which produced it. No arithmetic/codec law is
+assumed. Identifying those calls with C5 is a separate atomic codec join. -/
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1.OraclePortCkptAbiSourceFields
+open AspisR1Stage2 OraclePortCkptAbiTry
+
+private theorem checkpoint_guard {T : Type} (b : Bool)
+    (tail : Result (core.result.Result T verifier.Error)) (out : T)
+    (h : (if b then ok (.Err verifier.Error.Checkpoint) else tail) = ok (.Ok out)) :
+    b = false ∧ tail = ok (.Ok out) := by
+  cases b
+  · exact ⟨rfl,h⟩
+  · cases h
+
+private theorem checkpoint_guard_prop {T : Type} (b : Prop) [Decidable b]
+    (tail : Result (core.result.Result T verifier.Error)) (out : T)
+    (h : (if b then ok (.Err verifier.Error.Checkpoint) else tail) = ok (.Ok out)) :
+    tail = ok (.Ok out) := by
+  split at h
+  · cases h
+  · exact h
+
+inductive QueryReads (ops : ResumeOps) :
+    verifier.Reader → List U32 → verifier.Reader → Prop where
+  | nil (r : verifier.Reader) : QueryReads ops r [] r
+  | cons {r r1 r2 : verifier.Reader} {b : Array U8 4#usize} {q : U32} {qs : List U32}
+      (read : ops.raw 4#usize r = ok (b,r1))
+      (decode : lift (core.num.U32.from_le_bytes b) = ok q)
+      (tail : QueryReads ops r1 qs r2) : QueryReads ops r (q::qs) r2
+
+structure Fields (ops : ResumeOps) (ck : Slice U8)
+    (v : transport.Variant) (p : verifier.Prepared) (a : verifier.Accumulator) where
+  variant : p.variant = v
+  root0 : Array U8 32#usize
+  root1 : Array U8 32#usize
+  roots : p.roots = Array.make 2#usize [root0,root1]
+  rState : verifier.Reader
+  rRoot0 : verifier.Reader
+  rRoot1 : verifier.Reader
+  stateRead : ops.raw 32#usize ⟨ck,80#usize⟩ = ok (p.state,rState)
+  root0Read : ops.raw 32#usize rState = ok (root0,rRoot0)
+  root1Read : ops.raw 32#usize rRoot0 = ok (root1,rRoot1)
+  rGamma : verifier.Reader
+  rKappa : verifier.Reader
+  alpha0 : aspis_core.field.wide_exact.WideExact
+  alpha1 : aspis_core.field.wide_exact.WideExact
+  rAlpha0 : verifier.Reader
+  rAlpha1 : verifier.Reader
+  alpha : p.alpha = Array.make 2#usize [alpha0,alpha1]
+  gammaRead : ops.readE rRoot1 = ok (.Ok p.gamma,rGamma)
+  kappaRead : ops.readE rGamma = ok (.Ok p.kappa,rKappa)
+  alpha0Read : ops.readE rKappa = ok (.Ok alpha0,rAlpha0)
+  alpha1Read : ops.readE rAlpha0 = ok (.Ok alpha1,rAlpha1)
+  rRho : verifier.Reader
+  rhoRead : ops.readK rAlpha1 = ok (.Ok p.rho,rRho)
+  rQueries : verifier.Reader
+  queriesRead : QueryReads ops rRho p.queries.val rQueries
+  validate : ops.validate p.queries = ok (.Ok ())
+  semanticEnd : Usize
+  semanticRead : ops.readSemanticAlpha ck rQueries.at = ok (.Ok (p.semantic_alpha,semanticEnd))
+  x0 : aspis_core.field.QM31
+  y0 : aspis_core.field.QM31
+  x1 : aspis_core.field.QM31
+  y1 : aspis_core.field.QM31
+  coordinates : p.z = Array.make 2#usize [⟨x0,y0⟩,⟨x1,y1⟩]
+  rX0 : verifier.Reader
+  rY0 : verifier.Reader
+  rX1 : verifier.Reader
+  rY1 : verifier.Reader
+  x0Read : ops.readK {rQueries with «at» := semanticEnd} = ok (.Ok x0,rX0)
+  y0Read : ops.readK rX0 = ok (.Ok y0,rY0)
+  x1Read : ops.readK rY0 = ok (.Ok x1,rX1)
+  y1Read : ops.readK rX1 = ok (.Ok y1,rY1)
+  rClaim : verifier.Reader
+  rRhs : verifier.Reader
+  rPower : verifier.Reader
+  claimRead : ops.readE rY1 = ok (.Ok p.claim,rClaim)
+  rhsRead : ops.readE rClaim = ok (.Ok a.rhs,rRhs)
+  powerRead : ops.readK rRhs = ok (.Ok a.power,rPower)
+  finalLength : Usize
+  zero : aspis_core.field.QM31
+  allocated : alloc.vec.Vec aspis_core.field.QM31
+  finalAt : Usize
+  checksumEnd : Usize
+  lengthCall : ops.finalLen v = ok finalLength
+  zeroCall : ops.zeroK = ok zero
+  allocation : ops.filled finalLength zero = ok (.Ok allocated)
+  weightsRead : ops.readWeights ck rPower.at allocated = ok (.Ok (a.weights,finalAt))
+  checksumEndCall : Slice.len ck - 32#usize = ok checksumEnd
+  cursor : finalAt = checksumEnd
+  nextByte : U8
+  nextRead : Slice.index_usize ck 9#usize = ok nextByte
+  nextCast : lift (UScalar.cast .Usize nextByte) = ok a.next
+
+/-- Full output provenance for the emitted decoder, on every successful run.
+The proof only inverts executed binds/guards; it does not unfold byte codecs. -/
+theorem successful_fields (ops : ResumeOps) {H : Type}
+    (digestInst : aspis_core.digest.Digest32 H)
+    (bytes proof public1 : Slice U8) (v : transport.Variant) (hash : H)
+    (p : verifier.Prepared) (acc : verifier.Accumulator)
+    (success : verifier.resumeWithOps ops digestInst bytes proof public1 v hash =
+      ok (.Ok (p,acc))) : Nonempty (Fields ops bytes v p acc) := by
+  unfold verifier.resumeWithOps at success
+  obtain ⟨size, _, h⟩ := bind_success _ _ _ success
+  obtain ⟨_, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨header, _, h⟩ := bind_success _ _ _ h
+  obtain ⟨magicBad, _, h⟩ := bind_success _ _ _ h
+  obtain ⟨_, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨tagByte, _, h⟩ := bind_success _ _ _ h
+  obtain ⟨tag, _, h⟩ := bind_success _ _ _ h
+  obtain ⟨_, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨nextByte, nextByteRead, h⟩ := bind_success _ _ _ h
+  have h := checkpoint_guard_prop _ _ _ h
+  obtain ⟨version, _, h⟩ := bind_success _ _ _ h
+  obtain ⟨_, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨reserved, _, h⟩ := bind_success _ _ _ h
+  obtain ⟨iter, _, h⟩ := bind_success _ _ _ h
+  obtain ⟨anyResult, _, h⟩ := bind_success _ _ _ h
+  rcases anyResult with ⟨anyBad, iterOut⟩
+  obtain ⟨_, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨end1, hend, h⟩ := bind_success _ _ _ h
+  obtain ⟨stored, hstored, h⟩ := bind_success _ _ _ h
+  obtain ⟨chunks, hchunks, h⟩ := bind_success _ _ _ h
+  obtain ⟨digest, hdigest, h⟩ := bind_success _ _ _ h
+  obtain ⟨bad, hbad, h⟩ := bind_success _ _ _ h
+  obtain ⟨hb, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨storedPublic, hsp, h⟩ := bind_success _ _ _ h
+  obtain ⟨publicParts, hpp, h⟩ := bind_success _ _ _ h
+  obtain ⟨publicDigest, hpd, h⟩ := bind_success _ _ _ h
+  obtain ⟨publicBad, hpb, h⟩ := bind_success _ _ _ h
+  obtain ⟨hpublicBad, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨storedChecksum, hsc, h⟩ := bind_success _ _ _ h
+  obtain ⟨domain, hdomain, h⟩ := bind_success _ _ _ h
+  obtain ⟨body, hbody, h⟩ := bind_success _ _ _ h
+  obtain ⟨checksumParts, hcp, h⟩ := bind_success _ _ _ h
+  obtain ⟨checksumDigest, hcd, h⟩ := bind_success _ _ _ h
+  obtain ⟨checksumBad, hcb, h⟩ := bind_success _ _ _ h
+  obtain ⟨_, h⟩ := checkpoint_guard _ _ _ h
+  obtain ⟨⟨state,rState⟩,stateRead,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨root0,rRoot0⟩,root0Read,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨root1,rRoot1⟩,root1Read,h⟩ := bind_success _ _ _ h
+  obtain ⟨gamma,rGamma,gammaRead,h⟩ := read_success _ _ _ h
+  obtain ⟨kappa,rKappa,kappaRead,h⟩ := read_success _ _ _ h
+  obtain ⟨alpha0,rAlpha0,alpha0Read,h⟩ := read_success _ _ _ h
+  obtain ⟨alpha1,rAlpha1,alpha1Read,h⟩ := read_success _ _ _ h
+  obtain ⟨rho,rRho,rhoRead,h⟩ := read_success _ _ _ h
+  obtain ⟨⟨qb0,rq0⟩,qr0,h⟩ := bind_success _ _ _ h
+  obtain ⟨q0,qd0,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb1,rq1⟩,qr1,h⟩ := bind_success _ _ _ h
+  obtain ⟨q1,qd1,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb2,rq2⟩,qr2,h⟩ := bind_success _ _ _ h
+  obtain ⟨q2,qd2,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb3,rq3⟩,qr3,h⟩ := bind_success _ _ _ h
+  obtain ⟨q3,qd3,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb4,rq4⟩,qr4,h⟩ := bind_success _ _ _ h
+  obtain ⟨q4,qd4,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb5,rq5⟩,qr5,h⟩ := bind_success _ _ _ h
+  obtain ⟨q5,qd5,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb6,rq6⟩,qr6,h⟩ := bind_success _ _ _ h
+  obtain ⟨q6,qd6,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb7,rq7⟩,qr7,h⟩ := bind_success _ _ _ h
+  obtain ⟨q7,qd7,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb8,rq8⟩,qr8,h⟩ := bind_success _ _ _ h
+  obtain ⟨q8,qd8,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb9,rq9⟩,qr9,h⟩ := bind_success _ _ _ h
+  obtain ⟨q9,qd9,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb10,rq10⟩,qr10,h⟩ := bind_success _ _ _ h
+  obtain ⟨q10,qd10,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb11,rq11⟩,qr11,h⟩ := bind_success _ _ _ h
+  obtain ⟨q11,qd11,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb12,rq12⟩,qr12,h⟩ := bind_success _ _ _ h
+  obtain ⟨q12,qd12,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb13,rq13⟩,qr13,h⟩ := bind_success _ _ _ h
+  obtain ⟨q13,qd13,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb14,rq14⟩,qr14,h⟩ := bind_success _ _ _ h
+  obtain ⟨q14,qd14,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb15,rq15⟩,qr15,h⟩ := bind_success _ _ _ h
+  obtain ⟨q15,qd15,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb16,rq16⟩,qr16,h⟩ := bind_success _ _ _ h
+  obtain ⟨q16,qd16,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb17,rq17⟩,qr17,h⟩ := bind_success _ _ _ h
+  obtain ⟨q17,qd17,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb18,rq18⟩,qr18,h⟩ := bind_success _ _ _ h
+  obtain ⟨q18,qd18,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb19,rq19⟩,qr19,h⟩ := bind_success _ _ _ h
+  obtain ⟨q19,qd19,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb20,rq20⟩,qr20,h⟩ := bind_success _ _ _ h
+  obtain ⟨q20,qd20,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨qb21,rq21⟩,qr21,h⟩ := bind_success _ _ _ h
+  obtain ⟨q21,qd21,h⟩ := bind_success _ _ _ h
+  obtain ⟨validated,validate,h⟩ := bind_success _ _ _ h
+  obtain ⟨unit,valid,h⟩ := try_success _ _ _ h
+  cases unit
+  subst validated
+  obtain ⟨semanticResult,semanticCall,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨semanticAlpha,semanticEnd⟩,semanticEq,h⟩ := try_success _ _ _ h
+  subst semanticResult
+  obtain ⟨x0,rX0,x0Read,h⟩ := read_success _ _ _ h
+  obtain ⟨y0,rY0,y0Read,h⟩ := read_success _ _ _ h
+  obtain ⟨x1,rX1,x1Read,h⟩ := read_success _ _ _ h
+  obtain ⟨y1,rY1,y1Read,h⟩ := read_success _ _ _ h
+  obtain ⟨claim,rClaim,claimRead,h⟩ := read_success _ _ _ h
+  obtain ⟨rhs,rRhs,rhsRead,h⟩ := read_success _ _ _ h
+  obtain ⟨power,rPower,powerRead,h⟩ := read_success _ _ _ h
+  obtain ⟨finalLength,lengthCall,h⟩ := bind_success _ _ _ h
+  obtain ⟨zero,zeroCall,h⟩ := bind_success _ _ _ h
+  obtain ⟨allocatedResult,allocatedCall,h⟩ := bind_success _ _ _ h
+  obtain ⟨allocated,allocatedEq,h⟩ := try_success _ _ _ h
+  subst allocatedResult
+  obtain ⟨weightsResult,weightsCall,h⟩ := bind_success _ _ _ h
+  obtain ⟨⟨weights,finalAt⟩,weightsEq,h⟩ := try_success _ _ _ h
+  subst weightsResult
+  obtain ⟨cursor,h⟩ := checkpoint_guard _ _ _ h
+  have cursorEq : finalAt = end1 := by simpa only [bne_eq_false_iff_eq] using cursor
+  obtain ⟨next,nextCast,h⟩ := bind_success _ _ _ h
+  have finalEq := core.result.Result.Ok.inj (Result.ok.inj h)
+  have preparedEq := congrArg Prod.fst finalEq
+  have accumulatorEq := congrArg Prod.snd finalEq
+  dsimp only at preparedEq accumulatorEq
+  subst p acc
+  refine ⟨{
+    variant := rfl, root0 := root0, root1 := root1, roots := rfl,
+    rState := rState, rRoot0 := rRoot0, rRoot1 := rRoot1,
+    stateRead := stateRead, root0Read := root0Read, root1Read := root1Read,
+    rGamma := rGamma, rKappa := rKappa, alpha0 := alpha0, alpha1 := alpha1,
+    rAlpha0 := rAlpha0, rAlpha1 := rAlpha1, alpha := rfl,
+    gammaRead := gammaRead, kappaRead := kappaRead,
+    alpha0Read := alpha0Read, alpha1Read := alpha1Read,
+    rRho := rRho, rhoRead := rhoRead, rQueries := rq21, queriesRead := ?_,
+    validate := validate, semanticEnd := semanticEnd, semanticRead := semanticCall,
+    x0 := x0, y0 := y0, x1 := x1, y1 := y1, coordinates := rfl,
+    rX0 := rX0, rY0 := rY0, rX1 := rX1, rY1 := rY1,
+    x0Read := x0Read, y0Read := y0Read, x1Read := x1Read, y1Read := y1Read,
+    rClaim := rClaim, rRhs := rRhs, rPower := rPower,
+    claimRead := claimRead, rhsRead := rhsRead, powerRead := powerRead,
+    finalLength := finalLength, zero := zero, allocated := allocated,
+    finalAt := finalAt, checksumEnd := end1, lengthCall := lengthCall,
+    zeroCall := zeroCall, allocation := allocatedCall, weightsRead := weightsCall,
+    checksumEndCall := hend, cursor := cursorEq, nextByte := nextByte,
+    nextRead := nextByteRead, nextCast := nextCast }⟩
+  exact (QueryReads.cons qr0 qd0 (QueryReads.cons qr1 qd1 (QueryReads.cons qr2 qd2 (QueryReads.cons qr3 qd3 (QueryReads.cons qr4 qd4 (QueryReads.cons qr5 qd5 (QueryReads.cons qr6 qd6 (QueryReads.cons qr7 qd7 (QueryReads.cons qr8 qd8 (QueryReads.cons qr9 qd9 (QueryReads.cons qr10 qd10 (QueryReads.cons qr11 qd11 (QueryReads.cons qr12 qd12 (QueryReads.cons qr13 qd13 (QueryReads.cons qr14 qd14 (QueryReads.cons qr15 qd15 (QueryReads.cons qr16 qd16 (QueryReads.cons qr17 qd17 (QueryReads.cons qr18 qd18 (QueryReads.cons qr19 qd19 (QueryReads.cons qr20 qd20 (QueryReads.cons qr21 qd21 QueryReads.nil _))))))))))))))))))))))
+
+#print axioms checkpoint_guard
+#print axioms checkpoint_guard_prop
+#print axioms successful_fields
+end AspisR1.OraclePortCkptAbiSourceFields
