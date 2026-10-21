@@ -9,7 +9,7 @@ module=sys.argv[2];source=B/'lean'/(module.replace('.', '/')+'.lean');E.mkdir(pa
 ref=json.loads((B/'evidence/transfer-bindings-20261020/ExtractedAdapterTransferBindings/command.json').read_text())
 objects=Path('/tmp/codex-cx-s8-join-20261021-objects');objects.mkdir(exist_ok=True)
 env=dict(os.environ);port=json.loads((B/'evidence/port-integrate-20261021/OraclePortFrozenOrderDecision-1/command.json').read_text())
-env['LEAN_PATH']=str(objects)+':/tmp/codex-cx-s8-kani2-20261021-objects:'+':/tmp/codex-cx-s8-kani-20261021-objects:/tmp/codex-cx-s7-kani-20261021-objects:/tmp/r1-circle-pointwise-coalesced-local-v1/objects:/tmp/cx-geometry-20261020-objects:'+ ':/tmp/codex-cx-r20-pool-handoff-20261020-objects:/tmp/root-finish-prefix-deps-20261018:'+ref['environment']['LEAN_PATH']+':'+port['lean_path']
+env['LEAN_PATH']=str(objects)+':/tmp/adaptive-format-R1SemanticHit-only-20261019/objects:/tmp/adaptive-format-coalesced-R0P-20261019/objects:'+ ':/tmp/codex-cx-s8-kani2-20261021-objects:'+':/tmp/codex-cx-s8-kani-20261021-objects:/tmp/codex-cx-s7-kani-20261021-objects:/tmp/r1-circle-pointwise-coalesced-local-v1/objects:/tmp/cx-geometry-20261020-objects:'+ ':/tmp/codex-cx-r20-pool-handoff-20261020-objects:/tmp/root-finish-prefix-deps-20261018:'+ref['environment']['LEAN_PATH']+':'+port['lean_path']
 compiler='/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean'
 (objects/(module.replace('.', '/')+'.olean')).parent.mkdir(parents=True,exist_ok=True)
 cmd=[compiler,'-j1','-M4400','-DElab.async=false','-o',str(objects/(module.replace('.', '/')+'.olean')),str(source)]

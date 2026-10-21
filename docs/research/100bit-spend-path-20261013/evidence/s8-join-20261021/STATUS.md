@@ -35,3 +35,13 @@ The compact strict scan is being joined to the exact canonical predicate
 of `OraclePortCompactDraft`. It scans full 16-byte chunks and ignores a
 trailing suffix, so a multiple-of-16 length condition is essential when
 comparing with the parser's four-byte canonical scan.
+
+## Stage 2 — exact byte/word grouping
+
+`S8JoinCompactChunks.chunk_iff` equates the extracted strict codec on a full
+16-byte chunk with the frozen parser's canonicality of exactly those bytes.
+`canonical_chunks` proves the whole list/grouping equivalence for lengths
+that are multiples of 16. No parser or codec operations are abstract callbacks.
+All six theorem audits use standard axioms; focused attempt chunks-06 passes.
+The retained coalesced R1SemanticHit/R0P caches resolve a duplicate-declaration
+import failure in chunks-02; no shared cache or old module was modified.
