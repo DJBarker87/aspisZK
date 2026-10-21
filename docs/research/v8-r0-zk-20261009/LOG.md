@@ -7642,3 +7642,18 @@ privacy headline. Open: shipped entry-point/outer-caller transport, i.e. that
 the shipped prover entry calls these references in this order (the isolated
 scalar-contract check timed out at 600 s even with all three verified summaries
 active), and all-family callback coverage.
+
+## D121 — prover commitment part 12 (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit12-20261021` (`r1p-final/PROVER-COMMIT12-20261021.md`).
+Proved: both one-iteration Kani checks of the shipped scalar loops pass
+against the verified next-word summaries; Lean proves the sixteen-try
+schedules and conditional state transport; the transcript, binary-parent and
+literal 17-call query-prefix checks pass. J8363: 13 standard-axiom audits,
+zero swap; no production change. No premise is removed. A checked
+counterexample shows the builder premise cannot hold for every currently
+permitted `input` (the free-parameter pattern again: fix `input` to the
+protocol's admitted input domain), and the direct shipped extraction pulls in
+`core::fmt::Formatter` (as in the checkpoint cone: stub the panic path after
+proving it unreachable). Open: shipped outer execution transport and
+all-family shared-oracle coverage.
