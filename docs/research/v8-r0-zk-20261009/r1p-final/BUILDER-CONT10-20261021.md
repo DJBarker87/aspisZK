@@ -111,4 +111,169 @@ and the successful compiler's actual instance/public projection.
 
 ## Stage 4: checker/retry coupling and Source5
 
-Pending.
+The checker/retry coupling is not constructed. Its actual type quantifies over
+arbitrary `FSExperiments`, observer programs, randomness and source h, and
+asks for agreement outside the fixed model events. Builder/validator facts
+supply no law relating those observations. The inherited checked
+`BuilderExecutionBoundary.no_constant_mismatch_join` rules out zero-versus-one
+observations whenever the fixed bad-event union has mass less than one.
+This prevents an unconditional inference from the new builder facts; it is
+not an assertion of a defect in shipped execution.
+
+The missing concrete law must cover the exact P_chk/P_R1 checker inputs,
+pole/VR1 checks, masks, retries, next_attempt failures, non-Rejected aborts,
+publication/serialization and reached-query history. The full forest callback
+port is a prerequisite for the requested source instance; it is not an
+execution law. No bad event is broadened, no arbitrary observation replaced,
+and no execution premise renamed into another assumed package.
+
+`PrivacyR1FinalReleaseSource5` builds on Source4 and imports the new field/store
+composition, std port and projected validator acceptance results. Every
+inherited binder and the complete error/freshness/strict-bound conclusion
+is preserved. The exact signature audit below has zero deletions and zero
+additions. It is deletion-only but not strictly weaker, and is not a completed
+shipped-source privacy release.
+
+## Final verification and resource record
+
+The read-only final audit validates eight current modules, 52 complete named
+axioms results, exact source hashes and current direct-import object
+fingerprints. Accepted axiom sets are subsets of propext, Classical.choice and
+Quot.sound; all accepted attempts have zero swaps. The source revisions,
+dirty flags, commands, wall/RSS/swap and full failure/replacement logs are in
+`builder-cont10-attempts.jsonl` and `builder-cont10-final-audit.json`.
+
+| Target in R1Z | attempt | exit | wall | peak RSS KiB |
+|---|---:|---:|---:|---:|
+| `BuilderDropFields` | 9378 | 0 | 0:01.39 | 2537168 |
+| `BuilderDropStoreComposition` | 9390 | 0 | 0:01.25 | 2532776 |
+| `BuilderForestStd` | 9380 | 0 | 0:01.66 | 2549788 |
+| `BuilderForestStdPort` | 9382 | 0 | 0:01.24 | 2542296 |
+| `BuilderForestValidatorExtracted` | 9387 | 0 | 0:01.31 | 2544424 |
+| `BuilderForestValidatorSteps` | 9391 | 0 | 0:01.97 | 4011288 |
+| `BuilderForestValidatorAcceptance` | 9394 | 0 | 0:01.87 | 4010620 |
+| `PrivacyR1FinalReleaseSource5` | 9395 | 0 | 0:03.38 | 4123624 |
+
+`builder-cont10-p6-audit.json` checks four projected solver receipts and all
+current shipped .rs/.toml pins. It reconstructs the sole root-error-selector
+tail change for the first three input-tree hashes; frontier/index harness
+bodies are unchanged. Per-run Rust source manifests were captured before
+launch. Tool/lock hashes in that audit are explicitly sampled after the runs.
+
+All builds used the requested scopes, MemoryHigh=6G, MemoryMax=8G,
+MemorySwapMax=0, TasksMax=64; Rust used four jobs and the required linker flag.
+Both adapter generators pass their deterministic --check. No full frozen
+manifest replay or complete source-release verification is claimed. No
+unchanged full regression or stopped whole-frame/whole-validator job reran.
+New module names only: no pre-existing shared module/object was replaced.
+
+No shipped crate/program file changed against e5d6d81a5, so the ELF rule is
+not triggered; inherited frozen pins are not presented as new measurements.
+All original privacy, Source1–4, RuntimeJoin and concurrent-worker modules
+are unchanged. No binary, object, LLBC, archive or key is committed. No
+wallet operation, key cleanup, push or merge is performed. No task-owned
+build is left running.
+
+Open: actual pointer/iterator correspondence for the destructor; full forest
+callback-state port and semantic admission; the shipped runtime inhabitant;
+and the concrete checker/retry/observer execution laws. The new projected
+frame and validator theorems do not silently discharge those source joins.
+
+## Verbatim endpoint signature audit
+
+No complete runtime or execution join was discharged. The binder/conclusion
+diff is empty, excluding the theorem name: deletion-only with zero deletions,
+not a strict weakening. No new or stronger premise is introduced. The error,
+freshness term and strict <2^-100 conclusion are byte-identical.
+
+Before, verbatim:
+
+```lean
+theorem privacy_R1_release_source4
+    (seed : R1ProverP K CommitHandle Aux F
+      (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+    (hB : R0Z.K4.PackField B)
+    (R_source_records_admission_banks_transport : BuilderRuntimeJoin.RustRuntimeJoin h)
+    (cF : ℕ)
+    (R_commit_equal_fibres : ∀ τ : Tape K F, (Finset.univ.filter
+      (fun e : (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ → OracleAnswer) × (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ → OracleAnswer) =>
+        ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2 = some τ)).card = cF)
+    (L₁ L₂ : ℕ) (R_commit_exhaustion : RExh (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂)
+    (R_commit_counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (R_commit_counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
+    (R_commit_stream₁ : 16 * L₁ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ * 8)
+    (R_wire_coin_carrier : ((wire base ((base.pubBytes x).length) h B outputs x).toWire).Cm ≃ (RIdx → OracleAnswer))
+    (R_wire_D80_batches : RWireBatches (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver)
+    (R_wire_D80_ordered_log : ∀ (w : (h).Instance) (sec : SecP) (d : OracleAnswer)
+      (τ : Tape K F) (roots : Fin 3 → OracleAnswer) (rest : RIdx → OracleAnswer) (ch : Challenges K),
+      ((wire base ((base.pubBytes x).length) h B outputs x).toWire).comLog (R_wire_coin_carrier.symm rest) roots (view h B outputs x w ch τ) ch =
+        (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).openList ch).map (fun c =>
+          (gram (((wire base ((base.pubBytes x).length) h B outputs x).toWire).pubBytes x) ((wire base ((base.pubBytes x).length) h B outputs x).toWire).vtag (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).leafVal h w x τ ch) sec d rest
+            (cposOf (E₁ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁) (E₂ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂) c), ansC roots rest c)))
+    (R_commit_cell_count : RCommitCount L₁ L₂)
+    (R_commit_blocks₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2 * L₁) (R_commit_blocks₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2 * L₂)
+    (source : FSExperiments K CommitHandle Aux R1Bat F)
+    [Fintype source.RealRand] [Nonempty source.RealRand]
+    [Fintype source.IdealRand] [Nonempty source.IdealRand]
+    (observer_program : source.Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+    (R_wire_builder_checker_D75_retry : ∀ (adv : source.Adversary) (w : (h).Instance),
+      (h).public w = x.1 → ModelExecutionJoin
+        (realTest h B outputs source adv x w)
+        (realTest h B outputs (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide)
+          (P_R1 (h).transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w) (QueryScanRealLazyBound.realBad (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 h B outputs x w))
+    (G_sim_R_wire : ∀ adv : source.Adversary, ModelExecutionJoin
+      (idealTestS source adv x (simE (h).transport B outputs x))
+      (idealTestS (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide) (P_R1 (h).transport B hB) (fun h' => VR1 h'))
+        (RomObserverBin.observerMap source observer_program adv) x (simE (h).transport B outputs x)) (QueryScanIdealHistory.selectedBad)) :
+    ZK_FSS h B outputs source x (simE (h).transport B outputs x)
+      (modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1)) ∧
+    modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) ∧
+    modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) < 1 / 2^100
+```
+
+After, verbatim:
+
+```lean
+theorem privacy_R1_release_source5
+    (seed : R1ProverP K CommitHandle Aux F
+      (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+    (hB : R0Z.K4.PackField B)
+    (R_source_records_admission_banks_transport : BuilderRuntimeJoin.RustRuntimeJoin h)
+    (cF : ℕ)
+    (R_commit_equal_fibres : ∀ τ : Tape K F, (Finset.univ.filter
+      (fun e : (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ → OracleAnswer) × (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ → OracleAnswer) =>
+        ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2 = some τ)).card = cF)
+    (L₁ L₂ : ℕ) (R_commit_exhaustion : RExh (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂)
+    (R_commit_counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (R_commit_counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
+    (R_commit_stream₁ : 16 * L₁ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ * 8)
+    (R_wire_coin_carrier : ((wire base ((base.pubBytes x).length) h B outputs x).toWire).Cm ≃ (RIdx → OracleAnswer))
+    (R_wire_D80_batches : RWireBatches (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver)
+    (R_wire_D80_ordered_log : ∀ (w : (h).Instance) (sec : SecP) (d : OracleAnswer)
+      (τ : Tape K F) (roots : Fin 3 → OracleAnswer) (rest : RIdx → OracleAnswer) (ch : Challenges K),
+      ((wire base ((base.pubBytes x).length) h B outputs x).toWire).comLog (R_wire_coin_carrier.symm rest) roots (view h B outputs x w ch τ) ch =
+        (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).openList ch).map (fun c =>
+          (gram (((wire base ((base.pubBytes x).length) h B outputs x).toWire).pubBytes x) ((wire base ((base.pubBytes x).length) h B outputs x).toWire).vtag (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).leafVal h w x τ ch) sec d rest
+            (cposOf (E₁ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁) (E₂ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂) c), ansC roots rest c)))
+    (R_commit_cell_count : RCommitCount L₁ L₂)
+    (R_commit_blocks₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2 * L₁) (R_commit_blocks₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2 * L₂)
+    (source : FSExperiments K CommitHandle Aux R1Bat F)
+    [Fintype source.RealRand] [Nonempty source.RealRand]
+    [Fintype source.IdealRand] [Nonempty source.IdealRand]
+    (observer_program : source.Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+    (R_wire_builder_checker_D75_retry : ∀ (adv : source.Adversary) (w : (h).Instance),
+      (h).public w = x.1 → ModelExecutionJoin
+        (realTest h B outputs source adv x w)
+        (realTest h B outputs (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide)
+          (P_R1 (h).transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w) (QueryScanRealLazyBound.realBad (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 h B outputs x w))
+    (G_sim_R_wire : ∀ adv : source.Adversary, ModelExecutionJoin
+      (idealTestS source adv x (simE (h).transport B outputs x))
+      (idealTestS (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide) (P_R1 (h).transport B hB) (fun h' => VR1 h'))
+        (RomObserverBin.observerMap source observer_program adv) x (simE (h).transport B outputs x)) (QueryScanIdealHistory.selectedBad)) :
+    ZK_FSS h B outputs source x (simE (h).transport B outputs x)
+      (modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1)) ∧
+    modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) ∧
+    modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) < 1 / 2^100
+```
