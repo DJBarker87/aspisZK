@@ -1,0 +1,92 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuelJoin22.lean:20:37: error: failed to prove strict positivity, but it would be possible to prove nonnegativity if desired
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuelJoin22.lean:21:29: error: failed to synthesize
+  Zero ?m.88
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuelJoin22.lean:21:42: error: unsolved goals
+i : Fin count
+hm : eventMass (failure i) = 1 / (2 ^ 256) ^ k
+⊢ ?m.91 ≤ ?m.92
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuelJoin22.lean:51:55: error: unexpected token '('; expected ')', ',' or ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuelJoin22.lean:48:4: error: Type mismatch
+  CouplingR1PBin.mp_fst ?m.115
+has type
+  (mean fun x => ?m.115 x.1) = mean ?m.115
+but is expected to have type
+  (eventMass fun r => ∃ i, ProverCommitSeedEvent19.augmented old queries i r.1) =
+    eventMass fun r => ∃ i, ProverCommitSeedEvent19.augmented old queries i r
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuelJoin22.lean:50:47: error: Type mismatch
+  CouplingR1PBin.mp_snd ?m.135
+has type
+  (mean fun x => ?m.135 x.2) = mean ?m.135
+but is expected to have type
+  (eventMass fun r => ∃ j, failure j r.2) = eventMass fun t => ∃ j, failure j t
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuelJoin22.lean:51:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eventMass fun r => ∃ i, ProverCommitSeedEvent19.augmented old queries i r.1
+in the target expression
+  ((FsAbortBounds.mass fun s => ∃ i, ProverCommitSeedEvent19.augmented old queries i s.1) +
+      FsAbortBounds.mass fun s => ∃ j, failure j s.2) ≤
+    (eventMass fun m => ∃ i, old i m) + ProverCommitSeedEvent19.budget q + charge
+
+M : Type
+inst✝¹ : Fintype M
+inst✝ : Nonempty M
+old : Fin 8 → M → Prop
+queries : M → List ProverCommitSeedEvent19.Entry
+q : ℕ
+bound : ∀ (m : M), (queries m).length ≤ q
+sub :
+  ∀ (r : (M × OracleAnswer) × Tape),
+    (∃ i, bad old queries i r) → (∃ i, ProverCommitSeedEvent19.augmented old queries i r.1) ∨ ∃ j, failure j r.2
+h :
+  (eventMass fun s => ∃ i, bad old queries i s) ≤
+    (FsAbortBounds.mass fun s => ∃ i, ProverCommitSeedEvent19.augmented old queries i s.1) +
+      FsAbortBounds.mass fun s => ∃ j, failure j s.2
+hleft :
+  (eventMass fun r => ∃ i, ProverCommitSeedEvent19.augmented old queries i r.1) =
+    eventMass fun r => ∃ i, ProverCommitSeedEvent19.augmented old queries i r
+hright : (eventMass fun r => ∃ j, failure j r.2) = eventMass fun t => ∃ j, failure j t
+⊢ ((FsAbortBounds.mass fun s => ∃ i, ProverCommitSeedEvent19.augmented old queries i s.1) +
+      FsAbortBounds.mass fun s => ∃ j, failure j s.2) ≤
+    (eventMass fun m => ∃ i, old i m) + ProverCommitSeedEvent19.budget q + charge
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuelJoin22.lean:76:55: error: Type mismatch
+  hm
+has type
+  (mean fun s => if ∃ i, bad old queries i (join.cp.toM s) then 1 else 0) =
+    mean fun m => if ∃ i, bad old queries i m then 1 else 0
+but is expected to have type
+  (eventMass fun s => ∃ i, bad old queries i (join.cp.toM s)) = eventMass fun m => ∃ i, bad old queries i m
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuelJoin22.lean:77:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean fun s => ?f (join.cp.toR s)
+in the target expression
+  |(mean fun s => test (runtime (join.cp.toR s))) - mean fun s => test (model (join.cp.toM s).1.1)| ≤
+    eventMass fun s => ∃ i, bad old queries i (join.cp.toM s)
+
+R M V : Type
+inst✝² : Fintype R
+inst✝¹ : Fintype M
+inst✝ : Nonempty M
+runtime : R → V
+model : M → V
+old : Fin 8 → M → Prop
+queries : M → List ProverCommitSeedEvent19.Entry
+join : RunJoin runtime model old queries
+test : V → ℚ
+bounded : ∀ (v : V), 0 ≤ test v ∧ test v ≤ 1
+q : ℕ
+bound : ∀ (m : M), (queries m).length ≤ q
+ht :
+  |(mean fun s => test (runtime (join.cp.toR s))) - mean fun s => test (model (join.cp.toM s).1.1)| ≤
+    eventMass fun s => ∃ i, bad old queries i (join.cp.toM s)
+hm :
+  (mean fun s => if ∃ i, bad old queries i (join.cp.toM s) then 1 else 0) =
+    mean fun m => if ∃ i, bad old queries i m then 1 else 0
+hmass : (eventMass fun s => ∃ i, bad old queries i (join.cp.toM s)) = eventMass fun m => ∃ i, bad old queries i m
+⊢ |(mean fun r => test (runtime r)) - mean fun m => test (model m)| ≤
+    (eventMass fun m => ∃ i, old i m) + ProverCommitSeedEvent19.budget q + charge
+'R1Z.ProverCommitFuelJoin22.failure_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitFuelJoin22.old_contained' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitFuelJoin22.mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitFuelJoin22.test_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
