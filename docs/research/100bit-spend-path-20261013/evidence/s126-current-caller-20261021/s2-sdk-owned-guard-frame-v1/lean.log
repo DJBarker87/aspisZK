@@ -1,0 +1,43 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedGuardFrameV1.lean:51:80: error: unsolved goals
+case isTrue
+sdk : OwnedSdk
+guards : LiveGuards
+slot : Usize
+old : OwnedDataCell
+bytes : alloc.vec.Vec U8
+held : LiveInvariant sdk guards
+valid : ↑slot < (↑sdk.data_cells).length
+actual : old = (↑sdk.data_cells)[↑slot]
+h :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (old, sdk.data_cells.set slot)
+index : ℕ
+h✝ : ↑slot = index
+⊢ ↑old.borrowed = countAt sdk index
+
+case isFalse
+sdk : OwnedSdk
+guards : LiveGuards
+slot : Usize
+old : OwnedDataCell
+bytes : alloc.vec.Vec U8
+held : LiveInvariant sdk guards
+valid : ↑slot < (↑sdk.data_cells).length
+actual : old = (↑sdk.data_cells)[↑slot]
+h :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (old, sdk.data_cells.set slot)
+index : ℕ
+h✝ : ¬↑slot = index
+⊢ countAt sdk index = countAt sdk index
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedGuardFrameV1.lean:59:8: error: unexpected token 'with'; expected command
+'AspisS2OwnedStage1.SdkReference.GuardFrame.index_mut_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.GuardFrame.invariant_transport' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.GuardFrame.write_bytes_invariant' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

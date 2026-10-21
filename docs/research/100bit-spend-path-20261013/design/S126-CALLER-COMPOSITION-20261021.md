@@ -601,3 +601,50 @@ ordered-log/source join. The checked parent decode/first/split conclusions and
 native operation write frames remove specific local premises, but no whole
 S2 or S6 closure is claimed. S1 still needs its original nested claim/powers
 and preparation trace premises discharged through this caller connection.
+
+
+## Complete owned-parent guard finalization, 2026-10-21 continuation
+
+S2SdkOwnedGuardAcquireV1.checkpoint_acquire_invariant and
+shared_acquire_invariant now derive their postconditions from each actual
+emitted acquisition return. Slot validity follows from the reached Vec.index;
+no independent slot-validity or acquisition-success premise is introduced.
+Shared aliases, signed counter bounds and ordinary error statuses are retained.
+S2SdkOwnedGuardFrameV1.write_bytes_invariant uses the exact reached mutable
+index/setter and proves that the checkpoint bytes assignment preserves the
+live-guard invariant.
+
+The enclosing S2SdkOwnedGuardBodyV1.body_live_invariant starts from the actual
+empty guard record and the single complete owned_stage1_body execution. It
+establishes LiveInvariant on every ordinary return, both Ok and Err, with
+arbitrary child Ops. No separate guard invariant, slot validity, child success
+or write-frame premise remains in this theorem. The companion
+body_return_finalizes composes that result with release_total: any ordinary
+body return produces a complete owned_stage1 return with exactly the same SDK
+status. The previous separate live-invariant and release-success assumptions
+are discharged at this concrete reference parent. This is conditional on the
+body returning; it is not TOTAL termination for arbitrary external operations,
+and is stronger in status coverage than an ACCEPTED-ONLY statement.
+
+Focused receipts: guard-acquire-v5 exit0,10.335s,2261991424 bytes RSS;
+guard-frame-v2 exit0,13.522s,2247540736 bytes RSS;
+guard-body-v13 exit0,11.391458s,3233398784 bytes RSS. All swap0, one local
+mkdir lock, -j1 -M4400, standard propext/Classical.choice/Quot.sound only.
+The failed body attempts are excluded. The replacement proof reduces one
+outer bind/branch/tuple-pattern helper at a time, retaining arbitrary child
+implementations. Exact Expr assertions avoid repeatedly re-elaborating the
+same guard facts; only guard records use default definitional transparency.
+No resource-option override or unchanged full replay was used.
+
+Before this checkpoint, research was read-only rechecked at
+496879d8fb01640c9cf091f5e797069bc98fe035; the two frozen SDK program files
+still have no source diff against b2727acd3. The reference remains an isolated
+proof candidate, with no production adoption or re-pin implied.
+
+S2 remains OPEN: the shipped SDK account/snapshot/alias construction and
+ordered parent-step correspondence must still connect to this complete owned
+reference, including native errors, writeback and guard drops. The concrete
+Std iterator/copy bindings and the adopted dV_frozen2 ordered-log join remain
+explicit obligations. Native step certificates plus this parent theorem do
+not by themselves instantiate that join. S6 and S1 retain the previously
+recorded source/caller obligations; the 100-bit target is not yet established.
