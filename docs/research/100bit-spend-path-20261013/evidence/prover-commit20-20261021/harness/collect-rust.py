@@ -19,7 +19,9 @@ for name in sys.argv[1:]:
           input_manifest=name+'-inputs.json',print_axioms='N/A: Rust/Kani/Charon; promoted Lean checked separately')
  if name.startswith(('sim-fields-owned-v2-','sim-semantic-owned-v1-')):
   x['accepted']=x['exit_status']==0
- x['acceptance_scope']='single target only; no whole simulator or OS law'
+ if name=='semantic-runtime-v2':
+  x['accepted']=x['exit_status']==0 and 'test result: ok. 2 passed' in stdout
+ x['acceptance_scope']='single target only; fixture runtime checks are not universal refinement; no whole simulator or OS law'
  rows[name]=x
 f.write_text(json.dumps(list(rows.values()),indent=2)+'\n')
 print([(x['name'],x['exit_status'],x['accepted']) for x in rows.values()])
