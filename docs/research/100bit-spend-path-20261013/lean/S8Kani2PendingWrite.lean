@@ -2,7 +2,7 @@ import S8Kani2MutableSource
 import S8Kani2MutableStep
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result ControlFlow
-namespace AspisR1BatchedWeightsFinishExtraction
+namespace S8Kani2MutableExtraction
 namespace batched_weights
 abbrev FinishIter := core.iter.adapters.enumerate.Enumerate (core.slice.iter.IterMut aspis_core.field.QM31)
 abbrev FinishBack := FinishIter → FinishIter
@@ -53,4 +53,4 @@ theorem backPrefix_step (f : Nat → aspis_core.field.QM31)
 #print axioms backPrefix_step
 
 end batched_weights
-end AspisR1BatchedWeightsFinishExtraction
+end S8Kani2MutableExtraction

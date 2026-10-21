@@ -6,27 +6,27 @@ noncomputable section
 namespace S8Kani2MutableValue
 open Aeneas Aeneas.Std Result
 namespace F
-abbrev BW := AspisR1BatchedWeightsFinishExtraction.batched_weights.BatchedWeights
-abbrev Q := AspisR1BatchedWeightsFinishExtraction.aspis_core.field.QM31
-abbrev value := AspisR1BatchedWeightsFinishExtraction.batched_weights.BatchedWeights.value
+abbrev BW := S8Kani2MutableExtraction.batched_weights.BatchedWeights
+abbrev Q := S8Kani2MutableExtraction.aspis_core.field.QM31
+abbrev value := S8Kani2MutableExtraction.batched_weights.BatchedWeights.value
 end F
 
 /-- Reducer identity to the retained concrete arithmetic extraction. -/
 theorem reducer_eq (x : U64) :
-    AspisR1BatchedWeightsFinishExtraction.aspis_core.field.M31.reduce_u64 x =
+    S8Kani2MutableExtraction.aspis_core.field.M31.reduce_u64 x =
       AspisR1BatchedWeightsExtraction.aspis_core.field.M31.reduce_u64 x := by
-  unfold AspisR1BatchedWeightsFinishExtraction.aspis_core.field.M31.reduce_u64
+  unfold S8Kani2MutableExtraction.aspis_core.field.M31.reduce_u64
     AspisR1BatchedWeightsExtraction.aspis_core.field.M31.reduce_u64
-    AspisR1BatchedWeightsFinishExtraction.aspis_core.field.reduce_u64
+    S8Kani2MutableExtraction.aspis_core.field.reduce_u64
     AspisR1BatchedWeightsExtraction.aspis_core.field.reduce_u64
-    AspisR1BatchedWeightsFinishExtraction.aspis_core.field.P
+    S8Kani2MutableExtraction.aspis_core.field.P
     AspisR1BatchedWeightsExtraction.aspis_core.field.P
   rfl
 
 theorem value_eq_entry (self : F.BW) (index : Usize) :
     F.value self index = AspisR1BatchedWeightsExtraction.batched_weights.value_entry
       self.raw self.terms index := by
-  unfold F.value AspisR1BatchedWeightsFinishExtraction.batched_weights.BatchedWeights.value
+  unfold F.value S8Kani2MutableExtraction.batched_weights.BatchedWeights.value
     AspisR1BatchedWeightsExtraction.batched_weights.value_entry
     AspisR1BatchedWeightsExtraction.batched_weights.BatchedWeights.value
   simp only [reducer_eq]

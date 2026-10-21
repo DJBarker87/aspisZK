@@ -3,7 +3,7 @@ import S8Kani2MutableStep
 import S8Kani2PendingWrite
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result ControlFlow WP
-namespace AspisR1BatchedWeightsFinishExtraction
+namespace S8Kani2MutableExtraction
 namespace batched_weights
 abbrev FinishNextBack := FinishIter → Option (Std.Usize × aspis_core.field.QM31) → FinishIter
 abbrev FinishIterMut := core.slice.iter.IterMut aspis_core.field.QM31
@@ -197,4 +197,4 @@ theorem finish_loop_output_invariant_of_values
 #print axioms none_step_law_actual
 
 end batched_weights
-end AspisR1BatchedWeightsFinishExtraction
+end S8Kani2MutableExtraction

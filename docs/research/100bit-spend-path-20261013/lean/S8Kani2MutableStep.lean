@@ -2,7 +2,7 @@ import S8Kani2MutableSource
 
 open Aeneas Aeneas.Std Result ControlFlow Error
 
-namespace AspisR1BatchedWeightsFinishExtraction
+namespace S8Kani2MutableExtraction
 namespace batched_weights
 
 private abbrev FinishIter :=
@@ -37,4 +37,4 @@ theorem finish_loop_body_none
 #print axioms finish_loop_body_none
 
 end batched_weights
-end AspisR1BatchedWeightsFinishExtraction
+end S8Kani2MutableExtraction

@@ -2,8 +2,8 @@ import S8Kani2MutableLoop
 import S8Kani2SliceSet
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result
-open AspisR1BatchedWeightsFinishExtraction.batched_weights
-namespace BwPrefixWriteIndex
+open S8Kani2MutableExtraction.batched_weights
+namespace S8Kani2PrefixWriteIndex
 abbrev FieldQM := AspisR1BatchedWeightsExtraction.aspis_core.field.QM31
 variable (f : Nat → FieldQM)
 
@@ -19,7 +19,7 @@ theorem suffix_index_unchanged (n : Nat) (s : Slice FieldQM) (i : Usize)
       have hn' : n ≤ (s.setAtNat n (f n)).len.val := by rw [hlen]; omega
       have hprefix := ih (s.setAtNat n (f n)) i hn' (Nat.le_trans (Nat.le_succ n) hi) (by rw [hlen]; exact hibound)
       have hidx : i.val < s.len.val := hibound
-      have hset := BwSliceSetIndexLemmas.setAtNat_ne s i n (f n) hidx (by omega)
+      have hset := S8Kani2SliceSetIndexLemmas.setAtNat_ne s i n (f n) hidx (by omega)
         (by omega : i.val ≠ n)
       exact hprefix.trans hset
 
@@ -37,9 +37,9 @@ theorem prefixWrite_index (n : Nat) (s : Slice FieldQM) (i : Usize)
       · have heq : i.val = n := by omega
         have hprefix := suffix_index_unchanged f n (s.setAtNat n (f n)) i
           (by rw [hlen]; omega) (by omega) (by rw [hlen]; omega)
-        have hset := BwSliceSetIndexLemmas.setAtNat_same s i n (f n) (by omega) heq
+        have hset := S8Kani2SliceSetIndexLemmas.setAtNat_same s i n (f n) (by omega) heq
         simpa [heq] using hprefix.trans hset
 
 #print axioms suffix_index_unchanged
 #print axioms prefixWrite_index
-end BwPrefixWriteIndex
+end S8Kani2PrefixWriteIndex

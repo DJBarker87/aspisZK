@@ -8,7 +8,7 @@ namespace S8Kani2CallerJoin
 open Aeneas Aeneas.Std Result
 open S8OwnedP6ValueModel S8OwnedP6Finish
 open S8Kani2MutableValue S8Kani2FinishReferenceJoin
-open AspisR1BatchedWeightsFinishExtraction.batched_weights
+open S8Kani2MutableExtraction.batched_weights
 
 def coordinate (q : F.Q) (j : Fin 4) : U32 :=
   match j.val with | 0 => q.c0.a | 1 => q.c0.b | 2 => q.c1.a | _ => q.c1.b

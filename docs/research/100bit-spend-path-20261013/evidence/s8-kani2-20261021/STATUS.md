@@ -40,3 +40,11 @@ that model boundary is stated explicitly in source-binding.json. Global S8
 remains open until S7/R15 identify the actual reached vectors/sums and the
 headline interprets its free S8 proposition as the concrete certificate.
 No claim is made that a named certificate alone proves any arbitrary S8.
+
+Final isolation stage: all copied mutable declarations, including the slice
+and prefix helpers, now have S8Kani2 namespaces. Changed modules and their
+dependencies were checked individually again. Final source packet: 13 Lean
+modules, 32 standard-axiom audits, six successful Kani roots. Full ledger:
+35 Lean attempts and six host attempts, including failures and superseded
+namespace versions. Zero swap. `remaining.tsv` and `upstream-status.json`
+record why global S8 cannot yet be marked discharged.

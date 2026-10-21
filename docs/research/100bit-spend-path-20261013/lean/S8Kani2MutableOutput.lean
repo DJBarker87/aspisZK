@@ -1,7 +1,7 @@
 import S8Kani2MutableLoop
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result ControlFlow
-namespace AspisR1BatchedWeightsFinishExtraction
+namespace S8Kani2MutableExtraction
 namespace batched_weights
 theorem finish_output_invariant
     (self : BatchedWeights) (weights : FinishSlice)
@@ -33,4 +33,4 @@ theorem finish_output_invariant
 
 #print axioms finish_output_invariant
 end batched_weights
-end AspisR1BatchedWeightsFinishExtraction
+end S8Kani2MutableExtraction

@@ -11,7 +11,7 @@ set_option linter.unusedVariables false
 
 /- You can set the `maxRecDepth` value with the `-max-recdepth` CLI option -/
 
-namespace AspisR1BatchedWeightsFinishExtraction
+namespace S8Kani2MutableExtraction
 namespace aspis_core.field
 abbrev M31 := AspisR1BatchedWeightsExtraction.aspis_core.field.M31
 abbrev CM31 := AspisR1BatchedWeightsExtraction.aspis_core.field.CM31
@@ -307,4 +307,4 @@ def batched_weights.finish_entry
   let s1 ← batched_weights.BatchedWeights.finish { «raw» := raw1, terms } s
   ok (deref_mut_back s1)
 
-end AspisR1BatchedWeightsFinishExtraction
+end S8Kani2MutableExtraction

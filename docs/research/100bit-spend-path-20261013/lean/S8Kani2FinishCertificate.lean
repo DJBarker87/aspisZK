@@ -10,7 +10,7 @@ set_option autoImplicit false
 noncomputable section
 namespace S8Kani2FinishCertificate
 open Aeneas Aeneas.Std Result
-open AspisR1BatchedWeightsFinishExtraction.batched_weights
+open S8Kani2MutableExtraction.batched_weights
 open S8Kani2MutableValue
 
 /-- Total mutable-enumerator traversal and exact pointwise local values.
@@ -34,7 +34,7 @@ theorem mutable_finish_total (self : F.BW) (old : FinishSlice)
   intro i hi
   refine ⟨?_,hvalue i hi⟩
   rw [hout]
-  exact BwPrefixWriteIndex.prefixWrite_index (valueAt self) old.len.val old i le_rfl hi
+  exact S8Kani2PrefixWriteIndex.prefixWrite_index (valueAt self) old.len.val old i le_rfl hi
 
 structure FinishCertificate : Prop where
   reference : S8OwnedP6Certificate.ReferenceCertificate

@@ -15,6 +15,7 @@ for name,d in reuse.items():
  expected=source.read_text()
  for old,new in mapping.items():expected=expected.replace('import '+old,'import '+new)
  if name=='S8Kani2PendingWrite':expected+='\nend batched_weights\nend AspisR1BatchedWeightsFinishExtraction\n'
+ expected=expected.replace('AspisR1BatchedWeightsFinishExtraction','S8Kani2MutableExtraction').replace('BwPrefixWriteIndex','S8Kani2PrefixWriteIndex').replace('BwSliceSetIndexLemmas','S8Kani2SliceSetIndexLemmas')
  actual=B/'lean'/(name+'.lean')
  assert executable_tokens(expected)==executable_tokens(actual.read_text()),name
 source=(R/'tools/s8-kani2-20261021/src/lib.rs').read_text()

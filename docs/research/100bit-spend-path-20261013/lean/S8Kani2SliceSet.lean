@@ -1,7 +1,7 @@
 import S8Kani2MutableLoop
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result
-namespace BwSliceSetIndexLemmas
+namespace S8Kani2SliceSetIndexLemmas
 variable {α : Type} (s : Slice α) (i : Std.Usize) (j : Nat) (x : α)
 theorem len_val_eq_length : s.len.val = s.val.length := by
   simp [Slice.len, UScalar.ofNatCore_val_eq]
@@ -21,4 +21,4 @@ theorem setAtNat_ne (hi : i.val < s.len.val) (hj : j < s.len.val)
 #print axioms len_val_eq_length
 #print axioms setAtNat_same
 #print axioms setAtNat_ne
-end BwSliceSetIndexLemmas
+end S8Kani2SliceSetIndexLemmas

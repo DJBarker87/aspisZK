@@ -1,0 +1,10 @@
+item	status	exact_scope_or_next_step	evidence
+symbolic base/step/exit	CLOSED LOCAL	Three-cell fully symbolic state; real IterMut next; equality/canonical prefix/frame/bounds	receipts/kani2-04/receipt.json
+production base and exit	CLOSED	Capacity 64 with arbitrary destination length and probe	receipts/kani2-05/stdout.log
+production step	CLOSED WITH SELECTED-READ ABSTRACTION	Capacity 64, arbitrary cursor/probe and selected U64 row; Lean value_reference supplies the raw-vector read join	receipts/kani2-06/receipt.json; S8Kani2FinishReferenceJoin
+reference iteration induction	CLOSED	Actual emitted loop = destination-length many extracted reference steps	S8Kani2ReferenceInduction.reference_finish_induction
+mutable-model traversal/reference	CLOSED	Deferred back-write traversal total and pointwise equal to new owned reference for arbitrary lengths	S8Kani2FinishReferenceJoin.finish_reference_simulation
+P6 named local certificate	SUPPLIED	Complete reference model plus mutable finish simulation; exact scope described in source-binding.json	S8Kani2CallerJoin.p6_certificate
+Rust unsafe iterator representation	P6 MODEL BOUNDARY	Related suffix/cursor checked with real iterator; no claim of kernel extraction of unsafe pointer representation	source-binding.json
+S7/R15 reached caller invariant	OPEN UPSTREAM	Instantiate CallerInvariant for actual reached raw/weights and weighted sum, with query/checkpoint provenance	upstream-status.json; S8Kani2CallerJoin.finish_caller_join
+headline S8	OPEN	Interpret free S8 as concrete relation; do not infer arbitrary S8 from named local certificate	endpoint-signature-status.json; ../s8-kani-20261021/proofs/endpoint-01/receipt.json
