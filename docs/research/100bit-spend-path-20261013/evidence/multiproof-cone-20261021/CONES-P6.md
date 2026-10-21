@@ -66,3 +66,33 @@ Validation: `S7P6AccumulatorIterations`, attempt 1, exit 0,
 `9c8429300` (full revision and all pins in receipt). Its `total` axiom report
 is `[propext, Classical.choice, Quot.sound]`. The same fixed local compiler,
 flags, lock and private objects were used. No source/ELF/host build changed.
+
+## Stage 3: complete emitted K writer to C5
+
+`CheckpointP6EncodeK.encode_k_total` proves the complete emitted `encode_k`
+returns all four words' LE bytes, for arbitrary raw U32 limbs. It composes
+both actual nested CM31 writers, all checked sub-slices/copies, and their
+back-write continuations. No per-write success law is assumed.
+`CheckpointP6KBytes.word_bytes` proves arbitrary-word source LE bytes equal
+frozen le32. `encode_k_c5` composes the whole writer with pass 5's C5
+canonical representation theorem, giving exact C5.encodeK output bytes.
+Canonicality remains required only for the quotient/physical-byte bridge;
+it is unnecessary for writer success. The inherited `not_all_words_canonicalized`
+counterexample explains why deleting it would be false.
+
+Successful validation (exact full revisions and pins are in receipts):
+
+| Target | Attempt | Exit | Wall seconds | Peak RSS bytes | Swaps | Revision |
+|---|---:|---:|---:|---:|---:|---|
+| CheckpointP6EncodeK | 2 | 0 | 16.534316333010793 | 3656187904 | 0 | 9c8429300 |
+| CheckpointP6KBytes | 9 | 0 | 24.81911849975586 | 3666837504 | 0 | b296751fe |
+
+All three theorem axiom reports are `[propext, Classical.choice, Quot.sound]`.
+The initial writer attempt needed explicit monad-lift/back-write unfolding.
+The byte bridge's failed attempts exposed recursive simplifier interactions
+between BitVec.toLEBytes, UScalar.val and bv_toNat, plus small elaboration
+issues. The permanent replacement exposes just four symbolic bytes and
+uses explicit BitVec/Nat equalities. No recursion/heartbeat/memory setting
+was increased; failed recovery output is excluded. The small norm_num
+invocations normalize only byte-width powers/division-by-one, never a
+concrete checkpoint vector or recurrence. No solver or full-build rerun.

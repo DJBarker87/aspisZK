@@ -1,0 +1,40 @@
+import CheckpointP6EncodeK
+import MultiproofConeCanonical
+
+set_option autoImplicit false
+namespace AspisR1.CheckpointP6KBytes
+open Aeneas Aeneas.Std Result
+open OraclePortCkptAbi2Extracted OraclePortCkptAbi5Codec
+open MultiproofConeCanonical OraclePortCompactDraft
+
+theorem word_bytes (x : U32) :
+    bytesOf (core.num.U32.to_le_bytes x).val=le32 x.val := by
+  apply List.ext_getElem
+  · simp [bytesOf,core.num.U32.to_le_bytes,BitVec.toLEBytes,le32]
+  · intro j hj hk
+    have bound : j<4 := by simpa [le32] using hk
+    interval_cases j <;> apply Fin.ext <;>
+      simp [bytesOf,core.num.U32.to_le_bytes,BitVec.toLEBytes,le32,
+        AspisV8R19.SqueezeOracleBridge.decodeByte,UScalar.val,BitVec.toNat_setWidth,
+        BitVec.toNat_ushiftRight,Nat.shiftRight_eq_div_pow,Nat.div_div_eq_div_mul]
+
+/-- Entire nested emitted K writer equals the existing canonical C5 byte
+encoder. Canonicality is a reached-field/caller obligation; writer execution
+itself was proved on every raw U32 input. -/
+theorem encode_k_c5 (q : RawK) (canonical : OraclePortCkptAbi4Decode.Canonical q) :
+    ∃ out, encode_k q=ok out ∧
+      bytesOf out.val=OraclePortCheckpointAbiC5.encodeK (exactK q canonical) := by
+  obtain ⟨out,run,layout⟩ := CheckpointP6EncodeK.encode_k_total q
+  refine ⟨out,run,?_⟩
+  rw [layout,OraclePortCkptAbi5Codec.c5_k_bytes]
+  simp only [CheckpointP6EncodeK.bytes,bytesOf,List.map_append]
+  change bytesOf (core.num.U32.to_le_bytes q.c0.a).val ++
+    bytesOf (core.num.U32.to_le_bytes q.c0.b).val ++
+    bytesOf (core.num.U32.to_le_bytes q.c1.a).val ++
+    bytesOf (core.num.U32.to_le_bytes q.c1.b).val = _
+  rw [word_bytes,word_bytes,word_bytes,word_bytes]
+  simp [OraclePortCkptAbi4Decode.words,List.append_assoc]
+
+#print axioms word_bytes
+#print axioms encode_k_c5
+end AspisR1.CheckpointP6KBytes
