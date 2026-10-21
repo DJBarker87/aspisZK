@@ -7752,3 +7752,21 @@ serialiser, material, scalar callers), with its randomness and history
 adapter. Then prove both WholeRunJoins for `rust := shippedProverExperiment`.
 The residual is then only the P6 toolchain boundary (the Kani/Aeneas
 translation is trusted), which is already a named premise.
+
+## D127 — prover commitment part 18; seed-guess term missing from the bad event (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit18-20261021` (`r1p-final/PROVER-COMMIT18-20261021.md`):
+a bounded attempt-entropy model with retained errors and draw state; entropy
+failure transport under fixed bad events; bounded entropy symmetry with an
+unchanged draw history; the simulator's one-coin transition (Kani,
+owned-reference extraction and Lean); exact frame separation and finite-ROM
+marginal uniformity. J8674: 33 standard-axiom audits, zero swap. No concrete
+`shippedProverExperiment` yet; `RustProverRefinement` unchanged. Finding: the
+shared-oracle component has a seed-guess gap of 2^-256 − 2^-512, which is more
+than the query-scan-only allowance in `realBad`/`selectedBad`, so joint
+history equality cannot follow from marginal uniformity under the current bad
+event. Not an attack. Lead ruling: add an explicit seed-guess event (the
+adversary queries the simulator's seed point) to the fixed bad events,
+charged once at q·2^-256 for q oracle queries, and re-prove the privacy error
+bound, which stays far below 2^-100. Also open: the full simulator extraction
+(has_errors) and the timed-out entropy-exhaustion Kani check.
