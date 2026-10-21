@@ -1,0 +1,31 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortWords.lean:61:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  frameFromView decoder annotated 0
+in the target expression
+  BinCompiledRunWordStability.wordsFromRun decoder annotated = BinCompiledRunWordStability.wordsFromRun decoder original
+
+decoder : LiteralByteProtocol.Decoder
+d : Decision
+P : Prover
+H : Bytes → State
+original : View Bytes State ((RawCutProverCompiler.Public × RawCutProverCompiler.Proof) × Bool) :=
+  eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier decoder d))
+annotated : View Bytes State ((RawCutProverCompiler.Public × RawCutProverCompiler.Proof) × Bool) :=
+  eval H
+    (RawCutProverCompiler.experiment (compiled decoder d (wordsFromRun decoder) P)
+      (OracleDecisionFeasibilityCore.verifier decoder d))
+hpub : annotated.2.1.1 = original.2.1.1
+hproof : annotated.2.1.2 = RawCutTranscriptRun.proof (wordsFromRun decoder original) original.2.1.2
+frames : ∀ row < 33, frameFromView decoder annotated row = frameFromView decoder original row
+cuts :
+  ∀ row < 33,
+    BinRawByteCutRecovery.cut annotated.1 (frameFromView decoder original row) =
+      BinRawByteCutRecovery.cut original.1 (frameFromView decoder original row)
+⊢ BinCompiledRunWordStability.wordsFromRun decoder annotated = BinCompiledRunWordStability.wordsFromRun decoder original
+'AspisR1.OraclePortWords.wordsFromRun_compiled_eq_original' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortWords.wordsFromRun_compiled_eq_retainedBuildWords' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
