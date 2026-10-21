@@ -1,0 +1,3 @@
+PROVED reverse successful whole term-loop transfer from the explicit old-term-body to fixed-term-body law. Checked cursor progress is derived from the transported body; the theorem does not assume termination, a completed trace or final output correspondence separately.
+
+Limitations: The successful old-body to fixed-body law remains an explicit dependency. The remaining original eight-coordinate accumulation loop bridge must discharge it. This composes the term-loop layer only; it does not close frozen Rust Std/P6, source operation bindings, the complete S4 cone or global soundness. No production source changes.
