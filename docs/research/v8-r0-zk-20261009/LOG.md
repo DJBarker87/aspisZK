@@ -7539,3 +7539,18 @@ boundary (`Not_found` in `InterpReduceCollapse.collapse_ctx_following_sequence`)
 Next: reshape that reference loop (structural recursion over a fixed-size
 array, or an explicit fold) to avoid the collapse path, and keep Kani's
 shipped = reference.
+
+## D114 — simulator cost, first pass (2026-10-21, lead)
+
+Landed from `codex/cx-sim-cost-20261021` (`r1p-final/SIM-COST-20261021.md`):
+an abstract cost writer with stage composition, exact cost erasure for
+programmed-oracle replay, simulator-stage composition, and a bounded sampling
+fallback (an expected-cost/truncation model for rejection sampling).
+`PrivacyR1HeadlineV2Sim` keeps every V2 premise and conclusion and adds exact
+ideal-game equality and a degree-one cost bound, under explicit preparation and
+size contracts. 8 modules, 31 audits, zero swap. Open: a compiled
+counterexample shows that unrestricted auxiliary `outputs` rule out a uniform
+byte-cost bound at the generic signature. That is the free-parameter pattern
+again, so pass 2 fixes `outputs` and the field/view stages to the protocol
+instance (as D106/D111 did), then proves the size and preparation contracts
+there.
