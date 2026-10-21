@@ -1,0 +1,27 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRuntimeBindingC7.lean:76:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  failureMass (view run)
+in the target expression
+  (match some run with
+    | none => 0
+    | some run => failureMass (view run)) ≤
+    failureMass (eval H (projected D P))
+
+case neg
+D : LiteralByteProtocol.Decoder
+rust : Verifier
+P : Prover
+runtime : Runtime
+join : ExecutionJoin D rust
+binding : StoredCarrierBinding D rust P runtime
+H : Bytes → State
+run : RunView
+hr : (eval H runtime).2 = some run
+accepted : ¬run.2.2 = true
+zero : failureMass (view run) = 0
+⊢ (match some run with
+    | none => 0
+    | some run => failureMass (view run)) ≤
+    failureMass (eval H (projected D P))
+'AspisR1.OraclePortRuntimeBindingC7.annotatedWith_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortRuntimeBindingC7.failure_nonnegative' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortRuntimeBindingC7.transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

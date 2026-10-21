@@ -31,6 +31,9 @@ module = sys.argv[1]
 source = PACKET / 'lean' / (module + '.lean')
 baseline = json.loads((HERE / 'OraclePortStoredAcceptanceC6-1/command.json').read_text())
 path = str(OBJECTS) + ':' + baseline['lean_path']
+if module == 'OraclePortHeadlineDVC7':
+    pin = json.loads((HERE / 'OraclePortC7M10ImportPin.json').read_text())
+    path = str(OBJECTS) + ':' + pin['command']['lean_path'] + ':' + baseline['lean_path']
 imports = []
 for name in re.findall(r'^import (\S+)', source.read_text(), re.M):
     obj = next((Path(p) / (name.replace('.', '/') + '.olean')
