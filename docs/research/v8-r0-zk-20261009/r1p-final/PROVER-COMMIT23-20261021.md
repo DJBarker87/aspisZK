@@ -90,3 +90,47 @@ of the pre-existing model carrier. In particular `ProverCommitFuelJoin22`
 is unchanged: its additional Tape cannot simply be defined by inspecting
 its model's already sampled coins. The required joint independence and
 both output marginals must still be proved for a concrete source adapter.
+
+## Stage 2 — split map operations and write induction
+
+`ProverCommitTreeOps23.writes_decode` proves an induction over arbitrary
+write schedules against the existing universal TreeMap model. It retains
+both the decoded final tree and every insertion's previous answer. Its
+explicit hypotheses are universal insert-state and insert-previous laws.
+`get_decode` transports a get contract to the retained list model;
+`iterSteps_spec` and `tree_iteration` retain every unconsumed enumeration
+suffix. J7476 passes: exit 0, 1.36 s, 2533348 KiB, swaps 0; all four
+theorem audits use only standard axioms. These are operation specifications
+and a conditional composition proof, **not** a Rust std implementation instance.
+
+The previous stopped combined gate is not rerun. New host-only gates use
+exact shipped BTreeMap<Vec<u8>,[u8;32]> types and check one queried byte at
+an arbitrary index below 32 (all answer bytes remain symbolic):
+
+- `tree-get-v1`: one entry, arbitrary one-byte key/query and arbitrary answer;
+  get presence/value and retained length pass. Exit 0, 52.235 s,
+  6315228 KiB, swaps 0. This completed while approaching MemoryHigh.
+- `tree-iter-v1`: one entry, one successful iterator step and then exhaustion;
+  exact key, selected answer byte and key length pass. Exit 0, 35.592 s,
+  2620428 KiB, swaps 0.
+- `tree-insert-v1`: two insertions, arbitrary one-byte keys and arbitrary
+  old/new answers; tests previous answer and length, without get/iteration.
+  Stopped at 6399311872 cgroup bytes. Exit 1, 377.322 s,
+  6230832 KiB, swaps 0; excluded, no counterexample claimed.
+- `tree-insert-leaf-v2`: proof shape changed to unwind four rather than 34,
+  still with unwinding assertions. Stopped at 6536085504 cgroup bytes;
+  excluded. No larger cap was used.
+- `tree-insert-retained-v3`: additionally excludes the harness's final map
+  destruction with mem::forget (the actual operation retains its map).
+  Stopped at 6531129344 cgroup bytes; excluded. This disproves the working
+  hypothesis that final destruction alone explained the formula growth.
+
+The stop JSONs name only this worker's CBMC process and scope. Every gate
+uses 6G/8G/no swap/64 tasks and the required RUSTFLAGS. The exact source,
+command, status/wall/RSS/swap fields for **all** Rust attempts are in
+`rust-attempts.json` and `receipts/`. The split insertion check is still a
+demonstrated resource obstruction after two explicit formula-shape changes.
+No successful universal insertion certificate or arbitrary-height library
+representation proof is available. The one-entry get/iterator results do
+not discharge the universal hypotheses of writes_decode. No map source
+equation is installed from a finite fixture.
