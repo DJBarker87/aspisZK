@@ -102,6 +102,37 @@ formatter or panic path in the entire shipped outer prover unreachable.
 The actual scalar caller partition and complete query caller cut are the
 next focused checks; they do not yet have accepted results.
 
+## Stage 3: full query caller around the sampler boundary
+
+`transcript::query13::result_and_retained_state` executes the complete actual
+`Transcript::queries` method, rather than the part-12 prefix. Its observer
+checks all seventeen hash calls, their exact state chain, row-31 framing,
+payload pointer/length and both eight-block arrays. A sampler callee cut
+checks those arrays and returns arbitrary queries/selected state or an error.
+The actual caller forwards the successful query array and selected state;
+on error it maps the error to `Transcript` and retains the absorbed state.
+Both branches call the sampler exactly once. The trace hook is compiled out
+in this library feature configuration, as it is without `prover`; the host
+prover's optional trace side effects are not certified by this check.
+
+`transcript-query-caller-v2` passes: exit 0, wall 17.524 s, peak RSS
+547220 KiB, zero swaps. The v1 comparison bound 84 is shorter than the
+88-byte query array; its unwind failure is retained and replaced by 170.
+All safety and unwinding assertions remain enabled. The sampler cut is
+explicit, not a verified sampler implementation or a probability law.
+It proves the caller transport universally over its outcomes and supplies
+the concrete array/result/state boundary for separately composing the
+existing sampler proof. It does not replace the whole shared-oracle or
+shipped outer execution join.
+
+`ProverCommitScalarPartition.first_accept_partition` proves symbolically
+that a sequence bounded by the rejection value has a first success or
+exhausts. `sixteen_partition` specializes it to the seventeen scalar cases.
+J8369 passes both audits with `[propext, Quot.sound]`: exit 0, wall 1.40 s,
+peak RSS 2550616 KiB, zero swaps. No concrete recurrence or large carrier
+is reduced. The associated direct Kani scalar run is still pending; the
+partition lemma alone is not an accepted execution certificate.
+
 ## Remaining stages
 
 Formatter/panic unreachability, concrete outer transport and all-family shared
