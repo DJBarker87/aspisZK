@@ -58,3 +58,22 @@ five audits with standard axioms: exit 0, wall 1.89s, peak RSS 3,521,096 KiB,
 swaps 0; revision `6352cfd55` plus exact source hash. Fixed launcher caps
 unchanged. The dependency was the accepted J8657 object; no old shared object
 was overwritten. All failure receipts are excluded from accepted evidence.
+
+## Stage 3 — exact successful-draw symmetry
+
+`ProverCommitEntropySymmetry18` constructs a bijection of raw 96-byte
+candidates for *any* permutation of `SecP`: valid candidates are permuted and
+invalid candidates stay fixed. `run_equivariant` transports the entire
+bounded draw loop with the same draw-state history, cursor and OS failures.
+`successful_law_equal` proves that every two successful secrets have exactly
+the same mass under sixteen independent uniform raw draws. The failure
+outcome remains present in the unconditioned law. No giant carrier is
+enumerated. This supplies the mathematical symmetry needed for a conditional
+success law; it does not supply an OS law or erase the failure probability.
+
+J8660 failed on local rewrite normal forms and an unqualified helper;
+changed-source J8661 passes all seven audits using only standard axioms:
+exit 0, wall 2.64s, peak RSS 3,501,884 KiB, swaps 0, revision `0549f01af`
+plus exact source hash. Two harmless no-op `change` lints remain in the
+inverse proofs. Source dependencies J8657/J8659 are unchanged and reused.
+Caps remain 6G/8G/no-swap/64 tasks; no old shared module is overwritten.
