@@ -1,0 +1,141 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeRowStep.lean:53:2: error: 'change' tactic failed, pattern
+  (have __do_jp := fun stored => do
+      let finish ← 5#usize + stored
+      if bytes.len < finish then ok none
+        else do
+          let good ← headerChecks bytes tag size
+          if good = true then do
+              let payload ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                    { start := 5#usize, «end» := finish }
+              let logical ← prepare row payload
+              match logical with
+                | none => ok none
+                | some value => continuation finish value
+            else ok none;
+    if row ≥ 14#u8 then do
+      let stored ← size / 2#usize
+      __do_jp stored
+    else do
+      let stored ← ok size
+      __do_jp stored) =
+    if bytes.len < finish then ok none
+    else do
+      let good ← headerChecks bytes tag size
+      if good = true then do
+          let payload ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := 5#usize, «end» := finish }
+          let logical ← prepare row payload
+          match logical with
+            | none => ok none
+            | some value => continuation finish value
+        else ok none
+is not definitionally equal to target
+  (let (tag, size) := (tag, size)
+    do
+    let stored ← if row ≥ 14#u8 then size / 2#usize else ok size
+    let i1 ← 5#usize + stored
+    if bytes.len < i1 then ok none
+      else do
+        let good ← headerChecks bytes tag size
+        if good = true then do
+            let payload ←
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                  { start := 5#usize, «end» := i1 }
+            if row ≥ 14#u8 then do
+                let b1 ← reference.check_values payload
+                if b1 = true then
+                    if row ≥ 14#u8 then do
+                      let o1 ← reference.expand_rows payload (alloc.vec.Vec.new U8)
+                      match o1 with
+                        | none => ok none
+                        | some x => do
+                          let s ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                { «end» := 5#usize }
+                          let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+                          let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref
+                          let rows1 ← rows.push framed1
+                          let i8 ← row + 1#u8
+                          let s2 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                { start := i1 }
+                          parser_reference.semantic_rows i8 s2 rows1
+                    else do
+                      let x ← alloc.slice.Slice.to_vec core.clone.CloneU8 payload
+                      let s ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                            { «end» := 5#usize }
+                      let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+                      let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref
+                      let rows1 ← rows.push framed1
+                      let i8 ← row + 1#u8
+                      let s2 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                            { start := i1 }
+                      parser_reference.semantic_rows i8 s2 rows1
+                  else ok none
+              else
+                if row ≥ 14#u8 then do
+                  let o1 ← reference.expand_rows payload (alloc.vec.Vec.new U8)
+                  match o1 with
+                    | none => ok none
+                    | some x => do
+                      let s ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                            { «end» := 5#usize }
+                      let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+                      let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref
+                      let rows1 ← rows.push framed1
+                      let i8 ← row + 1#u8
+                      let s2 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                            { start := i1 }
+                      parser_reference.semantic_rows i8 s2 rows1
+                else do
+                  let x ← alloc.slice.Slice.to_vec core.clone.CloneU8 payload
+                  let s ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                        { «end» := 5#usize }
+                  let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+                  let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref
+                  let rows1 ← rows.push framed1
+                  let i8 ← row + 1#u8
+                  let s2 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                        { start := i1 }
+                  parser_reference.semantic_rows i8 s2 rows1
+          else ok none) =
+    if bytes.len < finish then ok none
+    else do
+      let good ← headerChecks bytes tag size
+      if good = true then do
+          let payload ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := 5#usize, «end» := finish }
+          let logical ← prepare row payload
+          match logical with
+            | none => ok none
+            | some value => do
+              let prefixBytes ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                    { «end» := 5#usize }
+              let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 prefixBytes
+              let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed value.deref
+              let rows1 ← rows.push framed1
+              let nextRow ← row + 1#u8
+              let rest ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                    { start := finish }
+              parser_reference.semantic_rows nextRow rest rows1
+        else ok none
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeRowStep.lean:42:42: warning: This simp argument is unused:
+  MultiproofConePayloadControl.inline_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵o̵t̵D̵o̵n̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵s̵h̵a̵p̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵H̵e̵a̵d̵e̵r̵C̵o̵n̵t̵r̵o̵l̵.̵i̵n̵l̵i̵n̵e̵_̵e̵q̵,̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵P̵a̵y̵l̵o̵a̵d̵C̵o̵n̵t̵r̵o̵l̵.̵i̵n̵l̵i̵n̵e̵_̵e̵q̵]̵[̲n̲o̲t̲D̲o̲n̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲s̲h̲a̲p̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲,̲ ̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲H̲e̲a̲d̲e̲r̲C̲o̲n̲t̲r̲o̲l̲.̲i̲n̲l̲i̲n̲e̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConeRowStep.row_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

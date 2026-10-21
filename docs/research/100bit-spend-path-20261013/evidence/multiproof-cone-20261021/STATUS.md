@@ -241,3 +241,45 @@ recursion limit; it was replaced by a named cast lemma, a byte-list projection
 lemma and four explicit small-byte steps. No limits were raised. Successful
 current theorems have standard axioms only. The earlier audit-result remains
 the preceding checkpoint; final expanded packet auditing follows row closure.
+
+## Stage 7: complete owned parser reference (2026-10-21)
+
+`MultiproofConeSemanticRows.rows_total` proves the actual extracted owned
+row recurrence against `OraclePortCompactDraft.semanticRows`, by row-count
+induction. It preserves the decoded accumulator and every ordinary rejection.
+The initial-domain instance `MultiproofConeParserTotal.rows_join` discharges
+RowsJoin; `parse_total` now has **no** RowsJoin, canonical-input, honest-run or
+successful-source antecedent and covers every `Slice U8`. The result compares
+the Option semantic-row projection, including rejection. `accepted_parse`
+identifies the successful frozen Parsed value, its wire bytes and semantic
+rows. This is total **owned-reference-to-model** refinement, not exact equality
+of every production Rust Error payload and not production source adoption.
+
+The main row induction passed in 17.006464 s, 3,604,381,696-byte peak RSS;
+the complete parser bridge passed in 20.897470 s, 3,512,582,144-byte peak RSS.
+Both have zero swaps and standard axioms only. The extracted single-row
+normalization passed independently first. The new row proof reconstructs its
+local scalar, slice and vector bounds from the row count/table; it does not
+assume the desired loop equation. No concrete 27-row wire was unfolded.
+
+The printed tuple let was an Aeneas `uncurry` application. Its explicit
+unfolding, followed by checked bind congruence with the actual continuation,
+resolved the row normalization. One proof-local elaboration transparency
+setting permits ordinary unfolding of implicit scalar bounds; it changes no
+kernel axiom and raises no resource or proof limit.
+
+**Both whole production source-cone joins remain open.** Parser production
+P6 control/loop composition and stored-to-reached/decoder binding still need
+adoption. Multiproof live-array/row/log/caller joins still need discharge.
+The checked parser reference does not instantiate the complete source
+AcceptedRunJoin or lower its target.
+
+A whole-prefix sort BMC attempt is retained as **INCOMPLETE** despite its zero
+raw driver exit and misleading success summary: it has zero completed
+VERIFICATION SUCCESSFUL results and stops during symbolic unwinding near the
+240 s harness timeout. Its assessment and exact failed harness snapshot are
+under host/receipts/batch-sort-1. This is not a mathematical counterexample or
+a verified result. The existing 19 roots were separately checked to have 19
+completed solver results. The runner/auditor is being hardened to fail closed;
+sorting is being replaced by an exact insertion-iteration cut and owned row
+recursion, at the same memory cap. No unchanged larger-cap rerun is planned.

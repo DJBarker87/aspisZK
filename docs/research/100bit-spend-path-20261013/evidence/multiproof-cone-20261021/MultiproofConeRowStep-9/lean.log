@@ -1,0 +1,239 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeRowStep.lean:43:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if row ≥ 14#u8 then size / 2#usize else ok size
+in the target expression
+  (let (tag, size) := (tag, size)
+    do
+    let stored ← if row ≥ 14#u8 then size / 2#usize else ok size
+    let i1 ← 5#usize + stored
+    if bytes.len < i1 then ok none
+      else do
+        let i2 ← bytes.index_usize 0#usize
+        if (i2 != tag) = true then ok none
+          else do
+            let i3 ← bytes.index_usize 1#usize
+            let i4 ← bytes.index_usize 2#usize
+            let i5 ← bytes.index_usize 3#usize
+            let i6 ← bytes.index_usize 4#usize
+            let b ←
+              core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 (Array.make 4#usize [i3, i4, i5, i6] ⋯)
+                  (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 size))
+            if b = true then ok none
+              else do
+                let payload ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                      { start := 5#usize, «end» := i1 }
+                if row ≥ 14#u8 then do
+                    let b1 ← reference.check_values payload
+                    if b1 = true then
+                        if row ≥ 14#u8 then do
+                          let o1 ← reference.expand_rows payload (alloc.vec.Vec.new U8)
+                          match o1 with
+                            | none => ok none
+                            | some x => do
+                              let s ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                    { «end» := 5#usize }
+                              let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+                              let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref
+                              let rows1 ← rows.push framed1
+                              let i8 ← row + 1#u8
+                              let s2 ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                    { start := i1 }
+                              parser_reference.semantic_rows i8 s2 rows1
+                        else do
+                          let x ← alloc.slice.Slice.to_vec core.clone.CloneU8 payload
+                          let s ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                { «end» := 5#usize }
+                          let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+                          let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref
+                          let rows1 ← rows.push framed1
+                          let i8 ← row + 1#u8
+                          let s2 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                { start := i1 }
+                          parser_reference.semantic_rows i8 s2 rows1
+                      else ok none
+                  else
+                    if row ≥ 14#u8 then do
+                      let o1 ← reference.expand_rows payload (alloc.vec.Vec.new U8)
+                      match o1 with
+                        | none => ok none
+                        | some x => do
+                          let s ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                { «end» := 5#usize }
+                          let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+                          let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref
+                          let rows1 ← rows.push framed1
+                          let i8 ← row + 1#u8
+                          let s2 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                { start := i1 }
+                          parser_reference.semantic_rows i8 s2 rows1
+                    else do
+                      let x ← alloc.slice.Slice.to_vec core.clone.CloneU8 payload
+                      let s ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                            { «end» := 5#usize }
+                      let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+                      let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref
+                      let rows1 ← rows.push framed1
+                      let i8 ← row + 1#u8
+                      let s2 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                            { start := i1 }
+                      parser_reference.semantic_rows i8 s2 rows1) =
+    if bytes.len < finish then ok none
+    else do
+      let good ← headerChecks bytes tag size
+      if good = true then do
+          let payload ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := 5#usize, «end» := finish }
+          let logical ← prepare row payload
+          match logical with
+            | none => ok none
+            | some value => do
+              let prefixBytes ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                    { «end» := 5#usize }
+              let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 prefixBytes
+              let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed value.deref
+              let rows1 ← rows.push framed1
+              let nextRow ← row + 1#u8
+              let rest ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                    { start := finish }
+              parser_reference.semantic_rows nextRow rest rows1
+        else ok none
+
+row : U8
+bytes : Slice U8
+rows : alloc.vec.Vec (alloc.vec.Vec U8)
+tag : U8
+size stored finish : Usize
+notDone : ¬row ≥ 27#u8
+shape : reference.row_shape row = ok (some (tag, size))
+storage : (if row ≥ 14#u8 then size / 2#usize else ok size) = ok stored
+endOffset : 5#usize + stored = ok finish
+⊢ (let (tag, size) := (tag, size)
+    do
+    let stored ← if row ≥ 14#u8 then size / 2#usize else ok size
+    let i1 ← 5#usize + stored
+    if bytes.len < i1 then ok none
+      else do
+        let i2 ← bytes.index_usize 0#usize
+        if (i2 != tag) = true then ok none
+          else do
+            let i3 ← bytes.index_usize 1#usize
+            let i4 ← bytes.index_usize 2#usize
+            let i5 ← bytes.index_usize 3#usize
+            let i6 ← bytes.index_usize 4#usize
+            let b ←
+              core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 (Array.make 4#usize [i3, i4, i5, i6] ⋯)
+                  (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 size))
+            if b = true then ok none
+              else do
+                let payload ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                      { start := 5#usize, «end» := i1 }
+                if row ≥ 14#u8 then do
+                    let b1 ← reference.check_values payload
+                    if b1 = true then
+                        if row ≥ 14#u8 then do
+                          let o1 ← reference.expand_rows payload (alloc.vec.Vec.new U8)
+                          match o1 with
+                            | none => ok none
+                            | some x => do
+                              let s ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                    { «end» := 5#usize }
+                              let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+                              let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref
+                              let rows1 ← rows.push framed1
+                              let i8 ← row + 1#u8
+                              let s2 ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                    { start := i1 }
+                              parser_reference.semantic_rows i8 s2 rows1
+                        else do
+                          let x ← alloc.slice.Slice.to_vec core.clone.CloneU8 payload
+                          let s ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                { «end» := 5#usize }
+                          let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+                          let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref
+                          let rows1 ← rows.push framed1
+                          let i8 ← row + 1#u8
+                          let s2 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                { start := i1 }
+                          parser_reference.semantic_rows i8 s2 rows1
+                      else ok none
+                  else
+                    if row ≥ 14#u8 then do
+                      let o1 ← reference.expand_rows payload (alloc.vec.Vec.new U8)
+                      match o1 with
+                        | none => ok none
+                        | some x => do
+                          let s ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                { «end» := 5#usize }
+                          let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+                          let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref
+                          let rows1 ← rows.push framed1
+                          let i8 ← row + 1#u8
+                          let s2 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                { start := i1 }
+                          parser_reference.semantic_rows i8 s2 rows1
+                    else do
+                      let x ← alloc.slice.Slice.to_vec core.clone.CloneU8 payload
+                      let s ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                            { «end» := 5#usize }
+                      let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+                      let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref
+                      let rows1 ← rows.push framed1
+                      let i8 ← row + 1#u8
+                      let s2 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                            { start := i1 }
+                      parser_reference.semantic_rows i8 s2 rows1) =
+    if bytes.len < finish then ok none
+    else do
+      let good ← headerChecks bytes tag size
+      if good = true then do
+          let payload ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := 5#usize, «end» := finish }
+          let logical ← prepare row payload
+          match logical with
+            | none => ok none
+            | some value => do
+              let prefixBytes ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                    { «end» := 5#usize }
+              let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 prefixBytes
+              let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed value.deref
+              let rows1 ← rows.push framed1
+              let nextRow ← row + 1#u8
+              let rest ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                    { start := finish }
+              parser_reference.semantic_rows nextRow rest rows1
+        else ok none
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (5 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.MultiproofConeRowStep.row_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
