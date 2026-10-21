@@ -2,8 +2,9 @@
 
 Base `28776b162`; branch `codex/cx-prover-commit19-20261021`.
 
-Work in progress. Target not yet established. This report is updated at each
-committed stage. Concurrent-worker modules SourceIdentification,
+**Target not yet established.** The seed-augmented deployed bound and bounded
+joint-history coupling are proved. Full shipped execution remains blocked by
+the source translation and transport obligations recorded below. Concurrent-worker modules SourceIdentification,
 RustRuntimeJoin and PrivacyR1FinalRelease are untouched.
 
 ## Scope and mathematical accounting
@@ -227,3 +228,408 @@ theorem sixteen_rejected {State OsError : Type}
     (invalid : ∀ j < 16, draws j (blocks j) = 0) :
     generate next (states 0) = (.error .repeatedZero,states 16)
 ```
+
+## Stage 5 — per-function simulator extraction and owned references
+
+The full part-18 extraction is not retried unchanged. Splitting the actual
+`sim::concat` root yields LLBC with `has_errors=false`, but Aeneas rejects
+its borrowed iterator with “Nested borrows are not supported yet” at source
+lines 89:4–89:44 (exit 2). The owned indexed reference avoids a live iterator
+borrow across recursion. Its final extraction also has `has_errors=false`,
+and Charon/Aeneas both succeed. No external function template is required.
+
+`AspisR1SimulatorConcat19` is promoted verbatim except for narrowing the
+root Aeneas import to the cached Std/RustAttributes imports. The generated
+resource options are unchanged. `ProverCommitSimulatorConcat19.extracted_finite`
+proves the full finite recursion for every admitted index/count pair, retaining
+index, clone and append failures/divergence. The source comparison Kani check
+passes for three arbitrary slices, each of length 0–4 (including empty slices):
+110.011 s, peak RSS 4,442,628 KiB, exit 0, swaps 0. This is explicitly a bounded
+source check, not universal borrowed-Vec/List transport.
+
+The programming-table reference retains overwrite behavior, the sticky
+collision flag and arbitrary 32-byte old/new answers. Its indexed owned
+extraction has no external function template. `ProverCommitSimulatorInsert19`
+proves its entire finite recursion, including append-at-end, overwrite,
+conflicts, errors and divergence. Source BTreeMap/RefCell-to-Vec transport is
+not inferred from that theorem. The broader one-existing-entry Kani gate was
+stopped for proof-shape review; a narrower overwrite-only gate is separate.
+
+The first recursive-pop versions of both references lower to external
+`Vec.pop` templates. Those are excluded and never promoted: substituting
+the generated axioms would violate the proof rules. The indexed replacements
+remove that external boundary. Concat-owned-v2 is an excluded whole-crate
+compile failure during invalid entropy instrumentation; v3 follows the
+source fix and is hash-pinned independently.
+
+| Accepted extraction | Charon wall s / RSS KiB | Aeneas wall s / RSS KiB |
+|---|---:|---:|
+| concat-owned-v3 | 34.591 / 578564 | 0.337 / 61600 |
+| insert-owned-v2 | 30.606 / 577236 | 0.332 / 66000 |
+
+All four exit 0 with swaps 0, under 6G/8G/no-swap/64-task scopes. Charon uses
+`--release`, four jobs and the specified linker flag; time is in optimized
+compilation/translation. LLBC bytes and binaries stay on the host; only hashes
+and sizes are committed. Raw Lean text and exact import-only promotion
+manifests are retained. `#print axioms`: N/A for translation; promoted source
+and new finite-schedule theorems are separately checked below.
+
+J8697/J8698 compile concat Types/Funs; J8699 audits its two new theorems and
+the extracted function (exit 0, 1.42 s, 2,536,200 KiB). J8700/J8701 compile
+insert Types/Funs; J8702 audits its two new theorems and the extracted function
+(exit 0, 1.49 s, 2,541,136 KiB). All swaps 0 and accepted axioms standard;
+exact revision/hash/dependency receipts are in the evidence directory.
+
+### Remaining simulator extraction obstruction
+
+Splitting the actual `walk` root with named opaque wire/transcript boundaries
+produces valid LLBC (exit 0, 32.889 s, 576760 KiB), but Aeneas fails its loop
+context match (exit 2, 0.721 s, 104016 KiB). An owned recursive reference for
+its 25 semantic rows is then tried, retaining the advanced transcript and
+semantic errors. With an opaque wire callee it translates (31.274 s Charon,
+0.344 s Aeneas), but the generated files still require external transcript
+state/error/method and map_err declarations. This result is excluded from
+Lean promotion and supplies no source certificate.
+
+Closing that owned row root's dependency cone, with no opaque wire module,
+still gives `has_errors=false` (Charon exit 0, 36.113 s, 574640 KiB), but Aeneas
+fails with an uncaught `Not_found` from
+`InterpReduceCollapse.collapse_ctx_following_sequence` during a callee loop
+context collapse (exit 2, 0.642 s, 84128 KiB). The direct generic semantic-method
+root also exits 101 without an LLBC; its complete compiler stderr is retained,
+and no mathematical conclusion is drawn from that failure. No unchanged or
+higher-cap retry is performed.
+
+This is the demonstrated remaining translation obstruction after the requested
+function split and owned-reference attempt. A successful opaque outer driver
+is not a full simulator extraction. Next: isolate the failing transcript/parser
+callee loop, provide its owned source reference and exact source equality,
+then link rows 25–32, programming/serialization traversal and error/retry
+assembly. The uncapped nonzero loop and the full bounded-schedule/history
+adapter still require source certificates. `shippedProverExperiment` is not
+constructed; neither shipped WholeRunJoin is claimed, and the revised
+RustProverRefinement remains explicit.
+
+### Strictness and actual source changes
+
+J8703 additionally proves `proper_at` and `strict_event_witness` (exit 0,
+1.80 s, 4,034,544 KiB, swaps 0, standard axioms). The latter exhibits a genuine
+source-frame query where the augmented event is true and the old empty event
+is false. Together with `old_contained` and the actual
+`legacy_refinement_implies`, this documents containment, proper event
+extension and premise implication separately. Proper inclusion for every
+fixed observer is false for a zero-query observer and is not claimed.
+
+Only a `cfg(kani)` / `cfg(aeneas_ref)` reference module is appended to sim.rs.
+Production source prefixes match `28776b162` byte for byte, including the
+unchanged real entropy generator. This changes source hashes and proof
+artifacts, but introduces no production configuration behavior change.
+No SBF/ELF rebuild or new byte-equivalence result is claimed; historical
+artifact evidence is not attributed to a new source build.
+
+Verbatim source diff and the pre-seed endpoint statement follow.
+
+```diff
+diff --git a/crates/aspis-r1-cost-probe/src/sim.rs b/crates/aspis-r1-cost-probe/src/sim.rs
+index 13110b794..432db2553 100644
+--- a/crates/aspis-r1-cost-probe/src/sim.rs
++++ b/crates/aspis-r1-cost-probe/src/sim.rs
+@@ -520,0 +521,43 @@ mod tests;
++
++// Proof-only owned references. Not enabled in any production configuration.
++#[cfg(any(kani,aeneas_ref))]
++pub mod owned19 {
++    use alloc::vec::Vec;
++    pub fn concat(parts:Vec<Vec<u8>>,index:usize,mut output:Vec<u8>)->Vec<u8> {
++        if index==parts.len() { return output; }
++        let part=parts[index].clone();
++        output.extend_from_slice(&part);
++        concat(parts,index.wrapping_add(1),output)
++    }
++    // One program-table transition, including conflict retention.
++    // The table is represented by unique-key entries; ordering is immaterial
++    // to lookup, while the simulator's public iteration order needs transport.
++    pub fn insert(mut table:Vec<(Vec<u8>,[u8;32])>,index:usize,address:Vec<u8>,answer:[u8;32],collision:bool)
++        ->(Vec<(Vec<u8>,[u8;32])>,bool) {
++        if index==table.len() {
++            table.push((address,answer));
++            return (table,collision);
++        }
++        let (key,previous)=table[index].clone();
++        if key==address {
++            table[index]=(key,answer);
++            (table,collision || previous!=answer)
++        } else {
++            insert(table,index.wrapping_add(1),address,answer,collision)
++        }
++    }
++
++    // Owned recursion for the actual walk's 25 semantic transcript rows.
++    // The callee is unchanged. Both its advanced transcript and semantic
++    // error are retained; no callback success or hash law is asserted here.
++    pub fn semantic_rows<H:aspis_core::Digest32>(
++        mut state:crate::r1_wire::SemanticTranscript<H>, records:Vec<Vec<u8>>,
++        row:usize,mut sem:[aspis_core::field::QM31;25])
++        ->Result<(crate::r1_wire::SemanticTranscript<H>,[aspis_core::field::QM31;25]),super::Error> {
++        if row==25 {return Ok((state,sem));}
++        let record=records[row].clone();
++        let value=state.semantic(row as u8,&record).map_err(|_|super::Error::Semantic)?;
++        sem[row]=value;
++        semantic_rows(state,records,row.wrapping_add(1),sem)
++    }
++}
+```
+
+```lean
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1)) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100
+```
+
+## Verbatim premise/event and endpoint diff
+
+```lean
+-- R1Z/ProverCommitSeedEvent19.lean
+def seedPoint (a : List UInt8) (seed : OracleAnswer) : Prop :=
+  a.take ((domain.val.map ProverCommitSaltBytes.byte).length + 32) =
+    domain.val.map ProverCommitSaltBytes.byte ++ List.ofFn seed
+
+
+-- R1Z/ProverCommitSeedEvent19.lean
+def augmented {M : Type} (old : Fin 8 → M → Prop) (queries : M → List Entry)
+    (i : Fin 8) (r : M × OracleAnswer) : Prop :=
+  old i r.1 ∨ (i = 0 ∧ seedGuess (queries r.1) r.2)
+
+
+-- R1Z/ProverCommitSeedEvent19.lean
+theorem seed_mass {M : Type} [Fintype M] [Nonempty M]
+    (queries : M → List Entry) (q : Nat) (bound : ∀ m, (queries m).length ≤ q) :
+    eventMass (fun r : M × OracleAnswer => seedGuess (queries r.1) r.2) ≤ budget q
+
+-- R1Z/ProverCommitSeedJoin19.lean
+structure RunJoin {R M V : Type} [Fintype R] [Fintype M]
+    (runtime : R → V) (model : M → V)
+    (bad : Fin 8 → M → Prop) (queries : M → List Entry) where
+  cp : Coupling R (M × OracleAnswer)
+  agreement : ∀ s, ¬ (∃ i, augmented bad queries i (cp.toM s)) →
+    runtime (cp.toR s) = model (cp.toM s).1
+
+
+-- R1Z/PrivacyR1HeadlineDeployed.lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitSeedJoin19.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (ProverCommitSeedJoin19.RunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad
+      (idealSeedQueries template outputs x rust observer_program adv)))
+
+
+-- R1Z/ProverCommitSimulatorConcat19.lean
+theorem extracted_finite (parts : Parts) (index : Usize) (remaining : Nat) (output : Bytes)
+    (count : index.val+remaining = parts.length) :
+    sim.owned19.concat parts index output = finite parts index remaining output
+
+-- R1Z/ProverCommitSimulatorInsert19.lean
+theorem extracted_finite (table : Table) (index : Usize) (address : Bytes)
+    (answer : Answer) (collision : Bool) (remaining : Nat)
+    (count : index.val+remaining = table.length) :
+    sim.owned19.insert table index address answer collision =
+      finite table index address answer collision remaining
+
+```
+
+```diff
+diff --git a/docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployed.lean b/docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployed.lean
+index d38a88b65..79a3261ca 100644
+--- a/docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployed.lean
++++ b/docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployed.lean
+@@ -0,0 +1,2 @@
++import R1Z.ProverCommitSeedJoin19
++import R1Z.ProverCommitObserverQueries19
+@@ -90 +92 @@ existing realBad/selectedBad, not predicates chosen by the implementation. -/
+-def RustProverRefinement : Prop :=
++def LegacyRustProverRefinement : Prop :=
+@@ -105,0 +108,51 @@ def RustProverRefinement : Prop :=
++/-- Exact adversary-only query suffix of the underlying ordered source. -/
++def realSeedQueries (adv : rust.Adversary) (w : (h).Instance) : (source).RealRand →
++    List ProverCommitSeedEvent19.Entry :=
++  ProverCommitObserverQueries19.real W Pr 8
++    (P_R1 (h).transport B hB) (fun h' => VR1 h') h B outputs
++    (ProverCommitReencode16.observer ProverCommitReencode16.encode
++      (RomObserverBin.observerMap rust observer_program adv)) x w
++
++def idealSeedQueries (adv : rust.Adversary) : (source).IdealRand →
++    List ProverCommitSeedEvent19.Entry :=
++  ProverCommitObserverQueries19.ideal W 8 eight_pos
++    (P_R1 (h).transport B hB) (simE (h).transport B outputs x)
++    (ProverCommitReencode16.observer ProverCommitReencode16.encode
++      (RomObserverBin.observerMap rust observer_program adv)) x
++
++/-- The explicit deployed obligation. Both sides include the complete public
++view, ordered observer history and observer decision. The exceptions are the
++fixed parser events augmented with a single global seed-guess event on an
++independently retained model seed. Query functions are fixed by the model. -/
++def RustProverRefinement : Prop :=
++  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
++    Nonempty (ProverCommitSeedJoin19.RunJoin
++      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
++      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
++                let v := (source).real h B outputs a x w r
++                (v, (source).observe a v))
++      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
++      (realSeedQueries template outputs x rust observer_program adv w))) ∧
++  (∀ adv : rust.Adversary, Nonempty (ProverCommitSeedJoin19.RunJoin
++      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
++                (v, rust.observe adv v))
++      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
++                let v := (source).ideal (simE (h).transport B outputs x) a x r
++                (v, (source).observe a v))
++      QueryScanIdealHistory.selectedBad
++      (idealSeedQueries template outputs x rust observer_program adv)))
++
++/-- Every previous certificate still suffices. The independent seed is added
++by product extension, so this is an actual implication between premises. -/
++theorem legacy_refinement_implies
++    (old : LegacyRustProverRefinement template outputs x rust observer_program) :
++    RustProverRefinement template outputs x rust observer_program := by
++  constructor
++  · intro adv w hw
++    let join := Classical.choice (old.1 adv w hw)
++    exact ⟨ProverCommitSeedJoin19.of_old _ _ _ _ join.cp join.agreement⟩
++  · intro adv
++    let join := Classical.choice (old.2 adv)
++    exact ⟨ProverCommitSeedJoin19.of_old _ _ _ _ join.cp join.agreement⟩
++
++
+@@ -111,4 +164,4 @@ theorem privacy_headline_deployed
+-      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1)) ∧
+-    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ≤
+-      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ∧
+-    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100 := by
++      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64)) ∧
++    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) ≤
++      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) ∧
++    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) < 1 / 2^100 := by
+@@ -124,9 +177,22 @@ theorem privacy_headline_deployed
+-    have hr := QueryScanRealLazyJoin.join_le _ _ _
+-      (Classical.choice (refinement.1 adv w hw)).tests
+-      (QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr))
+-      (ProverCommitModelCore16.real_bad_mass base h B outputs x seed hc₁ hc₂ w)
+-      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (fun _ => ⟨bit_nonneg _, bit_le_one _⟩)
+-    have hi := scan_coupling_le _ _
+-      ((Classical.choice (refinement.2 adv)).tests.toScanCoupling
+-        (fun i => QueryScanIdealHistory.selected_bad_mass i))
+-      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (fun _ => ⟨bit_nonneg _, bit_le_one _⟩)
++    have hr₀ := ProverCommitSeedJoin19.test_bound
++      (Classical.choice (refinement.1 adv w hw)) (fun run => bit run.2)
++      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (2^64)
++      (fun r => ProverCommitObserverQueries19.real_bound W Pr 8
++        (P_R1 (h).transport B hB) (fun h' => VR1 h') h B outputs _ x w r)
++    have hi₀ := ProverCommitSeedJoin19.test_bound
++      (Classical.choice (refinement.2 adv)) (fun run => bit run.2)
++      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (2^64)
++      (fun r => ProverCommitObserverQueries19.ideal_bound W 8 eight_pos
++        (P_R1 (h).transport B hB) (simE (h).transport B outputs x) _ x r)
++    have hscan : 8 * scanProbability ≤ 8 / (2 : ℚ)^486 := by
++      simpa only [mul_one_div] using
++        mul_le_mul_of_nonneg_left scan_probability_le (by norm_num : (0 : ℚ) ≤ 8)
++    have hr := hr₀.trans (add_le_add
++      ((ProverCommitModelCore16.real_bad_mass base h B outputs x seed hc₁ hc₂ w).trans
++        (add_le_add (le_refl _) hscan)) (le_refl (ProverCommitSeedEvent19.budget (2^64))))
++    have idealMass : eventMass (fun r : (source).IdealRand => ∃ i : Fin 8, QueryScanIdealHistory.selectedBad i r) ≤
++        8 * scanProbability := by
++      exact R0Z.FsAbortBounds.mass_exists_le_card _ _
++        (fun i => QueryScanIdealHistory.selected_bad_mass i)
++    have hi := hi₀.trans (add_le_add (idealMass.trans hscan)
++      (le_refl (ProverCommitSeedEvent19.budget (2^64))))
+@@ -158,3 +224,4 @@ theorem privacy_headline_deployed
+-    calc _ ≤ ((QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) + 8 / (2 : ℚ)^486) +
+-        modelError W Pr L₁ L₂) + 8 / (2 : ℚ)^486 :=
+-          t₂.trans (add_le_add (t₁.trans (add_le_add hr hmid)) hi)
++    calc _ ≤ ((QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) + 8 / (2 : ℚ)^486 +
++          ProverCommitSeedEvent19.budget (2^64)) + modelError W Pr L₁ L₂) +
++          (8 / (2 : ℚ)^486 + ProverCommitSeedEvent19.budget (2^64)) :=
++            t₂.trans (add_le_add (t₁.trans (add_le_add hr hmid)) hi)
+@@ -162,4 +229,8 @@ theorem privacy_headline_deployed
+-           QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) :=
+-          QueryScanFreshNumerics.amount_identity _ _ _
+-         _ ≤ _ := add_le_add (le_refl _) hk
+-  · exact model.2
++           QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) +
++           2 * ProverCommitSeedEvent19.budget (2^64) := by ring
++         _ ≤ _ := add_le_add (add_le_add (le_refl _) hk) (le_refl _)
++  · constructor
++    · exact add_le_add model.2.1 (le_refl _)
++    · apply (add_le_add model.2.1 (le_refl _)).trans_lt
++      exact ProverCommitSeedJoin19.total_lt_target
++        (Nat.le_trans (Nat.add_le_add_right hM 1) (by norm_num)) (Nat.le_refl _)
+@@ -167,0 +239 @@ theorem privacy_headline_deployed
++#print axioms legacy_refinement_implies
+```
+
+## Final evidence, resource review and remaining deliverable
+
+The overwrite-only source Kani gate `sim::siminsert19small::overwrite` times
+out at 600.076 s (exit 124, swaps 0), with cgroup memory peak 6,570,635,264
+bytes. The interrupted `/usr/bin/time` child accounting reports 15,480 KiB;
+that is retained verbatim but is not presented as the verifier's actual peak
+RSS. This failed gate is excluded. No larger cap or unchanged retry follows.
+Its source, full stdout/stderr, exact inputs and scope limits are committed.
+
+The preceding broader insertion gate was deliberately stopped at source/proof
+shape review. The last process observation recorded 239 seconds elapsed and
+5,906,808 KiB child RSS. Stopping its whole scope also terminated the accounting
+wrapper, so final wall time, peak RSS and swap measurements are unavailable.
+The receipt explicitly records those fields as unknown, launcher exit 241,
+and excludes the target; no passing result or invented metrics are claimed.
+The replacement changed both source scope and unwind bound, rather than
+raising memory. These Kani limitations do not affect the accepted extracted
+reference recursion, but leave its general shipped table transport open.
+
+Final Lean target: `R1Z/ProverCommit19Audit.lean`, env J attempt 8704, exit 0,
+wall 1.95 s, peak RSS 4,093,916 KiB, swaps 0, source revision `3b9e65518` plus
+the exact audit and dependency hashes. All 42 `#print axioms` lines use only
+a subset of `[propext, Classical.choice, Quot.sound]`; no new axiom is introduced.
+This is one final cached audit of the changed proof dependency cone. The
+full frozen release manifest is not replayed while the required full simulator
+source target is still not green. No unchanged full regression is run.
+
+`harness/final-audit.py` checks all accepted/excluded Lean receipts and source
+snapshots, theorem audit coverage, import-only extraction promotions, valid
+LLBC flags, Rust verdicts/caps, current source-prefix identity, unchanged
+concurrent-owner modules and absence of committed binaries/LLBC/objects.
+Its final result is `final-audit.json`. Historical external templates are
+retained only as `.lean.txt` evidence and are never promoted or imported.
+
+What remains is concrete source work, not an additional cryptographic
+assumption: close the owned simulator row driver's transcript/parser callee
+cone after Aeneas's reproducible context-collapse failure; certify all table
+and serialization traversal and their errors; prove the nonzero/counter
+schedule and actual view/retry projection; assemble those with the earlier
+real-prover certificates into the actual shipped FSExperiments object and
+prove both seed-augmented RunJoins. The bounded joint-history law in this
+pass can then be consumed by that concrete adapter. Until then the revised
+RustProverRefinement is retained and shipped privacy is not established.
+
+Attempts used: J8675–8704, after checking prior host receipts; next assigned
+number is J8705, subject to checking host receipts again. All Lean jobs were
+serial. Every completed Rust/extraction and Lean job used the requested caps;
+all accepted results have zero swap. The only production-file change is the
+cfg-gated simulator reference module, and no frozen behavior or security target
+is lowered. No concurrent-owner file, wallet or key is changed. No push is made.

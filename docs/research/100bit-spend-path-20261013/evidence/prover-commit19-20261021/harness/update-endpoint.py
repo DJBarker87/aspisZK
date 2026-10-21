@@ -1,3 +1,5 @@
+# Historical initial endpoint construction (J8686). Later corrections are
+# retained in the attempt snapshots and final endpoint-after.lean.txt.
 from pathlib import Path
 p=Path('docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployed.lean')
 e=Path(__file__).resolve().parent.parent
