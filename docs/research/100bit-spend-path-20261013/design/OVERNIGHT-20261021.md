@@ -103,6 +103,15 @@ Each was byte-identical, every time.
    accepted-run join; total-form local helpers are listed separately. The
    cheapest next three are S9, S3 and the checkpoint ABI.
 
+   Checkpoint ABI cone (branch `codex/cx-ckpt-abi-draft-20261021`, on top of
+   the audit): proved total saved-ten reference decoding with duplicate
+   rejection, prepared/accumulator equality, the twelve-step resume, the
+   exact six ordered digest reads, exact immutable byte reads to offset 1736,
+   and producing-call witnesses for every extracted resume field. Still open:
+   writer/codec adoption, reached-state provenance, Vec/allocation, and the
+   frozen driver. The concrete unwrap crosses the nonstandard `Formatter`
+   boundary. 33 theorems, standard axioms.
+
 ## Soundness
 
 Current headline: **`R1FinalSoundnessHeadlineV3.final_soundness`**
