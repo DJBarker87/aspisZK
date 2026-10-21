@@ -1,0 +1,5 @@
+Proved: successful actual tail slicing derives its own exact sixteen-byte frame from the checked indexing call. With the retained concrete QM31 decoder installed, a successful actual two-term tail loop yields precisely terms [0,1], original source coefficient/byte positions, strict same-byte parsing and encoding roundtrip, and all four canonical coordinates for each term. No independent frame-length, canonicality, child-parser success or source-position premise is needed.
+
+Scope: accepted-success implication for the actual emitted source loop, conditional on the explicit decoder slot binding. This does not prove totality of the enclosing call, actual Ops installation, tail arithmetic accumulation, RustStd, runtime or the final soundness bound. Production source is unchanged.
+
+Focused final check: 17.681 seconds, process RSS 3,215,081,472 bytes, zero swaps, five standard-only axiom reports. V1/V2 failures are rejected. V3 is a green predecessor before the full-loop consumer was added; its evidence is retained without rerun.

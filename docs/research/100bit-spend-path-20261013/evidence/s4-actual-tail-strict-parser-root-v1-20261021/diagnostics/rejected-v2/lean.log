@@ -1,0 +1,73 @@
+/tmp/root-s4-tail-parser-v2-20261021/sources/FourDotsActualTailParserRootV1.lean:59:39: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-s4-tail-parser-v2-20261021/sources/FourDotsActualTailParserRootV1.lean:63:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑a).length
+in the target expression
+  min ((↑a.to_slice).length - ↑{ start := offset, «end» := finish }.start)
+      (↑{ start := offset, «end» := finish }.end - ↑{ start := offset, «end» := finish }.start) =
+    16
+
+case isTrue
+ops : AspisR1FastDotsCurrent.FourDotsOps
+a : Std.Array Std.U8 608#usize
+g : Std.Array Wide 29#usize
+slot : Usize
+iter iter' : Range
+old next : Tail
+c : Contribution
+slot32 base480 term16 offset coeffIndex finish : Usize
+optQ : Option AspisR1FastDotsActualCallbackTailTraceRootV1.QM
+pushed : core.result.Result Unit Unit × Tail
+u : Unit
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some c.term, iter')
+h0 : slot * 32#usize = ok slot32
+h1 : 480#usize + slot32 = ok base480
+h2 : c.term * 16#usize = ok term16
+h3 : base480 + term16 = ok offset
+h4 : c.term + 26#usize = ok coeffIndex
+hread : g.index_usize coeffIndex = ok c.coefficient
+h5 : offset + 16#usize = ok finish
+hparse : ops.qm31FromBytes c.bytes = ok optQ
+hunwrap : core.option.Option.unwrap optQ = ok c.scalar
+hpush : ops.ebyKPush old c.coefficient c.scalar = ok pushed
+hunpush : core.result.Result.unwrap core.fmt.DebugUnit pushed.1 = ok u
+htail : pushed.2 = next
+hv : ↑finish = ↑offset + 16
+hb :
+  { start := offset, «end» := finish }.start ≤ { start := offset, «end» := finish }.end ∧
+    ↑{ start := offset, «end» := finish }.end ≤ a.to_slice.length
+hslice :
+  ok ⟨List.slice ↑{ start := offset, «end» := finish }.start ↑{ start := offset, «end» := finish }.end ↑a.to_slice, ⋯⟩ =
+    ok c.bytes
+heq :
+  ⟨List.slice ↑{ start := offset, «end» := finish }.start ↑{ start := offset, «end» := finish }.end ↑a.to_slice, ⋯⟩ =
+    c.bytes
+he :
+  ↑⟨List.slice ↑{ start := offset, «end» := finish }.start ↑{ start := offset, «end» := finish }.end ↑a.to_slice, ⋯⟩ =
+    ↑c.bytes
+hlen : (↑a).length = 608
+hend : ↑finish ≤ 608
+⊢ min ((↑a.to_slice).length - ↑{ start := offset, «end» := finish }.start)
+      (↑{ start := offset, «end» := finish }.end - ↑{ start := offset, «end» := finish }.start) =
+    16
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a.to_slice
+  has type
+    Slice AspisR1FastDotsActualTailBodyTraceRootV1.U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑a.to_slice
+'AspisR1FastDotsActualTailParserRootV1.parser_slice_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1FastDotsActualTailParserRootV1.tail_input_frame_length' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsActualTailParserRootV1.tail_input_strict_parser' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
