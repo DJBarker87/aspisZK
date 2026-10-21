@@ -392,3 +392,39 @@ under capped zero-swap scopes. This answers the requested single full-mask
 control, but proves neither cost independence from masks nor a worst-case
 bound. The candidate remains unadopted and still fails its existing B1
 fixture criterion. No production source or release budget changed.
+
+## Caller query state, split guard and exact library source
+
+At `d773d87db`, the checked caller/Stage2 carrier packet maps all actual
+Prepared, scratch, accumulator, geometry and pending-weight fields and
+derives the same successful Stage2 query-loop call from successful current
+tx1 control flow. The source-installed constructor variant derives its
+initial next=0 from that same execution without an independent constructor
+result or equality premise. Binding the actual generated constructor slot
+to that transparent source body remains open: its current emitted owner
+marks Accumulator::new opaque. A focused constructor-root extraction is
+being attempted instead of accepting that source-slot equality as assumed.
+
+The split-guard theorem independently derives k=ops.split directly from the
+first rejecting guard in the complete retained tx1 source cut. Instantiating
+only the frozen compact.rs literal split value derives k=10. Focused compile
+exit 0, 2.167s, peak process RSS 2,246,852,608B, zero swaps; both printed
+declarations have standard axioms. The new ten-query composition therefore
+need not assume either the starting cursor or the admitted split. Its first
+combined imports exposed a real generated global-discriminant instance name
+collision; a namespace-only source adapter and focused dependent rebuild
+are in flight. No combined theorem is claimed green yet.
+
+At `1c541c92c`, exact SBF std source provenance supersedes the earlier
+source-unavailable limitation. Installed core/array/mod.rs and try_trait.rs
+match Anza commit 790f1537507dbdb0da320fbb3b1c1eca3b33c474, as pinned by
+platform-tools v1.52 version.md. Seven relevant bodies match the prior
+Kani/upstream comparison. This is source identity, not formal refinement;
+the compiler binary itself still reports an unknown commit.
+
+The isolated Std extraction now exposes an Aeneas associated-type
+normalization error at Try::Output, independently of S4 arithmetic. The
+original failure and supported-mode probes are retained, and a type-safe
+normalization repair is under investigation. No weakened equality check,
+custom axiom, source migration or original-Std correspondence claim is
+accepted. S4 and the full implementation-linked 100-bit theorem remain open.
