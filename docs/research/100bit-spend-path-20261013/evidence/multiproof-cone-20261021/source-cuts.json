@@ -21,6 +21,12 @@
     },
     {
       "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn batch_leaf<",
+      "sha256": "33b6355d543fa6f0f38740a0df9eb2f98ed51bde483d882b53400115a7a749d8",
+      "body": "fn batch_leaf<H: Digest32>(hash: H, tree: usize, q: &[u8]) -> [u8; 32] {\n    match tree {\n        0 => {\n            let salt: [u8; 32] = q[608..640].try_into().unwrap();\n            private_leaf_hash_with_digest(hash, merkle::C1_TAG, &q[..480], &salt)\n        }\n        1 => {\n            let salt: [u8; 32] = q[640..672].try_into().unwrap();\n            private_leaf_hash_with_digest(hash, merkle::C2_TAG, &q[480..608], &salt)\n        }\n        _ => {\n            let salt: [u8; 32] = q[800..832].try_into().unwrap();\n            private_leaf_hash_with_digest(hash, 0x72, &q[672..800], &salt)\n        }\n    }\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
       "marker": "fn same_batch_leaf(",
       "sha256": "de3a045cea8baadbd3c281d717cd75ecb1745a91d4a1826088660c2a4eb3d328",
       "body": "fn same_batch_leaf(values: &[[u8; 32]; multiproof::MAX_BATCH], index: usize, leaf: [u8; 32]) -> bool {\n    values[index] == leaf\n}"
@@ -108,6 +114,7 @@
     "compact.rs: verifier::SEMANTIC_BYTES replaced by its pinned literal 13_831",
     "multiproof verifier prefix: private well_formed exposed pub(crate)",
     "batch helpers: private functions exposed pub(crate)",
+    "node-count group: fix Arity::Two; index_at(&level,...) becomes index_at(level,...) for the mutable-reference wrapper; exact parent/group/write/increment order",
     "binary group: extract Two match arm; i/at/w become mutable scalar references; false return preserved; exact parent/write order retained",
     "wire Error: add Debug derive for proof-crate test diagnostics only",
     "parser: isolated Error/Variant carriers retain Parse and tag=2; wire validation and Prefix functions copied verbatim",
@@ -118,6 +125,6 @@
     "multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3"
   },
   "outputs": {
-    "tools/multiproof-cone-20261021/src/frozen.rs": "1d1b17af3bf0034cd193a16e93a7ed5c438be3798fb1a5f546bd120335f90605"
+    "tools/multiproof-cone-20261021/src/frozen.rs": "e30ea29de0652a70d6ad22d9090216c76d424610ade909e1c47bdab1cb0f196a"
   }
 }

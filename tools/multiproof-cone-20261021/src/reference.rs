@@ -108,4 +108,6 @@ pub fn expand_rows(bytes:&[u8],mut out:alloc::vec::Vec<u8>)->Option<alloc::vec::
 
 pub fn read16(bytes:&[u8])->[u8;16] {[bytes[0],bytes[1],bytes[2],bytes[3],bytes[4],bytes[5],bytes[6],bytes[7],bytes[8],bytes[9],bytes[10],bytes[11],bytes[12],bytes[13],bytes[14],bytes[15]]}
 
+#[cfg_attr(kani, kani::requires(bytes.len()==32))]
+#[cfg_attr(kani, kani::ensures(|out: &[u8;32]| out.as_slice()==bytes))]
 pub fn read32(bytes:&[u8])->[u8;32] {[bytes[0],bytes[1],bytes[2],bytes[3],bytes[4],bytes[5],bytes[6],bytes[7],bytes[8],bytes[9],bytes[10],bytes[11],bytes[12],bytes[13],bytes[14],bytes[15],bytes[16],bytes[17],bytes[18],bytes[19],bytes[20],bytes[21],bytes[22],bytes[23],bytes[24],bytes[25],bytes[26],bytes[27],bytes[28],bytes[29],bytes[30],bytes[31]]}

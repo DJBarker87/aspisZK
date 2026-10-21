@@ -516,9 +516,25 @@ pub(crate) fn binary_group<H:Digest32>(hash:H,idx:&mut [u32;16],val:&mut [[u8;32
  idx[*w]=parent;val[*w]=digest;*w+=1;true
 }
 
+pub(crate) fn count_group(level:&mut [u32;16],n:usize,mut i:usize,mut w:usize)->(usize,usize,usize) {
+ let arity=Arity::Two;let mut count=0;
+            let parent = index_at(level, i) >> arity.bits();
+            let mut j = i;
+            while j < n && index_at(level, j) >> arity.bits() == parent {
+                j += 1;
+            }
+            count += arity.width() - (j - i);
+            level[w] = parent;
+            w += 1;
+            i = j;
+(i,w,count)
+}
+
 }
 pub mod batch {
 use super::multiproof;
+use aspis_core::{r0::merkle,Digest32};
+use aspis_core::state_only_private_merkle::private_leaf_hash_with_digest;
 pub(crate) fn batch_keys(queries: &[u32; 22], lo: usize, n: usize, tree: usize) -> [u64; multiproof::MAX_BATCH] {
     let mut keys = [0u64; multiproof::MAX_BATCH];
     for j in 0..n {
@@ -537,6 +553,22 @@ pub(crate) fn sort_batch_keys(mut keys: [u64; multiproof::MAX_BATCH], n: usize) 
         }
     }
     keys
+}
+pub(crate) fn batch_leaf<H: Digest32>(hash: H, tree: usize, q: &[u8]) -> [u8; 32] {
+    match tree {
+        0 => {
+            let salt: [u8; 32] = q[608..640].try_into().unwrap();
+            private_leaf_hash_with_digest(hash, merkle::C1_TAG, &q[..480], &salt)
+        }
+        1 => {
+            let salt: [u8; 32] = q[640..672].try_into().unwrap();
+            private_leaf_hash_with_digest(hash, merkle::C2_TAG, &q[480..608], &salt)
+        }
+        _ => {
+            let salt: [u8; 32] = q[800..832].try_into().unwrap();
+            private_leaf_hash_with_digest(hash, 0x72, &q[672..800], &salt)
+        }
+    }
 }
 pub(crate) fn same_batch_leaf(values: &[[u8; 32]; multiproof::MAX_BATCH], index: usize, leaf: [u8; 32]) -> bool {
     values[index] == leaf

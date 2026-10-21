@@ -20,7 +20,7 @@ wire=item(base+'r1_wire.rs','pub const fn row_shape(')
 compact=(R/(base+'compact.rs')).read_text().split('#[cfg(test)]')[0]
 compact=compact.replace('crate::verifier::SEMANTIC_BYTES','13_831')
 # Batch primitives, verbatim; leaf hashing itself remains a separate byte cut.
-markers=['fn batch_keys(','fn sort_batch_keys(','fn same_batch_leaf(','fn same_batch_index(','fn batch_key_at(']
+markers=['fn batch_keys(','fn sort_batch_keys(','fn batch_leaf<','fn same_batch_leaf(','fn same_batch_index(','fn batch_key_at(']
 batch='\n'.join(item(base+'candidate.rs',m).replace('fn ','pub(crate) fn ',1) for m in markers)
 # The binary group is the exact source match arm plus its chronological writes.
 a=mp.index('                    if i + 1 < n');b=mp.index('\n                Arity::Eight =>',a)
@@ -33,6 +33,10 @@ step='''pub(crate) fn binary_group<H:Digest32>(hash:H,idx:&mut [u32;16],val:&mut
  idx[*w]=parent;val[*w]=digest;*w+=1;true
 }
 '''
+# Exact count-level group; arity is fixed to Two by the concrete caller.
+a=mp.index('            let parent = index_at(&level, i) >> arity.bits();')
+b=mp.index('            i = j;',a)+len('            i = j;')
+count_group="pub(crate) fn count_group(level:&mut [u32;16],n:usize,mut i:usize,mut w:usize)->(usize,usize,usize) {\n let arity=Arity::Two;let mut count=0;\n"+mp[a:b].replace('index_at(&level,','index_at(level,')+"\n(i,w,count)\n}\n"
 # Candidate insertion body is copied from the source after batch_leaf, ending before node_count.
 s=(R/(base+'candidate.rs')).read_text();a=s.index('        if d > 0 && same_batch_index');b=s.index('\n    let count = multiproof::node_count',a)
 leaf=s[a:b];leaf=leaf[:leaf.rfind('\n    }')]
@@ -54,15 +58,18 @@ pub mod compact {
 '''+compact+'''
 }
 pub mod multiproof {
-'''+mp+'\n'+step+'''
+'''+mp+'\n'+step+'\n'+count_group+'''
 }
 pub mod batch {
 use super::multiproof;
+use aspis_core::{r0::merkle,Digest32};
+use aspis_core::state_only_private_merkle::private_leaf_hash_with_digest;
 '''+batch+'\n'+leaf+'\n}\n'+parser}
 ledger=dict(schema='frozen-parser-multiproof-cuts-v1',exact_items=cuts,substitutions=[
  'compact.rs: verifier::SEMANTIC_BYTES replaced by its pinned literal 13_831',
  'multiproof verifier prefix: private well_formed exposed pub(crate)',
  'batch helpers: private functions exposed pub(crate)',
+ 'node-count group: fix Arity::Two; index_at(&level,...) becomes index_at(level,...) for the mutable-reference wrapper; exact parent/group/write/increment order',
  'binary group: extract Two match arm; i/at/w become mutable scalar references; false return preserved; exact parent/write order retained',
  'wire Error: add Debug derive for proof-crate test diagnostics only',
  'parser: isolated Error/Variant carriers retain Parse and tag=2; wire validation and Prefix functions copied verbatim',
