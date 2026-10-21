@@ -1,0 +1,68 @@
+import AllocationStageSpecM10
+import SharedFiniteMaterializationM10
+
+/-! Exact retained array-slot/header counters at materialization sites.
+This is deliberately a retained-storage subledger: evaluating f may allocate
+additional temporaries, and those are not silently counted as zero heap work. -/
+set_option autoImplicit false
+namespace AspisR1.MaterializationAllocationM10
+open AllocationStageSpecM10
+
+def cells (n : Nat) : Nat := n+1
+
+/-- The new annotation is attached to the array constructor itself. -/
+def materialize {A : Type} {n : Nat} (f : Fin n → A × Nat) :
+    (Array A × Nat) × Nat :=
+  ((Array.ofFn (fun i => (f i).1),((List.ofFn f).map Prod.snd).sum+3*n+1),cells n)
+
+theorem erase {A : Type} {n : Nat} (f : Fin n → A × Nat) :
+    (materialize f).1 = BinTypedWordDemandWork.materialize f := rfl
+
+theorem count {A : Type} {n : Nat} (f : Fin n → A × Nat) :
+    (materialize f).2 = (materialize f).1.1.size+1 := by
+  simp only [materialize,cells,Array.size_ofFn]
+
+theorem sum_lower (xs : List Nat) (C : Nat) (h : ∀ x ∈ xs, C ≤ x) :
+    xs.length*C ≤ xs.sum := by
+  induction xs with
+  | nil => simp only [List.length_nil,List.sum_nil,Nat.zero_mul,Nat.le_refl]
+  | cons x xs ih =>
+    have hx := h x (by simp only [List.mem_cons,or_true,Nat.le_refl,eq_self_iff_true,true_or])
+    have ht := ih (fun y hy => h y (by simp only [List.mem_cons]; exact Or.inr hy))
+    simp only [List.length_cons,List.sum_cons]
+    nlinarith
+
+theorem work_lower {A : Type} {n : Nat} (f : Fin n → A × Nat) (C : Nat)
+    (h : ∀ i, C ≤ (f i).2) :
+    n*(C+3)+1 ≤ (BinTypedWordDemandWork.materialize f).2 := by
+  have hs := sum_lower ((List.ofFn f).map Prod.snd) C (by
+    intro x hx
+    obtain ⟨y,hy,rfl⟩ := List.mem_map.mp hx
+    obtain ⟨i,rfl⟩ := List.mem_ofFn.mp hy
+    exact h i)
+  simp only [List.length_map,List.length_ofFn] at hs
+  change _ ≤ _+3*n+1
+  nlinarith
+
+theorem batch_lower {A : Type} {n : Nat} (f : Fin n → A × Nat) (C : Nat)
+    (h : ∀ i, C ≤ (f i).2) : n*(C+3)+1 ≤ (SharedFiniteMaterializationM10.batch f).2 :=
+  work_lower f C h
+
+/-- A fixed-width storage tariff for retained slots and one header.
+It makes no claim about allocations performed by the element function f. -/
+def annotation {A : Type} {n : Nat} (W : Nat) (f : Fin n → A × Nat) :
+    Allocation W (BinTypedWordDemandWork.materialize f).2 where
+  elements := cells n
+  bits := W*cells n
+  width_law := Nat.le_refl _
+  creation_work := by
+    have h := work_lower f 0 (fun _ => Nat.zero_le _)
+    unfold cells
+    omega
+
+#print axioms erase
+#print axioms count
+#print axioms sum_lower
+#print axioms work_lower
+#print axioms batch_lower
+end AspisR1.MaterializationAllocationM10

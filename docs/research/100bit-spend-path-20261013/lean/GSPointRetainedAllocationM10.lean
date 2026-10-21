@@ -1,0 +1,85 @@
+import MaterializationAllocationM10
+import PointStageSpecM10
+
+/-! Concrete nonzero retained point-array storage, not the complete heap.
+Two outer arrays and two capture closures accompany 29 initial and 5 final
+point arrays. Every array counts its stored slots and one header. Per-element
+arithmetic temporaries are explicitly outside this subledger. -/
+set_option autoImplicit false
+namespace AspisR1.GSPointRetainedAllocationM10
+open AllocationStageSpecM10 MaterializationAllocationM10
+open AspisWideTower AspisPool.AlgorithmicCircleDecoderV7
+open GSFixedInputDecoderFamily
+
+/-- Fixed logical slot width, including one pair of eight-limb field values. -/
+def width : Nat := 1024
+
+def initialCells : Nat := cells 1048576
+def finalCells : Nat := cells 262144
+/-- Outer batch arrays: n slots, header, capture closure. -/
+def outerCells (n : Nat) : Nat := cells n+1
+
+def retainedCells : Nat := 29*initialCells+5*finalCells+outerCells 29+outerCells 5
+
+theorem initial_lower (W : InitialWord WideExact) :
+    1048576*3+1 ≤ (GSPointBatchWorkM10.initial W).2 :=
+  work_lower _ 0 (fun _ => Nat.zero_le _)
+
+theorem final_lower (V : FinalWord WideExact) :
+    262144*3+1 ≤ (GSPointBatchWorkM10.final V).2 :=
+  work_lower _ 0 (fun _ => Nat.zero_le _)
+
+attribute [local irreducible] GSPointBatchWorkM10.initial GSPointBatchWorkM10.final
+
+theorem inputs_lower (W : Fin 29 → InitialWord WideExact) (V : Fin 5 → FinalWord WideExact) :
+    retainedCells ≤ (GSPointBatchWorkM10.inputs W V).2 := by
+  have ha := batch_lower (fun i : Fin 29 => GSPointBatchWorkM10.initial (W i))
+    (1048576*3+1) (fun i => initial_lower (W i))
+  have hb := batch_lower (fun i : Fin 5 => GSPointBatchWorkM10.final (V i))
+    (262144*3+1) (fun i => final_lower (V i))
+  unfold GSPointBatchWorkM10.inputs
+  dsimp only
+  unfold retainedCells initialCells finalCells outerCells cells
+  omega
+
+/-- Extension of the actual point stage. Its retained allocation count is a
+fixed constructor count, not a caller-supplied heap function. -/
+@[irreducible] def spec : AllocationStageSpecM10.StageSpec width
+    (fun w : PointStageSpecM10.WordPair =>
+      some (AspisWide.GSConcreteReceivedWordInputs.fromWords w.1 w.2))
+    (fun _ => True) (fun _ => True) (fun _ => GSPointBatchWorkM10.budget) where
+  toStageSpec := PointStageSpecM10.spec
+  allocation w := {
+    elements := retainedCells
+    bits := width*retainedCells
+    width_law := Nat.le_refl _
+    creation_work := by
+      simpa only [PointStageSpecM10.spec,AbstractStageSpecM10.pureStage] using inputs_lower w.1 w.2 }
+
+theorem exact_count (w : PointStageSpecM10.WordPair) :
+    (spec.allocation w).elements = 31719496 ∧
+    (spec.allocation w).bits = 32480763904 := by
+  unfold spec
+  constructor <;> rfl
+
+theorem positive (w : PointStageSpecM10.WordPair) : 0 < (spec.allocation w).bits := by
+  rw [(exact_count w).2]
+  omega
+
+theorem accepted_nonzero (w : PointStageSpecM10.WordPair) :
+    (spec.run w).1 = some (AspisWide.GSConcreteReceivedWordInputs.fromWords w.1 w.2) ∧
+    (spec.allocation w).bits = width*(29*initialCells+5*finalCells+outerCells 29+outerCells 5) ∧
+    0 < (spec.allocation w).bits :=
+  ⟨spec.value w,by unfold spec; rfl,positive w⟩
+
+theorem work_dominates (w : PointStageSpecM10.WordPair) :
+    (spec.allocation w).bits ≤ width*(spec.run w).2 := allocation_le_work spec w
+
+#print axioms initial_lower
+#print axioms final_lower
+#print axioms inputs_lower
+#print axioms exact_count
+#print axioms positive
+#print axioms accepted_nonzero
+#print axioms work_dominates
+end AspisR1.GSPointRetainedAllocationM10
