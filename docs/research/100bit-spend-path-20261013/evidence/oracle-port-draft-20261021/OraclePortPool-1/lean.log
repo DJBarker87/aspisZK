@@ -1,0 +1,24 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortPool.lean:50:90: error: unsolved goals
+D : LiteralByteProtocol.Decoder
+d : Decision
+P : Prover
+tape : Tape
+policy : Policy
+H : Bytes → State
+run : Run
+hr : (eval H (deployed (tx1 D P tape) (poolTx2 D d P policy))).2.resumed = some run
+ha : run.2.2 = true
+⊢ { checkpoint := Option.map (fun c => R9PoolCheckpointCodec.encode (stage1 D P) (some c)) (eval H (stage1 D P)).2,
+      words :=
+        match (eval H (stage1 D P)).2 with
+        | none => fun x => 0
+        | some c => tape c.raw } =
+    { checkpoint := Option.map (fun c => R9PoolCheckpointCodec.encode (stage1 D P) (some c)) (eval H (stage1 D P)).2,
+      words :=
+        match (eval H (stage1 D P)).2 with
+        | none => fun x => 0
+        | some c => tape c.raw }
+'AspisR1.OraclePortPool.caller' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortPool.transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortPool.deployed_transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortPool.source_caller' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
