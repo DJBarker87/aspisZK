@@ -1,0 +1,14 @@
+{
+  "schema": "s2-header-source-cut-v1",
+  "revision": "5b6193eec1057e57895b5647e3dc6e01a6a95147",
+  "freeze": "b2727acd3",
+  "sources": {
+    "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+    "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+    "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7"
+  },
+  "exact_body": "pub fn parse_shape(proof: &[u8]) -> Result<Variant, Error> {\n    if proof.len() != compact::PROOF_BYTES\n        || &proof[..8] != compact::MAGIC\n        || proof[8] != Variant::S2.tag()\n        || proof[9..16].iter().any(|&x| x != 0)\n    {\n        return Err(Error::Parse);\n    }\n    Ok(Variant::S2)\n}",
+  "reference": "pub fn header_reference(length:usize, magic:bool, tag:u8, tail:bool)->bool {\n    length==57607 && magic && tag==2 && tail\n}\n",
+  "code_sha256": "53faa1f179dd003e831b2a130f57ba9313b536efb63b25e01573af9cf69bbb1f",
+  "boundary": "Direct public-API linkage against copied frozen verifier crate, default private-leaf-salts feature. Symbolic header, zero unread suffix."
+}

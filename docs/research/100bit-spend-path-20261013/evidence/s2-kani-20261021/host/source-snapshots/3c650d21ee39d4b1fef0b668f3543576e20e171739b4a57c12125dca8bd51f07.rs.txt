@@ -1,0 +1,83 @@
+#![allow(dead_code,private_interfaces,static_mut_refs)]
+#[derive(Clone,Copy)] struct Hash;
+trait Digest32:Copy {} impl Digest32 for Hash {}
+#[derive(Clone,Copy,Debug,PartialEq,Eq)] struct E(u32);
+impl E {const ZERO:Self=Self(0);fn to_le_bytes(self)->[u8;32]{unsafe{INACTIVE}}}
+type K=u32;type SecureCirclePoint=u8;
+#[derive(Clone,Copy,Debug,PartialEq,Eq)] enum Variant {S2}
+impl Variant {fn folds(self)->usize{2}}
+#[derive(Clone,Copy,Debug,PartialEq,Eq)] enum Error {Transcript,Relation}
+#[derive(Clone,Copy,Debug,PartialEq,Eq)] struct Event{row:u8,len:usize,byte:u8,gamma:bool,ptr:usize,before:[u8;32]}
+const EMPTY:Event=Event{row:0,len:0,byte:0,gamma:false,ptr:0,before:[0;32]};
+static mut EVENTS:[Event;6]=[EMPTY;6];static mut COUNT:usize=0;static mut PROBE:usize=0;
+static mut INACTIVE:[u8;32]=[0;32];static mut FAIL:bool=false;
+static mut VALUES:[u32;6]=[0;6];static mut STATES:[[u8;32];6]=[[0;32];6];static mut CLAIM_FAIL:bool=false;
+static mut QUERIES:[u32;22]=[0;22];
+fn observe(row:u8,payload:&[u8],gamma:bool,before:[u8;32]){unsafe{
+EVENTS[COUNT]=Event{row,len:payload.len(),byte:if PROBE<payload.len(){payload[PROBE]}else{0},gamma,ptr:if row==27||row==29||row==31{payload.as_ptr()as usize}else{0},before};COUNT+=1;
+}}
+struct Transcript<H>{state:[u8;32],_hash:H}
+impl<H:Digest32> Transcript<H>{
+fn new(hash:H,state:[u8;32],_:Variant)->Self{Self{state,_hash:hash}}
+fn state(&self)->[u8;32]{self.state}
+fn scalar(&mut self,row:u8,payload:&[u8],gamma:bool)->E{observe(row,payload,gamma,self.state);self.state=unsafe{STATES[(row-27)as usize]};E(unsafe{VALUES[(row-27)as usize]})}
+fn queries(&mut self,row:u8,payload:&[u8])->Result<[u32;22],Error>{observe(row,payload,false,self.state);self.state=unsafe{STATES[(row-27)as usize]};if unsafe{FAIL}{Err(Error::Transcript)}else{Ok(unsafe{QUERIES})}}
+fn scalar_k(&mut self,row:u8,payload:&[u8])->K{observe(row,payload,false,self.state);self.state=unsafe{STATES[(row-27)as usize]};unsafe{VALUES[5]}}
+}
+mod r1_semantic {use super::*;pub struct Verified<H>{pub transcript:Transcript<H>,pub roots:[[u8;32];2],pub alpha:[K;10],pub z:[SecureCirclePoint;2]}}
+struct View<'a>{variant:Variant,y1:&'a[u8],inactive:E,round0:&'a[u8],folded_root:Option<&'a[u8;32]>,round1:&'a[u8],final_message:&'a[u8]}
+fn powers<const N:usize>(x:E)->[E;N]{[x;N]}
+fn prepared_claim<H:Digest32>(_:&r1_semantic::Verified<H>,_:&[u8],_:E,_:&[E;29],kappa:E)->Result<E,Error>{if unsafe{CLAIM_FAIL}{Err(Error::Relation)}else{Ok(kappa)}}
+
+pub struct Prepared {
+    pub variant:Variant,pub roots:[[u8;32];2],pub gamma:E,pub kappa:E,pub alpha:[E;2],pub rho:K,
+    pub queries:[u32;22],pub semantic_alpha:[K;10],pub z:[SecureCirclePoint;2],pub claim:E,pub state:[u8;32],
+}
+impl Prepared {
+pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H,g:&mut [E;29])->Result<Box<Self>,Error> {
+        let mut t=Transcript::new(hash,sem.transcript.state(),v.variant);
+        let gamma=t.scalar(27,v.y1,true);
+        let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);
+        let alpha0=t.scalar(29,v.round0,false);
+        let (alpha,row)=if v.variant.folds()==2 {
+            let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(v.folded_root.unwrap());bytes.extend_from_slice(v.round1);
+            ([alpha0,t.scalar(30,&bytes,false)],31)
+        } else {
+            ([alpha0,E::ZERO],30)
+        };
+        let queries=t.queries(row,v.final_message)?;
+        let rho=t.scalar_k(row+1,&[]);
+        // Reuse this caller-owned scratch array in tx1; it is never serialized.
+        *g=powers::<29>(gamma);
+        let claim=prepared_claim(sem,v.y1,v.inactive,g,kappa)?;
+        Ok(Box::new(Self{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))
+    }
+}
+fn reference<H:Digest32>(sem:&r1_semantic::Verified<H>,v:&View<'_>,hash:H,g:&mut[E;29])->Result<Box<Prepared>,Error>{
+let mut t=Transcript::new(hash,sem.transcript.state(),Variant::S2);
+let gamma=t.scalar(27,v.y1,true);
+let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);
+let alpha0=t.scalar(29,v.round0,false);
+let mut message=[0u8;256];message[..32].copy_from_slice(v.folded_root.unwrap());message[32..].copy_from_slice(v.round1);
+let alpha1=t.scalar(30,&message,false);
+let queries=t.queries(31,v.final_message)?;
+let rho=t.scalar_k(32,&[]);
+*g=powers::<29>(gamma);
+let claim=prepared_claim(sem,v.y1,v.inactive,g,kappa)?;
+Ok(Box::new(Prepared{variant:Variant::S2,roots:sem.roots,gamma,kappa,alpha:[alpha0,alpha1],rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))
+}
+fn fields(p:&Prepared)->(E,E,[E;2],K,[u32;22],E,[u8;32]){(p.gamma,p.kappa,p.alpha,p.rho,p.queries,p.claim,p.state)}
+#[cfg(kani)] mod proofs {use super::*;
+#[kani::proof] #[kani::unwind(258)] fn opening_dispatch_bytes(){
+let y1:[u8;928]=kani::any();let round0:[u8;224]=kani::any();let root:[u8;32]=kani::any();let round1:[u8;224]=kani::any();let final_message:[u8;2048]=kani::any();
+let states:[[u8;32];6]=kani::any();let claim_fail:bool=kani::any();
+let inactive:[u8;32]=kani::any();let values:[u32;6]=kani::any();let queries:[u32;22]=kani::any();let fail:bool=kani::any();let probe:usize=kani::any();
+unsafe{STATES=states;CLAIM_FAIL=claim_fail;INACTIVE=inactive;VALUES=values;QUERIES=queries;FAIL=fail;PROBE=probe;EVENTS=[EMPTY;6];COUNT=0;}
+let sem=r1_semantic::Verified{transcript:Transcript::new(Hash,[0;32],Variant::S2),roots:[[0;32];2],alpha:[0;10],z:[0;2]};
+let view=View{variant:Variant::S2,y1:&y1,inactive:E(0),round0:&round0,folded_root:Some(&root),round1:&round1,final_message:&final_message};
+let mut g=[E::ZERO;29];let x=Prepared::new(&sem,&view,Hash,&mut g);let trace=unsafe{EVENTS};let count=unsafe{COUNT};
+unsafe{EVENTS=[EMPTY;6];COUNT=0;}let mut rg=[E::ZERO;29];let y=reference(&sem,&view,Hash,&mut rg);
+assert_eq!(trace,unsafe{EVENTS});assert_eq!(count,unsafe{COUNT});assert_eq!(g,rg);
+match (x,y){(Ok(x),Ok(y))=>{assert_eq!(fields(&x),fields(&y));assert_eq!(x.roots,y.roots);assert_eq!(x.semantic_alpha,y.semantic_alpha);assert_eq!(x.z,y.z);assert_eq!(x.variant,y.variant);},(Err(x),Err(y))=>assert_eq!(x,y),_=>assert!(false)}
+assert_eq!(count,if fail{5}else{6});
+}}

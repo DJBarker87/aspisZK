@@ -1,0 +1,31 @@
+{
+  "source_revision": "5afacb66aeb7a4456e0710910f5352d36d3f0fa9",
+  "source_sha256": "df916635a88e421fd7ed27e3404751461825933e4697575ddf98bba25744b4ba",
+  "source_cut": {
+    "schema": "s2-opening-source-cut-v1",
+    "revision": "5afacb66aeb7a4456e0710910f5352d36d3f0fa9",
+    "sources": {
+      "crates/aspis-r1-cost-probe/src/verifier.rs": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756"
+    },
+    "exact_bodies": {
+      "Prepared": "pub struct Prepared {\n    pub variant:Variant,pub roots:[[u8;32];2],pub gamma:E,pub kappa:E,pub alpha:[E;2],pub rho:K,\n    pub queries:[u32;22],pub semantic_alpha:[K;10],pub z:[SecureCirclePoint;2],pub claim:E,pub state:[u8;32],\n}",
+      "new": "pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H,g:&mut [E;29])->Result<Box<Self>,Error> {\n        let mut t=Transcript::new(hash,sem.transcript.state(),v.variant);\n        let gamma=t.scalar(27,v.y1,true);\n        let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);\n        let alpha0=t.scalar(29,v.round0,false);\n        let (alpha,row)=if v.variant.folds()==2 {\n            let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(v.folded_root.unwrap());bytes.extend_from_slice(v.round1);\n            ([alpha0,t.scalar(30,&bytes,false)],31)\n        } else {\n            ([alpha0,E::ZERO],30)\n        };\n        let queries=t.queries(row,v.final_message)?;\n        let rho=t.scalar_k(row+1,&[]);\n        // Reuse this caller-owned scratch array in tx1; it is never serialized.\n        *g=powers::<29>(gamma);\n        let claim=prepared_claim(sem,v.y1,v.inactive,g,kappa)?;\n        Ok(Box::new(Self{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))\n    }"
+    },
+    "code_sha256": "df916635a88e421fd7ed27e3404751461825933e4697575ddf98bba25744b4ba",
+    "qualification": "Complete Prepared::new shell, S2 only. Transcript/field/claim children are explicit abstract interpreters, not proved implementations. Arbitrary serializer bytes, challenges, query result, query failure and byte probe. Claims only order, payload identity and returned-field plumbing at that boundary; no hash/query/arithmetic refinement."
+  },
+  "command": [
+    "cargo",
+    "kani",
+    "-j",
+    "4",
+    "--harness",
+    "opening_state_threading",
+    "-Z",
+    "unstable-options",
+    "--output-format",
+    "terse",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ]
+}

@@ -1,0 +1,22 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: trait `Digest32` is more private than the item `Prepared::new`
+  --> src/lib.rs:37:1
+   |
+37 | pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H,g:&mut [E;29])->Result<Box<Self>,Error> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function `Prepared::new` is reachable at visibility `pub`
+   |
+note: but trait `Digest32` is only usable at visibility `pub(crate)`
+  --> src/lib.rs:3:1
+   |
+ 3 | trait Digest32:Copy {} impl Digest32 for Hash {}
+   | ^^^^^^^^^^^^^^^^^^^
+   = note: `#[warn(private_bounds)]` on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Thread 2: Checking harness proofs::opening_dispatch_bytes...

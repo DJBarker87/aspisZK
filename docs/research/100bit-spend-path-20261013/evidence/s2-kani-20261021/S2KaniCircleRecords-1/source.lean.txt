@@ -1,0 +1,92 @@
+import ExtractedPrefixCoefficients
+import R1CircleRecordCodec
+
+/-! Typed row25/26 messages from the retained actual Prefix parser. This
+closes the typed-codec join at that parser, not its frozen optimized caller. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.S2KaniCircleRecords
+open Aeneas Aeneas.Std Result
+open ExtractedRecordByteValue ExtractedPrefixStrictPayload
+open ExtractedPrefixSemanticLow RetainedFieldByteCodec
+
+/-- Generic strict sequence lemma: no concrete numeral normalization. -/
+theorem strict_sequence (n : Nat) (raw : List U8) (hlen : raw.length = n * 32)
+    (hstrict : ∀ chunk ∈ (List.toChunksExact 32 (by decide) raw).1,
+      StrictLowChunk chunk) :
+    ∃ values : Fin n → SemanticCoefficientCodec.LowWide,
+      SelectedFieldSequenceCodec.decodeLow n (raw.map rawByte) = some values ∧
+      SelectedFieldSequenceCodec.encodeLow values = raw.map rawByte := by
+  have hslot : ∀ i : Fin n, ∃ lo : QM31Limbs,
+      SemanticCoefficientCodec.decodeLow (((raw.drop (32 * i.val)).take 32).map rawByte) =
+        some (lowValue lo) := by
+    intro i
+    obtain ⟨lo, hd, _⟩ := strict_chunk_decodeLow _
+      (hstrict _ (ExtractedPrefixChunkOrder.slice_mem 32 (by decide) raw i.val (by omega)))
+    exact ⟨lo, hd⟩
+  classical
+  choose limbs hd using hslot
+  let values := fun i => lowValue (limbs i)
+  have hdecode : SelectedFieldSequenceCodec.decodeLow n (raw.map rawByte) = some values := by
+    apply (SelectedFieldSequenceCodec.decodeLow_eq_some_iff _ _).mpr
+    refine ⟨by simpa only [List.length_map] using hlen, ?_⟩
+    intro i
+    simpa only [List.map_take, List.map_drop] using hd i
+  exact ⟨values, hdecode, SelectedFieldSequenceCodec.encodeLow_of_decode _ _ hdecode⟩
+
+/-- The generated row table agrees with the typed two-circle carrier. -/
+theorem circle_table (i : Fin 2) (row : U8) (hrow : row.val = 25 + i.val) :
+    ∃ tag size, ExtractedRowShape.table row = some (tag,size) ∧
+      rawByte tag = CircleRecordCodec.tag i ∧ size.val = CircleRecordCodec.count i * 32 := by
+  have hi : i.val = 0 ∨ i.val = 1 := by omega
+  rcases hi with hi | hi
+  · refine ⟨4#u8,3712#usize,?_,?_,?_⟩
+    · simp [ExtractedRowShape.table, hrow, hi]
+    · apply Fin.ext; simp [rawByte, CircleRecordCodec.tag, hi]
+    · simp [CircleRecordCodec.count, hi]
+  · refine ⟨5#u8,928#usize,?_,?_,?_⟩
+    · simp [ExtractedRowShape.table, hrow, hi]
+    · apply Fin.ext; simp [rawByte, CircleRecordCodec.tag, hi]
+    · simp [CircleRecordCodec.count, hi]
+
+/-- No per-record model decode hypothesis: strictness and framing come from
+success of the actual extracted inner parser. -/
+theorem circle_record_decode (i : Fin 2) (row : U8) (hrow : row.val = 25 + i.val)
+    (frame payload : Slice U8)
+    (hp : AspisR1PrefixAggregateParser.r1_wire.parse_record row frame = ok (.Ok payload)) :
+    ∃ value : CircleRecordCodec.Payload i,
+      CircleRecordCodec.decode i (frame.val.map rawByte) = some value ∧
+      CircleRecordCodec.encode value = frame.val.map rawByte := by
+  obtain ⟨tag,size,ht,hlen,hframe,_⟩ :=
+    ExtractedPrefixFrameAgreement.parse_record_frame_success row frame payload hp
+  obtain ⟨ct,cs,hct,hcb,hcs⟩ := circle_table i row hrow
+  have hpair := Option.some.inj (ht.symm.trans hct)
+  obtain ⟨rfl,rfl⟩ := Prod.mk.inj hpair
+  obtain ⟨_,_,hs⟩ := parse_record_strict_payload row frame payload (by omega) hp
+  obtain ⟨values,hd,_⟩ := strict_sequence (CircleRecordCodec.count i) payload.val
+    (hlen.trans hcs) hs
+  have hdecode : CircleRecordCodec.decode i (frame.val.map rawByte) = some values := by
+    unfold CircleRecordCodec.decode
+    rw [← hcb, ← hcs, hframe]
+    exact hd
+  exact ⟨values,hdecode,CircleRecordCodec.encode_of_decode i _ values hdecode⟩
+
+/-- Both final rows are selected from the complete returned Prefix trace.
+The literal frame identity is derived, rather than supplied as an assumption. -/
+theorem reached_circle_record (bytes : Slice U8)
+    (parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix)
+    (hp : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (.Ok parsed))
+    (i : Fin 2) (row : U8) (hrow : row.val = 25 + i.val) (frame : Slice U8)
+    (hm : (row,frame) ∈ ExtractedPrefixTrace.rowOrder.zip parsed.records.val) :
+    ∃ value : CircleRecordCodec.Payload i,
+      CircleRecordCodec.decode i (frame.val.map rawByte) = some value ∧
+      CircleRecordCodec.encode value = frame.val.map rawByte := by
+  obtain ⟨payload,hr⟩ := ExtractedPrefixParse.parse_record_of_success bytes parsed hp row frame hm
+  exact circle_record_decode i row hrow frame payload hr
+
+#print axioms strict_sequence
+#print axioms circle_table
+#print axioms circle_record_decode
+#print axioms reached_circle_record
+end AspisR1.S2KaniCircleRecords
+end

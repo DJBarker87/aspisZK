@@ -1,0 +1,133 @@
+#![allow(dead_code,private_interfaces)]
+const CLAIMS:usize=87;const LANES:usize=29;
+#[derive(Debug,Clone,Copy,PartialEq,Eq)] enum Error {Length{row:u8},InvalidRow,TrailingBytes,Rejected{row:u8}}
+static mut FAIL_ROW:u8=255;
+fn parse_record(row:u8,_record:&[u8])->Result<(),Error>{if row==unsafe{FAIL_ROW}{Err(Error::Rejected{row})}else{Ok(())}}
+pub const fn row_shape(row: u8) -> Option<(u8, usize)> {
+    match row {
+        0 | 1 | 3..=13 => Some((0, 0)),
+        2 => Some((1, 32)),
+        14 => Some((3, 32)),
+        15..=24 => Some((2, 28 * 32)),
+        25 => Some((4, (CLAIMS + LANES) * 32)),
+        26 => Some((5, LANES * 32)),
+        _ => None,
+    }
+}
+pub struct Prefix<'a> {
+    pub c1_root: &'a [u8; 32],
+    records: [&'a [u8]; 27],
+}
+pub(crate) struct ValidatedRecord<'a> {
+    row: u8,
+    framed: &'a [u8],
+}
+fn parse_record_at<'a>(
+    bytes: &'a [u8],
+    row: u8,
+    offset: usize,
+) -> Result<(&'a [u8], usize), Error> {
+    let length = 5 + row_shape(row).unwrap().1;
+    let framed = bytes
+        .get(offset..offset + length)
+        .ok_or(Error::Length { row })?;
+    parse_record(row, framed)?;
+    Ok((framed, offset + length))
+}
+impl<'a> Prefix<'a> {
+pub fn parse(bytes: &'a [u8]) -> Result<Self, Error> {
+        if bytes.len() < 32 {
+            return Err(Error::Length { row: 0 });
+        }
+        let c1_root = match bytes[..32].try_into() {
+            Ok(root) => root,
+            Err(_) => return Err(Error::Length { row: 0 }),
+        };
+        let (r0, offset) = parse_record_at(bytes, 0, 32)?;
+        let (r1, offset) = parse_record_at(bytes, 1, offset)?;
+        let (r2, offset) = parse_record_at(bytes, 2, offset)?;
+        let (r3, offset) = parse_record_at(bytes, 3, offset)?;
+        let (r4, offset) = parse_record_at(bytes, 4, offset)?;
+        let (r5, offset) = parse_record_at(bytes, 5, offset)?;
+        let (r6, offset) = parse_record_at(bytes, 6, offset)?;
+        let (r7, offset) = parse_record_at(bytes, 7, offset)?;
+        let (r8, offset) = parse_record_at(bytes, 8, offset)?;
+        let (r9, offset) = parse_record_at(bytes, 9, offset)?;
+        let (r10, offset) = parse_record_at(bytes, 10, offset)?;
+        let (r11, offset) = parse_record_at(bytes, 11, offset)?;
+        let (r12, offset) = parse_record_at(bytes, 12, offset)?;
+        let (r13, offset) = parse_record_at(bytes, 13, offset)?;
+        let (r14, offset) = parse_record_at(bytes, 14, offset)?;
+        let (r15, offset) = parse_record_at(bytes, 15, offset)?;
+        let (r16, offset) = parse_record_at(bytes, 16, offset)?;
+        let (r17, offset) = parse_record_at(bytes, 17, offset)?;
+        let (r18, offset) = parse_record_at(bytes, 18, offset)?;
+        let (r19, offset) = parse_record_at(bytes, 19, offset)?;
+        let (r20, offset) = parse_record_at(bytes, 20, offset)?;
+        let (r21, offset) = parse_record_at(bytes, 21, offset)?;
+        let (r22, offset) = parse_record_at(bytes, 22, offset)?;
+        let (r23, offset) = parse_record_at(bytes, 23, offset)?;
+        let (r24, offset) = parse_record_at(bytes, 24, offset)?;
+        let (r25, offset) = parse_record_at(bytes, 25, offset)?;
+        let (r26, offset) = parse_record_at(bytes, 26, offset)?;
+        if offset != bytes.len() {
+            return Err(Error::TrailingBytes);
+        }
+        Ok(Self {
+            c1_root,
+            records: [
+                r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17,
+                r18, r19, r20, r21, r22, r23, r24, r25, r26,
+            ],
+        })
+    }
+pub fn record(&self, row: u8) -> Result<&'a [u8], Error> {
+        if row >= 27 {
+            return Err(Error::InvalidRow);
+        }
+        Ok(self.records[row as usize])
+    }
+pub fn payload(&self, row: u8) -> Result<&'a [u8], Error> {
+        let framed = self.record(row)?;
+        Ok(&framed[5..])
+    }
+pub(crate) fn validated_record(&self, row: u8) -> Result<ValidatedRecord<'a>, Error> {
+        Ok(ValidatedRecord {
+            row,
+            framed: self.record(row)?,
+        })
+    }
+}
+fn record_range(row:u8)->(usize,usize) {
+    let mut i=0u8;let mut at=32usize;
+    while i<row {at+=5+row_shape(i).unwrap().1;i+=1;}
+    (at,5+row_shape(row).unwrap().1)
+}
+#[cfg(kani)] mod proofs {
+use super::*;
+#[kani::proof] #[kani::unwind(29)] fn prefix_records_are_reached_slices(){
+    unsafe{FAIL_ROW=255;}
+    let bytes=[0u8;13831];let row:u8=kani::any();kani::assume(row<27);
+    let p=Prefix::parse(&bytes).unwrap();
+    let (at,length)=record_range(row);
+    let rec=p.record(row).unwrap();
+    assert_eq!(rec.as_ptr(),bytes[at..at+length].as_ptr());assert_eq!(rec.len(),length);
+    let token=p.validated_record(row).unwrap();
+    assert_eq!(token.row,row);assert_eq!(token.framed.as_ptr(),rec.as_ptr());assert_eq!(token.framed.len(),rec.len());
+    assert_eq!(p.payload(row).unwrap().as_ptr(),bytes[at+5..at+length].as_ptr());
+    assert_eq!(p.payload(row).unwrap().len(),length-5);
+    if row==25 {assert_eq!((at,length),(9181,3717));}
+    if row==26 {assert_eq!((at,length),(12898,933));}
+}
+#[kani::proof] #[kani::unwind(29)] fn prefix_propagates_first_parser_error(){
+    let row:u8=kani::any();kani::assume(row<27);unsafe{FAIL_ROW=row;}
+    let bytes=[0u8;13831];
+    assert!(matches!(Prefix::parse(&bytes),Err(Error::Rejected{row:r}) if r==row));
+}
+#[kani::proof] #[kani::unwind(29)] fn record_at_exact_range(){
+    let row:u8=kani::any();kani::assume(row<27);unsafe{FAIL_ROW=255;}
+    let bytes=[0u8;13831];let (at,length)=record_range(row);
+    let (framed,next)=parse_record_at(&bytes,row,at).unwrap();
+    assert_eq!(next,at+length);assert_eq!(framed.as_ptr(),bytes[at..].as_ptr());assert_eq!(framed.len(),length);
+}
+}

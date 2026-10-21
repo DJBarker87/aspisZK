@@ -1,0 +1,37 @@
+{
+  "source_revision": "5afacb66aeb7a4456e0710910f5352d36d3f0fa9",
+  "source_sha256": "0da2d1cd12ff0bc6c1a885be4a31be400df35958c5a6adbdc690194456011b04",
+  "source_cut": {
+    "schema": "s2-parser-source-cut-v1",
+    "revision": "5afacb66aeb7a4456e0710910f5352d36d3f0fa9",
+    "sources": {
+      "crates/aspis-r1-cost-probe/src/r1_wire.rs": "d0cf787d38cc8b801b8c8b917a5c658ec685511728380b090ae8235fe62d0f08"
+    },
+    "exact_bodies": {
+      "pub const fn row_shape(": "pub const fn row_shape(row: u8) -> Option<(u8, usize)> {\n    match row {\n        0 | 1 | 3..=13 => Some((0, 0)),\n        2 => Some((1, 32)),\n        14 => Some((3, 32)),\n        15..=24 => Some((2, 28 * 32)),\n        25 => Some((4, (CLAIMS + LANES) * 32)),\n        26 => Some((5, LANES * 32)),\n        _ => None,\n    }\n}",
+      "pub struct Prefix<": "pub struct Prefix<'a> {\n    pub c1_root: &'a [u8; 32],\n    records: [&'a [u8]; 27],\n}",
+      "pub(crate) struct ValidatedRecord<": "pub(crate) struct ValidatedRecord<'a> {\n    row: u8,\n    framed: &'a [u8],\n}",
+      "fn parse_record_at<'a>": "fn parse_record_at<'a>(\n    bytes: &'a [u8],\n    row: u8,\n    offset: usize,\n) -> Result<(&'a [u8], usize), Error> {\n    let length = 5 + row_shape(row).unwrap().1;\n    let framed = bytes\n        .get(offset..offset + length)\n        .ok_or(Error::Length { row })?;\n    parse_record(row, framed)?;\n    Ok((framed, offset + length))\n}",
+      "pub fn parse(bytes:": "pub fn parse(bytes: &'a [u8]) -> Result<Self, Error> {\n        if bytes.len() < 32 {\n            return Err(Error::Length { row: 0 });\n        }\n        let c1_root = match bytes[..32].try_into() {\n            Ok(root) => root,\n            Err(_) => return Err(Error::Length { row: 0 }),\n        };\n        let (r0, offset) = parse_record_at(bytes, 0, 32)?;\n        let (r1, offset) = parse_record_at(bytes, 1, offset)?;\n        let (r2, offset) = parse_record_at(bytes, 2, offset)?;\n        let (r3, offset) = parse_record_at(bytes, 3, offset)?;\n        let (r4, offset) = parse_record_at(bytes, 4, offset)?;\n        let (r5, offset) = parse_record_at(bytes, 5, offset)?;\n        let (r6, offset) = parse_record_at(bytes, 6, offset)?;\n        let (r7, offset) = parse_record_at(bytes, 7, offset)?;\n        let (r8, offset) = parse_record_at(bytes, 8, offset)?;\n        let (r9, offset) = parse_record_at(bytes, 9, offset)?;\n        let (r10, offset) = parse_record_at(bytes, 10, offset)?;\n        let (r11, offset) = parse_record_at(bytes, 11, offset)?;\n        let (r12, offset) = parse_record_at(bytes, 12, offset)?;\n        let (r13, offset) = parse_record_at(bytes, 13, offset)?;\n        let (r14, offset) = parse_record_at(bytes, 14, offset)?;\n        let (r15, offset) = parse_record_at(bytes, 15, offset)?;\n        let (r16, offset) = parse_record_at(bytes, 16, offset)?;\n        let (r17, offset) = parse_record_at(bytes, 17, offset)?;\n        let (r18, offset) = parse_record_at(bytes, 18, offset)?;\n        let (r19, offset) = parse_record_at(bytes, 19, offset)?;\n        let (r20, offset) = parse_record_at(bytes, 20, offset)?;\n        let (r21, offset) = parse_record_at(bytes, 21, offset)?;\n        let (r22, offset) = parse_record_at(bytes, 22, offset)?;\n        let (r23, offset) = parse_record_at(bytes, 23, offset)?;\n        let (r24, offset) = parse_record_at(bytes, 24, offset)?;\n        let (r25, offset) = parse_record_at(bytes, 25, offset)?;\n        let (r26, offset) = parse_record_at(bytes, 26, offset)?;\n        if offset != bytes.len() {\n            return Err(Error::TrailingBytes);\n        }\n        Ok(Self {\n            c1_root,\n            records: [\n                r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17,\n                r18, r19, r20, r21, r22, r23, r24, r25, r26,\n            ],\n        })\n    }",
+      "pub fn record(&self,": "pub fn record(&self, row: u8) -> Result<&'a [u8], Error> {\n        if row >= 27 {\n            return Err(Error::InvalidRow);\n        }\n        Ok(self.records[row as usize])\n    }",
+      "pub fn payload(&self,": "pub fn payload(&self, row: u8) -> Result<&'a [u8], Error> {\n        let framed = self.record(row)?;\n        Ok(&framed[5..])\n    }",
+      "pub(crate) fn validated_record(&self,": "pub(crate) fn validated_record(&self, row: u8) -> Result<ValidatedRecord<'a>, Error> {\n        Ok(ValidatedRecord {\n            row,\n            framed: self.record(row)?,\n        })\n    }"
+    },
+    "code_sha256": "0da2d1cd12ff0bc6c1a885be4a31be400df35958c5a6adbdc690194456011b04",
+    "qualification": "Exact parser caller, helper and token accessors. Child parse_record abstracted by arbitrary first failing row; no canonicality proof claimed. All wrapper observations are addresses/lengths; no backing bytes read by these exact bodies except root reference conversion. Zero buffer does not establish content validity."
+  },
+  "command": [
+    "cargo",
+    "kani",
+    "-j",
+    "4",
+    "--harness",
+    "proofs",
+    "-Z",
+    "unstable-options",
+    "--output-format",
+    "terse",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ]
+}

@@ -34,7 +34,8 @@ pool_command = json.loads((PACKET / 'evidence/r9-pool-20261021/R1FinalSoundnessB
 # Keep each predecessor's complete successful path, rather than manually
 # reconstructing its transitive cache. Private objects always come first.
 headline = json.loads((PACKET / 'evidence/headline-20261021/R1FinalSoundnessHeadline-2/command.json').read_text())
-path = ':'.join(dict.fromkeys([str(OBJECTS), '/tmp/codex-cx-headline-20261021-objects', '/tmp/codex-cx-s2-kani-20261021-reference'] + headline['lean_path'].split(':')))
+r4 = json.loads((PACKET / 'evidence/r4-transport2-20261021/R4Transport2CirclePrefix-1/command.json').read_text())
+path = ':'.join(dict.fromkeys([str(OBJECTS), '/tmp/codex-cx-headline-20261021-objects'] + r4['lean_path'].split(':') + headline['lean_path'].split(':')))
 assert any((Path(x) / 'R9TwoTransactionExperiment.olean').exists() for x in path.split(':'))
 imports = []
 for name in re.findall(r'^import (\S+)', source.read_text(), re.M):

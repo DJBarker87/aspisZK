@@ -1,0 +1,80 @@
+/Users/dominic/ZK/.worktrees/cx-s2-kani/docs/research/100bit-spend-path-20261013/lean/S2KaniReachedCirclePrefix.lean:34:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-s2-kani/docs/research/100bit-spend-path-20261013/lean/S2KaniReachedCirclePrefix.lean:66:4: error: Tactic `apply` failed: could not unify the conclusion of `@Subtype.ext`
+  ?a1 = ?a2
+with the goal
+  semanticMessage record.framed fits = LiteralTranscript.Message.payload (CircleRecordCodec.message value)
+
+Note: The full type of `@Subtype.ext` is
+  ∀ {α : Sort ?u.56} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 = ↑a2 → a1 = a2
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+bytes : Slice U8
+pre : r1_wire.Prefix
+hp : Parsed bytes pre
+record : ValidatedRecord
+ha : pre.validated_record 25#u8 = ok (core.result.Result.Ok record)
+before after : SemanticTranscript Hash
+block : Bytes32
+hcall :
+  SemanticTranscript.sample_block_validated D before record.row record.framed = ok (core.result.Result.Ok block, after)
+P : LiteralTranscript.Prefix
+hstate :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState before.state
+H : Bytes → State
+hdigest :
+  ∀ (hash : Hash) (parts : Slice (Slice U8)) (out : Std.Array U8 32#usize),
+    D.digest hash parts = ok out → decodeState out = H (flatten parts)
+hr : record.row = 25#u8
+value : CircleRecordCodec.Payload 0
+he : CircleRecordCodec.encode value = rawBytes record.framed
+fits : List.length (rawBytes record.framed) ≤ SelectedTranscriptParams.D
+⊢ semanticMessage record.framed fits = LiteralTranscript.Message.payload (CircleRecordCodec.message value)
+/Users/dominic/ZK/.worktrees/cx-s2-kani/docs/research/100bit-spend-path-20261013/lean/S2KaniReachedCirclePrefix.lean:96:4: error: Tactic `apply` failed: could not unify the conclusion of `@Subtype.ext`
+  ?a1 = ?a2
+with the goal
+  semanticMessage record.framed fits = LiteralTranscript.Message.payload (CircleRecordCodec.message value)
+
+Note: The full type of `@Subtype.ext` is
+  ∀ {α : Sort ?u.65} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 = ↑a2 → a1 = a2
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+bytes : Slice U8
+pre : r1_wire.Prefix
+hp : Parsed bytes pre
+record : ValidatedRecord
+ha : pre.validated_record 26#u8 = ok (core.result.Result.Ok record)
+before after : SemanticTranscript Hash
+block : Bytes32
+hcall :
+  SemanticTranscript.sample_block_validated D before record.row record.framed = ok (core.result.Result.Ok block, after)
+hash : Hash
+opening : transcript.Transcript Hash
+hnew : transcript.Transcript.new D hash after.state transport.Variant.S2 = ok opening
+P : LiteralTranscript.Prefix
+htag : P.statement.tag = 2
+hstate :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState before.state
+H : Bytes → State
+hdigest :
+  ∀ (hash : Hash) (parts : Slice (Slice U8)) (out : Std.Array U8 32#usize),
+    D.digest hash parts = ok out → decodeState out = H (flatten parts)
+hr : record.row = 26#u8
+value : CircleRecordCodec.Payload 1
+he : CircleRecordCodec.encode value = rawBytes record.framed
+fits : List.length (rawBytes record.framed) ≤ SelectedTranscriptParams.D
+⊢ semanticMessage record.framed fits = LiteralTranscript.Message.payload (CircleRecordCodec.message value)
+'AspisR1PublicPreparation.S2KaniReachedCirclePrefix.accessor_circle_message' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S2KaniReachedCirclePrefix.parsed_circle25_state' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S2KaniReachedCirclePrefix.parsed_circle26_reseed_state' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

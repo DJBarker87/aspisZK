@@ -3,7 +3,7 @@ import os,sys,subprocess,json,hashlib
 from pathlib import Path
 H=Path('/home/dombarker/project-offloads/codex-cx-s2-kani-20261021')
 name,pattern,seconds=sys.argv[1:4]
-crate=H/'crate';os.chdir(crate)
+crate=H/('linked' if name.startswith('linked-') else 'crate');os.chdir(crate)
 os.environ.update(PATH='/home/dombarker/.cargo/bin:'+os.environ['PATH'],CARGO_BUILD_JOBS='4',CARGO_TARGET_DIR=str(H/'target'),CARGO_NET_OFFLINE='true',RUSTFLAGS='-C link-arg=-Wl,--threads=4')
 subprocess.run(['python3',str(H/'kit/reservation.py'),str(H/(name+'-reservation.json'))],check=True,stdout=subprocess.DEVNULL)
 source=(crate/'src/lib.rs').read_bytes();snapshots=H/'source-snapshots';snapshots.mkdir(exist_ok=True)
