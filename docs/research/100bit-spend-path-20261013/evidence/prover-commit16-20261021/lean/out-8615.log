@@ -1,0 +1,103 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReturned16.lean:27:51: error: unsolved goals
+v : QValues
+⊢ List.map (fun q => q) ↑v = ↑v
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReturned16.lean:31:30: warning: This simp argument is unused:
+  List.map_id_fun
+
+Hint: Omit it from the simp argument list.
+  simp only [field_roundtrip,̵ ̵L̵i̵s̵t̵.̵m̵a̵p̵_̵i̵d̵_̵f̵u̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReturned16.lean:104:85: error: unsolved goals
+left right : Hash
+domain : Slice U8
+same : SameFrames left right domain
+state : State
+cells : Usize
+c1 : Values
+columns : alloc.vec.Vec Values
+g padding : QValues
+dependent : Usize
+active : Std.Array Bool 1024#usize
+nonce : Std.Array U8 32#usize
+⊢ (do
+      let (status, c1, afterC1) ← prover_commit_reference.collect_m31_owned right domain state cells c1
+      match status with
+        | core.result.Result.Err e => ok (core.result.Result.Err e, afterC1)
+        | core.result.Result.Ok PUnit.unit => do
+          let (status, columns, afterColumns) ←
+            prover_commit_reference.material_columns_owned right domain afterC1 columns 0#usize 10#usize dependent
+                active
+          match status with
+            | core.result.Result.Err e => ok (core.result.Result.Err e, afterColumns)
+            | core.result.Result.Ok PUnit.unit => do
+              let (status, g, afterG) ← prover_commit_reference.collect_qm31_owned left domain afterColumns 1024#usize g
+              match status with
+                | core.result.Result.Err e => ok (core.result.Result.Err e, afterG)
+                | core.result.Result.Ok PUnit.unit => do
+                  let (status, g) ← balance g dependent active
+                  match status with
+                    | core.result.Result.Err e => ok (core.result.Result.Err e, afterG)
+                    | core.result.Result.Ok PUnit.unit => do
+                      let (status, padding, final) ←
+                        prover_commit_reference.material_padding_owned right domain afterG padding 0#usize dependent
+                            active
+                      match status with
+                        | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+                        | core.result.Result.Ok PUnit.unit => do
+                          let (status, padding) ← balance padding dependent active
+                          match status with
+                            | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+                            | core.result.Result.Ok PUnit.unit =>
+                              ok
+                                (core.result.Result.Ok
+                                    { c1 := c1, mask_only_c1 := columns, g := g, h1_padding := padding,
+                                      mask_nonce := nonce },
+                                  final)) =
+    do
+    let (status, c1, afterC1) ← prover_commit_reference.collect_m31_owned right domain state cells c1
+    match status with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, afterC1)
+      | core.result.Result.Ok PUnit.unit => do
+        let (status, columns, afterColumns) ←
+          prover_commit_reference.material_columns_owned right domain afterC1 columns 0#usize 10#usize dependent active
+        match status with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, afterColumns)
+          | core.result.Result.Ok PUnit.unit => do
+            let (status, g, afterG) ← prover_commit_reference.collect_qm31_owned right domain afterColumns 1024#usize g
+            match status with
+              | core.result.Result.Err e => ok (core.result.Result.Err e, afterG)
+              | core.result.Result.Ok PUnit.unit => do
+                let (status, g) ← balance g dependent active
+                match status with
+                  | core.result.Result.Err e => ok (core.result.Result.Err e, afterG)
+                  | core.result.Result.Ok PUnit.unit => do
+                    let (status, padding, final) ←
+                      prover_commit_reference.material_padding_owned right domain afterG padding 0#usize dependent
+                          active
+                    match status with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+                      | core.result.Result.Ok PUnit.unit => do
+                        let (status, padding) ← balance padding dependent active
+                        match status with
+                          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+                          | core.result.Result.Ok PUnit.unit =>
+                            ok
+                              (core.result.Result.Ok
+                                  { c1 := c1, mask_only_c1 := columns, g := g, h1_padding := padding,
+                                    mask_nonce := nonce },
+                                final)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReturned16.lean:108:4: warning: This simp argument is unused:
+  qm_collection_support left right domain same
+
+Hint: Omit it from the simp argument list.
+  simp only [assemble, raw_collection_support left right domain same,
+      indexed_columns_support left right domain same,
+      q̵m̵_̵c̵o̵l̵l̵e̵c̵t̵i̵o̵n̵_̵s̵u̵p̵p̵o̵r̵t̵ ̵l̵e̵f̵t̵ ̵r̵i̵g̵h̵t̵ ̵d̵o̵m̵a̵i̵n̵ ̵s̵a̵m̵e̵,̵indexed_padding_support left right domain same _ _ 0#usize _ _ (by decide)]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitReturned16.field_roundtrip' does not depend on any axioms
+'R1Z.ProverCommitReturned16.vector_roundtrip' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverCommitReturned16.assembly_oracle_support' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
