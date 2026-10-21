@@ -38,3 +38,11 @@ Source/model identities, full source Calls tree/carriers, final instance/inline
 correspondence and the final source-coverage instance are still open. The
 current model target is `OraclePortFrozen2.dV_frozen2`; the authoritative headline
 is `OraclePortHeadlineFrozen2PerAttempt.final_soundness` (design addendum 13:05).
+
+The strengthened replay initially failed because a naive comma split treated
+`initializes((0, 16))` inside a parameter attribute as two parameters. That
+failed local check was inadvertently included in the stage-1 commit with the
+previous successful receipt. The following corrective commit uses balanced
+parentheses and replaces that receipt with the successful final replay:
+21 classifications agree, 189 negative controls reject, exit 0, standard
+compiler evidence only. No host result or target-flow status was changed.

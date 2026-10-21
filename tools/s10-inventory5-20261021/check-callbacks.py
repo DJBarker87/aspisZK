@@ -7,7 +7,15 @@ x=json.loads((E/'indirect.json').read_text());elf=json.loads((B/'evidence/s10-in
 original=json.loads((B/'evidence/s10-inventory-20261021/inventory.json').read_text());recorded=json.loads((E/'resolved.json').read_text())
 def valid_field(o):
     symbol=r'[@%](?:"[^"]+"|[-\w.$]+)'
-    params=o['field_signature'].split('(',1)[1].rsplit(')',1)[0].split(',')
+    params=[];depth=0;start=o['field_signature'].index('(')+1
+    for j,c in enumerate(o['field_signature'][start:],start):
+        if c=='(':depth+=1
+        elif c==')':
+            if depth==0:
+                params.append(o['field_signature'][start:j]);break
+            depth-=1
+        elif c==',' and depth==0:
+            params.append(o['field_signature'][start:j]);start=j+1
     if o['index']>=len(params):return False
     param=params[o['index']]
     if not all(t in param for t in ['noalias','readonly',o['parameter']]):return False
