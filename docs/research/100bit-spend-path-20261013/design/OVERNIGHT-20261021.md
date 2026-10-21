@@ -76,11 +76,23 @@ Each was byte-identical, every time.
      multiproof order differs from the frozen ascending-level order on
      accepting slots, and that this permutation changes recovery. So the model
      must adopt the frozen order.
-   - `cx-frozen-order-draft` (running at 06:00): dV_frozen with the exact
-     frozen slot order, re-proving leaf recovery, budgets and
-     checked_acceptance for level-order logs. Once the model order equals the
-     frozen order, the per-cone joins are exactly the refinement statements
-     the S-cone re-pins prove.
+   - `cx-frozen-order-draft` (HEAD 7edd59818, pushed): **done**. dV_frozen
+     uses the exact frozen order (sorted leaves and duplicates, then ascending
+     levels and parent indices). For level-order logs it re-proves
+     collision-free recovery through shared paths, verifier budget ≤ 1161,
+     starts ≤ Q+1080, log ≤ Q+2322, and checked_acceptance.
+     `OraclePortHeadlineFrozen.final_soundness` (and `per_query`) has exactly
+     three premises: `hqueries`, `AcceptedRunJoin D rust` (the frozen Rust
+     verifier's accepted runs have the same logs and outputs as dV_frozen)
+     and `StoredCarrierBinding` (runtime). 25 modules, 69 theorems, standard
+     axioms, zero swap.
+
+   **This last branch is the one to review if you adopt the port.** Each
+   branch in the chain contains the ones before it. If adopted, the full
+   soundness gap is the per-cone accepted-run refinements of the frozen
+   source to dV_frozen (table in the join-split design note, updated on the
+   last branch), which is exactly what the S-cone re-pins establish, plus
+   the runtime carrier binding.
    Recommendation: adopt. The whole soundness gap then becomes one
    Rust-equals-dV execution join plus the runtime carrier binding, which is
    exactly what the S-cone re-pins establish. Nothing merges without your yes.
