@@ -1,0 +1,60 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortReachedRootsC6.lean:22:10: error: don't know how to synthesize placeholder for argument `w`
+context:
+D : LiteralByteProtocol.Decoder
+P : Prover
+H : Bytes → State
+row : ℕ
+bound : row < 33
+⊢ TranscriptView.Challenge LiteralTranscript.E
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortReachedRootsC6.lean:21:97: error: unsolved goals
+D : LiteralByteProtocol.Decoder
+P : Prover
+H : Bytes → State
+row : ℕ
+bound : row < 33
+⊢ ∃ c, (reached D P H).rounds[row]? = some (LiteralTranscript.erase ((OraclePortReachedRunC6.input P H).proof row), c)
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortReachedRootsC6.lean:92:4: error: Type mismatch: After simplification, term
+  BinRawByteCollisionTargets.fixed_frame 38 pre payload.1 tail prelen
+ has type
+  @Eq (Option State)
+    (BinRawByteCollisionTargets.fixed 38
+      (bytes
+          (UnifiedSampler.stateOf SelectedTranscriptParams.params
+            (LiteralTranscript.erasePrefix
+              ((LiteralByteProtocol.protocol D).transcript H (OraclePortReachedRunC6.input P H).statement
+                (OraclePortReachedRunC6.input P H).proof 30))) ++
+        ([0, SelectedTranscriptParams.label 30] ++
+          (PublicInitFrame.lengthBytes
+              (List.length (bytes payload.1 ++ SelectedFieldSequenceCodec.encodeWide payload.2)) ++
+            (bytes payload.1 ++ SelectedFieldSequenceCodec.encodeWide payload.2)))))
+    (some payload.1)
+but is expected to have type
+  @Eq (Option State)
+    (BinRawByteCollisionTargets.fixed 38
+      (bytes
+          (UnifiedSampler.stateOf SelectedTranscriptParams.params
+            (LiteralTranscript.erasePrefix
+              ((LiteralByteProtocol.protocol D).transcript H (eval H P).2.statement
+                (OraclePortReachedRunC6.input P H).proof 30))) ++
+        ([0, SelectedTranscriptParams.label 30] ++
+          (PublicInitFrame.lengthBytes
+              (List.length
+                (match OpeningRecordCodec.Row.second, payload with
+                | OpeningRecordCodec.Row.gamma, coefficients => SelectedFieldSequenceCodec.encodeLow coefficients
+                | OpeningRecordCodec.Row.kappa, value => FoldedLeafCodec.encodeWide value
+                | OpeningRecordCodec.Row.first, coefficients => SelectedFieldSequenceCodec.encodeWide coefficients
+                | OpeningRecordCodec.Row.second, (root, coefficients) =>
+                  bytes root ++ SelectedFieldSequenceCodec.encodeWide coefficients
+                | OpeningRecordCodec.Row.final, coefficients => SelectedFieldSequenceCodec.encodeWide coefficients
+                | OpeningRecordCodec.Row.rho, x => [])) ++
+            match OpeningRecordCodec.Row.second, payload with
+            | OpeningRecordCodec.Row.gamma, coefficients => SelectedFieldSequenceCodec.encodeLow coefficients
+            | OpeningRecordCodec.Row.kappa, value => FoldedLeafCodec.encodeWide value
+            | OpeningRecordCodec.Row.first, coefficients => SelectedFieldSequenceCodec.encodeWide coefficients
+            | OpeningRecordCodec.Row.second, (root, coefficients) =>
+              bytes root ++ SelectedFieldSequenceCodec.encodeWide coefficients
+            | OpeningRecordCodec.Row.final, coefficients => SelectedFieldSequenceCodec.encodeWide coefficients
+            | OpeningRecordCodec.Row.rho, x => []))))
+    (some payload.1)
+'AspisR1.OraclePortReachedRootsC6.erased_index' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortReachedRootsC6.targets' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

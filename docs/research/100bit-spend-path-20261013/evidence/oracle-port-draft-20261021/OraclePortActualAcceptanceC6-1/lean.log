@@ -1,0 +1,105 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortActualAcceptanceC6.lean:54:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  RawCutWordsFromView.rootFrom 8 (RawCutWordsFromView.frameFromView D (view (run D P H)) 0)
+in the target expression
+  OraclePortRecoveredAcceptanceC6.maps (run D P H).1 (frames D P H) p =
+    have f0 := RawCutWordsFromView.frameFromView D (view (run D P H)) 0;
+    have f2 := RawCutWordsFromView.frameFromView D (view (run D P H)) 2;
+    have f30 := RawCutWordsFromView.frameFromView D (view (run D P H)) 30;
+    CanonicalCutEnrichedTranscript.wordsFromMaps
+      (BinCanonicalCutWords.rawC1Map (view (run D P H)).1 f0 (RawCutWordsFromView.rootFrom 8 f0))
+      (BinCanonicalCutWords.rawC2Map (view (run D P H)).1 f2 (RawCutWordsFromView.rootFrom 8 f2))
+      (BinCanonicalCutWords.rawFoldedMap (view (run D P H)).1 f30 (RawCutWordsFromView.rootFrom 9 f30))
+
+D : LiteralByteProtocol.Decoder
+P : Prover
+H : Bytes → State
+p : Parsed
+targets : ∀ (k : Fin 3), BinRawByteCollisionTargets.pred (selectors k) (frames D P H k) = some (committedRoot p ↑k)
+h0 :
+  BinRawByteCollisionTargets.pred 2 (RawCutWordsFromView.frameFromView D (view (run D P H)) 0) =
+    some (committedRoot p 0)
+h1 :
+  BinRawByteCollisionTargets.pred 2 (RawCutWordsFromView.frameFromView D (view (run D P H)) 2) =
+    some (committedRoot p 1)
+h2 :
+  BinRawByteCollisionTargets.pred 3 (RawCutWordsFromView.frameFromView D (view (run D P H)) 30) =
+    some (committedRoot p 2)
+r0 : RawCutWordsFromView.rootFrom 8 (RawCutWordsFromView.frameFromView D (view (run D P H)) 0) = committedRoot p 0
+r1 : RawCutWordsFromView.rootFrom 8 (RawCutWordsFromView.frameFromView D (view (run D P H)) 2) = committedRoot p 1
+r2 : RawCutWordsFromView.rootFrom 9 (RawCutWordsFromView.frameFromView D (view (run D P H)) 30) = committedRoot p 2
+⊢ OraclePortRecoveredAcceptanceC6.maps (run D P H).1 (frames D P H) p =
+    have f0 := RawCutWordsFromView.frameFromView D (view (run D P H)) 0;
+    have f2 := RawCutWordsFromView.frameFromView D (view (run D P H)) 2;
+    have f30 := RawCutWordsFromView.frameFromView D (view (run D P H)) 30;
+    CanonicalCutEnrichedTranscript.wordsFromMaps
+      (BinCanonicalCutWords.rawC1Map (view (run D P H)).1 f0 (RawCutWordsFromView.rootFrom 8 f0))
+      (BinCanonicalCutWords.rawC2Map (view (run D P H)).1 f2 (RawCutWordsFromView.rootFrom 8 f2))
+      (BinCanonicalCutWords.rawFoldedMap (view (run D P H)).1 f30 (RawCutWordsFromView.rootFrom 9 f30))
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortActualAcceptanceC6.lean:78:68: error: unsolved goals
+case isTrue
+D : LiteralByteProtocol.Decoder
+P : Prover
+H : Bytes → State
+Q : ℕ
+hq : ∀ (H : Bytes → State), (eval H P).1.length ≤ Q
+accepted : (run D P H).2.2 = true
+clean :
+  ¬hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred (Q + 1161))
+      emptyTable (run D P H).1
+decisionAccepted :
+  (eval H
+        (OraclePortReachedRunC6.decision (OraclePortReachedRunC6.input P H).stored (reached D P H) (terminal P H))).2 =
+    true
+left✝³ : OraclePortAdmission.Guard (reached D P H)
+p : Parsed
+q : Fin 22 → Fin 262144
+w✝ : RecordedBinaryExperimentBin.SourceInputs
+parsed : OraclePortStoredParserC4.parseReached (OraclePortReachedRunC6.input P H).stored (reached D P H) = some p
+query : queries (reached D P H) = some q
+left✝² : Padding p q
+left✝¹ : (eval H (verifySlots p q slots)).2 = true
+left✝ : OraclePortStoredDecisionDraftC4.input p q (reached D P H) = some w✝
+right✝ : D0TypedChecks.verify (OraclePortStoredDecisionDraftC4.typedRows p q (reached D P H)) w✝ = true
+rootTargets : ∀ (k : Fin 3), BinRawByteCollisionTargets.pred (selectors k) (frames D P H k) = some (committedRoot p ↑k)
+k : Fin 3
+h✝ : ↑k = 0
+⊢ 0 < 33
+
+case isFalse
+D : LiteralByteProtocol.Decoder
+P : Prover
+H : Bytes → State
+Q : ℕ
+hq : ∀ (H : Bytes → State), (eval H P).1.length ≤ Q
+accepted : (run D P H).2.2 = true
+clean :
+  ¬hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred (Q + 1161))
+      emptyTable (run D P H).1
+decisionAccepted :
+  (eval H
+        (OraclePortReachedRunC6.decision (OraclePortReachedRunC6.input P H).stored (reached D P H) (terminal P H))).2 =
+    true
+left✝³ : OraclePortAdmission.Guard (reached D P H)
+p : Parsed
+q : Fin 22 → Fin 262144
+w✝ : RecordedBinaryExperimentBin.SourceInputs
+parsed : OraclePortStoredParserC4.parseReached (OraclePortReachedRunC6.input P H).stored (reached D P H) = some p
+query : queries (reached D P H) = some q
+left✝² : Padding p q
+left✝¹ : (eval H (verifySlots p q slots)).2 = true
+left✝ : OraclePortStoredDecisionDraftC4.input p q (reached D P H) = some w✝
+right✝ : D0TypedChecks.verify (OraclePortStoredDecisionDraftC4.typedRows p q (reached D P H)) w✝ = true
+rootTargets : ∀ (k : Fin 3), BinRawByteCollisionTargets.pred (selectors k) (frames D P H k) = some (committedRoot p ↑k)
+k : Fin 3
+h✝ : ¬↑k = 0
+⊢ (if ↑k = 1 then 2 else 30) < 33
+'AspisR1.OraclePortActualAcceptanceC6.tail_root' depends on axioms: [propext, Quot.sound]
+'AspisR1.OraclePortActualAcceptanceC6.middle_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortActualAcceptanceC6.maps_eq_builder' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortActualAcceptanceC6.accepted_checks' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
