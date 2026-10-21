@@ -1,0 +1,91 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCache.lean:19:71: error: unsolved goals
+n : ℕ
+answers : Fin n → OracleAnswer
+c : Fin n
+j : Fin 8
+⊢ (⇑(Equiv.refl Word) ∘ Function.uncurry (((Equiv.refl (Fin n)).arrowCongr blockW) answers) ∘ ⇑finProdFinEquiv.symm)
+      (finProdFinEquiv (c, j)) =
+    blockW (answers c) j
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCache.lean:20:64: warning: This simp argument is unused:
+  Equiv.symm_apply_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [wordsE, Equiv.trans_apply, Equiv.arrowCongr_apply, E̵q̵u̵i̵v̵.̵s̵y̵m̵m̵_̵a̵p̵p̵l̵y̵_̵a̵p̵p̵l̵y̵,̵Equiv.curry_symm_apply,
+      Equiv.refl_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCache.lean:21:28: warning: This simp argument is unused:
+  Equiv.refl_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [wordsE, Equiv.trans_apply, Equiv.arrowCongr_apply, Equiv.symm_apply_apply,
+      Equiv.curry_symm_apply,̵ ̵E̵q̵u̵i̵v̵.̵r̵e̵f̵l̵_̵a̵p̵p̵l̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCache.lean:53:65: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  b ≥ 1
+  b - d ≤ -1
+  0 ≤ a ≤ 18446744073709551615
+  a - b ≥ 1
+  a - d ≥ 1
+where
+ a := ↑n
+ b := ↑↑c
+ d := ↑↑⟨↑state.counter, inbounds⟩
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCache.lean:55:4: error: unsolved goals
+case pos.refl.refl.right
+n : ℕ
+answers : Fin n → OracleAnswer
+domain : Slice U8
+state : State
+capacity : n < 2 ^ 64
+cache : cacheValid answers state
+counterbound : ↑state.counter ≤ n
+wordbound : ↑state.word ≤ 8
+empty : ↑state.counter = 0 → ↑state.word = 8
+needed : state.word = 8#usize
+inbounds : ↑state.counter < n
+success :
+  (do
+      let (counter, block, word) ← refill (blockHash answers) domain state
+      let value ← readBlock block word
+      ok (value, { seed := state.seed, counter := counter, block := block, word := word.wrapping_add 1#usize })) =
+    ok
+      (byteWord (answerBytes (answers ⟨↑state.counter, inbounds⟩)) ⟨↑0#usize, ⋯⟩,
+        { seed := state.seed, counter := core.num.U64.wrapping_add state.counter 1#u64,
+          block := answerBytes (answers ⟨↑state.counter, inbounds⟩), word := Usize.wrapping_add 0#usize 1#usize })
+inc : ↑(core.num.U64.wrapping_add state.counter 1#u64) = ↑state.counter + 1
+oldslot : ↑state.word = 8
+pos : position state = 8 * ↑state.counter
+index : ⟨position state, ⋯⟩ = finProdFinEquiv (⟨↑state.counter, inbounds⟩, 0)
+⊢ blockW (answers ⟨↑state.counter, inbounds⟩) ⟨↑0#usize, ⋯⟩ = blockW (answers ⟨↑state.counter, inbounds⟩) 0
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCache.lean:74:6: error: Type mismatch
+  cache
+has type
+  cacheValid answers state
+but is expected to have type
+  cacheValid answers
+    { seed := state.seed, counter := state.counter, block := answerBytes (answers c),
+      word := state.word.wrapping_add 1#usize }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCache.lean:75:84: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  b ≥ 1
+  b - d ≤ 0
+  1 ≤ 8*b - e ≤ 8
+  0 ≤ a ≤ 18446744073709551615
+  a - b ≥ 0
+  a - d ≥ 1
+where
+ a := ↑n
+ b := ↑↑state.counter
+ d := ↑↑⟨↑state.counter - 1, ⋯⟩
+ e := ↑(8 * ↑state.counter + ↑state.word - 8)
+'R1Z.ProverCommitOwnedDecoder.initial_cache' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.wordsE_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.next_cache' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

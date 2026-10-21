@@ -1,0 +1,148 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBytes.lean:32:33: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 4294967296
+  0 ≤ b ≤ 3
+  b - c + d ≥ 0
+  0 ≤ a ≤ 7
+where
+ a := ↑↑word
+ b := ↑↑amount
+ c := ↑(UScalar.size UScalarTy.Usize)
+ d := ↑(↑word * 4) % ↑(UScalar.size UScalarTy.Usize)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBytes.lean:46:25: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  b ≥ 4294967296
+  0 ≤ a ≤ 7
+  a ≥ 0
+  4*a + e ≥ 0
+  4*a + d ≥ 0
+  4*a + c ≥ 32
+where
+ a := ↑↑word
+ b := ↑(UScalar.size UScalarTy.Usize)
+ c := ↑↑1#usize
+ d := ↑↑2#usize
+ e := ↑↑3#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBytes.lean:47:25: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  b ≥ 4294967296
+  0 ≤ a ≤ 7
+  a ≥ 0
+  4*a + e ≥ 0
+  4*a + d ≥ 32
+  4*a + c ≥ 0
+where
+ a := ↑↑word
+ b := ↑(UScalar.size UScalarTy.Usize)
+ c := ↑↑1#usize
+ d := ↑↑2#usize
+ e := ↑↑3#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBytes.lean:48:25: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  b ≥ 4294967296
+  0 ≤ a ≤ 7
+  a ≥ 0
+  4*a + e ≥ 32
+  4*a + d ≥ 0
+  4*a + c ≥ 0
+where
+ a := ↑↑word
+ b := ↑(UScalar.size UScalarTy.Usize)
+ c := ↑↑1#usize
+ d := ↑↑2#usize
+ e := ↑↑3#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBytes.lean:50:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b₁ ← Array.index_usize block ((word.wrapping_mul 4#usize).wrapping_add 1#usize)
+    let b₂ ← Array.index_usize block ((word.wrapping_mul 4#usize).wrapping_add 2#usize)
+    let b₃ ← Array.index_usize block ((word.wrapping_mul 4#usize).wrapping_add 3#usize)
+    ok (core.num.U32.from_le_bytes (Array.make 4#usize [byteAt block ⟨4 * ↑word, ⋯⟩, b₁, b₂, b₃] ⋯))
+is not definitionally equal to the right-hand side
+  ok
+    (core.num.U32.from_le_bytes
+      (Array.make 4#usize
+        [byteAt block ⟨4 * ↑word, ⋯⟩, byteAt block ⟨4 * ↑word + 1, ⋯⟩, byteAt block ⟨4 * ↑word + 2, ⋯⟩,
+          byteAt block ⟨4 * ↑word + 3, ⋯⟩]
+        ⋯))
+
+block : Bytes32
+word : Usize
+bound : ↑word < 8
+size : 2 ^ 32 ≤ UScalar.size UScalarTy.Usize
+off : ↑(word.wrapping_mul 4#usize) = 4 * ↑word
+o1 : ↑((word.wrapping_mul 4#usize).wrapping_add 1#usize) = 4 * ↑word + ↑1#usize
+o2 : ↑((word.wrapping_mul 4#usize).wrapping_add 2#usize) = 4 * ↑word + ↑2#usize
+o3 : ↑((word.wrapping_mul 4#usize).wrapping_add 3#usize) = 4 * ↑word + ↑3#usize
+⊢ (do
+      let b₁ ← Array.index_usize block ((word.wrapping_mul 4#usize).wrapping_add 1#usize)
+      let b₂ ← Array.index_usize block ((word.wrapping_mul 4#usize).wrapping_add 2#usize)
+      let b₃ ← Array.index_usize block ((word.wrapping_mul 4#usize).wrapping_add 3#usize)
+      ok (core.num.U32.from_le_bytes (Array.make 4#usize [byteAt block ⟨4 * ↑word, ⋯⟩, b₁, b₂, b₃] ⋯))) =
+    ok
+      (core.num.U32.from_le_bytes
+        (Array.make 4#usize
+          [byteAt block ⟨4 * ↑word, ⋯⟩, byteAt block ⟨4 * ↑word + 1, ⋯⟩, byteAt block ⟨4 * ↑word + 2, ⋯⟩,
+            byteAt block ⟨4 * ↑word + 3, ⋯⟩]
+          ⋯))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBytes.lean:49:31: warning: This simp argument is unused:
+  o1
+
+Hint: Omit it from the simp argument list.
+  simp only [readBlock, index_byteAt _ _ (by omega : (Usize.wrapping_mul word 4#usize).val < 32),
+      index_byteAt _ _
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲(by omega : (Usize.wrapping_add (Usize.wrapping_mul word 4#usize) 1#usize).val < 32),
+      index_byteAt _ _
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲(by omega : (Usize.wrapping_add (Usize.wrapping_mul word 4#usize) 2#usize).val < 32),
+      index_byteAt _ _
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲(by omega : (Usize.wrapping_add (Usize.wrapping_mul word 4#usize) 3#usize).val < 32),
+      bind_tc_ok, byteWord, off, o1̵,̵ ̵o̵2, o3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBytes.lean:49:35: warning: This simp argument is unused:
+  o2
+
+Hint: Omit it from the simp argument list.
+  simp only [readBlock, index_byteAt _ _ (by omega : (Usize.wrapping_mul word 4#usize).val < 32),
+      index_byteAt _ _
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲(by omega : (Usize.wrapping_add (Usize.wrapping_mul word 4#usize) 1#usize).val < 32),
+      index_byteAt _ _
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲(by omega : (Usize.wrapping_add (Usize.wrapping_mul word 4#usize) 2#usize).val < 32),
+      index_byteAt _ _
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲(by omega : (Usize.wrapping_add (Usize.wrapping_mul word 4#usize) 3#usize).val < 32),
+      bind_tc_ok, byteWord, off, o1, o2̵,̵ ̵o̵3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBytes.lean:49:39: warning: This simp argument is unused:
+  o3
+
+Hint: Omit it from the simp argument list.
+  simp only [readBlock, index_byteAt _ _ (by omega : (Usize.wrapping_mul word 4#usize).val < 32),
+      index_byteAt _ _
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲(by omega : (Usize.wrapping_add (Usize.wrapping_mul word 4#usize) 1#usize).val < 32),
+      index_byteAt _ _
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲(by omega : (Usize.wrapping_add (Usize.wrapping_mul word 4#usize) 2#usize).val < 32),
+      index_byteAt _ _
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲(by omega : (Usize.wrapping_add (Usize.wrapping_mul word 4#usize) 3#usize).val < 32),
+      bind_tc_ok, byteWord, off, o1, o2,̵ ̵o̵3̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBytes.lean:53:7: error(lean.unknownIdentifier): Unknown constant `BitVec.fromLEBytesAux`
+BitVec.toNat_append {m n : ℕ} (x : BitVec m) (y : BitVec n) : (x ++ y).toNat = x.toNat <<< n ||| y.toNat
+BitVec.toNat_concat {w : ℕ} (x : BitVec w) (b : Bool) : (x.concat b).toNat = x.toNat * 2 + b.toNat
+'R1Z.ProverCommitOwnedDecoder.index_byteAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.offset_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.readBlock_byteWord' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
