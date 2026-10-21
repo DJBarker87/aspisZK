@@ -975,3 +975,24 @@ prior scan context and candidate adoption limitations remain explicit; no
 new decoder or desired encoded-byte premise is added. Focused exit0,7.261s,
 peak RSS4,053,975,040 bytes,zero swaps,standard axioms. The lane embeddings,
 width29 equality and global recovered-word binding remain open.
+
+
+## Ten first-stage queries now retain typed decoded openings too
+
+`evidence/s4-tx1-ten-typed-openings-v1-20261022` composes the same-query
+encoding result with the actual reached first-stage calls. Its theorem
+`S4Tx1TypedOpeningsV1.candidate_source_tx1_success_ten_typed_openings`
+retains the existing scan/prepare source bindings and all same-array powers
+facts, and upgrades each of the same ten actual query results to typed
+opening evidence. It adds no independent successful decode, desired byte
+identity, index-bound or proof-length premise. This and the already proved
+twelve-query settlement consumer cover all22 calls at this boundary.
+
+Focused exit0,42.015s,peak process RSS3,762,700,288 bytes,zero swaps,
+standard axioms, launch revision6a86aa5dc99079058c80b9ad02752c4367b2db1c.
+The first attempt only lacked the already compiled first-stage prepared-caller
+module in the selected settlement cache; its diagnostic is retained. The
+accepted environment appends the previous successful ten-query profile to
+supply missing owners. No dependency build, whole-manifest replay or Rust
+source change was run. Caller source bindings, final arithmetic/model join,
+coherent release replay and candidate adoption remain open.
