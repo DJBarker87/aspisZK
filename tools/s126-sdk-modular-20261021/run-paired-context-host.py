@@ -7,7 +7,7 @@ Raw CBMC assertion/cover statuses and exit are retained without re-labelling.
 from pathlib import Path
 import sys,os,re,json,hashlib,subprocess
 H=Path('/home/dombarker/project-offloads/s126-real-sdk-20261021');B=Path('/home/dombarker/.kani/kani-0.67.0/bin');tag=sys.argv[1] if len(sys.argv)>1 else 'sdk-paired-context-check-v1';O=H/tag;O.mkdir(exist_ok=True)
-mode='prefix' if 'prefix' in tag else ('native' if 'native' in tag else 'paired')
+mode='call' if 'call-prefix' in tag else ('prefix' if 'prefix' in tag else ('native' if 'native' in tag else 'paired'))
 files=list((H/'target/kani').rglob('aspis_s126_sdk_'+mode+'_context_v1*pretty_name_map.json'));assert len(files)==1,files
 names=json.loads(files[0].read_text());selected=[(k,v) for k,v in names.items() if '::any::' in str(v) and 'u8' in str(v) and 'stage1' in str(k)];assert len(selected)==1,selected
 scan,pretty=selected[0];entries=[k for k,v in names.items() if v==('proofs::'+mode+'_parent_arguments' if mode!='paired' else 'proofs::paired_parent_context')];assert len(entries)==1,entries

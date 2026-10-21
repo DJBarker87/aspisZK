@@ -76,6 +76,47 @@ with tempfile.TemporaryDirectory() as d:
  assert (Path(d)/'src/lib.rs').read_bytes()==prefixSource.read_bytes()
  assert json.loads((Path(d)/'source-cut.json').read_text())==cut
 accepted[prefixTag]=dict(source_sha256=sha(prefixSource),receipt_sha256=sha(rawReceipt),raw_exit_status=10,noncover_successes=len(properties)-len(covers),reachable_covers=1,wall_seconds=raw['wall_seconds'],peak_rss_kib=raw['peak_rss_kib'],swaps=0,qualification='Native frozen stage1 decoder-entry cut, with actual decoder length rejection; native std-any overapproximation remains explicit. Cover counterexample is expected; every non-cover property must be SUCCESS. Not post-decoder/full-stage correspondence.')
+callTag='sdk-call-prefix-check-v1'
+callSource=E/'sources/sdk-call-context-v1/src/lib.rs'
+cut=json.loads((callSource.parents[1]/'source-cut.json').read_text())
+codegen=json.loads((E/'sdk-call-prefix-codegen-v1-input.json').read_text())
+assert codegen['source_sha256']==cut['source_sha256']==sha(callSource)
+assert codegen['env']['RUSTFLAGS'].startswith('-C opt-level=3 ')
+rp=E/'receipts'/callTag/'receipt.json';r=json.loads(rp.read_text())
+assert r['exit_status']==10 and r['swaps']==0 and r['limits']['memory.swap.max']=='0'
+properties=json.loads((E/'diagnostics'/callTag/'properties-without-traces.json').read_text())
+noncover=[p for p in properties if p['sourceLocation'].get('propertyClass')!='cover']
+covers=[p for p in properties if p['sourceLocation'].get('propertyClass')=='cover']
+assert noncover and all(p['status']=='SUCCESS' for p in noncover)
+assert len(covers)==2 and all(p['status']=='FAILURE' for p in covers)
+assert any('successful verifier reply never calls error mapper' in p['description'] for p in noncover)
+for text in ['observer.is_none()','proof.as_ptr()','PUBLIC_PARTS[phase][0]','PUBLIC_PARTS[phase][1]','BOX_PTRS[phase]','CANDIDATE_PTRS[phase]']:
+ assert any(text in p['description'] for p in noncover),text
+inp=json.loads((E/(callTag+'-input.json')).read_text())
+assert '--unwinding-assertions' in inp['commands'][-1] and inp['normal_pipeline_receipt_sha256']==sha(normal)
+with tempfile.TemporaryDirectory() as d:
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-paired-context.py'),d,'call','fields','unreachable-error'],check=True)
+ assert (Path(d)/'src/lib.rs').read_bytes()==callSource.read_bytes()
+ assert json.loads((Path(d)/'source-cut.json').read_text())==cut
+ assert (Path(d)/'statement-fields.json').read_bytes()==(callSource.parents[1]/'statement-fields.json').read_bytes()
+accepted[callTag]=dict(source_sha256=sha(callSource),receipt_sha256=sha(rp),raw_exit_status=10,noncover_successes=len(noncover),reachable_covers=2,wall_seconds=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],swaps=0,qualification='Full native SDK tx1-entry prefix. Actual typed object/public/proof/k/None arguments checked; all statement value fields quantified. Reply fixed to Ok(empty Vec), causing following size guard to reject; actual child interpretation/prefix transport and post-child writeback remain explicit. Error mapper reachability assertion is proved, not assumed.')
+stepSource,stepCut,stepReceipt=checked('sdk-finish-step-join-v3','sdk-finish-step-v3')
+stepText=stepSource.read_text()
+assert '#[cfg_attr(kani,kani::modifies(target))]' in stepText
+assert 'target:*mut u8' in stepText and 'destination[offset]=source[offset]' in stepText
+assert 'target==unsafe{destination.as_mut_ptr().add(offset)}' in stepText
+assert 'count/loop' in stepCut['qualification'] and 'not the frozen whole-copy' in stepCut['qualification']
+stepAudit=json.loads((E/'receipts/sdk-finish-step-properties-v3/property-audit.json').read_text())
+stepPins=json.loads((E/'sdk-finish-step-properties-v3-input.json').read_text())
+assert stepAudit['source_sha256']==stepPins['source_sha256']==sha(stepSource)
+assert stepAudit['proof_receipt_sha256']==stepPins['proof_receipt_sha256']==sha(stepReceipt)
+assert stepAudit['program_sha256']==stepPins['program_sha256']
+assert any(p['class']=='assigns' and 'native_copy_step' in p['name'] for p in stepAudit['selected_properties'])
+assert any('old(source[offset])' in p['description'] for p in stepAudit['selected_properties'])
+with tempfile.TemporaryDirectory() as d:
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-finish-step.py'),d],check=True)
+ assert (Path(d)/'src/lib.rs').read_bytes()==stepSource.read_bytes()
+ assert json.loads((Path(d)/'source-cut.json').read_text())==stepCut
 snap=E/'sources/owned-sdk-snapshots-v1'
 with tempfile.TemporaryDirectory() as d:
  out=Path(d)/'src';subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-snapshot-reference.py'),str(out)],check=True)
@@ -95,4 +136,4 @@ assert flags and all('opt-level=3' in r and 'overflow-checks=yes' in r and '--ka
 for p in E.rglob('*'):
  if p.is_file():assert p.suffix not in ['.olean','.o','.a','.so','.dylib','.llbc','.bc','.out']
 (E/'accepted-cuts.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',qualification='Checked finite SDK operation/lifecycle domains and exact pure snapshot adaptation. Reached phase cuts are explicit. Complete actual stage1 child instances and ordered caller join remain open; timed-out/context/codegen/preflight evidence is excluded from accepted cuts.',cuts=accepted),indent=2)+'\n')
-print('PASS eight SDK cuts (including native admitted decoder entry) and exact snapshot/full-parent metadata fission; whole caller closure not asserted')
+print('PASS ten SDK cuts including actual tx1-entry arguments and byte-assignment frame; count/whole-copy and enclosing caller joins remain open')

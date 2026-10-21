@@ -1,0 +1,84 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "commands": [
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/goto-instrument",
+      "--remove-function-body",
+      "_RINvXs2E_NtNtCsci0VKyKEi6N_4core5slice4iterINtB7_4IterhENtNtNtNtBb_4iter6traits8iterator8Iterator3anyNCNvNtCsdMSxOZ8NwSd_32aspis_s126_sdk_native_context_v17adapter6stage10EB1H_",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_s126_sdk_native_context_v1-2f470c32d1732862__RNvNtCsdMSxOZ8NwSd_32aspis_s126_sdk_native_context_v16proofs23native_parent_arguments.out",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-context-check-v2/removed.out"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/goto-instrument",
+      "--generate-function-body",
+      "_RINvXs2E_NtNtCsci0VKyKEi6N_4core5slice4iterINtB7_4IterhENtNtNtNtBb_4iter6traits8iterator8Iterator3anyNCNvNtCsdMSxOZ8NwSd_32aspis_s126_sdk_native_context_v17adapter6stage10EB1H_",
+      "--generate-function-body-options",
+      "nondet-return",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-context-check-v2/removed.out",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-context-check-v2/abstract.out"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/goto-cc",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-context-check-v2/abstract.out",
+      "--function",
+      "_RNvNtCsdMSxOZ8NwSd_32aspis_s126_sdk_native_context_v16proofs23native_parent_arguments",
+      "-o",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-context-check-v2/entry.out"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/goto-instrument",
+      "--add-library",
+      "--no-malloc-may-fail",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-context-check-v2/entry.out",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-context-check-v2/library.out"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/goto-instrument",
+      "--generate-function-body-options",
+      "assert-false-assume-false",
+      "--generate-function-body",
+      ".*",
+      "--drop-unused-functions",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-context-check-v2/library.out",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-context-check-v2/reachable.out"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/goto-instrument",
+      "--ensure-one-backedge-per-target",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-context-check-v2/reachable.out",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-context-check-v2/ready.out"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/cbmc",
+      "--no-malloc-may-fail",
+      "--no-undefined-shift-check",
+      "--no-signed-overflow-check",
+      "--nan-check",
+      "--no-self-loops-to-assumptions",
+      "--no-pointer-primitive-check",
+      "--object-bits",
+      "16",
+      "--unwind",
+      "1772",
+      "--sat-solver",
+      "cadical",
+      "--slice-formula",
+      "--unwinding-assertions",
+      "--json-ui",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-context-check-v2/ready.out"
+    ]
+  ],
+  "input_goto_sha256": "b96911b15e722330f0bb0ad98850504bd9beb0b514a2f75e47d0d2d68f4cda7f",
+  "pretty_names_sha256": "9610d3f4c8598a693f6a4407742d860af0b7b36c3cf35a128dd588356274b4b3",
+  "abstracted_function": "_RINvXs2E_NtNtCsci0VKyKEi6N_4core5slice4iterINtB7_4IterhENtNtNtNtBb_4iter6traits8iterator8Iterator3anyNCNvNtCsdMSxOZ8NwSd_32aspis_s126_sdk_native_context_v17adapter6stage10EB1H_",
+  "pretty_name": "<std::slice::Iter<'_, u8> as std::iter::Iterator>::any::<{closure@src/lib.rs:78:35: 78:41}>",
+  "tool_pins": {
+    "/home/dombarker/.kani/kani-0.67.0/bin/goto-instrument": "4c6c6e630f7bfecada2d974f4a91b8031a8a6f5ced81319d34cf4ed9edf60e3e",
+    "/home/dombarker/.kani/kani-0.67.0/bin/goto-cc": "ca585d7be4355a77b17b01eb19012ffcd1cb2b9372d0faba623b2485f174b210",
+    "/home/dombarker/.kani/kani-0.67.0/bin/cbmc": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973"
+  },
+  "qualification": "Paired accepted-parent check under one named pure std-any overapproximation.\nThis is not an unconditional source theorem: exact scan/byte-view and child\ninterpretations must be composed from separately checked certificates.\nRaw CBMC assertion/cover statuses and exit are retained without re-labelling.\n",
+  "timeout_seconds": 180,
+  "preprocessing": "Kani normal goto-cc harness entry, add-library, assert-false undefined bodies, reachable pruning, backedge normalization; all Rust/CBMC safety and unwinding checks retained",
+  "normal_pipeline_receipt_sha256": "6eb1b60a215ed8a9a8eaee1a43dfc43aa14961c7ccb3754d58772e2ed784468c"
+}

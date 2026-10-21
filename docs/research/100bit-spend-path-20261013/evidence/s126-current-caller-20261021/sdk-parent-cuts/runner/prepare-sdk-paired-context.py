@@ -5,8 +5,8 @@ results are full typed shared replies; only the native std-any GOTO body is
 abstracted later. This packet does not itself instantiate the callee joins.
 """
 from pathlib import Path
-import sys,subprocess,hashlib,json
-R=Path(__file__).resolve().parents[2];O=Path(sys.argv[1]);mode=sys.argv[2] if len(sys.argv)>2 else 'paired';assert mode in ['paired','native','prefix'];(O/'src').mkdir(exist_ok=True,parents=True)
+import sys,subprocess,hashlib,json,tempfile
+R=Path(__file__).resolve().parents[2];O=Path(sys.argv[1]);mode=sys.argv[2] if len(sys.argv)>2 else 'paired';assert mode in ['paired','native','prefix','call'];(O/'src').mkdir(exist_ok=True,parents=True)
 freeze='b2727acd3abf79315d18b754a260f58f4b1c6326'
 frozen=subprocess.check_output(['git','-C',str(R),'show',freeze+':programs/r1-cost-probe/src/r1_pool_adapter.rs'],text=True)
 def cut(s,name):
@@ -84,7 +84,13 @@ fn planned_tx1<H:aspis_core::Digest32>(public:Public<'_>,bytes:&[u8],proof:&[u8]
  Ok(plan().output[..plan().output_len].to_vec())
 }
 '''
-harness=(R/'tools/s126-sdk-20261021/harness.rs').read_text();start=harness.index('fn statement()');end=harness.index('\n#[kani::proof]',start);s+=harness[start:end]+'\n'
+harness=(R/'tools/s126-sdk-20261021/harness.rs').read_text();start=harness.index('fn statement()');end=harness.index('\n#[kani::proof]',start)
+if len(sys.argv)>3 and sys.argv[3]=='fields':
+ with tempfile.TemporaryDirectory() as d:
+  subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/make-sdk-statement-fields.py'),d],check=True)
+  s+=(Path(d)/'statement.rs').read_text()
+  (O/'statement-fields.json').write_bytes((Path(d)/'statement-fields.json').read_bytes())
+else:s+=harness[start:end]+'\n'
 s+=r'''
 #[kani::proof] #[kani::unwind(1772)]
 #[kani::stub(crate::decode_public_statement_box,planned_decode)]
@@ -157,7 +163,7 @@ fn paired_parent_context() {
 }
 }
 '''
-if mode in ['native','prefix']:
+if mode in ['native','prefix','call']:
  # Same frozen complete SDK caller. Remove only reference invocation/state;
  # assertions inspect every reached typed child argument in the native path.
  s=s.replace('fn paired_parent_context()', 'fn native_parent_arguments()')
@@ -181,11 +187,19 @@ if mode in ['native','prefix']:
 """+s[b:]
  s=s.replace('paired parent accepts with full arbitrary checkpoint bytes','native caller accepts with full arbitrary checkpoint bytes')
  s=s.replace('withdrawal parent accepts','withdrawal native caller accepts')
+if mode=='call':
+ s=s.replace('fn native_parent_arguments()', 'fn call_parent_arguments()')
+ s=s.replace('output:kani::any(),output_len,k:instruction[1] as usize', 'output:[0;1769],output_len:0,k:instruction[1] as usize')
+ a=s.index(' if actual.is_ok() {');b=s.index(' for i in 0..3 {\n  assert_eq!',a)
+ s=s[:a]+' assert!(actual.is_err());\n assert!(unsafe{CALLS[0][3]}<=1);\n'+s[b:]
+ a=s.index(' kani::cover!(actual.is_ok(),');b=s.index('\n}\n}',a)
+ s=s[:a]+''' kani::cover!(unsafe{CALLS[0][3]}==1,"full real SDK caller reaches tx1 with exact same-object/public/proof/k/None arguments");
+ kani::cover!(unsafe{CALLS[0][3]}==1&&matches!(plan().statement,PoolV1PairForestTerminalStatementV1::Withdrawal{..}),"withdrawal SDK caller reaches tx1");'''+s[b:]
 if mode=='prefix':
  s=s.replace('fn native_parent_arguments()', 'fn prefix_parent_arguments()')
  old=cut(s,'planned_decode')
  s=s.replace(old,r"""fn planned_decode(bytes:&[u8])->Result<Box<PoolV1PairForestTerminalStatementV1>,ProgramError>{
-  assert_eq!(bytes.len(),1880);
+  if bytes.len()!=1880 {return Err(ProgramError::InvalidAccountData);}
   assert_eq!(bytes.as_ptr(),unsafe{NATIVE_ROOT_PTRS[1]});
   unsafe{CALLS[0][0]+=1;}
   Err(ProgramError::InvalidAccountData)
@@ -196,6 +210,10 @@ if mode=='prefix':
  s=s[:a]+' assert!(actual.is_err());\n assert!(unsafe{CALLS[0][0]}<=1);\n'+s[b:]
  a=s.index(' kani::cover!(actual.is_ok(),');b=s.index('\n}\n}',a)
  s=s[:a]+' kani::cover!(unsafe{CALLS[0][0]}==1,"full source prefix reaches decoder with exact native public buffer");'+s[b:]
+if len(sys.argv)>4 and sys.argv[4]=='unreachable-error':
+ s=s.replace('fn planned_zero_scan(_:Vec<u8>)->bool {false}', 'fn planned_zero_scan(_:Vec<u8>)->bool {false}\nfn unreachable_error(_:verifier::Error)->ProgramError {assert!(false,"successful verifier reply never calls error mapper");ProgramError::InvalidInstructionData}')
+ s=s.replace('#[kani::proof] #[kani::unwind(1772)]', '#[kani::stub(crate::error,unreachable_error)]\n#[kani::proof] #[kani::unwind(1772)]')
+ if mode=='paired':s=s.replace('#[kani::stub(crate::error,unreachable_error)]', '#[kani::stub(crate::error,unreachable_error)]\n#[kani::stub(aspis_s126_owned_sdk_snapshots::error,unreachable_error)]')
 (O/'src/lib.rs').write_text(s)
 host='/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src'
 (O/'Cargo.toml').write_text('''[package]
@@ -218,7 +236,20 @@ sha=lambda s:hashlib.sha256(s.encode()).hexdigest()
 
 if mode=='prefix':
  p=O/'source-cut.json';cutmeta=json.loads(p.read_text())
- cutmeta['qualification']='Actual complete frozen native stage1 with a decoder-entry cut returning InvalidAccountData. The prefix must preserve the exact decoder input pointer/length, once-only entry, all data/lamport counter restoration, and error return. Full typed child construction is unreachable and removed from the harness, not from the frozen stage1. No accepted/full-stage claim.'
- cutmeta['domain']='Three real AccountInfo values, independent data/lamport alias maps and all signed counters/metadata; arbitrary58295/1880/1768-byte root buffers. Native std-any is the only GOTO overapproximation. The decoder stub asserts the1880-byte public root pointer and returns a fixed source error. No decoder success or semantic object premise.'
+ cutmeta['qualification']='Actual complete frozen native stage1 with a decoder-entry cut returning InvalidAccountData. The prefix must preserve the exact admitted decoder input pointer/length, once-only admitted entry, all data/lamport counter restoration, and error return. Full typed child construction is unreachable and removed from the harness, not from the frozen stage1. No accepted/full-stage claim.'
+ cutmeta['domain']='Three real AccountInfo values, independent data/lamport alias maps and all signed counters/metadata; arbitrary58295/1880/1768-byte root buffers. Native std-any is the only GOTO overapproximation. The decoder stub retains its actual1880-byte length rejection, then asserts the admitted public root pointer and returns a fixed source error. No decoder success or semantic object premise.'
  cutmeta['retained_cuts']=['Actual std-any scan/byte-view certificate must be composed; its nondeterministic overapproximation covers both results','Runtime heap embedding and compiler/library boundaries','Complete post-decoder continuation is excluded from this prefix check']
  p.write_text(json.dumps(cutmeta,indent=2)+'\n')
+
+if len(sys.argv)>4 and sys.argv[4]=='unreachable-error':
+ p=O/'source-cut.json';m=json.loads(p.read_text())
+ m['retained_cuts'].append('Error mapper has an assert-false reachability stub: the context must prove it is never called with the common successful verifier reply. No error mapping/log implementation equality is asserted for rejected verifier children.')
+ m['statement_factory']='Every real struct field generated from frozen declarations; both variants, all u32 M31 storage words, no canonicality restriction. Padding is not a value field.'
+ p.write_text(json.dumps(m,indent=2)+'\n')
+
+if mode=='call':
+ p=O/'source-cut.json';m=json.loads(p.read_text())
+ m['qualification']='Native tx1-entry prefix certificate. Full frozen SDK stage1 and full typed statement/candidate callbacks are retained; tx1 returns a fixed successful empty vector, forcing the following length guard to reject. Assertions at child entry prove actual pointer/semantic-reference/k/None arguments independent of later returned bytes. Counter restoration is checked on every return. No accepted-parent or writeback claim.'
+ m['domain']='Arbitrary native metadata, independent alias maps and all signed counters; full1880/1768 public/checkpoint root byte values. Proof root bytes are arbitrary subject to its first688 bytes equalling the arbitrary candidate reply and byte696 being the S2 tag2, matching the admitted source prefix/tag guard; mismatching prefix/tag paths are not covered by this cut. Every value field of both actual statement variants is quantified. Actual decoder length rejection retained. The tx1 reply is fixed successful-empty; no post-child or total execution theorem is inferred.'
+ m['retained_cuts'].append('tx1-entry context returns Ok(empty Vec) after checking arguments; native execution prefix/callee-interpretation transport must be composed to use this for other replies')
+ p.write_text(json.dumps(m,indent=2)+'\n')

@@ -860,3 +860,79 @@ same-byte/same-decoded-object theorem. S1 still needs original nested claim,
 powers/preparation-trace and caller composition. No source adoption decision
 has been requested; no production or other-session track changed. The raw
 per-attempt 2^-100 target without grinding credit is not yet established.
+
+## Addendum 2026-10-21 22:37 UTC — actual SDK tx1-entry arguments
+
+`sdk-call-prefix-check-v1` now checks the complete frozen native SDK caller
+through entry to tx1, using the real AccountInfo/Rc/RefCell types, both full
+statement variants and the actual common/semantic_public methods. There is
+no reduced statement/error/observer carrier. All 2022 non-cover properties
+are SUCCESS; both covers are reachable, including Withdrawal. Raw CBMC exit10
+is retained for the cover witnesses. Wall118.170s, peak4435968KiB, swap0;
+MemoryHigh6G/MemoryMax8G/MemorySwapMax0. The large raw trace is retained on
+the host with SHA/size pins; the packet contains the complete trace-free
+property/status projection, not hundreds of megabytes of array assignments.
+
+Assertions establish that validation receives the returned decoded Box,
+encoding receives its candidate-afterstate field, and tx1 receives the exact
+semantic references from that object, the original public-buffer pointer and
+1880-byte length, proof pointer+688 and57607-byte length, the instruction's
+split and observer None. Counters are restored on every returned context
+path. Decoder length rejection is preserved. No separate supplied pointer,
+semantic-object, slice-length or observer agreement is assumed in this cut.
+
+The cut is explicit: decoder/validator/encoder replies are full typed common
+successful results; tx1 checks its arguments and returns Ok(empty Vec), forcing
+the following checkpoint-length guard to reject before writeback. The error
+mapper has an assert-false reachability stub, and that assertion is proved
+unreachable for this successful verifier reply. No rejected-child logging
+semantics or successful whole-parent equivalence is inferred. Actual child
+interpretations and execution-prefix transport to other returned replies must
+still be installed. All statement value fields are generated individually
+from frozen Rust declarations, including arbitrary u32 M31 storage words;
+both variants and noncanonical values are included. Padding is not a value
+field. The previous transmute-based factory is retained only in old attempts.
+
+Domain correction: this tx1-entry harness's proof prefix is initialized to
+the arbitrary688-byte candidate reply and byte696 is tag2. These are the
+admitted source prefix/tag equations, not every joint proof/candidate/tag
+combination. Public/checkpoint root contents remain arbitrary. Mismatching
+prefix/tag rejection paths are outside this cut; their source/guard composition
+remains required. Earlier draft wording about all joint root byte values was
+too broad; its qualification was corrected without changing the checked Rust
+source or replaying the solver. The packet checker regenerates both the source
+and the corrected qualification.
+
+For the post-child block, wide and normalized whole-heap byte-query attempts
+and whole-copy dynamic write-set contracts were stopped and excluded, without
+raising any cap. Their source, commands, stop reasons, wall/RSS/swap receipts
+and admissions remain in the packet. The normalized candidate explicitly
+requires the reached58295/1880/1768 wire layout; deriving that entry relation
+is still part of the enclosing source transport. It is not an adversary
+restriction or a proved whole-source theorem.
+
+The replacement `sdk-finish-step-join-v3` proves one SDK indexed byte assignment
+through an actual RefMut with a ghost raw-byte pointer equal to its base plus
+the symbolic offset. Its modifies set is exactly that u8 pointer. All611
+properties and2/2 boundary covers pass: exit0,8.642s,383508KiB,swap0,6G/8G/0.
+It proves the byte equals the old source byte and no write outside that byte
+is allowed. The operation is a byte-assignment reference candidate, not the
+frozen whole-copy implementation. Count induction and whole-copy equivalence
+remain necessary before this can replace the native post-child premise.
+The follow-up property audit is read-only: exit0,.222s,42388KiB,swap0,1G/2G/0;
+762 static properties,18 selected assign/postcondition properties, exact
+source/proof/program/tool pins. No solver replay was performed for that audit.
+
+Fresh admission had one vanished-cgroup race before a paired codegen job
+launched. The private admission script now retries the entire snapshot, never
+skips the unknown row, and rejects missing roots or unbounded populated
+scopes. The paired codegen preflight passed afterwards; it is not a proof and
+no paired whole-parent solver was launched from that preflight.
+
+The source-only checker now selects ten cuts at their stated scopes. The
+complete SDK/first/decoder Lean targets and their standard-axiom audits are
+reused unchanged. S2, S6 and S1 remain OPEN: actual SDK embedding and source
+prefix/child/reply/whole-copy/oracle-log composition are not yet a concrete
+AcceptedRunJoin instance. In particular, proved tx1-entry arguments do not
+alone discharge the enclosing caller premise. No frozen production source,
+security metric, protocol parameter, other cone or release artifact changed.
