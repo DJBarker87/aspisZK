@@ -7830,3 +7830,20 @@ that finish within k draws are identical; runs that exhaust k are added to the
 fixed bad events, charged at (1/p)^k per stream instance times the number of
 instances, with p the field size (≈ 2^-31 per draw). Choose k so the total
 charge is ≤ 2^-120, and re-prove the privacy bound stays < 2^-100.
+
+## D132 — prover commitment part 22: fuel-bounded nonzero search (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit22-20261021` (`r1p-final/PROVER-COMMIT22-20261021.md`).
+Per D131: a five-draw nonzero model agrees with terminating source runs within
+the fuel, and the shipped loop's Kani check passes. A fixed exhaustion charge
+of ≤ 2^-120 per side is added to the bad events, the old events are proved
+contained in the new ones, and the enlarged-event deployed privacy bound
+stays < 2^-100. Also proved: universal Lean Std.TreeMap transport over finite
+write schedules, and reuse of the concrete QM31 and circle sampler proofs,
+fallbacks included. J8772: 42 standard-axiom audits, zero swap; no shipped
+change. Open: the BTreeMap source gate was stopped near MemoryHigh, as
+AGENTS.md requires; native TLS reaches the unsupported `pthread_key_create`,
+so stub the thread-local accessor with a verified single-threaded contract;
+adaptive fuel/history transport; and the caller/policy assembly.
+`shippedProverExperiment` and the WholeRunJoins are not built yet. The
+prover track's env-J range 8600–8799 is nearly used up (8773+ remain).
