@@ -1,0 +1,13 @@
+def Aeneas.Std.Slice.setAtNat.{u} : {α : Type u} → Slice α → ℕ → α → Slice α :=
+fun {α} v i x => ⟨(↑v).set i x, ⋯⟩
+List.set_append_right.{u_1} {α : Type u_1} {s t : List α} (i : ℕ) (x : α) (h : s.length ≤ i) :
+  (s ++ t).set i x = s ++ t.set (i - s.length) x
+List.set_append_left.{u_1} {α : Type u_1} {s t : List α} (i : ℕ) (x : α) (h : i < s.length) :
+  (s ++ t).set i x = s.set i x ++ t
+List.set_cons_zero.{u_1} {α : Type u_1} {x : α} {xs : List α} {a : α} : (x :: xs).set 0 a = a :: xs
+List.set_eq_of_length_le.{u_1} {α : Type u_1} {l : List α} {i : ℕ} (h : l.length ≤ i) {a : α} : l.set i a = l
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi5/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi5Weights.lean:35:29: error(lean.unknownIdentifier): Unknown constant `List.length_eq_zero.mp`
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi5/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi5Weights.lean:48:70: error(lean.invalidField): Invalid field `setAtNat`: The environment does not contain `Subtype.setAtNat`, so it is not possible to project the field `setAtNat` from an expression
+  ⟨pre ++ y :: ys ++ suffix, bound⟩
+of type `{ l // l.length ≤ Usize.max }`
+'AspisR1.OraclePortCkptAbi5Weights.overwrite_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

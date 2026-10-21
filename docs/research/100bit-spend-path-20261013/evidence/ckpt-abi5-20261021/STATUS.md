@@ -80,3 +80,28 @@ zero swaps, revision `e0f05c24f`. All six new theorem audits use exactly
 metavariable goal ordering and machine-literal projection failures;
 explicit argument construction and checked scalar projection equalities
 resolve them. No cap, heartbeat or recursion setting is changed.
+
+## Stage 4: allocation model and complete mutable interval
+
+`OraclePortCkptAbi5Weights.overwrite_exact` replaces every element of an
+arbitrary bounded interval through the **actual imported** IterMut.next/back
+operations, preserving arbitrary prefix/suffix and giving the exact ending
+iterator index. It requires no caller-provided next/writeback specification.
+`allocated_overwrite_exact` composes S10 pass-4 `filled_exact` with that
+interval theorem: success returns exactly the supplied decoded value list
+and requested length; reservation failure returns Allocation before writes.
+It is total over the reservation Bool and arbitrary matching-length values.
+
+This closes mutable-loop **content composition in the std/allocation model**.
+The decoded list is an input, not alleged production decoder provenance.
+Actual Rust try_reserve_exact/resize outcome correspondence, read_checkpoint_weights
+fallible read interleaving, Box::new and physical allocator/Drop state remain
+separate. In particular no universal allocator-success assumption is added.
+S10 pass-4's std composition endpoint targets the old frozen decision;
+its local content theorem is reused without claiming endpoint transport.
+
+Attempt 4 exits 0: 27.683180292 seconds, peak RSS 3,492,003,840 bytes,
+zero swaps, revision `3283eb3a7`. Both new theorem axiom reports are
+`[propext, Classical.choice, Quot.sound]`. Failed attempts 1–3 retain the
+reserved `prefix` binder, list/explicit Slice namespace issues and empty-list
+length simplification. No limit was raised and no shipped source changed.

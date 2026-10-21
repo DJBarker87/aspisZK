@@ -1,0 +1,17 @@
+def Aeneas.Std.Slice.setAtNat.{u} : {α : Type u} → Slice α → ℕ → α → Slice α :=
+fun {α} v i x => ⟨(↑v).set i x, ⋯⟩
+List.set_append_right.{u_1} {α : Type u_1} {s t : List α} (i : ℕ) (x : α) (h : s.length ≤ i) :
+  (s ++ t).set i x = s ++ t.set (i - s.length) x
+List.set_append_left.{u_1} {α : Type u_1} {s t : List α} (i : ℕ) (x : α) (h : i < s.length) :
+  (s ++ t).set i x = s.set i x ++ t
+List.set_cons_zero.{u_1} {α : Type u_1} {x : α} {xs : List α} {a : α} : (x :: xs).set 0 a = a :: xs
+List.set_eq_of_length_le.{u_1} {α : Type u_1} {l : List α} {i : ℕ} (h : l.length ≤ i) {a : α} : l.set i a = l
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi5/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi5Weights.lean:57:6: error: Type mismatch: After simplification, term
+  result
+ has type
+  overwrite xs { slice := ⟨pre ++ (x :: ys ++ suffix), ⋯⟩, i := pre.length + ([].length + 1) } =
+    ok { slice := ⟨pre ++ (x :: xs ++ suffix), ⋯⟩, i := pre.length + ([].length + (xs.length + 1)) }
+but is expected to have type
+  overwrite xs { slice := ⟨pre ++ (x :: ys ++ suffix), ⋯⟩, i := pre.length + 1 } =
+    ok { slice := ⟨pre ++ (x :: xs ++ suffix), ⋯⟩, i := pre.length + (xs.length + 1) }
+'AspisR1.OraclePortCkptAbi5Weights.overwrite_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
