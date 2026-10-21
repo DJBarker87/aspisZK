@@ -222,3 +222,32 @@ fn adoption_binary_level_step() {
  }
  assert_eq!(calls.get(),source_calls);assert_eq!(event.get(),source_event);
 }
+
+#[kani::proof_for_contract(super::adoption::source_row)]
+#[kani::stub_verified(r::read32)] #[kani::unwind(34)]
+fn adoption_binary_row_contract() {
+ let s=r::Scratch{idx:kani::any(),val:kani::any(),n:kani::any(),at:kani::any()};
+ let nodes:[u8;5504]=kani::any();let length:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();let coordinate:usize=kani::any();
+ kani::assume(s.n>0 && s.n<=16 && i<s.n && w<=i && length<=5504 && s.at<=length && coordinate<65);
+ super::adoption::source_row(s,&nodes[..length],i,w,kani::any(),coordinate);
+}
+
+#[kani::proof] #[kani::stub_verified(super::adoption::source_row)]
+#[kani::stub_verified(r::read32)] #[kani::unwind(34)]
+fn adoption_binary_level_composed() {
+ use core::cell::Cell;
+ use super::adoption::BinaryHash;
+ let s=r::Scratch{idx:kani::any(),val:kani::any(),n:kani::any(),at:kani::any()};
+ let nodes:[u8;5504]=kani::any();let length:usize=kani::any();
+ let answers:[[u8;32];16]=kani::any();let selected:usize=kani::any();let coordinate:usize=kani::any();
+ kani::assume(s.n>0 && s.n<=16 && length<=5504 && s.at<=length && selected<16 && coordinate<65);
+ let (success,after,source_calls,source_event)=super::adoption::source_level_via_rows(s,&nodes[..length],&answers,selected,coordinate);
+ let calls=Cell::new(0);let event=Cell::new(0);
+ let reference=r::level_rows(BinaryHash{answers:&answers,selected,coordinate,calls:&calls,event:&event},s,&nodes[..length],0,0);
+ match reference {
+  r::Level::Stop(reference)=>{assert!(!success);super::adoption::same_scratch(&after,&reference);},
+  r::Level::Done(reference)=>{assert!(success);super::adoption::same_scratch(&after,&reference);}
+ }
+ assert!(after.n>0 && after.n<=16 && after.at<=length);
+ assert_eq!(calls.get(),source_calls);assert_eq!(event.get(),source_event);
+}

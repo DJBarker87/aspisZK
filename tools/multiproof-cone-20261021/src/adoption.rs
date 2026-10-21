@@ -4,7 +4,7 @@ use core::cell::Cell;
 use aspis_core::Digest32;
 use super::{frozen as f,reference as r};
 
-#[derive(Clone,Copy)]
+#[derive(Clone,Copy,kani::Arbitrary)]
 pub struct LeafObservation {pub digest:[u8;32],pub calls:usize,pub event:u8}
 #[derive(Clone,Copy)]
 struct LeafHash<'a> {tree:usize,coordinate:usize,answer:[u8;32],calls:&'a Cell<usize>,event:&'a Cell<u8>}
@@ -56,3 +56,46 @@ pub fn same_scratch(a:&r::Scratch,b:&r::Scratch) {
  assert_eq!(a.idx[j],b.idx[j]);assert_eq!(a.val[j][k],b.val[j][k]);
  assert_eq!(a.n,b.n);assert_eq!(a.at,b.at);
 }
+
+#[derive(Clone,Copy)]
+pub struct RowObservation {pub success:bool,pub state:r::Scratch,pub i:usize,pub w:usize,pub calls:usize,pub event:u8}
+impl kani::Arbitrary for RowObservation {
+ fn any()->Self {Self{success:kani::any(),state:r::Scratch{idx:kani::any(),val:kani::any(),n:kani::any(),at:kani::any()},i:kani::any(),w:kani::any(),calls:kani::any(),event:kani::any()}}
+}
+pub fn row_equal(a:&RowObservation,b:&RowObservation)->bool {
+ a.success==b.success && a.i==b.i && a.w==b.w && a.calls==b.calls && a.event==b.event &&
+ a.state.n==b.state.n && a.state.at==b.state.at &&
+ (0..16).all(|j| a.state.idx[j]==b.state.idx[j] && (0..32).all(|k|a.state.val[j][k]==b.state.val[j][k]))
+}
+#[derive(Clone,Copy)]
+struct RowHash<'a> {answer:[u8;32],coordinate:usize,calls:&'a Cell<usize>,event:&'a Cell<u8>}
+impl Digest32 for RowHash<'_> {
+ fn digest(&self,parts:&[&[u8]])->[u8;32] {
+  assert_eq!(parts.len(),3);assert_eq!(parts[0].len(),1);
+  assert_eq!(parts[1].len(),32);assert_eq!(parts[2].len(),32);
+  let c=self.coordinate;
+  self.event.set(if c==0 {parts[0][0]}else if c<33 {parts[1][c-1]}else{parts[2][c-33]});
+  self.calls.set(self.calls.get()+1);self.answer
+ }
+}
+pub fn reference_row(s:r::Scratch,nodes:&[u8],i:usize,w:usize,answer:[u8;32],coordinate:usize)->RowObservation {
+ let calls=Cell::new(0);let event=Cell::new(0);
+ let hash=RowHash{answer,coordinate,calls:&calls,event:&event};
+ let (success,state,i,w)=match r::binary_step(hash,s,nodes,i,w) {
+  r::Row::Stop(state)=>(false,state,i,w),r::Row::Next(state,i,w)=>(true,state,i,w),
+ };
+ RowObservation{success,state,i,w,calls:calls.get(),event:event.get()}
+}
+#[kani::requires(s.n>0 && s.n<=16 && i<s.n && w<=i && s.at<=nodes.len())]
+#[kani::requires(nodes.len()<=5504 && coordinate<65)]
+#[kani::ensures(|out:&RowObservation| row_equal(out,&reference_row(s,nodes,i,w,answer,coordinate)))]
+pub fn source_row(s:r::Scratch,nodes:&[u8],i:usize,w:usize,answer:[u8;32],coordinate:usize)->RowObservation {
+ let calls=Cell::new(0);let event=Cell::new(0);
+ let hash=RowHash{answer,coordinate,calls:&calls,event:&event};
+ let (mut idx,mut val,mut at,mut next_i,mut next_w)=(s.idx,s.val,s.at,i,w);
+ let success=f::multiproof::binary_group(hash,&mut idx,&mut val,s.n,nodes,&mut at,&mut next_w,&mut next_i);
+ RowObservation{success,state:r::Scratch{idx,val,n:s.n,at},i:next_i,w:next_w,calls:calls.get(),event:event.get()}
+}
+
+// Generated factoring of the checked source level control.
+include!("adoption_level.rs");

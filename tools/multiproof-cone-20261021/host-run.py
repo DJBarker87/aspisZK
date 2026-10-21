@@ -8,6 +8,11 @@ cg=Path('/sys/fs/cgroup'+Path('/proc/self/cgroup').read_text().split('0::')[1].s
 limits={n:(cg/n).read_text().strip() for n in ['memory.high','memory.max','memory.swap.max','pids.max']}
 assert limits=={'memory.high':str(6*2**30),'memory.max':str(8*2**30),'memory.swap.max':'0','pids.max':'64'},limits
 pins={str(p.relative_to(R)):hashlib.sha256(p.read_bytes()).hexdigest() for base in ['tools/multiproof-cone-20261021','crates/aspis-core/src','crates/aspis-r1-cost-probe/src'] for p in (R/base).rglob('*') if p.is_file() and 'target' not in p.parts}
+# Preserve every proof input before compilation, including failed attempts.
+inputs=O/'inputs';inputs.mkdir()
+for p in (R/'tools/multiproof-cone-20261021').rglob('*'):
+ if p.is_file() and 'target' not in p.parts and p.suffix in ['.rs','.py','.toml','.lock']:
+  (inputs/(str(p.relative_to(R/'tools/multiproof-cone-20261021')).replace('/','--')+'.txt')).write_bytes(p.read_bytes())
 start=time.monotonic()
 with (O/'stdout.log').open('w') as so,(O/'stderr.log').open('w') as se:
  ret=subprocess.run(['/usr/bin/time','-v','-o',str(O/'time.log'),*cmd],cwd=R,stdout=so,stderr=se).returncode
