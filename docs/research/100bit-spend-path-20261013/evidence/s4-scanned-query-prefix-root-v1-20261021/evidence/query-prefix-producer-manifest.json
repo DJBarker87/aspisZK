@@ -1,0 +1,89 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "packet": "s4-query-values-four-callback-join-v1-20261021",
+  "status": "green-source-model-join",
+  "modules": [
+    {
+      "module": "S4QueryValuesFourCallbackJoinV1",
+      "source_sha256": "f4b0bfb1de882e9d21f07e1df40f814d76820491e56d5412f8a23062094a3ef9",
+      "object_sha256": "85c091db5c384f383ed0ffd98442327d2d91926f4d30a01231fc319fa2805918",
+      "producer_receipt": "producers/QueryValuesJoin/receipt.json"
+    },
+    {
+      "module": "AspisR1QueryPrefixToCurrentFourDotsV1",
+      "source_sha256": "93c3bc39eaace0b9e6f5dd8583ac6a6a40d27632c749cd4007d4a0f52150dc3c",
+      "object_sha256": "0d7118e6560eb1363ed8c92e5212140619e5d1fd08905ab50ff96986bdff983f",
+      "producer_receipt": "producers/PrefixBridge/receipt.json"
+    },
+    {
+      "module": "S4GeneratedFunctionFourCallbacksV2",
+      "source_sha256": "8b354c2131aa740436fcb12cfd62c251e072d9ff43cbaa306d72306c344d3f56",
+      "object_sha256": "d3f4fa2d6f8e36f2282d3f13110ec3590312dbc0e6623f62a18f26fdb42406b6",
+      "producer_receipt": "producers/GeneratedFunction/receipt.json"
+    },
+    {
+      "module": "AspisR1Stage2QueryTailCut.Types",
+      "source_sha256": "62775d495923556e9ab1b10f48b02bba80ee944dea39fc16b90d12774308eee7",
+      "object_sha256": "3934e9d961a3aef4712dbc89b7a6227361ee90c5c9d4a4718287a66a9b69316f",
+      "producer_receipt": "producers/AdaptedStage2Types/receipt.json"
+    },
+    {
+      "module": "AspisR1Stage2QueryTailCut.ForwardOps",
+      "source_sha256": "2e73d466a7e9b20d8e1b577909f22a4a537f0ab05be7b567064c71c0b3190e14",
+      "object_sha256": "dd3b5a0b3442835ff773d209f82138e11fc8b1dfc24ecadcab31a0bc4797e2e5",
+      "producer_receipt": "producers/AdaptedStage2ForwardOps/receipt.json"
+    }
+  ],
+  "direct_imports": [
+    "AspisR1QueryPrefixToCurrentFourDotsV1",
+    "S4GeneratedFunctionFourCallbacksV2"
+  ],
+  "direct_import_source_map": {
+    "AspisR1QueryPrefixToCurrentFourDotsV1": {
+      "source": "sources/PrefixToCurrentFourDotsV1.lean",
+      "source_sha256": "93c3bc39eaace0b9e6f5dd8583ac6a6a40d27632c749cd4007d4a0f52150dc3c",
+      "object_sha256": "0d7118e6560eb1363ed8c92e5212140619e5d1fd08905ab50ff96986bdff983f"
+    },
+    "S4GeneratedFunctionFourCallbacksV2": {
+      "source": "sources/S4GeneratedFunctionFourCallbacksV2.lean",
+      "source_sha256": "8b354c2131aa740436fcb12cfd62c251e072d9ff43cbaa306d72306c344d3f56",
+      "object_sha256": "d3f4fa2d6f8e36f2282d3f13110ec3590312dbc0e6623f62a18f26fdb42406b6"
+    }
+  },
+  "limitations": [
+    "source-model caller bridge; does not close opening operation installation or hcoords caller provenance",
+    "four_dots operational callback is connected through the checked P6 array model; Rust std correspondence remains separate",
+    "does not establish final accepted-run arithmetic join or headline soundness"
+  ],
+  "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "source_revision_at_launch": "7505e9ce1d3d4dc385cf785a501163e98277f09b",
+  "compile_exit_status": 0,
+  "wall_seconds": 6.46,
+  "peak_rss_bytes": 3638214656,
+  "swap_bytes": 0,
+  "compiler_sha256": "1b370cfcbf44e80d1b004ab1b1ab9a4c73951f9f7c242140bcff9bc577576554",
+  "selected_dependency_source_map": {
+    "AspisR1Stage2QueryTailCut.Types": {
+      "source": "dependencies/Stage2QueryTailCut/Types.lean",
+      "source_sha256": "62775d495923556e9ab1b10f48b02bba80ee944dea39fc16b90d12774308eee7",
+      "object_sha256": "3934e9d961a3aef4712dbc89b7a6227361ee90c5c9d4a4718287a66a9b69316f",
+      "producer_receipt": "producers/AdaptedStage2Types/receipt.json"
+    },
+    "AspisR1Stage2QueryTailCut.ForwardOps": {
+      "source": "dependencies/Stage2QueryTailCut/ForwardOps.lean",
+      "source_sha256": "2e73d466a7e9b20d8e1b577909f22a4a537f0ab05be7b567064c71c0b3190e14",
+      "object_sha256": "dd3b5a0b3442835ff773d209f82138e11fc8b1dfc24ecadcab31a0bc4797e2e5",
+      "producer_receipt": "producers/AdaptedStage2ForwardOps/receipt.json"
+    }
+  },
+  "formatter_owner": {
+    "source_packet": "evidence/stage2-generated-prefix-canonicality-formatter-repair-20261020",
+    "object_sha256": "63b8efa3940faa81bb26f1b6ea140b2d6b81c1f1155b3fafa0544f6e1e82b9fc",
+    "selection_record": "evidence/formatter-owner-selection.json",
+    "classification": "P6 model; Rust formatting correspondence remains open"
+  }
+}

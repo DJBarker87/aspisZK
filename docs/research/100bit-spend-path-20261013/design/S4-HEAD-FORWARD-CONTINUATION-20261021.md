@@ -101,3 +101,11 @@ Source-only packet `evidence/s4-scanned-claim-powers-forward-root-v1-20261021/`:
 `S4ScannedAcceptedRunRootV1.four_dots_success_exact_prefix` reuses the generated function's first three bind inversions and exact slice/try-from/unwrap operations to derive the typed608-byte prefix from any successful generated four-dot call, for arbitrary Ops and without coefficient hypotheses. `scanned_accepted_run_literal_values` applies this to the installed P6 call, reuses the scanner/ClaimPowers construction and identifies its output with the accepted output by Result.ok injectivity. Every literal field result and canonicality fact describes those same accepted values.
 
 The accepted-run theorem replaces the independently supplied prefix identity with successful selected execution. This is a different accepted-run statement, not a claim of stronger unconditional totality or proof of the caller. Source-only packet `evidence/s4-scanned-accepted-run-root-v1-20261021/`: exit0,20.202s,3,920,904,192B peak process RSS,zero swaps,standard axioms. Actual opening/scanner/powers/caller bindings, P6/Std and runtime/artifact joins remain open.
+
+## Query-prefix caller composition
+
+`S4ScannedQueryPrefixRootV1.scanned_query_prefix_success_literal_values` composes the retained typed query-prefix adapter with the scanner-bound accepted-run theorem. It derives the query-index read, cast, opening call, same coefficient forwarding and exact returned tuple; the same accepted dot array supplies canonicality and all four literal field results. It does not introduce independent callback or arithmetic success witnesses.
+
+The opening operation still has an explicit successful-read byte-offset contract on the same proof and `next`; `next<22`, canonical gamma, successful ClaimPowers and its same-array carrier identity remain inputs. `query_values_forward_prefix_ops` is a selected prefix model, so this composition is not full frozen query_values/tx2 source refinement. Production scanner/opening, powers/caller, P6/Std and runtime/artifact joins remain open.
+
+Packet `evidence/s4-scanned-query-prefix-root-v1-20261021/`: focused exit0,47.985s,3,261,661,184B peak process RSS,zero swaps,standard axioms. Exact prefix-adapter source/object pair matches its existing producer manifest; unchanged dependencies were reused.
