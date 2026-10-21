@@ -1,0 +1,24 @@
+--- headline
++++ m10
+@@ -40,16 +40,16 @@
+     /- R-wire: binary causal decoder completion, distinct from collision mass;
+        BIN model §6, WIRE-TX1/TX2, owner Codex/privacy. -/
+     (h_Rwire_tag : BoundaryEvidence s → InitialTagDecision.CheckedRejects D d P (Q + 1161))
+-    (e : RawExtractorCostComposedBin.CostedExtractor) (p : Parameters)
+-    /- Size-restricted M10 adequacy; length is independent of distinct reads. -/
+-    (h_M10_ledger : RawExtractorCostComposedBin.LedgerRefinement e p Q)
++    (heap : CostedAllocationLedgerM10.HeapMirror)
++    /- Strict residual: cumulative allocation bit work on the same domain. -/
++    (h_M10_allocation : CostedAllocationLedgerM10.AllocationBound heap Q)
+     (h_M10_log_length : BoundaryEvidence s → ∀ H,
+       (eval H (recorded D d P)).2.2 = true →
+         (eval H (recorded D d P)).1.length ≤ Q + 1161) :
+     (∀ H : Bytes → State, (eval H (recorded D d P)).2.2 = true →
+       AspisV8R19.OracleResampling.mean (fun coins : Coins =>
+-        ((e.eval (eval H (recorded D d P)) coins).2.total : ℚ)) ≤ (p.attemptBudget : ℚ)) ∧
+-    (∀ run coins w, (e.eval run coins).1 = some w → LiteralProtocol.relation run.2.1.1 w) ∧
++        (((CostedAllocationLedgerM10.extractor heap).eval (eval H (recorded D d P)) coins).2.total : ℚ)) ≤ ((CostedAllocationLedgerM10.params Q).attemptBudget : ℚ)) ∧
++    (∀ run coins w, ((CostedAllocationLedgerM10.extractor heap).eval run coins).1 = some w → LiteralProtocol.relation run.2.1.1 w) ∧
+     (1 / (2 : ℚ)^126 + 1 / (2 : ℚ)^454 ≤ 1 / (2 : ℚ)^120) ∧
+     ((deployedFailureModel (tx1 D P tape) (poolTx2 D d P policy)) ≤ totalBound Q) ∧
+     (Q ≤ Qmax → (deployedFailureModel (tx1 D P tape) (poolTx2 D d P policy)) ≤ (Q+1 : ℚ) * (1/(2:ℚ)^100))
