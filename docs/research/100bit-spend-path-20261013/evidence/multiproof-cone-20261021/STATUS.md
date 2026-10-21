@@ -2,7 +2,7 @@
 
 Current continuation branch: `codex/cx-multiproof-cone6-20261021`, base `26ed8e339` (prior continuation branches: cone2, cone3 and cone4; original packet: `codex/cx-multiproof-cone-20261021`). The oracle-decision port
 is approved for this work. Target: `OraclePortHeadlineFrozen` at
-`OraclePortFrozenOrder.dV_frozen`, not the superseded recursive schedule.
+`OraclePortFrozen2.dV_frozen2`, retaining the two transaction batches and checkpoint placement.
 
 ## Stages
 
@@ -1028,3 +1028,77 @@ These results concern the explicit instrumented source cut. Initial source
 packed-key/physical-proof carrier identification and enclosing Rust caller
 lowering remain excluded; no global AcceptedRunJoin is claimed. The named
 frozen2 stage endpoint and final audit follow this checkpoint.
+
+## Continuation 6, stage 3b: physical count consumed; named frozen2 endpoint
+
+The physical count bridge is now consumed, not merely imported.
+`MultiproofConeCountPhysical.rows_projection` proves exact in-place
+written-prefix/unread observations for the certified count transition.
+`MultiproofConeCountPhysicalLevels.physical_count_eq` composes the count
+through height; `unread_domain` and `next_domain` preserve the corrected
+Kani domain; `eighteen_count` identifies the equal-parent source recurrence.
+`MultiproofConeCountBounds.eighteen_bound` proves a count at most 288.
+`MultiproofConeSlotTail.slot_count_eq` is now used by BOTH tail and tailState,
+which execute physicalCount directly. The earlier logical-count boundary in
+stage 2b is superseded by this integration.
+
+`MultiproofConeFrozen2Stage.both_batches` is the named accepted-stage endpoint
+against `OraclePortFrozen2.batch0` and `batch1`. It instantiates the actual
+scratch-threaded triples and erases internal scratch only at the external
+Bool-stage boundary. `accepted_outer` preserves any intervening continuation
+at the outer short-circuit; it does not reorder the six slots across the
+checkpoint path. `MultiproofConeSlotAdapters.slot_view` supplies each exact
+checked physical fixed-slot range from a 57,607-byte proof and Parsed.wire
+identity. The sorting and opening stream adapters from continuation 5 are
+reused unchanged at the initial source-carrier cut.
+
+Before: accepted_eighteen required initial physical Domain, Strict order and
+an actual successful extracted height Result, and concluded level Live/bytes
+observations. After: both_batches quantifies over arbitrary initial scratch,
+requires the callback/oracle equation and physical fixed-slot byte equations,
+and takes actual sourceBatch acceptance as the antecedent. Its conclusion is
+full ordered request/answer and Bool equality for each of the two named
+frozen2 batches. It assumes no leaf, duplicate, count, padding, root, per-row
+or per-slot join result. Internal scratch is retained between the three calls,
+and deliberately projected at the matching external Bool boundary.
+
+The final focused Rust gate `cone6-guards-final-1` checks initial source index
+validation against the recursive reference, the universally arbitrary unread
+count group (including every scratch coordinate), and the concrete stale-prefix
+regression. Three roots pass, exit 0, wall 22.296102 s, peak RSS 637268 KiB,
+zero swaps, optimized under the prescribed 6G/8G/0/64 scope. Its exact current
+Rust source pins, reservation, solver and logs are under host-cone6. No source
+observer/parent/leaf gate was repeated unchanged; those certificates are reused.
+
+The final dependency replay exposed that direct .olean bytes may stay
+identical after a transitive source change. One Batches launch was refused
+before Lean ran. `dependency-fingerprint-review.json` records the old/new
+SlotTail source hashes and identical SlotState object hashes. compile6 v3 now
+pins the task-owned reachable source/object closure as well as direct imports
+and environment. The batch replay is justified by the changed physical-count
+source dependency. It is not an unchanged regression or a workaround for a
+failed theorem/resource cap.
+
+Current focused targets (all exit 0, zero swaps; full SHA/dependency/revision,
+commands and individual standard axiom reports are in receipts/manifest):
+- `MultiproofConeCountPhysical`, attempt 6: 19.231374 s, peak RSS 3499720704 bytes.
+- `MultiproofConeCountBounds`, attempt 3: 14.326855 s, peak RSS 3550707712 bytes.
+- `MultiproofConeCountPhysicalLevels`, attempt 1: 16.274417 s, peak RSS 3505291264 bytes.
+- `MultiproofConeSlotTail`, attempt 4: 22.003820 s, peak RSS 3561963520 bytes.
+- `MultiproofConeVerifyState`, attempt 4: 9.545304 s, peak RSS 3585179648 bytes.
+- `MultiproofConeSlotState`, attempt 2: 4.910545 s, peak RSS 3628023808 bytes.
+- `MultiproofConeBatches`, attempt 3: 19.515197 s, peak RSS 3550019584 bytes.
+- `MultiproofConeFrozen2Stage`, attempt 2: 9.024332 s, peak RSS 3617144832 bytes.
+- `MultiproofConeSlotAdapters`, attempt 2: 42.125049 s, peak RSS 2754379776 bytes.
+
+This is a complete accepted composition of the explicit instrumented/P6
+multiproof cut, classified (c) because source-carrier/callback interpretation
+and actual Rust caller lowering are retained. It is not a whole Rust (a)
+result or a global AcceptedRunJoin inhabitant. S2 must bind the actual source
+packed-key/proof/query/root carriers and enclosing caller identities to this
+cut; the other cones, S10 and runtime/annotation binding are also needed for
+the global theorem. These excluded obligations have not been repackaged as
+proof fields or called discharged. No headline premise is removed, and no
+100-bit release closure is claimed. No shipped or inherited/sibling Lean file
+changed, so no SBF/ELF rebuild is triggered or byte-identity result claimed.
+The final import/axiom audit is the next and last verification target.

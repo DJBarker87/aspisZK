@@ -47,7 +47,7 @@ def tailState (p : Parsed) (batch kind : Nat) (nodes : Slice U8) (s : reference.
     Program Bytes State (Bool × reference.Scratch) :=
   let is := (live s 0 s.n.val).map Prod.fst
   if wellFormed is then
-    let count := MultiproofConeCountLevels.sourceCount 18 is
+    let count := slotCount s
     let cap := capacity (3*batch+kind)
     let bs := MultiproofConeCanonical.bytesOf nodes.val
     if count≤cap ∧ bs.length=32*cap ∧

@@ -161,6 +161,22 @@ impl Digest32 for LeafOracle {
  assert_eq!(level[coordinate],if coordinate==w {index/2}else{before[coordinate]});
 }
 
+#[kani::proof] #[kani::unwind(18)] fn initial_index_validation(){
+ let idx:[u32;16]=kani::any();let n:usize=kani::any();kani::assume(n<=16);
+ assert_eq!(f::multiproof::well_formed(&idx[..n]),n>0 && r::valid_indices(idx,n,0));
+}
+
+#[kani::proof] #[kani::unwind(18)] fn count_stale_consumed_prefix(){
+ let mut idx=[0u32;16];idx[..7].copy_from_slice(&[0,1,2,3,100,101,200]);
+ assert!(f::multiproof::well_formed(&idx[..7]));
+ let (i,w,_)=f::multiproof::count_group(&mut idx,7,0,0);
+ let (i,w,_)=f::multiproof::count_group(&mut idx,7,i,w);
+ let (i,w,_)=f::multiproof::count_group(&mut idx,7,i,w);
+ assert_eq!((i,w),(6,3));assert!(!f::multiproof::well_formed(&idx[..7]));
+ assert!(f::multiproof::well_formed(&idx[i..7]));
+ assert_eq!(f::multiproof::count_group(&mut idx,7,i,w),(7,4,1));
+}
+
 #[kani::proof] #[kani::unwind(34)] fn semantic_zero_high_field(){
  let compact:[u8;16]=kani::any();let row:u8=kani::any();
  let expanded=r::expand_chunk(compact);

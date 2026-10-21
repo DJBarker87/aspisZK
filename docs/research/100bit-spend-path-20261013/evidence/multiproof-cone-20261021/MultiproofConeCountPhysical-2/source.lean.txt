@@ -1,0 +1,114 @@
+import MultiproofConeCountLevels
+import MultiproofConeLiveOrder
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeCountPhysical
+open OraclePortFrozenOrder MultiproofConeLiveOrder
+attribute [local instance] Classical.propDecidable
+
+def cells (k : Nat → Nat) (start count : Nat) : List Nat :=
+  (List.range count).map (fun j => k (start+j))
+
+def unread (k : Nat → Nat) (n i : Nat) := cells k i (n-i)
+
+theorem cells_cons (k : Nat → Nat) (start count : Nat) :
+    cells k start (count+1)=k start::cells k (start+1) count := by
+  simp only [cells,List.range_succ_eq_map,List.map_cons,List.map_map,Nat.add_zero,Function.comp_apply]
+  congr 1
+  apply List.map_congr_left
+  intro j _
+  congr 1
+  omega
+
+theorem unread_cons (k : Nat → Nat) (n i : Nat) (active : i<n) :
+    unread k n i=k i::unread k n (i+1) := by
+  have size : n-i=n-(i+1)+1 := by omega
+  unfold unread
+  rw [size,cells_cons]
+
+theorem cells_write (k : Nat → Nat) (i w : Nat) :
+    cells (write k i w) 0 (w+1)=cells k 0 w++[k i/2] := by
+  have front : cells (write k i w) 0 w=cells k 0 w := by
+    apply List.map_congr_left
+    intro j mem
+    have jb := List.mem_range.mp mem
+    simp only [Nat.zero_add,write,if_neg (by omega : j≠w)]
+  simp only [cells,List.range_succ,List.map_append,List.map_cons,List.map_nil,Nat.zero_add] at front ⊢
+  rw [front]
+  simp only [write,↓reduceIte]
+
+theorem unread_write (k : Nat → Nat) (n i w start : Nat) (safe : w<start) :
+    unread (write k i w) n start=unread k n start := by
+  apply List.map_congr_left
+  intro j _
+  simp only [write,if_neg (by omega : start+j≠w)]
+
+theorem advance_bounds (k : Nat → Nat) (n i : Nat) (active : i<n) :
+    i+1≤advance k n i ∧ advance k n i≤n := by
+  unfold advance
+  split
+  next both => have := both.1;omega
+  next => omega
+
+theorem group_tail (k : Nat → Nat) (n i : Nat) (active : i<n) :
+    (match unread k n (i+1) with | j::_ => decide (paired (k i) j) | [] => false)=
+      decide (pairAt k n i) ∧
+    (if decide (pairAt k n i) then (unread k n (i+1)).drop 1 else unread k n (i+1))=
+      unread k n (advance k n i) := by
+  by_cases next : i+1<n
+  · rw [unread_cons k n (i+1) next]
+    simp only [pairAt,next,true_and,advance,List.drop_succ_cons,List.drop_zero]
+    by_cases both : paired (k i) (k (i+1)) <;> simp [both,Nat.add_assoc]
+    exact (unread_cons k n (i+1) next).symm
+  · have empty : unread k n (i+1)=[] := by simp only [unread,show n-(i+1)=0 by omega,cells,List.range_zero,List.map_nil]
+    simp only [empty,pairAt,next,false_and,decide_false,Bool.false_eq_true,if_false,advance]
+    exact ⟨trivial,trivial⟩
+
+/-- The per-node Kani gate certifies precisely this read/advance/single-write
+transition on the unread suffix. The old consumed cells are never read. -/
+def rows : Nat → (Nat → Nat) → Nat → Nat → Nat → Nat → List Nat × Nat
+  | 0,k,_,_,w,c => (cells k 0 w,c)
+  | fuel+1,k,n,i,w,c => if i<n then
+      rows fuel (write k i w) n (advance k n i) (w+1)
+        (c+if pairAt k n i then 0 else 1)
+    else (cells k 0 w,c)
+
+/-- Complete in-place count-row projection, including the already-written
+parent prefix and the unread cells preserved by each certified source write. -/
+theorem rows_projection (fuel : Nat) (k : Nat → Nat) (n i w c : Nat)
+    (safe : w ≤ i) (endBound : i ≤ n) :
+    rows fuel k n i w c =
+      (cells k 0 w++(countLevel fuel (unread k n i)).1,
+        c+(countLevel fuel (unread k n i)).2) := by
+  induction fuel generalizing k i w c with
+  | zero => simp only [rows,countLevel,List.append_nil,Nat.add_zero]
+  | succ fuel ih =>
+    by_cases active : i<n
+    · rw [rows,if_pos active]
+      have bounds := advance_bounds k n i active
+      rw [ih (write k i w) (advance k n i) (w+1) _ (by omega) bounds.2,
+        cells_write,unread_write k n i w (advance k n i) (by omega),unread_cons k n i active,countLevel]
+      have tail := group_tail k n i active
+      rw [tail.1,tail.2]
+      by_cases both : pairAt k n i <;>
+        simp only [both,decide_true,decide_false,Bool.false_eq_true,↓reduceIte,
+          List.append_assoc,List.singleton_append,Nat.add_assoc,Nat.add_comm,Nat.add_left_comm]
+    · have empty : unread k n i=[] := by simp only [unread,show n-i=0 by omega,cells,List.range_zero,List.map_nil]
+      simp only [rows,if_neg active,empty,countLevel,List.append_nil,Nat.add_zero]
+
+/-- n=w at level completion permits the next level to forget only the scratch
+suffix. Its live prefix and exact supplied-node contribution are proved here. -/
+theorem level_projection (k : Nat → Nat) (n : Nat) :
+    rows n k n 0 0 0=countLevel n (cells k 0 n) := by
+  rw [rows_projection n k n 0 0 0 (by omega) (by omega)]
+  simp only [unread,Nat.sub_zero,cells,List.range_zero,List.map_nil,List.nil_append,Nat.zero_add]
+
+#print axioms cells_cons
+#print axioms unread_cons
+#print axioms cells_write
+#print axioms unread_write
+#print axioms advance_bounds
+#print axioms group_tail
+#print axioms rows_projection
+#print axioms level_projection
+end AspisR1.MultiproofConeCountPhysical

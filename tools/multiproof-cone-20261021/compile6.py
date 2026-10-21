@@ -48,8 +48,35 @@ for name in re.findall(r'^import (\S+)', source.read_text(), re.M):
     if obj is None:
         raise SystemExit('Missing cached import: ' + name)
     imports.append({'module': name, 'path': str(obj), 'sha256': sha(obj)})
+# Direct .olean bytes can remain unchanged after a transitive source change.
+# Pin the task-owned dependency closure as well; inherited cache objects remain
+# selected and hash-pinned at the explicit import boundaries.
+owned_dependencies = {}
+def visit_owned(name):
+    if name in owned_dependencies:
+        return
+    dep = PACKET / 'lean' / (name.replace('.', '/') + '.lean')
+    if not dep.exists():
+        return
+    relative = str(dep.relative_to(ROOT))
+    exists = subprocess.run(['git','cat-file','-e','26ed8e339:' + relative],
+                            stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode == 0
+    if exists:
+        return
+    obj = next((Path(p)/(name.replace('.', '/') + '.olean') for p in path.split(':')
+                if (Path(p)/(name.replace('.', '/') + '.olean')).exists()), None)
+    if obj is None:
+        raise SystemExit('Missing task-owned dependency object: ' + name)
+    owned_dependencies[name] = {'module': name, 'source': relative,
+        'source_sha256': sha(dep), 'object': str(obj), 'object_sha256': sha(obj)}
+    for child in re.findall(r'^import (\S+)', dep.read_text(), re.M):
+        visit_owned(child)
+for imported in imports:
+    visit_owned(imported['module'])
+owned_dependencies = [owned_dependencies[n] for n in sorted(owned_dependencies)]
 overlay = HERE / 'cache-overlay.json'
 environment_artifacts = {'private_cache_overlay_sha256': sha(overlay)} if overlay.exists() else {}
+environment_artifacts['owned_dependency_closure_sha256'] = hashlib.sha256(json.dumps(owned_dependencies,sort_keys=True).encode()).hexdigest()
 fp = hashlib.sha256(json.dumps({'imports': imports, 'lean_path': path,
                                'environment_artifacts': environment_artifacts}, sort_keys=True).encode()).hexdigest()
 manifest = HERE / 'manifest.json'
@@ -72,9 +99,11 @@ argv = [LEAN, '-j1', '-M4400', '-DElab.async=false', '-R', str(PACKET / 'lean'),
 receipt = {'module': module, 'attempt': n, 'argv': argv, 'lean_path': path,
            'source_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
            'source_sha256': sha(source), 'direct_imports': imports, 'deps_fingerprint': fp,
-           'deps_fingerprint_kind': 'imports-and-environment-v2',
+           'deps_fingerprint_kind': 'imports-owned-closure-environment-v3',
+           'owned_transitive_dependencies': owned_dependencies,
            'environment_artifacts': environment_artifacts}
 (out / 'command.json').write_text(json.dumps(receipt, indent=2) + '\n')
+(out / 'task-dependencies.json').write_text(json.dumps(owned_dependencies,indent=2) + '\n')
 while True:
     try:
         LOCK.mkdir()

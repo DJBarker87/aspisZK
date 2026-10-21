@@ -22,6 +22,12 @@ unread list. `MultiproofConeCountGroups.drop_group` proves exactly one or
 two occupied children under strict order. `source_level_eq` identifies the
 source-shaped group scan with frozen countLevel. `MultiproofConeCountLevels`
 proves parent order and `count_eq` for arbitrary height, hence height 18,
-without any digest/oracle-value premise. Physical loop/caller carriers must
-still be related to this logical projection when constructing the complete
-source cone; the new local gate does not by itself establish that relation.
+without any digest/oracle-value premise. `MultiproofConeCountPhysical.rows_projection` now supplies the in-place
+written-prefix/unread projection. `MultiproofConeCountPhysicalLevels` composes
+it through height, preserves the unread gate domain and identifies the result
+with nodeCount. `SlotTail.slot_count_eq` consumes that physical count directly;
+the source-shaped logical recurrence is no longer substituted as an assumed
+count in the accepted slot tail. CountBounds proves the full count at most
+288, so accumulating the contributions cannot overflow usize. The retained
+P6 boundary is the local Kani-to-Nat-memory interpretation; source/caller
+carrier binding remains separate.

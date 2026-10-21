@@ -1,5 +1,5 @@
 import MultiproofConePhysicalVerify
-import MultiproofConeCountLevels
+import MultiproofConeCountPhysicalLevels
 import MultiproofConePadding
 
 set_option autoImplicit false
@@ -23,6 +23,21 @@ theorem prefix_bytes (nodes : Slice U8) (count : Nat) :
   simp only [remaining,prefixNodes,show (0#usize).val=0 from rfl,List.drop_zero,
     MultiproofConeCanonical.bytesOf,List.map_take]
 
+/-- Exact live index view of the physical scratch, including arbitrary suffix. -/
+theorem keys_view (s : reference.Scratch) :
+    MultiproofConeCountPhysical.cells (MultiproofConeLivePreservation.keys s) 0 s.n.val=
+      (live s 0 s.n.val).map Prod.fst := by
+  simp only [MultiproofConeCountPhysical.cells,MultiproofConeLivePreservation.keys,
+    live,MultiproofConePhysicalLive.view,List.map_map,Function.comp_def,
+    decodeEntry,MultiproofConePhysicalLive.cell,Nat.zero_add]
+
+def slotCount (s : reference.Scratch) : Nat :=
+  MultiproofConeCountPhysicalLevels.physicalCount 18 (MultiproofConeLivePreservation.keys s) s.n.val
+
+theorem slot_count_eq (s : reference.Scratch) :
+    slotCount s=nodeCount 18 ((live s 0 s.n.val).map Prod.fst) := by
+  rw [slotCount,MultiproofConeCountPhysicalLevels.physical_count_eq,keys_view]
+
 /-- The post-leaf source-shaped tail: index-only count, whole-word padding,
 physical eighteen-level execution, then physical root/consumption comparison.
 The caller supplies the exact fixed slot view; no byte-equality conclusion is
@@ -31,7 +46,7 @@ def tail (p : Parsed) (batch kind : Nat) (nodes : Slice U8) (s : reference.Scrat
     Program Bytes State Bool :=
   let is := (live s 0 s.n.val).map Prod.fst
   if wellFormed is then
-    let count := MultiproofConeCountLevels.sourceCount 18 is
+    let count := slotCount s
     let cap := capacity (3*batch+kind)
     let bs := MultiproofConeCanonical.bytesOf nodes.val
     if count≤cap ∧ bs.length=32*cap ∧
@@ -52,12 +67,12 @@ theorem accepted_tail {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
     eval H (tail p batch kind nodes s)=eval H (slotTail p batch kind (live s 0 s.n.val)) := by
   let is := (live s 0 s.n.val).map Prod.fst
   by_cases wf : wellFormed is
-  · have count := MultiproofConeCountLevels.count_eq 18 is wf.2.2.1
+  · have count : slotCount s=nodeCount 18 is := slot_count_eq s
     let cap := capacity (3*batch+kind)
     let bs := MultiproofConeCanonical.bytesOf nodes.val
-    by_cases checks : MultiproofConeCountLevels.sourceCount 18 is≤cap ∧ bs.length=32*cap ∧
-        MultiproofConePadding.scan (4*(cap-MultiproofConeCountLevels.sourceCount 18 is))
-          (bs.drop (32*MultiproofConeCountLevels.sourceCount 18 is))=true
+    by_cases checks : slotCount s≤cap ∧ bs.length=32*cap ∧
+        MultiproofConePadding.scan (4*(cap-slotCount s))
+          (bs.drop (32*slotCount s))=true
     · have source : tail p batch kind nodes s=
           MultiproofConePhysicalVerify.verify (encodeState (OraclePortBatchDraft.committedRoot p kind))
             (prefixNodes nodes (nodeCount 18 is)) {s with «at»:=0#usize} := by
@@ -102,6 +117,8 @@ theorem accepted_tail {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
     cases accepted
 
 #print axioms prefix_bytes
+#print axioms keys_view
+#print axioms slot_count_eq
 #print axioms accepted_tail
 end AspisR1.MultiproofConeSlotTail
 end

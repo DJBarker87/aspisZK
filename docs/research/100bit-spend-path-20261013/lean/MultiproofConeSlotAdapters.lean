@@ -1,0 +1,37 @@
+import MultiproofConeOpeningAdapters
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeSlotAdapters
+open Aeneas Aeneas.Std Result
+open MultiproofConeCanonical MultiproofConeSlices OraclePortSelectedDraft
+
+theorem layout (batch kind : Nat) (b : batch<2) (k : kind<3) :
+    slotStart (3*batch+kind)+32*capacity (3*batch+kind)≤57607 := by
+  interval_cases batch <;> interval_cases kind <;> decide
+
+/-- Every fixed physical sibling slot is the exact frozen byte slice. -/
+theorem slot_view (proof : Slice U8) (length : proof.val.length=57607)
+    (p : OraclePortCompactDraft.Parsed) (wire : p.wire=bytesOf proof.val)
+    (batch kind : Nat) (b : batch<2) (k : kind<3) :
+    ∃ start finish view,
+      start.val=slotStart (3*batch+kind) ∧
+      finish.val=start.val+32*capacity (3*batch+kind) ∧
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+        proof {start:=start,«end»:=finish}=ok view ∧
+      view.val.length=32*capacity (3*batch+kind) ∧
+      bytesOf view.val=OraclePortCompactDraft.slice p.wire (slotStart (3*batch+kind))
+        (32*capacity (3*batch+kind)) := by
+  have fit := layout batch kind b k
+  let start : Usize := UScalar.ofNat (slotStart (3*batch+kind)) (by scalar_tac)
+  let finish : Usize := UScalar.ofNat (slotStart (3*batch+kind)+32*capacity (3*batch+kind)) (by scalar_tac)
+  have sv : start.val=slotStart (3*batch+kind) := rfl
+  have fv : finish.val=start.val+32*capacity (3*batch+kind) := rfl
+  have order : start.val≤finish.val := by omega
+  have endBound : finish.val≤proof.val.length := by omega
+  refine ⟨start,finish,sub proof start finish,sv,fv,range_total _ _ _ order endBound,?_,?_⟩
+  · rw [sub_length proof start finish order endBound];omega
+  · rw [bytes_sub,wire,sv,fv,sv,Nat.add_sub_cancel_left]
+
+#print axioms layout
+#print axioms slot_view
+end AspisR1.MultiproofConeSlotAdapters
