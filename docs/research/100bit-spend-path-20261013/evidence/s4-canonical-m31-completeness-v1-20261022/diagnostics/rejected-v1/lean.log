@@ -1,0 +1,15 @@
+/tmp/root-s4-canonical-m31-v1-20261022/sources/S4CanonicalM31V1.lean:23:42: error: unsolved goals
+bs : Bytes
+hlen : List.length bs = 4
+hc : canonical bs
+f : WordBytes := fun i => List.get bs ⟨↑i, ⋯⟩
+hf : fixedBytes? 4 bs = some f
+hback : List.ofFn f = bs
+hfirst : little bs < 2147483647
+hw : ↑(decodeWordLE f) < m31Modulus
+value : M31Value := ⟨↑(decodeWordLE f), hw⟩
+⊢ some ⟨↑(decodeWordLE f), hw⟩ = some value
+'AspisR1.S4CanonicalM31V1.canonical_m31_decode_exists' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

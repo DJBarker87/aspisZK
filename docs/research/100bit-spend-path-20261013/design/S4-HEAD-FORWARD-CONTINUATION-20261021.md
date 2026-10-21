@@ -873,3 +873,32 @@ attempt and exact source are retained: multiplication by n+1 needed explicit
 production source change occurred. The next concrete target is strict M31
 canonical-byte completeness, followed by QM31 and the 608-byte instantiation.
 S4 source adoption and the implementation-linked100-bit target remain open.
+
+
+## Concrete codec and 608-byte opening completeness, 2026-10-22
+
+The generic decoder contracts now have concrete instances:
+`evidence/s4-canonical-m31-completeness-v1-20261022` proves successful strict
+exact-M31 decoding for every canonical four-byte list (exit0,23.457s,peak
+RSS3,628,089,344 bytes,zero swaps). The exact-QM31 counterpart in
+`evidence/s4-canonical-qm31-completeness-v1-20261022` proves the same for a
+canonical sixteen-byte list, with an exact list-window theorem for each
+of its four limbs (exit0,6.702s,peak RSS3,630,710,784 bytes,zero swaps).
+These reuse the retained codecs and endian theorem; there is no new decoder
+law axiom or assumed successful decoding. Reports contain standard axioms.
+
+`evidence/s4-canonical-opening-completeness-v1-20261022` instantiates the
+structural theorem for C1's 26 M31 plus one QM31 slot, C2's two-QM31 slot,
+and the four slots in each leaf. Its final theorem
+`S4CanonicalOpeningV1.canonical_opening_decode_exists` takes only
+`bs.length = 608` and canonicality. It derives both successful decodes of
+that same list's 480/128-byte pieces and the literal identity
+`bs = encodeC1 c1 ++ encodeC2 c2`. Successful decode and that desired byte
+identity are conclusions, not premises. Focused compile exit0,7.822s,
+peak RSS3,626,614,784 bytes,zero swaps; six standard-axiom reports.
+
+The bytes-to-typed-leaf existence gap is closed at the mathematical codec
+boundary. Same-source-array/strict-scan application and the decoded leaves'
+global recovered-word binding must still compose with the actual caller;
+the four-dot field equality and candidate-adoption boundaries are unchanged.
+These local claims do not close S4 or establish the100-bit target.
