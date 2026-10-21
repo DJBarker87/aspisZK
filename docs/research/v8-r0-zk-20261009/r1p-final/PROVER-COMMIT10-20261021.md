@@ -53,3 +53,38 @@ large counter, sample stream or tape. J8305 passes all four printed axiom audits
 with the standard three axioms, zero swaps. Earlier backend elaboration drafts
 are retained as excluded attempts. This closes counter-frame parsing, not yet
 the state/cache position invariant or scalar-array fibre equality.
+
+## Stage 4: extracted owned collection
+
+The proof-only Rust reference adds `collect_m31_owned`: ascending scalar
+sampling with a fresh owned accumulator at every recursive call. Charon
+succeeds (23.470 s, 677988 KiB RSS, zero swaps); Aeneas succeeds (0.453 s,
+76736 KiB, zero swaps), with `has_errors=false`. Both run optimized in capped
+scopes. The host source inventory verifies all 472 tracked Rust/Cargo inputs
+against this worktree (the exact count is in `host-inputs-checked.json`).
+
+Five generated dependency declarations are byte-identical to the already
+adopted Step8 extraction. `extraction/shared-declarations.json` records each
+literal definition hash. The new function is adopted verbatim under the
+shared Step8 namespace and nominal types; raw generated Types/Funs are retained
+as text. This port avoids duplicate nominal state/error carriers and adds no
+opaque definition, theorem assumption or semantic edit.
+
+J8306 checks the port. J8308 proves the whole extracted recursion equals its
+finite owned fold, retaining allocation errors and partial error states.
+J8311 proves that erasing the partial accumulator gives exactly the decoder's
+sequential collection, in ascending order, under the explicit capacity bound.
+All four new collection theorem audits use only the standard three axioms.
+The finite collection theorem does not identify the shipped outer caller.
+
+The sole Rust edit is under the existing proof-only module guard. After this
+edit, all three frozen ELF builds and exact comparisons pass: default
+`dfc2a91ab24e1ec4f57debd8f124cb4f6a3c38ba2662b7318e2e4f3b4acdde34`
+(1507400 bytes), devnet
+`fb2fc048f6499a4775051d0267c76e8ca273b28f557bfd3b5fb65b2f687c8b78`
+(1507400 bytes), pool
+`121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`
+(605704 bytes). Walls are 2.261/2.214/0.407 s; peak RSS is
+202212/202364/100116 KiB; all exits and swaps are zero. Complete build
+commands/features, source pins and cgroup receipts accompany the comparison.
+No ELF, LLBC, object, archive or key is committed. Caches and keys are retained.

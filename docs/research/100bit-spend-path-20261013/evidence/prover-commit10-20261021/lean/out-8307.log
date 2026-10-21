@@ -1,0 +1,104 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCollection.lean:26:54: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+remaining : Usize
+positive : 0 < ↑remaining
+one : ↑1#usize = 1
+⊢ ↑remaining < UScalar.size UScalarTy.Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCollection.lean:57:20: error: Tactic `rfl` failed: The left-hand side
+  match core.result.Result.Ok value with
+  | core.result.Result.Ok value => do
+    let values1 ← alloc.vec.Vec.push values value
+    let i ← lift (remaining.wrapping_sub 1#usize)
+    prover_commit_reference.collect_m31_owned hash domain after i values1
+  | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+is not definitionally equal to the right-hand side
+  match core.result.Result.Ok value with
+  | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+  | core.result.Result.Ok value => do
+    let values' ← alloc.vec.Vec.push values value
+    finite hash domain n values' after
+
+case succ.ok.Ok.fail
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (remaining : Usize) (values : Values) (state : State),
+    ↑remaining = n →
+      prover_commit_reference.collect_m31_owned hash domain state remaining values = finite hash domain n values state
+remaining : Usize
+values : Values
+state : State
+count : ↑remaining = n + 1
+more : remaining ≠ 0#usize
+after : prover_commit_reference.State
+value : aspis_core.field.M31
+hs : prover_commit_reference.limb_caller hash domain state = ok (core.result.Result.Ok value, after)
+e : Error
+hp : alloc.vec.Vec.push values value = fail e
+⊢ (match core.result.Result.Ok value with
+    | core.result.Result.Ok value => do
+      let values1 ← alloc.vec.Vec.push values value
+      let i ← lift (remaining.wrapping_sub 1#usize)
+      prover_commit_reference.collect_m31_owned hash domain after i values1
+    | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)) =
+    match core.result.Result.Ok value with
+    | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+    | core.result.Result.Ok value => do
+      let values' ← alloc.vec.Vec.push values value
+      finite hash domain n values' after
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCollection.lean:58:17: error: Tactic `rfl` failed: The left-hand side
+  match core.result.Result.Ok value with
+  | core.result.Result.Ok value => do
+    let values1 ← alloc.vec.Vec.push values value
+    let i ← lift (remaining.wrapping_sub 1#usize)
+    prover_commit_reference.collect_m31_owned hash domain after i values1
+  | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+is not definitionally equal to the right-hand side
+  match core.result.Result.Ok value with
+  | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+  | core.result.Result.Ok value => do
+    let values' ← alloc.vec.Vec.push values value
+    finite hash domain n values' after
+
+case succ.ok.Ok.div
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (remaining : Usize) (values : Values) (state : State),
+    ↑remaining = n →
+      prover_commit_reference.collect_m31_owned hash domain state remaining values = finite hash domain n values state
+remaining : Usize
+values : Values
+state : State
+count : ↑remaining = n + 1
+more : remaining ≠ 0#usize
+after : prover_commit_reference.State
+value : aspis_core.field.M31
+hs : prover_commit_reference.limb_caller hash domain state = ok (core.result.Result.Ok value, after)
+hp : alloc.vec.Vec.push values value = div
+⊢ (match core.result.Result.Ok value with
+    | core.result.Result.Ok value => do
+      let values1 ← alloc.vec.Vec.push values value
+      let i ← lift (remaining.wrapping_sub 1#usize)
+      prover_commit_reference.collect_m31_owned hash domain after i values1
+    | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)) =
+    match core.result.Result.Ok value with
+    | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+    | core.result.Result.Ok value => do
+      let values' ← alloc.vec.Vec.push values value
+      finite hash domain n values' after
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCollection.lean:61:57: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 0
+where
+ a := ↑n
+'R1Z.ProverCommitOwnedCollection.sub_one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedCollection.extracted_finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

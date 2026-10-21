@@ -1,0 +1,53 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCollectionBridge.lean:28:9: error: unsolved goals
+case zero
+hash : Hash
+domain : Slice U8
+values : Values
+state : State
+room : (↑values).length + 0 ≤ Usize.max
+⊢ (let (status, values, state) := (core.result.Result.Ok (), values, state)
+    match status with
+    | core.result.Result.Err e => ok (core.result.Result.Err e, state)
+    | core.result.Result.Ok PUnit.unit => ok (core.result.Result.Ok ↑values, state)) =
+    let (sample, state) := (core.result.Result.Ok [], state)
+    match sample with
+    | core.result.Result.Err e => ok (core.result.Result.Err e, state)
+    | core.result.Result.Ok tail => ok (core.result.Result.Ok (↑values ++ tail), state)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCollectionBridge.lean:54:20: error: unsolved goals
+case succ.ok.Ok.ok.Ok
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (values : Values) (state : State),
+    (↑values).length + n ≤ Usize.max →
+      erase (finite hash domain n values state) =
+        prepend (↑values) (collect (prover_commit_reference.limb_caller hash domain) n state)
+values : Values
+state : State
+room : (↑values).length + (n + 1) ≤ Usize.max
+after : prover_commit_reference.State
+value : aspis_core.field.M31
+hs : prover_commit_reference.limb_caller hash domain state = ok (core.result.Result.Ok value, after)
+values' : alloc.vec.Vec U32
+pushed : alloc.vec.Vec.push values value = ok values'
+contents : ↑values' = ↑values ++ [value]
+final : prover_commit_reference.State
+tail : List U32
+ht : collect (prover_commit_reference.limb_caller hash domain) n after = ok (core.result.Result.Ok tail, final)
+⊢ ok (core.result.Result.Ok (↑values ++ value :: tail), final) = do
+    let (sample, state) ← ok (core.result.Result.Ok (value :: tail), final)
+    match sample with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, state)
+      | core.result.Result.Ok tail => ok (core.result.Result.Ok (↑values ++ tail), state)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedCollectionBridge.lean:28:68: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [finite, erase, collect, prepend, bind_tc_ok,̵ ̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitOwnedCollection.finite_collect' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedCollection.extracted_collect' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

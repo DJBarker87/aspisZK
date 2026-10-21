@@ -241,3 +241,23 @@ pub(crate) fn balance_qm31_rows(table: &[aspis_core::field::QM31], dependent: us
         balance_qm31_rows(table, dependent, active, row + 1, after)
     } else { sum }
 }
+
+/// Owned raw-array producer in ascending sample order. The recursive call owns
+/// the accumulator; no mutable iterator borrow crosses an iteration. Errors
+/// retain the exact state reached by the scalar caller. This is proof-only.
+#[cfg(any(kani, aeneas_ref))]
+pub(crate) fn collect_m31_owned(hash: HashFn, domain: &[u8], state: State,
+    remaining: usize, values: Vec<M31>)
+    -> (Result<(), StateOnlyMaskBuildError>, Vec<M31>, State)
+{
+    if remaining == 0 { return (Ok(()), values, state); }
+    let (sample, state) = limb_caller(hash, domain, state);
+    match sample {
+        Err(error) => (Err(error), values, state),
+        Ok(value) => {
+            let mut values = values;
+            values.push(value);
+            collect_m31_owned(hash, domain, state, remaining - 1, values)
+        }
+    }
+}
