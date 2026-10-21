@@ -3,7 +3,10 @@
 Branch `codex/cx-prover-commit14-20261021`, base `3bbbd12bb`.
 Evidence: `docs/research/100bit-spend-path-20261013/evidence/prover-commit14-20261021/`.
 
-The actual release target is not yet established. This report is updated by stage.
+The owned material recursions, retained-global-oracle support/window bridge,
+and all nine bounded M31 cell gates pass. Complete shipped execution/history
+and all-family coverage remain open. No headline premise is removed.
+**The actual release target is not yet established.**
 
 ## Stage 1: owned indexed material schedule
 
@@ -255,3 +258,62 @@ the host-wide populated reservation receipts enforce the 55 GiB limit.
 All gates keep four compiler jobs and the required linker flag. The common
 Rust source stays immutable while these gates run. The final Lean sources
 are unchanged by this Rust-only harness split, so J8389 is not rerun.
+
+## Completed word split and final handoff
+
+All nine `state_only_hiding::material14::word_0` through `word_8` gates pass.
+The earlier first-acceptance and legal-word partition theorems audited in
+part 13 make these input cases exhaustive within the stated cell domain.
+The exact status, command, source hashes, base revision, cgroup reservations,
+limits, timing, RSS and swap are retained in `rust-attempts.json`, individual
+receipts and input manifests. Kani `#print axioms` is N/A; its external
+verifier/library trust boundary is separate from the Lean axiom audit.
+
+| Initial word | Exit | Wall s | Peak RSS KiB | Cgroup peak bytes | Swap |
+|---|---:|---:|---:|---:|---:|
+| 0 | 0 | 402.345 | 4183604 | 4381966336 | 0 |
+| 1 | 0 | 381.102 | 4237376 | 4436647936 | 0 |
+| 2 | 0 | 401.022 | 4218436 | 4400451584 | 0 |
+| 3 | 0 | 402.277 | 4236764 | 4437901312 | 0 |
+| 4 | 0 | 425.096 | 4224740 | 4425584640 | 0 |
+| 5 | 0 | 400.58 | 4244752 | 4445896704 | 0 |
+| 6 | 0 | 401.327 | 4245432 | 4446199808 | 0 |
+| 7 | 0 | 402.961 | 4238880 | 4439527424 | 0 |
+| 8 | 0 | 343.771 | 4275328 | 4476215296 | 0 |
+
+This certifies the lifted M31 cell for any legal initial word, first accepted
+candidate or exhaustion, arbitrary retained scalar state, and an owned
+vector prefix of length at most two. Kani retains its explicit no-malloc-
+failure model. The source scalar is executed using its accepted verified
+next-word callee, not an unproved scalar stub. Exact host proof-input binary
+hashes/sizes are retained in `kani-artifacts.json`; no binary is committed.
+
+The raw returned-value/state equality is not promoted to a proof of complete
+adaptive callback history. The whole extracted owned recursions and their
+generic one-step equations are proved in Lean, but arbitrary source vector
+prefix transport, QM31 source-cell P6, all outer-column/returned-material
+assembly, and actual builder/checker/retry execution still need their joins.
+The actual source loop's prior preflighted Aeneas context-join failure is
+not rerun unchanged or treated as an accepted extraction.
+
+The source-history item stops at the checked observer handoff boundary:
+unrestricted replacement programs do not preserve complete histories.
+The callback-family item stops at the actual runtime/history instance;
+reference support and nine-block local scalar oracles cannot supply that
+instance or the full 4096-limb source run. No whole-run predicate, bad event,
+query budget, carrier, adversary quantifier, numerical error term, security
+target, or headline premise is weakened. `G_sim_R_wire` stays named.
+
+The next concrete deliverable is a verified scalar summary in the
+first-acceptance formulation, then universal source-prefix/QM31 and column
+context transport to the owned reference, followed by the actual observer
+program and builder/checker/retry history join. All-family shared-oracle
+coverage must instantiate every seed, packing, D, salt, tree, retry and
+abort callback in that same retained global execution. The old local-ROM
+capacity counterexample remains valid; local resets do not close the join.
+
+Final `harness/validate.py --check` is an evidence validation, not another
+Lean build or unchanged regression. All scoped jobs are finished, proof
+sources and receipts are committed, host caches and keys are retained.
+No production Rust/Cargo/frozen ELF input or peer-owned file is changed.
+There is no push or merge. Env J next available attempt remains **8390**.

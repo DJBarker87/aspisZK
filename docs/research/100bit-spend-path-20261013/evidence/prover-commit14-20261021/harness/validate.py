@@ -30,6 +30,11 @@ if (E/'rust-attempts.json').exists():
   assert x['accepted'] == (x['exit_status']==0),x['name']
   assert x['swaps']==0 and x['limits']['memory.swap.max']=='0',x['name']
   assert x['env']['RUSTFLAGS']=='-C link-arg=-Wl,--threads=4',x['name']
+  if x['accepted']:
+   output=(E/'receipts'/x['name']/'stdout.log').read_text()
+   target=x['command'][x['command'].index('--harness')+1]
+   assert 'Checking harness '+target in output and 'VERIFICATION:- SUCCESSFUL' in output,x['name']
+   assert '1 successfully verified harnesses, 0 failures, 1 total' in output,x['name']
   assert sum(r['bytes'] for r in json.loads((E/(x['name']+'-inputs.json')).read_text())['reservations'])+8*2**30<=55*2**30,x['name']
 for p in E.rglob('*'):
  if p.is_file():assert p.suffix not in ['.olean','.llbc','.tar','.gz','.elf','.bin'],str(p)
