@@ -89,4 +89,9 @@ text=text.replace('(prover base ((R1Wire.pubBytes base x).length) h B outputs x 
 text=text.replace('((R1Wire.pubBytes base x).length)', '(List.length (R1Wire.pubBytes base x))').replace('h.transport', '(R0Z.ZkStatement.HonestProver.transport h)')
 text=text.replace('source.RealRand','(source).RealRand').replace('source.IdealRand','(source).IdealRand').replace('source.Adversary','(source).Adversary').replace('coins.symm','(coins).symm')
 text='\n'.join(l.rstrip() for l in text.splitlines() if l.strip())+'\n'
-(root/'lean/R1Z/PrivacyR1HeadlineAcct.lean').write_text(text)
+target=root/'lean/R1Z/PrivacyR1HeadlineAcct.lean'
+if '--check' in __import__('sys').argv:
+    assert target.read_text()==text, 'generated endpoint is stale'
+    print('Endpoint generation check passed.')
+else:
+    target.write_text(text)
