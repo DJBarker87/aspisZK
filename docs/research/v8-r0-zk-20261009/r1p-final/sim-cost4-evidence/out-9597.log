@@ -1,0 +1,70 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:168:46: error: no macro or `[quot_precheck]` instance for syntax kind `Lean.Parser.Term.proj` found
+  (R1Wire.pubBytes base x).length
+This means we cannot eagerly check your notation/quotation for unbound identifiers; you can use `set_option quotPrecheck false` to disable this check.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:179:22: error: elaboration function for `_private.R1Z.SimCostLazyBoundedBytes.0.R1Z.SimCostLazyBoundedBytes.termWidth` has not been implemented
+  width
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:180:25: error: elaboration function for `_private.R1Z.SimCostLazyBoundedBytes.0.R1Z.SimCostLazyBoundedBytes.termWidth` has not been implemented
+  width
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:184:26: error: elaboration function for `_private.R1Z.SimCostLazyBoundedBytes.0.R1Z.SimCostLazyBoundedBytes.termWidth` has not been implemented
+  width
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:181:60: error: unsolved goals
+CommitHandle Aux : Type
+template : R1Wire K CommitHandle Aux
+input : HonestProver K
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+P : Challenges K → Prop
+sim : Challenges K → Tape K F → View K CommitHandle Aux R1Bat
+adv : R1Adv K CommitHandle Aux
+r :
+  (Fin 8 →
+      R1Coins
+        (PhaseProtocolInstanceBin.wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs
+              x).toWire.Cm
+        (PhaseProtocolInstanceBin.wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs
+              x).toWire.Tab) ×
+    (Fin 8 → Tape K F)
+u :
+  Fin
+      (PhaseProtocolInstanceBin.wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs
+            x).toWire.qmax →
+    OracleAnswer
+s : Prepared AspisWideTower.WideExact CommitHandle Aux :=
+  prepare
+    (PhaseProtocolInstanceBin.wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire 8 ⋯
+    P x sim r
+ht :
+  List.length
+        (prepare
+            (PhaseProtocolInstanceBin.wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs
+                x).toWire
+            8 ⋯ P x sim r).table ≤
+      TranscriptR1.schedule.length + 2 * Fintype.card (Fin 3 ⊕ RIdx) ∧
+    KeysBound (RomGrammarBin.bound (base.pubBytes x).length)
+      (prepare
+          (PhaseProtocolInstanceBin.wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs
+              x).toWire
+          8 ⋯ P x sim r).table
+⊢ let s :=
+    prepare
+      (PhaseProtocolInstanceBin.wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire 8
+      ⋯ P x sim r;
+  let result := sorry;
+  sorry
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:200:41: error: elaboration function for `_private.R1Z.SimCostLazyBoundedBytes.0.R1Z.SimCostLazyBoundedBytes.termWidth` has not been implemented
+  width
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:202:65: error: elaboration function for `_private.R1Z.SimCostLazyBoundedBytes.0.R1Z.SimCostLazyBoundedBytes.termWidth` has not been implemented
+  width
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:199:25: error: elaboration function for `_private.R1Z.SimCostLazyBoundedBytes.0.R1Z.SimCostLazyBoundedBytes.termWidth` has not been implemented
+  width
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:203:16: error: elaboration function for `_private.R1Z.SimCostLazyBoundedBytes.0.R1Z.SimCostLazyBoundedBytes.termWidth` has not been implemented
+  width
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:207:14: error(lean.unknownIdentifier): Unknown constant `protocol_relative`
+'R1Z.SimCostLazyBoundedBytes.protocol_uniform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyBoundedBytes.run_relative' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyBoundedBytes.uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyBoundedBytes.initial_cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyBoundedBytes.run_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyBoundedBytes.run_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
