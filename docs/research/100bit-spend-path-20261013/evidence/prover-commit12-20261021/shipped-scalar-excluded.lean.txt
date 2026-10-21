@@ -1,0 +1,146 @@
+import AspisR1ProverStreams.Funs
+import R1Z.ProverCommitCallerLoop
+
+/-! Exact iteration schedule of both shipped scalar callers. The next-word
+body remains the actual extracted method, on the same evolving state. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitShippedScalar
+open Aeneas Aeneas.Std Result ControlFlow AspisR1ProverStreams
+
+theorem usize_more (attempts : Usize) (running : attempts.val < 16) :
+    ∃ after : core.ops.range.Range Usize,
+      core.iter.range.IteratorRange.next core.iter.range.StepUsize
+        {start := attempts, «end» := 16#usize} = ok (some attempts, after) ∧
+      after.start.val = attempts.val + 1 ∧ after.end = 16#usize := by
+  have hmax : attempts.val + 1 ≤ Usize.max := by scalar_tac
+  simp only [core.iter.range.IteratorRange.next, core.iter.range.StepUsize,
+    core.iter.range.IScalarStep, core.cmp.PartialOrdUsize,
+    core.cmp.impls.PartialOrdUsize.lt, core.clone.CloneUsize,
+    core.clone.impls.CloneUsize.clone, liftFun1, liftFun2, bind_tc_ok]
+  simp [running, core.iter.range.IScalarStep.forward_checked, hmax]
+
+theorem usize_done (attempts : Usize) (stopped : 16 ≤ attempts.val) :
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize
+      {start := attempts, «end» := 16#usize} =
+      ok (none, {start := attempts, «end» := 16#usize}) := by
+  simp [core.iter.range.IteratorRange.next, core.iter.range.StepUsize,
+    core.iter.range.IScalarStep, core.cmp.PartialOrdUsize,
+    core.cmp.impls.PartialOrdUsize.lt, not_lt.mpr stopped]
+
+abbrev Sample := core.result.Result aspis_core.field.M31
+  state_only_hiding.StateOnlyMaskBuildError
+
+namespace mask
+abbrev State := state_only_hiding.SeedExpander
+def finite : Nat → State → Result (State × Option Sample)
+  | 0, state => ok (state, none)
+  | n+1, state => do
+    let (word, after) ← state_only_hiding.SeedExpander.next_word state
+    let candidate ← lift (word &&& 2147483647#u32)
+    let p ← aspis_core.field.P
+    if candidate < p then ok (after, some (.Ok candidate))
+    else finite n after
+
+theorem loop_finite (n : Nat) (state : State) (attempts : Usize)
+    (remaining : attempts.val + (n) = 16) :
+    state_only_hiding.SeedExpander.m31_loop
+      {start := attempts, «end» := 16#usize} state = finite n state := by
+  induction n generalizing state attempts with
+  | zero =>
+    have stopped : 16 ≤ attempts.val := by omega
+    rw [state_only_hiding.SeedExpander.m31_loop, loop]
+    simp only [state_only_hiding.SeedExpander.m31_loop.body,
+      usize_done attempts stopped, bind_tc_ok, Aeneas.Std.uncurry_apply_pair, finite]
+  | succ n ih =>
+    have running : attempts.val < 16 := by omega
+    obtain ⟨after, heq, hstart, hend⟩ := usize_more attempts running
+    rw [state_only_hiding.SeedExpander.m31_loop, loop]
+    simp only [state_only_hiding.SeedExpander.m31_loop.body, heq,
+      bind_tc_ok, Aeneas.Std.uncurry_apply_pair, finite]
+    cases hn : state_only_hiding.SeedExpander.next_word state with
+    | fail error => rfl
+    | div => rfl
+    | ok pair =>
+      rcases pair with ⟨word, state'⟩
+      simp only [bind_tc_ok, Aeneas.Std.uncurry_apply_pair, lift]
+      split_ifs
+      · rfl
+      · have hafter : after = {start := after.start, «end» := 16#usize} := by
+          cases after
+          simp_all
+        rw [hafter]
+        exact ih state' _ (by omega)
+
+theorem scalar_sixteen (state : State) :
+    state_only_hiding.SeedExpander.m31 state = (do
+      let (after, pending) ← finite 16 state
+      match pending with
+      | none => ok (.Err .MaskSampleExhausted, after)
+      | some sample => ok (sample, after)) := by
+  unfold state_only_hiding.SeedExpander.m31
+  rw [state_only_hiding.MASK_SAMPLE_RETRY_LIMIT]
+  rw [loop_finite 16 state 0#usize (by decide)]
+  rfl
+
+#print axioms loop_finite
+#print axioms scalar_sixteen
+end mask
+
+namespace source
+abbrev State := state_only_entropy.Profile21SourceExpander
+def finite : Nat → State → Result (State × Option Sample)
+  | 0, state => ok (state, none)
+  | n+1, state => do
+    let (word, after) ← state_only_entropy.Profile21SourceExpander.next_word state
+    let candidate ← lift (word &&& 2147483647#u32)
+    let p ← aspis_core.field.P
+    if candidate < p then ok (after, some (.Ok candidate))
+    else finite n after
+
+theorem loop_finite (n : Nat) (state : State) (attempts : I32)
+    (remaining : attempts.val + ((n : Int)) = 16) :
+    state_only_entropy.Profile21SourceExpander.m31_loop
+      {start := attempts, «end» := 16#i32} state = finite n state := by
+  induction n generalizing state attempts with
+  | zero =>
+    have stopped : 16 ≤ attempts.val := by omega
+    rw [state_only_entropy.Profile21SourceExpander.m31_loop, loop]
+    simp only [state_only_entropy.Profile21SourceExpander.m31_loop.body,
+      ProverCommitCallerLoop.iterator_done attempts stopped, bind_tc_ok, Aeneas.Std.uncurry_apply_pair, finite]
+  | succ n ih =>
+    have running : attempts.val < 16 := by omega
+    obtain ⟨after, heq, hstart, hend⟩ := ProverCommitCallerLoop.iterator_more attempts running
+    rw [state_only_entropy.Profile21SourceExpander.m31_loop, loop]
+    simp only [state_only_entropy.Profile21SourceExpander.m31_loop.body, heq,
+      bind_tc_ok, Aeneas.Std.uncurry_apply_pair, finite]
+    cases hn : state_only_entropy.Profile21SourceExpander.next_word state with
+    | fail error => rfl
+    | div => rfl
+    | ok pair =>
+      rcases pair with ⟨word, state'⟩
+      simp only [bind_tc_ok, Aeneas.Std.uncurry_apply_pair, lift]
+      split_ifs
+      · rfl
+      · have hafter : after = {start := after.start, «end» := 16#i32} := by
+          cases after
+          simp_all
+        rw [hafter]
+        exact ih state' _ (by omega)
+
+theorem scalar_sixteen (state : State) :
+    state_only_entropy.Profile21SourceExpander.m31 state = (do
+      let (after, pending) ← finite 16 state
+      match pending with
+      | none => ok (.Err .MaskSampleExhausted, after)
+      | some sample => ok (sample, after)) := by
+  unfold state_only_entropy.Profile21SourceExpander.m31
+  rw [loop_finite 16 state 0#i32 (by decide)]
+  rfl
+
+#print axioms loop_finite
+#print axioms scalar_sixteen
+end source
+
+#print axioms usize_more
+#print axioms usize_done
+end R1Z.ProverCommitShippedScalar

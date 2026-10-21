@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitShippedSchedule.lean:15:67: error: unsolved goals
+attempts : Usize
+running : ↑attempts < 16
+hmax : ↑attempts + 1 ≤ Usize.max
+⊢ ∃ after,
+    (do
+          let n ←
+            if h : ↑attempts < UScalar.max UScalarTy.Usize then ok (some (UScalar.ofNatCore (↑attempts + 1) ⋯))
+              else ok none
+          match n with
+            | none => fail Error.panic
+            | some n => ok (some attempts, { start := n, «end» := 16#usize })) =
+        ok (some attempts, after) ∧
+      ↑after.start = ↑attempts + 1 ∧ after.end = 16#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitShippedSchedule.lean:21:62: warning: This simp argument is unused:
+  hmax
+
+Hint: Omit it from the simp argument list.
+  simp [running, core.iter.range.UScalarStep.forward_checked,̵ ̵h̵m̵a̵x̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitShippedSchedule.mask.loop_finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitShippedSchedule.mask.scalar_sixteen' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitShippedSchedule.source.loop_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitShippedSchedule.source.scalar_sixteen' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitShippedSchedule.usize_more' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitShippedSchedule.usize_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
