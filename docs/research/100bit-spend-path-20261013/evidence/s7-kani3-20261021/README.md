@@ -47,3 +47,41 @@ No headline premise is deleted. The local mixed law strictly improves its
 predecessor by eliminating the canonical rhs premise; it does not alter the
 headline signature. The initial canonical attempt used a namespace as a
 filename and failed before invoking Lean; its null resource fields are marked.
+
+Stage 4: `S7Kani3CallerStep.push_caller_invariant` proves exact source-push
+length/congruence preservation, frames other rows and derives the selected
+row's next phase bound. `S7Kani3CallerTrace` begins at actual coordinate-lifted
+initial rows, records successful emitted owned pushes and counter transitions,
+and proves reached lengths/congruence by induction. `reached_finish` supplies
+those facts to `S8Kani2CallerJoin.finish_caller_join`; the named partial
+`AspisR1.S7Kani3P6RouteCertificate.p6_route_certificate` composes the previous
+S7 local certificate, new storage/basis/backend/phase facts and S8's existing
+`p6_certificate`. It does not assume the reached raw congruence at finish.
+
+The `PushTrace` relation still carries each push's canonicality/phase/read
+witnesses. It permits counter updates because congruence/lengths are independent
+of the terms counter. It does NOT prove the frozen query and TX callers are
+members, nor identify its dynamically updated sum with the protocol's basis
+sum. It must not be substituted for the full source caller certificate.
+
+The correct TX checkpoint law resets terms to zero: `reset_phase`,
+`transaction_splice` and `checkpoint_congruence` prove this rebase algebraically.
+Checkpoint authentication/history and source resume provenance remain explicit.
+No R15 result or oracle-decision interpretation is silently adopted.
+
+The actual requested R19 interface remains arbitrary in its S7/S8/R17 fields.
+`S7Kani3FrozenEndpointObstruction.no_uniform_release_restoration` exhibits the
+joint false-target obstruction. This is a genuine obstruction to that uniform
+endpoint operation, not a refutation of the desired concrete caller theorem.
+No endpoint is edited; no premise deletion or complete S7/S8/R17 discharge is
+claimed. `remaining.tsv` states the independent missing source/semantic joins.
+
+`preflight.py` handles the continuation's assigned base: all inherited pinned
+source/reference/generated hashes match and the shipped diff from da6f0085a
+is empty. The original generator's old-base aggregate check fails on two
+inherited cfg(kani/aeneas_ref) builder references added before this worktree;
+its failure is retained in `source-preflight.json`, not relabelled a pass.
+The extracted-byte check and new emitted-loop binding checks pass. No shipped
+source, existing Lean module, protected candidate, M10, wallet or ELF is changed.
+No SBF rebuild or unchanged full regression is run. This packet is focused
+cached-object evidence; it is not a coherent frozen release replay.

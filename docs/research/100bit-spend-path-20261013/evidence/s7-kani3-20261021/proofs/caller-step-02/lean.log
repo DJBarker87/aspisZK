@@ -1,0 +1,46 @@
+/Users/dominic/ZK/.worktrees/cx-s7-kani3/docs/research/100bit-spend-path-20261013/lean/S7Kani3CallerStep.lean:62:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1BatchedFoldSourceStep.sourcePush ?terms ?raw ?product % AspisR1BatchedFoldSourceStep.modulus
+in the target expression
+  AspisR1BatchedFoldSourceStep.sourcePush (↑weights.terms) (↑(x k)) (↑(powerLimb power k) * ↑basis) % 2147483647 =
+    (sum (↑index) k + ↑(powerLimb power k) * ↑basis) % 2147483647
+
+case pos
+weights : BatchedWeights
+old : S8OwnedP6Finish.Weights
+sum : ℕ → Fin 4 → ℕ
+caller : CallerInvariant weights.raw old sum
+index : Usize
+power : K
+basis : U32
+x : Fin 4 → U64
+hindex : ↑index < weights.raw.length
+hget : (↑weights.raw)[↑index]? = some (makeRow x)
+hcanon : ∀ (k : Fin 4), ↑(powerLimb power k) < 2 ^ 31 - 1
+hbasis : ↑basis < 2 ^ 31 - 1
+hphase : ∀ (k : Fin 4), S7Kani3PhaseInvariant.Phase ↑weights.terms ↑(x k)
+row : Std.Array U64 4#usize
+hread✝ : weights.raw.index_usize index = ok row
+hrow : row = (↑weights.raw)[↑index]
+hi : ↑index < (↑weights.raw).length
+hroweq : row = makeRow x
+hread' : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Row) weights.raw index = ok (makeRow x)
+y : Fin 4 → U64
+hy :
+  S7Kani2OwnedPush.push_owned weights index power basis =
+    ok { raw := weights.raw.set index (makeRow y), terms := weights.terms }
+hvalue :
+  ∀ (j : Fin 4),
+    ↑(y j) = AspisR1BatchedFoldSourceStep.sourcePush (↑weights.terms) (↑(x j)) (↑(powerLimb power j) * ↑basis)
+k : Fin 4
+hread : (↑(weights.raw.set index (makeRow y)))[↑index]? = some (makeRow y)
+⊢ AspisR1BatchedFoldSourceStep.sourcePush (↑weights.terms) (↑(x k)) (↑(powerLimb power k) * ↑basis) % 2147483647 =
+    (sum (↑index) k + ↑(powerLimb power k) * ↑basis) % 2147483647
+/Users/dominic/ZK/.worktrees/cx-s7-kani3/docs/research/100bit-spend-path-20261013/lean/S7Kani3CallerStep.lean:55:16: warning: This simp argument is unused:
+  List.getElem?_set
+
+Hint: Omit it from the simp argument list.
+  simp [L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵s̵e̵t̵,̵hi]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'S7Kani3CallerStep.rowAt_makeRow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'S7Kani3CallerStep.push_caller_invariant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
