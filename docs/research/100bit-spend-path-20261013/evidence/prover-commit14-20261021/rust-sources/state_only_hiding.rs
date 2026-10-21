@@ -1928,7 +1928,6 @@ mod material14 {
     #[kani::unwind(84)]
     #[kani::stub(crate::host_hashv, rom::expander_query)]
     #[kani::stub_verified(SeedExpander::next_word)]
-    #[kani::stub_verified(reference::next)]
     fn m31_iteration() {
         let state: reference::State = kani::any();
         kani::assume(state.word <= 8);
@@ -1942,7 +1941,12 @@ mod material14 {
         let mut expander = SeedExpander {hash:crate::HOST_HASH,seed:state.seed,
             counter:state.counter,block:state.block,word:state.word};
         let actual = one_shipped(&mut expander, &mut values);
-        assert_eq!(actual, expected.0); assert_eq!(values, expected.1);
+        assert_eq!(actual, expected.0);
+        assert_eq!(values.len(), expected.1.len());
+        assert!(values.len() <= 3);
+        for i in 0..3 {
+            if i < values.len() { assert_eq!(values[i], expected.1[i]); }
+        }
         assert_eq!(expander.seed, expected.2.seed);
         assert_eq!(expander.counter, expected.2.counter);
         assert_eq!(expander.block, expected.2.block);

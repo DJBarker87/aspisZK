@@ -1,0 +1,41 @@
+import R1Z.ProverCommit13Audit
+import R1Z.ProverCommitMaterialRecursion
+import R1Z.ProverCommitMaterialSupport
+import R1Z.ProverCommitMaterialWindow
+import R1Z.ProverCommitMaterialIteration
+import R1Z.ProverCommitObserverBoundary
+
+/-! Single frozen final audit of the new material/reference boundary. -/
+#print axioms R1Z.ProverCommitMaterialRecursion.sub_one
+#print axioms R1Z.ProverCommitMaterialRecursion.extracted_finite
+#print axioms R1Z.ProverCommitMaterialRecursion.qm_extracted_finite
+#print axioms R1Z.ProverCommitMaterialRecursion.columns_extracted_finite
+#print axioms R1Z.ProverCommitMaterialRecursion.next_row
+#print axioms R1Z.ProverCommitMaterialRecursion.padding_extracted_finite
+#print axioms R1Z.ProverCommitMaterialSupport.iterator_more
+#print axioms R1Z.ProverCommitMaterialSupport.iterator_done
+#print axioms R1Z.ProverCommitMaterialSupport.loop_finite
+#print axioms R1Z.ProverCommitMaterialSupport.caller_sixteen
+#print axioms R1Z.ProverCommitMaterialSupport.next_support
+#print axioms R1Z.ProverCommitMaterialSupport.finite_support
+#print axioms R1Z.ProverCommitMaterialSupport.scalar_support
+#print axioms R1Z.ProverCommitMaterialSupport.tower_support
+#print axioms R1Z.ProverCommitMaterialSupport.collection_support
+#print axioms R1Z.ProverCommitMaterialSupport.raw_collection_support
+#print axioms R1Z.ProverCommitMaterialSupport.qm_collection_support
+#print axioms R1Z.ProverCommitMaterialSupport.columns_support
+#print axioms R1Z.ProverCommitMaterialSupport.padding_support
+#print axioms R1Z.ProverCommitMaterialSupport.indexed_columns_support
+#print axioms R1Z.ProverCommitMaterialSupport.indexed_padding_support
+#print axioms R1Z.ProverCommitMaterialWindow.state_roundtrip
+#print axioms R1Z.ProverCommitMaterialWindow.old_state_roundtrip
+#print axioms R1Z.ProverCommitMaterialWindow.next_bridge
+#print axioms R1Z.ProverCommitMaterialWindow.next_success_from_old
+#print axioms R1Z.ProverCommitMaterialWindow.next_local_support
+#print axioms R1Z.ProverCommitMaterialWindow.finite_window
+#print axioms R1Z.ProverCommitMaterialWindow.scalar_window
+#print axioms R1Z.ProverCommitMaterialIteration.m31_iteration
+#print axioms R1Z.ProverCommitMaterialIteration.qm31_iteration
+#print axioms R1Z.ProverCommitObserverBoundary.replacement_changes_history
+#print axioms R1Z.ProverCommitObserverBoundary.no_unrestricted_history_transport
+#print axioms R1Z.PrivacyR1HeadlineOwnedClosed.Admitted.privacy_headline_admitted

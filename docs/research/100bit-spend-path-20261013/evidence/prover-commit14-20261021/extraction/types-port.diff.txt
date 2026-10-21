@@ -1,0 +1,26 @@
+--- generated
++++ ported
+@@ -50,7 +50,6 @@
+ /-- [aspis_prover::state_only_hiding::StateOnlyMaskBuildError]
+     Source: 'crates/aspis-prover/src/state_only_hiding.rs', lines 51:0-57:1
+     Visibility: public -/
+-@[discriminant isize]
+ inductive state_only_hiding.StateOnlyMaskBuildError where
+ | ZeroPrivateEntropy : state_only_hiding.StateOnlyMaskBuildError
+ | ReusedMaskNonce : state_only_hiding.StateOnlyMaskBuildError
+@@ -58,4 +57,15 @@
+ | TraceShape : state_only_hiding.StateOnlyMaskBuildError
+ | Layout : state_only_hiding.StateOnlyMaskBuildError
+ 
++-- Explicit discriminant instance for the pinned Lean 4.32 Aeneas port.
++def state_only_hiding.StateOnlyMaskBuildError.read_discriminant :
++    state_only_hiding.StateOnlyMaskBuildError → Isize
++  | .ZeroPrivateEntropy => 0#isize
++  | .ReusedMaskNonce => 1#isize
++  | .MaskSampleExhausted => 2#isize
++  | .TraceShape => 3#isize
++  | .Layout => 4#isize
++instance instMaterial14MaskErrorDiscriminant :
++    Discriminant state_only_hiding.StateOnlyMaskBuildError Isize where
++  read_discriminant := state_only_hiding.StateOnlyMaskBuildError.read_discriminant
+ end AspisR1ProverMaterial14
