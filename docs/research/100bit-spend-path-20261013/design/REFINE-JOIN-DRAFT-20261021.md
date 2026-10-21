@@ -63,3 +63,30 @@ signature in this packet. No premise deletion is claimed. R19 and the existing
 draft endpoints remain unchanged. The exact candidate signature replacement
 and the failed transport step are recorded in evidence; this is an obstruction
 to the proposed black-box proof, not a full-verifier counterexample.
+
+## Independent frozen-slot results
+
+`OraclePortRefineJoinSlot.padding_guard_erasure` proves that accepted
+`slotTail` evaluation is exactly the same as `verifyInPlace` on the counted
+prefix with that padding guard erased. This establishes that the guard can
+only restrict acceptance, including on arbitrary raw `Parsed` inputs.
+`accepted_leaf_log` proves by induction that a successful frozen leaf scan
+queries every source position including duplicates, in the sorted source
+order. `successful_levels` constructs the full successful level chain by
+induction on height without evaluating height 18. `padding_witness_direction`
+checks that the inherited nonzero-padding witness cannot refute the requested
+one-direction implication.
+
+These are source-side facts. The general theorem
+
+```lean
+(eval H (verifySlot_frozen p q batch kind)).2 = true →
+  (eval H (OraclePortBatchDraft.verifySlot p q batch kind)).2 = true
+```
+
+and its accepted-read multiset consequence are still open. In particular,
+source nodeCount/consumed siblings must be identified with orderedFrontier,
+and the sorted live-prefix level invariant with the recursive selected tree.
+The height-chain theorem is not that missing invariant. No additional raw
+slot counterexample was found. This limitation is separate from the generic
+consumer obstruction above; the latter does not make the slot claim false.
