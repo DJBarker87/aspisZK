@@ -7847,3 +7847,21 @@ so stub the thread-local accessor with a verified single-threaded contract;
 adaptive fuel/history transport; and the caller/policy assembly.
 `shippedProverExperiment` and the WholeRunJoins are not built yet. The
 prover track's env-J range 8600–8799 is nearly used up (8773+ remain).
+
+## D133 — prover commitment part 23; BTreeMap as a trusted std boundary (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit23-20261021` (`r1p-final/PROVER-COMMIT23-20261021.md`):
+single-thread TLS access semantics with a validated trace stub; adaptive fresh
+fuel bounds with the exact marked-answer law; split map source gates and
+write-schedule composition; the concrete rho/QM31 sampler policy and the
+programmed TLS slot; the joint adaptive history law with supplied and memoised
+draws. The TLS, one-entry lookup and iterator gates pass. J7486: 24
+standard-axiom audits, zero swap; no shipped change. The split BTreeMap
+insertion gate still approached MemoryHigh after two proof-shape changes and
+was stopped, per AGENTS.md. Lead ruling: do not verify std's B-tree internals.
+Put `std::collections::BTreeMap` (insert/get/iter as the prover uses them)
+in the trusted std/allocation cone (S10 pass 4), with its documented
+ordered-map semantics as the spec, i.e. the universal TreeMap model already
+proved. Record it as an explicit named trust item next to rustc/P7, so it
+is visible, not hidden. The single-thread assumption for TLS is recorded on
+the same list.
