@@ -59,3 +59,11 @@ Packets `evidence/s4-forward-field-ops-root-v1-20261021/` and `evidence/s4-forwa
 Adjacent S5: `evidence/s5-paircut-range-loop-trace-v1-20261021/` proves successful actual range-loop execution yields an ordered callback trace. `evidence/s5-paircut-range-decoded-product-v2-20261021/` retains that same trace, the accepted push list, and a `List.Forall₂` mapping of each index to the exact successful reader/scratch pair. Its decoded finish equation uses that same product list. The checked-field specialization derives successful-read canonicality; the external generated reader binding remains open. The earlier v1 product packet omits the exported list/read correspondence and is superseded for this purpose.
 
 Next: concrete caller input provenance and the Rust Std/from_fn boundary. The latter is not closed by any P6 scheduling theorem or by candidate fixture agreement.
+
+## Literal value equations
+
+`S4LiteralHeadSumRootV1.source_head_sum_literal` removes execution-selected head lists from the value expression: exact ordered source coverage and source meanings imply the fixed 26-term sum of coefficient reads times the raw little-endian source words at their exact slot/term byte offsets. The invalid-shape default in the total value function is excluded by each source meaning.
+
+`S4LiteralCallbackValueRootV1.callback_field_result_literal` composes that identity with the same callback field result, retaining the actual first tail input, g[28] read, two-term tail run and accepted three-push trace. `S4ForwardLiteralValueRootV1.four_dots_forward_literal_value` constructs the entire function result and supplies these literal value equations for its same four canonical outputs. No child-call, array-call or parent execution success premise is introduced. The remaining parser/canonicality, P6/Std and actual caller/source/runtime boundaries are unchanged.
+
+Focused targets: literal head sum 17.356s / 3,681,206,272B RSS; literal callback 20.107s / 3,668,688,896B; complete forward literal values 17.329s / 3,641,311,232B. All exit0, zero swaps and standard axioms. The source-only focused packets retain direct dependency sources and exact receipts; no full manifest or unchanged CU run was started.
