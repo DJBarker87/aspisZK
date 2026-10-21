@@ -42,7 +42,7 @@ Per-cone joins (`JOIN-SPLIT-DRAFT-20261021.md`, `CONE-AUDIT-20261021.md`):
 | S7 | reference = dV_frozen2 stage, total; frozen caller adoption waits on S2 | lead (paused) |
 | S8 | reference = dV_frozen2 stage, total, composed with S7; caller adoption waits on S2 | lead (paused) |
 | Checkpoint ABI | reference observations = dV_frozen2 checkpoint stage, including the six reads; caller lowering waits on S2 | lead (paused) |
-| Parser and multiproof | strict scanner, compact expansion and parser frames proved; continuing | lead (running) |
+| Parser and multiproof | parser complete against frozen rows; multiproof stage join `both_batches` proved (c), conditional on caller binding and Rust carrier P6 | lead |
 | S10 inventory | every declaration assigned; 140 CFG ordering facts kernel-checked; gates exit 2 pending the caller identities | lead (paused) |
 
 ## Privacy
