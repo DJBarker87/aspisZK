@@ -19,6 +19,8 @@ def validate(outputs):
     assert all(r['original']==old['gaps'][i] and r['reason'] for i,r in enumerate(frontier))
     matched={r['id']:r['mir_name'] for r in outputs['body-matches.json']}
     newowners={r['name']:r['owner'] for r in outputs['mir-owners.json']}
+    assert all(int(r['owner'] is not None)+int(r['boundary'] is not None)==1 for r in outputs['mir-owners.json'])
+    assert len(newowners)==x['counts']['new_mir_candidates']
     overrides=x['ownership_reassignments'];override_ids=[r['id'] for r in overrides]
     assert len(override_ids)==len(set(override_ids))
     for r in overrides:
@@ -38,15 +40,21 @@ assert receipt['generator_sha256']==m.sha((HERE/'reconcile.py').read_bytes())
 for name,value in outputs.items():assert receipt['output_hashes'][name]==m.sha(m.encoded(value))
 for path,digest in outputs['reconciliation.json']['input_hashes'].items():assert m.sha((m.R/path).read_bytes())==digest
 validate(outputs);checks.append('frozen inputs, exact ownership partition, call endpoint IDs, all original frontier dispositions and deterministic output pins')
-for kind in ['duplicate_owner','false_edge','hidden_frontier']:
+for kind in ['duplicate_owner','false_edge','hidden_frontier','conflicting_source_owner']:
     bad=copy.deepcopy(outputs)
     if kind=='duplicate_owner':bad['reconciliation.json']['assignments'].append(bad['reconciliation.json']['assignments'][0])
     elif kind=='false_edge':bad['corroborated-edges.json'][0]['target']=-1
-    else:bad['frontier-dispositions.json'].pop()
+    elif kind=='hidden_frontier':bad['frontier-dispositions.json'].pop()
+    else:bad['reconciliation.json']['ownership_reassignments'][0]['owner']='S10'
     try:validate(bad)
     except (AssertionError,KeyError):checks.append('rejects '+kind)
     else:raise AssertionError('mutation accepted: '+kind)
 manifest=m.load(m.E/'probe-manifest.json');assert len(manifest['probes'])==28
+assert manifest['driver_source']['sha256']==m.sha((HERE/'mir_edges.rs').read_bytes())
+source_recheck=m.load(m.E/'source-recheck.json')
+assert source_recheck['manifest']['sha256']==m.sha((m.OLD/'source-hashes.json').read_bytes())
+assert source_recheck['files']==488 and source_recheck['mismatches']==[]
+driver_versions={m.sha(p.read_bytes()) for p in [HERE/'mir_edges.rs',HERE/'historical/mir_edges_v6.rs']}
 assert len([r for r in manifest['probes'] if r['name'].startswith('pool-')])==24
 success=[]
 for probe in manifest['probes']:
@@ -54,6 +62,7 @@ for probe in manifest['probes']:
     assert r['exit_status']==0 and r['limits']=={'memory.high':str(6*2**30),'memory.max':str(8*2**30),'memory.swap.max':'0','pids.max':'64'}
     assert r['swaps']==0 and r['wall_seconds']<600
     assert command['source_revision']==outputs['reconciliation.json']['source_revision']
+    assert command['driver_sha256'] in driver_versions
     assert command['env']['S10_MODULE']!='*' or not probe['name'].startswith('pool-')
     success.append(r)
 checks.append('28 successful timed and capped probes; all 24 Pool modules individually selected; zero swap')
