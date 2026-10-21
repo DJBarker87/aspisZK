@@ -276,3 +276,34 @@ J7579/J7580/J7581, all exit 0, 1.52/2.07/2.82 s,
 2522248/2541716/3957148 KiB, swaps 0. All seven consumer audits are standard.
 No other worker's source or object is changed. The following final audit
 uses the repaired dependency closure; J7578 remains excluded.
+
+## Final verification and artifact scope
+
+J7583 passes `R1Z/ProverCommit25Audit.lean`: exit 0, wall 2.01 s,
+peak RSS 4103860 KiB, swaps 0, source revision `6e4e28d00` plus the exact
+additive audit source SHA-256 and dependency fingerprint in its receipt.
+All 52 complete audit lines (50 local facts/constructors and both unchanged
+privacy endpoints) use only [propext, Classical.choice, Quot.sound], or fewer.
+The repaired final dependency closure is imported together successfully.
+
+J7582 is a reservation preflight hold, not a compile: 48.375 GiB populated
+plus 8 GiB exceeded the 55 GiB limit. J7583 waited, then launched only when
+the reservation fell to 24 GiB. Every Lean compile used the global lock,
+one job at a time, -M7000 and 6G/8G/no swap/64-task scopes. No cap was raised.
+Every actual attempt, including excluded failures, has a source snapshot,
+SHA-256, dependency-object fingerprint, source revision plus exact additive
+snapshot identity, exit, time, RSS, swap and full axioms/error lines.
+Preflight-only numbers are listed separately and have no claimed compiler
+result. The final audit script checks those identities and accepted scopes.
+
+No tracked file under crates/ or programs/ changed. The shipped-file ELF
+rebuild rule is therefore not triggered; unchanged-source D129 evidence is
+reused, without claiming a new ELF comparison. The complete frozen release
+manifest is withheld because the concrete source refinement is still open.
+No other worker's owned module was edited. No wallet/key was touched.
+No binaries, objects, archives or local target directory are included. No push.
+All SSH sessions completed within the twenty-minute no-output limit.
+
+The packet uses assigned Env J numbers through 7583. Next candidate: 7584,
+subject to checking the shared receipts. `final-audit.json` is the machine
+summary. The requested deployed target is **not yet established**.
