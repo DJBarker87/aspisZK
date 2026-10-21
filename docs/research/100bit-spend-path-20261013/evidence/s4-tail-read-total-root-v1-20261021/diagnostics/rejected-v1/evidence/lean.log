@@ -1,0 +1,203 @@
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:10:67: error: Tactic `decide` failed for proposition
+  1024 ≤ 2 ^ UScalarTy.Usize.numBits
+because its `Decidable` instance
+  Nat.decLe 1024 (2 ^ UScalarTy.Usize.numBits)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match Nat.ble 1024 (2 ^ UScalarTy.Usize.numBits), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:9:72: error: unsolved goals
+n : ℕ
+hn : n < 1024
+hb : n < 2 ^ UScalarTy.Usize.numBits
+x : Usize := UScalar.ofNatCore n hb
+⊢ (match if h : n < 2 ^ System.Platform.numBits then some (UScalar.ofNatCore n ⋯) else none with
+    | some x => ok x
+    | none => fail Error.integerOverflow) =
+    ok (UScalar.ofNatCore n hb)
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:13:60: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp [UScalar.tryMk, ̲UScalar.tryMkOpt, ̲UScalar.check_bounds,h̵b̵,̵ ̲Result.ofOption, ̲x]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:25:27: error: overloaded, errors 
+  25:33 Ambiguous term
+    U8
+  Possible interpretations:
+    AspisR1FastDotsActualTailBodyTraceRootV1.U8 : Type
+    
+    Std.U8 : Type
+  
+  25:33 Ambiguous term
+    U8
+  Possible interpretations:
+    AspisR1FastDotsActualTailBodyTraceRootV1.U8 : Type
+    
+    Std.U8 : Type
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:29:16: error: Ambiguous term
+  U8
+Possible interpretations:
+  AspisR1FastDotsActualTailBodyTraceRootV1.U8 : Type
+  
+  Std.U8 : Type
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:30:44: error: Application type mismatch: The argument
+  slot32
+has type
+  (base480 : ?m.4) →
+    (term16 : ?m.9 base480) →
+      (offset : ?m.10 base480 term16) →
+        (coeffIndex : ?m.11 base480 term16 offset) → ?m.12 base480 term16 offset coeffIndex → Usize
+but is expected to have type
+  UScalar UScalarTy.Usize
+in the application
+  ok slot32
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:31:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  HAdd (UScalar UScalarTy.Usize)
+    ((base480 : ?m.4) →
+      (term16 : ?m.9 base480) →
+        (offset : ?m.10 base480 term16) →
+          (coeffIndex : ?m.11 base480 term16 offset) → ?m.12 base480 term16 offset coeffIndex → Usize)
+    ?m.29
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:31:47: error(lean.unknownIdentifier): Unknown identifier `base480`
+
+Note: It is not possible to treat `base480` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:31:8: error: stuck at solving universe constraint
+  ?u.36 + 1 =?= max (max (max (max (max 1 ?u.12) ?u.13) ?u.14) ?u.15) ?u.16
+while trying to unify
+  (base480 : ?m.4) →
+    (term16 : ?m.9 base480) →
+      (offset : ?m.10 base480 term16) →
+        (coeffIndex : ?m.11 base480 term16 offset) →
+          ?m.12 base480 term16 offset coeffIndex →
+            Usize : Sort (max (max (max (max (max 1 ?u.12) ?u.13) ?u.14) ?u.15) ?u.16)
+with
+  (base480 : ?m.4) →
+    (term16 : ?m.9 base480) →
+      (offset : ?m.10 base480 term16) →
+        (coeffIndex : ?m.11 base480 term16 offset) →
+          ?m.12 base480 term16 offset coeffIndex →
+            Usize : Sort (max (max (max (max (max 1 ?u.12) ?u.13) ?u.14) ?u.15) ?u.16)
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:31:2: error: stuck at solving universe constraint
+  ?u.36 + 1 =?= max (max (max (max (max 1 ?u.12) ?u.13) ?u.14) ?u.15) ?u.16
+while trying to unify
+  (base480 : ?m.4) →
+    (term16 : ?m.9 base480) →
+      (offset : ?m.10 base480 term16) →
+        (coeffIndex : ?m.11 base480 term16 offset) →
+          ?m.12 base480 term16 offset coeffIndex →
+            Usize : Sort (max (max (max (max (max 1 ?u.12) ?u.13) ?u.14) ?u.15) ?u.16)
+with
+  (base480 : ?m.4) →
+    (term16 : ?m.9 base480) →
+      (offset : ?m.10 base480 term16) →
+        (coeffIndex : ?m.11 base480 term16 offset) →
+          ?m.12 base480 term16 offset coeffIndex →
+            Usize : Sort (max (max (max (max (max 1 ?u.12) ?u.13) ?u.14) ?u.15) ?u.16)
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:73:15: error: unexpected token ':='; expected '}'
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:48:30: error: overloaded, errors 
+  48:36 Ambiguous term
+    U8
+  Possible interpretations:
+    AspisR1FastDotsActualTailBodyTraceRootV1.U8 : Type
+    
+    Std.U8 : Type
+  
+  48:36 Ambiguous term
+    U8
+  Possible interpretations:
+    AspisR1FastDotsActualTailBodyTraceRootV1.U8 : Type
+    
+    Std.U8 : Type
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:50:14: error(lean.unknownIdentifier): Unknown identifier `ReadWitness`
+
+Note: It is not possible to treat `ReadWitness` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:89:21: error: overloaded, errors 
+  89:27 Ambiguous term
+    U8
+  Possible interpretations:
+    AspisR1FastDotsActualTailBodyTraceRootV1.U8 : Type
+    
+    Std.U8 : Type
+  
+  89:27 Ambiguous term
+    U8
+  Possible interpretations:
+    AspisR1FastDotsActualTailBodyTraceRootV1.U8 : Type
+    
+    Std.U8 : Type
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:91:9: error(lean.unknownIdentifier): Unknown identifier `ReadWitness`
+
+Note: It is not possible to treat `ReadWitness` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:95:65: error: unsolved goals
+ops : Ops
+a : sorry
+g : Std.Array Wide 29#usize
+slot term : Usize
+iter iter' : Range
+old next : Tail
+r : sorry
+q : QM
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some term, iter')
+hp : ops.qm31FromBytes sorry = ok (some q)
+hpush : ops.ebyKPush old sorry q = ok (core.result.Result.Ok (), next)
+⊢ AspisR1FastDotsCurrent.fast_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop1.body
+      ops (sorry ()) g slot iter old =
+    ok (cont (iter', next))
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:96:17: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp [TailBody,h̵n̵,̵ ̲r.h0, ̲r.h1, ̲r.h2, ̲r.h3, ̲r.h4, ̲r.hread, ̲r.h5, ̲r.hslice, ̲hp, ̲hpush,
+      core.option.Option.unwrap, ̲core.result.Result.unwrap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:96:67: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp [TailBody, ̲hn, ̲r.h0, ̲r.h1, ̲r.h2, ̲r.h3, ̲r.h4, ̲r.hread, ̲r.h5, ̲r.hslice, ̲hp,̵h̵p̵ush,
+      core.option.Option.unwrap, ̲core.result.Result.unwrap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:96:70: warning: This simp argument is unused:
+  hpush
+
+Hint: Omit it from the simp argument list.
+  simp [TailBody, ̲hn, ̲r.h0, ̲r.h1, ̲r.h2, ̲r.h3, ̲r.h4, ̲r.hread, ̲r.h5, ̲r.hslice, ̲hp,h̵p̵u̵s̵h̵,̵
+      core.option.Option.unwrap, ̲core.result.Result.unwrap]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:97:4: warning: This simp argument is unused:
+  core.option.Option.unwrap
+
+Hint: Omit it from the simp argument list.
+  simp [̵T̵a̵i̵l̵B̵o̵d̵y̵,̵h̵n̵,̵r̵.̵h̵0̵,̵r̵.̵h̵1̵,̵r̵.̵h̵2̵,̵r̵.̵h̵3̵,̵r̵.̵h̵4̵,̵r̵.̵h̵r̵e̵a̵d̵,̵r̵.̵h̵5̵,̵r̵.̵h̵s̵l̵i̵c̵e̵,̵h̵p̵,̵h̵p̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵u̵n̵w̵r̵a̵p̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵]̵[̲T̲a̲i̲l̲B̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲r̲.̲h̲0̲,̲ ̲r̲.̲h̲1̲,̲ ̲r̲.̲h̲2̲,̲ ̲r̲.̲h̲3̲,̲ ̲r̲.̲h̲4̲,̲ ̲r̲.̲h̲r̲e̲a̲d̲,̲ ̲r̲.̲h̲5̲,̲ ̲r̲.̲h̲s̲l̲i̲c̲e̲,̲ ̲h̲p̲,̲ ̲h̲p̲u̲s̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲u̲n̲w̲r̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-tail-read-total-v1-20261021/sources/S4TailReadTotalRootV1.lean:97:30: warning: This simp argument is unused:
+  core.result.Result.unwrap
+
+Hint: Omit it from the simp argument list.
+  simp [̵T̵a̵i̵l̵B̵o̵d̵y̵,̵h̵n̵,̵r̵.̵h̵0̵,̵r̵.̵h̵1̵,̵r̵.̵h̵2̵,̵r̵.̵h̵3̵,̵r̵.̵h̵4̵,̵r̵.̵h̵r̵e̵a̵d̵,̵r̵.̵h̵5̵,̵r̵.̵h̵s̵l̵i̵c̵e̵,̵h̵p̵,̵h̵p̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵u̵n̵w̵r̵a̵p̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵]̵[̲T̲a̲i̲l̲B̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲r̲.̲h̲0̲,̲ ̲r̲.̲h̲1̲,̲ ̲r̲.̲h̲2̲,̲ ̲r̲.̲h̲3̲,̲ ̲r̲.̲h̲4̲,̲ ̲r̲.̲h̲r̲e̲a̲d̲,̲ ̲r̲.̲h̲5̲,̲ ̲r̲.̲h̲s̲l̲i̲c̲e̲,̲ ̲h̲p̲,̲ ̲h̲p̲u̲s̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲o̲p̲t̲i̲o̲n̲.̲O̲p̲t̲i̲o̲n̲.̲u̲n̲w̲r̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1FastDotsTailReadTotalRootV1.tail_reads_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsTailReadTotalRootV1.actual_tail_body_from_reads' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
