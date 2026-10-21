@@ -33,3 +33,35 @@ then exact-width production section decoding and its concrete ResumeOps
 implementation at OraclePortCkptAbi5Stage.reached_stage through strictStage.
 The inherited raw-fields reference encode_c5 checksum composition is reused;
 this stage does not assert production writer/reader/allocator adoption.
+
+## Stage 2 — exact-width production K section
+
+Production Reader source is copied verbatim into the independent tools crate;
+source_check.py verifies its identity, raw::<16>(), N-byte cursor advance,
+whole checkpoint length and final-cursor guards. No shipped source changed.
+Kani k-section-current-1 checks the actual production field decoder, no stubs,
+on arbitrary 17-byte backing data: the cursor ends at 16, success iff all four
+LE limbs are below P, the output has exactly those limbs, and its encoding is
+the first 16 bytes. The arbitrary seventeenth byte is a later section byte.
+This proves no noncanonical width is supplied by Reader.k; the standalone
+K::from_le_bytes / decode_k_spec still accepts a trailing byte on direct calls.
+
+CheckpointBytesReaderWidth.exact_k_section proves exact slice, 16-byte width,
+cursor advance and unchanged backing at every bounded cursor, for arbitrary
+decoder result and panic continuation. exact_k_width excludes a seventeenth
+byte from the typed array. The theorem explicitly leaves decoder adoption
+separate, rather than claiming a generic callback is the concrete Rust instance.
+Final Lean attempt 3 is standard axioms only; full metrics and revision in
+manifest.json. Attempts 1–2 preserve literal/platform-width elaboration failures.
+
+Final production Kani target: ['timeout', '300', 'cargo', 'kani', '--manifest-path', 'tools/ckpt-bytes2-20261022/Cargo.toml', '--lib', '--exact', '--harness', 'proofs::k_exact_section', '--no-assertion-reach-checks', '--solver', 'kissat', '--output-format', 'old', '-Z', 'unstable-options', '--cbmc-args', '--object-bits', '10', '--unwinding-assertions'].
+Exit 0, wall 1.287706813076511 s, peak RSS 62132 KiB,
+swaps 0; #print axioms N/A (Kani). Source/dependency pins, revision,
+exact cgroup and MemoryHigh=6G/MemoryMax=8G/MemorySwapMax=0/TasksMax=64
+are in kani/k-section-current-1/receipt.json. Reservation preflight retained.
+The first Kani launch failed at compilation because the isolated host copy
+lacked tools/r1-builder-reference/tree.rs; no proof ran. The second passed
+against an inherited sim.rs differing from this worktree. That unused file
+was synced into this task's host directory and the final gate rerun against
+current source; the earlier result is superseded, with evidence retained.
+No other workspace was edited. No frozen ELF rebuild trigger is present.

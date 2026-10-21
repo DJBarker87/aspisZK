@@ -1,0 +1,44 @@
+import OraclePortCkptAbi2Unwrap
+
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1.CheckpointBytesReaderWidth
+open AspisR1Stage2 OraclePortCkptAbi2Unwrap
+
+/-- Source Reader.k sequencing with its field decoder explicit. The decoder
+receives an Array of exactly 16 bytes, including on a rejected field. -/
+def sectionK {A : Type}
+    (panic : core.array.TryFromSliceError → Result (Array U8 16#usize))
+    (decode : Array U8 16#usize → Result A) (r : verifier.Reader) :
+    Result (A × verifier.Reader) := do
+  let (b,out) ← verifier.Reader.rawWithUnwrap 16#usize (unwrapWithPanic panic) r
+  let q ← decode b
+  ok (q,out)
+
+/-- Exact bytes, width and post-cursor for every bounded source position.
+The result equation preserves every decoder result rather than assuming
+successful or canonical bytes. Decoder implementation adoption is separate. -/
+theorem exact_k_section {A : Type}
+    (panic : core.array.TryFromSliceError → Result (Array U8 16#usize))
+    (decode : Array U8 16#usize → Result A) (r : verifier.Reader)
+    (bound : r.at.val + 16 ≤ r.bytes.val.length) :
+    ∃ b out, b.val.length = 16 ∧
+      b.val = (r.bytes.val.drop r.at.val).take 16 ∧
+      out.at.val = r.at.val + 16 ∧ out.bytes = r.bytes ∧
+      sectionK panic decode r = (do let q ← decode b; ok (q,out)) := by
+  obtain ⟨b,out,run,contents,cursor,backing⟩ :=
+    raw_panic_unreachable r 16#usize panic bound
+  refine ⟨b,out,?_,contents,cursor,backing,?_⟩
+  · exact b.property
+  · unfold sectionK
+    rw [run]
+    rfl
+
+/-- No seventeenth byte is part of a bounded K section, regardless of how
+many later sections are present in the backing checkpoint. -/
+theorem exact_k_width (b : Array U8 16#usize) : b.val[16]? = none := by
+  exact List.getElem?_eq_none (by simpa only [b.property] using (show 16 ≤ 16 from Nat.le_refl 16))
+
+#print axioms exact_k_section
+#print axioms exact_k_width
+end AspisR1.CheckpointBytesReaderWidth
