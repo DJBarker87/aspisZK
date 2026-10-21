@@ -1,0 +1,34 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLive.lean:45:4: error: Type mismatch
+  Eq.trans
+    (write_cell s w parent digest cursor wb j (Decidable.byContradiction fun a => write_prefix._proof_1 w wb j jb a))
+    (if_neg fun a => write_prefix._proof_2 w j jb a)
+has type
+  cell { idx := s.idx.set w parent, val := s.val.set w digest, n := s.n, «at» := cursor } j = cell s j
+but is expected to have type
+  cell { idx := s.idx.set w parent, val := s.val.set w digest, n := s.n, «at» := cursor } (0 + j) = cell s (0 + j)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLive.lean:39:49: error: unsolved goals
+s : reference.Scratch
+w : Usize
+parent : U32
+digest : Digest
+cursor : Usize
+wb : ↑w < 16
+lastEq :
+  cell { idx := s.idx.set w parent, val := s.val.set w digest, n := s.n, «at» := cursor } ↑w =
+    if True then (↑parent, digest) else cell s ↑w
+prefixEq :
+  List.map (fun j => cell { idx := s.idx.set w parent, val := s.val.set w digest, n := s.n, «at» := cursor } j)
+      (List.range ↑w) =
+    List.map (fun j => cell s j) (List.range ↑w)
+⊢ List.map (fun j => cell s j) (List.range ↑w) ++ [if True then (↑parent, digest) else cell s ↑w] =
+    List.map (fun j => cell s j) (List.range ↑w) ++ [(↑parent, digest)]
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLive.lean:47:13: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵ ̵at lastEq
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConePhysicalLive.write_cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConePhysicalLive.write_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConePhysicalLive.unread' depends on axioms: [propext, Classical.choice, Quot.sound]

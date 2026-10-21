@@ -689,3 +689,35 @@ zero swaps. All five individual reports have standard axioms only; complete
 revision/hash/dependency/command fields are retained in the module receipt and
 manifest. Attempt 1 is an elaboration diagnostic. No shared objects or shipped
 files changed, and no runtime or ELF regression was triggered.
+
+## Continuation 5, stage 1b / 2b: physical node Program and opening views
+
+`MultiproofConePhysicalProgram` supplies an actual free Program over physical
+three-component byte-slice addresses and 32-byte array answers. `writer` asks
+before mutating idx/val/cursor; `node` retains every checked array/scalar/range
+Result and short rejection. `node_result` proves its returned Result equals
+the actual extracted binary_step on ALL scratch/slice inputs, under only the
+explicit oracle interpretation equation. It does not assume the physical
+Live relation, successful execution, sortedness or a model RowJoin. The raw
+Program is not yet transported to the frozen Bytes/State signature or proved
+equal to runLevel; production adoption still uses the verified one-call P6
+observer boundary. Attempt 2: exit 0, 6.362917 s, 3643441152-byte RSS, zero
+swaps; all four individual reports are standard.
+
+`MultiproofConeOpeningAdapters.opening_view` identifies the checked physical
+range at 10055+832*pos, including its exact 832-byte content, assuming the
+explicit Parsed.wire/physical carrier equality and fixed source proof length.
+`selected_leaf` composes the sorted packed ordinal with that selected opening
+and the frozen leaf address for all three kinds. The actual leaf observer is
+reused unchanged; this adapter does not prove the complete batch leaf loop or
+its duplicate behavior. Attempt 1: exit 0, 4.737305 s, 3645390848-byte RSS,
+zero swaps; all three individual reports are standard.
+
+The manifest and receipts retain exact revisions, source/import hashes,
+commands, timing and complete axiom output. In-progress PhysicalNode/Live
+attempts are failed elaboration diagnostics, not certificates. Node attempt 6
+was edited during its failed compile; its snapshot was the version with the
+misplaced local option (as the parser error confirms), but it is excluded from
+all accepted evidence. compile5 now additionally checks source identity after
+compilation before marking any result current. No limits were raised, no
+shared objects were overwritten and no shipped files changed.

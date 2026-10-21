@@ -98,7 +98,8 @@ try:
     with (out / 'lean.log').open('w') as log, (out / 'time.log').open('w') as timing:
         result = subprocess.run(['/usr/bin/time', '-l', *argv],
                                 env={**os.environ, 'LEAN_PATH': path}, stdout=log, stderr=timing)
-    receipt.update(exit=result.returncode, wall_seconds=time.monotonic() - start)
+    receipt.update(exit=result.returncode, wall_seconds=time.monotonic() - start,
+                   source_unchanged=sha(source)==receipt['source_sha256'])
 finally:
     LOCK.rmdir()
 timing = (out / 'time.log').read_text()
@@ -109,8 +110,8 @@ receipt.update(peak_rss_bytes=int(re.search(r'(\d+)\s+maximum resident set size'
                log=str((out / 'lean.log').relative_to(ROOT)),
                time=str((out / 'time.log').relative_to(ROOT)),
                errors=[line for line in (log + '\n' + timing).splitlines() if 'error:' in line],
-               final_current=result.returncode == 0)
-if result.returncode == 0:
+               final_current=result.returncode == 0 and receipt['source_unchanged'])
+if result.returncode == 0 and receipt['source_unchanged']:
     obj = OBJECTS / (module.replace('.', '/') + '.olean')
     receipt.update(object_sha256=sha(obj), object_size=obj.stat().st_size)
 (out / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
@@ -123,4 +124,4 @@ manifest.write_text(json.dumps(data, indent=2) + '\n')
 print(log)
 print(json.dumps({k: receipt[k] for k in ['module', 'attempt', 'exit', 'wall_seconds',
                                         'peak_rss_bytes', 'swaps']}))
-sys.exit(result.returncode)
+sys.exit(result.returncode if receipt['source_unchanged'] else 2)
