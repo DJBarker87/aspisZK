@@ -132,9 +132,56 @@ array closures, their canonical arguments, and full Content.path from
 successful Parts (J9363, 3.11 s, 4,018,648 KiB, zero swap). Six and eight
 standard-axiom audits respectively. No path-array equality is assumed.
 
-## Stages 4–5: runtime and checker/retry
+`BuilderAppendArguments` identifies the actual output pair, append cursor
+bit, sibling selection and complete append-digest recursion, with totality.
+J9365: 2.11 s, 4,018,816 KiB, zero swap, eight audits.
+`BuilderBlockArguments` derives all source node-child arguments (J9369,
+4.40 s, 4,034,672 KiB, five audits). `BuilderBlockResult` identifies the
+complete actual 57-block writer and proves totality (J9372, 2.14 s,
+4,020,580 KiB, four audits). All statements are symbolic in raw words.
 
-In progress. Neither join is inferred from a component theorem.
+`BuilderBlockCollect` proves ordered bounded-range collection with a
+FiniteTrace induction and derives every block from the actual successful
+Parts call (J9374, 2.01 s, 4,029,068 KiB, three audits).
+`BuilderPartsComplete.content` supplies **all three** Content fields from
+`parts w p = ok pt`; `banks_columns` then supplies the actual merged-bank
+flag, every canonical cell and all shipped Vec columns without a Content
+premise. J9375: 1.82 s, 4,008,464 KiB, zero swap, two audits.
+All these accepted axiom audits contain only the permitted standard axioms.
+This completes the remaining Parts content obligation at the existing
+aggregate-extraction/std-model boundary. It does not prove semantic
+admission or equate the exploratory forest extraction with shipped Rust.
+
+## Stages 4–5: runtime and checker/retry obstruction
+
+The shipped RustRuntimeJoin remains uninhabited here. Parts content now
+supplies the entire structural bank/column computation, but successful
+shipped forest admission (including append/root and sentinel), complete
+Drop/owned-reference correspondence, and the concrete source instance map
+remain unavailable. The generated forest reference still contains 24
+unsupported externals and its validator equivalence attempts have no verdict.
+These are actual source-proof obstructions, not additional assumed joins.
+
+`BuilderRuntimeBoundary.zero_padding` derives an invariant of the exact
+RustRuntimeJoin. `no_mismatch_runtime_join` supplies a typed counterexample
+to dropping that premise for an arbitrary h: a unit-instance prover whose
+padding columns equal one cannot have any such join. J9354: 1.83 s,
+4,089,108 KiB, zero swap, two standard-axiom audits. This is not a claim that
+the shipped prover has that defect. It explains why replacing the missing
+source inhabitant by a theorem for every h would be false.
+
+The source experiments, observer and randomness in the endpoint also remain
+arbitrary. The inherited checked BuilderExecutionBoundary counterexample
+still prevents deriving a fixed-event ModelExecutionJoin from builder
+facts. No concrete P_chk/P_R1, pole/VR1, masks, retry/non-Rejected errors,
+publication, serialization or reached-query execution law is constructed.
+The real and ideal fixed-event joins are retained; no arbitrary bad event,
+canonical-h substitution or fabricated coupling removes them.
+
+`PrivacyR1FinalReleaseSource4` builds on Source3 and imports the completed
+Parts and observation/boundary results. Its binders and complete conclusion
+are unchanged, including freshness and strict <2^-100. The deletion-only
+diff has zero deletions; no weakening or completed source release is claimed.
 
 ## Resource and provenance
 
@@ -142,3 +189,102 @@ All task jobs use MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64,
 with reservation guards below the host's 55 GiB allowance and the required
 linker flag. No other worker is interrupted. No wallet or key cleanup is
 performed. No frozen ELF rebuild is required unless a shipped file changes.
+
+## Verbatim endpoint signature audit
+
+No complete runtime or execution join was discharged. The binder/conclusion
+diff is empty, excluding the theorem name: deletion-only with zero deletions,
+not a strict weakening. No new or stronger premise is introduced. The error,
+freshness term and strict <2^-100 conclusion are byte-identical.
+
+Before, verbatim:
+
+```lean
+theorem privacy_R1_release_source3
+    (seed : R1ProverP K CommitHandle Aux F
+      (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+    (hB : R0Z.K4.PackField B)
+    (R_source_records_admission_banks_transport : BuilderRuntimeJoin.RustRuntimeJoin h)
+    (cF : ℕ)
+    (R_commit_equal_fibres : ∀ τ : Tape K F, (Finset.univ.filter
+      (fun e : (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ → OracleAnswer) × (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ → OracleAnswer) =>
+        ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2 = some τ)).card = cF)
+    (L₁ L₂ : ℕ) (R_commit_exhaustion : RExh (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂)
+    (R_commit_counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (R_commit_counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
+    (R_commit_stream₁ : 16 * L₁ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ * 8)
+    (R_wire_coin_carrier : ((wire base ((base.pubBytes x).length) h B outputs x).toWire).Cm ≃ (RIdx → OracleAnswer))
+    (R_wire_D80_batches : RWireBatches (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver)
+    (R_wire_D80_ordered_log : ∀ (w : (h).Instance) (sec : SecP) (d : OracleAnswer)
+      (τ : Tape K F) (roots : Fin 3 → OracleAnswer) (rest : RIdx → OracleAnswer) (ch : Challenges K),
+      ((wire base ((base.pubBytes x).length) h B outputs x).toWire).comLog (R_wire_coin_carrier.symm rest) roots (view h B outputs x w ch τ) ch =
+        (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).openList ch).map (fun c =>
+          (gram (((wire base ((base.pubBytes x).length) h B outputs x).toWire).pubBytes x) ((wire base ((base.pubBytes x).length) h B outputs x).toWire).vtag (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).leafVal h w x τ ch) sec d rest
+            (cposOf (E₁ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁) (E₂ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂) c), ansC roots rest c)))
+    (R_commit_cell_count : RCommitCount L₁ L₂)
+    (R_commit_blocks₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2 * L₁) (R_commit_blocks₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2 * L₂)
+    (source : FSExperiments K CommitHandle Aux R1Bat F)
+    [Fintype source.RealRand] [Nonempty source.RealRand]
+    [Fintype source.IdealRand] [Nonempty source.IdealRand]
+    (observer_program : source.Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+    (R_wire_builder_checker_D75_retry : ∀ (adv : source.Adversary) (w : (h).Instance),
+      (h).public w = x.1 → ModelExecutionJoin
+        (realTest h B outputs source adv x w)
+        (realTest h B outputs (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide)
+          (P_R1 (h).transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w) (QueryScanRealLazyBound.realBad (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 h B outputs x w))
+    (G_sim_R_wire : ∀ adv : source.Adversary, ModelExecutionJoin
+      (idealTestS source adv x (simE (h).transport B outputs x))
+      (idealTestS (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide) (P_R1 (h).transport B hB) (fun h' => VR1 h'))
+        (RomObserverBin.observerMap source observer_program adv) x (simE (h).transport B outputs x)) (QueryScanIdealHistory.selectedBad)) :
+    ZK_FSS h B outputs source x (simE (h).transport B outputs x)
+      (modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1)) ∧
+    modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) ∧
+    modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) < 1 / 2^100
+```
+
+After, verbatim:
+
+```lean
+theorem privacy_R1_release_source4
+    (seed : R1ProverP K CommitHandle Aux F
+      (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+    (hB : R0Z.K4.PackField B)
+    (R_source_records_admission_banks_transport : BuilderRuntimeJoin.RustRuntimeJoin h)
+    (cF : ℕ)
+    (R_commit_equal_fibres : ∀ τ : Tape K F, (Finset.univ.filter
+      (fun e : (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ → OracleAnswer) × (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ → OracleAnswer) =>
+        ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2 = some τ)).card = cF)
+    (L₁ L₂ : ℕ) (R_commit_exhaustion : RExh (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂)
+    (R_commit_counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (R_commit_counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
+    (R_commit_stream₁ : 16 * L₁ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ * 8)
+    (R_wire_coin_carrier : ((wire base ((base.pubBytes x).length) h B outputs x).toWire).Cm ≃ (RIdx → OracleAnswer))
+    (R_wire_D80_batches : RWireBatches (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver)
+    (R_wire_D80_ordered_log : ∀ (w : (h).Instance) (sec : SecP) (d : OracleAnswer)
+      (τ : Tape K F) (roots : Fin 3 → OracleAnswer) (rest : RIdx → OracleAnswer) (ch : Challenges K),
+      ((wire base ((base.pubBytes x).length) h B outputs x).toWire).comLog (R_wire_coin_carrier.symm rest) roots (view h B outputs x w ch τ) ch =
+        (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).openList ch).map (fun c =>
+          (gram (((wire base ((base.pubBytes x).length) h B outputs x).toWire).pubBytes x) ((wire base ((base.pubBytes x).length) h B outputs x).toWire).vtag (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).leafVal h w x τ ch) sec d rest
+            (cposOf (E₁ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁) (E₂ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂) c), ansC roots rest c)))
+    (R_commit_cell_count : RCommitCount L₁ L₂)
+    (R_commit_blocks₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2 * L₁) (R_commit_blocks₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2 * L₂)
+    (source : FSExperiments K CommitHandle Aux R1Bat F)
+    [Fintype source.RealRand] [Nonempty source.RealRand]
+    [Fintype source.IdealRand] [Nonempty source.IdealRand]
+    (observer_program : source.Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+    (R_wire_builder_checker_D75_retry : ∀ (adv : source.Adversary) (w : (h).Instance),
+      (h).public w = x.1 → ModelExecutionJoin
+        (realTest h B outputs source adv x w)
+        (realTest h B outputs (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide)
+          (P_R1 (h).transport B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w) (QueryScanRealLazyBound.realBad (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 h B outputs x w))
+    (G_sim_R_wire : ∀ adv : source.Adversary, ModelExecutionJoin
+      (idealTestS source adv x (simE (h).transport B outputs x))
+      (idealTestS (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide) (P_R1 (h).transport B hB) (fun h' => VR1 h'))
+        (RomObserverBin.observerMap source observer_program adv) x (simE (h).transport B outputs x)) (QueryScanIdealHistory.selectedBad)) :
+    ZK_FSS h B outputs source x (simE (h).transport B outputs x)
+      (modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1)) ∧
+    modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) ∧
+    modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver + 1) < 1 / 2^100
+```
