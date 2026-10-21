@@ -1,0 +1,48 @@
+import PointStageSpecM10
+import BankStageSpecM10
+import PostStageSpecM10
+import StageGuardM10
+
+/-! Complete GS continuation, composed exclusively through opaque StageSpecs.
+The type exposes eager functions and numerical budgets, never concrete runs. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ComposedContinuationSpecM10
+open AspisWideTower AspisPool.AlgorithmicCircleDecoderV7 GSFixedInputDecoderFamily
+open AbstractStageSpecM10 GSPostProcessWorkM10
+attribute [local irreducible] GSByteJointSpendExtractor.extract GSConcreteByteDecoderBank.run
+  AspisWide.GSConcreteReceivedWordInputs.fromWords GSPostProcessCompleteM10.budget
+  GSPointBatchWorkM10.budget GSByteBankWorkM10.budget
+  LiteralComputedCandidateExtract.extract GSByteJointSpendExtractor.decodedLists
+
+@[irreducible] def spec (image : PublicImage) (C : Nat) (hi : PublicImageBound image C)
+    (pub : R0P.Public AspisV8R15.ExactTowerBase.M31Exact)
+    (W : Fin 29 → InitialWord WideExact) (coins : GSConcreteByteDecoderBank.RawCoins) :=
+  seq (StageGuardM10.guard (pub.nextPairIndex < 2^64) PointStageSpecM10.spec)
+    (seq (StageGuardM10.guard (pub.nextPairIndex < 2^64) (BankStageSpecM10.spec coins))
+      (PostStageSpecM10.spec image C hi pub W))
+
+@[never_extract,noinline] def budget (C : Nat) : Nat :=
+  GSPointBatchWorkM10.budget+(BankStageLawsM10.budget+GSPostProcessCompleteM10.budget C+1)+1
+
+theorem value (image : PublicImage) (C : Nat) (hi : PublicImageBound image C)
+    (pub : R0P.Public AspisV8R15.ExactTowerBase.M31Exact)
+    (W : Fin 29 → InitialWord WideExact) (V : Fin 5 → FinalWord WideExact)
+    (coins : GSConcreteByteDecoderBank.RawCoins) :
+    ((spec image C hi pub W coins).run (W,V)).1 = GSByteJointSpendExtractor.extract pub W V coins := by
+  have h := (spec image C hi pub W coins).value (W,V)
+  unfold GSByteJointSpendExtractor.extract
+  rw [BankStageLawsM10.eager,Option.bind_some] at h
+  exact h
+
+theorem work (image : PublicImage) (C : Nat) (hi : PublicImageBound image C)
+    (pub : R0P.Public AspisV8R15.ExactTowerBase.M31Exact) (hp : pub.nextPairIndex < 2^64)
+    (W : Fin 29 → InitialWord WideExact) (V : Fin 5 → FinalWord WideExact)
+    (coins : GSConcreteByteDecoderBank.RawCoins) :
+    ((spec image C hi pub W coins).run (W,V)).2 ≤ budget C :=
+  (spec image C hi pub W coins).work 0 (W,V) ⟨True.intro,hp⟩
+
+#print axioms value
+#print axioms work
+end AspisR1.ComposedContinuationSpecM10
+end

@@ -1,0 +1,31 @@
+import StagePackM10
+import GSByteBankWorkM10
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.BankStageSpecM10
+open AspisWideTower GSFixedInputDecoderFamily AbstractStageSpecM10
+attribute [local irreducible] GSByteBankWorkM10.run GSByteBankWorkM10.budget
+  GSConcreteByteDecoderBank.run
+
+@[irreducible] def spec (coins : GSConcreteByteDecoderBank.RawCoins) :
+    StageSpec (fun inputs : Inputs WideExact 5 => GSConcreteByteDecoderBank.run inputs coins)
+      (fun _ => True) GSBankOutputEnvelopeM10.Bounded (fun _ => GSByteBankWorkM10.budget+1) :=
+  StagePackM10.pack
+    (fun inputs : Inputs WideExact 5 => GSConcreteByteDecoderBank.run inputs coins)
+    (fun _ => True) GSBankOutputEnvelopeM10.Bounded (fun _ => GSByteBankWorkM10.budget+1)
+    (fun inputs => GSByteBankWorkM10.run inputs coins)
+    (fun inputs => GSByteBankWorkM10.value inputs coins)
+    (StagePackM10.const_work _ _ (fun inputs => GSByteBankWorkM10.work inputs coins))
+    (fun inputs out _ ho => GSByteBankWorkM10.bounded inputs coins out ho)
+
+theorem value (coins : GSConcreteByteDecoderBank.RawCoins) (inputs : Inputs WideExact 5) :
+    ((spec coins).run inputs).1 = GSConcreteByteDecoderBank.run inputs coins := (spec coins).value inputs
+
+theorem work (coins : GSConcreteByteDecoderBank.RawCoins) (L : Nat) (inputs : Inputs WideExact 5) :
+    ((spec coins).run inputs).2 ≤ GSByteBankWorkM10.budget+1 := (spec coins).work L inputs True.intro
+
+#print axioms value
+#print axioms work
+end AspisR1.BankStageSpecM10
+end

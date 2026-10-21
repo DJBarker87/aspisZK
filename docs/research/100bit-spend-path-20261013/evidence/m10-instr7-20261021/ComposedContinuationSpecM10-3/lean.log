@@ -1,0 +1,21 @@
+spec : (image : PublicImage) →
+  (C : ℕ) →
+    PublicImageBound image C →
+      (pub : R0P.Public AspisV8R15.ExactTowerBase.M31Exact) →
+        (W : Fin 29 → InitialWord WideExact) →
+          (coins : GSConcreteByteDecoderBank.RawCoins) →
+            StageSpec
+              (fun a =>
+                (some (AspisWide.GSConcreteReceivedWordInputs.fromWords a.1 a.2)).bind fun a =>
+                  (BankStageLawsM10.eager coins a).bind fun out =>
+                    LiteralComputedCandidateExtract.extract pub W (GSByteJointSpendExtractor.decodedLists W out))
+              (fun a => True ∧ pub.nextPairIndex < 2 ^ 64) (fun x => True) fun L =>
+              GSPointBatchWorkM10.budget + (BankStageLawsM10.budget + GSPostProcessCompleteM10.budget C + 1) + 1
+GSByteJointSpendExtractor.extract : R0P.Public AspisV8R15.ExactTowerBase.M31Exact →
+  (Fin 29 → InitialWord GSByteJointSpendExtractor.K) →
+    (Fin 5 → FinalWord GSByteJointSpendExtractor.K) → GSByteJointSpendExtractor.Coins → Option SpendRelation.Wspend
+/Users/dominic/ZK/.worktrees/cx-m10-instr7/docs/research/100bit-spend-path-20261013/lean/ComposedContinuationSpecM10.lean:35:101: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisR1.ComposedContinuationSpecM10.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ComposedContinuationSpecM10.work' depends on axioms: [propext, Classical.choice, Quot.sound]
