@@ -380,4 +380,29 @@ The evidence-domain change in `h_R16_instance`, `h_Rwire_tag` and `h_M10_log_len
 
 ### V2 focused validation
 
-Source and signature audit are prepared. A single focused local compile is scheduled with the successful M10Closed cache environment, private `/tmp/codex-cx-headline2-20261021-objects`, shared mkdir lock, `-j1 -M4400 -DElab.async=false`, and `/usr/bin/time -l`. The committed receipt will record all AGENTS.md formal-workflow section 6 fields, dependency fingerprint and full axioms lines. No manifest replay or dependency rebuild is requested.
+One focused local compile passed with the successful M10Closed cache environment, private `/tmp/codex-cx-headline2-20261021-objects`, shared mkdir lock, `-j1 -M4400 -DElab.async=false`, and `/usr/bin/time -l`. No manifest replay, dependency rebuild or second compiler invocation was performed.
+
+| AGENTS.md formal-workflow section 6 field | V2 attempt 1 |
+|---|---|
+| Exact target | `lean/R1FinalSoundnessHeadlineV2.lean`: `AspisR1.R1FinalSoundnessHeadlineV2.final_soundness` and `accepted_cost_cubic`, plus three adapters |
+| Exit status | 0 |
+| Wall time | 23.06824562512338 seconds, excluding lock wait |
+| Peak RSS | 3660333056 bytes |
+| Swaps | 0 |
+| Source revision | `122f2db4fa66df20a6d84f8caf76c5b1fe6df4cb` |
+| Source SHA-256 | `f3090391663242e2ada796d5ef65e47b4be1c4ebc1ac173decf49593be1ad7c2` |
+| Dependency/environment fingerprint | `0baa4b8796746305b9cc6a22d0579c16cb440adac4470a19085896518c180575` |
+
+Full `#print axioms` output:
+
+```
+'AspisR1.R1FinalSoundnessHeadlineV2.legacyStatements' does not depend on any axioms
+'AspisR1.R1FinalSoundnessHeadlineV2.legacyEvidence' does not depend on any axioms
+'AspisR1.R1FinalSoundnessHeadlineV2.ofLegacy' does not depend on any axioms
+'AspisR1.R1FinalSoundnessHeadlineV2.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R1FinalSoundnessHeadlineV2.accepted_cost_cubic' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+The compiler emitted two style warnings because `legacyEvidence` and `ofLegacy` are proof-valued definitions declared with `def`; both are axiom-free and the focused compile has no errors. The successful source is retained without a cosmetic edit or recompilation. Exact argv, complete ordered search path, direct import hashes, compiler/time logs and object SHA-256/size are in `evidence/headline2-20261021/manifest.json` and `R1FinalSoundnessHeadlineV2-1/`. No object or binary is committed. This is focused composition evidence against retained cached dependencies, not a coherent frozen-release replay.
+
+V2 composition and documentation are complete. The remaining source/model and runtime joins, 24 release evidence fields, and recorded log-length premise remain explicit as listed above.
