@@ -1,0 +1,143 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone3/docs/research/100bit-spend-path-20261013/lean/MultiproofConeModelBoundary.lean:18:42: warning: This simp argument is unused:
+  not_true_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [show 1̵%̵2̵=̵1̵1̲ ̲%̲ ̲2̲ ̲=̲ ̲1̲ from r̵f̵l̵,̵i̵f̵f̵_̵t̵r̵u̵e̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵]̵r̲f̲l̲,̲ ̲i̲f̲f̲_̲t̲r̲u̲e̲]̲ at parity
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone3/docs/research/100bit-spend-path-20261013/lean/MultiproofConeModelBoundary.lean:35:12: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+s : reference.Scratch
+left right : Std.Array U8 32#usize
+ni cursor : Usize
+index : U32
+w : Usize
+bound : ↑w < 16
+s1 : Slice U8
+_✝² : [> let s1 ← lift (Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice <]
+s1_post : s1 = (Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice
+s2 : Slice U8
+_✝¹ : [> let s2 ← lift left.to_slice <]
+s2_post : s2 = left.to_slice
+s3 : Slice U8
+_✝ : [> let s3 ← lift right.to_slice <]
+s3_post : s3 = right.to_slice
+s4 : Slice (Slice U8)
+_ : [> let s4 ← lift (Array.make 3#usize [s1, s2, s3] ⋯).to_slice <]
+s4_post : s4 = (Array.make 3#usize [s1, s2, s3] ⋯).to_slice
+⊢ (do
+      let digest ← D.digest hash s4
+      let i ← index / 2#u32
+      let a ← s.idx.update w i
+      let a1 ← s.val.update w digest
+      let i1 ← w + 1#usize
+      ok (reference.Row.Next { idx := a, val := a1, n := s.n, «at» := cursor } ni i1)) ⦃
+    out => ∃ next nw, out = reference.Row.Next next ni nw ⦄
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone3/docs/research/100bit-spend-path-20261013/lean/MultiproofConeModelBoundary.lean:47:44: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+s : reference.Scratch
+n : s.n = 2#usize
+index : U32
+_✝³ : [> let index ← s.idx.index_usize 0#usize <]
+value : Std.Array U8 32#usize
+_✝² : [> let value ← s.val.index_usize 0#usize <]
+i1 : Usize
+_✝¹ : [> let i1 ← 0#usize + 1#usize <]
+i1_post : ↑i1 = 0 + 1
+i2 : U32
+_✝ : [> let i2 ← s.idx.index_usize i1 <]
+i3 : U32
+_ : [> let i3 ← lift (index ^^^ 1#u32) <]
+first : ¬↑(↑s.idx)[0] = 1
+second : ¬↑(↑s.idx)[1] = 0
+index_post : index = (↑s.idx)[0]
+value_post : value = (↑s.val)[0]
+i2_post : i2 = (↑s.idx)[1]
+i3_post1 : ↑i3 = ↑(↑s.idx)[0] ^^^ 1
+i3_post2 : i3.bv = (↑s.idx)[0].bv ^^^ 1#32
+h✝ : ¬↑(↑s.idx)[1] = ↑(↑s.idx)[0] ^^^ 1
+⊢ ↑s.at = 0
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone3/docs/research/100bit-spend-path-20261013/lean/MultiproofConeModelBoundary.lean:47:44: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+s : reference.Scratch
+n : s.n = 2#usize
+index : U32
+_✝⁴ : [> let index ← s.idx.index_usize 0#usize <]
+value : Std.Array U8 32#usize
+_✝³ : [> let value ← s.val.index_usize 0#usize <]
+i1 : Usize
+_✝² : [> let i1 ← 0#usize + 1#usize <]
+i1_post : ↑i1 = 0 + 1
+i2 : U32
+_✝¹ : [> let i2 ← s.idx.index_usize i1 <]
+i3 : U32
+_✝ : [> let i3 ← lift (index ^^^ 1#u32) <]
+i5 : Usize
+_ : [> let i5 ← Slice.len ⟨[], ⋯⟩ - s.at <]
+first : ¬↑(↑s.idx)[0] = 1
+second : ¬↑(↑s.idx)[1] = 0
+index_post : index = (↑s.idx)[0]
+value_post : value = (↑s.val)[0]
+i2_post : i2 = (↑s.idx)[1]
+i3_post1 : ↑i3 = ↑(↑s.idx)[0] ^^^ 1
+i3_post2 : i3.bv = (↑s.idx)[0].bv ^^^ 1#32
+h✝ : ¬↑(↑s.idx)[1] = ↑(↑s.idx)[0] ^^^ 1
+i5_post1 : ↑i5 = 0
+i5_post2 : ↑s.at = 0
+⊢ False
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone3/docs/research/100bit-spend-path-20261013/lean/MultiproofConeModelBoundary.lean:47:24: warning: This simp argument is unused:
+  n
+
+Hint: Omit it from the simp argument list.
+  simp_all [n̵,̵first, ̲second]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone3/docs/research/100bit-spend-path-20261013/lean/MultiproofConeModelBoundary.lean:47:26: warning: This simp argument is unused:
+  first
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵n̵,̵f̵i̵r̵s̵t̵,̵s̵e̵c̵o̵n̵d̵]̵[̲n̲,̲ ̲s̲e̲c̲o̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone3/docs/research/100bit-spend-path-20261013/lean/MultiproofConeModelBoundary.lean:47:32: warning: This simp argument is unused:
+  second
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵n̵,̵f̵i̵r̵s̵t̵,̵s̵e̵c̵o̵n̵d̵]̵[̲n̲,̲ ̲f̲i̲r̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConeModelBoundary.paired_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeModelBoundary.descending_guards' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeModelBoundary.parent_produced' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.MultiproofConeModelBoundary.descending_source' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.MultiproofConeModelBoundary.descending_model' depends on axioms: [propext, Classical.choice, Quot.sound]

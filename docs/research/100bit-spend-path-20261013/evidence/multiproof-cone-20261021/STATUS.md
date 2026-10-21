@@ -435,3 +435,60 @@ one-node source equation and hash totality remain explicit. It is exact full
 Result/state equality to the extracted reference, not model ordered-log equality.
 All current theorem reports use standard axioms; failed elaboration receipts
 are retained and excluded from accepted evidence. No limits were raised.
+
+### Exact composition blocker and current endpoint
+
+`MultiproofConeModelBoundary.descending_source` proves that the actual extracted
+row hashes an occupied `(1,0)` prefix. `descending_model` proves frozen
+`runLevel 2 [(1,v),(0,w)] []` instead returns `(no reads, none)`. Such a scratch
+can satisfy the nonempty/bounded/cursor domain: take idx=[1,0,0,...],
+n=2, at=0 and an empty physical slice (digest scratch is arbitrary). `paired_iff` proves source XOR
+and frozen even/consecutive guards agree under strict ascending order. Thus
+promoting the new domain-preservation theorem directly into model RowJoin is
+**false** without a stronger invariant. This is not a reached-source bug:
+production validates the initial indices, and the invariant must then be proved
+through safe overwrites and each parent frontier. No assumption restricting
+actual adversarial input is introduced to bypass that obligation.
+
+The requested whole multiproof-cone join is therefore **not established**.
+Beyond physical window/frame adoption, the exact missing deliverable is a
+sorted live-prefix/scratch-suffix relation maintained by the actual node step,
+with matching ordered reads and model `runLevel`, then the initial-key/opening,
+leaf/count/padding/root byte/state adapters and both three-slot batches.
+`dV_frozen2` invokes the same `verifySlot_frozen` programs in batch0 before
+checkpoint and batch1 after resume. No per-cone source signature/implementation
+instance, `ConeLogJoin`, or `AcceptedRunJoin` is manufactured. Caller lowering
+is excluded and remains with S2.
+
+Before/after premise audit: old `adopt_eighteen` takes an arbitrary *level*
+function, a whole-level equation, and successful-level preservation. New
+`NodeAdoption.eighteen_eq` takes a *node Step*, defines its level by bounded
+iteration, retains one-node equality on RowDomain, and derives level equality
+and preservation. It adds explicit `HashTotal`. This is a checked construction
+for that source-level carrier, not an unqualified weakening of the old theorem
+for arbitrary level functions. The window Kani gates do not alone instantiate
+the physical one-node equation. P6 operational/library correspondence and
+source/model log/refinement remain proof obligations, not cryptographic axioms.
+
+The current two-transaction headline and its cone consumer were imported in
+`MultiproofConeNodeFreeze`, attempt 1: exit 0, 19.014795 s, 3533914112-byte
+peak RSS, zero swaps, source revision `e0661080a`. All 14 anchor reports have
+standard axioms only. Every new authored theorem also has its own report;
+receipts pin exact source hashes, imports, command, revision and metrics.
+This is focused compatible cache reuse, not a coherent release replay.
+The old 19-root/parser/sort/leaf/runtime evidence is reused for unchanged
+executable bodies; no unchanged full regression or failed binary gate ran.
+
+No shipped crate, Session A candidate or sibling module changed. The only
+existing generated Rust-body change is proof-copy `root_matches` visibility;
+its body remains exact. No frozen ELF rebuild was triggered or identity
+measurement claimed. No wallet or key was touched; no push or merge occurred.
+
+Current focused audit:
+
+```sh
+python3 -B tools/multiproof-cone-20261021/audit-node.py
+```
+
+Its receipt is `audit-node-result.json`. The preceding audits are historical
+checkpoints, not claims that the timed-out full-state contracts became verified.
