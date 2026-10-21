@@ -742,3 +742,40 @@ authenticated checkpoint/proof context: tx2_common contains no strict scanner.
 Neither condition may be silently inferred from arbitrary ResumeOps or from
 tx2 success alone. The concrete-reader/resume connection is being proved;
 the scanner/checkpoint context remains an upstream integration boundary.
+
+## Complete emitted settlement body reaches the twelve S4 results
+
+The complete emitted tx2_common body, including every residual branch and
+the inline post-query suffix, is now copied into a typed operation cut and
+compared token-for-token with its pinned generated body under a declared
+callee/constant substitution map. This supersedes the earlier ordered-marker
+evidence for the hand-cut resume/prefix/complete wrapper. No arbitrary
+`complete` suffix port occurs in this new body. Its success-inversion theorem
+derives the same successful resume, split cursor, powers array, geometry,
+pending state and actual selected query-loop success. Packet:
+`evidence/s4-tx2-full-source-owned-cut-v1-20261021`.
+Focused compile:exit0,7.053s,peak RSS4,095,246,336 bytes,zero swaps,standard
+axioms, captured launch revision8b9811238.
+
+`AspisR1S4FullTx2CandidateFieldsRootV1.full_tx2_source_cut_success_twelve_actual_fields`
+installs split10, the existing source-powers interface and the actual
+candidate query callback in that complete body. From one successful common
+caller execution it derives all twelve actual query calls and, for each,
+CandidateQueryFieldEvidence plus the successful opening/dots callback and
+eight coordinate bounds on that exact returned array. The same source
+powers result supplies ClaimPowers and its array correspondence. The theorem
+does not assume an independently successful prefix, query loop, initial
+cursor or powers call. The wrapper theorem reaches that same complete body
+from authenticated-wrapper success. Packet:
+`evidence/s4-full-tx2-candidate-fields-root-v1-20261021`.
+Focused compile:exit0,6.777s,peak process RSS4,060,282,880 bytes,zero swaps,
+standard axioms, captured launch revision8b9811238.
+
+The remaining contracts are not hidden: canonical gamma from the same
+resume and prior same-proof strict scan are explicit; non-S4 Ops are still
+operation boundaries, and S1 must bind the chosen powers implementation to
+the installed source-powers interface. Exact body preservation does not
+discharge concrete child-operation semantics. The candidate remains
+unadopted and the B1 performance failure is unchanged. These results remove
+the synthetic-prefix caller premise but do not close frozen-source S4 or
+the implementation-linked100-bit theorem.
