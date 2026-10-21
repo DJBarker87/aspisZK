@@ -1,0 +1,32 @@
+import CheckpointBytes3Word
+
+set_option autoImplicit false
+namespace AspisR1.CheckpointBytes3WordMath
+open Aeneas Aeneas.Std Result
+open CheckpointBytes3Word
+
+theorem pack_append (a b c d : U8) :
+    (pack a b c d).bv = d.bv ++ c.bv ++ b.bv ++ a.bv := by
+  change (a.bv.setWidth 32) ||| ((b.bv.setWidth 32) <<< 8) |||
+    ((c.bv.setWidth 32) <<< 16) ||| ((d.bv.setWidth 32) <<< 24) = _
+  have h := BitVec.setWidth_append_append_append_eq_shiftLeft_setWidth_or
+    (b := d.bv) (b' := c.bv) (b'' := b.bv) (b''' := a.bv) (w'''' := 32)
+  simp only [BitVec.setWidth_eq] at h
+  rw [h]
+  ac_rfl
+
+theorem pack_value (a b c d : U8) :
+    (pack a b c d).val = a.val + 256*b.val + 65536*c.val + 16777216*d.val := by
+  change (pack a b c d).bv.toNat = _
+  rw [pack_append]
+  simp only [BitVec.toNat_append]
+  rw [← Nat.shiftLeft_add_eq_or_of_lt a.bv.isLt,
+    ← Nat.shiftLeft_add_eq_or_of_lt b.bv.isLt,
+    ← Nat.shiftLeft_add_eq_or_of_lt c.bv.isLt]
+  simp only [Nat.shiftLeft_eq]
+  change ((d.val * 256 + c.val) * 256 + b.val) * 256 + a.val = _
+  omega
+
+#print axioms pack_append
+#print axioms pack_value
+end AspisR1.CheckpointBytes3WordMath
