@@ -2,55 +2,7 @@
   "schema": "s2-kani-host-v1",
   "attempts": [
     {
-      "source_revision": "5b6193eec1057e57895b5647e3dc6e01a6a95147",
-      "command": [
-        "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
-        "cargo",
-        "--preset",
-        "aeneas",
-        "--mir",
-        "built",
-        "--sysroot",
-        "default",
-        "--start-from",
-        "crate::header_reference",
-        "--dest-file",
-        "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/header-extraction/S2Header.llbc",
-        "--",
-        "--manifest-path",
-        "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/reference/Cargo.toml",
-        "--offline",
-        "--release",
-        "--lib",
-        "--jobs",
-        "1"
-      ],
-      "cwd": "/home/dombarker",
-      "expected_time": "Pinned charon translation of optimized numeric helper bodies; no arithmetic execution",
-      "exit_status": 101,
-      "wall_seconds": 0.004,
-      "peak_rss_kib": 5808,
-      "swaps": 0,
-      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r10e0ccc473e7449a94cb8976a5ed693d.scope",
-      "limits": {
-        "memory.high": "6442450944",
-        "memory.max": "8589934592",
-        "memory.swap.max": "0",
-        "pids.max": "64"
-      },
-      "cgroup_memory_peak_bytes": 7888896,
-      "env": {
-        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/charon-target",
-        "CARGO_BUILD_JOBS": "1",
-        "CARGO_NET_OFFLINE": "true",
-        "SBF_TRACE_DIR": null
-      },
-      "print_axioms": "N/A: no Lean compilation",
-      "attempt": "header-charon-1",
-      "receipt": "docs/research/100bit-spend-path-20261013/evidence/s2-kani-20261021/host-receipts/header-charon-1/receipt.json"
-    },
-    {
-      "source_revision": "5b6193eec1057e57895b5647e3dc6e01a6a95147",
+      "source_revision": "c877c98a6e64779fed96a6fb65506c63c54e2318",
       "command": [
         "timeout",
         "180",
@@ -69,18 +21,18 @@
       ],
       "cwd": "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/crate",
       "expected_time": "Kani compilation and bounded proofs comparison; no dense arithmetic; timeout 180s",
-      "exit_status": 0,
-      "wall_seconds": 4.086,
-      "peak_rss_kib": 381076,
+      "exit_status": 1,
+      "wall_seconds": 0.151,
+      "peak_rss_kib": 108412,
       "swaps": 0,
-      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r6adb55d331d442d5ba91b5c7757fbe21.scope",
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rf83438c9bea240b0867570fa609239fc.scope",
       "limits": {
         "memory.high": "6442450944",
         "memory.max": "8589934592",
         "memory.swap.max": "0",
         "pids.max": "64"
       },
-      "cgroup_memory_peak_bytes": 294858752,
+      "cgroup_memory_peak_bytes": 36319232,
       "env": {
         "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/target",
         "CARGO_BUILD_JOBS": "4",
@@ -88,8 +40,92 @@
         "SBF_TRACE_DIR": null
       },
       "print_axioms": "N/A: no Lean compilation",
-      "attempt": "header-v1",
-      "receipt": "docs/research/100bit-spend-path-20261013/evidence/s2-kani-20261021/host-receipts/header-v1/receipt.json"
+      "attempt": "callers-v1",
+      "receipt": "docs/research/100bit-spend-path-20261013/evidence/s2-kani-20261021/host-receipts/callers-v1/receipt.json"
+    },
+    {
+      "source_revision": "c877c98a6e64779fed96a6fb65506c63c54e2318",
+      "command": [
+        "timeout",
+        "180",
+        "cargo",
+        "kani",
+        "-j",
+        "4",
+        "--harness",
+        "proofs",
+        "-Z",
+        "unstable-options",
+        "--output-format",
+        "terse",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/crate",
+      "expected_time": "Kani compilation and bounded proofs comparison; no dense arithmetic; timeout 180s",
+      "exit_status": 1,
+      "wall_seconds": 93.193,
+      "peak_rss_kib": 6307920,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r7342140291fb4e21a4b12a33ccb3655e.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 6566875136,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation",
+      "attempt": "callers-v2",
+      "receipt": "docs/research/100bit-spend-path-20261013/evidence/s2-kani-20261021/host-receipts/callers-v2/receipt.json"
+    },
+    {
+      "source_revision": "c877c98a6e64779fed96a6fb65506c63c54e2318",
+      "command": [
+        "timeout",
+        "120",
+        "cargo",
+        "kani",
+        "-j",
+        "4",
+        "--harness",
+        "proofs",
+        "-Z",
+        "unstable-options",
+        "--output-format",
+        "terse",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/crate",
+      "expected_time": "Kani compilation and bounded proofs comparison; no dense arithmetic; timeout 120s",
+      "exit_status": 0,
+      "wall_seconds": 2.714,
+      "peak_rss_kib": 205184,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rc2a0cf68f6a34422b2e7bdafd0b435d3.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 192995328,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation",
+      "attempt": "callers-v3",
+      "receipt": "docs/research/100bit-spend-path-20261013/evidence/s2-kani-20261021/host-receipts/callers-v3/receipt.json"
     },
     {
       "source_revision": "5b6193eec1057e57895b5647e3dc6e01a6a95147",
@@ -160,6 +196,54 @@
       ],
       "cwd": "/home/dombarker",
       "expected_time": "Pinned charon translation of optimized numeric helper bodies; no arithmetic execution",
+      "exit_status": 101,
+      "wall_seconds": 0.004,
+      "peak_rss_kib": 5808,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r10e0ccc473e7449a94cb8976a5ed693d.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 7888896,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/charon-target",
+        "CARGO_BUILD_JOBS": "1",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation",
+      "attempt": "header-charon-1",
+      "receipt": "docs/research/100bit-spend-path-20261013/evidence/s2-kani-20261021/host-receipts/header-charon-1/receipt.json"
+    },
+    {
+      "source_revision": "5b6193eec1057e57895b5647e3dc6e01a6a95147",
+      "command": [
+        "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--mir",
+        "built",
+        "--sysroot",
+        "default",
+        "--start-from",
+        "crate::header_reference",
+        "--dest-file",
+        "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/header-extraction/S2Header.llbc",
+        "--",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/reference/Cargo.toml",
+        "--offline",
+        "--release",
+        "--lib",
+        "--jobs",
+        "1"
+      ],
+      "cwd": "/home/dombarker",
+      "expected_time": "Pinned charon translation of optimized numeric helper bodies; no arithmetic execution",
       "exit_status": 0,
       "wall_seconds": 0.132,
       "peak_rss_kib": 104192,
@@ -181,6 +265,48 @@
       "print_axioms": "N/A: no Lean compilation",
       "attempt": "header-charon-2",
       "receipt": "docs/research/100bit-spend-path-20261013/evidence/s2-kani-20261021/host-receipts/header-charon-2/receipt.json"
+    },
+    {
+      "source_revision": "5b6193eec1057e57895b5647e3dc6e01a6a95147",
+      "command": [
+        "timeout",
+        "180",
+        "cargo",
+        "kani",
+        "-j",
+        "4",
+        "--harness",
+        "proofs",
+        "-Z",
+        "unstable-options",
+        "--output-format",
+        "terse",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/crate",
+      "expected_time": "Kani compilation and bounded proofs comparison; no dense arithmetic; timeout 180s",
+      "exit_status": 0,
+      "wall_seconds": 4.086,
+      "peak_rss_kib": 381076,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r6adb55d331d442d5ba91b5c7757fbe21.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 294858752,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s2-kani-20261021/target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation",
+      "attempt": "header-v1",
+      "receipt": "docs/research/100bit-spend-path-20261013/evidence/s2-kani-20261021/host-receipts/header-v1/receipt.json"
     }
   ]
 }

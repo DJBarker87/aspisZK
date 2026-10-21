@@ -1,0 +1,17 @@
+{
+  "schema": "s2-caller-source-cut-v1",
+  "revision": "c877c98a6e64779fed96a6fb65506c63c54e2318",
+  "sources": {
+    "programs/r1-cost-probe/src/lib.rs": "806264e5de0b54762872f72f129afad7c1ee5b71333c1a3375955dd8d6080172",
+    "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794"
+  },
+  "exact_bodies": {
+    "observer_before_cfg": "fn observer()->verifier::Observer {\n    #[cfg(feature=\"cu-profiling\")] {Some(mark)}\n    #[cfg(not(feature=\"cu-profiling\"))] {None}\n}",
+    "observer_off": "fn observer()->verifier::Observer {None}",
+    "first_decoded": "fn first_decoded(public:aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public<'_>,public_bytes:&[u8],proof:&[u8],k:usize)->Result<Vec<u8>,ProgramError>{\n    verifier::tx1(public,public_bytes,proof,k,SolanaDigest,observer()).map_err(error)\n}",
+    "tx2": "pub fn tx2<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8], hash: H, obs: Observer) -> Result<(), Error> {\n    parse_shape(proof)?;\n    canonical_scan(proof)?;\n    mark(obs, Phase::Parsed);\n    tx2_common(public_bytes, proof, checkpoint, hash, obs)\n}",
+    "tx2_authenticated": "pub fn tx2_authenticated<H: Digest32>(public_bytes: &[u8], proof: &[u8], checkpoint: &[u8], hash: H, obs: Observer) -> Result<(), Error> {\n    parse_shape(proof)?;\n    mark(obs, Phase::Parsed);\n    tx2_common(public_bytes, proof, checkpoint, hash, obs)\n}"
+  },
+  "code_sha256": "cf19782eb4613facfc1a5c62f57a23a87fe370e60cd2fe192b2742e47af01214",
+  "qualification": "Universal success/failure controls at opaque child boundaries. Trace preserves exact slice addresses/lengths, semantic token, k and None observer. Not equality of child implementations or AccountInfo execution."
+}
