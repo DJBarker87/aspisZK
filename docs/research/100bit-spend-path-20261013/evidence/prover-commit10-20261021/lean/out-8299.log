@@ -1,0 +1,16 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBackend.lean:21:4: error: `simp` made no progress
+case succ
+n : ℕ
+ih : ∀ (bits : BitVec (8 * n)), littleEndian (List.map UScalar.mk bits.toLEBytes) = bits.toNat
+bits : BitVec (8 * n + 8)
+⊢ littleEndian
+      (List.map UScalar.mk
+        (if 8 * n + 8 > 0 then BitVec.setWidth 8 bits :: (BitVec.setWidth (8 * n + 8 - 8) (bits >>> 8)).toLEBytes
+        else [])) =
+    bits.toNat
+'R1Z.ProverCommitOwnedDecoder.littleEndian_bits' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.littleEndian_counter' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.blockHash_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.blockHash_end' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

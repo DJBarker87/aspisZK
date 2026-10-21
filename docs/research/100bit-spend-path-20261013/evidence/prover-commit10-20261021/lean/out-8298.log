@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBackend.lean:12:9: error: unsolved goals
+case zero
+bits : BitVec (8 * 0)
+⊢ bits.toNat = 0
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBackend.lean:16:4: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBackend.lean:12:50: warning: This simp argument is unused:
+  BitVec.toNat_eq
+
+Hint: Omit it from the simp argument list.
+  simp [BitVec.toLEBytes, littleEndian,̵ ̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBackend.lean:35:57: error: unsolved goals
+n : ℕ
+answers : Fin n → OracleAnswer
+domain : Slice U8
+seed : Bytes32
+counter : U64
+bound : ↑counter < n
+⊢ ok ⟨List.ofFn fun i => BitVec.ofNat 8 (answers ⟨↑counter, ⋯⟩ i).toNat#uscalar, ⋯⟩ =
+    ok (Array.make 32#usize (List.ofFn fun i => BitVec.ofNat 8 (answers ⟨↑counter, bound⟩ i).toNat#uscalar) ⋯)
+'R1Z.ProverCommitOwnedDecoder.littleEndian_bits' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.littleEndian_counter' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.blockHash_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.blockHash_end' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

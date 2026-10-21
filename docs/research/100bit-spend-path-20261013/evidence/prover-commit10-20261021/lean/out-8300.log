@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBackend.lean:21:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  littleEndian (List.map UScalar.mk (BitVec.toLEBytes ?bits))
+in the target expression
+  ↑(BitVec.setWidth 8 bits#uscalar) +
+      256 * littleEndian (List.map UScalar.mk (BitVec.setWidth (8 * n + 8 - 8) (bits >>> 8)).toLEBytes) =
+    bits.toNat
+
+case succ
+n : ℕ
+ih : ∀ (bits : BitVec (8 * n)), littleEndian (List.map UScalar.mk bits.toLEBytes) = bits.toNat
+bits : BitVec (8 * n + 8)
+⊢ ↑(BitVec.setWidth 8 bits#uscalar) +
+      256 * littleEndian (List.map UScalar.mk (BitVec.setWidth (8 * n + 8 - 8) (bits >>> 8)).toLEBytes) =
+    bits.toNat
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBackend.lean:20:46: warning: This simp argument is unused:
+  Nat.add_sub_cancel
+
+Hint: Omit it from the simp argument list.
+  simp only [if_pos (by omega : 8̵*̵n̵+̵8̵8̲ ̲*̲ ̲n̲ ̲+̲ ̲8̲ > 0), N̵a̵t̵.̵a̵d̵d̵_̵s̵u̵b̵_̵c̵a̵n̵c̵e̵l̵,̵ ̵List.map_cons, littleEndian]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitOwnedDecoder.littleEndian_bits' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.littleEndian_counter' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.blockHash_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.blockHash_end' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -42,3 +42,14 @@ in the per-attempt JSONL and verbatim logs. Excluded elaboration drafts are
 retained, never treated as formal evidence. Only new worker-owned modules are
 installed in the shared Env J source/object tree; their successive versions
 are snapshotted by the launcher. No peer-owned source is replaced.
+
+## Stage 3: finite oracle backend
+
+`ProverCommitOwnedBackend` proves little-endian byte decoding by symbolic
+induction on bit width, then proves that every extracted counter frame selects
+exactly its indexed supplied oracle block. The last block is included and every
+counter at or beyond the allocation fails. These statements do not unfold a
+large counter, sample stream or tape. J8305 passes all four printed axiom audits
+with the standard three axioms, zero swaps. Earlier backend elaboration drafts
+are retained as excluded attempts. This closes counter-frame parsing, not yet
+the state/cache position invariant or scalar-array fibre equality.
