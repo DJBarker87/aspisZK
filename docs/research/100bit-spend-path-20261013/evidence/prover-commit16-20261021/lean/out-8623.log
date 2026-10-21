@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReencode16.lean:104:68: error: unsolved goals
+CommitHandle Aux : Type
+v : View K CommitHandle Aux R1Bat
+ch : PhaseWireOrdered16.OrderedChallenges
+front suffix : List Entry
+entry : Fin 3 ⊕ RIdx → Entry
+width : front.length = TranscriptR1.schedule.length
+parsed : recover v (front ++ List.map entry (PhaseWireLog2Bin.opens ch.algebra) ++ suffix) = some ch
+⊢ (match recover v (front ++ (List.map entry (PhaseWireLog2Bin.opens ch.algebra) ++ suffix)) with
+    | none => front ++ (List.map entry (PhaseWireLog2Bin.opens ch.algebra) ++ suffix)
+    | some ch_1 =>
+      front ++
+        (reindex ch_1
+            (List.take (PhaseWireLog2Bin.opens ch_1.algebra).length
+                (List.map entry (PhaseWireLog2Bin.opens ch.algebra)) ++
+              List.take ((PhaseWireLog2Bin.opens ch_1.algebra).length - (PhaseWireLog2Bin.opens ch.algebra).length)
+                suffix) ++
+          (List.drop (PhaseWireLog2Bin.opens ch_1.algebra).length
+              (List.map entry (PhaseWireLog2Bin.opens ch.algebra)) ++
+            List.drop ((PhaseWireLog2Bin.opens ch_1.algebra).length - (PhaseWireLog2Bin.opens ch.algebra).length)
+              suffix))) =
+    front ++ (List.map entry (PhaseWireOrdered16.opens ch) ++ suffix)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReencode16.lean:105:16: warning: This simp argument is unused:
+  parsed
+
+Hint: Omit it from the simp argument list.
+  simp [encode, p̵a̵r̵s̵e̵d̵,̵ ̵← width, List.take_append, List.drop_append, reindex_map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReencode16.lean:105:69: warning: This simp argument is unused:
+  reindex_map
+
+Hint: Omit it from the simp argument list.
+  simp [encode, parsed, ← width, List.take_append, List.drop_append,̵ ̵r̵e̵i̵n̵d̵e̵x̵_̵m̵a̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitReencode16.fetch_map' depends on axioms: [propext]
+'R1Z.ProverCommitReencode16.reindex_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReencode16.recover_algebra' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReencode16.encode_parts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReencode16.privacy_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

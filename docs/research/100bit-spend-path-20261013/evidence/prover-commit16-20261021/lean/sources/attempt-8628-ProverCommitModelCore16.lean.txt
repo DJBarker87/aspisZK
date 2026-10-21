@@ -1,0 +1,96 @@
+import R1Z.ProverCommitFixedEndpoint
+import R1Z.ProverCommitFixedObserver
+/-! Explicit canonical admitted-domain specialization of the owned headline.
+This fixes the mathematical builder, not its outstanding shipped Rust identification. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitModelCore16
+attribute [local irreducible] PrivacyR1AcctBasis.basis PrivacyR1AcctBasis.packing_laws
+abbrev ownedDecode := ProverCommitOwnedDecoder.decoder (K := PrivacyR1AcctBasis.K)
+open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.FsAbort R0Z.FsGood R0Z.HvzkV R0Z.HvzkS R0Z.RefPayload
+  R1Z.Batched R1Z.PredicateR1 R1Z.MaskImageVR1 R1Z.PoleMassR1 R1Z.ModelsVR1 R1Z.SimulatorR1
+  R1Z.GamesR1 R1Z.Sem1UniformR1 R1Z.GamesR1PBin R1Z.CouplingR1PBin R1Z.EventsR1PBin R1Z.FinalR1PBin
+  R1Z.CommitReadsR1 R1Z.PremisesR1PBin R1Z.QueryScanPrivacyFinal R1Z.LayoutR1PBin
+attribute [local instance] Classical.propDecidable
+open R1Z.ProverCommitTapeCompletion
+open R1Z.PhaseProtocolInstanceBin R1Z.PrivacyR1Final R1Z.QueryScanHistorySplit
+open R1Z.PrivacyR1Headline
+local notation "K" => PrivacyR1AcctBasis.K
+local notation "F" => PrivacyR1AcctBasis.F
+local notation "B" => PrivacyR1AcctBasis.basis
+local notation "hB" => PrivacyR1AcctBasis.packing_laws
+local notation "L₁" => PrivacyR1AcctModel.L₁
+local notation "L₂" => PrivacyR1AcctModel.L₂
+attribute [local irreducible] ProverCommitSourceDecoder.L₁ ProverCommitSourceDecoder.L₂
+variable {CommitHandle Aux : Type}
+variable (template : R1Wire K CommitHandle Aux)
+
+local notation "log" => PhaseWireLog2Bin.log
+local notation "base" => PrivacyR1AcctModel.base template log
+local instance : CharP K 2147483647 :=
+  charP_of_injective_algebraMap (algebraMap (ZMod AspisCircleGroupOrder.P) K).injective
+    AspisCircleGroupOrder.P
+
+def input : HonestProver K := BuilderSource.prover
+
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+local notation "decode" => ownedDecode
+
+local notation "fib" => PhaseWireLog2Bin.fib
+local notation "opens" => PhaseWireLog2Bin.opens
+local notation "seed" => PrivacyR1AcctModel.seed
+  (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) decode fib opens
+open R1Z.PrivacyR1HeadlineWire2
+local notation "source" => fsR1P
+  (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x))
+  (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed))
+  8 eight_pos (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')
+local notation "coins" => PrivacyR1AcctModel.wire_coins template log h outputs x
+local notation "W" => R1Z.PhaseLocalityBin.R1PhaseWire.toWire
+  (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)
+local notation "Pr" => R1Z.PhaseLocalityBin.R1PhaseProver.toProver
+  (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)
+
+/-- The constructed model's uncharged core. Runtime transport may pay the
+fixed QueryScan/lazy events once, rather than pay them a second time. -/
+theorem core_privacy :
+    ZK_FSS h B outputs source x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError W Pr L₁ L₂) := by
+  intro adv w hw
+  obtain ⟨hpub, hs⟩ := PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises (x := x) w hw
+  have caller := ProverCommitOwnedEndpoint.caller_law template input outputs x
+  obtain ⟨hc₁,hc₂,hs₁,hs₂,hcount,hb₁,hb₂⟩ := ProverCommitCallerInstance.budgets Pr caller
+  let R : RomModel W := RomFiniteBin.rom (baseWire base) (RomGrammarBin.bound ((base.pubBytes x).length))
+  have hin : ∀ w : (h).Instance, RAddrIn W Pr R h B outputs x w :=
+    RomGrammarBin.address_domain (baseWire base) _ Pr h B outputs x
+      (PhaseProtocolCoverageBin.read_coverage base _ h B outputs x seed (Nat.le_refl _))
+  have hc : ∀ w : (h).Instance, RCausal W Pr h B outputs x w :=
+    fun w => (causal_iff W Pr h B outputs x w).mpr
+      (causal_premise base _ h B outputs x seed w)
+  have hb : RCommitBytes W Pr := PrivacyR1Final.commit_source W Pr
+    (PrivacyR1FinalProtocol.commitment_grammar base _ h B outputs x seed)
+  have hop := PrivacyR1Final.wire_batches W Pr (PhaseWireLog2Bin.batches input outputs x template decode)
+  have hcom := (com_log_iff W Pr hb coins h B outputs x).mpr
+    (PhaseWireLog2Bin.ordered_log input outputs x template decode)
+  have hz := R1Z.ProverCommitQuotientPrivacy.privacy_R1_games_quotient W Pr 8 eight_pos h B hB outputs x
+    hpub hs (rows01 base _ h B outputs x)
+    (R1J.PrivacySamplerSpend.samplerLaw_of_spend W (rows01 base _ h B outputs x)
+      (algebraMap R1J.SamplerLawSpend.QF K) (RingHom.injective _)
+      (sampler_source base _ h B outputs x))
+    R hin hc hb ProverCommitSourceDecoder.quotientFibreSize (by
+      intro τ
+      convert ProverCommitCallerInstance.fibres Pr caller τ using 2
+      ext e
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and]) L₁ L₂
+    (ProverCommitCallerInstance.exhaustion Pr caller)
+    hc₁ hc₂ hs₁ hs₂ coins hop hcom
+  have hm : ZK_FSS h B outputs source x (simE (h).transport B outputs x)
+      (modelError W Pr L₁ L₂) := by
+    simpa only [modelError, abR1P, abR1, Nat.cast_ofNat, Nat.cast_pow,
+      Nat.cast_zero, zero_mul, zero_div, pow_two] using hz
+  exact hm adv w hw
+
+#print axioms core_privacy
+end R1Z.ProverCommitModelCore16

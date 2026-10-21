@@ -3,7 +3,7 @@
 Base `d9c3ed7ab`; branch `codex/cx-prover-commit16-20261021`.
 No production source or concurrent-worker module is changed.
 
-## Stage 1 — explicit deployed premise
+## Stage 1 — initial explicit deployed premise (J8609)
 
 `PrivacyR1HeadlineDeployed.privacy_headline_deployed` quantifies an independent
 `rust : FSExperiments`, its finite randomness carriers and its observer program.
@@ -32,7 +32,7 @@ audits contain only `[propext, Classical.choice, Quot.sound]`. All jobs use
 were already present and skipped. No dependency object was rebuilt.
 Evidence: `docs/research/100bit-spend-path-20261013/evidence/prover-commit16-20261021/lean/`.
 
-Verbatim adopted source (including statement and proof):
+Verbatim initial source (superseded by the ordered deployed endpoint below):
 
 ```lean
 import R1Z.ProverCommitFixedEndpoint
@@ -191,7 +191,7 @@ must retain query order at `dec`/`chOf`, carry it through retry and ideal
 execution, and change the batch consumer accordingly. The generic
 postprocessing proof shows this adds no error *once joint transcript transport
 is supplied*; it does not establish that missing transport for the old
-set-only endpoint. The requested complete ordered headline is still open.
+set-only endpoint. At this stage the complete ordered headline was still open; the subsequent public reencoding model below preserves its error bound. Concrete source alignment remains open.
 
 J8610 failed on missing namespace and a reserved binder name; excluded.
 Changed J8611 passed all thirteen axiom audits with standard axioms only:
@@ -668,5 +668,673 @@ These are local serialization-section laws, not complete proof serialization,
 semantic-message framing, multiproof traversal, RustSerializationJoin or a
 Lean-to-Kani trusted import. The prefix is length three in these checks;
 universal prefix transport above concerns the extracted material collectors.
-The ordered-batch sorting/dedup block check remains pending.
+The combined ordered-batch sorting/dedup check timed out at 600 seconds.
+It was replaced by fixed-shape, source-valid 18-bit-key cases with unchanged
+caps; the first (batch A, plain keys, kissat) also timed out at 600 seconds.
+A smaller ordered-slicing/projection cut (before sort/dedup) timed out too.
+All three are excluded; no success or counterexample is inferred. No further
+fixed-shape cases were launched after that demonstrated solver obstruction.
+The receipt's /usr/bin/time peak RSS for timed-out parents omits killed
+children; the cgroup peaks below are the meaningful aggregate measurements.
 
+| Excluded target | Exit | Wall seconds | Parent peak RSS KiB | Cgroup peak bytes | Swap |
+|---|---:|---:|---:|---:|---:|
+| combined ordered batch | 124 | 600.003 | 15836 | 4210159616 | 0 |
+| fixed batch A plain | 124 | 600.003 | 16008 | 1002143744 | 0 |
+| ordered projection cut | 124 | 600.094 | 16016 | 6614953984 | 0 |
+
+These Kani jobs spend time in bounded symbolic verification, not native
+finite-field elimination. Their dev-profile compiler output is Kani's MIR
+input, not a debug arithmetic release gate. Native sampler validation uses
+an optimized release binary. No cap was raised; all scopes are unchanged.
+
+
+
+## Stage 4 — ordered public experiment and upgraded deployed endpoint
+
+The initial direct-carrier obstruction has a useful resolution for the model:
+its ROMView already includes the verifier transcript. `ProverCommitReencode16`
+recovers the retained QueryScan order from those public entries, validates
+length, distinctness and equality with the algebra's query set, then rebuilds
+the 10+12 logical opening log. Malformed parses follow an explicit total
+identity fallback. The decoder has no witness or private tape input.
+
+`reindex_map` proves the exact new list, with its new multiplicities, can be
+reconstructed from the old logical entries, since both cover the same global
+read set. No new oracle query is introduced. `recover_algebra` pins the
+projection. `encode_parts` proves the verifier transcript prefix and subsequent
+observer-query suffix are preserved at a validated parse.
+
+`experiment` wraps the adaptive observer's program **before** its queries and
+transforms the final ROMView and decision together. `privacy_transport` proves
+privacy for that transformed experiment with precisely the same ε; it is not
+an argument based on marginal laws. `PrivacyR1HeadlineOrdered16.privacy_headline_ordered`
+is the resulting model endpoint, with exactly the old error expression and
+numerical bounds. J8620 first passed the transport core; J8624 passes the
+completed prefix/suffix transport (exit 0, 5.05s, RSS 4149024 KiB, swap 0).
+J8621 first passed the headline; J8625 replays it after that imported source
+changed (exit 0, 8.10s, RSS 4184328 KiB, swap 0). These are changed dependency
+inputs, not unchanged regression reruns. J8619 and J8622–8623 are excluded
+syntax/normalization diagnostics; no failed declaration is adopted.
+
+The final `PrivacyR1HeadlineDeployed.RustProverRefinement` now targets this
+**ordered reencoded experiment**, replacing its initial legacy-log target.
+Its only theorem proof binder remains `refinement`. It quantifies an independent
+runtime and carries full public-run equality and observer decisions outside
+the same realBad/selectedBad, including the ideal simulator join.
+`privacy_headline_deployed` retains the original exact error expression, upper
+bound and < 2^-100 conclusion. There is no specialization that identifies
+Rust with the model in the adopted endpoint.
+
+To charge the exceptions once, `ProverCommitModelCore16.core_privacy` exposes
+the existing quotient model proof before the QueryScan/freshness allowances.
+`read_bound` and `real_bad_mass` keep the huge concrete read universe symbolic.
+The final proof transports that core through the ordered observer, applies
+the two supplied whole-run joins, and uses the original model-level
+`privacy_headline_admitted` numerical ledger. This is an extraction and
+composition of existing model arguments, not new source evidence or a
+reduction of the deployed obligation to a cryptographic assumption.
+
+J8626 and J8628 hit concrete-specialization heartbeats; J8629–8630 are excluded
+annotation syntax diagnostics. J8631 proves the abstract core; J8634 adds the
+symbolic read bound; J8637 adds the abstract fixed-event mass bound (exit 0,
+5.09s, RSS 4072708 KiB, swap 0). J8627 stopped at driver preflight because the
+failed J8626 had no imported object: no Lean invocation occurred, and its
+separate preflight receipt records unavailable resource fields as null.
+J8632–8636 are excluded concrete-ROM specialization diagnostics. The old
+reduction was replaced by named generic lemmas, not increased heartbeats or
+memory. J8638 reaches the composed bound but has an addition-orientation
+error; J8639 fixes it and removes diagnostic traces: exit 0, wall 16.97s,
+peak RSS 4106448 KiB, swap 0, revision `5ada24a62` plus exact source SHA.
+All adopted new audits use only subsets of the standard three axioms.
+
+The 10-split witness is also reproduced by the unchanged native source sampler:
+`sampler16-evidence.json`, revision `d863d8bc6`, exit 0, wall 8.05s,
+peak RSS 569964 KiB, zero swaps, cargo run --release --offline -j4, same
+6G/8G/no-swap/64-task cap and required RUSTFLAGS. It accepts both stable
+orders swapping positions 9 and 10; their sets agree and their sorted first
+batches differ. This is an arbitrary-squeeze-block source regression witness,
+not a cryptographic-hash preimage or a universal source refinement. The probe
+and all core sources/build script are pinned by hashes. #print axioms is N/A.
+
+Verbatim completed reencoding definitions and statements:
+
+```lean
+import R1Z.ProverCommitFixedEndpoint
+import R1Z.PhaseWireOrdered16
+/-! Public reindexing and adaptive-observer transport. The transformed games
+are constructed models, not a concrete Rust serialization certificate. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitReencode16
+open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.HvzkS R1Z.Batched
+  R1Z.GamesR1 R1Z.GamesR1PBin R1Z.CouplingR1PBin
+attribute [local instance] Classical.propDecidable
+
+/-- Select a logical read's bytes/answer from a previous encoding. -/
+def fetch {C V : Type} [DecidableEq C] : List C → List V → C → Option V
+  | a::tail, v::vs, c => if a = c then some v else fetch tail vs c
+  | _, _, _ => none
+
+theorem fetch_map {C V : Type} [DecidableEq C] (old : List C) (f : C → V)
+    (c : C) (hc : c ∈ old) : fetch old (old.map f) c = some (f c) := by
+  induction old with
+  | nil => exact False.elim (List.not_mem_nil hc)
+  | cons a old ih =>
+    simp only [List.map_cons, fetch]
+    by_cases ha : a = c
+    · subst a; simp only [if_true]
+    · rw [if_neg ha]
+      apply ih
+      rcases List.mem_cons.mp hc with he | he
+      · exact False.elim (ha he.symm)
+      · exact he
+
+local notation "K" => PrivacyR1AcctBasis.K
+local notation "F" => PrivacyR1AcctBasis.F
+local notation "B" => PrivacyR1AcctBasis.basis
+abbrev Entry := List UInt8 × OracleAnswer
+
+def reindex (ch : PhaseWireOrdered16.OrderedChallenges) (entries : List Entry) : List Entry :=
+  (PhaseWireOrdered16.opens ch).map (fun c =>
+    (fetch (PhaseWireLog2Bin.opens ch.algebra) entries c).getD ([], 0))
+
+/-- The complete new ordered log, with its new multiplicities, is reconstructed
+from the old log without any extra oracle query or private tape input. -/
+theorem reindex_map (ch : PhaseWireOrdered16.OrderedChallenges)
+    (entry : Fin 3 ⊕ RIdx → Entry) :
+    reindex ch ((PhaseWireLog2Bin.opens ch.algebra).map entry) =
+      (PhaseWireOrdered16.opens ch).map entry := by
+  apply List.map_congr_left
+  intro c hc
+  have hold : c ∈ PhaseWireLog2Bin.opens ch.algebra :=
+    (PhaseWireLog2Bin.opens_coverage ch.algebra c).mpr
+      ((PhaseWireOrdered16.opens_coverage ch c).mp hc)
+  rw [fetch_map _ entry c hold]
+  rfl
+
+/-- Recover the retained QueryScan order solely from public transcript entries.
+Validation also makes malformed/rejected inputs explicit. This is a total
+model decoder; source alignment of the transcript prefix is still required. -/
+def recover {CommitHandle Aux : Type} (v : View K CommitHandle Aux R1Bat)
+    (log : List Entry) : Option PhaseWireOrdered16.OrderedChallenges :=
+  let q : Fin 8 → OracleAnswer := fun k =>
+    (log[TranscriptR1.schedule.idxOf (.qb k)]?).getD ([], 0) |>.2
+  let order := ((PhaseSamplerParserBin.scanned
+    (PhaseQueryScanBin.stop PhaseSamplerParserBin.done q) q).1.accepted).map PhaseSamplerParserBin.fibre
+  if hl : order.length = 22 then
+    if hn : order.Nodup then
+      if hs : order.toFinset = v.1.challenges.queries then
+        some ⟨v.1.challenges, order, hl, hn, hs⟩
+      else none
+    else none
+  else none
+
+def encode {CommitHandle Aux : Type} (v : View K CommitHandle Aux R1Bat)
+    (log : List Entry) : List Entry :=
+  match recover v log with
+  | none => log
+  | some ch =>
+    let transcriptLength := TranscriptR1.schedule.length
+    let openingLength := (PhaseWireLog2Bin.opens ch.algebra).length
+    log.take transcriptLength ++ reindex ch ((log.drop transcriptLength).take openingLength) ++
+      log.drop (transcriptLength + openingLength)
+
+theorem recover_algebra {CommitHandle Aux : Type}
+    (v : View K CommitHandle Aux R1Bat) (log : List Entry)
+    (ch : PhaseWireOrdered16.OrderedChallenges) (hr : recover v log = some ch) :
+    ch.algebra = v.1.challenges := by
+  unfold recover at hr
+  dsimp only at hr
+  split at hr
+  · split at hr
+    · split at hr
+      · cases Option.some.inj hr
+        rfl
+      · cases hr
+    · cases hr
+  · cases hr
+
+/-- Exact prefix/suffix transport at a validated public parse. In particular
+reindexing neither changes nor discards an observer's later oracle queries. -/
+theorem encode_parts {CommitHandle Aux : Type}
+    (v : View K CommitHandle Aux R1Bat) (ch : PhaseWireOrdered16.OrderedChallenges)
+    (front suffix : List Entry) (entry : Fin 3 ⊕ RIdx → Entry)
+    (width : front.length = TranscriptR1.schedule.length)
+    (parsed : recover v (front ++ (PhaseWireLog2Bin.opens ch.algebra).map entry ++ suffix) = some ch) :
+    encode v (front ++ (PhaseWireLog2Bin.opens ch.algebra).map entry ++ suffix) =
+      front ++ (PhaseWireOrdered16.opens ch).map entry ++ suffix := by
+  unfold encode
+  rw [parsed]
+  simp [← width, List.take_append, List.drop_append, reindex_map]
+
+section Transport
+variable {CommitHandle Aux : Type}
+
+def mapView (encoding : View K CommitHandle Aux R1Bat → List Entry → List Entry)
+    (v : ROMView K CommitHandle Aux R1Bat) : ROMView K CommitHandle Aux R1Bat :=
+  ⟨v.disclosed, encoding v.disclosed v.observerOracle⟩
+
+def observer (encoding : View K CommitHandle Aux R1Bat → List Entry → List Entry)
+    (adv : R1Adv K CommitHandle Aux) : R1Adv K CommitHandle Aux where
+  prog := fun v log => adv.prog v (encoding v log)
+  decide := fun v => adv.decide (mapView encoding v)
+
+variable (W : R1Wire K CommitHandle Aux) (Pr : R1ProverP K CommitHandle Aux F W)
+  (N : Nat) (hN : 0 < N) (P : Challenges K → Prop)
+  (Vp : (h : HonestProver K) → Challenges K → h.Instance → Prop)
+local notation "model" => fsR1P W Pr N hN P Vp
+
+def experiment (encoding : View K CommitHandle Aux R1Bat → List Entry → List Entry) :
+    FSExperiments K CommitHandle Aux R1Bat F where
+  Adversary := R1Adv K CommitHandle Aux
+  RealRand := (model).RealRand
+  IdealRand := (model).IdealRand
+  real := fun h packing outputs adv x w r =>
+    mapView encoding ((model).real h packing outputs (observer encoding adv) x w r)
+  ideal := fun sim adv x r => mapView encoding ((model).ideal sim (observer encoding adv) x r)
+  observe := fun adv v => adv.decide v
+
+variable (encoding : View K CommitHandle Aux R1Bat → List Entry → List Entry)
+instance real_finite : Fintype (experiment W Pr N hN P Vp encoding).RealRand :=
+  inferInstanceAs (Fintype (model).RealRand)
+instance real_nonempty : Nonempty (experiment W Pr N hN P Vp encoding).RealRand :=
+  inferInstanceAs (Nonempty (model).RealRand)
+instance ideal_finite : Fintype (experiment W Pr N hN P Vp encoding).IdealRand :=
+  inferInstanceAs (Fintype (model).IdealRand)
+instance ideal_nonempty : Nonempty (experiment W Pr N hN P Vp encoding).IdealRand :=
+  inferInstanceAs (Nonempty (model).IdealRand)
+
+/-- Adaptive programs receive the reencoded prefix before querying. Both games
+and the final decision are transported together, with exactly the same ε. -/
+theorem privacy_transport (h : HonestProver K)
+    (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle)
+    (sim : Challenges K → Tape K F → View K CommitHandle Aux R1Bat) (ε : ℚ)
+    (private_model : ZK_FSS h B outputs model x sim ε) :
+    ZK_FSS h B outputs (experiment W Pr N hN P Vp encoding) x sim ε := by
+  intro adv w hw
+  exact private_model (observer encoding adv) w hw
+end Transport
+
+#print axioms fetch_map
+#print axioms reindex_map
+#print axioms recover_algebra
+#print axioms encode_parts
+#print axioms privacy_transport
+end R1Z.ProverCommitReencode16
+```
+
+Verbatim ordered model endpoint:
+
+```lean
+import R1Z.ProverCommitReencode16
+import R1Z.ProverCommitFixedObserver
+/-! Explicit canonical admitted-domain specialization of the owned headline.
+This fixes the mathematical builder, not its outstanding shipped Rust identification. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PrivacyR1HeadlineOrdered16
+abbrev ownedDecode := ProverCommitOwnedDecoder.decoder (K := PrivacyR1AcctBasis.K)
+open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.FsAbort R0Z.FsGood R0Z.HvzkV R0Z.HvzkS R0Z.RefPayload
+  R1Z.Batched R1Z.PredicateR1 R1Z.MaskImageVR1 R1Z.PoleMassR1 R1Z.ModelsVR1 R1Z.SimulatorR1
+  R1Z.GamesR1 R1Z.Sem1UniformR1 R1Z.GamesR1PBin R1Z.CouplingR1PBin R1Z.EventsR1PBin R1Z.FinalR1PBin
+  R1Z.CommitReadsR1 R1Z.PremisesR1PBin R1Z.QueryScanPrivacyFinal R1Z.LayoutR1PBin
+attribute [local instance] Classical.propDecidable
+open R1Z.ProverCommitTapeCompletion
+open R1Z.PhaseProtocolInstanceBin R1Z.PrivacyR1Final R1Z.QueryScanHistorySplit
+open R1Z.PrivacyR1Headline
+local notation "K" => PrivacyR1AcctBasis.K
+local notation "F" => PrivacyR1AcctBasis.F
+local notation "B" => PrivacyR1AcctBasis.basis
+local notation "hB" => PrivacyR1AcctBasis.packing_laws
+local notation "L₁" => PrivacyR1AcctModel.L₁
+local notation "L₂" => PrivacyR1AcctModel.L₂
+attribute [local irreducible] ProverCommitSourceDecoder.L₁ ProverCommitSourceDecoder.L₂
+variable {CommitHandle Aux : Type}
+variable (template : R1Wire K CommitHandle Aux)
+
+local notation "log" => PhaseWireLog2Bin.log
+local notation "base" => PrivacyR1AcctModel.base template log
+local instance : CharP K 2147483647 :=
+  charP_of_injective_algebraMap (algebraMap (ZMod AspisCircleGroupOrder.P) K).injective
+    AspisCircleGroupOrder.P
+
+def input : HonestProver K := BuilderSource.prover
+
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+local notation "decode" => ownedDecode
+
+local notation "fib" => PhaseWireLog2Bin.fib
+local notation "opens" => PhaseWireLog2Bin.opens
+local notation "seed" => PrivacyR1AcctModel.seed
+  (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) decode fib opens
+open R1Z.PrivacyR1HeadlineWire2
+local notation "source" => fsR1P
+  (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x))
+  (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed))
+  8 eight_pos (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')
+local notation "coins" => PrivacyR1AcctModel.wire_coins template log h outputs x
+local notation "W" => R1Z.PhaseLocalityBin.R1PhaseWire.toWire
+  (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)
+local notation "Pr" => R1Z.PhaseLocalityBin.R1PhaseProver.toProver
+  (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)
+local notation "ordered" => ProverCommitReencode16.experiment W Pr 8 eight_pos
+  (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')
+  ProverCommitReencode16.encode
+
+/-- Model privacy after public ordered-log reencoding and adaptive observer
+wrapping. This is not a proof of complete Rust proof-byte reconstruction. -/
+theorem privacy_headline_ordered
+ :
+    ZK_FSS h B outputs ordered x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1)) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100 := by
+  have model := PrivacyR1HeadlineOwnedClosed.Admitted.FixedObserver.privacy_headline_admitted
+    template outputs x
+  constructor
+  · exact ProverCommitReencode16.privacy_transport _ _ _ _ _ _ _ _ _ _ _ _ model.1
+  · exact model.2
+
+#print axioms privacy_headline_ordered
+end R1Z.PrivacyR1HeadlineOrdered16
+```
+
+Verbatim abstract core and fixed-event lemmas:
+
+```lean
+import R1Z.ProverCommitQuotientPrivacy
+import R1Z.PrivacyR1FinalProtocolHistoryReal
+import R1Z.PrivacyR1FinalProtocolHistory
+import R1Z.QueryScanFreshNumerics
+
+/-! Real-law-free endpoint with a proved scan-freshness numerical allowance.
+The conservative internal coupling budget is dominated by that allowance. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitModelCore16
+open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.FsAbort R0Z.FsGood R0Z.HvzkV R0Z.HvzkS R0Z.RefPayload
+  R1Z.Batched R1Z.PredicateR1 R1Z.MaskImageVR1 R1Z.PoleMassR1 R1Z.ModelsVR1 R1Z.SimulatorR1
+  R1Z.GamesR1 R1Z.Sem1UniformR1 R1Z.GamesR1PBin R1Z.CouplingR1PBin R1Z.EventsR1PBin R1Z.FinalR1PBin
+  R1Z.CommitReadsR1 R1Z.PremisesR1PBin R1Z.QueryScanPrivacyFinal R1Z.LayoutR1PBin
+attribute [local instance] Classical.propDecidable
+open R1Z.ProverCommitTapeCompletion
+open R1Z.PhaseProtocolInstanceBin R1Z.PrivacyR1Final R1Z.QueryScanHistorySplit
+local notation "K" => AspisWideTower.WideExact
+variable {CommitHandle Aux : Type} {F : Subfield K}
+variable (base : R1Wire K CommitHandle Aux) (publicWidth : ℕ)
+    (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+theorem core_privacy
+    (seed : R1ProverP K CommitHandle Aux F
+      (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+    (hB : R0Z.K4.PackField B) (hpub : PublicBase F x.1)
+    (builder_refinement_D46_D51 : R0Z.HonestValidity.BuilderSoundOn h B x)
+    (cF : ℕ)
+    (R_commit_quotient_fibres : ∀ τ : SourceTape K F, (Finset.univ.filter
+      (fun e : (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ → OracleAnswer) × (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ → OracleAnswer) =>
+        quotientDecode (fun e => ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2) e = some τ)).card = cF)
+    (L₁ L₂ : ℕ) (R_commit_exhaustion : RExh (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂)
+    (R_commit_counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (R_commit_counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
+    (R_commit_stream₁ : 16 * L₁ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ * 8)
+    (R_wire_coin_carrier : ((wire base ((base.pubBytes x).length) h B outputs x).toWire).Cm ≃ (RIdx → OracleAnswer))
+    (R_wire_D80_batches : RWireBatches (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver)
+    (R_wire_D80_ordered_log : ∀ (w : h.Instance) (sec : SecP) (d : OracleAnswer)
+      (τ : Tape K F) (roots : Fin 3 → OracleAnswer) (rest : RIdx → OracleAnswer) (ch : Challenges K),
+      ((wire base ((base.pubBytes x).length) h B outputs x).toWire).comLog (R_wire_coin_carrier.symm rest) roots (view h B outputs x w ch τ) ch =
+        (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).openList ch).map (fun c =>
+          (gram (((wire base ((base.pubBytes x).length) h B outputs x).toWire).pubBytes x) ((wire base ((base.pubBytes x).length) h B outputs x).toWire).vtag (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).leafVal h w x τ ch) sec d rest
+            (cposOf (E₁ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁) (E₂ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂) c), ansC roots rest c)))
+    (R_commit_cell_count : RCommitCount L₁ L₂)
+    (R_commit_blocks₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2 * L₁) (R_commit_blocks₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2 * L₂)
+ :
+    ZK_FSS h B outputs (fsR1P (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 (by decide)
+      (P_R1 h.transport B hB) (fun h' => VR1 h')) x
+      (simE h.transport B outputs x) (modelError (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂) := by
+  let W := (wire base ((base.pubBytes x).length) h B outputs x).toWire
+  let Pr := (prover base ((base.pubBytes x).length) h B outputs x seed).toProver
+  let R : RomModel W := RomFiniteBin.rom (baseWire base) (RomGrammarBin.bound ((base.pubBytes x).length))
+  have hin : ∀ w : h.Instance, RAddrIn W Pr R h B outputs x w :=
+    RomGrammarBin.address_domain (baseWire base) _ Pr h B outputs x
+      (PhaseProtocolCoverageBin.read_coverage base _ h B outputs x seed (Nat.le_refl _))
+  have hc : ∀ w : h.Instance, RCausal W Pr h B outputs x w :=
+    fun w => (causal_iff W Pr h B outputs x w).mpr
+      (causal_premise base _ h B outputs x seed w)
+  have hb : RCommitBytes W Pr := PrivacyR1Final.commit_source W Pr
+    (PrivacyR1FinalProtocol.commitment_grammar base _ h B outputs x seed)
+  have hop := PrivacyR1Final.wire_batches W Pr R_wire_D80_batches
+  have hcom := (com_log_iff W Pr hb R_wire_coin_carrier h B outputs x).mpr R_wire_D80_ordered_log
+  have hz := R1Z.ProverCommitQuotientPrivacy.privacy_R1_games_quotient W Pr 8 (by decide) h B hB outputs x
+    hpub builder_refinement_D46_D51 (rows01 base _ h B outputs x)
+    (R1J.PrivacySamplerSpend.samplerLaw_of_spend W (rows01 base _ h B outputs x)
+      (algebraMap R1J.SamplerLawSpend.QF K) (RingHom.injective _)
+      (sampler_source base _ h B outputs x))
+    R hin hc hb cF (by
+      intro τ
+      convert R_commit_quotient_fibres τ using 2
+      ext e
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+      rfl) L₁ L₂ R_commit_exhaustion
+    R_commit_counter₁ R_commit_counter₂ R_commit_stream₁ R_commit_stream₂
+    R_wire_coin_carrier hop hcom
+  have hm : ZK_FSS h B outputs (fsR1P W Pr 8 (by decide)
+      (P_R1 h.transport B hB) (fun h' => VR1 h')) x
+      (simE h.transport B outputs x) (modelError W Pr L₁ L₂) := by
+    simpa only [modelError, abR1P, abR1, Nat.cast_ofNat, Nat.cast_pow,
+      Nat.cast_zero, zero_mul, zero_div, pow_two] using hz
+  exact hm
+
+/-- Keep the large concrete finite read universe symbolic at specialization. -/
+theorem read_bound (W : R1Wire K CommitHandle Aux) (Pr : R1ProverP K CommitHandle Aux F W)
+    (L₁ L₂ : ℕ) (count : RCommitCount L₁ L₂)
+    (blocks₁ : Pr.E₁ ≤ 2*L₁) (blocks₂ : Pr.E₂ ≤ 2*L₂) :
+    8 * n1 W Pr ≤ 2^25 := by
+  have hn := R1Z.GamesR1PBin.n1_le W Pr L₁ L₂ count blocks₁ blocks₂
+  norm_num at hn ⊢
+  omega
+
+/-- The generic ROM environment prevents concrete domain normalization when
+only its fixed-event mass is needed by the runtime endpoint. -/
+theorem real_bad_mass
+    (seed : R1ProverP K CommitHandle Aux F (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+    (counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
+    (w : h.Instance) :
+    eventMass (fun r => ∃ k, QueryScanRealLazyBound.realBad (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver 8 h B outputs x w k r) ≤
+      QueryScanRealLazyBound.lazyBudget (8 * n1 (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver) +
+        8 * scanProbability := by
+  let W := (wire base ((base.pubBytes x).length) h B outputs x).toWire
+  let Pr := (prover base ((base.pubBytes x).length) h B outputs x seed).toProver
+  let R : RomModel W := RomFiniteBin.rom (baseWire base) (RomGrammarBin.bound ((base.pubBytes x).length))
+  have hin : RAddrIn W Pr R h B outputs x w :=
+    RomGrammarBin.address_domain (baseWire base) _ Pr h B outputs x
+      (PhaseProtocolCoverageBin.read_coverage base _ h B outputs x seed (Nat.le_refl _)) w
+  have hc : RCausal W Pr h B outputs x w :=
+    (causal_iff W Pr h B outputs x w).mpr (causal_premise base _ h B outputs x seed w)
+  have hb : RCommitBytes W Pr := PrivacyR1Final.commit_source W Pr
+    (PrivacyR1FinalProtocol.commitment_grammar base _ h B outputs x seed)
+  exact QueryScanRealLazyBound.real_bad_union_mass W Pr R 8 (by decide) h B outputs x w
+    hin hc hb counter₁ counter₂
+
+#print axioms real_bad_mass
+#print axioms read_bound
+#print axioms core_privacy
+end R1Z.ProverCommitModelCore16
+```
+
+Verbatim final deployed endpoint (supersedes Stage 1's initial target):
+
+```lean
+import R1Z.ProverCommitFixedEndpoint
+import R1Z.ProverCommitReencode16
+import R1Z.ProverCommitModelCore16
+import R1Z.ProverCommitFixedObserver
+/-! Explicit canonical admitted-domain specialization of the owned headline.
+This fixes the mathematical builder, not its outstanding shipped Rust identification. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PrivacyR1HeadlineDeployed
+abbrev ownedDecode := ProverCommitOwnedDecoder.decoder (K := PrivacyR1AcctBasis.K)
+open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.FsAbort R0Z.FsGood R0Z.HvzkV R0Z.HvzkS R0Z.RefPayload
+  R1Z.Batched R1Z.PredicateR1 R1Z.MaskImageVR1 R1Z.PoleMassR1 R1Z.ModelsVR1 R1Z.SimulatorR1
+  R1Z.GamesR1 R1Z.Sem1UniformR1 R1Z.GamesR1PBin R1Z.CouplingR1PBin R1Z.EventsR1PBin R1Z.FinalR1PBin
+  R1Z.CommitReadsR1 R1Z.PremisesR1PBin R1Z.QueryScanPrivacyFinal R1Z.LayoutR1PBin
+attribute [local instance] Classical.propDecidable
+open R1Z.ProverCommitTapeCompletion
+open R1Z.PhaseProtocolInstanceBin R1Z.PrivacyR1Final R1Z.QueryScanHistorySplit
+open R1Z.PrivacyR1Headline
+local notation "K" => PrivacyR1AcctBasis.K
+local notation "F" => PrivacyR1AcctBasis.F
+local notation "B" => PrivacyR1AcctBasis.basis
+local notation "hB" => PrivacyR1AcctBasis.packing_laws
+local notation "L₁" => PrivacyR1AcctModel.L₁
+local notation "L₂" => PrivacyR1AcctModel.L₂
+attribute [local irreducible] ProverCommitSourceDecoder.L₁ ProverCommitSourceDecoder.L₂
+variable {CommitHandle Aux : Type}
+variable (template : R1Wire K CommitHandle Aux)
+
+local notation "log" => PhaseWireLog2Bin.log
+local notation "base" => PrivacyR1AcctModel.base template log
+local instance : CharP K 2147483647 :=
+  charP_of_injective_algebraMap (algebraMap (ZMod AspisCircleGroupOrder.P) K).injective
+    AspisCircleGroupOrder.P
+
+def input : HonestProver K := BuilderSource.prover
+
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+local notation "decode" => ownedDecode
+
+local notation "fib" => PhaseWireLog2Bin.fib
+local notation "opens" => PhaseWireLog2Bin.opens
+local notation "seed" => PrivacyR1AcctModel.seed
+  (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) decode fib opens
+open R1Z.PrivacyR1HeadlineWire2
+local notation "raw" => fsR1P
+  (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x))
+  (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed))
+  8 eight_pos (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')
+local notation "coins" => PrivacyR1AcctModel.wire_coins template log h outputs x
+local notation "W" => R1Z.PhaseLocalityBin.R1PhaseWire.toWire
+  (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)
+local notation "Pr" => R1Z.PhaseLocalityBin.R1PhaseProver.toProver
+  (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)
+
+local notation "source" => ProverCommitReencode16.experiment W Pr 8 eight_pos
+  (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')
+  ProverCommitReencode16.encode
+
+/-- Equality of the full observable execution and the observer's decision,
+not merely equality of acceptance or a hash. The independently supplied
+runtime must include builder/checker/retry, ordered wire and oracle history
+in its FS experiment. No concrete Rust instance is supplied here. -/
+structure WholeRunJoin {R M : Type} [Fintype R] [Fintype M]
+    (runtime : R → ROMView K CommitHandle Aux R1Bat × Bool)
+    (model : M → ROMView K CommitHandle Aux R1Bat × Bool)
+    (bad : Fin 8 → M → Prop) where
+  cp : Coupling R M
+  agreement : ∀ s, ¬ (∃ i, bad i (cp.toM s)) →
+    runtime (cp.toR s) = model (cp.toM s)
+
+def WholeRunJoin.tests {R M : Type} [Fintype R] [Fintype M]
+    {runtime : R → ROMView K CommitHandle Aux R1Bat × Bool}
+    {model : M → ROMView K CommitHandle Aux R1Bat × Bool}
+    {bad : Fin 8 → M → Prop} (join : WholeRunJoin runtime model bad) :
+    ModelExecutionJoin (fun r => bit (runtime r).2) (fun m => bit (model m).2) bad where
+  cp := join.cp
+  agreement := fun s hn => congrArg (fun run => bit run.2) (join.agreement s hn)
+
+variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
+  [Fintype rust.RealRand] [Nonempty rust.RealRand]
+  [Fintype rust.IdealRand] [Nonempty rust.IdealRand]
+  (observer_program : rust.Adversary → View K CommitHandle Aux R1Bat →
+    List (List UInt8 × OracleAnswer) → OProg)
+
+/-- The explicit deployed obligation. Both sides include the complete public
+view, ordered observer history and observer decision. The exceptions are the
+existing realBad/selectedBad, not predicates chosen by the implementation. -/
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (WholeRunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (WholeRunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad))
+
+attribute [local irreducible] PrivacyR1AcctBasis.basis
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1)) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100 := by
+  have model := PrivacyR1HeadlineOwnedClosed.Admitted.FixedObserver.privacy_headline_admitted
+    template outputs x
+  have caller := ProverCommitOwnedEndpoint.caller_law template input outputs x
+  obtain ⟨hc₁,hc₂,hs₁,hs₂,hcount,hb₁,hb₂⟩ := ProverCommitCallerInstance.budgets Pr caller
+  have hM := ProverCommitModelCore16.read_bound W Pr L₁ L₂ hcount hb₁ hb₂
+  have hk := QueryScanFreshNumerics.lazy_budget_le_fresh hM
+    (Nat.succ_le_succ (Nat.zero_le (8 * n1 W Pr)))
+  constructor
+  · intro adv w hw
+    have hr := QueryScanRealLazyJoin.join_le _ _ _
+      (Classical.choice (refinement.1 adv w hw)).tests
+      (QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr))
+      (ProverCommitModelCore16.real_bad_mass base h B outputs x seed hc₁ hc₂ w)
+      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (fun _ => ⟨bit_nonneg _, bit_le_one _⟩)
+    have hi := scan_coupling_le _ _
+      ((Classical.choice (refinement.2 adv)).tests.toScanCoupling
+        (fun i => QueryScanIdealHistory.selected_bad_mass i))
+      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (fun _ => ⟨bit_nonneg _, bit_le_one _⟩)
+    obtain ⟨hpub, hs⟩ := PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises (x := x) w hw
+    have core := ProverCommitModelCore16.core_privacy base h B outputs x seed hB hpub hs
+      ProverCommitSourceDecoder.quotientFibreSize (by
+        intro τ
+        convert ProverCommitCallerInstance.fibres Pr caller τ using 2
+        ext e
+        simp only [Finset.mem_filter, Finset.mem_univ, true_and])
+      L₁ L₂ (ProverCommitCallerInstance.exhaustion Pr caller)
+      hc₁ hc₂ hs₁ hs₂ coins
+      (PhaseWireLog2Bin.batches input outputs x template decode)
+      (PhaseWireLog2Bin.ordered_log input outputs x template decode) hcount hb₁ hb₂
+    have mid := ProverCommitReencode16.privacy_transport _ _ _ _ _ _
+      ProverCommitReencode16.encode _ _ _ _ _ core
+    have hmid := mid (RomObserverBin.observerMap rust observer_program adv) w hw
+    have t₁ := abs_sub_le
+      (mean (realTest h B outputs rust adv x w))
+      (mean (realTest h B outputs source (RomObserverBin.observerMap rust observer_program adv) x w))
+      (mean (idealTestS source (RomObserverBin.observerMap rust observer_program adv) x
+        (simE (h).transport B outputs x)))
+    have t₂ := abs_sub_le
+      (mean (realTest h B outputs rust adv x w))
+      (mean (idealTestS source (RomObserverBin.observerMap rust observer_program adv) x
+        (simE (h).transport B outputs x)))
+      (mean (idealTestS rust adv x (simE (h).transport B outputs x)))
+    rw [abs_sub_comm] at hi
+    calc _ ≤ ((QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) + 8 / (2 : ℚ)^486) +
+        modelError W Pr L₁ L₂) + 8 / (2 : ℚ)^486 :=
+          t₂.trans (add_le_add (t₁.trans (add_le_add hr hmid)) hi)
+         _ = modelError W Pr L₁ L₂ + 16 / (2 : ℚ)^486 +
+           QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) :=
+          QueryScanFreshNumerics.amount_identity _ _ _
+         _ ≤ _ := add_le_add (le_refl _) hk
+  · exact model.2
+
+#print axioms WholeRunJoin.tests
+#print axioms privacy_headline_deployed
+end R1Z.PrivacyR1HeadlineDeployed
+```
+
+## Diffs and residual boundary
+
+`formal-additions.diff` records all new formal modules against the research
+base. `deployed-ordered-upgrade.diff` records the initial-to-final deployed
+statement and proof change. These are in the part-16 evidence directory.
+The model change is explicit, not a deletion-only source-refinement claim.
+No old shared module/source/object, concurrent-worker file, production source,
+feature, wire constant, security target, wallet or key is modified.
+
+**Target not yet established for the shipped prover.** Remaining obligations:
+
+1. Supply the independently represented shipped experiment and prove its
+   RustProverRefinement instance, including builder, checker, early-stop retry,
+   visible errors, shared-oracle callbacks, serialization and observer.
+2. Align `recover` with the actual retained transcript prefix on success and
+   abort. The total decoder and validated-parse transport do not establish this
+   concrete parser/history property by themselves.
+3. Align the per-batch logical `reads` order with the exact dV_frozen2 tree and
+   node traversal, and prove complete proof-byte reconstruction. Per-tree keys
+   are sorted after the ordered 10+12 split, but logical reads still use the
+   fixed finite-set list order. The old serialization residual is not declared
+   discharged; the timed-out Kani ordered-block cases provide no certificate.
+4. Connect the extracted owned collector and assembled object to the shipped
+   borrowed loops/context, nonce reservation, seed/entropy/allocator boundaries
+   and final object disposal. The prior Aeneas loop-context join failure and
+   the all-family callback obligations remain. No unchanged extraction rerun
+   is claimed.
+
+The next concrete deliverable is an owned outer assembly extraction with a
+source-iteration/context refinement, plus a small source traversal reference
+whose standard-library sorting boundary can be certified independently of
+symbolic Vec allocation. The four accepted codec checks, universal extracted
+prefix bridges, returned-reference support and conditional deployed theorem
+are reusable components, not a complete deployed privacy certificate.
+
+No frozen ELF or SBF artifact was rebuilt. Historical artifact pins are
+inherited only within their original scope. No full frozen manifest replay is
+claimed for these additive model changes; the final cached dependency audit
+is recorded below after all adopted sources are frozen.

@@ -1,4 +1,6 @@
 import R1Z.ProverCommitFixedEndpoint
+import R1Z.ProverCommitReencode16
+import R1Z.ProverCommitModelCore16
 import R1Z.ProverCommitFixedObserver
 /-! Explicit canonical admitted-domain specialization of the owned headline.
 This fixes the mathematical builder, not its outstanding shipped Rust identification. -/
@@ -42,7 +44,7 @@ local notation "opens" => PhaseWireLog2Bin.opens
 local notation "seed" => PrivacyR1AcctModel.seed
   (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) decode fib opens
 open R1Z.PrivacyR1HeadlineWire2
-local notation "source" => fsR1P
+local notation "raw" => fsR1P
   (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x))
   (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed))
   8 eight_pos (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')
@@ -51,6 +53,10 @@ local notation "W" => R1Z.PhaseLocalityBin.R1PhaseWire.toWire
   (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)
 local notation "Pr" => R1Z.PhaseLocalityBin.R1PhaseProver.toProver
   (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)
+
+local notation "source" => ProverCommitReencode16.experiment W Pr 8 eight_pos
+  (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')
+  ProverCommitReencode16.encode
 
 /-- Equality of the full observable execution and the observer's decision,
 not merely equality of acceptance or a hash. The independently supplied
@@ -97,6 +103,7 @@ def RustProverRefinement : Prop :=
                 (v, (source).observe a v))
       QueryScanIdealHistory.selectedBad))
 
+attribute [local irreducible] PrivacyR1AcctBasis.basis
 theorem privacy_headline_deployed
     (refinement : RustProverRefinement template outputs x rust observer_program)
  :
@@ -107,17 +114,54 @@ theorem privacy_headline_deployed
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100 := by
   have model := PrivacyR1HeadlineOwnedClosed.Admitted.FixedObserver.privacy_headline_admitted
     template outputs x
+  have caller := ProverCommitOwnedEndpoint.caller_law template input outputs x
+  obtain ⟨hc₁,hc₂,hs₁,hs₂,hcount,hb₁,hb₂⟩ := ProverCommitCallerInstance.budgets Pr caller
+  have hM := ProverCommitModelCore16.read_bound W Pr L₁ L₂ hcount hb₁ hb₂
+  have hk := QueryScanFreshNumerics.lazy_budget_le_fresh hM
+    (Nat.succ_le_succ (Nat.zero_le (8 * n1 W Pr)))
   constructor
   · intro adv w hw
+    have hr := QueryScanRealLazyJoin.join_le _ _ _
+      (Classical.choice (refinement.1 adv w hw)).tests
+      (QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr))
+      (ProverCommitModelCore16.real_bad_mass base h B outputs x seed hc₁ hc₂ w)
+      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (fun _ => ⟨bit_nonneg _, bit_le_one _⟩)
+    have hi := scan_coupling_le _ _
+      ((Classical.choice (refinement.2 adv)).tests.toScanCoupling
+        (fun i => QueryScanIdealHistory.selected_bad_mass i))
+      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (fun _ => ⟨bit_nonneg _, bit_le_one _⟩)
     obtain ⟨hpub, hs⟩ := PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises (x := x) w hw
-    have caller := ProverCommitOwnedEndpoint.caller_law template input outputs x
-    apply (PrivacyR1FinalProtocolCaller.privacy_R1_protocol_caller
-      base h B outputs x seed hB hpub hs caller coins
+    have core := ProverCommitModelCore16.core_privacy base h B outputs x seed hB hpub hs
+      ProverCommitSourceDecoder.quotientFibreSize (by
+        intro τ
+        convert ProverCommitCallerInstance.fibres Pr caller τ using 2
+        ext e
+        simp only [Finset.mem_filter, Finset.mem_univ, true_and])
+      L₁ L₂ (ProverCommitCallerInstance.exhaustion Pr caller)
+      hc₁ hc₂ hs₁ hs₂ coins
       (PhaseWireLog2Bin.batches input outputs x template decode)
-      (PhaseWireLog2Bin.ordered_log input outputs x template decode)
-      rust observer_program
-      (fun adv w hw => (Classical.choice (refinement.1 adv w hw)).tests)
-      (fun adv => (Classical.choice (refinement.2 adv)).tests)).1 adv w hw
+      (PhaseWireLog2Bin.ordered_log input outputs x template decode) hcount hb₁ hb₂
+    have mid := ProverCommitReencode16.privacy_transport _ _ _ _ _ _
+      ProverCommitReencode16.encode _ _ _ _ _ core
+    have hmid := mid (RomObserverBin.observerMap rust observer_program adv) w hw
+    have t₁ := abs_sub_le
+      (mean (realTest h B outputs rust adv x w))
+      (mean (realTest h B outputs source (RomObserverBin.observerMap rust observer_program adv) x w))
+      (mean (idealTestS source (RomObserverBin.observerMap rust observer_program adv) x
+        (simE (h).transport B outputs x)))
+    have t₂ := abs_sub_le
+      (mean (realTest h B outputs rust adv x w))
+      (mean (idealTestS source (RomObserverBin.observerMap rust observer_program adv) x
+        (simE (h).transport B outputs x)))
+      (mean (idealTestS rust adv x (simE (h).transport B outputs x)))
+    rw [abs_sub_comm] at hi
+    calc _ ≤ ((QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) + 8 / (2 : ℚ)^486) +
+        modelError W Pr L₁ L₂) + 8 / (2 : ℚ)^486 :=
+          t₂.trans (add_le_add (t₁.trans (add_le_add hr hmid)) hi)
+         _ = modelError W Pr L₁ L₂ + 16 / (2 : ℚ)^486 +
+           QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) :=
+          QueryScanFreshNumerics.amount_identity _ _ _
+         _ ≤ _ := add_le_add (le_refl _) hk
   · exact model.2
 
 #print axioms WholeRunJoin.tests
