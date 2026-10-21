@@ -316,3 +316,89 @@ result, exit 0, 1.548632 s, 176304 KiB RSS, zero swaps. The rejected whole-sort
 BMC attempts remain explicitly incomplete. This stage proves sort/reference
 meaning; production loop adoption and the remaining multiproof representation,
 ordered-log and caller joins are not claimed. No shipped source changed.
+
+## Continuation stage 2: leaf step checked; binary adoption blocked
+
+`cone2-leaf-2` verifies both `adoption_leaf_hash_contract` and
+`adoption_leaf_batch_step`: two completed solver results, exit 0, wall
+33.363419 s, peak RSS 2,720,936 KiB, zero swaps. The caller uses the verified
+leaf-hash stub, whose returned digest, component lengths, arbitrary event byte
+and exact call count are specified without hidden global state. The source cut
+is the entire candidate.rs leaf iteration: key read, cursor increment, selected
+opening ordinal, index cast, hash, duplicate comparison and append. All scratch
+coordinates, including rejected duplicate scratch, are checked. This proves
+that iteration on the supplied opening slice; its stored-proof slice provenance
+and the batch caller remain separate. The contract's first caller compilation
+failed because the proof-only return carrier lacked `kani::Arbitrary`; that is
+fixed, and the failed receipt is retained.
+
+`MultiproofConeLevelIteration.levels_eq_iteration` proves exact full-Result
+equality of structural height iteration with the **actual extracted**
+`MultiproofConeRef.reference.levels`, for heights through 18. Rejection retains
+the exact partial scratch and skips subsequent levels; panic/divergence Results
+are retained as well. `iterate_congr_on`/`adopt_eighteen` compose a named local
+source equation and successful-level domain preservation over the nonempty,
+bounded frontier and physical node slice. Those local source certificates
+remain explicit premises. This is a kernel induction, not a claim that the
+missing P6 certificate or ordered model-log join is proved in Lean.
+
+The direct complete-level BMC `cone2-level-step-1` timed out with no completed
+solver result (241.519697 s, 6,381,040 KiB RSS, zero swaps). Its 512-byte
+diagnostic bound also did not cover the entire frozen slot. The replacement
+uses a full-state `source_row` contract followed by a composed level harness,
+with arbitrary nodes over the complete 5,504-byte maximum slot, arbitrary
+scratch/cursors and independent oracle replies by call ordinal. The full-state
+contract compares every scratch byte, not an arbitrary-coordinate weakening.
+The generated factoring and observation wrappers are documented in
+`tools/multiproof-cone-20261021/ADOPTION.md` and the substitution ledger.
+
+The first row-contract gate timed out during propositional reduction after
+43,982 VCCs (1,393 remaining after simplification), with zero completed solver
+results: 243.280178 s, 6,408,264 KiB RSS, zero swaps. The focused replacement
+inlines read32 so unused read bytes can be sliced away, without changing any
+postcondition, input domain or memory cap. The replacement also timed out during propositional conversion, with zero
+completed results: 243.373072 s, 6,461,112 KiB RSS, zero swaps, 44,201 VCCs
+(1,554 after simplification). Neither failure is a counterexample to the
+mathematical equality. Both are resource/proof-encoding blockers at this scope.
+The dependent composed-level harness must not run or be counted as verified
+until the row contract passes. No unchanged larger-cap rerun is authorized or
+proposed here. **The complete binary source/reference adoption is not closed.**
+
+The final focused import/axioms anchor is `MultiproofConeContinuationFreeze`,
+attempt 1: exit 0, wall 29.013957 s, 3,476,193,280-byte RSS, zero swaps, source
+revision `73ea28341`. Its receipt pins the exact source/import hashes and all
+fourteen complete standard-axiom reports, including the unchanged headline and
+reused complete parser theorem. Every new theorem also has its own report.
+This is a compatible focused import audit; no coherent frozen release manifest
+was replayed. The prior 19-cut suite, sort-atomic certificate and unchanged
+extractions are reused, not rerun. The continuation audit checks the new
+proofs and the exact reused leaf-root/callee bodies across the unrelated row
+harness attribute change.
+
+No shipped crate, Session A candidate, sibling module, wallet or key changed.
+No ELF rebuild was triggered or byte-identity measurement claimed. No headline
+premise was removed and neither production cone is reclassified as complete.
+Caller lowering was deliberately left to S2. Stop scope: item 1 is complete;
+item 2 has a checked leaf step and height induction but remains blocked on the
+full-state binary row/level certificate.
+
+Latest check: `python3 -B tools/multiproof-cone-20261021/audit-continuation.py`
+validates the new focused proofs, retained extraction pins, exact leaf roots and
+callee files, diagnostic dispositions and unchanged shipped/sibling sources.
+Its result is `audit-continuation-result.json`; the earlier `audit-result.json`
+is the historical checkpoint. Do not run the old all-root auditor as though
+the newly added unverified binary roots had passed. All populated-scope
+reservation preflights for these host attempts are retained beside the receipts.
+
+Next concrete deliverable: isolate and verify the occupied/sibling/short
+full-state row frames and the symbolic node-window read, then run
+`adoption_binary_level_composed` with those verified callees. The current
+composed harness is an unverified draft. Its input bound and the successful
+level-domain postcondition must be retained. A future source change is needed
+before another resource-heavy attempt; neither timeout is counted as success.
+
+Receipt provenance: `source_revision` records checkout HEAD when a job starts.
+The source snapshots and SHA-256 fields identify the exact tested edits,
+including edits not yet committed at that moment; the continuation auditor
+checks current source bytes against the successful snapshots. Final reporting
+commits do not relabel historical compile evidence as a new release replay.
