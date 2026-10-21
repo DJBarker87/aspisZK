@@ -402,3 +402,36 @@ The source snapshots and SHA-256 fields identify the exact tested edits,
 including edits not yet committed at that moment; the continuation auditor
 checks current source bytes against the successful snapshots. Final reporting
 commits do not relabel historical compile evidence as a new release replay.
+
+## Continuation 3: single-node replacement and exact node induction
+
+Branch `codex/cx-multiproof-cone3-20261021`, base `feeb8584a`. The three old
+level/row timeouts were not rerun. `cone3-hash-1` verifies the returned-effects
+hash observer (one completed result, exit 0, 4.324373 s, 533308 KiB peak RSS).
+`cone3-nodes-1` verifies five independent roots: occupied, sibling and short
+single-parent steps; exact final-root digest equality; and row domain/progress.
+All five complete (exit 0, 64.177020 s, 611548 KiB peak RSS). Both jobs have zero
+swaps and recorded 6G/8G/no-swap/64-task scopes and reservation preflights.
+They use symbolic scratch, sibling bytes, replies and independent observation
+coordinates. No unverified row/level contract is used as a stub.
+
+These are separated 0..32-byte window gates, cursor zero, not a claim to have
+verified the entire 5504-byte physical-node buffer. The exact source group is
+unchanged. `MultiproofConeNodeWindow.physical_read` proves the checked physical
+range and actual extracted read32 return precisely the original sibling bytes,
+for arbitrary physical lengths/cursors with enough bytes. `short_iff` proves
+the matching short-window condition. The production `.get`/relative-cursor
+frame adoption remains a named P6/library-lowering obligation.
+
+`MultiproofConeRead32.read32_total` proves exact byte content. The actual
+extracted `binary_step_progress` now proves totality, rejection scratch identity,
+unchanged n, successful i advance, w+1 and all next-row bounds, under bounded
+frontier/cursor and total hash only. `rows_eq_extracted` proves node iteration
+matches the extracted level. `level_preserve` derives nonempty bounded frontier
+and physical-cursor preservation for successful levels. `NodeAdoption.eighteen_eq`
+composes the local node equation through height 18: the former full-level
+certificate and level-preservation hypotheses are removed, while the precise
+one-node source equation and hash totality remain explicit. It is exact full
+Result/state equality to the extracted reference, not model ordered-log equality.
+All current theorem reports use standard axioms; failed elaboration receipts
+are retained and excluded from accepted evidence. No limits were raised.

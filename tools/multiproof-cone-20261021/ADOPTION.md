@@ -45,3 +45,48 @@ on the precise one-level certificate and preservation premises. This packet
 stops at the requested resource blocker, without a cap increase or a complete
 source-cone claim. A next attempt should isolate the sibling/short/occupied
 full-state frames and symbolic slice window before composing a level.
+
+## Continuation 3: separated node windows
+
+The replacement does not rerun any failed level/row gate. `adoption_node.rs`
+uses the generated, unmodified `binary_group` body on an arbitrary window of
+0..32 symbolic bytes, with cursor zero. Occupied, sibling and short cases are
+separate harnesses. Scratch, n/i/w, hash reply and event-byte coordinate remain
+arbitrary. A separately verified `hash_parts` observer checks 1/32/32 component
+lengths, digest, one-call count and the selected byte; its effects are returned,
+then accounted for by local Cells. Only this checked hash observer is stubbed.
+No row or level is stubbed. `same_scratch` checks arbitrary independent idx and
+val coordinates plus n/at. `scratch_ext` states the kernel extensionality rule.
+
+`node_digest_equality` separately checks the exact copied `root_matches` body.
+The generator only exposes its visibility. `node_domain_preservation` checks
+one row's cursor advance/write bound and success/rejection call count, without
+an equality postcondition. These six results are in cone3-hash-1 (one) and
+cone3-nodes-1 (five). Their receipt snapshots pin all executable inputs.
+
+The physical buffer is **not** silently replaced by this window. The kernel
+`MultiproofConeNodeWindow.physical_read` proves the checked range/read32
+composition reads the exact original 32-byte window on arbitrary slices;
+`short_iff` covers the missing-sibling test. The production `.get`/relative
+cursor rebase and source-loop factoring must still be connected through the
+P6/library lowering boundary. No gate here checks all 5504 physical bytes in
+one BMC invocation, and no physical-slot source equation is claimed from the
+window harness alone.
+
+`binary_step_progress` checks the actual extracted body. `rows_eq_extracted`
+proves finite node iteration equals the extracted partial-fixpoint level;
+`level_preserve` derives the nonempty frontier domain after successful levels.
+`NodeAdoption.eighteen_eq` composes a *one-node* equation through the level and
+height 18. It removes the old complete-level equation and preservation premises,
+retaining the explicit local node equation and total oracle. It compares full
+Results/scratch; it does not encode a source oracle-log carrier or identify the
+frozen list model.
+
+The complete-cone consumer is now `OraclePortFrozen2Join.AcceptedRunJoin` via
+`OraclePortFrozen2Cones`; the slot program itself remains `verifySlot_frozen`
+in batch0 before checkpoint and batch1 after resume. The missing obligations
+are physical source-window adoption; the sorted live-prefix/safe-overwrite and
+scratch-suffix representation; ordered list-model row simulation; initial
+keys/openings, leaf/count/padding/root adapters; and both three-slot batches.
+Caller lowering waits on S2. No whole-cone completion follows from the new
+local gates or conditional height theorem.
