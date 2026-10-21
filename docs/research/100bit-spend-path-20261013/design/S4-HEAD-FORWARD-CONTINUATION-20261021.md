@@ -723,3 +723,22 @@ no independent success or coordinate premise. Focused compile:exit0,4.008s,
 peak RSS4,057,530,368 bytes,zero swaps,standard axioms. Its resume-prefix
 premise is still a model boundary, not full Rust tx2_common acceptance; a
 separate exact-body caller composition is in progress.
+
+`evidence/s4-tx2-authenticated-wrapper-cut-v1-20261021` proves that accepted
+execution of the authenticated wrapper operation cut reaches the same
+tx2_common call with unchanged public/proof/checkpoint/hash/observer
+arguments, after successful parsing and the Parsed mark. Its checker compares
+the complete pinned Rust/generated wrapper bodies and the complete cut body
+under an explicit callee/type substitution map; this replaces ordered-marker
+checks as the source-body evidence. Concrete operation implementations still
+require their own bindings. Focused compile:exit0,12.342s,peak process
+RSS2,242,428,928 bytes,zero swaps,standard axioms.
+
+The full settlement cut still requires canonical prepared gamma and the
+same-proof strict scan. Existing concrete decoder canonicality can supply the
+first only after its reader operation is bound to ResumeOps.readE and the
+same successful resume output. The second comes from prior tx1 and the
+authenticated checkpoint/proof context: tx2_common contains no strict scanner.
+Neither condition may be silently inferred from arbitrary ResumeOps or from
+tx2 success alone. The concrete-reader/resume connection is being proved;
+the scanner/checkpoint context remains an upstream integration boundary.
