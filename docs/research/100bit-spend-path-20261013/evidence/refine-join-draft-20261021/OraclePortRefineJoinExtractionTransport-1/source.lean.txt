@@ -1,0 +1,45 @@
+import OraclePortRefineJoinConsumer
+
+/-! Exact sufficient data agreement for the existing extractor consumer.
+ExecutionRefinement alone is not asserted to supply this agreement. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortRefineJoin
+open AspisV8R19.CausalFirstHitUnionBound
+open RawRecordedOracleExtractionMassBin
+open RawCutWordsFromRunExecutableBin
+open RawCutWordsFromRunPublicValidBin
+attribute [local instance] Classical.propDecidable
+
+/-- Public decoding and all fixed words actually consumed by the extractor.
+No log equality or oracle-program equality is required by this predicate. -/
+structure RecoveredInputAgreement (source model : RawCutProverCompiler.RunView) : Prop where
+  public : runDecodedPublic source = runDecodedPublic model
+  initial : initialWordsFromRun source = initialWordsFromRun model
+  final : finalWordFromRun source = finalWordFromRun model
+
+theorem extractor_eq_of_recovered_inputs (source model : RawCutProverCompiler.RunView)
+    (h : RecoveredInputAgreement source model) (coins : GSConcreteByteDecoderBank.RawCoins) :
+    RawRecordedPublicSpendExtractorBin.extract source coins =
+      RawRecordedPublicSpendExtractorBin.extract model coins := by
+  unfold RawRecordedPublicSpendExtractorBin.extract extractFromRun
+  rw [h.public,h.initial,h.final]
+
+/-- Pointwise failure transfer for the unchanged concrete extractor. The
+protocol-specific missing step is to derive recovered-input agreement on
+accepted annotated source runs from frozen/caller/cut invariants. -/
+theorem failureMass_le_of_recovered_inputs (source model : RawCutProverCompiler.RunView)
+    (haccept : source.2.2 = true → model.2.2 = true)
+    (hwords : source.2.2 = true → RecoveredInputAgreement source model) :
+    failureMass source ≤ failureMass model := by
+  unfold failureMass
+  apply mean_mono
+  intro coins
+  apply indicator_mono
+  rintro ⟨ha,hf⟩
+  exact ⟨haccept ha, (extractor_eq_of_recovered_inputs source model (hwords ha) coins).symm.trans hf⟩
+
+#print axioms extractor_eq_of_recovered_inputs
+#print axioms failureMass_le_of_recovered_inputs
+end AspisR1.OraclePortRefineJoin
+end

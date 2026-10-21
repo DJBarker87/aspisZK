@@ -150,3 +150,31 @@ acceptance-only bad-input events. The current `failureMass` is not such an
 event. Its dependence on the log and reconstructed words is precisely the
 remaining consumer issue; neither lemma silently substitutes a new event for
 that headline's event.
+
+## Exact recovery residual, not a new hidden source premise
+
+`OraclePortRefineJoinExtractionTransport.RecoveredInputAgreement source model`
+has exactly these fields:
+
+```lean
+decoded_public : runDecodedPublic source = runDecodedPublic model
+initial : initialWordsFromRun source = initialWordsFromRun model
+final : finalWordFromRun source = finalWordFromRun model
+```
+
+`extractor_eq_of_recovered_inputs` proves equality of the **unchanged actual**
+extractor at every coin tape from these fields. Together with acceptance
+inclusion, `failureMass_le_of_recovered_inputs` proves the exact pointwise
+failure-mass inequality needed by `lazyMean_le_of_eval`. No probability or
+failure-mass premise is used to prove that lemma. However, the fields are not
+proved from `ExecutionRefinement`: deriving them for accepted two-pass source
+annotations is the remaining protocol-specific task. They have not been
+smuggled into a claimed headline replacement.
+
+`OraclePortRefineJoinStrict.execution_refinement_strict` additionally proves
+strict weakening at the actual inherited eager verifier. Starting with any
+Input seed, it overwrites only the public tag with zero to exhibit a rejecting
+input, and adds one read after each rejection. The new source satisfies
+ExecutionRefinement but fails ExecutionJoin. This strengthens the earlier
+conditional strictness construction to the concrete model without assuming
+that a rejecting input exists.
