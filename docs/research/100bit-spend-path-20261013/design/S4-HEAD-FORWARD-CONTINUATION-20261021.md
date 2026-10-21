@@ -952,3 +952,26 @@ The remaining source powers installation obligation and non-S4 operation
 boundaries are not discharged here. The arithmetic lane joins, recovered
 model word binding and candidate adoption remain open, as does the full
 implementation-linked100-bit target.
+
+
+## Same candidate query and twelve settlement openings are now typed
+
+`evidence/s4-same-query-typed-opening-v1-20261022` preserves every witness
+of CandidateQueryFieldEvidence: the actual indexed query and opening read,
+actual dots callback result, same Current-carrier output array and four
+LiteralFieldResult equations. It derives successful C1/C2 decodes and exact
+encoded-byte identity for that same arrayQ. No independent query-index bound,
+proof length, canonicality or successful decoder is assumed; the index bound
+comes from the actual array index success and length from the same strict scan.
+Focused exit0,11.487s,peak RSS4,052,025,344 bytes,zero swaps; three standard
+axiom reports. Predicate enrichment is proved, not merely assumed in a new
+structure; existing query evidence and prior same-proof scan remain premises.
+
+`evidence/s4-tx2-twelve-typed-openings-v1-20261022` composes that enrichment
+with the complete settlement source-cut success theorem. Each of the same
+twelve actual calls now carries the same four output field equations and
+typed decoded opening. All former source-cut, raw/non-S4 operation boundaries,
+prior scan context and candidate adoption limitations remain explicit; no
+new decoder or desired encoded-byte premise is added. Focused exit0,7.261s,
+peak RSS4,053,975,040 bytes,zero swaps,standard axioms. The lane embeddings,
+width29 equality and global recovered-word binding remain open.
