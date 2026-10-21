@@ -1,7 +1,11 @@
 # Builder continuation 7
 
 Branch `codex/cx-builder-ref7-20261021`, base `b7a4cc502`.
-No push or merge. Work and evidence are recorded incrementally.
+**Partial closure.** Nullifier P6/owned callback and the actual Vec wrapper
+are closed. Complete admission, primitive Parts content, shipped RuntimeJoin
+and real execution coupling remain open. No release premise is removed.
+
+No push or merge. Each completed component is committed separately.
 
 ## Stage 2: canonical Parts / column handoff
 
@@ -164,6 +168,28 @@ P6 evidence remains under the named Kani/CBMC, compiler/extraction and std
 adapter trust boundary. No theorem asserts Kani soundness or promotes a
 solver receipt into a kernel axiom. No binary, object, LLBC or key is
 committed. No key cleanup, merge or push is performed.
+
+## Final verification
+
+Final endpoint J9320: `R1Z.PrivacyR1FinalReleaseSource2`, exit 0,
+4.20 s wall, 4,114,812 KiB RSS, zero swap; standard axioms only. Its new
+imports include both completed reference/column components. The final
+read-only audit checks seven current modules and twenty axiom audits,
+matching current source hashes, dependency-object hashes and receipts.
+It checks that the sole shipped crate diff is the five-line cfg-only
+registration at the end of spend.rs, all original privacy and quotient
+modules are unchanged, and all three frozen ELF cmp/hash checks pass.
+Exact audit packet: `builder-cont7-final-audit.json`; signature comparison:
+`builder-cont7-signature-audit.json`; all attempts (including rejected
+elaborations): `builder-cont7-attempts.jsonl`. No pending task-owned host
+build is left running. No full manifest or unchanged runtime suite was rerun.
+
+Remaining work is specifically: an owned validated-tree append/validation
+route with certified source equality and successful-source RspendPlus;
+canonical callee correspondence for all three primitive Parts components;
+the concrete successful-source HonestProver/RuntimeJoin assembly; and the
+actual checker/retry observation and randomness coupling. The new endpoint
+retains all those obligations instead of adding substitute premises.
 
 ## Verbatim endpoint signature audit
 
