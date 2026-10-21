@@ -7433,3 +7433,18 @@ Fintype/Nonempty sample-carrier instances. None was false at those values.
 Env J 9704, 9707, 9712, standard axioms, zero swap. This is the current
 privacy headline. Remaining: quotient fibres, exhaustion, builder premises,
 batch/log, and the two execution joins.
+
+## D107 — builder refinement part 10 (2026-10-21, lead)
+
+Landed from `codex/cx-builder-ref10-20261021` (`r1p-final/BUILDER-CONT10-20261021.md`):
+per-store and per-column byte-frame composition for the zeroising destructor
+at arbitrary lengths; proved Lean models for all 24 forest std externals;
+projected validator Kani checks with a symbolic loop induction, and
+successful-validator frontier acceptance. `PrivacyR1FinalReleaseSource5` keeps
+every premise. 8 modules, 52 audits, zero swap; no shipped change. Open: the
+actual destructor pointer/iterator correspondence; full forest semantic
+admission (the aggregate port hits callback-interface type mismatches); the
+shipped `RustRuntimeJoin` inhabitant; checker/retry coupling. The last two
+are the prover-side execution join, the privacy analogue of the
+verifier-equals-dV join on soundness. One more pass goes to forest admission,
+which is still a model step.
