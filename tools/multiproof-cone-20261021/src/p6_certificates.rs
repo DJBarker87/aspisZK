@@ -72,7 +72,7 @@ fn sibling_parent_contract() {
 /// until its solver result and unwinding assertions have both passed.
 #[derive(Clone,Copy)]
 struct TapeHash<'a> {
-    answers:&'a [[u8;32];288],selected:usize,coordinate:usize,
+    answers:&'a [[[u8;32];16];18],selected:usize,coordinate:usize,
     calls:&'a Cell<usize>,observed:&'a Cell<u8>,
 }
 impl Digest32 for TapeHash<'_> {
@@ -84,7 +84,7 @@ impl Digest32 for TapeHash<'_> {
             let c=self.coordinate;
             self.observed.set(if c==0 {parts[0][0]}else if c<33 {parts[1][c-1]}else{parts[2][c-33]});
         }
-        self.calls.set(call+1);self.answers[call]
+        self.calls.set(call+1);self.answers[call/16][call%16]
     }
 }
 
@@ -95,7 +95,9 @@ fn verify_in_place_complete() {
     let idx:[u32;16]=kani::any();let val:[[u8;32];16]=kani::any();
     let n:usize=kani::any();let nodes:[u8;5504]=kani::any();
     let length:usize=kani::any();kani::assume(length<=5504);
-    let root:[u8;32]=kani::any();let answers:[[u8;32];288]=kani::any();
+    // Nested construction keeps kani::Arbitrary's own initialization loops
+    // within the same unwind bound; all 288 replies remain independent.
+    let root:[u8;32]=kani::any();let answers:[[[u8;32];16];18]=kani::any();
     let selected:usize=kani::any();let coordinate:usize=kani::any();
     kani::assume(selected<288 && coordinate<65);
     let calls=Cell::new(0);let observed=Cell::new(0);
