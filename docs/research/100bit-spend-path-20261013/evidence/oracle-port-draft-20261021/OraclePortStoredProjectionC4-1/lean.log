@@ -1,0 +1,76 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortStoredProjectionC4.lean:44:25: error: Invalid simp theorem: Expected a proposition, but found
+  LiteralByteProtocol.Decoder → Decision → Input → Program Bytes State Bool
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortStoredProjectionC4.lean:45:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H (original D d P)).2.1.stored
+in the target expression
+  ((eval H (original D d P)).1 ++ (eval H (OraclePortStoredExperimentC4.verifier D d (eval H (original D d P)).2.1)).1,
+      ((eval H (original D d P)).2.1.statement,
+        RawCutTranscriptRun.proof
+          (build
+            ((eval H (original D d P)).1,
+              ((eval H (original D d P)).2.1.statement, (eval H (original D d P)).2.1.proof),
+              (eval H (original D d P)).2.2))
+          (eval H (original D d P)).2.1.proof),
+      (eval H (original D d P)).2.2) =
+    ((eval H (original D d P)).1 ++
+        (eval H
+            (OracleDecisionFeasibilityCore.verifier D (d (eval H P).2.stored) (eval H (original D d P)).2.1.statement
+              (eval H (original D d P)).2.1.proof)).1,
+      ((eval H (original D d P)).2.1.statement,
+        RawCutTranscriptRun.proof
+          (build
+            ((eval H (original D d P)).1,
+              ((eval H (original D d P)).2.1.statement, (eval H (original D d P)).2.1.proof),
+              (eval H (original D d P)).2.2))
+          (eval H (original D d P)).2.1.proof),
+      (eval H (original D d P)).2.2)
+
+D : LiteralByteProtocol.Decoder
+d : Decision
+build : RawCutProverCompiler.RunView → CanonicalCutEnrichedTranscript.Words
+P : Prover
+H : Bytes → State
+same :
+  view (eval H (original D d P)) =
+    eval H (RawCutProverCompiler.experiment (project P) (OraclePortExperiment.verifier D (d (eval H P).2.stored)))
+stored : (eval H (original D d P)).2.1.stored = (eval H P).2.stored
+⊢ ((eval H (original D d P)).1 ++ (eval H (OraclePortStoredExperimentC4.verifier D d (eval H (original D d P)).2.1)).1,
+      ((eval H (original D d P)).2.1.statement,
+        RawCutTranscriptRun.proof
+          (build
+            ((eval H (original D d P)).1,
+              ((eval H (original D d P)).2.1.statement, (eval H (original D d P)).2.1.proof),
+              (eval H (original D d P)).2.2))
+          (eval H (original D d P)).2.1.proof),
+      (eval H (original D d P)).2.2) =
+    ((eval H (original D d P)).1 ++
+        (eval H
+            (OracleDecisionFeasibilityCore.verifier D (d (eval H P).2.stored) (eval H (original D d P)).2.1.statement
+              (eval H (original D d P)).2.1.proof)).1,
+      ((eval H (original D d P)).2.1.statement,
+        RawCutTranscriptRun.proof
+          (build
+            ((eval H (original D d P)).1,
+              ((eval H (original D d P)).2.1.statement, (eval H (original D d P)).2.1.proof),
+              (eval H (original D d P)).2.2))
+          (eval H (original D d P)).2.1.proof),
+      (eval H (original D d P)).2.2)
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortStoredProjectionC4.lean:53:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  RawCutWordsFromView.frameFromView D
+    (eval H (RawCutProverCompiler.experiment ?m.26 (OracleDecisionFeasibilityCore.verifier D ?m.25))) n
+in the target expression
+  RawCutWordsFromView.frameFromView D (eval H (OraclePortExperiment.original D (d (eval H P).2.stored) (project P))) n =
+    RawCutWordsFromView.frame D H (eval H P).2.statement (eval H P).2.proof n
+
+D : LiteralByteProtocol.Decoder
+d : Decision
+P : Prover
+H : Bytes → State
+n : ℕ
+hn : n ≤ 33
+⊢ RawCutWordsFromView.frameFromView D (eval H (OraclePortExperiment.original D (d (eval H P).2.stored) (project P))) n =
+    RawCutWordsFromView.frame D H (eval H P).2.statement (eval H P).2.proof n
+'AspisR1.OraclePortStoredProjectionC4.project_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortStoredProjectionC4.original_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortStoredProjectionC4.recorded_view' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortStoredProjectionC4.frame_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
