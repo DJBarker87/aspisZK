@@ -1,0 +1,89 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOpeningRows.lean:67:18: error: Application type mismatch: The argument
+  pred
+has type
+  UScalar UScalarTy.U8
+but is expected to have type
+  Slice U8
+in the application
+  ih pred
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOpeningRows.lean:78:4: error: Tactic `apply` failed: could not unify the conclusion of `@result_decide_congr`
+  ok (decide ?p) = ok (decide ?q)
+with the goal
+  (do
+      let b ← MultiproofParserRef.parser_reference.opening_scan (sub bytes 0#usize 832#usize)
+      if b = true then MultiproofParserRef.parser_reference.opening_rows (bytes.drop 832#usize) pred else ok false) =
+    ok (decide (AllOpenings (n + 1) (bytesOf ↑bytes)))
+
+Note: The full type of `@result_decide_congr` is
+  ∀ {p q : Prop} [inst : Decidable p] [inst_1 : Decidable q], (p ↔ q) → ok (decide p) = ok (decide q)
+
+case succ
+n : ℕ
+ih :
+  ∀ (bytes : Slice U8) (remaining : U8),
+    ↑remaining = n →
+      (↑bytes).length = 832 * n →
+        MultiproofParserRef.parser_reference.opening_rows bytes remaining = ok (decide (AllOpenings n (bytesOf ↑bytes)))
+bytes : Slice U8
+remaining : U8
+hn : ↑remaining = n + 1
+length : (↑bytes).length = 832 * (n + 1)
+hne : remaining ≠ 0#u8
+bound : ↑832#usize ≤ (↑bytes).length
+notShort : ¬bytes.len < 832#usize
+head : Slice U8 := sub bytes 0#usize 832#usize
+headLength : (↑head).length = 832
+rest : Slice U8 := bytes.drop 832#usize
+restLength : (↑rest).length = (↑bytes).length - 832
+pred : UScalar UScalarTy.U8
+hpred : remaining - 1#u8 = ok pred
+hpost : ↑pred = ↑remaining - ↑1#u8 ∧ ↑1#u8 ≤ ↑remaining
+hp : ↑pred = n
+nextLength : (↑rest).length = 832 * n
+ht : MultiproofParserRef.parser_reference.opening_rows sorry sorry = ok (decide (AllOpenings n (bytesOf ↑sorry)))
+headBytes : bytesOf ↑head = List.take 832 (bytesOf ↑bytes)
+restBytes : bytesOf ↑rest = List.drop 832 (bytesOf ↑bytes)
+⊢ (do
+      let b ← MultiproofParserRef.parser_reference.opening_scan (sub bytes 0#usize 832#usize)
+      if b = true then MultiproofParserRef.parser_reference.opening_rows (bytes.drop 832#usize) pred else ok false) =
+    ok (decide (AllOpenings (n + 1) (bytesOf ↑bytes)))
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOpeningRows.lean:76:6: warning: This simp argument is unused:
+  MultiproofConeOpeningScan.opening_total head headLength
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵n̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵n̵o̵t̵S̵h̵o̵r̵t̵,̵p̵r̵e̵f̵i̵x̵_̵t̵o̵t̵a̵l̵[̲h̲n̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲n̲o̲t̲S̲h̲o̲r̲t̲,̲ ̲p̲r̲e̲f̲i̲x̲_̲t̲o̲t̲a̲l̲ bytes 832#usize b̵o̵u̵n̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵O̵p̵e̵n̵i̵n̵g̵S̵c̵a̵n̵.̵o̵p̵e̵n̵i̵n̵g̵_̵t̵o̵t̵a̵l̵ ̵h̵e̵a̵d̵ ̵h̵e̵a̵d̵L̵e̵n̵g̵t̵h̵,̵d̵e̵c̵i̵d̵e̵_̵e̵q̵_̵t̵r̵u̵e̵_̵e̵q̵,̵b̲o̲u̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲d̲e̲c̲i̲d̲e̲_̲e̲q̲_̲t̲r̲u̲e̲_̲e̲q̲,̲ drop_total bytes 832#usize b̵o̵u̵n̵d̵,̵h̵p̵r̵e̵d̵,̵h̵t̵,̵r̵e̵s̵u̵l̵t̵_̵i̵f̵_̵c̵o̵n̵j̵]̵b̲o̲u̲n̲d̲,̲ ̲h̲p̲r̲e̲d̲,̲ ̲h̲t̲,̲ ̲r̲e̲s̲u̲l̲t̲_̲i̲f̲_̲c̲o̲n̲j̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOpeningRows.lean:76:62: warning: This simp argument is unused:
+  decide_eq_true_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵n̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵n̵o̵t̵S̵h̵o̵r̵t̵,̵p̵r̵e̵f̵i̵x̵_̵t̵o̵t̵a̵l̵[̲h̲n̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲n̲o̲t̲S̲h̲o̲r̲t̲,̲ ̲p̲r̲e̲f̲i̲x̲_̲t̲o̲t̲a̲l̲ bytes 832#usize b̵o̵u̵n̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̲o̲u̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+        MultiproofConeOpeningScan.opening_total head h̵e̵a̵d̵L̵e̵n̵g̵t̵h̵,̵d̵e̵c̵i̵d̵e̵_̵e̵q̵_̵t̵r̵u̵e̵_̵e̵q̵,̵h̲e̲a̲d̲L̲e̲n̲g̲t̲h̲,̲ drop_total bytes 832#usize b̵o̵u̵n̵d̵,̵h̵p̵r̵e̵d̵,̵h̵t̵,̵r̵e̵s̵u̵l̵t̵_̵i̵f̵_̵c̵o̵n̵j̵]̵b̲o̲u̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲h̲p̲r̲e̲d̲,̲ ̲h̲t̲,̲ ̲r̲e̲s̲u̲l̲t̲_̲i̲f̲_̲c̲o̲n̲j̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOpeningRows.lean:77:45: warning: This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp only [hne, ̲if_false, ̲notShort, ̲prefix_total bytes 832#usize bound, ̲bind_tc_ok,
+        MultiproofConeOpeningScan.opening_total head headLength, ̲decide_eq_true_eq,
+        drop_total bytes 832#usize bound, ̲hpred,h̵t̵,̵ ̲result_if_conj]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOpeningRows.lean:77:48: warning: This simp argument is unused:
+  result_if_conj
+
+Hint: Omit it from the simp argument list.
+  simp only [hne, ̲if_false, ̲notShort, ̲prefix_total bytes 832#usize bound, ̲bind_tc_ok,
+        MultiproofConeOpeningScan.opening_total head headLength, ̲decide_eq_true_eq,
+        drop_total bytes 832#usize bound, ̲hpred, ̲ht,̵r̵e̵s̵u̵l̵t̵_̵i̵f̵_̵c̵o̵n̵j̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private.MultiproofConeOpeningRows.0.AspisR1.MultiproofConeOpeningRows.slice_step' depends on axioms: [propext,
+ Quot.sound]
+'AspisR1.MultiproofConeOpeningRows.all_step' depends on axioms: [propext, Quot.sound]
+'AspisR1.MultiproofConeOpeningRows.rows_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -153,8 +153,7 @@ release manifest replay.
 is deleted, no source implementation is adopted, and no whole verifier
 `AcceptedRunJoin` is constructed. The design rows retain whole-cone (d).
 
-For the parser, prove the complete scanner's fixed-section induction and
-semantic row/Vec expansion, then bind stored bytes to the actual reached
+For the parser, prove semantic row/Vec expansion, then bind stored bytes to the actual reached
 projection/decoder. Local totality does not prove the entire caller equation.
 For the multiproof, instantiate the exact live-prefix/scratch relation and
 RowJoin, establish key sorting/tie order and leaf/count/padding loop
@@ -174,3 +173,29 @@ python3 -B tools/multiproof-cone-20261021/audit.py
 `audit-result.json` deliberately records both complete-cone fields and
 `accepted_run_join_constructed` as false. The frozen headline/R19 and all
 Session A and sibling source modules remain byte-identical to this task's base.
+
+## Stage 5: complete strict scanner (2026-10-21)
+
+`MultiproofConeStrictScan.scan_total` identifies the actual Aeneas-extracted
+owned parser scanner with `OraclePortCompactDraft.scan` for every 57,607-byte
+slice, including rejection. Its proof composes arbitrary-byte canonical-word,
+compact-value and slice lemmas with an induction over the 22 opening records.
+`MultiproofConeCanonical.scan_total` establishes exact frozen canonicality,
+not just structural word checks; `MultiproofConeCompactScan.check_values_total`
+establishes it for every 16-byte-aligned compact region. The scanner theorem
+adds no source acceptance, canonical-input or honest-run hypothesis.
+
+The corresponding focused receipts record all section 6 fields and standard
+axioms. This is reference-to-model scanner closure, not the complete parser
+or either requested accepted-run join. Semantic rows, expansion and reached
+caller binding remain open. The preceding `audit-result.json` records the
+11-module/18-cut committed checkpoint; the expanded packet is being audited
+in the following stage.
+
+A nineteenth P6 root, `semantic_zero_high_field`, checks the frozen semantic
+field validator on each arbitrary zero-high compact expansion against the
+owned compact predicate. Its single focused host gate passed (0.638571 s,
+186568 KiB peak RSS, zero swaps); the receipt pins actual working source
+hashes. The recorded base revision predates this added root; a new complete
+19-root gate against a committed revision is required before final audit.
+Only proof-tool copies changed; all shipped source files remain unchanged.

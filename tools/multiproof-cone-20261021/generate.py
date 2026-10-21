@@ -46,7 +46,7 @@ leaf='''pub(crate) fn leaf_insert(idx:&mut [u32;16],val:&mut [[u8;32];16],d:&mut
 '''+leaf+'\ntrue\n}\n'
 # Exact parser/semantic functions and source expansion pipeline.
 wire_items=[item(base+'r1_wire.rs',m) for m in ['pub enum Error {','fn validate_record_fields(','pub fn parse_record(','pub struct Prefix<',"fn parse_record_at<'a>",'pub fn parse(bytes:','pub fn record(&self,']]
-wire_more='#[derive(Debug)]\n'+'\n'.join(wire_items[:5])+"\nimpl<'a> Prefix<'a> {\n"+'\n'.join(wire_items[5:])+"\n}\n"
+wire_more='#[derive(Debug)]\n'+'\n'.join(wire_items[:5]).replace('fn validate_record_fields(', 'pub(crate) fn validate_record_fields(')+"\nimpl<'a> Prefix<'a> {\n"+'\n'.join(wire_items[5:])+"\n}\n"
 parser_items=[item(base+'candidate.rs',m) for m in ['fn opening(','pub fn parse_shape(','fn canonical_scan(']]
 echeck=item(base+'verifier.rs','fn echeck(')
 parser='pub mod parser {\n use super::compact::{self,CodecError,OPENING};\n use aspis_core::field::{M31,QM31 as K,WideExact as E};\n #[derive(Clone,Copy,Debug,PartialEq,Eq)] pub enum Variant {S2}\n impl Variant {fn tag(self)->u8 {2}}\n #[derive(Debug)] pub enum Error {Parse}\n impl From<CodecError> for Error {fn from(_:CodecError)->Self{Self::Parse}}\n'+echeck+'\n'+'\n'.join(x.replace('fn canonical_scan(', 'pub(crate) fn canonical_scan(') for x in parser_items)+'\n}\n'
@@ -71,6 +71,7 @@ ledger=dict(schema='frozen-parser-multiproof-cuts-v1',exact_items=cuts,substitut
  'batch helpers: private functions exposed pub(crate)',
  'node-count group: fix Arity::Two; index_at(&level,...) becomes index_at(level,...) for the mutable-reference wrapper; exact parent/group/write/increment order',
  'binary group: extract Two match arm; i/at/w become mutable scalar references; false return preserved; exact parent/write order retained',
+ 'wire validate_record_fields: expose pub(crate) in the proof copy; body unchanged',
  'wire Error: add Debug derive for proof-crate test diagnostics only',
  'parser: isolated Error/Variant carriers retain Parse and tag=2; wire validation and Prefix functions copied verbatim',
  'leaf insertion: d becomes scalar reference; Merkle error becomes false and continue becomes true; exact writes retained'],

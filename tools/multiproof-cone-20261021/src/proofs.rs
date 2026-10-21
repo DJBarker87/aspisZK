@@ -144,3 +144,9 @@ impl Digest32 for LeafOracle {
  assert_eq!(j,if paired {i+2}else{i+1});
  assert_eq!(next_w,w+1);assert_eq!(contribution,if paired {0}else{1});assert_eq!(level[w],index/2);
 }
+
+#[kani::proof] #[kani::unwind(34)] fn semantic_zero_high_field(){
+ let compact:[u8;16]=kani::any();let row:u8=kani::any();
+ let expanded=r::expand_chunk(compact);
+ assert_eq!(f::r1_wire::validate_record_fields(row,&expanded).is_ok(),r::canonical_qm(compact));
+}

@@ -27,7 +27,7 @@ pub enum Error {
     TrailingBytes,
     Public, #[cfg(feature = "r1p-check")] ActivePole, // host retry loop only: Lean ¬NoPole, no detail (LOG D73.4.1)
 }
-fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
+pub(crate) fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {
     for (value, bytes) in payload.chunks_exact(32).enumerate() {
         let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;
         if x.c1() != QM31::ZERO {
