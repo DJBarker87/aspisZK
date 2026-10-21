@@ -1,0 +1,124 @@
+import OraclePortFrozen2Checkpoint
+import OraclePortFrozenOrderEnvelopes
+
+/-! TX1 authenticates batch 0 and saves ten accumulator steps. Pool TX2
+checks the three checkpoint digests, resumes twelve steps, authenticates
+batch 1, and checks finish on the returned state. No checkpoint is chosen
+outside the oracle program. The two entry points use the same retained bytes.
+Source caller/field provenance remains a separate accepted-run join. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortFrozen2
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft OraclePortFrozenOrder
+open OraclePortStoredDecisionDraftC4 OraclePortStoredExperimentC4
+open RawCutTranscriptRun (ErasedPrefix ErasedMessage)
+open RecordedBinaryExperimentBin (SourceInputs)
+open OraclePortCheckpointAbiC5
+attribute [local instance] Classical.propDecidable
+
+def batch0 : List (Nat × Nat) := [(0,0),(0,1),(0,2)]
+def batch1 : List (Nat × Nat) := [(1,0),(1,1),(1,2)]
+abbrev batch (p : Parsed) (q : Fin 22 → Fin 262144) (ss : List (Nat × Nat)) :=
+  OraclePortShortCircuit.short (slotPrograms p q ss)
+
+def stage2 (p : Parsed) (q : Fin 22 → Fin 262144) (tr : ErasedPrefix)
+    (i : SourceInputs) (a : QueryAccumulator.State K E) : Program Bytes State Bool :=
+  bind (batch p q batch1) fun ok => .done (ok && finish p q tr i a)
+
+def afterBatch0 (stored : Bytes) (p : Parsed) (q : Fin 22 → Fin 262144)
+    (tr : ErasedPrefix) : Program Bytes State Bool :=
+  match input p q tr, LiteralOpeningView.read (typedRows p q tr) with
+  | some i, some v => bind (checkpoint stored p q tr i v) fun resumed =>
+      match resumed with
+      | none => .done false
+      | some a => stage2 p q tr i a
+  | _, _ => .done false
+
+def dV_frozen2 : Decision := fun stored tr _ =>
+  if OraclePortAdmission.Guard tr then
+    match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+    | some p, some q => bind (batch p q batch0) fun ok =>
+        if ok then afterBatch0 stored p q tr else .done false
+    | _, _ => .done false
+  else .done false
+
+theorem short_append (H : Bytes → State) (ps qs : List (Program Bytes State Bool)) :
+    eval H (OraclePortShortCircuit.short (ps ++ qs)) =
+      eval H (bind (OraclePortShortCircuit.short ps) fun ok =>
+        if ok then OraclePortShortCircuit.short qs else .done false) := by
+  induction ps with
+  | nil => rfl
+  | cons p ps ih =>
+    simp only [List.cons_append,OraclePortShortCircuit.short,eval_bind]
+    cases h : (eval H p).2 <;> simp [h,eval,ih,eval_bind,List.append_assoc]
+
+theorem batches (H : Bytes → State) (p : Parsed) (q : Fin 22 → Fin 262144) :
+    eval H (batch p q slots) = eval H (bind (batch p q batch0) fun ok =>
+      if ok then batch p q batch1 else .done false) := by
+  have ss : slots = batch0 ++ batch1 := rfl
+  unfold batch
+  simp only [ss,slotPrograms,List.map_append,short_append]
+
+theorem after_value (H : Bytes → State) (stored : Bytes) (p : Parsed)
+    (q : Fin 22 → Fin 262144) (tr : ErasedPrefix) (query : queries tr = some q) :
+    (eval H (afterBatch0 stored p q tr)).2 =
+      ((eval H (batch p q batch1)).2 && arithmetic p q tr) := by
+  cases hi : input p q tr with
+  | none => simp [afterBatch0,hi,arithmetic,eval]
+  | some i =>
+    cases hv : LiteralOpeningView.read (typedRows p q tr) with
+    | none =>
+      have reject : D0TypedChecks.verify (typedRows p q tr) i = false := by
+        cases checked : D0TypedChecks.verify (typedRows p q tr) i
+        · rfl
+        · have matching := D0TypedChecks.accepted_matching _ i checked
+          obtain ⟨v,_,_,opening,_,_⟩ := HchecksReaderComposition.matching_read_parsers _ i.data matching
+          rw [hv] at opening
+          contradiction
+      simp [afterBatch0,hi,hv,arithmetic,reject,eval]
+    | some v =>
+      simp only [afterBatch0,hi,hv,eval_bind,checkpoint_value,stage2,eval_bind,eval,
+        finish_value p q tr i hi query,arithmetic,hi]
+
+theorem acceptance_eq (H : Bytes → State) (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage) :
+    (eval H (dV_frozen2 stored tr m)).2 = (eval H (dV_frozen stored tr m)).2 := by
+  by_cases guard : OraclePortAdmission.Guard tr
+  · cases hp : OraclePortStoredParserC4.parseReached stored tr with
+    | none => simp only [dV_frozen2,dV_frozen,if_pos guard,hp,eval]
+    | some p =>
+      cases hq : queries tr with
+      | none => simp only [dV_frozen2,dV_frozen,if_pos guard,hp,hq,eval]
+      | some q =>
+        simp only [dV_frozen2,dV_frozen,if_pos guard,hp,hq,eval_bind,eval]
+        change _ = (eval H (batch p q slots)).2 && arithmetic p q tr
+        rw [batches]
+        simp only [eval_bind]
+        cases h : (eval H (batch p q batch0)).2 <;>
+          simp [h,eval,after_value H stored p q tr hq]
+  · simp only [dV_frozen2,dV_frozen,if_neg guard]
+
+theorem accepted_details (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage)
+    (H : Bytes → State) (ha : (eval H (dV_frozen2 stored tr m)).2 = true) :
+    OraclePortAdmission.Guard tr ∧ ∃ p q i,
+      OraclePortStoredParserC4.parseReached stored tr = some p ∧ queries tr = some q ∧
+      (eval H (OraclePortShortCircuit.short (slotPrograms p q slots))).2 = true ∧
+      input p q tr = some i ∧ D0TypedChecks.verify (typedRows p q tr) i = true :=
+  OraclePortFrozenOrder.accepted_details stored tr m H ((acceptance_eq H stored tr m).symm.trans ha)
+
+theorem admitted (stored : Bytes) :
+    OraclePortAdmission.admit (dV_frozen2 stored) = dV_frozen2 stored := by
+  funext tr m
+  unfold OraclePortAdmission.admit dV_frozen2
+  split <;> rfl
+
+#print axioms short_append
+#print axioms batches
+#print axioms after_value
+#print axioms acceptance_eq
+#print axioms accepted_details
+#print axioms admitted
+end AspisR1.OraclePortFrozen2
+end
