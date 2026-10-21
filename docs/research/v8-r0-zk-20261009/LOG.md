@@ -7475,3 +7475,21 @@ attempt range (9200–9399) is exhausted. Lead decision: pause the builder
 track here after eleven passes. What remains is mostly the prover-side
 execution join, and it resumes with a fresh attempt allocation when the user
 reviews the plan.
+
+## D110 — prover commitment part 7: one caller law (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit7-20261021` (`r1p-final/PROVER-COMMIT7-20261021.md`).
+Exact consuming-cursor exhaustion classification is proved, and quotient
+failures are identified with the two wordsE exhaustion events. Both shipped
+scalar callers are Kani-verified against the owned reference with verified
+next-word callees (the shared memoised oracle, cfg(kani) only), and the
+reference is extracted with its finite sixteen-step loop semantics proved.
+`PrivacyR1FinalProtocolCaller` derives the fibre, exhaustion and budget
+premises from one explicit `CallerLaw`, so the shipped-prover side of
+those rows is now a single named caller refinement. Final J8266: 23
+standard-axiom checks; all three frozen ELFs rebuilt byte-identical (shipped
+edits are cfg(kani)/cfg(aeneas_ref) modules only, gated in `lib.rs`). Open:
+full caller transport and universal read coverage. The scalar-summary,
+four-coordinate and balancing comparisons hit 600 s timeouts and were not
+rerun. All nine source checklist rows stay open. This endpoint builds on the
+Quotient line; it should be folded into the D106 privacy headline.
