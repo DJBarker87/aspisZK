@@ -7554,3 +7554,16 @@ byte-cost bound at the generic signature. That is the free-parameter pattern
 again, so pass 2 fixes `outputs` and the field/view stages to the protocol
 instance (as D106/D111 did), then proves the size and preparation contracts
 there.
+
+## D115 — prover commitment part 9: balancing loops extracted (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit9-20261021` (`r1p-final/PROVER-COMMIT9-20261021.md`).
+Reshaping the owned balancing references into row recursion gets past the
+Aeneas collapse error: both translate, Lean proves ascending-fold
+equivalence for both complete owned balancing callers, and both Kani row
+comparisons pass. J8288: 40 standard-axiom audits, zero swap; the shipped
+change is in the cfg(kani)/cfg(aeneas_ref) reference module only, and all
+three frozen ELFs are byte-identical. `CallerLaw` is not discharged, because
+D112's headline quantifies over an arbitrary decoder. Same pattern as D108
+and D114: part 10 fixes the decoder to the concrete shipped decoder (with its
+execution transport), then proves CallerLaw and read coverage there.
