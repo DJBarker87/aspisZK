@@ -1,0 +1,54 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCheckpointResumeC5.lean:41:2: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCheckpointResumeC5.lean:40:63: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵e̵c̵o̵d̵e̵A̵c̵c̵u̵m̵u̵l̵a̵t̵o̵r̵,̵i̵f̵_̵p̵o̵s̵ ̵h̵e̵a̵d̵e̵r̵,̵r̵h̵s̵,̵p̵o̵w̵e̵r̵,̵w̵e̵i̵g̵h̵t̵s̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]̵[̲d̲e̲c̲o̲d̲e̲A̲c̲c̲u̲m̲u̲l̲a̲t̲o̲r̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲h̲e̲a̲d̲e̲r̲,̲ ̲r̲h̲s̲,̲ ̲p̲o̲w̲e̲r̲,̲ ̲w̲e̲i̲g̲h̲t̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCheckpointResumeC5.lean:83:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.take 1736 (encode H stored pub p a)
+in the target expression
+  List.drop 1736 (encode H stored pub p a) =
+    bytes (H (OraclePortPhysicalFrameDraft.domain ++ List.take 1736 (save H stored pub c d rho q).checkpoint))
+
+H : Bytes → State
+stored pub : Bytes
+c : Context
+d : MatchingSupport.Data E
+rho : K
+q : Fin 22 → Fin 262144
+p : Prepared := prepared c d rho q
+a : QueryAccumulator.State K E := (OraclePortCheckpointStateC3.write (model d rho q)).accumulator
+proofHash : slice (encode H stored pub p a) 16 32 = bytes (H stored)
+publicHash : slice (encode H stored pub p a) 48 32 = bytes (H pub)
+body : List.take 1736 (encode H stored pub p a) = OraclePortCheckpointAbiC5.body p a (H stored) (H pub)
+checksum :
+  List.drop 1736 (encode H stored pub p a) =
+    bytes (H (OraclePortPhysicalFrameDraft.domain ++ OraclePortCheckpointAbiC5.body p a (H stored) (H pub)))
+⊢ List.drop 1736 (encode H stored pub p a) =
+    bytes (H (OraclePortPhysicalFrameDraft.domain ++ List.take 1736 (save H stored pub c d rho q).checkpoint))
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCheckpointResumeC5.lean:105:23: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.OraclePortCheckpointResumeC5.decode_written' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortCheckpointResumeC5.stored_retained' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCheckpointResumeC5.save_hash_binding' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortCheckpointResumeC5.physical_resume' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortCheckpointResumeC5.physical_finish' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
