@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFreshWindow24.lean:52:4: error: Invalid argument name `i` for function `indexed_injective`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `room`: i̵r̲o̲o̲m̲
+  • `seed`: i̵s̲e̲e̲d̲
+  • `a₁`: i̵a̲₁̲
+  • `a₂`: i̵a̲₂̲
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFreshWindow24.lean:53:6: error: Type mismatch: After simplification, term
+  same
+ has type
+  address (List.ofFn seed) (↑attempt) (UInt8.ofNat ↑stream) i =
+    address (List.ofFn seed) (↑attempt) (UInt8.ofNat ↑stream) j
+but is expected to have type
+  address (List.ofFn seed) (↑?m.48.1) (UInt8.ofNat ↑?m.48.2.1) ↑?m.48.2.2 =
+    address (List.ofFn seed) (↑?m.49.1) (UInt8.ofNat ↑?m.49.2.1) ↑?m.49.2.2
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFreshWindow24.lean:50:84: error: unsolved goals
+seed : OracleAnswer
+attempt : Fin 8
+stream : Fin 4
+i j : ℕ
+hi : i < 2 ^ 64
+hj : j < 2 ^ 64
+same : cursor seed attempt stream i = cursor seed attempt stream j
+⊢ i = j
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFreshWindow24.lean:66:2: error: 'change' tactic failed, pattern
+  seedPoint (address (List.ofFn seed) (↑attempt) (UInt8.ofNat ↑stream) counter) seed
+is not definitionally equal to target
+  seedPoint (cursor seed attempt stream counter) seed
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFreshWindow24.lean:79:4: error: Invalid argument name `i` for function `indexed_injective`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `room`: i̵r̲o̲o̲m̲
+  • `seed`: i̵s̲e̲e̲d̲
+  • `a₁`: i̵a̲₁̲
+  • `a₂`: i̵a̲₂̲
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFreshWindow24.lean:80:6: error: Type mismatch: After simplification, term
+  same
+ has type
+  address (List.ofFn seed) (↑i.1) (UInt8.ofNat ↑i.2.1) ↑i.2.2 =
+    address (List.ofFn seed) (↑attempt) (UInt8.ofNat ↑stream) counter
+but is expected to have type
+  address (List.ofFn seed) (↑?m.115.1) (UInt8.ofNat ↑?m.115.2.1) ↑?m.115.2.2 =
+    address (List.ofFn seed) (↑?m.116.1) (UInt8.ofNat ↑?m.116.2.1) ↑?m.116.2.2
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFreshWindow24.lean:75:105: error: unsolved goals
+history : List (Index (2 ^ 64))
+seed : OracleAnswer
+attempt : Fin 8
+stream : Fin 4
+start counter : ℕ
+lower : start ≤ counter
+room : counter < 2 ^ 64
+earlier : ∀ i ∈ history, i.1 ≠ attempt ∨ i.2.1 ≠ stream ∨ ↑i.2.2 < start
+h : cursor seed attempt stream counter ∈ (List.map (indexedAddress seed) history).toFinset
+i : Index (2 ^ 64)
+member : i ∈ history
+same : indexedAddress seed i = cursor seed attempt stream counter
+⊢ False
+'R1Z.ProverCommitFreshWindow24.linear_fresh' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitFreshWindow24.cursor_injective' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitFreshWindow24.observer_fresh' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitFreshWindow24.earlier_coin_fresh' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitFreshWindow24.source_window_fresh' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

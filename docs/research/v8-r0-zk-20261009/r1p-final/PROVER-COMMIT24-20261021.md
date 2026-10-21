@@ -54,7 +54,38 @@ peak 2534100 KiB, swaps 0; both audits use only standard axioms.
 
 The retained ordinary/gamma transcript packets explicitly cover candidates,
 not unconditional equivalence to the frozen source. They are not installed
-as shipped policies. Further caller/policy/coupling work is in progress.
+as shipped policies. Further caller/policy/coupling work is below.
+
+## Stage 3 — source-frame freshness and fuel marginal obstruction
+
+`ProverCommitFreshWindow24.source_window_fresh` proves Fresh for a concrete
+five-counter source address window against retained earlier coin coordinates
+and observer queries outside the existing seedGuess event. Different attempts
+and streams, and strictly lower counters on the same attempt/stream, are
+separated on actual concatenated bytes. The start may depend on earlier
+answers: all answer branches satisfy the invariant. This closes that local
+freshness shape; it does not classify every other internal source hash call
+or assert that the entire shipped caller is the marked program.
+
+J7493 hit the existing heartbeat limit during implicit address reduction.
+The replacement keeps the address definitions locally irreducible and
+explicitly rewrites their small outer shape; no limit was raised. J7494 and
+J7496 are excluded elaboration/projection failures. J7498 passes all five
+freshness theorems: exit 0, wall 1.95 s, peak 4040884 KiB, swaps 0; standard
+axioms only.
+
+`ProverCommitFuelFactor24.runJoin_not_model_function` proves a necessary
+coupling constraint for the actual RunJoin carrier: its retained fuel tape
+cannot be any deterministic function of its model coins and retained seed.
+The proof uses an off-graph witness and the exact product marginal; it never
+enumerates the fuel carrier. `tape_nontrivial` needs no axioms. J7495 is an
+excluded eventMass elaboration failure; J7497 passes the three theorems:
+exit 0, wall 1.78 s, peak 4035376 KiB, swaps 0; standard axioms only.
+
+This is a demonstrated obstruction to the deterministic-factor construction,
+not a proof that a source coupling with additional randomness is impossible.
+The generic complete_joint law does not by itself construct the two
+RunJoin marginal maps for the actual source experiment.
 
 ## Concrete experiment and endpoint
 
