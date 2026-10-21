@@ -7461,3 +7461,17 @@ cases. Specialise `log`, `fib` and `opens` to the protocol's own D88 encoding
 (the logical transcript encoding and phase leaves of PhaseProtocolInstanceBin),
 then prove both premises there. The Rust serialisation equalling that
 encoding stays a source join. Env J 9721, standard axioms, zero swap.
+
+## D109 — builder refinement part 11; builder track paused (2026-10-21, lead)
+
+Landed from `codex/cx-builder-ref11-20261021` (`r1p-final/BUILDER-CONT11-20261021.md`).
+State-preserving forest callback adapters are proved, the aggregate forest
+callback port now compiles, and forest selection and destructor cursor frames
+are proved; inner/outer iterator Kani projections pass. 3 modules, 15
+audits, zero swap; no shipped change. Full semantic admission and the
+universal shipped-destructor correspondence stay open, and `RustRuntimeJoin`
+and checker/retry coupling remain named premises. The builder's env-J
+attempt range (9200–9399) is exhausted. Lead decision: pause the builder
+track here after eleven passes. What remains is mostly the prover-side
+execution join, and it resumes with a fresh attempt allocation when the user
+reviews the plan.
