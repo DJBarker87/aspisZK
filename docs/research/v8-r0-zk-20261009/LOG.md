@@ -7789,3 +7789,12 @@ module at the end of shipped `aspis-r1-cost-probe/src/sim.rs` (additions only,
 no lines moved, excluded from production builds) without rebuilding the ELFs.
 The next prover job must confirm all three frozen ELFs byte-identical as its
 first stage.
+
+## D129 — frozen ELF recheck at the research tip: all three match (2026-10-21, lead)
+
+Clears the D128 pending check. `codex/cx-elf-recheck-20261021` (evidence
+`100bit-spend-path-20261013/evidence/elf-recheck-20261021/RESULTS.md`) rebuilt
+the three frozen programs from the research tip, including the cfg-gated
+`sim.rs` addition. Default verifier `dfc2a91a…`, devnet `fb2fc048…` and Pool
+`121f3e29…` all **MATCH** (SHA-256 and byte-for-byte cmp; the unstripped
+linked ELFs also match). Capped builds, zero swap.
