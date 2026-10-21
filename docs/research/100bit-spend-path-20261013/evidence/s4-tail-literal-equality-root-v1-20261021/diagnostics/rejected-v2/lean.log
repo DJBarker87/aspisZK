@@ -1,0 +1,85 @@
+/tmp/root-s4-tail-literal-equality-v2-20261021/sources/S4TailLiteralEqualityRootV1.lean:77:14: error: unsolved goals
+case ok
+ops : Ops
+a : Std.Array U8 608#usize
+g : Std.Array Wide 29#usize
+slot : Usize
+old : Tail
+r0 : Range := { start := 0#usize, «end» := 2#usize }
+r1 : Range := { start := 1#usize, «end» := 2#usize }
+r2 : Range := { start := 2#usize, «end» := 2#usize }
+step : Range × Tail → Result (ControlFlow (Range × Tail) Tail) := fun st => TailBody ops a g slot st.1 st.2
+hn0 : core.iter.range.IteratorRange.next core.iter.range.StepUsize r0 = ok (some 0#usize, r1)
+hn1 : core.iter.range.IteratorRange.next core.iter.range.StepUsize r1 = ok (some 1#usize, r2)
+hd : ∀ (tail : Tail), loop step (r2, tail) = ok tail
+tail next : Tail
+hp : literalPush ops a g slot 1#usize tail = ok next
+⊢ loop (fun st => TailBody ops a g slot st.1 st.2) (r2, next) = ok next
+/tmp/root-s4-tail-literal-equality-v2-20261021/sources/S4TailLiteralEqualityRootV1.lean:85:12: error: unsolved goals
+case ok
+ops : Ops
+a : Std.Array U8 608#usize
+g : Std.Array Wide 29#usize
+slot : Usize
+old : Tail
+r0 : Range := { start := 0#usize, «end» := 2#usize }
+r1 : Range := { start := 1#usize, «end» := 2#usize }
+r2 : Range := { start := 2#usize, «end» := 2#usize }
+step : Range × Tail → Result (ControlFlow (Range × Tail) Tail) := fun st => TailBody ops a g slot st.1 st.2
+hn0 : core.iter.range.IteratorRange.next core.iter.range.StepUsize r0 = ok (some 0#usize, r1)
+hn1 : core.iter.range.IteratorRange.next core.iter.range.StepUsize r1 = ok (some 1#usize, r2)
+hd : ∀ (tail : Tail), loop step (r2, tail) = ok tail
+hm : ∀ (tail : Tail), loop step (r1, tail) = literalPush ops a g slot 1#usize tail
+next : Tail
+hp : literalPush ops a g slot 0#usize old = ok next
+⊢ loop (fun st => TailBody ops a g slot st.1 st.2) (r1, next) = literalPush ops a g slot 1#usize next
+/tmp/root-s4-tail-literal-equality-v2-20261021/sources/S4TailLiteralEqualityRootV1.lean:70:29: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [step, r2, hb,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-tail-literal-equality-v2-20261021/sources/S4TailLiteralEqualityRootV1.lean:77:28: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵,̵bind_tc_ok, ̲hd]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-tail-literal-equality-v2-20261021/sources/S4TailLiteralEqualityRootV1.lean:77:42: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp only [hp, ̲bind_tc_ok,̵h̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-tail-literal-equality-v2-20261021/sources/S4TailLiteralEqualityRootV1.lean:78:27: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-tail-literal-equality-v2-20261021/sources/S4TailLiteralEqualityRootV1.lean:79:24: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵p̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-tail-literal-equality-v2-20261021/sources/S4TailLiteralEqualityRootV1.lean:85:57: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [literalTwoPushes, ̲hp, ̲bind_tc_ok,̵h̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1FastDotsTailLiteralEqualityRootV1.actual_tail_eq_literal_two_pushes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsTailLiteralEqualityRootV1.literal_two_pushes_success_actual_tail' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

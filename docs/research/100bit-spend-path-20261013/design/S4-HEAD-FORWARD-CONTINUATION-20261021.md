@@ -109,3 +109,9 @@ The accepted-run theorem replaces the independently supplied prefix identity wit
 The opening operation still has an explicit successful-read byte-offset contract on the same proof and `next`; `next<22`, canonical gamma, successful ClaimPowers and its same-array carrier identity remain inputs. `query_values_forward_prefix_ops` is a selected prefix model, so this composition is not full frozen query_values/tx2 source refinement. Production scanner/opening, powers/caller, P6/Std and runtime/artifact joins remain open.
 
 Packet `evidence/s4-scanned-query-prefix-root-v1-20261021/`: focused exit0,47.985s,3,261,661,184B peak process RSS,zero swaps,standard axioms. Exact prefix-adapter source/object pair matches its existing producer manifest; unchanged dependencies were reused.
+
+## All-outcome tail equivalence
+
+`S4TailLiteralEqualityRootV1.actual_tail_eq_literal_two_pushes` proves exact Result equality between the original generated tail loop over0..2 and the candidate literal two-push model, for arbitrary typed inputs and operation records. The proof reuses the exact literal operation sequence and next/body equality, then unfolds only the two range steps and terminal state. It covers success, failure and divergence without parser, coordinate, accumulator invariant or execution-success premises. `literal_two_pushes_success_actual_tail` supplies the previously missing reverse success direction.
+
+This closes the one-way tail-model comparison, not raw candidate type/operation correspondence or full frozen helper equivalence/adoption. Packet `evidence/s4-tail-literal-equality-root-v1-20261021/`: focused exit0,10.370s,3,683,172,352B peak process RSS,zero swaps,standard axioms. Two failed local match/let presentation attempts are retained; no source/toolchain or cap change, no full replay or CU rerun. The copied literal definitions/body helper match the prior retained source exactly up to enclosing namespace.
