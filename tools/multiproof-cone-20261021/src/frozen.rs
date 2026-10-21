@@ -516,6 +516,51 @@ pub(crate) fn binary_group<H:Digest32>(hash:H,idx:&mut [u32;16],val:&mut [[u8;32
  idx[*w]=parent;val[*w]=digest;*w+=1;true
 }
 
+pub(crate) fn binary_level<H:Digest32>(hash:H,idx:&mut [u32;16],val:&mut [[u8;32];16],n:&mut usize,nodes:&[u8],at:&mut usize)->bool {
+let arity=Arity::Two;
+        let mut w = 0;
+        let mut i = 0;
+        while i < *n {
+            let parent = index_at(idx, i) >> arity.bits();
+            let digest = match arity {
+                Arity::Two => {
+                    // Hash straight from the stored slices: no sibling or
+                    // pair copies (SBF cost; same grammar and order).
+                    if i + 1 < *n && index_at(idx, i + 1) == index_at(idx, i) ^ 1 {
+                        let d = occupied_binary_parent(hash, val, i);
+                        i += 2;
+                        d
+                    } else {
+                        let Some(sibling) = nodes.get(*at..*at + 32) else { return false };
+                        *at += 32;
+                        let d = sibling_binary_parent(hash, val, i, sibling, index_at(idx, i) & 1 == 0);
+                        i += 1;
+                        d
+                    }
+                }
+                Arity::Eight => {
+                    let mut children = [[0u8; 32]; 8];
+                    for (slot, child) in children.iter_mut().enumerate() {
+                        if i < *n && index_at(idx, i) >> 3 == parent && (index_at(idx, i) & 7) as usize == slot {
+                            *child = value_at(val, i);
+                            i += 1;
+                        } else {
+                            let Some(sibling) = nodes.get(*at..*at + 32) else { return false };
+                            child.copy_from_slice(sibling);
+                            *at += 32;
+                        }
+                    }
+                    merkle::parent_with_digest(hash, &children)
+                }
+            };
+            idx[w] = parent;
+            val[w] = digest;
+            w += 1;
+        }
+        *n = w;
+true
+}
+
 pub(crate) fn count_group(level:&mut [u32;16],n:usize,mut i:usize,mut w:usize)->(usize,usize,usize) {
  let arity=Arity::Two;let mut count=0;
             let parent = index_at(level, i) >> arity.bits();
@@ -599,6 +644,26 @@ pub(crate) fn leaf_insert(idx:&mut [u32;16],val:&mut [[u8;32];16],d:&mut usize,i
         val[*d] = leaf;
         *d += 1;
 true
+}
+
+#[cfg(kani)]
+pub(crate) fn leaf_batch_iteration(keys:[u64;16],mut key_position:usize,lo:usize,tree:usize,q:&[u8;832],idx:&mut [u32;16],val:&mut [[u8;32];16],d:&mut usize,answer:[u8;32],coordinate:usize)->(bool,usize,usize,usize,u8) {
+        let key = batch_key_at(&keys, key_position);
+        key_position += 1;
+        let index = (key >> 8) as u32;
+        let selected = lo + (key & 0xff) as usize;
+        let observation = crate::adoption::leaf_hash(tree,q,answer,coordinate);
+        let leaf = observation.digest;
+        if *d > 0 && same_batch_index(idx, *d - 1, index) {
+            if !same_batch_leaf(val, *d - 1, leaf) {
+                return (false,key_position,selected,observation.calls,observation.event);
+            }
+            return (true,key_position,selected,observation.calls,observation.event);
+        }
+        idx[*d] = index;
+        val[*d] = leaf;
+        *d += 1;
+(true,key_position,selected,observation.calls,observation.event)
 }
 
 }

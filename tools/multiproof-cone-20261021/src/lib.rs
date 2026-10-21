@@ -7,3 +7,5 @@ pub mod sort_reference;
 pub use frozen::r1_wire;
 #[cfg(kani)] mod proofs;
 #[cfg(test)] mod tests;
+
+#[cfg(kani)] pub mod adoption;

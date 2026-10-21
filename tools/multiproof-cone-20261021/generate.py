@@ -43,6 +43,12 @@ step='''pub(crate) fn binary_group<H:Digest32>(hash:H,idx:&mut [u32;16],val:&mut
  idx[*w]=parent;val[*w]=digest;*w+=1;true
 }
 '''
+# One exact outer iteration of verify_in_place, fixed to binary arity.
+va=mp.index('        let mut w = 0;',mp.index('pub fn verify_in_place'))
+vb=mp.index('        n = w;',va)+len('        n = w;')
+level_body=mp[va:vb].replace('while i < n {','while i < *n {').replace('i + 1 < n','i + 1 < *n').replace('i < n &&','i < *n &&').replace('at..at + 32','*at..*at + 32').replace('at +=','*at +=').replace('n = w;','*n = w;')
+level='pub(crate) fn binary_level<H:Digest32>(hash:H,idx:&mut [u32;16],val:&mut [[u8;32];16],n:&mut usize,nodes:&[u8],at:&mut usize)->bool {\nlet arity=Arity::Two;\n'+level_body+'\ntrue\n}\n'
+
 # Exact count-level group; arity is fixed to Two by the concrete caller.
 a=mp.index('            let parent = index_at(&level, i) >> arity.bits();')
 b=mp.index('            i = j;',a)+len('            i = j;')
@@ -54,6 +60,16 @@ leaf=leaf.replace('return Err(Error::Merkle);','return false;').replace('       
 leaf=leaf.replace('d >','*d >').replace('d -','*d -').replace('idx[d]','idx[*d]').replace('val[d]','val[*d]').replace('d +=','*d +=')
 leaf='''pub(crate) fn leaf_insert(idx:&mut [u32;16],val:&mut [[u8;32];16],d:&mut usize,index:u32,leaf:[u8;32])->bool {
 '''+leaf+'\ntrue\n}\n'
+# The entire key-position/leaf iteration, including duplicate-error chronology.
+la=s.index('        let key = batch_key_at(&keys, key_position);')
+lb=s.index('\n    let count = multiproof::node_count',la)
+leaf_body=s[la:lb];leaf_body=leaf_body[:leaf_body.rfind('\n    }')]
+leaf_body=leaf_body.replace('let q = opening(proof, lo + (key & 0xff) as usize);','let selected = lo + (key & 0xff) as usize;')
+leaf_body=leaf_body.replace('let leaf = batch_leaf(hash, tree, q);','let observation = crate::adoption::leaf_hash(tree,q,answer,coordinate);\n        let leaf = observation.digest;')
+leaf_body=leaf_body.replace('return Err(Error::Merkle);','return (false,key_position,selected,observation.calls,observation.event);').replace('            continue;','            return (true,key_position,selected,observation.calls,observation.event);')
+leaf_body=leaf_body.replace('d >','*d >').replace('d -','*d -').replace('idx[d]','idx[*d]').replace('val[d]','val[*d]').replace('d +=','*d +=')
+leaf_iteration='#[cfg(kani)]\npub(crate) fn leaf_batch_iteration(keys:[u64;16],mut key_position:usize,lo:usize,tree:usize,q:&[u8;832],idx:&mut [u32;16],val:&mut [[u8;32];16],d:&mut usize,answer:[u8;32],coordinate:usize)->(bool,usize,usize,usize,u8) {\n'+leaf_body+'\n(true,key_position,selected,observation.calls,observation.event)\n}\n'
+
 # Exact parser/semantic functions and source expansion pipeline.
 wire_items=[item(base+'r1_wire.rs',m) for m in ['pub enum Error {','fn validate_record_fields(','pub fn parse_record(','pub struct Prefix<',"fn parse_record_at<'a>",'pub fn parse(bytes:','pub fn record(&self,']]
 wire_more='#[derive(Debug)]\n'+'\n'.join(wire_items[:5]).replace('fn validate_record_fields(', 'pub(crate) fn validate_record_fields(')+"\nimpl<'a> Prefix<'a> {\n"+'\n'.join(wire_items[5:])+"\n}\n"
@@ -68,18 +84,20 @@ pub mod compact {
 '''+compact+'''
 }
 pub mod multiproof {
-'''+mp+'\n'+step+'\n'+count_group+'''
+'''+mp+'\n'+step+'\n'+level+'\n'+count_group+'''
 }
 pub mod batch {
 use super::multiproof;
 use aspis_core::{r0::merkle,Digest32};
 use aspis_core::state_only_private_merkle::private_leaf_hash_with_digest;
-'''+batch+'\n'+sort_step+'\n'+leaf+'\n}\n'+parser}
+'''+batch+'\n'+sort_step+'\n'+leaf+'\n'+leaf_iteration+'\n}\n'+parser}
 ledger=dict(schema='frozen-parser-multiproof-cuts-v1',exact_items=cuts,substitutions=[
  'compact.rs: verifier::SEMANTIC_BYTES replaced by its pinned literal 13_831',
  'multiproof verifier prefix: private well_formed exposed pub(crate)',
  'batch helpers: private functions exposed pub(crate)',
  'sort atomic step: exact let-j/while guard and swap/decrement body; while becomes one if; return continuation flag, owned keys and cursor',
+ 'binary_level: exact verify_in_place outer level body; fix Arity::Two, n/at become scalar references, success returns true, rejection scratch and local n retained',
+ 'leaf_batch_iteration: exact candidate batch_tree key/read/hash/duplicate/write iteration; pass the selected opening as q and return its selected ordinal, cursor, event and count; hash replaced only by its separately verified observer wrapper; error/continue become the corresponding bool and poststate',
  'node-count group: fix Arity::Two; index_at(&level,...) becomes index_at(level,...) for the mutable-reference wrapper; exact parent/group/write/increment order',
  'binary group: extract Two match arm; i/at/w become mutable scalar references; false return preserved; exact parent/write order retained',
  'wire validate_record_fields: expose pub(crate) in the proof copy; body unchanged',

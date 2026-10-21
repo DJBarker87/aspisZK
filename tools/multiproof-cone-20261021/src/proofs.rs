@@ -165,3 +165,60 @@ impl Digest32 for LeafOracle {
   }
  }
 }
+
+
+// Every leaf hash input byte, component length and call count is in the
+// verified contract. The caller stub has no unreported global effects.
+#[kani::proof_for_contract(super::adoption::leaf_hash)] #[kani::unwind(34)]
+fn adoption_leaf_hash_contract() {
+ let tree:usize=kani::any();let coordinate:usize=kani::any();let q:[u8;832]=kani::any();
+ kani::assume(tree<3 && coordinate<2+(if tree==0 {480}else{128})+32);
+ super::adoption::leaf_hash(tree,&q,kani::any(),coordinate);
+}
+
+// One complete batch_tree leaf iteration: cursor advances before ordinary
+// duplicate disagreement, and the selected opening ordinal is retained.
+#[kani::proof] #[kani::stub_verified(super::adoption::leaf_hash)] #[kani::unwind(34)]
+fn adoption_leaf_batch_step() {
+ let keys:[u64;16]=kani::any();let position:usize=kani::any();let lo:usize=kani::any();let tree:usize=kani::any();
+ let q:[u8;832]=kani::any();let answer:[u8;32]=kani::any();let coordinate:usize=kani::any();
+ let s=r::Scratch{idx:kani::any(),val:kani::any(),n:kani::any(),at:kani::any()};
+ kani::assume(position<16 && lo<=10 && tree<3 && s.n<16);
+ kani::assume(coordinate<2+(if tree==0 {480}else{128})+32);
+ let (mut idx,mut val,mut d)=(s.idx,s.val,s.n);
+ let (success,next,selected,calls,event)=f::batch::leaf_batch_iteration(keys,position,lo,tree,&q,&mut idx,&mut val,&mut d,answer,coordinate);
+ let index=(keys[position]>>8) as u32;
+ assert_eq!(next,position+1);assert_eq!(selected,lo+(keys[position]&255) as usize);
+ assert_eq!(calls,1);assert_eq!(event,super::adoption::leaf_event(tree,&q,coordinate));
+ let after=r::Scratch{idx,val,n:d,at:s.at};
+ match r::leaf_step(s,index,answer) {
+  None=>{assert!(!success);super::adoption::same_scratch(&after,&s);},
+  Some(reference)=>{assert!(success);super::adoption::same_scratch(&after,&reference);}
+ }
+}
+
+// One entire binary level, including ordinary missing-sibling rejection.
+// The source body is generated from verify_in_place, not manually rewritten.
+// The arbitrary ordinal and byte observe the exact ordered parent-call list;
+// answers vary independently by ordinal. All scratch coordinates are checked.
+#[kani::proof] #[kani::stub_verified(r::read32)] #[kani::unwind(34)]
+fn adoption_binary_level_step() {
+ use core::cell::Cell;
+ use super::adoption::BinaryHash;
+ let s=r::Scratch{idx:kani::any(),val:kani::any(),n:kani::any(),at:kani::any()};
+ let nodes:[u8;512]=kani::any();let length:usize=kani::any();
+ let answers:[[u8;32];16]=kani::any();let selected:usize=kani::any();let coordinate:usize=kani::any();
+ kani::assume(s.n>0 && s.n<=16 && length<=512 && s.at<=length && selected<16 && coordinate<65);
+ let calls=Cell::new(0);let event=Cell::new(0);
+ let hash=BinaryHash{answers:&answers,selected,coordinate,calls:&calls,event:&event};
+ let (mut idx,mut val,mut n,mut at)=(s.idx,s.val,s.n,s.at);
+ let success=f::multiproof::binary_level(hash,&mut idx,&mut val,&mut n,&nodes[..length],&mut at);
+ let source_calls=calls.get();let source_event=event.get();calls.set(0);event.set(0);
+ let reference=r::level_rows(hash,s,&nodes[..length],0,0);
+ let after=r::Scratch{idx,val,n,at};
+ match reference {
+  r::Level::Stop(reference)=>{assert!(!success);super::adoption::same_scratch(&after,&reference);},
+  r::Level::Done(reference)=>{assert!(success);super::adoption::same_scratch(&after,&reference);}
+ }
+ assert_eq!(calls.get(),source_calls);assert_eq!(event.get(),source_event);
+}
