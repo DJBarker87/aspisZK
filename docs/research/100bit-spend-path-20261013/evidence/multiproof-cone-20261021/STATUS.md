@@ -577,3 +577,43 @@ hashes, dependencies, exits, time/RSS/swaps and every axiom report.
 The stronger invariant removes the descending-pair obstruction for this
 concrete extracted loop. It does not identify the source log with runLevel or
 construct a complete multiproof ConeLogJoin/AcceptedRunJoin.
+
+## Continuation 4, stage 4: ordered logical level comparison
+
+`MultiproofConeOrderedLevel.level_program` proves exact Program identity
+between a logical source-shaped level retaining the XOR guard and the frozen
+`runLevel`, on every ascending live list and arbitrary supplied bytes/fuel.
+`level_log` gives exact read/answer order for every oracle. Rejection on short
+siblings is retained; no injectivity, collision-freedom, distinct addresses,
+or accepted/honest-run premise is used. The proof inducts on fuel and applies
+the already proved pairing equivalence, without unrolling a concrete tree.
+Attempt 2: exit 0, 25.016042 s, 3587522560-byte RSS, zero swaps; both axiom
+reports are standard. This is a logical level program theorem, explicitly
+not a complete physical-array or batch source-log simulation.
+
+### Precise remaining interface blocker
+
+The current concrete extraction endpoint is
+`reference.levels D hash scratch physical height : Result reference.Level`.
+It exposes neither a Program nor a returned ordered log. The target slot
+`verifySlot_frozen` is a `Program Bytes State Bool`, and `ConeLogJoin` quantifies
+over that full Program observation through a concrete dependent Signature and
+Implementation. `eighteen_sorted` and `eighteen_eq` therefore do not type as
+that cone certificate; replacing the physical source with sourceLevel would
+assume the missing representation/log theorem. The new `level_program` proves
+only the final logical comparison, not the absent concrete identification.
+This is an interface gap, not a counterexample to reached source correctness.
+
+The next concrete deliverable is an instrumented physical node/level carrier
+with a proved relation between (written parent prefix, unread child suffix,
+physical cursor/remaining sibling bytes, digest arrays) and the Live argument
+of sourceLevel, preserving each actual hash input before overwrite. It must
+compose the checked one-call P6 observations into the returned ordered program,
+then carry that relation through height 18. After that come exact key/opening,
+leaf/count/padding/root adapters and both short-circuited three-slot batches
+of dV_frozen2. Caller lowering remains excluded and assigned to S2.
+
+No complete multiproof ConeLogJoin/AcceptedRunJoin is constructed and no
+headline premise is removed. The CONE-AUDIT whole-cone classification remains
+(d). The focused sorted-index and physical-rebase gates are closed at their
+stated boundaries; the complete accepted-run target is not yet established.

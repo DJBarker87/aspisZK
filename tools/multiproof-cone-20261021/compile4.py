@@ -30,7 +30,7 @@ def lean_processes():
 module = sys.argv[1]
 source = PACKET / 'lean' / (module.replace('.', '/') + '.lean')
 baseline = json.loads((HERE.parent / 'oracle-port-draft-20261021/OraclePortHeadlineDVC7-1/command.json').read_text())
-config = {'MultiproofConeNodeFreeze': 'dv-twotx-20261021/OraclePortHeadlineFrozen2PerAttempt-1/command.json'}
+config = {'MultiproofConeLiveFreeze':'dv-twotx-20261021/OraclePortHeadlineFrozen2PerAttempt-1/command.json', 'MultiproofConeNodeFreeze': 'dv-twotx-20261021/OraclePortHeadlineFrozen2PerAttempt-1/command.json'}
 selected = config.get(module)
 selected_path = json.loads((HERE.parent / selected).read_text())['lean_path'] if selected else ''
 path = str(OBJECTS) + ':/tmp/codex-cx-multiproof-cone3-20261021-objects:/tmp/codex-cx-multiproof-cone2-20261021-objects:/tmp/codex-cx-multiproof-cone-20261021-objects:/tmp/codex-cx-frozen-order-draft-20261021-objects:/tmp/codex-cx-acclog-draft-20261021-objects:/tmp/codex-cx-refine-join-draft-20261021-objects:/tmp/codex-cx-inner-order-draft-20261021-objects:/tmp/codex-cx-shortcircuit-draft-20261021-objects:/tmp/codex-cx-join-split-draft-20261021-objects:' + selected_path + ':' + baseline['lean_path']

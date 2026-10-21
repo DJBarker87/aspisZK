@@ -1,0 +1,63 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOrderedLevel.lean:20:41: error(lean.unknownIdentifier): Unknown identifier `children`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOrderedLevel.lean:26:36: error(lean.unknownIdentifier): Unknown identifier `children`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOrderedLevel.lean:26:60: error(lean.unknownIdentifier): Unknown identifier `children`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOrderedLevel.lean:42:21: error: unsolved goals
+case succ.cons
+fuel : ℕ
+ih :
+  ∀ (live : Live) (nodes : Bytes),
+    List.Pairwise (fun x1 x2 => x1 < x2) (List.map Prod.fst live) →
+      sourceLevel fuel live nodes = runLevel fuel live nodes
+nodes : Bytes
+rest : List (ℕ × State)
+i : ℕ
+v : State
+sorted : List.Pairwise (fun x1 x2 => x1 < x2) (List.map Prod.fst ((i, v) :: rest))
+tailSorted : List.Pairwise (fun x1 x2 => x1 < x2) (List.map Prod.fst rest)
+dropSorted : List.Pairwise (fun x1 x2 => x1 < x2) (List.map Prod.fst (List.drop 1 rest))
+guard :
+  (match rest with
+    | (j, snd) :: tail => decide (j = i ^^^ 1)
+    | [] => false) =
+    match rest, sorted, tailSorted, dropSorted with
+    | (j, snd) :: tail, sorted, tailSorted, dropSorted => decide (paired i j)
+    | [], sorted, tailSorted, dropSorted => false
+⊢ (if
+        (match rest, sorted, tailSorted, dropSorted with
+          | (j, snd) :: tail, sorted, tailSorted, dropSorted => decide (paired i j)
+          | [], sorted, tailSorted, dropSorted => false) =
+          true then
+      Program.ask (BinMerkle32Path.nodeInput sorry) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel (List.drop 1 rest) nodes) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)
+    else
+      match SemanticRecordCodec.decodeState (List.take 32 nodes) with
+      | none => Program.done none
+      | some sibling =>
+        Program.ask (BinMerkle32Path.nodeInput (if i % 2 = 0 then sorry else sorry)) fun d =>
+          AspisV8R19.OracleProgramOps.bind (runLevel fuel rest (List.drop 32 nodes)) fun out =>
+            Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)) =
+    if
+        (match rest with
+          | (j, snd) :: tail => decide (paired i j)
+          | [] => false) =
+          true then
+      Program.ask (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children v rest.head!.2)) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel (List.drop 1 rest) nodes) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)
+    else
+      match SemanticRecordCodec.decodeState (List.take 32 nodes) with
+      | none => Program.done none
+      | some sibling =>
+        Program.ask
+          (BinMerkle32Path.nodeInput
+            (if i % 2 = 0 then OracleDecisionMultiTree.children v sibling
+            else OracleDecisionMultiTree.children sibling v))
+          fun d =>
+          AspisV8R19.OracleProgramOps.bind (runLevel fuel rest (List.drop 32 nodes)) fun out =>
+            Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOrderedLevel.lean:57:17: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOrderedLevel.lean:57:17: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeOrderedLevel.lean:57:17: warning: declaration uses `sorry`
+'AspisR1.MultiproofConeOrderedLevel.level_program' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeOrderedLevel.level_log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
