@@ -42,3 +42,49 @@ JSONL and verbatim logs. No failed draft is adopted as proof evidence.
 The Kani one-iteration comparison is in progress at this stage commit.
 The material schedule has not yet been identified with the entire shipped
 builder or canonical raw-array projection. No endpoint premise is removed.
+
+## Stage 2: retained global oracle and observer boundary
+
+`ProverCommitMaterialSupport` proves deterministic support through the whole
+indexed material-column and padding reference: if two retained callbacks
+agree on every domain/seed/counter expander frame, all returned values,
+errors and states agree. The hash is never reset between calls, rows or
+columns. Scalar rejection, tower coordinate order, collector, column and
+padding induction are all included. This is stronger than per-call local
+support but remains a deterministic reference result. It neither proves
+fresh independent answers nor instantiates the shipped global-window join.
+
+J8382 is an excluded simp-loop draft, fixed by unfolding only the symbolic
+zero branch once; no recursion-depth cap is raised. J8383 passes the focused
+support lemmas; J8384 adds the whole extracted indexed-column and padding
+consumers and passes: exit 0, wall 2.01 s, peak RSS 2587472 KiB, zero swaps.
+All fifteen printed audits use only the standard three axioms. The column
+result needs only `SameFrames`; padding also states `row.val ≤ 1024`.
+These are oracle-support conditions, not a replacement for either headline
+execution premise, and do not hide a whole-execution equality.
+
+`ProverCommitObserverBoundary.replacement_changes_history` proves for every
+oracle, every existing history and positive query fuel that `.done` and
+one query yield different complete histories. `no_unrestricted_history_transport`
+then rules out universal suffix-history equality under an arbitrary program
+replacement. J8380 is an excluded reserved-token syntax draft; J8381 passes
+both audits with `[propext, Quot.sound]`: exit 0, 1.70 s, 3503196 KiB, zero swaps.
+
+This directly tests the endpoint handoff: `RomObserverBin.observerMap`
+preserves `source.observe adv` but replaces its query program with the
+independently quantified `observer_program adv`. `GamesR1PBin.realGameP`
+uses that program on both the rejection and successful-output branches.
+The suffix counterexample is an obstruction to inferring complete history
+equality for an unrestricted handoff; it is not a counterexample to the
+actual privacy bound or to a correctly identified source program. Supplying
+the actual program and proving its operational correspondence remains work.
+A reflexive coupling of the mathematical constructor would not establish
+that the shipped builder/checker/retry execution runs that constructor.
+
+The all-family ledger is retained in `callback-coverage.json`; material
+reference support is added without promoting it to shipped callback-log
+coverage. Packing, D collection, successful source-seed wrapper disposal,
+salts/tree traversal, retries, aborts and callback-history identification
+still need actual source joins. Existing local callback checks cannot supply
+these by name alone. No peer-owned source-identification, runtime-join or
+final-release module is edited.
