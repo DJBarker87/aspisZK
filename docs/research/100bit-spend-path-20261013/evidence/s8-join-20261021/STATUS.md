@@ -99,3 +99,25 @@ instances. The replacement compares the underlying propositions, without
 unfolding the finite-field decision and without changing limits. Final
 attempt accumulator-05 passes (5.376s, 3,494,641,664-byte RSS, zero swap,
 standard axioms). No unchanged heavy regression was retried.
+
+## Stage 7 — canonical realization and committed S7 reference
+
+`S8JoinModelRepresentation.model_caller` constructs the legacy P6 length and
+coordinate-congruence interface at a canonical logical 64-row accumulator.
+Its sum argument is the canonical coordinate of the field weight, not an
+asserted equality to an independently supplied unreduced natural sum.
+`model_finish_check` and `model_check_eq` prove complete emitted reference
+finish and exact ClosedSum checking for every data/query/rho input.
+
+`S8JoinS7Reference` imports the committed sibling
+`S7JoinAccumulatorReference` at `939c74d63`, with source SHA and successful
+receipt retained in `upstream-s7.json`. No sibling module was copied, edited,
+merged or cherry-picked. Integration must include that committed dependency
+closure. `weights_eq` identifies its produced weights with the frozen sums;
+`reached_caller`, `finish_check` and `mutable_finish` supply P6 conditions and
+complete finish at the canonical realization of that produced field state.
+This is reference composition, not a source-storage/checkpoint identity.
+
+Successful final-source checks: representation-02 and s7-reference-01, ten
+standard-axiom audits, zero swap. The named upstream file was read only with
+`git show`; the task uses its private cached object directory read-only.
