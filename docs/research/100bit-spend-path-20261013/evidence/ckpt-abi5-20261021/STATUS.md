@@ -55,3 +55,28 @@ zero swaps, revision `ca3caa95e`. All five new theorem axiom reports are
 finite-list length simplification, div-by-one at four limb boundaries and
 the actual List.ofFn_add/pair equivalence interface needed explicit proofs.
 No failed compiler-recovery axiom output is accepted. No resource cap changed.
+
+## Stage 3: dynamic emitted query-loop counter provenance
+
+`OraclePortCkptAbi5Reached.successful_chain` handles arbitrary stop counters,
+ordinary Rust errors, outer failures/divergence and successful owned-state
+iteration. `emitted_body` identifies this body with the actual imported
+`verifier.candidate.query_loop_loop.body` for any endpoint.
+`reached_calls` instantiates the actual `queryWithOps` and discharges the
+advance condition with `AspisR1Stage2.query_next`, rather than asking the
+caller for a step/advance theorem. `tx1_next` gives exactly ten successful
+calls and next=10 from start=0; `tx2_next` gives twelve and next=22 from
+start=10. `chain_endpoint` identifies the final counter.
+
+These are successful **emitted WithOps** execution results. Real callback
+adoption, initial Accumulator::new fields and lazy pending.finish arithmetic
+are not derived from counters or CFG paths. In particular rhs/power/weights
+are not yet identified with C3's recurrence. The query callback itself is
+not accepted by name as a frozen production instance.
+
+Attempt 3 exits 0: 6.176296834 seconds, peak RSS 2,259,697,664 bytes,
+zero swaps, revision `e0f05c24f`. All six new theorem audits use exactly
+`[propext, Classical.choice, Quot.sound]`. Failed attempts 1–2 retain
+metavariable goal ordering and machine-literal projection failures;
+explicit argument construction and checked scalar projection equalities
+resolve them. No cap, heartbeat or recursion setting is changed.
