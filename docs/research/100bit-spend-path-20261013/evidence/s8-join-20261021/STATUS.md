@@ -138,3 +138,18 @@ output equality, not a new security event or altered acceptance contract.
 It does not assert that S7 source/query/checkpoint execution supplies the
 field-meaning relation. Final source raw-congruence-03 passes all five
 standard-axiom audits, zero swap.
+
+## Stage 9 — total reference equality to dV_frozen
+
+`S8JoinFrozenArithmetic.verify_eq` and `arithmetic_eq` replace the accumulator
+predicate by the complete canonical finish reference on all typed/arithmetic
+inputs. `decision_eq` proves equality of complete Programs to dV_frozen:
+all rejected inputs, the actual short-circuit multiproof order and the exact
+oracle log remain covered. This equality is between the logical reference
+and dV_frozen; its left side is not relabelled Rust.
+
+`accepted_reference` binds the reference check to the actual parsed p,
+reached q and reader-derived i/rho on a frozen accepted run, with no clean-log
+or S8 premise. `accepted_model_caller` supplies the old P6 conditions at that
+same logical state. Five standard-axiom audits pass (frozen-arithmetic-03).
+No headline premise was deleted.
