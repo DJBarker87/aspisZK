@@ -1,0 +1,118 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSimulatorSeedGuess18.lean:20:65: error: unsolved goals
+U : Type
+inst✝² : Fintype U
+inst✝¹ : Nonempty U
+inst✝ : DecidableEq U
+a b : U
+different : a ≠ b
+p : U × ({ x // x ≠ b } → U)
+⊢ { toFun := fun t => (t b, fun j => t ↑j), invFun := fun p j => if h : j = b then p.1 else p.2 ⟨j, h⟩, left_inv := ⋯,
+          right_inv := ⋯ }.symm
+      p a =
+    p.2 ⟨a, different⟩
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSimulatorSeedGuess18.lean:23:50: error: unsolved goals
+U : Type
+inst✝² : Fintype U
+inst✝¹ : Nonempty U
+inst✝ : DecidableEq U
+a b : U
+different : a ≠ b
+left : ∀ (p : U × ({ x // x ≠ b } → U)), (LazyTable.splitAt b).symm p a = p.2 ⟨a, different⟩
+p : U × ({ x // x ≠ b } → U)
+⊢ { toFun := fun t => (t b, fun j => t ↑j), invFun := fun p j => if h : j = b then p.1 else p.2 ⟨j, h⟩, left_inv := ⋯,
+          right_inv := ⋯ }.symm
+      p b =
+    p.1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSimulatorSeedGuess18.lean:30:4: error: Type mismatch
+  eval_point_mass ?m.95 v
+has type
+  (eventMass fun t => t ?m.95 = v) = 1 / ↑(Fintype.card U)
+but is expected to have type
+  (mean fun rest => if rest ⟨a, different⟩ = v then 1 else 0) = 1 / ↑(Fintype.card U)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSimulatorSeedGuess18.lean:30:20: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSimulatorSeedGuess18.lean:21:38: warning: This simp argument is unused:
+  dif_neg different
+
+Hint: Omit it from the simp argument list.
+  simp only [R1Z.LazyTable.splitAt,̵ ̵d̵i̵f̵_̵n̵e̵g̵ ̵d̵i̵f̵f̵e̵r̵e̵n̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSimulatorSeedGuess18.lean:24:38: warning: This simp argument is unused:
+  dif_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [R1Z.LazyTable.splitAt,̵ ̵d̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSimulatorSeedGuess18.lean:47:4: error: Type mismatch: After simplification, term
+  point_mass v
+ has type
+  (mean fun s => @ite ℚ (s = v) (Classical.propDecidable ((fun v_1 => v_1 = v) s)) 1 0) = 1 / ↑(Fintype.card U)
+but is expected to have type
+  (mean fun w => @ite ℚ (w = v) (inst✝ w v) 1 0) = 1 / ↑(Fintype.card U)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSimulatorSeedGuess18.lean:66:6: error: Type mismatch
+  table_collision seed guess same
+has type
+  (eventMass fun table => table seed = table guess) = 1 / ↑(Fintype.card U)
+but is expected to have type
+  (mean fun table => if table seed = table guess then 1 else 0) = q
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSimulatorSeedGuess18.lean:54:65: error: unsolved goals
+case e_a
+U : Type
+inst✝² : Fintype U
+inst✝¹ : Nonempty U
+inst✝ : DecidableEq U
+guess : U
+q : ℚ := 1 / ↑(Fintype.card U)
+inner : ∀ (seed : U), (mean fun table => if table seed = table guess then 1 else 0) = if seed = guess then 1 else q
+decompose : ∀ (seed : U), (if seed = guess then 1 else q) = q + if seed = guess then 1 - q else 0
+⊢ (1 - q) / ↑(Fintype.card U) = (1 - 1 / ↑(Fintype.card U)) / ↑(Fintype.card U)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSimulatorSeedGuess18.lean:63:17: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSimulatorSeedGuess18.lean:94:4: warning: exponent 483 exceeds the threshold 256, exponentiation operation was not evaluated, use `set_option exponentiation.threshold <num>` to set a new threshold
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSimulatorSeedGuess18.lean:117:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean fun s => ?f (cp.toR s)
+in the target expression
+  |(mean fun s => equalTest (observation guess (cp.toR s))) - mean fun s => equalTest (cp.toM s)| ≤
+    eventMass fun s => bad (cp.toM s)
+
+U : Type
+inst✝² : Fintype U
+inst✝¹ : Nonempty U
+inst✝ : DecidableEq U
+size : Fintype.card U = 2 ^ 256
+guess : U
+cp : Coupling (U × (U → U)) (U × U)
+bad : U × U → Prop
+mass : eventMass bad ≤ 8 / 2 ^ 486
+agrees : ∀ (s : cp.S), ¬bad (cp.toM s) → observation guess (cp.toR s) = cp.toM s
+bounded : ∀ (pair : U × U), 0 ≤ equalTest pair ∧ equalTest pair ≤ 1
+comparison :
+  |(mean fun s => equalTest (observation guess (cp.toR s))) - mean fun s => equalTest (cp.toM s)| ≤
+    eventMass fun s => bad (cp.toM s)
+hm : (eventMass fun s => bad (cp.toM s)) = eventMass bad
+⊢ False
+'R1Z.ProverCommitSimulatorSeedGuess18.table_collision' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitSimulatorSeedGuess18.independent_probability' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitSimulatorSeedGuess18.seeded_probability' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitSimulatorSeedGuess18.numerical_gap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSimulatorSeedGuess18.no_query_scan_only_join' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -228,3 +228,47 @@ passes all five audits: exit 0, 1.89s, 4,042,756 KiB, swaps 0, standard
 axioms. Exact snapshots and dependency fingerprints distinguish all attempts.
 After 17:00 the launcher correctly uses the global lock rather than slots.
 No existing shared object or concurrent-worker source was overwritten.
+
+
+## Shared-oracle seed-guess obstruction (component scope)
+
+`ProverCommitSimulatorSeedGuess18` checks the missing *joint* law. Fix an
+attempt/stream/counter. `seed_addresses_injective` proves the source's
+65-byte coin addresses are injective in the 32-byte seed as well. Now take
+one uniform table H and a uniform secret seed, publish H(seed), and let an
+observer make one query at a fixed guessed-seed address H(guess). Compare
+this exact source-coin component with an independent uniform published coin
+and an independent uniform oracle answer. For a word carrier of size N:
+
+- independent equality probability: 1/N;
+- seeded equality probability: 1/N + (1−1/N)/N;
+- distinguishing gap: (1−1/N)/N.
+
+The proofs retain the common table, rather than replacing it with separate
+per-call random outputs. At N=2^256, `numerical_gap` proves this gap exceeds
+8/2^486. `no_query_scan_only_join` therefore rules out equality of this
+coin/query pair outside *any* model event of mass at most 8/2^486. It is
+not a free `FSExperiments` counterexample: its source component is exactly
+one seeded hash coin and one query in the same namespace, with the
+byte-frame injectivity proved above.
+
+**Scope limit:** this is not yet a nonexistence theorem for the requested
+full `RustProverRefinement`, nor an attack on 100-bit privacy. It does not
+prove the projection through the Rust simulator's first accepted attempt,
+its abort cases, or the final returned proof/programming table. It also does
+not prove that every queried coin address falls through the programmed
+lookup; that source namespace/history correspondence is still required.
+The component result does establish that marginal independent-coin laws,
+Kani source equality and Aeneas extraction cannot alone provide the desired
+joint simulator-history equality with only the query-scan exception. A seed
+freshness/history argument with its exact loss, or another explicitly
+justified ideal-run interpretation, is required. Neither is silently added
+here and the fixed bad events are unchanged.
+
+J8672 fails on local match/decider normalization and an implicit coupling
+rewrite. Changed-source J8673 passes all six audits, using only standard
+axioms: exit 0, wall 2.41s, peak RSS 4,040,828 KiB, swaps 0, source revision
+`46d5067eb` plus the exact snapshot hash. The existing byte/ROM module is
+reused without recompilation. The power calculation stays symbolic (Lean
+warns that exponent 483 exceeds its evaluation threshold); no threshold,
+heartbeats, recursion limit or memory cap is raised.
