@@ -1,0 +1,74 @@
+import ListConstructorAllocationM10
+import PublicParserWork
+
+/-! Allocation counters at the fixed-width public cursor's copying, dropping,
+Fin.cons and scalar decoding sites. Scalar tariffs count bounded constructor
+and field-temporary groups (64 for four bytes, 128 for eight bytes), rather
+than reserving the public parser's entire work bound. -/
+set_option autoImplicit false
+namespace AspisR1.PublicCursorAllocationM10
+open ListConstructorAllocationM10
+abbrev Byte := BinMerkle32Path.Byte
+
+def fieldCells (xs : List Byte) : Nat := xs.length+1+64
+def indexCells (xs : List Byte) : Nat := xs.length+1+128
+
+theorem field_work (xs : List Byte) : fieldCells xs ≤ (PublicPrimitiveDecoderWork.field xs).2 := by
+  simp only [fieldCells,PublicPrimitiveDecoderWork.field,PublicPrimitiveDecoderWork.length_work]
+  omega
+
+theorem index_work (xs : List Byte) : indexCells xs ≤ (PublicPrimitiveDecoderWork.index xs).2 := by
+  simp only [indexCells,PublicPrimitiveDecoderWork.index,PublicPrimitiveDecoderWork.length_work]
+  omega
+
+def decodeCells {A : Type} (d : List Byte → Option A × Nat) (heap : List Byte → Nat)
+    (k : Nat) : Nat → List Byte → Nat
+  | 0, _ => 1
+  | n+1, xs =>
+    let p := BinLeafListWork.take k xs
+    match (d p.1).1 with
+    | none => takeCells k xs+heap p.1+1
+    | some _ => takeCells k xs+heap p.1+dropCells k xs+
+        decodeCells d heap k n (BinLeafListWork.drop k xs).1+3
+
+theorem decode_work {A : Type} (d : List Byte → Option A × Nat) (heap : List Byte → Nat)
+    (h : ∀ xs, heap xs ≤ (d xs).2) (k n : Nat) (xs : List Byte) :
+    decodeCells d heap k n xs ≤ (FixedWidthDecoderWork.decode d k n xs).2 := by
+  induction n generalizing xs with
+  | zero => exact Nat.le_refl _
+  | succ n ih =>
+    have hp := take_work k xs
+    have hd := drop_work k xs
+    have hh := h (BinLeafListWork.take k xs).1
+    have ht := ih (BinLeafListWork.drop k xs).1
+    simp only [decodeCells,FixedWidthDecoderWork.decode]
+    split <;> dsimp only <;> omega
+
+def digestCells := decodeCells PublicPrimitiveDecoderWork.field fieldCells 4 8
+def frontierCells := decodeCells PublicPrimitiveDecoderWork.digest digestCells 32 20
+
+theorem digest_work (xs : List Byte) : digestCells xs ≤ (PublicPrimitiveDecoderWork.digest xs).2 :=
+  decode_work _ _ field_work 4 8 xs
+
+theorem frontier_work (xs : List Byte) : frontierCells xs ≤ (PublicPrimitiveDecoderWork.frontier xs).2 :=
+  decode_work _ _ digest_work 32 20 xs
+
+def readCells {A : Type} (n : Nat) (heap : List Byte → Nat) (xs : List Byte) : Nat :=
+  takeCells n xs+dropCells n xs+heap (BinLeafListWork.take n xs).1+2
+
+theorem read_work {A : Type} (n : Nat) (d : List Byte → Option A × Nat)
+    (heap : List Byte → Nat) (h : ∀ xs, heap xs ≤ (d xs).2) (xs : List Byte) :
+    readCells (A := A) n heap xs ≤ (PublicPrimitiveDecoderWork.read n d xs).2 := by
+  have hp := take_work n xs
+  have hd := drop_work n xs
+  have hh := h (BinLeafListWork.take n xs).1
+  change _+_+_+2 ≤ _+_+_+2
+  omega
+
+#print axioms field_work
+#print axioms index_work
+#print axioms decode_work
+#print axioms digest_work
+#print axioms frontier_work
+#print axioms read_work
+end AspisR1.PublicCursorAllocationM10

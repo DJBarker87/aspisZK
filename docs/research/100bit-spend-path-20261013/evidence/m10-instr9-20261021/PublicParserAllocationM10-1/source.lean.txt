@@ -1,0 +1,117 @@
+import PublicCursorAllocationM10
+
+set_option autoImplicit false
+namespace AspisR1.PublicParserAllocationM10
+open PublicCursorAllocationM10
+open SemanticPublicWire (Common Wire Digest M31)
+
+/-- A source operation with its constructor counter and separate work law. -/
+structure Model (A : Type) where
+  run : PublicParserWork.Result A
+  cells : Nat
+  paid : cells ≤ run.2
+
+def atom {A : Type} (run : PublicParserWork.Result A) (cells : Nat)
+    (paid : cells ≤ run.2) : Model A := ⟨run,cells,paid⟩
+
+def bind {A B : Type} (x : Model A) (f : A → Model B) : Model B where
+  run := PublicParserWork.bind x.run (fun a => (f a).run)
+  cells := x.cells+(match x.run.1 with | none => 0 | some a => (f a).cells)+1
+  paid := by
+    have hx := x.paid
+    cases h : x.run.1 with
+    | none => simp only [h,PublicParserWork.bind]; omega
+    | some a =>
+      have hf := (f a).paid
+      simp only [h,PublicParserWork.bind]
+      omega
+
+def pure {A : Type} (a : A) : Model A := atom (PublicParserWork.pure a) 1 (Nat.le_refl _)
+
+def readDigest (xs : List Byte) := atom (PublicParserWork.readDigest xs)
+  (readCells 32 digestCells xs) (read_work 32 _ _ digest_work xs)
+def readField (xs : List Byte) := atom (PublicParserWork.readField xs)
+  (readCells 4 fieldCells xs) (read_work 4 _ _ field_work xs)
+def readIndex (xs : List Byte) := atom (PublicParserWork.readIndex xs)
+  (readCells 8 indexCells xs) (read_work 8 _ _ index_work xs)
+def readFrontier (xs : List Byte) := atom (PublicParserWork.readFrontier xs)
+  (readCells 640 frontierCells xs)
+  (read_work 640 _ _ frontier_work xs)
+def expect (tag : Byte) (xs : List Byte) := atom (PublicParserWork.expect tag xs) 1 (by decide)
+
+def decodeAfter (anchor nullifier : Digest) (asset : M31) (change : Digest)
+    (xs : List Byte) : Model Common :=
+  bind (readIndex xs) fun (index, rest) =>
+  bind (readFrontier rest) fun (snapshot, rest) =>
+  bind (readDigest rest) fun (root, rest) =>
+  bind (readFrontier rest) fun (nextFrontier, rest) =>
+  atom (if rest.isEmpty then some ⟨anchor,nullifier,asset,change,index,snapshot,root,nextFrontier⟩
+    else none,2) 2 (Nat.le_refl _)
+
+def decodeTransfer (xs : List Byte) : Model Wire :=
+  bind (readDigest xs) fun (anchor, rest) =>
+  bind (readDigest rest) fun (nullifier, rest) =>
+  bind (readField rest) fun (asset, rest) =>
+  bind (expect 1 rest) fun rest =>
+  bind (readDigest rest) fun (recipient, rest) =>
+  bind (readDigest rest) fun (change, rest) =>
+  bind (expect 0 rest) fun rest =>
+  bind (decodeAfter anchor nullifier asset change rest) fun c => pure (.transfer c recipient)
+
+def decodeWithdrawal (xs : List Byte) : Model Wire :=
+  bind (readDigest xs) fun (anchor, rest) =>
+  bind (readDigest rest) fun (nullifier, rest) =>
+  bind (readField rest) fun (asset, rest) =>
+  bind (expect 0 rest) fun rest =>
+  bind (readDigest rest) fun (change, rest) =>
+  bind (expect 1 rest) fun rest =>
+  bind (readField rest) fun (amount, rest) =>
+  bind (decodeAfter anchor nullifier asset change rest) fun c => pure (.withdrawal c amount)
+
+def addResult {A : Type} (m : Model A) (n : Nat) : Model A :=
+  ⟨(m.run.1,m.run.2+n),m.cells+n,Nat.add_le_add_right m.paid n⟩
+
+def decode : List Byte → Model Wire
+  | [] => atom (none,1) 1 (Nat.le_refl _)
+  | tag::rest =>
+    if tag = 0 then addResult (decodeTransfer rest) 2
+    else if tag = 1 then addResult (decodeWithdrawal rest) 3
+    else atom (none,3) 1 (by decide)
+
+def parsePublic (xs : List Byte) : Model (R0P.Public M31) :=
+  bind (decode xs) fun wire =>
+    let pub := SemanticPublicWire.toPublic wire
+    atom (if PublicOptionShape.check pub then some pub else none,256) 128 (by decide)
+
+/-- Erasure preserves the complete executed-prefix work, including rejection. -/
+theorem erase (xs : List Byte) : (parsePublic xs).run = PublicParserWork.parsePublic xs := by
+  cases xs with
+  | nil => rfl
+  | cons tag rest =>
+    unfold parsePublic decode PublicParserWork.parsePublic PublicParserWork.decode
+    split
+    · rfl
+    · split <;> rfl
+
+theorem cells_work (xs : List Byte) :
+    (parsePublic xs).cells ≤ (PublicParserWork.parsePublic xs).2 := by
+  rw [← erase xs]
+  exact (parsePublic xs).paid
+
+def spec : AllocationStageSpecM10.StageSpec 1024 SemanticPublicWire.parsePublic
+    (fun _ => True) (fun _ => True) (fun _ => 110260) where
+  run := PublicParserWork.parsePublic
+  value := PublicParserWork.parsePublic_value
+  work _ xs _ := PublicParserWork.parsePublic_work xs
+  invariant _ _ _ _ := True.intro
+  allocation xs := ⟨(parsePublic xs).cells,1024*(parsePublic xs).cells,
+    Nat.le_refl _,cells_work xs⟩
+
+theorem allocated_bits_work (xs : List Byte) :
+    (spec.allocation xs).bits ≤ 1024*(PublicParserWork.parsePublic xs).2 :=
+  AllocationStageSpecM10.allocation_le_work spec xs
+
+#print axioms erase
+#print axioms cells_work
+#print axioms allocated_bits_work
+end AspisR1.PublicParserAllocationM10

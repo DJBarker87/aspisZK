@@ -1,0 +1,100 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/PublicParserAllocationM10.lean:93:6: error: Tactic `rfl` failed: The left-hand side
+  (bind (atom (none, 1) 1 pure._proof_1) fun wire =>
+      have pub := SemanticPublicWire.toPublic wire;
+      atom (if PublicOptionShape.check pub = true then some pub else none, 256) 128 ⋯).run
+is not definitionally equal to the right-hand side
+  PublicParserWork.bind
+    (match tag :: rest with
+    | [] => (none, 1)
+    | tag :: rest =>
+      if tag = 0 then
+        have r := PublicParserWork.decodeTransfer rest;
+        (r.1, r.2 + 2)
+      else
+        if tag = 1 then
+          have r := PublicParserWork.decodeWithdrawal rest;
+          (r.1, r.2 + 3)
+        else (none, 3))
+    fun wire =>
+    have pub := SemanticPublicWire.toPublic wire;
+    (if PublicOptionShape.check pub = true then some pub else none, 256)
+
+case h_1
+tag : Byte
+rest x✝ : List Byte
+heq✝ : tag :: rest = []
+⊢ (bind (atom (none, 1) 1 pure._proof_1) fun wire =>
+        have pub := SemanticPublicWire.toPublic wire;
+        atom (if PublicOptionShape.check pub = true then some pub else none, 256) 128 ⋯).run =
+    PublicParserWork.bind
+      (match tag :: rest with
+      | [] => (none, 1)
+      | tag :: rest =>
+        if tag = 0 then
+          have r := PublicParserWork.decodeTransfer rest;
+          (r.1, r.2 + 2)
+        else
+          if tag = 1 then
+            have r := PublicParserWork.decodeWithdrawal rest;
+            (r.1, r.2 + 3)
+          else (none, 3))
+      fun wire =>
+      have pub := SemanticPublicWire.toPublic wire;
+      (if PublicOptionShape.check pub = true then some pub else none, 256)
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/PublicParserAllocationM10.lean:94:6: error: Tactic `rfl` failed: The left-hand side
+  (bind
+      (if tag✝ = 0 then addResult (decodeTransfer rest✝) 2
+      else if tag✝ = 1 then addResult (decodeWithdrawal rest✝) 3 else atom (none, 3) 1 decode._proof_1)
+      fun wire =>
+      have pub := SemanticPublicWire.toPublic wire;
+      atom (if PublicOptionShape.check pub = true then some pub else none, 256) 128 ⋯).run
+is not definitionally equal to the right-hand side
+  PublicParserWork.bind
+    (match tag :: rest with
+    | [] => (none, 1)
+    | tag :: rest =>
+      if tag = 0 then
+        have r := PublicParserWork.decodeTransfer rest;
+        (r.1, r.2 + 2)
+      else
+        if tag = 1 then
+          have r := PublicParserWork.decodeWithdrawal rest;
+          (r.1, r.2 + 3)
+        else (none, 3))
+    fun wire =>
+    have pub := SemanticPublicWire.toPublic wire;
+    (if PublicOptionShape.check pub = true then some pub else none, 256)
+
+case h_2
+tag : Byte
+rest x✝ : List Byte
+tag✝ : Byte
+rest✝ : List Byte
+heq✝ : tag :: rest = tag✝ :: rest✝
+⊢ (bind
+        (if tag✝ = 0 then addResult (decodeTransfer rest✝) 2
+        else if tag✝ = 1 then addResult (decodeWithdrawal rest✝) 3 else atom (none, 3) 1 decode._proof_1)
+        fun wire =>
+        have pub := SemanticPublicWire.toPublic wire;
+        atom (if PublicOptionShape.check pub = true then some pub else none, 256) 128 ⋯).run =
+    PublicParserWork.bind
+      (match tag :: rest with
+      | [] => (none, 1)
+      | tag :: rest =>
+        if tag = 0 then
+          have r := PublicParserWork.decodeTransfer rest;
+          (r.1, r.2 + 2)
+        else
+          if tag = 1 then
+            have r := PublicParserWork.decodeWithdrawal rest;
+            (r.1, r.2 + 3)
+          else (none, 3))
+      fun wire =>
+      have pub := SemanticPublicWire.toPublic wire;
+      (if PublicOptionShape.check pub = true then some pub else none, 256)
+'AspisR1.PublicParserAllocationM10.erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserAllocationM10.cells_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicParserAllocationM10.allocated_bits_work' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

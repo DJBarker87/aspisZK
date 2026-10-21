@@ -1,0 +1,70 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/PublicCursorAllocationM10.lean:45:14: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  l ≥ 0
+  j ≥ 0
+  i ≥ 0
+  i - j ≥ 0
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  e ≥ 0
+  c ≥ 0
+  c - e ≥ 0
+  b ≥ 0
+  b + g - l ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑(BinLeafListWork.take k xs).2
+ b := ↑(takeCells k xs)
+ c := ↑(BinLeafListWork.drop k xs).2
+ e := ↑(dropCells k xs)
+ f := ↑(d (BinLeafListWork.take k xs).1).2
+ g := ↑(heap (BinLeafListWork.take k xs).1)
+ i := ↑(FixedWidthDecoderWork.decode d k n (BinLeafListWork.drop k xs).1).2
+ j := ↑(decodeCells d heap k n (BinLeafListWork.drop k xs).1)
+ l := ↑(match (d (BinLeafListWork.take k xs).1).1 with
+    | none => (none, (BinLeafListWork.take k xs).2 + (d (BinLeafListWork.take k xs).1).2 + 1)
+    | some a =>
+      (Option.map (Fin.cons a) (FixedWidthDecoderWork.decode d k n (BinLeafListWork.drop k xs).1).1,
+        (BinLeafListWork.take k xs).2 + (d (BinLeafListWork.take k xs).1).2 + (BinLeafListWork.drop k xs).2 +
+            (FixedWidthDecoderWork.decode d k n (BinLeafListWork.drop k xs).1).2 +
+          3)).2
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/PublicCursorAllocationM10.lean:45:14: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  l ≥ 0
+  j ≥ 0
+  i ≥ 0
+  i - j ≥ 0
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  e ≥ 0
+  c ≥ 0
+  c - e ≥ 0
+  b ≥ 0
+  b + e + g + j - l ≥ -2
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑(BinLeafListWork.take k xs).2
+ b := ↑(takeCells k xs)
+ c := ↑(BinLeafListWork.drop k xs).2
+ e := ↑(dropCells k xs)
+ f := ↑(d (BinLeafListWork.take k xs).1).2
+ g := ↑(heap (BinLeafListWork.take k xs).1)
+ i := ↑(FixedWidthDecoderWork.decode d k n (BinLeafListWork.drop k xs).1).2
+ j := ↑(decodeCells d heap k n (BinLeafListWork.drop k xs).1)
+ l := ↑(match (d (BinLeafListWork.take k xs).1).1 with
+    | none => (none, (BinLeafListWork.take k xs).2 + (d (BinLeafListWork.take k xs).1).2 + 1)
+    | some a =>
+      (Option.map (Fin.cons a) (FixedWidthDecoderWork.decode d k n (BinLeafListWork.drop k xs).1).1,
+        (BinLeafListWork.take k xs).2 + (d (BinLeafListWork.take k xs).1).2 + (BinLeafListWork.drop k xs).2 +
+            (FixedWidthDecoderWork.decode d k n (BinLeafListWork.drop k xs).1).2 +
+          3)).2
+'AspisR1.PublicCursorAllocationM10.field_work' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PublicCursorAllocationM10.index_work' depends on axioms: [propext, Quot.sound]
+'AspisR1.PublicCursorAllocationM10.decode_work' depends on axioms: [propext, sorryAx]
+'AspisR1.PublicCursorAllocationM10.digest_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicCursorAllocationM10.frontier_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PublicCursorAllocationM10.read_work' depends on axioms: [propext, Quot.sound]
