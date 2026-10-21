@@ -1104,3 +1104,26 @@ Focused exit0,13.042s,peak RSS3,976,593,408 bytes,zero swaps; three standard
 axiom reports. The concrete one-slot arithmetic join, four-slot lift and
 actual query/model composition remain in flight; source adoption and the
 implementation-linked100-bit target are still open.
+
+
+## Trace member witnesses and exact two-term bounds
+
+`evidence/s4-actual-tail-trace-member-witness-v1-20261022` derives each
+contribution's original same-step InputWitness by structural induction on
+RunTrace. For the actual source range0..2, the retained exact term-index
+sequence also gives every contribution's term <2. The scalar-byte worker
+can therefore select its actual C2 Fin2 lane and invoke its same-step parser
+proof, without assuming an independently successful step or term bound.
+Focused exit0,3.684s,peak process RSS2,242,199,552 bytes,zero swaps; both
+reports have standard axioms. Rejected first attempt is retained (the
+membership simplifier needed to eliminate the final empty-list case).
+
+A source/model boundary remains explicit for the ten-query first-stage
+consumer: its existing prepare binding supplies a canonical gamma and same
+powers array but the generic statement does not additionally assert that
+this gamma is the model's transcript challenge. The actual S1 preparation
+and sampler owners must supply that correspondence. The twelve-query
+concrete resume consumer instead derives powers for the exact Prepared.gamma
+returned by that resume; transcript/sampler correspondence remains outside
+these local arithmetic projections. None of the local gamma-parameterized
+results alone establishes the implementation-linked100-bit target.
