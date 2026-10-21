@@ -151,3 +151,81 @@ missing identity between the reconstructed source statement/public buffer
 and this endpoint's abstract `Input.statement` or proof annotation. Those
 parser/representation/caller obligations cannot be discharged by simply
 citing an injectivity theorem on a different carrier.
+
+## Stage 3: exact logical factorization and constructed-instance endpoint
+
+`StoredCarrierBindingComponents.binding_iff` separates precisely:
+
+1. `CarrierBytes`: the accepted observation's stored bytes equal the model's;
+2. `ObservationJoin`: its ordered log, statement, logical proof and verdict
+   equal the model's in the same H.
+
+Their conjunction implies the original and conversely. This is an **exact
+factorization**, not a weakening. The second conjunct is still a source
+obligation; the frozen layout/digest cuts do not prove it. Even the first
+requires identifying the actual writer slice with the model's `.stored`,
+beyond merely proving source TX1/TX2 slice equality.
+
+`StoredCarrierPresentedModel` constructs a narrower logical instance. It
+records the existing annotated model execution, checks the two complete
+proof/public digest bindings against an arbitrary presented `Inputs`, then
+returns that designated observation with its `.stored` set to the presented
+proof. `binding` proves the original carrier obligation from R9's exact
+P2′ contract. The checked conjunction is this **defined constructor** plus
+P2′; it does not assume an input callback that returns the desired equality.
+The construction copies the model's statement/log/proof/verdict by definition.
+It has no AccountInfo, System, PDA, real upload or physical checkpoint effects.
+It does not replace any frozen runtime with this constructor silently.
+
+`StoredCarrierPresentedHeadline.final_soundness` applies the adopted
+per-attempt theorem at this explicit constructor. It retains hqueries and
+AcceptedRunJoin and uses only P2′ as the runtime remainder. Claims, the
+failure event, extractor, constants and query range are unchanged at that
+instance. Its full signature diff **includes** specialization of the
+arbitrary Runtime parameter and replacement of StoredCarrierBinding by
+P2′; it is not a deletion-only/strict-weakening result for the deployed
+runtime. Global P2′ over all input presentations can be stronger than what a
+particular accepting execution uses. No weakening claim is made for that
+replacement. The requested deployed deletion/weakening remains unproved.
+
+The initial presented-model attempts are retained: missing canon namespace,
+then trying to bind the program's result pair as though it already contained
+its log. The corrected constructor explicitly uses the existing recorder;
+no new operational-log equality is assumed. Failed compiler recovery using
+`sorryAx` is excluded from every successful axiom result.
+
+### Precise missing fact and disposition
+
+There is no identified new runtime contract beyond P1–P7/P2′ for the raw
+byte consistency. The missing non-byte fact is **accepted-observation
+provenance**: the concrete staged TX1/Pool-TX2 execution and its chosen
+adversary P yield the model's complete designated annotated observation,
+including both passes and the chronological shared-oracle trace. This is
+part of R10 and the R9/R20/caller/source refinements, which the existing
+checkpoint and Pool packets explicitly leave open. It cannot be inferred
+from account locks, PDA/System semantics, metadata truth or digest equality.
+Adding it to P2/P2′ under a new name would hide source work, not close it.
+
+The next deployable deliverable is an operational transaction/caller model
+and a frozen-source join that instantiates `ObservationJoin` and identifies
+TX1's raw stored slice with the annotation's carrier. It must compose the
+checkpoint worker's remaining reader/reached-state join, R20 public encoding
+and the caller's accepted ordered trace. The present worker does not edit
+those concurrent cones or assert their completion. Once that source join is
+proved, existing P2/P2′/P3/P4 can supply the physical runtime effects at the
+explicit interpreted boundary; the arbitrary Prop slots alone are insufficient.
+
+Stage-3 successful focused checks (all zero swaps, standard axioms only):
+
+| Module | Attempt | Exit | Wall (s) | Peak RSS (bytes) |
+|---|---:|---:|---:|---:|
+| StoredCarrierBindingComponents | 1 | 0 | 15.621 | 3,144,728,576 |
+| StoredCarrierPresentedModel | 3 | 0 | 22.327 | 3,314,548,736 |
+| StoredCarrierPresentedHeadline | 1 | 0 | 21.703 | 3,568,189,440 |
+
+Each module's source revision/hash, imports/fingerprint, exact command,
+complete axiom output, errors and resources are retained in `manifest.json`
+and its attempt directory. `headline-signature-before.lean.txt`,
+`headline-signature-model-after.lean.txt` and `headline-signature-model.diff`
+expose the quantifier/carrier change. `audit.json` explicitly records
+`deployed_premise_removed=false` and `deployed_strict_weakening_proved=false`.

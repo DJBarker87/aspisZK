@@ -1,0 +1,14 @@
+--- arbitrary-runtime endpoint
++++ constructed presented model
+@@ -1,7 +1,8 @@
+ theorem final_soundness
+     (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
+     (hqueries : ∀ H : Bytes → State, (eval H P).1.length ≤ Q)
+-    (rust : Verifier) (runtime : Runtime)
++    (rust : Verifier)
++    (hash : Bytes → State) (pub : Input → Bytes) (current : Input → R9PoolRuntimeBinding.Inputs)
+     (h_Rust_equals_dV : AcceptedRunJoin D rust)
+-    (h_stored_runtime : StoredCarrierBinding D rust P runtime) :
+-    Claims D P Q runtime
++    (h_P2_prime : P2PrimeForInputs hash pub current) :
++    OraclePortHeadlineFrozenPerAttempt.Claims D P Q (runtime D rust P hash pub current)
