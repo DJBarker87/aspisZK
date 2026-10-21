@@ -17,7 +17,7 @@ siblings consecutively. Paths are relative to `crates/aspis-r1-cost-probe/src/`.
 The list runner reads each live group before constructing its next prefix;
 this models the source's safe in-place overwrite order.
 
-`OraclePortFrozenOrderDecision.dV_frozen` keeps admission, reached parsing,
+`OraclePortFrozenOrder.dV_frozen` (`OraclePortFrozenOrderDecision.lean`) keeps admission, reached parsing,
 query extraction, six-slot short circuit and the existing arithmetic check.
 It removes the global recursive-tree `Padding` precheck: the frozen source
 checks each slot's padding after hashing its leaves. Keeping that old guard
@@ -67,7 +67,63 @@ prover are unchanged.
 
 ## Stage 3: headline and join split
 
-Pending. No premise removal or new headline is claimed before C6 is proved.
+The new conditional endpoint is
+`OraclePortHeadlineFrozen.final_soundness`, in
+`OraclePortFrozenOrderHeadline.lean`; `per_query` also compiles. It retains
+the accepted extractor cost, returned relation, abort allowance and runtime
+bound, with the accepted experiment now fixed to `dV_frozen`. The per-query
+form applies for 32 ≤ Q ≤ Qmax, as in the inherited AccLog draft.
+
+The sole source-verifier premise is the following structure in namespace
+`OraclePortFrozenOrderJoin`, quoted verbatim:
+
+```lean
+structure AcceptedRunJoin (D : LiteralByteProtocol.Decoder) (rust : Verifier) : Prop where
+  verifier : AcceptedVerifierJoin rust (verifier D OraclePortFrozenOrder.dV_frozen)
+  annotated : ∀ (P : Prover) H,
+    (eval H (annotatedWith D rust P)).2.2 = true →
+      eval H (annotatedWith D rust P) =
+        eval H (annotated D OraclePortFrozenOrder.dV_frozen P)
+```
+
+Here `AcceptedVerifierJoin` is verbatim:
+
+```lean
+def AcceptedVerifierJoin (source model : Verifier) : Prop :=
+  ∀ H i, (eval H (source i)).2 = true → eval H (source i) = eval H (model i)
+```
+
+Ordered logs, all return values, stored/public data, recovered words and both
+annotation passes are retained. `StoredCarrierBinding D rust P runtime`
+remains a separate runtime premise. `total_join_accepted` supplies the join
+from total equality at this same frozen model. The generic cone composition
+rules now target the frozen decision; total `PerConeJoins`, S10 inventory and
+source/model caller identities imply the two-pass join without an additional
+source-stability hypothesis. The evaluation-only cone route retains its
+explicit sufficient enrichment-stability obligation.
+
+`OraclePortFrozenOrderConsumer` and `OraclePortFrozenOrderProbability`
+re-establish the clean adaptive consumer and collision/start failure bound.
+`OraclePortFrozenOrderTransport` transports the actual extractor input and
+runtime failure mass using accepted equality, without comparison to the old
+recursive log. The cached closed M10 ledger is consumed read-only.
+
+The exact resolved signature diff against the inherited AccLog endpoint is
+recorded in `evidence/frozen-order-draft-20261021/headline-signature.diff`.
+It exposes only the two fixed-model substitutions: the `AcceptedRunJoin`
+namespace and the `Claims` namespace. This is a model retargeting, **not a
+claim that the new source join is weaker than the old join at a different
+model**, and not a premise deletion from R19. R19's free decision and boundary
+premises remain untouched. No premise is removed in this packet. The accepted
+interface retains the inherited logical shape rather than adding recovery,
+budget, C6 or model-soundness assumptions.
+
+The join delivery table in `JOIN-SPLIT-DRAFT-20261021.md` now names
+`dV_frozen` at its model boundary. Concrete S-cone inhabitants, exact mutable
+array/byte adapters, the full frozen caller tree and both caller identities
+remain source-owner work. Matching the model's inner schedule removes the
+old requirement to prove literal accepted-log equality against recursive
+postorder; it does not itself prove an extracted source refinement.
 
 ## Evidence
 
@@ -77,3 +133,13 @@ exit, wall time, peak RSS, swaps, errors and complete axiom reports.
 The launcher uses the prescribed shared mkdir lock and private object path.
 No package build, frozen release replay, source re-pin, wallet action, push
 or merge is performed.
+
+
+## Delivery boundary
+
+All requested model-side stages are proved in additive new modules. The
+conditional headline does not establish that the deployed/frozen verifier
+inhabits its source join, nor that a runtime satisfies the carrier binding.
+No full frozen release replay or deployment is claimed. A coherent release
+closure still needs the dedicated build-host workflow. The branch remains a
+draft for lead review and cannot be merged before user approval of the port.

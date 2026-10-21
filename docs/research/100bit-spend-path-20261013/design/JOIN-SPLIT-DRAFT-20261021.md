@@ -93,7 +93,7 @@ No pending re-pin is silently treated as a landed implementation of `J(c)`.
 | S9 | `J(.s9)`: factored S2 Libra low/high powers and weight loops, full machine state | `AspisR1.S3S9CurrentSourceModel.old_s9_weight_eq_factored`, `s9_source_weights_equal`; `S2LibraFactoredIdentity.source_scaled_eq` are algebraic identities | Current checked factored machine/loops and operand/caller totality, adopted source pin. **Session A** |
 | S10 | `∀ i, Covered inventory (tree i)` (`S10Join`), with each `Site` recording exact declaration and owner | Existing inventory audits; no inventory membership theorem proves execution. New core checks all value continuations, including rejection paths | Instantiate the **current** admitted declaration list, reconcile 29 retained unresolved declarations and production `candidate::query_values` owners, all opaque callbacks, generated-name collisions and exact source/toolchain hashes. **Session A** |
 | Parser/compact codec | `J(.parserCodec)`: full source `parse_shape`/canonical scan/semantic rows/strict codecs and stored→reached projection; exact Option/Err result for every byte slice | `OraclePortStoredParserC4.parsed`, `parse_of_parts`; `OraclePortCompactDraft` defines exact model offsets/row framing; S2 header and fixed-field parser are local total facts | Whole frozen scanner/row parser/compact expansion equality, all offsets/length/canonical guards, binding D by construction; parser/S2/S8 owners |
-| Multiproof | `J(.multiproof)`: `batch_tree`/`verify_in_place`, sorted keys, duplicates, padding, idx/val mutation, node consumption and **ordered reads on failure** | `OraclePortBatchDraft.execute_trace`, `retained_consistent`, `slot_root`; R13 sort/support/dedup-step and inner-level fold results. Short-circuit draft: `decision_verdict`, `decision_prefix`, `decision_accepted_eq` prove the **outer-only** repair; `actual_slot_not_prefix` proves the actual selected-slot inner-order obstruction | Whole dedup scan, source leaf-first/padding-after-leaves/level-order parent schedule, 18-level simulation, zero-scan backend and source accepted-tx2/read coverage; **R13/S7/composition owners**. Outer eager suffix repaired conditionally; exact frozen-order decision and its count proof remain open. See `SHORTCIRCUIT-DRAFT-20261021.md` |
+| Multiproof | `J(.multiproof)`: `batch_tree`/`verify_in_place`, sorted keys, duplicates, padding, idx/val mutation, node consumption and **ordered reads on failure** | `OraclePortBatchDraft.execute_trace`, `retained_consistent`, `slot_root`; R13 sort/support/dedup-step and inner-level fold results. Short-circuit draft: `decision_verdict`, `decision_prefix`, `decision_accepted_eq` prove the **outer-only** repair; `actual_slot_not_prefix` proves the actual selected-slot inner-order obstruction | Whole dedup scan, source leaf-first/padding-after-leaves/level-order parent schedule, 18-level simulation, zero-scan backend and source accepted-tx2/read coverage; **R13/S7/composition owners**. The new `OraclePortFrozenOrder` model supplies sorted leaf/duplicate, post-leaf padding and ascending-level parent order; its indexed recovery, 1161 verifier budget and C6 are compiled. The remaining obligation is the extracted source/live-array/caller refinement to that exact model, not a permutation to the old recursive model. See `FROZEN-ORDER-DRAFT-20261021.md` |
 | Checkpoint ABI | `J(.checkpointAbi)`: 1768-byte encoding/resume, exact prepared/accumulator fields, three digest operations and error timing | `OraclePortCheckpointAbiC5.encode_length`, block widths/offsets and codec roundtrip lemmas; C5 prepared/slices/resume model compositions | Frozen writer/resume→byte model, digest order, stored/public/proof and state provenance, source adoption. **R15/checkpoint + adapter owners**; runtime sameness is still P2′ |
 | Pool caller / ASQ8 | `J(.poolCaller)`: exact CPI program/accounts/payload, hint strip, public reconstruction and both variants; preserve ordinary error results | Six retained ASQ8 Kani roots include full Result `shipped_pipeline_normalization_equivalence`; `ASQ8Normalization.success_bytes`; `ASQ8PoolHandoff.handoff_bytes`. New `OraclePortJoinSplitASQ8.pool_handoff` consumes that exact P6 normalization contract and the extracted strip | CPI/AccountInfo/PDA/ownership guards, proof/checkpoint/public same-snapshot and transaction order; **Pool/runtime owner**, P2/P2′. ASQ8 is 320 bytes; reconstructed ASF8 is 1880 bytes |
 
@@ -285,3 +285,32 @@ frozen-order dV_sc needs new inner scheduling and accounting, not only the
 outer suffix change. No all-input frozen acceptance-equivalence theorem,
 full frozen-prefix theorem, premise deletion or coherent release replay is
 claimed by the follow-up.
+
+
+## Frozen-order target update (unmerged, 21 October 2026)
+
+The table's historical `dV`/outer-only target above is superseded **for the
+frozen-order draft only** by `OraclePortFrozenOrder.dV_frozen`. The thirteen
+`J(c)` predicates and S10 inventory shape are unchanged. The model caller now
+uses sorted leaves (including immediate duplicate digest checks), per-slot
+post-leaf padding, ascending levels and ascending occupied parents, and the
+six-slot short circuit. It has no global recursive `Padding` precheck.
+
+| Join layer | Exact frozen draft target | Status / owner |
+|---|---|---|
+| S1–S9 and pure codec/backend sites | `∀ site, site.owner = c → ∀ args, source site args = model site args` | Same total refinement shape; instantiate concrete extracted arguments, ordinary error values, post-state and source pins. Existing owner status is unchanged; no S re-pin file is changed here. |
+| Multiproof sites | The same `J(.multiproof)` with model slot `OraclePortFrozenOrder.verifySlot_frozen` | Model execution, indexed collision-free recovery and budgets proved. Mutable-array simulation, byte adapters and extracted/source pins remain with the multiproof/S7 owners. |
+| Checkpoint and pool sites | Same `J(.checkpointAbi)` / `J(.poolCaller)` | Existing source/account/checkpoint provenance obligations retained. |
+| S10 | `∀ i, Covered inventory (tree i)` | Current inventory and all error continuations still owed by its owner. |
+| Caller source identity | `∀ i, rust i = interpret source (tree i)` | Frozen caller decomposition and complete mutable state; composition/source owners. |
+| Caller model identity | `∀ i, interpret model (tree i) = verifier D OraclePortFrozenOrder.dV_frozen i` | Exact schedule target; no recursive-log equality or permutation obligation. Whole caller identification remains explicit. |
+| Headline source join | `OraclePortFrozenOrderJoin.AcceptedRunJoin D rust` | Two accepted passes, ordered logs and enriched outputs. Conditional headline consumes this; no frozen inhabitant claimed. |
+| Runtime carrier | `StoredCarrierBinding D rust P runtime` | Separate retained runtime premise. |
+
+`OraclePortFrozenOrderJoin.acceptedRunJoin_of_total_cones` (file
+`OraclePortFrozenOrderCones.lean`) composes total cone joins and these caller
+identities into the accepted-run join. Its total program equality supplies
+enrichment stability, so this route needs no extra source-stability premise.
+For evaluation-only cone joins, `acceptedRunJoin_of_cones` explicitly retains
+the sufficient source-enrichment stability fact. Neither composition theorem
+instantiates a cone, tree, signature or inventory from the current extraction.
