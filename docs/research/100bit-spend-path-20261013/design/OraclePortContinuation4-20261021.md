@@ -139,3 +139,75 @@ elaboration errors and a recursion-limit failure: default simp tried to
 expand long zero lists. Attempt 3 replaces that with symbolic slices and
 bounded 16-byte header reduction, and passes. No limits were raised.
 Pool attempt 1 had a dependent-case equation mismatch; attempt 2 passes.
+
+## Stage 4: resumed stage (c) on the new experiment
+
+`OraclePortStoredAccountingC4` proves the conservative envelopes on the
+adaptive carrier: distinct first reads ≤Q+1161, recognised starts ≤Q+1080,
+and zero additional starts from compiler replay. No uniform fixed stored
+proof is assumed. The existing compiler module gives log length ≤Q+2322.
+
+`OraclePortStoredPoolReplayC4.prepare_original` identifies the complete
+prepared-prefix/terminal observation with the new original experiment,
+including the original prover log. `resume_recorded` proves exact logical
+accepted-resume equality with the new recorded experiment. This supersedes
+stage 3's then-open logical replay identity. Physical account serialization,
+prepared-field ABI, runtime caller and policy checks remain source joins.
+
+`OraclePortStoredAdmissionC4` constructs R16 instances at the repaired
+experiment. Retagging preserves acceptance, compiled erasure is exact, and
+accepted admitted/canonical executions yield the public parse and valid
+row-31/32 placements. `OraclePortStoredChecksC4.source` selects those fields
+and binds data to the actual compiled reader; `source_instance` needs only
+acceptance. Its `hchecks` composes the existing typed check results into
+`Checks` at the new recorded rows. The explicit `ReaderBinding` remains the
+required acceptance-to-typed-check implication. It is not proved by the
+multiproof-only kernel. `fields_do_not_determine_typed_acceptance` confirms
+that substituting arbitrary data into an R16 witness preserves every visible
+field while forcing one candidate to fail the typed checker.
+
+`OraclePortStoredDecisionDraftC4` now supplies an arithmetic candidate from
+stored bytes and reached queries: global first-position opening maps build
+C1/C2/folded words, erased rows are retagged with those words, a reader-bound
+source is constructed, and the candidate checks semantic equations, pairing,
+first matching and the accumulated sum through `D0TypedChecks.verify`.
+`accepted` exposes the successful parser, padding, shared-tree and typed
+checks on these byte-derived rows. There is no external word, forest or
+source-data argument. `decision_budget` proves the same ≤1046 envelope.
+This is a specified arithmetic candidate, **not a completed frozen dV**:
+its byte-derived word completion still must be related, at selected fibres,
+to the compiler's commitment-cut word recovery; checkpoint hash inputs and
+physical prepared-field encoding also remain to be composed.
+
+The current typed-composition obligation, quoted verbatim, is:
+
+```lean
+def ReaderBinding (D : LiteralByteProtocol.Decoder) (d : Decision) (P : Prover)
+    (Q : Nat) (fallback : (Bytes → State) → SourceInputs) : Prop :=
+  ∀ H : Bytes → State,
+    ¬ RecordedBinaryExperimentBin.binaryCollision Q
+      (view (eval H (annotated D (admitted d) (canon P)))) →
+    (eval H (original D (admitted d) (canon P))).2.2 = true →
+    D0TypedChecks.verify (rows D (admitted d) (canon P) H)
+      (source D d P fallback H) = true
+```
+
+This is a new-carrier model obligation; it is not claimed as a deletion-only
+replacement in the old headline. No old signature or premise was changed.
+
+| Existing headline premise / interface | Continuation 4 status | Deletion |
+|---|---|---|
+| Free pure `d` | New adaptive stored input and arithmetic candidate; exact annotation replay proved | None; completed dV specialization not established |
+| `h_R16_instance` | Derived at the new admitted/canonical experiment; reader-bound source constructed | None in the old signature |
+| `h_R13` | Source binds actual compiled reader; selected byte-derived-to-recovered word transfer remains | None |
+| `h_R15_writer` | Logical saved-ten/resumed-twelve law and exact new Pool replay proved; selected arithmetic transport still to compose | None |
+| `h_R3_semantic` | Candidate explicitly checks semantic equations on its byte-derived rows; transfer to compiled rows remains | None |
+| `h_R14_backend` | Candidate checks pairing/closed sum; physical prepared-field/caller composition remains | None |
+| Terminal carrier | Replaced by separately retained stored bytes after exact row-layout audit | Interface repair, not a premise deletion |
+| Budget | Candidate ≤1046, distinct reads ≤Q+1161 | Proved at new carrier |
+| Starts / recorded log | Q+1080 / Q+2322, all input | Conservative enlarged domains retained |
+| Pool | Stored identity, lossless logical packet, accepted resume equals new recorded run | Physical ABI/runtime join remains |
+| M10 and other workers' boundaries | Unchanged | None |
+
+**Headline premise deletions: zero.** Neither parser nonvacuity nor R16
+admission is labelled CheckedAcceptance at a completed frozen verifier.
