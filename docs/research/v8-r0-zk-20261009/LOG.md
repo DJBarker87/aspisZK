@@ -7919,3 +7919,24 @@ privacy issue. Lead ruling: interpret CoinOracle as a state-passing coin tape
 product coupling. Extend the extracted interface so each call returns
 (digest, updated cursor, recording/collision effects), prove the extracted
 calls preserve exactly those effects, then assemble shippedProverExperiment.
+
+## D137 (lead, 2026-10-22 00:10): part 27 merged; coin tape effects proved, continuation port is the next obstruction
+
+Merged `codex/cx-prover-commit27-20261021` (report
+`r1p-final/PROVER-COMMIT27-20261021.md`). Proved: the extracted state-passing
+CoinOracle calls preserve exactly their (digest, cursor, recording/collision)
+effects, universally per call and by induction over adaptive call sequences;
+the D134 product-coupling marginals hold with the explicit cursor (concrete
+115-word tape); effectful semantic/circle/suffix caller skeletons. 34 axioms
+reports, standard axioms only. Per-call RefCell Kani gates and the 115-word
+read-address gate pass; monolithic 115-word checks timed out and are excluded.
+No shipped file changed (D129 ELF evidence still applies).
+Not established: the retained full walk/policy continuations still consume a
+pure `Digest32` (`Machine → … → Result Bytes32`), so they cannot take the new
+`Result (Bytes32 × Machine)` operation (J7673 installation probe). This is an
+interface-composition obstruction, not a privacy counterexample.
+`shippedProverExperiment`, both WholeRunJoins and the endpoint remain open;
+`RustProverRefinement` stays explicit; zero premises removed.
+Next (part 28): port the complete effectful continuation (replay reset, query
+selection, native trace, retries, commitment programming, ordered
+serialisation) to the state-passing operation, then the joins and endpoint.
