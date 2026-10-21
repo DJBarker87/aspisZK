@@ -251,3 +251,59 @@ fn adoption_binary_level_composed() {
  assert!(after.n>0 && after.n<=16 && after.at<=length);
  assert_eq!(calls.get(),source_calls);assert_eq!(event.get(),source_event);
 }
+
+// Continuation 3: one parent only, arbitrary sibling bytes, verified hash
+// contract; never unroll a level or choose a concrete scratch observation.
+#[kani::proof_for_contract(super::adoption_node::hash_parts)] #[kani::unwind(34)]
+fn node_hash_contract() {
+ let tag:[u8;1]=kani::any();let left:[u8;32]=kani::any();let right:[u8;32]=kani::any();
+ let coordinate:usize=kani::any();kani::assume(coordinate<65);
+ super::adoption_node::hash_parts(&[&tag,&left,&right],kani::any(),coordinate);
+}
+fn node_pair(case:u8) {
+ use core::cell::Cell;use super::adoption_node::{Hash,source};
+ let s=r::Scratch{idx:kani::any(),val:kani::any(),n:kani::any(),at:0};
+ let i:usize=kani::any();let w:usize=kani::any();let coordinate:usize=kani::any();
+ let window:[u8;32]=kani::any();let length:usize=kani::any();let answer:[u8;32]=kani::any();
+ kani::assume(s.n>0 && s.n<=16 && i<s.n && w<=i && coordinate<65 && length<=32);
+ let paired=i+1<s.n && s.idx[i+1]==s.idx[i]^1;
+ kani::assume(if case==0 {paired} else {!paired && (length==32)==(case==1)});
+ let calls=Cell::new(0);let event=Cell::new(0);
+ let hash=Hash{answer,coordinate,calls:&calls,event:&event};
+ let (success,after,next_i,next_w)=source(hash,s,&window[..length],i,w);
+ let count=calls.get();let byte=event.get();calls.set(0);event.set(0);
+ match r::binary_step(hash,s,&window[..length],i,w) {
+  r::Row::Stop(expected)=>{assert!(!success);super::adoption::same_scratch(&after,&expected);assert_eq!((next_i,next_w),(i,w));},
+  r::Row::Next(expected,ri,rw)=>{assert!(success);super::adoption::same_scratch(&after,&expected);assert_eq!((next_i,next_w),(ri,rw));}
+ }
+ assert_eq!(calls.get(),count);assert_eq!(event.get(),byte);
+}
+#[kani::proof] #[kani::stub_verified(super::adoption_node::hash_parts)] #[kani::unwind(34)]
+fn node_pair_occupied(){node_pair(0);}
+#[kani::proof] #[kani::stub_verified(super::adoption_node::hash_parts)] #[kani::unwind(34)]
+fn node_pair_sibling(){node_pair(1);}
+#[kani::proof] #[kani::stub_verified(super::adoption_node::hash_parts)] #[kani::unwind(34)]
+fn node_pair_short(){node_pair(2);}
+
+// Independent equality certificate for the actual final-root comparison.
+#[kani::proof] #[kani::unwind(34)]
+fn node_digest_equality() {
+ let values:[[u8;32];16]=kani::any();let root:[u8;32]=kani::any();
+ assert_eq!(f::multiproof::root_matches(&values,&root),values[0]==root);
+}
+// Domain/progress has its own small harness and no equality postcondition.
+#[kani::proof] #[kani::stub_verified(super::adoption_node::hash_parts)] #[kani::unwind(34)]
+fn node_domain_preservation() {
+ use core::cell::Cell;use super::adoption_node::{Hash,source};
+ let s=r::Scratch{idx:kani::any(),val:kani::any(),n:kani::any(),at:0};
+ let i:usize=kani::any();let w:usize=kani::any();let coordinate:usize=kani::any();
+ let window:[u8;32]=kani::any();let length:usize=kani::any();
+ kani::assume(s.n>0 && s.n<=16 && i<s.n && w<=i && coordinate<65 && length<=32);
+ let calls=Cell::new(0);let event=Cell::new(0);
+ let (success,out,ni,nw)=source(Hash{answer:kani::any(),coordinate,calls:&calls,event:&event},s,&window[..length],i,w);
+ assert_eq!(out.n,s.n);assert!(out.at<=length);
+ if success {
+  assert!(i<ni && ni<=s.n && nw==w+1 && nw<=ni && nw<=s.n);
+  assert_eq!(calls.get(),1);
+ } else {assert_eq!((ni,nw,out.at),(i,w,0));assert_eq!(calls.get(),0);}
+}

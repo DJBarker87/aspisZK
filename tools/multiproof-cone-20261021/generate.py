@@ -16,6 +16,7 @@ mp=(R/(base+'multiproof.rs')).read_text().split('/// Prover side:')[0]
 # The whole verifier prefix is copied, including well_formed and all callees.
 # Expose private helpers only to this proof crate's sibling harness module.
 mp=mp.replace('fn well_formed(', 'pub(crate) fn well_formed(')
+mp=mp.replace('fn root_matches(', 'pub(crate) fn root_matches(')
 wire=item(base+'r1_wire.rs','pub const fn row_shape(')
 compact=(R/(base+'compact.rs')).read_text().split('#[cfg(test)]')[0]
 compact=compact.replace('crate::verifier::SEMANTIC_BYTES','13_831')
@@ -93,7 +94,7 @@ use aspis_core::state_only_private_merkle::private_leaf_hash_with_digest;
 '''+batch+'\n'+sort_step+'\n'+leaf+'\n'+leaf_iteration+'\n}\n'+parser}
 ledger=dict(schema='frozen-parser-multiproof-cuts-v1',exact_items=cuts,substitutions=[
  'compact.rs: verifier::SEMANTIC_BYTES replaced by its pinned literal 13_831',
- 'multiproof verifier prefix: private well_formed exposed pub(crate)',
+ 'multiproof verifier prefix: private well_formed and root_matches exposed pub(crate); bodies unchanged',
  'batch helpers: private functions exposed pub(crate)',
  'sort atomic step: exact let-j/while guard and swap/decrement body; while becomes one if; return continuation flag, owned keys and cursor',
  'adoption_level: factor each exact binary_group body into the separately verified source_row wrapper; same i<n guard, chronological scratch/cursor update and n=w; return oracle ordinal/coordinate observation and use arbitrary independent per-call replies',

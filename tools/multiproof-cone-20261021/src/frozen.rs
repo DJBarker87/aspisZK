@@ -371,7 +371,7 @@ fn index_at(indices: &[u32; MAX_BATCH], index: usize) -> u32 {
 fn value_at(values: &[[u8; 32]; MAX_BATCH], index: usize) -> [u8; 32] { values[index] }
 
 #[inline(always)]
-fn root_matches(values: &[[u8; 32]; MAX_BATCH], root: &[u8; 32]) -> bool { values[0] == *root }
+pub(crate) fn root_matches(values: &[[u8; 32]; MAX_BATCH], root: &[u8; 32]) -> bool { values[0] == *root }
 
 #[inline(always)]
 fn occupied_binary_parent<H: Digest32>(hash: H, values: &[[u8; 32]; MAX_BATCH], index: usize) -> [u8; 32] {

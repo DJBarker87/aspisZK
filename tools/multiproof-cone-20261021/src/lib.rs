@@ -9,3 +9,5 @@ pub use frozen::r1_wire;
 #[cfg(test)] mod tests;
 
 #[cfg(kani)] pub mod adoption;
+
+#[cfg(kani)] pub mod adoption_node;
