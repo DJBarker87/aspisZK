@@ -93,7 +93,7 @@ No pending re-pin is silently treated as a landed implementation of `J(c)`.
 | S9 | `J(.s9)`: factored S2 Libra low/high powers and weight loops, full machine state | `AspisR1.S3S9CurrentSourceModel.old_s9_weight_eq_factored`, `s9_source_weights_equal`; `S2LibraFactoredIdentity.source_scaled_eq` are algebraic identities | Current checked factored machine/loops and operand/caller totality, adopted source pin. **Session A** |
 | S10 | `∀ i, Covered inventory (tree i)` (`S10Join`), with each `Site` recording exact declaration and owner | Existing inventory audits; no inventory membership theorem proves execution. New core checks all value continuations, including rejection paths | Instantiate the **current** admitted declaration list, reconcile 29 retained unresolved declarations and production `candidate::query_values` owners, all opaque callbacks, generated-name collisions and exact source/toolchain hashes. **Session A** |
 | Parser/compact codec | `J(.parserCodec)`: full source `parse_shape`/canonical scan/semantic rows/strict codecs and stored→reached projection; exact Option/Err result for every byte slice | `OraclePortStoredParserC4.parsed`, `parse_of_parts`; `OraclePortCompactDraft` defines exact model offsets/row framing; S2 header and fixed-field parser are local total facts | Whole frozen scanner/row parser/compact expansion equality, all offsets/length/canonical guards, binding D by construction; parser/S2/S8 owners |
-| Multiproof | `J(.multiproof)`: `batch_tree`/`verify_in_place`, sorted keys, duplicates, padding, idx/val mutation, node consumption and **ordered reads on failure** | `OraclePortBatchDraft.execute_trace`, `retained_consistent`, `slot_root`; R13 sort/support/dedup-step and inner-level fold results | Whole dedup scan, 18-level parent/sibling simulation, zero-scan backend, source accepted-tx2/read coverage; **R13/S7 owners**. Eager-vs-short-circuit obstruction below belongs to composition |
+| Multiproof | `J(.multiproof)`: `batch_tree`/`verify_in_place`, sorted keys, duplicates, padding, idx/val mutation, node consumption and **ordered reads on failure** | `OraclePortBatchDraft.execute_trace`, `retained_consistent`, `slot_root`; R13 sort/support/dedup-step and inner-level fold results. Short-circuit draft: `decision_verdict`, `decision_prefix`, `decision_accepted_eq` prove the **outer-only** repair; `actual_slot_not_prefix` proves the actual selected-slot inner-order obstruction | Whole dedup scan, source leaf-first/padding-after-leaves/level-order parent schedule, 18-level simulation, zero-scan backend and source accepted-tx2/read coverage; **R13/S7/composition owners**. Outer eager suffix repaired conditionally; exact frozen-order decision and its count proof remain open. See `SHORTCIRCUIT-DRAFT-20261021.md` |
 | Checkpoint ABI | `J(.checkpointAbi)`: 1768-byte encoding/resume, exact prepared/accumulator fields, three digest operations and error timing | `OraclePortCheckpointAbiC5.encode_length`, block widths/offsets and codec roundtrip lemmas; C5 prepared/slices/resume model compositions | Frozen writer/resume→byte model, digest order, stored/public/proof and state provenance, source adoption. **R15/checkpoint + adapter owners**; runtime sameness is still P2′ |
 | Pool caller / ASQ8 | `J(.poolCaller)`: exact CPI program/accounts/payload, hint strip, public reconstruction and both variants; preserve ordinary error results | Six retained ASQ8 Kani roots include full Result `shipped_pipeline_normalization_equivalence`; `ASQ8Normalization.success_bytes`; `ASQ8PoolHandoff.handoff_bytes`. New `OraclePortJoinSplitASQ8.pool_handoff` consumes that exact P6 normalization contract and the extracted strip | CPI/AccountInfo/PDA/ownership guards, proof/checkpoint/public same-snapshot and transaction order; **Pool/runtime owner**, P2/P2′. ASQ8 is 320 bytes; reconstructed ASF8 is 1880 bytes |
 
@@ -264,3 +264,24 @@ read-order questions; S10's generated declaration collision; the unchanged
 stored-runtime binding; and the eventual approved, coherent release replay.
 The split is proved conditionally; **none of those remaining source joins is
 asserted proved by this packet**.
+
+
+## Short-circuit draft follow-up (21 October 2026)
+
+The additive sibling packet `SHORTCIRCUIT-DRAFT-20261021.md` proves the
+outer-only decision repair and a conditional `OraclePortHeadlineDVsc`
+endpoint. Its ordered join targets `verifier D outerDecision i`; the old
+false-head/eager-suffix example no longer applies to that outer loop.
+No existing Lean module or source join is changed or discharged.
+
+This does **not** identify the frozen verifier with that endpoint: the
+source hashes sorted leaves before padding and parents, while the retained
+inner model uses global padding first and recursive parents before duplicate
+leaves. `OraclePortShortCircuitSlotObstruction.actual_slot_not_prefix` proves
+this second mismatch against the actual depth-18 selected `verifySlot`, for
+the all-zero query helper input and any source continuation after its first
+two leaf reads. It does not assert full stored-input reachability. An exact
+frozen-order dV_sc needs new inner scheduling and accounting, not only the
+outer suffix change. No all-input frozen acceptance-equivalence theorem,
+full frozen-prefix theorem, premise deletion or coherent release replay is
+claimed by the follow-up.

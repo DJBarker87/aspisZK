@@ -51,6 +51,29 @@ Stage 1 focused checks: core attempt 3 and obstruction attempt 2, exit 0,
 standard axioms only, zero swaps. Earlier failed elaborations are retained
 in the manifest; they are not accepted proof evidence.
 
+### Actual selected-slot obstruction
+
+`OraclePortShortCircuitSlotObstruction.actual_slot_not_prefix` strengthens
+the depth-two cut to the existing **height-18 `verifySlot`** with
+`zeroQueries : Fin 22 → Fin 262144 := fun _ => 0` and arbitrary `Parsed p`.
+A symbolic `zero_build` lemma proves the sparse tree is a single left spine;
+no height-18 recurrence or large index domain is normalized concretely.
+The slot's first two reads are a leaf frame and a node frame.
+
+The source sorts `(index << 8) | position`; at this helper input its first
+two leaves are opening 0 and opening 1, before it can reject a duplicate.
+The theorem quantifies over **every** continuation after those two reads
+and proves that source-shaped log cannot be a prefix of this actual slot's
+log, for every oracle world. Real leaf/node grammars are used: their first
+bytes are 0x10 and 0x12. This removes the toy-address limitation of the
+small countermodel. It still does not prove that these query indices are
+reachable through all upstream source/model guards. No full frozen run or
+acceptance-equivalence counterexample is claimed. Attempt 3 checks using
+standard axioms and zero swaps; the previous syntax/elaboration failures
+and heartbeat timeout remain in the receipts. The replacement uses an
+explicit Program return type and opaque slot/tree interfaces, not a raised
+heartbeat or memory cap.
+
 ## Stage 2: outer decision and accounting
 
 `OraclePortShortCircuitDecision.outerDecision` changes only the six-slot
@@ -107,4 +130,57 @@ standard axioms only and zero swaps.
 
 ## Stage 4: handoff and audit
 
-Pending final focused audit. Exact frozen ordering remains open.
+All nine new modules compile, with 41 new theorems and 46 accepted axiom
+reports, each a subset of {propext, Classical.choice, Quot.sound}. The manifest
+retains 18 attempts: nine successful and nine failed. Every attempt records
+target/command, source revision and SHA-256, direct-import hashes and dependency
+fingerprint, exit, wall time, peak RSS, swaps and complete axiom/error output.
+Peak RSS across all attempts is 3,673,571,328 bytes; all report zero swaps.
+No memory, heartbeat or recursion cap was raised.
+
+The final union import `OraclePortShortCircuitFreeze`, attempt 1, exits 0 in
+14.685375 seconds, peak RSS 3,594,027,008 bytes, zero swaps. It audits the two
+headline theorems, ordered-cone endpoint and both obstruction endpoints in
+one compatible focused import. This is **not** a coherent frozen release
+replay. Historical cached objects, including the unchanged closed M10
+ledger, are reused read-only; only private task objects are produced.
+
+The nine failed attempts contain corrected elaboration/syntax issues and
+one slot-obstruction heartbeat timeout. All failed snapshots/logs remain;
+compiler-recovery `sorryAx` in failed receipts is excluded from accepted
+evidence. Every theorem in each final source has its own accepted
+`#print axioms` report. No full regression or frozen manifest was rerun.
+
+Reproduce the receipt/source/import/signature/scope audit without Lean:
+
+```sh
+python3 -B tools/oracle-port-shortcircuit/audit.py
+```
+
+`frozen-sources.json` pins every final new source and the byte-identical
+original R19/C7 endpoints, execution/runtime definitions and inspected
+source/model bodies. The audit verifies no existing Lean module was edited;
+S1/S3/S4/S5/S9/S10 candidates and M10 instrumentation are untouched.
+`signature-retarget.diff` is checked against both exact source signatures.
+The updated multiproof row in `JOIN-SPLIT-DRAFT-20261021.md` distinguishes
+the proved outer repair from the still-open inner simulation.
+
+### Exact remaining work
+
+Construct an independently source-shaped inner decision: sorted leaf hashes
+and immediate duplicate exits; per-slot count/padding after those leaves;
+mutable level-order parent verification and ordinary errors; actual S8 pure
+early exits in their caller positions; checkpoint hashes and transaction
+ordering. Prove its verdict correspondence and **fresh** count/start bounds
+(or justified read permutation/set containment), then port the accepted
+probability/extractor consumer to that decision and instantiate the concrete
+cone, driver and stored-runtime joins. The existing prefix theorem cannot
+be silently reused for that source schedule. A reachable full verifier
+counterexample is not supplied by the helper obstruction.
+
+The packet therefore completes the independent outer repair and conditional
+endpoint, and stops the requested exact frozen-order item at the documented
+inner-order obstruction. It removes no premise and changes no shipped code,
+protocol constant, proof format or CU target. The user must still approve
+the unmerged port before the lead merges this draft. No push, merge, Rust
+suite, SBF rebuild, wallet/key operation or key cleanup was performed.

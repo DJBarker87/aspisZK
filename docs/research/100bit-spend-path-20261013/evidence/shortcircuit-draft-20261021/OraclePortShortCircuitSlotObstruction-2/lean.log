@@ -1,0 +1,92 @@
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitSlotObstruction.lean:33:21: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitSlotObstruction.lean:33:50: warning: 'decide' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitSlotObstruction.lean:33:50: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitSlotObstruction.lean:54:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H (OraclePortBatchDraft.execute (spine a s (h + 1)))).1
+in the target expression
+  ∃ tail,
+    (eval H (OraclePortBatchDraft.execute (spine a s h))).1 ++
+          ([] ++
+            [(BinMerkle32Path.nodeInput (children (eval H (OraclePortBatchDraft.execute (spine a s h))).2.1 (s h)),
+                H
+                  (BinMerkle32Path.nodeInput
+                    (children (eval H (OraclePortBatchDraft.execute (spine a s h))).2.1 (s h))))]) ++
+        ([] ++
+          [(BinMerkle32Path.nodeInput
+                (children
+                  (H
+                    (BinMerkle32Path.nodeInput
+                      (children (eval H (OraclePortBatchDraft.execute (spine a s h))).2.1 (s h))))
+                  (s (h + 1))),
+              H
+                (BinMerkle32Path.nodeInput
+                  (children
+                    (H
+                      (BinMerkle32Path.nodeInput
+                        (children (eval H (OraclePortBatchDraft.execute (spine a s h))).2.1 (s h))))
+                    (s (h + 1)))))]) =
+      (a, H a) ::
+        (BinMerkle32Path.nodeInput (children (H a) (s 0)), H (BinMerkle32Path.nodeInput (children (H a) (s 0)))) :: tail
+
+case succ
+a : Bytes
+s : ℕ → State
+H : Bytes → State
+h : ℕ
+tail : List (Bytes × State)
+eq :
+  (eval H (OraclePortBatchDraft.execute (spine a s (h + 1)))).1 =
+    (a, H a) ::
+      (BinMerkle32Path.nodeInput (children (H a) (s 0)), H (BinMerkle32Path.nodeInput (children (H a) (s 0)))) :: tail
+⊢ ∃ tail,
+    (eval H (OraclePortBatchDraft.execute (spine a s h))).1 ++
+          ([] ++
+            [(BinMerkle32Path.nodeInput (children (eval H (OraclePortBatchDraft.execute (spine a s h))).2.1 (s h)),
+                H
+                  (BinMerkle32Path.nodeInput
+                    (children (eval H (OraclePortBatchDraft.execute (spine a s h))).2.1 (s h))))]) ++
+        ([] ++
+          [(BinMerkle32Path.nodeInput
+                (children
+                  (H
+                    (BinMerkle32Path.nodeInput
+                      (children (eval H (OraclePortBatchDraft.execute (spine a s h))).2.1 (s h))))
+                  (s (h + 1))),
+              H
+                (BinMerkle32Path.nodeInput
+                  (children
+                    (H
+                      (BinMerkle32Path.nodeInput
+                        (children (eval H (OraclePortBatchDraft.execute (spine a s h))).2.1 (s h))))
+                    (s (h + 1)))))]) =
+      (a, H a) ::
+        (BinMerkle32Path.nodeInput (children (H a) (s 0)), H (BinMerkle32Path.nodeInput (children (H a) (s 0)))) :: tail
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitSlotObstruction.lean:59:74: error: unsolved goals
+idx : ∀ (pos : ℕ), index zeroQueries 0 pos = 0
+⊢ List.map (index zeroQueries 0) (List.range 10) = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitSlotObstruction.lean:62:32: warning: This simp argument is unused:
+  idx
+
+Hint: Omit it from the simp argument list.
+  simp [selected, ̲batchPositions,̵i̵d̵x̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.OraclePortShortCircuitSlotObstruction.unoccupied' depends on axioms: [propext]
+'AspisR1.OraclePortShortCircuitSlotObstruction.zero_build' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortShortCircuitSlotObstruction.spine_first_two' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OraclePortShortCircuitSlotObstruction.zero_selected' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OraclePortShortCircuitSlotObstruction.zero_input' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortShortCircuitSlotObstruction.slot_first_two' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortShortCircuitSlotObstruction.actual_slot_not_prefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
