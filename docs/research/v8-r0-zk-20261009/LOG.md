@@ -7627,3 +7627,18 @@ preparation formulas, actual WideExact arithmetic, predicate/retry and
 encoding composition, callback certificates, and the whole-experiment source
 join. This env-J attempt range is exhausted, so the track pauses until a new
 range is allocated.
+
+## D120 — CallerLaw discharged at the fixed decoder (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit11-20261021` (`r1p-final/PROVER-COMMIT11-20261021.md`).
+Byte-load and finite oracle cache correspondence with `wordsE` are proved,
+bounded scalar windows are composed over one retained global oracle, and
+`CallerLaw` is derived for the fixed operational reference decoder (the D118
+specialisation composed from the Kani-matched extracted references).
+`privacy_headline_owned_closed` (`docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineOwnedClosed.lean`) removes
+`R_commit_caller` with a deletion-only diff (the lead checked it). J8355: 32
+standard-axiom audits, zero swap; no production change. This is the current
+privacy headline. Open: shipped entry-point/outer-caller transport, i.e. that
+the shipped prover entry calls these references in this order (the isolated
+scalar-contract check timed out at 600 s even with all three verified summaries
+active), and all-family callback coverage.
