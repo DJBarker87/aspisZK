@@ -41,5 +41,9 @@ for a in host['attempts']:
 generated=(E/'header-extraction/generated/AspisS2HeaderRef/Funs.lean').read_text();definition=generated.split('def header_reference',1)[1].split('end AspisS2HeaderRef',1)[0].strip()
 module=(P/'lean/S2KaniHeaderReference.lean').read_text();copied=module.split('def header_reference',1)[1].split('theorem header_rejects',1)[0].strip();assert definition==copied
 binding=json.loads((E/'parser-binding.json').read_text());assert all(x['normalized_equal'] for x in binding['declarations'])
+linked=json.loads((E/'linked-source-pins.json').read_text())
+assert json.loads((E/'linked-freeze-diff.json').read_text())==[]
+for path,h in linked.items():
+ assert hashlib.sha256(subprocess.check_output(['git','show','b2727acd3:'+path])).hexdigest()==h,path
 result=dict(schema='s2-kani-offline-audit-v1',status='pass',formal_modules=accepted,accepted_kani_batches=passes,headline_deletion='not claimed: missing decision/public-tag binding',existing_endpoints_unchanged=True,scope='Focused checks only; no frozen manifest/C2/P6/R21 replay or full source/model boundary discharge.')
 (E/'audit.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({'status':'pass','formal_modules':len(accepted),'accepted_kani_batches':passes}))
