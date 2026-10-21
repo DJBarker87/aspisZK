@@ -1,0 +1,76 @@
+import OraclePortFrozen2Decision
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortFrozen2
+open FS FS2 FS2.Duplex
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.AdaptiveFirstReadLaw
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft OraclePortFrozenOrder
+open OraclePortStoredDecisionDraftC4
+open RawCutTranscriptRun (ErasedPrefix ErasedMessage)
+attribute [local instance] Classical.propDecidable
+
+/-- On acceptance the original log is split at exactly the batch boundary.
+The six checkpoint reads occur there, not before the verifier sampler. -/
+theorem accepted_trace (H : Bytes → State) (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage)
+    (ha : (eval H (dV_frozen2 stored tr m)).2 = true) :
+    ∃ p q i v,
+      OraclePortAdmission.Guard tr ∧
+      OraclePortStoredParserC4.parseReached stored tr = some p ∧ queries tr = some q ∧
+      input p q tr = some i ∧ LiteralOpeningView.read (typedRows p q tr) = some v ∧
+      (eval H (batch p q batch0)).2 = true ∧ (eval H (batch p q batch1)).2 = true ∧
+      eval H (dV_frozen2 stored tr m) =
+        ((eval H (batch p q batch0)).1 ++ (eval H (checkpoint stored p q tr i v)).1 ++
+          (eval H (batch p q batch1)).1,true) ∧
+      eval H (dV_frozen stored tr m) =
+        ((eval H (batch p q batch0)).1 ++ (eval H (batch p q batch1)).1,true) := by
+  have old : (eval H (dV_frozen stored tr m)).2 = true := (acceptance_eq H stored tr m).symm.trans ha
+  obtain ⟨guard,p,q,i,hp,hq,merkle,hi,checked⟩ := OraclePortFrozenOrder.accepted_details stored tr m H old
+  have matching := D0TypedChecks.accepted_matching _ i checked
+  obtain ⟨v,_,_,hv,_,_⟩ := HchecksReaderComposition.matching_read_parsers _ i.data matching
+  have parts := merkle
+  change (eval H (batch p q slots)).2 = true at parts
+  rw [batches] at parts
+  simp only [eval_bind] at parts
+  have first : (eval H (batch p q batch0)).2 = true := by
+    cases h : (eval H (batch p q batch0)).2
+    · simp [h,eval] at parts
+    · rfl
+  have second : (eval H (batch p q batch1)).2 = true := by
+    simpa only [first,if_true] using parts
+  refine ⟨p,q,i,v,guard,hp,hq,hi,hv,first,second,?_,?_⟩
+  · simp only [dV_frozen2,if_pos guard,hp,hq,eval_bind,first,if_true,afterBatch0,
+      hi,hv,checkpoint_value,stage2,eval,second,finish_value p q tr i hi hq,checked,
+      Bool.true_and,List.append_nil,List.append_assoc]
+  · simp only [dV_frozen,if_pos guard,hp,hq,eval_bind,arithmetic,hi,checked,eval,
+      Bool.and_true,List.append_nil]
+    rw [← show batch p q slots = OraclePortShortCircuit.short (slotPrograms p q slots) from rfl,batches]
+    simp only [eval_bind,first,if_true,second]
+
+/-- Every old authentication read is present in the accepted two-TX log.
+No order equality or permutation is asserted for the two complete logs. -/
+theorem old_read (H : Bytes → State) (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage)
+    (ha : (eval H (dV_frozen2 stored tr m)).2 = true) (a : Bytes)
+    (hr : Read (eval H (dV_frozen stored tr m)).1 a) :
+    Read (eval H (dV_frozen2 stored tr m)).1 a := by
+  obtain ⟨p,q,i,v,_,_,_,_,_,_,_,new,old⟩ := accepted_trace H stored tr m ha
+  rw [old] at hr
+  rw [new]
+  simp only [Read,List.map_append,List.mem_append] at *
+  tauto
+
+theorem six_inserted (H : Bytes → State) (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage)
+    (ha : (eval H (dV_frozen2 stored tr m)).2 = true) :
+    (eval H (dV_frozen2 stored tr m)).1.length = (eval H (dV_frozen stored tr m)).1.length + 6 := by
+  obtain ⟨p,q,i,v,_,_,_,_,_,_,_,new,old⟩ := accepted_trace H stored tr m ha
+  rw [new,old]
+  simp only [List.length_append,checkpoint_reads]
+  omega
+
+#print axioms accepted_trace
+#print axioms old_read
+#print axioms six_inserted
+end AspisR1.OraclePortFrozen2
+end
