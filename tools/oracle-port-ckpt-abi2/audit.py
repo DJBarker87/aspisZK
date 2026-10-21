@@ -5,6 +5,8 @@ import hashlib,json,re,subprocess
 R=Path(__file__).resolve().parents[2];B=R/'docs/research/100bit-spend-path-20261013';E=B/'evidence/ckpt-abi2-20261021'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 manifest=json.loads((E/'manifest.json').read_text());current=[a for a in manifest['attempts'] if a.get('final_current')]
+required={'OraclePortCkptAbi2Unwrap','OraclePortCkptAbi2Reached','OraclePortCkptAbi2StdInventory','OraclePortCkptAbi2DriverObstruction','OraclePortCkptAbi2Vec','OraclePortCkptAbi2Extracted.Types','OraclePortCkptAbi2Extracted.Funs','OraclePortCkptAbi2Freeze'}
+assert {a['module'] for a in current}==required
 for a in current:
  assert a['exit']==0 and a['swaps']==0
  source=B/'lean'/(a['module'].replace('.','/')+'.lean');assert sha(source)==a['source_sha256'],source

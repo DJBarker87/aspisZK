@@ -66,7 +66,7 @@ all three theorems. The missing namespace import in attempt 1 is retained.
 At revision 78d23d694, all five final focused Kani gates pass, with explicit
 unwinds and unwind assertions. The tool's standard no-malloc-failure model
 is part of this P6 boundary; it is not an allocator-availability theorem.
-`source-pins.json` verifies 184 local/host source inputs with zero mismatches.
+`source-pins.json` verifies 186 local/host source and Cargo inputs with zero mismatches.
 The standalone crate calls the actual shipped checkpoint function; no frozen
 body is copied into the writer proof. The hash protocol checks its three
 calls and compares an arbitrary checksum-body byte, and the result comparison
@@ -115,3 +115,39 @@ or premise deletion is claimed. The cone row remains (d). No full frozen
 release replay is run while its concrete source/driver join is incomplete.
 No existing Lean module, sibling cone, protected candidate, shipped crate,
 wallet/key or ELF changed. The ELF rebuild condition is therefore inapplicable.
+
+## Final focused import and axioms audit
+
+The final packet has 11 new theorem declarations across the raw-reader,
+reached-model, Vec-content and driver-obstruction modules, plus two emitted
+reference modules. `OraclePortCkptAbi2Freeze`, attempt 2: exit 0, wall
+8.926383 seconds, peak RSS 3,565,223,936 bytes, zero swaps, source revision
+f9e9ac663 (the receipt pins every changed source/import hash). Its 14 axiom
+reports cover all 11 theorems and all three extracted reference functions;
+each uses only a subset of `{propext, Classical.choice, Quot.sound}`.
+
+The first import audit exposed the generator's global
+`instDiscriminantVariantIsize` collision with the existing stage-2 extraction.
+Only the new extraction was changed: its enum was alpha-renamed to
+`CheckpointAbi2Variant`, preserving all constructors, fields, Rust metadata
+and executable bodies. The new Types and dependent Funs were recompiled
+before the final union audit. `normalize.py --check` verifies the exact
+emitted-to-normalized transformation, including removal of generator limits.
+No existing/shared Lean object was overwritten. This is a focused mixed-cache
+import check, not a coherent frozen release replay.
+
+Recheck committed evidence with:
+
+```
+python3 -B tools/oracle-port-ckpt-abi2/normalize.py --check
+python3 -B tools/oracle-port-ckpt-abi2/audit.py
+python3 -B tools/oracle-port-ckpt-abi2/source-pins.py
+```
+
+The source-pin check includes the standalone proof crate's retained Cargo
+lockfile. All 186 selected source/Cargo files match the isolated host snapshot.
+The concrete frozen caller tree and checkpoint Site/Signature needed for the
+final join are still absent from this base's instantiated artifacts; the
+existing join-split interface remains parameterized. That missing caller
+identity is requested from the lead, not replaced by a whole-driver premise
+or by the checkpoint erasure refuted above.

@@ -220,7 +220,7 @@ def encode_k (x : aspis_core.field.QM31) : Result (Array Std.U8 16#usize) := do
   ok (to_slice_mut_back s1)
 
 /-- [checkpoint_abi2_correspondence::decode_e_spec]:
-    Source: 'src/lib.rs', lines 40:0-43:1 -/
+    Source: 'src/lib.rs', lines 35:0-38:1 -/
 def decode_e_spec
   (b : Slice Std.U8) :
   Result (Option aspis_core.field.wide_exact.WideExact)
@@ -241,13 +241,13 @@ def decode_e_spec
       (Array.make 8#usize [ i1, i2, i3, i4, i5, i6, i7, i8 ])
 
 /-- [checkpoint_abi2_correspondence::k_byte]:
-    Source: 'src/lib.rs', lines 50:0-50:43 -/
+    Source: 'src/lib.rs', lines 45:0-45:43 -/
 def k_byte (x : aspis_core.field.QM31) (i : Std.Usize) : Result Std.U8 := do
   let a ← encode_k x
   Array.index_usize a i
 
 /-- [checkpoint_abi2_correspondence::e_byte]:
-    Source: 'src/lib.rs', lines 51:0-51:65 -/
+    Source: 'src/lib.rs', lines 46:0-46:65 -/
 def e_byte
   (x : aspis_core.field.wide_exact.WideExact) (i : Std.Usize) :
   Result Std.U8
@@ -261,7 +261,7 @@ def e_byte
   ok (UScalar.cast .U8 i5)
 
 /-- [checkpoint_abi2_correspondence::body_byte]:
-    Source: 'src/lib.rs', lines 52:0-68:1 -/
+    Source: 'src/lib.rs', lines 47:0-63:1 -/
 def body_byte
   (p : aspis_r1_cost_probe.verifier.Prepared)
   (a : aspis_r1_cost_probe.verifier.Accumulator) (hp : Array Std.U8 32#usize)

@@ -60,10 +60,10 @@ structure aspis_core.field.wide_exact.WideExact where
     Name pattern: [aspis_r1_cost_probe::transport::Variant]
     Visibility: public -/
 @[discriminant isize, rust_type "aspis_r1_cost_probe::transport::Variant"]
-inductive aspis_r1_cost_probe.transport.Variant where
-| S1 : aspis_r1_cost_probe.transport.Variant
-| S2 : aspis_r1_cost_probe.transport.Variant
-| D : aspis_r1_cost_probe.transport.Variant
+inductive aspis_r1_cost_probe.transport.CheckpointAbi2Variant where
+| S1 : aspis_r1_cost_probe.transport.CheckpointAbi2Variant
+| S2 : aspis_r1_cost_probe.transport.CheckpointAbi2Variant
+| D : aspis_r1_cost_probe.transport.CheckpointAbi2Variant
 
 /-- [aspis_r1_cost_probe::verifier::Prepared]
     Source: '/home/dombarker/project-offloads/codex-cx-ckpt-abi2-20261021/crates/aspis-r1-cost-probe/src/verifier.rs', lines 49:0-49:19
@@ -71,7 +71,7 @@ inductive aspis_r1_cost_probe.transport.Variant where
     Visibility: public -/
 @[rust_type "aspis_r1_cost_probe::verifier::Prepared"]
 structure aspis_r1_cost_probe.verifier.Prepared where
-  variant : aspis_r1_cost_probe.transport.Variant
+  variant : aspis_r1_cost_probe.transport.CheckpointAbi2Variant
   roots : Array (Array Std.U8 32#usize) 2#usize
   gamma : aspis_core.field.wide_exact.WideExact
   kappa : aspis_core.field.wide_exact.WideExact

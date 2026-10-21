@@ -4,7 +4,7 @@ from pathlib import Path
 import hashlib,json,subprocess
 R=Path(__file__).resolve().parents[2];E=R/'docs/research/100bit-spend-path-20261013/evidence/ckpt-abi2-20261021'
 H='/home/dombarker/project-offloads/codex-cx-ckpt-abi2-20261021'
-paths=[R/'Cargo.toml',R/'Cargo.lock']
+paths=[R/'Cargo.toml',R/'Cargo.lock',R/'tools/oracle-port-ckpt-abi2/Cargo.toml',R/'tools/oracle-port-ckpt-abi2/Cargo.lock']
 for name in ['aspis-core','aspis-statement','aspis-r1-cost-probe']:
  paths += [R/'crates'/name/'Cargo.toml',*(R/'crates'/name/'src').rglob('*.rs')]
 paths += list((R/'tools/r1-builder-reference').rglob('*.rs'))
