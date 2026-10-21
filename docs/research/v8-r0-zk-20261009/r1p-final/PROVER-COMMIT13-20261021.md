@@ -23,6 +23,39 @@ only the standard three axioms: exit 0, wall 6.97 s, peak RSS 4159700 KiB,
 zero swaps. Exact source/dependency hashes and source revision are in the
 receipt. No package-wide build or unchanged regression is run.
 
+The canonical builder theorem now uses an implicit statement parameter, so
+its name resolves to the proved theorem after deleting the identically named
+premise. J8366 is an excluded doc-comment placement draft; J8367 checks the
+specialized before statement (exit 0, 6.82 s, 4158164 KiB, zero swaps).
+J8368 checks the deletion-only after statement (exit 0, 6.71 s, 4161568 KiB,
+zero swaps), with all three audits standard-axiom only.
+The full verbatim texts are `headline-specialized-before.lean.txt` and
+`headline-specialized-after.lean.txt`; `headline-deletions.diff` deletes exactly
+one binder, with no other change:
+
+```lean
+-- Before (verbatim)
+theorem privacy_headline_admitted
+    (builder_premises : BuilderPremises h B x)
+    (observer_program : (source).Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+```
+
+```lean
+-- After (verbatim)
+theorem privacy_headline_admitted
+    (observer_program : (source).Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+```
+
+This is genuine discharge on the explicitly fixed canonical domain. It is a
+specialization of the previous arbitrary-input theorem, not a weakening with
+unchanged quantifiers. The experiment, error bound and remaining real/ideal
+execution-join premises are byte-identical between the two specialized texts.
+No runtime join or successful-source admission proof is added or hidden.
+Shared Env J drafts/objects were snapshotted under this branch's own host
+directory before replacement; no peer-owned module was replaced.
+
 ## Remaining stages
 
 Formatter/panic unreachability, concrete outer transport and all-family shared

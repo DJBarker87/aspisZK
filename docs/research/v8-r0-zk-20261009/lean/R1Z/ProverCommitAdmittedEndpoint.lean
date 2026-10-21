@@ -54,6 +54,7 @@ private theorem R_commit_caller : ProverCommitCallerInstance.CallerLaw
 
 #print axioms R_commit_caller
 
+variable {x} in
 /-- The canonical M31 spend relation supplies the common builder contract.
 The transport override changes no public projection or raw trace. -/
 theorem builder_premises : BuilderPremises h B x := by
@@ -63,7 +64,6 @@ theorem builder_premises : BuilderPremises h B x := by
 #print axioms builder_premises
 
 theorem privacy_headline_admitted
-    (builder_premises : BuilderPremises h B x)
     (observer_program : (source).Adversary → View K CommitHandle Aux R1Bat →
       List (List UInt8 × OracleAnswer) → OProg)
     (R_wire_builder_checker_D75_retry : ∀ (adv : (source).Adversary) (w : (R0Z.ZkStatement.HonestProver.Instance h)),
