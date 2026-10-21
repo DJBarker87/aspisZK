@@ -130,8 +130,50 @@ that a sequence bounded by the rejection value has a first success or
 exhausts. `sixteen_partition` specializes it to the seventeen scalar cases.
 J8369 passes both audits with `[propext, Quot.sound]`: exit 0, wall 1.40 s,
 peak RSS 2550616 KiB, zero swaps. No concrete recurrence or large carrier
-is reduced. The associated direct Kani scalar run is still pending; the
-partition lemma alone is not an accepted execution certificate.
+is reduced. The direct `state_only_hiding::scalar13::mask_scalar_partition` check
+subsequently passes: exit 0, 557.458 s, peak RSS 3234648 KiB, zero swaps.
+This is one actual shipped scalar execution with no scalar/next-word stub.
+Its seventeen-way partition constrains earlier candidates to rejection and
+checks the returned value/error, seed, counter (including wraparound),
+buffer and word position against a closed-form consumption specification.
+The associated Lean lemma establishes exhaustiveness of the cases. The
+Debug formatter stub asserts false before divergence, so reaching it would
+fail this complete scalar check as well. The counter-indexed oracle table
+contains arbitrary answers; it is not fresh independent sampling per word.
+The proof has a different shape from the old two-execution timeout and was
+not rerun after passing. The corresponding source-scalar run is distinct
+and still pending. Whole material-builder transport remains open.
+
+## Stage 4: actual material extraction and demonstrated obstruction
+
+After proving the scalar safety boundary, the extractor is run on the actual
+`build_mask_material_for_layout`, leaving only the actual m31/qm31 and
+balancing helper calls opaque. This is a compositional cut, not a change to
+the production body. The exact Charon command and all source/tool hashes
+are retained. It uses `--release --jobs 4` and a copied, isolated Charon cache.
+
+`material-charon-v1` succeeds: exit 0, 32.189 s, peak RSS 683432 KiB,
+zero swaps; LLBC `has_errors=false`, SHA-256
+`9c67eeabce7e541c4bb819f96bdb318ec8b33f7375257744195bfac0b3629a0a`,
+size 1912945 bytes (binary/intermediate stays on the host).
+`material-aeneas-v1` then fails: exit 2, 2.247 s, peak RSS 128832 KiB,
+zero swaps. The exact error is:
+
+```text
+Unexpected
+Source: 'crates/aspis-prover/src/state_only_hiding.rs', lines 471:4-489:1
+Compiler source: interp/InterpAbs.ml, line 191
+```
+
+The stack reaches `InterpJoin.join_ctxs` / `convert_value_to_abstractions` at
+the material-builder loop join. This is a new concrete outer-translation
+obstruction after isolating the scalar/formatter cone. It is not a Lean
+counterexample, a memory failure, or a certificate of the outer caller.
+The unchanged failing translation is not rerun and no cap is raised.
+The replacement deliverable is an owned, indexed material-loop reference,
+with per-iteration Kani equality for the shipped iterator/`?`/Vec update and
+Lean induction over that reference, then composition with the accepted
+scalar/window and balancing laws. Failed extraction is explicitly excluded.
 
 ## Remaining stages
 
