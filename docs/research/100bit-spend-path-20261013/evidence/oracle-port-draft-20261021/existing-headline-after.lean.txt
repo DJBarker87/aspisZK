@@ -1,0 +1,55 @@
+theorem final_soundness
+    (D : LiteralByteProtocol.Decoder)
+    (d : ErasedPrefix → ErasedMessage → Bool) (P : Prover)
+    (Q : Nat) (tape : Tape) (policy : Policy)
+    (hqueries : DecoderQueryAccounting.AdversaryQueries P Q)
+    (s : BoundaryStatements) (evidence : BoundaryEvidence s)
+    (source : (Bytes → State) → SourceInputs)
+    /- R16: construct the authenticated decoder/decision map, public bytes and
+       exact row-31/32 placements. DECODER-INSTANCE, owner Codex/lead. -/
+    (h_R16_instance : BoundaryEvidence s → ∀ H,
+      ¬ binaryCollision (Q + 1161) (eval H (recorded D d P)) →
+      FS2.accepts (eval H (original D d P)) → InstanceFields D d P H (source H))
+    /- R13: accepted binary reads give literal matching data; R13-CLOSE,
+       batch A on S7, owner Codex. -/
+    (h_R13 : ∀ H,
+      ¬ binaryCollision (Q + 1161) (eval H (recorded D d P)) → FS2.accepts (eval H (original D d P)) →
+      LiteralMatchingData.read (compiledRows D d P H) = some (source H).data)
+    /- R14 backend: pairing and finalized accumulator; R14-FINISH,
+       S4/S5/S8/S9 boundaries, owner Codex. -/
+    (h_R14_backend : ∀ H,
+      ¬ binaryCollision (Q + 1161) (eval H (recorded D d P)) → FS2.accepts (eval H (original D d P)) →
+      LiteralPairingChecks.checks (compiledRows D d P H) ∧
+      ∀ q : Fin 22 → Fin 262144,
+        LiteralQueryRead.decode (source H).queryBytes = some q →
+        HchecksAccumulator.ClosedSum LiteralOpeningView.eK (source H).data q
+          (SelectedChallengeMap.rhoOf (source H).rho))
+    /- R15 writer: authenticated first-match state; TX1-FINISH and read/write
+       audits, unconditional frozen-writer preservation still owed, owner Codex. -/
+    (h_R15_writer : ∀ H,
+      ¬ binaryCollision (Q + 1161) (eval H (recorded D d P)) → FS2.accepts (eval H (original D d P)) →
+      ∀ q : Fin 22 → Fin 262144,
+        LiteralQueryRead.decode (source H).queryBytes = some q →
+        ∀ j, MatchingSupport.match0 (source H).data (q j))
+    /- R3/R2: actual semantic endpoint with arithmetic/allocation/circle
+       boundaries; HCHECKS field table, owner Codex. -/
+    (h_R3_semantic : ∀ H,
+      ¬ binaryCollision (Q + 1161) (eval H (recorded D d P)) → FS2.accepts (eval H (original D d P)) →
+      HchecksReaderComposition.SemanticEndpoint (source H).decoded
+        (compiledRows D d P H) (source H).data)
+    /- R-wire: binary causal decoder completion, distinct from collision mass;
+       BIN model §6, WIRE-TX1/TX2, owner Codex/privacy. -/
+    (h_Rwire_tag : BoundaryEvidence s → InitialTagDecision.CheckedRejects D d P (Q + 1161))
+    (e : RawExtractorCostComposedBin.CostedExtractor) (p : Parameters)
+    /- Size-restricted M10 adequacy; length is independent of distinct reads. -/
+    (h_M10_ledger : RawExtractorCostComposedBin.LedgerRefinement e p Q)
+    (h_M10_log_length : BoundaryEvidence s → ∀ H,
+      (eval H (recorded D d P)).2.2 = true →
+        (eval H (recorded D d P)).1.length ≤ Q + 1161) :
+    (∀ H : Bytes → State, (eval H (recorded D d P)).2.2 = true →
+      AspisV8R19.OracleResampling.mean (fun coins : Coins =>
+        ((e.eval (eval H (recorded D d P)) coins).2.total : ℚ)) ≤ (p.attemptBudget : ℚ)) ∧
+    (∀ run coins w, (e.eval run coins).1 = some w → LiteralProtocol.relation run.2.1.1 w) ∧
+    (1 / (2 : ℚ)^126 + 1 / (2 : ℚ)^454 ≤ 1 / (2 : ℚ)^120) ∧
+    ((deployedFailureModel (tx1 D P tape) (poolTx2 D d P policy)) ≤ totalBound Q) ∧
+    (Q ≤ Qmax → (deployedFailureModel (tx1 D P tape) (poolTx2 D d P policy)) ≤ (Q+1 : ℚ) * (1/(2:ℚ)^100))
