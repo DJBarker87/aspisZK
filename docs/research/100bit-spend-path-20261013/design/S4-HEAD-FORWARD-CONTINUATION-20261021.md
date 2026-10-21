@@ -714,3 +714,12 @@ Only source/receipt packet checks were rerun for integration. No unchanged
 Lean compilation, runtime suite, or package replay was repeated. The full
 settlement caller connection and coherent final closure remain open; neither
 S4 nor the implementation-linked100-bit target is declared closed.
+
+The twelve-query resume-prefix analogue is also checked in
+`evidence/s4-tx2-output-fullwide-bounds-v1-20261021`:
+`tx2_after_resume_candidate_twelve_fullwide_coordinate_bounds` preserves each
+same query/opening/dots success and bounds that exact returned array. It adds
+no independent success or coordinate premise. Focused compile:exit0,4.008s,
+peak RSS4,057,530,368 bytes,zero swaps,standard axioms. Its resume-prefix
+premise is still a model boundary, not full Rust tx2_common acceptance; a
+separate exact-body caller composition is in progress.
