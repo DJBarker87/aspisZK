@@ -58,3 +58,18 @@ is a multiple of 16. All five audits use standard axioms (scan-01).
 `preflight.py` validates inherited S8 frozen file/reference hashes and the
 new-module lexical scan. The historical checkers' broad-base failures are
 recorded in `legacy-validation.json`; their code/old receipts are unchanged.
+
+## Stage 4 — accepted frozen y1 scan
+
+`S8JoinFrozenScan.accepted_y1` derives success of the complete emitted strict
+scan on the actual 464-byte y1 slice (7031..7495) of the same stored byte
+slice that dV_frozen accepts. Parsing supplies the canonicality and exact
+length. No callee-success, codec, or S8 hypothesis remains. This covers the
+single compact::check_values invocation in candidate::canonical_scan;
+the other strict field decoders remain with their assigned cones.
+
+`S8JoinScanRemainder.unaligned_mismatch` retains a four-byte invalid-tail
+counterexample: the source chunks_exact scan succeeds but the whole-list
+canonical predicate rejects. The total scan theorem models that behavior;
+accepted y1 cannot hit it. All six audits pass with standard axioms
+(frozen-scan-03, remainder-01). No shared cache or lock was removed.
