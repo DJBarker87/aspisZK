@@ -84,3 +84,39 @@ command pins are in `host/receipts/lengths-{writer,reader}-v1/`. Rust axiom
 reports are N/A. Five inherited pass-2 reservation files accidentally copied
 with the initial host snapshot were removed from this packet; actual pass-3
 preflight records and every pass-3 attempt remain retained.
+
+## Stage 3 — representation condition and std owned iteration
+
+`OraclePortCkptAbi3Canonical.canonical_word_bytes` proves the word-level
+byte projection agrees with its exact-field quotient on canonical words.
+`not_all_words_canonicalized` proves an unconditional extension to all U32
+words is false: the raw limb P and zero have identical residues but different
+LE32 encodings. The proof uses the existing symbolic four-byte decoder law,
+not reduction of checkpoint vectors. This is a representation obstruction,
+not a counterexample to a correctly restricted accepted-run join. Successful
+strict resume can provide canonicality, so deriving it from that path is a
+possible next step. All raw QM31 words in the writer certificate must not be
+silently interpreted as canonical C5 field values.
+
+Final Canonical attempt 1: exit 0, 14.751043 seconds, peak RSS 3,488,006,144
+bytes, zero swaps, revision `6e2b4eb8a`. All three axiom audits are standard.
+The full extracted sparse-byte function has **not** been identified with C5.
+In particular, word canonicality alone is not the complete four/eight-limb
+codec bridge or Prepared/Accumulator representation theorem.
+
+`OraclePortCkptAbi3OwnedIter.owned_contents` proves that length-indexed
+iteration using the actual imported std `IntoIteratorVec.into_iter` and
+`IteratorIntoIter.next` consumes all Vec contents exactly once, in order,
+and leaves an empty iterator. It assumes no step/next specification supplied
+by a caller. Final attempt 1: exit 0, 3.495536 seconds, peak RSS 2,255,929,344
+bytes, zero swaps, revision `6e2b4eb8a`. Three new standard axiom audits.
+This closes owned-iterator **content in that std model**, not adoption of
+mutable/shared Rust iteration in the checkpoint helpers.
+
+Physical allocation remains open. The inspected std model represents Vec
+as a bounded list, `with_capacity` ignores its argument, and owned IntoIter
+is another Vec. Rust `heap::filled` calls `try_reserve_exact` and can return
+Allocation; resume separately calls `Box::new`. These physical effects are
+absent from the inspected content model. Kani's standard no-malloc-failure
+model and a bounded-list theorem must not be promoted to physical allocator
+availability, capacity, deallocation or Drop semantics.
