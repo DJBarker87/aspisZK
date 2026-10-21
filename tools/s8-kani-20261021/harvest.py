@@ -12,6 +12,6 @@ for phase in ['extraction','extraction-concrete','extraction-leaves','extraction
 import hashlib,json
 p=Path(%r);print(json.dumps({str(x.relative_to(p)):{'sha256':hashlib.sha256(x.read_bytes()).hexdigest(),'size_bytes':x.stat().st_size} for x in p.rglob('*') if x.is_file()},indent=2))'''%(D+'/'+phase)
  pins=subprocess.check_output(['ssh',H,'python3 - <<\'PYREMOTE\'\n'+script+'\nPYREMOTE'],text=True)
- (out/'artifact-pins.json').write_text(pins+'\n')
+ (out/'artifact-pins.json').write_text(pins.rstrip()+'\n')
  subprocess.run(['rsync','-a','--exclude=*.llbc','--exclude=*Template*',H+':'+D+'/'+phase+'/',str(out)+'/'],check=True)
 print('Harvested source/resource receipts and generated definitions; no binary or template axioms')

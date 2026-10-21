@@ -1,0 +1,37 @@
+structure Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.IterMut.slice : Slice T
+  Aeneas.Std.core.slice.iter.IterMut.i : ℕ :=
+    0
+constructor:
+  Aeneas.Std.core.slice.iter.IterMut.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.IterMut T
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6IteratorRuntimeAudit.lean:4:7: error(lean.unknownIdentifier): Unknown constant `core.slice.iter.IterMut.Insts.CoreIterTraitsIteratorIteratorMutAT`
+structure Aeneas.Std.core.iter.adapters.enumerate.Enumerate.{u} (I : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.iter : I
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.count : Usize
+constructor:
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.mk.{u} {I : Type u} (iter : I) (count : Usize) :
+    core.iter.adapters.enumerate.Enumerate I
+def Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next : {I Item : Type} →
+  core.iter.traits.iterator.Iterator I Item →
+    core.iter.adapters.enumerate.Enumerate I →
+      Result (Option (Usize × Item) × core.iter.adapters.enumerate.Enumerate I) :=
+fun {I Item} IteratorInst self => do
+  let __x ← IteratorInst.next self.iter
+  match __x with
+    | (opt, iter') =>
+      match opt with
+      | none => Result.ok (none, { iter := iter', count := self.count })
+      | some a => do
+        let count' ← self.count + 1#usize
+        Result.ok (some (self.count, a), { iter := iter', count := count' })
+def Aeneas.Std.core.slice.Slice.iter_mut : {T : Type} →
+  Slice T → Result (core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Slice T)) :=
+fun {T} slice => Result.ok ({ slice := slice }, fun it => it.slice)
+'Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Aeneas.Std.core.slice.Slice.iter_mut' depends on axioms: [propext]
