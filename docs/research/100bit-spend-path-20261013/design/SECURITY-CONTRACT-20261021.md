@@ -39,23 +39,35 @@ consequence used for communication, not the completion criterion.
 |---|---|---|---|---|
 | `R1FinalSoundnessHeadlineV3` (pure decision) | 15/2^109 ≈ 2^-105.09 | (0+34)·B + κ ≈ 0.996·2^-100 | met | stated |
 | `OraclePortHeadlineFrozen` (adopted port) | 15/2^109 ≈ 2^-105.09 | (0+1080)·B ≈ 2^-95.0 | **not met** at the whole-experiment level | stated, with Q+1080 |
+| `OraclePortHeadlineFrozenPerAttempt` (probability-level repair) | 15/2^109 ≈ 2^-105.09 | 34·B + κ(1161) + 2^-126 + 2^-454 ≤ 2^-100 | **met, conditional** | stated, with Q+34 for every Q |
 
-Both are conditional on their source premises, and neither is release-complete
-for the deployed verifier until those are discharged.
+All three are conditional on their source premises. None is release-complete
+for the deployed verifier until those are discharged. In particular, the new
+endpoint retains exactly `hqueries`, `AcceptedRunJoin D rust` and
+`StoredCarrierBinding D rust P runtime`; its premise signature diff is empty.
 
 The port's 1080 counts verifier-issued terminal Merkle reads as potential
 attempt starts. This is a counting artefact of the union bound, not an attack.
 A compiled counterexample (`ROWAWARE-DRAFT-20261021.md`) shows that such a
 read can be recognised as a fresh start by the decoder, so the decoder-level
-fix failed. The open task is a probability-level fix: charge B only to starts
-that could be the accepted transcript's start, meaning the prover's own
-starts plus the verifier's single followed transcript, which restores Q+34
-and therefore (A).
+fix failed. The probability-level repair is proved in
+[`START-CHARGE-20261021.md`](START-CHARGE-20261021.md): the submitted
+transcript's starts are already read in the prover/sampler prefix, before
+terminal authentication. The restricted hit event has mass at most
+(Q+34)·B under the unchanged full adaptive experiment. The collision mass
+κ(Q+1161), extractor abort 2^-126, and query-scan exhaustion 2^-454 remain
+unchanged. `OraclePortHeadlineFrozenPerAttempt.failure_bound` states their
+full sum for every Q; `zero_queries` proves (A) at the whole-experiment
+level. `per_query` retains the old Qmax with no positive lower bound on Q.
+No decoder, shipped implementation, security metric or adversary restriction
+changes. The old adopted endpoint itself remains unchanged.
 
 ## Correction to the lead's adoption addendum
 
 The C3-BIN addendum "oracle-decision port ADOPTED" (2026-10-21 09:40) gave the
 target as "(Q+1)/2^100". That is a corollary, not the contract, and under the
 port it holds only for 32 ≤ Q ≤ Qmax. The binding criterion is (A) and (B)
-above. Until the start-charging fix lands, no note may describe the port
-endpoint as meeting 100-bit per-attempt soundness.
+above. The unchanged `OraclePortHeadlineFrozen` endpoint must not be described as
+meeting 100-bit per-attempt soundness. The new per-attempt endpoint provides
+the conditional probability repair; correspondence to the deployed verifier
+and the runtime carrier binding remain outstanding.
