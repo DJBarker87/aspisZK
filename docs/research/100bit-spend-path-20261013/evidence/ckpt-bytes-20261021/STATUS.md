@@ -27,3 +27,15 @@ Neither boundary disproves a correctly bounded production section theorem.
 No complete checkpoint cone, decoder join, premise removal or frozen release
 result is claimed. Next local target: CheckpointBytesE.e_byte_raw, followed
 by exact C5 byte projection and bounded sparse-body composition.
+
+## Stage 1: checked scalar arithmetic
+
+CheckpointBytesArithmetic.{div_four,rem_four,mul_eight} prove actual checked
+Usize operation equalities, without fixing pointer width or assuming successful
+calls. Division is bounded to i<65536; multiplication takes i<4. These
+symbolic arithmetic lemmas replace unfolding the platform-sized BitVec
+operations. Final attempt 2: exit 0, 19.93675470817834 seconds, peak RSS
+3478847488 bytes, zero swaps, revision 6a952a828 (full SHA in receipt).
+All three axiom reports are [propext, Classical.choice, Quot.sound].
+The failed first attempt used the wrong WP/exists interface for rem/mul and
+an insufficient division bound; its recovery reports are not accepted.

@@ -1,0 +1,34 @@
+import CheckpointP6KBytes
+
+set_option autoImplicit false
+namespace AspisR1.CheckpointBytesArithmetic
+open Aeneas Aeneas.Std Result
+
+theorem div_four (i : Usize) (small : i.val < 65536) :
+    i / 4#usize = ok (Usize.ofNat (i.val / 4) (by scalar_tac)) := by
+  obtain ⟨j,hj,hv⟩ := UScalar.div_spec (x:=i) (y:=4#usize) (by decide)
+  have eq : j = Usize.ofNat (i.val / 4) (by scalar_tac) := by
+    apply UScalar.eq_of_val_eq
+    simpa using hv
+  simpa only [eq] using hj
+
+theorem rem_four (i : Usize) :
+    i % 4#usize = ok (Usize.ofNat (i.val % 4) (by scalar_tac)) := by
+  obtain ⟨j,hj,hv⟩ := WP.spec_imp_exists (UScalar.rem_spec (x:=i) (y:=4#usize) (by decide))
+  have eq : j = Usize.ofNat (i.val % 4) (by scalar_tac) := by
+    apply UScalar.eq_of_val_eq
+    simpa using hv
+  simpa only [eq] using hj
+
+theorem mul_eight (i : Usize) (small : i.val < 4) :
+    8#usize * i = ok (Usize.ofNat (8*i.val) (by scalar_tac)) := by
+  obtain ⟨j,hj,hv⟩ := WP.spec_imp_exists (UScalar.mul_spec (x:=8#usize) (y:=i) (by scalar_tac))
+  have eq : j = Usize.ofNat (8*i.val) (by scalar_tac) := by
+    apply UScalar.eq_of_val_eq
+    simpa using hv
+  simpa only [eq] using hj
+
+#print axioms div_four
+#print axioms rem_four
+#print axioms mul_eight
+end AspisR1.CheckpointBytesArithmetic
