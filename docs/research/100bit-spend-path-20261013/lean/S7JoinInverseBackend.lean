@@ -33,10 +33,33 @@ theorem square_decode (x : U32) (n : Nat) :
   | succ n ih =>
       rw [squareN,ih,word_mul,←pow_two,←pow_mul,pow_succ,Nat.mul_comm]
 
+theorem power_step (x a b : U32) (i j n : Nat)
+    (ha : decode a=decode x^i) (hb : decode b=decode x^j) :
+    decode (wordMul (squareN a n) b)=decode x^(i*2^n+j) := by
+  rw [word_mul,square_decode,ha,hb,←pow_mul,←pow_add]
+
 theorem chain_exponent (x : U32) :
     decode (inverseWord x)=decode x^(P-2) := by
-  simp only [inverseWord,word_mul,square_decode,←pow_two,←pow_mul,←pow_add]
-  rfl
+  let t2 := wordMul (wordMul x x) x
+  have h2 : decode t2=decode x^3 := by
+    dsimp only [t2]
+    rw [word_mul,word_mul]
+    ring
+  let t4 := wordMul (squareN t2 2) t2
+  have h4 : decode t4=decode x^15 := power_step x t2 t2 3 3 2 h2 h2
+  let t8 := wordMul (squareN t4 4) t4
+  have h8 : decode t8=decode x^255 := power_step x t4 t4 15 15 4 h4 h4
+  let t16 := wordMul (squareN t8 8) t8
+  have h16 : decode t16=decode x^65535 := power_step x t8 t8 255 255 8 h8 h8
+  let t24 := wordMul (squareN t16 8) t8
+  have h24 : decode t24=decode x^16777215 := power_step x t16 t8 65535 255 8 h16 h8
+  let t28 := wordMul (squareN t24 4) t4
+  have h28 : decode t28=decode x^268435455 := power_step x t24 t4 16777215 15 4 h24 h4
+  have hx : decode x=decode x^1 := (pow_one _).symm
+  have h29 : decode (wordMul (squareN t28 1) x)=decode x^536870911 :=
+    power_step x t28 x 268435455 1 1 h28 hx
+  have h31 := power_step x (wordMul (squareN t28 1) x) x 536870911 1 2 h29 hx
+  exact h31
 
 theorem inverse_decode (x : U32) : decode (inverseWord x)=(decode x)⁻¹ := by
   rw [chain_exponent]
@@ -49,6 +72,7 @@ theorem inverse_decode (x : U32) : decode (inverseWord x)=(decode x)⁻¹ := by
     exact ZMod.pow_card_sub_one_eq_one hz
 
 #print axioms square_decode
+#print axioms power_step
 #print axioms chain_exponent
 #print axioms inverse_decode
 end AspisR1.S7JoinInverseBackend
