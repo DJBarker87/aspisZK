@@ -1,0 +1,102 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortHonestRowsC4.lean:12:26: error: Ambiguous term
+  Byte
+Possible interpretations:
+  _root_.Byte : Type
+  
+  AspisV8R19.DuplexFrames.Byte : Type
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortHonestRowsC4.lean:13:4: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortHonestRowsC4.lean:18:13: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortHonestRowsC4.lean:20:63: error: Ambiguous term
+  Byte
+Possible interpretations:
+  _root_.Byte : Type
+  
+  AspisV8R19.DuplexFrames.Byte : Type
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortHonestRowsC4.lean:26:37: error: Ambiguous term
+  Byte
+Possible interpretations:
+  _root_.Byte : Type
+  
+  AspisV8R19.DuplexFrames.Byte : Type
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortHonestRowsC4.lean:29:59: warning: This simp argument is unused:
+  little_zeros
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵,̵l̵i̵t̵t̵l̵e̵_̵z̵e̵r̵o̵s̵]̵[̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortHonestRowsC4.lean:61:40: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.238 = ?m.238
+but is expected to have type
+  header row = ⟨(rowShape row).1 % 256, ⋯⟩ :: le32 (rowShape row).2
+in the application
+  h rfl
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortHonestRowsC4.lean:65:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if 14 ≤ row ∧ ¬canonical (slice (header row ++ payload ++ tail) 5 (storedSize row)) then ?m.280 else ?m.281
+in the target expression
+  (if
+        14 ≤ row ∧
+          ¬canonical
+              (slice (header row ++ payload ++ tail) 5
+                (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2)) then
+      none
+    else do
+      let tail_1 ←
+        semanticRows fuel (row + 1)
+            (List.drop (5 + if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2)
+              (header row ++ payload ++ tail))
+      pure
+          ((header row ++
+              if 14 ≤ row then
+                expand ((rowShape row).2 / 32)
+                  (slice (header row ++ payload ++ tail) 5
+                    (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2))
+              else
+                slice (header row ++ payload ++ tail) 5
+                  (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2)) ::
+            tail_1)) =
+    some ((header row ++ if 14 ≤ row then expand ((rowShape row).2 / 32) payload else payload) :: rs)
+
+fuel row : ℕ
+payload tail : Bytes
+rs : List Bytes
+hp : List.length payload = storedSize row
+hc : 14 ≤ row → canonical payload
+ht : semanticRows fuel (row + 1) tail = some rs
+hh : List.length (header row) = 5
+hl : 5 + storedSize row ≤ List.length (header row ++ payload ++ tail)
+hhead : List.take 5 (header row ++ payload ++ tail) = header row
+hpay : slice (header row ++ payload ++ tail) 5 (storedSize row) = payload
+htail : List.drop (5 + storedSize row) (header row ++ payload ++ tail) = tail
+notBad : ¬(14 ≤ row ∧ ¬canonical (slice (header row ++ payload ++ tail) 5 (storedSize row)))
+⊢ (if
+        14 ≤ row ∧
+          ¬canonical
+              (slice (header row ++ payload ++ tail) 5
+                (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2)) then
+      none
+    else do
+      let tail_1 ←
+        semanticRows fuel (row + 1)
+            (List.drop (5 + if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2)
+              (header row ++ payload ++ tail))
+      pure
+          ((header row ++
+              if 14 ≤ row then
+                expand ((rowShape row).2 / 32)
+                  (slice (header row ++ payload ++ tail) 5
+                    (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2))
+              else
+                slice (header row ++ payload ++ tail) 5
+                  (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2)) ::
+            tail_1)) =
+    some ((header row ++ if 14 ≤ row then expand ((rowShape row).2 / 32) payload else payload) :: rs)
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortHonestRowsC4.lean:85:8: warning: declaration uses `sorry`
+'AspisR1.OraclePortHonestRowsC4.header_length' depends on axioms: [propext, sorryAx]
+'AspisR1.OraclePortHonestRowsC4.little_zeros' depends on axioms: [sorryAx]
+'AspisR1.OraclePortHonestRowsC4.canonical_zeros' depends on axioms: [propext, sorryAx]
+'AspisR1.OraclePortHonestRowsC4.storedSize_mod' depends on axioms: [propext]
+'AspisR1.OraclePortHonestRowsC4.semantic_cons' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortHonestRowsC4.roundtrip' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
