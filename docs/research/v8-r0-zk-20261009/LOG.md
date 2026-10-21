@@ -7865,3 +7865,23 @@ ordered-map semantics as the spec, i.e. the universal TreeMap model already
 proved. Record it as an explicit named trust item next to rustc/P7, so it
 is visible, not hidden. The single-thread assumption for TLS is recorded on
 the same list.
+
+## D134 — prover commitment part 24; coupling needs an independent fuel tape (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit24-20261021` (`r1p-final/PROVER-COMMIT24-20261021.md`).
+The trusted-std list is named (ordered map and single-thread TLS contracts,
+per D133). Also proved: adaptive map caller transport, room in the source
+search counters, and source-window freshness outside the seedGuess event.
+J7499: 24 standard-axiom audits, zero swap. Two obstructions, both about the
+proof construction, not about privacy:
+(1) `runJoin_not_model_function`: the RunJoin's extra fuel tape cannot be any
+deterministic function of the model coins and seed. Lead ruling: build the
+coupling on the product space (model coins × an independent uniform fuel
+tape), prove both marginals (the real run's coins are exactly that product,
+and the model ignores the fuel except on the already-charged exhaustion
+event), then derive the WholeRunJoin.
+(2) The retained Aeneas packet for `sampler.add_small_base_p` has an iterator
+ABI mismatch (`into_iter_back back`). Re-extract that function on its own
+with the pinned kit, or use an owned reference with Kani shipped = reference,
+and install unconditional gamma/ordinary/query policies from it.
+`shippedProverExperiment` and the endpoint are not built yet.
