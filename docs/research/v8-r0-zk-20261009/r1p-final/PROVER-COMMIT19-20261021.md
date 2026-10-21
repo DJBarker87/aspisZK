@@ -633,3 +633,17 @@ serial. Every completed Rust/extraction and Lean job used the requested caps;
 all accepted results have zero swap. The only production-file change is the
 cfg-gated simulator reference module, and no frozen behavior or security target
 is lowered. No concurrent-owner file, wallet or key is changed. No push is made.
+
+## Committed source stages
+
+```text
+69d174066 Extract owned simulator helpers and record remaining source obstruction
+3b9e65518 Verify entropy draw rejection separately and compose sixteen steps
+5c82dc920 Construct simulator coin and adaptive shared history coupling
+59790da74 Add seed query exceptions to deployed privacy refinement and bound
+b1978fda4 Prove global simulator seed query budget and coupling extension
+```
+
+The final evidence/handoff commit follows these source stages. The evidence
+auditor passes against the committed source tree; no compiler or runtime gate
+is repeated for this bookkeeping update.
