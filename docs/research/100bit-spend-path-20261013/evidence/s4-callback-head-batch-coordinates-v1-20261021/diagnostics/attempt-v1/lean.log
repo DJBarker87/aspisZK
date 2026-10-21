@@ -1,0 +1,127 @@
+/tmp/query-s4-callback-head-batch-v1/sources/S4CallbackHeadBatchCoordinatesV1.lean:77:11: error(lean.unknownIdentifier): Unknown identifier `AspisR1FastDotsN8WideFromLimbsCallBridgeV1.word0`
+/tmp/query-s4-callback-head-batch-v1/sources/S4CallbackHeadBatchCoordinatesV1.lean:78:11: error(lean.unknownIdentifier): Unknown identifier `AspisR1FastDotsN8WideFromLimbsCallBridgeV1.word1`
+/tmp/query-s4-callback-head-batch-v1/sources/S4CallbackHeadBatchCoordinatesV1.lean:79:11: error(lean.unknownIdentifier): Unknown identifier `AspisR1FastDotsN8WideFromLimbsCallBridgeV1.word2`
+/tmp/query-s4-callback-head-batch-v1/sources/S4CallbackHeadBatchCoordinatesV1.lean:80:11: error(lean.unknownIdentifier): Unknown identifier `AspisR1FastDotsN8WideFromLimbsCallBridgeV1.word3`
+/tmp/query-s4-callback-head-batch-v1/sources/S4CallbackHeadBatchCoordinatesV1.lean:81:11: error(lean.unknownIdentifier): Unknown identifier `AspisR1FastDotsN8WideFromLimbsCallBridgeV1.word4`
+/tmp/query-s4-callback-head-batch-v1/sources/S4CallbackHeadBatchCoordinatesV1.lean:82:11: error(lean.unknownIdentifier): Unknown identifier `AspisR1FastDotsN8WideFromLimbsCallBridgeV1.word5`
+/tmp/query-s4-callback-head-batch-v1/sources/S4CallbackHeadBatchCoordinatesV1.lean:83:11: error(lean.unknownIdentifier): Unknown identifier `AspisR1FastDotsN8WideFromLimbsCallBridgeV1.word6`
+/tmp/query-s4-callback-head-batch-v1/sources/S4CallbackHeadBatchCoordinatesV1.lean:84:11: error(lean.unknownIdentifier): Unknown identifier `AspisR1FastDotsN8WideFromLimbsCallBridgeV1.word7`
+/tmp/query-s4-callback-head-batch-v1/sources/S4CallbackHeadBatchCoordinatesV1.lean:41:26: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/query-s4-callback-head-batch-v1/sources/S4CallbackHeadBatchCoordinatesV1.lean:105:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fast_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0
+    (fourDotsOpsWithP6ArrayFromFnN4N8 (ActualBatchOps ops)) ?m.858 a g slot ?m.859
+in the target expression
+  BaseLoop (fourDotsOpsWithP6ArrayFromFnN4N8 (ActualBatchOps ops)) iter a g slot (Array.repeat 8#usize 0#u64) = ok limbs
+
+ops : Ops
+a : Std.Array U8 608#usize
+g : Std.Array Wide 29#usize
+slot : Usize
+hcoords : ∀ (i : Fin 29), AspisR1FastDotsWideLimbCanonical.CoordinateBound (↑g)[↑i]
+value : Wide
+c' : fast_dots.four_dots.closure
+h : Callback (headOps ops) (a, g) slot = ok (value, c')
+_hc : c' = (a, g)
+iter : AspisR1FastDotsActualCallbackTailTraceRootV1.StepBy
+limbs : Std.Array Std.U64 8#usize
+values : Std.Array Std.U32 8#usize
+optBody : Option AspisR1FastDotsActualCallbackTailTraceRootV1.Wide
+body : AspisR1FastDotsActualCallbackTailTraceRootV1.Wide
+_tail0 : AspisR1FastDotsActualCallbackTailTraceRootV1.Tail
+_wide28 : AspisR1FastDotsActualCallbackTailTraceRootV1.Wide
+_slotOffset _start _finish : Usize
+_bytes : Slice Std.U8
+_optQ : Option AspisR1FastDotsActualCallbackTailTraceRootV1.QM
+_q : AspisR1FastDotsActualCallbackTailTraceRootV1.QM
+_pushed : core.result.Result Unit Unit × AspisR1FastDotsActualCallbackTailTraceRootV1.Tail
+_u : Unit
+_tail2 : AspisR1FastDotsActualCallbackTailTraceRootV1.Tail
+_tailValue : AspisR1FastDotsActualCallbackTailTraceRootV1.Wide
+hstep :
+  core.iter.traits.iterator.Iterator.step_by.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) { start := 0#usize, «end» := 26#usize }
+      4#usize =
+    ok iter
+hbase :
+  AspisR1FastDotsActualCallbackTailTraceRootV1.BaseLoop (headOps ops) iter a g slot (Array.repeat 8#usize 0#u64) =
+    ok limbs
+harray :
+  (headOps ops).arrayFromFn 8#usize
+      (fast_dots.four_dots.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 (headOps ops)) limbs =
+    ok values
+hbody : (headOps ops).wideFromLimbs values = ok optBody
+hunwrap : core.option.Option.unwrap optBody = ok body
+_hnew : (headOps ops).ebyKNew = ok _tail0
+_hread : g.index_usize 28#usize = ok _wide28
+_hmul : slot * 120#usize = ok _slotOffset
+_hadd104 : _slotOffset + 104#usize = ok _start
+_hadd120 : _slotOffset + 120#usize = ok _finish
+_hslice :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) a
+      { start := _start, «end» := _finish } =
+    ok _bytes
+_hparse : (headOps ops).qm31FromBytes _bytes = ok _optQ
+_hunq : core.option.Option.unwrap _optQ = ok _q
+_hpush : (headOps ops).ebyKPush _tail0 _wide28 _q = ok _pushed
+_hunpush : core.result.Result.unwrap core.fmt.DebugUnit _pushed.1 = ok _u
+_htail :
+  AspisR1FastDotsActualCallbackTailTraceRootV1.TailLoop (headOps ops) { start := 0#usize, «end» := 2#usize } a g slot
+      _pushed.2 =
+    ok _tail2
+_hfinish : (headOps ops).ebyKFinish _tail2 = ok _tailValue
+_hadd : (headOps ops).wideAdd body _tailValue = ok value
+hopt : optBody = some body
+hbody' : (headOps ops).wideFromLimbs values = ok (some body)
+hbase0 :
+  BaseLoop (fourDotsOpsWithP6ArrayFromFnN4N8 (ActualBatchOps ops)) iter a g slot (Array.repeat 8#usize 0#u64) = ok limbs
+⊢ ∃ iter limbs values body ds starts,
+    core.iter.traits.iterator.Iterator.step_by.trait_default
+          (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) { start := 0#usize, «end» := 26#usize }
+          4#usize =
+        ok iter ∧
+      BaseLoop (headOps ops) iter a g slot (Array.repeat 8#usize 0#u64) = ok limbs ∧
+        (headOps ops).arrayFromFn 8#usize (InnerFn (headOps ops)) limbs = ok values ∧
+          (headOps ops).wideFromLimbs values = ok (some body) ∧
+            (AspisR1FastDotsOuterFoldTraceV2.ExactTrace ops a g slot AspisR1FastDotsStepSchedule.startBy
+                (Array.repeat 8#usize 0#u64) limbs ds do
+                let a ← starts
+                pure ↑a) ∧
+              ds.length = 7 ∧
+                List.map (fun word => ↑word) ↑values =
+                    [AspisR1.FastDotFoldedBatches.fullSum (AspisR1FastDotsOuterFoldTraceV2.rawBatchLists ds ⟨0, ⋯⟩) %
+                        AspisR1BatchedFoldArithmetic.modulus,
+                      AspisR1.FastDotFoldedBatches.fullSum (AspisR1FastDotsOuterFoldTraceV2.rawBatchLists ds ⟨1, ⋯⟩) %
+                        AspisR1BatchedFoldArithmetic.modulus,
+                      AspisR1.FastDotFoldedBatches.fullSum (AspisR1FastDotsOuterFoldTraceV2.rawBatchLists ds ⟨2, ⋯⟩) %
+                        AspisR1BatchedFoldArithmetic.modulus,
+                      AspisR1.FastDotFoldedBatches.fullSum (AspisR1FastDotsOuterFoldTraceV2.rawBatchLists ds ⟨3, ⋯⟩) %
+                        AspisR1BatchedFoldArithmetic.modulus,
+                      AspisR1.FastDotFoldedBatches.fullSum (AspisR1FastDotsOuterFoldTraceV2.rawBatchLists ds ⟨4, ⋯⟩) %
+                        AspisR1BatchedFoldArithmetic.modulus,
+                      AspisR1.FastDotFoldedBatches.fullSum (AspisR1FastDotsOuterFoldTraceV2.rawBatchLists ds ⟨5, ⋯⟩) %
+                        AspisR1BatchedFoldArithmetic.modulus,
+                      AspisR1.FastDotFoldedBatches.fullSum (AspisR1FastDotsOuterFoldTraceV2.rawBatchLists ds ⟨6, ⋯⟩) %
+                        AspisR1BatchedFoldArithmetic.modulus,
+                      AspisR1.FastDotFoldedBatches.fullSum (AspisR1FastDotsOuterFoldTraceV2.rawBatchLists ds ⟨7, ⋯⟩) %
+                        AspisR1BatchedFoldArithmetic.modulus] ∧
+                  (∀ x ∈ ↑values, ↑x < AspisV8R17.RawReducer.P) ∧
+                    body =
+                      AspisR1FastDotsN8WideFromLimbsABI.finishToCurrent
+                        (AspisR1EbyKFinish.Proof.wideFromParts sorry sorry sorry sorry sorry sorry sorry sorry)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1FastDotsCallbackHeadBatchCoordinatesV1.actual_callback_head_batch_coordinates' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
