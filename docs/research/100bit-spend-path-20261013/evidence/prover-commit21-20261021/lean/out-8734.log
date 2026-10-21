@@ -1,0 +1,110 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTablePrefix21.lean:10:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverCommitTablePrefix21.lookup_append`:
+  [DecidableEq Value]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Value] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTablePrefix21.lean:36:34: error: Ambiguous term
+  insert
+Possible interpretations:
+  ProverCommitTable20.insert : Table ?m.90 ?m.91 → ?m.90 → ?m.91 → Bool → Table ?m.90 ?m.91 × Bool
+  
+  Insert.insert : ?m.90 → ?m.91 → ?m.91
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTablePrefix21.lean:35:4: error: unsolved goals
+case neg
+Key Value : Type
+inst✝¹ : DecidableEq Key
+inst✝ : DecidableEq Value
+suffix : Table Key Value
+key : Key
+answer : Value
+collision : Bool
+tail : List (Key × Value)
+ih :
+  lookup tail key = none →
+    ProverCommitTable20.insert (tail ++ suffix) key answer collision =
+      let out := ProverCommitTable20.insert suffix key answer collision;
+      (tail ++ out.1, out.2)
+k : Key
+v : Value
+h : ¬k = key
+miss : lookup tail key = none
+⊢ ProverCommitTable20.insert ((k, v) :: (tail ++ suffix)) key answer collision =
+    ((k, v) :: (tail ++ (ProverCommitTable20.insert suffix key answer collision).1),
+      (ProverCommitTable20.insert suffix key answer collision).2)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTablePrefix21.lean:36:41: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [List.cons_append, ̲insert,h̵,̵ ̲if_false, ̲ih miss]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTablePrefix21.lean:36:43: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵c̵o̵n̵s̵_̵a̵p̵p̵e̵n̵d̵,̵i̵n̵s̵e̵r̵t̵,̵h̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵h̵[̲L̲i̲s̲t̲.̲c̲o̲n̲s̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲i̲n̲s̲e̲r̲t̲,̲ ̲h̲,̲ ̲i̲h̲ miss]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTablePrefix21.lean:36:52: warning: This simp argument is unused:
+  ih miss
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵c̵o̵n̵s̵_̵a̵p̵p̵e̵n̵d̵,̵i̵n̵s̵e̵r̵t̵,̵h̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵h̵ ̵m̵i̵s̵s̵]̵[̲L̲i̲s̲t̲.̲c̲o̲n̲s̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲i̲n̲s̲e̲r̲t̲,̲ ̲h̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTablePrefix21.lean:45:13: error: Ambiguous term
+  insert
+Possible interpretations:
+  ProverCommitTable20.insert : Table ?m.38 ?m.39 → ?m.38 → ?m.39 → Bool → Table ?m.38 ?m.39 × Bool
+  
+  Insert.insert : ?m.38 → ?m.39 → ?m.39
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTablePrefix21.lean:43:75: error: unsolved goals
+Key Value : Type
+inst✝¹ : DecidableEq Key
+inst✝ : DecidableEq Value
+pre suffix : Table Key Value
+key : Key
+previous answer : Value
+collision : Bool
+miss : lookup pre key = none
+⊢ (pre ++ (ProverCommitTable20.insert ((key, previous) :: suffix) key answer collision).1,
+      (ProverCommitTable20.insert ((key, previous) :: suffix) key answer collision).2) =
+    (pre ++ (key, answer) :: suffix, collision || decide (previous ≠ answer))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTablePrefix21.lean:45:20: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [insert,̵i̵f̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTablePrefix21.lean:55:2: error: Tactic `rfl` failed: The left-hand side
+  decide
+      ((collision ||
+          conflict ((lookup pre address).orElse fun x => lookup ((key, previous) :: suffix) address) answer) =
+        collision) ||
+    conflict ((lookup pre address).orElse fun x => if key = address then some previous else lookup suffix address)
+      answer
+is not definitionally equal to the right-hand side
+  true
+
+Key Value : Type
+inst✝¹ : DecidableEq Key
+inst✝ : DecidableEq Value
+pre suffix : Table Key Value
+key address : Key
+previous answer : Value
+collision : Bool
+⊢ (decide
+        ((collision ||
+            conflict ((lookup pre address).orElse fun x => lookup ((key, previous) :: suffix) address) answer) =
+          collision) ||
+      conflict ((lookup pre address).orElse fun x => if key = address then some previous else lookup suffix address)
+        answer) =
+    true
+'R1Z.ProverCommitTablePrefix21.lookup_append' depends on axioms: [propext]
+'R1Z.ProverCommitTablePrefix21.insert_append_miss' depends on axioms: [propext, sorryAx]
+'R1Z.ProverCommitTablePrefix21.overwrite_after_prefix' depends on axioms: [propext, sorryAx]
+'R1Z.ProverCommitTablePrefix21.entry_collision' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
