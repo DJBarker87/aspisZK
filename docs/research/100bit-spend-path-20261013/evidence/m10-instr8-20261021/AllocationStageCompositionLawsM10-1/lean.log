@@ -1,0 +1,108 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr8/docs/research/100bit-spend-path-20261013/lean/AllocationStageCompositionLawsM10.lean:19:85: error: unsolved goals
+A B C : Type
+W : ℕ
+f : A → Option B
+g : B → Option C
+I : A → Prop
+J : B → Prop
+K : C → Prop
+F G : ℕ → ℕ
+s : StageSpec W f I J F
+t : StageSpec W g J K G
+a : A
+b : B
+h : (s.run a).1 = some b
+⊢ (Option.rec (motive := fun t_1 =>
+          (s.run a).1 = t_1 → Allocation W ((AbstractStageSpecM10.seq s.toStageSpec t.toStageSpec).run a).2)
+          (fun h =>
+            Eq.rec (motive := fun x x_1 =>
+              (s.run a).1 = x → Allocation W ((AbstractStageSpecM10.seq s.toStageSpec t.toStageSpec).run a).2)
+              (fun h => ⋯.mpr (finish W (s.run a).2 (s.allocation a))) ⋯ ⋯)
+          (fun val h =>
+            Eq.rec (motive := fun x x_1 =>
+              (s.run a).1 = x → Allocation W ((AbstractStageSpecM10.seq s.toStageSpec t.toStageSpec).run a).2)
+              (fun h =>
+                ⋯.mpr
+                  { elements := (s.allocation a).elements + (t.allocation val).elements + 1,
+                    bits := (s.allocation a).bits + (t.allocation val).bits + W, width_law := ⋯, creation_work := ⋯ })
+              ⋯ ⋯)
+          (s.run a).1 ⋯).elements =
+      (s.allocation a).elements + (t.allocation b).elements + 1 ∧
+    (Option.rec (motive := fun t_1 =>
+          (s.run a).1 = t_1 → Allocation W ((AbstractStageSpecM10.seq s.toStageSpec t.toStageSpec).run a).2)
+          (fun h =>
+            Eq.rec (motive := fun x x_1 =>
+              (s.run a).1 = x → Allocation W ((AbstractStageSpecM10.seq s.toStageSpec t.toStageSpec).run a).2)
+              (fun h => ⋯.mpr (finish W (s.run a).2 (s.allocation a))) ⋯ ⋯)
+          (fun val h =>
+            Eq.rec (motive := fun x x_1 =>
+              (s.run a).1 = x → Allocation W ((AbstractStageSpecM10.seq s.toStageSpec t.toStageSpec).run a).2)
+              (fun h =>
+                ⋯.mpr
+                  { elements := (s.allocation a).elements + (t.allocation val).elements + 1,
+                    bits := (s.allocation a).bits + (t.allocation val).bits + W, width_law := ⋯, creation_work := ⋯ })
+              ⋯ ⋯)
+          (s.run a).1 ⋯).bits =
+      (s.allocation a).bits + (t.allocation b).bits + W
+/Users/dominic/ZK/.worktrees/cx-m10-instr8/docs/research/100bit-spend-path-20261013/lean/AllocationStageCompositionLawsM10.lean:20:17: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [seq,h̵,̵ ̲join]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr8/docs/research/100bit-spend-path-20261013/lean/AllocationStageCompositionLawsM10.lean:28:63: error: unsolved goals
+A B C : Type
+W : ℕ
+f : A → Option B
+g : B → Option C
+I : A → Prop
+J : B → Prop
+K : C → Prop
+F G : ℕ → ℕ
+s : StageSpec W f I J F
+t : StageSpec W g J K G
+a : A
+h : (s.run a).1 = none
+⊢ (Option.rec (motive := fun t_1 =>
+          (s.run a).1 = t_1 → Allocation W ((AbstractStageSpecM10.seq s.toStageSpec t.toStageSpec).run a).2)
+          (fun h =>
+            Eq.rec (motive := fun x x_1 =>
+              (s.run a).1 = x → Allocation W ((AbstractStageSpecM10.seq s.toStageSpec t.toStageSpec).run a).2)
+              (fun h =>
+                ⋯.mpr
+                  { elements := (s.allocation a).elements + 1, bits := (s.allocation a).bits + W, width_law := ⋯,
+                    creation_work := ⋯ })
+              ⋯ ⋯)
+          (fun val h =>
+            Eq.rec (motive := fun x x_1 =>
+              (s.run a).1 = x → Allocation W ((AbstractStageSpecM10.seq s.toStageSpec t.toStageSpec).run a).2)
+              (fun h => ⋯.mpr (join W (s.run a).2 (t.run val).2 (s.allocation a) (t.allocation val))) ⋯ ⋯)
+          (s.run a).1 ⋯).elements =
+      (s.allocation a).elements + 1 ∧
+    (Option.rec (motive := fun t_1 =>
+          (s.run a).1 = t_1 → Allocation W ((AbstractStageSpecM10.seq s.toStageSpec t.toStageSpec).run a).2)
+          (fun h =>
+            Eq.rec (motive := fun x x_1 =>
+              (s.run a).1 = x → Allocation W ((AbstractStageSpecM10.seq s.toStageSpec t.toStageSpec).run a).2)
+              (fun h =>
+                ⋯.mpr
+                  { elements := (s.allocation a).elements + 1, bits := (s.allocation a).bits + W, width_law := ⋯,
+                    creation_work := ⋯ })
+              ⋯ ⋯)
+          (fun val h =>
+            Eq.rec (motive := fun x x_1 =>
+              (s.run a).1 = x → Allocation W ((AbstractStageSpecM10.seq s.toStageSpec t.toStageSpec).run a).2)
+              (fun h => ⋯.mpr (join W (s.run a).2 (t.run val).2 (s.allocation a) (t.allocation val))) ⋯ ⋯)
+          (s.run a).1 ⋯).bits =
+      (s.allocation a).bits + W
+/Users/dominic/ZK/.worktrees/cx-m10-instr8/docs/research/100bit-spend-path-20261013/lean/AllocationStageCompositionLawsM10.lean:29:17: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [seq,h̵,̵ ̲finish]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.AllocationStageCompositionLawsM10.transport_counts' does not depend on any axioms
+'AspisR1.AllocationStageCompositionLawsM10.success' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.AllocationStageCompositionLawsM10.failure' depends on axioms: [propext, sorryAx, Quot.sound]

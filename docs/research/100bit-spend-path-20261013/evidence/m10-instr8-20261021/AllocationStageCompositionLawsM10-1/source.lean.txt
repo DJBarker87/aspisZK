@@ -1,0 +1,34 @@
+import AllocationStageSpecM10
+
+set_option autoImplicit false
+namespace AspisR1.AllocationStageCompositionLawsM10
+open AllocationStageSpecM10
+
+/-- Transport in a work index preserves the counted cells and bits. -/
+theorem transport_counts {W x y : Nat} (h : x = y) (a : Allocation W x) :
+    (h ▸ a).elements = a.elements ∧ (h ▸ a).bits = a.bits := by
+  cases h
+  exact ⟨rfl,rfl⟩
+
+/-- On success, both stages' events and the bind-result cell are counted. -/
+theorem success {A B C : Type} {W : Nat} {f : A → Option B} {g : B → Option C}
+    {I : A → Prop} {J : B → Prop} {K : C → Prop} {F G : Nat → Nat}
+    (s : StageSpec W f I J F) (t : StageSpec W g J K G) (a : A) (b : B)
+    (h : (s.run a).1 = some b) :
+    ((seq s t).allocation a).elements = (s.allocation a).elements+(t.allocation b).elements+1 ∧
+    ((seq s t).allocation a).bits = (s.allocation a).bits+(t.allocation b).bits+W := by
+  simp only [seq,h,join]
+
+/-- On failure, the second stage has no allocation contribution. -/
+theorem failure {A B C : Type} {W : Nat} {f : A → Option B} {g : B → Option C}
+    {I : A → Prop} {J : B → Prop} {K : C → Prop} {F G : Nat → Nat}
+    (s : StageSpec W f I J F) (t : StageSpec W g J K G) (a : A)
+    (h : (s.run a).1 = none) :
+    ((seq s t).allocation a).elements = (s.allocation a).elements+1 ∧
+    ((seq s t).allocation a).bits = (s.allocation a).bits+W := by
+  simp only [seq,h,finish]
+
+#print axioms transport_counts
+#print axioms success
+#print axioms failure
+end AspisR1.AllocationStageCompositionLawsM10
