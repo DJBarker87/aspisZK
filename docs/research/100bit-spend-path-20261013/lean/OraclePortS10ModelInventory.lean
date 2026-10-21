@@ -107,6 +107,21 @@ theorem interpret_eq_frozen (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMess
   · simp [tree, interpret, model, modelCone, signature, Args, Value,
       guardSite, AspisV8R19.OracleProgramOps.bind, OraclePortFrozenOrder.dV_frozen, hg]
 
+/-- The recorded model stage inventory has one owner per distinct site. -/
+theorem inventory_nodup : inventory.Nodup := by
+  simp [inventory, guardSite, parserSite, querySite, merkleSite, arithmeticSite]
+
+/-- A concrete S10Join at the decision-stage boundary. The prefix remains a
+parameter: the outer Rust decoder/sampler/Pool/checkpoint driver is not this
+five-site tree and still needs its own source-order decomposition. -/
+def stageTree (traceOf : Input → ErasedPrefix) (i : Input) : Calls signature Bool :=
+  tree i.stored (traceOf i)
+
+theorem model_S10Join (traceOf : Input → ErasedPrefix) :
+    S10Join inventory (stageTree traceOf) := by
+  intro i
+  exact covered i.stored (traceOf i)
+
 /-- The independent source obligation needed to upgrade the model inventory.
 `sourceTree` must be a real frozen driver tree, including entrypoint, Pool,
 checkpoint and all nested source declarations. This definition does not
@@ -116,5 +131,7 @@ def SourceInventoryCompleteness {σ : Signature} (recorded : List Site)
 
 #print axioms covered
 #print axioms interpret_eq_frozen
+#print axioms inventory_nodup
+#print axioms model_S10Join
 end AspisR1.OraclePortS10ModelInventory
 end

@@ -14,3 +14,13 @@ then resolves relative SBF calls and dynamic syscall relocations. Opcode
 0x8d remains an explicit indirect-call frontier. No binary or key is copied,
 modified or removed. LLBC is retained on the host; only JSON census data
 is committed. No proof closure or new axiom audit is claimed at this stage.
+
+The resumed model proof is checked in `OraclePortS10ModelInventory-7/`:
+`covered` covers every return continuation of the five model sites;
+`interpret_eq_frozen` identifies the interpreted tree with `dV_frozen`;
+`inventory_nodup` proves unique model sites; `model_S10Join` supplies the
+actual `S10Join` predicate for the decision-stage tree. This excludes the
+outer Rust driver, checkpoint and Pool. It is not source coverage.
+Attempt 6 failed on the reserved Lean identifier `prefix`; attempt 7 renames
+that binder. Attempt 5 has an interruption record and no invented timing or
+exit status. All four final theorem audits use only standard axioms.
