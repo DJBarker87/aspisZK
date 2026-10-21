@@ -49,7 +49,12 @@ pub(crate) fn limb(hash: HashFn, domain: &[u8], mut state: State)
 }
 
 /// One carried-result transition. Success is absorbing, including its state.
-#[cfg(kani)]
+#[cfg_attr(kani, kani::requires(hash == crate::HOST_HASH))]
+#[cfg_attr(kani, kani::requires(state.word <= 8))]
+#[cfg_attr(kani, kani::requires(crate::prover_commit_oracle::known_domain(domain)))]
+#[cfg_attr(kani, kani::requires(crate::prover_commit_oracle::expander_domain(domain, state.seed, state.counter, state.word)))]
+#[cfg_attr(kani, kani::ensures(|output| *output == pure_try_step(old(state), old(result))))]
+#[cfg(any(kani, aeneas_ref))]
 pub(crate) fn try_step(hash: HashFn, domain: &[u8], state: State,
     result: Result<M31, StateOnlyMaskBuildError>)
     -> (Result<M31, StateOnlyMaskBuildError>, State)
@@ -173,4 +178,52 @@ mod contracts {
         let _ = next(crate::HOST_HASH, domain, State { seed, counter, block, word });
     }
 
+}
+
+/// Operational one-step summary; no loop or fresh nondeterminism.
+#[cfg(kani)]
+fn pure_try_step(state: State, result: Result<M31, StateOnlyMaskBuildError>)
+    -> (Result<M31, StateOnlyMaskBuildError>, State)
+{
+    match result {
+        Ok(value) => (Ok(value), state),
+        Err(error) => {
+            let (word, after) = pure_next(state);
+            let candidate = word & 0x7fff_ffff;
+            (if candidate < P { Ok(M31(candidate)) } else { Err(error) }, after)
+        }
+    }
+}
+#[cfg(kani)]
+mod step_contract8 {
+    use super::*;
+    use crate::prover_commit_oracle as rom;
+    #[kani::proof_for_contract(try_step)]
+    #[kani::unwind(84)]
+    #[kani::stub(crate::host_hashv, rom::expander_query)]
+    #[kani::stub_verified(next)]
+    fn scalar_step() {
+        let domain: &[u8] = if kani::any::<bool>() {
+            b"aspis:state-only:private-mask-expand:v1"
+        } else { b"aspis:state-only:profile21:source-expand:v1" };
+        let state: State = kani::any();
+        kani::assume(state.word <= 8);
+        rom::reset_expander(domain, state.seed, state.counter);
+        let result = if kani::any::<bool>() { Ok(M31(kani::any())) }
+            else { Err(StateOnlyMaskBuildError::MaskSampleExhausted) };
+        let _ = try_step(crate::HOST_HASH, domain, state, result);
+    }
+}
+
+/// One row of the owned balancing fold. The outer row order is proved separately.
+#[cfg(any(kani, aeneas_ref))]
+pub(crate) fn balance_m31_step(sum: M31, value: M31, active: bool,
+    row: usize, dependent: usize) -> M31 {
+    if !active && row != dependent { sum.add(value) } else { sum }
+}
+#[cfg(any(kani, aeneas_ref))]
+pub(crate) fn balance_qm31_step(sum: aspis_core::field::QM31,
+    value: aspis_core::field::QM31, active: bool, row: usize, dependent: usize)
+    -> aspis_core::field::QM31 {
+    if !active && row != dependent { sum.add(value) } else { sum }
 }

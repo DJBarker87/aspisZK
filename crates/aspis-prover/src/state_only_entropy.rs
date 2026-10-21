@@ -1475,3 +1475,65 @@ mod prover_commit_caller7 {
 
 
 }
+
+/// Universal four-call control-flow comparison over an arbitrary scalar trace.
+/// Stubs are relational inputs, not asserted scalar contracts. Each side sees
+/// the same trace; all sampled results and successor states are unconstrained.
+#[cfg(kani)]
+mod prover_commit_four8 {
+    use super::*;
+    use aspis_core::field::{M31, QM31};
+    use crate::prover_commit_reference::State;
+    type Sample = Result<M31, StateOnlyMaskBuildError>;
+    const ZERO: State = State { seed: [0;32], counter: 0, block: [0;32], word: 0 };
+    static mut STATES: [State;4] = [ZERO;4];
+    static mut VALUES: [Sample;4] = [Ok(M31::ZERO);4];
+    static mut CURSOR: usize = 0;
+    fn transition() -> (Sample, State) {
+        unsafe {
+            assert!(CURSOR < 4);
+            let pair = (VALUES[CURSOR], STATES[CURSOR]);
+            CURSOR += 1;
+            pair
+        }
+    }
+    fn shipped_scalar(state: &mut Profile21SourceExpander) -> Sample {
+        let (value, after) = transition();
+        *state.seed = after.seed;
+        state.counter = after.counter;
+        state.block = after.block;
+        state.word = after.word;
+        value
+    }
+    fn reference_scalar(_: aspis_core::HashFn, _: &[u8], _: State) -> (Sample, State) {
+        transition()
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    #[kani::stub(Profile21SourceExpander::m31, shipped_scalar)]
+    #[kani::stub(crate::prover_commit_reference::limb_caller, reference_scalar)]
+    fn four_control() {
+        for i in 0..4 {
+            unsafe {
+                STATES[i] = kani::any();
+                VALUES[i] = if kani::any::<bool>() { Ok(M31(kani::any())) }
+                    else { Err(StateOnlyMaskBuildError::MaskSampleExhausted) };
+            }
+        }
+        let state: State = kani::any();
+        unsafe { CURSOR = 0; }
+        let (expected, after) = crate::prover_commit_reference::qm31_caller(
+            crate::HOST_HASH, b"unused relational input", state);
+        let expected_calls = unsafe { CURSOR };
+        unsafe { CURSOR = 0; }
+        let mut actual = Profile21SourceExpander { hash: crate::HOST_HASH,
+            seed: Zeroizing::new(state.seed), counter: state.counter, block: state.block, word: state.word };
+        let observed: Result<QM31, StateOnlyMaskBuildError> = actual.qm31();
+        assert_eq!(observed, expected);
+        assert_eq!(*actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+        assert_eq!(unsafe { CURSOR }, expected_calls);
+    }
+}

@@ -1717,3 +1717,108 @@ mod prover_commit_balance7 {
         assert_eq!(actual[probe].c1.b.0, table[probe].c1.b.0);
     }
 }
+
+/// Single-row comparisons, with arbitrary accumulated sum. These establish
+/// the fold transition, not an extraction of the full iterator consumer.
+#[cfg(kani)]
+mod prover_commit_balance8 {
+    use super::*;
+    fn canonical(raw: u32) -> M31 {
+        let v = raw & 0x7fff_ffff;
+        M31(if v == P { 0 } else { v })
+    }
+    fn field() -> QM31 {
+        QM31 { c0: CM31::new(canonical(kani::any()), canonical(kani::any())),
+            c1: CM31::new(canonical(kani::any()), canonical(kani::any())) }
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    fn m31_step() {
+        let sum = canonical(kani::any());
+        let value = canonical(kani::any());
+        let active: bool = kani::any();
+        let row: usize = kani::any();
+        let dependent: usize = kani::any();
+        let observed = core::iter::once(row)
+            .filter(|r| !active && *r != dependent)
+            .fold(sum, |s, _| s.add(value));
+        let expected = crate::prover_commit_reference::balance_m31_step(sum, value, active, row, dependent);
+        assert_eq!(observed, expected);
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    fn qm31_step() {
+        let sum = field();
+        let value = field();
+        let active: bool = kani::any();
+        let row: usize = kani::any();
+        let dependent: usize = kani::any();
+        let observed = core::iter::once(row)
+            .filter(|r| !active && *r != dependent)
+            .fold(sum, |s, _| s.add(value));
+        let expected = crate::prover_commit_reference::balance_qm31_step(sum, value, active, row, dependent);
+        assert_eq!(observed, expected);
+    }
+}
+
+/// Universal four-call control-flow comparison over an arbitrary scalar trace.
+/// Stubs are relational inputs, not asserted scalar contracts. Each side sees
+/// the same trace; all sampled results and successor states are unconstrained.
+#[cfg(kani)]
+mod prover_commit_four8 {
+    use super::*;
+    use aspis_core::field::{M31, QM31};
+    use crate::prover_commit_reference::State;
+    type Sample = Result<M31, StateOnlyMaskBuildError>;
+    const ZERO: State = State { seed: [0;32], counter: 0, block: [0;32], word: 0 };
+    static mut STATES: [State;4] = [ZERO;4];
+    static mut VALUES: [Sample;4] = [Ok(M31::ZERO);4];
+    static mut CURSOR: usize = 0;
+    fn transition() -> (Sample, State) {
+        unsafe {
+            assert!(CURSOR < 4);
+            let pair = (VALUES[CURSOR], STATES[CURSOR]);
+            CURSOR += 1;
+            pair
+        }
+    }
+    fn shipped_scalar(state: &mut SeedExpander) -> Sample {
+        let (value, after) = transition();
+        state.seed = after.seed;
+        state.counter = after.counter;
+        state.block = after.block;
+        state.word = after.word;
+        value
+    }
+    fn reference_scalar(_: aspis_core::HashFn, _: &[u8], _: State) -> (Sample, State) {
+        transition()
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    #[kani::stub(SeedExpander::m31, shipped_scalar)]
+    #[kani::stub(crate::prover_commit_reference::limb_caller, reference_scalar)]
+    fn four_control() {
+        for i in 0..4 {
+            unsafe {
+                STATES[i] = kani::any();
+                VALUES[i] = if kani::any::<bool>() { Ok(M31(kani::any())) }
+                    else { Err(StateOnlyMaskBuildError::MaskSampleExhausted) };
+            }
+        }
+        let state: State = kani::any();
+        unsafe { CURSOR = 0; }
+        let (expected, after) = crate::prover_commit_reference::qm31_caller(
+            crate::HOST_HASH, b"unused relational input", state);
+        let expected_calls = unsafe { CURSOR };
+        unsafe { CURSOR = 0; }
+        let mut actual = SeedExpander { hash: crate::HOST_HASH,
+            seed: state.seed, counter: state.counter, block: state.block, word: state.word };
+        let observed: Result<QM31, StateOnlyMaskBuildError> = actual.qm31();
+        assert_eq!(observed, expected);
+        assert_eq!(actual.seed, after.seed);
+        assert_eq!(actual.counter, after.counter);
+        assert_eq!(actual.block, after.block);
+        assert_eq!(actual.word, after.word);
+        assert_eq!(unsafe { CURSOR }, expected_calls);
+    }
+}
