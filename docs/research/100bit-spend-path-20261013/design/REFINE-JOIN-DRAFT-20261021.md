@@ -90,3 +90,63 @@ and the sorted live-prefix level invariant with the recursive selected tree.
 The height-chain theorem is not that missing invariant. No additional raw
 slot counterexample was found. This limitation is separate from the generic
 consumer obstruction above; the latter does not make the slot claim false.
+
+## Refinement-form join split
+
+The existing join table remains a read-only historical equality interface.
+This table supersedes its delivery *form* for this draft, without claiming
+any frozen implementation inhabits an obligation. `R(c)` is verbatim:
+
+```lean
+∀ site, site.owner = c → ∀ args, ValueRefinement (source site args) (model site args)
+```
+
+`ValueRefinement source model` is verbatim:
+
+```lean
+∀ H, (eval H source).2 = (eval H model).2 ∧
+  (eval H source).1.Subperm (eval H model).1
+```
+
+Unlike accepted-only Boolean refinement, this retains complete intermediate
+results/state even on ordinary rejection. The caller can branch on them.
+`cone_join_refines`, `bind_refines`, `interpret_refines`, and
+`execution_refinement_of_cones` prove old equality implies the replacement
+and that these replacements suffice for the new execution refinement.
+`accepted_child_counterexample` demonstrates why accepted-only refinement
+cannot be substituted in an arbitrary value-dependent caller. `short_refines`
+proves it does suffice for the actual short-circuit Boolean-AND shape.
+
+| Cone | Delivery form where sufficient | State/observations still required |
+| --- | --- | --- |
+| S1 | `R(.s1)` | Prepared, powers, semantic claims, scratch and complete return state |
+| S2 | `R(.s2)` | Observer-off dispatch, byte slices, child errors and full state |
+| S3 | `R(.s3)` | Group tables/masks, weight-loop values and state |
+| S4 | `R(.s4)` | All four dots, limbs/batches, prefix reads and returned state |
+| S5 | `R(.s5)` | Strict decode, tower/kernel values, errors and final state |
+| S6 | `R(.s6)` | Public/proof/k, callbacks, complete checkpoint bytes and errors |
+| S7 | `R(.s7)` | Selected values, geometry/readers, accumulator/Vec and full loop state |
+| S8 | `R(.s8)` | Accumulator, residue/row traversal, finish result and caller writes |
+| S9 | `R(.s9)` | Factored power/weight-loop values and complete state |
+| S10 | Unchanged `S10Join inventory tree` | Declaration/source coverage of all continuations; not an executable cone |
+| Parser/codec | `R(.parserCodec)` | Exact parsed Option/Err, offsets, canonical guards and reached fields |
+| Multiproof | Accepted Boolean refinement at short-circuit slot boundary; `R(.multiproof)` at general value-returning calls | Successful roots, duplicate consistency, level/frontier correspondence, accepted read containment; the general source-slot theorem remains open |
+| Checkpoint ABI | `R(.checkpointAbi)` for execution; equality/causal laws for observed ABI | Exact 1768-byte payload/state and same-input provenance; arbitrary read permutation does not establish runtime or recovery-cut compatibility |
+| Pool caller | `R(.poolCaller)` for execution; preserve externally observed calls separately | CPI/account/public/proof/checkpoint/hint bytes, ordinary errors, same snapshot and transaction order |
+
+These forms suffice for **execution refinement**, not by themselves for the
+recorded extractor headline. Existing pin/backend/checked-arithmetic/totality
+and caller obligations from `JOIN-SPLIT-DRAFT-20261021.md` all remain.
+Accepted-only cone refinements also do not establish R22 totality on rejected
+inputs. No re-pin file was edited.
+
+## What probability transfers now
+
+`OraclePortRefineJoinConsumer.acceptance_event_transport` proves the exact
+lazy memoized-oracle inequality for any event depending only on acceptance
+and the shared `Input`. `acceptance_failure_bound` specializes it to
+`ExecutionRefinement D rust`. This confirms the one-direction argument for
+acceptance-only bad-input events. The current `failureMass` is not such an
+event. Its dependence on the log and reconstructed words is precisely the
+remaining consumer issue; neither lemma silently substitutes a new event for
+that headline's event.

@@ -1,0 +1,53 @@
+import OraclePortRefineJoinCore
+
+/-! Strict weakening at the actual inherited verifier, with a concrete
+rejecting public tag. No assumption of a rejecting dV input is needed. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortRefineJoin
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortStoredExperimentC4 OraclePortStoredConsumerC7 OraclePortRuntimeBindingC7
+attribute [local instance] Classical.propDecidable
+
+theorem eager_rejected_read_refines (D : LiteralByteProtocol.Decoder) (address : Bytes) :
+    ExecutionRefinement D (rejectedRead (verifier D dV) address) := by
+  intro H i ha
+  obtain ⟨hv,hl⟩ := rejected_read_refines (verifier D dV) address H i ha
+  have hs : (eval H (verifier D OraclePortShortCircuit.outerDecision i)).2 = true :=
+    (OraclePortShortCircuit.verifier_verdict D i H).trans hv
+  rw [OraclePortShortCircuit.verifier_accepted_eq D i H hs]
+  exact ⟨hv,hl⟩
+
+theorem eager_bad_tag_rejects (D : LiteralByteProtocol.Decoder) (H : Bytes → State)
+    (i : Input) (ht : i.statement.tag ≠ 2) : (eval H (verifier D dV i)).2 = false := by
+  unfold OraclePortStoredExperimentC4.verifier
+  rw [OracleDecisionFeasibilityBudget.verifier_eval]
+  have hg : ¬ OraclePortAdmission.Guard (LiteralTranscript.erasePrefix
+      ((LiteralByteProtocol.protocol D).transcript H i.statement i.proof 33)) := by
+    intro h
+    have tag := h.1
+    rw [InitialTagDecision.erased_transcript_tag] at tag
+    exact ht tag
+  simp only [OracleDecisionFeasibilityCore.onBytes,dV,OraclePortReachedRunC6.decision,
+    OraclePortStoredDecisionDraftC4.decision,if_neg hg,eval]
+
+/-- Full ExecutionJoin is genuinely stronger at the actual fixed model.
+The arbitrary seed Input only supplies unchanged other fields; tag zero
+constructs a rejecting witness in every oracle world. -/
+theorem execution_refinement_strict (D : LiteralByteProtocol.Decoder) (seed : Input)
+    (address : Bytes) : ∃ rust : Verifier,
+    ExecutionRefinement D rust ∧ ¬ ExecutionJoin D rust := by
+  refine ⟨rejectedRead (verifier D dV) address,eager_rejected_read_refines D address,?_⟩
+  intro h
+  let i : Input := {seed with statement := {seed.statement with tag := 0}}
+  let H : Bytes → State := fun _ _ => 0
+  have hr := eager_bad_tag_rejects D H i (by change (0 : Nat) ≠ 2; decide)
+  exact rejected_read_not_equal (verifier D dV) address H i hr (h i)
+
+#print axioms eager_rejected_read_refines
+#print axioms eager_bad_tag_rejects
+#print axioms execution_refinement_strict
+end AspisR1.OraclePortRefineJoin
+end

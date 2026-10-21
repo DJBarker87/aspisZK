@@ -1,0 +1,82 @@
+import OraclePortRefineJoinCore
+import OraclePortJoinSplitCore
+
+/-! Refinement-form cone substitution. Intermediate values still agree:
+otherwise the next caller branch, state and call arguments can differ.
+Only oracle read order/multiplicity is weakened here. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortRefineJoin
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortStoredExperimentC4 OraclePortRuntimeBindingC7 OraclePortJoinSplit
+
+/-- Total equality of returned value/state with sub-multiset read coverage.
+This includes ordinary Rust rejection results as values. -/
+def ValueRefinement {α : Type} (source model : Program Bytes State α) : Prop :=
+  ∀ H, (eval H source).2 = (eval H model).2 ∧
+    (eval H source).1.Subperm (eval H model).1
+
+def ConeRefinement {σ : Signature} (source model : Implementation σ) (cone : Cone) : Prop :=
+  ∀ site, site.owner = cone → ∀ args, ValueRefinement (source site args) (model site args)
+
+theorem cone_join_refines {σ : Signature} (source model : Implementation σ) (cone : Cone)
+    (h : ConeJoin source model cone) : ConeRefinement source model cone := by
+  intro site hs args H
+  rw [h site hs args]
+  exact ⟨rfl,List.Subperm.refl _⟩
+
+theorem bind_refines {α β : Type} (p q : Program Bytes State α)
+    (f g : α → Program Bytes State β) (hp : ValueRefinement p q)
+    (hf : ∀ a, ValueRefinement (f a) (g a)) :
+    ValueRefinement (bind p f) (bind q g) := by
+  intro H
+  obtain ⟨hv,hl⟩ := hp H
+  obtain ⟨hw,hm⟩ := hf (eval H q).2 H
+  simp only [eval_bind,hv]
+  exact ⟨hw,hl.append hm⟩
+
+/-- This pointwise hypothesis can be supplied separately by all thirteen
+ConeRefinement fields; site ownership still comes from the caller inventory. -/
+theorem interpret_refines {σ : Signature} {α : Type}
+    (source model : Implementation σ)
+    (h : ∀ site args, ValueRefinement (source site args) (model site args))
+    (tree : Calls σ α) : ValueRefinement (interpret source tree) (interpret model tree) := by
+  induction tree with
+  | done a => intro H; exact ⟨rfl,List.Subperm.refl _⟩
+  | invoke site args next ih =>
+      exact bind_refines _ _ _ _ (h site args) ih
+  | oracle address next ih =>
+      intro H
+      obtain ⟨hv,hl⟩ := ih (H address) H
+      simp only [interpret,eval]
+      exact ⟨hv,(List.Subperm.refl [(address,H address)]).append hl⟩
+
+/-- Bool-only children under a short-circuit AND need only accepted
+refinement. This is the relevant interface for the six slot children. -/
+theorem short_refines (source model : List (Program Bytes State Bool))
+    (h : List.Forall₂ (fun p q => ∀ H, (eval H p).2 = true →
+      (eval H q).2 = true ∧ (eval H p).1.Subperm (eval H q).1) source model)
+    (H : Bytes → State) (ha : (eval H (OraclePortShortCircuit.short source)).2 = true) :
+    (eval H (OraclePortShortCircuit.short model)).2 = true ∧
+    (eval H (OraclePortShortCircuit.short source)).1.Subperm
+      (eval H (OraclePortShortCircuit.short model)).1 := by
+  induction h with
+  | nil => exact ⟨rfl,List.Subperm.refl _⟩
+  | @cons p q ps qs hp ht ih =>
+      cases hv : (eval H p).2
+      · simp [OraclePortShortCircuit.short,eval_bind,hv,eval] at ha
+      · have hat : (eval H (OraclePortShortCircuit.short ps)).2 = true := by
+          simpa only [OraclePortShortCircuit.short,eval_bind,hv,if_true] using ha
+        obtain ⟨hq,hl⟩ := hp H hv
+        obtain ⟨hs,hm⟩ := ih hat
+        simp only [OraclePortShortCircuit.short,eval_bind,hv,hq,if_true]
+        exact ⟨hs,hl.append hm⟩
+
+#print axioms cone_join_refines
+#print axioms bind_refines
+#print axioms interpret_refines
+#print axioms short_refines
+end AspisR1.OraclePortRefineJoin
+end

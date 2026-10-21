@@ -1,0 +1,10 @@
+--- OraclePortHeadlineDVsc.final_soundness
++++ requested OraclePortHeadlineRefine (UNPROVED)
+@@ -2,6 +2,6 @@
+     (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
+     (hqueries : ∀ H : Bytes → State, (eval H P).1.length ≤ Q)
+     (rust : Verifier) (runtime : Runtime)
+-    (h_Rust_equals_dV : OuterExecutionJoin D rust)
++    (h_Rust_refines_dV : OraclePortRefineJoin.ExecutionRefinement D rust)
+     (h_stored_runtime : StoredCarrierBinding D rust P runtime) :
+     Claims D P Q runtime
