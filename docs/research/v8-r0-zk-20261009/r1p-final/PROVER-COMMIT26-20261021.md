@@ -147,3 +147,153 @@ elaboration failure. The replacement uses the existing explicit finite-instance
 transport and opaque finite dictionaries, preserving the actual distributions
 without kernel-normalizing their large enumerations. No limits were raised.
 The dictionary linter warnings concern intentional opacity, not added axioms.
+
+## Demonstrated obstruction — stateful ideal oracle versus pure extracted API
+
+The native simulator's `CoinOracle::digest` (`crates/aspis-r1-cost-probe/src/sim.rs`)
+borrows a `RefCell<CoinState>`, reads `coins[next]`, increments `next`, and may
+also update the recorded table/collision flag. It does this even for a repeated
+input. The current extracted semantic/circle/control `Digest32` operation has
+type `H → Slice (Slice U8) → Result Bytes32`; it returns neither an updated
+handle nor an updated heap. The new pure shared-ROM instances correctly
+interpret a lookup oracle, but **cannot unconditionally interpret this native
+cursor oracle**. This distinction was found during source composition; the
+new digest law must not be promoted to the simulator's full execution law.
+
+`oracle-effect-v1` copies `concat`, `CoinState` and `CoinOracle::digest`
+verbatim from pinned source, adds only the trait/type wrapper and a test,
+and runs the exact same input twice against coins `[zero, one]` with recording
+disabled. It observes zero, then one, and cursor two. The optimized native
+counterexample passes: exit 0, wall 0.362 s, RSS 126864 KiB, swap 0,
+6G/8G/no-swap/64-task scope, requested RUSTFLAGS. This is a concrete source
+counterexample to a stateless interpretation, **not** a privacy attack or an
+end-to-end counterexample. `oracle-effect-source.json` pins the copied bodies.
+
+`ProverCommitOracleEffect26.two_reads` proves the corresponding cursor trace.
+`no_stateless_interpretation` proves that the *actual extracted API* cannot
+return both distinct answers for the same handle and parts. J7634: exit 0,
+1.85 s, 4070944 KiB, zero swap, both standard-only axioms audits.
+
+This stops the direct ideal-side instantiation in stage (3). Repair requires
+an explicit state/heap-threaded interpretation or a proved execution transport
+for `CoinState.next`, recording and collision behavior, composed through the
+semantic/circle/suffix calls. A freshness restriction cannot be silently
+assumed or added to TrustedStd. If freshness is used, it must follow from the
+existing permitted exceptions (or a separately justified change to the stated
+bound); it is not supplied by the totality or marginal theorems above.
+The source file and extraction interface are unchanged; no protocol or
+security-contract change is proposed here.
+
+`shippedProverExperiment`, its complete real-side and ideal-side WholeRunJoins,
+and endpoint specialization remain **unconstructed**. Beyond the effect
+transport, the exact builder/checker/retry, native trace, commitment programming
+and ordered serialization continuations still need their full observable
+source/model identification. The new component results close local obligations
+only. TrustedStd has not acquired a source-refinement field, and P6/P7 have
+not been broadened to assume the desired conclusion.
+
+## Coherent verification and scope
+
+J7635 passes `R1Z/ProverCommit26Audit.lean`: exit 0, wall 1.75 s,
+peak RSS 4115124 KiB, swap 0, source revision `39e78e853` plus the exact
+additive source snapshot SHA-256/dependency fingerprint in its receipt.
+All 40 complete audit lines (38 new facts and both retained endpoints) use
+only [propext, Classical.choice, Quot.sound], or fewer. The source-level type
+inventory records the actual FSExperiments and extracted continuation types.
+J7633 is an excluded audit diagnostic: its 38 checks were standard-only,
+but an unimported assembly-name `#check` failed. J7635 changes the audit source
+by removing that diagnostic and adding the two new effect-obstruction facts;
+it is not an unchanged rerun. The final changed dependency closure is coherent.
+
+All actual Lean attempts (including failures) record target, source snapshot,
+revision, source hash, dependency fingerprint, exit, time, RSS, swap and full
+axioms/error output. J7591 is preflight-only. All host Lean compiles used one
+job at a time through the global launcher lock and the required scope caps;
+Rust gates use independent capped scopes. Later Rust gates record prelaunch
+aggregate checks in the retained runner; the early cell scope was observed at
+34.375 GiB aggregate reservation, within the 55 GiB host limit. No cap, heartbeat or recursion limit was raised.
+The final summary is `final-audit.json`; `rust-inputs.json` binds every Rust
+gate to its source snapshot. Timeout parent RSS omits killed descendants;
+the cgroup peak in each receipt is authoritative for those failed probes.
+
+No tracked file under `crates/` or `programs/` changed. The shipped-file ELF
+rebuild rule is not triggered; unchanged D129 artifact evidence is reused,
+without claiming a new ELF comparison. No concurrent-owned module, wallet
+or key was touched. No binaries, objects, archives or local target directory
+are committed. No push. The complete frozen release manifest is withheld
+because the concrete whole-source refinement has not passed its preflight.
+Next Env J candidate: 7636, subject to the shared receipt check.
+
+## Verbatim endpoint before/after and deletion-only diff
+
+The specialization is blocked as described above. The endpoint declarations
+below are copied verbatim from `ProverCommitDeployedFuel22.lean`; surrounding
+parameters and local notations are unchanged. Before is base `57ca9c452`;
+after is this branch. The entire endpoint module is byte-identical.
+`endpoint-deletion.diff` is empty: zero premises removed. This is **not** a
+successful deletion-only discharge; no quantifier, carrier, exception or
+conclusion was changed.
+
+Before:
+
+```lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad
+      (idealSeedQueries template outputs x rust observer_program adv)))
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+After:
+
+```lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad
+      (idealSeedQueries template outputs x rust observer_program adv)))
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+The requested deployed target is **not yet established**.
