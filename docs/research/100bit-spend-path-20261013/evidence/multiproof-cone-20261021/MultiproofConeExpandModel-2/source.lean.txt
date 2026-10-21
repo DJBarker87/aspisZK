@@ -1,0 +1,41 @@
+import MultiproofConeCanonical
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeExpandModel
+open AspisV8R19.DuplexFrames
+open OraclePortCompactDraft
+open MultiproofConeCanonical
+
+private theorem slice_step (wire : Bytes) (j : Nat) :
+    slice (wire.drop 16) (16*j) 16 = slice wire (16*(j+1)) 16 := by
+  unfold slice
+  rw [List.drop_drop]
+  congr 2
+  omega
+
+theorem expand_step (wire : Bytes) (n : Nat) :
+    expand (n+1) wire = wire.take 16 ++ List.replicate 16 0 ++ expand n (wire.drop 16) := by
+  unfold expand
+  rw [List.range_succ_eq_map]
+  simp only [List.map_cons,List.map_map,List.flatten_cons]
+  simp only [slice,Nat.mul_zero,List.drop_zero]
+  have hm : (List.range n).map (fun j => (wire.drop (16*Nat.succ j)).take 16 ++ List.replicate 16 0) =
+      (List.range n).map (fun j => ((wire.drop 16).drop (16*j)).take 16 ++ List.replicate 16 0) := by
+    apply List.map_congr_left
+    intro j _
+    have h := slice_step wire j
+    simpa only [slice] using congrArg (fun x => x ++ List.replicate 16 0) h.symm
+  rw [hm]
+
+theorem bytes_append (xs ys : List Aeneas.Std.U8) :
+    bytesOf (xs++ys) = bytesOf xs ++ bytesOf ys := List.map_append
+
+theorem bytes_zero : bytesOf (List.replicate 16 (0#u8)) = List.replicate 16 0 := by
+  simp only [bytesOf,List.map_replicate]
+  rfl
+
+#print axioms slice_step
+#print axioms expand_step
+#print axioms bytes_append
+#print axioms bytes_zero
+end AspisR1.MultiproofConeExpandModel

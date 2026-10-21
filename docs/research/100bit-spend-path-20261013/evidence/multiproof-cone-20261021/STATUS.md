@@ -199,3 +199,45 @@ owned compact predicate. Its single focused host gate passed (0.638571 s,
 hashes. The recorded base revision predates this added root; a new complete
 19-root gate against a committed revision is required before final audit.
 Only proof-tool copies changed; all shipped source files remain unchanged.
+
+## Stage 6: total compact expansion and frame operations
+
+`MultiproofConeExpansion.expand_total` proves the actual extracted owned
+expansion recurrence returns precisely the frozen `expand` bytes for every
+16-byte-aligned input satisfying the independent vector-capacity bound.
+`MultiproofConeExpansionLength.empty_accumulator` additionally proves exact
+doubled output length. The proof uses length induction and the checked
+single-value expansion, never reduction of a concrete expanded proof.
+
+`MultiproofConeFrameModel.header_model_total` identifies the five checked
+header reads/comparisons with the exact frozen tag and `le32` frame.
+`MultiproofConeLogicalPayload.good_total` and `bad_rejected` cover canonical
+rejection, compact expansion and ordinary payload copying.
+`MultiproofConeRowScalars.scalars_total` supplies all reached table, division,
+offset and next-row checks. `MultiproofConeFrameBuild.framing_total` supplies
+frame allocation/push and the exact decoded accumulator append, under size
+bounds independently established by these preceding facts.
+
+`MultiproofConeParserControl.parse_of_rows` checks complete top-level parser
+control for every input length, retaining the explicit **uninstantiated**
+`RowsJoin` hypothesis. The extracted row normalization and row-count induction
+are the next targets. No whole parser/source accepted-run join follows from
+this conditional theorem. Multiproof RowJoin and ordered-log/caller obligations
+remain unchanged and open.
+
+The expanded P6 gate now pins committed Rust revision `c2beabcc1`: 18 ordinary
+roots passed in 186.193180 seconds (3,288,384 KiB peak RSS); the separately
+selected verified `read32` contract passed in 0.910352 seconds (177,052 KiB).
+All 19 roots have zero swaps and recorded 6G/8G/no-swap/64-task scopes. Their
+preflights reserved 16 GiB and 32 GiB respectively after adding our scope,
+below the 55 GiB limit. No unchanged full Kani suite was repeated to add the
+omitted contract selector. Native tests are reused from the preceding runtime
+checkpoint; only proof-tool visibility and an added proof root changed.
+
+Failed proof/elaboration attempts remain recorded. The frame-size cast was
+made symbolic to avoid reducing abstract usize width. An unsuccessful broad
+simp over the library's irreducible recursive `toLEBytes` hit the default
+recursion limit; it was replaced by a named cast lemma, a byte-list projection
+lemma and four explicit small-byte steps. No limits were raised. Successful
+current theorems have standard axioms only. The earlier audit-result remains
+the preceding checkpoint; final expanded packet auditing follows row closure.

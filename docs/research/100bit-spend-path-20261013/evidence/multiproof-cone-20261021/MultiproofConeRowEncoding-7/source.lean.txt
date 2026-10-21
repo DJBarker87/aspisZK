@@ -1,0 +1,36 @@
+import MultiproofConeCanonical
+import MultiproofConeRowShape
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeRowEncoding
+open Aeneas Aeneas.Std Result
+open OraclePortCompactDraft MultiproofConeCanonical
+
+def shapeSize (row : Nat) : Usize := UScalar.ofNat (rowShape row).2 (by
+  exact Nat.le_trans (MultiproofConeRowShape.shape_properties row).2.1 (by decide))
+
+/-- Only the six small frame-table alternatives are reduced. No row payload
+or concrete parser recurrence is evaluated. -/
+theorem size_encoding (row : Nat) (size : Usize)
+    (shape : size.val = (rowShape row).2) :
+    bytesOf (core.num.U32.to_le_bytes (UScalar.cast .U32 size)).val = le32 size.val := by
+  have hs : size = shapeSize row := UScalar.eq_of_val_eq shape
+  subst size
+  unfold shapeSize
+  unfold rowShape
+  split_ifs
+  · change bytesOf (core.num.U32.to_le_bytes (UScalar.cast .U32 (32#usize))).val = le32 32
+    decide
+  · change bytesOf (core.num.U32.to_le_bytes (UScalar.cast .U32 (32#usize))).val = le32 32
+    decide
+  · change bytesOf (core.num.U32.to_le_bytes (UScalar.cast .U32 (896#usize))).val = le32 896
+    decide
+  · change bytesOf (core.num.U32.to_le_bytes (UScalar.cast .U32 (3712#usize))).val = le32 3712
+    decide
+  · change bytesOf (core.num.U32.to_le_bytes (UScalar.cast .U32 (928#usize))).val = le32 928
+    decide
+  · change bytesOf (core.num.U32.to_le_bytes (UScalar.cast .U32 (0#usize))).val = le32 0
+    decide
+
+#print axioms size_encoding
+end AspisR1.MultiproofConeRowEncoding

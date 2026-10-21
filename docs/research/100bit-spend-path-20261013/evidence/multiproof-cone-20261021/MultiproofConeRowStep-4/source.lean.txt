@@ -1,0 +1,48 @@
+import MultiproofConeHeaderControl
+import MultiproofConePayloadControl
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeRowStep
+open Aeneas Aeneas.Std Result
+open MultiproofParserRef MultiproofConeFrameHeader MultiproofConeLogicalPayload
+
+/-- One actual extracted row, with only local table/arithmetic operations
+supplied explicitly. The recursive continuation remains the extracted body. -/
+theorem row_step (row : U8) (bytes : Slice U8)
+    (rows : alloc.vec.Vec (alloc.vec.Vec U8)) (tag : U8) (size stored finish : Usize)
+    (notDone : ¬row>=27#u8)
+    (shape : reference.row_shape row=ok (some (tag,size)))
+    (storage : (if row>=14#u8 then size/2#usize else ok size)=ok stored)
+    (endOffset : 5#usize+stored=ok finish) :
+    let cont := fun logical : alloc.vec.Vec U8 => do
+      let prefixBytes ← core.slice.index.Slice.index
+        (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes {«end»:=5#usize}
+      let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 prefixBytes
+      let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed (alloc.vec.Vec.deref logical)
+      let rows1 ← alloc.vec.Vec.push rows framed1
+      let nextRow ← row+1#u8
+      let rest ← core.slice.index.Slice.index
+        (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes {start:=finish}
+      parser_reference.semantic_rows nextRow rest rows1
+    parser_reference.semantic_rows row bytes rows =
+      (if Slice.len bytes<finish then ok none else do
+        let good ← headerChecks bytes tag size
+        if good then do
+          let payload ← core.slice.index.Slice.index
+            (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes {start:=5#usize,«end»:=finish}
+          let logical ← prepare row payload
+          match logical with
+          | none => ok none
+          | some value => cont value
+        else ok none) := by
+  dsimp only
+  rw [parser_reference.semantic_rows]
+  simp only [notDone,if_false,shape,bind_tc_ok,lift]
+  dsimp (config := {zeta := true,zetaDelta := true}) only
+  rw [storage]
+  simp only [bind_tc_ok,endOffset,lift]
+  rw [MultiproofConeHeaderControl.inline_eq]
+  simp only [MultiproofConePayloadControl.inline_eq]
+
+#print axioms row_step
+end AspisR1.MultiproofConeRowStep

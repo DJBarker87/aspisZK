@@ -1,0 +1,32 @@
+import MultiproofConeHeaderControl
+import MultiproofConeRowEncoding
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.MultiproofConeFrameModel
+open Aeneas Aeneas.Std Result
+open AspisV8R19.DuplexFrames AspisV8R19.SqueezeOracleBridge
+open OraclePortCompactDraft MultiproofConeCanonical MultiproofConeFrameHeader
+attribute [local instance] Classical.propDecidable
+
+def headerBytes (row : Nat) : Bytes :=
+  ⟨(rowShape row).1%256,Nat.mod_lt _ (by decide)⟩ :: le32 (rowShape row).2
+
+theorem tag_encoding (row : Nat) (tag : U8) (value : tag.val=(rowShape row).1) :
+    decodeByte tag = (⟨(rowShape row).1%256,Nat.mod_lt _ (by decide)⟩ : AspisV8R19.DuplexFrames.Byte) := by
+  apply Fin.ext
+  change tag.val = (rowShape row).1%256
+  rw [value,Nat.mod_eq_of_lt (by have h := (MultiproofConeRowShape.shape_properties row).1;omega)]
+
+theorem header_model_total (row : Nat) (bytes : Slice U8) (tag : U8) (size : Usize)
+    (tagValue : tag.val=(rowShape row).1) (sizeValue : size.val=(rowShape row).2)
+    (bound : 5≤bytes.val.length) :
+    headerChecks bytes tag size = ok (decide ((bytesOf bytes.val).take 5 = headerBytes row)) := by
+  rw [header_total bytes tag size bound,MultiproofConeRowEncoding.size_encoding row size sizeValue,
+    tag_encoding row tag tagValue,sizeValue]
+  rfl
+
+#print axioms tag_encoding
+#print axioms header_model_total
+end AspisR1.MultiproofConeFrameModel
+end

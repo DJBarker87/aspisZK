@@ -1,0 +1,119 @@
+import MultiproofConeCanonical
+import MultiproofConeRowShape
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeRowEncoding
+open Aeneas Aeneas.Std Result
+open OraclePortCompactDraft MultiproofConeCanonical
+
+def shapeWord (row : Nat) : U32 := UScalar.ofNat (rowShape row).2 (by
+  exact Nat.le_trans (MultiproofConeRowShape.shape_properties row).2.1 (by decide))
+
+/-- The symbolic narrowing fact avoids reducing Aeneas's abstract usize width. -/
+private theorem cast_exact (x : Usize) (h : x.val < 2^UScalarTy.U32.numBits) :
+    (UScalar.cast .U32 x).val = x.val := by
+  simp only [UScalar.cast,UScalar.val,BitVec.toNat_setWidth]
+  exact Nat.mod_eq_of_lt h
+
+private theorem word_bytes (x : U32) :
+    bytesOf (core.num.U32.to_le_bytes x).val = bytesOf (List.map UScalar.mk x.bv.toLEBytes) := rfl
+
+/-- Only the six small frame-table alternatives are reduced. No row payload
+or concrete parser recurrence is evaluated. -/
+theorem size_encoding (row : Nat) (size : Usize)
+    (shape : size.val = (rowShape row).2) :
+    bytesOf (core.num.U32.to_le_bytes (UScalar.cast .U32 size)).val = le32 size.val := by
+  have hc : UScalar.cast .U32 size = shapeWord row := by
+    apply UScalar.eq_of_val_eq
+    rw [cast_exact size (by
+      have bound := (MultiproofConeRowShape.shape_properties row).2.1
+      rw [shape]
+      exact Nat.lt_of_le_of_lt bound (by decide))]
+    exact shape
+  rw [hc,shape]
+  unfold shapeWord
+  unfold rowShape
+  split_ifs
+  · change bytesOf (core.num.U32.to_le_bytes (32#u32)).val = le32 32
+    rw [word_bytes]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<32)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<24)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<16)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<8)]
+    unfold BitVec.toLEBytes
+    rw [if_neg (by decide : ¬(0:Nat)<0)]
+    rfl
+  · change bytesOf (core.num.U32.to_le_bytes (32#u32)).val = le32 32
+    rw [word_bytes]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<32)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<24)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<16)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<8)]
+    unfold BitVec.toLEBytes
+    rw [if_neg (by decide : ¬(0:Nat)<0)]
+    rfl
+  · change bytesOf (core.num.U32.to_le_bytes (896#u32)).val = le32 896
+    rw [word_bytes]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<32)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<24)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<16)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<8)]
+    unfold BitVec.toLEBytes
+    rw [if_neg (by decide : ¬(0:Nat)<0)]
+    rfl
+  · change bytesOf (core.num.U32.to_le_bytes (3712#u32)).val = le32 3712
+    rw [word_bytes]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<32)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<24)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<16)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<8)]
+    unfold BitVec.toLEBytes
+    rw [if_neg (by decide : ¬(0:Nat)<0)]
+    rfl
+  · change bytesOf (core.num.U32.to_le_bytes (928#u32)).val = le32 928
+    rw [word_bytes]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<32)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<24)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<16)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<8)]
+    unfold BitVec.toLEBytes
+    rw [if_neg (by decide : ¬(0:Nat)<0)]
+    rfl
+  · change bytesOf (core.num.U32.to_le_bytes (0#u32)).val = le32 0
+    rw [word_bytes]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<32)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<24)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<16)]
+    unfold BitVec.toLEBytes
+    rw [if_pos (by decide : (0:Nat)<8)]
+    unfold BitVec.toLEBytes
+    rw [if_neg (by decide : ¬(0:Nat)<0)]
+    rfl
+
+#print axioms word_bytes
+#print axioms cast_exact
+#print axioms size_encoding
+end AspisR1.MultiproofConeRowEncoding

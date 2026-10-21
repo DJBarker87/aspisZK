@@ -1,0 +1,124 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeExpansion.lean:23:4: error: unsolved goals
+case pos
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (bytes : Slice U8) (out : alloc.vec.Vec U8),
+      (↑bytes).length % 16 = 0 →
+        (↑out).length + 2 * (↑bytes).length ≤ Usize.max →
+          (↑bytes).length = m →
+            ∃ result,
+              MultiproofParserRef.reference.expand_rows bytes out = ok (some result) ∧
+                bytesOf ↑result = bytesOf ↑out ++ expand (m / 16) (bytesOf ↑bytes)
+bytes : Slice U8
+out : alloc.vec.Vec U8
+aligned : (↑bytes).length % 16 = 0
+capacity : (↑out).length + 2 * (↑bytes).length ≤ Usize.max
+hn : (↑bytes).length = n
+empty : (↑bytes).length = 0
+⊢ bytesOf ↑out =
+    bytesOf ↑out ++
+      (List.map (fun j => slice (bytesOf ↑bytes) (16 * j) 16 ++ List.replicate 16 0) (List.range (n / 16))).flatten
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeExpansion.lean:62:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑bytes).length / 16
+in the target expression
+  bytesOf ↑out ++ (bytesOf ↑chunk ++ List.replicate 16 0) ++ expand ((↑rest).length / 16) (bytesOf ↑rest) =
+    bytesOf ↑out ++ expand (n / 16) (bytesOf ↑bytes)
+
+case neg
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (bytes : Slice U8) (out : alloc.vec.Vec U8),
+      (↑bytes).length % 16 = 0 →
+        (↑out).length + 2 * (↑bytes).length ≤ Usize.max →
+          (↑bytes).length = m →
+            ∃ result,
+              MultiproofParserRef.reference.expand_rows bytes out = ok (some result) ∧
+                bytesOf ↑result = bytesOf ↑out ++ expand (m / 16) (bytesOf ↑bytes)
+bytes : Slice U8
+out : alloc.vec.Vec U8
+aligned : (↑bytes).length % 16 = 0
+capacity : (↑out).length + 2 * (↑bytes).length ≤ Usize.max
+hn : (↑bytes).length = n
+empty : ¬(↑bytes).length = 0
+bound : 16 ≤ (↑bytes).length
+notShort : ¬bytes.len < 16#usize
+chunk : Std.Array U8 16#usize
+hread : MultiproofParserRef.reference.read16 bytes = ok chunk
+hchunk : ↑chunk = List.take 16 ↑bytes
+a : Std.Array U8 32#usize
+ha : MultiproofParserRef.reference.expand_chunk chunk = ok a
+haval : ↑a = ↑chunk ++ List.replicate 16 0#u8
+alen : (↑a).length = 32
+next : alloc.vec.Vec U8
+hnext : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out a.to_slice = ok next
+hnextval : ↑next = ↑out ++ ↑a.to_slice
+rest : Slice U8 := bytes.drop 16#usize
+restLength : (↑rest).length = (↑bytes).length - 16
+nextLength : (↑next).length = (↑out).length + 32
+restAligned : (↑rest).length % 16 = 0
+restCapacity : (↑next).length + 2 * (↑rest).length ≤ Usize.max
+result : alloc.vec.Vec U8
+hresult : MultiproofParserRef.reference.expand_rows rest next = ok (some result)
+hmeaning : bytesOf ↑result = bytesOf ↑next ++ expand ((↑rest).length / 16) (bytesOf ↑rest)
+chunkBytes : bytesOf ↑chunk = List.take 16 (bytesOf ↑bytes)
+restBytes : bytesOf ↑rest = List.drop 16 (bytesOf ↑bytes)
+quotient : (↑bytes).length / 16 = (↑rest).length / 16 + 1
+⊢ bytesOf ↑out ++ (bytesOf ↑chunk ++ List.replicate 16 0) ++ expand ((↑rest).length / 16) (bytesOf ↑rest) =
+    bytesOf ↑out ++ expand (n / 16) (bytesOf ↑bytes)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    out
+  has type
+    alloc.vec.Vec U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑out
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeExpansion.lean:25:17: warning: This simp argument is unused:
+  empty
+
+Hint: Omit it from the simp argument list.
+  simp only [e̵m̵p̵t̵y̵,̵Nat.zero_div, ̲expand, ̲List.range_zero, ̲List.map_nil, ̲List.flatten_nil,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeExpansion.lean:25:23: warning: This simp argument is unused:
+  Nat.zero_div
+
+Hint: Omit it from the simp argument list.
+  simp only [empty,N̵a̵t̵.̵z̵ ̲er̵o̵_̵d̵i̵v̵,̵e̵xpand, ̲List.range_zero, ̲List.map_nil, ̲List.flatten_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeExpansion.lean:25:43: warning: This simp argument is unused:
+  List.range_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵m̵p̵t̵y̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵d̵i̵v̵,̵e̵x̵p̵a̵n̵d̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵t̵e̵n̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲e̲m̲p̲t̲y̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲d̲i̲v̲,̲ ̲e̲x̲p̲a̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲t̲e̲n̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeExpansion.lean:25:59: warning: This simp argument is unused:
+  List.map_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [empty, ̲Nat.zero_div, ̲expand, ̲List.range_zero, ̲List.m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵flatten_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeExpansion.lean:25:72: warning: This simp argument is unused:
+  List.flatten_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵m̵p̵t̵y̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵d̵i̵v̵,̵e̵x̵p̵a̵n̵d̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵t̵e̵n̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲e̲m̲p̲t̲y̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲d̲i̲v̲,̲ ̲e̲x̲p̲a̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeExpansion.lean:25:89: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵m̵p̵t̵y̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵d̵i̵v̵,̵e̵x̵p̵a̵n̵d̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵t̵e̵n̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲e̲m̲p̲t̲y̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲d̲i̲v̲,̲ ̲e̲x̲p̲a̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲t̲e̲n̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConeExpansion.expand_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

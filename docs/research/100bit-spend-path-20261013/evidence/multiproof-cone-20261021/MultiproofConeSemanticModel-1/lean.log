@@ -1,0 +1,63 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeSemanticModel.lean:22:2: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x : ℕ × ℕ),
+    (if List.length wire < 5 + if 14 ≤ row then x.2 / 2 else x.2 then none
+      else
+        if List.take 5 wire ≠ ⟨x.1 % 256, ⋯⟩ :: le32 x.2 then none
+        else
+          if 14 ≤ row ∧ ¬canonical (slice wire 5 (if 14 ≤ row then x.2 / 2 else x.2)) then none
+          else do
+            let tail ← semanticRows fuel (row + 1) (List.drop (5 + if 14 ≤ row then x.2 / 2 else x.2) wire)
+            pure
+                ((List.take 5 wire ++
+                    if 14 ≤ row then expand (x.2 / 32) (slice wire 5 (if 14 ≤ row then x.2 / 2 else x.2))
+                    else slice wire 5 (if 14 ≤ row then x.2 / 2 else x.2)) ::
+                  tail)) =
+      if List.length wire < 5 + if 14 ≤ row then x.2 / 2 else x.2 then none
+      else
+        if List.take 5 wire ≠ ⟨x.1 % 256, ⋯⟩ :: le32 x.2 then none
+        else
+          if 14 ≤ row ∧ ¬canonical (slice wire 5 (if 14 ≤ row then x.2 / 2 else x.2)) then none
+          else
+            Option.map
+              (fun tail =>
+                (List.take 5 wire ++
+                    if 14 ≤ row then expand (x.2 / 32) (slice wire 5 (if 14 ≤ row then x.2 / 2 else x.2))
+                    else slice wire 5 (if 14 ≤ row then x.2 / 2 else x.2)) ::
+                  tail)
+              (semanticRows fuel (row + 1) (List.drop (5 + if 14 ≤ row then x.2 / 2 else x.2) wire))
+
+fuel row : ℕ
+wire : Bytes
+⊢ (if List.length wire < 5 + if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2 then none
+    else
+      if List.take 5 wire ≠ ⟨(rowShape row).1 % 256, ⋯⟩ :: le32 (rowShape row).2 then none
+      else
+        if 14 ≤ row ∧ ¬canonical (slice wire 5 (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2)) then none
+        else do
+          let tail ←
+            semanticRows fuel (row + 1)
+                (List.drop (5 + if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2) wire)
+          pure
+              ((List.take 5 wire ++
+                  if 14 ≤ row then
+                    expand ((rowShape row).2 / 32)
+                      (slice wire 5 (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2))
+                  else slice wire 5 (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2)) ::
+                tail)) =
+    if List.length wire < 5 + if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2 then none
+    else
+      if List.take 5 wire ≠ ⟨(rowShape row).1 % 256, ⋯⟩ :: le32 (rowShape row).2 then none
+      else
+        if 14 ≤ row ∧ ¬canonical (slice wire 5 (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2)) then none
+        else
+          Option.map
+            (fun tail =>
+              (List.take 5 wire ++
+                  if 14 ≤ row then
+                    expand ((rowShape row).2 / 32)
+                      (slice wire 5 (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2))
+                  else slice wire 5 (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2)) ::
+                tail)
+            (semanticRows fuel (row + 1)
+              (List.drop (5 + if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2) wire))
+'AspisR1.MultiproofConeSemanticModel.row_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

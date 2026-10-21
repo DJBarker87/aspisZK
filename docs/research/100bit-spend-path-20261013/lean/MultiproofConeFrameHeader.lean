@@ -1,0 +1,79 @@
+import MultiproofConeByteEquality
+import MultiproofConeBool
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.MultiproofConeFrameHeader
+open Aeneas Aeneas.Std Result
+open AspisV8R19.SqueezeOracleBridge
+open MultiproofConeCanonical MultiproofConeByteEquality
+attribute [local instance] Classical.propDecidable
+
+/-- The five reads and comparison expression occurring inline in the extracted
+semantic row body, before any payload allocation or recursion. -/
+def headerChecks (bytes : Slice U8) (tag : U8) (size : Usize) : Result Bool := do
+  let b0 ← Slice.index_usize bytes 0#usize
+  if b0 != tag then ok false else do
+    let b1 ← Slice.index_usize bytes 1#usize
+    let b2 ← Slice.index_usize bytes 2#usize
+    let b3 ← Slice.index_usize bytes 3#usize
+    let b4 ← Slice.index_usize bytes 4#usize
+    let a := core.num.U32.to_le_bytes (UScalar.cast .U32 size)
+    let ne ← core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+      (Array.make 4#usize [b1,b2,b3,b4]) a
+    ok (!ne)
+
+theorem header_total (bytes : Slice U8) (tag : U8) (size : Usize)
+    (bound : 5 ≤ bytes.val.length) :
+    headerChecks bytes tag size = ok (decide ((bytesOf bytes.val).take 5 =
+      decodeByte tag :: bytesOf (core.num.U32.to_le_bytes (UScalar.cast .U32 size)).val)) := by
+  generalize hxs : bytes.val = xs at bound
+  cases xs with
+  | nil => simp at bound
+  | cons b0 xs =>
+    cases xs with
+    | nil => simp at bound
+    | cons b1 xs =>
+      cases xs with
+      | nil => simp at bound
+      | cons b2 xs =>
+        cases xs with
+        | nil => simp at bound
+        | cons b3 xs =>
+          cases xs with
+          | nil => simp at bound
+          | cons b4 xs =>
+            let a := core.num.U32.to_le_bytes (UScalar.cast .U32 size)
+            let data := Array.make 4#usize [b1,b2,b3,b4]
+            have same : (bytesOf [b0,b1,b2,b3,b4] = decodeByte tag :: bytesOf a.val) ↔
+                b0=tag ∧ data=a := by
+              constructor
+              · intro h
+                have raw : [b0,b1,b2,b3,b4] = tag::a.val := bytes_injective h
+                have hp := List.cons.inj raw
+                exact ⟨hp.1,Subtype.ext hp.2⟩
+              · rintro ⟨head,tail⟩
+                rw [head]
+                have hv := congrArg (fun arr : Array U8 4#usize => arr.val) tail
+                exact congrArg bytesOf (congrArg (List.cons tag) hv)
+            simp only [headerChecks,Slice.index_usize,Slice.getElem?_Usize_eq,hxs,
+              show (0#usize).val=0 from rfl,show (1#usize).val=1 from rfl,
+              show (2#usize).val=2 from rfl,show (3#usize).val=3 from rfl,
+              show (4#usize).val=4 from rfl,
+              List.getElem?_cons_zero,List.getElem?_cons_succ,bind_tc_ok]
+            rw [array_ne_total]
+            simp only [bind_tc_ok]
+            have framePrefix : (bytesOf bytes.val).take 5 = bytesOf [b0,b1,b2,b3,b4] := by
+              simp only [hxs,bytesOf,List.map_cons,List.take_succ_cons,List.take_zero,List.map_nil]
+            simp only [hxs] at framePrefix
+            rw [framePrefix]
+            change (if b0 != tag then ok false else ok (!decide (data≠a))) =
+              ok (decide (bytesOf [b0,b1,b2,b3,b4] = decodeByte tag :: bytesOf a.val))
+            calc
+              _ = ok (decide (b0=tag ∧ data=a)) := by
+                by_cases ht : b0=tag <;> by_cases ha : data=a <;> simp [ht,ha]
+              _ = _ := MultiproofConeBool.result_decide_congr same.symm
+
+#print axioms header_total
+end AspisR1.MultiproofConeFrameHeader
+end
