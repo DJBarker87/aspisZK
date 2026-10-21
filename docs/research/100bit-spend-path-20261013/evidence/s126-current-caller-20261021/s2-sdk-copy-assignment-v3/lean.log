@@ -1,0 +1,42 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCopyAssignmentV1.lean:48:4: error: unsolved goals
+case pos
+sdk : OwnedSdk
+slot : Usize
+source : alloc.vec.Vec U8
+guards : LiveGuards
+valid : ↑slot < (↑sdk.data_cells).length
+cell : OwnedDataCell
+actual : cell = (↑sdk.data_cells)[↑slot]
+actualRead : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+actualMut :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (cell, sdk.data_cells.set slot)
+read : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+loopCell : OwnedDataCell
+loopActual : loopCell = (↑sdk.data_cells)[↑slot]
+cellEq : loopCell = cell
+loopTotal :
+  copy_in_place sdk slot ⟨↑source, ⋯⟩ =
+    ok
+      (if (↑cell.bytes).length = (↑source).length then
+        (core.result.Result.Ok (), replaceBytes sdk slot cell ⟨↑source, ⋯⟩)
+      else (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk))
+sameLength : (↑cell.bytes).length = (↑source).length
+sizeEq : source.len = cell.bytes.len
+⊢ ok
+      (core.result.Result.Ok (),
+        { accounts := sdk.accounts,
+          data_cells :=
+            sdk.data_cells.set slot
+              { bytes := ⟨↑source, ⋯⟩, borrowed := cell.borrowed, strong := cell.strong, weak := cell.weak },
+          lamports_cells := sdk.lamports_cells },
+        guards) =
+    ok
+      (core.result.Result.Ok (),
+        { accounts := sdk.accounts,
+          data_cells :=
+            sdk.data_cells.set slot
+              { bytes := source, borrowed := cell.borrowed, strong := cell.strong, weak := cell.weak },
+          lamports_cells := sdk.lamports_cells },
+        guards)
+'AspisS2OwnedStage1.SdkReference.CopyLoop.finish_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

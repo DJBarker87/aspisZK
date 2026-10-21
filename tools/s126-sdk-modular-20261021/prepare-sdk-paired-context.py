@@ -214,6 +214,21 @@ if len(sys.argv)>4 and sys.argv[4]=='unreachable-error':
  s=s.replace('fn planned_zero_scan(_:Vec<u8>)->bool {false}', 'fn planned_zero_scan(_:Vec<u8>)->bool {false}\nfn unreachable_error(_:verifier::Error)->ProgramError {assert!(false,"successful verifier reply never calls error mapper");ProgramError::InvalidInstructionData}')
  s=s.replace('#[kani::proof] #[kani::unwind(1772)]', '#[kani::stub(crate::error,unreachable_error)]\n#[kani::proof] #[kani::unwind(1772)]')
  if mode=='paired':s=s.replace('#[kani::stub(crate::error,unreachable_error)]', '#[kani::stub(crate::error,unreachable_error)]\n#[kani::stub(aspis_s126_owned_sdk_snapshots::error,unreachable_error)]')
+std_copy_pin=None
+if len(sys.argv)>5 and sys.argv[5]=='std-copy':
+ assert mode in ['paired','native']
+ with tempfile.TemporaryDirectory() as d:
+  subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-std-copy-frame.py'),d],check=True)
+  primitive=(Path(d)/'src/lib.rs').read_text()
+  start=primitive.index(' static mut OBSERVED:usize=0;');end=primitive.index(' #[kani::proof] #[kani::unwind(8)]',start)
+  definitions=primitive[start:end]
+  std_copy_pin=dict(primitive_source_sha256=hashlib.sha256(primitive.encode()).hexdigest(),definitions_sha256=hashlib.sha256(definitions.encode()).hexdigest(),definition_source=definitions,leaf_proof='sdk-std-copy-frame-join-v1',bridge_proof='sdk-std-copy-bridge-join-v1')
+ s=s.replace('use super::*;\nuse aspis_s126_owned_sdk_snapshots', 'use super::*;\n'+definitions+'\nuse aspis_s126_owned_sdk_snapshots',1)
+ s=s.replace('#[kani::proof] #[kani::unwind(1772)]', '#[kani::stub(<[u8]>::copy_from_slice,copy_bridge)]\n#[kani::stub_verified(verified_byte_copy)]\n#[kani::proof] #[kani::unwind(1772)]')
+ s=s.replace(' b0[..688].copy_from_slice(&plan().candidate);b0[696]=2;', ' unsafe{core::ptr::copy_nonoverlapping(plan().candidate.as_ptr(),b0.as_mut_ptr(),688);}b0[696]=2;')
+ s=s.replace(' let output_len:usize=kani::any();kani::assume(output_len<=1769);', ' let output_len=1768usize;')
+ s=s.replace('  let observed:usize=kani::any();kani::assume(observed<1768);\n', '')
+ s=s.replace(' unsafe{PHASE=0;CALLS=[[0;4];2];}', ' let observed:usize=kani::any();kani::assume(observed<1768);\n unsafe{OBSERVED=observed;EXPECTED=plan().output[observed];PHASE=0;CALLS=[[0;4];2];}')
 (O/'src/lib.rs').write_text(s)
 host='/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src'
 (O/'Cargo.toml').write_text('''[package]
@@ -252,4 +267,11 @@ if mode=='call':
  m['qualification']='Native tx1-entry prefix certificate. Full frozen SDK stage1 and full typed statement/candidate callbacks are retained; tx1 returns a fixed successful empty vector, forcing the following length guard to reject. Assertions at child entry prove actual pointer/semantic-reference/k/None arguments independent of later returned bytes. Counter restoration is checked on every return. No accepted-parent or writeback claim.'
  m['domain']='Arbitrary native metadata, independent alias maps and all signed counters; full1880/1768 public/checkpoint root byte values. Proof root bytes are arbitrary subject to its first688 bytes equalling the arbitrary candidate reply and byte696 being the S2 tag2, matching the admitted source prefix/tag guard; mismatching prefix/tag paths are not covered by this cut. Every value field of both actual statement variants is quantified. Actual decoder length rejection retained. The tx1 reply is fixed successful-empty; no post-child or total execution theorem is inferred.'
  m['retained_cuts'].append('tx1-entry context returns Ok(empty Vec) after checking arguments; native execution prefix/callee-interpretation transport must be composed to use this for other replies')
+ p.write_text(json.dumps(m,indent=2)+'\n')
+
+if std_copy_pin is not None:
+ p=O/'source-cut.json';m=json.loads(p.read_text());m['std_copy_certificate']=std_copy_pin
+ m['retained_cuts'].append('Actual inherent std copy byte instance uses the exact proved primitive contract/bridge. Every reached u8/1768-byte/observed-byte precondition must hold. The frozen SDK body itself is unchanged. Harness prefix initialization uses the equivalent nonoverlapping pointer copy, avoiding an unrelated688-byte std-copy stub instance.')
+ m['retained_cuts'].append('Verifier reply length is fixed1768 in this accepted-parent context; connect to actual successful tx1 via the checked R22 checkpoint-size fact. Wrong-size successful child replies are outside this context.')
+ m['domain']='Full native metadata/alias/signed-counter inputs and full owned SDK state. Both real statement variants/all value fields; arbitrary688-byte candidate; proof bytes subject to admitted prefix/tag equations. Public/checkpoint bytes arbitrary. Common successful full typed child replies; arbitrary1768-byte verifier output (with one unused1769th plan byte). Verified std copy summary preserves every SDK object outside the checkpoint destination. Accepted-only parent assertion; native scan/child/input embedding and ordered-log interpretations must still be composed.'
  p.write_text(json.dumps(m,indent=2)+'\n')

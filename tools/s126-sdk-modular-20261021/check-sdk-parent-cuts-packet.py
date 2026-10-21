@@ -117,6 +117,56 @@ with tempfile.TemporaryDirectory() as d:
  subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-finish-step.py'),d],check=True)
  assert (Path(d)/'src/lib.rs').read_bytes()==stepSource.read_bytes()
  assert json.loads((Path(d)/'source-cut.json').read_text())==stepCut
+# Whole-copy leaf contracts and exact complete owned-parent composition.
+for tag,folder,generator in [
+ ('sdk-finish-fixed-frame-join-v3','sdk-finish-fixed-frame-v3','prepare-sdk-finish-fixed-frame.py'),
+ ('sdk-std-copy-frame-join-v1','sdk-std-copy-frame-v1','prepare-sdk-std-copy-frame.py'),
+ ('sdk-std-copy-bridge-join-v1','sdk-std-copy-frame-v1','prepare-sdk-std-copy-frame.py')]:
+ source,cut,rp=checked(tag,folder)
+ with tempfile.TemporaryDirectory() as d:
+  subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021'/generator),d],check=True)
+  assert (Path(d)/'src/lib.rs').read_bytes()==source.read_bytes()
+  assert json.loads((Path(d)/'source-cut.json').read_text())==cut
+ accepted[tag]['qualification']=cut['qualification']+' Specialized leaf/bridge only; no enclosing native caller instance.'
+ if 'fixed-frame' in tag:
+  audit=json.loads((E/'receipts/sdk-finish-fixed-frame-properties-v3/property-audit.json').read_text())
+  pins=json.loads((E/'sdk-finish-fixed-frame-properties-v3-input.json').read_text())
+  assert audit['source_sha256']==pins['source_sha256']==sha(source)
+  assert audit['proof_receipt_sha256']==pins['proof_receipt_sha256']==sha(rp)
+  assert audit['program_sha256']==pins['program_sha256']
+  assert any(p['class']=='assigns' for p in audit['selected_properties'])
+  assert any('expected' in p['description'] for p in audit['selected_properties'])
+ if tag=='sdk-std-copy-frame-join-v1':
+  audit=json.loads((E/'receipts/sdk-std-copy-frame-properties-v1/property-audit.json').read_text())
+  pins=json.loads((E/'sdk-std-copy-frame-properties-v1-input.json').read_text())
+  assert audit['source_sha256']==pins['source_sha256']==sha(source)
+  assert audit['proof_receipt_sha256']==pins['proof_receipt_sha256']==sha(rp)
+  assert audit['program_sha256']==pins['program_sha256']
+  assert any(p['class']=='assigns' and p['name']=='memcpy.assigns.2' and 'array_replace' in p['description'] for p in audit['selected_properties'])
+  assert any('expected()' in p['description'] for p in audit['selected_properties'])
+ if 'bridge' in tag:
+  command=json.loads(rp.read_text())['command']
+  assert 'function-contracts' in command and 'stubbing' in command
+  assert '#[kani::stub_verified(verified_byte_copy)]' in source.read_text()
+copy=E/'sources/owned-sdk-copy-v1'
+with tempfile.TemporaryDirectory() as d:
+ out=Path(d)/'src'
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-owned-sdk-copy.py'),str(out)],check=True)
+ assert (out/'src/lib.rs').read_bytes()==(copy/'src/lib.rs').read_bytes()
+ assert json.loads((out/'source-cut.json').read_text())==json.loads((copy/'source-cut.json').read_text())
+ i=Path(d)/'raw';i.mkdir();o=Path(d)/'adapt'
+ for p in (copy/'generated/AspisS2SdkCopyReference').glob('*.lean.txt'):(i/p.name[:-4]).write_bytes(p.read_bytes())
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/adapt-owned-sdk-copy.py'),str(i),str(o)],check=True)
+ for p in o.iterdir():assert p.read_bytes()==(S/p.name).read_bytes(),p
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/make-sdk-copy-parent.py'),str(o)],check=True)
+ assert (o/'S2SdkCopyParentV1.lean').read_bytes()==(S/'S2SdkCopyParentV1.lean').read_bytes()
+for phase in ['charon','aeneas']:
+ r=json.loads((E/'receipts'/('owned-sdk-copy-v1-'+phase)/'receipt.json').read_text())
+ inp=json.loads((copy/(phase+'-input.json')).read_text())
+ assert r['exit_status']==0 and r['swaps']==0 and r['limits']['memory.swap.max']=='0'
+ assert inp['source_sha256']==sha(copy/'src/lib.rs') and inp['tool_pins']
+ assert inp['owned_sdk_dependency_sha256']==sha(B/'evidence/s126-current-caller-20261021/modular-host/sources/owned-sdk-v3/src/lib.rs')
+
 snap=E/'sources/owned-sdk-snapshots-v1'
 with tempfile.TemporaryDirectory() as d:
  out=Path(d)/'src';subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-snapshot-reference.py'),str(out)],check=True)
@@ -136,4 +186,4 @@ assert flags and all('opt-level=3' in r and 'overflow-checks=yes' in r and '--ka
 for p in E.rglob('*'):
  if p.is_file():assert p.suffix not in ['.olean','.o','.a','.so','.dylib','.llbc','.bc','.out']
 (E/'accepted-cuts.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',qualification='Checked finite SDK operation/lifecycle domains and exact pure snapshot adaptation. Reached phase cuts are explicit. Complete actual stage1 child instances and ordered caller join remain open; timed-out/context/codegen/preflight evidence is excluded from accepted cuts.',cuts=accepted),indent=2)+'\n')
-print('PASS ten SDK cuts including actual tx1-entry arguments and byte-assignment frame; count/whole-copy and enclosing caller joins remain open')
+print('PASS thirteen SDK cuts and complete owned-parent copy-loop adaptation; enclosing native caller joins remain open')

@@ -1,0 +1,105 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCopyAssignmentV1.lean:47:4: error: unsolved goals
+case pos
+sdk : OwnedSdk
+slot : Usize
+source : alloc.vec.Vec U8
+guards : LiveGuards
+valid : ↑slot < (↑sdk.data_cells).length
+cell : OwnedDataCell
+actual : cell = (↑sdk.data_cells)[↑slot]
+actualRead : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+actualMut :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (cell, sdk.data_cells.set slot)
+read : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+loopTotal :
+  copy_in_place sdk slot source.deref =
+    ok
+      (if (↑(↑sdk.data_cells)[↑slot].bytes).length = (↑source.deref).length then
+        (core.result.Result.Ok (), replaceBytes sdk slot (↑sdk.data_cells)[↑slot] source.deref)
+      else (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk))
+cellEq : (↑sdk.data_cells)[↑slot] = cell
+sameLength : (↑cell.bytes).length = (↑source).length
+sizeEq : source.len = cell.bytes.len
+⊢ ok
+      ((if (↑(↑sdk.data_cells)[↑slot].bytes).length = (↑source.deref).length then
+            (core.result.Result.Ok (),
+              { accounts := sdk.accounts,
+                data_cells :=
+                  sdk.data_cells.set slot
+                    { bytes := source.deref, borrowed := (↑sdk.data_cells)[↑slot].borrowed,
+                      strong := (↑sdk.data_cells)[↑slot].strong, weak := (↑sdk.data_cells)[↑slot].weak },
+                lamports_cells := sdk.lamports_cells })
+          else (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk)).1,
+        (if (↑(↑sdk.data_cells)[↑slot].bytes).length = (↑source.deref).length then
+            (core.result.Result.Ok (),
+              { accounts := sdk.accounts,
+                data_cells :=
+                  sdk.data_cells.set slot
+                    { bytes := source.deref, borrowed := (↑sdk.data_cells)[↑slot].borrowed,
+                      strong := (↑sdk.data_cells)[↑slot].strong, weak := (↑sdk.data_cells)[↑slot].weak },
+                lamports_cells := sdk.lamports_cells })
+          else (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk)).2,
+        guards) =
+    ok
+      (core.result.Result.Ok (),
+        { accounts := sdk.accounts,
+          data_cells :=
+            sdk.data_cells.set slot
+              { bytes := source, borrowed := cell.borrowed, strong := cell.strong, weak := cell.weak },
+          lamports_cells := sdk.lamports_cells },
+        guards)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCopyAssignmentV1.lean:52:4: error: unsolved goals
+case neg
+sdk : OwnedSdk
+slot : Usize
+source : alloc.vec.Vec U8
+guards : LiveGuards
+valid : ↑slot < (↑sdk.data_cells).length
+cell : OwnedDataCell
+actual : cell = (↑sdk.data_cells)[↑slot]
+actualRead : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+actualMut :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (cell, sdk.data_cells.set slot)
+read : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+loopTotal :
+  copy_in_place sdk slot source.deref =
+    ok
+      (if (↑(↑sdk.data_cells)[↑slot].bytes).length = (↑source.deref).length then
+        (core.result.Result.Ok (), replaceBytes sdk slot (↑sdk.data_cells)[↑slot] source.deref)
+      else (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk))
+cellEq : (↑sdk.data_cells)[↑slot] = cell
+sameLength : ¬(↑cell.bytes).length = (↑source).length
+sizeNe : source.len ≠ cell.bytes.len
+mismatch : (source.len != cell.bytes.len) = true
+⊢ ok
+      ((if (↑(↑sdk.data_cells)[↑slot].bytes).length = (↑source.deref).length then
+            (core.result.Result.Ok (), replaceBytes sdk slot (↑sdk.data_cells)[↑slot] source.deref)
+          else (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk)).1,
+        (if (↑(↑sdk.data_cells)[↑slot].bytes).length = (↑source.deref).length then
+            (core.result.Result.Ok (), replaceBytes sdk slot (↑sdk.data_cells)[↑slot] source.deref)
+          else (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk)).2,
+        guards) =
+    ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk, guards)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCopyAssignmentV1.lean:49:38: warning: This simp argument is unused:
+  if_pos sameLength
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵i̵n̵i̵s̵h̵L̵o̵o̵p̵,̵l̵o̵o̵p̵T̵o̵t̵a̵l̵,̵i̵f̵_̵p̵o̵s̵ ̵s̵a̵m̵e̵L̵e̵n̵g̵t̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵f̵i̵n̵i̵s̵h̵A̵s̵s̵i̵g̵n̵m̵e̵n̵t̵,̵a̵c̵t̵u̵a̵l̵R̵e̵a̵d̵,̵s̵i̵z̵e̵E̵q̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵a̵c̵t̵u̵a̵l̵M̵u̵t̵,̵r̵e̵p̵l̵a̵c̵e̵B̵y̵t̵e̵s̵]̵[̲f̲i̲n̲i̲s̲h̲L̲o̲o̲p̲,̲ ̲l̲o̲o̲p̲T̲o̲t̲a̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲f̲i̲n̲i̲s̲h̲A̲s̲s̲i̲g̲n̲m̲e̲n̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲c̲t̲u̲a̲l̲R̲e̲a̲d̲,̲ ̲s̲i̲z̲e̲E̲q̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲c̲t̲u̲a̲l̲M̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲e̲p̲l̲a̲c̲e̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCopyAssignmentV1.lean:56:38: warning: This simp argument is unused:
+  if_neg sameLength
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵i̵n̵i̵s̵h̵L̵o̵o̵p̵,̵l̵o̵o̵p̵T̵o̵t̵a̵l̵,̵i̵f̵_̵n̵e̵g̵ ̵s̵a̵m̵e̵L̵e̵n̵g̵t̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵f̵i̵n̵i̵s̵h̵A̵s̵s̵i̵g̵n̵m̵e̵n̵t̵,̵a̵c̵t̵u̵a̵l̵R̵e̵a̵d̵,̵m̵i̵s̵m̵a̵t̵c̵h̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲f̲i̲n̲i̲s̲h̲L̲o̲o̲p̲,̲ ̲l̲o̲o̲p̲T̲o̲t̲a̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲f̲i̲n̲i̲s̲h̲A̲s̲s̲i̲g̲n̲m̲e̲n̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲c̲t̲u̲a̲l̲R̲e̲a̲d̲,̲ ̲m̲i̲s̲m̲a̲t̲c̲h̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS2OwnedStage1.SdkReference.CopyLoop.finish_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

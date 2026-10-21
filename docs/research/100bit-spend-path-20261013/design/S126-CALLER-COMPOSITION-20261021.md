@@ -936,3 +936,111 @@ prefix/child/reply/whole-copy/oracle-log composition are not yet a concrete
 AcceptedRunJoin instance. In particular, proved tx1-entry arguments do not
 alone discharge the enclosing caller premise. No frozen production source,
 security metric, protocol parameter, other cone or release artifact changed.
+
+## Addendum 2026-10-22 00:55 BST — full owned copy count and parent equality
+
+The authoritative protocol freeze remains
+`b2727acd3abf79315d18b754a260f58f4b1c6326`. Research HEAD
+`369becb700710075a4a972604f473f977b81c3ed` was inspected read-only: the
+program lib.rs and adapter still have no diff against that freeze. All new
+Rust is an isolated reference/harness; no shipped source or release pin is
+changed. These candidates require the native/source composition below before
+adoption, and any adoption requires explicit equivalence and artifact re-pin.
+
+`owned-sdk-copy-v1` imports the complete existing OwnedSdk, not a replacement
+account carrier. Charon and Aeneas extract the actual byte step and while loop
+with no new callbacks. Five emitted SDK/error declarations are checked against
+the existing full declarations. Exact emitted source, tool hashes, dependency
+hashes, LLBC hash/has_errors=false, admissions and receipts are in
+`evidence/s126-current-caller-20261021/sdk-parent-cuts`. Charon: exit0,
+0.477s,174012KiB; Aeneas: exit0,0.359s,68992KiB. Both swap0, High6G/Max8G/Swap0.
+
+The new checked claims are:
+
+- `CopyLoop.copy_step_total` derives actual reads, setter and byte update from
+  valid SDK/source/destination indexes, and preserves the live guard invariant.
+- `CopyLoop.copy_loop_total` proves the emitted count loop by decreasing
+  source-length minus offset. The invariant retains the entire initial SDK
+  and replaces only the selected byte vector. `increment_total` uses the
+  actual slice bound to discharge checked usize addition.
+- `CopyLoop.copy_in_place_total` covers every valid SDK slot and all source
+  contents/lengths, including ordinary length rejection with unchanged state.
+  It requires no separate read, setter, increment or loop-success premise.
+  This is TOTAL on its stated valid-slot domain, not total arbitrary callbacks.
+- `CopyLoop.finish_eq` identifies the loop and original complete final
+  assignment on every SDK/slot/source/guard input, including model failure and
+  divergence branches. It adds no validity, length or success premise.
+- `CopyParent.body_factor` kernel-checks fission of BOTH exact assignment sites
+  in the complete original parent. `body_eq_loop` substitutes the proved loop
+  equality in that whole parent. `stage1_eq` includes final guard release and
+  equality of the complete status/SDK result.
+
+Before/after enclosing statement: the original `owned_stage1_body ops program
+sdk data guards` equals `bodyWithFinish originalFinish ...`; it now equals
+`bodyWithFinish loopFinish ...` for the SAME universally quantified ops,
+program, full SDK, data and guards, with no copy-success, slot or length
+hypothesis. Whole `stage1_eq` has the same arbitrary ops and full state and
+retains all ordinary errors/cleanup. This removes the copy-loop interpretation
+premise inside the owned parent. It does not instantiate actual child ops,
+prove their termination, or assert equality to complete native SDK execution.
+
+Smallest changed targets were compiled in dependency order, with the local
+atomic lock and `-j1 -M4400`; each exit0,swap0, exact source/tool/direct imports
+and axioms recorded in the named focused receipts:
+
+| Target | Accepted receipt | Wall seconds | Peak RSS bytes |
+|---|---|---:|---:|
+| S2SdkCopyLoopModelV1 | s2-sdk-copy-loop-model-v2 | 3.600339 | 2214002688 |
+| S2SdkCopyStepTotalV1 | s2-sdk-copy-step-total-v1 | 4.393219 | 2252701696 |
+| S2SdkCopyArrayLawsV1 | s2-sdk-copy-array-laws-v2 | 4.810138 | 2250145792 |
+| S2SdkCopyLoopTotalV1 | s2-sdk-copy-loop-total-v5 | 3.367144 | 2262679552 |
+| S2SdkCopyAssignmentV1 | s2-sdk-copy-assignment-v4 | 5.289451 | 2254684160 |
+| S2SdkCopyParentV1 | s2-sdk-copy-parent-v1 | 7.329930 | 3310419968 |
+
+All printed axioms are subsets of propext, Classical.choice and Quot.sound.
+Failed local drafts remain excluded. The packet check now selects55 current
+focused targets and11763 selected import objects by hash, without distributing
+objects or replaying unchanged Lean proofs. This is not a coherent release
+rebuild.
+
+Native whole-copy progress is distinct from the loop proof. The exact frozen
+finish block, with its actual RefMut and a borrowed Vec reply, satisfies a
+fixed1768-byte write-set contract: `sdk-finish-fixed-frame-join-v3`, exit0,
+15.194s,726496KiB,swap0,843 properties and2 covers. Two earlier owned-Vec
+versions failed the freeable check and are excluded; no safety check was
+disabled. The helper borrows the reply so owner/drop remains with its caller;
+transport of that split is still required.
+
+The actual std slice-copy primitive also passes its contract with a real SDK
+RefMut destination: `sdk-std-copy-frame-join-v1`, exit0,11.057s,443896KiB,
+swap0,525 properties and2 covers. The generic inherent-method bridge, with
+that VERIFIED callee, passes `sdk-std-copy-bridge-join-v1`: exit0,3.516s,
+208836KiB,swap0,138 properties and1 cover. It checks the reached type is u8,
+length1768, and the observed pre-call byte. Its writes are limited to the
+actual fixed destination array. The metadata-only audit pins703 static
+properties including memcpy array_replace assigns and the exact postcondition:
+exit0,0.227s,41908KiB,swap0,High1G/Max2G/Swap0. Native proofs use High6G/Max8G/
+Swap0. Normal Kani pipeline capture confirms the same post-codegen passes as
+the private runner; no missing contract-installation pass was found.
+
+The full paired caller with that verified copy summary still timed out:
+`sdk-paired-context-check-v4`, exit1,185.115s,6402236KiB,swap0. A split full
+native caller check also timed out: `sdk-native-context-check-v4`, exit1,
+183.868s,6408764KiB,swap0. Neither is accepted evidence. Loop metadata identifies
+the remaining memcmp and small account/field-construction loops. A changed
+loop configuration is being checked with unwinding assertions retained and
+the same caps; no larger resource cap or unchanged full replay is authorized
+by these failures. Codegen success is never reported as parent proof.
+
+Exact remaining S2 premises: concrete native SDK/runtime heap embedding;
+composition of metadata/borrow/scan/prefix/return/drop cuts into the actual
+caller; actual decoder, validation, encoding and verifier child interpretations;
+wrong-size and rejected-child error/log behavior; ordered oracle-log transport;
+and the resulting concrete `AcceptedRunJoin` instance consumed by
+`OraclePortFrozen2.dV_frozen2`. Accepted-only native contexts retain admitted
+prefix/tag equations and common successful typed child replies; these must be
+derived/composed, not hidden in a renamed assumption. The copy result above
+closes neither those cuts nor actual whole-SDK totality. S6 still shares the
+native caller gap; S1 still needs its original preparation/caller and power
+range/trace joins. S1/S2/S6 and the100-bit target remain OPEN. No protocol or
+security-contract decision is requested by this reference-only progress.
