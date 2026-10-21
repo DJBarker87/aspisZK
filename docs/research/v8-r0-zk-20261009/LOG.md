@@ -7418,3 +7418,18 @@ is now the single privacy status reference (statement, plain-English premise
 table with owners, audit). Remaining: source builder/runtime correspondence,
 the commitment law, real/ideal execution joins and the release boundaries.
 Builder part 10 and prover part 7 will be folded in when they land.
+
+## D106 — privacy accounting premises discharged at the protocol instance (2026-10-21, lead)
+
+Landed from `codex/cx-priv-acct-20261021` (appended to `r1p-final/PRIVACY-HEADLINE-20261021.md`).
+`PrivacyR1HeadlineAcct.privacy_headline_acct` specialises the headline to the
+protocol's values (L₁, L₂ = 4096 from `ProverCommitSourceDecoder`, the block
+budgets, and the concrete M31 tower basis; cF stays universal because it
+appears only in the untouched fibre premise) and removes: `hB` (the concrete
+tower packing field laws), `R_commit_counter₁/₂` (strict < 2^64),
+`R_commit_stream₁/₂` (16L ≤ 8E), `R_commit_cell_count`, `R_commit_blocks₁/₂`,
+`R_wire_coin_carrier` (identity equivalence at the protocol base) and the four
+Fintype/Nonempty sample-carrier instances. None was false at those values.
+Env J 9704, 9707, 9712, standard axioms, zero swap. This is the current
+privacy headline. Remaining: quotient fibres, exhaustion, builder premises,
+batch/log, and the two execution joins.
