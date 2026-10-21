@@ -36,8 +36,17 @@ bounded by initial live nodes plus proof words. `leaves_bound` covers early
 duplicate rejection. Six slots consume at most 2·66+914 = 1046 calls; this
 includes a conservative six-call slack compared with the recursive 1040.
 
-Collision-free recovery is in progress over actual levels; unconditional
-recovery-table permutation remains false on the inherited collision witness.
+`level_lift` and `levels_path` construct the exact indexed authentication
+path by induction over executed levels. `leaves_retained` includes every
+sorted source position, including duplicates; successful duplicate checks
+suffice to retain its digest. `slot_path` proves the root equation and
+containment of its complete leaf/parent trace in the actual frozen slot log.
+`recovery_at_index` applies the original collision-free first-commitment-cut
+recovery theorem to that witness. `authenticated` recovers each of the 22
+source openings at its exact index, through the accepted six-slot short
+circuit. This neither permutes logs nor adds independent path hashes.
+Unconditional recovery-table permutation remains false on the inherited
+collision witness. C6 composition is in progress.
 
 ## Stage 3: headline and join split
 

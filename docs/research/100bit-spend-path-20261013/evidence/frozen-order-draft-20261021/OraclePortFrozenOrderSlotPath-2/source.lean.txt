@@ -1,0 +1,84 @@
+import OraclePortFrozenOrderRecoveryLevels
+import OraclePortFrozenOrderLeaves
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortFrozenOrder
+open FS FS2 FS2.Duplex
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OracleDecisionMultiTree BinMerkle32Path
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft
+attribute [local instance] Classical.propDecidable
+
+theorem inPlace_success (H : Bytes → State) (root : State) (live : Live) (nodes : Bytes)
+    (accepted : (eval H (verifyInPlace root live nodes)).2 = true) :
+    (eval H (runLevels 18 live nodes)).2 = some ([(0,root)],[]) := by
+  unfold verifyInPlace at accepted
+  split at accepted
+  · simp only [eval_bind,eval] at accepted
+    split at accepted
+    · rename_i i d remaining out
+      have ok : i=0 ∧ d=root ∧ remaining=[] := of_decide_eq_true accepted
+      rcases ok with ⟨rfl,rfl,rfl⟩
+      exact out
+    · contradiction
+  · contradiction
+
+theorem inPlace_path (H : Bytes → State) (root : State) (live : Live) (nodes : Bytes)
+    (accepted : (eval H (verifyInPlace root live nodes)).2 = true)
+    (i : Nat) (v : State) (member : (i,v) ∈ live) :
+    ∃ path : Path (BinMultiproof.slots 18 i), foldPath H path v = root ∧
+      ∀ a ∈ inputTrace H path v, Read (eval H (verifyInPlace root live nodes)).1 a := by
+  have success := inPlace_success H root live nodes accepted
+  obtain ⟨path,hm,hr⟩ := levels_path H 18 live nodes [(0,root)] [] success i v member
+  have eq : foldPath H path v = root := by simpa using congrArg Prod.snd (List.mem_singleton.mp hm)
+  refine ⟨path,eq,?_⟩
+  unfold verifyInPlace at accepted ⊢
+  split
+  · simpa only [eval_bind,eval,List.append_nil] using hr
+  · rename_i bad
+    simp only [if_neg bad,eval,Bool.false_eq_true] at accepted
+
+theorem slot_path (H : Bytes → State) (p : Parsed) (q : Fin 22 → Fin 262144)
+    (batch kind pos : Nat) (member : pos ∈ batchPositions batch)
+    (accepted : (eval H (verifySlot_frozen p q batch kind)).2 = true) :
+    ∃ path : Path (BinMultiproof.slots 18 (index q kind pos)),
+      foldPath H path (H (leaf p kind pos)) = committedRoot p kind ∧
+      ∀ a ∈ BinMerkle32Leaf.fullTrace H path (leaf p kind pos),
+        Read (eval H (verifySlot_frozen p q batch kind)).1 a := by
+  have sorted : pos ∈ sortedPositions q batch kind := by
+    simpa only [sortedPositions,List.mem_mergeSort] using member
+  simp only [verifySlot_frozen,eval_bind] at accepted ⊢
+  cases out : (eval H (hashLeaves p q kind (sortedPositions q batch kind) [])).2 with
+  | none => simp [out,eval] at accepted
+  | some live =>
+    simp only [out] at accepted ⊢
+    have retained := (leaves_retained H p q kind (sortedPositions q batch kind) [] live out).2 pos sorted
+    unfold slotTail at accepted ⊢
+    dsimp only at accepted ⊢
+    split
+    · rename_i wf
+      simp only [if_pos wf] at accepted
+      split
+      · rename_i pad
+        simp only [if_pos pad] at accepted
+        obtain ⟨path,root,reads⟩ := inPlace_path H (committedRoot p kind) live _ accepted
+          (index q kind pos) (H (leaf p kind pos)) retained.1
+        refine ⟨path,root,?_⟩
+        intro a ha
+        simp only [BinMerkle32Leaf.fullTrace,List.mem_cons] at ha
+        simp only [Read,List.map_append,List.mem_append]
+        rcases ha with rfl | ha
+        · exact Or.inl retained.2
+        · exact Or.inr (reads a ha)
+      · rename_i pad
+        simp [pad,eval] at accepted
+    · rename_i wf
+      simp [wf,eval] at accepted
+
+#print axioms inPlace_success
+#print axioms inPlace_path
+#print axioms slot_path
+end AspisR1.OraclePortFrozenOrder
+end

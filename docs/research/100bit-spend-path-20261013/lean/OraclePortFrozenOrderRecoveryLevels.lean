@@ -1,0 +1,55 @@
+import OraclePortFrozenOrderRecoveryStep
+
+/-! Path construction by induction over executed levels. Reads belong to the
+actual breadth-first log; no recursive execution trace is substituted. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortFrozenOrder
+open FS FS2 FS2.Duplex
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OracleDecisionMultiTree BinMerkle32Path
+attribute [local instance] Classical.propDecidable
+
+theorem levels_path (H : Bytes → State) (h : Nat) (live : Live) (nodes : Bytes)
+    (next : Live) (remaining : Bytes)
+    (success : (eval H (runLevels h live nodes)).2 = some (next,remaining))
+    (i : Nat) (v : State) (member : (i,v) ∈ live) :
+    ∃ path : Path (BinMultiproof.slots h i),
+      (i / 2^h,foldPath H path v) ∈ next ∧
+      ∀ a ∈ inputTrace H path v, Read (eval H (runLevels h live nodes)).1 a := by
+  induction h generalizing live nodes next remaining i v with
+  | zero =>
+    simp only [BinMultiproof.slots]
+    simp only [runLevels,eval,Option.some.injEq,Prod.mk.injEq] at success
+    rcases success with ⟨rfl,rfl⟩
+    exact ⟨.nil,by simpa only [foldPath,pow_zero,Nat.div_one] using member,by simp [inputTrace]⟩
+  | succ h ih =>
+    simp only [BinMultiproof.slots]
+    simp only [runLevels,eval_bind] at success ⊢
+    cases out : (eval H (runLevel live.length live nodes)).2 with
+    | none => simp [out,eval] at success
+    | some pair =>
+      rcases pair with ⟨mid,bytes⟩
+      simp only [out] at success ⊢
+      obtain ⟨cs,child,parent,read⟩ := level_lift H live.length live nodes mid bytes
+        (Nat.le_refl _) out i v member
+      obtain ⟨path,root,reads⟩ := ih mid bytes next remaining success (i/2)
+        (H (nodeInput cs)) parent
+      have filled : fillChild (BinMultiproof.slot i) cs v = cs := by
+        rw [← child]; exact Function.update_eq_self _ _
+      refine ⟨.cons cs path, ?_, ?_⟩
+      · simp only [foldPath,filled]
+        have div : i / 2^(h+1) = (i/2) / 2^h := by
+          rw [Nat.div_div_eq_div_mul,pow_succ]; congr 1; omega
+        rw [div]; exact root
+      · intro a ha
+        simp only [inputTrace,filled,List.mem_cons] at ha
+        simp only [Read,List.map_append,List.mem_append]
+        rcases ha with rfl | ha
+        · exact Or.inl read
+        · exact Or.inr (reads a ha)
+
+#print axioms levels_path
+end AspisR1.OraclePortFrozenOrder
+end

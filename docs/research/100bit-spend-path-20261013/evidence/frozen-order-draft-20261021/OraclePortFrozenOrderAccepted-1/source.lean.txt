@@ -1,0 +1,28 @@
+import OraclePortFrozenOrderDecision
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortFrozenOrder
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft
+open RecordedBinaryExperimentBin (SourceInputs)
+open RawCutTranscriptRun (ErasedPrefix ErasedMessage)
+
+theorem accepted_details (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage)
+    (H : Bytes → State) (ha : (eval H (dV_frozen stored tr m)).2 = true) :
+    OraclePortAdmission.Guard tr ∧ ∃ p q i,
+      OraclePortStoredParserC4.parseReached stored tr = some p ∧ queries tr = some q ∧
+      (eval H (OraclePortShortCircuit.short (slotPrograms p q slots))).2 = true ∧
+      OraclePortStoredDecisionDraftC4.input p q tr = some i ∧
+      D0TypedChecks.verify (OraclePortStoredDecisionDraftC4.typedRows p q tr) i = true := by
+  obtain ⟨guard,p,q,hp,hq,merkle,arithmetic⟩ := accepted stored tr m H ha
+  refine ⟨guard,p,q,?_⟩
+  cases hi : OraclePortStoredDecisionDraftC4.input p q tr with
+  | none => simp [OraclePortStoredDecisionDraftC4.arithmetic,hi] at arithmetic
+  | some i => exact ⟨i,hp,hq,merkle,hi,by simpa only [OraclePortStoredDecisionDraftC4.arithmetic,hi] using arithmetic⟩
+
+#print axioms accepted_details
+end AspisR1.OraclePortFrozenOrder
+end
