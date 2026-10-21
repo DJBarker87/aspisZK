@@ -72,7 +72,38 @@ zero swaps; detailed source/import fingerprints and timings are recorded.
 
 ## Stage 3: conditional outer endpoint
 
-Pending focused verification. No premise removal is claimed.
+`OraclePortShortCircuitTransport` proves identical accepted original and
+annotated evaluations. `runtime_transport` uses that equality and the zero
+failure mass of rejected runs to carry C7's failure bound to a runtime joined
+to `outerDecision`, without requiring false all-input program equality to dV.
+
+`OraclePortShortCircuitHeadline` defines namespace `OraclePortHeadlineDVsc`
+and its `dV_sc := outerDecision`, explicitly **outer-only**, not an exact
+frozen decision. Its `final_soundness` and `per_query` retain the query cap,
+stored-runtime premise, numeric envelope, domain 32 ≤ Q ≤ Qmax and closed
+M10 ledger. The accepted extractor experiment is `projected_sc`; the proof
+transports it to C7 only after acceptance is established.
+
+`signature-retarget.diff` records the sole textual premise-type replacement,
+quoted verbatim:
+
+```lean
+(h_Rust_equals_dV : ExecutionJoin D rust)
+(h_Rust_equals_dV : OuterExecutionJoin D rust)
+```
+
+These are different execution joins. **No premise deletion or strict
+weakening is claimed.** The `Claims` name now resolves in the DVsc namespace;
+`signature-audit.json` explicitly records the projected→projected_sc change
+rather than hiding it behind equal unqualified names.
+
+`OraclePortShortCircuitJoin.OuterOrderingJoin.model_order` targets
+`verifier D outerDecision i`. Its conditional cone substitution theorem
+feeds the new endpoint. `false_head_stops` and `rejected_head_log` prove that
+the previous eager false-head/reading-suffix counterexample disappears at
+the outer loop. They do not establish the inner child source joins.
+Transport attempt 2, headline attempt 1 and join attempt 1 compile with
+standard axioms only and zero swaps.
 
 ## Stage 4: handoff and audit
 

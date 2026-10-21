@@ -1,0 +1,34 @@
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitTransport.lean:39:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval H (OraclePortStoredExperimentC4.verifier D outerDecision (eval H (original D dV P)).2.1)
+in the target expression
+  (have v := eval H (original D dV P);
+    (v.1 ++ (eval H (OraclePortStoredExperimentC4.verifier D outerDecision v.2.1)).1, enrich (build D (view v)) v.2.1,
+      v.2.2)) =
+    have v := eval H (original D dV P);
+    (v.1 ++ (eval H (OraclePortStoredExperimentC4.verifier D dV v.2.1)).1, enrich (build D (view v)) v.2.1, v.2.2)
+
+D : LiteralByteProtocol.Decoder
+P : Prover
+H : Bytes → State
+ha :
+  (have v := eval H (original D outerDecision P);
+        (v.1 ++ (eval H (OraclePortStoredExperimentC4.verifier D outerDecision v.2.1)).1,
+          enrich (build D (view v)) v.2.1, v.2.2)).2.2 =
+    true
+same : eval H (original D outerDecision P) = eval H (original D dV P)
+hv : (eval H (OraclePortStoredExperimentC4.verifier D outerDecision (eval H (original D dV P)).2.1)).2 = true
+⊢ (have v := eval H (original D dV P);
+    (v.1 ++ (eval H (OraclePortStoredExperimentC4.verifier D outerDecision v.2.1)).1, enrich (build D (view v)) v.2.1,
+      v.2.2)) =
+    have v := eval H (original D dV P);
+    (v.1 ++ (eval H (OraclePortStoredExperimentC4.verifier D dV v.2.1)).1, enrich (build D (view v)) v.2.1, v.2.2)
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitTransport.lean:59:6: error(lean.unknownIdentifier): Unknown identifier `AspisV8R19.CausalFirstHitUnionBound.lazyMean`
+'AspisR1.OraclePortShortCircuit.original_verdict' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortShortCircuit.original_accepted_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortShortCircuit.annotated_verdict' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortShortCircuit.annotated_accepted_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortShortCircuit.annotatedWith_outer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortShortCircuit.runtime_transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
