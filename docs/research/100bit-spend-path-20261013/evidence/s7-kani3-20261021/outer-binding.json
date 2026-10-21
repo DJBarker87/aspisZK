@@ -1,0 +1,14 @@
+{
+  "emitted": "def basis_levels_owned\n  (basis : Array aspis_core.field.M31 256#usize) (node : aspis_core.field.M31)\n  (width : Std.Usize) (n : Std.Usize) :\n  Result (Array aspis_core.field.M31 256#usize)\n  := do\n  if n >= width\n  then ok basis\n  else\n    let basis1 \u2190 basis_block_owned basis node n 0#usize\n    let m \u2190 aspis_core.field.M31.mul node node\n    let m1 \u2190 aspis_core.field.M31.double m\n    let m2 \u2190 aspis_core.field.M31.ONE\n    let node1 \u2190 aspis_core.field.M31.sub m1 m2\n    let i \u2190 n * 2#usize\n    basis_levels_owned basis1 node1 width i\npartial_fixpoint",
+  "emitted_sha256": "4bb9c743e577f75dc4da51d74ae240575db8edaeb39454514ef2acf288de2e29",
+  "port": "S7Kani3BasisOuter.basis_levels_owned",
+  "edits": [
+    "M31 carrier renamed U32",
+    "basis_block_owned uses existing parameterized port with concrete M31.mul",
+    "mul/double/ONE/sub block factored as t2",
+    "double is exact source add(self,self); ONE is literal 1"
+  ],
+  "scope": "Loop recurrence/totality, not full basis-value semantics or whole frozen source equivalence",
+  "kani_cut": "outer_phase_step consumes bounded products after multiplication; no stub",
+  "frozen_field_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+}
