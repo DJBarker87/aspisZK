@@ -1,0 +1,77 @@
+/Users/dominic/ZK/.worktrees/cx-cones-p6/docs/research/100bit-spend-path-20261013/lean/S8P6ReturnedFinish.lean:53:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 0
+  d ≥ 0
+  0 ≤ c ≤ 63
+  c - d ≤ -1
+  c - e ≥ 0
+  b ≥ 0
+  b - c ≥ 1
+where
+ b := ↑(List.map rawValue (List.take (alloc.vec.Vec.length destination) ↑raw)).length
+ c := ↑j
+ d := ↑(List.ofFn a.weights).length
+ e := ↑(↑raw).length
+ f := ↑(↑destination).length
+/Users/dominic/ZK/.worktrees/cx-cones-p6/docs/research/100bit-spend-path-20261013/lean/S8P6ReturnedFinish.lean:75:57: error: unsolved goals
+case this
+raw : Raw
+destination : Weights
+terms : Usize
+p : Parsed
+q : Fin 22 → Fin 262144
+tr : ErasedPrefix
+i : SourceInputs
+a : Acc
+caller : Caller raw destination a
+out : FinishSlice
+run :
+  S8Kani2MutableExtraction.batched_weights.BatchedWeights.finish { raw := raw, terms := terms }
+      (S8Kani2FinishReferenceJoin.toSlice destination) =
+    ok out
+fields : List.map mutableField ↑out = List.ofFn a.weights
+l : Fin 64
+⊢ ?m.36
+
+raw : Raw
+destination : Weights
+terms : Usize
+p : Parsed
+q : Fin 22 → Fin 262144
+tr : ErasedPrefix
+i : SourceInputs
+a : Acc
+caller : Caller raw destination a
+out : FinishSlice
+run :
+  S8Kani2MutableExtraction.batched_weights.BatchedWeights.finish { raw := raw, terms := terms }
+      (S8Kani2FinishReferenceJoin.toSlice destination) =
+    ok out
+fields : List.map mutableField ↑out = List.ofFn a.weights
+l : Fin 64
+this : ?m.36
+⊢ fieldAt out l = a.weights l
+/Users/dominic/ZK/.worktrees/cx-cones-p6/docs/research/100bit-spend-path-20261013/lean/S8P6ReturnedFinish.lean:73:88: error: unsolved goals
+raw : Raw
+destination : Weights
+terms : Usize
+p : Parsed
+q : Fin 22 → Fin 262144
+tr : ErasedPrefix
+i : SourceInputs
+a : Acc
+caller : Caller raw destination a
+out : FinishSlice
+run :
+  S8Kani2MutableExtraction.batched_weights.BatchedWeights.finish { raw := raw, terms := terms }
+      (S8Kani2FinishReferenceJoin.toSlice destination) =
+    ok out
+fields : List.map mutableField ↑out = List.ofFn a.weights
+cells : ∀ (l : Fin 64), fieldAt out l = a.weights l
+⊢ finish raw destination terms p q tr i a = ok (OraclePortFrozen2.finish p q tr i a)
+/Users/dominic/ZK/.worktrees/cx-cones-p6/docs/research/100bit-spend-path-20261013/lean/S8P6ReturnedFinish.lean:76:9: error: unexpected token 'at'; expected command
+'AspisR1.S8P6ReturnedFinish.mutable_certificate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S8P6ReturnedFinish.finish_certificate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S8P6ReturnedFinish.stage_observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
