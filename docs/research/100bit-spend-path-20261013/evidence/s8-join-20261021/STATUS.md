@@ -73,3 +73,12 @@ counterexample: the source chunks_exact scan succeeds but the whole-list
 canonical predicate rejects. The total scan theorem models that behavior;
 accepted y1 cannot hit it. All six audits pass with standard axioms
 (frozen-scan-03, remainder-01). No shared cache or lock was removed.
+
+## Stage 5 — exact field interpretation of finish
+
+`S8JoinFinishField.modelValue_field` proves full-U64 reduction preserves the
+exact QM31 tower value. `finish_field` and `mutable_field` identify the full
+reference and mutable output field lists with the raw prefix. Their only
+precondition is destination/raw length, independent of terms or phase.
+All three final-source audits pass (field-04), standard axioms, zero swap.
+This is field interpretation, not a proof of source query/TX provenance.
