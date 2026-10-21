@@ -1,6 +1,6 @@
 import R1Z.PrivacyR1HeadlineAcct
 
-/-! Canonical logical opening model. Query order is increasing fibre order;
+/-! Canonical logical opening model. Query order is the fixed finite-set list order;
 its two normalized batches split at eleven queries. No source identity is
 asserted by constructing this model. -/
 set_option autoImplicit false
@@ -88,7 +88,7 @@ theorem leaf_view (w : (honest h).Instance) (τ : Tape K F) (ch : Challenges K)
   · by_cases h1 : T.val = 1
     · have hq : u ∈ ch.queries := by
         simpa only [fib, treeFib, h1, if_neg (by decide : ¬ (1 = 2))] using hu
-      simp only [h0, h1, if_false, if_true]
+      simp only [h1, if_true]
       exact PhaseLeafEncodingBin.c2_view (honest h).transport rfl x.1 B
         (applyEligible ((honest h).build w) τ.2) τ.1 ch u hq
     · have h2 : T.val = 2 := by omega
@@ -123,6 +123,85 @@ def RustSerializationJoin
     (rust : (RIdx → OracleAnswer) → (Fin 3 → OracleAnswer) →
       View K CommitHandle Aux R1Bat → Challenges K → List (List UInt8 × OracleAnswer)) : Prop :=
   rust = log
+
+
+theorem opened_union (a b : Fin 3 → Finset Fib) (c : Fin 3 ⊕ RIdx) :
+    openedQ (fun T => a T ∪ b T) c ↔ openedQ a c ∨ openedQ b c := by
+  rcases c with T | (b' | i | ⟨T,u⟩ | ⟨T,u⟩ | ⟨T,n⟩)
+  · simp only [openedQ, true_or]
+  · simp only [openedQ, false_or]
+  · simp only [openedQ, false_or]
+  · simp only [openedQ, false_or]
+  · exact Finset.mem_union
+  · simp only [openedQ, Finset.mem_union]
+    constructor
+    · rintro ⟨u, hu | hu, he⟩
+      · exact Or.inl ⟨u, hu, he⟩
+      · exact Or.inr ⟨u, hu, he⟩
+    · rintro (⟨u, hu, he⟩ | ⟨u, hu, he⟩)
+      · exact ⟨u, Or.inl hu, he⟩
+      · exact ⟨u, Or.inr hu, he⟩
+
+theorem opens_coverage (ch : Challenges K) (c : Fin 3 ⊕ RIdx) :
+    c ∈ opens ch ↔ openedQ (fib ch) c := by
+  rw [opens, List.mem_append, reads_coverage, reads_coverage]
+  have he : fib ch = fun T => batchFib ch 0 T ∪ batchFib ch 1 T :=
+    funext (fibre_union ch)
+  rw [he, opened_union]
+
+theorem entry_grammar (w : (honest h).Instance) (τ : Tape K F) (ch : Challenges K)
+    (pub : List UInt8) (tag : UInt8) (sec : SecP) (d : OracleAnswer)
+    (roots : Fin 3 → OracleAnswer) (rest : RIdx → OracleAnswer)
+    (c : Fin 3 ⊕ RIdx) (hc : openedQ (fib ch) c) :
+    entry rest roots (view (honest h) B outputs x w ch τ) c =
+      (gram pub tag (PhaseLeafConstructionBin.leafVal PhaseLeafEncodingBin.encoding B
+        (honest h) w x τ ch) sec d rest
+          (cposOf (E₁ := PrivacyR1AcctModel.E₁) (E₂ := PrivacyR1AcctModel.E₂) c),
+        ansC roots rest c) := by
+  rcases c with T | (b | i | ⟨T,u⟩ | ⟨T,u⟩ | ⟨T,n⟩)
+  · rfl
+  · exact False.elim hc
+  · exact False.elim hc
+  · exact False.elim hc
+  · simp only [entry, cposOf, gram]
+    rw [leaf_view h outputs x w τ ch T u hc]
+  · rfl
+
+variable (template : R1Wire K CommitHandle Aux)
+local notation "base" => PrivacyR1AcctModel.base template log
+local notation "W" => PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) (honest h) B outputs x)
+variable (decode : (Fin PrivacyR1AcctModel.E₁ → OracleAnswer) →
+  (Fin PrivacyR1AcctModel.E₂ → OracleAnswer) → Option (Tape K F))
+local notation "seed" => PrivacyR1AcctModel.seed W decode fib opens
+local notation "Pr" => PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) (honest h) B outputs x seed)
+
+def batches : RWireBatches W Pr where
+  fib := batchFib
+  reads := reads
+  concatenation := fun _ => rfl
+  nodup := reads_nodup
+  coverage := reads_coverage
+  fibre_union := fibre_union
+
+theorem ordered_log (w : (honest h).Instance) (sec : SecP) (d : OracleAnswer)
+    (τ : Tape K F) (roots : Fin 3 → OracleAnswer) (rest : RIdx → OracleAnswer)
+    (ch : Challenges K) :
+    R1Wire.comLog W ((PrivacyR1AcctModel.wire_coins template log (honest h) outputs x).symm rest)
+      roots (view (honest h) B outputs x w ch τ) ch =
+    (R1ProverP.openList Pr ch).map (fun c =>
+      (gram (R1Wire.pubBytes W x) (R1Wire.vtag W) (R1ProverP.leafVal Pr (honest h) w x τ ch) sec d rest
+        (cposOf (E₁ := (R1ProverP.E₁ Pr)) (E₂ := (R1ProverP.E₂ Pr)) c), ansC roots rest c)) := by
+  change (opens ch).map _ = (opens ch).map _
+  apply List.map_congr_left
+  intro c hc
+  exact entry_grammar h outputs x w τ ch _ _ sec d roots rest c
+    ((opens_coverage ch c).mp hc)
+
+#print axioms opened_union
+#print axioms opens_coverage
+#print axioms entry_grammar
+#print axioms batches
+#print axioms ordered_log
 
 #print axioms query_union
 #print axioms fibre_union
