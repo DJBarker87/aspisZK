@@ -105,3 +105,23 @@ zero swaps, revision `3283eb3a7`. Both new theorem axiom reports are
 `[propext, Classical.choice, Quot.sound]`. Failed attempts 1–3 retain the
 reserved `prefix` binder, list/explicit Slice namespace issues and empty-list
 length simplification. No limit was raised and no shipped source changed.
+
+## Stage 5: total ordered reference decision composition
+
+`OraclePortCkptAbi5Decision.after_observation` substitutes the strict saved-ten
+reader at the actual checkpoint position, with its returned state feeding
+stage2. `decision_observation` proves total ordered address/answer **and**
+Bool equality with `dV_frozen2` for every oracle, stored bytes, transcript
+prefix and terminal message, including every rejection. Query uniqueness is
+derived inside the reached branch; it is not a premise of this theorem.
+This is a complete **reference/model decision** observation equality, not
+an equality of frozen Rust programs or the annotated source experiment.
+
+Attempt 3 exits 0: 11.033524542 seconds, peak RSS 3,605,757,952 bytes,
+zero swaps, revision `1e0b88593`. Both axiom reports are
+`[propext, Classical.choice, Quot.sound]`. Attempt 1 retained a reflexive
+composition goal; attempt 2 then hit the default recursion limit while
+reducing the large checkpoint/stage2 definitions. The replacement keeps
+those stages locally irreducible and applies their symbolic observation
+law. No maxRecDepth, maxHeartbeats or memory setting was raised. Failed
+attempts and recovery output remain excluded from proof claims.

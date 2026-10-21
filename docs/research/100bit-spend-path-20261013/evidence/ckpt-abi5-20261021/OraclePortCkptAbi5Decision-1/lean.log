@@ -1,0 +1,38 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi5/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi5Decision.lean:34:13: error: unsolved goals
+case some.some
+H : Bytes → State
+stored : Bytes
+p : Parsed
+q : Fin 22 → Fin 262144
+tr : ErasedPrefix
+query : queries tr = some q
+i : RecordedBinaryExperimentBin.SourceInputs
+hi : OraclePortStoredDecisionDraftC4.input p q tr = some i
+v : LiteralOpeningView.View
+hv : LiteralOpeningView.read (typedRows p q tr) = some v
+⊢ ((eval H (checkpoint stored p q tr i v)).1 ++
+        (eval H
+            (match (eval H (checkpoint stored p q tr i v)).2 with
+            | none => Program.done false
+            | some a => stage2 p q tr i a)).1,
+      (eval H
+          (match (eval H (checkpoint stored p q tr i v)).2 with
+          | none => Program.done false
+          | some a => stage2 p q tr i a)).2) =
+    ((eval H (checkpoint stored p q tr i v)).1 ++
+        (eval H
+            (match (eval H (checkpoint stored p q tr i v)).2 with
+            | none => Program.done false
+            | some a => stage2 p q tr i a)).1,
+      (eval H
+          (match (eval H (checkpoint stored p q tr i v)).2 with
+          | none => Program.done false
+          | some a => stage2 p q tr i a)).2)
+'AspisR1.OraclePortCkptAbi5Decision.after_observation' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortCkptAbi5Decision.decision_observation' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
