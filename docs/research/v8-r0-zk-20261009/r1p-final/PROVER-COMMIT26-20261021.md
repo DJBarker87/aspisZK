@@ -107,3 +107,24 @@ standard-only. J7618 and J7620 are focused predecessors (2.01/2.45 s,
 3974852/3981816 KiB, zero swap). J7616/7617/7619 are excluded elaboration
 failures. Source snapshots, dependencies, errors and complete audit lines
 are retained in the per-attempt evidence. No new depth/heartbeat limits.
+
+## Stage 3 — semantic/circle validator transport
+
+`ProverCommitSemanticTransport26` identifies the independent nominal owners
+of WideExact decoding and record validation. `limbs`/`bytes` retain every
+canonicality rejection and machine failure; `zero_test` preserves the exact
+QM31-subfield check. `fields_bounded` proves the recursive field validator
+transport by a symbolic payload-length induction, and `fields` removes the
+bound by choosing a sufficient symbolic fuel. `checked` transports the full
+header/tag/length/canonicality checker for every row and byte slice, including
+all errors and divergence. `shape` preserves every row shape and its constants.
+This closes the checker-conversion obligation left open in part 25; it does
+not itself identify the whole shipped prover/simulator continuation.
+
+J7630 passes all eleven audits: exit 0, wall 8.85 s, peak RSS 3991592 KiB,
+swap 0; standard axioms only. Focused predecessors J7623/J7624/J7626 passed
+at 1.92/2.03/2.28 s and 3967516/3968240/3972160 KiB, zero swap.
+J7622/J7625/J7627–7629 are excluded elaboration/normalization failures.
+No recursion/heartbeat option changed and no concrete large arithmetic was
+normalized. Only this job's additive modules were installed; imported shared
+predecessors and all concurrent-owned files remain untouched.
