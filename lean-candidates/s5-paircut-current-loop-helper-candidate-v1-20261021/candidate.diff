@@ -1,0 +1,69 @@
+--- frozen weights.rs
++++ candidate weights.rs
+@@ -176,6 +176,29 @@
+     }
+     /// Product rows keep a K tensor after their low digits have been folded.
+     /// Only the contracted scalar is in E. Sparse rows are handled separately.
++    #[inline(always)]
++    fn push_byte_products_row(f:&[u8],scratch:&[K],n:usize)->Result<E,Error> {
++        let mut pair=crate::fast_pairing::EbyKDot::new();
++        for j in 0..n {pair.push(field(f,j),scratch[j]).map_err(|_|Error::Parse)?;}
++        Ok(pair.finish())
++    }
++    #[inline(always)]
++    fn push_byte_products_partial(f:&[u8],common:&[K;16],s:usize)->Result<E,Error> {
++        let mut dot=crate::fast_pairing::EbyKDot::new();
++        for j in 0..16 {
++            dot.push(field(f,16*s+j),common[j]).map_err(|_|Error::Parse)?;
++        }
++        Ok(dot.finish())
++    }
++    #[inline(always)]
++    fn push_byte_products_high(partials:&[E;4],coefficients:&[K;4])->Result<E,Error> {
++        let mut high=crate::fast_pairing::EbyKDot::new();
++        for s in 0..4 {
++            high.push(partials[s],coefficients[s]).map_err(|_|Error::Parse)?;
++        }
++        Ok(high.finish())
++    }
++
+     #[inline(never)]
+     pub fn pair(&self,alpha:&[E],f:&[u8],kappa:E)->Result<E,Error> {
+         let n=f.len()/32; let folds=alpha.len();
+@@ -199,9 +222,8 @@
+                 self.tensor(k,folds,&mut scratch);
+                 let mut scale=Self::scalar_factor(&self.factors[k][0],&ap0);
+                 if folds==2 {scale=scale.mul(Self::scalar_factor(&self.factors[k][1],&ap1));}
+-                let mut pair=crate::fast_pairing::EbyKDot::new();
+-                for j in 0..n {pair.push(field(f,j),scratch[j]).map_err(|_|Error::Parse)?;}
+-                parts[kind]=scale.mul(pair.finish());
++                let pair=Self::push_byte_products_row(f,&scratch,n)?;
++                parts[kind]=scale.mul(pair);
+             }
+         }
+         if shared_two_point {
+@@ -211,21 +233,12 @@
+             let common:[K;16]=core::array::from_fn(|j|
+                 self.factors[0][2][j&3].mul(self.factors[0][3][j>>2]));
+             let mut partials=[E::ZERO;4];
+-            for s in 0..4 {
+-                let mut dot=crate::fast_pairing::EbyKDot::new();
+-                for j in 0..16 {
+-                    dot.push(field(f,16*s+j),common[j]).map_err(|_|Error::Parse)?;
+-                }
+-                partials[s]=dot.finish();
+-            }
++            for s in 0..4 { partials[s]=Self::push_byte_products_partial(f,&common,s)?; }
+             for (kind,k) in [(1usize,0usize),(3usize,2usize)] {
+-                let mut high=crate::fast_pairing::EbyKDot::new();
+-                for s in 0..4 {
+-                    high.push(partials[s],self.factors[k][4][s]).map_err(|_|Error::Parse)?;
+-                }
++                let high=Self::push_byte_products_high(&partials,&self.factors[k][4])?;
+                 let scale=Self::scalar_factor(&self.factors[k][0],&ap0)
+                     .mul(Self::scalar_factor(&self.factors[k][1],&ap1));
+-                parts[kind]=scale.mul(high.finish());
++                parts[kind]=scale.mul(high);
+             }
+         }
+         if folds==1 {

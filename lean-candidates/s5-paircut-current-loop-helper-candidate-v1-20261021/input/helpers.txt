@@ -1,0 +1,23 @@
+    #[inline(always)]
+    fn push_byte_products_row(f:&[u8],scratch:&[K],n:usize)->Result<E,Error> {
+        let mut pair=crate::fast_pairing::EbyKDot::new();
+        for j in 0..n {pair.push(field(f,j),scratch[j]).map_err(|_|Error::Parse)?;}
+        Ok(pair.finish())
+    }
+    #[inline(always)]
+    fn push_byte_products_partial(f:&[u8],common:&[K;16],s:usize)->Result<E,Error> {
+        let mut dot=crate::fast_pairing::EbyKDot::new();
+        for j in 0..16 {
+            dot.push(field(f,16*s+j),common[j]).map_err(|_|Error::Parse)?;
+        }
+        Ok(dot.finish())
+    }
+    #[inline(always)]
+    fn push_byte_products_high(partials:&[E;4],coefficients:&[K;4])->Result<E,Error> {
+        let mut high=crate::fast_pairing::EbyKDot::new();
+        for s in 0..4 {
+            high.push(partials[s],coefficients[s]).map_err(|_|Error::Parse)?;
+        }
+        Ok(high.finish())
+    }
+
