@@ -1,0 +1,123 @@
+structure AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary {X : Type}
+  (D : MultiproofConeRef.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent)
+  (leafSource : AspisR1.MultiproofConeP6Batch.Leaf) : Prop
+number of parameters: 8
+fields:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.oracle : ∀
+      (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.binary_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.occupied_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.sibling_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource
+constructor:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.mk {X : Type} {D : MultiproofConeRef.aspis_core.digest.Digest32 X}
+    {hash : X} {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent}
+    {leafSource : AspisR1.MultiproofConeP6Batch.Leaf}
+    (oracle :
+      ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input))
+    (binary_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary)
+    (occupied_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied)
+    (sibling_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling)
+    (leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource) :
+    AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary D hash H binary occupied sibling leafSource
+AspisR1.MultiproofConeP6Verify.verify_in_place_owned {X : Type} (D : MultiproofConeRef.aspis_core.digest.Digest32 X)
+  (hash : X) (H : AspisR1.MultiproofConePhysicalProgram.Address → AspisR1.MultiproofConePhysicalProgram.Digest)
+  (law :
+    ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)), D.digest hash input = Aeneas.Std.Result.ok (H input))
+  (source : AspisR1.MultiproofConeP6Composition.Node) (gate : AspisR1.MultiproofConeP6Composition.NodeGate H source)
+  (root : AspisR1.MultiproofConePhysicalProgram.Digest) (s : MultiproofConeRef.reference.Scratch)
+  (physical : Aeneas.Std.Slice Aeneas.Std.U8) (size : (↑physical).length ≤ 5504) :
+  AspisR1.MultiproofConeP6Verify.wrapper
+      (fun state =>
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeP6Composition.levels source 18 state physical)).2)
+      root s physical =
+    MultiproofConeRef.reference.verify_owned D hash root s physical
+AspisR1.MultiproofConeP6Batch.batch_tree_owned {X : Type} (D : MultiproofConeRef.aspis_core.digest.Digest32 X)
+  (hash : X) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (law :
+    ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input))
+  (nodeSource : AspisR1.MultiproofConeP6Composition.Node)
+  (nodeGate :
+    AspisR1.MultiproofConeP6Composition.NodeGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) nodeSource)
+  (leafSource : AspisR1.MultiproofConeP6Batch.Leaf) (leafGate : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8) (size : (↑nodes).length ≤ 5504) (s : MultiproofConeRef.reference.Scratch) :
+  AspisV8R19.MemoizedProgramLaw.eval H
+      (AspisR1.MultiproofConeP6Batch.batch_tree nodeSource leafSource p q batch kind nodes s) =
+    AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeSlotState.slotState p q batch kind nodes s)
+AspisR1.MultiproofConeP6Frozen2Stage.function_certificates {X : Type}
+  (D : MultiproofConeRef.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leafSource : AspisR1.MultiproofConeP6Batch.Leaf)
+  (p6 : AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary D hash H binary occupied sibling leafSource) :
+  (∀ (root : AspisR1.MultiproofConePhysicalProgram.Digest) (s : MultiproofConeRef.reference.Scratch)
+      (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+      (↑physical).length ≤ 5504 →
+        AspisR1.MultiproofConeP6Verify.wrapper
+            (fun state =>
+              (AspisV8R19.MemoizedProgramLaw.eval (AspisR1.MultiproofConePhysicalTransport.rawOracle H)
+                  (AspisR1.MultiproofConeP6Composition.levels
+                    (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) 18 state physical)).2)
+            root s physical =
+          MultiproofConeRef.reference.verify_owned D hash root s physical) ∧
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ)
+      (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+      (↑nodes).length ≤ 5504 →
+        ∀ (s : MultiproofConeRef.reference.Scratch),
+          AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.MultiproofConeP6Batch.batch_tree (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling)
+                leafSource p q batch kind nodes s) =
+            AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeSlotState.slotState p q batch kind nodes s)
+AspisR1.MultiproofConeP6Frozen2Stage.both_batches {X : Type} (D : MultiproofConeRef.aspis_core.digest.Digest32 X)
+  (hash : X) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leafSource : AspisR1.MultiproofConeP6Batch.Leaf)
+  (p6 : AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary D hash H binary occupied sibling leafSource)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8)
+  (views :
+    ∀ (b k : ℕ),
+      b < 2 →
+        k < 3 →
+          AspisR1.MultiproofConeCanonical.bytesOf ↑(nodes b k) =
+            AspisR1.OraclePortCompactDraft.slice p.wire (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+              (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k))) :
+  (∀ (s : MultiproofConeRef.reference.Scratch),
+      (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leafSource p q nodes 0 s)).2 =
+          true →
+        AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leafSource p q nodes 0 s) =
+          AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch0)) ∧
+    ∀ (s : MultiproofConeRef.reference.Scratch),
+      (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leafSource p q nodes 1 s)).2 =
+          true →
+        AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leafSource p q nodes 1 s) =
+          AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch1)
+'AspisR1.MultiproofConeP6Composition.rows_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Composition.levels_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Composition.eighteen_owned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Verify.verify_in_place_owned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Verify.verifyState_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Batch.leaves_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Batch.batch_tree_owned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Callbacks.three_parents' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Callbacks.node_gate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Frozen2Stage.function_certificates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Frozen2Stage.both_batches' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeFrozen2Stage.accepted_outer' depends on axioms: [propext]
+'AspisR1.MultiproofConeSlotAdapters.slot_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortFrozen2Join.acceptedRunJoin_of_cones' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortHeadlineFrozen2PerAttempt.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
