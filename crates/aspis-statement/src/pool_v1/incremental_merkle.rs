@@ -759,3 +759,8 @@ mod tests {
         );
     }
 }
+
+// Proof/extraction-only owned reference; excluded from all shipped builds.
+#[cfg(any(kani, aeneas_ref))]
+#[path = "../../../../tools/r1-builder-reference/tree.rs"]
+pub mod tree_reference;

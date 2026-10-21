@@ -1,0 +1,10 @@
+{
+  "source_revision": "73f1c18bb02e9946f17ead49d5d6c60777120b0c",
+  "source_sha256": "1b32061871f52a74ddbc2a9cdaa6a884ec6dd04b41fec55926631496506faa81",
+  "reference_sha256": "de20fb5ebbfc8de68693970e2317c8b5bb4378e73053f64262f2ee4491f31b59",
+  "actual_guard": "while carry_level < POOL_V1_TREE_DEPTH && (leaf_index >> carry_level) & 1 == 1 {",
+  "actual_step": "carry = pool_v1_tree_parent(&frontier[carry_level], &carry);\n            frontier[carry_level] = self.empty[carry_level];\n            carry_level += 1;",
+  "harness_step": "carry = pool_v1_tree_parent(&frontier_node, &carry);\n            let cleared_node=empty_node;\n            carry_level += 1;",
+  "scope": "Value projection of one iteration at every admissible level, arbitrary frontier-node/empty-node/carry words and every output limb. Array index/update and frame laws are Lean obligations, not silently dropped Kani assertions; not a whole append_one Kani verdict.",
+  "trust_boundary": "P6 Kani/CBMC and Rust compiler/source slicing. No Lean axiom or assumed cryptographic property."
+}
