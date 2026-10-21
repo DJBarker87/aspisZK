@@ -57,12 +57,19 @@ premises, `CallerLaw` (D120), and builder soundness on the admitted input
 domain (D122). The simulator cost is relative to the adversary's input:
 replay ≤ c·(n+1), cache ≤ C·(n+1)².
 
+**Caveat (D124, 14:30):** at the fixed-observer specialisation the two execution
+joins became identities and were deleted, so the headline is a **model-level**
+theorem. The deployed claim needs the explicit premise `RustProverRefinement`
+below. D111's wire discharge must also be redone over the *ordered* q22 queries,
+because the shipped prover batches by order, not by set.
+
 | Remaining premise | Meaning | Owner |
 |---|---|---|
 | `R_wire_builder_checker_D75_retry` | the shipped prover's whole run (builder, checker, retry) equals the model run outside the named bad event | lead: prover part 15 (observer fixed, QM31 transport, retry history) |
 | `G_sim_R_wire` | the source simulator's ideal run equals the model's | lead, after the real-run join |
 | `sim_preparation` | concrete preparation cost for simulator efficiency | lead (paused; needs a new env-J range) |
-| `RustSerializationJoin` | Rust's ordered serialisation equals the logical encoding | lead |
+| `RustProverRefinement` (to be made explicit) | the real shipped prover's whole run (builder, checker, retry, ordered serialisation, observer) equals the constructed source outside the bad event | lead: prover part 16 |
+| Ordered-q22 wire encoding | redo D111's wire discharge with the query order kept | lead |
 
 ## Release gates still to run
 

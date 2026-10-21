@@ -7687,3 +7687,30 @@ supply history equality, so the real execution join needs the observer fixed
 to the protocol's. Open: arbitrary-prefix/QM31 source transport,
 returned-material assembly, the complete builder/checker/retry history, and
 all-family coverage; `G_sim_R_wire` stays named.
+
+## D124 — serialisation-order mismatch; the fixed-observer endpoint is model-only (2026-10-21, lead)
+
+Landed from `codex/cx-ser-join-20261021` (`r1p-final/SER-JOIN-20261021.md`)
+and `codex/cx-prover-commit15-20261021` (`r1p-final/PROVER-COMMIT15-20261021.md`).
+
+1. **Modelling error in D111.** The shipped prover splits the ordered q22
+   query array into its batches (10 + 12) and then sorts each batch. D111's
+   logical encoding splits `Finset.toList` of the query set and discards
+   order. `SerJoinOrderObstruction.cannot_match_both` proves that no single
+   encoding agrees with both of two valid query orders with the same set, and
+   the shipped sampler accepts both. This is not a leak (the order is
+   derived from the public transcript), but the privacy model must keep the
+   ordered q22, as the soundness model dV_frozen2 already does. D111's wire
+   discharge has to be redone over ordered queries. Also,
+   `RustSerializationJoin` was never a binder of the headline; it was only a
+   documented residual, which is a bookkeeping gap.
+2. **Model-only endpoint.** Specialising `observer_program` to the
+   constructed source's own observer makes both execution joins identities
+   (the model compared with itself), so they were deleted. The worker states
+   this correctly: it proves nothing about the Rust prover.
+   `privacy_headline_admitted` at that specialisation is a **model-level**
+   theorem. Lead ruling: the deployed privacy claim must carry one explicit
+   premise, `RustProverRefinement`, meaning the real shipped prover's whole run
+   (builder, checker, retry, serialisation and observer) equals the constructed
+   source outside the named bad event. Nothing may be described as deployed
+   privacy without it. J8399/J8500, standard axioms, zero swap.
