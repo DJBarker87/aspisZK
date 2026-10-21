@@ -24,3 +24,27 @@ outer Rust driver, checkpoint and Pool. It is not source coverage.
 Attempt 6 failed on the reserved Lean identifier `prefix`; attempt 7 renames
 that binder. Attempt 5 has an interruption record and no invented timing or
 exit status. All four final theorem audits use only standard axioms.
+
+The resumed census also retains forced-Solana-cfg verifier v3, raw ELF symbol
+kinds/aliases, all diagnostic source hashes, original frozen toolchain/build
+metadata, and nine extraction/summary receipts. Every copied frozen input
+matches the Git pin. Pool v3/v4/v5 stops record their unchanged progress or
+MemoryHigh throttling; all jobs keep 6G/8G/zero-swap/64-task caps. No Pool
+LLBC was emitted by these probes. No source, key or deployed artifact was
+changed. Counts distinguish aliases and zero-size labels from instructions.
+
+Reproduce the data gates without compiling or rerunning failed extractions:
+
+```
+python3 -B tools/s10-inventory-20261021/audit-extractions.py
+python3 -B tools/s10-inventory-20261021/inventory.py --check
+python3 -B tools/s10-inventory-20261021/audit.py
+```
+
+The final audit includes corrupt-source, linked-hash and call-target negative
+tests, double-ownership detection, and the **expected exit 2** of
+`inventory.py --check --require-complete`. `validation.json` records the
+checks. A successful reconciliation audit does not change the incomplete
+source-coverage status. The full table, residual specifications, import
+collision proposal and exact open source-tree obligation are in
+[S10-INVENTORY-20261021.md](../../design/S10-INVENTORY-20261021.md).
