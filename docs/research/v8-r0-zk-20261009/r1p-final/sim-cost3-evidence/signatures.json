@@ -1,0 +1,302 @@
+{
+  "original_binders_preserved_verbatim": true,
+  "original_privacy_conclusion_preserved_verbatim": true,
+  "removed_privacy_premises": [],
+  "added_endpoint_binders": [
+    "C : Nat",
+    "sim_preparation : Preparation ... C"
+  ],
+  "discharged_contracts": [
+    "protocol table length",
+    "stored-key length",
+    "all adversary address restrictions removed"
+  ],
+  "unconditional_efficiency_closure": false,
+  "statements": {
+    "R1Z/SimCostRelativeReplay": [
+      {
+        "name": "queryBytes_log",
+        "statement": "theorem queryBytes_log (O : List UInt8 → OracleAnswer) (p : OProg) (q : Nat) :\n    queryBytes O p q = ((runLog p O q).map (fun row => row.1.length)).sum",
+        "sha256": "7c19c770409002dbc40c609aa3aa5b347484d3056c21fcdf33d39f73544708c4"
+      },
+      {
+        "name": "lookup_bytes",
+        "statement": "theorem lookup_bytes (a : List UInt8) (t : Table) (L : Nat) (ht : KeysBound L t) :\n    (lookup a t).2 ≤ (t.length+1)*(a.length+L+3)",
+        "sha256": "448d0d569b997e0871560bf193d42253ac5f635c2bab591638e5618fe0a05344"
+      },
+      {
+        "name": "replay_bytes",
+        "statement": "theorem replay_bytes (t : Table) (H : List UInt8 → OracleAnswer) (p : OProg) (q L : Nat)\n    (ht : KeysBound L t) :\n    (replay t H p q).2 ≤ (t.length+1) *\n      (queryBytes (fun a => (t.lookup a).getD (H a)) p q + q*(L+6))",
+        "sha256": "2415195a87c04a31a20567be42030be9570cb1e02c89386d8af53f6a7f7b9981"
+      },
+      {
+        "name": "replay_relative",
+        "statement": "theorem replay_relative (t : Table) (H : List UInt8 → OracleAnswer) (p : OProg) (q L : Nat)\n    (ht : KeysBound L t) :\n    (replay t H p q).2 ≤ (t.length+1)*(L+6) *\n      inputLength (fun a => (t.lookup a).getD (H a)) p q",
+        "sha256": "860f73dbfde57972b45f5d18105e7f37304679aa7dce22abbe8a7d3149262d55"
+      },
+      {
+        "name": "programmed_relative",
+        "statement": "theorem programmed_relative (t : Table) (H : List UInt8 → OracleAnswer) (p : OProg) (q L : Nat)\n    (ht : KeysBound L t) :\n    (programmed t H p q).2 ≤ ((t.length+1)*(L+6)+2*t.length) *\n      (inputLength (fun a => (t.lookup a).getD (H a)) p q + 1)",
+        "sha256": "0f7c26ba4e078348f4a43b1979efe08e2b48c21b7e7618d71b81f7973b514535"
+      }
+    ],
+    "R1Z/SimCostRelativeIdeal": [
+      {
+        "name": "finish_relative",
+        "statement": "theorem finish_relative (W : R1Wire K CommitHandle Aux)\n    (adv : R1Adv K CommitHandle Aux) (s : Prepared K CommitHandle Aux) (L T : Nat)\n    (hlen : s.table.length ≤ T) (hkeys : KeysBound L s.table) :\n    (finish W adv s).2 ≤ relativeCoefficient 0 L T * (adversaryInput W adv s + 1)",
+        "sha256": "08490ec18963ab27627d297db8c53f9d0055158141d05cf63e93023650e6ee40"
+      },
+      {
+        "name": "run_relative",
+        "statement": "theorem run_relative (W : R1Wire K CommitHandle Aux) (N : Nat) (hN : 0 < N)\n    (P : Challenges K → Prop) (x : Statement K CommitHandle)\n    (sim : Challenges K → Tape K F → View K CommitHandle Aux R1Bat)\n    (C L T : Nat) (prep : Preparation W N hN P x sim C)\n    (adv : R1Adv K CommitHandle Aux) (r : Coins (F := F) W N)\n    (hs : (prepare W N hN P x sim r).table.length ≤ T ∧\n      KeysBound L (prepare W N hN P x sim r).table) :\n    (run W N hN P x sim C prep adv r).2 ≤ relativeCoefficient C L T *\n      (adversaryInput W adv (prepare W N hN P x sim r) + 1)^1",
+        "sha256": "93c7ac10543f515b470b4af591d7993fdf28e901188ba81f363eea045f3a77d5"
+      },
+      {
+        "name": "protocol_finish_relative",
+        "statement": "theorem protocol_finish_relative (P : Challenges KP → Prop)\n    (sim : Challenges KP → Tape KP FP → View KP CommitHandle Aux R1Bat)\n    (adv : R1Adv KP CommitHandle Aux)\n    (r : (Fin 8 → R1Coins (W).Cm (W).Tab) × (Fin 8 → Tape KP FP)) :\n    (finish W adv (prepare W 8 (by decide) P x sim r)).2 ≤\n      relativeCoefficient 0 (RomGrammarBin.bound (R1Wire.pubBytes base x).length)\n        (TranscriptR1.schedule.length + 2 * Fintype.card (Fin 3 ⊕ RIdx)) *\n      (adversaryInput W adv (prepare W 8 (by decide) P x sim r) + 1)^1",
+        "sha256": "f3d68b21e943a39552efb20a9e302eee4562c0d0374640da313f5b90b5551c05"
+      },
+      {
+        "name": "protocol_run_relative",
+        "statement": "theorem protocol_run_relative (P : Challenges KP → Prop)\n    (sim : Challenges KP → Tape KP FP → View KP CommitHandle Aux R1Bat)\n    (C : Nat) (prep : Preparation W 8 (by decide) P x sim C)\n    (adv : R1Adv KP CommitHandle Aux)\n    (r : (Fin 8 → R1Coins (W).Cm (W).Tab) × (Fin 8 → Tape KP FP)) :\n    (run W 8 (by decide) P x sim C prep adv r).2 ≤\n      relativeCoefficient C (RomGrammarBin.bound (R1Wire.pubBytes base x).length)\n        (TranscriptR1.schedule.length + 2 * Fintype.card (Fin 3 ⊕ RIdx)) *\n      (adversaryInput W adv (prepare W 8 (by decide) P x sim r) + 1)^1",
+        "sha256": "d1ba2b8784b767ba61b0cf41a7954b97efbd20b39ffa113e8a51cfbe05fa5971"
+      }
+    ],
+    "R1Z/PrivacyR1HeadlineV2SimProto": [
+      {
+        "name": "privacy_headline_v2_sim_proto",
+        "statement": "theorem privacy_headline_v2_sim_proto\n    (builder_premises : BuilderPremises h B x)\n    (R_commit_caller : ProverCommitCallerInstance.CallerLaw\n      (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)))\n    (observer_program : (source).Adversary → View K CommitHandle Aux R1Bat →\n      List (List UInt8 × OracleAnswer) → OProg)\n    (R_wire_builder_checker_D75_retry : ∀ (adv : (source).Adversary) (w : (R0Z.ZkStatement.HonestProver.Instance h)),\n      (R0Z.ZkStatement.HonestProver.public h w) = x.1 → ModelExecutionJoin\n        (realTest h B outputs source adv x w)\n        (realTest h B outputs (fsR1P (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) 8 eight_pos\n          (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h')) (RomObserverBin.observerMap source observer_program adv) x w) (QueryScanRealLazyBound.realBad (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) 8 h B outputs x w))\n    (G_sim_R_wire : ∀ adv : (source).Adversary, ModelExecutionJoin\n      (idealTestS source adv x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x))\n      (idealTestS (fsR1P (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) 8 eight_pos (P_R1 (R0Z.ZkStatement.HonestProver.transport h) B hB) (fun h' => VR1 h'))\n        (RomObserverBin.observerMap source observer_program adv) x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)) (QueryScanIdealHistory.selectedBad))\n    (C : Nat)\n    (sim_preparation : SimCostIdeal.Preparation simWire 8 eight_pos simPredicate x simulator C) :\n    (ZK_FSS h B outputs source x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)\n      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1)) ∧\n    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ≤\n      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ∧\n    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100) ∧\n    ∀ (adv : (source).Adversary) (r : (source).IdealRand),\n      (SimCostIdeal.run simWire 8 eight_pos simPredicate x simulator C sim_preparation adv r).1 =\n        (source).ideal simulator adv x r ∧\n      (SimCostIdeal.run simWire 8 eight_pos simPredicate x simulator C sim_preparation adv r).2 ≤\n        SimCostRelativeIdeal.relativeCoefficient C\n          (RomGrammarBin.bound (R1Wire.pubBytes base x).length)\n          (TranscriptR1.schedule.length + 2 * Fintype.card (Fin 3 ⊕ RIdx)) *\n          (SimCostRelativeIdeal.adversaryInput simWire adv\n            (SimCostIdeal.prepare simWire 8 eight_pos simPredicate x simulator r) + 1)^1",
+        "sha256": "5431dbf16928634063169014e0c108d4ab813568dcc39f64bbcfab9d9998852d"
+      }
+    ],
+    "R1Z/SimCostLazyCoupling": [
+      {
+        "name": "lazy_draws",
+        "statement": "theorem lazy_draws (key : List UInt8 → A) (c : A → Option OracleAnswer)\n    (p : OProg) (q : Nat) (u : Fin q → OracleAnswer) :\n    (lazyRun key c p q u).2 ≤ q",
+        "sha256": "bb18ad2a9c6e947488b3351a94eecff329c7fa70e872031b49c88b2e04c18178"
+      },
+      {
+        "name": "mean_update",
+        "statement": "theorem mean_update [Fintype A] (a : A) (f : (A → OracleAnswer) → ℚ) :\n    mean (fun p : (A → OracleAnswer) × OracleAnswer =>\n      f (Function.update p.1 a p.2)) = mean f",
+        "sha256": "1d8cd0856df81faaf8286f9f0be7ded64a528e4d8e7446d1cf80bf679314b434"
+      },
+      {
+        "name": "mean_snoc",
+        "statement": "theorem mean_snoc {T : Type} [Fintype T] (q : Nat) (f : (Fin (q+1) → T) → ℚ) :\n    mean f = mean (fun v : T => mean (fun u : Fin q → T => f (Fin.snoc u v)))",
+        "sha256": "21d23e75dbbcd49601ecdc51653421eda478aacc7e3f6f62414a2d1172aedfb9"
+      },
+      {
+        "name": "mean_swap",
+        "statement": "theorem mean_swap {S T : Type} [Fintype S] [Fintype T] (f : S → T → ℚ) :\n    mean (fun s => mean (f s)) = mean (fun t => mean (fun s => f s t))",
+        "sha256": "34dbbbf56d2fa164d4bf8354902835740ff4b92d7ca52efaa75dd8c6abd09964"
+      },
+      {
+        "name": "cached_update",
+        "statement": "theorem cached_update (c : A → Option OracleAnswer) (H : A → OracleAnswer)\n    (a : A) (v : OracleAnswer) (ha : c a = none) :\n    cached c (Function.update H a v) = cached (Function.update c a (some v)) H",
+        "sha256": "6329b5519b21fbdf73782d7553ff425ee5ae5e4b0b2300da8e391c863136883b"
+      },
+      {
+        "name": "lazy_uniform",
+        "statement": "theorem lazy_uniform [Fintype A] (key : List UInt8 → A)\n    (c : A → Option OracleAnswer) (p : OProg) (q : Nat)\n    (f : List (List UInt8 × OracleAnswer) → ℚ) :\n    mean (fun u : Fin q → OracleAnswer => f (lazyRun key c p q u).1) =\n      mean (fun H : A → OracleAnswer => runLog p (fun a => cached c H (key a)) q |> f)",
+        "sha256": "500105086f39f4f725bc230340937a718e00da66877be2dd45570ee55097ff31"
+      }
+    ],
+    "R1Z/SimCostRelativeObstruction": [
+      {
+        "name": "emit_erase",
+        "statement": "theorem emit_erase (bs : List UInt8) : (emit bs).1 = bs",
+        "sha256": "d29431665e22a28b208945682ac422532cc90e6bf26278ad2335b6b4565e115d"
+      },
+      {
+        "name": "emit_cost",
+        "statement": "theorem emit_cost (bs : List UInt8) : (emit bs).2 = bs.length",
+        "sha256": "f87d049fcb2f79b184335641f43672edba69cf1d9152101ad44e8f062d259d58"
+      },
+      {
+        "name": "output_cost",
+        "statement": "theorem output_cost (π : Fin 1024 ≃ Fin 1024)\n    (x : Statement K Nat) (ch : Challenges K) (t : Tape K F) :\n    (emit ((simE (Bat := R1Bat) π B outputs x ch t).1.publicOutputs)).2 = x.2",
+        "sha256": "e84b751a280abbe1d78c39a31552c73337f834dcd41a494bf2a8677cee7fdbfd"
+      },
+      {
+        "name": "no_uniform_relative_metadata",
+        "statement": "theorem no_uniform_relative_metadata (π : Fin 1024 ≃ Fin 1024)\n    (pub : R0P.Public K) (ch : Challenges K) (t : Tape K F)\n    (q c K0 d : Nat) :\n    ∃ x : Statement K Nat,\n      x.1 = pub ∧ c * (inputLength (fun _ => 0) OProg.done q + K0)^d <\n        (emit ((simE (Bat := R1Bat) π B outputs x ch t).1.publicOutputs)).2",
+        "sha256": "11cf6cf27683514753dc738d9a1ac8c4377601e887b196694fe34df62731950c"
+      }
+    ],
+    "R1Z/SimCostLazyProtocol": [
+      {
+        "name": "mean_some",
+        "statement": "theorem mean_some {A U : Type} [DecidableEq A] [Fintype A] [Fintype U] [Nonempty U]\n    (f : (A → U) → ℚ) :\n    mean (fun H : Option A → U => f (fun a => H (some a))) = mean f",
+        "sha256": "6cf64be89d4fd946459a04467c7e09cd358d911b99d08bf2235813bb0b29b66c"
+      },
+      {
+        "name": "lazy_projection",
+        "statement": "theorem lazy_projection {A : Type} [DecidableEq A] [Fintype A]\n    (key : List UInt8 → Option A) (c : Option A → Option OracleAnswer)\n    (p : OProg) (q : Nat) (f : Table → ℚ)\n    (O : (A → OracleAnswer) → List UInt8 → OracleAnswer)\n    (hO : ∀ H bs, cached c H (key bs) = O (fun a => H (some a)) bs) :\n    mean (fun u : Fin q → OracleAnswer => f (lazyRun key c p q u).1) =\n      mean (fun H : A → OracleAnswer => f (runLog p (O H) q))",
+        "sha256": "8d1b4896a77ee6f5daeba31d4d9bbe2ad070de6321327e20af8f96dc209809ce"
+      },
+      {
+        "name": "outside_lookup",
+        "statement": "theorem outside_lookup (bound : Nat) (t : Table) (bs : List UInt8)\n    (ht : KeysBound bound t) (hd : RomFiniteBin.decode bound bs = none) :\n    t.lookup bs = none",
+        "sha256": "d7c63c22e89e17a821ab7f6627ac9cd60a54d4f7a8edfc290a76e6d299eb41e1"
+      },
+      {
+        "name": "initial_oracle",
+        "statement": "theorem initial_oracle (bound : Nat) (t : Table) (ht : KeysBound bound t)\n    (H : Option (RomFiniteBin.Address bound) → OracleAnswer) (bs : List UInt8) :\n    cached (initial bound t) H (RomFiniteBin.decode bound bs) =\n      (t.lookup bs).getD (RomFiniteBin.lookup bound (fun a => H (some a)) bs)",
+        "sha256": "a10e288efece8b6e0bc346026d8207026d606c4fe70f87ffe4a551d4bf8ffb3d"
+      },
+      {
+        "name": "bounded_lazy_uniform",
+        "statement": "theorem bounded_lazy_uniform (bound : Nat) (t : Table) (ht : KeysBound bound t)\n    (p : OProg) (q : Nat) (f : Table → ℚ) :\n    mean (fun u : Fin q → OracleAnswer =>\n      f (t ++ (lazyRun (RomFiniteBin.decode bound) (initial bound t) p q u).1)) =\n    mean (fun H : RomFiniteBin.Address bound → OracleAnswer =>\n      f (t ++ runLog p (fun bs => (t.lookup bs).getD (RomFiniteBin.lookup bound H bs)) q))",
+        "sha256": "343ec1cb1e455d7fb50b2db1612f495e4d13b73b26de026212b81d9199375bfa"
+      },
+      {
+        "name": "protocol_lazy_uniform",
+        "statement": "theorem protocol_lazy_uniform (P : Challenges K → Prop)\n    (sim : Challenges K → Tape K F → View K CommitHandle Aux R1Bat)\n    (adv : R1Adv K CommitHandle Aux)\n    (r : (Fin 8 → R1Coins (W).Cm (W).Tab) × (Fin 8 → Tape K F))\n    (f : Table → ℚ) :\n    let s := prepare W 8 (by decide) P x sim r\n    mean (fun u : Fin (W).qmax → OracleAnswer =>\n      f (s.table ++ (lazyRun (RomFiniteBin.decode width) (initial width s.table)\n        (adv.prog s.view s.table) (W).qmax u).1)) =\n    mean (fun H : RomFiniteBin.Address width → OracleAnswer =>\n      f (s.table ++ runLog (adv.prog s.view s.table)\n        (fun bs => (s.table.lookup bs).getD (RomFiniteBin.lookup width H bs)) (W).qmax))",
+        "sha256": "82900101e15abdfa85eab55498f01ad64dc6f60fcff8c606ddad633e4d23a928"
+      }
+    ],
+    "R1Z/SimCostBinarySource": [
+      {
+        "name": "trials_bound",
+        "statement": "theorem trials_bound {A : Type} (B : Nat) (u : Fin B → Option A) :\n    (trials B u).2 ≤ B",
+        "sha256": "ded07ad215f7361afdaab2b8829d0c87ff320ccad36baa3f9ab7fffab3911621"
+      },
+      {
+        "name": "option_mean",
+        "statement": "theorem option_mean {A : Type} [Fintype A] [Nonempty A] (f : Option A → ℚ) :\n    mean f = rejection A * f none + (1-rejection A) * mean (fun a : A => f (some a))",
+        "sha256": "8c65fc9a4d30ec4b772399d5bfc33ebdbe0746ff540b0b1c5f87a8365f76a579"
+      },
+      {
+        "name": "trials_law",
+        "statement": "theorem trials_law {A : Type} [Fintype A] [Nonempty A] (B : Nat) (f : Option A → ℚ) :\n    mean (fun u : Fin B → Option A => f (trials B u).1) =\n      (rejection A)^B * f none + (1-(rejection A)^B) * mean (fun a : A => f (some a))",
+        "sha256": "d25580e1b1349c9039cbd5f12391e8906a9a40fa3ceba812031deac8a610f060"
+      },
+      {
+        "name": "word_reject",
+        "statement": "theorem word_reject (m : Nat) : wordEquiv m (Fin.last m) = none",
+        "sha256": "2f4d1cfae5b534ce91d6b9b247b36aa6664bb30472a33e3460d239a699ba42d0"
+      },
+      {
+        "name": "words_law",
+        "statement": "theorem words_law (m : Nat) [NeZero m] (B : Nat) (f : Option (Fin m) → ℚ) :\n    mean (fun u : Fin B → Fin (m+1) => f (words m B u).1) =\n      (rejection (Fin m))^B * f none +\n        (1-(rejection (Fin m))^B) * mean (fun a : Fin m => f (some a))",
+        "sha256": "fffc897086ea3885af2c4710c778b8a87a9b0b02387970ef1098895a0fb474a4"
+      },
+      {
+        "name": "m31_source_law",
+        "statement": "theorem m31_source_law (B : Nat) (f : Option (Fin 2147483647) → ℚ) :\n    mean (fun u : Fin B → Fin 2147483648 => f (words 2147483647 B u).1) =\n      m31Reject^B * f none + (1-m31Reject^B) * mean (fun a : Fin 2147483647 => f (some a))",
+        "sha256": "e437c9f4406b3ca4adc6191a7d0b52d57c2b883cfd310a50831fdb2b84fc905b"
+      },
+      {
+        "name": "m31_source_tail",
+        "statement": "theorem m31_source_tail (B : Nat) :\n    mean (fun u : Fin B → Fin 2147483648 =>\n      if (words 2147483647 B u).1 = none then (1:ℚ) else 0) = 1/(2:ℚ)^(31*B)",
+        "sha256": "40da35abd045d7b1a5a470d13c371769df624a51c812044a14b88de133d90588"
+      }
+    ],
+    "R1Z/SimCostBinaryCoupling": [
+      {
+        "name": "complete_uniform",
+        "statement": "theorem complete_uniform (m : Nat) [NeZero m] (B : Nat) : MP (complete m B)",
+        "sha256": "f5f8b3e6aa0c48b3a1daa950bcdf58e00c56d404fffb7a2fce0ffb2e4d83bc7d"
+      },
+      {
+        "name": "complete_agrees",
+        "statement": "theorem complete_agrees (m B : Nat) (r : Source m B)\n    (h : (words m B r.1).1 ≠ none) :\n    (words m B r.1).1 = some (complete m B r)",
+        "sha256": "7a9ff4705a49dfeaf7b81d8d501a5a2f872acba44e8f8524d3f9506e79e21a69"
+      },
+      {
+        "name": "batch_uniform",
+        "statement": "theorem batch_uniform (m : Nat) [NeZero m] (B samples : Nat) : MP (batchComplete m B samples)",
+        "sha256": "187232aff0f0d5e468d467e81b5570d55815b42df5420e538d42365187b8127b"
+      },
+      {
+        "name": "batch_agrees",
+        "statement": "theorem batch_agrees (B samples : Nat) (r : Fin samples → M31Source B) (h : ¬ bad B samples r) :\n    ∀ i, (words 2147483647 B (r i).1).1 = some (batchComplete 2147483647 B samples r i)",
+        "sha256": "aa5ff222d79a56cd400419bd5e34f8bd72aca52d151fc6abf9beec01e11e44ca"
+      },
+      {
+        "name": "batch_failure_mass",
+        "statement": "theorem batch_failure_mass (B samples : Nat) :\n    mass (bad B samples) ≤ (samples : ℚ) * (1/(2:ℚ)^(31*B))",
+        "sha256": "b6e9e639df14a2452fd59324a132d1279a95a2e9c6ccaa72054e819c579c5ab7"
+      },
+      {
+        "name": "eight_failure_budget",
+        "statement": "theorem eight_failure_budget (samples : Nat) : mass (bad 8 samples) ≤ extraMass samples",
+        "sha256": "2d6d22e203167d77f35c21f9cb1681d781b0fa7965144106e875378f424254bf"
+      },
+      {
+        "name": "batch_draws",
+        "statement": "theorem batch_draws (B samples : Nat) (r : Fin samples → M31Source B) :\n    ∑ i, (words 2147483647 B (r i).1).2 ≤ B*samples",
+        "sha256": "ca950533e46ebdea55ceb2e3165c272014ff4fc83c8a29531206a563d8900a48"
+      },
+      {
+        "name": "observer_transfer",
+        "statement": "theorem observer_transfer (samples : Nat)\n    (real : (Fin samples → M31Source 8) → ℚ) (ideal : (Fin samples → Fin 2147483647) → ℚ)\n    (hr : ∀ r, 0 ≤ real r ∧ real r ≤ 1)\n    (hi : ∀ v, 0 ≤ ideal v ∧ ideal v ≤ 1)\n    (ha : ∀ r, ¬ bad 8 samples r → real r = ideal (batchComplete 2147483647 8 samples r)) :\n    |mean real - mean ideal| ≤ extraMass samples",
+        "sha256": "84db4533c7a9096cdc8a546c9043bdee36a47e2bbe5c1732178473b414585e99"
+      },
+      {
+        "name": "total_source_error",
+        "statement": "theorem total_source_error (epsilon : ℚ)\n    (he : epsilon ≤ 1/(2:ℚ)^109 + 1/(2:ℚ)^137 + 1/(2:ℚ)^454 +\n      128*((2:ℚ)^25+1)/(2:ℚ)^190)\n    (samples : Nat) (hs : samples ≤ 2^128) :\n    epsilon + mass (bad 8 samples) < 1/(2:ℚ)^100",
+        "sha256": "187c6825be28910c40f59152ef0c96f3341adcd6bb0ec357d8b34df69c994e92"
+      }
+    ],
+    "R1Z/SimCostTapeCoupling": [
+      {
+        "name": "tapes_uniform",
+        "statement": "theorem tapes_uniform : MP completeTapes",
+        "sha256": "1738def44259af6e927a7c11b66596e14772c7322f8f1795fc6c8c00e3db2e72"
+      },
+      {
+        "name": "aff_agrees",
+        "statement": "theorem aff_agrees (r : Fin (Fintype.card Coordinates) → M31Source 8)\n    (h : ¬ bad 8 (Fintype.card Coordinates) r) (i : Fin 8) (a : AffCoordinate) :\n    ((words 2147483647 8 (r (Fintype.equivFin Coordinates (i,Sum.inl a))).1).1.map\n      ProverCommitWordCarrier.baseEquiv) = some ((completeTapes r i).1 a)",
+        "sha256": "23508052a49e12910bec50501b6275a6b271cfb0f4f183906baaa147d9eca184"
+      },
+      {
+        "name": "eligible_agrees",
+        "statement": "theorem eligible_agrees (r : Fin (Fintype.card Coordinates) → M31Source 8)\n    (h : ¬ bad 8 (Fintype.card Coordinates) r) (i : Fin 8) (a : EligibleCell) :\n    ((words 2147483647 8 (r (Fintype.equivFin Coordinates (i,Sum.inr a))).1).1.map\n      ProverCommitWordCarrier.baseEquiv) = some ((completeTapes r i).2 a)",
+        "sha256": "f8167d7bc91ae62d32c65c56cb29b072a5cd3044525f702b60907708d355190f"
+      },
+      {
+        "name": "sample_count",
+        "statement": "theorem sample_count : Fintype.card Coordinates ≤ 417792",
+        "sha256": "b420d7b956d81475506610872979d65a0979414557863d70030f9e487dc0e390"
+      },
+      {
+        "name": "sample_count_small",
+        "statement": "theorem sample_count_small : Fintype.card Coordinates ≤ 2^128",
+        "sha256": "074a7e36d1723dad30554e3dfe344a3542e72c1ef5f1a4d49e476cf0bac62ed2"
+      },
+      {
+        "name": "tape_failure_mass",
+        "statement": "theorem tape_failure_mass : mass (bad 8 (Fintype.card Coordinates)) ≤ 1/(2:ℚ)^120",
+        "sha256": "8cb7ba5045216aae059a68ca3ad5e59c48f978e338a906a077c5f0c581a9a021"
+      },
+      {
+        "name": "tape_source_draws",
+        "statement": "theorem tape_source_draws (r : Fin (Fintype.card Coordinates) → M31Source 8) :\n    ∑ i, (words 2147483647 8 (r i).1).2 ≤ 3342336",
+        "sha256": "8a7645d2ad883da8f65dfd600fe487af71175bc59baa489c55e9c7eaf718d27b"
+      },
+      {
+        "name": "tape_observer_transfer",
+        "statement": "theorem tape_observer_transfer\n    (real : (Fin (Fintype.card Coordinates) → M31Source 8) → ℚ)\n    (ideal : (Fin 8 → Tape K F) → ℚ)\n    (hr : ∀ r, 0 ≤ real r ∧ real r ≤ 1) (hi : ∀ t, 0 ≤ ideal t ∧ ideal t ≤ 1)\n    (ha : ∀ r, ¬ bad 8 (Fintype.card Coordinates) r → real r = ideal (completeTapes r)) :\n    |mean real - mean ideal| ≤ 1/(2:ℚ)^120",
+        "sha256": "1c0d9eff5d13f8e6309ee68cccbc1d23fa5cc05822c4c0231b547d32437a7047"
+      }
+    ],
+    "R1Z/SimCostRelativePacket": [
+      {
+        "name": "polynomial_eval",
+        "statement": "theorem polynomial_eval (C L T n : Nat) :\n    (costPolynomial C L T).eval n = SimCostRelativeIdeal.relativeCoefficient C L T*(n+1)^1",
+        "sha256": "df36b019a59381a1b0f4dd21bcbc3b5a0002a27c01fbf973227fbf281b352195"
+      },
+      {
+        "name": "polynomial_degree",
+        "statement": "theorem polynomial_degree (C L T : Nat) : (costPolynomial C L T).natDegree ≤ 1",
+        "sha256": "4b0032fb7c6a27dbf859d0a2eea82e8b32a5647f66ffc3d4ff05426ebf4a314f"
+      },
+      {
+        "name": "protocol_tape_total_error",
+        "statement": "theorem protocol_tape_total_error (epsilon : ℚ)\n    (he : epsilon ≤ 1/(2:ℚ)^109 + 1/(2:ℚ)^137 + 1/(2:ℚ)^454 +\n      128*((2:ℚ)^25+1)/(2:ℚ)^190) :\n    epsilon + mass (bad 8 (Fintype.card Coordinates)) < 1/(2:ℚ)^100",
+        "sha256": "1e209f1292d4f9b28295001884dc95d92de2285e9fd98ee7e8ac6def951d04b0"
+      }
+    ]
+  }
+}
