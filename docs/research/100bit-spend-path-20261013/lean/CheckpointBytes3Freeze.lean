@@ -1,0 +1,39 @@
+import CheckpointBytes3Reader
+import CheckpointBytes3Allocation
+import OraclePortCkptAbi5Decision
+
+#print axioms AspisR1.CheckpointBytes3Allocation.filled_exact
+#print axioms AspisR1.CheckpointBytes3Allocation.filled_success_content
+#print axioms AspisR1.CheckpointBytes3Allocation.filled_rejection
+#print axioms AspisR1.CheckpointBytes3Allocation.no_unconditional_allocation_success
+#print axioms AspisR1.CheckpointBytes3EDecode.low_word_model
+#print axioms AspisR1.CheckpointBytes3EDecode.high_word_model
+#print axioms AspisR1.CheckpointBytes3EDecode.raw_pair
+#print axioms AspisR1.CheckpointBytes3EDecode.fixed_decode
+#print axioms AspisR1.CheckpointBytes3EDecode.decode_e_identification
+#print axioms AspisR1.CheckpointBytes3EDecode.reject_e
+#print axioms AspisR1.CheckpointBytes3EDecode.successful_e
+#print axioms AspisR1.CheckpointBytes3EShape.from_limbs_shape
+#print axioms AspisR1.CheckpointBytes3EShape.e_shape
+#print axioms AspisR1.CheckpointBytes3KDecode.raw_ext
+#print axioms AspisR1.CheckpointBytes3KDecode.model_shape
+#print axioms AspisR1.CheckpointBytes3KDecode.word_model
+#print axioms AspisR1.CheckpointBytes3KDecode.fixed_decode
+#print axioms AspisR1.CheckpointBytes3KDecode.decode_k_identification
+#print axioms AspisR1.CheckpointBytes3KDecode.reject_k
+#print axioms AspisR1.CheckpointBytes3KDecode.successful_k
+#print axioms AspisR1.CheckpointBytes3Namespaces.from_to_k
+#print axioms AspisR1.CheckpointBytes3Namespaces.to_from_k
+#print axioms AspisR1.CheckpointBytes3Namespaces.from_to_e
+#print axioms AspisR1.CheckpointBytes3Namespaces.to_from_e
+#print axioms AspisR1.CheckpointBytes3Namespaces.prepared_fields
+#print axioms AspisR1.CheckpointBytes3Namespaces.accumulator_fields
+#print axioms AspisR1.CheckpointBytes3Reader.read_k_c5
+#print axioms AspisR1.CheckpointBytes3Reader.read_e_c5
+#print axioms AspisR1.CheckpointBytes3ScalarShape.k_shape
+#print axioms AspisR1.CheckpointBytes3ScalarShape.k_no_panic
+#print axioms AspisR1.CheckpointBytes3Word.word_total
+#print axioms AspisR1.CheckpointBytes3WordMath.pack_append
+#print axioms AspisR1.CheckpointBytes3WordMath.pack_value
+#print axioms AspisR1.OraclePortCkptAbi5Stage.reached_stage
+#print axioms AspisR1.OraclePortCkptAbi5Decision.decision_observation

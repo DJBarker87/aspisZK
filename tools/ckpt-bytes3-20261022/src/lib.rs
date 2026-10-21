@@ -1,0 +1,66 @@
+#![allow(dead_code, unexpected_cfgs)]
+use aspis_core::field::{M31,CM31,QM31 as K,WideExact as E};
+use aspis_core::circle::SecureCirclePoint;
+use aspis_r1_cost_probe::{verifier::{Error,Prepared},transport::Variant};
+include!("reader-source.rs");
+include!("sections-source.rs");
+
+#[cfg(kani)] mod proofs {
+use super::*;
+fn any_k()->K {K{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}}
+fn any_e()->E {let x:[u32;8]=kani::any();for v in x {kani::assume(v<0x7fffffff);}E::from_limbs(x).unwrap()}
+fn limbs(k:K)->[u32;4] {[k.c0.a.0,k.c0.b.0,k.c1.a.0,k.c1.b.0]}
+fn words(b:&[u8],at:usize)->[u32;4] {
+ [u32::from_le_bytes(b[at..at+4].try_into().unwrap()),
+  u32::from_le_bytes(b[at+4..at+8].try_into().unwrap()),
+  u32::from_le_bytes(b[at+8..at+12].try_into().unwrap()),
+  u32::from_le_bytes(b[at+12..at+16].try_into().unwrap())]
+}
+#[kani::proof]
+#[kani::unwind(163)]
+fn semantic_section() {
+ let b:[u8;161]=kani::any();
+ let mut canonical=true;
+ for i in 0..40 {canonical &= u32::from_le_bytes(b[1+4*i..1+4*i+4].try_into().unwrap())<0x7fffffff;}
+ let got=read_checkpoint_semantic_alpha(&b,1);
+ assert_eq!(got.is_ok(),canonical);
+ match got {Ok((a,at))=>{assert_eq!(at,161);for i in 0..10 {assert_eq!(limbs(a[i]),words(&b,1+16*i));}},Err(e)=>assert!(matches!(e,Error::Checkpoint))}
+}
+#[kani::proof]
+#[kani::unwind(1026)]
+fn weight_section() {
+ let b:[u8;1025]=kani::any();
+ let mut canonical=true;
+ for i in 0..256 {canonical &= u32::from_le_bytes(b[1+4*i..1+4*i+4].try_into().unwrap())<0x7fffffff;}
+ let initial=vec![any_k();64];
+ let got=read_checkpoint_weights(&b,1,initial);
+ assert_eq!(got.is_ok(),canonical);
+ match got {Ok((a,at))=>{assert_eq!(at,1025);assert_eq!(a.len(),64);for i in 0..64 {assert_eq!(limbs(a[i]),words(&b,1+16*i));}},Err(e)=>assert!(matches!(e,Error::Checkpoint))}
+}
+#[kani::proof]
+#[kani::unwind(66)]
+fn filled_content() {
+ let n=64;let value=any_k();
+ if let Ok(out)=aspis_core::r0::heap::filled(n,value) {assert_eq!(out.len(),n);for x in out {assert_eq!(x,value);}}
+}
+#[kani::proof]
+#[kani::unwind(66)]
+fn resize_content() {
+ let n=64;let value=any_k();
+ let mut out=Vec::new();out.resize(n,value);
+ assert_eq!(out.len(),n);for i in 0..n {assert_eq!(out[i],value);}
+}
+#[kani::proof]
+#[kani::unwind(66)]
+fn box_prepared_content() {
+ let variant=match kani::any::<u8>()%3 {0=>Variant::S1,1=>Variant::S2,_=>Variant::D};
+ let roots=kani::any();let state=kani::any();let queries=kani::any();
+ let gamma=any_e();let kappa=any_e();let alpha=core::array::from_fn(|_|any_e());let claim=any_e();
+ let rho=any_k();let semantic_alpha=core::array::from_fn(|_|any_k());
+ let z=core::array::from_fn(|_|SecureCirclePoint{x:any_k(),y:any_k()});
+ let p=Box::new(Prepared{variant,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state});
+ assert_eq!(p.variant,variant);assert_eq!(p.roots,roots);assert_eq!(p.state,state);for i in 0..22 {assert_eq!(p.queries[i],queries[i]);}
+ assert_eq!(p.gamma,gamma);assert_eq!(p.kappa,kappa);assert_eq!(p.alpha,alpha);assert_eq!(p.claim,claim);assert_eq!(p.rho,rho);
+ for i in 0..10 {assert_eq!(p.semantic_alpha[i],semantic_alpha[i]);}for i in 0..2 {assert_eq!(p.z[i].x,z[i].x);assert_eq!(p.z[i].y,z[i].y);}
+}
+}
