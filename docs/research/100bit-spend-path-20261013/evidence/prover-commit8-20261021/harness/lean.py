@@ -21,7 +21,7 @@ from pathlib import Path
 R=Path(%r);J=Path('/home/dombarker/project-offloads/aspis-joint-20261019')
 rel=%r;attempt=%r;memory_gib=%r
 p=J/'sources'/rel
-assert rel.startswith('AspisR1ProverStep8/') or rel.startswith('AspisR1ProverCaller7/') or rel.startswith('AspisR1ProverCommitReference/') or rel.startswith('AspisR1ProverCommit/') or rel.startswith('AspisR1ProverLeaf/') or rel.startswith('AspisR1ProverStreams/') or rel.startswith('R1Z/ProverCommit') or rel in ('R1Z/PrivacyR1FinalProtocolQuotient.lean','R1Z/PrivacyR1FinalProtocolCaller.lean')
+assert rel.startswith('AspisR1ProverStep8/') or rel.startswith('AspisR1ProverCaller7/') or rel.startswith('AspisR1ProverCommitReference/') or rel.startswith('AspisR1ProverCommit/') or rel.startswith('AspisR1ProverLeaf/') or rel.startswith('AspisR1ProverStreams/') or rel.startswith('R1Z/ProverCommit') or rel in ('R1Z/PrivacyR1FinalProtocolQuotient.lean','R1Z/PrivacyR1FinalProtocolCaller.lean','R1Z/PrivacyR1FinalProtocolCallerScope.lean')
 p.parent.mkdir(parents=True,exist_ok=True)
 if p.exists():
  q=R/'snapshots'/attempt/rel;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(p.read_bytes())

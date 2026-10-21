@@ -99,4 +99,59 @@ inserted to bridge these obligations.
 
 ## Stage 3: universal read coverage and endpoint
 
-Pending definition checks and focused proof results.
+`ProverCommitReferenceReads.next_support` proves that the extracted next-word
+operation depends only on its current domain/seed/LE64-counter frame.
+`transition_support`, `scalar_support`, `all_calls_support`, and
+`tower_support` lift this to every scalar transition, the actual extracted
+sixteen-try caller, an arbitrary number of scalar calls, and the extracted
+four-coordinate caller. Callbacks may fail or diverge; the theorem uses
+agreement on expander frames and does not assume a globally equal oracle.
+J8278: exit 0, wall 1.84 s, peak RSS 4,013,224 KiB, zero swaps; five
+standard-axiom audits. J8276 is an excluded syntax draft.
+
+This establishes a universal **reference expander support** result. It does
+not identify actual commitment read logs, prove no counter reuse, construct
+the outer producer's typed positions, or cover binary tree nodes/leaves,
+attempt bindings, the three seeds and all per-leaf salts. Those are distinct
+source execution obligations. The aggregate source obstruction recorded in
+stage 2 also prevents claiming their universal runtime read completeness.
+
+The new module `PrivacyR1FinalProtocolCallerScope` is built on the existing
+`PrivacyR1FinalProtocolCaller`. `tapeOf_inherited` checks definitionally that
+protocol construction preserves exactly the seed's decoder.
+`caller_not_automatic` instantiates the all-failure counterexample at this
+actual endpoint constructor. J8279: exit 0, wall 2.46 s, peak RSS 4,070,356
+KiB, zero swaps, two new standard-axiom audits plus the unchanged endpoint
+audit. The endpoint's experiment, simulator, error bound and signature are
+unchanged. No complete shipped-source row or endpoint premise is discharged;
+the requested deletion-only diff is therefore empty, rather than a weakened
+statement. `checklist-deletion-audit.json` and `checklist-deletions.diff`
+record that fact mechanically.
+
+## Before (verbatim from continuation 7 after-table)
+
+```text
+| R_commit_D80.roots/nodes | AddressAt for all three roots/internal binary parents, child order, padded folded geometry, byte carrier and D81 grammar. Do not substitute eight-way C2 recovery for binary recovery. |
+| R_commit_D80.leaves | Exact 0x71/0xf1/0x72 tags, packed leafVal/trailing salt, private-leaf backend and byte/digest conversions, on the actual prover tree. |
+| R_commit_D80.bindings | Both secret-attempt binding reads, source/public/variant mapping, context encoding and digest answers (P`R1Z/LayoutR1PBin.lean:133`). |
+| R_commit_D80.seeds | All three seed derivations, reserved secret distribution and source/D stream selection (P`R1Z/LayoutR1PBin.lean:136`). |
+| R_commit_D80.salts | Full per-leaf secret salt derivation, nonce/tree/secret binding and LE32(u) (P`R1Z/LayoutR1PBin.lean:140`); verifier facts only consume disclosed salts. |
+| R_commit_D80.mask_expander/source_expander | Stream/domain/seed/LE64(counter), eight words per block, no counter reuse, index/stream selection and complete hash-read coverage (P`R1Z/LayoutR1PBin.lean:131`). |
+| R_commit_quotient_fibres, cF | Equal successful fibres on the H1 quotient; measure-preserving completion is proved. The explicit sequential wordsE decoder has a derived fibre constant and a successful input. The new endpoint derives this premise from one typed CallerLaw, including an output-coordinate equivalence; proving CallerLaw for the actual source remains open. |
+| R_commit_exhaustion | Every tapeOf failure must imply one of the actual two 16-try little-endian stream-exhaustion events. Exact consuming wordsE-to-Exhausted classification is proved, and the endpoint derives this premise from CallerLaw. The shipped source-to-decoder caller/cursor equation remains open. |
+| R_commit_counter₁/₂, R_commit_stream₁/₂, R_commit_cell_count, R_commit_blocks₁/₂ | All coordinate-model count, canonical stream/block and counter bounds are proved and derived in the endpoint from CallerLaw. The universal shipped caller/read-completeness instance remains open; model cardinalities do not establish source coverage. |
+```
+
+## After (verbatim; no complete shipped-source row removed)
+
+```text
+| R_commit_D80.roots/nodes | AddressAt for all three roots/internal binary parents, child order, padded folded geometry, byte carrier and D81 grammar. Do not substitute eight-way C2 recovery for binary recovery. |
+| R_commit_D80.leaves | Exact 0x71/0xf1/0x72 tags, packed leafVal/trailing salt, private-leaf backend and byte/digest conversions, on the actual prover tree. |
+| R_commit_D80.bindings | Both secret-attempt binding reads, source/public/variant mapping, context encoding and digest answers (P`R1Z/LayoutR1PBin.lean:133`). |
+| R_commit_D80.seeds | All three seed derivations, reserved secret distribution and source/D stream selection (P`R1Z/LayoutR1PBin.lean:136`). |
+| R_commit_D80.salts | Full per-leaf secret salt derivation, nonce/tree/secret binding and LE32(u) (P`R1Z/LayoutR1PBin.lean:140`); verifier facts only consume disclosed salts. |
+| R_commit_D80.mask_expander/source_expander | Stream/domain/seed/LE64(counter), eight words per block, no counter reuse, index/stream selection and complete hash-read coverage (P`R1Z/LayoutR1PBin.lean:131`). |
+| R_commit_quotient_fibres, cF | Equal successful fibres on the H1 quotient; measure-preserving completion is proved. The explicit sequential wordsE decoder has a derived fibre constant and a successful input. The new endpoint derives this premise from one typed CallerLaw, including an output-coordinate equivalence; proving CallerLaw for the actual source remains open. |
+| R_commit_exhaustion | Every tapeOf failure must imply one of the actual two 16-try little-endian stream-exhaustion events. Exact consuming wordsE-to-Exhausted classification is proved, and the endpoint derives this premise from CallerLaw. The shipped source-to-decoder caller/cursor equation remains open. |
+| R_commit_counter₁/₂, R_commit_stream₁/₂, R_commit_cell_count, R_commit_blocks₁/₂ | All coordinate-model count, canonical stream/block and counter bounds are proved and derived in the endpoint from CallerLaw. The universal shipped caller/read-completeness instance remains open; model cardinalities do not establish source coverage. |
+```
