@@ -77,3 +77,57 @@ final machine and ordered history. No finite-call-tree adapter, successful-run
 conditioning or extra randomness is required. J7821 passes three audits
 (1.77 s, 4160768 KiB, zero swap). These are marginal laws, not source/model
 pointwise walk equivalence or WholeRunJoins. All audits use standard axioms.
+
+## Stage 3 — actual initializer and demonstrated native-owner obstruction
+
+A tiny extraction-only wrapper calls the unchanged native
+`SemanticTranscript::new`. `init28-v2` extracts the actual checked public-length
+conversion, rejection before any digest, complete domain framing and returned
+initial state. Its function body is retained verbatim. The pinned generator's
+global Error-discriminant collision is replaced by an explicitly named local
+instance with identical variant indices. `Result::map_err` is defined by
+ordinary Ok/Err case analysis; no template axiom is installed. The first
+`init28-v1` root pattern selected no body; its exit 0 is explicitly excluded,
+not represented as successful initializer extraction.
+
+`ProverCommitInit28.source` reconstructs the actual extracted initializer from
+the generic monadic one, including length errors. `walk` now includes this
+initializer and the entire constructed continuation. `walk_effects` installs
+the actual extracted CoinOracle with final machine and ordered history.
+J7830 passes both audits (1.97 s, 4160448 KiB, zero swap, standard axioms).
+This is a full constructed formal walk, **not** the missing native outer-owner
+equality, retry/serialization join or shipped experiment.
+
+The necessary native-owner extraction was attempted on just `sim::walk`.
+Charon succeeds (`walk28-v1-charon`: exit 0, 30.917 s, 578312 KiB, zero swap).
+Aeneas fails (`walk28-v1-aeneas`: exit 2, 0.814 s, 120912 KiB, zero swap):
+
+```text
+Failure "Could not match the contexts"
+Source: 'crates/aspis-r1-cost-probe/src/sim.rs', lines 165:4-177:1
+Compiler source: interp/InterpJoin.ml, line 2209
+```
+
+The retained contexts identify the `Range<u8>` semantic loop, `sem:[QM31;25]`,
+borrowed `Records`, and pending early return. This is a translation/borrow-join
+obstruction, not memory pressure or a privacy counterexample. No unchanged
+retry, raised cap, new cryptographic assumption, or full 115-word harness is
+used. Raw logs, exact extraction commands, source/tool hashes, caps and
+reservations are committed under this job's evidence directory. All extraction
+work is optimized; time is in compilation/translation, not elimination.
+
+**Exact next interface:** prove the native `walk` semantic-prefix owner
+(`sim.rs:165–168`, including indexing and `map_err`/early return) equals the
+bounded 25-row stateful `ProverCommitSemanticRows28.rows` owner, then compose
+its returned state through both circles and the suffix. A per-step owned Rust
+loop shell with Kani source-equality gates is the next replacement for the
+failing borrowed iterator extraction. The existing `extracted_source` theorem
+is for the retained `semantic20.rows` helper, not this native outer loop; the
+two are not silently identified.
+
+Following that interface, connect replay to the actual attempt owner: retries,
+P_R1 check, tape/view builders, commitment programming, ordered serialization
+and table merging. Those concrete joins remain open. `shippedProverExperiment`
+and real/ideal WholeRunJoins are unconstructed; realBad/selectedBad, seedGuess
+and fuel exhaustion events are unchanged. RustProverRefinement remains explicit;
+zero premises removed. Target not yet established.
