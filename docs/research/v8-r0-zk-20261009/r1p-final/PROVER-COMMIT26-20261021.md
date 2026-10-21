@@ -91,3 +91,19 @@ The complete old scanner gate is not rerun. These fine-grained gates close
 library/control obligations; their full source-to-Q22 composition still needs
 an exact scanner execution transport theorem. The standard trust list is not
 expanded to include that desired conclusion.
+
+### Unconditional query reference totality
+
+`ProverCommitQueryTotal26` removes the successful-call premise at each
+construction layer: generic stateful from_fn totality, concrete byte-rank
+and masked-word totality, valid scanner transition totality, first-stop
+finish totality, the complete eight-block driver, and finally the installed
+query callback. All input bytes remain universally quantified. Query rejection
+is retained as a normal result, not assumed away. This closes the totality
+of the concrete policy, while source correspondence remains a separate claim.
+
+J7621: exit 0, wall 2.49 s, peak RSS 3987544 KiB, swap 0; all nine audits
+standard-only. J7618 and J7620 are focused predecessors (2.01/2.45 s,
+3974852/3981816 KiB, zero swap). J7616/7617/7619 are excluded elaboration
+failures. Source snapshots, dependencies, errors and complete audit lines
+are retained in the per-attempt evidence. No new depth/heartbeat limits.

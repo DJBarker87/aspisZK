@@ -1,0 +1,99 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQueryTotal26.lean:23:4: error: unsolved goals
+case pos
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+step_total : ∀ (f : F) (i : Usize), ↑i < ↑N → ∃ value next, callback.call_mut f i = ok (value, next)
+fuel : ℕ
+ih :
+  ∀ (i : Usize) (f : F) (acc : List T),
+    ↑i ≤ ↑N → ↑N - ↑i < fuel → ∃ values next, arrayFromFnLoop N callback fuel i f acc = ok (values, next)
+i : Usize
+f : F
+acc : List T
+hi : ↑i ≤ ↑N
+budget : ↑N - ↑i < fuel + 1
+more : i < N
+hmore : ↑i < ↑N
+value : T
+next : F
+hcall : callback.call_mut f i = ok (value, next)
+cap : ↑N ≤ Usize.max
+j : UScalar UScalarTy.Usize
+hj : i + 1#usize = ok j
+hjval : ↑j = ↑i + ↑1#usize
+jval : ↑j = ↑i + 1
+values : List T
+last : F
+htail : arrayFromFnLoop N callback fuel j next (value :: acc) = ok (values, last)
+⊢ (if h : True then ok (values, last) else ok (acc.reverse, f)) = ok (values, last)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQueryTotal26.lean:36:27: error: unsolved goals
+T F : Type
+N : Usize
+callback : core.ops.function.FnMut F Usize T
+step_total : ∀ (f : F) (i : Usize), ↑i < ↑N → ∃ value next, callback.call_mut f i = ok (value, next)
+fuel : ℕ
+ih :
+  ∀ (i : Usize) (f : F) (acc : List T),
+    ↑i ≤ ↑N → ↑N - ↑i < fuel → ∃ values next, arrayFromFnLoop N callback fuel i f acc = ok (values, next)
+i : Usize
+f : F
+acc : List T
+hi : ↑i ≤ ↑N
+budget : ↑N - ↑i < fuel + 1
+more : ¬i < N
+⊢ (if h : False then do
+      let __x ← callback.call_mut f i
+      let i' ← i + 1#usize
+      arrayFromFnLoop N callback fuel i' __x.2 (__x.1 :: acc)
+    else ok (acc.reverse, f)) =
+    ok (acc.reverse, f)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQueryTotal26.lean:35:38: warning: This simp argument is unused:
+  if_pos
+
+Hint: Omit it from the simp argument list.
+  simp only [arrayFromFnLoop, ̲more,i̵f̵_̵p̵o̵s̵,̵ ̲hcall, ̲bind_tc_ok, ̲hj, ̲htail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQueryTotal26.lean:36:62: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵r̵r̵a̵y̵F̵r̵o̵m̵F̵n̵L̵o̵o̵p̵,̵m̵o̵r̵e̵,̵i̵f̵_̵n̵e̵g̵]̵[̲a̲r̲r̲a̲y̲F̲r̲o̲m̲F̲n̲L̲o̲o̲p̲,̲ ̲m̲o̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQueryTotal26.lean:47:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQueryTotal26.lean:64:10: error: don't know how to synthesize placeholder for argument `w`
+context:
+block : Bytes32
+ranks : Std.Array U32 8#usize
+hranks : block_rank block = ok ranks
+cb : core.ops.function.FnMut query_words.closure U32 U32 := query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+hm : AspisV8R19.TraversalRuntime.mapState cb.call_mut ↑ranks () = ok (List.map queryMaskWord ↑ranks, ())
+ha : Std.core.array.Array.map cb ranks () = ok ⟨List.map queryMaskWord ↑ranks, ⋯⟩
+⊢ Std.Array U32 8#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitQueryTotal26.lean:59:82: error: unsolved goals
+block : Bytes32
+ranks : Std.Array U32 8#usize
+hranks : block_rank block = ok ranks
+cb : core.ops.function.FnMut query_words.closure U32 U32 := query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+hm : AspisV8R19.TraversalRuntime.mapState cb.call_mut ↑ranks () = ok (List.map queryMaskWord ↑ranks, ())
+ha : Std.core.array.Array.map cb ranks () = ok ⟨List.map queryMaskWord ↑ranks, ⋯⟩
+⊢ ∃ words, Query31ConcreteWordsDriverChain.actualQueryWords block = ok words
+'R1Z.ProverCommitQueryTotal26.from_fn_loop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitQueryTotal26.block_rank_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitQueryTotal26.map_stable' depends on axioms: [propext]
+'R1Z.ProverCommitQueryTotal26.words_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

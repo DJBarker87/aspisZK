@@ -1,0 +1,86 @@
+import R1Z.ProverCommitQuery26
+import R1Z.ProverCommitArrayIndex25
+/-! Totality of the installed concrete query decoder, without a successful
+source-call premise. Symbolic induction keeps all input bytes arbitrary. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitQueryTotal26
+open Aeneas Aeneas.Std Result
+open ProverCommitQuery26
+open AspisR1SelectedMaskProbe
+open AspisR1QueryScanUnrolled.r0_transcript
+
+theorem from_fn_loop_total {T F : Type} (N : Usize)
+    (callback : core.ops.function.FnMut F Usize T)
+    (step_total : ∀ f i, i.val < N.val → ∃ value next, callback.call_mut f i = ok (value,next))
+    (fuel : Nat) (i : Usize) (f : F) (acc : List T)
+    (hi : i.val ≤ N.val) (budget : N.val-i.val < fuel) :
+    ∃ values next, arrayFromFnLoop N callback fuel i f acc = ok (values,next) := by
+  induction fuel generalizing i f acc with
+  | zero => omega
+  | succ fuel ih =>
+    by_cases more : i < N
+    · have hmore : i.val < N.val := more
+      obtain ⟨value,next,hcall⟩ := step_total f i hmore
+      have cap : N.val ≤ Usize.max := by
+        have hb := N.hBounds
+        have hm := Usize.max_succ_eq_pow
+        change N.val < 2^System.Platform.numBits at hb
+        omega
+      obtain ⟨j,hj,hjval⟩ := WP.spec_imp_exists
+        (Usize.add_spec (x := i) (y := 1#usize) (by scalar_tac))
+      have jval : j.val = i.val+1 := by simpa using hjval
+      obtain ⟨values,last,htail⟩ := ih j next (value::acc) (by omega) (by omega)
+      refine ⟨values,last,?_⟩
+      simp only [arrayFromFnLoop,more,dif_pos,hcall,bind_tc_ok,hj,htail]
+    · exact ⟨acc.reverse,f,by simp [arrayFromFnLoop,more]⟩
+
+theorem from_fn_total {T F : Type} (N : Usize)
+    (callback : core.ops.function.FnMut F Usize T)
+    (step_total : ∀ f i, i.val < N.val → ∃ value next, callback.call_mut f i = ok (value,next))
+    (f : F) : ∃ values, AspisR1SelectedMaskProbe.core.array.from_fn N callback f = ok values := by
+  obtain ⟨values,last,hrun⟩ := from_fn_loop_total N callback step_total
+    (N.val+1) (0#usize) f [] (by scalar_tac) (by scalar_tac)
+  unfold AspisR1SelectedMaskProbe.core.array.from_fn
+  split
+  · exact ⟨_,rfl⟩
+  · rename_i error hfail
+    rw [hrun] at hfail
+    cases hfail
+  · rename_i hdiv
+    rw [hrun] at hdiv
+    cases hdiv
+
+theorem block_rank_total (block : Bytes32) :
+    ∃ words, block_rank block = ok words := by
+  let cb := block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+  have steps : ∀ f i, i.val < (8#usize).val → ∃ value next, cb.call_mut f i = ok (value,next) := by
+    intro f i hi
+    exact ⟨_,f,block_rank_callback_call_mut_success f i hi⟩
+  exact from_fn_total (8#usize) cb steps block
+
+theorem map_stable {T U F : Type} (call : F → T → Result (U × F))
+    (f : F) (g : T → U) (stable : ∀ x, call f x = ok (g x,f)) (xs : List T) :
+    AspisV8R19.TraversalRuntime.mapState call xs f = ok (xs.map g,f) := by
+  induction xs with
+  | nil => rfl
+  | cons x xs ih =>
+    simp only [AspisV8R19.TraversalRuntime.mapState,stable,bind_tc_ok,ih,List.map_cons]
+
+theorem words_total (block : Bytes32) :
+    ∃ words, Query31ConcreteWordsDriverChain.actualQueryWords block = ok words := by
+  obtain ⟨ranks,hranks⟩ := block_rank_total block
+  let cb := query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+  have hm := map_stable cb.call_mut () queryMaskWord (query_mask_call_mut_exact ()) ranks.val
+  have ha := core.array.Array.map_success cb ranks () _ () hm
+  refine ⟨⟨ranks.val.map queryMaskWord,by simpa only [List.length_map] using ranks.property⟩,?_⟩
+  simp only [Query31ConcreteWordsDriverChain.actualQueryWords,query_words,hranks,bind_tc_ok,
+    AspisR1QueryScanUnrolled.core.array.Array.map,AspisR1SelectedMaskProbe.core.array.Array.map]
+  exact ha
+
+#print axioms from_fn_loop_total
+#print axioms from_fn_total
+#print axioms block_rank_total
+#print axioms map_stable
+#print axioms words_total
+end R1Z.ProverCommitQueryTotal26
