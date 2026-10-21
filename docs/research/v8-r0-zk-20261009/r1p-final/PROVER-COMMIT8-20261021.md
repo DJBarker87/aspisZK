@@ -155,3 +155,67 @@ record that fact mechanically.
 | R_commit_exhaustion | Every tapeOf failure must imply one of the actual two 16-try little-endian stream-exhaustion events. Exact consuming wordsE-to-Exhausted classification is proved, and the endpoint derives this premise from CallerLaw. The shipped source-to-decoder caller/cursor equation remains open. |
 | R_commit_counter₁/₂, R_commit_stream₁/₂, R_commit_cell_count, R_commit_blocks₁/₂ | All coordinate-model count, canonical stream/block and counter bounds are proved and derived in the endpoint from CallerLaw. The universal shipped caller/read-completeness instance remains open; model cardinalities do not establish source coverage. |
 ```
+
+## Further balancing-lowering attempt and demonstrated stopping point
+
+After the first coherent new-cone audit was green, a **new, narrower**
+extraction targeted just the owned `balance_m31_owned` and
+`balance_qm31_owned` functions, with concrete field arithmetic. This was not
+a rerun of either timed-out CBMC comparison or the old shipped builder
+extraction. Charon exits 0, `has_errors=false`, wall 23.917 s, peak RSS
+668,336 KiB, zero swaps. Aeneas exits **2**, wall 0.327 s, peak RSS
+67,936 KiB, zero swaps: `Not_found` in
+`InterpReduceCollapse.collapse_ctx_following_sequence` (line 1991), called
+from `InterpJoin.match_ctx_with_target` and `InterpLoops` at the loop
+boundary. Full stdout/stderr, tool/source pins, exact command and LLBC
+hash/size are retained in `balance-*-v1` receipts and
+`extraction/excluded-balance-artifact.json`. No output is adopted as a
+certificate, no axiom replaces the failed lowering, and it is not replayed.
+
+Thus even this owned whole-loop-to-fold transport remains a demonstrated
+translator obstruction, distinct from the now-small verified row
+comparison and its Lean iteration algebra. The full shipped material-loop
+join, raw coordinate projection/order and seed `tapeOf` identification are
+still required for CallerLaw. The trees/bindings/seeds/salts and complete
+source callback-log coverage remain independent. No complete source row is
+closed, and no endpoint premise is removed.
+
+## Final coherent audit and frozen artifacts
+
+`R1Z.ProverCommit8Audit`, J**8280**, imports the previous complete prover
+cone and every new theorem module. Exit **0**, wall **2.31 s**, peak RSS
+**4,032,952 KiB**, **zero swaps**. All **27** printed audits contain only
+`propext`, `Classical.choice`, `Quot.sound`, a subset, or no axioms. Source
+revision **`7665aa666`** contains every adopted theorem and Rust source;
+the additive audit file is pinned by its exact SHA-256, literal attempted
+source and dependency fingerprint. The subsequent balancing experiment
+changes only evidence and extraction configuration, so this unchanged
+coherent audit is not rerun. Assigned attempts consumed through **8280**;
+next available **8281**. Shared-module replacements are limited to this
+branch's newly created namespace/modules; all privacy-worker modules are
+untouched.
+
+The single final ELF comparison after the last Rust source edit succeeds:
+
+| Artifact | SHA-256 | Size bytes | Wall s | RSS KiB |
+| --- | --- | ---: | ---: | ---: |
+| default | dfc2a91ab24e1ec4f57debd8f124cb4f6a3c38ba2662b7318e2e4f3b4acdde34 | 1507400 | 2.284 | 203356 |
+| devnet | fb2fc048f6499a4775051d0267c76e8ca273b28f557bfd3b5fb65b2f687c8b78 | 1507400 | 2.234 | 202908 |
+| pool | 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548 | 605704 | 0.392 | 99580 |
+
+All three builds and `cmp` calls exit 0 with zero swaps. Their exact frozen
+features, toolchain, sources, cgroup reservations, compiler/linker flags and
+commands are recorded in `frozen-elf-final-check.json` and receipts. No ELF,
+LLBC, executable, `.olean`, archive or wallet key is committed. Keys and
+build caches are retained on the host. No push, merge, deployment, key
+cleanup, or peer-file edit was performed.
+
+`harness/validate.py` checks all fourteen attempted Lean source identities,
+ten accepted attempts, all 27 final audit lines, five accepted Kani targets,
+896 Rust source identities, the empty deletion diff, all three byte-identical
+ELFs, and the exact generated Funs identity. Earlier/excluded Rust source
+configurations are reconstructed and hash-checked by `harness/source-map.py`;
+all resource/error receipts remain verbatim. These are evidence validations,
+not repeated compilation or regression runs. Raw generator/compiler output
+retains upstream whitespace; adopted handwritten sources have no whitespace
+errors.
