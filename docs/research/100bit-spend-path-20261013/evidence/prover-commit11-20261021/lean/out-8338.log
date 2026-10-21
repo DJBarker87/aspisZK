@@ -1,0 +1,183 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedModel.lean:55:8: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ g ≤ 4294967295
+  0 ≤ f ≤ 4294967295
+  f - g ≥ 1
+  e ≥ 1
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - c - 16*d ≥ 0
+  0 ≤ a ≤ 18446744073709551615
+  8*a - b - e ≥ 0
+  8*a - e ≥ 0
+where
+ a := ↑blocks
+ b := ↑n
+ c := ↑r
+ d := ↑L
+ e := ↑(position after)
+ f := ↑↑((wordsE blocks) answers ⟨position state + (↑i + 1), ⋯⟩)
+ g := ↑↑((wordsE blocks) answers ⟨position after + ↑i, ⋯⟩)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedModel.lean:60:41: error: Tactic `rfl` failed: The left-hand side
+  match ok (word, after) with
+  | ok (word, after) =>
+    if word &&& 2147483647#u32 < aspis_core.field.P then
+      Option.map (fun x => fieldValue (word &&& 2147483647#u32) :: x) (sequence (blockHash answers) domain 0 16 after)
+    else sequence (blockHash answers) domain (0 + 1) r after
+  | x => none
+is not definitionally equal to the right-hand side
+  match some (fieldValue (word &&& 2147483647#u32)) with
+  | none => Option.map (valuesList (0 + 1)) (decodeWords accepted n (0 + 1) r fun j => ws j.succ)
+  | some a => Option.map (fun x => a :: x) (some [])
+
+case pos.zero
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+blocks : ℕ
+answers : Fin blocks → OracleAnswer
+domain : Slice U8
+capacity : blocks < 2 ^ 64
+n : ℕ
+ih :
+  ∀ (L r : ℕ) (state : State),
+    valid blocks state →
+      cacheValid answers state →
+        ∀ (fits : position state + n ≤ blocks * 8),
+          r + 16 * L ≤ n →
+            ∀ (ws : Fin n → CommitReadsR1.Word),
+              (∀ (i : Fin n), (wordsE blocks) answers ⟨position state + ↑i, ⋯⟩ = ws i) →
+                sequence (blockHash answers) domain (L + 1) r state =
+                  Option.map (valuesList (L + 1)) (decodeWords accepted n (L + 1) r ws)
+state : State
+before : valid blocks state
+cache : cacheValid answers state
+fits : position state + (n + 1) ≤ blocks * 8
+ws : Fin (n + 1) → CommitReadsR1.Word
+r : ℕ
+word : U32
+after : prover_commit_reference.State
+hn : prover_commit_reference.next (blockHash answers) domain state = ok (word, after)
+progress : valid blocks after ∧ position after = position state + 1
+nextcache : cacheValid answers after
+bound : position state < blocks * 8
+wordeq : wordFin word = (wordsE blocks) answers ⟨position state, bound⟩
+head :
+  accepted (ws 0) =
+    if word &&& 2147483647#u32 < aspis_core.field.P then some (fieldValue (word &&& 2147483647#u32)) else none
+fit : position after + n ≤ blocks * 8
+yes : word &&& 2147483647#u32 < aspis_core.field.P
+budget : r + 1 + 16 * 0 ≤ n + 1
+agrees : ∀ (i : Fin (n + 1)), (wordsE blocks) answers ⟨position state + ↑i, ⋯⟩ = ws i
+tail : ∀ (i : Fin n), (wordsE blocks) answers ⟨position after + ↑i, ⋯⟩ = ws i.succ
+⊢ (match ok (word, after) with
+    | ok (word, after) =>
+      if word &&& 2147483647#u32 < aspis_core.field.P then
+        Option.map (fun x => fieldValue (word &&& 2147483647#u32) :: x) (sequence (blockHash answers) domain 0 16 after)
+      else sequence (blockHash answers) domain (0 + 1) r after
+    | x => none) =
+    match some (fieldValue (word &&& 2147483647#u32)) with
+    | none => Option.map (valuesList (0 + 1)) (decodeWords accepted n (0 + 1) r fun j => ws j.succ)
+    | some a => Option.map (fun x => a :: x) (some [])
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedModel.lean:62:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  sequence (blockHash answers) domain (L + 1) 16 after
+in the target expression
+  (match ok (word, after) with
+    | ok (word, after) =>
+      if word &&& 2147483647#u32 < aspis_core.field.P then
+        Option.map (fun x => fieldValue (word &&& 2147483647#u32) :: x)
+          (sequence (blockHash answers) domain (L + 1) 16 after)
+      else sequence (blockHash answers) domain (L + 1 + 1) r after
+    | x => none) =
+    match some (fieldValue (word &&& 2147483647#u32)) with
+    | none => Option.map (valuesList (L + 1 + 1)) (decodeWords accepted n (L + 1 + 1) r fun j => ws j.succ)
+    | some a =>
+      Option.map (fun x => a :: x)
+        (Option.map (valuesList (L + 1)) (decodeWords accepted n (L + 1) 16 fun j => ws j.succ))
+
+case pos.succ
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+blocks : ℕ
+answers : Fin blocks → OracleAnswer
+domain : Slice U8
+capacity : blocks < 2 ^ 64
+n : ℕ
+ih :
+  ∀ (L r : ℕ) (state : State),
+    valid blocks state →
+      cacheValid answers state →
+        ∀ (fits : position state + n ≤ blocks * 8),
+          r + 16 * L ≤ n →
+            ∀ (ws : Fin n → CommitReadsR1.Word),
+              (∀ (i : Fin n), (wordsE blocks) answers ⟨position state + ↑i, ⋯⟩ = ws i) →
+                sequence (blockHash answers) domain (L + 1) r state =
+                  Option.map (valuesList (L + 1)) (decodeWords accepted n (L + 1) r ws)
+state : State
+before : valid blocks state
+cache : cacheValid answers state
+fits : position state + (n + 1) ≤ blocks * 8
+ws : Fin (n + 1) → CommitReadsR1.Word
+r : ℕ
+word : U32
+after : prover_commit_reference.State
+hn : prover_commit_reference.next (blockHash answers) domain state = ok (word, after)
+progress : valid blocks after ∧ position after = position state + 1
+nextcache : cacheValid answers after
+bound : position state < blocks * 8
+wordeq : wordFin word = (wordsE blocks) answers ⟨position state, bound⟩
+head :
+  accepted (ws 0) =
+    if word &&& 2147483647#u32 < aspis_core.field.P then some (fieldValue (word &&& 2147483647#u32)) else none
+fit : position after + n ≤ blocks * 8
+yes : word &&& 2147483647#u32 < aspis_core.field.P
+L : ℕ
+budget : r + 1 + 16 * (L + 1) ≤ n + 1
+agrees : ∀ (i : Fin (n + 1)), (wordsE blocks) answers ⟨position state + ↑i, ⋯⟩ = ws i
+tail : ∀ (i : Fin n), (wordsE blocks) answers ⟨position after + ↑i, ⋯⟩ = ws i.succ
+⊢ (match ok (word, after) with
+    | ok (word, after) =>
+      if word &&& 2147483647#u32 < aspis_core.field.P then
+        Option.map (fun x => fieldValue (word &&& 2147483647#u32) :: x)
+          (sequence (blockHash answers) domain (L + 1) 16 after)
+      else sequence (blockHash answers) domain (L + 1 + 1) r after
+    | x => none) =
+    match some (fieldValue (word &&& 2147483647#u32)) with
+    | none => Option.map (valuesList (L + 1 + 1)) (decodeWords accepted n (L + 1 + 1) r fun j => ws j.succ)
+    | some a =>
+      Option.map (fun x => a :: x)
+        (Option.map (valuesList (L + 1)) (decodeWords accepted n (L + 1) 16 fun j => ws j.succ))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2147483647 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedModel.lean:64:8: error: Type mismatch
+  ih L r after progress.left nextcache fit
+    (Decidable.byContradiction fun a => sequence_model._proof_8 n L state r budget after a) (fun i => ws i.succ) tail
+has type
+  sequence (blockHash answers) domain (L + 1) r after =
+    Option.map (valuesList (L + 1)) (decodeWords accepted n (L + 1) r fun i => ws i.succ)
+but is expected to have type
+  (match ok (word, after) with
+    | ok (word, after) =>
+      if word &&& 2147483647#u32 < aspis_core.field.P then
+        Option.map (fun x => fieldValue (word &&& 2147483647#u32) :: x) (sequence (blockHash answers) domain L 16 after)
+      else sequence (blockHash answers) domain (L + 1) r after
+    | x => none) =
+    match none with
+    | none => Option.map (valuesList (L + 1)) (decodeWords accepted n (L + 1) r fun j => ws j.succ)
+    | some a =>
+      Option.map (fun x => a :: x) (Option.map (valuesList L) (decodeWords accepted n L 16 fun j => ws j.succ))
+'R1Z.ProverCommitOwnedDecoder.decode_no_values' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.sequence_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,26 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedArrayLaw.lean:44:4: error: Tactic `rfl` failed: The left-hand side
+  ↑((wordsE blocks) answers ⟨position initial + ↑i, ⋯⟩)
+is not definitionally equal to the right-hand side
+  ↑((wordsE blocks) answers i)
+
+case succ
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+blocks : ℕ
+answers : Fin blocks → OracleAnswer
+domain : Slice U8
+capacity : blocks < 2 ^ 64
+L : ℕ
+budget : 16 * (L + 1) ≤ blocks * 8
+erase_eq :
+  erase (collect (prover_commit_reference.limb_caller (blockHash answers) domain) (L + 1) initial) =
+    Option.map (List.map fieldValue) (samples (blockHash answers) domain (L + 1))
+i : Fin (blocks * 8)
+⊢ ↑((wordsE blocks) answers ⟨position initial + ↑i, ⋯⟩) = ↑((wordsE blocks) answers i)
+'R1Z.ProverCommitOwnedDecoder.valuesList_index' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.samples_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.mapped_lookup' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.samples_array' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

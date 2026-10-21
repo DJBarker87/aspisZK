@@ -1,0 +1,214 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedSequence.lean:36:16: error: Tactic `rfl` failed: The left-hand side
+  match fail e with
+  | ok (core.result.Result.Ok value, after) =>
+    Option.map (fun x => fieldValue value :: x) (sequence hash domain L 16 after)
+  | x => none
+is not definitionally equal to the right-hand side
+  erase do
+    let (sample, after) ←
+      do
+        let (after, pending) ← ProverCommitStepLoop.finite hash domain 16 state
+        match pending with
+          | none => ok (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted, after)
+          | some pair => ok pair
+    match sample with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+      | core.result.Result.Ok a => do
+        let (tail, final) ← collect (prover_commit_reference.limb_caller hash domain) L after
+        match tail with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+          | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+
+case succ.fail
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+hash : Hash
+domain : Slice U8
+L : ℕ
+ih :
+  ∀ (state : State),
+    sequence hash domain L 16 state = erase (collect (prover_commit_reference.limb_caller hash domain) L state)
+state : State
+e : Error
+hs : scalarFinite hash domain 16 state = fail e
+⊢ (match fail e with
+    | ok (core.result.Result.Ok value, after) =>
+      Option.map (fun x => fieldValue value :: x) (sequence hash domain L 16 after)
+    | x => none) =
+    erase do
+      let (sample, after) ←
+        do
+          let (after, pending) ← ProverCommitStepLoop.finite hash domain 16 state
+          match pending with
+            | none => ok (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted, after)
+            | some pair => ok pair
+      match sample with
+        | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+        | core.result.Result.Ok a => do
+          let (tail, final) ← collect (prover_commit_reference.limb_caller hash domain) L after
+          match tail with
+            | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+            | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedSequence.lean:37:13: error: Tactic `rfl` failed: The left-hand side
+  match div with
+  | ok (core.result.Result.Ok value, after) =>
+    Option.map (fun x => fieldValue value :: x) (sequence hash domain L 16 after)
+  | x => none
+is not definitionally equal to the right-hand side
+  erase do
+    let (sample, after) ←
+      do
+        let (after, pending) ← ProverCommitStepLoop.finite hash domain 16 state
+        match pending with
+          | none => ok (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted, after)
+          | some pair => ok pair
+    match sample with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+      | core.result.Result.Ok a => do
+        let (tail, final) ← collect (prover_commit_reference.limb_caller hash domain) L after
+        match tail with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+          | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+
+case succ.div
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+hash : Hash
+domain : Slice U8
+L : ℕ
+ih :
+  ∀ (state : State),
+    sequence hash domain L 16 state = erase (collect (prover_commit_reference.limb_caller hash domain) L state)
+state : State
+hs : scalarFinite hash domain 16 state = div
+⊢ (match div with
+    | ok (core.result.Result.Ok value, after) =>
+      Option.map (fun x => fieldValue value :: x) (sequence hash domain L 16 after)
+    | x => none) =
+    erase do
+      let (sample, after) ←
+        do
+          let (after, pending) ← ProverCommitStepLoop.finite hash domain 16 state
+          match pending with
+            | none => ok (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted, after)
+            | some pair => ok pair
+      match sample with
+        | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+        | core.result.Result.Ok a => do
+          let (tail, final) ← collect (prover_commit_reference.limb_caller hash domain) L after
+          match tail with
+            | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+            | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedSequence.lean:41:17: error: Tactic `rfl` failed: The left-hand side
+  match ok (core.result.Result.Err e, after) with
+  | ok (core.result.Result.Ok value, after) =>
+    Option.map (fun x => fieldValue value :: x) (sequence hash domain L 16 after)
+  | x => none
+is not definitionally equal to the right-hand side
+  erase do
+    let (sample, after) ←
+      do
+        let (after, pending) ← ProverCommitStepLoop.finite hash domain 16 state
+        match pending with
+          | none => ok (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted, after)
+          | some pair => ok pair
+    match sample with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+      | core.result.Result.Ok a => do
+        let (tail, final) ← collect (prover_commit_reference.limb_caller hash domain) L after
+        match tail with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+          | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+
+case succ.ok.Err
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+hash : Hash
+domain : Slice U8
+L : ℕ
+ih :
+  ∀ (state : State),
+    sequence hash domain L 16 state = erase (collect (prover_commit_reference.limb_caller hash domain) L state)
+state after : State
+e : state_only_hiding.StateOnlyMaskBuildError
+hs : scalarFinite hash domain 16 state = ok (core.result.Result.Err e, after)
+⊢ (match ok (core.result.Result.Err e, after) with
+    | ok (core.result.Result.Ok value, after) =>
+      Option.map (fun x => fieldValue value :: x) (sequence hash domain L 16 after)
+    | x => none) =
+    erase do
+      let (sample, after) ←
+        do
+          let (after, pending) ← ProverCommitStepLoop.finite hash domain 16 state
+          match pending with
+            | none => ok (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted, after)
+            | some pair => ok pair
+      match sample with
+        | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+        | core.result.Result.Ok a => do
+          let (tail, final) ← collect (prover_commit_reference.limb_caller hash domain) L after
+          match tail with
+            | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+            | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedSequence.lean:43:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  sequence hash domain L 16 ?state
+in the target expression
+  (match ok (core.result.Result.Ok value, after) with
+    | ok (core.result.Result.Ok value, after) =>
+      Option.map (fun x => fieldValue value :: x) (sequence hash domain L 16 after)
+    | x => none) =
+    erase do
+      let (sample, after) ←
+        do
+          let (after, pending) ← ProverCommitStepLoop.finite hash domain 16 state
+          match pending with
+            | none => ok (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted, after)
+            | some pair => ok pair
+      match sample with
+        | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+        | core.result.Result.Ok a => do
+          let (tail, final) ← collect (prover_commit_reference.limb_caller hash domain) L after
+          match tail with
+            | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+            | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+
+case succ.ok.Ok
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+hash : Hash
+domain : Slice U8
+L : ℕ
+ih :
+  ∀ (state : State),
+    sequence hash domain L 16 state = erase (collect (prover_commit_reference.limb_caller hash domain) L state)
+state after : State
+value : aspis_core.field.M31
+hs : scalarFinite hash domain 16 state = ok (core.result.Result.Ok value, after)
+⊢ (match ok (core.result.Result.Ok value, after) with
+    | ok (core.result.Result.Ok value, after) =>
+      Option.map (fun x => fieldValue value :: x) (sequence hash domain L 16 after)
+    | x => none) =
+    erase do
+      let (sample, after) ←
+        do
+          let (after, pending) ← ProverCommitStepLoop.finite hash domain 16 state
+          match pending with
+            | none => ok (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted, after)
+            | some pair => ok pair
+      match sample with
+        | core.result.Result.Err e => ok (core.result.Result.Err e, after)
+        | core.result.Result.Ok a => do
+          let (tail, final) ← collect (prover_commit_reference.limb_caller hash domain) L after
+          match tail with
+            | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+            | core.result.Result.Ok values => ok (core.result.Result.Ok (a :: values), final)
+'R1Z.ProverCommitOwnedDecoder.sequence_collect' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.sequence_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.sequence_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.decode_list_step' depends on axioms: [propext, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

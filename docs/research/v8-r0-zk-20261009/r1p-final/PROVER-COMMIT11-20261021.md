@@ -28,3 +28,32 @@ not memory failures. No resource cap or recursion/heartbeat option is raised.
 Only new worker-owned module/objects are installed in Env J; overwritten
 versions of those modules/objects are snapshotted under this branch's host
 workspace. No peer-owned source is changed.
+
+## Stage 2: complete reference CallerLaw
+
+`ProverCommitOwnedSequence` erases only the operational error/state wrapper
+and proves that the exact extracted collector obeys the consuming word-loop
+recurrence. `ProverCommitOwnedModel.sequence_model` proves equality with
+`decodeWords` by induction on remaining words, using Stage 1's exact cache
+law and the explicit retry budget. Both rejection and early acceptance
+preserve the same suffix of one global finite oracle.
+
+`ProverCommitOwnedArrayLaw.samples_array` transports the resulting list
+equation to the actual finite arrays, proving lookup correspondence rather
+than treating a default value as a sampled coordinate.
+`ProverCommitOwnedCallerLaw.rawArrays_model` composes the two protocol-sized
+streams. `quotient_decoder` gives the exact quotient equation, with the
+identity coordinate equivalence. `ProverCommitOwnedEndpoint.caller_law`
+constructs CallerLaw for precisely the fixed operational-reference prover
+of `PrivacyR1HeadlineOwned`, with no new hypothesis.
+
+Accepted focused attempts J8337, J8340, J8343, J8344, J8348 all exit 0,
+zero swaps, standard axioms. Their fourteen new theorem audits are recorded
+in the receipts. Excluded drafts have changed-source replacements; none
+failed from memory pressure. No shipped Rust source or ELF input changes.
+
+**Scope:** the mathematical CallerLaw for the fixed decoder is now proved.
+This does not construct either shipped execution join, certify the actual
+outer material-building loops, or prove all-family shipped callback coverage.
+The existing headline is deliberately unchanged until those source gates
+are addressed.
