@@ -7448,3 +7448,16 @@ shipped `RustRuntimeJoin` inhabitant; checker/retry coupling. The last two
 are the prover-side execution join, the privacy analogue of the
 verifier-equals-dV join on soundness. One more pass goes to forest admission,
 which is still a model step.
+
+## D108 — wire batch/log premises: free constructor parameters (2026-10-21, lead)
+
+Landed from `codex/cx-priv-wirelog-20261021` (`r1p-final/WIRELOG-20261021.md`).
+`R_wire_D80_batches` and `R_wire_D80_ordered_log` cannot be deleted at the
+current instance: its constructors take `log`, `fib` and `opens` as
+independent parameters. Compiled counterexamples: empty openings break root
+coverage, and an empty log with one root opening breaks the ordered-log
+equation. Lead ruling: the same pattern as D85 and the soundness free-d
+cases. Specialise `log`, `fib` and `opens` to the protocol's own D88 encoding
+(the logical transcript encoding and phase leaves of PhaseProtocolInstanceBin),
+then prove both premises there. The Rust serialisation equalling that
+encoding stays a source join. Env J 9721, standard axioms, zero swap.
