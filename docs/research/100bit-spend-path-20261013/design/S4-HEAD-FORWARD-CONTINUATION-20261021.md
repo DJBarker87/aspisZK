@@ -690,12 +690,15 @@ it does not assert source adoption. Packet:
 Focused compile: exit0,9.551s,peak process RSS4,008,951,808 bytes,zero swaps,
 standard axioms, captured launch revision3af931da4.
 
-The loop object selected for that compile has a producer source hash beginning
-6eec6a3f, whereas the current tracked loop snapshot begins c398ba41. Both are
-recorded explicitly. The equality is proved for the exact selected object;
-it is not yet evidence of identity with the current tracked source. Resolving
-this provenance difference is the next source-link task, rather than treating
-the passing compile as a current-source re-pin.
+An initial producer lookup incorrectly associated the loop object with the
+earlier v1 receipt (source hash beginning6eec6a3f). The exact selected object
+20a8d684 is instead produced by the existing successful
+`evidence/stage2-continuation-20261020/proofs/query-loop-v2/receipt.json`:
+its source hash c398ba41 equals the current tracked loop source. The v1/v2
+diff changes only the private `actual_body` proof script, not the definitions.
+The packet now pins the correct v2 source/object receipt and verifies the
+identity. This resolves that specific provenance issue without any rebuild;
+it does not discharge other transitive source/driver bindings.
 
 `candidate_source_tx1_success_ten_fullwide_coordinate_bounds` composes the
 ten-query caller result with the existing coordinate consumer. For every one

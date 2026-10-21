@@ -15,8 +15,10 @@ assert not list(root.rglob('*.olean')) and not list(root.rglob('*.ilean'))
 imports=json.loads((root/'evidence/direct-imports.json').read_text())
 assert imports['S4V10NoFromFnKernelRootV1']['object_sha256']=='ca18a216918afcabfd2731a0b72a6f74f2bf872aa7819b5ac9ca68034e9ab3a3'
 assert imports['Stage2ContinuationQueryLoop']['object_sha256']=='20a8d68464f20012572d37f1228045ac2a42a5776e3d5f8281f7180b24c0d450'
-assert imports['Stage2ContinuationQueryLoop']['source_snapshot_matches_producer'] is False
+assert imports['Stage2ContinuationQueryLoop']['source_snapshot_matches_producer'] is True
+assert imports['Stage2ContinuationQueryLoop']['producer_source_sha256']==imports['Stage2ContinuationQueryLoop']['source_sha256']
+assert imports['Stage2ContinuationQueryLoop']['producer_exit_status']==0
 for line in (root/'SHA256SUMS').read_text().splitlines():
  h,name=line.split('  ',1); q=root/name
  assert q.is_file() and sha(q)==h,(name,h)
-print('packet checks PASS; object binaries omitted; loop source/object provenance mismatch explicitly retained')
+print('packet checks PASS; object binaries omitted; selected loop v2 source/object provenance matches')

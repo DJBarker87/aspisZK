@@ -14,6 +14,6 @@ The callback equality is the already checked `no_from_fn_dots_eq_concrete` kerne
 - Object SHA256 (receipt only; binary omitted): `dcf017e2fdeb86bf7db7d6373ff7b187bc8891dbb23618b3896d38549ef15186`
 - `#print axioms` for all three exported theorems: `[propext, Classical.choice, Quot.sound]`.
 
-The exact loop `.olean` owner used by this compile is pinned in `direct-imports.json`. Its producer receipt records source SHA `6eec6a3f…`, while the currently tracked source snapshot is different (`c398ba41…`). This provenance mismatch is explicit; no identity claim is made between those source snapshots. The selected module object hash itself is exact.
+The exact loop `.olean` owner used by this compile is pinned in `direct-imports.json`. The selected object matches the successful v2 producer receipt, whose source SHA `c398ba41…` equals the tracked source SHA. The earlier v1 receipt (`6eec6a3f…`) was not the selected producer; its only source diff is the private `actual_body` proof script (`simp only [...]` versus `rfl`), while the definitions are unchanged.
 
 No binaries are included.
