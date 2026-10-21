@@ -26,12 +26,67 @@ J8733/J8734 are excluded syntax/elaboration failures; changed-source J8735
 passes (exit 0, 1.34 s, 2516444 KiB, swaps 0; standard axioms only). Exact
 snapshots and dependency fingerprints are in `lean/attempts-8733-8736.jsonl`.
 
+`ProverCommitKeyCompare21.vec_eq` proves arbitrary-length Aeneas byte-Vec
+comparison equals List equality (J8739, exit 0, 1.23 s, 2522828 KiB;
+J8738 excluded). `ProverCommitTableKeys21.extracted_keys` installs it
+through the **actual extracted owned insertion loop** for arbitrary finite
+table lengths, preserving indexing/update/growth errors and array value
+comparison (J8742, exit 0, 1.28 s, 2530436 KiB). All standard axioms,
+zero swap. This is a universal owned-source helper theorem, not the
+std::BTreeMap representation proof.
+
+A changed actual `ProgramOne` overwrite-flag gate eliminates key allocation
+and comparison by using the empty key, retaining arbitrary 32-byte old/new
+answers and an arbitrary initial flag. It still reaches the MemoryHigh
+region and is stopped for shape review (exit 1, 90.620 s, 6378692 KiB,
+swaps 0). This is excluded, not a counterexample or a passed source gate.
+No unchanged larger-cap retry occurs.
+
 No universal std::BTreeMap-to-entry theorem is claimed. A symbolic prefix
 summary alone cannot discharge the source-library representation invariant.
 
 ## Stage 2 — later simulator traversal
 
-Pending extraction and source identification.
+The first suffix extraction isolates the next failure to native TLS tracing:
+Charon v1 emits an opaque CircleRow discriminant and is excluded; adding
+the enum declaration produces error-free LLBC, but Aeneas v2 fails in
+`std::thread::local::LocalKey::with` (exit 2, 2.144 s, 374528 KiB).
+An owned byte-trace version translates but exposes external iterator, field
+serialization and query-sampler templates. Those templates are retained
+as inert `.lean.txt`, never imported or accepted as axioms.
+
+The accepted **generic control** reference moves native trace entries to a
+returned Vec of field values and gives gamma, ordinary, qm31 and q22
+selection as explicit policy parameters. It preserves all eager squeeze /
+advance calls, row labels, payloads and query rejection; it adds no hash
+or sampler equation. The concrete policy functions are not proved by this
+reference. Circle rows 25/26 remain outside this accepted suffix.
+
+`sim-tail-control-v2` translates with no external templates (Charon exit 0,
+32.303 s, 577028 KiB; Aeneas exit 0, 3.281 s, 489104 KiB). Types J8740
+and Funs J8741 compile (1.38 s / 2539196 KiB and 5.88 s / 2782816 KiB).
+Port changes are only narrowed imports and declaration-order discriminant
+expansions, with exact raw/promoted hashes and diffs in `extraction/control21`.
+Generated resource settings are unchanged.
+
+`ProverCommitTail21.tail_schedule` decomposes the extracted reference into
+rows 27–30 followed by query/rho continuation. `query_failure` retains the
+post-query state and previous trace and omits rho. `query_success` retains
+the final row-32 state and trace. `semantic_continuation` transports the
+accepted 25-row finite source equation through every continuation consuming
+its entire result, including errors/state. It does not instantiate the
+missing circle/source-carrier/policy/TLS join. J8746 passes (exit 0, 1.32 s,
+2531256 KiB, swaps 0; all standard axioms). J8743 passed an earlier focused
+version; J8744/J8745 are excluded schedule elaboration failures.
+
+Two optimized differential fixtures instantiate the policy with the actual
+source samplers and compare the original `walk` against the part-20 owned
+25-row cone, actual circle methods, and the new generic suffix. Both the
+success and all-zero/query-rejection paths agree on returned result, the
+**entire ordered request/answer history**, and the serialized native trace.
+The rejection path retains four scalar trace entries; success has 27.
+`tail-runtime-v1` passes (exit 0, 5.171 s, 357184 KiB, swaps 0), under
+6G/8G/no-swap/64 tasks. These are fixtures, not universal source refinement.
 
 ## Stage 3 — nonzero loop and endpoint
 

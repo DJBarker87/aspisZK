@@ -1,0 +1,47 @@
+import R1Z.ProverCommitSimulatorInsert19
+/-! Arbitrary-length key equality for the pinned Aeneas Vec model.
+This discharges a model helper, not Rust std::BTreeMap representation. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitKeyCompare21
+open Aeneas Aeneas.Std Result
+
+theorem allM_pairs (xs ys : List U8) (sameLength : xs.length=ys.length) :
+    List.allM (fun (pair : U8×U8) => core.cmp.PartialEqU8.eq pair.1 pair.2)
+      (List.zip xs ys) = ok (decide (xs=ys)) := by
+  induction xs generalizing ys with
+  | nil =>
+    have empty : ys=[] := List.length_eq_zero.mp (by omega)
+    subst ys
+    rfl
+  | cons x xs ih =>
+    cases ys with
+    | nil => simp only [List.length_cons,List.length_nil] at sameLength; omega
+    | cons y ys =>
+      have tail : xs.length=ys.length := by simpa only [List.length_cons,Nat.add_right_cancel_iff] using sameLength
+      simp only [List.zip_cons_cons,List.allM,core.cmp.PartialEqU8,liftFun2,lift,
+        core.cmp.impls.PartialEqU8.eq,bind_tc_ok]
+      by_cases h : x=y
+      · subst y
+        simpa only [decide_true,Bool.true_eq_true,ite_true,List.cons.injEq,true_and] using ih ys tail
+      · simp only [h,decide_false,Bool.false_eq_true,ite_false,List.cons.injEq,false_and]
+        rfl
+
+/-- Universal finite Vec/List comparison, without a length bound or kernel
+byte enumeration. The only scalar equality is the pinned U8 operation. -/
+theorem vec_eq (left right : alloc.vec.Vec U8) :
+    alloc.vec.partial_eq.PartialEqVec.eq core.cmp.PartialEqU8 left right =
+      ok (decide (left.val=right.val)) := by
+  unfold alloc.vec.partial_eq.PartialEqVec.eq
+  by_cases h : left.length=right.length
+  · rw [if_pos h]
+    exact allM_pairs left.val right.val h
+  · rw [if_neg h]
+    have different : left.val≠right.val := by
+      intro same
+      apply h
+      exact congrArg List.length same
+    simp only [different,decide_false]
+
+#print axioms allM_pairs
+#print axioms vec_eq
+end R1Z.ProverCommitKeyCompare21

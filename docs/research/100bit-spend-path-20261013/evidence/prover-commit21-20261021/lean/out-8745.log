@@ -1,0 +1,69 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTail21.lean:48:96: error: unsolved goals
+H P : Type
+hash : aspis_core.digest.Digest32 H
+policy : transcript.control21.Policy P
+oracle : H
+state : Std.Array U8 32#usize
+sem : Values
+z : Points
+r : sim.Records
+variant : transport.Variant
+⊢ (do
+      let t ← transcript.control21.Transcript.new hash policy oracle state variant
+      let __x ← transcript.control21.Transcript.scalar hash policy t 27#u8 r.y1.deref true
+      let __x_1 ← transcript.control21.Transcript.scalar hash policy __x.2 28#u8 r.inactive.to_slice false
+      let __x_2 ← transcript.control21.Transcript.scalar hash policy __x_1.2 29#u8 r.c0.deref false
+      let payload ← alloc.slice.Slice.to_vec core.clone.CloneU8 r.folded_root.to_slice
+      let payload1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 payload r.c1.deref
+      let __x_3 ← transcript.control21.Transcript.scalar hash policy __x_2.2 30#u8 payload1.deref false
+      let __x_4 ← transcript.control21.Transcript.queries hash policy __x_3.2 31#u8 r.fin.deref
+      match __x_4.1 with
+        | core.result.Result.Ok q => do
+          let __x_5 ← transcript.control21.Transcript.scalar_k hash policy __x_4.2 32#u8 (Std.Array.empty U8).to_slice
+          ok
+              (core.result.Result.Ok (sem, z, __x.1, __x_1.1, __x_2.1, __x_3.1, q, __x_5.1), __x_5.2.state,
+                __x_5.2.trace)
+        | core.result.Result.Err e => ok (core.result.Result.Err e, __x_4.2.state, __x_4.2.trace)) =
+    do
+    let x ← transcript.control21.Transcript.new hash policy oracle state variant
+    let x ← transcript.control21.Transcript.scalar hash policy x 27#u8 r.y1.deref true
+    let x_1 ← transcript.control21.Transcript.scalar hash policy x.2 28#u8 r.inactive.to_slice false
+    let x_2 ← transcript.control21.Transcript.scalar hash policy x_1.2 29#u8 r.c0.deref false
+    let x_3 ← alloc.slice.Slice.to_vec core.clone.CloneU8 r.folded_root.to_slice
+    let x_4 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 x_3 r.c1.deref
+    let x_5 ← transcript.control21.Transcript.scalar hash policy x_2.2 30#u8 x_4.deref false
+    let __x ← transcript.control21.Transcript.queries hash policy x_5.2 31#u8 r.fin.deref
+    match __x.1 with
+      | core.result.Result.Ok q => do
+        let __x ← transcript.control21.Transcript.scalar_k hash policy __x.2 32#u8 (Std.Array.empty U8).to_slice
+        ok (core.result.Result.Ok (sem, z, x.1, x_1.1, x_2.1, x_5.1, q, __x.1), __x.2.state, __x.2.trace)
+      | core.result.Result.Err e => ok (core.result.Result.Err e, __x.2.state, __x.2.trace)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTail21.lean:49:72: warning: This simp argument is unused:
+  pure_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [sim.tail_control21, ̲setup, ̲finish, ̲lift, ̲bind_tc_ok, ̲bind_assoc,̵p̵u̵r̵e̵_̵b̵i̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTail21.lean:60:40: warning: This simp argument is unused:
+  Aeneas.Std.uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵i̵n̵i̵s̵h̵,̵r̵e̵j̵e̵c̵t̵e̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]̵[̲f̲i̲n̲i̲s̲h̲,̲ ̲r̲e̲j̲e̲c̲t̲e̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTail21.lean:74:39: warning: This simp argument is unused:
+  Aeneas.Std.uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵i̵n̵i̵s̵h̵,̵s̵a̵m̵p̵l̵e̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵,̵l̵a̵s̵t̵]̵[̲f̲i̲n̲i̲s̲h̲,̲ ̲s̲a̲m̲p̲l̲e̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲a̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitTail21.tail_schedule' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTail21.query_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTail21.query_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTail21.semantic_continuation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1SimControl21.sim.tail_control21' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1SimControl21.transcript.control21.Transcript.queries' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

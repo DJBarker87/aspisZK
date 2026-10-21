@@ -17,9 +17,9 @@ for name in sys.argv[1:]:
           source_revision=pins['source_revision'],production_source_revision='ec5946193',
           source_identity='Exact full instrumented source hashes in input manifest; production-prefix binding checked separately.',
           input_manifest=name+'-inputs.json',print_axioms='N/A: Rust/Kani/Charon; promoted Lean checked separately')
- if name.startswith(('sim-fields-owned-v2-','sim-semantic-owned-v1-')):
+ if name.startswith(('sim-tail-control-v2-',)):
   x['accepted']=x['exit_status']==0
- if name=='semantic-runtime-v2':
+ if name=='tail-runtime-v1':
   x['accepted']=x['exit_status']==0 and 'test result: ok. 2 passed' in stdout
  x['acceptance_scope']='single target only; fixture runtime checks are not universal refinement; no whole simulator or OS law'
  rows[name]=x
