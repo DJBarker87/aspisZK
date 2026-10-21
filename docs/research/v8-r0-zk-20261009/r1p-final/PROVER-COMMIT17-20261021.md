@@ -83,7 +83,7 @@ The relation may include vectors, hash cursors and full oracle history. Its
 local-step hypothesis is explicit, not silently instantiated for Rust.
 J8646 failed on missing simplification in the error branch; changed J8648
 passes with `[propext]`, exit 0, wall 0.64s, peak RSS 1,409,736 KiB, swaps 0,
-revision `9cb63237e` plus exact source hash in the receipt.
+revision `45a502067` plus exact source hash in the receipt.
 
 The Kani one-iteration gates compare the literal borrowed cell body with the
 owned collector (`remaining=1`) or a fresh-state padding-cell reference. An
@@ -162,3 +162,150 @@ It does not close borrowed-source all-length iteration, the extra clones /
 allocation behavior, nonce/entropy/zeroization boundaries, or the nominal
 type transport from the new extraction back to Material14/Returned16. No
 source-to-model security premise is removed by this stage.
+
+## Stage 4 — whole-run obstruction and retained endpoint
+
+`ProverCommitRuntimeObstruction17.no_unrestricted_endpoint` constructs an
+independently supplied experiment with inhabited singleton randomness
+carriers, identical disclosed views, and a public oracle-history-length bit
+that differs between real and ideal runs. Its distinguishing advantage is
+exactly one. Therefore deleting the refinement premise while leaving the
+existing `rust : FSExperiments` quantification unrestricted is false for
+any epsilon below one. This is a countermodel to that proposed inference,
+**not an attack on the shipped prover**, and not a proof that a concrete
+shipped adapter cannot be verified.
+
+J8643 initially misses the explicit Fintype instances for the defined
+carriers. Changed J8644 passes the countermodel's axiom audit with only
+`[propext, Classical.choice, Quot.sound]`: exit 0, wall 1.58s, peak RSS
+3489488 KiB, swaps 0, revision `9cb63237e` plus exact source snapshot hash.
+All host caps and launcher slot locks are unchanged.
+
+**Target not yet established.** No new deployed endpoint or strict weakening
+is claimed. No premise is removed, added, repackaged, or renamed in the
+existing endpoint. The before/after source is byte-identical; `endpoint.diff`
+is deliberately empty and `endpoint-status.json` records both hashes.
+Neither a whole-run real coupling nor a whole-run ideal coupling has been
+constructed. The countermodel means local helper checks cannot justify an
+unrestricted premise deletion; it does not turn unfinished concrete runtime
+work into a proved impossibility.
+
+Remaining concrete deliverables are:
+
+1. Instantiate an independent shipped experiment from its exact input/entropy
+   carriers, builder/checker/retry behavior, visible errors, ordered proof
+   bytes, and retained shared-oracle history. The existing endpoint has no
+   such concrete instance. No concurrent-worker module was touched to obtain
+   one by assumption.
+2. Supply arbitrary-length borrowed-Vec/source iteration identification and
+   transport the new owned extraction to the old material/model types.
+   Verify the full semantic framing, source sort/dedup and multiproof traversal,
+   rather than promoting the emission-cell checks to those claims.
+3. Establish exact retained transcript recovery on success and abort, then
+   instantiate both existing WholeRunJoin obligations (real and ideal), with
+   the fixed bad events and the same randomness law. OS entropy, nonce-store
+   reservation, allocation/disposal and sampler/model alignment remain explicit
+   implementation boundaries, not new cryptographic assumptions.
+
+The next narrow source deliverable is a complete serializer source model,
+including its semantic-row and multiproof-node iterators, with arbitrary
+prefix Vec semantics and Rust-to-List transport. The new cell checks and
+all-length induction can be reused there. A model alias named “shipped”
+would not supply either missing WholeRunJoin and is not introduced.
+
+## Verbatim endpoint before
+
+The following exact declaration span includes the refinement definition and
+full theorem signature; its unchanged surrounding local notations and types
+are in `endpoint-before.lean.txt`.
+
+```lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (WholeRunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (WholeRunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad))
+
+attribute [local irreducible] PrivacyR1AcctBasis.basis
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1)) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100
+```
+
+## Verbatim endpoint after
+
+No new endpoint is substituted. The exact same declaration span remains:
+
+```lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (WholeRunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (WholeRunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad))
+
+attribute [local irreducible] PrivacyR1AcctBasis.basis
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1)) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) < 1 / 2^100
+```
+
+## Final cached audit and evidence validation
+
+J8655 targets `R1Z/ProverCommit17Audit.lean`, after all adopted Lean sources
+are frozen. It imports the new traversal, loop, owned assembly and runtime
+countermodel alongside the unchanged deployed endpoint. Exit 0, wall 1.95s,
+peak RSS 4093644 KiB, swaps 0, source revision `dd0211c96` plus the exact audit
+source SHA-256 and imported-object fingerprints in its receipt. All twelve
+`#print axioms` reports are empty or subsets of
+`[propext, Classical.choice, Quot.sound]`. No recursive callee was unfolded or
+unchanged dependency rebuilt. This is one cached composition/axioms audit;
+**no full frozen release-manifest replay or shipped-prover release result is
+claimed**, because neither concrete WholeRunJoin instance exists yet.
+
+`harness/final-audit.py` passes source/snapshot hash checks, all accepted and
+excluded Lean statuses, full allowed-axiom parsing, the ten successful Kani
+receipts, both extraction receipts, ported-source hashes, literal source
+bindings, exact v1/v2 instrumentation reconstruction, fixed resource limits,
+and unchanged endpoint/production sources. `final-audit.json` records its
+result. Receipt error extraction was corrected to recognize Lean diagnostic
+syntax instead of the substring “error” in a successful theorem name such as
+`first_stage_error`; raw output, compiler status and proof results are unchanged.
+No proof or build is rerun for that metadata correction.
+
+Evidence is under
+`docs/research/100bit-spend-path-20261013/evidence/prover-commit17-20261021/`.
+No ELF, .olean, LLBC binary, archive, wallet or task key is committed. There
+is no local target directory. No push, merge, production source change,
+concurrent-worker edit, resource-cap increase, or security-target change was
+made. Attempts 8641–8655 are used; next assigned number is **8656** after
+checking host receipts. All earlier timed-out ordered-Vec jobs remain excluded.
