@@ -1,0 +1,3 @@
+PROVED one successful source-installed tx1 call derives split10, the same prepared/scratch outputs, initial cursor0, and a successful end10 Stage2 query loop.
+
+Limitations: The constructor body and query adapter are explicitly installed source-model operations; actual frozen Rust child-slot installation remains open. All other source operations remain parameters. No independent successful constructor/query call, cursor or split premise is used. This theorem derives the caller prefix; field results are composed separately with upstream scanner/preparation contracts. Registered Std-model/extraction TCB, original from_fn boundary, source/artifact join and final soundness remain separate.
