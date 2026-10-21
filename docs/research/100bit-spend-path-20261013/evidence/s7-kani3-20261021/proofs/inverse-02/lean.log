@@ -1,0 +1,123 @@
+/Users/dominic/ZK/.worktrees/cx-s7-kani3/docs/research/100bit-spend-path-20261013/lean/S7Kani3InverseLoop.lean:62:58: error: Type mismatch
+  hsub
+has type
+  UScalar.tryMk UScalarTy.Usize (↑index - 1) = ok i
+but is expected to have type
+  index - 1#usize = ok i
+/Users/dominic/ZK/.worktrees/cx-s7-kani3/docs/research/100bit-spend-path-20261013/lean/S7Kani3InverseLoop.lean:65:55: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  0 ≤ d ≤ 109
+  d - e ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  b ≥ 0
+  b - d ≥ 1
+  a ≥ 0
+  a - d ≥ 1
+where
+ a := ↑(↑flat).length
+ b := ↑(↑prefixes).length
+ c := ↑(↑inverse).length
+ d := ↑(↑index - 1)
+ e := ↑prefixes.length
+/Users/dominic/ZK/.worktrees/cx-s7-kani3/docs/research/100bit-spend-path-20261013/lean/S7Kani3InverseLoop.lean:68:51: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  0 ≤ d ≤ 109
+  d - e ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  b ≥ 0
+  b - d ≥ 1
+  a ≥ 0
+  a - d ≥ 1
+where
+ a := ↑(↑flat).length
+ b := ↑(↑prefixes).length
+ c := ↑(↑inverse).length
+ d := ↑(↑index - 1)
+ e := ↑flat.length
+/Users/dominic/ZK/.worktrees/cx-s7-kani3/docs/research/100bit-spend-path-20261013/lean/S7Kani3InverseLoop.lean:71:58: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  0 ≤ d ≤ 109
+  d - e ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  b ≥ 0
+  b - d ≥ 1
+  a ≥ 0
+  a - d ≥ 1
+where
+ a := ↑(↑flat).length
+ b := ↑(↑prefixes).length
+ c := ↑(↑inverse).length
+ d := ↑(↑index - 1)
+ e := ↑inverse.length
+/Users/dominic/ZK/.worktrees/cx-s7-kani3/docs/research/100bit-spend-path-20261013/lean/S7Kani3InverseLoop.lean:81:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑index
+in the target expression
+  model (↑flat) (↑prefixes) n (↑(inverse.set i (wordMul suffix pref))) (wordMul suffix x) =
+    model (↑flat) (↑prefixes) (n + 1) (↑inverse) suffix
+
+case succ.refine_2
+flat prefixes : alloc.vec.Vec U32
+n : ℕ
+ih :
+  ∀ (inverse : alloc.vec.Vec U32) (suffix : U32) (index : Usize),
+    ↑index = n →
+      n ≤ 110 →
+        n ≤ (↑flat).length →
+          n ≤ (↑prefixes).length →
+            n ≤ (↑inverse).length →
+              ∃ out,
+                inverse_owned flat prefixes inverse suffix index = ok out ∧
+                  ↑out = model (↑flat) (↑prefixes) n (↑inverse) suffix ∧ (↑out).length = (↑inverse).length
+inverse : alloc.vec.Vec U32
+suffix : U32
+index : Usize
+hn : ↑index = n + 1
+bound : n + 1 ≤ 110
+hf : n + 1 ≤ (↑flat).length
+hp : n + 1 ≤ (↑prefixes).length
+hi : n + 1 ≤ (↑inverse).length
+hnz : index ≠ 0#usize
+i : UScalar UScalarTy.Usize
+hsub : UScalar.tryMk UScalarTy.Usize (↑index - 1) = ok i
+hival : ↑i = ↑index - 1
+hisub : index - 1#usize = ok i
+hiv : ↑i = n
+pref : U32
+hpr : prefixes.index_usize i = ok pref
+hpv : pref = (↑prefixes)[↑i]
+hpr' : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) prefixes i = ok pref
+x : U32
+hxr : flat.index_usize i = ok x
+hxv : x = (↑flat)[↑i]
+hxr' : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) flat i = ok x
+old : U32
+back : U32 → alloc.vec.Vec U32
+hmut : inverse.index_mut_usize i = ok (old, back)
+left✝ : old = (↑inverse)[↑i]
+hback : back = inverse.set i
+hm : alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice U32) inverse i = ok (old, back)
+hslen : (↑(inverse.set i (wordMul suffix pref))).length = (↑inverse).length
+out : alloc.vec.Vec U32
+hrun : inverse_owned flat prefixes (inverse.set i (wordMul suffix pref)) (wordMul suffix x) i = ok out
+hout : ↑out = model (↑flat) (↑prefixes) n (↑(inverse.set i (wordMul suffix pref))) (wordMul suffix x)
+hlen : (↑out).length = (↑(inverse.set i (wordMul suffix pref))).length
+⊢ model (↑flat) (↑prefixes) n (↑(inverse.set i (wordMul suffix pref))) (wordMul suffix x) =
+    model (↑flat) (↑prefixes) (n + 1) (↑inverse) suffix
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    flat
+  has type
+    alloc.vec.Vec U32
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑flat
+'S7Kani3InverseLoop.inverse_refines' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,43 @@
+/Users/dominic/ZK/.worktrees/cx-s7-kani3/docs/research/100bit-spend-path-20261013/lean/S7Kani3InverseLoop.lean:46:10: error: Application type mismatch: The argument
+  ↑index
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.23
+of sort `Type (?u.23 + 1)` in the application
+  @InitialSeg ↑index
+/Users/dominic/ZK/.worktrees/cx-s7-kani3/docs/research/100bit-spend-path-20261013/lean/S7Kani3InverseLoop.lean:46:21: error(lean.unknownIdentifier): Unknown identifier `nverse.val.length`
+/Users/dominic/ZK/.worktrees/cx-s7-kani3/docs/research/100bit-spend-path-20261013/lean/S7Kani3InverseLoop.lean:61:30: error: Invalid argument name `x` for function `AspisR1.ExtractedCurrentReducerOps.tryMk_success`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `n`: x̵n̲
+  • `h`: x̵h̲
+/Users/dominic/ZK/.worktrees/cx-s7-kani3/docs/research/100bit-spend-path-20261013/lean/S7Kani3InverseLoop.lean:61:51: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+flat prefixes : alloc.vec.Vec U32
+hi : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+n : ℕ
+ih :
+  ∀ (inverse : alloc.vec.Vec U32) (suffix : U32) (index : Usize),
+    ↑index = n →
+      n ≤ 110 →
+        n ≤ (↑flat).length →
+          n ≤ (↑prefixes).length →
+            ∃ out,
+              inverse_owned flat prefixes inverse suffix index = ok out ∧
+                ↑out = model (↑flat) (↑prefixes) n (↑inverse) suffix ∧ (↑out).length = (↑inverse).length
+inverse : alloc.vec.Vec U32
+suffix : U32
+index : Usize
+hn : ↑index = n + 1
+bound : n + 1 ≤ 110
+hf : n + 1 ≤ (↑flat).length
+hp : n + 1 ≤ (↑prefixes).length
+hnz : index ≠ 0#usize
+⊢ ℕ
+/Users/dominic/ZK/.worktrees/cx-s7-kani3/docs/research/100bit-spend-path-20261013/lean/S7Kani3InverseLoop.lean:60:13: error: Tactic `rcases` failed: `x✝ : ?m.124` is not an inductive datatype
+'S7Kani3InverseLoop.inverse_refines' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
