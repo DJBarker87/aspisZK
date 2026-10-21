@@ -7812,3 +7812,21 @@ evidence stands). Open: the actual overwrite-flag Kani check timed out at
 600 s; universal table/source transport; the later simulator traversal; and
 uncapped nonzero-loop treatment. `shippedProverExperiment` and the
 WholeRunJoins are not yet constructed.
+
+## D131 — prover commitment part 21; nonzero-search ruling (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit21-20261021` (`r1p-final/PROVER-COMMIT21-20261021.md`):
+arbitrary-prefix table composition with a split per-entry gate (which
+replaces the timed-out overwrite-flag check), universal owned-key transport,
+generic opening-control extraction, and both differential fixtures over
+complete ordered oracle histories and serialised traces. J8747: 24
+standard-axiom audits, zero swap; no shipped change. Open: universal BTreeMap
+transport, the concrete circle/sampler/TLS joins, and nonzero
+termination/divergence, now localised to one shared oracle stream.
+Lead ruling on divergence: the shipped loop draws until it gets a nonzero
+value, so it terminates with probability 1 and has no cap. Model it as a
+fuel-bounded loop with fuel k, a protocol constant fixed in the model. Runs
+that finish within k draws are identical; runs that exhaust k are added to the
+fixed bad events, charged at (1/p)^k per stream instance times the number of
+instances, with p the field size (≈ 2^-31 per draw). Choose k so the total
+charge is ≤ 2^-120, and re-prove the privacy bound stays < 2^-100.
