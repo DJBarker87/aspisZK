@@ -108,3 +108,69 @@ external declarations; its Types/Funs compile. The reference source differs
 from the retained binary extraction only by cfg(kani) reader-contract
 attributes, which are absent in extraction builds. A final combined run is
 needed after adding the exact count-group/leaf source cuts.
+
+## Final focused verification
+
+The combined 18-cut run is current at Rust revision
+`e0251ff98a99402ff34d19c1d8cd4558aa59d887`: exit 0, wall
+154.0682397610508 s, peak RSS 3,290,456 KiB, zero swaps. Every root uses
+the final committed Rust files, and the source/solver/limits are in the receipt.
+`native-final-1` records the four optimized differential tests on those same
+final Rust files. No shipped file or sibling candidate changed, so the
+conditional SBF/ELF rebuild requirement was not triggered. No frozen ELF
+byte-identity measurement is claimed.
+
+All eleven new Lean modules compile, with thirteen authored theorem
+declarations (including two private helpers) and 27 current standard-axiom
+reports including the final import audit. The final target
+`MultiproofConeFreeze`, attempt 1, exited 0 in 22.041078709065914 s with
+3,554,918,400-byte RSS and zero swaps, at source revision
+`e0251ff98a99402ff34d19c1d8cd4558aa59d887`; its source SHA and direct
+import fingerprint are in the receipt. It imports the unchanged frozen
+headline and reports its axioms as well as both complete owned reference
+entry functions. `MultiproofConeHeader.header_total` handles every stored
+slice, including short inputs, and matches `OraclePortHeader.accepts`.
+The endian lemmas reuse the retained all-input parser, including rejection.
+
+One queued word-scan attempt was refused before starting Lean after its
+source changed while waiting. Its metrics are explicitly not applicable,
+and it is excluded from kernel evidence. Other failed receipts are retained
+for elaboration, the corrected heartbeat-expensive header proof and missing
+cache imports; they are never current evidence. The header replacement uses
+a generic Boolean/Result lemma rather than raising any limit. No job hit a
+Lean memory cap.
+
+The retained endian proof needed two diagnosed missing cache namespaces,
+AspisV8R19.SamplerWordBridge and AspisR72Sampler.Funs. A task-private union
+of 67 hash-pinned object/companion symlinks supplies them. No shared object
+was overwritten or rebuilt. The union and all selected direct imports are
+recorded. This is a focused compatible import audit, not a coherent frozen
+release manifest replay.
+
+## Unfinished whole-cone obligations
+
+**Neither requested whole-cone accepted-run join is discharged.** No premise
+is deleted, no source implementation is adopted, and no whole verifier
+`AcceptedRunJoin` is constructed. The design rows retain whole-cone (d).
+
+For the parser, prove the complete scanner's fixed-section induction and
+semantic row/Vec expansion, then bind stored bytes to the actual reached
+projection/decoder. Local totality does not prove the entire caller equation.
+For the multiproof, instantiate the exact live-prefix/scratch relation and
+RowJoin, establish key sorting/tie order and leaf/count/padding loop
+simulations, and prove the ordered source digest log and both batch callers.
+The extracted reference returns values/state, not an instrumented whole-run
+log; `height_total` therefore cannot discharge log equality on its own. The
+Kani one-call byte/count observations support the P6 local cuts, not the
+missing complete ordered caller/annotation proof.
+
+Reproduce the source and evidence checks with:
+
+```sh
+python3 -B tools/multiproof-cone-20261021/generate.py --check
+python3 -B tools/multiproof-cone-20261021/audit.py
+```
+
+`audit-result.json` deliberately records both complete-cone fields and
+`accepted_run_join_constructed` as false. The frozen headline/R19 and all
+Session A and sibling source modules remain byte-identical to this task's base.
