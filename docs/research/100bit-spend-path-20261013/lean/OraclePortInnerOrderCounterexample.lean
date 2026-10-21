@@ -1,0 +1,143 @@
+import OraclePortInnerOrderFrozen
+import OraclePortShortCircuitSlotObstruction
+
+/-! Counterexample to the requested EVERY-input helper equivalence. It is not
+claimed to pass the full parser or full dV. The wire has the full slot width;
+its all-one padding is the source rejection, not short-slice totalization. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortInnerOrderCounterexample
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortSelectedDraft OracleDecisionMultiTree
+open OraclePortInnerOrderFrozen
+open OraclePortShortCircuitSlotObstruction (spine zeroQueries zero_build)
+attribute [local instance] Classical.propDecidable
+
+abbrev z : State := fun _ => 0
+abbrev H : Bytes → State := fun _ => z
+
+/-- Symbolic in height and sibling data, including the retained duplicate table. -/
+theorem spine_output (a : Bytes) (s : Nat → State) (h : Nat) :
+    (eval H (OraclePortBatchDraft.execute (spine a s h))).2 = (z,[(a,z)]) := by
+  induction h with
+  | zero => rfl
+  | succ h ih =>
+    simp only [spine,OraclePortBatchDraft.execute,eval_bind,eval,ih,List.append_nil,H]
+
+theorem selected_zero_one : selected zeroQueries 0 1 = List.replicate 10 0 := by
+  have idx (pos : Nat) : index zeroQueries 1 pos = 0 := by
+    simp [index,zeroQueries]
+  change (List.range 10).map (index zeroQueries 1) = _
+  rw [show index zeroQueries 1 = (fun _ => 0) from funext idx]
+  simp
+
+theorem input_zero_one (p : Parsed) : input p zeroQueries 0 1 0 = leaf p 1 0 := by
+  simp [input,position,batchPositions,index,zeroQueries]
+  rfl
+
+theorem duplicates_zero (p : Parsed) (ps : List Nat) :
+    (eval H (OraclePortBatchDraft.duplicates p zeroQueries 0 1
+      [(leaf p 1 0,z)] ps)).2 = true := by
+  induction ps with
+  | nil => rfl
+  | cons pos rest ih =>
+    simp only [OraclePortBatchDraft.duplicates,eval,eval_bind,ih,H]
+    simp [index,zeroQueries,input_zero_one]
+
+/-- For any stored bytes, semantic=[] fixes kind 1's model root to zero. -/
+theorem old_accepts (wire : Bytes) :
+    (eval H (OraclePortBatchDraft.verifySlot ⟨wire,[]⟩ zeroQueries 0 1)).2 = true := by
+  let p : Parsed := ⟨wire,[]⟩
+  have shape := zero_build (selected zeroQueries 0 1) (input p zeroQueries 0 1)
+    (sibling p zeroQueries 0 1)
+    (by rw [selected_zero_one]; simp)
+    (by rw [selected_zero_one]; intro i hi; simpa using hi) 18
+  rw [input_zero_one] at shape
+  have out : (eval H (OraclePortBatchDraft.execute (tree p zeroQueries 0 1))).2 =
+      (z,[(leaf p 1 0,z)]) := by
+    unfold tree
+    rw [shape]
+    exact spine_output _ _ _
+  change (eval H (OraclePortBatchDraft.verifySlot p zeroQueries 0 1)).2 = true
+  simp only [OraclePortBatchDraft.verifySlot,eval_bind,eval,out,duplicates_zero,
+    Bool.and_true]
+  simp [OraclePortBatchDraft.committedRoot,p,SemanticRecordCodec.decodeState]
+
+/-- The source keeps a single distinct index on all-zero queries. -/
+theorem hash_zero_tail (p : Parsed) (ps : List Nat) :
+    (eval H (hashLeaves p zeroQueries 1 ps [(0,z)])).2 = some [(0,z)] := by
+  induction ps with
+  | nil => rfl
+  | cons pos rest ih =>
+    simpa only [hashLeaves,eval,index,zeroQueries,Fin.val_zero,
+      show ¬ (1 : Nat) = 2 by decide,if_false,show (0 : Nat) = 0 from rfl,
+      if_true,H] using ih
+
+theorem sorted_zero_one : sortedPositions zeroQueries 0 1 = List.range 10 := by
+  simp only [sortedPositions,batchPositions,if_pos rfl,index,zeroQueries,
+    Fin.val_zero,show ¬ (1 : Nat) = 2 by decide,if_false,
+    Nat.lt_irrefl,eq_self, true_and,false_or]
+  exact List.mergeSort_of_pairwise (by decide)
+
+theorem hash_zero (p : Parsed) :
+    (eval H (hashLeaves p zeroQueries 1 (sortedPositions zeroQueries 0 1) [])).2 =
+      some [(0,z)] := by
+  rw [sorted_zero_one]
+  change (eval H (hashLeaves p zeroQueries 1 (0 :: List.range' 1 9) [])).2 = _
+  simp only [hashLeaves,eval,H,index,zeroQueries,Fin.val_zero,
+    show ¬ (1 : Nat) = 2 by decide,if_false]
+  exact hash_zero_tail _ _
+
+/-- Generic recurrence fact, not a concrete height-18 normalization. -/
+theorem count_singleton_zero (h : Nat) : nodeCount h [0] = h := by
+  induction h with
+  | zero => rfl
+  | succ h ih => simp only [nodeCount,countLevel,List.length_singleton,
+      Bool.false_eq_true,if_false,Nat.zero_div,ih]; omega
+
+/-- Complete slot 1, deliberately nonzero padding. No large numeral is reduced. -/
+def badWire : Bytes := List.replicate (slotStart 1 + 32*capacity 1) 1
+
+theorem bad_slot : slice badWire (slotStart 1) (32*capacity 1) =
+    List.replicate (32*capacity 1) 1 := by
+  simp [slice,badWire,List.drop_replicate,List.take_replicate]
+
+theorem frozen_rejects :
+    (eval H (verifySlot_frozen ⟨badWire,[]⟩ zeroQueries 0 1)).2 = false := by
+  simp only [verifySlot_frozen,eval_bind,hash_zero]
+  unfold slotTail
+  simp only [List.map_cons,List.map_nil]
+  split
+  · rw [count_singleton_zero]
+    have bad : ¬ ((slice badWire (slotStart 1) (32*capacity 1)).drop (32*18) =
+        List.replicate (32*(capacity 1-18)) 0) := by
+      rw [bad_slot,List.drop_replicate]
+      intro he
+      have hh := congrArg List.head? he
+      change some (1 : AspisV8R19.DuplexFrames.Byte) = some 0 at hh
+      contradiction
+    simp only [show 3*0+1=1 by decide,bad,and_false,if_false,eval]
+  · rfl
+
+theorem acceptance_counterexample :
+    (eval H (verifySlot_frozen ⟨badWire,[]⟩ zeroQueries 0 1)).2 ≠
+      (eval H (OraclePortBatchDraft.verifySlot ⟨badWire,[]⟩ zeroQueries 0 1)).2 := by
+  rw [frozen_rejects,old_accepts]
+  decide
+
+#print axioms spine_output
+#print axioms selected_zero_one
+#print axioms input_zero_one
+#print axioms duplicates_zero
+#print axioms old_accepts
+#print axioms hash_zero_tail
+#print axioms sorted_zero_one
+#print axioms hash_zero
+#print axioms count_singleton_zero
+#print axioms bad_slot
+#print axioms frozen_rejects
+#print axioms acceptance_counterexample
+end AspisR1.OraclePortInnerOrderCounterexample
+end
