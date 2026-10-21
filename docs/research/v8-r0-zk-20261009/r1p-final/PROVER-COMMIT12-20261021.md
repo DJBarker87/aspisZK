@@ -64,3 +64,33 @@ hard link; the four replaced proof sources were installed by atomic rename,
 so the predecessor workspace and its cache were not modified. Only this
 worker's new Lean modules are installed in Env J; overwritten own drafts
 and objects are snapshotted by the launcher. No peer-owned file is changed.
+
+## Stage 2: state transport and a concrete deletion obstruction
+
+`ProverCommitShippedTransport.finite_transport` composes a next-word step law
+between distinct state carriers through any number of remaining tries. Both
+scalar transport theorems apply it to the fixed sixteen-try schedules,
+retaining success, exhaustion, operational failure/divergence and the exact
+mapped final state. The step law is an explicit hypothesis, not a concrete
+Rust instance smuggled in by the theorem name. J8362 passes all four axiom
+audits: exit 0, 1.44 s, 2560240 KiB peak RSS, zero swaps. J8361 is an excluded
+elaboration draft, replaced after reducing the pure bit-mask lift.
+
+`ProverCommitBuilderDeletionObstruction` establishes an actual counterexample
+to a blanket deletion of `builder_premises` at the current endpoint.
+`badInput pub` has a `Unit` witness, returns exactly `pub`, and puts the
+concrete tower element `PrivacyR1AcctBasis.i` in every trace cell.
+`i_not_base` proves that element lies outside the headline's base subfield.
+`builder_premise_false` proves the builder premise is false for this input,
+even after `PhaseWireLog2Bin.honest` fixes the transport. Consequently
+`no_universal_builder_discharge` proves there is no theorem supplying the
+builder premise for every permitted `input`, for any public statement and
+handle. J8360 passes the three axiom audits: exit 0, 2.31 s, 4112556 KiB peak
+RSS, zero swaps, standard three axioms only.
+
+This does not refute the concrete Rust builder. It identifies the missing
+input/source identification: the top theorem still quantifies over an
+unconstrained build function. Per-call scalar or hash-frame facts do not
+constrain that function. Specializing `input` would change the quantifiers;
+it is not the requested deletion-only change. No peer-owned identification
+or runtime-join file is modified.
