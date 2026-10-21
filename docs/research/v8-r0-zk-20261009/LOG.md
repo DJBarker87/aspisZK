@@ -7567,3 +7567,19 @@ three frozen ELFs are byte-identical. `CallerLaw` is not discharged, because
 D112's headline quantifies over an arbitrary decoder. Same pattern as D108
 and D114: part 10 fixes the decoder to the concrete shipped decoder (with its
 execution transport), then proves CallerLaw and read coverage there.
+
+## D116 — simulator cost pass 2: bound must be in adversary input length (2026-10-21, lead)
+
+Landed from `codex/cx-sim-cost2-20261021` (`r1p-final/SIM-COST-20261021.md`).
+Proved: the protocol preparation table length, programmed-key encoding bounds,
+disclosed leaf widths 480/128/128 bytes, batch truncation cost bounds, and
+explicit sampling-error arithmetic (the envelope plus truncation mass stays
+< 2^-100). Obstruction (compiled): fixing the protocol outputs does not bound
+the adversary's query lengths, so a cost bound uniform in the query count q
+is false, and replaying a programmed table costs time proportional to the
+query bytes. Lead ruling: that is the wrong efficiency notion. A ZK
+simulator is efficient relative to the adversary, so the bound should be
+poly(q + Σ|query bytes|), polynomial in the adversary's own query input
+length (its running time). Pass 3 states and proves the cost in that form.
+5 modules, 31 audits, zero swap; three memory-cap failures were replaced by
+changed symbolic proofs, with caps unchanged.
