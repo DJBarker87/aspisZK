@@ -7522,3 +7522,20 @@ weaker and both stay available; the report gives the obstruction. Env J
 changes). These two are the privacy headline. Remaining: the shipped caller
 and builder refinements, the Rust serialisation identity, the real
 checker/retry and ideal execution joins, and simulator implementation.
+
+## D113 — prover commitment part 8 (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit8-20261021` (`r1p-final/PROVER-COMMIT8-20261021.md`).
+The three timed-out comparisons are now split into symbolic steps: a
+scalar-step contract, four-coordinate trace checks and balancing-row checks,
+each with a Lean induction. Five new Kani targets pass. Also proved: the
+independence of the caller premises, and universal reference expander
+support. J8280: 27 standard-axiom audits, zero swap; the shipped edits are in
+the cfg(kani)/cfg(aeneas_ref) modules only, and all three frozen ELFs are
+byte-identical. Open: the full shipped `CallerLaw` (the outer caller
+transport) and universal shipped read coverage. The narrower owned-balancing
+reference produces clean LLBC but hits an Aeneas internal error at the loop
+boundary (`Not_found` in `InterpReduceCollapse.collapse_ctx_following_sequence`).
+Next: reshape that reference loop (structural recursion over a fixed-size
+array, or an explicit fold) to avoid the collapse path, and keep Kani's
+shipped = reference.
