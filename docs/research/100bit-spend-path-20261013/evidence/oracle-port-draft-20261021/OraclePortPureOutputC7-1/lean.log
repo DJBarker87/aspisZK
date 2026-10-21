@@ -1,0 +1,35 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortPureOutputC7.lean:12:41: error(lean.unknownIdentifier): Unknown identifier `Table`
+
+Note: It is not possible to treat `Table` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortPureOutputC7.lean:19:17: error: Ambiguous term
+  bind
+Possible interpretations:
+  AspisV8R19.OracleProgramOps.bind : Program ?m.54 ?m.55 ?m.56 →
+    (?m.56 → Program ?m.54 ?m.55 ?m.57) → Program ?m.54 ?m.55 ?m.57
+  
+  Bind.bind : ?m.54 ?m.56 → (?m.56 → ?m.54 ?m.57) → ?m.54 ?m.57
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortPureOutputC7.lean:20:6: error: Tactic `cases` failed: major premise type is not an inductive type
+  I → Option A
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case ask
+I A X Y : Type
+inst✝¹ : DecidableEq I
+inst✝ : Fintype A
+f : X → Y
+i : I
+k : A → Program I A X
+ih :
+  ∀ (a : A) (t : sorry) (observe : View I A Y → ℚ),
+    lazyMean (AspisV8R19.OracleProgramOps.bind (k a) fun x => Program.done (f x)) sorry observe =
+      lazyMean (k a) sorry fun v => observe (v.1, f v.2)
+t : sorry
+observe : View I A Y → ℚ
+x✝ : AspisV8PairedCommitment.Table I A
+h : sorry = x✝
+⊢ lazyMean (AspisV8R19.OracleProgramOps.bind (Program.ask i k) fun x => Program.done (f x)) x✝ observe =
+    match x✝ i with
+    | some a => lazyMean (k a) x✝ fun r => observe ((i, a) :: r.1, f r.2)
+    | none => mean fun a => lazyMean (k a) (AspisV8PairedCommitment.put x✝ i a) fun r => observe ((i, a) :: r.1, f r.2)
+'AspisR1.OraclePortPureOutputC7.lazyMean_map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,65 @@
+import OraclePortStoredAcceptanceC6
+
+/-! Fixed stored-input fibres are used only to prove pointwise model facts.
+The probability experiment below always runs the original adaptive prover. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortStoredReductionC7
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortStoredExperimentC4 OraclePortStoredAdmissionC4
+
+/-- An oracle-independent map on the prover's result, with no added queries. -/
+def fixStored (s : Bytes) (P : Prover) : Prover :=
+  bind P fun i => .done {i with stored := s}
+
+theorem fixStored_eval (s : Bytes) (P : Prover) (H : Bytes → State) :
+    eval H (fixStored s P) = ((eval H P).1,{(eval H P).2 with stored := s}) := by
+  simp only [fixStored,eval_bind,eval,List.append_nil]
+
+def pairProver (s : Bytes) (P : Prover) : RawCutProverCompiler.Prover :=
+  OraclePortStoredProjectionC4.project (canon (fixStored s P))
+
+theorem pairProver_eval (s : Bytes) (P : Prover) (H : Bytes → State) :
+    eval H (pairProver s P) =
+      ((eval H P).1,((eval H P).2.statement,R16CanonReduction.proof (eval H P).2.proof)) := by
+  rw [pairProver,OraclePortStoredProjectionC4.project_eval,canon_eval,fixStored_eval]
+  rfl
+
+theorem original_fixed (D : LiteralByteProtocol.Decoder) (d : Decision)
+    (s : Bytes) (P : Prover) (H : Bytes → State) :
+    view (eval H (original D d (canon (fixStored s P)))) =
+      eval H (OraclePortExperiment.original D (d s) (pairProver s P)) := by
+  rw [OraclePortStoredProjectionC4.original_view,canon_eval,fixStored_eval]
+  rfl
+
+theorem annotated_fixed (D : LiteralByteProtocol.Decoder) (d : Decision)
+    (s : Bytes) (P : Prover) (H : Bytes → State) :
+    view (eval H (annotated D d (canon (fixStored s P)))) =
+      eval H (OraclePortExperiment.recorded D (d s) (pairProver s P)) := by
+  rw [OraclePortStoredProjectionC4.recorded_view,canon_eval,fixStored_eval]
+  rfl
+
+/-- A fixed fibre agrees with the adaptive experiment at the selected world.
+This equality is never used to replace its oracle distribution by a fibre. -/
+theorem annotated_selected (D : LiteralByteProtocol.Decoder) (d : Decision)
+    (P : Prover) (H : Bytes → State) :
+    view (eval H (annotated D d (canon P))) =
+      eval H (OraclePortExperiment.recorded D (d (eval H P).2.stored)
+        (pairProver (eval H P).2.stored P)) := by
+  rw [OraclePortStoredProjectionC4.recorded_view,canon_eval]
+  have hp : OraclePortStoredProjectionC4.project (canon P) =
+      pairProver (eval H P).2.stored P := by
+    unfold pairProver OraclePortStoredProjectionC4.project canon fixStored
+    rfl
+  rw [hp]
+  rfl
+
+#print axioms fixStored_eval
+#print axioms pairProver_eval
+#print axioms original_fixed
+#print axioms annotated_fixed
+#print axioms annotated_selected
+end AspisR1.OraclePortStoredReductionC7
+end

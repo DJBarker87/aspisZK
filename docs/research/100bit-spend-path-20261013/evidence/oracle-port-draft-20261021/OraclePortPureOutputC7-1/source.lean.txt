@@ -1,0 +1,32 @@
+import AspisV8R19.OracleProgramOps
+
+/-! Pure output projection preserves the entire lazy memoized oracle law.
+The function is chosen before running the prover and makes no oracle calls. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortPureOutputC7
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.OracleResampling
+
+theorem lazyMean_map {I A X Y : Type} [DecidableEq I] [Fintype A]
+    (p : Program I A X) (f : X → Y) (t : Table I A)
+    (observe : View I A Y → ℚ) :
+    lazyMean (bind p (fun x => .done (f x))) t observe =
+      lazyMean p t (fun v => observe (v.1,f v.2)) := by
+  induction p generalizing t observe with
+  | done x => rfl
+  | ask i k ih =>
+      simp only [bind,lazyMean]
+      cases h : t i with
+      | some a =>
+          simp only [h]
+          exact ih a t _
+      | none =>
+          simp only [h]
+          apply mean_congr
+          intro a
+          exact ih a (put t i a) _
+
+#print axioms lazyMean_map
+end AspisR1.OraclePortPureOutputC7
+end

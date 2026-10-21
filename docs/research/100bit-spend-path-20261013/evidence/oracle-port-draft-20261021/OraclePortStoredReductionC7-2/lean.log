@@ -1,0 +1,31 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortStoredReductionC7.lean:55:4: error: Tactic `rfl` failed: The left-hand side
+  AspisV8R19.OracleProgramOps.bind (AspisV8R19.OracleProgramOps.bind P fun i => Program.done (canonInput i)) fun i =>
+    Program.done (i.statement, i.proof)
+is not definitionally equal to the right-hand side
+  AspisV8R19.OracleProgramOps.bind
+    (AspisV8R19.OracleProgramOps.bind
+      (AspisV8R19.OracleProgramOps.bind P fun i =>
+        Program.done { statement := i.statement, proof := i.proof, stored := (eval H P).2.stored })
+      fun i => Program.done (canonInput i))
+    fun i => Program.done (i.statement, i.proof)
+
+D : LiteralByteProtocol.Decoder
+d : Decision
+P : Prover
+H : Bytes → State
+⊢ (AspisV8R19.OracleProgramOps.bind (AspisV8R19.OracleProgramOps.bind P fun i => Program.done (canonInput i)) fun i =>
+      Program.done (i.statement, i.proof)) =
+    AspisV8R19.OracleProgramOps.bind
+      (AspisV8R19.OracleProgramOps.bind
+        (AspisV8R19.OracleProgramOps.bind P fun i =>
+          Program.done { statement := i.statement, proof := i.proof, stored := (eval H P).2.stored })
+        fun i => Program.done (canonInput i))
+      fun i => Program.done (i.statement, i.proof)
+'AspisR1.OraclePortStoredReductionC7.fixStored_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortStoredReductionC7.pairProver_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortStoredReductionC7.original_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortStoredReductionC7.annotated_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortStoredReductionC7.annotated_selected' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

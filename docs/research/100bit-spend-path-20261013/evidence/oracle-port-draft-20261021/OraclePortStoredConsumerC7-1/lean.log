@@ -1,0 +1,39 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortStoredConsumerC7.lean:37:2: error: Tactic `apply` failed: [Error pretty printing: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.(invalid MessageData.lazy, missing context)]
+
+D : LiteralByteProtocol.Decoder
+s : Bytes
+P : Prover
+Q : ℕ
+hq : ∀ (H : Bytes → State), (eval H P).1.length ≤ Q
+H : Bytes → State
+hc : ¬OraclePortConsumer.collision (Q + 1161) (eval H (OraclePortExperiment.recorded D (dV s) (pairProver s P)))
+ha : FS2.accepts (eval H (OraclePortExperiment.original D (dV s) (pairProver s P)))
+checks :
+  ¬RecordedBinaryExperimentBin.binaryCollision (Q + 1161)
+        (view (eval H (annotated D OraclePortReachedRunC6.decision (canon (fixStored s P))))) →
+    (eval H (original D OraclePortReachedRunC6.decision (canon (fixStored s P)))).2.2 = true →
+      LiteralAcceptanceTerminal.Checks (output D OraclePortReachedRunC6.decision (canon (fixStored s P)) H).statement
+        (rows D OraclePortReachedRunC6.decision (canon (fixStored s P)) H)
+orig :
+  view (eval H (original D dV (canon (fixStored s P)))) =
+    eval H (OraclePortExperiment.original D (dV s) (pairProver s P))
+ann :
+  view (eval H (annotated D dV (canon (fixStored s P)))) =
+    eval H (OraclePortExperiment.recorded D (dV s) (pairProver s P))
+⊢ LiteralAcceptanceTerminal.Checks (eval H (OraclePortExperiment.recorded D (dV s) (pairProver s P))).2.1.1
+    (OraclePortConsumer.compiledRows D (dV s) (pairProver s P) H)
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortStoredConsumerC7.lean:81:14: error: Application type mismatch: The argument
+  ha
+has type
+  View Bytes State ((LiteralTranscript.Public × (ℕ → LiteralTranscript.Message)) × Bool)
+of sort `Type` but is expected to have type
+  (eval H (projected D P)).2.2 = true
+of sort `Prop` in the application
+  model ha
+'AspisR1.OraclePortStoredConsumerC7.projected_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortStoredConsumerC7.fibre_checks' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortStoredConsumerC7.admitted_dV' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortStoredConsumerC7.fibre_clean' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortStoredConsumerC7.clean' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
