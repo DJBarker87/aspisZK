@@ -45,3 +45,41 @@ Focused stage-1 compile: attempt 6, exit 0, 19.099 seconds,
 import fingerprint, command, logs and timing are in the manifest and attempt
 directory. Attempts 1–5 retain ordinary syntax/elaboration errors. This is
 focused cached-object validation, not a frozen release replay.
+
+### Stage 2: completion, clean event and restricted mass
+
+`StartChargeHit.hit_implies_chain` localises the existing indexed-round
+argument to an arbitrary specified log with pointwise completion. It has no
+probability or acceptance hypothesis. `StartChargeCompletion.decodes`
+instantiates the existing binary RWire completion on the charged prefix;
+`hit_in_prefix` sends a literal bad submitted round into that prefix's
+classifier event.
+
+`StartChargeClean.accepted_facts` obtains the existing full-run Checks,
+extractor word alignment and admitted tag from frozen acceptance.
+`clean` proves the original full experiment's `CleanAcceptedModel` with
+bad event = full-log collision OR prefix-only hit. Prefix collision freedom
+is inherited from full collision freedom; no extra collision event is added.
+
+`StartChargeProbability.hit_mass` uses the finite-support oracle law to
+identify the prefix observable's mass under the full adaptive experiment
+with its mass under `charged D P`. `restricted_union_bound` then applies
+the existing per-start density B and Q+34 start count. `failure_bound` gives
+exactly κ(Q+1161) + (Q+34)B + 2^-126 on the **unchanged full-run**
+accepted-extractor failure event, for every Q. There are no additional
+source, probability, transcript-format or lower-query hypotheses.
+
+All five modules through the probability bridge have successful focused
+checks with standard axioms and zero swaps. Completion attempts 1–4 retain
+elaboration timeouts (and one invalid reducibility annotation); making
+protocol projections and hit predicates opaque, and applying completion
+pointwise, replaces the accidental unfolding. No resource/heartbeat cap
+was raised. The symbolic decoder completion itself already passed in those
+attempts; failed recovery terms are never accepted.
+
+Before the final endpoint check, cache comparison found 14 differing
+historical objects among the integrated port objects available through the
+copied historical launcher. `cache-equivalence.json` retains the comparison.
+The final pass will use the latest `port-integrate-20261021` environment and
+recheck the new modules in dependency order. This is a specifically
+identified dependency-environment change, not an unchanged regression.
