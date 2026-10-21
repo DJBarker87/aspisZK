@@ -1,6 +1,7 @@
 # Prover commitment part 28
 
-Base `26b922be6`, branch `codex/cx-prover-commit28-20261022`.
+Inherited worktree revision `f53e30fc4e26375c1bd0623532dafaf49571dc9d`; retained endpoint comparison base
+`26b922be6`; branch `codex/cx-prover-commit28-20261022`.
 Target not yet established. Work and evidence are recorded incrementally.
 The final assigned Env J range is 7800–7999; used receipts are skipped.
 No shipped files or concurrent-owned modules are changed.

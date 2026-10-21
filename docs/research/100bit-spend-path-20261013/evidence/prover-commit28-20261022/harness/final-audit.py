@@ -49,7 +49,7 @@ identity=json.loads((E/'endpoint-identity.json').read_text());assert identity['b
 assert not (E/'endpoint-deletion.diff').read_bytes()
 for label in ['before','after']:
  assert hashlib.sha256((E/('endpoint-'+label+'.lean.txt')).read_bytes()).hexdigest()==identity[label+'_sha256']
-result=dict(status='target not yet established',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_base_revision='26b922be6',
+result=dict(status='target not yet established',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_base_revision='26b922be6',worktree_start_revision='f53e30fc4e26375c1bd0623532dafaf49571dc9d',
  final_axioms_audit=by[7831],latest_sources=latest,lean_attempts=len(rows),lean_passes=sum(r['accepted'] for r in rows),
  excluded_lean=[r['attempt'] for r in rows if not r['accepted']],preflight_only=[7834],preflight_reason='Unchanged source/deps refused; no compiler launched. Subsequent targets were not rerun.',rust=rust,
  source_scope='Kernel-checked pure reconstruction and concrete stateful installation of retained semantic/circle/control continuations; ordered observer, replay reset, port marginals, actual initializer and constructed complete formal walk.',
