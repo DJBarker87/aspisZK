@@ -238,3 +238,53 @@ The decisive remaining S4 boundaries are concrete, not more head arithmetic:
 **S4 is not closed; the 100-bit implementation-linked target is not yet
 established.** All four workers remain allocated to the above source and
 composition boundaries, rather than restarting S3/S5 arithmetic inventories.
+
+## Two-hour checkpoint — 18:49 UTC
+
+**S4 remains open.** Concentrating the four workers has produced checked
+compositions covering all ten stage-1 queries and all twelve stage-2 queries,
+not just isolated dot-product examples. These are candidate/model source-cut
+results, not closure of the frozen Rust component or the global driver.
+
+The twelve-query result now derives the coefficient array from the same
+successful tx2 prefix. Its early-indexed-powers variant invokes the retained
+transparent extracted candidate directly; it does not assume Rust
+`array::from_fn` correspondence. Likewise, the first-ten-query result derives
+canonical gamma and the coefficient array from one successful candidate-backed
+preparation and uses that same returned scratch array. The actual tx1 parent
+link remains separate. These results are in the early-powers prefix and
+prepared-scratch early-indexed-powers packets under `evidence/`.
+
+Concrete typed source bindings now cover the installed QM31 parser,
+WideExact to/from-limbs and addition, and the checked-Q/dot-push child. The
+four-comparison Q candidate has a generated-body equivalence theorem and
+optimized native differential tests. Its proof does not require an arbitrary
+iterator predicate or arbitrary dot backend. Rust Std/runtime boundaries
+listed in the packets are not thereby proved.
+
+An important scope correction: the fixed-tail/original-tail equality preserves
+all Result outcomes. The existing complete fixed-head/original-head bridge is
+only **successful fixed execution implies matching original execution**.
+The reverse success direction and totality are not consequences of that
+theorem. The reverse-loop worker has now proved that a successful original
+limb loop yields an ordered symbolic trace of exactly `end - start` steps;
+identifying its eight-step specialization with the fixed emitted sequence is
+in progress. Literal eight-element packing itself has a checked totality
+lemma.
+
+The proof-friendly combined source candidate changes only `fast_dots.rs`,
+`fast_pairing.rs` and `weights.rs` in an isolated worktree; research production
+source is unchanged. Six fixtures and the strict stack gate pass functional
+checks, with maximum measured stage-1 CU **1,210,100** and settlement CU
+**1,189,265**. These are fixture measurements, not all-input bounds. The
+candidate fails the existing preregistered B1 CU criterion on all six fixtures;
+no budget relaxation or adoption is claimed. A single additional inline
+variant was more expensive and has been stopped. The cheaper candidate's
+remaining standing gates are running sequentially on the capped NUC.
+
+Remaining closure work is: reverse-loop/totality composition; actual parent
+caller and source-operation bindings; an explicit decision on candidate
+adoption versus frozen-source correspondence; then the concrete component and
+driver interfaces with the appropriate source/artifact pins and one coherent
+closure replay. The S10 model placeholder remains a placeholder. The two-hour
+checkpoint did not meet full S4 closure, and no new closure ETA is asserted.
