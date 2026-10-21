@@ -1,0 +1,85 @@
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s4-current-repin-20261020/s4-query-values-four-callback-claim-prefix-carrier-v1/sources/S4QueryValuesClaimPrefixCarrierV1.lean:47:4: error: No goals to be solved
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s4-current-repin-20261020/s4-query-values-four-callback-claim-prefix-carrier-v1/sources/S4QueryValuesClaimPrefixCarrierV1.lean:59:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ∀ (i : Fin 29), CoordBound (↑_a)[↑i]
+Error: Application type mismatch: The argument
+  claim_powers_prefix_array_coordinate_bounds._proof_1 claimPowers i
+has type
+  ↑i < (↑(prefixArrayToCurrent (claimArrayToPrefix claimPowers))).length
+but is expected to have type
+  ↑i < (↑_a).length
+in the application
+  (↑_a)[↑i]
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+gamma : ClaimE
+claimPowers : Std.Array ClaimE 29#usize
+hgamma : ClaimCanonical gamma
+hpowers : AspisR1CurrentPreparedClaim.ClaimPowers.powers 29#usize gamma = ok claimPowers
+⊢ ∀ (i : Fin 29), CoordBound (↑(prefixArrayToCurrent (claimArrayToPrefix claimPowers)))[↑i]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s4-current-repin-20261020/s4-query-values-four-callback-claim-prefix-carrier-v1/sources/S4QueryValuesClaimPrefixCarrierV1.lean:98:83: error: Application type mismatch: The argument
+  g
+has type
+  Std.Array PrefixWide 29#usize
+but is expected to have type
+  Std.Array AspisR1FastDotsQueryValuesFourCallbackFieldResultV2.CurrentWide 29#usize
+in the application
+  AspisR1FastDotsQueryValuesFourCallbackClaimPowersV1.CallbackFieldResult base
+    (AspisR1FastDotsConcreteTailInstallRootV1.install (AspisR1FastDotsQueryValuesFourCallbackClaimPowersV1.Outer base))
+    arrayQ g
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s4-current-repin-20261020/s4-query-values-four-callback-claim-prefix-carrier-v1/sources/S4QueryValuesClaimPrefixCarrierV1.lean:101:83: error: Application type mismatch: The argument
+  g
+has type
+  Std.Array PrefixWide 29#usize
+but is expected to have type
+  Std.Array AspisR1FastDotsQueryValuesFourCallbackFieldResultV2.CurrentWide 29#usize
+in the application
+  AspisR1FastDotsQueryValuesFourCallbackClaimPowersV1.CallbackFieldResult base
+    (AspisR1FastDotsConcreteTailInstallRootV1.install (AspisR1FastDotsQueryValuesFourCallbackClaimPowersV1.Outer base))
+    arrayQ g
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s4-current-repin-20261020/s4-query-values-four-callback-claim-prefix-carrier-v1/sources/S4QueryValuesClaimPrefixCarrierV1.lean:104:83: error: Application type mismatch: The argument
+  g
+has type
+  Std.Array PrefixWide 29#usize
+but is expected to have type
+  Std.Array AspisR1FastDotsQueryValuesFourCallbackFieldResultV2.CurrentWide 29#usize
+in the application
+  AspisR1FastDotsQueryValuesFourCallbackClaimPowersV1.CallbackFieldResult base
+    (AspisR1FastDotsConcreteTailInstallRootV1.install (AspisR1FastDotsQueryValuesFourCallbackClaimPowersV1.Outer base))
+    arrayQ g
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s4-current-repin-20261020/s4-query-values-four-callback-claim-prefix-carrier-v1/sources/S4QueryValuesClaimPrefixCarrierV1.lean:107:83: error: Application type mismatch: The argument
+  g
+has type
+  Std.Array PrefixWide 29#usize
+but is expected to have type
+  Std.Array AspisR1FastDotsQueryValuesFourCallbackFieldResultV2.CurrentWide 29#usize
+in the application
+  AspisR1FastDotsQueryValuesFourCallbackClaimPowersV1.CallbackFieldResult base
+    (AspisR1FastDotsConcreteTailInstallRootV1.install (AspisR1FastDotsQueryValuesFourCallbackClaimPowersV1.Outer base))
+    arrayQ g
+'AspisR1FastDotsQueryValuesClaimPrefixCarrierV1.prefixWideToCurrent_currentWideToPrefix' does not depend on any axioms
+'AspisR1FastDotsQueryValuesClaimPrefixCarrierV1.prefixArrayToCurrent_claimArrayToPrefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsQueryValuesClaimPrefixCarrierV1.claim_powers_prefix_array_coordinate_bounds' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsQueryValuesClaimPrefixCarrierV1.query_values_success_four_callback_field_results_of_claim_powers_prefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
