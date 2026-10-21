@@ -1,0 +1,56 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedBorrowTotalV1.lean:43:4: error: Type mismatch
+  hmut
+has type
+  sdk.data_cells.index_mut_usize slot = ok ((↑sdk.data_cells)[↑slot], sdk.data_cells.set slot)
+but is expected to have type
+  sdk.data_cells.index_mut_usize slot = ok (cell, sdk.data_cells.set slot)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedBorrowTotalV1.lean:57:2: error: unsolved goals
+case pos
+sdk : OwnedSdk
+slot : Usize
+valid : ↑slot < (↑sdk.data_cells).length
+cell : OwnedDataCell
+hcell : cell = (↑sdk.data_cells)[↑slot]
+hread : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+right✝ :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (cell, sdk.data_cells.set slot)
+allowed : cell.borrowed ≥ 0#isize ∧ cell.borrowed < core.num.Isize.MAX
+⊢ 0 ≤ ↑cell.borrowed ∧ ↑cell.borrowed < Isize.max
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedBorrowTotalV1.lean:58:2: error: unsolved goals
+case neg
+sdk : OwnedSdk
+slot : Usize
+valid : ↑slot < (↑sdk.data_cells).length
+cell : OwnedDataCell
+hcell : cell = (↑sdk.data_cells)[↑slot]
+hread : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+right✝ :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (cell, sdk.data_cells.set slot)
+allowed : ¬(cell.borrowed ≥ 0#isize ∧ cell.borrowed < core.num.Isize.MAX)
+⊢ (if 0 ≤ ↑cell.borrowed ∧ ↑cell.borrowed < Isize.max then
+      ok (core.result.Result.Ok (Usize.ofNatCore (↑cell.bytes).length ⋯))
+    else ok (core.result.Result.Err solana_program_error.ProgramError.AccountBorrowFailed)) =
+    ok
+      (if 0 ≤ ↑cell.borrowed ∧ ↑cell.borrowed < Isize.max then
+        core.result.Result.Ok (Usize.ofNatCore (↑cell.bytes).length ⋯)
+      else core.result.Result.Err solana_program_error.ProgramError.AccountBorrowFailed)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedBorrowTotalV1.lean:58:68: warning: This simp argument is unused:
+  allowed
+
+Hint: Omit it from the simp argument list.
+  simp [owned_data_len, ̲hread, ̲PrimitivesTotal.shared_allowed_exact,̵a̵l̵l̵o̵w̵e̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS2OwnedStage1.SdkReference.BorrowTotal.cell_operations_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowTotal.data_len_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowTotal.shared_increment_total' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

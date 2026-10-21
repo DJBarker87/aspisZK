@@ -481,3 +481,123 @@ through exact emitted function identity and proves release with no guards is
 identity. This is not release-totality for arbitrary supplied guard records.
 The packet consistency check accepts31 current focused targets; it regenerates
 both old-tail and full SDK reference adapters from the pinned emitted text.
+
+
+`S2SdkOwnedDecodedReuseV1.stage1_decoded_first` now strengthens the complete
+owned-parent conclusion to expose one matching boxed decode, the semantic
+projection of that exact object, and first_decoded on that exact public slice.
+All three equations are derived from the single enclosing owned_stage1 success;
+none is an added premise. Constructor equations from Try::branch are explicitly
+propagated, rather than treating its Continue payload as independent data.
+
+`stage1_current_first` consumes that witness and the existing actual-decoder
+and S6 decoder-scoped reuse transport. From the same single parent execution
+it derives actual decodeActual success and firstCurrent success on exactly the
+same public bytes. `semantic_public_eq` checks the full newly emitted semantic
+projection equals the earlier checked projection by definitional equality.
+The current successful receipt is s2-sdk-owned-decoded-reuse-v4: exit0,
+28.996379s,3117383680 bytes RSS,swap0,-j1 -M4400; all three axioms audits
+contain only propext,Classical.choice,Quot.sound. v1/v3 failures are excluded.
+This removes the old independent decode/public/caller premises at the complete
+owned parent boundary. It does not yet establish the corresponding instance
+for the shipped SDK parent, nor identify the slice with an initial SDK account
+buffer through a proved heap-construction relation. No whole S2/S6 closure or
+100-bit release conclusion follows at this checkpoint.
+
+
+### Same-byte parent, SDK write sets and guard arithmetic continuation
+
+The latest decoded-reuse receipt is now s2-sdk-owned-decoded-reuse-v6:
+exit0,7.620981s,3451830272 bytes RSS,swap0. In addition to the three-call
+witness and current first composition, `stage1_current_first_split` derives
+split10 from that same parent success through the already checked compact
+source guard. The outer release admits [3,11], but the existing
+CurrentCompactReleaseRejectV1 theorem rejects11 at compact tx1; no adversary
+input restriction is introduced. This matches the fixed split in dV_frozen2.
+
+`S2SdkOwnedPrimitivesTotalV1.bytes_clone_total` proves the exact emitted Vec
+byte-clone is TOTAL identity for arbitrary typed byte vectors, by the existing
+library clone induction. `shared_allowed_exact/true` cover the entire signed
+counter domain. Current receipt primitives-total-v3: exit0,15.507505s,
+2236481536 bytes RSS,swap0,standard-only audits.
+
+`S2SdkOwnedBorrowTotalV1` now proves exact valid-slot read/update operations,
+temporary length read, checkpoint acquisition and shared acquisition, including
+their ordinary AccountBorrowFailed results and full returned SDK state. Shared
+increment and positive-count decrement are TOTAL signed checked operations.
+Current receipt borrow-total-v8: exit0,4.366439s,2263498752 bytes RSS,swap0,
+standard-only audits. Slot validity is an explicit domain obligation here; it
+must be derived by the actual enclosing SDK construction/caller, not assumed
+closed by these local results.
+
+`S2SdkOwnedGuardReleaseV1.release_total` composes the complete emitted reverse
+release order under its explicit LiveInvariant. That invariant tracks valid
+slots, exclusive count-1 and exclusion from both shared slots, plus enough
+shared count for each live guard, including public/proof aliasing. Literal
+release subterm identity is checked by release_eq. Current receipt
+guard-release-v5: exit0,11.010643s,2278637568 bytes RSS,swap0,standard-only
+audits. This is conditional TOTAL; the parent-body acquisition invariant
+instance remains to be derived. It is not a replacement assumption that
+closes S2.
+
+The direct selected-byte wide Kani query sdk-owned-descriptor-frame-v2 did
+not complete: it was stopped at the ten-minute review (9:59); the runner
+recorded exit1,602.044s,3476408KiB RSS,swap0. It is excluded. The descriptor/
+counter predecessor sdk-owned-descriptor-join-v1 passed in5.129s,
+428220KiB,swap0,over all view lengths0..58295. No larger cap retry was used.
+
+The replacement checks an actual memory write-set contract on native SDK
+acquire/drop rather than selecting a byte in the large buffer. The two v2
+harnesses retain real AccountInfo/Rc/RefCell and the exact original
+try_borrow_data / try_borrow_mut_data and guard drop operations. They permit
+only the actual signed borrow counter cell to be assigned and require its
+original value on return. Thus the checked operation cannot assign to account
+buffer memory, SDK slice descriptors, keys, flags, rent_epoch, lamport values,
+or Rc headers. Input buffers contain all58295 symbolic bytes with view length
+0..58295; signed borrow counts range over all isize values. Both data and
+lamport Rc strong/internal weak counts range1..isizeMAX; the private compiler
+layout is validated against public SDK operations/count accessors before
+logical-count injection. Lamport borrow counters start at the SDK constructor's
+zero; no arbitrary lamport-borrow counter domain is claimed.
+
+- sdk-shared-write-frame-v2: exit0,35.368s,4653828KiB RSS,swap0,
+  0/761 failed assertions,2/2 covers.
+- sdk-exclusive-write-frame-v2: exit0,27.639s,4754044KiB RSS,swap0,
+  0/795 failed assertions,2/2 covers.
+
+Fresh admissions,6GiB/8GiB cgroups and MemorySwapMax=0 are recorded. The
+property audit inspects the already checked GOTO without another solver run;
+it confirms actual SDK/stdlib assigns checks and the counter-restoration
+postcondition. Only source, text metadata and binary hashes are distributed.
+Kani0.67.0 function-contract and compiler/layout trust boundaries are explicit.
+The actual Cargo fingerprints confirm -C opt-level=3,overflow-checks=yes and
+the Kani compiler/sysroot flags despite Cargo's generic dev-profile label;
+Kani library hashes and contract source pins are retained. The dedicated
+check-sdk-frame-packet.py validates sources, dependency versions, receipts,
+flags, assignment/postcondition metadata and resource limits; the general
+packet checker invokes it.
+
+The actual checkpoint-size helper is also TOTAL1768: the new
+S2SdkCheckpointSizeTotalV1 proves literal emitted helper identities to the
+already checked R22 CHECKPOINT_FIXED and Tx1FinalLenBoundV8 functions, then
+reuses their symbolic proofs and two small checked arithmetic operations.
+No unchanged arithmetic dependency is rebuilt. Receipt checkpoint-size-total-v2:
+exit0,14.343054s,2255339520 bytes RSS,swap0,standard-only audits. The missing
+R22ControlBounds cache in the initial attempt was found and reused.
+
+Before these pins, research was re-inspected read-only at
+67851f0ab48d40e8df404efc18d65326238804d5. Its S2/S6 re-pins still name
+b2727acd3, and both SDK program files have no diff against that freeze.
+The current handoff's integration endpoint is
+OraclePortHeadlineFrozen2PerAttempt.final_soundness / dV_frozen2, under the
+unchanged raw per-attempt SECURITY-CONTRACT-20261021.md. This continuation
+makes no numerical completion claim and changes no frozen production source.
+
+Remaining: instantiate the live-guard invariant from the complete owned parent
+on every ordinary return; complete the concrete shipped SDK account/snapshot/
+alias construction and ordered parent-step correspondence (including errors,
+writeback and release effects); feed that instance into the adopted two-tx
+ordered-log/source join. The checked parent decode/first/split conclusions and
+native operation write frames remove specific local premises, but no whole
+S2 or S6 closure is claimed. S1 still needs its original nested claim/powers
+and preparation trace premises discharged through this caller connection.

@@ -25,6 +25,7 @@ if sdk_owned.exists():
   for p in sdk_owned.glob('*.lean.txt'):(i/p.name[:-4]).write_bytes(p.read_bytes())
   subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/adapt-owned-sdk.py'),str(i),str(o)],check=True,capture_output=True)
   for p in o.iterdir():assert p.read_bytes()==(S/p.name).read_bytes(),p.name
+subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/check-sdk-frame-packet.py')],check=True)
 freeze=json.loads((E/'extraction-source-freeze.json').read_text())
 assert all(r['matches'] and r['frozen_sha256']==r['extraction_workspace_sha256'] for r in freeze['files'])
 receipts=[(p,json.loads(p.read_text())) for p in E.glob('*/receipt.json')]

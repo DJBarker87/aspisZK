@@ -7,6 +7,8 @@ subprocess.run(['python3',str(H/'kit/reservation.py'),str(H/(name+'-admission.js
 cmd=['cargo','kani','--manifest-path',str(crate/'Cargo.toml'),'--lib','--exact','--harness',harness,'--solver','cadical','--no-assertion-reach-checks','-j','1','-Z','unstable-options','--output-format','terse','--harness-timeout','600','--cbmc-args','--unwinding-assertions']
 if len(sys.argv)>4 and sys.argv[4]=='codegen':
  pos=cmd.index('--cbmc-args');cmd[pos:pos]=['--only-codegen']
+if len(sys.argv)>4 and sys.argv[4]=='contracts':
+ pos=cmd.index('--cbmc-args');cmd[pos:pos]=['-Z','function-contracts']
 if len(sys.argv)>4 and sys.argv[4]=='stubbing':
  pos=cmd.index('--cbmc-args');cmd[pos:pos]=['-Z','stubbing']
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
