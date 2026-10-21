@@ -7401,3 +7401,20 @@ destructor correspondence (whole-frame Kani reached the 6 GiB review point
 and was stopped, per AGENTS.md); forest admission, with 24 unsupported
 externals and timed-out validator comparisons; the shipped runtime
 inhabitant; and checker/retry coupling.
+
+## D105 — one privacy headline (2026-10-21, lead)
+
+Landed from `codex/cx-priv-headline-20261021`.
+`R1Z.PrivacyR1Headline.privacy_headline` composes the quotient line (D94 →
+D100) with the builder line (D99 → ReleaseSource3) through a common builder
+contract, with proved adapters for the abstract protocol, the canonical
+builder and the source runtime join; there is no tape-carrier obstruction.
+Its signature is audited against all six predecessors. Exact error:
+ε = M·qmax/2^255 + M²/2^255 + εexh + 8·4096/((2^31−1)^4−1) + 16/2^486 + 128(M+1)/2^190
+≤ 2^-109 + 2^-137 + 2^-454 + 128(M+1)/2^190 < 2^-100, with M = 8·n1 ≤ 2^25.
+The numerical part needs no source hypothesis. Focused compile (env J 9500):
+exit 0, 5.82 s, 4.13 GB, zero swap, standard axioms. `r1p-final/PRIVACY-HEADLINE-20261021.md`
+is now the single privacy status reference (statement, plain-English premise
+table with owners, audit). Remaining: source builder/runtime correspondence,
+the commitment law, real/ideal execution joins and the release boundaries.
+Builder part 10 and prover part 7 will be folded in when they land.
