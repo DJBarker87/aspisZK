@@ -1,0 +1,3 @@
+PROVED complete literal V10 candidate outer success supplies the same mapped output array and all four scanner-derived literal field-result witnesses.
+
+Limitations: No independent current/old helper-success premise; complete outer transport derives the single matching current output. Retains same-public gamma canonicality, ClaimPowers provenance, caller coefficient equality, proof length/query bound/opening slice and scan success. Actual full caller integration discharges those in a separate theorem. Selected installed Ops and source-shaped candidate output, not unrestricted raw method/source runtime refinement, frozen adoption, whole S4 closure or global soundness.

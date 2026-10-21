@@ -1,0 +1,9 @@
+# Concrete S4 Dot.push child-call equality
+
+This source-only packet proves a concrete edge between the installed S4 push backend and the retained generated Dot loop. `dot_via_raw_eq_generated_push_raw` gives full `Result` equality for an arbitrary raw callback, including error and divergence propagation, after mapping the one-field Dot carrier. Its successful case composes the local four-coordinate update theorem with the generated range-loop update theorem. `qraw_backend_eq_generated_dot_control` then specializes the explicit EbyK push body to the retained `Dot.push_raw` adapter using the exact `QRaw` value already installed by the accepted S4 tail packet.
+
+The outer EbyK control body and its explicit operation slots were source-body checked in `s4-concrete-tail-installed-three-pushes-v1-20261021`. The copied generated Dot `push_loop.body`, `push_loop`, and outer `push_raw` adapter were source-body checked in the retained `original-dot-push-loop-refinement-v3` packet. This theorem connects those model bodies and preserves all `Result` branches; it does not establish the Rust standard-library execution semantics for `Range.next`, `Slice.iter`, or `Iterator.all`, nor prove Rust `Q.raw` is identical to the emitted QRaw model at runtime. Those remain explicit source/std boundaries.
+
+Lean 4.32 target `AspisR1S4DotPushCallEqualityV1` compiled with `-j1 -M4400`, exit 0 in 7.059 seconds, peak aggregate RSS 3,708,911,616 bytes, swap 0. Both exported theorem axiom reports contain only `propext`, `Classical.choice`, and `Quot.sound`. No custom axioms, `sorry`, `native_decide`, or generated external-axiom template is used in the selected theorem closure.
+
+Run `python3 check-packet.py` from this directory to verify the packet hashes and direct-source/producer pins. Compiled objects are intentionally omitted.
