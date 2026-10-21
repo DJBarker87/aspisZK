@@ -1,0 +1,11 @@
+# S4 width-29 literal result join
+
+This packet proves `literal_field_result_width29`: an existing successful literal S4 field result has decoded value `width29Batch word gamma` when its 26 head values, lane-28 first tail value, and two ordered tail-loop values are identified with the corresponding width-29 terms. The proof uses `Fin.sum_univ_add (a := 26) (b := 3)` to split the 29-lane sum. That exact split compiles under the isolated V6 owner cohort recorded in `cohort/`.
+
+The theorem’s premises remain explicit: `hhead` identifies each of the 26 base-field contributions; `hwide28` identifies the coefficient at lane 28; `hfirst` identifies the initial tail scalar; and `htail` identifies both ordered tail-loop coefficients and scalars. The next composition must derive those facts from the same checked opening bytes, decoded slots, actual callback trace, and canonical powers. This packet proves the algebraic join; it does not discharge those byte/value premises or claim full Rust runtime correspondence.
+
+`AspisFormal.V6Width29CorrelatedAgreement` was rebuilt from the unchanged source into an isolated object directory. The previous selected owner cohort had an instantiated `width29Batch`/`Finset.sum` mismatch (`rfl` failed with a missing `SimplexCategory` instance). The corrected overlay stages all 843 selected `AspisFormal/*.olean` modules in first-owner-wins order from the original exact parent profile, replacing only V6 with the isolated rebuild. The selected owner map and hashes are in `cohort/selected-aspisformal-owner-manifest.json`; the original non-AspisFormal profile order remains unchanged. This is a local proof environment repair, not a global replacement of the accepted V6 owner.
+
+Two focused probes are preserved: the unfolded V6 batch expression is definitionally equal to its 29-lane sum under the coherent cohort, and the `Fin.sum_univ_add` lemma gives the exact 26+3 split. Rejected range-split experiments and the corrected `-R` setup are retained under `diagnostics/` and the attempt receipts. Failed diagnostics are not proof inputs.
+
+The checked module uses Lean 4.32, `-j1 -M4400`, and only standard axioms `[propext, Classical.choice, Quot.sound]`. The packet contains sources and evidence only; it contains no compiled objects.

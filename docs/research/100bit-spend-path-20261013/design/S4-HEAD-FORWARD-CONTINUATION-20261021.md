@@ -1063,3 +1063,44 @@ standard-axiom reports. The rejected first attempt is retained: an ambiguous
 local Range alias and a scalar-literal simplification needed correction.
 No whole replay or source adoption occurred. The full arithmetic/model join
 and implementation-linked100-bit target remain open.
+
+
+## Width29 algebra and full26 head projection have checked owners
+
+`evidence/s4-width29-literal-join-d18-v1-20261022` proves the complete
+algebraic26+3 join from an existing LiteralFieldResult. Its hhead, hwide28,
+hfirst and htail value-identification premises remain explicit; follow-on
+composition must discharge them from the same bytes and actual trace.
+The proof reuses Fin.sum_univ_add instead of a custom range sum proof.
+Focused exit0,8.986s,peak RSS3,670,228,992 bytes,zero swaps,standard axioms.
+
+The packet records the unchanged V6 source's isolated owner rebuild and
+selected843-module AspisFormal overlay. The previous instantiated sum had
+a missing SimplexCategory instance and failed rfl; the new owner passes
+unfold/rfl and the exact existing finite-sum split. This is a local compiled
+owner repair, not adoption of a new protocol source or a coherent final
+release replay. The historical/global owner remains untouched.
+
+`evidence/s4-head-codec-projection-v1-20261022` records the source byte-to-M31
+and head parser embedding facts with standard-axiom audit. Its old head-v13
+original command/LEAN_PATH was not retained; that provenance limitation is
+explicit and it must not be treated as a final formal-release producer until
+coherent receipt repair/replay. Exact-name C1 slice receipt repair is recorded.
+`evidence/s4-head-fin26-codec-wrapper-v1-20261022` adds a newly recorded focused
+consumer: from shared hbytes and all29 same-g power equations it derives
+all26 exact head terms, without separate cell/read premises. Focused exit0,
+8.233s,peak RSS3,706,109,952 bytes,zero swaps,standard axioms.
+
+## The actual returned source array preserves decoded field values
+
+`evidence/s4-same-returned-array-semantic-transport-v1-20261022` proves the
+fieldwise Current-to-Full map preserves all eight coordinates and decoded
+values, for arbitrary raw inputs without a canonicality premise.
+`S4ReturnedValueTransportV1.same_returned_array_decode` uses the exact array
+identity already retained by candidate query evidence; it transports the
+Current-carrier decoded list to that actual returned Full-carrier list.
+It does not prove their arithmetic value or any hash/oracle trace equality.
+Focused exit0,13.042s,peak RSS3,976,593,408 bytes,zero swaps; three standard
+axiom reports. The concrete one-slot arithmetic join, four-slot lift and
+actual query/model composition remain in flight; source adoption and the
+implementation-linked100-bit target are still open.

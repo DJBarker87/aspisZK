@@ -1,0 +1,109 @@
+/tmp/d18-s4-width29-literal-join-v2/sources/D18S4Width29LiteralJoinCheckV1.lean:45:8: warning: This simp argument is unused:
+  Fin.sum_univ_zero
+
+Hint: Omit it from the simp argument list.
+  simp [Fin.sum̵_̵u̵n̵i̵v̵_̵z̵e̵r̵o̵,̵ ̵F̵i̵n̵.̵s̵u̵cc_zero_eq_one, Fin.succ_one_eq_two, add_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/d18-s4-width29-literal-join-v2/sources/D18S4Width29LiteralJoinCheckV1.lean:59:35: error: unsolved goals
+f : Fin 29 → TowerWide
+g : ℕ → TowerWide := fun n => if h : n < 29 then f ⟨n, h⟩ else 0
+gA : ℕ → TowerWide := fun n => if h : n < 26 then f (Fin.castAdd 3 ⟨n, h⟩) else 0
+gB : ℕ → TowerWide := fun n => if h : n < 3 then f (Fin.natAdd 26 ⟨n, h⟩) else 0
+hsplit : List.range' 0 29 = List.range' 0 26 ++ List.map (fun n => 26 + n) (List.range' 0 3)
+i : ℕ
+hi : i < 26
+hn : 0 + 1 * i ∈ List.range' 0 26
+hn26 : 0 + 1 * i < 26
+hn29 : 0 + 1 * i < 29
+⊢ (if h : i < 29 then f ⟨i, h⟩ else 0) = if h : i < 26 then f ⟨i, ⋯⟩ else 0
+/tmp/d18-s4-width29-literal-join-v2/sources/D18S4Width29LiteralJoinCheckV1.lean:67:34: error: unsolved goals
+f : Fin 29 → TowerWide
+g : ℕ → TowerWide := fun n => if h : n < 29 then f ⟨n, h⟩ else 0
+gA : ℕ → TowerWide := fun n => if h : n < 26 then f (Fin.castAdd 3 ⟨n, h⟩) else 0
+gB : ℕ → TowerWide := fun n => if h : n < 3 then f (Fin.natAdd 26 ⟨n, h⟩) else 0
+hsplit : List.range' 0 29 = List.range' 0 26 ++ List.map (fun n => 26 + n) (List.range' 0 3)
+hfirstMap : List.map g (List.range' 0 26) = List.map gA (List.range' 0 26)
+i : ℕ
+hi : i < 3
+hn : 0 + 1 * i ∈ List.range' 0 3
+hn3 : 0 + 1 * i < 3
+hn29 : 26 + (0 + 1 * i) < 29
+⊢ (if h : 26 + i < 29 then f ⟨26 + i, h⟩ else 0) = if h : i < 3 then f ⟨26 + i, ⋯⟩ else 0
+/tmp/d18-s4-width29-literal-join-v2/sources/D18S4Width29LiteralJoinCheckV1.lean:78:42: error: unsolved goals
+f : Fin 29 → TowerWide
+g : ℕ → TowerWide := fun n => if h : n < 29 then f ⟨n, h⟩ else 0
+gA : ℕ → TowerWide := fun n => if h : n < 26 then f (Fin.castAdd 3 ⟨n, h⟩) else 0
+gB : ℕ → TowerWide := fun n => if h : n < 3 then f (Fin.natAdd 26 ⟨n, h⟩) else 0
+hsplit : List.range' 0 29 = List.range' 0 26 ++ List.map (fun n => 26 + n) (List.range' 0 3)
+hfirstMap : List.map g (List.range' 0 26) = List.map gA (List.range' 0 26)
+htailMap : List.map (fun n => g (26 + n)) (List.range' 0 3) = List.map gB (List.range' 0 3)
+i : Fin 26
+⊢ f ⟨↑i, ⋯⟩ = f (Fin.castAdd 3 i)
+/tmp/d18-s4-width29-literal-join-v2/sources/D18S4Width29LiteralJoinCheckV1.lean:86:42: error: unsolved goals
+f : Fin 29 → TowerWide
+g : ℕ → TowerWide := fun n => if h : n < 29 then f ⟨n, h⟩ else 0
+gA : ℕ → TowerWide := fun n => if h : n < 26 then f (Fin.castAdd 3 ⟨n, h⟩) else 0
+gB : ℕ → TowerWide := fun n => if h : n < 3 then f (Fin.natAdd 26 ⟨n, h⟩) else 0
+hsplit : List.range' 0 29 = List.range' 0 26 ++ List.map (fun n => 26 + n) (List.range' 0 3)
+hfirstMap : List.map g (List.range' 0 26) = List.map gA (List.range' 0 26)
+htailMap : List.map (fun n => g (26 + n)) (List.range' 0 3) = List.map gB (List.range' 0 3)
+hA : (List.map g (List.range' 0 26)).sum = ∑ i, f (Fin.castAdd 3 i)
+i : Fin 3
+⊢ f ⟨26 + ↑i, ⋯⟩ = f (Fin.natAdd 26 i)
+/tmp/d18-s4-width29-literal-join-v2/sources/D18S4Width29LiteralJoinCheckV1.lean:93:61: error: unsolved goals
+f : Fin 29 → TowerWide
+g : ℕ → TowerWide := fun n => if h : n < 29 then f ⟨n, h⟩ else 0
+gA : ℕ → TowerWide := fun n => if h : n < 26 then f (Fin.castAdd 3 ⟨n, h⟩) else 0
+gB : ℕ → TowerWide := fun n => if h : n < 3 then f (Fin.natAdd 26 ⟨n, h⟩) else 0
+hsplit : List.range' 0 29 = List.range' 0 26 ++ List.map (fun n => 26 + n) (List.range' 0 3)
+hfirstMap : List.map g (List.range' 0 26) = List.map gA (List.range' 0 26)
+htailMap : List.map (fun n => g (26 + n)) (List.range' 0 3) = List.map gB (List.range' 0 3)
+hA : (List.map g (List.range' 0 26)).sum = ∑ i, f (Fin.castAdd 3 i)
+hB : (List.map (fun n => g (26 + n)) (List.range' 0 3)).sum = ∑ i, f (Fin.natAdd 26 i)
+⊢ (List.map g (List.range' 0 26)).sum + (List.map (g ∘ fun n => 26 + n) (List.range' 0 3)).sum =
+    (List.map g (List.range' 0 26)).sum + (List.map (fun n => g (26 + n)) (List.range' 0 3)).sum
+/tmp/d18-s4-width29-literal-join-v2/sources/D18S4Width29LiteralJoinCheckV1.lean:65:17: warning: This simp argument is unused:
+  hn26
+
+Hint: Omit it from the simp argument list.
+  simp [g, gA, hn26̵,̵ ̵h̵n̵2̵9]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/d18-s4-width29-literal-join-v2/sources/D18S4Width29LiteralJoinCheckV1.lean:65:23: warning: This simp argument is unused:
+  hn29
+
+Hint: Omit it from the simp argument list.
+  simp [g, gA, hn26,̵ ̵h̵n̵2̵9̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/d18-s4-width29-literal-join-v2/sources/D18S4Width29LiteralJoinCheckV1.lean:73:17: warning: This simp argument is unused:
+  hn3
+
+Hint: Omit it from the simp argument list.
+  simp [g, gB, hn3̵,̵ ̵h̵n̵29]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/d18-s4-width29-literal-join-v2/sources/D18S4Width29LiteralJoinCheckV1.lean:73:22: warning: This simp argument is unused:
+  hn29
+
+Hint: Omit it from the simp argument list.
+  simp [g, gB, hn3,̵ ̵h̵n̵2̵9̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/d18-s4-width29-literal-join-v2/sources/D18S4Width29LiteralJoinCheckV1.lean:121:28: warning: Variable name `hc` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/d18-s4-width29-literal-join-v2/sources/D18S4Width29LiteralJoinCheckV1.lean:191:46: warning: This simp argument is unused:
+  Fin.val_natAdd
+
+Hint: Omit it from the simp argument list.
+  simp [term26, term27, term28, Fin.natAdd,̵ ̵F̵i̵n̵.̵v̵a̵l̵_̵n̵a̵t̵A̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1D18S4Width29LiteralJoinV1.literal_field_result_width29' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
