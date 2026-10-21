@@ -7352,3 +7352,19 @@ full semantic admission; canonical Parts-content/column correspondence; the
 shipped `RustRuntimeJoin` inhabitant; and real checker/retry coupling. Next:
 P6 route for `derive_nullifier_with` too (Kani shipped = owned reference,
 where the reference avoids the HRTB closure).
+
+## D102 — builder refinement part 7: nullifier via P6 route (2026-10-21, lead)
+
+Landed from `codex/cx-builder-ref7-20261021` (`r1p-final/BUILDER-CONT7-20261021.md`).
+`derive_nullifier_with` is closed by the P6 route: an owned callback reference
+without the HRTB closure extracts, and four Kani checks with the shared
+memoised oracle and the verified raw-word contract prove shipped = reference
+(cfg-gated module at the end of `spend.rs`; all three frozen ELFs rebuilt,
+SHA-256 and byte comparison equal). Also proved: canonical merge, the Parts
+component column handoff, actual Vec column materialisation and bank
+composition, and conditional Parts/bank/column correspondence. 7 modules,
+20 standard-axiom audits, zero swap. Next blocker: Aeneas hits a shared-borrow
+internal error in the validated-tree `append_one` carry loop; same P6 route
+next. `PrivacyR1FinalReleaseSource2` has an empty signature diff (no weakening
+claimed). Open: complete semantic admission, primitive Parts-content
+correspondence, the shipped RustRuntimeJoin, and checker/retry coupling.
