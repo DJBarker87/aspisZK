@@ -128,3 +128,22 @@ J7622/J7625/J7627–7629 are excluded elaboration/normalization failures.
 No recursion/heartbeat option changed and no concrete large arithmetic was
 normalized. Only this job's additive modules were installed; imported shared
 predecessors and all concurrent-owned files remain untouched.
+
+## Stage 4 — install the coupled source oracle in extracted digest APIs
+
+`ProverCommitDigest26` constructs concrete, total ROM interpretations for the
+semantic, circle and suffix `Digest32` owners. All three concatenate the exact
+ordered source slices and return the retained machine byte representation of
+the same oracle answer. `semantic_circle` proves the nominal hash instance
+conversion exactly. `packed_read` installs the product coupling's packed raw
+words at their actual stream-3 addresses. `digest_law` proves that the *whole
+installed digest function*, as a consumer of the complete finite table, has
+the uniform source-table law. It supplies no source/model execution equality
+and adds no trusted source-join field.
+
+J7632 passes all four audits: exit 0, wall 1.98 s, peak RSS 4074312 KiB,
+swap 0; standard axioms only. J7631 is an excluded namespace/dictionary
+elaboration failure. The replacement uses the existing explicit finite-instance
+transport and opaque finite dictionaries, preserving the actual distributions
+without kernel-normalizing their large enumerations. No limits were raised.
+The dictionary linter warnings concern intentional opacity, not added axioms.
