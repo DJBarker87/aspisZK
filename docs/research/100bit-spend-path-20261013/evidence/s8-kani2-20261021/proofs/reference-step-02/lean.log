@@ -1,0 +1,43 @@
+/Users/dominic/ZK/.worktrees/cx-s8-kani2/docs/research/100bit-spend-path-20261013/lean/S8Kani2FinishTraversal.lean:33:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let a ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) raw state.2
+    let q ← value_owned a
+    let (_, index_mut_back) ←
+      alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice aspis_core.field.QM31) state.1 state.2
+    let index1 ← state.2 + 1#usize
+    ok (cont (index_mut_back q, index1))
+is not definitionally equal to the right-hand side
+  do
+    let x ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice S8OwnedP6ValueModel.Row) raw state.2
+    let x ← value_owned x
+    let x_1 ← alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice S8OwnedP6ValueModel.Q) state.1 state.2
+    let next ←
+      let (_, back) := x_1
+        do
+        let next ← state.2 + 1#usize
+        ok (back x, next)
+    ok (cont next)
+
+raw : Raw
+state : State
+running : state.2 < alloc.vec.Vec.len state.1
+⊢ (do
+      let a ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) raw state.2
+      let q ← value_owned a
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice aspis_core.field.QM31) state.1 state.2
+      let index1 ← state.2 + 1#usize
+      ok (cont (index_mut_back q, index1))) =
+    do
+    let x ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice S8OwnedP6ValueModel.Row) raw state.2
+    let x ← value_owned x
+    let x_1 ← alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice S8OwnedP6ValueModel.Q) state.1 state.2
+    let next ←
+      let (_, back) := x_1
+        do
+        let next ← state.2 + 1#usize
+        ok (back x, next)
+    ok (cont next)
+'S8Kani2FinishTraversal.extracted_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'S8Kani2FinishTraversal.extracted_exit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'S8Kani2FinishTraversal.steps_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]

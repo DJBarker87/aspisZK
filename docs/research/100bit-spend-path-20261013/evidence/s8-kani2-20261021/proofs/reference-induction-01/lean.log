@@ -1,0 +1,74 @@
+/Users/dominic/ZK/.worktrees/cx-s8-kani2/docs/research/100bit-spend-path-20261013/lean/S8Kani2ReferenceInduction.lean:27:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  b - c ≥ 1
+  a ≥ 0
+  a - b ≥ 0
+  a - c ≥ 1
+where
+ a := ↑(alloc.vec.Vec.length raw)
+ b := ↑(alloc.vec.Vec.length state.1)
+ c := ↑↑state.2
+ d := ↑Usize.max
+ e := ↑(↑state.1).length
+/Users/dominic/ZK/.worktrees/cx-s8-kani2/docs/research/100bit-spend-path-20261013/lean/S8Kani2ReferenceInduction.lean:34:2: error: unsolved goals
+case refine_1
+raw : Raw
+state : State
+hlen : alloc.vec.Vec.length state.1 ≤ alloc.vec.Vec.length raw
+hi : ↑state.2 < alloc.vec.Vec.length state.1
+hr : ↑state.2 < alloc.vec.Vec.length raw
+row : Row
+hread : alloc.vec.Vec.index_usize raw state.2 = ok row
+right✝ : row = (↑raw)[↑state.2]
+hread' : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Row) raw state.2 = ok row
+previous : Q
+back : Q → alloc.vec.Vec Q
+hmut : alloc.vec.Vec.index_mut_usize state.1 state.2 = ok (previous, back)
+left✝ : previous = (↑state.1)[↑state.2]
+hback : back = alloc.vec.Vec.set state.1 state.2
+hmut' : alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice Q) state.1 state.2 = ok (previous, back)
+hcap : ↑state.2 + 1 ≤ Usize.max
+sadd : state.2 + 1#usize ⦃ n => ↑n = ↑state.2 + 1 ⦄
+next : UScalar UScalarTy.Usize
+hnext : state.2 + 1#usize = ok next
+hval : ↑next = ↑state.2 + 1
+⊢ (let (_, back) := (previous, back)
+    ok (back (modelValue row), next)) =
+    ok (back (modelValue row), next)
+/Users/dominic/ZK/.worktrees/cx-s8-kani2/docs/research/100bit-spend-path-20261013/lean/S8Kani2ReferenceInduction.lean:61:4: error: 'change' tactic failed, pattern
+  (do
+      let flow ← finish_owned_loop.body raw state.1 state.2
+      match flow with
+        | done out => ok out
+        | cont s => loop (fun s => finish_owned_loop.body raw s.1 s.2) s) =
+    ?m.149
+is not definitionally equal to target
+  (match
+      match (state.1, state.2) with
+      | (weights1, index1) => finish_owned_loop.body raw weights1 index1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (weights1, index1) => finish_owned_loop.body raw weights1 index1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let final ← steps raw (n + 1) state
+    ok final.1
+'S8Kani2ReferenceInduction.step_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'S8Kani2ReferenceInduction.reference_loop_induction' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'S8Kani2ReferenceInduction.reference_finish_induction' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
