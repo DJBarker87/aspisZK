@@ -53,7 +53,22 @@ in the manifest; they are not accepted proof evidence.
 
 ## Stage 2: outer decision and accounting
 
-Pending focused verification.
+`OraclePortShortCircuitDecision.outerDecision` changes only the six-slot
+outer conjunction. `decision_verdict` proves acceptance equivalence for
+every stored byte string, erased prefix/message and oracle world;
+`decision_prefix` proves the all-input decision-log prefix;
+`decision_accepted_eq` proves identical accepted evaluations.
+`OraclePortShortCircuitAccounting` lifts these to the full transcript driver.
+
+The inherited envelopes are proved directly for this outer decision:
+B_V ≤ 1161, annotated distinct reads ≤ Q+1161, decoded starts ≤ Q+1080,
+and annotated issued-log length ≤ Q+2322. The annotation reruns the verifier;
+its complete rejecting log need not itself be a prefix, so the length and
+start results use the existing generic accounting with the proved budget.
+No probability constant, padding bound, or M10 file changes.
+
+Decision attempt 3 and accounting attempt 2 compile with standard axioms,
+zero swaps; detailed source/import fingerprints and timings are recorded.
 
 ## Stage 3: conditional outer endpoint
 

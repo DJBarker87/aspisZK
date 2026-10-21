@@ -1,0 +1,74 @@
+import OraclePortShortCircuitDecision
+
+/-! All-input envelopes for the outer-only repair. None identifies frozen
+inner scheduling or changes a probability constant. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortShortCircuit
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.AdaptiveFirstReadLaw
+open OraclePortStoredExperimentC4 OraclePortStoredAdmissionC4 OraclePortStoredConsumerC7
+
+theorem verifier_verdict (D : LiteralByteProtocol.Decoder) (i : Input) (H : Bytes → State) :
+    (eval H (verifier D outerDecision i)).2 = (eval H (verifier D dV i)).2 := by
+  unfold verifier
+  rw [OracleDecisionFeasibilityBudget.verifier_eval,
+    OracleDecisionFeasibilityBudget.verifier_eval]
+  exact decision_verdict _ _ _ H
+
+theorem verifier_prefix (D : LiteralByteProtocol.Decoder) (i : Input) (H : Bytes → State) :
+    (eval H (verifier D outerDecision i)).1 <+: (eval H (verifier D dV i)).1 := by
+  unfold verifier
+  rw [OracleDecisionFeasibilityBudget.verifier_eval,
+    OracleDecisionFeasibilityBudget.verifier_eval]
+  obtain ⟨suffix,eq⟩ := decision_prefix i.stored
+    (LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol D).transcript H i.statement i.proof 33))
+    (LiteralTranscript.erase (i.proof 33)) H
+  exact ⟨suffix,by simpa only [OracleDecisionFeasibilityCore.onBytes,List.append_assoc] using
+    congrArg (fun xs => (((List.range 33).map fun j => (eval H
+      ((LiteralByteProtocol.protocol D).chain H i.statement i.proof j).toProgram).1).flatten) ++ xs) eq⟩
+
+theorem verifier_accepted_eq (D : LiteralByteProtocol.Decoder) (i : Input) (H : Bytes → State)
+    (ha : (eval H (verifier D outerDecision i)).2 = true) :
+    eval H (verifier D outerDecision i) = eval H (verifier D dV i) := by
+  unfold verifier at *
+  rw [OracleDecisionFeasibilityBudget.verifier_eval] at ha
+  rw [OracleDecisionFeasibilityBudget.verifier_eval,
+    OracleDecisionFeasibilityBudget.verifier_eval]
+  dsimp only [OracleDecisionFeasibilityCore.onBytes] at *
+  rw [decision_accepted_eq _ _ _ H ha]
+
+theorem verifier_bound (D : LiteralByteProtocol.Decoder) (i : Input) (H : Bytes → State) :
+    (eval H (verifier D outerDecision i)).1.length ≤ 1161 :=
+  verifier_budget D outerDecision outer_budget H i
+
+theorem distinct_bound (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
+    (hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q) (H : Bytes → State) :
+    firstReads emptyTable (eval H (annotated D outerDecision (canon P))).1 ≤ Q+1161 :=
+  OraclePortStoredAccountingC4.distinct_bound D outerDecision (build D) (canon P) Q
+    (fun H => by rw [canon_eval]; exact hq H) outer_budget H
+
+theorem starts_bound (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
+    (hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q) (H : Bytes → State) :
+    DecodedFirstReadUnionBound.decoderFirstReads RecordedBinaryExperimentBin.dec emptyTable
+      (eval H (annotated D outerDecision (canon P))).1 ≤ Q+1080 :=
+  OraclePortStoredAccountingC4.starts_bound D outerDecision (build D) (canon P) Q
+    (fun H => by rw [canon_eval]; exact hq H) outer_budget H
+
+theorem log_length (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
+    (hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q) (H : Bytes → State) :
+    (eval H (annotated D outerDecision (canon P))).1.length ≤ Q+2322 :=
+  recorded_length D outerDecision (build D) (canon P) Q
+    (fun H => by rw [canon_eval]; exact hq H) outer_budget H
+
+#print axioms verifier_verdict
+#print axioms verifier_prefix
+#print axioms verifier_accepted_eq
+#print axioms verifier_bound
+#print axioms distinct_bound
+#print axioms starts_bound
+#print axioms log_length
+end AspisR1.OraclePortShortCircuit
+end

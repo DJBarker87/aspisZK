@@ -1,0 +1,293 @@
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitDecision.lean:24:20: error: Type mismatch: After simplification, term
+  congrArg
+ has type
+  ∀ (f : ?m.20 → ?m.21), ?m.22 = ?m.23 → f ?m.22 = f ?m.23
+but is expected to have type
+  (AspisV8R19.OracleProgramOps.bind (verifySlot p q s.1 s.2) fun b =>
+      AspisV8R19.OracleProgramOps.bind (eager (List.map (fun s => verifySlot p q s.1 s.2) ss)) fun c =>
+        Program.done (b && c)) =
+    AspisV8R19.OracleProgramOps.bind (verifySlot p q s.1 s.2) fun ok =>
+      AspisV8R19.OracleProgramOps.bind (verifySlots p q ss) fun tail => Program.done (ok && tail)
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitDecision.lean:25:15: error: unexpected token '('; expected command
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitDecision.lean:46:6: error: unsolved goals
+case h_1.isTrue
+stored : Bytes
+tr : ErasedPrefix
+m : ErasedMessage
+H : Bytes → State
+h✝¹ : OraclePortAdmission.Guard tr
+x✝¹ : Option Parsed
+x✝ : Option (Fin 22 → Fin 262144)
+p✝ : Parsed
+q✝ : Fin 22 → Fin 262144
+heq✝¹ : OraclePortStoredParserC4.parseReached stored tr = some p✝
+heq✝ : queries tr = some q✝
+h✝ : Padding p✝ q✝
+⊢ ((eval H (verifySlots p✝ q✝ slots)).2 && OraclePortStoredDecisionDraftC4.arithmetic p✝ q✝ tr) =
+    (eval H
+        (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          if Padding p q then
+            AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+              Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+          else Program.done false
+        | x, x_1 => Program.done false)).2
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitDecision.lean:47:8: error: Tactic `rfl` failed: The left-hand side
+  (eval H (Program.done false)).2
+is not definitionally equal to the right-hand side
+  (eval H
+      (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+      | some p, some q =>
+        if Padding p q then
+          AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+            Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+        else Program.done false
+      | x, x_1 => Program.done false)).2
+
+case h_1.isFalse
+stored : Bytes
+tr : ErasedPrefix
+m : ErasedMessage
+H : Bytes → State
+h✝¹ : OraclePortAdmission.Guard tr
+x✝¹ : Option Parsed
+x✝ : Option (Fin 22 → Fin 262144)
+p✝ : Parsed
+q✝ : Fin 22 → Fin 262144
+heq✝¹ : OraclePortStoredParserC4.parseReached stored tr = some p✝
+heq✝ : queries tr = some q✝
+h✝ : ¬Padding p✝ q✝
+⊢ (eval H (Program.done false)).2 =
+    (eval H
+        (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          if Padding p q then
+            AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+              Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+          else Program.done false
+        | x, x_1 => Program.done false)).2
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitDecision.lean:48:6: error: Tactic `rfl` failed: The left-hand side
+  (eval H (Program.done false)).2
+is not definitionally equal to the right-hand side
+  (eval H
+      (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+      | some p, some q =>
+        if Padding p q then
+          AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+            Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+        else Program.done false
+      | x, x_1 => Program.done false)).2
+
+case h_2
+stored : Bytes
+tr : ErasedPrefix
+m : ErasedMessage
+H : Bytes → State
+h✝ : OraclePortAdmission.Guard tr
+x✝² : Option Parsed
+x✝¹ : Option (Fin 22 → Fin 262144)
+x✝ :
+  ∀ (p : Parsed) (q : Fin 22 → Fin 262144),
+    OraclePortStoredParserC4.parseReached stored tr = some p → queries tr = some q → False
+⊢ (eval H (Program.done false)).2 =
+    (eval H
+        (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          if Padding p q then
+            AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+              Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+          else Program.done false
+        | x, x_1 => Program.done false)).2
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitDecision.lean:58:8: error: Type mismatch: After simplification, term
+  log_prefix H (slotPrograms ?m.122 ?m.123 slots)
+ has type
+  (eval H (short (slotPrograms ?m.122 ?m.123 slots))).1 <+: (eval H (verifySlots ?m.122 ?m.123 slots)).1
+but is expected to have type
+  (eval H (short (slotPrograms p✝ q✝ slots))).1 <+:
+    (eval H
+        (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          if Padding p q then
+            AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+              Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+          else Program.done false
+        | x, x_1 => Program.done false)).1
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitDecision.lean:60:18: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.137 = ?m.137
+but is expected to have type
+  (eval H (Program.done false)).1 ++ [] =
+    (eval H
+        (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          if Padding p q then
+            AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+              Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+          else Program.done false
+        | x, x_1 => Program.done false)).1
+in the application
+  Exists.intro [] rfl
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitDecision.lean:61:16: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.143 = ?m.143
+but is expected to have type
+  (eval H (Program.done false)).1 ++ [] =
+    (eval H
+        (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          if Padding p q then
+            AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+              Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+          else Program.done false
+        | x, x_1 => Program.done false)).1
+in the application
+  Exists.intro [] rfl
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitDecision.lean:72:11: error(lean.unknownIdentifier): Unknown constant `Bool.and_eq_true.mp`
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitDecision.lean:74:8: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (if OraclePortAdmission.Guard tr then
+      if Padding p✝ q✝ then
+        AspisV8R19.OracleProgramOps.bind (short (slotPrograms p✝ q✝ slots)) fun ok =>
+          Program.done (ok && OraclePortStoredDecisionDraftC4.arithmetic p✝ q✝ tr)
+      else Program.done false
+    else Program.done false)
+is not definitionally equal to the right-hand side
+  eval H
+    (if OraclePortAdmission.Guard tr then
+      match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+      | some p, some q =>
+        if Padding p q then
+          AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+            Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+        else Program.done false
+      | x, x_1 => Program.done false
+    else Program.done false)
+
+case h_1.isFalse
+stored : Bytes
+tr : ErasedPrefix
+m : ErasedMessage
+H : Bytes → State
+h✝¹ : OraclePortAdmission.Guard tr
+x✝¹ : Option Parsed
+x✝ : Option (Fin 22 → Fin 262144)
+p✝ : Parsed
+q✝ : Fin 22 → Fin 262144
+heq✝¹ : OraclePortStoredParserC4.parseReached stored tr = some p✝
+heq✝ : queries tr = some q✝
+h✝ : ¬Padding p✝ q✝
+ha : (eval H (Program.done false)).2 = true
+⊢ eval H
+      (if OraclePortAdmission.Guard tr then
+        if Padding p✝ q✝ then
+          AspisV8R19.OracleProgramOps.bind (short (slotPrograms p✝ q✝ slots)) fun ok =>
+            Program.done (ok && OraclePortStoredDecisionDraftC4.arithmetic p✝ q✝ tr)
+        else Program.done false
+      else Program.done false) =
+    eval H
+      (if OraclePortAdmission.Guard tr then
+        match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          if Padding p q then
+            AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+              Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+          else Program.done false
+        | x, x_1 => Program.done false
+      else Program.done false)
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitDecision.lean:75:6: error: Tactic `rfl` failed: The left-hand side
+  eval H (if OraclePortAdmission.Guard tr then Program.done false else Program.done false)
+is not definitionally equal to the right-hand side
+  eval H
+    (if OraclePortAdmission.Guard tr then
+      match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+      | some p, some q =>
+        if Padding p q then
+          AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+            Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+        else Program.done false
+      | x, x_1 => Program.done false
+    else Program.done false)
+
+case h_2
+stored : Bytes
+tr : ErasedPrefix
+m : ErasedMessage
+H : Bytes → State
+h✝ : OraclePortAdmission.Guard tr
+x✝² : Option Parsed
+x✝¹ : Option (Fin 22 → Fin 262144)
+x✝ :
+  ∀ (p : Parsed) (q : Fin 22 → Fin 262144),
+    OraclePortStoredParserC4.parseReached stored tr = some p → queries tr = some q → False
+ha : (eval H (Program.done false)).2 = true
+⊢ eval H (if OraclePortAdmission.Guard tr then Program.done false else Program.done false) =
+    eval H
+      (if OraclePortAdmission.Guard tr then
+        match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          if Padding p q then
+            AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+              Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+          else Program.done false
+        | x, x_1 => Program.done false
+      else Program.done false)
+/Users/dominic/ZK/.worktrees/cx-shortcircuit-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortShortCircuitDecision.lean:76:4: error: Tactic `rfl` failed: The left-hand side
+  eval H
+    (if OraclePortAdmission.Guard tr then
+      match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+      | some p, some q =>
+        if Padding p q then
+          AspisV8R19.OracleProgramOps.bind (short (slotPrograms p q slots)) fun ok =>
+            Program.done (ok && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+        else Program.done false
+      | x, x_1 => Program.done false
+    else Program.done false)
+is not definitionally equal to the right-hand side
+  eval H
+    (if OraclePortAdmission.Guard tr then
+      match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+      | some p, some q =>
+        if Padding p q then
+          AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+            Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+        else Program.done false
+      | x, x_1 => Program.done false
+    else Program.done false)
+
+case isFalse
+stored : Bytes
+tr : ErasedPrefix
+m : ErasedMessage
+H : Bytes → State
+h✝ : ¬OraclePortAdmission.Guard tr
+ha : (eval H (Program.done false)).2 = true
+⊢ eval H
+      (if OraclePortAdmission.Guard tr then
+        match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          if Padding p q then
+            AspisV8R19.OracleProgramOps.bind (short (slotPrograms p q slots)) fun ok =>
+              Program.done (ok && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+          else Program.done false
+        | x, x_1 => Program.done false
+      else Program.done false) =
+    eval H
+      (if OraclePortAdmission.Guard tr then
+        match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          if Padding p q then
+            AspisV8R19.OracleProgramOps.bind (verifySlots p q slots) fun merkle =>
+              Program.done (merkle && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+          else Program.done false
+        | x, x_1 => Program.done false
+      else Program.done false)
+'AspisR1.OraclePortShortCircuit.eager_slots' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OraclePortShortCircuit.decision_verdict' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortShortCircuit.decision_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortShortCircuit.decision_accepted_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortShortCircuit.outer_budget' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

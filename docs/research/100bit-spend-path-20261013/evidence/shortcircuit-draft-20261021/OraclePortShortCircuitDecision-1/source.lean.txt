@@ -1,0 +1,89 @@
+import OraclePortShortCircuitCore
+import OraclePortJoinSplitDecision
+
+/-! The minimal OUTER repair of dV. It retains dV's padding-first and
+recursive child order. It must not be called the exact frozen decision. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortShortCircuit
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft
+open OraclePortStoredExperimentC4 OraclePortStoredConsumerC7
+open RawCutTranscriptRun (ErasedPrefix ErasedMessage)
+attribute [local instance] Classical.propDecidable
+
+def slotPrograms (p : Parsed) (q : Fin 22 → Fin 262144) (ss : List (Nat × Nat)) :=
+  ss.map fun s => verifySlot p q s.1 s.2
+
+theorem eager_slots (p : Parsed) (q : Fin 22 → Fin 262144) (ss : List (Nat × Nat)) :
+    eager (slotPrograms p q ss) = verifySlots p q ss := by
+  induction ss with
+  | nil => rfl
+  | cons s ss ih => simpa only [slotPrograms,List.map_cons,eager,verifySlots] using
+      congrArg (fun tail => bind (verifySlot p q s.1 s.2) fun b =>
+        bind tail fun c => .done (b && c)) ih
+
+/-- Short-circuit only between existing dV slot programs. -/
+def outerDecision : Decision := fun stored tr _ =>
+  if OraclePortAdmission.Guard tr then
+    match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+    | some p, some q => if Padding p q then
+        bind (short (slotPrograms p q slots)) fun ok =>
+          .done (ok && OraclePortStoredDecisionDraftC4.arithmetic p q tr)
+      else .done false
+    | _, _ => .done false
+  else .done false
+
+theorem decision_verdict (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage)
+    (H : Bytes → State) :
+    (eval H (outerDecision stored tr m)).2 = (eval H (dV stored tr m)).2 := by
+  unfold outerDecision dV OraclePortReachedRunC6.decision OraclePortStoredDecisionDraftC4.decision
+  split
+  · split
+    · split
+      · simp only [eval_bind,eval,verdict,eager_slots]
+      · rfl
+    · rfl
+  · rfl
+
+theorem decision_prefix (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage)
+    (H : Bytes → State) :
+    (eval H (outerDecision stored tr m)).1 <+: (eval H (dV stored tr m)).1 := by
+  unfold outerDecision dV OraclePortReachedRunC6.decision OraclePortStoredDecisionDraftC4.decision
+  split
+  · split
+    · split
+      · simpa only [eval_bind,eval,List.append_nil,eager_slots] using
+          log_prefix H (slotPrograms _ _ slots)
+      · exact ⟨[],rfl⟩
+    · exact ⟨[],rfl⟩
+  · exact ⟨[],rfl⟩
+
+theorem decision_accepted_eq (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage)
+    (H : Bytes → State) (ha : (eval H (outerDecision stored tr m)).2 = true) :
+    eval H (outerDecision stored tr m) = eval H (dV stored tr m) := by
+  unfold outerDecision dV OraclePortReachedRunC6.decision OraclePortStoredDecisionDraftC4.decision at *
+  split at *
+  · split at *
+    · split at *
+      · have hs : (eval H (short (slotPrograms _ _ slots))).2 = true :=
+          (Bool.and_eq_true.mp ha).1
+        simp only [eval_bind,eval,← eager_slots,← accepted_eq H _ hs]
+      · rfl
+    · rfl
+  · rfl
+
+theorem outer_budget : Budget outerDecision := by
+  intro stored H tr m
+  exact (decision_prefix stored tr m H).length_le.trans
+    (OraclePortStoredDecisionDraftC4.decision_budget stored H tr m)
+
+#print axioms eager_slots
+#print axioms decision_verdict
+#print axioms decision_prefix
+#print axioms decision_accepted_eq
+#print axioms outer_budget
+end AspisR1.OraclePortShortCircuit
+end
