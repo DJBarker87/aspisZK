@@ -174,3 +174,67 @@ The frozen Rust still uses `array::from_fn`; P6 is an intermediate model,
 not a completed Rust Std proof. Candidate adoption or that source boundary
 must be resolved before a frozen-implementation closure claim. No production
 code, wire format or runtime artifact changed in these commits.
+
+
+## 18:07 UTC — complete typed helper, outer call and query consumer
+
+The previous paragraph's typed helper/outer and actual opening/caller items
+have materially advanced, without changing the remaining release boundary.
+
+- `S4V10LiteralHelperSourceCutV1.literal_helper_eq_fixed` identifies the entire
+  emitted V10 helper, through named typed operation substitutions, with the
+  current fixed-v6 helper for **all Result outcomes**. Its checker compares
+  the complete emitted token stream. Focused exit 0, 8.74s, 3,756,589,056B RSS,
+  zero swap, standard axioms.
+- `S4V10LiteralOuterTransferRootV1.literal_outer_to_current` discharges the
+  complete helper relation in the exact emitted outer four-call body; no
+  independent child equality/success premise remains. It preserves failure,
+  divergence and the exact mapped four-element output. Focused exit 0,
+  7.818s, 3,705,798,656B RSS, zero swap, standard axioms.
+- `S4V10LiteralScannedMeaningRootV1.literal_four_scanned_literal_values`
+  transfers that same output to all four literal field equations and
+  canonicality. Retained premises are gamma canonicality, the ClaimPowers
+  output/caller identity, scanner success and the opening/length/index facts.
+  Focused exit 0, 12.773s, 3,992,518,656B RSS, zero swap, standard axioms.
+- `S4FullQueryValuesPrefixV1.full_query_values_success_scanned_field_results`
+  consumes success of the **complete** retained `queryWithOps` source cut,
+  with installed S4 and actual R22 opening. It derives the opening, index
+  bound, exact 608-byte prefix and same four returned field-result witnesses.
+  Thus the length/index/opening and separate dot-success assumptions are not
+  independent caller premises. Gamma, ClaimPowers output and coefficient
+  identity remain explicit. Focused exit 0, 18.61s, 4,006,363,136B RSS, zero
+  swap, standard axioms. The non-S4 query operations remain parameterized;
+  this is not yet the complete frozen caller refinement.
+- `S4InstalledOpsIndependentRootV1.installed_ops_independent` proves the
+  **entire eleven-field installed record** is independent of its apparent
+  base argument. The selected model has no arbitrary backend left through
+  that base. This does not identify those fixed methods with Rust execution.
+- `S4DotPushCallEqualityV1.dot_via_raw_eq_generated_push_raw` identifies the
+  installed dot backend with the retained generated dot-loop adapter for
+  every Result outcome. It retains the raw-function and Rust Std lineage
+  boundaries; it is stronger than the earlier push-count result.
+
+These packets are committed through `38fd90a6c` on research. No production
+source, protocol parameter or release artifact changed.
+
+The decisive remaining S4 boundaries are concrete, not more head arithmetic:
+
+1. **Frozen source/Std:** original `from_fn` has no accepted extracted parent
+   owner. The transparent LLBC attempt fails at the mutable limb loop before
+   Aeneas emits it; the P6 trace theorem is about the model. V10 avoids this
+   source construct but is still a candidate requiring adoption and gates.
+2. **Accumulator child:** Rust `Iterator::all` has no retained Aeneas method
+   owner. A minimal candidate replaces only Q::from_limbs with four ordered
+   comparisons; native differential partitions/boundaries/random arrays pass,
+   while its generated-source/Lean proof is in flight. No adoption is claimed.
+3. **Coefficient provenance:** retained tx2 source proves the same g is
+   passed from powers29 into the query loop. Current powers29's Std/borrowed
+   callback parent has no accepted whole-array source owner equating that
+   output with ClaimPowers. Per-step arithmetic alone does not discharge it.
+4. **Final composition:** instantiate the complete concrete component and
+   actual driver interfaces at an adopted source/artifact pin, then perform
+   the coherent closure replay. The S10 placeholder does not establish this.
+
+**S4 is not closed; the 100-bit implementation-linked target is not yet
+established.** All four workers remain allocated to the above source and
+composition boundaries, rather than restarting S3/S5 arithmetic inventories.
