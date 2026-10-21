@@ -145,6 +145,13 @@ receipt.update(peak_rss_bytes=int(re.search(r'(\d+)\s+maximum resident set size'
 if result.returncode == 0 and receipt['source_unchanged']:
     obj = OBJECTS / (module.replace('.', '/') + '.olean')
     receipt.update(object_sha256=sha(obj), object_size=obj.stat().st_size)
+allowed_axioms = {'propext', 'Classical.choice', 'Quot.sound'}
+axiom_names = []
+for report in receipt['axioms']:
+    if 'depends on axioms:' in report:
+        axiom_names.extend(x.strip() for x in report.split('[',1)[1].rsplit(']',1)[0].split(','))
+receipt['axioms_accepted'] = set(axiom_names) <= allowed_axioms
+receipt['final_current'] = receipt['final_current'] and receipt['axioms_accepted']
 (out / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
 data = json.loads(manifest.read_text()) if manifest.exists() else data
 for a in data['attempts']:
@@ -155,4 +162,4 @@ manifest.write_text(json.dumps(data, indent=2) + '\n')
 print(log)
 print(json.dumps({k: receipt[k] for k in ['module', 'attempt', 'exit', 'wall_seconds',
                                         'peak_rss_bytes', 'swaps']}))
-sys.exit(result.returncode if receipt['source_unchanged'] else 2)
+sys.exit(result.returncode if result.returncode else (0 if receipt['final_current'] else 2))

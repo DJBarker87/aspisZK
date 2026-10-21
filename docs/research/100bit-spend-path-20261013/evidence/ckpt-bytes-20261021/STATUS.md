@@ -65,3 +65,34 @@ success iff needs allocation availability or a success-conditioned claim;
 neither follows merely from caller binding or field provenance. This is a
 source/model boundary, not a cryptographic assumption or an allocator failure
 measurement. No additional premise is silently inserted into P6.
+
+## Stage 3: complete extracted E-byte execution and C5 byte meaning
+
+CheckpointBytesE.e_byte_raw proves in-range success for every raw WideExact,
+with no canonicality or supplied-success premise. It composes checked scalar
+arithmetic and eight symbolic 32-bit words; its finite case split has only
+32 scalar positions. CheckpointBytesETotal.e_byte_all covers every Usize:
+inside 0..31 it returns the exact raw byte, otherwise arrayOutOfBounds.
+CheckpointBytesEC5.rawBytes_c5 and e_byte_c5 identify those bytes with C5's
+encodeE on CanonicalWide values. Canonicality is necessary only for the
+raw-word/exact-field quotient bridge. No full body/checkpoint is reduced.
+
+| Target | Attempt | Exit | Wall s | Peak RSS bytes | Swap |
+|---|---:|---:|---:|---:|---:|
+| CheckpointBytesE | 10 | 0 | 16.32794408267364 | 3813359616 | 0 |
+| CheckpointBytesEC5 | 1 | 0 | 5.133784458041191 | 3656663040 | 0 |
+| CheckpointBytesETotal | 1 | 0 | 15.043641124852002 | 3651796992 | 0 |
+
+All six final theorem axiom reports are [propext, Classical.choice,
+Quot.sound]. Revisions are f98510f8e (exact full SHA in receipts). Attempts
+1..7 and 9 retain elaboration/simplifier failures. Attempt 8 exits 0 but is
+REJECTED: this toolchain's bv_decide emits native axioms. It is explicitly
+non-current and not accepted evidence. The replacement normalizes only
+symbolic word shifts, byte truncations and tiny powers, using ushiftRight_eq
+before the Nat projection lemmas and omega. The launcher now enforces the
+standard-axiom whitelist in addition to exit/source checks. No bv_decide
+remains in the accepted source, and no native generated axiom is imported
+by the current E object. No memory/heartbeat/recursion cap was raised.
+
+Exact next byte consumer: a new sparse body_byte/C5 theorem over canonical
+Prepared/Accumulator fields, saved.next=10, bounded queries and 64 weights.

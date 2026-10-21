@@ -1,0 +1,38 @@
+import CheckpointBytesArithmetic
+
+set_option autoImplicit false
+namespace AspisR1.CheckpointBytesE
+open Aeneas Aeneas.Std Result
+open OraclePortCkptAbi2Extracted OraclePortCkptAbi5Codec OraclePortCkptAbi4Decode
+open MultiproofConeCanonical OraclePortCompactDraft CheckpointBytesArithmetic
+abbrev RawE := aspis_core.field.wide_exact.WideExact
+
+def rawBytes (q : RawE) : List U8 :=
+  CheckpointP6EncodeK.bytes q.c0 ++ CheckpointP6EncodeK.bytes q.c1
+
+theorem rawBytes_length (q : RawE) : (rawBytes q).length = 32 := by
+  simp [rawBytes,CheckpointP6EncodeK.bytes,core.num.U32.to_le_bytes,BitVec.toLEBytes]
+
+/-- Only the 32 sparse scalar positions are inspected; no buffer is reduced. -/
+theorem e_byte_raw (q : RawE) (i : Fin 32) :
+    e_byte q (Usize.ofNat i.val (by have := i.isLt; scalar_tac)) =
+      ok ((rawBytes q)[i.val]'(by rw [rawBytes_length]; exact i.isLt)) := by
+  fin_cases i <;>
+    simp (disch := scalar_tac) [e_byte,aspis_core.field.wide_exact.WideExact.to_limbs,
+      div_four,rem_four,mul_eight,Array.index_usize,Array.make,rawBytes,
+      CheckpointP6EncodeK.bytes,core.num.U32.to_le_bytes,BitVec.toLEBytes]
+  all_goals
+    dsimp only [HShiftRight.hShiftRight,instHShiftRightUScalarResult,
+      UScalar.shiftRight_UScalar]
+    simp [UScalar.shiftRight] <;>
+      congr 1 <;>
+      apply UScalar.eq_of_val_eq <;>
+      dsimp only [UScalar.cast,UScalar.val,UScalar.bv,HShiftRight.hShiftRight] <;>
+      simp only [UScalarTy.U8_numBits_eq,UScalarTy.U32_numBits_eq] <;>
+      simp only [BitVec.ushiftRight_eq,BitVec.toNat_setWidth,BitVec.toNat_ushiftRight,
+        Nat.shiftRight_eq_div_pow] <;>
+      norm_num only [Nat.reducePow] <;> omega
+
+#print axioms rawBytes_length
+#print axioms e_byte_raw
+end AspisR1.CheckpointBytesE
