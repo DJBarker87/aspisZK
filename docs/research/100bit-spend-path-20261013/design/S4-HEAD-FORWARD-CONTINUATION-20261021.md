@@ -852,3 +852,24 @@ by the 26 M31 and three QM31 lane projections and same-g power equations.
 Merkle authentication and prior-tx checkpoint context stay with their named
 upstream owners; source adoption/B1 and the other whole-cone joins remain
 open. The implementation-linked100-bit target is not yet established.
+
+
+## Canonical block splitting and decoder completeness, 2026-10-22
+
+`evidence/s4-canonical-fixed-width-completeness-v1-20261022` proves
+`S4CanonicalBlocksV1.canonical_split_blocks`: a canonical byte list remains
+canonical in both pieces at any four-byte-aligned split, including short
+inputs. It also proves structural fixed-width decoder completeness for any
+block decoder whose completeness and predicate-preserving split are supplied.
+The latter generic theorem retains those two contracts; it does not assert
+that the concrete M31/QM31 decoder contracts have already been discharged.
+These lemmas let the opening proof derive successful C1/C2 decoding from the
+prior strict scan rather than assume an encoded opening identity.
+
+Focused target exit0,26.075s,peak process RSS3,597,565,952 bytes,zero swaps;
+both axiom reports contain only propext and Quot.sound. The rejected first
+attempt and exact source are retained: multiplication by n+1 needed explicit
+`Nat.mul_succ` normalization before linear arithmetic. No full replay or
+production source change occurred. The next concrete target is strict M31
+canonical-byte completeness, followed by QM31 and the 608-byte instantiation.
+S4 source adoption and the implementation-linked100-bit target remain open.
