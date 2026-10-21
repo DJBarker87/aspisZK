@@ -5,6 +5,16 @@ This branch is a draft for lead/user review. It changes no existing Lean
 module, deployed verifier, candidate pin or M10 instrumentation. Do not merge
 it as a completed frozen-verifier soundness endpoint.
 
+## Continuation 3 finding: parser carrier is impossible
+
+The inherited parser decision **always rejects**: it asks a message bounded
+by 3,717 bytes to contain the 57,607-byte stored proof. This is now a checked
+Lean theorem, not a suspected missing join. The historical “strict parser”
+results below prove properties conditional on an unreachable parse success.
+They must not be read as a nonvacuous verifier implementation. No completed
+`dV`, unconditional acceptance transfer, or frozen-decision headline is claimed.
+See “Continuation 3: checkpoint state and carrier audit” below.
+
 ## Continuation status
 
 The continuation adds a strict compact parser, query-selected occupied trees,
@@ -571,3 +581,57 @@ Receipts for these checks are under
 `OraclePortTerminalCarrierAuditC3-{1,2}/`. Attempt 1 of the carrier audit had
 an unresolved Option bind reduction; attempt 2 changes that local proof and
 passes. Both successful audits use only standard axioms, with zero swaps.
+
+## Continuation 3: side-by-side premise status
+
+This table supersedes the historical status table where the inherited parser
+was described as an implemented but unfinished verifier. The comparator is
+the exact headline quoted in `design/SOUNDNESS-HEADLINE-20261021.md`.
+
+| Existing headline | Continuation 3 result | Removed / added premise |
+|---|---|---|
+| Free pure `d` | Effectful decision carrier retained; inherited parser cannot carry the stored proof | No frozen `dV` specialization established |
+| `source`, `h_R16_instance` | Existing admission constructor remains; no source witness at a nonvacuous completed verifier | No deletion |
+| `h_R13` | Selected typed slot transport remains available; parser success is impossible | No deletion; acceptance-to-reader transfer still owed after carrier repair |
+| `h_R15_writer` | New reached ten-step state plus twelve-step resume equals the 22-step accumulator | No deletion; physical prepared-state and selected first-match joins still owed |
+| `h_R3_semantic` | `D0TypedChecks.accepted_semantic` remains available only after actual typed acceptance | No deletion |
+| `h_R14_backend` | New resumed accumulator equation equals `HchecksAccumulator.ClosedSum`; pairing still needs actual acceptance | No deletion |
+| `h_Rwire_tag` | Existing admission/tag and conditional completion results retained | No new deletion |
+| No arbitrary effectful budget premise | Six-slot helper accounting establishes exactly 66 leaf calls and terminal envelope with six checkpoint frames | Does not identify a completed `dV` or delete the generic decision budget binder |
+| `h_M10_log_length`, log domain `Q+1161` | Generic port log bound **Q+2322** | Larger recorded domain; not a weakening of the old premise |
+| Existing scalar envelope `Q+34` | Generic port decoder-start envelope **Q+1080** | Conservative increase; range requires `32 ≤ Q ≤ Qmax` |
+| `LedgerRefinement e p Q` | Generic port retains `LedgerRefinement e p (Q+1161)` | Stronger domain to cover Q+2322 entries; no claim about concurrent M10 work |
+| Frozen Rust correspondence | Future **Rust-equals-dV join** must cover stored proof/public carrier, checkpoint ABI, execution and recorded log | Still external, and cannot be stated honestly as the only residual before carrier/model repair |
+| Runtime, cryptographic and release boundaries | Retained as inventoried above | No deletion |
+
+**Exact premise deletion count: zero.** No old theorem signature changes.
+No `CheckedAcceptance` theorem derived from the inherited parser's universal
+rejection is added. No new soundness headline is emitted at an all-rejecting
+surrogate. A separate stored-proof input and its accounting/transport are
+required before stage (c) can be attempted as a nonvacuous verifier theorem.
+
+## Continuation 3: exact 66-leaf accounting
+
+`OraclePortSparseLeafCountC3.leaves_card` proves by height induction that
+opened leaves equal the finite set of selected indices in the subtree.
+`OraclePortRepresentativeCountC3` proves that first-occurrence positions
+are in bijection with distinct selected indices and that their complement
+is exactly `duplicatePositions`. Thus every slot's distinct leaves plus its
+duplicate calls equals its source position count, including repeated query
+or folded indices. No full leaf universe is enumerated.
+
+`OraclePortSixSlotBudgetC3.leaf_count` gives exactly **66** over all six
+slots. `.six_slot_length` gives `66 + totalParents`; `.sibling_bound` gives
+914; `.batch_budget` gives **1040**. `.checkpointBatch_budget` composes the
+actual `writeResume` program with the six-slot execution and proves **1046**
+on every oracle when padding holds (the shape-rejection case consumes zero
+checkpoint hashes). With the existing 115 sampler-call bound this is 1161.
+The helper inputs are still explicit parsed proof/query/checkpoint values;
+the carrier obstruction prevents calling this helper the completed dV.
+
+The three modules' final attempts are respectively 2, 3 and 1. Intermediate
+failures were local elaboration errors. Representative-count attempt 2
+reached simp's recursion limit by rewriting a position into a term containing
+itself; attempt 3 replaces this with an abstract Boolean filter-partition
+lemma. No limit was raised, no memory-cap failure occurred and no unchanged
+attempt was repeated. All final axiom reports are standard; swaps are zero.

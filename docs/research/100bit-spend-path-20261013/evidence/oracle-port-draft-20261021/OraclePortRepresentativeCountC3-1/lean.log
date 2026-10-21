@@ -1,0 +1,44 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRepresentativeCountC3.lean:18:37: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRepresentativeCountC3.lean:23:50: error: Application type mismatch: The argument
+  hf
+has type
+  List.find? (fun pos => decide (index q kind pos = i)) (batchPositions batch) = some found
+but is expected to have type
+  List.find? (@decide ?m.107) ?m.112 = some ?m.108
+in the application
+  List.find?_some hf
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRepresentativeCountC3.lean:59:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  {x ∈ List.toFinset ?s | ?p x = true}
+in the target expression
+  {pos ∈ (batchPositions batch).toFinset | pos = position q batch kind (index q kind pos)}.card =
+    (List.filter (fun pos => decide (pos = position q batch kind (index q kind pos))) (batchPositions batch)).length
+
+q : Fin 22 → Fin 262144
+batch kind : ℕ
+⊢ {pos ∈ (batchPositions batch).toFinset | pos = position q batch kind (index q kind pos)}.card =
+    (List.filter (fun pos => decide (pos = position q batch kind (index q kind pos))) (batchPositions batch)).length
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRepresentativeCountC3.lean:62:8: error(lean.unknownIdentifier): Unknown constant `List.length_filter_add_length_filter_neg_eq_length`
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRepresentativeCountC3.lean:75:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 262144
+  0 ≤ a ≤ 262143
+where
+ a := ↑↑(q ⟨pos % 22, ⋯⟩)
+ b := ↑(have u := ↑(q ⟨pos % 22, ⋯⟩);
+  u / 4)
+'AspisR1.OraclePortRepresentativeCountC3.representative' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OraclePortRepresentativeCountC3.representative_card' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortRepresentativeCountC3.batch_nodup' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortRepresentativeCountC3.partition_count' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortRepresentativeCountC3.slot_leaf_law' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
