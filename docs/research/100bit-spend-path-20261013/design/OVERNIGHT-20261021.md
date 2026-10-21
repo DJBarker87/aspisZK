@@ -26,12 +26,28 @@ Each was byte-identical, every time.
    the decision query the oracle and to state the headline at the frozen
    verifier's decision. A draft port is on the **unmerged** branch
    `codex/cx-oracle-port-draft-20261021` (pushed to origin as a backup). It
-   already proves `checked_acceptance` without the R13/R15/R3/R14-model
-   premises; the remaining step is a stored-proof bridge into the
-   probability consumer (pass 7 was running at the time of writing). Constants
-   under the port: verifier queries ≤ 1161 kept; start bound Q+1080
-   (conservative; a row-aware decoder would restore Q+34); log ≤ Q+2322.
-   Recommendation: adopt. Nothing merges without your yes.
+   now has a **completed draft headline**,
+   `OraclePortHeadlineDV.final_soundness` (`OraclePortHeadlineDVC7.lean`,
+   branch head 3a01b2d6d). Its only premises are:
+   - `hqueries`, the adversary's query budget;
+   - `h_Rust_equals_dV : ExecutionJoin D rust`, saying the frozen Rust verifier
+     executes as the modelled frozen decision dV;
+   - `h_stored_runtime : StoredCarrierBinding …`, the runtime binding of the
+     stored proof bytes.
+
+   R16, R13, R15, R3, R14's model part and the tag law are all theorems
+   there, proved through `checked_acceptance` (C6) and the stored-aware
+   probability bridge (C7). Numbers: κ(Q+1161) and B unchanged; the start
+   multiplier is Q+1080, so the per-query form (Q+1)·2^-100 holds for
+   32 ≤ Q ≤ Qmax; extractor cost ≤ 4·scale³·(Q+2323)³. A second unmerged
+   draft, `codex/cx-rowaware-draft-20261021`, is working on a row-aware
+   decoder to bring the bound back to Q+34 for every Q. Design notes:
+   `design/OraclePortContinuation7-20261021.md` on the draft branch, with
+   its comparison against headline v3. 11 + earlier modules, standard
+   axioms, zero swap.
+   Recommendation: adopt. The whole soundness gap then becomes one
+   Rust-equals-dV execution join plus the runtime carrier binding, which is
+   exactly what the S-cone re-pins establish. Nothing merges without your yes.
 
 ## Soundness
 
