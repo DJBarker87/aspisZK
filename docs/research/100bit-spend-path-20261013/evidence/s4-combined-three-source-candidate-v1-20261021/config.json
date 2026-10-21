@@ -1,0 +1,43 @@
+{
+  "unit": "s4-combined-three-source-candidate-20261021",
+  "collector": "/home/dombarker/project-offloads/r1-circle-sample-wrapper-extraction-v2/collect-cgroups.py",
+  "collector_sha256": "4fc152ea4f88742fb460c301ae17446f1d1ba9162acdaafb37d80e60c4907800",
+  "global_lock": "/tmp/aspis-global-extraction-admission-20261019.lock",
+  "baseline_root": "/home/dombarker/project-offloads/codex-cx-pin-20261020",
+  "candidate_root": "/home/dombarker/project-offloads/s4-combined-candidate-20261021/work",
+  "source_revision": "85c4adeb66d0a641bcdf58cc470751e6d67ab8d0",
+  "baseline_source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "baseline_fast_dots_sha256": "32d90c30e36dea620da0619bfdd9bd7fce3973fb22a3d8c30deb42a79a0ccd61",
+  "candidate_sources": {
+    "crates/aspis-r1-cost-probe/src/fast_dots.rs": "53fa714e84ded64b844061f4d1b66ad20ee1ba48c3873a73970f80ede8a0b602",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs": "2cb96261cecfd766b5e1b45a585b74c5f59c20c6be4f41e806239e2786ca7313",
+    "crates/aspis-r1-cost-probe/src/weights.rs": "28b558ffa9f5b004188c7f50b1597fe681186f54fb4d52a3bd125df4f2481137"
+  },
+  "baseline_artifact_sha256": "dfc2a91ab24e1ec4f57debd8f124cb4f6a3c38ba2662b7318e2e4f3b4acdde34",
+  "baseline_source_hashes_sha256": "87b4c5c696e02b2aa433aefab2b99c83c248a0a039b4be68ec58395d61a3d75e",
+  "baseline_runs_sha256": "a1b0a795f5101751950e42c7db19a1decfa3bd7f61d8ef37c85b211fa11a749f",
+  "build_tool": "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+  "build_tool_sha256": "46e50d5d1bcc70abfd74f0b6281071ef91576031330d1d892622e1ea59445d6c",
+  "gate_tool": "/home/dombarker/project-offloads/codex-r1-format-adopt-20261019/artifacts/pool_gate_adopt",
+  "gate_tool_sha256": "08fa1659c95cccd82248e8d144d712d67027e93d8f67401aabad8e4e79bdd802",
+  "strict_stack_script_sha256": "eb8c6faaf1291eb2dbd66560bfe3f07b6f6734572b23875b79872b496e829287",
+  "baseline_runs_file": "baseline/baseline-runs.json",
+  "b1_file": "baseline/cu.json",
+  "baseline_source_manifest": "baseline/baseline-source-hashes.json",
+  "current_source_relevance_file": "baseline/current-source-relevance.json",
+  "phases": {
+    "build": {
+      "memory_high_bytes": 2147483648,
+      "memory_max_bytes": 4294967296
+    },
+    "gates": {
+      "memory_high_bytes": 536870912,
+      "memory_max_bytes": 1073741824
+    }
+  },
+  "expected_work": {
+    "build": "Copy pinned baseline source/cache, overlay only the three candidate Rust files, compile optimized SBF artifact; no proof generation.",
+    "gates": "Run all six retained optimized CU fixtures against candidate artifact; compare checkpoint tails/return data; calculate prereg B1/+10k result; run strict stack audit."
+  },
+  "source_change_intent": "candidate only: S4 V10 fixed-call fast_dots; early-return indexed weights::powers; four ordered comparisons in Q::from_limbs; no frozen source/adoption."
+}
