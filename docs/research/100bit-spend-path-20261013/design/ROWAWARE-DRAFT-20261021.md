@@ -33,10 +33,9 @@ resulting elaboration diagnostics are not accepted proof evidence. Attempt
 
 ## Outstanding investigation
 
-Causality alone may not exclude the frozen node overlap: the existing
-witness already walks from initialisation through row zero. A counterexample
-against the stronger full-row gate is being checked. No Q+34 or premise
-removal is claimed at this stage.
+Causality alone does not exclude the frozen node overlap. The final
+collision-free counterexample below passes even the stronger full-row gate.
+No Q+34 endpoint or premise removal is claimed.
 
 ## Fully cached causal witness
 
@@ -95,3 +94,95 @@ input. `safe_no_collision` proves this suffices without using a false
 `Small T Q` side condition. `clean_safe` evaluates only five byte lists of
 at most 75 bytes, five reader indices and 32-byte state equalities; it never
 enumerates the oracle state space or padded address universe.
+
+## Checked obstruction and stopping point
+
+`OraclePortRowAwareObstructionD8.cached_table` identifies the support table
+with the chronological application of exactly the four row-zero cells.
+`frozen_node` identifies the fifth input with the frozen `12 || left32 ||
+right32` encoding. `causal_node_without_collision` combines this table
+identity, `Gate`, absence of the exact five-reader collision event for every
+Q, and exactly **one** fresh recognised start on the fifth query.
+
+`OraclePortRowAwareCounterclaimD9.causal_clean_zero_is_false` compiles the
+negation of this exact subclaim (with the namespace abbreviations opened):
+
+```lean
+∀ (prior : List (Bytes × State)) (cs : BinMerkle32Path.Children),
+  let a := OracleDecisionDomSepFrozen.node cs
+  let T := applyTrace emptyTable prior
+  Gate D a T →
+  ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv
+    BinRawByteCollisionTargets.pred Q) emptyTable (prior ++ [(a,fun _ => 6)]) →
+  decoderFirstReads (decode D) T [(a,fun _ => 6)] = 0
+```
+
+The counterexample uses the familiar overlap:
+
+```
+node:    12 || 00^32 || a1 || 00^31
+absorb: (12 || 00^31) || 00 || a1 || 00^31
+```
+
+Its preceding row is fully recognised and cached at the correct row; no
+collision is available to charge to κ. The problem is the **current**
+row-one message: the model accepts a 31-byte payload while the frozen
+row-one record has five bytes. Checking the predecessor's causal chain
+cannot reject that current payload. This is a false subclaim, rather than
+a resource or normalization obstruction. The one failed D8 attempt had the
+frozen-byte equality oriented backwards; the repaired symbolic equality
+passes without a cap change.
+
+Scope matters: this five-query prefix is **not** a complete accepted frozen
+57,607-byte proof, not a deployed minimal multiproof, and not a counterexample
+to the aggregate Q+34 bound restricted to such runs. It disproves the
+proposed general inference that a node extending a recognised prefix must
+involve a collision. A separate accepted-source exclusion/charging proof
+could still establish Q+34. This draft does not assert that accepted-source
+exclusion is impossible.
+
+The requested unconditional zero-node-start route stops here. Restoring
+Q+34 still needs either a decoder that also checks frozen current-row
+message grammar, with its same-run completion and extraction proof, or a
+sharper aggregate charging proof. The prior source-frame length envelope
+would exclude this node under the first approach, but source-frame
+membership cannot be assumed for arbitrary candidate starts. It must be
+proved at the required accepted-run boundary. No Q+34 endpoint is emitted;
+the prior conservative endpoint is retained.
+
+## Signature audit and final verification
+
+`signature-audit.json` checks all 25 existing headline/final-soundness
+modules against base `b81ae0928`, including `R1FinalSoundnessBinPerQueryR19`.
+Every file is byte-identical and every signature diff is empty. No premise
+is removed or advertised as removed. `GateAtRows` is a new, explicit
+conditional transport obligation, not a strictly weaker replacement of an
+existing endpoint premise.
+
+Nine new modules pass, with 30 theorem axiom reports, all subsets of
+`{propext, Classical.choice, Quot.sound}`. All 21 actual attempts are retained;
+12 failed attempts have diagnostics and source snapshots, with no successful
+claim based on them. Every attempt has zero swaps. The largest successful
+peak is 4,309,843,968 bytes; the single cap failure and its split replacement
+are recorded above. `audit.py` checks final source/receipt agreement, each
+new theorem's axiom audit, import-object hashes, resource fields, forbidden
+proof constructs, and the unchanged existing endpoints.
+
+| Module suffix | Green attempt | Wall seconds | Peak RSS bytes |
+|---|---:|---:|---:|
+| CausalD1 | 3 | 5.247 | 3613851648 |
+| WitnessD2 | 2 | 11.433 | 3623878656 |
+| WalkD3 | 2 | 5.556 | 3535257600 |
+| RecognizedD4 | 1 | 22.178 | 4309843968 |
+| GateWitnessD5 | 6 | 10.371 | 3628810240 |
+| NoCollisionD6 | 3 | 7.933 | 3678175232 |
+| TransportD7 | 1 | 6.556 | 3623698432 |
+| ObstructionD8 | 2 | 4.186 | 3627204608 |
+| CounterclaimD9 | 1 | 8.853 | 3610279936 |
+
+This is focused draft evidence. No frozen-manifest release replay, Rust/SBF
+rebuild, Aeneas replay, or runtime test is warranted by these additive
+mathematical modules. No existing Lean module, S1/S3/S4/S5/S9/S10 candidate,
+M10 instrumentation, sibling worktree, wallet key, or shipped verifier is
+modified. No object file or binary is committed. Each completed stage is
+committed locally; nothing is pushed or merged.
