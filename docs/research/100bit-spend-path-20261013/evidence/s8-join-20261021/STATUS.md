@@ -82,3 +82,20 @@ reference and mutable output field lists with the raw prefix. Their only
 precondition is destination/raw length, independent of terms or phase.
 All three final-source audits pass (field-04), standard axioms, zero swap.
 This is field interpretation, not a proof of source query/TX provenance.
+
+## Stage 6 — finalization at the frozen ClosedSum consumer
+
+`S8JoinAccumulatorStage.finish_check` proves complete emitted finish plus
+exact equality of the resulting check to the ClosedSum Boolean used by
+D0TypedChecks, for arithmetic false results as well as true results. It
+retains destination length=64, destination≤raw length and pointwise raw
+field meaning as the S7 representation input. There is no successful helper,
+phase, canonicality, residue-range or free S8 premise. The check expression
+is a field reference; extracted finish_relation/dot and source caller
+membership are not thereby proved.
+
+Attempt accumulator-03 hit the default heartbeat bound comparing decision
+instances. The replacement compares the underlying propositions, without
+unfolding the finite-field decision and without changing limits. Final
+attempt accumulator-05 passes (5.376s, 3,494,641,664-byte RSS, zero swap,
+standard axioms). No unchanged heavy regression was retried.
