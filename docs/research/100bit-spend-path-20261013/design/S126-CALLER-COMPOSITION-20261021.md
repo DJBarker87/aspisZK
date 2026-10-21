@@ -407,3 +407,77 @@ Before this checkpoint, the main research worktree was inspected read-only at
 handoff still explicitly name frozen `b2727acd3`; the overnight handoff keeps
 the next-freeze candidate parked. No new freeze is inferred from intervening
 S3/S9 source-proof commits. This branch/worktree remains isolated.
+
+
+### Full owned SDK reference continuation (2026-10-21)
+
+S2 remains OPEN. The full `owned-sdk-v3` reference retains account metadata,
+separate data/lamports alias slots, signed borrow counters, strong/weak counts,
+all bytes, guard acquisition, ordinary-return releases, and checkpoint writes.
+This is an isolated reference, not an adopted production change. The shipped
+SDK-to-reference heap/trace correspondence is not inferred from extraction.
+
+The reference extracted successfully after replacing unsupported extracted
+signed AddChecked/SubChecked expressions with signed checked_add/checked_sub
+and unwrap. The exact isize carrier is retained. `owned-sdk-v1` is a retained
+failed extraction; v2 and v3 are successful. v3 includes the actual checkpoint
+size/Variant helpers. Its full emitted Types and Funs compile as
+`S2SdkOwnedTypesV1` and `S2SdkOwnedModelV1`; installation also compiles and
+installs ten of twelve helper fields, including the actual decoder, validator,
+encoder, compact tx1, sizes, equality operations and clone. Remaining fields
+are digest and error/log interpretation, alongside the imported current
+verifier's own child contracts. This is not closure of those contracts.
+
+Focused actual-SDK joins now compare the exact owned reference shared acquire,
+exclusive acquire and temporary length read against the pinned SDK for every
+signed counter, all metadata and all byte values in the explicit 1768-byte
+domain. Accepted receipts are sdk-owned-shared-join-v2 (9.251 s,
+425584 KiB), sdk-owned-exclusive-join-v1 (8.951 s,425928 KiB), and
+sdk-owned-length-join-v1 (6.961 s,423456 KiB); each exits zero with swap zero.
+The predecessor shared join v1 failed its harness unwind bound and is excluded.
+The counter-injection harness validates the pinned RefCell layout with real
+SDK acquire/drop operations first; this is compiler/layout-specific evidence,
+not a portable-layout theorem or an arbitrary-account-length proof.
+
+`S2FrameOperationsTotalV1` proves guarded emitted range, prefix, compact suffix,
+tag read and copy operations total. `S2OwnedFrameReachabilityV1` derives the
+proof and checkpoint length guards from successful execution of the earlier
+owned tail. These guarded operation and accepted-only reachability results
+are distinct. The complete SDK-parent accepted-only reachability proof is
+still being developed; failed attempts are retained and excluded. Its tactic
+splits outer conditions without normalizing full parser/arithmetic bodies or
+raising Lean resource options.
+
+Remaining enclosing S2 obligations are the successful full-reference parent
+connection, concrete shipped SDK-to-reference construction/composition with
+all aliases/errors/state/trace effects, relevant totality and wider byte/frame
+contracts, then the composed premise audit and coherent pinned validation.
+S1 and S6 are not declared closed by this continuation.
+
+
+The complete reference-parent connection is now checked as
+`SdkReference.Reachability.stage1_current_call` in
+`S2SdkOwnedReachabilityV1.lean`, receipt
+`s2-sdk-owned-reachability-v17`: exit0,14.551363s,
+3297067008 bytes peak RSS,swap0,Lean -j1 -M4400. Its only execution
+premise is `owned_stage1 (Installation.install ops verifierOps) program sdk
+ data = ok (.Ok (),sdkOut)`. Its conclusion derives an actual current compact
+`tx1 verifierOps` success at the same explicit SolanaDigest installation,
+Unit state and observer None. It assumes no independent decoder, child-call,
+borrow-result or callback-success premise. The theorem is ACCEPTED-ONLY and
+concerns the complete owned reference; the SDK-source construction relation
+and its transport are still not proved. Digest/error interpretation and the
+current verifier child dictionary retain their existing boundaries. The
+existential call arguments are derived from the source execution, but this
+statement does not yet expose their decode/semantic projection witness.
+
+The proof traverses only emitted parent binds/conditions and branch equations;
+callee implementations are not normalized. Empty Infallible residual branches
+are eliminated explicitly. The successful theorem depends only on propext,
+Classical.choice and Quot.sound. Failed trials (including generated sorryAx
+from failed elaboration) are excluded and must not be cited as proof evidence.
+`S2SdkOwnedScanTotalV1` is also checked: it transfers the existing TOTAL scan
+through exact emitted function identity and proves release with no guards is
+identity. This is not release-totality for arbitrary supplied guard records.
+The packet consistency check accepts31 current focused targets; it regenerates
+both old-tail and full SDK reference adapters from the pinned emitted text.

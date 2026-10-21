@@ -1,0 +1,940 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedReachabilityV1.lean:21:10: error: Invalid pattern: Expected a constructor or constant marked with `[match_pattern]`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedReachabilityV1.lean:36:47: error: Application type mismatch: The argument
+  h
+has type
+  TSyntax `ident
+but is expected to have type
+  TSyntax [`Lean.Parser.Tactic.locationWildcard, `Lean.Parser.Tactic.locationHyp]
+in the application
+  h.raw
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedReachabilityV1.lean:67:90: error: unsolved goals
+ops : Ops
+verifierOps : AspisR1CurrentCaller.Ops
+program : Std.Array U8 32#usize
+sdk sdkOut : OwnedSdk
+data : alloc.vec.Vec U8
+h✝¹ :
+  (have s := data.deref;
+    do
+    let (result, sdk1, guards) ←
+      owned_stage1_body (Installation.install ops verifierOps) program sdk s
+          { checkpoint := none, «public» := none, proof := none }
+    let sdk2 ← owned_release_guards sdk1 guards
+    ok (result, sdk2)) =
+    ok (core.result.Result.Ok (), sdkOut)
+sdkBody : OwnedSdk
+guards : LiveGuards
+finalSdk : OwnedSdk
+hrelease : owned_release_guards sdkBody guards = ok finalSdk
+hbody :
+  (do
+      let b ←
+        (Installation.install ops verifierOps).op1 core.cmp.PartialEqU8 data.deref
+            (Array.make 2#usize [3#u8, 10#u8] owned_stage1_body._proof_2)
+      if b = true then
+          have i := sdk.accounts.len;
+          if (i != 3#usize) = true then
+            ok
+              (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData, sdk,
+                { checkpoint := none, «public» := none, proof := none })
+          else do
+            let proof ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount) sdk.accounts 0#usize
+            let public1 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount) sdk.accounts 1#usize
+            let checkpoint ←
+              alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount) sdk.accounts 2#usize
+            let b1 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 proof.key public1.key
+            if b1 = true then
+                ok
+                  (core.result.Result.Err solana_program_error.ProgramError.InvalidArgument, sdk,
+                    { checkpoint := none, «public» := none, proof := none })
+              else do
+                let b2 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 proof.key checkpoint.key
+                if b2 = true then
+                    ok
+                      (core.result.Result.Err solana_program_error.ProgramError.InvalidArgument, sdk,
+                        { checkpoint := none, «public» := none, proof := none })
+                  else do
+                    let b3 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 public1.key checkpoint.key
+                    if b3 = true then
+                        ok
+                          (core.result.Result.Err solana_program_error.ProgramError.InvalidArgument, sdk,
+                            { checkpoint := none, «public» := none, proof := none })
+                      else
+                        if proof.is_signer = true then
+                          ok
+                            (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk,
+                              { checkpoint := none, «public» := none, proof := none })
+                        else
+                          if proof.is_writable = true then
+                            ok
+                              (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk,
+                                { checkpoint := none, «public» := none, proof := none })
+                          else
+                            if proof.executable = true then
+                              ok
+                                (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk,
+                                  { checkpoint := none, «public» := none, proof := none })
+                            else
+                              if public1.is_signer = true then
+                                ok
+                                  (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk,
+                                    { checkpoint := none, «public» := none, proof := none })
+                              else
+                                if public1.is_writable = true then
+                                  ok
+                                    (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk,
+                                      { checkpoint := none, «public» := none, proof := none })
+                                else
+                                  if public1.executable = true then
+                                    ok
+                                      (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk,
+                                        { checkpoint := none, «public» := none, proof := none })
+                                  else do
+                                    let b4 ←
+                                      core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 checkpoint.owner
+                                          program
+                                    if b4 = true then
+                                        ok
+                                          (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData,
+                                            sdk, { checkpoint := none, «public» := none, proof := none })
+                                      else
+                                        if checkpoint.is_signer = true then
+                                          ok
+                                            (core.result.Result.Err
+                                                solana_program_error.ProgramError.InvalidAccountData,
+                                              sdk, { checkpoint := none, «public» := none, proof := none })
+                                        else
+                                          if checkpoint.executable = true then
+                                            ok
+                                              (core.result.Result.Err
+                                                  solana_program_error.ProgramError.InvalidAccountData,
+                                                sdk, { checkpoint := none, «public» := none, proof := none })
+                                          else
+                                            if checkpoint.is_writable = true then do
+                                              let r ← owned_data_len sdk checkpoint.data_slot
+                                              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                              match cf with
+                                                | core.ops.control_flow.ControlFlow.Continue val => do
+                                                  let i1 ←
+                                                    aspis_r1_cost_probe.verifier.checkpoint_size
+                                                        aspis_r1_cost_probe.transport.Variant.S2
+                                                  if (val != i1) = true then
+                                                      ok
+                                                        (core.result.Result.Err
+                                                            solana_program_error.ProgramError.InvalidAccountData,
+                                                          sdk, { checkpoint := none, «public» := none, proof := none })
+                                                    else do
+                                                      let (r1, sdk1, guards1) ←
+                                                        owned_acquire_checkpoint sdk
+                                                            { checkpoint := none, «public» := none, proof := none }
+                                                            checkpoint.data_slot
+                                                      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                                                      match cf1 with
+                                                        | core.ops.control_flow.ControlFlow.Continue a => do
+                                                          let odc ←
+                                                            alloc.vec.Vec.index
+                                                                (core.slice.index.SliceIndexUsizeSlice OwnedDataCell)
+                                                                sdk1.data_cells checkpoint.data_slot
+                                                          let v ← alloc.vec.CloneVec.clone core.clone.CloneU8 odc.bytes
+                                                          let b5 ← owned_checkpoint_nonzero v
+                                                          if b5 = true then
+                                                              ok
+                                                                (core.result.Result.Err
+                                                                    solana_program_error.ProgramError.AccountAlreadyInitialized,
+                                                                  sdk1, guards1)
+                                                            else do
+                                                              let (r2, sdk2) ←
+                                                                owned_acquire_shared sdk1 public1.data_slot
+                                                              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                                                              match cf2 with
+                                                                | core.ops.control_flow.ControlFlow.Continue a => do
+                                                                  let odc1 ←
+                                                                    alloc.vec.Vec.index
+                                                                        (core.slice.index.SliceIndexUsizeSlice
+                                                                          OwnedDataCell)
+                                                                        sdk2.data_cells public1.data_slot
+                                                                  let public_data ←
+                                                                    alloc.vec.CloneVec.clone core.clone.CloneU8
+                                                                        odc1.bytes
+                                                                  have s : Slice U8 := public_data.deref
+                                                                  let r3 ←
+                                                                    decode_public_statement_box
+                                                                        (Installation.install ops verifierOps) s
+                                                                  let cf3 ←
+                                                                    core.result.Result.Insts.CoreOpsTry.branch r3
+                                                                  match cf3 with
+                                                                    | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                                                      do
+                                                                      let r4 ←
+                                                                        (Installation.install ops verifierOps).op5 val1
+                                                                      let r5 ←
+                                                                        core.result.Result.map_err
+                                                                            owned_stage1_body.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                                                            r4 ()
+                                                                      let cf4 ←
+                                                                        core.result.Result.Insts.CoreOpsTry.branch r5
+                                                                      match cf4 with
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Continue a =>
+                                                                          do
+                                                                          let pvpftcv ←
+                                                                            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common
+                                                                                val1
+                                                                          let r6 ←
+                                                                            (Installation.install ops verifierOps).op8
+                                                                                pvpftcv.lane_transition.candidate_afterstate
+                                                                          let r7 ←
+                                                                            core.result.Result.map_err
+                                                                                owned_stage1_body.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError
+                                                                                r6 ()
+                                                                          let cf5 ←
+                                                                            core.result.Result.Insts.CoreOpsTry.branch
+                                                                                r7
+                                                                          match cf5 with
+                                                                            |
+                                                                            core.ops.control_flow.ControlFlow.Continue
+                                                                                val2 =>
+                                                                              do
+                                                                              let (r8, sdk3) ←
+                                                                                owned_acquire_shared sdk2
+                                                                                    proof.data_slot
+                                                                              let cf6 ←
+                                                                                core.result.Result.Insts.CoreOpsTry.branch
+                                                                                    r8
+                                                                              match cf6 with
+                                                                                |
+                                                                                core.ops.control_flow.ControlFlow.Continue
+                                                                                    a =>
+                                                                                  do
+                                                                                  let odc2 ←
+                                                                                    alloc.vec.Vec.index
+                                                                                        (core.slice.index.SliceIndexUsizeSlice
+                                                                                          OwnedDataCell)
+                                                                                        sdk3.data_cells proof.data_slot
+                                                                                  let proof_data ←
+                                                                                    alloc.vec.CloneVec.clone
+                                                                                        core.clone.CloneU8 odc2.bytes
+                                                                                  let proof_length ←
+                                                                                    (Installation.install ops
+                                                                                          verifierOps).op4
+                                                                                  let proof_start ←
+                                                                                    (Installation.install ops
+                                                                                          verifierOps).op7
+                                                                                  let o ←
+                                                                                    lift
+                                                                                        (proof_start.checked_add
+                                                                                          proof_length)
+                                                                                  let r9 ←
+                                                                                    (Installation.install ops
+                                                                                            verifierOps).op2
+                                                                                        o
+                                                                                        solana_program_error.ProgramError.InvalidAccountData
+                                                                                  let cf7 ←
+                                                                                    core.result.Result.Insts.CoreOpsTry.branch
+                                                                                        r9
+                                                                                  match cf7 with
+                                                                                    |
+                                                                                    core.ops.control_flow.ControlFlow.Continue
+                                                                                        val3 =>
+                                                                                      have i2 := proof_data.len;
+                                                                                      if (i2 != val3) = true then
+                                                                                        ok
+                                                                                          (core.result.Result.Err
+                                                                                              solana_program_error.ProgramError.InvalidAccountData,
+                                                                                            sdk3,
+                                                                                            {
+                                                                                              checkpoint :=
+                                                                                                guards1.checkpoint,
+                                                                                              «public» :=
+                                                                                                some public1.data_slot,
+                                                                                              proof :=
+                                                                                                some proof.data_slot })
+                                                                                      else do
+                                                                                        let s1 ←
+                                                                                          alloc.vec.Vec.index
+                                                                                              (core.slice.index.SliceIndexRangeToUsizeSlice
+                                                                                                U8)
+                                                                                              proof_data
+                                                                                              { «end» := proof_start }
+                                                                                        let b6 ←
+                                                                                          (Installation.install ops
+                                                                                                  verifierOps).op0
+                                                                                              core.cmp.PartialEqU8 s1
+                                                                                              val2
+                                                                                        if b6 = true then
+                                                                                            ok
+                                                                                              (core.result.Result.Err
+                                                                                                  solana_program_error.ProgramError.InvalidAccountData,
+                                                                                                sdk3,
+                                                                                                {
+                                                                                                  checkpoint :=
+                                                                                                    guards1.checkpoint,
+                                                                                                  «public» :=
+                                                                                                    some
+                                                                                                      public1.data_slot,
+                                                                                                  proof :=
+                                                                                                    some
+                                                                                                      proof.data_slot })
+                                                                                          else do
+                                                                                            let i3 ←
+                                                                                              proof_start + 8#usize
+                                                                                            let i4 ←
+                                                                                              alloc.vec.Vec.index
+                                                                                                  (core.slice.index.SliceIndexUsizeSlice
+                                                                                                    U8)
+                                                                                                  proof_data i3
+                                                                                            let i5 ←
+                                                                                              aspis_r1_cost_probe.transport.Variant.tag
+                                                                                                  aspis_r1_cost_probe.transport.Variant.S2
+                                                                                            if (i4 != i5) = true then
+                                                                                                ok
+                                                                                                  (core.result.Result.Err
+                                                                                                      solana_program_error.ProgramError.InvalidAccountData,
+                                                                                                    sdk3,
+                                                                                                    {
+                                                                                                      checkpoint :=
+                                                                                                        guards1.checkpoint,
+                                                                                                      «public» :=
+                                                                                                        some
+                                                                                                          public1.data_slot,
+                                                                                                      proof :=
+                                                                                                        some
+                                                                                                          proof.data_slot })
+                                                                                              else do
+                                                                                                let p ←
+                                                                                                  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                                                                                                      val1
+                                                                                                have s2 : Slice U8 :=
+                                                                                                  public_data.deref
+                                                                                                let s3 ←
+                                                                                                  alloc.vec.Vec.index
+                                                                                                      (core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                                        U8)
+                                                                                                      proof_data
+                                                                                                      {
+                                                                                                        start :=
+                                                                                                          proof_start,
+                                                                                                        «end» := val3 }
+                                                                                                let i6 ←
+                                                                                                  data.deref.index_usize
+                                                                                                      1#usize
+                                                                                                let i7 ←
+                                                                                                  lift
+                                                                                                      (UScalar.cast
+                                                                                                        UScalarTy.Usize
+                                                                                                        i6)
+                                                                                                let r10 ←
+                                                                                                  first_decoded
+                                                                                                      (Installation.install
+                                                                                                        ops verifierOps)
+                                                                                                      p s2 s3 i7
+                                                                                                let cf8 ←
+                                                                                                  core.result.Result.Insts.CoreOpsTry.branch
+                                                                                                      r10
+                                                                                                match cf8 with
+                                                                                                  |
+                                                                                                  core.ops.control_flow.ControlFlow.Continue
+                                                                                                      val4 =>
+                                                                                                    have i8 := val4.len;
+                                                                                                    ⋯
+                                                                                                  |
+                                                                                                  core.ops.control_flow.ControlFlow.Break
+                                                                                                      residual =>
+                                                                                                    do
+                                                                                                    let r11 ←
+                                                                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                                          Unit
+                                                                                                          (core.convert.FromSame
+                                                                                                            solana_program_error.ProgramError)
+                                                                                                          residual
+                                                                                                    ok
+                                                                                                        (r11, sdk3,
+                                                                                                          {
+                                                                                                            checkpoint :=
+                                                                                                              guards1.checkpoint,
+                                                                                                            «public» :=
+                                                                                                              some
+                                                                                                                public1.data_slot,
+                                                                                                            proof :=
+                                                                                                              some
+                                                                                                                proof.data_slot })
+                                                                                    |
+                                                                                    core.ops.control_flow.ControlFlow.Break
+                                                                                        residual =>
+                                                                                      do
+                                                                                      let r10 ←
+                                                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                            Unit
+                                                                                            (core.convert.FromSame
+                                                                                              solana_program_error.ProgramError)
+                                                                                            residual
+                                                                                      ok
+                                                                                          (r10, sdk3,
+                                                                                            {
+                                                                                              checkpoint :=
+                                                                                                guards1.checkpoint,
+                                                                                              «public» :=
+                                                                                                some public1.data_slot,
+                                                                                              proof :=
+                                                                                                some proof.data_slot })
+                                                                                |
+                                                                                core.ops.control_flow.ControlFlow.Break
+                                                                                    residual =>
+                                                                                  do
+                                                                                  let r9 ←
+                                                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                        Unit
+                                                                                        (core.convert.FromSame
+                                                                                          solana_program_error.ProgramError)
+                                                                                        residual
+                                                                                  ok
+                                                                                      (r9, sdk3,
+                                                                                        {
+                                                                                          checkpoint :=
+                                                                                            guards1.checkpoint,
+                                                                                          «public» :=
+                                                                                            some public1.data_slot,
+                                                                                          proof := guards1.proof })
+                                                                            |
+                                                                            core.ops.control_flow.ControlFlow.Break
+                                                                                residual =>
+                                                                              do
+                                                                              let r8 ←
+                                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                    Unit
+                                                                                    (core.convert.FromSame
+                                                                                      solana_program_error.ProgramError)
+                                                                                    residual
+                                                                              ok
+                                                                                  (r8, sdk2,
+                                                                                    { checkpoint := guards1.checkpoint,
+                                                                                      «public» :=
+                                                                                        some public1.data_slot,
+                                                                                      proof := guards1.proof })
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Break
+                                                                            residual =>
+                                                                          do
+                                                                          let r6 ←
+                                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                Unit
+                                                                                (core.convert.FromSame
+                                                                                  solana_program_error.ProgramError)
+                                                                                residual
+                                                                          ok
+                                                                              (r6, sdk2,
+                                                                                { checkpoint := guards1.checkpoint,
+                                                                                  «public» := some public1.data_slot,
+                                                                                  proof := guards1.proof })
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      do
+                                                                      let r4 ←
+                                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                            Unit
+                                                                            (core.convert.FromSame
+                                                                              solana_program_error.ProgramError)
+                                                                            residual
+                                                                      ok
+                                                                          (r4, sdk2,
+                                                                            { checkpoint := guards1.checkpoint,
+                                                                              «public» := some public1.data_slot,
+                                                                              proof := guards1.proof })
+                                                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                                                  let r3 ←
+                                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        Unit
+                                                                        (core.convert.FromSame
+                                                                          solana_program_error.ProgramError)
+                                                                        residual
+                                                                  ok (r3, sdk2, guards1)
+                                                        | core.ops.control_flow.ControlFlow.Break residual => do
+                                                          let r2 ←
+                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                Unit
+                                                                (core.convert.FromSame
+                                                                  solana_program_error.ProgramError)
+                                                                residual
+                                                          ok (r2, sdk1, guards1)
+                                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                                  let r1 ←
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        Unit (core.convert.FromSame solana_program_error.ProgramError)
+                                                        residual
+                                                  ok (r1, sdk, { checkpoint := none, «public» := none, proof := none })
+                                            else
+                                              ok
+                                                (core.result.Result.Err
+                                                    solana_program_error.ProgramError.InvalidAccountData,
+                                                  sdk, { checkpoint := none, «public» := none, proof := none })
+        else do
+          let b1 ←
+            (Installation.install ops verifierOps).op1 core.cmp.PartialEqU8 data.deref
+                (Array.make 2#usize [3#u8, 11#u8] owned_stage1_body._proof_6)
+          if b1 = true then
+              have i := sdk.accounts.len;
+              if (i != 3#usize) = true then
+                ok
+                  (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData, sdk,
+                    { checkpoint := none, «public» := none, proof := none })
+              else do
+                let proof ←
+                  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount) sdk.accounts 0#usize
+                let public1 ←
+                  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount) sdk.accounts 1#usize
+                let checkpoint ←
+                  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount) sdk.accounts 2#usize
+                let b2 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 proof.key public1.key
+                if b2 = true then
+                    ok
+                      (core.result.Result.Err solana_program_error.ProgramError.InvalidArgument, sdk,
+                        { checkpoint := none, «public» := none, proof := none })
+                  else do
+                    let b3 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 proof.key checkpoint.key
+                    if b3 = true then
+                        ok
+                          (core.result.Result.Err solana_program_error.ProgramError.InvalidArgument, sdk,
+                            { checkpoint := none, «public» := none, proof := none })
+                      else do
+                        let b4 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 public1.key checkpoint.key
+                        if b4 = true then
+                            ok
+                              (core.result.Result.Err solana_program_error.ProgramError.InvalidArgument, sdk,
+                                { checkpoint := none, «public» := none, proof := none })
+                          else
+                            if proof.is_signer = true then
+                              ok
+                                (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk,
+                                  { checkpoint := none, «public» := none, proof := none })
+                            else
+                              if proof.is_writable = true then
+                                ok
+                                  (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk,
+                                    { checkpoint := none, «public» := none, proof := none })
+                              else
+                                if proof.executable = true then
+                                  ok
+                                    (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk,
+                                      { checkpoint := none, «public» := none, proof := none })
+                                else
+                                  if public1.is_signer = true then
+                                    ok
+                                      (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, sdk,
+                                        { checkpoint := none, «public» := none, proof := none })
+                                  else
+                                    if public1.is_writable = true then
+                                      ok
+                                        (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData,
+                                          sdk, { checkpoint := none, «public» := none, proof := none })
+                                    else
+                                      if public1.executable = true then
+                                        ok
+                                          (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData,
+                                            sdk, { checkpoint := none, «public» := none, proof := none })
+                                      else do
+                                        let b5 ←
+                                          core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 checkpoint.owner
+                                              program
+                                        if b5 = true then
+                                            ok
+                                              (core.result.Result.Err
+                                                  solana_program_error.ProgramError.InvalidAccountData,
+                                                sdk, { checkpoint := none, «public» := none, proof := none })
+                                          else
+                                            if checkpoint.is_signer = true then
+                                              ok
+                                                (core.result.Result.Err
+                                                    solana_program_error.ProgramError.InvalidAccountData,
+                                                  sdk, { checkpoint := none, «public» := none, proof := none })
+                                            else
+                                              if checkpoint.executable = true then
+                                                ok
+                                                  (core.result.Result.Err
+                                                      solana_program_error.ProgramError.InvalidAccountData,
+                                                    sdk, { checkpoint := none, «public» := none, proof := none })
+                                              else
+                                                if checkpoint.is_writable = true then do
+                                                  let r ← owned_data_len sdk checkpoint.data_slot
+                                                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                                  match cf with
+                                                    | core.ops.control_flow.ControlFlow.Continue val => do
+                                                      let i1 ←
+                                                        aspis_r1_cost_probe.verifier.checkpoint_size
+                                                            aspis_r1_cost_probe.transport.Variant.S2
+                                                      if (val != i1) = true then
+                                                          ok
+                                                            (core.result.Result.Err
+                                                                solana_program_error.ProgramError.InvalidAccountData,
+                                                              sdk,
+                                                              { checkpoint := none, «public» := none, proof := none })
+                                                        else do
+                                                          let (r1, sdk1, guards1) ←
+                                                            owned_acquire_checkpoint sdk
+                                                                { checkpoint := none, «public» := none, proof := none }
+                                                                checkpoint.data_slot
+                                                          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                                                          match cf1 with
+                                                            | core.ops.control_flow.ControlFlow.Continue a => do
+                                                              let odc ←
+                                                                alloc.vec.Vec.index
+                                                                    (core.slice.index.SliceIndexUsizeSlice
+                                                                      OwnedDataCell)
+                                                                    sdk1.data_cells checkpoint.data_slot
+                                                              let v ←
+                                                                alloc.vec.CloneVec.clone core.clone.CloneU8 odc.bytes
+                                                              let b6 ← owned_checkpoint_nonzero v
+                                                              if b6 = true then
+                                                                  ok
+                                                                    (core.result.Result.Err
+                                                                        solana_program_error.ProgramError.AccountAlreadyInitialized,
+                                                                      sdk1, guards1)
+                                                                else do
+                                                                  let (r2, sdk2) ←
+                                                                    owned_acquire_shared sdk1 public1.data_slot
+                                                                  let cf2 ←
+                                                                    core.result.Result.Insts.CoreOpsTry.branch r2
+                                                                  match cf2 with
+                                                                    | core.ops.control_flow.ControlFlow.Continue a => do
+                                                                      let odc1 ←
+                                                                        alloc.vec.Vec.index
+                                                                            (core.slice.index.SliceIndexUsizeSlice
+                                                                              OwnedDataCell)
+                                                                            sdk2.data_cells public1.data_slot
+                                                                      let public_data ←
+                                                                        alloc.vec.CloneVec.clone core.clone.CloneU8
+                                                                            odc1.bytes
+                                                                      have s : Slice U8 := public_data.deref
+                                                                      let r3 ←
+                                                                        decode_public_statement_box
+                                                                            (Installation.install ops verifierOps) s
+                                                                      let cf3 ←
+                                                                        core.result.Result.Insts.CoreOpsTry.branch r3
+                                                                      match cf3 with
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Continue
+                                                                            val1 =>
+                                                                          do
+                                                                          let r4 ←
+                                                                            (Installation.install ops verifierOps).op5
+                                                                                val1
+                                                                          let r5 ←
+                                                                            core.result.Result.map_err
+                                                                                owned_stage1_body.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                                                                r4 ()
+                                                                          let cf4 ←
+                                                                            core.result.Result.Insts.CoreOpsTry.branch
+                                                                                r5
+                                                                          match cf4 with
+                                                                            |
+                                                                            core.ops.control_flow.ControlFlow.Continue
+                                                                                a =>
+                                                                              do
+                                                                              let pvpftcv ←
+                                                                                aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common
+                                                                                    val1
+                                                                              let r6 ←
+                                                                                (Installation.install ops
+                                                                                        verifierOps).op8
+                                                                                    pvpftcv.lane_transition.candidate_afterstate
+                                                                              let r7 ←
+                                                                                core.result.Result.map_err
+                                                                                    owned_stage1_body.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError
+                                                                                    r6 ()
+                                                                              let cf5 ←
+                                                                                core.result.Result.Insts.CoreOpsTry.branch
+                                                                                    r7
+                                                                              match cf5 with
+                                                                                |
+                                                                                core.ops.control_flow.ControlFlow.Continue
+                                                                                    val2 =>
+                                                                                  do
+                                                                                  let (r8, sdk3) ←
+                                                                                    owned_acquire_shared sdk2
+                                                                                        proof.data_slot
+                                                                                  let cf6 ←
+                                                                                    core.result.Result.Insts.CoreOpsTry.branch
+                                                                                        r8
+                                                                                  match cf6 with
+                                                                                    |
+                                                                                    core.ops.control_flow.ControlFlow.Continue
+                                                                                        a =>
+                                                                                      do
+                                                                                      let odc2 ←
+                                                                                        alloc.vec.Vec.index
+                                                                                            (core.slice.index.SliceIndexUsizeSlice
+                                                                                              OwnedDataCell)
+                                                                                            sdk3.data_cells
+                                                                                            proof.data_slot
+                                                                                      let proof_data ←
+                                                                                        alloc.vec.CloneVec.clone
+                                                                                            core.clone.CloneU8
+                                                                                            odc2.bytes
+                                                                                      let proof_length ←
+                                                                                        (Installation.install ops
+                                                                                              verifierOps).op4
+                                                                                      let proof_start ←
+                                                                                        (Installation.install ops
+                                                                                              verifierOps).op7
+                                                                                      let o ←
+                                                                                        lift
+                                                                                            (proof_start.checked_add
+                                                                                              proof_length)
+                                                                                      let r9 ←
+                                                                                        (Installation.install ops
+                                                                                                verifierOps).op2
+                                                                                            o
+                                                                                            solana_program_error.ProgramError.InvalidAccountData
+                                                                                      let cf7 ←
+                                                                                        core.result.Result.Insts.CoreOpsTry.branch
+                                                                                            r9
+                                                                                      match cf7 with
+                                                                                        |
+                                                                                        core.ops.control_flow.ControlFlow.Continue
+                                                                                            val3 =>
+                                                                                          have i2 := proof_data.len;
+                                                                                          if (i2 != val3) = true then
+                                                                                            ok
+                                                                                              (core.result.Result.Err
+                                                                                                  solana_program_error.ProgramError.InvalidAccountData,
+                                                                                                sdk3,
+                                                                                                {
+                                                                                                  checkpoint :=
+                                                                                                    guards1.checkpoint,
+                                                                                                  «public» :=
+                                                                                                    some
+                                                                                                      public1.data_slot,
+                                                                                                  proof :=
+                                                                                                    some
+                                                                                                      proof.data_slot })
+                                                                                          else do
+                                                                                            let s1 ←
+                                                                                              alloc.vec.Vec.index
+                                                                                                  (core.slice.index.SliceIndexRangeToUsizeSlice
+                                                                                                    U8)
+                                                                                                  proof_data
+                                                                                                  {
+                                                                                                    «end» :=
+                                                                                                      proof_start }
+                                                                                            let b7 ←
+                                                                                              (Installation.install ops
+                                                                                                      verifierOps).op0
+                                                                                                  core.cmp.PartialEqU8
+                                                                                                  s1 val2
+                                                                                            if b7 = true then
+                                                                                                ok
+                                                                                                  (core.result.Result.Err
+                                                                                                      solana_program_error.ProgramError.InvalidAccountData,
+                                                                                                    sdk3,
+                                                                                                    {
+                                                                                                      checkpoint :=
+                                                                                                        guards1.checkpoint,
+                                                                                                      «public» :=
+                                                                                                        some
+                                                                                                          public1.data_slot,
+                                                                                                      proof :=
+                                                                                                        some
+                                                                                                          proof.data_slot })
+                                                                                              else do
+                                                                                                let i3 ←
+                                                                                                  proof_start + 8#usize
+                                                                                                let i4 ←
+                                                                                                  alloc.vec.Vec.index
+                                                                                                      (core.slice.index.SliceIndexUsizeSlice
+                                                                                                        U8)
+                                                                                                      proof_data i3
+                                                                                                let i5 ←
+                                                                                                  aspis_r1_cost_probe.transport.Variant.tag
+                                                                                                      aspis_r1_cost_probe.transport.Variant.S2
+                                                                                                if
+                                                                                                      (i4 != i5) =
+                                                                                                        true then
+                                                                                                    ok
+                                                                                                      (core.result.Result.Err
+                                                                                                          solana_program_error.ProgramError.InvalidAccountData,
+                                                                                                        sdk3,
+                                                                                                        {
+                                                                                                          checkpoint :=
+                                                                                                            guards1.checkpoint,
+                                                                                                          «public» :=
+                                                                                                            some
+                                                                                                              public1.data_slot,
+                                                                                                          proof :=
+                                                                                                            some
+                                                                                                              proof.data_slot })
+                                                                                                  else do
+                                                                                                    let p ←
+                                                                                                      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                                                                                                          val1
+                                                                                                    have s2 :
+                                                                                                      Slice U8 :=
+                                                                                                      public_data.deref
+                                                                                                    let s3 ←
+                                                                                                      alloc.vec.Vec.index
+                                                                                                          (core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                                            U8)
+                                                                                                          proof_data
+                                                                                                          {
+                                                                                                            start :=
+                                                                                                              proof_start,
+                                                                                                            «end» :=
+                                                                                                              val3 }
+                                                                                                    let i6 ←
+                                                                                                      data.deref.index_usize
+                                                                                                          1#usize
+                                                                                                    let i7 ←
+                                                                                                      lift
+                                                                                                          (UScalar.cast
+                                                                                                            UScalarTy.Usize
+                                                                                                            i6)
+                                                                                                    let r10 ←
+                                                                                                      first_decoded
+                                                                                                          (Installation.install
+                                                                                                            ops
+                                                                                                            verifierOps)
+                                                                                                          p s2 s3 i7
+                                                                                                    let cf8 ←
+                                                                                                      core.result.Result.Insts.CoreOpsTry.branch
+                                                                                                          r10
+                                                                                                    ⋯
+                                                                                        |
+                                                                                        core.ops.control_flow.ControlFlow.Break
+                                                                                            residual =>
+                                                                                          do
+                                                                                          let r10 ←
+                                                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                                Unit
+                                                                                                (core.convert.FromSame
+                                                                                                  solana_program_error.ProgramError)
+                                                                                                residual
+                                                                                          ok
+                                                                                              (r10, sdk3,
+                                                                                                {
+                                                                                                  checkpoint :=
+                                                                                                    guards1.checkpoint,
+                                                                                                  «public» :=
+                                                                                                    some
+                                                                                                      public1.data_slot,
+                                                                                                  proof :=
+                                                                                                    some
+                                                                                                      proof.data_slot })
+                                                                                    |
+                                                                                    core.ops.control_flow.ControlFlow.Break
+                                                                                        residual =>
+                                                                                      do
+                                                                                      let r9 ←
+                                                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                            Unit
+                                                                                            (core.convert.FromSame
+                                                                                              solana_program_error.ProgramError)
+                                                                                            residual
+                                                                                      ok
+                                                                                          (r9, sdk3,
+                                                                                            {
+                                                                                              checkpoint :=
+                                                                                                guards1.checkpoint,
+                                                                                              «public» :=
+                                                                                                some public1.data_slot,
+                                                                                              proof := guards1.proof })
+                                                                                |
+                                                                                core.ops.control_flow.ControlFlow.Break
+                                                                                    residual =>
+                                                                                  do
+                                                                                  let r8 ←
+                                                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                        Unit
+                                                                                        (core.convert.FromSame
+                                                                                          solana_program_error.ProgramError)
+                                                                                        residual
+                                                                                  ok
+                                                                                      (r8, sdk2,
+                                                                                        {
+                                                                                          checkpoint :=
+                                                                                            guards1.checkpoint,
+                                                                                          «public» :=
+                                                                                            some public1.data_slot,
+                                                                                          proof := guards1.proof })
+                                                                            |
+                                                                            core.ops.control_flow.ControlFlow.Break
+                                                                                residual =>
+                                                                              do
+                                                                              let r6 ←
+                                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                    Unit
+                                                                                    (core.convert.FromSame
+                                                                                      solana_program_error.ProgramError)
+                                                                                    residual
+                                                                              ok
+                                                                                  (r6, sdk2,
+                                                                                    { checkpoint := guards1.checkpoint,
+                                                                                      «public» :=
+                                                                                        some public1.data_slot,
+                                                                                      proof := guards1.proof })
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Break
+                                                                            residual =>
+                                                                          do
+                                                                          let r4 ←
+                                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                Unit
+                                                                                (core.convert.FromSame
+                                                                                  solana_program_error.ProgramError)
+                                                                                residual
+                                                                          ok
+                                                                              (r4, sdk2,
+                                                                                { checkpoint := guards1.checkpoint,
+                                                                                  «public» := some public1.data_slot,
+                                                                                  proof := guards1.proof })
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      do
+                                                                      let r3 ←
+                                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                            Unit
+                                                                            (core.convert.FromSame
+                                                                              solana_program_error.ProgramError)
+                                                                            residual
+                                                                      ok (r3, sdk2, guards1)
+                                                            | core.ops.control_flow.ControlFlow.Break residual => do
+                                                              let r2 ←
+                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    Unit
+                                                                    (core.convert.FromSame
+                                                                      solana_program_error.ProgramError)
+                                                                    residual
+                                                              ok (r2, sdk1, guards1)
+                                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                                      let r1 ←
+                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            Unit
+                                                            (core.convert.FromSame solana_program_error.ProgramError)
+                                                            residual
+                                                      ok
+                                                          (r1, sdk,
+                                                            { checkpoint := none, «public» := none, proof := none })
+                                                else
+                                                  ok
+                                                    (core.result.Result.Err
+                                                        solana_program_error.ProgramError.InvalidAccountData,
+                                                      sdk, { checkpoint := none, «public» := none, proof := none })
+            else
+              ok
+                (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData, sdk,
+                  { checkpoint := none, «public» := none, proof := none })) =
+    ok (core.result.Result.Ok (), sdkBody, guards)
+h✝ :
+  (let (result, sdk1, guards) := (core.result.Result.Ok (), sdkBody, guards)
+    do
+    let sdk2 ← owned_release_guards sdk1 guards
+    ok (result, sdk2)) =
+    ok (core.result.Result.Ok (), sdkOut)
+h : ok (core.result.Result.Ok (), finalSdk) = ok (core.result.Result.Ok (), sdkOut)
+⊢ ∃ pub bytes proof k checkpoint,
+    AspisR1CurrentCaller.verifier.candidate.tx1 verifierOps
+        (SourceInstallation.currentDigest
+          (SolanaDigest.Insts.Aspis_coreDigestDigest32 (Installation.install ops verifierOps)))
+        (CurrentCarrier.toCurrentPublic pub) bytes proof k () none =
+      ok (core.result.Result.Ok checkpoint)
+'AspisS2OwnedStage1.SdkReference.Reachability.stage1_current_call' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

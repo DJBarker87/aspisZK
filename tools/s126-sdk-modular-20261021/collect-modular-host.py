@@ -16,7 +16,7 @@ for f in H.iterdir():
  for rel in ['src/lib.rs','Cargo.toml','Cargo.lock','source-cut.json','voluntary-stop.json']:
   if (f/rel).is_file():copy(f/rel,Path('sources')/f.name/rel)
  for p in f.glob('*-input.json'):copy(p,Path('sources')/f.name/p.name)
- if f.name in ['owned-tail-v5','owned-tail-v6','owned-tail-v8']:
+ if f.name in ['owned-tail-v5','owned-tail-v6','owned-tail-v8','owned-sdk-v1','owned-sdk-v2','owned-sdk-v3']:
   for p in (f/'generated').rglob('*.lean'):
    copy(p,Path('sources')/f.name/(str(p.relative_to(f))+'.txt'))
 for folder in H.glob('sdk-*guard-context-v*'):

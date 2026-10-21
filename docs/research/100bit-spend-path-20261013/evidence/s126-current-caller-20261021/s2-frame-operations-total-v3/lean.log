@@ -1,0 +1,63 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2FrameOperationsTotalV1.lean:29:37: warning: This simp argument is unused:
+  core.slice.index.SliceIndexRangeUsizeSlice
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵s̵e̵g̵m̵e̵n̵t̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵U̵S̵c̵a̵l̵a̵r̵.̵l̵e̵_̵e̵q̵u̵i̵v̵,̵d̵e̵r̵e̵f̵_̵v̵a̵l̵,̵h̵s̵,̵h̵f̵]̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲s̲e̲g̲m̲e̲n̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲U̲S̲c̲a̲l̲a̲r̲.̲l̲e̲_̲e̲q̲u̲i̲v̲,̲ ̲d̲e̲r̲e̲f̲_̲v̲a̲l̲,̲ ̲h̲s̲,̲ ̲h̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2FrameOperationsTotalV1.lean:44:33: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑58295#usize - ↑688#usize
+in the target expression
+  List.take (↑58295#usize - 688) (List.drop 688 ↑bytes) = List.take 57607 (List.drop 688 ↑bytes)
+
+case refine_1
+bytes : alloc.vec.Vec U8
+h : (↑bytes).length = 58295
+ha : ↑688#usize = 688
+hz : ↑58295#usize = 58295
+hd : ↑58295#usize - ↑688#usize = 57607
+⊢ List.take (↑58295#usize - 688) (List.drop 688 ↑bytes) = List.take 57607 (List.drop 688 ↑bytes)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (58295 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2FrameOperationsTotalV1.lean:45:33: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑58295#usize - ↑688#usize
+in the target expression
+  (List.take (↑58295#usize - 688) (List.drop 688 ↑bytes)).length = 57607
+
+case refine_2
+bytes : alloc.vec.Vec U8
+h : (↑bytes).length = 58295
+ha : ↑688#usize = 688
+hz : ↑58295#usize = 58295
+hd : ↑58295#usize - ↑688#usize = 57607
+⊢ (List.take (↑58295#usize - 688) (List.drop 688 ↑bytes)).length = 57607
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (58295 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisS2OwnedStage1.FrameOperationsTotal.range_total' depends on axioms: [propext, Quot.sound]
+'AspisS2OwnedStage1.FrameOperationsTotal.compact_suffix_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.FrameOperationsTotal.tag_read_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS2OwnedStage1.FrameOperationsTotal.copy_total' depends on axioms: [propext, Quot.sound]
