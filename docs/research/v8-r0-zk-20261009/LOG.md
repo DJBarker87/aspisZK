@@ -7735,3 +7735,20 @@ conditional on RustProverRefinement. Open (the content of that premise): the
 concrete runtime refinement, exact serialisation traversal, and
 borrowed-loop / outer-assembly identification. Three ordered-Vec Kani attempts
 timed out and were excluded.
+
+## D126 — prover commitment part 17; the Rust experiment must be made concrete (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit17-20261021` (`r1p-final/PROVER-COMMIT17-20261021.md`):
+ordered List and section composition of the serialiser; bounded serialiser
+emission-cell and ordered-query-element Kani checks; borrowed-cell checks;
+an extracted owned outer assembly with error-preserving Lean composition.
+J8655, standard axioms, zero swap. `RustProverRefinement` stays open. A checked
+countermodel shows it cannot be deleted while `rust : FSExperiments` is
+unrestricted. That is the free-parameter pattern again, and it does not refute
+the actual prover. Lead ruling: build `shippedProverExperiment : FSExperiments`
+as a concrete Lean object from the extracted owned references and the
+Kani-certified shipped = reference equalities (builder, checker, retry,
+serialiser, material, scalar callers), with its randomness and history
+adapter. Then prove both WholeRunJoins for `rust := shippedProverExperiment`.
+The residual is then only the P6 toolchain boundary (the Kani/Aeneas
+translation is trusted), which is already a named premise.
