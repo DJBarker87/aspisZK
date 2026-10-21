@@ -1,0 +1,3 @@
+PROVED decoded local C1/C2 opening coordinates equal all29 coordinates of the existing recovered global word under primitive packed-byte map facts.
+
+Limitations: Retains packed1(queryLeaf i)=some(bs.take480) and packed2(queryLeaf i)=some(bs.drop480); concrete authentication/source correspondence must supply them. First theorem retains exact same C1/C2 decoder outputs; canonical608 variant derives decoder outputs and byte identity rather than assuming them. No desired word equality is assumed, but the full concrete recovered-word correspondence is not closed until the packed-map facts are discharged. Lane embeddings, width29 arithmetic, source adoption and implementation-linked100-bit theorem remain open.

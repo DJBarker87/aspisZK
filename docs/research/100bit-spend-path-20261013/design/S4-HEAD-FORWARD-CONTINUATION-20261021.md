@@ -996,3 +996,24 @@ accepted environment appends the previous successful ten-query profile to
 supply missing owners. No dependency build, whole-manifest replay or Rust
 source change was run. Caller source bindings, final arithmetic/model join,
 coherent release replay and candidate adoption remain open.
+
+
+## Local decoded opening to existing recovered-word projection
+
+`evidence/s4-decoded-opening-recovered-word-v1-20261022` proves
+`S4RecoveredOpeningWordV1.decoded_pair_matches_recovered_word`: given the
+same successful C1/C2 decodes and the primitive packed byte-map facts at
+`queryLeaf i`, every coordinate of the existing TypedRecoveredWords.word
+at i equals the corresponding local LiteralTypedWords.word coordinate of
+those decoded leaves at `querySlot i`. No global word equality is assumed.
+The canonical608 variant derives the decodes and encoded-byte identity
+before proving that same all29-coordinate equality. Existing word/decoder
+projections are reused; there is no new commitment model.
+
+This closes the representation projection conditional on the two named
+byte-map entries. It DOES NOT prove the actual Merkle/caller authentication
+supplies those entries: that concrete recovered-map correspondence remains
+an upstream obligation. Query leaf/slot geometry and the width29 field-value
+join also still need composition. Focused exit0,21.784s,peak process
+RSS3,578,331,136 bytes,zero swaps; both reports contain standard axioms.
+No Rust source change or candidate adoption occurred.
