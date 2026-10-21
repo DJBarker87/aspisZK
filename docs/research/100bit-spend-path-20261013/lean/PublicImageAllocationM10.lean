@@ -1,0 +1,108 @@
+import AllocationBatchM10
+import MaterializationAllocationM10
+import InitialPublicImageWorkM10
+
+/-! Constructor schedules for the concrete public-image primitive. Each
+polynomial operation creates at most a dense coefficient square plus its
+scalar/result groups, at the fixed unreduced degree cap 2048. The operation
+schedule is the actual Chebyshev/fractional/triangular fuel schedule, not a
+numerical upper bound selected by the caller. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.PublicImageAllocationM10
+open CompPoly AspisWideTower GSPostProcessWorkM10
+attribute [local irreducible] InitialEncoderScheduleM10.operations InitialEncoderScheduleM10.operationBudget
+  InitialPublicImageWorkM10.coordinateSchedule InitialPublicImageWorkM10.message
+  InitialEncoderScheduleM10.budget GSPostProcessWorkM10.coordinateBudget
+  InitialPublicImageWorkM10.coordinateCost
+
+def polynomialCells : Nat := 20*(2048+4)^2
+
+theorem polynomial_paid : polynomialCells ≤ InitialEncoderScheduleM10.primitive := by
+  unfold polynomialCells InitialEncoderScheduleM10.primitive
+  omega
+
+@[irreducible] def encoderCells : Nat := InitialEncoderScheduleM10.operations*polynomialCells
+
+theorem encoder_paid (m : Fin 1024 → WideExact) :
+    encoderCells ≤ (InitialEncoderScheduleM10.eval m).2 := by
+  unfold encoderCells InitialEncoderScheduleM10.eval
+  exact Nat.mul_le_mul_left _ polynomial_paid
+
+theorem encoder_budget : encoderCells ≤ InitialEncoderScheduleM10.budget := by
+  unfold encoderCells InitialEncoderScheduleM10.budget
+  exact Nat.mul_le_mul InitialEncoderScheduleM10.operations_bound polynomial_paid
+
+@[irreducible] def coordinateCells : Nat := InitialPublicImageWorkM10.coordinateSchedule*polynomialCells
+
+theorem coordinate_paid : coordinateCells ≤ InitialPublicImageWorkM10.coordinateCost := by
+  unfold coordinateCells InitialPublicImageWorkM10.coordinateCost
+  exact Nat.mul_le_mul_left _ polynomial_paid
+
+@[irreducible] def messageCells : Nat := 1024*coordinateCells+3*1024+1
+
+theorem message_paid (q : CPolynomial WideExact) :
+    messageCells ≤ (InitialPublicImageWorkM10.message q).2 := by
+  have h : 1024*(InitialPublicImageWorkM10.coordinateCost+3)+1 ≤
+      (InitialPublicImageWorkM10.message q).2 := by
+    unfold InitialPublicImageWorkM10.message
+    simp only [BinTypedWordDemandWork.materialize,List.map_ofFn,Function.comp_def,
+      List.ofFn_const,List.sum_replicate,nsmul_eq_mul]
+    omega
+  have hp := Nat.add_le_add_right
+    (Nat.add_le_add_right (Nat.mul_le_mul_left 1024 coordinate_paid) (3*1024)) 1
+  have hp' : messageCells ≤ 1024*(InitialPublicImageWorkM10.coordinateCost+3)+1 := by
+    unfold messageCells
+    simpa only [Nat.mul_add,Nat.mul_comm 1024 3] using hp
+  exact hp'.trans h
+
+def imageCells (cs : List WideExact) : Nat :=
+  2*cs.length+messageCells+encoderCells+2*(cs.length+1025)+32
+
+theorem image_paid (cs : List WideExact) : imageCells cs ≤ (InitialPublicImageWorkM10.eval cs).2 := by
+  have hm := message_paid (CPolynomial.ofArray cs.toArray)
+  have he := encoder_paid (InitialPublicImageWorkM10.message (CPolynomial.ofArray cs.toArray)).1.read
+  change 2*cs.length+_+_+2*(cs.length+1025)+32 ≤ 5*cs.length+_+_+2*(cs.length+1025)+1000
+  omega
+
+/-- Source coordinate arithmetic: encoder, Horner coefficients, fixed-domain
+point generation, powers 2 and 512, inverse and final multiplication. -/
+@[irreducible] def receivedCoordinateCells : Nat := encoderCells+1000000000+4*1025
+
+theorem received_coordinate_budget : receivedCoordinateCells ≤ GSPostProcessWorkM10.coordinateBudget := by
+  unfold receivedCoordinateCells GSPostProcessWorkM10.coordinateBudget
+  simpa only [Nat.add_assoc] using Nat.add_le_add encoder_budget
+    (show 1000000000+4*1025 ≤ 1000000000000+1030 by omega)
+
+@[irreducible] def distanceCells : Nat := 1048576*(receivedCoordinateCells+32)+32
+
+theorem distance_paid : distanceCells ≤ GSPostProcessWorkM10.distanceBudget := by
+  unfold distanceCells GSPostProcessWorkM10.distanceBudget
+  exact Nat.add_le_add (Nat.mul_le_mul_left 1048576
+    (Nat.add_le_add received_coordinate_budget (show 32 ≤ 1000 by omega))) (by omega)
+
+@[irreducible] def keepCells : Nat := 29*1048576*(receivedCoordinateCells+32)+32
+
+theorem keep_paid : keepCells ≤ GSPostProcessWorkM10.keepBudget := by
+  unfold keepCells GSPostProcessWorkM10.keepBudget
+  exact Nat.add_le_add (Nat.mul_le_mul_left (29*1048576)
+    (Nat.add_le_add received_coordinate_budget (show 32 ≤ 1000 by omega))) (by omega)
+
+def equalityCells : Nat := 4*29*1024
+
+theorem equality_paid : equalityCells ≤ GSPostProcessWorkM10.equalityBudget := by
+  unfold equalityCells GSPostProcessWorkM10.equalityBudget
+  omega
+
+#print axioms polynomial_paid
+#print axioms encoder_paid
+#print axioms encoder_budget
+#print axioms coordinate_paid
+#print axioms message_paid
+#print axioms image_paid
+#print axioms received_coordinate_budget
+#print axioms distance_paid
+#print axioms keep_paid
+#print axioms equality_paid
+end AspisR1.PublicImageAllocationM10
+end

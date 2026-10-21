@@ -1,4 +1,4 @@
-import AllocationBatchM10
+import AllocationBatchConstantM10
 import GSPointBatchWorkM10
 import GSByteSamplerWorkM10
 
@@ -13,24 +13,29 @@ open GSFixedInputDecoderFamily M31RetryOutputFiber M31AcceptFiber
 
 def pointCells : Nat := 1000000000
 
-def initialCells (_W : InitialWord WideExact) : Nat :=
-  AllocationBatchM10.cells (fun _ : Fin 1048576 => pointCells)
-def finalCells (_V : FinalWord WideExact) : Nat :=
-  AllocationBatchM10.cells (fun _ : Fin 262144 => pointCells)
+@[never_extract,noinline] def initialCells (_W : InitialWord WideExact) : Nat :=
+  1048576*pointCells+3*1048576+1
+@[never_extract,noinline] def finalCells (_V : FinalWord WideExact) : Nat :=
+  262144*pointCells+3*262144+1
 
 theorem initial_paid (W : InitialWord WideExact) : initialCells W ≤ (GSPointBatchWorkM10.initial W).2 := by
-  apply AllocationBatchM10.materialize_work
-  intro i
-  change 1000000000 ≤ 1000000000000
-  omega
+  have h := AllocationBatchM10.materialize_work
+    (fun i : Fin 1048576 =>
+      ((AspisWide.GSRuntimeInitialDistanceEncoderBridge.initialRuntimePoint i,
+        (1+AspisWide.GSRuntimeInitialDistanceEncoderBridge.initialRuntimePoint i^2)^512*W i),1000000000000))
+    (fun _ => pointCells) (fun _ => by change 1000000000 ≤ 1000000000000; omega)
+  rw [AllocationBatchConstantM10.cells] at h
+  exact h
 
 theorem final_paid (V : FinalWord WideExact) : finalCells V ≤ (GSPointBatchWorkM10.final V).2 := by
-  apply AllocationBatchM10.materialize_work
-  intro i
-  change 1000000000 ≤ 1000000000000
-  omega
+  have h := AllocationBatchM10.materialize_work
+    (fun i : Fin 262144 =>
+      ((AspisWide.GSRuntimeFinalDistanceEncoderBridge.finalRuntimePoint i,V i),1000000000000))
+    (fun _ => pointCells) (fun _ => by change 1000000000 ≤ 1000000000000; omega)
+  rw [AllocationBatchConstantM10.cells] at h
+  exact h
 
-def inputsCells (W : Fin 29 → InitialWord WideExact) (V : Fin 5 → FinalWord WideExact) : Nat :=
+@[never_extract,noinline] def inputsCells (W : Fin 29 → InitialWord WideExact) (V : Fin 5 → FinalWord WideExact) : Nat :=
   AllocationBatchM10.cells (fun i => initialCells (W i))+
     AllocationBatchM10.cells (fun i => finalCells (V i))+4
 
@@ -40,18 +45,16 @@ theorem inputs_paid (W : Fin 29 → InitialWord WideExact) (V : Fin 5 → FinalW
     (AllocationBatchM10.batch_work _ _ (fun i => initial_paid (W i)))
     (AllocationBatchM10.batch_work _ _ (fun i => final_paid (V i)))) 4
 
-def pairCells : Nat := 16*16*8+16+1
+def pairCells : Nat := 16*16*128+16+1
 
-def sampleCells (n : Nat) : Nat := AllocationBatchM10.cells (fun _ : Fin n => pairCells)+2*n+1
+@[never_extract,noinline] def sampleCells (n : Nat) : Nat := n*pairCells+3*n+1+2*n+1
 
 theorem sample_paid (n : Nat) (coins : ActualWidePairInputTape n) :
     sampleCells n ≤ (GSByteSamplerWorkM10.sample n coins).2 := by
-  apply Nat.add_le_add_right
-  apply Nat.add_le_add_right
-  apply AllocationBatchM10.batch_work
-  intro i
-  change 16*16*8+16+1 ≤ 65536
-  omega
+  have h := AllocationBatchM10.batch_work (fun i : Fin n => GSByteSamplerWorkM10.pair (coins i))
+    (fun _ => pairCells) (fun _ => by change 16*16*128+16+1 ≤ 65536; omega)
+  rw [AllocationBatchConstantM10.cells] at h
+  exact Nat.add_le_add_right (Nat.add_le_add_right h (2*n)) 1
 
 #print axioms initial_paid
 #print axioms final_paid

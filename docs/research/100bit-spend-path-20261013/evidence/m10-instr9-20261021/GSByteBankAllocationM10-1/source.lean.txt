@@ -1,0 +1,45 @@
+import GSBankAllocationM10
+import GSPointSamplerAllocationM10
+import BankStageSpecM10
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSByteBankAllocationM10
+open AspisWideTower GSFixedInputDecoderFamily GSDecoderTapeReindex M31AcceptFiber M31RetryOutputFiber
+attribute [local irreducible] GSDecoderActualBankM10.run GSBankAllocationM10.bankCells
+  GSByteSamplerWorkM10.sample GSPointSamplerAllocationM10.sampleCells
+
+def reindexCells : Nat := 2*34*21377328
+
+def cells (inputs : Inputs WideExact 5) (coins : GSConcreteByteDecoderBank.RawCoins) : Nat :=
+  GSPointSamplerAllocationM10.sampleCells 21377328+
+    (match (GSByteSamplerWorkM10.sample 21377328 coins).1 with
+    | none => 0
+    | some H => GSBankAllocationM10.bankCells (P31^8) 149 inputs
+        (flatBank WideExact (1025*112) (256*112) 149 H)+reindexCells+1)+1
+
+theorem paid (inputs : Inputs WideExact 5) (coins : GSConcreteByteDecoderBank.RawCoins) :
+    cells inputs coins ≤ (GSByteBankWorkM10.run inputs coins).2 := by
+  have hs := GSPointSamplerAllocationM10.sample_paid 21377328 coins
+  have hr : reindexCells ≤ GSByteBankWorkM10.reindexBudget := by
+    unfold reindexCells GSByteBankWorkM10.reindexBudget
+    omega
+  cases h : (GSByteSamplerWorkM10.sample 21377328 coins).1 with
+  | none => simp only [cells,GSByteBankWorkM10.run,PublicParserWork.bind,h]; omega
+  | some H =>
+    have hb := GSBankAllocationM10.bank_paid (P31^8) 149 inputs
+      (flatBank WideExact (1025*112) (256*112) 149 H)
+    simp only [cells,GSByteBankWorkM10.run,PublicParserWork.bind,h]
+    omega
+
+@[irreducible] def spec (coins : GSConcreteByteDecoderBank.RawCoins) :
+    AllocationStageSpecM10.StageSpec 1024 (BankStageLawsM10.eager coins) (fun _ => True)
+      GSBankOutputEnvelopeM10.Bounded (fun _ => BankStageLawsM10.budget) where
+  toStageSpec := BankStageSpecM10.spec coins
+  allocation inputs := ⟨cells inputs coins,1024*cells inputs coins,Nat.le_refl _,by
+    unfold BankStageSpecM10.spec ConstantStagePackM10.pack BankStageLawsM10.run
+    exact paid inputs coins⟩
+
+#print axioms paid
+end AspisR1.GSByteBankAllocationM10
+end

@@ -1,0 +1,52 @@
+import GSBankAllocationM10
+import GSPointSamplerAllocationM10
+import AllocationOptionBindM10
+import BankStageSpecM10
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSByteBankAllocationM10
+open AspisWideTower GSFixedInputDecoderFamily GSDecoderTapeReindex M31AcceptFiber M31RetryOutputFiber
+attribute [local irreducible] GSDecoderActualBankM10.run GSBankAllocationM10.bankCells
+  GSByteSamplerWorkM10.sample GSPointSamplerAllocationM10.sampleCells
+
+def reindexCells : Nat := 2*34*21377328
+
+def reindexed (inputs : Inputs WideExact 5) (H : ActualWidePairOutputTape 21377328) :
+    Option (Results WideExact 5) × Nat :=
+  let b := GSDecoderActualBankM10.run (P31^8) 149 inputs
+    (flatBank WideExact (1025*112) (256*112) 149 H)
+  (some b.1,b.2+GSByteBankWorkM10.reindexBudget+1)
+
+def reindexedCells (inputs : Inputs WideExact 5) (H : ActualWidePairOutputTape 21377328) : Nat :=
+  GSBankAllocationM10.bankCells (P31^8) 149 inputs
+    (flatBank WideExact (1025*112) (256*112) 149 H)+reindexCells+1
+
+theorem reindexed_paid (inputs : Inputs WideExact 5) (H : ActualWidePairOutputTape 21377328) :
+    reindexedCells inputs H ≤ (reindexed inputs H).2 := by
+  have hr : reindexCells ≤ GSByteBankWorkM10.reindexBudget := by
+    unfold reindexCells GSByteBankWorkM10.reindexBudget
+    omega
+  exact Nat.add_le_add_right (Nat.add_le_add
+    (GSBankAllocationM10.bank_paid (P31^8) 149 inputs
+      (flatBank WideExact (1025*112) (256*112) 149 H)) hr) 1
+
+attribute [local irreducible] reindexed reindexedCells
+
+def cells (inputs : Inputs WideExact 5) (coins : GSConcreteByteDecoderBank.RawCoins) : Nat :=
+  AllocationOptionBindM10.cells (GSByteSamplerWorkM10.sample 21377328 coins)
+    (GSPointSamplerAllocationM10.sampleCells 21377328) (reindexedCells inputs)
+
+theorem paid (inputs : Inputs WideExact 5) (coins : GSConcreteByteDecoderBank.RawCoins) :
+    cells inputs coins ≤ (GSByteBankWorkM10.run inputs coins).2 := by
+  have hh := AllocationOptionBindM10.paid (GSByteSamplerWorkM10.sample 21377328 coins)
+    (reindexed inputs) (GSPointSamplerAllocationM10.sampleCells 21377328) (reindexedCells inputs)
+    (GSPointSamplerAllocationM10.sample_paid 21377328 coins) (reindexed_paid inputs)
+  unfold reindexed at hh
+  simpa only [cells,GSByteBankWorkM10.run] using hh
+
+
+#print axioms reindexed_paid
+#print axioms paid
+end AspisR1.GSByteBankAllocationM10
+end

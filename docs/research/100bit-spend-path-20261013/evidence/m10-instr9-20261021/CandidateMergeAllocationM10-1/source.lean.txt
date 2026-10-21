@@ -1,0 +1,67 @@
+import AllocationListConsumersM10
+import FiniteCandidateMergeWorkM10
+
+set_option autoImplicit false
+namespace AspisR1.CandidateMergeAllocationM10
+variable {X I M : Type} [Fintype I] [DecidableEq I] [DecidableEq M]
+
+def dedupCells [DecidableEq X] (Cwork Ccells : Nat) : List X → Nat
+  | [] => 1
+  | _::xs => dedupCells Cwork Ccells xs+
+      (FiniteCandidateMergeWorkM10.dedup Cwork xs).1.length*Ccells+2
+
+theorem dedup_paid [DecidableEq X] (Cwork Ccells : Nat) (h : Ccells ≤ Cwork) (xs : List X) :
+    dedupCells Cwork Ccells xs ≤ (FiniteCandidateMergeWorkM10.dedup Cwork xs).2 := by
+  induction xs with
+  | nil => exact Nat.le_refl _
+  | cons x xs ih =>
+    have hm := Nat.mul_le_mul_left (FiniteCandidateMergeWorkM10.dedup Cwork xs).1.length h
+    change _+_*Ccells+2 ≤ _+_*Cwork+3
+    omega
+
+def advanceCells (Ckeep Ceq Hkeep Heq : Nat) (keep : Finset I → (I → M) → Bool)
+    (S : Finset I) (lane : I) (family : List (I → M)) (decoded : List M) : Nat :=
+  let raw := family.flatMap (fun t => decoded.map (Function.update t lane))
+  let filtered := ExtractorListWorkM10.filter (fun t => (keep (insert lane S) t,Ckeep)) raw
+  AllocationListConsumersM10.filterMapCells (fun _ => Hkeep) raw+
+    dedupCells Ceq Heq filtered.1+3*family.length*decoded.length+family.length+1
+
+theorem advance_paid (Ckeep Ceq Hkeep Heq : Nat) (hk : Hkeep ≤ Ckeep) (he : Heq ≤ Ceq)
+    (keep : Finset I → (I → M) → Bool) (S : Finset I) (lane : I)
+    (family : List (I → M)) (decoded : List M) :
+    advanceCells Ckeep Ceq Hkeep Heq keep S lane family decoded ≤
+      (FiniteCandidateMergeWorkM10.advance Ckeep Ceq keep S lane family decoded).2 := by
+  have hf := AllocationListConsumersM10.filterMap_paid
+    (fun t => (if keep (insert lane S) t then some t else none,Ckeep))
+    (fun _ => Hkeep) (fun _ => hk)
+    (family.flatMap (fun t => decoded.map (Function.update t lane)))
+  have hd := dedup_paid Ceq Heq he
+    (ExtractorListWorkM10.filter (fun t => (keep (insert lane S) t,Ckeep))
+      (family.flatMap (fun t => decoded.map (Function.update t lane)))).1
+  change _+_+3*family.length*decoded.length+family.length+1 ≤
+    _+_+5*(family.length+1)*(decoded.length+1)
+  nlinarith
+
+def cells (Ckeep Ceq Hkeep Heq : Nat) (keep : Finset I → (I → M) → Bool)
+    (decoded : I → List M) (S : Finset I) (family : List (I → M)) : List I → Nat
+  | [] => 1
+  | lane::rest => advanceCells Ckeep Ceq Hkeep Heq keep S lane family (decoded lane)+
+      cells Ckeep Ceq Hkeep Heq keep decoded (insert lane S)
+        (FiniteCandidateMergeWorkM10.advance Ckeep Ceq keep S lane family (decoded lane)).1 rest+1
+
+theorem paid (Ckeep Ceq Hkeep Heq : Nat) (hk : Hkeep ≤ Ckeep) (he : Heq ≤ Ceq)
+    (keep : Finset I → (I → M) → Bool) (decoded : I → List M)
+    (S : Finset I) (family : List (I → M)) (lanes : List I) :
+    cells Ckeep Ceq Hkeep Heq keep decoded S family lanes ≤
+      (FiniteCandidateMergeWorkM10.run Ckeep Ceq keep decoded S family lanes).2 := by
+  induction lanes generalizing S family with
+  | nil => exact Nat.le_refl _
+  | cons lane rest ih =>
+    exact Nat.add_le_add_right (Nat.add_le_add
+      (advance_paid _ _ _ _ hk he _ _ _ _ _)
+      (ih (insert lane S) (FiniteCandidateMergeWorkM10.advance Ckeep Ceq keep S lane family (decoded lane)).1)) 1
+
+#print axioms dedup_paid
+#print axioms advance_paid
+#print axioms paid
+end AspisR1.CandidateMergeAllocationM10

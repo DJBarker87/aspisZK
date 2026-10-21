@@ -1,0 +1,48 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/PostProcessAllocationM10.lean:34:2: error: Type mismatch
+  Nat.add_le_add ha hb
+has type
+  AllocationListConsumersM10.filterMapCells PublicImageAllocationM10.imageCells cs +
+      AllocationListConsumersM10.filterMapCells (fun x => PublicImageAllocationM10.distanceCells)
+        (ExtractorListWorkM10.filterMap
+            (fun xs =>
+              (Option.map Message.read (InitialPublicImageWorkM10.image.eval xs).1,
+                (InitialPublicImageWorkM10.image.eval xs).2))
+            cs).1 ≤
+    (ExtractorListWorkM10.filterMap
+          (fun xs =>
+            (Option.map Message.read (InitialPublicImageWorkM10.image.eval xs).1,
+              (InitialPublicImageWorkM10.image.eval xs).2))
+          cs).2 +
+      (ExtractorListWorkM10.filterMap (fun m => (if (distance W m).1 = true then some m else none, (distance W m).2))
+          (ExtractorListWorkM10.filterMap
+              (fun xs =>
+                (Option.map Message.read (InitialPublicImageWorkM10.image.eval xs).1,
+                  (InitialPublicImageWorkM10.image.eval xs).2))
+              cs).1).2
+but is expected to have type
+  closeCells W cs ≤ (close InitialPublicImageWorkM10.image W cs).2
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/PostProcessAllocationM10.lean:39:56: error(lean.unknownIdentifier): Unknown identifier `initialRuntimeEncoder`
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/PostProcessAllocationM10.lean:43:2: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/PostProcessAllocationM10.lean:65:51: warning: Variable name `t` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/PostProcessAllocationM10.lean:91:13: error(lean.unknownIdentifier): Unknown identifier `merge_paid`
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/PostProcessAllocationM10.lean:87:74: error: unsolved goals
+pub : R0P.Public M31Exact
+W : Fin 29 → InitialWord WideExact
+out : Results WideExact 5
+ha :
+  (AllocationBatchM10.cells fun lane => closeCells (W lane) ((out.1 lane).getD [])) ≤
+    (SharedFiniteMaterializationM10.batch fun lane =>
+        close InitialPublicImageWorkM10.image (W lane) ((out.1 lane).getD [])).2
+⊢ cells pub W out ≤ (eval pub W out).2
+'AspisR1.PostProcessAllocationM10.close_paid' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/PostProcessAllocationM10.lean:99:14: error(lean.unknownIdentifier): Unknown constant `merge_paid`
+'AspisR1.PostProcessAllocationM10.scan_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PostProcessAllocationM10.scan_paid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PostProcessAllocationM10.erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PostProcessAllocationM10.paid' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

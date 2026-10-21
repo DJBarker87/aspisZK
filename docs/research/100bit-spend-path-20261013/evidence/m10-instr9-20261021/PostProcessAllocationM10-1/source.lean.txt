@@ -1,0 +1,105 @@
+import PublicImageAllocationM10
+import CandidateMergeAllocationM10
+import CachedWitnessAllocationM10
+import GSPostProcessCompleteM10
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.PostProcessAllocationM10
+open AspisWideTower AspisV8R15.ExactTowerBase GSFixedInputDecoderFamily
+open AspisPool.AlgorithmicCircleDecoderV7 GSPostProcessWorkM10
+open AspisWide.GSRuntimeInitialJointKeepCore
+attribute [local irreducible] InitialPublicImageWorkM10.eval GSPostProcessWorkM10.close
+  GSPostProcessWorkM10.merge GSPostProcessWorkM10.scan
+
+def closeCells (_W : InitialWord WideExact) (cs : List (List WideExact)) : Nat :=
+  let a := ExtractorListWorkM10.filterMap (fun xs =>
+    ((InitialPublicImageWorkM10.image.eval xs).1.map Message.read,
+      (InitialPublicImageWorkM10.image.eval xs).2)) cs
+  AllocationListConsumersM10.filterMapCells PublicImageAllocationM10.imageCells cs+
+  AllocationListConsumersM10.filterMapCells (fun _ => PublicImageAllocationM10.distanceCells) a.1
+
+theorem close_paid (W : InitialWord WideExact) (cs : List (List WideExact)) :
+    closeCells W cs ≤ (close InitialPublicImageWorkM10.image W cs).2 := by
+  have ha := AllocationListConsumersM10.filterMap_paid
+    (fun xs => ((InitialPublicImageWorkM10.image.eval xs).1.map Message.read,
+      (InitialPublicImageWorkM10.image.eval xs).2)) PublicImageAllocationM10.imageCells
+    PublicImageAllocationM10.image_paid cs
+  have hb := AllocationListConsumersM10.filterMap_paid
+    (fun m => (if (distance W m).1 then some m else none,(distance W m).2))
+    (fun _ => PublicImageAllocationM10.distanceCells) (fun _ => PublicImageAllocationM10.distance_paid)
+    (ExtractorListWorkM10.filterMap (fun xs =>
+      ((InitialPublicImageWorkM10.image.eval xs).1.map Message.read,
+        (InitialPublicImageWorkM10.image.eval xs).2)) cs).1
+  exact Nat.add_le_add ha hb
+
+def mergeCells (W : Fin 29 → InitialWord WideExact)
+    (decoded : Fin 29 → List (InitialMessage WideExact)) : Nat :=
+  CandidateMergeAllocationM10.cells keepBudget equalityBudget PublicImageAllocationM10.keepCells
+    PublicImageAllocationM10.equalityCells (runtimeKeep initialRuntimeEncoder W) decoded ∅ [0] (List.finRange 29)
+
+theorem merge_paid (W : Fin 29 → InitialWord WideExact)
+    (decoded : Fin 29 → List (InitialMessage WideExact)) : mergeCells W decoded ≤ (merge W decoded).2 :=
+  CandidateMergeAllocationM10.paid _ _ _ _ PublicImageAllocationM10.keep_paid PublicImageAllocationM10.equality_paid _ _ _ _ _
+
+/-- The scan executes the bounded cached checker, not the function-valued
+hash circuit; its work projection is the already bounded witness tariff. -/
+def scan (pub : R0P.Public M31Exact) (xs : List (ConcreteBinding.Tuple WideExact)) :
+    Option SpendRelation.Wspend × Nat :=
+  ExtractorListWorkM10.findMap
+    (fun t => (CachedWitnessAllocationM10.extract pub (CandidateListWitnessExtract.rows t),
+      witnessBudget*(pub.nextPairIndex+1))) xs
+
+theorem scan_erase (pub : R0P.Public M31Exact) (xs : List (ConcreteBinding.Tuple WideExact)) :
+    scan pub xs = GSPostProcessWorkM10.scan pub xs := by
+  simp only [scan,GSPostProcessWorkM10.scan,CachedWitnessAllocationM10.value]
+
+def scanCells (pub : R0P.Public M31Exact) (xs : List (ConcreteBinding.Tuple WideExact)) : Nat :=
+  AllocationListConsumersM10.findMapCells
+    (fun t => (CachedWitnessAllocationM10.extract pub (CandidateListWitnessExtract.rows t),
+      witnessBudget*(pub.nextPairIndex+1)))
+    (fun t => CachedWitnessAllocationM10.cells pub (CandidateListWitnessExtract.rows t)) xs
+
+theorem scan_paid (pub : R0P.Public M31Exact) (xs : List (ConcreteBinding.Tuple WideExact)) :
+    scanCells pub xs ≤ (scan pub xs).2 :=
+  AllocationListConsumersM10.findMap_paid _ _ (fun t => CachedWitnessAllocationM10.paid pub _) xs
+
+def eval (pub : R0P.Public M31Exact) (W : Fin 29 → InitialWord WideExact)
+    (out : Results WideExact 5) : Option SpendRelation.Wspend × Nat :=
+  let a := SharedFiniteMaterializationM10.batch (fun lane => close InitialPublicImageWorkM10.image (W lane) ((out.1 lane).getD []))
+  let b := merge W a.1
+  let c := scan pub b.1
+  (c.1,a.2+b.2+c.2+1000)
+
+theorem erase (pub : R0P.Public M31Exact) (W : Fin 29 → InitialWord WideExact)
+    (out : Results WideExact 5) :
+    eval pub W out = GSPostProcessCompleteM10.eval InitialPublicImageWorkM10.image pub W out := by
+  simp only [eval,GSPostProcessCompleteM10.eval,scan_erase]
+
+def cells (pub : R0P.Public M31Exact) (W : Fin 29 → InitialWord WideExact)
+    (out : Results WideExact 5) : Nat :=
+  let a := SharedFiniteMaterializationM10.batch (fun lane => close InitialPublicImageWorkM10.image (W lane) ((out.1 lane).getD []))
+  let b := merge W a.1
+  AllocationBatchM10.cells (fun lane => closeCells (W lane) ((out.1 lane).getD []))+
+    mergeCells W a.1+scanCells pub b.1+32
+
+theorem paid (pub : R0P.Public M31Exact) (W : Fin 29 → InitialWord WideExact)
+    (out : Results WideExact 5) : cells pub W out ≤ (eval pub W out).2 := by
+  have ha := AllocationBatchM10.batch_work
+    (fun lane : Fin 29 => close InitialPublicImageWorkM10.image (W lane) ((out.1 lane).getD []))
+    _ (fun lane => close_paid _ _)
+  have hb := merge_paid W
+    (SharedFiniteMaterializationM10.batch (fun lane => close InitialPublicImageWorkM10.image (W lane) ((out.1 lane).getD []))).1
+  have hc := scan_paid pub
+    (merge W (SharedFiniteMaterializationM10.batch (fun lane => close InitialPublicImageWorkM10.image (W lane) ((out.1 lane).getD []))).1).1
+  change _+_+_+32 ≤ _+_+_+1000
+  omega
+
+#print axioms close_paid
+#print axioms merge_paid
+#print axioms scan_erase
+#print axioms scan_paid
+#print axioms erase
+#print axioms paid
+end AspisR1.PostProcessAllocationM10
+end

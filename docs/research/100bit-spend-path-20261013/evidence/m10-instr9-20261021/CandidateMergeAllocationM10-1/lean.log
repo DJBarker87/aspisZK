@@ -1,0 +1,45 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/CandidateMergeAllocationM10.lean:43:2: error: linarith failed to find a contradiction
+I M : Type
+inst✝² : Fintype I
+inst✝¹ : DecidableEq I
+inst✝ : DecidableEq M
+Ckeep Ceq Hkeep Heq : ℕ
+hk : Hkeep ≤ Ckeep
+he : Heq ≤ Ceq
+keep : Finset I → (I → M) → Bool
+S : Finset I
+lane : I
+family : List (I → M)
+decoded : List M
+hf :
+  AllocationListConsumersM10.filterMapCells (fun x => Hkeep)
+      (List.flatMap (fun t => List.map (Function.update t lane) decoded) family) ≤
+    (ExtractorListWorkM10.filterMap (fun t => (if keep (insert lane S) t = true then some t else none, Ckeep))
+        (List.flatMap (fun t => List.map (Function.update t lane) decoded) family)).2
+hd :
+  dedupCells Ceq Heq
+      (ExtractorListWorkM10.filter (fun t => (keep (insert lane S) t, Ckeep))
+          (List.flatMap (fun t => List.map (Function.update t lane) decoded) family)).1 ≤
+    (FiniteCandidateMergeWorkM10.dedup Ceq
+        (ExtractorListWorkM10.filter (fun t => (keep (insert lane S) t, Ckeep))
+            (List.flatMap (fun t => List.map (Function.update t lane) decoded) family)).1).2
+a✝ :
+  (ExtractorListWorkM10.filter (fun t => (keep (insert lane S) t, Ckeep))
+            (List.flatMap (fun t => List.map (Function.update t lane) decoded) family)).2 +
+        (FiniteCandidateMergeWorkM10.dedup Ceq
+            (ExtractorListWorkM10.filter (fun t => (keep (insert lane S) t, Ckeep))
+                (List.flatMap (fun t => List.map (Function.update t lane) decoded) family)).1).2 +
+      5 * (family.length + 1) * (decoded.length + 1) <
+    AllocationListConsumersM10.filterMapCells (fun x => Hkeep)
+              (List.flatMap (fun t => List.map (Function.update t lane) decoded) family) +
+            dedupCells Ceq Heq
+              (ExtractorListWorkM10.filter (fun t => (keep (insert lane S) t, Ckeep))
+                  (List.flatMap (fun t => List.map (Function.update t lane) decoded) family)).1 +
+          3 * family.length * decoded.length +
+        family.length +
+      1
+⊢ False
+failed
+'AspisR1.CandidateMergeAllocationM10.dedup_paid' depends on axioms: [propext, Quot.sound]
+'AspisR1.CandidateMergeAllocationM10.advance_paid' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.CandidateMergeAllocationM10.paid' depends on axioms: [propext, sorryAx, Quot.sound]

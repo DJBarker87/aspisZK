@@ -1,0 +1,135 @@
+import CachedWitnessHashM10
+import GSPostProcessWorkM10
+
+set_option autoImplicit false
+namespace AspisR1.CachedWitnessAllocationM10
+open R0P SpendRelation AspisWideTower AspisV8R15.ExactTowerBase
+open AspisPool.V7PairLeafOccupancy (PairLeaf)
+open CachedWitnessHashM10
+attribute [local irreducible] TraceValueDecode.decode
+variable {K : Type} [Field K] [DecidableEq K]
+
+def inputCheck (pub : Public K) (value : K) (sk salt : Digest K)
+    (path : Fin 24 → Bool × Digest K) (pair : PairLeaf K) : Bool :=
+  let commitment := note (owner sk) value pub.assetId salt
+  InputWitnessCheck.pairValidCheck pair &&
+    decide (pair.selectedOccupied (path 0).1 = 1) &&
+    InputWitnessCheck.digestEqCheck (pair.selectedCommitment (path 0).1) commitment &&
+    InputWitnessCheck.digestEqCheck (path 0).2
+      (if (path 0).1 then pair.firstCommitment else pair.secondCommitment) &&
+    InputWitnessCheck.digestEqCheck pub.nullifier (nullifier sk salt) &&
+    InputWitnessCheck.digestEqCheck pub.anchor (merkle commitment path 24)
+
+theorem input_value (pub : Public K) (value : K) (sk salt : Digest K)
+    (path : Fin 24 → Bool × Digest K) (pair : PairLeaf K) :
+    inputCheck pub value sk salt path pair = InputWitnessCheck.check pub value sk salt path pair := by
+  simp only [inputCheck,owner_value,note_value,nullifier_value,merkle_value,
+    InputWitnessCheck.check,merkleRoot]
+
+def outputPair (pub : Public K) : Option (Digest K) :=
+  match pub.variant with
+  | .privateTransfer => pub.recipient.map (fun r => node r pub.change)
+  | .withdrawal => some (node pub.change (fun _ => 0))
+
+theorem output_pair_value (pub : Public K) : outputPair pub = SpendRelation.outputPair pub := by
+  simp only [outputPair,SpendRelation.outputPair,node_value]
+
+def appendCheck (pub : Public K) : Bool :=
+  match outputPair pub with
+  | none => false
+  | some pair =>
+    InputWitnessCheck.digestEqCheck pub.nextRoot (append pub pair 20) &&
+      if hc : digestCarry pub.nextPairIndex < 20 then
+        InputWitnessCheck.digestEqCheck
+          (pub.nextFrontier ⟨digestCarry pub.nextPairIndex,hc⟩)
+          (append pub pair (digestCarry pub.nextPairIndex))
+      else true
+
+theorem append_value (pub : Public K) : appendCheck pub = SpendRelation.appendCheck pub := by
+  simp only [appendCheck,SpendRelation.appendCheck,output_pair_value,CachedWitnessHashM10.append_value]
+
+def variantCheck (pub : Public K) (w : Witness K) : Bool :=
+  match pub.variant with
+  | .privateTransfer =>
+    match pub.recipient with
+    | none => false
+    | some recipient => InputWitnessCheck.digestEqCheck recipient
+      (note w.recipientOwner (w.outputValue.val : K) pub.assetId w.recipientSalt)
+  | .withdrawal =>
+    match pub.withdrawalAmount with
+    | none => false
+    | some amount => decide (amount = (w.outputValue.val : K))
+
+theorem variant_value (pub : Public K) (w : Witness K) :
+    variantCheck pub w = SpendRelation.variantOutputCheck pub w := by
+  simp only [variantCheck,SpendRelation.variantOutputCheck,recipientCommitment,note_value]
+  rfl
+
+def check (pub : Public K) (w : Witness K) : Bool :=
+  PublicOptionShape.check pub &&
+    inputCheck pub (w.inputValue.val : K) w.sk w.salt w.path w.pair &&
+    decide (w.inputValue.val = w.outputValue.val+w.changeValue.val) &&
+    InputWitnessCheck.digestEqCheck pub.change
+      (note w.changeOwner (w.changeValue.val : K) pub.assetId w.changeSalt) &&
+    variantCheck pub w && appendCheck pub
+
+theorem check_value (pub : Public K) (w : Witness K) : check pub w = SpendRelation.check pub w := by
+  simp only [check,SpendRelation.check,input_value,note_value,changeCommitment,variant_value,append_value]
+
+def extract (pub : Public M31Exact) (A : R0P.Trace WideExact) : Option Wspend :=
+  match TraceValueDecode.decode A with
+  | none => none
+  | some values =>
+    let w := ComputableTraceWitness.fromTrace A values.1 values.2.1 values.2.2
+    if check pub w = true then some w else none
+
+theorem value (pub : Public M31Exact) (A : R0P.Trace WideExact) :
+    extract pub A = TraceWitnessExtract.extract pub A := by
+  simp only [extract,TraceWitnessExtract.extract,check_value,checkM31]
+  rfl
+
+/-- Includes value-cell projection and witness capture groups, finite checks,
+input-note hash chain, all 24 path nodes, both output note chains, output-pair
+compression, root prefix and (when reached) the carry prefix. Cached states
+are retained between all adjacent hash operations. -/
+def inputCells : Nat := 256+ownerCells+noteCells+nullifierCells+merkleCells 24
+
+def checkCells (pub : Public M31Exact) : Nat :=
+  1024+inputCells+2*noteCells+nodeCells+appendCells 20+
+    appendCells (digestCarry pub.nextPairIndex)
+
+def cells (pub : Public M31Exact) (A : R0P.Trace WideExact) : Nat :=
+  1024+(match TraceValueDecode.decode A with | none => 0 | some _ => checkCells pub+1024)
+
+theorem check_cells_bound (pub : Public M31Exact) : checkCells pub ≤ 1000000000000 := by
+  have hm := merkle_cells_bound 24
+  have ha := append_cells_bound 20
+  have hb := append_cells_bound (digestCarry pub.nextPairIndex)
+  have hc := Nat.mul_le_mul_right nodeCells (digest_carry_le pub.nextPairIndex)
+  unfold checkCells inputCells
+  unfold nodeCells noteCells ownerCells nullifierCells spongeCells permutationCells roundCells at *
+  omega
+
+theorem cells_bound (pub : Public M31Exact) (A : R0P.Trace WideExact) :
+    cells pub A ≤ 1000000002048 := by
+  have hc := check_cells_bound pub
+  unfold cells
+  cases TraceValueDecode.decode A <;> dsimp only <;> omega
+
+theorem paid (pub : Public M31Exact) (A : R0P.Trace WideExact) :
+    cells pub A ≤ GSPostProcessWorkM10.witnessBudget*(pub.nextPairIndex+1) := by
+  have hs : 1000000002048 ≤ GSPostProcessWorkM10.witnessBudget := by
+    unfold GSPostProcessWorkM10.witnessBudget
+    omega
+  exact (cells_bound pub A).trans (hs.trans (Nat.le_mul_of_pos_right _ (by omega)))
+
+#print axioms input_value
+#print axioms output_pair_value
+#print axioms append_value
+#print axioms variant_value
+#print axioms check_value
+#print axioms value
+#print axioms check_cells_bound
+#print axioms cells_bound
+#print axioms paid
+end AspisR1.CachedWitnessAllocationM10

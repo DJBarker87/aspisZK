@@ -1,0 +1,35 @@
+import GSByteBankAllocationM10
+import AllocationStageAttachM10
+import BankStageSpecM10
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GSByteBankAllocationStageM10
+open AspisWideTower GSFixedInputDecoderFamily
+attribute [local irreducible] GSByteBankWorkM10.run BankStageLawsM10.run
+  GSByteBankAllocationM10.cells
+
+theorem stage_run (coins : GSConcreteByteDecoderBank.RawCoins) (inputs : Inputs WideExact 5) :
+    (BankStageSpecM10.spec coins).run inputs = GSByteBankWorkM10.run inputs coins := by
+  unfold BankStageSpecM10.spec ConstantStagePackM10.pack BankStageLawsM10.run
+  rfl
+
+theorem stage_paid (coins : GSConcreteByteDecoderBank.RawCoins) (inputs : Inputs WideExact 5) :
+    GSByteBankAllocationM10.cells inputs coins ≤ ((BankStageSpecM10.spec coins).run inputs).2 := by
+  rw [stage_run]
+  exact GSByteBankAllocationM10.paid inputs coins
+
+@[irreducible] def spec (coins : GSConcreteByteDecoderBank.RawCoins) :=
+  AllocationStageAttachM10.attach 1024 (BankStageSpecM10.spec coins)
+    (fun inputs => GSByteBankAllocationM10.cells inputs coins) (stage_paid coins)
+
+theorem spec_run (coins : GSConcreteByteDecoderBank.RawCoins) (inputs : Inputs WideExact 5) :
+    (spec coins).run inputs = (BankStageSpecM10.spec coins).run inputs := by
+  unfold spec
+  exact AllocationStageAttachM10.run _ _ _ _ _
+
+#print axioms stage_run
+#print axioms stage_paid
+#print axioms spec_run
+end AspisR1.GSByteBankAllocationStageM10
+end
