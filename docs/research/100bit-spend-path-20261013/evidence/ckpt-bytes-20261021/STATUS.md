@@ -182,3 +182,29 @@ rewrite and is retained as failed. SparseK attempt 1: exit 0,
 26.897038583643734 s, RSS 3604922368 bytes, zero swaps, revision 7d0b16eea.
 All seventeen new axiom reports are standard. Full revisions and resource,
 source, object and dependency pins are in the receipts. No cap was raised.
+
+## Stage 8: literal header and five sparse digest/state intervals
+
+CheckpointBytesHeader.header_bytes proves every one of the 16 literal
+header bytes when source next.val=10. next_cast supplies the cast law
+symbolically. Final attempt 1 exits 0, 18.502187584061176 s, peak RSS
+3630186496 bytes, zero swaps, revision 335b96d88. Both axiom reports are
+standard. Only these tiny header positions are split, not a whole body.
+
+CheckpointBytesDigest.bytes_stateOf identifies an arbitrary raw 32-byte
+array with its exact C5 State interpretation. CheckpointBytesSparseDigest
+then proves source dispatch and byte content for proofHash, publicHash,
+state, root0 and root1. Its generator checks the extracted threshold
+schedule. Digest attempt 2: exit 0, 7.301299958024174 s, peak RSS 3644194816
+bytes, zero swaps, revision 7d0b16eea. SparseDigest attempt 1: exit 0,
+27.438740625046194 s, peak RSS 3529834496 bytes, zero swaps, revision
+335b96d88. All eleven reports are standard. The first digest attempt's broad
+ofFn simplification is replaced by a symbolic getElem proof; it is retained
+as failed evidence. No limit is raised.
+
+CheckpointBytesLookup adds structural C5 body-block and fixed-width vector
+byte lookup, for subsequent aggregation. Final attempt 2 exits 0,
+6.080399166792631 s, peak RSS 3656286208 bytes, zero swaps; all four reports
+standard (some use fewer than all three axioms). Attempt 1's redundant
+bound tactic and unexpanded multiplication identity are retained failures.
+It never evaluates the encoded checkpoint or a concrete vector.
