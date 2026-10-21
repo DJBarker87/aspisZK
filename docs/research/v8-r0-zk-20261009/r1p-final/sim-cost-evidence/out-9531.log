@@ -1,0 +1,70 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostView.lean:35:31: error: unexpected token 'meta'; expected '[', '{', '|', '⦃' or term
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostView.lean:35:36: error: unexpected token '=>'; expected 'lemma'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostView.lean:35:50: error: unexpected token ','; expected 'lemma'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostView.lean:40:30: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Type) → x_0 → Costed x_0
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostView.lean:42:2: error: Tactic `rfl` failed: The left-hand side
+  ((nomatch ) (R0Z.ZkStatement.metadata outputs x ch)).1
+is not definitionally equal to the right-hand side
+  simE π B outputs x ch t
+
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+π : Fin 1024 ≃ Fin 1024
+B : PackBasis F
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+R M A S D : ℕ
+st : Stages π B outputs x R M A S D
+ch : Challenges K
+t : Tape K F
+⊢ ((nomatch ) (R0Z.ZkStatement.metadata outputs x ch)).1 = simE π B outputs x ch t
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostView.lean:41:18: warning: This simp argument is unused:
+  st.shifted.erase
+
+Hint: Omit it from the simp argument list.
+  simp only [run, erase_bind, pure, st.reference.erase, st.mask.erase, st.add.erase,
+  ̲  ̲ ̲ ̲s̵t̵.̵s̵h̵i̵f̵t̵e̵d̵.̵e̵r̵a̵s̵e̵,̵ ̵st.metadata.erase]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostView.lean:52:29: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Type) → x_0 → Costed x_0
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostView.lean:53:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  l ≥ 0
+  k ≥ 0
+  j ≥ 0
+  j - k ≥ 0
+  i ≥ 0
+  h ≥ 0
+  h - i ≥ 0
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - b + d - e + f - g + h - i + j - k - l ≤ -1
+where
+ a := ↑R
+ b := ↑(st.reference.run ch).2
+ d := ↑M
+ e := ↑(st.mask.run (ch, t)).2
+ f := ↑A
+ g := ↑(st.add.run ((st.reference.run ch).1, (st.mask.run (ch, t)).1)).2
+ h := ↑S
+ i := ↑(st.shifted.run (ch, (st.add.run ((st.reference.run ch).1, (st.mask.run (ch, t)).1)).1)).2
+ j := ↑D
+ k := ↑(st.metadata.run ch).2
+ l := ↑((nomatch ) (st.metadata.run ch).1).2
+'R1Z.SimCostView.run_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostView.run_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
