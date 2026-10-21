@@ -1,0 +1,3 @@
+PROVED complete generated P6-model four_dots success, canonical outputs and literal source value equations from the strict openingCanonical predicate, the exact608-byte prefix identity and canonical29 coefficients. Both the source query length bound and all116 strict decoder acceptances are derived; no parent/child success premise.
+
+Limitations: The openingCanonical predicate matches the merged strict scanner model, but actual stored/opening carrier and installed caller bindings remain open. Array construction remains the retained P6 model; this is not Rust Std/source artifact closure or the final soundness theorem.
