@@ -248,3 +248,87 @@ mod validator_projection {
         assert_eq!(unsafe { CALLS },calls*2);
     }
 }
+
+// Projected validator transitions: no whole-tree arrays and no hashing cone.
+// The source expressions below are pinned verbatim in the continuation audit.
+#[cfg(kani)]
+mod validator_steps {
+    use super::*;
+
+    #[kani::proof]
+    #[kani::unwind(10)]
+    fn tree_validator_frontier_step() {
+        let index: u64 = kani::any();
+        let level: usize = kani::any();
+        kani::assume(level < 20);
+        let node = kani::any::<[u32;8]>().map(M31);
+        let empty = kani::any::<[u32;8]>().map(M31);
+        let source: Result<(),PoolV1TreeError> = (|| {
+            if (index >> level) & 1 == 0 && node != empty {
+                return Err(PoolV1TreeError::NonCanonicalFrontier);
+            }
+            Ok(())
+        })();
+        let mut reference = Ok(());
+        if (index >> level) & 1 == 0 && node != empty {
+            reference = Err(PoolV1TreeError::NonCanonicalFrontier);
+        }
+        assert_eq!(source,reference);
+    }
+
+    #[kani::proof]
+    fn tree_validator_index_step() {
+        let index: u64 = kani::any();
+        let source = if index > POOL_V1_LEAF_CAPACITY {
+            Err(PoolV1TreeError::IndexOutOfRange)
+        } else { Ok(()) };
+        let reference = if index <= POOL_V1_LEAF_CAPACITY { Ok(()) }
+            else { Err(PoolV1TreeError::IndexOutOfRange) };
+        assert_eq!(source,reference);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(10)]
+    fn tree_validator_root_step() {
+        let index: u64 = kani::any();
+        kani::assume(index <= POOL_V1_LEAF_CAPACITY);
+        let root = kani::any::<[u32;8]>().map(M31);
+        let empty = kani::any::<[u32;8]>().map(M31);
+        // A single arbitrary common pure reconstruction result. Error identity
+        // is arbitrary too: the transition must propagate every error.
+        let reconstructed: Result<Digest,PoolV1TreeError> = if kani::any() {
+            Ok(kani::any::<[u32;8]>().map(M31))
+        } else { Err(match kani::any::<u8>() % 13 {
+            0 => PoolV1TreeError::TreeFull,
+            1 => PoolV1TreeError::InsufficientCapacity,
+            2 => PoolV1TreeError::IndexOutOfRange,
+            3 => PoolV1TreeError::RootMismatch,
+            4 => PoolV1TreeError::NonCanonicalFrontier,
+            5 => PoolV1TreeError::WrongLength,
+            6 => PoolV1TreeError::WrongMagic,
+            7 => PoolV1TreeError::WrongVersion,
+            8 => PoolV1TreeError::WrongDepth,
+            9 => PoolV1TreeError::WrongTreeHash,
+            10 => PoolV1TreeError::WrongDigestEncoding,
+            11 => PoolV1TreeError::NonCanonicalDigest,
+            _ => PoolV1TreeError::NonZeroReserved,
+        }) };
+        let source = (|| {
+            if index == 0 {
+                return if root == empty { Ok(()) }
+                    else { Err(PoolV1TreeError::RootMismatch) };
+            }
+            if index < POOL_V1_LEAF_CAPACITY && reconstructed? != root {
+                return Err(PoolV1TreeError::RootMismatch);
+            }
+            Ok(())
+        })();
+        let reference = if index == 0 {
+            if root == empty { Ok(()) } else { Err(PoolV1TreeError::RootMismatch) }
+        } else if index < POOL_V1_LEAF_CAPACITY {
+            reconstructed.and_then(|r| if r == root { Ok(()) }
+                else { Err(PoolV1TreeError::RootMismatch) })
+        } else { Ok(()) };
+        assert_eq!(source,reference);
+    }
+}
