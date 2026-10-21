@@ -16,8 +16,15 @@ rows=[]
 for f in ['sim.rs','r1_wire.rs','transcript.rs']:
  p=Path('crates/aspis-r1-cost-probe/src')/f
  original=p.read_bytes()
- code='from pathlib import Path;import json,hashlib;p=Path('+repr(H+'/src/'+str(p))+');s=p.read_bytes();print(json.dumps(dict(prefix_sha256=hashlib.sha256(s[:'+str(len(original))+']).hexdigest(),full_sha256=hashlib.sha256(s).hexdigest(),size_bytes=len(s))))'
- remote=json.loads(subprocess.check_output(['ssh',host,'python3 -'],input=code.encode()))
- sha=hashlib.sha256(original).hexdigest();assert remote['prefix_sha256']==sha,(f,remote,sha)
- rows.append(dict(file=str(p),production_sha256=sha,production_size_bytes=len(original),**remote))
-(E/'source-prefix-binding.json').write_text(json.dumps(dict(base='ec5946193',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),files=rows,scope='Exact source prefixes retained; all additions host-only under cfg(kani/aeneas_ref); no shipped source modification'),indent=2)+'\n')
+ remote=subprocess.check_output(['ssh',host,'cat '+H+'/src/'+str(p)])
+ projected=remote
+ inherited=b''
+ if f=='sim.rs':
+  start=remote.index(b'// Owned reference for exactly one source Coins::coin transition.')
+  end=remote.index(b'// Proof-only owned references.',start)
+  inherited=remote[start:end]
+  assert b'#[cfg(any(kani,aeneas_ref))]' in inherited and b'#[cfg(kani)]' in inherited
+  projected=remote[:start]+remote[end:]
+ sha=hashlib.sha256(original).hexdigest();assert projected.startswith(original),f
+ rows.append(dict(file=str(p),production_sha256=sha,production_size_bytes=len(original),full_sha256=hashlib.sha256(remote).hexdigest(),size_bytes=len(remote),source_body_matches_after_inherited_reference_projection=True,inherited_coin18_sha256=hashlib.sha256(inherited).hexdigest() if inherited else None,projection='Remove inherited proof-only coin_owned18/simcoin18 block before the shipped owned19 module; exact diff retained' if inherited else 'identity'))
+(E/'source-prefix-binding.json').write_text(json.dumps(dict(base='ec5946193',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),files=rows,scope='Shipped bodies match after documented inherited coin18 projection; all new additions host-only under cfg(kani/aeneas_ref); no local shipped source modification'),indent=2)+'\n')
