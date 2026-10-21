@@ -1,0 +1,3 @@
+PROVED all-Result equality between the complete selected fixed-helper tail and original callback tail, including failure and divergence; no parser/push success or canonicality premise.
+
+Limitations: Exact tail source cuts are checked modulo argument names and scalar projection of the old returned closure tuple. Repeated slot arithmetic is pure and shares the same Result; branch order and error propagation remain represented. This is selected parameterized-Ops model equality, not concrete source-operation installation, whole-callback equality, Rust Std refinement, candidate adoption or global soundness. No production source was changed.
