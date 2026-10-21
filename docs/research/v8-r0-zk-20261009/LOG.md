@@ -7940,3 +7940,20 @@ interface-composition obstruction, not a privacy counterexample.
 Next (part 28): port the complete effectful continuation (replay reset, query
 selection, native trace, retries, commitment programming, ordered
 serialisation) to the state-passing operation, then the joins and endpoint.
+
+## D138 (lead, 2026-10-22 01:30): part 28 merged; continuations ported, native walk loop is the next obstruction
+
+Merged `codex/cx-prover-commit28-20261022` (report
+`r1p-final/PROVER-COMMIT28-20261022.md`). Closed the D137 interface mismatch:
+a generic monadic state lift, with kernel-checked source reconstruction, ports
+the complete transcript continuations to the state-passing CoinOracle.
+Composed the stateful semantic/circle/query/rho walk with ordered read
+history, replay reset, product marginals and extracted initialisation.
+35 axioms reports, standard axioms only, zero swap (J7831). No shipped change.
+Obstruction: Aeneas cannot extract the native `sim::walk` borrowed semantic
+loop (`sim.rs:165–177`, `for row in 0..25 { sem[row] = st.semantic(...)? }`;
+InterpJoin.ml:2209). Next (part 29): the P6 route for that loop: an owned
+reference loop, a per-iteration Kani shipped=reference check, a Lean induction
+over the 25 rows connecting it to the bounded stateful row continuation, then
+`shippedProverExperiment`, both WholeRunJoins and the endpoint.
+`RustProverRefinement` stays explicit; zero premises removed.
