@@ -1,6 +1,6 @@
 # Parser and multiproof source refinement
 
-Current continuation branch: `codex/cx-multiproof-cone4-20261021`, base `01b350ddf` (prior continuation branches: cone2 and cone3; original packet: `codex/cx-multiproof-cone-20261021`). The oracle-decision port
+Current continuation branch: `codex/cx-multiproof-cone5-20261021`, base `902ae095f` (prior continuation branches: cone2, cone3 and cone4; original packet: `codex/cx-multiproof-cone-20261021`). The oracle-decision port
 is approved for this work. Target: `OraclePortHeadlineFrozen` at
 `OraclePortFrozenOrder.dV_frozen`, not the superseded recursive schedule.
 
@@ -819,3 +819,57 @@ The remaining focused theorem compares these same observations with the
 ordered logical sourceLevel and then frozen runLevels. No caller, padding,
 root or complete cone claim is inferred from the now-connected physical facts.
 All exact targets/revisions/hashes/metrics/axioms are in manifest and receipts.
+
+## Continuation 5, stage 1f: accepted physical-to-frozen height-18 log join
+
+**The continuation-4 physical Live/log blocker is closed for the accepted
+extracted level execution.**
+`MultiproofConePhysicalLogicalStep.logical_step` proves exact Program identity
+for a physical node's logical Live projection, including occupied-pair and
+supplied-byte child order. `MultiproofConePhysicalSourceLevel.trace_source`
+identifies the actual physical chronological observations with sourceLevel;
+`level_join` composes the physical Program log, complete digest prefix and
+remaining bytes with the frozen ordered runLevel. Attempt 2: exit 0,
+13.380564 s, 3645243392-byte peak RSS, zero swaps, two standard reports.
+
+`MultiproofConePhysicalFrozenLevels.levels_join` proves the invariant and
+ordered observation equality by induction over height. Its specialization
+`accepted_eighteen` is the exact new endpoint:
+
+```
+eval H (bind (transport (PhysicalLevels.levels 18 scratch physical))
+  (fun result => .done (project physical result))) =
+eval H (OraclePortFrozenOrder.runLevels 18
+  (live scratch 0 scratch.n.val) (remaining physical scratch.at))
+```
+
+It retains ONLY the explicit callback/oracle interpretation equation, the
+independent initial physical Domain and Strict index order, and the actual
+successful extracted `reference.levels ... 18` Result. There is no per-level
+RowJoin, source-level equality, digest-content, ordered-log or preservation
+hypothesis. The physical program retains the full scratch Result; `project`
+compares its live prefix and remaining bytes at this boundary. Neither the
+unread suffix nor rejection scratch is silently used as a model input.
+Height attempt 1: exit 0, 13.782822 s, 3645620224-byte peak RSS, zero swaps;
+both reports use only propext, Classical.choice and Quot.sound.
+
+This is an accepted-level refinement of the concrete instrumented extracted
+carrier, not a total arbitrary-source theorem or a complete Rust verifier
+AcceptedRunJoin. Production interpretation still crosses the explicitly
+retained, verified local P6 hash/window/rebase cuts. No new Rust or shipped
+file was edited, and no new Kani gate or ELF rebuild was necessary.
+
+The requested key/opening adapter work is at `KeyAdapters.sorted_stream` and
+`OpeningAdapters.selected_leaf`: exact sorted query-index and absolute-opening
+projection, checked physical opening slice, and exact frozen leaf address.
+Initial batch_keys prefix and Parsed.wire/physical carrier identities remain
+explicit source/caller cuts; the prior reached-key and leaf observer gates are
+reused. This is not the complete leaf/dedup batch loop.
+
+At this focused budget boundary, count/padding/root composition, complete
+source leaf/dedup loop adoption and both three-slot batches of dV_frozen2 remain
+open. Caller lowering remains excluded and owned by S2. No complete cone or
+headline source premise is removed; CONE-AUDIT retains whole-cone (d). The
+next concrete deliverable is a leaf-first batch Program whose sorted opening
+stream uses these adapters, followed by the index-only node_count and physical
+padding/root guards, then the six short-circuited slot calls.
