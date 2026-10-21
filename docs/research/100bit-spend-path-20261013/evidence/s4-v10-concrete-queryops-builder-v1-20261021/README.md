@@ -1,6 +1,6 @@
 # Concrete V10 QueryOps builder
 
-This packet specializes the already checked candidate query callback using the fixed `concreteOps` record. `concreteCandidateQueryOps` has no arbitrary dots/backend slot. `concrete_candidate_dots_is_literal_v10` identifies its callback with the V10 literal outer body through the checked wide-carrier maps; `concrete_candidate_query_refines_old_model` transfers a successful complete candidate query result to the old P6 callback with the same output.
+This packet specializes the already checked candidate query callback using the fixed `concreteOps` record. `concreteCandidateQueryOps` has no arbitrary dots/backend slot. `concrete_candidate_dots_is_literal_v10` identifies its callback with the V10 literal outer body through the checked wide-carrier maps; `concrete_candidate_query_refines_old_model` transfers a successful complete candidate query result to the same source-shaped query using the selected P6 model callback, with identical output.
 
 The result is a Lean model/refinement composition over the selected generated owners. It does not establish Rust Std/runtime execution equivalence or adoption of the candidate source. The source-to-generated boundary and the Aeneas Std model remain explicit.
 
@@ -8,6 +8,10 @@ Compile receipt: Lean 4.32, `-j1 -M 4400`, exit 0, 14.273 s wall, aggregate peak
 
 The first compile attempt and the namespace/syntax diagnostic are retained under `lean-candidates/s4-v10-concrete-queryops-builder-v1-20261021/diagnostics/`.
 
-## Source callsite link
+## Source callsite and owner
 
-`source-evidence/check_query_callsite.py` verifies the exact retained `query_values` source hash and first-four-statement byte span, including the call `crate::fast_dots::four_dots(q, g)`. The V10 endpoint packet separately checks candidate `four_dots`/helper bodies against the selected fixed-call body and emitted sequential four-call body. The Lean builder specializes the `QueryOps.dots` callback to that checked literal V10 endpoint. These are composed source/model links; the selected generated callback/runtime interpretation remains the explicit boundary.
+`source-evidence/check_query_callsite.py` verifies the pinned current candidate `query_values` body begins with index selection, opening, and `crate::fast_dots::four_dots(q, g)` in that order. The V10 endpoint packet separately checks the candidate `four_dots`/helper bodies against the selected fixed-call body and emitted sequential four-call body. This builder fixes the generated model's `QueryOps.dots` slot to that concrete endpoint.
+
+The complete proof owner is the selected stage2b `Stage2ContinuationQueryAdvance`/`Stage2ContinuationQueryLoop`, not the auxiliary older prefix artifact. The current candidate source snapshot SHA is `5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794`; stage2b source revision `bdfe262...` and final source revision `2ec37343...` carry this same file hash. The source-to-emission link is pinned to retained attempt `checkpoint-k-inline-55`: its source manifest and Charon input record that candidate hash; its Charon receipt points to LLBC SHA `4c36344e...`; the Aeneas receipt consumes that LLBC; and `final-extraction-pins.json` ties the same LLBC and source revisions to emitted `Funs.lean` SHA `b3aa665d...`. These copied source manifests and receipts are under `source-evidence/stage2b-extraction-checkpoint-k-inline-55/`.
+
+The stage2 binding scripts reconstruct the operation-parameterized query and accumulator definitions from that exact emitted `Funs.lean`, changing only typed callees. The three complete loop definitions are likewise preserved with only `query_values` parameterized. The current unrolled traces, owned accumulator/pending state, `accumulate_batched_with_node` result state, and by-value return are present in the source and selected model. `source-evidence/check_stage2_source_binding.py` verifies the Rust→Charon→LLBC→Aeneas→Funs pins, selected Lean sources/objects, body-binding hashes, and both generator checks. The old `a6508483...` prefix snapshot is retained only under `source-evidence/historical-old-prefix/`; it is not the theorem owner.

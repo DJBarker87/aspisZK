@@ -1,0 +1,3 @@
+PROVED one source-installed caller success yields split10 and all ten ordered actual model query successes with the same four field-result witnesses, now using the emitted constructor cut and concrete final_len/zero/one leaves.
+
+Limitations: Scanner and same-result preparation/ClaimPowers bindings remain explicit upstream contracts. Only filled remains universal in the constructor; the complete concrete arithmetic backend is fixed in the exported specialization. The query callback here is the original P6 mathematical model. Frozen Rust Std/from_fn correspondence or adoption of the tested V10 candidate remains open. No complete S4/source/runtime/artifact or implementation-linked100-bit closure is claimed.

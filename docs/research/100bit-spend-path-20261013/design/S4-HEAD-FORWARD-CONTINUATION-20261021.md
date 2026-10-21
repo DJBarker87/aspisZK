@@ -466,3 +466,97 @@ already tested V10 candidate avoids this custom from_fn-model gap; it is
 still unadopted and fails the historical B1 CU criterion. All four active
 slots are concentrating on S4 composition and its remaining source boundary.
 S4 against the frozen implementation and the full 100-bit goal remain open.
+
+## Concrete constructor arithmetic and caller upgrade
+
+`evidence/s4-accumulator-concrete-children-v1-20261021` supplies the
+source-owned final_len and ZERO/ONE leaves through explicit carrier maps;
+only filled remains universal. The current source-installed caller proof
+now uses this emitted Result-valued constructor body rather than the
+earlier pure-constant predecessor. The prepared-loop producer is retained
+in `evidence/s4-concrete-prepared-loop-v4-20261021`.
+
+`S4Tx1TenFieldResultsConcreteV4.source_tx1_success_ten_field_results`
+(namespace `AspisR1S4Tx1ConcreteTenFieldResultsRootV4`) composes that producer
+with all ten ordered model query results. It removes the previously supplied
+finalLen, zeroQ, zeroWide and oneQ constructor arguments. Scanner and
+same-result preparation/ClaimPowers contracts remain explicit, as do the
+non-S4 operation slots. Focused compile: exit0,23.460s,peak process RSS
+3,870,687,232 bytes,zero swaps,standard axioms. Its source-only packet is
+`evidence/s4-tx1-concrete-ten-field-results-root-v4-20261021`.
+
+`S4ConcreteConstructorBoundsV1.source_final_len_total_and_bounded`
+(namespace `AspisR1S4ConcreteConstructorBoundsV1`) reuses verbatim the small
+symbolic checked-multiplication/shift proofs from Tx1FinalLenBoundV8. It
+proves totality and exact final lengths256/64/64 by variant, hence length
+at most256, for the concrete current-carrier constructor leaf. This is
+independent of allocator or constructor success. Focused compile: exit0,
+5.688s,peak process RSS2,220,572,672 bytes,zero swaps,standard axioms.
+Packet: `evidence/s4-concrete-constructor-bounds-root-v1-20261021`.
+
+## Candidate loops and the current query source owner
+
+`evidence/s4-candidate-loop-field-transport-v1-20261021` proves same-output
+transport for successful candidate ten/twelve-query loops to the selected
+original-dot model, then derives the existing field-result witnesses. These
+first corollaries enumerate the transported model calls; a stronger version
+retaining each actually reached candidate call is being developed. No
+independent successful old loop is assumed.
+
+A comparison initially used the historical c8ea query source cut, which
+differs from current Rust after its first four statements. That was not the
+selected theorem owner. The selected Stage2ContinuationQueryAdvance and
+Stage2ContinuationQueryLoop owners already use the current unrolled traces,
+owned accumulator/pending and pair result. Existing stage2b source pins
+identify candidate.rs5164975d, identical to current production. The builder
+packet now retains the exact current owners, generated bodies, typed callee
+parameterization checks and explicit historical-prefix classification. The
+historical comparison does not reopen the current query suffix. Extraction
+trust and concrete child binding remain explicit.
+
+The upstream preparation issue is precise: the existing
+S4PreparedScratchClaimPowersV1 theorem already derives canonical gamma and
+same-array ClaimPowers from one successful PreparedScratchModel run. There
+is not yet an accepted binding from the current caller's abstract prepare
+slot to that complete run. hprepareBinding is retained; a model powers
+theorem is not being relabeled as source dispatcher closure.
+
+The candidate's direct Q::from_limbs validation-to-parser join is now the
+next local backend target. Candidate adoption, the original from_fn source
+boundary, upstream concrete driver binding and final artifact/release replay
+remain unresolved. S4 and the implementation-linked100-bit target remain
+open.
+
+## Same caller to actual candidate query witnesses
+
+`AspisR1S4CandidateTx1ActualFieldsRootV1.candidate_source_tx1_success_ten_actual_field_results`
+is green. It starts from one successful tx1 in the source-installed candidate
+caller, derives split10 and constructor cursor0 from that same execution,
+and obtains all ten actually reached candidate query calls with field-result
+evidence at the same accumulator and coefficient array. It does not assume
+a successful loop, a starting cursor, or independently successful old-model
+queries. The full arithmetic backend and constructor leaf operations are
+concrete. Scanner and same-run preparation/ClaimPowers bindings remain
+explicit upstream contracts.
+
+The composition reuses
+`evidence/s4-candidate-loop-actual-calls-v1-20261021` and
+`evidence/s4-candidate-caller-prepared-root-v1-20261021`. The accepted
+focused compile took16.801s,peak process RSS3,938,385,920 bytes,zero swaps,
+standard axioms. Source-only packet:
+`evidence/s4-candidate-tx1-actual-fields-root-v1-20261021`. A failed first
+application needed an explicit function-equality transport through the
+already opaque loop; its source and diagnostics are retained, and no
+resource override was used.
+
+The concrete QueryOps builder evidence now checks the complete retained
+provenance chain: current candidate.rs5164975d as Charon input, emitted
+LLBC4c36344e as Aeneas input, and final generated Funsb3aa665d as the source
+of the checked typed-callee parameterization. The existing generation
+checks were rerun; unchanged Lean extraction/dependency jobs were not.
+
+This is progress on the unadopted candidate path, not frozen-implementation
+S4 closure. The local validation-to-parser join, actual source/driver
+installation of upstream bindings, candidate adoption/final artifact pins
+and the final coherent release replay remain open. The 100-bit goal is
+not yet established.

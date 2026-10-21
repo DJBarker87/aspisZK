@@ -21,4 +21,11 @@ assert 'base : Ops' not in src.read_text()
 for name,pin in pre['selected_imports'].items():
  assert Path(pin['path']).is_file(),name
  assert sha(Path(pin['path']))==pin['sha256'],name
+binding=json.loads((p/'source-evidence/current-stage2-source-binding.json').read_text())
+for key in ['query_advance_object','query_loop_object']:
+ pin=binding[key]; artifact=Path(pin['path']); assert artifact.is_file(); assert sha(artifact)==pin['sha256']
+assert binding['query_advance_source_sha256']=='9d7eb55883d5f8215d0eddaea737b60ace37c16a4a498d1f2f903110f14fbbfd'
+assert binding['query_loop_source_sha256']=='c398ba41273939ac739a064eee492976988027ff1b1d6f33657480b17aed0def'
+import subprocess
+subprocess.run(['python3', str(p/'source-evidence/check_stage2_source_binding.py')], check=True)
 print('PASS: source, receipt, axioms, and direct imported object pins verified')
