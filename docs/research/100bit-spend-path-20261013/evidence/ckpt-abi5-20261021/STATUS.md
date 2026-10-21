@@ -125,3 +125,62 @@ reducing the large checkpoint/stage2 definitions. The replacement keeps
 those stages locally irreducible and applies their symbolic observation
 law. No maxRecDepth, maxHeartbeats or memory setting was raised. Failed
 attempts and recovery output remain excluded from proof claims.
+
+## Stage 6: focused union, caller evidence and precise remainder
+
+`OraclePortCkptAbi5Freeze`, attempt 1, exits 0 in 31.607240083 seconds,
+peak RSS 3,456,466,944 bytes, zero swaps, source revision `5c89dc959`.
+Its 18 complete axiom reports cover all 17 new theorems and the reused
+S10 `filled_exact`; every report is `[propext, Classical.choice, Quot.sound]`.
+All six new modules have successful final receipts. The manifest retains
+17 attempts (6 final successes and 11 superseded failures), maximum peak
+RSS 3,605,757,952 bytes and zero swaps throughout. This is a focused union
+against pinned cached objects, not a coherent full frozen release rebuild.
+
+`tools/oracle-port-ckpt-abi5/provenance.py --check` reconciles all pinned
+caller excerpts with current shipped bytes and maps all 22 selected CFG
+relations to their exact S10 pass-4 kernel theorem names. It pins the new
+checkpoint decision, six-read schedule, S10 allocation boundary and unchanged
+pass-3 bounded Kani evidence. `provenance.json` preserves the 18 body blocks
+plus checksum, individual offsets and exact producing-source requirements.
+None is mislabelled a complete Rust-to-C5 field proof.
+
+`tools/oracle-port-ckpt-abi5/audit.py` exits 0. `audit-result.json` records
+this receipt/source/scope audit. It checks final source snapshots, successful
+receipt equality, current direct-import hashes, all new theorem axiom lines,
+all 22 CFG matches and source-pin regeneration; it rejects shipped/protected/
+sibling/existing-Lean changes and committed binaries or oversized JSON.
+No shipped file changed, so the conditional frozen-ELF rebuild gate is not
+triggered. No host, Rust, SBF, runtime or adversarial job was run. No release
+manifest replay is claimed: the concrete source join has not been built.
+Historical bounded Kani/ELF evidence is reused within its original domain,
+not relabelled as new verification. No local target directory was created.
+
+**Precise remaining deliverable:** identify the actual frozen TX1 writer
+and Pool TX2 reader, including source reservation/resize/Box and all
+Reader/ResumeOps operations, with the byte/C5 reference. In particular:
+
+- Complete extracted encode_k/e_byte/body_byte-to-C5 equations and production
+  strict-reader adoption, including every malformed-byte Result path.
+- Rust Prepared from sem/transcript/claims and the initial accumulator;
+  actual query/field backend adoption and pending.finish's rhs/power/64 weights
+  recurrence. The new counter proof does not establish those arithmetic fields.
+- Concrete frozen source Calls/carriers and returned-state/error dependencies
+  at the batch0/checkpoint/batch1 position, plus annotation's two executions.
+  No aggregate source-join hypothesis is introduced as a substitute.
+- The independent retained StoredCarrierBinding/P2/P2-prime account snapshot,
+  proof suffix, public reconstruction and transaction-pair binding.
+
+The former model-level absent-stage/interleaving obstruction is resolved;
+the reference/model composition is now total. The source/operational gaps
+above remain. CONE-AUDIT's checkpoint row is updated but stays **whole-cone
+(d)**. **The checkpoint AcceptedRunJoin and deployed security target are not
+yet established. Zero headline premises are removed.**
+
+Recheck without compiling or using the host:
+
+```
+python3 -B tools/oracle-port-ckpt-abi5/audit.py
+```
+
+Each stage is committed locally with a plain message; no push or merge.
