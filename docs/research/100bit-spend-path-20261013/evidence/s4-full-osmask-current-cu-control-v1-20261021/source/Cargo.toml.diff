@@ -1,0 +1,38 @@
+--- /private/tmp/s4-combined-candidate-20261021/evidence-v1/s4-full-osmask-current-cu-control-v1-20261021/source/Cargo.toml.frozen	2026-10-21 21:01:57
++++ /private/tmp/s4-combined-candidate-20261021/evidence-v1/s4-full-osmask-current-cu-control-v1-20261021/source/Cargo.toml	2026-10-21 20:50:37
+@@ -3,7 +3,7 @@
+ version = "0.1.0"
+ edition = "2021"
+ publish = false
+-default-run = "aspis-r1-cu-probe"
++default-run = "pool_gate_osmask"
+
+ [features]
+ r0-op-count = ["aspis-core/r0-op-count"]
+@@ -13,12 +13,12 @@
+
+ [dependencies]
+ anyhow = "1.0.100"
+-aspis-core = { path = "../../crates/aspis-core", features = ["r0"] }
+-aspis-pool = { path = "../../programs/aspis-pool", features = ["no-entrypoint", "pair-forest-account-evidence", "pair-forest-verifier-lane-invariant-audit"] }
+-aspis-prover = { path = "../../crates/aspis-prover", features = ["r0", "insecure-spend-fixture"] }
+-aspis-r1-cost-probe = { path = "../../crates/aspis-r1-cost-probe", features = ["prover"] }
+-aspis-registry = { path = "../../programs/aspis-registry", features = ["no-entrypoint"] }
+-aspis-statement = { path = "../../crates/aspis-statement", features = ["r0", "pool-v1-kernel"] }
++aspis-core = { path = "/home/dombarker/project-offloads/codex-cx-cu-bound3-20261020/src/crates/aspis-core", features = ["r0"] }
++aspis-pool = { path = "/home/dombarker/project-offloads/codex-cx-cu-bound3-20261020/src/programs/aspis-pool", features = ["no-entrypoint", "pair-forest-account-evidence", "pair-forest-verifier-lane-invariant-audit"] }
++aspis-prover = { path = "/home/dombarker/project-offloads/codex-cx-cu-bound3-20261020/src/crates/aspis-prover", features = ["r0", "insecure-spend-fixture"] }
++aspis-r1-cost-probe = { path = "/home/dombarker/project-offloads/codex-cx-cu-bound3-20261020/src/crates/aspis-r1-cost-probe", features = ["prover"] }
++aspis-registry = { path = "/home/dombarker/project-offloads/codex-cx-cu-bound3-20261020/src/programs/aspis-registry", features = ["no-entrypoint"] }
++aspis-statement = { path = "/home/dombarker/project-offloads/codex-cx-cu-bound3-20261020/src/crates/aspis-statement", features = ["r0", "pool-v1-kernel"] }
+ litesvm = "=0.16.0"
+ agave-feature-set = "=4.2.1"
+ solana-program-runtime = "=4.2.1"
+@@ -38,3 +38,7 @@
+
+ [profile.release]
+ opt-level = 3
++
++[[bin]]
++name = "pool_gate_osmask"
++path = "src/bin/pool_gate.rs"

@@ -375,3 +375,20 @@ This completes the selected arithmetic model's operation specification, not
 the frozen Rust-to-model correspondence. Actual Std/from_fn, preparation,
 caller operation slots and final S4/S10 driver bindings remain open. The
 100-bit implementation target is not yet established.
+
+## Full-mask retained-proof control
+
+The same current-format 57,607-byte OS-random/full-mask proof and public
+input were accepted by both pinned frozen and isolated candidate artifacts.
+Source-only evidence is integrated in
+`evidence/s4-full-osmask-current-cu-control-v1-20261021/`, preserving the
+original corpus provenance and exact input/artifact hashes.
+
+Measured stage-1 transaction CU: frozen 1,196,068; candidate 1,206,885
+(delta 10,817). Measured settlement transaction CU: frozen 1,139,924;
+candidate 1,150,423 (delta 10,499). The nested verifier CPI is included in
+the settlement total, not an additional transaction. Both runs exited 0
+under capped zero-swap scopes. This answers the requested single full-mask
+control, but proves neither cost independence from masks nor a worst-case
+bound. The candidate remains unadopted and still fails its existing B1
+fixture criterion. No production source or release budget changed.
