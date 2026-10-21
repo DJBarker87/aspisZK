@@ -804,3 +804,51 @@ RSS4,041,883,648 bytes,zero swaps). The concrete Reader.e operation adapter
 and successful-resume composition remain in progress; the new full settlement
 consumer will only be accepted after those exact owners compile and compose.
 No template decoder axiom is being accepted as a canonicality law.
+
+## Canonical gamma is now derived from the same successful resume
+
+`evidence/s4-reader-e-current-canonical-v2-20261021` installs the concrete
+strict byte decoder in the complete emitted Reader.e operation body. Its
+dependent raw-read argument has the exact ResumeOps signature. Success of
+that body implies all eight current-carrier coordinate bounds, without any
+decoder-success or canonicality-law premise. It directly reuses
+`ExtractedRecordByteCanonicality.slice_success`; no older Reader carrier is
+imported. The complete source-body checker permits only the documented
+raw/decoder/Option callee substitutions. Focused compile:exit0,9.819s,peak
+RSS2,256,715,776 bytes,zero swaps,standard axioms.
+
+`evidence/s4-resume-gamma-actual-canonical-v1-20261021` then reuses the existing
+complete `successful_fields` theorem and its exact `gammaRead` witness.
+Installing that concrete Reader.e in ResumeOps proves the eight bounds for
+the gamma returned by the same successful resume. The selected v3 receipt
+is against the direct-byte-proof parent:exit0,2.862s,peak RSS2,244,476,928
+bytes,zero swaps,standard axioms. The earlier isolated wrapper proof is not
+used by the composed current S4 import.
+
+`AspisR1S4ConcreteResumeTwelveFieldsRootV2.full_tx2_concrete_reader_twelve_actual_fields`
+composes this result with the complete settlement-body theorem. The previous
+`hcanonical : ∀ p a, same_resume_success → Canonical gamma` premise is gone.
+The new concrete operation record fixes readE to the strict source adapter;
+its canonicality follows from execution. From the one accepted full body it
+retains all twelve actual queries, same-array field equations and coordinate
+bounds. The only additional input proposition is the prior same-proof strict
+scan; other raw/non-S4 operations and the S1 powers implementation remain
+explicit source boundaries. Packet:
+`evidence/s4-concrete-resume-twelve-fields-root-v2-20261021`.
+Focused compile:exit0,11.464s,peak RSS4,053,286,912 bytes,zero swaps,standard
+axioms; its fieldwise canonicality helper has no axioms.
+
+Two integration failures are retained as diagnostics: a partial canonical
+cache shadowed unrelated Mathlib modules, and the older Reader carrier
+collided with current FinishRelation.Types. The accepted profile selects
+only the needed project cache owners and the direct byte canonicality proof.
+No unchanged full regression or package build was run. No production source,
+security parameter or candidate-adoption decision changed.
+
+The next S4 arithmetic join identifies these four returned dot values with
+the matching four width-29 first-fold inputs of dV_frozen2. The shared byte
+interface is the exact 608-byte prefix equalling encodeC1++encodeC2, followed
+by the 26 M31 and three QM31 lane projections and same-g power equations.
+Merkle authentication and prior-tx checkpoint context stay with their named
+upstream owners; source adoption/B1 and the other whole-cone joins remain
+open. The implementation-linked100-bit target is not yet established.

@@ -1,0 +1,102 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "packet_id": "s4-reader-e-current-canonical-v2-20261021",
+  "status": "GREEN exact Reader.e operation cut; direct RecordParser byte-canonicality predecessor; old Reader carrier removed",
+  "target": "AspisR1S4ReaderEActualWideCanonicalV1.readerE_success_canonical",
+  "source_sha256": "37ee2531d55684a4f4d248641a92e7aeafc37c64d7b0367fdd7e52f75b934a6f",
+  "object_sha256": "61cf7f067e28822b71135ac15d8aaf225dbb9b36ed76da62f11eaa37bc2f3384",
+  "generated_funs": {
+    "path": "lean-candidates/s4-tx2-full-source-owned-cut-v1-20261021/source-pins/Funs.lean",
+    "sha256": "b3aa665deadedac1f04233f5535bce0774cfed34e6ee7f979657982504d97c2b",
+    "function": "verifier.Reader.e",
+    "span_lines": [
+      2485,
+      2495
+    ]
+  },
+  "body_substitutions": [
+    "verifier.Reader.raw -> raw",
+    "WideExact.from_le_bytes -> actualCurrentWideDecoder",
+    "Option.ok_or -> optionOkOr"
+  ],
+  "raw_abi": "dependent (n : Usize) -> Reader -> Result (Array U8 n x Reader); body calls n=32#usize",
+  "result_theorem": "readerE_success_canonical proves eight flat CurrentWide coordinates < 2147483647 for the same w returned by a successful adapted Reader.e.",
+  "decoder_adapter": {
+    "definition": "actualCurrentWideDecoder",
+    "underlying": "AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes",
+    "carrier_map": "fieldwise currentOfRecordWide/currentOfRecordQM",
+    "source_binding_packet": "evidence/s4-wide-exact-decoder-source-binding-v1-20261021"
+  },
+  "canonicality_predecessor": {
+    "module": "ExtractedRecordByteCanonicality",
+    "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedRecordByteCanonicality.lean",
+    "source_sha256": "3ad68b76909d82ba93126b0de4ac5eca66df6e628f246e6d2e1688c2c304825d",
+    "object_sha256": "1f7406232cab30165799f257dac60b50074ca353300147c23fb1639200404419",
+    "theorem": "AspisR1.ExtractedRecordByteCanonicality.slice_success",
+    "result": "successful RecordParser decoding yields exact 32-byte slice, eight canonical LE words, and their packed WideExact value"
+  },
+  "direct_imports": [
+    {
+      "module": "Stage2ContinuationTypes",
+      "source": "dependencies/Stage2ContinuationTypes.lean",
+      "source_sha256": "306e143d7f9ceb5f552fe39c2c77d14daa50e4aa089d6d48b9e66f2bc76bdbd8",
+      "object_sha256": "fef467130e5622366f50d955dee81ed4fc72e878d5d7f50792760a827ad42206"
+    },
+    {
+      "module": "ExtractedRecordByteCanonicality",
+      "source": "dependencies/ExtractedRecordByteCanonicality.lean",
+      "source_sha256": "3ad68b76909d82ba93126b0de4ac5eca66df6e628f246e6d2e1688c2c304825d",
+      "object_sha256": "1f7406232cab30165799f257dac60b50074ca353300147c23fb1639200404419"
+    },
+    {
+      "module": "AspisR1RecordParser.Types selected transitive owner",
+      "object_path": "/tmp/root-finish-view-host-cache-20261019/objects/AspisR1RecordParser/Types.olean",
+      "object_sha256": "2d1c54171fddf4b6977cf3cc44d0fe34d8342a173869d3183163ff9c6d926228",
+      "source_provenance": "source identity not separately pinned by this packet; exact selected object pinned"
+    }
+  ],
+  "coherent_import_overlay": {
+    "module_count": 3950,
+    "referenced_bytes": 794775304,
+    "manifest": "dependencies/coherent-closure-manifest.json",
+    "sha256": "0a4e7a549b45b3ce9767b9cc2377ce55e93a1dd06066981c74615dbe8abfc2fa",
+    "note": "This prepared overlay is a superset of the imports loaded by v2; the v2 source directly imports ExtractedRecordByteCanonicality and does not import Stage2ResumeConcreteDecoderCanonicality or the old Stage2AdoptedReader carrier."
+  },
+  "compile_receipt": {
+    "exit_status": 0,
+    "wall_seconds": 9.819,
+    "max_rss_bytes": 2256715776,
+    "swap_bytes": 0,
+    "lean_path": [
+      "/tmp/query-s4-carrier-map-v1/stage2-adapter/objects",
+      "/tmp/s4-resume-gamma-canonical-consumer/objects",
+      "/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean"
+    ],
+    "compiler": "/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+    "compiler_sha256": "1b370cfcbf44e80d1b004ab1b1ab9a4c73951f9f7c242140bcff9bc577576554",
+    "argv": [
+      "/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+      "-j1",
+      "-M4400",
+      "-R",
+      "/tmp/s4-reader-e-current-canonical-v1/sources",
+      "-o",
+      "/tmp/s4-reader-e-current-canonical-v1/local-attempt-v7/objects/S4ReaderEActualWideCanonicalV1.olean",
+      "/tmp/s4-reader-e-current-canonical-v1/sources/S4ReaderEActualWideCanonicalV1.lean"
+    ],
+    "git_head_at_launch": "6f59f538dfb6c8ecb786614d0885594eee45b837",
+    "lock_inode": 220432028
+  },
+  "axiom_audits": [
+    "AspisR1S4ReaderEActualWideCanonicalV1.actualCurrentWideDecoder_success_canonical",
+    "AspisR1S4ReaderEActualWideCanonicalV1.readerE_success_canonical"
+  ],
+  "supersedes": "v1 packet remains green but imported the old Reader canonicality carrier; v2 replaces only its canonicality predecessor and proof.",
+  "failed_attempts": "v2 diagnostic had RecordWide alias namespace spelling error; only local-attempt-v7 is accepted.",
+  "scope_limitations": [
+    "Only three explicit generated-callee substitutions; all other Reader.e body tokens are preserved.",
+    "Conclusion is conditional on successful Reader.e output; no outer resume reachability is proved here.",
+    "No general Aeneas soundness theorem is claimed.",
+    "No compiled OLean is included."
+  ]
+}
