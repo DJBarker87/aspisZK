@@ -147,4 +147,28 @@ LLBC, `.olean`, archive or key is committed; caches and keys are retained.
 
 ## Final audit
 
-Pending the one frozen combined audit; focused targets above are complete.
+`manifest.json` freezes all six adopted Rust/Lean sources. Its `--check`
+validation passes before the combined audit. The exact next consumer is
+`R1Z.ProverCommit9Audit`, which imports the prior complete prover cone, the
+new balancing recursion and the D112 scope module.
+
+J**8288**, the single final combined audit: exit **0**, wall **1.67 s**, peak
+RSS **4102448 KiB**, **zero swaps**. All **40** printed audits have only
+`propext`, `Classical.choice`, `Quot.sound`, a subset, or no axioms. Source
+revision **`0383f66ba`** contains all adopted predecessor sources; the additive
+audit is pinned by its exact SHA and literal source snapshot. The receipt
+retains the compiled dependency fingerprint. No unchanged audit is repeated.
+Assigned attempts consumed through **8288**; next available **8289**.
+
+`harness/validate.py --check` validates all six source identities, all eight
+attempt snapshots/dependency fingerprints, seven accepted Lean attempts and
+one excluded draft, every accepted axiom line, all seven capped host receipts,
+the Kani source maps, the empty premise diff and the three byte-identical ELFs.
+This is evidence validation, not a second build or regression run.
+
+Completed: the owned-balancing translator failure is removed, the recursion
+and whole-owned caller folds are proved, and both Kani row tests pass.
+Not completed: the full shipped outer CallerLaw and universal shipped runtime
+read coverage. There is no deletion-only theorem improvement to claim.
+No peer-owned SourceIdentification, RustRuntimeJoin or PrivacyR1FinalRelease
+file is edited. No push, merge, deployment or wallet cleanup is performed.
