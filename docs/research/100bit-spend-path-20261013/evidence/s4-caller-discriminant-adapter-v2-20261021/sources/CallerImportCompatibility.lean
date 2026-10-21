@@ -1,0 +1,4 @@
+import AspisR1CurrentCaller.Types
+import S4TenQueryFieldResultsRootV1
+import S4ConcreteKernelOpsRootV1
+#print axioms AspisR1S4TenQueryFieldResultsRootV1.ten_query_fields_from_source
