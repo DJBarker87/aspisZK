@@ -94,3 +94,70 @@ unconstrained build function. Per-call scalar or hash-frame facts do not
 constrain that function. Specializing `input` would change the quantifiers;
 it is not the requested deletion-only change. No peer-owned identification
 or runtime-join file is modified.
+
+## Stage 3: transcript and binary-node callback checks
+
+The new callback observers check the actual generic `Digest32` methods'
+framing, call count, returned answer and retained state. Payload forwarding
+is checked by exact slice pointer and length, so arbitrary payload bytes are
+preserved rather than replaced with a fixture. Responses are arbitrary
+traces; they are not assumed fresh independent ROM samples. Proving framing
+for that larger class also covers consistent deterministic oracle traces,
+but supplies no probability law or complete adaptive execution coupling.
+
+Accepted checks cover outer transcript `new` (S2), `absorb` and `block`;
+semantic transcript `new` and `sample_block_validated`, including wrong-row
+rejection with no calls and unchanged state; and binary parent hashing
+`0x12 || left || right`. Explicit bounds are payload length <= 2048 and
+row <= 32 for the outer transcript, framed length <= 3717 and row <= 26 for
+the semantic block, and public-byte length <= 4096 for semantic initialization.
+The concrete caller must still instantiate these bounds and argument images.
+
+The byte-ROM used by earlier local proofs is not an all-family backend:
+`semantic-row25-capacity-v1` checks the actual `row_shape(25)`: payload 3712,
+framed record 3717, complete hash input 3751 bytes, exceeding its 514-byte
+capacity. The outer row-31 frame can also reach 2086 bytes. The new observers
+do not raise that ROM's capacity or silently use it for these calls.
+
+`transcript-queries-prefix-v1` checks the literal source prefix ending just
+before `queries_from_pairs`: one absorb followed by eight squeeze/advance
+pairs, all on the expected state; both answer buffers, absorbed state and
+last advance are checked. `query-prefix.json` pins the exact source fragment.
+This is a source-cut prefix, not a full query-method equivalence certificate.
+The whole-query comparison executes the sampler twice and was stopped after
+263.988 s at a review point (6380792 KiB GNU-time peak RSS; no memory cap
+increase). The exact own-process stop and cgroup peak are retained. It is
+excluded, not timed out, not a counterexample and not an accepted certificate.
+Its replacement proves the prefix without expanding the sampler.
+
+The first semantic initialization trial fails an unwinding check because
+its domain exceeds the initial 34-byte comparison bound. Only that harness's
+literal bound changes to 84 in the accepted replacement. All unwinding and
+safety assertions remain enabled. No scalar-contract timeout is rerun.
+
+| Accepted target | Exit | Wall (s) | GNU peak RSS (KiB) | Cgroup peak (bytes) | Swaps |
+|---|---:|---:|---:|---:|---:|
+| `transcript-new-v1` | 0 | 2.193 | 345540 | 293654528 | 0 |
+| `transcript-absorb-v1` | 0 | 6.836 | 474636 | 555020288 | 0 |
+| `transcript-block-v1` | 0 | 3.838 | 379680 | 329170944 | 0 |
+| `semantic-new-v2` | 0 | 2.718 | 331588 | 297054208 | 0 |
+| `semantic-block-v1` | 0 | 4.463 | 388660 | 338833408 | 0 |
+| `semantic-row25-capacity-v1` | 0 | 1.908 | 326612 | 274354176 | 0 |
+| `binary-parent-v1` | 0 | 2.332 | 345408 | 294027264 | 0 |
+| `transcript-queries-prefix-v1` | 0 | 13.773 | 482088 | 514879488 | 0 |
+
+Every target's exact harness, command, source hashes, resource scope and
+full output are in the receipts. Source revision is the pinned baseline
+`3ac016af1` with the literal additive proof-only sources; `final-source-inputs.json`
+pins the entire 550-input Rust/Cargo snapshot. Every input resolves to that
+baseline or an exact retained proof-only candidate. `harness/validate.py`
+checks these identities, resource limits, swaps, link flags, active verified
+scalar stubs and accepted Lean axioms. No full Rust regression was needed
+for these proof-only changes.
+
+`callback-coverage.json` inventories eighteen families with source anchors,
+hashes, verified local references where available, and remaining obligations.
+It explicitly leaves public digest/outer binding, the inline intermediate
+source and D seeds, concrete material/D/salt/packing/tree schedules,
+full query result-state transport, and retry/abort histories open. A local
+framing check is not promoted to an all-family or whole-shipped certificate.

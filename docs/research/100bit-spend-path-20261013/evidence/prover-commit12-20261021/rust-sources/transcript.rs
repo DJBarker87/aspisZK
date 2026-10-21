@@ -1,0 +1,241 @@
+//! UNPROVED COST PROBE. Explicit opening schedule, including rho after queries.
+use aspis_core::r0::CodeField;
+use aspis_core::{Digest32,field::WideExact as E};
+use crate::transport::Variant;
+pub struct Transcript<H: Digest32> { pub state:[u8;32], hash:H }
+impl<H: Digest32> Transcript<H> {
+    pub fn new(hash:H, semantic_state:[u8;32], variant:Variant) -> Self {
+        #[cfg(not(feature = "private-leaf-salts"))]
+        let domain: &[u8] = b"UNPROVED:R1:COST-PROBE:P2";
+        #[cfg(feature = "private-leaf-salts")]
+        let domain: &[u8] = b"UNPROVED:R1:PRIVATE-SALTED:P3";
+        Self { state:hash.digest(&[domain,&[variant.tag()],&semantic_state]), hash }
+    }
+    pub fn absorb(&mut self, row:u8, payload:&[u8]) {
+        self.state=self.hash.digest(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);
+    }
+    pub fn block(&mut self,row:u8,payload:&[u8])->[u8;32] {
+        self.absorb(row,payload);
+        let block=self.hash.digest(&[&self.state,&[1]]);
+        self.state=self.hash.digest(&[&self.state,&[2]]);
+        block
+    }
+    pub fn scalar(&mut self,row:u8,payload:&[u8],nonzero:bool)->E {
+        let block=self.block(row,payload);
+        let out=if nonzero {crate::sampler::gamma_sample(&block)} else {crate::sampler::ordinary_sample(&block)};
+        crate::trace::value(4,row as usize,out); out
+    }
+    /// Final query-residual batching: at most 22 coefficients, so a nonzero
+    /// residual has at most 21 roots even when sampled from the K subfield.
+    /// Gamma and both folding challenges continue to use E.
+    pub fn scalar_k(&mut self,row:u8,payload:&[u8])->aspis_core::field::QM31 {
+        let out=crate::sampler::qm31_sample(&self.block(row,payload));
+        crate::trace::value(4,row as usize,E::from_qm31(out)); out
+    }
+    pub fn queries(&mut self, row:u8, payload:&[u8])->Result<[u32;22],crate::verifier::Error> {
+        self.absorb(row,payload);
+        let mut blocks=[[0;32];8];let mut advances=blocks; let mut state=self.state;
+        blocks[0]=self.hash.digest(&[&state,&[1]]);
+        advances[0]=self.hash.digest(&[&state,&[2]]);state=advances[0];
+        blocks[1]=self.hash.digest(&[&state,&[1]]);
+        advances[1]=self.hash.digest(&[&state,&[2]]);state=advances[1];
+        blocks[2]=self.hash.digest(&[&state,&[1]]);
+        advances[2]=self.hash.digest(&[&state,&[2]]);state=advances[2];
+        blocks[3]=self.hash.digest(&[&state,&[1]]);
+        advances[3]=self.hash.digest(&[&state,&[2]]);state=advances[3];
+        blocks[4]=self.hash.digest(&[&state,&[1]]);
+        advances[4]=self.hash.digest(&[&state,&[2]]);state=advances[4];
+        blocks[5]=self.hash.digest(&[&state,&[1]]);
+        advances[5]=self.hash.digest(&[&state,&[2]]);state=advances[5];
+        blocks[6]=self.hash.digest(&[&state,&[1]]);
+        advances[6]=self.hash.digest(&[&state,&[2]]);state=advances[6];
+        blocks[7]=self.hash.digest(&[&state,&[1]]);
+        advances[7]=self.hash.digest(&[&state,&[2]]);state=advances[7];
+        let (q,state)=aspis_core::r0_transcript::queries_from_pairs(&blocks,&advances).map_err(|_|crate::verifier::Error::Transcript)?;
+        self.state=state;
+        { let u=q[0]; crate::trace::value(5,0,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[1]; crate::trace::value(5,1,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[2]; crate::trace::value(5,2,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[3]; crate::trace::value(5,3,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[4]; crate::trace::value(5,4,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[5]; crate::trace::value(5,5,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[6]; crate::trace::value(5,6,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[7]; crate::trace::value(5,7,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[8]; crate::trace::value(5,8,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[9]; crate::trace::value(5,9,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[10]; crate::trace::value(5,10,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[11]; crate::trace::value(5,11,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[12]; crate::trace::value(5,12,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[13]; crate::trace::value(5,13,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[14]; crate::trace::value(5,14,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[15]; crate::trace::value(5,15,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[16]; crate::trace::value(5,16,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[17]; crate::trace::value(5,17,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[18]; crate::trace::value(5,18,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[19]; crate::trace::value(5,19,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[20]; crate::trace::value(5,20,E::from_m31(aspis_core::field::M31(u))); }
+        { let u=q[21]; crate::trace::value(5,21,E::from_m31(aspis_core::field::M31(u))); }
+        Ok(q)
+    }
+}
+
+#[cfg(kani)]
+mod callbacks12 {
+    use super::*;
+    static mut CALLS: usize = 0;
+    // These are arbitrary response traces, not fresh independent oracle
+    // samples. Framing is proved even for traces outside the deterministic
+    // oracle subclass; no probability assertion is made by these harnesses.
+    #[derive(Clone,Copy)]
+    struct AbsorbObserver {
+        state: [u8;32], row:u8, payload:*const u8, len:usize,
+        answers:[[u8;32];3],
+    }
+    impl Digest32 for AbsorbObserver {
+        fn digest(&self,parts:&[&[u8]])->[u8;32] {
+            let call = unsafe { let c=CALLS; CALLS+=1; c };
+            if call==0 {
+                assert_eq!(parts.len(),4);
+                assert_eq!(parts[0],&self.state);
+                assert_eq!(parts[1],&[0,0xa0+self.row]);
+                assert_eq!(parts[2],&(self.len as u32).to_le_bytes());
+                assert_eq!(parts[3].len(),self.len);
+                assert_eq!(parts[3].as_ptr(),self.payload);
+            } else {
+                assert!(call < 3);
+                assert_eq!(parts.len(),2);
+                assert_eq!(parts[0],&self.answers[0]);
+                assert_eq!(parts[1],&[call as u8]);
+            }
+            self.answers[call]
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    fn absorb() {
+        let payload:[u8;2048]=kani::any();
+        let len:usize=kani::any(); kani::assume(len<=2048);
+        let row:u8=kani::any(); kani::assume(row<=32);
+        let state:[u8;32]=kani::any();
+        let answers:[[u8;32];3]=kani::any();
+        let h=AbsorbObserver{state,row,payload:payload.as_ptr(),len,answers};
+        unsafe {CALLS=0;}
+        let mut t=Transcript{state,hash:h};
+        t.absorb(row,&payload[..len]);
+        assert_eq!(t.state,answers[0]);
+        unsafe {assert_eq!(CALLS,1);}
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    fn block() {
+        let payload:[u8;2048]=kani::any();
+        let len:usize=kani::any(); kani::assume(len<=2048);
+        let row:u8=kani::any(); kani::assume(row<=32);
+        let state:[u8;32]=kani::any();
+        let answers:[[u8;32];3]=kani::any();
+        let h=AbsorbObserver{state,row,payload:payload.as_ptr(),len,answers};
+        unsafe {CALLS=0;}
+        let mut t=Transcript{state,hash:h};
+        assert_eq!(t.block(row,&payload[..len]),answers[1]);
+        assert_eq!(t.state,answers[2]);
+        unsafe {assert_eq!(CALLS,3);}
+    }
+    #[derive(Clone,Copy)]
+    struct NewObserver {semantic:[u8;32],answer:[u8;32]}
+    impl Digest32 for NewObserver {
+        fn digest(&self,parts:&[&[u8]])->[u8;32] {
+            assert_eq!(parts.len(),3);
+            assert_eq!(parts[0],b"UNPROVED:R1:PRIVATE-SALTED:P3");
+            assert_eq!(parts[1],&[Variant::S2.tag()]);
+            assert_eq!(parts[2],&self.semantic);
+            unsafe {CALLS+=1;}
+            self.answer
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    fn new_transcript() {
+        let semantic:[u8;32]=kani::any(); let answer:[u8;32]=kani::any();
+        unsafe {CALLS=0;}
+        let t=Transcript::new(NewObserver{semantic,answer},semantic,Variant::S2);
+        assert_eq!(t.state,answer);
+        unsafe {assert_eq!(CALLS,1);}
+    }
+
+    #[derive(Clone,Copy)]
+    struct QueryObserver {state:[u8;32],payload:*const u8,len:usize,answers:[[u8;32];17]}
+    impl Digest32 for QueryObserver {
+        fn digest(&self,parts:&[&[u8]])->[u8;32] {
+            let call=unsafe {let c=CALLS;CALLS+=1;c};
+            assert!(call<17);
+            if call==0 {
+                assert_eq!(parts.len(),4);
+                assert_eq!(parts[0],&self.state);
+                assert_eq!(parts[1],&[0,0xa0+31]);
+                assert_eq!(parts[2],&(self.len as u32).to_le_bytes());
+                assert_eq!(parts[3].len(),self.len);
+                assert_eq!(parts[3].as_ptr(),self.payload);
+            } else {
+                assert_eq!(parts.len(),2);
+                let prior=2*((call-1)/2);
+                assert_eq!(parts[0],&self.answers[prior]);
+                assert_eq!(parts[1],&[if call%2==1 {1} else {2}]);
+            }
+            self.answers[call]
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(84)]
+    fn queries() {
+        let payload:[u8;2048]=kani::any();let len:usize=kani::any();kani::assume(len<=2048);
+        let state:[u8;32]=kani::any();let answers:[[u8;32];17]=kani::any();
+        let h=QueryObserver{state,payload:payload.as_ptr(),len,answers};
+        unsafe {CALLS=0;}
+        let mut t=Transcript{state,hash:h};
+        let actual=t.queries(31,&payload[..len]);
+        unsafe {assert_eq!(CALLS,17);}
+        let blocks=core::array::from_fn(|k| answers[2*k+1]);
+        let advances=core::array::from_fn(|k| answers[2*k+2]);
+        match aspis_core::r0_transcript::queries_from_pairs(&blocks,&advances) {
+            Ok((q,after))=>{assert!(matches!(actual,Ok(values) if values==q));assert_eq!(t.state,after);}
+            Err(_)=>{assert!(matches!(actual,Err(crate::verifier::Error::Transcript)));assert_eq!(t.state,answers[0]);}
+        }
+    }
+
+    #[kani::proof]
+    #[kani::unwind(84)]
+    fn queries_prefix() {
+        let backing:[u8;2048]=kani::any();let len:usize=kani::any();kani::assume(len<=2048);
+        let state:[u8;32]=kani::any();let answers:[[u8;32];17]=kani::any();
+        let h=QueryObserver{state,payload:backing.as_ptr(),len,answers};
+        unsafe {CALLS=0;}
+        let mut actual=Transcript{state,hash:h};
+        let row=31;let payload=&backing[..len];
+        actual.absorb(row,payload);
+        let mut blocks=[[0;32];8];let mut advances=blocks; let mut state=actual.state;
+        blocks[0]=actual.hash.digest(&[&state,&[1]]);
+        advances[0]=actual.hash.digest(&[&state,&[2]]);state=advances[0];
+        blocks[1]=actual.hash.digest(&[&state,&[1]]);
+        advances[1]=actual.hash.digest(&[&state,&[2]]);state=advances[1];
+        blocks[2]=actual.hash.digest(&[&state,&[1]]);
+        advances[2]=actual.hash.digest(&[&state,&[2]]);state=advances[2];
+        blocks[3]=actual.hash.digest(&[&state,&[1]]);
+        advances[3]=actual.hash.digest(&[&state,&[2]]);state=advances[3];
+        blocks[4]=actual.hash.digest(&[&state,&[1]]);
+        advances[4]=actual.hash.digest(&[&state,&[2]]);state=advances[4];
+        blocks[5]=actual.hash.digest(&[&state,&[1]]);
+        advances[5]=actual.hash.digest(&[&state,&[2]]);state=advances[5];
+        blocks[6]=actual.hash.digest(&[&state,&[1]]);
+        advances[6]=actual.hash.digest(&[&state,&[2]]);state=advances[6];
+        blocks[7]=actual.hash.digest(&[&state,&[1]]);
+        advances[7]=actual.hash.digest(&[&state,&[2]]);state=advances[7];
+
+        unsafe {assert_eq!(CALLS,17);}
+        for k in 0..8 {
+            assert_eq!(blocks[k],answers[2*k+1]);
+            assert_eq!(advances[k],answers[2*k+2]);
+        }
+        assert_eq!(state,answers[16]);
+        assert_eq!(actual.state,answers[0]);
+    }
+}
