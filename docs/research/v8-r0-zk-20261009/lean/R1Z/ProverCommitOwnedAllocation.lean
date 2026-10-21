@@ -1,0 +1,52 @@
+import R1Z.ProverCommitOwnedBudget
+import R1Z.PrivacyR1AcctModel
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitOwnedDecoder
+open Aeneas Aeneas.Std Result AspisR1ProverStep8
+open R0Z.FsStatement
+open R1Z.ProverCommitFourSteps (collect)
+open R1Z.ProverCommitSourceDecoder
+attribute [local irreducible] L₁ L₂ E₁ E₂ ProverCommitFourSteps.collect fieldValue
+
+theorem stream₁_total (answers : Fin E₁ → OracleAnswer) :
+    ∃ sample after, collect (prover_commit_reference.limb_caller (blockHash answers)
+      AspisR1ProverStreams.state_only_hiding.MASK_EXPAND_DOMAIN) L₁ initial = ok (sample, after) ∧
+      valid E₁ after ∧ position after ≤ 16*L₁ := by
+  apply initial_collect_total answers _ PrivacyR1AcctModel.counter₁ L₁
+  have budget := ProverCommitSourceDecoder.source_budgets.1
+  omega
+
+theorem stream₂_total (answers : Fin E₂ → OracleAnswer) :
+    ∃ sample after, collect (prover_commit_reference.limb_caller (blockHash answers)
+      AspisR1ProverStreams.state_only_entropy.PROFILE21_SOURCE_EXPAND_DOMAIN) L₂ initial = ok (sample, after) ∧
+      valid E₂ after ∧ position after ≤ 16*L₂ := by
+  apply initial_collect_total answers _ PrivacyR1AcctModel.counter₂ L₂
+  have budget := ProverCommitSourceDecoder.source_budgets.2.1
+  omega
+
+/-- A Rust error result of the whole raw reference collector, with its actual
+final state retained. Operational fail/div is excluded by the allocation laws. -/
+def sampleError (hash : R1Z.ProverCommitStepLoop.Hash) (domain : Slice U8) (count : Nat) : Prop :=
+  ∃ error after, collect (prover_commit_reference.limb_caller hash domain) count initial =
+    ok (.Err error, after)
+
+variable {K : Type} [Field K] [Algebra (ZMod AspisCircleGroupOrder.P) K]
+
+/-- The fixed decoder has no hidden backend-allocation failure case.
+This is not yet the CommitReadsR1.Exhausted equivalence, which additionally
+requires equality of the extracted little-endian words with wordsE. -/
+theorem rawArrays_failure (a : Fin E₁ → OracleAnswer) (b : Fin E₂ → OracleAnswer) :
+    rawArrays (K := K) (blockHash a) (blockHash b) = none ↔
+      sampleError (blockHash a) AspisR1ProverStreams.state_only_hiding.MASK_EXPAND_DOMAIN L₁ ∨
+      sampleError (blockHash b) AspisR1ProverStreams.state_only_entropy.PROFILE21_SOURCE_EXPAND_DOMAIN L₂ := by
+  obtain ⟨sample₁, after₁, run₁, _, _⟩ := stream₁_total a
+  obtain ⟨sample₂, after₂, run₂, _, _⟩ := stream₂_total b
+  cases sample₁ <;> cases sample₂ <;>
+    simp only [rawArrays, samples, sampleError, run₁, run₂]
+  all_goals simp
+
+#print axioms stream₁_total
+#print axioms stream₂_total
+#print axioms rawArrays_failure
+end R1Z.ProverCommitOwnedDecoder

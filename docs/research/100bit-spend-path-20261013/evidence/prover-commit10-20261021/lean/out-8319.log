@@ -1,0 +1,87 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedTotal.lean:34:56: error: 'change' tactic failed, pattern
+  ↑offset < 32
+is not definitionally equal to target
+  ↑offset < Array.length block
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedTotal.lean:37:6: error: Application type mismatch: The argument
+  offset_add offset offsetbound 1#usize ?m.63
+has type
+  ↑(offset.wrapping_add 1#usize) < 32
+but is expected to have type
+  ↑(offset.wrapping_add 1#usize) < Array.length block
+in the application
+  Array.index_usize_spec block (offset.wrapping_add 1#usize) (offset_add offset offsetbound 1#usize ?m.63)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedTotal.lean:40:6: error: Application type mismatch: The argument
+  offset_add offset offsetbound 2#usize ?m.92
+has type
+  ↑(offset.wrapping_add 2#usize) < 32
+but is expected to have type
+  ↑(offset.wrapping_add 2#usize) < Array.length block
+in the application
+  Array.index_usize_spec block (offset.wrapping_add 2#usize) (offset_add offset offsetbound 2#usize ?m.92)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedTotal.lean:43:6: error: Application type mismatch: The argument
+  offset_add offset offsetbound 3#usize ?m.121
+has type
+  ↑(offset.wrapping_add 3#usize) < 32
+but is expected to have type
+  ↑(offset.wrapping_add 3#usize) < Array.length block
+in the application
+  Array.index_usize_spec block (offset.wrapping_add 3#usize) (offset_add offset offsetbound 3#usize ?m.121)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedTotal.lean:44:24: error: Invalid `←` modifier: `offset` is a let-declaration name to be unfolded
+
+Note: The simplifier cannot "refold" local declarations by name
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedTotal.lean:45:12: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.144 = ?m.144
+but is expected to have type
+  (do
+      let b₀ ← Array.index_usize block (word.wrapping_mul 4#usize)
+      let b₁ ← Array.index_usize block ((word.wrapping_mul 4#usize).wrapping_add 1#usize)
+      let b₂ ← Array.index_usize block ((word.wrapping_mul 4#usize).wrapping_add 2#usize)
+      let b₃ ← Array.index_usize block ((word.wrapping_mul 4#usize).wrapping_add 3#usize)
+      ok (core.num.U32.from_le_bytes (Array.make 4#usize [b₀, b₁, b₂, b₃] ⋯))) =
+    ok ?m.142
+in the application
+  Exists.intro ?m.142 rfl
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedTotal.lean:44:34: warning: This simp argument is unused:
+  h₀
+
+Hint: Omit it from the simp argument list.
+  simp only [readBlock, ← offset, h₀̵,̵ ̵h̵₁, h₂, h₃, bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedTotal.lean:44:38: warning: This simp argument is unused:
+  h₁
+
+Hint: Omit it from the simp argument list.
+  simp only [readBlock, ← offset, h₀, h₁̵,̵ ̵h̵₂, h₃, bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedTotal.lean:44:42: warning: This simp argument is unused:
+  h₂
+
+Hint: Omit it from the simp argument list.
+  simp only [readBlock, ← offset, h₀, h₁, h₂̵,̵ ̵h̵₃, bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedTotal.lean:44:46: warning: This simp argument is unused:
+  h₃
+
+Hint: Omit it from the simp argument list.
+  simp only [readBlock, ← offset, h₀, h₁, h₂, h̵₃̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedTotal.lean:44:50: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [readBlock, ← offset, h₀, h₁, h₂, h₃,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitOwnedDecoder.usize_size_lower' depends on axioms: [propext]
+'R1Z.ProverCommitOwnedDecoder.small_offset' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.offset_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.readBlock_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.next_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

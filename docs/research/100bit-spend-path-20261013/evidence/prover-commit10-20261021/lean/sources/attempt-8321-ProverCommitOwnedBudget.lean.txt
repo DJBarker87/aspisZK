@@ -1,0 +1,67 @@
+import R1Z.ProverCommitOwnedTotal
+set_option autoImplicit false
+namespace R1Z.ProverCommitOwnedDecoder
+open Aeneas Aeneas.Std Result AspisR1ProverStep8
+open R0Z.FsStatement
+open R1Z.ProverCommitStepLoop (State Sample scalarFinite)
+open R1Z.ProverCommitFourSteps (collect)
+
+theorem scalar_total {blocks : Nat} (answers : Fin blocks → OracleAnswer)
+    (domain : Slice U8) (capacity : blocks < 2^64) (n : Nat) (state : State)
+    (before : valid blocks state) (room : position state + n ≤ 8*blocks) :
+    ∃ sample after, scalarFinite (blockHash answers) domain n state = ok (sample, after) ∧
+      valid blocks after ∧ position state ≤ position after ∧ position after ≤ position state + n := by
+  induction n generalizing state with
+  | zero => exact ⟨.Err .MaskSampleExhausted, state, rfl, before, by omega, by omega⟩
+  | succ n ih =>
+    obtain ⟨word, current, next⟩ := next_total answers domain state before (by omega)
+    have progress := next_progress answers domain state current word capacity before next
+    rw [R1Z.ProverCommitStepLoop.scalarFinite_succ, next]
+    simp only [bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
+    split
+    · exact ⟨.Ok _, current, rfl, progress.1, by omega, by omega⟩
+    · obtain ⟨sample, after, success, invariant, lo, hi⟩ :=
+        ih current progress.1 (by omega)
+      exact ⟨sample, after, success, invariant, by omega, by omega⟩
+
+theorem collect_total {blocks : Nat} (answers : Fin blocks → OracleAnswer)
+    (domain : Slice U8) (capacity : blocks < 2^64) (n : Nat) (state : State)
+    (before : valid blocks state) (room : position state + 16*n ≤ 8*blocks) :
+    ∃ sample after, collect (prover_commit_reference.limb_caller (blockHash answers) domain)
+      n state = ok (sample, after) ∧ valid blocks after ∧
+      position state ≤ position after ∧ position after ≤ position state + 16*n := by
+  induction n generalizing state with
+  | zero => exact ⟨.Ok [], state, rfl, before, by omega, by omega⟩
+  | succ n ih =>
+    obtain ⟨sample, current, step, invariant, lo, hi⟩ :=
+      scalar_total answers domain capacity 16 state before (by omega)
+    have caller : prover_commit_reference.limb_caller (blockHash answers) domain state = ok (sample, current) := by
+      rw [R1Z.ProverCommitStepLoop.caller_sixteen]
+      exact step
+    simp only [collect, caller, bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
+    cases sample with
+    | Err e => exact ⟨.Err e, current, rfl, invariant, lo, by omega⟩
+    | Ok value =>
+      obtain ⟨tail, after, rest, final, low, high⟩ := ih current invariant (by omega)
+      simp only [rest, bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
+      cases tail with
+      | Err e => exact ⟨.Err e, after, rfl, final, by omega, by omega⟩
+      | Ok values => exact ⟨.Ok (value::values), after, rfl, final, by omega, by omega⟩
+
+/-- Universal allocation/read bound for the complete raw reference producer.
+The only remaining non-success is the Rust sampler error, not a backend
+out-of-bounds request, operational failure, or divergence. -/
+theorem initial_collect_total {blocks : Nat} (answers : Fin blocks → OracleAnswer)
+    (domain : Slice U8) (capacity : blocks < 2^64) (count : Nat)
+    (room : 16*count ≤ 8*blocks) :
+    ∃ sample after, collect (prover_commit_reference.limb_caller (blockHash answers) domain)
+      count initial = ok (sample, after) ∧ valid blocks after ∧ position after ≤ 16*count := by
+  have start : valid blocks initial := by simp [valid, initial]
+  obtain ⟨sample, after, run, final, _, high⟩ := collect_total answers domain capacity count initial start
+    (by simpa only [position, initial] using room)
+  exact ⟨sample, after, run, final, by simpa only [position, initial] using high⟩
+
+#print axioms scalar_total
+#print axioms collect_total
+#print axioms initial_collect_total
+end R1Z.ProverCommitOwnedDecoder

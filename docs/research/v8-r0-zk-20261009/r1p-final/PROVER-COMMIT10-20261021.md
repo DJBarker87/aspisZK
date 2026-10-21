@@ -88,3 +88,47 @@ edit, all three frozen ELF builds and exact comparisons pass: default
 202212/202364/100116 KiB; all exits and swaps are zero. Complete build
 commands/features, source pins and cgroup receipts accompany the comparison.
 No ELF, LLBC, object, archive or key is committed. Caches and keys are retained.
+
+## Stage 5: cursor accounting and the Kani composition boundary
+
+`next_factor` factors the exact extracted next-word function without evaluating
+any byte stream. `next_progress` proves that each successful next-word call
+preserves the finite cursor invariant and advances exactly one word; the
+64-bit counter bound excludes wraparound. Successful scalar sampling advances
+strictly, so `samples_bound` bounds successful arrays by eight times their
+block allocation.
+
+`readBlock_total`, `next_total`, `scalar_total` and `collect_total` prove the
+converse allocation property: with room for all remaining tries, these
+reference computations cannot fail operationally or diverge. The full L₁/L₂
+streams are instantiated at E₁/E₂ by `stream₁_total` and `stream₂_total`.
+`rawArrays_failure` identifies failure exactly with a Rust error from one of
+the two extracted collectors, rather than an extra backend-allocation case.
+`accepted_word` proves that the extracted bit mask, comparison and field-value
+conversion implement the fibre model's accepted-word predicate for every U32.
+These are symbolic proofs; no large array, tape or recurrence is normalized.
+
+Accepted focused attempts are J8314, J8315, J8317, J8318, J8320, J8322,
+J8324 and J8325. Full axiom/error lines and all required resource/source fields
+are in the receipts. J8323 hit the simplifier recursion limit while elaborating
+the failure classification, not memory pressure. Its replacement J8324 keeps
+counts/collect opaque and rewrites the two already-proved run equations first;
+no recursion/heartbeat or memory cap is raised.
+
+There is a concrete obstruction to treating the **existing local Kani
+certificates** as the complete outer transport. The actual Rust expander ROM
+has nine answers and asserts `index < 9`. `nine_block_source_none` proves that
+**every** nine-block backend fails to produce the required 4096-limb second
+raw array; `nine_block_decode_none` lifts that fact through the composed raw
+decoder. At most 72 scalar samples can succeed from those nine blocks. A larger
+unwind cannot repair that domain. This does not refute the fixed E₁/E₂ decoder:
+it uses the full allocations. It does not refute a future compositional proof
+with a retained global oracle and a proved window-rebasing invariant.
+
+The new raw owned producer and cursor accounting remove additional reference
+obstacles. They still do not establish the byte-load/cache-content identity
+with `wordsE`, the complete shipped entry-point/outer-array transport, or the
+all-family shipped runtime callback log. No new whole-program Kani/P6
+certificate is claimed. No unchanged failed aggregate extraction, timed-out
+whole-loop comparison or old regression is rerun. The missing outer transport
+cannot be replaced by the new nine-block impossibility theorem.
