@@ -1,0 +1,70 @@
+import S7JoinGeometryInversion
+
+/-! Query ordinal and five-lane meaning of the emitted grouping loop. -/
+set_option autoImplicit false
+namespace AspisR1.S7JoinGeometryGroups
+open Aeneas Aeneas.Std Result
+open S7JoinBatchInverse
+open S7Kani3GroupsLoop (Group record)
+open S7JoinBasisMachine (decode)
+
+theorem model_order (flat : List U32) (fuel start : Nat) (groups : List Group) :
+    S7Kani3GroupsLoop.model flat fuel start groups=
+      groups++(List.range' start fuel).map (record flat) := by
+  induction fuel generalizing start groups with
+  | zero => simp [S7Kani3GroupsLoop.model]
+  | succ fuel ih =>
+      rw [S7Kani3GroupsLoop.model,ih]
+      simp only [List.range'_succ,List.map_cons,List.append_assoc,List.singleton_append]
+
+theorem record_cell (flat : List U32) (i : Nat) (k : Fin 5) :
+    (record flat i).val[k.val]?.getD 0#u32=cell flat (5*i+k.val) := by
+  fin_cases k <;> rfl
+
+/-- No grouping-success or record-value hypothesis is needed. -/
+theorem total_exact (flat : alloc.vec.Vec U32) (empty : alloc.vec.Vec Group)
+    (count : Usize) (hc : count.val≤22) (hf : flat.val.length=5*count.val)
+    (he : empty.val=[]) :
+    ∃ out, S7Kani3GroupsLoop.groups_owned flat empty 0#usize count=ok out ∧
+      out.val=(List.range count.val).map (record flat.val) ∧
+      ∀ i, i<count.val → ∀ k : Fin 5,
+        ((out.val[i]?.getD (record [] 0)).val[k.val]?.getD 0#u32)=
+          cell flat.val (5*i+k.val) := by
+  obtain ⟨out,ho,hout,_⟩ := S7Kani3GroupsLoop.groups_refines flat empty 0#usize count
+    count.val hc (by simp) (by omega) (by rw [he]; simp; exact hc)
+  have hm : out.val=(List.range count.val).map (record flat.val) := by
+    simpa only [model_order,he,List.nil_append,show (0#usize).val=0 from rfl,List.range'_eq_range]
+      using hout
+  refine ⟨out,ho,hm,?_⟩
+  intro i hi k
+  rw [hm,List.getElem?_map,List.getElem?_range hi]
+  simp only [Option.map_some,Option.getD_some,record_cell]
+
+/-- Compose reciprocals, lengths and actual grouping in source order. The
+remaining inputs are allocation/gather provenance, not postulated inverses. -/
+theorem inversion_groups (flat empty inverse : alloc.vec.Vec U32)
+    (groups : alloc.vec.Vec Group) (count : Usize) (hc : count.val≤22)
+    (hf : flat.val.length=5*count.val) (he : empty.val=[])
+    (hi : inverse.val.length=flat.val.length) (hg : groups.val=[])
+    (hx : ∀ x ∈ flat.val, decode x≠0) :
+    ∃ inv out,
+      S7JoinGeometryInversion.invert_owned flat empty inverse=ok inv ∧
+      S7Kani3GroupsLoop.groups_owned inv groups 0#usize count=ok out ∧
+      out.val.length=count.val ∧
+      ∀ i, i<count.val → ∀ k : Fin 5,
+        decode ((out.val[i]?.getD (record [] 0)).val[k.val]?.getD 0#u32)=
+          (decode (cell flat.val (5*i+k.val)))⁻¹ := by
+  obtain ⟨inv,hinv,hlen,hvalues⟩ := S7JoinGeometryInversion.total_exact
+    flat empty inverse (by omega) he hi hx
+  obtain ⟨out,hout,horder,hcells⟩ := total_exact inv groups count hc (hlen.trans hf) hg
+  refine ⟨inv,out,hinv,hout,?_,?_⟩
+  · rw [horder,List.length_map,List.length_range]
+  · intro i hi k
+    rw [hcells i hi k]
+    exact hvalues (5*i+k.val) (by have := k.isLt; omega)
+
+#print axioms model_order
+#print axioms record_cell
+#print axioms total_exact
+#print axioms inversion_groups
+end AspisR1.S7JoinGeometryGroups

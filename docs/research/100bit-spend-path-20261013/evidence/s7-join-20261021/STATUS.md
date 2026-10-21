@@ -83,3 +83,24 @@ BasisCanonical-1. All use standard axioms, zero swap and fixed local caps.
 the concrete tower, avoiding large dictionary normalization in the consumer
 bridge under development. The consumer has not passed yet; its failed
 recursion-depth attempts remain explicit and no resource limit was raised.
+
+## Stage 5 — exact frozen consumer and reached query
+
+`S7JoinFrozenConsumer.decision_eq` is total equality of the full reference
+decision program with `OraclePortFrozenOrder.dV_frozen`, preserving guards,
+input failures, six-slot short circuit, ordered oracle reads and typed checks.
+Only the arithmetic closed-sum predicate is replaced by the proved S7 field
+reference. `accepted_matching_query` derives the exact same reached query
+vector from `input_fields`; it adds no query-membership premise. It concludes
+the reference check on the original byte-derived MatchingSupport data.
+This is reference-to-dV refinement, not source-to-dV or TX trace membership.
+
+Consumer attempt 5 passes all six audits (standard axioms, 29.465 seconds,
+3,601,596,416 bytes peak RSS, zero swaps). The generic `S7JoinReferenceCheck`
+interface was the permanent replacement for three failed concrete tower
+normalization attempts; no recursion/heartbeat/resource cap was raised.
+
+The backend carrier attempt found a missing inherited transitive cache
+`R22TotalCheckedComposition`; the launcher now adds its already-built
+`/tmp/codex-cx-r22-total-20261021-objects` path, as recorded by the inherited
+canonical-backend receipt. No shared object was overwritten or rebuilt.
