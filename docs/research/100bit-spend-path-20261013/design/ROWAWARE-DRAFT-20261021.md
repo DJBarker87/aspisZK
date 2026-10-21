@@ -65,3 +65,33 @@ word `prefix`, or unwanted reduction of padded addresses. Explicit symbolic
 rewrites and opaque address constants fix these; the final split modules
 compile and all their axiom audits are standard. These remain focused draft
 checks, not a unified release replay.
+
+## Density, mass, and completion boundary
+
+`OraclePortRowAwareTransportD7.classifier_density` retains exactly
+`PerAttemptEnvelope.B`. `decoded_union_bound` retains `N * B` for an
+explicit `DecoderReadsBound`; no query factor is removed. The binary
+collision event is independent of the decoder, and
+`binary_mass_unchanged` retains exactly `BinCombinedMerkleCollision.kappa Q`
+(`6 * Q^2 / 256^32`) for the same experiment and first-read bound. This is
+an unchanged probability **bound**, not an assertion that the filtered
+classifier event has identical probability.
+
+`completion_transport` preserves the complete recovered literal transcript,
+message, and challenge of existing port completion at every retained row.
+`completion_of_checks` composes the existing RWire-derived
+`OraclePortCompletionDraft.completion_of_checks`. Both explicitly require
+`GateAtRows D dO P Q`; this has NOT been discharged on all accepted
+collision-free runs. In particular, pending-prefix answers are supported by
+the old decoder, while this draft gate asks for a completely cached
+predecessor row. One must not silently identify these domains. Equality of
+the complete extractor output on all accepted collision-free runs remains
+unproved; `retained_value` covers only individual retained starts.
+
+`OraclePortRowAwareNoCollisionD6` adds the full five-reader check for the
+five-cell trace, for every Q. Each answer differs from iv, every previous
+answer, and every target parsed from the current or any previously cached
+input. `safe_no_collision` proves this suffices without using a false
+`Small T Q` side condition. `clean_safe` evaluates only five byte lists of
+at most 75 bytes, five reader indices and 32-byte state equalities; it never
+enumerates the oracle state space or padded address universe.
