@@ -779,3 +779,28 @@ discharge concrete child-operation semantics. The candidate remains
 unadopted and the B1 performance failure is unchanged. These results remove
 the synthetic-prefix caller premise but do not close frozen-source S4 or
 the implementation-linked100-bit theorem.
+
+## Reuse for the concrete resume decoder
+
+The complete resume output projection already exists in
+`lean/OraclePortCkptAbiSourceFields.lean`: `successful_fields` supplies a
+`Fields` witness whose `gammaRead` is the exact successful first readE call
+returning the same Prepared.gamma. Its selected resume body matches the
+current source. A new handwritten inversion of the long resume suffix is
+therefore unnecessary; the next composition reuses this owner.
+
+`evidence/s4-wide-exact-decoder-source-binding-v1-20261021` checks that the
+current full wide_exact.rs file equals the retained source snapshot, that its
+from_le_bytes and from_limbs fragments match the admitted record-parser
+fragments, and that the generated method bodies match the retained record,
+view and current Echeck owners. Existing byte-decoder canonicality consumes
+the exact limb-validation theorem. This is source/body-identity evidence,
+not a new translation-soundness theorem; its checker passes without rerunning
+unchanged Lean proofs.
+
+The fieldwise eight-bound-to-ClaimCanonical bridge has passed its focused
+predecessor check with no axioms (exit0,6.942s,peak process
+RSS4,041,883,648 bytes,zero swaps). The concrete Reader.e operation adapter
+and successful-resume composition remain in progress; the new full settlement
+consumer will only be accepted after those exact owners compile and compose.
+No template decoder axiom is being accepted as a canonicality law.
