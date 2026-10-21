@@ -231,3 +231,54 @@ five digests/state arrays, six wide fields, rho/power, semantic and coordinate
 K vectors, all weights, and the query vector. This is **section-complete**,
 not a claimed aggregate body_byte/C5 source-state theorem. The independent
 18-block raw-field reference plus checksum composition is proved in stage 5.
+
+## Final focused union and precise handoff
+
+CheckpointBytesFreeze attempt 1: exit 0, 6.376390375196934 s, peak RSS
+3559882752 bytes, zero swaps, revision 9439e4182c7122bafd45d2edba449da4c178c6e8.
+Its 30 union reports include every sparse section family and the unchanged
+strictStage/reached_stage/decision consumers. All are standard. This is one
+focused compatible-cache union, not a coherent frozen release replay.
+
+The audit checks 19 final modules, all 71 authored theorem reports and 30
+union reports, exact source/object/import hashes, source pins, generator
+--check outputs, allowed axioms and owned source scope. Maximum accepted
+peak RSS is 3813359616 bytes; every accepted attempt records zero swaps.
+The native-axiom E attempt is explicitly rejected even though its exit is 0.
+All failed attempts remain evidence, not accepted proof results.
+
+**Closed:** complete all-input extracted e_byte execution; exact canonical
+E and K selector byte meaning; exact local source equations for every sparse
+body section; complete 18-block raw-field reference and checksum equality
+with C5; structural lookup laws needed for aggregation. Assumptions are
+spelled out: per-selected-field canonicality, header next=10, and 64 weights.
+The raw word/query selector needs no canonical-word assumption. No source
+call-success law or whole-body equality was introduced as a premise.
+
+**Still open:** the single aggregate source body_byte/C5 theorem, connecting
+the concrete extracted Prepared/Accumulator to the Fields reference carrier;
+complete exact-width strict-decoder output/rejection semantics; production
+Reader/ResumeOps/section/fallible-allocation/Box adoption; the source-stage
+byte/decoder join and its six actual digest reads at reached_stage. The
+17-zero-byte K counterexample stops the unrestricted strict-K formulation,
+not the exact-width production parser target. The allocation model theorem
+stops an unconditional success theorem across all reservation states, not
+an accepted-source refinement conditioned on actual source success.
+
+The exact next new consumer is CheckpointBytesBody.body_byte_c5, using the
+section equations and CheckpointBytesLookup. The final existing endpoint is
+OraclePortCkptAbi5Stage.reached_stage through strictStage and then
+OraclePortCkptAbi5Decision.decision_observation. NEXT.md keeps
+S2S10CallerBinding separate from S1S7S8StateProvenance. Neither is hidden
+in P6 or asserted proved. No new checkpoint cone join, AcceptedRunJoin,
+headline premise removal or deployed security conclusion is supplied.
+
+No shipped/protected/sibling/existing baseline Lean source changed. No Rust,
+Kani, Aeneas, SBF, host env-J, runtime or full frozen release replay ran.
+Inherited Kani results are reused only within their original domain; no
+whole-function harness was launched. The shipped-source/ELF rebuild trigger
+is absent, so no new ELF byte-identity measurement is claimed. No shared
+object, root checkout, key/wallet, merge, push or local target/ was touched.
+All work is committed locally with plain messages. Recheck the packet with:
+
+    python3 -B tools/ckpt-bytes-20261021/audit.py
