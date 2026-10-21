@@ -53,3 +53,12 @@ freedom (R22) for that cone follows automatically from the lemma in
    ~08:12 network drop, with nothing running behind it on the host. Your
    separately started build-v5 run was not touched. If something was waiting on
    that command, please rerun it.
+
+## S10 ownership lists for your acceptance (added 11:20)
+
+S10 pass 2 assigned every reachable declaration of the frozen verifier and
+Pool to a cone. The declarations it assigned to your cones (S1–S6, S9) are
+listed in the S10 evidence (`evidence/s10-inventory2-20261021/`, see
+`design/S10-INVENTORY-20261021.md`), with 57 ownership corrections. Please
+review the lists for your cones and confirm or correct them. Your proved cone
+joins should cover exactly those declarations.
