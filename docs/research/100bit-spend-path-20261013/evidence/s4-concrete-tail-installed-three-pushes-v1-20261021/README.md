@@ -1,0 +1,7 @@
+# S4 concrete installed tail: accepted three-push consumer
+
+This packet proves a same-call accepted-tail consequence under the concrete installed operation record. Given one successful generated callback through `ConcreteTailInstallRootV1.install`, it derives (1) the exact zero constructor state, (2) the ordered accepted three-push `QRaw` trace and count 3, (3) success of the installed `finishTailCurrent` on that same output state, (4) the exact eight output residues for those same accumulator words, and (5) the actual installed `wideAdd` result. No per-push or finish success premises are independent assumptions.
+
+The operation installation is pinned by `S4ConcreteTailInstallRootV1.source_bindings`. The constructor comes from the retained generated `AspisR1Stage2Accumulate.new_entry` and its `EbyKNewToPushStateABI` map. The finish runs retained generated `AspisR1EbyKFinish.EbyKDot.finish` through `FinishDotSourceABI` and its checked output carrier map. The push trace consumes `pushWithDotBackend QRaw`, whose body models the emitted EbyK push control flow with explicit backend operations. This packet does **not** prove that the actual Rust/imported `fast_pairing.EbyKDot.push` method is bound to `pushWithDotBackend QRaw`, nor does it prove Rust `Iterator.all` correspondence for the QRaw backend. That exact source-operation binding remains open.
+
+The Lean source is retained without binary object files. The compile receipt records the focused source check; its target command did not request an `.olean` output.
