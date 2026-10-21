@@ -561,3 +561,20 @@ pub mod owned19 {
         semantic_rows(state,records,row.wrapping_add(1),sem)
     }
 }
+
+// One iteration of the native walk's semantic prefix, with owned inputs.
+// The production loop above remains the source of the iteration statement.
+// The owned callee is the retained P6 semantic20 reference, not a new sampler.
+#[cfg(any(kani,aeneas_ref))]
+pub mod owned29 {
+    use super::*;
+    pub fn semantic_step<H:Digest32>(st:SemanticTranscript<H>, row:u8,
+        record:Vec<u8>, mut sem:[K;25])
+        ->Result<(SemanticTranscript<H>,[K;25]),Error> {
+        let (value,st)=crate::r1_wire::semantic20::semantic(st,row,record);
+        match value {
+            Err(_)=>Err(Error::Semantic),
+            Ok(value)=>{sem[row as usize]=value;Ok((st,sem))}
+        }
+    }
+}
