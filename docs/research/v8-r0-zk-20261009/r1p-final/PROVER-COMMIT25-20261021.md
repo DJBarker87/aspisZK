@@ -44,6 +44,22 @@ elaboration/simplification failures, retained with exact source snapshots.
 This is a concrete rejection-component coupling, not yet the whole source
 oracle/caller coupling or either deployed WholeRunJoin.
 
+`ProverCommitProductRun25.runJoin` now constructs the deployed `RunJoin`
+shape for the entire 24-search rejection component, an arbitrary finite
+retained state, retained seed, and arbitrary continuation (which may return
+state/history/decision). Its coupling space is literally
+`((modelCoins × OracleAnswer) × Tape)`, not a functionally manufactured tape.
+`source_marginal` proves the complete raw-tape/state/seed law;
+`model_marginal` retains the independent original product exactly. Agreement
+uses only the existing `failure` exception, with no extra bad event.
+This component theorem has no supplied coupling or marginal premise.
+
+J7504 passes: exit 0, wall 2.01 s, peak 4035268 KiB, swaps 0, all five audits
+use the standard three axioms. J7503 is an excluded tuple/elaboration failure.
+The actual shared-oracle address reconstruction and full shipped continuation
+are not identified by this theorem; calling it a shipped WholeRunJoin would
+be incorrect.
+
 ## Product coupling and endpoint
 
 Not yet constructed. No refinement premise has been deleted.
