@@ -7714,3 +7714,24 @@ and `codex/cx-prover-commit15-20261021` (`r1p-final/PROVER-COMMIT15-20261021.md`
    (builder, checker, retry, serialisation and observer) equals the constructed
    source outside the named bad event. Nothing may be described as deployed
    privacy without it. J8399/J8500, standard axioms, zero swap.
+
+## D125 — deployed privacy endpoint with an explicit Rust refinement premise (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit16-20261021` (`r1p-final/PROVER-COMMIT16-20261021.md`).
+Per D124: `PrivacyR1HeadlineDeployed` (`lean/R1Z/PrivacyR1HeadlineDeployed.lean`)
+states deployed privacy with one explicit premise, `RustProverRefinement`. It
+says the given implementation's whole real run, and its ideal run, are each
+joined (`WholeRunJoin`) to the constructed source's, including the observer
+view, the ordered observer history and the decision, outside only the fixed
+model bad events `realBad` / `selectedBad`. It cannot be emptied by
+specialisation, and the privacy bound is unchanged. The model now keeps
+ordered queries: ordered 10 + 12 batches, public log re-encoding and
+adaptive-observer transport are proved, which repairs the D111 order mismatch.
+Also: universal extracted M31/QM31 prefix bridges, returned-material assembly
+support, and four section-wise codec Kani checks. J8640: 32 standard-axiom
+audits, zero swap. **Current privacy headlines:** the model-level
+`privacy_headline_admitted`, and the deployed `PrivacyR1HeadlineDeployed`,
+conditional on RustProverRefinement. Open (the content of that premise): the
+concrete runtime refinement, exact serialisation traversal, and
+borrowed-loop / outer-assembly identification. Three ordered-Vec Kani attempts
+timed out and were excluded.

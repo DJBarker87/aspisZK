@@ -68,8 +68,8 @@ because the shipped prover batches by order, not by set.
 | `R_wire_builder_checker_D75_retry` | the shipped prover's whole run (builder, checker, retry) equals the model run outside the named bad event | lead: prover part 15 (observer fixed, QM31 transport, retry history) |
 | `G_sim_R_wire` | the source simulator's ideal run equals the model's | lead, after the real-run join |
 | `sim_preparation` | concrete preparation cost for simulator efficiency | lead (paused; needs a new env-J range) |
-| `RustProverRefinement` (to be made explicit) | the real shipped prover's whole run (builder, checker, retry, ordered serialisation, observer) equals the constructed source outside the bad event | lead: prover part 16 |
-| Ordered-q22 wire encoding | redo D111's wire discharge with the query order kept | lead |
+| `RustProverRefinement` (explicit since D125, `PrivacyR1HeadlineDeployed`) | the real shipped prover's whole run (builder, checker, retry, ordered serialisation, observer) equals the constructed source outside the bad event | lead: prover part 16 |
+| Ordered-q22 wire encoding | done (D125): ordered 10+12 batches, bound unchanged | — |
 
 ## Release gates still to run
 
