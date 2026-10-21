@@ -40,3 +40,23 @@ an explicit parameter; this does not identify Rust preparation or query_loop.
 
 Focused attempt 1: exit 0, wall 22.648015 seconds, peak RSS 3,572,154,368
 bytes, zero swaps, revision 118175311; both axiom reports standard.
+
+## Stage 3 — Vec content and non-erasure of checkpoint reads
+
+`OraclePortCkptAbi2Vec.push_exact` / `append_exact` prove total exact content
+for the same bounded-list Vec model used in the builder track, under explicit
+machine-size bounds. This is value semantics, not a physical allocation or
+Drop theorem. `OraclePortCkptAbi2StdInventory` prints the actual imported
+model to make that distinction checkable. It introduces no allocator axiom.
+Final Vec attempt 2: exit 0, 5.557012 seconds, RSS 2,253,717,504 bytes, zero
+swaps. Its first attempt omitted the list-cons length rewrite; retained as
+failed evidence. Inventory attempt 5 is the final accepted inspection;
+earlier command-syntax probes are retained and never treated as proofs.
+
+`OraclePortCkptAbi2DriverObstruction` proves that authentic write/resume plus
+an unchanged tail preserves the tail verdict but adds exactly six ordered
+reads. Thus this particular substitution cannot erase checkpoint operations,
+even on accepted tails. It is **not** a counterexample to an independently
+instantiated full Rust/frozen-model driver identity. Final attempt 2: exit 0,
+8.033791 seconds, RSS 3,516,989,440 bytes, zero swaps, standard axioms for
+all three theorems. The missing namespace import in attempt 1 is retained.
