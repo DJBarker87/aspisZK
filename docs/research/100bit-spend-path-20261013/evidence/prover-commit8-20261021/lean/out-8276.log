@@ -1,0 +1,55 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReferenceReads.lean:20:39: error: Invalid `←` modifier: `blockSlices` is a declaration name to be unfolded
+
+Hint: The simplifier cannot "refold" definitions by name. Use `rw` for this instead,
+                      or use the `←` simp modifier with an equational lemma for `blockSlices`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReferenceReads.lean:20:2: error: unsolved goals
+case pos
+left right : Hash
+domain : Slice U8
+state : State
+same : left (blockSlices domain state.seed state.counter) = right (blockSlices domain state.seed state.counter)
+h : state.word = 8#usize
+⊢ (do
+      let (i, a, i1) ←
+        do
+          let a2 ←
+            left
+                (Array.make 3#usize [domain, state.seed.to_slice, (core.num.U64.to_le_bytes state.counter).to_slice]
+                    ⋯).to_slice
+          ok (core.num.U64.wrapping_add state.counter 1#u64, a2, 0#usize)
+      let i2 ← a.index_usize (i1.wrapping_mul 4#usize)
+      let i4 ← a.index_usize ((i1.wrapping_mul 4#usize).wrapping_add 1#usize)
+      let i6 ← a.index_usize ((i1.wrapping_mul 4#usize).wrapping_add 2#usize)
+      let i8 ← a.index_usize ((i1.wrapping_mul 4#usize).wrapping_add 3#usize)
+      ok
+          (core.num.U32.from_le_bytes (Array.make 4#usize [i2, i4, i6, i8] ⋯),
+            { seed := state.seed, counter := i, block := a, word := i1.wrapping_add 1#usize })) =
+    do
+    let (i, a, i1) ←
+      do
+        let a2 ←
+          right
+              (Array.make 3#usize [domain, state.seed.to_slice, (core.num.U64.to_le_bytes state.counter).to_slice]
+                  ⋯).to_slice
+        ok (core.num.U64.wrapping_add state.counter 1#u64, a2, 0#usize)
+    let i2 ← a.index_usize (i1.wrapping_mul 4#usize)
+    let i4 ← a.index_usize ((i1.wrapping_mul 4#usize).wrapping_add 1#usize)
+    let i6 ← a.index_usize ((i1.wrapping_mul 4#usize).wrapping_add 2#usize)
+    let i8 ← a.index_usize ((i1.wrapping_mul 4#usize).wrapping_add 3#usize)
+    ok
+        (core.num.U32.from_le_bytes (Array.make 4#usize [i2, i4, i6, i8] ⋯),
+          { seed := state.seed, counter := i, block := a, word := i1.wrapping_add 1#usize })
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReferenceReads.lean:20:54: warning: This simp argument is unused:
+  same
+
+Hint: Omit it from the simp argument list.
+  simp only [h, if_true, bind_tc_ok, ← blockSlices,̵ ̵s̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitReferenceReads.next_support' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReferenceReads.transition_support' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReferenceReads.scalar_support' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReferenceReads.all_calls_support' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReferenceReads.tower_support' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

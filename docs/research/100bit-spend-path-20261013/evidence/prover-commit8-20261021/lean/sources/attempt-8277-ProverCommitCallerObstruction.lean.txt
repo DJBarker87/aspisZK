@@ -1,0 +1,43 @@
+import R1Z.ProverCommitCallerInstance
+import R1Z.ProverCommitSourceSuccess
+
+/-! A definition-level obstruction to deleting CallerLaw from an endpoint
+whose tapeOf is still supplied by an arbitrary seed prover. Scalar theorems
+alone cannot restrict that independently supplied function. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitCallerObstruction
+open R0P R0Z.FsStatement R0Z.JointView R1Z.GamesR1 R1Z.GamesR1PBin
+  R1Z.ProverCommitTapeCompletion R1Z.ProverCommitSourceDecoder
+attribute [local instance] Classical.propDecidable
+variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+local notation "F" => R1Z.ProverCommitWordCarrier.sourceBase (K := K)
+variable {W : R1Wire K CommitHandle Aux}
+
+def failedCaller (seed : R1ProverP K CommitHandle Aux F W) :
+    R1ProverP K CommitHandle Aux F W :=
+  { seed with tapeOf := fun _ _ => none }
+
+theorem all_failure_not_law (Pr : R1ProverP K CommitHandle Aux F W)
+    (failed : ∀ e₁ e₂, Pr.tapeOf e₁ e₂ = none) :
+    ¬ R1Z.ProverCommitCallerInstance.CallerLaw Pr := by
+  intro law
+  obtain ⟨coordinates, caller⟩ := law.quotient
+  obtain ⟨e, s, success⟩ := decoder_has_success (K := K)
+  let eqv := R1Z.ProverCommitCallerInstance.inputsTransport Pr law.blocks₁ law.blocks₂
+  have h := caller (eqv.symm e)
+  have hn : (fun p : (Fin Pr.E₁ → OracleAnswer) × (Fin Pr.E₂ → OracleAnswer) =>
+      Pr.tapeOf p.1 p.2) (eqv.symm e) = none := failed _ _
+  simp only [quotientDecode, hn, Option.map_none] at h
+  change none = (quotientDecoder (eqv (eqv.symm e))).map coordinates at h
+  rw [eqv.apply_symm_apply, success, Option.map_some] at h
+  cases h
+
+theorem failedCaller_not_law (seed : R1ProverP K CommitHandle Aux F W) :
+    ¬ R1Z.ProverCommitCallerInstance.CallerLaw (failedCaller seed) := by
+  exact all_failure_not_law (failedCaller seed) (fun _ _ => rfl)
+
+#print axioms all_failure_not_law
+#print axioms failedCaller_not_law
+end R1Z.ProverCommitCallerObstruction

@@ -69,7 +69,33 @@ disabled, no timeout or memory cap is increased.
 
 ## Stage 2: caller transport
 
-Pending definition checks and focused proof results.
+`ProverCommitCallerObstruction.all_failure_not_law` is a checked
+counterexample to deleting the caller premise for arbitrary endpoint inputs:
+replacing only a seed prover's `tapeOf` by `none` contradicts `CallerLaw`.
+The proof uses the existing nonvacuous `decoder_has_success` and the exact
+input transport; no concrete stream or large finite carrier is reduced.
+`failedCaller_not_law` supplies that explicit record update. J8277: exit 0,
+wall 1.88 s, peak RSS 4,028,632 KiB, zero swaps, two standard-axiom audits.
+J8274 is an excluded elaboration draft; J8275 is the accepted narrower
+predecessor (1.80 s, 4,027,104 KiB, zero swaps).
+
+This is a definition-level independence result, **not** a counterexample to
+the shipped prover. It pinpoints why composing the verified scalar and tower
+callees cannot complete the requested source law: no existing definition
+identifies the inherited `seed.tapeOf` with the shipped outer raw-sample
+producer. `source-frontier.json` verifies that all four outer/balancing
+function bodies and both translation tools match the retained failing
+aggregate-lowering evidence. No unchanged aggregate lowering is repeated.
+The previous `Enumerate`/`IterMut` and Aeneas loop-boundary failures are not
+certificates. A new owned reference, even with proved iteration, does not
+supply that absent execution/carrier/order join.
+
+The actual next obligations are (i) a valid shipped outer-loop lowering or
+relational step-to-loop execution certificate, (ii) its raw pre-balance
+sample projection and complete coordinate bijection, and (iii) its exact
+connection to the endpoint seed's `tapeOf` on every pair of block answers.
+`CallerLaw` remains a named premise, with no unverified contract or axiom
+inserted to bridge these obligations.
 
 ## Stage 3: universal read coverage and endpoint
 
