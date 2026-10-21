@@ -1,0 +1,22 @@
+import R22TotalStage2Constants
+
+/-! Separate audit for the retained stage2 Error discriminant instance. -/
+#print axioms AspisR1.R22TotalStage2Constants.compact_SEMANTIC_COMPACT_VALUES_R22
+#print axioms AspisR1.R22TotalStage2Constants.verifier_SEMANTIC_BYTES_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_LOGICAL_SEMANTIC_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_COMPACT_SEMANTIC_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_Y1_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_COMPACT_Y1_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_INACTIVE_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_ROUND0_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_FOLDED_ROOT_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_ROUND1_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_FINAL_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_OPENINGS_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OPENING_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_NODES_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_MAX_NODES_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_FIXED_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_MAX_PROOF_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_PROOF_BYTES_R22
+#print axioms AspisR1.R22TotalStage2Constants.verifier_CHECKPOINT_FIXED_R22

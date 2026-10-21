@@ -55,3 +55,5 @@ try:
  manifests.write_text(json.dumps(old,indent=2)+'\n')
  print(json.dumps({k:record[k] for k in ('module','exit','wall_seconds','peak_rss_bytes','swaps','axiom_lines','errors')},indent=2)); print(log[-10000:])
 finally: LOCK.rmdir()
+
+raise SystemExit(proc.returncode)

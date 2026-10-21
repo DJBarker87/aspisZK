@@ -1,0 +1,52 @@
+[
+  {
+    "research_revision": "b7a4cc502353e598c414c39d5b0e8e56f4a21765",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/BuilderRecordsReference.lean",
+    "source_sha256": "89ea8e0d18016d793775bb9b09008b2f2c1e706e87f31102425eef0deacfe2dc",
+    "theorem": "R1Z.BuilderRecordsReference.records",
+    "signature": "theorem records (input : Input) (out : U32) (rec : Option Note) (chg : Note)\n    (s : Snapshot) (asset : U32) (empty : Roots) :\n    records_reference.records_reference_with_roots input out rec chg s asset empty =\n      ok (witness input out rec chg, publicRecord rec s asset empty)",
+    "form": "TOTAL",
+    "R22": "Reference all-word totality; D90 Kani supplies shipped equality/safety under P6.",
+    "action": "Read only git show; existing env-J evidence reused, not locally imported or replayed."
+  },
+  {
+    "research_revision": "b7a4cc502353e598c414c39d5b0e8e56f4a21765",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/BuilderRecordsReference.lean",
+    "source_sha256": "89ea8e0d18016d793775bb9b09008b2f2c1e706e87f31102425eef0deacfe2dc",
+    "theorem": "R1Z.BuilderRecordsReference.normalized_trace",
+    "signature": "theorem normalized_trace\n    {K : Type} [Field K] [Fintype K] [DecidableEq K]\n    [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647]\n    (input : Input) (out : U32) (rec : Option Note) (chg : Note)\n    (s : Snapshot) (asset : U32) (empty : Roots) (pub : R0P.Public R1J.SpendWitnessMap.F)\n    (hw : WitnessOk (BuilderExtractedRecords.rawWitness (witness input out rec chg)))\n    (hp : PubCorr (BuilderExtractedRecords.rawPublic (publicRecord rec s asset empty))\n      (R1J.SpendWitnessMap.mapPub (K",
+    "form": "ACCEPTED-ONLY",
+    "R22": "WitnessOk and PubCorr; model normalization, not whole source execution.",
+    "action": "Read only git show; existing env-J evidence reused, not locally imported or replayed."
+  },
+  {
+    "research_revision": "b7a4cc502353e598c414c39d5b0e8e56f4a21765",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/BuilderRecordsP6.lean",
+    "source_sha256": "bacad27c672a782003b7dafcb381986652fcb440896990a2442a8c453da97653",
+    "theorem": "R1Z.BuilderRecordsP6.route_records",
+    "signature": "theorem route_records {w : RW} {p : RP} {input : Input} {out : U32} {rec : Option Note}\n    {chg : Note} {s : Snapshot} {asset : U32} {empty : Roots}\n    (p6 : Route w p input out rec chg s asset empty) :\n    w = witness input out rec chg \u2227 p = publicRecord rec s asset empty",
+    "form": "ACCEPTED-ONLY",
+    "R22": "Named P6 Route certificate.",
+    "action": "Read only git show; existing env-J evidence reused, not locally imported or replayed."
+  },
+  {
+    "research_revision": "b7a4cc502353e598c414c39d5b0e8e56f4a21765",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/BuilderRecordsP6.lean",
+    "source_sha256": "bacad27c672a782003b7dafcb381986652fcb440896990a2442a8c453da97653",
+    "theorem": "R1Z.BuilderRecordsP6.route_banks",
+    "signature": "theorem route_banks {w : RW} {p : RP} {input : Input} {out : U32} {rec : Option Note}\n    {chg : Note} {s : Snapshot} {asset : U32} {empty : Roots}\n    (p6 : Route w p input out rec chg s asset empty) :\n    AspisBuilderGlueSource.pool_v1.pair_forest_copy_builder.merged_banks\n      (bankWitness w) (bankPublic p) =\n    AspisBuilderGlueSource.pool_v1.pair_forest_copy_builder.merged_banks\n      (bankWitness (witness input out rec chg)) (bankPublic (publicRecord rec s asset empty))",
+    "form": "OTHER",
+    "R22": "Full-result substitution equality, including errors.",
+    "action": "Read only git show; existing env-J evidence reused, not locally imported or replayed."
+  },
+  {
+    "research_revision": "b7a4cc502353e598c414c39d5b0e8e56f4a21765",
+    "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/BuilderBankMaterialization.lean",
+    "source_sha256": "95a8dfa12d1427b898fcca79730a3d771d38c9aabbc6fcd78ad46a6832937e0c",
+    "theorem": "R1Z.BuilderBankMaterialization.banks_table",
+    "signature": "theorem banks_table (w : RW) (p : RP) (pt : Parts) (hp : parts w p = ok pt) :\n    \u2203 merged, merged_banks w p = ok (true,stableModel pt,lateModel pt,merged) \u2227\n      \u2200 k, k < 16384 \u2192 merged.val[k]! = BuilderBankCells.cell pt (k/1024) (k%1024)",
+    "form": "ACCEPTED-ONLY",
+    "R22": "Actual successful parts computation; source Parts-content/runtime join remains.",
+    "action": "Read only git show; existing env-J evidence reused, not locally imported or replayed."
+  }
+]
