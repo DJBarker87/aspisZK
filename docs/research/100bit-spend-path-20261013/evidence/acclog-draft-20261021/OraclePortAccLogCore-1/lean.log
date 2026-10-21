@@ -1,0 +1,75 @@
+/Users/dominic/ZK/.worktrees/cx-acclog-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortAccLogCore.lean:81:25: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval H
+    (rust
+      (enrich
+        (build D
+          (view
+            (eval H (originalWith (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision) P))))
+        (eval H (originalWith (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision) P)).2.1))
+in the target expression
+  (have v := eval H (originalWith (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision) P);
+    have i := enrich (build D (view v)) v.2.1;
+    (v.1 ++ (eval H (rust i)).1, i, (eval H (rust i)).2)) =
+    have v := eval H (originalWith (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision) P);
+    have i := enrich (build D (view v)) v.2.1;
+    (v.1 ++ (eval H (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision i)).1, i,
+      (eval H (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision i)).2)
+
+D : LiteralByteProtocol.Decoder
+rust : Verifier
+h : AcceptedVerifierJoin rust (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision)
+stable :
+  ∀ (w : CanonicalCutEnrichedTranscript.Words) (i : Input) (H : Bytes → State),
+    (eval H (rust (enrich w i))).2 = (eval H (rust i)).2
+P : Prover
+H : Bytes → State
+ha :
+  (have v := eval H (originalWith (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision) P);
+        have i := enrich (build D (view v)) v.2.1;
+        (v.1 ++ (eval H (rust i)).1, i, (eval H (rust i)).2)).2.2 =
+    true
+before : (eval H (originalWith rust P)).2.2 = true
+raw :
+  eval H (originalWith rust P) =
+    eval H (originalWith (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision) P)
+second :
+  eval H
+      (rust
+        (enrich
+          (build D
+            (view
+              (eval H (originalWith (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision) P))))
+          (eval H
+                (originalWith (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision) P)).2.1)) =
+    eval H
+      (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision
+        (enrich
+          (build D
+            (view
+              (eval H (originalWith (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision) P))))
+          (eval H (originalWith (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision) P)).2.1))
+⊢ (have v := eval H (originalWith (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision) P);
+    have i := enrich (build D (view v)) v.2.1;
+    (v.1 ++ (eval H (rust i)).1, i, (eval H (rust i)).2)) =
+    have v := eval H (originalWith (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision) P);
+    have i := enrich (build D (view v)) v.2.1;
+    (v.1 ++ (eval H (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision i)).1, i,
+      (eval H (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision i)).2)
+/Users/dominic/ZK/.worktrees/cx-acclog-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortAccLogCore.lean:93:6: error: Type mismatch
+  Eq.symm (OraclePortShortCircuit.verifier_accepted_eq D i H hs)
+has type
+  eval H (OraclePortStoredExperimentC4.verifier D dV i) =
+    eval H (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision i)
+but is expected to have type
+  ((eval H (OraclePortStoredExperimentC4.verifier D dV i)).1, true) =
+    eval H (OraclePortStoredExperimentC4.verifier D OraclePortShortCircuit.outerDecision i)
+'AspisR1.OraclePortAccLog.executionJoin_acceptedRunJoin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortAccLog.outerExecutionJoin_acceptedRunJoin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortAccLog.originalWith_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortAccLog.annotatedWith_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortAccLog.acceptedRunJoin_of_stable' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortAccLog.rejectedRead_acceptedRunJoin' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortAccLog.acceptedRunJoin_strict' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

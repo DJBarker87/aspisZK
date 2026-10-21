@@ -47,7 +47,22 @@ is that order. Existing modules remain unchanged by this packet.
 
 ## Stage 2: composition
 
-Pending focused composition checks.
+`OraclePortAccLogCones` proves exact evaluated-log/value equality composes
+through `bind` and the complete continuation-sensitive `Calls` tree. Existing
+`ConeJoin` implies `ConeLogJoin`; the latter retains every intermediate return
+value and state as well as the ordered log, including ordinary errors.
+`acceptedVerifierJoin_of_cones` lifts these obligations with the existing S10
+inventory and explicit source/model caller identities. `short_accepted_eq`
+proves accepted-only equality suffices for Boolean children of the outer AND.
+`acceptedRunJoin_of_cones` additionally uses source verdict stability under
+annotation enrichment to cover both passes.
+
+These are conditional composition theorems. The general frozen-to-current-
+recursive-slot accepted-log obligation is false on raw helper inputs by Stage
+1; no actual frozen whole-decision join is constructed. Per-cone source pins,
+caller inventory, checked arithmetic and upstream reachability remain owed.
+Total S-cone statements needed by R22 are not weakened by these accepted-only
+consumer facts.
 
 ## Stage 3: accepted-run interface and headline
 

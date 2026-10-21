@@ -1,0 +1,115 @@
+import OraclePortRefineJoinStrict
+
+/-! Exact accepted observations. The annotated field deliberately covers both
+passes and their enriched output. A raw one-pass implication alone does not
+silently supply this field. All rejecting runs remain unconstrained. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortAccLog
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortStoredExperimentC4 OraclePortStoredAdmissionC4 OraclePortStoredConsumerC7
+open OraclePortRuntimeBindingC7
+attribute [local instance] Classical.propDecidable
+
+/-- Same ordered read/answer sequence and Bool on each accepted call. -/
+def AcceptedVerifierJoin (source model : Verifier) : Prop :=
+  ∀ H i, (eval H (source i)).2 = true → eval H (source i) = eval H (model i)
+
+/-- Complete accepted runs, including the two-pass annotation compiler.
+Equality includes public data, stored bytes, proof/words, verdict and log. -/
+structure AcceptedRunJoin (D : LiteralByteProtocol.Decoder) (rust : Verifier) : Prop where
+  verifier : AcceptedVerifierJoin rust (verifier D OraclePortShortCircuit.outerDecision)
+  annotated : ∀ (P : Prover) H,
+    (eval H (annotatedWith D rust P)).2.2 = true →
+      eval H (annotatedWith D rust P) =
+        eval H (annotated D OraclePortShortCircuit.outerDecision P)
+
+theorem executionJoin_acceptedRunJoin (D : LiteralByteProtocol.Decoder) (rust : Verifier)
+    (h : ExecutionJoin D rust) : AcceptedRunJoin D rust := by
+  constructor
+  · intro H i ha
+    rw [h i] at ha ⊢
+    have hs : (eval H (verifier D OraclePortShortCircuit.outerDecision i)).2 = true :=
+      (OraclePortShortCircuit.verifier_verdict D i H).trans ha
+    exact (OraclePortShortCircuit.verifier_accepted_eq D i H hs).symm
+  · intro P H ha
+    rw [annotatedWith_eq D rust h] at ha ⊢
+    have hs : (eval H (annotated D OraclePortShortCircuit.outerDecision P)).2.2 = true :=
+      (OraclePortShortCircuit.annotated_verdict D P H).trans ha
+    exact (OraclePortShortCircuit.annotated_accepted_eq D P H hs).symm
+
+theorem outerExecutionJoin_acceptedRunJoin (D : LiteralByteProtocol.Decoder) (rust : Verifier)
+    (h : OraclePortShortCircuit.OuterExecutionJoin D rust) : AcceptedRunJoin D rust := by
+  constructor
+  · intro H i _; rw [h i]
+  · intro P H _; rw [OraclePortShortCircuit.annotatedWith_outer D rust h]
+
+theorem originalWith_eval (rust : Verifier) (P : Prover) (H : Bytes → State) :
+    eval H (originalWith rust P) =
+      ((eval H P).1 ++ (eval H (rust (eval H P).2)).1,
+        ((eval H P).2,(eval H (rust (eval H P).2)).2)) := by
+  simp only [originalWith,eval_bind,eval,List.append_nil]
+
+theorem annotatedWith_eval (D : LiteralByteProtocol.Decoder) (rust : Verifier)
+    (P : Prover) (H : Bytes → State) :
+    eval H (annotatedWith D rust P) =
+      let v := eval H (originalWith rust P)
+      let i := enrich (build D (view v)) v.2.1
+      (v.1 ++ (eval H (rust i)).1,(i,(eval H (rust i)).2)) := by
+  simp only [annotatedWith,originalWith,eval_bind,OracleProgramRecording.eval_record,
+    eval,List.append_nil]
+
+/-- A sufficient, separately proved lifting rule. Stability only concerns the
+verdict under enrichment; accepted logs follow from the raw join itself. -/
+theorem acceptedRunJoin_of_stable (D : LiteralByteProtocol.Decoder) (rust : Verifier)
+    (h : AcceptedVerifierJoin rust (verifier D OraclePortShortCircuit.outerDecision))
+    (stable : ∀ w i H, (eval H (rust (enrich w i))).2 = (eval H (rust i)).2) :
+    AcceptedRunJoin D rust := by
+  refine ⟨h,?_⟩
+  intro P H ha
+  have before : (eval H (originalWith rust P)).2.2 = true := by
+    simpa only [annotatedWith_eval,stable,originalWith_eval] using ha
+  have raw : eval H (originalWith rust P) =
+      eval H (originalWith (verifier D OraclePortShortCircuit.outerDecision) P) := by
+    rw [originalWith_eval] at before
+    simp only [originalWith_eval,h H (eval H P).2 before]
+  rw [annotatedWith_eval,raw] at ha ⊢
+  have second := h H _ ha
+  change _ = eval H (annotatedWith D (verifier D OraclePortShortCircuit.outerDecision) P)
+  rw [annotatedWith_eval,second]
+
+/-- Reject-only reads demonstrate strict weakening, also through annotation. -/
+theorem rejectedRead_acceptedRunJoin (D : LiteralByteProtocol.Decoder) (address : Bytes) :
+    AcceptedRunJoin D (OraclePortRefineJoin.rejectedRead (verifier D dV) address) := by
+  apply acceptedRunJoin_of_stable
+  · intro H i ha
+    cases hv : (eval H (verifier D dV i)).2
+    · simp [OraclePortRefineJoin.rejectedRead,eval_bind,hv,eval] at ha
+    · have hs : (eval H (verifier D OraclePortShortCircuit.outerDecision i)).2 = true :=
+        (OraclePortShortCircuit.verifier_verdict D i H).trans hv
+      simp only [OraclePortRefineJoin.rejectedRead,eval_bind,hv,if_true,eval,List.append_nil]
+      exact (OraclePortShortCircuit.verifier_accepted_eq D i H hs).symm
+  · intro w i H
+    simp only [OraclePortRefineJoin.rejectedRead,verifier_enrich]
+
+theorem acceptedRunJoin_strict (D : LiteralByteProtocol.Decoder) (seed : Input)
+    (address : Bytes) : ∃ rust : Verifier, AcceptedRunJoin D rust ∧ ¬ ExecutionJoin D rust := by
+  refine ⟨OraclePortRefineJoin.rejectedRead (verifier D dV) address,
+    rejectedRead_acceptedRunJoin D address,?_⟩
+  intro h
+  let i : Input := {seed with statement := {seed.statement with tag := 0}}
+  let H : Bytes → State := fun _ _ => 0
+  have hr := OraclePortRefineJoin.eager_bad_tag_rejects D H i (by simp [i])
+  exact OraclePortRefineJoin.rejected_read_not_equal (verifier D dV) address H i hr (h i)
+
+#print axioms executionJoin_acceptedRunJoin
+#print axioms outerExecutionJoin_acceptedRunJoin
+#print axioms originalWith_eval
+#print axioms annotatedWith_eval
+#print axioms acceptedRunJoin_of_stable
+#print axioms rejectedRead_acceptedRunJoin
+#print axioms acceptedRunJoin_strict
+end AspisR1.OraclePortAccLog
+end
