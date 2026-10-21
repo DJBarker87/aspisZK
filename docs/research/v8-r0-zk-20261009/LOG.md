@@ -7673,3 +7673,17 @@ current privacy headline. Remaining premises: the two execution joins
 outer execution transport and all-family shared-oracle coverage. Blocker: the
 outer material loop (source lines 471–489) fails at Aeneas's loop-context join.
 Next: an owned indexed material-loop reference with per-iteration P6 equality.
+
+## D123 — prover commitment part 14: material loop (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit14-20261021` (`r1p-final/PROVER-COMMIT14-20261021.md`).
+The owned material schedule is extracted and its finite recursions proved;
+deterministic material oracle support and the bridge from scalar windows to
+the retained global cursor are proved; all nine M31 material-cell cases pass
+Kani (success, exhaustion, and prefixes of length ≤ 2). J8389: 33 standard-axiom
+audits, zero swap; no production change. No premise is removed. A
+counterexample shows that unrestricted `observer_program` replacement cannot
+supply history equality, so the real execution join needs the observer fixed
+to the protocol's. Open: arbitrary-prefix/QM31 source transport,
+returned-material assembly, the complete builder/checker/retry history, and
+all-family coverage; `G_sim_R_wire` stays named.
