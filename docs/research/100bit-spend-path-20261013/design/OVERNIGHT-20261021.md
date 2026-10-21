@@ -1,0 +1,136 @@
+# Overnight summary, 20→21 October 2026
+
+Lead coordinator summary of the overnight Codex run (about 21:30 to 07:00).
+The detail sits in the addenda of `design/C3-BIN-20261021.md` (soundness)
+and in LOG D85–D119 of `docs/research/v8-r0-zk-20261009/LOG.md` (privacy).
+Every merged result was reviewed before cherry-picking. Each review checked
+for `sorry`, axioms, `admit`, `native_decide` and `implemented_by`, compared
+before/after signatures wherever a premise was claimed removed, and, for any
+job that touched shipped crates, required a rebuild of all three frozen
+programs: default `dfc2a91a…`, devnet `fb2fc048…` and Pool `121f3e29…`.
+Each was byte-identical, every time.
+
+## Decisions waiting for you
+
+1. **Soundness wording: per oracle query, not per attempt.** `hN` (at most
+   33 recognised starts) turned out to be a restriction on the adversary, and a
+   compiled adversary breaks it. The earlier "< 2^-100 up to 2.2·10^22 queries"
+   depended on it and should not be cited. The proved form is per query: for
+   an adversary making at most Q oracle queries, failure ≤ (Q+1)·2^-100 for
+   every Q up to about 1.5·10^46 (2^153). The lead has assumed the per-query
+   wording; please confirm it.
+2. **Oracle-decision port.** Every soundness source job tonight (R3, R13–R16,
+   R9, the tag law, R4, S2, S7, S8) ended at the same place: the headline's
+   decision `d` is a free pure function, so nothing ties it to the frozen
+   verifier, which recomputes Merkle paths with hash calls. The fix is to let
+   the decision query the oracle and to state the headline at the frozen
+   verifier's decision. A draft port is on the **unmerged** branch
+   `codex/cx-oracle-port-draft-20261021` (pushed to origin as a backup). It
+   already proves `checked_acceptance` without the R13/R15/R3/R14-model
+   premises; the remaining step is a stored-proof bridge into the
+   probability consumer (pass 7 was running at the time of writing). Constants
+   under the port: verifier queries ≤ 1161 kept; start bound Q+1080
+   (conservative; a row-aware decoder would restore Q+34); log ≤ Q+2322.
+   Recommendation: adopt. Nothing merges without your yes.
+
+## Soundness
+
+Current headline: **`R1FinalSoundnessHeadlineV3.final_soundness`**
+(`design/SOUNDNESS-HEADLINE-20261021.md`, sections v1, v2, v3).
+
+    F ≤ (Q+34)·15/2^109 + 6·(Q+1161)^2/2^256 + 2^-126 + 2^-454
+    Q ≤ 2^153 (exact Qmax in the file)  →  F ≤ (Q+1)/2^100
+
+Here F is the deployed two-transaction failure probability at the constructed
+tx1/Pool instance, and Q bounds the adversary's oracle queries, counting
+repeats. The extractor is the concrete `ActualCostedExtractorM10.extractor`,
+with cost ≤ 4·scale³·(Q+1162)³.
+
+Removed or discharged tonight, each by a checked deletion-only or
+strictly-weaker signature diff:
+- `hN` → the per-query bound (Q+34 starts, proved).
+- `h_R4_row31`, from R16 placement and the sampler invariants.
+- `h_R18`, which was unused.
+- `h_R19`, derived from the query budget (verifier ≤ 561 queries).
+- `h_R9_transport`, at the constructed tx1/Pool instance.
+- `h_Rwire`, narrowed to a single tag-rejection law.
+- R16/R13/R14/R15/R3, weakened to collision-free runs (strictly weaker; the
+  collision mass is already charged).
+- All of M10: `h_M10_ledger`, `h_M10_uniform`, the allocation mirror (with the
+  lead's check that it is concrete), and `h_M10_log_length` (log ≤ Q+1122).
+
+Still assumed: the query budget; R16/R13/R14/R15/R3 on collision-free runs;
+the tag rejection law; and the BoundaryEvidence fields: P1–P7 trust and
+runtime, and the frozen-source joins R10, R17, R20–R22, R4 transport and
+S1–S10.
+
+Source-side progress, without premise removal: ASQ8 encoder equivalence (P6);
+R17 geometry tables certified (2×512 entries, plus 262,144 fibres and
+1,048,576 slots); the S2 header rejection proved against the frozen crate;
+S7 and S8 P6 certificates (owned references translate, loop proofs by step
+plus induction), up to the caller execution join; P5 bump guards (61 Kani
+harnesses); R4 sampler pieces; R22 overflow freedom as a corollary of total
+cone theorems (35 of 146 cone theorems are already total). Encoding
+uniqueness holds: the frozen verifier and Pool reject non-canonical limbs, so
+each spend has exactly one marker PDA (D97, no change needed).
+
+## Privacy
+
+Current headline: **`PrivacyR1HeadlineV2.privacy_headline_v2`**, with the
+alternative `privacy_headline_v2_fibres` and the cost-annotated
+`PrivacyR1HeadlineV2SimProto` (`r1p-final/PRIVACY-HEADLINE-20261021.md`).
+
+    ε ≤ 2^-109 + 2^-137 + 2^-454 + 128(M+1)/2^190 < 2^-100,   M ≤ 2^25
+
+Removed tonight:
+- the causal premise (phase-restricted protocol model, D85–D88);
+- the commitment families, read coverage and public width (D89);
+- the real-side history law, via scan freshness (D91–D94; D93 corrects a
+  wrong lead ruling in D91);
+- builder soundness and `hpub` (D96);
+- all accounting rows: packing basis, counters, streams, cells, blocks,
+  coin carrier and sample carriers (D106);
+- the wire batch and ordered-log premises, after fixing the protocol
+  encoding (D111).
+
+The fibre/exhaustion/budget premises are reduced to one `CallerLaw` (D110,
+D112). Simulator cost is relative to the adversary's input length:
+replay ≤ c·(n+1), lazy cache ≤ C·(n+1)², sampling coupled with truncation
+≤ 2^-120 (D114–D119). `sim_preparation` is still open.
+
+Still assumed: `CallerLaw` (shipped prover callers; part 10 fixed the decoder
+and stopped at the outer-caller transport), the builder source join
+(`RustRuntimeJoin`; forest admission is mostly done), the Rust serialisation
+join, the real/ideal execution joins, and `sim_preparation`.
+
+## Paused and parked tracks
+
+- Candidate freeze (the 1.19M CU candidate) is parked at 10/12 cones after
+  prep9 cost about 0.9M tokens for one cell. Resume when you want it adopted;
+  shipped-file edits merged tonight must be carried onto that branch and its
+  pins rechecked (all edits are cfg(kani)/cfg(aeneas_ref) only).
+- The builder (11 parts), prover commitment (10 parts) and simulator cost
+  (4 passes) tracks are paused at the prover-side execution join or at an
+  exhausted env-J attempt range.
+
+## Items for session A
+
+- Please state S-cone re-pin theorems in **total** form (∀ inputs, the
+  extraction returns `ok`). Then R22 (overflow freedom) follows for each cone
+  as a corollary, via the lemma proved in `R22-TOTAL-20261021.md`.
+- Combined import collision: the duplicated `instDiscriminantErrorIsize`
+  instances block one aggregate import. A type-qualified naming fix is
+  prototyped in `IMPORT-UNION-20261021.md`, and S10 pins need updating
+  before the single final manifest replay.
+- Lead error: commit aab0d23d0 swept in session A's 23 staged
+  `s5-p6-serializer-kani` files under a lead message (shared index). Nothing
+  was lost; authorship is session A's. Lead commits now use explicit paths.
+
+## Other errors and corrections
+
+- D91 → D93: the lead first ruled that every repeated read was a collision.
+  An adversary may repeat queries legitimately, and the worker compiled that
+  counterexample; the corrected event is scan freshness only.
+- A Codex content filter blocked the first limb-canonicality review (it read
+  as attack framing). It was rerun as an encoding-uniqueness correctness
+  property.
