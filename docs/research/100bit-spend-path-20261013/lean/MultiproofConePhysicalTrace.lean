@@ -26,7 +26,7 @@ inductive Trace {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X) (physic
       Trace D hash physical s i w {s with n:=w} []
   | next (s : reference.Scratch) (i w ni nw cursor : Usize) (parent : U32)
       (left right digest : Array U8 32#usize) (after final : reference.Scratch) (es : List Event)
-      (wb : w.val<16) (nwval : nw.val=w.val+1)
+      (wb : w.val<16) (active : i.val<s.n.val) (nwval : nw.val=w.val+1)
       (input : Input physical s i left right ni cursor)
       (hashed : D.digest hash (parts left right)=ok digest)
       (parentval : parent.val=s.idx.val[i.val]!.val/2)
@@ -44,7 +44,7 @@ theorem prefix_exact {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
     view final 0 final.n.val=view s 0 w.val ++ es.map Event.output := by
   induction trace with
   | done s i w halt => simp [view,cell]
-  | next s i w ni nw cursor parent left right digest after final es wb nwval input hashed parentval state step rest ih =>
+  | next s i w ni nw cursor parent left right digest after final es wb active nwval input hashed parentval state step rest ih =>
     rw [ih,state,nwval,write_prefix s w parent digest cursor wb]
     simp only [List.map_cons,Event.output,parentval,List.append_assoc,List.singleton_append]
 
@@ -54,7 +54,7 @@ theorem valid_events {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
     (trace : Trace D hash physical s i w final es) : ∀ e∈es, e.Valid D hash := by
   induction trace with
   | done s i w halt => simp
-  | next s i w ni nw cursor parent left right digest after final es wb nwval input hashed parentval state step rest ih =>
+  | next s i w ni nw cursor parent left right digest after final es wb active nwval input hashed parentval state step rest ih =>
     intro e mem
     rcases List.mem_cons.mp mem with rfl | mem
     · exact hashed
@@ -91,7 +91,7 @@ theorem rows_trace {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
         obtain ⟨es,trace⟩ := ih after ni nw progress.2.1 success
         obtain ⟨left,right,digest,parent,cursor,input,hashed,pv,nwv,state⟩ := observed
         refine ⟨_ ,.next s i w ni nw cursor parent left right digest after final es
-          (by have := domain.2.1;have := domain.2.2.2.1;omega) nwv input hashed pv state eq trace⟩
+          (by have := domain.2.1;have := domain.2.2.2.1;omega) act nwv input hashed pv state eq trace⟩
 
 theorem level_trace {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
     (total : HashTotal D hash) (physical : Slice U8) (s final : reference.Scratch)

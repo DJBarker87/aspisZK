@@ -786,3 +786,36 @@ It does NOT yet prove that the physical Program's full log equals the event
 witness and the frozen sourceLevel/runLevels log. That final observation
 comparison remains a distinct theorem, as do batch leaf/count/padding/root and
 both three-slot callers. No whole-cone accepted-run join is claimed.
+
+## Continuation 5, stage 1e: chronological witness equals physical Program log
+
+`MultiproofConePhysicalPrelude.supply_form` and
+`MultiproofConePhysicalNodeForm.node_form` prove Program-level normalization:
+zero requests on short rejection, otherwise exactly the physical request and
+checked writer continuation. This equality is established from checked reads,
+ranges and arithmetic, not inferred from returned-Result equality.
+`MultiproofConePhysicalInputUnique.input_unique` establishes that the child
+addresses/cursors are fixed before the oracle answer.
+
+`MultiproofConePhysicalObservations.node_observation`, `trace_program` and
+`level_observation` now identify the chronological event witness with the
+ACTUAL instrumented physical Program's complete ordered request/answer log.
+The physical digest-content and ordered-log witnesses are therefore connected,
+rather than being independent existential certificates. Only oracle
+interpretation, initial physical bounds and actual successful execution are
+retained. Attempt 2: exit 0, 9.947575 s, 3654238208-byte RSS, zero swaps;
+all four reports are standard.
+
+Trace.next was strengthened with the active-row guard. This excludes phantom
+steps after termination without adding a hypothesis to rows_trace (the guard
+is obtained from actual execution). Trace attempt 2 and its dependent
+Invariant attempt 2 are current; the earlier compiled versions are historical.
+`MultiproofConePhysicalViews` supplies the exact Live projection, unread
+preservation, sorted projection, physical cursor rebase and supplied-state
+byte decoder. All seven reports are standard. Its first attempt exits 0 in
+8.104475 s with 3639525376-byte RSS and zero swaps.
+
+The remaining focused theorem compares these same observations with the
+ordered logical sourceLevel and then frozen runLevels. No caller, padding,
+root or complete cone claim is inferred from the now-connected physical facts.
+All exact targets/revisions/hashes/metrics/axioms are in manifest and receipts.
