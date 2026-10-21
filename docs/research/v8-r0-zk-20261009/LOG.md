@@ -7508,3 +7508,17 @@ Rust's complete ordered serialisation equals that logical encoding, including
 the finite-set ordering and batch split. Current privacy headline:
 `PrivacyR1HeadlineWire2.privacy_headline_wire2`. D110's caller law is on a
 sibling line and still needs folding in.
+
+## D112 — privacy headline v2 (2026-10-21, lead)
+
+Landed from `codex/cx-priv-headline2-20261021` (v2 section of
+`r1p-final/PRIVACY-HEADLINE-20261021.md`). `PrivacyR1HeadlineV2.privacy_headline_v2`
+composes D111 (wire premises discharged, built on D106's accounting) with
+D110's caller law, keeping ε < 2^-100. `privacy_headline_v2_fibres` is kept
+as an alternative endpoint: the aggregate fibre/exhaustion premises do not
+imply CallerLaw's pointwise decoder partition, so neither form is strictly
+weaker and both stay available; the report gives the obstruction. Env J
+9512, standard axioms, zero swap (9510 and 9511 failed and were fixed by source
+changes). These two are the privacy headline. Remaining: the shipped caller
+and builder refinements, the Rust serialisation identity, the real
+checker/retry and ideal execution joins, and simulator implementation.
