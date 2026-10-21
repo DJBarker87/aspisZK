@@ -1,0 +1,114 @@
+import RRRowAllocationM10
+import GSScalarConstructorAllocationM10
+import RRRecoveryWorkM10
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.RRTraversalAllocationM10
+open CompPoly RRConcreteState RRConcreteValidState RRActualScalarTraceM10
+variable {K : Type} [Field K] [BEq K] [LawfulBEq K] [DecidableEq K] [Fintype K]
+
+def nodeCells (D ell q t : Nat) (s : ValidState ell K)
+    (H : Nat → Fin t → K × K) (cursor : Nat) : Nat :=
+  let r := GSScalarAtCursorM10.general (scalarPolynomial s.val) q t H cursor
+  GSScalarConstructorAllocationM10.traceCells ell r.2+
+    ((r.1.1.getD []).map (fun a => RRRowAllocationM10.normalizeCells D ell s.val a+1)).sum+
+    10*(D+1)^2
+
+theorem node_paid (D ell q t : Nat) (s : ValidState ell K)
+    (H : Nat → Fin t → K × K) (cursor : Nat) :
+    nodeCells D ell q t s H cursor ≤ RRActualFieldEnvelopeM10.node D ell q t s H cursor := by
+  have ht := GSScalarConstructorAllocationM10.trace_paid ell
+    (GSScalarAtCursorM10.general (scalarPolynomial s.val) q t H cursor).2
+  have hn := RecoveryParserAllocationM10.sum_mono
+    ((GSScalarAtCursorM10.general (scalarPolynomial s.val) q t H cursor).1.1.getD [])
+    (fun a => RRRowAllocationM10.normalizeCells D ell s.val a+1)
+    (fun a => (RRNormalizationWorkM10.normalize D ell s.val a).2)
+    (fun a _ => RRRowAllocationM10.normalize_paid D ell s.val a)
+  have he := Nat.mul_le_mul_right ((D+1)^2) (by decide : 10 ≤ 100)
+  change _+_+10*(D+1)^2 ≤ _+_+100*(D+1)^2
+  omega
+
+def terminalCells (s : RawState K) : Nat :=
+  2*(s.maxX+1)*(s.rows.length+1)+2*(s.maxX+1)+2
+
+theorem terminal_paid (D : Nat) (s : RawState K) :
+    terminalCells s ≤ RRActualTraversalWorkM10.terminal D s := by
+  unfold terminalCells RRActualTraversalWorkM10.terminal
+  nlinarith
+
+def walkCells {S : Type} (run : S → Nat → Result K) (heap : S → Nat → Nat) :
+    List (K × S) → Nat → Nat
+  | [], _ => 1
+  | (_,s)::xs,c =>
+    match (run s c).1.1 with
+    | none => heap s c+1
+    | some ys => heap s c+walkCells run heap xs (run s c).1.2+2*ys.length+3
+
+theorem walk_paid {S : Type} (run : S → Nat → Result K)
+    (heap work : S → Nat → Nat) (h : ∀ s c, heap s c ≤ work s c)
+    (xs : List (K × S)) (c : Nat) :
+    walkCells run heap xs c ≤ RRActualTraversalWorkM10.walkWork run work xs c := by
+  induction xs generalizing c with
+  | nil => exact Nat.le_refl _
+  | cons x xs ih =>
+    rcases x with ⟨a,s⟩
+    have hs := h s c
+    have ht := ih (run s c).1.2
+    simp only [walkCells,RRActualTraversalWorkM10.walkWork]
+    split <;> omega
+
+def cells (D ell q t : Nat) (H : Nat → Fin t → K × K) :
+    Nat → ValidState ell K → Nat → Nat
+  | 0, s, _ => terminalCells s.val
+  | d+1, s, c =>
+    match (children ell q t H s c).1.1 with
+    | none => nodeCells D ell q t s H c+1
+    | some cs => nodeCells D ell q t s H c+
+        walkCells (collect ell q t H d) (cells D ell q t H d) cs (children ell q t H s c).1.2
+
+theorem paid (D ell q t : Nat) (H : Nat → Fin t → K × K)
+    (d : Nat) (s : ValidState ell K) (c : Nat) :
+    cells D ell q t H d s c ≤ RRActualTraversalWorkM10.work D ell q t H d s c := by
+  induction d generalizing s c with
+  | zero => exact terminal_paid D s.val
+  | succ d ih =>
+    have hn := node_paid D ell q t s H c
+    cases h : (children ell q t H s c).1.1 with
+    | none => simp only [cells,RRActualTraversalWorkM10.work,h]; omega
+    | some cs =>
+      have hw := walk_paid (collect ell q t H d) (cells D ell q t H d)
+        (RRActualTraversalWorkM10.work D ell q t H d) ih cs (children ell q t H s c).1.2
+      simp only [cells,RRActualTraversalWorkM10.work,h]
+      omega
+
+def initialCells (s : RawState K) : Nat :=
+  4*((s.rows.map List.length).sum+s.rows.length+1)
+
+theorem initial_paid (s : RawState K) : initialCells s ≤ RRRecoveryWorkM10.initialScan s := by
+  unfold initialCells RRRecoveryWorkM10.initialScan
+  omega
+
+def recoveryCells (D ell q t d : Nat) (s : RawState K)
+    (hd : ∀ i ≤ s.maxX, (RRVectorRowPolynomialBridge.inputPolynomial s.rows i).natDegree ≤ ell)
+    (hn : model s ≠ 0)
+    (H : {i : Nat // i ∈ Finset.range (d*ell)} → Fin t → K × K) : Nat :=
+  initialCells s+cells (RRRecoveryWorkM10.cap D ell d) ell q t
+    (AspisV8R19.OracleFiniteSupport.extend (Finset.range (d*ell)) H (fun _ => (0,0)))
+    d (RRConcreteInitialValidStateFromFacts.initialValidState ell s hd hn) 0
+
+theorem recovery_paid (D ell q t d : Nat) (s : RawState K)
+    (hd : ∀ i ≤ s.maxX, (RRVectorRowPolynomialBridge.inputPolynomial s.rows i).natDegree ≤ ell)
+    (hn : model s ≠ 0)
+    (H : {i : Nat // i ∈ Finset.range (d*ell)} → Fin t → K × K) :
+    recoveryCells D ell q t d s hd hn H ≤ (RRRecoveryWorkM10.recover D ell q t d s hd hn H).2 :=
+  Nat.add_le_add (initial_paid s) (paid _ _ _ _ _ _ _ _)
+
+#print axioms node_paid
+#print axioms terminal_paid
+#print axioms walk_paid
+#print axioms paid
+#print axioms initial_paid
+#print axioms recovery_paid
+end AspisR1.RRTraversalAllocationM10
+end
