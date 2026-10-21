@@ -1,0 +1,17 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostRelativeReplay.lean:61:2: error: linarith failed to find a contradiction
+t : Table
+H : List UInt8 → OracleAnswer
+p : OProg
+q L : ℕ
+ht : KeysBound L t
+hb : (replay t H p q).2 ≤ (List.length t + 1) * (queryBytes (fun a => (List.lookup a t).getD (H a)) p q + q * (L + 6))
+a✝ : (List.length t + 1) * (L + 6) * (q + queryBytes (fun a => (List.lookup a t).getD (H a)) p q) < (replay t H p q).2
+⊢ False
+failed
+'R1Z.SimCostRelativeReplay.queryBytes_log' depends on axioms: [propext]
+'R1Z.SimCostRelativeReplay.lookup_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostRelativeReplay.replay_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostRelativeReplay.replay_relative' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostRelativeReplay.programmed_relative' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
