@@ -1,0 +1,59 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: type `Variant` is more private than the item `parse_shape`
+ --> src/lib.rs:6:1
+  |
+6 | pub fn parse_shape(proof: &[u8]) -> Result<Variant, Error> {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `parse_shape` is reachable at visibility `pub`
+  |
+note: but type `Variant` is only usable at visibility `pub(crate)`
+ --> src/lib.rs:2:42
+  |
+2 | #[derive(Debug,Clone,Copy,PartialEq,Eq)] enum Variant {S2}
+  |                                          ^^^^^^^^^^^^
+  = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `Error` is more private than the item `parse_shape`
+ --> src/lib.rs:6:1
+  |
+6 | pub fn parse_shape(proof: &[u8]) -> Result<Variant, Error> {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `parse_shape` is reachable at visibility `pub`
+  |
+note: but type `Error` is only usable at visibility `pub(crate)`
+ --> src/lib.rs:4:42
+  |
+4 | #[derive(Debug,Clone,Copy,PartialEq,Eq)] enum Error {Parse}
+  |                                          ^^^^^^^^^^
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Thread 1: Checking harness proofs::non_s2_rejected...
+Thread 0: Checking harness proofs::short_proofs_rejected_without_read...
+Thread 2: Checking harness proofs::header_correspondence...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 168 failed (2 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.78876376s
+
+Thread 1: 
+VERIFICATION RESULT:
+ ** 0 of 187 failed (4 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.9973281s
+
+Thread 2: 
+VERIFICATION RESULT:
+ ** 0 of 152 failed (4 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.3945909s
+
+Manual Harness Summary:
+Complete - 3 successfully verified harnesses, 0 failures, 3 total.

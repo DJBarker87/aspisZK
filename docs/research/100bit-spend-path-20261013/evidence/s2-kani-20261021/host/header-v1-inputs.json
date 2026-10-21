@@ -1,0 +1,32 @@
+{
+  "source_revision": "5b6193eec1057e57895b5647e3dc6e01a6a95147",
+  "source_sha256": "67086ae15f5279eea5e6bc97f02301bb2b3f61188372a2acf71796685c7653e6",
+  "source_cut": {
+    "schema": "s2-header-source-cut-v1",
+    "revision": "5b6193eec1057e57895b5647e3dc6e01a6a95147",
+    "freeze": "b2727acd3",
+    "sources": {
+      "crates/aspis-r1-cost-probe/src/candidate.rs": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+      "crates/aspis-r1-cost-probe/src/compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "crates/aspis-r1-cost-probe/src/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7"
+    },
+    "exact_body": "pub fn parse_shape(proof: &[u8]) -> Result<Variant, Error> {\n    if proof.len() != compact::PROOF_BYTES\n        || &proof[..8] != compact::MAGIC\n        || proof[8] != Variant::S2.tag()\n        || proof[9..16].iter().any(|&x| x != 0)\n    {\n        return Err(Error::Parse);\n    }\n    Ok(Variant::S2)\n}",
+    "reference": "pub fn header_reference(length:usize, magic:bool, tag:u8, tail:bool)->bool {\n    length==57607 && magic && tag==2 && tail\n}\n",
+    "code_sha256": "67086ae15f5279eea5e6bc97f02301bb2b3f61188372a2acf71796685c7653e6",
+    "boundary": "Exact parse_shape body. Variant::S2.tag and constants supplied from frozen definitions. Only header reads; suffix supplied as zero in Kani, independence checked by body census."
+  },
+  "command": [
+    "cargo",
+    "kani",
+    "-j",
+    "4",
+    "--harness",
+    "proofs",
+    "-Z",
+    "unstable-options",
+    "--output-format",
+    "terse",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ]
+}
