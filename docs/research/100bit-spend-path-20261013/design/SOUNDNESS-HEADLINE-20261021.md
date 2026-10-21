@@ -406,3 +406,114 @@ Full `#print axioms` output:
 The compiler emitted two style warnings because `legacyEvidence` and `ofLegacy` are proof-valued definitions declared with `def`; both are axiom-free and the focused compile has no errors. The successful source is retained without a cosmetic edit or recompilation. Exact argv, complete ordered search path, direct import hashes, compiler/time logs and object SHA-256/size are in `evidence/headline2-20261021/manifest.json` and `R1FinalSoundnessHeadlineV2-1/`. No object or binary is committed. This is focused composition evidence against retained cached dependencies, not a coherent frozen-release replay.
 
 V2 composition and documentation are complete. The remaining source/model and runtime joins, 24 release evidence fields, and recorded log-length premise remain explicit as listed above.
+
+## V3 — recorded log length discharged (2026-10-21)
+
+`R1FinalSoundnessHeadlineV3.final_soundness` imports the v2 boundary types
+unchanged and removes `h_M10_log_length` with no replacement hypothesis.
+The logical recorded experiment, extractor, parameters, κ, `totalBound`,
+`Qmax`, and the entire conclusion remain unchanged.
+
+### Symbolic issued-query accounting
+
+For a fixed oracle H, let p be the chronological prover log and v the literal
+verifier log on the prover's returned public/proof pair. The exact theorem
+`recorded_log_eq` proves that the recorded log is `(p ++ v) ++ v`.
+`RawCutProverCompiler.compiled_experiment_eval` supplies the operational
+composition: the compiler records the original experiment and returns pure
+word metadata, then the external verifier executes again. The prover itself
+executes once. Recording preserves the full issued-query log by
+`OracleProgramRecording.eval_record`, proved by induction over `Program`.
+No oracle reads are issued by the pure metadata constructor. The external
+verifier repeats the original verifier program because enriched proof
+metadata is ignored by that verifier.
+
+Both verifier passes must be counted for log length. Their addresses being
+repeated only helps distinct-first-read accounting. The existing
+`R19BudgetOriginalReads.verifier_queries` bounds each full list by 561,
+using the symbolic list induction `flatten_length_le` and sampler induction
+`R19BudgetSamplerReads.query_tail_length`. The new proof applies those
+inductive results; it does not evaluate a concrete run, recurrence, or
+large finite universe.
+
+Thus `recorded_log_length` proves, without acceptance or boundary evidence,
+
+```
+(eval H (recorded D d P)).1.length ≤ Q + 1122
+```
+
+from the existing `hqueries : AdversaryQueries P Q`. In turn,
+`recorded_log_length_envelope` proves `length ≤ Q + 1161`. There are 39
+queries of slack in the unchanged envelope. The stronger suggested bound
+Q+561 is unnecessary; compiler enrichment includes an internal verifier
+pass. No larger constant, κ change, or range change is required.
+
+The v3 `accepted_cost_cubic` also removes the size assumption. It explicitly
+uses the existing adversary query bound and retains
+`4·CostedAllocationLedgerM10.scale³·(Q+1162)³`.
+
+### Deletion-only signature audit against v2
+
+Run `python3 docs/research/100bit-spend-path-20261013/evidence/loglen-20261021/audit.py`.
+The normalized statement diff contains only the following deletion:
+
+```lean
+    (h_M10_log_length : BoundaryEvidence s → ∀ H,
+      (eval H (recorded D d P)).2.2 = true →
+        (eval H (recorded D d P)).1.length ≤ Q + 1161)
+```
+
+The script removes comments and blank lines and puts the final signature
+colon on its own line in both statements. It checks that every other binder
+and the conclusion are textually identical; no replacement is introduced.
+V3 opens the actual V2 namespace rather than redeclaring evidence types, so
+all 24 evidence fields retain exactly their existing types. The expanded
+before/after statements, diff and machine-readable audit are in
+`evidence/loglen-20261021/`.
+
+Frozen Rust correspondence, verifier-equals-decision, runtime joins and all
+other v2 premises remain open. This result closes only the recorded logical
+experiment's length premise.
+
+### V3 focused validation and all attempts
+
+One module was compiled, with one failed elaboration attempt and one corrected
+successful attempt. Attempt 1 used an ambiguous unqualified `experiment_eval`;
+attempt 2 qualified `RawCutProverCompiler.experiment_eval`. The failed attempt's
+`sorryAx` output is preserved as a diagnostic, never accepted as proof evidence.
+No unchanged rerun, dependency rebuild, full manifest replay, or resource-cap
+increase was performed. Both attempts used the shared mkdir lock, private
+`/tmp/codex-cx-loglen-20261021-objects`, `-j1 -M4400 -DElab.async=false`,
+and `/usr/bin/time -l`.
+
+| Formal-workflow section 6 field | Attempt 1 (failed) | Attempt 2 (accepted) |
+|---|---|---|
+| Exact target | `lean/R1FinalSoundnessHeadlineV3.lean` (all five theorems) | same |
+| Exit status | 1 | 0 |
+| Wall time (seconds) | 31.13965129200369 | 14.094432291109115 |
+| Peak RSS (bytes) | 3541450752 | 3653009408 |
+| Swaps | 0 | 0 |
+| Source revision | `b274ea7ecca4070b898d6f16e2894288b7f642b0` | `75e438996214e021031fe0b88a1fe653a77bf1d7` |
+| Source SHA-256 | `b5edfdc43baaadac495aa68700ffacac7acd78b349e964c288bd9e2b5fe503ca` | `0a9cae6e26297c41e3630b42ea662acc082eaf54f2a2fb0b7d061b420f1fd1f2` |
+| Dependency fingerprint | `0f3b7fee53235a815a29042916cca5cb5522958e5fb08abb2b95228ae510566a` | `0f3b7fee53235a815a29042916cca5cb5522958e5fb08abb2b95228ae510566a` |
+| Axioms result | Contains `sorryAx` after elaboration failure; rejected | All five: `[propext, Classical.choice, Quot.sound]` |
+
+Accepted attempt full `#print axioms` output:
+
+```
+'AspisR1.R1FinalSoundnessHeadlineV3.recorded_log_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R1FinalSoundnessHeadlineV3.recorded_log_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R1FinalSoundnessHeadlineV3.recorded_log_length_envelope' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.R1FinalSoundnessHeadlineV3.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.R1FinalSoundnessHeadlineV3.accepted_cost_cubic' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+Exact argv, ordered search path, direct import object hashes, source revisions,
+complete diagnostics and time logs for both attempts are retained in
+`evidence/loglen-20261021/manifest.json` and the two attempt directories.
+Object SHA-256 and size are recorded for the successful attempt; no object
+or binary is committed. This is focused composition against cached dependencies,
+not a coherent frozen-release replay. The final release manifest remains the
+lead's one-time gate after the other owners finish.

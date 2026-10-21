@@ -6,8 +6,7 @@ experiment log followed by a repeat of its verifier log. Its proof uses
 `OracleProgramRecording.eval_record`, proved by induction over Program; the
 pure metadata construction returns `.done` and adds no reads.
 
-`R19BudgetOriginalReads.experiment_eval` is not a declaration; the applicable
-composition law is `RawCutProverCompiler.experiment_eval`. The verifier query
+The composition law is `RawCutProverCompiler.experiment_eval`. The verifier query
 bound is `R19BudgetOriginalReads.verifier_queries`, not its distinct-read
 corollary. The bound uses induction over lists (`flatten_length_le`) and the
 sampler/program induction `R19BudgetSamplerReads.query_tail_length`.
