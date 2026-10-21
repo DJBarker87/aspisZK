@@ -1,0 +1,93 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortOpeningRewordC6.lean:31:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (do
+        let c1 ← some v.c1
+        let c2 ← some v.c2
+        match hsem : _a with
+          | none => none
+          | some semantic => do
+            let z0 ← LiteralChallengeRead.ordinaryAt rs 25
+            let z1 ← LiteralChallengeRead.ordinaryAt rs 26
+            pure
+                { c1 := c1, c2 := c2,
+                  word := LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK c1 c2,
+                  semantic := semantic, semantic_length := ⋯, challenge25 := z0, challenge26 := z1,
+                  circlePoints := fun i =>
+                    if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                    else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+                  functionals :=
+                    SelectedOpeningFunctionals.functionals (List.map Prod.snd semantic) fun i =>
+                      if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                      else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+                  baseFunctional :=
+                    SelectedOpeningFunctionals.rawBase (List.map Prod.snd semantic) fun i =>
+                      if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                      else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1) }) =
+      some v
+Error: Application type mismatch: The argument
+  hsem
+has type
+  _a = some semantic
+but is expected to have type
+  LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) = some semantic
+in the application
+  LiteralOpeningView.read._proof_1 rs length semantic hsem
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+w : CanonicalCutEnrichedTranscript.Words
+rs : TranscriptRounds
+v : LiteralOpeningView.View
+c1 : LiteralTranscript.c1At rs = some v.c1
+c2 : LiteralTranscript.c2At rs = some v.c2
+sem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) = some v.semantic
+word : v.word = LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK v.c1 v.c2
+length : (List.take 25 rs).length = 25
+read :
+  (do
+      let c1 ← some v.c1
+      let c2 ← some v.c2
+      match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) with
+        | none => none
+        | some semantic => do
+          let z0 ← LiteralChallengeRead.ordinaryAt rs 25
+          let z1 ← LiteralChallengeRead.ordinaryAt rs 26
+          pure
+              { c1 := c1, c2 := c2,
+                word := LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK c1 c2,
+                semantic := semantic, semantic_length := ⋯, challenge25 := z0, challenge26 := z1,
+                circlePoints := fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+                functionals :=
+                  SelectedOpeningFunctionals.functionals (List.map Prod.snd semantic) fun i =>
+                    if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                    else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+                baseFunctional :=
+                  SelectedOpeningFunctionals.rawBase (List.map Prod.snd semantic) fun i =>
+                    if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                    else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1) }) =
+    some v
+semantic : List (R0P.Mask.SemMsgZ LiteralSemanticPrefix.E × LiteralSemanticPrefix.E)
+hsemantic : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (reword w (List.take 25 rs)) = some semantic
+same : scalarPairs semantic = scalarPairs v.semantic
+cs : List.map Prod.snd semantic = List.map Prod.snd v.semantic
+first : LiteralTranscript.c1At (reword w rs) = some w.c1
+second : LiteralTranscript.c2At (reword w rs) = some w.c2
+⊢ ∃ v',
+    LiteralOpeningView.read (reword w rs) = some v' ∧
+      scalarPairs v'.semantic = scalarPairs v.semantic ∧
+        v'.functionals = v.functionals ∧
+          v'.baseFunctional = v.baseFunctional ∧
+            v'.circlePoints = v.circlePoints ∧
+              v'.word = LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK w.c1 w.c2
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortOpeningRewordC6.lean:30:13: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]̵ ̵at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.OraclePortOpeningRewordC6.opening' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

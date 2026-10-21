@@ -1,0 +1,55 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortSemanticProjectionC6.lean:58:6: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x : SemMsgZ E),
+    (match Msg.semantic (scalarMessage x) with
+          | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+          | x => none).get
+        ⋯ =
+      (match Msg.semantic x with
+          | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+          | x => none).get
+        ⋯
+
+case pos
+xs : List (SemMsgZ E × E)
+h : xs.length = 25
+hl :
+  ∀ (j : Fin 10),
+    (match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+        | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+        | x => none).isSome =
+      true
+hr :
+  ∀ (j : Fin 10),
+    (match Msg.semantic xs[15 + ↑j].1 with
+        | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+        | x => none).isSome =
+      true
+j : Fin 10
+⊢ (match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+        | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+        | x => none).get
+      ⋯ =
+    (match Msg.semantic xs[15 + ↑j].1 with
+        | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+        | x => none).get
+      ⋯
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortSemanticProjectionC6.lean:71:17: error(lean.unknownIdentifier): Unknown identifier `hr`
+'AspisR1.OraclePortSemanticProjectionC6.scalar_challenges' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortSemanticProjectionC6.scalar_claim' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortSemanticProjectionC6.scalar_poly' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortSemanticProjectionC6.scalar_polynomials' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortSemanticProjectionC6.observe_scalar' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortSemanticProjectionC6.observe_of_scalar_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortSemanticProjectionC6.read_observe' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

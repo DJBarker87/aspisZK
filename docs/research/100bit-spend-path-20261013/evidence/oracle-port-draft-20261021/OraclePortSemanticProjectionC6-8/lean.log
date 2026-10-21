@@ -1,0 +1,339 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortSemanticProjectionC6.lean:54:2: error: unsolved goals
+case e'_2.e_2
+xs : List (SemMsgZ E × E)
+h : xs.length = 25
+left : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+right : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+same :
+  (fun j =>
+      match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+      | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+      | x => none) =
+    fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+⊢ (∀ (j : Fin 10),
+      (match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+          | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+          | x => none).isSome =
+        true) =
+    ∀ (j : Fin 10),
+      ((fun j =>
+              match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+              | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+              | x => none)
+            j).isSome =
+        true
+
+case e'_2.e_3.e_2
+xs : List (SemMsgZ E × E)
+h : xs.length = 25
+left : Fin 10 → Option (Polynomial E) := ⋯
+right : Fin 10 → Option (Polynomial E) := ⋯
+same :
+  (fun j =>
+      match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+      | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+      | x => none) =
+    fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+⊢ (fun j =>
+      (match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+          | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+          | x => none).isSome =
+        true) =
+    fun j =>
+    ((fun j =>
+            match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+            | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+            | x => none)
+          j).isSome =
+      true
+
+case e'_2.e_3.e_3
+xs : List (SemMsgZ E × E)
+h : xs.length = 25
+left : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+right : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+same :
+  (fun j =>
+      match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+      | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+      | x => none) =
+    fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+⊢ (fun a =>
+      instDecidableEqBool
+        (match Msg.semantic (scalarMessage xs[15 + ↑a].1) with
+          | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+          | x => none).isSome
+        true) ≍
+    fun a =>
+    instDecidableEqBool
+      ((fun j =>
+            match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+            | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+            | x => none)
+          a).isSome
+      true
+
+case e'_2.e_4
+xs : List (SemMsgZ E × E)
+h : xs.length = 25
+left : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+right : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+same :
+  (fun j =>
+      match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+      | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+      | x => none) =
+    fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+⊢ (fun h_1 =>
+      some fun j =>
+        (match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+            | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+            | x => none).get
+          ⋯) ≍
+    fun hall =>
+    some fun j =>
+      ((fun j =>
+              match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+              | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+              | x => none)
+            j).get
+        ⋯
+
+case e'_2.e_5
+xs : List (SemMsgZ E × E)
+h : xs.length = 25
+left : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+right : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+same :
+  (fun j =>
+      match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+      | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+      | x => none) =
+    fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+⊢ (fun h => none) ≍ fun hall => none
+
+case e'_3.e_2
+xs : List (SemMsgZ E × E)
+h : xs.length = 25
+left : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+right : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+same :
+  (fun j =>
+      match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+      | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+      | x => none) =
+    fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+⊢ (∀ (j : Fin 10),
+      (match Msg.semantic xs[15 + ↑j].1 with
+          | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+          | x => none).isSome =
+        true) =
+    ∀ (j : Fin 10),
+      ((fun j =>
+              match Msg.semantic xs[15 + ↑j].1 with
+              | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+              | x => none)
+            j).isSome =
+        true
+
+case e'_3.e_3.e_2
+xs : List (SemMsgZ E × E)
+h : xs.length = 25
+left : Fin 10 → Option (Polynomial E) := ⋯
+right : Fin 10 → Option (Polynomial E) := ⋯
+same :
+  (fun j =>
+      match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+      | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+      | x => none) =
+    fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+⊢ (fun j =>
+      (match Msg.semantic xs[15 + ↑j].1 with
+          | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+          | x => none).isSome =
+        true) =
+    fun j =>
+    ((fun j =>
+            match Msg.semantic xs[15 + ↑j].1 with
+            | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+            | x => none)
+          j).isSome =
+      true
+
+case e'_3.e_3.e_3
+xs : List (SemMsgZ E × E)
+h : xs.length = 25
+left : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+right : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+same :
+  (fun j =>
+      match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+      | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+      | x => none) =
+    fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+⊢ (fun a =>
+      instDecidableEqBool
+        (match Msg.semantic xs[15 + ↑a].1 with
+          | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+          | x => none).isSome
+        true) ≍
+    fun a =>
+    instDecidableEqBool
+      ((fun j =>
+            match Msg.semantic xs[15 + ↑j].1 with
+            | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+            | x => none)
+          a).isSome
+      true
+
+case e'_3.e_4
+xs : List (SemMsgZ E × E)
+h : xs.length = 25
+left : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+right : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+same :
+  (fun j =>
+      match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+      | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+      | x => none) =
+    fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+⊢ (fun h_1 =>
+      some fun j =>
+        (match Msg.semantic xs[15 + ↑j].1 with
+            | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+            | x => none).get
+          ⋯) ≍
+    fun hall =>
+    some fun j =>
+      ((fun j =>
+              match Msg.semantic xs[15 + ↑j].1 with
+              | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+              | x => none)
+            j).get
+        ⋯
+
+case e'_3.e_5
+xs : List (SemMsgZ E × E)
+h : xs.length = 25
+left : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+right : Fin 10 → Option (Polynomial E) :=
+  fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+same :
+  (fun j =>
+      match Msg.semantic (scalarMessage xs[15 + ↑j].1) with
+      | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+      | x => none) =
+    fun j =>
+    match Msg.semantic xs[15 + ↑j].1 with
+    | Msg.semantic (SemMsgZ.base (SemMsg.roundPoly p)) => some p
+    | x => none
+⊢ (fun h => none) ≍ fun hall => none
+'AspisR1.OraclePortSemanticProjectionC6.scalar_challenges' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortSemanticProjectionC6.scalar_claim' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortSemanticProjectionC6.scalar_poly' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortSemanticProjectionC6.scalar_polynomials' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortSemanticProjectionC6.observe_scalar' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortSemanticProjectionC6.observe_of_scalar_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortSemanticProjectionC6.read_observe' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
