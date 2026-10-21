@@ -21,11 +21,11 @@ fn real_width_accumulation_and_historical_modes() {
   let b=BatchedWeights{raw:alloc::vec![[1<<33;4];64],terms:phase};
   let mut shipped=copy_a(&a);let mut pending=copy_b(&b);
   accumulate_batched_with_node(&p,&mut shipped,node,E::ONE,&mut pending);
-  let (owned,bowned)=accumulate_owned(&p,copy_a(&a),node,E::ONE,copy_b(&b));same(&shipped,&owned,&pending,&bowned);
+  let (owned,bowned)=accumulate_owned(p.rho,copy_a(&a),node,E::ONE,copy_b(&b));same(&shipped,&owned,&pending,&bowned);
   let mut historical=copy_a(&a);let mut bh=copy_b(&b);accumulate_with_node(&p,&mut historical,node,E::ONE,Some(&mut bh));
-  let (reference,br)=accumulate_optional_owned(&p,copy_a(&a),node,E::ONE,Some(copy_b(&b)));same(&historical,&reference,&bh,&br.unwrap());
+  let (reference,br)=accumulate_optional_owned(p.rho,copy_a(&a),node,E::ONE,Some(copy_b(&b)));same(&historical,&reference,&bh,&br.unwrap());
   let mut historical=copy_a(&a);accumulate_with_node(&p,&mut historical,node,E::ONE,None);
-  let (reference,br)=accumulate_optional_owned(&p,copy_a(&a),node,E::ONE,None);
+  let (reference,br)=accumulate_optional_owned(p.rho,copy_a(&a),node,E::ONE,None);
   same(&historical,&reference,&b,&b);assert!(br.is_none());
  }}}
 }

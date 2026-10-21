@@ -37,33 +37,22 @@ pub(super) fn run(proof:&[u8],p:&Prepared,a:Accumulator,g:&[E;29],obs:Observer,g
 }
 '''
 # Owned state removes only mutable-reference parameters. Loop order/trace remain literal.
-prod=item(V,'fn accumulate_batched_with_node')
-owned=prod.replace('fn accumulate_batched_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,weights:&mut BatchedWeights) {','pub fn accumulate_owned(p:&Prepared,mut a:Accumulator,mut node:M31,value:E,mut weights:BatchedWeights)->(Accumulator,BatchedWeights) {')
-assert owned!=prod
-owned=owned[:-1]+'    (a,weights)\n}'
+owned=(T/'src/owned_accumulate.rs').read_text()
 query=item(C,'fn query_values(').replace('fn query_values(', 'pub fn query_owned(')
-query=query.replace('accumulate_batched_with_node(p, &mut a, node, folded, &mut pending);','let (a, pending) = accumulate_owned(p, a, node, folded, pending);')
+query=query.replace('accumulate_batched_with_node(p, &mut a, node, folded, &mut pending);','let (a, pending) = accumulate_owned(p.rho, a, node, folded, pending);')
 query=query.replace('let q = opening(proof, i);','let q = candidate::opening(proof, i);')
 # Sibling privacy: keep query function in its own module, not an existing module.
 query=query.replace('candidate::opening(proof, i)','opening(proof, i)')
-loop=item(C,'fn query_loop(').replace('fn query_loop(', 'pub fn query_loop_owned(').replace('query_values(proof, p, a, g, obs, geometry, pending)','query_owned(proof, p, a, g, obs, geometry, pending)')
+loop='pub fn query_loop_owned(proof:&[u8],p:&Prepared,a:Accumulator,g:&[E;29],obs:Observer,geometry:&QueryGeometry,pending:BatchedWeights,end:usize)->Result<(Accumulator,BatchedWeights),Error> {\n    if a.next>=end {return Ok((a,pending));}\n    match query_owned(proof,p,a,g,obs,geometry,pending) {\n        Err(error)=>Err(error),\n        Ok((a,pending))=>query_loop_owned(proof,p,a,g,obs,geometry,pending,end)\n    }\n}\n'
 owned+='\n'+item(C,'fn opening(')+'\n'+query+'\n'+loop
-# Historical Option<&mut> variant: move owned Option state, no reborrow loop.
-historical=item(V,'fn accumulate_with_node')
-historical=historical.replace('fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,index', 'fn unreachable(') if False else historical
-historical=historical.replace('fn accumulate_with_node(p:&Prepared,a:&mut Accumulator,mut node:M31,value:E,mut pending:Option<&mut BatchedWeights>) {','pub fn accumulate_optional_owned(p:&Prepared,mut a:Accumulator,mut node:M31,value:E,mut pending:Option<BatchedWeights>)->(Accumulator,Option<BatchedWeights>) {')
-historical=historical.replace('if let Some(weights)=pending.as_deref_mut() {', 'pending = if let Some(mut weights)=pending {')
-historical=historical.replace('} else {a.weights[j]=a.weights[j].add(a.power.mul_m31(basis[j]));}', 'Some(weights) } else {a.weights[j]=a.weights[j].add(a.power.mul_m31(basis[j])); None };')
-historical=historical.replace('if let Some(weights)=pending {weights.terms+=1;}','if let Some(weights)=pending.as_mut() {weights.terms+=1;}')
-# This match stays inside a loop, but loans are local to owned state rather than input reborrows.
-historical=historical[:-1]+'    (a,pending)\n}'
-owned+='\n'+historical+'\n'
 outputs={'src/frozen.rs':frozen,'src/owned.rs':owned}
 for rel,s in outputs.items():
  p=T/rel
  if '--check' in sys.argv: assert p.read_text()==s, rel
  else:p.write_text(s)
-manifest={'frozen_revision':'b2727acd3abf79315d18b754a260f58f4b1c6326','worktree_base':'072b24afc','source_files':pins,'literal_items':items,'generated':{k:hashlib.sha256(v.encode()).hexdigest() for k,v in outputs.items()},'shipped_changes':subprocess.check_output(['git','diff','--name-only','072b24afc','--','crates','programs'],cwd=R,text=True).splitlines()}
+for name in ['compact.rs','fast_dots.rs','fast_pairing.rs','fast_domain.rs','trace.rs','transport.rs']:
+ p=V.with_name(name);pins[str(p.relative_to(R))]=hashlib.sha256(p.read_bytes()).hexdigest()
+manifest={'reference_sources':{name:hashlib.sha256((T/name).read_bytes()).hexdigest() for name in ['src/owned_accumulate.rs','src/geometry_owned.rs','src/lib.rs','generate.py']},'frozen_revision':'b2727acd3abf79315d18b754a260f58f4b1c6326','worktree_base':'072b24afc','source_files':pins,'literal_items':items,'generated':{k:hashlib.sha256(v.encode()).hexdigest() for k,v in outputs.items()},'shipped_changes':subprocess.check_output(['git','diff','--name-only','072b24afc','--','crates','programs'],cwd=R,text=True).splitlines()}
 assert not manifest['shipped_changes']
 for path,sha in pins.items():
  assert hashlib.sha256(subprocess.check_output(['git','show','b2727acd3:'+path],cwd=R)).hexdigest()==sha,path
