@@ -1,0 +1,115 @@
+import ActualAllocationExtractorM10
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ClosedAllocationLedgerM10
+open RawExtractorCostComposedV2 RawExtractorCostLedger
+open RawRecordedEagerExtractorReadsBin (RunView Coins)
+open ActualAllocationExtractorM10 (actualHeap)
+attribute [local irreducible] BinEagerWordsReads.words
+
+@[irreducible] def eval (run : RunView) (coins : Coins) : Option SpendRelation.Wspend × Resources :=
+  let x := ActualAllocationExtractorM10.eval run coins
+  (x.1,CubicAllocationLiftM10.resources x.2 (BinEagerWordsReads.words run).2
+    (actualHeap.bits run coins) run.1.length CostedAllocationLedgerM10.naturalConstant)
+
+theorem value (run : RunView) (coins : Coins) :
+    (eval run coins).1 = RawRecordedPublicSpendExtractorBin.extract run coins := by
+  unfold eval
+  exact ActualAllocationExtractorM10.value run coins
+
+@[irreducible] def extractor : RawExtractorCostComposedBin.CostedExtractor := ⟨eval,value⟩
+abbrev params := CostedAllocationLedgerM10.params
+
+theorem total (Q : Nat) (run : RunView) (coins : Coins) (ha : run.2.2 = true)
+    (hl : run.1.length ≤ Q+1161) :
+    (eval run coins).2.total ≤ 4*CostedAllocationLedgerM10.scale^3*(run.1.length+1)^3 := by
+  unfold eval CostedAllocationLedgerM10.scale
+  exact CubicAllocationLiftM10.total_bound _ _ _ _ _ _ _
+    (ActualAllocationExtractorM10.work run coins) (BinEagerWordsReads.words_reads run)
+    (ActualAllocationExtractorM10.allocation_bound Q run coins ha hl)
+
+theorem field_bound (run : RunView) (coins : Coins) :
+    (eval run coins).2.fieldOps ≤ 4*CostedAllocationLedgerM10.scale^3*(run.1.length+1)^3 := by
+  unfold eval CubicAllocationLiftM10.resources
+  change (ActualAllocationExtractorM10.eval run coins).2 ≤ _
+  unfold CostedAllocationLedgerM10.scale
+  exact CubicFieldBoundM10.bound _ _ _ _ _ (ActualAllocationExtractorM10.work run coins)
+
+theorem total_overhead (Q : Nat) (run : RunView) (coins : Coins) (ha : run.2.2 = true)
+    (hl : run.1.length ≤ Q+1161) : (eval run coins).2.total ≤ (params Q).overhead :=
+  CostedAllocationLedgerM10.lift_log _ _ Q (total Q run coins ha hl) hl
+
+theorem bounded_jobs (Q : Nat) (run : RunView) (coins : Coins) (hl : run.1.length ≤ Q+1161) :
+    ∃ j : Jobs AspisWideTower.WideExact, j.Bounded (params Q).n (params Q).b (params Q).count ∧
+      (eval run coins).2.fieldOps ≤ j.charge (params Q).mulBudget+(params Q).overhead := by
+  obtain ⟨j,hj,_⟩ := CostedAllocationLedgerM10.bounded_jobs actualHeap Q run coins hl
+  refine ⟨j,hj,?_⟩
+  exact (CostedAllocationLedgerM10.lift_log _ _ Q (field_bound run coins) hl).trans (Nat.le_add_left _ _)
+
+theorem reads (Q : Nat) (run : RunView) (coins : Coins) (hl : run.1.length ≤ Q+1161) :
+    (eval run coins).2.logReads ≤ (params Q).readBudget := by
+  have h := CostedAllocationLedgerM10.reads actualHeap Q run coins hl
+  unfold CostedAllocationLedgerM10.eval CubicAllocationLiftM10.resources at h
+  unfold eval CubicAllocationLiftM10.resources
+  exact h
+
+theorem ledger (Q : Nat) : RawExtractorCostComposedBin.LedgerRefinement extractor (params Q) Q := by
+  unfold extractor
+  constructor
+  · exact Nat.le_refl _
+  · intro run coins _ hl
+    exact bounded_jobs Q run coins hl
+  · intro run coins _ hl
+    exact reads Q run coins hl
+  · intro run coins ha hl
+    have ht := total_overhead Q run coins ha hl
+    have hb : (eval run coins).2.bits ≤ (eval run coins).2.total := by
+      unfold Resources.total
+      omega
+    have hf : 1 ≤ ((params Q).b+1)^2 := by
+      have hh := Nat.pow_le_pow_left (show 1 ≤ (params Q).b+1 by omega) 2
+      simpa only [one_pow] using hh
+    have hm := Nat.mul_le_mul
+      (show (params Q).overhead ≤ (eval run coins).2.fieldOps+
+        (eval run coins).2.logReads+(params Q).overhead by omega) hf
+    change (eval run coins).2.bits ≤ _
+    exact (hb.trans ht).trans (by simpa only [Nat.mul_one] using hm)
+
+theorem uniform (Q : Nat) : RawExtractorParameterPolynomial.CoordinateBound (params Q)
+    (Q+RawExtractorFixedCubicM10.slack CostedAllocationLedgerM10.fixed)
+    CostedAllocationLedgerM10.fixed.overheadConstant 3 := CostedAllocationLedgerM10.uniform Q
+
+theorem polynomial_eval (Q : Nat) : CostedAllocationLedgerM10.costPolynomial.eval Q = (params Q).attemptBudget :=
+  CostedAllocationLedgerM10.polynomial_eval Q
+
+theorem polynomial_degree : CostedAllocationLedgerM10.costPolynomial.natDegree ≤ 3 := CostedAllocationLedgerM10.polynomial_degree
+
+theorem accepted_cost (Q : Nat) (run : RunView) (ha : run.2.2 = true)
+    (hl : run.1.length ≤ Q+1161) :
+    (∀ coins, (extractor.eval run coins).2.total ≤ CostedAllocationLedgerM10.costPolynomial.eval Q) ∧
+    AspisV8R19.OracleResampling.mean (fun coins : Coins =>
+      ((extractor.eval run coins).2.total : ℚ)) ≤ ((CostedAllocationLedgerM10.costPolynomial.eval Q : Nat) : ℚ) := by
+  rw [polynomial_eval]
+  exact RawExtractorCostComposedBin.accepted_attempt_cost extractor (params Q) Q (ledger Q) run ha hl
+
+theorem direct_bound (Q : Nat) (run : RunView) (coins : Coins) (ha : run.2.2 = true)
+    (hl : run.1.length ≤ Q+1161) :
+    (eval run coins).2.total ≤ 4*CostedAllocationLedgerM10.scale^3*(Q+1162)^3 :=
+  (total Q run coins ha hl).trans
+    (Nat.mul_le_mul_left _ (Nat.pow_le_pow_left (by omega) 3))
+
+#print axioms value
+#print axioms total
+#print axioms field_bound
+#print axioms total_overhead
+#print axioms bounded_jobs
+#print axioms reads
+#print axioms ledger
+#print axioms uniform
+#print axioms polynomial_eval
+#print axioms polynomial_degree
+#print axioms accepted_cost
+#print axioms direct_bound
+end AspisR1.ClosedAllocationLedgerM10
+end
