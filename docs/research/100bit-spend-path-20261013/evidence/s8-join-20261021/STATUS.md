@@ -45,3 +45,16 @@ that are multiples of 16. No parser or codec operations are abstract callbacks.
 All six theorem audits use standard axioms; focused attempt chunks-06 passes.
 The retained coalesced R1SemanticHit/R0P caches resolve a duplicate-declaration
 import failure in chunks-02; no shared cache or old module was modified.
+
+## Stage 3 — total compact scan result
+
+`S8JoinCompactTotal.check_values_total` proves full Result equality for every
+extracted byte slice, including inner NonCanonical rejection and any ignored
+partial final chunk. The target is canonicality of precisely the consumed
+prefix, not an all-storage successful-input restriction. `aligned_scan_total`
+uses the same frozen canonical predicate on the entire input when its length
+is a multiple of 16. All five audits use standard axioms (scan-01).
+
+`preflight.py` validates inherited S8 frozen file/reference hashes and the
+new-module lexical scan. The historical checkers' broad-base failures are
+recorded in `legacy-validation.json`; their code/old receipts are unchanged.

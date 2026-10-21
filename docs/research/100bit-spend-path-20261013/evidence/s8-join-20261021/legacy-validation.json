@@ -1,0 +1,7 @@
+{
+  "commands": ["python3 tools/s8-kani2-20261021/check-source.py", "python3 tools/s8-kani2-20261021/summarize.py"],
+  "observed_exit_status": [1, 1],
+  "reason": "Historical blanket shipped-file assertions compare all crates/programs with 75c037e96 or 6ecb5fc09; later unrelated prover and incremental_merkle changes are present in this worker base.",
+  "scope": "The check-source generator reached its blanket diff assertion after validating S8 literal source and frozen file hashes. summarize reached its blanket diff assertion after checking retained local and host receipts.",
+  "replacement": "tools/s8-join-20261021/validate.py rechecks exact S8 frozen source/reference hashes, retained mutable-model transformations, own final-source receipts/axioms, and no shipped changes relative to this worker base. It does not edit or weaken either historical checker."
+}
