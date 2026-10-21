@@ -1,0 +1,13 @@
+# V10 typed inner-body transport and bound
+
+This packet proves an exact typed transport for the generated V10 inner term body, then feeds that same successful body result to the retained v6 source-derived per-term linear bound. `v10TermBody_eq_fixedBody` equates the source-cut body under an explicit `BodyOps` record with the existing fixed body on the same pointwise mapped input array. `v10_term_body_success_linear_bound` consumes that exact result and reuses the existing v6 theorem; no separate “same output” premise or independent body run is introduced.
+
+The generated-body checker passes. The source cut preserves the emitted body verbatim except that `M31.from_le_bytes` and `WideExact.to_limbs` are explicit operation fields. `adaptOps` supplies the current parser and composes current `wideToLimbs` with the checked V10→EbyK carrier map. The indexed-array transport covers success, failure, and divergence.
+
+Owner inspection was completed against the exact selected `Aeneas.Std.Array.Array` object SHA `9abd3dd0fb11ac9f39225c0940fb20175b474190f25f29e385b3b901500f75dd` and source SHA `09ef16897a42cf3f80772067ef11f643f840a7f726b2426aabf29fefa602097e`, with the retained producer receipt linked in the manifest. The selected definition is the length-indexed List subtype and `index_usize` uses that type. Fully qualified type/index references in the map helper resolve coherently. The initial unqualified simplification error was namespace/API resolution; it was not evidence of an incompatible owner. A separate initial duplicate-module import (`FunsOpsFixedV6` vs `AspisR1FastDotsCurrent.FunsOpsFixedV6`) was fixed by using the exact namespaced owner required by the retained bound chain. The failed diagnostic attempts are retained.
+
+Lean 4.32 checks: body transport 8.70s / peak RSS 2,258,911,232 bytes / swap 0; bound composition 1.83s / peak RSS 2,240,659,456 bytes / swap 0. `#print axioms` reports `[propext]` for the map theorem and `[propext, Classical.choice, Quot.sound]` for the body and bound theorem. No generated `FunsExternal` axioms are imported. Exact sources, compiler, imports, objects, commands, and receipts are recorded in the manifest.
+
+This result does not establish source installation of either operation, whole callback semantics, Rust/P6 `from_fn` correspondence, or adoption equivalence.
+
+A first loop-lifting attempt (`S4V10TypedTermLoopBoundV1`) is retained under `diagnostics/`: unfolding the Aeneas loop through `congr 1` hit Lean's 200,000-heartbeat limit and caused a `sorryAx` in that failed target. The corrected `congrArg` proof is in the separate evidence packet `evidence/s4-v10-term-loop-bound-v2-20261021`.
