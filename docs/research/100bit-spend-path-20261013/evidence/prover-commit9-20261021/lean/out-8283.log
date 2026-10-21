@@ -1,0 +1,33 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBalanceRecursion.lean:20:48: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+row : Usize
+h : ↑row < 1024
+⊢ 1024 < UScalar.size UScalarTy.Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBalanceRecursion.lean:21:13: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.val_one`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBalanceRecursion.lean:21:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.ProverCommitBalanceRecursion.next_row' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitBalanceRecursion.sequence_ascending' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitBalanceRecursion.m31_rows_fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitBalanceRecursion.m31_all_rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitBalanceRecursion.qm31_rows_fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitBalanceRecursion.qm31_all_rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

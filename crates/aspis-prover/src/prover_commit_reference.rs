@@ -117,10 +117,7 @@ pub(crate) fn balance_m31_owned(mut table: Vec<M31>, dependent: usize,
     if table.len() != 1024 || active[dependent] {
         return (Err(StateOnlyMaskBuildError::TraceShape), table);
     }
-    let mut sum = M31::ZERO;
-    for row in 0..1024usize {
-        if !active[row] && row != dependent { sum = sum.add(table[row]); }
-    }
+    let sum = balance_m31_rows(&table, dependent, active, 0, M31::ZERO);
     table[dependent] = M31::ZERO.sub(sum);
     (Ok(()), table)
 }
@@ -131,10 +128,7 @@ pub(crate) fn balance_qm31_owned(mut table: Vec<aspis_core::field::QM31>, depend
     if table.len() != 1024 || active[dependent] {
         return (Err(StateOnlyMaskBuildError::TraceShape), table);
     }
-    let mut sum = aspis_core::field::QM31::ZERO;
-    for row in 0..1024usize {
-        if !active[row] && row != dependent { sum = sum.add(table[row]); }
-    }
+    let sum = balance_qm31_rows(&table, dependent, active, 0, aspis_core::field::QM31::ZERO);
     table[dependent] = aspis_core::field::QM31::ZERO.sub(sum);
     (Ok(()), table)
 }
@@ -216,14 +210,34 @@ mod step_contract8 {
 }
 
 /// One row of the owned balancing fold. The outer row order is proved separately.
-#[cfg(any(kani, aeneas_ref))]
 pub(crate) fn balance_m31_step(sum: M31, value: M31, active: bool,
     row: usize, dependent: usize) -> M31 {
     if !active && row != dependent { sum.add(value) } else { sum }
 }
-#[cfg(any(kani, aeneas_ref))]
 pub(crate) fn balance_qm31_step(sum: aspis_core::field::QM31,
     value: aspis_core::field::QM31, active: bool, row: usize, dependent: usize)
     -> aspis_core::field::QM31 {
     if !active && row != dependent { sum.add(value) } else { sum }
+}
+
+/// Ascending fixed-bound recursion; the accumulator is fresh owned state.
+/// This avoids the Aeneas loop context-collapse path without changing row order.
+pub(crate) fn balance_m31_rows(table: &[M31], dependent: usize,
+    active: &[bool; 1024], row: usize, sum: M31) -> M31
+{
+    if row < 1024 {
+        let after = balance_m31_step(sum, table[row], active[row], row, dependent);
+        balance_m31_rows(table, dependent, active, row + 1, after)
+    } else { sum }
+}
+
+/// Ascending fixed-bound recursion; the accumulator is fresh owned state.
+/// This avoids the Aeneas loop context-collapse path without changing row order.
+pub(crate) fn balance_qm31_rows(table: &[aspis_core::field::QM31], dependent: usize,
+    active: &[bool; 1024], row: usize, sum: aspis_core::field::QM31) -> aspis_core::field::QM31
+{
+    if row < 1024 {
+        let after = balance_qm31_step(sum, table[row], active[row], row, dependent);
+        balance_qm31_rows(table, dependent, active, row + 1, after)
+    } else { sum }
 }
