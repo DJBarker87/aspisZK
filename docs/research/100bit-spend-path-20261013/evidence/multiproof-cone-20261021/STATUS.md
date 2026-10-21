@@ -1007,3 +1007,24 @@ full targets/revisions/hashes and commands in receipts/manifest. Tail attempts
 1–2 hit default elaboration heartbeats while trying to reduce an opaque
 rejected branch; explicit Program equations replaced broad normalization.
 No heartbeat/recursion/memory cap was changed. No shipped file changed.
+
+## Continuation 6, stage 3a: shared scratch and short-circuited triples
+
+`MultiproofConeVerifyState.verify_projection` / `tail_projection` retain the
+actual physical poststate and prove that erasing only that internal state
+commutes with complete oracle observation. `MultiproofConeSlotState.accepted_slot`
+composes the entire extracted leaf fold with the count/padding/physical-root
+tail. `MultiproofConeBatches.accepted_sequence` inducts over the actual Bool
+short-circuit, instantiating each slot with accepted_slot. `accepted_three`
+specializes to C1, C2, folded; it works for either batch ordinal and arbitrary
+initial scratch. The previous slot's real idx/val suffix is passed onward;
+only d and the node cursor are reset, as in batch_tree.
+
+VerifyState attempt 3: exit 0, wall 32.381478 s, peak RSS 3526868992 bytes.
+SlotState attempt 1: exit 0, wall 19.882933 s, peak RSS 3529654272 bytes.
+Batches attempt 2: exit 0, wall 14.969253 s, peak RSS 3546202112 bytes.
+All zero swap, six standard reports, exact hashes/revisions in manifest.
+These results concern the explicit instrumented source cut. Initial source
+packed-key/physical-proof carrier identification and enclosing Rust caller
+lowering remain excluded; no global AcceptedRunJoin is claimed. The named
+frozen2 stage endpoint and final audit follow this checkpoint.
