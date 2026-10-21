@@ -44,7 +44,37 @@ import AspisR1S3InactiveSource.Types failed, environment already contains 'instD
 
 ## Proposed fix and prototype
 
-In progress: qualify discriminant instance names on evidence copies, retaining
-the original generated reader and all enum/type/function names. Rebuild the
-small dependent wrapper closure into a private object directory, then import
-all three audit groups in one uniquely named root module.
+The evidence-only `ImportUnionNamedDiscriminant` adapter calls the pinned
+`Aeneas.Discriminant.generateReadDiscriminantCmds` and elaborates its reader
+command unchanged. It replaces the anonymous instance command with
+`<fully-qualified-enum-name>.instDiscriminant`. On copies only, the S3 and
+stage2 Types modules import the adapter and replace `@[discriminant isize]`
+with `@[import_union_discriminant]`. All five affected enum readers retain
+the original generator logic (S3 Error; stage2 Error, Variant, Arity, Phase).
+Public-preparation Types/Funs and the entire main group are reused unchanged.
+
+Thirteen copied modules are rebuilt, bottom-up, into
+`/tmp/codex-cx-import-coll-20261021-objects`; this directory alone overrides
+the old S3/stage2 objects. No shared cache is written. Wrapper changes are
+only additional axiom-print commands; statements and proofs are unchanged.
+`copy-provenance.json` pins every original and copied source.
+
+| Focused check | Exit | Wall (s) | Peak RSS (bytes) | Swaps |
+|---|---:|---:|---:|---:|
+| Untouched union baseline | 1 | 5.567 | 2,317,189,120 | 0 |
+| `ImportUnionAllConesCx20261021` | 0 | 6.606 | 3,234,267,136 | 0 |
+| `ImportUnionHeadlineCx20261021` (R19 + all cones) | 0 | 7.200 | 3,558,064,128 | 0 |
+
+The all-cone module imports **all three** retained R22 audit groups in one
+Lean environment and prints 60 standard-axiom audits. The headline aggregator
+additionally imports the unchanged `R1FinalSoundnessBinPerQueryR19` and audits
+its `final_soundness` theorem to `[propext, Classical.choice, Quot.sound]`.
+The equation theorem overlap coexists, as Lean's import implementation allows.
+These are focused integration checks, not a replay of the full frozen manifest.
+
+Every attempt uses the requested local toolchain, `-j1 -M4400
+-DElab.async=false`, the global mkdir lock, and `/usr/bin/time -l`.
+Receipts include source revision/hash, immediate-object dependency
+fingerprint, exact command/path, exit, wall, peak RSS, swaps, complete axiom
+output and errors. Three initial adapter elaboration errors are retained;
+the fourth adapter version passes. There was no memory failure or cap raise.

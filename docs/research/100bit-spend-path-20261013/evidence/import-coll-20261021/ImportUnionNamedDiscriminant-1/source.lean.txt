@@ -1,0 +1,27 @@
+import Aeneas
+
+/- Evidence-only discriminant naming adapter. The original Aeneas generator
+   supplies the reader verbatim; only the instance declaration is named.
+   Restricted deliberately to the closed, isize enums in this prototype. -/
+open Lean Elab Command
+namespace ImportUnionNamedDiscriminant
+syntax (name := namedDiscriminant) "import_union_discriminant" : attr
+initialize namedDiscriminantAttribute : AttributeImpl ← do
+  let attrImpl : AttributeImpl := {
+    name := `namedDiscriminant
+    descr := "Emit the Aeneas isize reader with a type-qualified instance name"
+    add := fun declName _ _ => do
+      liftCommandElabM do
+        let cmds ← liftTermElabM
+          (Aeneas.Discriminant.generateReadDiscriminantCmds declName .Isize none)
+        elabCommand cmds[0]!
+        let instName := mkIdent (declName ++ `instDiscriminant)
+        let target := mkIdent declName
+        let reader := mkIdent (declName ++ `read_discriminant)
+        elabCommand (← `(instance $instName :
+          Aeneas.Std.Discriminant $target Aeneas.Std.Isize where
+            read_discriminant := $reader))
+  }
+  registerBuiltinAttribute attrImpl
+  pure attrImpl
+end ImportUnionNamedDiscriminant
