@@ -28,7 +28,7 @@ def lean_processes():
 
 
 module = sys.argv[1]
-source = PACKET / 'lean' / (module + '.lean')
+source = PACKET / 'lean' / (module.replace('.', '/') + '.lean')
 baseline = json.loads((HERE.parent / 'oracle-port-draft-20261021/OraclePortHeadlineDVC7-1/command.json').read_text())
 config = {m: 'overflow-freedom-s2-20261020/receipts/R22Stage2ReaderTotal-20261020T141933Z/receipt.json' for m in ['OraclePortCkptAbiReader', 'OraclePortCkptAbiReadSequence', 'OraclePortCkptAbiSource']}
 selected = config.get(module)
@@ -68,8 +68,9 @@ out.mkdir()
 if overlay.exists():
     (out / 'cache-overlay.json').write_bytes(overlay.read_bytes())
 OBJECTS.mkdir(exist_ok=True)
+(OBJECTS / module.replace('.', '/')).parent.mkdir(parents=True,exist_ok=True)
 argv = [LEAN, '-j1', '-M4400', '-DElab.async=false', '-R', str(PACKET / 'lean'),
-        '-o', str(OBJECTS / (module + '.olean')), str(source)]
+        '-o', str(OBJECTS / (module.replace('.', '/') + '.olean')), str(source)]
 receipt = {'module': module, 'attempt': n, 'argv': argv, 'lean_path': path,
            'source_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
            'source_sha256': sha(source), 'direct_imports': imports, 'deps_fingerprint': fp,
@@ -112,7 +113,7 @@ receipt.update(peak_rss_bytes=int(re.search(r'(\d+)\s+maximum resident set size'
                errors=[line for line in (log + '\n' + timing).splitlines() if 'error:' in line],
                final_current=result.returncode == 0)
 if result.returncode == 0:
-    obj = OBJECTS / (module + '.olean')
+    obj = OBJECTS / (module.replace('.', '/') + '.olean')
     receipt.update(object_sha256=sha(obj), object_size=obj.stat().st_size)
 (out / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
 data = json.loads(manifest.read_text()) if manifest.exists() else data
