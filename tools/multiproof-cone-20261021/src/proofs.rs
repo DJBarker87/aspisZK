@@ -224,7 +224,7 @@ fn adoption_binary_level_step() {
 }
 
 #[kani::proof_for_contract(super::adoption::source_row)]
-#[kani::stub_verified(r::read32)] #[kani::unwind(34)]
+#[kani::unwind(34)]
 fn adoption_binary_row_contract() {
  let s=r::Scratch{idx:kani::any(),val:kani::any(),n:kani::any(),at:kani::any()};
  let nodes:[u8;5504]=kani::any();let length:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();let coordinate:usize=kani::any();
@@ -233,7 +233,7 @@ fn adoption_binary_row_contract() {
 }
 
 #[kani::proof] #[kani::stub_verified(super::adoption::source_row)]
-#[kani::stub_verified(r::read32)] #[kani::unwind(34)]
+#[kani::unwind(34)]
 fn adoption_binary_level_composed() {
  use core::cell::Cell;
  use super::adoption::BinaryHash;
