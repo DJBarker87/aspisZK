@@ -10,7 +10,7 @@ sub=ev/f'submission-{attempt}.json';sub.write_text(json.dumps(r,indent=2)+'\n')
 def run(args,**kw):return subprocess.run(args,check=True,**kw)
 run(['ssh',host,f'mkdir -p {remote}'])
 # Upload branch-owned new names only; failed source versions may be replaced.
-assert module in {'R1Z/SimCostRelativeReplay', 'R1Z/SimCostRelativeIdeal', 'R1Z/SimCostRelativeObstruction', 'R1Z/SimCostLazyCoupling', 'R1Z/SimCostLazyProtocol', 'R1Z/SimCostBinarySource', 'R1Z/SimCostRelativePacket', 'R1Z/PrivacyR1HeadlineV2SimProto'}
+assert module in {'R1Z/SimCostRelativeReplay', 'R1Z/SimCostRelativeIdeal', 'R1Z/SimCostRelativeObstruction', 'R1Z/SimCostLazyCoupling', 'R1Z/SimCostLazyProtocol', 'R1Z/SimCostBinarySource', 'R1Z/SimCostBinaryCoupling', 'R1Z/SimCostRelativePacket', 'R1Z/PrivacyR1HeadlineV2SimProto'}
 run(['ssh',host,f'test ! -f /home/dombarker/project-offloads/aspis-joint-20261019/sources/{module}.lean || mkdir -p {remote}/snapshots/{attempt} && cp -p /home/dombarker/project-offloads/aspis-joint-20261019/sources/{module}.lean {remote}/snapshots/{attempt}/ 2>/dev/null || true'])
 run(['scp',str(src),f'{host}:/home/dombarker/project-offloads/aspis-joint-20261019/sources/{module}.lean'])
 run(['scp',str(sub),str(ev/'host-attempt.py'),f'{host}:{remote}/'])

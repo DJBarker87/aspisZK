@@ -1,0 +1,48 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 0413); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostBinaryCoupling.lean:64:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean fun ts => ?g (ts i)
+in the target expression
+  (mean fun s => if (fun r => (words 2147483647 B (r i).1).1 = none) s then 1 else 0) = 1 / 2 ^ (31 * B)
+
+B samples : ℕ
+i : Fin samples
+⊢ (mean fun s => if (fun r => (words 2147483647 B (r i).1).1 = none) s then 1 else 0) = 1 / 2 ^ (31 * B)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostBinaryCoupling.lean:68:2: error: Type mismatch: After simplification, term
+  mass_exists_le_card (fun i r => (words 2147483647 B (r i).1).1 = none) (1 / 2 ^ (31 * B)) fun i => Eq.le (hi i)
+ has type
+  @LE.le ℚ Rat.instLE (mass fun s => ∃ i, (words 2147483647 B (s i).1).1 = none) (↑samples * (1 / 2 ^ (31 * B)))
+but is expected to have type
+  @LE.le ℚ Rat.instLE (mass (bad B samples)) (↑samples * (1 / 2 ^ (31 * B)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostBinaryCoupling.lean:76:2: error: Type mismatch: After simplification, term
+  hb
+ has type
+  @LE.le ℚ Rat.instLE (mass (bad 8 samples))
+    (↑samples * 452312848583266388373324160190187140051835877600158453279131187530910662656⁻¹)
+but is expected to have type
+  @LE.le ℚ Rat.instLE (mass (bad 8 samples)) (↑samples * (2 ^ 248)⁻¹)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostBinaryCoupling.lean:109:23: error: Application type mismatch: The argument
+  add_le_add_left hb epsilon
+has type
+  mass (bad 8 samples) + epsilon ≤ extraMass samples + epsilon
+but is expected to have type
+  epsilon + mass (bad 8 samples) ≤ epsilon + extraMass samples
+in the application
+  lt_of_le_of_lt (add_le_add_left hb epsilon)
+'R1Z.SimCostBinaryCoupling.complete_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostBinaryCoupling.complete_agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostBinaryCoupling.batch_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostBinaryCoupling.batch_agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostBinaryCoupling.batch_failure_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostBinaryCoupling.eight_failure_budget' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostBinaryCoupling.batch_draws' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostBinaryCoupling.observer_transfer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostBinaryCoupling.total_source_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.64
+	Maximum resident set size (kbytes): 3502552
+	Swaps: 0
+	Exit status: 1
+
+
