@@ -24,6 +24,8 @@ while sum(x['bytes'] for x in caps)+8*2**30 > 55*2**30:
     caps=reservation()
 (H/(name+'-inputs.json')).write_text(json.dumps(dict(reservations=caps,source_revision=(H/'revision.txt').read_text().strip(),source_hashes={str(p.relative_to(H/'src')):hashlib.sha256(p.read_bytes()).hexdigest() for p in list((H/'src/crates/aspis-prover/src').glob('*.rs'))+list((H/'src/crates/aspis-core/src').rglob('*.rs'))+list((H/'src/crates/aspis-r1-cost-probe/src').glob('*.rs'))+[H/'src/Cargo.lock',H/'src/crates/aspis-prover/Cargo.toml',H/'src/crates/aspis-core/Cargo.toml']}),indent=2)+'\n')
 cmd=['cargo','kani','--no-assertion-reach-checks','-j','4','-p','aspis-r1-cost-probe','--lib','--exact','--harness',target,'-Z','function-contracts','-Z','stubbing','-Z','unstable-options','--output-format','terse','--cbmc-args','--unwinding-assertions']
+unwindset=os.environ.get('KANI_UNWINDSET')
+if unwindset: cmd += ['--unwindset',unwindset]
 solver=os.environ.get('KANI_SOLVER')
 if solver:
     assert solver in ['kissat','cadical']
@@ -31,6 +33,8 @@ if solver:
 if target.startswith(('state_only_hiding::','state_only_entropy::')):
     cmd[cmd.index('-p')+1]='aspis-prover'
     cmd[cmd.index('--lib'):cmd.index('--lib')]=['--features','r0']
+if target.startswith('sim::'):
+    cmd[cmd.index('--lib'):cmd.index('--lib')]=['--features','r1p-check']
 if target.endswith('*'):
     cmd.remove('--exact');cmd[cmd.index('--harness')+1]=target[:-1]
 sys.exit(subprocess.run(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'harness/capped.py'),str(H/'receipts'/name),'Kani compilation then bounded relational byte-oracle comparison; no dense arithmetic; 600 second timeout','--','timeout','600',*cmd]).returncode)
