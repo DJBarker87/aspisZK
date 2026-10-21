@@ -97,6 +97,12 @@ Each was byte-identical, every time.
    Rust-equals-dV execution join plus the runtime carrier binding, which is
    exactly what the S-cone re-pins establish. Nothing merges without your yes.
 
+   Cone audit (read-only, branch `codex/cx-cone-audit-20261021`,
+   `design/CONE-AUDIT-20261021.md`): all 14 cones are classified against the
+   frozen-order join table. No cone yet has a complete instantiated
+   accepted-run join; total-form local helpers are listed separately. The
+   cheapest next three are S9, S3 and the checkpoint ABI.
+
 ## Soundness
 
 Current headline: **`R1FinalSoundnessHeadlineV3.final_soundness`**
