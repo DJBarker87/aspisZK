@@ -131,3 +131,24 @@ the verbatim receipts.
 This is the mathematical rebasing bridge for the P6 route. It does not
 itself prove the actual material builder's loop schedule, entry-point
 transport, or all-family shipped callback coverage.
+
+## Frozen formal audit
+
+`manifest.json` pins the 13 adopted Lean modules and the launch/validation
+inputs. Preflight source/receipt/dependency/deletion checks pass before the
+single combined replay. **J8355**, exact target **R1Z.ProverCommit11Audit**,
+imports the accepted part-10 audit cone plus all adopted part-11 modules:
+exit **0**, wall **2.51 s**, peak RSS **4,081,116 KiB**, **zero swaps**,
+source revision **31666e439** plus the literal additive audit source identified
+by SHA-256 in the receipt. The exact dependency fingerprint is retained.
+All **32 public** axiom audits contain only a subset of `propext`,
+`Classical.choice`, `Quot.sound`; the private CallerLaw application is
+separately audited in J8351 with the same restriction. All 33 new theorem
+audits therefore have explicit resource/source evidence.
+
+The final evidence-only validator adds a whitelist check for the approved
+axioms and checks the exact final audit target list. The pre-audit manifest
+is retained as `preflight-manifest.json`; all Lean source identities remain
+unchanged. `harness/validate.py` passes after receipt collection. This does
+not repeat the Lean replay. Attempts are consumed through **8355**; next
+available **8356**.
