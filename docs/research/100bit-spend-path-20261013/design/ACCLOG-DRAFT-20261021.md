@@ -66,9 +66,71 @@ consumer facts.
 
 ## Stage 3: accepted-run interface and headline
 
-Pending focused interface and transport checks. The two-pass annotation
-compiler must be covered explicitly; a one-pass accepted-only implication
-does not identify the first pass when only the enriched second pass accepts.
+`OraclePortAccLog.AcceptedRunJoin D rust` is verbatim:
+
+```lean
+structure AcceptedRunJoin (D : LiteralByteProtocol.Decoder) (rust : Verifier) : Prop where
+  verifier : AcceptedVerifierJoin rust (verifier D OraclePortShortCircuit.outerDecision)
+  annotated : ∀ (P : Prover) H,
+    (eval H (annotatedWith D rust P)).2.2 = true →
+      eval H (annotatedWith D rust P) =
+        eval H (annotated D OraclePortShortCircuit.outerDecision P)
+```
+
+The first field uses this verbatim definition:
+
+```lean
+def AcceptedVerifierJoin (source model : Verifier) : Prop :=
+  ∀ H i, (eval H (source i)).2 = true → eval H (source i) = eval H (model i)
+```
+
+Both fields retain **ordered** reads and answers and the entire returned
+carrier. The annotated output includes public statement, stored bytes and
+the enriched proof containing the recovered words. No rejection equality is
+required. The second field is deliberately stronger than the first field
+alone: it covers the two actual annotation passes. It is not claimed to
+follow from one-pass acceptance inclusion. `acceptedRunJoin_of_stable` gives
+a sufficient lifting rule from the raw join and source verdict stability
+under proof enrichment; source owners may prove those facts instead of the
+annotated equality directly. The headline has no additional stability
+premise: it consumes the explicitly quoted two-field join.
+
+`executionJoin_acceptedRunJoin` and `outerExecutionJoin_acceptedRunJoin`
+prove both inherited joins imply this interface. `acceptedRunJoin_strict`
+and `acceptedRunJoin_outer_strict` prove strict weakening against each old
+interface at the actual fixed models, using a tag-zero rejecting input and
+an extra query only after rejection. Their witnesses cover annotation too.
+These results compare logical predicates; they do not construct the frozen
+source join.
+
+`OraclePortAccLogTransport` proves equality of first-pass built words on
+accepted first passes, and equality of decoded public data, initial words,
+final words and the actual extractor on accepted annotated runs. It then
+proves the unchanged runtime failure-mass transfer using the retained
+`StoredCarrierBinding` and the actual `failureMass`. Rejected runtime runs
+have zero mass. There is no replacement acceptance-only bad-input event,
+new extractor, multiset rewrite or monotonicity assumption.
+
+The compiled endpoint is
+`OraclePortHeadlineAccLog.final_soundness`, in the distinctly named new file
+`OraclePortAccLogHeadline.lean`. It retains `OraclePortHeadlineDVsc.Claims`
+verbatim: accepted model extractor cost, returned-witness relation, abort
+allowance, total runtime bound and the same per-query range. The separate
+`per_query` theorem also compiles. The exact signature diff against
+`OraclePortHeadlineDVsc.final_soundness` changes **only**:
+
+```diff
+-    (h_Rust_equals_dV : OuterExecutionJoin D rust)
++    (h_Rust_equals_dV : AcceptedRunJoin D rust)
+```
+
+See `evidence/acclog-draft-20261021/headline-signature.diff` and the complete
+before/after signatures. The replacement is quoted verbatim above and proved
+strictly weaker. No premise deletion from the current R19 release endpoint
+is claimed. R19, its free decision, boundary hypotheses and source/runtime
+obligations are unchanged. This is a conditional draft port endpoint, not
+an unconditional frozen-source soundness result. The cached closed M10
+ledger is reused read-only; no concurrent instrumentation file is changed.
 
 ## Evidence
 
