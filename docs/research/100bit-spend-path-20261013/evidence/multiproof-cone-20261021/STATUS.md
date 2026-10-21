@@ -671,3 +671,21 @@ Exact revision, source/dependency hashes, command and logs are recorded in
 elaborations 1/2 are diagnostics, not accepted proofs. The new compile5
 launcher writes only into the continuation-5 private object directory and
 reuses prior caches. No shipped crate or inherited Lean module changed.
+
+## Continuation 5, stage 2a: exact packed key adapters
+
+`MultiproofConeKeyAdapters.packed_index` and `packed_opening` prove both
+projections of each reached u64 key: the high field is the query-derived tree
+index, and the low-byte relative ordinal plus the batch start selects exactly
+the original absolute opening. `sorted_stream` composes these with the actual
+extracted sort and proves the whole sorted `(index,absolute opening)` stream,
+including query ties and both batch sizes. Its only source-carrier premise is
+the initial batch_keys prefix equation; that premise remains at the existing
+independent P6 key-generator boundary. The raw proof opening/hash callback
+adapter is not discharged by this index/ordinal theorem.
+
+Focused attempt 2: exit 0, wall 15.901830 s, peak RSS 3579215872 bytes,
+zero swaps. All five individual reports have standard axioms only; complete
+revision/hash/dependency/command fields are retained in the module receipt and
+manifest. Attempt 1 is an elaboration diagnostic. No shared objects or shipped
+files changed, and no runtime or ELF regression was triggered.
