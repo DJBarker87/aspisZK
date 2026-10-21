@@ -1,0 +1,24 @@
+def Aeneas.Std.UScalar.shiftRight : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then ok (x.bv.ushiftRight s#uscalar) else fail Error.integerOverflow
+def Aeneas.Std.UScalar.cast : {src_ty : UScalarTy} → (tgt_ty : UScalarTy) → UScalar src_ty → UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+def Aeneas.Std.UScalar.div : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => if (y.bv != 0) = true then ok (x.bv.udiv y.bv#uscalar) else fail Error.divisionByZero
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+def Aeneas.Std.UScalar.mul : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x * ↑y)
+def Aeneas.Std.UScalar.rem : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => if (↑y != 0) = true then ok (x.bv.umod y.bv#uscalar) else fail Error.divisionByZero
+def Aeneas.Std.UScalar.val : {ty : UScalarTy} → UScalar ty → ℕ :=
+fun {ty} x => x.bv.toNat
+@[reducible] def Aeneas.Std.UScalar.bv : {ty : UScalarTy} → UScalar ty → BitVec ty.numBits :=
+fun ty self => self.1
