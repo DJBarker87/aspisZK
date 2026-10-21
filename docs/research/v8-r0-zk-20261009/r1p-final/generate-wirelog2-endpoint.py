@@ -46,8 +46,11 @@ premises are the two D80 wire premises; decoder/execution joins remain. -/''')
 (root/'lean/R1Z/PrivacyR1HeadlineWire2.lean').write_text(s)
 # Keep verbatim signatures with common specialization context in the requested report.
 report=root/'r1p-final/WIRELOG-20261021.md'
-t=report.read_text(); marker='\n## Verbatim specialised before/after (D108)\n'
+t=report.read_text()
+audit_marker='\n## Frozen extension audit\n'
+audit_tail=t[t.index(audit_marker):] if audit_marker in t else ''
+marker='\n## Verbatim specialised before/after (D108)\n'
 if marker in t: t=t[:t.index(marker)]
 preamble=s[s.index('variable {CommitHandle'):s.index('namespace Before')]
 t+=marker+'\nThe shared specialisation context is exactly:\n\n```lean\n'+preamble+'```\n\nBefore (the accounting headline after this specialisation):\n\n```lean\n'+before+'\n```\n\nAfter (the new endpoint signature):\n\n```lean\n'+after+'\n```\n\nMechanical signature diff (deletions only):\n\n```diff\n'+'\n'.join(diff)+'\n```\n'
-report.write_text(t)
+report.write_text(t+audit_tail)
