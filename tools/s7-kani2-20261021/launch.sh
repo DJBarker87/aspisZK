@@ -19,4 +19,4 @@ for line in units.splitlines():
 assert total+8*2**30<55*2**30,(total,scopes)
 open('reservations/'+sys.argv[1]+'.json','w').write(json.dumps(dict(time_unix=time.time(),active=scopes,reserved_bytes=total,requested_bytes=8*2**30,safe_limit_bytes=55*2**30),indent=2)+'\n')
 PY
-exec systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 tools/s7-kani2-20261021/host-run.py "$attempt" timeout --kill-after=10s 240s cargo kani --manifest-path tools/s7-kani2-20261021/Cargo.toml -j 4 --output-format terse --no-assertion-reach-checks --solver kissat -Z function-contracts -Z stubbing -Z unstable-options "$@" --cbmc-args --unwinding-assertions
+exec systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 tools/s7-kani2-20261021/host-run.py "$attempt" timeout --kill-after=10s "${S7_TIMEOUT:-240}s" cargo kani --manifest-path tools/s7-kani2-20261021/Cargo.toml -j 4 --output-format terse --no-assertion-reach-checks --solver kissat -Z function-contracts -Z stubbing -Z unstable-options "$@" --cbmc-args --unwinding-assertions

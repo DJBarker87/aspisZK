@@ -1,0 +1,26 @@
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2OwnedPush.lean:32:88: error: unsolved goals
+weights : BatchedWeights
+index : Usize
+power : K
+basis : U32
+hindex : ↑index < weights.raw.length
+safe :
+  ∀ (row : Row),
+    alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Row) weights.raw index = ok row →
+      ∀ (j : Usize) (raw : U64), ↑j < 4 → Array.index_usize row j = ok raw → ↑raw + ↑(limb power j) * ↑basis < 2 ^ 64
+row : Std.Array U64 4#usize
+hread : weights.raw.index_usize index = ok row
+right✝ : row = (↑weights.raw)[↑index]
+hr : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Row) weights.raw index = ok row
+updated : Std.Array U64 4#usize
+hupdated : residue_owned row power basis (decide (weights.terms &&& 3#usize = 3#usize)) = ok updated
+old : Std.Array U64 4#usize
+back : Std.Array U64 4#usize → alloc.vec.Vec (Std.Array U64 4#usize)
+hmut : weights.raw.index_mut_usize index = ok (old, back)
+left✝ : old = (↑weights.raw)[↑index]
+hback : back = weights.raw.set index
+hm : alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice Row) weights.raw index = ok (old, back)
+⊢ (let (_, index_mut_back) := (old, weights.raw.set index)
+    ok { raw := index_mut_back updated, terms := weights.terms }) =
+    ok { raw := weights.raw.set index updated, terms := weights.terms }
+'S7Kani2OwnedPush.push_total_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

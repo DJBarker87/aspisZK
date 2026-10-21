@@ -57,7 +57,8 @@ let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
 fn row_step_contract(){row_step(kani::any(),kani::any(),kani::any(),kani::any());}
 struct BatchedWeights { raw:Vec<[u64;4]>,terms:usize }
 #[kani::requires(k_ok(power) && basis.0<P && row_safe(*row,power,basis))]
-#[kani::ensures(|_:&()| row_equal(*row,row_spec(old(*row),power,basis,flush)))]
+#[kani::modifies(row)]
+#[kani::ensures(|_:&()| row_equal(*row,old(row_spec(*row,power,basis,flush))))]
 fn update_residue_row(row:&mut[u64;4],power:K,basis:M31,flush:bool){*row=row_step(*row,power,basis,flush);}
 #[kani::proof_for_contract(update_residue_row)] #[kani::unwind(6)] #[kani::stub_verified(row_step)]
 fn mutable_row_contract(){let mut row=kani::any();update_residue_row(&mut row,kani::any(),kani::any(),kani::any());}
@@ -166,3 +167,67 @@ fn accumulator_mutable_step() {
  assert!(row_equal(weights.raw[observe],expected));
  assert_eq!(weights.raw.len(),64); assert_eq!(weights.terms,terms);
 }
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_00() {fixed_accumulator_step::<0>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_01() {fixed_accumulator_step::<1>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_02() {fixed_accumulator_step::<2>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_03() {fixed_accumulator_step::<3>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_04() {fixed_accumulator_step::<4>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_05() {fixed_accumulator_step::<5>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_06() {fixed_accumulator_step::<6>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_07() {fixed_accumulator_step::<7>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_08() {fixed_accumulator_step::<8>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_09() {fixed_accumulator_step::<9>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_10() {fixed_accumulator_step::<10>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_11() {fixed_accumulator_step::<11>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_12() {fixed_accumulator_step::<12>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_13() {fixed_accumulator_step::<13>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_14() {fixed_accumulator_step::<14>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_15() {fixed_accumulator_step::<15>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_16() {fixed_accumulator_step::<16>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_17() {fixed_accumulator_step::<17>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_18() {fixed_accumulator_step::<18>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_19() {fixed_accumulator_step::<19>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_20() {fixed_accumulator_step::<20>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_21() {fixed_accumulator_step::<21>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_22() {fixed_accumulator_step::<22>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_23() {fixed_accumulator_step::<23>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_24() {fixed_accumulator_step::<24>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_25() {fixed_accumulator_step::<25>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_26() {fixed_accumulator_step::<26>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_27() {fixed_accumulator_step::<27>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_28() {fixed_accumulator_step::<28>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_29() {fixed_accumulator_step::<29>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_30() {fixed_accumulator_step::<30>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_31() {fixed_accumulator_step::<31>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_32() {fixed_accumulator_step::<32>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_33() {fixed_accumulator_step::<33>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_34() {fixed_accumulator_step::<34>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_35() {fixed_accumulator_step::<35>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_36() {fixed_accumulator_step::<36>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_37() {fixed_accumulator_step::<37>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_38() {fixed_accumulator_step::<38>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_39() {fixed_accumulator_step::<39>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_40() {fixed_accumulator_step::<40>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_41() {fixed_accumulator_step::<41>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_42() {fixed_accumulator_step::<42>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_43() {fixed_accumulator_step::<43>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_44() {fixed_accumulator_step::<44>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_45() {fixed_accumulator_step::<45>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_46() {fixed_accumulator_step::<46>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_47() {fixed_accumulator_step::<47>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_48() {fixed_accumulator_step::<48>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_49() {fixed_accumulator_step::<49>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_50() {fixed_accumulator_step::<50>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_51() {fixed_accumulator_step::<51>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_52() {fixed_accumulator_step::<52>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_53() {fixed_accumulator_step::<53>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_54() {fixed_accumulator_step::<54>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_55() {fixed_accumulator_step::<55>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_56() {fixed_accumulator_step::<56>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_57() {fixed_accumulator_step::<57>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_58() {fixed_accumulator_step::<58>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_59() {fixed_accumulator_step::<59>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_60() {fixed_accumulator_step::<60>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_61() {fixed_accumulator_step::<61>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_62() {fixed_accumulator_step::<62>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)] fn accumulator_mutable_slot_63() {fixed_accumulator_step::<63>();}

@@ -1,0 +1,14 @@
+@[irreducible] def Aeneas.Std.alloc.vec.Vec.push.{u} : {α : Type u} → alloc.vec.Vec α → α → Result (alloc.vec.Vec α) :=
+fun {α} v x =>
+  let nlen := (↑v).length + 1;
+  if h : (decide (nlen ≤ U32.max) || decide (nlen ≤ Usize.max)) = true then ok ⟨(↑v).concat x, ⋯⟩
+  else fail Error.maximumSizeExceeded
+@[reducible] def Aeneas.Std.alloc.vec.Vec.len.{u} : {α : Type u} → alloc.vec.Vec α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+def Aeneas.Std.alloc.vec.Vec.index_mut : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → alloc.vec.Vec T → I → Result (Output × (Output → alloc.vec.Vec T)) :=
+fun {T I Output} inst self i => inst.index_mut i self
+Aeneas.Std.alloc.vec.Vec.push_spec.{u} {α : Type u} (v : alloc.vec.Vec α) (x : α) (h : (↑v).length < Usize.max) :
+  v.push x ⦃ v1 => ↑v1 = ↑v ++ [x] ⦄
+Aeneas.Std.alloc.vec.Vec.index_mut_usize_spec.{u} {α : Type u} (v : alloc.vec.Vec α) (i : Usize)
+  (hbound : ↑i < v.length) : v.index_mut_usize i ⦃ x y => x = (↑v)[↑i] ∧ y = v.set i ⦄

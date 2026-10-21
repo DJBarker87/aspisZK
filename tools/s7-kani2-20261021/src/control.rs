@@ -19,3 +19,22 @@ fn basis_control_step() {
  let write=n+j;let ordinal=j+1;let next=n*2;
  assert!(write<256);assert!(j<256);assert!(ordinal<=128);assert!(next<=256);
 }
+
+// Storage functor after the separately certified four scalar results have
+// been substituted. Compares ordered source cell writes to owned row store;
+// arithmetic is deliberately outside this storage-only certificate.
+#[kani::proof] #[kani::unwind(68)]
+fn accumulator_store_functor() {
+ let rows:[[u64;4];64]=kani::any();let updated:[u64;4]=kani::any();
+ let index:usize=kani::any();let observe:usize=kani::any();
+ kani::assume(index<64 && observe<64);
+ let mut source=rows.to_vec();let mut reference=rows.to_vec();
+ let row=&mut source[index];
+ for lane in 0..4 {row[lane]=updated[lane];}
+ reference[index]=updated;
+ for lane in 0..4 {
+  assert_eq!(source[observe][lane],reference[observe][lane]);
+  assert_eq!(source[observe][lane],if observe==index{updated[lane]}else{rows[observe][lane]});
+ }
+ assert_eq!(source.len(),64);assert_eq!(reference.len(),64);
+}
