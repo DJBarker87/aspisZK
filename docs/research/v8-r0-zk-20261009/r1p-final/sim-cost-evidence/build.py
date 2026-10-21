@@ -9,9 +9,7 @@ r={'attempt':attempt,'module':module,'source_sha256':sha(src),'source_revision':
 sub=ev/f'submission-{attempt}.json';sub.write_text(json.dumps(r,indent=2)+'\n')
 def run(args,**kw):return subprocess.run(args,check=True,**kw)
 run(['ssh',host,f'mkdir -p {remote}'])
-# New sources only: refuse overwriting a shared module with another source.
-check=f'test ! -e /home/dombarker/project-offloads/aspis-joint-20261019/sources/{module}.lean || test "$(sha256sum /home/dombarker/project-offloads/aspis-joint-20261019/sources/{module}.lean | cut -d\" \" -f1)" = "{r["source_sha256"]}"'
-# Our own failed attempts may be updated; new module names are branch-owned.
+# Upload branch-owned new names only; failed source versions may be replaced.
 assert module.startswith('R1Z/SimCost') or module=='R1Z/PrivacyR1HeadlineV2Sim'
 run(['scp',str(src),f'{host}:/home/dombarker/project-offloads/aspis-joint-20261019/sources/{module}.lean'])
 run(['scp',str(sub),str(ev/'host-attempt.py'),f'{host}:{remote}/'])
