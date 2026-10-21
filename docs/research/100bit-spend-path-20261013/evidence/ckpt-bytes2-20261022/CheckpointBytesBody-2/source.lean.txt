@@ -1,0 +1,428 @@
+import CheckpointBytesLookup
+import CheckpointBytesHeader
+import CheckpointBytesSparseDigest
+import CheckpointBytesSparseE
+import CheckpointBytesSparseK
+import CheckpointBytesQuery
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CheckpointBytesBody
+open Aeneas Aeneas.Std Result
+open OraclePortCkptAbi2Extracted
+open aspis_r1_cost_probe.verifier
+open CheckpointBytesBlocks CheckpointBytesDigest
+open OraclePortCkptAbi4Decode OraclePortCkptAbi5Codec
+open MultiproofConeCanonical OraclePortCompactDraft
+attribute [local irreducible] OraclePortCkptAbi2Extracted.body_byte
+
+def fields (p : Prepared) (a : Accumulator) (size : a.weights.val.length = 64)
+    (qb : ∀ j : Fin 22, (p.queries.val[j.val]'(by simpa [p.queries.property] using j.isLt)).val < 262144) : Fields where
+  state := stateOf p.state
+  roots := fun j => stateOf (p.roots.val[j.val]'(by simpa [p.roots.property] using j.isLt))
+  gamma := p.gamma
+  kappa := p.kappa
+  alpha := fun j => p.alpha.val[j.val]'(by simpa [p.alpha.property] using j.isLt)
+  rho := p.rho
+  queries := fun j => ⟨(p.queries.val[j.val]'(by simpa [p.queries.property] using j.isLt)).val,qb j⟩
+  semanticAlpha := fun j => p.semantic_alpha.val[j.val]'(by simpa [p.semantic_alpha.property] using j.isLt)
+  coordinates := fun j => match j.val with
+    | 0 => (p.z.val[0]'(by simp [p.z.property])).x
+    | 1 => (p.z.val[0]'(by simp [p.z.property])).y
+    | 2 => (p.z.val[1]'(by simp [p.z.property])).x
+    | _ => (p.z.val[1]'(by simp [p.z.property])).y
+  claim := p.claim
+  rhs := a.rhs
+  power := a.power
+  weights := fun j => a.weights.val[j.val]'(by rw [size]; exact j.isLt)
+
+theorem body_block (p : OraclePortCheckpointAbiC5.Prepared)
+    (a : QueryAccumulator.State OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E)
+    (hp hu : AspisV8R19.SourceDuplexStep.State) (j : Fin 18) (i : Nat)
+    (bound : i < (OraclePortCheckpointAbiC5.widths[j.val]'(by have := j.isLt; simp [OraclePortCheckpointAbiC5.widths] <;> omega))) :
+    (OraclePortCheckpointAbiC5.body p a hp hu)[OraclePortCheckpointAbiC5.offsets[j.val]'(by have := j.isLt; simp [OraclePortCheckpointAbiC5.offsets]; omega)+i]? =
+      ((OraclePortCheckpointAbiC5.blocks p a hp hu)[j.val]'(by have := j.isLt; simp [OraclePortCheckpointAbiC5.blocks] <;> omega))[i]? := by
+  apply CheckpointBytesLookup.body_byte p a hp hu j _ (List.getElem?_eq_getElem _) i
+  have widths := congrArg (fun xs : List Nat => xs[j.val]?) (OraclePortCheckpointAbiC5.block_widths p a hp hu)
+  simp only [List.getElem?_map] at widths
+  have index : j.val < (OraclePortCheckpointAbiC5.blocks p a hp hu).length := by have := j.isLt; simp [OraclePortCheckpointAbiC5.blocks] <;> omega
+  rw [List.getElem?_eq_getElem index,Option.map_some,List.getElem?_eq_getElem (show j.val < OraclePortCheckpointAbiC5.widths.length by simpa [OraclePortCheckpointAbiC5.widths] using j.isLt)] at widths
+  have eqn := Option.some.inj widths
+  rw [← eqn] at bound
+  exact bound
+
+theorem body_byte_c5 (p : Prepared) (a : Accumulator) (hp hu : Array U8 32#usize)
+    (size : a.weights.val.length = 64)
+    (qb : ∀ j : Fin 22, (p.queries.val[j.val]'(by simpa [p.queries.property] using j.isLt)).val < 262144)
+    (canonical : CanonicalFields (fields p a size qb)) (next : a.next.val = 10)
+    (i : Usize) (bound : i.val < 1736) :
+    ∃ v, OraclePortCkptAbi2Extracted.body_byte p a hp hu i = ok v ∧
+      (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical)
+        (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu))[i.val]? =
+          some (AspisV8R19.SqueezeOracleBridge.decodeByte v) := by
+  by_cases h16 : i.val < 16
+  · have localByte := CheckpointBytesHeader.header_bytes p a hp hu next ⟨i.val,h16⟩
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨0,by decide⟩ (i.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    simp only [Nat.zero_add] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h48 : i.val < 48
+  · let k := Usize.ofNat (i.val-16) (by scalar_tac)
+    have kb : k.val < 32 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseDigest.proofHash_bytes p a hp hu k kb
+    have idx : 16+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨1,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 16+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h80 : i.val < 80
+  · let k := Usize.ofNat (i.val-48) (by scalar_tac)
+    have kb : k.val < 32 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseDigest.publicHash_bytes p a hp hu k kb
+    have idx : 48+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨2,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 48+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h112 : i.val < 112
+  · let k := Usize.ofNat (i.val-80) (by scalar_tac)
+    have kb : k.val < 32 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseDigest.state_bytes p a hp hu k kb
+    have idx : 80+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨3,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 80+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h144 : i.val < 144
+  · let k := Usize.ofNat (i.val-112) (by scalar_tac)
+    have kb : k.val < 32 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseDigest.root0_bytes p a hp hu k kb
+    have idx : 112+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨4,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 112+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h176 : i.val < 176
+  · let k := Usize.ofNat (i.val-144) (by scalar_tac)
+    have kb : k.val < 32 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseDigest.root1_bytes p a hp hu k kb
+    have idx : 144+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨5,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 144+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h208 : i.val < 208
+  · let k := Usize.ofNat (i.val-176) (by scalar_tac)
+    have kb : k.val < 32 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseE.gamma_c5 p a hp hu canonical.gamma k kb
+    have idx : 176+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨6,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 176+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h240 : i.val < 240
+  · let k := Usize.ofNat (i.val-208) (by scalar_tac)
+    have kb : k.val < 32 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseE.kappa_c5 p a hp hu canonical.kappa k kb
+    have idx : 208+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨7,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 208+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h272 : i.val < 272
+  · let k := Usize.ofNat (i.val-240) (by scalar_tac)
+    have kb : k.val < 32 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseE.alpha0_c5 p a hp hu (canonical.alpha 0) k kb
+    have idx : 240+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨8,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 240+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h304 : i.val < 304
+  · let k := Usize.ofNat (i.val-272) (by scalar_tac)
+    have kb : k.val < 32 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseE.alpha1_c5 p a hp hu (canonical.alpha 1) k kb
+    have idx : 272+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨9,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 272+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h320 : i.val < 320
+  · let k := Usize.ofNat (i.val-304) (by scalar_tac)
+    have kb : k.val < 16 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseK.rho_c5 p a hp hu canonical.rho k kb
+    have idx : 304+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨10,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 304+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h408 : i.val < 408
+  · have ordinal : (i.val-320)/4 < 22 := by omega
+    let j : Fin 22 := ⟨(i.val-320)/4,ordinal⟩
+    let k := Usize.ofNat ((i.val-320)%4) (by scalar_tac)
+    have kb : k.val < 4 := by simp [k]; omega
+    have localByte := CheckpointBytesQuery.query_bytes p a hp hu j k kb
+    have idx : 320+4*j.val+k.val = i.val := by simp [j,k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨11,by decide⟩ (4*j.val+k.val) (by simp [OraclePortCheckpointAbiC5.widths]; dsimp [j,k]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    unfold OraclePortCheckpointAbiC5.queryBytes at lookup
+    rw [List.flatMap_def,List.map_ofFn] at lookup
+    rw [CheckpointBytesLookup.vector_byte _ 4 (by intro j; simp [le32]) (j) k.val kb] at lookup
+    have pos : 320+4*j.val+k.val = i.val := by simp [j,k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h568 : i.val < 568
+  · have ordinal : (i.val-408)/16 < 10 := by omega
+    let j : Fin 10 := ⟨(i.val-408)/16,ordinal⟩
+    let k := Usize.ofNat ((i.val-408)%16) (by scalar_tac)
+    have kb : k.val < 16 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseK.semantic_c5 p a hp hu j (canonical.semanticAlpha j) k kb
+    have idx : 408+16*j.val+k.val = i.val := by simp [j,k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨12,by decide⟩ (16*j.val+k.val) (by simp [OraclePortCheckpointAbiC5.widths]; dsimp [j,k]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    unfold OraclePortCheckpointAbiC5.encodeKs at lookup
+    unfold FixedWidthDecoder.encode at lookup
+    rw [List.flatMap_def,List.map_ofFn] at lookup
+    rw [CheckpointBytesLookup.vector_byte _ 16 (by intro j; exact OraclePortCheckpointAbiC5.encodeK_length _) (j) k.val kb] at lookup
+    have pos : 408+16*j.val+k.val = i.val := by simp [j,k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h584 : i.val < 584
+  · let k := Usize.ofNat (i.val-568) (by scalar_tac)
+    have kb : k.val < 16 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseK.coordinate0_c5 p a hp hu (canonical.coordinates 0) k kb
+    have idx : 568+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨13,by decide⟩ (16*0+k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    unfold OraclePortCheckpointAbiC5.encodeKs at lookup
+    unfold FixedWidthDecoder.encode at lookup
+    rw [List.flatMap_def,List.map_ofFn] at lookup
+    rw [CheckpointBytesLookup.vector_byte _ 16 (by intro j; exact OraclePortCheckpointAbiC5.encodeK_length _) (⟨0,by decide⟩) k.val kb] at lookup
+    have pos : 568+(16*0+k.val) = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h600 : i.val < 600
+  · let k := Usize.ofNat (i.val-584) (by scalar_tac)
+    have kb : k.val < 16 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseK.coordinate1_c5 p a hp hu (canonical.coordinates 1) k kb
+    have idx : 584+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨13,by decide⟩ (16*1+k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    unfold OraclePortCheckpointAbiC5.encodeKs at lookup
+    unfold FixedWidthDecoder.encode at lookup
+    rw [List.flatMap_def,List.map_ofFn] at lookup
+    rw [CheckpointBytesLookup.vector_byte _ 16 (by intro j; exact OraclePortCheckpointAbiC5.encodeK_length _) (⟨1,by decide⟩) k.val kb] at lookup
+    have pos : 568+(16*1+k.val) = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h616 : i.val < 616
+  · let k := Usize.ofNat (i.val-600) (by scalar_tac)
+    have kb : k.val < 16 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseK.coordinate2_c5 p a hp hu (canonical.coordinates 2) k kb
+    have idx : 600+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨13,by decide⟩ (16*2+k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    unfold OraclePortCheckpointAbiC5.encodeKs at lookup
+    unfold FixedWidthDecoder.encode at lookup
+    rw [List.flatMap_def,List.map_ofFn] at lookup
+    rw [CheckpointBytesLookup.vector_byte _ 16 (by intro j; exact OraclePortCheckpointAbiC5.encodeK_length _) (⟨2,by decide⟩) k.val kb] at lookup
+    have pos : 568+(16*2+k.val) = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h632 : i.val < 632
+  · let k := Usize.ofNat (i.val-616) (by scalar_tac)
+    have kb : k.val < 16 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseK.coordinate3_c5 p a hp hu (canonical.coordinates 3) k kb
+    have idx : 616+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨13,by decide⟩ (16*3+k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    unfold OraclePortCheckpointAbiC5.encodeKs at lookup
+    unfold FixedWidthDecoder.encode at lookup
+    rw [List.flatMap_def,List.map_ofFn] at lookup
+    rw [CheckpointBytesLookup.vector_byte _ 16 (by intro j; exact OraclePortCheckpointAbiC5.encodeK_length _) (⟨3,by decide⟩) k.val kb] at lookup
+    have pos : 568+(16*3+k.val) = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h664 : i.val < 664
+  · let k := Usize.ofNat (i.val-632) (by scalar_tac)
+    have kb : k.val < 32 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseE.claim_c5 p a hp hu canonical.claim k kb
+    have idx : 632+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨14,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 632+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h696 : i.val < 696
+  · let k := Usize.ofNat (i.val-664) (by scalar_tac)
+    have kb : k.val < 32 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseE.rhs_c5 p a hp hu canonical.rhs k kb
+    have idx : 664+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨15,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 664+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  by_cases h712 : i.val < 712
+  · let k := Usize.ofNat (i.val-696) (by scalar_tac)
+    have kb : k.val < 16 := by simp [k]; omega
+    have localByte := CheckpointBytesSparseK.power_c5 p a hp hu canonical.power k kb
+    have idx : 696+k.val = i.val := by simp [k]; omega
+    simp only [idx] at localByte
+    have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+    rw [cast] at localByte
+    have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨16,by decide⟩ (k.val) (by simp [OraclePortCheckpointAbiC5.widths]; omega)
+    simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+    have pos : 696+k.val = i.val := by simp [k]; omega
+    rw [pos] at lookup
+    obtain ⟨v,run,byte⟩ := localByte
+    refine ⟨v,run,?_⟩
+    rw [lookup]
+    exact byte
+  have ordinal : (i.val-712)/16 < 64 := by omega
+  let j : Fin 64 := ⟨(i.val-712)/16,ordinal⟩
+  let k := Usize.ofNat ((i.val-712)%16) (by scalar_tac)
+  have kb : k.val < 16 := by simp [k]; omega
+  have localByte := CheckpointBytesSparseK.weight_c5 p a hp hu size j (canonical.weights j) k kb
+  have idx : 712+16*j.val+k.val = i.val := by simp [j,k]; omega
+  simp only [idx] at localByte
+  have cast : Usize.ofNat i.val (by scalar_tac) = i := by apply UScalar.eq_of_val_eq; rfl
+  rw [cast] at localByte
+  have lookup := body_block (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu) ⟨17,by decide⟩ (16*j.val+k.val) (by simp [OraclePortCheckpointAbiC5.widths]; dsimp [j,k]; omega)
+  simp only [OraclePortCheckpointAbiC5.offsets,OraclePortCheckpointAbiC5.blocks,List.getElem_cons_zero,List.getElem_cons_succ,prepared,accumulator,fields] at lookup
+  unfold OraclePortCheckpointAbiC5.encodeKs at lookup
+  unfold FixedWidthDecoder.encode at lookup
+  rw [List.flatMap_def,List.map_ofFn] at lookup
+  rw [CheckpointBytesLookup.vector_byte _ 16 (by intro j; exact OraclePortCheckpointAbiC5.encodeK_length _) (j) k.val kb] at lookup
+  have pos : 712+16*j.val+k.val = i.val := by simp [j,k]; omega
+  rw [pos] at lookup
+  obtain ⟨v,run,byte⟩ := localByte
+  refine ⟨v,run,?_⟩
+  rw [lookup]
+  exact byte
+
+#print axioms body_block
+#print axioms body_byte_c5
+end AspisR1.CheckpointBytesBody
+end
