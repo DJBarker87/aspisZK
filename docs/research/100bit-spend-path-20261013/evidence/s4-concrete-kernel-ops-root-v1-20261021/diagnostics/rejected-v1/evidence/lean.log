@@ -1,0 +1,49 @@
+/tmp/root-s4-concrete-kernel-ops-v1-20261021/sources/S4ConcreteKernelOpsRootV1.lean:69:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1FastDotsFourCallbacksForwardRootV1.install ?base
+in the target expression
+  fast_dots.four_dots (AspisR1FastDotsWholeOuterTransferRootV1.install concreteOps) q g = ok values
+
+proof : Slice U8
+j : ℕ
+q : Slice U8
+g : Std.Array Wide 29#usize
+gamma : ClaimE
+claimPowers : Std.Array ClaimE 29#usize
+hgamma : ClaimCanonical gamma
+hpowers : AspisR1CurrentPreparedClaim.ClaimPowers.powers 29#usize gamma = ok claimPowers
+hcaller : g = claimArrayToFast claimPowers
+hlen : (↑proof).length = 57607
+hj : j < 22
+hread : ↑q = List.slice (10055 + j * 832) (10055 + j * 832 + 832) ↑proof
+hscan : MultiproofParserRef.parser_reference.scan proof = ok true
+values : Std.Array Wide 4#usize
+a : Std.Array U8 608#usize
+v0 v1 v2 v3 : Wide
+hfixed : fast_dots.four_dots_fixed (AspisR1FastDotsFourCallbacksForwardRootV1.install concreteOps) q g = ok values
+ha : ↑a = List.slice 0 ↑608#usize ↑q
+hcan : ∀ x ∈ ↑values, AspisR1CurrentWide.Proof.CanonicalWide (AspisR1FastDotsTailWideAddCurrentV1.s4ToCurrentE x)
+hvalues : ↑values = [v0, v1, v2, v3]
+h0 : LiteralFieldResult (literalOps concreteOps) a g 0#usize v0
+h1 : LiteralFieldResult (literalOps concreteOps) a g 1#usize v1
+h2 : LiteralFieldResult (literalOps concreteOps) a g 2#usize v2
+h3 : LiteralFieldResult (literalOps concreteOps) a g 3#usize v3
+hold : fast_dots.four_dots (AspisR1FastDotsWholeOuterTransferRootV1.install concreteOps) q g = ok values
+⊢ ∃ values a v0 v1 v2 v3,
+    fast_dots.four_dots concreteOps q g = ok values ∧
+      ↑a = List.slice 0 ↑608#usize ↑q ∧
+        (∀ x ∈ ↑values, AspisR1CurrentWide.Proof.CanonicalWide (AspisR1FastDotsTailWideAddCurrentV1.s4ToCurrentE x)) ∧
+          ↑values = [v0, v1, v2, v3] ∧
+            LiteralFieldResult (literalOps concreteOps) a g 0#usize v0 ∧
+              LiteralFieldResult (literalOps concreteOps) a g 1#usize v1 ∧
+                LiteralFieldResult (literalOps concreteOps) a g 2#usize v2 ∧
+                  LiteralFieldResult (literalOps concreteOps) a g 3#usize v3
+'AspisR1FastDotsConcreteKernelOpsRootV1.installed_eq_concrete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsConcreteKernelOpsRootV1.concrete_array_constructor' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsConcreteKernelOpsRootV1.original_four_total_and_field_results' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

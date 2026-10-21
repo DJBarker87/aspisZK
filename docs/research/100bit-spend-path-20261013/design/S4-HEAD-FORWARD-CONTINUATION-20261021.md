@@ -353,3 +353,25 @@ bindings must still be installed at the frozen source/artifact pin. None of
 the above replaces the S10 placeholder or constructs the complete
 `OraclePortFrozen2Join.AcceptedRunJoin`; the deployed 100-bit target remains
 unestablished. Production source and wire format remain unchanged.
+
+## Concrete kernel and original/P6 endpoint integrated
+
+The original/P6 scanner endpoint is committed at `a76beb8e9`: scanner and
+same canonical ClaimPowers inputs imply successful original generated
+`four_dots` execution and all four field-result witnesses. Its source-library
+P6 correspondence remains explicit. Focused compile: exit 0, 24.210s,
+3,985,752,064B peak RSS, zero swaps, standard axioms.
+
+`S4ConcreteKernelOpsRootV1.original_four_total_and_field_results` now removes
+the arbitrary Ops parameter entirely. The complete eleven-field record is
+written explicitly, and both installed records equal it. The proof reuses
+the scanner-total theorem and the original/fixed transfer. Focused compile:
+exit 0, 12.344s, 3,966,222,336B peak process RSS, zero swaps; all three
+printed declarations use standard axioms. The failed first compile was an
+installer-alias rewrite mismatch; its source and logs are retained as rejected
+diagnostics. No dependency replay or source migration was performed.
+
+This completes the selected arithmetic model's operation specification, not
+the frozen Rust-to-model correspondence. Actual Std/from_fn, preparation,
+caller operation slots and final S4/S10 driver bindings remain open. The
+100-bit implementation target is not yet established.

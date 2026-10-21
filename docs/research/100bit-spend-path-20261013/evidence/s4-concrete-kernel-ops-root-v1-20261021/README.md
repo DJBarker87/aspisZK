@@ -1,0 +1,3 @@
+PROVED scanner-derived original generated/P6 four-dot success and all four field-result witnesses with an explicit complete eleven-field operation record; no arbitrary Ops argument.
+
+Limitations: Canonical gamma, successful ClaimPowers, exact caller coefficient map, scanner success and query bounds remain upstream premises. The concrete operation record selects the already-proved Lean implementations; it does not establish correspondence to frozen Rust Std/from_fn, the actual caller operation slots, the SBF artifact or the global S4/S10 join. Production source unchanged. The rejected first compile is retained as diagnostic, not accepted evidence.
