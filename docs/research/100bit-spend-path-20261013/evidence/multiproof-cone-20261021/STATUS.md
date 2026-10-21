@@ -979,3 +979,31 @@ reports are standard. Receipts record full hashes/revisions and dependencies.
 The physical source array/list control relation remains distinct from these
 logical count facts. Padding/root and batch composition remain in progress.
 No shipped source changed; no frozen ELF rebuild is triggered.
+
+## Continuation 6, stage 2b: padding and physical verifier/root composition
+
+`MultiproofConePadding.padding` composes every verified eight-byte zero word
+and proves exact frozen padding equality from the fixed slot width; no partial
+suffix is ignored. `MultiproofConeRootGuard.root_guard` identifies singleton
+Live, digest equality and empty remaining bytes with the physical source root
+and exact-cursor comparison. `MultiproofConePhysicalVerify.accepted_verify`
+now derives successful extracted height execution from source acceptance and
+proves its full ordered-log/Bool equality with frozen verifyInPlace. The old
+successful-height Result premise is not retained. Only the callback/oracle
+interpretation equation and initial zero cursor remain at that verifier cut.
+
+`MultiproofConeSlotTail.accepted_tail` composes the source-shaped count,
+zero-word scan and physical verifier at the exact fixed-slot byte view. It
+retains the explicit slot carrier equation and oracle interpretation; there
+is no count-result, padding-result, root-result or per-level equality premise.
+The count uses the logical equal-parent recurrence proved in stage 2a; its
+physical array/control projection is still a separate P6 adoption boundary.
+
+Padding attempt 2: exit 0, 20.740605 s, RSS 3461775360 bytes. RootGuard
+attempt 1: exit 0, 22.993015 s, RSS 3316842496 bytes. PhysicalVerify attempt 1:
+exit 0, 16.431379 s, RSS 3581804544 bytes. SlotTail attempt 3: exit 0,
+17.160123 s, RSS 3585196032 bytes. All zero swap, nine standard reports;
+full targets/revisions/hashes and commands in receipts/manifest. Tail attempts
+1–2 hit default elaboration heartbeats while trying to reduce an opaque
+rejected branch; explicit Program equations replaced broad normalization.
+No heartbeat/recursion/memory cap was changed. No shipped file changed.
