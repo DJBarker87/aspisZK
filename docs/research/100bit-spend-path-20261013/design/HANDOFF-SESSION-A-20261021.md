@@ -74,3 +74,14 @@ For the non-checkpoint stages these are the same as the `dV_frozen` stages,
 because only the checkpoint stage was inserted (`design/DV-TWOTX-20261021.md`).
 The contract you are proving toward is `design/SECURITY-CONTRACT-20261021.md`:
 100-bit per attempt, no grinding credit.
+
+## Dependencies of the lead's cones on yours (23:35)
+
+- **S7** needs the source `four_dots`, opening, fold and geometry joins from
+  S4/S5 to finish its whole-function certificate.
+- **S8** needs the source EbyKDot and relation-finisher laws, from the S3/S9
+  EbyK work.
+- **Every** lead cone (multiproof, checkpoint, S7, S8) also waits on S2's caller
+  binding.
+When these land, the lead composes them; please state their joins against
+`dV_frozen2`, in total form where possible.
