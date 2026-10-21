@@ -7583,3 +7583,18 @@ poly(q + Σ|query bytes|), polynomial in the adversary's own query input
 length (its running time). Pass 3 states and proves the cost in that form.
 5 modules, 31 audits, zero swap; three memory-cap failures were replaced by
 changed symbolic proofs, with caps unchanged.
+
+## D117 — simulator cost pass 3: relative replay cost and sampling coupling (2026-10-21, lead)
+
+Landed from `codex/cx-sim-cost3-20261021` (`r1p-final/SIM-COST3-20261021.md`).
+Following D116, programmed replay cost is proved ≤ c·(n+1), with n the
+adversary's query input length, and the protocol table contracts are
+discharged. Also proved: lazy-ROM source laws, an adaptive lazy-oracle
+coupling to uniform finite tables, a bounded M31 sampling law from uniform
+binary words, and binary coupling for all eight protocol tapes (≤ 417,792
+M31 samples, ≤ 3,342,336 draws, truncation mass ≤ 2^-120).
+`PrivacyR1HeadlineV2SimProto` keeps every privacy premise and the < 2^-100
+conclusion, and adds the relative cost conclusion, conditional on the
+retained `sim_preparation`. Open: concrete field/preparation costs, lazy-cache
+byte work and the whole-experiment source join; a compiled metadata example
+shows the remaining limit on a uniform bound. 10 modules, 57 audits, zero swap.
