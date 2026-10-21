@@ -492,3 +492,32 @@ python3 -B tools/multiproof-cone-20261021/audit-node.py
 
 Its receipt is `audit-node-result.json`. The preceding audits are historical
 checkpoints, not claims that the timed-out full-state contracts became verified.
+
+## Continuation 4, stage 1: live-order invariant
+
+`MultiproofConeLiveOrder.step` proves the mathematical in-place parent
+transition preserves strict order of both live intervals and the stronger
+cross-boundary condition: every written parent is below every unread child's
+parent. `level` and `all_levels` induct over successful node/level transitions;
+`no_descending` rules out the prior (1,0) counterexample on ordered frontiers.
+`MultiproofConeLiveLeaves.build_sorted` proves the deduplicating index fold on
+a nondecreasing input, including ties; `batch_levels_sorted` composes that fold
+with arbitrarily many levels. Rejection on duplicate digest disagreement is
+outside the successful index fold and cannot create an accepted descending run.
+These are mathematical index-carrier theorems, not a new whole source join.
+
+The `cone4-order-1` host receipt verifies two exact-source per-step gates:
+`live_order_step` checks the generated frozen binary_group's index write,
+source/model pairing guard, mixed-prefix invariant and every cursor update;
+`live_order_leaf` checks frozen leaf_insert's strict output and dedup branch.
+Inputs, cursors, scratch suffix and observation coordinates are symbolic. The
+hash in the index-only gate returns zero; no digest/log refinement is claimed
+by that gate. No row or level is stubbed. All successful Lean declarations have
+individual standard-axiom reports; the first failed elaboration is retained
+and excluded. The manifest/receipts give all required metrics and source pins.
+
+Still required: concrete extracted-array instantiation of the mathematical
+index carrier, reached packed-key/index/opening provenance, physical window
+adoption, and ordered model/log/batch simulation. The new induction does not
+silently assert that the frozen production loop inhabits its Runs relation.
+No complete multiproof AcceptedRunJoin or headline premise removal is claimed.

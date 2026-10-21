@@ -307,3 +307,8 @@ fn node_domain_preservation() {
   assert_eq!(calls.get(),1);
  } else {assert_eq!((ni,nw,out.at),(i,w,0));assert_eq!(calls.get(),0);}
 }
+
+#[kani::proof] #[kani::unwind(18)]
+fn live_order_step() {super::live_order::check_step();}
+#[kani::proof] #[kani::unwind(34)]
+fn live_order_leaf() {super::live_order::check_leaf();}
