@@ -1,0 +1,30 @@
+--- PrivacyR1FinalProtocolQuotient
++++ PrivacyR1FinalProtocolCaller
+@@ -1,15 +1,10 @@
+-theorem privacy_R1_protocol_quotient
++theorem privacy_R1_protocol_caller
+     (seed : R1ProverP K CommitHandle Aux F
+       (wire base ((base.pubBytes x).length) h B outputs x).toWire)
+     (hB : R0Z.K4.PackField B) (hpub : PublicBase F x.1)
+     (builder_refinement_D46_D51 : R0Z.HonestValidity.BuilderSoundOn h B x)
+-    (cF : ℕ)
+-    (R_commit_quotient_fibres : ∀ τ : SourceTape K F, (Finset.univ.filter
+-      (fun e : (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ → OracleAnswer) × (Fin ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ → OracleAnswer) =>
+-        quotientDecode (fun e => ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).tapeOf e.1 e.2) e = some τ)).card = cF)
+-    (L₁ L₂ : ℕ) (R_commit_exhaustion : RExh (prover base ((base.pubBytes x).length) h B outputs x seed).toProver L₁ L₂)
+-    (R_commit_counter₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2^64) (R_commit_counter₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2^64)
+-    (R_commit_stream₁ : 16 * L₁ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ * 8) (R_commit_stream₂ : 16 * L₂ ≤ ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ * 8)
++    (R_commit_caller : R1Z.ProverCommitCallerInstance.CallerLaw
++      (prover base ((base.pubBytes x).length) h B outputs x seed).toProver)
+     (R_wire_coin_carrier : ((wire base ((base.pubBytes x).length) h B outputs x).toWire).Cm ≃ (RIdx → OracleAnswer))
+     (R_wire_D80_batches : RWireBatches (wire base ((base.pubBytes x).length) h B outputs x).toWire (prover base ((base.pubBytes x).length) h B outputs x seed).toProver)
+     (R_wire_D80_ordered_log : ∀ (w : h.Instance) (sec : SecP) (d : OracleAnswer)
+@@ -18,8 +13,6 @@
+         (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).openList ch).map (fun c =>
+           (gram (((wire base ((base.pubBytes x).length) h B outputs x).toWire).pubBytes x) ((wire base ((base.pubBytes x).length) h B outputs x).toWire).vtag (((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).leafVal h w x τ ch) sec d rest
+             (cposOf (E₁ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁) (E₂ := ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂) c), ansC roots rest c)))
+-    (R_commit_cell_count : RCommitCount L₁ L₂)
+-    (R_commit_blocks₁ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₁ ≤ 2 * L₁) (R_commit_blocks₂ : ((prover base ((base.pubBytes x).length) h B outputs x seed).toProver).E₂ ≤ 2 * L₂)
+     (source : FSExperiments K CommitHandle Aux R1Bat F)
+     [Fintype source.RealRand] [Nonempty source.RealRand]
+     [Fintype source.IdealRand] [Nonempty source.IdealRand]

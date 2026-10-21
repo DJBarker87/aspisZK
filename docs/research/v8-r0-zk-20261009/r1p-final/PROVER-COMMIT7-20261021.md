@@ -164,3 +164,84 @@ producer has the expected packed value, typed address, and complete read
 coverage. In particular a salt derivation can repeat a binding read;
 physical callback count is not a bijection with distinct typed coordinates.
 No universal read-coverage theorem is claimed.
+
+## Before (verbatim from continuation 6 after-table)
+
+```text
+| R_commit_D80.roots/nodes | AddressAt for all three roots/internal binary parents, child order, padded folded geometry, byte carrier and D81 grammar. Do not substitute eight-way C2 recovery for binary recovery. |
+| R_commit_D80.leaves | Exact 0x71/0xf1/0x72 tags, packed leafVal/trailing salt, private-leaf backend and byte/digest conversions, on the actual prover tree. |
+| R_commit_D80.bindings | Both secret-attempt binding reads, source/public/variant mapping, context encoding and digest answers (P`R1Z/LayoutR1PBin.lean:133`). |
+| R_commit_D80.seeds | All three seed derivations, reserved secret distribution and source/D stream selection (P`R1Z/LayoutR1PBin.lean:136`). |
+| R_commit_D80.salts | Full per-leaf secret salt derivation, nonce/tree/secret binding and LE32(u) (P`R1Z/LayoutR1PBin.lean:140`); verifier facts only consume disclosed salts. |
+| R_commit_D80.mask_expander/source_expander | Stream/domain/seed/LE64(counter), eight words per block, no counter reuse, index/stream selection and complete hash-read coverage (P`R1Z/LayoutR1PBin.lean:131`). |
+| R_commit_quotient_fibres, cF | Equal successful fibres on the H1 quotient; measure-preserving completion is proved. The explicit sequential wordsE decoder has a derived fibre constant and a successful input; the actual source/caller/order/field-image equation remains open. |
+| R_commit_exhaustion | Every tapeOf failure must imply one of the actual two 16-try little-endian stream-exhaustion events. Quotient packing adds no failures; the source caller/cursor law and exact wordsE-to-Exhausted classification remain open. |
+| R_commit_counter₁/₂, R_commit_stream₁/₂, R_commit_cell_count, R_commit_blocks₁/₂ | All coordinate-model count, canonical stream/block and counter bounds are proved. The universal shipped caller/read-completeness instance remains open; model cardinalities do not establish source coverage. |
+```
+
+## After (verbatim; nine complete shipped-source rows remain open)
+
+```text
+| R_commit_D80.roots/nodes | AddressAt for all three roots/internal binary parents, child order, padded folded geometry, byte carrier and D81 grammar. Do not substitute eight-way C2 recovery for binary recovery. |
+| R_commit_D80.leaves | Exact 0x71/0xf1/0x72 tags, packed leafVal/trailing salt, private-leaf backend and byte/digest conversions, on the actual prover tree. |
+| R_commit_D80.bindings | Both secret-attempt binding reads, source/public/variant mapping, context encoding and digest answers (P`R1Z/LayoutR1PBin.lean:133`). |
+| R_commit_D80.seeds | All three seed derivations, reserved secret distribution and source/D stream selection (P`R1Z/LayoutR1PBin.lean:136`). |
+| R_commit_D80.salts | Full per-leaf secret salt derivation, nonce/tree/secret binding and LE32(u) (P`R1Z/LayoutR1PBin.lean:140`); verifier facts only consume disclosed salts. |
+| R_commit_D80.mask_expander/source_expander | Stream/domain/seed/LE64(counter), eight words per block, no counter reuse, index/stream selection and complete hash-read coverage (P`R1Z/LayoutR1PBin.lean:131`). |
+| R_commit_quotient_fibres, cF | Equal successful fibres on the H1 quotient; measure-preserving completion is proved. The explicit sequential wordsE decoder has a derived fibre constant and a successful input. The new endpoint derives this premise from one typed CallerLaw, including an output-coordinate equivalence; proving CallerLaw for the actual source remains open. |
+| R_commit_exhaustion | Every tapeOf failure must imply one of the actual two 16-try little-endian stream-exhaustion events. Exact consuming wordsE-to-Exhausted classification is proved, and the endpoint derives this premise from CallerLaw. The shipped source-to-decoder caller/cursor equation remains open. |
+| R_commit_counter₁/₂, R_commit_stream₁/₂, R_commit_cell_count, R_commit_blocks₁/₂ | All coordinate-model count, canonical stream/block and counter bounds are proved and derived in the endpoint from CallerLaw. The universal shipped caller/read-completeness instance remains open; model cardinalities do not establish source coverage. |
+```
+
+The new `PrivacyR1FinalProtocolCaller.privacy_R1_protocol_caller` is built on
+`PrivacyR1FinalProtocolQuotient`. Its printed conclusion has identical text
+under the documented specialization to the M31 image subfield and canonical
+L₁/L₂. The signature audit records twelve removed parameters/premises and
+the single remaining caller law. This is a conditional reduction of the
+checklist, not a proof of the remaining law or a closure of a complete
+shipped-source row. The exact cursor-classification sub-obligation is closed.
+
+## Final audit, executable artifacts and stopping point
+
+Final coherent new-cone audit `R1Z.ProverCommit7Audit`, J8266: exit 0,
+wall 1.71 s, peak RSS 4,043,344 KiB, zero swaps. Source revision
+`9e6c55ba8` contains all adopted theorem/Rust sources; the additive audit
+module and its exact SHA/dependencies are recorded with its receipt.
+All 23 new audit lines contain only propext, Classical.choice, Quot.sound
+or a subset. Existing compiled dependencies are reused; there is one final
+new-cone audit, no unchanged package replay, and no aggregate extraction.
+Assigned attempts consumed through 8266; next available is 8267.
+
+After the last Rust source edit, all three frozen SBF artifacts were rebuilt
+in dedicated 6G/8G/zero-swap/64-task scopes with four jobs. Compilation and
+linking are optimized SBF, not debug arithmetic. `build.py` records the exact
+frozen features/toolchain and linker flags; the SBF linker uses its target
+`--threads=4` spelling. All three `cmp` calls return 0 against retained
+accepted artifacts, with the accepted SHA-256 values:
+
+| Artifact | SHA-256 | Wall s | RSS KiB |
+| --- | --- | ---: | ---: |
+| default | dfc2a91ab24e1ec4f57debd8f124cb4f6a3c38ba2662b7318e2e4f3b4acdde34 | 23.895 | 648608 |
+| devnet | fb2fc048f6499a4775051d0267c76e8ca273b28f557bfd3b5fb65b2f687c8b78 | 2.219 | 203364 |
+| pool | 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548 | 24.020 | 642416 |
+
+All exit 0, zero swaps. Sizes, exact commands, source hashes and scope
+receipts are in `frozen-elf-final-check.json` and the receipt index. Only
+proof-configuration Rust code/attributes changed; shipped bodies did not.
+No wallet/key cleanup, transaction, deployment, push, peer-file edit, or
+merge was performed. Build keys and caches are retained on the host.
+
+The demonstrated obstruction is repeated bounded-checking timeout after
+callee isolation, not a theorem counterexample. The final live source has
+no unverified scalar contract. Remaining work is a scalable, verified
+scalar summary over successive oracle states, four-coordinate/outer-loop
+identity and source-to-wordsE transport, then universal typed read coverage
+for trees, bindings, seeds and salts. Repeating the same direct qM31 or
+1024-row proof unchanged is not justified by these receipts.
+
+`harness/validate.py` validates all 27 attempted Lean source identities
+(12 accepted targets/prototypes), all 23 final axioms lines, all three ELF
+comparisons and the complete Rust receipt-to-source mapping, without
+replaying any build. Raw stdout and the literal generated-port diff retain
+upstream trailing spaces; whitespace warnings in those evidence files are
+intentional. The adopted code has no such whitespace errors.

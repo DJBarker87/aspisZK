@@ -1,0 +1,23 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCallerLoop.lean:72:30: warning: 'push_cast' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCallerLoop.lean:79:33: error: unsolved goals
+hash : Hash
+domain : Slice U8
+state : State
+⊢ (do
+      let (state1, pending_return) ← finite hash domain 16 state
+      match pending_return with
+        | none => ok (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted, state1)
+        | some p => ok p) =
+    do
+    let (after, pending) ← finite hash domain 16 state
+    match pending with
+      | none => ok (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted, after)
+      | some pair => ok pair
+'R1Z.ProverCommitCallerLoop.iterator_more' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCallerLoop.iterator_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCallerLoop.loop_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCallerLoop.caller_sixteen' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
