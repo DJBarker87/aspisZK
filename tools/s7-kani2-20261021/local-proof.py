@@ -31,7 +31,7 @@ try:
    q=Path(d)/(name.replace('.', '/')+'.olean')
    if q.exists():imports[name]=dict(object_path=str(q),sha256=sha(q));break
   assert name in imports, name
- meta=dict(direct_imports=imports,schema='focused-extractor-proof-packet-v1',module=module,command=cmd,source_sha256=sha(source),source_revision=subprocess.check_output(['git','-C',str(R),'rev-parse','HEAD'],text=True).strip(),compiler_sha256=sha(compiler),lean_path=env['LEAN_PATH'])
+ meta=dict(attempt=sys.argv[1],direct_imports=imports,schema='focused-extractor-proof-packet-v1',module=module,command=cmd,source_sha256=sha(source),source_revision=subprocess.check_output(['git','-C',str(R),'rev-parse','HEAD'],text=True).strip(),compiler_sha256=sha(compiler),lean_path=env['LEAN_PATH'])
  (E/'source.lean').write_bytes(source.read_bytes())
  (E/'command.json').write_text(json.dumps(meta,indent=2)+'\n')
  with (E/'lean.log').open('w') as log,(E/'time.log').open('w') as timing:

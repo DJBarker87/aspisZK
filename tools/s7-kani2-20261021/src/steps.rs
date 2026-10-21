@@ -56,7 +56,11 @@ let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
 #[kani::unwind(6)]
 fn row_step_contract(){row_step(kani::any(),kani::any(),kani::any(),kani::any());}
 struct BatchedWeights { raw:Vec<[u64;4]>,terms:usize }
+#[kani::requires(k_ok(power) && basis.0<P && row_safe(*row,power,basis))]
+#[kani::ensures(|_:&()| row_equal(*row,row_spec(old(*row),power,basis,flush)))]
 fn update_residue_row(row:&mut[u64;4],power:K,basis:M31,flush:bool){*row=row_step(*row,power,basis,flush);}
+#[kani::proof_for_contract(update_residue_row)] #[kani::unwind(6)] #[kani::stub_verified(row_step)]
+fn mutable_row_contract(){let mut row=kani::any();update_residue_row(&mut row,kani::any(),kani::any(),kani::any());}
 impl BatchedWeights {
 fn push(&mut self,index:usize,power:K,basis:M31) {
 let flush=self.terms&3==3;
@@ -150,3 +154,15 @@ fn fixed_accumulator_step<const J:usize>() {
 #[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(row_step)] fn accumulator_slot_61() {fixed_accumulator_step::<61>();}
 #[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(row_step)] fn accumulator_slot_62() {fixed_accumulator_step::<62>();}
 #[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(row_step)] fn accumulator_slot_63() {fixed_accumulator_step::<63>();}
+#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)]
+fn accumulator_mutable_step() {
+ let rows:[[u64;4];64]=kani::any(); let j:usize=kani::any();let observe:usize=kani::any();
+ kani::assume(j<64 && observe<64);
+ let power:K=kani::any();let basis:M31=kani::any();let terms:usize=kani::any();
+ kani::assume(k_ok(power) && basis.0<P && terms<22 && row_safe(rows[j],power,basis));
+ let mut weights=BatchedWeights{raw:rows.to_vec(),terms};
+ weights.push(j,power,basis);
+ let expected=if observe==j {row_spec(rows[j],power,basis,terms&3==3)} else {rows[observe]};
+ assert!(row_equal(weights.raw[observe],expected));
+ assert_eq!(weights.raw.len(),64); assert_eq!(weights.terms,terms);
+}

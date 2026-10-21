@@ -45,7 +45,11 @@ fn row_step_contract(){row_step(kani::any(),kani::any(),kani::any(),kani::any())
 '''
 # An exact row driver cut with the contract-annotated row implementation.
 out+='''struct BatchedWeights { raw:Vec<[u64;4]>,terms:usize }
+#[kani::requires(k_ok(power) && basis.0<P && row_safe(*row,power,basis))]
+#[kani::ensures(|_:&()| row_equal(*row,row_spec(old(*row),power,basis,flush)))]
 fn update_residue_row(row:&mut[u64;4],power:K,basis:M31,flush:bool){*row=row_step(*row,power,basis,flush);}
+#[kani::proof_for_contract(update_residue_row)] #[kani::unwind(6)] #[kani::stub_verified(row_step)]
+fn mutable_row_contract(){let mut row=kani::any();update_residue_row(&mut row,kani::any(),kani::any(),kani::any());}
 impl BatchedWeights {
 fn push(&mut self,index:usize,power:K,basis:M31) {
 '''+push+'''
@@ -73,6 +77,9 @@ fixed=fixed.replace('let j:usize=kani::any();','let j=J;')
 out+='fn fixed_accumulator_step<const J:usize>() {\n'+fixed+'\n}\n'
 for j in range(64):
  out+=f'#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(row_step)] fn accumulator_slot_{j:02}() {{fixed_accumulator_step::<{j}>();}}\n'
+mut=out[out.index('fn accumulator_row_step() {'):]
+mut=mut[:mut.index('\n}')+2].replace('fn accumulator_row_step()', 'fn accumulator_mutable_step()')
+out+='#[kani::proof] #[kani::unwind(66)] #[kani::stub_verified(update_residue_row)]\n'+mut+'\n'
 for label,stmt in [('basis-block','basis[n+j]=basis[j].mul(node);'),('prefix-push','prefixes.push(product);'),('prefix-mul','product=product.mul(value);'),('inverse-write','flat_inverse[i]=suffix_inverse.mul(prefixes[i]);'),('inverse-suffix','suffix_inverse=suffix_inverse.mul(flat[i]);')]:cut(label,stmt)
 files={'src/steps.rs':out}
 pins=dict(frozen_revision='b2727acd3',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_sha256=hashlib.sha256(V.read_bytes()).hexdigest(),cuts=pins,scope='Fixed 64-weight production row step; scalar calls are contract cuts, fusion is separately checked in Lean. No full accumulator claim.',generated={k:hashlib.sha256(v.encode()).hexdigest() for k,v in files.items()})
