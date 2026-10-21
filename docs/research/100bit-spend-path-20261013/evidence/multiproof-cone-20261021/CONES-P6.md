@@ -42,3 +42,27 @@ frozen2. All three inherited STATUS files explicitly retain source adoption
 obligations; none supplies an already-instantiable whole-source certificate.
 The next stages inspect those exact local gates rather than assuming the
 missing complete-function equations as P6 fields.
+
+## Stage 2: S7 complete accumulator-port iteration
+
+`S7P6AccumulatorIterations.total` composes the inherited complete one-query
+accumulator carrier port for every transaction-local count within 22.
+It derives each call's success, canonical RHS/power, unchanged output-weight
+storage, all 64 exact coefficient updates, raw PushTrace membership, phase
+progress and final cursor. The caller supplies the initial reached invariant,
+canonical rho/values and count bounds, **not** any per-call success or step
+correspondence. `Trace` retains each actual port execution and full local
+coefficient/RHS/power equations. This covers the accumulator portion of
+both 10- and 12-step intervals without normalizing a concrete run.
+
+It does not certify the frozen `query_values`: the opening, four_dots,
+circle comparison (including Query rejection), line fold, geometry lookup,
+and source carrier/observer lowering must first produce those node/value
+inputs and adopt the port. No source query gate is silently replaced by an
+always-successful accumulator call.
+
+Validation: `S7P6AccumulatorIterations`, attempt 1, exit 0,
+4.882670667022467 s, peak RSS 3,377,020,928 bytes, zero swaps, revision
+`9c8429300` (full revision and all pins in receipt). Its `total` axiom report
+is `[propext, Classical.choice, Quot.sound]`. The same fixed local compiler,
+flags, lock and private objects were used. No source/ELF/host build changed.
