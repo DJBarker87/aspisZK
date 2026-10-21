@@ -873,3 +873,44 @@ headline source premise is removed; CONE-AUDIT retains whole-cone (d). The
 next concrete deliverable is a leaf-first batch Program whose sorted opening
 stream uses these adapters, followed by the index-only node_count and physical
 padding/root guards, then the six short-circuited slot calls.
+
+## Continuation 5 final focused audit and budget handoff
+
+`MultiproofConePhysicalFreeze`, attempt 1, imports the completed physical
+closure, key/opening adapters and the unchanged frozen2 cone consumer/headline.
+Exact target: `lean/MultiproofConePhysicalFreeze.lean`; exit 0; wall 30.124344 s;
+peak RSS 3475243008 bytes; zero swaps; source revision
+`3051a9764` (full SHA, source SHA, selected imports and dependency fingerprint in
+`MultiproofConePhysicalFreeze-1/receipt.json`). All fifteen final axiom reports
+are subsets of {propext, Classical.choice, Quot.sound}. Every authored theorem
+also has an individual report. This is focused compatible-cache compilation,
+not a coherent frozen release manifest replay.
+
+The deterministic `audit-physical.py` passes: twenty current additive modules,
+74 standard reports including the final audit, matching source snapshots and
+current direct-import hashes, zero swaps, no banned proof shortcuts, no changed
+inherited/sibling Lean or shipped crate. `generate.py --check` reports
+`Frozen cuts verified`. Failed elaborations remain diagnostic evidence and are
+never counted as current certificates. No full unchanged Kani/runtime/manifest
+regression was repeated; unchanged verified observers/window/rebase/key cuts
+are reused at their explicitly stated P6 boundaries.
+
+Reproduce the focused evidence audit with:
+
+```sh
+python3 -B tools/multiproof-cone-20261021/audit-physical.py
+```
+
+`audit-physical-result.json` records the accepted physical-to-frozen level
+claim and its retained premises, and deliberately records
+`complete_multiproof_source_cone=false` and
+`accepted_run_join_constructed=false`. It does not package the remaining
+leaf/count/padding/root/batch obligations into an assumed structure and call
+that discharge. The CONE-AUDIT row is updated to this exact boundary.
+
+The focused physical scratch/Live/log and key/opening adapter deliverables are
+committed. The complete source cone, both three-slot batches and the global
+AcceptedRunJoin remain unfinished as listed above. No claim of 100-bit release
+closure or headline premise removal is made. No shipped file changed, so the
+conditional SBF/ELF rebuild was not triggered and no byte-identity measurement
+is claimed. No wallet/key was touched; no push or merge occurred.
