@@ -176,3 +176,54 @@ theorem programmed_history_agrees {count : Nat} (room : count ≤ 2^64)
       runLog program (programmedOracle entries (RomFiniteBin.lookup bound table)) fuel
 
 ```
+
+## Stage 4 — per-draw entropy rejection and sixteen-step induction
+
+The former 600-second entropy exhaustion gate is replaced by three one-draw
+checks. `make-entropy-step.py` extracts the verbatim body of the production
+`generate` loop, retaining getrandom, Zeroizing buffers, all three source
+slices and the source conjunction. It changes only successful return framing
+from `Ok(Self {...})` to `Ok(Some(Self {...}))` and appends `Ok(None)` for a
+rejected draw. The exact source/body hashes and these two literal replacements
+are recorded in `entropy-step-binding.json`. The original generator and its
+sixteen-iteration loop are not changed.
+
+Each Kani target supplies an arbitrary 96-byte candidate through the stubbed
+OS boundary, constrains one complete 32-byte block to zero, and proves exactly
+one call and `Ok(None)`. The other two blocks remain arbitrary, including
+additional zeros. The proofs execute source slicing, validity checks and drop
+code, with unwinding assertions enabled. They do not prove an OS law.
+
+| Check | Exit | Wall s | Peak RSS KiB | Swaps |
+|---|---:|---:|---:|---:|
+| reject_block_0 / entropy-reject-block0-v2 | 0 | 17.252 | 918988 | 0 |
+| reject_block_1 / entropy-reject-block1-v1 | 0 | 18.795 | 919252 | 0 |
+| reject_block_2 / entropy-reject-block2-v1 | 0 | 21.155 | 919340 | 0 |
+
+Block0-v1 is an excluded compilation error: the copied `Self` body needed
+its enclosing impl. V2 restores that context; it does not weaken the gate.
+`#print axioms`: N/A for these Kani jobs. All use the specified four-job,
+6G/8G/no-swap/64-task scopes and linker flag; time is in compilation and
+bounded symbolic byte/control checking, not debug arithmetic execution.
+
+`ProverCommitEntropyStep19.rejected_prefix` proves the loop induction for
+arbitrary different rejected draws and arbitrary retained states.
+`sixteen_rejected` uses the per-block decode fact at each draw and returns
+`RepeatedZeroBlock` with state exactly `states 16`. This closes the mathematical
+and source-slice replacement of the old all-zero exhaustion check under the
+named P6 source-body/control-flow boundary; it does not claim a new whole-run
+Rust refinement or erase successful/OS-error cases from the experiment.
+The already accepted part-18 first-success and OS-failure gates are reused.
+
+J8696 passes: exit 0, 1.80 s, peak RSS 3,491,816 KiB, swaps 0, revision
+`5c82dc920` plus source SHA-256; all four axioms audits standard. J8695 is an
+excluded local Nat-zero normalization error. Verbatim final theorem:
+
+```lean
+theorem sixteen_rejected {State OsError : Type}
+    (next : State → Except OsError Candidate × State) (states : Nat → State)
+    (draws : Nat → Candidate) (blocks : Nat → Fin 3)
+    (drawn : ∀ j < 16, next (states j) = (.ok (draws j),states (j+1)))
+    (invalid : ∀ j < 16, draws j (blocks j) = 0) :
+    generate next (states 0) = (.error .repeatedZero,states 16)
+```
