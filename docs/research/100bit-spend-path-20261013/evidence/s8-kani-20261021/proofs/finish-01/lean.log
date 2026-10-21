@@ -1,0 +1,201 @@
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:58:73: error: Application type mismatch: The argument
+  index
+has type
+  Usize
+of sort `Type` but is expected to have type
+  ↑?m.308 + ↑?m.309 ≤ UScalar.max ?m.307
+of sort `Prop` in the application
+  UScalar.add_spec index
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:60:15: error(lean.invalidField): Invalid field notation: Type of
+  next
+is not known; cannot resolve field `val`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `AddUnits.val`
+  • `Byte.val`
+  • `Char.val`
+  • `Fin.val`
+  • `Finset.val`
+  • `Float.val`
+  • `Float32.val`
+  • `FloatSpec.val`
+  • `NonScalar.val`
+  • `PNat.val`
+  • `Subtype.val`
+  • `Units.val`
+  • `ZMod.val`
+  • `Array.Mem.val`
+  • `LLVM.AttributeIndex.val`
+  • `LLVM.CodegenFileType.val`
+  • `LLVM.DLLStorageClass.val`
+  • `LLVM.IntPredicate.val`
+  • `LLVM.Linkage.val`
+  • `LLVM.Visibility.val`
+  • `Lean.ElabBlock.val`
+  • `Lean.ElabInline.val`
+  • `Lean.ExprStructEq.val`
+  • `OrderHom.Subtype.val`
+  • `ST.Out.val`
+  • `Vector.Mem.val`
+  • `IScalar.val`
+  • `UScalar.val`
+  • `Do.Tests.ExBox.val`
+  • `Lean.Doc.Parser.val`
+  • `Lean.Doc.WithSyntax.val`
+  • `Lean.Elab.FieldInfo.val`
+  • `Lean.Language.DynamicSnapshot.val`
+  • `Lean.Language.SyntaxGuarded.val`
+  • `Lean.Meta.InstanceEntry.val`
+  • `Lean.Meta.UnificationHintEntry.val`
+  • `Lean.Server.WithRpcRef.val`
+  • `Std.Time.Timestamp.val`
+  • `Std.Time.WallTime.val`
+  • `Step.Test.U8.val`
+  • `Batteries.BinomialHeap.Imp.FindMin.val`
+  • `Lean.Elab.ComputedFields.Context.val`
+  • `Lean.Elab.Term.LetRecToLift.val`
+  • `Lean.Elab.Term.NamedArg.val`
+  • `Lean.Meta.Match.Example.val`
+  • `Lean.Meta.Match.Pattern.val`
+  • `Lean.Meta.Sym.BitVecValue.val`
+  • `Lean.Meta.Sym.FinValue.val`
+  • `Lean.Meta.SynthInstance.Instance.val`
+  • `Std.Sat.AIG.Fanin.val`
+  • `Std.Time.Internal.UnitVal.val`
+  • `Lean.Compiler.LCNF.FixedParams.AbsValue.val`
+  • `Lean.Elab.Term.StructInst.FieldView.val`
+  • `Lean.Meta.Try.Collector.InductionCandidate.val`
+  • `Mathlib.Tactic.Ring.Common.Result.val`
+  • `Std.Tactic.BVDecide.BVExpr.WithCache.val`
+  • `Lean.Meta.Grind.Arith.Cutsat.SymbolicBound.val`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:63:56: error: unsolved goals
+raw : Raw
+old : Weights
+hlen : alloc.vec.Vec.length old ≤ alloc.vec.Vec.length raw
+weights : Weights
+index : Usize
+hcells :
+  ∀ (j : ℕ),
+    (↑(weights, index).1)[j]? = if j < ↑(weights, index).2 then Option.map modelValue (↑raw)[j]? else (↑old)[j]?
+hsize : alloc.vec.Vec.length weights = alloc.vec.Vec.length old
+hindex : ↑index ≤ alloc.vec.Vec.length old
+hi : ↑index < alloc.vec.Vec.length weights
+hr : ↑index < alloc.vec.Vec.length raw
+row : Row
+hread : alloc.vec.Vec.index_usize raw index = ok row
+hrow : row = (↑raw)[↑index]
+hread' : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Row) raw index = ok row
+previous : Q
+back : Q → alloc.vec.Vec Q
+hmut : alloc.vec.Vec.index_mut_usize weights index = ok (previous, back)
+_hprev : previous = (↑weights)[↑index]
+hback : back = alloc.vec.Vec.set weights index
+hmut' : alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice Q) weights index = ok (previous, back)
+hcap : ↑index + 1 ≤ Usize.max
+next : Usize
+hnext : ?m.305 = ok next
+hval : sorry = ↑index + 1
+hcond : index < alloc.vec.Vec.len weights
+⊢ (let (_, index_mut_back) := (previous, back)
+    do
+    let index1 ← index + 1#usize
+    ok (cont (index_mut_back (modelValue row), index1))) =
+    ok (cont (back (modelValue row), next))
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:66:96: error: Function expected at
+  hback
+but this term has type
+  back = alloc.vec.Vec.set weights index
+
+Note: Expected a function because this term is being applied to the argument
+  _
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:79:39: error: Application type mismatch: The argument
+  j
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.184
+of sort `Type (?u.184 + 1)` in the application
+  @PrincipalSeg j
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:79:42: error(lean.unknownIdentifier): Unknown identifier `ndex.val`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:78:12: error: unsolved goals
+case neg
+raw : Raw
+old : Weights
+hlen : alloc.vec.Vec.length old ≤ alloc.vec.Vec.length raw
+weights : Weights
+index : Usize
+hcells :
+  ∀ (j : ℕ),
+    (↑(weights, index).1)[j]? = if j < ↑(weights, index).2 then Option.map modelValue (↑raw)[j]? else (↑old)[j]?
+hsize : alloc.vec.Vec.length weights = alloc.vec.Vec.length old
+hindex : ↑index ≤ alloc.vec.Vec.length old
+hi : ↑index < alloc.vec.Vec.length weights
+hr : ↑index < alloc.vec.Vec.length raw
+row : Row
+hread : alloc.vec.Vec.index_usize raw index = ok row
+hrow : row = (↑raw)[↑index]
+hread' : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Row) raw index = ok row
+previous : Q
+back : Q → alloc.vec.Vec Q
+hmut : alloc.vec.Vec.index_mut_usize weights index = ok (previous, back)
+_hprev : previous = (↑weights)[↑index]
+hback : back = alloc.vec.Vec.set weights index
+hmut' : alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice Q) weights index = ok (previous, back)
+hcap : ↑index + 1 ≤ Usize.max
+next : Usize
+hnext : ?m.305 = ok next
+hval : sorry = ↑index + 1
+hcond : index < alloc.vec.Vec.len weights
+body : finish_owned_loop.body raw weights index = ok (cont (back (modelValue row), next))
+hback' : back (modelValue row) = alloc.vec.Vec.set weights index (modelValue row)
+j : ℕ
+hj : ¬↑index = j
+he : j < ↑next ↔ sorry
+⊢ (if j < ↑index then Option.map modelValue (↑raw)[j]? else (↑old)[j]?) =
+    if j < ↑next then Option.map modelValue (↑raw)[j]? else (↑old)[j]?
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:88:4: error: unsolved goals
+case refine_2
+raw : Raw
+old : Weights
+hlen : alloc.vec.Vec.length old ≤ alloc.vec.Vec.length raw
+j : ℕ
+⊢ (↑old)[j]? = if j < 0#usize.bv.toNat then Option.map modelValue (↑raw)[j]? else (↑old)[j]?
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:64:100: warning: This simp argument is unused:
+  hnext
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵i̵n̵i̵s̵h̵_̵o̵w̵n̵e̵d̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵i̵f̵_̵p̵o̵s̵ ̵h̵c̵o̵n̵d̵,̵h̵r̵e̵a̵d̵'̵,̵h̵m̵u̵t̵'̵,̵m̵o̵d̵e̵l̵V̵a̵l̵u̵e̵_̵s̵u̵c̵c̵e̵s̵s̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵n̵e̵x̵t̵]̵[̲f̲i̲n̲i̲s̲h̲_̲o̲w̲n̲e̲d̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲h̲c̲o̲n̲d̲,̲ ̲h̲r̲e̲a̲d̲'̲,̲ ̲h̲m̲u̲t̲'̲,̲ ̲m̲o̲d̲e̲l̲V̲a̲l̲u̲e̲_̲s̲u̲c̲c̲e̲s̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:90:29: warning: This simp argument is unused:
+  BitVec.toNat_ofNat
+
+Hint: Omit it from the simp argument list.
+  simp only [̵U̵S̵c̵a̵l̵a̵r̵.̵v̵a̵l̵,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵,̵ ̵N̵a̵t̵.̵z̵e̵r̵o̵_̵m̵o̵d̵,̵N̵a̵t̵.̵n̵o̵t̵_̵l̵t̵_̵z̵e̵r̵o̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲U̲S̲c̲a̲l̲a̲r̲.̲v̲a̲l̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲m̲o̲d̲,̲ ̲N̲a̲t̲.̲n̲o̲t̲_̲l̲t̲_̲z̲e̲r̲o̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:90:49: warning: This simp argument is unused:
+  Nat.zero_mod
+
+Hint: Omit it from the simp argument list.
+  simp only [̵U̵S̵c̵a̵l̵a̵r̵.̵v̵a̵l̵,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵,̵ ̵N̵a̵t̵.̵z̵e̵r̵o̵_̵m̵o̵d̵,̵N̵a̵t̵.̵n̵o̵t̵_̵l̵t̵_̵z̵e̵r̵o̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲U̲S̲c̲a̲l̲a̲r̲.̲v̲a̲l̲,̲ ̲B̲i̲t̲V̲e̲c̲.̲t̲o̲N̲a̲t̲_̲o̲f̲N̲a̲t̲,̲ ̲N̲a̲t̲.̲n̲o̲t̲_̲l̲t̲_̲z̲e̲r̲o̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:90:62: warning: This simp argument is unused:
+  Nat.not_lt_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵U̵S̵c̵a̵l̵a̵r̵.̵v̵a̵l̵,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵,̵ ̵N̵a̵t̵.̵z̵e̵r̵o̵_̵m̵o̵d̵,̵N̵a̵t̵.̵n̵o̵t̵_̵l̵t̵_̵z̵e̵r̵o̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲U̲S̲c̲a̲l̲a̲r̲.̲v̲a̲l̲,̲ ̲B̲i̲t̲V̲e̲c̲.̲t̲o̲N̲a̲t̲_̲o̲f̲N̲a̲t̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲m̲o̲d̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:90:78: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵U̵S̵c̵a̵l̵a̵r̵.̵v̵a̵l̵,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵,̵ ̵N̵a̵t̵.̵z̵e̵r̵o̵_̵m̵o̵d̵,̵N̵a̵t̵.̵n̵o̵t̵_̵l̵t̵_̵z̵e̵r̵o̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲U̲S̲c̲a̲l̲a̲r̲.̲v̲a̲l̲,̲ ̲B̲i̲t̲V̲e̲c̲.̲t̲o̲N̲a̲t̲_̲o̲f̲N̲a̲t̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲m̲o̲d̲,̲ ̲N̲a̲t̲.̲n̲o̲t̲_̲l̲t̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'S8OwnedP6Finish.modelValue_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'S8OwnedP6Finish.modelValue_coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'S8OwnedP6Finish.finish_total_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

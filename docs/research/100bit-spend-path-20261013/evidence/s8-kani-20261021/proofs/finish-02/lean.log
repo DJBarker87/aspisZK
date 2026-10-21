@@ -1,0 +1,164 @@
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:60:10: error: Type mismatch: After simplification, term
+  hcap
+ has type
+  @LE.le ℕ instLENat (↑index + 1) Usize.max
+but is expected to have type
+  @LE.le ℕ instLENat (↑index + ↑1#usize) Usize.max
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:65:56: error: unsolved goals
+raw : Raw
+old : Weights
+hlen : alloc.vec.Vec.length old ≤ alloc.vec.Vec.length raw
+weights : Weights
+index : Usize
+hcells :
+  ∀ (j : ℕ),
+    (↑(weights, index).1)[j]? = if j < ↑(weights, index).2 then Option.map modelValue (↑raw)[j]? else (↑old)[j]?
+hsize : alloc.vec.Vec.length weights = alloc.vec.Vec.length old
+hindex : ↑index ≤ alloc.vec.Vec.length old
+hi : ↑index < alloc.vec.Vec.length weights
+hr : ↑index < alloc.vec.Vec.length raw
+row : Row
+hread : alloc.vec.Vec.index_usize raw index = ok row
+hrow : row = (↑raw)[↑index]
+hread' : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Row) raw index = ok row
+previous : Q
+back : Q → alloc.vec.Vec Q
+hmut : alloc.vec.Vec.index_mut_usize weights index = ok (previous, back)
+_hprev : previous = (↑weights)[↑index]
+hback : back = alloc.vec.Vec.set weights index
+hmut' : alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice Q) weights index = ok (previous, back)
+hcap : ↑index + 1 ≤ Usize.max
+sadd : index + 1#usize ⦃ n => ↑n = ↑index + 1 ⦄
+next : UScalar UScalarTy.Usize
+hnext : index + 1#usize = ok next
+hval : ↑next = ↑index + 1
+hcond : index < alloc.vec.Vec.len weights
+⊢ (let (_, index_mut_back) := (previous, back)
+    ok (cont (index_mut_back (modelValue row), next))) =
+    ok (cont (back (modelValue row), next))
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:71:24: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 1
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  b - d ≥ 0
+  b - e ≤ -1
+  a ≥ 0
+  a - b ≥ 0
+  a - d ≥ 0
+where
+ a := ↑(alloc.vec.Vec.length raw)
+ b := ↑(alloc.vec.Vec.length weights)
+ c := ↑Usize.max
+ d := ↑↑next
+ e := ↑↑(alloc.vec.Vec.set weights index (modelValue row), next).2
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:77:55: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 1
+  d - e ≥ 1
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  b - d ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - d ≥ 0
+where
+ a := ↑(alloc.vec.Vec.length raw)
+ b := ↑(alloc.vec.Vec.length weights)
+ c := ↑Usize.max
+ d := ↑↑next
+ e := ↑↑(alloc.vec.Vec.set weights index (modelValue row), next).2
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:81:39: error: Application type mismatch: The argument
+  j
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.198
+of sort `Type (?u.198 + 1)` in the application
+  @PrincipalSeg j
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:81:42: error(lean.unknownIdentifier): Unknown identifier `ndex.val`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:81:57: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 1
+  d - e ≥ 2
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  b - d ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - d ≥ 0
+where
+ a := ↑(alloc.vec.Vec.length raw)
+ b := ↑(alloc.vec.Vec.length weights)
+ c := ↑Usize.max
+ d := ↑↑next
+ e := ↑j
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:80:12: error: unsolved goals
+case neg
+raw : Raw
+old : Weights
+hlen : alloc.vec.Vec.length old ≤ alloc.vec.Vec.length raw
+weights : Weights
+index : Usize
+hcells :
+  ∀ (j : ℕ),
+    (↑(weights, index).1)[j]? = if j < ↑(weights, index).2 then Option.map modelValue (↑raw)[j]? else (↑old)[j]?
+hsize : alloc.vec.Vec.length weights = alloc.vec.Vec.length old
+hindex : ↑index ≤ alloc.vec.Vec.length old
+hi : ↑index < alloc.vec.Vec.length weights
+hr : ↑index < alloc.vec.Vec.length raw
+row : Row
+hread : alloc.vec.Vec.index_usize raw index = ok row
+hrow : row = (↑raw)[↑index]
+hread' : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Row) raw index = ok row
+previous : Q
+back : Q → alloc.vec.Vec Q
+hmut : alloc.vec.Vec.index_mut_usize weights index = ok (previous, back)
+_hprev : previous = (↑weights)[↑index]
+hback : back = alloc.vec.Vec.set weights index
+hmut' : alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice Q) weights index = ok (previous, back)
+hcap : ↑index + 1 ≤ Usize.max
+sadd : index + 1#usize ⦃ n => ↑n = ↑index + 1 ⦄
+next : UScalar UScalarTy.Usize
+hnext : index + 1#usize = ok next
+hval : ↑next = ↑index + 1
+hcond : index < alloc.vec.Vec.len weights
+body : finish_owned_loop.body raw weights index = ok (cont (back (modelValue row), next))
+hback' : back (modelValue row) = alloc.vec.Vec.set weights index (modelValue row)
+j : ℕ
+hj : ¬↑index = j
+he : j < ↑next ↔ sorry
+⊢ (if j < ↑index then Option.map modelValue (↑raw)[j]? else (↑old)[j]?) =
+    if j < ↑next then Option.map modelValue (↑raw)[j]? else (↑old)[j]?
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Finish.lean:83:10: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 0
+  d ≥ 0
+  d ≥ 0
+  d + e ≥ 0
+  d + e - f ≥ 0
+  c ≥ 1
+  c - d - e ≤ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 0
+  a - c ≥ 0
+  a - d - e ≥ 0
+where
+ a := ↑(alloc.vec.Vec.length raw)
+ b := ↑Usize.max
+ c := ↑↑next
+ d := ↑(alloc.vec.Vec.length old - ↑(weights, index).2)
+ e := ↑↑(weights, index).2
+ f := ↑↑(alloc.vec.Vec.set weights index (modelValue row), next).2
+'S8OwnedP6Finish.modelValue_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'S8OwnedP6Finish.modelValue_coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'S8OwnedP6Finish.finish_total_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

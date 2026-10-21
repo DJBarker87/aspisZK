@@ -1,0 +1,152 @@
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:48:74: error: unexpected token '|'; expected ')', ',' or ':'
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:105:52: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Sort ?u.84
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:105:70: error: Application type mismatch: The argument
+  j
+has type
+  Type ?u.83
+of sort `Type (?u.83 + 1)` but is expected to have type
+  ℕ
+of sort `Type` in the application
+  Good bytes j
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:105:49: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  LT j
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:123:10: error: Tactic `constructor` failed: target is not an inductive datatype
+
+case pos.some
+bytes : Slice U8
+allGood : Prop := ∀ j < (↑bytes).length / 16, Good bytes j
+i : Usize
+hib : ↑i ≤ (↑bytes).length / 16
+hprefix : sorry
+hi : ↑i < (↑bytes).length / 16
+next : Usize
+s : Slice U8
+hnv : ↑next = ↑i + 1
+_hc : ↑s = List.take 16 (List.drop (16 * ↑i) ↑bytes)
+q : Q
+_hp : aspis_core.field.QM31.from_le_bytes s = ok (some q)
+hgood : Good bytes ↑i ↔ (some q).isSome = true
+hstep :
+  check_values_owned_loop.body bytes i =
+    ok
+      (match some q with
+      | none => done (some (core.result.Result.Err CodecError.NonCanonical)))
+⊢ match
+    match some q with
+    | none => done (some (core.result.Result.Err CodecError.NonCanonical)) with
+  | done y => (y = none ↔ allGood) ∧ (y = none ∨ y = some (core.result.Result.Err CodecError.NonCanonical))
+  | cont x' => (↑x' ≤ (↑bytes).length / 16 ∧ sorry) ∧ (↑bytes).length / 16 - ↑x' < (↑bytes).length / 16 - ↑i
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:131:10: error: Application type mismatch: The argument
+  UScalar.div_spec bytes.len ?m.295
+has type
+  ∃ z, bytes.len / 16#usize = ok z ∧ ↑z = ↑bytes.len / ↑16#usize
+but is expected to have type
+  ?m.288 ⦃ ?m.289 ⦄
+in the application
+  WP.spec_imp_exists (UScalar.div_spec bytes.len ?m.295)
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:132:15: error(lean.invalidField): Invalid field notation: Type of
+  count
+is not known; cannot resolve field `val`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `AddUnits.val`
+  • `Byte.val`
+  • `Char.val`
+  • `Fin.val`
+  • `Finset.val`
+  • `Float.val`
+  • `Float32.val`
+  • `FloatSpec.val`
+  • `IntermediateField.val`
+  • `NonScalar.val`
+  • `PNat.val`
+  • `Subalgebra.val`
+  • `SubalgebraClass.val`
+  • `Subtype.val`
+  • `Units.val`
+  • `ZMod.val`
+  • `Array.Mem.val`
+  • `LLVM.AttributeIndex.val`
+  • `LLVM.CodegenFileType.val`
+  • `LLVM.DLLStorageClass.val`
+  • `LLVM.IntPredicate.val`
+  • `LLVM.Linkage.val`
+  • `LLVM.Visibility.val`
+  • `Lean.ElabBlock.val`
+  • `Lean.ElabInline.val`
+  • `Lean.ExprStructEq.val`
+  • `NumberField.RingOfIntegers.val`
+  • `OrderHom.Subtype.val`
+  • `ST.Out.val`
+  • `Valuation.IsUniformizer.val`
+  • `Valuation.Uniformizer.val`
+  • `Vector.Mem.val`
+  • `IScalar.val`
+  • `UScalar.val`
+  • `Do.Tests.ExBox.val`
+  • `Lean.Doc.Parser.val`
+  • `Lean.Doc.WithSyntax.val`
+  • `Lean.Elab.FieldInfo.val`
+  • `Lean.Language.DynamicSnapshot.val`
+  • `Lean.Language.SyntaxGuarded.val`
+  • `Lean.Meta.InstanceEntry.val`
+  • `Lean.Meta.UnificationHintEntry.val`
+  • `Lean.Server.WithRpcRef.val`
+  • `Std.Time.Timestamp.val`
+  • `Std.Time.WallTime.val`
+  • `Step.Test.U8.val`
+  • `Batteries.BinomialHeap.Imp.FindMin.val`
+  • `Lean.Elab.ComputedFields.Context.val`
+  • `Lean.Elab.Term.LetRecToLift.val`
+  • `Lean.Elab.Term.NamedArg.val`
+  • `Lean.Meta.Match.Example.val`
+  • `Lean.Meta.Match.Pattern.val`
+  • `Lean.Meta.Sym.BitVecValue.val`
+  • `Lean.Meta.Sym.FinValue.val`
+  • `Lean.Meta.SynthInstance.Instance.val`
+  • `Mathlib.Tactic.Determinant.Cert.val`
+  • `Std.Sat.AIG.Fanin.val`
+  • `Std.Time.Internal.UnitVal.val`
+  • `Lean.Compiler.LCNF.FixedParams.AbsValue.val`
+  • `Lean.Elab.Term.StructInst.FieldView.val`
+  • `Lean.Meta.Try.Collector.InductionCandidate.val`
+  • `Mathlib.Tactic.Ring.Common.Result.val`
+  • `Std.Tactic.BVDecide.BVExpr.WithCache.val`
+  • `Lean.Meta.Grind.Arith.Cutsat.SymbolicBound.val`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:136:8: error: No goals to be solved
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:134:48: warning: This simp argument is unused:
+  hcount
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵h̵e̵c̵k̵_̵v̵a̵l̵u̵e̵s̵_̵o̵w̵n̵e̵d̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵h̵c̵o̵u̵n̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵h̵c̵o̵n̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵W̵P̵.̵s̵p̵e̵c̵_̵o̵k̵]̵[̲c̲h̲e̲c̲k̲_̲v̲a̲l̲u̲e̲s̲_̲o̲w̲n̲e̲d̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲h̲c̲o̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲W̲P̲.̲s̲p̲e̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:134:55: warning: This simp argument is unused:
+  if_neg hcond
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵h̵e̵c̵k̵_̵v̵a̵l̵u̵e̵s̵_̵o̵w̵n̵e̵d̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵h̵c̵o̵u̵n̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵h̵c̵o̵n̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵W̵P̵.̵s̵p̵e̵c̵_̵o̵k̵]̵[̲c̲h̲e̲c̲k̲_̲v̲a̲l̲u̲e̲s̲_̲o̲w̲n̲e̲d̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲h̲c̲o̲u̲n̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲W̲P̲.̲s̲p̲e̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:134:68: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵h̵e̵c̵k̵_̵v̵a̵l̵u̵e̵s̵_̵o̵w̵n̵e̵d̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵h̵c̵o̵u̵n̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵h̵c̵o̵n̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵W̵P̵.̵s̵p̵e̵c̵_̵o̵k̵]̵[̲c̲h̲e̲c̲k̲_̲v̲a̲l̲u̲e̲s̲_̲o̲w̲n̲e̲d̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲h̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲h̲c̲o̲n̲d̲,̲ ̲W̲P̲.̲s̲p̲e̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:134:79: warning: This simp argument is unused:
+  WP.spec_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵h̵e̵c̵k̵_̵v̵a̵l̵u̵e̵s̵_̵o̵w̵n̵e̵d̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵h̵c̵o̵u̵n̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵h̵c̵o̵n̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵W̵P̵.̵s̵p̵e̵c̵_̵o̵k̵]̵[̲c̲h̲e̲c̲k̲_̲v̲a̲l̲u̲e̲s̲_̲o̲w̲n̲e̲d̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲h̲c̲o̲u̲n̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲h̲c̲o̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'S8OwnedP6Scan.parser_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.S8OwnedP6Scan.0.S8OwnedP6Scan.add_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.S8OwnedP6Scan.0.S8OwnedP6Scan.mul_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'S8OwnedP6Scan.scan_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'S8OwnedP6Scan.scan_total_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

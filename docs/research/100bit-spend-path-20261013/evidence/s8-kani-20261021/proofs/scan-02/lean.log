@@ -1,0 +1,167 @@
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:50:37: error: unsolved goals
+case none
+bytes : Slice U8
+index : Usize
+hi : ↑index < (↑bytes).length / 16
+hlen : (↑bytes).length ≤ Usize.max
+hb : 16 * ↑index + 16 ≤ (↑bytes).length ∧ ↑index + 1 ≤ (↑bytes).length / 16
+count : UScalar UScalarTy.Usize
+hcount : bytes.len / 16#usize = ok count
+hcv : ↑count = (↑bytes).length / 16
+at1 : Usize
+hat : index * 16#usize = ok at1
+hav : ↑at1 = ↑index * 16
+end1 : Usize
+hend : at1 + 16#usize = ok end1
+hev : ↑end1 = ↑at1 + 16
+s : Slice U8
+hs : core.slice.index.SliceIndexRangeUsizeSlice.index { start := at1, «end» := end1 } bytes = ok s
+hcontents : ↑s = List.slice ↑{ start := at1, «end» := end1 }.start ↑{ start := at1, «end» := end1 }.end ↑bytes
+hslen : s.length = ↑{ start := at1, «end» := end1 }.end - ↑{ start := at1, «end» := end1 }.start
+hslen' : (↑s).length = 16
+next : Usize
+hnext : index + 1#usize = ok next
+hnv : ↑next = ↑index + 1
+hcontents' : ↑s = List.take 16 (List.drop (16 * ↑index) ↑bytes)
+hcond : index < count
+hs' :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := at1, «end» := end1 } =
+    ok s
+hparse : aspis_core.field.QM31.from_le_bytes s = ok none
+hgood : Good bytes ↑index ↔ none.isSome = true
+⊢ (if ↑index < ↑count then do
+      let s ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := at1, «end» := end1 } bytes
+      let o ← aspis_core.field.QM31.from_le_bytes s
+      let r ←
+        match o with
+          | none => ok (core.result.Result.Err CodecError.NonCanonical)
+          | some v => ok (core.result.Result.Ok v)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont next)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit CodecError)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+          ok (done (some r1))
+    else ok (done none)) =
+    ok (done (some (core.result.Result.Err CodecError.NonCanonical)))
+
+case some
+bytes : Slice U8
+index : Usize
+hi : ↑index < (↑bytes).length / 16
+hlen : (↑bytes).length ≤ Usize.max
+hb : 16 * ↑index + 16 ≤ (↑bytes).length ∧ ↑index + 1 ≤ (↑bytes).length / 16
+count : UScalar UScalarTy.Usize
+hcount : bytes.len / 16#usize = ok count
+hcv : ↑count = (↑bytes).length / 16
+at1 : Usize
+hat : index * 16#usize = ok at1
+hav : ↑at1 = ↑index * 16
+end1 : Usize
+hend : at1 + 16#usize = ok end1
+hev : ↑end1 = ↑at1 + 16
+s : Slice U8
+hs : core.slice.index.SliceIndexRangeUsizeSlice.index { start := at1, «end» := end1 } bytes = ok s
+hcontents : ↑s = List.slice ↑{ start := at1, «end» := end1 }.start ↑{ start := at1, «end» := end1 }.end ↑bytes
+hslen : s.length = ↑{ start := at1, «end» := end1 }.end - ↑{ start := at1, «end» := end1 }.start
+hslen' : (↑s).length = 16
+next : Usize
+hnext : index + 1#usize = ok next
+hnv : ↑next = ↑index + 1
+hcontents' : ↑s = List.take 16 (List.drop (16 * ↑index) ↑bytes)
+hcond : index < count
+hs' :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := at1, «end» := end1 } =
+    ok s
+val✝ : Q
+hparse : aspis_core.field.QM31.from_le_bytes s = ok (some val✝)
+hgood : Good bytes ↑index ↔ (some val✝).isSome = true
+⊢ (if ↑index < ↑count then do
+      let s ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := at1, «end» := end1 } bytes
+      let o ← aspis_core.field.QM31.from_le_bytes s
+      let r ←
+        match o with
+          | none => ok (core.result.Result.Err CodecError.NonCanonical)
+          | some v => ok (core.result.Result.Ok v)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont next)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit CodecError)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+          ok (done (some r1))
+    else ok (done none)) =
+    ok (cont next)
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:89:46: warning: This simp argument is unused:
+  hcond
+
+Hint: Omit it from the simp argument list.
+  simp [check_values_owned_loop.body, ̲hcount, ̲hc̵o̵n̵d̵,̵h̵at, ̲hend, ̲hs', ̲hparse, ̲hnext,
+        S8OwnedP6.core.option.Option.ok_or,
+  ̵  ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:89:61: warning: This simp argument is unused:
+  hs'
+
+Hint: Omit it from the simp argument list.
+  simp [check_values_owned_loop.body, ̲hcount, ̲hcond, ̲hat, ̲hend, ̲hs̵'̵,̵h̵parse, ̲hnext,
+        S8OwnedP6.core.option.Option.ok_or,
+  ̵  ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:89:65: warning: This simp argument is unused:
+  hparse
+
+Hint: Omit it from the simp argument list.
+  simp [check_values_owned_loop.body, ̲hcount, ̲hcond, ̲hat, ̲hend, ̲hs', ̲hp̵a̵r̵s̵e̵,̵h̵next,
+        S8OwnedP6.core.option.Option.ok_or,
+  ̵  ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:136:26: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.394 = ?m.394
+but is expected to have type
+  True
+in the application
+  Or.inl rfl
+/Users/dominic/ZK/.worktrees/cx-s8-kani/docs/research/100bit-spend-path-20261013/lean/S8OwnedP6Scan.lean:139:19: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case neg.mpr
+bytes : Slice U8
+allGood : Prop := ∀ j < (↑bytes).length / 16, Good bytes j
+i : Usize
+hib : ↑i ≤ (↑bytes).length / 16
+hprefix : ∀ j < ↑i, Good bytes j
+hi : ¬↑i < (↑bytes).length / 16
+count : UScalar UScalarTy.Usize
+hcount : bytes.len / 16#usize = ok count
+hcv : ↑count = (↑bytes).length / 16
+hcond : ¬i < count
+a✝ : allGood
+⊢ True
+'S8OwnedP6Scan.parser_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.S8OwnedP6Scan.0.S8OwnedP6Scan.add_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.S8OwnedP6Scan.0.S8OwnedP6Scan.mul_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'S8OwnedP6Scan.scan_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'S8OwnedP6Scan.scan_total_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
