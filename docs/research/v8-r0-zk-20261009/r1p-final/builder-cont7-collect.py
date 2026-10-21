@@ -13,7 +13,7 @@ for mode,artifact in [('default','aspis_r1_cost_probe_program.so'),('devnet','as
  p=R/'stage0/artifacts'/mode/artifact
  q=pathlib.Path('/home/dombarker/project-offloads/codex-cx-builder-ref2-20261021/stage0/artifacts')/mode/artifact
  if p.exists():result['elf_cmp'][mode]=dict(exit=subprocess.run(['cmp','-s',str(p),str(q)]).returncode,current=pin(p),frozen=pin(q))
-for group in ['nullifier','forest-owned-p6','stage0/receipts']:
+for group in ['nullifier','forest-owned-p6','forest-owned-match-p6','columns','stage0/receipts']:
  e=R/group
  rec={}
  for p in e.rglob('*'):
@@ -47,7 +47,7 @@ for name in ['Cargo.toml','Cargo.lock']:
  p=R/'stage0/src'/name
  result['source_pins']['stage0/src'][name]=pin(p)
 result['diagnostics']={}
-for d in ['nullifier/kani','nullifier/kani-words','nullifier/kani-limbs','nullifier/aeneas','forest-owned-p6/aeneas']:
+for d in ['nullifier/kani','nullifier/kani-words','nullifier/kani-limbs','nullifier/aeneas','forest-owned-p6/aeneas','forest-owned-match-p6/aeneas','columns/aeneas-columns']:
  p=R/d/'stdout.log';q=R/d/'stderr.log'
  if p.exists(): result['diagnostics'][d]=p.read_text()[-14000:]+('\nSTDERR\n'+q.read_text()[-5000:] if q.exists() else '')
 print(json.dumps(result))

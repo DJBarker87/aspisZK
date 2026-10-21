@@ -12,10 +12,32 @@ to the actual Parts dispatcher. `banks_columns` composes that transport with
 the actual full-bank materialization and column-major readout, including
 thirteen zero padding columns. The proof is symbolic; no cell enumeration.
 
-This is a conditional callee handoff: `Content.blocks`, `.path`, and `.aux`
-are still required. It does not prove actual Parts computes canonical
-components, and `columnCell` is mathematical readout, not extraction of the
-shipped Vec wrapper. Neither qualification is a released source join.
+The primitive `Content.blocks`, `.path`, and `.aux` obligations remain.
+It does not yet prove actual Parts computes canonical components.
+
+The actual shipped `columns` function has now been extracted separately.
+`BuilderColumnsExtracted` uses the same three proved std adapters as the
+bank extraction (from_fn, iterator map, mapped next), removing the backend's
+unsupported map/collect trait metadata only. No Rust function body is
+modified; no external declaration remains. Charon exit 0, 9.912 s,
+611,788 KiB RSS; Aeneas exit 0, 0.292 s, 75,504 KiB RSS, zero swaps.
+The retained first CLI attempt rejected an incorrect preset before building;
+the corrected command is separately recorded. Adaptation audit:
+`builder-cont7-columns-adaptation.json`.
+
+`BuilderSliceCollect` proves ordered slice iteration and identity-map Vec
+collection by symbolic suffix induction. `BuilderColumns` proves total
+execution of every actual column closure and the complete actual columns
+function, all sixteen column lengths, all 1,024 row reads per column, and
+the thirteen padding columns. `source_banks_columns` composes the actual
+Parts, bank materialization, merge, and Vec wrapper into the canonical raw
+copyCellMerged handoff, conditional on the primitive Content facts. There
+is no Vec/array equality or successful columns execution hypothesis.
+
+Final focused attempts 9313, 9315, 9319: extraction, generic collector, and
+full dependent bridge. All standard axioms, zero swaps; final bridge wall
+2.49 s, peak RSS 4,033,244 KiB. Retained failed elaborations 9314, 9316,
+9317 are corrected source versions, not accepted certificates.
 
 Env J 9308: target `R1Z.BuilderPartsContent`, exit 0, wall 2.75 s,
 peak RSS 4,006,804 KiB, zero swaps. All three #print axioms audits use only
@@ -81,7 +103,67 @@ full log hashes/sizes, and exact commands: builder-cont7-host-evidence.json.
 
 ## Stages 3–4: runtime and execution
 
-Pending. The inherited endpoint's runtime and execution joins remain explicit.
+The shipped RuntimeJoin is not constructed. Its admission field needs
+embedded RspendPlus, including append/carry and the D50 sentinel, from actual
+successful-source execution. After the nullifier replacement the forest
+caller reaches a separate borrowed capability boundary in the validated
+incremental tree. A diagnostic-only explicit-match rewrite of Result.map
+passes that point, then Aeneas fails in the validated append_one carry loop:
+incremental_merkle.rs:189–193, InterpMatchCtxs.ml:230, visiting a shared borrow
+retained in the validated capability. Charon 0 (9.484 s, 614,816 KiB RSS),
+Aeneas 2 (2.252 s, 484,564 KiB RSS), zero swap. This diagnostic substitution
+is not certified or shipped. The actual carry/frontier capability needs a
+separate owned reference/callee proof; neither a larger cap nor another
+unchanged compiler replay can supply it. That rejected output is not a
+certificate. The remaining primitive Parts content joins are also not
+proved; the now-closed Vec wrapper is removed from the remaining list.
+
+`PrivacyR1FinalReleaseSource2` includes the new proof modules and preserves
+all original binders and the complete freshness conclusion. Its runtime and
+real/ideal execution joins remain explicit. There is no instantiated shipped
+HonestProver on the actual successful compiler domain, and no concrete
+source FSExperiments observation/randomness law connecting checker input,
+P_chk/P_R1, pole/VR1, masks, retries, non-Rejected errors, publication,
+serialization and reached-query history. The endpoint still quantifies over
+an arbitrary source experiment. The inherited checked
+BuilderExecutionBoundary.no_constant_mismatch_join demonstrates why builder
+facts cannot imply that arbitrary-source execution join. No subtype carrying
+RspendPlus, canonical-h substitution, fabricated runtime inhabitant or
+execution premise with arbitrary bad events is introduced.
+
+The exact binder diff is therefore empty, excluding the theorem name:
+zero deleted premises, zero added premises, no claimed strict weakening.
+The complete before/after signatures follow below.
+
+## Resource and evidence audit
+
+All new Lean sources are compiled one module per env-J attempt, before their
+dependent bridge. No original release/privacy/quotient module is edited.
+No unchanged full regression or frozen-manifest replay is claimed. All
+final theorem/definition audits, source SHA, direct-import fingerprint,
+source revision/dirty flag, wall, RSS and swap are retained.
+
+The inherited launcher's shallow reservation glob missed nested user scopes.
+J9308/9309 report only their own shallow aggregate check (24/26 GiB before
+the 8 GiB job); their valid per-job cgroup receipts do not establish a
+complete aggregate reservation guard. The task-owned launcher now scans
+all populated cgroups recursively. Later jobs wait on that complete scan;
+no other worker is stopped. Every job retains MemoryHigh=6G, MemoryMax=8G,
+MemorySwapMax=0, TasksMax=64. Rust work is solver/proof compilation or
+optimized SBF compilation, not an unoptimized arithmetic release gate.
+
+The three rebuilt ELFs also pass cmp against the retained frozen artifacts.
+Default: 32.528 s, 647,668 KiB; devnet: 2.790 s, 203,092 KiB; Pool: 29.186 s,
+643,988 KiB; all exit 0 and zero swap. No shipped crate input changes after
+this gate. Kani-only edits are confined to the excluded reference file.
+The narrow extraction workspace has four stale, unused prover siblings;
+all actual statement/core/copy inputs match. The isolated full ELF workspace
+matches all production inputs in this checkout.
+
+P6 evidence remains under the named Kani/CBMC, compiler/extraction and std
+adapter trust boundary. No theorem asserts Kani soundness or promotes a
+solver receipt into a kernel axiom. No binary, object, LLBC or key is
+committed. No key cleanup, merge or push is performed.
 
 ## Verbatim endpoint signature audit
 
