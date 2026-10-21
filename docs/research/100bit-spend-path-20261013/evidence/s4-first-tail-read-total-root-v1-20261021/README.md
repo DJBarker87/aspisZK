@@ -1,0 +1,3 @@
+PROVED forward totality of all three actual tail input prefixes for every source slot below four: checked first-query offsets, g[28] read, exact sixteen-byte slice, and both loop input prefixes. Reuses the actual checked-Usize library semantics and the previously proved loop read theorem.
+
+Limitations: Parser acceptance and dot-kernel execution are not inferred from successful reads. first_query_input_of_reads installs the exact same FirstQueryInput once its parser returns some q. No whole callback totality, caller/P6/Std refinement, pairing equality or 100-bit soundness claim; production unchanged.

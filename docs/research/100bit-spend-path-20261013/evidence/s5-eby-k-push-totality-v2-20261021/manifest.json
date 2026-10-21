@@ -1,0 +1,168 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "packet": "s5-eby-k-push-totality-v2-20261021",
+  "classification": "PROVED outer totality of the exact parameterized EbyK push operation for arbitrary scalar input, and a successful valid-scalar push plus both retained QRaw decoded accumulator updates under explicit accumulator bounds.",
+  "modules": [
+    {
+      "module": "EbyKPushTotalityV1",
+      "source": "sources/EbyKPushTotalityV1.lean",
+      "source_sha256": "59e284b8f398887ef2414c4d87487e0733f72d533e894ad0dfa6489b3e1d0d27",
+      "object_sha256": "4ae9684f0b0e4bdbb1cdbab08596a0aeec5cae702f9d3f88b5bba37fc9299906",
+      "receipt": "evidence/receipt.json",
+      "preflight": "evidence/preflight.json",
+      "command": "evidence/command.json",
+      "source_revision": "7e95d635e4aaf60fb0bfde1fdd548a0173bd2a28",
+      "exit_status": 0,
+      "wall_seconds": 8.31,
+      "peak_rss_bytes": 3272867840,
+      "swap_bytes": 0,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    }
+  ],
+  "direct_import_source_map": {
+    "AspisR1EbyKPushConcreteCheckedQV1": {
+      "repository_path": "dependencies/AspisR1EbyKPushConcreteCheckedQV1.lean",
+      "source_sha256": "107fc151d59df19eb8949c5f28af43c049e0a919c02cf878a2db73b9ded6a560",
+      "object_sha256": "6a3053d745220aa105980b32e648a36202dc9aad57dfe0c3d0cbfa4f4b53652e",
+      "object_path_at_launch": "/tmp/prepared-local-warm-cache-20261020/AspisR1EbyKPushConcreteCheckedQV1.olean"
+    },
+    "EbyKPushDotBackend": {
+      "repository_path": "dependencies/EbyKPushDotBackend.lean",
+      "source_sha256": "69eaa9bede52230ccd30794132c7deffc73c545a9f92866a921046b129dff52a",
+      "object_sha256": "1cccf360657a4da86a7dea1a5037b7e80d39a3fea2ec1652f24576218a4a8241",
+      "object_path_at_launch": "/tmp/prepared-local-warm-cache-20261020/EbyKPushDotBackend.olean"
+    },
+    "EbyKPushCheckedScalarCanonical": {
+      "repository_path": "dependencies/EbyKPushCheckedScalarCanonical.lean",
+      "source_sha256": "148e84f98769f4d1c9e2c4c51034a6d4df04b8cb850877a0df6acc8301c21dd9",
+      "object_sha256": "d6612645737244477aca49b15268e8543d2c744380ba0e2291fb3e197427a818",
+      "object_path_at_launch": "/tmp/prepared-local-warm-cache-20261020/EbyKPushCheckedScalarCanonical.olean"
+    },
+    "EbyKPowerValueCanonicalToPushV5": {
+      "repository_path": "dependencies/EbyKPowerValueCanonicalToPushV5.lean",
+      "source_sha256": "62c1353b62ae025716b2a3f1a8adb4df0ce9cdd0f49815fde494b59c7d462fba",
+      "object_sha256": "adee5b97ae5bef35af60aaed77d6d581d3a0ce5ad8ceae49b160313d4a10097c",
+      "object_path_at_launch": "/tmp/prepared-local-warm-cache-20261020/EbyKPowerValueCanonicalToPushV5.olean"
+    },
+    "S5QRaw.EbyKPushDecodedProductUpdateV1": {
+      "repository_path": "dependencies/EbyKPushDecodedProductUpdateV1.lean",
+      "source_sha256": "42e2b854e05187b26028bfa70051045da48482ca6d73721b48d8e56e16ae3554",
+      "object_sha256": "a2dadf28307a0963ebb8082af80aba9b11b118320dea9b906f74f42cbcd6084d",
+      "object_path_at_launch": "/tmp/prepared-local-warm-cache-20261020/S5QRaw/EbyKPushDecodedProductUpdateV1.olean"
+    },
+    "QRawSourceForwardTotalityV1": {
+      "repository_path": "dependencies/QRawSourceForwardTotalityV1.lean",
+      "source_sha256": "e3a38268841db2f492e469121632538b637dc428dfdfa8e33f4bbbd6f364aaab",
+      "object_sha256": "d55b5fa7bb68f13c8452c7260874bbc856f7085c3fc79a3d452f1f2063ee983c",
+      "object_path_at_launch": "/tmp/qraw-v16-objects/QRawSourceForwardTotalityV1.olean"
+    },
+    "DotPushSourceResidues": {
+      "repository_path": "dependencies/DotPushSourceResidues.lean",
+      "source_sha256": "0803e00bb1d42e7d5230de2ff82c380a2d4866a6ca7aee1d1c19103c92d11e5a",
+      "object_sha256": "99c8267690b093a1ce50d29ed7f07e8fa9d00d8f5e3a4c11ee23026ed62256b8",
+      "object_path_at_launch": "/tmp/prepared-local-warm-cache-20261020/DotPushSourceResidues.olean"
+    }
+  },
+  "compiler": {
+    "path": "/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+    "sha256": "1b370cfcbf44e80d1b004ab1b1ab9a4c73951f9f7c242140bcff9bc577576554"
+  },
+  "resource": {
+    "threads": 1,
+    "lean_memory_mb": 4400,
+    "timeout_seconds": 240,
+    "swap_bytes": 0
+  },
+  "limitations": [
+    "Arbitrary-input theorem is outer Result totality; invalid checked-Q limbs return the inner Err.",
+    "Decoded product theorem retains explicit pre-call <2^46 bounds on both accumulator arrays; a dependent count-invariant consumer is still needed.",
+    "Whole Weights::pair/caller correspondence and Rust Std/source installation remain open.",
+    "Compiled OLean binaries are excluded; exact object hashes and external launch paths are recorded."
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "7ca0940b553f297a19eac01a110747995f09e92920a870b4147096a004496380",
+      "size_bytes": 739
+    },
+    {
+      "path": "check_packet.py",
+      "sha256": "19dc164a4efe9874f94062e65fe8d2cb42464dbd951739ad1448c42840768bf2",
+      "size_bytes": 1319
+    },
+    {
+      "path": "dependencies/AspisR1EbyKPushConcreteCheckedQV1.lean",
+      "sha256": "107fc151d59df19eb8949c5f28af43c049e0a919c02cf878a2db73b9ded6a560",
+      "size_bytes": 3824
+    },
+    {
+      "path": "dependencies/DotPushSourceResidues.lean",
+      "sha256": "0803e00bb1d42e7d5230de2ff82c380a2d4866a6ca7aee1d1c19103c92d11e5a",
+      "size_bytes": 1833
+    },
+    {
+      "path": "dependencies/EbyKPowerValueCanonicalToPushV5.lean",
+      "sha256": "62c1353b62ae025716b2a3f1a8adb4df0ce9cdd0f49815fde494b59c7d462fba",
+      "size_bytes": 4900
+    },
+    {
+      "path": "dependencies/EbyKPushCheckedScalarCanonical.lean",
+      "sha256": "148e84f98769f4d1c9e2c4c51034a6d4df04b8cb850877a0df6acc8301c21dd9",
+      "size_bytes": 1510
+    },
+    {
+      "path": "dependencies/EbyKPushDecodedProductUpdateV1.lean",
+      "sha256": "42e2b854e05187b26028bfa70051045da48482ca6d73721b48d8e56e16ae3554",
+      "size_bytes": 11315
+    },
+    {
+      "path": "dependencies/EbyKPushDotBackend.lean",
+      "sha256": "69eaa9bede52230ccd30794132c7deffc73c545a9f92866a921046b129dff52a",
+      "size_bytes": 3553
+    },
+    {
+      "path": "dependencies/QRawSourceForwardTotalityV1.lean",
+      "sha256": "e3a38268841db2f492e469121632538b637dc428dfdfa8e33f4bbbd6f364aaab",
+      "size_bytes": 8869
+    },
+    {
+      "path": "evidence/command.json",
+      "sha256": "9c803e448f0eadf8453367cb8daeb94600a76169cb9260617918e39eae4f1088",
+      "size_bytes": 3052
+    },
+    {
+      "path": "evidence/lean.log",
+      "sha256": "5210973245ef98225c4d40ae2840df52689dbb4978ac12244afd8be0069a5f61",
+      "size_bytes": 1865
+    },
+    {
+      "path": "evidence/preflight.json",
+      "sha256": "f18b61b379becbc896ec3cfc80d98c736357962030791ae1139f4e14786579d8",
+      "size_bytes": 1373
+    },
+    {
+      "path": "evidence/receipt.json",
+      "sha256": "6f75c75891bbea8d4479ab8492ad57f3a10e37cb241104baa69ef392836021ed",
+      "size_bytes": 1730
+    },
+    {
+      "path": "evidence/run_focused.py",
+      "sha256": "5a6a5b324f1ecd26731f404200e0f062f021d16b0f259910d20f94917c9bdbbf",
+      "size_bytes": 4957
+    },
+    {
+      "path": "evidence/time.log",
+      "sha256": "04b55c10d17618959344be64d255aaf30479ecb749a96ab8729c306934a29ac2",
+      "size_bytes": 777
+    },
+    {
+      "path": "sources/EbyKPushTotalityV1.lean",
+      "sha256": "59e284b8f398887ef2414c4d87487e0733f72d533e894ad0dfa6489b3e1d0d27",
+      "size_bytes": 20965
+    }
+  ]
+}
