@@ -60,6 +60,33 @@ The actual shared-oracle address reconstruction and full shipped continuation
 are not identified by this theorem; calling it a shipped WholeRunJoin would
 be incorrect.
 
+## Stage 3 — circle caller and nominal carriers
+
+The pinned Charon/Aeneas kit extracts the owned `circle25::point` caller
+with no external templates. Its policy parameter replaces only the circle
+sampler; record validation, row-order errors, all three hash calls and the
+advanced state remain extracted. Charon: exit 0, 32.404 s, 577348 KiB;
+Aeneas: exit 0, 1.042 s, 111408 KiB; swaps 0, all caps 6G/8G/no swap/64 tasks.
+The source is a host-only reference, not an edit to a shipped file.
+
+`ProverCommitCircle25` installs the existing all-block/two-fallback sampler.
+`sample_total` proves exact selected model coordinates for either row.
+`first_caller` and `second_caller` identify its successful returned point and
+entire advanced state from the extracted checked/block calls; they expose
+those local calls as hypotheses and do not assert a whole-source join.
+`wrapper_roundtrip`/`semantic_roundtrip` prove coefficient and semantic-state
+nominal conversions without loss. J7535: exit 0, 2.29 s, peak 3968716 KiB,
+swaps 0; all six axioms audits are standard-only (wrapper roundtrip: none).
+J7532/7533 are excluded literal-match simplification failures; the final
+proof closes the tiny literal match by `rfl`, not a larger reduction.
+Types J7505 and Funs J7507 compile separately. Raw/promoted source hashes,
+tool/source pins, resource receipts and the import-only port diff are under
+`extraction/circle25` and `receipts/circle-policy25-v1-*`.
+
+The source-level circle-policy equality and the semantic validator's nominal
+execution transport still need composition; fixture equality is not promoted
+to that universal source theorem.
+
 ## Product coupling and endpoint
 
 Not yet constructed. No refinement premise has been deleted.

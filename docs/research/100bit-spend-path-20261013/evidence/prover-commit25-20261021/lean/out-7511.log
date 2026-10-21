@@ -1,0 +1,29 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/GammaCallerDigitsModel.lean:90:6: error: 'change' tactic failed, pattern
+  (do
+      let digits2 ←
+        do
+          let __x ← ops.add digits1 1#u32
+          match __x with
+            | (fst, digits3) => ok digits3
+      ops.decode digits2) =
+    ok out
+is not definitionally equal to target
+  (match (true, digits1) with
+    | (wrapped, digits1) =>
+      have __do_jp := fun digits2 => ops.decode digits2;
+      if wrapped = true then do
+        let __x ← ops.add digits1 1#u32
+        match __x with
+          | (fst, digits3) => do
+            let digits2 ← ok digits3
+            __do_jp digits2
+      else do
+        let digits2 ← ok digits1
+        __do_jp digits2) =
+    ok out
+'AspisR1GammaCaller.DigitsModel.gamma_digits_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
