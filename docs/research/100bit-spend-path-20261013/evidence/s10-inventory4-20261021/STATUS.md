@@ -131,3 +131,43 @@ ordinary errors and full carriers still require a semantic caller simulation.
 Coverage of the forty-label list cannot establish those identities. No final
 whole-source `S10Join` or frozen `AcceptedRunJoin` instance is claimed, and no
 headline premise is removed. The requested end-to-end target remains open.
+
+## Final verification and handoff
+
+`python3 -B tools/s10-inventory4-20261021/audit.py` exits **0**. Its receipt
+`validation.json` records source revision, script SHA, 1.712 seconds wall,
+23,412,736-byte peak RSS, zero swaps, all thirteen current formal results and
+their complete standard-axiom audits. It verifies exact source regeneration,
+the namespace-only builder port, all host generator hashes/caps/receipts,
+all 140 cut certificates, a rejected injected bypass edge, and the unchanged
+shipped and owned sources. The earlier callback replay supplies 24 negative
+controls. The largest committed JSON is 1,052,660 bytes; the 5.64 MB full
+instance JSON remains hash/size/generator-only on the host.
+
+The two requested **completeness** gates ran once after the focused proofs
+and bridge passed:
+
+- `tools/s10-inventory2-20261021/reconcile.py --check --require-complete`: **2**.
+- `tools/s10-inventory3-20261021/reconcile.py --check --require-complete`: **2**.
+
+Their complete stdout/stderr are in `validation.json`. Integrity success is
+separate from completeness failure. These gates and their criteria were not
+changed, and no unchanged full Lean/runtime/SBF regression was repeated.
+
+**Target not yet established.** The missing deliverable is a frozen source
+Calls lowering with complete mutable/error/allocation carriers and all-value
+continuation coverage, plus its exact source/model oracle-order identities.
+The typed forty-label inventory and CFG path facts do not inhabit it. Final
+instance/inline correspondence or explicit source-exclusion certificates,
+144 ELF indirect sites, generic/native LLBC residuals and cone-owner adoption
+also remain. The new fallible allocation model still needs actual reservation
+and resize provenance at its invoked source sites. Other workers' cone
+modules/generated files and `lean-candidates` remain untouched.
+
+The exact new composition endpoint is
+`AspisR1.OraclePortJoinSplitStdFrozen.acceptedRunJoin_of_cones`; it retains
+all old cone joins, adds the explicit std join, and retains both caller
+identities. No concrete `AcceptedRunJoin`, `StoredCarrierBinding`, final
+source-coverage instance or headline premise deletion is claimed. The
+headline/security contract is unchanged. Work is committed on
+`codex/cx-s10-inventory4-20261021`; no push or merge occurred.
