@@ -1,0 +1,68 @@
+import ListConstructorAllocationM10
+import BinFrameConstructionWork
+
+set_option autoImplicit false
+namespace AspisR1.FrameConstructorAllocationM10
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8PairedCommitment FS FS2.Duplex RawTranscriptFrameBytes
+open ListConstructorAllocationM10
+
+structure Model (A : Type) where
+  run : A × Nat
+  cells : Nat
+  paid : cells ≤ run.2
+
+def literal (xs : List Byte) : Model Bytes :=
+  ⟨BinFrameConstructionWork.literal xs,xs.length+1,Nat.le_refl _⟩
+
+/-- 32 byte cons cells, eight word groups and one retained capture group. -/
+def stateBytes (s : State) : Model Bytes :=
+  ⟨BinFrameConstructionWork.stateBytes s,41,by decide⟩
+
+def join (x y : Model Bytes) : Model Bytes where
+  run := BinFrameConstructionWork.join x.run y.run
+  cells := x.cells+y.cells+appendCells x.run.1+2
+  paid := by
+    have hx := x.paid
+    have hy := y.paid
+    have ha := append_work x.run.1 y.run.1
+    change _ ≤ x.run.2+y.run.2+(BinLeafListWork.append x.run.1 y.run.1).2+2
+    omega
+
+def publicInit (pub : Bytes) (root : State) : Model Bytes :=
+  let len := PublicPrimitiveDecoderWork.length pub
+  let header := join (literal semanticDomain) (literal [0])
+  let header := join header ⟨(lengthBytes len.1,len.2+128),5+pub.length+1,by
+    simp only [PublicPrimitiveDecoderWork.length_work]; omega⟩
+  join (join header ⟨(pub,0),0,Nat.le_refl _⟩) (stateBytes root)
+
+def absorb (s : State) (row : Nat) (p : Bytes) : Model Bytes :=
+  join (join (stateBytes s) ⟨([0,label row],64),3,by decide⟩) ⟨(p,0),0,Nat.le_refl _⟩
+
+def rowZero (s : State) : Model Bytes :=
+  join (join (stateBytes s) (literal [0,160])) (literal [0,0,0,0,0])
+def advance (s : State) : Model Bytes := join (stateBytes s) (literal [2])
+def reseed (tag : Byte) (s : State) : Model Bytes :=
+  join (join (literal openingDomain) (literal [tag])) (stateBytes s)
+
+theorem publicInit_erase (pub : Bytes) (root : State) :
+    (publicInit pub root).run = BinFrameConstructionWork.publicInit pub root := rfl
+theorem absorb_erase (s : State) (row : Nat) (p : Bytes) :
+    (absorb s row p).run = BinFrameConstructionWork.absorb s row p := rfl
+theorem rowZero_erase (s : State) : (rowZero s).run = BinFrameConstructionWork.rowZero s := rfl
+theorem advance_erase (s : State) : (advance s).run = BinFrameConstructionWork.advance s := rfl
+theorem reseed_erase (tag : Byte) (s : State) :
+    (reseed tag s).run = BinFrameConstructionWork.reseed tag s := rfl
+
+/-- The source constructor schedule is nonzero even for an empty payload. -/
+theorem advance_positive (s : State) : 0 < (advance s).cells := by
+  change 0 < 41+2+appendCells (bytes s)+2
+  omega
+
+#print axioms publicInit_erase
+#print axioms absorb_erase
+#print axioms rowZero_erase
+#print axioms advance_erase
+#print axioms reseed_erase
+#print axioms advance_positive
+end AspisR1.FrameConstructorAllocationM10

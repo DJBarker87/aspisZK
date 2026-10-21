@@ -1,0 +1,65 @@
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/FrameReplayAllocationM10.lean:52:12: error: Tactic `rfl` failed: The left-hand side
+  (let a := ask log (FrameConstructorAllocationM10.absorb state row bytes);
+    let b := ask log (FrameConstructorAllocationM10.advance a.run.1);
+    if row = 26 then
+      let c := ask log (reseed pub.tag b.run.1);
+      { run := (c.run.1, a.run.2 + b.run.2 + c.run.2), cells := a.cells + b.cells + c.cells, paid := ⋯ }
+    else { run := (b.run.1, a.run.2 + b.run.2), cells := a.cells + b.cells, paid := ⋯ }).run
+is not definitionally equal to the right-hand side
+  have a := BinFrameReplayTotalWork.ask log (BinFrameConstructionWork.absorb state row bytes);
+  have b := BinFrameReplayTotalWork.ask log (BinFrameConstructionWork.advance a.1);
+  have c := BinFrameReplayTotalWork.ask log (BinFrameConstructionWork.reseed pub.tag b.1);
+  (c.1, a.2 + b.2 + c.2)
+
+case isTrue
+log : List (Bytes × State)
+pub : Public
+state : State
+row : ℕ
+bytes : Bytes
+h✝ : row = 26
+⊢ (let a := ask log (FrameConstructorAllocationM10.absorb state row bytes);
+      let b := ask log (FrameConstructorAllocationM10.advance a.run.1);
+      if row = 26 then
+        let c := ask log (reseed pub.tag b.run.1);
+        { run := (c.run.1, a.run.2 + b.run.2 + c.run.2), cells := a.cells + b.cells + c.cells, paid := ⋯ }
+      else { run := (b.run.1, a.run.2 + b.run.2), cells := a.cells + b.cells, paid := ⋯ }).run =
+    have a := BinFrameReplayTotalWork.ask log (BinFrameConstructionWork.absorb state row bytes);
+    have b := BinFrameReplayTotalWork.ask log (BinFrameConstructionWork.advance a.1);
+    have c := BinFrameReplayTotalWork.ask log (BinFrameConstructionWork.reseed pub.tag b.1);
+    (c.1, a.2 + b.2 + c.2)
+/Users/dominic/ZK/.worktrees/cx-m10-instr9/docs/research/100bit-spend-path-20261013/lean/FrameReplayAllocationM10.lean:52:12: error: Tactic `rfl` failed: The left-hand side
+  (let a := ask log (FrameConstructorAllocationM10.absorb state row bytes);
+    let b := ask log (FrameConstructorAllocationM10.advance a.run.1);
+    if row = 26 then
+      let c := ask log (reseed pub.tag b.run.1);
+      { run := (c.run.1, a.run.2 + b.run.2 + c.run.2), cells := a.cells + b.cells + c.cells, paid := ⋯ }
+    else { run := (b.run.1, a.run.2 + b.run.2), cells := a.cells + b.cells, paid := ⋯ }).run
+is not definitionally equal to the right-hand side
+  have a := BinFrameReplayTotalWork.ask log (BinFrameConstructionWork.absorb state row bytes);
+  have b := BinFrameReplayTotalWork.ask log (BinFrameConstructionWork.advance a.1);
+  (b.1, a.2 + b.2)
+
+case isFalse
+log : List (Bytes × State)
+pub : Public
+state : State
+row : ℕ
+bytes : Bytes
+h✝ : ¬row = 26
+⊢ (let a := ask log (FrameConstructorAllocationM10.absorb state row bytes);
+      let b := ask log (FrameConstructorAllocationM10.advance a.run.1);
+      if row = 26 then
+        let c := ask log (reseed pub.tag b.run.1);
+        { run := (c.run.1, a.run.2 + b.run.2 + c.run.2), cells := a.cells + b.cells + c.cells, paid := ⋯ }
+      else { run := (b.run.1, a.run.2 + b.run.2), cells := a.cells + b.cells, paid := ⋯ }).run =
+    have a := BinFrameReplayTotalWork.ask log (BinFrameConstructionWork.absorb state row bytes);
+    have b := BinFrameReplayTotalWork.ask log (BinFrameConstructionWork.advance a.1);
+    (b.1, a.2 + b.2)
+'AspisR1.FrameReplayAllocationM10.lookup_work' depends on axioms: [propext, Quot.sound]
+'AspisR1.FrameReplayAllocationM10.payload_erase' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.FrameReplayAllocationM10.successor_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FrameReplayAllocationM10.state_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FrameReplayAllocationM10.frameAt_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FrameReplayAllocationM10.frame_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FrameReplayAllocationM10.frame_cells_work' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
