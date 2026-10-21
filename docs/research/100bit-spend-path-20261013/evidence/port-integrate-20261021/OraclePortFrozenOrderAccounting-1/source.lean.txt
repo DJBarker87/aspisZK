@@ -1,0 +1,92 @@
+import OraclePortFrozenOrderDecision
+import OraclePortShortCircuitAccounting
+
+/-! Resource conservation for the actual level runner. Each parent hash
+consumes either two live nodes or one live node and one 32-byte proof word.
+The proof is symbolic in fuel, height and proof bytes, including rejection.
+-/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortFrozenOrder
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft
+attribute [local instance] Classical.propDecidable
+
+def weight : Option (Live × Bytes) → Nat
+  | none => 0
+  | some (live,nodes) => live.length + nodes.length / 32
+
+theorem level_conservation (H : Bytes → State) (fuel : Nat) (live : Live) (nodes : Bytes) :
+    (eval H (runLevel fuel live nodes)).1.length +
+      weight (eval H (runLevel fuel live nodes)).2 ≤ live.length + nodes.length / 32 := by
+  induction fuel generalizing live nodes with
+  | zero => simp [runLevel,eval,weight]
+  | succ fuel ih =>
+    cases live with
+    | nil => simp [runLevel,eval,weight]
+    | cons entry rest =>
+      rcases entry with ⟨i,v⟩
+      cases rest with
+      | nil =>
+        simp only [runLevel,Bool.false_eq_true,if_false]
+        cases hd : SemanticRecordCodec.decodeState (nodes.take 32) with
+        | none => simp [eval,weight]
+        | some sibling =>
+            have bound := ih [] (nodes.drop 32)
+            have enough : 32 ≤ nodes.length := by
+              have size : (nodes.take 32).length = 32 := by
+                unfold SemanticRecordCodec.decodeState at hd
+                split at hd
+                · assumption
+                · contradiction
+              rw [List.length_take] at size
+              omega
+            have div : (nodes.drop 32).length / 32 + 1 = nodes.length / 32 := by
+              rw [List.length_drop]; omega
+            simp only [eval,eval_bind,List.length_cons,List.length_append,List.length_nil]
+            cases out : (eval H (runLevel fuel [] (nodes.drop 32))).2 with
+            | none => simp only [out,Option.map_none,weight,List.length_cons,List.length_nil] at *; omega
+            | some pair =>
+              rcases pair with ⟨next,remaining⟩
+              simp only [out,Option.map_some,weight,List.length_cons,List.length_nil] at *
+              omega
+      | cons entry tail =>
+        rcases entry with ⟨j,w⟩
+        simp only [runLevel,decide_eq_true_eq]
+        by_cases both : paired i j
+        · simp only [if_pos both,List.drop_succ_cons,List.drop_zero]
+          have bound := ih tail nodes
+          simp only [eval,eval_bind,List.length_cons,List.length_append,List.length_nil]
+          cases out : (eval H (runLevel fuel tail nodes)).2 with
+          | none => simp only [out,Option.map_none,weight,List.length_cons,List.length_nil] at *; omega
+          | some pair =>
+            rcases pair with ⟨next,remaining⟩
+            simp only [out,Option.map_some,weight,List.length_cons,List.length_nil] at *
+            omega
+        · simp only [if_neg both]
+          cases hd : SemanticRecordCodec.decodeState (nodes.take 32) with
+          | none => simp [eval,weight]
+          | some sibling =>
+              have bound := ih ((j,w)::tail) (nodes.drop 32)
+              have enough : 32 ≤ nodes.length := by
+                have size : (nodes.take 32).length = 32 := by
+                  unfold SemanticRecordCodec.decodeState at hd
+                  split at hd
+                  · assumption
+                  · contradiction
+                rw [List.length_take] at size
+                omega
+              have div : (nodes.drop 32).length / 32 + 1 = nodes.length / 32 := by
+                rw [List.length_drop]; omega
+              simp only [eval,eval_bind,List.length_cons,List.length_append,List.length_nil]
+              cases out : (eval H (runLevel fuel ((j,w)::tail) (nodes.drop 32))).2 with
+              | none => simp only [out,Option.map_none,weight,List.length_cons,List.length_nil] at *; omega
+              | some pair =>
+                rcases pair with ⟨next,remaining⟩
+                simp only [out,Option.map_some,weight,List.length_cons,List.length_nil] at *
+                omega
+#print axioms level_conservation
+end AspisR1.OraclePortFrozenOrder
+end

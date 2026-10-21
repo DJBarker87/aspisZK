@@ -1,0 +1,86 @@
+import OraclePortShortCircuitTransport
+
+/-! Accepted execution refinement. Read accounting uses sub-permutation,
+not prefix: the source's level order and the model's postorder differ.
+This definition says nothing about extraction monotonicity. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortRefineJoin
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortStoredExperimentC4 OraclePortStoredConsumerC7 OraclePortRuntimeBindingC7
+
+/-- Same input carrier (including public input and all proof/stored bytes).
+Each oracle world is shared; multiplicity, not only set membership, is kept. -/
+def AcceptedRefinement (source model : Verifier) : Prop :=
+  ∀ H i, (eval H (source i)).2 = true →
+    (eval H (model i)).2 = true ∧
+      (eval H (source i)).1.Subperm (eval H (model i)).1
+
+def ExecutionRefinement (D : LiteralByteProtocol.Decoder) (rust : Verifier) : Prop :=
+  AcceptedRefinement rust (verifier D OraclePortShortCircuit.outerDecision)
+
+theorem outer_join_refines (D : LiteralByteProtocol.Decoder) (rust : Verifier)
+    (h : OraclePortShortCircuit.OuterExecutionJoin D rust) : ExecutionRefinement D rust := by
+  intro H i ha
+  rw [h i] at ha ⊢
+  exact ⟨ha, List.Subperm.refl _⟩
+
+/-- The inherited eager ExecutionJoin implies the new short-circuit refinement
+because accepted short/eager evaluations agree, including the whole log. -/
+theorem execution_join_refines (D : LiteralByteProtocol.Decoder) (rust : Verifier)
+    (h : ExecutionJoin D rust) : ExecutionRefinement D rust := by
+  intro H i ha
+  rw [h i] at ha ⊢
+  have hv := OraclePortShortCircuit.verifier_verdict D i H
+  have hs : (eval H (verifier D OraclePortShortCircuit.outerDecision i)).2 = true :=
+    hv.trans ha
+  rw [OraclePortShortCircuit.verifier_accepted_eq D i H hs]
+  exact ⟨ha, List.Subperm.refl _⟩
+
+theorem accepted_budget (D : LiteralByteProtocol.Decoder) (rust : Verifier)
+    (h : ExecutionRefinement D rust) (H : Bytes → State) (i : Input)
+    (ha : (eval H (rust i)).2 = true) : (eval H (rust i)).1.length ≤ 1161 :=
+  (h H i ha).2.length_le.trans
+    (verifier_budget D OraclePortShortCircuit.outerDecision
+      OraclePortShortCircuit.outer_budget H i)
+
+/-- No accepted source reads remain outside the model multiset. -/
+theorem accepted_no_extra (D : LiteralByteProtocol.Decoder) (rust : Verifier)
+    (h : ExecutionRefinement D rust) (H : Bytes → State) (i : Input)
+    (ha : (eval H (rust i)).2 = true) (read : Bytes × State)
+    (hr : read ∈ (eval H (rust i)).1) :
+    read ∈ (eval H (verifier D OraclePortShortCircuit.outerDecision i)).1 :=
+  (h H i ha).2.subset hr
+
+/-- Rejection-only instrumentation witnesses strict weakening at every model
+with a rejecting input. It introduces one read only after a rejected run. -/
+def rejectedRead (model : Verifier) (address : Bytes) : Verifier := fun i =>
+  bind (model i) fun ok => if ok then .done true else .ask address fun _ => .done false
+
+theorem rejected_read_refines (model : Verifier) (address : Bytes) :
+    AcceptedRefinement (rejectedRead model address) model := by
+  intro H i ha
+  cases hv : (eval H (model i)).2
+  · simp [rejectedRead,eval_bind,hv,eval] at ha
+  · simp only [rejectedRead,eval_bind,hv,if_true,eval,List.append_nil]
+    exact ⟨True.intro, List.Subperm.refl _⟩
+
+theorem rejected_read_not_equal (model : Verifier) (address : Bytes)
+    (H : Bytes → State) (i : Input) (hr : (eval H (model i)).2 = false) :
+    rejectedRead model address i ≠ model i := by
+  intro eq
+  have hl := congrArg (fun p => (eval H p).1.length) eq
+  simp only [rejectedRead,eval_bind,hr,Bool.false_eq_true,if_false,eval,
+    List.length_append,List.length_cons,List.length_nil] at hl
+  omega
+
+#print axioms outer_join_refines
+#print axioms execution_join_refines
+#print axioms accepted_budget
+#print axioms accepted_no_extra
+#print axioms rejected_read_refines
+#print axioms rejected_read_not_equal
+end AspisR1.OraclePortRefineJoin
+end
