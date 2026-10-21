@@ -421,3 +421,25 @@ bytes to the subsequent source-stage commit. The final generator check and
 `codex/cx-priv-acct-20261021`; nothing was pushed. The still-open quotient,
 exhaustion, builder, batch/log and execution premises listed above are not
 accounting failures and were deliberately not discharged by this worker.
+
+## D106 wire/log audit (2026-10-21)
+
+The proposed deletion of `R_wire_D80_batches` and
+`R_wire_D80_ordered_log` is obstructed at the model level. The new module
+`R1Z/PrivacyR1HeadlineWire.lean` proves that an empty supplied opening list
+cannot satisfy the batch law, and that an empty supplied log with a singleton
+root opening violates the ordered-log equation for every supplied full tape
+and challenge. Env J attempt 9721 compiled all four new theorems (exit 0,
+4.17 s, peak 4,127,808 KiB, zero swaps, standard axioms only).
+
+`PhaseProtocolInstanceBin` constructs messages, leaf encoding, addresses and
+phase order, while retaining the independent `log`, `fib` and `opens` supplied
+by `PrivacyR1AcctModel`. Neither D80 binder contains an intrinsic Rust-source
+identification. The batch binder remains an opening-layout contract; the log
+binder remains the exact ordered serialization/read-log join once its data
+are bound to pinned Rust behavior. See [the detailed audit](WIRELOG-20261021.md)
+and [receipts](wirelog-attempts-9720-9799.jsonl) for the precise remaining joins.
+
+No deletion-only endpoint or altered privacy conclusion is claimed. The
+before and after D106 signatures are identical: both existing binders remain
+verbatim in `privacy_headline_acct`. No predecessor Lean file was edited.
