@@ -76,7 +76,7 @@ theorem final_soundness
     lazyMean (recorded D (decision cs duplicates frames) P) emptyTable
       RawRecordedOracleExtractionMassBin.failureMass +
       QueryScanModelFailure.failureProbability (2^18) ≤ OraclePortHeadline.totalBound Q :=
-  (OraclePortHeadline.final_soundness D (decision cs duplicates frames) P Q hqueries
+  (OraclePortHeadline.recorded_soundness D (decision cs duplicates frames) P Q hqueries
     (budget cs duplicates frames ha) hcompletion hchecks e p hledger).2.2.2.1
 
 #print axioms budget

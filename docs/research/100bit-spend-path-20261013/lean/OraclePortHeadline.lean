@@ -1,4 +1,5 @@
 import OraclePortConsumer
+import OraclePortPool
 import OracleDecisionMultiNumeric
 import RawRecordedActualAdaptiveFailureBoundBin
 import RawExtractorCostComposedBin
@@ -94,7 +95,7 @@ theorem final_soundness_of_clean
 
 /-- The model frontier is completion plus actual reader Checks, rather than
 an opaque clean-model hypothesis. Neither frontier is called a source join. -/
-theorem final_soundness
+theorem recorded_soundness
     (D : LiteralByteProtocol.Decoder) (dO : Decision) (P : Prover) (Q : Nat)
     (hqueries : DecoderQueryAccounting.AdversaryQueries P Q)
     (hbudget : Budget dO)
@@ -116,6 +117,34 @@ theorem final_soundness
     (OraclePortConsumer.clean_of_checks D dO P Q hqueries hbudget hcompletion hchecks)
     e p h_M10_ledger
 
+/-- Draft headline at the constructed logical Pool instance. The two model
+frontiers below remain additional to Rust equality and runtime assumptions. -/
+theorem final_soundness
+    (D : LiteralByteProtocol.Decoder) (dO : Decision) (P : Prover) (Q : Nat)
+    (tape : R9PoolConcreteExperiment.Tape) (policy : R9PoolConcreteExperiment.Policy)
+    (hqueries : DecoderQueryAccounting.AdversaryQueries P Q)
+    (hbudget : Budget dO)
+    (hcompletion : OraclePortConsumer.Completion D dO P (Q + 1161))
+    (hchecks : OraclePortConsumer.CheckedAcceptance D dO P (Q + 1161))
+    (e : CostedExtractor) (p : Parameters)
+    (h_M10_ledger : LedgerRefinement e p (Q + 1161)) :
+    (∀ H : Bytes → State, (eval H (recorded D dO P)).2.2 = true →
+      AspisV8R19.OracleResampling.mean (fun coins : Coins =>
+        ((e.eval (eval H (recorded D dO P)) coins).2.total : ℚ)) ≤ (p.attemptBudget : ℚ)) ∧
+    (∀ run coins w, (e.eval run coins).1 = some w → LiteralProtocol.relation run.2.1.1 w) ∧
+    (1/(2:ℚ)^126 + 1/(2:ℚ)^454 ≤ 1/(2:ℚ)^120) ∧
+    (R9DeployedBinaryExperiment.deployedFailureModel (OraclePortPool.tx1 D P tape)
+      (OraclePortPool.poolTx2 D dO P policy) ≤ totalBound Q) ∧
+    (32 ≤ Q → Q ≤ Qmax →
+      R9DeployedBinaryExperiment.deployedFailureModel (OraclePortPool.tx1 D P tape)
+      (OraclePortPool.poolTx2 D dO P policy) ≤ (Q+1:ℚ)*(1/(2:ℚ)^100)) := by
+  obtain ⟨hcost, hreturned, habort, hbound, _⟩ :=
+    recorded_soundness D dO P Q hqueries hbudget hcompletion hchecks e p h_M10_ledger
+  have ht := (OraclePortPool.deployed_transport D dO P tape policy).trans hbound
+  exact ⟨hcost, hreturned, habort, ht,
+    fun hlo hhi => ht.trans (OracleDecisionMultiNumeric.safe_range Q hlo hhi)⟩
+
+#print axioms recorded_soundness
 #print axioms final_soundness_of_clean
 #print axioms recorded_failure_bound
 #print axioms final_soundness
