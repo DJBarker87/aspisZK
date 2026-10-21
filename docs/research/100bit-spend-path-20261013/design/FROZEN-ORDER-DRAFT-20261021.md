@@ -46,7 +46,24 @@ recovery theorem to that witness. `authenticated` recovers each of the 22
 source openings at its exact index, through the accepted six-slot short
 circuit. This neither permutes logs nor adds independent path hashes.
 Unconditional recovery-table permutation remains false on the inherited
-collision witness. C6 composition is in progress.
+collision witness.
+
+`OraclePortFrozenOrderC6.checked_acceptance` compiles at the actual adaptive
+stored experiment and `dV_frozen`, with no source-data, recovery, reader,
+matching, writer or backend model premise. Its interface is verbatim:
+
+```lean
+def checked_acceptance (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
+    (hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q) :
+    OraclePortStoredChecksC4.CheckedAcceptance D decision (canon P) (Q+1161)
+```
+
+Here `decision` is the abbreviation for `OraclePortFrozenOrder.dV_frozen`
+in `OraclePortFrozenOrderReached`. New reached-run/root/actual/canonical
+modules redo the dependent C6 steps. Existing parsing, typed arithmetic,
+row restoration, frame grammar and observation transport lemmas are reused
+without changing their definitions. The collision predicate and canonical
+prover are unchanged.
 
 ## Stage 3: headline and join split
 
