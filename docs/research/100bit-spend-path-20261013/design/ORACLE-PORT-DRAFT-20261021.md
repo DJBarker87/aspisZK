@@ -534,3 +534,40 @@ wallet/key, Rust source or deployed artifact was edited. Nothing was pushed.
 ```sh
 python3 -B docs/research/100bit-spend-path-20261013/evidence/oracle-port-draft-20261021/continuation-audit.py
 ```
+
+## Continuation 3: checkpoint state and carrier audit
+
+`OraclePortCheckpointStateC3` constructs the saved accumulator by running ten
+steps from the initial state, retains the prepared inputs, and runs twelve
+more steps on resume. `resumed_state` identifies the entire accumulator with
+`QueryAccumulator.run22`; `resumed_fields` gives next, power, weights and rhs;
+`finish_iff` identifies the resulting final relation with R14's `ClosedSum`.
+These are symbolic proofs, not normalization of 22 concrete steps. They do
+not supply the physical prepared-field encoder or its Rust refinement.
+
+A genuine obstruction was found while checking the inherited parser's types.
+`RawCutTranscriptRun.ErasedMessage.payload` carries
+`SelectedTranscriptParams.Message = { bs : Bytes // bs.length ≤ 3717 }`.
+`OraclePortCompactDraft.parseTerminal` attempts to parse **57607 bytes** from
+that terminal message. `OraclePortTerminalCarrierAuditC3.parse_impossible`
+and `.parseTerminal_impossible` prove this impossible for every terminal
+message; `.batch_always_rejects` proves the inherited batch decision returns
+`([], false)` for every oracle and erased prefix. Initial messages carry no
+terminal bytes and cannot avoid this obstruction.
+
+Consequently the existing parser cannot be the frozen dV. Its rejection
+cannot be used to claim unconditional CheckedAcceptance, premise deletion,
+or completed frozen-verifier soundness. A separate, unbounded stored-proof
+carrier must reach the verifier/caller, outside the bounded sampler-message
+type. Threading that carrier through a new experiment, compiler and Pool
+transport is a substantive interface repair. Enlarging the sampler bound
+would change the protocol, and is not an equivalent repair. Existing modules
+remain untouched as required. Stage (c)'s requested nonvacuous composition
+and the physical checkpoint-to-this-decision join stop at this demonstrated
+obstruction; independent sparse accounting continues.
+
+Receipts for these checks are under
+`evidence/oracle-port-draft-20261021/OraclePortCheckpointStateC3-1/` and
+`OraclePortTerminalCarrierAuditC3-{1,2}/`. Attempt 1 of the carrier audit had
+an unresolved Option bind reduction; attempt 2 changes that local proof and
+passes. Both successful audits use only standard axioms, with zero swaps.
