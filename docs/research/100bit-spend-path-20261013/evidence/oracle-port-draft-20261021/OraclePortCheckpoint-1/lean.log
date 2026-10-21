@@ -1,0 +1,91 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCheckpoint.lean:32:14: error: unsolved goals
+case succ
+D : LiteralByteProtocol.Decoder
+dO : Decision
+pf : Proof
+H : Bytes → State
+n : ℕ
+ih :
+  ∀ (t : LiteralTranscript.Prefix),
+    eval H (OracleDecisionFeasibilityCore.verifierFrom D dO pf n t) =
+      let r := eval H (rounds D pf n t);
+      let terminal := eval H (OracleDecisionFeasibilityCore.onBytes dO r.2 (pf 33));
+      (r.1 ++ terminal.1, terminal.2)
+t : LiteralTranscript.Prefix
+⊢ ((eval H (LiteralByteSampler.samp (33 - (n + 1)) t (pf (33 - (n + 1)))).toProgram).1 ++
+        ((eval H
+              (rounds D pf n
+                (Prefix.ext t (pf (33 - (n + 1)))
+                  (eval H (LiteralByteSampler.samp (33 - (n + 1)) t (pf (33 - (n + 1)))).toProgram).2))).1 ++
+          (eval H
+              (OracleDecisionFeasibilityCore.onBytes dO
+                (eval H
+                    (rounds D pf n
+                      (Prefix.ext t (pf (33 - (n + 1)))
+                        (eval H (LiteralByteSampler.samp (33 - (n + 1)) t (pf (33 - (n + 1)))).toProgram).2))).2
+                (pf 33))).1),
+      (eval H
+          (OracleDecisionFeasibilityCore.onBytes dO
+            (eval H
+                (rounds D pf n
+                  (Prefix.ext t (pf (33 - (n + 1)))
+                    (eval H (LiteralByteSampler.samp (33 - (n + 1)) t (pf (33 - (n + 1)))).toProgram).2))).2
+            (pf 33))).2) =
+    ((eval H ((LiteralByteProtocol.protocol D).samp (33 - (n + 1)) t (pf (33 - (n + 1)))).toProgram).1 ++
+        ((eval H
+              (rounds D pf n
+                (Prefix.ext t (pf (33 - (n + 1)))
+                  (eval H
+                      ((LiteralByteProtocol.protocol D).samp (33 - (n + 1)) t (pf (33 - (n + 1)))).toProgram).2))).1 ++
+          (eval H
+              (OracleDecisionFeasibilityCore.onBytes dO
+                (eval H
+                    (rounds D pf n
+                      (Prefix.ext t (pf (33 - (n + 1)))
+                        (eval H
+                            ((LiteralByteProtocol.protocol D).samp (33 - (n + 1)) t
+                                (pf (33 - (n + 1)))).toProgram).2))).2
+                (pf 33))).1),
+      (eval H
+          (OracleDecisionFeasibilityCore.onBytes dO
+            (eval H
+                (rounds D pf n
+                  (Prefix.ext t (pf (33 - (n + 1)))
+                    (eval H
+                        ((LiteralByteProtocol.protocol D).samp (33 - (n + 1)) t (pf (33 - (n + 1)))).toProgram).2))).2
+            (pf 33))).2)
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCheckpoint.lean:73:61: error: unsolved goals
+D : LiteralByteProtocol.Decoder
+dO : Decision
+P : Prover
+H : Bytes → State
+c : Checkpoint
+hc : write (eval H (prepare D P)) = some c
+ha : (eval H (resume D dO c)).2.2.2 = true
+hr : c.raw = eval H (prepare D P)
+hb : (eval H (base dO c.raw)).2 = eval H (original D dO P)
+ha' : (R16DecisionCheckpoint.tx2 (R16DecisionCheckpoint.resume c.saved) && (eval H (base dO c.raw)).2.2.2) = true
+hguard : R16DecisionCheckpoint.tx2 (R16DecisionCheckpoint.resume c.saved) = true
+hacc : (eval H (original D dO P)).2.2 = true
+⊢ ((eval H (original D dO P)).1 ++
+        (eval H
+            (OraclePortExperiment.verifier D dO (eval H (original D dO P)).2.1.1 (eval H (original D dO P)).2.1.2)).1,
+      ((eval H (original D dO P)).2.1.1,
+        RawCutTranscriptRun.proof (BinCompiledRunWordStability.wordsFromRun D (eval H (original D dO P)))
+          (eval H (original D dO P)).2.1.2),
+      true) =
+    ((eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D dO))).1 ++
+        (eval H
+            (OracleDecisionFeasibilityCore.verifier D dO
+              (eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D dO))).2.1.1
+              (eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D dO))).2.1.2)).1,
+      ((eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D dO))).2.1.1,
+        RawCutTranscriptRun.proof
+          (BinCompiledRunWordStability.wordsFromRun D
+            (eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D dO))))
+          (eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D dO))).2.1.2),
+      (eval H (RawCutProverCompiler.experiment P (OracleDecisionFeasibilityCore.verifier D dO))).2.2)
+'AspisR1.OraclePortCheckpoint.rounds_terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCheckpoint.prepare_original' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCheckpoint.resume_matching' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCheckpoint.resume_recorded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -10,7 +10,8 @@ obj=pathlib.Path('/tmp/codex-cx-oracle-port-draft-20261021-objects'); obj.mkdir(
 module=sys.argv[1]; attempt=sys.argv[2]; src=base/'lean'/f'{module}.lean'
 out=ev/f'{module}-{attempt}'; out.mkdir()
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
-paths=list(dict.fromkeys([str(obj)]+pin['lean_path'].split(':')+extra['lean_path'].split(':')))
+d0=json.loads((base/'evidence/d0-decision-20261021/D0ChecksComposition-1/command.json').read_text())
+paths=list(dict.fromkeys([str(obj)]+pin['lean_path'].split(':')+extra['lean_path'].split(':')+d0['lean_path'].split(':')))
 imports=[]
 for line in src.read_text().splitlines():
  if line.startswith('import '):
