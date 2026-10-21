@@ -54,3 +54,33 @@ Symbolic proof/public lengths; C5/extracted kernel identification and Rust
 reached-state provenance; std owned-iteration/physical allocation boundary;
 TX1/TX2 caller joins and the concrete checkpoint Site from the S10 worker.
 Existing pass-2 evidence remains evidence for its recorded source/domain.
+
+## Stage 2 — symbolic proof/public lengths
+
+`proofs::frozen_writer_all_bounded_lengths` passes against the linked frozen
+writer, for arbitrary backing bytes and symbolic `proof_len ≤ 57607` and
+`public_len ≤ 1880`, including empty slices. Each hash call checks exact
+slice pointer **and metadata**, rather than looping over proof/public bytes.
+This proves the call receives the entire original borrowed slice of that
+symbolic length. Output bytes and checksum-body bytes remain independently
+universally indexed. The S2, next=10, 64-weight and canonical-wide-input
+restrictions are unchanged; raw QM31 words remain arbitrary.
+
+`proofs::reader_authentication_all_bounded_lengths` passes over the same
+lengths, arbitrary checkpoint bytes of length 1768 and arbitrary digest
+answers. The byte-exact source authentication prefix checks header and all
+three short-circuit digest comparisons, including exact source slice identity
+and checksum-body slice identity. Every subsequent source reader statement
+is independent of proof/public/hash, as the source excerpt boundary shows.
+This is a certificate for the **authentication prefix**, not a rerun or
+certificate of full resume/driver composition. The six field-section roots
+are unchanged and their successful receipts are reused.
+
+Both final gates use unwind 70 and explicit unwind assertions. Writer:
+exit 0, 63.006556 seconds, 2,040,116 KiB peak RSS. Reader prefix: exit 0,
+2.917657 seconds, 299,224 KiB peak RSS. Both have zero swaps and the required
+6G/8G/zero-swap/64-task caps. Source revision `6e2b4eb8a`; exact source and
+command pins are in `host/receipts/lengths-{writer,reader}-v1/`. Rust axiom
+reports are N/A. Five inherited pass-2 reservation files accidentally copied
+with the initial host snapshot were removed from this packet; actual pass-3
+preflight records and every pass-3 attempt remain retained.

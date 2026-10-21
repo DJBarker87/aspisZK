@@ -123,6 +123,8 @@ fn frozen_writer_exact_byte_and_reads() {
  assert_eq!(step.get(),3);assert_eq!(got.len(),1768);
  assert_eq!(got[j],if j<1736 {body_byte(&p,&a,&answers[0],&answers[1],j)} else {answers[2][j-1736]});
 }
+include!("length-proofs.rs");
+
 }
 
 
