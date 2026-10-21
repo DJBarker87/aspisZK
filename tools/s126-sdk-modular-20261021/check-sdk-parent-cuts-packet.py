@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+"""Audit selected SDK cuts and snapshot equivalence; not whole S2 closure."""
+from pathlib import Path
+import hashlib,json,re,subprocess,tempfile,tomllib
+R=Path(__file__).resolve().parents[2];B=R/'docs/research/100bit-spend-path-20261013'
+E=B/'evidence/s126-current-caller-20261021/sdk-parent-cuts';S=B/'lean-candidates/s126-caller-boundary-20261021'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+accepted={}
+def checked(tag,folder):
+ source=E/'sources'/folder/'src/lib.rs';cut=json.loads((source.parents[1]/'source-cut.json').read_text())
+ assert cut['source_sha256']==sha(source)
+ inp=json.loads((E/(tag+'-input.json')).read_text());assert inp['source_sha256']==sha(source)
+ assert '-C opt-level=3' in inp['env']['RUSTFLAGS'] and 'overflow-checks=yes' in inp['env']['RUSTFLAGS']
+ assert inp['env']['CARGO_BUILD_JOBS']=='1' and inp['tool_pins']
+ receipt=E/'receipts'/tag/'receipt.json';r=json.loads(receipt.read_text())
+ assert r['exit_status']==0 and r['swaps']==0 and r['limits']['memory.swap.max']=='0'
+ assert r['limits']['memory.max']=='8589934592' and '--unwinding-assertions' in r['command']
+ log=(receipt.parent/'stdout.log').read_text();counts=re.search(r'0 of (\d+) failed',log);assert counts
+ covers=re.search(r'(\d+) of (\d+) cover properties satisfied',log);assert covers and covers[1]==covers[2]
+ packages={p['name']:p for p in tomllib.loads((source.parents[1]/'Cargo.lock').read_text())['package']}
+ for p,v in [('solana-program','2.3.0'),('solana-account-info','2.3.0'),('solana-program-error','2.2.2')]:assert packages[p]['version']==v and packages[p]['checksum']
+ accepted[tag]=dict(source_sha256=sha(source),receipt_sha256=sha(receipt),assertions=int(counts[1]),covers=int(covers[1]),wall_seconds=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],swaps=0)
+ return source,cut,receipt
+for mode in ['shared','exclusive','length','chain']:
+ source,cut,_=checked('sdk-heap-'+mode+'-join-v2','sdk-heap-'+mode+'-v2')
+ assert cut['max_buffer_bytes']==10485760
+ text=source.read_text();assert 'initial_lamport_counts:[isize;3]=kani::any()' in text
+ assert 'data_slots:[usize;3]=kani::any()' in text and 'lamport_slots:[usize;3]=kani::any()' in text
+ if mode=='chain':assert 'actual_trace[i][row],expected_trace[i][row]' in text and 'lifecycle cut' in cut['domain']
+ with tempfile.TemporaryDirectory() as d:
+  subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-heap-join.py'),d,mode,'10485760'],check=True)
+  assert (Path(d)/'src/lib.rs').read_bytes()==source.read_bytes()
+for mode in ['shared','exclusive']:
+ source,cut,receipt=checked('sdk-'+mode+'-write-frame-v3','sdk-'+mode+'-write-frame-v3')
+ assert cut['all_lamport_counters'] and cut['max_buffer_bytes']==10485760
+ text=source.read_text();assert '#[kani::modifies(counter.cast::<isize>())]' in text and '#[kani::proof_for_contract('+mode+'_roundtrip)]' in text
+ audit=json.loads((E/'receipts'/('sdk-'+mode+'-write-properties-v3')/'property-audit.json').read_text())
+ pins=json.loads((E/('sdk-'+mode+'-properties-v3-input.json')).read_text())
+ assert pins['checked_source_sha256']==audit['source_sha256']==sha(source)
+ assert pins['checked_receipt_sha256']==sha(receipt) and pins['program_sha256']==audit['checked_program_sha256']
+ assert any(p['class']=='assigns' and 'AccountInfo' in p['name'] for p in audit['contract_properties'])
+ assert any(p['class']=='assertion' and 'old(' in p['description'] for p in audit['contract_properties'])
+ with tempfile.TemporaryDirectory() as d:
+  subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-shared-write-frame.py'),d,mode,'all-rc-counts','10485760','all-lamport-counters'],check=True)
+  assert (Path(d)/'src/lib.rs').read_bytes()==source.read_bytes()
+source,cut,_=checked('sdk-metadata-prefix-join-v2','sdk-metadata-prefix-v2')
+assert cut['protocol_freeze']=='b2727acd3abf79315d18b754a260f58f4b1c6326' and cut['max_buffer_bytes']==10485760
+with tempfile.TemporaryDirectory() as d:
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-metadata-prefix.py'),d],check=True)
+ assert (Path(d)/'src/lib.rs').read_bytes()==source.read_bytes()
+ assert json.loads((Path(d)/'source-cut.json').read_text())==cut
+with tempfile.TemporaryDirectory() as d:
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/make-sdk-metadata-parent.py'),d],check=True)
+ assert (Path(d)/'S2SdkMetadataParentV1.lean').read_bytes()==(S/'S2SdkMetadataParentV1.lean').read_bytes()
+prefixTag='sdk-prefix-context-check-v3'
+prefixSource=E/'sources/sdk-prefix-context-v3/src/lib.rs'
+cut=json.loads((prefixSource.parents[1]/'source-cut.json').read_text())
+codegen=json.loads((E/'sdk-prefix-context-codegen-v3-input.json').read_text())
+assert codegen['source_sha256']==cut['source_sha256']==sha(prefixSource)
+assert codegen['env']['RUSTFLAGS'].startswith('-C opt-level=3 ')
+rawReceipt=E/'receipts'/prefixTag/'receipt.json';raw=json.loads(rawReceipt.read_text())
+assert raw['exit_status']==10 and raw['swaps']==0 and raw['limits']['memory.swap.max']=='0'
+properties=json.loads((E/'diagnostics'/prefixTag/'properties-without-traces.json').read_text())
+assert properties and all(p['status']=='SUCCESS' for p in properties if p['sourceLocation'].get('propertyClass')!='cover')
+covers=[p for p in properties if p['sourceLocation'].get('propertyClass')=='cover']
+assert len(covers)==1 and covers[0]['status']=='FAILURE' # raw CBMC counterexample witnesses reachability
+inp=json.loads((E/(prefixTag+'-input.json')).read_text())
+normal=E/'receipts/sdk-private-stub-semantic-preflight-v4/stdout.log'
+assert inp['normal_pipeline_receipt_sha256']==sha(normal)
+assert inp['pretty_name'].find('any')>=0 and len(inp['input_goto_sha256'])==64
+assert inp['timeout_seconds']==180 and inp['tool_pins']
+assert '--unwinding-assertions' in inp['commands'][-1]
+assert not any(c in inp['commands'][-1] for c in ['--no-bounds-check','--no-pointer-check','--no-unwinding-assertions'])
+with tempfile.TemporaryDirectory() as d:
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-paired-context.py'),d,'prefix'],check=True)
+ assert (Path(d)/'src/lib.rs').read_bytes()==prefixSource.read_bytes()
+ assert json.loads((Path(d)/'source-cut.json').read_text())==cut
+accepted[prefixTag]=dict(source_sha256=sha(prefixSource),receipt_sha256=sha(rawReceipt),raw_exit_status=10,noncover_successes=len(properties)-len(covers),reachable_covers=1,wall_seconds=raw['wall_seconds'],peak_rss_kib=raw['peak_rss_kib'],swaps=0,qualification='Native frozen stage1 decoder-entry cut, with actual decoder length rejection; native std-any overapproximation remains explicit. Cover counterexample is expected; every non-cover property must be SUCCESS. Not post-decoder/full-stage correspondence.')
+snap=E/'sources/owned-sdk-snapshots-v1'
+with tempfile.TemporaryDirectory() as d:
+ out=Path(d)/'src';subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-snapshot-reference.py'),str(out)],check=True)
+ assert (out/'src/lib.rs').read_bytes()==(snap/'src/lib.rs').read_bytes()
+ i=Path(d)/'raw';i.mkdir();o=Path(d)/'adapt'
+ for p in (snap/'generated/AspisS2SdkSnapshots').glob('*.lean.txt'):(i/p.name[:-4]).write_bytes(p.read_bytes())
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/adapt-sdk-snapshot.py'),str(i),str(o)],check=True)
+ for p in o.iterdir():assert p.read_bytes()==(S/p.name).read_bytes(),p
+for phase in ['charon','aeneas']:
+ r=json.loads((E/'receipts'/('owned-sdk-snapshots-v1-'+phase)/'receipt.json').read_text())
+ inp=json.loads((snap/(phase+'-input.json')).read_text())
+ assert r['exit_status']==0 and r['swaps']==0 and r['limits']['memory.swap.max']=='0'
+ assert inp['source_sha256']==sha(snap/'src/lib.rs') and inp['tool_pins']
+assert all(not p['has_errors'] for p in json.loads((E/'llbc-pins.json').read_text()))
+flags=[json.loads(p.read_text())['rustflags'] for p in (E/'compiler-flags').glob('*/*.json')]
+assert flags and all('opt-level=3' in r and 'overflow-checks=yes' in r and '--kani-compiler' in r for r in flags)
+for p in E.rglob('*'):
+ if p.is_file():assert p.suffix not in ['.olean','.o','.a','.so','.dylib','.llbc','.bc','.out']
+(E/'accepted-cuts.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',qualification='Checked finite SDK operation/lifecycle domains and exact pure snapshot adaptation. Reached phase cuts are explicit. Complete actual stage1 child instances and ordered caller join remain open; timed-out/context/codegen/preflight evidence is excluded from accepted cuts.',cuts=accepted),indent=2)+'\n')
+print('PASS eight SDK cuts (including native admitted decoder entry) and exact snapshot/full-parent metadata fission; whole caller closure not asserted')

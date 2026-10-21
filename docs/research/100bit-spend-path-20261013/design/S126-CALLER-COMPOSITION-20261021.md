@@ -744,3 +744,119 @@ join. Concrete syscall/library/runtime boundaries must be kept distinct from
 that missing refinement. S6 retains the shared shipped-caller gap. S1 retains
 its original nested claim/powers/preparation-trace premises. No whole S1/S2/S6
 or global 100-bit conclusion is asserted: target not yet established.
+
+## Addendum 2026-10-21 21:48 UTC — native metadata and decoder-entry cuts
+
+S2 remains OPEN. This addendum closes the following scoped SDK obligations;
+it does not close `AcceptedRunJoin D rust` or promote a source cut to a whole
+SDK execution. The authoritative protocol freeze is still b2727acd3abf79315d18b754a260f58f4b1c6326.
+Research was inspected read-only at 57ca9c4525f0006b40b692bda88bcb99fab71d7d;
+the frozen program lib.rs and r1_pool_adapter.rs remain unchanged there.
+
+`sdk-parent-cuts/accepted-cuts.json` selects the exact checked source/tool/
+command/resource receipts. `check-sdk-parent-cuts-packet.py` regenerates every
+selected Rust candidate and both full-parent Lean fissions, checks SDK lock
+versions, optimized compiler flags, properties, native source cuts and pins.
+The normal packet check invokes it. No unchanged full replay was run.
+
+* The three-account native heap checks now retain independent data and lamport
+  alias maps, all account metadata, every signed borrow counter, full symbolic
+  buffers and lengths 0..10485760. Shared acquire/drop, exclusive acquire/drop
+  and data length agree with the complete owned SDK state. Native Rc headers
+  in these fixtures are those of the constructed graph; arbitrary safe header
+  counts are checked separately by the broader write-set contracts, not
+  silently attributed to these fixtures.
+* The lifecycle cut retains all three real Rust guards in source order and
+  checks native/reference counter traces at each reached acquisition and on
+  every cut return. It covers returns after checkpoint, public and proof
+  guards, including success. Children are explicit return-phase cuts; this
+  is not a check of parsing, hashing or the complete stage1.
+* The shared/exclusive write-set contracts now cover 10 MiB buffers, every
+  signed data and lamport counter and all safe data/lamport Rc header counts.
+  Their assigns/postcondition audits confirm that only the selected borrow
+  counter is written and its old value is restored. The v2 certificates are
+  retained unchanged as historical narrower evidence.
+* `S2SdkAliasPartitionV1.independent_heaps` proves every three-handle identity
+  pattern has an exact three-slot representation in each heap independently.
+  Distinct keys are not assumed to imply distinct data identities. Runtime
+  construction of the full heap embedding remains an enclosing boundary.
+
+`sdk-metadata-prefix-join-v2` checks the exact frozen stage1 prefix through
+`require_verifier_checkpoint`, before persistent guards. It compares every
+ordinary native/reference status, including duplicate keys, malformed
+instructions, metadata rejection and the SDK size-borrow failure; all heap
+counters remain unchanged. It preserves the exact native helper bodies and
+the exact owned prefix, with no scanner/decoder/parser/oracle stub. Domain:
+three real AccountInfo values and the complete heap domain above. The enclosing
+reference connection is `S2SdkMetadataParentV1.body_factor` / `stage1_eq`:
+the kernel checks both original complete continuations and final cleanup,
+all outcomes, without a metadata-success or release-success premise. This is
+fission of the original parent, not a replacement metadata carrier.
+
+The next native cut is `sdk-prefix-context-check-v3`. The complete frozen
+stage1 body is retained. Its decoder cut retains the real 1880-byte rejection,
+then checks the exact admitted public root pointer and once-only entry before
+returning InvalidAccountData. Every signed data/lamport counter is restored
+on every returned prefix status. Root storage remains arbitrary58295/1880/1768
+bytes with arbitrary metadata/alias maps. The native std-any body alone is
+overapproximated by a nondeterministic bool; its exact scan/byte-view instance
+must still be composed from the previously checked std/SDK iterator packet.
+All 3611 non-cover properties are SUCCESS; the single cover is reachable.
+Raw CBMC exit10 is retained: its sole failing assertion is the cover, whose
+counterexample witnesses reachability. The checker does not relabel other
+assertion failures or accept an empty property set. This is a decoder-entry
+cut, not an accepted whole-stage refinement or unrestricted-length theorem.
+
+The v2 decoder cut was false: stage1 can pass an incorrectly sized public
+buffer to the decoder, which rejects it. The failed harness incorrectly
+asserted the length before that rejection. Its source, counterexample property
+projection and receipt are retained and excluded; v3 preserves the actual
+length rejection. Earlier whole paired/native contexts timed out in generic
+instrumentation and are excluded. The raw runner was corrected to establish
+the Kani harness entry and retain the normal library/undefined-body/backedge
+pipeline, with commands witnessed by a separate tiny semantic preflight.
+No safety or unwinding checks were disabled. The general ProgramError equality
+metadata attempt was stopped at about 6.1 GiB RSS and replaced with the exact
+five-status relation; that replacement passed with about 1.14 GiB RSS.
+
+For concrete snapshot instrumentation, `owned-sdk-snapshots-v1` adds only two
+named helpers executing the identical Vec clone. Charon/Aeneas retain all
+thirty literal-equal SDK/protocol types and the same twelve Ops fields.
+`S2SdkSnapshotEquivalenceV1.body_eq` / `stage1_eq` prove complete old/new parent
+equality, all statuses and every SDK field. Their proof term is kernel-checked
+Eq.refl after full transparency on symbolic bodies; no resource override or
+custom axiom is used. The source remains an isolated reference candidate;
+no production source adoption or re-pin is implied.
+
+Selected native receipts, all swap0, MemoryHigh6G/MemoryMax8G/MemorySwapMax0:
+
+| Target | Exit | Wall s | Peak RSS KiB | Properties / covers |
+| --- | ---: | ---: | ---: | --- |
+| sdk-heap-shared-join-v2 | 0 | 23.058 | 812212 | 1814 / 5 |
+| sdk-heap-exclusive-join-v2 | 0 | 22.435 | 832360 | 1821 / 5 |
+| sdk-heap-length-join-v2 | 0 | 22.018 | 841820 | 1742 / 5 |
+| sdk-heap-chain-join-v2 | 0 | 124.586 | 3911540 | 2224 / 9 |
+| sdk-shared-write-frame-v3 | 0 | 33.226 | 4753852 | 771 / 2 |
+| sdk-exclusive-write-frame-v3 | 0 | 28.393 | 4754732 | 805 / 2 |
+| sdk-metadata-prefix-join-v2 | 0 | 34.932 | 1191572 | 2038 / 10 |
+| sdk-prefix-context-check-v3 | 10 (cover) | 14.746 | 591016 | 3611 success / 1 reached |
+
+Focused Lean receipts (one atomic local lock, -j1 -M4400, all exit0/swap0):
+alias-partition-v3 2.254336s/1392640000 bytes; snapshot-reference-v1
+8.453849s/2281340928 bytes; snapshot-equivalence-v4 12.129992s/2271543296
+bytes; metadata-parent-v2 15.869365s/2226028544 bytes. All accepted printed
+axioms are subsets of propext/Classical.choice/Quot.sound. Raw templates and
+failed elaborations are excluded from proof claims. Exact tool/source/direct
+and selected transitive import hashes are in the source-only packet.
+
+The remaining enclosing premises are unchanged in scope: actual native SDK
+embedding and source-step composition through successful decoding, validation,
+candidate encoding, proof framing, first_decoded/tx1 and writeback; concrete
+child/digest/error-log interpretations; and ordered source/oracle-log transport
+into the headline AcceptedRunJoin. The completed prefix cuts provide concrete
+pieces of that instance, but the timed-out parent contexts supply none.
+S6 retains this shared actual-caller gap despite the complete owned-reference
+same-byte/same-decoded-object theorem. S1 still needs original nested claim,
+powers/preparation-trace and caller composition. No source adoption decision
+has been requested; no production or other-session track changed. The raw
+per-attempt 2^-100 target without grinding credit is not yet established.

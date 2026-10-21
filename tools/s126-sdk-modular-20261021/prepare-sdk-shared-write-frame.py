@@ -63,6 +63,19 @@ if all_rc:
   assert_eq!(std::rc::Rc::weak_count(&account.lamports),rc_counts[3]-1);
   let counter=std::rc::Rc::as_ptr(&account.data).cast::<Cell<isize>>();''')
  s=s.replace('  unsafe{(*counter).set(0);}', '  assert_eq!(std::rc::Rc::strong_count(&account.data),rc_counts[0]);\n  assert_eq!(std::rc::Rc::weak_count(&account.data),rc_counts[1]-1);\n  assert_eq!(std::rc::Rc::strong_count(&account.lamports),rc_counts[2]);\n  assert_eq!(std::rc::Rc::weak_count(&account.lamports),rc_counts[3]-1);\n  unsafe{(*counter).set(0);*ds=1;*dw=1;*ls=1;*lw=1;}')
+limit=int(sys.argv[4]) if len(sys.argv)>4 else 58295
+assert 0<limit<=10*1024*1024
+all_lamport_counters=len(sys.argv)>5 and sys.argv[5]=='all-lamport-counters'
+if all_lamport_counters:
+ s=s.replace('  let initial:isize=kani::any();', """  let lamport_counter=std::rc::Rc::as_ptr(&account.lamports).cast::<Cell<isize>>();
+  assert_eq!(unsafe{(*lamport_counter).get()},0);
+  let initial_lamport:isize=kani::any();unsafe{(*lamport_counter).set(initial_lamport);}
+  let initial:isize=kani::any();""")
+ s=s.replace('  unsafe{(*counter).set(0);', """  assert_eq!(unsafe{(*lamport_counter).get()},initial_lamport);
+  unsafe{(*lamport_counter).set(0);}
+  unsafe{(*counter).set(0);""")
+s=s.replace('58295',str(limit))
+if limit!=58295:s=s.replace('full proof view write-set checked','maximum buffer view write-set checked')
 (O/'src/lib.rs').write_text(s)
 (O/'Cargo.toml').write_text('''[package]
 name="aspis-s126-sdk-shared-write-frame"
@@ -75,4 +88,4 @@ solana-program="=2.3.0"
 opt-level=3
 overflow-checks=true
 ''')
-(O/'source-cut.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',source_sha256=hashlib.sha256(s.encode()).hexdigest(),qualification=__doc__,mode=mode,rc_counter_domain=('Both data and lamport Rc strong counts1..isizeMAX; internal weak counts1..isizeMAX, public weak=internal-1. Compiler-layout header validated before injection.' if all_rc else 'SDK constructor counts: strong1,public weak0.'),domain='All signed counters, full58295-byte symbolic storage, view length0..58295, every account metadata/lamport value. Compiler-specific counter location validated before injection.',contract='Only counter.cast::<isize>() may be assigned; counter restored on return. Exact original SDK acquire and guard drop execute; acquisition mode explicitly recorded.',remaining='Need actual enclosing source composition; no whole S2 closure.'),indent=2)+'\n')
+(O/'source-cut.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',source_sha256=hashlib.sha256(s.encode()).hexdigest(),max_buffer_bytes=limit,all_lamport_counters=all_lamport_counters,qualification=__doc__,mode=mode,rc_counter_domain=('Both data and lamport Rc strong counts1..isizeMAX; internal weak counts1..isizeMAX, public weak=internal-1. Compiler-layout header validated before injection.' if all_rc else 'SDK constructor counts: strong1,public weak0.'),domain=('All signed data counters, '+('all signed lamport counters, ' if all_lamport_counters else 'constructor-zero lamport counters, ')+f'full{limit}-byte symbolic storage, view length0..{limit}, every account metadata/lamport value. Compiler-specific counter location validated before injection.'),contract='Only counter.cast::<isize>() may be assigned; counter restored on return. Exact original SDK acquire and guard drop execute; acquisition mode explicitly recorded.',remaining='Need actual enclosing source composition; no whole S2 closure.'),indent=2)+'\n')

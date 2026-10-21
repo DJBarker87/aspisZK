@@ -6,7 +6,7 @@ from pathlib import Path
 import os,sys,subprocess,json,hashlib
 H=Path('/home/dombarker/project-offloads/s126-real-sdk-20261021');name=sys.argv[1]
 assert name in ['shared','exclusive']
-version=sys.argv[2] if len(sys.argv)>2 else 'v1';assert version in ['v1','v2']
+version=sys.argv[2] if len(sys.argv)>2 else 'v1';assert version in ['v1','v2','v3']
 input_tag='sdk-'+name+'-properties'+('' if version=='v1' else '-'+version)
 crate=H/('sdk-'+name+'-write-frame-'+version);receipt=H/'receipts'/('sdk-'+name+'-write-frame-'+version)
 passed=json.loads((receipt/'receipt.json').read_text());assert passed['exit_status']==0

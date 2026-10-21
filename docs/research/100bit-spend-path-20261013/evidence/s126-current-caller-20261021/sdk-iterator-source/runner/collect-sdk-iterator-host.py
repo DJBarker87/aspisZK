@@ -38,7 +38,10 @@ function_pins={}
 for name in ['source_begin','source_next']:
  bodies=[cut(s,name) for s in sources.values()];assert len(set(bodies))==1
  function_pins[name]=dict(source=bodies[0],sha256=hashlib.sha256(bodies[0].encode()).hexdigest(),all_native_and_extracted_bodies_identical=True)
-(O/'source-pins.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',protocol_freeze='b2727acd3abf79315d18b754a260f58f4b1c6326',extraction_parent_revision='9b6ba762d',functions=function_pins,llbc=pins,qualification='Native join v3 checks constructor plus one next step, every1768-byte value/cursor0..1768, full OwnedSdk rows and live AccountInfo RefMut. Exact bodies equal extraction v2; no unchanged extraction replay. Pointer-slot heap construction and complete shipped parent remain outside this leaf certificate.'),indent=2)+'\n')
+dependency=H/'owned-sdk-v3'
+for rel in ['src/lib.rs','Cargo.toml','Cargo.lock']:
+ if (dependency/rel).is_file():copy(dependency/rel,Path('dependency-owned-sdk-v3')/rel)
+(O/'source-pins.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',protocol_freeze='b2727acd3abf79315d18b754a260f58f4b1c6326',extraction_parent_revision='9b6ba762d',functions=function_pins,owned_sdk_dependency_source_sha256=sha(dependency/'src/lib.rs'),llbc=pins,qualification='Native join v3 checks constructor plus one next step, every1768-byte value/cursor0..1768, full OwnedSdk rows and live AccountInfo RefMut. Exact bodies equal extraction v2; no unchanged extraction replay. Pointer-slot heap construction and complete shipped parent remain outside this leaf certificate.'),indent=2)+'\n')
 for name in ['prepare-sdk-iterator-reference.py','extract-sdk-iterator-host.py','collect-sdk-iterator-host.py']:
  p=H/'kit'/name
  if p.is_file():copy(p,Path('runner')/name)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate concrete next/constructor evidence; never imply complete SDK join."""
 from pathlib import Path
-import hashlib,json,re,subprocess,tempfile
+import hashlib,json,re,subprocess,tempfile,tomllib
 R=Path(__file__).resolve().parents[2];B=R/'docs/research/100bit-spend-path-20261013';E=B/'evidence/s126-current-caller-20261021';S=B/'lean-candidates/s126-caller-boundary-20261021'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 std=E/'std-any-source';sdk=E/'sdk-iterator-source'
@@ -21,6 +21,12 @@ for phase in ['charon','aeneas']:
  if phase=='charon':assert '--sysroot' not in row['command']
 # Validate native source bodies against the bodies that were actually extracted.
 pins=json.loads((sdk/'source-pins.json').read_text())
+dependency=sdk/'dependency-owned-sdk-v3/src/lib.rs'
+assert pins['owned_sdk_dependency_source_sha256']==sha(dependency)
+assert dependency.read_bytes()==(E/'modular-host/sources/owned-sdk-v3/src/lib.rs').read_bytes()
+lock=tomllib.loads((sdk/'sdk-iterator-reference-v3/Cargo.lock').read_text())
+packages={p['name']:p['version'] for p in lock['package']}
+for package,version in [('solana-program','2.3.0'),('solana-account-info','2.3.0'),('solana-program-error','2.2.2')]:assert packages[package]==version
 for name,row in pins['functions'].items():
  for tag in ['sdk-iterator-reference-v1','sdk-iterator-reference-v2','sdk-iterator-reference-v3']:
   body=cut((sdk/tag/'src/lib.rs').read_text(),name,'pub fn ')
