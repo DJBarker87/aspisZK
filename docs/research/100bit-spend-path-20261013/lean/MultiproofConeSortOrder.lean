@@ -1,0 +1,78 @@
+import MultiproofConeSortTotal
+import OraclePortFrozenOrderSlot
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeSortOrder
+open Aeneas Aeneas.Std Result MultiproofSortRef
+open AspisR1 MultiproofConeSortTotal OraclePortFrozenOrder OraclePortSelectedDraft
+
+private theorem index_bound (q : Fin 22 → Fin 262144) (kind pos : Nat) :
+    index q kind pos < 262144 := by
+  simp only [index]
+  have h := (q ⟨pos%22,Nat.mod_lt _ (by decide)⟩).isLt
+  split <;> omega
+
+/-- The actual packed key uses a relative position; on the reached lists this
+is pos for batch zero and pos-10 for the resumed batch. -/
+def packed (q : Fin 22 → Fin 262144) (batch kind pos : Nat) : U64 :=
+  UScalar.ofNat (256*index q kind pos + (pos%22-(if batch=0 then 0 else 10))) (by
+    have ib := index_bound q kind pos
+    have pb := Nat.mod_lt pos (by decide : 0<22)
+    have bound : 256*index q kind pos + (pos%22-(if batch=0 then 0 else 10)) ≤ 67108863 := by omega
+    exact bound.trans (by decide))
+
+private theorem position_bounds (batch pos : Nat) (mem : pos∈batchPositions batch) :
+    (if batch=0 then 0 else 10)≤pos ∧ pos<22 := by
+  unfold batchPositions at mem
+  split at mem
+  next h => simp only [List.mem_range] at mem; simp [h];omega
+  next h =>
+    simp only [List.mem_map,List.mem_range] at mem
+    obtain ⟨i,hi,rfl⟩ := mem
+    simp [h];omega
+
+/-- Packed-u64 ascending order is exactly the frozen index/absolute-position
+order, including ties. No uniqueness assumption on queries is used. -/
+theorem packed_order (q : Fin 22 → Fin 262144) (batch kind a b : Nat)
+    (ha : a∈batchPositions batch) (hb : b∈batchPositions batch) :
+    packed q batch kind a ≤ packed q batch kind b ↔
+      index q kind a < index q kind b ∨ index q kind a=index q kind b ∧ a≤b := by
+  have ba := position_bounds batch a ha
+  have bb := position_bounds batch b hb
+  change (packed q batch kind a).val ≤ (packed q batch kind b).val ↔ _
+  simp [packed, Nat.mod_eq_of_lt ba.2,Nat.mod_eq_of_lt bb.2]
+  omega
+
+/-- Exact equality with sortedPositions for a source prefix containing the
+packed keys emitted by batch_keys. Prefix provenance is a separate Kani cut. -/
+theorem sorted_positions (q : Fin 22 → Fin 262144) (batch kind : Nat)
+    (keys : Array U64 16#usize) (n : Usize) (bound : n.val≤16)
+    (initial : keys.val.take n.val=(batchPositions batch).map (packed q batch kind)) :
+    ∃ out, sort_reference.sort_rows keys 0#usize n=ok out ∧
+      out.val.take n.val=(sortedPositions q batch kind).map (packed q batch kind) ∧
+      out.val.drop n.val=keys.val.drop n.val := by
+  obtain ⟨out,eqout,prefixEq,suffixEq⟩ := sort_eq_mergeSort keys n bound
+  refine ⟨out,eqout,?_,suffixEq⟩
+  rw [prefixEq,initial]
+  exact (List.map_mergeSort (fun a ha b hb => by
+    simp only [packed_order q batch kind a b ha hb])).symm
+
+/-- Source for-range starts at one; the extracted zero iteration is exactly
+identity, so it gives the same returned array. -/
+theorem source_start_one (keys : Array U64 16#usize) (n : Usize) (positive : 0<n.val) :
+    sort_reference.sort_rows keys 0#usize n=sort_reference.sort_rows keys 1#usize n := by
+  have more : ¬0#usize≥n := by change ¬0≥n.val;omega
+  rw [sort_reference.sort_rows]
+  simp only [more,if_false]
+  rw [sort_reference.insert_rows]
+  simp only [sort_reference.insert_step,↓reduceIte,bind_tc_ok]
+  obtain ⟨one,add,oneval⟩ := WP.spec_imp_exists (UScalar.add_spec (x:=0#usize) (y:=1#usize) (by scalar_tac))
+  have oneeq : one=1#usize := by apply UScalar.eq_of_val_eq;scalar_tac
+  simp only [add,oneeq,bind_tc_ok]
+
+#print axioms index_bound
+#print axioms position_bounds
+#print axioms packed_order
+#print axioms sorted_positions
+#print axioms source_start_one
+end AspisR1.MultiproofConeSortOrder

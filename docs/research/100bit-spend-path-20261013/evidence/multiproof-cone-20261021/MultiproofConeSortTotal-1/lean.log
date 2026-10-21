@@ -1,0 +1,30 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone2/docs/research/100bit-spend-path-20261013/lean/MultiproofConeSortTotal.lean:29:50: error(lean.invalidField): Invalid field `reverse`: The environment does not contain `List.Perm.reverse`, so it is not possible to project the field `reverse` from an expression
+  insertReverse_perm pre.reverse x
+of type
+  (insertReverse pre.reverse x).Perm (x :: pre.reverse)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone2/docs/research/100bit-spend-path-20261013/lean/MultiproofConeSortTotal.lean:15:62: error: unsolved goals
+keys : Std.Array U64 16#usize
+cursor : Usize
+bound : ↑cursor < 16
+sorted : List.Pairwise (fun x1 x2 => x1 ≤ x2) (List.take ↑cursor ↑keys)
+len : (↑keys).length = 16
+inbounds : ↑cursor < (↑keys).length
+pre : List U64 := List.take ↑cursor ↑keys
+x : U64 := (↑keys)[↑cursor]!
+tail : List U64 := List.drop (↑cursor + 1) ↑keys
+shape : ↑keys = pre ++ x :: tail
+plen : pre.length = ↑cursor
+out : Std.Array U64 16#usize
+eqout : sort_reference.insert_rows keys cursor = ok out
+content : ↑out = (insertReverse pre.reverse x).reverse ++ tail
+⊢ ∃ out,
+    sort_reference.insert_rows keys cursor = ok out ∧
+      (↑out).Perm ↑keys ∧
+        List.Pairwise (fun x1 x2 => x1 ≤ x2) (List.take (↑cursor + 1) ↑out) ∧
+          ∀ (k : ℕ), ↑cursor + 1 ≤ k → List.drop k ↑out = List.drop k ↑keys
+'AspisR1.MultiproofConeSortTotal.insert_prefix_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.MultiproofConeSortTotal.sort_rows_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeSortTotal.sort_eq_mergeSort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

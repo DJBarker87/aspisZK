@@ -12,7 +12,7 @@ import time
 HERE = Path(__file__).resolve().parents[2] / 'docs/research/100bit-spend-path-20261013/evidence/multiproof-cone-20261021'
 PACKET = HERE.parent.parent
 ROOT = PACKET.parents[2]
-OBJECTS = Path('/tmp/codex-cx-multiproof-cone-20261021-objects')
+OBJECTS = Path('/tmp/codex-cx-multiproof-cone2-20261021-objects')
 LOCK = Path('/tmp/aspis-local-lean.lock.d')
 LEAN = '/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean'
 
@@ -33,7 +33,7 @@ baseline = json.loads((HERE.parent / 'oracle-port-draft-20261021/OraclePortHeadl
 config = {}
 selected = config.get(module)
 selected_path = json.loads((HERE.parent / selected).read_text())['lean_path'] if selected else ''
-path = str(OBJECTS) + ':/tmp/codex-cx-frozen-order-draft-20261021-objects:/tmp/codex-cx-acclog-draft-20261021-objects:/tmp/codex-cx-refine-join-draft-20261021-objects:/tmp/codex-cx-inner-order-draft-20261021-objects:/tmp/codex-cx-shortcircuit-draft-20261021-objects:/tmp/codex-cx-join-split-draft-20261021-objects:' + selected_path + ':' + baseline['lean_path']
+path = str(OBJECTS) + ':/tmp/codex-cx-multiproof-cone-20261021-objects:/tmp/codex-cx-frozen-order-draft-20261021-objects:/tmp/codex-cx-acclog-draft-20261021-objects:/tmp/codex-cx-refine-join-draft-20261021-objects:/tmp/codex-cx-inner-order-draft-20261021-objects:/tmp/codex-cx-shortcircuit-draft-20261021-objects:/tmp/codex-cx-join-split-draft-20261021-objects:' + selected_path + ':' + baseline['lean_path']
 if module == 'OraclePortJoinSplitFreeze':
     for command in dict.fromkeys(config.values()):
         path += ':' + json.loads((HERE.parent / command).read_text())['lean_path']

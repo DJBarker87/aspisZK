@@ -1,6 +1,6 @@
 # Parser and multiproof source refinement
 
-Assigned branch: `codex/cx-multiproof-cone-20261021`. The oracle-decision port
+Assigned continuation branch: `codex/cx-multiproof-cone2-20261021` (prior packet: `codex/cx-multiproof-cone-20261021`). The oracle-decision port
 is approved for this work. Target: `OraclePortHeadlineFrozen` at
 `OraclePortFrozenOrder.dV_frozen`, not the superseded recursive schedule.
 
@@ -283,3 +283,36 @@ a verified result. The existing 19 roots were separately checked to have 19
 completed solver results. The runner/auditor is being hardened to fail closed;
 sorting is being replaced by an exact insertion-iteration cut and owned row
 recursion, at the same memory cap. No unchanged larger-cap rerun is planned.
+
+## Continuation stage 1: sort and insertion closed (2026-10-21)
+
+The WIP `MultiproofConeSortStep.insert_step_total` already checked successfully
+in retained attempt 3. The new `MultiproofConeSortPermutation.insert_step_perm`
+proves unconditional whole-array `List.Perm` for that same atomic transition.
+`MultiproofConeSortInsertion.insert_rows_total` proves totality of the actual
+extracted right-to-left insertion recurrence, exact content and untouched
+arbitrary scratch suffix, without sortedness. `insertReverse_perm` and
+`insertReverse_sorted` give its multiset and order laws.
+
+`MultiproofConeSortTotal.sort_rows_total` proves the complete extracted outer
+sort terminates for every n≤16 with an initially sorted processed prefix.
+`sort_eq_mergeSort` identifies its result with Lean core mergeSort by
+`List.Perm.eq_of_pairwise`; the suffix beyond n is unchanged.
+`MultiproofConeSortOrder.packed_order` proves exact index/position tie order,
+and `sorted_positions` identifies the returned packed prefix with the frozen
+`sortedPositions` construction, assuming only the independently specified
+initial batch-key prefix. `source_start_one` connects the Rust 1..n start to
+the identity zero iteration. No distinct-query assumption is imposed.
+
+All new declarations have individual standard-axiom reports. Exact targets,
+source revisions/hashes, import fingerprints, exits, wall/RSS/swaps and logs
+are recorded in `manifest.json` and the named module-attempt directories.
+The continuation uses a fresh private object directory prepended to the
+retained cache; no old/shared object is overwritten. Failed elaboration
+attempts are retained, never current evidence. No limit was raised.
+
+The existing `batch-sort-atomic-1` P6 receipt is reused: one completed solver
+result, exit 0, 1.548632 s, 176304 KiB RSS, zero swaps. The rejected whole-sort
+BMC attempts remain explicitly incomplete. This stage proves sort/reference
+meaning; production loop adoption and the remaining multiproof representation,
+ordered-log and caller joins are not claimed. No shipped source changed.
