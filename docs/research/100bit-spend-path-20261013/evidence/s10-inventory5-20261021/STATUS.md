@@ -46,3 +46,39 @@ previous successful receipt. The following corrective commit uses balanced
 parentheses and replaces that receipt with the successful final replay:
 21 classifications agree, 189 negative controls reject, exit 0, standard
 compiler evidence only. No host result or target-flow status was changed.
+
+## Stage 2: strict source CFG chronology and the current std-aware target
+
+`OraclePortS10StrictOrder.before_end` strengthens dominance on a path reaching
+its selected target to an explicit occurrence decomposition
+`pre ++ cut :: (post ++ [target])`, with `cut != target`. It permits loops
+and repeated visits; membership is no longer described informally as strict
+chronology. Six generated modules apply the existing kernel-checked cuts to
+all 140 source observations (70 distinct graph facts, reused for both builds).
+`strict-order-map.json` retains all coordinates and theorem names. The generic
+lemma compiled first, then one generated chunk, the other chunks, the std
+bridge and one combined import/axioms audit. The first generic elaboration
+failure (constructor binder and an unavailable list lemma name) is retained;
+its corrected replacement uses the actual Lean `List.append_of_mem` theorem.
+No large reduction, numeral evaluation or limit increase was used.
+
+`stage-order.json` maps all 140 facts onto dV_frozen2's actual batch-0,
+save/resume, batch-1 schedule. It records the remaining pure-state transport
+explicitly: source TX2 runs its twelve query steps after batch 1, while the
+model C5 resumer computes those pure steps before batch 1. Source totality,
+absence of oracle effects and equality of the reached finish state must be
+proved before commuting that computation. Source rejection timing and mutable
+state cannot be inferred from the block graph.
+
+`OraclePortS10StdFrozen2.acceptedRunJoin_of_cones` provides the std/allocation
+extension's composition endpoint at the **current**
+`OraclePortFrozen2Join.AcceptedRunJoin`. Its source/model caller identities,
+all fourteen cone joins and S10 coverage remain hypotheses. It does not
+instantiate a frozen source tree or discharge either ordering identity.
+
+All nine successful focused targets use only standard axioms and zero swaps.
+The std endpoint: exit 0, 15.554 s, peak 3,496,558,592 bytes. Combined
+`OraclePortS10Inventory5Freeze`: exit 0, 16.432 s, peak 3,214,852,096 bytes.
+Exact targets/commands/revisions, source/import SHA pins, resources and every
+new theorem's `#print axioms` line are in `manifest.json` and per-attempt
+receipts. This is a focused cached-object union, not a frozen release replay.
