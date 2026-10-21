@@ -127,3 +127,50 @@ This extends the per-batch bridge to the whole head loop. Eight-value output pac
 `S4LiteralN8PackingRootV1.literal_eight_success_p6_same_output` constructs the original P6 N8 array success from the eight literal read/reduce operations' success, preserving their exact returned values. It derives bounded callback totality, reuses generic P6 forward execution, then uses the retained indexed N8 output theorem and deterministic reads/reductions to identify the constructed array. No canonicality or independent array success is assumed.
 
 This closes the local literal-N8-to-P6 output gap needed by the complete fixed-call helper comparison. Extracting that grouped literalEight segment from the complete candidate helper and composing head/tail remain next. Packet `evidence/s4-literal-n8-packing-root-v1-20261021/`: focused exit0,12.451s,3,745,873,920B peak process RSS,zero swaps,standard axioms. The older source replay and selected warm object are separately pinned with differing historical object hashes; final coherent release replay is still required. No production/CU change or whole-helper/source adoption claimed.
+
+## Concentrated closure: complete helper and four-output composition
+
+All four workers were redirected to S4 on 21 October; the focused checkpoint
+clock was recorded at 16:48 UTC (review by 18:48 UTC). This changes allocation,
+not the security target or the meaning of cone closure.
+
+`S4FixedTailProgramEqualityRootV1.fixed_tail_eq_old_tail` proves all-Result
+equality of the complete fixed-helper and original scalar tail programs.
+Source-cut checks compare both exact generated bodies, modulo argument names
+and projection of the old captured-array tuple. Focused exit0,16.329s,
+3,288,072,192B peak RSS,zero swap,standard axioms.
+
+`S4WholeHelperTransferRootV1.installed_fixed_helper_success_old_callback`
+composes the complete head transfer, literal N8 packing and full tail equality.
+Its only execution premise is successful fixed-v6 helper execution under the
+retained concrete installation. It returns the identical scalar and unchanged
+captured arrays from the original callback. The installation discharges the
+generic limb-count and P6 N8 operation equalities. Focused exit0,25.412s,
+3,586,605,056B peak RSS,zero swap,standard axioms.
+
+`S4WholeOuterTransferRootV1.installed_fixed_four_success_old_four` then builds
+the exact ordered four-callback P6 trace and original array from the complete
+fixed-call function's accepted execution. No independent old callback,
+constructor or parent success is assumed. Focused exit0,20.501s,
+3,645,177,856B peak RSS,zero swap,standard axioms.
+
+`S4FixedFourScannedMeaningRootV1.fixed_four_scanned_literal_values` feeds that
+same complete output into the retained scanner-bound arithmetic theorem.
+All four returned values have the literal source field equations and are
+canonical. Focused exit0,26.672s,3,861,217,280B peak RSS,zero swap,standard axioms.
+
+The packets are respectively `s4-fixed-tail-program-equality-root-v1-20261021`,
+`s4-whole-helper-transfer-root-v1-20261021`,
+`s4-whole-outer-transfer-root-v1-20261021`, and
+`s4-fixed-four-scanned-meaning-root-v1-20261021` under `evidence/`.
+
+**S4 remains open.** These are selected-model accepted-run results. Required
+source work is the complete typed V10 helper/outer transport, concrete emitted
+operation/type bindings, actual opening/caller and coefficient provenance,
+and a concrete frozen component/driver connection. The existing shared S10
+model inventory still has a placeholder S4 carrier/implementation; its generic
+ConeJoin cannot be instantiated merely by renaming these local results.
+The frozen Rust still uses `array::from_fn`; P6 is an intermediate model,
+not a completed Rust Std proof. Candidate adoption or that source boundary
+must be resolved before a frozen-implementation closure claim. No production
+code, wire format or runtime artifact changed in these commits.
