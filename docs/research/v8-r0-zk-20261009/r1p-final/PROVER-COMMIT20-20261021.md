@@ -1065,3 +1065,32 @@ law or universal source equality; no additional Lean replay was needed.
 +    }
 +}
 ```
+
+### Final table obstruction and handoff
+
+The final narrowed source target `sim::table_source20::overwritten_flag`
+(`table-source-flag-v1`) **times out**: exit 124, wall 600.191 s, zero swap,
+source base `8f5d893d7` with exact instrumented hashes in its input manifest.
+Its scope peak is 6601838592 bytes; an observed CBMC RSS is 6427508 KiB at
+537 s. GNU time reports 15652 KiB for the wrapper after process-group timeout;
+that figure is explicitly **not** the aggregate child peak. Limits remain
+MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; no higher-cap or
+unchanged retry is made. This is a demonstrated verification obstruction,
+not a failed mathematical assertion. No task build or SSH process remains.
+
+The exact unchanged-input endpoint diff is empty. No additional assumption,
+query loss, bad event, source cap or abort interpretation was introduced.
+The new results discharge owned-reference translation and finite schedule /
+table-history mathematics; they retain the named source/library/caller and
+probability-law obligations. The requested shipped experiment and both
+WholeRunJoins are **not established**.
+
+`final-audit.json` checks snapshots/hashes, dependency receipts, every new
+theorem audit, all accepted/excluded verdicts, source-prefix/promotion pins,
+resource caps, unchanged endpoint/shipped files, and absence of binaries.
+`handoff.json` lists the next concrete deliverables. In particular, replace
+whole-tree heap exploration with a certified per-key library insertion/lookup
+interface, bind expanded rows to the reused compact parser at its caller,
+and prove nonzero-loop successful-prefix/no-success treatment with its actual
+law before instantiating the bounded history coupling. No release success
+or source WholeRunJoin is inferred from the fixture tests.
