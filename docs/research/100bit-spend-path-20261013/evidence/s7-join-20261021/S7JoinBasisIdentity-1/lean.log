@@ -1,0 +1,44 @@
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinBasisIdentity.lean:19:23: error: Type mismatch: After simplification, term
+  hj
+ has type
+  j < 1
+but is expected to have type
+  j = 0
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinBasisIdentity.lean:29:8: error: Tactic `rfl` failed: The left-hand side
+  naturalLineValue (2 * x ^ 2 - 1) (2 * (j / 2) / 2)
+is not definitionally equal to the right-hand side
+  naturalLineValue (doubledFactor x 1) (j / 2)
+
+case pos
+K : Type u_1
+inst✝ : CommRing K
+n : ℕ
+ih : ∀ (x : K), ∀ j < 2 ^ n, value n x j = naturalLineValue x j
+x : K
+j : ℕ
+hj : j < 2 ^ (n + 1)
+hdiv : j / 2 < 2 ^ n
+hm : j % 2 < 2
+even : j % 2 = 0
+he : j = 2 * (j / 2)
+⊢ naturalLineValue (2 * x ^ 2 - 1) (2 * (j / 2) / 2) = naturalLineValue (doubledFactor x 1) (j / 2)
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinBasisIdentity.lean:33:8: error: Tactic `rfl` failed: The left-hand side
+  x * naturalLineValue (2 * x ^ 2 - 1) ((2 * (j / 2) + 1) / 2)
+is not definitionally equal to the right-hand side
+  x * naturalLineValue (doubledFactor x 1) (j / 2)
+
+case neg
+K : Type u_1
+inst✝ : CommRing K
+n : ℕ
+ih : ∀ (x : K), ∀ j < 2 ^ n, value n x j = naturalLineValue x j
+x : K
+j : ℕ
+hj : j < 2 ^ (n + 1)
+hdiv : j / 2 < 2 ^ n
+hm : j % 2 < 2
+even : ¬j % 2 = 0
+he : j = 2 * (j / 2) + 1
+⊢ x * naturalLineValue (2 * x ^ 2 - 1) ((2 * (j / 2) + 1) / 2) = x * naturalLineValue (doubledFactor x 1) (j / 2)
+'AspisR1.S7JoinBasisIdentity.value_eq_natural' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S7JoinBasisIdentity.production_basis' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
