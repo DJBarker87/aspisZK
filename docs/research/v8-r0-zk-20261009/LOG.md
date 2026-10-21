@@ -7770,3 +7770,22 @@ adversary queries the simulator's seed point) to the fixed bad events,
 charged once at q·2^-256 for q oracle queries, and re-prove the privacy error
 bound, which stays far below 2^-100. Also open: the full simulator extraction
 (has_errors) and the timed-out entropy-exhaustion Kani check.
+
+## D128 — seed-guess event added; joint history coupling (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit19-20261021` (`r1p-final/PROVER-COMMIT19-20261021.md`).
+Per D127: the global simulator seed query budget and seed-query exceptions are
+added to the deployed refinement's fixed bad events, with containment and
+transport from the old premise to the new one, and the revised privacy bound
+stays < 2^-100. The bounded joint adaptive-history coupling is constructed,
+including programmed lookup and shared-oracle fallback, which closes the gap
+D127 found. Three entropy rejection checks pass, with the sixteen-draw Lean
+induction; owned simulator helpers are extracted. J8704: 42 standard-axiom
+audits, zero swap. Still open: the owned simulator's transcript/parser cone
+hits Aeneas `Not_found`, the table-source Kani check timed out,
+`shippedProverExperiment` is not yet constructed, and `RustProverRefinement`
+stays explicit. **Pending check:** the job appended a cfg(any(kani,aeneas_ref))
+module at the end of shipped `aspis-r1-cost-probe/src/sim.rs` (additions only,
+no lines moved, excluded from production builds) without rebuilding the ELFs.
+The next prover job must confirm all three frozen ELFs byte-identical as its
+first stage.
