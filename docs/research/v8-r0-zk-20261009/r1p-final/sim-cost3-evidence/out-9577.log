@@ -1,0 +1,67 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyProtocol.lean:30:69: error: unexpected token 'set_option'; expected 'lemma'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyProtocol.lean:43:21: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+A : Type
+inst✝¹ : DecidableEq A
+inst✝ : Fintype A
+key : List UInt8 → Option A
+c : Option A → Option OracleAnswer
+p : OProg
+q : Nat
+f : Table → Rat
+O : (A → OracleAnswer) → List UInt8 → OracleAnswer
+hO :
+  ∀ (H : Option A → OracleAnswer) (bs : List UInt8),
+    @Eq OracleAnswer (@cached (Option A) c H (key bs)) (O (fun a => H (@some A a)) bs)
+hh :
+  @Eq Rat
+    (@mean (Option A → OracleAnswer)
+      (@Pi.instFintype (Option A) (fun a => OracleAnswer)
+        (fun a b => @Option.instDecidableEq A (fun a b => Classical.propDecidable (@Eq A a b)) a b)
+        (@instFintypeOption A inst✝) fun a =>
+        @Pi.instFintype (Fin (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) (fun a => UInt8)
+          (instDecidableEqFin (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+          {
+              len :=
+                @OfNat.ofNat Nat (nat_lit 31) (instOfNatNat (nat_lit 31)) }.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+          fun a => @FinEnum.instFintype UInt8 FinEnum.instUInt8)
+      fun H => f (runLog p (O fun a => H (@some A a)) q))
+    (@mean (A → OracleAnswer)
+      (@Pi.instFintype A (fun a => OracleAnswer) (fun a b => Classical.propDecidable (@Eq A a b)) inst✝ fun a =>
+        @Pi.instFintype (Fin (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) (fun a => UInt8)
+          (instDecidableEqFin (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+          {
+              len :=
+                @OfNat.ofNat Nat (nat_lit 31) (instOfNatNat (nat_lit 31)) }.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+          fun a => @FinEnum.instFintype UInt8 FinEnum.instUInt8)
+      fun H => f (runLog p (O H) q))
+⊢ @Eq Rat
+    (@mean (Option A → OracleAnswer)
+      (@Pi.instFintype (Option A) (fun a => OracleAnswer) (fun a b => @Option.instDecidableEq A inst✝¹ a b)
+        (@instFintypeOption A inst✝) fun a =>
+        @Pi.instFintype (Fin (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) (fun a => UInt8)
+          (instDecidableEqFin (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+          {
+              len :=
+                @OfNat.ofNat Nat (nat_lit 31) (instOfNatNat (nat_lit 31)) }.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+          fun a => @FinEnum.instFintype UInt8 FinEnum.instUInt8)
+      fun H => f (runLog p (fun a => O (fun a => H (@some A a)) a) q))
+    (@mean (A → OracleAnswer)
+      (@Pi.instFintype A (fun a => OracleAnswer) inst✝¹ inst✝ fun a =>
+        @Pi.instFintype (Fin (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))) (fun a => UInt8)
+          (instDecidableEqFin (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))))
+          {
+              len :=
+                @OfNat.ofNat Nat (nat_lit 31) (instOfNatNat (nat_lit 31)) }.instFintypeToTypeOrderHomFinHAddNatLenOfNat
+          fun a => @FinEnum.instFintype UInt8 FinEnum.instUInt8)
+      fun H => f (runLog p (O H) q))
+'R1Z.SimCostLazyProtocol.splitOption' depends on axioms: [Quot.sound]
+'R1Z.SimCostLazyProtocol.mean_some' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyProtocol.lazy_projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyProtocol.outside_lookup' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyProtocol.initial_oracle' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyProtocol.bounded_lazy_uniform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyProtocol.protocol_lazy_uniform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
