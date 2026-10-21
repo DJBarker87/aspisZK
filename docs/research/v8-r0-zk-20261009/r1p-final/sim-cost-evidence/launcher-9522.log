@@ -1,0 +1,46 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 0328); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostReplay.lean:24:4: error: unsolved goals
+case neg
+a : Bytes
+t : List (Bytes × OracleAnswer)
+ih : (lookup a t).1 = List.lookup a t
+b : Bytes
+v : OracleAnswer
+he : ¬a = b
+⊢ List.lookup a t = List.lookup a ((b, v) :: t)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostReplay.lean:24:28: warning: This simp argument is unused:
+  Ne.symm he
+
+Hint: Omit it from the simp argument list.
+  simp [lookup, he, ih,̵ ̵N̵e̵.̵s̵y̵m̵m̵ ̵h̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostReplay.lean:48:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (lookup ?a ?t).1
+in the target expression
+  (have r := lookup a t;
+      (r.1.getD (H a), r.2 + 1)).1 =
+    (List.lookup a t).getD (H a)
+
+t : Table
+H : Bytes → OracleAnswer
+a : Bytes
+⊢ (have r := lookup a t;
+      (r.1.getD (H a), r.2 + 1)).1 =
+    (List.lookup a t).getD (H a)
+'R1Z.SimCostReplay.lookup_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostReplay.lookup_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostReplay.oracle_erase' depends on axioms: [sorryAx]
+'R1Z.SimCostReplay.replay_erase' depends on axioms: [propext, sorryAx]
+'R1Z.SimCostReplay.replay_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostReplay.programmed_erase' depends on axioms: [propext, sorryAx]
+'R1Z.SimCostReplay.programmed_linear' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.14
+	Maximum resident set size (kbytes): 3514072
+	Swaps: 0
+	Exit status: 1
+
+

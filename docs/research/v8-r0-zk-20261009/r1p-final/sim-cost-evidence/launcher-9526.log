@@ -1,0 +1,68 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 0330); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+    (match firstGood (fun c => P (drawW W c)) r.1 with
+      | none =>
+        { disclosed := W.failView,
+          observerOracle := runLog (adv.prog W.failView []) (W.look (r.1 ⟨0, hN⟩).2.2.2) W.qmax }
+      | some k =>
+        { disclosed := sim (drawW W (r.1 k)) (r.2 k),
+          observerOracle :=
+            verLog W x (sim (drawW W (r.1 k)) (r.2 k)) (r.1 k) ++
+              runLog (adv.prog (sim (drawW W (r.1 k)) (r.2 k)) (verLog W x (sim (drawW W (r.1 k)) (r.2 k)) (r.1 k)))
+                (progOracle W x (sim (drawW W (r.1 k)) (r.2 k)) (r.1 k) (r.1 ⟨0, hN⟩).2.2.2) W.qmax }).disclosed
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.56} {β : α → Sort ?u.55} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case h_2.e_disclosed
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CommitHandle Aux
+N : ℕ
+hN : 0 < N
+P : Challenges K → Prop
+x : Statement K CommitHandle
+sim : Challenges K → Tape K F → View K CommitHandle Aux R1Bat
+Pr : R1ProverP K CommitHandle Aux F W
+Vp : (h : HonestProver K) → Challenges K → h.Instance → Prop
+adv : R1Adv K CommitHandle Aux
+r : Coins W N
+x✝ : Option (Fin N)
+k✝ : Fin N
+heq✝ : firstGood (fun c => P (drawW W c)) r.1 = some k✝
+⊢ sim (drawW W (r.1 k✝)) (r.2 k✝) =
+    (match firstGood (fun c => P (drawW W c)) r.1 with
+      | none =>
+        { disclosed := W.failView,
+          observerOracle := runLog (adv.prog W.failView []) (W.look (r.1 ⟨0, hN⟩).2.2.2) W.qmax }
+      | some k =>
+        { disclosed := sim (drawW W (r.1 k)) (r.2 k),
+          observerOracle :=
+            verLog W x (sim (drawW W (r.1 k)) (r.2 k)) (r.1 k) ++
+              runLog (adv.prog (sim (drawW W (r.1 k)) (r.2 k)) (verLog W x (sim (drawW W (r.1 k)) (r.2 k)) (r.1 k)))
+                (progOracle W x (sim (drawW W (r.1 k)) (r.2 k)) (r.1 k) (r.1 ⟨0, hN⟩).2.2.2) W.qmax }).disclosed
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostIdeal.lean:57:32: warning: This simp argument is unused:
+  progOracle
+
+Hint: Omit it from the simp argument list.
+  simp only [finishRef, abR1,̵ ̵p̵r̵o̵g̵O̵r̵a̵c̵l̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostIdeal.lean:82:4: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostIdeal.lean:89:8: warning: declaration uses `sorry`
+'R1Z.SimCostIdeal.finish_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostIdeal.ideal_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostIdeal.run_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostIdeal.run_linear' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.60
+	Maximum resident set size (kbytes): 3514676
+	Swaps: 0
+	Exit status: 1
+
+
