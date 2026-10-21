@@ -132,3 +132,74 @@ all-family shipped runtime callback log. No new whole-program Kani/P6
 certificate is claimed. No unchanged failed aggregate extraction, timed-out
 whole-loop comparison or old regression is rerun. The missing outer transport
 cannot be replaced by the new nine-block impossibility theorem.
+
+## Verbatim before/after of the targeted premise
+
+The pre-specialization D112 source is retained in `headline-original-v2.lean.txt`.
+The complete operational-reference endpoint before/after the proposed premise
+deletion is retained in `headline-specialized-before.lean.txt` and
+`headline-specialized-after.lean.txt`. These files are identical and
+`headline-deletions.diff` is empty. The fixed definition in both is:
+
+```lean
+abbrev ownedDecode := ProverCommitOwnedDecoder.decoder (K := PrivacyR1AcctBasis.K)
+```
+
+Before:
+
+```lean
+    (R_commit_caller : ProverCommitCallerInstance.CallerLaw
+      (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)))
+```
+
+After:
+
+```lean
+    (R_commit_caller : ProverCommitCallerInstance.CallerLaw
+      (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)))
+```
+
+D112 has no separately named universal shipped read-coverage binder. Both
+execution joins and CallerLaw remain explicit. No single shipped-execution
+join is claimed to have been constructed, and no source checklist row is
+marked closed on the basis of the reference-only theorems.
+
+## Final frozen audit and remaining work
+
+`manifest.json` freezes 17 Rust/Lean sources, the exact next consumer and all
+41 new theorem audit targets. `harness/validate.py --check` passes before the
+single combined replay. **J8326**, target **R1Z.ProverCommit10Audit**, imports
+the accepted continuation-9 cone plus every adopted continuation-10 module:
+exit **0**, wall **1.69 s**, peak RSS **4106532 KiB**, **zero swaps**.
+Source revision **d6bc1766c** contains all adopted predecessors; the additive
+audit is pinned by its SHA-256 and literal attempted source snapshot.
+The dependency fingerprint is retained in the receipt. All **41** printed
+axiom results contain only `propext`, `Classical.choice`, `Quot.sound`, a
+subset, or no axioms. This audit verifies the actual conditional endpoint;
+it does not discharge its remaining hypotheses.
+
+`harness/validate.py` passes after the replay: it checks the frozen source
+identities, all attempted source snapshots and dependency fingerprints,
+adopted module identities, extraction sharing against literal generated
+bodies, the host Rust/Cargo input inventory, all capped host receipts,
+the exact ELF comparisons, the empty deletion diff and the 41 final axiom
+lines. This is evidence validation, not another Lean replay. Assigned attempts
+are consumed through **8326**; next available **8327**.
+
+Completed: a fixed operational-reference decoder and corresponding D112
+specialization, extracted owned scalar-array production, exact finite backend
+framing, successful array lengths, reference callback support, symbolic cursor
+and retry-budget accounting, full reference allocation/error classification,
+and the machine-word accepted-value law.
+
+**Not completed:** CallerLaw for that decoder, the full shipped entry-point
+and outer raw-array transport, and universal all-family shipped callback
+coverage. The next mathematical consumer is a cache-content/byte-load
+refinement to `wordsE`, followed by the sequential fibre law; the source
+consumer is the complete entry-point-to-producer execution transport with a
+consistent global oracle across local proof windows. The retained nine-block
+Kani certificates cannot directly fill that source obligation. The local-ROM
+obstruction does not show that the full E₁/E₂ reference refinement is false.
+
+No peer-owned SourceIdentification, RustRuntimeJoin or PrivacyR1FinalRelease
+file is edited. No push, merge, deployment or wallet cleanup is performed.
