@@ -7368,3 +7368,21 @@ internal error in the validated-tree `append_one` carry loop; same P6 route
 next. `PrivacyR1FinalReleaseSource2` has an empty signature diff (no weakening
 claimed). Open: complete semantic admission, primitive Parts-content
 correspondence, the shipped RustRuntimeJoin, and checker/retry coupling.
+
+## D103 — builder refinement part 8: carry loop passed; zeroisation destructor next (2026-10-21, lead)
+
+Landed from `codex/cx-builder-ref8-20261021` (`r1p-final/BUILDER-CONT8-20261021.md`).
+The `append_one` carry loop is closed by the P6 route: a projected carry-step
+Kani check (368 checks), the extracted carry transition with its stopping
+and frontier invariants, twelve primitive path/aux writer identities, and
+the actual withdrawal auxiliary Parts content. The cfg-gated tail module is in
+`incremental_merkle.rs`; all three frozen ELFs were rebuilt byte-identical. 7
+modules, 26 standard-axiom audits, zero swap. `PrivacyR1FinalReleaseSource3`
+keeps every premise (signatures audited). Next blocker: the forest
+extraction reaches the volatile zeroisation destructor at
+`state_only_trace.rs:90` (`&raw mut`, unsupported by Aeneas). Lead route:
+zeroisation writes only the memory of the value being dropped and changes no
+output. Treat that `Drop` as an opaque, excluded declaration with a proved
+specification: a Kani harness shows it writes only within the dropped
+value's bytes and returns unit, so nothing observable is lost. The model then
+treats drop as a no-op on outputs.
