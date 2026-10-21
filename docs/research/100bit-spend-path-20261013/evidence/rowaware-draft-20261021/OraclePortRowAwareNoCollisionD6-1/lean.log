@@ -1,0 +1,71 @@
+/Users/dominic/ZK/.worktrees/cx-rowaware-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRowAwareNoCollisionD6.lean:43:22: error: Type mismatch
+  List.mem_cons_of_mem ?m.220
+has type
+  ?m.221 ∈ ?m.222 → ?m.221 ∈ ?m.220 :: ?m.222
+but is expected to have type
+  b ∈ q.1 :: List.map Prod.fst prior
+/Users/dominic/ZK/.worktrees/cx-rowaware-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRowAwareNoCollisionD6.lean:38:4: error: unsolved goals
+case cons.inl.inr.inr
+Q : ℕ
+q : Bytes × State
+rest : List (Bytes × State)
+ih :
+  ∀ (prior : List (Bytes × State)) (T : Table Bytes State),
+    (∀ (a : Bytes) (v : State), T a = some v → (a, v) ∈ prior) →
+      Safe prior rest →
+        ¬hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred Q) T rest
+prior : List (Bytes × State)
+T : Table Bytes State
+hcover : ∀ (a : Bytes) (v : State), T a = some v → (a, v) ∈ prior
+hiv : q.2 ≠ SelectedTranscriptParams.params.iv
+hprev : ∀ r ∈ prior, r.2 ≠ q.2
+htarget : ∀ b ∈ q.1 :: List.map Prod.fst prior, ∀ (j : Fin 5), BinRawByteCollisionTargets.pred j b ≠ some q.2
+hrest : Safe (q :: prior) rest
+left✝¹ : T q.1 = none
+left✝ : AllAddressCollision.Small T Q
+j : Fin 5
+b : Bytes
+hb : b = q.1 ∨ T b ≠ none
+h : BinRawByteCollisionTargets.pred j b = some q.2
+hm : b ∈ q.1 :: List.map Prod.fst prior
+⊢ False
+/Users/dominic/ZK/.worktrees/cx-rowaware-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRowAwareNoCollisionD6.lean:32:19: error: unsolved goals
+case cons.inr
+Q : ℕ
+q : Bytes × State
+rest : List (Bytes × State)
+ih :
+  ∀ (prior : List (Bytes × State)) (T : Table Bytes State),
+    (∀ (a : Bytes) (v : State), T a = some v → (a, v) ∈ prior) →
+      Safe prior rest →
+        ¬hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred Q) T rest
+prior : List (Bytes × State)
+T : Table Bytes State
+hcover : ∀ (a : Bytes) (v : State), T a = some v → (a, v) ∈ prior
+hiv : q.2 ≠ SelectedTranscriptParams.params.iv
+hprev : ∀ r ∈ prior, r.2 ≠ q.2
+htarget : ∀ b ∈ q.1 :: List.map Prod.fst prior, ∀ (j : Fin 5), BinRawByteCollisionTargets.pred j b ≠ some q.2
+hrest : Safe (q :: prior) rest
+htail :
+  hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred Q) (put T q.1 q.2)
+    rest
+⊢ False
+/Users/dominic/ZK/.worktrees/cx-rowaware-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRowAwareNoCollisionD6.lean:44:14: error: unexpected token '('; expected command
+/Users/dominic/ZK/.worktrees/cx-rowaware-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRowAwareNoCollisionD6.lean:62:2: error: failed to synthesize
+  Decidable
+    (Safe []
+      ([(PublicInitFrame.domain ++ [0] ++ PublicInitFrame.lengthBytes [].length ++ [] ++ bytes zero, s0),
+          (absorb (bytes s0) 160 PublicInitFrame.emptyRecord, absorbed), (squeeze (bytes absorbed), answer),
+          (advance (bytes absorbed), endpoint)] ++
+        [(node, fun x => 6)]))
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.OraclePortRowAwareNoCollisionD6.safe_no_collision' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortRowAwareNoCollisionD6.clean_safe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortRowAwareNoCollisionD6.clean_no_collision' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

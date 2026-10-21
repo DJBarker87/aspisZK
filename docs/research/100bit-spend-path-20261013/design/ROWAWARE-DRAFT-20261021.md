@@ -37,3 +37,31 @@ Causality alone may not exclude the frozen node overlap: the existing
 witness already walks from initialisation through row zero. A counterexample
 against the stronger full-row gate is being checked. No Q+34 or premise
 removal is claimed at this stage.
+
+## Fully cached causal witness
+
+`OraclePortRowAwareWitnessD2`, `WalkD3`, `RecognizedD4`, and
+`GateWitnessD5` (each with the `OraclePortRowAware` prefix) replace the
+older four-cell support by the complete row-zero cache: initial answer
+`03^32`, row-zero absorb answer `04^32`, squeeze answer `05^32`, and
+advance answer `12 || 00^31`. All four answers differ and none is the IV.
+The previous leaf answer `00^32` is omitted entirely. The resulting table
+still recognises the same frozen 65-byte Merkle node as a row-one absorb.
+
+The gate witness uses the actual literal sampler, not a detached label or
+an assumed prefix-recognition predicate. `initial_eval` proves its entire
+row-zero evaluation; `first_node` proves its next first cell is the node;
+`gate_node` recursively supplies the cached predecessor and an initial
+start recognised in the empty subtable. Thus even the stronger requirement
+that the whole predecessor row (including its squeeze) was cached does not
+exclude this node.
+
+The first combined witness compile hit -M4400 (4,813,848,576-byte peak).
+Its replacement splits the finite fibers, walks, and recognition across
+modules and keeps table/walk definitions opaque. No cap was raised and the
+failed combined source was not retried unchanged. Subsequent failed
+elaborations involved missing canonicality proof arguments, the reserved
+word `prefix`, or unwanted reduction of padded addresses. Explicit symbolic
+rewrites and opaque address constants fix these; the final split modules
+compile and all their axiom audits are standard. These remain focused draft
+checks, not a unified release replay.
