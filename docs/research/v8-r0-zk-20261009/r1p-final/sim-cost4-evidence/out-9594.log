@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:44:57: error: unsolved goals
+w : ℕ
+t : Table
+a : List UInt8
+v : OracleAnswer
+ha : a.length ≤ w
+hd : (RomFiniteBin.decode w a).isSome = true
+x : RomFiniteBin.Address w
+he : RomFiniteBin.decode w a = some x
+hx : ↑x = a
+⊢ ¬?m.86 = ?m.87
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:44:11: error: unsolved goals
+case some.none
+w : ℕ
+t : Table
+a : List UInt8
+v : OracleAnswer
+ha : a.length ≤ w
+hd : (RomFiniteBin.decode w a).isSome = true
+x : RomFiniteBin.Address w
+he : RomFiniteBin.decode w a = some x
+hx : ↑x = a
+⊢ some 0 = Function.update (initial w t) (some x) (some v) none
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:47:41: error(lean.unknownIdentifier): Unknown constant `List.lookup_cons_eq`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:47:6: error: unsolved goals
+case pos
+w : ℕ
+t : Table
+a : List UInt8
+v : OracleAnswer
+ha : a.length ≤ w
+hd : (RomFiniteBin.decode w a).isSome = true
+x : RomFiniteBin.Address w
+he : RomFiniteBin.decode w a = some x
+hx : ↑x = a
+⊢ List.lookup a ((a, v) :: t) = some v
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:48:6: error: unsolved goals
+case neg
+w : ℕ
+t : Table
+a : List UInt8
+v : OracleAnswer
+ha : a.length ≤ w
+hd : (RomFiniteBin.decode w a).isSome = true
+x : RomFiniteBin.Address w
+he : RomFiniteBin.decode w a = some x
+hx : ↑x = a
+y : RomFiniteBin.Address w
+hy : ¬y = x
+hn : ↑y ≠ a
+⊢ List.lookup (↑y) t = Function.update (initial w t) (some x) (some v) (some y)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:54:10: warning: This simp argument is unused:
+  Function.update_of_ne (by simpa using hy)
+
+Hint: Omit it from the simp argument list.
+  simp only [initial, List.lookup, beq_eq_false_iff_ne.mpr hn,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵o̵f̵_̵n̵e̵ ̵(̵b̵y̵ ̵s̵i̵m̵p̵a̵ ̵u̵s̵i̵n̵g̵ ̵h̵y̵)̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.SimCostLazyBoundedBytes.initial_cons' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyBoundedBytes.run_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyBoundedBytes.run_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

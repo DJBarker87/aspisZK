@@ -1,0 +1,30 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 0428); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBoundedBytes.lean:131:40: error: linarith failed to find a contradiction
+w : ℕ
+t : Table
+p : OProg
+q : ℕ
+u : Fin q → OracleAnswer
+ht : KeysBound w t
+b : ℕ := SimCostLazyBytes.bytes (run w t p q u).1
+n : ℕ := q + b
+hb :
+  (run w t p q u).2 ≤
+    q * ((List.length t + q + 1) * (2 * w + 3) + 3 * w + 67) + SimCostLazyBytes.bytes (run w t p q u).1
+a✝ : q * ((List.length t + q + 2) * (5 * w + 70)) < q * ((List.length t + q + 1) * (2 * w + 3) + 3 * w + 67)
+⊢ False
+failed
+'R1Z.SimCostLazyBoundedBytes.run_relative' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyBoundedBytes.uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyBoundedBytes.initial_cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyBoundedBytes.run_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyBoundedBytes.run_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:04.14
+	Maximum resident set size (kbytes): 4135772
+	Swaps: 0
+	Exit status: 1
+
+
