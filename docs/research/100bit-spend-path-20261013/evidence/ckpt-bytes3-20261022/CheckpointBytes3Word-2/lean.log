@@ -1,0 +1,207 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:16:66: error: unsolved goals
+b : Slice U8
+i : Usize
+bound : ↑i + 4 ≤ (↑b).length
+maxLen : (↑b).length ≤ Usize.max
+⊢ (do
+      let i1 ← lift (BitVec.setWidth 32 (↑b)[↑i].bv#uscalar)
+      let i2 ← i + 1#usize
+      let i3 ←
+        match (↑b)[↑i2]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let i4 ← lift (BitVec.setWidth 32 i3.bv#uscalar)
+      let i5 ← i4 <<< 8#i32
+      let i6 ← lift (i1 ||| i5)
+      let i7 ← i + 2#usize
+      let i8 ←
+        match (↑b)[↑i7]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let i9 ← lift (BitVec.setWidth 32 i8.bv#uscalar)
+      let i10 ← i9 <<< 16#i32
+      let i11 ← lift (i6 ||| i10)
+      let i12 ← i + 3#usize
+      let i13 ←
+        match (↑b)[↑i12]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let i14 ← lift (BitVec.setWidth 32 i13.bv#uscalar)
+      let i15 ← i14 <<< 24#i32
+      ok (i11 ||| i15)) =
+    ok
+      ((BitVec.setWidth 32 (↑b)[↑i].bv ||| BitVec.setWidth 32 (↑b)[↑i + 1].bv <<< 8 |||
+            BitVec.setWidth 32 (↑b)[↑i + 2].bv <<< 16 |||
+          BitVec.setWidth 32 (↑b)[↑i + 3].bv <<< 24)#uscalar)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:19:41: warning: This simp argument is unused:
+  UScalar.add
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, UScalar.cast, UScalar.a̵d̵d̵,̵ ̵U̵S̵c̵a̵l̵a̵r̵.̵tryMk,
+  ̵  ̵ ̵ ̵UScalar.tryMkOpt, UScalar.shiftLeft_IScalar,
+  ̲  ̲ ̲ ̲UScalar.shiftLeft,
+  ̵  ̵ ̵ ̵pack, show i.val < b.val.length by omega,
+      show i.val ̲+ ̲1 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲2 < b.val.length by omega,
+      show i.val ̲+ ̲3 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲1 ≤ Usize.max by omega,
+      show i.val ̲+ ̲2 ≤ Usize.max by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲3 ≤ Usize.max by omega]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:19:54: warning: This simp argument is unused:
+  UScalar.tryMk
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, UScalar.cast, UScalar.add, UScalar.tryMk,̵
+  ̵ ̵ ̵ ̵ ̵U̵S̵c̵a̵l̵a̵r̵.̵t̵r̵y̵M̵k̵Opt, UScalar.shiftLeft_IScalar,
+  ̲  ̲ ̲ ̲UScalar.shiftLeft,
+  ̵  ̵ ̵ ̵pack, show i.val < b.val.length by omega,
+      show i.val ̲+ ̲1 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲2 < b.val.length by omega,
+      show i.val ̲+ ̲3 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲1 ≤ Usize.max by omega,
+      show i.val ̲+ ̲2 ≤ Usize.max by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲3 ≤ Usize.max by omega]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:20:4: warning: This simp argument is unused:
+  UScalar.tryMkOpt
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, UScalar.cast, UScalar.add, UScalar.tryMk,
+  ̵  ̵ ̵ ̵UScalar.t̵r̵y̵M̵k̵O̵p̵t̵,̵ ̵U̵S̵c̵a̵l̵a̵r̵.̵shiftLeft_IScalar,
+  ̲  ̲ ̲ ̲UScalar.shiftLeft,
+  ̵  ̵ ̵ ̵pack, show i.val < b.val.length by omega,
+      show i.val ̲+ ̲1 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲2 < b.val.length by omega,
+      show i.val ̲+ ̲3 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲1 ≤ Usize.max by omega,
+      show i.val ̲+ ̲2 ≤ Usize.max by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲3 ≤ Usize.max by omega]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:20:22: warning: This simp argument is unused:
+  UScalar.shiftLeft_IScalar
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, UScalar.cast, UScalar.add, UScalar.tryMk, UScalar.tryMkOpt,
+  ̲  ̲ ̲ ̲U̵S̵c̵a̵l̵a̵r̵.̵s̵h̵i̵f̵t̵L̵e̵f̵t̵_̵I̵S̵c̵a̵l̵a̵r̵,̵ ̵UScalar.shiftLeft, pack, show i.val < b.val.length by omega,
+      show i̵.̵v̵a̵l̵+̵1̵i̲.̲v̲a̲l̲ ̲+̲ ̲1̲ < b.val.length by omega, show i̵.̵v̵a̵l̵+̵2̵i̲.̲v̲a̲l̲ ̲+̲ ̲2̲ < b.val.length by omega,
+      show i̵.̵v̵a̵l̵+̵3̵i̲.̲v̲a̲l̲ ̲+̲ ̲3̲ < b.val.length by omega, show i̵.̵v̵a̵l̵+̵1̵i̲.̲v̲a̲l̲ ̲+̲ ̲1̲ ≤ Usize.max by omega,
+      show i̵.̵v̵a̵l̵+̵2̵i̲.̲v̲a̲l̲ ̲+̲ ̲2̲ ≤ Usize.max by omega, show i̵.̵v̵a̵l̵+̵3̵i̲.̲v̲a̲l̲ ̲+̲ ̲3̲ ≤ Usize.max by omega]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:20:49: warning: This simp argument is unused:
+  UScalar.shiftLeft
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, UScalar.cast, UScalar.add, UScalar.tryMk,
+  ̵  ̵ ̵ ̵UScalar.tryMkOpt,
+  ̲  ̲ ̲ ̲UScalar.shiftLeft_IScalar, U̵S̵c̵a̵l̵a̵r̵.̵s̵h̵i̵f̵t̵L̵e̵f̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵pack, show i.val < b.val.length by omega,
+      show i.val ̲+ ̲1 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲2 < b.val.length by omega,
+      show i.val ̲+ ̲3 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲1 ≤ Usize.max by omega,
+      show i.val ̲+ ̲2 ≤ Usize.max by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲3 ≤ Usize.max by omega]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:22:4: warning: This simp argument is unused:
+  show i.val + 1 < b.val.length by omega
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, UScalar.cast, UScalar.add, UScalar.tryMk,
+  ̵  ̵ ̵ ̵UScalar.tryMkOpt,
+  ̲  ̲ ̲ ̲UScalar.shiftLeft_IScalar, UScalar.shiftLeft,
+  ̵  ̵ ̵ ̵pack, show i.val < b.val.length by omega,
+      show i.val+̵1̵ <̵ ̵b̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵ ̵b̵y̵ ̵o̵m̵e̵g̵a̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵h̵o̵w̵ ̵i̵.̵v̵a̵l̵+ ̲2 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲3 < b.val.length by omega,
+      show i.val ̲+ ̲1 ≤ Usize.max by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲2 ≤ Usize.max by omega,
+      show i.val ̲+ ̲3 ≤ Usize.max by omega]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:23:4: warning: This simp argument is unused:
+  show i.val + 2 < b.val.length by omega
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, UScalar.cast, UScalar.add, UScalar.tryMk,
+  ̵  ̵ ̵ ̵UScalar.tryMkOpt,
+  ̲  ̲ ̲ ̲UScalar.shiftLeft_IScalar, UScalar.shiftLeft,
+  ̵  ̵ ̵ ̵pack, show i.val < b.val.length by omega,
+      show i.val ̲+ ̲1 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+2̵ ̵<̵ ̵b̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵ ̵b̵y̵ ̵o̵m̵e̵g̵a̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵h̵o̵w̵ ̵i̵.̵v̵a̵l̵+̵ ̲3 < b.val.length by omega,
+      show i.val ̲+ ̲1 ≤ Usize.max by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲2 ≤ Usize.max by omega,
+      show i.val ̲+ ̲3 ≤ Usize.max by omega]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:24:4: warning: This simp argument is unused:
+  show i.val + 3 < b.val.length by omega
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, UScalar.cast, UScalar.add, UScalar.tryMk,
+  ̵  ̵ ̵ ̵UScalar.tryMkOpt,
+  ̲  ̲ ̲ ̲UScalar.shiftLeft_IScalar, UScalar.shiftLeft,
+  ̵  ̵ ̵ ̵pack, show i.val < b.val.length by omega,
+      show i.val ̲+ ̲1 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲2 < b.val.length by omega,
+      show i.val+̵3̵ <̵ ̵b̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵ ̵b̵y̵ ̵o̵m̵e̵g̵a̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵h̵o̵w̵ ̵i̵.̵v̵a̵l̵+ ̲1 ≤ Usize.max by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲2 ≤ Usize.max by omega,
+      show i.val ̲+ ̲3 ≤ Usize.max by omega]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:25:4: warning: This simp argument is unused:
+  show i.val + 1 ≤ Usize.max by omega
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, UScalar.cast, UScalar.add, UScalar.tryMk,
+  ̵  ̵ ̵ ̵UScalar.tryMkOpt,
+  ̲  ̲ ̲ ̲UScalar.shiftLeft_IScalar, UScalar.shiftLeft,
+  ̵  ̵ ̵ ̵pack, show i.val < b.val.length by omega,
+      show i.val ̲+ ̲1 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲2 < b.val.length by omega,
+      show i.val ̲+ ̲3 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+1̵ ̵≤̵ ̵U̵s̵i̵z̵e̵.̵m̵a̵x̵ ̵b̵y̵ ̵o̵m̵e̵g̵a̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵h̵o̵w̵ ̵i̵.̵v̵a̵l̵+̵ ̲2 ≤ Usize.max by omega,
+      show i.val ̲+ ̲3 ≤ Usize.max by omega]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:26:4: warning: This simp argument is unused:
+  show i.val + 2 ≤ Usize.max by omega
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, UScalar.cast, UScalar.add, UScalar.tryMk,
+  ̵  ̵ ̵ ̵UScalar.tryMkOpt,
+  ̲  ̲ ̲ ̲UScalar.shiftLeft_IScalar, UScalar.shiftLeft,
+  ̵  ̵ ̵ ̵pack, show i.val < b.val.length by omega,
+      show i.val ̲+ ̲1 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲2 < b.val.length by omega,
+      show i.val ̲+ ̲3 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲1 ≤ Usize.max by omega,
+      show i.val+̵2̵ ≤̵ ̵U̵s̵i̵z̵e̵.̵m̵a̵x̵ ̵b̵y̵ ̵o̵m̵e̵g̵a̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵h̵o̵w̵ ̵i̵.̵v̵a̵l̵+ ̲3 ≤ Usize.max by omega]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:27:4: warning: This simp argument is unused:
+  show i.val + 3 ≤ Usize.max by omega
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.index_usize, UScalar.cast, UScalar.add, UScalar.tryMk,
+  ̵  ̵ ̵ ̵UScalar.tryMkOpt,
+  ̲  ̲ ̲ ̲UScalar.shiftLeft_IScalar, UScalar.shiftLeft,
+  ̵  ̵ ̵ ̵pack, show i.val < b.val.length by omega,
+      show i.val ̲+ ̲1 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲2 < b.val.length by omega,
+      show i.val ̲+ ̲3 < b.val.length by omega,
+  ̵  ̵ ̵ ̵show i.val ̲+ ̲1 ≤ Usize.max by omega,
+      show i.val ̲+2̵ 2̲ ̲≤ Usize.max by omega,̵
+  ̵ ̵ ̵ ̵ ̵s̵h̵o̵w̵ ̵i̵.̵v̵a̵l̵+̵3̵ ̵≤̵ ̵U̵s̵i̵z̵e̵.̵m̵a̵x̵ ̵b̵y̵ ̵o̵m̵e̵g̵a̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CheckpointBytes3Word.word_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
