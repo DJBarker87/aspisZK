@@ -18,7 +18,7 @@ per-cone joins plus one ordered caller join.
 
 ## What each re-pin should deliver
 
-For each cone you own (S1, S3, S4, S5, S9, S10), the target is an
+For each cone you own (S1–S6 per the user, 2026-10-21; S9/S10 ownership to be confirmed), the target is an
 **accepted-run refinement against the matching `dV_frozen` stage**: whenever
 the frozen function returns successfully on the reached inputs, its result
 (and any oracle reads) equal the model stage's. The exact statement shape for
