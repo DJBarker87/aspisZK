@@ -32,9 +32,40 @@ No shared existing source/object was overwritten (only this new module's
 failed source was replaced); no dependency replay was needed. Exact source,
 dependency fingerprints and full audit lines are in the part-17 `lean/`.
 
-Rust cell checks are in progress and will be recorded separately. The prior
-four primitive codec results are reused without replay or a claimed formal
-import into Lean.
+Five replacement Kani checks pass (unwinding assertions enabled):
+
+| Target in `compact::serialization17` | Wall s | Peak RSS KiB | Exit | Swaps |
+|---|---:|---:|---:|---:|
+| section_header | 2.593 | 365016 | 0 | 0 |
+| section_transcript_cell | 3.726 | 379988 | 0 | 0 |
+| section_opening_cell | 2.933 | 375168 | 0 | 0 |
+| section_node_padding_cell | 3.061 | 377268 | 0 | 0 |
+| ordered_element | 2.667 | 374404 | 0 | 0 |
+
+These spend time in Kani compilation/bounded verification, with no dense
+arithmetic; Kani's MIR profile is not a native debug arithmetic release gate.
+Each uses 6G/8G/no-swap/64-task scopes, four compiler jobs and the prescribed
+linker flag. Source revision `47ccfa22c`, exact instrumented source hashes,
+commands and full output are in `rust-attempts.json`, `*-inputs.json` and
+`receipts/`. Axioms: N/A (Kani, not Lean). The unchanged production source is
+copied with only cfg(kani) harnesses appended in the isolated host workspace.
+
+The header is complete. The transcript check is one compact 32-byte cell
+(including both successful emission and unchanged-prefix rejection); the
+opening check is one arbitrary lane's 4/16-byte slice; the node check is one
+32-byte node plus one zero padding node. Their Vec prefix is three bytes.
+The ordered check covers any batch, tree and legal ordinal of the real
+22-element query array, compares the source map invocation to direct
+indexing, and verifies one push onto a one-element prefix. It avoids all
+prior timed-out Vec/sort formulations. The Lean append induction quantifies
+all lengths at its List carrier, while the Rust Vec/List bridge still needs
+certification. No large-prefix Rust claim follows from a small-prefix check.
+`check-source.py --check` binds the exact source expressions and refuses a
+changed source snapshot; it is a text-binding preflight, not an equivalence
+proof. Sorting/dedup correctness, full semantic framing, opening lane order,
+node multiproof traversal, and full Rust section callbacks remain open.
+The prior four primitive codec results are reused without replay or a
+claimed formal import into Lean.
 
 ## Remaining concrete execution boundary
 

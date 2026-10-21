@@ -5,7 +5,7 @@ E=Path(__file__).resolve().parent.parent
 H='/home/dombarker/project-offloads/codex-cx-prover-commit17-20261021'
 host='dombarker@100.108.41.90'
 rows=[]
-compact=(E/'rust-sources/compact.rs').read_bytes()+(E/'rust-sources/serialization16.rs').read_bytes()
+compact=(E/'rust-sources/compact-with-harness.rs').read_bytes()
 for name in sys.argv[1:]:
  d=E/'receipts'/name;d.mkdir(exist_ok=True,parents=True)
  for f in ['receipt.json','stdout.log','stderr.log','time.log']:
@@ -15,7 +15,7 @@ for name in sys.argv[1:]:
  assert x['swaps']==0
  assert x['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
  assert x['env']['RUSTFLAGS']=='-C link-arg=-Wl,--threads=4'
- assert pins['source_hashes']['crates/aspis-r1-cost-probe/src/compact.rs'] in [hashlib.sha256(compact).hexdigest(),hashlib.sha256(compact+(E/'rust-sources/serialization16b.rs').read_bytes()).hexdigest(),hashlib.sha256(compact+(E/'rust-sources/serialization16b.rs').read_bytes()+(E/'rust-sources/serialization16c.rs').read_bytes()).hexdigest()]
+ assert pins['source_hashes']['crates/aspis-r1-cost-probe/src/compact.rs']==hashlib.sha256(compact).hexdigest()
  x.update(name=name,accepted=x['exit_status']==0,source_revision=pins['source_revision'],source_hashes=pins['source_hashes'])
  if x['accepted']:assert 'VERIFICATION:- SUCCESSFUL' in (d/'stdout.log').read_text()
  rows.append(x)

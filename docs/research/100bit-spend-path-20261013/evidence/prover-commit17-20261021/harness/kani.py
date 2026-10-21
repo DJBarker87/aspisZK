@@ -28,6 +28,9 @@ solver=os.environ.get('KANI_SOLVER')
 if solver:
     assert solver in ['kissat','cadical']
     cmd[2:2]=['--solver',solver]
+if target.startswith('state_only_hiding::'):
+    cmd[cmd.index('-p')+1]='aspis-prover'
+    cmd[cmd.index('--lib'):cmd.index('--lib')]=['--features','r0']
 if target.endswith('*'):
     cmd.remove('--exact');cmd[cmd.index('--harness')+1]=target[:-1]
 sys.exit(subprocess.run(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'harness/capped.py'),str(H/'receipts'/name),'Kani compilation then bounded relational byte-oracle comparison; no dense arithmetic; 600 second timeout','--','timeout','600',*cmd]).returncode)
