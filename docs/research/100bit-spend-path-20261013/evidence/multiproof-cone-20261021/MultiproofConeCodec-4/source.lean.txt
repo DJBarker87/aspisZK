@@ -1,0 +1,106 @@
+import MultiproofConeRef.Funs
+import OraclePortCompactDraft
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeCodec
+open Aeneas Aeneas.Std Result
+open MultiproofConeRef
+
+/-- Total checked reference at the actual strict M31 byte boundary. -/
+theorem canonical_word_total (b : Array U8 4#usize) :
+    reference.canonical_word b =
+      ok (decide ((core.num.U32.from_le_bytes b).val < 2147483647)) := by
+  rfl
+
+/-- The reference's row table agrees with the frozen parser's table on every
+reached row, without evaluating the 27-row expansion. -/
+theorem row_shape_total (row : U8) (hr : row.val < 27) :
+    (do let o ← reference.row_shape row
+        ok (o.map (fun p => (p.1.val, p.2.val)))) =
+      ok (some (OraclePortCompactDraft.rowShape row.val)) := by
+  have eq_nat (k : U8) : row = k ↔ row.val = k.val :=
+    ⟨UScalar.val_eq_of_eq, UScalar.eq_of_val_eq⟩
+  unfold reference.row_shape OraclePortCompactDraft.rowShape
+  simp only [eq_nat, UScalar.le_equiv]
+  simp only [show (27#u8).val = 27 from rfl, show (2#u8).val = 2 from rfl,
+    show (14#u8).val = 14 from rfl, show (15#u8).val = 15 from rfl,
+    show (24#u8).val = 24 from rfl, show (25#u8).val = 25 from rfl,
+    show (26#u8).val = 26 from rfl]
+  simp only [show ¬ 27 ≤ row.val by omega, if_false]
+  by_cases h2 : row.val = 2 <;> simp only [h2, if_true, if_false]
+  · rfl
+  by_cases h14 : row.val = 14 <;> simp only [h14, if_true, if_false]
+  · rfl
+  by_cases h15 : 15 ≤ row.val <;> by_cases h24 : row.val ≤ 24 <;>
+    simp only [h15, h24, and_self, and_false, false_and, if_true, if_false]
+  all_goals try rfl
+  all_goals by_cases h25 : row.val = 25 <;> simp only [h25, if_true, if_false]
+  all_goals try rfl
+  all_goals by_cases h26 : row.val = 26 <;> simp only [h26, if_true, if_false] <;> rfl
+
+/-- Exact expansion bytes for every stored compact value, regardless of
+canonicality. The zero high half is constructed, not assumed. -/
+theorem expand_chunk_total (c : Array U8 16#usize) :
+    ∃ out, reference.expand_chunk c = ok out ∧
+      out.val = c.val ++ List.replicate 16 (0#u8) := by
+  rcases c with ⟨xs, hx⟩
+  change xs.length = 16 at hx
+  cases xs with
+  | nil => simp at hx
+  | cons b0 xs =>
+    cases xs with
+    | nil => simp at hx
+    | cons b1 xs =>
+      cases xs with
+      | nil => simp at hx
+      | cons b2 xs =>
+        cases xs with
+        | nil => simp at hx
+        | cons b3 xs =>
+          cases xs with
+          | nil => simp at hx
+          | cons b4 xs =>
+            cases xs with
+            | nil => simp at hx
+            | cons b5 xs =>
+              cases xs with
+              | nil => simp at hx
+              | cons b6 xs =>
+                cases xs with
+                | nil => simp at hx
+                | cons b7 xs =>
+                  cases xs with
+                  | nil => simp at hx
+                  | cons b8 xs =>
+                    cases xs with
+                    | nil => simp at hx
+                    | cons b9 xs =>
+                      cases xs with
+                      | nil => simp at hx
+                      | cons b10 xs =>
+                        cases xs with
+                        | nil => simp at hx
+                        | cons b11 xs =>
+                          cases xs with
+                          | nil => simp at hx
+                          | cons b12 xs =>
+                            cases xs with
+                            | nil => simp at hx
+                            | cons b13 xs =>
+                              cases xs with
+                              | nil => simp at hx
+                              | cons b14 xs =>
+                                cases xs with
+                                | nil => simp at hx
+                                | cons b15 xs =>
+                                  have hempty : xs = [] := List.eq_nil_of_length_eq_zero (by simpa using hx)
+                                  subst xs
+                                  simp only [reference.expand_chunk, Array.index_usize, Array.getElem?_Usize_eq,
+                                    Array.getElem?_Nat_eq, List.getElem?_cons_zero,
+                                    List.getElem?_cons_succ, Result.bind_ok]
+                                  exact ⟨_, rfl, rfl⟩
+
+#print axioms canonical_word_total
+#print axioms row_shape_total
+#print axioms expand_chunk_total
+end AspisR1.MultiproofConeCodec

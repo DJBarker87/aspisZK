@@ -1,0 +1,32 @@
+import MultiproofConeRef.Funs
+import OraclePortCompactDraft
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeCodec
+open Aeneas Aeneas.Std Result
+open MultiproofConeRef
+
+/-- Total checked reference at the actual strict M31 byte boundary. -/
+theorem canonical_word_total (b : Array U8 4#usize) :
+    reference.canonical_word b =
+      ok (decide ((core.num.U32.from_le_bytes b).val < 2147483647)) := by
+  rfl
+
+/-- The reference's row table agrees with the frozen parser's table on every
+reached row, without evaluating the 27-row expansion. -/
+theorem row_shape_total (row : U8) (hr : row.val < 27) :
+    reference.row_shape row = ok (some
+      (U8.ofNat (OraclePortCompactDraft.rowShape row.val).1,
+       Usize.ofNat (OraclePortCompactDraft.rowShape row.val).2)) := by
+  unfold reference.row_shape OraclePortCompactDraft.rowShape
+  simp only [UScalar.ge_equiv, UScalar.le_equiv, UScalar.ofNat_val_eq]
+  split <;> simp_all
+  all_goals split <;> simp_all
+  all_goals split <;> simp_all
+  all_goals split <;> simp_all
+  all_goals split <;> simp_all
+  all_goals split <;> simp_all
+
+#print axioms canonical_word_total
+#print axioms row_shape_total
+end AspisR1.MultiproofConeCodec
