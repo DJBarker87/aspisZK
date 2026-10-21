@@ -1,0 +1,73 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:60:6: error: Tactic `apply` failed: could not unify the conclusion of `@bind_same`
+  ?p >>= ?f = ?p >>= ?g
+with the goal
+  (do
+      let sample ←
+        do
+          let sem ← liftM (Array.update sem row value)
+          pure (core.result.Result.Ok (next, sem))
+      match sample with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok (next, sem) => rows effect records (row.wrapping_add 1#usize) n next sem) =
+    do
+    let result ←
+      do
+        let sem ← liftM (Array.update sem row value)
+        ProverCommitSemanticRows28.rows effect records (row.wrapping_add 1#usize) n next sem
+    pure (ProverCommitStep29.discard result)
+
+Note: The full type of `@bind_same` is
+  ∀ {M : Type → Type} [inst : Monad M] {A B : Type} (p : M A) (f g : A → M B),
+    (∀ (a : A), f a = g a) → p >>= f = p >>= g
+
+case succ.Ok
+M : Type → Type
+inst✝³ : Monad M
+inst✝² : LawfulMonad M
+inst✝¹ : MonadLiftT Result M
+inst✝ : LawfulMonadLiftT Result M
+H : Type
+effect : H → Parts → M Bytes32
+records : Records
+n : ℕ
+ih :
+  ∀ (row : Usize) (state : State H) (sem : Values),
+    ↑row + n ≤ 25 →
+      rows effect records row n state sem = do
+        let result ← ProverCommitSemanticRows28.rows effect records row n state sem
+        pure (ProverCommitStep29.discard result)
+row : Usize
+state : State H
+sem : Values
+count : ↑row + (n + 1) ≤ 25
+rt : UScalar.cast UScalarTy.Usize (UScalar.cast UScalarTy.U8 row) = row
+record✝ record : alloc.vec.Vec U8
+next : r1_wire.SemanticTranscript H
+value : aspis_core.field.QM31
+⊢ (do
+      let sample ←
+        do
+          let sem ← liftM (Array.update sem row value)
+          pure (core.result.Result.Ok (next, sem))
+      match sample with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok (next, sem) => rows effect records (row.wrapping_add 1#usize) n next sem) =
+    do
+    let result ←
+      do
+        let sem ← liftM (Array.update sem row value)
+        ProverCommitSemanticRows28.rows effect records (row.wrapping_add 1#usize) n next sem
+    pure (ProverCommitStep29.discard result)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:59:17: warning: This simp argument is unused:
+  rt
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵r̵t̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitRows29.cast_roundtrip' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitRows29.bind_same' depends on axioms: [Quot.sound]
+'R1Z.ProverCommitRows29.lift_ok' does not depend on any axioms
+'R1Z.ProverCommitRows29.rows_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

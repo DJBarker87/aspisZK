@@ -56,3 +56,37 @@ No cap was raised. Build time was optimized compilation/linking.
 Pending: complete per-iteration Kani gate, finite-row induction, native walk
 composition, shipped experiment and both WholeRunJoins. No refinement premise
 has been removed. Target not yet established.
+
+## Stage 2: finite row induction and composed stateful walk
+
+`ProverCommitRows29.rows_model` is a symbolic induction for every prefix
+`row.val+n≤25`. It composes the extracted owned step and proves equality with
+`ProverCommitSemanticRows28.rows` after explicitly forgetting the local state
+on inner semantic errors. It retains malformed records, array/index failures,
+divergence and all externally observable machine effects. The theorem is
+polymorphic over lawful monads and lawful Result lifting; no oracle, sampler,
+privacy or implementation-join hypothesis is added.
+
+`ProverCommitWalk29.suffix_source` reconstructs the retained complete suffix
+by definitional equality. `continuation_model` composes the finite rows, both
+circle points and every Transcript tail operation. `walk_model` includes the
+actual extracted initialization. `logged_model` instantiates the induction
+with the extracted oracle machine and ordered read history, including on error.
+`walk_effects` installs the concrete reference machine in this composition.
+The result projects only the internal local state/trace fields that native
+`walk` does not return; the external machine/history are retained.
+
+J7846 passes the four generic row audits (2.08 s, 4151596 KiB RSS). J7850
+passes all five composed-walk audits (2.11 s, 4140088 KiB RSS). Both exit 0,
+zero swaps; every audit is a subset of the allowed standard axioms. Earlier
+syntax/inference/bind-associativity diagnostics are retained and excluded.
+No resource or kernel limits were raised. These are owned-reference-to-model
+results; the native connection remains gated on the per-iteration Kani result.
+
+The all-record Kani preflight exposed a proof-shape issue: a global unwind of
+904 also expanded the recursive 32-byte validator up to 904 calls, even though
+a semantic record has at most 28 field cells. It was stopped before memory
+pressure. `show-step-loops` identifies the native validation and byte-comparison
+loops. The replacement uses global unwind 40 and `memcmp.0:904`, retaining
+unwinding assertions; no source input bound or covered error is weakened.
+The replacement gate is pending. No whole-function harness has been used.

@@ -65,5 +65,5 @@ mod step_kani29 {
         }
     }
     #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::unwind(40)] fn empty_record(){check::<0>()}
-    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::unwind(904)] fn all_semantic_records(){check::<901>()}
+    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::unwind(40)] fn all_semantic_records(){check::<901>()}
 }
