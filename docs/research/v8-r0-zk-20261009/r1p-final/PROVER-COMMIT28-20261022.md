@@ -52,3 +52,28 @@ loop under its unchanged row-count invariant, then installs the concrete
 machine (J7816: three audits, 1.88 s, 4167424 KiB, zero swap). J7815 recompiles
 the final generic suffix after its explanatory comment changed. All accepted
 new theorems audit to the allowed standard axioms or fewer.
+
+## Stage 2 — ordered observations and composed walk continuation
+
+`ProverCommitLogged28` adds an ordered call/answer list alongside the native
+machine: the D133 recording map alone cannot represent repeated reads.
+`query_history`/`tail_history` install the complete suffix with this observer.
+`replayReset` retains the exact finite tape and prior ordered history, resets
+the cursor to zero, enables a fresh empty recording map and clears collision;
+`reset_then` proves the next continuation receives precisely this state.
+J7817 passes six audits (2.30 s, 4188872 KiB, zero swap).
+
+`ProverCommitWalk28.continuation` composes the 25 semantic rows, both concrete
+circle policies, nominal coefficient-preserving conversions, and the complete
+suffix. `continuation_effects` installs the actual extracted machine in the
+whole composition, retaining all early inner errors and ordered reads. J7820
+passes (1.86 s, 4165360 KiB, zero swap). This begins **after** semantic
+initialization and is a constructed formal continuation, not yet an extracted
+native `walk` owner theorem. Its documentation preserves that boundary.
+
+`ProverCommitPortMarginal28` extends the D134/D135 marginal construction to
+arbitrary stateful continuations and arbitrary observations of the result,
+final machine and ordered history. No finite-call-tree adapter, successful-run
+conditioning or extra randomness is required. J7821 passes three audits
+(1.77 s, 4160768 KiB, zero swap). These are marginal laws, not source/model
+pointwise walk equivalence or WholeRunJoins. All audits use standard axioms.
