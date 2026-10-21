@@ -75,9 +75,12 @@ reference file. Substituting it in the isolated owned constructor advances
 forest translation to code generation. Two further constructor name clashes
 are fixed in LLBC metadata: enum constructors and tuple struct constructors
 receive distinct function names. Function bodies, IDs, calls and type layout
-are not changed by those renames. Aeneas then succeeds: 5.667 s,
+are not changed by those renames. The structural JSON audit finds exactly
+five changed scalar leaves, all in function names, the item-name index or
+the function rename attribute. Exact before/after values are committed in
+`builder-cont9-adaptation-audit.json`. Aeneas then succeeds: 5.667 s,
 455,440 KiB, zero swap, 6,625 generated Lean lines. This raw output contains
-unsupported externals (including Drop, records, lazy external, iterator,
+24 unsupported externals (including Drop, records, lazy external, iterator,
 array, Option/Result and slice operations) and is not admitted or compiled as
 a certificate.
 
@@ -86,7 +89,7 @@ checks timed out at 240 s with no verdict. Its GNU-time parent RSS is
 incomplete (14,960 KiB); it is not the child peak. The replacement projects
 the common pure root-helper result. Both callers pass the same immutable
 tree and empty table, so this isolates control flow, not root reconstruction.
-The complete semantic admission obligation remains open.
+The projected-root replacement also timed out at 240.040 s without a verdict; its parent RSS is likewise incomplete. Neither failed experiment certifies the reference substitution. The complete semantic admission obligation remains open.
 
 ## Stage 3: Parts content
 

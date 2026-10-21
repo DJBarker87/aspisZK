@@ -141,3 +141,110 @@ mod proofs {
         assert_eq!(unsafe { CALLS },2);
     }
 }
+
+/// Control-flow reference for the validator. Carry the first frontier error
+/// through the loop condition; root checks retain their original order.
+pub fn validate_owned(tree: IncrementalMerkleTreeV1,
+    empty: [Digest; POOL_V1_TREE_DEPTH+1]) -> Result<(),PoolV1TreeError> {
+    if tree.next_leaf_index > POOL_V1_LEAF_CAPACITY {
+        return Err(PoolV1TreeError::IndexOutOfRange);
+    }
+    let mut result = Ok(());
+    let mut level = 0;
+    while level < POOL_V1_TREE_DEPTH && result.is_ok() {
+        if (tree.next_leaf_index >> level) & 1 == 0 && tree.frontier[level] != empty[level] {
+            result = Err(PoolV1TreeError::NonCanonicalFrontier);
+        }
+        level += 1;
+    }
+    result?;
+    if tree.next_leaf_index == 0 {
+        return if tree.root == empty[POOL_V1_TREE_DEPTH] {
+            Ok(())
+        } else {
+            Err(PoolV1TreeError::RootMismatch)
+        };
+    }
+    if tree.next_leaf_index < POOL_V1_LEAF_CAPACITY
+        && tree.reconstruct_nonfull_root(&empty)? != tree.root {
+        return Err(PoolV1TreeError::RootMismatch);
+    }
+    Ok(())
+}
+
+#[cfg(kani)]
+mod validator_proofs {
+    use super::*;
+    static mut ROOT_CALLS: u8 = 0;
+    static mut ROOT_RESULT: Result<Digest, PoolV1TreeError> =
+        Err(PoolV1TreeError::RootMismatch);
+    static mut ROOT_TREE: IncrementalMerkleTreeV1 = IncrementalMerkleTreeV1 {
+        next_leaf_index: 0, root: [M31::ZERO;8], frontier: [[M31::ZERO;8];20],
+    };
+    static mut ROOT_EMPTY: [Digest;21] = [[M31::ZERO;8];21];
+    fn shared_root(tree: &IncrementalMerkleTreeV1, empty: &[Digest;21])
+        -> Result<Digest,PoolV1TreeError> {
+        unsafe {
+            if ROOT_CALLS == 0 {
+                ROOT_TREE = *tree; ROOT_EMPTY = *empty;
+                ROOT_RESULT = if kani::any() { Ok(kani::any::<[u32;8]>().map(M31)) }
+                    else { Err(PoolV1TreeError::RootMismatch) };
+            } else {
+                assert_eq!(ROOT_CALLS,1);
+                assert_eq!(ROOT_TREE.next_leaf_index,tree.next_leaf_index);
+                for i in 0..8 { assert_eq!(ROOT_TREE.root[i].0,tree.root[i].0); }
+                for l in 0..20 { for i in 0..8 {
+                    assert_eq!(ROOT_TREE.frontier[l][i].0,tree.frontier[l][i].0);
+                } }
+                for l in 0..21 { for i in 0..8 { assert_eq!(ROOT_EMPTY[l][i].0,empty[l][i].0); } }
+            }
+            ROOT_CALLS += 1; ROOT_RESULT
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    #[kani::stub(IncrementalMerkleTreeV1::reconstruct_nonfull_root,shared_root)]
+    fn tree_validate_control_flow() {
+        let tree = IncrementalMerkleTreeV1 {
+            next_leaf_index: kani::any(),
+            root: kani::any::<[u32;8]>().map(M31),
+            frontier: kani::any::<[[u32;8];20]>().map(|d|d.map(M31)),
+        };
+        let empty = kani::any::<[[u32;8];21]>().map(|d|d.map(M31));
+        let actual = tree.validate_with_empty_roots(&empty);
+        let calls = unsafe { ROOT_CALLS };
+        let reference = validate_owned(tree,empty);
+        assert_eq!(actual,reference);
+        assert_eq!(unsafe { ROOT_CALLS },calls*2);
+    }
+}
+
+#[cfg(kani)]
+mod validator_projection {
+    use super::*;
+    // The two callers pass the same immutable tree and empty table, unchanged.
+    // Project their common pure helper result; no helper implementation proof.
+    static mut ANSWER: Result<Digest,PoolV1TreeError> = Err(PoolV1TreeError::RootMismatch);
+    static mut CALLS: u8 = 0;
+    fn root_projection(_: &IncrementalMerkleTreeV1, _: &[Digest;21])
+        -> Result<Digest,PoolV1TreeError> {
+        unsafe { CALLS += 1; ANSWER }
+    }
+    #[kani::proof]
+    #[kani::unwind(34)]
+    #[kani::stub(IncrementalMerkleTreeV1::reconstruct_nonfull_root,root_projection)]
+    fn tree_validate_projected_root() {
+        let tree = IncrementalMerkleTreeV1 {
+            next_leaf_index: kani::any(), root: kani::any::<[u32;8]>().map(M31),
+            frontier: kani::any::<[[u32;8];20]>().map(|d|d.map(M31)),
+        };
+        let empty = kani::any::<[[u32;8];21]>().map(|d|d.map(M31));
+        unsafe { ANSWER=if kani::any() { Ok(kani::any::<[u32;8]>().map(M31)) }
+            else { Err(PoolV1TreeError::RootMismatch) }; }
+        let actual=tree.validate_with_empty_roots(&empty);
+        let calls=unsafe { CALLS };
+        let reference=validate_owned(tree,empty);
+        assert_eq!(actual,reference);
+        assert_eq!(unsafe { CALLS },calls*2);
+    }
+}

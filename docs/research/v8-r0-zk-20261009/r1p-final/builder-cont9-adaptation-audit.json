@@ -1,0 +1,194 @@
+{
+  "metadata_only": true,
+  "changes": [
+    {
+      "path": "/translated/item_names/48/value/4/Ident/0",
+      "before": "PairLeaf",
+      "after": "PairLeafCtor"
+    },
+    {
+      "path": "/translated/item_names/269/value/4/Ident/0",
+      "before": "Tree",
+      "after": "TreeCtor"
+    },
+    {
+      "path": "/translated/fun_decls/8/item_meta/name/4/Ident/0",
+      "before": "PairLeaf",
+      "after": "PairLeafCtor"
+    },
+    {
+      "path": "/translated/fun_decls/145/item_meta/name/4/Ident/0",
+      "before": "Tree",
+      "after": "TreeCtor"
+    },
+    {
+      "path": "/translated/fun_decls/196/item_meta/attr_info/rename",
+      "before": null,
+      "after": "M31Ctor"
+    }
+  ],
+  "source_revision": "5aef25c53",
+  "artifacts": {
+    "drop-opaque-validator/admission.llbc": {
+      "sha256": "cef9b700c03c57d06e7aa6d42eff17e0b06b3bd378592916b471d67d990bb43b",
+      "size": 7452570
+    },
+    "drop-opaque-validator/admission-renamed.llbc": {
+      "sha256": "1357e3347cd200baecdf7f0100f5d884d343bb8b536a7a325a1e06de537d2798",
+      "size": 8314416
+    },
+    "drop-opaque-validator/generated/Admission-renamed.lean": {
+      "sha256": "63c3044dbe71069d760fef6ff9006a8bd887f815b2301bae1e689fe4ece2b754",
+      "size": 325444
+    }
+  },
+  "unproved_externals": [
+    "core.array.iter.IntoIter",
+    "Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter",
+    "core.iter.adapters.flatten.Flatten",
+    "core.iter.traits.iterator.Iterator.sum.default",
+    "core.iter.traits.iterator.Iterator.any.default",
+    "core.iter.traits.iterator.Iterator.flatten.default",
+    "core.iter.traits.iterator.Iterator.map.default",
+    "core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next",
+    "core.array.from_fn",
+    "core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any",
+    "core.array.Array.map",
+    "core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next",
+    "U64.Insts.CoreIterTraitsAccumSumU64.sum",
+    "core.ops.range.Range.contains",
+    "core.ops.range.RangeInclusive.contains",
+    "core.option.Option.ok_or",
+    "core.option.Option.Insts.CoreOpsTry_traitTry.branch",
+    "core.result.Result.map",
+    "core.result.Result.map_err",
+    "core.slice.iter.Chunks",
+    "core.slice.Slice.chunks",
+    "poseidon2.external_linear_lazy",
+    "pool_v1.pair_forest_copy_builder.records",
+    "state_only_trace.StateOnlyTraceFoundation.Insts.CoreOpsDropDrop.drop"
+  ],
+  "drop_opaque": [
+    {
+      "def_id": 246,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "aspis_statement",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "state_only_trace",
+              0
+            ]
+          },
+          {
+            "Impl": {
+              "Trait": 56
+            }
+          },
+          {
+            "Ident": [
+              "drop",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 29,
+            "beg": {
+              "line": 83,
+              "col": 4
+            },
+            "end": {
+              "line": 94,
+              "col": 5
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": "fn drop(&mut self) {\n        // Host prover traces contain the unmasked witness before commitment.\n        // Clear them on every return path instead of relying on allocator\n        // reuse.  M31 is canonical, so zero is also a valid overwritten word.\n        for column in &mut self.c1 {\n            for value in column {\n                // SAFETY: the vector is uniquely borrowed during drop.\n                unsafe { core::ptr::write_volatile(value, M31::ZERO) };\n            }\n        }\n        core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);\n    }",
+        "attr_info": {
+          "attributes": [],
+          "inline": null,
+          "rename": null,
+          "public": true
+        },
+        "is_local": true,
+        "opacity": "Opaque",
+        "lang_item": null
+      },
+      "generics": {
+        "regions": [
+          {
+            "index": 0,
+            "name": null,
+            "mutability": "Unknown"
+          }
+        ],
+        "types": [],
+        "const_generics": [],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "signature": {
+        "is_unsafe": false,
+        "abi": "Rust",
+        "is_variadic": false,
+        "inputs": [
+          {
+            "Deduplicated": 17596
+          }
+        ],
+        "output": {
+          "Deduplicated": 2315
+        }
+      },
+      "src": {
+        "TraitImpl": {
+          "impl_ref": {
+            "id": 56,
+            "generics": {
+              "regions": [],
+              "types": [],
+              "const_generics": [],
+              "trait_refs": []
+            }
+          },
+          "trait_ref": {
+            "id": 30,
+            "generics": {
+              "regions": [],
+              "types": [
+                {
+                  "Deduplicated": 3557
+                }
+              ],
+              "const_generics": [],
+              "trait_refs": []
+            }
+          },
+          "item_id": {
+            "Method": 0
+          },
+          "reuses_default": false
+        }
+      },
+      "is_global_initializer": null,
+      "body": "Opaque"
+    }
+  ],
+  "validator_substitution": {
+    "before_sha256": "e1eaa56f86d6dbc4eb2d01b95f957fe2c27e19906a344b89e1e0a2565327d894",
+    "after_sha256": "9c6f8c6e10827eeeeda173edd446bc2fb8ca1a6e5b961e2d594f5cc2892ec08e",
+    "old": "inner.validate_with_empty_roots(&empty)?;",
+    "new": "validate_owned(inner, empty)?;",
+    "status": "Exploratory P6 reference substitution; no semantic admission certificate"
+  }
+}

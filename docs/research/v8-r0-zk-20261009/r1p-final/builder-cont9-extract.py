@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Host-only continuation: preserve inherited reference substitutions; opaque one Drop."""
-import pathlib, subprocess, os, json, hashlib, sys, time
+import pathlib, subprocess, os, json, hashlib, sys, time, fcntl
 R=pathlib.Path('/home/dombarker/project-offloads/codex-cx-builder-ref9-20261021')
 S=R/'source'; E=R/sys.argv[2]; E.mkdir(exist_ok=True)
+lock=(R/'rust-stage.lock').open('a');fcntl.flock(lock,fcntl.LOCK_EX)
 KIT=pathlib.Path('/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016')
 env=os.environ.copy();env.update(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',RUSTUP_TOOLCHAIN='nightly-2026-06-01',RUSTFLAGS='-C link-arg=-Wl,--threads=4 --cfg aeneas_ref',CARGO_BUILD_JOBS='4',CARGO_TARGET_DIR=str(R/'extraction-target'),ASPIS_SOURCE_REV=sys.argv[1])
 def run(name,cmd):
@@ -42,10 +43,22 @@ if rc==0:
             for i,v in enumerate(x):
                 if v==old:x[i]=new;changes.append(path+'/'+str(i))
                 elif isinstance(v,(list,dict)):visit(v,path+'/'+str(i))
-    visit(d,''); adapted=E/'admission-renamed.llbc';adapted.write_text(json.dumps(d))
+    visit(d,'')
+    if '--rename-constructors' in sys.argv:
+        enum_names={json.dumps(t['item_meta']['name']):{v['name'] for v in t['kind']['Enum']} for t in d['translated']['type_decls'] if t and isinstance(t['kind'],dict) and 'Enum' in t['kind']}
+        constructors=[f['item_meta']['name'] for f in d['translated']['fun_decls'] if f and f['item_meta']['name'][-1].get('Ident',[None])[0] in enum_names.get(json.dumps(f['item_meta']['name'][:-1]),set())]
+        for name in constructors:
+            old=name; new=old[:-1]+[{'Ident':[old[-1]['Ident'][0]+'Ctor',0]}];visit(d,'')
+    if '--rename-tuple-constructors' in sys.argv:
+        type_names={json.dumps(t['item_meta']['name']) for t in d['translated']['type_decls'] if t}
+        for f in d['translated']['fun_decls']:
+            if f and json.dumps(f['item_meta']['name']) in type_names:
+                f['item_meta']['attr_info']['rename']=f['item_meta']['name'][-1]['Ident'][0]+'Ctor'
+                changes.append('/translated/fun_decls/'+str(f['def_id'])+'/item_meta/attr_info/rename')
+    adapted=E/'admission-renamed.llbc';adapted.write_text(json.dumps(d))
     (E/'metadata-rename.json').write_text(json.dumps(dict(old=old,new=new,paths=changes),indent=2)+'\n')
     (E/'generated').mkdir(exist_ok=True)
-    rc=run('aeneas',[str(KIT/'bin/aeneas'),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisBuilderForestDropP6','-dest',str(E/'generated'),'-loops-to-rec','-print-unknown-externals',str(adapted)])
+    rc=run('aeneas-types' if '--rename-tuple-constructors' in sys.argv else ('aeneas-names' if '--rename-constructors' in sys.argv else 'aeneas'),[str(KIT/'bin/aeneas'),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisBuilderForestDropP6','-dest',str(E/'generated'),'-loops-to-rec','-print-unknown-externals',str(adapted)])
 pin=lambda p:dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),size=p.stat().st_size)
-(E/'summary.json').write_text(json.dumps(dict(source_revision=sys.argv[1],exit=rc,opaque_flag=['--opaque',pattern],source_pins={str(p.relative_to(S)):pin(p) for p in S.rglob('*.rs') if 'target' not in p.parts},tool_pins={str(p):pin(p) for p in [KIT/'charon-target/release/charon',KIT/'bin/aeneas']}),indent=2)+'\n')
+(E/('summary-types.json' if '--rename-tuple-constructors' in sys.argv else ('summary-renamed.json' if '--rename-constructors' in sys.argv else 'summary.json'))).write_text(json.dumps(dict(source_revision=sys.argv[1],exit=rc,opaque_flag=['--opaque',pattern],source_pins={str(p.relative_to(S)):pin(p) for p in S.rglob('*.rs') if 'target' not in p.parts},tool_pins={str(p):pin(p) for p in [KIT/'charon-target/release/charon',KIT/'bin/aeneas']}),indent=2)+'\n')
 sys.exit(rc)
