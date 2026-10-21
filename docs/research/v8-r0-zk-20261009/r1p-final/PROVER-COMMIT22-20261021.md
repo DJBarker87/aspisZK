@@ -88,13 +88,64 @@ An arbitrary Lean tree theorem plus bounded node fixtures does not prove
 that relation. No program/source equality is installed from this check.
 
 
-## Stage 3
+## Stage 3 — concrete sampler reuse; TLS obstruction
 
-Pending.
+`ProverCommitSemanticSampler22` reuses the soundness-side semantic sampler
+proof from `lean/bridge-selected-current-20261018/ExtractedSourceSemanticSampler.lean`.
+It removes the unrelated large first-25 caller import, uses the exact cached
+QM31 sampler and SqueezeOracleBridge, and proves the same canonical four-digit
+decode and fixed exact-tower embedding. `sample_total_semChal` obtains the
+successful sampled value itself, rather than assuming source success.
+J8763 is excluded; J8764 focused and J8767 final pass (exit 0, 1.94 s,
+3959336 KiB, zero swap).
 
-## Endpoint audit
+`ProverCommitCircleSampler22` reuses `R4TransportCircleCoordinates` with that
+sampler bridge. `circle_total_coordinates` covers every input block and
+both circle rows, including both fallback points. J8769 passes (exit 0,
+2.14 s, 3974604 KiB, zero swap). All new sampler/circle theorem audits use
+only standard axioms. This proves concrete sampler outputs, not reachability
+of the simulator's rows or a complete continuation join.
 
-Pending; RustProverRefinement remains explicit.
+`r4-reuse-binding.json` confirms the shipped sampler.rs and
+r0_transcript.rs files are byte-identical to the R4 source-inventory pins.
+The exact proof-port diffs are retained. The initial source-graph inventory
+was insufficient because it encountered legacy/current source variants.
+A separate metadata utility read 1825 retained module headers, without
+importing their declarations, and determined the precise circle dependency
+closure. J8765 is an excluded utility elaboration failure; J8766/J8768 pass
+(metadata only, no mathematical theorem). Forty missing retained objects
+were copied into Env J; **zero existing source files or objects were
+overwritten**. Exact SHA-256/size/import/sidecar pins are in
+`r4-installed-closure.json`. No object or binary is committed.
+
+The actual native TLS gate `tls-append-v1` fails because Kani reaches
+`pthread_key_create` in std::sys::thread_local::key::unix::create, an
+unsupported foreign call. Exit 1, 4.612 s, 547548 KiB, zero swap. Remaining
+pointer/assertion failures after that unsupported operation are not accepted
+as Rust counterexamples. The original gate and complete logs are retained;
+no TLS stub, axiom, or assumed native-to-owned trace equation is installed.
+
+The existing part-21 success and rejection fixtures are reused unchanged;
+they compare complete ordered request/answer histories and serialized native
+traces, but remain fixtures. Gamma/ordinary/query optimized-shell and caller
+reachability joins from R4 remain explicit, as does native TLS refinement.
+
+
+## Endpoint audit and demonstrated stopping conditions
+
+`shippedProverExperiment` and its two WholeRunJoins are **not constructed**.
+The explicit Rust refinement is retained. The new endpoint enlarges the
+fixed bad event and error allowance; it does not discharge or hide the
+source obligation and does not narrow the Rust source residual.
+
+The demonstrated blockers are the direct BTreeMap source-gate formula
+pressure near MemoryHigh and reachable unsupported native TLS. The
+remaining deliverables are a universal source/library representation join,
+concrete remaining sampler-policy/row/caller/error/retry assembly, and the
+adaptive shared-oracle fuel-tape/history adapter, before either WholeRunJoin
+can be honestly constructed. No proof of the model compared with itself is
+substituted for a source instance.
+
 
 ## Stage 1 endpoint statements — verbatim
 
