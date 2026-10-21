@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 0417); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostTapeCoupling.lean:22:33: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?e ((Equiv.symm ?e) ?x)
+in the target expression
+  (fun u i => u ((Fintype.equivFin I).symm i)) ((fun u i => u ((Fintype.equivFin I) i)) u) i = u i
+
+I U : Type
+inst✝ : Fintype I
+u : Fin (Fintype.card I) → U
+i : Fin (Fintype.card I)
+⊢ (fun u i => u ((Fintype.equivFin I).symm i)) ((fun u i => u ((Fintype.equivFin I) i)) u) i = u i
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostTapeCoupling.lean:23:34: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Equiv.symm ?e) (?e ?x)
+in the target expression
+  (fun u i => u ((Fintype.equivFin I) i)) ((fun u i => u ((Fintype.equivFin I).symm i)) u) i = u i
+
+I U : Type
+inst✝ : Fintype I
+u : I → U
+i : I
+⊢ (fun u i => u ((Fintype.equivFin I) i)) ((fun u i => u ((Fintype.equivFin I).symm i)) u) i = u i
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostTapeCoupling.lean:47:10: error: Application type mismatch: The argument
+  batch_uniform 2147483647 8 (Fintype.card Coordinates)
+has type
+  MP (batchComplete 2147483647 8 (Fintype.card Coordinates))
+but is expected to have type
+  MP fun x => x
+in the application
+  mp_comp (batch_uniform 2147483647 8 (Fintype.card Coordinates))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostTapeCoupling.lean:47:67: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostTapeCoupling.lean:77:28: error(lean.unknownIdentifier): Unknown identifier `mass`
+
+Note: It is not possible to treat `mass` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostTapeCoupling.lean:94:6: error(lean.unknownIdentifier): Unknown identifier `tapes_uniform`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostTapeCoupling.lean:91:46: error: unsolved goals
+real : (Fin (Fintype.card Coordinates) → M31Source 8) → ℚ
+ideal : (Fin 8 → Tape K F) → ℚ
+hr : ∀ (r : Fin (Fintype.card Coordinates) → M31Source 8), 0 ≤ real r ∧ real r ≤ 1
+hi : ∀ (t : Fin 8 → Tape K F), 0 ≤ ideal t ∧ ideal t ≤ 1
+ha :
+  ∀ (r : Fin (Fintype.card Coordinates) → M31Source 8),
+    ¬bad 8 (Fintype.card Coordinates) r → real r = ideal (completeTapes r)
+hb : |mean real - mean fun r => ideal (completeTapes r)| ≤ FsAbort.eventMass (bad 8 (Fintype.card Coordinates))
+⊢ |mean real - mean ideal| ≤ 1 / 2 ^ 120
+'R1Z.SimCostTapeCoupling.enumerateEquiv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostTapeCoupling.pairTapeEquiv' depends on axioms: [Quot.sound]
+'R1Z.SimCostTapeCoupling.tapeEquiv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostTapeCoupling.lean:100:14: error(lean.unknownIdentifier): Unknown constant `tapes_uniform`
+'R1Z.SimCostTapeCoupling.aff_agrees' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostTapeCoupling.eligible_agrees' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostTapeCoupling.sample_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostTapeCoupling.sample_count_small' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostTapeCoupling.tape_failure_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostTapeCoupling.tape_source_draws' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostTapeCoupling.tape_observer_transfer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.65
+	Maximum resident set size (kbytes): 4105268
+	Swaps: 0
+	Exit status: 1
+
+
