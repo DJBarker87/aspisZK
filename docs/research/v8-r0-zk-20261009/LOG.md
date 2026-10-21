@@ -7493,3 +7493,18 @@ full caller transport and universal read coverage. The scalar-summary,
 four-coordinate and balancing comparisons hit 600 s timeouts and were not
 rerun. All nine source checklist rows stay open. This endpoint builds on the
 Quotient line; it should be folded into the D106 privacy headline.
+
+## D111 — wire batch and ordered-log premises discharged (2026-10-21, lead)
+
+Landed from `codex/cx-priv-wirelog2-20261021` (`r1p-final/WIRELOG-20261021.md`).
+Per D108, `PrivacyR1HeadlineWire2.privacy_headline_wire2` (built on D106's
+`PrivacyR1HeadlineAcct`) fixes the S2 transport, the logical log, the fibres
+and the openings to the protocol's own encoding (logical opening batches and
+disclosed leaf encoding are constructed), proves `R_wire_D80_batches` and
+`R_wire_D80_ordered_log` symbolically, and removes both (deletion-only diff
+after the specialisation). Env J 9740/9741, standard axioms, zero swap. The
+residual is one named source join, `PhaseWireLog2Bin.RustSerializationJoin`:
+Rust's complete ordered serialisation equals that logical encoding, including
+the finite-set ordering and batch split. Current privacy headline:
+`PrivacyR1HeadlineWire2.privacy_headline_wire2`. D110's caller law is on a
+sibling line and still needs folding in.
