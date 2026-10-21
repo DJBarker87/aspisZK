@@ -7613,3 +7613,17 @@ cache/byte-load correspondence with `wordsE`, complete shipped outer-caller
 transport, and all-family shipped read coverage. The nine-block Kani ROM is
 proved insufficient for whole-array certification. These are the prover-side
 execution join, so the prover track pauses here after ten parts.
+
+## D119 — simulator cost pass 4; track paused (2026-10-21, lead)
+
+Landed from `codex/cx-sim-cost4-20261021` (`r1p-final/SIM-COST3-20261021.md`):
+an explicit lazy-cache implementation with exact erasure; an unconditional
+protocol cache byte-work bound C·(n+1)² relative to the adversary's query
+input length, with a matching fixed-preparation source law; and
+certification of the M31/QM31 arithmetic batch stages under the existing
+tariffs and the 417,792-coordinate bound. 4 modules, 20 theorems, standard
+axioms, zero swap. `sim_preparation` stays open: operation counts for the full
+preparation formulas, actual WideExact arithmetic, predicate/retry and
+encoding composition, callback certificates, and the whole-experiment source
+join. This env-J attempt range is exhausted, so the track pauses until a new
+range is allocated.
