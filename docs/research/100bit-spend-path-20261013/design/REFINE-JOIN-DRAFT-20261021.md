@@ -178,3 +178,38 @@ input, and adds one read after each rejection. The new source satisfies
 ExecutionRefinement but fails ExecutionJoin. This strengthens the earlier
 conditional strictness construction to the concrete model without assuming
 that a rejecting input exists.
+
+## Verification and handoff
+
+Eight new modules compile together; 28 new theorems each have a successful
+standard-axiom audit. The final current receipts contain 43 axiom reports,
+all subsets of {propext, Classical.choice, Quot.sound}. There were 17 focused
+attempts, ten successes and seven corrected elaboration failures. Failed
+compiler-recovery sorryAx lines are retained in failed logs only and are not
+accepted proof evidence. Peak RSS across attempts is 3,648,192,512 bytes;
+every attempt reports zero swaps. Final combined import
+`OraclePortRefineJoinFreeze`, attempt 2: exit 0, 3.9759890832938254 seconds,
+3,568,189,440-byte peak RSS, zero swaps.
+
+Each receipt records exact target/command, exit, wall time, RSS, swap, source
+revision/SHA-256, direct-import hashes, dependency/environment fingerprint,
+full axiom lines and errors. Compilation used the prescribed local -M4400,
+-j1, disabled asynchronous elaboration, shared mkdir lock, and a private object
+directory. The extra final import was justified by adding the concrete
+extractor-input transport module, not an unchanged regression rerun.
+
+Run the read-only audit with `python3 -B tools/oracle-port-refine-join/audit.py`.
+`source-pins.json` pins new sources and the unchanged R19/model/runtime inputs;
+`audit-result.json` records additive scope and receipt checks. These checks
+reuse historical cached imports read-only; this is not a coherent frozen
+release-manifest replay. No generated certificate, package-wide Lean replay,
+Rust rebuild, wallet/key operation, push, merge or deployed change occurred.
+
+Remaining work is explicit: prove the general frozen accepted-slot/tree and
+read-multiset correspondence; prove transcript/commitment-cut and recovered
+word preservation for the accepted two-pass source annotations; then derive
+the requested headline with only the advertised replacement premise and
+compile its exact signature diff. The current candidate diff is prominently
+marked **UNPROVED**, and no premise removal is claimed. The generic recovery
+countermodels identify why a black-box log-containment rewrite cannot close
+that consumer proof; they are not a full-verifier impossibility result.

@@ -1,0 +1,25 @@
+import OraclePortRefineJoinStrict
+import OraclePortRefineJoinSlot
+import OraclePortRefineJoinCones
+import OraclePortRefineJoinExtractionTransport
+import OraclePortRefineJoinRecoveryObstruction
+
+/-! Compatible final focused import audit. This packet does not establish
+OraclePortHeadlineRefine or the general frozen-slot acceptance refinement.
+No coherent frozen release-manifest replay is claimed. -/
+#print axioms AspisR1.OraclePortRefineJoin.execution_join_refines
+#print axioms AspisR1.OraclePortRefineJoin.execution_refinement_strict
+#print axioms AspisR1.OraclePortRefineJoin.accepted_budget
+#print axioms AspisR1.OraclePortRefineJoin.accepted_no_extra
+#print axioms AspisR1.OraclePortRefineJoin.acceptance_failure_bound
+#print axioms AspisR1.OraclePortRefineJoin.execution_refinement_of_cones
+#print axioms AspisR1.OraclePortRefineJoin.short_refines
+#print axioms AspisR1.OraclePortRefineJoin.accepted_child_counterexample
+#print axioms AspisR1.OraclePortRefineJoinSlot.padding_guard_erasure
+#print axioms AspisR1.OraclePortRefineJoinSlot.accepted_leaf_log
+#print axioms AspisR1.OraclePortRefineJoinSlot.successful_levels
+#print axioms AspisR1.OraclePortRefineJoinRecoveryObstruction.recovery_transfer_counterexample
+#print axioms AspisR1.OraclePortRefineJoinRecoveryObstruction.cut_permutation_counterexample
+
+#print axioms AspisR1.OraclePortRefineJoin.extractor_eq_of_recovered_inputs
+#print axioms AspisR1.OraclePortRefineJoin.failureMass_le_of_recovered_inputs
