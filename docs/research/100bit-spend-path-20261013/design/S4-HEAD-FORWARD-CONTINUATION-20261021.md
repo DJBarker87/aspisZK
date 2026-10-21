@@ -560,3 +560,24 @@ S4 closure. The local validation-to-parser join, actual source/driver
 installation of upstream bindings, candidate adoption/final artifact pins
 and the final coherent release replay remain open. The 100-bit goal is
 not yet established.
+
+## Actual callback output meaning and validation scope correction
+
+`AspisR1FastDotsV10CallbackOutputFieldResultsV1.concrete_candidate_dots_success_has_endpoint_fields`
+identifies the actual candidate callback's returned array with the canonical
+four-value array and its four literal field results. It consumes the existing
+fullArrayToCurrent g = claimArrayToFast claimPowers identity; the additional
+V10 input map is derived, not supplied. No successful old/P6 callback is
+assumed. Focused compile: exit0,29.682s,peak process RSS3,914,432,512 bytes,
+zero swaps,standard axioms. Packet:
+`evidence/s4-v10-callback-output-field-results-v1-20261021`.
+
+Correction to the validation subtask: private fast_pairing checked_q accepts
+a QM31 value and calls Q::from_limbs(limbs_of(k)); limbs_of projects its four
+existing field coordinates. It does not call U32::from_le_bytes. A separate
+green byte-codec validation/parser lemma does not establish this actual
+child dispatch, and its missing resource receipt prevents a release claim.
+It remains candidate-only. The active proof target is the exact candidate
+checked_q/limbs_of path on the current scalar carrier, reusing the retained
+four-comparison validation theorem and canonical coordinate bounds.
+This supersedes treating a byte-decoder seam as the critical checked_q gap.

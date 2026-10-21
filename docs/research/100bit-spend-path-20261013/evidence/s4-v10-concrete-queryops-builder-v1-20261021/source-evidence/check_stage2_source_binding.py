@@ -38,7 +38,8 @@ assert pins['extraction_source_hashes_match_final_revision'] is True
 assert pins['llbc']['sha256']==llbc['sha256']
 assert next(x for x in pins['generated_files'] if x['path'].endswith('/Funs.lean'))['sha256']==sha(r/'generated-Funs.lean')
 # Verify the exact generator transforms still reconstruct the checked source modules from the pinned emitted bodies.
-E=Path('/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/evidence/stage2-continuation-20261020/harness')
+repo=next(parent for parent in r.parents if (parent/'crates/aspis-r1-cost-probe/Cargo.toml').is_file())
+E=repo/'docs/research/100bit-spend-path-20261013/evidence/stage2-continuation-20261020/harness'
 subprocess.run(['python3',str(E/'prepare-query-advance.py'),'--check'],check=True)
 subprocess.run(['python3',str(E/'prepare-loop-fact.py'),'--check'],check=True)
 subprocess.run(['python3',str(r/'check_query_callsite.py')],check=True)
