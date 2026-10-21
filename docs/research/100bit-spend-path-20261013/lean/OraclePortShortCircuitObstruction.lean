@@ -1,0 +1,88 @@
+import OraclePortShortCircuitCore
+
+/-! Concrete schedule obstructions. Frozen coordinates:
+candidate.rs:180-195 hashes sorted leaves (checking duplicates immediately),
+196-200 then checks count/padding, 202 calls verify_in_place;
+multiproof.rs:151-193 hashes parents level by level after all those leaves.
+compact.rs:139-144 check_values returns at the first noncanonical chunk;
+candidate.rs:55 invokes it before prepare (278) or batch_merkle (282).
+These small programs expose exactly the relevant source ordering cuts, not
+an extracted whole-verifier theorem or a reachable full stored-proof witness. -/
+set_option autoImplicit false
+namespace AspisR1.OraclePortShortCircuitObstruction
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OracleDecisionMultiTree
+
+/-- A leaf is hashed before the source can reject nonzero slot padding. -/
+def sourcePaddingReject (leaf : Bytes) : Program Bytes State Bool :=
+  .ask leaf fun _ => .done false
+
+/-- dV's global Padding guard rejects before calling any slot. -/
+def modelPaddingReject : Program Bytes State Bool := .done false
+
+theorem padding_verdict (leaf : Bytes) (H : Bytes → State) :
+    (eval H (sourcePaddingReject leaf)).2 = (eval H modelPaddingReject).2 := rfl
+
+theorem padding_not_prefix (leaf : Bytes) (H : Bytes → State) :
+    ¬ (eval H (sourcePaddingReject leaf)).1 <+: (eval H modelPaddingReject).1 := by
+  intro hp
+  have bound := hp.length_le
+  simp only [sourcePaddingReject,modelPaddingReject,eval,List.length_cons,
+    List.length_nil] at bound
+  omega
+
+/-- Source order for leaves at 0 and 2 of a depth-two tree: both leaves,
+then the left parent, then the root. Right sibling digests are supplied.
+This is the minimal nontrivial sorted-leaf/level-order cut. -/
+def sourceTwo (a b : Bytes) (z : State) : Program Bytes State State :=
+  .ask a fun da => .ask b fun db =>
+    .ask (BinMerkle32Path.nodeInput (children da z)) fun left =>
+      .ask (BinMerkle32Path.nodeInput (children db z)) fun right =>
+        .ask (BinMerkle32Path.nodeInput (children left right)) fun root => .done root
+
+def modelTwo (a b : Bytes) (z : State) :=
+  OraclePortBatchDraft.execute (.branch (.branch (.opened a) (.supplied z))
+    (.branch (.opened b) (.supplied z)))
+
+theorem two_root_eq (a b : Bytes) (z : State) (H : Bytes → State) :
+    (eval H (sourceTwo a b z)).2 = (eval H (modelTwo a b z)).2.1 := by
+  rfl
+
+/-- Distinct second addresses already disprove prefix inclusion even though
+both executions compute the same Merkle root in every oracle world. -/
+theorem two_not_prefix (a b : Bytes) (z : State) (H : Bytes → State)
+    (different : b ≠ BinMerkle32Path.nodeInput (children (H a) z)) :
+    ¬ (eval H (sourceTwo a b z)).1 <+: (eval H (modelTwo a b z)).1 := by
+  intro hp
+  obtain ⟨suffix,eq⟩ := hp
+  have lengths := congrArg List.length eq
+  simp only [sourceTwo,modelTwo,OraclePortBatchDraft.execute,eval_bind,eval,
+    List.length_append,List.length_cons,List.length_nil] at lengths
+  have empty : suffix = [] := by cases suffix <;> simp_all
+  subst suffix
+  simp only [List.append_nil] at eq
+  have second := congrArg (fun xs => (xs[1]?).map Prod.fst) eq
+  simp only [sourceTwo,modelTwo,OraclePortBatchDraft.execute,eval_bind,eval,
+    List.nil_append,List.cons_append,List.append_nil,List.getElem?_cons_succ,
+    List.getElem?_cons_zero,Option.map_some,Option.some.injEq] at second
+  exact different second
+
+/-- A concrete byte-address instance: a node starts with 0x12, while b
+starts with 0x11. This uses a tiny list, no large recurrence evaluation. -/
+theorem concrete_two_not_prefix (H : Bytes → State) (z : State) :
+    ¬ (eval H (sourceTwo [0x10] [0x11] z)).1 <+:
+      (eval H (modelTwo [0x10] [0x11] z)).1 := by
+  apply two_not_prefix
+  intro same
+  have head := congrArg List.head? same
+  change some (0x11 : AspisV8R19.DuplexFrames.Byte) = some (0x12 : AspisV8R19.DuplexFrames.Byte) at head
+  contradiction
+
+#print axioms padding_verdict
+#print axioms padding_not_prefix
+#print axioms two_root_eq
+#print axioms two_not_prefix
+#print axioms concrete_two_not_prefix
+end AspisR1.OraclePortShortCircuitObstruction
