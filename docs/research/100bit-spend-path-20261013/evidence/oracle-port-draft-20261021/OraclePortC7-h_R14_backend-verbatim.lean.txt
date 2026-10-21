@@ -1,0 +1,9 @@
+    (h_R14_backend : ∀ H,
+      ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1161)
+        (eval H (OraclePortExperiment.recorded D (dV s) (pairProver s P))) →
+      FS2.accepts (eval H (OraclePortExperiment.original D (dV s) (pairProver s P))) →
+      LiteralPairingChecks.checks (OraclePortConsumer.compiledRows D (dV s) (pairProver s P) H) ∧
+      ∀ q : Fin 22 → Fin 262144,
+        LiteralQueryRead.decode (source H).queryBytes = some q →
+        HchecksAccumulator.ClosedSum LiteralOpeningView.eK (source H).data q
+          (SelectedChallengeMap.rhoOf (source H).rho))

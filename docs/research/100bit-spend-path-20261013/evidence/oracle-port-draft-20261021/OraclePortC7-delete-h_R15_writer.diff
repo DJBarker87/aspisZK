@@ -1,0 +1,16 @@
+--- before
++++ after
+@@ -1,13 +1,6 @@
+     (D : LiteralByteProtocol.Decoder) (s : Bytes) (P : OraclePortStoredExperimentC4.Prover)
+     (Q : Nat) (hqueries : ∀ H : Bytes → State, (eval H P).1.length ≤ Q)
+     (source : (Bytes → State) → SourceInputs)
+-    (h_R15_writer : ∀ H,
+-      ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1161)
+-        (eval H (OraclePortExperiment.recorded D (dV s) (pairProver s P))) →
+-      FS2.accepts (eval H (OraclePortExperiment.original D (dV s) (pairProver s P))) →
+-      ∀ q : Fin 22 → Fin 262144,
+-        LiteralQueryRead.decode (source H).queryBytes = some q →
+-        ∀ j, MatchingSupport.match0 (source H).data (q j))
+     (h_R3_semantic : ∀ H,
+       ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1161)
+         (eval H (OraclePortExperiment.recorded D (dV s) (pairProver s P))) →

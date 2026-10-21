@@ -31,7 +31,7 @@ module = sys.argv[1]
 source = PACKET / 'lean' / (module + '.lean')
 baseline = json.loads((HERE / 'OraclePortStoredAcceptanceC6-1/command.json').read_text())
 path = str(OBJECTS) + ':' + baseline['lean_path']
-if module == 'OraclePortHeadlineDVC7':
+if module in {'OraclePortHeadlineDVC7', 'OraclePortFreezeC7'}:
     pin = json.loads((HERE / 'OraclePortC7M10ImportPin.json').read_text())
     path = str(OBJECTS) + ':' + pin['command']['lean_path'] + ':' + baseline['lean_path']
 imports = []

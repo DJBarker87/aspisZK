@@ -1,0 +1,15 @@
+--- before
++++ after
+@@ -1,12 +1,6 @@
+     (D : LiteralByteProtocol.Decoder) (s : Bytes) (P : OraclePortStoredExperimentC4.Prover)
+     (Q : Nat) (hqueries : ∀ H : Bytes → State, (eval H P).1.length ≤ Q)
+     (source : (Bytes → State) → SourceInputs)
+-    (h_R3_semantic : ∀ H,
+-      ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1161)
+-        (eval H (OraclePortExperiment.recorded D (dV s) (pairProver s P))) →
+-      FS2.accepts (eval H (OraclePortExperiment.original D (dV s) (pairProver s P))) →
+-      HchecksReaderComposition.SemanticEndpoint (source H).decoded
+-        (OraclePortConsumer.compiledRows D (dV s) (pairProver s P) H) (source H).data)
+     (h_Rwire_tag : ∀ H,
+       ¬ RecordedBinaryExperimentBin.binaryCollision (Q+1161)
+         (eval H (OraclePortExperiment.recorded D (dV s) (pairProver s P))) →
