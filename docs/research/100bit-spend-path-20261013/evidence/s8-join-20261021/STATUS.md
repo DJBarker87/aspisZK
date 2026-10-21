@@ -153,3 +153,54 @@ reached q and reader-derived i/rho on a frozen accepted run, with no clean-log
 or S8 premise. `accepted_model_caller` supplies the old P6 conditions at that
 same logical state. Five standard-axiom audits pass (frozen-arithmetic-03).
 No headline premise was deleted.
+
+## Exact remaining handoff
+
+To instantiate the source S8 join, S7/checkpoint/caller must supply, for each
+actual reached finish state `pending` and destination `destination`:
+
+```
+destination.length = 64
+destination.length ≤ pending.raw.length
+∀ (l : Fin 64) r, pending.raw.val[l.val]? = some r →
+  S8JoinFinishField.rawValue r =
+    (S7JoinAccumulatorReference.run LiteralOpeningView.eK i.data q
+      (SelectedChallengeMap.rhoOf i.rho)).weights l
+```
+
+The `i`, `q`, rho, old weights, rhs and both source transaction intervals
+must be bound to the same accepted stored proof/prepared/checkpoint state.
+Then `S8JoinRawCongruence.mutable_finish_eq` supplies exact canonical output
+list equality, without source phase, term-count, raw-range, unused-suffix or
+old-cell hypotheses. The source caller must compose its two writes and the
+concrete finish_relation/dot consumer. The logical model construction is not
+silently substituted for that source state. The retained unsafe-iterator P6
+representation boundary is also unchanged.
+
+Consequently no whole-source `ConeLogJoin .s8`, `AcceptedRunJoin` inhabitant,
+headline premise deletion or frozen release replay is claimed. The headline
+source is unchanged. No shipped crate/program, protected candidate, sibling
+module, wallet or ELF was edited; no SBF rebuild or new host gate is needed.
+
+## Stage 10 — final focused audit and audit-row update
+
+`S8JoinPacketAudit.checked_reference` composes the supplied P6 certificate,
+total reference decision equality and all-input scan equality. Its final
+focused compile imports all twelve new modules and audits every new theorem.
+This is a focused cached-dependency check, not a coherent frozen release
+manifest replay or a Rust execution-join inhabitant.
+
+Target: `S8JoinPacketAudit`; exit `0`; wall `14.885764s`;
+peak RSS `3602546688` bytes; swaps `0`; source revision
+`f9d4a503eb8472ccd64c4f9592e8e500ee6017f9`; source SHA-256
+`3e8015d780070a22cb0dc7385f624b82dc1f0aa8ee1f16c2cbe8fd923dc5e7a3`. All 45 final audit lines use subsets of
+`[propext, Classical.choice, Quot.sound]`. Exact commands, import hashes,
+dependency fingerprints, source snapshots, timings and full audit/errors
+are retained in `manifest.json` and `proofs/`.
+
+`preflight.py` and `validate.py` pass: final-source receipts for 12 modules,
+45 distinct theorem audits (89 including the focused final repeats), zero
+swap, inherited S8 owner/reference pins unchanged, sibling S7 dependency
+validated, and the frozen headline source byte-identical to the worker base.
+`git diff --check` passes. Only the S8 row of CONE-AUDIT was updated.
+No complete source-cone closure or security premise removal is claimed.
