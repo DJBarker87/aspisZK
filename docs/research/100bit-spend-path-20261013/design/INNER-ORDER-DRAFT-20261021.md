@@ -77,3 +77,52 @@ guarded theorem and source/caller invariants first. The compiled raw-helper
 counterexample does not establish that such a corrected theorem is false.
 No premise is deleted or retargeted, so no premise-deletion signature diff is
 claimed. R19 and the existing draft endpoints remain byte-identical.
+
+## Stage 4: handoff and reproducible audit
+
+Inspected source mapping (all under `crates/aspis-r1-cost-probe/src/`):
+
+| Frozen source | New definition |
+| --- | --- |
+| `candidate.rs:92–113` sorted index/position keys | `sortedPositions` |
+| `candidate.rs:173–195` sorted leaf loop and duplicate exit | `hashLeaves` |
+| `multiproof.rs:54–59,85–110` well-formed/count | `wellFormed`, `countLevel`, `nodeCount` |
+| `candidate.rs:196–202` count/capacity/zero padding | `slotTail` |
+| `multiproof.rs:147–169,187–193` binary live-prefix loop and final comparison | `runLevel`, `runLevels`, `verifyInPlace` |
+
+The list representation, Nat arithmetic, and logical conjunction in the pure
+final check require a future refinement theorem under the source live-prefix
+invariants. The intended equivalence of pair tests uses strictly increasing
+indices. No proof of source checked-integer totality, stable-sort refinement,
+or full parser/caller reachability is included. The definition covers the
+binary branch only; it does not purport to model the eight-way branch.
+
+All four new modules compile. There are 19 new theorems and 23 accepted
+axiom reports, all subsets of {propext, Classical.choice, Quot.sound}.
+The five receipts include four successes and the corrected elaboration
+failure. Peak RSS is 3,650,830,336 bytes; every attempt reports zero swaps.
+Final focused import `OraclePortInnerOrderFreeze`, attempt 1: exit 0,
+10.607074750121683 seconds, peak RSS 3,558,785,024 bytes, zero swaps.
+Each receipt includes exact command/target, source revision and SHA-256,
+direct-import hashes, dependency/environment fingerprint, exit, wall time,
+RSS, swaps, complete axiom lines and errors. The local cap is -M4400,
+with the prescribed shared mkdir lock and private object directory.
+
+This reuses historical cached imports read-only and is **not** a coherent
+frozen manifest replay. No full regression, Rust suite or build-host job was
+launched. The false helper statement is the obstruction; larger resource
+limits would not repair it.
+
+Run the read-only audit with:
+
+```sh
+python3 -B tools/oracle-port-inner-order/audit.py
+```
+
+`frozen-sources.json` pins the final new Lean sources and unchanged inspected
+source/model/headline files. The audit checks additive scope, final source and
+receipt hashes, standard axioms and every new theorem's audit report. No
+existing Lean module, S1/S3/S4/S5/S9/S10 candidate or M10 instrumentation file
+was changed. No wallet/key operation, push, merge or deployment occurred.
+The lead must retain this as an unmerged draft pending user approval of the
+port. The proposed corrected theorem and the endpoint remain open.
