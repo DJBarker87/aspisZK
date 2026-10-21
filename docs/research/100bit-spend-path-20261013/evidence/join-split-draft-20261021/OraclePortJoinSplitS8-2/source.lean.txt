@@ -1,0 +1,37 @@
+import S8FrozenRow
+
+/-! S8 local row certificate on its exact typed domain. This is not a
+totality theorem for arbitrary raw vectors, check_values or finish. -/
+set_option autoImplicit false
+namespace AspisR1.OraclePortJoinSplitS8
+open Aeneas Aeneas.Std Result ControlFlow
+
+structure RowArgs where
+  limbs : Array U32 4#usize
+  iter : core.ops.range.Range Usize
+  iterNext : core.ops.range.Range Usize
+  basis : U32
+  limb : U32
+  j : Usize
+  terms : Usize
+  old : Array U64 4#usize
+  previous : U64
+  next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some j, iterNext)
+  indexBound : j.val < 4
+  limbRead : Array.index_usize limbs j = ok limb
+  limbCanonical : limb.val < AspisV8R17.RawReducer.P
+  basisCanonical : basis.val < AspisV8R17.RawReducer.P
+  cadence : previous.val < 2^34 + (terms.val%4) * AspisR1BatchedAllPrefix.cap
+  rawRead : Array.index_usize old j = ok previous
+
+theorem row_total (a : RowArgs) :
+    ∃ product : U64, ∃ updated : Array U64 4#usize,
+      a.limb.val * a.basis.val = product.val ∧
+      S8FrozenRow.verifier.update_residue_row_loop0.body a.limbs a.iter a.old a.basis =
+        ok (.cont (a.iterNext, updated, a.basis)) :=
+  S8FrozenRow.row_step_total a.limbs a.iter a.basis a.j a.iterNext a.limb a.old
+    a.previous a.terms a.next a.indexBound a.limbRead a.limbCanonical
+    a.basisCanonical a.cadence a.rawRead
+
+#print axioms row_total
+end AspisR1.OraclePortJoinSplitS8

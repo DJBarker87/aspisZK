@@ -1,0 +1,85 @@
+import OraclePortJoinSplitCore
+
+/-! The actual C7 decision stages, as distinct from the frozen source call
+graph. This exposes the concrete target of CompositionOrderingJoin.model_order.
+All stages quantify over rejected inputs too. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortJoinSplitDecision
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft
+open OraclePortStoredExperimentC4 OraclePortStoredConsumerC7 OraclePortRuntimeBindingC7
+open RawCutTranscriptRun (ErasedPrefix ErasedMessage)
+attribute [local instance] Classical.propDecidable
+
+abbrev Queries := Fin 22 → Fin 262144
+
+structure Stages where
+  guard : ErasedPrefix → Bool
+  parser : Bytes → ErasedPrefix → Option Parsed
+  query : ErasedPrefix → Option Queries
+  padding : Parsed → Queries → Bool
+  merkle : Parsed → Queries → Program Bytes State Bool
+  arithmetic : Parsed → Queries → ErasedPrefix → Bool
+
+def run (stages : Stages) : Decision := fun stored tr _ =>
+  if stages.guard tr then
+    match stages.parser stored tr, stages.query tr with
+    | some p, some q => if stages.padding p q then
+        bind (stages.merkle p q) fun ok => .done (ok && stages.arithmetic p q tr)
+      else .done false
+    | _, _ => .done false
+  else .done false
+
+def model : Stages where
+  guard := fun tr => decide (OraclePortAdmission.Guard tr)
+  parser := OraclePortStoredParserC4.parseReached
+  query := queries
+  padding := fun p q => decide (Padding p q)
+  merkle := fun p q => verifySlots p q slots
+  arithmetic := OraclePortStoredDecisionDraftC4.arithmetic
+
+structure StageJoins (source target : Stages) : Prop where
+  guard : ∀ tr, source.guard tr = target.guard tr
+  parser : ∀ stored tr, source.parser stored tr = target.parser stored tr
+  query : ∀ tr, source.query tr = target.query tr
+  padding : ∀ p q, source.padding p q = target.padding p q
+  merkle : ∀ p q, source.merkle p q = target.merkle p q
+  arithmetic : ∀ p q tr, source.arithmetic p q tr = target.arithmetic p q tr
+
+theorem run_eq (source target : Stages) (join : StageJoins source target)
+    (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage) :
+    run source stored tr m = run target stored tr m := by
+  simp only [run, join.guard, join.parser, join.query, join.padding,
+    join.merkle, join.arithmetic]
+
+theorem model_eq (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage) :
+    run model stored tr m = dV stored tr m := by
+  simp only [run, model, OraclePortStoredConsumerC7.dV,
+    OraclePortStoredDecisionDraftC4.decision, decide_eq_true_eq]
+  rfl
+
+theorem decision_eq (source : Stages) (join : StageJoins source model) :
+    run source = dV := by
+  funext stored tr m
+  exact (run_eq source model join stored tr m).trans (model_eq stored tr m)
+
+/-- The source transcript driver still needs all decoder, sampler, row-order,
+checkpoint and caller bindings. A decision equality cannot supply that fact. -/
+def DriverJoin (D : LiteralByteProtocol.Decoder) (rust : Verifier) (source : Stages) : Prop :=
+  ∀ i, rust i = verifier D (run source) i
+
+theorem executionJoin (D : LiteralByteProtocol.Decoder) (rust : Verifier)
+    (source : Stages) (stages : StageJoins source model)
+    (driver : DriverJoin D rust source) : ExecutionJoin D rust := by
+  intro i
+  rw [driver i, decision_eq source stages]
+
+#print axioms run_eq
+#print axioms model_eq
+#print axioms decision_eq
+#print axioms executionJoin
+end AspisR1.OraclePortJoinSplitDecision
+end

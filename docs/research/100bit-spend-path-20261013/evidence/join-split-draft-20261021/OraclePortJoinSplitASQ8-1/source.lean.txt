@@ -1,0 +1,34 @@
+import ASQ8PoolHandoff
+
+/-! Consume the landed ASQ8 reference results without inventing a kernel
+proof of the Kani source/reference equality. Account/runtime binding is absent
+from this local codec certificate and remains a separate Pool obligation. -/
+set_option autoImplicit false
+namespace AspisR1.OraclePortJoinSplitASQ8
+open Aeneas Aeneas.Std Result
+open AspisR20Request ASQ8Normalization pool_v1.pair_forest_terminal
+
+abbrev Outcome := core.result.Result Bytes r0.Error
+
+/-- Exact complete-Result P6 contract of shipped_pipeline_normalization_equivalence.
+Rejections must agree as well as successes. -/
+def P6Normalization (source : Bytes → Result Outcome) : Prop :=
+  ∀ bytes, source bytes = normalize_pool_v1_pair_forest_terminal_request_reference_v1 bytes
+
+theorem normalized_bytes (source : Bytes → Result Outcome) (p6 : P6Normalization source)
+    (bytes out : Bytes) (accepted : source bytes = ok (.Ok out)) : out = bytes :=
+  ASQ8Normalization.success_bytes bytes out ((p6 bytes).symm.trans accepted)
+
+theorem pool_handoff (source : Bytes → Result Outcome) (p6 : P6Normalization source)
+    (payload : Slice U8) (bytes out : Bytes) (a b c d : U8)
+    (suffix : payload.val = bytes.val ++ [a,b,c,d])
+    (accepted : source bytes = ok (.Ok out)) :
+    ∃ body hints,
+      AspisR20Pool.pair_forest.split_pair_forest_terminal_bump_hints_v1 payload =
+        ok (.Ok (body,hints)) ∧ body.val = out.val :=
+  ASQ8PoolHandoff.handoff_bytes payload bytes out a b c d suffix
+    ((p6 bytes).symm.trans accepted)
+
+#print axioms normalized_bytes
+#print axioms pool_handoff
+end AspisR1.OraclePortJoinSplitASQ8

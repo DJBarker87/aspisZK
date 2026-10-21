@@ -30,7 +30,10 @@ def lean_processes():
 module = sys.argv[1]
 source = PACKET / 'lean' / (module + '.lean')
 baseline = json.loads((HERE.parent / 'oracle-port-draft-20261021/OraclePortHeadlineDVC7-1/command.json').read_text())
-path = str(OBJECTS) + ':' + baseline['lean_path']
+config = json.loads((Path(__file__).with_name('cache-paths.json')).read_text())
+selected = config.get(module)
+selected_path = json.loads((HERE.parent / selected).read_text())['lean_path'] if selected else ''
+path = str(OBJECTS) + ':' + selected_path + ':' + baseline['lean_path']
 # Additional historical focused paths are supplied explicitly, and all selected
 # direct import hashes are recorded below; shared objects are never overwritten.
 path += ':' + os.environ.get('JOIN_SPLIT_EXTRA_PATH', '')
