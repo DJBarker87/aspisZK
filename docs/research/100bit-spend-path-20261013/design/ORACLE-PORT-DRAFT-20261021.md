@@ -5,6 +5,18 @@ This branch is a draft for lead/user review. It changes no existing Lean
 module, deployed verifier, candidate pin or M10 instrumentation. Do not merge
 it as a completed frozen-verifier soundness endpoint.
 
+## Continuation status
+
+The continuation adds a strict compact parser, query-selected occupied trees,
+actual duplicate-digest comparisons, sparse sibling accounting, physical
+checkpoint **framing**, selected typed-slot transport and generalized decoder
+completion. `OraclePortPrefixHeadlineDraft.final_soundness` removes the
+independent completion binder at an admitted decision, retaining
+`CheckedAcceptance`. No completed frozen `dV` is asserted. The historical
+status and receipts below describe the first packet; the continuation results
+and remaining obligations are distinguished in “What remains, without
+relabelling” and the continuation receipt summary.
+
 ## Status: partial port; frozen dV not constructed
 
 The general oracle-decision carrier, compiler/replay, binary clean-model
@@ -238,18 +250,48 @@ layer, not premise deletions from the old headline.
 
 ### What remains, without relabelling
 
-1. Construct the full compact-proof parser at the erased terminal interface:
-   fixed header, canonical field scans, compact expansion, precise row/public
-   alignment, six occupied depth-18 trees, duplicate checks, sibling padding
-   and checkpoint/resume framing. Bind the physical header tag to `Public.tag`.
-2. Prove selected-leaf/typed-reader transfer at the canonical compiled rows,
-   yielding the quoted `TypedBinding`, then `CheckedAcceptance`. Recovering a
-   selected leaf is now proved; assembling all semantic and matching data
-   from those equalities remains a mathematical model step.
-3. Port sampler-prefix decoder completion to the new trace: establish
-   `OraclePortConsumer.Completion`. No universal zero-terminal-start claim
-   is needed or asserted. The old whole-log canonicality shortcut is invalid
-   for arbitrary terminal byte reads.
+1. **Parser and selected trees implemented; complete checkpoint join still
+   open.** `OraclePortCompactDraft` checks header, canonical limbs, compact
+   expansion and rows 0–32, binding byte 8 to `Public.tag`.
+   `OraclePortSelectedDraft` obtains the 10+12 query positions from row 31,
+   constructs the six depth-18 trees and their 66 source preimages, and uses
+   the sparse level-ordered sibling frontier. `OraclePortCoverageDraft`
+   proves occupancy, selected opened paths and the exact sibling count;
+   fixed padding is checked before hashing. `OraclePortBatchDraft` retains
+   actual leaf digests and compares duplicates, with roots derived from the
+   same parsed row bytes. Physical checkpoint framing and the six stored-byte
+   hash calls are separate in `OraclePortPhysicalFrameDraft`: **the body’s
+   prepared/accumulator fields are not yet derived from the reached ten-query
+   state or composed into this decision**. The full 66-call accounting law
+   and its end-to-end terminal budget are also not yet proved. The earlier
+   supplied-only counterexample is excluded by the new tree construction,
+   not by renaming `Admissible`.
+2. **Selected typed slots and a source-selector obstruction are proved;
+   acceptance-to-typed-arithmetic transfer remains open.** Packed-map
+   agreement transfers through C1/C2 and folded typed slots without asserting
+   equality on unselected coordinates (`OraclePortTypedSlotsDraft`).
+   `OraclePortDataChoiceDraft` proves that R16 fields ignore `.data`, and
+   gives a counterexample to universal typed acceptance from those fields.
+   This refutes that intermediate implication, **not** the full quoted
+   `TypedBinding` target for a future completed verifier. The retained
+   `source` chooser is not known to select the matching reader’s data.
+   `OraclePortReaderSourceDraft.readerSource` binds data to that reader and
+   preserves every R16 field; the old `TypedBinding` implies its quoted
+   `ReaderBinding` replacement. Neither acceptance frontier is proved for
+   the parser/batch decision. Consequently `CheckedAcceptance`, and hence
+   the requested unconditional R13/R15/R3/R14 model discharge at `dV`, remain
+   open. Merely adding a `ReaderBinding` premise would not complete item 2.
+3. **Decoder trace transport proved; independent completion premise removed
+   at the conditional admitted endpoint.**
+   `OraclePortSamplerPrefixDraft.original_decodes` proves completion across
+   arbitrary terminal-byte suffixes from sampler format and tag checks;
+   `OraclePortCompletionDraft.completion_of_format` ports it to the annotation
+   compiler’s exact enriched output. `completion_of_checks` derives precisely
+   `OraclePortConsumer.Completion` from the retained `CheckedAcceptance` and
+   tag law. The admitted conditional headline supplies the tag law and query
+   bound. Its deletion-only diff removes the independent completion binder;
+   it does **not** discharge `CheckedAcceptance` or instantiate a completed
+   `dV`. No canonicality of the entire terminal log is assumed.
 4. Establish the exact frozen Rust/caller/physical-checkpoint equality with
    that completed dV, including stop prefixes and runtime same-byte premises.
    `OraclePortPool.RustPoolEqualsModel` is the generalized resumed-observation
@@ -261,9 +303,10 @@ layer, not premise deletions from the old headline.
    frozen release replay after integration. No opaque boundary proposition
    is proved merely because the new logical theorem does not use it.
 
-The single-source-join-plus-runtime milestone therefore remains open. The
-counterexamples stop the invalid immediate-composition items; independent
-carrier, consumer, admission, recovery and Pool work was completed.
+The single-source-join-plus-runtime milestone remains open. The continuation
+reduces the independent decoder frontier, but checkpoint-state construction
+and the acceptance-to-typed-arithmetic transfer remain mathematical work.
+No endpoint at `dO := dV` is claimed, and items 4–6 remain named boundaries.
 
 ## What acceptance would mean
 
@@ -351,14 +394,14 @@ Reproduce the evidence/scope/signature audit without replaying Lean:
 python3 -B docs/research/100bit-spend-path-20261013/evidence/oracle-port-draft-20261021/audit.py
 ```
 
-The only deletion claim is the new specialized kernel's budget binder, for
+The initial packet's deletion claim is the new specialized kernel's budget binder, for
 which the before/after texts and deletion-only diff are committed. The full
 old/new comparison is not a weakening proof. The documentation and receipts
 intentionally report the frozen dV construction and remaining model joins as
 unfinished, rather than treating the existence of a generic conditional
 soundness theorem as completion of the requested port.
 
-## Continuation: byte parser and prefix completion (in progress)
+## Continuation: checked additions and exact limit
 
 New modules have the distinct `OraclePort*Draft` names. The compact parser
 now checks all fixed offsets, expands the 426 semantic and 29 y1 compact
@@ -377,3 +420,117 @@ leaves. The previously quoted `TypedBinding` uses the retained R16 source
 chooser; its predicate does not constrain `SourceInputs.data`. A new audit
 module makes that fact explicit rather than assuming a selected opening
 identifies the full reader data.
+
+### Continuation signature accounting
+
+The new conditional endpoint is
+`OraclePortPrefixHeadlineDraft.final_soundness`, with `dO := admit core`.
+It still requires the same `hqueries`, `hbudget`, `hchecks`, extractor and
+shifted M10 ledger as the literal admitted specialization of
+`OraclePortHeadline.final_soundness`. Its only binder deletion is:
+
+```lean
+    (hcompletion : OraclePortConsumer.Completion D (admit core) P (Q + 1161))
+```
+
+`prefix-headline-before.lean.txt`, `prefix-headline-after.lean.txt` and
+`prefix-completion-deletion-only.diff` record that deletion. The audit proves
+that the before text is the old generic signature with **only** the literal
+admitted specialization, and that the after text is the new compiled source
+signature. `completion` supplies the deleted argument from `hchecks` and the
+admission tag law. This is a deletion from the new conditional architecture,
+not from `R1FinalSoundnessBinPerQueryR19`; both existing headline files remain
+byte-identical to the branch base.
+
+The data-bound replacement frontier is quoted verbatim below. Its implication
+from the retained `OraclePortChecks.TypedBinding` is compiled as
+`typed_binding_implies_reader_binding`. `binding_pointwise_strict` shows
+strictness for the underlying source predicate whenever typed acceptance is
+inhabited: incrementing c0 breaks the old source equality, while rebinding
+the actual reader repairs it. No nonvacuity theorem for a completed verifier
+or unconditional strictness theorem across the entire prover domain is
+claimed.
+
+```lean
+def ReaderBinding (D : LiteralByteProtocol.Decoder) (core : Decision) (P : Prover)
+    (Q : Nat) (fallback : (Bytes → State) → SourceInputs) : Prop :=
+  ∀ H : Bytes → State,
+    ¬ RecordedBinaryExperimentBin.binaryCollision Q
+      (eval H (recorded D (admit core) (R16CanonReduction.canon P))) →
+    FS2.accepts (eval H (original D (admit core) (R16CanonReduction.canon P))) →
+    D0TypedChecks.verify (compiledRows D (admit core) (R16CanonReduction.canon P) H)
+      (readerSource D core P fallback H) = true
+
+```
+
+`readerSource` preserves all R16 fields and uses the successful matching reader
+for `.data`. `checked_acceptance` constructs `CheckedAcceptance` **from an
+inhabitant of ReaderBinding**. That inhabitant is not constructed here. This
+replacement is therefore an audited repair of data selection, not a claim
+that the requested frozen acceptance-to-checker theorem has been proved.
+
+| Current R19 model premise | Continuation status |
+|---|---|
+| R16 instance | Admission constructs it; rebinding reader data preserves every field. |
+| R13 full reader equality | Proved by a successful typed check, not yet by parser/batch acceptance. Selected slot agreement is proved separately. |
+| R15 saved/resumed first match | Available from the typed check; physical checkpoint provenance remains uncomposed. |
+| R14 model pairing/accumulator | Available from the typed check; its acceptance implication is not implemented in the parser/batch decision. |
+| R3 semantic endpoint | Available from the typed equation checker and parsed degree lemmas; no acceptance-to-equations transfer is claimed here. |
+| R-wire completion | Derived on the generalized trace from format/tag, or from CheckedAcceptance; no independent completion binder in the new admitted headline. |
+| Frozen dV and items 4–6 | No dV endpoint; Rust/caller equality, M10 and runtime/source/release boundaries remain named, as above. |
+
+The exact demonstrated obstruction is the implication “R16 instance fields
+force typed acceptance for every selected witness.”
+`r16_does_not_determine_typed_acceptance` refutes it for any instance witness
+by changing only c0 if necessary. It does **not** refute the requested full
+`TypedBinding` statement with all future parser and arithmetic constraints.
+The actual remaining work is to prove the selected-reader arithmetic transfer
+and the checkpoint-state construction, rather than to call either Rust
+refinement. No false claim that those tasks are impossible is made.
+
+### Continuation verification receipts
+
+The continuation has 12 new modules and 48 final standard-axiom reports.
+There were 31 focused invocations: 16 failed elaborations/resource attempts
+and 15 green attempts (including superseded checkpoints). Every final
+module is green. Process swaps are zero. All final axiom reports are subsets
+of `{propext, Classical.choice, Quot.sound}`.
+
+One attempt, `OraclePortDataChoiceDraft-3`, hit the unchanged `-M4400` cap
+(peak RSS 4,689,215,488 bytes; exit -6). It was not rerun unchanged. The
+concrete fold-plus-one specialization was replaced by an abstract badness
+law and a scalar c0 counterexample; attempt 5 checks the stronger closed
+counterexample in 5.447 seconds, peak 3,629,596,672 bytes, zero swaps.
+`data-choice-resource-review.json` records the failure, exact source hashes
+and replacement. The stderr memory exception is retained in `time.log` and
+in the receipt errors. No proof or resource cap was raised.
+
+| Module | Final attempt | Exit | Wall seconds | Peak RSS bytes | Swaps | Axiom reports |
+|---|---:|---:|---:|---:|---:|---:|
+| `OraclePortBatchDraft` | 3 | 0 | 4.826 | 3634544640 | 0 | 4 |
+| `OraclePortCompactDraft` | 3 | 0 | 4.354 | 3645489152 | 0 | 3 |
+| `OraclePortCompletionDraft` | 5 | 0 | 8.737 | 3623583744 | 0 | 2 |
+| `OraclePortCoverageDraft` | 2 | 0 | 4.426 | 3639574528 | 0 | 6 |
+| `OraclePortDataChoiceDraft` | 5 | 0 | 5.447 | 3629596672 | 0 | 6 |
+| `OraclePortDuplicateBindingDraft` | 3 | 0 | 3.896 | 3617341440 | 0 | 4 |
+| `OraclePortPhysicalFrameDraft` | 2 | 0 | 3.450 | 3634528256 | 0 | 4 |
+| `OraclePortPrefixHeadlineDraft` | 1 | 0 | 6.930 | 3622289408 | 0 | 2 |
+| `OraclePortReaderSourceDraft` | 2 | 0 | 5.242 | 3646668800 | 0 | 5 |
+| `OraclePortSamplerPrefixDraft` | 2 | 0 | 4.821 | 3629826048 | 0 | 4 |
+| `OraclePortSelectedDraft` | 2 | 0 | 6.720 | 3640393728 | 0 | 3 |
+| `OraclePortTypedSlotsDraft` | 1 | 0 | 3.755 | 3631300608 | 0 | 5 |
+
+Per-attempt command, source revision, source SHA-256, dependency fingerprint,
+exit, wall, RSS, swaps, all axiom lines and errors are in the main manifest
+and each receipt directory. Stage manifests separate parser construction,
+checkpoint framing, typed-source audit and decoder completion.
+
+The final audit is static: it verifies receipts, current source/dependency
+hashes, standard axioms, scope and both signature claims. It does not rerun
+an unchanged Lean manifest or claim coherent frozen-release evidence.
+No existing Lean module, candidate re-pin, concurrent instrumentation,
+wallet/key, Rust source or deployed artifact was edited. Nothing was pushed.
+
+```sh
+python3 -B docs/research/100bit-spend-path-20261013/evidence/oracle-port-draft-20261021/continuation-audit.py
+```
