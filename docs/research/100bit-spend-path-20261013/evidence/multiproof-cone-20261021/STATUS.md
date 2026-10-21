@@ -929,3 +929,27 @@ retained elaboration diagnostics, never current evidence. The first errors
 were notation/structure layout, then missing scalar/content normalization;
 no memory limit was raised. The whole leaf induction and batch tail remain
 in progress. No shipped or inherited Lean module changed.
+
+## Continuation 6, stage 1b: complete instrumented physical leaf fold
+
+`MultiproofConeLeafFold.leaves_join` inducts over all reached leaf requests,
+using the actual extracted `reference.leaf_step` after each answer. It proves
+outer-success totality, exact scratch capacity preservation and full reversed
+Live content, without assuming duplicate digest consistency. Rejection stops
+immediately after the disagreeing leaf request; the suffix is not requested.
+`MultiproofConeLeafFrozen.frozen_join` projects this physical program to exact
+ordered observations of frozen `hashLeaves` on every capacity-bounded stream.
+`batch_leaves` specializes to both batch sizes (10/12), with arbitrary scratch
+suffix and an empty live prefix. No accepted-only or honest-input premise is
+needed for this leaf result.
+
+LeafFold attempt 3: exit 0, wall 13.834102 s, peak RSS 3601154048 bytes,
+zero swaps. LeafFrozen attempt 1: exit 0, wall 15.137953 s, peak RSS
+3550068736 bytes, zero swaps, at revision `93c5abebc`. Nine reports standard;
+full target/source/import hashes and metrics are in receipts and manifest.
+Failed elaborations are retained. The existing verified source leaf observer,
+leaf-iteration and key/opening adapters are reused. The instrumented loop uses
+the exact frozen leaf address, whose opening adapter was previously proved;
+the initial packed-key and physical/Parsed.wire carrier equations remain
+caller cuts. This does not yet supply the count/padding/root tail or either
+three-slot accepted-run cone join. No shipped file changed.
