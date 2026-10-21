@@ -1,0 +1,3 @@
+PROVED accepted-success actual callback gives exactly three checked backend pushes from the retained source constructor, final count3 and both accumulator word bounds below 2^46.
+
+Limitations: PushBinding and source constructor installation are explicit operation/source boundaries. Actual callback success is assumed: ACCEPTED-ONLY, not unrestricted outer TOTAL. The same final tail state supplies the actual finish operation and final wide addition; decoded product summation and concrete finish/wide-add installation remain separate. RustStd, full caller/runtime, final artifact and global soundness remain open; production unchanged.
