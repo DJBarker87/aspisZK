@@ -1,0 +1,61 @@
+CURRENT HEADLINE BEFORE (verbatim):
+    (e : RawExtractorCostComposedBin.CostedExtractor) (p : Parameters)
+    /- Size-restricted M10 adequacy; length is independent of distinct reads. -/
+    (h_M10_ledger : RawExtractorCostComposedBin.LedgerRefinement e p Q)
+    (h_M10_log_length : BoundaryEvidence s → ∀ H,
+      (eval H (recorded D d P)).2.2 = true →
+        (eval H (recorded D d P)).1.length ≤ Q + 1161)
+
+ACCEPTED M10 ENDPOINT AFTER (verbatim):
+    (heap : CostedAllocationLedgerM10.HeapMirror)
+    /- Strict residual: cumulative allocation bit work on the same domain. -/
+    (h_M10_allocation : CostedAllocationLedgerM10.AllocationBound heap Q)
+    (h_M10_log_length : BoundaryEvidence s → ∀ H,
+      (eval H (recorded D d P)).2.2 = true →
+        (eval H (recorded D d P)).1.length ≤ Q + 1161)
+
+RESIDUAL EXPANSION (verbatim):
+structure HeapMirror where
+  bits : RunView → Coins → Nat
+
+def AllocationBound (heap : HeapMirror) (Q : Nat) : Prop := ∀ run coins,
+  run.2.2 = true → run.1.length ≤ Q+1161 → heap.bits run coins ≤ (footprint*workConstant)*(run.1.length+1)
+
+The complete value/work/Jobs/read/public-image stages have accepted proofs.
+Only the cumulative allocation-bit counter lacks a bounded source mirror.
+The overall headline change is specialization plus this explicit narrowing,
+NOT an unconditional deletion of every M10 implementation premise.
+
+signature-specialization-and-narrowing.diff shows the full headline change.
+signature-deletion-only.diff starts AFTER installing the explicitly displayed
+single residual component premise; it deletes only h_M10_ledger from that
+component-specialized headline. The audit does not disguise the residual as
+a proved fact or hide it in a subtype. All other binders and conclusions are
+unchanged after the extractor/parameter specialization.
+
+UNIFORM BEFORE (generic premise, verbatim from R1FinalSoundnessBin):
+    (h_M10_uniform : ∀ Q, RawExtractorParameterPolynomial.CoordinateBound
+      (params Q) (Q + c) a k)
+
+UNIFORM AFTER (accepted theorem, verbatim):
+theorem uniform (Q : Nat) : RawExtractorParameterPolynomial.CoordinateBound (params Q)
+    (Q+RawExtractorFixedCubicM10.slack fixed) fixed.overheadConstant 3 :=
+  RawExtractorFixedCubicM10.coordinates fixed Q
+
+There is no uniform-coordinate hypothesis for the new fixed family.
+The allocation-only premise remains when using this family's implementation
+cost bound; it is not replaced by an unproved heap/bit reservation.
+The earlier linear-overhead family is not asserted to bound cubic bit work.
+The existing RawExtractorFixedCubicM10 fixed-protocol specialization supplies
+exact polynomial evaluation and degree <=3.
+
+DIRECT CONSTANT AND DEGREE:
+  accepted total <= 4*scale^3*(Q+1162)^3
+  scale = CubicAllocationLiftM10.constant workConstant
+    (footprint*workConstant) naturalConstant
+  constant C A N = C+A+N+12976224+257+1
+  costPolynomial.eval Q = (params Q).attemptBudget
+  costPolynomial.natDegree <= 3
+
+No decimal evaluation of huge protocol recurrence constants was attempted.
+No other source/model/Rust correspondence or runtime heap claim is removed.
