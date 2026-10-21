@@ -26,3 +26,17 @@ A semantic reference theorem is not yet a frozen whole-cone refinement.
 No shipped source, existing Lean module, S1–S6 cone, lean-candidate, sibling
 S7/S8 cone or headline is modified. No ELF rebuild is triggered. No complete
 frozen manifest replay or premise deletion is claimed.
+
+## Stage 2 — resumed basis completion
+
+`S7JoinProductionBasis.total_exact` now compiles (attempt 4). It proves
+successful concrete initialization and all six emitted basis levels, with
+each of the 64 output cells decoding to `naturalLineValue` for every input
+word. No canonical-input or successful-output premise is required. The
+previous WIP initialization failed on an unreduced `if True`; the replacement
+uses `ite_true`. Failed attempts stay in the receipt history.
+
+The pre-stop successful `S7JoinGeometry` and `S7JoinQueryReference` receipts
+establish total stored-domain line inverses/nonzero denominators, query-node
+identity, and exact agreement with dV's query values and basis. They do not
+establish constructor table bytes, opening decoding, or query/TX membership.

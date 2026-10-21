@@ -24,7 +24,7 @@ theorem total_exact (node : U32) : ∃ out,
     have hj0 : j=0 := by omega
     subst j
     rw [hset,S7JoinBasisBlock.set_at _ _ _ _ (by decide)]
-    simp only [show (0#usize).val=0 from rfl,if_pos rfl,decode,
+    simp only [show (0#usize).val=0 from rfl,ite_true,decode,
       show (1#u32).val=1 from rfl,Nat.cast_one,naturalLineValue,
       Nat.bitIndices_zero,List.toFinset_nil,Finset.prod_empty]
   obtain ⟨out,ho,hpre⟩ := levels_prefix 6 0 (decode node) b node 1#usize
