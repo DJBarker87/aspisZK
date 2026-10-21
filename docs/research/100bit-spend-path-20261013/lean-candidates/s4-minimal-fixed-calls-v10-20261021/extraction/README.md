@@ -1,0 +1,22 @@
+# Exact v10 Charon/Aeneas extraction
+
+This packet is a candidate-only extraction replay of `fast_dots::four_dots` from the v10 source snapshot. Production files were not modified. The runner used a selective isolated source workspace and existing pinned Cargo target cache; it did not rebuild the package dependency cache from cold state.
+
+The accepted Charon stage is `evidence/runs-charon-retry5/`: exit 0 in 85.72 seconds, peak process RSS 550,372 KiB, sampled scope peak 524,447,744 bytes, swap 0, and no memory events. Limits were `MemoryHigh=2 GiB`, `MemoryMax=4 GiB`, `MemorySwapMax=0`. It emitted `four_dots.llbc` with SHA-256 `da5a61fddb4d82bb2684220cd8923ae1e21f647341c13aa1afdaf60f2314b7ef`.
+
+The accepted Aeneas stage is `evidence/runs-aeneas-retry6/`: exit 0 in 4.01 seconds, peak process RSS 290,048 KiB, sampled scope peak 310,964,224 bytes, swap 0, and no memory events under the same limits. Generated `Funs.lean` has SHA-256 `089f0ec1a9e03a7044756f8f42f27f8b7eaf06d5a0b4996a738b14b987c83975`. The generated `fast_dots.four_dots` body has four sequential calls to `fast_dots.four_dots_one` at indices 0, 1, 2, and 3, followed by `Array.make 4`; the emitted body contains no `from_fn` call.
+
+`check-extraction.py` verifies the accepted receipt/output hashes and executable-body equality with the pinned v6 `four_dots_fixed` and `four_dots_one` definitions after stripping documentation comments. This is a textual executable-body comparison, not a Lean theorem. It does not prove equivalence from the frozen callback-based Rust source to v10, and does not discharge the Rust `std::array::from_fn` to P6 operational-model boundary. The v10 candidate also contains helper changes (two 8-limb loops, explicit N8 reduction entries, and an unrolled two-push tail) whose semantic equivalence to the frozen source remains open.
+
+Earlier attempts are retained in `evidence/diagnostics/`. The first stopped before compilation because isolated `c3/build` path dependency files were omitted. Retry 4 reached Cargo compilation but stopped on an omitted `refine/diffharness/tests/glue_gen.rs` include. Retry 5 followed after those source paths were restored. Two intermediate runner dispatch errors failed before the stage process was launched; they are not accepted extraction evidence. These were setup-only failures, not proof or resource failures.
+
+The runner could not report a repository revision because the isolated source workspace is a selected file snapshot without `.git`; the launch receipts honestly mark `git-revision-unavailable`. `evidence/source-workspace-inventory.json` therefore hashes and sizes all 748 files present in the extraction workspace. Exact compiler/tool hashes, Cargo lock hash, command, environment, LLBC hash, and generated Lean hashes are preserved in the receipts/config. JSON files are small; generated LLBC is 3.1 MiB. No binary or key material is included.
+
+The matching optimized candidate build and six fixtures are separately recorded in `../measurements/`. They passed, stayed below the 1.4M CU ceiling, and regressed by about 13.1k stage1 and 15.7k settlement CU on average versus the measured baseline. Cost is therefore a tradeoff; the candidate is not adopted.
+
+
+## Two-push tail helper join
+
+The focused Lean packet in `evidence/tail-literal-run-join-v1/` proves that success of the original emitted two-term tail loop implies success of the v10 literal two-push sequence on the same starting state and with the same operations. It obtains the two iterations and their actual input witnesses from the source loop trace; it does not assume independently successful pushes. The theorem is one-way (original success to candidate success). It does not establish reverse failure behavior or close the Rust `std::array::from_fn`/P6 boundary.
+
+The receipt-only replay was justified because the first green attempt did not retain the formal-release RSS, swap, and wall-time fields required by the project rules. The source remained byte-identical. The accepted receipt records Lean 4.32, exit 0, 26.09 seconds, peak aggregate RSS 3,304,046,592 bytes, process RSS 3,315,449,856 bytes, and zero swap. The imported `S4TailLoopForwardRootV1` source/object pins and exact command are in that packet. The source was initially named `S4TailLoopLiteralPushJoinV19.lean` and the initial object `S4TailLoopLiteralPushJoinV20.olean`; the retained packet source is named `S4TailLiteralJoinV1.lean`.

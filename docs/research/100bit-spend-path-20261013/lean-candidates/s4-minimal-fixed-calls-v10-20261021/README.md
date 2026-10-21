@@ -1,0 +1,13 @@
+# v10 minimal fixed-call candidate
+
+Candidate-only, production source untouched. The candidate removes the actual `four_dots` outer `core::array::from_fn` call path and replaces it with the already pinned four-call helper body from v6. The public entry has the same Rust expression body as v6 `four_dots_fixed`, with only the function name changed; the single-slot helper is byte-identical to v6. `check-source-correspondence.py` verifies both comparisons and the v6 generated Lean body pin for calls at slots 0, 1, 2, 3.
+
+This is the smallest candidate tried after v8 that keeps the by-reference helper and compile-time four-slot construction. It retains the 26-term step-by schedule and exact tail ordering. The helper uses the extraction-friendly explicit limb accumulator updates and explicit eight-word reduction already present in v6. The candidate no longer contains `from_fn`.
+
+The exact v6 source/Funs hashes and prior successful Charon/Aeneas receipts are under `s4-four-dots-fixed-call-v1/evidence/v6/`. The v10 source has now also been replayed through Charon and Aeneas with the capped NUC runner; exact LLBC, generated Lean files, commands, source pins, resource receipts, and logs are retained under `extraction/evidence/`. `extraction/check-extraction.py` verifies those hashes and checks the emitted executable bodies against the pinned v6 bodies after removing documentation-only metadata. In particular, Aeneas emitted the v10 public `four_dots` with four sequential `four_dots_one` calls at slots 0–3 and `Array.make 4`.
+
+This establishes exact v10 extraction and emitted-body identity with the v6 fixed-call owner. It does **not** by itself prove equivalence between the frozen Rust `std::array::from_fn` callback traversal and the candidate's four static calls, nor prove every changed helper subbody against the frozen original. The Rust standard-library correspondence for the P6 stateful array model remains an explicit P6 boundary. Production source remains untouched.
+
+The optimized build and six finite CU fixtures passed, as did strict stack audit. The result remains within the tested 1.4M CU ceiling, but regresses CU against the pinned baseline: average +13,078.3 stage1 and +15,694.8 settlement CU. The maximum measurement was 1,212,366 / 1,400,000 CU (187,634 headroom). This is a proof-feasibility/cost tradeoff, not a cost improvement; see `measurements/results/README.md` and receipts.
+
+The comparison uses a 58-path baseline source manifest. At current research HEAD 78812cfb5f384933ec3e2bc7eb76580e2672ace4, 56 of 58 manifest files are identical; the only differences are feature-excluded `prover.rs` and cfg(test)-only `r1_checkpoint_tests.rs`. This is not an exhaustive whole-repository reachability proof.
