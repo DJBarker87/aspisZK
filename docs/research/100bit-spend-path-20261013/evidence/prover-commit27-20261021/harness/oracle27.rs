@@ -81,4 +81,15 @@ mod proofs {
   let reference=if next<coins.len(){coins[next]}else{[0;32]};
   assert_eq!(source[at],reference[at]);
  }
+ // Pointer identity proves get/index address transport without eagerly
+ // muxing and copying all 32 bytes of 115 symbolic words twice.
+ #[kani::proof] #[kani::unwind(116)]
+ fn read_address115(){
+  let data:[[u8;32];115]=kani::any();let coins=data.to_vec();
+  let next:usize=kani::any();
+  match coins.get(next) {
+   Some(source)=>{assert!(next<coins.len());assert!(core::ptr::eq(source,&coins[next]));},
+   None=>assert!(next>=coins.len())
+  }
+ }
 }

@@ -163,3 +163,112 @@ a new impossibility theorem. Full continuation extraction/porting is the next
 concrete deliverable. `shippedProverExperiment`, both real/ideal WholeRunJoins
 and endpoint specialization remain unconstructed. No source-refinement
 assumption has been hidden inside TrustedStd, a callback, P6 or P7.
+
+## Verbatim endpoint before/after
+
+The whole endpoint module is byte-identical to base `26b922be6`. Both copies
+below use unchanged surrounding parameters and local notations. The empty
+`endpoint-deletion.diff` removes zero premises. This is not a completed
+deletion-only discharge; no quantifier, carrier, bad event or conclusion changed.
+
+Before:
+
+```lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad
+      (idealSeedQueries template outputs x rust observer_program adv)))
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+After:
+
+```lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad
+      (idealSeedQueries template outputs x rust observer_program adv)))
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+## Native-length gate refinement and final verification
+
+The direct native 115-word RefCell/reference gate (`native115-v2`) timed out
+at 90 s; its predecessor `native115-v1` failed only the 115-element arbitrary
+array construction unwind. Neither is verification. The first shared-input
+whole-word read cell (`read115-v1`) also timed out at 90 s. The replacement
+`read-address115-v1` proves the exact library address fact instead: for an
+arbitrary 115-word vector and arbitrary cursor, `get` either returns the same
+immutable cell as indexed access, or returns none exactly beyond the end.
+Exit 0, 8.436 s, 798492 KiB RSS, zero swap, unwinding assertions enabled.
+This avoids muxing/copying all 32 bytes twice. It complements the passing
+small-vector RefCell/effect gates and universal extracted `read_total` lemma;
+it is not reported as a successful monolithic 115-word RefCell gate.
+
+J7674 passes `R1Z/ProverCommit27Audit.lean`: exit 0, 1.77 s,
+4199196 KiB peak RSS, swap 0, source revision `f09769794` plus the exact
+additive audit-source SHA/dependency fingerprint. All 34 complete audit lines
+(32 new facts and both retained endpoints) use only the accepted standard
+axioms, or fewer. Exact target, exit, wall, RSS, swaps, revisions, snapshots,
+transitive dependency hashes and full axiom/error lines are in `lean/`.
+The audit coherently imports the final changed dependency closure; it does
+not assert a complete shipped-game execution law.
+
+All Lean and Rust host jobs used the specified 6G/8G/no-swap/64-task scopes.
+No recursion/heartbeat limit was raised. Extraction used optimized Cargo;
+Kani time was in CBMC, with the requested RUSTFLAGS. Timeout parent RSS can
+omit killed descendants; the retained cgroup peak is the aggregate metric.
+No unchanged full regression or frozen manifest was replayed: whole-source
+release preflight is not green. Earlier D129 artifact evidence is reused.
+No tracked file under `crates/` or `programs/` changed, so the shipped-file ELF
+rebuild rule is not triggered. No concurrent-owned source, wallet, key,
+binary/object/archive, or local target directory is changed or committed.
+No push. Next Env J candidate is 7675, subject to the shared receipt check.
+
+The requested deployed target is **not yet established**. The next deliverable
+is the complete effectful walk/policy continuation, including replay reset,
+query selection, native trace, retries, commitment programming and ordered
+serialization, followed by the concrete real/ideal WholeRunJoins. The endpoint
+above retains `RustProverRefinement` explicitly; zero premises were removed.
