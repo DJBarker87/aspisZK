@@ -1,0 +1,58 @@
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinQueryRows.lean:65:50: error: unexpected token '∧'; expected term
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinQueryRows.lean:65:35: error: Application type mismatch: The argument
+  ↑0#usize
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.89
+of sort `Type (?u.89 + 1)` in the application
+  @InitialSeg ↑0#usize
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinQueryRows.lean:64:2: error: unsolved goals
+case refine_2
+old : S8OwnedP6Finish.Weights
+output : alloc.vec.Vec K
+state : BatchedWeights
+sum : S7Kani3CallerTrace.Sum
+node : U32
+power : K
+next : Usize
+t : ℕ
+hout : (↑output).length = 64
+hn : ↑next ≤ 22
+ht : t < 22
+hc : S7JoinBackendCarriers.Canonical power
+history : PushTrace old state sum
+hp : Progress t 0 state
+basis : S7Kani2BasisLoop.Basis
+hbasis : S7JoinProductionBasis.basis_owned node = ok basis
+hcanon : S7JoinBasisCanonical.Canonical basis
+hmeaning :
+  ∀ (j : Fin 64),
+    S7JoinBasisMachine.decode (S7JoinBasisBlock.cell basis ↑j) =
+      AspisCircleTensorBinding.naturalLineValue (S7JoinBasisMachine.decode node) ↑j
+out : BatchedWeights
+sumOut : S7Kani3CallerTrace.Sum
+hrun :
+  S7Kani2AccumulatorLoop.accumulate_rows_owned backend output state basis power next 64#usize 0#usize = ok (output, out)
+hist : PushTrace old out sumOut
+hprogress : Progress t 64 out
+hsum :
+  ∀ (i : ℕ) (k : Fin 4),
+    sumOut i k =
+      if ↑0#usize ≤ i ∧ i < 64 then
+        sum i k + ↑(S7Kani2OwnedRowRefinement.powerLimb power k) * ↑(S7JoinBasisBlock.cell basis i)
+      else sum i k
+terms : UScalar UScalarTy.Usize
+hinc : out.terms + 1#usize = ok terms
+hterms : ↑terms = ↑out.terms + 1
+ht' : ↑terms = t + 1
+i : ℕ
+hi : i < 64
+k : Fin 4
+⊢ ↑(sum i k + ↑(S7Kani2OwnedRowRefinement.powerLimb power k) * ↑(S7JoinBasisBlock.cell basis i)) =
+    ↑(sum i k) +
+      ↑↑(S7Kani2OwnedRowRefinement.powerLimb power k) *
+        AspisCircleTensorBinding.naturalLineValue (S7JoinBasisMachine.decode node) i
+'AspisR1.S7JoinQueryRows.initial_progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S7JoinQueryRows.query_rows_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S7JoinQueryRows.initial_query_rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -44,19 +44,31 @@ theorem query_rows_exact (old : S8OwnedP6Finish.Weights) (output : alloc.vec.Vec
     (hc : S7JoinBackendCarriers.Canonical power)
     (history : PushTrace old state sum) (hp : Progress t 0 state) :
     ∃ after sumOut, query_rows output state node power next=ok after ∧
-      PushTrace old after sumOut ∧ Progress (t+1) 0 after := by
-  obtain ⟨basis,hbasis,hcanon,_⟩ := S7JoinBasisCanonical.total_exact node
-  obtain ⟨out,sumOut,hrun,hist,hprogress⟩ := rows_exact old output state sum basis power next
+      PushTrace old after sumOut ∧ Progress (t+1) 0 after ∧
+      ∀ i, i<64 → ∀ k : Fin 4,
+        (sumOut i k : ZMod AspisCircleGroupOrder.P)=(sum i k : ZMod AspisCircleGroupOrder.P)+
+          (S7Kani2OwnedRowRefinement.powerLimb power k).val*
+            AspisCircleTensorBinding.naturalLineValue (S7JoinBasisMachine.decode node) i := by
+  obtain ⟨basis,hbasis,hcanon,hmeaning⟩ := S7JoinBasisCanonical.total_exact node
+  obtain ⟨out,sumOut,hrun,hist,hprogress,hsum⟩ := rows_exact old output state sum basis power next
     0#usize 64 t hout hn (by decide) hc hcanon history hp
   obtain ⟨terms,hinc,hterms⟩ := S7Kani2AccumulatorLoop.increment out.terms (by
     have he := hprogress.1
     omega)
   have ht' : terms.val=t+1 := by rw [hterms,hprogress.1]
   refine ⟨{out with terms:=terms},sumOut,?_,.counter hist terms,
-    next_query_progress t out terms ht' hprogress⟩
-  simp only [query_rows,hbasis,hrun,bind_tc_ok]
-  change (do let terms ← out.terms+1#usize; ok {out with terms:=terms})=ok _
-  rw [hinc,bind_tc_ok]
+    next_query_progress t out terms ht' hprogress,?_⟩
+  · simp only [query_rows,hbasis,hrun,bind_tc_ok]
+    change (do let terms ← out.terms+1#usize; ok {out with terms:=terms})=ok _
+    rw [hinc,bind_tc_ok]
+  · intro i hi k
+    rw [hsum i k,if_pos (by change (0#usize).val≤ i ∧ i<64; simp; exact hi),
+      Nat.cast_add,Nat.cast_mul]
+    have hm := hmeaning (⟨i,hi⟩ : Fin 64)
+    change (sum i k : ZMod AspisCircleGroupOrder.P)+
+      (S7Kani2OwnedRowRefinement.powerLimb power k).val*
+        S7JoinBasisMachine.decode (S7JoinBasisBlock.cell basis i)=_
+    rw [hm]
 
 /-- The first query needs no pre-existing PushTrace or row-phase premise. -/
 theorem initial_query_rows (old : S8OwnedP6Finish.Weights) (output : alloc.vec.Vec K)
@@ -65,9 +77,11 @@ theorem initial_query_rows (old : S8OwnedP6Finish.Weights) (output : alloc.vec.V
     (hc : S7JoinBackendCarriers.Canonical power) :
     ∃ after sumOut,
       query_rows output ⟨initialRaw old,0#usize⟩ node power next=ok after ∧
-      PushTrace old after sumOut ∧ Progress 1 0 after :=
-  query_rows_exact old output _ (initialSum old) node power next 0 hout hn (by decide)
-    hc .initial (initial_progress old hold)
+      PushTrace old after sumOut ∧ Progress 1 0 after := by
+  obtain ⟨after,sumOut,hrun,hist,hphase,_⟩ :=
+    query_rows_exact old output _ (initialSum old) node power next 0 hout hn (by decide)
+      hc .initial (initial_progress old hold)
+  exact ⟨after,sumOut,hrun,hist,hphase⟩
 
 #print axioms initial_progress
 #print axioms query_rows_exact

@@ -172,3 +172,28 @@ including their companions; no shared file was rewritten. The accepted
 attempts record the overlay hash and snapshot. `stage-cache.py` validates or
 recreates these private links. Later failures were local proof elaboration,
 not memory pressure.
+
+## Stage 8 — exact coefficients and complete owned accumulator port
+
+`S7JoinRowsTrace.rows_exact` is strengthened with the exact ordered update
+for every Nat sum lane, including framing outside the visited row interval.
+`S7JoinQueryRows.query_rows_exact` now transports those values through the
+proved emitted basis identity: each of the 64 row/lane residues adds its
+power limb times `naturalLineValue (decode node) i` in ZMod P. This prevents
+the existential output trace from hiding the intended coefficient formula.
+
+`S7JoinAccumulation.total_exact` composes the complete observer-off owned
+accumulator carrier port. On the canonical rhs/value/power/rho and reached
+raw-phase domain, it derives full success, raw PushTrace membership, exact
+coefficient updates, next-query phase/terms, both RHS-coordinate equations,
+canonical output RHS/power, exact power multiplication, cursor increment
+and unchanged production output-weight storage. Mixed RHS multiplication
+uses the frozen canonicalization and arithmetic backend, not an inverse or
+multiply-success premise. The source-shaped port still requires original
+caller/carrier/observer adoption and opening/fold semantics; it is not
+relabeled a complete frozen Rust execution theorem.
+
+Focused successful attempts: strengthened RowsTrace-7, QueryRows-3 and
+Accumulation-2. Every axiom audit is standard and every swap count is zero.
+The earlier accumulation attempt passed but lacked coefficient semantics;
+the strengthened source and dependencies were compiled in order.

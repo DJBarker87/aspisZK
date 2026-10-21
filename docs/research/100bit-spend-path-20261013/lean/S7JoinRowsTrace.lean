@@ -89,13 +89,17 @@ theorem rows_exact (old : S8OwnedP6Finish.Weights) (output : alloc.vec.Vec K)
     (history : PushTrace old state sum) (hp : Progress t j.val state) :
     ∃ after sumOut,
       accumulate_rows_owned backend output state basis power next 64#usize j=ok (output,after) ∧
-      PushTrace old after sumOut ∧ Progress t 64 after := by
+      PushTrace old after sumOut ∧ Progress t 64 after ∧
+      ∀ i k, sumOut i k=if j.val≤ i ∧ i<64 then
+        sum i k+(powerLimb power k).val*(cell basis i).val else sum i k := by
   rw [extracted_loop_composition backend basis power next 64#usize j fuel (output,state)
     (by decide) remaining]
   induction fuel generalizing j state sum with
   | zero =>
       have hj : j.val=64 := by omega
-      exact ⟨state,sum,rfl,history,by simpa only [hj] using hp⟩
+      refine ⟨state,sum,rfl,history,by simpa only [hj] using hp,?_⟩
+      intro i k
+      rw [if_neg (by omega : ¬(j.val≤ i ∧ i<64))]
   | succ fuel ih =>
       have hj : j.val<64 := by omega
       have hlen := hp.2.1
@@ -115,12 +119,22 @@ theorem rows_exact (old : S8OwnedP6Finish.Weights) (output : alloc.vec.Vec K)
       have hp1 : Progress t (j.val+1) updated :=
         progress_write t j.val state y j rfl hj hp (by simpa only [hp.1] using hy)
       obtain ⟨j1,hinc,hj1⟩ := increment j (by omega)
-      obtain ⟨after,sumOut,hrun,hist,hprogress⟩ := ih updated sum1 j1 (by omega)
+      obtain ⟨after,sumOut,hrun,hist,hprogress,hsum⟩ := ih updated sum1 j1 (by omega)
         hist1 (by simpa only [hj1] using hp1)
-      refine ⟨after,sumOut,?_,hist,hprogress⟩
-      simp only [iterate,step_exact output state updated basis power next j hout hn hj hpush,
-        bind_tc_ok,hinc]
-      exact hrun
+      refine ⟨after,sumOut,?_,hist,hprogress,?_⟩
+      · simp only [iterate,step_exact output state updated basis power next j hout hn hj hpush,
+          bind_tc_ok,hinc]
+        exact hrun
+      · intro i k
+        rw [hsum]
+        dsimp only [sum1]
+        by_cases he : i=j.val
+        · subst i
+          rw [if_neg (by omega : ¬(j1.val≤j.val ∧ j.val<64)),Function.update_self,
+            if_pos (by omega : j.val≤j.val ∧ j.val<64)]
+        · by_cases hf : j1.val≤ i ∧ i<64
+          · rw [if_pos hf,Function.update_of_ne he,if_pos (by omega : j.val≤ i ∧ i<64)]
+          · rw [if_neg hf,Function.update_of_ne he,if_neg (by omega : ¬(j.val≤ i ∧ i<64))]
 
 /-- Every row is ready for the next query after incrementing terms once. -/
 theorem next_query_progress (t : Nat) (state : BatchedWeights) (terms : Usize)

@@ -1,0 +1,152 @@
+import S7JoinBasisCanonical
+import S7JoinBackendCarriers
+import S7Kani3CallerTrace
+
+/-! Full 64-row observer-off carrier port. Actual emitted Vec pushes are
+used; PushTrace membership and phase bounds are conclusions of the loop.
+Original query/observer/backend/source-carrier adoption remains separate. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.S7JoinRowsTrace
+open Aeneas Aeneas.Std Result
+open S7Kani2AccumulatorLoop
+open S7Kani2OwnedRowRefinement (makeRow powerLimb)
+open S7Kani3CallerTrace (PushTrace Sum)
+open S7Kani3PhaseInvariant (Phase)
+open S7JoinBasisBlock (cell)
+
+def zeroK : K := ⟨(0#u32,0#u32),(0#u32,0#u32)⟩
+def backend : Backend where
+  push := S7Kani2OwnedPush.push_owned
+  from_qm31 := fun q => ok ⟨q,zeroK⟩
+  from_m31 := fun m => ok ⟨⟨(m,0#u32),(0#u32,0#u32)⟩,zeroK⟩
+  trace := fun _ _ _ => ok ()
+
+/-- Exactly the per-row phase needed during one query: rows below cursor
+have advanced, while the remaining rows retain the old phase. -/
+def Progress (t cursor : Nat) (state : BatchedWeights) : Prop :=
+  state.terms.val=t ∧ state.raw.val.length=64 ∧
+  ∀ i, i<64 → ∃ x : Fin 4 → U64,
+    state.raw.val[i]?=some (makeRow x) ∧
+    ∀ k, Phase (if i<cursor then t+1 else t) (x k).val
+
+theorem progress_write (t cursor : Nat) (state : BatchedWeights)
+    (y : Fin 4 → U64) (index : Usize) (hj : index.val=cursor)
+    (hc : cursor<64) (hp : Progress t cursor state)
+    (hy : ∀ k, Phase (t+1) (y k).val) :
+    Progress t (cursor+1) {state with raw:=state.raw.set index (makeRow y)} := by
+  have hlen := hp.2.1
+  refine ⟨hp.1,by simpa using hp.2.1,?_⟩
+  intro i hi
+  by_cases he : i=cursor
+  · subst i
+    refine ⟨y,?_,?_⟩
+    · change (state.raw.val.set index.val (makeRow y))[cursor]?=some (makeRow y)
+      rw [hj,List.getElem?_set_self (by omega)]
+    · simpa only [show cursor<cursor+1 by omega,if_pos] using hy
+  · obtain ⟨x,hx,hphase⟩ := hp.2.2 i hi
+    refine ⟨x,?_,?_⟩
+    · change (state.raw.val.set index.val (makeRow y))[i]?=some (makeRow x)
+      rw [List.getElem?_set_ne (by omega : index.val≠i)]
+      exact hx
+    · have hiff : (i<cursor+1)=(i<cursor) := propext (by omega)
+      simpa only [hiff] using hphase
+
+/-- Tracing arithmetic is bounded and the pure observer-off embeddings cannot
+reject. The only mutable effect is the concrete source push. -/
+theorem step_exact (output : alloc.vec.Vec K) (state after : BatchedWeights)
+    (basis : S7Kani2BasisLoop.Basis) (power : K) (next j : Usize)
+    (hout : output.val.length=64) (hn : next.val≤22) (hj : j.val<64)
+    (hpush : S7Kani2OwnedPush.push_owned state j power (cell basis j.val)=ok after) :
+    step backend basis power next 64#usize j (output,state)=ok (output,after) := by
+  obtain ⟨m,hm,hmv⟩ := WP.spec_imp_exists (Array.index_usize_spec basis j (by
+    simp only [basis.property]
+    change j.val<256
+    omega))
+  have hjb : j.val<basis.val.length := by rw [basis.property]; change j.val<256; omega
+  have hcell : m=cell basis j.val := by
+    simp only [cell,List.getElem?_eq_getElem hjb,Option.getD_some]
+    exact hmv
+  obtain ⟨i,hi,hiv⟩ := ExtractedCurrentReducerOps.tryMk_success
+    (ty:=.Usize) (next.val*64) (by scalar_tac)
+  have hmul : (next*64#usize : Result Usize)=ok i := hi
+  obtain ⟨ij,hij,hijv⟩ := ExtractedCurrentReducerOps.tryMk_success
+    (ty:=.Usize) (i.val+j.val) (by scalar_tac)
+  have hadd : (i+j : Result Usize)=ok ij := hij
+  obtain ⟨q,hq,_⟩ := WP.spec_imp_exists (alloc.vec.Vec.index_usize_spec output j (by change j.val<output.val.length; rw [hout]; exact hj))
+  have hq' : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice K) output j=ok q := hq
+  simp only [step,hm,hcell,backend,hpush,hmul,hadd,hq',bind_tc_ok]
+
+/-- Full emitted row loop produces its own actual-push trace and advances the
+phase of every visited row. No per-row success or trace-membership hypothesis. -/
+theorem rows_exact (old : S8OwnedP6Finish.Weights) (output : alloc.vec.Vec K)
+    (state : BatchedWeights) (sum : Sum) (basis : S7Kani2BasisLoop.Basis)
+    (power : K) (next j : Usize) (fuel t : Nat)
+    (hout : output.val.length=64) (hn : next.val≤22)
+    (remaining : j.val+fuel=64)
+    (hc : S7JoinBackendCarriers.Canonical power)
+    (hb : S7JoinBasisCanonical.Canonical basis)
+    (history : PushTrace old state sum) (hp : Progress t j.val state) :
+    ∃ after sumOut,
+      accumulate_rows_owned backend output state basis power next 64#usize j=ok (output,after) ∧
+      PushTrace old after sumOut ∧ Progress t 64 after ∧
+      ∀ i k, sumOut i k=if j.val≤i ∧ i<64 then
+        sum i k+(powerLimb power k).val*(cell basis i).val else sum i k := by
+  rw [extracted_loop_composition backend basis power next 64#usize j fuel (output,state)
+    (by decide) remaining]
+  induction fuel generalizing j state sum with
+  | zero =>
+      have hj : j.val=64 := by omega
+      refine ⟨state,sum,rfl,history,by simpa only [hj] using hp,?_⟩
+      intro i k
+      rw [if_neg (by omega : ¬(j.val≤i ∧ i<64))]
+  | succ fuel ih =>
+      have hj : j.val<64 := by omega
+      have hlen := hp.2.1
+      obtain ⟨x,hget,hphase⟩ := hp.2.2 j.val hj
+      have hphase' : ∀ k, Phase state.terms.val (x k).val := by
+        simpa only [Nat.lt_irrefl,if_false,hp.1] using hphase
+      obtain ⟨y,hpush,_,hy⟩ := S7Kani3CallerStep.push_caller_invariant state old sum
+        (S7Kani3CallerTrace.reached_invariant old state sum history) j power
+        (cell basis j.val) x (by change j.val<state.raw.val.length; omega)
+        hget hc (hb j.val (by omega)) hphase'
+      let updated : BatchedWeights := {state with raw:=state.raw.set j (makeRow y)}
+      let sum1 : Sum := Function.update sum j.val
+        (fun k => sum j.val k+(powerLimb power k).val*(cell basis j.val).val)
+      have hist1 : PushTrace old updated sum1 :=
+        .push history j power (cell basis j.val) x (by change j.val<state.raw.val.length; omega)
+          hget hc (hb j.val (by omega)) hphase' hpush
+      have hp1 : Progress t (j.val+1) updated :=
+        progress_write t j.val state y j rfl hj hp (by simpa only [hp.1] using hy)
+      obtain ⟨j1,hinc,hj1⟩ := increment j (by omega)
+      obtain ⟨after,sumOut,hrun,hist,hprogress,hsum⟩ := ih updated sum1 j1 (by omega)
+        hist1 (by simpa only [hj1] using hp1)
+      refine ⟨after,sumOut,?_,hist,hprogress,?_⟩
+      · simp only [iterate,step_exact output state updated basis power next j hout hn hj hpush,
+          bind_tc_ok,hinc]
+        exact hrun
+      · intro i k
+        rw [hsum]
+        dsimp only [sum1]
+        by_cases he : i=j.val
+        · subst i
+          rw [if_neg (by omega : ¬(j1.val≤j.val ∧ j.val<64)),Function.update_self,
+            if_pos (by omega : j.val≤j.val ∧ j.val<64)]
+        · by_cases hf : j1.val≤i ∧ i<64
+          · rw [if_pos hf,Function.update_of_ne he,if_pos (by omega : j.val≤i ∧ i<64)]
+          · rw [if_neg hf,Function.update_of_ne he,if_neg (by omega : ¬(j.val≤i ∧ i<64))]
+
+/-- Every row is ready for the next query after incrementing terms once. -/
+theorem next_query_progress (t : Nat) (state : BatchedWeights) (terms : Usize)
+    (ht : terms.val=t+1) (hp : Progress t 64 state) :
+    Progress (t+1) 0 {state with terms:=terms} := by
+  refine ⟨ht,hp.2.1,?_⟩
+  intro i hi
+  obtain ⟨x,hx,hphase⟩ := hp.2.2 i hi
+  exact ⟨x,hx,by simpa only [hi,if_pos,Nat.not_lt_zero,if_false] using hphase⟩
+
+#print axioms progress_write
+#print axioms step_exact
+#print axioms rows_exact
+#print axioms next_query_progress
+end AspisR1.S7JoinRowsTrace
