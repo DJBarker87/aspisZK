@@ -1,0 +1,19 @@
+--- retained/IndexedCandidateDecode8RetainedBridgeV3
++++ env-J/IndexedCandidateDecode8RetainedBridgeV3
+@@ -1,6 +1,6 @@
+ import AspisR1Post25Sampler.Funs
+ import R0C.ModuloField
+-import ExtractedMaskHornerStep
++import R1Z.ProverCommitArrayIndex25
+ 
+ /-! Candidate-only bridge from the freshly extracted ordinary sampler's
+ `decode8` result to the retained eight-limb `digitsField` representation.
+@@ -36,7 +36,7 @@
+     (hi : i.val < 8) :
+     Array.index_usize digits i =
+       .ok (digits.val[i.val]'(by simpa [digits.property] using hi)) :=
+-  AspisR1.ExtractedMaskHornerStep.array_index_usize_ok digits i hi
++  R1Z.ProverCommitArrayIndex25.array_index_usize_ok digits i hi
+ 
+ private def reduced (x : U32) : U32 :=
+   ⟨BitVec.umod x.bv (2147483647#u32).bv⟩

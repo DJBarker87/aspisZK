@@ -1,0 +1,218 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPack25.lean:91:6: error: Tactic `apply` failed: could not unify the conclusion of `@Fin.ext`
+  ?a = ?b
+with the goal
+  tapes.1 ⟨↑i + n - n, ⋯⟩ = tapes.1 i
+
+Note: The full type of `@Fin.ext` is
+  ∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+
+case neg
+A : Type
+zero : A
+n : ℕ
+tapes : (Fin n → A) × (Fin n → A)
+i : Fin n
+hi : ¬↑i < used zero tapes.1
+⊢ tapes.1 ⟨↑i + n - n, ⋯⟩ = tapes.1 i
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPack25.lean:97:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  dite (used zero tapes.1 + ↑i < used zero tapes.1) ?m.145 ?m.146
+in the target expression
+  (if h :
+        used zero
+              (front fun i =>
+                if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+                else
+                  if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩
+                  else tapes.1 ⟨↑i - n, ⋯⟩) +
+            ↑i <
+          used zero tapes.1 then
+      tapes.1
+        ⟨used zero
+              (front fun i =>
+                if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+                else
+                  if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩
+                  else tapes.1 ⟨↑i - n, ⋯⟩) +
+            ↑i,
+          ⋯⟩
+    else
+      if h_1 :
+          used zero
+                (front fun i =>
+                  if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+                  else
+                    if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩
+                    else tapes.1 ⟨↑i - n, ⋯⟩) +
+              ↑i <
+            used zero tapes.1 + n then
+        tapes.2
+          ⟨used zero
+                  (front fun i =>
+                    if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+                    else
+                      if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩
+                      else tapes.1 ⟨↑i - n, ⋯⟩) +
+                ↑i -
+              used zero tapes.1,
+            ⋯⟩
+      else
+        tapes.1
+          ⟨used zero
+                  (front fun i =>
+                    if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+                    else
+                      if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩
+                      else tapes.1 ⟨↑i - n, ⋯⟩) +
+                ↑i -
+              n,
+            ⋯⟩) =
+    tapes.2 i
+
+case snd
+A : Type
+zero : A
+n : ℕ
+tapes : (Fin n → A) × (Fin n → A)
+i : Fin n
+h₁ : ¬used zero tapes.1 + ↑i < used zero tapes.1
+h₂ : used zero tapes.1 + ↑i < used zero tapes.1 + n
+⊢ (if h :
+        used zero
+              (front fun i =>
+                if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+                else
+                  if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩
+                  else tapes.1 ⟨↑i - n, ⋯⟩) +
+            ↑i <
+          used zero tapes.1 then
+      tapes.1
+        ⟨used zero
+              (front fun i =>
+                if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+                else
+                  if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩
+                  else tapes.1 ⟨↑i - n, ⋯⟩) +
+            ↑i,
+          ⋯⟩
+    else
+      if h_1 :
+          used zero
+                (front fun i =>
+                  if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+                  else
+                    if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩
+                    else tapes.1 ⟨↑i - n, ⋯⟩) +
+              ↑i <
+            used zero tapes.1 + n then
+        tapes.2
+          ⟨used zero
+                  (front fun i =>
+                    if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+                    else
+                      if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩
+                      else tapes.1 ⟨↑i - n, ⋯⟩) +
+                ↑i -
+              used zero tapes.1,
+            ⋯⟩
+      else
+        tapes.1
+          ⟨used zero
+                  (front fun i =>
+                    if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+                    else
+                      if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩
+                      else tapes.1 ⟨↑i - n, ⋯⟩) +
+                ↑i -
+              n,
+            ⋯⟩) =
+    tapes.2 i
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl
+      (used zero
+          (front fun i =>
+            if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, pack._proof_4 zero tapes i h⟩
+            else
+              if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, pack._proof_5 zero tapes i h h₂⟩
+              else tapes.1 ⟨↑i - n, pack._proof_6 zero tapes i h₂⟩) +
+        ↑i)
+  has type
+    @Eq ℕ
+      (used zero
+          (front fun i =>
+            if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+            else if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩ else tapes.1 ⟨↑i - n, ⋯⟩) +
+        ↑i)
+      (used zero
+          (front fun i =>
+            if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+            else if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩ else tapes.1 ⟨↑i - n, ⋯⟩) +
+        ↑i)
+  but is expected to have type
+    @Eq ℕ (used zero (front (pack zero tapes)) + ↑i)
+      (used zero
+          (front fun i =>
+            if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, ⋯⟩
+            else if h₂ : ↑i < used zero tapes.1 + n then tapes.2 ⟨↑i - used zero tapes.1, ⋯⟩ else tapes.1 ⟨↑i - n, ⋯⟩) +
+        ↑i)
+  in the application
+    id
+      (Eq.refl
+        (used zero
+            (front fun i =>
+              if h : ↑i < used zero tapes.1 then tapes.1 ⟨↑i, pack._proof_4 zero tapes i h⟩
+              else
+                if h₂ : ↑i < used zero tapes.1 + n then
+                  tapes.2 ⟨↑i - used zero tapes.1, pack._proof_5 zero tapes i h h₂⟩
+                else tapes.1 ⟨↑i - n, pack._proof_6 zero tapes i h₂⟩) +
+          ↑i))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPack25.lean:94:22: warning: This simp argument is unused:
+  used_pack
+
+Hint: Omit it from the simp argument list.
+  simp only [̵u̵n̵p̵a̵c̵k̵,̵u̵s̵e̵d̵_̵p̵a̵c̵k̵,̵p̵a̵c̵k̵]̵[̲u̲n̲p̲a̲c̲k̲,̲ ̲p̲a̲c̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPack25.lean:116:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  2*c - d ≥ 1
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - b - c ≤ -1
+  a - 2*c ≤ -1
+  a - d ≥ 1
+where
+ a := ↑↑i
+ b := ↑(used zero (front stream))
+ c := ↑n
+ d := ↑↑⟨used zero (front stream) + (↑i - used zero (front stream)), ⋯⟩
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPack25.lean:123:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  2*c - d ≥ 1
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - b - c ≥ 0
+  a - 2*c ≤ -1
+  a - d ≥ 1
+where
+ a := ↑↑i
+ b := ↑(used zero (front stream))
+ c := ↑n
+ d := ↑↑⟨↑i - n + n, ⋯⟩
+'R1Z.ProverCommitPack25.used_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPack25.used_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPack25.used_pack' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPack25.used_unpack' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPack25.unpack_pack' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPack25.pack_unpack' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPack25.packed_uniform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

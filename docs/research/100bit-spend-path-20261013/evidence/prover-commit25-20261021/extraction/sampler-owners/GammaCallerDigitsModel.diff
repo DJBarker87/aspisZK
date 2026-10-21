@@ -1,0 +1,17 @@
+--- retained/GammaCallerDigitsModel
++++ env-J/GammaCallerDigitsModel
+@@ -87,11 +87,9 @@
+       rw [if_pos hz]
+       exact hfirst
+   | true =>
+-      change (do
+-        let digits2 ← (do let (_,digits3) ← ops.add digits1 1#u32; .ok digits3)
+-        ops.decode digits2) = .ok out at h
+-      have hflat : (do let pair ← ops.add digits1 1#u32; ops.decode pair.2) = .ok out := by
+-        simpa only [bind_assoc_eq, bind_tc_ok] using h
++      dsimp only at h
++      simp only [if_true,bind_tc_ok,pure_bind] at h
++      have hflat : (do let pair ← ops.add digits1 1#u32; ops.decode pair.2) = .ok out := h
+       obtain ⟨pair,hsecond,h⟩ := bind_success (ops.add digits1 1#u32) _ _ hflat
+       rcases pair with ⟨wrappedAgain,digits2⟩
+       change ops.decode digits2 = .ok out at h

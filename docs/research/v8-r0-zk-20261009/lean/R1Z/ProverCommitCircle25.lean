@@ -26,6 +26,46 @@ def toSemantic {H : Type} (s : State H) : ProverCommitSemantic20.State H :=
 theorem semantic_roundtrip {H : Type} (s : ProverCommitSemantic20.State H) :
     toSemantic (fromSemantic s) = s := by cases s; rfl
 
+def fromHash {H : Type} (hash : AspisR1SimSemantic20.aspis_core.digest.Digest32 H) :
+    aspis_core.digest.Digest32 H := ⟨hash.coremarkerCopyInst,hash.digest⟩
+
+def fromError : AspisR1SimSemantic20.r1_wire.Error → r1_wire.Error
+  | .Allocation => .Allocation
+  | .RowOrder expected actual => .RowOrder expected actual
+  | .InvalidRow => .InvalidRow
+  | .Tag row => .Tag row
+  | .Length row => .Length row
+  | .NonCanonical row index => .NonCanonical row index
+  | .Boundary round => .Boundary round
+  | .Terminal => .Terminal
+  | .EqualCirclePoints => .EqualCirclePoints
+  | .TrailingBytes => .TrailingBytes
+  | .Public => .Public
+  | .ActivePole => .ActivePole
+
+def fromBlock {H : Type} (value : (core.result.Result Bytes32
+    AspisR1SimSemantic20.r1_wire.Error) × ProverCommitSemantic20.State H) :
+    (core.result.Result Bytes32 r1_wire.Error) × State H :=
+  ((match value.1 with
+    | core.result.Result.Ok block => core.result.Result.Ok block
+    | core.result.Result.Err error => core.result.Result.Err (fromError error)),fromSemantic value.2)
+
+/-- Universal nominal transport of the actual three-read block method,
+including every hash failure/divergence and the row-order rejection state. -/
+theorem block_transport {H : Type} (hash : AspisR1SimSemantic20.aspis_core.digest.Digest32 H)
+    (state : ProverCommitSemantic20.State H) (row : U8) (record : Slice U8) :
+    (do let value ← AspisR1SimSemantic20.r1_wire.SemanticTranscript.sample_block_validated
+          hash state row record
+        ok (fromBlock value)) =
+      r1_wire.SemanticTranscript.sample_block_validated (fromHash hash)
+        (fromSemantic state) row record := by
+  simp only [AspisR1SimSemantic20.r1_wire.SemanticTranscript.sample_block_validated,
+    r1_wire.SemanticTranscript.sample_block_validated,fromHash,fromSemantic,lift,bind_tc_ok]
+  split
+  · rfl
+  · simp only [bind_assoc,bind_tc_ok]
+    rfl
+
 def row (second : Bool) : AspisR1CircleSampleWrapper.r0_transcript.CircleRow :=
   if second then .Second else .First
 
@@ -96,6 +136,7 @@ theorem second_caller {H : Type} (hash : aspis_core.digest.Digest32 H)
   simp [r1_wire.circle25.point,order,checked,sampled,h]
   rfl
 
+#print axioms block_transport
 #print axioms wrapper_roundtrip
 #print axioms semantic_roundtrip
 #print axioms points_decode

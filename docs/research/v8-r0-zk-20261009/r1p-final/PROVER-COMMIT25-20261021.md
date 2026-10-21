@@ -87,6 +87,50 @@ The source-level circle-policy equality and the semantic validator's nominal
 execution transport still need composition; fixture equality is not promoted
 to that universal source theorem.
 
+## Stage 4 — owned scalar policies and the remaining source gate
+
+The 23 retained scalar-owner modules are compiled into Env J from their
+pinned sources, not by copying native objects. The exact import/source map,
+raw sources, final port diffs and hashes are under `sampler-owners.json` and
+`extraction/sampler-owners`. No existing shared predecessor object is
+overwritten: each owner name was absent from Env J. One irrelevant
+mask-Horner import was replaced by the identical small array-index proof in
+`ProverCommitArrayIndex25` (J7508: only propext); this avoids an unrelated
+mask proof replay. Four old monadic proof scripts received local elaboration
+ports; their statements and generated arithmetic bodies are unchanged.
+
+`ProverCommitPolicies25` now installs unconditional owned gamma, ordinary
+and rho policies into the extracted suffix. `gamma_rank` proves every
+block's exact nonzero field rank; `ordinary_total` proves every block's
+ordinary field rank; `scalar_after_block` preserves the trace/allocation/cast
+continuation and advanced state. **The query policy is still an explicit
+parameter.** J7567: exit 0, wall 1.92 s, peak 3961104 KiB, swaps 0; all seven
+audits standard-only. This is an owned-reference policy installation, not
+yet unconditional frozen-source equivalence for the whole sampler family.
+
+The add-small source gate passes, but the candidate additionally rewrites
+`low_base_p_digits`. Its full arithmetic comparison times out at 600 s,
+and the isolated division-pass comparison times out at 180 s; neither is
+accepted. The full gate's cgroup peak is 1310396416 bytes (the killed
+process-tree RSS is not captured by GNU time's parent statistic).
+The replacement control gates pass (two harnesses; 2.489 s, 279588 KiB,
+zero swap), comparing byte parsing, all ordered cell inputs, outputs and
+retained state for arbitrary paired cell responses. They establish traversal
+wiring only; arithmetic-cell instantiation/source composition remains open.
+All receipts are retained, with no unchanged rerun or increased cap.
+
+`block_transport` additionally proves the semantic-to-circle nominal
+execution join for the actual three-read block method, including every
+hash error/divergence and wrong-row rejection. J7541: exit 0, 2.41 s,
+3972420 KiB, zero swap; all seven circle audits standard-only. Validator
+nominal transport remains distinct. Exact shipped source prefixes used by
+the extraction are checked in `circle-source-binding.json`.
+
+J7506/J7561 are preflight import failures; no compiler launched. The query
+closure's retained source/std/caller correspondence is explicitly open in
+its original manifest, so importing its mathematical schedule would not
+by itself close that source gate.
+
 ## Product coupling and endpoint
 
 Not yet constructed. No refinement premise has been deleted.
