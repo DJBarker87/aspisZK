@@ -678,3 +678,36 @@ fits the measured transaction budget, but fails the historical B1 criterion.
 It remains unadopted; no security criterion or performance gate was silently
 relaxed. Complete source/driver instances, remaining other-cone obligations
 and final release replay/artifact binding still prevent a100-bit claim.
+
+## Complete candidate query equality and ten-query raw bounds
+
+The selected execution model now has full-Result equality of its QueryOps
+record, complete query and complete query loop when the two unused from_fn
+slots diverge. There are no acceptance, scanner or canonicality premises in
+these equality statements. This extends the already proved callback equality;
+it does not assert source adoption. Packet:
+`evidence/s4-v10-no-fromfn-queryops-equality-v1-20261021`.
+Focused compile: exit0,9.551s,peak process RSS4,008,951,808 bytes,zero swaps,
+standard axioms, captured launch revision3af931da4.
+
+The loop object selected for that compile has a producer source hash beginning
+6eec6a3f, whereas the current tracked loop snapshot begins c398ba41. Both are
+recorded explicitly. The equality is proved for the exact selected object;
+it is not yet evidence of identity with the current tracked source. Resolving
+this provenance difference is the next source-link task, rather than treating
+the passing compile as a current-source re-pin.
+
+`candidate_source_tx1_success_ten_fullwide_coordinate_bounds` composes the
+ten-query caller result with the existing coordinate consumer. For every one
+of the same ten actual calls it retains the successful opening and dots
+callback and proves all eight coordinate bounds on that exact returned
+array. No independent callback success or scalar bound was added. The
+concrete scan/preparation bindings and non-S4 operations remain explicit.
+Packet: `evidence/s4-candidate-tx1-output-fullwide-bounds-v1-20261021`.
+Focused compile: exit0,8.375s,peak RSS3,964,796,928 bytes,zero swaps,standard
+axioms, captured launch revision3af931da4.
+
+Only source/receipt packet checks were rerun for integration. No unchanged
+Lean compilation, runtime suite, or package replay was repeated. The full
+settlement caller connection and coherent final closure remain open; neither
+S4 nor the implementation-linked100-bit target is declared closed.
