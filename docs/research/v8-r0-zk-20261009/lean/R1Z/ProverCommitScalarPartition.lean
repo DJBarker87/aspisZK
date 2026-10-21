@@ -43,6 +43,13 @@ theorem masked_partition (raw : Nat → Nat) :
   sixteen_partition (fun i => raw i &&& 2147483647)
     (fun _ _ => Nat.and_le_right)
 
+/-- Exactly the nine retained word positions used by the source split. -/
+theorem word_partition (word : Nat) (admitted : word ≤ 8) :
+    word = 0 ∨ word = 1 ∨ word = 2 ∨ word = 3 ∨ word = 4 ∨
+      word = 5 ∨ word = 6 ∨ word = 7 ∨ word = 8 := by
+  omega
+
+#print axioms word_partition
 #print axioms masked_partition
 #print axioms first_accept_partition
 #print axioms sixteen_partition

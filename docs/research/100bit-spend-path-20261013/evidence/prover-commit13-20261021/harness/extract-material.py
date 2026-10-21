@@ -24,13 +24,29 @@ def run(name,cmd):
  rc=subprocess.run(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'harness/capped.py'),str(H/'receipts'/name),'Optimized compilation and owned reference translation; no dense arithmetic','--',*cmd]).returncode
  if rc:raise SystemExit(rc)
 (H/'extraction').mkdir(exist_ok=True)
-run('material-charon-v2',[CHARON,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--start-from','crate::state_only_hiding::build_mask_material_for_layout',
- '--opaque','aspis_prover::state_only_hiding::{aspis_prover::state_only_hiding::SeedExpander}::m31',
- '--opaque','aspis_prover::state_only_hiding::{aspis_prover::state_only_hiding::SeedExpander}::qm31',
- '--opaque','crate::state_only_hiding::balance_m31_copy_inactive',
- '--opaque','crate::state_only_hiding::balance_qm31_copy_inactive',
+run('material-charon-v3',[CHARON,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--start-from','crate::state_only_hiding::build_mask_material_for_layout',
+ '--opaque','crate::state_only_hiding',
+ '--include','crate::state_only_hiding::build_mask_material_for_layout',
+ '--include','crate::state_only_hiding::SeedExpander',
+ '--include','crate::state_only_hiding::StateOnlyMaskMaterial',
+ '--include','crate::state_only_hiding::StateOnlyMaskBuildError',
+ '--include','crate::state_only_hiding::StateOnlyMaskNonceStore',
  '--include','core::result::Result','--include','aspis_core::field::M31','--include','aspis_core::field::CM31','--include','aspis_core::field::QM31','--include','aspis_core::state_only_hiding::StateOnlyHidingContext','--include','aspis_core::state_only_hiding::{_}::encode','--include','aspis_statement::TraceCell',
- '--opaque','aspis_core','--opaque','aspis_statement','--dest-file',str(H/'extraction/ProverMaterial13-v2.llbc'),'--','--manifest-path',str(H/'src/crates/aspis-prover/Cargo.toml'),'--locked','--offline','--release','--lib','--features','r0','--jobs','4'])
-p=H/'extraction/ProverMaterial13-v2.llbc';data=json.loads(p.read_text());(H/'material-llbc-v2.json').write_text(json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),size_bytes=p.stat().st_size,has_errors=data.get('has_errors')),indent=2)+'\n')
+ '--opaque','aspis_core','--opaque','aspis_statement','--dest-file',str(H/'extraction/ProverMaterial13-v3.llbc'),'--','--manifest-path',str(H/'src/crates/aspis-prover/Cargo.toml'),'--locked','--offline','--release','--lib','--features','r0','--jobs','4'])
+p=H/'extraction/ProverMaterial13-v3.llbc';data=json.loads(p.read_text());(H/'material-llbc-v3.json').write_text(json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),size_bytes=p.stat().st_size,has_errors=data.get('has_errors')),indent=2)+'\n')
 assert data['has_errors'] is False
-run('material-aeneas-v2',[AENEAS,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR1ProverMaterial13','-dest',str(H/'extraction/generated-v2'),'-subdir','AspisR1ProverMaterial13','-split-files','-emit-json',str(p)])
+functions=data['translated']['fun_decls']
+rows=[]
+for f in functions:
+ if f is None:continue
+ n=f['item_meta']['name'];last=n[-1]
+ if 'Ident' in last and last['Ident'][0] in ['build_mask_material_for_layout','m31','qm31','balance_m31_copy_inactive','balance_qm31_copy_inactive']:
+  rows.append(dict(name=n,body_kind=list(f['body']) if isinstance(f['body'],dict) else f['body']))
+(H/'material-opacity-preflight-v3.json').write_text(json.dumps(rows,indent=2)+'\n')
+for r in rows:
+ last=r['name'][-1]['Ident'][0]
+ assert (isinstance(r['body_kind'],list) if last=='build_mask_material_for_layout' else r['body_kind']=='Opaque'),r
+assert any(r['name'][-1]['Ident'][0]=='build_mask_material_for_layout' for r in rows)
+assert any(r['name'][-1]['Ident'][0]=='m31' for r in rows)
+assert any(r['name'][-1]['Ident'][0]=='qm31' for r in rows)
+run('material-aeneas-v3',[AENEAS,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR1ProverMaterial13','-dest',str(H/'extraction/generated-v3'),'-subdir','AspisR1ProverMaterial13','-split-files','-emit-json',str(p)])

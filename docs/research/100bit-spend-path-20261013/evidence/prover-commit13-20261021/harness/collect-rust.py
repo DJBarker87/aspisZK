@@ -20,7 +20,7 @@ rows=[]
 for p in s.rglob('*.kani-metadata.json'):
  x=json.loads(p.read_text())
  for h in x.get('proof_harnesses',[]):
-  if any(t in h.get('pretty_name','') for t in ['safety13','scalar13']):rows.append(dict(metadata=str(p),harness=h))
+  if any(t in h.get('pretty_name','') for t in ['safety13','scalar13','seeds13','query13','outer13']):rows.append(dict(metadata=str(p),harness=h))
 print(json.dumps(rows,indent=2))
 '''%R
 (E/'scalar-harness-metadata.json').write_text(subprocess.check_output(['ssh',host,'python3 -'],input=code,text=True))
