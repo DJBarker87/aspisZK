@@ -1,0 +1,29 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCursor.lean:18:50: error(lean.unknownIdentifier): Unknown constant `Option.bind_pure`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCursor.lean:18:9: error: unsolved goals
+case zero
+N : ℕ
+ws : Fin N → Word
+p : ℕ
+⊢ ((tryLimb ws p 16).bind fun a => some a) = tryLimb ws p 16
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCursor.lean:19:14: error: unsolved goals
+case succ
+N : ℕ
+ws : Fin N → Word
+L : ℕ
+ih : ∀ (p : ℕ), runFrom ws p (L + 1) = (runFrom ws p L).bind fun q => tryLimb ws q 16
+p : ℕ
+⊢ ((tryLimb ws p 16).bind fun a => (tryLimb ws a 16).bind fun q => runFrom ws q L) =
+    (runFrom ws p L).bind fun y => (tryLimb ws y 16).bind fun q => tryLimb ws q 16
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCursor.lean:87:12: error: Type mismatch: After simplification, term
+  hless
+ has type
+  True ↔ cursor ws (p + 1) L 16 = none
+but is expected to have type
+  none = none ↔ cursor ws (p + 1) L 16 = none
+'R1Z.ProverCommitCursor.runFrom_succ' depends on axioms: [propext, sorryAx]
+'R1Z.ProverCommitCursor.runFrom_zero' depends on axioms: [propext, sorryAx]
+'R1Z.ProverCommitCursor.cursor_step' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitCursor.decoder_cursor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCursor.decoder_exhausted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

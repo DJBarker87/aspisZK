@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCursor.lean:18:12: error: Tactic `rfl` failed: The left-hand side
+  runFrom ws p (0 + 1)
+is not definitionally equal to the right-hand side
+  (runFrom ws p 0).bind fun q => tryLimb ws q 16
+
+case zero
+N : ℕ
+ws : Fin N → Word
+p : ℕ
+⊢ runFrom ws p (0 + 1) = (runFrom ws p 0).bind fun q => tryLimb ws q 16
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCursor.lean:19:14: error: unsolved goals
+case succ
+N : ℕ
+ws : Fin N → Word
+L : ℕ
+ih : ∀ (p : ℕ), runFrom ws p (L + 1) = (runFrom ws p L).bind fun q => tryLimb ws q 16
+p : ℕ
+⊢ ((tryLimb ws p 16).bind fun a => (tryLimb ws a 16).bind fun q => runFrom ws q L) =
+    (tryLimb ws p 16).bind fun y => (runFrom ws y L).bind fun q => tryLimb ws q 16
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCursor.lean:20:24: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [runFrom, i̵h̵,̵ ̵Option.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCursor.lean:38:2: error: `simp` failed: maximum number of steps exceeded
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCursor.lean:76:29: error(lean.unknownIdentifier): Unknown constant `R1Z.ProverCommitWordCarrier.accepted_failure.mp`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCursor.lean:81:23: error(lean.unknownIdentifier): Unknown constant `R1Z.ProverCommitWordCarrier.accepted_failure.mpr`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCursor.lean:84:10: error: Type mismatch: After simplification, term
+  hless
+ has type
+  (decodeWords accepted n L 16 fun i => tail i.succ) = none ↔ cursor ws (p + 1) L 16 = none
+but is expected to have type
+  Option.map (fun v => (a, v)) (decodeWords accepted n L 16 fun j => tail j.succ) = none ↔ cursor ws (p + 1) L 16 = none
+'R1Z.ProverCommitCursor.runFrom_succ' depends on axioms: [propext, sorryAx]
+'R1Z.ProverCommitCursor.runFrom_zero' depends on axioms: [propext, sorryAx]
+'R1Z.ProverCommitCursor.cursor_step' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverCommitCursor.decoder_cursor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCursor.decoder_exhausted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
