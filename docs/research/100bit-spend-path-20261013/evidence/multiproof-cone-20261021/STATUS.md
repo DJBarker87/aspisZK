@@ -1,5 +1,25 @@
 # Parser and multiproof source refinement
 
+**P6 certificate continuation (2026-10-21): blocked at whole-function adoption.**
+Three new contracts for the actual binary/occupied/sibling node callback bodies
+pass, using the independently verified hash observer. The existing leaf-hash
+certificate is reused after function/dependency checks. The complete
+`verify_in_place` gate reaches source/reference execution but times out with
+zero completed solver results (effective exit 65, 241.901905 s, 3,597,180 KiB
+RSS, zero swaps). No whole `batch_tree` certificate or actual-source stage
+instantiation is claimed. Both requested items stop at this demonstrated
+certificate blocker. The instrumented stage remains (c); the actual Rust
+source/caller instance remains (d); zero headline premises removed.
+
+Current branch: `codex/cx-multiproof-p6-20261021`, base `57ca9c452`.
+Function-by-function coverage, extraction distinctions, callee verification,
+all failed attempts and the exact next deliverable are recorded in
+[P6-CERTIFICATES.md](P6-CERTIFICATES.md), [p6-function-citations.json](p6-function-citations.json)
+and [p6-audit-result.json](p6-audit-result.json). Receipts are under `host-p6/`.
+`python3 -B tools/multiproof-cone-20261021/audit-p6.py` checks the packet.
+No shipped or Lean source changed; frozen-ELF rebuilds were not triggered.
+The retained Lean endpoint's standard axiom reports are reused, not replayed.
+
 **Current result (continuation 6):** the leaf/dedup, physical count, zero-padding,
 physical root and scratch-threaded two-triple composition is proved for the
 explicit instrumented/P6 source cut. Endpoint:
@@ -9,7 +29,7 @@ verifier/annotation join remain open. The final continuation-6 section below
 supersedes the historical unfinished-obligation lists; historical receipts are
 retained.
 
-Current continuation branch: `codex/cx-multiproof-cone6-20261021`, base `26ed8e339` (prior continuation branches: cone2, cone3 and cone4; original packet: `codex/cx-multiproof-cone-20261021`). The oracle-decision port
+Prior continuation branch: `codex/cx-multiproof-cone6-20261021`, base `26ed8e339` (prior continuation branches: cone2, cone3 and cone4; original packet: `codex/cx-multiproof-cone-20261021`). The oracle-decision port
 is approved for this work. Target: `OraclePortHeadlineFrozen` at
 `OraclePortFrozen2.dV_frozen2`, retaining the two transaction batches and checkpoint placement.
 
