@@ -1,0 +1,183 @@
+import AllocatedContinuationM10
+import PublicRecoveryAllocationM10
+import PublicParserAllocationM10
+import AllocationPublicStageM10
+import CostedAllocationLedgerM10
+
+/-! The allocator is fixed by the source-site stage constructors. There is
+no HeapMirror argument, and no resource bound assumed of a supplied function.
+The returned value executes the retained-state witness mirror. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ActualAllocationExtractorM10
+open AspisWideTower AspisV8R15.ExactTowerBase SpendRelation
+open CanonicalCutEnrichedTranscript (Words)
+open RawRecordedEagerExtractorReadsBin (RunView Coins)
+attribute [local irreducible] BinPublicRecoverySharedStageM10.stage PublicParserWork.parsePublic
+  PublicRecoveryAllocationM10.stageCells InitialPublicImageWorkM10.budget
+
+def continuation (pub : R0P.Public M31Exact) (words : Words) (coins : Coins) : Option Wspend × Nat :=
+  (AllocatedContinuationM10.spec pub (CostedExtractorStagesM10.received words) coins).run
+    (CostedExtractorStagesM10.received words,fun _ => words.final)
+
+def continuationCells (pub : R0P.Public M31Exact) (words : Words) (coins : Coins) : Nat :=
+  ((AllocatedContinuationM10.spec pub (CostedExtractorStagesM10.received words) coins).allocation
+    (CostedExtractorStagesM10.received words,fun _ => words.final)).elements
+
+theorem continuation_value (pub : R0P.Public M31Exact) (words : Words) (coins : Coins) :
+    (continuation pub words coins).1 = RawRecordedEagerExtractorReadsBin.continueWithWords pub words coins := by
+  unfold continuation
+  have h := AllocatedContinuationM10.value pub (CostedExtractorStagesM10.received words)
+    (fun _ => words.final) coins
+  simpa only [CostedExtractorStagesM10.received,RawRecordedEagerExtractorReadsBin.continueWithWords] using h
+
+theorem continuation_work (pub : R0P.Public M31Exact) (hp : pub.nextPairIndex < 2^64)
+    (words : Words) (coins : Coins) :
+    (continuation pub words coins).2 ≤ ComposedContinuationSpecM10.budget InitialPublicImageWorkM10.budget := by
+  unfold continuation
+  exact AllocatedContinuationM10.work pub hp _ _ coins
+
+theorem continuation_paid (pub : R0P.Public M31Exact) (words : Words) (coins : Coins) :
+    continuationCells pub words coins ≤ (continuation pub words coins).2 :=
+  ((AllocatedContinuationM10.spec pub (CostedExtractorStagesM10.received words) coins).allocation
+    (CostedExtractorStagesM10.received words,fun _ => words.final)).creation_work
+
+@[irreducible] def eval (run : RunView) (coins : Coins) : Option Wspend × Nat :=
+  ExtractorStagesM10.publicStage (BinPublicRecoverySharedStageM10.stage run)
+    (PublicParserAllocationM10.parsePublic run.2.1.1.pubBytes).run
+    (fun pub words => continuation pub words coins)
+
+theorem value (run : RunView) (coins : Coins) :
+    (eval run coins).1 = RawRecordedPublicSpendExtractorBin.extract run coins := by
+  have hp : (PublicParserAllocationM10.parsePublic run.2.1.1.pubBytes).run.1 =
+      RawCutWordsFromRunPublicValidBin.runDecodedPublic run := by
+    rw [PublicParserAllocationM10.erase]
+    unfold RawCutWordsFromRunPublicValidBin.runDecodedPublic
+    exact PublicParserWork.parsePublic_value _
+  have hh := ExtractorStagesM10.public_refines (BinPublicRecoverySharedStageM10.stage run)
+    (PublicParserAllocationM10.parsePublic run.2.1.1.pubBytes).run
+    (fun pub words => continuation pub words coins)
+    (BinEagerWordsReads.words run).1 (RawCutWordsFromRunPublicValidBin.runDecodedPublic run)
+    (fun pub words => RawRecordedEagerExtractorReadsBin.continueWithWords pub words coins)
+    (BinPublicRecoverySharedStageM10.stage_value run) hp
+    (fun pub words => continuation_value pub words coins)
+  have he := RawRecordedEagerExtractorReadsBin.optionReads_value
+    (RawCutWordsFromRunPublicValidBin.runDecodedPublic run)
+    (fun pub => (RawRecordedEagerExtractorReadsBin.continueWithWords pub
+      (BinEagerWordsReads.words run).1 coins,(BinEagerWordsReads.words run).2))
+  unfold eval
+  exact (hh.trans he.symm).trans (RawRecordedEagerExtractorReadsBin.value run coins)
+
+theorem work (run : RunView) (coins : Coins) :
+    (eval run coins).2 ≤ CostedAllocationLedgerM10.workConstant*(run.1.length+1) := by
+  have hp : (PublicParserAllocationM10.parsePublic run.2.1.1.pubBytes).run.2 ≤ 110260 := by
+    rw [PublicParserAllocationM10.erase]
+    exact PublicParserWork.parsePublic_work _
+  have hh := ExtractorStagesM10.public_work (BinPublicRecoverySharedStageM10.stage run)
+    (PublicParserAllocationM10.parsePublic run.2.1.1.pubBytes).run
+    (fun pub words => continuation pub words coins)
+    (4000000000000*(run.1.length+1)) 110260 (ComposedContinuationSpecM10.budget InitialPublicImageWorkM10.budget)
+    (BinPublicRecoverySharedStageM10.stage_work run) hp
+    (fun pub hpub => continuation_work pub (PublicParsedIndexM10.bound _ pub
+      (by simpa only [PublicParserAllocationM10.erase] using hpub)) _ coins)
+  have hc : 110260+ComposedContinuationSpecM10.budget InitialPublicImageWorkM10.budget+1+1000 ≤
+      (110260+ComposedContinuationSpecM10.budget InitialPublicImageWorkM10.budget+1+1000)*(run.1.length+1) :=
+    Nat.le_mul_of_pos_right _ (by omega)
+  unfold eval CostedAllocationLedgerM10.workConstant CostedExtractorStagesM10.workConstant
+  nlinarith
+
+@[irreducible] def cells (run : RunView) (coins : Coins) : Nat :=
+  AllocationPublicStageM10.cells (PublicParserAllocationM10.parsePublic run.2.1.1.pubBytes).run
+    (BinPublicRecoverySharedStageM10.stage run) (PublicRecoveryAllocationM10.stageCells run)
+    (PublicParserAllocationM10.parsePublic run.2.1.1.pubBytes).cells
+    (fun pub words => continuationCells pub words coins)
+
+theorem cells_paid (run : RunView) (coins : Coins) : cells run coins ≤ (eval run coins).2 := by
+  unfold cells eval
+  exact AllocationPublicStageM10.paid _ _ _ _ _ _
+    (PublicRecoveryAllocationM10.stage_work run)
+    (PublicParserAllocationM10.parsePublic run.2.1.1.pubBytes).paid
+    (fun pub words => continuation_paid pub words coins)
+
+def width : Nat := 1024
+
+/-- Fixed constructor composition; callers cannot choose the allocation bill. -/
+def actualHeap : CostedAllocationLedgerM10.HeapMirror := ⟨fun run coins => width*cells run coins⟩
+
+theorem allocation_work (run : RunView) (coins : Coins) :
+    actualHeap.bits run coins ≤ width*(eval run coins).2 :=
+  Nat.mul_le_mul_left width (cells_paid run coins)
+
+theorem allocation_linear (run : RunView) (coins : Coins) :
+    actualHeap.bits run coins ≤ (width*CostedAllocationLedgerM10.workConstant)*(run.1.length+1) := by
+  have hw := work run coins
+  exact (allocation_work run coins).trans (by
+    simpa only [Nat.mul_assoc] using Nat.mul_le_mul_left width hw)
+
+theorem width_le_footprint : width ≤ CostedAllocationLedgerM10.footprint := by
+  unfold width CostedAllocationLedgerM10.footprint
+  omega
+
+theorem allocation_bound (Q : Nat) : CostedAllocationLedgerM10.AllocationBound actualHeap Q := by
+  intro run coins _ _
+  exact (allocation_linear run coins).trans
+    (Nat.mul_le_mul_right _ (Nat.mul_le_mul_right _ width_le_footprint))
+
+theorem counted_allocations (run : RunView) (coins : Coins) :
+    actualHeap.bits run coins = 1024*(PublicRecoveryAllocationM10.stageCells run+
+      (PublicParserAllocationM10.parsePublic run.2.1.1.pubBytes).cells+
+      (match (PublicParserAllocationM10.parsePublic run.2.1.1.pubBytes).run.1 with
+      | none => 0
+      | some pub => continuationCells pub (BinPublicRecoverySharedStageM10.stage run).1 coins)+1+32) := rfl
+
+theorem positive (run : RunView) (coins : Coins) : 0 < actualHeap.bits run coins := by
+  rw [counted_allocations]
+  have h : 0 < PublicRecoveryAllocationM10.stageCells run+
+      (PublicParserAllocationM10.parsePublic run.2.1.1.pubBytes).cells+
+      (match (PublicParserAllocationM10.parsePublic run.2.1.1.pubBytes).run.1 with
+      | none => 0 | some pub => continuationCells pub (BinPublicRecoverySharedStageM10.stage run).1 coins)+1+32 := by omega
+  exact Nat.mul_pos (by omega) h
+
+/-- This is an accepted-flag RunView, precisely the domain of AllocationBound;
+it does not assert that a recorded protocol experiment produces this view. -/
+def acceptedRun (pub : RawCutProverCompiler.Public) (proof : RawCutProverCompiler.Proof) : RunView :=
+  ([],((pub,proof),true))
+
+theorem accepted_nonvacuous (pub : RawCutProverCompiler.Public) (proof : RawCutProverCompiler.Proof)
+    (coins : Coins) :
+    (acceptedRun pub proof).2.2 = true ∧
+    actualHeap.bits (acceptedRun pub proof) coins = width*cells (acceptedRun pub proof) coins ∧
+    0 < actualHeap.bits (acceptedRun pub proof) coins := ⟨rfl,rfl,positive _ _⟩
+
+/-- A fully specified view in the ledger's accepted-flag domain. Empty public
+bytes exercise a rejecting parser; recovery/cache construction still occurs. -/
+def literalAcceptedRun : RunView := acceptedRun
+  { pubBytes := [], initFits := by change 75 ≤ 131072; omega, tag := 0 }
+  (fun _ => .payload ⟨[],by change 0 ≤ 3717; omega⟩)
+
+theorem literal_count (coins : Coins) :
+    literalAcceptedRun.2.2 = true ∧
+    actualHeap.bits literalAcceptedRun coins =
+      1024*(PublicRecoveryAllocationM10.stageCells literalAcceptedRun+35) ∧
+    0 < actualHeap.bits literalAcceptedRun coins := by
+  refine ⟨rfl,?_,positive _ _⟩
+  rw [counted_allocations]
+  change 1024*(PublicRecoveryAllocationM10.stageCells literalAcceptedRun+2+0+1+32) = _
+  ring
+
+#print axioms continuation_value
+#print axioms continuation_work
+#print axioms continuation_paid
+#print axioms value
+#print axioms work
+#print axioms cells_paid
+#print axioms allocation_work
+#print axioms allocation_linear
+#print axioms width_le_footprint
+#print axioms allocation_bound
+#print axioms counted_allocations
+#print axioms positive
+#print axioms accepted_nonvacuous
+#print axioms literal_count
+end AspisR1.ActualAllocationExtractorM10
+end

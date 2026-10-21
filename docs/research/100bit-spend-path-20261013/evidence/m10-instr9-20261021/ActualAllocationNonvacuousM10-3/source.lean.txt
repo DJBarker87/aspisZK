@@ -1,0 +1,35 @@
+import ActualAllocationExtractorM10
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ActualAllocationNonvacuousM10
+open ActualAllocationExtractorM10
+open RawRecordedEagerExtractorReadsBin (RunView Coins)
+attribute [local irreducible] PublicRecoveryAllocationM10.stageCells
+
+/-- A fully specified view in the ledger's accepted-flag domain. Empty public
+bytes exercise a rejecting parser; recovery/cache construction still occurs. -/
+@[never_extract,noinline,irreducible] def literalAcceptedRun : RunView := acceptedRun
+  { pubBytes := [], initFits := by change 75 ≤ 131072; omega, tag := 0 }
+  (fun _ => .payload ⟨[],by change 0 ≤ 3717; omega⟩)
+
+theorem literal_public_bytes : literalAcceptedRun.2.1.1.pubBytes = [] := by
+  unfold literalAcceptedRun acceptedRun
+  rfl
+
+theorem literal_count (coins : Coins) :
+    literalAcceptedRun.2.2 = true ∧
+    actualHeap.bits literalAcceptedRun coins =
+      1024*(PublicRecoveryAllocationM10.stageCells literalAcceptedRun+35) ∧
+    0 < actualHeap.bits literalAcceptedRun coins := by
+  refine ⟨?_,?_,positive _ _⟩
+  · unfold literalAcceptedRun acceptedRun
+    rfl
+  · rw [counted_allocations,literal_public_bytes]
+    change 1024*(PublicRecoveryAllocationM10.stageCells literalAcceptedRun+2+0+1+32) = _
+    congr 1
+
+#print axioms literal_public_bytes
+#print axioms literal_count
+end AspisR1.ActualAllocationNonvacuousM10
+end
