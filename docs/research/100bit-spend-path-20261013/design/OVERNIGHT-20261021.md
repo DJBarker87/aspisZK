@@ -59,6 +59,19 @@ Each was byte-identical, every time.
    but the draft dV evaluates the remaining slots. A follow-up draft
    (`codex/cx-shortcircuit-draft-20261021`) makes dV short-circuit like the
    frozen code and proves acceptance is unchanged.
+   Fidelity chain after the split (all unmerged draft branches, each stacked
+   on the last):
+   - `cx-shortcircuit-draft`: the outer short circuit now matches the frozen
+     verifier, with acceptance unchanged and prefix logs (`OraclePortHeadlineDVsc`).
+   - `cx-inner-order-draft`: the model slot is more permissive than the
+     frozen one (it accepts non-zero padding).
+   - `cx-refine-join-draft`: proves the one-directional ExecutionRefinement
+     (strictly weaker), the ≤1161 accepted-run bound, and guard erasure on
+     accepted runs. Log containment alone does not transfer the extractor
+     (countermodels), so
+   - `cx-acclog-draft` (running at 05:40) targets equal logs on frozen-accepted
+     runs. That is the weakest join that transfers the extractor's input
+     exactly.
    Recommendation: adopt. The whole soundness gap then becomes one
    Rust-equals-dV execution join plus the runtime carrier binding, which is
    exactly what the S-cone re-pins establish. Nothing merges without your yes.
