@@ -1,0 +1,3 @@
+PROVED one concrete candidate caller success yields all ten actual query calls and CandidateQueryFieldEvidence, which explicitly retains the actual dots callback output, canonical four returned values and four literal field equations, for one shared mapped ClaimPowers vector.
+
+Limitations: Scanner and same-run preparation/ClaimPowers contracts remain explicit upstream interfaces. The concrete arithmetic record and constructor constants are fixed; filled and nonS4 source operations remain universal. The isolated candidate is unadopted; frozen source Std/from_fn, actual upstream driver/runtime and final artifact/release bindings remain open.

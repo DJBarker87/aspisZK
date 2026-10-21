@@ -581,3 +581,54 @@ It remains candidate-only. The active proof target is the exact candidate
 checked_q/limbs_of path on the current scalar carrier, reusing the retained
 four-comparison validation theorem and canonical coordinate bounds.
 This supersedes treating a byte-decoder seam as the critical checked_q gap.
+
+## Direct returned-array evidence in both query segments
+
+`AspisR1S4CandidateTx1OutputFieldsRootV1.candidate_source_tx1_success_ten_output_field_results`
+now retains one shared canonical gamma/ClaimPowers vector and all ten reached
+candidate calls. Each `CandidateQueryFieldEvidence` explicitly includes the
+actual candidate dots-callback success equation, equality of that returned
+array with the four canonical field values, and their four literal field
+results. This strengthens the earlier old-model QueryFieldEvidence consumer.
+The first single-query draft used its callback equation in the proof but
+omitted that equation from its exported existential; statement review caught
+and corrected this before the end-to-end theorem was compiled.
+
+The focused tx1 compile passed in22.783s,peak process RSS3,958,915,072 bytes,
+zero swaps,standard axioms. Packet:
+`evidence/s4-candidate-tx1-output-fields-root-v1-20261021`. Single-query
+source composition and its corrected evidence predicate are retained in
+`evidence/s4-v10-candidate-query-field-evidence-v1-20261021`.
+
+The settlement-side prefix analogue is
+`AspisR1S4Tx2ResumeTwelveActualCallsV1.resume_model_candidate_twelve_actual_field_evidence`,
+retained in `evidence/s4-tx2-resume-twelve-field-evidence-v2-20261021`. It
+invokes the selected resumeWithOps, derives next=10 from the following
+rejecting guard, and obtains all twelve actual candidate calls with direct
+returned-array field evidence, from the same source-prefix success. It
+retains ResumeOps, strict scan, prepared gamma/P6-powers contracts and the
+documented suffix operations. This is a source-installed resume/prefix
+composition, not yet full tx2_common/tx2_authenticated refinement. Focused
+compile:22.330s,peak RSS4,001,775,616 bytes,zero swaps,standard axioms.
+
+The checked-Q candidate-to-QRaw full-Result bridge was already proved in
+commit19eeb1bb3 (`evidence/s4-checked-q-push-bridge-v1-20261021`). Reusing
+that stronger result avoids duplicating its validation/wrapper proof. The
+new concrete-record projection installs it directly at ebyKPush; the
+additional parser-output coordinate theorem is supplementary. Its launch
+revision is recovered from reflog/object timing, not captured at launch, as
+recorded in `evidence/s4-checked-q-parser-output-v1-20261021`.
+
+Correction to another potential false gap: the actual V10 helper and its
+head body do not invoke arrayFromFnP6. They use literal eight-coordinate
+updates and Array.make8, with registered Aeneas Range/StepBy models. The
+P6 array slot belongs to the original reference side, not the actual V10
+execution. Explicit dead-slot lemmas for arrayFromFn and wideLimbCount are
+being checked to make this distinction robust. The frozen original's Std
+from_fn source boundary remains open; the candidate remains unadopted.
+
+Input provenance from concrete preparation/scanner belongs upstream S1/S2;
+it must be composed for the global theorem, but is distinct from an open S4
+arithmetic law. Candidate adoption also still conflicts with the historical
+B1 fixture CU criterion. The implementation-linked100-bit target is not
+yet established.

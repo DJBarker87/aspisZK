@@ -1,0 +1,85 @@
+{
+  "title": "Current strict parser success to exact checked_q validation result",
+  "status": "focused kernel proof green; source-only packet",
+  "theorems": [
+    "AspisR1S4QCheckedQCurrentSemanticsV1.checked_q_source_limbs_are_canonical",
+    "AspisR1S4QCheckedQCurrentSemanticsV1.checked_q_source_output_coordinates",
+    "AspisR1S4QCheckedQCurrentSemanticsV1.parser_success_checked_q_coordinates"
+  ],
+  "source_pins": {
+    "lean_source": {
+      "path": "sources/QCheckedQCurrentSemanticsV1.lean",
+      "sha256": "dd766918bb10f8f419f0cb2e1663554ea571e80d1950a557c659a62ed192acea"
+    },
+    "candidate_source": {
+      "path": "/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s4-checked-q-all-unrolled-candidate-v1-20261021/source-snapshot/fast_pairing.candidate.rs",
+      "sha256": "2cb96261cecfd766b5e1b45a585b74c5f59c20c6be4f41e806239e2786ca7313"
+    },
+    "candidate_lean_funs": {
+      "path": "/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s4-checked-q-all-unrolled-candidate-v1-20261021/proof-source-evidence/Funs.lean",
+      "sha256": "4f120131ef71c9fdcf57c484812075c9e945e23476b05e8020169adb46007cd4"
+    },
+    "parser_lean_source": {
+      "path": "/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/evidence/s4-current-qm-parser-root-v1-20261021/sources/FourDotsCurrentQmParserRootV1.lean",
+      "sha256": "1e6c221d3bc10763a0bf8299ce4f4e558ad6d1516bbecdcf4f1e272d8ae23f87"
+    }
+  },
+  "dependency_pins": [
+    {
+      "module": "AspisR1CheckedQCandidateV1.Funs",
+      "source_sha256": "4f120131ef71c9fdcf57c484812075c9e945e23476b05e8020169adb46007cd4",
+      "object_path": "/tmp/s4-q-validation-parser-bridge-v1/objects/AspisR1CheckedQCandidateV1/Funs.olean",
+      "object_sha256": "94c647dc300c4c277140320011e14fa6726aa6d32818339de9c37d570f0dd798",
+      "producer": "lean-candidates/s4-checked-q-all-unrolled-candidate-v1-20261021"
+    },
+    {
+      "module": "FourDotsCurrentQmParserRootV1",
+      "source_sha256": "1e6c221d3bc10763a0bf8299ce4f4e558ad6d1516bbecdcf4f1e272d8ae23f87",
+      "object_path": "/tmp/root-s4-qm-parser-v2-20261021/objects/FourDotsCurrentQmParserRootV1.olean",
+      "object_sha256": "8ba054a790c7ab284d5c0087b8cb04779378f1c1c3767db892d30a6aa178b9e7",
+      "producer": "evidence/s4-current-qm-parser-root-v1-20261021"
+    },
+    {
+      "module": "QCheckedQCurrentSemanticsV1",
+      "source_sha256": "dd766918bb10f8f419f0cb2e1663554ea571e80d1950a557c659a62ed192acea",
+      "object_path": "/tmp/s4-q-validation-parser-bridge-v1/objects/QCheckedQCurrentSemanticsV1.olean",
+      "object_sha256": "3080e076554475b0057cba2efda803227ad74fe25e6b7075aab7e55f1bd3da89"
+    }
+  ],
+  "lean": {
+    "version": "Lean 4.32.0",
+    "path": "/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+    "argv": [
+      "/usr/bin/time",
+      "-l",
+      "/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+      "-j1",
+      "-M4400",
+      "-R",
+      "/tmp/s4-q-validation-parser-bridge-v1/sources",
+      "-o",
+      "/tmp/s4-q-validation-parser-bridge-v1/objects/QCheckedQCurrentSemanticsV1.olean",
+      "/tmp/s4-q-validation-parser-bridge-v1/sources/QCheckedQCurrentSemanticsV1.lean"
+    ],
+    "lean_path": [
+      "/tmp/s4-q-validation-parser-bridge-v1/objects",
+      "/tmp/root-s4-qm-parser-v2-20261021/objects",
+      "/tmp/root-s4-qm-parser-cache-20261021"
+    ]
+  },
+  "receipt": {
+    "exit_status": 0,
+    "wall_seconds": 9.756406,
+    "max_rss_bytes": 3267969024,
+    "swap_bytes": 0,
+    "source_revision": "247ff6840dc79bd84275997e21af136c65376f78",
+    "source_revision_note": "Recovered from the git reflog: last HEAD update was 22:28:44 +0100; compiled object mtime was 22:30:35 +0100. The launch revision was not directly captured in the runner, so the recovery basis is recorded. Source file SHA is independently pinned.",
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "runner_lock": "atomic /tmp/aspis-local-lean.lock.d, owned dir inode and target verified for cleanup"
+  },
+  "scope": "The exact frozen source checked_q(k) calls Q::from_limbs(limbs_of(k)).ok_or(()), and limbs_of returns k.c0.a, k.c0.b, k.c1.a, k.c1.b in that order. The Lean theorem instantiates candidate Q.from_limbs on the exact same ordered current QM31 U32 projections. For any current q with four coordinates below m31Modulus it proves the child returns the exact source-limb array; strict parser success on the same q supplies those four bounds via installed_parser_success_strict. Thus a successful parser result yields successful candidate validation with the same four coordinate values. The outer Rust ok_or wrapper and full checked_q parent dispatch are handled by the stronger existing CandidatePushCheckedQBridge packet; no claim of full S4/caller closure."
+}
