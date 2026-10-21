@@ -1,0 +1,7 @@
+# Current FieldOps installation for the P6 helper
+
+This focused source-only packet records a green Lean consumer that installs exact current generated `WideExact.add` and `WideExact.mul_m31` calls into the P6 helper `FieldOps`. It proves `wide_add_total_exact` through the retained `CurrentWideLinearExact` owner and proves successful `mul_m31` canonicality/decode behavior through `CurrentWideMulM31V13`. The dispatch lemmas show the P6 methods reduce to those actual current calls under the installed record.
+
+The successful `mul_m31` theorem is conditional on the actual operation returning `.ok`; this packet does not prove its totality. The six-operation `FieldOps` record remains partially uninstantiated: `mul_qm31` is not connected to the current generated method here. The P6 generated helper/source caller and Rust standard-library correspondences, the enclosing `Weights::pair` continuation, and the whole S9 source refinement remain open.
+
+Verification was a single focused Lean 4.32.0 compile with `-j1 -M4400`, exit 0, wall 15.5129s, peak process RSS 3,207,528,448 bytes, swap 0. `#print axioms` for the four exported theorems reported only `propext`, `Classical.choice`, and `Quot.sound`. The compile used an exact-hash temporary copy of the repository source under `AspisFormal/.lake`; the source hash was checked before launch. The exact command, launch revision, preflight, output, and time log are retained.
