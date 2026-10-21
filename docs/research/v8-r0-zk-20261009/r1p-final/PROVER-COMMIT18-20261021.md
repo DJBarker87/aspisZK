@@ -2,6 +2,12 @@
 
 Base `c35b7b481`; branch `codex/cx-prover-commit18-20261021`.
 
+**Target not yet established.** No `shippedProverExperiment` is constructed,
+neither requested WholeRunJoin is inhabited, and the deployed endpoint retains
+`RustProverRefinement`. This pass closes entropy-model and simulator-coin
+components and exhibits a joint-history obstruction to using their marginal
+laws as the missing source certificate. The exact limits are below.
+
 ## Target and boundaries
 
 Construct the actual shipped experiment, prove both fixed-event whole-run
@@ -272,3 +278,73 @@ axioms: exit 0, wall 2.41s, peak RSS 4,040,828 KiB, swaps 0, source revision
 reused without recompilation. The power calculation stays symbolic (Lean
 warns that exponent 483 exceeds its evaluation threshold); no threshold,
 heartbeats, recursion limit or memory cap is raised.
+
+## Remaining component certificates and endpoint status
+
+`component-certificates.json` names the remaining contracts explicitly;
+these are **unclosed follow-up contracts**, not axioms, silently supplied
+Lean hypotheses, or completed certificates:
+
+- `P6BuilderAdmission18` and `P6CheckerRetry18`: actual entry-point admission,
+  checker invocation and full source reject/abort/retry behaviour. Existing
+  builder/checker results are cited in their accepted scope; concurrent
+  source/runtime owners are not bypassed.
+- `P6BorrowedMaterialIteration18` and `P6AssemblyNominalTransport18`:
+  arbitrary-length borrowed Vec semantics and transport of Assembly17's
+  nominal types/callees to Material14/Returned16.
+- `P6SerialisationTraversal18`: full semantic framing, 22-element opening
+  order, sort/dedup, multiproof traversal, padding, errors and arbitrary
+  prefix Vec/List transport. Cell checks do not discharge this contract.
+- `P6EntropyGenerateTrace18`, `PlatformEntropyLaw18` and
+  `P6OuterAttemptPreamble18`: all mixed entropy paths and their law, durable
+  reservation, context/seed derivation, allocation, cloning and source
+  preparation before the extracted owned assembly.
+- `P6SimulatorOwned18` and `SimulatorNonzeroTermination18`: remaining tape,
+  semantic/opening execution, programming-table mutations/collisions and
+  uncapped nonzero/counter behaviour. Direct full extraction is rejected;
+  the one-coin P6 reference is now available to compose.
+- `SimulatorOracleHistoryAdapter18`: joint public-coin/oracle history,
+  first-successful-attempt projection and an explicitly justified seed
+  freshness/history loss. Its marginal subclaim is proved; the isolated
+  query-scan-only joint subclaim is refuted above.
+
+No whole-run equality is inserted into any of these contracts. No
+`shippedProverExperiment`, real WholeRunJoin or ideal WholeRunJoin is claimed.
+`RustProverRefinement` is neither removed nor renamed. The exact before/after
+endpoint statements above and the byte-identical full snapshots document
+that no premise weakening has been achieved.
+
+The next concrete mathematical deliverable is the simulator's accepted-view
+and programmed-fallback projection for the proved seed-guess component,
+followed by a history/freshness transport with its actual loss. Check whether
+the existing freshness accounting can cover the simulator coin namespace;
+this has not been proved here. Do not silently expand `selectedBad`, replace
+the shipped simulator by independent coins, or reinterpret a toolchain P6
+boundary as a probability-law certificate. The source deliverable remains an
+owned programming-table/serializer reference with complete source equality.
+
+## Final validation and handoff
+
+J8662 was the interim entropy-only cached audit (exit 0, 2.11s,
+4,083,816 KiB, swaps 0). The new simulator source/lemmas justify the changed
+final audit J8674, `R1Z/ProverCommit18Audit.lean`: exit 0, wall 1.97s,
+peak RSS 4,084,992 KiB, swaps 0, source revision `944b988ca` plus the exact
+audit SHA-256 snapshot and dependency fingerprint in `lean/`. All 32 new
+theorems and the retained deployed endpoint have full `#print axioms` output;
+all use only a subset of `[propext, Classical.choice, Quot.sound]`.
+This is one cached audit of the final changed dependency cone, not a frozen
+release-manifest rebuild or a source-to-deployed privacy result.
+
+`harness/final-audit.py` checks every source snapshot/hash, accepted/excluded
+attempt, all theorem audit coverage, promoted extraction hashes, Rust verdicts,
+resource caps, and endpoint byte equality against `c35b7b481`. It rejects
+LLBC `has_errors=true` even when cargo exits 0. It confirms no production or
+concurrent-owner source is changed and no binaries/LLBC/objects are committed.
+Its machine-readable result is `final-audit.json`. No unchanged adversarial,
+runtime, SBF or full-manifest regression was run. No key or wallet was created,
+changed or removed. Nothing is pushed.
+
+Attempts used: J8656–8674, with J8668 retired after a pre-launch transfer
+failure and no compiler receipt. Next available assigned number is J8675;
+check host receipts before using it. All post-17:00 Lean jobs used the global
+lock, and no SSH connection was left silent for twenty minutes.

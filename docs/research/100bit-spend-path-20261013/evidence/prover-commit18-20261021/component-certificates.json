@@ -51,15 +51,33 @@
     },
     {
       "name": "SimulatorOracleHistoryAdapter18",
-      "scope": "sim::Coins frame/counter/stream requests, repeated nonzero draws, programming table duplicate/collision semantics and ordered observer suffix under the common oracle",
-      "evidence": "crates/aspis-r1-cost-probe/src/sim.rs::Coins, CoinOracle, ProgramOne, programmed_hash",
-      "remaining": "Fixed HOST_HASH seeded expansion cannot simply be called independent model coins; oracle idealisation/history transport must be explicit"
+      "scope": "joint seeded-coin/shared-oracle law including observer seed guesses, programmed table lookup, selected retries and full returned history",
+      "evidence": "ProverCommitSimulatorOracle18.coins_uniform; ProverCommitSimulatorSeedGuess18.no_query_scan_only_join",
+      "remaining": "Marginal ROM law proved; isolated joint coin/query component exceeds query-scan-only allowance; final-view projection and a justified history loss remain open"
+    },
+    {
+      "name": "SimulatorNonzeroTermination18",
+      "scope": "Coins::nonzero unbounded retries, counter-wrap and exact return/error/divergence behaviour",
+      "evidence": "sim.rs::Coins::nonzero",
+      "remaining": "No termination/counter bound or finite-stream completion certificate exists"
     },
     {
       "name": "P6OuterAttemptPreamble18",
       "scope": "durable reservation, context/binding/seed derivation, allocation/cloning, apply material and leaf salts before extracted outer material schedule",
       "evidence": "prover.rs::prove_masked_with_attempt; state_only_entropy.rs::reserve_and_build_pool_v1_pair_forest_mask_material_v1",
       "remaining": "Owned Assembly17 begins after reservation/seed/allocation and does not certify these operations"
+    },
+    {
+      "name": "P6SimulatorCoinTransition18",
+      "scope": "one Coins::coin call at arbitrary seed/attempt/stream and next < u64::MAX, exact five hash slices, result and retained fields",
+      "evidence": "simcoin-transition-v1; AspisR1SimulatorCoin18; ProverCommitSimulatorCoin18.extracted_step",
+      "remaining": "Closed only in this transition scope; no uniformity, nonzero loop or overflow source claim"
+    },
+    {
+      "name": "SimulatorCoinROMMarginal18",
+      "scope": "source frame bytes, 8 attempts x 4 streams x counters before wrap, independent coordinate law under uniform finite-ROM table",
+      "evidence": "ProverCommitSimulatorOracle18.{source_frame,indexed_injective,coins_uniform}",
+      "remaining": "Proved mathematical marginal law; not joint observer-history refinement"
     }
   ]
 }
