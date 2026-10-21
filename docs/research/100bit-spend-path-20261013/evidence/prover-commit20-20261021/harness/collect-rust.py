@@ -14,10 +14,10 @@ for name in sys.argv[1:]:
  assert x['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
  stdout=(d/'stdout.log').read_text()
  x.update(name=name,accepted=x['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL' in stdout,
-          source_revision=pins['source_revision'],production_source_revision='28776b162',
+          source_revision=pins['source_revision'],production_source_revision='8f5d893d7',
           source_identity='Exact full instrumented source hashes in input manifest; production-prefix binding checked separately.',
           input_manifest=name+'-inputs.json',print_axioms='N/A: Rust/Kani/Charon; promoted Lean checked separately')
- if name.startswith(('sim-concat-owned-v3-','sim-insert-owned-v2-')):
+ if name.startswith(('sim-fields-owned-v2-','sim-semantic-owned-v1-')):
   x['accepted']=x['exit_status']==0
  x['acceptance_scope']='single target only; no whole simulator or OS law'
  rows[name]=x

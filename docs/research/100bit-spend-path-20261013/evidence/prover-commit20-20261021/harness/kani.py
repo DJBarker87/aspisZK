@@ -33,7 +33,7 @@ if solver:
 if target.startswith(('state_only_hiding::','state_only_entropy::')):
     cmd[cmd.index('-p')+1]='aspis-prover'
     cmd[cmd.index('--lib'):cmd.index('--lib')]=['--features','r0']
-if target.startswith('sim::'):
+if target.startswith(('sim::','r1_wire::')):
     cmd[cmd.index('--lib'):cmd.index('--lib')]=['--features','r1p-check']
 if target.endswith('*'):
     cmd.remove('--exact');cmd[cmd.index('--harness')+1]=target[:-1]

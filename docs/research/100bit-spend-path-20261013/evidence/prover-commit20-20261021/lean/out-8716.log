@@ -1,0 +1,266 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:15:21: error: Application type mismatch: The argument
+  UScalar.cast UScalarTy.U8 row
+has type
+  UScalar UScalarTy.U8
+but is expected to have type
+  core.result.Result Values r1_wire.Error × State ?m.22
+in the application
+  lift (UScalar.cast UScalarTy.U8 row)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:17:17: error: Type mismatch
+  alloc.vec.CloneVec.clone core.clone.CloneU8 value
+has type
+  Result (alloc.vec.Vec U8)
+but is expected to have type
+  Outcome ?m.32
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:18:23: error: Type mismatch
+  r1_wire.semantic20.semantic hash state index record
+has type
+  Result (core.result.Result aspis_core.field.QM31 r1_wire.Error × r1_wire.SemanticTranscript H)
+but is expected to have type
+  Outcome ?m.35
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:18:23: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Bind Outcome
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:20:34: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Pure Outcome
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:16:36: error: Application type mismatch: The argument
+  core.slice.index.SliceIndexUsizeSlice Bytes
+has type
+  core.slice.index.SliceIndex Usize (Slice Bytes) Bytes
+but is expected to have type
+  core.slice.index.SliceIndex Usize (Slice Bytes) (core.result.Result Values r1_wire.Error × State (alloc.vec.Vec U8))
+in the application
+  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Bytes)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:32:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 26
+  0 ≤ a ≤ 24
+  a - c ≥ -1
+where
+ a := ↑↑row
+ b := ↑Usize.size
+ c := ↑(UScalar.size UScalarTy.Usize)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:42:9: error: unsolved goals
+case zero
+H : Type
+hash : aspis_core.digest.Digest32 H
+records : Records
+row : Usize
+state : State H
+sem : Values
+count : ↑row + 0 = 25
+stop : row = 25#usize
+⊢ ok (core.result.Result.Ok sem, state) = sorry hash records 25#usize 0 state sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:51:13: error: unsolved goals
+case succ.fail
+H : Type
+hash : aspis_core.digest.Digest32 H
+records : Records
+n : ℕ
+ih :
+  ∀ (row : Usize) (state : State H) (sem : Values),
+    ↑row + n = 25 → r1_wire.semantic20.rows hash state records row sem = finite hash records row n state sem
+row : Usize
+state : State H
+sem : Values
+count : ↑row + (n + 1) = 25
+more : row ≠ 25#usize
+e : Error
+hi : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Bytes) records row = fail e
+⊢ fail e = sorry hash records row (n + 1) state sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:52:10: error: unsolved goals
+case succ.div
+H : Type
+hash : aspis_core.digest.Digest32 H
+records : Records
+n : ℕ
+ih :
+  ∀ (row : Usize) (state : State H) (sem : Values),
+    ↑row + n = 25 → r1_wire.semantic20.rows hash state records row sem = finite hash records row n state sem
+row : Usize
+state : State H
+sem : Values
+count : ↑row + (n + 1) = 25
+more : row ≠ 25#usize
+hi : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Bytes) records row = div
+⊢ div = sorry hash records row (n + 1) state sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:56:15: error: unsolved goals
+case succ.ok.fail
+H : Type
+hash : aspis_core.digest.Digest32 H
+records : Records
+n : ℕ
+ih :
+  ∀ (row : Usize) (state : State H) (sem : Values),
+    ↑row + n = 25 → r1_wire.semantic20.rows hash state records row sem = finite hash records row n state sem
+row : Usize
+state : State H
+sem : Values
+count : ↑row + (n + 1) = 25
+more : row ≠ 25#usize
+value : Bytes
+hi : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Bytes) records row = ok value
+e : Error
+hc : alloc.vec.CloneVec.clone core.clone.CloneU8 value = fail e
+⊢ fail e = sorry hash records row (n + 1) state sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:57:12: error: unsolved goals
+case succ.ok.div
+H : Type
+hash : aspis_core.digest.Digest32 H
+records : Records
+n : ℕ
+ih :
+  ∀ (row : Usize) (state : State H) (sem : Values),
+    ↑row + n = 25 → r1_wire.semantic20.rows hash state records row sem = finite hash records row n state sem
+row : Usize
+state : State H
+sem : Values
+count : ↑row + (n + 1) = 25
+more : row ≠ 25#usize
+value : Bytes
+hi : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Bytes) records row = ok value
+hc : alloc.vec.CloneVec.clone core.clone.CloneU8 value = div
+⊢ div = sorry hash records row (n + 1) state sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:61:17: error: unsolved goals
+case succ.ok.ok.fail
+H : Type
+hash : aspis_core.digest.Digest32 H
+records : Records
+n : ℕ
+ih :
+  ∀ (row : Usize) (state : State H) (sem : Values),
+    ↑row + n = 25 → r1_wire.semantic20.rows hash state records row sem = finite hash records row n state sem
+row : Usize
+state : State H
+sem : Values
+count : ↑row + (n + 1) = 25
+more : row ≠ 25#usize
+value : Bytes
+hi : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Bytes) records row = ok value
+record : alloc.vec.Vec U8
+hc : alloc.vec.CloneVec.clone core.clone.CloneU8 value = ok record
+e : Error
+hs : r1_wire.semantic20.semantic hash state (UScalar.cast UScalarTy.U8 row) record = fail e
+⊢ fail e = sorry hash records row (n + 1) state sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:62:14: error: unsolved goals
+case succ.ok.ok.div
+H : Type
+hash : aspis_core.digest.Digest32 H
+records : Records
+n : ℕ
+ih :
+  ∀ (row : Usize) (state : State H) (sem : Values),
+    ↑row + n = 25 → r1_wire.semantic20.rows hash state records row sem = finite hash records row n state sem
+row : Usize
+state : State H
+sem : Values
+count : ↑row + (n + 1) = 25
+more : row ≠ 25#usize
+value : Bytes
+hi : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Bytes) records row = ok value
+record : alloc.vec.Vec U8
+hc : alloc.vec.CloneVec.clone core.clone.CloneU8 value = ok record
+hs : r1_wire.semantic20.semantic hash state (UScalar.cast UScalarTy.U8 row) record = div
+⊢ div = sorry hash records row (n + 1) state sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:70:21: error: unsolved goals
+case succ.ok.ok.ok.Ok.fail
+H : Type
+hash : aspis_core.digest.Digest32 H
+records : Records
+n : ℕ
+ih :
+  ∀ (row : Usize) (state : State H) (sem : Values),
+    ↑row + n = 25 → r1_wire.semantic20.rows hash state records row sem = finite hash records row n state sem
+row : Usize
+state : State H
+sem : Values
+count : ↑row + (n + 1) = 25
+more : row ≠ 25#usize
+value✝ : Bytes
+hi : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Bytes) records row = ok value✝
+record : alloc.vec.Vec U8
+hc : alloc.vec.CloneVec.clone core.clone.CloneU8 value✝ = ok record
+next : r1_wire.SemanticTranscript H
+value : aspis_core.field.QM31
+hs :
+  r1_wire.semantic20.semantic hash state (UScalar.cast UScalarTy.U8 row) record = ok (core.result.Result.Ok value, next)
+e : Error
+hu : Array.update sem row value = fail e
+⊢ (do
+      let sem1 ← Array.update sem row value
+      r1_wire.semantic20.rows hash next records (core.num.Usize.wrapping_add row 1#usize) sem1) =
+    sorry hash records row (n + 1) state sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:71:18: error: unsolved goals
+case succ.ok.ok.ok.Ok.div
+H : Type
+hash : aspis_core.digest.Digest32 H
+records : Records
+n : ℕ
+ih :
+  ∀ (row : Usize) (state : State H) (sem : Values),
+    ↑row + n = 25 → r1_wire.semantic20.rows hash state records row sem = finite hash records row n state sem
+row : Usize
+state : State H
+sem : Values
+count : ↑row + (n + 1) = 25
+more : row ≠ 25#usize
+value✝ : Bytes
+hi : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Bytes) records row = ok value✝
+record : alloc.vec.Vec U8
+hc : alloc.vec.CloneVec.clone core.clone.CloneU8 value✝ = ok record
+next : r1_wire.SemanticTranscript H
+value : aspis_core.field.QM31
+hs :
+  r1_wire.semantic20.semantic hash state (UScalar.cast UScalarTy.U8 row) record = ok (core.result.Result.Ok value, next)
+hu : Array.update sem row value = div
+⊢ (do
+      let sem1 ← Array.update sem row value
+      r1_wire.semantic20.rows hash next records (core.num.Usize.wrapping_add row 1#usize) sem1) =
+    sorry hash records row (n + 1) state sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:65:32: warning: This simp argument is unused:
+  Aeneas.Std.uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:70:35: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:71:32: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:73:25: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:73:36: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵l̵i̵f̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:45:28: warning: declaration uses `sorry`
+'R1Z.ProverCommitSemantic20.increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSemantic20.extracted_finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1SimSemantic20.r1_wire.semantic20.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1SimSemantic20.r1_wire.semantic20.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1SimSemantic20.r1_wire.fields20.validate' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
