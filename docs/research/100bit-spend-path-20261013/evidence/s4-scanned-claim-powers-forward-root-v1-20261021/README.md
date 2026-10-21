@@ -1,0 +1,3 @@
+PROVED same-input composition of owned scanner opening acceptance, successful canonical ClaimPowers and complete P6 four-dot literal field results.
+
+Limitations: The prior29 coordinate bounds are derived from successful canonical ClaimPowers, using the explicit same-array fieldwise carrier identity; this does not prove that caller identity or actual source powers refinement. Proof length57607, j<22, exact indexed opening source-slice identity, owned scanner success and typed608-byte prefix identity remain explicit. Owned scanner to production source, P6 array to Rust Std, caller/runtime/final-artifact bindings and global soundness remain open; no production change or whole-cone closure.
