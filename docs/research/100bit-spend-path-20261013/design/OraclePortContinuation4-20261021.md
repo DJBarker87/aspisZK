@@ -60,3 +60,52 @@ are in the manifest and receipt directories.
 
 Separate stored-proof experiment/compiler and the resumed stage (c) audit
 are recorded below as they are completed.
+
+## Stage 2: separate carrier, parser and compiler
+
+`OraclePortStoredExperimentC4.Input` adds one field, `stored : Bytes`, to the
+public/proof pair. The prover supplies it in its oracle program output; it
+is not fixed after observing the oracle and then smuggled into a supposedly
+fixed old decision. The new decision type is `Bytes → Decision` and the
+verifier chooses `d i.stored` from the same input. The sampler protocol and
+3717-byte message bound remain unchanged. The original experiment retains
+that input. The annotation compiler records the full original run, enriches
+only literal word metadata, and retains stored bytes byte-for-byte.
+
+Eight compiler/accounting theorems pass. They prove exact program replay,
+public/stored/acceptance equality, unchanged distinct first reads, and
+recorded log length ≤ Q+2322 under the all-input per-stored-proof budget.
+There is no fixed-carrier or prover-independence assumption. This is an
+interface repair, not a deletion-only specialization of an old signature.
+
+`OraclePortStoredParserC4.parseReached` parses `stored`, then checks
+`Aligned` against the erased prefix. `parsed` proves exact wire identity,
+parser success and alignment; `parse_of_parts` composes the header, canonical
+scan, semantic decoder and alignment checks. The latter is conditional,
+not a nonvacuity witness. `kernel` reads queries from the reached row 31,
+checks padding and executes the six shared slots. Its all-input decision
+budget is ≤1046 (six-slot work itself ≤1040), with no impossible terminal
+proof payload. `kernel_accepted` exposes actual parser/query/padding/tree
+results. It does not conclude typed arithmetic acceptance.
+
+The successful compiler/parser attempts are 2 and 2. Compiler attempt 1
+used the reserved structure-field name `public`; parser attempt 1 omitted
+Option monad simplification and used pre-case equations after dependent
+case splitting. Changed proofs fix these local elaborations. Successful
+reports use standard axioms, zero swaps; exact resource fields are retained.
+
+Pool impact: the checkpoint must retain the *same* `stored` argument across
+TX1/TX2, alongside the existing saved-ten accumulator and prepared fields.
+Its existing proof hash already binds every stored byte, including nodes
+and padding. A hash cannot reconstruct those bytes; TX2 needs the retained
+proof account/slice, not only the digest. `Input.stored` must therefore be
+fed from the same Pool proof-account range (688..58295 in the adapter), with
+exact byte identity across resume. Compiler recovery consumes the projected
+legacy `RunView`, while the experiment retains the larger input. Existing
+`OraclePortPool.poolTx2` and `CallerReachability` mention an old fixed
+`Decision`/`Prover`; they cannot simply be instantiated with this new
+prover-dependent carrier. A new caller identity must target the projected
+new recorded run and carry stored-byte identity. Frozen proof-account ABI
+and checkpoint field encodings do not need to change. The logical
+finite-support codec can retain the larger checkpoint without claiming a
+physical ABI implementation. No runtime or shipped source was edited.
