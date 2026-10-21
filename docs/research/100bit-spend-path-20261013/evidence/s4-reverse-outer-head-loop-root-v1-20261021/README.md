@@ -1,0 +1,3 @@
+PROVED reverse successful complete outer head-loop transport from an explicit successful-body law. The original emitted StepBy body supplies cursor advancement, positive progress, unchanged step and decreasing remaining range; no independent loop termination or final-output equality is assumed.
+
+Limitations: The old-body to fixed-body successful-flow law remains an explicit dependency; the separate eight-limb reverse proof must discharge it. This theorem supplies the outer loop composition required by ReverseHeadSuccess, not complete S4 totality by itself. No production source, source freeze, artifact, Rust Std/P6 boundary or global driver premise is changed.
