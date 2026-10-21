@@ -1,0 +1,52 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 0425); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBytes.lean:28:5: error: Invalid field notation: `List.lookup` has a parameter with expected type
+  List (?α × ?β)
+but it cannot be used
+
+Note: The parameter cannot be referred to by name because that function has a preceding parameter of the same name
+
+Hint: Consider rewriting this application without field notation (e.g., `C.f x` instead of `x.f`) or changing the parameter names of the function to avoid this conflict
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBytes.lean:28:42: error: Invalid field notation: `List.lookup` has a parameter with expected type
+  List (?α × ?β)
+but it cannot be used
+
+Note: The parameter cannot be referred to by name because that function has a preceding parameter of the same name
+
+Hint: Consider rewriting this application without field notation (e.g., `C.f x` instead of `x.f`) or changing the parameter names of the function to avoid this conflict
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBytes.lean:35:34: error: Invalid field notation: `List.lookup` has a parameter with expected type
+  List (?α × ?β)
+but it cannot be used
+
+Note: The parameter cannot be referred to by name because that function has a preceding parameter of the same name
+
+Hint: Consider rewriting this application without field notation (e.g., `C.f x` instead of `x.f`) or changing the parameter names of the function to avoid this conflict
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBytes.lean:44:31: error(lean.unknownIdentifier): Unknown identifier `cons_lookup`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBytes.lean:44:13: error: unsolved goals
+case succ.query.none
+q : ℕ
+ih : ∀ (t : Table) (p : OProg) (u : Fin q → OracleAnswer), (run t p q u).1 = (lazyRun id sorry p q u).1
+t : Table
+u : Fin (q + 1) → OracleAnswer
+a : List UInt8
+k : OracleAnswer → OProg
+h : List.lookup a t = none
+⊢ (a, u (Fin.last q)) :: (lazyRun id sorry (k (u (Fin.last q))) q (Fin.init u)).1 =
+    (match sorry a with
+      | some v => ((a, v) :: (lazyRun id sorry (k v) q (Fin.init u)).1, (lazyRun id sorry (k v) q (Fin.init u)).2)
+      | none =>
+        ((a, u (Fin.last q)) ::
+            (lazyRun id (Function.update sorry a (some (u (Fin.last q)))) (k (u (Fin.last q))) q (Fin.init u)).1,
+          (lazyRun id (Function.update sorry a (some (u (Fin.last q)))) (k (u (Fin.last q))) q (Fin.init u)).2 + 1)).1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBytes.lean:67:13: error: Tactic `rcases` failed: `hp : Addresses L t (OProg.query a k) (q + 1) u` is not an inductive datatype
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyBytes.lean:86:14: error(lean.unknownIdentifier): Unknown constant `cons_lookup`
+'R1Z.SimCostLazyBytes.run_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyBytes.run_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.58
+	Maximum resident set size (kbytes): 3503300
+	Swaps: 0
+	Exit status: 1
+
+
