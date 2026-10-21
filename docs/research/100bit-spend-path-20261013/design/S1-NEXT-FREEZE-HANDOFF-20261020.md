@@ -158,3 +158,14 @@ The lead handoff `HANDOFF-SESSION-A-20261021.md` now identifies `OraclePortFroze
 
 
 Numerical fidelity note: the active user goal in this session still requires raw per-attempt failure at most 2^-100, without work/grinding normalization. The adopted OraclePortFrozenOrderHeadline Claims/per_query endpoint instead concludes failureModel <= (Q+1)*2^-100 in its stated Q range, retaining totalBound Q separately. This session therefore treats accepted-run source refinement as necessary common work, but does not treat completion of those joins or that query-normalized headline alone as completion of its raw per-attempt goal. No numerical constant, adversary restriction or success criterion has been changed here.
+
+
+### Checked finish, same-callback reduction and current addition
+
+Three S4 operation/composition packets are now source-frozen for integration without unchanged Lean replays:
+
+- `s4-tail-finish-source-map-v1-20261021`: explicit EbyK source-finish carrier adapter is total on every typed tail state, preserving both input arrays/count and yielding canonical output with all eight exact same-input residues modulo P (11.315s, aggregate RSS 3,183,214,592 bytes, zero swaps, three standard-only axiom reports).
+- `s4-callback-tail-finish-residues-v1-20261021`: successful actual callback under that adapter retains its own tail loop and finish calls, those same eight output residues, and its final wideAdd call (10.604s, aggregate RSS 3,206,201,344 bytes, zero swaps, one standard-only report).
+- `s4-current-wide-add-adapter-v1-20261021`: literal carrier maps and the existing current wide-add theorem give canonical output and decoded field addition for canonical operands (33.298s, aggregate RSS 3,147,939,840 bytes, zero swaps, two standard-only reports).
+
+These are explicit source-operation adapters and an accepted-success composition. Actual frozen Ops-slot installation, same-callback input/operand canonicality derivation and full dV_frozen arithmetic/result refinement remain open. The add theorem is total only on its stated canonical-operand domain. Source snapshots/import pins and focused compiler receipts are retained; no source re-extraction, production change or full manifest replay was performed by packaging.
