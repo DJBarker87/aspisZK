@@ -35,5 +35,22 @@ Pending extraction and source identification.
 
 ## Stage 3 — nonzero loop and endpoint
 
-The part-20 arbitrary-oracle obstruction remains binding. No artificial
-abort or cap is introduced. Pending admitted-input analysis.
+`ProverCommitNonzeroStream21` strengthens the part-20 obstruction: a single
+consistent callback can answer zero on every target-stream address while
+retaining every answer on every other stream, for all seeds, attempts,
+counters and counter wraparound. `frame_stream`, `target_answer`,
+`other_answer`, `target_zero_prefix` pass J8737 (exit 0, 2.10 s,
+4042696 KiB, swaps 0; standard axioms). J8736 is an excluded simp failure.
+
+Thus finite *protocol dimensions* alone do not imply a uniform bound for
+the generic coin callback. The transcript and root streams can be held
+fixed while tape-stream nonzero search consumes any finite fuel without
+success. This result does not instantiate an accepted P_R1 challenge draw,
+does not identify concrete HOST_HASH with the generic callback, and does
+not assign a probability to this behavior. Those qualifications matter: it
+is not a proof that an actual admitted source run diverges, nor an attack.
+
+No artificial abort, cap, new bad event or total experiment is introduced.
+To construct the requested shipped experiment still requires either a
+concrete hash termination argument, or a source-faithful treatment of
+divergence and its probability/coupling, followed by both WholeRunJoins.

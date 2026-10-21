@@ -29,7 +29,7 @@ opaque=[]
 for pattern in sys.argv[4:]:opaque+=['--opaque',pattern]
 run(name+'-charon',[CHARON,'cargo','--preset','aeneas','--mir','built','--sysroot','default',
  '--start-from',root,
- '--include','core::result::Result', '--include','aspis_core::field', '--opaque','aspis_core',*opaque,
+ '--include','core::result::Result', '--include','aspis_core::field', '--include','aspis_core::r0_transcript::CircleRow', '--opaque','aspis_core',*opaque,
  '--dest-file',str(H/'extraction'/(name+'.llbc')),'--','--manifest-path',str(H/'src/crates/aspis-r1-cost-probe/Cargo.toml'),'--locked','--offline','--release','--lib','--features','r1p-check','--jobs','4'])
 p=H/'extraction'/(name+'.llbc');data=json.loads(p.read_text());(H/(name+'-llbc.json')).write_text(json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),size_bytes=p.stat().st_size,has_errors=data.get('has_errors'),root=root,opaque=sys.argv[4:]),indent=2)+'\n')
 assert data['has_errors'] is False
