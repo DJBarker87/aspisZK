@@ -1,0 +1,72 @@
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCanonicalAcceptanceC6.lean:42:91: error: unsolved goals
+D : LiteralByteProtocol.Decoder
+P : Prover
+H : Bytes → State
+accepted : (run D (canon P) H).2.2 = true
+p : Parsed
+q : Fin 22 → Fin 262144
+w : CanonicalCutEnrichedTranscript.Words := BinCompiledRunWordStability.wordsFromRun D (view (run D (canon P) H))
+⊢ (have v :=
+            ((eval H (canon P)).1 ++ (eval H (OraclePortStoredExperimentC4.verifier D decision (eval H (canon P)).2)).1,
+              (eval H (canon P)).2, (eval H (OraclePortStoredExperimentC4.verifier D decision (eval H (canon P)).2)).2);
+          (v.1 ++ (eval H (OraclePortStoredExperimentC4.verifier D decision v.2.1)).1, enrich (build D (view v)) v.2.1,
+            v.2.2)).2.1.statement =
+    (OraclePortReachedRunC6.input (canon P) H).statement
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCanonicalAcceptanceC6.lean:49:4: error: Tactic `rfl` failed: The left-hand side
+  (have v := eval H (original D decision (canon P));
+        (v.1 ++ (eval H (OraclePortStoredExperimentC4.verifier D decision v.2.1)).1, enrich (build D (view v)) v.2.1,
+          v.2.2)).2.1.proof
+is not definitionally equal to the right-hand side
+  RawCutTranscriptRun.proof w (OraclePortReachedRunC6.input (canon P) H).proof
+
+D : LiteralByteProtocol.Decoder
+P : Prover
+H : Bytes → State
+accepted : (run D (canon P) H).2.2 = true
+p : Parsed
+q : Fin 22 → Fin 262144
+w : CanonicalCutEnrichedTranscript.Words := BinCompiledRunWordStability.wordsFromRun D (view (run D (canon P) H))
+hpub : (output D decision (canon P) H).statement = (OraclePortReachedRunC6.input (canon P) H).statement
+⊢ (have v := eval H (original D decision (canon P));
+          (v.1 ++ (eval H (OraclePortStoredExperimentC4.verifier D decision v.2.1)).1, enrich (build D (view v)) v.2.1,
+            v.2.2)).2.1.proof =
+    RawCutTranscriptRun.proof w (OraclePortReachedRunC6.input (canon P) H).proof
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCanonicalAcceptanceC6.lean:51:70: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCanonicalAcceptanceC6.lean:55:9: error: unexpected token 'at'; expected command
+/Users/dominic/ZK/.worktrees/cx-oracle-port-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCanonicalAcceptanceC6.lean:80:91: error: unsolved goals
+D : LiteralByteProtocol.Decoder
+P : Prover
+H : Bytes → State
+Q : ℕ
+hq : ∀ (H : Bytes → State), (eval H P).1.length ≤ Q
+accepted : (run D (canon P) H).2.2 = true
+clean :
+  ¬hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred (Q + 1161))
+      emptyTable (run D (canon P) H).1
+hq' : ∀ (H : Bytes → State), (eval H (canon P)).1.length ≤ Q
+p : Parsed
+q : Fin 22 → Fin 262144
+left✝¹ :
+  OraclePortStoredParserC4.parseReached (OraclePortReachedRunC6.input (canon P) H).stored (reached D (canon P) H) =
+    some p
+left✝ : queries (reached D (canon P) H) = some q
+checks :
+  Nonempty
+    (LiteralAcceptanceTerminal.Checks (OraclePortReachedRunC6.input (canon P) H).statement
+      (rows D decision (canon P) H))
+⊢ (have v :=
+            ((eval H (canon P)).1 ++ (eval H (OraclePortStoredExperimentC4.verifier D decision (eval H (canon P)).2)).1,
+              (eval H (canon P)).2, (eval H (OraclePortStoredExperimentC4.verifier D decision (eval H (canon P)).2)).2);
+          (v.1 ++ (eval H (OraclePortStoredExperimentC4.verifier D decision v.2.1)).1, enrich (build D (view v)) v.2.1,
+            v.2.2)).2.1.statement =
+    (OraclePortReachedRunC6.input (canon P) H).statement
+'AspisR1.OraclePortCanonicalAcceptanceC6.canonical_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCanonicalAcceptanceC6.rows_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCanonicalAcceptanceC6.accepted_checks' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
