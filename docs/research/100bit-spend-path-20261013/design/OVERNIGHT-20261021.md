@@ -50,6 +50,15 @@ Each was byte-identical, every time.
    `design/OraclePortContinuation7-20261021.md` on the draft branch, with
    its comparison against headline v3. 11 + earlier modules, standard
    axioms, zero swap.
+   Join split (unmerged branch `codex/cx-join-split-draft-20261021`,
+   `design/JOIN-SPLIT-DRAFT-20261021.md`): `ExecutionJoin` is proved to follow
+   from per-cone joins (S1–S10, parser, multiproof, checkpoint ABI, Pool
+   caller) plus one ordered caller join, with the landed certificates and R22
+   totality plugged in. That gives session A an exact per-cone target table.
+   It found one fidelity gap: frozen batches short-circuit after a failure,
+   but the draft dV evaluates the remaining slots. A follow-up draft
+   (`codex/cx-shortcircuit-draft-20261021`) makes dV short-circuit like the
+   frozen code and proves acceptance is unchanged.
    Recommendation: adopt. The whole soundness gap then becomes one
    Rust-equals-dV execution join plus the runtime carrier binding, which is
    exactly what the S-cone re-pins establish. Nothing merges without your yes.
