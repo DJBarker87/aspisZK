@@ -117,3 +117,25 @@ The exact source files/model boundary are pinned in source-pins.json.
 NEXT.md states the separate S2S10CallerBinding and S1S7S8StateProvenance
 interfaces and identifies reached_stage/strictStage as the retained consumer.
 Neither premise is hidden in P6, and no unproved source equality is assumed.
+
+## Stage 5: all 18 raw-field reference blocks and checksum equal C5
+
+CheckpointBytesBlocks.{blocks_c5,body_c5,encode_c5} prove complete fixed-block
+composition from a raw scalar field inventory, including all 64 weights,
+queries, header next=10, proof/public hashes and checksum over the complete
+body. rawK_c5 reuses the actual nested source K writer; rawKs_c5 inducts over
+symbolic vector length. E fields use the newly proved rawBytes_c5. No
+per-block byte equality or checksum equality is supplied as a premise.
+CanonicalFields spells out every raw four/eight-limb canonicality bound;
+Prepared and accumulator interpretations are concrete definitions.
+
+This closes the **raw-field reference block composition**. Fields is an
+explicit reference carrier. Identifying it with the extracted Prepared /
+Accumulator sparse body_byte and adopting the actual production writer
+remain separate; this theorem does not silently count that as done.
+
+Final CheckpointBytesBlocks attempt 2: exit 0, 12.403295292053372 s,
+peak RSS 3655057408 bytes, zero swaps, revision 0e57b8b1d (full SHA and
+object/source/import pins in receipt). All five reports are standard.
+Attempt 1's dependent-proof map/ofFn rewrite failed; induction replaces it.
+No full byte buffer or long vector is evaluated, and no cap is raised.
