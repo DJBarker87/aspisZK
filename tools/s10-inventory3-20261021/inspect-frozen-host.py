@@ -89,5 +89,7 @@ for mode,build in [('default','build-default-v3'),('devnet','build-devnet-v1'),(
    for b in fs:
     if (b['path'],b['line']) in wanted:out.write(f'// {b["path"]}:{b["line"]}\n'+b['body']+'\n')
  dump(H/'packet'/('frontiers-'+mode+'.json'),observations)
+bodyfile=H/'packet/frontier-frozen-bodies.txt'
+bodyfile.write_text(bodyfile.read_text().rstrip()+'\n')
 dump(H/'packet/llvm-linked-definitions.json',decls)
 print(json.dumps({m:dict(unique=sum(len(r['frozen_bodies'])==1 for r in rs),review=[(r['index'],len(r['frozen_bodies'])) for r in rs if len(r['frozen_bodies'])!=1],occurrences=sum(len(r['compiler_occurrences']) for r in rs)) for m,rs in result.items()}))

@@ -66,3 +66,37 @@ listing functions in source order or ELF address order cannot supply them.
 The completeness gate exits **2**, with the exact output and resources in
 `reconcile-receipt.json`. It has not been weakened to make missing source joins
 pass. No headline premise is removed. **Target not yet established.**
+
+## Stage 3: coverage preflight and validation
+
+`coverage-preflight.py` stops with exit 2 before Lean generation/compilation.
+Of these forty affected declaration labels, 39 map to existing Cone owners;
+`heap::filled` is owned by **ordered caller join**, which is not a Cone
+constructor. The eventual source-tree lowering must account for that helper
+inside the caller or give its concrete instances appropriate invoked sites.
+This is a concrete interface obligation, not evidence that the whole task is
+mathematically impossible. A list alone also supplies neither the actual
+source tree nor its mutable/error carriers and ordering identities. No new
+Lean coverage instance is claimed. The discarded generator draft never
+invoked Lean; no failed compile or nonstandard-axiom result is hidden.
+
+The focused audit validates all retained build caps/receipts/mono pins, all
+three reproduced ELF pins, reconciliation regeneration, forty body records,
+all eighteen specifications, the actual Site/Cone preflight and unchanged four
+model theorem axioms. Negative checks reject a duplicate body, missing
+frontier and removed real CFG-order fact. Both the original pass-two gate and
+the pass-three completeness gate exit 2, with stdout/stderr preserved in
+`validation.json`. The audit's successful integrity status is separate from
+those failed completeness results. No full Lean manifest or unchanged runtime
+suite was repeated.
+
+Exact target, revision, exit, wall time, peak RSS, swaps and full reused
+`#print axioms` lines are in `validation.json`. All derived JSON files are
+below 5 MB; large compiler output remains hash-pinned on the host. The
+concatenated body excerpt is generated text with one final newline; original
+individual MIR body hashes remain unchanged. No wallet/key cleanup occurred.
+
+The next concrete deliverable is the missing typed source lowering and
+reachable-instance/pointer-flow certificate, accepted by the affected cone
+owners. Until that exists, assigning every residual to trust or emitting an
+indexed tree detached from Rust would conceal the required source proof.
