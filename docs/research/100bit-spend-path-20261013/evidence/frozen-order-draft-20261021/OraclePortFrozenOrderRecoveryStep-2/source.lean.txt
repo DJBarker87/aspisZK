@@ -1,0 +1,107 @@
+import OraclePortFrozenOrderDecision
+
+/-! Every occupied child survives a successful source level, and the parent
+preimage is read by that actual level program. No ordering permutation or
+collision exclusion is needed for this local execution fact. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortFrozenOrder
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OracleDecisionMultiTree BinMerkle32Path
+open AspisV8R19.AdaptiveFirstReadLaw
+attribute [local instance] Classical.propDecidable
+
+def Lift (H : Bytes → State) (i : Nat) (v : State) (next : Live)
+    (log : List (Bytes × State)) : Prop :=
+  ∃ cs : Children, cs (BinMultiproof.slot i) = v ∧
+    (i/2,H (nodeInput cs)) ∈ next ∧ Read log (nodeInput cs)
+
+theorem level_lift (H : Bytes → State) (fuel : Nat) (live : Live) (nodes : Bytes)
+    (next : Live) (remaining : Bytes) (enough : live.length ≤ fuel)
+    (success : (eval H (runLevel fuel live nodes)).2 = some (next,remaining))
+    (i : Nat) (v : State) (member : (i,v) ∈ live) :
+    Lift H i v next (eval H (runLevel fuel live nodes)).1 := by
+  induction fuel generalizing live nodes next remaining i v with
+  | zero => have : live = [] := List.eq_nil_of_length_eq_zero (by omega); subst live; simp at member
+  | succ fuel ih =>
+    cases live with
+    | nil => simp at member
+    | cons entry rest =>
+      rcases entry with ⟨j,w⟩
+      cases rest with
+      | nil =>
+        simp only [runLevel,Bool.false_eq_true,if_false] at success ⊢
+        cases hd : SemanticRecordCodec.decodeState (nodes.take 32) with
+        | none => simp [hd,eval] at success
+        | some sibling =>
+          simp only [hd,eval,eval_bind] at success ⊢
+          cases out : (eval H (runLevel fuel [] (nodes.drop 32))).2 with
+          | none => simp [out] at success
+          | some pair =>
+            rcases pair with ⟨tail,bytes⟩
+            simp only [out,Option.map_some,Option.some.injEq,Prod.mk.injEq] at success
+            rcases success with ⟨rfl,rfl⟩
+            have same : i = j ∧ v = w := by simpa using member
+            rcases same with ⟨rfl,rfl⟩
+            refine ⟨if i%2=0 then children v sibling else children sibling v, ?_,
+              List.mem_cons_self .., ?_⟩
+            · by_cases even : i%2=0
+              · have bit : BinMultiproof.slot i = 0 := Fin.ext even
+                simp [even,bit,children]
+              · have bit : BinMultiproof.slot i = 1 := Fin.ext (by dsimp [BinMultiproof.slot]; omega)
+                simp [even,bit,children]
+            · exact List.mem_cons_self ..
+      | cons entry tail =>
+        rcases entry with ⟨k,x⟩
+        by_cases both : paired j k
+        · simp only [runLevel,decide_eq_true_eq,if_pos both,List.drop_succ_cons,List.drop_zero,
+            eval,eval_bind] at success ⊢
+          cases out : (eval H (runLevel fuel tail nodes)).2 with
+          | none => simp [out] at success
+          | some pair =>
+            rcases pair with ⟨endLive,bytes⟩
+            simp only [out,Option.map_some,Option.some.injEq,Prod.mk.injEq] at success
+            rcases success with ⟨rfl,rfl⟩
+            rcases List.mem_cons.mp member with he | ht
+            · cases he
+              refine ⟨children v x, ?_, List.mem_cons_self .., List.mem_cons_self ..⟩
+              have bit : BinMultiproof.slot i = 0 := Fin.ext both.1
+              simp [bit,children]
+            · rcases List.mem_cons.mp ht with he | ht
+              · cases he
+                have par : i/2 = j/2 := by have := both.1; have := both.2; omega
+                have bit : BinMultiproof.slot i = 1 := Fin.ext (by
+                  dsimp [BinMultiproof.slot]; have := both.1; have := both.2; omega)
+                refine ⟨children w v, by simp [bit,children], ?_, List.mem_cons_self ..⟩
+                rw [par]; exact List.mem_cons_self ..
+              · obtain ⟨cs,hc,hm,hr⟩ := ih tail nodes endLive bytes (by simp only [List.length_cons] at enough; omega) out i v ht
+                exact ⟨cs,hc,List.mem_cons_of_mem _ hm,List.mem_cons_of_mem _ hr⟩
+        · simp only [runLevel,decide_eq_true_eq,if_neg both] at success ⊢
+          cases hd : SemanticRecordCodec.decodeState (nodes.take 32) with
+          | none => simp [hd,eval] at success
+          | some sibling =>
+            simp only [hd,eval,eval_bind] at success ⊢
+            cases out : (eval H (runLevel fuel ((k,x)::tail) (nodes.drop 32))).2 with
+            | none => simp [out] at success
+            | some pair =>
+              rcases pair with ⟨endLive,bytes⟩
+              simp only [out,Option.map_some,Option.some.injEq,Prod.mk.injEq] at success
+              rcases success with ⟨rfl,rfl⟩
+              rcases List.mem_cons.mp member with he | ht
+              · cases he
+                refine ⟨if i%2=0 then children v sibling else children sibling v, ?_,
+                  List.mem_cons_self .., List.mem_cons_self ..⟩
+                by_cases even : i%2=0
+                · have bit : BinMultiproof.slot i = 0 := Fin.ext even
+                  simp [even,bit,children]
+                · have bit : BinMultiproof.slot i = 1 := Fin.ext (by dsimp [BinMultiproof.slot]; omega)
+                  simp [even,bit,children]
+              · obtain ⟨cs,hc,hm,hr⟩ := ih ((k,x)::tail) (nodes.drop 32) endLive bytes
+                  (by simp only [List.length_cons] at enough ⊢; omega) out i v ht
+                exact ⟨cs,hc,List.mem_cons_of_mem _ hm,List.mem_cons_of_mem _ hr⟩
+
+#print axioms level_lift
+end AspisR1.OraclePortFrozenOrder
+end

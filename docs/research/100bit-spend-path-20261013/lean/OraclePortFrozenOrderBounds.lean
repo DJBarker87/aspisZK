@@ -1,0 +1,106 @@
+import OraclePortFrozenOrderAccounting
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortFrozenOrder
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft
+attribute [local instance] Classical.propDecidable
+
+theorem levels_conservation (H : Bytes → State) (h : Nat) (live : Live) (nodes : Bytes) :
+    (eval H (runLevels h live nodes)).1.length +
+      weight (eval H (runLevels h live nodes)).2 ≤ live.length + nodes.length / 32 := by
+  induction h generalizing live nodes with
+  | zero => simp [runLevels,eval,weight]
+  | succ h ih =>
+    have bound := level_conservation H live.length live nodes
+    simp only [runLevels,eval_bind,List.length_append]
+    cases out : (eval H (runLevel live.length live nodes)).2 with
+    | none => simp only [out,eval,weight,List.length_nil] at *; omega
+    | some pair =>
+      rcases pair with ⟨next,remaining⟩
+      have nextBound := ih next remaining
+      simp only [out,weight] at bound
+      simp only
+      omega
+
+def leafWeight : Option Live → Nat
+  | none => 0
+  | some live => live.length
+
+theorem leaves_bound (H : Bytes → State) (p : Parsed) (q : Fin 22 → Fin 262144)
+    (kind : Nat) (ps : List Nat) (rev : Live) :
+    (eval H (hashLeaves p q kind ps rev)).1.length ≤ ps.length ∧
+    leafWeight (eval H (hashLeaves p q kind ps rev)).2 ≤ ps.length + rev.length := by
+  induction ps generalizing rev with
+  | nil => simp [hashLeaves,eval,leafWeight]
+  | cons pos rest ih =>
+    cases rev with
+    | nil =>
+      have bound := ih [(index q kind pos,H (leaf p kind pos))]
+      simp only [hashLeaves,eval,List.length_cons,List.length_nil] at *
+      omega
+    | cons entry tail =>
+      rcases entry with ⟨j,v⟩
+      by_cases he : index q kind pos = j
+      · by_cases hd : H (leaf p kind pos) = v
+        · have bound := ih ((j,v)::tail)
+          simp only [hashLeaves,eval,if_pos he,if_pos hd,List.length_cons] at *
+          omega
+        · simp [hashLeaves,eval,he,hd,leafWeight]
+      · have bound := ih ((index q kind pos,H (leaf p kind pos))::(j,v)::tail)
+        simp only [hashLeaves,eval,if_neg he,List.length_cons] at *
+        omega
+
+theorem inPlace_bound (H : Bytes → State) (root : State) (live : Live) (nodes : Bytes) :
+    (eval H (verifyInPlace root live nodes)).1.length ≤ live.length + nodes.length / 32 := by
+  unfold verifyInPlace
+  split
+  · have bound := levels_conservation H 18 live nodes
+    simpa only [eval_bind,eval,List.append_nil] using
+      (Nat.le_add_right (eval H (runLevels 18 live nodes)).1.length
+        (weight (eval H (runLevels 18 live nodes)).2)).trans bound
+  · simp [eval]
+
+theorem tail_bound (H : Bytes → State) (p : Parsed) (batch kind : Nat) (live : Live) :
+    (eval H (slotTail p batch kind live)).1.length ≤ live.length + capacity (3*batch+kind) := by
+  unfold slotTail
+  dsimp only
+  split
+  · split
+    · rename_i guard
+      have bound := inPlace_bound H (committedRoot p kind) live
+        ((slice p.wire (slotStart (3*batch+kind)) (32*capacity (3*batch+kind))).take
+          (32*nodeCount 18 (live.map Prod.fst)))
+      have len : ((slice p.wire (slotStart (3*batch+kind)) (32*capacity (3*batch+kind))).take
+          (32*nodeCount 18 (live.map Prod.fst))).length / 32 ≤ capacity (3*batch+kind) := by
+        rw [List.length_take]; omega
+      omega
+    · simp [eval]
+  · simp [eval]
+
+theorem slot_bound (H : Bytes → State) (p : Parsed) (q : Fin 22 → Fin 262144)
+    (batch kind : Nat) :
+    (eval H (verifySlot_frozen p q batch kind)).1.length ≤
+      2*(batchPositions batch).length + capacity (3*batch+kind) := by
+  have bound := leaves_bound H p q kind (sortedPositions q batch kind) []
+  have len : (sortedPositions q batch kind).length = (batchPositions batch).length := by
+    exact List.length_mergeSort ..
+  simp only [verifySlot_frozen,eval_bind,List.length_append]
+  cases out : (eval H (hashLeaves p q kind (sortedPositions q batch kind) [])).2 with
+  | none => simp only [out,eval,List.length_nil]; omega
+  | some live =>
+    have tail := tail_bound H p batch kind live
+    simp only [out,leafWeight,List.length_nil,Nat.add_zero] at bound
+    simp only
+    omega
+
+#print axioms levels_conservation
+#print axioms leaves_bound
+#print axioms inPlace_bound
+#print axioms tail_bound
+#print axioms slot_bound
+end AspisR1.OraclePortFrozenOrder
+end

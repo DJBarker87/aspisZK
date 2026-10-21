@@ -27,8 +27,17 @@ obligation. This packet does not claim an extracted Rust theorem.
 
 ## Stage 2: recovery and accounting
 
-Pending. Collision-free recovery must follow actual level-order execution;
-unconditional recovery-table permutation is false on the inherited witness.
+The actual source-order program now has compiled all-input bounds:
+`decision_budget` ≤ 1046, `verifier_bound` ≤ 1161, `distinct_bound` ≤ Q+1161,
+`starts_bound` ≤ Q+1080, and `log_length` ≤ Q+2322. No comparison to a
+recursive log is used. `level_conservation` and `levels_conservation` prove
+symbolically that parent calls plus the remaining frontier/proof weight are
+bounded by initial live nodes plus proof words. `leaves_bound` covers early
+duplicate rejection. Six slots consume at most 2·66+914 = 1046 calls; this
+includes a conservative six-call slack compared with the recursive 1040.
+
+Collision-free recovery is in progress over actual levels; unconditional
+recovery-table permutation remains false on the inherited collision witness.
 
 ## Stage 3: headline and join split
 

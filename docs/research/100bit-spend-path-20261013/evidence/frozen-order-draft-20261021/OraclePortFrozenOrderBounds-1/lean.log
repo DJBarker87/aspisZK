@@ -1,0 +1,42 @@
+/Users/dominic/ZK/.worktrees/cx-frozen-order-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozenOrderBounds.lean:43:6: error: Type mismatch: After simplification, term
+  bound
+ has type
+  (eval H (hashLeaves p q kind rest [(index q kind pos, H (leaf p kind pos))])).1.length ≤ rest.length ∧
+    leafWeight (eval H (hashLeaves p q kind rest [(index q kind pos, H (leaf p kind pos))])).2 ≤ rest.length + (0 + 1)
+but is expected to have type
+  1 + (eval H (hashLeaves p q kind rest [(index q kind pos, H (leaf p kind pos))])).1.length ≤ rest.length + 1 ∧
+    leafWeight (eval H (hashLeaves p q kind rest [(index q kind pos, H (leaf p kind pos))])).2 ≤ rest.length + (0 + 1)
+/Users/dominic/ZK/.worktrees/cx-frozen-order-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozenOrderBounds.lean:70:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+H : Bytes → State
+p : Parsed
+batch kind : ℕ
+live : Live
+⊢ (eval H
+          (have is := List.map Prod.fst live;
+          if wellFormed is then
+            have count := nodeCount 18 is;
+            have cap := capacity (3 * batch + kind);
+            have nodes := slice p.wire (slotStart (3 * batch + kind)) (32 * cap);
+            if
+                count ≤ cap ∧
+                  List.length nodes = 32 * cap ∧
+                    List.drop (32 * count) nodes = List.replicate (32 * (cap - count)) 0 then
+              verifyInPlace (committedRoot p kind) live (List.take (32 * count) nodes)
+            else Program.done false
+          else Program.done false)).1.length ≤
+    List.length live + capacity (3 * batch + kind)
+/Users/dominic/ZK/.worktrees/cx-frozen-order-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozenOrderBounds.lean:92:23: warning: This simp argument is unused:
+  out
+
+Hint: Omit it from the simp argument list.
+  simp only [o̵u̵t̵,̵eval, ̲List.length_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.OraclePortFrozenOrder.levels_conservation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortFrozenOrder.leaves_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortFrozenOrder.inPlace_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortFrozenOrder.tail_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortFrozenOrder.slot_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
