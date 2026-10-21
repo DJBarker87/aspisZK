@@ -1,0 +1,56 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitControlSource28.lean:44:94: error: unsolved goals
+H P : Type
+hash : aspis_core.digest.Digest32 H
+policy : transcript.control21.Policy P
+token : H
+state : Std.Array U8 32#usize
+sem : Std.Array aspis_core.field.QM31 25#usize
+z : Std.Array (Std.Array aspis_core.field.QM31 2#usize) 2#usize
+records : sim.Records
+variant : transport.Variant
+⊢ (do
+      let t ← transcript.control21.Transcript.new hash policy token state variant
+      let __x ← transcript.control21.Transcript.scalar hash policy t 27#u8 records.y1.deref true
+      let s1 ← lift records.inactive.to_slice
+      let __x_1 ← transcript.control21.Transcript.scalar hash policy __x.2 28#u8 s1 false
+      let __x_2 ← transcript.control21.Transcript.scalar hash policy __x_1.2 29#u8 records.c0.deref false
+      let s3 ← lift records.folded_root.to_slice
+      let payload ← alloc.slice.Slice.to_vec core.clone.CloneU8 s3
+      let payload1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 payload records.c1.deref
+      let __x_3 ← transcript.control21.Transcript.scalar hash policy __x_2.2 30#u8 payload1.deref false
+      let __x_4 ← transcript.control21.Transcript.queries hash policy __x_3.2 31#u8 records.fin.deref
+      match __x_4.1 with
+        | core.result.Result.Ok q => do
+          let s7 ← lift (Std.Array.empty U8).to_slice
+          let __x_5 ← transcript.control21.Transcript.scalar_k hash policy __x_4.2 32#u8 s7
+          ok
+              (core.result.Result.Ok (sem, z, __x.1, __x_1.1, __x_2.1, __x_3.1, q, __x_5.1), __x_5.2.state,
+                __x_5.2.trace)
+        | core.result.Result.Err e => ok (core.result.Result.Err e, __x_4.2.state, __x_4.2.trace)) =
+    do
+    let t ← transcript.control21.Transcript.new hash policy token state variant
+    let __x ← transcript.control21.Transcript.scalar hash policy t 27#u8 records.y1.deref true
+    let s1 ← liftM (lift records.inactive.to_slice)
+    let __x_1 ← transcript.control21.Transcript.scalar hash policy __x.2 28#u8 s1 false
+    let __x_2 ← transcript.control21.Transcript.scalar hash policy __x_1.2 29#u8 records.c0.deref false
+    let s3 ← liftM (lift records.folded_root.to_slice)
+    let payload ← liftM (alloc.slice.Slice.to_vec core.clone.CloneU8 s3)
+    let payload1 ← liftM (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 payload records.c1.deref)
+    let __x_3 ← transcript.control21.Transcript.scalar hash policy __x_2.2 30#u8 payload1.deref false
+    let __x_4 ← transcript.control21.Transcript.queries hash policy __x_3.2 31#u8 records.fin.deref
+    match __x_4.1 with
+      | core.result.Result.Ok q => do
+        let s7 ← liftM (lift (Std.Array.empty U8).to_slice)
+        let __x_5 ← transcript.control21.Transcript.scalar_k hash policy __x_4.2 32#u8 s7
+        pure
+            (core.result.Result.Ok (sem, z, __x.1, __x_1.1, __x_2.1, __x_3.1, q, __x_5.1), __x_5.2.state, __x_5.2.trace)
+      | core.result.Result.Err e => pure (core.result.Result.Err e, __x_4.2.state, __x_4.2.trace)
+'R1Z.ProverCommitControlSource28.absorb' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitControlSource28.queries' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitControlSource28.block' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitControlSource28.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitControlSource28.scalar_k' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitControlSource28.start' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitControlSource28.tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

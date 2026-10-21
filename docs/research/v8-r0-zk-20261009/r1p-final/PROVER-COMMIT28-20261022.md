@@ -18,3 +18,37 @@ Pending: generic interpreter validation, the concrete suffix, semantic/circle
 and full walk composition, replay reset, retry/programming/serialization,
 shippedProverExperiment, both WholeRunJoins and endpoint specialization.
 RustProverRefinement remains explicit until those concrete obligations close.
+
+## Stage 1 — complete suffix, with source reconstruction
+
+`ProverCommitStateLift28.bind_run` proves the generic state-threading equation;
+`install` transports a per-call implementation equation through any complete
+stateful continuation. `ProverCommitControlProgram28` is a mechanical monadic
+lift of the seven retained control21 functions. Pure Result specialization
+reconstructs every retained source body (`ProverCommitControlSource28`), including
+the whole query scanner/trace continuation and tail. These are kernel-checked
+identities, rather than a syntactic diff offered as a source theorem.
+
+`ProverCommitControl28.query_effects` and `tail_effects` install the actual
+extracted CoinOracle and the concrete D136 scalar/query policy. Their complete
+results retain the external machine, including on inner verifier errors. The
+old dictionary/token is no longer the mutable-state carrier. No source-join
+hypothesis is added: the only per-call equality is the proved `call_exact`.
+
+J7800 (generic state equations), J7809 (seven source reconstruction audits) and
+J7813 (two concrete complete suffix audits) pass, with standard axioms only,
+zero swaps, respectively 1.77/3.97/2.27 s and
+4157784/4200924/4181032 KiB peak RSS. The first direct `rfl` reconstruction of
+the query/tail exceeded default recursion depth; J7807/J7809 replace it with
+per-bind congruence and previously proved helper equations. No limits rose.
+Earlier parse/name diagnostics and exact snapshots are retained and excluded.
+This stage does not claim a full walk, retry or serialized-game join.
+
+The same construction now reconstructs the full semantic and circle callers
+(J7814: four audits, 1.76 s, 4151548 KiB, zero swap). The validators and scalar
+samplers remain the actual retained functions. `ProverCommitSemanticRows28`
+ports the finite 25-row loop and proves equality with the actual extracted
+loop under its unchanged row-count invariant, then installs the concrete
+machine (J7816: three audits, 1.88 s, 4167424 KiB, zero swap). J7815 recompiles
+the final generic suffix after its explanatory comment changed. All accepted
+new theorems audit to the allowed standard axioms or fewer.
