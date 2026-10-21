@@ -1,0 +1,256 @@
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:89:73: error: unexpected token '#print'; expected 'lemma'
+theorem Aeneas.Std.bind_assoc_eq.{u} : ∀ {a b c : Type u} (e : Result a) (g : a → Result b) (h : b → Result c),
+  e >>= g >>= h = e >>= fun x => g x >>= h :=
+fun {a b c} e g h =>
+  id
+    (casesOn (motive := fun t => e = t → Std.bind (Std.bind e g) h = Std.bind e fun x => Std.bind (g x) h) e
+      (fun v h_1 =>
+        Eq.symm h_1 ▸
+          of_eq_true
+            (Eq.trans
+              (congr (congrArg Eq (congrFun' (congrArg Std.bind (bind_ok v g)) h))
+                (bind_ok v fun x => Std.bind (g x) h))
+              (eq_self (Std.bind (g v) h))))
+      (fun e_1 h_1 =>
+        Eq.symm h_1 ▸
+          of_eq_true
+            (Eq.trans
+              (congr (congrArg Eq (Eq.trans (congrFun' (congrArg Std.bind (bind_fail e_1 g)) h) (bind_fail e_1 h)))
+                (bind_fail e_1 fun x => Std.bind (g x) h))
+              (eq_self (fail e_1))))
+      (fun h_1 =>
+        Eq.symm h_1 ▸
+          of_eq_true
+            (Eq.trans
+              (congr (congrArg Eq (Eq.trans (congrFun' (congrArg Std.bind (bind_div g)) h) (bind_div h)))
+                (bind_div fun x => Std.bind (g x) h))
+              (eq_self div)))
+      (Eq.refl e))
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:91:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind`
+@[implicit_reducible] def Aeneas.Std.instBindResult.{u_1} : Bind Result :=
+{ bind := fun {α β} => Std.bind }
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:112:19: error: unsolved goals
+case succ.fail
+backend : Backend
+basis : Std.Array U32 256#usize
+power : K
+next width : Usize
+hwidth : ↑width ≤ 256
+n : ℕ
+ih :
+  ∀ (j : Usize) (state : State),
+    ↑j + n = ↑width →
+      accumulate_rows_owned backend state.1 state.2 basis power next width j =
+        iterate (step backend basis power next width) n j state
+j : Usize
+remaining : ↑j + (n + 1) = ↑width
+output_weights : alloc.vec.Vec K
+weights : BatchedWeights
+running : ¬j ≥ width
+j1 : UScalar UScalarTy.Usize
+hj1 : j + 1#usize = ok j1
+hv : ↑j1 = ↑j + 1
+error : Error
+h0 : basis.index_usize j = fail error
+⊢ fail error = do
+    let state1 ←
+      let (output_weights, weights) := (output_weights, weights)
+        fail error
+    let j1 ← j + 1#usize
+    iterate (step backend basis power next width) n j1 state1
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:113:12: error: unsolved goals
+case succ.div
+backend : Backend
+basis : Std.Array U32 256#usize
+power : K
+next width : Usize
+hwidth : ↑width ≤ 256
+n : ℕ
+ih :
+  ∀ (j : Usize) (state : State),
+    ↑j + n = ↑width →
+      accumulate_rows_owned backend state.1 state.2 basis power next width j =
+        iterate (step backend basis power next width) n j state
+j : Usize
+remaining : ↑j + (n + 1) = ↑width
+output_weights : alloc.vec.Vec K
+weights : BatchedWeights
+running : ¬j ≥ width
+j1 : UScalar UScalarTy.Usize
+hj1 : j + 1#usize = ok j1
+hv : ↑j1 = ↑j + 1
+h0 : basis.index_usize j = div
+⊢ div = do
+    let state1 ←
+      let (output_weights, weights) := (output_weights, weights)
+        div
+    let j1 ← j + 1#usize
+    iterate (step backend basis power next width) n j1 state1
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:117:10: error: Tactic `rfl` failed: The left-hand side
+  do
+    let weights1 ← backend.push weights j power m
+    let i ← next * width
+    let i1 ← i + j
+    let q ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice K) output_weights j
+    let we ← backend.from_qm31 q
+    backend.trace 12#u16 i1 we
+    let i2 ← i + j
+    let we1 ← backend.from_m31 m
+    backend.trace 13#u16 i2 we1
+    let i3 ← j + 1#usize
+    accumulate_rows_owned backend output_weights weights1 basis power next width i3
+is not definitionally equal to the right-hand side
+  do
+    let state1 ←
+      let (output_weights, weights) := (output_weights, weights)
+        do
+        let weights1 ← backend.push weights j power m
+        let i ← next * width
+        let i1 ← i + j
+        let q ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice K) output_weights j
+        let we ← backend.from_qm31 q
+        backend.trace 12#u16 i1 we
+        let i2 ← i + j
+        let we1 ← backend.from_m31 m
+        backend.trace 13#u16 i2 we1
+        ok (output_weights, weights1)
+    let j1 ← j + 1#usize
+    iterate (step backend basis power next width) n j1 state1
+
+case succ.ok
+backend : Backend
+basis : Std.Array U32 256#usize
+power : K
+next width : Usize
+hwidth : ↑width ≤ 256
+n : ℕ
+ih :
+  ∀ (j : Usize) (state : State),
+    ↑j + n = ↑width →
+      accumulate_rows_owned backend state.1 state.2 basis power next width j =
+        iterate (step backend basis power next width) n j state
+j : Usize
+remaining : ↑j + (n + 1) = ↑width
+output_weights : alloc.vec.Vec K
+weights : BatchedWeights
+running : ¬j ≥ width
+j1 : UScalar UScalarTy.Usize
+hj1 : j + 1#usize = ok j1
+hv : ↑j1 = ↑j + 1
+m : U32
+h0 : basis.index_usize j = ok m
+⊢ (do
+      let weights1 ← backend.push weights j power m
+      let i ← next * width
+      let i1 ← i + j
+      let q ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice K) output_weights j
+      let we ← backend.from_qm31 q
+      backend.trace 12#u16 i1 we
+      let i2 ← i + j
+      let we1 ← backend.from_m31 m
+      backend.trace 13#u16 i2 we1
+      let i3 ← j + 1#usize
+      accumulate_rows_owned backend output_weights weights1 basis power next width i3) =
+    do
+    let state1 ←
+      let (output_weights, weights) := (output_weights, weights)
+        do
+        let weights1 ← backend.push weights j power m
+        let i ← next * width
+        let i1 ← i + j
+        let q ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice K) output_weights j
+        let we ← backend.from_qm31 q
+        backend.trace 12#u16 i1 we
+        let i2 ← i + j
+        let we1 ← backend.from_m31 m
+        backend.trace 13#u16 i2 we1
+        ok (output_weights, weights1)
+    let j1 ← j + 1#usize
+    iterate (step backend basis power next width) n j1 state1
+case succ.ok
+backend : Backend
+basis : Std.Array U32 256#usize
+power : K
+next width : Usize
+hwidth : ↑width ≤ 256
+n : ℕ
+ih :
+  ∀ (j : Usize) (state : State),
+    ↑j + n = ↑width →
+      accumulate_rows_owned backend state.1 state.2 basis power next width j =
+        iterate (step backend basis power next width) n j state
+j : Usize
+remaining : ↑j + (n + 1) = ↑width
+output_weights : alloc.vec.Vec K
+weights : BatchedWeights
+running : ¬j ≥ width
+j1 : UScalar UScalarTy.Usize
+hj1 : j + 1#usize = ok j1
+hv : ↑j1 = ↑j + 1
+m : U32
+h0 : basis.index_usize j = ok m
+⊢ (do
+      let weights1 ← backend.push weights j power m
+      let i ← next * width
+      let i1 ← i + j
+      let q ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice K) output_weights j
+      let we ← backend.from_qm31 q
+      backend.trace 12#u16 i1 we
+      let i2 ← i + j
+      let we1 ← backend.from_m31 m
+      backend.trace 13#u16 i2 we1
+      let i3 ← j + 1#usize
+      accumulate_rows_owned backend output_weights weights1 basis power next width i3) =
+    do
+    let state1 ←
+      let (output_weights, weights) := (output_weights, weights)
+        do
+        let weights1 ← backend.push weights j power m
+        let i ← next * width
+        let i1 ← i + j
+        let q ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice K) output_weights j
+        let we ← backend.from_qm31 q
+        backend.trace 12#u16 i1 we
+        let i2 ← i + j
+        let we1 ← backend.from_m31 m
+        backend.trace 13#u16 i2 we1
+        ok (output_weights, weights1)
+    let j1 ← j + 1#usize
+    iterate (step backend basis power next width) n j1 state1
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:110:51: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [running, if_false, iterate, step, bind_t̵c̵_̵o̵k̵,̵ ̵b̵i̵n̵d̵_̵assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:110:63: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [running, if_false, iterate, step, bind_tc_ok,̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:112:33: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵0̵,̵ ̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:113:26: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵0̵,̵ ̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:115:21: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵0̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'S7Kani2AccumulatorLoop.increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+'S7Kani2AccumulatorLoop.extracted_loop_composition' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

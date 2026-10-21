@@ -1,0 +1,45 @@
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:108:6: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  U32 = State
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.43} {β : α → Sort ?u.42} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case succ.e_3
+backend : Backend
+basis : Std.Array U32 256#usize
+power : K
+next width : Usize
+hwidth : ↑width ≤ 256
+n : ℕ
+ih :
+  ∀ (j : Usize) (state : State),
+    ↑j + n = ↑width →
+      accumulate_rows_owned backend state.1 state.2 basis power next width j =
+        iterate (step backend basis power next width) n j state
+j : Usize
+remaining : ↑j + (n + 1) = ↑width
+output_weights : alloc.vec.Vec K
+weights : BatchedWeights
+running : ¬j ≥ width
+j1 : UScalar UScalarTy.Usize
+hj1 : j + 1#usize = ok j1
+hv : ↑j1 = ↑j + 1
+⊢ U32 = State
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:106:51: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [running, if_false, iterate, step, bind_t̵c̵_̵o̵k̵,̵ ̵b̵i̵n̵d̵_̵assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-s7-kani2/docs/research/100bit-spend-path-20261013/lean/S7Kani2AccumulatorLoop.lean:106:63: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [running, if_false, iterate, step, bind_tc_ok,̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'S7Kani2AccumulatorLoop.increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+'S7Kani2AccumulatorLoop.extracted_loop_composition' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
