@@ -82,14 +82,52 @@ The complete verbatim endpoint texts are `headline-before.lean.txt` and
 deleted lines and no additions. Both texts share the separately proved
 CallerLaw application, so the theorem body is literally unchanged.
 
-Before:
+Verbatim before (declaration prefix):
 
 ```lean
+theorem privacy_headline_owned_closed
+    (builder_premises : BuilderPremises h B x)
     (R_commit_caller : ProverCommitCallerInstance.CallerLaw
       (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)))
+    (observer_program : (source).Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
 ```
 
-After: the binder is absent. The argument name in the unchanged proof now
-resolves to the checked private theorem, rather than to a caller-supplied
-hypothesis. This is a deletion at the fixed operational-reference endpoint;
-no whole-shipped-execution certificate follows from this deletion alone.
+Verbatim after (declaration prefix):
+
+```lean
+theorem privacy_headline_owned_closed
+    (builder_premises : BuilderPremises h B x)
+    (observer_program : (source).Adversary → View K CommitHandle Aux R1Bat →
+      List (List UInt8 × OracleAnswer) → OProg)
+```
+
+The argument name in the unchanged proof resolves to the checked private
+theorem, rather than to a caller-supplied hypothesis. This is a deletion
+at the fixed operational-reference endpoint; no whole-shipped-execution
+certificate follows from this deletion alone.
+
+## Stage 4: canonical global-to-local rebasing
+
+`ProverCommitOwnedRebase.windowAnswers` constructs each nine-answer local
+table as a restriction of the retained global answers. `windowHash_at` proves
+the callback identity at every in-range request. `window_wrapping_offset`
+proves that the Rust local-ROM wrapping subtraction is ordinary subtraction
+inside these windows. `scalar_rebase` removes the support premise from
+Stage 3 by constructing the correct local backend. `scalar_window_offset`
+places the current counter at offset zero or one, inside the scalar contract
+margin. Global allocation and counter bounds exclude wraparound.
+
+`ProverCommitOwnedWindowCollection.collect_rebase` then proves the complete
+collection equals per-scalar rebased calls, by symbolic induction, including
+partial Rust error states. Each call uses a bounded local backend; every
+window is derived from the same global input. No full array is supplied to a
+nine-block ROM. No fresh independent table is substituted for a retained
+global answer. J8352 checks the initial three rebasing lemmas, J8353 the
+final four, J8354 the collection induction: all exit 0, standard axioms,
+zero swaps. Source identities, dependencies and resource fields are in
+the verbatim receipts.
+
+This is the mathematical rebasing bridge for the P6 route. It does not
+itself prove the actual material builder's loop schedule, entry-point
+transport, or all-family shipped callback coverage.
