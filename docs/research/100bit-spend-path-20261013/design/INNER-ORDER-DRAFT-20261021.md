@@ -50,3 +50,30 @@ Attempt 1 had three corrected elaboration issues (find? reduction, the sort
 proof, and an ambiguous Byte). Attempt 2 exits 0; every theorem has a standard
 axiom audit. Failed compiler-recovery sorryAx reports are retained only in
 the failed receipt and are not accepted evidence.
+
+## Stage 3: independent rejecting-path accounting
+
+`OraclePortInnerOrderRejectLog.rejecting_log` proves the counterexample's
+complete evaluation: the ten leaf reads, in ascending source position order,
+then false. `padding_stops` proves the continuation itself is `.done false`;
+no parent query is issued. `rejecting_log_length` is exactly 10, hence the
+witness's log is below 1161. This is a witness-specific result, not a proof
+of the requested universal rejecting verifier budget.
+
+The model must adopt the frozen behaviour: hash sorted leaves and reject a
+bad duplicate immediately; then check this slot's node count and zero padding;
+only then hash its parents level by level. The existing global padding guard
+must be moved into the slot continuation for all-path source-order fidelity.
+Merely replacing the child underneath that global guard still rejects bad
+padding before any leaf query. The guarded acceptance theorem should compare
+a source slot to the old slot conjoined with the appropriate per-slot padding
+predicate, under the upstream size and batch/kind invariants. The raw old
+helper alone is not equivalent.
+
+The requested unconditional theorem is false, so no accepted-run multiset
+transport, universal 1161 budget, `OraclePortHeadlineDVFrozen` endpoint, or
+all-path ordered frozen caller join is asserted. Those items need the corrected
+guarded theorem and source/caller invariants first. The compiled raw-helper
+counterexample does not establish that such a corrected theorem is false.
+No premise is deleted or retargeted, so no premise-deletion signature diff is
+claimed. R19 and the existing draft endpoints remain byte-identical.
