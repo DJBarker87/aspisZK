@@ -428,3 +428,41 @@ original failure and supported-mode probes are retained, and a type-safe
 normalization repair is under investigation. No weakened equality check,
 custom axiom, source migration or original-Std correspondence claim is
 accepted. S4 and the full implementation-linked 100-bit theorem remain open.
+
+## Focused S4 caller composition and candidate refinement
+
+At `2498c28cc`, `source_tx1_success_ten_field_results` composes one
+source-installed caller success with all ten ordered query executions and
+their four field-result witnesses. The preparation and strict-scanner
+contracts remain explicit and are applied to results from that same caller.
+The arithmetic record is concrete. Its constructor predecessor is still the
+source-installed constant model; this does not close the frozen caller slot.
+The focused compile passed in 29.32 seconds, peak process RSS
+3,894,444,032 bytes, zero swaps, standard axioms. Keeping already proved
+query functions locally irreducible avoided pathological definitional
+reduction; no resource-option override was introduced.
+
+The concrete V10 endpoint and the full-query accepted-result refinement
+are checked. A further concrete QueryOps builder fixes the dots callback
+to the literal V10 outer body, and generic ten/twelve-query loop transport
+preserves the identical final output. Their source-only packets are
+`s4-v10-concrete-queryops-builder-v1-20261021` and
+`s4-stage2-querycall-refinement-v1-20261021`. These are model/refinement
+results, not candidate adoption or frozen Rust execution equivalence.
+
+The isolated current constructor extraction succeeded using an added
+wrapper in a private source copy; the frozen constructor body is unchanged.
+`s4-accumulator-new-current-extraction-v1-20261021` retains the generated
+body and a Result-valued source cut, including failure/divergence and error
+conversion. Success of that installed cut gives next=0 in the same caller
+witness. Its child implementations remain parameterized. The extraction
+launch Git revision was not captured; exact source hashes are retained and
+this is explicitly not a final formal release receipt.
+
+Further unsafe Std implementation lowering is not the active route. A
+conservative associated-type repair passed the earlier Try-output failure
+but exposed unsupported mutable-borrow copying inside Std Guard. The
+already tested V10 candidate avoids this custom from_fn-model gap; it is
+still unadopted and fails the historical B1 CU criterion. All four active
+slots are concentrating on S4 composition and its remaining source boundary.
+S4 against the frozen implementation and the full 100-bit goal remain open.
