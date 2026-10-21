@@ -1,0 +1,68 @@
+import OraclePortFrozen2Trace
+
+/-! Log insertion also covers rejection after an authentic checkpoint, not
+just accepted decisions. If TX1 rejects before the checkpoint there are no
+checkpoint reads to insert. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortFrozen2
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft OraclePortFrozenOrder
+open OraclePortStoredDecisionDraftC4
+open RawCutTranscriptRun (ErasedPrefix ErasedMessage)
+open RecordedBinaryExperimentBin (SourceInputs)
+open OraclePortStoredExperimentC4 OraclePortStoredAdmissionC4
+
+theorem roundtrip_log (H : Bytes → State) (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage)
+    (p : Parsed) (q : Fin 22 → Fin 262144) (i : SourceInputs) (v : LiteralOpeningView.View)
+    (guard : OraclePortAdmission.Guard tr)
+    (parsed : OraclePortStoredParserC4.parseReached stored tr = some p)
+    (query : queries tr = some q) (input : OraclePortStoredDecisionDraftC4.input p q tr = some i)
+    (opening : LiteralOpeningView.read (typedRows p q tr) = some v)
+    (first : (eval H (batch p q batch0)).2 = true) :
+    (eval H (dV_frozen2 stored tr m)).1 =
+      (eval H (batch p q batch0)).1 ++ (eval H (checkpoint stored p q tr i v)).1 ++
+        (eval H (batch p q batch1)).1 ∧
+    (eval H (dV_frozen stored tr m)).1 =
+      (eval H (batch p q batch0)).1 ++ (eval H (batch p q batch1)).1 := by
+  constructor
+  · simp only [dV_frozen2,if_pos guard,parsed,query,eval_bind,first,if_true,afterBatch0,
+      input,opening,checkpoint_value,stage2,eval,List.append_nil,List.append_assoc]
+  · simp only [dV_frozen,if_pos guard,parsed,query,eval_bind,eval,List.append_nil]
+    change (eval H (batch p q slots)).1 = _
+    rw [batches]
+    simp only [eval_bind,first,if_true]
+
+/-- One complete verifier execution contains the six physical checkpoint reads. -/
+theorem verifier_six_inserted (D : LiteralByteProtocol.Decoder) (i : Input) (H : Bytes → State)
+    (ha : (eval H (verifier D dV_frozen2 i)).2 = true) :
+    (eval H (verifier D dV_frozen2 i)).1.length =
+      (eval H (verifier D dV_frozen i)).1.length + 6 := by
+  simp only [OraclePortStoredExperimentC4.verifier,OraclePortExperiment.verifier,
+    OracleDecisionFeasibilityBudget.verifier_eval] at ha ⊢
+  have delta := six_inserted H i.stored
+    (LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol D).transcript H i.statement i.proof 33))
+    (LiteralTranscript.erase (i.proof 33)) ha
+  simp only [List.length_append]
+  omega
+
+/-- Annotation runs the verifier twice; this is separate from the two TXs
+inside each verifier execution. Repeated digest reads remain issued reads. -/
+theorem annotated_twelve_inserted (D : LiteralByteProtocol.Decoder) (P : Prover) (H : Bytes → State)
+    (ha : (eval H (annotated D dV_frozen2 P)).2.2 = true) :
+    (eval H (annotated D dV_frozen2 P)).1.length =
+      (eval H (annotated D dV_frozen P)).1.length + 12 := by
+  have originalAccepted : (eval H (original D dV_frozen2 P)).2.2 = true := by
+    simpa only [annotated,recorded_eval] using ha
+  rw [original_eval] at originalAccepted
+  have delta := verifier_six_inserted D (eval H P).2 H originalAccepted
+  simp only [annotated,recorded_eval,original_eval,List.length_append]
+  omega
+
+#print axioms roundtrip_log
+#print axioms verifier_six_inserted
+#print axioms annotated_twelve_inserted
+end AspisR1.OraclePortFrozen2
+end
