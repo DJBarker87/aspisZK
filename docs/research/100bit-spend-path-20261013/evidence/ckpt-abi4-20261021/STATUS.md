@@ -63,3 +63,28 @@ axioms (full lines in manifest/log). Attempt 1 inspects the live std bodies;
 attempt 2's failed list/cursor arithmetic congruence is retained, including
 compiler recovery output, and is not accepted proof evidence. A changed
 proof resolves it in attempt 3. No memory limit or heartbeat is raised.
+
+## Stage 3: successful strict extracted decoder canonicality
+
+`OraclePortCkptAbi4Decode.decoded_canonical` derives all four raw limb bounds
+from `decode_k_spec b = ok (some q)`, with no input-length or external
+canonicality hypothesis. `from_limbs_canonical` proves all eight limb bounds
+from successful extracted WideExact.from_limbs. `decoded_wide_canonical`
+then derives them from successful extracted decode_e_spec itself.
+`canonical_words_bytes` lifts the pass-3 single-word projection law to the
+complete ordered four-word list, under these explicit bounds.
+
+These are the actual pass-2 extracted **reference strict decoders**, not
+an identification of the emitted production reader's call tree with them.
+The complete U8/U32 codec bridge to C5.encodeK/encodeE and sparse body_byte
+is still missing. In particular, canonical_words_bytes states a mathematical
+LE32 projection equality; it is not encode_k/C5 equality. No raw noncanonical
+writer input is silently mapped into a canonical exact-field encoding.
+
+Final decoder attempt 5: exit 0; wall 17.072822208 s; peak RSS 3,354,214,400
+bytes; swaps 0; source revision `d377690b4`. All four axiom reports are
+`[propext, Classical.choice, Quot.sound]`. Attempts 2 and 3 separately checked
+the four- and eight-limb parts. Failed attempts 1 and 4 retain the unresolved
+branch/let and inferred list-cast goals; corrected elimination, explicit Nat
+lambda domain and let reduction resolve those errors. Their compiler recovery
+axioms are not accepted. Manifest/source snapshots preserve every attempt.

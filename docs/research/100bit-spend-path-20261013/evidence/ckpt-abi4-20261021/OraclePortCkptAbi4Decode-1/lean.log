@@ -1,0 +1,41 @@
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+inductive Aeneas.Std.Result.{u} : Type u → Type u
+number of parameters: 1
+constructors:
+Aeneas.Std.Result.ok : {α : Type u} → α → Result α
+Aeneas.Std.Result.fail : {α : Type u} → Error → Result α
+Aeneas.Std.Result.div : {α : Type u} → Result α
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi4/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi4Decode.lean:22:63: error: unsolved goals
+case ok.ok.ok.ok
+b : Slice U8
+q : RawK
+v✝³ v✝² v✝¹ v✝ : U32
+success :
+  (if 2147483647 ≤ ↑(↑(Array.make 4#usize [v✝³, v✝², v✝¹, v✝] ⋯))[0] then ok none
+    else
+      if 2147483647 ≤ ↑(↑(Array.make 4#usize [v✝³, v✝², v✝¹, v✝] ⋯))[1] then ok none
+      else
+        if 2147483647 ≤ ↑(↑(Array.make 4#usize [v✝³, v✝², v✝¹, v✝] ⋯))[2] then ok none
+        else
+          if 2147483647 ≤ ↑(↑(Array.make 4#usize [v✝³, v✝², v✝¹, v✝] ⋯))[3] then ok none
+          else
+            ok
+              (some
+                {
+                  c0 :=
+                    { a := (↑(Array.make 4#usize [v✝³, v✝², v✝¹, v✝] ⋯))[0],
+                      b := (↑(Array.make 4#usize [v✝³, v✝², v✝¹, v✝] ⋯))[1] },
+                  c1 :=
+                    { a := (↑(Array.make 4#usize [v✝³, v✝², v✝¹, v✝] ⋯))[2],
+                      b := (↑(Array.make 4#usize [v✝³, v✝², v✝¹, v✝] ⋯))[3] } })) =
+    ok (some q)
+h0 : word_spec b 0#usize = ok v✝³
+h1 : word_spec b 4#usize = ok v✝²
+h2 : word_spec b 8#usize = ok v✝¹
+h3 : word_spec b 12#usize = ok v✝
+⊢ ↑q.c0.a < 2147483647 ∧ ↑q.c0.b < 2147483647 ∧ ↑q.c1.a < 2147483647 ∧ ↑q.c1.b < 2147483647
+'AspisR1.OraclePortCkptAbi4Decode.decoded_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

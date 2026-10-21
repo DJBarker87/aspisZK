@@ -1,0 +1,39 @@
+import OraclePortCkptAbi2Extracted.Funs
+import OraclePortCkptAbi3Canonical
+
+/-! Canonicality comes from successful extracted strict decoding, not from
+an arbitrary raw writer state. This is a local reference-decoder theorem. -/
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1.OraclePortCkptAbi4Decode
+open OraclePortCkptAbi2Extracted
+abbrev RawK := aspis_core.field.QM31
+
+def Canonical (q : RawK) : Prop :=
+  q.c0.a.val < 2147483647 ∧ q.c0.b.val < 2147483647 ∧
+  q.c1.a.val < 2147483647 ∧ q.c1.b.val < 2147483647
+
+#print Aeneas.Std.Array.index_usize
+#print Aeneas.Std.Result
+
+/-- No byte-length or caller canonicality hypothesis: every successful
+strict decoder result has four canonical raw limbs. -/
+theorem decoded_canonical (b : Slice U8) (q : RawK)
+    (success : decode_k_spec b = ok (some q)) : Canonical q := by
+  unfold decode_k_spec at success
+  cases h0 : word_spec b 0#usize <;> simp_all
+  cases h1 : word_spec b 4#usize <;> simp_all
+  cases h2 : word_spec b 8#usize <;> simp_all
+  cases h3 : word_spec b 12#usize <;> simp_all
+  simp only [Array.index_usize, k_from_limbs] at success
+  simp at success
+  split at success <;> simp_all
+  split at success <;> simp_all
+  split at success <;> simp_all
+  split at success <;> simp_all
+  subst q
+  simp only [Canonical]
+  omega
+
+#print axioms decoded_canonical
+end AspisR1.OraclePortCkptAbi4Decode
