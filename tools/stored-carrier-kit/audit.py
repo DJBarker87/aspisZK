@@ -19,6 +19,17 @@ for m in mods:
   names=set(re.search(r'\[([\s\S]*)\]',line)[1].replace('\n',' ').replace(' ','').split(','))
   assert names<={'propext','Classical.choice','Quot.sound'},(m,names)
  accepted.append(dict(module=m,theorems=n,receipt_attempt=a['attempt'],wall=a['wall_seconds'],peak_rss_bytes=a['peak_rss_bytes'],swaps=a['swaps']))
+freeze_rows=[a for a in man['attempts'] if a['module']=='StoredCarrierFreeze' and a['final_current']]
+freeze=None
+if freeze_rows:
+ assert len(freeze_rows)==1
+ f=freeze_rows[0];assert f['exit']==0 and f['swaps']==0 and len(f['axioms'])==13
+ assert f['source_sha256']==sha(B/'lean/StoredCarrierFreeze.lean')
+ for line in f['axioms']:
+  if 'does not depend' in line:continue
+  names=set(re.search(r'\[([\s\S]*)\]',line)[1].replace('\n',' ').replace(' ','').split(','))
+  assert names<={'propext','Classical.choice','Quot.sound'},names
+ freeze={k:f[k] for k in ['module','attempt','exit','wall_seconds','peak_rss_bytes','swaps','source_revision','source_sha256','axioms']}
 roots=['route-v3','readonly-v1','stage1-v1','stage2-v1']
 for root in roots:
  d=json.loads((E/'host/receipts'/root/'receipt.json').read_text());assert d['exit_status']==0 and d['swaps']==0
@@ -40,6 +51,6 @@ before=sig(B/'lean/OraclePortHeadlineFrozenPerAttempt.lean');after=sig(B/'lean/S
 (E/'headline-signature-before.lean.txt').write_text(before)
 (E/'headline-signature-model-after.lean.txt').write_text(after)
 (E/'headline-signature-model.diff').write_text(''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='arbitrary-runtime endpoint',tofile='constructed presented model')))
-result=dict(status='proved focused components and logical instance; deployed carrier binding remains open',modules=accepted,kani_roots=roots,new_theorems=sum(x['theorems'] for x in accepted),shipped_files_changed=changes,original_endpoint_edited=False,deployed_premise_removed=False,deployed_strict_weakening_proved=False,constructed_model_binding_proved=True,constructed_model_p2_prime_only_runtime_remainder=True,source_observation_join_proved=False,full_frozen_manifest_replayed=False,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip())
+result=dict(status='proved focused components and logical instance; deployed carrier binding remains open',modules=accepted,kani_roots=roots,new_theorems=sum(x['theorems'] for x in accepted)+(1 if freeze else 0),focused_union_audit=freeze,shipped_files_changed=changes,original_endpoint_edited=False,deployed_premise_removed=False,deployed_strict_weakening_proved=False,constructed_model_binding_proved=True,constructed_model_p2_prime_only_runtime_remainder=True,source_observation_join_proved=False,full_frozen_manifest_replayed=False,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip())
 (E/'audit.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps(result))

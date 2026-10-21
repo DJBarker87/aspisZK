@@ -229,3 +229,36 @@ and its attempt directory. `headline-signature-before.lean.txt`,
 `headline-signature-model-after.lean.txt` and `headline-signature-model.diff`
 expose the quantifier/carrier change. `audit.json` explicitly records
 `deployed_premise_removed=false` and `deployed_strict_weakening_proved=false`.
+
+## Final focused audit and handoff
+
+`StoredCarrierFreeze`, attempt 1, exit 0, wall **20.283186 s**, peak RSS
+**3,608,641,536 bytes**, **0 swaps**, source revision
+`b9aa029eea225455e7ebfe7af103f046da08fd48` (the command receipt records the
+full actual revision). Thirteen `#print axioms` reports cover every new
+theorem, including the satisfiable P2′ self-presentation witness. All use
+only subsets of `{propext, Classical.choice, Quot.sound}`. Exact target,
+argv, module/hash, dependency fingerprint, timings, output and source snapshot
+are in `StoredCarrierFreeze-1/` and `manifest.json`. This combines the focused
+objects once; it is not a coherent full frozen-source release replay.
+
+Reproduce the read-only source/evidence/signature checks with:
+
+```sh
+python3 tools/stored-carrier-kit/audit.py
+```
+
+The audit checks every accepted Lean source/receipt/axiom result, all four
+accepted Kani roots and their unchanged Rust inputs, the 247 source/Cargo
+pins, reused receipt hashes, the nonempty signature diff and the 5 MB JSON
+limit. No unchanged Lean/Kani gate is rerun. Failed attempts remain visible
+but are never counted as proof evidence. No source/build dependency, toolchain
+or binary is installed or changed by this packet. No local target directory
+was created.
+
+No shipped Rust, existing Lean module, sibling cone, lean-candidate, wallet
+or key changed; no ELF rebuild is triggered. No full frozen manifest is
+launched while the source/caller closure is incomplete. No push or merge.
+**The requested deployed StoredCarrierBinding discharge is not established.**
+The logical presented-instance endpoint is proved; its constructor/source
+specialization is explicit, and the original endpoint signature is untouched.
