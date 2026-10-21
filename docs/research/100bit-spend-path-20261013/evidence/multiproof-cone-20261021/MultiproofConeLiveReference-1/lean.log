@@ -1,0 +1,319 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:7:17: warning: Could not generate mvcgen spec for AspisR1.MultiproofConeNodeDomain.hash_spec: (kernel) constant has already been declared 'AspisR1.MultiproofConeNodeDomain.hash_spec.mvcgen_spec'
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:7:17: warning: Could not generate mvcgen spec for AspisR1.MultiproofConeNodeDomain.read_spec: (kernel) constant has already been declared 'AspisR1.MultiproofConeNodeDomain.read_spec.mvcgen_spec'
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:27:12: warning: 'simp_all' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:27:25: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:27:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:27:25: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:42:49: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ib : ↑i < (↑s.idx).length
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁶ : [> let index ← s.idx.index_usize i <]
+value : Std.Array U8 32#usize
+_✝⁵ : [> let value ← s.val.index_usize i <]
+i1 : Usize
+_✝⁴ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝¹ : i1 < s.n
+i2 : U32
+_✝³ : [> let i2 ← s.idx.index_usize i1 <]
+i3 : U32
+_✝² : [> let i3 ← lift (index ^^^ 1#u32) <]
+right : Std.Array U8 32#usize
+_✝¹ : [> let right ← s.val.index_usize i1 <]
+i4 : Usize
+_✝ : [> let i4 ← i + 2#usize <]
+out : reference.Scratch
+_ : [> let out ← reference.write_parent D hash s value right i4 s.at index w <]
+x✝² : Usize
+x✝¹ : U32
+x✝ : reference.Row
+gi : (↑s.idx)[↑i]?.getD default = (↑s.idx)[↑i]
+index_post : index = (↑s.idx)[↑i]
+value_post : value = (↑s.val)[↑i]
+i2_post : i3 = (↑s.idx)[↑i + 1]
+i3_post1 : ↑(↑s.idx)[↑i + 1] = ↑(↑s.idx)[↑i] ^^^ 1
+i3_post2 : (↑s.idx)[↑i + 1].bv = (↑s.idx)[↑i].bv ^^^ 1#32
+h✝ : i2 = (↑s.idx)[↑i + 1]
+right_post : right = (↑s.val)[↑i + 1]
+i4_post : ↑i4 = ↑i + 2
+out_post1 : x✝ = reference.Row.Next out i4 x✝²
+out_post2 : out.idx = s.idx.set w x✝¹
+out_post3 : ↑x✝¹ = ↑(↑s.idx)[↑i] / 2
+out_post4 : ↑x✝² = ↑w + 1
+⊢ ∃ parent,
+    s.idx.set w x✝¹ = s.idx.set w parent ∧
+      ↑parent = ↑(↑s.idx)[↑i] / 2 ∧ ↑i + 1 < ↑s.n ∧ ↑((↑s.idx)[↑i + 1]?.getD default) = ↑(↑s.idx)[↑i] ^^^ 1
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:42:49: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ib : ↑i < (↑s.idx).length
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁹ : [> let index ← s.idx.index_usize i <]
+value : Std.Array U8 32#usize
+_✝⁸ : [> let value ← s.val.index_usize i <]
+i1 : Usize
+_✝⁷ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝³ : i1 < s.n
+i2 : U32
+_✝⁶ : [> let i2 ← s.idx.index_usize i1 <]
+i3 : U32
+_✝⁵ : [> let i3 ← lift (index ^^^ 1#u32) <]
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+out : reference.Scratch
+_ : [> let out ← reference.write_parent D hash s value sibling i1 i6 index w <]
+x✝² : Usize
+x✝¹ : U32
+x✝ : reference.Row
+gi : (↑s.idx)[↑i]?.getD default = (↑s.idx)[↑i]
+index_post : index = (↑s.idx)[↑i]
+value_post : value = (↑s.val)[↑i]
+i2_post : i2 = (↑s.idx)[↑i + 1]
+i3_post1 : ↑i3 = ↑(↑s.idx)[↑i] ^^^ 1
+i3_post2 : i3.bv = (↑s.idx)[↑i].bv ^^^ 1#32
+h✝² : ¬↑(↑s.idx)[↑i + 1] = ↑(↑s.idx)[↑i] ^^^ 1
+i5_post1 : ↑i5 = (↑physical).length - ↑s.at
+h✝¹ : 32 ≤ (↑physical).length - ↑s.at
+i6_post : ↑i6 = ↑s.at + 32
+s1_post1 : ↑s1 = List.slice (↑s.at) (↑s.at + 32) ↑physical
+s1_post2 : (List.slice (↑s.at) (↑s.at + 32) ↑physical).length = 32
+i7_post1 : ↑(↑s.idx)[↑i] % 2 = 0
+i7_post2 : 0#32 = (↑s.idx)[↑i].bv &&& 1#32
+h✝ : i7 = 0#u32
+out_post1 : x✝ = reference.Row.Next out i1 x✝²
+out_post2 : out.idx = s.idx.set w x✝¹
+out_post3 : ↑x✝¹ = ↑(↑s.idx)[↑i] / 2
+out_post4 : ↑x✝² = ↑w + 1
+⊢ ∃ parent,
+    s.idx.set w x✝¹ = s.idx.set w parent ∧
+      ↑parent = ↑(↑s.idx)[↑i] / 2 ∧ (↑i + 1 < ↑s.n → ¬↑((↑s.idx)[↑i + 1]?.getD default) = ↑(↑s.idx)[↑i] ^^^ 1)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:42:49: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ib : ↑i < (↑s.idx).length
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁹ : [> let index ← s.idx.index_usize i <]
+value : Std.Array U8 32#usize
+_✝⁸ : [> let value ← s.val.index_usize i <]
+i1 : Usize
+_✝⁷ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝³ : i1 < s.n
+i2 : U32
+_✝⁶ : [> let i2 ← s.idx.index_usize i1 <]
+i3 : U32
+_✝⁵ : [> let i3 ← lift (index ^^^ 1#u32) <]
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+out : reference.Scratch
+_ : [> let out ← reference.write_parent D hash s sibling value i1 i6 index w <]
+x✝² : Usize
+x✝¹ : U32
+x✝ : reference.Row
+gi : (↑s.idx)[↑i]?.getD default = (↑s.idx)[↑i]
+index_post : index = (↑s.idx)[↑i]
+value_post : value = (↑s.val)[↑i]
+i2_post : i2 = (↑s.idx)[↑i + 1]
+i3_post1 : ↑i3 = ↑(↑s.idx)[↑i] ^^^ 1
+i3_post2 : i3.bv = (↑s.idx)[↑i].bv ^^^ 1#32
+h✝² : ¬↑(↑s.idx)[↑i + 1] = ↑(↑s.idx)[↑i] ^^^ 1
+i5_post1 : ↑i5 = (↑physical).length - ↑s.at
+h✝¹ : 32 ≤ (↑physical).length - ↑s.at
+i6_post : ↑i6 = ↑s.at + 32
+s1_post1 : ↑s1 = List.slice (↑s.at) (↑s.at + 32) ↑physical
+s1_post2 : (List.slice (↑s.at) (↑s.at + 32) ↑physical).length = 32
+i7_post2 : i7.bv = (↑s.idx)[↑i].bv &&& 1#32
+h✝ : ↑(↑s.idx)[↑i] % 2 = 1
+out_post1 : x✝ = reference.Row.Next out i1 x✝²
+out_post2 : out.idx = s.idx.set w x✝¹
+out_post3 : ↑x✝¹ = ↑(↑s.idx)[↑i] / 2
+out_post4 : ↑x✝² = ↑w + 1
+⊢ ∃ parent,
+    s.idx.set w x✝¹ = s.idx.set w parent ∧
+      ↑parent = ↑(↑s.idx)[↑i] / 2 ∧ (↑i + 1 < ↑s.n → ¬↑((↑s.idx)[↑i + 1]?.getD default) = ↑(↑s.idx)[↑i] ^^^ 1)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:42:49: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ib : ↑i < (↑s.idx).length
+index : U32
+_✝⁷ : [> let index ← s.idx.index_usize i <]
+value : Std.Array U8 32#usize
+_✝⁶ : [> let value ← s.val.index_usize i <]
+i1 : Usize
+_✝⁵ : [> let i1 ← i + 1#usize <]
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+out : reference.Scratch
+_ : [> let out ← reference.write_parent D hash s value sibling i1 i6 index w <]
+x✝² : Usize
+x✝¹ : U32
+x✝ : reference.Row
+gi : (↑s.idx)[↑i]?.getD default = (↑s.idx)[↑i]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index_post : index = (↑s.idx)[↑i]
+value_post : value = (↑s.val)[↑i]
+i1_post : ↑i1 = ↑i + 1
+h✝² : ↑s.n ≤ ↑i + 1
+i5_post1 : ↑i5 = (↑physical).length - ↑s.at
+h✝¹ : 32 ≤ (↑physical).length - ↑s.at
+i6_post : ↑i6 = ↑s.at + 32
+s1_post1 : ↑s1 = List.slice (↑s.at) (↑s.at + 32) ↑physical
+s1_post2 : (List.slice (↑s.at) (↑s.at + 32) ↑physical).length = 32
+i7_post1 : ↑(↑s.idx)[↑i] % 2 = 0
+i7_post2 : 0#32 = (↑s.idx)[↑i].bv &&& 1#32
+h✝ : i7 = 0#u32
+out_post1 : x✝ = reference.Row.Next out i1 x✝²
+out_post2 : out.idx = s.idx.set w x✝¹
+out_post3 : ↑x✝¹ = ↑(↑s.idx)[↑i] / 2
+out_post4 : ↑x✝² = ↑w + 1
+⊢ ∃ parent, s.idx.set w x✝¹ = s.idx.set w parent ∧ ↑parent = ↑(↑s.idx)[↑i] / 2
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:42:49: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ib : ↑i < (↑s.idx).length
+index : U32
+_✝⁷ : [> let index ← s.idx.index_usize i <]
+value : Std.Array U8 32#usize
+_✝⁶ : [> let value ← s.val.index_usize i <]
+i1 : Usize
+_✝⁵ : [> let i1 ← i + 1#usize <]
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+out : reference.Scratch
+_ : [> let out ← reference.write_parent D hash s sibling value i1 i6 index w <]
+x✝² : Usize
+x✝¹ : U32
+x✝ : reference.Row
+gi : (↑s.idx)[↑i]?.getD default = (↑s.idx)[↑i]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index_post : index = (↑s.idx)[↑i]
+value_post : value = (↑s.val)[↑i]
+i1_post : ↑i1 = ↑i + 1
+h✝² : ↑s.n ≤ ↑i + 1
+i5_post1 : ↑i5 = (↑physical).length - ↑s.at
+h✝¹ : 32 ≤ (↑physical).length - ↑s.at
+i6_post : ↑i6 = ↑s.at + 32
+s1_post1 : ↑s1 = List.slice (↑s.at) (↑s.at + 32) ↑physical
+s1_post2 : (List.slice (↑s.at) (↑s.at + 32) ↑physical).length = 32
+i7_post2 : i7.bv = (↑s.idx)[↑i].bv &&& 1#32
+h✝ : ↑(↑s.idx)[↑i] % 2 = 1
+out_post1 : x✝ = reference.Row.Next out i1 x✝²
+out_post2 : out.idx = s.idx.set w x✝¹
+out_post3 : ↑x✝¹ = ↑(↑s.idx)[↑i] / 2
+out_post4 : ↑x✝² = ↑w + 1
+⊢ ∃ parent, s.idx.set w x✝¹ = s.idx.set w parent ∧ ↑parent = ↑(↑s.idx)[↑i] / 2
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:42:41: warning: This simp argument is unused:
+  gi
+
+Hint: Omit it from the simp argument list.
+  simp_all [Shape, ̲SourcePair,̵g̵i̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConeLiveReference.write_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLiveReference.binary_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

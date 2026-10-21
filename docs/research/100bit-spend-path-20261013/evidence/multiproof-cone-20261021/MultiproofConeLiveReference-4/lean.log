@@ -1,0 +1,103 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:26:25: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+s : reference.Scratch
+left right : Std.Array U8 32#usize
+ni cursor : Usize
+index : U32
+w : Usize
+bound : ↑w < 16
+s1 : Slice U8
+_✝² : [> let s1 ← lift (Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice <]
+s1_post : s1 = (Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice
+s2 : Slice U8
+_✝¹ : [> let s2 ← lift left.to_slice <]
+s2_post : s2 = left.to_slice
+s3 : Slice U8
+_✝ : [> let s3 ← lift right.to_slice <]
+s3_post : s3 = right.to_slice
+s4 : Slice (Slice U8)
+_ : [> let s4 ← lift (Array.make 3#usize [s1, s2, s3] ⋯).to_slice <]
+s4_post :
+  s4 =
+    (Array.make 3#usize
+        [(Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice, left.to_slice, right.to_slice]
+        ⋯).to_slice
+⊢ (do
+      let digest ←
+        D.digest hash
+            (Array.make 3#usize
+                [(Array.make 1#usize [18#u8] reference.write_parent._proof_4).to_slice, left.to_slice, right.to_slice]
+                ⋯).to_slice
+      let i ← index / 2#u32
+      let a ← s.idx.update w i
+      let a1 ← s.val.update w digest
+      let i1 ← w + 1#usize
+      ok (reference.Row.Next { idx := a, val := a1, n := s.n, «at» := cursor } ni i1)) ⦃
+    out =>
+    ∃ next nw, out = reference.Row.Next next ni nw ∧ ∃ x, next.idx = s.idx.set w x ∧ ↑x = ↑index / 2 ∧ ↑nw = ↑w + 1 ⦄
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:45:14: error: Invalid `⟨...⟩` notation: The expected type
+  (match do
+      let sibling ← reference.read32 s1
+      let i7 ← lift ((↑s.idx)[↑i] &&& 1#u32)
+      if i7 = 0#u32 then reference.write_parent D hash s (↑s.val)[↑i] sibling i1 i6 (↑s.idx)[↑i] w
+        else reference.write_parent D hash s sibling (↑s.val)[↑i] i1 i6 (↑s.idx)[↑i] w with
+    | ok x => WP.wp_return x
+    | fail e => fun x => False
+    | div => fun x => False)
+    fun out =>
+    match out with
+    | reference.Row.Stop stopped => stopped = s
+    | reference.Row.Next next ni nw =>
+      ∃ parent,
+        next.idx = s.idx.set w parent ∧
+          ↑parent = ↑(↑s.idx)[↑i] / 2 ∧
+            (↑ni = if ↑i + 1 < ↑s.n ∧ (↑s.idx)[↑i + 1]?.getD default = (↑s.idx)[↑i] ^^^ 1#u32 then ↑i + 2 else ↑i + 1) ∧
+              ↑nw = ↑w + 1
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:45:14: error: Invalid `⟨...⟩` notation: The expected type
+  (match do
+      let sibling ← reference.read32 s1
+      let i7 ← lift ((↑s.idx)[↑i] &&& 1#u32)
+      if i7 = 0#u32 then reference.write_parent D hash s (↑s.val)[↑i] sibling i1 i6 (↑s.idx)[↑i] w
+        else reference.write_parent D hash s sibling (↑s.val)[↑i] i1 i6 (↑s.idx)[↑i] w with
+    | ok x => WP.wp_return x
+    | fail e => fun x => False
+    | div => fun x => False)
+    fun out =>
+    match out with
+    | reference.Row.Stop stopped => stopped = s
+    | reference.Row.Next next ni nw =>
+      ∃ parent,
+        next.idx = s.idx.set w parent ∧
+          ↑parent = ↑(↑s.idx)[↑i] / 2 ∧
+            (↑ni = if ↑i + 1 < ↑s.n ∧ (↑s.idx)[↑i + 1]?.getD default = (↑s.idx)[↑i] ^^^ 1#u32 then ↑i + 2 else ↑i + 1) ∧
+              ↑nw = ↑w + 1
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:44:41: warning: This simp argument is unused:
+  gi
+
+Hint: Omit it from the simp argument list.
+  simp_all [Shape, ̲SourcePair, ̲gi̵,̵g̵etNext]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveReference.lean:44:44: warning: This simp argument is unused:
+  getNext
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵S̵h̵a̵p̵e̵,̵S̵o̵u̵r̵c̵e̵P̵a̵i̵r̵,̵g̵i̵,̵g̵e̵t̵N̵e̵x̵t̵]̵[̲S̲h̲a̲p̲e̲,̲ ̲S̲o̲u̲r̲c̲e̲P̲a̲i̲r̲,̲ ̲g̲i̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConeLiveReference.write_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLiveReference.binary_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

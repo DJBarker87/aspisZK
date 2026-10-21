@@ -541,3 +541,39 @@ are reused unchanged. No full regression was repeated. Concrete extracted
 live-array induction and ordered source/model log, leaf/count/padding/root
 and two-batch composition remain open. No shipped file changed, so the frozen
 ELF rebuild condition was not triggered; no byte-identity run is claimed.
+
+## Continuation 4, stage 3: concrete extracted order induction
+
+The mathematical carrier is now instantiated for the actual extracted arrays.
+`MultiproofConeLiveReference.binary_shape` proves exact idx mutation and pair
+consumption of `reference.binary_step`, without assuming sortedness or a source
+equation. `MultiproofConeLivePreservation.binary_preserves`, `rows_sorted` and
+`level_sorted` derive the mixed-prefix invariant for actual successful rows
+and levels. `MultiproofConeLiveBatch.eighteen_sorted` inducts through the actual
+extracted height loop; only HashTotal and initial domain/order remain. Neither
+level preservation nor model RowJoin is assumed. `guard_eq` derives the
+source-XOR/frozen-even-consecutive guard equation on each ordered unread suffix.
+
+`MultiproofConeLiveBatch.leaf_projection` identifies the actual extracted
+leaf insertion's index projection, including unequal-duplicate rejection.
+`MultiproofConeLiveFold.fold_projection` / `fold_sorted` induct over structural
+iteration of that actual step. `sorted_batch` composes the actual extracted
+sort's proved order with this insertion fold. Its leaf/key projection remains
+an explicit caller adapter, rather than an assumption that the output is
+sorted. The initial scratch suffix is arbitrary and no distinct-query or
+digest-consistency antecedent is added. The concrete frozen batch loop's
+factoring and selected-opening/hash provenance remain P6/source obligations.
+
+`cone4-keys-1` independently checks reached `batch_keys` for both batch sizes
+and all three trees: exact index/relative-position projections, key bounds,
+and monotonicity through the u64-shift/u32-cast. One completed solver result,
+exit 0, 1.887354 s, 184428 KiB RSS, zero swaps, with the prescribed capped scope.
+Existing sort and leaf-hash certificates are reused for unchanged bodies.
+
+All successful new theorems have individual standard-axiom reports. Failed
+local elaborations are retained but not accepted as evidence; no resource or
+proof limit was raised. Receipts/manifest pin exact targets, source revisions,
+hashes, dependencies, exits, time/RSS/swaps and every axiom report.
+The stronger invariant removes the descending-pair obstruction for this
+concrete extracted loop. It does not identify the source log with runLevel or
+construct a complete multiproof ConeLogJoin/AcceptedRunJoin.

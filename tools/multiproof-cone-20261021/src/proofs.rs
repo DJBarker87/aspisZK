@@ -319,3 +319,22 @@ fn physical_node_occupied() {super::physical_node::check(0);}
 fn physical_node_sibling() {super::physical_node::check(1);}
 #[kani::proof] #[kani::stub_verified(super::adoption_node::hash_parts)] #[kani::unwind(34)]
 fn physical_node_short() {super::physical_node::check(2);}
+
+// Reached key generation and bounded projection: no u64-to-u32 truncation
+// or relative-position carry can disturb the nondecreasing index stream.
+#[kani::proof] #[kani::unwind(24)]
+fn live_packed_keys() {
+ let queries:[u32;22]=kani::any();let batch:usize=kani::any();let tree:usize=kani::any();
+ kani::assume(batch<2 && tree<3);
+ for j in 0..22 {kani::assume(queries[j]<262144);}
+ let (lo,n)=if batch==0 {(0,10)}else{(10,12)};
+ let keys=f::batch::batch_keys(&queries,lo,n,tree);
+ let j:usize=kani::any();kani::assume(j<n);
+ let index=if tree==2 {queries[lo+j]/4}else{queries[lo+j]};
+ assert_eq!(keys[j]>>8,u64::from(index));assert_eq!((keys[j]>>8) as u32,index);
+ assert_eq!(keys[j]&255,j as u64);assert!(keys[j]<67108864);
+ let a:u64=kani::any();let b:u64=kani::any();
+ kani::assume(a<=b && b<67108864);
+ assert_eq!((a>>8) as u32,(a/256) as u32);
+ assert!((a>>8) as u32 <= (b>>8) as u32);
+}

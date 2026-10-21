@@ -1,0 +1,91 @@
+import MultiproofConeLivePreservation
+import MultiproofConeLeaf
+import MultiproofConeSortOrder
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeLiveBatch
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConeNodeDomain MultiproofConeNodeIteration MultiproofConeLevelIteration
+open MultiproofConeLiveOrder MultiproofConeLiveLeaves MultiproofConeLivePreservation
+attribute [local step] MultiproofConeLeaf.digest_eq_spec
+
+/-- The successful actual extracted leaf step has exactly the mathematical
+deduplicating index projection. Digest disagreement remains an inner none. -/
+theorem leaf_projection (s : reference.Scratch) (index : U32) (leaf : Array U8 32#usize)
+    (bound : s.n.val<16) (next : reference.Scratch)
+    (success : reference.leaf_step s index leaf=ok (some next)) :
+    (keys next,next.n.val)=insert (keys s) s.n.val index.val := by
+  have getLast : ∀ (h : 0<s.n.val), s.idx.val[s.n.val-1]! =
+      s.idx.val[s.n.val-1]'(by have len := s.idx.property;omega) := by
+    intro h;exact getElem!_pos _ _ (by have len := s.idx.property;omega)
+  have spec : reference.leaf_step s index leaf ⦃ out => ∀ next, out=some next →
+      (keys next,next.n.val)=insert (keys s) s.n.val index.val ⦄ := by
+    unfold reference.leaf_step
+    step* <;> simp_all [insert,keys,getLast] <;> scalar_tac
+  obtain ⟨out,eqout,post⟩ := WP.spec_imp_exists spec
+  rw [success] at eqout
+  cases eqout
+  exact post next rfl
+
+/-- Successful extracted leaf insertion produces a strictly ascending prefix
+when the input stream is nondecreasing, including duplicate queries. -/
+theorem leaf_sorted (s : reference.Scratch) (index : U32) (leaf : Array U8 32#usize)
+    (bound : s.n.val<16) (sorted : Strict (keys s) 0 s.n.val)
+    (upper : ∀ a, a<s.n.val → keys s a≤index.val) (next : reference.Scratch)
+    (success : reference.leaf_step s index leaf=ok (some next)) :
+    Strict (keys next) 0 next.n.val := by
+  have eq := leaf_projection s index leaf bound next success
+  have first := congrArg Prod.fst eq
+  have second := congrArg Prod.snd eq
+  change keys next=(insert (keys s) s.n.val index.val).1 at first
+  change next.n.val=(insert (keys s) s.n.val index.val).2 at second
+  rw [first,second]
+  exact insert_sorted _ _ _ sorted upper
+
+/-- Concrete extracted height-loop order preservation. The only oracle premise
+is totality; there is no level-preservation or model RowJoin assumption. -/
+theorem iterate_sorted {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (physical : Slice U8) (height : Nat)
+    (s : reference.Scratch) (domain : Domain physical s) (sorted : Strict (keys s) 0 s.n.val)
+    (next : reference.Scratch)
+    (success : iterate (fun s => reference.level_rows D hash s physical 0#usize 0#usize) height s=ok (.Done next)) :
+    Strict (keys next) 0 next.n.val := by
+  induction height generalizing s with
+  | zero => cases success;exact sorted
+  | succ height ih =>
+    simp only [iterate] at success
+    cases row : reference.level_rows D hash s physical 0#usize 0#usize with
+    | fail error => simp only [row,bind_tc_fail] at success;cases success
+    | div => simp only [row,bind_tc_div] at success;cases success
+    | ok level =>
+      rw [row] at success
+      simp only [bind_tc_ok] at success
+      cases level with
+      | Stop stopped => cases success
+      | Done after =>
+        exact ih after (level_preserve D hash total physical s after domain row)
+          (level_sorted D hash total physical s after domain sorted row) success
+
+theorem eighteen_sorted {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (physical : Slice U8) (s : reference.Scratch)
+    (domain : Domain physical s) (sorted : Strict (keys s) 0 s.n.val)
+    (next : reference.Scratch)
+    (success : reference.levels D hash s physical 18#u32=ok (.Done next)) :
+    Strict (keys next) 0 next.n.val := by
+  rw [levels_eq_iteration D hash physical 18#u32 (by decide) s] at success
+  exact iterate_sorted D hash total physical 18 s domain sorted next success
+
+/-- The actual packed-index projection is monotone before its bounded u32
+cast. The reached packed-key bounds independently rule out truncation. -/
+theorem projected_keys_sorted (packed : List U64) (sorted : packed.Pairwise (·≤·)) :
+    (packed.map (fun x => x.val/256)).Pairwise (·≤·) := by
+  apply List.Pairwise.map _ sorted
+  intro a b le
+  exact Nat.div_le_div_right le
+
+#print axioms leaf_projection
+#print axioms leaf_sorted
+#print axioms iterate_sorted
+#print axioms eighteen_sorted
+#print axioms projected_keys_sorted
+end AspisR1.MultiproofConeLiveBatch
