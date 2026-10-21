@@ -7598,3 +7598,18 @@ conclusion, and adds the relative cost conclusion, conditional on the
 retained `sim_preparation`. Open: concrete field/preparation costs, lazy-cache
 byte work and the whole-experiment source join; a compiled metadata example
 shows the remaining limit on a uniform bound. 10 modules, 57 audits, zero swap.
+
+## D118 — prover commitment part 10: fixed decoder, CallerLaw still open (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit10-20261021` (`r1p-final/PROVER-COMMIT10-20261021.md`).
+Per D115, the decoder is fixed to the operational reference decoder composed
+from the extracted, Kani-matched references, and the headline is specialised
+to it. Also proved: extracted owned collection proofs, finite block backend
+counter correspondence, finite stream cursor/read bounds, and accepted-word
+refinement. J8326: 41 standard-axiom audits, zero swap; the shipped change is
+only in the cfg-gated reference module, and all three frozen ELFs are
+byte-identical. `CallerLaw` is retained (empty deletion diff). Remaining:
+cache/byte-load correspondence with `wordsE`, complete shipped outer-caller
+transport, and all-family shipped read coverage. The nine-block Kani ROM is
+proved insufficient for whole-array certification. These are the prover-side
+execution join, so the prover track pauses here after ten parts.
