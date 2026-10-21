@@ -109,7 +109,23 @@ induction with bounds 4, 8, 10, 15 or 16; no concrete permutation cell is
 reduced. Its deterministic generator `--check` passes. J9347 passes in
 4.55 s, 3,791,660 KiB, zero swap; all 46 axioms audits use only the allowed
 standard axioms. This removes duplicated primitive computation as a source
-of mismatch; the caller argument correspondence remains the next target.
+of mismatch.
+
+`BuilderDigestArguments` proves complete Result identities for the actual
+note chunks, digest extraction, permutation wrapper, block/sponge/node
+hashes, owner, arbitrary chunk and length selection, and chained sponge
+pre-states. J9356: 2.92 s, 4,023,840 KiB, zero swap, 16 audits.
+`BuilderDigestTotal` proves primitive and arbitrary-note totality for all
+raw words without admission hypotheses: J9357, 1.95 s, 4,015,268 KiB,
+zero swap, eight audits. The proof uses generic finite-field refinement;
+no concrete hash is evaluated.
+
+`BuilderAuxContent` derives the exact change/recipient/input digest maps,
+both output occupancy records, the auxiliary callee and the full inherited
+Content.aux equation from successful actual Parts. It requires neither a
+transfer/withdrawal flag premise nor an assumed digest/inverse equality.
+J9359: 2.03 s, 4,013,772 KiB, zero swap, eight audits. All standard axioms.
+Path and block argument correspondence remain separate.
 
 ## Stages 4–5: runtime and checker/retry
 
