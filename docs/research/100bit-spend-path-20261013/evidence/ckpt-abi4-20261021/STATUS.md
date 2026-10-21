@@ -34,3 +34,32 @@ source revision `9f42fc11cc715bd0475d8981ac98851b49dce9ae`. Both axiom reports
 are `[propext, Classical.choice, Quot.sound]`. Exact target, command, source
 and dependency hashes, logs and metrics are in manifest.json and the attempt
 directory. No coherent full replay is claimed or justified yet.
+
+## Stage 2: shared/mutable std content and capacity obstruction
+
+`OraclePortCkptAbi4Std.shared_interval` proves the actual imported shared
+slice iterator consumes every element of an arbitrary bounded interval in
+order, preserving the backing and ending at i+n. `shared_exhausted` proves
+its next step at length returns none. `mutable_writeback` proves the actual
+mutable next/back operation reads the original element, advances by one, and
+writes back exactly via setAtNat at the original cursor. These have no
+caller-supplied next/back specifications. They remain std-model results;
+adopting read_checkpoint_weights' complete fallible loop and its translation
+is still required.
+
+`no_requested_capacity` proves no function on the returned bounded-list Vec
+can recover all requested capacities: with_capacity(0) and with_capacity(1)
+are the same empty model Vec. This rules out using that content state alone
+as evidence of physical capacity. It is **not** an impossibility theorem
+for a richer allocator refinement, nor a claim that Rust's actual capacity
+always equals the request. Rust try_reserve_exact, Allocation, Box::new,
+BumpAllocator availability/high-water and Drop require a richer operational
+boundary. No physical allocator availability premise has been disguised as
+a std-model consequence.
+
+Final std attempt 3: exit 0; wall 9.420210875 s; peak RSS 2,218,590,208 bytes;
+swaps 0; source revision `65b3d0f46`. All four axiom reports use only standard
+axioms (full lines in manifest/log). Attempt 1 inspects the live std bodies;
+attempt 2's failed list/cursor arithmetic congruence is retained, including
+compiler recovery output, and is not accepted proof evidence. A changed
+proof resolves it in attempt 3. No memory limit or heartbeat is raised.
