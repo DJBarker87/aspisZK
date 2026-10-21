@@ -1,0 +1,70 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTreeMap22.lean:13:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverCommitTreeMap22.lookup_of_graph`:
+  [DecidableEq Value]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Value] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTreeMap22.lean:95:51: error: unsolved goals
+Key Value : Type
+inst✝³ : DecidableEq Key
+inst✝² : DecidableEq Value
+cmp : Key → Key → Ordering
+inst✝¹ : Std.TransCmp cmp
+inst✝ : Std.LawfulEqCmp cmp
+tail : List (Key × Value)
+ih :
+  ∀ (table : List (Key × Value)) (tree : Std.TreeMap Key Value cmp) (collision : Bool),
+    (∀ (key : Key), lookup table key = tree[key]?) →
+      (∀ (query : Key),
+          lookup (ProverCommitTable20.writes table collision tail).1 query = (writes tree collision tail).1[query]?) ∧
+        (ProverCommitTable20.writes table collision tail).2 = (writes tree collision tail).2
+table : List (Key × Value)
+tree : Std.TreeMap Key Value cmp
+collision : Bool
+related : ∀ (key : Key), lookup table key = tree[key]?
+key : Key
+answer : Value
+rel :
+  ∀ (query : Key),
+    lookup (ProverCommitTable20.insert table key answer collision).1 query = (tree.insert key answer)[query]?
+⊢ (decide ((collision || conflict tree[key]? answer) = collision) || conflict tree[key]? answer) = true
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTreeMap22.lean:97:4: error: Type mismatch: After simplification, term
+  ih (ProverCommitTable20.insert table key answer collision).1 (tree.insert key answer)
+    (collision || conflict tree[key]? answer) rel
+ has type
+  (∀ (query : Key),
+      lookup
+          (ProverCommitTable20.writes (ProverCommitTable20.insert table key answer collision).1
+              (collision || conflict tree[key]? answer) tail).1
+          query =
+        (writes (tree.insert key answer) (collision || conflict tree[key]? answer) tail).1[query]?) ∧
+    (ProverCommitTable20.writes (ProverCommitTable20.insert table key answer collision).1
+          (collision || conflict tree[key]? answer) tail).2 =
+      (writes (tree.insert key answer) (collision || conflict tree[key]? answer) tail).2
+but is expected to have type
+  (∀ (query : Key),
+      lookup
+          (ProverCommitTable20.writes (ProverCommitTable20.insert table key answer collision).1
+              (ProverCommitTable20.insert table key answer collision).2 tail).1
+          query =
+        (writes (tree.insert key answer) (collision || conflict tree[key]? answer) tail).1[query]?) ∧
+    (ProverCommitTable20.writes (ProverCommitTable20.insert table key answer collision).1
+          (ProverCommitTable20.insert table key answer collision).2 tail).2 =
+      (writes (tree.insert key answer) (collision || conflict tree[key]? answer) tail).2
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTreeMap22.lean:101:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverCommitTreeMap22.enumeration_order`:
+  [DecidableEq Key]
+  [DecidableEq Value]
+  [Std.LawfulEqCmp cmp]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Key] [DecidableEq Value] [Std.LawfulEqCmp cmp] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'R1Z.ProverCommitTreeMap22.writes_transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTreeMap22.enumeration_order' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTreeMap22.lookup_of_graph' depends on axioms: [propext]
+'R1Z.ProverCommitTreeMap22.lookup_toList' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTreeMap22.insert_lookup' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTreeMap22.program_collision' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTreeMap22.enumerated' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

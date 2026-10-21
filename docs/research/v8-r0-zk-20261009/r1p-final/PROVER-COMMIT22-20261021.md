@@ -60,9 +60,33 @@ start counters. Marginal coordinate uniformity alone is not that join.
 Neither this packet nor the new endpoint asserts the join is proved.
 
 
-## Stage 2
+## Stage 2 — universal Lean Std.TreeMap transport
 
-Pending.
+`ProverCommitTreeMap22` proves arbitrary-tree lookup/enumeration graph
+agreement with the existing first-match list model, insert/overwrite lookup,
+sticky collision agreement, and composition over arbitrary finite write
+schedules with repeated keys. Enumeration is ordered under the supplied
+lawful comparator. These are universal **Lean Std** model theorems. They
+place no tree-height, key-length, prefix-length or cardinality restriction.
+J8759 is excluded; J8760 focused passes; J8761 is an excluded Boolean
+precedence elaboration failure; changed-source J8762 passes (exit 0,
+1.27 s, 2530276 KiB, zero swap, standard axioms only).
+
+The direct Rust operation gate `tree-insert-get-v1` uses the exact shipped
+`BTreeMap<Vec<u8>,[u8;32]>`, one preexisting entry, symbolic one-byte keys,
+arbitrary 32-byte answers and a symbolic queried key. It tests the returned
+previous answer, lookup and size. Even this shape reaches the 6 GiB region:
+stopped for representation/formula review at 6442090496 cgroup bytes,
+exit 1, 343.417 s, peak process RSS 6270156 KiB, zero swap.
+`tree-insert-stop.json` records the exact terminated process and scope.
+No counterexample and no successful per-operation source certificate are
+claimed. No unchanged larger-cap rerun is performed. The unrun enumeration
+harness is retained as a proposed gate, not evidence.
+
+The missing obligation is the Rust std library representation relation.
+An arbitrary Lean tree theorem plus bounded node fixtures does not prove
+that relation. No program/source equality is installed from this check.
+
 
 ## Stage 3
 
