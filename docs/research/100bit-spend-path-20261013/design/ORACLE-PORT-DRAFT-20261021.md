@@ -635,3 +635,48 @@ reached simp's recursion limit by rewriting a position into a term containing
 itself; attempt 3 replaces this with an abstract Boolean filter-partition
 lemma. No limit was raised, no memory-cap failure occurred and no unchanged
 attempt was repeated. All final axiom reports are standard; swaps are zero.
+
+## Continuation 3: acceptance obstruction and final evidence
+
+`OraclePortAcceptanceCarrierObstructionC3.guarded_rejects` shows admission
+cannot repair the size mismatch. `.original_rejects` and `.recorded_rejects`
+lift it to the actual generic experiments, for every decoder, prover and
+oracle. `.accepting_join_impossible` proves that any accepting implementation
+cannot have an acceptance-preserving join to this decision. The last theorem
+is an implication, not an assertion that a Rust accepting fixture was tested.
+
+This stops stage (c) under common rule 4 (check actual definitions; stop a
+false target and report the obstruction). In particular, the parser's
+selected slots cannot be composed on an accepted compiled run: no such run
+exists for this decision. An ex-falso `CheckedAcceptance` would conceal this
+problem. R16/R13/R15/R3/R14 at a completed frozen dV and the requested
+`dO := dV` headline therefore remain unproved. The physical prepared-field
+encoding, and its binding to the reached ten-query state, also remain open;
+the checkpoint arithmetic composition above does not imply byte refinement.
+
+The required repair is to give the verifier/caller the separate full stored
+proof carrier used by Rust, while leaving the sampler-message bound alone.
+The new carrier must be threaded through the original and recorded
+experiments and Pool handoff, with budget/replay/selected-word transport
+re-established. The six-slot helper budget proved here is reusable for that
+repair. Rust-equals-dV becomes a meaningful external join only after that
+model and its typed arithmetic transfer have been completed.
+
+`evidence/oracle-port-draft-20261021/continuation3-manifest.json` is the
+focused final manifest. It contains all ten attempts (four failed local
+elaborations), their exact commands/targets, source revisions and SHA-256s,
+dependency fingerprints, exits, wall times, peak RSS, swaps, errors and full
+axioms output. Six final modules pass with **32** standard-axiom reports,
+peak **3,642,572,800 bytes** RSS and **zero swaps**. No memory cap failure,
+cap increase or unchanged compile rerun occurred. No `.olean` is committed.
+
+Run `python3 evidence/oracle-port-draft-20261021/continuation3-audit.py`
+from this research directory to verify the packet without replaying Lean.
+The general packet's `audit.py` also passes (151 final axiom reports across
+the retained packet). The new empty
+`continuation3-existing-headline-signature.diff` and endpoint SHA-256s record
+zero signature changes/deletions. The larger-log and scalar constants in the
+side-by-side table remain explicit. A complete frozen-manifest replay is
+not run: this is focused cached-object evidence, not a release, and the
+proposed frozen-verifier endpoint has been shown to have a false carrier
+assumption. No push or existing Lean-module edit is performed.
