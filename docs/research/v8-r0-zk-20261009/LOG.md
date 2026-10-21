@@ -7386,3 +7386,18 @@ output. Treat that `Drop` as an opaque, excluded declaration with a proved
 specification: a Kani harness shows it writes only within the dropped
 value's bytes and returns unit, so nothing observable is lost. The model then
 treats drop as a no-op on outputs.
+
+## D104 — builder refinement part 9: Parts content complete (2026-10-21, lead)
+
+Landed from `codex/cx-builder-ref9-20261021` (`r1p-final/BUILDER-CONT9-20261021.md`).
+Proved: full actual Parts content and bank/column correspondence, the actual
+occupancy inverse, and 46 primitive extraction identities. The zeroising
+`Drop` is excluded by an exact opacity flag (metadata audited), and its
+observation rule is proved. The projected volatile-store contract and bounded
+destructor behaviour pass Kani, and forest reference translation now
+succeeds. `PrivacyR1FinalReleaseSource4`: 16 modules, 129 standard-axiom
+audits, zero swap; no premise deleted. No shipped change. Open: universal
+destructor correspondence (whole-frame Kani reached the 6 GiB review point
+and was stopped, per AGENTS.md); forest admission, with 24 unsupported
+externals and timed-out validator comparisons; the shipped runtime
+inhabitant; and checker/retry coupling.
