@@ -741,7 +741,7 @@ symbolic read bound; J8637 adds the abstract fixed-event mass bound (exit 0,
 5.09s, RSS 4072708 KiB, swap 0). J8627 stopped at driver preflight because the
 failed J8626 had no imported object: no Lean invocation occurred, and its
 separate preflight receipt records unavailable resource fields as null.
-J8632–8636 are excluded concrete-ROM specialization diagnostics. The old
+J8632, J8633, J8635 and J8636 are excluded concrete-ROM specialization diagnostics. The old
 reduction was replaced by named generic lemmas, not increased heartbeats or
 memory. J8638 reaches the composed bound but has an addition-orientation
 error; J8639 fixes it and removes diagnostic traces: exit 0, wall 16.97s,
@@ -1338,3 +1338,34 @@ No frozen ELF or SBF artifact was rebuilt. Historical artifact pins are
 inherited only within their original scope. No full frozen manifest replay is
 claimed for these additive model changes; the final cached dependency audit
 is recorded below after all adopted sources are frozen.
+
+
+## Final coherent cached audit
+
+J8640 compiles `R1Z/ProverCommit16Audit.lean` after all seven adopted formal
+modules are frozen: exit **0**, wall **1.82s**, peak RSS **4104660 KiB**,
+swaps **0**, source revision **`2b5886a17`** plus the exact additive audit-source
+SHA in its receipt. All **32** printed declarations use only subsets of
+`[propext, Classical.choice, Quot.sound]`; the field adapter uses no axioms.
+This replaces the earlier J8618 (23-declaration) stage audit because new
+ordered-transport/core source and dependencies were subsequently added. It
+is not a repeat of unchanged inputs or a full frozen release manifest.
+
+`harness/audit.py` checks all receipt/snapshot source hashes, adopted current
+source identities, accepted axioms, zero swap/caps, the four accepted Kani
+and three excluded timeout statuses, native source-sampler witness pins and
+that repository changes against the base are additions only.
+`harness/objects.py` independently confirms every adopted source and recorded
+dependency-object SHA against the current host cache, for eight modules
+including the audit. `object-pins.json` retains SHA256 and size for those
+objects and the native probe binary. `kani-artifacts.json` retains compiled
+proof-binary hashes/sizes only; unexecuted compiled harnesses are not labelled
+verified. No binary, .olean, ELF, tarball or local target directory is committed.
+
+The formal-source/report/harness whitespace check passes. Raw Kani output and
+unified-diff context retain their original whitespace for evidence fidelity.
+Only attempts 8608–8640 were reserved here; 8627 was preflight-only. Previously
+used 8600–8607 were skipped. Every completed compiler invocation, including
+excluded diagnostics, has full timing, dependency fingerprint and axiom/error
+output in the part-16 JSONL receipts. The final source and runtime targets are
+unchanged by this evidence-only audit stage.
