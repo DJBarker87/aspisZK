@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyCoupling.lean:116:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean fun c => mean fun r => ?f (c, r)
+in the target expression
+  (mean fun t =>
+      mean fun s => f ((a, s) :: runLog (k s) (fun a_1 => cached (Function.update c (key a) (some s)) t (key a_1)) q)) =
+    mean fun H => f (runLog (OProg.query a k) (fun a => cached c H (key a)) (q + 1))
+
+case succ.query.none
+A : Type
+inst✝¹ : DecidableEq A
+inst✝ : Fintype A
+key : List UInt8 → A
+q : ℕ
+ih :
+  ∀ (c : A → Option OracleAnswer) (p : OProg) (f : List (List UInt8 × OracleAnswer) → ℚ),
+    (mean fun u => f (lazyRun key c p q u).1) = mean fun H => f (runLog p (fun a => cached c H (key a)) q)
+c : A → Option OracleAnswer
+f : List (List UInt8 × OracleAnswer) → ℚ
+a : List UInt8
+k : OracleAnswer → OProg
+hc : c (key a) = none
+inner :
+  ∀ (v : OracleAnswer),
+    (mean fun u => f ((a, v) :: (lazyRun key (Function.update c (key a) (some v)) (k v) q u).1)) =
+      mean fun H => f ((a, v) :: runLog (k v) (fun a_1 => cached (Function.update c (key a) (some v)) H (key a_1)) q)
+⊢ (mean fun t =>
+      mean fun s => f ((a, s) :: runLog (k s) (fun a_1 => cached (Function.update c (key a) (some s)) t (key a_1)) q)) =
+    mean fun H => f (runLog (OProg.query a k) (fun a => cached c H (key a)) (q + 1))
+'R1Z.SimCostLazyCoupling.lazy_draws' depends on axioms: [propext]
+'R1Z.SimCostLazyCoupling.mean_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyCoupling.mean_snoc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyCoupling.mean_swap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyCoupling.cached_update' depends on axioms: [propext, Quot.sound]
+'R1Z.SimCostLazyCoupling.lazy_uniform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

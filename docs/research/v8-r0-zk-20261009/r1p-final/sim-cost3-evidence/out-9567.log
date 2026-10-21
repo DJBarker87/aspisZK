@@ -1,0 +1,55 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyCoupling.lean:38:12: error: Type mismatch
+  Nat.le_refl 0
+has type
+  0 ≤ 0
+but is expected to have type
+  (lazyRun key c p 0 u).2 ≤ 0
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyCoupling.lean:44:16: error: Type mismatch: After simplification, term
+  Nat.add_le_add_right
+ has type
+  ?m.78 ≤ ?m.79 → ∀ (k : ℕ), ?m.78 + k ≤ ?m.79 + k
+but is expected to have type
+  (lazyRun key (Function.update c (key a) (some (u (Fin.last q)))) (k (u (Fin.last q))) q (Fin.init u)).2 + 1 ≤ q + 1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyCoupling.lean:43:6: error: Alternative `some` has not been provided
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyCoupling.lean:45:10: error: unexpected token '('; expected command
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyCoupling.lean:70:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean fun c => mean fun r => ?f (c, r)
+in the target expression
+  (mean fun s => mean (f s)) = mean fun t => mean fun s => f s t
+
+S T : Type
+inst✝¹ : Fintype S
+inst✝ : Fintype T
+f : S → T → ℚ
+⊢ (mean fun s => mean (f s)) = mean fun t => mean fun s => f s t
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyCoupling.lean:91:58: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean fun x => ?c
+in the target expression
+  f [] = mean fun H => f (runLog p (fun a => cached c H (key a)) 0)
+
+case zero
+A : Type
+inst✝¹ : DecidableEq A
+inst✝ : Fintype A
+key : List UInt8 → A
+c : A → Option OracleAnswer
+p : OProg
+f : List (List UInt8 × OracleAnswer) → ℚ
+⊢ f [] = mean fun H => f (runLog p (fun a => cached c H (key a)) 0)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyCoupling.lean:100:17: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyCoupling.lean:105:17: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostLazyCoupling.lean:91:32: warning: This simp argument is unused:
+  runLog
+
+Hint: Omit it from the simp argument list.
+  simp only [lazyRun,̵ ̵r̵u̵n̵L̵o̵g̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.SimCostLazyCoupling.lazy_draws' depends on axioms: [sorryAx]
+'R1Z.SimCostLazyCoupling.mean_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyCoupling.mean_snoc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyCoupling.mean_swap' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostLazyCoupling.cached_update' depends on axioms: [propext, Quot.sound]
+'R1Z.SimCostLazyCoupling.lazy_uniform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
