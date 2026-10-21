@@ -134,6 +134,31 @@ The launcher uses the prescribed shared mkdir lock and private object path.
 No package build, frozen release replay, source re-pin, wallet action, push
 or merge is performed.
 
+The final packet has 25 new modules and 69 new theorem declarations. All 81
+current axiom reports (including proof-valued definitions and the final
+import audit) are subsets of {propext, Classical.choice, Quot.sound}.
+The 36 focused attempts comprise 25 successes and 11 corrected elaboration
+failures; failed logs are retained and are not current proof evidence.
+No attempt exhausted the cap. Peak RSS over all attempts was 3,661,463,552
+bytes, with zero swaps throughout.
+
+Final target `OraclePortFrozenOrderFreeze`, attempt 1: exit 0; wall
+14.93441079184413 seconds; peak RSS 3,560,292,352 bytes; zero swaps; source
+revision `9fd962ee4437747b12d95e714a98cdb0d975cc67`. All ten final `#print
+axioms` reports are standard. The exact source SHA-256 and direct-import
+fingerprint are in its receipt, along with command and per-attempt logs.
+No unchanged Lean target or full regression was rerun.
+
+Run `python3 -B tools/oracle-port-frozen-order/audit.py` to check source and
+object hashes, every receipt and theorem audit, additive Lean scope, unchanged
+source-owner/R19 files, and the exact resolved signature comparison.
+`audit-result.json` records the passing result; its source revision is the
+final Lean attempt's recorded revision, so rerunning this read-only proof
+check after a documentation commit does not relabel old compile evidence.
+It writes only deterministic audit/signature/pin metadata in this packet.
+This focused cached-object check does not certify a coherent release closure.
+
+
 
 ## Delivery boundary
 
