@@ -1017,3 +1017,24 @@ an upstream obligation. Query leaf/slot geometry and the width29 field-value
 join also still need composition. Focused exit0,21.784s,peak process
 RSS3,578,331,136 bytes,zero swaps; both reports contain standard axioms.
 No Rust source change or candidate adoption occurred.
+
+
+## The typed opening slot is the existing first-fold input position
+
+`evidence/s4-opening-first-fold-geometry-v1-20261022` proves that the existing
+initial childIndex u slot has TypedRecoveredWords.queryLeaf=u and
+querySlot=slot. Using those representation identities,
+`S4FirstFoldOpeningGeometryV1.decoded_opening_first_fold_inputs` identifies
+each recovered lane's existing FirstFold.fibre value with the same decoded
+local C1/C2 slot. Primitive recovered-byte map facts and the exact decodes
+remain explicit; authentication is not assumed solved by this projection.
+
+`batch_value_is_first_fold_fibre` then identifies width29Batch of these29
+per-lane first-fold values with FirstFold.fibre of the existing
+TwoFoldExtraction.batchedWord. This generic identity unfolds the existing
+model definitions and does not introduce a new folding model, prove a fold
+equation or assert the source dot output equals that batch. It fixes the
+precise target for the arithmetic join. Focused exit0,23.614s,peak process
+RSS3,578,331,136 bytes,zero swaps; four standard-axiom reports. Source
+query geometry correspondence, arithmetic join and coherent release replay
+remain required. No production change or candidate adoption occurred.
