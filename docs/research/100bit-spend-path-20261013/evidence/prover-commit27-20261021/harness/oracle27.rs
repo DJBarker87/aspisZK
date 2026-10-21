@@ -49,7 +49,7 @@ fn reference(s:CoinState,parts:&[&[u8]])->([u8;32],CoinState) {
 mod proofs {
  use super::*;
  fn check<const N:usize>() {
-  let coins:[[u8;32];2]=kani::any();let len:usize=N;
+  let coins:[[u8;32];N]=kani::any();let len:usize=N;
   let next:usize=kani::any();kani::assume(next<usize::MAX);
   let previous:Option<[u8;32]>=kani::any();let recording:bool=kani::any();let collision:bool=kani::any();
   let bytes:[u8;1]=kani::any();let parts:[&[u8];1]=[&bytes];
@@ -60,7 +60,7 @@ mod proofs {
   let (expected,result)=reference(b,&parts);let actual=heap.into_inner();
   assert_eq!(digest,expected);assert_eq!(actual.next,result.next);
   assert_eq!(actual.coins.len(),result.coins.len());
-  for i in 0..N {for j in 0..32 {assert_eq!(actual.coins[i][j],result.coins[i][j]);}}assert_eq!(actual.record,result.record);
+  if N>0 {let i:usize=kani::any();kani::assume(i<N);let j:usize=kani::any();kani::assume(j<32);assert_eq!(actual.coins[i][j],result.coins[i][j]);}assert_eq!(actual.record,result.record);
   assert_eq!(actual.collision,result.collision);
  }
  #[kani::proof] #[kani::stub_verified(effect::different)] #[kani::unwind(36)] fn call_empty(){check::<0>()}
@@ -69,4 +69,16 @@ mod proofs {
  #[kani::proof_for_contract(effect::different)]
  #[kani::unwind(36)]
  fn different_contract(){effect::different(kani::any(),kani::any());}
+ #[kani::proof] #[kani::stub_verified(effect::different)] #[kani::unwind(116)]
+ fn call_native115(){check::<115>()}
+ // Shared immutable input isolates the exact source get/default cell from
+ // RefCell, recording and the duplicated 115-word heap constructions.
+ #[kani::proof] #[kani::unwind(116)]
+ fn read_native115(){
+  let data:[[u8;32];115]=kani::any();let coins=data.to_vec();
+  let next:usize=kani::any();let at:usize=kani::any();kani::assume(at<32);
+  let source=*coins.get(next).unwrap_or(&[0;32]);
+  let reference=if next<coins.len(){coins[next]}else{[0;32]};
+  assert_eq!(source[at],reference[at]);
+ }
 }

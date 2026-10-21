@@ -1,0 +1,74 @@
+import R1Z.ProverCommitCoinSequence27
+import R1Z.ProverCommitTranscriptTape27
+/-! Exact finite native tape initialization and the marginal of the *actual
+extracted* call interpreter, with its cursor and recording/collision effects. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitMachineMarginal27
+open Aeneas Aeneas.Std Result
+open R0Z R0Z.FsStatement R0Z.LawTransport
+open ProverCommitCoinTape27 ProverCommitCoinCall27 ProverCommitCoinSequence27
+open ProverCommitTranscriptTape27 ProverCommitProductOracle25
+attribute [local instance] Classical.propDecidable
+private def answerFinite : Fintype OracleAnswer := inferInstance
+attribute [local instance] answerFinite
+attribute [local irreducible] answerFinite
+private def inputFinite : Fintype Input := inferInstance
+attribute [local instance] inputFinite
+attribute [local irreducible] inputFinite
+
+def initialMachine (bound : Nat) (fits : 65 ≤ bound) (seed : OracleAnswer)
+    (attempt : Fin 8) (recording : Bool) (t : Tab bound) : Machine where
+  coins := ⟨List.ofFn (fun i : Fin 115 => ProverCommitOwnedDecoder.answerBytes
+    (t (transcriptKey bound fits seed attempt i))),by simp only [List.length_ofFn]; scalar_tac⟩
+  next := 0#usize
+  record := if recording then some (fun _ => none) else none
+  collision := false
+
+/-- Only the retained product table supplies these coins, with no new tape. -/
+theorem initial_product (bound : Nat) (fits : 65 ≤ bound) (seed : OracleAnswer)
+    (attempt : Fin 8) (recording : Bool) (p : Input × Tab bound) :
+    initialMachine bound fits seed attempt recording (table bound fits seed p) =
+      initialMachine bound fits seed attempt recording p.2 := by
+  have pointwise : (fun i : Fin 115 => ProverCommitOwnedDecoder.answerBytes
+      (table bound fits seed p (transcriptKey bound fits seed attempt i))) =
+      (fun i : Fin 115 => ProverCommitOwnedDecoder.answerBytes
+      (p.2 (transcriptKey bound fits seed attempt i))) := by
+    funext i
+    rw [transcript_unchanged]
+  simp only [initialMachine,pointwise]
+
+/-- The tested result includes every returned state and ordered call history,
+not just digest values or acceptance. -/
+theorem generated_source_law {Value : Type} (bound : Nat)
+    [Fintype (RomFiniteBin.Address bound)] (fits : 65 ≤ bound) (seed : OracleAnswer)
+    (attempt : Fin 8) (recording : Bool) (program : Program ProverCommitCoinSequence27.Parts ProverCommitCoinSequence27.Bytes32 Value)
+    (test : Result (Run Value) → ℚ) :
+    mean (fun p : Input × Tab bound => test (evaluate program
+      (initialMachine bound fits seed attempt recording (table bound fits seed p)))) =
+    mean (fun t : Tab bound => test (evaluate program
+      (initialMachine bound fits seed attempt recording t))) := by
+  exact (QueryScanIdealHistory.mean_fintype_transport _ _ _).trans
+    ((source_oracle_uniform bound fits seed
+      (fun t => test (evaluate program (initialMachine bound fits seed attempt recording t)))).trans
+      (QueryScanIdealHistory.mean_fintype_transport _ _ _))
+
+/-- Projection to the model coin component also retains the complete effectful
+execution law. The independent rejection/fuel component is ignored here. -/
+theorem generated_model_law {Value : Type} (bound : Nat)
+    [Fintype (RomFiniteBin.Address bound)] (fits : 65 ≤ bound) (seed : OracleAnswer)
+    (attempt : Fin 8) (recording : Bool) (program : Program ProverCommitCoinSequence27.Parts ProverCommitCoinSequence27.Bytes32 Value)
+    (test : Result (Run Value) → ℚ) :
+    mean (fun p : Input × Tab bound => test (evaluate program
+      (initialMachine bound fits seed attempt recording p.2))) =
+    mean (fun t : Tab bound => test (evaluate program
+      (initialMachine bound fits seed attempt recording t))) := by
+  exact (QueryScanIdealHistory.mean_fintype_transport _ _ _).trans
+    ((R1Z.CouplingR1PBin.mp_snd
+      (fun t => test (evaluate program (initialMachine bound fits seed attempt recording t)))).trans
+      (QueryScanIdealHistory.mean_fintype_transport _ _ _))
+
+#print axioms initial_product
+#print axioms generated_source_law
+#print axioms generated_model_law
+end R1Z.ProverCommitMachineMarginal27

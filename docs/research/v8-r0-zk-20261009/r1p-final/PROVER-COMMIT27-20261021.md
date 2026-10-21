@@ -88,3 +88,78 @@ semantic/circle three-read helper and suffix block/query-materialization
 skeletons (`callers27.rs`); their source equations and whole-source composition
 are the next stage. The policy, retry, native trace and serialization boundaries
 are not discharged by this interface extraction.
+
+## Stage 3 — generated call-sequence and caller effects
+
+`ProverCommitCoinSequence27.generated_sequence` is an induction over the
+**actual extracted** CoinOracle operation, for arbitrary finite adaptive
+programs. It preserves value, final machine state and ordered input/digest
+history with no successful-call hypothesis; machine wrapping remains exact.
+`step_view` identifies the full machine state with the Nat reference below
+wrap, with an explicit arithmetic room condition rather than an execution
+join hypothesis. J7662 passes both audits (exit 0, 1.92 s, 4174608 KiB, swap 0).
+
+`ProverCommitMachineMarginal27.initialMachine` is the actual finite 115-entry
+machine vector, decoded from the existing product table's stream-0 addresses,
+with cursor zero and explicit recording initialization. `initial_product`
+identifies it with the model's retained table projection. The source and model
+marginals now apply to the actual extracted interpreter, retaining the complete
+result, cursor, recording/collision effects and ordered history. J7668 passes
+all three audits (exit 0, 1.89 s, 4171904 KiB, zero swap).
+
+`AspisR1EffectCallers27` extracts the literal three-read helper shared by
+semantic/circle sampling, the suffix absorb/block, and the full eager query
+materialization. The owned trait changes `&self` into `&mut self`; the extracted
+trait returns `(digest, updated hash state)` at every call. Original pure
+owners remain unchanged. The generated one-variant error discriminant is given
+an explicit local name to avoid the pinned generator's global-name collision;
+the raw file is retained. J7664/J7665 compile the ported types/functions.
+
+`ProverCommitEffectCallers27.semantic_call` and `block_call` identify the
+extracted bodies with explicit adaptive three-call programs, retaining final
+hash state. Mismatched semantic rows return without reads. The history-length
+lemmas establish zero/three reads and exactly three suffix reads.
+`dictionary_exact` identifies the concrete source dictionary with the concrete
+expected-state step. `query_effects` transports it through the complete eager
+query materialization, retaining all sixteen reads, the initial absorb, all
+errors and returned hash state. J7672 passes six audits (exit 0, 1.93 s,
+4163060 KiB, zero swap); standard axioms only.
+
+`source-binding.json` checks byte-for-byte copies of the native CoinOracle,
+semantic helper (visibility change only), suffix absorb/block and exact query
+prefix through all sixteen reads. This is source binding of call skeletons,
+not a claim that arbitrary decoder/validator policies implement the whole walk.
+The concrete old decoder/checker policies still need installation into the
+new effectful full continuation, including retry, trace and serialization.
+J7661 was preflight-only (missing predecessor object); it launched no compiler.
+All other failed predecessors and exact snapshots are retained.
+
+## Concrete whole-caller boundary
+
+J7673 is an intentionally excluded installation probe. The complete retained
+`AspisR1SimControl21.transcript.control21.Transcript.queries` still accepts its
+old pure `Digest32` dictionary. Installing the new concrete digest fails with:
+
+```text
+has type
+  Machine → Slice (Slice U8) → Result (Bytes32 × Machine)
+but is expected to have type
+  Machine → Slice (Slice U8) → Result Bytes32
+```
+
+The new effectful *call skeletons* are verified above, but do not replace the
+entire semantic/circle/control policy continuations and full walk owner. In
+particular, the new query skeleton stops before concrete scanner selection,
+native trace publication and rho. The old continuation cannot consume the
+updated hash state without being ported; projecting away that state would
+reintroduce the disproved D136 stateless interpretation. The exact probe,
+type inventory, source snapshot, error and resource receipt are retained.
+No successful theorem imports this diagnostic; its failed source is outside
+the Lean source tree.
+
+This obstructs direct whole-caller installation and therefore stage (3).
+It is an interface-composition obstruction, not a privacy counterexample or
+a new impossibility theorem. Full continuation extraction/porting is the next
+concrete deliverable. `shippedProverExperiment`, both real/ideal WholeRunJoins
+and endpoint specialization remain unconstructed. No source-refinement
+assumption has been hidden inside TrustedStd, a callback, P6 or P7.

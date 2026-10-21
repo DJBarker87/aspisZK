@@ -1,0 +1,96 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEffectCallers27.lean:45:2: error: unsolved goals
+case pos
+s : SemanticTranscript Machine
+framed : Slice U8
+⊢ (let (absorbed, t) :=
+      expected s.hash
+        (Array.make 3#usize
+            [s.state.to_slice, (Array.make 2#usize [0#u8, U8.wrapping_add 160#u8 s.next_row] ⋯).to_slice, framed]
+            ⋯).to_slice
+    let (block, t1) :=
+      expected t
+        (Array.make 2#usize
+            [absorbed.to_slice,
+              (Array.make 1#usize [1#u8] SemanticTranscript.sample_block_validated._proof_10).to_slice]
+            ⋯).to_slice
+    let (a, t2) :=
+      expected t1
+        (Array.make 2#usize
+            [absorbed.to_slice,
+              (Array.make 1#usize [2#u8] SemanticTranscript.sample_block_validated._proof_13).to_slice]
+            ⋯).to_slice
+    ok (core.result.Result.Ok block, { state := a, hash := t2, next_row := s.next_row.wrapping_add 1#u8 })) =
+    ok
+      (core.result.Result.Ok
+          (expected
+              (expected s.hash
+                  (Array.make 3#usize
+                      [s.state.to_slice, (Array.make 2#usize [0#u8, U8.wrapping_add 160#u8 s.next_row] ⋯).to_slice,
+                        framed]
+                      ⋯).to_slice).2
+              (Array.make 2#usize
+                  [Array.to_slice
+                      (expected s.hash
+                          (Array.make 3#usize
+                              [s.state.to_slice,
+                                (Array.make 2#usize [0#u8, U8.wrapping_add 160#u8 s.next_row] ⋯).to_slice, framed]
+                              ⋯).to_slice).1,
+                    (Array.make 1#usize [1#u8] ⋯).to_slice]
+                  ⋯).to_slice).1,
+        {
+          state :=
+            (expected
+                (expected
+                    (expected s.hash
+                        (Array.make 3#usize
+                            [s.state.to_slice,
+                              (Array.make 2#usize [0#u8, U8.wrapping_add 160#u8 s.next_row] ⋯).to_slice, framed]
+                            ⋯).to_slice).2
+                    (Array.make 2#usize
+                        [Array.to_slice
+                            (expected s.hash
+                                (Array.make 3#usize
+                                    [s.state.to_slice,
+                                      (Array.make 2#usize [0#u8, U8.wrapping_add 160#u8 s.next_row] ⋯).to_slice, framed]
+                                    ⋯).to_slice).1,
+                          (Array.make 1#usize [1#u8] ⋯).to_slice]
+                        ⋯).to_slice).2
+                (Array.make 2#usize
+                    [Array.to_slice
+                        (expected s.hash
+                            (Array.make 3#usize
+                                [s.state.to_slice,
+                                  (Array.make 2#usize [0#u8, U8.wrapping_add 160#u8 s.next_row] ⋯).to_slice, framed]
+                                ⋯).to_slice).1,
+                      (Array.make 1#usize [2#u8] ⋯).to_slice]
+                    ⋯).to_slice).1,
+          hash :=
+            (expected
+                (expected
+                    (expected s.hash
+                        (Array.make 3#usize
+                            [s.state.to_slice,
+                              (Array.make 2#usize [0#u8, U8.wrapping_add 160#u8 s.next_row] ⋯).to_slice, framed]
+                            ⋯).to_slice).2
+                    (Array.make 2#usize
+                        [Array.to_slice
+                            (expected s.hash
+                                (Array.make 3#usize
+                                    [s.state.to_slice,
+                                      (Array.make 2#usize [0#u8, U8.wrapping_add 160#u8 s.next_row] ⋯).to_slice, framed]
+                                    ⋯).to_slice).1,
+                          (Array.make 1#usize [1#u8] ⋯).to_slice]
+                        ⋯).to_slice).2
+                (Array.make 2#usize
+                    [Array.to_slice
+                        (expected s.hash
+                            (Array.make 3#usize
+                                [s.state.to_slice,
+                                  (Array.make 2#usize [0#u8, U8.wrapping_add 160#u8 s.next_row] ⋯).to_slice, framed]
+                                ⋯).to_slice).1,
+                      (Array.make 1#usize [2#u8] ⋯).to_slice]
+                    ⋯).to_slice).2,
+          next_row := s.next_row.wrapping_add 1#u8 })
+'R1Z.ProverCommitEffectCallers27.semantic_call' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh
