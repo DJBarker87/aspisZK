@@ -1,0 +1,116 @@
+/tmp/query-s4-carrier-map-v1/sources/CallerStage2StartZero.lean:58:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ops.accumulatorNew
+in the target expression
+  AspisR1Stage2.verifier.candidate.query_loop call proof (AspisR1S4CallerStage2CarrierV1.preparedToStage prepared)
+      (AspisR1S4CallerStage2CarrierV1.accumulatorToStage initialAcc)
+      (AspisR1S4CallerStage2CarrierV1.arrayWideToStage scratch)
+      (Option.map (fun f phase => f (AspisR1S4CallerStage2CarrierV1.phaseToCaller phase)) obs)
+      (AspisR1S4CallerStage2CarrierV1.geometryToStage geom)
+      (AspisR1S4CallerStage2CarrierV1.batchedWeightsToStage pending) k =
+    ok (core.result.Result.Ok (outputAccS, outputPendingS))
+
+H : Type
+ops : AspisR1CallerV4Tx1OpsCut.Ops H
+call : AspisR1Stage2.QueryCall
+inst : AspisR1CurrentCaller.aspis_core.digest.Digest32 H
+public1 : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+public_bytes proof : Slice U8
+k : Usize
+hash : H
+obs : Option (AspisR1CurrentCaller.verifier.Phase → Result Unit)
+bytes : alloc.vec.Vec U8
+finalLen : AspisR1CurrentCaller.transport.Variant → Result Usize
+filled :
+  Usize →
+    AspisR1CurrentCaller.aspis_core.field.QM31 →
+      Result
+        (core.result.Result (alloc.vec.Vec AspisR1CurrentCaller.aspis_core.field.QM31)
+          AspisR1CurrentCaller.aspis_core.r0.Error)
+zeroQ : AspisR1CurrentCaller.aspis_core.field.QM31
+zeroWide : AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact
+oneQ : AspisR1CurrentCaller.aspis_core.field.QM31
+hnewBinding :
+  ops.accumulatorNew = fun v =>
+    AspisR1S4AccumulatorNewSourceCutV1.accumulatorNewBody finalLen filled zeroQ zeroWide oneQ v
+h :
+  AspisR1CallerV4Tx1OpsCut.tx1
+      { split := ops.split, offFoldedRoot := ops.offFoldedRoot, offRound1 := ops.offRound1, zero := ops.zero,
+        mark := ops.mark, parseShape := ops.parseShape, canonicalScan := ops.canonicalScan, prepare := ops.prepare,
+        accumulatorNew := ops.accumulatorNew, batchMerkle := ops.batchMerkle, makeGeometry := ops.makeGeometry,
+        weightsNew := ops.weightsNew, queryLoop := AspisR1S4CallerStage2CarrierV1.stage2QueryLoopAdapter call,
+        weightsFinish := ops.weightsFinish, checkpoint := ops.checkpoint }
+      inst public1 public_bytes proof k hash obs =
+    ok (core.result.Result.Ok bytes)
+parsed : AspisR1CurrentCaller.transport.Variant
+zero : AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact
+prepared : AspisR1CurrentCaller.verifier.Prepared
+scratch : Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize
+initialAcc : AspisR1CurrentCaller.verifier.Accumulator
+geom : AspisR1CurrentCaller.verifier.QueryGeometry
+pending : AspisR1CurrentCaller.verifier.BatchedWeights
+outputAcc : AspisR1CurrentCaller.verifier.Accumulator
+outputPending : AspisR1CurrentCaller.verifier.BatchedWeights
+outputAccS : AspisR1Stage2.verifier.Accumulator
+outputPendingS : AspisR1Stage2.verifier.BatchedWeights
+hparse : ops.parseShape proof = ok (core.result.Result.Ok parsed)
+hscan : ops.canonicalScan proof = ok (core.result.Result.Ok ())
+hzero : ops.zero = ok zero
+hprepare :
+  ops.prepare inst public1 proof hash obs (Array.repeat 29#usize zero) = ok (core.result.Result.Ok prepared, scratch)
+hnew :
+  AspisR1Stage2.verifier.candidate.query_loop call proof (AspisR1S4CallerStage2CarrierV1.preparedToStage prepared)
+      (AspisR1S4CallerStage2CarrierV1.accumulatorToStage initialAcc)
+      (AspisR1S4CallerStage2CarrierV1.arrayWideToStage scratch)
+      (Option.map (fun f phase => f (AspisR1S4CallerStage2CarrierV1.phaseToCaller phase)) obs)
+      (AspisR1S4CallerStage2CarrierV1.geometryToStage geom)
+      (AspisR1S4CallerStage2CarrierV1.batchedWeightsToStage pending) k =
+    ok (core.result.Result.Ok (outputAccS, outputPendingS))
+hloop : ops.accumulatorNew AspisR1CurrentCaller.transport.Variant.S2 = ok (core.result.Result.Ok initialAcc)
+hacc : AspisR1S4CallerStage2CarrierV1.accumulatorToCaller outputAccS = outputAcc
+hpending : AspisR1S4CallerStage2CarrierV1.batchedWeightsToCaller outputPendingS = outputPending
+⊢ AspisR1S4AccumulatorNewSourceCutV1.accumulatorNewBody finalLen filled zeroQ zeroWide oneQ
+      AspisR1CurrentCaller.transport.Variant.S2 =
+    ok (core.result.Result.Ok initialAcc)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/tmp/query-s4-carrier-map-v1/sources/CallerStage2StartZero.lean:63:58: error: Application type mismatch: The argument
+  hnew
+has type
+  AspisR1Stage2.verifier.candidate.query_loop call proof (AspisR1S4CallerStage2CarrierV1.preparedToStage prepared)
+      (AspisR1S4CallerStage2CarrierV1.accumulatorToStage initialAcc)
+      (AspisR1S4CallerStage2CarrierV1.arrayWideToStage scratch)
+      (Option.map (fun f phase => f (AspisR1S4CallerStage2CarrierV1.phaseToCaller phase)) obs)
+      (AspisR1S4CallerStage2CarrierV1.geometryToStage geom)
+      (AspisR1S4CallerStage2CarrierV1.batchedWeightsToStage pending) k =
+    ok (core.result.Result.Ok (outputAccS, outputPendingS))
+but is expected to have type
+  ops.accumulatorNew AspisR1CurrentCaller.transport.Variant.S2 = ok (core.result.Result.Ok initialAcc)
+in the application
+  And.intro hnew
+/tmp/query-s4-carrier-map-v1/sources/CallerStage2StartZero.lean:63:63: error: Application type mismatch: The argument
+  hloop
+has type
+  ops.accumulatorNew AspisR1CurrentCaller.transport.Variant.S2 = ok (core.result.Result.Ok initialAcc)
+but is expected to have type
+  AspisR1Stage2.verifier.candidate.query_loop call proof (AspisR1S4CallerStage2CarrierV1.preparedToStage prepared)
+      (AspisR1S4CallerStage2CarrierV1.accumulatorToStage initialAcc)
+      (AspisR1S4CallerStage2CarrierV1.arrayWideToStage scratch)
+      (Option.map (fun f phase => f (AspisR1S4CallerStage2CarrierV1.phaseToCaller phase)) obs)
+      (AspisR1S4CallerStage2CarrierV1.geometryToStage geom)
+      (AspisR1S4CallerStage2CarrierV1.batchedWeightsToStage pending) k =
+    ok (core.result.Result.Ok (outputAccS, outputPendingS))
+in the application
+  And.intro hloop
+'AspisR1S4CallerStage2StartZeroV1.tx1_success_same_stage2_query_starts_zero' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
