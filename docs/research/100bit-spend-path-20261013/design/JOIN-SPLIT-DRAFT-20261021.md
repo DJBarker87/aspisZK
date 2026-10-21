@@ -314,3 +314,25 @@ enrichment stability, so this route needs no extra source-stability premise.
 For evaluation-only cone joins, `acceptedRunJoin_of_cones` explicitly retains
 the sufficient source-enrichment stability fact. Neither composition theorem
 instantiates a cone, tree, signature or inventory from the current extraction.
+
+## Two-transaction checkpoint target (21 October 2026)
+
+For the additive two-transaction endpoint, the frozen-order target is
+`OraclePortFrozen2.dV_frozen2`; the single-pass endpoint and its join remain
+historical, separately named theorems. See
+[DV-TWOTX-20261021.md](DV-TWOTX-20261021.md).
+
+| Join layer | Exact two-transaction target | Retained obligation |
+|---|---|---|
+| Checkpoint ABI | `OraclePortFrozen2.checkpoint stored p q tr i v`, reached through `afterBatch0`, using the saved-ten C5 writer and authenticated resumed-twelve reader | Identify source prepared fields and accumulator with the reached `p,q,i,v`; preserve proof/public/checksum digest order on both calls; adopt physical byte codecs and ordinary error results. This is a stage of `dV_frozen2`, rather than an external checksum fact. |
+| Multiproof | Batch 0's three `verifySlot_frozen` calls before checkpoint; batch 1's three after checkpoint verification | Existing mutable-array/source refinements; include early failures and duplicate digests. Slot definitions remain unchanged. |
+| Pool caller | Same stored/public bytes across TX1 save and Pool TX2 resume; stage-2 acceptance uses the returned accumulator | Actual account/carrier/public reconstruction and transaction/source order; P2/P2′ retained. |
+| Caller model identity | `∀ i, interpret model (tree i) = verifier D OraclePortFrozen2.dV_frozen2 i` | Exact full caller schedule, including all six checkpoint reads. |
+| Accepted-run source join | `OraclePortFrozen2Join.AcceptedRunJoin D rust` | Complete accepted ordered observations and enriched outputs in both annotation passes. No source inhabitant is supplied by model acceptance equivalence. |
+| Runtime binding | Original `StoredCarrierBinding D rust P runtime` | Same separate runtime/carrier obligation; no weakening. |
+
+`OraclePortFrozen2Cones` specializes the existing cone composition to this
+new caller identity. It neither edits the S1–S9 cones nor instantiates the
+source signatures, inventory, trees or source/codec joins. Allocation/std
+coverage remains with the independent S10 worker; this packet does not
+change the existing cone enumeration.

@@ -40,9 +40,10 @@ consequence used for communication, not the completion criterion.
 | `R1FinalSoundnessHeadlineV3` (pure decision) | 15/2^109 ≈ 2^-105.09 | (0+34)·B + κ ≈ 0.996·2^-100 | met | stated |
 | `OraclePortHeadlineFrozen` (adopted port) | 15/2^109 ≈ 2^-105.09 | (0+1080)·B ≈ 2^-95.0 | **not met** at the whole-experiment level | stated, with Q+1080 |
 | `OraclePortHeadlineFrozenPerAttempt` (probability-level repair) | 15/2^109 ≈ 2^-105.09 | 34·B + κ(1161) + 2^-126 + 2^-454 ≤ 2^-100 | **met, conditional** | stated, with Q+34 for every Q |
+| `OraclePortHeadlineFrozen2PerAttempt` (two-transaction checkpoint model) | 15/2^109 ≈ 2^-105.09 | 34·B + κ(1161) + 2^-126 + 2^-454 ≤ 2^-100 | **met, conditional** | stated, with Q+34 for every Q |
 
-All three are conditional on their source premises. None is release-complete
-for the deployed verifier until those are discharged. In particular, the new
+All four are conditional on their source premises. None is release-complete
+for the deployed verifier until those are discharged. In particular, the single-pass `OraclePortHeadlineFrozenPerAttempt`
 endpoint retains exactly `hqueries`, `AcceptedRunJoin D rust` and
 `StoredCarrierBinding D rust P runtime`; its premise signature diff is empty.
 
@@ -68,6 +69,33 @@ The C3-BIN addendum "oracle-decision port ADOPTED" (2026-10-21 09:40) gave the
 target as "(Q+1)/2^100". That is a corollary, not the contract, and under the
 port it holds only for 32 ≤ Q ≤ Qmax. The binding criterion is (A) and (B)
 above. The unchanged `OraclePortHeadlineFrozen` endpoint must not be described as
-meeting 100-bit per-attempt soundness. The new per-attempt endpoint provides
-the conditional probability repair; correspondence to the deployed verifier
+meeting 100-bit per-attempt soundness. `OraclePortHeadlineFrozenPerAttempt` provides
+the conditional single-pass probability repair; correspondence to the deployed verifier
 and the runtime carrier binding remain outstanding.
+
+
+## Two-transaction model target
+
+The additive `OraclePortHeadlineFrozen2PerAttempt.final_soundness` targets
+`OraclePortFrozen2.dV_frozen2`, including checkpoint save and authenticated
+resume between batch 0 and batch 1. Its source premise is the newly targeted
+`OraclePortFrozen2Join.AcceptedRunJoin D rust`; it retains the original
+`StoredCarrierBinding D rust P runtime` and adversary query-count hypothesis.
+Boolean acceptance equivalence does not convert the old single-pass source
+join into this new ordered-log join. The old endpoints remain separately
+named historical model theorems.
+
+The verifier envelope remains 1161: a symbolic one-resource-per-slot
+improvement pays for the six extra checkpoint digest reads. First reads
+remain at most Q+1161, and the recorded log is at most Q+2322. Submitted
+transcript starts are already followed in the prover/sampler prefix, before
+all checkpoint digests, so the start charge remains Q+34. Digest inputs need
+not be syntactically disjoint from the decoder language.
+
+`failure_bound` states the full repeated/adaptive-attempt expression, and
+`zero_queries` proves the whole-experiment ≤2^-100 inequality. The extractor,
+B, collision function, abort allowances, query range, adversary and security
+metric are unchanged. See [DV-TWOTX-20261021.md](DV-TWOTX-20261021.md) and
+the receipts under `evidence/dv-twotx-20261021/`. This is a conditional model
+endpoint. The deployed security target is **not yet established**: the new
+frozen-source accepted-run join and runtime/carrier binding remain open.
