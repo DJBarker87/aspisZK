@@ -1,0 +1,110 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiReference.lean:53:16: error: Tactic `rfl` failed: The left-hand side
+  ((stored, H stored) ::
+      (eval H
+          (Program.ask pub fun hu =>
+            if slice ck 48 32 = bytes hu then
+              Program.ask (checksumInput ck) fun hc =>
+                Program.done (if List.drop 1736 ck = bytes hc then OraclePortCkptAbiCodec.decode ck else none)
+            else Program.done none)).1,
+    (eval H
+        (Program.ask pub fun hu =>
+          if slice ck 48 32 = bytes hu then
+            Program.ask (checksumInput ck) fun hc =>
+              Program.done (if List.drop 1736 ck = bytes hc then OraclePortCkptAbiCodec.decode ck else none)
+          else Program.done none)).2)
+is not definitionally equal to the right-hand side
+  ([(stored, H stored), (pub, H pub), (checksumInput ck, H (checksumInput ck))],
+    if List.drop 1736 ck = bytes (H (checksumInput ck)) then OraclePortCkptAbiCodec.decode ck else none)
+
+case isTrue.isTrue.isTrue
+H : Bytes → State
+stored pub ck : Bytes
+h✝² : Header ck
+h✝¹ : slice ck 16 32 = bytes (H stored)
+h✝ : slice ck 48 32 = bytes (H pub)
+⊢ ((stored, H stored) ::
+        (eval H
+            (Program.ask pub fun hu =>
+              if slice ck 48 32 = bytes hu then
+                Program.ask (checksumInput ck) fun hc =>
+                  Program.done (if List.drop 1736 ck = bytes hc then OraclePortCkptAbiCodec.decode ck else none)
+              else Program.done none)).1,
+      (eval H
+          (Program.ask pub fun hu =>
+            if slice ck 48 32 = bytes hu then
+              Program.ask (checksumInput ck) fun hc =>
+                Program.done (if List.drop 1736 ck = bytes hc then OraclePortCkptAbiCodec.decode ck else none)
+            else Program.done none)).2) =
+    ([(stored, H stored), (pub, H pub), (checksumInput ck, H (checksumInput ck))],
+      if List.drop 1736 ck = bytes (H (checksumInput ck)) then OraclePortCkptAbiCodec.decode ck else none)
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiReference.lean:53:16: error: Tactic `rfl` failed: The left-hand side
+  ((stored, H stored) ::
+      (eval H
+          (Program.ask pub fun hu =>
+            if slice ck 48 32 = bytes hu then
+              Program.ask (checksumInput ck) fun hc =>
+                Program.done (if List.drop 1736 ck = bytes hc then OraclePortCkptAbiCodec.decode ck else none)
+            else Program.done none)).1,
+    (eval H
+        (Program.ask pub fun hu =>
+          if slice ck 48 32 = bytes hu then
+            Program.ask (checksumInput ck) fun hc =>
+              Program.done (if List.drop 1736 ck = bytes hc then OraclePortCkptAbiCodec.decode ck else none)
+          else Program.done none)).2)
+is not definitionally equal to the right-hand side
+  ([(stored, H stored), (pub, H pub)], none)
+
+case isTrue.isTrue.isFalse
+H : Bytes → State
+stored pub ck : Bytes
+h✝² : Header ck
+h✝¹ : slice ck 16 32 = bytes (H stored)
+h✝ : ¬slice ck 48 32 = bytes (H pub)
+⊢ ((stored, H stored) ::
+        (eval H
+            (Program.ask pub fun hu =>
+              if slice ck 48 32 = bytes hu then
+                Program.ask (checksumInput ck) fun hc =>
+                  Program.done (if List.drop 1736 ck = bytes hc then OraclePortCkptAbiCodec.decode ck else none)
+              else Program.done none)).1,
+      (eval H
+          (Program.ask pub fun hu =>
+            if slice ck 48 32 = bytes hu then
+              Program.ask (checksumInput ck) fun hc =>
+                Program.done (if List.drop 1736 ck = bytes hc then OraclePortCkptAbiCodec.decode ck else none)
+            else Program.done none)).2) =
+    ([(stored, H stored), (pub, H pub)], none)
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiReference.lean:71:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if
+      List.drop 1736 { stored := stored, checkpoint := ck }.checkpoint =
+        bytes
+          (H
+            (OraclePortPhysicalFrameDraft.domain ++
+              List.take 1736 { stored := stored, checkpoint := ck }.checkpoint)) then
+    ?m.60
+  else ?m.61
+in the target expression
+  ([(stored, H stored), (pub, H pub), (checksumInput ck, H (checksumInput ck))],
+      if List.drop 1736 ck = bytes (H (checksumInput ck)) then OraclePortCkptAbiCodec.decode ck else none) =
+    ([(stored, H stored), (pub, H pub), (checksumInput ck, H (checksumInput ck))], OraclePortCkptAbiCodec.decode ck)
+
+H : Bytes → State
+stored pub ck : Bytes
+header : Header ck
+binding : HashBinding H pub { stored := stored, checkpoint := ck }
+⊢ ([(stored, H stored), (pub, H pub), (checksumInput ck, H (checksumInput ck))],
+      if List.drop 1736 ck = bytes (H (checksumInput ck)) then OraclePortCkptAbiCodec.decode ck else none) =
+    ([(stored, H stored), (pub, H pub), (checksumInput ck, H (checksumInput ck))], OraclePortCkptAbiCodec.decode ck)
+'AspisR1.OraclePortCkptAbiReference.resume_eval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbiReference.header_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbiReference.resume_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbiReference.resume_saved' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbiReference.accepted_saved_fields' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortCkptAbiReference.writer_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbiReference.writeResume_trace' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

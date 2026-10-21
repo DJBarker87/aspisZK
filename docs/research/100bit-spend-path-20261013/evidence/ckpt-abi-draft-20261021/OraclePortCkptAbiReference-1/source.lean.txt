@@ -1,0 +1,159 @@
+import OraclePortCkptAbiCodec
+
+/-! Source-shaped saved-ten reference: all rejection branches are total, and
+failed digest comparisons short circuit. Source extraction identification is
+intentionally not asserted. The input domain is S2 with saved.next = 10. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortCkptAbiReference
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortCheckpointAbiC5 OraclePortCheckpointResumeC5
+open OraclePortCkptAbiCodec (Decoded)
+attribute [local instance] Classical.propDecidable
+attribute [local irreducible] OraclePortCheckpointStateC3.advance
+  OraclePortCheckpointStateC3.write QueryAccumulator.run QueryAccumulator.run22
+
+def Header (ck : Bytes) : Prop :=
+  ck.length = 1768 ∧
+  slice ck 0 16 = OraclePortPhysicalFrameDraft.magic ++ [2,10,1,0,0,0,0,0]
+
+def checksumInput (ck : Bytes) : Bytes :=
+  OraclePortPhysicalFrameDraft.domain ++ ck.take 1736
+
+def resume (stored pub ck : Bytes) : Program Bytes State (Option Decoded) :=
+  if Header ck then
+    .ask stored fun hp =>
+      if slice ck 16 32 = bytes hp then
+        .ask pub fun hu =>
+          if slice ck 48 32 = bytes hu then
+            .ask (checksumInput ck) fun hc =>
+              .done (if ck.drop 1736 = bytes hc then OraclePortCkptAbiCodec.decode ck else none)
+          else .done none
+      else .done none
+  else .done none
+
+/-- Exact all-input evaluation, including zero/one/two/three-read rejection.
+The lists contain ordered addresses and answers, not just a read count. -/
+theorem resume_eval (H : Bytes → State) (stored pub ck : Bytes) :
+    eval H (resume stored pub ck) =
+      if Header ck then
+        if slice ck 16 32 = bytes (H stored) then
+          if slice ck 48 32 = bytes (H pub) then
+            ([(stored,H stored),(pub,H pub),(checksumInput ck,H (checksumInput ck))],
+              if ck.drop 1736 = bytes (H (checksumInput ck)) then
+                OraclePortCkptAbiCodec.decode ck else none)
+          else ([(stored,H stored),(pub,H pub)],none)
+        else ([(stored,H stored)],none)
+      else ([],none) := by
+  unfold resume
+  split
+  · simp only [eval]
+    split
+    · split <;> rfl
+    · rfl
+  · rfl
+
+theorem header_saved (H : Bytes → State) (stored pub : Bytes) (c : Context)
+    (d : MatchingSupport.Data E) (rho : K) (q : Fin 22 → Fin 262144) :
+    Header (save H stored pub c d rho q).checkpoint := by
+  exact ⟨(stored_retained H stored pub c d rho q).2,
+    (OraclePortCheckpointSlicesC5.prefix_slices H stored pub _ _).1⟩
+
+/-- Hash validation uses precisely the retained proof and public bytes and
+complete saved body. This lemma covers arbitrary hash-bound checkpoints. -/
+theorem resume_bound (H : Bytes → State) (stored pub ck : Bytes)
+    (header : Header ck) (binding : HashBinding H pub ⟨stored,ck⟩) :
+    eval H (resume stored pub ck) =
+      ([(stored,H stored),(pub,H pub),(checksumInput ck,H (checksumInput ck))],
+        OraclePortCkptAbiCodec.decode ck) := by
+  rw [resume_eval,if_pos header,if_pos binding.2.1,if_pos binding.2.2.1]
+  rw [if_pos binding.2.2.2]
+
+/-- Total saved-ten result, including repeated-query rejection. -/
+theorem resume_saved (H : Bytes → State) (stored pub : Bytes) (c : Context)
+    (d : MatchingSupport.Data E) (rho : K) (q : Fin 22 → Fin 262144) :
+    eval H (resume stored pub (save H stored pub c d rho q).checkpoint) =
+      ([(stored,H stored),(pub,H pub),
+        (checksumInput (save H stored pub c d rho q).checkpoint,
+          H (checksumInput (save H stored pub c d rho q).checkpoint))],
+        if Function.Injective q then some (prepared c d rho q,
+          (OraclePortCheckpointStateC3.write (model d rho q)).accumulator) else none) := by
+  rw [resume_bound H stored pub _ (header_saved H stored pub c d rho q)
+    (save_hash_binding H stored pub c d rho q),OraclePortCkptAbiCodec.saved_fields]
+
+def resumed (d : MatchingSupport.Data E) (decoded : Decoded) : QueryAccumulator.State K E :=
+  OraclePortCheckpointStateC3.advance (model d decoded.1.rho decoded.1.queries) 12 decoded.2
+
+/-- Successful reference resume identifies every decoded field and the
+resumed-twelve state. Acceptance is unnecessary; the result holds at resume. -/
+theorem accepted_saved_fields (H : Bytes → State) (stored pub : Bytes) (c : Context)
+    (d : MatchingSupport.Data E) (rho : K) (q : Fin 22 → Fin 262144)
+    (out : Decoded)
+    (success : (eval H (resume stored pub (save H stored pub c d rho q).checkpoint)).2 = some out) :
+    Function.Injective q ∧ out.1 = prepared c d rho q ∧
+    out.2 = (OraclePortCheckpointStateC3.write (model d rho q)).accumulator ∧
+    resumed d out = QueryAccumulator.run22 LiteralOpeningView.eK rho
+      (QueryResidualBridge.values d q) (QueryResidualBridge.basis q) := by
+  rw [resume_saved] at success
+  dsimp only at success
+  split at success
+  · rename_i unique
+    have eq := Option.some.inj success
+    subst out
+    refine ⟨unique,rfl,rfl,?_⟩
+    have result := physical_resume H stored pub c d rho q
+    rw [OraclePortCheckpointResumeC5.resume,
+      if_pos (save_hash_binding H stored pub c d rho q)] at result
+    change (decodeAccumulator (encode H stored pub _ _)).map _ = _ at result
+    rw [decode_written H stored pub _ _ (OraclePortCheckpointStateC3.saved_next _),
+      Option.map_some,Option.some.injEq] at result
+    exact result
+  · cases success
+
+theorem writer_trace (H : Bytes → State) (stored pub : Bytes) (p : Prepared)
+    (a : QueryAccumulator.State K E) :
+    eval H (OraclePortCheckpointOracleC5.writer stored pub p a) =
+      ([(stored,H stored),(pub,H pub),
+        (OraclePortPhysicalFrameDraft.domain ++ body p a (H stored) (H pub),
+          H (OraclePortPhysicalFrameDraft.domain ++ body p a (H stored) (H pub)))],
+        ⟨stored,encode H stored pub p a⟩) := rfl
+
+def writeResume (stored pub : Bytes) (c : Context) (d : MatchingSupport.Data E)
+    (rho : K) (q : Fin 22 → Fin 262144) : Program Bytes State (Option Decoded) :=
+  bind (OraclePortCheckpointOracleC5.writer stored pub (prepared c d rho q)
+    (OraclePortCheckpointStateC3.write (model d rho q)).accumulator)
+    (fun saved => resume saved.stored pub saved.checkpoint)
+
+/-- Exact six-read order on all authentic saved-ten inputs, even if query
+uniqueness subsequently rejects. Resume rereads exactly the writer's inputs. -/
+theorem writeResume_trace (H : Bytes → State) (stored pub : Bytes) (c : Context)
+    (d : MatchingSupport.Data E) (rho : K) (q : Fin 22 → Fin 262144) :
+    let input := checksumInput (save H stored pub c d rho q).checkpoint
+    eval H (writeResume stored pub c d rho q) =
+      ([(stored,H stored),(pub,H pub),(input,H input),
+        (stored,H stored),(pub,H pub),(input,H input)],
+        if Function.Injective q then some (prepared c d rho q,
+          (OraclePortCheckpointStateC3.write (model d rho q)).accumulator) else none) := by
+  have bodyEq := (checksum_bound H stored pub (prepared c d rho q)
+    (OraclePortCheckpointStateC3.write (model d rho q)).accumulator).1
+  have inputEq : checksumInput (save H stored pub c d rho q).checkpoint =
+      OraclePortPhysicalFrameDraft.domain ++ body (prepared c d rho q)
+        (OraclePortCheckpointStateC3.write (model d rho q)).accumulator (H stored) (H pub) := by
+    exact congrArg (OraclePortPhysicalFrameDraft.domain ++ ·) bodyEq
+  simp only [writeResume,eval_bind,writer_trace]
+  change (([(stored,H stored),(pub,H pub),(_,_)]) ++
+    (eval H (resume stored pub (save H stored pub c d rho q).checkpoint)).1,
+    (eval H (resume stored pub (save H stored pub c d rho q).checkpoint)).2) = _
+  rw [resume_saved,inputEq]
+  rfl
+
+#print axioms resume_eval
+#print axioms header_saved
+#print axioms resume_bound
+#print axioms resume_saved
+#print axioms accepted_saved_fields
+#print axioms writer_trace
+#print axioms writeResume_trace
+end AspisR1.OraclePortCkptAbiReference
+end
