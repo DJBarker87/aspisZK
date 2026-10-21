@@ -1,0 +1,17 @@
+theorem Aeneas.Std.UScalar.max_USize_eq : UScalar.max UScalarTy.Usize = Usize.max :=
+of_eq_true
+  (Eq.trans
+    (congr (congrArg Eq (UScalar.max_def UScalarTy.Usize))
+      (Eq.trans Usize.max_def (congrFun' (congrArg HSub.hSub (congrArg (HPow.hPow 2) Usize.numBits_def)) 1)))
+    (eq_self (2 ^ System.Platform.numBits - 1)))
+@[irreducible] def Aeneas.Std.Usize.max : ℕ :=
+wrapped✝.1
+@[irreducible] def Aeneas.Std.UScalar.max : UScalarTy → ℕ :=
+wrapped✝.1
+def Aeneas.Std.UScalar.ofNatCore : {ty : UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinScalarInspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.size_pos`
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinScalarInspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalarTy.numBits_pos`
+Aeneas.Std.UScalar.ofNat {ty : UScalarTy} (x : ℕ) (hInBounds : x ≤ UScalar.cMax ty := by decide) : UScalar ty
+Aeneas.Std.Usize.ofNat (x : ℕ) (hInBounds : x ≤ UScalar.cMax UScalarTy.Usize := by decide) : UScalar UScalarTy.Usize
+Aeneas.Std.Usize.ofNatCore (x : ℕ) (h : x < 2 ^ UScalarTy.Usize.numBits) : UScalar UScalarTy.Usize

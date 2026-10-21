@@ -1,0 +1,37 @@
+# S8 accepted-run join continuation
+
+Branch `codex/cx-s8-join-20261021`, base `6c520f134`.
+No shipped source edits. New Lean modules only. No pushes.
+
+## Stage 1 — exact finish target
+
+`S8JoinFinishExact.reference_exact` identifies the complete emitted owned
+finish with the canonical raw prefix list; `mutable_exact` identifies the
+complete mutable traversal with its exact transported list. The only
+precondition is destination length ≤ raw length. Terms, phase, raw bounds,
+callee success and congruence are not required for these execution identities.
+`prefix_length` supplies length preservation of the deferred writes.
+
+Focused receipts and failed intermediate attempts are retained in
+`proofs/` and `manifest.json`. Failed elaborations may print `sorryAx`;
+those are explicitly unsuccessful attempts, not accepted proofs.
+
+## Upstream handoff
+
+The current S7 branch was read with `git show`, without editing or importing
+its working tree. At base `6c520f134`, `S7Kani3CallerTrace.reached_invariant`
+consumes `PushTrace`; `p6_route_certificate` does not supply actual frozen
+query membership or source state provenance. The requested next interface is
+an actual reached raw vector, destination, and raw-coordinate congruence with
+`∑ j : Fin 22, rho^j * basis q j l` (including saved-ten/resumed-twelve).
+
+`dV_frozen` itself uses `D0TypedChecks.verify` with a `ClosedSum` field
+predicate. It has no raw U64 Vec, mutable iterator or physical checkpoint
+state. Such source-state provenance cannot be projected out of that model
+without a concrete representation/reached-source construction. A new model
+representation is not silently labelled the reached Rust state.
+
+The compact strict scan is being joined to the exact canonical predicate
+of `OraclePortCompactDraft`. It scans full 16-byte chunks and ignores a
+trailing suffix, so a multiple-of-16 length condition is essential when
+comparing with the parser's four-byte canonical scan.
