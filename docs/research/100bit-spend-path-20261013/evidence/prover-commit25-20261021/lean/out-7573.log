@@ -1,0 +1,52 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductOracle25.lean:15:0: warning: Definition `_private.R1Z.ProverCommitProductOracle25.0.R1Z.ProverCommitProductOracle25.answerFinite` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductOracle25.lean:16:17: warning: instance `_private.R1Z.ProverCommitProductOracle25.0.R1Z.ProverCommitProductOracle25.answerFinite` must be marked with `@[reducible]` or `@[implicit_reducible]`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductOracle25.lean:32:12: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  @instFintypeProd (Trio (NZ 0)) (Trio (Fin 5 → OracleAnswer))
+    (@instFintypeProd (NZ 0) (NZ 0 × NZ 0)
+      (@Subtype.fintype OracleAnswer (fun a => a ≠ 0)
+        (fun a => @instDecidableNot (a = 0) (Fintype.decidablePiFintype a 0)) answerFinite)
+      (instFintypeProd (NZ 0) (NZ 0)))
+    (instFintypeProd (Fin 5 → OracleAnswer) ((Fin 5 → OracleAnswer) × (Fin 5 → OracleAnswer)))
+inferred
+  @instFintypeProd (Trio (NZ 0)) (Trio (Fin 5 → OracleAnswer))
+    (@instFintypeProd (NZ 0) (NZ 0 × NZ 0)
+      (@Subtype.fintype OracleAnswer (fun a => a ≠ 0)
+        (fun a => @instDecidableNot (a = 0) (Classical.propDecidable (a = 0))) answerFinite)
+      (instFintypeProd (NZ 0) (NZ 0)))
+    (instFintypeProd (Fin 5 → OracleAnswer) ((Fin 5 → OracleAnswer) × (Fin 5 → OracleAnswer)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductOracle25.lean:34:8: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductOracle25.lean:63:6: error: Application type mismatch: The argument
+  replacement_uniform (key bound fits seed) (key_injective bound fits seed) test
+has type
+  (@mean ((Coord → OracleAnswer) × (RomFiniteBin.Address bound → OracleAnswer))
+      (@instFintypeProd (Coord → OracleAnswer) (RomFiniteBin.Address bound → OracleAnswer)
+        (@Pi.instFintype Coord (fun a => OracleAnswer) (fun a b => Classical.propDecidable (a = b))
+          (instFintypeProd (Fin 8) (Fin 15)) fun a => answerFinite)
+        Pi.instFintype)
+      fun x => test ((fun p => replaceTable (key bound fits seed) ⋯ p.1 p.2) x)) =
+    mean test
+but is expected to have type
+  (@mean ((Coord → OracleAnswer) × (RomFiniteBin.Address bound → OracleAnswer))
+      (@instFintypeProd (Coord → OracleAnswer) (RomFiniteBin.Address bound → OracleAnswer)
+        (@Pi.instFintype Coord (fun a => OracleAnswer) (fun a b => instDecidableEqProd a b)
+          (instFintypeProd (Fin 8) (Fin 15)) fun a => answerFinite)
+        Pi.instFintype)
+      fun p => test (replaceTable (key bound fits seed) ⋯ p.1 p.2)) =
+    mean test
+in the application
+  Eq.trans (h fun p => test (replaceTable (key bound fits seed) (key_injective bound fits seed) p.1 p.2))
+    (replacement_uniform (key bound fits seed) (key_injective bound fits seed) test)
+'R1Z.ProverCommitProductOracle25.words_uniform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProductOracle25.key_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProductOracle25.source_oracle_uniform' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitProductOracle25.source_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProductOracle25.observer_history' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

@@ -131,6 +131,41 @@ closure's retained source/std/caller correspondence is explicitly open in
 its original manifest, so importing its mathematical schedule would not
 by itself close that source gate.
 
+## Stage 5 — persistent source stream and finite-ROM product marginal
+
+`ProverCommitPack25` proves that moving a rejected search's unused suffix
+behind the following independent window is a bijection. Its cut is fixed
+by the already-consumed prefix. `ProverCommitPackWindows25` handles unequal
+window lengths; `ProverCommitStreamPack25` composes three windows and proves
+the next source positions are exactly `used a` and `used a + used b`.
+`source_stream_marginal` proves the whole 15-word source stream uniform from
+three model nonzero coins times independent five-word fuel windows.
+This does not leave unused five-word gaps after early successes.
+
+J7566/7568/7570 pass, respectively: wall 2.16/1.99/2.24 s, peak
+4044676/4041400/4046384 KiB, zero swap. Their 18 audits use only the standard
+three axioms. J7564/7565/7569 are excluded parser/rewrite failures.
+
+`ProverCommitProductOracle25.words_uniform` lifts this construction to all
+eight attempts. `source_oracle_uniform` reconstructs the single finite source
+oracle at the actual stream-3 byte coordinates, proving its complete uniform
+marginal without an assumed source distribution. `source_at` identifies every
+packed coordinate. `observer_history` transports complete ordered adaptive
+histories, repeats and termination outside precisely the existing seedGuess
+event. J7575 passes: exit 0, 2.19 s, 4043884 KiB, zero swap; five standard
+axioms audits. J7571–7574 are excluded elaboration failures; the replacement
+keeps a finite dictionary opaque and uses `mean_fintype_transport` explicitly,
+preventing kernel normalization of incompatible decidable/Fintype dictionaries.
+No resource or heartbeat/depth limit is raised. The dictionary linter warnings
+concern this intentional opacity, not an assumed finiteness or a new axiom.
+
+`ProverCommitProductCarrier25` supplies actual carrier equivalences from the
+existing `Fin 8 → SecP` and `FuelJoin22.Tape` (24 × 5) to these inputs;
+`source_words_uniform` preserves their exact laws. J7577 passes: exit 0,
+1.92 s, peak 4044988 KiB, zero swap, standard axioms only. J7576 is an
+excluded coordinate-elaboration failure. These are local source randomness
+and observer laws; the full source continuation is not identified yet.
+
 ## Product coupling and endpoint
 
 Not yet constructed. No refinement premise has been deleted.
