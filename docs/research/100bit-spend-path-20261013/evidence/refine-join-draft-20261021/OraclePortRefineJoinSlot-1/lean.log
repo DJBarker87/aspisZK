@@ -1,0 +1,110 @@
+/Users/dominic/ZK/.worktrees/cx-refine-join-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRefineJoinSlot.lean:24:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (eval H
+        (have is := List.map Prod.fst live;
+        if wellFormed is then
+          have count := nodeCount 18 is;
+          have cap := capacity (3 * batch + kind);
+          have nodes := slice p.wire (slotStart (3 * batch + kind)) (32 * cap);
+          if
+              count ≤ cap ∧
+                List.length nodes = 32 * cap ∧ List.drop (32 * count) nodes = List.replicate (32 * (cap - count)) 0 then
+            verifyInPlace (OraclePortBatchDraft.committedRoot p kind) live (List.take (32 * count) nodes)
+          else Program.done false
+        else Program.done false)).2 =
+    true
+of `ha`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+H : Bytes → State
+p : Parsed
+batch kind : ℕ
+live : Live
+ha :
+  (eval H
+        (have is := List.map Prod.fst live;
+        if wellFormed is then
+          have count := nodeCount 18 is;
+          have cap := capacity (3 * batch + kind);
+          have nodes := slice p.wire (slotStart (3 * batch + kind)) (32 * cap);
+          if
+              count ≤ cap ∧
+                List.length nodes = 32 * cap ∧ List.drop (32 * count) nodes = List.replicate (32 * (cap - count)) 0 then
+            verifyInPlace (OraclePortBatchDraft.committedRoot p kind) live (List.take (32 * count) nodes)
+          else Program.done false
+        else Program.done false)).2 =
+    true
+⊢ eval H
+      (have is := List.map Prod.fst live;
+      if wellFormed is then
+        have count := nodeCount 18 is;
+        have cap := capacity (3 * batch + kind);
+        have nodes := slice p.wire (slotStart (3 * batch + kind)) (32 * cap);
+        if
+            count ≤ cap ∧
+              List.length nodes = 32 * cap ∧ List.drop (32 * count) nodes = List.replicate (32 * (cap - count)) 0 then
+          verifyInPlace (OraclePortBatchDraft.committedRoot p kind) live (List.take (32 * count) nodes)
+        else Program.done false
+      else Program.done false) =
+    eval H (unguardedTail p batch kind live)
+/Users/dominic/ZK/.worktrees/cx-refine-join-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRefineJoinSlot.lean:55:8: error: unsolved goals
+case neg
+H : Bytes → State
+p : Parsed
+q : Fin 22 → Fin 262144
+kind : ℕ
+out : Live
+pos : ℕ
+rest : List ℕ
+ih :
+  ∀ (rev : Live),
+    (eval H (hashLeaves p q kind rest rev)).2 = some out →
+      (eval H (hashLeaves p q kind rest rev)).1 = List.map (fun pos => (leaf p kind pos, H (leaf p kind pos))) rest
+tail : List (ℕ × State)
+j : ℕ
+v : State
+hi : index q kind pos = j
+hd : ¬H (leaf p kind pos) = v
+ha : none = some out
+⊢ (eval H (hashLeaves p q kind (pos :: rest) ((j, v) :: tail))).1 =
+    List.map (fun pos => (leaf p kind pos, H (leaf p kind pos))) (pos :: rest)
+/Users/dominic/ZK/.worktrees/cx-refine-join-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRefineJoinSlot.lean:55:57: warning: This simp argument is unused:
+  Option.noConfusion
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵a̵s̵h̵L̵e̵a̵v̵e̵s̵,̵e̵v̵a̵l̵,̵i̵f̵_̵p̵o̵s̵ ̵h̵i̵,̵i̵f̵_̵n̵e̵g̵ ̵h̵d̵,̵O̵p̵t̵i̵o̵n̵.̵n̵o̵C̵o̵n̵f̵u̵s̵i̵o̵n̵]̵[̲h̲a̲s̲h̲L̲e̲a̲v̲e̲s̲,̲ ̲e̲v̲a̲l̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲h̲i̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲h̲d̲]̲ at ha
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-refine-join-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRefineJoinSlot.lean:72:6: error: Type mismatch: After simplification, term
+  congrArg some same
+ has type
+  @Eq (Option (Live × Bytes)) (some (live, nodes)) (some last)
+but is expected to have type
+  @Eq (Option (Live × Bytes)) (some (none.getD (live, nodes))) (some last)
+/Users/dominic/ZK/.worktrees/cx-refine-join-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRefineJoinSlot.lean:84:8: error: Type mismatch: After simplification, term
+  rfl
+ has type
+  True
+but is expected to have type
+  some ((some last).getD (live, nodes)) = some last
+/Users/dominic/ZK/.worktrees/cx-refine-join-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRefineJoinSlot.lean:90:48: error: Application type mismatch: The argument
+  mem
+has type
+  0 < chain.length
+but is expected to have type
+  ?m.378 ≠ []
+in the application
+  List.head?_eq_some_head mem
+/Users/dominic/ZK/.worktrees/cx-refine-join-draft/docs/research/100bit-spend-path-20261013/lean/OraclePortRefineJoinSlot.lean:90:12: error: Type mismatch: After simplification, term
+  hhead
+ has type
+  chain.head? = some (next.1, next.2)
+but is expected to have type
+  chain[0] = next
+'AspisR1.OraclePortRefineJoinSlot.padding_guard_erasure' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortRefineJoinSlot.accepted_leaf_log' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.OraclePortRefineJoinSlot.successful_levels' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortRefineJoinSlot.padding_witness_direction' depends on axioms: [propext, Classical.choice, Quot.sound]
