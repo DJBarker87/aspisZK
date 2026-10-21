@@ -104,3 +104,44 @@ The backend carrier attempt found a missing inherited transitive cache
 `R22TotalCheckedComposition`; the launcher now adds its already-built
 `/tmp/codex-cx-r22-total-20261021-objects` path, as recorded by the inherited
 canonical-backend receipt. No shared object was overwritten or rebuilt.
+
+## Stage 6 — ordered inverse records and backend carriers
+
+`S7JoinGeometryGroups.inversion_groups` composes checked prefix/inversion
+with the actual emitted grouping driver. It proves output length and every
+record's exact lane meaning at flat offset 5*i+k, preserving query ordinal.
+`S7JoinBackendCarriers` supplies lossless conversions between the owned
+four-word K carrier and the frozen arithmetic carrier, equivalent canonicality,
+and total multiplication/canonicalization refinements on the appropriate
+operand domains. It does not claim the physical opening/checkpoint ABI.
+Successful focused attempts: GeometryGroups-2, BackendCarriers-3.
+
+`source-bindings.json` pins the unchanged frozen caller/backend/model files
+and states the remaining source/extraction boundaries. R17's existing
+optimized certificate is reused only after checking its input hashes; no
+unchanged Rust/SBF regression is rerun. Its numeric tables remain external
+executable evidence, never new kernel axioms.
+
+`S7JoinFreeze` imports the complete additive continuation together and audits
+the principal results; its receipt is the focused union check. This is not
+the complete frozen release manifest, which remains inappropriate while the
+source correspondence is incomplete. `tools/s7-join-20261021/audit.py` checks
+all current source snapshots, theorem axiom coverage, successful receipts,
+direct cached import hashes, reused R17 pins and the permitted change scope.
+
+## Remaining complete-cone obligation
+
+Reference-to-dV arithmetic is established, including the matching reached
+query vector; source-to-reference is not established. The exact remaining
+work is frozen gather/allocation/iterator/lookup and opaque-inv binding,
+opening/four_dots and physical-carrier semantics, actual query/accumulator
+caller composition, 64-row phase and canonical-power provenance, rhs/power/
+next/trace effects, both TX trace memberships and checkpoint provenance.
+The per-cone signatures/tree/caller identities and P6 operational/runtime
+binding must then compose at the unchanged headline. No `AcceptedRunJoin`
+inhabitant or premise deletion is asserted by this packet.
+
+Only owned new Lean modules, their evidence/tooling and the requested S7
+audit row changed. S1–S6, protected candidates, sibling S7/S8, checkpoint ABI,
+parser/multiproof, shipped crates and frozen ELFs are unchanged. No wallet
+operation, host build, shared-object rewrite, push or merge was performed.
