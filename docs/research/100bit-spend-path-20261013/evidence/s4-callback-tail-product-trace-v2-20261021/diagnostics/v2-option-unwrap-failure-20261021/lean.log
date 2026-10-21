@@ -1,0 +1,95 @@
+/tmp/query-s4-callback-tail-product-v1/sources/S4CallbackTailProductTraceV1.lean:51:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/query-s4-callback-tail-product-v1/sources/S4CallbackTailProductTraceV1.lean:121:11: error: unsolved goals
+case none
+ops : Ops
+a : Std.Array U8 608#usize
+g : Std.Array Wide 29#usize
+slot : Usize
+value : Wide
+closure' : Closure
+hcoords : ∀ (j : Fin 29), CoordBound (↑g)[↑j]
+hpushbinding : PushBinding ops AspisR1FastDotsPushProductTraceRootV1.raw
+hnewbinding : ops.ebyKNew = AspisR1FastDotsTailAcceptedTraceRootV1.newFromSource
+hcall : Callback ops (a, g) slot = ok (value, closure')
+hclosure : closure' = (a, g)
+iter : StepBy
+limbs : Std.Array U64 8#usize
+vals : Std.Array U32 8#usize
+body : AspisR1FastDotsActualCallbackTailTraceRootV1.Wide
+tail0 : AspisR1FastDotsActualCallbackTailTraceRootV1.Tail
+wide28 : AspisR1FastDotsActualCallbackTailTraceRootV1.Wide
+slotOffset start finish : Usize
+bytes : Slice U8
+optQ : Option AspisR1FastDotsActualCallbackTailTraceRootV1.QM
+q : AspisR1FastDotsActualCallbackTailTraceRootV1.QM
+pushed : core.result.Result Unit Unit × AspisR1FastDotsActualCallbackTailTraceRootV1.Tail
+u : Unit
+tail2 : AspisR1FastDotsActualCallbackTailTraceRootV1.Tail
+tailValue : AspisR1FastDotsActualCallbackTailTraceRootV1.Wide
+hstep :
+  core.iter.traits.iterator.Iterator.step_by.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) { start := 0#usize, «end» := 26#usize }
+      4#usize =
+    ok iter
+hbase : BaseLoop ops iter a g slot (Array.repeat 8#usize 0#u64) = ok limbs
+hvals :
+  ops.arrayFromFn 8#usize
+      (AspisR1FastDotsCurrent.fast_dots.four_dots.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 ops) limbs =
+    ok vals
+hnew : ops.ebyKNew = ok tail0
+hread : g.index_usize 28#usize = ok wide28
+hmul : slot * 120#usize = ok slotOffset
+hstart : slotOffset + 104#usize = ok start
+hfinish : slotOffset + 120#usize = ok finish
+hslice :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) a
+      { start := start, «end» := finish } =
+    ok bytes
+hparse : ops.qm31FromBytes bytes = ok optQ
+hunwrap✝ : core.option.Option.unwrap optQ = ok q
+hpush : ops.ebyKPush tail0 wide28 q = ok pushed
+hunpush : core.result.Result.unwrap core.fmt.DebugUnit pushed.1 = ok u
+hloop : TailLoop ops { start := 0#usize, «end» := 2#usize } a g slot pushed.2 = ok tail2
+hfinishTail : ops.ebyKFinish tail2 = ok tailValue
+hadd : ops.wideAdd body tailValue = ok value
+htail0 : tail0 = EbyKNewToPushStateABI.pushZero
+hunwrap : pushed.1 = core.result.Result.Ok ()
+hpushed : pushed = (core.result.Result.Ok (), pushed.2)
+hsourcepush : ops.ebyKPush EbyKNewToPushStateABI.pushZero wide28 q = ok (core.result.Result.Ok (), pushed.2)
+hfirst :
+  AspisR1FastDotsTailAcceptedTraceRootV1.push AspisR1FastDotsPushProductTraceRootV1.raw EbyKNewToPushStateABI.pushZero
+      wide28 q =
+    ok (core.result.Result.Ok (), pushed.2)
+cs : List Contribution
+htrace : RunTrace ops a g slot { start := 0#usize, «end» := 2#usize } pushed.2 tail2 cs
+_hindices : List.map (fun c => ↑c.term) cs = [0, 1]
+_hlen : cs.length = 2
+htail :
+  AspisR1DotCountBoundV1.AcceptedPushTrace AspisR1FastDotsPushProductTraceRootV1.raw pushed.2
+    (List.map (fun c => (c.coefficient, c.scalar)) cs) tail2
+hfull :
+  AspisR1DotCountBoundV1.AcceptedPushTrace AspisR1FastDotsPushProductTraceRootV1.raw EbyKNewToPushStateABI.pushZero
+    ((wide28, q) :: List.map (fun c => (c.coefficient, c.scalar)) cs) tail2
+hwidecanonical : AspisR1FastDotsTailCoefficientCanonicalV1.PushCanonical wide28
+htailcanonical : ∀ c ∈ cs, AspisR1FastDotsTailCoefficientCanonicalV1.PushCanonical c.coefficient
+hallcanonical : ∀ p ∈ (wide28, q) :: List.map (fun c => (c.coefficient, c.scalar)) cs, PushCanonical p.1
+hproduct :
+  AspisR1FastDotsPushProductTraceRootV1.stateValue tail2 =
+    List.foldl AspisR1FastDotsPushProductTraceRootV1.addProduct
+      (AspisR1FastDotsPushProductTraceRootV1.stateValue EbyKNewToPushStateABI.pushZero)
+      ((wide28, q) :: List.map (fun c => (c.coefficient, c.scalar)) cs)
+hbody : ops.wideFromLimbs vals = ok none
+hunwrapBody : ofOption none Error.panic = ok body
+⊢ none = some body
+/tmp/query-s4-callback-tail-product-v1/sources/S4CallbackTailProductTraceV1.lean:124:8: error: Type mismatch: After simplification, term
+  hunwrapBody
+ has type
+  @Eq (Result AspisR1FastDotsActualCallbackTailTraceRootV1.Wide) (ofOption (some b) Error.panic) (ok body)
+but is expected to have type
+  @Eq (Result AspisR1FastDotsActualCallbackTailTraceRootV1.Wide) (ok b) (ok body)
+'AspisR1FastDotsCallbackTailProductTraceV1.actual_callback_tail_product_trace' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

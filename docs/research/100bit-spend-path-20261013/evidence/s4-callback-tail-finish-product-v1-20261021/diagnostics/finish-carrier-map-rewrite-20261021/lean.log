@@ -1,0 +1,70 @@
+/tmp/query-s4-callback-tail-finish-product-v1/sources/S4CallbackTailFinishProductV1.lean:28:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/query-s4-callback-tail-finish-product-v1/sources/S4CallbackTailFinishProductV1.lean:83:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  finished
+in the target expression
+  AspisR1CurrentWide.Proof.CanonicalWide (s4ToCurrentE tailValue)
+
+ops : Ops
+a : Std.Array U8 608#usize
+g : Std.Array Wide 29#usize
+slot : Usize
+value : Wide
+closure' : Closure
+hcoords : ∀ (j : Fin 29), CoordBound (↑g)[↑j]
+hpushbinding : AspisR1FastDotsTailAcceptedTraceRootV1.PushBinding ops AspisR1FastDotsPushProductTraceRootV1.raw
+hnewbinding : ops.ebyKNew = AspisR1FastDotsTailAcceptedTraceRootV1.newFromSource
+hbodyCanonical :
+  ∀ (vals : Std.Array U32 8#usize) (body : aspis_core.field.wide_exact.WideExact),
+    ops.wideFromLimbs vals = ok (some body) → AspisR1CurrentWide.Proof.CanonicalWide (s4ToCurrentE body)
+hcall : Callback (withTailFinishAdd ops) (a, g) slot = ok (value, closure')
+hpush' :
+  AspisR1FastDotsTailAcceptedTraceRootV1.PushBinding (withTailFinishAdd ops) AspisR1FastDotsPushProductTraceRootV1.raw
+hnew' : (withTailFinishAdd ops).ebyKNew = AspisR1FastDotsTailAcceptedTraceRootV1.newFromSource
+body : aspis_core.field.wide_exact.WideExact
+vals : Std.Array U32 8#usize
+wide28 : AspisR1FastDotsCallbackTailProductTraceV1.Wide
+q : aspis_core.field.QM31
+tailStart : fast_pairing.EbyKDot
+tail2 : AspisR1FastDotsActualCallbackTailTraceRootV1.Tail
+tailValue : aspis_core.field.wide_exact.WideExact
+cs : List AspisR1FastDotsActualTailBodyTraceRootV1.Contribution
+hread : g.index_usize 28#usize = ok wide28
+hbodySome : (withTailFinishAdd ops).wideFromLimbs vals = ok (some body)
+hnew : (withTailFinishAdd ops).ebyKNew = ok EbyKNewToPushStateABI.pushZero
+hpush :
+  (withTailFinishAdd ops).ebyKPush EbyKNewToPushStateABI.pushZero wide28 q = ok (core.result.Result.Ok (), tailStart)
+htrace :
+  AspisR1FastDotsActualTailLoopTraceRootV1.RunTrace (withTailFinishAdd ops) a g slot
+    { start := 0#usize, «end» := 2#usize } tailStart tail2 cs
+hloop :
+  AspisR1FastDotsActualCallbackTailTraceRootV1.TailLoop (withTailFinishAdd ops) { start := 0#usize, «end» := 2#usize } a
+      g slot tailStart =
+    ok tail2
+hfinish : (withTailFinishAdd ops).ebyKFinish tail2 = ok tailValue
+hadd : (withTailFinishAdd ops).wideAdd body tailValue = ok value
+hindices : List.map (fun c => ↑c.term) cs = [0, 1]
+hlen : cs.length = 2
+haccepted :
+  AspisR1DotCountBoundV1.AcceptedPushTrace AspisR1FastDotsPushProductTraceRootV1.raw EbyKNewToPushStateABI.pushZero
+    ((wide28, q) :: List.map (fun c => (c.coefficient, c.scalar)) cs) tail2
+hproduct :
+  AspisR1FastDotsPushProductTraceRootV1.stateValue tail2 =
+    List.foldl AspisR1FastDotsPushProductTraceRootV1.addProduct
+      (AspisR1FastDotsPushProductTraceRootV1.stateValue EbyKNewToPushStateABI.pushZero)
+      ((wide28, q) :: List.map (fun c => (c.coefficient, c.scalar)) cs)
+hbodycan : AspisR1CurrentWide.Proof.CanonicalWide (s4ToCurrentE body)
+finished : CurrentWide
+hfinRun : finishTailCurrent tail2 = ok finished
+finish : FinishE
+hmap : finishEToCurrent finish = finished
+hwords : currentFinishWords finished = List.map AspisR1EbyKFinish.Proof.word (↑tail2.c0.sums ++ ↑tail2.c1.sums)
+hsourceFinish : finishTailCurrent tail2 = ok tailValue
+hfinEq : finished = tailValue
+hfinCan : AspisR1CurrentWide.Proof.CanonicalWide (AspisR1CurrentWide.Proof.ofFinishE finish)
+⊢ AspisR1CurrentWide.Proof.CanonicalWide (s4ToCurrentE tailValue)
+'AspisR1FastDotsCallbackTailFinishProductV1.actual_callback_finish_product_value' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
