@@ -1,0 +1,68 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 0352); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+he : sorry = x✝
+⊢ List.length
+        (have H :=
+            (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire.look
+              (r.1 ⟨0, ⋯⟩).2.2.2;
+          match
+            FsAbort.firstGood
+              (fun c =>
+                P (drawW (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire c))
+              r.1 with
+          | none =>
+            { view := (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire.failView,
+              table := [], fallback := H }
+          | some k =>
+            have v :=
+              sim
+                (drawW (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire (r.1 k))
+                (r.2 k);
+            { view := v,
+              table :=
+                verLog (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire x v
+                  (r.1 k),
+              fallback := H }).table ≤
+      tableBound ∧
+    KeysBound (RomGrammarBin.bound (base.pubBytes x).length)
+      (have H :=
+          (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire.look
+            (r.1 ⟨0, ⋯⟩).2.2.2;
+        match
+          FsAbort.firstGood
+            (fun c =>
+              P (drawW (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire c))
+            r.1 with
+        | none =>
+          { view := (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire.failView,
+            table := [], fallback := H }
+        | some k =>
+          have v :=
+            sim (drawW (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire (r.1 k))
+              (r.2 k);
+          { view := v,
+            table :=
+              verLog (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire x v
+                (r.1 k),
+            fallback := H }).table
+'R1Z.SimCostProtocolStoredSizes.entry_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostProtocolStoredSizes.protocol_log_keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostProtocolStoredSizes.transcript_address_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostProtocolStoredSizes.concrete_log_length' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ concrete_log_length]
+'R1Z.SimCostProtocolStoredSizes.transcript_keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostProtocolStoredSizes.concrete_log_keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostProtocolStoredSizes.preparation_stored_sizes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:15.95
+	Maximum resident set size (kbytes): 7170092
+	Swaps: 0
+	Exit status: 1
+
+

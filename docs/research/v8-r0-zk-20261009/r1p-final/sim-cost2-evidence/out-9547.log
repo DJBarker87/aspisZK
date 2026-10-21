@@ -1,0 +1,81 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostProtocolStoredSizes.lean:55:8: error: (kernel) excessive memory consumption detected
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostProtocolStoredSizes.lean:97:13: error(lean.unknownIdentifier): Unknown identifier `firstGood`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostProtocolStoredSizes.lean:97:2: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.171
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+CommitHandle Aux : Type
+template : R1Wire K CommitHandle Aux
+input : HonestProver K
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+P : Challenges K → Prop
+inst✝ : DecidablePred P
+sim : Challenges K → Tape K F → View K CommitHandle Aux R1Bat
+r :
+  (Fin 8 →
+      R1Coins (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire.Cm
+        (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire.Tab) ×
+    (Fin 8 → Tape K F)
+x✝ : ?m.171
+he : sorry = x✝
+⊢ List.length
+        (have H :=
+            (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire.look
+              (r.1 ⟨0, ⋯⟩).2.2.2;
+          match
+            FsAbort.firstGood
+              (fun c =>
+                P (drawW (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire c))
+              r.1 with
+          | none =>
+            { view := (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire.failView,
+              table := [], fallback := H }
+          | some k =>
+            have v :=
+              sim
+                (drawW (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire (r.1 k))
+                (r.2 k);
+            { view := v,
+              table :=
+                verLog (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire x v
+                  (r.1 k),
+              fallback := H }).table ≤
+      tableBound ∧
+    KeysBound (RomGrammarBin.bound (base.pubBytes x).length)
+      (have H :=
+          (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire.look
+            (r.1 ⟨0, ⋯⟩).2.2.2;
+        match
+          FsAbort.firstGood
+            (fun c =>
+              P (drawW (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire c))
+            r.1 with
+        | none =>
+          { view := (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire.failView,
+            table := [], fallback := H }
+        | some k =>
+          have v :=
+            sim (drawW (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire (r.1 k))
+              (r.2 k);
+          { view := v,
+            table :=
+              verLog (wire base (base.pubBytes x).length (PhaseWireLog2Bin.honest input) B outputs x).toWire x v
+                (r.1 k),
+            fallback := H }).table
+'R1Z.SimCostProtocolStoredSizes.entry_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostProtocolStoredSizes.protocol_log_keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostProtocolStoredSizes.transcript_address_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostProtocolStoredSizes.concrete_log_length' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ concrete_log_length]
+'R1Z.SimCostProtocolStoredSizes.transcript_keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostProtocolStoredSizes.concrete_log_keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostProtocolStoredSizes.preparation_stored_sizes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
