@@ -1,0 +1,43 @@
+import CheckpointBytes4FlatSections
+
+set_option autoImplicit false
+namespace AspisR1.CheckpointBytes4FixedWidth
+
+/-- Every successful fixed-width decode identifies each exact input slice.
+This transports the flat C5 query/coordinate decoder back to physical reads. -/
+theorem decode_at {B A : Type} (decode : List B → Option A) (width n : Nat)
+    (bytes : List B) (values : Fin n → A)
+    (success : FixedWidthDecoder.decode decode width n bytes = some values) :
+    ∀ j : Fin n, decode ((bytes.drop (j.val*width)).take width) = some (values j) := by
+  induction n generalizing bytes with
+  | zero => exact fun j => Fin.elim0 j
+  | succ n ih =>
+    cases headRun : decode (bytes.take width) with
+    | none => simp only [FixedWidthDecoder.decode,headRun,Option.bind_none] at success; cases success
+    | some head =>
+      cases tailRun : FixedWidthDecoder.decode decode width n (bytes.drop width) with
+      | none => simp only [FixedWidthDecoder.decode,headRun,Option.bind_some,tailRun,Option.bind_none] at success; cases success
+      | some tail =>
+        have eq : Fin.cons head tail = values := by
+          apply Option.some.inj
+          simpa only [FixedWidthDecoder.decode,headRun,Option.bind_eq_bind,Option.bind_some,tailRun,Option.pure_def] using success
+        subst values
+        intro j
+        refine Fin.cases ?_ (fun k => ?_) j
+        · simpa only [Fin.val_zero,Nat.zero_mul,List.drop_zero,Fin.cons_zero] using headRun
+        · have run := ih (bytes.drop width) tail tailRun k
+          simpa only [Fin.val_succ,List.drop_drop,Nat.succ_mul,
+            show width+k.val*width = k.val*width+width by omega,Fin.cons_succ] using run
+
+/-- Nested bounded checkpoint slices agree with the absolute physical offset. -/
+theorem slice_slice {B : Type} (bytes : List B) (start total offset width : Nat)
+    (bound : offset+width ≤ total) :
+    (((bytes.drop start).take total).drop offset).take width =
+      (bytes.drop (start+offset)).take width := by
+  rw [List.drop_take,List.drop_drop,List.take_take]
+  congr 1
+  omega
+
+#print axioms decode_at
+#print axioms slice_slice
+end AspisR1.CheckpointBytes4FixedWidth

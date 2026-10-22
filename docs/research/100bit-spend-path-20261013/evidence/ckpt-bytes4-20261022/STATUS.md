@@ -27,7 +27,7 @@ Sections-1 is a retained failed elaboration attempt; recovery sorryAx is
 not accepted evidence. All compiles use private objects and the shared
 mkdir lock, -j1 -M4400 -DElab.async=false. No host env J range is used.
 
-## Remaining
+## Initial remaining inventory (superseded by the final handoff below)
 
 1. Concrete ResumeOps, semantic/weight source-loop refinements.
 2. Consume the concrete instance with successful_fields.
@@ -101,3 +101,86 @@ comparison explicitly checks equal lengths before element comparison),
 Dependent SemanticFields was rebuilt once after that source change.
 Failed attempts and exact hashes, source revisions and axiom lines remain
 in manifest.json and per-attempt receipts. No failed recovery proof counts.
+
+
+## Complete successful output adoption
+
+`CheckpointBytes4SuccessfulFields.successful_saved_fields` now consumes the
+concrete callback instance through successful_fields and proves agreement of
+all returned Prepared/Accumulator components with authentic C5 saved bytes,
+including all 22 queries and the next cursor. It derives reserved=true.
+There is no canonicality, decoded-output equality or allocation-availability
+premise. Input `encoding` is saved-state/byte provenance. `next` is supplied
+by the existing saved-ten recurrence theorem at the reached model boundary.
+`BodyMatches` states explicit component agreements, not an opaque wrapper.
+
+`CheckpointBytes4Comparison.ne_sound` discharges byte comparison soundness;
+`successful_calls` consumes the existing source authentication-call theorem
+with the concrete callbacks and comparison, producing all three digest call
+witnesses and exact proof/public/checksum byte comparisons. No hash-collision
+or digest correctness assumption enters the output theorem.
+
+Verbatim established output theorem (this is **not** the requested final
+source-stage observation theorem):
+```lean
+theorem successful_saved_fields (reserved : Bool) {Hash : Type}
+    (D : aspis_core.digest.Digest32 Hash) (ck proof public1 : Slice U8) (hash : Hash)
+    (p : verifier.Prepared) (a : verifier.Accumulator)
+    (H : Bytes → State) (stored pub : Bytes) (pm : OraclePortCheckpointAbiC5.Prepared)
+    (am : QueryAccumulator.State OraclePortCheckpointAbiC5.K E)
+    (encoding : bytesOf ck.val = encode H stored pub pm am) (next : am.next = 10)
+    (success : verifier.resumeWithOps (ops reserved) D ck proof public1 .S2 hash = ok (.Ok (p,a))) :
+    BodyMatches p a pm am ∧ a.next.val = am.next ∧ reserved = true
+```
+
+Accepted SuccessfulFields-1: exit 0, wall 14.171271875035018 s, peak RSS
+3651141632 bytes, swaps 0, standard axioms. Accepted SavedFields-2: exit 0,
+wall 6.228315291926265 s, peak RSS 3678453760 bytes, swaps 0; all four reports
+standard. Accepted Next-5: exit 0, wall 5.123275457881391 s, peak RSS
+3662970880 bytes, swaps 0, standard axioms. Further supporting targets and
+all failed attempts have exact AGENTS.md formal-workflow section 6 fields
+and full axiom lines in manifest.json. Failed diagnostic/elaboration results
+are retained and excluded from accepted evidence.
+
+## Final handoff: closed and remaining
+
+Closed at the source-shaped/P6 callback-content boundary: a concrete
+ResumeOps record, arbitrary-byte semantic and weight kernel refinements to
+flat C5 decoding, emitted cursor composition, successful_fields consumption,
+and complete successful returned-field adoption on authentic saved bytes.
+The independent native scalar/semantic/weight/allocation/resize/Box content
+gates from the preceding packet are reused; their source/harness audit
+passed read-only in this packet. No native gate became a Lean axiom.
+The actual frozen Rust/carrier/toolchain interpretation remains that explicit
+P6 boundary; this packet is not a whole Rust extraction certificate.
+
+**Item 3 is not established.** There is no proved final checkpoint source
+stage theorem with exactly S2S10CallerBinding and S1S7S8StateProvenance, so
+there is no honest verbatim final statement to report as proved. Neither
+named premise has been manufactured or defined to carry observation equality.
+The lead's success-conditioned AcceptedRunJoin ruling remains unchanged.
+
+Concrete interface obstruction: `verifier.resumeWithOps` returns
+`Result (core.result.Result (Prepared × Accumulator) Error)`, without an
+oracle event trace. `Tx2ResumeDigests.Calls` certifies three callback calls and
+their bound inputs/results, but its type has no event list or exhaustiveness
+field. In contrast, `OraclePortCkptAbi5Stage.reached_stage` compares `eval` of
+`Program Bytes State (Option (QueryAccumulator.State K E))` values, including
+the complete ordered log. Thus successful_saved_fields/successful_calls
+cannot be applied directly as its missing source observation. This is an
+unproved effect/caller interpretation, not a counterexample to the desired
+source theorem or a new cryptographic/availability premise.
+
+Exact next deliverable/consumer: reify the source writer/resume's executed
+Digest32 binds into an ordered oracle program, prove its successful trace
+is exactly the writer's three calls followed by the resume's three calls,
+and use successful_saved_fields for the returned-state transport. Bind source
+proof/public/carrier identities through S2/S10 and authentic saved-ten state
+through S1/S7/S8; then consume OraclePortCkptAbi5Stage.reached_stage through
+strictStage and OraclePortCkptAbi5Decision.decision_observation to dV_frozen2.
+Do not use an output-equality theorem as a substitute for that trace proof.
+
+Only additive Lean and task tools/receipts changed. No shipped file, existing
+Lean module, session A candidate, shared object, wallet or key changed. No
+ELF rebuild trigger, host env J attempt, large build, full release replay,
+push, merge, or 100-bit/security closure claim. No JSON >5 MB is included.

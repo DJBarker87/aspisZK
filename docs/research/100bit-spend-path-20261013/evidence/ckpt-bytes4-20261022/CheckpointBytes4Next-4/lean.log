@@ -1,0 +1,30 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes4/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes4Next.lean:17:81: error: unsolved goals
+reserved : Bool
+ck : Slice U8
+p : verifier.Prepared
+a : verifier.Accumulator
+f : OraclePortCkptAbiSourceFields.Fields (ops reserved) ck transport.Variant.S2 p a
+H : Bytes → State
+stored pub : Bytes
+pm : Prepared
+am : QueryAccumulator.State K E
+encoding : bytesOf ↑ck = encode H stored pub pm am
+length : (↑ck).length = 1768
+bound : 9 < (↑ck).length
+sourceRead : (↑ck)[9] = f.nextByte
+byteEq : (↑ck)[9] = f.nextByte
+header : slice (bytesOf ↑ck) 0 16 = OraclePortPhysicalFrameDraft.magic ++ [2, 10, 1, 0, 0, 0, 0, 0]
+ninth : (slice (bytesOf ↑ck) 0 16)[9]? = (OraclePortPhysicalFrameDraft.magic ++ [2, 10, 1, 0, 0, 0, 0, 0])[9]?
+ninth' : some (AspisV8R19.SqueezeOracleBridge.decodeByte (↑ck)[9]) = some 10
+mapRead : (bytesOf ↑ck)[9]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte (↑ck)[9])
+byteVal : ↑f.nextByte = 10
+castEq : UScalar.cast UScalarTy.Usize f.nextByte = a.next
+⊢ ↑(BitVec.setWidth System.Platform.numBits f.nextByte.bv#uscalar) = 10
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes4/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes4Next.lean:39:21: warning: This simp argument is unused:
+  byteVal
+
+Hint: Omit it from the simp argument list.
+  simp [UScalar.cast,̵b̵y̵t̵e̵V̵a̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CheckpointBytes4Next.next_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

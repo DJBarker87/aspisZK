@@ -1,0 +1,53 @@
+import CheckpointBytes4Ops
+import RawTx2ResumeDigestCalls
+
+set_option autoImplicit false
+namespace AspisR1.CheckpointBytes4Comparison
+open Aeneas Aeneas.Std Result
+open AspisR1Stage2 CheckpointBytes4Ops
+
+/-- No hash-binding comparison soundness premise remains for the concrete
+byte comparison callback. -/
+theorem list_eq_sound (xs ys : List U8)
+    (success : listEq core.cmp.PartialEqU8 xs ys = ok true) : xs = ys := by
+  induction xs generalizing ys with
+  | nil => cases ys with | nil => rfl | cons y ys => cases success
+  | cons x xs ih =>
+    cases ys with
+    | nil => cases success
+    | cons y ys =>
+      change (if decide (x = y) then listEq core.cmp.PartialEqU8 xs ys else ok false) = ok true at success
+      cases same : decide (x = y) with
+      | false => rw [same] at success; cases success
+      | true =>
+        rw [same] at success
+        have tail : listEq core.cmp.PartialEqU8 xs ys = ok true := success
+        have head : x = y := of_decide_eq_true same
+        rw [head,ih ys tail]
+
+theorem ne_sound {n : Usize} (s : Slice U8) (a : Array U8 n)
+    (success : ne core.cmp.PartialEqU8 s a = ok false) : s.val = a.val := by
+  unfold ne at success
+  obtain ⟨same,run,tail⟩ := OraclePortCkptAbiTry.bind_success _ _ _ success
+  cases same with
+  | false => cases tail
+  | true =>
+    unfold eq at run
+    split at run
+    · exact list_eq_sound s.val a.val run
+    · cases run
+
+/-- Authentication call provenance now consumes the concrete comparison and
+callback instance. This is three executed calls, not yet an instrumented log. -/
+theorem successful_calls (reserved : Bool) {H : Type}
+    (D : aspis_core.digest.Digest32 H) (bytes proof public1 : Slice U8)
+    (v : transport.Variant) (hash : H) (p : verifier.Prepared) (a : verifier.Accumulator)
+    (success : verifier.resumeWithOps (ops reserved) D bytes proof public1 v hash = ok (.Ok (p,a))) :
+    Nonempty (AspisR1Stage2.Tx2ResumeDigests.Calls D hash bytes proof public1) :=
+  AspisR1Stage2.Tx2ResumeDigests.successful_resume_calls (ops reserved) D
+    (fun s a h => ne_sound s a h) bytes proof public1 v hash p a success
+
+#print axioms list_eq_sound
+#print axioms ne_sound
+#print axioms successful_calls
+end AspisR1.CheckpointBytes4Comparison
