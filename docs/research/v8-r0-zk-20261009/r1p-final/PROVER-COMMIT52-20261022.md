@@ -17,9 +17,20 @@ Exit 1; wall 0.07 s; peak RSS 31184 KiB; swaps 0; source revision
 `223a37671e784ddeeab6bd8295df24fdb2647a79`; axioms audit not applicable (no Lean
 compile and no new theorem).
 
-Read-only source resolution is continuing against retained extraction evidence
-and the retained Lean 4.32 arithmetic port. Neither Session A sources nor
-existing shared objects have been edited or replaced.
+Read-only source resolution expanded the preflight to retained extraction
+evidence and the retained Lean 4.32 arithmetic port. The resolver accepts
+additional repository copies only when all candidate bodies have the same
+SHA-256; its decisions are in `build/resolution.json`. The two missing
+SelectedMask field modules use the audited arithmetic port's unchanged
+`sources/` files, with original paths and hashes in `build/plan.json`.
+
+The expanded preflight succeeds and schedules **529 missing modules**. The
+single compiler pass is BUILD-52-2 (BUILD-52-1 invoked no compiler). It runs
+sequentially in one scope with the same limits, asserts the actual cgroup
+settings, monitors aggregate child RSS, stops near 7.5 GiB RSS or after ten
+minutes without a new target, and stops at the first compiler failure. Existing
+objects are reused and never overwritten. No Session A source is edited.
+The J10400–J10499 launcher is prepared but no proof attempt has been used.
 
 ## Endpoint before/after
 

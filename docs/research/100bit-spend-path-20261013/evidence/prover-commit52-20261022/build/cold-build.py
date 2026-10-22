@@ -16,7 +16,8 @@ W = Path(__file__).resolve().parent
 BASE = Path('/home/dombarker/project-offloads')
 J = BASE / 'aspis-joint-20261019'
 env = json.loads((BASE / 'r1-privacy-build-integration-20261019/env/J.json').read_text())
-manifest = json.loads((W / 'preflight.json').read_text())
+manifest = json.loads((W / 'preflight-expanded.json').read_text())
+BUILD = 'BUILD-52-2'
 revision = (W / 'revision.txt').read_text().strip()
 objects = J / 'objects'
 paths = [objects] + [Path(p) for p in env['LEAN_PATH'].split(':')]
@@ -44,12 +45,18 @@ def visit(m):
         p = W / 'pinned' / rec['path']
         if sha(p) != rec['sha256']:
             raise RuntimeError('source pin mismatch: ' + m)
-        root = next(W / 'pinned' / r for r in manifest['resolution_roots']
-                    if str(p).startswith(str(W / 'pinned' / r) + '/'))
+        root = max((W / 'pinned' / r for r in manifest['resolution_roots']
+                    if str(p).startswith(str(W / 'pinned' / r) + '/')), key=lambda r: len(str(r)))
         imports = rec['imports']
     else:
-        p = J / 'sources' / (m.replace('.', '/') + '.lean')
-        if not p.is_file():
+        rel = m.replace('.', '/') + '.lean'
+        candidates = [J / 'sources' / rel]
+        # The already-audited arithmetic port owns these two generated modules.
+        # Its port-summary.json records their successful 4.32 source hashes.
+        if m in ['AspisR1SelectedMaskProbe.Funs', 'AspisR1SelectedMaskProbe.Types']:
+            candidates.append(BASE / 'aspis-r1-mask-lean432-20261015/sources' / rel)
+        p = next((q for q in candidates if q.is_file()), None)
+        if p is None:
             raise RuntimeError('unresolved uncached import: ' + m)
         # Read-only retained shared source; preserve a pinned copy before building.
         import re
@@ -61,8 +68,9 @@ def visit(m):
         target = W / 'external' / (m.replace('.', '/') + '.lean')
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(p.read_bytes())
+        origin = str(p)
         p, root = target, W / 'external'
-        external[m] = {'sha256': sha(p), 'imports': imports}
+        external[m] = {'origin': origin, 'sha256': sha(p), 'imports': imports}
     for i in imports:
         visit(i)
     ordered.append((m, p, root, imports))
@@ -76,7 +84,9 @@ for m in manifest['roots']:
     'ordered_missing_modules': [x[0] for x in ordered], 'external_sources': external,
     'environment': env, 'limits': {'MemoryHigh': '6G', 'MemoryMax': '8G',
                                   'MemorySwapMax': 0, 'TasksMax': 64}}, indent=2))
-print('BUILD-52-1 preflight complete:', len(ordered), 'missing modules', flush=True)
+print(BUILD, 'preflight complete:', len(ordered), 'missing modules', flush=True)
+if '--check' in sys.argv:
+    sys.exit(0)
 
 # Read cgroup v2 aggregate usage, including every compiler child.
 cgname = next(l.split('::', 1)[1] for l in Path('/proc/self/cgroup').read_text().splitlines()
@@ -104,7 +114,7 @@ result = 0
 for index, (m, p, root, imports) in enumerate(ordered, 1):
     if obj(m):
         raise RuntimeError('object appeared after plan; stop rather than overwrite: ' + m)
-    label = 'BUILD-52-1-' + str(index).zfill(3)
+    label = BUILD + '-' + str(index).zfill(3)
     fingerprint = hashlib.sha256(json.dumps(
         [(i, str(obj(i)), sha(obj(i))) for i in imports], sort_keys=True).encode()).hexdigest()
     output = objects / (m.replace('.', '/') + '.olean')
@@ -148,7 +158,7 @@ for index, (m, p, root, imports) in enumerate(ordered, 1):
             os.killpg(proc.pid, 9)
             rc = proc.wait()
     text = log.read_text()
-    record = {'build': 'BUILD-52-1', 'label': label, 'module': m, 'command': cmd,
+    record = {'build': BUILD, 'label': label, 'module': m, 'command': cmd,
               'revision': revision, 'source_sha256': sha(p), 'deps_fingerprint': fingerprint,
               'exit': rc, 'wall_seconds': time.monotonic() - start,
               'aggregate_peak_rss_bytes_sampled': peak_rss,
@@ -166,7 +176,7 @@ for index, (m, p, root, imports) in enumerate(ordered, 1):
         result = rc or 1
         break
 (W / 'result.json').write_text(json.dumps({
-    'label': 'BUILD-52-1', 'target': manifest['roots'], 'exit': result,
+    'label': BUILD, 'target': manifest['roots'], 'exit': result,
     'wall_seconds': time.monotonic() - build_start, 'revision': revision,
     'cgroup_memory_peak_bytes': cgvalue('memory.peak'),
     'cgroup_swap_current_bytes': cgvalue('memory.swap.current'),
