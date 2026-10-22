@@ -1,0 +1,81 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+error[E0428]: the name `native_inactive` is defined multiple times
+  --> inactive-binding.rs:13:1
+   |
+13 | fn native_inactive(r:usize)->Result<bool,u8> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `native_inactive` redefined here
+   |
+  ::: weights-iterations.rs:5:1
+   |
+ 5 | fn native_inactive(q:&[E;1024],j:usize,raw:E,s:E)->E {s.add(q[j].mul_qm31(raw))}
+   | ---------------------------------------------------- previous definition of the value `native_inactive` here
+   |
+   = note: `native_inactive` must be defined only once in the value namespace of this module
+
+error[E0428]: the name `owner_inactive` is defined multiple times
+  --> inactive-binding.rs:18:1
+   |
+18 | fn owner_inactive(j:usize)->bool {let r=owner_s2_row(j);(ACTIVE_MASKS[r/16]>>((r%16) as u32))&1==0}
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `owner_inactive` redefined here
+   |
+  ::: weights-iterations.rs:6:1
+   |
+ 6 | fn owner_inactive(q:[E;1024],raw:[E;1024],j:usize,sum:E)->E {sum.add(q[j].mul_qm31(raw[j]))}
+   | ----------------------------------------------------------- previous definition of the value `owner_inactive` here
+   |
+   = note: `owner_inactive` must be defined only once in the value namespace of this module
+
+error[E0061]: this function takes 4 arguments but 1 argument was supplied
+  --> inactive-binding.rs:24:14
+   |
+24 |   assert_eq!(native_inactive(native_s2_row(j)),Ok(owner_inactive(j)));
+   |              ^^^^^^^^^^^^^^^------------------
+   |                             ||
+   |                             |argument #1 of type `&[E; 1024]` is missing
+   |                             two arguments of type `E` and `E` are missing
+   |
+note: function defined here
+  --> weights-iterations.rs:5:4
+   |
+ 5 | fn native_inactive(q:&[E;1024],j:usize,raw:E,s:E)->E {s.add(q[j].mul_qm31(raw))}
+   |    ^^^^^^^^^^^^^^^ -----------         ----- ---
+help: provide the arguments
+   |
+24 -   assert_eq!(native_inactive(native_s2_row(j)),Ok(owner_inactive(j)));
+24 +   assert_eq!(native_inactive(/* &[E; 1024] */, native_s2_row(j), /* E */, /* E */),Ok(owner_inactive(j)));
+   |
+
+error[E0061]: this function takes 4 arguments but 1 argument was supplied
+  --> inactive-binding.rs:24:51
+   |
+24 |   assert_eq!(native_inactive(native_s2_row(j)),Ok(owner_inactive(j)));
+   |                                                   ^^^^^^^^^^^^^^---
+   |                                                                 |
+   |                                                                 two arguments of type `[E; 1024]` and `[E; 1024]` are missing
+   |                                                                 argument #4 of type `E` is missing
+   |
+note: function defined here
+  --> weights-iterations.rs:6:4
+   |
+ 6 | fn owner_inactive(q:[E;1024],raw:[E;1024],j:usize,sum:E)->E {sum.add(q[j].mul_qm31(raw[j]))}
+   |    ^^^^^^^^^^^^^^ ---------- ------------         -----
+help: provide the arguments
+   |
+24 -   assert_eq!(native_inactive(native_s2_row(j)),Ok(owner_inactive(j)));
+24 +   assert_eq!(native_inactive(native_s2_row(j)),Ok(owner_inactive(/* [E; 1024] */, /* [E; 1024] */, j, /* E */)));
+   |
+
+error[E0308]: mismatched types
+  --> inactive-binding.rs:24:48
+   |
+24 |   assert_eq!(native_inactive(native_s2_row(j)),Ok(owner_inactive(j)));
+   |              --------------------------------- ^^^^^^^^^^^^^^^^^^^^^ expected `E`, found `Result<E, _>`
+   |              |
+   |              expected because this is `E`
+   |
+   = note: expected struct `E`
+                found enum `std::result::Result<E, _>`
+
+Some errors have detailed explanations: E0061, E0308, E0428.
+For more information about an error, try `rustc --explain E0061`.
+error: Failed to execute cargo (exit status: 101). Found 5 compilation errors.

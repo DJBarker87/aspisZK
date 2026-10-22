@@ -74,3 +74,5 @@ include!("factor-iterations.rs");
 include!("points-iterations.rs");
 
 include!("circle-iterations.rs");
+
+include!("inactive-binding.rs");

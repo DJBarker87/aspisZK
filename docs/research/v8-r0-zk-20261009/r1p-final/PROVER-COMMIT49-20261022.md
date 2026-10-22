@@ -174,6 +174,25 @@ all diagnostics are retained. Factor extraction v2 adds only owned line/fill
 functions; selected old factor/arithmetic declarations remain identical and
 are rebound against v2 to keep the final input pin current. No shipped change.
 
+## Stage 8: shipped inactive lookup and model indicator
+
+The owned S2 row permutation and literal 64-entry active-row mask table are
+bound to the shipped lookup by the universal native gate `inactive-s2-v2`.
+It passes in 0.419 s / 146240 KiB with zero swaps in the required scope;
+v1's Rust symbol collision is retained as a failed compile and repaired by
+renaming only the harness symbols. No shipped source changed.
+
+J10075–10083 establish the source row formula, equality of every literal
+table entry, shift/mask bit semantics, and the complete inactive helper result.
+`ProverCommitInactiveOutput49.exact_result` returns the canonical zero/one indicator
+of the model's `copyInactiveRows` at `rowEquiv.symm j`, for every legal index.
+The table proof uses four named groups of sixteen entries after the initial
+single expansion hit recursion depth; no limit was raised. J10078 was a
+missing-dependency preflight with no compiler started. Failed drafts and exact
+successful target/status/wall/RSS/swap/source/dependency/axiom receipts are in
+`lean/attempts.json`. Every printed axiom is standard. This finishes raw weight
+column zero, not the complete weight constructor or caller composition.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,
