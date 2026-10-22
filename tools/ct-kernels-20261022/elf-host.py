@@ -3,7 +3,8 @@ from pathlib import Path
 import os,subprocess,hashlib,json
 R=Path(__file__).resolve().parents[2]; H=R.parent
 F=Path('/home/dombarker/project-offloads/codex-cx-pin-20261020/artifacts')
-rows=json.loads((R/'elf-identities.json').read_text())
+rows=[]
+subprocess.run(['python3',str(R/'tools/ct-kernels-20261022/refresh-project-mtimes.py'),str(R)],check=True)
 for mode,pin,manifest,features,filename in [
  ('default','dfc2a91ab24e1ec4f57debd8f124cb4f6a3c38ba2662b7318e2e4f3b4acdde34','r1-cost-probe','pool-adapter,private-leaf-salts','aspis_r1_cost_probe_program.so'),
  ('devnet','fb2fc048f6499a4775051d0267c76e8ca273b28f557bfd3b5fb65b2f687c8b78','r1-cost-probe','pool-adapter,private-leaf-salts','aspis_r1_cost_probe_program.so'),
@@ -12,10 +13,9 @@ for mode,pin,manifest,features,filename in [
  for k in ['ASPIS_R1_POOL_PROGRAM_ID','ASPIS_R1_REGISTRY_PROGRAM_ID','CARGO_ENCODED_RUSTFLAGS']:env.pop(k,None)
  if mode=='devnet':env.update(ASPIS_R1_POOL_PROGRAM_ID='BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs',ASPIS_R1_REGISTRY_PROGRAM_ID='9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q')
  env['RUSTC_WRAPPER']=str(R/'tools/ct-kernels-20261022/rustc-bounded.sh')
- if mode=='default': continue
- out=H/'artifacts'/('v4-'+mode);out.mkdir(parents=True,exist_ok=False)
+ out=H/'artifacts'/('v5-'+mode);out.mkdir(parents=True,exist_ok=False)
  cmd=['env','-u','RUSTFLAGS','/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf','--manifest-path',str(R/'programs'/manifest/'Cargo.toml'),'--sbf-out-dir',str(out),'--features',features,'--skip-tools-install','--offline','-j','4','--','--locked']
- code=subprocess.run(['python3',str(R/'tools/ct-kernels-20261022/run-host.py'),'elf-v4-'+mode,*cmd],env=env).returncode
+ code=subprocess.run(['python3',str(R/'tools/ct-kernels-20261022/run-host.py'),'elf-v5-'+mode,*cmd],env=env).returncode
  artifact=out/filename
  row=dict(mode=mode,exit_status=code,expected_sha256=pin)
  if artifact.exists():
