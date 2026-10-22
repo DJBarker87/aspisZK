@@ -520,3 +520,22 @@ explicit universal afterLow-map premise; this conditional result does not
 close S9. Work is joining the four-term prefix and exact source suffix,
 retaining the same bound PERM[3] value instead of positing an independent
 second read. Full-loop/refinement/release and 100-bit composition remain open.
+
+
+PROVED complete Pair-to-Candidate active body transport: the former
+universal afterLow equality premise is discharged by the exact source
+term-prefix and bound-index suffix maps. Both branches retain the same
+PERM[3] value, and the body Result equality preserves failure/divergence
+as well as success. Commits 28fe8a9ca3, 4fc322cd33, 42ee84b961; evidence
+s9-pair-term-prefix-map-v1-20261022/, s9-pair-afterlow-map-v1-20261022/,
+s9-pair-full-active-map-v1-20261022/. Focused full-active check: 19.588 s,
+3.19 GB process RSS, zero swaps, standard axioms.
+
+PROVED successful selected helper-loop execution has exactly the two source
+active calls followed by its terminal call, reusing the accepted fixed
+iterator transitions rather than reproving their arithmetic. Commit
+8567e9e6f2; evidence/s9-pair-two-body-calls-v1-20261022/. Focused check:
+18.809 s, below 3.16 GB, zero swaps, standard axioms. Complete loop/public
+helper transport and genuine actual-core type-to-operation correspondence
+are being joined next. Production Rust refinement, release binding and the
+composed 100-bit theorem remain OPEN; no S9 release closure is claimed.
