@@ -192,3 +192,41 @@ theorem privacy_headline_deployed
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
 ```
+
+## Final verification and handoff
+
+J9151 is the one final focused axioms audit of all nineteen new top theorems
+and their final new-module dependency closure. Target:
+`R1Z.ProverCommitReservationAudit37`; exit 0; wall 1.71 s; peak RSS
+4,029,308 KiB; zero swaps. Every audit uses only a subset of
+[propext, Classical.choice, Quot.sound]. The exact source revision is the
+task base plus the retained source overlay/dependency fingerprints;
+`final-proof-audit.json` additionally verifies the committed sources at
+`595a3c2f7` against the host source bytes and all retained audit dependency
+objects. All match. No inherited shared source/object was overwritten;
+changes to this job's own modules were snapshotted before replacement.
+
+All seventeen attempts J9135–J9151, including rejected drafts, have exact
+module targets, commands, source SHA-256, dependency fingerprints, exit
+status, wall/RSS/swap data, full axioms lines and diagnostics in
+`evidence/prover-commit37-20261022/lean/attempts.json` and its raw receipts.
+No final proof uses an unproved declaration, forbidden decision shortcut,
+or added recursion/heartbeat limit. `git diff --check` passes.
+
+The complete 491-file tracked crates/programs inventory is byte-identical
+to the actual task base (`shipped-sources-unchanged.json`); no shipped-file
+ELF rebuild was triggered. No native/Kani, dense Rust, SBF, Aeneas or runtime
+gate ran, and no unchanged regression was repeated. Prior runtime/artifact
+evidence is reused without attributing a new source refinement to it. No
+complete frozen manifest replay ran because the native reservation/event
+preflight is not green. This is not a formal release result.
+
+All task compilation jobs finished. No local target directory, binaries,
+.olean files, tarballs or ELFs were added. No wallet/account keys were
+created, deleted or altered. Nothing was pushed or merged.
+
+Checkpoints: `4f6ca1c77` (fresh ROM bound/event audit), `862815a97`
+(conditional ROM memo counterexample), `595a3c2f7` (nonzero/retry and frame
+checks). Next unused assigned Env J attempt: **J9152**. The required next
+interface is the reservation memo-history transport described above;
+publication/conversion/WholeRunJoins and premise removal remain open.
