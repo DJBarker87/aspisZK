@@ -1286,3 +1286,79 @@ cached import objects; these are evidence consistency counts, not security
 closure counts. No unchanged formal replay was run. `git diff --check` reports
 only preserved upstream extraction/log whitespace (including the literal adapted
 reference emission); raw evidence and its recorded source hashes are retained.
+
+
+## Complete borrowed-reference equivalence gate — closed (2026-10-22)
+
+This addendum supersedes the preceding "complete original/new body equivalence"
+and "Next enclosing deliverable" open items, only at their owned-reference scope.
+`S2SdkBorrowedEquivalenceV1.body_eq` now proves, with **no propositional
+premise**, for arbitrary full `Ops`, program, SDK, data and live guards:
+
+```
+BorrowedReference.owned_stage1_body ops program sdk data guards
+  = owned_stage1_body ops program sdk data guards
+```
+
+`stage1_eq` proves, again without a success, range, frame, nonalias or child
+execution premise:
+
+```
+BorrowedReference.owned_stage1 ops program sdk data
+  = owned_stage1 ops program sdk data
+```
+
+The second equality includes the complete outer reverse guard release. These
+are unconditional full `Result` equalities: ordinary statuses, all SDK fields,
+failure and divergence are retained. They are not termination theorems for
+arbitrary external child Ops. They neither replace the SDK carrier nor turn
+an assumed byte frame into a field of a new contract.
+
+The prior gate consisted of two isolated equalities (scan and acquisition
+frame) plus an unproved requirement to use them in the complete caller. The
+new full-body proof walks each common source operation under the checked
+`bind_congr_reached` rule. At each inserted public re-read, it consumes the
+actual preceding read and acquisition equations to derive a successful
+re-read of the same bytes. The source supplies its own queried-slot validity
+and frame; no independent range/acquisition/scan/decode success is added to
+`body_eq` or `stage1_eq`. Both instruction branches and all error continuations
+are included. The kernel checks every generated proof term.
+
+`stage1_current_first` consumes this equality in the existing enclosing
+installed decoder/verifier theorem. Its only execution premise is one complete
+borrowed `owned_stage1 (Installation.install ops verifierOps)` success. Its
+conclusion includes an actual decoder success and the corresponding current
+`firstCurrent` execution on the same public bytes; there is no independent
+parse, projection or verifier-child success premise. This conclusion is
+ACCEPTED-ONLY and still concerns the full owned reference. `ops.op10` (Solana
+digest), `ops.op11` (exact verifier error/log interpretation), and the explicit
+current verifier `verifierOps` retain their source-instance obligations; the
+reference theorem does not hide or instantiate them. The earlier current
+verifier installation/dependency inventory is unchanged.
+
+The first broad comparison hit the unchanged default200000 heartbeat limit.
+The replacement compares only the next source operation, reduces only outer
+control structure and consumes the named byte-frame/scan results. No heartbeat,
+recursion or memory limit was increased. Draft compiler errors and terminal
+receipts are retained and excluded from the accepted current-source selector.
+The smallest changed target compiled before packet/hash audits. No new heavy
+host job or unchanged full regression was launched for this proof.
+
+**Remaining S2 boundary:** actual frozen AccountInfo execution to the full owned
+reference, including concrete runtime heap construction, the remaining
+native scan/prefix/reply/child interpretation and exact errors/logs/state, plus
+ordered oracle/two-pass caller transport. The earlier native typed-callee cuts
+and successful writeback certificate remain scoped certificates, not this
+missing whole-source instance. This gate closes a real enclosing reference
+obligation but does not close S2 or the shared actual-SDK S6 obligation. S1
+retains the previously documented original preparation/powers/trace gates.
+There is no production source change or adoption decision in this commit;
+a future production candidate would still require its source/artifact re-pin.
+The 100-bit per-attempt target remains not yet established.
+
+Final focused receipt `s2-sdk-borrowed-equivalence-v12`: target
+`S2SdkBorrowedEquivalenceV1`, exit0, 22.873708792s,
+3227238400 bytes RSS,swap0. All three `#print axioms` reports
+(`body_eq`, `stage1_eq`, `stage1_current_first`) contain only `propext`,
+`Classical.choice`, `Quot.sound`. Source/tool/direct-import hashes and exact
+`lake env lean -j1 -M4400` invocation are in the receipt/command packet.
