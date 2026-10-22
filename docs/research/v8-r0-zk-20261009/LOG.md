@@ -8540,3 +8540,28 @@ The user decided the three D161 questions, each as the lead recommended:
    a CPU model. L3 evidence is a disassembly audit plus dudect-style
    measurements, labelled as measurement, with compiler/CPU constant-time named
    as trust items.
+
+## D163 (lead, 2026-10-22 11:50): L1 model layer merged; CT-kernel candidate passes against the new ELF pins
+
+Merged `codex/cx-l1-coupling-20261022` (report
+`r1p-final/SIDE-CHANNEL-L1-20261022.md`), proof-only. Proved: an ordered L1
+attempt record with retry-control erasure; the conditional retry hazards and
+iteration-entry laws for all eight attempts; capped two-seed entropy symmetry
+and the ideal draw-count law; generic joint-TV union tools, with a numerical
+candidate below 2^-100 that is **not** yet an established native bound.
+J9880 standard axioms; no shipped change. No TLS leak or valid-spend
+counterexample was found. Open: native event-producer refinement; the
+joint mask/count/TLS/oracle coupling; equal-circle and query-abort integration;
+composition with part 47.
+Constant-time kernel candidate (`codex/cx-ct-kernels-20261022`, kept unmerged
+as a candidate per D162; report `design/CT-KERNELS-20261022.md`): the design
+note came first; branch-free M31/CM31/QM31/WideExact kernels behind a host-only
+feature; TLS instrumentation gated off in production; 69 Kani harnesses
+(equivalence plus two-run trace) and 41 native tests pass; transfer and withdrawal fixture
+proofs are byte-identical. Its builds give default `40dc7574…`, devnet
+`12cb0bc2…`, Pool `121f3e29…`. Those are exactly the current pins after the
+user-approved S4 adoption (C3-BIN addendum 11:50), so the ELF gate **passes**:
+verifier bytes are unchanged by the candidate. Single-run fixture measurements:
+transfer 41.74 → 39.01 s, withdrawal 38.94 → 42.23 s (measurement only).
+Remaining L2 items: sampler, sparse evaluation, query scan, multiproof
+sharing, checker.
