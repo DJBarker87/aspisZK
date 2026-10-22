@@ -37,8 +37,8 @@ Per-cone joins (`JOIN-SPLIT-DRAFT-20261021.md`, `CONE-AUDIT-20261021.md`):
 
 | Cone | Status | Owner |
 |---|---|---|
-| S1, S3, S4, S5, S6, S9 | in progress | user's Codex |
-| S2 (top-level verifier and adapter caller) | SDK metadata guard verified; stage-1 binding to first_decoded open (buffer operations being split) | user's Codex. **Critical path**: S7, S8, checkpoint and S10 wait on its caller interface |
+| S1, S3, S4, S5, S6, S9 | in progress (session A keeps S1 and S6; S3/S4/S5/S9 as before) | user's Codex |
+| S2 (top-level verifier and adapter caller) | ownership transferred to the lead on 2026-10-23 (handoff `S2-OWNERSHIP-HANDOFF-20261023.md`, branch `codex/s126-caller-20261021` tip `0182d4eb4f`); diagnosis and plan job running | lead. **Critical path** |
 | S7 | reference = dV_frozen2 stage, total; frozen caller adoption waits on S2 | lead (paused) |
 | S8 | reference = dV_frozen2 stage, total, composed with S7; caller adoption waits on S2 | lead (paused) |
 | Checkpoint ABI | success-conditioned stage join with the six ordered digest reads proved to dV_frozen2 at the decision position (`CheckpointBytes5Decision.decision_success_join`, 2026-10-22); remaining premises exactly `S2S10CallerBinding` and `S1S7S8StateProvenance` | lead (waits on S2, S1/S7/S8) |
