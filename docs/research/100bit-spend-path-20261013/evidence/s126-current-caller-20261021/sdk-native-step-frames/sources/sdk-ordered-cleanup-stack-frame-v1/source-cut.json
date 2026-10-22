@@ -1,0 +1,8 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_sha256": "4839d95138f9cd8a6db0fce3436220ef47bed447f83a456b5bd28b66cd6721dc",
+  "cleanup_source_sha256": "f290c3a71b925625618564eeb15817631b6ae3c19f4c2a9d26de805ebbddf3d6",
+  "qualification": "Keep the cleanup body, replace only harness payload Vecs by full stack arrays.\nThe SDK receives the SAME actual slice types/lengths, arbitrary bytes, metadata,\nRc/counter domain and actual guard types. Input Vec capacity was not SDK state;\nits observation is removed. First-reply Vec and statement Box stay actual owners.\nThis avoids large proof-payload heap initialization under DFCC; not a source\nimplementation change or a smaller/zeroed SDK payload.\n",
+  "expected_time": "Cached optimized compilation, then SAME cleanup full-heap frame on complete arbitrary58295/1880/1768-byte stack-backed SDK slices. Avoid large Vec-to-heap initialization under global DFCC instrumentation.8G cap unchanged.",
+  "remaining": "Every property/cover must pass. SDK source/storage adequacy and matching leaf/tool/ABI pins remain; primitive source input is a borrowed slice, not its backing Vec. Explicit/compiler cleanup and frozen allocator/valid-owner/runtime transport, actual source call-site separation and oracle/TX2 joins remain. No whole S2."
+}
