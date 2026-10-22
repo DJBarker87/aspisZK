@@ -104,3 +104,37 @@ ContextBounds J9478 (1.91 s, 4,166,340 KiB), GlobalRun J9482 (2.01 s,
 limit during underspecified elaboration; the replacement supplies explicit
 grammar arguments and a symbolic update equality, with no limit increase.
 No existing inherited module was changed for these new proof modules.
+
+## Charged adaptive reads and selected retry control
+
+`ProverCommitNormalCarrier42` embeds fixed nonce/binding values into the
+existing coupling carrier, leaving the old public coordinates unused. Its
+commutation lemmas show that private seed/rest lenses leave these fixed
+public values intact. `ProverCommitCharged42.hit_private` instantiates the
+existing charging and adaptive observer argument on this normalized carrier.
+It uses the actual `qry_tame`, `charged_tame` and `verLog_rest` proofs; it does
+not assume the observer's query remains unchanged. `CarrierJoin42` proves
+that this carrier's `uVec` is precisely the `gAddr` normalization above, that
+the public nonce is fixed, that both private seeds are retained, and that
+charged private observer hits have mass ≤2^-255. Public bindings are excluded
+from the freshness theorem.
+
+`ProverCommitOwnerSuccess42.source_success` retains the entire selected
+owner's successful output, including the exact public nonce, both private
+blocks and state. `RetryOwner42.entropy_model` installs the extracted selected
+64-byte owner as the entropy callback of `ProverCommitRetry34.realAttempt`;
+`eight_model` transports it through all eight attempts, before the actual
+serializer guard, retaining every state update. This is a local selected
+callback/control theorem with an unrestricted subsequent continuation; it
+does not assert that the entire downstream native prover has been refined.
+Reservation remains in the successful continuation, so it is not moved before
+the native public-byte guard.
+
+Accepted focused targets: RetryOwner J9483 (1.95 s, 4,160,608 KiB),
+OwnerSuccess J9485 (2.26 s, 4,152,768 KiB), NormalCarrier J9488 (8.68 s,
+4,117,772 KiB), Charged J9487 (4.75 s, 4,133,152 KiB), CarrierJoin J9492
+(1.99 s, 4,164,724 KiB). All exit 0, zero swaps, standard axioms only.
+J9487 initially stopped in dependency preflight before a pin or compiler
+receipt existed; its source snapshot is retained as `preflight-9487-*`.
+After NormalCarrier compiled, J9487 was used for exactly one real compile.
+No existing receipt or source/dependency compilation was rerun unchanged.
