@@ -52,3 +52,4 @@ include!("iterations.rs");
   assert_eq!(a,b);assert_eq!(ta,tb);assert_eq!(ta.1,3);
  }
 }
+include!("opening-iterations.rs");

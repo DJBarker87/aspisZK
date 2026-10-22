@@ -69,3 +69,54 @@ assert arithmetic correctness, callback success, allocation totality,
 simulator equality, or privacy. The iterator model and its count theorem
 are separate from the kernel-checked evaluator induction; the remaining
 source/P6 composition is stated explicitly rather than hidden as an axiom.
+
+## Stage 2: aggregate y1 and full-width arithmetic
+
+J9905 proves `ProverCommitY1Aggregate48.every_lane`: all 29 normalized native
+evaluator-denotation calls succeed, in order, with their canonical exact
+values, and the concatenated 928 bytes equal the corresponding model list.
+It uses symbolic list induction and pointwise byte congruence. This replaces
+the part-47 abandoned aggregation without recurrence expansion or a larger
+resource limit. J9904's only failure is a final natural-number scalar notation
+conversion in the byte-count lemma; it supplies no accepted theorem.
+
+The following opening fields use arbitrary full WideExact challenges, so the
+subfield-only arithmetic of part 47 is insufficient for them. J9907 proves
+canonical QM31 operations and raw multiplication by the tower constant;
+J9909 gives its exact decoded value; J9910 proves actual release full-width
+WideExact add/mul preserve canonicality and have the exact tower value.
+`ProverCommitWideOps48.mul_exact` has no checked-success, high-half-zero,
+source-success, or callee-equality premise. The checked/release relation is
+reused only after the checked canonical result has been established.
+These close arithmetic obligations, not the semantic/interpolation caller
+or complete simulator output equality. J9906 is a redundant-tactic draft;
+J9908 is a rejected ambiguous-carrier draft. Their original diagnostics and
+nonaccepted axiom output remain in the receipts.
+
+J9911 proves the full canonical source limb tuple has the exact full-width
+32-byte image and decoding. The actual native serializer also passes Kani on
+arbitrary canonical low and high coordinates (2.674 s, 294936 KiB RSS, zero
+swaps). Kani also checks the raw-M31 trait embedding chain agrees with the
+semantic column lift followed by `from_qm31` (0.461 s, 158976 KiB RSS, zero
+swaps). The copied field files are byte-identical to their current shipped
+sources; `pins/wide-body-inputs.json` records both complete files and the
+scalar-trait source pin.
+
+## Stage 3: opening coefficient mix and fold owners
+
+The new counter owners in `opening-owner/lib.rs` translate successfully.
+Only those owned counters go through Charon/Aeneas; no shipped loop is
+extracted. Their reused arithmetic declaration bodies are compared byte for
+byte by `harness/bind-opening.py` before the new extracted owner definitions
+are installed as `AspisR1ProducerRelease47.Opening48` (J9912).
+
+The actual opening's coefficient-fold expression passes its arbitrary-lane
+and arbitrary-coefficient-index Kani transition (5.381 s, 387972 KiB RSS,
+zero swaps). The source primal fold-cell expression passes its complete
+callee-trace gate (0.872 s, 167704 KiB RSS, zero swaps).
+J9913 proves the **entire 29-lane coefficient mix**, with full-width
+canonical inputs and exact decoded weighted sum. This is not a theorem that
+the source gamma-power producer or source coefficient arrays have already
+been identified with the full model trace. Those producer bindings remain
+explicit work, as do the fold-array value induction and remaining semantic
+and opening fields.
