@@ -1,0 +1,83 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:19:15: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.88 = ?m.88
+but is expected to have type
+  ↑?m.81 = ↑out ++ ↑nodes
+in the application
+  ⟨?m.86, rfl⟩
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:18:12: warning: This simp argument is unused:
+  hc'
+
+Hint: Omit it from the simp argument list.
+  simp only [show o̵u̵t̵.̵l̵e̵n̵g̵t̵h̵+̵(̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵d̵e̵r̵e̵f̵ ̵n̵o̵d̵e̵s̵)̵.̵l̵e̵n̵g̵t̵h̵≤̵U̵s̵i̵z̵e̵.̵m̵a̵x̵o̲u̲t̲.̲l̲e̲n̲g̲t̲h̲ ̲+̲ ̲(̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲d̲e̲r̲e̲f̲ ̲n̲o̲d̲e̲s̲)̲.̲l̲e̲n̲g̲t̲h̲ ̲≤̲ ̲U̲s̲i̲z̲e̲.̲m̲a̲x̲ from room, d̵i̵f̵_̵p̵o̵s̵,̵h̵c̵'̵]̵d̲i̲f̲_̲p̲o̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:38:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+out nodes : Bytes
+cap : Usize
+fits : (↑nodes).length ≤ ↑cap
+room : (↑out).length + (↑nodes).length + ↑cap ≤ Usize.max
+after : alloc.vec.Vec U8
+ha : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (alloc.vec.Vec.deref nodes) = ok after
+hv : ↑after = ↑out ++ ↑nodes
+len : (↑after).length = (↑out).length + (↑nodes).length
+notlarge : ¬alloc.vec.Vec.len nodes > cap
+⊢ ↑(after.len.wrapping_add cap) = (↑after).length + ↑cap
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:41:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+out nodes : Bytes
+cap : Usize
+fits : (↑nodes).length ≤ ↑cap
+room : (↑out).length + (↑nodes).length + ↑cap ≤ Usize.max
+after : alloc.vec.Vec U8
+ha : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (alloc.vec.Vec.deref nodes) = ok after
+hv : ↑after = ↑out ++ ↑nodes
+len : (↑after).length = (↑out).length + (↑nodes).length
+notlarge : ¬alloc.vec.Vec.len nodes > cap
+add : ↑(after.len.wrapping_add cap) = (↑after).length + ↑cap
+⊢ ↑((after.len.wrapping_add cap).wrapping_sub (alloc.vec.Vec.len nodes)) = (↑out).length + ↑cap
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:47:2: error: unsolved goals
+case refine_1
+out nodes : Bytes
+cap : Usize
+fits : (↑nodes).length ≤ ↑cap
+room : (↑out).length + (↑nodes).length + ↑cap ≤ Usize.max
+after : alloc.vec.Vec U8
+ha : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (alloc.vec.Vec.deref nodes) = ok after
+hv : ↑after = ↑out ++ ↑nodes
+len : (↑after).length = (↑out).length + (↑nodes).length
+notlarge : ¬alloc.vec.Vec.len nodes > cap
+add : ↑(after.len.wrapping_add cap) = (↑after).length + ↑cap
+sub : ↑((after.len.wrapping_add cap).wrapping_sub (alloc.vec.Vec.len nodes)) = (↑out).length + ↑cap
+finalLen : Usize := (after.len.wrapping_add cap).wrapping_sub (alloc.vec.Vec.len nodes)
+result : alloc.vec.Vec U8
+hr : alloc.vec.Vec.resize core.clone.CloneU8 after finalLen 0#u8 = ok result
+he : ↑result = (↑after).resize (↑finalLen) 0#u8
+⊢ (do
+      let out2 ←
+        alloc.vec.Vec.resize core.clone.CloneU8 after
+            ((after.len.wrapping_add cap).wrapping_sub (alloc.vec.Vec.len nodes)) 0#u8
+      ok (core.result.Result.Ok out2)) =
+    ok (core.result.Result.Ok result)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:47:82: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1Padding43.append_nodes, ̲notlarge, ̲if_false, ̲ha, ̲bind_tc_ok, ̲lift,̵h̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitPadding43.extend' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverCommitPadding43.reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPadding43.accepts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh
