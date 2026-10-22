@@ -8385,3 +8385,28 @@ sorted, deduplicated list (`List.mergeSort` of `List.dedup`, or the
 `Finset` sort). Record it visibly on the trust list. Then prove that the
 parent traversal built on it is sorted and duplicate-free, and that it
 preserves the subsequent coin order.
+
+## D157 (lead, 2026-10-22 08:35): part 44 merged; standing rule for std collection methods
+
+Merged `codex/cx-prover-commit44-20261022` (report
+`r1p-final/PROVER-COMMIT44-20261022.md`). Added the D156 TrustedStd field for
+`BTreeSet::from_iter`. Proved: sorted, duplicate-free parent traversal with
+coin order and state preserved; the native parent transition (536 Kani checks)
+composed through all 18 tree levels. 15 theorems, standard axioms; shipped
+files unchanged.
+Obstruction: `BTreeMap::len` (which controls the final `program_tree`
+Merkle-error guard) is not among the TrustedStd fields and cannot be derived
+from them (countermodel). The direct native `indices.sort(); indices.dedup()`
+Kani diagnostic timed out at 600 s and was not rerun.
+
+**Standing rule (to stop one ruling per std method).** Extending D133/D145/D156:
+a worker may add a named TrustedStd field, without waiting for a lead ruling,
+for any **pure** std collection or slice method the shipped code actually
+calls (constructors, observers, `len`, `sort`, `sort_unstable`, `dedup`,
+`from_iter`, `iter`/`into_iter`, `contains`, `get`, `insert`, `remove`). The
+field must state exactly the method's documented semantics against the Lean model
+(`Std.TreeMap`/`TreeSet`, `List`), and the report must list every field added,
+with the call site. Not covered by this rule: anything with I/O, allocation
+failure, concurrency, interior mutability, hashing (`HashMap` ordering) or
+unsafe code. Those still need a ruling. So `BTreeMap::len` (= model size) and
+`slice::sort` + `Vec::dedup` (= sorted dedup list) are covered.
