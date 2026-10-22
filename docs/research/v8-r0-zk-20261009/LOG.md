@@ -8519,3 +8519,24 @@ Findings, lead summary:
 Raised to the user (escalation per AGENTS.md §8): the deployed route (F8),
 whether to change the host prover for L2 (F2, F5–F7), and the L3 platform.
 Proof-only L1 work proceeds meanwhile.
+
+## D162 (user decisions, 2026-10-22 11:05): route, constant-time prover, L3 platform
+
+The user decided the three D161 questions, each as the lead recommended:
+1. **Deployment route = proof-account route** (public nonce = proof-account key,
+   `generate_for_mask_nonce` → `prove_masked_retrying_with`), per the documented
+   design (D38.4). The client/caller will be changed to call it, with new source
+   pins and integration receipts. That is a host/client change; no verifier
+   change. The devnet runner's 96-byte route is not the target.
+2. **Constant-time host prover (L2).** Add constant-time field kernels and
+   fixed-shape loops on the prover side only, and gate off TLS instrumentation
+   in production builds. Constraints: the verifier ELFs stay byte-identical
+   (dfc2a91a…, fb2fc048…, 121f3e29…); proof bytes are unchanged; each kernel
+   gets a Kani/Lean equivalence proof to the current arithmetic and a two-run
+   branch/index-trace check. It is an adoption candidate on its own branch,
+   note-before-code, and is not frozen until its gates pass. Prior prover source
+   pins are re-checked against it.
+3. **L3 platform = x86_64 Linux native.** Pin the binary, compiler and flags, and
+   a CPU model. L3 evidence is a disassembly audit plus dudect-style
+   measurements, labelled as measurement, with compiler/CPU constant-time named
+   as trust items.
