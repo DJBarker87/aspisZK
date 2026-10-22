@@ -8722,3 +8722,24 @@ the client's cores and is not a guarantee for smaller machines. The candidate is
 adopted. Adoption still needs the native refinement rebinding for the changed P_R1 and
 evaluation code, the D166 joint trace transport, the expanded thread/TLS model, and
 the L3 receipt on the pinned platform.
+
+## D173 (lead, 2026-10-22 21:30): part 49 merged; simulator payload equality still open; cost control
+
+Merged `codex/cx-prover-commit49-20261022` (16 commits; report
+`r1p-final/PROVER-COMMIT49-20261022.md`). It covers statement points and
+point-weight callers, circle factors, the inactive table, native power/inverse
+kernels, the final half-shift and Libra column, raw coefficients, the full
+materialised weights with R1 functional correspondence, and the complete owned
+opening kernel with ordered coefficient bytes. Its final audit imports 93 modules
+and checks 241 theorems, standard axioms only. Shipped files unchanged.
+It stopped on an exhausted env J range (10000–10199). Six interfaces remain
+before native simulator output = `R0Z.RefPayload.simE` payload: the
+`qm31_sum_products_small::<3>` composition; the optimised
+`evaluate_state_only_polynomial` caller; the semantic oracle value
+(maskLinear + sem14·terminalValue, with the sparse-equality pruning and the
+P_R1 good-domain condition, including α9 ≠ ½, for the full caller); `Weights::new` outer
+composition and gamma batching; the source `encode_at`/`eval_at`/`nodes_for`/
+`phi_inverse`/leaf bindings; the final payload composition.
+Cost: part 48 used about 0.9M tokens and part 49 about 1.3M, against a requested
+0.4M. The worker cannot see its own token use, so from part 50 the env J range
+is the budget: 100 compile numbers per part.
