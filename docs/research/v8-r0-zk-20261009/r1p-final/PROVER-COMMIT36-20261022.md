@@ -9,6 +9,10 @@ endpoint or removal of RustProverRefinement is claimed.
 Actual base: `e91b035a1339e76376ec024ac173418327230462`.
 Branch: `codex/cx-prover-commit36-20261022`. No shipped source changed.
 
+The new component results retain E1 where used and introduce the named E2
+contract with a consistent model instance; the actual deployed theorem's
+premises are unchanged. No source-refinement assumption is discharged.
+
 ## Stage 1: private reservation membership
 
 `R1Z.ProverCommitLedger36` implements private ledger membership. The
@@ -117,3 +121,79 @@ observation conversion, concrete experiments and both WholeRunJoins remain
 open. The membership/control model is reusable, but does not discharge
 those source refinements. The security target remains unchanged and is
 **not yet established**.
+
+## Actual endpoint before/after: unchanged
+
+The active fuel-accounted endpoint is `ProverCommitDeployedFuel22`.
+The older `PrivacyR1HeadlineDeployed` and TrustedStd are also byte-identical
+to the task base; complete source snapshots, SHA-256 and the empty diff
+are retained under `endpoint/`. No statement-domain or environment
+quantifier change is installed into either endpoint. D146 and D148 remain
+the intended eventual quantifiers, not a claim about the existing theorem.
+No budgets, events, witness/adversary restrictions or conclusions changed.
+The following is the verbatim theorem statement before and after.
+
+Before:
+
+```lean
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+After:
+
+```lean
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+## Final verification and handoff
+
+J9134 is the one final focused audit of all fifteen new top theorems. It
+imports the final new dependency closure, prints every theorem's axioms and
+prints the exact E2/address interfaces: exit 0, wall 1.76 s, peak RSS
+4,129,592 KiB, zero swaps. Every accepted theorem uses only a subset of
+[propext, Classical.choice, Quot.sound]. No sorry/admit/native_decide or
+new recursion/heartbeat settings occur in the final modules.
+
+All seven attempts J9128–J9134 have exact targets, source SHA-256 snapshots,
+dependency fingerprints and object hashes, commands, exits, wall times,
+RSS, swaps, full axioms output and rejected-draft diagnostics in
+`evidence/prover-commit36-20261022/lean/attempts.json` and raw receipts.
+The recorded task-base revision plus source overlay hashes identifies each
+attempt. `final-proof-audit.json` additionally checks the committed proof
+sources at `a1889ba35` plus the exact additive J9134 audit module against
+host sources and all retained audit dependency objects; all match.
+No inherited shared module was overwritten. This job's own changed module
+versions/objects were snapshotted in its branch-specific host directory by
+the launcher helper before replacement.
+
+No native/Kani, dense arithmetic, SBF or runtime gate ran. No Rust source
+changed, so the shipped-file ELF rule is not triggered. The complete
+crates/programs source hash inventory is retained in
+`shipped-sources-unchanged.json`. Existing runtime/artifact checks are
+reused, not rerun. No full frozen manifest replay ran because the numerical
+native-address preflight is not green. No claim of a formal release replay
+is made.
+
+All task compilation jobs finished. No binaries, .olean, LLBC or ELFs are
+committed; no local target directory or wallet/account key was created.
+No key was deleted or altered. Nothing was pushed or merged.
+
+Completed checkpoints: `722486dc5` (membership/control model), `a1889ba35`
+(address-law obstruction). The exact next deliverable is the native
+reservation-address push-forward interface above. Subsequent native
+publication, observation conversion, both WholeRunJoins and the endpoint
+without RustProverRefinement remain open. Next unused Env J attempt: J9135.

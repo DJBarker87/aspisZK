@@ -1,0 +1,98 @@
+'R1Z.ProverCommitLedger36.alreadyExists_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedger36.create_preserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedger36.created_present' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedger36.chain_preserves' does not depend on any axioms
+'R1Z.ProverCommitLedger36.reservation_retained' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedger36.duplicate_path' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedger36.fail_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedger36.failure_replay' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPathMass36.E1_address' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPathMass36.constant_address_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPathMass36.no_E1_only_path_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPathMass36.bijective_address_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPathMass36.entries_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitE2Witness36.model_E2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitE2Witness36.E1_E2_without_uniform_paths' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure R1Z.ProverCommitLedger36.E2 (OS Data : Type) (present : OS → R1Z.ProverCommitLedger36.Path → Prop)
+  (create : OS → R1Z.ProverCommitLedger36.Path → R1Z.ProverCommitEnvironment35.Outcome × OS)
+  (stored : OS → R1Z.ProverCommitLedger36.Path → Data → Prop)
+  (writtenFsynced : OS → R1Z.ProverCommitLedger36.Path → Data → OS → Prop) (persists : OS → OS → Prop) : Prop
+number of parameters: 7
+fields:
+  R1Z.ProverCommitLedger36.E2.atomic : ∀ (s : OS) (p : R1Z.ProverCommitLedger36.Path),
+      ((create s p).1 = Except.error R1Z.ProverCommitEnvironment35.IOError.alreadyExists ↔ present s p) ∧
+        ((create s p).1 = Except.ok () → present (create s p).2 p) ∧
+          ∀ (q : R1Z.ProverCommitLedger36.Path), present s q → present (create s p).2 q
+  R1Z.ProverCommitLedger36.E2.durable : ∀ (s : OS) (p : R1Z.ProverCommitLedger36.Path) (data : Data) (t : OS),
+      writtenFsynced s p data t → stored t p data ∧ ∀ (u : OS), persists t u → stored u p data
+constructor:
+  R1Z.ProverCommitLedger36.E2.mk {OS Data : Type} {present : OS → R1Z.ProverCommitLedger36.Path → Prop}
+    {create : OS → R1Z.ProverCommitLedger36.Path → R1Z.ProverCommitEnvironment35.Outcome × OS}
+    {stored : OS → R1Z.ProverCommitLedger36.Path → Data → Prop}
+    {writtenFsynced : OS → R1Z.ProverCommitLedger36.Path → Data → OS → Prop} {persists : OS → OS → Prop}
+    (atomic :
+      ∀ (s : OS) (p : R1Z.ProverCommitLedger36.Path),
+        ((create s p).1 = Except.error R1Z.ProverCommitEnvironment35.IOError.alreadyExists ↔ present s p) ∧
+          ((create s p).1 = Except.ok () → present (create s p).2 p) ∧
+            ∀ (q : R1Z.ProverCommitLedger36.Path), present s q → present (create s p).2 q)
+    (durable :
+      ∀ (s : OS) (p : R1Z.ProverCommitLedger36.Path) (data : Data) (t : OS),
+        writtenFsynced s p data t → stored t p data ∧ ∀ (u : OS), persists t u → stored u p data) :
+    R1Z.ProverCommitLedger36.E2 OS Data present create stored writtenFsynced persists
+theorem R1Z.ProverCommitPathMass36.E1_address : ∀ {Context : Type}
+  (law : Context → R1Z.ProverCommitEntropy18.Candidate → ℚ),
+  R1Z.ProverCommitEnvironment35.E1 law →
+    ∀ (context : Context) (address : R0Z.FsStatement.OracleAnswer → R0Z.FsStatement.OracleAnswer)
+      (entry : R0Z.FsStatement.OracleAnswer),
+      (R1Z.ProverCommitEnvironmentLaw35.conditionalMass law context fun raw => address (raw 0) = entry) =
+        R1Z.ProverCommitPathMass36.pathMass address entry :=
+fun {Context} law rng context address entry =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = R1Z.ProverCommitPathMass36.pathMass address entry)
+        (R1Z.ProverCommitEnvironmentLaw35.E1_event law rng context fun raw => address (raw 0) = entry)))
+    (R1Z.CommitReadsR1.mass_coord 0 fun nonce => address nonce = entry)
+theorem R1Z.ProverCommitPathMass36.no_E1_only_path_bound : ∀ {Context : Type}
+  (law : Context → R1Z.ProverCommitEntropy18.Candidate → ℚ),
+  R1Z.ProverCommitEnvironment35.E1 law →
+    ∀ (context : Context),
+      ¬∀ (address : R0Z.FsStatement.OracleAnswer → R0Z.FsStatement.OracleAnswer) (entry : R0Z.FsStatement.OracleAnswer),
+          (R1Z.ProverCommitEnvironmentLaw35.conditionalMass law context fun raw => address (raw 0) = entry) ≤
+            1 / 2 ^ 256 :=
+fun {Context} law rng context bound =>
+  have h := bound (fun x => 0) 0;
+  False.elim
+    (Eq.mp
+      (eq_false
+        (Mathlib.Meta.NormNum.isRat_le_false
+          (Mathlib.Meta.NormNum.IsNNRat.to_isRat
+            (Mathlib.Meta.NormNum.IsNat.to_isNNRat (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 1))))
+          (Mathlib.Meta.NormNum.IsNNRat.to_isRat
+            (Mathlib.Meta.NormNum.isNNRat_div
+              (Mathlib.Meta.NormNum.isNNRat_mul (Eq.refl HMul.hMul)
+                (Mathlib.Meta.NormNum.IsNat.to_isNNRat (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 1)))
+                (Mathlib.Meta.NormNum.isNNRat_inv_pos
+                  (Mathlib.Meta.NormNum.IsNat.to_isNNRat
+                    (Mathlib.Meta.NormNum.isNat_pow (Eq.refl HPow.hPow) (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 2))
+                      (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 256))
+                      (Mathlib.Meta.NormNum.IsNatPowT.run
+                        (Mathlib.Meta.NormNum.IsNatPowT.trans
+                          (Mathlib.Meta.NormNum.IsNatPowT.trans
+                            (Mathlib.Meta.NormNum.IsNatPowT.trans Mathlib.Meta.NormNum.IsNatPowT.bit0
+                              Mathlib.Meta.NormNum.IsNatPowT.bit0)
+                            (Mathlib.Meta.NormNum.IsNatPowT.trans Mathlib.Meta.NormNum.IsNatPowT.bit0
+                              Mathlib.Meta.NormNum.IsNatPowT.bit0))
+                          (Mathlib.Meta.NormNum.IsNatPowT.trans
+                            (Mathlib.Meta.NormNum.IsNatPowT.trans Mathlib.Meta.NormNum.IsNatPowT.bit0
+                              Mathlib.Meta.NormNum.IsNatPowT.bit0)
+                            (Mathlib.Meta.NormNum.IsNatPowT.trans Mathlib.Meta.NormNum.IsNatPowT.bit0
+                              Mathlib.Meta.NormNum.IsNatPowT.bit0)))))))
+                (Eq.refl (Nat.mul 1 1))
+                (Eq.refl 115792089237316195423570985008687907853269984665640564039457584007913129639936))))
+          (Eq.refl true)))
+      (Eq.mp (congrArg (fun _a => _a ≤ 1 / 2 ^ 256) (R1Z.ProverCommitPathMass36.constant_address_mass 0))
+        (Eq.mp
+          (congrArg (fun _a => _a ≤ 1 / 2 ^ 256) (R1Z.ProverCommitPathMass36.E1_address law rng context (fun x => 0) 0))
+          h)))
+exit=0
+window=1 slot=global env=J launcher=run-joint.sh

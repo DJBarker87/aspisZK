@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPathMass36.lean:42:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  conditionalMass law context fun raw => ?address (raw 0) = ?entry
+in the target expression
+  (conditionalMass law context fun raw => 0 = 0) ≤ 1 / 2 ^ 256
+
+Context : Type
+law : Context → Candidate → ℚ
+rng : E1 law
+context : Context
+bound :
+  ∀ (address : OracleAnswer → OracleAnswer) (entry : OracleAnswer),
+    (conditionalMass law context fun raw => address (raw 0) = entry) ≤ 1 / 2 ^ 256
+h : (conditionalMass law context fun raw => 0 = 0) ≤ 1 / 2 ^ 256
+⊢ False
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPathMass36.lean:70:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FsAbortBounds.mass fun f => ∃ i, address (f 0) = entry i
+in the target expression
+  (eventMass fun raw => ∃ i, address (raw 0) = entry i) ≤ ↑entries * δ
+
+Context : Type
+law : Context → Candidate → ℚ
+rng : E1 law
+context : Context
+address : OracleAnswer → OracleAnswer
+entries : ℕ
+entry : Fin entries → OracleAnswer
+δ : ℚ
+push_forward : ∀ (p : OracleAnswer), pathMass address p ≤ δ
+⊢ (eventMass fun raw => ∃ i, address (raw 0) = entry i) ≤ ↑entries * δ
+'R1Z.ProverCommitPathMass36.E1_address' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPathMass36.constant_address_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPathMass36.no_E1_only_path_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPathMass36.bijective_address_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPathMass36.entries_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh
