@@ -1,0 +1,54 @@
+import R1Z.ProverCommitPathMass36
+
+/-! Consistency witness for the E2 contract. File contents really are retained
+in this model. E2 contains no assertion about an address hash distribution. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitE2Witness36
+open ProverCommitEnvironment35 ProverCommitLedger36
+attribute [local instance] Classical.propDecidable
+
+abbrev Files := Path → Option Nat
+def present (s : Files) (p : Path) : Prop := ∃ d, s p = some d
+def stored (s : Files) (p : Path) (d : Nat) : Prop := s p = some d
+def persists (s t : Files) : Prop := ∀ p d, stored s p d → stored t p d
+def writtenFsynced (_s : Files) (p : Path) (d : Nat) (t : Files) : Prop := stored t p d
+
+def create (s : Files) (p : Path) : Outcome × Files :=
+  if present s p then (.error .alreadyExists,s)
+  else (.ok (),Function.update s p (some 0))
+
+theorem model_E2 : E2 Files Nat present create stored writtenFsynced persists := by
+  constructor
+  · intro s p
+    by_cases hp : present s p
+    · simp [create,hp]
+    · simp only [create,if_neg hp]
+      refine ⟨by simp [hp], ?_, ?_⟩
+      · intro _; exact ⟨0,by simp⟩
+      · intro q hq
+        by_cases hqp : q = p
+        · subst q; exact False.elim (hp hq)
+        · simpa only [present,Function.update_of_ne hqp] using hq
+  · intro s p data t h
+    exact ⟨h,fun u future => future p data h⟩
+
+/-- E1 and the E2 model both hold while the generic constant-address bound
+fails. This is a countermodel to deriving address regularity from those two
+environment contracts, not a counterexample to concrete SHA-256 privacy. -/
+theorem E1_E2_without_uniform_paths :
+    ProverCommitEnvironment35.E1
+      (fun (_ : Unit) (_ : ProverCommitEntropy18.Candidate) =>
+        1 / (Fintype.card ProverCommitEntropy18.Candidate : ℚ)) ∧
+    E2 Files Nat present create stored writtenFsynced persists ∧
+    ¬ (∀ address entry, ProverCommitPathMass36.pathMass address entry ≤
+      1 / (2 : ℚ)^256) := by
+  refine ⟨fun _ _ => rfl,model_E2,?_⟩
+  intro h
+  have bad := h (fun _ => 0) 0
+  rw [ProverCommitPathMass36.constant_address_mass] at bad
+  norm_num at bad
+
+#print axioms model_E2
+#print axioms E1_E2_without_uniform_paths
+end R1Z.ProverCommitE2Witness36
