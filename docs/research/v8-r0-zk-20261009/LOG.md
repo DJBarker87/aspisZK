@@ -8365,3 +8365,23 @@ sixteen-candidate nonzero comparison loop over arbitrary bytes times out at
 per-candidate native transition check, then a Lean induction over the 16
 iterations (as for the walk rows in part 30); then publication, FS conversion,
 joins and endpoint.
+
+## D156 (lead, 2026-10-22 08:15): part 43 merged; BTreeSet::from_iter joins TrustedStd
+
+Merged `codex/cx-prover-commit43-20261022` (report
+`r1p-final/PROVER-COMMIT43-20261022.md`). Proved: the native entropy candidate
+transition (per-candidate Kani with the zero-test contract) composed through
+the sixteen iterations in Lean, which closes D155; publication caller lemmas
+with ordered byte control; exact native node padding. J9535, 33 theorems,
+standard axioms; no shipped or trust change.
+Obstruction: the parent-node collection uses `BTreeSet::from_iter`, which
+extraction leaves as an external template.
+
+**Ruling (same policy as D133/D145).** `std::collections::BTreeSet` is a
+standard collection; do not verify its internals. Add exactly one named
+TrustedStd field for `BTreeSet::from_iter` followed by iteration: the
+result iterates the input's distinct elements in ascending order, i.e. the
+sorted, deduplicated list (`List.mergeSort` of `List.dedup`, or the
+`Finset` sort). Record it visibly on the trust list. Then prove that the
+parent traversal built on it is sorted and duplicate-free, and that it
+preserves the subsequent coin order.
