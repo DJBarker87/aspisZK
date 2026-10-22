@@ -1,0 +1,12 @@
+{
+  "source": "crates/aspis-prover/src/state_only_entropy.rs",
+  "source_sha256": "6b5a9c8737cc2b832d29bc7dab4660533195d7fe5c46104dc1e6ea2659252934",
+  "original_body": "            let mut bytes = Zeroizing::new([0u8; 64]);\n            getrandom::fill(bytes.as_mut())?;\n\n            let mut field_mask_entropy = Zeroizing::new([0u8; 32]);\n            let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);\n            field_mask_entropy.copy_from_slice(&bytes[..32]);\n            leaf_salt_seed.copy_from_slice(&bytes[32..]);\n            if *field_mask_entropy != [0; 32] && *leaf_salt_seed != [0; 32] {\n                return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });\n            }",
+  "candidate_sha256": "838cd1de6687d7d3b4ba61c3ba704c2713c4495fe507488f47b93305c7846c36",
+  "transformations": [
+    "wrap native success in Some",
+    "OS ? becomes Some(Err(Os))",
+    "fall-through becomes None"
+  ],
+  "loop_range": "0..ENTROPY_RETRY_LIMIT; ENTROPY_RETRY_LIMIT = 16"
+}
