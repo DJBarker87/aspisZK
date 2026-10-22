@@ -1519,3 +1519,33 @@ state or independent finish-output equality is assumed. Focused exit 0,
 11.886s, peak aggregate RSS 2,229,354,496 bytes, swap 0, standard axioms.
 The source trace/first-stop construction is still open and remains distinct
 from this local finish projection.
+
+
+## Extracted production hash wrapper bound conditionally under P3
+
+`s4-solanadigest-wrapper-p3-binding-v1-20261022` was reviewed, including
+the exact functionalized emitted body and packet checker. The focused
+source cut retains the production SolanaDigest fragment and exact trait,
+Hash representation and Hash::to_bytes bodies. Charon and Aeneas succeeded
+on the NUC in capped swap-free scopes. The single external hashv operation
+is made an explicit parameter in the checked body adapter; its P3
+instantiation is the already documented concatenation hash model. Generated
+FunsExternal_Template is retained only as diagnostic source and is never
+imported by the accepted proof. No external hash/SHA axiom is introduced.
+
+`p3_digest_method_eq_model`, `p3_public_record_eq_model` and
+`p3_current_record_eq_model` connect that emitted method interpretation and
+the two nominal dictionary records, with the Copy/Clone interpretation
+explicit. Focused wrapper run: exit 0, 8.862s, peak process RSS
+3,467,362,304 bytes, swap 0, named reports standard axioms only. Exact
+source, dependency/tool, emitted-body and output pins are in the packet.
+This closes the checked wrapper-method bridge under P3; it does not prove
+SHA256/syscall internals, actual whole caller instantiation, current-release
+P3 reacceptance or a random-oracle probability law. The next consumer
+specializes the actual row31 sampler to this dictionary and derives its
+functional digest law instead of assuming it generically.
+
+The proposed isolated inline(always) optimization was found already tested
+in retained work (`/tmp/s4-combined-inline-v2-20261021`); outputs and strict
+stack checks passed but all six B1 comparisons failed. It was not rerun.
+Candidate source adoption and B1 policy remain unresolved.
