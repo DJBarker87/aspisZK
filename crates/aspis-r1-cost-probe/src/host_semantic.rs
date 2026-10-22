@@ -282,6 +282,10 @@ pub(crate) fn no_pole(
     let values = lean_copy_row_values(&compiled.trace, lambda)?;
     let masks = aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_row_masks_v1()
         .map_err(|_| Error::Public)?;
+    #[cfg(feature = "ct-host-prover")]
+    return Ok(crate::ct_pole::all_slots_clear(&values, &masks, chi));
+    #[cfg(not(feature = "ct-host-prover"))]
+    {
     let mut clear = true;
     for (row, sides) in values.iter().enumerate() {
         if masks[row >> 4] & (1 << (row & 15)) == 0 {
@@ -293,6 +297,7 @@ pub(crate) fn no_pole(
         }
     }
     Ok(clear)
+    }
 }
 
 /// Lean `copyRowValues t λ b endpoint slot` (v8-r0-sem-proof-20261008

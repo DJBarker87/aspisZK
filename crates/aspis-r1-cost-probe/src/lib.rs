@@ -43,3 +43,6 @@ compile_error!("`audit-eight-way` is audit-only: it is never built for a program
 
 #[cfg(all(feature = "ct-host-prover", feature = "program-build"))]
 compile_error!("ct-host-prover is host-prover only, incompatible with program-build");
+
+#[cfg(feature = "ct-host-prover")]
+mod ct_pole;

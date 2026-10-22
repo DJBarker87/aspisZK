@@ -609,3 +609,10 @@ fn raw_wide_constructor_equivalence() {
  assert_eq!(field::WideExact::from_qm31(q(0)).to_limbs(),reference::WideExact::from_qm31(r(0)).to_limbs());
 }
 }
+
+#[cfg(any(kani,test))] #[path="../../crates/aspis-r1-cost-probe/src/ct_pole.rs"] mod pole_actual;
+#[cfg(any(kani,test))] #[path="pole-instrumented.rs"] mod pole_instrumented;
+#[cfg(any(kani,test))] #[path="pole-compression.rs"] mod pole_compression;
+#[cfg(any(kani,test))] #[path="pole-compression-reference.rs"] mod pole_compression_reference;
+#[cfg(any(kani,test))] #[path="pole-compression-instrumented.rs"] mod pole_compression_instrumented;
+#[cfg(any(kani,test))] #[path="pole-proofs.rs"] mod pole_proofs;
