@@ -97,3 +97,47 @@ survive. One item needs you: `canonical::Q::from_limbs` changed body
 (`be073dde…` → `5c935940…`). It is reached by `EbyKDot::push` via `checked_q`,
 so the S5 four-limb predicate/Option correspondence must be rebound (S5 is
 yours; the S8 consumer is the lead's). Please state it against the new body.
+
+## S2 lead caller interface (worker, 2026-10-22)
+
+Additive interface: `lean/S2LeadInterface.lean`; exact consumers and statement
+cross-check: `design/S2-LEAD-INTERFACE-20261022.md`; receipts and semantic field
+audit: `evidence/s2-interface-20261022/`. No A candidate/evidence was edited.
+
+Please export fixed-input witnesses for `S2CallerFacts`: `proofBytes`,
+`publicBytes`, `proofSuffix`, `proofLength`, `checkpointBytes`,
+`checkpointLength`, `nodeViews` (all b<2,k<3), `y1Input`, `observerNone`,
+`reachedPrefix`, `callOrder`, `accountFrame`, `writtenMetadata`, `oracle`.
+Proof/public snapshots must identify the externally fixed stored proof and
+`tr.statement.pubBytes` at reached calls. Checkpoint save/TX2/resume must use
+the same verifier-checkpoint bytes, with the actual writer→account→reader
+transport proved separately. The record contains no observation/log/verifier-
+output equality; see `FIELD-AUDIT.md` for every field's meaning.
+
+Read-only inspection of your s126 worktree found the qualification now lists
+**15/15** windows plus public/checkpoint roots. The important gap is the domain:
+actual SDK native framing covers the bounded **decoder-error prefix**, whereas
+the lead needs successful caller execution and fixed byte identities. Your
+`all_buffers_frame` correctly leaves common-execution source-certificate
+instantiation external. Its 58295-byte account frame must become the actual
+[688,58295) suffix (57607 bytes); `proof_suffix_bytes` checks that conversion.
+`LinkedFirst`/`stage1_current_call` expose existential owned buffers, not yet
+the fixed external stored/public snapshots. `observer_none` and `first_success`
+are useful exact owned Option/current-tx1 links. TX2 reconstructed ASF8 public
+bytes, verifier checkpoint retention, runtime/source transport and account
+metadata effects still require witnesses; ASQ8 bytes and the Pool checkpoint
+are different carriers.
+
+Checked composition also caught distinct extracted checkpoint/multiproof
+`Digest32` types; `multiproofDigest` transports the identical implementation
+fields. The total per-call multiproof oracle law implies the weaker checkpoint
+success law via `checkpoint_oracle`; byte preservation proves neither law.
+`compose` derives checkpoint bindings, six slot premises, S7 initial Progress
+and actual S8 CallerInvariant from the independent lead S7 PushTrace. General
+resumed Progress, saved-ten-state provenance and field meaning stay with the
+lead cones; these are not disguised as S2 facts. No whole S2 or AcceptedRunJoin
+closure is claimed.
+
+Focused local compile passed (attempt6): exit0, 28.946s, peak RSS3.65GB,
+swaps0; all six theorem audits standard-only. No further Lean compile is
+needed for this handoff. No shipped source/ELF change or push.
