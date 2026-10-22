@@ -111,12 +111,6 @@ fn matmul(a: &[u32], b: &[u32], ni: usize, nj: usize, len: usize) -> Vec<u32> {
 /// Builders + emitter supplied values.  None = the converter refuses (shape or
 /// index error that z9c also rejects); counted as a reject.
 fn convert(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert)> {
-    convert_shared(p, c, ln).map(|(pb, cc, _, _)| (pb, cc))
-}
-
-// Preserve every converter computation and rejection before handing the same
-// validated source descriptors to the extracted writers. No source is rebuilt.
-fn convert_shared(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert, Vec<(u32, u32)>, Vec<(u32, u32)>)> {
     let bwr = p.lay.bw - BAT0;
     // QPrime.
     let lks: Vec<&LaneKer> = c.qp.iter().collect();
@@ -284,7 +278,7 @@ fn convert_shared(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert, V
         lu,
         lid,
     };
-    Some((pb, cc, fq.sid, fg.sid))
+    Some((pb, cc))
 }
 
 /// The new checker, panics (out-of-range index, overflow) mapped to false, as
