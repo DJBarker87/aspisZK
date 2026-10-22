@@ -8,9 +8,16 @@ Production research source has not been changed by this recommendation.
 
 ## Concrete source and artifact
 
-Candidate branch: `codex/s4-combined-candidate-20261021`, production-source
-commit `e47c7390c31883b4b4a4289ba23ada3396fd107c`. Its three changed
-production files are:
+The three candidate blobs are taken from
+`e47c7390c31883b4b4a4289ba23ada3396fd107c` on
+`codex/s4-combined-candidate-20261021`. That historical branch also contains
+other experimental source changes in its ancestry and must not be merged
+wholesale. The retained gates below exercised baseline
+`b2727acd3abf79315d18b754a260f58f4b1c6326` plus only these three blobs.
+A clean current-research review overlay is commit
+`5b23a95e6386a02fe12540403aa46067ee167c0d` on
+`codex/s4-three-source-review-20261022`, based on `369647a72`; its current-base
+checks are separate from those historical receipts. The candidate files are:
 
 | File | Candidate SHA256 | Purpose |
 | --- | --- | --- |

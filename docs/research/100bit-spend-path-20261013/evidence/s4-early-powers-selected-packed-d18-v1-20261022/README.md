@@ -1,0 +1,11 @@
+# Early-powers tx2 selected packed-return composition
+
+This packet composes the committed generated early-powers tx2 endpoint with the selected packed-return matcher. From one successful tx2 source-cut execution it retains the same concrete ReaderE resume, the actual generated early-return `weights::powers::<29>` result and its ClaimPowers semantics, and all twelve actual candidate callback results. For each reached callback it applies `returned_values_match_selected_packed_word` to that callback's `CandidateQueryReturnedLocalBatchEvidence`, producing `SelectedPackedReturnEvidence` for the same returned values and the same packed query data.
+
+The public theorem is `AspisR1.S4EarlyPowersSelectedPackedTxConsumersD18V1.tx2_earlypowers_success_twelve_selected_packed_batches`. It requires the tx2 source-cut success, strict scan, parsed proof wire/length, query indices, and per-position recovered-map predicates `hauth0`/`hauth1`. It does not require a separate successful `sourceP6WeightsPowers` result or caller-supplied canonical gamma.
+
+The three generated-powers producers are pinned through the base packet at `../s4-early-powers-generated-full-tx2-fields-d18-v1-20261022`; this packet records its manifest and closure hashes and only the incremental closure owners for the selected-return composition. The selected-return and format-alignment owners are pinned with their original source/object receipts. The recursive selected import check found 7,520 modules with zero missing imports.
+
+The theorem is a candidate operation-cut result. It does not establish equivalence of the early-return powers candidate to frozen Rust `from_fn`, adoption, full compiled Rust caller refinement, strict scanning from raw accepted input, non-S4 operation implementations, proof-wire parsing, physical Merkle/root binding, recovered-map authentication itself, or global security soundness. The scan, parsed-wire relation, and recovered-map predicates are explicit inputs.
+
+The focused consumer compiled with Lean 4.32 using `-j1 -M 4400`; wall time was 20.576 s, peak RSS 4,066,551,952 bytes as captured by the time log, and swap was 0. `#print axioms` reports only `propext`, `Classical.choice`, and `Quot.sound`. The launch source revision is captured in the receipt. No compiled object is included.

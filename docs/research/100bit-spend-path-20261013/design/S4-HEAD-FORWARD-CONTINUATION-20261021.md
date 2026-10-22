@@ -1342,3 +1342,32 @@ All packet checkers above passed primary review. Prior setup/proof failures
 are retained or summarized as diagnostics. These are focused standard-axiom
 results, not the coherent final closure. Frozen-source S4 and the complete
 implementation-linked 100-bit target remain unestablished.
+
+
+## Early-powers selected packed outputs and conditional hash regrouping
+
+Primary review checked both new packets' source statements, pin manifests and
+retained receipts; both packet checkers pass without repeating compilation.
+`s4-early-powers-selected-packed-d18-v1-20261022` composes the actual emitted
+early-powers candidate and ReaderE resume with the selected packed-word
+bridge for all twelve successful tx2 callbacks. It removes the independently
+supplied P6 powers-success and gamma-canonicality premises of the older
+consumer. Actual query/model-index correspondence, recovered commitment
+authentication, the remaining source-cut operation instances, and candidate
+adoption are still required. Its focused run was exit 0, 20.576s, peak RSS
+4,066,551,952 bytes, swap 0, with only standard axioms.
+
+`s4-solanadigest-p3-regroup-v1-20261022` proves that the four-slice actual
+opening framing and three-slice canonical absorb framing hash identically
+in the explicitly defined concatenation-hash model under documented runtime
+premise P3. The canonical third slice is length bytes followed by payload.
+It does not assert that an arbitrary Digest32 instance has this property,
+prove SHA256/syscall semantics, or establish current-release premise
+reacceptance. The production wrapper extraction remains a separate task.
+Its focused run was exit 0, 20.895s, peak RSS 3,423,780,864 bytes, swap 0,
+with standard axioms.
+
+The candidate recommendation now distinguishes the historical gated
+b2727-plus-three-blobs overlay from the old experimental branch's ancestry.
+No production source, B1 criterion or security contract was changed.
+S4 and the implementation-linked 100-bit target remain open.
