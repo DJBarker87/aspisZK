@@ -141,3 +141,52 @@ closure is claimed.
 Focused local compile passed (attempt6): exit0, 28.946s, peak RSS3.65GB,
 swaps0; all six theorem audits standard-only. No further Lean compile is
 needed for this handoff. No shipped source/ELF change or push.
+
+## Import-union adapter adoption (release gate 1, 2026-10-22)
+
+The real adapter is now `lean/ImportUnionNamedDiscriminant.lean`. It delegates
+reader and instance generation to the pinned Aeneas generator, then gives the
+instance the name `<fully-qualified-enum>.instDiscriminant`. It preserves the
+scalar, explicit tags (including `u8 [1,2]`), and generic binders. The pinned
+Aeneas library itself is unchanged. Rebuild this adapter if that library changes.
+
+The deterministic migration tool is `tools/import-union/migrate.py` at repository
+root. This worker applied its default scope only (`docs/research/**/lean/`),
+including generated standalone type-bearing modules. No `lean-candidates` file
+was edited. Session A should apply the **same script** to its chosen adopted
+candidate roots, each explicitly listed, for example:
+
+```sh
+python3 tools/import-union/migrate.py --apply \
+  --candidate-root docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020 \
+  --manifest /tmp/session-a-import-union-before-after.json
+python3 tools/import-union/migrate.py --check \
+  --candidate-root docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020 \
+  --manifest /tmp/session-a-import-union-check.json
+```
+
+Repeat `--candidate-root` for each adopted extraction. The script changes only
+`@[discriminant ...]` to `@[import_union_discriminant ...]` and adds one
+`import ImportUnionNamedDiscriminant`; all other bytes remain unchanged. Keep
+the before/after manifest from the **first** apply; a second apply is a no-op
+and produces an empty manifest. Commit the manifests with the adopted pins.
+Do not migrate alternative source variants into the same environment as if
+they were separate modules: one selected provider owns each Lean module name.
+
+Compile the adapter first, then changed Types roots, then all transitive
+consumers in the selected S10 manifest bottom-up using a private object overlay.
+Include both `AspisR1TerminalDecoder.Types` and `AspisR1WithdrawalCaller.Types`:
+their old `instDiscriminantPoolV1TransitionKindU8` collision stopped part 52 at
+`ExtractedDecoderCallerBridge`. Re-pin source and object hashes and audit raw
+`ModuleData.constants` across the final union, since environment enumeration
+alone suppresses accepted duplicate equation theorems. Duplicate definitions
+are errors; duplicate generated equation theorems with the same type are allowed.
+Use the existing host caps (6G high, 8G max, zero swap), retain the cache, and
+record all AGENTS formal-release fields. Keep this import-compatibility result
+separate from discharge of soundness or privacy premises.
+
+Worker receipts: `evidence/import-union-20261022/`; migration hashes are in
+`migration.json`, exact-byte validation in `migration-validation.json`, and
+focused adapter checks in `adapter-host/`. The final union source is
+`lean/ImportUnionReleaseGate.lean`. This handoff requests Session A's candidate
+adoption and S10 re-pinning; the worker does not claim those edits are done.
