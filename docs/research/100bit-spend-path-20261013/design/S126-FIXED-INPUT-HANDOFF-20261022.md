@@ -136,3 +136,64 @@ source/receipts are retained with their historical qualification. This repairs
 the source-pin omission; it does not enlarge the conditional decoder-error
 prefix scope. Byte-identical dependency source/log snapshots retain their
 original whitespace. No unchanged Lean or release replay was run.
+
+## SDK leaf coupling and first-entry continuation (2026-10-22)
+
+The lead's final section of `HANDOFF-SESSION-A-20261021.md` remains the
+consumer specification. The fixed-initial-heap Lean exports above identify
+initial account0/account1, account0 length58295 and exact suffix57607; they
+have not yet been instantiated with the externally fixed accepted SDK run.
+They do not populate all fourteen fields of `S2LeadInterface.S2CallerFacts`.
+In particular checkpoint retention/TX2 public reconstruction, reached node/y1
+views, writer/account/reader transport and ordered oracle laws require their
+actual independent witnesses. Byte frames imply none of those oracle laws.
+
+New accepted source-only packets are `sdk-live-pairs/` and
+`sdk-drop-frames/`. Their focused checkers reproduce source generators and
+check original source, locks, exact target metadata, all-properties summaries,
+source manifests, resource limits and matching prior unary model/frame pins.
+No unchanged Lean or full release replay ran.
+
+| Target | Exit | Wall seconds | Peak RSS KiB | Swap | Exact bounded claim |
+| --- | --- | --- | --- | --- | --- |
+| sdk-live-pair-length-check-v1 | 0 | 2.926 | 345496 | 0 | actual SDK/model length result + counter/restoration |
+| sdk-live-pair-shared-check-v1 | 0 | 3.301 | 349268 | 0 | actual SDK/model real shared guard/error + counter/Drop restoration |
+| sdk-live-pair-exclusive-check-v1 | 0 | 3.155 | 349816 | 0 | actual SDK/model real exclusive guard/error + counter/Drop restoration |
+| sdk-drop-shared-frame-v1 | 0 | 10.728 | 1388348 | 0 | actual Ref Drop writes only live counter and decrements it |
+| sdk-drop-exclusive-frame-v1 | 0 | 10.905 | 1002148 | 0 | actual RefMut Drop writes only live counter and resets it |
+
+Kani0.67.0, original solana-account-info2.3.0 source
+`6b59aba664bb70fda6e17bcc8cf6eb41fc0bc9d8bcbb797bd70c1b107809c29a`;
+full source/tool/lock/import dependencies appear in the packets. Each solver
+received fresh admission, MemoryHigh6G/MemoryMax8G/MemorySwapMax0, optimized
+backend and one compilation job. `#print axioms`: N/A for these bounded Rust
+checks; no new Lean theorem or axiom. These are helper correspondences, not
+TOTAL source execution or a discharged enclosing source/caller premise.
+The real typed heap domain covers10MiB/all views, signed borrow counters and
+all nonzero usize Rc headers. General valid runtime heap embedding and
+contextual/source/ABI composition remain explicit. Prior matching unary
+actual/model counter-only frames are reused, not rechecked. The new ordinary
+pairs replace the unsuccessful paired DFCC attempt, not those unary frames.
+
+`sdk-coupling-attempts/` retains unsuccessful whole-prefix pairs, point-frame
+and reference constructor attempts. They receive no proof credit. Source
+changes, not cap increases or unchanged replay, are required next. In the
+first reference constructor, successful checkpoint Vec replacement also
+invalidates its attempted checkpoint pointer-preservation assertion. That
+assertion is corrected in the next candidate; proof/public pointer identity
+and checkpoint byte identity are different claims.
+
+The native first-entry-only experiment progresses beyond the historical
+decoder-error cut, but is not yet a complete source certificate. In v1,
+windows4/11 failed the observer assertion and neither reached cover fired.
+Generated-goto inspection found `observer()` reading the mutable bare
+`Option::None` callback-retention global, although its Rust source returns
+literal `None`. The callback assignment then changes this generated constant.
+This is an instrumentation/codegen correspondence defect, not evidence that
+the shipped release selects Some. The corrected candidate puts that retained
+callback in a uniquely tagged GhostStorage object; source observer remains
+literal None. Its affected window is checked first before extending coverage.
+Previously passing v1 windows are partial historical evidence; no full entry
+frame, successful native/reference join or whole S2 closure follows. Source
+scan/comparison/typed-child installation, first-result/writeback effects,
+valid runtime heap interpretation and ordered oracle transport remain.

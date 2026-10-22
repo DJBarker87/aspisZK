@@ -14,12 +14,20 @@ pair='separated-pair' in sys.argv
 pointwise='pointwise' in sys.argv or pair
 plain='plain' in sys.argv
 single='single-byte' in sys.argv
+first_coupling='first-coupling' in sys.argv
+coupled_cmp='coupled-cmp' in sys.argv
+if coupled_cmp:assert first_coupling
+native_first_frame='native-first-frame' in sys.argv
+if native_first_frame:assert first_coupling and coupled_cmp and pointwise
+native_first_entry='native-first-entry' in sys.argv
+if native_first_entry:assert native_first_frame
 if single:assert plain and pointwise
 tag,version=sys.argv[1:3];P=H/('sdk-shared-prefix-'+version);O=H/tag
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 pin=H/('sdk-shared-prefix-codegen-'+version+'-input.json');inp=json.loads(pin.read_text())
 assert sha(P/'src/lib.rs')==inp['source_sha256']
 assert sha(P/'Cargo.toml')==inp['cargo_sha256']
+for rel,digest in inp['crate_source_pins'].items():assert sha(P/rel)==digest,rel
 crate_name=tomllib.loads((P/'Cargo.toml').read_text())['package']['name'].replace('-','_')
 wanted='proofs::native_owned_decoder_prefix';line=next(i+1 for i,s in enumerate((P/'src/lib.rs').read_text().splitlines()) if 'fn native_owned_decoder_prefix()' in s)
 selected=[]
@@ -42,8 +50,15 @@ cmds=[
  [str(B/'goto-instrument'),'--add-library','--no-malloc-may-fail',str(O/('entry.out' if pointwise else 'contract.out')),str(O/'library.out')],
  [str(B/'goto-instrument'),'--generate-function-body-options','assert-false-assume-false','--generate-function-body','.*','--drop-unused-functions',str(O/'library.out'),str(O/'reachable.out')],
  [str(B/'goto-instrument'),'--ensure-one-backedge-per-target',str(O/'reachable.out'),str(O/'ready.out')],
- [str(B/'cbmc'),'--no-malloc-may-fail','--no-undefined-shift-check','--no-signed-overflow-check','--nan-check','--no-self-loops-to-assumptions','--no-pointer-primitive-check','--object-bits','16','--unwind','48','--sat-solver','cadical','--slice-formula','--unwinding-assertions','--json-ui',str(O/'ready.out')]
+ [str(B/'cbmc'),'--no-malloc-may-fail','--no-undefined-shift-check','--no-signed-overflow-check','--nan-check','--no-self-loops-to-assumptions','--no-pointer-primitive-check','--object-bits','16','--unwind',('700' if first_coupling and not coupled_cmp else '48'),'--sat-solver','cadical','--slice-formula','--unwinding-assertions','--json-ui',str(O/'ready.out')]
 ]
+if coupled_cmp:
+ callbacks=[k for k,v in names.items() if v=='proofs::s126_coupled_cmp'];assert callbacks==['s126_coupled_cmp'],callbacks
+ cmds[0].insert(-2,str(O/'comparison-declaration.c'))
+ cmds[1][-2]=str(O/'comparison-linked.out')
+ cmds[1:1]=[
+  [str(B/'goto-instrument'),'--replace-calls','memcmp:s126_coupled_memcmp',str(O/'linked.out'),str(O/'comparison-replaced.out')],
+  [str(B/'goto-cc'),str(O/'comparison-replaced.out'),str(O/'comparison-body.c'),'-o',str(O/'comparison-linked.out')]]
 if plain:cmds[-1].remove('--json-ui')
 if havoc_inputs:
  initializer=[k for k,v in names.items() if str(v).endswith('::s126_input_bytes')]
@@ -54,6 +69,11 @@ if havoc_inputs:
   [str(B/'goto-cc'),str(O/'replaced.out'),str(O/'initializer-body.c'),str(libc),'-o',str(O/'linked.out')]]
 if 'run' not in sys.argv:
  assert not O.exists();O.mkdir()
+ (O/'runner-at-launch.py').write_bytes(Path(__file__).read_bytes())
+ (O/'source-cut.json').write_bytes((P/'source-cut.json').read_bytes())
+ if coupled_cmp:
+  (O/'comparison-declaration.c').write_text('#include <stddef.h>\nint s126_coupled_memcmp(const void *,const void *,size_t);\nint (*s126_keep_comparison)(const void *,const void *,size_t)=s126_coupled_memcmp;\n')
+  (O/'comparison-body.c').write_text('#include <stddef.h>\nint memcmp(const void *,const void *,size_t);\nint s126_coupled_cmp(const unsigned char *,const unsigned char *,size_t);\nint s126_coupled_memcmp(const void *a,const void *b,size_t n){if(n==688)return s126_coupled_cmp((const unsigned char *)a,(const unsigned char *)b,n);return memcmp(a,b,n);}\n')
  if havoc_inputs:
   (O/'initializer-declaration.c').write_text('#include <stddef.h>\nsize_t s126_havoc_input(unsigned char *,size_t);\nsize_t (*s126_keep_initializer)(unsigned char *,size_t)=s126_havoc_input;\n')
   (O/'initializer-body.c').write_text('#include <stddef.h>\nvoid __CPROVER_havoc_slice(void *,size_t);\nsize_t s126_havoc_input(unsigned char *p,size_t n){__CPROVER_havoc_slice(p,n);return n;}\n')
@@ -61,7 +81,15 @@ if 'run' not in sys.argv:
  (H/(tag+'-input.json')).write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',source_sha256=sha(P/'src/lib.rs'),borrowed_source_sha256=sha(H/'owned-sdk-borrowed-v1/src/lib.rs'),codegen_input_sha256=sha(pin),raw_goto_sha256=sha(raw),harness_metadata_sha256=sha(metadata),harness_metadata=row,pretty_names_sha256=sha(namePath),runner_sha256=sha(Path(__file__)),tool_pins={str(p):sha(p) for p in [B/'goto-cc',B/'goto-instrument',B/'cbmc',libc]+([O/'initializer-declaration.c',O/'initializer-body.c'] if havoc_inputs else [])},abstracted_function=scan,abstracted_pretty_name=pretty,commands=cmds,qualification=('Pointwise native-prefix byte/descriptor/scalar before-after checks; no DFCC, no owned reference loaded. Same read-only std-any overapproximation. Extensional/runtime/scan/caller composition remains required.' if pointwise else __doc__),property_scope=('Only named byte-preservation assertion. All other safety/unwinding/cover/caller properties require their checked union.' if single else 'All reachable assertions and source safety/unwinding checks; no selection'),timeout_seconds=180,retained='Reached-decoder scope, concrete native/source scan transport, decoder cut instance and later-stage/runtime/oracle joins remain explicit. Codegen and failed checks are not proof evidence.'),indent=2)+'\n')
  if pair:
   p=H/(tag+'-input.json');m=json.loads(p.read_text());m['qualification']='Actual SDK native/full borrowed-reference decoder-prefix pair. No DFCC/native frame is assumed. Independent byte-frame certificates and input-heap composition are required separately; ordinary proof, no SDK method stubs.';p.write_text(json.dumps(m,indent=2)+'\n')
- raise SystemExit(subprocess.call(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'kit/capped.py'),str(H/'receipts'/tag),'Native prefix: '+('native/reference pair, frame certified separately' if pair else 'symbolic pointwise before/after assertions, no DFCC' if pointwise else 'explicit DFCC frame')+', pure scan overapproximation and one180s CBMC check; no arithmetic evaluation','--','python3',__file__,tag,version,'run',*(['havoc-inputs'] if havoc_inputs else []),*(['pointwise'] if pointwise else []),*(['plain'] if plain else []),*(['single-byte'] if single else []),*(['separated-pair'] if pair else [])]))
+ if first_coupling:
+  p=H/(tag+'-input.json');m=json.loads(p.read_text());m['qualification']='Candidate complete native/reference first-entry pair, unseeded bytes. '+('Ordinary proof, no native frame assumed or enforced; independent source frames required.' if pointwise else 'Native DFCC frame enforced; every frame property must pass.')+' SDK method stubs, if present in exact harness metadata, require matching direct actual/model coupling plus unary write frames and contextual/ABI source transport. Typed common child replies, empty successful first-result cut, pure scan and runtime/oracle/successful-writeback transport remain explicit. This is not whole S2.';p.write_text(json.dumps(m,indent=2)+'\n')
+ if coupled_cmp:
+  p=H/(tag+'-input.json');m=json.loads(p.read_text());m['comparison_cut']='Relational read-only comparison result for length688 only. Both argument origins, every candidate coordinate and child order checked by the retained extern-C Rust callback; all other memcmp bodies unchanged. Native-SDK gate/reference equality and frame/argument congruence still must instantiate this shared choice. No prefix equality is assumed.';m['tool_pins'].update({str(p):sha(p) for p in [O/'comparison-declaration.c',O/'comparison-body.c']});p.write_text(json.dumps(m,indent=2)+'\n')
+ if native_first_frame:
+  p=H/(tag+'-input.json');m=json.loads(p.read_text());m['qualification']='Native-only original SDK first-prefix pointwise byte identity at decoder/validator/encoder/comparison/first and return, plus descriptors/counters/Rc/lamports. No SDK model stub or owned reference executes; no native DFCC frame assumed. Full partition/coordinate and same-source event composition, concrete pure scan/comparison/child cuts, successful first-output/writeback and runtime/oracle transport remain required.';p.write_text(json.dumps(m,indent=2)+'\n')
+ if native_first_entry:
+  p=H/(tag+'-input.json');m=json.loads(p.read_text());m['source_scope']='native_first_entry_only';m['qualification']='Original SDK verifier-entry preconditions, byte identity on one original coordinate, typed public/proof/k/None and derived initial/live counters/slots. Assertions and both covers precede the entry stop. No SDK model, owned execution, returned first value or post-call frame. Ordinary native returns stop without claiming entry. Full index/root coverage and actual child/gate/scan/runtime/source joins remain required.';m['comparison_cut']='Unilateral read-only arbitrary0/nonzero688-byte guard result, including every real outcome. Candidate-coordinate semantics not checked or claimed here; other libc comparisons unchanged.';p.write_text(json.dumps(m,indent=2)+'\n')
+ raise SystemExit(subprocess.call(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'kit/capped.py'),str(H/'receipts'/tag),'Native prefix: '+('native/reference pair, frame certified separately' if pair else 'symbolic pointwise before/after assertions, no DFCC' if pointwise else 'explicit DFCC frame')+', pure scan overapproximation and one180s CBMC check; no arithmetic evaluation','--','python3',__file__,tag,version,'run',*(['havoc-inputs'] if havoc_inputs else []),*(['pointwise'] if pointwise else []),*(['plain'] if plain else []),*(['single-byte'] if single else []),*(['separated-pair'] if pair else []),*(['first-coupling'] if first_coupling else []),*(['coupled-cmp'] if coupled_cmp else []),*(['native-first-frame'] if native_first_frame else []),*(['native-first-entry'] if native_first_entry else [])]))
 for i,cmd in enumerate(cmds):
  if plain and i==len(cmds)-1:
   invcmd=cmd.copy();invcmd[-1:-1]=['--show-properties','--json-ui']
