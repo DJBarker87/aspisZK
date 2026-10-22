@@ -336,3 +336,51 @@ iteration. The real caller, deployed Rust/Std correspondence, candidate
 adoption, frozen artifact binding, S10/coherent replay and composed security
 experiment remain OPEN. These focused checks do not close S9 or establish
 the 100-bit target. No production code or CU changed.
+
+
+Further PROVED constructive obligations: `7bdc43083a` derives actual
+generated-candidate scalar_factor success from canonical mapped inputs,
+and concrete QM31 multiplication success/canonical outputs from canonical
+operands. `eacf92b8d0` constructs the selected side-zero arithmetic prefix.
+`adb840ed37` constructs all four actual candidate power multiplies and proves
+the selected arithmetic prefix for either bounded side, with no child-call
+success premise. Existing extracted-fold, power-array and exact arithmetic
+owners are reused. All focused checks passed below 3.3 GB with zero observed
+swaps and standard axioms only; immutable failed elaboration attempts are not
+counted as proofs. See the three corresponding evidence packets.
+
+The current constructive frontier is joining the canonical high-term array,
+its exact from_fn result and sums, both branch tails and the forward loop
+constructor. A NUC caller-step extraction is candidate evidence in progress;
+its field-decoder and accumulation interfaces must still be discharged. No
+caller/refinement or release/security closure is inferred from that extraction.
+
+
+PROVED complete selected helper-loop construction: `527c302de5` constructs
+both actual selected activeBody executions, the actual fixed iterator
+transitions, and the complete loop success from canonical ap0/ap1/extra reads.
+The initial array can be arbitrary: side zero establishes the canonical
+cell 1 required by side one. No loop/body/child success premise remains in
+`selected_helper_total`. Evidence:
+evidence/s9-body-and-loop-construction-v1-20261022/.
+
+PROVED selected correct-result composition: canonical reads alone construct
+the zero-initialized helper result, canonicality of all four returned cells,
+and all four original S2 coefficient equations with actual challenge-read
+witnesses. Evidence: evidence/s9-selected-helper-correct-result-v1-20261022/.
+It reuses the existing successful-run canonicality/frame and coefficient
+owners, rather than duplicating their proofs.
+
+The generated candidate's successful-run correspondence was already proved,
+but cannot be reversed to infer candidate success. Candidate term construction
+is now separately checked: one actual selected callback witness constructs
+the corresponding actual candidate term call using full Result operation
+maps; all four calls follow from the same HighTermsFour witness. Its complete
+prefix/body/loop construction is still in progress.
+
+Caller-step integration found two different compiled owners for byte-identical
+QuadraticTowerOperations and QM31WordResidues sources in the old S3 parser
+and current S9 caches. The remaining common objects match. This does not
+authorize silently mixing cohorts: a focused S3 dependency-frontier rebuild
+against the selected S9 owners is being prepared on the NUC before composing
+the field-readback adapter. No coherent release replay is claimed.
