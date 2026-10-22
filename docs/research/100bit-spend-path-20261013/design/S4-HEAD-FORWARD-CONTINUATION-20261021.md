@@ -1208,3 +1208,30 @@ operation boundaries, primitive commitment authentication, candidate source
 adoption or frozen from_fn refinement, and final coherent replay remain
 open. This closes the returned-value arithmetic join along the accepted
 candidate tx1 cut, not the entire frozen S4 cone or the 100-bit target.
+
+
+## Twelve settlement callbacks return the intended local batch values
+
+`s4-tx2-twelve-returned-local-batches-d18-v1-20261022` establishes
+`AspisR1S4Tx2TwelveReturnedLocalBatchesV1.full_tx2_twelve_actual_returned_local_batches`.
+It consumes the original same-proof strict scan and complete candidate tx2
+source-cut success. The exact reached resume supplies gamma canonicality;
+the exact source powers call supplies all 29 decoded powers. For every one
+of the twelve actual reached query calls, the result retains its success
+and identifies its actual returned Full array with the four width29 local
+batches for its own same decoded opening and resumed gamma. No independent
+callback success, parser output, desired output equation or gamma
+canonicality premise was added.
+
+Focused exit 0, 7.70s, peak RSS 4,063,887,360 bytes, no swap; named axioms
+are standard-only. The primary packet checker passed. Its runner did not
+capture launch Git revision; this is explicitly UNKNOWN_NOT_CAPTURED and
+not substituted by packaging HEAD. The result therefore is focused local
+source-cut evidence, not a final release replay.
+
+Together with the ten-query result, the arithmetic return-value join is
+proved on both candidate source cuts. Non-S4 source operations, prior scan
+binding, commitment authentication, stage-1 transcript gamma correspondence,
+frozen from_fn refinement or source-candidate adoption, release pins and the
+coherent final dependency replay remain open. S4 is not declared fully
+closed and the implementation-linked 100-bit target is not established.
