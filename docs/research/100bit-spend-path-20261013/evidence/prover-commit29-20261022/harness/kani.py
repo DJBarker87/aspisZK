@@ -24,6 +24,10 @@ while sum(x['bytes'] for x in caps)+8*2**30 > 55*2**30:
     caps=reservation()
 (H/(name+'-inputs.json')).write_text(json.dumps(dict(reservations=caps,source_revision=(H/'revision.txt').read_text().strip(),source_hashes={str(p.relative_to(H/'src')):hashlib.sha256(p.read_bytes()).hexdigest() for p in list((H/'src/crates/aspis-prover/src').glob('*.rs'))+list((H/'src/crates/aspis-core/src').rglob('*.rs'))+list((H/'src/crates/aspis-r1-cost-probe/src').glob('*.rs'))+[H/'src/Cargo.lock',H/'src/crates/aspis-prover/Cargo.toml',H/'src/crates/aspis-core/Cargo.toml']}),indent=2)+'\n')
 cmd=['cargo','kani','--no-assertion-reach-checks','-j','4','-p','aspis-r1-cost-probe','--lib','--exact','--harness',target,'-Z','function-contracts','-Z','stubbing','-Z','unstable-options','--output-format','terse','--cbmc-args','--unwinding-assertions']
+bits=os.environ.get('KANI_OBJECT_BITS')
+if bits:
+    assert bits in ['10','12']
+    cmd += ['--object-bits',bits]
 unwindset=os.environ.get('KANI_UNWINDSET')
 if unwindset: cmd += ['--unwindset',unwindset]
 solver=os.environ.get('KANI_SOLVER')

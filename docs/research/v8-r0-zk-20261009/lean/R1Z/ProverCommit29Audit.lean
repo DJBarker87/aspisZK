@@ -1,3 +1,4 @@
+import R1Z.ProverCommitFields29
 import R1Z.ProverCommitWalk29
 import R1Z.ProverCommitDeployedFuel22
 /-! Final changed-cone audit. Native per-iteration Kani evidence and the
@@ -24,3 +25,8 @@ complete experiment remain separate source obligations, not Lean axioms. -/
 #print axioms R1Z.ProverCommitWalk29.walk_effects
 #print axioms R1Z.ProverCommitDeployedFuel22.privacy_headline_deployed
 #print axioms R1Z.PrivacyR1HeadlineDeployed.privacy_headline_deployed
+
+#print axioms R1Z.ProverCommitFields29.sub_one
+#print axioms R1Z.ProverCommitFields29.finite_source
+#print axioms R1Z.ProverCommitFields29.bounded_owned
+#print axioms AspisR1SimSemantic20.r1_wire.fields29.finite

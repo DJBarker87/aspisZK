@@ -19,6 +19,6 @@ print(json.dumps(dict(checked_files=len(pins),differences=diffs)))
 remote=['ssh','dombarker@100.108.41.90','python3 -c '+"'"+code.replace("'","'\\''")+"'"]
 r=subprocess.run(remote,input=json.dumps(pins),text=True,capture_output=True,check=True)
 result=json.loads(r.stdout);assert result['differences']==[],result
-receipt=dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),pins=pins,result=result,source_identity='base revision plus exact source pins; new cfg wrapper is committed after validation',artifacts='frozen-elf-final-check.json',scope='all tracked crates/programs files plus Cargo manifest/lock and .cargo configuration; exact source bytes, no binaries')
+receipt=dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),pins=pins,result=result,source_identity='base revision 495b8640a plus exact source pins; the cfg-only finite helper is committed after validation',artifacts='frozen-elf-final-check.json',scope='all tracked crates/programs files plus Cargo manifest/lock and .cargo configuration; exact source bytes, no binaries')
 (E/'frozen-source-inventory.json').write_text(json.dumps(receipt,indent=2)+'\n')
 print(result)

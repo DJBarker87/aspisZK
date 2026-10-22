@@ -829,3 +829,22 @@ pub mod semantic20 {
         }
     }
 }
+
+// Explicit field-cell fuel for proof-only Kani substitution. The generic
+// owned recursion remains the retained reference; Lean proves equality under
+// its existing length bound before this helper is used in a caller gate.
+#[cfg(any(kani,aeneas_ref))]
+pub mod fields29 {
+    use alloc::vec::Vec;
+    use aspis_core::field::{WideExact,QM31};
+    use super::Error;
+    pub fn finite(row:u8,payload:Vec<u8>,value:usize,remaining:usize)->Result<(),Error> {
+        if remaining==0 {return Ok(());}
+        if payload.len()<32 {return Ok(());}
+        let bytes=&payload[..32];
+        let x=match WideExact::from_le_bytes(bytes) {Some(x)=>x,None=>return Err(Error::NonCanonical{row,value})};
+        if x.c1()!=QM31::ZERO {return Err(Error::NonCanonical{row,value});}
+        let tail=payload[32..].to_vec();
+        finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+    }
+}

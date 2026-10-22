@@ -137,3 +137,163 @@ owned iteration, using arbitrary state/semantic cells and the 27-record
 constructor invariant. Ordered hash framing/answers and all errors are checked.
 The only callee congruence cut is the same pure sampler's arbitrary common
 result, with identical input and call count required on both executions.
+
+
+## Stage 4: certified finite field-cell substitution and stopping point
+
+The three earlier failed recipes were not retried unchanged with a larger
+memory cap. The diagnostic `row14-status6-diagnostic` recovers the precise
+CBMC error hidden by Kani's terse status 6: `too many addressed objects`,
+maximum `2^10 = 1024`. It exits 6 after 95.871 s, peak RSS 3751724 KiB,
+zero swaps. This is not a source counterexample. Row 2's arbitrary root record
+(up to 37 bytes, with native lookup and the success/error paths) passes:
+`iteration29-row2-root-v1`, exit 0, 15.430 s, 675460 KiB RSS, zero swaps.
+The corresponding row-14 field-bearing gate with 12 object bits was stopped
+for proof-shape review; it is excluded, not called a passed check.
+
+`r1_wire::fields29::finite` adds explicit field-cell fuel to the **owned
+reference**, retaining each source parse, error, clone and wrapping index.
+It is extracted in full without a native opaque boundary (`fields29-v1`:
+Charon exit 0, 29.889 s, 576944 KiB; Aeneas exit 0, 0.861 s, 102256 KiB;
+zero swaps). `port-fields.py --check` checks every reused field definition
+and copies the new function body exactly into the retained nominal namespace.
+
+`ProverCommitFields29.finite_source` proves its equality with the retained
+Nat-bounded validator for arbitrary fuel/payload/value. `bounded_owned` then
+uses the existing `ProverCommitFields20.extracted_finite` to prove exact equality
+with `fields20::validate` whenever `payload.length < 32*(fuel+1)`. It preserves
+the exact first failing index, short suffixes, errors and divergence. J7866
+passes these three audits and the extracted helper audit: exit 0, 1.30 s,
+2542108 KiB RSS, zero swaps, standard axioms only.
+
+The replacement Kani adapter checks that length bound by **assertion**, along
+with the incoming zero field index; it does not assume either condition. It
+uses one field cell for row 14 and 28 for semantic rows 15–24. The native
+validator is unchanged. Its row-14 loop is bounded to two unwind checks with
+unwinding assertions enabled. This exact input-size theorem justifies replacing
+the owned validator call; no native validation/source agreement is assumed.
+This field-cell fuel leaves the protocol's sampler fuel events and charges
+unchanged.
+
+**Demonstrated obstruction:** even that complete native row-14 iteration gate,
+`iteration29-row14-fueled-v1`, times out with exit 124 after 600.136 s.
+Cgroup peak memory is 6614237184 bytes; observed individual solver RSS reached
+6439948 KiB, with zero swap. The GNU-time receipt's 15816 KiB is only the killed
+timeout parent's RSS and is not a valid solver peak. The fixed row-15 gate
+also timed out: exit 124, 600.291 s, cgroup peak 6691713024 bytes; the attached
+monitor recorded 6551728 KiB aggregate scope RSS (a sampled lower bound on
+full-lifetime peak), zero swap. No counterexample, successful per-iteration
+certificate or full native walk identity is inferred from either timeout.
+
+**Exact next interface:** a checked native/owned semantic-callee contract,
+consumable by the iteration caller without re-expanding its borrowed field
+validation. At minimum it must connect native `validate_record_fields`
+(`r1_wire.rs:51–59`) to `fields20::validate` / the now-certified finite helper
+on the row-14 32-byte and row-15–24 896-byte payloads. Success versus rejection
+is sufficient after the caller's `map_err(Error::Semantic)`, but the contract
+must preserve unchanged transcript state/no hash before validation, then the
+same three ordered hash reads, return value and advanced state on success.
+The retained per-cell checks are not silently promoted to that callee/caller
+contract. The next deliverable is that modular contract plus a completed
+row-14 gate, then the row-15 gate and all-row bridge; no whole-function harness.
+
+The 25-row induction and both-circle/Transcript composition are **reference to
+model** equalities until this source contract is certified. Thus stage (2)'s
+native per-iteration gate is incomplete, and stage (3)'s full native owner
+identification is not claimed. `shippedProverExperiment`, the real and ideal
+WholeRunJoins, retry/programming/serialization and endpoint specialization
+remain open. No assumptions, quantifiers, failure events or numerical budgets
+were changed; zero refinement premises were removed. Target not yet established.
+
+J7867 is the final updated axiom audit after the new source/helper proof:
+exit 0, 2.31 s, 4129844 KiB RSS, zero swaps; 26 complete axiom lines (21 new
+theorems, three extracted owners/helpers, two retained endpoints), all subsets
+of `[propext, Classical.choice, Quot.sound]`. The previous audit was refreshed
+because its source/import closure changed. `closure-check.json` checks the
+179 final imported object hashes and all seven current source hashes, with
+zero differences. No unchanged full manifest was rerun: its source preflight
+is not green. Historical diagnostics and source snapshots are retained.
+
+All three ELFs were rebuilt once more after the cfg-only finite helper was
+added. All exit 0 and remain byte-identical: 5.766/2.193/0.361 s,
+203056/202920/100812 KiB RSS, zero swaps. Final exact hashes and byte comparisons
+are in `frozen-elf-final-check.json`; all 492 shipped source/configuration pins
+match the rebuilt snapshot. The proof workspace differs only by the two
+explicit cfg-only Kani adapters; accepted preflights have exact source snapshots.
+
+All host builds used the requested 6G/8G/0/64 scopes, optimized extraction/SBF
+compilation and four-job/linker limits. Kani uses its native GOTO backend rather
+than executing a debug Rust arithmetic gate. Reservation refusals/waits are
+retained; no other worker or worktree was modified. Build-generated task keys
+are retained at the recorded host paths with 0600 permissions; no key material
+is committed. No push or merge was performed. Stop at the demonstrated source
+callee-contract obstruction above.
+
+## Verbatim endpoint before/after
+
+The endpoint file is byte-identical to base `26b922be6`. These statements use
+unchanged surrounding parameters and local notations. The full module copies,
+SHA-256 identity record and empty deletion diff are committed with the evidence.
+This is zero-premise deletion, not a completed specialization.
+
+Before:
+
+```lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad
+      (idealSeedQueries template outputs x rust observer_program adv)))
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+After:
+
+```lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad
+      (idealSeedQueries template outputs x rust observer_program adv)))
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```

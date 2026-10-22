@@ -42,6 +42,14 @@ mod step_kani29 {
             SAMPLE_OUTPUT
         }
     }
+    // Justified by ProverCommitFields29.bounded_owned. These preconditions
+    // are assertions checked at the call site, never Kani assumptions.
+    fn checked_fields(row:u8,payload:Vec<u8>,value:usize)->Result<(),crate::r1_wire::Error> {
+        let remaining=if row==14 {1} else {28};
+        assert!(payload.len()<32*(remaining+1));
+        assert_eq!(value,0);
+        crate::r1_wire::fields29::finite(row,payload,value,remaining)
+    }
     fn check<const N:usize,const ROW:u8>() {
         let x:[u32;4]=kani::any();
         unsafe {SAMPLE_OUTPUT=K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}};SAMPLE_REPLAY=false;SAMPLE_NEXT=0;}
@@ -70,7 +78,8 @@ mod step_kani29 {
             _=>assert!(false),
         }
     }
-    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::unwind(40)] fn empty_record(){check::<0,0>()}
-    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::unwind(40)] fn short_records(){check::<37,14>()}
-    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::unwind(40)] fn all_semantic_records(){check::<901,15>()}
+    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::stub(crate::r1_wire::fields20::validate,checked_fields)] #[kani::unwind(40)] fn empty_record(){check::<0,0>()}
+    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::stub(crate::r1_wire::fields20::validate,checked_fields)] #[kani::unwind(40)] fn root_record(){check::<37,2>()}
+    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::stub(crate::r1_wire::fields20::validate,checked_fields)] #[kani::unwind(40)] fn short_records(){check::<37,14>()}
+    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::stub(crate::r1_wire::fields20::validate,checked_fields)] #[kani::unwind(40)] fn all_semantic_records(){check::<901,15>()}
 }

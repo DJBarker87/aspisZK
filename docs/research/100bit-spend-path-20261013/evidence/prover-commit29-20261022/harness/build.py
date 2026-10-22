@@ -30,13 +30,13 @@ for mode in ['default','devnet','pool']:
     features='r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit' if mode=='pool' else 'pool-adapter,private-leaf-salts'
     cmd=['taskset','-c','0-3','env','-u','RUSTFLAGS',SBF,'--manifest-path',str(H/'frozen-src/programs'/package/'Cargo.toml'),'--sbf-out-dir',str(out),'--features',features,'--skip-tools-install','--offline','-j','4','--','--locked']
     reserve(mode)
-    subprocess.run(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'harness/capped.py'),str(H/'receipts'/('build-'+mode+'-final-index-owner')),'Incremental optimized SBF compilation/link; no proof generation','--',*cmd],check=True)
+    subprocess.run(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'harness/capped.py'),str(H/'receipts'/('build-'+mode+'-final-field-fuel')),'Incremental optimized SBF compilation/link; no proof generation','--',*cmd],check=True)
     subprocess.run(['sha256sum',str(out/('aspis_pool.so' if mode=='pool' else 'aspis_r1_cost_probe_program.so'))],check=True)
 
     elf=out/('aspis_pool.so' if mode=='pool' else 'aspis_r1_cost_probe_program.so')
     sha=hashlib.sha256(elf.read_bytes()).hexdigest()
     prior=Path('/home/dombarker/project-offloads/codex-cx-prover-commit3-20261020/artifacts')/mode/elf.name
     cmp=subprocess.run(['cmp','--silent',str(elf),str(prior)]).returncode
-    results[mode]=dict(sha256=sha,size_bytes=elf.stat().st_size,expected_sha256=expected[mode],cmp_exit=cmp,byte_identical=sha==expected[mode] and cmp==0,receipt=json.loads((H/'receipts'/('build-'+mode+'-final-index-owner')/'receipt.json').read_text()))
+    results[mode]=dict(sha256=sha,size_bytes=elf.stat().st_size,expected_sha256=expected[mode],cmp_exit=cmp,byte_identical=sha==expected[mode] and cmp==0,receipt=json.loads((H/'receipts'/('build-'+mode+'-final-field-fuel')/'receipt.json').read_text()))
     assert results[mode]['byte_identical'],results[mode]
 (H/'frozen-elf-final-check.json').write_text(json.dumps(dict(source_revision=(H/'revision.txt').read_text().strip(),source_hashes={str(p.relative_to(H/'frozen-src')):hashlib.sha256(p.read_bytes()).hexdigest() for p in (H/'frozen-src').rglob('*.rs')},programs=results),indent=2)+'\n')
