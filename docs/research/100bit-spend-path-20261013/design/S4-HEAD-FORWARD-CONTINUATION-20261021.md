@@ -1127,3 +1127,37 @@ concrete resume consumer instead derives powers for the exact Prepared.gamma
 returned by that resume; transcript/sampler correspondence remains outside
 these local arithmetic projections. None of the local gamma-parameterized
 results alone establishes the implementation-linked100-bit target.
+
+
+## Concrete callback arithmetic and four-slot/model transport, October 22
+
+The concrete width-29 kernel now derives the 26 head values, the C1 tail
+parser value, both C2 parser values and all coefficient reads from the same
+LiteralFieldResult, the common encoded opening and the same 29 powers.
+`s4-concrete-width29-kernel-d18-v1-20261022` retains the exact theorem
+`literal_field_result_concrete_width29`: no per-term scalar or desired-output
+equality is supplied. Its focused compile exited 0 in 7.694s, peak RSS
+4,073,619,456 bytes, no swap, standard axioms. Launch HEAD was not captured
+for that job; the packet explicitly records the missing launch pin rather
+than substituting packaging HEAD. This is not final release evidence.
+
+`s4-four-slot-current-array-semantics-v1-20261022` lifts those concrete
+results to the same four-element Current returned array (exit 0, 6.73s,
+peak RSS 4,065,329,152 bytes, no swap, standard axioms).
+`s4-tail-parser-witness-embedding-v3-20261022` retains the unique-module
+parser embeddings and the term-index-linked actual tail trace. Rejected
+same-name/self-import and weaker predecessor attempts remain diagnostics.
+The v1/v2 parser packet assemblies are not accepted.
+
+`s4-local-batch-model-transport-v1-20261022` proves the local batches equal
+the first-fold inputs of the existing TypedRecoveredWords.word, given the
+primitive packed-map byte identities and successful C1/C2 decodes for that
+same opening. No unconstrained replacement word is introduced (exit 0,
+4.293s, peak RSS 3,633,561,600 bytes, no swap, standard axioms).
+All four packet checkers passed during primary review.
+
+These results remove local arithmetic/parser premises. The primitive
+commitment-authentication identities, source-candidate adoption or frozen
+from_fn correspondence, full caller composition, stage-1 transcript-gamma
+binding and final coherent dependency replay remain open. S4 and the
+implementation-linked 100-bit target are not declared closed.
