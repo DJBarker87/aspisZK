@@ -1,0 +1,48 @@
+//! UNPROVED experimental SDK borrow references. Return real std guard types.
+//! Their full two-word layout, result/error and counter frame must be checked
+//! against the pinned original SDK before any caller may use these stubs.
+use solana_program::{account_info::AccountInfo,program_error::ProgramError};
+use std::{cell::{Cell,Ref,RefMut},rc::Rc};
+
+#[repr(C)]
+struct GuardBits<T>{value:*mut T,counter:*const Cell<isize>}
+
+pub struct Models<'a>(std::marker::PhantomData<&'a ()>);
+impl<'a> Models<'a>{
+pub fn length(account:&AccountInfo<'a>)->Result<usize,ProgramError>{
+ let counter=Rc::as_ptr(&account.data).cast::<Cell<isize>>();
+ let before=unsafe{(*counter).get()};
+ if before>=0 && before<isize::MAX {
+  Ok(unsafe{(&*account.data.as_ptr()).len()})
+ }else{Err(ProgramError::AccountBorrowFailed)}
+}
+pub fn shared<'b>(account:&'b AccountInfo<'a>)->Result<Ref<'b,&'b mut [u8]>,ProgramError>{
+ let counter=Rc::as_ptr(&account.data).cast::<Cell<isize>>();
+ let before=unsafe{(*counter).get()};
+ if before>=0 && before<isize::MAX {
+  unsafe{(*counter).set(before+1);}
+  let bits=GuardBits{value:account.data.as_ptr(),counter};
+  Ok(unsafe{std::mem::transmute::<GuardBits<&'a mut [u8]>,Ref<'b,&'b mut [u8]>>(bits)})
+ }else{Err(ProgramError::AccountBorrowFailed)}
+}
+    #[cfg_attr(kani,kani::modifies(Rc::as_ptr(&account.data).cast_mut().cast::<isize>()))]
+    #[cfg_attr(kani,kani::ensures(|result| {
+        let before=old(unsafe{(*Rc::as_ptr(&account.data).cast::<std::cell::Cell<isize>>()).get()});let now=unsafe{(*Rc::as_ptr(&account.data).cast::<std::cell::Cell<isize>>()).get()};
+        match result {
+            Ok(guard)=>before==0 && now == -1 && std::mem::size_of_val(guard)==2*std::mem::size_of::<usize>() &&
+                unsafe{*(guard as *const _ as *const usize)}==account.data.as_ptr() as usize &&
+                unsafe{*(guard as *const _ as *const usize).add(1)}==Rc::as_ptr(&account.data) as usize,
+            Err(e)=>matches!(e,ProgramError::AccountBorrowFailed) && (before!=0) && now==before,
+        }
+    }))]
+pub fn exclusive<'b>(account:&'b AccountInfo<'a>)->Result<RefMut<'b,&'a mut [u8]>,ProgramError>{
+ let counter=Rc::as_ptr(&account.data).cast::<Cell<isize>>();
+ let before=unsafe{(*counter).get()};
+ if before==0 {
+  unsafe{(*counter).set(-1);}
+  let bits=GuardBits{value:account.data.as_ptr(),counter};
+  Ok(unsafe{std::mem::transmute::<GuardBits<&'a mut [u8]>,RefMut<'b,&'a mut [u8]>>(bits)})
+ }else{Err(ProgramError::AccountBorrowFailed)}
+}
+
+}

@@ -12,12 +12,19 @@ folders=[f'sdk-account-info-{m}-v1' for m in modes]+[f'sdk-live-{m}-v1' for m in
 folders += ['sdk-account-info-all-v1','sdk-account-info-all-v2']
 folders += [f'sdk-shared-prefix-v{i}' for i in range(7,13)]
 folders += [f'sdk-live-model-shared-v{i}' for i in range(1,4)]+['sdk-live-model-exclusive-v1','sdk-live-model-length-v1','sdk-live-model-length-v2']
+folders += [f'sdk-live-model-contract-{m}-v{v}' for m in modes for v in [1,2]]
+folders += ['sdk-shared-prefix-v13','sdk-shared-prefix-v14']
 receipts=[f'sdk-live-{m}-{kind}-v1' for m in modes for kind in ['codegen','join','properties']]
 receipts += [f'sdk-shared-prefix-codegen-v{i}' for i in [7,8,10]]+['sdk-shared-prefix-check-v10']
 receipts += [f'sdk-live-model-shared-{kind}-v{i}' for i in range(1,4) for kind in ['codegen','join']]
 receipts += [f'sdk-live-model-length-{kind}-v{i}' for i in [1,2] for kind in ['codegen','join']]
 receipts += ['sdk-live-alias-inspection-v1','sdk-live-function-inventory-v1']
 receipts += ['sdk-shared-prefix-codegen-v11','sdk-native-prefix-frame-check-v1','sdk-shared-prefix-codegen-v12','sdk-native-point-frame-check-v1']
+receipts += ['sdk-native-point-frame-plain-v1']
+receipts += [f'sdk-live-model-contract-{m}-join-v{v}' for m in modes for v in [1,2]]
+receipts += [f'sdk-live-model-contract-{m}-properties-v1' for m in ['shared','exclusive']]
+receipts += [f'sdk-live-model-contract-{m}-properties-v2' for m in modes]
+receipts += ['sdk-live-model-contract-length-codegen-v2','sdk-shared-prefix-codegen-v13','sdk-shared-prefix-codegen-v14','sdk-native-model-point-frame-v1','sdk-native-point-frame-properties-v1','sdk-native-point-single-v1']
 for name in folders:
  root=H/name;assert root.is_dir(),root
  for p in root.rglob('*'):
@@ -36,11 +43,16 @@ for tag in receipts:
   p=H/(tag+suffix)
   if p.is_file():copy(p,p.name)
  for p in (H/tag).glob('*.json'):copy(p,Path('diagnostics')/tag/p.name)
+ for p in (H/tag).glob('cbmc.log'):
+  if p.stat().st_size<1024*1024:copy(p,Path('diagnostics')/tag/p.name)
 for mode in modes:
  root=H/f'sdk-live-{mode}-properties-v1-snapshot'
  copy(root/'harness-metadata.json',Path('metadata')/mode/'harness-metadata.json')
+for folder in folders:
+ p=H/folder/'checked-metadata/harness-metadata.json'
+ if p.is_file():copy(p,Path('metadata')/folder/'harness-metadata.json')
 for p in (H/'kit').glob('*'):
- if p.is_file() and (p.suffix=='.py' and any(x in p.name for x in ['live-','shared-prefix','run-modular','reservation','capped']) or p.name=='sdk-live-models.rs'):
+ if p.is_file() and (p.suffix=='.py' and any(x in p.name for x in ['live-','shared-prefix','run-modular','reservation','capped','native-point','native-model','associated-sdk-model']) or p.name=='sdk-live-models.rs'):
   copy(p,Path('runner')/p.name)
 registry=Path('/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-account-info-2.3.0')
 for rel in ['src/lib.rs','src/debug_account_data.rs','Cargo.toml','Cargo.toml.orig']:

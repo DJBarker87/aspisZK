@@ -9,6 +9,7 @@ import sys,json,hashlib,subprocess,os,signal,re
 H=Path('/home/dombarker/project-offloads/s126-real-sdk-20261021');B=Path('/home/dombarker/.kani/kani-0.67.0/bin')
 havoc_inputs='havoc-inputs' in sys.argv
 pointwise='pointwise' in sys.argv
+plain='plain' in sys.argv
 tag,version=sys.argv[1:3];P=H/('sdk-shared-prefix-'+version);O=H/tag
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 pin=H/('sdk-shared-prefix-codegen-'+version+'-input.json');inp=json.loads(pin.read_text())
@@ -36,6 +37,7 @@ cmds=[
  [str(B/'goto-instrument'),'--ensure-one-backedge-per-target',str(O/'reachable.out'),str(O/'ready.out')],
  [str(B/'cbmc'),'--no-malloc-may-fail','--no-undefined-shift-check','--no-signed-overflow-check','--nan-check','--no-self-loops-to-assumptions','--no-pointer-primitive-check','--object-bits','16','--unwind','48','--sat-solver','cadical','--slice-formula','--unwinding-assertions','--json-ui',str(O/'ready.out')]
 ]
+if plain:cmds[-1].remove('--json-ui')
 if havoc_inputs:
  initializer=[k for k,v in names.items() if str(v).endswith('::s126_input_bytes')]
  assert len(initializer)==1,initializer
@@ -50,7 +52,7 @@ if 'run' not in sys.argv:
   (O/'initializer-body.c').write_text('#include <stddef.h>\nvoid __CPROVER_havoc_slice(void *,size_t);\nsize_t s126_havoc_input(unsigned char *p,size_t n){__CPROVER_havoc_slice(p,n);return n;}\n')
  subprocess.run(['python3',str(H/'kit/reservation.py'),str(H/(tag+'-admission.json'))],check=True,stdout=subprocess.DEVNULL)
  (H/(tag+'-input.json')).write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',source_sha256=sha(P/'src/lib.rs'),borrowed_source_sha256=sha(H/'owned-sdk-borrowed-v1/src/lib.rs'),codegen_input_sha256=sha(pin),raw_goto_sha256=sha(raw),harness_metadata_sha256=sha(metadata),harness_metadata=row,pretty_names_sha256=sha(namePath),runner_sha256=sha(Path(__file__)),tool_pins={str(p):sha(p) for p in [B/'goto-cc',B/'goto-instrument',B/'cbmc',libc]+([O/'initializer-declaration.c',O/'initializer-body.c'] if havoc_inputs else [])},abstracted_function=scan,abstracted_pretty_name=pretty,commands=cmds,qualification=('Pointwise native-prefix byte/descriptor/scalar before-after checks; no DFCC, no owned reference loaded. Same read-only std-any overapproximation. Extensional/runtime/scan/caller composition remains required.' if pointwise else __doc__),property_scope='All reachable assertions and source safety/unwinding checks; no selection',timeout_seconds=180,retained='Reached-decoder scope, concrete native/source scan transport, decoder cut instance and later-stage/runtime/oracle joins remain explicit. Codegen and failed checks are not proof evidence.'),indent=2)+'\n')
- raise SystemExit(subprocess.call(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'kit/capped.py'),str(H/'receipts'/tag),'Native prefix: '+('symbolic pointwise before/after assertions, no DFCC' if pointwise else 'explicit DFCC frame')+', pure scan overapproximation and one180s CBMC check; no arithmetic evaluation','--','python3',__file__,tag,version,'run',*(['havoc-inputs'] if havoc_inputs else []),*(['pointwise'] if pointwise else [])]))
+ raise SystemExit(subprocess.call(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'kit/capped.py'),str(H/'receipts'/tag),'Native prefix: '+('symbolic pointwise before/after assertions, no DFCC' if pointwise else 'explicit DFCC frame')+', pure scan overapproximation and one180s CBMC check; no arithmetic evaluation','--','python3',__file__,tag,version,'run',*(['havoc-inputs'] if havoc_inputs else []),*(['pointwise'] if pointwise else []),*(['plain'] if plain else [])]))
 for i,cmd in enumerate(cmds):
  with (O/('step'+str(i)+'.log')).open('w') as log:
   p=subprocess.Popen(cmd,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
@@ -60,7 +62,12 @@ for i,cmd in enumerate(cmds):
  if i<len(cmds)-1:assert p.returncode==0,(i,p.returncode)
  else:
   rows=[]
-  for item in json.loads((O/('step'+str(i)+'.log')).read_text()):rows += [{k:v for k,v in r.items() if k!='trace'} for r in item.get('result',[])]
+  if plain:
+   for line in (O/('step'+str(i)+'.log')).read_text().splitlines():
+    m=re.fullmatch(r'\[([^\]]+)\] (.*): (SUCCESS|FAILURE|UNKNOWN|NOT_CHECKED|UNREACHABLE)',line)
+    if m:rows.append(dict(property=m[1],description=m[2],status=m[3]))
+  else:
+   for item in json.loads((O/('step'+str(i)+'.log')).read_text()):rows += [{k:v for k,v in r.items() if k!='trace'} for r in item.get('result',[])]
   (O/'properties-without-traces.json').write_text(json.dumps(rows,indent=2)+'\n')
   (O/'cbmc-exit.json').write_text(json.dumps(dict(exit_status=p.returncode,qualification='Raw exit retained; all non-cover properties must pass, covers report FAILURE when reached.'))+'\n')
   raise SystemExit(p.returncode)

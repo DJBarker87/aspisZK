@@ -2092,3 +2092,70 @@ their b2727acd versions. This is recorded in
 dependencies or release artifacts and does not supersede the freeze authority.
 The focused packet checker accepts only the three actual-method contracts.
 No Lean source changed and no unchanged Lean/full manifest replay was run.
+
+### 2026-10-22 — separate common-spec checks; transport not yet established
+
+The next model check avoids executing native and reference consecutively.
+Each reference independently satisfies the **identical actual SDK method
+postcondition**, with only the parameter renamed from self to account. Its
+input is still actual AccountInfo and its output is still actual std Ref or
+RefMut; no shadow guard/account type or fabricated Arbitrary instance is used.
+Both postconditions include the counter-only write frame and complete two-word
+host guard representation. The model harness also checks actual guard Drop
+and unchanged scalar/header fields on the same explicit finite heap domain.
+
+The original free-function model contracts pass (length/shared/exclusive:
+9.149/8.869/8.720s,439024/444132/443360KiB,swap0). However, using those free
+functions as SDK method stubs fails codegen due to the SDK impl's early-bound
+lifetime parameter. An associated-function namespace fixes that signature
+without constructing a new value or replacing any SDK carrier. The complete
+associated model checks also pass, independently, without stubs:
+
+| Unary associated-model contract | Checks/covers | Exit | Wall s | RSS KiB | Swap |
+|---|---|---:|---:|---:|---:|
+| sdk-live-model-contract-length-join-v2 |741/3|0|8.188|439992|0|
+| sdk-live-model-contract-shared-join-v2 |763/3|0|9.814|444064|0|
+| sdk-live-model-contract-exclusive-join-v2 |760/3|0|10.230|445228|0|
+
+These do **not** establish method equivalence by themselves. Before ordinary
+stubs can receive correspondence credit, the common specification must be
+proved functional and complete for caller-observable outcomes and state on
+the pinned ABI, including pointer representation, live guard use/drop and
+allocation/log/oracle behaviour. General runtime-to-fixture embedding remains
+separate. All failed paired model certificates remain excluded. No enclosing
+source/caller premise has been removed in this batch; no native S2 closure,
+S6/S1 closure, unrestricted TOTAL or100-bit claim is made.
+
+Metadata restoration exposed a cache hazard: length-v1 codegen-v2 exited0
+without replacing the shared package's most recent exclusive metadata. Its
+target-kind check correctly rejected the stale metadata. That codegen is not
+an accepted proof/artifact restoration. v2 gives each model crate a unique
+package name and snapshots its matching method metadata/program hash directly
+after the successful check. Original SDK method metadata had already been
+snapshotted in their original audits; those checks remain unchanged. Source,
+lock, flags, tool, source-contract and matching target pins are retained.
+
+The last native pointwise timeout log reached SAT checks and then built error
+traces. CBMC6.8.0's pinned option source shows that JSON UI implicitly enables
+traces outside cover mode. A focused run of the **identical compiled target**
+with only the output format changed still times out (plain-v1,
+exit1,180.180s,4455248KiB,swap0), now after two SAT checks and during the next
+propositional reduction. Therefore trace generation alone is not a sufficient
+explanation. No failed property or reached cover is inferred from those SAT
+messages without the complete report. The associated-model native pointwise
+candidate also times out (exit1,183.192s,4762264KiB,swap0); it is excluded both
+for timeout and for the still-unproved ordinary-stub transport. Codegen success
+is not correspondence. All heavy scopes retain fresh admission and6G/8G/0.
+
+A property inventory identifies2311 properties in the original SDK v12
+pointwise program. The next partition checks only the named byte-preservation
+assertion; every other safety/unwinding/caller property remains unproved by
+that partition and a complete checked union is required before any whole-frame
+claim. This is an explicit proof partition, not an assertion that dropped
+properties pass. No unchanged all-properties replay or higher cap is planned.
+That first named-property partition also timed out (exit1,180.163s,
+3989580KiB,swap0). It supplies no byte-frame result, even in isolation. Its
+terminal receipt and timeout are retained; no solver from these jobs remains
+live. A further decomposition must change the byte-frame proof representation
+or establish the complete common-spec method transport, rather than repeat
+these unchanged native jobs. The priority and closure criteria remain S2 first.
