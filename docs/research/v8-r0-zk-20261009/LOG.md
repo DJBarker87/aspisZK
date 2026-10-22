@@ -8565,3 +8565,18 @@ verifier bytes are unchanged by the candidate. Single-run fixture measurements:
 transfer 41.74 → 39.01 s, withdrawal 38.94 → 42.23 s (measurement only).
 Remaining L2 items: sampler, sparse evaluation, query scan, multiproof
 sharing, checker.
+
+## D164 (lead, 2026-10-22 12:25): part 47 merged; y1 image proved for the owned reference
+
+Merged `codex/cx-prover-commit47-20261022` (report
+`r1p-final/PROVER-COMMIT47-20261022.md`). Proved: release field normalisation
+and canonical embedded arithmetic; the recursive basis/evaluator with subfield
+range and exact decoding; the owned reference's exact byte image for all 29 `y1`
+lanes. J9799 standard axioms; shipped files unchanged; no new trust field.
+Open: binding the **shipped** `sim::semantic`/`sim::opening` to the owned
+reference. The worker retried Aeneas on shipped loops and iterators, which fails.
+Lead direction: the shipped side never goes through Aeneas. Use the P6 route
+that worked in parts 29–30 and 43–44: a per-iteration Kani check
+(shipped iteration = owned iteration, verified stubs for callees), then a Lean
+induction over the owned loop. The constant-time candidate (D162) does not touch the
+simulator, so this binding remains valid if the candidate is adopted.
