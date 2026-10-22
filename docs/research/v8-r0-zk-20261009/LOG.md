@@ -8308,3 +8308,28 @@ OS-drawn bytes:
   visibly in the headline.
 Do not switch the target to the 96-byte `generate()` adapter. The deployed
 route is the proof-account route.
+
+## D153 (lead, 2026-10-22 06:30): part 40 merged; public binding inputs need a conditional ROM law
+
+Merged `codex/cx-prover-commit40-20261022` (report
+`r1p-final/PROVER-COMMIT40-20261022.md`). Proved: private-seed memo counting
+with visible additions 4·Q·attempts/2^256 + 48/2^256, keeping < 2^-100
+(conditional on the remaining joins); the public-nonce preparation model with
+the part-39 ledger coupling kept; an exhaustive hash-family classification on
+the deployed path (`ProverCommitHashClass40.classify`, `hash-input-inventory.json`).
+J9186, 30 theorems, standard axioms; shipped files unchanged.
+Lead check of the classification: the masks, D-seed, leaf salts and Merkle
+nodes all derive from the private OS bytes (field entropy, leaf seed). The
+public-only inputs (public bytes, reservation, precommit and attempt
+bindings) carry no secret. So the public nonce is **not** a privacy attack.
+Obstruction: the old commitment argument (`EventsR1PBin.hit_cm`, `HitFresh`)
+assumed the first binding input was fresh, which is false once the nonce is
+public: the adversary can pre-query it with probability 1.
+Next (part 41): replace that use of `hit_cm` with the worker's specified
+public-prefix-aware conditional ROM law. Start from the adversary's prior
+queries and answers, reuse both binding answers in the same ROM, reserve the
+nonce in the shared ledger, and expose fresh private-derivation coordinates
+only outside the two raw-seed memo events. Then transport the joint adaptive
+law (with duplicate termination and retained rejected-attempt history) to the
+successful continuation, keeping the existing bounds on private-derived reads.
+No new trust item, nonce law or ledger cap.
