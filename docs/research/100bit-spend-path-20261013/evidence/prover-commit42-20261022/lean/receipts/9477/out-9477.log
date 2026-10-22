@@ -1,0 +1,54 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPrivatePairs42.lean:29:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverCommitPrivatePairs42.vector_update`:
+  [Fintype K]
+  [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPrivatePairs42.lean:72:68: error: unsolved goals
+case e'_2
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CommitHandle Aux
+Pr : R1ProverP K CommitHandle Aux F W
+h : HonestProver K
+B : PackBasis F
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+w : h.Instance
+hb : RCommitBytes W Pr
+nonce : NZ
+digest first second : OracleAnswer
+q : RIdx
+hq : ∀ (b : Fin 2), q ≠ Sum.inl b
+a : Carrier W Pr
+u : OracleAnswer
+c : CPos Pr.E₁ Pr.E₂
+independent : ¬depS c (Sum.inr q)
+parts :
+  tapeR W Pr (vector W Pr first second ((answerLens W Pr q).set a u)) = tapeR W Pr (vector W Pr first second a) ∧
+    trOf (vector W Pr first second ((answerLens W Pr q).set a u)) = trOf (vector W Pr first second a) ∧
+      restOf (vector W Pr first second ((answerLens W Pr q).set a u)) =
+        Function.update (restOf (vector W Pr first second a)) q u
+⊢ gram (W.pubBytes x) W.vtag
+      (Pr.leafVal h w x (tapeR W Pr (vector W Pr first second a)) (chOf W (trOf (vector W Pr first second a))))
+      (ProverCommitPublicBinding40.publicSec nonce ((answerLens W Pr q).set a u).1) digest
+      (Function.update (restOf (vector W Pr first second a)) q u) c =
+    gram (W.pubBytes x) W.vtag
+      (Pr.leafVal h w x (tapeR W Pr (vector W Pr first second a)) (chOf W (trOf (vector W Pr first second a))))
+      (ProverCommitPublicBinding40.publicSec nonce a.1) digest
+      (Function.update (restOf (vector W Pr first second a)) q u) c
+'R1Z.ProverCommitPrivatePairs42.publicSec_update' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitPrivatePairs42.vector_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPrivatePairs42.answer_parts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPrivatePairs42.seed_inv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPrivatePairs42.answer_inv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPrivatePairs42.pair_all' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPrivatePairs42.pair_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,98 @@
+import R1Z.ProverCommitBindingErase41
+import R1Z.AgreeR1PBin
+
+/-! Public binding normalization on the actual gAddr/attVec read program.
+Only the two binding positions are overwritten; all private-derived answers
+remain on their original independent coordinates. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitGlobal42
+open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.FsAbort R0Z.HvzkV
+open GamesR1 GamesR1PBin CouplingR1PBin AgreeR1PBin LayoutR1PBin LensR1 LazyFrozen
+attribute [local instance] Classical.propDecidable
+variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+
+variable (W : R1Wire K CommitHandle Aux) (Pr : R1ProverP K CommitHandle Aux F W)
+
+def publicIndex (p : Pos1 Pr.E₁ Pr.E₂) : Option (Fin 2) :=
+  match p with
+  | .inr (.inr (.inr (.inl b))) => some b
+  | _ => none
+
+def positions (N : Nat) : Finset (Fin (N*n1 W Pr)) :=
+  Finset.univ.filter (fun g => (publicIndex W Pr ((posE W Pr N g).2)).isSome)
+
+def values {N : Nat} (answers : Fin N → Fin 2 → OracleAnswer)
+    (g : Fin (N*n1 W Pr)) : OracleAnswer :=
+  match publicIndex W Pr ((posE W Pr N g).2) with
+  | some b => answers (posE W Pr N g).1 b
+  | none => 0
+
+def normalized {N : Nat} (answers : Fin N → Fin 2 → OracleAnswer)
+    (coins : Fin (N*n1 W Pr) → OracleAnswer) :=
+  ProverCommitPublicCoins41.normalize (positions W Pr N) (values W Pr answers) coins
+
+theorem posE_index {N : Nat} (k : Fin N) (p : Pos1 Pr.E₁ Pr.E₂) :
+    posE W Pr N (finProdFinEquiv (k,Pr.ord.symm p)) = (k,p) := by
+  simp [posE]
+
+theorem normalized_attVec {N : Nat} (answers : Fin N → Fin 2 → OracleAnswer)
+    (coins : Fin (N*n1 W Pr) → OracleAnswer) (k : Fin N) (p : Pos1 Pr.E₁ Pr.E₂) :
+    attVec W Pr (normalized W Pr answers coins) k p =
+      match publicIndex W Pr p with
+      | some b => answers k b
+      | none => attVec W Pr coins k p := by
+  simp only [attVec,normalized,ProverCommitPublicCoins41.normalize,positions,values,
+    Finset.mem_filter,Finset.mem_univ,true_and,posE_index]
+  cases publicIndex W Pr p <;> rfl
+
+/-- The global binding normalization is exactly the local rebind, with every
+mask, D-seed, expansion, salt, leaf, node and transcript coordinate retained. -/
+theorem normalized_rest {N : Nat} (answers : Fin N → Fin 2 → OracleAnswer)
+    (coins : Fin (N*n1 W Pr) → OracleAnswer) (k : Fin N) :
+    restOf (attVec W Pr (normalized W Pr answers coins) k) =
+      ProverCommitBindingErase41.rebind (answers k 0) (answers k 1)
+        (restOf (attVec W Pr coins k)) := by
+  funext q
+  simp only [restOf,normalized_attVec]
+  cases q with
+  | inl b => fin_cases b <;> rfl
+  | inr q => rfl
+
+variable (R : RomModel W) (h : HonestProver K) (B : PackBasis F)
+  (outputs : Statement K CommitHandle → Challenges K → Aux)
+  (x : Statement K CommitHandle) (w : h.Instance)
+
+theorem causal (hc : RCausal W Pr h B outputs x w) (Fr : Finset R.A)
+    (covers : Frz R x ⊆ Fr) {N : Nat} (sec : Fin N → SecP)
+    (answers : Fin N → Fin 2 → OracleAnswer) :
+    CausalF Fr (ProverCommitPublicCoins41.addresses (positions W Pr N)
+      (values W Pr answers) (aA W Pr R h B outputs x w sec)) := by
+  apply ProverCommitPublicCoins41.addresses_causal
+  intro i u v t s prior same
+  exact causalF_aA W Pr R h B outputs x w hc sec i u v t s prior
+    (fun y hy => same y (covers hy))
+
+/-- Joint conditional law at the encoded concrete gAddr program. Public
+values are fixed by the conditional context; spare binding coins are unused. -/
+theorem conditional_law (hc : RCausal W Pr h B outputs x w) (Fr : Finset R.A)
+    (covers : Frz R x ⊆ Fr) {N : Nat} (sec : Fin N → SecP)
+    (answers : Fin N → Fin 2 → OracleAnswer) {C : Type}
+    (observe : (R.A → OracleAnswer) → C)
+    (locality : ∀ t s, (∀ y ∈ Fr, t y=s y) → observe t=observe s)
+    (c : C) (test : (R.A → OracleAnswer) → ℚ) :
+    mean (fun p : (R.A → OracleAnswer) × (Fin (N*n1 W Pr) → OracleAnswer) =>
+      if observe p.1=c then test (progF Fr
+        (ProverCommitPublicCoins41.addresses (positions W Pr N) (values W Pr answers)
+          (aA W Pr R h B outputs x w sec)) p.1 p.2) else 0) =
+      mean (fun t : R.A → OracleAnswer => if observe t=c then test t else 0) :=
+  ProverCommitConditionalRom41.conditional_law Fr _
+    (causal W Pr R h B outputs x w hc Fr covers sec answers) observe locality c test
+
+#print axioms posE_index
+#print axioms normalized_attVec
+#print axioms normalized_rest
+#print axioms causal
+#print axioms conditional_law
+end R1Z.ProverCommitGlobal42

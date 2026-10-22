@@ -1,0 +1,137 @@
+import R1Z.ProverCommitGlobal42
+
+/-! Private-derived designated-field bounds on a fixed public context.
+The nonce and both binding answers are fixed. Spare public coordinates stay
+on the product carrier but cannot be used as hprivate freshness witnesses. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitPrivateBounds42
+open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.FsAbort R0Z.FsAbortBounds R0Z.HvzkV
+open GamesR1 GamesR1PBin CouplingR1PBin EventsR1PBin LayoutR1PBin LensR1
+attribute [local instance] Classical.propDecidable
+variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+variable (W : R1Wire K CommitHandle Aux) (Pr : R1ProverP K CommitHandle Aux F W)
+  (h : HonestProver K) (B : PackBasis F)
+  (outputs : Statement K CommitHandle → Challenges K → Aux)
+  (x : Statement K CommitHandle) (w : h.Instance)
+
+abbrev Carrier := ProverCommitPublicBinding40.Private × (Pos1 Pr.E₁ Pr.E₂ → OracleAnswer)
+
+def vector (first second : OracleAnswer) (a : Carrier W Pr) : Pos1 Pr.E₁ Pr.E₂ → OracleAnswer :=
+  fun p => match ProverCommitGlobal42.publicIndex W Pr p with
+    | some b => if b.val=0 then first else second
+    | none => a.2 p
+
+def address (nonce : NZ) (digest first second : OracleAnswer)
+    (a : Carrier W Pr) (c : CPos Pr.E₁ Pr.E₂) : List UInt8 :=
+  attAddr W Pr h B outputs x w (ProverCommitPublicBinding40.publicSec nonce a.1)
+    digest (vector W Pr first second a) (.inr c)
+
+def privatePos (c : CPos Pr.E₁ Pr.E₂) : Prop := ∀ b : Fin 2, c ≠ .inr (.inr (.inl b))
+
+def seedLens (i : Fin 2) : Lens (Carrier W Pr) NZ where
+  get a := a.1 i
+  set a z := (Function.update a.1 i z,a.2)
+  get_set a z := by simp
+  set_get a := by simp
+  set_set a z z' := by simp
+
+def answerLens (q : RIdx) : Lens (Carrier W Pr) OracleAnswer where
+  get a := a.2 (.inr (.inr (.inr q)))
+  set a u := (a.1,Function.update a.2 (.inr (.inr (.inr q))) u)
+  get_set a u := by simp
+  set_get a := by simp
+  set_set a u u' := by simp
+
+theorem src_private (c : CPos Pr.E₁ Pr.E₂) (hc : privatePos W Pr c) :
+    (∀ i, src c = .inl i → i ≠ 0) ∧
+      (∀ q, src c = .inr q → ∀ b : Fin 2, q ≠ .inl b) := by
+  rcases c with t | (e | e) | (b | i | salt | leaf | node)
+  · constructor
+    · intro i eq; cases eq
+    · intro q eq b; cases eq; simp [rootChild,qNode]
+  · constructor
+    · intro i eq; cases eq
+    · intro q eq b; cases eq; simp [qSeed]
+  · constructor
+    · intro i eq; cases eq
+    · intro q eq b; cases eq; simp [qSeed]
+  · exact False.elim (hc b rfl)
+  · constructor
+    · intro j eq; by_cases hi : i.val=2 <;> simp [src,hi] at eq; subst j; decide
+    · intro q eq b
+      by_cases hi : i.val=2
+      · simp only [src,hi,if_true,Sum.inr.injEq] at eq; subst q; simp [qSeed]
+      · simp only [src,hi,if_false] at eq; cases eq
+  · constructor
+    · intro j eq; cases eq; decide
+    · intro q eq b; cases eq
+  · constructor
+    · intro j eq; cases eq
+    · intro q eq b; cases eq; simp [qSalt]
+  · constructor
+    · intro j eq; cases eq
+    · intro q eq b; cases eq; rcases node with ⟨t,⟨⟨d,hd⟩,i⟩⟩; cases d <;> simp [childQ,qLeaf,qNode]
+
+/-- The public seed slot is never used as a hprivate designated coordinate. -/
+theorem seed_field (hb : RCommitBytes W Pr) (nonce : NZ) (digest first second : OracleAnswer)
+    (c : CPos Pr.E₁ Pr.E₂) (i : Fin 2) (source : src c = .inl i.succ)
+    (a : Carrier W Pr) (z : NZ) :
+    nzOf (fld (W.pubBytes x).length c
+      (address W Pr h B outputs x w nonce digest first second ((seedLens W Pr i).set a z) c)) = z := by
+  simp only [address,attAddr]
+  rw [hb, fld_gram,source]
+  simp only [srcVal,ProverCommitPublicBinding40.publicSec,Fin.cases_succ,seedLens,
+    Function.update_self,nzOf_val]
+
+theorem vector_answer (first second : OracleAnswer) (q : RIdx)
+    (hprivate : ∀ b : Fin 2, q ≠ .inl b) (a : Carrier W Pr) (u : OracleAnswer) :
+    restOf (vector W Pr first second ((answerLens W Pr q).set a u)) q = u := by
+  cases q with
+  | inl b => exact False.elim (hprivate b rfl)
+  | inr q => simp [restOf,vector,ProverCommitGlobal42.publicIndex,answerLens]
+
+theorem answer_field (hb : RCommitBytes W Pr) (nonce : NZ) (digest first second : OracleAnswer)
+    (c : CPos Pr.E₁ Pr.E₂) (q : RIdx) (source : src c = .inr q)
+    (hprivate : ∀ b : Fin 2, q ≠ .inl b) (a : Carrier W Pr) (u : OracleAnswer) :
+    fld (W.pubBytes x).length c
+      (address W Pr h B outputs x w nonce digest first second ((answerLens W Pr q).set a u) c) = u := by
+  simp only [address,attAddr]
+  rw [hb,fld_gram,source]
+  exact vector_answer W Pr first second q hprivate a u
+
+/-- A fixed frozen address may include both memo bindings and the exact old
+query history. All hprivate-derived families retain the old 2^255 bound. -/
+theorem private_pair (hb : RCommitBytes W Pr) (nonce : NZ) (digest first second : OracleAnswer)
+    (c : CPos Pr.E₁ Pr.E₂) (hc : privatePos W Pr c)
+    (target : Carrier W Pr → List UInt8)
+    (seeds : ∀ i : Fin 2, src c = .inl i.succ → ∀ a z,
+      target ((seedLens W Pr i).set a z) = target a)
+    (answers : ∀ q, src c = .inr q → ∀ a u,
+      target ((answerLens W Pr q).set a u) = target a) :
+    PairFresh target (fun a => address W Pr h B outputs x w nonce digest first second a c) (2^255) := by
+  have hprivate := src_private W Pr c hc
+  cases hs : src c with
+  | inl i =>
+    have hi := hprivate.1 i hs
+    have positive : 0 < i.val := by
+      have hval : i.val ≠ 0 := fun e => hi (Fin.ext e)
+      omega
+    let j : Fin 2 := ⟨i.val-1,by have := i.isLt; omega⟩
+    have hj : i=j.succ := Fin.ext (by simp only [Fin.val_succ,j]; omega)
+    rw [hj] at hs
+    exact pairFresh_of_lens (seedLens W Pr j) target _
+      (fun a => nzOf (fld (W.pubBytes x).length c a)) _ card_NZ
+      (seeds j hs) (seed_field W Pr h B outputs x w hb nonce digest first second c j hs)
+  | inr q =>
+    exact pairFresh_of_lens (answerLens W Pr q) target _
+      (fld (W.pubBytes x).length c) _ umin_le_card_ans (answers q hs)
+      (answer_field W Pr h B outputs x w hb nonce digest first second c q hs (hprivate.2 q hs))
+
+#print axioms src_private
+#print axioms seed_field
+#print axioms vector_answer
+#print axioms answer_field
+#print axioms private_pair
+end R1Z.ProverCommitPrivateBounds42

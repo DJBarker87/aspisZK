@@ -1,0 +1,81 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitContextBounds42.lean:38:16: error(lean.unknownIdentifier): Unknown identifier `mean_le_mean`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitContextBounds42.lean:26:39: error: unsolved goals
+K CommitHandle Aux : Type
+inst✝⁵ : Field K
+inst✝⁴ : Fintype K
+inst✝³ : DecidableEq K
+inst✝² : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CommitHandle Aux
+Pr : R1ProverP K CommitHandle Aux F W
+h : HonestProver K
+B : PackBasis F
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+w : h.Instance
+hb : RCommitBytes W Pr
+C : Type
+inst✝¹ : Fintype C
+inst✝ : Nonempty C
+gate : C → Prop
+nonce : C → NZ
+digest first second : C → OracleAnswer
+c : CPos Pr.E₁ Pr.E₂
+hc : privatePos W Pr c
+q : ℕ
+inputs : C → Fin q → List UInt8
+point :
+  ∀ (ctx : C),
+    (mass fun a =>
+        gate ctx ∧
+          ∃ i, inputs ctx i = address W Pr h B outputs x w (nonce ctx) (digest ctx) (first ctx) (second ctx) a c) ≤
+      (if gate ctx then 1 else 0) * (↑q / 2 ^ 255)
+⊢ (mean fun ctx =>
+      mass fun a =>
+        gate ctx ∧
+          ∃ i, inputs ctx i = address W Pr h B outputs x w (nonce ctx) (digest ctx) (first ctx) (second ctx) a c) ≤
+    mass gate * (↑q / 2 ^ 255)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitContextBounds42.lean:68:40: error: Application type mismatch: The argument
+  x
+has type
+  Statement K CommitHandle
+but is expected to have type
+  Fin ?m.96
+in the application
+  normalized_local W Pr ?m.98 ?m.100 ?m.102 x
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitContextBounds42.lean:66:41: error: unsolved goals
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CommitHandle Aux
+Pr : R1ProverP K CommitHandle Aux F W
+h : HonestProver K
+B : PackBasis F
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+w : h.Instance
+N : ℕ
+nonce : Fin N → NZ
+digest : OracleAnswer
+answers : Fin N → Fin 2 → OracleAnswer
+seeds : Fin N → ProverCommitPublicBinding40.Private
+coins : Fin (N * n1 W Pr) → OracleAnswer
+k : Fin N
+c : CPos Pr.E₁ Pr.E₂
+⊢ attAddr W Pr h B outputs x w (ProverCommitPublicBinding40.publicSec (nonce k) (seeds k)) digest
+      (attVec W Pr (ProverCommitGlobal42.normalized W Pr answers coins) k) (Sum.inr c) =
+    address W Pr h B outputs x w (nonce k) digest (answers k 0) (answers k 1) (seeds k, attVec W Pr coins k) c
+'R1Z.ProverCommitContextBounds42.context_frozen_mass' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitContextBounds42.normalized_local' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitContextBounds42.global_private_address' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

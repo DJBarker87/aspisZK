@@ -1,0 +1,105 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitGlobalRun42.lean:54:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  runC (gAddr W Pr h B outputs x w sec ?m.388) ?m.378 ?m.379 i
+in the target expression
+  actual i =
+    progF Fr (ProverCommitPublicCoins41.addresses (positions W Pr N) (values W Pr answers) a) base coins
+      (a i actual
+        (progF Fr (ProverCommitPublicCoins41.addresses (positions W Pr N) (values W Pr answers) a) base coins))
+
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CommitHandle Aux
+Pr : R1ProverP K CommitHandle Aux F W
+R : RomModel W
+h : HonestProver K
+B : PackBasis F
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+w : h.Instance
+hin : RAddrIn W Pr R h B outputs x w
+hc : RCausal W Pr h B outputs x w
+Fr : Finset R.A
+covers : Frz R x ⊆ Fr
+N : ℕ
+sec : Fin N → SecP
+answers : Fin N → Fin 2 → OracleAnswer
+base : R.A → OracleAnswer
+coins : Fin (N * n1 W Pr) → OracleAnswer
+memo :
+  ∀ i ∈ positions W Pr N,
+    aA W Pr R h B outputs x w sec i (normalized W Pr answers coins) base ∈ Fr ∧
+      values W Pr answers i = base (aA W Pr R h B outputs x w sec i (normalized W Pr answers coins) base)
+fresh : ∀ i ∉ positions W Pr N, aA W Pr R h B outputs x w sec i (normalized W Pr answers coins) base ∉ Fr
+distinct :
+  ∀ i ∉ positions W Pr N,
+    ∀ j < i,
+      aA W Pr R h B outputs x w sec j (normalized W Pr answers coins) base ≠
+        aA W Pr R h B outputs x w sec i (normalized W Pr answers coins) base
+a : Fin (N * n1 W Pr) → (Fin (N * n1 W Pr) → OracleAnswer) → (R.A → OracleAnswer) → R.A := aA W Pr R h B outputs x w sec
+programmed : R.A → OracleAnswer := table W Pr R h B outputs x w Fr sec answers base coins
+stable : ∀ y ∈ Fr, programmed y = base y
+digest : lookA R programmed (W.pubBytes x) = lookA R base (W.pubBytes x)
+actual : Fin (N * n1 W Pr) → OracleAnswer :=
+  runC (gAddr W Pr h B outputs x w sec (lookA R programmed (W.pubBytes x))) (lookA R programmed) 0
+ca : CausalF Fr a
+i : Fin (N * n1 W Pr)
+⊢ actual i =
+    progF Fr (ProverCommitPublicCoins41.addresses (positions W Pr N) (values W Pr answers) a) base coins
+      (a i actual
+        (progF Fr (ProverCommitPublicCoins41.addresses (positions W Pr N) (values W Pr answers) a) base coins))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitGlobalRun42.lean:80:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  runC
+    (gAddr W Pr h B outputs x w sec (lookA R (table W Pr R h B outputs x w Fr sec answers base coins) (W.pubBytes x)))
+    (lookA R (table W Pr R h B outputs x w Fr sec answers base coins)) 0
+in the target expression
+  let programmed := table W Pr R h B outputs x w Fr sec answers base coins;
+  publish (runC (gAddr W Pr h B outputs x w sec (lookA R programmed (W.pubBytes x))) (lookA R programmed) 0) state =
+    publish (normalized W Pr answers coins) state
+
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CommitHandle Aux
+Pr : R1ProverP K CommitHandle Aux F W
+R : RomModel W
+h : HonestProver K
+B : PackBasis F
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+w : h.Instance
+hin : RAddrIn W Pr R h B outputs x w
+hc : RCausal W Pr h B outputs x w
+Fr : Finset R.A
+covers : Frz R x ⊆ Fr
+N : ℕ
+sec : Fin N → SecP
+answers : Fin N → Fin 2 → OracleAnswer
+base : R.A → OracleAnswer
+coins : Fin (N * n1 W Pr) → OracleAnswer
+memo :
+  ∀ i ∈ positions W Pr N,
+    aA W Pr R h B outputs x w sec i (normalized W Pr answers coins) base ∈ Fr ∧
+      values W Pr answers i = base (aA W Pr R h B outputs x w sec i (normalized W Pr answers coins) base)
+fresh : ∀ i ∉ positions W Pr N, aA W Pr R h B outputs x w sec i (normalized W Pr answers coins) base ∉ Fr
+distinct :
+  ∀ i ∉ positions W Pr N,
+    ∀ j < i,
+      aA W Pr R h B outputs x w sec j (normalized W Pr answers coins) base ≠
+        aA W Pr R h B outputs x w sec i (normalized W Pr answers coins) base
+State Observation : Type
+state : State
+publish : (Fin (N * n1 W Pr) → OracleAnswer) → State → Observation
+⊢ let programmed := table W Pr R h B outputs x w Fr sec answers base coins;
+  publish (runC (gAddr W Pr h B outputs x w sec (lookA R programmed (W.pubBytes x))) (lookA R programmed) 0) state =
+    publish (normalized W Pr answers coins) state
+'R1Z.ProverCommitGlobalRun42.run_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitGlobalRun42.continuation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

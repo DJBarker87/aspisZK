@@ -21,7 +21,8 @@ for pin in sorted((E/'pins').glob('lean-*.json')):
   records.append(rec)
   continue
  for kind,ext in [('out','log'),('time','log'),('sha','txt')]:
-  subprocess.run(['scp','-q',HOST+':/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/'+kind+'-'+a+'.'+ext,str(dest)],check=True)
+  if not (dest/(kind+'-'+a+'.'+ext)).exists():
+   subprocess.run(['scp','-q',HOST+':/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/'+kind+'-'+a+'.'+ext,str(dest)],check=True)
  log=(dest/('out-'+a+'.log')).read_text();tl=(dest/('time-'+a+'.log')).read_text()
  def field(s):
   m=re.search(re.escape(s)+r':\s*(.+)',tl);return m[1] if m else None
