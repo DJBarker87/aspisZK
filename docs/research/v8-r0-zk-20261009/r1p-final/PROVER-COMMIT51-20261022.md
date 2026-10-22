@@ -693,3 +693,38 @@ end R1Z.ProverCommitDeployedFuel22
 
 ```
 
+
+## Final accepted-cone audit and handoff
+
+J10368, exact target `R1Z.ProverCommitFinalAudit51`, exits 0 in 1.57 s,
+peak RSS 4216444 KiB, zero swaps. Its source revision is
+`0c8955cdb836ebdade189a028b251a4c054439d0` plus the frozen audit source hash
+and dependency-object fingerprint recorded in its receipt. It imports the
+repaired retained audit and all 32 new proof modules, and prints 73 new
+axiom audits, each a subset of `[propext, Classical.choice, Quot.sound]`.
+The old repaired audit's already retained axiom output is reused. This is
+one final combined check of the accepted cone; it is not a replay of the
+unavailable terminal cone or the complete frozen release manifest.
+
+The permanent linear binder regenerates `Linear50` byte-identically to
+J10300, with both scalar-multiplication definitions owned only by `Batched48`.
+`harness/final-check.py` verifies all source snapshots, resource receipts,
+accepted source hashes, allowed printed axioms, the unchanged deployed endpoint
+and all 491 shipped files. `pins/final-lean-freeze.json` freezes 44 current
+accepted/rebuilt modules. No crates/programs file changed, so no ELF rebuild
+is triggered. The prior default/devnet/Pool pins remain retained, without a
+fresh ELF identity claim. No wallet/account key is created or destroyed.
+
+Allocation used: J10300–J10368, comprising 65 compiler invocations (45 successful)
+and four explicitly retired preflights. J10369–J10399 remain unused. Work stops
+on the demonstrated terminal integration obstruction above. All accepted stages
+are committed; no push or merge is performed.
+
+Next concrete deliverable: a coherently pinned, replayable terminal producer
+bridge/cache, instantiating the actual Poseidon callable contract and public/
+selector/Copy lane provenance, then the exact oracle
+`maskLinear pi B a tau + ch.sem14 * terminalValue pub ch.sem0 ch.sem1 ch.sem2
+ch.sem13 (zc ch) B (honestClaims (0 : Trace K) a) a`.
+After its source success/value is proved, compose the boundary/terminal guards
+and round assembly, then interfaces 4–6 in the requested order. Full native
+simulator output = `R0Z.RefPayload.simE` payload is **not established**.
