@@ -43,10 +43,13 @@ idata=json.loads(identity.read_text())
 old={'default':'dfc2a91ab24e1ec4f57debd8f124cb4f6a3c38ba2662b7318e2e4f3b4acdde34','devnet':'fb2fc048f6499a4775051d0267c76e8ca273b28f557bfd3b5fb65b2f687c8b78','pool':'121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548'}
 new={k:v['sha256'] for k,v in idata['artifacts'].items()};new['pool']=old['pool']
 references=[]
+linked={'default-linked':'cff391a766c1085e4c1673268c0e6ace53a9e1b3ae9ef406bab5fb978d755486','devnet-linked':'35626ba4724bf9e6065610ee6ad2b9aeae8cba7464d302ce7c94d9ebf04bdcc6','pool-linked':'9121c1fc52a3b7f17146e57102979985ce37af1866407234dcfd3e37cd45a4cf'}
 for scope in N['scopes']:
  for p in sorted(scope.rglob('*')):
   if not p.is_file() or p.suffix not in ['.json','.md','.txt','.sha256'] or p.stat().st_size>12000000:continue
   s=p.read_text(errors='replace')
+  for k,h in linked.items():
+   if h in s:references.append({'receipt':str(p.relative_to(R)),'artifact':k,'old_sha256':h,'new_sha256':None,'status':'historical linked artifact receipt; no adopted linked ELF pin supplied'})
   for k,h in old.items():
    if h in s:references.append({'receipt':str(p.relative_to(R)),'artifact':k,'old_sha256':h,'new_sha256':new[k],'status':'unchanged retained Pool artifact pin' if k=='pool' else 'HISTORICAL verifier artifact; old graph/CFG/symbol certificate not transferred'})
 write('artifact-pins.json',{'target_revision':TARGET,'identity_receipt':str(identity.relative_to(R)),'identity_receipt_sha256':sha(identity.read_bytes()),'old':old,'new':new,'references':references,'new_default_devnet_size':1508152,'pool_size':605704,'note':'Adopted pins reused from approved identity receipt/C3 addendum. No ELF bytes locally rehashed or rebuilt. All old verifier address/inline/call-graph evidence remains historical, including linked.elf/debug comparisons; Pool pin alone does not validate changed verifier callees.'})

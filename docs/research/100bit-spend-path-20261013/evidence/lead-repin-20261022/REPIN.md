@@ -207,3 +207,12 @@ retained standard-axiom proof receipts are reused, never reported as a
 coherent new release proof. No assumptions are discharged, added or weakened.
 The remaining source/implementation joins are proof obligations, not new
 cryptographic assumptions. **Target not yet established.**
+
+Final focused validation: [validation.json](validation.json), exit 0,
+11 checks, wall 11.137223 seconds, peak RSS 250,953,728 bytes, swaps 0.
+Receipt source revision is `96b1b1dac52c076e73d984f09fd5cf3fa09ab974`;
+the exact audit scripts, including the final linked-artifact reference
+extension, are pinned by SHA-256. The six old deployed/linked artifact hashes
+have 32 explicit retained references; default/devnet linked pins are retained
+historically, with no invented adopted linked ELF hash. Final scope inspection
+also confirms the new validation files are confined to this evidence directory.

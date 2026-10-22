@@ -18,3 +18,10 @@ No Lean, Rust, Kani, SBF, full regression or wallet operation runs here.
 Existing formal receipts and axioms are reused at their original scope;
 there are no new theorem/axioms claims. Stage 2 supplies ownership, adoption
 impact and the report. Historical receipts remain immutable.
+
+Stage 2 is complete in `REPIN.md`, `ownership.json`, `extraction-text.json`,
+`artifact-pins.json` and `model-pins.json`. Stage 3's `validation.json` records
+11 passing focused checks and resource metrics. `validate.py` reproduces the
+source/hash validation and writes a new timed receipt; `impact.py --check`
+checks deterministic evidence without changing it. Historical binary
+references include linked artifacts; no new linked-artifact pin is inferred.
