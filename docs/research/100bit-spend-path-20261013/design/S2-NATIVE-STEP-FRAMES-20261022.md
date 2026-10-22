@@ -79,3 +79,47 @@ writer/account/TX2-reader checkpoint transport and fixed public retention or
 reconstruction. Cross-TX hash equality is not byte equality; no collision term
 or query budget is silently added. S6 and S1 composition remain behind that
 caller connection. Target not yet established.
+
+## Actual implicit cleanup follow-up
+
+`evidence/s126-current-caller-20261021/sdk-implicit-cleanup/` now checks
+**actual implicit compiler destruction**, rather than the explicit typed Drop
+continuation. The checked wrapper moves its actual guards and owners into an
+uncontracted callee; the callee returns and its actual parameter cleanup occurs
+before the wrapper postcondition. No ManuallyDrop, explicit Drop helper or
+verified/model callee stub occurs in either checked function. Only the same
+qualified std dealloc → actual frozen BumpAllocator dealloc dispatch remains.
+
+`sdk-implicit-cleanup-frame-check-v2`: exit0,1856 non-cover checks all pass,
+2/2 covers,103.742s,6322008KiB RSS,zero swaps; optimized one job with fresh
+6G/8G/Swap0 admission. #print axioms N/A. An independent saved GOTO fragment
+confirms exactly the five native destruction roles/types in order: reply Vec,
+proof Ref, statement Box, public Ref, checkpoint RefMut. Its exact prepared
+GOTO hash matches the checked target. Metadata inspection exit0,.169s,
+46732KiB RSS,zero swaps,1G/2G/Swap0. Contract instrumentation declarations/dead
+records are listed explicitly; no unknown call is silently filtered.
+
+This removes the explicit-Drop-helper requirement from the focused cleanup
+frame. The original native suffix and this actual implicit suffix have the
+same typed destruction order. Moving the live values into that source-step
+instance, admitted runtime-layout completeness, allocator dispatch and
+whole-caller common execution remain explicit; operation-order equality is
+not promoted to a universal compiler-correctness theorem.
+
+The first implicit attempt (`...check-v1`) failed its postcondition:
+exit1,41.633s,1779836KiB,swap0. Its probe ran before function-parameter
+cleanup. Moving destruction inside the checked wrapper corrected that proof
+boundary; this is not a shipped-defect claim. The stronger combined copy plus
+implicit-cleanup check timed out: exit1,203.523s,6545012KiB,swap0. It is excluded
+and will not be rerun unchanged or with a higher cap. The separate exact copy
+frame, actual implicit cleanup frame, actual SDK geometry and existing kernel
+frame composition are the retained route. No new whole-copy theorem is claimed.
+
+`python3 tools/s126-sdk-modular-20261021/check-implicit-cleanup-packet.py`
+audits all source hashes, regeneration, receipts, exact metadata/stubs,
+dependency reuse and compiled cleanup fragment without solver replay. No
+binaries are distributed. Failed initial parser inspection was corrected to
+recognise and list DFCC instrumentation; it reused the saved dump, with no
+second GOTO invocation or proof replay. Initial and corrected parser sources
+are retained. Whole S2, S1, S6 and the 100-bit target remain OPEN. No source
+adoption decision or production change was made or requested here.
