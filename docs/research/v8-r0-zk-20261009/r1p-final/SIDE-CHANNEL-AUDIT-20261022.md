@@ -477,3 +477,185 @@ the observed record. Removing/gating instrumentation and padding external
 schedules changes frozen host execution; source-faithful modeling, retention
 of histories, and exact I/O-publicness proofs are proof-only. Do not claim
 “no publication” means no side channel.
+
+### F8 — deployment/caller correspondence is not pinned to the requested adapter (priority 0)
+
+The requested audit target is explicit and was not changed: the proof-account
+public nonce adapter feeding `prove_masked_retrying_with`. Repository search
+finds its documentation and library definition, but **no checked-in native
+production caller of `prove_masked_retrying_with` using that adapter**.
+The actual R1 devnet demonstration at
+`tools/r1-cost-probe/src/bin/devnet_spend/plan.rs:112` instead calls
+`prove_masked_retrying`, whose callback calls the 96-byte `generate()`
+(`probe/prover.rs:334`). The separate live wallet adapter
+`tools/v7-live-pool-proof/src/lib.rs:67–86,97–116` uses
+`generate_for_mask_nonce` but calls the older V7 onefold prover. Neither
+establishes deployment correspondence for the requested composed route.
+The caller-supplied callback in the audited API is not itself an enforcement
+of fresh public proof-account nonce selection.
+
+This is a **source/deployment gap**, not evidence that the public nonce is a
+privacy break or permission to silently analyze the 96-byte route instead.
+The actual binary, configuration and client adapter must be pinned before a
+claim about deployment. The different nonce routes have different entropy
+counts and reservation paths, so their receipts are not interchangeable.
+
+The demonstration does reveal useful concrete caller I/O and timing structure:
+
+| Caller functions/source | Actual behavior and classification |
+|---|---|
+| `plan.rs:14–25` `pk/meta/ro/rw/ix/err/digest/note/bytes`, :26 `run` | b for the documented public fixture inputs; `note` loops up to 10,000 to find fixture lane matches. This is not secret production note sampling. Match/unwrap errors are public request/environment errors |
+| `plan.rs:78` `prove` | b for fixed public fixtures; upstream witness building and path-dependent preparation must be re-audited if replaced with secret wallet witnesses. Writes `note-recovery.json` mode 0600/create-new, then sync, before proving (:104–109); includes input key/salt and output recovery data. Contents are deliberately public fixture values in this driver; never treat this as a generic private-wallet logging guarantee |
+| same:112–123 | after proving, writes afterstate-prefixed `proof.bin`, then `statement.bin`, then returns JSON with attempts, wall seconds, mask audit, proof length, upload count and instructions. No proof-file write on a prover error, but recovery file and nonce burns remain. OS-dependent write prefix/error order is observable. Vector/file lengths are fixed/public here; no proof of a production recovery JSON's length independence exists |
+| `devnet_spend.rs:13` `main`, :24 `unhex`, :25 `hex` | reads JSON stdin; prints plan JSON (or signed transaction hex/signature/byte count) to stdout. Errors propagate through anyhow; keyfile reads, transaction signing and serialization are outside the requested prover library. Their secret-key arithmetic is an additional deployment L2/L3 boundary, not audited field arithmetic |
+| `scripts/r1_devnet_spend.py` `write/key/account/invoke/plan/readhex/ix/b58/create` | fixture-driver local receipts, retained key files, account/rent queries and account creation. Public plans/account sizes govern these operations. Base58 parsing loops operate on public addresses. `key` invokes external `solana-keygen`, whose key generation/signing trace is an external boundary |
+| same `send` (:26–89), `upload` (:106–122), nested `one` | proof upload in 3763-byte chunks (plus four-byte offset), four concurrent workers with `(i%4)*0.25s` staggering; source order is index order but actual submission/completion order is scheduler-dependent. 16 proof uploads, then one statement upload, readback, then checkpoint/stage1/stage2; network retries and polling are visible. Fixed plan lengths do not fix network packet timing |
+| same main spend loop (:166 onward) | creates/reuses proof/public/checkpoint key files and accounts, loads proof plan or generates it, records timing summaries, then settlement readbacks and explicit replay/mutation tests. These extra test transactions are observable fixture behavior, not a hidden prover action |
+| `scripts/r1_devnet_rpc.py:7,14` `pace`, `rpc` | shared 0.65s RPC pacing; at most eight transport attempts; backoff min(2^attempt,16); public response/fault dependent; URL timeout 60s. These do not establish a witness-independent schedule when the request start time depends on proof generation |
+
+**Recommendation:** proof-only pin/trace the actual deployed caller and
+supply an execution correspondence certificate to the requested route, or
+report that the route is still a deployment target. If changing a deployed
+caller to use fresh proof-account nonces per attempt, that is a host/client
+change requiring new source pins, entropy/ledger proofs and integration
+receipts. Audit private recovery-file length/content policy, error rendering,
+signing/key generation and upload scheduling for that caller. No live RPC,
+wallet operation or deployment was performed by this audit.
+
+## Deployment target and L3 boundary
+
+The prover/checker implementation is **native host Rust with std**, not the
+SBF verifier: durable filesystem I/O, OS getrandom, TLS/RefCell, Instant,
+panic hooks and catch_unwind are all on the prover route.
+`aspis-r1-cost-probe/Cargo.toml` gates prover/sim/checker behind host features;
+`programs/r1-cost-probe/Cargo.toml:22` enables `optimized-terminal` and
+`program-build`, not `prover/r1p-check`. The host feature set and verifier
+feature set must not be conflated. SHA-256 is supplied as a `HashFn`, so an
+arbitrary user callback is not automatically the frozen HOST_HASH.
+
+The reused historical receipt `r1p-retry/evidence-pole.json:15` records
+rustc/cargo 1.94.1 and `x86_64-unknown-linux-gnu` on the Linux build host.
+It is prior test evidence, not an attestation of today's user's deployment.
+No WASM/browser artifact or WASM runtime is identified for this route; a
+browser deployment would need a different supported RNG/filesystem adapter
+and new analysis. A precise deployed CPU model, microcode, OS, native prover
+binary hash, active target features, panic strategy and compiler flags are
+**not pinned by the supplied task artifacts**. We do not infer CPU type from
+“nuc”, or use the local development Mac's CPU as the deployment CPU.
+
+L3 must explicitly choose named trust items or measurements per deployment:
+
+1. **Compiler trace preservation:** exact rustc/LLVM, optimization/LTO,
+   target triple/CPU/features, dependency versions, panic mode and binary hash;
+   source fixed-trace kernels lower without secret control flow/addressing.
+   Current F2 source is not fixed-trace, so this cannot be assumed as if L2
+   had passed. Inspect disassembly for branches, table accesses, integer
+   divide/remainder lowering, SIMD helpers and compiler-inserted bounds checks.
+2. **Hardware latency/microarchitecture:** identified CPU/microcode and used
+   instruction set; operand-independent multiply/divide/shift/selection
+   latency where required; cache/TLB/speculation/branch predictor effects,
+   shared-core/SMT/cache adversary and OS scheduling model. Data-independent
+   instruction latency alone does not hide secret-dependent memory addresses.
+3. **Native services:** chosen SHA-256 backend and dispatch, allocator,
+   getrandom implementation, zeroization, TLS, std comparisons/collections,
+   filesystem/persistence and fault visibility. E1/E2 are semantic entropy/
+   durability assumptions; they imply neither timing isolation nor allocator
+   constant time. Secret-file content privacy remains a declared boundary.
+4. **Measurements, clearly labelled:** dudect-style fixed-vs-random and
+   same-public two-witness timing distributions per field kernel, mask
+   sampler, helper, sumcheck, encoder, P_R1 phase and whole prover; include
+   failing as well as successful attempts and full count/effect traces.
+   Record warm/cold cache, pinned CPU/core, frequency/SMT settings, sample
+   count, statistical method, raw timing data, binary/source hashes and
+   environment. Evaluate cache/address traces where the threat model includes
+   local attackers. A non-detection is not a proof; do not fold L3 into L2.
+
+No timing measurements or disassembly inspection were performed here.
+
+## Evidence and validation status
+
+Receipts are under
+`docs/research/100bit-spend-path-20261013/evidence/sidechannel-20261022/`:
+
+- `source-inventory.json`: SHA-256/size pins for 55 source files plus feature/
+  dependency inputs, 1,648 lexical declarations and 4,993 operation sites.
+  `inventory.py` regenerates the index. Classification is the function-family
+  tables above, not a regex claim of taint analysis, cfg resolution or whole
+  program completeness. Macro-generated and external runtime implementations
+  remain explicit boundaries.
+- `checks.py` / `checks.json`: nine tiny exact source-expression/model checks,
+  including canonical add/negate/reduction, scalar rejection, gamma carry,
+  entropy and retry normalization, local pole-cardinality obstruction, and
+  same-query-list/different-duplicate trace. Exit 0. These are **Python
+  source-expression counterexamples and formula checks**, not execution of
+  native Rust, bounded Kani verification, full-spend counterexamples or a
+  Lean theorem. Chosen streams do not establish a SHA-256 preimage.
+- `validation.json`: source pins checked against both worktree and baseline,
+  cited finding anchors checked, allowed-file policy checked, and git diff
+  whitespace validation. It records the actual command outcomes.
+
+No Rust/Lean/Kani build was started, no new harness was put under crates/
+or programs/, and no complete regression was rerun. Therefore the three
+frozen-ELF rebuild condition was not triggered: no identity claim is made
+from an unrun build. Frozen shipped sources and part-46 prover-refinement
+modules were not edited. No proof assumptions were discharged by compiling
+this report. E1/E2/P1 and existing refinement/trust hypotheses remain;
+no new trust item is silently installed. The proposed L3 trust items are
+choices to be documented, not accepted assumptions of a new theorem.
+
+## Priorities and exact next proof deliverables
+
+1. **P0 — pin deployment and L1 retry/effect law (F8/F1).** Deliver
+   `SideChannelDeploymentPins` (actual native binary/hash/features, caller,
+   CPU and nonce callback), a source-faithful `L1AttemptRecord` carrying RNG
+   call status/count, nonce reservation/write/fsync prefixes, precise failing
+   call/error, checker invocation count, return count and external write/send
+   metadata, and `SideChannelRetryLaw` with the conditional hazard identities
+   above. Prove source ownership/order for every k=0..7, including callback
+   errors and rejection prefixes. Do **not** replace the caller by the
+   96-byte adapter or assume a numerical geometric parameter.
+2. **P0 — full L1 privacy coupling.** Deliver `SideChannelL1JointCoupling`:
+   for every same-public valid witness pair, adversarial byte-blind schedule,
+   public nonce schedule and retained ROM/ledger history, couple the complete
+   L1 records and the existing published proof/oracle view. State exact
+   agreement outside named bad events and the total variation bound including
+   pole/exhaustion/memo terms once. Prove the capped two-seed entropy law,
+   query exhaustion/equal-circle abort law and TLS observations are included.
+   If claiming exact equality rather than statistical distance, produce an
+   actual witness-independent P∧VR1∧¬exh law or stop with a valid-spend
+   counterexample. The local tuple obstruction is not that counterexample.
+3. **P0 — L2 arithmetic obstruction/decision (F2).** Deliver small Kani
+   self-compositions instrumenting the actual canonical M31 helpers; record
+   expected counterexamples for equal branch traces on arbitrary canonical
+   operands. Do not “prove” the false theorem by adding equal-secret premises.
+   For unchanged code, formalize the obstruction and state L2 remains open.
+   If approved for adoption, supply fixed-trace replacement kernels plus
+   arithmetic equivalence, caller range facts and compiled instruction audit.
+4. **P1 — L2 guard and structured-loop proofs (F3/F4).** Deliver
+   `SideChannelCanonicalGuards`, showing exactly which source `any`/parser/
+   high-half/balance/boundary/nonzero branches are constant on the honest
+   domain, not just on successful fixtures. Kani per-step two-run checks,
+   then Lean loop induction for fixed mask layouts, entropy candidate control,
+   scalar/refill offsets and field-width invariants; expose variable
+   private-coin traces in the relation instead of dropping them. Compile
+   smallest modules first, using env J 9800–9899 only for real attempts.
+5. **P1 — L2 addressing/allocations/collections (F5/F6).** Deliver
+   `SideChannelSourceTrace` with explicit branch, index, loop, allocation,
+   variable-operation and collection-cost events. Small two-run checks for
+   sparse_eq suffix selection, duplicate scan, Merkle sharing, table insert/
+   lazy-entry/memo-hit, rank pivot/early-stop and TLS buffer state. Either
+   prove their complete conditional distribution is simulatable under the
+   adopted L2 contract, or retain concrete counterexamples and identify the
+   necessary host/protocol change. A TrustedStd semantics premise is not a
+   cost premise; any needed cost trust must be explicit and approved as such.
+6. **P1 — compose and gate.** Deliver `SideChannelL1Native` and
+   `SideChannelL2Native` connected to the *actual* native caller/artifact,
+   with exact remaining hypotheses and one axioms audit. Coordinate the
+   interfaces with part 46 without editing its owned modules. Any new
+   cfg(kani)-only crate/program harness requires the user's three frozen ELF
+   rebuilds in MemoryHigh=6G/MemoryMax=8G/MemorySwapMax=0/TasksMax=64 scopes,
+   followed by byte identity to dfc2a91a… / fb2fc048… / 121f3e29…; any host
+   implementation change needs its own source/refinement and adoption gates.
+7. **P2 — L3 deployment receipt.** Deliver the explicit trust selection and/or
+   the measured, reproducible binary/CPU timing/cache experiment specified
+   above. No source proof or fixture timing is a substitute for it.
