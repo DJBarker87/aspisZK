@@ -211,3 +211,30 @@ final source/artifact re-pins and S10 integration; the composed security
 experiment and raw 100-bit conclusion. No complete S9 cone or 100-bit result
 is claimed. Focused receipts reuse pinned warm dependencies and do not
 constitute the final coherent release replay.
+
+
+## Continuation: same-helper branch composition and actual candidate terms
+
+This continuation supersedes the earlier open item for obtaining two branch
+execution witnesses from the same successful selected helper loop. Commit
+`d46dd805f` proves that join, including the same intermediate array and the
+raw cell-zero frame needed to transport canonicality through branch one.
+It retains input-read canonicality, and is still a selected-model helper
+result rather than a Rust caller or complete coefficient theorem.
+
+Commit `89fc8b853` supplies the second-branch record and actual candidate
+scalar callback transport, with a separate standard-axiom audit of the
+record constructors. Commit `7188efe5e` derives the candidate body's same
+four term child calls from its successful generated-source parent execution.
+The exact suffix preserves the already-read PERM index; it does not replace
+that index with a fresh read. Commit `469de4f6f` relates each accepted term
+to its scaled source coordinate and seed power, using an additive public
+decoder export from the original producer. Earlier declaration bodies are
+unchanged, but the new owner object is separately pinned.
+
+Still OPEN: compose the same-body scalar and ordered sums into the original
+coefficient relation; finish candidate high-array and scalar-fold transport;
+join the complete candidate body and outer helper to the model; discharge
+actual caller/library boundaries; adopt and re-pin artifacts if the candidate
+is accepted; complete S10/coherent replay and the security experiment.
+No complete S9 cone or 100-bit conclusion follows from these focused checks.
