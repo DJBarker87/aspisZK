@@ -2323,3 +2323,16 @@ No independent writer/child/range/frame premise is added. Physical native
 storage, account metadata, cross-transaction checkpoint/TX2 public transport,
 actual child installation and ordered oracle correspondence remain. The lead's
 fourteen-field `S2CallerFacts` is still not populated in full; no cone closure.
+
+## 2026-10-22 sized saved-account and native tail progress
+
+The latest exact statement, before/after premise audit and source-only
+receipts are in the last two sections of
+`S126-FIXED-INPUT-HANDOFF-20261022.md`. The reference export now derives final
+account2 checkpoint bytes/1768 size and all account/lamports metadata stability
+from the same sole complete installed accepted execution premise. The actual
+SDK continuation proves complete public/checkpoint point frames and one proof
+window, plus concrete copy/Drop preconditions; whole proof/native effect-frame
+composition is not yet proved. All whole-caller/frame timeouts are retained
+and excluded. No shipped source or release artifact changed. S2/S6/S1 remain
+open; source and runtime/oracle/TX2 execution instantiation is still required.

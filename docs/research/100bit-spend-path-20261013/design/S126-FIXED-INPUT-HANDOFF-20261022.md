@@ -276,3 +276,118 @@ are unchanged at the adopted S4 freeze, explicitly pinned in
 `caller-source-adoption-overlay-20261022.json`; changed transitive S4/powers
 semantics remain their owners' re-pin obligations. No shipped source or ELF
 was changed. Whole S1/S2/S6 and the100-bit target remain unestablished.
+
+## Sized final-account export and metadata effects (2026-10-22)
+
+Read the final section of `HANDOFF-SESSION-A-20261021.md` at lead commit
+f4669da3e298974347f8aa7faacddce36ebabe72. Its14 `S2CallerFacts` fields are
+the target interface. No lead file, production source or other cone was edited.
+
+The previous `borrowed_stage1_fixed_saved_current` provided the checkpoint
+at the ORIGINAL account2 data slot. The stronger
+`CheckpointWriter.borrowed_stage1_sized_saved_account` in
+`S126SdkSizedAccountExportV1.lean` now provides the same initial proof/public
+identities, exact57607-byte suffix and source-current-first execution, plus:
+
+- final `inputBytes out 2` equals the SAME current-first result checkpoint;
+- that checkpoint has length1768, derived from this caller's actual header
+  read, `checkpoint_size_S2` call and successful output-length branch;
+- `out.accounts=initial.accounts` and
+  `out.lamports_cells=initial.lamports_cells`.
+
+The sole enclosing premise remains the complete successful installed borrowed
+reference execution, with identical initial/out carriers and quantifiers.
+No writer, metadata, checkpoint-size, first-child-success, buffer-frame or
+independent range premise was added. `S2SdkMetadataFrameV1` separately proves
+account/lamport metadata preservation for ALL ordinary returned statuses,
+including successful writes and rejections. It does not prove termination
+of arbitrary supplied children. Checkpoint-size arithmetic reuses the existing
+TOTAL S2 size theorem; the enclosing success implication is ACCEPTED-ONLY.
+
+| Focused target / accepted attempt | Exit | Wall s | RSS bytes | Swap | Axioms reports |
+| --- | --- | --- | --- | --- | --- |
+| S2SdkMetadataFrameV1 / s2-sdk-metadata-frame-v4 | 0 | 31.610255458 | 3242229760 | 0 | 10 |
+| S126SdkSavedAccountExportV1 / s126-sdk-saved-account-export-v1 | 0 | 17.698031459 | 3252469760 | 0 | 1 |
+| S2SdkCheckpointLengthV1 / s2-sdk-checkpoint-length-v2 | 0 | 62.078208500 | 3131523072 | 0 | 2 |
+| S2SdkSizedSavedFirstV1 / s2-sdk-sized-saved-first-v1 | 0 | 33.085579292 | 3215065088 | 0 | 3 |
+| S126SdkSizedAccountExportV1 / s126-sdk-sized-account-export-v1 | 0 | 20.964783500 | 3247210496 | 0 | 2 |
+
+All17 reports use only subsets of propext/Classical.choice/Quot.sound. Each
+smallest changed target compiled first with the atomic local lock and
+-j1 -M4400. Exact source/tool/direct imports are in each receipt;
+`account-effects-import-pins.json` records5632 selected object hashes only.
+Cold dependencies were avoided by reusing pinned R22 checkpoint caches.
+Earlier failed and superseded attempts remain excluded. The new source-only
+`check-account-effects-packet.py` passes; no unchanged Lean replay occurred.
+
+## Actual SDK post-first continuation cuts
+
+`evidence/s126-current-caller-20261021/sdk-native-tail/` retains four passing
+cuts plus12 excluded attempts, including whole-stage and DFCC timeouts.
+The source-only checker reproduces the generators and validates sources,
+helper equality, receipts, original-SDK harness metadata, exact local-path
+pre/post pins and cover audits. No binaries are distributed.
+
+| Native target | Enabled checks | Exit | Wall s | RSS KiB | Swap |
+| --- | --- | --- | --- | --- | --- |
+| post-first-tail-root1-check-v5 | 2083 | 0 | 56.771 | 2325940 | 0 |
+| post-first-tail-root2-check-v5 | 2085 | 0 | 59.408 | 2495940 | 0 |
+| post-first-tail-root0-window0-check-v6 | 2084 | 0 | 178.395 | 4321272 | 0 |
+| tail-leaf-links-check-v1 | 2187 | 0 | 56.264 | 2418476 | 0 |
+
+All four execute original SDK2.3.0 and real std guards, full statement Box,
+688-byte candidate and original relative declaration/Drop order. Only the
+previously checked exact native-finish bool image is a verified callee stub;
+the full original native_finish/ProgramError body and source-image proof
+remain pinned. Includes mapped first failure, all reply lengths0..1769,
+success and wrong-length rejection, counters/Rc/lamports restoration. Canonical
+slots and admitted counts are conclusions of the earlier native-entry cuts;
+the complete source execution joining those cuts is still an obligation.
+
+Root1 covers every public byte; root2 covers every checkpoint byte. Root0
+covers only the FIRST4096-byte window, not all58295 bytes. No complete proof
+postframe follows from this partial observation. The leaf-links cut checks
+actual copy destination, actual guard counter-word pointers/live counts and
+all nine counter/data region disjointness facts. Those supply concrete leaf
+preconditions, but the combined source effect-frame theorem still must be
+composed. No credit is assigned to timed-out combined frame attempts.
+Each job had fresh admission,6G/8G/MemorySwapMax=0, optimized compiler flags
+and one build job. Original assertion runs report3of5 cover locations;
+root1/2 targeted audits establish the three distinct source intentions,
+with repeated wrong-length compiler locations kept distinct. These auxiliary
+queries do not replay assertions, and their raw inventories are not substituted
+for the enabled assertion count above.
+
+Remaining lead-interface premises are actual native-to-installed-reference
+source/heap/child/gate/scan correspondence; original external snapshot and
+cross-transaction ASF8/checkpoint transport; actual reached calls/order,
+nodeViews/y1Input and total per-call oracle law. Native owner/deallocation and
+full proof-byte postframe composition are still open. Account metadata and
+checkpoint size are now consequences at the REFERENCE layer, not new
+assumptions; this does not supply their native instance. The inherited
+source-current-first link reuses S6 decoder/None proofs. Original S1
+Prepared/prepared_claim challenge trace/caller correspondence and remaining
+R22/repin/coherent replay remain required. Whole S1/S2/S6 and the100-bit target
+are NOT established.
+
+## Combined actual guard destruction frame
+
+`sdk-native-drop-chain/` adds a checked concrete combined guard frame:
+`native_drop_chain` consumes the actual proof/public `Ref` and checkpoint
+`RefMut` obtained from original SDK2.3.0. Actual std Drop runs in source
+relative order, with no SDK/Drop models or verified stubs. Its only permitted
+writes are the three real borrow counters; both shared counters decrement
+and the exclusive counter returns to0. `sdk-native-tail-leaf-links-check-v1`
+previously checked its actual guard-word/counter/live-count preconditions
+and disjointness from every original data buffer. This closes the combined
+GUARD-destruction effect-frame subclaim in that admitted SDK fixture domain;
+statement Box/checkpoint Vec owner effects and full source composition remain.
+No full proof/public postframe is inferred while owner effects are open.
+
+Accepted `sdk-native-drop-chain-check-v3`: exit0,48.872s,3950528KiB peak RSS,
+swap0,1632 enabled assertions and both covers satisfied, fresh6G/8G/Swap0,
+optimized flags and one build job. v1/v2 are excluded fixture-bound failures
+(loop4 and32-byte key memcmp); v3 uses structural bound33 with unwinding
+assertions enabled. All exact source/tool/dependency pins and three receipts
+are retained source-only. Checker reproduces the accepted source and passes;
+no assertion replay. Kani result, so #print axioms is not applicable.
