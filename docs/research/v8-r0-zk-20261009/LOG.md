@@ -8086,3 +8086,27 @@ sorted association list, checked by Kani against the shipped BTreeMap
 per transition (insert/entry-or-insert/iteration order); timing calls
 removed (timings are not observable, D143). Verify each small function
 separately before composing.
+
+## D145 (lead, 2026-10-22 03:45): part 32 merged; correction to D144 on BTreeMap
+
+Merged `codex/cx-prover-commit32-20261022` (report
+`r1p-final/PROVER-COMMIT32-20261022.md`; relaunched once after a Codex
+capacity error, with a WIP snapshot commit kept). Proved in Lean, for the recursive sorted-list
+publication reference: lookup totality, insertion/replacement, query-order
+publication, sortedness, uniqueness and byte comparison. Standard axioms; all
+three frozen ELFs rebuilt byte-identical (cfg-gated `sim_owned32.rs`).
+Obstruction: the Kani check of the shipped BTreeMap transitions times out
+(600 s), even isolated.
+
+**Correction (lead error in D144).** D144 asked for Kani checks "against the
+shipped BTreeMap". That contradicts D133: BTreeMap internals are not verified;
+`std::collections::BTreeMap` is a named trusted item (`ProverCommitTrustedStd24.TrustedStd`:
+`btree_empty`, `btree_insert_state`, `btree_insert_previous`, `btree_get`,
+`btree_iter_ordered`, specifying it by the universal `Std.TreeMap` model). The
+timeout is the predictable cost of that mistake. Corrected route: verify the
+shipped *loop logic* with Kani with BTreeMap stubbed by an implementation of
+exactly the TrustedStd contract (the sorted-list model), and connect the
+native loop to the reference in Lean via the TrustedStd fields. If the shipped
+code uses `entry(..).or_insert_with`, add it to TrustedStd as one more named
+field with its documented semantics (get, then insert if absent), recorded
+visibly on the trust list. Do not add any other field.
