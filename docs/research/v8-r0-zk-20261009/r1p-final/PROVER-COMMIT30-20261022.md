@@ -65,3 +65,44 @@ hash. None is represented as a proof or memory kill. `source-inventory.json`
 checks 661 tracked files against the isolated host workspace: only the two
 explicit cfg-only adapter files differ; every other source/configuration pin
 matches. No tracked shipped source has changed.
+
+## Stage 2: range-owner and whole-walk composition
+
+J7870 compiles `R1Z.ProverCommitNative30`. `continuation_owned` transports the
+source's u8 Range counter through the existing finite-row induction;
+`walk_owned` includes initialization; `walk_model` includes both circle points
+and the complete Transcript tail; `logged_model` retains the external machine
+and ordered read history, including rejection. Exit 0, 1.98 s,
+4103840 KiB GNU peak RSS, zero swaps. All four `#print axioms` reports are
+`[propext, Classical.choice, Quot.sound]`. J7868/J7869 are excluded elaboration
+diagnostics (cast-zero normalization and final reflexivity), retained verbatim.
+No failed theorem is accepted and no `sorryAx` appears in the accepted audit.
+
+This Lean owner uses the separately checked semantic iteration substitution;
+the source boundary is the recorded Kani proof and structural source binding,
+not a new Lean axiom or a declaration pretending to interpret Rust. Its complete
+source-to-model attribution remains pending until the caller gate is complete.
+
+The borrowed semantic summary is checked separately against both native and
+owned callees in `semantic30-summary-all-rows-v1` (exit 0, 32.496 s,
+920484 KiB RSS, zero swaps). This strengthens the earlier callee gate with a
+third execution and the same exact state, error and ordered effects.
+
+The initial caller recipes expanded harness input construction or the callee's
+parser/oracle body. They were stopped for shape review, and remain excluded.
+The replacement caller proof uses a common arbitrary callee result and complete
+post-state, checking identical incoming row/state/counter/record bytes and
+exactly one call in each context. Both success and every error constructor are
+covered. The common post-state is deliberately more general than a genuine
+callee outcome; exact callee behavior and effects are supplied by the separate
+native/owned callee check. An oracle that panics on any direct caller read
+checks that the surrounding caller makes no additional hash query. Thus callee
+effects are inserted exactly once at the same program point on both sides,
+rather than silently discarded. This is the documented two-harness contextual
+congruence argument, not an unverified `stub_verified` annotation.
+
+The native row-14 caller with this complete summary passes
+`caller30-row14-context-v1`; the remaining rows are pending. No caller expands
+field validation. Inputs retain arbitrary transcript bytes/counter, every
+semantic array limb, and arbitrary selected record bytes. Fresh arbitrary
+index checks cover every incoming record byte and every returned array cell.

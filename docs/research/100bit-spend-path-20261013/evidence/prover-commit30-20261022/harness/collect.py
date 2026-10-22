@@ -5,7 +5,7 @@ H='/home/dombarker/project-offloads/codex-cx-prover-commit30-20261022';host='dom
 for name in ['receipts','*-inputs.json','*-stop.json']:
  subprocess.run(['scp','-r',f'{host}:{H}/{name}',str(E)],check=True)
 S=E/'rust-sources';S.mkdir(exist_ok=True)
-for variant,folder in [('semantic','src'),('fields','src-fields'),('semantic-v1','snapshots/semantic30-row14-v1'),('fields-v1','snapshots/fields-v1'),('fields-v2','snapshots/fields-v2'),('semantic-v3','snapshots/semantic-v3'),('semantic-modular-v1','snapshots/semantic-modular-v1'),('fields-v3','snapshots/fields-v3')]:
+for variant,folder in [('semantic','src'),('fields','src-fields'),('semantic-v1','snapshots/semantic30-row14-v1'),('fields-v1','snapshots/fields-v1'),('fields-v2','snapshots/fields-v2'),('semantic-v3','snapshots/semantic-v3'),('semantic-modular-v1','snapshots/semantic-modular-v1'),('fields-v3','snapshots/fields-v3'),('caller-v1','snapshots/caller-v1'),('caller-v2','snapshots/caller-v2'),('caller-v3','snapshots/caller-v3'),('caller-v4','snapshots/caller-v4')]:
  for name in ['r1_wire.rs','sim.rs']:
   path=f'{folder}/crates/aspis-r1-cost-probe/src/{name}' if folder.startswith('src') else f'{folder}/{name}'
   subprocess.run(['scp',f'{host}:{H}/{path}',str(S/(variant+'-'+name+'.txt'))],check=True)

@@ -1,0 +1,78 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNative30.lean:31:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let result ←
+      ProverCommitRows29.rows effect records.semantic (UScalar.cast UScalarTy.Usize 0#u8) 25 initial
+          (Array.repeat 25#usize AspisR1SimSemantic20.aspis_core.field.QM31.ZERO)
+    match result with
+      | core.result.Result.Err e => pure (core.result.Result.Err e)
+      | core.result.Result.Ok (state, sem) => do
+        let out ← ProverCommitWalk29.suffix effect (core.result.Result.Ok sem) state records variant
+        pure out.1
+is not definitionally equal to the right-hand side
+  do
+    let result ←
+      ProverCommitRows29.rows effect records.semantic 0#usize 25 initial
+          (Array.repeat 25#usize AspisR1SimSemantic20.aspis_core.field.QM31.ZERO)
+    match result with
+      | core.result.Result.Err e => pure (core.result.Result.Err e)
+      | core.result.Result.Ok (state, sem) => do
+        let out ← ProverCommitWalk29.suffix effect (core.result.Result.Ok sem) state records variant
+        pure out.1
+
+M : Type → Type
+inst✝³ : Monad M
+inst✝² : LawfulMonad M
+inst✝¹ : MonadLiftT Result M
+inst✝ : LawfulMonadLiftT Result M
+effect : Unit → Parts → M ProverCommitWalk28.Bytes32
+initial : SemanticState
+records : Records
+variant : AspisR1SimControl21.transport.Variant
+⊢ (do
+      let result ←
+        ProverCommitRows29.rows effect records.semantic (UScalar.cast UScalarTy.Usize 0#u8) 25 initial
+            (Array.repeat 25#usize AspisR1SimSemantic20.aspis_core.field.QM31.ZERO)
+      match result with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok (state, sem) => do
+          let out ← ProverCommitWalk29.suffix effect (core.result.Result.Ok sem) state records variant
+          pure out.1) =
+    do
+    let result ←
+      ProverCommitRows29.rows effect records.semantic 0#usize 25 initial
+          (Array.repeat 25#usize AspisR1SimSemantic20.aspis_core.field.QM31.ZERO)
+    match result with
+      | core.result.Result.Err e => pure (core.result.Result.Err e)
+      | core.result.Result.Ok (state, sem) => do
+        let out ← ProverCommitWalk29.suffix effect (core.result.Result.Ok sem) state records variant
+        pure out.1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNative30.lean:47:66: error: unsolved goals
+M : Type → Type
+inst✝³ : Monad M
+inst✝² : LawfulMonad M
+inst✝¹ : MonadLiftT Result M
+inst✝ : LawfulMonadLiftT Result M
+effect : Unit → Parts → M ProverCommitWalk28.Bytes32
+publicBytes : Slice U8
+records : Records
+variant : AspisR1SimControl21.transport.Variant
+⊢ (do
+      let initial ← ProverCommitInit28.start effect () publicBytes records.c1_root
+      match initial with
+        | core.result.Result.Err a => pure (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic)
+        | core.result.Result.Ok initial =>
+          ProverCommitWalk29.continuation effect { state := initial.state, hash := (), next_row := initial.next_row }
+            records variant) =
+    do
+    let initial ← ProverCommitInit28.start effect () publicBytes records.c1_root
+    match initial with
+      | core.result.Result.Err a => pure (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic)
+      | core.result.Result.Ok initial =>
+        ProverCommitWalk29.continuation effect { state := initial.state, hash := (), next_row := initial.next_row }
+          records variant
+'R1Z.ProverCommitNative30.continuation_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitNative30.walk_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitNative30.walk_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitNative30.logged_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh
