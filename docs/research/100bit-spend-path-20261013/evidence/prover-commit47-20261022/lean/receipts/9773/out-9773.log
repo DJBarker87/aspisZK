@@ -1,0 +1,50 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitArrayValue47.lean:27:17: error(lean.unknownIdentifier): Unknown identifier `Function.update_same`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitArrayValue47.lean:26:4: error: unsolved goals
+case pos
+n : Usize
+xs : ℕ → Old.Q
+i : Usize
+hi : ↑i < ↑n
+x : Old.Q
+hidx : ↑i < (↑(sourceArray n xs)).length
+out : Std.Array E n
+hout : (sourceArray n xs).update i (ProverCommitNativeOps47.embedded x) = ok out
+hset : out = (sourceArray n xs).set i (ProverCommitNativeOps47.embedded x)
+hk1 : ↑i < ((↑(sourceArray n xs)).set (↑i) (ProverCommitNativeOps47.embedded x)).length
+hk2 : ↑i < (↑(sourceArray n (Function.update xs (↑i) x))).length
+⊢ ProverCommitNativeOps47.embedded x = ProverCommitNativeOps47.embedded (Function.update xs (↑i) x ↑i)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitArrayValue47.lean:28:4: error: unsolved goals
+case neg
+n : Usize
+xs : ℕ → Old.Q
+i : Usize
+hi : ↑i < ↑n
+x : Old.Q
+hidx : ↑i < (↑(sourceArray n xs)).length
+out : Std.Array E n
+hout : (sourceArray n xs).update i (ProverCommitNativeOps47.embedded x) = ok out
+hset : out = (sourceArray n xs).set i (ProverCommitNativeOps47.embedded x)
+k : ℕ
+hk1 : k < ((↑(sourceArray n xs)).set (↑i) (ProverCommitNativeOps47.embedded x)).length
+hk2 : k < (↑(sourceArray n (Function.update xs (↑i) x))).length
+h : ¬k = ↑i
+⊢ (if ↑i = k then ProverCommitNativeOps47.embedded x else ProverCommitNativeOps47.embedded (xs k)) =
+    ProverCommitNativeOps47.embedded (xs k)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitArrayValue47.lean:28:17: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵if_false, ̲Function.update_of_ne h]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitArrayValue47.lean:28:19: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵o̵f̵_̵n̵e̵[̲h̲,̲ ̲F̲u̲n̲c̲t̲i̲o̲n̲.̲u̲p̲d̲a̲t̲e̲_̲o̲f̲_̲n̲e̲ h]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitArrayValue47.update' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitArrayValue47.ones' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

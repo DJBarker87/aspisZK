@@ -1,0 +1,67 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBasisFillValue47.lean:44:8: error: Type mismatch
+  hcp
+has type
+  Canonical p
+but is expected to have type
+  Canonical (next (↑width + ↑j))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBasisFillValue47.lean:65:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  k - ↑width
+in the target expression
+  decode (xs ↑j) * decode factor = decode (xs (↑width + ↑j - ↑width)) * decode factor
+
+case pos
+width : Usize
+capacity : 2 * ↑width ≤ 512
+factor : Old.Q
+hfactor : Canonical factor
+n : ℕ
+ih :
+  ∀ (xs : ℕ → Old.Q),
+    (∀ k < 512, Canonical (xs k)) →
+      ∀ (j : Usize),
+        ↑j + n ≤ ↑width →
+          ∃ ys,
+            fillN n (sourceArray 512#usize xs) j width (ProverCommitNativeOps47.embedded factor) =
+                ok (sourceArray 512#usize ys) ∧
+              (∀ k < 512, Canonical (ys k)) ∧
+                ∀ k < 512,
+                  decode (ys k) =
+                    if ↑width + ↑j ≤ k ∧ k < ↑width + ↑j + n then decode (xs (k - ↑width)) * decode factor
+                    else decode (xs k)
+xs : ℕ → Old.Q
+hxs : ∀ k < 512, Canonical (xs k)
+j : Usize
+bound : ↑j + (n + 1) ≤ ↑width
+hj : ↑j < 512
+hd : ↑(width.wrapping_add j) = ↑width + ↑j
+hn : ↑(j.wrapping_add 1#usize) = ↑j + 1
+p : Old.Q
+hp :
+  (ProverCommitNativeOps47.embedded (xs ↑j)).mul (ProverCommitNativeOps47.embedded factor) =
+    ok (ProverCommitNativeOps47.embedded p)
+hcp : Canonical p
+hdp : decode p = decode (xs ↑j) * decode factor
+next : ℕ → Old.Q := Function.update xs (↑width + ↑j) p
+hnext : ∀ k < 512, Canonical (next k)
+ys : ℕ → Old.Q
+hy :
+  fillN n (sourceArray 512#usize next) (j.wrapping_add 1#usize) width (ProverCommitNativeOps47.embedded factor) =
+    ok (sourceArray 512#usize ys)
+hcy : ∀ k < 512, Canonical (ys k)
+hval :
+  ∀ k < 512,
+    decode (ys k) =
+      if ↑width + ↑(j.wrapping_add 1#usize) ≤ k ∧ k < ↑width + ↑(j.wrapping_add 1#usize) + n then
+        decode (next (k - ↑width)) * decode factor
+      else decode (next k)
+k : ℕ
+hk : k < 512
+he : k = ↑width + ↑j
+htail : ¬(↑width + (↑j + 1) ≤ k ∧ k < ↑width + (↑j + 1) + n)
+hall : ↑width + ↑j ≤ k ∧ k < ↑width + ↑j + (n + 1)
+hl : k - ↑width = ↑j
+⊢ decode (xs ↑j) * decode factor = decode (xs (↑width + ↑j - ↑width)) * decode factor
+'R1Z.ProverCommitBasisFillValue47.add_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitBasisFillValue47.fill_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

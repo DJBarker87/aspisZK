@@ -1,0 +1,86 @@
+import R1Z.ProverCommitPairCounter47
+/-! Canonical value theorem for every finite counter-owner run. The basis
+array is an input here; its production and the native iterator connection
+are not assumed to have been proved by this theorem. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitPairValue47
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitNativeOps47 ProverCommitPairCounter47
+open AspisR1.ExtractedCurrentQM31Exact
+
+def dot (q basis : Nat → QM31Exact) : Nat → Nat → QM31Exact × QM31Exact
+ | 0,_ => (0,0)
+ | n+1,i =>
+   let tail := dot q basis n (i+1)
+   (q (2*i)*basis i+tail.1,q (2*i+1)*basis i+tail.2)
+
+attribute [local irreducible] dot finite
+
+theorem finite_value (n : Nat) (q basis : Nat → Old.Q)
+    (hq : ∀ j, j<1024 → Canonical (q j)) (hb : ∀ j, j<512 → Canonical (basis j))
+    (i : Usize) (bound : i.val+n≤512) (p0 p1 : Old.Q)
+    (hp0 : Canonical p0) (hp1 : Canonical p1) :
+    ∃ a b : Old.Q,
+      finite n (sourceArray 1024#usize q) (sourceArray 512#usize basis) i
+        (ProverCommitNativeOps47.embedded p0) (ProverCommitNativeOps47.embedded p1) =
+          ok (ProverCommitNativeOps47.embedded a,ProverCommitNativeOps47.embedded b) ∧
+      Canonical a ∧ Canonical b ∧
+      decode a=decode p0+(dot (fun j => decode (q j)) (fun j => decode (basis j)) n i.val).1 ∧
+      decode b=decode p1+(dot (fun j => decode (q j)) (fun j => decode (basis j)) n i.val).2 := by
+  induction n generalizing i p0 p1 with
+  | zero => exact ⟨p0,p1,by rw [finite],hp0,hp1,by simp only [dot,add_zero],by simp only [dot,add_zero]⟩
+  | succ n ih =>
+    have hi : i.val<512 := by omega
+    have he : (Usize.wrapping_mul 2#usize i).val=2*i.val := double_val i hi
+    have ho : (Usize.wrapping_add (Usize.wrapping_mul 2#usize i) 1#usize).val=2*i.val+1 := odd_val i hi
+    have hn : (Usize.wrapping_add i 1#usize).val=i.val+1 := next_val i (by omega)
+    obtain ⟨m0,hm0,hcm0,hdm0⟩ := ProverCommitNativeOps47.mul_exact (q (2*i.val)) (basis i.val)
+      (hq _ (by omega)) (hb _ hi)
+    obtain ⟨s0,hs0,hcs0,hds0⟩ := ProverCommitNativeOps47.add_exact p0 m0 hp0 hcm0
+    obtain ⟨m1,hm1,hcm1,hdm1⟩ := ProverCommitNativeOps47.mul_exact (q (2*i.val+1)) (basis i.val)
+      (hq _ (by omega)) (hb _ hi)
+    obtain ⟨s1,hs1,hcs1,hds1⟩ := ProverCommitNativeOps47.add_exact p1 m1 hp1 hcm1
+    obtain ⟨a,b,htail,hca,hcb,hda,hdb⟩ := ih (Usize.wrapping_add i 1#usize)
+      (by rw [hn];omega) s0 s1 hcs0 hcs1
+    refine ⟨a,b,?_,hca,hcb,?_,?_⟩
+    · rw [finite,index _ _ i (by exact hi)]
+      simp only [bind_tc_ok]
+      rw [index _ _ (Usize.wrapping_mul 2#usize i) (by change (Usize.wrapping_mul 2#usize i).val<1024;rw [he];omega),he]
+      simp only [bind_tc_ok]
+      simp only [hm0,hs0,bind_tc_ok]
+      rw [index _ _ (Usize.wrapping_add (Usize.wrapping_mul 2#usize i) 1#usize)
+        (by change (Usize.wrapping_add (Usize.wrapping_mul 2#usize i) 1#usize).val<1024;rw [ho];omega),ho]
+      simp only [bind_tc_ok]
+      simp only [hm1,hs1,bind_tc_ok]
+      exact htail
+    · rw [hda,hn,hds0,hdm0]
+      simp only [dot]
+      ring
+    · rw [hdb,hn,hds1,hdm1]
+      simp only [dot]
+      ring
+
+/-- The extracted recursion is total and canonical at all 512 pairs. This
+statement computes the actual decoded input-basis dot product; it does not
+substitute a mathematical natural-basis equality for the unproved producer. -/
+theorem source_value (q basis : Nat → Old.Q)
+    (hq : ∀ j, j<1024 → Canonical (q j)) (hb : ∀ j, j<512 → Canonical (basis j))
+    (p0 p1 : Old.Q) (hp0 : Canonical p0) (hp1 : Canonical p1) :
+    ∃ a b : Old.Q,
+      pairs (sourceArray 1024#usize q) (sourceArray 512#usize basis) 0#usize 512#u16
+        (ProverCommitNativeOps47.embedded p0) (ProverCommitNativeOps47.embedded p1) =
+          ok (ProverCommitNativeOps47.embedded a,ProverCommitNativeOps47.embedded b) ∧
+      Canonical a ∧ Canonical b ∧
+      decode a=decode p0+(dot (fun j => decode (q j)) (fun j => decode (basis j)) 512 0).1 ∧
+      decode b=decode p1+(dot (fun j => decode (q j)) (fun j => decode (basis j)) 512 0).2 := by
+  obtain ⟨a,b,h,hca,hcb,hda,hdb⟩ := finite_value 512 q basis hq hb 0#usize
+    (by decide) p0 p1 hp0 hp1
+  refine ⟨a,b,?_,hca,hcb,hda,hdb⟩
+  calc
+    pairs _ _ _ _ _ _ = finite 512 _ _ _ _ _ := source_finite 512 _ rfl _ _ _ _ _
+    _ = _ := h
+
+#print axioms finite_value
+#print axioms source_value
+end R1Z.ProverCommitPairValue47
