@@ -1371,3 +1371,24 @@ The candidate recommendation now distinguishes the historical gated
 b2727-plus-three-blobs overlay from the old experimental branch's ancestry.
 No production source, B1 criterion or security contract was changed.
 S4 and the implementation-linked 100-bit target remain open.
+
+
+## P3 interpretation now supplies the functional digest law
+
+`s4-p3-source-interpretation-v1-20261022` proves
+`p3_success_interpreted`: every successful call of the explicitly defined
+concatenation-hash P3 dictionary is interpreted by
+`hashBytes sha256 bs = decodeState (sha256 bs)`, for every input slice
+grouping. Thus the generic functional `hdigest` premise used by the row-31
+join can be discharged in that model. The same module proves the canonical
+source byte oracle agrees with that functional hash on represented inputs,
+and interprets the actual four-slice opening through its canonical
+length-plus-payload absorb witness. Its default branch is not generalized
+into a full random oracle.
+
+The focused target compiled once after correcting a missing retained R4
+object-root profile: exit 0, 18.331s, peak process RSS 3,426,369,536 bytes,
+swap 0, three reports containing only standard axioms. The initial import
+profile failure is retained; no unchanged dependencies were rebuilt. The
+packet checker passed. Actual production wrapper refinement, runtime P3
+reacceptance and the probabilistic shared-oracle experiment remain open.

@@ -1,0 +1,3 @@
+PROVED functional interpretation of all successful digest calls in the explicit concatenation-hash P3 model; represented canonical source oracle and four-slice opening agree.
+
+Limitations: Conditional on the selected P3 model, not an arbitrary Digest32 dictionary. No production SolanaDigest extraction/refinement or current-release P3 reacceptance is claimed. No SHA256 theorem, shared random-oracle distribution, freshness, or soundness probability is established. The canonical byte oracle agrees with the functional hash only on represented inputs; no claim is made about its default branch. Focused compilation reused pinned retained objects; no final coherent release replay.
