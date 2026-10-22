@@ -47,7 +47,7 @@ r=subprocess.run(['ssh','dombarker@100.108.41.90','python3 -'],input=remote,text
 checked=json.loads(r.stdout)
 changed=subprocess.check_output(['git','diff','--name-only','0583e6bd5','--','crates','programs'],text=True).splitlines()
 assert not changed,changed
-record=dict(source_base_revision='0583e6bd5',audit_checkout_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_identity='base plus exact source overlay SHA256 and dependency-object pins',modules=checked,shipped_files_changed=changed,elf_rebuild_required=False,full_manifest_replayed=False,target_established=False,stop_interface='Concrete joint runtime entropy/reservation law; complete native publication and source-to-FS conversion remain open')
+record=dict(source_base_revision='0583e6bd5',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),audit_checkout_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_identity='base plus exact source overlay SHA256 and dependency-object pins',modules=checked,shipped_files_changed=changed,elf_rebuild_required=False,full_manifest_replayed=False,target_established=False,stop_interface='Concrete joint runtime entropy/reservation law; complete native publication and source-to-FS conversion remain open')
 (E/'final-proof-audit.json').write_text(json.dumps(record,indent=2)+'\n')
 (E/'shipped-sources-unchanged.json').write_text(json.dumps({k:record[k] for k in ['source_base_revision','audit_checkout_revision','shipped_files_changed','elf_rebuild_required']},indent=2)+'\n')
 print(json.dumps(dict(accepted_final_modules=len(checked),shipped_files_changed=changed,target_established=False)))

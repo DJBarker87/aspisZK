@@ -241,3 +241,19 @@ runtime entropy/reservation law named above, followed by the complete native
 publication policy and source-to-FSExperiments observation conversion. The
 current partial results justify neither WholeRunJoin nor removing
 RustProverRefinement.
+
+
+Final source commit: `91a449932`. The final source/object audit was repeated
+as a read-only identity check after this commit; it does not recompile or
+repeat any formal regression. All checked module sources are exactly those
+committed there. The three part-34 commits through that source checkpoint are:
+
+```text
+91a449932 Verify retry control and expose the runtime entropy law boundary
+9d289f8ca Prove the announced public statement image and exact serialization
+5e4dc3e68 Record part 34 statement scope and verification setup
+```
+
+Raw compiler/Kani receipts preserve tool-emitted whitespace verbatim; code
+whitespace checks pass. No validation log has been rewritten to silence a
+failed check.
