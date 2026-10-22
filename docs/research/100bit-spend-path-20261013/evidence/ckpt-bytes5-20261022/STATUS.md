@@ -1,7 +1,13 @@
 # Checkpoint ordered effects fifth packet
 
-Branch `codex/cx-ckpt-bytes5-20261022`. Additive modules only; work in progress.
-No final source-stage join is claimed until its statement compiles.
+Branch `codex/cx-ckpt-bytes5-20261022`. Additive modules only.
+Closed at the retained callback/content P6 boundary: ordered writer/resume
+reification, exact six saved-byte reads, successful returned-state adoption,
+and the success-conditioned reached checkpoint / dV_frozen2 position join.
+Remaining named refinements: S2S10CallerBinding and S1S7S8StateProvenance.
+The physical frozen Rust interpretation and complete raw/annotated verifier
+AcceptedRunJoin are not established. Final handoff below supersedes the
+historical in-progress stage notes.
 
 The 03:00 success-conditioned ruling and 04:20 ordered-effect obligation apply.
 The retained source callback-content/P6 boundary is unchanged. Every inner
@@ -11,8 +17,8 @@ Plan: first a reusable ordered state lift and source reconstruction, then
 successful trace/content adoption, then the reached/strict/decision consumer.
 D138's generic state equations are reused in shape; its privacy extraction
 imports are intentionally avoided in this local soundness dependency cone.
-No shipped change, existing Lean edit, shared object overwrite, host env J,
-wallet/key operation, push or merge is authorized by this packet.
+No shipped change, existing Lean edit, shared object overwrite, host env J
+attempt, wallet/key operation, push or merge occurred in this packet.
 
 ## Stage 1: reusable ordered state interpreter
 
@@ -177,3 +183,44 @@ Input saved-state provenance and caller/ROM carriers remain uninstantiated.
 No global security-endpoint premise has been deleted by relabeling it; the
 physical frozen source interpretation and both complete verifier passes are
 explicitly still open. Allocation success is derived, never added as a premise.
+
+## Final focused union and handoff
+
+All three requested items are proved at the explicitly retained source
+callback/content P6 boundary. The final theorem and the exact decision
+consumer statements above are kernel-checked, not proposed statements.
+
+`CheckpointBytes5Freeze` attempt 1: exit 0, wall 30.078006791882217 s,
+peak RSS 3589390336 bytes, swaps 0, source revision
+`128dc23e1f27a6b244bc51a998952ffd826be30e`. All 36 public/inherited #print axioms reports
+are standard subsets of [propext, Classical.choice, Quot.sound]. The four
+private helper reports are additionally checked in their defining receipts;
+every one of the 35 added theorems has an accepted report. Exact targets,
+source/import hashes, dependency fingerprints, commands, all failed attempts,
+wall/RSS/swap and full axiom lines are in manifest.json and per-attempt files.
+Nine modules use private objects and the shared mkdir lock with pinned local
+Lean 4.32, -j1 -M4400 -DElab.async=false. No host env J range was used.
+
+`python3 -B tools/ckpt-bytes5-20261022/audit.py` passes generator --check,
+current source/dependency hashes, every accepted defining-module receipt,
+all axiom reports, native source schedule/reuse pins, absence of forbidden
+proof declarations/options, absence of shipped/candidate/existing Lean edits,
+and the JSON size limit. Final current peak RSS is 3680419840 bytes and
+all current swaps are zero. Native scalar/section/allocation evidence is
+reused read-only and never made a Lean axiom. No shipped file changed, so no
+frozen ELF rebuild gate was triggered. No ELF identity check is newly claimed.
+This is one focused final union, not a coherent frozen-release replay.
+
+Exactly next: discharge the two displayed input/caller refinements for the
+actual frozen owner and install `CheckpointBytes5Decision.decision_success_join`
+in both raw and annotation passes of `OraclePortFrozen2Join.AcceptedRunJoin`,
+using the independently established prefix/suffix/outer caller results. See
+NEXT.md. Actual frozen Rust interpretation and complete verifier join remain
+false in audit-result.json; no 100-bit/security closure claim, protocol/metric
+change, push, merge or key cleanup. Target not yet established.
+
+Final diff review: source/tool `git diff --check` exits 0. The whole-tree
+check exits 2 solely for trailing whitespace emitted by Lean in the retained
+failed Writer-1 diagnostic log. That raw log is preserved byte-for-byte; its
+SHA-256, size and exact check output are recorded in diff-review.json. This
+is excluded failure evidence, not an accepted source or proof failure.
