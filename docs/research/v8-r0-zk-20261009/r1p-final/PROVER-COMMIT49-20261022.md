@@ -217,6 +217,38 @@ the unchanged cap. Other rejected syntax/cast/decidable-equality drafts and
 all receipts are retained. Every accepted theorem prints only standard axioms.
 No deployed endpoint premise is removed and no shipped file changed.
 
+## Stage 10: half, final-shift arithmetic caller, Libra column
+
+J10130 identifies the actual half producer with inverse two and proves
+`half + half = 1`, without evaluating the fixed inverse chain concretely.
+J10138 proves `FinalShift49.exact_result`: the arithmetic caller produces
+exactly the shifted polynomial, including actual half construction, source
+subtraction and source inverse. Its only denominator condition is the explicit
+challenge-not-half condition. The source values of original and eta-term0,
+the semantic polynomial, optimized evaluation and the semantic guards remain
+caller obligations. This theorem does not assert their provenance.
+
+J10136 proves `Libra49.caller`: actual raw kind four equals the existing model
+`SemSource.libraWeight` at every legal coefficient, including both power runs
+and the zero suffix. The native complete Libra and half callee-trace gate
+passes in 0.800 s / 147808 KiB, zero swaps. Source and owner exponents are
+respectively U64 and U8; the gate checks narrowing on every legal branch and
+the proved power iteration gate covers all exponents through 255.
+
+J10104 exposes a duplicate extracted M31.ZERO on composing Samples49 with
+Interpolate48. Their bodies are byte-identical. Samples49 now imports and
+reuses Interpolate48's declaration; no function body changes. J10105/06 check
+the new binding; J10108–10129 rebuild every affected retained dependent in
+topological order, with snapshots of all overwritten shared sources/objects.
+`pins/sample-import-rebuild.json` freezes the schedule. This is a changed
+import/dependency regression, not an unchanged replay. Every printed axiom is
+standard. The half drafts' small cast proof is replaced by a ZMod.val bound.
+Final-shift drafts J10131/33/34/37 hit default heartbeat limits while converting
+an inverse-of-two between definitionally equal aliases; the explicit-type
+snapshot reveals the mismatch. Aligning the constant's type with Half49 fixes
+it (J10138: 3.88 s / 4048524 KiB), without raising any limit. All diagnostics
+and source snapshots are retained. No shipped file or deployed premise changed.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

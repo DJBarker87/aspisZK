@@ -1,13 +1,10 @@
-import AspisR1ProducerRelease47.Basis
+import AspisR1ProducerRelease47.Interpolate48
 /-! Extracted counter owner, with identical arithmetic callees rebound to the
 previously proved release extraction. bind-counter.py checks every reused
 callee declaration body byte-for-byte. No external template is installed. -/
 open Aeneas Aeneas.Std Result ControlFlow Error
 noncomputable section
 namespace AspisR1ProducerRelease47
-@[global_simps, irreducible]
-def field.M31.ZERO : field.M31 := 0#u32
-
 @[global_simps, irreducible]
 def field.CM31.ZERO : field.CM31 := { a := 0#u32, b := 0#u32 }
 

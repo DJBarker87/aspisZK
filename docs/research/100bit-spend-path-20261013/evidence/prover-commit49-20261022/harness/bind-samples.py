@@ -14,13 +14,14 @@ def declarations(p):
  return out
 old,new=declarations(retained),declarations(source)
 old.update(declarations(L/"AspisR1ProducerRelease47/Basis.lean"))
+old.update(declarations(L/"AspisR1ProducerRelease47/Interpolate48.lean"))
 reuse=[]
 for k,v in new.items():
  if k.startswith('field.') and k in old:
   assert v==old[k],(k,v,old[k])
   reuse.append(k)
-extra=['field.M31.ZERO','field.CM31.ZERO','field.CM31.from_m31','field.QM31.from_cm31','owned.sum','owned.tail','owned.sample','owned.shift']
-text='''import AspisR1ProducerRelease47.Basis
+extra=['field.CM31.ZERO','field.CM31.from_m31','field.QM31.from_cm31','owned.sum','owned.tail','owned.sample','owned.shift']
+text='''import AspisR1ProducerRelease47.Interpolate48
 /-! Extracted counter owner, with identical arithmetic callees rebound to the
 previously proved release extraction. bind-counter.py checks every reused
 callee declaration body byte-for-byte. No external template is installed. -/

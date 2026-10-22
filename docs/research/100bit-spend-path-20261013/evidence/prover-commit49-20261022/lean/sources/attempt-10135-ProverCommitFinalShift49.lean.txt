@@ -1,0 +1,56 @@
+import R1Z.ProverCommitHalf49
+import R1Z.ProverCommitShiftGuards49
+/-! Final shift caller from the actual half and inverse producers. This closes
+the arithmetic block; semantic oracle and terminal-input provenance remain. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitFinalShift49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open Polynomial
+
+def run (p : Array field.QM31 28#usize) (a original eta0 : field.QM31) :
+    Result (Option (Array field.QM31 28#usize)) := do
+  let half ← extras.half
+  let denominator ← field.QM31.sub a half
+  let inv ← kernels.inverse_q denominator
+  match inv with
+  | none => ok none
+  | some i => do
+    let out ← owned.shift p original eta0 i half
+    ok (some out)
+
+attribute [local irreducible] ProverCommitHalf49.raw ProverCommitHalf49.word ProverCommitNativeQ48.source ProverCommitQArray48.array ProverCommitInterpolationPoly48.poly AspisR1.ExtractedCurrentQM31Exact.decode
+
+theorem exact_result (p : Nat → Old.Q) (hp : ∀ k, k<28 → Canonical (p k))
+    (a original eta0 : Old.Q) (ha : Canonical a) (ho : Canonical original) (he : Canonical eta0)
+    (hne : decode a≠(2 : QM31Exact)⁻¹) :
+    ∃ out : Nat → Old.Q,
+      run (ProverCommitQArray48.array 28#usize p) (ProverCommitNativeQ48.source a)
+        (ProverCommitNativeQ48.source original) (ProverCommitNativeQ48.source eta0)=
+        ok (some (ProverCommitQArray48.array 28#usize out)) ∧
+      (∀ k, k<28 → Canonical (out k)) ∧
+      ProverCommitInterpolationPoly48.poly 28 (fun k => decode (out k))=
+        ProverCommitInterpolationPoly48.poly 28 (fun k => decode (p k))+
+          C ((decode original-decode eta0)*(decode a-(2 : QM31Exact)⁻¹)⁻¹)*(X-C ((2 : QM31Exact)⁻¹)) := by
+  obtain ⟨d,hd,hcd,hvd⟩ := ProverCommitNativeQ48.sub a ProverCommitHalf49.raw ha ProverCommitHalf49.canonical
+  have hn : decode d≠0 := by rw [hvd,ProverCommitHalf49.value];exact sub_ne_zero.mpr hne
+  obtain ⟨i,hi,hci,hvi⟩ := ProverCommitNativeQInverse49.inverse d hcd hn
+  obtain ⟨out,hout,hcout,hvout⟩ := ProverCommitShift49.shift_value p hp original eta0 i ProverCommitHalf49.raw ho he hci ProverCommitHalf49.canonical
+  refine ⟨out,?_,hcout,?_⟩
+  · simp only [run,ProverCommitHalf49.result,hd,hi,hout,bind_tc_ok]
+  · have hpoly := ProverCommitShift49.polynomial_shift (fun k => decode (p k)) (fun k => decode (out k))
+      ((decode original-decode eta0)*decode i) (decode ProverCommitHalf49.raw) (by intro k;simpa only [neg_mul] using hvout k)
+    rw [hvi,hvd,ProverCommitHalf49.value] at hpoly
+    set_option pp.all true in
+      run_tac
+        let g ← Lean.Elab.Tactic.getMainGoal
+        let ty ← g.getType
+        let d ← Lean.Meta.getLocalDeclFromUserName `hpoly
+        Lean.logInfo m!"GOAL: {ty}"
+        Lean.logInfo m!"HYP: {d.type}"
+    exact hpoly
+
+#print axioms exact_result
+end R1Z.ProverCommitFinalShift49
