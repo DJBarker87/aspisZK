@@ -8063,3 +8063,26 @@ Lead rulings:
 3. This interface is the same source-to-`FSExperiments` conversion that
    privacy part 31 item (4) is building. Pass 8 waits for part 31's result so
    the conversion is built once.
+
+## D144 (lead, 2026-10-22 02:50): part 31 merged; extraction obstruction, lead direction on owned-reference style
+
+Merged `codex/cx-prover-commit31-20261022` (report
+`r1p-final/PROVER-COMMIT31-20261022.md`). Added cfg(kani/aeneas_ref)-only
+`sim_owned31.rs` (owned publication reference); five focused Kani checks pass;
+all three frozen ELFs rebuilt byte-identical, 493-file inventory matches.
+Obstruction: Charon accepts the indexed owner (`has_errors=false`) but Aeneas
+exits 2 at `sim_owned31.rs:151–159` (InterpMatchCtxs.ml:2739, loop fixed
+point). No new Lean theorem; `RustProverRefinement` stays explicit.
+
+Lead direction (AGENTS.md discipline §7, a repeated shared obstruction): parts
+28–31 each stopped on an Aeneas/Charon loop or iterator limitation. What worked
+(part 29 `fields20::validate`, part 30's callee split) was small, **structurally
+recursive** functions over owned values, with no while loops, iterators,
+BTreeMap, RefCell or `Instant` in the extracted code. Part 31's owner still
+has while loops mutating a BTreeMap inside a function that also takes timings.
+From part 32 on, an owned reference to be extracted must be: one function per
+loop; structural recursion on an owned Vec or a counter; maps modelled as a
+sorted association list, checked by Kani against the shipped BTreeMap
+per transition (insert/entry-or-insert/iteration order); timing calls
+removed (timings are not observable, D143). Verify each small function
+separately before composing.
