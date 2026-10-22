@@ -1,0 +1,77 @@
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s9-focused-powers-v1-20261022/attempts/attempt2/sources/S9N4PowerArraySemanticsV1.lean:30:13: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  AspisR1S9ConcreteFieldOpsV1.concreteFieldOpsInstance
+inferred
+  currentFieldOps
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s9-focused-powers-v1-20261022/attempts/attempt2/sources/S9N4PowerArraySemanticsV1.lean:49:8: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  AspisR1S9ConcreteFieldOpsV1.concreteFieldOpsInstance
+inferred
+  currentFieldOps
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s9-focused-powers-v1-20261022/attempts/attempt2/sources/S9N4PowerArraySemanticsV1.lean:50:8: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  AspisR1S9ConcreteFieldOpsV1.concreteFieldOpsInstance
+inferred
+  currentFieldOps
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s9-focused-powers-v1-20261022/attempts/attempt2/sources/S9N4PowerArraySemanticsV1.lean:50:38: error: synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
+  AspisR1S9ConcreteFieldOpsV1.concreteFieldOpsInstance
+inferred
+  currentFieldOps
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s9-focused-powers-v1-20261022/attempts/attempt2/sources/S9N4PowerArraySemanticsV1.lean:76:4: error: Type mismatch
+  hlowvalues i hi
+has type
+  ∃ helperValue,
+    Option.map AspisR1S3PowersToS9ScalarJoinV1.powerToS9Helper values[i]? = some helperValue ∧
+      AspisR1S9CurrentFieldOpsV1.Canonical helperValue ∧
+        AspisR1S9CurrentFieldOpsV1.decode helperValue = AspisR1PowersExactProduct.decode x ^ i
+but is expected to have type
+  ∃ v,
+    (↑low)[i]? = some v ∧
+      AspisR1S9CurrentFieldOpsV1.Canonical v ∧
+        AspisR1S9CurrentFieldOpsV1.decode v = AspisR1PowersExactProduct.decode x ^ i
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s9-focused-powers-v1-20261022/attempts/attempt2/sources/S9N4PowerArraySemanticsV1.lean:77:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  weights.kpowers 4#usize seed
+in the target expression
+  weights.kpowers 4#usize seed = ok currentHigh
+
+case refine_2
+x : PowerWide
+hx : AspisR1PowersConcreteMul.Canonical x
+seed : HelperQM
+hseed : sorry
+values : List AspisR1PowersConcreteMul.CallbackWide
+final : AspisR1S3PowersCanonicalTraceV1.PowerState 4#usize
+hrun :
+  AspisR1FromFnP6.statefulFromFnRun AspisR1S3PowersCanonicalTraceV1.powerStep (↑4#usize) 0
+      (AspisR1CurrentPowers.field.WideExact.ONE, x) =
+    ok (values, final)
+hlen : values.length = ↑4#usize
+_hcanonical : ∀ value ∈ values, AspisR1PowersConcreteMul.Canonical value
+_hfinal : AspisR1S3PowersCanonicalTraceV1.powerStateOK x final ↑4#usize
+low : Std.Array S9Wide 4#usize := AspisR1S3PowersToS9ScalarJoinV1.helperPowersArray values hlen
+hlowmap : ↑low = List.map AspisR1S3PowersToS9ScalarJoinV1.powerToS9Helper values
+hlowvalues :
+  ∀ i < 4,
+    ∃ helperValue,
+      Option.map AspisR1S3PowersToS9ScalarJoinV1.powerToS9Helper values[i]? = some helperValue ∧
+        AspisR1S9CurrentFieldOpsV1.Canonical helperValue ∧
+          AspisR1S9CurrentFieldOpsV1.decode helperValue = AspisR1PowersExactProduct.decode x ^ i
+currentHigh : Std.Array AspisR1S3KpowersTotalConstructiveV1.Q 4#usize
+hcurrent : weights.kpowers 4#usize seed = ok currentHigh
+hconcrete : weights.kpowers 4#usize seed = weights.kpowers 4#usize seed
+this : FieldOps := currentFieldOps
+hhighvalues :
+  ∀ i < ↑4#usize,
+    ∀ (v : field.QM31),
+      (↑currentHigh)[i]? = some v →
+        currentQMSemantics.canonical v ∧ currentQMSemantics.decode v = currentQMSemantics.decode seed ^ i
+⊢ weights.kpowers 4#usize seed = ok currentHigh
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/docs/research/100bit-spend-path-20261013/lean-candidates/s9-focused-powers-v1-20261022/attempts/attempt2/sources/S9N4PowerArraySemanticsV1.lean:84:14: error(lean.unknownIdentifier): Unknown constant `actual_s9_n4_low_high_arrays_from_canonical`

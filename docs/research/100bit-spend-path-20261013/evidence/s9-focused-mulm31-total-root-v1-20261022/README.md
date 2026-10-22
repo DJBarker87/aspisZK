@@ -9,3 +9,7 @@ Focused Lean 4.32, `-j1 -M4400`, exit 0, 19.737 s, process RSS 3,153,149,952 byt
 The runner acquired its atomic lock, wrote PID/inode metadata and checked no other Lean before launch. A sibling reported stale empty-lock cleanup with incomplete historical inode evidence around this period. We do not assert continuous cross-session lock ownership from that evidence; the process-tree measurements and successful proof remain valid. The earlier mutex-wait timeout launched no Lean. No rerun was made to manufacture stronger historical lock evidence.
 
 Complete S9 still requires its helper loop/value composition, original array-library correspondence, caller/source binding and global composition. No shipped source or security target changed.
+
+## Reuse correction
+
+The arbitrary-input primitive QM/wide totality lemmas already existed in `AspisR1S3PowersLowTotalV1`; this packet duplicated those proofs. They are not new primitive arithmetic results. The preferred integration consumer is now `s9-focused-mulm31-reuse-root-v2-20261022`, which imports that existing theorem directly and supplies the concrete S9 record's totality/exactness. This historical compile remains mathematically valid; its source and logs are preserved.

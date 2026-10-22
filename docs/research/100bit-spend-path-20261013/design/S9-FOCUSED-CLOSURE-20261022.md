@@ -87,3 +87,46 @@ cross-session mutex evidence rather than claiming stronger resource control.
 The emitted helper's structural two-step proof, full arithmetic composition,
 reached power-array consumer and source/caller boundary remain in flight.
 No complete cone has been declared closed.
+
+## Reuse correction and subsequent checked consumers
+
+The generic arbitrary-input M31 totality lemma already existed in
+`AspisR1S3PowersLowTotalV1`. The first root packet duplicated its proof;
+those primitive lemmas must not be counted as newly closed arithmetic.
+The preferred consumer is now
+`evidence/s9-focused-mulm31-reuse-root-v2-20261022/`, which directly imports
+that owner and proves totality/exactness for the same concrete S9 callback.
+The historical first packet has an explicit correction. One focused replay
+of V2 repaired missing clean concurrency evidence after a sibling mistakenly
+launched a second Lean process; all local launches are now centralized with
+ownership/foreign-process monitoring. No unchanged full regression ran.
+
+Further checked packets, all with standard-only theorem audits:
+
+- `evidence/s9-focused-powers-v1-20261022/`: from canonical seeds, construct
+  the low N=4 P6 trace/mapped array and actual concrete `kpowers` output;
+  all returned entries have canonicality and indexed power meanings.
+  Independent low/high successful-call premises are not assumed. The outer
+  caller assignment is still separate.
+- `evidence/s9-concrete-operation-semantics-v1-20261022/`: actual selected
+  square success/canonicality/decode and concrete mixed-product totality.
+- `evidence/s9-concrete-wideqm-product-v1-20261022/`: the same constructed
+  mixed-product result is canonical and has the exact coordinate products.
+- `evidence/s9-wideqm-scalar-product-root-v1-20261022/`: rewrites those same
+  coordinate products as multiplication by the QM31 scalar embedding in
+  the wide field. No operation-success premise is introduced.
+
+A centrally checked emitted-body control lemma is green in the working
+V3 owner: active-body success must return `.cont` with the same next iterator.
+Its checked source carve is definitionally equal to the emitted active
+suffix. It does not prove body/helper success or decoded output. The
+complete two-iteration consumer and high-terms array proof remain in flight.
+
+The generic low-powers source gap has been localized further: the old
+full-pair emission declared `weights.powers` externally, and its diagnostic
+Rust cut used an unreachable stub. A new narrowly selected NUC extraction
+retains the real generic powers function and closure, but its multiplication
+shim is still emitted as `fail panic`; that raw output is explicitly rejected
+for proof use. A mechanically checked typed-operation/P6 adapter is being
+built. No selector retry or compiler rebuild is authorized by this result,
+and no frozen Rust Std/array or deployed-compiler correspondence is inferred.
