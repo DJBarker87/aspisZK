@@ -426,3 +426,79 @@ The first helper draft had a mutable-index name typo and failed elaboration;
 its auto error-placeholder axioms are excluded, never accepted evidence.
 Source-only checker passes without unchanged proof replay. No production
 source, protocol, metric, frozen ELF or other cone was changed. S2 remains open.
+
+## Native constructor and paired first-entry connection
+
+Three new source-only packets are checked without unchanged replay:
+`sdk-native-constructor`, `sdk-native-first-pair`, and `sdk-release-allocator`.
+Their focused checkers are in tools/s126-sdk-modular-20261021. All retain exact
+source, tool/command, import/dependency inventories, metadata and receipts;
+Kani #print axioms is N/A. No binaries are distributed.
+
+The actual native constructor-ready source case checks the original SDK
+three-account execution, full statement Box, real guards and arbitrary
+admitted Rc/counter/lamport alias state. At native first entry it derives the
+original metadata/key/owner conditions, canonical data slots, admissible live
+borrow counts, original tag2, common candidate coordinate, actual scanfalse,
+and the fixed proof/public pointers/projection/k/None. At the actual scan site
+it checks the iterator's original checkpoint pointer, length1768, exclusive
+live counter and every selected original byte coordinate. This uses explicit
+let-fission/ghost instrumentation: its noninterference/equivalence certificate
+is still a gate. It does not supply the all-zero or prefix-equality facts by
+assuming a favourable native loop result; the existing exact loop laws must
+be installed at these checked views.
+
+The paired first-entry case executes BOTH complete caller bodies with the
+actual SDK and same original proof/public allocations. On the NECESSARY
+normalized input image, native first implies reference first with common
+ordered typed children, decoded public projection, exact suffix/k/None, and
+matching InvalidAccountData for the common empty first reply. It checks full
+Rc/borrow metadata restoration. Its sole normalization of control/byte input
+must still be shown identity from native constructor facts and existing exact
+scan/gate semantics. A restricted input fixture by itself is not the arbitrary
+adversary caller theorem. No successful arbitrary-result continuation or whole
+byte frame follows from this entry-only pair.
+
+| Target | Raw exit | Non-cover checks | Covers reached | Wall s | RSS KiB | Swap |
+| --- | --- | --- | --- | --- | --- | --- |
+| sdk-constructor-ready-v4 | 10 | 2807 | 2/2 | 59.746 | 3785772 | 0 |
+| sdk-native-first-image-pair-v1 | 10 | 5482 | 2/2 | 65.712 | 5071572 | 0 |
+| sdk-release-dealloc-check-v1 | 0 | 53 | 2/2 | 0.734 | 163824 | 0 |
+| sdk-release-owner-drop-check-v1 | 0 | 455 | 1/1 | 14.443 | 1349140 | 0 |
+| sdk-release-owner-empty-check-v1 | 0 | 501 | 3/3 | 23.792 | 1766288 | 0 |
+
+Raw exit10 in the first two rows means ONLY their reached cover properties
+report FAILURE. Every enabled non-cover property is reconciled against the
+complete saved inventory and reports SUCCESS; none is UNKNOWN or unchecked.
+Fresh admission,6G high/8G max/MemorySwapMax0, optimized Rust flags, one job
+and unwinding assertions are retained. Codegen receipts are separate.
+
+Owner destruction exposed a platform distinction already recorded in earlier
+work: host System/free ownership contracts failed freeable, whereas the
+frozen Solana source chooses the SDK BumpAllocator, whose dealloc body is
+empty. The three release allocator candidates execute that ACTUAL dealloc
+body, with an explicit std::alloc::dealloc dispatch stub for the owner checks.
+Actual full Box/Vec destructors have empty byte-write footprint under that
+provided dispatch, including all Vec lengths0..1769. Valid owner/runtime heap
+mapping, global allocator dispatch and ABI remain unproved. Do not call this
+host System equivalence or discharge runtime ownership by an unsafe call.
+Seven unsuccessful ownership/whole-tail/product attempts and their failures
+or timeouts are retained/excluded; no unchanged higher-cap replay was used.
+
+Remaining enclosing obligations, not new cryptographic assumptions:
+1. Native facts + exact source scan/gate laws must remove the normalized input
+   and ghost/source-fission conditions of the paired entry certificate.
+2. Compose actual decoder/validator/encoder/first child instances, arbitrary
+   first results/errors, copy and actual guard/owner effect frames into the
+   native accepted execution -> SAME complete installed reference execution.
+   Runtime heap/ABI/allocator and ordered oracle interpretation remain.
+3. Instantiate the lead's exact caller facts, including the cross-TX carriers
+   and saved checkpoint provenance. See S2-CROSS-TX-CARRIER-DECISION-20261022.md:
+   readonly flags and matching hashes alone do not prove byte identities.
+4. Finish S1 Prepared/prepared_claim trace/caller and S6 actual caller joins,
+   associated R22 totality, then coherent adopted-source re-pin/replay.
+
+The strongest reference theorem remains
+borrowed_stage1_sized_account_image, with the sole full accepted installed
+reference execution premise. This update does not pretend that native first
+entry has discharged that premise. S2/S6/S1 remain OPEN; target not established.

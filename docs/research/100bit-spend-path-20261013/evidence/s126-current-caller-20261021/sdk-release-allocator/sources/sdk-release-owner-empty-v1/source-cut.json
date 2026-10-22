@@ -1,0 +1,6 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_sha256": "6e3114d6f3d03c796624a5e88fdc1cadff8fa99ede47e16b191562b1b0bb8bb5",
+  "qualification": "Frozen-release owner destruction has EMPTY byte write footprint.\nReal full statement Box and Vec<u8> destructors execute via actual typed\nstd::ptr::drop_in_place. Only allocator deallocation is dispatched to actual\nSDK BumpAllocator::dealloc as selected by frozen target_os=solana source.\nNo owner locals, allocations, account data or counters may be written. Fixture\ncovers all first reply lengths0..1769; owner validity and allocator dispatch\nmust come from the concrete admitted caller, not this host candidate alone.\n",
+  "remaining": "All assertions/covers must pass. Frozen allocator dispatch/source/ABI, valid owner/caller and exact source destruction-order composition remain external. This candidate is a release-platform effect proof, not host System/free equivalence, full native-to-reference binding or whole S2."
+}

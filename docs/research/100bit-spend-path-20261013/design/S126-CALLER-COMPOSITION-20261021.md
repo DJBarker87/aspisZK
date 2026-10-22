@@ -2336,3 +2336,16 @@ window, plus concrete copy/Drop preconditions; whole proof/native effect-frame
 composition is not yet proved. All whole-caller/frame timeouts are retained
 and excluded. No shipped source or release artifact changed. S2/S6/S1 remain
 open; source and runtime/oracle/TX2 execution instantiation is still required.
+
+## 2026-10-22 actual native/reference first-entry pairing
+
+S126-FIXED-INPUT-HANDOFF-20261022.md now records the audited native constructor
+and actual-SDK paired first-entry certificates, with exact before/after scope,
+receipt metrics and remaining normalization, arbitrary continuation, runtime
+and oracle/TX2 obligations. These are checked source evidence, not whole S2.
+The allocator candidate's explicit frozen dispatch is qualified separately;
+failed System/free contracts and whole-product timeouts remain excluded.
+S2-CROSS-TX-CARRIER-DECISION-20261022.md records the distinct hash-to-byte
+transport obligation. No shipped source, security metric or other cone changed.
+Authority is the adopted25866ec overlay plus approved S4; earlier references
+to b2727acd alone are historical and superseded by the recorded overlay audit.
