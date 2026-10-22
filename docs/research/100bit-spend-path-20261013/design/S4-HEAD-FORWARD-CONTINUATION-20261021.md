@@ -1639,3 +1639,37 @@ The unrolled source-shaped DriverTrace and the unchanged production
 queries_from_pairs loop are still distinct. The production-loop extraction
 and refinement remain required; none of these results is a source adoption
 or an implementation-linked security theorem.
+
+## Chosen-model query acceptance, with no literal-success premise
+
+Primary review inspected the complete statement and proof of
+`s4-chosen-model-row31-acceptance-v1-20261022` and its actual named axiom
+report. `successful_queries_row31_literal_acceptance` starts from one
+successful `QueriesModel.queries` execution under concrete scanner boundaries
+and the explicit P3 digest interpretation. It derives literal byte-sampler
+success, the same ordered 22 query values, and exactly
+`decodeState after.state` as continuation state. No successful literal run,
+independently aligned pair list or desired output equality is a premise.
+The proof reuses the same schedule witness, concrete first-stop trace and
+full scanOut pair, source prefix transport, and literal decoder theorem.
+Framed-payload fit and prior-prefix state equality remain premises. This
+does not discharge actual production-loop refinement or SHA/syscall/ROM laws.
+Focused exit 0, 38.049s, peak aggregate RSS 3,432,693,760 bytes, swap 0;
+the named report contains only propext, Classical.choice and Quot.sound.
+The packet checker passed without rerunning unchanged Lean.
+
+The earlier `s4-chosen-model-row31-query-v1-20261022` remains as the
+conditional coordinate transport: it assumes successful literal sampling.
+Its README and checker explicitly preserve that narrower scope.
+`s4-literal-row31-pair-state-v1-20261022` additionally transports a supplied
+successful literal run backwards to the entire source pairsRun result,
+including continuation state. Its focused run exited 0 in 19.404s, peak
+process RSS 3,443,949,568 bytes, swap 0, standard axioms. Failed attempts
+are retained and rejected. All three source-only packet checks passed.
+
+The next work is restricted to S4's frozen array/from_fn source boundary
+and its stage-1/stage-2 caller instances. The sampler results are preserved;
+they are not a reason to expand the S4 closure task into further adjacent
+sampler work. Candidate adoption remains unapproved and the strict B1 gate
+remains failed. Frozen S4 and the implementation-linked 100-bit target
+remain open.
