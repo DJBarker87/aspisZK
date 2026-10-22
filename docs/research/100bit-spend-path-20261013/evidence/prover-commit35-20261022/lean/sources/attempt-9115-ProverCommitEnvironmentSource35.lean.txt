@@ -1,0 +1,139 @@
+import AspisR1Environment35.Funs
+import R1Z.ProverCommitEnvironment35
+/-! The extracted structural reservation owner is connected to the D147
+schedule for every history and payload-blind schedule. The external Kani gate
+connects the native source control to this same Rust owner; OS primitives,
+path computation and byte storage remain explicitly external boundaries. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitEnvironmentSource35
+open Aeneas Aeneas.Std Result AspisR1Environment35 ProverCommitEnvironment35
+open R0Z.FsStatement
+
+def kind : owner.Kind → Kind
+  | .Create => .create
+  | .WriteMagic => .writeMagic
+  | .WriteDigest => .writeDigest
+  | .WriteNonce => .writeNonce
+  | .FileSync => .fileSync
+  | .DirectoryOpen => .directoryOpen
+  | .DirectorySync => .directorySync
+
+def encodeOutcome : Outcome → core.result.Result Unit IOError
+  | .ok _ => .Ok ()
+  | .error e => .Err e
+
+def ops (schedule : Schedule) (nonce : OracleAnswer) : owner.IO Unit State IOError where
+  call k s :=
+    let step := ask schedule (kind k) s
+    let after := match k,step.1 with
+      | .Create,.ok _ => {step.2 with burned := nonce :: step.2.burned}
+      | _,_ => step.2
+    ok (encodeOutcome step.1,after)
+  duplicate e := ok (match e with | .alreadyExists => true | .other _ => false)
+
+def packChain (result : Outcome × State) : owner.Run State IOError :=
+  ⟨match result.1 with | .ok _ => .Ok () | .error e => .Err (.Io e),result.2,true⟩
+
+/-- The finite suffix contains exactly three writes, file sync and, on Unix,
+open-directory and directory sync. No suffix is evaluated after an error. -/
+theorem finish_source (schedule : Schedule) (nonce : OracleAnswer)
+    (unix : Bool) (s : State) :
+    owner.finish (ops schedule nonce) 0#u8 unix s =
+      ok (packChain (ioChain schedule (writes unix) s)) := by
+  have a0 : U8.wrapping_add 0#u8 1#u8 = 1#u8 := by rfl
+  have a1 : U8.wrapping_add 1#u8 1#u8 = 2#u8 := by rfl
+  have a2 : U8.wrapping_add 2#u8 1#u8 = 3#u8 := by rfl
+  have a3 : U8.wrapping_add 3#u8 1#u8 = 4#u8 := by rfl
+  have a4 : U8.wrapping_add 4#u8 1#u8 = 5#u8 := by rfl
+  have a5 : U8.wrapping_add 5#u8 1#u8 = 6#u8 := by rfl
+  have h6 : ∀ state, owner.finish (ops schedule nonce) 6#u8 unix state =
+      ok (packChain (ioChain schedule [] state)) := by
+    intro state; rw [owner.finish.eq_def] <;> first | rfl | decide
+  have h5 : ∀ state, owner.finish (ops schedule nonce) 5#u8 unix state =
+      ok (packChain (ioChain schedule ([.directorySync]) state)) := by
+    intro state
+    rw [owner.finish.eq_def] <;> try decide
+    dsimp only [ops,kind,bind_tc_ok]
+    cases hs : (ask schedule .directorySync state).1 <;>
+      simp only [hs,encodeOutcome,bind_tc_ok,lift,a5,h6,ioChain,packChain,List.cons_append,List.nil_append]
+    all_goals rfl
+  have h4 : ∀ state, owner.finish (ops schedule nonce) 4#u8 unix state =
+      ok (packChain (ioChain schedule ([] ++ (if unix then [.directoryOpen,.directorySync] else [])) state)) := by
+    intro state
+    rw [owner.finish.eq_def] <;> try decide
+    cases unix <;> simp only [Bool.false_eq_true,if_false,if_true,List.nil_append]
+    · rfl
+    ·
+      dsimp only [ops,kind,bind_tc_ok]
+      cases hs : (ask schedule .directoryOpen state).1 <;>
+        simp only [hs,encodeOutcome,bind_tc_ok,lift,a4,h5,ioChain,packChain,List.cons_append,List.nil_append]
+      all_goals rfl
+  have h3 : ∀ state, owner.finish (ops schedule nonce) 3#u8 unix state =
+      ok (packChain (ioChain schedule ([.fileSync] ++ (if unix then [.directoryOpen,.directorySync] else [])) state)) := by
+    intro state
+    rw [owner.finish.eq_def] <;> try decide
+    dsimp only [ops,kind,bind_tc_ok]
+    cases hs : (ask schedule .fileSync state).1 <;>
+      simp only [hs,encodeOutcome,bind_tc_ok,lift,a3,h4,ioChain,packChain,List.cons_append,List.nil_append]
+    all_goals rfl
+  have h2 : ∀ state, owner.finish (ops schedule nonce) 2#u8 unix state =
+      ok (packChain (ioChain schedule ([.writeNonce,.fileSync] ++ (if unix then [.directoryOpen,.directorySync] else [])) state)) := by
+    intro state
+    rw [owner.finish.eq_def] <;> try decide
+    dsimp only [ops,kind,bind_tc_ok]
+    cases hs : (ask schedule .writeNonce state).1 <;>
+      simp only [hs,encodeOutcome,bind_tc_ok,lift,a2,h3,ioChain,packChain,List.cons_append,List.nil_append]
+    all_goals rfl
+  have h1 : ∀ state, owner.finish (ops schedule nonce) 1#u8 unix state =
+      ok (packChain (ioChain schedule ([.writeDigest,.writeNonce,.fileSync] ++ (if unix then [.directoryOpen,.directorySync] else [])) state)) := by
+    intro state
+    rw [owner.finish.eq_def] <;> try decide
+    dsimp only [ops,kind,bind_tc_ok]
+    cases hs : (ask schedule .writeDigest state).1 <;>
+      simp only [hs,encodeOutcome,bind_tc_ok,lift,a1,h2,ioChain,packChain,List.cons_append,List.nil_append]
+    all_goals rfl
+  have h0 : ∀ state, owner.finish (ops schedule nonce) 0#u8 unix state =
+      ok (packChain (ioChain schedule ([.writeMagic,.writeDigest,.writeNonce,.fileSync] ++ (if unix then [.directoryOpen,.directorySync] else [])) state)) := by
+    intro state
+    rw [owner.finish.eq_def] <;> try decide
+    dsimp only [ops,kind,bind_tc_ok]
+    cases hs : (ask schedule .writeMagic state).1 <;>
+      simp only [hs,encodeOutcome,bind_tc_ok,lift,a0,h1,ioChain,packChain,List.cons_append,List.nil_append]
+    all_goals rfl
+  exact h0 s
+
+def decodeError : owner.Error IOError → ReservationError
+  | .Duplicate => .duplicate
+  | .Io e => .io e
+
+def unpack (out : owner.Run State IOError) : Except ReservationError Unit × State :=
+  (match out.result with | .Ok _ => .ok () | .Err e => .error (decodeError e),out.state)
+
+theorem unpack_chain (out : Outcome × State) :
+    unpack (packChain out) = (out.1.mapError ReservationError.io,out.2) := by
+  rcases out with ⟨status,s⟩
+  cases status <;> rfl
+
+/-- Complete extracted entry point: duplicate errors, all IO errors, successful
+reservation and the entire retained ledger/history state agree exactly. -/
+theorem reserve_source (schedule : Schedule) (nonce : OracleAnswer)
+    (unix : Bool) (s : State) :
+    (do let out ← owner.reserve (ops schedule nonce) unix s
+        ok (unpack out)) = ok (reserve schedule unix nonce s) := by
+  rw [owner.reserve]
+  dsimp only [ops,kind,bind_tc_ok]
+  cases h : (ask schedule .create s).1 with
+  | error e =>
+    cases e <;> simp only [h,encodeOutcome,bind_tc_ok,unpack,decodeError,
+      reserve,Except.mapError] <;> rfl
+  | ok u =>
+    cases u
+    dsimp only [h,encodeOutcome,bind_tc_ok]
+    rw [finish_source]
+    simp only [bind_tc_ok,unpack_chain,reserve,h]
+
+#print axioms finish_source
+#print axioms unpack_chain
+#print axioms reserve_source
+end R1Z.ProverCommitEnvironmentSource35

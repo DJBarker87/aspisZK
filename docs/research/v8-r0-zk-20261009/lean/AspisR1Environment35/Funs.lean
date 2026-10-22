@@ -16,19 +16,19 @@ set_option maxRecDepth 2048
 namespace AspisR1Environment35
 
 /-- [aspis_environment_owner35::owner::finish]:
-    Source: 'owner.rs', lines 10:0-16:1
+    Source: 'owner.rs', lines 10:0-17:1
     Visibility: public -/
 def owner.finish
   {S : Type} {E : Type} {P : Type} (IOInst : owner.IO P S E) (stage : Std.U8)
   (unix : Bool) (state : S) :
   Result (owner.Run S E)
   := do
-  match stage with
-  | 0#uscalar =>
+  if stage = 0#u8
+  then
     let (outcome, after) ← IOInst.call owner.Kind.WriteMagic state
     match outcome with
     | core.result.Result.Ok _ =>
-      let i ← lift (Std.U8.wrapping_add 0#u8 1#u8)
+      let i ← lift (Std.U8.wrapping_add stage 1#u8)
       owner.finish IOInst i unix after
     | core.result.Result.Err e =>
       ok
@@ -37,53 +37,14 @@ def owner.finish
           state := after,
           created := true
         }
-  | 1#uscalar =>
-    let (outcome, after) ← IOInst.call owner.Kind.WriteDigest state
-    match outcome with
-    | core.result.Result.Ok _ =>
-      let i ← lift (Std.U8.wrapping_add 1#u8 1#u8)
-      owner.finish IOInst i unix after
-    | core.result.Result.Err e =>
-      ok
-        {
-          result := (core.result.Result.Err (owner.Error.Io e)),
-          state := after,
-          created := true
-        }
-  | 2#uscalar =>
-    let (outcome, after) ← IOInst.call owner.Kind.WriteNonce state
-    match outcome with
-    | core.result.Result.Ok _ =>
-      let i ← lift (Std.U8.wrapping_add 2#u8 1#u8)
-      owner.finish IOInst i unix after
-    | core.result.Result.Err e =>
-      ok
-        {
-          result := (core.result.Result.Err (owner.Error.Io e)),
-          state := after,
-          created := true
-        }
-  | 3#uscalar =>
-    let (outcome, after) ← IOInst.call owner.Kind.FileSync state
-    match outcome with
-    | core.result.Result.Ok _ =>
-      let i ← lift (Std.U8.wrapping_add 3#u8 1#u8)
-      owner.finish IOInst i unix after
-    | core.result.Result.Err e =>
-      ok
-        {
-          result := (core.result.Result.Err (owner.Error.Io e)),
-          state := after,
-          created := true
-        }
-  | 4#uscalar =>
-    if unix
+  else
+    if stage = 1#u8
     then
-      let (outcome, after) ← IOInst.call owner.Kind.DirectoryOpen state
+      let (outcome, after) ← IOInst.call owner.Kind.WriteDigest state
       match outcome with
       | core.result.Result.Ok _ =>
-        let i ← lift (Std.U8.wrapping_add 4#u8 1#u8)
-        owner.finish IOInst i true after
+        let i ← lift (Std.U8.wrapping_add stage 1#u8)
+        owner.finish IOInst i unix after
       | core.result.Result.Err e =>
         ok
           {
@@ -91,25 +52,82 @@ def owner.finish
             state := after,
             created := true
           }
-    else ok { result := (core.result.Result.Ok ()), state, created := true }
-  | 5#uscalar =>
-    let (outcome, after) ← IOInst.call owner.Kind.DirectorySync state
-    match outcome with
-    | core.result.Result.Ok _ =>
-      let i ← lift (Std.U8.wrapping_add 5#u8 1#u8)
-      owner.finish IOInst i unix after
-    | core.result.Result.Err e =>
-      ok
-        {
-          result := (core.result.Result.Err (owner.Error.Io e)),
-          state := after,
-          created := true
-        }
-  | _ => ok { result := (core.result.Result.Ok ()), state, created := true }
+    else
+      if stage = 2#u8
+      then
+        let (outcome, after) ← IOInst.call owner.Kind.WriteNonce state
+        match outcome with
+        | core.result.Result.Ok _ =>
+          let i ← lift (Std.U8.wrapping_add stage 1#u8)
+          owner.finish IOInst i unix after
+        | core.result.Result.Err e =>
+          ok
+            {
+              result := (core.result.Result.Err (owner.Error.Io e)),
+              state := after,
+              created := true
+            }
+      else
+        if stage = 3#u8
+        then
+          let (outcome, after) ← IOInst.call owner.Kind.FileSync state
+          match outcome with
+          | core.result.Result.Ok _ =>
+            let i ← lift (Std.U8.wrapping_add stage 1#u8)
+            owner.finish IOInst i unix after
+          | core.result.Result.Err e =>
+            ok
+              {
+                result := (core.result.Result.Err (owner.Error.Io e)),
+                state := after,
+                created := true
+              }
+        else
+          if stage = 4#u8
+          then
+            if unix
+            then
+              let (outcome, after) ←
+                IOInst.call owner.Kind.DirectoryOpen state
+              match outcome with
+              | core.result.Result.Ok _ =>
+                let i ← lift (Std.U8.wrapping_add stage 1#u8)
+                owner.finish IOInst i true after
+              | core.result.Result.Err e =>
+                ok
+                  {
+                    result := (core.result.Result.Err (owner.Error.Io e)),
+                    state := after,
+                    created := true
+                  }
+            else
+              ok
+                { result := (core.result.Result.Ok ()), state, created := true
+                }
+          else
+            if stage = 5#u8
+            then
+              let (outcome, after) ←
+                IOInst.call owner.Kind.DirectorySync state
+              match outcome with
+              | core.result.Result.Ok _ =>
+                let i ← lift (Std.U8.wrapping_add stage 1#u8)
+                owner.finish IOInst i unix after
+              | core.result.Result.Err e =>
+                ok
+                  {
+                    result := (core.result.Result.Err (owner.Error.Io e)),
+                    state := after,
+                    created := true
+                  }
+            else
+              ok
+                { result := (core.result.Result.Ok ()), state, created := true
+                }
 partial_fixpoint
 
 /-- [aspis_environment_owner35::owner::reserve]:
-    Source: 'owner.rs', lines 17:0-23:1
+    Source: 'owner.rs', lines 18:0-24:1
     Visibility: public -/
 def owner.reserve
   {S : Type} {E : Type} {P : Type} (IOInst : owner.IO P S E) (unix : Bool)

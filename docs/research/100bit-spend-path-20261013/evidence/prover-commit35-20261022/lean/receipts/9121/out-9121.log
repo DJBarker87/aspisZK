@@ -1,0 +1,74 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:101:48: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵6̵0̵,̵n̵6̵1̵,̵n̵6̵2̵,̵n̵6̵3̵,̵n̵6̵4̵,̵n̵6̵5̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲n̲6̲0̲,̲ ̲n̲6̲1̲,̲ ̲n̲6̲2̲,̲ ̲n̲6̲3̲,̲ ̲n̲6̲4̲,̲ ̲n̲6̲5̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:145:15: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [if_f̵a̵l̵s̵e̵,̵i̵f̵_̵true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:172:53: error: unsolved goals
+case ok
+schedule : Schedule
+nonce : OracleAnswer
+unix : Bool
+s : State
+a✝ : Unit
+h : (ask schedule Kind.create s).1 = Except.ok a✝
+⊢ (ask schedule Kind.create s).2.burned = s.burned
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:179:9: error: unsolved goals
+case ok.unit
+schedule : Schedule
+nonce : OracleAnswer
+unix : Bool
+s : State
+call :
+  (ops schedule nonce).call owner.Kind.Create s =
+    ok
+      (encodeOutcome (ask schedule Kind.create s).1,
+        match (ask schedule Kind.create s).1 with
+        | Except.ok a =>
+          let __src := (ask schedule Kind.create s).2;
+          { history := __src.history, cursor := __src.cursor, burned := nonce :: s.burned }
+        | Except.error a => (ask schedule Kind.create s).2)
+h : (ask schedule Kind.create s).1 = Except.ok PUnit.unit
+⊢ ok
+      (Except.mapError ReservationError.io
+          (ioChain schedule (writes unix)
+              { history := (ask schedule Kind.create s).2.history, cursor := (ask schedule Kind.create s).2.cursor,
+                burned := nonce :: s.burned }).1,
+        (ioChain schedule (writes unix)
+            { history := (ask schedule Kind.create s).2.history, cursor := (ask schedule Kind.create s).2.cursor,
+              burned := nonce :: s.burned }).2) =
+    ok
+      (Except.mapError ReservationError.io
+          (ioChain schedule (writes unix)
+              { history := (ask schedule Kind.create s).2.history, cursor := (ask schedule Kind.create s).2.cursor,
+                burned := nonce :: (ask schedule Kind.create s).2.burned }).1,
+        (ioChain schedule (writes unix)
+            { history := (ask schedule Kind.create s).2.history, cursor := (ask schedule Kind.create s).2.cursor,
+              burned := nonce :: (ask schedule Kind.create s).2.burned }).2)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:181:15: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵encodeOutcome, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:181:31: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵e̵n̵c̵o̵d̵e̵O̵u̵t̵c̵o̵m̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲,̲ ̲e̲n̲c̲o̲d̲e̲O̲u̲t̲c̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitEnvironmentSource35.finish_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEnvironmentSource35.unpack_chain' does not depend on any axioms
+'R1Z.ProverCommitEnvironmentSource35.reserve_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

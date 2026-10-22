@@ -17,7 +17,6 @@ namespace AspisR1Environment35
 /-- [aspis_environment_owner35::owner::Kind]
     Source: 'owner.rs', lines 3:0-3:93
     Visibility: public -/
-@[discriminant isize]
 inductive owner.Kind where
 | Create : owner.Kind
 | WriteMagic : owner.Kind
@@ -30,7 +29,6 @@ inductive owner.Kind where
 /-- [aspis_environment_owner35::owner::Error]
     Source: 'owner.rs', lines 4:0-4:35
     Visibility: public -/
-@[discriminant isize]
 inductive owner.Error (E : Type) where
 | Duplicate : owner.Error E
 | Io : E → owner.Error E
@@ -50,4 +48,9 @@ structure owner.IO (Self : Type) (S : Type) (E : Type) where
   call : owner.Kind → S → Result ((core.result.Result Unit E) × S)
   duplicate : E → Result Bool
 
+-- Namespace-local names avoid global attribute-generated instance collisions.
+instance kindDiscriminant35 : Discriminant owner.Kind Isize where
+  read_discriminant := fun | .Create => 0#isize | .WriteMagic => 1#isize | .WriteDigest => 2#isize | .WriteNonce => 3#isize | .FileSync => 4#isize | .DirectoryOpen => 5#isize | .DirectorySync => 6#isize
+instance errorDiscriminant35 {E : Type} : Discriminant (owner.Error E) Isize where
+  read_discriminant := fun | .Duplicate => 0#isize | .Io _ => 1#isize
 end AspisR1Environment35

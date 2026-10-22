@@ -8,9 +8,10 @@ pub trait IO<S,E> {
     fn duplicate(error:&E)->bool;
 }
 pub fn finish<S,E,P:IO<S,E>>(stage:u8,unix:bool,state:S)->Run<S,E> {
-    let kind=match stage {0=>Kind::WriteMagic,1=>Kind::WriteDigest,2=>Kind::WriteNonce,3=>Kind::FileSync,
-        4=>if unix {Kind::DirectoryOpen}else{return Run{result:Ok(()),state,created:true}},
-        5=>Kind::DirectorySync,_=>return Run{result:Ok(()),state,created:true}};
+    let kind=if stage==0 {Kind::WriteMagic} else if stage==1 {Kind::WriteDigest}
+        else if stage==2 {Kind::WriteNonce} else if stage==3 {Kind::FileSync}
+        else if stage==4 {if unix {Kind::DirectoryOpen} else {return Run{result:Ok(()),state,created:true}}}
+        else if stage==5 {Kind::DirectorySync} else {return Run{result:Ok(()),state,created:true}};
     let (outcome,after)=P::call(kind,state);
     match outcome {Err(e)=>Run{result:Err(Error::Io(e)),state:after,created:true},Ok(())=>finish::<S,E,P>(stage+1,unix,after)}
 }

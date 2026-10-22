@@ -15,6 +15,11 @@ records=[]
 for pin in sorted((E/'pins').glob('lean-*.json')):
  rec=json.loads(pin.read_text());a=str(rec['attempt'])
  dest=E/'lean'/'receipts'/a;dest.mkdir(parents=True,exist_ok=True)
+ if a in ('9107','9108'):
+  rec.update(exit_status=[],launcher_exit_status=67,compiler_launched=False,wall=None,peak_rss_kib=None,swaps=None,print_axioms=[],errors=['Launcher refused unchanged source plus dependency fingerprint; no compiler ran.'],source_revision=(E/'pins'/'revision.txt').read_text().strip())
+  rec['source_snapshot']=str(next((E/'lean'/'sources').glob('attempt-'+a+'-*')).relative_to(E))
+  records.append(rec)
+  continue
  for kind,ext in [('out','log'),('time','log'),('sha','txt')]:
   subprocess.run(['scp','-q',HOST+':/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/'+kind+'-'+a+'.'+ext,str(dest)],check=True)
  log=(dest/('out-'+a+'.log')).read_text();tl=(dest/('time-'+a+'.log')).read_text()

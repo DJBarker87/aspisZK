@@ -1,0 +1,490 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:57:4: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:68:6: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:62:112: error: unsolved goals
+case x_5
+schedule : Schedule
+nonce : OracleAnswer
+unix : Bool
+s : State
+a0 : U8.wrapping_add 0#u8 1#u8 = 1#u8
+a1 : U8.wrapping_add 1#u8 1#u8 = 2#u8
+a2 : U8.wrapping_add 2#u8 1#u8 = 3#u8
+a3 : U8.wrapping_add 3#u8 1#u8 = 4#u8
+a4 : U8.wrapping_add 4#u8 1#u8 = 5#u8
+a5 : U8.wrapping_add 5#u8 1#u8 = 6#u8
+h6 : ∀ (state : State), owner.finish (ops schedule nonce) 6#u8 unix state = ok (packChain (ioChain schedule [] state))
+h5 :
+  ∀ (state : State),
+    owner.finish (ops schedule nonce) 5#u8 unix state = ok (packChain (ioChain schedule [Kind.directorySync] state))
+state : State
+⊢ 4#u8 = 4#8#uscalar → False
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:76:4: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:84:4: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:92:4: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:100:4: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:127:12: error: unsolved goals
+case error.alreadyExists
+schedule : Schedule
+nonce : OracleAnswer
+unix : Bool
+s : State
+h : (ask schedule Kind.create s).1 = Except.error IOError.alreadyExists
+⊢ (do
+      let out ←
+        let (result, after) := (core.result.Result.Err IOError.alreadyExists, (ask schedule Kind.create s).2)
+          match result with
+          | core.result.Result.Ok a =>
+            owner.finish
+              {
+                call := fun k s =>
+                  ok
+                    (match
+                        (ask schedule
+                            (match k with
+                            | owner.Kind.Create => Kind.create
+                            | owner.Kind.WriteMagic => Kind.writeMagic
+                            | owner.Kind.WriteDigest => Kind.writeDigest
+                            | owner.Kind.WriteNonce => Kind.writeNonce
+                            | owner.Kind.FileSync => Kind.fileSync
+                            | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                            | owner.Kind.DirectorySync => Kind.directorySync)
+                            s).1 with
+                      | Except.ok a => core.result.Result.Ok ()
+                      | Except.error e => core.result.Result.Err e,
+                      match k,
+                        (ask schedule
+                            (match k with
+                            | owner.Kind.Create => Kind.create
+                            | owner.Kind.WriteMagic => Kind.writeMagic
+                            | owner.Kind.WriteDigest => Kind.writeDigest
+                            | owner.Kind.WriteNonce => Kind.writeNonce
+                            | owner.Kind.FileSync => Kind.fileSync
+                            | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                            | owner.Kind.DirectorySync => Kind.directorySync)
+                            s).1 with
+                      | owner.Kind.Create, Except.ok a =>
+                        {
+                          history :=
+                            (ask schedule
+                                  (match k with
+                                  | owner.Kind.Create => Kind.create
+                                  | owner.Kind.WriteMagic => Kind.writeMagic
+                                  | owner.Kind.WriteDigest => Kind.writeDigest
+                                  | owner.Kind.WriteNonce => Kind.writeNonce
+                                  | owner.Kind.FileSync => Kind.fileSync
+                                  | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                                  | owner.Kind.DirectorySync => Kind.directorySync)
+                                  s).2.history,
+                          cursor :=
+                            (ask schedule
+                                  (match k with
+                                  | owner.Kind.Create => Kind.create
+                                  | owner.Kind.WriteMagic => Kind.writeMagic
+                                  | owner.Kind.WriteDigest => Kind.writeDigest
+                                  | owner.Kind.WriteNonce => Kind.writeNonce
+                                  | owner.Kind.FileSync => Kind.fileSync
+                                  | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                                  | owner.Kind.DirectorySync => Kind.directorySync)
+                                  s).2.cursor,
+                          burned :=
+                            nonce ::
+                              (ask schedule
+                                    (match k with
+                                    | owner.Kind.Create => Kind.create
+                                    | owner.Kind.WriteMagic => Kind.writeMagic
+                                    | owner.Kind.WriteDigest => Kind.writeDigest
+                                    | owner.Kind.WriteNonce => Kind.writeNonce
+                                    | owner.Kind.FileSync => Kind.fileSync
+                                    | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                                    | owner.Kind.DirectorySync => Kind.directorySync)
+                                    s).2.burned }
+                      | x, x_1 =>
+                        (ask schedule
+                            (match k with
+                            | owner.Kind.Create => Kind.create
+                            | owner.Kind.WriteMagic => Kind.writeMagic
+                            | owner.Kind.WriteDigest => Kind.writeDigest
+                            | owner.Kind.WriteNonce => Kind.writeNonce
+                            | owner.Kind.FileSync => Kind.fileSync
+                            | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                            | owner.Kind.DirectorySync => Kind.directorySync)
+                            s).2),
+                duplicate := fun e =>
+                  ok
+                    (match e with
+                    | IOError.alreadyExists => true
+                    | IOError.other a => false) }
+              0#u8 unix after
+          | core.result.Result.Err e =>
+            if
+                (match e with
+                  | IOError.alreadyExists => true
+                  | IOError.other a => false) =
+                  true then
+              ok { result := core.result.Result.Err owner.Error.Duplicate, state := after, created := false }
+            else ok { result := core.result.Result.Err (owner.Error.Io e), state := after, created := false }
+      ok
+          (match out.result with
+            | core.result.Result.Ok a => Except.ok ()
+            | core.result.Result.Err e =>
+              Except.error
+                (match e with
+                | owner.Error.Duplicate => ReservationError.duplicate
+                | owner.Error.Io e => ReservationError.io e),
+            out.state)) =
+    ok (Except.error ReservationError.duplicate, (ask schedule Kind.create s).2)
+
+case error.other
+schedule : Schedule
+nonce : OracleAnswer
+unix : Bool
+s : State
+a✝ : ℕ
+h : (ask schedule Kind.create s).1 = Except.error (IOError.other a✝)
+⊢ (do
+      let out ←
+        let (result, after) := (core.result.Result.Err (IOError.other a✝), (ask schedule Kind.create s).2)
+          match result with
+          | core.result.Result.Ok a =>
+            owner.finish
+              {
+                call := fun k s =>
+                  ok
+                    (match
+                        (ask schedule
+                            (match k with
+                            | owner.Kind.Create => Kind.create
+                            | owner.Kind.WriteMagic => Kind.writeMagic
+                            | owner.Kind.WriteDigest => Kind.writeDigest
+                            | owner.Kind.WriteNonce => Kind.writeNonce
+                            | owner.Kind.FileSync => Kind.fileSync
+                            | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                            | owner.Kind.DirectorySync => Kind.directorySync)
+                            s).1 with
+                      | Except.ok a => core.result.Result.Ok ()
+                      | Except.error e => core.result.Result.Err e,
+                      match k,
+                        (ask schedule
+                            (match k with
+                            | owner.Kind.Create => Kind.create
+                            | owner.Kind.WriteMagic => Kind.writeMagic
+                            | owner.Kind.WriteDigest => Kind.writeDigest
+                            | owner.Kind.WriteNonce => Kind.writeNonce
+                            | owner.Kind.FileSync => Kind.fileSync
+                            | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                            | owner.Kind.DirectorySync => Kind.directorySync)
+                            s).1 with
+                      | owner.Kind.Create, Except.ok a =>
+                        {
+                          history :=
+                            (ask schedule
+                                  (match k with
+                                  | owner.Kind.Create => Kind.create
+                                  | owner.Kind.WriteMagic => Kind.writeMagic
+                                  | owner.Kind.WriteDigest => Kind.writeDigest
+                                  | owner.Kind.WriteNonce => Kind.writeNonce
+                                  | owner.Kind.FileSync => Kind.fileSync
+                                  | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                                  | owner.Kind.DirectorySync => Kind.directorySync)
+                                  s).2.history,
+                          cursor :=
+                            (ask schedule
+                                  (match k with
+                                  | owner.Kind.Create => Kind.create
+                                  | owner.Kind.WriteMagic => Kind.writeMagic
+                                  | owner.Kind.WriteDigest => Kind.writeDigest
+                                  | owner.Kind.WriteNonce => Kind.writeNonce
+                                  | owner.Kind.FileSync => Kind.fileSync
+                                  | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                                  | owner.Kind.DirectorySync => Kind.directorySync)
+                                  s).2.cursor,
+                          burned :=
+                            nonce ::
+                              (ask schedule
+                                    (match k with
+                                    | owner.Kind.Create => Kind.create
+                                    | owner.Kind.WriteMagic => Kind.writeMagic
+                                    | owner.Kind.WriteDigest => Kind.writeDigest
+                                    | owner.Kind.WriteNonce => Kind.writeNonce
+                                    | owner.Kind.FileSync => Kind.fileSync
+                                    | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                                    | owner.Kind.DirectorySync => Kind.directorySync)
+                                    s).2.burned }
+                      | x, x_1 =>
+                        (ask schedule
+                            (match k with
+                            | owner.Kind.Create => Kind.create
+                            | owner.Kind.WriteMagic => Kind.writeMagic
+                            | owner.Kind.WriteDigest => Kind.writeDigest
+                            | owner.Kind.WriteNonce => Kind.writeNonce
+                            | owner.Kind.FileSync => Kind.fileSync
+                            | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                            | owner.Kind.DirectorySync => Kind.directorySync)
+                            s).2),
+                duplicate := fun e =>
+                  ok
+                    (match e with
+                    | IOError.alreadyExists => true
+                    | IOError.other a => false) }
+              0#u8 unix after
+          | core.result.Result.Err e =>
+            if
+                (match e with
+                  | IOError.alreadyExists => true
+                  | IOError.other a => false) =
+                  true then
+              ok { result := core.result.Result.Err owner.Error.Duplicate, state := after, created := false }
+            else ok { result := core.result.Result.Err (owner.Error.Io e), state := after, created := false }
+      ok
+          (match out.result with
+            | core.result.Result.Ok a => Except.ok ()
+            | core.result.Result.Err e =>
+              Except.error
+                (match e with
+                | owner.Error.Duplicate => ReservationError.duplicate
+                | owner.Error.Io e => ReservationError.io e),
+            out.state)) =
+    ok (Except.error (ReservationError.io (IOError.other a✝)), (ask schedule Kind.create s).2)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:133:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  owner.finish (ops ?schedule ?nonce) 0#u8 ?unix ?s
+in the target expression
+  (do
+      let out ←
+        let (result, after) :=
+            (core.result.Result.Ok (),
+              { history := (ask schedule Kind.create s).2.history, cursor := (ask schedule Kind.create s).2.cursor,
+                burned := nonce :: (ask schedule Kind.create s).2.burned })
+          match result with
+          | core.result.Result.Ok a =>
+            owner.finish
+              {
+                call := fun k s =>
+                  ok
+                    (match
+                        (ask schedule
+                            (match k with
+                            | owner.Kind.Create => Kind.create
+                            | owner.Kind.WriteMagic => Kind.writeMagic
+                            | owner.Kind.WriteDigest => Kind.writeDigest
+                            | owner.Kind.WriteNonce => Kind.writeNonce
+                            | owner.Kind.FileSync => Kind.fileSync
+                            | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                            | owner.Kind.DirectorySync => Kind.directorySync)
+                            s).1 with
+                      | Except.ok a => core.result.Result.Ok ()
+                      | Except.error e => core.result.Result.Err e,
+                      match k,
+                        (ask schedule
+                            (match k with
+                            | owner.Kind.Create => Kind.create
+                            | owner.Kind.WriteMagic => Kind.writeMagic
+                            | owner.Kind.WriteDigest => Kind.writeDigest
+                            | owner.Kind.WriteNonce => Kind.writeNonce
+                            | owner.Kind.FileSync => Kind.fileSync
+                            | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                            | owner.Kind.DirectorySync => Kind.directorySync)
+                            s).1 with
+                      | owner.Kind.Create, Except.ok a =>
+                        {
+                          history :=
+                            (ask schedule
+                                  (match k with
+                                  | owner.Kind.Create => Kind.create
+                                  | owner.Kind.WriteMagic => Kind.writeMagic
+                                  | owner.Kind.WriteDigest => Kind.writeDigest
+                                  | owner.Kind.WriteNonce => Kind.writeNonce
+                                  | owner.Kind.FileSync => Kind.fileSync
+                                  | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                                  | owner.Kind.DirectorySync => Kind.directorySync)
+                                  s).2.history,
+                          cursor :=
+                            (ask schedule
+                                  (match k with
+                                  | owner.Kind.Create => Kind.create
+                                  | owner.Kind.WriteMagic => Kind.writeMagic
+                                  | owner.Kind.WriteDigest => Kind.writeDigest
+                                  | owner.Kind.WriteNonce => Kind.writeNonce
+                                  | owner.Kind.FileSync => Kind.fileSync
+                                  | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                                  | owner.Kind.DirectorySync => Kind.directorySync)
+                                  s).2.cursor,
+                          burned :=
+                            nonce ::
+                              (ask schedule
+                                    (match k with
+                                    | owner.Kind.Create => Kind.create
+                                    | owner.Kind.WriteMagic => Kind.writeMagic
+                                    | owner.Kind.WriteDigest => Kind.writeDigest
+                                    | owner.Kind.WriteNonce => Kind.writeNonce
+                                    | owner.Kind.FileSync => Kind.fileSync
+                                    | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                                    | owner.Kind.DirectorySync => Kind.directorySync)
+                                    s).2.burned }
+                      | x, x_1 =>
+                        (ask schedule
+                            (match k with
+                            | owner.Kind.Create => Kind.create
+                            | owner.Kind.WriteMagic => Kind.writeMagic
+                            | owner.Kind.WriteDigest => Kind.writeDigest
+                            | owner.Kind.WriteNonce => Kind.writeNonce
+                            | owner.Kind.FileSync => Kind.fileSync
+                            | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                            | owner.Kind.DirectorySync => Kind.directorySync)
+                            s).2),
+                duplicate := fun e =>
+                  ok
+                    (match e with
+                    | IOError.alreadyExists => true
+                    | IOError.other a => false) }
+              0#u8 unix after
+          | core.result.Result.Err e =>
+            if
+                (match e with
+                  | IOError.alreadyExists => true
+                  | IOError.other a => false) =
+                  true then
+              ok { result := core.result.Result.Err owner.Error.Duplicate, state := after, created := false }
+            else ok { result := core.result.Result.Err (owner.Error.Io e), state := after, created := false }
+      ok (unpack out)) =
+    ok (reserve schedule unix nonce s)
+
+case ok.unit
+schedule : Schedule
+nonce : OracleAnswer
+unix : Bool
+s : State
+h : (ask schedule Kind.create s).1 = Except.ok PUnit.unit
+⊢ (do
+      let out ←
+        let (result, after) :=
+            (core.result.Result.Ok (),
+              { history := (ask schedule Kind.create s).2.history, cursor := (ask schedule Kind.create s).2.cursor,
+                burned := nonce :: (ask schedule Kind.create s).2.burned })
+          match result with
+          | core.result.Result.Ok a =>
+            owner.finish
+              {
+                call := fun k s =>
+                  ok
+                    (match
+                        (ask schedule
+                            (match k with
+                            | owner.Kind.Create => Kind.create
+                            | owner.Kind.WriteMagic => Kind.writeMagic
+                            | owner.Kind.WriteDigest => Kind.writeDigest
+                            | owner.Kind.WriteNonce => Kind.writeNonce
+                            | owner.Kind.FileSync => Kind.fileSync
+                            | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                            | owner.Kind.DirectorySync => Kind.directorySync)
+                            s).1 with
+                      | Except.ok a => core.result.Result.Ok ()
+                      | Except.error e => core.result.Result.Err e,
+                      match k,
+                        (ask schedule
+                            (match k with
+                            | owner.Kind.Create => Kind.create
+                            | owner.Kind.WriteMagic => Kind.writeMagic
+                            | owner.Kind.WriteDigest => Kind.writeDigest
+                            | owner.Kind.WriteNonce => Kind.writeNonce
+                            | owner.Kind.FileSync => Kind.fileSync
+                            | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                            | owner.Kind.DirectorySync => Kind.directorySync)
+                            s).1 with
+                      | owner.Kind.Create, Except.ok a =>
+                        {
+                          history :=
+                            (ask schedule
+                                  (match k with
+                                  | owner.Kind.Create => Kind.create
+                                  | owner.Kind.WriteMagic => Kind.writeMagic
+                                  | owner.Kind.WriteDigest => Kind.writeDigest
+                                  | owner.Kind.WriteNonce => Kind.writeNonce
+                                  | owner.Kind.FileSync => Kind.fileSync
+                                  | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                                  | owner.Kind.DirectorySync => Kind.directorySync)
+                                  s).2.history,
+                          cursor :=
+                            (ask schedule
+                                  (match k with
+                                  | owner.Kind.Create => Kind.create
+                                  | owner.Kind.WriteMagic => Kind.writeMagic
+                                  | owner.Kind.WriteDigest => Kind.writeDigest
+                                  | owner.Kind.WriteNonce => Kind.writeNonce
+                                  | owner.Kind.FileSync => Kind.fileSync
+                                  | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                                  | owner.Kind.DirectorySync => Kind.directorySync)
+                                  s).2.cursor,
+                          burned :=
+                            nonce ::
+                              (ask schedule
+                                    (match k with
+                                    | owner.Kind.Create => Kind.create
+                                    | owner.Kind.WriteMagic => Kind.writeMagic
+                                    | owner.Kind.WriteDigest => Kind.writeDigest
+                                    | owner.Kind.WriteNonce => Kind.writeNonce
+                                    | owner.Kind.FileSync => Kind.fileSync
+                                    | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                                    | owner.Kind.DirectorySync => Kind.directorySync)
+                                    s).2.burned }
+                      | x, x_1 =>
+                        (ask schedule
+                            (match k with
+                            | owner.Kind.Create => Kind.create
+                            | owner.Kind.WriteMagic => Kind.writeMagic
+                            | owner.Kind.WriteDigest => Kind.writeDigest
+                            | owner.Kind.WriteNonce => Kind.writeNonce
+                            | owner.Kind.FileSync => Kind.fileSync
+                            | owner.Kind.DirectoryOpen => Kind.directoryOpen
+                            | owner.Kind.DirectorySync => Kind.directorySync)
+                            s).2),
+                duplicate := fun e =>
+                  ok
+                    (match e with
+                    | IOError.alreadyExists => true
+                    | IOError.other a => false) }
+              0#u8 unix after
+          | core.result.Result.Err e =>
+            if
+                (match e with
+                  | IOError.alreadyExists => true
+                  | IOError.other a => false) =
+                  true then
+              ok { result := core.result.Result.Err owner.Error.Duplicate, state := after, created := false }
+            else ok { result := core.result.Result.Err (owner.Error.Io e), state := after, created := false }
+      ok (unpack out)) =
+    ok (reserve schedule unix nonce s)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:128:43: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵e̵n̵c̵o̵d̵e̵O̵u̵t̵c̵o̵m̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵n̵p̵a̵c̵k̵,̵d̵e̵c̵o̵d̵e̵E̵r̵r̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵r̵e̵s̵e̵r̵v̵e̵,̵E̵x̵c̵e̵p̵t̵.̵m̵a̵p̵E̵r̵r̵o̵r̵]̵[̲h̲,̲ ̲e̲n̲c̲o̲d̲e̲O̲u̲t̲c̲o̲m̲e̲,̲ ̲u̲n̲p̲a̲c̲k̲,̲ ̲d̲e̲c̲o̲d̲e̲E̲r̲r̲o̲r̲,̲ ̲r̲e̲s̲e̲r̲v̲e̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲m̲a̲p̲E̲r̲r̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:129:14: warning: This simp argument is unused:
+  Except.mapError
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵e̵n̵c̵o̵d̵e̵O̵u̵t̵c̵o̵m̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵n̵p̵a̵c̵k̵,̵d̵e̵c̵o̵d̵e̵E̵r̵r̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵r̵e̵s̵e̵r̵v̵e̵,̵E̵x̵c̵e̵p̵t̵.̵m̵a̵p̵E̵r̵r̵o̵r̵]̵[̲h̲,̲ ̲e̲n̲c̲o̲d̲e̲O̲u̲t̲c̲o̲m̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲u̲n̲p̲a̲c̲k̲,̲ ̲d̲e̲c̲o̲d̲e̲E̲r̲r̲o̲r̲,̲ ̲r̲e̲s̲e̲r̲v̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:132:15: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵encodeOutcome, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentSource35.lean:132:31: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵e̵n̵c̵o̵d̵e̵O̵u̵t̵c̵o̵m̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲,̲ ̲e̲n̲c̲o̲d̲e̲O̲u̲t̲c̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitEnvironmentSource35.finish_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEnvironmentSource35.unpack_chain' does not depend on any axioms
+'R1Z.ProverCommitEnvironmentSource35.reserve_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

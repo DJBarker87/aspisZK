@@ -1,0 +1,93 @@
+import AspisR1Environment35.Funs
+import R1Z.ProverCommitEnvironment35
+/-! The extracted structural reservation owner is connected to the D147
+schedule for every history and payload-blind schedule. The external Kani gate
+connects the native source control to this same Rust owner; OS primitives,
+path computation and byte storage remain explicitly external boundaries. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitEnvironmentSource35
+open Aeneas Aeneas.Std Result AspisR1Environment35 ProverCommitEnvironment35
+open R0Z.FsStatement
+
+def kind : owner.Kind → Kind
+  | .Create => .create
+  | .WriteMagic => .writeMagic
+  | .WriteDigest => .writeDigest
+  | .WriteNonce => .writeNonce
+  | .FileSync => .fileSync
+  | .DirectoryOpen => .directoryOpen
+  | .DirectorySync => .directorySync
+
+def encodeOutcome : Outcome → core.result.Result Unit IOError
+  | .ok _ => .Ok ()
+  | .error e => .Err e
+
+def ops (schedule : Schedule) (nonce : OracleAnswer) : owner.IO Unit State IOError where
+  call k s :=
+    let step := ask schedule (kind k) s
+    let after := match k,step.1 with
+      | .Create,.ok _ => {step.2 with burned := nonce :: step.2.burned}
+      | _,_ => step.2
+    ok (encodeOutcome step.1,after)
+  duplicate e := ok (match e with | .alreadyExists => true | .other _ => false)
+
+def packChain (result : Outcome × State) : owner.Run State IOError :=
+  ⟨match result.1 with | .ok _ => .Ok () | .error e => .Err (.Io e),result.2,true⟩
+
+/-- The finite suffix contains exactly three writes, file sync and, on Unix,
+open-directory and directory sync. No suffix is evaluated after an error. -/
+theorem finish_source (schedule : Schedule) (nonce : OracleAnswer)
+    (unix : Bool) (s : State) :
+    owner.finish (ops schedule nonce) 0#u8 unix s =
+      ok (packChain (ioChain schedule (writes unix) s)) := by
+  have a0 : U8.wrapping_add 0#u8 1#u8 = 1#u8 := by scalar_tac
+  have a1 : U8.wrapping_add 1#u8 1#u8 = 2#u8 := by scalar_tac
+  have a2 : U8.wrapping_add 2#u8 1#u8 = 3#u8 := by scalar_tac
+  have a3 : U8.wrapping_add 3#u8 1#u8 = 4#u8 := by scalar_tac
+  have a4 : U8.wrapping_add 4#u8 1#u8 = 5#u8 := by scalar_tac
+  have a5 : U8.wrapping_add 5#u8 1#u8 = 6#u8 := by scalar_tac
+  cases unix <;>
+    simp only [owner.finish, ops, kind, bind_tc_ok, lift, a0,a1,a2,a3,a4,a5,
+      writes, Bool.false_eq_true, Bool.true_eq_true, if_false, if_true,
+      List.append_nil, List.cons_append, List.nil_append, ioChain]
+  all_goals
+    repeat' first
+      | progress split
+      | progress simp only [encodeOutcome,packChain,bind_tc_ok,ioChain]
+      | rfl
+
+def decodeError : owner.Error IOError → ReservationError
+  | .Duplicate => .duplicate
+  | .Io e => .io e
+
+def unpack (out : owner.Run State IOError) : Except ReservationError Unit × State :=
+  (match out.result with | .Ok _ => .ok () | .Err e => .error (decodeError e),out.state)
+
+theorem unpack_chain (out : Outcome × State) :
+    unpack (packChain out) = (out.1.mapError ReservationError.io,out.2) := by
+  rcases out with ⟨status,s⟩
+  cases status <;> rfl
+
+/-- Complete extracted entry point: duplicate errors, all IO errors, successful
+reservation and the entire retained ledger/history state agree exactly. -/
+theorem reserve_source (schedule : Schedule) (nonce : OracleAnswer)
+    (unix : Bool) (s : State) :
+    (do let out ← owner.reserve (ops schedule nonce) unix s
+        ok (unpack out)) = reserve schedule unix nonce s |> ok := by
+  rw [owner.reserve]
+  simp only [ops,kind,bind_tc_ok]
+  cases h : (ask schedule .create s).1 with
+  | error e =>
+    cases e <;> simp only [h,encodeOutcome,bind_tc_ok,unpack,decodeError,
+      reserve,Except.mapError]
+  | ok u =>
+    cases u
+    simp only [h,encodeOutcome,bind_tc_ok]
+    rw [finish_source]
+    simp only [bind_tc_ok,unpack_chain,reserve,h]
+
+#print axioms finish_source
+#print axioms unpack_chain
+#print axioms reserve_source
+end R1Z.ProverCommitEnvironmentSource35
