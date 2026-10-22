@@ -279,6 +279,35 @@ canonicality and map lemmas fixes it without raising any option. Every
 accepted printed axiom is standard. No shipped change or deployed-premise
 removal. Target not yet established.
 
+## Stage 12: full materialized array and R1 weight-model values
+
+J10157/59/60 prove symbolic ring-map transport of the carry, opening points,
+equality/Libra rows and natural-basis evaluator, then identify the complete
+WideExact raw rows with R1 `ell`. J10164 proves a complete cell from the actual
+raw helpers and kappa producer. J10165/66 prove the full 1024-cell interval
+fill, zero initialization and complete kappa-weighted array output. J10168
+constructs every raw row from its proved producer and retains every producer
+Result as a conclusion (`raw_spec`); `material_model` concludes that each
+materialized cell equals existing `Batched.weightsR1`.
+
+The model adapter explicitly retains input representation equations for alpha,
+kappa and the four circle coordinates, plus their canonicality. No raw-row,
+power, factor, cell or whole-array output identity is a premise. The complete
+native outer Weights allocation/layout/reuse and iterator caller still need
+composition with these owned value theorems. This is not a native whole-payload
+or L2 call-count theorem. The 1024-write gate passes (21.467 s / 614776 KiB,
+zero swaps), on arbitrary initial arrays/returned inner-cell values; it checks
+only indexed write/context preservation, not inner arithmetic or allocation.
+Those have separate retained gates and the named caller boundary remains.
+
+J10158's concrete vector rewrite reaches recursion depth; proving evaluator
+and seven-row transport generically first fixes it. J10161's embed alias and
+ambiguous E are made explicit. J10162 initially emits a duplicate WideExact.ZERO;
+J10163 reuses the identical declaration from Pairs before any dependent is
+compiled. J10167's Usize bound is repaired by exposing `size_def`. All failed
+sources/diagnostics and accepted section-6 receipts remain. All accepted printed
+axioms are standard. No caps/options raised; no shipped files changed.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

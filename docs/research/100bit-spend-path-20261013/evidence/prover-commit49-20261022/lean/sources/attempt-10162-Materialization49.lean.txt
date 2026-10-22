@@ -1,0 +1,39 @@
+import AspisR1ProducerRelease47.Weights49
+/-! Extracted counter owner, with identical arithmetic callees rebound to the
+previously proved release extraction. bind-counter.py checks every reused
+callee declaration body byte-for-byte. No external template is installed. -/
+open Aeneas Aeneas.Std Result ControlFlow Error
+noncomputable section
+namespace AspisR1ProducerRelease47
+@[global_simps, irreducible]
+def field.wide_exact.WideExact.ZERO : field.wide_exact.WideExact :=
+  { c0 := field.QM31.ZERO, c1 := field.QM31.ZERO }
+
+def materialization.fill
+  (kp : Array field.wide_exact.WideExact 7#usize)
+  (raw1 : Array (Array field.QM31 7#usize) 1024#usize)
+  (out : Array field.wide_exact.WideExact 1024#usize) (j : Std.Usize)
+  (left : Std.U16) :
+  Result (Array field.wide_exact.WideExact 1024#usize)
+  := do
+  if left = 0#u16
+  then ok out
+  else
+    let a ← Array.index_usize raw1 j
+    let we ← Array.index_usize out j
+    let we1 ← owned.cell kp a 0#usize 7#u8 we
+    let out1 ← Array.update out j we1
+    let i ← lift (Std.Usize.wrapping_add j 1#usize)
+    let i1 ← lift (Std.U16.wrapping_sub left 1#u16)
+    materialization.fill kp raw1 out1 i i1
+partial_fixpoint
+
+def materialization.all
+  (kp : Array field.wide_exact.WideExact 7#usize)
+  (raw1 : Array (Array field.QM31 7#usize) 1024#usize) :
+  Result (Array field.wide_exact.WideExact 1024#usize)
+  := do
+  let a := Array.repeat 1024#usize field.wide_exact.WideExact.ZERO
+  materialization.fill kp raw1 a 0#usize 1024#u16
+
+end AspisR1ProducerRelease47

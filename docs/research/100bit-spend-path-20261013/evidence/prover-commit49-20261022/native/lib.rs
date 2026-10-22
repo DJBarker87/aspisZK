@@ -84,3 +84,5 @@ include!("libra-binding.rs");
 include!("point-rows-binding.rs");
 
 include!("stored-binding.rs");
+
+include!("material-binding.rs");
