@@ -1,0 +1,111 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "targets": {
+    "sdk-native-scan-fission-enter-v1": {
+      "mode": "enter",
+      "source_sha256": "6d56a0fdf30acab7a787d540de14a1022f9c5eff00f3904996e512119655bde9",
+      "receipt": {
+        "source_revision": "d8fc9db732c70ef8dd1dd548184326318d5e1ad1",
+        "command": [
+          "python3",
+          "/home/dombarker/project-offloads/s126-real-sdk-20261021/kit/run-native-scan-fission-frame-host.py",
+          "sdk-native-scan-fission-enter-v1",
+          "scan-fission-enter-v1",
+          "run",
+          "plain",
+          "first-coupling",
+          "coupled-cmp"
+        ],
+        "cwd": "/home/dombarker",
+        "expected_time": "Native prefix: explicit DFCC frame, pure scan overapproximation and one180s CBMC check; no arithmetic evaluation",
+        "exit_status": 10,
+        "wall_seconds": 77.939,
+        "peak_rss_kib": 3922476,
+        "swaps": 0,
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rad127e3d6de84bd394df92a343cc41db.scope",
+        "limits": {
+          "memory.high": "6442450944",
+          "memory.max": "8589934592",
+          "memory.swap.max": "0",
+          "pids.max": "64"
+        },
+        "cgroup_memory_peak_bytes": 4118171648,
+        "env": {
+          "CARGO_TARGET_DIR": null,
+          "CARGO_BUILD_JOBS": null,
+          "CARGO_NET_OFFLINE": null,
+          "SBF_TRACE_DIR": null
+        },
+        "print_axioms": "N/A: no Lean compilation"
+      },
+      "checks": 2955,
+      "covers": 2,
+      "raw_goto_sha256": "217e4c0a3dd8a80b059fd807c0c1520f1f43f029f1ae372eb048e8c941538716",
+      "prepared_goto_sha256": "bd240ade2d9c8e66cebd15c739bdfd06ea43974e3fa4de4ac0b855f18af87bd5",
+      "harness": "proofs::native_owned_decoder_prefix"
+    },
+    "sdk-scan-fission-leave-check-v1": {
+      "mode": "leave",
+      "source_sha256": "b1fcf3fbac604cf4b043158e8376d6bd2593de8f75d2dbb8d6cbb031c09e85a3",
+      "receipt": {
+        "source_revision": "d8fc9db732c70ef8dd1dd548184326318d5e1ad1",
+        "command": [
+          "cargo",
+          "kani",
+          "--manifest-path",
+          "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-shared-prefix-scan-fission-leave-v1/Cargo.toml",
+          "--lib",
+          "--exact",
+          "--harness",
+          "proofs::scan_leave_contract",
+          "--solver",
+          "cadical",
+          "--no-assertion-reach-checks",
+          "-j",
+          "1",
+          "-Z",
+          "unstable-options",
+          "--output-format",
+          "terse",
+          "--harness-timeout",
+          "180",
+          "-Z",
+          "function-contracts",
+          "-Z",
+          "stubbing",
+          "--cbmc-args",
+          "--unwinding-assertions"
+        ],
+        "cwd": "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-shared-prefix-scan-fission-leave-v1",
+        "expected_time": "Actual SDK modular guard/prefix check: cached optimized compilation then CBMC",
+        "exit_status": 0,
+        "wall_seconds": 0.803,
+        "peak_rss_kib": 199968,
+        "swaps": 0,
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rb43de648fe734077a0c150d789644c12.scope",
+        "limits": {
+          "memory.high": "6442450944",
+          "memory.max": "8589934592",
+          "memory.swap.max": "0",
+          "pids.max": "64"
+        },
+        "cgroup_memory_peak_bytes": 105332736,
+        "env": {
+          "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/s126-real-sdk-20261021/target",
+          "CARGO_BUILD_JOBS": "1",
+          "CARGO_NET_OFFLINE": "true",
+          "SBF_TRACE_DIR": null
+        },
+        "print_axioms": "N/A: no Lean compilation"
+      },
+      "checks": 110,
+      "covers": 2,
+      "raw_goto_sha256": "936d982cb79643a70053fd7f19ba0f718d1b647ec93f2b09920b0f35807f7ead",
+      "harness": "proofs::scan_leave_contract",
+      "prepared_goto_sha256": "d91af038a1bda89b49140c006cc961c6aa4b2b9137a60c789fc3261fb1d63030"
+    }
+  },
+  "dependency_evidence": "../sdk-native-constructor/dependencies",
+  "scope": "Actual unchanged enter probe is checked empty-write at its real original-SDK native scan site, on the existing constructor source class. Actual unchanged leave body is checked all-bool/all-old-Option ghost-only and exact Some(hit). Source let/any/probe order erasure and concrete extracted-scanner ghost erasure are checked separately.",
+  "remaining": "No whole native SDK caller/SBF/runtime/ABI/oracle/TX2 closure. Existing native constructor and first-entry common execution, actual scan/child port interpretation and the forward original-input constructor still require joint concrete instantiation."
+}
