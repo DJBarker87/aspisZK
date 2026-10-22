@@ -1,0 +1,68 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0152); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+
+case im.im.re
+p : WideExact × WideExact
+⊢ (SimCostWriter.bind (p.1.re * p.2.re, tariff Primitive.qm31Mul) fun ac =>
+              SimCostWriter.bind (p.1.im * p.2.im, tariff Primitive.qm31Mul) fun bd =>
+                SimCostWriter.bind (wideU * bd, tariff Primitive.qm31Mul) fun ubd =>
+                  SimCostWriter.bind (p.1.re * p.2.im, tariff Primitive.qm31Mul) fun ad =>
+                    SimCostWriter.bind (p.1.im * p.2.re, tariff Primitive.qm31Mul) fun bc =>
+                      SimCostWriter.bind (ac + ubd, tariff Primitive.qm31Add) fun re =>
+                        SimCostWriter.bind (ad + bc, tariff Primitive.qm31Add) fun im =>
+                          ({ re := re, im := im }, 2)).1.im.im.re =
+    p.1.re.re.re * p.2.im.im.re + -(p.1.re.re.im * p.2.im.im.im) +
+        (p.1.re.im.re * p.2.im.re.re + -(p.1.re.im.im * p.2.im.re.im)) +
+      (p.1.im.re.re * p.2.re.im.re + -(p.1.im.re.im * p.2.re.im.im) +
+        (p.1.im.im.re * p.2.re.re.re + -(p.1.im.im.im * p.2.re.re.im)))
+
+case im.im.im
+p : WideExact × WideExact
+⊢ (SimCostWriter.bind (p.1.re * p.2.re, tariff Primitive.qm31Mul) fun ac =>
+              SimCostWriter.bind (p.1.im * p.2.im, tariff Primitive.qm31Mul) fun bd =>
+                SimCostWriter.bind (wideU * bd, tariff Primitive.qm31Mul) fun ubd =>
+                  SimCostWriter.bind (p.1.re * p.2.im, tariff Primitive.qm31Mul) fun ad =>
+                    SimCostWriter.bind (p.1.im * p.2.re, tariff Primitive.qm31Mul) fun bc =>
+                      SimCostWriter.bind (ac + ubd, tariff Primitive.qm31Add) fun re =>
+                        SimCostWriter.bind (ad + bc, tariff Primitive.qm31Add) fun im =>
+                          ({ re := re, im := im }, 2)).1.im.im.im =
+    p.1.re.re.re * p.2.im.im.im + p.1.re.re.im * p.2.im.im.re +
+        (p.1.re.im.re * p.2.im.re.im + p.1.re.im.im * p.2.im.re.re) +
+      (p.1.im.re.re * p.2.re.im.im + p.1.im.re.im * p.2.re.im.re +
+        (p.1.im.im.re * p.2.re.re.im + p.1.im.im.im * p.2.re.re.re))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostWide5.lean:43:8: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostWide5.lean:64:45: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostWide5.lean:64:9: error: unsolved goals
+case zero
+z : WideExact
+n : ℕ
+hn : n < 2 ^ 0
+this : n = 0
+⊢ (power 0 z n).1 = z ^ n
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SimCostWide5.lean:73:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a - b ≥ 1
+where
+ a := ↑2 ^ k
+ b := ↑n / 2
+'R1Z.SimCostWide5.add_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.add_cost' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.mul_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.mul_cost' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.power_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.power_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.inverse_exponent_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.inverse_power' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.inv_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.inv_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:11.48
+	Maximum resident set size (kbytes): 4120176
+	Swaps: 0
+	Exit status: 1
+
+
