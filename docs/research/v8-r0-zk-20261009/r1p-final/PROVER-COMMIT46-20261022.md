@@ -77,7 +77,7 @@ Two pure D157 fields extend the std boundary in supplemental records in
 `ProverCommitStdIndex46`: `TrustedIndex.btree_index` (BTreeMap Index returns
 the associated value or panics if absent) and `TrustedSequence.vec_index`
 (Vec Index returns the indexed element or panics if out of range). Both are
-called at `sim.rs:357`. Consistency witnesses compile. The original shared
+called at `sim.rs:360`. Consistency witnesses compile. The original shared
 TrustedStd24 source/object is untouched. No source callback, interior
 mutability, allocation-totality, concurrency or hash law is added.
 
@@ -156,3 +156,112 @@ No new cryptographic or source-callee success assumption is introduced. In
 particular no field assumes canonical native opening values, a mathematical
 payload image, or equality with simE. All five additional std fields and their
 call sites are listed above; the original TrustedStd24 remains unchanged.
+
+
+## Demonstrated next interface: concrete source-view byte image
+
+**Target not yet established.** The next required interface is not another
+collection method. `ProverCommitFront46.Fields` is a raw-byte carrier;
+`sim.rs:236`'s `View5`, `sim::semantic` at :248 and `sim::opening` at :335
+are the actual producers. Their concrete source-to-model image has not been
+installed. In particular, the byte payload `y1` at :339 must be identified
+with the canonical mathematical opening values, not merely fed as an arbitrary
+byte argument into a proved codec. The same image must fix the semantic rows,
+remaining opening fields, packed leaf values and ordered query/node data.
+The retained transcript-walk certificate concerns the walk over records;
+it is not a certificate for these payload-producing functions.
+
+This boundary is demonstrated rather than repaired by an assumption:
+`ProverCommitCodecImageGap46.codec_accepts` accepts a zero-high cell whose
+first little-endian low word is exactly 2^31−1. `no_canonical_first_image`
+and `codec_does_not_supply_image` prove that codec success does not imply
+even the necessary canonical first-word image (Fin (2^31−1)). The native
+fixture retains the actual compact_values and M31/CM31/QM31 parser bodies
+verbatim: compact_values returns Ok with sixteen bytes, while the actual
+QM31 parser returns None. The optimized fixture exits 0 (0.151 s,
+133,732 KiB RSS, zero swaps); J9684 accepts all five finding theorems,
+standard axioms only. This is **not a claim that the simulator emits this
+cell**, and not a privacy attack or a Rust codec bug. The codec intentionally
+checks zero high halves, leaving canonicality to producer/consumer contracts.
+It is a counterexample to using the generic raw-byte certificate as the
+missing typed source-view image.
+
+Exact next deliverable: prove the concrete source producer/serialization
+bridge for sim::semantic and sim::opening, starting with the y1 expression
+`encoded(coefficients.iter().map(|m|eval_message(m,z1)))` at sim.rs:339.
+Relate every generated value and its actual to_le_bytes output to the
+mathematical simulator payload, including canonical limb/high-half and length
+invariants. Then instantiate the publication owner with those actual fields
+and actual leaf/node request logs, and transport D143's published bytes and
+observer-owned oracle history into FSExperiments. A pure std field cannot
+assert any of these source arithmetic, value-provenance or simE equations.
+No such field, source-success premise, caller-equality assumption or silent
+raw-input-domain narrowing is introduced.
+
+I stop at this source-image interface under the requested obstruction rule.
+The complete native simulator certificate, source-to-FSExperiments conversion,
+shippedProverExperiment, both concrete WholeRunJoins and endpoint premise
+removal remain open. The structural publication equations above must not be
+promoted to any of those claims. D143's timing/side-channel exclusion and
+D146's source-representable public-statement scope remain the intended
+contract. The existing environment/public-nonce models remain adversarial;
+no environment probability charge, nonce law, ledger cap or new adversary
+restriction is introduced here.
+
+## Verbatim endpoint before/after: unchanged
+
+The complete endpoint module, including every section binder, definition,
+and theorem proof, is byte-identical in `endpoint/before.lean.txt` and
+`endpoint/after.lean.txt` in the evidence directory. The following verbatim
+excerpts retain the x/rust binders and complete theorem statement. No D146
+domain restriction is installed before the source join exists; x and rust
+still have their original quantifiers. No conclusion, failure event or bound
+is changed, and RustProverRefinement remains explicit.
+
+Before:
+
+```lean
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+local notation "decode" => ownedDecode
+
+variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
+  [Fintype rust.RealRand] [Nonempty rust.RealRand]
+  [Fintype rust.IdealRand] [Nonempty rust.IdealRand]
+  (observer_program : rust.Adversary → View K CommitHandle Aux R1Bat →
+    List (List UInt8 × OracleAnswer) → OProg)
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+After:
+
+```lean
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+local notation "decode" => ownedDecode
+
+variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
+  [Fintype rust.RealRand] [Nonempty rust.RealRand]
+  [Fintype rust.IdealRand] [Nonempty rust.IdealRand]
+  (observer_program : rust.Adversary → View K CommitHandle Aux R1Bat →
+    List (List UInt8 × OracleAnswer) → OProg)
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```

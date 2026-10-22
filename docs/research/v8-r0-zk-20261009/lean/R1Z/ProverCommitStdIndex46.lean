@@ -1,5 +1,5 @@
 import R1Z.ProverCommitTrustedStd24
-/-! D157 pure collection observer used at sim.rs:357. This extends the
+/-! D157 pure collection observer used in ProgrammedTree::multiproof. This extends the
 named TrustedStd boundary for BTreeMap's Index operation. It does not add a
 source callback, interior-mutability, allocation-totality or privacy law. -/
 set_option autoImplicit false
