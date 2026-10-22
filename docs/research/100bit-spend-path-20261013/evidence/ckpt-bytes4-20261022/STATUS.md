@@ -39,3 +39,35 @@ No shipped source, existing Lean module, session A candidate, shared object,
 wallet or key changed. No frozen ELF rebuild trigger. No release replay,
 release/security claim, push or merge. The final requested theorem is not yet
 proved, so no unverified statement is presented as a proved theorem.
+
+## Concrete callback-content record and successful_fields consumer
+
+`CheckpointBytes4Ops.ops reserved` is a closed ResumeOps record: explicit
+variant constants, generic element-wise comparison, shared-iterator header
+scan, bounded raw reader, K/E reference decoder reader, ordered query
+validation, zero K, fallible filled, ten unrolled semantic reads and mutable
+weight iteration. There is no abstract ResumeOps callback parameter.
+`semantic_identification` and `weights_identification` identify the complete
+helper Results with the same ordered operations driven by C5 K decoding,
+including all short-circuit rejection outcomes. `successful_fields` applies
+OraclePortCkptAbiSourceFields.successful_fields to this concrete record;
+`successful_reservation` derives reserved=true from that execution.
+
+Important trust boundary: this is the source-shaped callback **content
+model**. The separately pinned native gates validate Reader and helper
+implementation content, not a kernel extraction theorem for physical Rust.
+The record's comparison/header/query ports are explicit implementations;
+no claim of their unproved full frozen-source adoption is made. The C5
+helper identification is operation-by-operation; adoption to the flat C5
+checkpoint decoder still needs every field/cursor and namespace transport.
+
+`CheckpointBytes4Weights.loop_success` proves exact mutable writeback through
+actual imported next/back for arbitrary prefix/suffix, initial slots, source
+reader and successful ordered reads. It retains all decoded values and the
+ending iterator index, without vector assignment or allocator assumptions.
+
+Accepted Weights-2: exit 0, wall 5.431434332858771 s, peak RSS 3670884352
+bytes, swaps 0. Accepted Ops-2: exit 0, wall 23.49622887512669 s, peak RSS
+3672702976 bytes, swaps 0. All six theorem reports standard; exact source
+revision and commands in receipts. First attempts are retained elaboration
+failures, never accepted evidence. No full replay or shipped change.
