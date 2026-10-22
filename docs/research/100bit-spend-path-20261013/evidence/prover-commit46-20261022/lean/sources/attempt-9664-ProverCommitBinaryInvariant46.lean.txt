@@ -1,0 +1,88 @@
+import R1Z.ProverCommitBinarySupport46
+import Mathlib.Data.Nat.Bitwise
+/-! Cursor invariants across native binary levels: strict parent ordering and
+nonincreasing occupancy keep every per-group certificate in its source domain. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitBinaryInvariant46
+open Aeneas Aeneas.Std ProverCommitBinaryGroup46 ProverCommitBinarySupport46
+open ProverCommitTreeSupport46
+
+theorem same_parent_pair (a b : U32) (ab : a.val < b.val) (same : a.val/2=b.val/2) :
+    b = a ^^^ 1#u32 := by
+  apply UScalar.eq_of_val_eq
+  rw [UScalar.val_xor]
+  change b.val = a.val ^^^ 1
+  have even : Even a.val := Nat.even_iff.mpr (by omega)
+  rw [Nat.xor_one_of_even even]
+  omega
+
+theorem strict_remaining (a : U32) (tail : List U32)
+    (sorted : (a::tail).Pairwise (fun x y => x.val < y.val)) :
+    ∀ b ∈ tail.drop ((group a tail.head?).consumed.val-1), a.val/2 < b.val/2 := by
+  cases tail with
+  | nil => simp only [List.drop_nil,List.not_mem_nil,false_implies,implies_true]
+  | cons b rest =>
+    obtain ⟨allA,sortedB⟩ := List.pairwise_cons.mp sorted
+    obtain ⟨allB,_⟩ := List.pairwise_cons.mp sortedB
+    have ab := allA b (List.mem_cons_self ..)
+    by_cases paired : b = a ^^^ 1#u32
+    · have hp : (some b) = some (a ^^^ 1#u32) := congrArg some paired
+      simp only [List.head?_cons,group,hp,if_true]
+      change ∀ c ∈ rest, a.val/2 < c.val/2
+      intro c hc
+      have bc := allB c hc
+      have eq : a.val/2=b.val/2 := by rw [paired,sibling_parent]
+      have diff := no_third_child a.val b.val c.val ab bc eq
+      omega
+    · have hp : (some b) ≠ some (a ^^^ 1#u32) := by simpa only [Option.some.injEq] using paired
+      simp only [List.head?_cons,group,hp,if_false]
+      change ∀ c ∈ b::rest, a.val/2 < c.val/2
+      have par : a.val/2 < b.val/2 := by
+        have ne : a.val/2≠b.val/2 := fun h => paired (same_parent_pair a b ab h)
+        omega
+      intro c hc
+      rcases List.mem_cons.mp hc with rfl | hc
+      · exact par
+      · have bc := allB c hc;omega
+
+theorem layer_sorted (xs : List U32)
+    (sorted : xs.Pairwise (fun x y => x.val < y.val)) :
+    (layer xs).1.Pairwise (fun x y => x.val < y.val) := by
+  cases hxs : xs with
+  | nil => simp only [layer,List.pairwise_nil]
+  | cons a tail =>
+    have hs : (a::tail).Pairwise (fun x y => x.val<y.val) := by simpa only [hxs] using sorted
+    have ht := (List.pairwise_cons.mp hs).2.drop (i := (group a tail.head?).consumed.val-1)
+    have ih := layer_sorted (tail.drop ((group a tail.head?).consumed.val-1)) ht
+    rw [layer]
+    apply List.pairwise_cons.mpr
+    refine ⟨?_,ih⟩
+    intro p hp
+    have h := (layer_support (tail.drop ((group a tail.head?).consumed.val-1))
+      {v | ∃ c ∈ tail.drop ((group a tail.head?).consumed.val-1), c.val=v}
+      (fun c hc => ⟨c,hc,rfl⟩)).1 p hp
+    obtain ⟨v,⟨c,hc,rfl⟩,par⟩ := h
+    rw [group_parent]
+    have bound := strict_remaining a tail hs c hc
+    omega
+termination_by xs.length
+decreasing_by
+  simp_all only [List.length_drop,List.length_cons];omega
+
+theorem layer_length (xs : List U32) : (layer xs).1.length ≤ xs.length := by
+  cases xs with
+  | nil => simp only [layer,List.length_nil,Nat.le_refl]
+  | cons a tail =>
+    have h := layer_length (tail.drop ((group a tail.head?).consumed.val-1))
+    rw [layer]
+    simp only [List.length_cons,List.length_drop] at *
+    omega
+termination_by xs.length
+decreasing_by
+  simp only [List.length_drop,List.length_cons];omega
+
+#print axioms same_parent_pair
+#print axioms strict_remaining
+#print axioms layer_sorted
+#print axioms layer_length
+end R1Z.ProverCommitBinaryInvariant46

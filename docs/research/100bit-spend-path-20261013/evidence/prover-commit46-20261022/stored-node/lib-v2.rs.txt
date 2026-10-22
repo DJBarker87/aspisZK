@@ -1,0 +1,31 @@
+//! Native callback expression, std indexing governed by D157's exact contract.
+use std::ops::Index;
+struct Table { key:usize,kids:[[u8;32];2] }
+impl Index<&usize> for Table {
+ type Output=[[u8;32];2];
+ fn index(&self,key:&usize)->&Self::Output {assert_eq!(*key,self.key);&self.kids}
+}
+struct ProgrammedTree {children:Vec<Table>}
+impl ProgrammedTree {
+ fn node(&self,depth:u32,index:u32)->[u8;32] {
+  self.children[depth as usize][&(index as usize/2)][index as usize%2]
+ }
+}
+pub fn select(kids:[[u8;32];2],index:u32)->[u8;32] {
+ if index&1==0 {kids[0]} else {kids[1]}
+}
+#[cfg(kani)] mod proofs {
+ use super::*;
+ #[kani::proof] #[kani::unwind(36)]
+ fn stored_node() {
+  let depth:u32=kani::any();let index:u32=kani::any();
+  kani::assume(depth<18 && index<1<<18);
+  let values:[[[u8;32];2];18]=kani::any();
+  let mut children=Vec::new();
+  for i in 0..18 {children.push(Table{key:index as usize/2,kids:values[i]});}
+  let tree=ProgrammedTree{children};
+  let actual=tree.node(depth,index);
+  let expected=select(values[depth as usize],index);
+  assert_eq!(actual,expected);
+ }
+}

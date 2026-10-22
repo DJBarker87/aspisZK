@@ -1,0 +1,76 @@
+import R1Z.ProverCommitBinarySupport46
+import R1Z.ProverCommitStdIndex46
+import Mathlib.Data.List.Forall2
+/-! Lookup-domain certificate for the source multiproof node callback. The
+pure std Index extension preserves panic on a missing key; support is proved
+from the actual parent construction rather than added to TrustedStd. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitStoredNode46
+open Aeneas Aeneas.Std Result ProverCommitTrustedStd24 ProverCommitStdIndex46
+open ProverCommitBinarySupport46 ProverCommitTreeSupport46
+abbrev Digest := ProverCommitProgramOne46.Bytes32
+abbrev Kids := Map (Digest × Digest)
+
+/-- Exact source callback control after std decoding, with every rejection
+remaining a Result failure. Digest-pair representation is immutable. -/
+def node (index : Kids → Nat → Result (Digest × Digest))
+    (children : List Kids) (depth : Nat) (child : U32) : Result Digest := do
+  match children[depth]? with
+  | none => .fail .panic
+  | some table =>
+    let kids ← index table (child.val/2)
+    ok (if child.val%2=0 then kids.1 else kids.2)
+
+theorem supported_lookup (needed : List (List U32)) (children : List Kids)
+    (rel : List.Forall₂ Covers needed (children.map support))
+    (depth : Nat) (wanted : List U32) (found : needed[depth]?=some wanted)
+    (child : U32) (mem : child ∈ wanted) :
+    ∃ table, children[depth]?=some table ∧ child.val/2 ∈ table := by
+  have hrel := List.forall₂_map_right_iff.mp rel
+  induction hrel generalizing depth wanted with
+  | nil => simp only [List.getElem?_nil] at found;cases found
+  | @cons want table wants tables head tail ih =>
+    cases depth with
+    | zero =>
+      simp only [List.getElem?_cons_zero,Option.some.injEq] at found
+      subst wanted
+      exact ⟨table,rfl,head child mem⟩
+    | succ depth =>
+      simp only [List.getElem?_cons_succ] at found
+      obtain ⟨table,hfound,hmem⟩ := ih (List.forall₂_map_right_iff.mpr tail) depth wanted found mem
+      exact ⟨table,hfound,hmem⟩
+
+variable (index : Kids → Nat → Result (Digest × Digest))
+  (std : TrustedIndex (modelMap (Key := Nat) (Value := Digest × Digest) (cmp := compare)) index)
+include std
+
+theorem node_supported (needed : List (List U32)) (children : List Kids)
+    (rel : List.Forall₂ Covers needed (children.map support))
+    (depth : Nat) (wanted : List U32) (found : needed[depth]?=some wanted)
+    (child : U32) (mem : child ∈ wanted) :
+    ∃ digest, node index children depth child = ok digest := by
+  obtain ⟨table,ht,hm⟩ := supported_lookup needed children rel depth wanted found child mem
+  cases hk : table[child.val/2]? with
+  | none => simp only [Std.TreeMap.mem_iff_isSome_getElem?,hk,Option.isSome_none,Bool.false_eq_true] at hm
+  | some kids =>
+    refine ⟨if child.val%2=0 then kids.1 else kids.2,?_⟩
+    simp only [node,ht,index_found modelMap index std table (child.val/2) kids hk,bind_tc_ok]
+
+/-- No node lookup fails for any requested batch subset of programmed leaves.
+Both the map and vector depth membership come from the constructed tree. -/
+theorem constructed_node {Coins : Type} (coin : Coins → Digest × Coins)
+    (root : Digest) (level : Map Digest) (coins : Coins) (reads : Nat)
+    (log : List (Digest × Digest × Digest)) (xs : List U32)
+    (covered : ∀ a ∈ xs, a.val ∈ support level)
+    (depth : Nat) (wanted : List U32) (found : (requests 18 xs)[depth]? = some wanted)
+    (child : U32) (mem : child ∈ wanted) :
+    ∃ digest, node index
+      (ProverCommitTree44.levels modelMap modelMap coin root 18 0
+        ⟨level,[],coins,reads,log⟩).children depth child = ok digest := by
+  exact node_supported index std (requests 18 xs) _
+    (stored_requests coin root level coins reads log xs covered) depth wanted found child mem
+
+#print axioms supported_lookup
+#print axioms node_supported
+#print axioms constructed_node
+end R1Z.ProverCommitStoredNode46

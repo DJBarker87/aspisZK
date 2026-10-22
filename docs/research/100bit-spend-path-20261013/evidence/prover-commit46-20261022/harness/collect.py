@@ -10,7 +10,7 @@ def sync(remote,local,extra=()):
  subprocess.run(['rsync','-az',*extra,HOST+':'+remote+'/',str(local)+'/'],check=True)
 
 
-sync(R,E/'pins',('--include=/*-inputs.json','--include=/*-llbc.json','--include=/lean-*.json','--include=/revision.txt','--include=/frozen-elf-final-check.json','--exclude=*'))
+sync(R,E/'pins',('--exclude=/program-one-transition-*','--exclude=/binary-group-v*','--exclude=/binary-cursor-v*','--exclude=/stored-node-v*','--include=/*-reservations.json','--include=/*-inputs.json','--include=/*-llbc.json','--include=/lean-*.json','--include=/revision.txt','--include=/frozen-elf-final-check.json','--exclude=*'))
 records=[]
 for pin in sorted((E/'pins').glob('lean-*.json')):
  rec=json.loads(pin.read_text());a=str(rec['attempt'])

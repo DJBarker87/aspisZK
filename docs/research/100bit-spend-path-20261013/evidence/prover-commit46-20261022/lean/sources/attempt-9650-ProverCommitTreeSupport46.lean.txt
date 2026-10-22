@@ -1,0 +1,57 @@
+import R1Z.ProverCommitTree44
+/-! Support invariant for the stored children. Root equality alone is not a
+membership certificate for the native BTreeMap Index callback. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitTreeSupport46
+open ProverCommitTrustedStd24 ProverCommitParentStep44 ProverCommitTree44
+variable {Digest Coins : Type}
+abbrev Map (V : Type) := Std.TreeMap Nat V compare
+
+def support {V : Type} (map : Map V) : Set Nat := {q | q ∈ map}
+def parents (s : Set Nat) : Set Nat := {q | ∃ i ∈ s, i/2=q}
+
+theorem step_next (level : Map Digest) (coin : Coins → Digest × Coins)
+    (root : Digest) (last : Bool) (s : Acc (Map Digest) (Map (Digest × Digest)) Coins Digest)
+    (p q : Nat) :
+    q ∈ (step modelMap modelMap level coin root last s p).next ↔ q=p ∨ q∈s.next := by
+  simp [step,modelMap,ProverCommitTreeOps23.treeInsert]
+
+theorem step_kids (level : Map Digest) (coin : Coins → Digest × Coins)
+    (root : Digest) (last : Bool) (s : Acc (Map Digest) (Map (Digest × Digest)) Coins Digest)
+    (p q : Nat) :
+    q ∈ (step modelMap modelMap level coin root last s p).kids ↔ q=p ∨ q∈s.kids := by
+  simp [step,modelMap,ProverCommitTreeOps23.treeInsert]
+
+theorem loop_support (level : Map Digest) (coin : Coins → Digest × Coins)
+    (root : Digest) (last : Bool) (s : Acc (Map Digest) (Map (Digest × Digest)) Coins Digest)
+    (ps : List Nat) (q : Nat) :
+    (q ∈ (ps.foldl (step modelMap modelMap level coin root last) s).next ↔ q∈ps ∨ q∈s.next) ∧
+    (q ∈ (ps.foldl (step modelMap modelMap level coin root last) s).kids ↔ q∈ps ∨ q∈s.kids) := by
+  induction ps generalizing s with
+  | nil => simp only [List.foldl_nil,List.not_mem_nil,false_or,and_self]
+  | cons p ps ih =>
+    simp only [List.foldl_cons]
+    have h := ih (step modelMap modelMap level coin root last s p)
+    rw [h.1,h.2,step_next,step_kids]
+    simp only [List.mem_cons]
+    tauto
+
+/-- Keys of the distinct ordered parent collector are precisely the image
+of current level keys under division by two. -/
+theorem collected (level : Map Digest) (q : Nat) :
+    q ∈ ProverCommitParents44.native modelMap level ↔ q ∈ parents (support level) := by
+  rw [ProverCommitParents44.native]
+  simp only [modelMap,ProverCommitParents44.input,ascendingDistinct,
+    Finset.mem_sort,List.mem_toFinset,List.mem_map,parents,support,Set.mem_setOf_eq]
+  constructor
+  · rintro ⟨⟨i,v⟩,mem,rfl⟩
+    exact ⟨i,by simpa using Std.TreeMap.mem_of_mem_toList mem,rfl⟩
+  · rintro ⟨i,mem,rfl⟩
+    obtain ⟨v,hv⟩ := Std.TreeMap.mem_iff_exists_getElem?.mp mem
+    exact ⟨(i,v),Std.TreeMap.mem_toList_iff_getElem?_eq_some.mpr hv,rfl⟩
+
+#print axioms step_next
+#print axioms step_kids
+#print axioms loop_support
+#print axioms collected
+end R1Z.ProverCommitTreeSupport46
