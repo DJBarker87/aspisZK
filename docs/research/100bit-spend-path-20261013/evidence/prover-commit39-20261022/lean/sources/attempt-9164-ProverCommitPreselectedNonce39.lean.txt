@@ -1,0 +1,59 @@
+import R1Z.ProverCommitReservationMemo39
+import R1Z.ProverCommitLedgerCoupling39
+
+/-! Source obstruction: generate_for_mask_nonce samples only the two private
+seeds. E1 cannot imply a distribution for a nonce supplied by its caller.
+The examples below do not evaluate any large finite universe. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitPreselectedNonce39
+open R0Z R0Z.FsStatement R0Z.FsAbort R0Z.FsGood R0Z.HvzkV GamesR1PBin
+open ProverCommitReservationRom37 ProverCommitReservationMemo39
+attribute [local instance] Classical.propDecidable
+
+/-- Exactly one prior query, chosen using the public preselected nonce. All
+private seed coins remain arbitrary, and can have the exact E1 law. -/
+def knownPrior (nonce : NZ) : List Entry := [(reservationInput nonce.val,0)]
+
+theorem known_memo (nonce : NZ) : memoGuess (knownPrior nonce) nonce := by
+  simp [memoGuess,knownPrior]
+
+theorem known_mass {Seeds : Type} [Fintype Seeds] [Nonempty Seeds] (nonce : NZ) :
+    eventMass (fun _ : Seeds => memoGuess (knownPrior nonce) nonce) = 1 := by
+  simp only [known_memo, eventMass, if_true, mean_const]
+
+/-- Failure already at Q=1, one attempt, so the existing Q cap cannot fix
+this. There is no ledger term and no hostile filesystem behaviour here. -/
+theorem not_requested_bound {Seeds : Type} [Fintype Seeds] [Nonempty Seeds]
+    (nonce : NZ) :
+    ¬ eventMass (fun _ : Seeds => memoGuess (knownPrior nonce) nonce) ≤ budget 1 1 := by
+  rw [known_mass]
+  norm_num [budget]
+
+/-- Any deterministic witness-based preselection is accepted by the API's
+nonce guard whenever both supplied values are nonzero. No witness argument
+in the *callee* can establish independence of the caller's nonce choice. -/
+def suppliedNonce (left right : NZ) (witnessBit : Bool) : NZ :=
+  if witnessBit then right else left
+
+theorem supplied_depends (left right : NZ) (different : left ≠ right) :
+    suppliedNonce left right false ≠ suppliedNonce left right true := by
+  simpa [suppliedNonce] using different
+
+/-- Same ledger, same ROM, same fault schedule; unequal caller-supplied
+nonces can have different native create_new outcomes. Injectivity of a hash
+is not assumed: the condition is simply that these two addresses differ. -/
+theorem distinct_create (left right : ProverCommitLedger36.Path)
+    (different : left ≠ right) :
+    (ProverCommitLedger36.createNew left ⟨none,[]⟩ ⟨[],0,[left]⟩).1 =
+        .error ProverCommitEnvironment35.IOError.alreadyExists ∧
+    (ProverCommitLedger36.createNew right ⟨none,[]⟩ ⟨[],0,[left]⟩).1 = .ok () := by
+  simp [ProverCommitLedger36.createNew,ProverCommitLedger36.inject,
+    ProverCommitLedger36.record,Ne.symm different]
+
+#print axioms known_memo
+#print axioms known_mass
+#print axioms not_requested_bound
+#print axioms supplied_depends
+#print axioms distinct_create
+end R1Z.ProverCommitPreselectedNonce39

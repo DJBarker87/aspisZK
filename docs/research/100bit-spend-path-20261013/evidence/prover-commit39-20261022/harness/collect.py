@@ -33,4 +33,18 @@ for pin in sorted((E/'pins').glob('lean-*.json')):
  rec['exact_command']=['sh',R+'/run-joint.sh',a,rec['module'][:-5],'J','7000','8',rec['deps_fingerprint']]
  rec['source_revision_description']='Task base revision plus this exact source SHA256 and retained dependency-object fingerprint; no attribution to an unchanged checkout.'
  records.append(rec)
+# An attempted dependent install stopped before launch because its prerequisite
+# object had not yet compiled. Preserve that invocation without inventing metrics.
+for snapshot in sorted((E/'lean'/'sources').glob('attempt-*.lean.txt')):
+ a=int(snapshot.name.split('-')[1])
+ if any(rec['attempt']==a for rec in records):continue
+ assert a==9164, ('unaccounted invocation',a)
+ records.append(dict(attempt=a,module='R1Z/ProverCommitPreselectedNonce39.lean',
+  source_sha256=hashlib.sha256(snapshot.read_bytes()).hexdigest(),
+  source_snapshot=str(snapshot.relative_to(E)),
+  source_revision=(E/'pins'/'revision.txt').read_text().strip(),
+  compiler_launched=False,exit_status=None,orchestrator_exit_status=1,
+  wall=None,peak_rss_kib=None,swaps=None,print_axioms=[],deps_fingerprint=None,
+  errors=['Prerequisite object R1Z.ProverCommitReservationMemo39 absent; dependency preflight stopped before launcher. No compiler ran and no host receipt exists.']))
+records.sort(key=lambda r:r['attempt'])
 (E/'lean'/'attempts.json').write_text(json.dumps(records,indent=2)+'\n')

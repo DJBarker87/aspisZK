@@ -1,0 +1,98 @@
+{
+  "revision": "a88d26f1b06798aae9fd61b5be43da1578775e2f",
+  "method": "Read-only source inspection with exact retained excerpts; not a Rust executable test or source refinement theorem.",
+  "sources": [
+    {
+      "path": "docs/research/v8-r0-zk-20261009/LOG.md",
+      "sha256": "c4588290423b38c9a0cc28033c1fddfbef288752af505527175e294dc7cef57b",
+      "size": 526044,
+      "excerpts": [
+        {
+          "start_line": 39,
+          "end_line": 44,
+          "text": "\n| Source of randomness or derived random material | Source and scope |\n|---|---|\n| Two private 32-byte seeds: field-mask entropy and leaf-salt seed | P/HONEST_PROVER_EXPERIMENT.md:17\u201329; P/PRIVACY_LEDGER.md:19\u201325. `crates/aspis-prover/src/state_only_entropy.rs:202\u2013224` obtains 64 OS-random bytes, retries all-zero private components and can fail. These seeds are not a statistically uniform tape of all mask coordinates. |\n| Public attempt/mask nonce | P/HONEST_PROVER_EXPERIMENT.md:18\u201327, P/PUBLIC_VIEW.md:23\u201325. Preselected proof-account public key, reserved durably before derivation. Not a third private seed. The alternate 96-byte `generate()` API is expressly outside this adapter (experiment:22\u201324; entropy.rs:172\u2013196). Account-key generation is environment setup, not silently additional prover entropy. |\n| C1 relation-free M31 masks; ten full-domain M31 mask-only columns; QM31 G; QM31 inactive H1 padding | P/HONEST_PROVER_EXPERIMENT.md:28\u201329 and P/PRIVACY_LEDGER.md:19\u201323; exact expansion in `crates/aspis-prover/src/state_only_hiding.rs:388\u2013402,429\u2013480,619\u2013643`. All derive from field entropy through domain-separated hash expansion. Balancing makes the resulting coordinates dependent. |"
+        },
+        {
+          "start_line": 5154,
+          "end_line": 5158,
+          "text": "**D38.4 Lead decision: the proof account.** The nonce is bound to the\nproof-account address, so each attempt uses a fresh proof-account keypair.\nA rejected attempt's account is never created on chain, so this costs\nnothing on chain. It is recorded as a prover requirement.\n"
+        },
+        {
+          "start_line": 8006,
+          "end_line": 8016,
+          "text": "owner is not extracted. Two further named gaps from the report: no certified\nowner converts the source outputs (proof bytes, programming tables, status)\ninto the `FSExperiments` real/ideal `ROMView` plus the observer's ordered\ntranscript; and the entropy model retains OS failure and zero-draw events,\nwhich must stay explicit bad events, not be assumed away.\nNext (part 31): owned references for the `sim_e_ablated` publication loops\ncertified against BTreeMap Iter/IntoIter per transition (conflict retention,\nkey order, early exits); the eight-attempt retry/publication owner; the\nreal-side `prove_masked_retrying_with` publication; then the source-to-\n`FSExperiments` conversion. `RustProverRefinement` stays explicit.\n"
+        }
+      ]
+    },
+    {
+      "path": "docs/research/v8-full-view-zk-20260912/HONEST_PROVER_EXPERIMENT.md",
+      "sha256": "6ee4c1f993fc3af27acc3ef29d02e105ce0578be28d0ac549be02e77e44558c0",
+      "size": 2948,
+      "excerpts": [
+        {
+          "start_line": 15,
+          "end_line": 27,
+          "text": "## Real experiment\n\n1. Accept a public statement `x` and a valid private-transfer witness `w`.\n2. Create the proof account first and use its public key as the unique public\n   mask nonce, matching the deployed API contract. Call\n   `StateOnlyAttemptSecrets::generate_for_mask_nonce()`, which obtains 64\n   OS-random bytes and separates the field-mask entropy and leaf-salt seed;\n   all-zero private components are rejected. The alternative 96-byte\n   `generate()` API belongs to experiments where the nonce is not preselected\n   by the proof-account key and is not selected for this adapter.\n3. Durably reserve that proof-account-derived public nonce before deriving private material.\n   A reservation is never reused after success, retry, abort or process\n   failure."
+        }
+      ]
+    },
+    {
+      "path": "docs/research/v8-full-view-zk-20260912/PUBLIC_VIEW.md",
+      "sha256": "bc73437a2ae0348dc8e37160516f190d9870cecbc1e45483200fbde313288809",
+      "size": 2552,
+      "excerpts": [
+        {
+          "start_line": 18,
+          "end_line": 25,
+          "text": "honest prover's complete internal oracle log are not direct view fields.\nActor labels, not domain prefixes, determine visibility. Later public values\nmay still reveal information about private state; this definition does not\nclaim otherwise.\n\nThe proof-account public key is provisionally the public attempt/mask nonce\nfor the intended deployed adapter. P0/P8 must still authenticate its exact\nlocation and framing in the generated application envelope."
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "sha256": "6b5a9c8737cc2b832d29bc7dab4660533195d7fe5c46104dc1e6ea2659252934",
+      "size": 60677,
+      "excerpts": [
+        {
+          "start_line": 172,
+          "end_line": 224,
+          "text": "    pub fn generate() -> Result<Self, StateOnlyAttemptEntropyError> {\n        for _ in 0..ENTROPY_RETRY_LIMIT {\n            let mut bytes = Zeroizing::new([0u8; 96]);\n            getrandom::fill(bytes.as_mut())?;\n\n            let mut mask_nonce = [0u8; 32];\n            let mut field_mask_entropy = Zeroizing::new([0u8; 32]);\n            let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);\n            mask_nonce.copy_from_slice(&bytes[..32]);\n            field_mask_entropy.copy_from_slice(&bytes[32..64]);\n            leaf_salt_seed.copy_from_slice(&bytes[64..]);\n\n            if mask_nonce != [0; 32] && *field_mask_entropy != [0; 32] && *leaf_salt_seed != [0; 32]\n            {\n                return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });\n            }\n        }\n        Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)\n    }\n\n    /// Generate fresh private attempt entropy for a preselected public nonce.\n    ///\n    /// A deployed proof binds this nonce to the proof-account address. Clients\n    /// therefore generate the account keypair first and pass its public key\n    /// here. The public nonce only needs to be unique; both secret seeds still\n    /// come independently from the operating system and are zeroized on drop.\n    pub fn generate_for_mask_nonce(\n        mask_nonce: [u8; 32],\n    ) -> Result<Self, StateOnlyAttemptEntropyError> {\n        if mask_nonce == [0; 32] {\n            return Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock);\n        }\n        for _ in 0..ENTROPY_RETRY_LIMIT {\n            let mut bytes = Zeroizing::new([0u8; 64]);\n            getrandom::fill(bytes.as_mut())?;\n\n            let mut field_mask_entropy = Zeroizing::new([0u8; 32]);\n            let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);\n            field_mask_entropy.copy_from_slice(&bytes[..32]);\n            leaf_salt_seed.copy_from_slice(&bytes[32..]);\n            if *field_mask_entropy != [0; 32] && *leaf_salt_seed != [0; 32] {\n                return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });\n            }\n        }\n        Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)"
+        },
+        {
+          "start_line": 392,
+          "end_line": 447,
+          "text": "    pub fn reserve_and_build_pool_v1_pair_forest_mask_material_v1(\n        mut self,\n        hash: HashFn,\n        precommit_binding: [u8; 32],\n        context: StateOnlyHidingContext,\n        nonce_store: &mut impl StateOnlyMaskNonceStore,\n    ) -> Result<(ReservedStateOnlyAttemptSecrets, StateOnlyMaskMaterial), StateOnlyMaskBuildError>\n    {\n        if context.mask_nonce != self.mask_nonce\n            || context.mask_layout_fingerprint\n                != PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1\n            || context.layout_factor_fingerprint\n                != PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1\n        {\n            return Err(StateOnlyMaskBuildError::Layout);\n        }\n        if !nonce_store.reserve(context.statement_digest, context.mask_nonce) {\n            return Err(StateOnlyMaskBuildError::ReusedMaskNonce);\n        }\n        let mut pre_reserved = PreReservedNonce {\n            statement_digest: context.statement_digest,\n            mask_nonce: context.mask_nonce,\n            consumed: false,\n        };\n        let material = build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref(\n            hash,\n            precommit_binding,\n            context,\n            &self.field_mask_entropy,\n            &mut pre_reserved,\n        )?;\n        if !pre_reserved.consumed {\n            return Err(StateOnlyMaskBuildError::ReusedMaskNonce);\n        }\n        let source_mask_seed = Zeroizing::new(hash(&[\n            POOL_V1_SOURCE_SEED_DOMAIN,\n            &precommit_binding,\n            &context.encode(),\n            self.field_mask_entropy.as_ref(),\n        ]));\n        self.field_mask_entropy.zeroize();\n        Ok((\n            ReservedStateOnlyAttemptSecrets {\n                mask_nonce: self.mask_nonce,\n                precommit_binding,\n                reserved_context: context,\n                leaf_salt_seed: self.leaf_salt_seed,\n                source_mask_seed,\n            },\n            material,\n        ))\n    }\n}\n\nstruct PreReservedNonce {\n    statement_digest: [u8; 32],"
+        },
+        {
+          "start_line": 901,
+          "end_line": 956,
+          "text": "    pub fn last_error(&self) -> Option<io::ErrorKind> {\n        self.last_error\n    }\n\n    fn reservation_path(&self, mask_nonce: &[u8; 32]) -> PathBuf {\n        // The nonce is burned globally within this wallet ledger, even if a\n        // caller tries to reuse it under a different statement digest.\n        let mut hasher = Sha256::new();\n        hasher.update(ATTEMPT_RESERVATION_DOMAIN);\n        hasher.update(mask_nonce);\n        let digest: [u8; 32] = hasher.finalize().into();\n        let mut name = String::with_capacity(69);\n        for byte in digest {\n            use std::fmt::Write as _;\n            write!(&mut name, \"{byte:02x}\").expect(\"writing to String cannot fail\");\n        }\n        name.push_str(\".burn\");\n        self.directory.join(name)\n    }\n\n    pub fn reserve_fallible(\n        &mut self,\n        statement_digest: [u8; 32],\n        mask_nonce: [u8; 32],\n    ) -> io::Result<bool> {\n        self.last_error = None;\n        let path = self.reservation_path(&mask_nonce);\n        let mut options = OpenOptions::new();\n        options.write(true).create_new(true);\n        #[cfg(unix)]\n        options.mode(0o600);\n        let mut file = match options.open(path) {\n            Ok(file) => file,\n            Err(error) if error.kind() == io::ErrorKind::AlreadyExists => return Ok(false),\n            Err(error) => return Err(error),\n        };\n\n        // A partially written file is still a burned nonce. Never remove it\n        // on failure.\n        file.write_all(RESERVATION_MAGIC)?;\n        file.write_all(&statement_digest)?;\n        file.write_all(&mask_nonce)?;\n        file.sync_all()?;\n        sync_directory(&self.directory)?;\n        Ok(true)\n    }\n}\n\nimpl StateOnlyMaskNonceStore for DurableStateOnlyMaskNonceStore {\n    fn reserve(&mut self, statement_digest: [u8; 32], mask_nonce: [u8; 32]) -> bool {\n        match self.reserve_fallible(statement_digest, mask_nonce) {\n            Ok(reserved) => reserved,\n            Err(error) => {\n                self.last_error = Some(error.kind());\n                false\n            }"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "sha256": "76aafd05e9b9459253f810be324b80fa5404449f93d03edb5697cddc669d2c42",
+      "size": 25854,
+      "excerpts": [
+        {
+          "start_line": 100,
+          "end_line": 135,
+          "text": "\n/// Secure-source P3 host API. Callers must supply OS-generated attempt\n/// secrets and a durable nonce ledger; successful reservations happen before\n/// mask derivation and leaf-salt derivation. This is still an UNPROVED\n/// protocol: fresh entropy alone does not establish zero knowledge.\npub fn prove_masked_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    attempt:StateOnlyAttemptSecrets,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n)->Result<(Vec<u8>,MaskedFixtureAudit),Error> {\n    let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;\n    let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),attempt.mask_nonce());\n    let binding=hash(&[b\"UNPROVED:R1:P3:PRIVATE-ATTEMPT\",&public_bytes,&[variant.tag()],&context.encode()]);\n    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,nonce_store)\n}\n\nfn prove_masked_with_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    context:StateOnlyHidingContext,\n    binding:[u8;32],\n    attempt:StateOnlyAttemptSecrets,\n    nonce_store:&mut impl StateOnlyMaskNonceStore,\n)->Result<(Vec<u8>,MaskedFixtureAudit),Error> {\n    let (reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,context,nonce_store).map_err(mask_error)?;\n    #[cfg(all(test,feature=\"r1p-check\"))]\n    if test_hooks::forced_exhaustion(reserved.mask_nonce()) { return Err(mask_error(StateOnlyMaskBuildError::MaskSampleExhausted)); }\n    let mut noised_c1=compiled.semantic_c1.clone();\n    let applied=apply_pool_v1_pair_forest_mask_material_v1(&mut noised_c1,material).map_err(|_|Error::Semantic)?;\n    let masks=pool_v1_pair_forest_copy_active_row_masks_v1().map_err(|_|Error::Semantic)?;\n    let d: [K;1024]=reserved.derive_pool_v1_pair_forest_zero_factor_d(hash,context).map_err(mask_error)?.try_into().map_err(|_|Error::Semantic)?;"
+        },
+        {
+          "start_line": 168,
+          "end_line": 177,
+          "text": "/// exhausted (`exh`, R1Z/GamesR1P.lean:164, 184) and moves to the next one.\n/// With the retry loop, `MaskSampleExhausted` from either expander is\n/// therefore a rejected attempt; every other mask error still aborts. Without\n/// the loop (`r1p-check` off) behaviour is unchanged.\nfn mask_error(e:StateOnlyMaskBuildError)->Error {\n    #[cfg(feature=\"r1p-check\")]\n    if e==StateOnlyMaskBuildError::MaskSampleExhausted { return Error::Rejected; }\n    let _=e;\n    Error::Semantic\n}"
+        },
+        {
+          "start_line": 325,
+          "end_line": 376,
+          "text": "/// D38.3 retry loop with fresh OS attempt secrets for every attempt.\n#[cfg(feature=\"r1p-check\")]\npub fn prove_masked_retrying(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n)->Result<RetriedProof,Error> {\n    prove_masked_retrying_with(public,compiled,variant,hash,nonce_store,|_|StateOnlyAttemptSecrets::generate().map_err(|_|Error::Entropy))\n}\n\n/// D38.3 retry loop. `next_attempt(k)` must return fresh OS-generated secrets\n/// for attempt k; a client that binds the nonce to the proof-account address\n/// (D38.4) generates a fresh account keypair per attempt and calls\n/// `StateOnlyAttemptSecrets::generate_for_mask_nonce` with its public key.\n///\n/// Each attempt durably burns its nonce in `nonce_store` before any mask or\n/// salt is derived (`reserve_and_build_\u2026`). As in Lean `realGameP`\n/// (R1Z/GamesR1P.lean:184: accept on `P \u2227 VR1 \u2227 \u00ac exh`), an attempt is\n/// rejected when its challenges fail P_R1, when \u03c7 is a LogUp pole (`\u00ac VR1`,\n/// LOG D40.3, D73.4.1), or when its mask decode is exhausted (`exh`,\n/// D73.4.2). Each returns the same detail-free `Error::Rejected` before any\n/// proof byte exists; its secrets are dropped (zeroized), it consumes one of\n/// the `ATTEMPT_CAP` attempts, and nothing about it is returned or logged.\n/// After `ATTEMPT_CAP` rejections the result is `AttemptsExhausted` and\n/// nothing is published (Lean's fixed `failView`, R1Z/GamesR1P.lean:185).\n/// Any other error aborts.\n#[cfg(feature=\"r1p-check\")]\npub fn prove_masked_retrying_with(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n    mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,\n)->Result<RetriedProof,Error> {\n    if variant!=Variant::S2 { return Err(Error::Semantic); }\n    for k in 0..ATTEMPT_CAP {\n        let attempt=next_attempt(k)?;\n        match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {\n            Ok((proof,audit))=>return Ok(RetriedProof{proof,audit,attempts:k+1}),\n            Err(Error::Rejected)=>continue,\n            Err(e)=>return Err(e),\n        }\n    }\n    Err(Error::AttemptsExhausted)\n}\n\n/// Test-only injection (cfg(test)): a queue of forced P_R1 verdicts, and a\n/// per-attempt record of public/derived freshness witnesses.\n#[cfg(all(test,feature=\"r1p-check\"))]"
+        }
+      ]
+    }
+  ],
+  "finding": "The preselected-nonce API samples 64 private seed bytes and does not sample, constrain the origin of, or establish independence/uniformity of its caller-supplied nonzero nonce.",
+  "safe_wrapper": "prove_masked_retrying fixes next_attempt to StateOnlyAttemptSecrets::generate; the generic callback API does not."
+}
