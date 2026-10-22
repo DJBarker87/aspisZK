@@ -1926,3 +1926,17 @@ previous twelve-query settlement model composition. They retain strict scan
 binding, remaining caller leaf/source operation bindings, and the frozen
 Std/source implementation seam. They do not establish full S4 closure or
 the implementation-linked 100-bit theorem.
+
+## Strict matcher candidate built with verified process caps
+
+`s4-fromfn-strict-visitor-build-v1-20261022` records the strict
+region-visitor candidate cached build: exit 0, 9.53s, process peak
+502,568 KiB, zero swap, binary SHA
+`8b068c351f82a3a175d9907eece9228872d1165d82ff9380873afccfc10808d9`.
+The actual owned Docker process cgroup was verified at High=1 GiB,
+Max=2 GiB, SwapMax=0 before releasing a start gate. Earlier setup-only
+failures never started the compiler. A post-build collector error was
+repaired using retained raw files; no unchanged build was repeated.
+The packet checker passes. This is a candidate tool build, not a successful
+from_fn translation, a generally validated associated-type normalization
+rule, or a frozen-source proof.
