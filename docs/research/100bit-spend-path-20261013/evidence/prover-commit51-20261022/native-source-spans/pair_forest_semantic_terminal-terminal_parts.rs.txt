@@ -1,0 +1,26 @@
+fn terminal_parts(
+    public: SemanticPublic<'_>,
+    claims: &[QM31; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1],
+    point: &[QM31; 10],
+    lambda: QM31,
+    chi: QM31,
+    theta: QM31,
+    zerocheck_point: &[QM31; 10],
+    mu: QM31,
+) -> Result<
+    (
+        QM31,
+        [QM31; 16],
+        [QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],
+        QM31,
+    ),
+    PoolV1PairForestSemanticTerminalErrorV1,
+> {
+    let (composition, c1, mask_only, g, h1_z, copy_active) =
+        composition_parts(public, claims, point, lambda, chi, theta)?;
+    let original = equality_value(zerocheck_point, point)
+        .mul(composition)
+        .add(mu.mul(h1_z))
+        .add(mu.mul(mu).mul(QM31::ONE.sub(copy_active).mul(h1_z)));
+    Ok((original, c1, mask_only, g))
+}

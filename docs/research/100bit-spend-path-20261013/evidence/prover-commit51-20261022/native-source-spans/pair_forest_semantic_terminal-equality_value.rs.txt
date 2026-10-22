@@ -1,0 +1,13 @@
+fn equality_value(left: &[QM31; 10], right: &[QM31; 10]) -> QM31 {
+    let factor = |a: QM31, b: QM31| {
+        let ab = a.mul(b);
+        QM31::ONE.sub(a).sub(b).add(ab).add(ab)
+    };
+    let mut product = factor(left[0], right[0]);
+    let mut index = 1usize;
+    while index < left.len() {
+        product = product.mul(factor(left[index], right[index]));
+        index += 1;
+    }
+    product
+}

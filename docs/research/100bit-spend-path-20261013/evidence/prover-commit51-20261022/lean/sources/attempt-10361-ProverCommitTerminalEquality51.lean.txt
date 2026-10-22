@@ -1,0 +1,28 @@
+import R1Z.ProverCommitTerminalProduct51
+/-! Complete owned terminal equality value, including its first factor. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitTerminalEquality51
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+attribute [local irreducible] ProverCommitNativeQ48.source ProverCommitQArray48.array
+
+theorem exact_result (a b : Nat → Old.Q)
+    (ha : ∀ i, i<10 → Canonical (a i)) (hb : ∀ i, i<10 → Canonical (b i)) :
+    ∃ z : Old.Q, terminal_eq51.eval (ProverCommitQArray48.array 10#usize a) (ProverCommitQArray48.array 10#usize b)=
+      ok (ProverCommitNativeQ48.source z) ∧ Canonical z ∧
+      decode z=R0P.SemSource.eqValue (fun i : Fin 10 => decode (a i.val)) (fun i : Fin 10 => decode (b i.val)) := by
+  obtain ⟨factor,hfactor,hcfactor,hdfactor⟩ := ProverCommitTerminalFactor51.exact_result (a 0) (b 0)
+    (ha _ (by decide)) (hb _ (by decide))
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitTerminalProduct51.go a b ha hb 9 1#u8 rfl factor hcfactor
+  refine ⟨z,?_,hcz,?_⟩
+  · rw [terminal_eq51.eval,ProverCommitQArray48.index _ _ 0#usize (by decide)]
+    simp only [bind_tc_ok]
+    rw [ProverCommitQArray48.index _ _ 0#usize (by decide)]
+    simp only [bind_tc_ok,show (0#usize).val=0 from rfl,hfactor]
+    exact hz
+  · rw [hdz,hdfactor,show (1#u8).val=1 from rfl,←ProverCommitTerminalMath51.product_model]
+    rfl
+
+#print axioms exact_result
+end R1Z.ProverCommitTerminalEquality51

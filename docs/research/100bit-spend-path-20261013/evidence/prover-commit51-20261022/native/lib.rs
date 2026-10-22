@@ -29,3 +29,5 @@ include!("columns.rs");
 include!("coefficient_array.rs");
 
 include!("half_prefix.rs");
+
+include!("terminal_eq.rs");
