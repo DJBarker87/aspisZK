@@ -1,0 +1,77 @@
+import R0Z.PayloadSplit
+/-! Claim and extra transport from the native field into the payload field. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitClaimMap51
+open R0P.SemSource
+open scoped BigOperators
+variable {K L : Type} [Field K] [Field L]
+  [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K]
+  [Fintype L] [DecidableEq L] [Algebra (ZMod AspisCircleGroupOrder.P) L]
+
+theorem dot (f : K →+* L) {n : Nat} (a b : Fin n → K) :
+    f (AspisR0.RoundNormalization.dot a b)=
+      AspisR0.RoundNormalization.dot (fun i => f (a i)) (fun i => f (b i)) := by
+  simp only [AspisR0.RoundNormalization.dot,map_sum,map_mul]
+
+theorem weight (f : K →+* L) (a : Fin 10 → K) (j : Fin 1024) :
+    f (AspisR0.Opening.eqWeight a j)=AspisR0.Opening.eqWeight (fun i => f (a i)) j := by
+  simp only [AspisR0.Opening.eqWeight,map_prod,apply_ite,map_sub,map_one]
+
+theorem carry (f : K →+* L) (a : Fin 10 → K) (n : Nat) :
+    f (succCarry a n)=succCarry (fun i => f (a i)) n := by
+  induction n with
+  | zero => simp only [succCarry,map_one]
+  | succ n ih =>
+    simp only [succCarry,map_mul,ih]
+    split_ifs <;> simp only [map_zero]
+
+theorem successor (f : K →+* L) (a : Fin 10 → K) (i : Fin 10) :
+    f (successorPoint a i)=successorPoint (fun j => f (a j)) i := by
+  simp only [successorPoint,map_add,map_sub,map_mul,carry]
+
+theorem absorption (f : K →+* L) (a : Fin 10 → K) (i : Fin 10) :
+    f (xor12Point a i)=xor12Point (fun j => f (a j)) i := by
+  simp only [xor12Point,apply_ite,map_sub,map_one]
+
+theorem points (f : K →+* L) (a : Fin 10 → K) (s : Fin 3) :
+    (fun i => f (openingPoints a s i))=openingPoints (fun j => f (a j)) s := by
+  funext i
+  fin_cases s
+  · rfl
+  · exact successor f a _
+  · exact absorption f a _
+
+theorem claims (f : K →+* L) (t : R0P.Trace K) (a : Fin 10 → K) (s : Fin 3) (l : Fin 29) :
+    f (honestClaims t a s l)=honestClaims (fun c j => f (t c j)) (fun i => f (a i)) s l := by
+  rw [honestClaims,dot]
+  unfold honestClaims
+  congr 1
+  funext j
+  rw [weight]
+  congr 1
+  exact points f a s
+
+theorem libra (f : K →+* L) (a : Fin 10 → K) (j : Fin 1024) :
+    f (libraWeight a j)=libraWeight (fun i => f (a i)) j := by
+  simp only [libraWeight,apply_ite,map_pow,map_zero]
+
+theorem extra (f : K →+* L) (pi : Fin 1024 ≃ Fin 1024) (t : R0P.Trace K) (a : Fin 10 → K) (l : Fin 29) :
+    f (R0P.Mask.honestExtra pi t a l)=R0P.Mask.honestExtra pi
+      (fun c j => f (t c j)) (fun i => f (a i)) l := by
+  rw [R0P.Mask.honestExtra,dot]
+  unfold R0P.Mask.honestExtra
+  congr 1
+  funext j
+  exact libra f a j
+
+#print axioms dot
+#print axioms weight
+#print axioms carry
+#print axioms successor
+#print axioms absorption
+#print axioms points
+#print axioms claims
+#print axioms libra
+#print axioms extra
+end R1Z.ProverCommitClaimMap51

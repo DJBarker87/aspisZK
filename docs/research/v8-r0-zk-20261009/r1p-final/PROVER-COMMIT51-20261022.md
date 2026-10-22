@@ -83,3 +83,25 @@ unfolding only the named symbolic value at that proof step fixes it in J10330.
 No recursion-depth or heartbeat setting is raised. J10331: exit 0, 1.78 s,
 4086212 KiB, zero swaps, standard axioms. This is the semantic oracle's mask
 component, not yet its extra-plus-terminal value or success theorem.
+
+## Stage 3c: native basis and exact extra functional
+
+J10338 constructs a concrete M31 subfield basis in QM31, and J10340
+instantiates the complete mask-read theorem with it: no B.i/B.u representation
+premises remain in `ProverCommitConcreteMask51.exact_result`. J10333/37 identify
+the complete two reverse-Horner extra evaluations with the model Libra dot
+product. J10341 gives `honestExtra` from explicit coefficient inputs (their
+permutation provenance is addressed next). J10342 proves both native inverse
+branches, including Some-success implying nonzero input; this is a local
+arithmetic fact, not a full P_R1-source domain theorem.
+
+J10343 proves symbolic hom transport of the entire mask formula. J10345 maps
+the native basis to the retained `PrivacyR1AcctBasis.basis` in WideExact, and
+J10349 transports all three statement points, all honest claims, and the
+Libra/extra functional between fields. The first concrete extra-sum rewrite
+fails at concrete instance inference; a generic Field lemma fixes it without
+normalizing the carrier. Rejected conditional-simplifier drafts and missing
+cache preflight J10344 are retained. The replacement reuses the cached account
+basis rather than building an unrelated cold Session A dependency closure.
+All accepted axioms remain standard. None of these transport results is
+promoted to the full terminal/oracle result.

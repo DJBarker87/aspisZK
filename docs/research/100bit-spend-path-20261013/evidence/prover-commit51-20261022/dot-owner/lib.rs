@@ -242,3 +242,15 @@ pub fn go(point:[K;10],columns:[[K;1024];26],left:u8,mut out:[K;26])->[K;26]{
 }
 pub fn eval(point:[K;10],columns:[[K;1024];26])->[K;26]{go(point,columns,26,[K::ZERO;26])}
 }
+
+pub mod coefficients51 {
+use super::field::QM31 as K;
+pub fn row(j:usize)->usize {(j/64)%4+4*((j/256)%4)+16*((j/16)%4)+64*(j%4)+256*((j/4)%4)}
+pub fn cell(rows:[K;1024],j:usize)->K {rows[row(j)]}
+pub fn go(rows:[K;1024],left:u16,mut out:[K;1024])->[K;1024]{
+ if left==0{return out;}
+ let i=1024u16.wrapping_sub(left);out[i as usize]=cell(rows,i as usize);
+ go(rows,left.wrapping_sub(1),out)
+}
+pub fn eval(rows:[K;1024])->[K;1024]{go(rows,1024,[K::ZERO;1024])}
+}
