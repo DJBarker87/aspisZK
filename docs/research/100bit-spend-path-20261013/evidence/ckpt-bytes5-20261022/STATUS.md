@@ -72,3 +72,53 @@ source-schedule.json. This audit is not a new physical Rust Vec owner theorem.
 No per-call implementation changed; prior native operation gates are reused,
 not represented as kernel axioms. No shipped file changed, hence no ELF gate.
 The composed source stage and decision consumer are still being checked.
+
+## Stage 4: success-conditioned reached checkpoint stage join
+
+`CheckpointBytes5Join.successful_fields_and_reads` consumes the writer result
+as the reader argument, derives authentic encoding, consumes
+successful_saved_fields, derives allocation success, and proves the six reads.
+`successful_stage` interprets actual returned source limbs and all queries;
+that returned state drives advance by twelve. `error_rejects` maps every
+source inner Error, including Allocation, to rejection. The final reached
+join derives distinct queries from the actual reached decoder, then consumes
+strictStage and reached_stage. No availability or collision-free premise.
+
+Accepted Join-7: exit 0, 18.082328415941447 s, peak RSS 3680419840 B,
+swaps 0. All five defining-module reports are standard. Exact command,
+source revision, hashes, dependency fingerprint and full axiom lines are in
+the receipt and manifest.json. Failed attempts remain explicitly excluded.
+
+The remaining refinements are exactly **S2S10CallerBinding** and
+**S1S7S8StateProvenance**, at the retained callback/content P6 boundary.
+The first contains proof/public carrier identities and per-call ROM dictionary
+interpretation. The second contains canonical **input** saved-ten fields,
+variant, widths, next, and their reached-model provenance. Neither contains
+source-output equality, log equality, ordered-read coverage, or observation
+equality. Reached parser/query facts and successful source execution are
+execution-context/conditioning facts, not additional refinement hypotheses.
+These structures are not claimed to be instantiated for the frozen caller.
+The physical native Vec/allocator/frozen-carrier interpretation remains the
+same explicit P6 trust boundary as in bytes4; no new kernel Rust extraction
+or whole-verifier AcceptedRunJoin is inferred from this content-stage result.
+
+Verbatim established reached-stage statement:
+
+```lean
+theorem success_conditioned_checkpoint_stage_join {Hash : Type}
+    (D : aspis_core.digest.Digest32 Hash) (hash : Hash) (H : Bytes → State)
+    (reserved : Bool) (wp : CheckpointBytes5Writer.Prepared) (wa : CheckpointBytes5Writer.Accumulator)
+    (proof public1 : Slice U8) (stored : Bytes) (parsed : OraclePortCompactDraft.Parsed)
+    (q : Fin 22 → Fin 262144) (tr : ErasedPrefix) (i : SourceInputs) (v : LiteralOpeningView.View)
+    (input : OraclePortStoredDecisionDraftC4.input parsed q tr = some i)
+    (query : OraclePortSelectedDraft.queries tr = some q)
+    (caller : S2S10CallerBinding D hash H proof public1 stored tr.statement.pubBytes)
+    (provenance : S1S7S8StateProvenance wp wa
+      (prepared (OraclePortAcceptedContextC6.context parsed i v) i.data
+        (SelectedChallengeMap.rhoOf i.rho) q)
+      (OraclePortCheckpointStateC3.write (model i.data (SelectedChallengeMap.rhoOf i.rho) q)).accumulator)
+    (p : verifier.Prepared) (a : verifier.Accumulator) (after : Log)
+    (success : run D hash (stage reserved wp wa proof public1) [] = ok (.Ok (p,a),after)) :
+    (observe after,some (resumedSource i.data p a)) =
+      eval H (OraclePortFrozen2.checkpoint stored parsed q tr i v)
+```
