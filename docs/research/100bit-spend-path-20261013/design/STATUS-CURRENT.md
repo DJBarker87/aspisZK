@@ -1,6 +1,6 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-Last updated 2026-10-22 06:00 by the lead. This page is the single current
+Last updated 2026-10-22 02:05 by the lead. This page is the single current
 reference; dated notes keep the history.
 
 ## The contract
