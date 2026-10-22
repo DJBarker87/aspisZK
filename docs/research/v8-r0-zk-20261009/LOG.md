@@ -8704,3 +8704,21 @@ about 2.1 s over 28k independent evaluations; 29 lane encodings about 1 s), both
 parallelisable over public shapes. Trust note: the prover is now explicitly
 multithreaded in P_R1, on public data only. The TLS single-thread item is restated
 to cover only the gated-off recorder; the quiet panic hook covers the workers.
+
+## D172 (lead, 2026-10-22 21:05): prover under 15 s on the build host (v2 candidate)
+
+Step 4 on `codex/cx-ct-kernels-v2-20261022` (head `b2f95e269a`, unmerged candidate).
+(a) Reusing the first-lift rank result across certificate workers recovered the
+accepting path: 16.19/16.18 s. (b) Parallel emitter insertion gave no gain and was reverted.
+(c) Semantic sumcheck evaluations and lane encodings now run on 16 workers with fixed
+public work ranges and a deterministic merge; constant-time kernels are unchanged;
+two-mask traces show partition and work counts are independent of secrets.
+**Median end-to-end 13.63 s (transfer) and 13.98 s (withdrawal)**, from about 37–39 s.
+The user's under-15 s target is met on the build host. Every step kept byte-identical
+proof and public bytes, zero verdict mismatches over 1,000 challenge sets, local Kani
+gates and the three ELF pins.
+Caveats: measured on a 16-core/22-thread Core Ultra 7 155H; the time scales with
+the client's cores and is not a guarantee for smaller machines. The candidate is not
+adopted. Adoption still needs the native refinement rebinding for the changed P_R1 and
+evaluation code, the D166 joint trace transport, the expanded thread/TLS model, and
+the L3 receipt on the pinned platform.
