@@ -1,0 +1,77 @@
+import CheckpointBytes5Join
+
+/-! Value-dependent observation composition at the actual reached checkpoint
+position of dV_frozen2. The prefix and remaining verifier stages are the pinned
+model stages; this is the checkpoint replacement theorem, not a frozen whole
+Rust decision or two-pass AcceptedRunJoin inhabitant. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CheckpointBytes5Decision
+open Aeneas Aeneas.Std Result AspisR1Stage2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortCheckpointAbiC5 OraclePortCheckpointResumeC5
+open CheckpointBytes5Effect CheckpointBytes5Inputs CheckpointBytes5Join OraclePortFrozen2
+open RawCutTranscriptRun (ErasedPrefix ErasedMessage)
+open RecordedBinaryExperimentBin (SourceInputs)
+attribute [local instance] Classical.propDecidable
+attribute [local irreducible] OraclePortCheckpointStateC3.write
+  OraclePortCheckpointStateC3.advance QueryAccumulator.run QueryAccumulator.run22
+  OraclePortCkptAbi5Stage.strictStage OraclePortFrozen2.checkpoint OraclePortFrozen2.stage2
+
+/-- Observation-level bind: the returned source state selects the continuation. -/
+def bindObservation {A B : Type} (H : Bytes → State) (observation : List (Bytes × State) × A)
+    (next : A → Program Bytes State B) : List (Bytes × State) × B :=
+  let tail := eval H (next observation.2)
+  (observation.1 ++ tail.1,tail.2)
+
+theorem bindObservation_eval {A B : Type} (H : Bytes → State) (p : Program Bytes State A)
+    (next : A → Program Bytes State B) :
+    bindObservation H (eval H p) next = eval H (bind p next) := by
+  simp only [bindObservation,eval_bind]
+
+/-- Exact checkpoint insertion through strictStage and the total reference
+strictDecision/dV_frozen2 theorem. Ordinary execution-context equalities say
+that the checkpoint position was reached; the only named source refinements
+are the two displayed structures. No observation premise is accepted. -/
+theorem decision_success_join {Hash : Type} (D : aspis_core.digest.Digest32 Hash)
+    (hash : Hash) (H : Bytes → State) (reserved : Bool)
+    (wp : CheckpointBytes5Writer.Prepared) (wa : CheckpointBytes5Writer.Accumulator)
+    (proof public1 : Slice U8) (stored : Bytes) (parsed : Parsed)
+    (q : Fin 22 → Fin 262144) (tr : ErasedPrefix) (m : ErasedMessage)
+    (i : SourceInputs) (v : LiteralOpeningView.View)
+    (guard : OraclePortAdmission.Guard tr)
+    (parser : OraclePortStoredParserC4.parseReached stored tr = some parsed)
+    (query : OraclePortSelectedDraft.queries tr = some q)
+    (input : OraclePortStoredDecisionDraftC4.input parsed q tr = some i)
+    (view : LiteralOpeningView.read (OraclePortStoredDecisionDraftC4.typedRows parsed q tr) = some v)
+    (batchOk : (eval H (batch parsed q batch0)).2 = true)
+    (caller : S2S10CallerBinding D hash H proof public1 stored tr.statement.pubBytes)
+    (provenance : S1S7S8StateProvenance wp wa
+      (prepared (OraclePortAcceptedContextC6.context parsed i v) i.data
+        (SelectedChallengeMap.rhoOf i.rho) q)
+      (OraclePortCheckpointStateC3.write (model i.data (SelectedChallengeMap.rhoOf i.rho) q)).accumulator)
+    (p : verifier.Prepared) (a : verifier.Accumulator) (after : Log)
+    (success : run D hash (stage reserved wp wa proof public1) [] = ok (.Ok (p,a),after)) :
+    let suffix := bindObservation H (observe after,some (resumedSource i.data p a))
+      (fun resumed => match resumed with | none => .done false | some state => stage2 parsed q tr i state)
+    ((eval H (batch parsed q batch0)).1 ++ suffix.1,suffix.2) =
+      eval H (dV_frozen2 stored tr m) := by
+  have checkpoint := success_conditioned_checkpoint_stage_join D hash H reserved wp wa proof public1
+    stored parsed q tr i v input query caller provenance p a after success
+  have reached := OraclePortCkptAbi5Stage.reached_stage H stored parsed q tr i v input query
+  have strict : (observe after,some (resumedSource i.data p a)) =
+      eval H (OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+        (OraclePortAcceptedContextC6.context parsed i v) i.data
+        (SelectedChallengeMap.rhoOf i.rho) q) := checkpoint.trans reached.symm
+  rw [← OraclePortCkptAbi5Decision.decision_observation H stored tr m]
+  dsimp only
+  rw [strict,bindObservation_eval]
+  simp only [OraclePortCkptAbi5Decision.strictDecision,if_pos guard,parser,query,eval_bind,
+    batchOk,if_true,OraclePortCkptAbi5Decision.strictAfter,input,view]
+  rfl
+
+#print axioms bindObservation_eval
+#print axioms decision_success_join
+end AspisR1.CheckpointBytes5Decision
+end

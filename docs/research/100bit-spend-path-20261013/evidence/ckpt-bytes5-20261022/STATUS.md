@@ -122,3 +122,58 @@ theorem success_conditioned_checkpoint_stage_join {Hash : Type}
     (observe after,some (resumedSource i.data p a)) =
       eval H (OraclePortFrozen2.checkpoint stored parsed q tr i v)
 ```
+
+## Stage 5: decision-position composition
+
+`CheckpointBytes5Decision.decision_success_join` inserts the proved source
+checkpoint observation between the pinned batch0 observation and the
+value-dependent stage2 continuation. Its proof consumes reached_stage,
+strictStage, then decision_observation, concluding exact ordered observation
+equality with dV_frozen2. Parser/query/opening/batch-success hypotheses are
+facts that this position was reached, not unproved observation transport.
+The only named source refinements are the same two transparent structures.
+
+Accepted Decision-4: exit 0, 18.077369750011712 s, 3628269568 B peak RSS,
+swaps 0; both reports standard. Its exact revision, hashes, dependency
+fingerprint, full axiom lines and failed diagnostics are in manifest.json.
+No whole frozen Rust decision or complete raw/annotated AcceptedRunJoin is
+claimed. The pinned model prefix/suffix still need the actual outer caller
+installation, with S2/S10 and S1/S7/S8 discharged at the inherited P6 boundary.
+
+Verbatim decision-position consumer statement:
+
+```lean
+theorem decision_success_join {Hash : Type} (D : aspis_core.digest.Digest32 Hash)
+    (hash : Hash) (H : Bytes → State) (reserved : Bool)
+    (wp : CheckpointBytes5Writer.Prepared) (wa : CheckpointBytes5Writer.Accumulator)
+    (proof public1 : Slice U8) (stored : Bytes) (parsed : Parsed)
+    (q : Fin 22 → Fin 262144) (tr : ErasedPrefix) (m : ErasedMessage)
+    (i : SourceInputs) (v : LiteralOpeningView.View)
+    (guard : OraclePortAdmission.Guard tr)
+    (parser : OraclePortStoredParserC4.parseReached stored tr = some parsed)
+    (query : OraclePortSelectedDraft.queries tr = some q)
+    (input : OraclePortStoredDecisionDraftC4.input parsed q tr = some i)
+    (view : LiteralOpeningView.read (OraclePortStoredDecisionDraftC4.typedRows parsed q tr) = some v)
+    (batchOk : (eval H (batch parsed q batch0)).2 = true)
+    (caller : S2S10CallerBinding D hash H proof public1 stored tr.statement.pubBytes)
+    (provenance : S1S7S8StateProvenance wp wa
+      (prepared (OraclePortAcceptedContextC6.context parsed i v) i.data
+        (SelectedChallengeMap.rhoOf i.rho) q)
+      (OraclePortCheckpointStateC3.write (model i.data (SelectedChallengeMap.rhoOf i.rho) q)).accumulator)
+    (p : verifier.Prepared) (a : verifier.Accumulator) (after : Log)
+    (success : run D hash (stage reserved wp wa proof public1) [] = ok (.Ok (p,a),after)) :
+    let suffix := bindObservation H (observe after,some (resumedSource i.data p a))
+      (fun resumed => match resumed with | none => .done false | some state => stage2 parsed q tr i state)
+    ((eval H (batch parsed q batch0)).1 ++ suffix.1,suffix.2) =
+      eval H (dV_frozen2 stored tr m)
+```
+
+Before/after obligation audit: bytes4 proved successful returned fields from
+an authentic-encoding hypothesis and had no ordered source execution log.
+This packet derives that encoding from the reified source writer's output,
+proves the complete source resume schedule's three appended calls, identifies
+the six source reads, and proves the checkpoint replacement at dV_frozen2.
+Input saved-state provenance and caller/ROM carriers remain uninstantiated.
+No global security-endpoint premise has been deleted by relabeling it; the
+physical frozen source interpretation and both complete verifier passes are
+explicitly still open. Allocation success is derived, never added as a premise.
