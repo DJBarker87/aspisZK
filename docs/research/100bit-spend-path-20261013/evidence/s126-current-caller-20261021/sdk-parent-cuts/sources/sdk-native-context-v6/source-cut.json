@@ -1,0 +1,88 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "qualification": "Separate harness-only mutable storage from pooled constant allocations.\nEach ghost value is projected from a uniquely tagged enclosing allocation.\nNo source function, symbolic input, assertion, or contract is removed.\n",
+  "source_sha256": "196a96a11cf22451afab79d9a65762e6167a6525da7b47fc3b549956567e66ff",
+  "base_source_sha256": "ee84714209f0e600d7c823329b85faf428211ab526aee8fad548f092d8ecaf8a",
+  "unchanged_source_prefix_sha256": "fe1a7a3f44603f3f76047dd9704d50ba39d0173966e7073685761913307f80e2",
+  "ghost_projection": [
+    {
+      "name": "OBSERVED",
+      "type": "usize",
+      "initializer": "0",
+      "tag": 5882264063299289089
+    },
+    {
+      "name": "EXPECTED",
+      "type": "u8",
+      "initializer": "0",
+      "tag": 5882264063299289090
+    },
+    {
+      "name": "PLAN",
+      "type": "Option<Plan>",
+      "initializer": "None",
+      "tag": 5882264063299289091
+    },
+    {
+      "name": "PHASE",
+      "type": "usize",
+      "initializer": "0",
+      "tag": 5882264063299289092
+    },
+    {
+      "name": "CALLS",
+      "type": "[[u8;4];2]",
+      "initializer": "[[0;4];2]",
+      "tag": 5882264063299289093
+    },
+    {
+      "name": "NATIVE_ROOT_PTRS",
+      "type": "[*const u8;3]",
+      "initializer": "[core::ptr::null();3]",
+      "tag": 5882264063299289094
+    },
+    {
+      "name": "MODEL_ROOT_PTRS",
+      "type": "[*const u8;3]",
+      "initializer": "[core::ptr::null();3]",
+      "tag": 5882264063299289095
+    },
+    {
+      "name": "PUBLIC_SNAPSHOT_PTR",
+      "type": "*const u8",
+      "initializer": "core::ptr::null()",
+      "tag": 5882264063299289096
+    },
+    {
+      "name": "PROOF_SNAPSHOT_PTR",
+      "type": "*const u8",
+      "initializer": "core::ptr::null()",
+      "tag": 5882264063299289097
+    },
+    {
+      "name": "BOX_PTRS",
+      "type": "[*const PoolV1PairForestTerminalStatementV1;2]",
+      "initializer": "[core::ptr::null();2]",
+      "tag": 5882264063299289098
+    },
+    {
+      "name": "CANDIDATE_PTRS",
+      "type": "[*const PoolV1PairVerifiedAfterstateV1;2]",
+      "initializer": "[core::ptr::null();2]",
+      "tag": 5882264063299289099
+    },
+    {
+      "name": "PUBLIC_KIND",
+      "type": "[u8;2]",
+      "initializer": "[0;2]",
+      "tag": 5882264063299289100
+    },
+    {
+      "name": "PUBLIC_PARTS",
+      "type": "[[*const ();2];2]",
+      "initializer": "[[core::ptr::null();2];2]",
+      "tag": 5882264063299289101
+    }
+  ],
+  "retained_obligations": "Audit raw emitted source functions and all assertions. Tagged storage addresses are ghost-only; actual SDK buffers, descriptors, aliases, child arguments and observed values retain the same domain. No native caller or release closure follows from this transformation alone."
+}

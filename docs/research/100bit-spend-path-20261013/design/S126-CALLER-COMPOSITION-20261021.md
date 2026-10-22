@@ -1582,3 +1582,181 @@ packet. Custom exit10 is never relabelled as a normal cargo-kani success.
 `git diff --check` reports only preserved whitespace in raw diagnostic/compiler
 logs; those evidence bytes are kept unchanged. Source and prose have no new
 whitespace findings.
+
+## Complete rejected-run buffer frame and tagged native caller recheck
+
+The new enclosing theorem is
+`ErrorBufferFrame.stage1_error_buffers` in `S2SdkErrorBufferFrameV1.lean`:
+
+```
+∀ ops program sdk out data error,
+  owned_stage1 ops program sdk data = ok (.Err error,out) →
+  buffers out = buffers sdk
+```
+
+`buffers` is the complete list of byte vectors, including their lengths.
+The theorem covers every ordinary ProgramError return of the **complete
+emitted owned stage1 and exact reverse-release finalizer**, for arbitrary
+child Ops and SDK values. It supplies no separate acquire/release success,
+slot validity, counter range, byte equality or child-success premise. The
+source body has exactly one byte-vector assignment, followed by an Ok return;
+an Err execution cannot take that terminal branch. Reached acquisitions and
+release steps preserve bytes, and the checked proof composes their frames
+through all actual body branches. `release_buffers` itself needs no separately
+assumed live-guard invariant: its ordinary-return equation derives the reached
+indexes and setters. This is a **RETURNED-ERROR frame theorem**, neither
+unrestricted TOTAL termination nor an accepted-success theorem.
+
+Before, only helper-level acquisition byte frames were available. After,
+`body_error_buffers` derives the same full frame from one complete body error
+return, and `stage1_error_buffers` includes final release. The dependent
+`S2SdkErrorBufferJoinV1.lean` consumes the previously proved complete caller
+equalities: `borrowed_error_buffers` covers the complete borrowed reference;
+`installed_error_buffers` covers the installed scalar-comparison/current
+decoder/verifier caller; `installed_error_read` derives equality of each
+byte-vector read, retaining invalid-slot failure and all aliases, with no
+queried-slot range premise. These are reference results. The actual native
+SDK embedding is not silently supplied by them.
+
+Smallest-file/following-bridge receipts, atomic local lock, `-j1 -M4400`:
+
+| Target | Selected receipt | Exit | Wall seconds | RSS bytes | Swaps |
+|---|---|---:|---:|---:|---:|
+| `S2SdkErrorBufferFrameV1` | `s2-sdk-error-buffer-frame-v4` |0|19.934187|3225075712|0|
+| `S2SdkErrorBufferJoinV1` | `s2-sdk-error-buffer-join-v1` |0|20.673901|3217375232|0|
+
+All ten axiom reports contain only propext, Classical.choice and Quot.sound.
+The first three focused frame attempts fail on finalizer elaboration (empty
+dsimp, field projection cases and unreduced successful-constructor equations).
+Their exact sources/logs are retained; compiler recovery sorryAx output in
+those failed receipts is excluded. No source contains sorry, a custom axiom,
+native_decide or a resource-option override. No unchanged full replay runs.
+The accepted source/import audit now selects67 targets and11775 objects; this
+is consistency evidence, not release closure.
+
+The native caller's tagged-ghost successor also passes:
+`sdk-native-context-check-v10`, raw exit10,131.972s,4521912KiB RSS,swap0,
+**2176/2176 non-cover properties SUCCESS and2/2 covers reached**. It executes
+the same complete frozen native stage1 as v9, with actual AccountInfo/RefCell
+state, both full typed statement variants, all returned1768 checkpoint bytes
+through an arbitrary observed coordinate, exact first-decoded argument
+pointers/lengths/semantic references/k/None, returned checkpoint descriptor
+and borrow-counter restoration. There is no selected-property filter.
+The only harness change wraps ghost globals in distinct tagged allocations;
+the complete source prefix before cfg(kani) is byte-identical to v9.
+
+`sdk-native-observer-emission-properties-v1` pins that exact caller artifact
+and confirms its native observer body loads a const eight-zero-byte allocation,
+not mutable ghost storage. It is metadata-only, exit0,0.296s,46976KiB,swap0.
+Because tagging also changes the ghost getters used by the copy contract,
+the same crate's **actual** `std_copy_value_frame` proof_for_contract is checked
+again: `sdk-native-tagged-copy-contract-v1`, normal cargo-kani exit0,9.561s,
+444028KiB,swap0, all assertions and both covers pass. The changed primitive
+binding is not silently attributed to the historical leaf. The older native
+v9 remains retained and checked as historical evidence; v10 replaces it in
+the selected native caller cut.
+
+The native scope has **not** expanded: common successful decoder/validator/
+encoder/verifier replies are still explicit typed child hooks; seeded
+candidate-prefix/tag, concrete scan interpretation, source-entry descriptor
+normalization, canonical constructed Rc graph versus arbitrary valid runtime
+heaps, actual child installation, and full state/log/oracle transport remain
+composition obligations. This is a checked enclosing native caller context,
+not an unconditional source-to-owned equivalence or whole S2 closure. Its
+observer assertion is derived and emission-audited, never assumed or removed.
+
+The attempted paired decoder-entry prefix contexts are all **excluded**:
+
+| Attempt | Encoding/change | Exit | Wall seconds | RSS KiB | Swaps |
+|---|---|---:|---:|---:|---:|
+| decoder-entry-v1 | Arbitrary byte queries; reviewed/stopped |15|168.391|6387496|0|
+| decoder-entry-v2 | Descriptor/counter queries only; timeout |1|184.026|6390240|0|
+| decoder-entry-v3 | UF array encoding; reviewed/stopped |15|136.952|6373100|0|
+| decoder-entry-v4 | Inventory-based unwind40, all unwinding assertions; timeout |1|184.139|6391020|0|
+
+All use fresh host admission, High6G/Max8G/Swap0. The loop inventory is
+metadata-only and retained. Stopped handles are verified against their live
+process command lines before signalling; terminal receipts and voluntary-stop
+reasons are preserved. None supplies a prefix join, byte-frame proof, array
+encoding equivalence claim or successful caller execution. No raised memory
+cap or unchanged rerun follows. Constructing and running both whole SDK heaps
+remains expensive even before decoder success. The next native composition
+must start from an already-related symbolic SDK state and check one concrete
+buffer/call continuation step with verified callees, then compose the steps;
+another whole paired prefix fixture is not the next gate.
+
+Read-only research inspection at `45c7b3c00a7431e66833a51686b8715d355749a3`
+confirms the two shipped program/adapter files still equal the authoritative
+freeze byte-for-byte. No production source or other cone is modified. There
+is no new adoption/re-pin decision requested by these proof/harness changes.
+S2 remains OPEN for the actual runtime/source/caller and ordered two-pass
+joins; S6 shares that native boundary and S1 retains original preparation/
+gamma-powers/caller obligations. Ops10/SolanaDigest, Ops11/exact error/log
+mapping and verifier source instances remain explicit. The100-bit per-attempt
+target is not yet established.
+
+### Native caller Rc input-domain premise removed
+
+The selected native context is further widened, rather than stopping at
+constructor-derived Rc inputs. `prepare-sdk-native-rc-domain.py` leaves the
+entire source/helper/contract prefix before `native_parent_arguments` byte
+identical to the tagged native v6 context. Only the harness's logical input
+state is widened: it validates each data/lamport Rc header projection against
+the actual SDK strong/weak getters, saves the constructor values, injects
+arbitrary nonzero header fields, checks getter correspondence, executes the
+unchanged complete source body, checks every injected Rc field unchanged on
+return, and restores all constructor fields before any harness handle drops.
+It reuses the exact two-word RcInner projection already checked in the wider
+SDK primitive frame certificates; it does not substitute an SDK carrier.
+
+The first widened context (`sdk-native-context-check-v11`) checks all twelve
+fields in1..isizeMAX: exit10,165.466s,4634896KiB,swap0, all2548 non-covers
+pass and all4 covers are reached. This is retained as a checked intermediate,
+not advertised as the full Rc domain. Inspection of the Rust source associated
+with pinned compiler53732d5e0 shows Rc increments wrap and abort on zero,
+with no isizeMAX cutoff. The source and URL/SHA are retained; installed
+compiler/sysroot archive hashes are separately recorded, rather than asserting
+that an upstream source download proves their binary provenance.
+
+The final selected successor, **`sdk-native-context-check-v12`**, therefore
+checks **every nonzero usize** independently for all three data strong counts,
+three data internal weak counts, three lamport strong counts and three lamport
+internal weak counts. Public weak count is internal weak minus1. There is no
+upper-half exclusion: the only injected-count predicate is count>=1.
+Raw exit10,180.287s total runner wall,4623192KiB RSS,swap0; **2546/2546
+non-cover properties pass and5/5 covers are reached**, including successful
+source execution at strong1, strongusizeMAX, and internal weakusizeMAX.
+The actual solver command completes within its individual180s deadline;
+the reported total wall also includes preparation and result processing.
+All original caller arguments, actual SDK guard effects, arbitrary checkpoint
+byte and returned-descriptor checks remain enabled. Rc preservation checks
+run regardless of adapter status within the same explicit common-successful-
+child context. No source or assertion is removed to widen the domain.
+
+Before, the native accepted-caller certificate used constructor-derived Rc
+counts. After, the exact same native source is checked at every nonzero Rc
+header value, with field/getter correspondence and restoration checked. This
+discharges that **scalar Rc-count restriction in the enclosing native caller
+context**. It does not prove general heap relocation/runtime embedding, actual
+child identities, scan/seed/alias normalization composition or ordered oracle
+transport. The broader valid-runtime relation still needs its concrete join.
+
+The observer's exact new artifact is independently emission-audited:
+`sdk-native-full-rc-observer-emission-properties-v1`, exit0,0.294s,
+48960KiB,swap0, const-None read with no ghost dependency. The same full-context
+crate's actual copy proof_for_contract is also checked again after this
+context change: `sdk-native-full-rc-copy-contract-v1`, normal cargo-kani exit0,
+9.953s,444292KiB,swap0; all assertions and both covers pass. That source's
+complete copy helper, contract, ghost getters and primitive-proof prefix are
+byte-identical to v6. The manifest selects v12 and this matching leaf in place
+of v10 and its leaf, retaining all predecessor receipts. A streamed metadata
+inventory additionally pins installed core/alloc/std and Kani archives; binary
+payloads are not distributed (62 archives,261351858 bytes hashed). A fresh
+post-check revalidation confirms all226 retained relevant source/package
+files on the NUC still equal the authoritative b2727acd freeze. This is a
+source-byte check, not a frozen SBF artifact rebuild.
+
+The enclosing rejected-run Lean theorems above remain the new reference-side
+frame result. There is no new theorem claiming complete native-to-owned
+stage1 equality. Lean receipts record base revision e4bccb2a3 plus exact new
+source snapshots/SHA values; those exact snapshots are included here.

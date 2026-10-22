@@ -35,8 +35,18 @@ receipts += ['sdk-native-context-check-v9','sdk-paired-context-codegen-v7','sdk-
 folders += ['sdk-proof-gate-v1','sdk-proof-gate-v2','sdk-proof-gate-v3']
 receipts += ['sdk-proof-gate-join-v1','sdk-proof-gate-join-v2','sdk-proof-gate-v1-charon','sdk-proof-gate-v1-aeneas','sdk-proof-gate-properties-v1','sdk-proof-gate-properties-v2','sdk-proof-gate-other-lengths-v1','sdk-proof-gate-frame-v1','sdk-proof-gate-frame-properties-v1','sdk-proof-gate-frame-properties-v2']
 folders += ['sdk-proof-gate-v4','memcmp-equal-v1','observer-emission-v1','observer-emission-v2','observer-emission-v3','sdk-paired-context-v10']
+folders += ['sdk-paired-decoder-entry-v1','sdk-paired-decoder-entry-v2']
+folders += ['sdk-native-context-v6']
+folders += ['sdk-native-context-v7','sdk-native-context-v8']
 new_diagnostics=['sdk-proof-length-cut-v1','sdk-proof-length-cut-v2','sdk-proof-length-cut-v3','sdk-proof-length-frame-cut-v1','sdk-proof-length-frame-cut-v2']+[f'sdk-paired-equalcmp-check-v{i}' for i in range(1,6)]
+new_diagnostics += [f'sdk-paired-decoder-entry-check-v{i}' for i in range(1,5)]
+new_diagnostics += ['sdk-native-context-check-v10']
+new_diagnostics += ['sdk-native-context-check-v11','sdk-native-context-check-v12']
 receipts += new_diagnostics+['sdk-proof-length-frame-codegen-v1','sdk-proof-length-frame-properties-v1','sdk-proof-length-frame-properties-v2','memcmp-equal-join-v1','observer-emission-check-v1','observer-emission-check-v2','observer-emission-check-v3','sdk-paired-context-codegen-v10','sdk-observer-emission-properties-v1','sdk-observer-emission-properties-v2']
+receipts += ['sdk-paired-decoder-entry-codegen-v1','sdk-paired-decoder-entry-codegen-v2','sdk-decoder-entry-loop-inventory-v1']
+receipts += ['sdk-native-context-codegen-v6','sdk-native-observer-emission-properties-v1']
+receipts += ['sdk-native-tagged-copy-contract-v1']
+receipts += ['sdk-native-context-codegen-v7','sdk-native-context-codegen-v8','sdk-native-rc-observer-emission-properties-v1','sdk-native-full-rc-observer-emission-properties-v1','sdk-kani-sysroot-pins-v1','sdk-native-full-rc-copy-contract-v1']
 pins=[]
 for name in folders:
  p=H/name
@@ -71,13 +81,16 @@ for p in (H/'target/kani/x86_64-unknown-linux-gnu/debug/.fingerprint').glob('*/*
  if any(k in p.parent.name for k in ['sdk-heap-','sdk-shared-write-frame','owned-sdk-snapshots','sdk-paired-context','sdk-prefix-context','sdk-native-context','sdk-metadata-prefix','sdk-call-context','sdk-finish','sdk-std-copy','sdk-proof-gate','sdk-stub-preflight']):copy(p,Path('compiler-flags')/p.parent.name/p.name)
 for p in (H/'kit').glob('*.py'):
  if any(k in p.name for k in ['heap-join','snapshot','paired-context','parent-cuts','write-frame','write-frame-properties','run-modular','metadata-prefix','statement-fields','reservation','finish-join','finish-contract','finish-step','finish-fixed-frame','std-copy','owned-sdk-copy','context-properties','sdk-proof-gate','owned-sdk-borrowed','sdk-borrowed','finish-verified','finish-contract-join','smt-preflight','prepared-sdk','trace-cbmc-exception']):copy(p,Path('runner')/p.name)
-for name in ['run-sdk-proof-length-cut-host.py','audit-sdk-length-cut-host.py','prepare-memcmp-equal.py','prepare-observer-emission.py','prepare-sdk-ghost-storage.py','run-sdk-paired-equalcmp-host.py','audit-observer-emission-host.py','memcmp688-declaration.c','memcmp688-equal.c']:
+for name in ['run-sdk-proof-length-cut-host.py','audit-sdk-length-cut-host.py','prepare-memcmp-equal.py','prepare-observer-emission.py','prepare-sdk-ghost-storage.py','run-sdk-paired-equalcmp-host.py','audit-observer-emission-host.py','memcmp688-declaration.c','memcmp688-equal.c','prepare-sdk-decoder-entry.py','run-sdk-decoder-entry-host.py','inspect-decoder-entry-loops-host.py']:
  p=H/'kit'/name
  if p.is_file():copy(p,Path('runner')/p.name)
+p=H/'kit/audit-native-observer-emission-host.py';copy(p,Path('runner')/p.name)
+for name in ['prepare-sdk-native-rc-domain.py','audit-native-rc-observer-emission-host.py','audit-native-full-rc-observer-emission-host.py','pin-kani-sysroot-host.py']:
+ p=H/'kit'/name;copy(p,Path('runner')/p.name)
 p=Path('/home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c');copy(p,Path('tool-and-freeze-pins')/'kani_lib.c')
 p=H/'kit/trace-cbmc-exception.cpp'
 if p.is_file():copy(p,Path('runner')/p.name)
-for rel in ['z3-tool-v1/tool-pins.json','source-freeze-revalidation-20261022.json']:
+for rel in ['z3-tool-v1/tool-pins.json','source-freeze-revalidation-20261022.json','source-freeze-post-full-rc-20261022.json']:
  p=H/rel
  if p.is_file():copy(p,Path('tool-and-freeze-pins')/p.name)
 (O/'llbc-pins.json').write_text(json.dumps(pins,indent=2)+'\n')

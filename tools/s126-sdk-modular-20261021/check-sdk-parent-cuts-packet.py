@@ -153,6 +153,91 @@ with tempfile.TemporaryDirectory() as d:
  assert json.loads((Path(d)/'source-cut.json').read_text())==nativeCut
 accepted[nativeTag]=dict(source_sha256=sha(nativeSource),receipt_sha256=sha(nativeReceipt),raw_exit_status=10,noncover_successes=len(noncover),reachable_covers=2,wall_seconds=nr['wall_seconds'],peak_rss_kib=nr['peak_rss_kib'],swaps=0,qualification='Full real native SDK stage1 through successful arbitrary1768-byte writeback: actual decoded-object/public/proof/k/None arguments, post-SDK checkpoint descriptor/observed value and all returned counter restorations checked. Input descriptor normalization has its own source-entry certificate. Common successful typed child hooks, actual child/prefix/scan/runtime embedding and full owned/state/log composition remain explicit. This is not an unconditional actual-source or total whole-stage join.')
 
+# The tagged-storage successor is selected for the native observer/caller cut.
+# Historical v9 remains retained and checked, but is replaced in this manifest.
+taggedTag='sdk-native-context-check-v10'
+taggedSource=E/'sources/sdk-native-context-v6/src/lib.rs'
+taggedCut=json.loads((taggedSource.parents[1]/'source-cut.json').read_text())
+assert taggedCut['source_sha256']==sha(taggedSource) and taggedCut['base_source_sha256']==sha(nativeSource)
+with tempfile.TemporaryDirectory() as d:
+ out=Path(d)/'tagged'
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-ghost-storage.py'),str(nativeSource.parents[1]),str(out)],check=True)
+ assert (out/'src/lib.rs').read_bytes()==taggedSource.read_bytes()
+ assert json.loads((out/'source-cut.json').read_text())==taggedCut
+trp=E/'receipts'/taggedTag/'receipt.json';tr=json.loads(trp.read_text())
+assert tr['exit_status']==10 and tr['swaps']==0 and tr['limits']['memory.swap.max']=='0'
+assert tr['limits']['memory.max']=='8589934592'
+tp=json.loads((E/'diagnostics'/taggedTag/'properties-without-traces.json').read_text())
+tn=[p for p in tp if p['sourceLocation'].get('propertyClass')!='cover'];tc=[p for p in tp if p['sourceLocation'].get('propertyClass')=='cover']
+assert len(tn)==2176 and all(p['status']=='SUCCESS' for p in tn)
+assert len(tc)==2 and all(p['status']=='FAILURE' for p in tc)
+assert any('observer.is_none()' in p['description'] for p in tn)
+assert any('actual post-call SDK checkpoint descriptor remains bound to root2' in p['description'] for p in tn)
+tinput=E/(taggedTag+'-input.json');ti=json.loads(tinput.read_text())
+assert ti['artifact_selection']['source_sha256']==sha(taggedSource)
+assert ti['artifact_selection']['codegen_input_sha256']==sha(E/'sdk-native-context-codegen-v6-input.json')
+assert not ti['selected_properties'] and '--unwinding-assertions' in ti['commands'][-1]
+observer=json.loads((E/'receipts/sdk-native-observer-emission-properties-v1/emission-audit.json').read_text())
+opins=json.loads((E/'sdk-native-observer-emission-properties-v1-input.json').read_text())
+assert opins['native_input_sha256']==sha(tinput) and opins['prepared_sha256']==ti['input_goto_sha256']
+assert observer['raw_goto_sha256']==opins['raw_goto_sha256'] and len(observer['observers'])==1
+assert 'Type........: const struct ' in observer['constant']
+assert '{ 0, 0, 0, 0, 0, 0, 0, 0 }' in observer['constant']
+assert all('proofs' not in body for body in observer['observers'])
+old=accepted.pop(nativeTag)
+accepted[taggedTag]=dict(old,source_sha256=sha(taggedSource),receipt_sha256=sha(trp),noncover_successes=len(tn),wall_seconds=tr['wall_seconds'],peak_rss_kib=tr['peak_rss_kib'],qualification=old['qualification']+' Harness ghost storage is tagged and exact native observer emission is separately audited as a constant-None read; the same-source copy contract is rechecked, rather than silently inherited after its ghost binding changed.')
+checked('sdk-native-tagged-copy-contract-v1','sdk-native-context-v6')
+
+# Widening changes only the caller's logical Rc-header inputs, preserving the
+# entire frozen/native/helper prefix. The upper-half usize domain is retained.
+for version,tag,codegen,full,count,coversCount,auditTag in [
+ ('v7','sdk-native-context-check-v11','sdk-native-context-codegen-v7',False,2548,4,'sdk-native-rc-observer-emission-properties-v1'),
+ ('v8','sdk-native-context-check-v12','sdk-native-context-codegen-v8',True,2546,5,'sdk-native-full-rc-observer-emission-properties-v1')]:
+ source=E/'sources'/('sdk-native-context-'+version)/'src/lib.rs';cut=json.loads((source.parents[1]/'source-cut.json').read_text())
+ assert cut['source_sha256']==sha(source) and cut['base_source_sha256']==sha(taggedSource)
+ with tempfile.TemporaryDirectory() as d:
+  out=Path(d)/'wider'
+  subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-native-rc-domain.py'),str(taggedSource.parents[1]),str(out),*(['full-usize'] if full else [])],check=True)
+  assert (out/'src/lib.rs').read_bytes()==source.read_bytes()
+  assert json.loads((out/'source-cut.json').read_text())==cut
+ text=source.read_text();base=taggedSource.read_text()
+ assert text[:text.index('fn native_parent_arguments()')]==base[:base.index('fn native_parent_arguments()')]
+ receipt=E/'receipts'/tag/'receipt.json';rr=json.loads(receipt.read_text())
+ assert rr['exit_status']==10 and rr['swaps']==0 and rr['limits']['memory.swap.max']=='0'
+ assert rr['limits']['memory.max']=='8589934592'
+ props=json.loads((E/'diagnostics'/tag/'properties-without-traces.json').read_text())
+ nc=[p for p in props if p['sourceLocation'].get('propertyClass')!='cover'];cv=[p for p in props if p['sourceLocation'].get('propertyClass')=='cover']
+ assert len(nc)==count and all(p['status']=='SUCCESS' for p in nc)
+ assert len(cv)==coversCount and all(p['status']=='FAILURE' for p in cv)
+ assert any('observer.is_none()' in p['description'] for p in nc)
+ ipath=E/(tag+'-input.json');ip=json.loads(ipath.read_text())
+ assert ip['artifact_selection']['source_sha256']==sha(source)
+ assert ip['artifact_selection']['codegen_input_sha256']==sha(E/(codegen+'-input.json'))
+ assert not ip['selected_properties'] and '--unwinding-assertions' in ip['commands'][-1]
+ ap=json.loads((E/(auditTag+'-input.json')).read_text());audit=json.loads((E/'receipts'/auditTag/'emission-audit.json').read_text())
+ assert ap['native_input_sha256']==sha(ipath) and ap['prepared_sha256']==ip['input_goto_sha256']
+ assert ap['raw_goto_sha256']==audit['raw_goto_sha256'] and len(audit['observers'])==1
+ assert 'Type........: const struct ' in audit['constant'] and '{ 0, 0, 0, 0, 0, 0, 0, 0 }' in audit['constant']
+ if full:
+  assert 'kani::assume(rc_counts[i][j]>=1);' in text
+  assert 'rc_counts[i][j]<=isize::MAX' not in text and 'rc_counts[0][0]==usize::MAX' in text
+  assert 'rc_counts[0][1]==usize::MAX' in text and '1..usizeMAX' in cut['rc_domain']
+  prior=accepted.pop(taggedTag)
+  accepted[tag]=dict(prior,source_sha256=sha(source),receipt_sha256=sha(receipt),noncover_successes=len(nc),reachable_covers=len(cv),wall_seconds=rr['wall_seconds'],peak_rss_kib=rr['peak_rss_kib'],qualification=prior['qualification']+' All twelve Rc strong/internal-weak fields are now arbitrary nonzero usize inputs, getter/layout correspondence is checked and all are restored before teardown. This removes the constructor-Rc-count restriction at the checked native caller boundary; arbitrary heap/source/child/ordered-log transport remains open.')
+checked('sdk-native-full-rc-copy-contract-v1','sdk-native-context-v8')
+accepted.pop('sdk-native-tagged-copy-contract-v1')
+sysroot=json.loads((E/'receipts/sdk-kani-sysroot-pins-v1/sysroot-pins.json').read_text())
+assert sysroot['archives'] and '53732d5e0' in sysroot['versions']['rustc-version']
+for prefix in ['libcore-','liballoc-','libstd-']:
+ assert any(Path(p['path']).name.startswith(prefix) and len(p['sha256'])==64 for p in sysroot['archives'])
+post=json.loads((E/'tool-and-freeze-pins/source-freeze-post-full-rc-20261022.json').read_text())
+freeze=json.loads((B/'evidence/s126-current-caller-20261021/extraction-source-freeze.json').read_text())
+assert post['freeze']==freeze['source_revision']=='b2727acd3abf79315d18b754a260f58f4b1c6326'
+expected={r['path']:r['frozen_sha256'] for r in freeze['files']}
+assert {r['path']:r['current'] for r in post['files']}==expected and all(r['matches'] and r['expected']==r['current'] for r in post['files'])
+rcPin=E/'tool-and-freeze-pins/rust-53732d5e0/source-pin.json'
+assert json.loads(rcPin.read_text())['sha256']==sha(rcPin.parent/'rc.rs')
+
 stepSource,stepCut,stepReceipt=checked('sdk-finish-step-join-v3','sdk-finish-step-v3')
 stepText=stepSource.read_text()
 assert '#[cfg_attr(kani,kani::modifies(target))]' in stepText
@@ -362,4 +447,4 @@ assert flags and all('opt-level=3' in r and 'overflow-checks=yes' in r and '--ka
 for p in E.rglob('*'):
  if p.is_file():assert p.suffix not in ['.olean','.o','.a','.so','.dylib','.llbc','.bc','.out']
 (E/'accepted-cuts.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',qualification='Checked finite SDK operation/lifecycle domains and exact pure snapshot adaptation. Reached phase cuts are explicit. Complete actual stage1 child instances and ordered caller join remain open; timed-out/context/codegen/preflight evidence is excluded from accepted cuts.',cuts=accepted),indent=2)+'\n')
-print('PASS twenty SDK cuts and complete owned-parent copy-loop adaptation; enclosing native caller joins remain open')
+print(f'PASS {len(accepted)} selected SDK cuts and complete owned-parent copy-loop adaptation; enclosing native caller joins remain open')
