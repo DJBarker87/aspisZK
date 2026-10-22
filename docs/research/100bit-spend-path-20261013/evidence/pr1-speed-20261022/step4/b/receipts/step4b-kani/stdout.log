@@ -1,0 +1,114 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: constant `PU` is never used
+ --> production.rs:1:7
+  |
+1 | const PU: u32 = 0x7fff_ffff;
+  |       ^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `PM` is never used
+ --> production.rs:2:7
+  |
+2 | const PM: u64 = 0x7fff_ffff;
+  |       ^^
+
+warning: function `red` is never used
+ --> production.rs:4:4
+  |
+4 | fn red(x: u64) -> u32 {
+  |    ^^^
+
+warning: function `mulm` is never used
+  --> production.rs:11:4
+   |
+11 | fn mulm(a: u32, b: u32) -> u32 {
+   |    ^^^^
+
+warning: function `addm` is never used
+  --> production.rs:15:4
+   |
+15 | fn addm(a: u32, b: u32) -> u32 {
+   |    ^^^^
+
+warning: function `subm` is never used
+  --> production.rs:20:4
+   |
+20 | fn subm(a: u32, b: u32) -> u32 {
+   |    ^^^^
+
+warning: function `negm` is never used
+  --> production.rs:24:4
+   |
+24 | fn negm(a: u32) -> u32 {
+   |    ^^^^
+
+warning: function `invm` is never used
+  --> production.rs:27:4
+   |
+27 | fn invm(a: u32) -> u32 {
+   |    ^^^^
+
+warning: function `dot` is never used
+  --> production.rs:33:4
+   |
+33 | fn dot(a: &[u32], b: &[u32]) -> u32 {
+   |    ^^^
+
+warning: function `axpy_sub` is never used
+  --> production.rs:54:4
+   |
+54 | fn axpy_sub(v: &mut [u32], s: u32, b: &[u32]) {
+   |    ^^^^^^^^
+
+warning: function `scale_in` is never used
+  --> production.rs:64:4
+   |
+64 | fn scale_in(v: &mut [u32], s: u32) {
+   |    ^^^^^^^^
+
+warning: struct `TagEch` is never constructed
+  --> production.rs:70:8
+   |
+70 | struct TagEch {
+   |        ^^^^^^
+
+warning: enum `Ins` is never used
+  --> production.rs:76:6
+   |
+76 | enum Ins {
+   |      ^^^
+
+warning: associated items `new`, `rank`, `insert`, `insert_fixed`, `insert_serial`, and `express` are never used
+   --> production.rs:82:8
+    |
+ 81 | impl TagEch {
+    | ----------- associated items in this implementation
+ 82 |     fn new(width: usize) -> Self {
+    |        ^^^
+...
+ 85 |     fn rank(&self) -> usize {
+    |        ^^^^
+...
+ 90 |     fn insert(&mut self, v: Vec<u32>) -> Ins {
+    |        ^^^^^^
+...
+ 97 |     fn insert_fixed(&mut self, v: Vec<u32>) -> Ins {
+    |        ^^^^^^^^^^^^
+...
+154 |     fn insert_serial(&mut self, mut v: Vec<u32>) -> Ins {
+    |        ^^^^^^^^^^^^^
+...
+182 |     fn express(&self, mut v: Vec<u32>) -> Option<Vec<u32>> {
+    |        ^^^^^^^
+
+Checking harness proofs::fixed_coordinate_sequence...
+
+VERIFICATION RESULT:
+ ** 0 of 41 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.513037s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

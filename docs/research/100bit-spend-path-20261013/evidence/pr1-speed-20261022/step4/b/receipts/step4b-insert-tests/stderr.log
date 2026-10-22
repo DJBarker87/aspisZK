@@ -1,0 +1,149 @@
+     Locking 1 package to latest compatible version
+   Compiling aspis-r1-cert-check v0.0.0 (/home/dombarker/project-offloads/codex-cx-ct-kernels-v2-20261022/pr1-step4b/docs/research/v8-r0-zk-20261009/c3/check)
+   Compiling pr1-step4-insert-gates v0.1.0 (/home/dombarker/project-offloads/codex-cx-ct-kernels-v2-20261022/pr1-step4b/tools/pr1-speed-20261022/step4-insert-gates)
+warning: unexpected `cfg` condition name: `kani`
+  --> gates.rs:19:7
+   |
+19 | #[cfg(kani)] mod proofs {
+   |       ^^^^
+   |
+   = help: expected names are: `docsrs`, `feature`, and `test` and 31 more
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: constant `PU` is never used
+ --> production.rs:1:7
+  |
+1 | const PU: u32 = 0x7fff_ffff;
+  |       ^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `PM` is never used
+ --> production.rs:2:7
+  |
+2 | const PM: u64 = 0x7fff_ffff;
+  |       ^^
+
+warning: function `red` is never used
+ --> production.rs:4:4
+  |
+4 | fn red(x: u64) -> u32 {
+  |    ^^^
+
+warning: function `mulm` is never used
+  --> production.rs:11:4
+   |
+11 | fn mulm(a: u32, b: u32) -> u32 {
+   |    ^^^^
+
+warning: function `addm` is never used
+  --> production.rs:15:4
+   |
+15 | fn addm(a: u32, b: u32) -> u32 {
+   |    ^^^^
+
+warning: function `subm` is never used
+  --> production.rs:20:4
+   |
+20 | fn subm(a: u32, b: u32) -> u32 {
+   |    ^^^^
+
+warning: function `negm` is never used
+  --> production.rs:24:4
+   |
+24 | fn negm(a: u32) -> u32 {
+   |    ^^^^
+
+warning: function `invm` is never used
+  --> production.rs:27:4
+   |
+27 | fn invm(a: u32) -> u32 {
+   |    ^^^^
+
+warning: function `dot` is never used
+  --> production.rs:33:4
+   |
+33 | fn dot(a: &[u32], b: &[u32]) -> u32 {
+   |    ^^^
+
+warning: function `axpy_sub` is never used
+  --> production.rs:54:4
+   |
+54 | fn axpy_sub(v: &mut [u32], s: u32, b: &[u32]) {
+   |    ^^^^^^^^
+
+warning: function `scale_in` is never used
+  --> production.rs:64:4
+   |
+64 | fn scale_in(v: &mut [u32], s: u32) {
+   |    ^^^^^^^^
+
+warning: struct `TagEch` is never constructed
+  --> production.rs:70:8
+   |
+70 | struct TagEch {
+   |        ^^^^^^
+
+warning: enum `Ins` is never used
+  --> production.rs:76:6
+   |
+76 | enum Ins {
+   |      ^^^
+
+warning: associated items `new`, `rank`, `insert`, `insert_fixed`, `insert_serial`, and `express` are never used
+   --> production.rs:82:8
+    |
+ 81 | impl TagEch {
+    | ----------- associated items in this implementation
+ 82 |     fn new(width: usize) -> Self {
+    |        ^^^
+...
+ 85 |     fn rank(&self) -> usize {
+    |        ^^^^
+...
+ 90 |     fn insert(&mut self, v: Vec<u32>) -> Ins {
+    |        ^^^^^^
+...
+ 97 |     fn insert_fixed(&mut self, v: Vec<u32>) -> Ins {
+    |        ^^^^^^^^^^^^
+...
+154 |     fn insert_serial(&mut self, mut v: Vec<u32>) -> Ins {
+    |        ^^^^^^^^^^^^^
+...
+182 |     fn express(&self, mut v: Vec<u32>) -> Option<Vec<u32>> {
+    |        ^^^^^^^
+
+warning: `pr1-step4-insert-gates` (lib) generated 15 warnings
+warning: function `addm` is never used
+  --> production.rs:15:4
+   |
+15 | fn addm(a: u32, b: u32) -> u32 {
+   |    ^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: methods `rank`, `insert`, and `express` are never used
+   --> production.rs:85:8
+    |
+ 81 | impl TagEch {
+    | ----------- methods in this implementation
+...
+ 85 |     fn rank(&self) -> usize {
+    |        ^^^^
+...
+ 90 |     fn insert(&mut self, v: Vec<u32>) -> Ins {
+    |        ^^^^^^
+...
+182 |     fn express(&self, mut v: Vec<u32>) -> Option<Vec<u32>> {
+    |        ^^^^^^^
+
+warning: `pr1-step4-insert-gates` (lib test) generated 5 warnings (3 duplicates)
+    Finished `release` profile [optimized] target(s) in 0.46s
+     Running unittests gates.rs (/home/dombarker/project-offloads/codex-cx-ct-kernels-v2-20261022/pr1-target/release/deps/pr1_step4_insert_gates-afc7ceb0486bdd54)
+   Doc-tests pr1_step4_insert_gates
