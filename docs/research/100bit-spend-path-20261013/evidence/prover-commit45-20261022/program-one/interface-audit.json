@@ -1,0 +1,14 @@
+{
+  "source_revision": "6143f773e8fc8bcc345b70f6d63484e701dc5b2a",
+  "source_file": "crates/aspis-r1-cost-probe/src/sim.rs",
+  "source_sha256": "2594f50a303bd53ea6ed64d0e49cd986794065c32514eadbd32272b9ec9a4460",
+  "program_one_body_verbatim": true,
+  "program_one_body_sha256": "e2ef69d88c4169d3a498a51c9e0e42888021edbc9b8711625bafd3d10dff4743",
+  "call_site": "sim.rs:115-120; final collision guard:491",
+  "next_interface": "ProgramOne::digest shared RefCell table and sticky-collision effect; borrow_mut + RefMut::deref_mut + writeback and borrow release",
+  "generated_return_type": "Result (Array Std.U8 32#usize); no updated table or collision result",
+  "allowed_new_trust": false,
+  "reason": "D157 explicitly excludes interior mutability from automatic pure-std field authorization",
+  "prior_native_evidence": "part20 table-source-empty-v2 passes on one-byte address and empty initial map; part21 overwrite-flag reaches MemoryHigh, excluded; neither is a universal shared-effect bridge",
+  "recommended_next_deliverable": "A state-passing ProgramOne reference returning (digest, table, collision), a source-native transition check under existing map laws, and Lean composition through the retained leaf/node write log; no new RefCell trust law silently installed"
+}
