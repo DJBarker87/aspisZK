@@ -8651,3 +8651,17 @@ before review. From now on, every job that changes prover or host code carries a
 budget gate: measure after each step and stop and escalate if any fixture's prover time
 rises more than 10% over baseline. The stage-3 branch is evidence only and is
 not a candidate.
+
+## D169 (user, 2026-10-22 19:00): stage-3 branch removed; prover target under 15 s
+
+On the user's instruction ("remove that shit if needed"), the stage-3
+fixed-shape branch `codex/cx-ct-kernels-20261022` was deleted. It was never in
+research. Its measurements are kept in D165; the v2 candidate is unaffected.
+**New user target: prover wall time under 15 s per proof** (about 38–42 s today,
+single-run on the x86_64 Linux build host). This is a performance requirement
+alongside the security contract, not a replacement for it. Next: a profiling
+job, with per-phase time, retry count and thread use, and a ranked list of
+speedups classified by whether proof bytes and the existing proofs/trust
+items survive. Notes: parallelism would touch the single-thread TLS trust item
+and the side-channel model; any change to proof bytes touches the verifier
+and soundness model and needs the user's approval.
