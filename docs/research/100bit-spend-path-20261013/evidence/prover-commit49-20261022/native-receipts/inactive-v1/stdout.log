@@ -1,0 +1,751 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+Checking harness weight_proofs::inactive_transition...
+CBMC 6.8.0 (cbmc-6.8.0)
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-prover-commit41-20261022/kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/simulator_native49-d688d3a3a49ff009__RNvNtCs62vpcqvsstX_18simulator_native4913weight_proofs19inactive_transition.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 12 object bits, 52 offset bits (user-specified)
+Starting Bounded Model Checking
+loop identifier memcmp.0 provided with unwindset does not match any loop
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSNtCs62vpcqvsstX_18simulator_native494CallINtB5_14SlicePartialEqBD_E5equalBF_.0 iteration 1 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSNtCs62vpcqvsstX_18simulator_native494CallINtB5_14SlicePartialEqBD_E5equalBF_.0 iteration 2 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSNtCs62vpcqvsstX_18simulator_native494CallINtB5_14SlicePartialEqBD_E5equalBF_.0 iteration 3 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSNtCs62vpcqvsstX_18simulator_native494CallINtB5_14SlicePartialEqBD_E5equalBF_.0 iteration 4 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSNtCs62vpcqvsstX_18simulator_native494CallINtB5_14SlicePartialEqBD_E5equalBF_.0 iteration 5 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSNtCs62vpcqvsstX_18simulator_native494CallINtB5_14SlicePartialEqBD_E5equalBF_.0 iteration 6 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSNtCs62vpcqvsstX_18simulator_native494CallINtB5_14SlicePartialEqBD_E5equalBF_.0 iteration 7 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSNtCs62vpcqvsstX_18simulator_native494CallINtB5_14SlicePartialEqBD_E5equalBF_.0 iteration 8 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal thread 0
+Runtime Symex: 0.0623847s
+size of program expression: 3412 steps
+slicing removed 2488 assignments
+Generated 617 VCC(s), 40 remaining after simplification
+Runtime Postprocess Equation: 0.000476457s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.192716s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 5.123e-06s
+Solving with CaDiCaL 2.0.0
+283399 variables, 1021315 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 7.91322s
+Runtime decision procedure: 8.10605s
+
+RESULTS:
+Check 1: trace.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: lib.rs:16:40 in function trace
+
+Check 2: trace.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: lib.rs:16:40 in function trace
+
+Check 3: trace.safety_check.3
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: lib.rs:16:46 in function trace
+
+Check 4: trace.safety_check.4
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: lib.rs:16:46 in function trace
+
+Check 5: native_inactive.assertion.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: weights-iterations.rs:5:61 in function native_inactive
+
+Check 6: owner_inactive.assertion.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: weights-iterations.rs:6:70 in function owner_inactive
+
+Check 7: owner_inactive.assertion.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: weights-iterations.rs:6:84 in function owner_inactive
+
+Check 8: reset.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: lib.rs:12:36 in function reset
+
+Check 9: reset.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: lib.rs:12:36 in function reset
+
+Check 10: reset.safety_check.3
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: lib.rs:12:52 in function reset
+
+Check 11: reset.safety_check.4
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: lib.rs:12:52 in function reset
+
+Check 12: reset.safety_check.5
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: lib.rs:12:68 in function reset
+
+Check 13: reset.safety_check.6
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: lib.rs:12:68 in function reset
+
+Check 14: call.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: lib.rs:14:8 in function call
+
+Check 15: call.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: lib.rs:14:8 in function call
+
+Check 16: call.assertion.1
+	 - Status: SUCCESS
+	 - Description: "assertion failed: i<8"
+	 - Location: lib.rs:14:13 in function call
+
+Check 17: call.assertion.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: lib.rs:14:26 in function call
+
+Check 18: call.safety_check.3
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: lib.rs:14:26 in function call
+
+Check 19: call.safety_check.4
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: lib.rs:14:26 in function call
+
+Check 20: call.safety_check.5
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: lib.rs:14:48 in function call
+
+Check 21: call.safety_check.6
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: lib.rs:14:48 in function call
+
+Check 22: call.assertion.3
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: lib.rs:14:48 in function call
+
+Check 23: call.safety_check.7
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: lib.rs:14:48 in function call
+
+Check 24: call.safety_check.8
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: lib.rs:14:48 in function call
+
+Check 25: call.assertion.4
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: lib.rs:14:58 in function call
+
+Check 26: call.safety_check.9
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: lib.rs:14:58 in function call
+
+Check 27: call.safety_check.10
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: lib.rs:14:58 in function call
+
+Check 28: <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal.assertion.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs:126:16 in function <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal
+
+Check 29: <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal.assertion.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs:126:29 in function <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal
+
+Check 30: <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal.assertion.3
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs:129:13 in function <[Call] as core::slice::cmp::SlicePartialEq<Call>>::equal
+
+Check 31: weight_proofs::inactive_transition.assertion.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: weights-iterations.rs:21:45 in function weight_proofs::inactive_transition
+
+Check 32: weight_proofs::inactive_transition.assertion.2
+	 - Status: SUCCESS
+	 - Description: "assertion failed: a == b"
+	 - Location: weights-iterations.rs:23:3 in function weight_proofs::inactive_transition
+
+Check 33: weight_proofs::inactive_transition.assertion.3
+	 - Status: SUCCESS
+	 - Description: "assertion failed: ta == tb"
+	 - Location: weights-iterations.rs:23:19 in function weight_proofs::inactive_transition
+
+Check 34: weight_proofs::inactive_transition.assertion.4
+	 - Status: SUCCESS
+	 - Description: "assertion failed: ta.1 == 2"
+	 - Location: weights-iterations.rs:23:37 in function weight_proofs::inactive_transition
+
+Check 35: weight_proofs::inactive_transition.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: weights-iterations.rs:21:45 in function weight_proofs::inactive_transition
+
+Check 36: owner_inactive.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: weights-iterations.rs:6:70 in function owner_inactive
+
+Check 37: owner_inactive.array_bounds.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: weights-iterations.rs:6:84 in function owner_inactive
+
+Check 38: native_inactive.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: weights-iterations.rs:5:61 in function native_inactive
+
+Check 39: native_inactive.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: weights-iterations.rs:5:61 in function native_inactive
+
+Check 40: native_inactive.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: weights-iterations.rs:5:61 in function native_inactive
+
+Check 41: native_inactive.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: weights-iterations.rs:5:61 in function native_inactive
+
+Check 42: native_inactive.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: weights-iterations.rs:5:61 in function native_inactive
+
+Check 43: native_inactive.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: weights-iterations.rs:5:61 in function native_inactive
+
+Check 44: native_inactive.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: weights-iterations.rs:5:61 in function native_inactive
+
+Check 45: trace.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:16:40 in function trace
+
+Check 46: trace.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:16:40 in function trace
+
+Check 47: trace.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:16:40 in function trace
+
+Check 48: trace.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:16:40 in function trace
+
+Check 49: trace.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:16:40 in function trace
+
+Check 50: trace.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:16:40 in function trace
+
+Check 51: trace.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:16:46 in function trace
+
+Check 52: trace.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:16:46 in function trace
+
+Check 53: trace.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:16:46 in function trace
+
+Check 54: trace.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:16:46 in function trace
+
+Check 55: trace.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:16:46 in function trace
+
+Check 56: trace.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:16:46 in function trace
+
+Check 57: <E as std::cmp::PartialEq>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:6:51 in function <E as std::cmp::PartialEq>::eq
+
+Check 58: <E as std::cmp::PartialEq>::eq.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:6:51 in function <E as std::cmp::PartialEq>::eq
+
+Check 59: <E as std::cmp::PartialEq>::eq.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:6:51 in function <E as std::cmp::PartialEq>::eq
+
+Check 60: <E as std::cmp::PartialEq>::eq.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:6:51 in function <E as std::cmp::PartialEq>::eq
+
+Check 61: <E as std::cmp::PartialEq>::eq.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:6:51 in function <E as std::cmp::PartialEq>::eq
+
+Check 62: <E as std::cmp::PartialEq>::eq.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:6:51 in function <E as std::cmp::PartialEq>::eq
+
+Check 63: <E as std::cmp::PartialEq>::eq.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:6:51 in function <E as std::cmp::PartialEq>::eq
+
+Check 64: <E as std::cmp::PartialEq>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:6:51 in function <E as std::cmp::PartialEq>::eq
+
+Check 65: <E as std::cmp::PartialEq>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:6:51 in function <E as std::cmp::PartialEq>::eq
+
+Check 66: <E as std::cmp::PartialEq>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:6:51 in function <E as std::cmp::PartialEq>::eq
+
+Check 67: <E as std::cmp::PartialEq>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:6:51 in function <E as std::cmp::PartialEq>::eq
+
+Check 68: <E as std::cmp::PartialEq>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:6:51 in function <E as std::cmp::PartialEq>::eq
+
+Check 69: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 70: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 71: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 72: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 73: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 74: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 75: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 76: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 77: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 78: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 79: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 80: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 81: <Call as std::cmp::PartialEq>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:7:55 in function <Call as std::cmp::PartialEq>::eq
+
+Check 82: <Call as std::cmp::PartialEq>::eq.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:7:55 in function <Call as std::cmp::PartialEq>::eq
+
+Check 83: <Call as std::cmp::PartialEq>::eq.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:7:55 in function <Call as std::cmp::PartialEq>::eq
+
+Check 84: <Call as std::cmp::PartialEq>::eq.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:7:55 in function <Call as std::cmp::PartialEq>::eq
+
+Check 85: <Call as std::cmp::PartialEq>::eq.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:7:55 in function <Call as std::cmp::PartialEq>::eq
+
+Check 86: <Call as std::cmp::PartialEq>::eq.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:7:55 in function <Call as std::cmp::PartialEq>::eq
+
+Check 87: <Call as std::cmp::PartialEq>::eq.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:7:55 in function <Call as std::cmp::PartialEq>::eq
+
+Check 88: <Call as std::cmp::PartialEq>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:7:55 in function <Call as std::cmp::PartialEq>::eq
+
+Check 89: <Call as std::cmp::PartialEq>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:7:55 in function <Call as std::cmp::PartialEq>::eq
+
+Check 90: <Call as std::cmp::PartialEq>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:7:55 in function <Call as std::cmp::PartialEq>::eq
+
+Check 91: <Call as std::cmp::PartialEq>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:7:55 in function <Call as std::cmp::PartialEq>::eq
+
+Check 92: <Call as std::cmp::PartialEq>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:7:55 in function <Call as std::cmp::PartialEq>::eq
+
+Check 93: reset.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:12:36 in function reset
+
+Check 94: reset.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:12:36 in function reset
+
+Check 95: reset.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:12:36 in function reset
+
+Check 96: reset.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:12:36 in function reset
+
+Check 97: reset.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:12:36 in function reset
+
+Check 98: reset.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:12:36 in function reset
+
+Check 99: reset.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:12:52 in function reset
+
+Check 100: reset.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:12:52 in function reset
+
+Check 101: reset.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:12:52 in function reset
+
+Check 102: reset.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:12:52 in function reset
+
+Check 103: reset.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:12:52 in function reset
+
+Check 104: reset.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:12:52 in function reset
+
+Check 105: reset.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:12:68 in function reset
+
+Check 106: reset.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:12:68 in function reset
+
+Check 107: reset.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:12:68 in function reset
+
+Check 108: reset.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:12:68 in function reset
+
+Check 109: reset.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:12:68 in function reset
+
+Check 110: reset.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:12:68 in function reset
+
+Check 111: call.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:14:8 in function call
+
+Check 112: call.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:14:8 in function call
+
+Check 113: call.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:14:8 in function call
+
+Check 114: call.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:14:8 in function call
+
+Check 115: call.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:14:8 in function call
+
+Check 116: call.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:14:8 in function call
+
+Check 117: call.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:14:26 in function call
+
+Check 118: call.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:14:26 in function call
+
+Check 119: call.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:14:26 in function call
+
+Check 120: call.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:14:26 in function call
+
+Check 121: call.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:14:26 in function call
+
+Check 122: call.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:14:26 in function call
+
+Check 123: call.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: lib.rs:14:26 in function call
+
+Check 124: pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 125: pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 126: pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 127: pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 128: pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 129: pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 130: call.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:14:48 in function call
+
+Check 131: call.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:14:48 in function call
+
+Check 132: call.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:14:48 in function call
+
+Check 133: call.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:14:48 in function call
+
+Check 134: call.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:14:48 in function call
+
+Check 135: call.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:14:48 in function call
+
+Check 136: call.pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: lib.rs:14:58 in function call
+
+Check 137: call.pointer_dereference.20
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: lib.rs:14:58 in function call
+
+Check 138: call.pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: lib.rs:14:58 in function call
+
+Check 139: call.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: lib.rs:14:58 in function call
+
+Check 140: call.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: lib.rs:14:58 in function call
+
+Check 141: call.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: lib.rs:14:58 in function call
+
+Check 142: call.array_bounds.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: lib.rs:14:58 in function call
+
+
+SUMMARY:
+ ** 0 of 142 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 8.211112s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

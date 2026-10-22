@@ -64,3 +64,5 @@ fn owner_shift(mut p:[E;28],original:E,eta_term0:E,inv:E,half:E)->[E;28] {
   let mut b=p;b[9]=row;assert_eq!(a,b);assert_eq!(ta,tb);assert_eq!(ta.1,6);
  }
 }
+
+include!("weights-iterations.rs");

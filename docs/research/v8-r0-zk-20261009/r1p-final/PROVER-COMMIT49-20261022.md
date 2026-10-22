@@ -70,6 +70,23 @@ reservation refusal, before a compiler launch. The subsequent authorized
 reservation succeeds; no cap or host reservation policy is changed.
 No native source is extracted and no shipped file changes.
 
+## Stage 3: materialization and inactive contraction arithmetic
+
+J10028 proves actual `WideExact::mul_qm31` for arbitrary raw QM31 RHS and
+canonical full-width input, including constructor normalization. J10030 proves
+the complete generic interval contraction; J10032 composes the actual kappa
+power producer with all seven cell terms, and the complete 1024-term inactive
+dot product. No power-array identity or source-success premise is supplied.
+The raw weight entries are still inputs: these theorems do not identify
+`Weights::raw` with the seven model functionals or prove the full materialized
+array/caller. All accepted declarations print only standard axioms. J10029
+and J10031 are rejected import/numeral/index-normalization drafts.
+Native material-cell and inactive transitions pass on arbitrary full arrays
+and legal indices (0.401 s / 139728 KiB; 8.484 s / 333680 KiB), zero swaps.
+The raw-method result is explicit and arithmetic callees are universal paired
+answers; no model-weight law is hidden in the stubs. Full copied field sources
+remain byte-identical to the shipped files. No shipped file changed.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,
