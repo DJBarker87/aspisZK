@@ -1,0 +1,3 @@
+# Actual QM31 wrapping, checked, and total/canonical bridge
+
+This packet retains three focused Lean targets: the unconditional mapping of the actual QM31 multiplication body to the R22 wrapping operation, its canonical-input equality with the checked current operation, and derived same-call success plus canonical output for canonical inputs. The targets use standard Lean axioms as recorded in their individual `proof/lean.log` files. Compiled objects are referenced by hashes in the manifest and are not included. This is a source-level formal result; it does not establish Rust binary or runtime refinement.
