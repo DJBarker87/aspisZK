@@ -65,3 +65,25 @@ it and propose a narrow proof-friendly source change with its affected pins
 and gates. Adoption remains governed by the freeze/B1 decision; PR #10 is
 still unadopted. S9, the global source join, and implementation-linked
 100-bit per-attempt soundness remain OPEN.
+
+## Concrete operation progress
+
+The focused concrete record is now green in
+`evidence/s9-focused-concrete-fieldops-v1-20261022/`. It installs actual
+selected/current operation calls, including the square body, wide product,
+add, M31/mixed products and extracted fold. The square and mixed-product
+meaning/totality continuation is separate; record dispatch is not counted as
+proving those laws.
+
+`evidence/s9-focused-mulm31-total-root-v1-20261022/` closes the previously
+success-conditional wide-by-M31 leaf: actual QM and wide calls are now proved
+total for every stored input; the concrete S9 record returns a canonical,
+exact scalar product on canonical input. No successful multiplication is
+assumed. This reuses the existing total U32 reducer and exactness owners.
+Focused exit 0, 19.737 s, process peak 3,153,149,952 bytes, observed swaps 0,
+standard axioms only. The packet explicitly records incomplete historical
+cross-session mutex evidence rather than claiming stronger resource control.
+
+The emitted helper's structural two-step proof, full arithmetic composition,
+reached power-array consumer and source/caller boundary remain in flight.
+No complete cone has been declared closed.
