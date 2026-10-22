@@ -1392,3 +1392,24 @@ swap 0, three reports containing only standard axioms. The initial import
 profile failure is retained; no unchanged dependencies were rebuilt. The
 packet checker passed. Actual production wrapper refinement, runtime P3
 reacceptance and the probabilistic shared-oracle experiment remain open.
+
+
+## Same source pair list now feeds both sampler views
+
+`s4-query31-materialized-conditional-join-v1-20261022` was reviewed and its
+checker passed. `sourcePair_functions_of_chain` derives the exact eight
+squeeze/advance success premises from the same successful source execution's
+DigestPair list and adjacent state invariant. The composed
+`actual_query_row31_materialized_join` retains that execution's decoded
+array, materialized blocks/advances and selected state, and the literal
+sampler's successful list run and decoded Fin22 function. It derives the
+source-array model views rather than assuming them. The focused helper and
+consumer runs exited 0, with standard axioms and zero process swaps; complete
+receipts are retained in the packet.
+
+The actual B.decode returned array is not yet equated with the literal
+query function. Work is split at that precise gap: byte-level query_words
+versus State-level words18, then scanner-chain and final-output composition.
+The prior-prefix state relation remains required. The generic digest law can
+now be instantiated for the proved P3 model, but its production wrapper and
+shared-oracle probability law are separate obligations.

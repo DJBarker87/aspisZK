@@ -1,0 +1,9 @@
+# S4 query-31 materialized source-pair join
+
+This packet adds two focused Lean consumers. `S4SourcePairsToFunctionsV1.sourcePair_functions_of_chain` constructs the literal sampler's `states` function from the absorbed state and the same source pair list's ordered advance outputs, and constructs `blocks` from that list's squeeze outputs. `hfirst` plus `stateChain` derive the initial state and adjacent state equalities; the two actual `DigestCall.hdigest` fields, after `digestCall_input_eq_readParts`, derive all eight exact digest-success premises. No new digest-output assumption is introduced.
+
+`S4Query31MaterializedConditionalJoinV1.actual_query_row31_materialized_join` consumes a successful `QueriesModel.queries` call at row 31, retaining its same absorbed transcript, pair list, materialized arrays, selected state and decoded output. It composes the pair-derived functions with the existing conditional literal row-31 join, and with `materialized_pair_views` to expose the actual arrays as the retained `QueryStateList` block/advance sequences. The result retains `LiteralQueryRead.decode xs = some q` and the scan result `.ok xs` on the same pair list.
+
+The pre-row31 `hstate` relation and generic digest interpretation `hdigest` remain explicit. This does not establish current-caller refinement, selected digest grouping semantics, authentication, or random-oracle distribution. It also does not equate the extracted `B.decode` output array with the `LiteralQueryRead.decode` query function. The source files are source-only; compiled objects remain in the local `/tmp` build roots. Both focused Lean 4.32 runs exited 0, used 0 swaps, and report only standard axioms. Exact logs, argv, LEAN_PATH profiles, import pins and resource receipts are in `receipt/`.
+
+Run `python3 check_packet.py` from this packet directory to validate checksums, source and import pins, receipts, axioms, and the source-only inventory.
