@@ -1,6 +1,6 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-Last updated 2026-10-21 14:00 by the lead. This page is the single current
+Last updated 2026-10-22 06:00 by the lead. This page is the single current
 reference; dated notes keep the history.
 
 ## The contract
@@ -41,7 +41,7 @@ Per-cone joins (`JOIN-SPLIT-DRAFT-20261021.md`, `CONE-AUDIT-20261021.md`):
 | S2 (top-level verifier and adapter caller) | SDK metadata guard verified; stage-1 binding to first_decoded open (buffer operations being split) | user's Codex. **Critical path**: S7, S8, checkpoint and S10 wait on its caller interface |
 | S7 | reference = dV_frozen2 stage, total; frozen caller adoption waits on S2 | lead (paused) |
 | S8 | reference = dV_frozen2 stage, total, composed with S7; caller adoption waits on S2 | lead (paused) |
-| Checkpoint ABI | reference observations = dV_frozen2 checkpoint stage, including the six reads; caller lowering waits on S2 | lead (paused) |
+| Checkpoint ABI | success-conditioned stage join with the six ordered digest reads proved to dV_frozen2 at the decision position (`CheckpointBytes5Decision.decision_success_join`, 2026-10-22); remaining premises exactly `S2S10CallerBinding` and `S1S7S8StateProvenance` | lead (waits on S2, S1/S7/S8) |
 | Parser and multiproof | parser complete against frozen rows; multiproof stage join `both_batches` proved (c), conditional on caller binding and Rust carrier P6 | lead |
 | S10 inventory | every declaration assigned; 140 CFG ordering facts kernel-checked; gates exit 2 pending the caller identities | lead (paused) |
 
