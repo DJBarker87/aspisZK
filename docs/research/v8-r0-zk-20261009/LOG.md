@@ -8140,3 +8140,36 @@ not restrict the adversary. Within the domain the statement may still be
 adversarially chosen, and the queries remain arbitrary. The endpoint must show
 the before/after quantifier on `x`, and the report must mark this as a scope
 statement, visible in the headline, not a hidden premise.
+
+## D147 (lead, 2026-10-22 04:50): part 34 merged; ruling on OS entropy and ledger failures
+
+Merged `codex/cx-prover-commit34-20261022` (report
+`r1p-final/PROVER-COMMIT34-20261022.md`). Proved: the D146 statement domain
+(`ProverCommitDomain34.DeployedStatement`) with exact `public_bytes`
+agreement; no publication outside it; the structural eight-attempt retry
+owner (two native Kani control checks), keeping entropy errors distinct from
+retryable rejections; separate OS-failure and zero-exhaustion events, with
+zero exhaustion ≤ 3/2^256 on a uniform raw carrier. J9095 standard axioms;
+no shipped change, TrustedStd unchanged.
+Stop: source control gives no OS-error bound below 1 (proved), so OS and
+filesystem failures cannot be charged as a small δ.
+
+**Lead ruling: OS and filesystem are an adversarial environment, not a
+probability term.** Do not add a δ for OS/fs failure and do not assume an
+error-free OS. Instead:
+1. Model `getrandom::fill` outcomes, reservation create/write/fsync results
+   and duplicate-nonce errors as an **environment schedule chosen by the
+   adversary**, as a function of the call sequence (call index, call kind,
+   prior outcomes). The schedule must not see the secret bytes being
+   written: the OS is not assumed to leak file or RNG contents to the
+   adversary.
+2. Prove fail-closed behaviour on every failure path (`state_only_entropy.rs`
+   172–196 and 919–962, `prover.rs` 354–375): nothing witness-dependent is
+   published. Only a witness-independent error outcome is observable, and
+   the simulator can reproduce it from the same schedule.
+3. One named environment trust item, **E1 (OS RNG):** when `getrandom::fill`
+   returns Ok, its bytes are uniform and independent of everything else.
+   Record it on the trust list next to TrustedStd and P7, visible in the headline.
+   The existing zero-exhaustion term 3/2^256 stays in the bound.
+This makes privacy hold for every failure schedule, which is stronger than
+any probability bound on failures.
