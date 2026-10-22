@@ -1,0 +1,38 @@
+import R1Z.ProverCommitMaskWide51
+import R1Z.ProverCommitExtraCaller51
+/-! Complete owned mask-plus-extra oracle component equals PayloadSplit.maskLinear. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitLinearOracle51
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open ProverCommitWideBasis51 (embed)
+
+def run (p : Array field.QM31 10#usize)
+    (c : Array (Array field.QM31 1024#usize) 26#usize)
+    (g d : Array field.QM31 1024#usize) (a b : field.QM31) : Result field.QM31 := do
+  let mask ← ProverCommitMaskRead51.run p c g
+  let ext ← ProverCommitExtraCaller51.run d a b
+  field.QM31.add mask ext
+
+attribute [local irreducible] ProverCommitNativeQ48.source ProverCommitQArray48.array
+  ProverCommitMaskRead51.run ProverCommitExtraCaller51.run
+
+theorem exact_result (p : Nat → Old.Q) (hp : ∀ i, i<10 → Canonical (p i))
+    (c : Nat → Nat → Old.Q) (hc : ∀ i, i<29 → ∀ j, j<1024 → Canonical (c i j))
+    (t : R0P.Trace QM31Exact) (ht : ∀ l : Fin 29, ∀ j : Fin 1024, decode (c l.val j.val)=t l j) :
+    ∃ z : Old.Q, run (ProverCommitQArray48.array 10#usize p) (ProverCommitMaskColumns51.columns c)
+      (ProverCommitQArray48.array 1024#usize (c 27)) (ProverCommitQArray48.array 1024#usize (c 28))
+      (ProverCommitNativeQ48.source (p 8)) (ProverCommitNativeQ48.source (p 9))=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ embed (decode z)=R0Z.PayloadSplit.maskLinear AspisR1.rowEquiv ProverCommitWideBasis51.basis
+        (fun i : Fin 10 => embed (decode (p i.val))) (fun l j => embed (t l j)) := by
+  obtain ⟨mask,hmask,hcmask,hdmask⟩ := ProverCommitMaskWide51.exact_result p hp c hc t ht
+  obtain ⟨ext,hext,hcext,hdext⟩ := ProverCommitExtraCaller51.exact_result (c 28) p (hc 28 (by decide)) hp t (ht 28)
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitNativeQ48.add mask ext hcmask hcext
+  refine ⟨z,?_,hcz,?_⟩
+  · simp only [run,hmask,hext,hz,bind_tc_ok]
+  · rw [R0Z.PayloadSplit.maskLinear_apply,hdz,map_add,hdmask,hdext,ProverCommitClaimMap51.extra]
+
+
+#print axioms exact_result
+end R1Z.ProverCommitLinearOracle51

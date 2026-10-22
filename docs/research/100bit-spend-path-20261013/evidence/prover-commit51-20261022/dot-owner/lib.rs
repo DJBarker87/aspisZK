@@ -254,3 +254,17 @@ pub fn go(rows:[K;1024],left:u16,mut out:[K;1024])->[K;1024]{
 }
 pub fn eval(rows:[K;1024])->[K;1024]{go(rows,1024,[K::ZERO;1024])}
 }
+
+pub mod terminal_eq51 {
+use super::field::QM31 as K;
+pub fn factor(a:K,b:K)->K {let ab=a.mul(b);K::ONE.sub(a).sub(b).add(ab).add(ab)}
+pub fn go(left:[K;10],right:[K;10],index:u8,product:K)->K {
+ if index==10{return product;}
+ let next=product.mul(factor(left[index as usize],right[index as usize]));
+ go(left,right,index.wrapping_add(1),next)
+}
+pub fn eval(left:[K;10],right:[K;10])->K{let product=factor(left[0],right[0]);go(left,right,1,product)}
+pub fn suffix(eq:K,composition:K,h1:K,active:K,mu:K)->K{
+ eq.mul(composition).add(mu.mul(h1)).add(mu.mul(mu).mul(K::ONE.sub(active).mul(h1)))
+}
+}

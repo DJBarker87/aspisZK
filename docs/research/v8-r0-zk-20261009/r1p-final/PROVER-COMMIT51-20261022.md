@@ -105,3 +105,35 @@ cache preflight J10344 are retained. The replacement reuses the cached account
 basis rather than building an unrelated cold Session A dependency closure.
 All accepted axioms remain standard. None of these transport results is
 promoted to the full terminal/oracle result.
+
+## Stage 3d: coefficient provenance and complete linear oracle component
+
+J10348/50 prove the complete independent owned 1024-cell coefficient producer
+and its exact `coeffsOf AspisR1.rowEquiv` image. J10351 composes it with the extra
+evaluator, discharging the coefficient input law of J10341. J10352/55 compose
+the native mask and extra values on WideExact:
+`ProverCommitLinearOracle51.exact_result` concludes exactly
+`embed (decode z) = R0Z.PayloadSplit.maskLinear AspisR1.rowEquiv
+ProverCommitWideBasis51.basis a mappedTrace`. It needs only canonical point/
+column inputs and the ordinary input trace representation; no mask, MLE,
+coefficient or extra output/model identity is a premise. J10355: exit 0,
+2.41 s, 4207016 KiB, zero swaps, standard axioms.
+
+The full native `Variant::coefficients` `from_fn` gate times out at 180.002 s,
+exit 124, cgroup peak 3372949504 bytes, zero swaps. Its GNU-time RSS is only
+15652 KiB because it measures the timeout parent; the aggregate cgroup peak
+is retained explicitly. It is not accepted and is not rerun unchanged. The
+loop trace isolates standard-library array construction and Kani's arbitrary
+array creation. The narrowed row callback initially still enters array creation
+and hits the harness unwind guard; removing that irrelevant array construction
+leaves the arbitrary-index row kernel, which passes in 0.292 s / 128776 KiB.
+The full owned Lean array result and native row kernel are established; a
+complete native `from_fn` constructor refinement is not claimed from that
+narrower gate. No new TrustedStd field is introduced.
+
+J10354 proves the exact source half-inverse prefix's None iff alpha9=half,
+Some-success implies alpha9!=half, and its canonical inverse value. The native
+accepted-prefix control-flow gate (public-data/emit/convert/build/check and
+panic rejection, with universal suffix outcomes) passes in 0.307 s / 137080
+KiB, zero swaps. This does not by itself instantiate the complete P_R1 checker
+or discharge its other source/domain obligations.

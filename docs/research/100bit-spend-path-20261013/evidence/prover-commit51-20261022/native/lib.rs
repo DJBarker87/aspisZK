@@ -25,3 +25,7 @@ fn go(input:[K;26],e:[u8;26],left:u8,mut out:[K;27],t:&mut Trace)->[K;27]{
 }
 
 include!("columns.rs");
+
+include!("coefficient_array.rs");
+
+include!("half_prefix.rs");
