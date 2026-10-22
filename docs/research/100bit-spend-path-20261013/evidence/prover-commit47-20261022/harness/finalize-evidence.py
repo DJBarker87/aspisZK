@@ -44,7 +44,7 @@ baseline=Path('crates/aspis-core/src/r0/basis.rs').read_text()
 records=[]
 for p in sorted((E/'native-receipts').glob('*/receipt.json')):
  r=json.loads(p.read_text());name=p.parent.name
- r.update(name=name,receipt=str(p.relative_to(E)),source_base_revision=BASE,source_overlay_revision=revision)
+ r.update(name=name,receipt=str(p.relative_to(E)),source_base_revision=BASE,archive_revision=revision,source_identity='Exact per-invocation input hashes and archived package sources; archive revision is not attributed as an unchanged checkout for earlier commands.')
  pin=E/'pins'/(name+'-inputs.json')
  if pin.exists():r['input_pin']=str(pin.relative_to(E));r['input_pin_sha256']=sha(pin)
  r['actual_target']=r['command']

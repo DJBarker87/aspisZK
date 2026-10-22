@@ -265,3 +265,33 @@ theorem privacy_headline_deployed
 ```
 
 
+
+## Final focused audit and archive
+
+J9799 audits all 135 newly added theorem declarations and the unchanged
+conditional deployed endpoint: exit 0, wall 1.76 s, peak RSS 4122868 KiB,
+zero swaps. Every accepted axiom list is a subset of [propext,
+Classical.choice, Quot.sound]. The count describes audit coverage only.
+`final-proof-audit.json` verifies the exact installed sources and all
+dependency objects in that final receipt. The complete source overlay is
+`f6c2399bb70dfeebaf26ee1ab9e89dcdce48f175`; its source hashes are recorded
+in `final-source-freeze.json`. No source changes follow that audit.
+
+`shipped-sources-unchanged.json` verifies all 491 tracked crates/programs
+files against the actual task base `dfd30a6f5`, with no untracked shipped
+file. `source-bindings.json` checks the copied field and literal helper
+bodies. `native-source-archives.json` identifies the exact package source
+version for each native/extraction command, including overwritten
+diagnostic drafts; `native-attempts.json` distinguishes accepted checks,
+timeouts and tool errors. `host-final-inventory.json` records hash/size
+pins and tool versions. No binary, ELF, .olean, LLBC, tarball or local
+target directory is committed.
+
+Stage commits are `536f50a47`, `0e6051535`, `0fa5fde0c`, `d6c3dfe63`, and
+`f6c2399bb`; the final handoff commit adds completed metadata only.
+`git-log-from-common-base.txt` records history through the source freeze.
+**Target not yet established; zero deployed endpoint premises removed.**
+The actual native generator byte-image bridge and complete simulator
+payload equality remain the next obligations, with the demonstrated
+extraction/binding obstruction. J9799 consumes the last assigned sequential
+compile number; no further compilation is launched.
