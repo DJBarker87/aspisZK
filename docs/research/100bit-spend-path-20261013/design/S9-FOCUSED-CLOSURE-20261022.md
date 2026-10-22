@@ -2,7 +2,7 @@
 
 The previous S4 library/extraction experiment is held before the new Charon
 build. The user asked which S is the quickest credible full-cone attempt with
-all four slots. S9 is the choice for the unchanged source, based on its small
+all four slots. S9 was selected before the S4 adoption, based on its small
 four-output, two-side helper and existing 56-coefficient identity. This is a
 relative judgment, not evidence that closure is assured. The first decision
 point is 4–6 hours, not a promised completion time.
@@ -51,7 +51,8 @@ This is decoded algebra, not yet execution refinement.
 
 ## Unresolved boundary and stopping rule
 
-S9 still calls Rust `core::array::from_fn`, both through powers and to build
+After the S4 adoption, WideExact powers uses the indexed early-return body.
+S9 still calls Rust `core::array::from_fn` through QM31 `kpowers` and to build
 high terms. Existing P6 models prove ordered value semantics but do not prove
 the frozen Rust initialized-buffer, ownership/drop and final array conversion
 semantics. The extracted full Pair candidate also does not prove the current
@@ -62,8 +63,10 @@ Do not restart the generic compiler campaign inside this attempt. Establish
 how far the concrete helper can be proved, then expose the smallest remaining
 library/source obligation. If that boundary prevents a complete cone, report
 it and propose a narrow proof-friendly source change with its affected pins
-and gates. Adoption remains governed by the freeze/B1 decision; PR #10 is
-still unadopted. S9, the global source join, and implementation-linked
+and gates. PR #10 was adopted at `29cbab431` after explicit user approval of up to
+12,000 additional CU per transaction. See S4-ADOPTION-DECISION-20261022.md.
+This removes the original WideExact powers from_fn obligation; it does not
+remove the separate QM31/high-terms library boundary. S9, the global source join, and implementation-linked
 100-bit per-attempt soundness remain OPEN.
 
 ## Concrete operation progress
@@ -130,3 +133,20 @@ shim is still emitted as `fail panic`; that raw output is explicitly rejected
 for proof use. A mechanically checked typed-operation/P6 adapter is being
 built. No selector retry or compiler rebuild is authorized by this result,
 and no frozen Rust Std/array or deployed-compiler correspondence is inferred.
+
+## Adopted-source continuation
+
+The two emitted calls are now proved in
+`evidence/s9-emitted-two-step-control-root-v1-20261022/` (commit b8d288ba1):
+a successful helper run yields its actual first body call, actual second body
+call and terminal iterator result, carrying the same intermediate/final arrays.
+This is accepted-run control decomposition, not totality or decoded output.
+
+Current ownership: D18 reuses the generic indexed early-powers theorem for the
+actual N=4 WideExact helper array; FS joins the two calls to their actual
+scalar-factor results and post-scalar source suffixes; Q joins the four actual
+high-term callback results and their exact stateful P6 array; root connects the
+checked array writes and branch arithmetic to the retained two-side identity.
+Only the root launches local Lean. The shared mutex is respected across other
+live Codex sessions; failed attempts and diagnostic axiom reports are not
+accepted theorem evidence. No unchanged full replay is launched.
