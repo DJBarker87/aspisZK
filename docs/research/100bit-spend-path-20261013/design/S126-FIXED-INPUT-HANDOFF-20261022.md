@@ -121,3 +121,18 @@ explicit. After that connection, compose the fixed source-first witness with
 S1's original Prepared/prepared_claim trace; the existing trace/parsing proofs
 remain reusable. Aggregate freeze adoption/re-pin and final coherent release
 dependency replay are still required. No shipped source or artifact changed.
+
+## Dependency-pin correction for the reference admission receipt
+
+The v1 receipt above lacked pre-execution local-path dependency inventories.
+This missing evidence justified one focused repeat after changing the runner
+to record those inventories before codegen/solver and verify them unchanged
+afterward. `sdk-reference-admission-check-v2` passes all1722 checks and both
+covers: exit0,13.369s,575196KiB RSS,swap0, fresh6G/8G/0 scope. Source/lock and
+four local dependency trees are pinned before the run; exported source copies
+match those pins, and every postcheck is true. The accepted packet is now
+`sdk-reference-admission-v2/`; the focused checker selects v2. Original v1
+source/receipts are retained with their historical qualification. This repairs
+the source-pin omission; it does not enlarge the conditional decoder-error
+prefix scope. Byte-identical dependency source/log snapshots retain their
+original whitespace. No unchanged Lean or release replay was run.

@@ -4,7 +4,7 @@ from pathlib import Path
 import json,hashlib,tomllib
 R=Path(__file__).resolve().parents[2]
 E=R/'docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021'
-P=E/'sdk-reference-admission';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+P=E/'sdk-reference-admission-v2';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 read=lambda p:json.loads(p.read_text())
 m=read(P/'manifest.json');assert m['schema']=='focused-extractor-proof-packet-v1'
 assert set(m['files'])=={str(p.relative_to(P)) for p in P.rglob('*') if p.is_file() and p.name!='manifest.json'}
@@ -14,9 +14,14 @@ for n,h in m['files'].items():
 q=read(P/'qualification.json');cut=read(P/'source/source-cut.json')
 assert q['source_sha256']==cut['source_sha256']==sha(P/'source/src/lib.rs')
 assert q['cargo_lock_sha256']==sha(P/'source/Cargo.lock')
-inp=read(P/'sdk-reference-admission-check-v1-input.json')
+inp=read(P/'sdk-reference-admission-check-v2-input.json')
 assert inp['source_sha256']==q['source_sha256']
+assert inp['cargo_sha256']==sha(P/'source/Cargo.toml')
+assert inp['cargo_lock_sha256']==q['cargo_lock_sha256']
 assert inp['runner_sha256']==sha(P/'runner/run-modular-host.py')
+post=read(P/'sdk-reference-admission-check-v2-dependency-postcheck.json')
+assert post['exit_status']==0 and all(post['unchanged'].values())
+assert set(post['unchanged'])==set(q['dependency_source_pins'])
 assert '--unwinding-assertions' in inp['command'] and '--property' not in inp['command']
 assert inp['command'][inp['command'].index('--harness-timeout')+1]=='180'
 r=read(P/'receipt/receipt.json')
@@ -32,6 +37,8 @@ assert len(rows[0]['attributes']['stubs'])==5
 old=E/'sdk-parent-cuts/sources/owned-sdk-borrowed-v1/src/lib.rs'
 assert sha(old)==sha(P/'dependencies/aspis-s126-owned-sdk-borrowed/src/lib.rs')
 for name,dep in q['dependency_source_pins'].items():
+ assert dep['path']==inp['local_dependency_source_pins'][name]['root']
+ assert dep['files']==inp['local_dependency_source_pins'][name]['files']
  for rel,h in dep['files'].items():assert sha(P/'dependencies'/name/rel)==h
 s=(P/'source/src/lib.rs').read_text()
 assert 'let data_slots=[proof_slot,1,2];' in s
