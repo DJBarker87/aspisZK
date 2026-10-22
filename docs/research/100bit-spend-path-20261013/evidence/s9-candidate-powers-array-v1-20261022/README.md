@@ -12,5 +12,11 @@ frozen standard-library boundary.
 
 The accepted target was Lean 4.32, exit 0, 34.137 seconds, maximum process RSS
 2,597,896,192 bytes, zero swap, with named axioms `[propext, Classical.choice,
-Quot.sound]`. Exact source/object hashes and selected import owners are recorded
-in `receipts/`. The compiled object is intentionally not included.
+Quot.sound]`. Exact source/object hashes, direct imported owners and the selected
+profile are recorded in the manifest and `evidence/`. The compiled object is not
+included.
+
+The original run used the retained controller at `run_focused.py` (SHA
+`3334b7d099553e981d55183c9d78cca42fe850fc2b53aab965cf916b4d37d0ee`). Exact
+concurrency observations are preserved in `evidence/concurrency-observations.json`.
+`python3 -B check_packet.py` verifies the retained source and run evidence.
