@@ -1,0 +1,7 @@
+# S9 owned field reader readback
+
+The success theorem `selected_field_success_readback` inverts the exact emitted `weights.field` body. It retains the three `wrapping_mul`/`wrapping_add` operation results, the exact slice returned by range indexing, and the successful byte decoder result on that same slice. The parser-byte result and limb readback corollaries then reuse the byte-map and canonical-byte facts to establish a 32-byte selected slice, eight canonical limbs, and the existing packed-value equality.
+
+The theorem does **not** establish that the wrapping arithmetic inputs equal any external index-bound policy, nor does it claim a frozen release artifact. Those remain separate obligations. The packet links the prior [from-bytes](../s9-owned-from-bytes-map-v1-20261022/README.md) and [from-limbs](../s9-owned-from-limbs-map-v1-20261022/README.md) packets and records exact imported object hashes; no dependencies are rebuilt here.
+
+`source-identity.json` pins the normalized generated `weights.field` body—including its three wrapping operations, same returned range-selected slice, and decoder/unwrap sequence—to the committed [candidate field decoder source-cut](../s9-candidate-field-decoder-sourcecut-v1-20261022/README.md). This is source translation identity, not runtime or release-binary refinement. Main theorem axiom reports are standard Lean axioms only. No compiled objects are included.
