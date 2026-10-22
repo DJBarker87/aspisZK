@@ -34,3 +34,52 @@ not runtime safety or source refinement. `#print axioms`: N/A, no Lean run.
 
 S10 completeness and the S2 caller identities remain open. Historical pass
 1–5 certificates are untouched. Target not yet established.
+
+## Stage 2: regenerated ELF, compiler and CFG observations
+
+`analysis-manifest.json` pins every output. The old pass 1–5 generators are
+adapted only for private input/output paths, adopted hashes and build labels;
+`generator-adapters.json` pins the original and adapted scripts. The ELF-only
+collector does not rerun the historical LLBC extraction. Full compiler and
+inline observations remain observations, not an extraction-success claim.
+
+LLVM objdump independently agrees with all 1,603 call instructions per
+verifier (previously 1,593) and all 2,202 Pool calls. Callx counts remain
+36/36/80 and relocated code-pointer candidates 17/17/26. Raw symbol aliases,
+new ELF IDs, exact address/size data, direct-call reachability lower bounds,
+relocations and missing DWARF are recorded. The 1,042 nonzero emitted symbol
+records have no unassigned or multiply assigned ownership proposals; the
+lead re-pin's source overlay is embedded without recycling historical IDs.
+No complete reachable/inlined declaration set is asserted.
+
+The retained frozen compiler inspectors regenerate all forty frontier
+observations for each mode, LLVM symbol-definition matches, and 120 typed
+instance observations. The 5,579,614-byte `instances.json` stays on the host,
+with SHA and generator retained; thirteen records are BODY_ONLY. The stripped
+release ELFs still have no transferable DWARF inline map. Prior debug-build
+failures remain historical, not a map for the adopted binaries. No new debug
+candidate or Lean build was necessary.
+
+All 140 selected-call dominance relations are re-established on newly
+extracted graphs (`cfg.json`, `ordering-repin-map.json`). Ten of the twelve
+nonempty function graphs are byte-identical at the edge-list level. Each
+TX2_common graph changes because of the adopted inlined powers<29> loop:
+38 facts have changed body hashes; 28 change before/after block coordinates.
+The selected call identities, argument constants and all 140 relations survive.
+Every new graph cut is independently checked in Python. The generic Lean
+strict-path mathematics is retained, but the old TX2 graph specializations
+remain historical; no new Lean specialization is claimed. This does not prove
+source_order, model_order, or a concrete source Calls tree.
+
+The same callback-flow resolver and independent replay recover 15 SHA callback
+targets and six null observers, with 131 open library dispatch sites. All 189
+negative controls reject. These are compiler-flow observations under the
+retained compiler/ABI boundary; library specifications and source refinements
+remain obligations. `callback-validation.json` records the focused replay.
+
+`inventory.py --check --require-complete` must still exit 2, including pending
+S2 caller identities. No headline premise is removed. All host analysis jobs
+have exact command/script/revision, exit/wall/RSS/swap and reservation receipts
+under this directory. Raw harness receipts retain the historical hard-coded
+revision field; analysis-manifest explicitly corrects it to the source-input
+pin. `#print axioms`: N/A for new work; no theorem was added or compiled.
