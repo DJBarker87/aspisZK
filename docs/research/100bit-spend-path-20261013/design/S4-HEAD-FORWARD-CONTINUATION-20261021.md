@@ -1750,3 +1750,72 @@ Changing Copy to Move would invalidate the live Guard field. A candidate
 lowering is being investigated with preserved regions and exclusive temp
 uses; unsafe initialization/write/drop lowering remains further work.
 None of this closes frozen S4 or the implementation-linked security target.
+
+## Original port now reaches the actual query ABI and accepted query
+
+`s4-original-port-queryops-total-v1-20261022` proves
+`original_port_queryops_dots_total_exact_batches` for the existing
+`withOldModelDots concreteOps` callback. It derives the typed prefix,
+successful FullWide output and four batch values from the same scanner,
+gamma and coefficient inputs. Neither V10 execution nor a successful dots
+call is a premise. Focused exit 0, 43.490s, peak process RSS 3,570,909,184
+bytes, aggregate 3,566,518,272 bytes, swap 0, standard axioms.
+
+`s4-original-port-accepted-query-v1-20261022` composes this into the complete
+source-shaped queryWithOps success. The actual successful index operation
+derives the cursor bound; the actual source opening supplies the same slice;
+determinism identifies the actual returned dot array with the proved batch
+array. The full query continuation remains in the accepted-run hypothesis.
+Focused exit 0, 60.819s, peak process RSS 3,263,102,976 bytes, aggregate
+3,250,847,744 bytes, swap 0, standard axioms. This is the per-query API for
+the twelve-call consumer. Source/library and enclosing caller installation
+of this original port remain open; no V10 adoption is required for these
+local results.
+
+## Parent prepare no longer needs an independent constructor-result premise
+
+`s4-candidate-prepare-s1-parent-v1-20261022` retains the complete emitted
+candidate.prepare control body with explicit one-to-one leaf operations
+and the final Prepared.new call defined by the S1 adapter.
+`prepareWithS1New_success_child` derives that exact same child execution;
+`prepareWithS1New_success_powers` derives its returned gamma and powers
+scratch. The token checker verifies the permitted substitutions against the
+retained emitted body. Focused exit 0, 10.226s, peak process RSS
+2,271,150,080 bytes, swap 0, standard axioms.
+
+`s4-prepare-installed-meaning-v1-20261022` selects the existing concrete
+preparation/sampler operations and reuses their checked canonicality and
+ClaimPowers results. From one successful same parent run it derives canonical
+mapped returned gamma and successful ClaimPowers equal to the mapped returned
+scratch, without an inactive-canonical or independent powers-success input.
+Focused receipt repair records the exact launch revision and argv: exit 0,
+6.520s, peak process RSS 3,712,253,952 bytes, swap 0, standard axioms. The
+original run and metadata deficiency are retained. Complete parent leaf
+installation and field-map composition into the existing tx1 caller remain
+work; this is not yet an arbitrary frozen Ops.prepare refinement.
+
+## Two bounded candidates retained without adoption
+
+`lean-candidates/s4-fromfn-reborrow-peephole-v1-20261022` preserves the
+region-bearing shared reborrow and eliminates only the pinned administrative
+mutable-reference temporary. Type/ref guards and adversarial use mutants
+were checked. One capped Aeneas run passed the earlier Copy failure but
+stopped at a later loop fixed-point type/context mismatch. Exit 2, 0.766s,
+75,152 KiB process RSS, swap 0, no Lean emitted. This is a candidate lowering,
+not an accepted translation rule or source proof.
+
+`lean-candidates/s4-const-generic-slot-candidate-v1-20261022` measures one
+isolated specialization of the already proposed helper, with unchanged
+arithmetic and parser order. Optimized native equivalence, six fixture output
+comparisons and strict stack checks passed. The combined strict B1 gate
+failed on all six fixtures; maximum stage 1 was 1,202,940 CU and maximum
+settlement 1,180,673 CU. The probe stopped. No source adoption, B1 exception
+or new optimization sweep follows from it. The compiled artifact is retained
+outside the source-only packet; its exact hash is recorded. README hash and
+delta labels were corrected against the raw manifest without rerunning gates.
+
+Primary review inspected complete new theorem statements, actual axiom
+reports, source/body checkers and candidate receipts. These results advance
+the source-shaped composition while retaining the frozen Std/library,
+operation installation and final two-transaction/security joins. S4 and the
+implementation-linked 100-bit goal remain open.

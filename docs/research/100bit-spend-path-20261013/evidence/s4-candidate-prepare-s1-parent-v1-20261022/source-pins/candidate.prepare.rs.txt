@@ -1,0 +1,11 @@
+// crates/aspis-r1-cost-probe/src/candidate.rs:255-267
+fn prepare<H: Digest32>(public: Public<'_>, proof: &[u8], hash: H, obs: Observer, g: &mut [E; 29]) -> Result<Box<Prepared>, Error> {
+    let mut logical = aspis_core::r0::heap::filled(compact::LOGICAL_SEMANTIC + compact::LOGICAL_Y1, 0u8).map_err(|_| Error::Allocation)?;
+    let (semantic, y1) = logical.split_at_mut(compact::LOGICAL_SEMANTIC);
+    compact::expand_semantic(&proof[compact::OFF_SEMANTIC..compact::OFF_Y1], semantic)?;
+    compact::expand_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE], y1)?;
+    let v = wide_view(proof, &logical[..compact::LOGICAL_SEMANTIC], &logical[compact::LOGICAL_SEMANTIC..])?;
+    let sem = crate::r1_semantic::verify_observed(public, v.semantic, hash, obs).map_err(|_| Error::Semantic)?;
+    mark(obs, Phase::Semantic);
+    Prepared::new(&sem, &v, hash, g)
+}
