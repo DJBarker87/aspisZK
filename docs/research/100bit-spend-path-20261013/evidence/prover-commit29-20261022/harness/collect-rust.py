@@ -37,7 +37,7 @@ for name in ['iteration29-row2-root-v1','iteration29-row0-empty-v2']:
    if hashlib.sha256(value.encode()).hexdigest()==want:found=value;break
   assert found is not None,(name,f,want)
   (S/(name+'-'+f+'.txt')).write_text(found)
-(E/'proof-source-binding.json').write_text(json.dumps(dict(shipped_source_commit='495b8640a',identity=identity,checked_other_tracked_files=490,proof_only_adapters=['SemanticTranscript arbitrary-state factory','one iteration Kani harness and common sampler congruence summary'],scope='accepted root/empty preflights have exact source snapshots; no unproved field-bearing check is accepted'),indent=2)+'\n')
+(E/'proof-source-binding.json').write_text(json.dumps(dict(shipped_source_commit='a40439db1',identity=identity,checked_other_tracked_files=490,proof_only_adapters=['SemanticTranscript arbitrary-state factory','one iteration Kani harness and common sampler congruence summary'],scope='accepted root/empty preflights have exact source snapshots; no unproved field-bearing check is accepted'),indent=2)+'\n')
 rows=[]
 for p in sorted((E/'receipts').glob('*/receipt.json')):
  x=json.loads(p.read_text());x['name']=p.parent.name
