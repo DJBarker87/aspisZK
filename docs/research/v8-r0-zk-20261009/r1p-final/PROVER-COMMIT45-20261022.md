@@ -33,3 +33,22 @@ rebuilt against the new object before their evidence is used.
 
 Publication, experiment conversion and endpoint remain pending at this
 checkpoint. No shipped source changed and no ELF rebuild is triggered.
+
+## Stage 2: guarded tree and transcript finalisation
+
+`ProverCommitPublication45.guarded_eighteen_levels` composes the existing
+18-level tree transport with the final length/get guard. Both success and
+Merkle rejection preserve the complete children maps, coins, reads and
+programming-call history. The finalisation pair `publication_decode` /
+`publication_none` transports native ordered transcript merge and its
+pre-merge `transcript.len()` count. Conflicting entries return no successful
+table or count. These are deterministic caller equations over the std API;
+they do not claim the concrete programming callback or byte codecs verified.
+
+J9627–J9631 rebuild Publication33, Merge33, Parents44, ParentStep44 and Tree44
+against the changed TrustedStd object, with branch-specific predecessor
+snapshots. J9633 accepts all four finalisation theorems: exit 0, 1.25 s,
+2,541,868 KiB RSS, zero swaps, standard axioms. J9632 is a rejected proof
+draft (the uncompiled declaration's diagnostic `sorryAx` is not accepted
+proof evidence). No admitted source or accepted sorry axiom is introduced.
+Exact section-6 evidence is in the Lean receipts and manifest.
