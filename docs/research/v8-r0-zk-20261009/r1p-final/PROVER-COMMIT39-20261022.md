@@ -244,3 +244,40 @@ J9164 stopped at dependency preflight before any compiler was launched:
 its memo-counting prerequisite object did not yet exist. This invocation has
 no wall/RSS/swap/axioms result and is recorded as such. No failed source is
 used by an accepted result and no unchanged source/dependency pair was rerun.
+
+## Final audit and handoff
+
+J9171 is the final focused audit of all eighteen new top theorems and the
+three new-module dependency closure: target `R1Z.ProverCommitAudit39`, exit 0,
+wall 1.67 s, peak RSS 4,131,644 KiB, zero swaps. Every `#print axioms`
+result is a subset of [propext, Classical.choice, Quot.sound]. Sources are
+pinned to the task base plus each exact retained overlay and dependency
+fingerprint. `final-proof-audit.json` checks final host source hashes against
+local checkpoint `50b341490` plus the audit overlay, and checks all retained
+dependency object fingerprints; all match. The raw command, exact target,
+source SHA-256, dependency fingerprint, status, wall/RSS/swap, diagnostics
+and full axioms lines for every launched attempt are committed under
+`evidence/prover-commit39-20261022/lean/`; the preflight-only invocation is
+marked distinctly. This is not a formal release result.
+
+Every compiler ran on the build host via Env J and the pinned launcher with
+Lean -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0 and TasksMax=64.
+Reservation checks passed (24 or 26 GiB populated plus this 8 GiB scope,
+below 55 GiB). All jobs are finished. No unchanged full regression,
+package-wide replay, Aeneas extraction, Rust/Kani, SBF or ELF build was run;
+none can discharge the demonstrated source-input ownership gap. The complete
+frozen manifest was not launched because source/nonce preflight is blocked.
+Prior frozen-artifact and runtime evidence is reused without attribution to
+a new source refinement.
+
+All 491 tracked crates/programs files match the actual task base byte for
+byte. `shipped-sources-unchanged.json` retains their SHA-256 and sizes. No
+shipped file changed, so the shipped-file rule does not trigger an ELF rebuild.
+No binaries, objects, ELFs, tarballs, local target directory or wallet/account
+keys were created, added, deleted or changed. `git diff --check` passes.
+No push or merge was performed.
+
+Stage commits: `a88d26f1b` (exact shared prefix laws), `50b341490`
+(conditional arithmetic, source finding, unchanged endpoint snapshots).
+The final handoff commit adds this audit and its evidence. Next unused
+assigned Env J attempt: **J9172**. The target remains **not yet established**.
