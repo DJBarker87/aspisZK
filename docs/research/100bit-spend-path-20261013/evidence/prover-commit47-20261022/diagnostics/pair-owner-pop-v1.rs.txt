@@ -1,0 +1,13 @@
+#![allow(unexpected_cfgs)]
+pub mod field;
+use field::WideExact as E;
+pub fn pairs(mut rows:Vec<(E,E,E)>,p0:E,p1:E)->(E,E) {
+ match rows.pop() {
+  None=>(p0,p1),
+  Some((a,b,n))=>pairs(rows,p0.add(a.mul(n)),p1.add(b.mul(n))),
+ }
+}
+pub fn evaluate(rows:Vec<(E,E,E)>,y:E)->E {
+ let (p0,p1)=pairs(rows,E::ZERO,E::ZERO);
+ p0.add(y.mul(p1))
+}

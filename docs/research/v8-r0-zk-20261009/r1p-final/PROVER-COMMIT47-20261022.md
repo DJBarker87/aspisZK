@@ -39,3 +39,20 @@ Those templates are retained as diagnostics, not installed as axioms.
 A second, narrower translation of arithmetic only uses overflow checks and
 has no external templates. Checked/release agreement remains a separate
 obligation. No unchecked arithmetic result is silently substituted.
+
+J9743 transports the checked CM31/QM31 arithmetic to the retained canonical
+arithmetic results. J9746 proves checked embedded WideExact add/mul closure.
+J9749 proves successful checked scalar operations equal wrapping operations.
+J9754 composes that relation through all needed field layers, including the
+actual release WideExact multiplication. J9756 discharges the checked-success
+intermediate: actual release `from_qm31` normalizes every raw input and
+preserves its exact value; actual release add/mul preserve the canonical
+QM31 embedding and have the expected exact field value. No checked-success
+premise remains in `ProverCommitNativeOps47.add_exact` / `mul_exact`.
+This replaces the timed-out direct multiplication gate with kernel proofs
+over both extractions; no larger cap or unchanged retry is used.
+
+The release serializer's external templates are not installed. D157 is not
+used to assert a source arithmetic or payload-image law. No std field has
+been added in this stage. Only new task-owned source/object overlays have
+been installed; previous versions are snapshotted in the branch workspace.

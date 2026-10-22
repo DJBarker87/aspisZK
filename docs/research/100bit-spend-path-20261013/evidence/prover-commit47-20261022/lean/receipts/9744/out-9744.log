@@ -1,0 +1,132 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSubfieldOps47.lean:17:46: error: failed to synthesize
+  Decidable (Canonical zero)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSubfieldOps47.lean:25:8: error: Type mismatch: After simplification, term
+  heq
+ has type
+  decode z = decode x + 0
+but is expected to have type
+  decode z = decode x
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSubfieldOps47.lean:33:8: error: Type mismatch: After simplification, term
+  heq
+ has type
+  @Eq QM31Exact (decode z) (decode x * 0)
+but is expected to have type
+  @Eq QM31Exact (decode z) 0
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSubfieldOps47.lean:58:2: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+⊢ (do
+      let c ←
+        do
+          let m ←
+            do
+              let s ← 0#u32 + 0#u32
+              if s ≥ 2147483647#u32 then do
+                  let s1 ← s - 2147483647#u32
+                  ok s1
+                else ok s
+          let m1 ←
+            do
+              let i ← m + 2147483647#u32
+              let s ← i - 0#u32
+              if s ≥ 2147483647#u32 then do
+                  let s1 ← s - 2147483647#u32
+                  ok s1
+                else ok s
+          let m2 ←
+            do
+              let s ← 0#u32 + 0#u32
+              if s ≥ 2147483647#u32 then do
+                  let s1 ← s - 2147483647#u32
+                  ok s1
+                else ok s
+          let m3 ←
+            do
+              let s ← 0#u32 + m2
+              if s ≥ 2147483647#u32 then do
+                  let s1 ← s - 2147483647#u32
+                  ok s1
+                else ok s
+          ok { a := m1, b := m3 }
+      ok { c0 := c, c1 := { a := 0#u32, b := 0#u32 } }) =
+    ok { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSubfieldOps47.lean:70:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mapR fromQ (AspisR1Qm31ArithmeticProbe.field.QM31.add zero zero)
+in the target expression
+  (do
+      let q1 ←
+        match AspisR1Qm31ArithmeticProbe.field.QM31.add zero zero with
+          | ok x => ok (fromQ x)
+          | fail e => fail e
+          | div => div
+      ok { c0 := fromQ z, c1 := q1 }) =
+    ok { c0 := fromQ z, c1 := fromQ zero }
+
+x y : Old.Q
+hx : Canonical x
+hy : Canonical y
+z : CurrentQM
+hz : AspisR1Qm31ArithmeticProbe.field.QM31.add x y = ok z
+hcanon : CurrentCanonicalQM z
+heq : decode z = decode x + decode y
+hzero : mapR fromQ (AspisR1Qm31ArithmeticProbe.field.QM31.add zero zero) = ok (fromQ zero)
+⊢ (do
+      let q1 ←
+        match AspisR1Qm31ArithmeticProbe.field.QM31.add zero zero with
+          | ok x => ok (fromQ x)
+          | fail e => fail e
+          | div => div
+      ok { c0 := fromQ z, c1 := q1 }) =
+    ok { c0 := fromQ z, c1 := fromQ zero }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSubfieldOps47.lean:82:68: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  field.QM31.mul (fromQ x) (fromQ y)
+in the target expression
+  (do
+      let ac ← ok (fromQ z)
+      let bd ← ok (fromQ zero)
+      let q ← ok (fromQ x)
+      let q1 ← ok (fromQ y)
+      let cross ← q.mul q1
+      let q2 ← field.wide_exact.mul_u bd
+      let q3 ← ac.add q2
+      let q4 ← cross.sub ac
+      let q5 ← q4.sub bd
+      ok { c0 := q3, c1 := q5 }) =
+    ok { c0 := fromQ z, c1 := fromQ zero }
+
+x y : Old.Q
+hx : Canonical x
+hy : Canonical y
+z : CurrentQM
+hz : AspisR1Qm31ArithmeticProbe.field.QM31.mul x y = ok z
+hcanon : CurrentCanonicalQM z
+heq : decode z = decode x * decode y
+main : field.QM31.mul (fromQ x) (fromQ y) = ok (fromQ z)
+⊢ (do
+      let ac ← ok (fromQ z)
+      let bd ← ok (fromQ zero)
+      let q ← ok (fromQ x)
+      let q1 ← ok (fromQ y)
+      let cross ← q.mul q1
+      let q2 ← field.wide_exact.mul_u bd
+      let q3 ← ac.add q2
+      let q4 ← cross.sub ac
+      let q5 ← q4.sub bd
+      ok { c0 := q3, c1 := q5 }) =
+    ok { c0 := fromQ z, c1 := fromQ zero }
+'R1Z.ProverCommitSubfieldOps47.zero_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSubfieldOps47.zero_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSubfieldOps47.add_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSubfieldOps47.mul_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSubfieldOps47.subC_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSubfieldOps47.sub_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSubfieldOps47.mul_u_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSubfieldOps47.embedded_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSubfieldOps47.embedded_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh
