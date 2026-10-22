@@ -35,3 +35,44 @@ branch-specific host workspace. Dependent modules used by subsequent stages
 must be rebuilt against this object before their evidence is accepted.
 Publication, source experiment conversion, concrete joins and endpoint remain
 pending at this stage checkpoint. No shipped source changes or ELF rebuild.
+
+## Stage 2: native parent transition and eighteen levels
+
+The per-parent native transition check passes all checks for arbitrary full
+32-byte child/coin/root values and all source depths 0–17 and parent indices
+below 2^17. It checks lazy left-then-right missing-child coins, the final-level
+root substitution, both writes, one read-count increment, and the complete
+ordered binary-parent call. The source body is retained verbatim except
+`reads+=1` becomes `*reads+=1` for the harness's caller-owned counter.
+Map get/insert and the recording digest callee remain explicit substitutes
+at their named boundaries; no collection internals are claimed verified.
+The accepted gate is `parent-transition-v3-eighteen-levels`: exit 0,
+2.975 s, peak RSS 227,796 KiB, zero swaps. V1 fails a 96-byte `memcmp`
+unwinding assertion. V2 passes on a 17-level stand-in but is superseded;
+V3 checks the actual 18-level source domain and an arbitrary selected byte
+of every returned digest. Neither earlier draft is the accepted final gate.
+
+`ProverCommitParentStep44.step_decode`, `loop_decode` and `collected_loop`
+transport both maps, lazy coins, the retained programming-call log and reads
+through the native ordered parent sequence. `child_index_bound` proves the
+binary child indices fit the source domain symbolically.
+`ProverCommitTree44.level_decode`, `levels_decode`, `range_levels` and
+`eighteen_levels` compose the state across the native depth order, preserving
+every stored children map and subsequent coin state. These are caller/control
+theorems; they do not identify the remaining concrete hash/codec/multiproof
+callees or constitute a full publication certificate.
+
+J9617 accepts the parent step (1.28 s, 2,541,736 KiB, zero swaps);
+J9621 accepts the depth composition (1.39 s, 2,544,484 KiB, zero swaps).
+Every axiom list is standard. J9619 is a rejected range-lemma draft.
+J9540 was refused before compilation because an unrelated historical receipt
+already occupies it; that receipt is not copied or attributed here. The
+subsequent numbers were selected from a read-only receipt inventory.
+
+The unchanged publication algebra, merge and salt consumers are rebuilt
+against the extended TrustedStd object: J9539 (`ProverCommitPublication33`),
+J9618 (`ProverCommitMerge33`) and J9620 (`ProverCommitLeaves43`), each exit 0,
+zero swaps and standard axioms. These overwrite shared source/objects only
+with the same tracked source bytes; branch-specific snapshots retain the
+previous source/objects. Other dependent release modules have not been
+replayed and no coherent release replay is claimed.
