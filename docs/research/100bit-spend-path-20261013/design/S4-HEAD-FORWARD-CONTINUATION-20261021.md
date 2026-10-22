@@ -1843,3 +1843,30 @@ correspondence, concrete operation installation, remaining caller leaves
 and scan binding remain open. These packets do not close S4. Primary
 review inspected statements and the full-tx2 named standard-axiom report;
 packet checks passed without repeating unchanged Lean compiles.
+
+## Actual returned preparation gamma and ten-call consumer
+
+`s4-tx1-actual-gamma-bridge-v1-20261022` exposes canonicality and
+ClaimPowers for exactly `toClaimE (wToP p.gamma)` from the same successful
+installed preparation call. Its mapped powers are the returned scratch,
+with the Stage2/FastDots carrier identity. This repairs the existential
+gamma API limitation noted in the previous packet; it directly reuses
+`parent_success_installed_meaning`, without assuming the desired powers
+or gamma identity. Focused Lean 4.32 exit 0, 24.102s, aggregate RSS
+3,991,633,920 bytes, swap 0, standard axioms.
+
+`s4-candidate-ten-original-port-batches-v1-20261022` takes the same
+successful candidate ten-loop and its gamma/powers/map/scan/start facts,
+then derives all ten reached original-port callbacks with their actual
+returned batch values. It reuses checked callback transport and the
+original-port accepted-query theorem, without using V10 arithmetic output.
+Focused Lean 4.32 exit 0, 16.564s, aggregate RSS 3,997,024,256 bytes,
+swap 0, standard axioms. Primary review read both theorem statements
+and named axiom reports; both packet checkers passed.
+
+Their combined same-caller consumer is not yet green: local whnf
+heartbeat failures are being isolated without raising limits. A separate
+identical-header/True diagnostic passes, localizing the problem to proof
+composition rather than the header. These diagnostics do not establish
+the combined result. Frozen Std/from_fn and operation installation remain
+open regardless of this local composition.
