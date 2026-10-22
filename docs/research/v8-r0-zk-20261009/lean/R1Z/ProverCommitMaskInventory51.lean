@@ -1,0 +1,37 @@
+import R1Z.ProverCommitWriteMath51
+import R1Z.ProverCommitMaskSchedule51
+import R1Z.ProverCommitTowerModel50
+/-! Symbolic finite-sum split for the two coefficient source arrays. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitMaskInventory51
+open scoped BigOperators
+open ProverCommitMaskSchedule51
+variable {K : Type} [Field K] {F : Subfield K}
+
+def input (c1 : Fin 16 → K) (mo : Fin 10 → K) (i : Fin 26) : K :=
+  if h : i.val<16 then c1 ⟨i.val,h⟩ else mo ⟨i.val-16,by omega⟩
+
+def value (B : R0P.PackBasis F) (c1 : Fin 16 → K) (mo : Fin 10 → K) (i : Fin 26) : K :=
+  R0P.Mask.mulTowerBasis B (input c1 mo i) ⟨i.val%4,Nat.mod_lt _ (by decide)⟩
+
+theorem polynomial (B : R0P.PackBasis F) (c1 : Fin 16 → K) (mo : Fin 10 → K) :
+    ProverCommitWriteMath51.polynomial (fun i => exponent i.val) (value B c1 mo)=
+      ProverCommitMaskPolynomial50.polynomial B c1 mo := by
+  unfold ProverCommitWriteMath51.polynomial ProverCommitMaskPolynomial50.polynomial
+  rw [Fin.sum_univ_add (a := 16) (b := 10)]
+  apply congrArg₂ (·+·)
+  · apply Finset.sum_congr rfl
+    intro i _
+    have h : i.val<16 := i.isLt
+    have hval : (Fin.castAdd 10 i).val=i.val := rfl
+    simp only [value,input,hval,dif_pos h,Fin.eta,first]
+  · apply Finset.sum_congr rfl
+    intro i _
+    have h : ¬16+i.val<16 := by omega
+    have hmod : (16+i.val)%4=i.val%4 := by omega
+    have hval : (Fin.natAdd 16 i).val=16+i.val := rfl
+    simp only [value,input,hval,dif_neg h,Nat.add_sub_cancel_left,Fin.eta,second,hmod]
+
+#print axioms polynomial
+end R1Z.ProverCommitMaskInventory51

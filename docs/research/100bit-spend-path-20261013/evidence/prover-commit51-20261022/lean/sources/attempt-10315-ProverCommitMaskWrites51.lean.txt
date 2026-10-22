@@ -1,0 +1,103 @@
+import R1Z.ProverCommitTower50
+import R1Z.ProverCommitQArray48
+import R1Z.ProverCommitBasisCounter47
+import AspisR1ProducerRelease47.MaskCoeff51
+/-! Symbolic value and canonicality of the 26 ordered coefficient writes. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitMaskWrites51
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+
+def exponents (e : Nat → U8) : Array U8 26#usize :=
+  ⟨List.ofFn (fun i : Fin 26 => e i.val),by simp only [List.length_ofFn];rfl⟩
+
+theorem index (e : Nat → U8) (i : Usize) (hi : i.val<26) :
+    Array.index_usize (exponents e) i=ok (e i.val) := by
+  rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ hi]
+  simp only [exponents,List.getElem_ofFn]
+
+def fill {K : Type} (e : Nat → Nat) (v : Nat → K) : Nat → (Nat → K) → (Nat → K)
+ | 0,q => q
+ | n+1,q => fill e v n (Function.update q (e (26-(n+1))) (v (26-(n+1))))
+
+theorem decode_update (q : Nat → Old.Q) (k : Nat) (z : Old.Q) :
+    (fun i => decode (Function.update q k z i))=Function.update (fun i => decode (q i)) k (decode z) := by
+  funext i
+  by_cases h : i=k
+  · subst i;rw [Function.update_self,Function.update_self]
+  · rw [Function.update_of_ne h,Function.update_of_ne h]
+
+attribute [local irreducible] ProverCommitNativeQ48.source ProverCommitQArray48.array
+
+theorem go (p : Nat → Old.Q) (hp : ∀ i, i<26 → Canonical (p i))
+    (e : Nat → U8) (he : ∀ i, i<26 → (e i).val<27)
+    (n : Nat) (left : U8) (hl : left.val=n) (hn : n≤26)
+    (q : Nat → Old.Q) (hq : ∀ i, i<27 → Canonical (q i)) :
+    ∃ z : Nat → Old.Q,
+      mask_coeff51.go (ProverCommitQArray48.array 26#usize p) (exponents e) left
+        (ProverCommitQArray48.array 27#usize q)=ok (ProverCommitQArray48.array 27#usize z) ∧
+      (∀ i, i<27 → Canonical (z i)) ∧
+      (fun i => decode (z i))=fill (fun i => (e i).val)
+        (fun i => ProverCommitTower50.basis ⟨i%4,Nat.mod_lt _ (by decide)⟩*decode (p i)) n
+        (fun i => decode (q i)) := by
+  induction n generalizing left q with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    refine ⟨q,?_,hq,rfl⟩
+    rw [mask_coeff51.go,hz];rfl
+  | succ n ih =>
+    have hne : left≠0#u8 := by scalar_tac
+    let i := U8.wrapping_sub 26#u8 left
+    have hi : i.val=26-(n+1) := by
+      dsimp only [i]
+      rw [U8.wrapping_sub_val_eq]
+      have hs : UScalar.size .U8=256 := by rw [UScalar.size_def];decide
+      rw [hs]
+      change (26+(256-left.val))%256=26-(n+1)
+      rw [hl]
+      omega
+    have hib : i.val<26 := by omega
+    have hdec : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    let idx := UScalar.cast .Usize i
+    have hidx : idx.val=i.val := by scalar_tac
+    obtain ⟨rem,hrem,hremval⟩ := WP.spec_imp_exists (UScalar.rem_spec i (show (4#u8).val ≠ 0 by decide))
+    obtain ⟨v,hv,hcv,hdv⟩ := ProverCommitTower50.mul (p i.val) (hp _ hib)
+      ⟨i.val%4,Nat.mod_lt _ (by decide)⟩ rem (by simpa only using hremval)
+    let next := Function.update q (e i.val).val v
+    have hcnext : ∀ k, k<27 → Canonical (next k) := by
+      intro k hk
+      dsimp only [next]
+      by_cases h : k=(e i.val).val
+      · subst k;rw [Function.update_self];exact hcv
+      · rw [Function.update_of_ne h];exact hq k hk
+    obtain ⟨z,hz,hcz,hdz⟩ := ih _ hdec (by omega) next hcnext
+    refine ⟨z,?_,hcz,?_⟩
+    · rw [mask_coeff51.go]
+      simp only [hne,if_false,lift,bind_tc_ok]
+      change (do
+        let cell ← Array.index_usize (ProverCommitQArray48.array 26#usize p) idx
+        let i2 ← i % 4#u8
+        let v ← tower50.mul cell i2
+        let exp ← Array.index_usize (exponents e) idx
+        let out ← Array.update (ProverCommitQArray48.array 27#usize q) (UScalar.cast .Usize exp) v
+        mask_coeff51.go (ProverCommitQArray48.array 26#usize p) (exponents e) (U8.wrapping_sub left 1#u8) out)=_
+      rw [ProverCommitQArray48.index _ _ idx (by rw [hidx];exact hib)]
+      simp only [bind_tc_ok]
+      rw [hidx,hrem]
+      simp only [bind_tc_ok]
+      rw [hv,index e idx (by rw [hidx];exact hib)]
+      simp only [bind_tc_ok]
+      have heidx : (UScalar.cast .Usize (e idx.val)).val=(e i.val).val := by rw [hidx];scalar_tac
+      rw [ProverCommitQArray48.update _ _ _ (by rw [heidx];exact he _ hib),heidx]
+      exact hz
+    · rw [hdz]
+      dsimp only [next]
+      rw [decode_update,hdv,hi]
+      rfl
+
+#print axioms index
+#print axioms decode_update
+#print axioms go
+end R1Z.ProverCommitMaskWrites51

@@ -1,0 +1,71 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaskWrites51.lean:55:43: error: Tactic `decide` failed for proposition
+  UScalar.size UScalarTy.U8 = 256
+because its `Decidable` instance
+  instDecidableEqNat (UScalar.size UScalarTy.U8) 256
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqNat` and `Nat.decEq`, reduction got stuck at the `Decidable` instance
+  match h : (UScalar.size UScalarTy.U8).beq 256 with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaskWrites51.lean:65:29: error: could not synthesize default value for parameter 'hInBounds' using tactics
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaskWrites51.lean:65:29: error: Expected type must not contain free variables
+  ↑(U8.wrapping_sub 26#u8 left) % 4 ≤ UScalar.cMax UScalarTy.U8
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaskWrites51.lean:65:55: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+p : ℕ → Old.Q
+hp : ∀ i < 26, Canonical (p i)
+e : ℕ → U8
+he : ∀ i < 26, ↑(e i) < 27
+n : ℕ
+ih :
+  ∀ (left : U8),
+    ↑left = n →
+      n ≤ 26 →
+        ∀ (q : ℕ → Old.Q),
+          (∀ i < 27, Canonical (q i)) →
+            ∃ z,
+              mask_coeff51.go (ProverCommitQArray48.array 26#usize p) (exponents e) left
+                    (ProverCommitQArray48.array 27#usize q) =
+                  ok (ProverCommitQArray48.array 27#usize z) ∧
+                (∀ i < 27, Canonical (z i)) ∧
+                  (fun i => decode (z i)) =
+                    fill (fun i => ↑(e i)) (fun i => ProverCommitTower50.basis ⟨i % 4, ⋯⟩ * decode (p i)) n fun i =>
+                      decode (q i)
+left : U8
+hl : ↑left = n + 1
+hn : n + 1 ≤ 26
+q : ℕ → Old.Q
+hq : ∀ i < 27, Canonical (q i)
+hne : left ≠ 0#u8
+i : U8 := U8.wrapping_sub 26#u8 left
+hi : ↑i = 26 - (n + 1)
+hib : ↑i < 26
+hdec : ↑(left.wrapping_sub 1#u8) = n
+idx : UScalar UScalarTy.Usize := UScalar.cast UScalarTy.Usize i
+hidx : ↑idx = ↑i
+⊢ i % 4#u8 = ok (↑i % 4)#u8
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaskWrites51.lean:67:42: error: could not synthesize default value for parameter 'hInBounds' using tactics
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaskWrites51.lean:67:42: error: Expected type must not contain free variables
+  ↑(U8.wrapping_sub 26#u8 left) % 4 ≤ UScalar.cMax UScalarTy.U8
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaskWrites51.lean:84:68: error: Application type mismatch: The argument
+  q
+has type
+  field.QM31
+but is expected to have type
+  ℕ → Old.Q
+in the application
+  ProverCommitQArray48.array 27#usize q
+'R1Z.ProverCommitMaskWrites51.index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaskWrites51.decode_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaskWrites51.go' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

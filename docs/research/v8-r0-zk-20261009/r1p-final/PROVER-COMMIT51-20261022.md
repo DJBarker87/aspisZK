@@ -40,3 +40,30 @@ J10307/08 are rejected symbolic let-normalization drafts; J10310 proves the
 corrected helper. J10309 is retired before compilation (missing dependency
 object). The coefficient producer remains the next obligation; this conditional
 caller is not complete native selected-mask success.
+
+## Stage 3a: complete selected-mask coefficient producer
+
+J10317 proves the owned 26-write loop's canonical output and symbolic overwrite
+sequence. J10316 proves the exact source destination schedule is injective,
+bounded by 27, and omits 23. J10320 proves the generic overwrite invariant and
+finite monomial coefficient laws; J10324 splits the combined schedule into the
+16 c1 and 10 mask-only summands. No Boolean cube or large concrete term is
+normalized. J10326 proves `ProverCommitMaskProducer51.exact_result`: actual
+owned array production succeeds and every decoded output cell equals its
+selected-mask polynomial coefficient. The old coefficient-image premise is
+discharged in J10327 `ProverCommitMaskCaller51.exact_result`, composing producer,
+linear forms, prepared Horner and final arithmetic. Canonical input values and
+the explicit B.i/B.u basis representation equations remain; complete semantic
+oracle provenance is still next. J10327: exit 0, 1.66 s, 4048744 KiB, zero
+swaps, standard axioms only.
+
+Native `coefficient-writes-v2` checks every output limb and paired tower-call
+argument/order for arbitrary 26 inputs and arbitrary paired tower answers,
+and checks the static schedule against the symbolic formula. Exit 0, 4.921 s,
+586132 KiB, zero swaps. The first harness fails only on array-equality memcmp
+unwinding; replacing the harness's equality with explicit limb comparisons
+fixes it. Two initial extraction drafts omit the copied field module files;
+those Rust compiler failures are retained. The corrected release-mode owner
+extraction succeeds. Rejected Lean drafts and retired preflight J10319 are
+retained; no source/cap is retried unchanged. Existing tower, linear, Horner
+and finish native gates are reused with their unchanged source pins.
