@@ -575,3 +575,24 @@ Rust source hashes alone. The required next bridge is guarded by canonical
 inputs and proved primitive bounds; a forced-checked extraction is diagnostic,
 not production-MIR correspondence. There is no arithmetic source closure
 claim yet, and production source/ELF/CU artifacts remain unchanged.
+
+
+PROVED selected projection execution: the helper output's actual coefficient
+reads are canonical (598a6aa6b3); a strengthened source body theorem fixes
+each iterator index (bd368492e6); the successful four-step source loop yields
+its four ordered body executions (ecd9e651ab), and those yield a canonical
+cell-4 result and the exact left-associated four-product accumulation
+(3cd103587c). The parent S2 projection call composes the same helper and loop
+executions (51ded24151), with initial accumulator and helper input canonical
+read contracts still explicit. The reached-helper proof was re-pinned to
+the owned-reader-backed Funs cohort before this composition. These checks
+are focused selected-source results, not a production caller/ELF theorem.
+
+The actual attempt7 field reader also now has a complete Result map to the
+owned field reader at the same buffer/index, with no added bound or success
+premise (focused target S9ActualWeightsFieldOwnedMapV1, 11.892 s, 2.24 GB,
+zero swaps, standard axioms; packet being assembled). Arithmetic addition
+extraction has five transparent declarations and compiled no-option owners.
+Its canonical-input map to checked arithmetic is in progress, reusing
+existing small-word bounds while avoiding a cold legacy proof rebuild.
+The overall S9 release cone and 100-bit composition are still OPEN.
