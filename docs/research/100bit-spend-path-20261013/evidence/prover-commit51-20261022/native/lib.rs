@@ -23,3 +23,5 @@ fn go(input:[K;26],e:[u8;26],left:u8,mut out:[K;27],t:&mut Trace)->[K;27]{
  for i in 0..26{let j=i as u8;let f=if j<14{2*j}else if j==14{13}else if j==15{25}else if j<22{2*(j-16)+1}else{2*(j-16)+3};assert_eq!(f,E[i]);}
  }
 }
+
+include!("columns.rs");

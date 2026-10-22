@@ -67,3 +67,19 @@ those Rust compiler failures are retained. The corrected release-mode owner
 extraction succeeds. Rejected Lean drafts and retired preflight J10319 are
 retained; no source/cap is retried unchanged. Existing tower, linear, Horner
 and finish native gates are reused with their unchanged source pins.
+
+## Stage 3b: all mask-column reads and selected-mask value
+
+J10330 proves all 26 complete sparse MLE calls and their destination reads
+without an MLE-output premise. J10331 composes those reads, the G-column MLE,
+and the complete selected-mask caller. `claims_value` identifies each read
+with `honestClaims t a 0`; canonical input arrays and their usual trace
+representation are the inputs, not an output equality. The native full-context
+column-loop gate checks all 26 outputs, all point operands and ordered column
+handles, exit 0, 27.266 s, 1166888 KiB, zero swaps. Column handles stand for
+read-only arrays; each complete array MLE's value is the separate Lean proof.
+J10329's opaque-value conversion reaches default recursion depth; explicitly
+unfolding only the named symbolic value at that proof step fixes it in J10330.
+No recursion-depth or heartbeat setting is raised. J10331: exit 0, 1.78 s,
+4086212 KiB, zero swaps, standard axioms. This is the semantic oracle's mask
+component, not yet its extra-plus-terminal value or success theorem.

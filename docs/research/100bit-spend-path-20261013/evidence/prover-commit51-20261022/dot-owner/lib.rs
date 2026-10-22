@@ -231,3 +231,14 @@ pub fn go(input:[K;26],exponents:[u8;26],left:u8,mut out:[K;27])->[K;27] {
 }
 pub fn eval(input:[K;26],exponents:[u8;26])->[K;27] {go(input,exponents,26,[K::ZERO;27])}
 }
+
+pub mod mask_columns51 {
+use super::{field::QM31 as K,mle50};
+pub fn go(point:[K;10],columns:[[K;1024];26],left:u8,mut out:[K;26])->[K;26]{
+ if left==0{return out;}
+ let i=26u8.wrapping_sub(left);
+ out[i as usize]=mle50::mle(point,columns[i as usize]);
+ go(point,columns,left.wrapping_sub(1),out)
+}
+pub fn eval(point:[K;10],columns:[[K;1024];26])->[K;26]{go(point,columns,26,[K::ZERO;26])}
+}
