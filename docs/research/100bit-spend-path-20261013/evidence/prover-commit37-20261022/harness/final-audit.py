@@ -4,7 +4,7 @@ import hashlib,json,subprocess
 from pathlib import Path
 E=Path(__file__).resolve().parent.parent
 S=Path('docs/research/v8-r0-zk-20261009/lean')
-mods=['ProverCommitLedger36','ProverCommitPathMass36','ProverCommitE2Witness36','ProverCommitAudit36']
+mods=['ProverCommitReservationRom37','ProverCommitReservationMemo37','ProverCommitReservationNonzero37','ProverCommitReservationFrames37','ProverCommitReservationAudit37']
 sha={f'R1Z/{m}.lean':hashlib.sha256((S/'R1Z'/(m+'.lean')).read_bytes()).hexdigest() for m in mods}
 revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 code='''import json,hashlib
@@ -19,7 +19,7 @@ for rel,sha in expected.items():
  sources.append(dict(path=rel,sha256=actual))
 env=json.loads(Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json').read_text())
 paths=[J/'objects']+[Path(p) for p in env['LEAN_PATH'].split(':')]
-receipt=json.loads((R/'lean-9134.json').read_text())
+receipt=json.loads((R/'lean-9151.json').read_text())
 objects=[]
 for m,sha in receipt['deps']:
  rel=Path(m.replace('.','/')).with_suffix('.olean')
@@ -31,7 +31,7 @@ print(json.dumps(dict(source_revision=%r,sources=sources,dependency_objects=obje
 '''%(sha,revision)
 out=subprocess.check_output(['ssh','dombarker@100.108.41.90','python3 -'],input=code,text=True)
 (E/'final-proof-audit.json').write_text(out)
-for a in [9129,9131,9133,9134]:
+for a in [9136,9146,9148,9150,9151]:
  log=(E/'lean'/'receipts'/str(a)/f'out-{a}.log').read_text()
  assert 'exit=0' in log and 'sorryAx' not in log
 for m in mods:
