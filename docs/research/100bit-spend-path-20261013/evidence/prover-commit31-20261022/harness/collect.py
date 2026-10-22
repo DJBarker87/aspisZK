@@ -5,7 +5,7 @@ H='/home/dombarker/project-offloads/codex-cx-prover-commit31-20261022';host='dom
 for name in ['receipts','*-inputs.json','*-stop.json','*-llbc.json']:
  subprocess.run(['scp','-r',f'{host}:{H}/{name}',str(E)],check=True)
 S=E/'rust-sources';S.mkdir(exist_ok=True)
-for variant,folder in [('v2','snapshots/v2'),('v3','snapshots/v3'),('v4','snapshots/v4'),('v6','snapshots/v6'),('current','src'),('leaves','src-leaves'),('cells','src-cells'),('constructed','src-constructed'),('recursive','src-recursive')]:
+for variant,folder in [('v2','snapshots/v2'),('v3','snapshots/v3'),('v4','snapshots/v4'),('v6','snapshots/v6'),('current','src'),('leaves','src-leaves'),('cells','src-cells'),('constructed','src-constructed'),('recursive','src-recursive'),('bytes','src-bytes'),('indexed','src-indexed'),('capacity','src-capacity'),('fixed','src-fixed'),('literal','src-literal'),('summary','src-summary')]:
  for name in ['sim.rs','sim_owned31.rs']:
   path=f'{folder}/crates/aspis-r1-cost-probe/src/{name}' if folder.startswith('src') else f'{folder}/{name}'
   subprocess.run(['scp',f'{host}:{H}/{path}',str(S/(variant+'-'+name+'.txt'))],check=True)
@@ -18,6 +18,7 @@ base=subprocess.check_output(['git','show','09eee7bad:crates/aspis-r1-cost-probe
 (S/'v1-sim.rs.txt').write_text(base+h)
 rows=[]
 for p in sorted((E/'receipts').glob('*/receipt.json')):
+ if p.parent.name.startswith('build-'):continue
  x=json.loads(p.read_text());x['name']=p.parent.name
  inp=json.loads((E/(p.parent.name+'-inputs.json')).read_text())
  x['source_revision']=inp['source_revision'];x['source_hashes']=inp['source_hashes']
