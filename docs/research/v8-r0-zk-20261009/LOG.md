@@ -8798,3 +8798,11 @@ once, globally, before more privacy parts: adopt the prototyped
 module under `lean/` and rebuild the affected closures (capped). Session A's
 `lean-candidates` get the same adapter and script through the handoff note rather than
 lead edits. Privacy part 53 waits for it.
+
+## D177 (user, 2026-10-23 01:05): lead decides for the next six hours
+
+The user is unavailable until about 07:00 and delegated all decisions to the lead in
+the meantime. Limits the lead keeps: no lowering of the security target, metric or
+adversary; no change to frozen verifier bytes or the protocol; any new trust item is
+named in the headline and logged with its reasons, so the user can reverse it; every
+such decision is listed in a morning summary.
