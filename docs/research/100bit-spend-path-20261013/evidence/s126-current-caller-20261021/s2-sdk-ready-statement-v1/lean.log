@@ -1,0 +1,200 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkReadyStatementV1.lean:94:95: error: unexpected token '('; expected ')', ',' or ':'
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkReadyStatementV1.lean:85:42: error: unsolved goals
+ops : Ops
+verifierOps : AspisR1CurrentCaller.Ops
+program : Std.Array U8 32#usize
+pa ua ca : OwnedAccount
+lamports : alloc.vec.Vec OwnedLamportsCell
+p u c : OwnedDataCell
+ten : Bool
+statement : Statement
+candidate : Std.Array U8 688#usize
+checkpointBytes : alloc.vec.Vec U8
+distinctPU : pa.key ≠ ua.key
+distinctPC : pa.key ≠ ca.key
+distinctUC : ua.key ≠ ca.key
+proofLength : (↑p.bytes).length = 58295
+checkpointLength : (↑c.bytes).length = 1768
+outputLength : (↑checkpointBytes).length = 1768
+proofAllowed : shared_allowed p.borrowed = ok true
+publicAllowed : shared_allowed u.borrowed = ok true
+scanned : owned_checkpoint_nonzero c.bytes = ok false
+decoded :
+  decode_public_statement_box (Installation.install ops verifierOps) u.bytes.deref =
+    ok (core.result.Result.Ok statement)
+validated : (Installation.install ops verifierOps).op5 statement = ok (core.result.Result.Ok ())
+encoded :
+  (Installation.install ops verifierOps).op8 (commonOf statement).lane_transition.candidate_afterstate =
+    ok (core.result.Result.Ok candidate)
+compared :
+  (Installation.install ops verifierOps).op0 core.cmp.PartialEqU8
+      (FrameOperationsTotal.segment p.bytes.deref 0#usize 688#usize) candidate =
+    ok false
+tagRead : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U8) p.bytes 696#usize = ok 2#u8
+firstReturned :
+  first_decoded (Installation.install ops verifierOps) (publicOf statement) u.bytes.deref
+      (FrameOperationsTotal.segment p.bytes.deref 688#usize 58295#usize) (splitIndex ten) =
+    ok (core.result.Result.Ok checkpointBytes)
+out : OwnedSdk
+run :
+  BorrowedReference.owned_stage1 (Installation.install ops verifierOps) program
+      (initialSdk program pa ua ca lamports p u c) (instruction ten) =
+    ok (core.result.Result.Ok (), out)
+saved : BorrowedBufferFrame.readBytes out 2#usize = ok checkpointBytes
+image :
+  BorrowedBufferFrame.buffers out =
+    (BorrowedBufferFrame.buffers (initialSdk program pa ua ca lamports p u c)).set 2 checkpointBytes
+accounts : out.accounts = (initialSdk program pa ua ca lamports p u c).accounts
+lamportsFrame : out.lamports_cells = (initialSdk program pa ua ca lamports p u c).lamports_cells
+⊢ (do
+      let account ←
+        (triple
+                { key := pa.key, owner := pa.owner, is_signer := false, is_writable := false, executable := false,
+                  rent_epoch := pa.rent_epoch, data_slot := 0#usize, lamports_slot := pa.lamports_slot }
+                { key := ua.key, owner := ua.owner, is_signer := false, is_writable := false, executable := false,
+                  rent_epoch := ua.rent_epoch, data_slot := 1#usize, lamports_slot := ua.lamports_slot }
+                (checkpointMeta program ca)).index_usize
+            0#usize
+      let x ←
+        (triple p u { bytes := c.bytes, borrowed := 0#isize, strong := c.strong, weak := c.weak }).index_usize
+            account.data_slot
+      ok x.bytes.deref) =
+    ok p.bytes.deref
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkReadyStatementV1.lean:89:42: error: unsolved goals
+ops : Ops
+verifierOps : AspisR1CurrentCaller.Ops
+program : Std.Array U8 32#usize
+pa ua ca : OwnedAccount
+lamports : alloc.vec.Vec OwnedLamportsCell
+p u c : OwnedDataCell
+ten : Bool
+statement : Statement
+candidate : Std.Array U8 688#usize
+checkpointBytes : alloc.vec.Vec U8
+distinctPU : pa.key ≠ ua.key
+distinctPC : pa.key ≠ ca.key
+distinctUC : ua.key ≠ ca.key
+proofLength : (↑p.bytes).length = 58295
+checkpointLength : (↑c.bytes).length = 1768
+outputLength : (↑checkpointBytes).length = 1768
+proofAllowed : shared_allowed p.borrowed = ok true
+publicAllowed : shared_allowed u.borrowed = ok true
+scanned : owned_checkpoint_nonzero c.bytes = ok false
+decoded :
+  decode_public_statement_box (Installation.install ops verifierOps) u.bytes.deref =
+    ok (core.result.Result.Ok statement)
+validated : (Installation.install ops verifierOps).op5 statement = ok (core.result.Result.Ok ())
+encoded :
+  (Installation.install ops verifierOps).op8 (commonOf statement).lane_transition.candidate_afterstate =
+    ok (core.result.Result.Ok candidate)
+compared :
+  (Installation.install ops verifierOps).op0 core.cmp.PartialEqU8
+      (FrameOperationsTotal.segment p.bytes.deref 0#usize 688#usize) candidate =
+    ok false
+tagRead : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U8) p.bytes 696#usize = ok 2#u8
+firstReturned :
+  first_decoded (Installation.install ops verifierOps) (publicOf statement) u.bytes.deref
+      (FrameOperationsTotal.segment p.bytes.deref 688#usize 58295#usize) (splitIndex ten) =
+    ok (core.result.Result.Ok checkpointBytes)
+out : OwnedSdk
+run :
+  BorrowedReference.owned_stage1 (Installation.install ops verifierOps) program
+      (initialSdk program pa ua ca lamports p u c) (instruction ten) =
+    ok (core.result.Result.Ok (), out)
+saved : BorrowedBufferFrame.readBytes out 2#usize = ok checkpointBytes
+image :
+  BorrowedBufferFrame.buffers out =
+    (BorrowedBufferFrame.buffers (initialSdk program pa ua ca lamports p u c)).set 2 checkpointBytes
+accounts : out.accounts = (initialSdk program pa ua ca lamports p u c).accounts
+lamportsFrame : out.lamports_cells = (initialSdk program pa ua ca lamports p u c).lamports_cells
+pRead : ProofGate.FixedLinked.inputBytes (initialSdk program pa ua ca lamports p u c) 0#usize = ok p.bytes.deref
+⊢ (do
+      let account ←
+        (triple
+                { key := pa.key, owner := pa.owner, is_signer := false, is_writable := false, executable := false,
+                  rent_epoch := pa.rent_epoch, data_slot := 0#usize, lamports_slot := pa.lamports_slot }
+                { key := ua.key, owner := ua.owner, is_signer := false, is_writable := false, executable := false,
+                  rent_epoch := ua.rent_epoch, data_slot := 1#usize, lamports_slot := ua.lamports_slot }
+                (checkpointMeta program ca)).index_usize
+            1#usize
+      let x ←
+        (triple p u { bytes := c.bytes, borrowed := 0#isize, strong := c.strong, weak := c.weak }).index_usize
+            account.data_slot
+      ok x.bytes.deref) =
+    ok u.bytes.deref
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkReadyStatementV1.lean:94:12: error: invalid `do` notation, expected type is not a monad application
+  Prop
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkReadyStatementV1.lean:75:61: error: unsolved goals
+ops : Ops
+verifierOps : AspisR1CurrentCaller.Ops
+program : Std.Array U8 32#usize
+pa ua ca : OwnedAccount
+lamports : alloc.vec.Vec OwnedLamportsCell
+p u c : OwnedDataCell
+ten : Bool
+statement : Statement
+candidate : Std.Array U8 688#usize
+checkpointBytes : alloc.vec.Vec U8
+distinctPU : pa.key ≠ ua.key
+distinctPC : pa.key ≠ ca.key
+distinctUC : ua.key ≠ ca.key
+proofLength : (↑p.bytes).length = 58295
+checkpointLength : (↑c.bytes).length = 1768
+outputLength : (↑checkpointBytes).length = 1768
+proofAllowed : shared_allowed p.borrowed = ok true
+publicAllowed : shared_allowed u.borrowed = ok true
+scanned : owned_checkpoint_nonzero c.bytes = ok false
+decoded :
+  decode_public_statement_box (Installation.install ops verifierOps) u.bytes.deref =
+    ok (core.result.Result.Ok statement)
+validated : (Installation.install ops verifierOps).op5 statement = ok (core.result.Result.Ok ())
+encoded :
+  (Installation.install ops verifierOps).op8 (commonOf statement).lane_transition.candidate_afterstate =
+    ok (core.result.Result.Ok candidate)
+compared :
+  (Installation.install ops verifierOps).op0 core.cmp.PartialEqU8
+      (FrameOperationsTotal.segment p.bytes.deref 0#usize 688#usize) candidate =
+    ok false
+tagRead : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U8) p.bytes 696#usize = ok 2#u8
+firstReturned :
+  first_decoded (Installation.install ops verifierOps) (publicOf statement) u.bytes.deref
+      (FrameOperationsTotal.segment p.bytes.deref 688#usize 58295#usize) (splitIndex ten) =
+    ok (core.result.Result.Ok checkpointBytes)
+out : OwnedSdk
+run :
+  BorrowedReference.owned_stage1 (Installation.install ops verifierOps) program
+      (initialSdk program pa ua ca lamports p u c) (instruction ten) =
+    ok (core.result.Result.Ok (), out)
+saved : BorrowedBufferFrame.readBytes out 2#usize = ok checkpointBytes
+image :
+  BorrowedBufferFrame.buffers out =
+    (BorrowedBufferFrame.buffers (initialSdk program pa ua ca lamports p u c)).set 2 checkpointBytes
+accounts : out.accounts = (initialSdk program pa ua ca lamports p u c).accounts
+lamportsFrame : out.lamports_cells = (initialSdk program pa ua ca lamports p u c).lamports_cells
+pRead : ProofGate.FixedLinked.inputBytes (initialSdk program pa ua ca lamports p u c) 0#usize = ok p.bytes.deref
+uRead : ProofGate.FixedLinked.inputBytes (initialSdk program pa ua ca lamports p u c) 1#usize = ok u.bytes.deref
+cRead : ProofGate.FixedLinked.inputBytes out 2#usize = ok checkpointBytes.deref
+⊢ ∃ out,
+    BorrowedReference.owned_stage1 (Installation.install ops verifierOps) program
+          (initialSdk program pa ua ca lamports p u c) (instruction ten) =
+        ok (core.result.Result.Ok (), out) ∧
+      ProofGate.FixedLinked.inputBytes (initialSdk program pa ua ca lamports p u c) 0#usize = ok p.bytes.deref ∧
+        ProofGate.FixedLinked.inputBytes (initialSdk program pa ua ca lamports p u c) 1#usize = ok u.bytes.deref ∧
+          ProofGate.FixedLinked.inputBytes out 2#usize = ok checkpointBytes.deref ∧
+            BorrowedBufferFrame.buffers out =
+                (BorrowedBufferFrame.buffers (initialSdk program pa ua ca lamports p u c)).set 2 checkpointBytes ∧
+              out.accounts = (initialSdk program pa ua ca lamports p u c).accounts ∧
+                out.lamports_cells = lamports ∧
+                  AspisR1CurrentCaller.verifier.candidate.tx1 verifierOps
+                      (SourceInstallation.currentDigest
+                        (SolanaDigest.Insts.Aspis_coreDigestDigest32 (Installation.install ops verifierOps)))
+                      (CurrentCarrier.toCurrentPublic (publicOf statement)) u.bytes.deref
+                      (FrameOperationsTotal.segment p.bytes.deref 688#usize 58295#usize) (splitIndex ten) () none =
+                    ok (core.result.Result.Ok checkpointBytes)
+'AspisS2OwnedStage1.SdkReference.ReadyStatement.common_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ReadyStatement.public_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ReadyStatement.construct' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
