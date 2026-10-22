@@ -8665,3 +8665,22 @@ speedups classified by whether proof bytes and the existing proofs/trust
 items survive. Notes: parallelism would touch the single-thread TLS trust item
 and the side-channel model; any change to proof bytes touches the verifier
 and soundness model and needs the user's approval.
+
+## D170 (lead, 2026-10-22 19:20): prover profile; P_R1 is 89% of prover time
+
+Merged `codex/cx-prover-speed-20261022` (measurement only;
+`design/PROVER-SPEED-20261022.md`). Five runs per fixture and variant on the build
+host (Intel Core Ultra 7 155H, 16 cores/22 threads, rustc 1.94.1), medians:
+research 37.25/37.24 s and CT v2 37.58/37.44 s (transfer/withdrawal); one
+attempt in every run. **P_R1 takes about 33 s**: emit 12.3, convert 4.7, build
+7.1, check 8.8. Everything else is about 4.3 s: semantic sumcheck 2.5,
+commitments and encodings 1.2, salts, hashing and Merkle under 0.7. So
+hashing and Merkle parallelism cannot reach the 15 s target. The target needs about a
+4x speedup of P_R1 (projected 12–13 s end to end). These are projections, not results.
+Next, per D169: a byte-preserving P_R1 speedup on the v2 candidate branch, using
+bounded workers, exact blocked/SIMD M31 arithmetic and removal of duplicated
+column construction. Accept/reject decisions and proof bytes stay identical,
+there are new Kani equivalence gates, and the deterministic exact checker stays
+(no randomized checking). P_R1 inputs are public challenges, so its trace falls under the D166
+simulatable-trace route. Workers change the thread model, so the TLS
+single-thread trust item must be re-examined (v2 already gates TLS recording off).
