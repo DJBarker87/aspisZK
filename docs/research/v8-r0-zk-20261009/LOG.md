@@ -8013,3 +8013,25 @@ certified against BTreeMap Iter/IntoIter per transition (conflict retention,
 key order, early exits); the eight-attempt retry/publication owner; the
 real-side `prove_masked_retrying_with` publication; then the source-to-
 `FSExperiments` conversion. `RustProverRefinement` stays explicit.
+
+## D142 (lead, 2026-10-22 02:25): simulator cost pass 6; ruling on callbacks
+
+Merged `codex/cx-sim-cost6-20261022` (report `r1p-final/SIM-COST6-20261022.md`).
+Proved: sparse WideExact shift suffix ≤ 85,439 ticks; the payload indexing and
+array-addition representation bridge; exact outer `firstGood` retry control
+8·C + 17 ticks. Standard axioms, zero swap (J8819–J8830); no shipped change.
+Finding (`no_uniform_callback_tariff`): with the endpoint's current
+quantifiers, the public-output callback and template/wire functions (frame,
+payload, final, pubBytes, decoder, lookup) range over an arbitrary family, so
+no numeric cost bound can hold (callback `bytes (C+1)` exceeds any C).
+**Lead ruling (free-parameter pattern):** these are protocol functions, not
+adversary inputs, so specialise them to the shipped R1 instance, the actual
+encoders and decoder used by the frozen simulator/prover. This is the same
+fix as earlier specialisations: a premise that is false for arbitrary
+parameter values is restated at the protocol's actual values. It restricts
+no adversary capability. The adversary's queries remain arbitrary, and cost
+stays relative to their length. The report must show the before/after
+quantifiers and confirm that no adversary-chosen input is among the fixed
+functions. Next (pass 7): the concrete callback/wire instance; reference/mask
+and terminal-read costs; the exact P_R1 predicate decision; composition into
+`SimCostIdeal.Preparation` with numeric C; endpoint without `sim_preparation`.
