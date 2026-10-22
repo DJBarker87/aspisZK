@@ -8580,3 +8580,28 @@ that worked in parts 29–30 and 43–44: a per-iteration Kani check
 (shipped iteration = owned iteration, verified stubs for callees), then a Lean
 induction over the owned loop. The constant-time candidate (D162) does not touch the
 simulator, so this binding remains valid if the candidate is adopted.
+
+## D165 (lead, 2026-10-22 12:50): constant-time stage 3; cost and a design question
+
+Candidate branch `codex/cx-ct-kernels-20261022` (head `47397e5e16`, unmerged
+per D162; reports `design/CT-KERNELS-20261022.md` and
+`CT-CHECKER-ASSESSMENT-20261022.md`). The ELF gate is corrected to PASS against the
+adopted pins. Stages 3(a)–(e) are done with equivalence gates (Kani, exhaustive or
+per-step), paired source-trace checks, ELF identity and byte identity of the
+fixture proofs and public bytes: fixed-shape samplers; constant-work bounded
+rejection with the legacy stream state; a fixed tensor schedule for equality
+weights; a full-pair QueryScan with masked selection; oblivious multiproof
+sorting and sharing with fixed slots. Single-run prover wall time
+(transfer/withdrawal, measurement only): baseline about 40 s; after (a) 44/43;
+(b) 53/52; (c) 161/137; (d) 192/202; (e) 176/166.
+Stopped at (f): a generic padded constant-shape P_R1 elimination costs
+80.1 billion M31 coefficient updates per attempt (source bounds; not a
+lower bound for every algorithm). A structure-specific emitter would be needed.
+Lead assessment: items (c)–(f) are **challenge-dependent (c-q)** and (a)–(b) are
+**private-coin-dependent (c-s)**. None reads the witness directly. Their source traces are
+functions of public data, Fiat–Shamir challenges and independent coins, so
+L2 can instead be met by proving that this trace is **simulatable**: its joint law
+equals the simulator's up to the existing bad events. That gives an identical
+timing distribution in the real and ideal worlds, and needs no constant-time rewrite.
+The field arithmetic on witness-bearing values (F2) and the pole check (F1) read
+secrets directly and keep the constant-time kernels. Raised to the user.
