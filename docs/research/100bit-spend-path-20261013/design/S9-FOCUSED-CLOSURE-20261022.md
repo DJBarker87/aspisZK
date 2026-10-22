@@ -539,3 +539,20 @@ iterator transitions rather than reproving their arithmetic. Commit
 helper transport and genuine actual-core type-to-operation correspondence
 are being joined next. Production Rust refinement, release binding and the
 composed 100-bit theorem remain OPEN; no S9 release closure is claimed.
+
+
+PROVED public selected caller helper semantics: the two source helper
+iterations and zero-array wrapper transport successful results to the checked
+Candidate helper (87f7f8643d). Reusing CandidateTopTotal then proves canonical
+returned cells and all original S2 coefficient equations (865ad6a8fb). The
+canonical mapped-input-read contracts and successful Pair call remain explicit;
+there is no remaining universal afterLow equality or output-canonicality
+premise. Evidence: s9-pair-helper-loop-wrapper-map-v1-20261022/ and
+s9-pair-public-top-result-v1-20261022/. Checks: 18.914 s, 17.023 s, 18.796 s;
+below 3.24 GB process RSS, zero swaps, standard axioms.
+
+This closes the selected helper's internal mathematical connection, not S9's
+release cone. Ongoing: actual core-extraction carrier/body correspondence,
+actual four-step projection accumulation and its caller contracts, then the
+remaining production/refinement/release joins and composed security result.
+Production code and measured CU artifacts have not changed in these proofs.
