@@ -1179,3 +1179,32 @@ Two preceding setup failures (missing selected kernel root, then incomplete
 model import closure) are retained; no source-theorem change was required.
 The packet checker passed. No whole-caller or final source-freeze closure is
 claimed by this mathematical/source-carrier composition.
+
+
+## Actual callback values and ten-query stage-1 consumer
+
+`s4-query-returned-local-batches-v1-20261022` establishes
+`AspisR1S4QueryReturnedSemanticsV1.typed_opening_returned_local_batches`.
+The same typed opening witness, same successful Claim powers call and
+canonical gamma now imply the actual returned Full array decodes to the
+four local width29 batch values. The result retains the original reached
+index, source opening, concrete dots success, Current-to-Full array identity,
+all four callback witnesses and both successful typed decodes. No independent
+dots success or desired value equation is assumed. Focused exit 0, 5.977s,
+peak RSS 4,064,673,792 bytes, no swap, standard axioms. A rejected ambiguous
+namespace attempt is retained; selective opens fixed it without changing
+the theorem statement.
+
+`s4-tx1-ten-returned-local-batches-v1-20261022` composes that result with
+the actual candidate source tx1 cut: every one of its ten reached callbacks
+has the returned-array semantic result. Its exact original caller success
+and per-query success witnesses remain. Focused exit 0, 6.237s, peak RSS
+4,050,108,416 bytes, no swap, standard axioms; both packet checkers passed.
+
+The stage-1 preparation binding still supplies an existential canonical
+gamma and same powers array; this theorem does not newly identify that gamma
+with a model transcript challenge. Scan/preparation bindings, non-S4
+operation boundaries, primitive commitment authentication, candidate source
+adoption or frozen from_fn refinement, and final coherent replay remain
+open. This closes the returned-value arithmetic join along the accepted
+candidate tx1 cut, not the entire frozen S4 cone or the 100-bit target.
