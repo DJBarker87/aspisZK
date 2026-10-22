@@ -1,0 +1,1308 @@
+def R1Z.ProverCommitEnvironment35.E1 : {Context : Type} → (Context → R1Z.ProverCommitEntropy18.Candidate → ℚ) → Prop :=
+fun {Context} okLaw =>
+  ∀ (context : Context) (bytes : R1Z.ProverCommitEntropy18.Candidate),
+    okLaw context bytes = 1 / ↑(Fintype.card R1Z.ProverCommitEntropy18.Candidate)
+theorem R1Z.ProverCommitEnvironmentSource35.reserve_source : ∀ (schedule : R1Z.ProverCommitEnvironment35.Schedule)
+  (nonce : R0Z.FsStatement.OracleAnswer) (unix : Bool) (s : R1Z.ProverCommitEnvironment35.State),
+  (do
+      let out ← AspisR1Environment35.owner.reserve (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce) unix s
+      Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironmentSource35.unpack out)) =
+    Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironment35.reserve schedule unix nonce s) :=
+fun schedule nonce unix s =>
+  have call :=
+    Except.casesOn (motive := fun t =>
+      (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1 = t →
+        (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce).call AspisR1Environment35.owner.Kind.Create s =
+          Aeneas.Std.Result.ok
+            (R1Z.ProverCommitEnvironmentSource35.encodeOutcome
+                (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1,
+              match (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1 with
+              | Except.ok a =>
+                let __src := (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2;
+                { history := __src.history, cursor := __src.cursor, burned := nonce :: s.burned }
+              | Except.error a =>
+                (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2))
+      (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1
+      (fun a h =>
+        Eq.ndrec (motive := fun x =>
+          (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1 = x →
+            (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce).call AspisR1Environment35.owner.Kind.Create s =
+              Aeneas.Std.Result.ok
+                (R1Z.ProverCommitEnvironmentSource35.encodeOutcome x,
+                  match x with
+                  | Except.ok a =>
+                    let __src :=
+                      (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2;
+                    { history := __src.history, cursor := __src.cursor, burned := nonce :: s.burned }
+                  | Except.error a =>
+                    (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2))
+          (fun h =>
+            of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg Aeneas.Std.Result.ok
+                      (congr (congrArg Prod.mk (congrArg R1Z.ProverCommitEnvironmentSource35.encodeOutcome h))
+                        (congrArg
+                          (fun x =>
+                            match AspisR1Environment35.owner.Kind.Create, x with
+                            | AspisR1Environment35.owner.Kind.Create, Except.ok a =>
+                              {
+                                history :=
+                                  (R1Z.ProverCommitEnvironment35.ask schedule
+                                        (match AspisR1Environment35.owner.Kind.Create with
+                                        | AspisR1Environment35.owner.Kind.Create =>
+                                          R1Z.ProverCommitEnvironment35.Kind.create
+                                        | AspisR1Environment35.owner.Kind.WriteMagic =>
+                                          R1Z.ProverCommitEnvironment35.Kind.writeMagic
+                                        | AspisR1Environment35.owner.Kind.WriteDigest =>
+                                          R1Z.ProverCommitEnvironment35.Kind.writeDigest
+                                        | AspisR1Environment35.owner.Kind.WriteNonce =>
+                                          R1Z.ProverCommitEnvironment35.Kind.writeNonce
+                                        | AspisR1Environment35.owner.Kind.FileSync =>
+                                          R1Z.ProverCommitEnvironment35.Kind.fileSync
+                                        | AspisR1Environment35.owner.Kind.DirectoryOpen =>
+                                          R1Z.ProverCommitEnvironment35.Kind.directoryOpen
+                                        | AspisR1Environment35.owner.Kind.DirectorySync =>
+                                          R1Z.ProverCommitEnvironment35.Kind.directorySync)
+                                        s).2.history,
+                                cursor :=
+                                  (R1Z.ProverCommitEnvironment35.ask schedule
+                                        (match AspisR1Environment35.owner.Kind.Create with
+                                        | AspisR1Environment35.owner.Kind.Create =>
+                                          R1Z.ProverCommitEnvironment35.Kind.create
+                                        | AspisR1Environment35.owner.Kind.WriteMagic =>
+                                          R1Z.ProverCommitEnvironment35.Kind.writeMagic
+                                        | AspisR1Environment35.owner.Kind.WriteDigest =>
+                                          R1Z.ProverCommitEnvironment35.Kind.writeDigest
+                                        | AspisR1Environment35.owner.Kind.WriteNonce =>
+                                          R1Z.ProverCommitEnvironment35.Kind.writeNonce
+                                        | AspisR1Environment35.owner.Kind.FileSync =>
+                                          R1Z.ProverCommitEnvironment35.Kind.fileSync
+                                        | AspisR1Environment35.owner.Kind.DirectoryOpen =>
+                                          R1Z.ProverCommitEnvironment35.Kind.directoryOpen
+                                        | AspisR1Environment35.owner.Kind.DirectorySync =>
+                                          R1Z.ProverCommitEnvironment35.Kind.directorySync)
+                                        s).2.cursor,
+                                burned :=
+                                  nonce ::
+                                    (R1Z.ProverCommitEnvironment35.ask schedule
+                                          (match AspisR1Environment35.owner.Kind.Create with
+                                          | AspisR1Environment35.owner.Kind.Create =>
+                                            R1Z.ProverCommitEnvironment35.Kind.create
+                                          | AspisR1Environment35.owner.Kind.WriteMagic =>
+                                            R1Z.ProverCommitEnvironment35.Kind.writeMagic
+                                          | AspisR1Environment35.owner.Kind.WriteDigest =>
+                                            R1Z.ProverCommitEnvironment35.Kind.writeDigest
+                                          | AspisR1Environment35.owner.Kind.WriteNonce =>
+                                            R1Z.ProverCommitEnvironment35.Kind.writeNonce
+                                          | AspisR1Environment35.owner.Kind.FileSync =>
+                                            R1Z.ProverCommitEnvironment35.Kind.fileSync
+                                          | AspisR1Environment35.owner.Kind.DirectoryOpen =>
+                                            R1Z.ProverCommitEnvironment35.Kind.directoryOpen
+                                          | AspisR1Environment35.owner.Kind.DirectorySync =>
+                                            R1Z.ProverCommitEnvironment35.Kind.directorySync)
+                                          s).2.burned }
+                            | x, x_1 =>
+                              (R1Z.ProverCommitEnvironment35.ask schedule
+                                  (match AspisR1Environment35.owner.Kind.Create with
+                                  | AspisR1Environment35.owner.Kind.Create => R1Z.ProverCommitEnvironment35.Kind.create
+                                  | AspisR1Environment35.owner.Kind.WriteMagic =>
+                                    R1Z.ProverCommitEnvironment35.Kind.writeMagic
+                                  | AspisR1Environment35.owner.Kind.WriteDigest =>
+                                    R1Z.ProverCommitEnvironment35.Kind.writeDigest
+                                  | AspisR1Environment35.owner.Kind.WriteNonce =>
+                                    R1Z.ProverCommitEnvironment35.Kind.writeNonce
+                                  | AspisR1Environment35.owner.Kind.FileSync =>
+                                    R1Z.ProverCommitEnvironment35.Kind.fileSync
+                                  | AspisR1Environment35.owner.Kind.DirectoryOpen =>
+                                    R1Z.ProverCommitEnvironment35.Kind.directoryOpen
+                                  | AspisR1Environment35.owner.Kind.DirectorySync =>
+                                    R1Z.ProverCommitEnvironment35.Kind.directorySync)
+                                  s).2)
+                          h))))
+                  (Aeneas.Std.Result.ok
+                    (R1Z.ProverCommitEnvironmentSource35.encodeOutcome (Except.error a),
+                      (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2)))
+                (eq_self
+                  (Aeneas.Std.Result.ok
+                    (R1Z.ProverCommitEnvironmentSource35.encodeOutcome (Except.error a),
+                      (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2)))))
+          (Eq.symm h)
+          (Eq.refl (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1))
+      (fun a h =>
+        Eq.ndrec (motive := fun x =>
+          (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1 = x →
+            (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce).call AspisR1Environment35.owner.Kind.Create s =
+              Aeneas.Std.Result.ok
+                (R1Z.ProverCommitEnvironmentSource35.encodeOutcome x,
+                  match x with
+                  | Except.ok a =>
+                    let __src :=
+                      (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2;
+                    { history := __src.history, cursor := __src.cursor, burned := nonce :: s.burned }
+                  | Except.error a =>
+                    (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2))
+          (fun h =>
+            Eq.mpr
+              (id
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg Aeneas.Std.Result.ok
+                          (congr (congrArg Prod.mk (congrArg R1Z.ProverCommitEnvironmentSource35.encodeOutcome h))
+                            (congrArg
+                              (fun x =>
+                                match AspisR1Environment35.owner.Kind.Create, x with
+                                | AspisR1Environment35.owner.Kind.Create, Except.ok a =>
+                                  {
+                                    history :=
+                                      (R1Z.ProverCommitEnvironment35.ask schedule
+                                            (match AspisR1Environment35.owner.Kind.Create with
+                                            | AspisR1Environment35.owner.Kind.Create =>
+                                              R1Z.ProverCommitEnvironment35.Kind.create
+                                            | AspisR1Environment35.owner.Kind.WriteMagic =>
+                                              R1Z.ProverCommitEnvironment35.Kind.writeMagic
+                                            | AspisR1Environment35.owner.Kind.WriteDigest =>
+                                              R1Z.ProverCommitEnvironment35.Kind.writeDigest
+                                            | AspisR1Environment35.owner.Kind.WriteNonce =>
+                                              R1Z.ProverCommitEnvironment35.Kind.writeNonce
+                                            | AspisR1Environment35.owner.Kind.FileSync =>
+                                              R1Z.ProverCommitEnvironment35.Kind.fileSync
+                                            | AspisR1Environment35.owner.Kind.DirectoryOpen =>
+                                              R1Z.ProverCommitEnvironment35.Kind.directoryOpen
+                                            | AspisR1Environment35.owner.Kind.DirectorySync =>
+                                              R1Z.ProverCommitEnvironment35.Kind.directorySync)
+                                            s).2.history,
+                                    cursor :=
+                                      (R1Z.ProverCommitEnvironment35.ask schedule
+                                            (match AspisR1Environment35.owner.Kind.Create with
+                                            | AspisR1Environment35.owner.Kind.Create =>
+                                              R1Z.ProverCommitEnvironment35.Kind.create
+                                            | AspisR1Environment35.owner.Kind.WriteMagic =>
+                                              R1Z.ProverCommitEnvironment35.Kind.writeMagic
+                                            | AspisR1Environment35.owner.Kind.WriteDigest =>
+                                              R1Z.ProverCommitEnvironment35.Kind.writeDigest
+                                            | AspisR1Environment35.owner.Kind.WriteNonce =>
+                                              R1Z.ProverCommitEnvironment35.Kind.writeNonce
+                                            | AspisR1Environment35.owner.Kind.FileSync =>
+                                              R1Z.ProverCommitEnvironment35.Kind.fileSync
+                                            | AspisR1Environment35.owner.Kind.DirectoryOpen =>
+                                              R1Z.ProverCommitEnvironment35.Kind.directoryOpen
+                                            | AspisR1Environment35.owner.Kind.DirectorySync =>
+                                              R1Z.ProverCommitEnvironment35.Kind.directorySync)
+                                            s).2.cursor,
+                                    burned :=
+                                      nonce ::
+                                        (R1Z.ProverCommitEnvironment35.ask schedule
+                                              (match AspisR1Environment35.owner.Kind.Create with
+                                              | AspisR1Environment35.owner.Kind.Create =>
+                                                R1Z.ProverCommitEnvironment35.Kind.create
+                                              | AspisR1Environment35.owner.Kind.WriteMagic =>
+                                                R1Z.ProverCommitEnvironment35.Kind.writeMagic
+                                              | AspisR1Environment35.owner.Kind.WriteDigest =>
+                                                R1Z.ProverCommitEnvironment35.Kind.writeDigest
+                                              | AspisR1Environment35.owner.Kind.WriteNonce =>
+                                                R1Z.ProverCommitEnvironment35.Kind.writeNonce
+                                              | AspisR1Environment35.owner.Kind.FileSync =>
+                                                R1Z.ProverCommitEnvironment35.Kind.fileSync
+                                              | AspisR1Environment35.owner.Kind.DirectoryOpen =>
+                                                R1Z.ProverCommitEnvironment35.Kind.directoryOpen
+                                              | AspisR1Environment35.owner.Kind.DirectorySync =>
+                                                R1Z.ProverCommitEnvironment35.Kind.directorySync)
+                                              s).2.burned }
+                                | x, x_1 =>
+                                  (R1Z.ProverCommitEnvironment35.ask schedule
+                                      (match AspisR1Environment35.owner.Kind.Create with
+                                      | AspisR1Environment35.owner.Kind.Create =>
+                                        R1Z.ProverCommitEnvironment35.Kind.create
+                                      | AspisR1Environment35.owner.Kind.WriteMagic =>
+                                        R1Z.ProverCommitEnvironment35.Kind.writeMagic
+                                      | AspisR1Environment35.owner.Kind.WriteDigest =>
+                                        R1Z.ProverCommitEnvironment35.Kind.writeDigest
+                                      | AspisR1Environment35.owner.Kind.WriteNonce =>
+                                        R1Z.ProverCommitEnvironment35.Kind.writeNonce
+                                      | AspisR1Environment35.owner.Kind.FileSync =>
+                                        R1Z.ProverCommitEnvironment35.Kind.fileSync
+                                      | AspisR1Environment35.owner.Kind.DirectoryOpen =>
+                                        R1Z.ProverCommitEnvironment35.Kind.directoryOpen
+                                      | AspisR1Environment35.owner.Kind.DirectorySync =>
+                                        R1Z.ProverCommitEnvironment35.Kind.directorySync)
+                                      s).2)
+                              h))))
+                      (Aeneas.Std.Result.ok
+                        (R1Z.ProverCommitEnvironmentSource35.encodeOutcome (Except.ok a),
+                          {
+                            history :=
+                              (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                    s).2.history,
+                            cursor :=
+                              (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                    s).2.cursor,
+                            burned := nonce :: s.burned })))
+                    (Aeneas.Std.Result.ok.injEq
+                      (R1Z.ProverCommitEnvironmentSource35.encodeOutcome (Except.ok a),
+                        {
+                          history :=
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.history,
+                          cursor :=
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.cursor,
+                          burned :=
+                            nonce ::
+                              (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                    s).2.burned })
+                      (R1Z.ProverCommitEnvironmentSource35.encodeOutcome (Except.ok a),
+                        {
+                          history :=
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.history,
+                          cursor :=
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.cursor,
+                          burned := nonce :: s.burned })))
+                  (Eq.trans
+                    (Prod.mk.injEq (R1Z.ProverCommitEnvironmentSource35.encodeOutcome (Except.ok a))
+                      {
+                        history :=
+                          (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                s).2.history,
+                        cursor :=
+                          (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                s).2.cursor,
+                        burned :=
+                          nonce ::
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.burned }
+                      (R1Z.ProverCommitEnvironmentSource35.encodeOutcome (Except.ok a))
+                      {
+                        history :=
+                          (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                s).2.history,
+                        cursor :=
+                          (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                s).2.cursor,
+                        burned := nonce :: s.burned })
+                    (Eq.trans
+                      (congr (congrArg And (eq_self (R1Z.ProverCommitEnvironmentSource35.encodeOutcome (Except.ok a))))
+                        (Eq.trans
+                          (R1Z.ProverCommitEnvironment35.State.mk.injEq
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.history
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.cursor
+                            (nonce ::
+                              (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                    s).2.burned)
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.history
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.cursor
+                            (nonce :: s.burned))
+                          (Eq.trans
+                            (congr
+                              (congrArg And
+                                (eq_self
+                                  (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                        s).2.history))
+                              (Eq.trans
+                                (congr
+                                  (congrArg And
+                                    (eq_self
+                                      (R1Z.ProverCommitEnvironment35.ask schedule
+                                            R1Z.ProverCommitEnvironment35.Kind.create s).2.cursor))
+                                  (Eq.trans
+                                    (List.cons.injEq nonce
+                                      (R1Z.ProverCommitEnvironment35.ask schedule
+                                            R1Z.ProverCommitEnvironment35.Kind.create s).2.burned
+                                      nonce s.burned)
+                                    (Eq.trans
+                                      (congrFun' (congrArg And (eq_self nonce))
+                                        ((R1Z.ProverCommitEnvironment35.ask schedule
+                                                R1Z.ProverCommitEnvironment35.Kind.create s).2.burned =
+                                          s.burned))
+                                      (true_and
+                                        ((R1Z.ProverCommitEnvironment35.ask schedule
+                                                R1Z.ProverCommitEnvironment35.Kind.create s).2.burned =
+                                          s.burned)))))
+                                (true_and
+                                  ((R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                          s).2.burned =
+                                    s.burned))))
+                            (true_and
+                              ((R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                      s).2.burned =
+                                s.burned)))))
+                      (true_and
+                        ((R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                s).2.burned =
+                          s.burned))))))
+              (Eq.refl
+                (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2.burned))
+          (Eq.symm h)
+          (Eq.refl (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1))
+      (Eq.refl (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1);
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          (do
+              let out ← _a
+              Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironmentSource35.unpack out)) =
+            Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironment35.reserve schedule unix nonce s))
+        (AspisR1Environment35.owner.reserve.eq_1 (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce) unix s)))
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (congrFun'
+              (congrArg bind
+                (Eq.trans
+                  (congrFun' (congrArg bind call)
+                    (Aeneas.Std.uncurry fun result after =>
+                      match result with
+                      | Aeneas.Std.core.result.Result.Ok a =>
+                        AspisR1Environment35.owner.finish (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce) 0#u8
+                          unix after
+                      | Aeneas.Std.core.result.Result.Err e => do
+                        let b ← (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce).duplicate e
+                        if b = true then
+                            Aeneas.Std.Result.ok
+                              { result := Aeneas.Std.core.result.Result.Err AspisR1Environment35.owner.Error.Duplicate,
+                                state := after, created := false }
+                          else
+                            Aeneas.Std.Result.ok
+                              { result := Aeneas.Std.core.result.Result.Err (AspisR1Environment35.owner.Error.Io e),
+                                state := after, created := false }))
+                  (Aeneas.Std.bind_tc_ok
+                    (R1Z.ProverCommitEnvironmentSource35.encodeOutcome
+                        (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1,
+                      match
+                        (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1 with
+                      | Except.ok a =>
+                        {
+                          history :=
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.history,
+                          cursor :=
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.cursor,
+                          burned := nonce :: s.burned }
+                      | Except.error a =>
+                        (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2)
+                    (Aeneas.Std.uncurry fun result after =>
+                      match result with
+                      | Aeneas.Std.core.result.Result.Ok a =>
+                        AspisR1Environment35.owner.finish (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce) 0#u8
+                          unix after
+                      | Aeneas.Std.core.result.Result.Err e => do
+                        let b ← (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce).duplicate e
+                        if b = true then
+                            Aeneas.Std.Result.ok
+                              { result := Aeneas.Std.core.result.Result.Err AspisR1Environment35.owner.Error.Duplicate,
+                                state := after, created := false }
+                          else
+                            Aeneas.Std.Result.ok
+                              { result := Aeneas.Std.core.result.Result.Err (AspisR1Environment35.owner.Error.Io e),
+                                state := after, created := false }))))
+              fun out => Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironmentSource35.unpack out)))
+          (Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironment35.reserve schedule unix nonce s))))
+      (Except.casesOn (motive := fun t =>
+        (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1 = t →
+          (do
+              let out ←
+                let (result, after) :=
+                    (R1Z.ProverCommitEnvironmentSource35.encodeOutcome
+                        (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1,
+                      match
+                        (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1 with
+                      | Except.ok a =>
+                        {
+                          history :=
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.history,
+                          cursor :=
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                  s).2.cursor,
+                          burned := nonce :: s.burned }
+                      | Except.error a =>
+                        (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2)
+                  match result with
+                  | Aeneas.Std.core.result.Result.Ok a =>
+                    AspisR1Environment35.owner.finish (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce) 0#u8 unix
+                      after
+                  | Aeneas.Std.core.result.Result.Err e => do
+                    let b ← (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce).duplicate e
+                    if b = true then
+                        Aeneas.Std.Result.ok
+                          { result := Aeneas.Std.core.result.Result.Err AspisR1Environment35.owner.Error.Duplicate,
+                            state := after, created := false }
+                      else
+                        Aeneas.Std.Result.ok
+                          { result := Aeneas.Std.core.result.Result.Err (AspisR1Environment35.owner.Error.Io e),
+                            state := after, created := false }
+              Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironmentSource35.unpack out)) =
+            Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironment35.reserve schedule unix nonce s))
+        (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1
+        (fun e h =>
+          Eq.ndrec (motive := fun x =>
+            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1 = x →
+              (do
+                  let out ←
+                    let (result, after) :=
+                        (R1Z.ProverCommitEnvironmentSource35.encodeOutcome x,
+                          match x with
+                          | Except.ok a =>
+                            {
+                              history :=
+                                (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                      s).2.history,
+                              cursor :=
+                                (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                      s).2.cursor,
+                              burned := nonce :: s.burned }
+                          | Except.error a =>
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2)
+                      match result with
+                      | Aeneas.Std.core.result.Result.Ok a =>
+                        AspisR1Environment35.owner.finish (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce) 0#u8
+                          unix after
+                      | Aeneas.Std.core.result.Result.Err e => do
+                        let b ← (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce).duplicate e
+                        if b = true then
+                            Aeneas.Std.Result.ok
+                              { result := Aeneas.Std.core.result.Result.Err AspisR1Environment35.owner.Error.Duplicate,
+                                state := after, created := false }
+                          else
+                            Aeneas.Std.Result.ok
+                              { result := Aeneas.Std.core.result.Result.Err (AspisR1Environment35.owner.Error.Io e),
+                                state := after, created := false }
+                  Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironmentSource35.unpack out)) =
+                Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironment35.reserve schedule unix nonce s))
+            (fun h =>
+              R1Z.ProverCommitEnvironment35.IOError.casesOn (motive := fun t =>
+                e = t →
+                  (do
+                      let out ←
+                        let (result, after) :=
+                            (R1Z.ProverCommitEnvironmentSource35.encodeOutcome (Except.error e),
+                              match Except.error e with
+                              | Except.ok a =>
+                                {
+                                  history :=
+                                    (R1Z.ProverCommitEnvironment35.ask schedule
+                                          R1Z.ProverCommitEnvironment35.Kind.create s).2.history,
+                                  cursor :=
+                                    (R1Z.ProverCommitEnvironment35.ask schedule
+                                          R1Z.ProverCommitEnvironment35.Kind.create s).2.cursor,
+                                  burned := nonce :: s.burned }
+                              | Except.error a =>
+                                (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                    s).2)
+                          match result with
+                          | Aeneas.Std.core.result.Result.Ok a =>
+                            AspisR1Environment35.owner.finish (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce)
+                              0#u8 unix after
+                          | Aeneas.Std.core.result.Result.Err e => do
+                            let b ← (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce).duplicate e
+                            if b = true then
+                                Aeneas.Std.Result.ok
+                                  {
+                                    result :=
+                                      Aeneas.Std.core.result.Result.Err AspisR1Environment35.owner.Error.Duplicate,
+                                    state := after, created := false }
+                              else
+                                Aeneas.Std.Result.ok
+                                  { result := Aeneas.Std.core.result.Result.Err (AspisR1Environment35.owner.Error.Io e),
+                                    state := after, created := false }
+                      Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironmentSource35.unpack out)) =
+                    Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironment35.reserve schedule unix nonce s))
+                e
+                (fun h_1 =>
+                  Eq.ndrec (motive := fun e =>
+                    (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1 =
+                        Except.error e →
+                      (do
+                          let out ←
+                            let (result, after) :=
+                                (R1Z.ProverCommitEnvironmentSource35.encodeOutcome (Except.error e),
+                                  match Except.error e with
+                                  | Except.ok a =>
+                                    {
+                                      history :=
+                                        (R1Z.ProverCommitEnvironment35.ask schedule
+                                              R1Z.ProverCommitEnvironment35.Kind.create s).2.history,
+                                      cursor :=
+                                        (R1Z.ProverCommitEnvironment35.ask schedule
+                                              R1Z.ProverCommitEnvironment35.Kind.create s).2.cursor,
+                                      burned := nonce :: s.burned }
+                                  | Except.error a =>
+                                    (R1Z.ProverCommitEnvironment35.ask schedule
+                                        R1Z.ProverCommitEnvironment35.Kind.create s).2)
+                              match result with
+                              | Aeneas.Std.core.result.Result.Ok a =>
+                                AspisR1Environment35.owner.finish
+                                  (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce) 0#u8 unix after
+                              | Aeneas.Std.core.result.Result.Err e => do
+                                let b ← (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce).duplicate e
+                                if b = true then
+                                    Aeneas.Std.Result.ok
+                                      {
+                                        result :=
+                                          Aeneas.Std.core.result.Result.Err AspisR1Environment35.owner.Error.Duplicate,
+                                        state := after, created := false }
+                                  else
+                                    Aeneas.Std.Result.ok
+                                      {
+                                        result :=
+                                          Aeneas.Std.core.result.Result.Err (AspisR1Environment35.owner.Error.Io e),
+                                        state := after, created := false }
+                          Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironmentSource35.unpack out)) =
+                        Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironment35.reserve schedule unix nonce s))
+                    (fun h =>
+                      of_eq_true
+                        (Eq.trans
+                          (congr
+                            (congrArg Eq
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg bind
+                                    (Eq.trans
+                                      (Eq.trans
+                                        (congrFun'
+                                          (congrArg Aeneas.Std.uncurry
+                                            (funext fun result =>
+                                              funext fun after =>
+                                                congrArg
+                                                  (AspisR1Environment35.owner.finish.match_1
+                                                    (fun result =>
+                                                      Aeneas.Std.Result
+                                                        (AspisR1Environment35.owner.Run
+                                                          R1Z.ProverCommitEnvironment35.State
+                                                          R1Z.ProverCommitEnvironment35.IOError))
+                                                    result fun a =>
+                                                    AspisR1Environment35.owner.finish
+                                                      {
+                                                        call := fun k s =>
+                                                          Aeneas.Std.Result.ok
+                                                            (match
+                                                                (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                    (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                    s).1 with
+                                                              | Except.ok a => Aeneas.Std.core.result.Result.Ok ()
+                                                              | Except.error e => Aeneas.Std.core.result.Result.Err e,
+                                                              match k,
+                                                                (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                    (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                    s).1 with
+                                                              | AspisR1Environment35.owner.Kind.Create, Except.ok a =>
+                                                                {
+                                                                  history :=
+                                                                    (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                          (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                          s).2.history,
+                                                                  cursor :=
+                                                                    (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                          (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                          s).2.cursor,
+                                                                  burned :=
+                                                                    nonce ::
+                                                                      (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                            (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                            s).2.burned }
+                                                              | x, x_1 =>
+                                                                (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                    (R1Z.ProverCommitEnvironmentSource35.kind k) s).2),
+                                                        duplicate := fun e =>
+                                                          Aeneas.Std.Result.ok
+                                                            (match e with
+                                                            | R1Z.ProverCommitEnvironment35.IOError.alreadyExists =>
+                                                              true
+                                                            | R1Z.ProverCommitEnvironment35.IOError.other a => false) }
+                                                      0#u8 unix after)
+                                                  (funext fun e =>
+                                                    Aeneas.Std.bind_tc_ok
+                                                      (match e with
+                                                      | R1Z.ProverCommitEnvironment35.IOError.alreadyExists => true
+                                                      | R1Z.ProverCommitEnvironment35.IOError.other a => false)
+                                                      fun y =>
+                                                      if y = true then
+                                                        Aeneas.Std.Result.ok
+                                                          {
+                                                            result :=
+                                                              Aeneas.Std.core.result.Result.Err
+                                                                AspisR1Environment35.owner.Error.Duplicate,
+                                                            state := after, created := false }
+                                                      else
+                                                        Aeneas.Std.Result.ok
+                                                          {
+                                                            result :=
+                                                              Aeneas.Std.core.result.Result.Err
+                                                                (AspisR1Environment35.owner.Error.Io e),
+                                                            state := after, created := false })))
+                                          (Aeneas.Std.core.result.Result.Err
+                                              R1Z.ProverCommitEnvironment35.IOError.alreadyExists,
+                                            (R1Z.ProverCommitEnvironment35.ask schedule
+                                                R1Z.ProverCommitEnvironment35.Kind.create s).2))
+                                        (Aeneas.Std.uncurry_apply_pair
+                                          (fun result after =>
+                                            match result with
+                                            | Aeneas.Std.core.result.Result.Ok a =>
+                                              AspisR1Environment35.owner.finish
+                                                {
+                                                  call := fun k s =>
+                                                    Aeneas.Std.Result.ok
+                                                      (match
+                                                          (R1Z.ProverCommitEnvironment35.ask schedule
+                                                              (R1Z.ProverCommitEnvironmentSource35.kind k) s).1 with
+                                                        | Except.ok a => Aeneas.Std.core.result.Result.Ok ()
+                                                        | Except.error e => Aeneas.Std.core.result.Result.Err e,
+                                                        match k,
+                                                          (R1Z.ProverCommitEnvironment35.ask schedule
+                                                              (R1Z.ProverCommitEnvironmentSource35.kind k) s).1 with
+                                                        | AspisR1Environment35.owner.Kind.Create, Except.ok a =>
+                                                          {
+                                                            history :=
+                                                              (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                    (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                    s).2.history,
+                                                            cursor :=
+                                                              (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                    (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                    s).2.cursor,
+                                                            burned :=
+                                                              nonce ::
+                                                                (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                      (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                      s).2.burned }
+                                                        | x, x_1 =>
+                                                          (R1Z.ProverCommitEnvironment35.ask schedule
+                                                              (R1Z.ProverCommitEnvironmentSource35.kind k) s).2),
+                                                  duplicate := fun e =>
+                                                    Aeneas.Std.Result.ok
+                                                      (match e with
+                                                      | R1Z.ProverCommitEnvironment35.IOError.alreadyExists => true
+                                                      | R1Z.ProverCommitEnvironment35.IOError.other a => false) }
+                                                0#u8 unix after
+                                            | Aeneas.Std.core.result.Result.Err e =>
+                                              if
+                                                  (match e with
+                                                    | R1Z.ProverCommitEnvironment35.IOError.alreadyExists => true
+                                                    | R1Z.ProverCommitEnvironment35.IOError.other a => false) =
+                                                    true then
+                                                Aeneas.Std.Result.ok
+                                                  {
+                                                    result :=
+                                                      Aeneas.Std.core.result.Result.Err
+                                                        AspisR1Environment35.owner.Error.Duplicate,
+                                                    state := after, created := false }
+                                              else
+                                                Aeneas.Std.Result.ok
+                                                  {
+                                                    result :=
+                                                      Aeneas.Std.core.result.Result.Err
+                                                        (AspisR1Environment35.owner.Error.Io e),
+                                                    state := after, created := false })
+                                          (Aeneas.Std.core.result.Result.Err
+                                            R1Z.ProverCommitEnvironment35.IOError.alreadyExists)
+                                          (R1Z.ProverCommitEnvironment35.ask schedule
+                                              R1Z.ProverCommitEnvironment35.Kind.create s).2))
+                                      (ite_cond_eq_true
+                                        (Aeneas.Std.Result.ok
+                                          {
+                                            result :=
+                                              Aeneas.Std.core.result.Result.Err
+                                                AspisR1Environment35.owner.Error.Duplicate,
+                                            state :=
+                                              (R1Z.ProverCommitEnvironment35.ask schedule
+                                                  R1Z.ProverCommitEnvironment35.Kind.create s).2,
+                                            created := false })
+                                        (Aeneas.Std.Result.ok
+                                          {
+                                            result :=
+                                              Aeneas.Std.core.result.Result.Err
+                                                (AspisR1Environment35.owner.Error.Io
+                                                  R1Z.ProverCommitEnvironment35.IOError.alreadyExists),
+                                            state :=
+                                              (R1Z.ProverCommitEnvironment35.ask schedule
+                                                  R1Z.ProverCommitEnvironment35.Kind.create s).2,
+                                            created := false })
+                                        (eq_self true))))
+                                  fun out =>
+                                  Aeneas.Std.Result.ok
+                                    (match out.result with
+                                      | Aeneas.Std.core.result.Result.Ok a => Except.ok ()
+                                      | Aeneas.Std.core.result.Result.Err e =>
+                                        Except.error
+                                          (match e with
+                                          | AspisR1Environment35.owner.Error.Duplicate =>
+                                            R1Z.ProverCommitEnvironment35.ReservationError.duplicate
+                                          | AspisR1Environment35.owner.Error.Io e =>
+                                            R1Z.ProverCommitEnvironment35.ReservationError.io e),
+                                      out.state))
+                                (Aeneas.Std.bind_tc_ok
+                                  {
+                                    result :=
+                                      Aeneas.Std.core.result.Result.Err AspisR1Environment35.owner.Error.Duplicate,
+                                    state :=
+                                      (R1Z.ProverCommitEnvironment35.ask schedule
+                                          R1Z.ProverCommitEnvironment35.Kind.create s).2,
+                                    created := false }
+                                  fun y =>
+                                  Aeneas.Std.Result.ok
+                                    (match y.result with
+                                      | Aeneas.Std.core.result.Result.Ok a => Except.ok ()
+                                      | Aeneas.Std.core.result.Result.Err e =>
+                                        Except.error
+                                          (match e with
+                                          | AspisR1Environment35.owner.Error.Duplicate =>
+                                            R1Z.ProverCommitEnvironment35.ReservationError.duplicate
+                                          | AspisR1Environment35.owner.Error.Io e =>
+                                            R1Z.ProverCommitEnvironment35.ReservationError.io e),
+                                      y.state))))
+                            (congrArg Aeneas.Std.Result.ok
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | Except.error R1Z.ProverCommitEnvironment35.IOError.alreadyExists =>
+                                    (Except.error R1Z.ProverCommitEnvironment35.ReservationError.duplicate,
+                                      (R1Z.ProverCommitEnvironment35.ask schedule
+                                          R1Z.ProverCommitEnvironment35.Kind.create s).2)
+                                  | Except.error e =>
+                                    (Except.error (R1Z.ProverCommitEnvironment35.ReservationError.io e),
+                                      (R1Z.ProverCommitEnvironment35.ask schedule
+                                          R1Z.ProverCommitEnvironment35.Kind.create s).2)
+                                  | Except.ok a =>
+                                    have retained :=
+                                      have __src :=
+                                        (R1Z.ProverCommitEnvironment35.ask schedule
+                                            R1Z.ProverCommitEnvironment35.Kind.create s).2;
+                                      { history := __src.history, cursor := __src.cursor,
+                                        burned :=
+                                          nonce ::
+                                            (R1Z.ProverCommitEnvironment35.ask schedule
+                                                  R1Z.ProverCommitEnvironment35.Kind.create s).2.burned };
+                                    match
+                                      R1Z.ProverCommitEnvironment35.ioChain schedule
+                                        (R1Z.ProverCommitEnvironment35.writes unix) retained with
+                                    | (result, final) =>
+                                      (Except.mapError R1Z.ProverCommitEnvironment35.ReservationError.io result, final))
+                                h)))
+                          (eq_self
+                            (Aeneas.Std.Result.ok
+                              (Except.error R1Z.ProverCommitEnvironment35.ReservationError.duplicate,
+                                (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                    s).2)))))
+                    (Eq.symm h_1) h)
+                (fun a h_1 =>
+                  Eq.ndrec (motive := fun e =>
+                    (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1 =
+                        Except.error e →
+                      (do
+                          let out ←
+                            let (result, after) :=
+                                (R1Z.ProverCommitEnvironmentSource35.encodeOutcome (Except.error e),
+                                  match Except.error e with
+                                  | Except.ok a =>
+                                    {
+                                      history :=
+                                        (R1Z.ProverCommitEnvironment35.ask schedule
+                                              R1Z.ProverCommitEnvironment35.Kind.create s).2.history,
+                                      cursor :=
+                                        (R1Z.ProverCommitEnvironment35.ask schedule
+                                              R1Z.ProverCommitEnvironment35.Kind.create s).2.cursor,
+                                      burned := nonce :: s.burned }
+                                  | Except.error a =>
+                                    (R1Z.ProverCommitEnvironment35.ask schedule
+                                        R1Z.ProverCommitEnvironment35.Kind.create s).2)
+                              match result with
+                              | Aeneas.Std.core.result.Result.Ok a =>
+                                AspisR1Environment35.owner.finish
+                                  (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce) 0#u8 unix after
+                              | Aeneas.Std.core.result.Result.Err e => do
+                                let b ← (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce).duplicate e
+                                if b = true then
+                                    Aeneas.Std.Result.ok
+                                      {
+                                        result :=
+                                          Aeneas.Std.core.result.Result.Err AspisR1Environment35.owner.Error.Duplicate,
+                                        state := after, created := false }
+                                  else
+                                    Aeneas.Std.Result.ok
+                                      {
+                                        result :=
+                                          Aeneas.Std.core.result.Result.Err (AspisR1Environment35.owner.Error.Io e),
+                                        state := after, created := false }
+                          Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironmentSource35.unpack out)) =
+                        Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironment35.reserve schedule unix nonce s))
+                    (fun h =>
+                      of_eq_true
+                        (Eq.trans
+                          (congr
+                            (congrArg Eq
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg bind
+                                    (Eq.trans
+                                      (Eq.trans
+                                        (congrFun'
+                                          (congrArg Aeneas.Std.uncurry
+                                            (funext fun result =>
+                                              funext fun after =>
+                                                congrArg
+                                                  (AspisR1Environment35.owner.finish.match_1
+                                                    (fun result =>
+                                                      Aeneas.Std.Result
+                                                        (AspisR1Environment35.owner.Run
+                                                          R1Z.ProverCommitEnvironment35.State
+                                                          R1Z.ProverCommitEnvironment35.IOError))
+                                                    result fun a =>
+                                                    AspisR1Environment35.owner.finish
+                                                      {
+                                                        call := fun k s =>
+                                                          Aeneas.Std.Result.ok
+                                                            (match
+                                                                (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                    (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                    s).1 with
+                                                              | Except.ok a => Aeneas.Std.core.result.Result.Ok ()
+                                                              | Except.error e => Aeneas.Std.core.result.Result.Err e,
+                                                              match k,
+                                                                (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                    (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                    s).1 with
+                                                              | AspisR1Environment35.owner.Kind.Create, Except.ok a =>
+                                                                {
+                                                                  history :=
+                                                                    (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                          (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                          s).2.history,
+                                                                  cursor :=
+                                                                    (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                          (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                          s).2.cursor,
+                                                                  burned :=
+                                                                    nonce ::
+                                                                      (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                            (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                            s).2.burned }
+                                                              | x, x_1 =>
+                                                                (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                    (R1Z.ProverCommitEnvironmentSource35.kind k) s).2),
+                                                        duplicate := fun e =>
+                                                          Aeneas.Std.Result.ok
+                                                            (match e with
+                                                            | R1Z.ProverCommitEnvironment35.IOError.alreadyExists =>
+                                                              true
+                                                            | R1Z.ProverCommitEnvironment35.IOError.other a => false) }
+                                                      0#u8 unix after)
+                                                  (funext fun e =>
+                                                    Aeneas.Std.bind_tc_ok
+                                                      (match e with
+                                                      | R1Z.ProverCommitEnvironment35.IOError.alreadyExists => true
+                                                      | R1Z.ProverCommitEnvironment35.IOError.other a => false)
+                                                      fun y =>
+                                                      if y = true then
+                                                        Aeneas.Std.Result.ok
+                                                          {
+                                                            result :=
+                                                              Aeneas.Std.core.result.Result.Err
+                                                                AspisR1Environment35.owner.Error.Duplicate,
+                                                            state := after, created := false }
+                                                      else
+                                                        Aeneas.Std.Result.ok
+                                                          {
+                                                            result :=
+                                                              Aeneas.Std.core.result.Result.Err
+                                                                (AspisR1Environment35.owner.Error.Io e),
+                                                            state := after, created := false })))
+                                          (Aeneas.Std.core.result.Result.Err
+                                              (R1Z.ProverCommitEnvironment35.IOError.other a),
+                                            (R1Z.ProverCommitEnvironment35.ask schedule
+                                                R1Z.ProverCommitEnvironment35.Kind.create s).2))
+                                        (Aeneas.Std.uncurry_apply_pair
+                                          (fun result after =>
+                                            match result with
+                                            | Aeneas.Std.core.result.Result.Ok a =>
+                                              AspisR1Environment35.owner.finish
+                                                {
+                                                  call := fun k s =>
+                                                    Aeneas.Std.Result.ok
+                                                      (match
+                                                          (R1Z.ProverCommitEnvironment35.ask schedule
+                                                              (R1Z.ProverCommitEnvironmentSource35.kind k) s).1 with
+                                                        | Except.ok a => Aeneas.Std.core.result.Result.Ok ()
+                                                        | Except.error e => Aeneas.Std.core.result.Result.Err e,
+                                                        match k,
+                                                          (R1Z.ProverCommitEnvironment35.ask schedule
+                                                              (R1Z.ProverCommitEnvironmentSource35.kind k) s).1 with
+                                                        | AspisR1Environment35.owner.Kind.Create, Except.ok a =>
+                                                          {
+                                                            history :=
+                                                              (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                    (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                    s).2.history,
+                                                            cursor :=
+                                                              (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                    (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                    s).2.cursor,
+                                                            burned :=
+                                                              nonce ::
+                                                                (R1Z.ProverCommitEnvironment35.ask schedule
+                                                                      (R1Z.ProverCommitEnvironmentSource35.kind k)
+                                                                      s).2.burned }
+                                                        | x, x_1 =>
+                                                          (R1Z.ProverCommitEnvironment35.ask schedule
+                                                              (R1Z.ProverCommitEnvironmentSource35.kind k) s).2),
+                                                  duplicate := fun e =>
+                                                    Aeneas.Std.Result.ok
+                                                      (match e with
+                                                      | R1Z.ProverCommitEnvironment35.IOError.alreadyExists => true
+                                                      | R1Z.ProverCommitEnvironment35.IOError.other a => false) }
+                                                0#u8 unix after
+                                            | Aeneas.Std.core.result.Result.Err e =>
+                                              if
+                                                  (match e with
+                                                    | R1Z.ProverCommitEnvironment35.IOError.alreadyExists => true
+                                                    | R1Z.ProverCommitEnvironment35.IOError.other a => false) =
+                                                    true then
+                                                Aeneas.Std.Result.ok
+                                                  {
+                                                    result :=
+                                                      Aeneas.Std.core.result.Result.Err
+                                                        AspisR1Environment35.owner.Error.Duplicate,
+                                                    state := after, created := false }
+                                              else
+                                                Aeneas.Std.Result.ok
+                                                  {
+                                                    result :=
+                                                      Aeneas.Std.core.result.Result.Err
+                                                        (AspisR1Environment35.owner.Error.Io e),
+                                                    state := after, created := false })
+                                          (Aeneas.Std.core.result.Result.Err
+                                            (R1Z.ProverCommitEnvironment35.IOError.other a))
+                                          (R1Z.ProverCommitEnvironment35.ask schedule
+                                              R1Z.ProverCommitEnvironment35.Kind.create s).2))
+                                      (ite_cond_eq_false
+                                        (Aeneas.Std.Result.ok
+                                          {
+                                            result :=
+                                              Aeneas.Std.core.result.Result.Err
+                                                AspisR1Environment35.owner.Error.Duplicate,
+                                            state :=
+                                              (R1Z.ProverCommitEnvironment35.ask schedule
+                                                  R1Z.ProverCommitEnvironment35.Kind.create s).2,
+                                            created := false })
+                                        (Aeneas.Std.Result.ok
+                                          {
+                                            result :=
+                                              Aeneas.Std.core.result.Result.Err
+                                                (AspisR1Environment35.owner.Error.Io
+                                                  (R1Z.ProverCommitEnvironment35.IOError.other a)),
+                                            state :=
+                                              (R1Z.ProverCommitEnvironment35.ask schedule
+                                                  R1Z.ProverCommitEnvironment35.Kind.create s).2,
+                                            created := false })
+                                        Bool.false_eq_true)))
+                                  fun out =>
+                                  Aeneas.Std.Result.ok
+                                    (match out.result with
+                                      | Aeneas.Std.core.result.Result.Ok a => Except.ok ()
+                                      | Aeneas.Std.core.result.Result.Err e =>
+                                        Except.error
+                                          (match e with
+                                          | AspisR1Environment35.owner.Error.Duplicate =>
+                                            R1Z.ProverCommitEnvironment35.ReservationError.duplicate
+                                          | AspisR1Environment35.owner.Error.Io e =>
+                                            R1Z.ProverCommitEnvironment35.ReservationError.io e),
+                                      out.state))
+                                (Aeneas.Std.bind_tc_ok
+                                  {
+                                    result :=
+                                      Aeneas.Std.core.result.Result.Err
+                                        (AspisR1Environment35.owner.Error.Io
+                                          (R1Z.ProverCommitEnvironment35.IOError.other a)),
+                                    state :=
+                                      (R1Z.ProverCommitEnvironment35.ask schedule
+                                          R1Z.ProverCommitEnvironment35.Kind.create s).2,
+                                    created := false }
+                                  fun y =>
+                                  Aeneas.Std.Result.ok
+                                    (match y.result with
+                                      | Aeneas.Std.core.result.Result.Ok a => Except.ok ()
+                                      | Aeneas.Std.core.result.Result.Err e =>
+                                        Except.error
+                                          (match e with
+                                          | AspisR1Environment35.owner.Error.Duplicate =>
+                                            R1Z.ProverCommitEnvironment35.ReservationError.duplicate
+                                          | AspisR1Environment35.owner.Error.Io e =>
+                                            R1Z.ProverCommitEnvironment35.ReservationError.io e),
+                                      y.state))))
+                            (congrArg Aeneas.Std.Result.ok
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | Except.error R1Z.ProverCommitEnvironment35.IOError.alreadyExists =>
+                                    (Except.error R1Z.ProverCommitEnvironment35.ReservationError.duplicate,
+                                      (R1Z.ProverCommitEnvironment35.ask schedule
+                                          R1Z.ProverCommitEnvironment35.Kind.create s).2)
+                                  | Except.error e =>
+                                    (Except.error (R1Z.ProverCommitEnvironment35.ReservationError.io e),
+                                      (R1Z.ProverCommitEnvironment35.ask schedule
+                                          R1Z.ProverCommitEnvironment35.Kind.create s).2)
+                                  | Except.ok a =>
+                                    have retained :=
+                                      have __src :=
+                                        (R1Z.ProverCommitEnvironment35.ask schedule
+                                            R1Z.ProverCommitEnvironment35.Kind.create s).2;
+                                      { history := __src.history, cursor := __src.cursor,
+                                        burned :=
+                                          nonce ::
+                                            (R1Z.ProverCommitEnvironment35.ask schedule
+                                                  R1Z.ProverCommitEnvironment35.Kind.create s).2.burned };
+                                    match
+                                      R1Z.ProverCommitEnvironment35.ioChain schedule
+                                        (R1Z.ProverCommitEnvironment35.writes unix) retained with
+                                    | (result, final) =>
+                                      (Except.mapError R1Z.ProverCommitEnvironment35.ReservationError.io result, final))
+                                h)))
+                          (eq_self
+                            (Aeneas.Std.Result.ok
+                              (Except.error
+                                  (R1Z.ProverCommitEnvironment35.ReservationError.io
+                                    (R1Z.ProverCommitEnvironment35.IOError.other a)),
+                                (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                    s).2)))))
+                    (Eq.symm h_1) h)
+                (Eq.refl e))
+            (Eq.symm h)
+            (Eq.refl (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1))
+        (fun u h =>
+          Eq.ndrec (motive := fun x =>
+            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1 = x →
+              (do
+                  let out ←
+                    let (result, after) :=
+                        (R1Z.ProverCommitEnvironmentSource35.encodeOutcome x,
+                          match x with
+                          | Except.ok a =>
+                            {
+                              history :=
+                                (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                      s).2.history,
+                              cursor :=
+                                (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                      s).2.cursor,
+                              burned := nonce :: s.burned }
+                          | Except.error a =>
+                            (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).2)
+                      match result with
+                      | Aeneas.Std.core.result.Result.Ok a =>
+                        AspisR1Environment35.owner.finish (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce) 0#u8
+                          unix after
+                      | Aeneas.Std.core.result.Result.Err e => do
+                        let b ← (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce).duplicate e
+                        if b = true then
+                            Aeneas.Std.Result.ok
+                              { result := Aeneas.Std.core.result.Result.Err AspisR1Environment35.owner.Error.Duplicate,
+                                state := after, created := false }
+                          else
+                            Aeneas.Std.Result.ok
+                              { result := Aeneas.Std.core.result.Result.Err (AspisR1Environment35.owner.Error.Io e),
+                                state := after, created := false }
+                  Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironmentSource35.unpack out)) =
+                Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironment35.reserve schedule unix nonce s))
+            (fun h =>
+              let ⟨h✝⟩ := u
+              Eq.ndrec (motive := fun u =>
+                (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1 =
+                    Except.ok u →
+                  (do
+                      let out ←
+                        let (result, after) :=
+                            (R1Z.ProverCommitEnvironmentSource35.encodeOutcome (Except.ok u),
+                              match Except.ok u with
+                              | Except.ok a =>
+                                {
+                                  history :=
+                                    (R1Z.ProverCommitEnvironment35.ask schedule
+                                          R1Z.ProverCommitEnvironment35.Kind.create s).2.history,
+                                  cursor :=
+                                    (R1Z.ProverCommitEnvironment35.ask schedule
+                                          R1Z.ProverCommitEnvironment35.Kind.create s).2.cursor,
+                                  burned := nonce :: s.burned }
+                              | Except.error a =>
+                                (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                    s).2)
+                          match result with
+                          | Aeneas.Std.core.result.Result.Ok a =>
+                            AspisR1Environment35.owner.finish (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce)
+                              0#u8 unix after
+                          | Aeneas.Std.core.result.Result.Err e => do
+                            let b ← (R1Z.ProverCommitEnvironmentSource35.ops schedule nonce).duplicate e
+                            if b = true then
+                                Aeneas.Std.Result.ok
+                                  {
+                                    result :=
+                                      Aeneas.Std.core.result.Result.Err AspisR1Environment35.owner.Error.Duplicate,
+                                    state := after, created := false }
+                              else
+                                Aeneas.Std.Result.ok
+                                  { result := Aeneas.Std.core.result.Result.Err (AspisR1Environment35.owner.Error.Io e),
+                                    state := after, created := false }
+                      Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironmentSource35.unpack out)) =
+                    Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironment35.reserve schedule unix nonce s))
+                (fun h =>
+                  id
+                    (id
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              (do
+                                  let out ← _a
+                                  Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironmentSource35.unpack out)) =
+                                Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironment35.reserve schedule unix nonce s))
+                            (R1Z.ProverCommitEnvironmentSource35.finish_source schedule nonce unix
+                              {
+                                history :=
+                                  (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                        s).2.history,
+                                cursor :=
+                                  (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create
+                                        s).2.cursor,
+                                burned := nonce :: s.burned })))
+                        (Eq.mpr
+                          (id
+                            (congr
+                              (congrArg Eq
+                                (Eq.trans
+                                  (Aeneas.Std.bind_tc_ok
+                                    (R1Z.ProverCommitEnvironmentSource35.packChain
+                                      (R1Z.ProverCommitEnvironment35.ioChain schedule
+                                        (R1Z.ProverCommitEnvironment35.writes unix)
+                                        {
+                                          history :=
+                                            (R1Z.ProverCommitEnvironment35.ask schedule
+                                                  R1Z.ProverCommitEnvironment35.Kind.create s).2.history,
+                                          cursor :=
+                                            (R1Z.ProverCommitEnvironment35.ask schedule
+                                                  R1Z.ProverCommitEnvironment35.Kind.create s).2.cursor,
+                                          burned := nonce :: s.burned }))
+                                    fun y => Aeneas.Std.Result.ok (R1Z.ProverCommitEnvironmentSource35.unpack y))
+                                  (congrArg Aeneas.Std.Result.ok
+                                    (R1Z.ProverCommitEnvironmentSource35.unpack_chain
+                                      (R1Z.ProverCommitEnvironment35.ioChain schedule
+                                        (R1Z.ProverCommitEnvironment35.writes unix)
+                                        {
+                                          history :=
+                                            (R1Z.ProverCommitEnvironment35.ask schedule
+                                                  R1Z.ProverCommitEnvironment35.Kind.create s).2.history,
+                                          cursor :=
+                                            (R1Z.ProverCommitEnvironment35.ask schedule
+                                                  R1Z.ProverCommitEnvironment35.Kind.create s).2.cursor,
+                                          burned := nonce :: s.burned })))))
+                              (congrArg Aeneas.Std.Result.ok
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | Except.error R1Z.ProverCommitEnvironment35.IOError.alreadyExists =>
+                                      (Except.error R1Z.ProverCommitEnvironment35.ReservationError.duplicate,
+                                        (R1Z.ProverCommitEnvironment35.ask schedule
+                                            R1Z.ProverCommitEnvironment35.Kind.create s).2)
+                                    | Except.error e =>
+                                      (Except.error (R1Z.ProverCommitEnvironment35.ReservationError.io e),
+                                        (R1Z.ProverCommitEnvironment35.ask schedule
+                                            R1Z.ProverCommitEnvironment35.Kind.create s).2)
+                                    | Except.ok a =>
+                                      have retained :=
+                                        have __src :=
+                                          (R1Z.ProverCommitEnvironment35.ask schedule
+                                              R1Z.ProverCommitEnvironment35.Kind.create s).2;
+                                        { history := __src.history, cursor := __src.cursor,
+                                          burned :=
+                                            nonce ::
+                                              (R1Z.ProverCommitEnvironment35.ask schedule
+                                                    R1Z.ProverCommitEnvironment35.Kind.create s).2.burned };
+                                      match
+                                        R1Z.ProverCommitEnvironment35.ioChain schedule
+                                          (R1Z.ProverCommitEnvironment35.writes unix) retained with
+                                      | (result, final) =>
+                                        (Except.mapError R1Z.ProverCommitEnvironment35.ReservationError.io result,
+                                          final))
+                                  h))))
+                          (Eq.refl
+                            (Aeneas.Std.Result.ok
+                              (Except.mapError R1Z.ProverCommitEnvironment35.ReservationError.io
+                                  (R1Z.ProverCommitEnvironment35.ioChain schedule
+                                      (R1Z.ProverCommitEnvironment35.writes unix)
+                                      {
+                                        history :=
+                                          (R1Z.ProverCommitEnvironment35.ask schedule
+                                                R1Z.ProverCommitEnvironment35.Kind.create s).2.history,
+                                        cursor :=
+                                          (R1Z.ProverCommitEnvironment35.ask schedule
+                                                R1Z.ProverCommitEnvironment35.Kind.create s).2.cursor,
+                                        burned := nonce :: s.burned }).1,
+                                (R1Z.ProverCommitEnvironment35.ioChain schedule
+                                    (R1Z.ProverCommitEnvironment35.writes unix)
+                                    {
+                                      history :=
+                                        (R1Z.ProverCommitEnvironment35.ask schedule
+                                              R1Z.ProverCommitEnvironment35.Kind.create s).2.history,
+                                      cursor :=
+                                        (R1Z.ProverCommitEnvironment35.ask schedule
+                                              R1Z.ProverCommitEnvironment35.Kind.create s).2.cursor,
+                                      burned := nonce :: s.burned }).2)))))))
+                (Eq.symm h✝) h)
+            (Eq.symm h)
+            (Eq.refl (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1))
+        (Eq.refl (R1Z.ProverCommitEnvironment35.ask schedule R1Z.ProverCommitEnvironment35.Kind.create s).1)))
+theorem R1Z.ProverCommitLedgerBoundary35.no_status_only_create_law : ∀ {Path : Type} [inst : DecidableEq Path]
+  (old fresh : Path),
+  fresh ≠ old →
+    ∀ (history : R1Z.ProverCommitEnvironment35.History),
+      ¬∃ schedule,
+          ∀ (path : Path),
+            schedule (List.length history) R1Z.ProverCommitEnvironment35.Kind.create history =
+              R1Z.ProverCommitLedgerBoundary35.createStatus [old] path :=
+fun {Path} [inst : DecidableEq Path] old fresh distinct history a =>
+  let ⟨schedule, law⟩ := a
+  have a := law old;
+  have b := law fresh;
+  have same := Eq.trans (Eq.symm a) b;
+  let ⟨⟩ := Except.ok ()
+  Eq.mp
+    (congr
+      (congrArg Eq
+        (ite_congr (Eq.trans R1Z.ProverCommitLedgerBoundary35.no_status_only_create_law._simp_2 (eq_self old))
+          (fun a => Eq.refl (Except.error R1Z.ProverCommitEnvironment35.IOError.alreadyExists)) fun a =>
+          Eq.refl (Except.ok ())))
+      (Eq.trans
+        (ite_congr R1Z.ProverCommitLedgerBoundary35.no_status_only_create_law._simp_2
+          (fun a => Eq.refl (Except.error R1Z.ProverCommitEnvironment35.IOError.alreadyExists)) fun a =>
+          Eq.refl (Except.ok ()))
+        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg distinct) x_0 x_1 x_2 x_3) (inst fresh old)
+          R1Z.ProverCommitEnvironment35.Outcome (Except.error R1Z.ProverCommitEnvironment35.IOError.alreadyExists)
+          (Except.ok ()))))
+    same
+'R1Z.ProverCommitEnvironment35.ask_blind' depends on axioms: [propext]
+'R1Z.ProverCommitEnvironment35.ask_retains' does not depend on any axioms
+'R1Z.ProverCommitEnvironment35.chain_retains' does not depend on any axioms
+'R1Z.ProverCommitEnvironment35.create_retained' depends on axioms: [propext]
+'R1Z.ProverCommitEnvironment35.create_failed' depends on axioms: [propext]
+'R1Z.ProverCommitEnvironment35.fail_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEnvironment35.failure_replay' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEnvironmentSource35.finish_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEnvironmentSource35.unpack_chain' does not depend on any axioms
+'R1Z.ProverCommitEnvironmentSource35.reserve_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEnvironmentLaw35.E1_event' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEnvironmentLaw35.E1_zero_candidate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEnvironmentControl35.public_failure_replay' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEnvironmentControl35.retry_failure_stops' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedgerBoundary35.no_status_only_create_law' depends on axioms: [propext]
+'R1Z.ProverCommitLedgerBoundary35.rng_ok_does_not_determine_duplicate' depends on axioms: [propext]
+exit=0
+window=1 slot=global env=J launcher=run-joint.sh

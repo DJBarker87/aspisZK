@@ -8,7 +8,7 @@ TrustedStd (unchanged), and D147 E1: successful OS RNG draws are uniform and
 independent. E1 is a named environment hypothesis, not a Lean axiom.
 
 Actual base: `6b5544772`; branch `codex/cx-prover-commit35-20261022`.
-Env J9100–J9199 follows part 34 J9095. No shipped source change planned.
+Env J9100–J9199 follows part 34 J9095. No shipped source changed.
 
 ## Stages
 
@@ -180,3 +180,48 @@ theorem privacy_headline_deployed
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
 ```
+
+## Final verification and retained scope
+
+J9127 is the single final focused axioms audit: exit 0, wall 1.87 s,
+peak RSS 4,134,020 KiB, zero swaps. It imports all new proof modules and
+prints axioms for every new top theorem; all are subsets of
+[propext, Classical.choice, Quot.sound]. It also prints the E1 definition,
+extracted reservation theorem and status-only impossibility theorem for
+statement inspection. Exact targets, source SHA256 overlays, dependency
+fingerprints, commands, status, wall time, peak RSS, swaps, source base
+revision and complete raw compiler diagnostics are in `lean/attempts.json`.
+Rejected proof drafts and launcher refusals are retained, not counted as
+accepted formal results. The final read-only source/object audit records the
+committed source revision and checks every retained dependency-object hash.
+No inherited shared module was modified; replacements of this job's own new
+objects were snapshotted in the branch-specific host directory first.
+
+The final native-owner Kani gate exits 0 in 2.975 s / 237,240 KiB. The
+byte-blind reservation gate exits 0 in 1.969 s / 174,868 KiB; OS failure
+9.286 s / 575,996 KiB; zero exhaustion 8.658 s / 514,616 KiB; reserve-before-
+derivation 1.915 s / 180,352 KiB. Charon/Aeneas v3 exit 0 in 0.162 s /
+162,072 KiB and 0.293 s / 66,000 KiB. The real-std probe compiles optimized
+in 1.359 s / 149,296 KiB and runs in 0.013 s / 1,936 KiB, both exit 0.
+Every recorded job has zero swaps. Raw receipts include cgroup limits and
+memory.peak; all jobs use individual 6G/8G/zero-swap/64-task scopes and the
+requested linker flags. Kani uses its MIR verification pipeline rather than
+an unoptimized arithmetic workload. No dense finite-field gate ran.
+
+TrustedStd and the actual endpoint are byte-identical to the task base.
+There are no changes under crates/ or programs/, so the three-ELF rebuild
+rule is not triggered. No full frozen-manifest replay is attempted: the
+concrete source/environment preflight is demonstrably not green. Unchanged
+runtime, reproducible-build and adversarial suites are reused, not rerun.
+The existing 3/2^256 zero-exhaustion allowance is not replaced by zero or by
+an OS/fs δ. No endpoint budget or failure event is changed.
+
+No binaries, .olean, LLBC, tarballs or ELFs are committed. No local target
+directory was created. All task host jobs finished; compiled caches and the
+fixed-public-data probe ledger remain retained. No wallet/account key was
+created, deleted or modified. Nothing was pushed or merged.
+
+**Target not yet established.** Next deliverable: the faithful private
+create_new ledger transition/exposure interface described above; then complete
+native publication, observation conversion, concrete experiment and both
+whole-run joins. RustProverRefinement remains explicit.
