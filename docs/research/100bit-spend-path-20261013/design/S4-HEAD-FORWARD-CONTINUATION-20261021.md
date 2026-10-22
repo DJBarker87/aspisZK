@@ -1959,3 +1959,52 @@ is claimed. Exact narrowed-input, runtime and cap evidence are being
 reviewed in their separate source-only packets. Source call-policy and
 supported inlining mechanisms are the next uncertainty to resolve before
 any further interpreter patch.
+
+## Candidate generated-powers execution is tied to the whole tx1 caller
+
+`s4-installed-early-powers-equation-v1-20261022` proves that the exact
+installed preparation powers field is the generated indexed candidate,
+through the public/claim/raw carrier maps, as a full Result equality.
+It preserves failure and divergence as well as success. Focused Lean 4.32
+exit 0, 30.529s, process peak 3,292,692,480 bytes, zero process swaps,
+standard axioms. Input x is the public wide carrier, so the returned
+caller gamma is supplied as `wToP p.gamma` (without a second toClaimE).
+
+`s4-installed-prepare-raw-early-powers-v1-20261022` derives successful
+execution of the actual generated early_powers29 body from that same
+successful prepareSlot call. It exposes the raw result at the mapped
+returned gamma and proves its mapped array equals the returned scratch.
+No independent raw-powers-success or desired-output premise is used.
+Focused exit 0, 26.834s, aggregate RSS 3,679,617,024 bytes, process peak
+3,694,297,088 bytes, zero swap, standard axioms.
+
+`s4-tx1-generated-powers-batches-v1-20261022` composes that raw source
+operation result with the accepted same-caller ten-query theorem.
+`accepted_tx1_generated_powers_and_batches` derives split=10, the same
+preparation witness, raw generated powers at its returned gamma, the exact
+returned scratch mapping and all ten batch results from one successful
+installed sourceCaller tx1. Focused exit 0, 24.924s, aggregate RSS
+3,931,750,400 bytes, process peak 3,944,251,392 bytes, zero swap, standard
+axioms. The checker reads the complete named axiom report. Primary review
+inspected each complete statement, result predicate and proof body.
+
+`s4-pr10-source-binding-checkpoint-v1-20261022` cross-pins the proposed
+three Rust blobs and their accepted source/body proofs. The accepted
+early-powers patch reconstructs the complete proposed weights.rs byte for
+byte. The unchanged query_values caller selects fast_dots(q,g), and the
+unchanged Prepared.new caller selects powers29(gamma) into that scratch.
+The reused source checkers pass without rerunning their Lean compiles.
+This checks the candidate selection, not an adoption of the candidate.
+
+`s4-coherent-closure-preflight-v1-20261022` resolves all seven endpoint
+roots and their 7,669 imported module owners. It records zero unresolved
+imports and zero same-module/different-hash owner conflicts, including
+the installed-preparation dependency shared by the new endpoints. It is
+a read-only owner preflight, not a source-coherent compile or final replay.
+
+The remaining S4 distinction is unchanged: these are checked candidate
+source-cut/model endpoints. Strict-scan and remaining caller leaf bindings,
+frozen Std equivalence or source adoption, final release pins/replay, and
+global runtime/security composition are not established here. The proposed
+candidate still fails the tighter preregistered B1 performance comparison;
+its draft PR remains unmerged and the owner decision remains pending.

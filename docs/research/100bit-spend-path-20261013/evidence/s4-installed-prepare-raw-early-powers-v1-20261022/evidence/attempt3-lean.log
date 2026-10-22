@@ -1,0 +1,107 @@
+/tmp/s4-installed-prepare-raw-early-powers-attempt3/sources/S4InstalledPrepareRawEarlyPowersV1.lean:61:4: error: Type mismatch: After simplification, term
+  hpowers
+ has type
+  AspisR1ClaimPreparedBridge.powersPublic 29#usize gamma = ok powers
+but is expected to have type
+  (do
+      let raw ←
+        AspisR1LoopPowers.weights.early_powers 29#usize
+            (AspisR1CurrentPreparedClaim.ClaimPowers.toPowers (AspisR1ClaimPreparedBridge.toClaimE gamma))
+      ok
+          (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE
+            (AspisR1CurrentPreparedClaim.ClaimPowers.mapArray raw))) =
+    ok powers
+/tmp/s4-installed-prepare-raw-early-powers-attempt3/sources/S4InstalledPrepareRawEarlyPowersV1.lean:72:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ok
+    (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE
+      (AspisR1CurrentPreparedClaim.ClaimPowers.mapArray raw))
+in the target expression
+  AspisR1S4PreparedNewS1AdapterV1.wArrayFromP
+      (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE
+        (AspisR1CurrentPreparedClaim.ClaimPowers.mapArray raw)) =
+    scratch
+
+case refine_2
+H : Type
+sampling : AspisR1PublicPreparation.PreparedModel.Boundaries
+embed : AspisR1PublicPreparation.aspis_core.field.M31 → Result AspisR1PublicPreparation.aspis_core.field.WideExact
+ops : AspisR1S4CandidatePrepareS1ParentV1.Leaves H
+d : AspisR1CurrentCaller.aspis_core.digest.Digest32 H
+public1 : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof : Slice U8
+hash : H
+obs : Option (AspisR1CurrentCaller.verifier.Phase → Result Unit)
+g : Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize
+out : AspisR1CurrentCaller.verifier.Prepared
+scratch : Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize
+h :
+  AspisR1S4CandidatePrepareS1ParentV1.prepareSlot
+      (AspisR1ClaimPreparedBridge.concreteBoundaries
+        (AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries sampling embed))
+      ops d public1 proof hash obs g =
+    ok (core.result.Result.Ok out, scratch)
+B : AspisR1PublicPreparation.PreparedScratchModel.Boundaries :=
+  AspisR1ClaimPreparedBridge.concreteBoundaries
+    (AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries sampling embed)
+hbody :
+  AspisR1S4CandidatePrepareS1ParentV1.prepareWithS1New B ops d public1 proof hash obs g =
+    ok (core.result.Result.Ok out, scratch)
+gamma : AspisR1PublicPreparation.aspis_core.field.WideExact
+powers : Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize
+hout : out.gamma = AspisR1S4PreparedNewS1AdapterV1.wFromP gamma
+hpowers : B.powers 29#usize gamma = ok powers
+hscratch : AspisR1S4PreparedNewS1AdapterV1.wArrayFromP powers = scratch
+hbodyEarly :
+  (AspisR1ClaimPreparedBridge.concreteBoundaries
+          (AspisR1ClaimPreparedBridge.InstalledMeaning.installedBoundaries sampling embed)).powers
+      29#usize gamma =
+    do
+    let raw ←
+      AspisR1LoopPowers.weights.early_powers 29#usize
+          (AspisR1CurrentPreparedClaim.ClaimPowers.toPowers (AspisR1ClaimPreparedBridge.toClaimE gamma))
+    ok
+        (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE
+          (AspisR1CurrentPreparedClaim.ClaimPowers.mapArray raw))
+hpowersEarly :
+  (do
+      let raw ←
+        AspisR1LoopPowers.weights.early_powers 29#usize
+            (AspisR1CurrentPreparedClaim.ClaimPowers.toPowers (AspisR1ClaimPreparedBridge.toClaimE gamma))
+      ok
+          (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE
+            (AspisR1CurrentPreparedClaim.ClaimPowers.mapArray raw))) =
+    ok powers
+raw : Std.Array AspisR1LoopPowers.field.WideExact 29#usize
+hraw :
+  AspisR1LoopPowers.weights.early_powers 29#usize
+      (AspisR1CurrentPreparedClaim.ClaimPowers.toPowers (AspisR1ClaimPreparedBridge.toClaimE gamma)) =
+    ok raw
+hmap :
+  ok
+      (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE
+        (AspisR1CurrentPreparedClaim.ClaimPowers.mapArray raw)) =
+    ok powers
+hgammaMap : AspisR1S4PreparedNewS1AdapterV1.wToP out.gamma = gamma
+hinput :
+  AspisR1CurrentPreparedClaim.ClaimPowers.toPowers
+      (AspisR1ClaimPreparedBridge.toClaimE (AspisR1S4PreparedNewS1AdapterV1.wToP out.gamma)) =
+    AspisR1CurrentPreparedClaim.ClaimPowers.toPowers (AspisR1ClaimPreparedBridge.toClaimE gamma)
+⊢ AspisR1S4PreparedNewS1AdapterV1.wArrayFromP
+      (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE
+        (AspisR1CurrentPreparedClaim.ClaimPowers.mapArray raw)) =
+    scratch
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1S4InstalledPrepareRawEarlyPowersV1.successful_prepare_exposes_generated_powers' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

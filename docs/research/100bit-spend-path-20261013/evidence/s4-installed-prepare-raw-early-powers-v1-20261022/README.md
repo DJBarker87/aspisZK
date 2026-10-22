@@ -1,0 +1,7 @@
+# Installed prepare exposes raw generated early powers
+
+This focused candidate theorem starts from the successful installed `prepareSlot` execution. The retained `prepareWithS1New_success_powers` theorem supplies the same run’s gamma, public powers, and scratch result. The installed powers projection is rewritten using the accepted full-`Result` source equation for `early_powers 29`; inverting that result yields the actual generated early-powers success and mapped output on the exact returned gamma. The carrier round trip `wToP (wFromP gamma) = gamma` fixes the generated operation input to `wToP out.gamma`.
+
+The theorem does not assume an independent powers success. Its result preserves the exact scratch output from the installed prepare call. This remains a candidate-model bridge; frozen original `from_fn` equivalence/source adoption remains open.
+
+Lean 4.32; focused target; `-j1 -M4400`; exit 0; wall time, aggregate/process peak RSS, swap, source revision, exact command/profile, direct import owners, raw logs, and `#print axioms` are retained. The compiled object is deliberately not included. Attempts 2 and 3 are preserved as rejected diagnostics: attempt 2 omitted the equation module’s own object root from the profile; attempt 3 rewrote through the module equation in the right profile but had two proof-script mismatches, before the green correction in attempt 4. Attempt 1 was an uncompiled draft.
