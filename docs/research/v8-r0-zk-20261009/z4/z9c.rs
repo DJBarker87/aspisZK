@@ -346,28 +346,23 @@ fn emit(p: &Pub) -> (Option<Cert>, EmitInfo) {
         }
     };
     let ln = Lanes::new(&p.cx);
-    // Cheap original first-lift rank gate before later certificate work.
-    // The complete lift family still runs below, including this first lift.
-    let w=lift_width(0);
-    let mut first=TagEch::new(w);
-    for m in lift_members(0) {
-        if let Ins::Pivot=first.insert(lift_src(&p.cx,0,m)) {
-            if first.rank()==w {break;}
-        }
-    }
-    if first.rank()<w {
-        info.lift_ranks.push(first.rank());info.fail=Some("lift rank below width");
-        return (None,info);
-    }
+    // The lift worker publishes the original first rank result exactly once.
+    // Other families wait at a fixed boundary; no duplicated elimination and
+    // no speculative expensive work on the early rank-rejection path.
+    let gate = LiftGate::default();
     enum Part { L(Option<Vec<Lift>>,EmitInfo), Q(Option<(Vec<LaneKer>,Vec<Vec<u32>>)>,EmitInfo), B(Option<(Vec<Vec<u32>>,Vec<u32>,Vec<u32>,LaneKer,Vec<Vec<u32>>)>,EmitInfo) }
     let mut parts = aspis_r1_cert_check::native_workers::ordered_families(3, |i| {
         let mut part_info=EmitInfo::default();
         match i {
-            0 => {let x=emit_lifts(p,&mut part_info);Part::L(x,part_info)},
-            1 => {let x=emit_qprime(p,&ln,&mut part_info);Part::Q(x,part_info)},
-            _ => {let x=emit_bcond(p,&ln,&mut part_info);Part::B(x,part_info)},
+            1 => {let x=emit_lifts(p,&mut part_info,&gate);Part::L(x,part_info)},
+            0 => {let x=if gate.wait() {emit_qprime(p,&ln,&mut part_info)} else {None};Part::Q(x,part_info)},
+            _ => {let x=if gate.wait() {emit_bcond(p,&ln,&mut part_info)} else {None};Part::B(x,part_info)},
         }
-    }).into_iter();
+    });
+    // Worker 1 (lift) is spawned before any worker can wait, including on
+    // thread-creation failure. Restore certificate-field order for the merge.
+    parts.swap(0,1);
+    let mut parts = parts.into_iter();
     let Part::L(lifts,li)=parts.next().unwrap() else {unreachable!()};
     info.lift_ranks=li.lift_ranks;info.t_lifts=li.t_lifts;
     let Some(lifts)=lifts else {info.fail=li.fail;return (None,info)};
@@ -663,7 +658,33 @@ pub(crate) fn main() {
 #[path = "z9d.rs"]
 pub(crate) mod z9d;
 
-fn emit_lifts(p:&Pub,info:&mut EmitInfo)->Option<Vec<Lift>> {
+#[derive(Default)]
+struct LiftGate {
+    result: std::sync::Mutex<Option<bool>>,
+    ready: std::sync::Condvar,
+}
+impl LiftGate {
+    fn publish(&self, ok: bool) {
+        *self.result.lock().unwrap() = Some(ok);
+        self.ready.notify_all();
+    }
+    fn wait(&self) -> bool {
+        let mut result = self.result.lock().unwrap();
+        while result.is_none() { result = self.ready.wait(result).unwrap(); }
+        result.unwrap()
+    }
+}
+// Wake waiting families even if the first lift panics. The original panic is
+// still joined/resumed by ordered_families and normalized to rejection.
+struct LiftGateGuard<'a>(&'a LiftGate);
+impl Drop for LiftGateGuard<'_> {
+    fn drop(&mut self) {
+        let mut result = self.0.result.lock().unwrap();
+        if result.is_none() { *result = Some(false); self.0.ready.notify_all(); }
+    }
+}
+fn emit_lifts(p:&Pub,info:&mut EmitInfo,gate:&LiftGate)->Option<Vec<Lift>> {
+    let _wake_on_panic = LiftGateGuard(gate);
     let tt = Instant::now();
     let mut lifts = vec![];
     for c in 0..17 {
@@ -679,6 +700,7 @@ fn emit_lifts(p:&Pub,info:&mut EmitInfo)->Option<Vec<Lift>> {
             }
         }
         info.lift_ranks.push(sel.len());
+        if c == 0 { gate.publish(sel.len() == w); }
         if sel.len() < w {
             info.fail = Some("lift rank below width");
             return None;
