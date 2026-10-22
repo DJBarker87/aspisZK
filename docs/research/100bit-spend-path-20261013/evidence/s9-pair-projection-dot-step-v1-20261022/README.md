@@ -1,0 +1,7 @@
+# Selected projection product and accumulation step
+
+PROVED: the same successful continued projection-body execution supplies the accumulator read, actual field-reader value, coefficient read, product, sum and returned array update. The field value is canonical by the actual-reader bridge; the actual selected multiplication and addition preserve canonicality and yield `decode total = decode old + decode field * decode coefficient`.
+
+Retained premises: the accumulator read and all coefficient reads are canonical. No field-value canonicality, multiplication/addition success, product meaning, or update-success premise is added; these are derived from the source execution. This is an accepted BODY theorem for the selected source-cut adapter, not a theorem for the full production pair function or four-iteration loop. Initial accumulator/helper-output canonicality and full caller/source correspondence remain to be composed. The statement does not claim binary behavior or 100-bit security.
+
+Existing source-reader, concrete arithmetic and six operation Result-map proofs were reused; direct selected object hashes are in preflight. The unchanged operation bridge was separately rebuilt on the NUC against the actual-reader adapter with the same object hash. The full dependency closure has not had a coherent release replay. Focused Lean 4.32, -j1 -M4400, standard axioms, zero observed swaps; exact status/time/RSS/source revision/tool/import pins are retained. No production code, CU measurements or compiled objects are included.

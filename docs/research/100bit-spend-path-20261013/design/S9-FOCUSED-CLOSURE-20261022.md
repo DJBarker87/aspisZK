@@ -461,3 +461,17 @@ The NUC helper-carrier transport is being rebuilt against this actual-reader
 adapter cohort. A genuine helper/projection Rust cut using actual core types
 is in preparation to replace the earlier fake-carrier extraction boundary.
 There is still no S9 release closure or composed 100-bit security result.
+
+
+PROVED selected projection dot-step: the same successful body execution
+supplies the source field/coefficient reads, product, addition and returned
+array update. The actual field read is canonical; selected concrete
+multiplication/addition preserve canonicality and prove total = old + field
+* coefficient under decoding. Canonical accumulator and coefficient reads
+remain explicit caller contracts. Evidence:
+evidence/s9-pair-projection-dot-step-v1-20261022/.
+Focused result: 21.098 s, 3.24 GB aggregate RSS, zero observed swaps,
+standard axioms. This is a source-cut BODY result, not whole-loop or full
+production source/refinement closure. The helper transport and genuine
+actual-core-type Rust cut remain in progress; the 100-bit target remains
+not established.
