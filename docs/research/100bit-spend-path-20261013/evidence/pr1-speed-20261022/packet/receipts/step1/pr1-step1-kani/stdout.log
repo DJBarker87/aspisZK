@@ -1,0 +1,43 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Thread 2: Checking harness proofs::production_overflow_reject...
+Thread 0: Checking harness proofs::reference_overflow_reject...
+Thread 2: 
+VERIFICATION RESULT:
+ ** 1 of 458 failed (7 unreachable)
+Failed Checks: attempt to add with overflow
+ File: "../../docs/research/v8-r0-zk-20261009/z4/source_descriptors.rs", line 6, in production::describe::{closure#2}
+
+VERIFICATION:- SUCCESSFUL (encountered one or more panics as expected)
+Verification Time: 0.66280913s
+
+Thread 0: 
+VERIFICATION RESULT:
+ ** 1 of 458 failed (7 unreachable)
+Failed Checks: attempt to add with overflow
+ File: "gates.rs", line 12, in proofs::reference::{closure#2}
+
+VERIFICATION:- SUCCESSFUL (encountered one or more panics as expected)
+Verification Time: 0.67556256s
+
+Thread 1: Checking harness proofs::descriptor_projection_and_order...
+Thread 1: 
+VERIFICATION RESULT:
+ ** 1 of 847 failed (846 undetermined)
+Failed Checks: unwinding assertion loop 0
+ File: "<builtin-library-memcmp>", line 25, in memcmp
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 53.831562s
+
+Manual Harness Summary:
+Verification failed for - proofs::descriptor_projection_and_order
+Complete - 2 successfully verified harnesses, 1 failures, 3 total.

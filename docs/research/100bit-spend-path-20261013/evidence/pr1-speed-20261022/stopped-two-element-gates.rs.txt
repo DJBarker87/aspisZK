@@ -1,0 +1,50 @@
+#[path = "../../docs/research/v8-r0-zk-20261009/z4/source_descriptors.rs"]
+mod production;
+
+#[cfg(kani)]
+mod proofs {
+    use super::production;
+    // Exact descriptor expression from pre-stage-1 z9e::extracted_builders.
+    fn reference(sid: &[(u32, u32)]) -> (Vec<u32>, Vec<u32>, Vec<u32>) {
+        let pr = |li: u32| if li < 10 { 1 } else { 4 };
+        (
+            sid.iter().map(|&(li, _)| li).collect(),
+            sid.iter().map(|&(li, j)| j / pr(li) + 1).collect(),
+            sid.iter().map(|&(li, j)| j % pr(li)).collect(),
+        )
+    }
+
+    // Per-element projection and stable concatenation. Arbitrary descriptors,
+    // not only the honest emitter's bounded indices. The only overflowing
+    // input is covered separately by both expected-panic harnesses.
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn descriptor_projection_and_order() {
+        let sid: [(u32,u32); 2] = kani::any();
+        for &(li,j) in &sid { kani::assume(li >= 10 || j < u32::MAX); }
+        let n: usize = kani::any(); kani::assume(n <= 2);
+        let result = production::describe(&sid[..n]);
+        let expected = reference(&sid[..n]);
+        assert!(result.0.len()==n && result.1.len()==n && result.2.len()==n);
+        for i in 0..n {
+            assert!(result.0[i]==expected.0[i]);
+            assert!(result.1[i]==expected.1[i]);
+            assert!(result.2[i]==expected.2[i]);
+            assert!(result.0[i]==sid[i].0);
+        }
+    }
+    #[kani::proof]
+    #[kani::should_panic]
+    #[kani::unwind(3)]
+    fn production_overflow_reject() {
+        let li: u32 = kani::any(); kani::assume(li < 10);
+        production::describe(&[(li,u32::MAX)]);
+    }
+    #[kani::proof]
+    #[kani::should_panic]
+    #[kani::unwind(3)]
+    fn reference_overflow_reject() {
+        let li: u32 = kani::any(); kani::assume(li < 10);
+        reference(&[(li,u32::MAX)]);
+    }
+}

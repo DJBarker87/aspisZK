@@ -20,6 +20,8 @@
 //! checked-arithmetic overflow in the extracted code, or an emitter shape
 //! failure) is a rejection, as the extraction models it.
 use super::*;
+#[path = "source_descriptors.rs"]
+mod source_descriptors;
 
 /// The challenges P_R1 reads (D38.1): public data only.
 #[derive(Clone)]
@@ -88,6 +90,13 @@ fn public_data(ch: &R1PublicChallenges) -> Option<Pub> {
 /// Replace every builder-produced field of `pb` by the extracted C3 builder's
 /// output (the same calls as z9d `builder_diff`).
 fn extracted_builders(p: &Pub, cert: &Cert, ln: &Lanes, pb: &mut ck::Pub) -> Option<()> {
+    let lks: Vec<&LaneKer> = cert.qp.iter().collect();
+    let fq = family(ln, &lks, &|l| l)?;
+    let fg = family(ln, &[&cert.bc_g], &|_| 0)?;
+    extracted_builders_shared(p, cert, &fq.sid, &fg.sid, pb)
+}
+
+fn extracted_builders_shared(p: &Pub, cert: &Cert, sidq: &[(u32, u32)], sidg: &[(u32, u32)], pb: &mut ck::Pub) -> Option<()> {
     let al: Vec<u32> = (0..10).flat_map(|j| ql(p.a[j])).collect();
     pb.tq = aspis_r1_cert_build::fill_tq(&al, &cert.hinv);
     let nq = p.qs.len();
@@ -111,20 +120,9 @@ fn extracted_builders(p: &Pub, cert: &Cert, ln: &Lanes, pb: &mut ck::Pub) -> Opt
     }
     let selh: Vec<u32> = cert.lifts[16].sel.clone();
     pb.lo = aspis_r1_cert_build::fill_lo(&al, &zz, &tr, &sx, &sy, &inact, &sel1, &selh, nq);
-    let desc = |f: &Fam| -> (Vec<u32>, Vec<u32>, Vec<u32>) {
-        let pr = |li: u32| if li < 10 { 1 } else { 4 };
-        (
-            f.sid.iter().map(|&(li, _)| li).collect(),
-            f.sid.iter().map(|&(li, j)| j / pr(li) + 1).collect(),
-            f.sid.iter().map(|&(li, j)| j % pr(li)).collect(),
-        )
-    };
-    let lks: Vec<&LaneKer> = cert.qp.iter().collect();
-    let fq = family(ln, &lks, &|l| l)?;
-    let (kq, rq, lq) = desc(&fq);
+    let (kq, rq, lq) = source_descriptors::describe(sidq);
     pb.own = aspis_r1_cert_build::fill_own(&al, &zz, &tr, &sx, &sy, &inact, &kq, &rq, &lq, kq.len(), 376, nq);
-    let fg = family(ln, &[&cert.bc_g], &|_| 0)?;
-    let (_, rg, lg) = desc(&fg);
+    let (_, rg, lg) = source_descriptors::describe(sidg);
     let kg = vec![10u32; rg.len()];
     pb.gown = aspis_r1_cert_build::fill_own(&al, &zz, &tr, &sx, &sy, &inact, &kg, &rg, &lg, kg.len(), 376, nq);
     let wl = |x: W| -> Vec<u32> { wlimbs(x).iter().map(|m| m.0).collect() };
@@ -207,8 +205,8 @@ pub fn p_r1_check(ch: &R1PublicChallenges) -> (bool, R1CheckTimes) {
         let cert = cert?;
         let t = Instant::now();
         let ln = Lanes::new(&p.cx);
-        let (mut pb, cc) = convert(&p, &cert, &ln)?;
-        extracted_builders(&p, &cert, &ln, &mut pb)?;
+        let (mut pb, cc, sidq, sidg) = convert_shared(&p, &cert, &ln)?;
+        extracted_builders_shared(&p, &cert, &sidq, &sidg, &mut pb)?;
         tm.builders = t.elapsed().as_secs_f64();
         let t = Instant::now();
         let ok = ck::check(&pb, &cc);
