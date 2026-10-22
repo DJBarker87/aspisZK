@@ -170,3 +170,37 @@ theorem privacy_headline_deployed
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
 ```
+
+## Final verification and handoff
+
+J9159 is the final focused audit of all fifteen new top theorems and their
+new-module dependency closure: target `R1Z.ProverCommitReservationAudit38`,
+exit 0, wall 1.65 s, peak RSS 4,131,160 KiB, zero swaps. Every audit contains
+only [propext, Classical.choice, Quot.sound]. The source revision is the
+recorded task base plus the exact retained source overlay and transitive
+object fingerprints. `final-proof-audit.json` verifies the final host sources
+against the local sources at checkpoint `0734a2eaa` plus the retained audit
+module overlay, and checks every audited dependency object; all match.
+
+All eight attempts J9152–J9159, including rejected drafts, have exact targets,
+commands, source snapshots/SHA-256, dependency fingerprints, exit statuses,
+wall/RSS/swap and full axioms/diagnostics retained in
+`evidence/prover-commit38-20261022/lean/attempts.json`. No unproved declaration
+is used by an accepted result. No forbidden proof shortcut or increased
+recursion/heartbeat limit was introduced. `git diff --check` passes.
+
+All 491 tracked crates/programs files match the actual base byte for byte;
+`shipped-sources-unchanged.json` records size and SHA-256 for each. The
+shipped-file rule therefore triggers no ELF rebuild. No native/Kani, Aeneas,
+Rust, SBF or unchanged runtime regression ran. Prior evidence is reused
+without claiming a new source refinement. No full frozen manifest replay
+ran because native reservation/history preflight and the numerical-scope
+interface remain open. This is not a formal release result.
+
+No binaries, objects, ELFs, tarballs or local target directory are added.
+No wallet/account keys were created, deleted or altered. All compilation
+jobs are finished. No push or merge was performed.
+
+Checkpoints: `c27158951` (event/counting), `0734a2eaa` (scope obstruction and
+conditional numerics). Next unused assigned Env J attempt: **J9160**.
+The security target remains **not yet established**.
