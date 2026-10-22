@@ -49,3 +49,26 @@ Every theorem has a standard-axiom report; exact revisions/hashes/commands
 and failed diagnostics remain in manifest.json. Recursion failures were
 replaced by a named pure tail and per-bind congruence, without raising limits.
 Writer effects, byte-input normalization and final stage composition remain.
+
+## Stage 3: writer, authentic inputs and actual returned-state interpretation
+
+`CheckpointBytes5Writer.writer_effects` proves the writer's three ordered
+reads and authentic C5 encoding from the source selector's canonical input
+fields. It uses source_body_c5, with the selector kept irreducible during
+composition. The result is the actual writer slice used as the resume input.
+`CheckpointBytes5Inputs.calls_inputs`/`calls_observation` identify proof/public
+and checksum addresses from the retained source Calls, including exact checked
+subtraction and prefix slice contents, not merely their widths.
+`CheckpointBytes5Output.fields_observation` interprets actual returned raw
+limbs numerically modulo p; canonical saved limbs roundtrip, and all returned
+queries/accumulator fields agree. No choice-based output identification.
+
+Accepted Writer-5: exit 0, 21.72884975001216 s, 3674685440 B RSS, swaps 0;
+Inputs-2: exit 0, 11.35070116724819 s, 3663888384 B RSS, swaps 0;
+Output-4: exit 0, 5.308121291920543 s, 3673571328 B RSS, swaps 0.
+All new theorem reports standard, exact provenance in manifest.json.
+The native direct writer-call schedule is checked read-only in
+source-schedule.json. This audit is not a new physical Rust Vec owner theorem.
+No per-call implementation changed; prior native operation gates are reused,
+not represented as kernel axioms. No shipped file changed, hence no ELF gate.
+The composed source stage and decision consumer are still being checked.

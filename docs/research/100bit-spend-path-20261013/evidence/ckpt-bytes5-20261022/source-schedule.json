@@ -1,0 +1,26 @@
+{
+  "checks": {
+    "writer_three_direct_calls_in_order": true,
+    "writer_complete_body_before_checksum": true,
+    "writer_checksum_appended_before_size_assert": true,
+    "put_helpers_digest_free": true,
+    "retained_resume_three_calls": true
+  },
+  "source_pins": {
+    "crates/aspis-r1-cost-probe/src/verifier.rs": {
+      "sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+      "size": 25102
+    },
+    "docs/research/100bit-spend-path-20261013/lean/Stage2ContinuationResumeBody.lean": {
+      "sha256": "e42cc6e24597ba67f0c1206b30e71604956b9596533d13d6c41ea269a98894de",
+      "size": 29757
+    },
+    "docs/research/100bit-spend-path-20261013/lean/CheckpointBytesDecodeC5.lean": {
+      "sha256": "746668d11b8e90b0d118d53dc607d7039a5e7a341693833a96a69489f22994f8",
+      "size": 5651
+    }
+  },
+  "scope": "read-only direct call schedule; selector and resume identities have separate Lean receipts; physical Vec/allocation/frozen Rust interpretation retains P6 boundary",
+  "new_kani_gate_required": false,
+  "reason": "no shipped/reference Rust change or modified per-call helper; reuse prior pinned per-operation content evidence; no whole-function harness"
+}

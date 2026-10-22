@@ -1,0 +1,167 @@
+import CheckpointBytes5Writer
+import CheckpointBytes5Output
+import OraclePortCkptAbi5Decision
+
+/-! Success-conditioned checkpoint stage, at the retained callback/content P6
+boundary. The two remaining named refinements concern input state/callers;
+neither contains output equality, oracle history, nor observation equality. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CheckpointBytes5Join
+open Aeneas Aeneas.Std Result
+open AspisR1Stage2 CheckpointBytes5Effect CheckpointBytes5Inputs
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open MultiproofConeCanonical OraclePortCheckpointAbiC5 OraclePortCheckpointResumeC5
+open CheckpointBytes4SavedFields
+open RawCutTranscriptRun (ErasedPrefix ErasedMessage)
+open RecordedBinaryExperimentBin (SourceInputs)
+attribute [local irreducible] OraclePortCheckpointStateC3.advance
+  OraclePortCheckpointStateC3.write QueryAccumulator.run QueryAccumulator.run22
+
+/-- Concrete byte carriers and the fixed, per-call ROM interpretation. -/
+structure S2S10CallerBinding {Hash : Type} (D : aspis_core.digest.Digest32 Hash)
+    (hash : Hash) (H : Bytes → State) (proof public1 : Slice U8) (stored pub : Bytes) : Prop where
+  proofBytes : bytesOf proof.val = stored
+  publicBytes : bytesOf public1.val = pub
+  oracle : Oracle D hash H
+
+/-- Input saved-state provenance only: canonical raw fields, fixed variant,
+widths, next and agreement with the reached ten-step model state. -/
+structure S1S7S8StateProvenance (p : CheckpointBytes5Writer.Prepared)
+    (a : CheckpointBytes5Writer.Accumulator) (pm : OraclePortCheckpointAbiC5.Prepared)
+    (am : QueryAccumulator.State K E) : Prop where
+  variant : p.variant = .S2
+  size : a.weights.val.length = 64
+  queriesBound : ∀ j : Fin 22, (p.queries.val[j.val]'(by simpa [p.queries.property] using j.isLt)).val < 262144
+  canonical : CheckpointBytesBlocks.CanonicalFields (CheckpointBytesBody.fields p a size queriesBound)
+  next : a.next.val = 10
+  prepared : CheckpointBytesBlocks.prepared (CheckpointBytesBody.fields p a size queriesBound) canonical = pm
+  accumulator : CheckpointBytesBlocks.accumulator (CheckpointBytesBody.fields p a size queriesBound) canonical = am
+
+/-- The returned writer slice is the actual resume argument. -/
+def stage (reserved : Bool) (wp : CheckpointBytes5Writer.Prepared)
+    (wa : CheckpointBytes5Writer.Accumulator) (proof public1 : Slice U8) :
+    Code (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error) := do
+  let ck ← CheckpointBytes5Writer.writer wp wa proof public1
+  CheckpointBytes5Resume.program (CheckpointBytes4Ops.ops reserved) ck proof public1 .S2
+
+def six (H : Bytes → State) (stored pub address : Bytes) : List (Bytes × State) :=
+  [(stored,H stored),(pub,H pub),(address,H address),
+   (stored,H stored),(pub,H pub),(address,H address)]
+
+theorem successful_fields_and_reads {Hash : Type} (D : aspis_core.digest.Digest32 Hash)
+    (hash : Hash) (H : Bytes → State) (reserved : Bool)
+    (wp : CheckpointBytes5Writer.Prepared) (wa : CheckpointBytes5Writer.Accumulator)
+    (proof public1 : Slice U8) (stored pub : Bytes)
+    (pm : OraclePortCheckpointAbiC5.Prepared) (am : QueryAccumulator.State K E)
+    (caller : S2S10CallerBinding D hash H proof public1 stored pub)
+    (provenance : S1S7S8StateProvenance wp wa pm am)
+    (p : verifier.Prepared) (a : verifier.Accumulator) (before after : Log)
+    (success : run D hash (stage reserved wp wa proof public1) before = ok (.Ok (p,a),after)) :
+    BodyMatches p a pm am ∧ a.next.val = am.next ∧ reserved = true ∧
+      observe after = observe before ++ six H stored pub
+        (OraclePortPhysicalFrameDraft.domain ++ body pm am (H stored) (H pub)) := by
+  simp only [stage,run_bind] at success
+  obtain ⟨mid,writerRun,resumeRun⟩ := OraclePortCkptAbiTry.bind_success _ _ _ success
+  rcases mid with ⟨ck,history⟩
+  try dsimp only [Aeneas.Std.uncurry] at resumeRun
+  obtain ⟨encoding,writerLog⟩ := CheckpointBytes5Writer.writer_effects D hash H caller.oracle
+    wp wa proof public1 ck provenance.size provenance.queriesBound provenance.canonical
+    provenance.next before history writerRun
+  try dsimp only at encoding writerLog
+  rw [provenance.prepared,provenance.accumulator,caller.proofBytes,caller.publicBytes] at encoding writerLog
+  have sourceSuccess := run_success D hash _ history after (.Ok (p,a)) resumeRun
+  rw [CheckpointBytes5Resume.source] at sourceSuccess
+  have modelNext : am.next = 10 := by rw [← provenance.accumulator]; rfl
+  obtain ⟨fields,next,reservedEq⟩ := CheckpointBytes4SuccessfulFields.successful_saved_fields
+    reserved D ck proof public1 hash p a H stored pub pm am encoding modelNext sourceSuccess
+  obtain ⟨calls,trace⟩ := CheckpointBytes5Trace.successful_log (CheckpointBytes4Ops.ops reserved)
+    D (fun s b h => CheckpointBytes4Comparison.ne_sound s b h)
+    ck proof public1 .S2 hash p a history sourceSuccess
+  have length : ck.val.length = 1768 := by
+    have h := congrArg List.length encoding
+    simpa only [bytesOf,List.length_map,encode_length] using h
+  have readLog := CheckpointBytes5Inputs.calls_observation D hash H caller.oracle
+    ck proof public1 calls length
+  try dsimp only at readLog
+  rw [caller.proofBytes,caller.publicBytes,encoding,
+    (checksum_bound H stored pub pm am).1] at readLog
+  have logEq := congrArg Prod.snd (Result.ok.inj (trace.symm.trans resumeRun))
+  dsimp only at logEq
+  refine ⟨fields,next,reservedEq,?_⟩
+  rw [← logEq]
+  change observe history ++ observe _ = _
+  rw [writerLog,readLog]
+  simp only [six,List.append_assoc,List.cons_append,List.nil_append]
+
+/-- The source output, interpreted numerically, drives the remaining twelve
+steps. No saved state is substituted for the returned source accumulator. -/
+def resumedSource (d : MatchingSupport.Data E) (p : verifier.Prepared) (a : verifier.Accumulator) :
+    QueryAccumulator.State K E :=
+  OraclePortCheckpointStateC3.advance
+    (model d (CheckpointBytes5Output.ofK p.rho) (CheckpointBytes5Output.queries p)) 12
+    (CheckpointBytes5Output.accumulator a)
+
+theorem successful_stage {Hash : Type} (D : aspis_core.digest.Digest32 Hash)
+    (hash : Hash) (H : Bytes → State) (reserved : Bool)
+    (wp : CheckpointBytes5Writer.Prepared) (wa : CheckpointBytes5Writer.Accumulator)
+    (proof public1 : Slice U8) (stored pub : Bytes) (c : Context)
+    (d : MatchingSupport.Data E) (rho : K) (q : Fin 22 → Fin 262144)
+    (caller : S2S10CallerBinding D hash H proof public1 stored pub)
+    (provenance : S1S7S8StateProvenance wp wa (prepared c d rho q)
+      (OraclePortCheckpointStateC3.write (model d rho q)).accumulator)
+    (unique : Function.Injective q)
+    (p : verifier.Prepared) (a : verifier.Accumulator) (after : Log)
+    (success : run D hash (stage reserved wp wa proof public1) [] = ok (.Ok (p,a),after)) :
+    (observe after,some (resumedSource d p a)) =
+      eval H (OraclePortCkptAbi5Stage.strictStage stored pub c d rho q) := by
+  let pm := prepared c d rho q
+  let am := (OraclePortCheckpointStateC3.write (model d rho q)).accumulator
+  obtain ⟨fields,next,_,reads⟩ := successful_fields_and_reads D hash H reserved wp wa proof public1
+    stored pub pm am caller provenance p a [] after success
+  have interpreted := CheckpointBytes5Output.fields_observation p a pm am fields next
+  have value : resumedSource d p a = OraclePortCkptAbiReference.resumed d (pm,am) := by
+    simp only [resumedSource,interpreted.1,interpreted.2.1,interpreted.2.2]
+    rfl
+  have saved := OraclePortCkptAbiReference.accepted_saved_fields H stored pub c d rho q (pm,am)
+    (by rw [OraclePortCkptAbiReference.resume_saved,if_pos unique])
+  rw [OraclePortCkptAbi5Stage.stage_observation H stored pub c d rho q unique]
+  apply Prod.ext
+  · rw [OraclePortFrozen2Digests.six_ordered_reads]
+    simpa only [observe,List.map_nil,List.nil_append,six,OraclePortFrozen2Digests.saved_body,pm,am] using reads
+  · rw [value,saved.2.2.2,OraclePortCheckpointOracleC5.writeResume_value]
+
+/-- The reached dV_frozen2 checkpoint position. Distinct queries are derived
+from the actual reached decoder, not added as a third refinement premise. -/
+theorem success_conditioned_checkpoint_stage_join {Hash : Type}
+    (D : aspis_core.digest.Digest32 Hash) (hash : Hash) (H : Bytes → State)
+    (reserved : Bool) (wp : CheckpointBytes5Writer.Prepared) (wa : CheckpointBytes5Writer.Accumulator)
+    (proof public1 : Slice U8) (stored : Bytes) (parsed : OraclePortCompactDraft.Parsed)
+    (q : Fin 22 → Fin 262144) (tr : ErasedPrefix) (i : SourceInputs) (v : LiteralOpeningView.View)
+    (input : OraclePortStoredDecisionDraftC4.input parsed q tr = some i)
+    (query : OraclePortSelectedDraft.queries tr = some q)
+    (caller : S2S10CallerBinding D hash H proof public1 stored tr.statement.pubBytes)
+    (provenance : S1S7S8StateProvenance wp wa
+      (prepared (OraclePortAcceptedContextC6.context parsed i v) i.data
+        (SelectedChallengeMap.rhoOf i.rho) q)
+      (OraclePortCheckpointStateC3.write (model i.data (SelectedChallengeMap.rhoOf i.rho) q)).accumulator)
+    (p : verifier.Prepared) (a : verifier.Accumulator) (after : Log)
+    (success : run D hash (stage reserved wp wa proof public1) [] = ok (.Ok (p,a),after)) :
+    (observe after,some (resumedSource i.data p a)) =
+      eval H (OraclePortFrozen2.checkpoint stored parsed q tr i v) := by
+  have fields := (OraclePortStoredDecisionDraftC4.input_fields parsed q tr i input).1
+  have decoded : LiteralQueryRead.decode i.queryBytes = some q := by
+    simpa [OraclePortSelectedDraft.queries,fields.2.1] using query
+  have unique := (LiteralQueryRead.decode_success _ _ decoded).2
+  exact (successful_stage D hash H reserved wp wa proof public1 stored tr.statement.pubBytes
+    (OraclePortAcceptedContextC6.context parsed i v) i.data (SelectedChallengeMap.rhoOf i.rho) q
+    caller provenance unique p a after success).trans
+      (OraclePortCkptAbi5Stage.reached_stage H stored parsed q tr i v input query)
+
+#print axioms success_conditioned_checkpoint_stage_join
+
+#print axioms successful_fields_and_reads
+#print axioms successful_stage
+end AspisR1.CheckpointBytes5Join
+end

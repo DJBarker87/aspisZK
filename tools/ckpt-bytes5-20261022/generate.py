@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Reify the retained resume instruction schedule, leaving the pure tail intact."""
 from pathlib import Path
+import sys
 import re
 R=Path(__file__).resolve().parents[2]
 L=R/'docs/research/100bit-spend-path-20261013/lean'
@@ -71,4 +72,8 @@ theorem source (ops : ResumeOps) {H : Type} (D : aspis_core.digest.Digest32 H)
 #print axioms source
 end AspisR1.CheckpointBytes5Resume
 '''
-(L/'CheckpointBytes5Resume.lean').write_text(text)
+destination=L/'CheckpointBytes5Resume.lean'
+if '--check' in sys.argv:
+    assert destination.read_text()==text,'resume source port differs'
+else:
+    destination.write_text(text)

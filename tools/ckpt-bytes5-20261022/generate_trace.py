@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
+import sys
 R=Path(__file__).resolve().parents[2]
 L=R/'docs/research/100bit-spend-path-20261013/lean'
 s=(L/'RawTx2ResumeDigestCalls.lean').read_text()
@@ -72,4 +73,8 @@ theorem successful_log (ops : ResumeOps) {H : Type}
 #print axioms successful_log
 end AspisR1.CheckpointBytes5Trace
 '''
-(L/'CheckpointBytes5Trace.lean').write_text(text)
+destination=L/'CheckpointBytes5Trace.lean'
+if '--check' in sys.argv:
+    assert destination.read_text()==text,'trace proof differs'
+else:
+    destination.write_text(text)
