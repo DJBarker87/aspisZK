@@ -24,6 +24,7 @@ print(json.dumps(dict(source_revision=source['source_revision'],source_files_reh
 import shlex
 x=json.loads(subprocess.check_output(['ssh',REMOTE,'python3 -c '+shlex.quote(code)],text=True))
 for b in x['builds']:
+ b['actual_source_revision']=x['source_revision']
  d=E/b['name'];d.mkdir(exist_ok=True)
  for p in b['outputs']:
   s=p['path'];name=Path(s).name
@@ -32,5 +33,6 @@ for b in x['builds']:
    assert hashlib.sha256((d/name).read_bytes()).hexdigest()==p['sha256']
    if name=='artifact-comparison.json':b['comparison']=json.loads((d/name).read_text())
 x.update(schema='s10-adopted-builds-v1',print_axioms='N/A: no Lean; compiler diagnostics only',host_workspace=H)
+x['receipt_revision_correction']='The reused capped.py writes a hard-coded historical b2727acd source_revision. Raw receipts are retained byte-for-byte. Actual source for every build is source-inputs.json, revision '+x['source_revision']+'. No historical source assertion is transferred.'
 (E/'build-manifest.json').write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
 print(json.dumps(dict(builds=len(x['builds']),source_files=x['source_files_rehashed'])))

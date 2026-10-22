@@ -138,3 +138,22 @@ confined to the three adopted files and their inlined callers; no unexplained
 selected-compiler body change or Pool artifact change was found. This does not
 assert global semantic equivalence or a full extraction of the current tree.
 `gates.json` remains INCOMPLETE/exit 2, with S2 caller identities explicitly open.
+
+## Stage 4: inventory addendum and focused validation
+
+The dated S10-INVENTORY section records the adopted pins, old-certificate
+historical scope, changed graph coordinates, complete delta lists and explicit
+S2 caller/source-tree/ordering residuals. No old certificate is overwritten.
+`validation.json` records the final focused audit's exact target, exit, wall,
+peak RSS, swaps, revision and compiler-source revision. `final-pins.json` pins
+all final scripts, evidence inputs and the inventory report. The audit checks
+every current source pin, all build/analysis receipts and caps/reservations,
+all collected artifact pins, every new CFG cut and bypass mutations,
+deterministic overlays, both failing completeness gates and the independent
+callback replay. Large compiler maps are hash-pinned host-only data.
+
+No Lean, full frozen-manifest, unrelated runtime/adversarial suite or unchanged
+SBF build is replayed. These are focused compiler and certificate checks,
+not a formal release result. The exact generic graph/standard-axiom results
+are retained at their historical mathematical scope. No task build or analysis
+scope remains running, no wallet/account key was removed, and no push occurs.
