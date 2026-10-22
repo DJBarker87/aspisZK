@@ -1,0 +1,52 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitDomain34.lean:160:17: error: unsolved goals
+case cons
+w : PublicRawCore.Word
+ws : List PublicRawCore.Word
+ih : (List.flatMap PublicRawCore.wordBytes ws).length = 4 * ws.length
+⊢ 4 + (List.flatMap PublicRawCore.wordBytes ws).length = 4 * (w :: ws).length
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitDomain34.lean:162:19: error: unexpected identifier; expected command
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitDomain34.lean:168:4: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitDomain34.lean:180:29: error: Tactic `decide` failed for proposition
+  1455 ≤ Aeneas.Std.Usize.max
+because its `Decidable` instance
+  Nat.decLe 1455 Aeneas.Std.Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match Nat.ble 1455 Aeneas.Std.Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitDomain34.lean:184:80: error: unsolved goals
+p : Source
+out : SourceBytes
+hs :
+  pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes p =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out)
+⊢ ↑out = List.map (fun x => x) ↑out
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitDomain34.lean:188:50: warning: This simp argument is unused:
+  List.map_id_fun
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵d̵e̵f̵,̵s̵o̵u̵r̵c̵e̵B̵y̵t̵e̵_̵r̵a̵w̵B̵y̵t̵e̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵i̵d̵_̵f̵u̵n̵]̵[̲F̲u̲n̲c̲t̲i̲o̲n̲.̲c̲o̲m̲p̲_̲d̲e̲f̲,̲ ̲s̲o̲u̲r̲c̲e̲B̲y̲t̲e̲_̲r̲a̲w̲B̲y̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitDomain34.lower_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitDomain34.canonical_transfer' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitDomain34.canonical_withdrawal' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitDomain34.lower_common' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitDomain34.lower_image' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitDomain34.source_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitDomain34.on_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitDomain34.sourceByte_rawByte' does not depend on any axioms
+'R1Z.ProverCommitDomain34.encodeWords_length' depends on axioms: [sorryAx]
+'R1Z.ProverCommitDomain34.encoded_length_bound' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverCommitDomain34.source_bytes_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitDomain34.public_bytes_ok' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitDomain34.outside_no_serializer_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

@@ -20,7 +20,7 @@ for pin in sorted((E/'pins').glob('lean-*.json')):
  log=(dest/('out-'+a+'.log')).read_text();tl=(dest/('time-'+a+'.log')).read_text()
  def field(s):
   m=re.search(re.escape(s)+r':\s*(.+)',tl);return m[1] if m else None
- rec.update(exit_status=re.findall(r'^exit=(\d+)$',log,re.M),wall=field('Elapsed (wall clock) time (h:mm:ss or m:ss)'),peak_rss_kib=field('Maximum resident set size (kbytes)'),swaps=field('Swaps'),print_axioms=re.findall(r'^.*depends on axioms:.*$',log,re.M),errors=[l for l in log.splitlines() if 'error' in l])
+ rec.update(exit_status=re.findall(r'^exit=(\d+)$',log,re.M),wall=field('Elapsed (wall clock) time (h:mm:ss or m:ss)'),peak_rss_kib=field('Maximum resident set size (kbytes)'),swaps=field('Swaps'),print_axioms=re.findall(r"^'[^']+' depends on axioms: \[.*?\]|^'[^']+' does not depend on any axioms",log,re.M|re.S),errors=[l for l in log.splitlines() if 'error' in l])
  # Exact source bytes are retained alongside each attempt, including rejected attempts.
  snapshot=next((E/'lean'/'sources').glob('attempt-'+a+'-*'),None)
  if snapshot:rec['source_snapshot']=str(snapshot.relative_to(E));assert hashlib.sha256(snapshot.read_bytes()).hexdigest()==rec['source_sha256']
