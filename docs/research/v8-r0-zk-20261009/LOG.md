@@ -8465,3 +8465,18 @@ finding is escalated to the user with a recommendation and is not patched silent
 First step: a side-channel inventory of the deployed prover path
 (`r1p-final/SIDE-CHANNEL-AUDIT-20261022.md`), running alongside privacy
 part 46.
+
+## D160 (lead, 2026-10-22 10:40): part 46 merged; publication composed, source-view byte image next
+
+Merged `codex/cx-prover-commit46-20261022` (report
+`r1p-final/PROVER-COMMIT46-20261022.md`). Per D158: `ProgramOne::digest` is
+certified as state passing (per-call Kani against the reference) and threaded
+with the part-28 lift; binary multiproof transitions and child-map support are
+verified; compact proof-byte publication and exact table/flag finalisation are
+composed. J9691, standard axioms; shipped files unchanged.
+Obstruction: the byte-image bridge from `sim::semantic`/`sim::opening` outputs
+to the model payload, starting with `y1`. A counterexample shows that codec
+success alone does not give the image. It is not a privacy attack.
+Next (part 47): that bridge, field by field. Per D159, the source-to-
+`FSExperiments` conversion now has to carry the L1 observables too, so part 47
+stops before the conversion and waits for the side-channel audit.
