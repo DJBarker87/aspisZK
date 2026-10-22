@@ -1,0 +1,7 @@
+# S9 pair-caller operation bridge
+
+The audited main theorem proves six concrete `Result` maps from the extracted pair-caller field slots to the selected P6 operations: `qmMul`, `qmSquare`, `wideAdd`, `wideMul`, `wideMulM31`, and `wideMulQM31`. It preserves success, failure, and divergence through the result mapping. Its seven theorem audit reports use standard Lean axioms only.
+
+The compiled dependency sources are explicit adapters. The `Types` module replaces the generated discriminant attribute with named discriminant equations and a globally qualified `instDiscriminant` instance under `AspisR1S9PairCallerStepV1`; the `Funs` and `FunsExternal` modules qualify the caller declarations into that namespace. Those adaptations are recorded rather than presented as unchanged production extraction. The external `weights.field` wrapper calls `ActualFieldComplete.decodeField`; this packet does not prove that wrapper is the actual production `weights.field` implementation. The linked field decoder source-cut packet also documents its known fake `WideExact` modeling boundary.
+
+The claim is limited to these six operation-slot result maps. It does not establish production caller refinement, actual source-field identity, or a frozen release artifact. Failed external/Funs v1/v2 attempts and their diagnostic logs are retained under `diagnostics/` and are marked failed, not accepted. No compiled objects are included.
