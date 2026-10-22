@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRawFresh41.lean:26:4: error: unsolved goals
+case neg.«_@».R1Z.ProverCommitRawFresh41.167738366._hygCtx._hyg.177.«1»
+tail more : List UInt8
+b : Fin 2
+hb : ¬↑b = 0
+eq : domain ((fun i => i) ⟨1, ⋯⟩) ++ tail = (if ↑b = 0 then dBind0 else dBind1) ++ more
+hi : ¬↑((fun i => i) ⟨1, ⋯⟩) = 1
+byte : True
+⊢ False
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRawFresh41.lean:36:4: error: Type mismatch: After simplification, term
+  ne_binding i (frame ++ List.ofFn seed) (pub ++ [tag] ++ ctxEnc digest nonce) 0
+ has type
+  @Ne (List UInt8) (domain i ++ (frame ++ List.ofFn seed))
+    ((if ↑0 = 0 then dBind0 else dBind1) ++ (pub ++ ([tag] ++ ctxEnc digest nonce)))
+but is expected to have type
+  @Ne (List UInt8) (domain i ++ (frame ++ List.ofFn seed)) (dBind0 ++ (pub ++ ([tag] ++ ctxEnc digest nonce)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRawFresh41.lean:38:4: error: Type mismatch: After simplification, term
+  ne_binding i (frame ++ List.ofFn seed) (ans first ++ ctxEnc digest nonce ++ descr) 1
+ has type
+  @Ne (List UInt8) (domain i ++ (frame ++ List.ofFn seed))
+    ((if ↑1 = 0 then dBind0 else dBind1) ++ (ans first ++ (ctxEnc digest nonce ++ descr)))
+but is expected to have type
+  @Ne (List UInt8) (domain i ++ (frame ++ List.ofFn seed)) (dBind1 ++ (ans first ++ (ctxEnc digest nonce ++ descr)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRawFresh41.lean:55:4: error: Type mismatch: After simplification, term
+  have this := fun h => Or.elim h statement fun h => Or.elim h separated.left separated.right;
+  this
+ has type
+  ¬(domain i ++ frame ++ List.ofFn seed = pub ∨
+      domain i ++ frame ++ List.ofFn seed = ProverCommitPublicBinding40.binding pub tag digest nonce ∨
+        domain i ++ frame ++ List.ofFn seed = ProverCommitPublicPrefix41.binding1 digest nonce first)
+but is expected to have type
+  False
+'R1Z.ProverCommitRawFresh41.ne_binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRawFresh41.raw_off_bindings' depends on axioms: [sorryAx]
+'R1Z.ProverCommitRawFresh41.raw_off_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh
