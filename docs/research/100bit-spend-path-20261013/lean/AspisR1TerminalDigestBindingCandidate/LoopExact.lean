@@ -1,3 +1,4 @@
+import ImportUnionDigestStep
 import AspisR1TerminalDigestBindingCandidate.Source
 import AspisR1TerminalDigestBindingCandidate.Exact
 import OccupancyRangeTraversal
@@ -249,42 +250,22 @@ theorem loop_success_fuel
       have hoffsetRead : (start + iter.start : Result Usize) = .ok openedIndex := by
         simpa [lane] using hoffset
       refine ⟨final, ?_, hfinalCanonical, ?_⟩
-      · change add_digest_binding_loop iter base selector opened start expected rightTweak = .ok final
+      · let nextLoop : Range → Array QM 8#usize → Result (Array QM 8#usize) :=
+          fun nextIter nextOut =>
+            add_digest_binding_loop nextIter nextOut selector opened start expected rightTweak
+        have hstep := ImportUnionDigestStep.step_success nextLoop iter1 lane base selector
+          opened start expected rightTweak expectedLane target old openedLane lifted
+          difference scaled updated openedIndex out final hexpectIndex htarget houtread
+          hoffset hopenread hlift hsub hmul hadd hupdate hloop
+        have hraw := (ImportUnionDigestStep.rawStep_eq_step nextLoop iter1 lane base
+          selector opened start expected rightTweak).trans hstep
+        change add_digest_binding_loop iter base selector opened start expected rightTweak = .ok final
         rw [add_digest_binding_loop.eq_def]
         simp only [hnext, bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
-        by_cases hright : rightTweak
-        · cases hinc : (lane + 1#usize : Result Usize) with
-          | fail e => simp [targetAfterLane, hright, hinc] at htarget
-          | div => simp [targetAfterLane, hright, hinc] at htarget
-          | ok i =>
-            have hloopRight : add_digest_binding_loop iter1 out selector opened start expected true = .ok final := by
-              simpa [hright] using hloop
-            have hincLane : (iter.start + 1#usize : Result Usize) = .ok i := by
-              simpa [lane] using hinc
-            by_cases hcond : i = poseidon2.DIGEST_ELEMS
-            · have hm : field.M31.add expectedLane
-                  poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK = .ok target := by
-                simpa [targetAfterLane, hright, hinc, hcond] using htarget
-              simp [hright, lane, openedLane, hincLane, hcond, hm, hexpectRead, bind_tc_ok,
-                hbaseRead, hoffsetRead, hopenread, hlift, hsub, hmul, hadd,
-                hupdate, hloopRight]
-            · have ht : expectedLane = target := by
-                simpa [targetAfterLane, hright, hinc, hcond] using htarget
-              subst target
-              simp [hright, lane, openedLane, hincLane, hcond, hexpectRead, bind_tc_ok,
-                hbaseRead, hoffsetRead, hopenread, hlift, hsub, hmul, hadd,
-                hupdate, hloopRight]
-        · have ht : expectedLane = target := by
-            simpa [targetAfterLane, hright] using htarget
-          subst target
-          have hbool : rightTweak = false := by
-            cases rightTweak with
-            | false => rfl
-            | true => exact False.elim (hright rfl)
-          have hloopFalse : add_digest_binding_loop iter1 out selector opened start expected false = .ok final := by
-            simpa [hbool] using hloop
-          simp [hright, lane, openedLane, hexpectRead, bind_tc_ok, hbaseRead, hoffsetRead,
-            hopenread, hlift, hsub, hmul, hadd, hupdate, hloopFalse]
+        change ImportUnionDigestStep.rawStep nextLoop iter1 lane base selector opened
+          start expected rightTweak = .ok final
+        exact hraw
       · exact hfinalValues
 
+#print axioms loop_success_fuel
 end AspisR1TerminalDigestBindingCandidate.LoopExact

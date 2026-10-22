@@ -120,4 +120,18 @@ uses the same locally proved projection lemma; the success composition uses
 IU-370 found the same iterator-result pair in the research-tree module
 `AspisR1TerminalDigestBindingCandidate.LoopExact` (not `lean-candidates`). Its
 two existing next-result simplifications now use `uncurry_apply_pair`;
-focused IU-371 passes. Fuel induction and arithmetic are unchanged.
+IU-371 passed elaboration but FAILED kernel checking at the unchanged 7,000 MB memory guard (7,169,616 KiB peak RSS, zero swaps). Its earlier success wording was incorrect and is superseded here. No accepted digest-loop result is claimed from IU-371. Fuel induction and arithmetic statements are unchanged.
+
+
+The digest memory obstruction is replaced by `lean/ImportUnionDigestStep.lean`.
+Its `rawStep_eq_step` factors the source tweak block into the already-proved
+`targetAfterLane`; `step_success` composes the existing successful primitive
+calls with an arbitrary continuation. Both lemmas pass focused IU-380 with
+standard axioms. The fuel theorem applies these opaque checked facts with its
+actual recursive continuation; focused IU-381 passes in 2.25 s, with standard
+axioms. No theorem statement or arithmetic invariant changed. The loop body
+and frozen source slice remain unchanged. This permanently avoids the large
+kernel conversion in the old branch proof; no cap or heartbeat increase was
+used. IU-371/373/374/376/377/378 memory failures and the intervening diagnostics
+are retained; they are not accepted evidence. The earlier note claiming an
+IU-371 pass was erroneous and has been corrected.
