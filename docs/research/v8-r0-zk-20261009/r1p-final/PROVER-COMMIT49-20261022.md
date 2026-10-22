@@ -308,6 +308,36 @@ compiled. J10167's Usize bound is repaired by exposing `size_def`. All failed
 sources/diagnostics and accepted section-6 receipts remain. All accepted printed
 axioms are standard. No caps/options raised; no shipped files changed.
 
+## Stage 13: complete opening-kernel caller and ordered byte images
+
+J10172/75 identify the entire d/s/t accumulation with the existing R1 round
+polynomial, including actual quarter scaling. J10176/79/85 prove the complete
+256-entry dual fold and its R1 `dualFold` value. J10180/84 prove the second
+round's 256-entry shape via a symbolic padding identity; all legal 64-fibre
+reads remain in the live prefix. J10186 identifies the primal cell with R1
+`primalFold`. J10187 composes first round, both first folds, second round and
+final primal fold. J10188 gives their ordered 7/7/64 coefficient byte images,
+using the retained full-width serializer theorem. No supplied round, fold or
+byte-image identity is a premise. Inputs are arbitrary canonical batch/weight
+arrays and fold challenges; source batch/tape and complete native caller
+provenance remain explicit boundaries.
+
+Native full-context dual-array iteration passes in 12.077 s / 567048 KiB,
+zero swaps; second-round 256-vs-padded-1024 iteration passes in 7.286 s /
+497080 KiB, zero swaps. Full callee operand/order traces are compared. The dual
+source pin was corrected from the nearby dense verifier to the actual
+prover.rs `fold`, plus weights.rs's quarter, before this stage is committed;
+the checked literal Horner body is unchanged.
+
+J10169 is a missing-dependency preflight (RoundPairing's cache module is
+R1RoundPairing, reached via BatchedAlgebra); no compiler starts. Rejected
+sum/carrier/index drafts J10170/73/74/77/78/81/82/83 are retained. Keeping
+`value` and `List.ofFn` opaque, and proving generic Horner/padding facts first,
+removes concrete-tower timeouts and list-constructor recursion without raising
+limits. All accepted printed axioms are standard. This is a complete owned
+opening-kernel value/byte path, not complete native simulator output equality.
+No shipped change or deployed-premise removal; no FSExperiments work.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

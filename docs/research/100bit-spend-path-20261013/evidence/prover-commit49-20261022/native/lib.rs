@@ -86,3 +86,7 @@ include!("point-rows-binding.rs");
 include!("stored-binding.rs");
 
 include!("material-binding.rs");
+
+include!("dual-binding.rs");
+
+include!("round-shape-binding.rs");

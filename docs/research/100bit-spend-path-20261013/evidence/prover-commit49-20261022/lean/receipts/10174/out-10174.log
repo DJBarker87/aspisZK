@@ -1,0 +1,24 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundModel49.lean:33:41: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (AspisR1.RoundPairing.roundPolynomial (fun j => ?q ↑j) fun j => ?w ↑j).coeff ?k
+in the target expression
+  (∑ d, ∑ s, ∑ t, if ↑k = ↑s + (4 - ↑t) % 4 then value (q (4 * ↑d + ↑s)) * value (w (4 * ↑d + ↑t)) else 0) * 4⁻¹ =
+    (AspisR1.RoundPairing.roundPolynomial (fun j => value (q ↑j)) fun j => value (w ↑j)).coeff ↑k
+
+n : ℕ
+hn : n ≤ 256
+q w : ℕ → Raw
+hq : ∀ k < 1024, canonical (q k)
+hw : ∀ k < 1024, canonical (w k)
+out : ℕ → Raw
+hout :
+  ProverCommitRoundScaled48.run n (sourceArray 1024#usize q) (sourceArray 1024#usize w) =
+    ok (List.ofFn fun k => source (out ↑k))
+hcout : ∀ k < 7, canonical (out k)
+hdout : ∀ k < 7, value (out k) = terms q w (indices n) k * ProverCommitWideScalar48.factor 536870912#u32
+k : Fin 7
+⊢ (∑ d, ∑ s, ∑ t, if ↑k = ↑s + (4 - ↑t) % 4 then value (q (4 * ↑d + ↑s)) * value (w (4 * ↑d + ↑t)) else 0) * 4⁻¹ =
+    (AspisR1.RoundPairing.roundPolynomial (fun j => value (q ↑j)) fun j => value (w ↑j)).coeff ↑k
+'R1Z.ProverCommitRoundModel49.terms_math' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRoundModel49.coefficients' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
