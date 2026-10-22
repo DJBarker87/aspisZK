@@ -1549,3 +1549,49 @@ The proposed isolated inline(always) optimization was found already tested
 in retained work (`/tmp/s4-combined-inline-v2-20261021`); outputs and strict
 stack checks passed but all six B1 comparisons failed. It was not rerun.
 Candidate source adoption and B1 policy remain unresolved.
+
+
+## Exact source-pair views and corrected scanner recursion interface
+
+`s4-pair-function-views-v1-20261022` proves
+`materialized_pair_function_views` from the existing same-pair
+materializedOutputs witness alone. Both decoded source arrays equal the
+range-8 list views of sourcePairBlocks and sourcePairStates(k+1). It does
+not assume stateChain, hash interpretation, pair length or independent
+array alignment. It supplies the direct list views needed for the scanner
+output join, avoiding independently selected existential source witnesses.
+Focused exit 0, 22.288s, peak process RSS 3,220,766,720 bytes, swap 0,
+standard axioms. Packet source and checker were reviewed.
+
+Primary review found that the earlier experimental Run.stopped interface
+forced the fallback input state to equal the current advance state. That
+restriction does not follow from the implementation. The corrected
+`s4-scanout-run-core-v1-20261022` quantifies the fallback independently and
+proves scanOut_of_run with the actual selected output state; no equality
+between distinct oracle outputs is assumed. Exit 0, 8.376s, peak process
+RSS 3,423,502,336 bytes, swap 0, axioms propext and Quot.sound.
+`s4-trace-literal-output-join-v1-20261022` separately composes an exact
+scanOut array-value result and same-pair literal result into array/list
+output equality. Its traceResult premise is the concrete array's scanOut
+result, not the desired equality with literal xs. Exit 0, 4.494s, standard
+axioms and zero swaps. Both packet checkers passed. The actual production
+DriverTrace-to-Run construction is still being proved, not assumed closed
+by these generic composition helpers.
+
+## Row31 cut specialized to the source wrapper's P3 interpretation
+
+`s4-query31-p3-materialized-join-v1-20261022` fixes the source-shaped
+QueriesModel cut's dictionary to p3PublicDigest32 sha256 and functional
+oracle to hashBytes sha256. It derives the former generic hdigest contract
+using the wrapper equality and p3_success_interpreted, preserving the same
+source witnesses, prior-prefix hstate and successful literal run. Exit 0,
+4.525s, peak process RSS 3,464,429,568 bytes, swap 0, standard axioms.
+Source statement and checker reviewed. No SHA/syscall or ROM law is added.
+
+The unchanged production queries_from_pairs is still distinct from its
+retained unrolled source-shaped candidate. Prior full extraction deliberately
+made the production helper opaque. A new focused extraction of its unchanged
+outer loop is underway, retaining scan/finish callee boundaries. Neither
+the P3 specialization nor the forthcoming model scanner composition may
+be described as full production sampler refinement until that source
+boundary is discharged. Frozen-source S4 and global soundness remain open.
