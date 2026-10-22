@@ -110,3 +110,9 @@ IU-350 found the same concrete iterator-result pair in
 lists now include `uncurry_apply_pair`; focused IU-351 passes. The fuel
 induction, sparse lane shape, arithmetic lemmas, statement and hypotheses are
 unchanged. The recurrence was not evaluated on a generated concrete cell.
+
+IU-353 found the symbolic and concrete forms in
+`OccupancyLiteralExecutionAll12ExactListPublic`. The generated/program equality
+uses the same locally proved projection lemma; the success composition uses
+`uncurry_apply_pair`. Focused IU-354 passes in 5.26 s. All statements and the
+12-cell model derivation remain unchanged.
