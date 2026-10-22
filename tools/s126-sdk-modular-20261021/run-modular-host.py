@@ -4,7 +4,7 @@ import hashlib,json,os,subprocess,sys,tomllib
 H=Path('/home/dombarker/project-offloads/s126-real-sdk-20261021');name,crate,harness=sys.argv[1:4];crate=Path(crate)
 os.environ.update(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(H/'target'),RUSTFLAGS='-C opt-level=3 -C overflow-checks=yes -C link-arg=-Wl,--threads=1')
 subprocess.run(['python3',str(H/'kit/reservation.py'),str(H/(name+'-admission.json'))],check=True,stdout=subprocess.DEVNULL)
-cmd=['cargo','kani','--manifest-path',str(crate/'Cargo.toml'),'--lib','--exact','--harness',harness,'--solver','cadical','--no-assertion-reach-checks','-j','1','-Z','unstable-options','--output-format','terse','--harness-timeout','600','--cbmc-args','--unwinding-assertions']
+cmd=['cargo','kani','--manifest-path',str(crate/'Cargo.toml'),'--lib','--exact','--harness',harness,'--solver','cadical','--no-assertion-reach-checks','-j','1','-Z','unstable-options','--output-format','terse','--harness-timeout',('180' if 'short' in sys.argv[4:] else '600'),'--cbmc-args','--unwinding-assertions']
 if len(sys.argv)>4 and sys.argv[4] in ['codegen','codegen-stubbing','codegen-contracts-stubbing']:
  pos=cmd.index('--cbmc-args');cmd[pos:pos]=['--only-codegen']
 if len(sys.argv)>4 and sys.argv[4] in ['contracts','contracts-stubbing','codegen-contracts-stubbing']:

@@ -2251,3 +2251,52 @@ bookkeeping, not a new freeze or a claim that these candidates exist at that
 revision. Lean's log-derived audit overlay supersedes the generic raw receipt's
 inapplicable N/A axiom field. Aggregate adoption/re-pin and final coherent
 release dependency replay remain required before a release claim.
+
+### 2026-10-22 — initial-account identity now derived by the complete reference
+
+The latest lead handoff was read at f4669da3e, including its fourteen
+`S2CallerFacts` fields and the distinction between initial native snapshots,
+the full58295-byte proof account, its57607-byte suffix, ASQ8/ASF8 and the two
+checkpoint carriers. The next checked deliverable directly addresses its
+existential-input concern. See `S126-FIXED-INPUT-HANDOFF-20261022.md` for full
+statements, before/after audit, exact remaining boundaries and receipt table.
+
+`S2SdkFixedInputCallerV1` derives two extra conclusions from the SAME complete
+installed reference stage1 success: its proof and public byte views are the
+literal account0/account1 reads from the FIXED initial SDK heap. No independent
+byte/frame/clone/child/prefix/tag premise is added. `S126SdkFixedInputCurrentV1`
+retains these equations while composing the actual source decoder, common
+statement candidate encoder, original Vec range/gate and current first wrapper.
+`S126SdkFixedInputExportV1.borrowed_stage1_fixed_input_witness` additionally
+exports exact proof-account length58295, suffix contents drop688/take57607,
+suffix length57607 and actual decode/current-first calls for the same bytes.
+`forget_initial_inputs` kernel-checks that this strengthens the PREVIOUS exact
+source-linked predicate, with its original quantifiers/carriers/results.
+
+Focused targets pass in14.591/6.007/17.925s, maximum RSS3492069376bytes,
+zero swaps and nine standard-only axiom reports across the accepted three
+targets. Their5614 selected import hashes are recorded without exporting
+objects. The changed generic/source-walk target was checked first, then its
+current-first bridge and suffix export. There was no unchanged full replay.
+The explicit ignored fields remain actual syscall/digest/verifier-child
+interpretation; this is accepted-only reference success, not arbitrary-child
+TOTAL or native/runtime identity. Initial owned SDK views are not silently
+equated with the lead's externally fixed native stored/public snapshots.
+
+Separately, the native-derived entry scalar facts construct the complete
+borrowed-reference decoder-error prefix in `sdk-reference-admission`:
+all1722 checks and both covers pass, exit0,15.182s,575428KiB RSS,swap0 under
+fresh6G/8G/0 admission. This avoids the timed-out two-execution solver target.
+It preserves arbitrary bytes and metadata, independent lamport aliases and
+arbitrary proof slot; pointer and scalar restoration are conclusions. Same
+scan result, original-buffer/native embedding and successful continuation
+substitution remain explicit. The borrowed parent equals the previously
+checked source; local-path snapshots recorded after the check are not a new
+freeze. Both focused evidence checkers pass without solver/Lean replay.
+
+S2, S6 and S1 remain OPEN. The next enclosing obligation is actual successful
+native SDK-to-fixed-initial-reference correspondence, with installed children
+and their ordered effects. Native decoder-error frames do not prove it.
+TX2 reconstruction/retention, remaining lead interface fields, original
+Prepared/prepared_claim trace correspondence, full R22 and release re-pin/
+coherent replay remain required. No shipped source or release artifact changed.
