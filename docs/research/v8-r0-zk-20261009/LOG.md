@@ -8275,3 +8275,36 @@ D150's charging of ledger entries was the wrong shape (lead error).
    value. Charge ≤ Q · attempts / (2^256 − 1) with the same Q ≤ 2^64 query budget
    the headline already uses for `seedGuess` (`ProverCommitSeedEvent19.budget
    (2^64)`). That is not a new restriction, and it is shown visibly in the bound.
+
+## D152 (lead, 2026-10-22 06:10): part 39 merged; the mask nonce is public and adversary-chosen
+
+Merged `codex/cx-prover-commit39-20261022` (report
+`r1p-final/PROVER-COMMIT39-20261022.md`). Proved
+(`ProverCommitLedgerCoupling39`): exact shared-ledger coupling for every
+finite ledger and schedule (state equality of the reservation transition and
+preparation prefix; collision implies duplicate, which stops both worlds
+identically). No ledger cap, no collision term. Also the conditional memo
+counting and < 2^-100 arithmetic. J9171, 18 theorems, standard axioms;
+shipped files byte-identical.
+Source finding (correct, and a lead error in D151): the deployed proof-account
+route calls `generate_for_mask_nonce(mask_nonce)` (`state_only_entropy.rs`
+202–224). The nonce is the caller-supplied proof-account public key (D38.4),
+not an OS draw. Only the 64 bytes of field entropy and leaf seed come from the
+OS. So D151's "the nonce is a uniform witness-independent coin" is false for
+the deployed path.
+
+**Ruling.** Model the mask nonce as **public and adversary-chosen**: quantify
+over it, and let the adversary pick it, possibly after earlier queries.
+Classify every hash input on this path by whether it contains private
+OS-drawn bytes:
+- Inputs built only from public data (the nonce, public statement) are public
+  oracle queries. The adversary may query them in advance, and the coupling
+  preserves them exactly in both worlds, with no charge (as the worker
+  recommends). The reservation path, if it depends only on the nonce, falls
+  here, and duplicates take the coupled fail-closed path (that is the
+  ledger's job: no mask reuse for a nonce).
+- Inputs containing the private 64 seed bytes are charged a memo-hit term,
+  ≤ Q · attempts / 2^256 per 32-byte seed under the existing Q ≤ 2^64 budget,
+  visibly in the headline.
+Do not switch the target to the 96-byte `generate()` adapter. The deployed
+route is the proof-account route.
