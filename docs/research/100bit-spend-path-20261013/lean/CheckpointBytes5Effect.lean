@@ -121,6 +121,19 @@ theorem run_read {H : Type} (D : aspis_core.digest.Digest32 H) (hash : H)
 theorem run_pure {A H : Type} (D : aspis_core.digest.Digest32 H) (hash : H)
     (a : A) (log : Log) : run D hash (pure a) log = ok (a,log) := rfl
 
+theorem erase_ite {A H : Type} (D : aspis_core.digest.Digest32 H) (hash : H)
+    (p : Prop) [Decidable p] (yes no : Code A) :
+    erase D hash (if p then yes else no) =
+      if p then erase D hash yes else erase D hash no := by split <;> rfl
+
+theorem run_ite {A H : Type} (D : aspis_core.digest.Digest32 H) (hash : H)
+    (p : Prop) [Decidable p] (yes no : Code A) (log : Log) :
+    run D hash (if p then yes else no) log =
+      if p then run D hash yes log else run D hash no log := by split <;> rfl
+
+#print axioms erase_ite
+#print axioms run_ite
+
 #print axioms run_bind
 #print axioms run_lift
 #print axioms run_read

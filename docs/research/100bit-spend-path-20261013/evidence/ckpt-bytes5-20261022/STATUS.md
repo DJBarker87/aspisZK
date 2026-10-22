@@ -28,3 +28,24 @@ source/import hashes, dependency fingerprint, command and reports are in
 manifest.json and the receipt. Earlier elaboration/parse failures are retained
 and excluded. Source resume reconstruction is still being checked; its first
 two diagnostics do not count as proved results. No option or resource cap rose.
+
+## Stage 2: complete retained resume reconstruction and exact log
+
+`CheckpointBytes5Resume.source` kernel-checks erasure of the mechanically
+reified instruction schedule against the complete retained resumeWithOps.
+`CheckpointBytes5Trace.successful_log` strengthens the old three-call
+inventory with an exact execution equation for arbitrary initial history.
+The digest-free suffix includes comparison, every field read, canonicality,
+query validation, fallible allocation, mutable weight writes and final cursor.
+The three digests are appended in proof/public/checksum order, with no other
+reads and no continuation resetting history. The theorem assumes actual
+successful execution, not trace equality. Source inner errors still reject.
+
+Accepted Resume-7: exit 0, 13.884923791978508 s, 2309373952 B RSS, swaps 0.
+Accepted Trace-2: exit 0, 3.986098083201796 s, 2291089408 B RSS, swaps 0.
+Effect-5 is current after generic conditional-observation equations were
+added: exit 0, 2.769025417044759 s, 2265530368 B RSS, swaps 0.
+Every theorem has a standard-axiom report; exact revisions/hashes/commands
+and failed diagnostics remain in manifest.json. Recursion failures were
+replaced by a named pure tail and per-bind congruence, without raising limits.
+Writer effects, byte-input normalization and final stage composition remain.
