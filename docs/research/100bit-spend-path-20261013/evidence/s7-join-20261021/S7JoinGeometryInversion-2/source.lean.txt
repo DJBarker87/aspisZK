@@ -1,0 +1,66 @@
+import S7JoinBatchInverse
+import S7JoinInverseExecution
+
+/-! Composition of the emitted Vec loops with the guarded fixed-chain port.
+Gathering literal domain rows and allocating the Vec are separate bindings. -/
+set_option autoImplicit false
+namespace AspisR1.S7JoinGeometryInversion
+open Aeneas Aeneas.Std Result
+open AspisCircleGroupOrder
+open S7JoinBasisMachine (decode)
+open S7JoinBatchInverse
+
+def invert_owned (flat empty inverse : alloc.vec.Vec U32) : Result (alloc.vec.Vec U32) := do
+  let (_,ps,p) ← S7Kani2PrefixLoop.prefixes_owned flat empty 1#u32 0#usize
+  let suffix ← S7JoinInverseExecution.inverse_owned p
+  S7Kani3InverseLoop.inverse_owned flat ps inverse suffix (alloc.vec.Vec.len flat)
+
+/-- Entire bounded inversion pipeline: no successful-prefix, inverse-call,
+backward-call, or inverse-value hypothesis is required. All typed words are
+allowed provided their field values are nonzero. -/
+theorem total_exact (flat empty inverse : alloc.vec.Vec U32)
+    (bound : flat.val.length≤110) (he : empty.val=[])
+    (hi : inverse.val.length=flat.val.length)
+    (hx : ∀ x ∈ flat.val, decode x≠0) :
+    ∃ out, invert_owned flat empty inverse=ok out ∧
+      out.val.length=flat.val.length ∧
+      ∀ j, j<flat.val.length → decode (cell out.val j)=(decode (cell flat.val j))⁻¹ := by
+  obtain ⟨ps,p,hpref,hmodel⟩ := S7Kani2PrefixLoop.prefixes_refines
+    flat empty 1#u32 0#usize flat.val.length bound (by simp only [show (0#usize).val=0 from rfl,Nat.zero_add])
+    (by rw [he]; simp only [List.length_nil,Nat.zero_add]; exact bound)
+  have hm : (ps.val,p)=(prefixes flat.val 1#u32,flat.val.foldl S7Kani2PrefixLoop.wordMul 1#u32) := by
+    simpa only [show (0#usize).val=0 from rfl,List.drop_zero,he,
+      prefix_model,List.nil_append] using hmodel
+  have hps : ps.val=prefixes flat.val 1#u32 := congrArg Prod.fst hm
+  have hp : p=flat.val.foldl S7Kani2PrefixLoop.wordMul 1#u32 := congrArg Prod.snd hm
+  have hpd : decode p=product flat.val := by
+    rw [hp,product_decode]
+    change (1 : ZMod P)*product flat.val=product flat.val
+    exact one_mul _
+  have hpz : p≠0#u32 := by
+    intro hz
+    have hn := product_nonzero flat.val hx
+    rw [←hpd,hz] at hn
+    exact hn rfl
+  obtain ⟨suffix,hs,hsv⟩ := S7JoinInverseExecution.inverse_exact p hpz
+  obtain ⟨out,ho,hout,hlen⟩ := S7Kani3InverseLoop.inverse_refines
+    flat ps inverse suffix (alloc.vec.Vec.len flat) bound (by rfl)
+    (by change flat.val.length≤ps.val.length; rw [hps,prefixes_length]) (by rw [hi]; rfl)
+  change out.val=S7Kani3InverseLoop.model flat.val ps.val flat.val.length inverse.val suffix at hout
+  refine ⟨out,?_,hlen.trans hi,?_⟩
+  · simp only [invert_owned,hpref,bind_tc_ok]
+    dsimp only
+    rw [hs,bind_tc_ok,ho]
+  · intro j hj
+    rw [hout]
+    have hb := backward_exact flat.val ps.val inverse.val suffix flat.val.length
+      (by rfl) (by omega) (by
+        intro k hk
+        rw [hps,prefix_decode flat.val 1#u32 k hk]
+        change (1 : ZMod P)*_= _
+        exact one_mul _) hx (by
+          rw [hsv,hpd,List.take_length]) j
+    simpa only [hj,if_pos] using hb
+
+#print axioms total_exact
+end AspisR1.S7JoinGeometryInversion

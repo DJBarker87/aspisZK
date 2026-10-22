@@ -1,0 +1,9 @@
+# Candidate S9 second-tail mapping and reusable writes
+
+PROVED locally: the exact second-branch suffix starting at low-times-all maps as a full Result to its retained concrete P6 operation sequence, through slots 2 and 3. This reuses the separate terminal challenge-product/wide-product/slot3 write proof. Failure, divergence and exact mapped output arrays are preserved; no child-success or output-array relation is supplied as a premise. This is a partial branch suffix: the source index read, quarter scaling, addition and slot1 prefix still need their transport and parent join.
+
+PROVED reusable prerequisites: bounded Array.update maps as a full Result using the existing accepted success-write theorem; candidate PERM[3]'s same actual read result transports to the identically pinned P6 table. The explicit bound remains in the generic update lemma and is discharged for the constant slots in its consumers.
+
+OPEN: the remaining second-branch prefix, candidateAfterTerms/activeBody/loop/caller joins, final four-output coefficient composition, actual source-library/runtime correspondence, candidate adoption and artifact re-pins, coherent replay and the 100-bit theorem. Production is unchanged. No complete S9 cone or security conclusion is claimed.
+
+Exact target/source revision/status/command, source/tool/import/object pins, wall time, peak RSS, observed swaps and standard-axiom reports are retained. No compiled objects are included. Warm Lean 4.32 dependencies were reused, smallest changed files first, one local -j1 -M4400 compile under the atomic mutex and aggregate watchdog. macOS swap is observational. Original failed V2 source was accidentally overwritten; its failed-source loss is recorded separately and is not presented as matching the original receipt. Only the exact green attempt4 source is accepted here. Run `python3 -B check_packet.py` to inspect evidence without Lean.

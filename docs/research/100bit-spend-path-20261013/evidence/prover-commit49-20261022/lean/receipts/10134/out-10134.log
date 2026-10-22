@@ -1,0 +1,48 @@
+POLY: {hpoly}
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFinalShift49.lean:48:10: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+case refine_2
+p : ℕ → Old.Q
+hp : ∀ k < 28, Canonical (p k)
+a original eta0 : Old.Q
+ha : Canonical a
+ho : Canonical original
+he : Canonical eta0
+hne : decode a ≠ 2⁻¹
+d : Old.Q
+hd :
+  field.QM31.sub (ProverCommitNativeQ48.source a) (ProverCommitNativeQ48.source ProverCommitHalf49.raw) =
+    ok (ProverCommitNativeQ48.source d)
+hcd : Canonical d
+hvd : decode d = decode a - decode ProverCommitHalf49.raw
+hn : decode d ≠ 0
+i : Old.Q
+hi : kernels.inverse_q (ProverCommitNativeQ48.source d) = ok (some (ProverCommitNativeQ48.source i))
+hci : Canonical i
+hvi : decode i = (decode d)⁻¹
+out : ℕ → Old.Q
+hout :
+  owned.shift (ProverCommitQArray48.array 28#usize p) (ProverCommitNativeQ48.source original)
+      (ProverCommitNativeQ48.source eta0) (ProverCommitNativeQ48.source i)
+      (ProverCommitNativeQ48.source ProverCommitHalf49.raw) =
+    ok (ProverCommitQArray48.array 28#usize out)
+hcout : ∀ k < 28, Canonical (out k)
+hvout :
+  ∀ (k : ℕ),
+    decode (out k) =
+      decode (p k) +
+        if k = 0 then -(decode original - decode eta0) * decode i * decode ProverCommitHalf49.raw
+        else if k = 1 then (decode original - decode eta0) * decode i else 0
+hpoly :
+  (ProverCommitInterpolationPoly48.poly 28 fun k => decode (out k)) =
+    (ProverCommitInterpolationPoly48.poly 28 fun k => decode (p k)) +
+      Polynomial.C ((decode original - decode eta0) * (decode a - 2⁻¹)⁻¹) * (X - Polynomial.C 2⁻¹)
+⊢ (ProverCommitInterpolationPoly48.poly 28 fun k => decode (out k)) =
+    (ProverCommitInterpolationPoly48.poly 28 fun k => decode (p k)) +
+      Polynomial.C ((decode original - decode eta0) * (decode a - 2⁻¹)⁻¹) * (X - Polynomial.C 2⁻¹)
+'R1Z.ProverCommitFinalShift49.exact_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

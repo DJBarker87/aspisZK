@@ -1,0 +1,171 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Resume.lean:470:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let a ← ops.checkpointSize v
+    erase D hash
+        (if (bytes.len != a) = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+        else do
+          let s ←
+            liftResult
+                (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                  { «end» := 8#usize })
+          let b ←
+            liftResult
+                (core.cmp.impls.PartialEqShared.ne (slicePartialEq ops 8#usize core.cmp.PartialEqU8) s
+                  (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8] program._proof_8))
+          if b = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+            else do
+              let i2 ← liftResult (bytes.index_usize 8#usize)
+              let i3 ← liftResult (ops.tag v)
+              if (i2 != i3) = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                else do
+                  let i4 ← liftResult (bytes.index_usize 9#usize)
+                  if i4 > 22#u8 then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                    else do
+                      let i5 ← liftResult (bytes.index_usize 10#usize)
+                      if (i5 != 1#u8) = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                        else do
+                          let s1 ←
+                            liftResult
+                                (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                  { start := 11#usize, «end» := 16#usize })
+                          let i6 ← liftResult (core.slice.Slice.iter s1)
+                          let __x ← liftResult (ops.headerAny i6)
+                          if __x.1 = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                            else do
+                              let end1 ← liftResult (bytes.len - 32#usize)
+                              let s2 ←
+                                liftResult
+                                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                      { start := 16#usize, «end» := 48#usize })
+                              let s3 ← liftResult (lift (Array.make 1#usize [proof] ⋯).to_slice)
+                              let a ← CheckpointBytes5Effect.read s3
+                              let b2 ← liftResult (ops.ne core.cmp.PartialEqU8 s2 a)
+                              if b2 = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                else do
+                                  let s4 ←
+                                    liftResult
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                          bytes { start := 48#usize, «end» := 80#usize })
+                                  let s5 ← liftResult (lift (Array.make 1#usize [public1] ⋯).to_slice)
+                                  let a1 ← CheckpointBytes5Effect.read s5
+                                  let b3 ← liftResult (ops.ne core.cmp.PartialEqU8 s4 a1)
+                                  if b3 = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                    else do
+                                      let s6 ←
+                                        liftResult
+                                            (core.slice.index.Slice.index
+                                              (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                              { start := end1 })
+                                      let s7 ←
+                                        liftResult
+                                            (lift
+                                              (Array.make 22#usize
+                                                  [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8,
+                                                    49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8,
+                                                    105#u8, 110#u8, 116#u8]
+                                                  program._proof_33).to_slice)
+                                      let s8 ←
+                                        liftResult
+                                            (core.slice.index.Slice.index
+                                              (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes { «end» := end1 })
+                                      let s9 ← liftResult (lift (Array.make 2#usize [s7, s8] ⋯).to_slice)
+                                      let a2 ← CheckpointBytes5Effect.read s9
+                                      liftResult (tail ops bytes v i4 end1 s6 a2))
+is not definitionally equal to the right-hand side
+  verifier.resumeWithOps ops D bytes proof public1 v hash
+
+ops : ResumeOps
+H : Type
+D : aspis_core.digest.Digest32 H
+bytes proof public1 : Slice U8
+v : transport.Variant
+hash : H
+⊢ (do
+      let a ← ops.checkpointSize v
+      erase D hash
+          (if (bytes.len != a) = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+          else do
+            let s ←
+              liftResult
+                  (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                    { «end» := 8#usize })
+            let b ←
+              liftResult
+                  (core.cmp.impls.PartialEqShared.ne (slicePartialEq ops 8#usize core.cmp.PartialEqU8) s
+                    (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8] program._proof_8))
+            if b = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+              else do
+                let i2 ← liftResult (bytes.index_usize 8#usize)
+                let i3 ← liftResult (ops.tag v)
+                if (i2 != i3) = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                  else do
+                    let i4 ← liftResult (bytes.index_usize 9#usize)
+                    if i4 > 22#u8 then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                      else do
+                        let i5 ← liftResult (bytes.index_usize 10#usize)
+                        if (i5 != 1#u8) = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                          else do
+                            let s1 ←
+                              liftResult
+                                  (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                    { start := 11#usize, «end» := 16#usize })
+                            let i6 ← liftResult (core.slice.Slice.iter s1)
+                            let __x ← liftResult (ops.headerAny i6)
+                            if __x.1 = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                              else do
+                                let end1 ← liftResult (bytes.len - 32#usize)
+                                let s2 ←
+                                  liftResult
+                                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                        bytes { start := 16#usize, «end» := 48#usize })
+                                let s3 ← liftResult (lift (Array.make 1#usize [proof] ⋯).to_slice)
+                                let a ← CheckpointBytes5Effect.read s3
+                                let b2 ← liftResult (ops.ne core.cmp.PartialEqU8 s2 a)
+                                if b2 = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                  else do
+                                    let s4 ←
+                                      liftResult
+                                          (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                            bytes { start := 48#usize, «end» := 80#usize })
+                                    let s5 ← liftResult (lift (Array.make 1#usize [public1] ⋯).to_slice)
+                                    let a1 ← CheckpointBytes5Effect.read s5
+                                    let b3 ← liftResult (ops.ne core.cmp.PartialEqU8 s4 a1)
+                                    if b3 = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                      else do
+                                        let s6 ←
+                                          liftResult
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                                { start := end1 })
+                                        let s7 ←
+                                          liftResult
+                                              (lift
+                                                (Array.make 22#usize
+                                                    [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8,
+                                                      82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8,
+                                                      111#u8, 105#u8, 110#u8, 116#u8]
+                                                    program._proof_33).to_slice)
+                                        let s8 ←
+                                          liftResult
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                                { «end» := end1 })
+                                        let s9 ← liftResult (lift (Array.make 2#usize [s7, s8] ⋯).to_slice)
+                                        let a2 ← CheckpointBytes5Effect.read s9
+                                        liftResult (tail ops bytes v i4 end1 s6 a2))) =
+    verifier.resumeWithOps ops D bytes proof public1 v hash
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Resume.lean:469:43: warning: This simp argument is unused:
+  erase_read
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵g̵r̵a̵m̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵r̵e̵a̵d̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵]̵[̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Resume.lean:469:54: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵g̵r̵a̵m̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵r̵e̵a̵d̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵]̵[̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲r̲e̲a̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CheckpointBytes5Resume.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

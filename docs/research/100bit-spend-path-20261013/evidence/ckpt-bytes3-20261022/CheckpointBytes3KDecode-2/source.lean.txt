@@ -1,0 +1,78 @@
+import CheckpointBytes3ScalarShape
+import CheckpointBytes3WordMath
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CheckpointBytes3KDecode
+open Aeneas Aeneas.Std Result
+open OraclePortCkptAbi2Extracted OraclePortCkptAbi4Decode OraclePortCkptAbi5Codec
+open RetainedFieldByteCodec RetainedExactLimbCodec CheckpointBytes3ScalarShape
+open CheckpointBytes3Word CheckpointBytes3WordMath MultiproofConeCanonical
+attribute [local instance] Classical.propDecidable
+
+def rawLimbs (l : QM31Limbs) : RawK :=
+  kWords (M31ParserRefinement.valueToU32 (l 0)) (M31ParserRefinement.valueToU32 (l 1))
+    (M31ParserRefinement.valueToU32 (l 2)) (M31ParserRefinement.valueToU32 (l 3))
+
+def rawK (x : OraclePortCheckpointAbiC5.K) : RawK := rawLimbs (qm31ExactLimbEquiv.symm x)
+
+theorem raw_ext (x y : RawK)
+    (h0 : x.c0.a.val = y.c0.a.val) (h1 : x.c0.b.val = y.c0.b.val)
+    (h2 : x.c1.a.val = y.c1.a.val) (h3 : x.c1.b.val = y.c1.b.val) : x = y := by
+  rcases x with ⟨⟨a,b⟩,⟨c,d⟩⟩
+  rcases y with ⟨⟨e,f⟩,⟨g,h⟩⟩
+  have h0' : a = e := UScalar.eq_of_val_eq h0
+  have h1' : b = f := UScalar.eq_of_val_eq h1
+  have h2' : c = g := UScalar.eq_of_val_eq h2
+  have h3' : d = h := UScalar.eq_of_val_eq h3
+  cases h0'; cases h1'; cases h2'; cases h3'; rfl
+
+theorem model_shape (bs : QM31Bytes) (w : Fin 4 → U32)
+    (hw : ∀ j, (w j).val = (decodeWordLE (qm31LimbBytes bs j)).val) :
+    (decodeQM31LE bs).map rawLimbs =
+      if Canonical (kWords (w 0) (w 1) (w 2) (w 3)) then
+        some (kWords (w 0) (w 1) (w 2) (w 3)) else none := by
+  have hc : (∀ j : Fin 4, (decodeWordLE (qm31LimbBytes bs j)).val < m31Modulus) ↔
+      Canonical (kWords (w 0) (w 1) (w 2) (w 3)) := by
+    simp_rw [← hw]
+    change (∀ j : Fin 4, (w j).val < 2147483647) ↔
+      (w 0).val < 2147483647 ∧ (w 1).val < 2147483647 ∧
+      (w 2).val < 2147483647 ∧ (w 3).val < 2147483647
+    constructor
+    · intro h; exact ⟨h 0,h 1,h 2,h 3⟩
+    · intro h j
+      fin_cases j
+      · exact h.1
+      · exact h.2.1
+      · exact h.2.2.1
+      · exact h.2.2.2
+  unfold decodeQM31LE
+  split
+  next h =>
+    rw [if_pos (hc.mp h),Option.map_some]
+    apply congrArg some
+    apply raw_ext <;> simp only [rawLimbs,kWords,M31ParserRefinement.valueToU32_val]
+    · exact (hw 0).symm
+    · exact (hw 1).symm
+    · exact (hw 2).symm
+    · exact (hw 3).symm
+  next h => rw [if_neg (fun c => h (hc.mpr c)),Option.map_none]
+
+def fixed (b : Slice U8) (width : b.val.length = 16) : QM31Bytes :=
+  fun j => AspisV8R19.SqueezeOracleBridge.decodeByte (b.val[j.val]'(by omega))
+
+def word (b : Slice U8) (width : b.val.length = 16) (j : Fin 4) : U32 :=
+  pack (b.val[4*j.val]'(by omega)) (b.val[4*j.val+1]'(by omega))
+    (b.val[4*j.val+2]'(by omega)) (b.val[4*j.val+3]'(by omega))
+
+theorem word_model (b : Slice U8) (width : b.val.length = 16) (j : Fin 4) :
+    (word b width j).val = (decodeWordLE (qm31LimbBytes (fixed b width) j)).val := by
+  rw [word,pack_value]
+  simp [decodeWordLE,qm31LimbBytes,fixed,limbByteIndex,Nat.add_comm,
+    AspisV8R19.SqueezeOracleBridge.decodeByte]
+
+#print axioms raw_ext
+#print axioms model_shape
+#print axioms word_model
+end AspisR1.CheckpointBytes3KDecode
+end

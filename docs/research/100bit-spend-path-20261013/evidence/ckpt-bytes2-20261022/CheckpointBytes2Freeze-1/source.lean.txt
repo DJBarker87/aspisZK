@@ -1,0 +1,25 @@
+import CheckpointBytesBodyDecodeJoin
+import CheckpointBytesRoundtripBoundary
+import CheckpointBytesReaderWidth
+import CheckpointBytesSuccess
+import OraclePortCkptAbi5Stage
+import OraclePortCkptAbi5Decision
+
+#print axioms AspisR1.CheckpointBytesBody.body_block
+#print axioms AspisR1.CheckpointBytesBody.body_byte_c5
+#print axioms AspisR1.CheckpointBytesReaderWidth.exact_k_section
+#print axioms AspisR1.CheckpointBytesReaderWidth.exact_k_width
+#print axioms AspisR1.CheckpointBytesDecodeC5.source_body_c5
+#print axioms AspisR1.CheckpointBytesDecodeC5.source_checksum_c5
+#print axioms AspisR1.CheckpointBytesDecodeC5.decode_k_iff
+#print axioms AspisR1.CheckpointBytesDecodeC5.reject_k_iff
+#print axioms AspisR1.CheckpointBytesDecodeC5.decode_e_iff
+#print axioms AspisR1.CheckpointBytesDecodeC5.reject_e_iff
+#print axioms AspisR1.CheckpointBytesDecodeC5.decode_source_fields
+#print axioms AspisR1.CheckpointBytesBodyDecodeJoin.decode_checkpoint
+#print axioms AspisR1.CheckpointBytesRoundtripBoundary.canonical_repeated_rejected
+#print axioms AspisR1.CheckpointBytesRoundtripBoundary.no_unqualified_roundtrip
+#print axioms AspisR1.CheckpointBytesSuccess.source_allocation_succeeded
+#print axioms AspisR1.CheckpointBytesSuccess.successful_overwrite
+#print axioms AspisR1.OraclePortCkptAbi5Stage.reached_stage
+#print axioms AspisR1.OraclePortCkptAbi5Decision.decision_observation

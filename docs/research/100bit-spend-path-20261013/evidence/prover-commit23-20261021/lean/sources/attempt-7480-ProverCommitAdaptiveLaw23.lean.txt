@@ -1,0 +1,75 @@
+import R1Z.QueryScanFreshProgram
+/-! Exact adaptive marked-answer law under a syntactic freshness invariant.
+Unmarked queries, repeated cached queries and all their ordered histories
+remain in the same memoized interpreter. No source-program instance is
+postulated here. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitAdaptiveLaw23
+open R0Z R0Z.FsStatement R0Z.FsAbort R0Z.FsGood R0Z.HvzkV
+open AspisV8R19.MemoizedProgramLaw AspisV8PairedCommitment
+open R1Z.QueryScanFreshProgram R1Z.CouplingR1PBin
+attribute [local instance] Classical.propDecidable
+variable {I A O : Type} [DecidableEq I]
+
+/-- Every marked address is outside all previous reads on every branch.
+Only marked reads must be fresh; other reads may be cached or fresh. -/
+def Fresh : {n : Nat} → Marked I A n → Finset I → Prop
+  | _, .done, _ => True
+  | _, .other i next, seen => ∀ a, Fresh (next a) (insert i seen)
+  | _, .scan i next, seen => i ∉ seen ∧ ∀ a, Fresh (next a) (insert i seen)
+
+theorem lazy_exact [Fintype A] [Nonempty A] {n : Nat}
+    (program : Marked I A n) (table : Table I A) (seen : Finset I)
+    (consistent : Consistent table seen) (fresh : Fresh program seen)
+    (out : Bool × (Fin n → A) → O) (observe : O → ℚ) (test : (Fin n → A) → ℚ)
+    (output : ∀ b q, observe (out (b,q)) = test q) :
+    lazyMean (compile program seen out) table (fun r => observe r.2) = mean test := by
+  induction program generalizing table seen with
+  | done =>
+    change observe (out (true,fun i : Fin 0 => i.elim0)) = mean test
+    rw [output]
+    have constant : test = fun _ => test (fun i : Fin 0 => i.elim0) := by
+      funext q
+      congr 1
+      exact Subsingleton.elim _ _
+    rw [constant,mean_const]
+  | @other n i next ih =>
+    cases hi : table i with
+    | some a =>
+      simp only [compile,lazyMean,hi]
+      exact ih a table (insert i seen) (consistent_cached table seen consistent i a hi)
+        (fresh a) out test output
+    | none =>
+      simp only [compile,lazyMean,hi]
+      calc _ = mean (fun _ : A => mean test) := by
+             apply mean_congr
+             intro a
+             exact ih a (put table i a) (insert i seen)
+               (consistent_put table seen consistent i a) (fresh a) out test output
+           _ = mean test := mean_const _
+  | @scan n i next ih =>
+    have hi : table i = none := (consistent i).mpr fresh.1
+    simp only [compile,lazyMean,hi]
+    calc _ = mean (fun a => mean (fun q : Fin n → A => test (Fin.cons a q))) := by
+           apply mean_congr
+           intro a
+           exact ih a (put table i a) (insert i seen)
+             (consistent_put table seen consistent i a) (fresh.2 a)
+             (fun r => out (decide (i ∉ seen) && r.1,Fin.cons a r.2))
+             (fun q => test (Fin.cons a q)) (by intro b q; exact output _ _)
+         _ = mean test := mean_cons test
+
+/-- Exact joint uniformity of adaptively selected marked answers, rather
+than a collection of fixed-start marginal statements. -/
+theorem fresh_uniform [Fintype I] [Fintype A] [Nonempty A] {n : Nat}
+    (program : Marked I A n) (fresh : Fresh program ∅) :
+    MP (fun table : I → A => (eval table (compile program ∅ Prod.snd)).2) := by
+  intro test
+  exact (empty_oracle_law (compile program ∅ Prod.snd) (fun r => test r.2)).trans
+    (lazy_exact program (fun _ => none) ∅ (by intro i; simp [Consistent]) fresh
+      Prod.snd test test (by intros; rfl))
+
+#print axioms lazy_exact
+#print axioms fresh_uniform
+end R1Z.ProverCommitAdaptiveLaw23

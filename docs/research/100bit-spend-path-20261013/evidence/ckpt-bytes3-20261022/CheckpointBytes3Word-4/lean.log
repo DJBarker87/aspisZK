@@ -1,0 +1,17 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:20:4: error: 'change' tactic failed, pattern
+  (↑b).length ≤ 2 ^ System.Platform.numBits - 1
+is not definitionally equal to target
+  (↑b).length ≤ Usize.max
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:16:66: error: unsolved goals
+b : Slice U8
+i : Usize
+bound : ↑i + 4 ≤ (↑b).length
+maxLen : (↑b).length ≤ Usize.max
+capacity : (↑b).length < 2 ^ System.Platform.numBits
+⊢ BitVec.setWidth 32 (↑b)[↑i].bv#uscalar ||| BitVec.setWidth 32 (↑b)[↑i + 1].bv <<< 8#uscalar |||
+        BitVec.setWidth 32 (↑b)[↑i + 2].bv <<< 16#uscalar |||
+      BitVec.setWidth 32 (↑b)[↑i + 3].bv <<< 24#uscalar =
+    (BitVec.setWidth 32 (↑b)[↑i].bv ||| BitVec.setWidth 32 (↑b)[Add.add (↑i) 1].bv <<< 8 |||
+          BitVec.setWidth 32 (↑b)[Add.add (↑i) 2].bv <<< 16 |||
+        BitVec.setWidth 32 (↑b)[Add.add (↑i) 3].bv <<< 24)#uscalar
+'AspisR1.CheckpointBytes3Word.word_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

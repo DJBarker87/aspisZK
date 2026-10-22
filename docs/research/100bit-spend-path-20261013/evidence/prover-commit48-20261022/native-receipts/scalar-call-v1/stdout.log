@@ -1,0 +1,731 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: function `arbitrary_binary` is never used
+  --> weights-init.rs:55:5
+   |
+55 |  fn arbitrary_binary(_x:K,_y:K)->K {arbitrary_qm()}
+   |     ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `multiply` is never used
+ --> scalar-binding.rs:9:5
+  |
+9 |  fn multiply(a:M31,b:M31)->M31 {unsafe {
+  |     ^^^^^^^^
+
+Checking harness scalar_proofs::scalar_call...
+CBMC 6.8.0 (cbmc-6.8.0)
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-prover-commit41-20261022/kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/simulator_wide_image48-aa117b5a3984aef6__RNvNtCs1nBPiORNMXe_22simulator_wide_image4813scalar_proofs11scalar_call.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 12 object bits, 52 offset bits (user-specified)
+Starting Bounded Model Checking
+loop identifier memcmp.0 provided with unwindset does not match any loop
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSTmmEINtB5_14SlicePartialEqBD_E5equalCs1nBPiORNMXe_22simulator_wide_image48.0 iteration 1 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[(u32, u32)] as core::slice::cmp::SlicePartialEq<(u32, u32)>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSTmmEINtB5_14SlicePartialEqBD_E5equalCs1nBPiORNMXe_22simulator_wide_image48.0 iteration 2 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[(u32, u32)] as core::slice::cmp::SlicePartialEq<(u32, u32)>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSTmmEINtB5_14SlicePartialEqBD_E5equalCs1nBPiORNMXe_22simulator_wide_image48.0 iteration 3 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[(u32, u32)] as core::slice::cmp::SlicePartialEq<(u32, u32)>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSTmmEINtB5_14SlicePartialEqBD_E5equalCs1nBPiORNMXe_22simulator_wide_image48.0 iteration 4 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[(u32, u32)] as core::slice::cmp::SlicePartialEq<(u32, u32)>>::equal thread 0
+Runtime Symex: 0.057674s
+size of program expression: 3206 steps
+slicing removed 2248 assignments
+Generated 627 VCC(s), 52 remaining after simplification
+Runtime Postprocess Equation: 0.000434411s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.00418455s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 4.471e-06s
+Solving with CaDiCaL 2.0.0
+7072 variables, 10782 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 2.3154e-05s
+Runtime decision procedure: 0.00427049s
+
+RESULTS:
+Check 1: field::M31::mul.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: scalar-binding.rs:10:9 in function field::M31::mul
+
+Check 2: field::M31::mul.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: scalar-binding.rs:10:9 in function field::M31::mul
+
+Check 3: field::M31::mul.assertion.1
+	 - Status: SUCCESS
+	 - Description: "assertion failed: i<4"
+	 - Location: scalar-binding.rs:10:14 in function field::M31::mul
+
+Check 4: field::M31::mul.assertion.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: scalar-binding.rs:10:27 in function field::M31::mul
+
+Check 5: field::M31::mul.safety_check.3
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: scalar-binding.rs:10:27 in function field::M31::mul
+
+Check 6: field::M31::mul.safety_check.4
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: scalar-binding.rs:10:27 in function field::M31::mul
+
+Check 7: field::M31::mul.safety_check.5
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: scalar-binding.rs:10:46 in function field::M31::mul
+
+Check 8: field::M31::mul.safety_check.6
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: scalar-binding.rs:10:46 in function field::M31::mul
+
+Check 9: field::M31::mul.assertion.3
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: scalar-binding.rs:10:46 in function field::M31::mul
+
+Check 10: field::M31::mul.safety_check.7
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: scalar-binding.rs:10:46 in function field::M31::mul
+
+Check 11: field::M31::mul.safety_check.8
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: scalar-binding.rs:10:46 in function field::M31::mul
+
+Check 12: field::M31::mul.assertion.4
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: scalar-binding.rs:10:58 in function field::M31::mul
+
+Check 13: field::M31::mul.safety_check.9
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: scalar-binding.rs:10:58 in function field::M31::mul
+
+Check 14: field::M31::mul.safety_check.10
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: scalar-binding.rs:10:58 in function field::M31::mul
+
+Check 15: scalar_proofs::scalar_call.assertion.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: scalar-binding.rs:19:28 in function scalar_proofs::scalar_call
+
+Check 16: scalar_proofs::scalar_call.assertion.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: scalar-binding.rs:19:40 in function scalar_proofs::scalar_call
+
+Check 17: scalar_proofs::scalar_call.assertion.3
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: scalar-binding.rs:19:61 in function scalar_proofs::scalar_call
+
+Check 18: scalar_proofs::scalar_call.assertion.4
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: scalar-binding.rs:19:73 in function scalar_proofs::scalar_call
+
+Check 19: scalar_proofs::scalar_call.assertion.5
+	 - Status: SUCCESS
+	 - Description: "assertion failed: actual == expected"
+	 - Location: scalar-binding.rs:23:3 in function scalar_proofs::scalar_call
+
+Check 20: scalar_proofs::scalar_call.assertion.6
+	 - Status: SUCCESS
+	 - Description: "assertion failed: ta == tb"
+	 - Location: scalar-binding.rs:23:31 in function scalar_proofs::scalar_call
+
+Check 21: scalar_proofs::scalar_call.assertion.7
+	 - Status: SUCCESS
+	 - Description: "assertion failed: ta.1 == 4"
+	 - Location: scalar-binding.rs:23:49 in function scalar_proofs::scalar_call
+
+Check 22: scalar_proofs::reset.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: scalar-binding.rs:7:37 in function scalar_proofs::reset
+
+Check 23: scalar_proofs::reset.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: scalar-binding.rs:7:37 in function scalar_proofs::reset
+
+Check 24: scalar_proofs::reset.safety_check.3
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: scalar-binding.rs:7:53 in function scalar_proofs::reset
+
+Check 25: scalar_proofs::reset.safety_check.4
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: scalar-binding.rs:7:53 in function scalar_proofs::reset
+
+Check 26: scalar_proofs::reset.safety_check.5
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: scalar-binding.rs:7:69 in function scalar_proofs::reset
+
+Check 27: scalar_proofs::reset.safety_check.6
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: scalar-binding.rs:7:69 in function scalar_proofs::reset
+
+Check 28: <[(u32, u32)] as core::slice::cmp::SlicePartialEq<(u32, u32)>>::equal.assertion.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs:126:16 in function <[(u32, u32)] as core::slice::cmp::SlicePartialEq<(u32, u32)>>::equal
+
+Check 29: <[(u32, u32)] as core::slice::cmp::SlicePartialEq<(u32, u32)>>::equal.assertion.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs:126:29 in function <[(u32, u32)] as core::slice::cmp::SlicePartialEq<(u32, u32)>>::equal
+
+Check 30: <[(u32, u32)] as core::slice::cmp::SlicePartialEq<(u32, u32)>>::equal.assertion.3
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs:129:13 in function <[(u32, u32)] as core::slice::cmp::SlicePartialEq<(u32, u32)>>::equal
+
+Check 31: scalar_proofs::trace.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: scalar-binding.rs:8:46 in function scalar_proofs::trace
+
+Check 32: scalar_proofs::trace.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: scalar-binding.rs:8:46 in function scalar_proofs::trace
+
+Check 33: scalar_proofs::trace.safety_check.3
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: scalar-binding.rs:8:52 in function scalar_proofs::trace
+
+Check 34: scalar_proofs::trace.safety_check.4
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: scalar-binding.rs:8:52 in function scalar_proofs::trace
+
+Check 35: scalar_proofs::trace.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: scalar-binding.rs:8:46 in function scalar_proofs::trace
+
+Check 36: scalar_proofs::trace.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: scalar-binding.rs:8:46 in function scalar_proofs::trace
+
+Check 37: scalar_proofs::trace.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: scalar-binding.rs:8:46 in function scalar_proofs::trace
+
+Check 38: scalar_proofs::trace.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: scalar-binding.rs:8:46 in function scalar_proofs::trace
+
+Check 39: scalar_proofs::trace.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: scalar-binding.rs:8:46 in function scalar_proofs::trace
+
+Check 40: scalar_proofs::trace.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: scalar-binding.rs:8:46 in function scalar_proofs::trace
+
+Check 41: scalar_proofs::trace.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: scalar-binding.rs:8:52 in function scalar_proofs::trace
+
+Check 42: scalar_proofs::trace.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: scalar-binding.rs:8:52 in function scalar_proofs::trace
+
+Check 43: scalar_proofs::trace.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: scalar-binding.rs:8:52 in function scalar_proofs::trace
+
+Check 44: scalar_proofs::trace.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: scalar-binding.rs:8:52 in function scalar_proofs::trace
+
+Check 45: scalar_proofs::trace.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: scalar-binding.rs:8:52 in function scalar_proofs::trace
+
+Check 46: scalar_proofs::trace.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: scalar-binding.rs:8:52 in function scalar_proofs::trace
+
+Check 47: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 48: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 49: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 50: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 51: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 52: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 53: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 54: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 55: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 56: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 57: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 58: std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for usize>::eq
+
+Check 59: field::M31::mul.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: scalar-binding.rs:10:9 in function field::M31::mul
+
+Check 60: field::M31::mul.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: scalar-binding.rs:10:9 in function field::M31::mul
+
+Check 61: field::M31::mul.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: scalar-binding.rs:10:9 in function field::M31::mul
+
+Check 62: field::M31::mul.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: scalar-binding.rs:10:9 in function field::M31::mul
+
+Check 63: field::M31::mul.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: scalar-binding.rs:10:9 in function field::M31::mul
+
+Check 64: field::M31::mul.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: scalar-binding.rs:10:9 in function field::M31::mul
+
+Check 65: field::M31::mul.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: scalar-binding.rs:10:27 in function field::M31::mul
+
+Check 66: field::M31::mul.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: scalar-binding.rs:10:27 in function field::M31::mul
+
+Check 67: field::M31::mul.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: scalar-binding.rs:10:27 in function field::M31::mul
+
+Check 68: field::M31::mul.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: scalar-binding.rs:10:27 in function field::M31::mul
+
+Check 69: field::M31::mul.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: scalar-binding.rs:10:27 in function field::M31::mul
+
+Check 70: field::M31::mul.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: scalar-binding.rs:10:27 in function field::M31::mul
+
+Check 71: field::M31::mul.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: scalar-binding.rs:10:27 in function field::M31::mul
+
+Check 72: pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 73: pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 74: pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 75: pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 76: pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 77: pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 78: field::M31::mul.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: scalar-binding.rs:10:46 in function field::M31::mul
+
+Check 79: field::M31::mul.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: scalar-binding.rs:10:46 in function field::M31::mul
+
+Check 80: field::M31::mul.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: scalar-binding.rs:10:46 in function field::M31::mul
+
+Check 81: field::M31::mul.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: scalar-binding.rs:10:46 in function field::M31::mul
+
+Check 82: field::M31::mul.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: scalar-binding.rs:10:46 in function field::M31::mul
+
+Check 83: field::M31::mul.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: scalar-binding.rs:10:46 in function field::M31::mul
+
+Check 84: field::M31::mul.pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: scalar-binding.rs:10:58 in function field::M31::mul
+
+Check 85: field::M31::mul.pointer_dereference.20
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: scalar-binding.rs:10:58 in function field::M31::mul
+
+Check 86: field::M31::mul.pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: scalar-binding.rs:10:58 in function field::M31::mul
+
+Check 87: field::M31::mul.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: scalar-binding.rs:10:58 in function field::M31::mul
+
+Check 88: field::M31::mul.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: scalar-binding.rs:10:58 in function field::M31::mul
+
+Check 89: field::M31::mul.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: scalar-binding.rs:10:58 in function field::M31::mul
+
+Check 90: field::M31::mul.array_bounds.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: scalar-binding.rs:10:58 in function field::M31::mul
+
+Check 91: scalar_proofs::reset.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: scalar-binding.rs:7:37 in function scalar_proofs::reset
+
+Check 92: scalar_proofs::reset.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: scalar-binding.rs:7:37 in function scalar_proofs::reset
+
+Check 93: scalar_proofs::reset.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: scalar-binding.rs:7:37 in function scalar_proofs::reset
+
+Check 94: scalar_proofs::reset.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: scalar-binding.rs:7:37 in function scalar_proofs::reset
+
+Check 95: scalar_proofs::reset.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: scalar-binding.rs:7:37 in function scalar_proofs::reset
+
+Check 96: scalar_proofs::reset.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: scalar-binding.rs:7:37 in function scalar_proofs::reset
+
+Check 97: scalar_proofs::reset.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: scalar-binding.rs:7:53 in function scalar_proofs::reset
+
+Check 98: scalar_proofs::reset.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: scalar-binding.rs:7:53 in function scalar_proofs::reset
+
+Check 99: scalar_proofs::reset.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: scalar-binding.rs:7:53 in function scalar_proofs::reset
+
+Check 100: scalar_proofs::reset.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: scalar-binding.rs:7:53 in function scalar_proofs::reset
+
+Check 101: scalar_proofs::reset.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: scalar-binding.rs:7:53 in function scalar_proofs::reset
+
+Check 102: scalar_proofs::reset.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: scalar-binding.rs:7:53 in function scalar_proofs::reset
+
+Check 103: scalar_proofs::reset.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: scalar-binding.rs:7:69 in function scalar_proofs::reset
+
+Check 104: scalar_proofs::reset.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: scalar-binding.rs:7:69 in function scalar_proofs::reset
+
+Check 105: scalar_proofs::reset.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: scalar-binding.rs:7:69 in function scalar_proofs::reset
+
+Check 106: scalar_proofs::reset.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: scalar-binding.rs:7:69 in function scalar_proofs::reset
+
+Check 107: scalar_proofs::reset.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: scalar-binding.rs:7:69 in function scalar_proofs::reset
+
+Check 108: scalar_proofs::reset.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: scalar-binding.rs:7:69 in function scalar_proofs::reset
+
+Check 109: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 110: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 111: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 112: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 113: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 114: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 115: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 116: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 117: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 118: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 119: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 120: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 121: scalar_proofs::scalar_call.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: scalar-binding.rs:19:28 in function scalar_proofs::scalar_call
+
+Check 122: scalar_proofs::scalar_call.array_bounds.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: scalar-binding.rs:19:40 in function scalar_proofs::scalar_call
+
+Check 123: scalar_proofs::scalar_call.array_bounds.3
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: scalar-binding.rs:19:61 in function scalar_proofs::scalar_call
+
+Check 124: scalar_proofs::scalar_call.array_bounds.4
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: scalar-binding.rs:19:73 in function scalar_proofs::scalar_call
+
+Check 125: <field::M31 as std::cmp::PartialEq>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: field.rs:23:16 in function <field::M31 as std::cmp::PartialEq>::eq
+
+Check 126: <field::M31 as std::cmp::PartialEq>::eq.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: field.rs:23:16 in function <field::M31 as std::cmp::PartialEq>::eq
+
+Check 127: <field::M31 as std::cmp::PartialEq>::eq.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: field.rs:23:16 in function <field::M31 as std::cmp::PartialEq>::eq
+
+Check 128: <field::M31 as std::cmp::PartialEq>::eq.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: field.rs:23:16 in function <field::M31 as std::cmp::PartialEq>::eq
+
+Check 129: <field::M31 as std::cmp::PartialEq>::eq.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: field.rs:23:16 in function <field::M31 as std::cmp::PartialEq>::eq
+
+Check 130: <field::M31 as std::cmp::PartialEq>::eq.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: field.rs:23:16 in function <field::M31 as std::cmp::PartialEq>::eq
+
+Check 131: <field::M31 as std::cmp::PartialEq>::eq.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: field.rs:23:16 in function <field::M31 as std::cmp::PartialEq>::eq
+
+Check 132: <field::M31 as std::cmp::PartialEq>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: field.rs:23:16 in function <field::M31 as std::cmp::PartialEq>::eq
+
+Check 133: <field::M31 as std::cmp::PartialEq>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: field.rs:23:16 in function <field::M31 as std::cmp::PartialEq>::eq
+
+Check 134: <field::M31 as std::cmp::PartialEq>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: field.rs:23:16 in function <field::M31 as std::cmp::PartialEq>::eq
+
+Check 135: <field::M31 as std::cmp::PartialEq>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: field.rs:23:16 in function <field::M31 as std::cmp::PartialEq>::eq
+
+Check 136: <field::M31 as std::cmp::PartialEq>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: field.rs:23:16 in function <field::M31 as std::cmp::PartialEq>::eq
+
+
+SUMMARY:
+ ** 0 of 136 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.09130915s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

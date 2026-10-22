@@ -1,0 +1,23 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitWeightDigit49.lean:23:48: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+j d : Usize
+hd : ↑d < 5
+⊢ 1024 < UScalar.size UScalarTy.Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitWeightDigit49.lean:27:49: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?a ^ ?m) ^ ?n
+in the target expression
+  ↑j / 2 ^ (2 * ↑d) % 4 = ↑j / 4 ^ ↑d % 4
+
+j d : Usize
+hd : ↑d < 5
+hm : ↑(Usize.wrapping_mul 2#usize d) = 2 * ↑d
+hcast : ↑(UScalar.cast UScalarTy.U32 (Usize.wrapping_mul 2#usize d)) = 2 * ↑d
+⊢ ↑j / 2 ^ (2 * ↑d) % 4 = ↑j / 4 ^ ↑d % 4
+'R1Z.ProverCommitWeightDigit49.shift_mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitWeightDigit49.digit' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

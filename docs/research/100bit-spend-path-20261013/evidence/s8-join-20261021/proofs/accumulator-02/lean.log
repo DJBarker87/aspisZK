@@ -1,0 +1,17 @@
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinAccumulatorStage.lean:35:103: error: unsolved goals
+raw : Raw
+old : Weights
+data : Data
+q : Queries
+rho : QM31Exact
+size : alloc.vec.Vec.length old = 64
+lengths : alloc.vec.Vec.length old ≤ alloc.vec.Vec.length raw
+meaning : ∀ (l : Fin 64) (row : Row), (↑raw)[↑l]? = some row → rawValue row = weight q rho l
+cells : ∀ (l : Fin 64), fieldAt (S8JoinFinishExact.output raw old) l = weight q rho l
+⊢ decide
+      (∑ x, data.f x * LiteralOpeningView.eK (∑ j, rho ^ ↑j * QueryResidualBridge.basis q j x) =
+        ∑ j, LiteralOpeningView.eK rho ^ ↑j * QueryResidualBridge.values data q j) =
+    decide
+      (∑ l, data.f l * LiteralOpeningView.eK (∑ j, rho ^ ↑j * QueryResidualBridge.basis q j l) =
+        ∑ j, LiteralOpeningView.eK rho ^ ↑j * QueryResidualBridge.values data q j)
+'AspisR1.S8JoinAccumulatorStage.finish_check' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

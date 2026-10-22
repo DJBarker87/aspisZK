@@ -1,0 +1,40 @@
+/Users/dominic/ZK/.worktrees/cx-start-charge/docs/research/100bit-spend-path-20261013/lean/StartChargeClean.lean:35:4: error: No goals to be solved
+/Users/dominic/ZK/.worktrees/cx-start-charge/docs/research/100bit-spend-path-20261013/lean/StartChargeClean.lean:52:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  dV s
+in the target expression
+  (eval H (OraclePortExperiment.original D d (prover P))).2.2 = true
+
+D : LiteralByteProtocol.Decoder
+P : Prover
+Q : ℕ
+hq : ∀ (H : Bytes → State), (eval H P).1.length ≤ Q
+H : Bytes → State
+hc : ¬RecordedBinaryExperimentBin.binaryCollision (Q + 1161) (eval H (projected D P))
+ha : (eval H (projected D P)).2.2 = true
+s : Bytes := (eval H P).2.stored
+d : OraclePortExperiment.Decision := dV s
+same : eval H (projected D P) = eval H (OraclePortExperiment.recorded D d (prover P))
+hcf : ¬RecordedBinaryExperimentBin.binaryCollision (Q + 1161) (eval H (OraclePortExperiment.recorded D d (prover P)))
+haf : (eval H (OraclePortExperiment.original D d (prover P))).2.2 = true
+cf : OraclePortConsumer.CheckedAcceptance D d (prover P) (Q + 1161)
+checks :
+  LiteralAcceptanceTerminal.Checks (eval H (OraclePortExperiment.recorded D d (prover P))).2.1.1
+    (OraclePortConsumer.compiledRows D d (prover P) H)
+fixed :
+  RawCutTranscriptRun.proof
+      (RawCutWordsFromRunExecutableBin.wordsFromRun
+        (eval H
+          (RawCutProverCompiler.experiment
+            (OracleDecisionFeasibilityCompiler.compiled D d (BinCompiledRunWordStability.wordsFromRun D) (prover P))
+            (OracleDecisionFeasibilityCore.verifier D d))))
+      (eval H
+              (RawCutProverCompiler.experiment
+                (OracleDecisionFeasibilityCompiler.compiled D d (BinCompiledRunWordStability.wordsFromRun D) (prover P))
+                (OracleDecisionFeasibilityCore.verifier D d))).2.1.2 =
+    (eval H
+            (RawCutProverCompiler.experiment
+              (OracleDecisionFeasibilityCompiler.compiled D d (BinCompiledRunWordStability.wordsFromRun D) (prover P))
+              (OracleDecisionFeasibilityCore.verifier D d))).2.1.2
+⊢ (eval H (OraclePortExperiment.original D (dV s) (prover P))).2.1.1.tag = 2
+'AspisR1.StartChargeClean.accepted_facts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.StartChargeClean.clean' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,61 @@
+import R1Z.ProverCommitTable20
+/-! Arbitrary finite prefixes for the single-entry programming gate.
+No finite key space or fixed table length is assumed. This module does not
+identify std::BTreeMap with the owned entry representation. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitTablePrefix21
+open ProverCommitTable20
+variable {Key Value : Type} [DecidableEq Key] [DecidableEq Value]
+
+theorem lookup_append (prefix suffix : Table Key Value) (key : Key) :
+    lookup (prefix++suffix) key = (lookup prefix key).orElse (fun _ => lookup suffix key) := by
+  induction prefix with
+  | nil => rfl
+  | cons entry tail ih =>
+    rcases entry with ⟨k,v⟩
+    simp only [List.cons_append,lookup]
+    by_cases h : k=key
+    · simp only [h,if_true,Option.orElse_some]
+    · simp only [h,if_false,ih]
+
+/-- A prefix without a matching key is retained verbatim, with no collision
+update. This is the induction boundary consumed by a single insert step. -/
+theorem insert_append_miss (prefix suffix : Table Key Value) (key : Key) (answer : Value)
+    (collision : Bool) (miss : lookup prefix key=none) :
+    insert (prefix++suffix) key answer collision =
+      let out := insert suffix key answer collision
+      (prefix++out.1,out.2) := by
+  induction prefix with
+  | nil => rfl
+  | cons entry tail ih =>
+    rcases entry with ⟨k,v⟩
+    by_cases h : k=key
+    · simp only [lookup,h,if_true] at miss
+      cases miss
+    · simp only [lookup,h,if_false] at miss
+      simp only [List.cons_append,insert,h,if_false,ih miss]
+
+/-- Exact overwrite at one entry after any missed prefix. The entire suffix
+and the original key are retained, and the collision flag is sticky. -/
+theorem overwrite_after_prefix (prefix suffix : Table Key Value) (key : Key)
+    (previous answer : Value) (collision : Bool) (miss : lookup prefix key=none) :
+    insert (prefix++(key,previous)::suffix) key answer collision =
+      (prefix++(key,answer)::suffix,collision || decide (previous≠answer)) := by
+  rw [insert_append_miss prefix ((key,previous)::suffix) key answer collision miss]
+  simp only [insert,if_true]
+
+/-- The symbolic prefix in the single-entry gate is exactly first-hit lookup;
+its summary also accounts for hits before the selected entry. -/
+theorem entry_collision (prefix suffix : Table Key Value) (key address : Key)
+    (previous answer : Value) (collision : Bool) :
+    (insert (prefix++(key,previous)::suffix) address answer collision).2 =
+      collision || conflict ((lookup prefix address).orElse
+        (fun _ => if key=address then some previous else lookup suffix address)) answer := by
+  rw [insert_collision,lookup_append]
+  rfl
+
+#print axioms lookup_append
+#print axioms insert_append_miss
+#print axioms overwrite_after_prefix
+#print axioms entry_collision
+end R1Z.ProverCommitTablePrefix21

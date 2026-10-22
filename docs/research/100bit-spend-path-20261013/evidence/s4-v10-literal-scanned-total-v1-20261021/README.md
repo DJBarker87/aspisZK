@@ -1,0 +1,7 @@
+# Scanner-derived literal typed V10 outer totality
+
+`AspisR1FastDotsV10LiteralScannedTotalV1.literal_outer_total_and_field_results_from_scan` composes the scanner/canonical-power fixed-helper result with the all-Result V10 literal outer transport. From the same accepted scan and caller array it derives literal V10 outer success, the fixed-helper success, equality of the mapped literal array with that same current output, canonicality of every output, and the four exact scanner-derived field-result witnesses. No independent fixed/literal helper-success, slot witness, or reverse-loop premise is required.
+
+The remaining upstream hypotheses are gamma canonicality, successful `ClaimPowers.powers 29 gamma`, the exact caller-array map to those powers, proof length 57607, query index below 22, the exact query slice, and scanner acceptance. The output field witnesses are for the selected installed current `literalOps` model.
+
+This does not establish frozen Rust standard-library / `array::from_fn` correspondence, production adoption of the selected literal V10 source, or complete S4 soundness. The module remains within the selected typed source/model boundary. The successful compile used Lean 4.32 with `-j1 -M 4400`; `/usr/bin/time -l` recorded peak RSS 3,985,752,064 bytes and zero swaps. The earlier import-path setup failure and one localized proof error are retained under `diagnostics/` and are not accepted results.

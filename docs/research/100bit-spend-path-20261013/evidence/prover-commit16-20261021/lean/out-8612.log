@@ -1,0 +1,203 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialTransport16.lean:28:20: error: Tactic `rfl` failed: The left-hand side
+  match core.result.Result.Ok value with
+  | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+  | core.result.Result.Ok value => do
+    let values' ← alloc.vec.Vec.push values value
+    ProverCommitMaterialRecursion.finite hash domain n values' after
+is not definitionally equal to the right-hand side
+  match core.result.Result.Ok value with
+  | core.result.Result.Err e => ok (core.result.Result.Err e, values, after)
+  | core.result.Result.Ok value => do
+    let fresh ← alloc.vec.Vec.push values value
+    accumulate (prover_commit_reference.limb_caller hash domain) n fresh after
+
+case succ.ok.Ok.fail
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (values : Values) (state : State),
+    ProverCommitMaterialRecursion.finite hash domain n values state =
+      accumulate (prover_commit_reference.limb_caller hash domain) n values state
+values : Values
+state : State
+after : prover_commit_reference.State
+value : aspis_core.field.M31
+hs : prover_commit_reference.limb_caller hash domain state = ok (core.result.Result.Ok value, after)
+e : Std.Error
+hp : alloc.vec.Vec.push values value = fail e
+⊢ (match core.result.Result.Ok value with
+    | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+    | core.result.Result.Ok value => do
+      let values' ← alloc.vec.Vec.push values value
+      ProverCommitMaterialRecursion.finite hash domain n values' after) =
+    match core.result.Result.Ok value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e, values, after)
+    | core.result.Result.Ok value => do
+      let fresh ← alloc.vec.Vec.push values value
+      accumulate (prover_commit_reference.limb_caller hash domain) n fresh after
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialTransport16.lean:29:17: error: Tactic `rfl` failed: The left-hand side
+  match core.result.Result.Ok value with
+  | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+  | core.result.Result.Ok value => do
+    let values' ← alloc.vec.Vec.push values value
+    ProverCommitMaterialRecursion.finite hash domain n values' after
+is not definitionally equal to the right-hand side
+  match core.result.Result.Ok value with
+  | core.result.Result.Err e => ok (core.result.Result.Err e, values, after)
+  | core.result.Result.Ok value => do
+    let fresh ← alloc.vec.Vec.push values value
+    accumulate (prover_commit_reference.limb_caller hash domain) n fresh after
+
+case succ.ok.Ok.div
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (values : Values) (state : State),
+    ProverCommitMaterialRecursion.finite hash domain n values state =
+      accumulate (prover_commit_reference.limb_caller hash domain) n values state
+values : Values
+state : State
+after : prover_commit_reference.State
+value : aspis_core.field.M31
+hs : prover_commit_reference.limb_caller hash domain state = ok (core.result.Result.Ok value, after)
+hp : alloc.vec.Vec.push values value = div
+⊢ (match core.result.Result.Ok value with
+    | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+    | core.result.Result.Ok value => do
+      let values' ← alloc.vec.Vec.push values value
+      ProverCommitMaterialRecursion.finite hash domain n values' after) =
+    match core.result.Result.Ok value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e, values, after)
+    | core.result.Result.Ok value => do
+      let fresh ← alloc.vec.Vec.push values value
+      accumulate (prover_commit_reference.limb_caller hash domain) n fresh after
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialTransport16.lean:32:10: error: Type mismatch
+  ih fresh after
+has type
+  ProverCommitMaterialRecursion.finite hash domain n fresh after =
+    accumulate (prover_commit_reference.limb_caller hash domain) n fresh after
+but is expected to have type
+  (do
+      let values' ← alloc.vec.Vec.push values value
+      ProverCommitMaterialRecursion.finite hash domain n values' after) =
+    do
+    let fresh ← alloc.vec.Vec.push values value
+    accumulate (prover_commit_reference.limb_caller hash domain) n fresh after
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialTransport16.lean:31:21: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitMaterialTransport16.m31_accumulate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaterialTransport16.m31_extracted_prefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialTransport16.lean:66:20: error: Tactic `rfl` failed: The left-hand side
+  match core.result.Result.Ok value with
+  | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+  | core.result.Result.Ok value => do
+    let values' ← alloc.vec.Vec.push values value
+    ProverCommitMaterialRecursion.qmFinite hash domain n values' after
+is not definitionally equal to the right-hand side
+  match core.result.Result.Ok value with
+  | core.result.Result.Err e => ok (core.result.Result.Err e, values, after)
+  | core.result.Result.Ok value => do
+    let fresh ← alloc.vec.Vec.push values value
+    accumulate (prover_commit_reference.qm31_caller hash domain) n fresh after
+
+case succ.ok.Ok.fail
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (values : QValues) (state : State),
+    ProverCommitMaterialRecursion.qmFinite hash domain n values state =
+      accumulate (prover_commit_reference.qm31_caller hash domain) n values state
+values : QValues
+state : State
+after : prover_commit_reference.State
+value : aspis_core.field.QM31
+hs : prover_commit_reference.qm31_caller hash domain state = ok (core.result.Result.Ok value, after)
+e : Std.Error
+hp : alloc.vec.Vec.push values value = fail e
+⊢ (match core.result.Result.Ok value with
+    | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+    | core.result.Result.Ok value => do
+      let values' ← alloc.vec.Vec.push values value
+      ProverCommitMaterialRecursion.qmFinite hash domain n values' after) =
+    match core.result.Result.Ok value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e, values, after)
+    | core.result.Result.Ok value => do
+      let fresh ← alloc.vec.Vec.push values value
+      accumulate (prover_commit_reference.qm31_caller hash domain) n fresh after
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialTransport16.lean:67:17: error: Tactic `rfl` failed: The left-hand side
+  match core.result.Result.Ok value with
+  | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+  | core.result.Result.Ok value => do
+    let values' ← alloc.vec.Vec.push values value
+    ProverCommitMaterialRecursion.qmFinite hash domain n values' after
+is not definitionally equal to the right-hand side
+  match core.result.Result.Ok value with
+  | core.result.Result.Err e => ok (core.result.Result.Err e, values, after)
+  | core.result.Result.Ok value => do
+    let fresh ← alloc.vec.Vec.push values value
+    accumulate (prover_commit_reference.qm31_caller hash domain) n fresh after
+
+case succ.ok.Ok.div
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (values : QValues) (state : State),
+    ProverCommitMaterialRecursion.qmFinite hash domain n values state =
+      accumulate (prover_commit_reference.qm31_caller hash domain) n values state
+values : QValues
+state : State
+after : prover_commit_reference.State
+value : aspis_core.field.QM31
+hs : prover_commit_reference.qm31_caller hash domain state = ok (core.result.Result.Ok value, after)
+hp : alloc.vec.Vec.push values value = div
+⊢ (match core.result.Result.Ok value with
+    | core.result.Result.Err error => ok (core.result.Result.Err error, values, after)
+    | core.result.Result.Ok value => do
+      let values' ← alloc.vec.Vec.push values value
+      ProverCommitMaterialRecursion.qmFinite hash domain n values' after) =
+    match core.result.Result.Ok value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e, values, after)
+    | core.result.Result.Ok value => do
+      let fresh ← alloc.vec.Vec.push values value
+      accumulate (prover_commit_reference.qm31_caller hash domain) n fresh after
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialTransport16.lean:70:10: error: Type mismatch
+  ih fresh after
+has type
+  ProverCommitMaterialRecursion.qmFinite hash domain n fresh after =
+    accumulate (prover_commit_reference.qm31_caller hash domain) n fresh after
+but is expected to have type
+  (do
+      let values' ← alloc.vec.Vec.push values value
+      ProverCommitMaterialRecursion.qmFinite hash domain n values' after) =
+    do
+    let fresh ← alloc.vec.Vec.push values value
+    accumulate (prover_commit_reference.qm31_caller hash domain) n fresh after
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialTransport16.lean:69:21: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitMaterialTransport16.qm31_accumulate' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitMaterialTransport16.qm31_extracted_prefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTree44.lean:71:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverCommitTree44.range_levels`:
+  [Std.TransCmp cmp]
+  [Std.LawfulEqCmp cmp]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Std.TransCmp cmp] [Std.LawfulEqCmp cmp] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTree44.lean:88:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  []
+in the target expression
+  decode map kids (List.foldl (fun state d => levelStep map kids coin root d state) s (List.range 18)) =
+    levels modelMap modelMap coin root 18 0 (decode map kids s)
+
+Digest Coins State Kids Thread Slot Output : Type
+cmp : ℕ → ℕ → Ordering
+inst✝² : Std.TransCmp cmp
+inst✝¹ : Std.LawfulEqCmp cmp
+inst✝ : DecidableEq Thread
+map : MapAPI ℕ Digest State cmp
+kids : MapAPI ℕ (Digest × Digest) Kids cmp
+tls : TLSAPI Thread Slot Output
+thread : Thread
+schedule : List (Thread × ProverCommitTLS23.Access Slot Output)
+mapLaw : TrustedStd map tls thread schedule
+kidsLaw : TrustedStd kids tls thread schedule
+coin : Coins → Digest × Coins
+root : Digest
+s : Tree State Kids Coins Digest
+⊢ decode map kids (List.foldl (fun state d => levelStep map kids coin root d state) s (List.range 18)) =
+    levels modelMap modelMap coin root 18 0 (decode map kids s)
+'R1Z.ProverCommitTree44.level_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTree44.levels_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTree44.range_levels' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTree44.eighteen_levels' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

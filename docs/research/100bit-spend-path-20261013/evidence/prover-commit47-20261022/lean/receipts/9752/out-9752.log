@@ -1,0 +1,126 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:21:4: error: Type mismatch
+  sub ?m.40 ?m.41
+has type
+  Refines id (UScalar.sub ?m.40 ?m.41) (ok (UScalar.wrapping_sub ?m.40 ?m.41))
+but is expected to have type
+  Refines id
+    (do
+      let s1 ← s - 2147483647#u32
+      ok s1)
+    (if id s ≥ 2147483647#u32 then do
+      let s1 ← lift (U32.wrapping_sub (id s) 2147483647#u32)
+      ok s1
+    else ok (id s))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:22:10: error: overloaded, errors 
+  Type mismatch
+    ProverCommitWrapping47.pure id s
+  has type
+    Refines id (ok s) (ok (id s))
+  but is expected to have type
+    Refines id (ok s)
+      (if id s ≥ 2147483647#u32 then do
+        let s1 ← lift (U32.wrapping_sub (id s) 2147483647#u32)
+        ok s1
+      else ok (id s))
+  
+  Function expected at
+    Pure.pure id
+  but this term has type
+    ?m.42 (?m.45 → ?m.45)
+  
+  Note: Expected a function because this term is being applied to the argument
+    s
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:32:4: error: Type mismatch
+  sub ?m.55 ?m.56
+has type
+  Refines id (UScalar.sub ?m.55 ?m.56) (ok (UScalar.wrapping_sub ?m.55 ?m.56))
+but is expected to have type
+  Refines id
+    (do
+      let s1 ← t - 2147483647#u32
+      ok s1)
+    (if id t ≥ 2147483647#u32 then do
+      let s1 ← lift (U32.wrapping_sub (id t) 2147483647#u32)
+      ok s1
+    else ok (id t))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:33:10: error: overloaded, errors 
+  Type mismatch
+    ProverCommitWrapping47.pure id t
+  has type
+    Refines id (ok t) (ok (id t))
+  but is expected to have type
+    Refines id (ok t)
+      (if id t ≥ 2147483647#u32 then do
+        let s1 ← lift (U32.wrapping_sub (id t) 2147483647#u32)
+        ok s1
+      else ok (id t))
+  
+  Function expected at
+    Pure.pure id
+  but this term has type
+    ?m.57 (?m.60 → ?m.60)
+  
+  Note: Expected a function because this term is being applied to the argument
+    t
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:44:2: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:61:2: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:92:54: error: Application type mismatch: The argument
+  add ?m.45 ?m.46
+has type
+  Refines id (UScalar.add ?m.45 ?m.46) (ok (UScalar.wrapping_add ?m.45 ?m.46))
+but is expected to have type
+  Refines id (lift (core.convert.num.FromU64U32.from x.a)) (lift (core.convert.num.FromU64U32.from (convC x).a))
+in the application
+  ProverCommitWrapping47.bind id convC (lift (core.convert.num.FromU64U32.from x.a))
+    (lift (core.convert.num.FromU64U32.from (convC x).a))
+    (fun i1 => do
+      let i3 ← lift (core.convert.num.FromU64U32.from x.b)
+      let i4 ← i1 + i3
+      let i6 ← lift (core.convert.num.FromU64U32.from y.a)
+      let i8 ← lift (core.convert.num.FromU64U32.from y.b)
+      let i9 ← i6 + i8
+      let i10 ← i4 * i9
+      let m2 ← AspisR1ProducerChecked47.field.M31.reduce_u64 i10
+      let m ← m0.sub m1
+      let m3 ← m2.sub m0
+      let m4 ← m3.sub m1
+      ok { a := m, b := m4 })
+    (fun i1 => do
+      let i3 ← lift (core.convert.num.FromU64U32.from (convC x).b)
+      let i4 ← lift (i1.wrapping_add i3)
+      let i6 ← lift (core.convert.num.FromU64U32.from (convC y).a)
+      let i8 ← lift (core.convert.num.FromU64U32.from (convC y).b)
+      let i9 ← lift (i6.wrapping_add i8)
+      let i10 ← lift (i4.wrapping_mul i9)
+      let m2 ← AspisR1ProducerRelease47.field.M31.reduce_u64 i10
+      let m ← AspisR1ProducerRelease47.field.M31.sub (id m0) (id m1)
+      let m3 ← m2.sub (id m0)
+      let m4 ← m3.sub (id m1)
+      ok { a := m, b := m4 })
+    (add ?m.45 ?m.46)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:91:13: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitRelease47.mAdd' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mSub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mDouble' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.shift31' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.reduce' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mReduce' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mMul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.addC' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.subC' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mulC' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.rC' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.addQ' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.subQ' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mulQ' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mulU' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.addE' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mulE' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

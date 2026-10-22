@@ -1,0 +1,54 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeVerifyState.lean:65:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+H : Bytes → State
+p : Parsed
+batch kind : ℕ
+nodes : Slice U8
+s : reference.Scratch
+⊢ ((eval H
+          (have is := List.map Prod.fst (live s 0 ↑s.n);
+          if wellFormed is then
+            have count := MultiproofConeCountLevels.sourceCount 18 is;
+            have cap := capacity (3 * batch + kind);
+            have bs := MultiproofConeCanonical.bytesOf ↑nodes;
+            if
+                count ≤ cap ∧
+                  List.length bs = 32 * cap ∧
+                    MultiproofConePadding.scan (4 * (cap - count)) (List.drop (32 * count) bs) = true then
+              verifyState (encodeState (OraclePortBatchDraft.committedRoot p kind)) (prefixNodes nodes count)
+                { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize }
+            else Program.done (false, s)
+          else Program.done (false, s))).1,
+      (eval H
+            (have is := List.map Prod.fst (live s 0 ↑s.n);
+            if wellFormed is then
+              have count := MultiproofConeCountLevels.sourceCount 18 is;
+              have cap := capacity (3 * batch + kind);
+              have bs := MultiproofConeCanonical.bytesOf ↑nodes;
+              if
+                  count ≤ cap ∧
+                    List.length bs = 32 * cap ∧
+                      MultiproofConePadding.scan (4 * (cap - count)) (List.drop (32 * count) bs) = true then
+                verifyState (encodeState (OraclePortBatchDraft.committedRoot p kind)) (prefixNodes nodes count)
+                  { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize }
+              else Program.done (false, s)
+            else Program.done (false, s))).2.1) =
+    eval H
+      (have is := List.map Prod.fst (live s 0 ↑s.n);
+      if wellFormed is then
+        have count := MultiproofConeCountLevels.sourceCount 18 is;
+        have cap := capacity (3 * batch + kind);
+        have bs := MultiproofConeCanonical.bytesOf ↑nodes;
+        if
+            count ≤ cap ∧
+              List.length bs = 32 * cap ∧
+                MultiproofConePadding.scan (4 * (cap - count)) (List.drop (32 * count) bs) = true then
+          verify (encodeState (OraclePortBatchDraft.committedRoot p kind)) (prefixNodes nodes count)
+            { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize }
+        else Program.done false
+      else Program.done false)
+'AspisR1.MultiproofConeVerifyState.eval_map' depends on axioms: [propext]
+'AspisR1.MultiproofConeVerifyState.verify_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeVerifyState.tail_projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

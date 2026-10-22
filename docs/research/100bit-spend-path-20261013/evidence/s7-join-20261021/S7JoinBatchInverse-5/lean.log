@@ -1,0 +1,47 @@
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinBatchInverse.lean:104:8: error: unsolved goals
+case pos
+xs ps : List U32
+hx : ∀ x ∈ xs, decode x ≠ 0
+n : ℕ
+ih :
+  ∀ (inv : List U32) (suffix : U32),
+    n ≤ xs.length →
+      n ≤ inv.length →
+        (∀ j < n, decode (cell ps j) = product (List.take j xs)) →
+          decode suffix = (product (List.take n xs))⁻¹ →
+            ∀ (j : ℕ),
+              decode (cell (S7Kani3InverseLoop.model xs ps n inv suffix) j) =
+                if j < n then (decode (cell xs j))⁻¹ else decode (cell inv j)
+inv : List U32
+suffix : U32
+hn : n + 1 ≤ xs.length
+hi : n + 1 ≤ inv.length
+hp : ∀ j < n + 1, decode (cell ps j) = product (List.take j xs)
+hs : decode suffix = (product (List.take (n + 1) xs))⁻¹
+hn' : n < xs.length
+hnz : product (List.take n xs) ≠ 0
+hxz : decode (cell xs n) ≠ 0
+hcell : decode (wordMul suffix (cell ps n)) = (decode (cell xs n))⁻¹
+hs' : decode (wordMul suffix (cell xs n)) = (product (List.take n xs))⁻¹
+he :
+  decode
+      (cell (S7Kani3InverseLoop.model xs ps n (inv.set n (wordMul suffix (cell ps n))) (wordMul suffix (cell xs n)))
+        n) =
+    if n < n then (decode (cell xs n))⁻¹ else decode (cell (inv.set n (wordMul suffix (cell ps n))) n)
+hj : ¬n < n
+⊢ decode (wordMul suffix (ps[n]?.getD 0#u32)) = (decode (xs[n]?.getD 0#u32))⁻¹
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinBatchInverse.lean:106:80: warning: This simp argument is unused:
+  hcell
+
+Hint: Omit it from the simp argument list.
+  simp only [Nat.lt_irrefl, ̲if_false, ̲show n̵<̵n̵+̵n̲ ̲<̲ ̲n̲ ̲+̲ ̲1 by omega, ̲if_pos, ̲cell,
+              List.getElem?_set_self (by omega : n < inv.length), ̲Option.getD_some,̵h̵c̵e̵l̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S7JoinBatchInverse.prefixes_length' depends on axioms: [propext]
+'AspisR1.S7JoinBatchInverse.prefix_model' depends on axioms: [propext]
+'AspisR1.S7JoinBatchInverse.product_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S7JoinBatchInverse.prefix_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S7JoinBatchInverse.product_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S7JoinBatchInverse.product_nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S7JoinBatchInverse.backward_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

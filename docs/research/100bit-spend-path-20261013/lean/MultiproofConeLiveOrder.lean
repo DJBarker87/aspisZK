@@ -1,0 +1,140 @@
+import MultiproofConeModelBoundary
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeLiveOrder
+open OraclePortFrozenOrder
+
+/-- Strict order on a live interval. Scratch outside the interval is arbitrary. -/
+def Strict (k : Nat → Nat) (lo hi : Nat) : Prop :=
+  ∀ a b, lo ≤ a → a < b → b < hi → k a < k b
+
+/-- The written parents precede every parent of an unread child. This stronger
+cross-boundary condition is what permits in-place writes and deduplication. -/
+def Inv (k : Nat → Nat) (n i w : Nat) : Prop :=
+  w ≤ i ∧ i ≤ n ∧ Strict k 0 w ∧ Strict k i n ∧
+  ∀ a b, a < w → i ≤ b → b < n → k a < k b / 2
+
+def pairAt (k : Nat → Nat) (n i : Nat) : Prop :=
+  i+1<n ∧ paired (k i) (k (i+1))
+instance (k : Nat → Nat) (n i : Nat) : Decidable (pairAt k n i) :=
+  by unfold pairAt paired; infer_instance
+
+def advance (k : Nat → Nat) (n i : Nat) : Nat :=
+  if pairAt k n i then i+2 else i+1
+
+def write (k : Nat → Nat) (i w : Nat) : Nat → Nat :=
+  fun j => if j=w then k i/2 else k j
+
+theorem initial (k : Nat → Nat) (n : Nat) (sorted : Strict k 0 n) : Inv k n 0 0 := by
+  refine ⟨by omega,by omega,?_,sorted,?_⟩ <;> simp [Strict]
+
+/-- Equal parents of two ascending children are precisely the even/consecutive
+pair consumed together by the binary source step. -/
+theorem same_parent_pair (a b : Nat) (asc : a<b) (same : a/2=b/2) : paired a b := by
+  unfold paired
+  omega
+
+/-- Skipping an occupied pair, or consuming an unpaired child, leaves a
+strictly greater parent at every unread coordinate. -/
+theorem parent_gap (k : Nat → Nat) (n i b : Nat) (active : i<n)
+    (sorted : Strict k i n) (lo : advance k n i ≤ b) (hi : b<n) : k i/2 < k b/2 := by
+  unfold advance at lo
+  split at lo
+  next hp =>
+    have h1 := sorted i (i+1) (by omega) (by omega) hp.1
+    have h2 := sorted (i+1) b (by omega) (by omega) hi
+    have hp' := hp.2
+    unfold paired at hp'
+    omega
+  next hp =>
+    have asc := sorted i b (by omega) (by omega) hi
+    have weak : k i/2 ≤ k b/2 := Nat.div_le_div_right (Nat.le_of_lt asc)
+    by_contra bad
+    have same : k i/2=k b/2 := by omega
+    have eqnext : b=i+1 := by
+      by_contra neq
+      have middle := sorted i (i+1) (by omega) (by omega) (by omega)
+      have last := sorted (i+1) b (by omega) (by omega) hi
+      omega
+    subst b
+    exact hp ⟨hi,same_parent_pair _ _ asc same⟩
+
+/-- Mathematical one-step invariant, including the safe unread suffix.
+The Kani certificate checks the frozen binary_group's exact index write and
+advance against this transition; no hash value is constrained. -/
+theorem step (k : Nat → Nat) (n i w : Nat) (inv : Inv k n i w) (active : i<n) :
+    Inv (write k i w) n (advance k n i) (w+1) := by
+  obtain ⟨wi,ib,pre,suffix,cross⟩ := inv
+  have adv : i+1 ≤ advance k n i ∧ advance k n i ≤ n := by
+    unfold advance
+    split
+    next hp => exact ⟨by omega,by have := hp.1;omega⟩
+    next => exact ⟨by omega,by omega⟩
+  refine ⟨by omega,adv.2,?_,?_,?_⟩
+  · intro a b _ ab bw
+    by_cases be : b=w
+    · subst b
+      have ae : a≠w := by omega
+      simp only [write,if_pos rfl,if_neg ae]
+      exact cross a i (by omega) (by omega) active
+    · have ae : a≠w := by omega
+      simp only [write,if_neg ae,if_neg be]
+      exact pre a b (by omega) ab (by omega)
+  · intro a b ia ab bn
+    have ae : a≠w := by omega
+    have be : b≠w := by omega
+    simp only [write,if_neg ae,if_neg be]
+    exact suffix a b (by omega) ab bn
+  · intro a b aw ia bn
+    have be : b≠w := by omega
+    simp only [write,if_neg be]
+    by_cases ae : a=w
+    · simp only [ae,if_pos rfl]
+      exact parent_gap k n i b active suffix ia bn
+    · simp only [if_neg ae]
+      exact cross a b (by omega) (by omega) bn
+
+/-- Index-only level iteration: fuel decreases once per parent. Ordinary
+missing-sibling rejection is represented by not taking a successful step. -/
+inductive Runs (n : Nat) : (Nat → Nat) → Nat → Nat → (Nat → Nat) → Nat → Prop
+  | done (k : Nat → Nat) (i w : Nat) (halt : n ≤ i) : Runs n k i w k w
+  | next (k : Nat → Nat) (i w : Nat) (out : Nat → Nat) (m : Nat)
+      (active : i<n)
+      (tail : Runs n (write k i w) (advance k n i) (w+1) out m) :
+      Runs n k i w out m
+
+/-- Induction over successful parent steps, allowing arbitrary early rejection
+outside Runs. At completion only the written prefix is live. -/
+theorem level (n : Nat) (k : Nat → Nat) (i w : Nat) (out : Nat → Nat) (m : Nat)
+    (run : Runs n k i w out m) (inv : Inv k n i w) : Strict out 0 m := by
+  induction run with
+  | done k i w halt => exact inv.2.2.1
+  | next k i w out m active tail ih => exact ih (step k n i w inv active)
+
+/-- Each level starts with the preceding level's strictly ascending output. -/
+inductive Levels : Nat → (Nat → Nat) → Nat → (Nat → Nat) → Nat → Prop
+  | zero (k : Nat → Nat) (n : Nat) : Levels 0 k n k n
+  | succ (h : Nat) (k mid out : Nat → Nat) (n m p : Nat)
+      (row : Runs n k 0 0 mid m) (tail : Levels h mid m out p) :
+      Levels (h+1) k n out p
+
+theorem all_levels (h : Nat) (k : Nat → Nat) (n : Nat) (out : Nat → Nat) (m : Nat)
+    (run : Levels h k n out m) (sorted : Strict k 0 n) : Strict out 0 m := by
+  induction run with
+  | zero => exact sorted
+  | succ h k mid out n m p row tail ih =>
+    exact ih (level n k 0 0 mid m row (initial k n sorted))
+
+theorem no_descending (k : Nat → Nat) (n i : Nat) (sorted : Strict k 0 n)
+    (bound : i+1<n) : ¬(k i=1 ∧ k (i+1)=0) := by
+  have asc := sorted i (i+1) (by omega) (by omega) bound
+  omega
+
+#print axioms initial
+#print axioms same_parent_pair
+#print axioms parent_gap
+#print axioms step
+#print axioms level
+#print axioms all_levels
+#print axioms no_descending
+end AspisR1.MultiproofConeLiveOrder

@@ -1,0 +1,48 @@
+import MultiproofConeLivePreservation
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConePhysicalDigest
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConeNodeDomain MultiproofConeLiveReference
+
+/-- Exact three-component hash address in the extracted parent writer. -/
+def parts (left right : Array U8 32#usize) : Slice (Slice U8) :=
+  ⟨[⟨[18#u8],by simp; scalar_tac⟩,⟨left.val,by have := left.property;scalar_tac⟩,
+    ⟨right.val,by have := right.property;scalar_tac⟩],by simp;scalar_tac⟩
+
+@[local step] theorem observed_hash {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (input : Slice (Slice U8)) :
+    D.digest hash input ⦃ value => D.digest hash input=ok value ⦄ := by
+  obtain ⟨value,eq⟩ := total input
+  simp only [eq,WP.spec_ok]
+
+/-- The digest and the exact address are retained together, before scratch is
+mutated. This is an equation about the actual extracted writer. -/
+@[local step] theorem write_observed {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (s : reference.Scratch) (left right : Array U8 32#usize)
+    (ni cursor : Usize) (index : U32) (w : Usize) (bound : w.val<16) :
+    reference.write_parent D hash s left right ni cursor index w
+      ⦃ out => ∃ digest parent nw,
+        D.digest hash (parts left right)=ok digest ∧ parent.val=index.val/2 ∧
+        nw.val=w.val+1 ∧ out=reference.Row.Next
+          {s with idx:=s.idx.set w parent,val:=s.val.set w digest,«at»:=cursor} ni nw ⦄ := by
+  unfold reference.write_parent
+  step* <;> simp_all [parts] <;> scalar_tac
+
+/-- Both buffers have the exact single-write content, including every untouched
+suffix coordinate; no assertion about index order substitutes for digest data. -/
+theorem set_digest (s : reference.Scratch) (w : Usize) (digest : Array U8 32#usize)
+    (bound : w.val<16) (j : Nat) (jb : j<16) :
+    (s.val.set w digest).val[j]!=(if j=w.val then digest else s.val.val[j]!) := by
+  have len : s.val.val.length=16 := s.val.property
+  by_cases eq : j=w.val
+  · subst j
+    simp [Array.set_val_eq,List.getElem!_eq_getElem?_getD,
+      List.getElem?_set_self (by omega : w.val<s.val.val.length)]
+  · simp [Array.set_val_eq,List.getElem!_eq_getElem?_getD,
+      List.getElem?_set_ne (Ne.symm eq),eq]
+
+#print axioms observed_hash
+#print axioms write_observed
+#print axioms set_digest
+end AspisR1.MultiproofConePhysicalDigest

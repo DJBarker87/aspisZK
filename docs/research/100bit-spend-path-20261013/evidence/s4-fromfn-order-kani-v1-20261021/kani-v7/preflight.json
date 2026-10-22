@@ -1,0 +1,41 @@
+{
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/s4-fromfn-order-kani-v1-20261021/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "std_from_fn_four_matches_explicit_ordered_calls",
+    "--harness",
+    "std_from_fn_eight_matches_explicit_ordered_calls",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "regular",
+    "-Z",
+    "unstable-options",
+    "-j",
+    "1",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_sha256": "a5f11a27423efcf797523d7f1cc1d70e335b2c29d27229525b8571c9525a919a",
+  "cargo_manifest_sha256": "de1ac816ae87578d6e5ed130399ff609edf23aea2ff952963b1790378dd8f1a1",
+  "binding_sha256": "67daba64346e8f2b7503f86011897c424aa75c1501226473f6a1e28f4914402e",
+  "candidate_revision": "candidate worktree commit 41fdc80546630d018c1a7c9dc971a3e544d69e55 plus isolated harness source SHA (uncommitted during proof run)",
+  "tool_sha256": {
+    "/home/dombarker/.cargo/bin/cargo-kani": "45c607cda6ed83414c0f7ff2c5f4cab8bda9d48031a035f9197d9ea16674f8f3",
+    "/home/dombarker/.kani/kani-0.67.0/bin/kani-driver": "683f3ad1216e67686a39b2fcd6dc661f5090574f55fde9dd407966dca42cbfad",
+    "/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler": "f74488368997b6b4e0b417a2f5a3c8e598eccc907288c1a7875d9866056e9ffc",
+    "/home/dombarker/.kani/kani-0.67.0/bin/cbmc": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973",
+    "/home/dombarker/.kani/kani-0.67.0/bin/kissat": "f2c8ccc9e2b50dccd0025c8cd1665a55d84aba9f1f2c24f5e61087b8cba7577d"
+  },
+  "limits": {
+    "memory.high": "2147483648",
+    "memory.max": "4294967296",
+    "memory.swap.max": "0"
+  },
+  "expected_cost": "Rust/Kani MIR lowering and two small symbolic fixed-array constructor checks; no field arithmetic or large elimination.",
+  "claim_boundary": "The harness directly invokes std::array::from_fn under Kani and checks arbitrary precomputed output/state traces. This is a named Kani/std operational result, not a Lean or Aeneas source-correspondence theorem."
+}

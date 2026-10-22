@@ -1,0 +1,90 @@
+import R1Z.ProverCommitInterpolationRow48
+/-! All 28 owned interpolation rows, composed from the separately proved
+factor, inverse, scalar and accumulator contracts. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitInterpolationOutput48
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open ProverCommitInterpolationEmbed48 (embed)
+open ProverCommitInterpolationRow48
+open ProverCommitInterpolationSchedule48
+open ProverCommitInterpolationIndices48
+
+def contribution (q : Old.Q) (i : Nat) : Polynomial QM31Exact :=
+  Polynomial.C (decode q*embed ((denProd i 0 28)⁻¹))*(polyProd i 0 28).map embed
+
+def rowSum (values : Nat → Old.Q) (i : Nat) : Nat → Polynomial QM31Exact
+ | 0 => 0
+ | n+1 => contribution (values i) i+rowSum values (i+1) n
+
+attribute [local irreducible] ProverCommitQArray48.array ProverCommitM31Array48.array
+  qpoly contribution rowSum
+
+theorem step (values xs : Nat → Old.Q) (i left : U8) (hn : left≠0#u8) (hi : i.val < 28) :
+    rows (ProverCommitQArray48.array 28#usize values) (ProverCommitQArray48.array 28#usize xs) i left=
+      (do let out ← row xs (values i.val) i
+          rows (ProverCommitQArray48.array 28#usize values) out
+            (U8.wrapping_add i 1#u8) (U8.wrapping_sub left 1#u8)) := by
+  have hcast : (UScalar.cast .Usize i).val=i.val := by scalar_tac
+  rw [rows]
+  simp only [hn,if_false,lift,bind_tc_ok]
+  rw [ProverCommitQArray48.index _ _ _ (by rw [hcast];exact hi)]
+  simp only [hcast,bind_tc_ok,row,ProverCommitInterpolationInitial48.prepare]
+  simp only [bind_assoc]
+  congr 1
+  funext basis
+  congr 1
+  funext pair
+  rcases pair with ⟨basis,den⟩
+  simp only [bind_assoc]
+
+theorem rows_value (values : Nat → Old.Q) (n : Nat) (xs : Nat → Old.Q)
+    (hxs : ∀ k, k < 28 → Canonical (xs k)) (i left : U8)
+    (hleft : left.val=n) (bound : i.val+n ≤ 28) :
+    ∃ ys : Nat → Old.Q,
+      rows (ProverCommitQArray48.array 28#usize values) (ProverCommitQArray48.array 28#usize xs) i left=
+        ok (ProverCommitQArray48.array 28#usize ys) ∧
+      (∀ k, k < 28 → Canonical (ys k)) ∧ qpoly ys=qpoly xs+rowSum values i.val n := by
+  induction n generalizing xs i left with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    refine ⟨xs,?_,hxs,?_⟩
+    · rw [rows,hz];rfl
+    · rw [rowSum,add_zero]
+  | succ n ih =>
+    have hn : left≠0#u8 := by scalar_tac
+    have hi : i.val < 28 := by omega
+    have hnext : (U8.wrapping_add i 1#u8).val=i.val+1 := next_val i hi
+    have hdec : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    obtain ⟨next,hrow,hcnext,hdnext⟩ := row_value xs hxs (values i.val) i hi
+    obtain ⟨ys,hy,hcy,hdy⟩ := ih next hcnext (U8.wrapping_add i 1#u8)
+      (U8.wrapping_sub left 1#u8) hdec (by rw [hnext];omega)
+    refine ⟨ys,?_,hcy,?_⟩
+    · rw [step values xs i left hn hi,hrow]
+      exact hy
+    · rw [hdy,hdnext,hnext,rowSum,contribution]
+      exact add_assoc _ _ _
+
+theorem zero_poly : qpoly (fun _ => zero)=0 := by
+  apply Polynomial.ext
+  intro k
+  simp only [qpoly,ProverCommitInterpolationPoly48.coeff,zero_decode,ite_self,Polynomial.coeff_zero]
+
+theorem interpolate_value (values : Nat → Old.Q) :
+    ∃ ys : Nat → Old.Q,
+      interpolate (ProverCommitQArray48.array 28#usize values)=ok (ProverCommitQArray48.array 28#usize ys) ∧
+      (∀ k, k < 28 → Canonical (ys k)) ∧ qpoly ys=rowSum values 0 28 := by
+  obtain ⟨ys,hy,hcy,hdy⟩ := rows_value values 28 (fun _ => zero) (fun _ _ => zero_canonical)
+    0#u8 28#u8 rfl (by scalar_tac)
+  refine ⟨ys,?_,hcy,?_⟩
+  · simp only [interpolate,ProverCommitQArray48.repeat_zero,hy]
+  · simpa only [zero_poly,zero_add,show (0#u8).val=0 from rfl] using hdy
+
+#print axioms step
+#print axioms rows_value
+#print axioms zero_poly
+#print axioms interpolate_value
+end R1Z.ProverCommitInterpolationOutput48

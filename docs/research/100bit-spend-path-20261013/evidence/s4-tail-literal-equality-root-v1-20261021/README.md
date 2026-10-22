@@ -1,0 +1,3 @@
+PROVED original generated two-step tail loop equals the literal two-push sequence for all model Result outcomes and arbitrary typed inputs/operations; reverse successful-run implication follows.
+
+Limitations: The equality is for the retained generated TailLoop and exact literalPush definitions; no loop success, parser success, canonicality or accumulator invariant is assumed. This discharges the one-way model tail-comparison gap, including failures/divergence. It does not identify raw candidate types, external operations or the whole candidate helper with frozen Rust. Rust Std/extraction correspondence, whole-helper/source adoption, caller/runtime/final-artifact bindings and global soundness remain open; production unchanged.

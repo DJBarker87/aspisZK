@@ -1,0 +1,172 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:15:39: error: Type mismatch: After simplification, term
+  bytebound
+ has type
+  @LT.lt ℕ instLTNat (↑b) (2 ^ 8)
+but is expected to have type
+  @LT.lt ℕ instLTNat (↑b) 256
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:22:86: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:22:26: error: unsolved goals
+b : U8
+bs : List U8
+ih : (BitVec.fromLEBytes (List.map U8.bv bs)).toNat = littleEndian bs
+bound : (BitVec.fromLEBytes (List.map U8.bv bs)).toNat < 2 ^ (8 * (List.map U8.bv bs).length)
+bytebound✝ : ↑b < UScalar.size UScalarTy.U8
+bytebound : ↑b < 256
+power : 2 ^ (8 * (bs.length + 1)) = 256 * 2 ^ (8 * bs.length)
+this : 0 < 2 ^ (8 * bs.length)
+⊢ b.bv.toNat < 256 * 2 ^ (8 * bs.length)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:23:41: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  f - g ≤ 0
+  0 ≤ e ≤ 255
+  d ≥ 0
+  d - e ≥ 1
+  a ≥ 0
+  a - c ≤ -1
+where
+ a := ↑(littleEndian bs)
+ c := ↑2 ^ (8 * (List.map U8.bv bs).length)
+ d := ↑(UScalar.size UScalarTy.U8)
+ e := ↑↑b
+ f := ↑2 ^ (8 * bs.length)
+ g := ↑(BitVec.fromLEBytes (List.map U8.bv bs)).toNat % ↑(256 * 2 ^ (8 * bs.length))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:24:41: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  0 ≤ e ≤ 255
+  d ≥ 0
+  d - e ≥ 1
+  a ≥ 0
+  a - c ≤ -1
+  a - 256*f ≥ 0
+where
+ a := ↑(littleEndian bs)
+ c := ↑2 ^ (8 * (List.map U8.bv bs).length)
+ d := ↑(UScalar.size UScalarTy.U8)
+ e := ↑↑b
+ f := ↑2 ^ (8 * bs.length)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:27:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ g ≤ 255
+  f ≥ 0
+  0 ≤ e ≤ 255
+  e - g ≥ 1
+  d ≥ 0
+  d - e ≥ 1
+  a ≥ 0
+  a - c ≤ -1
+where
+ a := ↑(littleEndian bs)
+ c := ↑2 ^ (8 * (List.map U8.bv bs).length)
+ d := ↑(UScalar.size UScalarTy.U8)
+ e := ↑↑b
+ f := ↑2 ^ (8 * bs.length)
+ g := ↑b.bv.toNat
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:37:4: warning: This simp argument is unused:
+  Equiv.refl_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [blockW, Equiv.trans_apply, Equiv.arrowCongr_apply, E̵q̵u̵i̵v̵.̵r̵e̵f̵l̵_̵a̵p̵p̵l̵y̵,̵ ̵Equiv.curry_apply,
+  ̲  ̲ ̲ ̲finFunctionFinEquiv_apply, finCongr_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:37:41: warning: This simp argument is unused:
+  finFunctionFinEquiv_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [blockW, Equiv.trans_apply, Equiv.arrowCongr_apply, Equiv.refl_apply, Equiv.curry_apply,
+  ̲  ̲ ̲ ̲f̵i̵n̵F̵u̵n̵c̵t̵i̵o̵n̵F̵i̵n̵E̵q̵u̵i̵v̵_̵a̵p̵p̵l̵y̵,̵finCongr_apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:38:4: warning: This simp argument is unused:
+  finCongr_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [blockW, Equiv.trans_apply, Equiv.arrowCongr_apply, Equiv.refl_apply, Equiv.curry_apply,
+  ̲  ̲ ̲ ̲f̵i̵n̵F̵u̵n̵c̵t̵i̵o̵n̵F̵i̵n̵E̵q̵u̵i̵v̵_̵a̵p̵p̵l̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵f̵i̵n̵C̵o̵n̵g̵r̵_̵a̵p̵p̵l̵y̵]̵f̲i̲n̲F̲u̲n̲c̲t̲i̲o̲n̲F̲i̲n̲E̲q̲u̲i̲v̲_̲a̲p̲p̲l̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:40:2: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:51:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  h - i ≤ -1
+  g ≥ 0
+  g - i ≤ -1
+  g + 256*h ≥ 0
+  f ≥ 0
+  f - i ≤ -1
+  f + 256*g + 65536*h ≥ 0
+  e ≥ 0
+  e - i ≤ -1
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a + 256*b + 65536*c + 16777216*d - e - 256*f - 65536*g - 16777216*h ≥ 1
+where
+ a := ↑(answer ⟨4 * ↑j, ⋯⟩).toNat
+ b := ↑(answer ⟨4 * ↑j + 1, ⋯⟩).toNat
+ c := ↑(answer ⟨4 * ↑j + 2, ⋯⟩).toNat
+ d := ↑(answer ⟨4 * ↑j + 3, ⋯⟩).toNat
+ e := ↑(BitVec.ofNat 8 (answer ⟨4 * ↑j, ⋯⟩).toNat).toNat
+ f := ↑(BitVec.ofNat 8 (answer ⟨4 * ↑j + 1, ⋯⟩).toNat).toNat
+ g := ↑(BitVec.ofNat 8 (answer ⟨4 * ↑j + 2, ⋯⟩).toNat).toNat
+ h := ↑(BitVec.ofNat 8 (answer ⟨4 * ↑j + 3, ⋯⟩).toNat).toNat
+ i := ↑2 ^ UScalarTy.U8.numBits
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:50:4: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [byteAt, answerBytes, Aeneas.Std.Array.make, List.getElem_ofFn, littleEndian,
+      L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵ ̵UScalar.val, UScalar.bv, BitVec.toNat_ofNat, UInt8.toNat_lt, Nat.mod_eq_of_lt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:50:34: warning: This simp argument is unused:
+  UScalar.bv
+
+Hint: Omit it from the simp argument list.
+  simp only [byteAt, answerBytes, Aeneas.Std.Array.make, List.getElem_ofFn, littleEndian,
+      List.nil_append, UScalar.val, U̵S̵c̵a̵l̵a̵r̵.̵b̵v̵,̵ ̵BitVec.toNat_ofNat, UInt8.toNat_lt, Nat.mod_eq_of_lt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:50:46: warning: This simp argument is unused:
+  BitVec.toNat_ofNat
+
+Hint: Omit it from the simp argument list.
+  simp only [byteAt, answerBytes, Aeneas.Std.Array.make, List.getElem_ofFn, littleEndian,
+      List.nil_append, UScalar.val, UScalar.bv, B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵,̵ ̵UInt8.toNat_lt, Nat.mod_eq_of_lt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:50:66: warning: This simp argument is unused:
+  UInt8.toNat_lt
+
+Hint: Omit it from the simp argument list.
+  simp only [byteAt, answerBytes, Aeneas.Std.Array.make, List.getElem_ofFn, littleEndian,
+      List.nil_append, UScalar.val, UScalar.bv, BitVec.toNat_ofNat, U̵I̵n̵t̵8̵.̵t̵o̵Nat_̵l̵t̵,̵ ̵N̵a̵t̵.mod_eq_of_lt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedByteValue.lean:50:82: warning: This simp argument is unused:
+  Nat.mod_eq_of_lt
+
+Hint: Omit it from the simp argument list.
+  simp only [byteAt, answerBytes, Aeneas.Std.Array.make, List.getElem_ofFn, littleEndian,
+      List.nil_append, UScalar.val, UScalar.bv, BitVec.toNat_ofNat, UInt8.toNat_lt,̵ ̵N̵a̵t̵.̵m̵o̵d̵_̵e̵q̵_̵o̵f̵_̵l̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitOwnedDecoder.fromLEBytes_value' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.blockW_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.byteWord_answer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

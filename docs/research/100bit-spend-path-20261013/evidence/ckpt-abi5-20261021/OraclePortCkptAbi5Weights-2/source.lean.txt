@@ -1,0 +1,61 @@
+import OraclePortStdAllocation
+import OraclePortCkptAbi4Std
+
+/-! Actual imported mutable-iterator content operations, with S10's fallible
+allocation model. Physical Rust reservation and source loop adoption remain
+separate; no allocator availability is asserted. -/
+set_option autoImplicit false
+namespace AspisR1.OraclePortCkptAbi5Weights
+open Aeneas Aeneas.Std Result
+#print Slice.setAtNat
+#check List.set_append_right
+#check List.set_append_left
+#check List.set_cons_zero
+#check List.set_eq_of_length_le
+
+def overwrite {T : Type} : List T → core.slice.iter.IterMut T →
+    Result (core.slice.iter.IterMut T)
+  | [], it => ok it
+  | x::xs, it => do
+      let (old,rest,back) ← core.slice.iter.IteratorIterMut.next it
+      match old with
+      | none => .fail .panic
+      | some _ => overwrite xs (back rest (some x))
+
+/-- A complete bounded interval is replaced in order through the actual
+next/back operation. The arbitrary pre and suffix are retained. -/
+theorem overwrite_exact {T : Type} (values old pre suffix : List T)
+    (length : values.length = old.length)
+    (bound : (pre ++ old ++ suffix).length ≤ Usize.max) :
+    overwrite values ⟨⟨pre ++ old ++ suffix,bound⟩,pre.length⟩ =
+      ok ⟨⟨pre ++ values ++ suffix,by simpa [List.length_append,length] using bound⟩,
+        pre.length + values.length⟩ := by
+  induction values generalizing pre old with
+  | nil =>
+    have empty : old = [] := List.length_eq_zero.mp length.symm
+    subst old
+    rfl
+  | cons x xs ih =>
+    cases old with
+    | nil => simp only [List.length_cons,List.length_nil] at length; omega
+    | cons y ys =>
+      have tailLength : xs.length = ys.length := by simpa using length
+      have first : pre.length < (pre ++ y::ys ++ suffix).length := by
+        simp only [List.length_append,List.length_cons]; omega
+      simp only [overwrite,core.slice.iter.IteratorIterMut.next]
+      rw [dif_pos (show pre.length < (Slice.len ⟨pre ++ y::ys ++ suffix,bound⟩).val from first)]
+      simp only [bind_tc_ok]
+      change overwrite xs ⟨(⟨pre ++ y::ys ++ suffix,bound⟩ : Slice T).setAtNat pre.length x,
+        pre.length+1⟩ = _
+      have update : (⟨pre ++ y::ys ++ suffix,bound⟩ : Slice T).setAtNat pre.length x =
+          ⟨(pre ++ [x]) ++ ys ++ suffix,by simpa [List.length_append] using bound⟩ := by
+        apply Subtype.ext
+        simp [Slice.setAtNat,List.set_append_right]
+      rw [update]
+      have result := ih ys (pre ++ [x]) tailLength
+        (by simpa [List.length_append] using bound)
+      simpa only [List.length_append,List.length_singleton,List.length_cons,
+        List.append_assoc,List.singleton_append,Nat.add_assoc,Nat.add_comm 1] using result
+
+#print axioms overwrite_exact
+end AspisR1.OraclePortCkptAbi5Weights

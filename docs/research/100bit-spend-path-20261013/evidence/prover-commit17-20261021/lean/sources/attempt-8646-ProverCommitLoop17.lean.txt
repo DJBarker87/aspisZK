@@ -1,0 +1,43 @@
+import Mathlib.Data.List.Basic
+/-! Iteration transport with fresh owned state. A state relation may include
+vectors, cursor, oracle history and every mutable field; no projection of
+those fields is imposed by this theorem. Concrete steps remain obligations. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitLoop17
+
+def run {I S E : Type} (step : I → S → Except E Unit × S) :
+    List I → S → Except E Unit × S
+  | [], state => (.ok (), state)
+  | i :: rest, state =>
+    let (status, after) := step i state
+    match status with
+    | .error e => (.error e, after)
+    | .ok () => run step rest after
+
+def Related {S T E : Type} (rel : S → T → Prop)
+    (left : Except E Unit × S) (right : Except E Unit × T) : Prop :=
+  left.1 = right.1 ∧ rel left.2 right.2
+
+/-- A genuine induction over all lengths, preserving first error, state and
+iteration order. It cannot by itself certify an untranslated Rust callback. -/
+theorem run_related {I S T E : Type} (rel : S → T → Prop)
+    (left : I → S → Except E Unit × S) (right : I → T → Except E Unit × T)
+    (local_step : ∀ i s t, rel s t → Related rel (left i s) (right i t))
+    (inputs : List I) (s : S) (t : T) (initial : rel s t) :
+    Related rel (run left inputs s) (run right inputs t) := by
+  induction inputs generalizing s t with
+  | nil => exact ⟨rfl, initial⟩
+  | cons i rest ih =>
+    obtain ⟨same, after⟩ := local_step i s t initial
+    cases hl : left i s with | mk ls ss =>
+      cases hr : right i t with | mk rs tt =>
+        simp only [Related, hl, hr, Prod.fst, Prod.snd] at same after
+        cases same
+        cases ls with
+        | error e => exact ⟨rfl, after⟩
+        | ok unit =>
+          cases unit
+          simpa only [run, hl, hr] using ih ss tt after
+
+#print axioms run_related
+end R1Z.ProverCommitLoop17

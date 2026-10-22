@@ -1,0 +1,47 @@
+import CheckpointBytesETotal
+import CheckpointBytesBodyArithmetic
+
+set_option autoImplicit false
+namespace AspisR1.CheckpointBytesWord
+open Aeneas Aeneas.Std Result
+open OraclePortCkptAbi2Extracted CheckpointBytesE CheckpointBytesETotal
+open CheckpointBytesArithmetic MultiproofConeCanonical OraclePortCompactDraft
+attribute [local irreducible] e_byte
+
+def select (x : U32) (i : Usize) : Result U8 := do
+  let r ← i % 4#usize
+  let shift ← 8#usize*r
+  let value ← x >>> shift
+  ok (UScalar.cast .U8 value)
+
+def repeated (x : U32) : RawE := ⟨⟨⟨x,x⟩,⟨x,x⟩⟩,⟨⟨x,x⟩,⟨x,x⟩⟩⟩
+
+theorem select_e (x : U32) (i : Usize) (bound : i.val < 4) :
+    e_byte (repeated x) i = select x i := by
+  simp (disch := scalar_tac) [e_byte,select,repeated,
+    aspis_core.field.wide_exact.WideExact.to_limbs,div_four,Array.index_usize,
+    Array.make,Nat.div_eq_of_lt bound]
+
+/-- The first four bytes suffice; all other limbs remain folded away. -/
+theorem select_bytes (x : U32) (i : Usize) (bound : i.val < 4) :
+    ∃ v, select x i = ok v ∧ (le32 x.val)[i.val]? =
+      some (AspisV8R19.SqueezeOracleBridge.decodeByte v) := by
+  let word := (core.num.U32.to_le_bytes x).val
+  have length : word.length = 4 := (core.num.U32.to_le_bytes x).property
+  have inside : i.val < word.length := by omega
+  have cast : Usize.ofNat i.val (by scalar_tac) = i := by
+    apply UScalar.eq_of_val_eq; simp
+  have run := e_byte_raw (repeated x) ⟨i.val,by omega⟩
+  rw [cast,select_e x i bound] at run
+  have first : (rawBytes (repeated x))[i.val]'(by rw [rawBytes_length]; omega) =
+      word[i.val] := by
+    change (word ++ word ++ word ++ word ++ (word ++ word ++ word ++ word))[i.val] = word[i.val]
+    simp (disch := omega) only [List.getElem_append_left,List.length_append,length]
+  rw [first] at run
+  refine ⟨word[i.val],run,?_⟩
+  rw [← CheckpointP6KBytes.word_bytes x]
+  simp [bytesOf,word,List.getElem?_eq_getElem inside]
+
+#print axioms select_e
+#print axioms select_bytes
+end AspisR1.CheckpointBytesWord

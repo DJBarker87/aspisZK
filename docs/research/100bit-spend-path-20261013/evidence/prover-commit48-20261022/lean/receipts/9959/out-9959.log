@@ -1,0 +1,73 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationInitial48.lean:29:9: error: unsolved goals
+case zero
+⊢ (if 0 < 28 then 1 else 0) = 1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationInitial48.lean:32:68: error(lean.unknownIdentifier): Unknown constant `Polynomial.coeff_one_succ`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationInitial48.lean:32:4: error: unsolved goals
+case pos
+k : ℕ
+h : k + 1 < 28
+⊢ 0 = Polynomial.coeff 1 (k + 1)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationInitial48.lean:33:26: error(lean.unknownIdentifier): Unknown constant `Polynomial.coeff_one_succ`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationInitial48.lean:33:4: error: unsolved goals
+case neg
+k : ℕ
+h : ¬k + 1 < 28
+⊢ 0 = Polynomial.coeff 1 (k + 1)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationInitial48.lean:58:49: error: Type mismatch: After simplification, term
+  hd
+ has type
+  @Eq (ZMod AspisCircleGroupOrder.P) (decode den) (denProd (↑i) (↑0#u8) 28)
+but is expected to have type
+  @Eq (ZMod AspisCircleGroupOrder.P) (decode den) (denProd (↑i) 0 28)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationInitial48.lean:64:2: error: unsolved goals
+case refine_1
+i : U8
+hi : ↑i < 28
+ys : ℕ → U32
+den : U32
+hy : basis_factors (array 28#usize initial) 1#u32 0#u8 i 0#u8 28#u8 = ok (array 28#usize ys, den)
+hcy : ∀ k < 28, canonical (ys k)
+hcd : canonical den
+hpoly : poly ys = poly initial * polyProd (↑i) (↑0#u8) 28
+hd : decode den = decode 1#u32 * denProd (↑i) (↑0#u8) 28
+one : decode 1#u32 = 1
+hd' : decode den = denProd (↑i) 0 28
+hn : den ≠ 0#u32
+⊢ (do
+      let basis ← (Array.repeat 28#usize field.M31.ZERO).update 0#usize 1#u32
+      basis_factors basis 1#u32 0#u8 i 0#u8 28#u8) =
+    ok (array 28#usize ys, den)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationInitial48.lean:64:23: warning: This simp argument is unused:
+  initial_source
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵e̵p̵a̵r̵e̵,̵i̵n̵i̵t̵i̵a̵l̵_̵s̵o̵u̵r̵c̵e̵,̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵O̵N̵E̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵y̵]̵[̲p̲r̲e̲p̲a̲r̲e̲,̲ ̲f̲i̲e̲l̲d̲.̲M̲3̲1̲.̲O̲N̲E̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationInitial48.lean:64:52: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵e̵p̵a̵r̵e̵,̵i̵n̵i̵t̵i̵a̵l̵_̵s̵o̵u̵r̵c̵e̵,̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵O̵N̵E̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵y̵]̵[̲p̲r̲e̲p̲a̲r̲e̲,̲ ̲i̲n̲i̲t̲i̲a̲l̲_̲s̲o̲u̲r̲c̲e̲,̲ ̲f̲i̲e̲l̲d̲.̲M̲3̲1̲.̲O̲N̲E̲,̲ ̲h̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationInitial48.lean:64:63: warning: This simp argument is unused:
+  hy
+
+Hint: Omit it from the simp argument list.
+  simp only [prepare, ̲initial_source, ̲field.M31.ONE, ̲bind_tc_ok,̵h̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitInterpolationInitial48.initial_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitInterpolationInitial48.initial_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitInterpolationInitial48.initial_poly' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitInterpolationInitial48.initial_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitInterpolationInitial48.prepare_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

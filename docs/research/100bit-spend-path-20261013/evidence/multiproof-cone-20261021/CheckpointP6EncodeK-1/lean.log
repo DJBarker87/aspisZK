@@ -1,0 +1,128 @@
+/Users/dominic/ZK/.worktrees/cx-cones-p6/docs/research/100bit-spend-path-20261013/lean/CheckpointP6EncodeK.lean:17:50: error: unsolved goals
+q : aspis_core.field.QM31
+⊢ ∃ out,
+    (do
+          let (s, to_slice_mut_back) ←
+            lift
+                (⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8], ⋯⟩,
+                  Array.from_slice
+                    ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                      ⋯⟩)
+          let x ←
+            if 8 ≤ (↑s).length then ok (⟨List.take 8 ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! 0 ↑s', ⋯⟩) else fail Error.panic
+          let s1 ←
+            let (s, index_mut_back) := x
+              do
+              let x ←
+                if 4 ≤ (↑s).length then ok (⟨List.take 4 ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! 0 ↑s', ⋯⟩)
+                  else fail Error.panic
+              let s1 ←
+                let (s, index_mut_back) := x
+                  do
+                  let s1 ←
+                    lift
+                        ⟨[BitVec.setWidth 8 (U32.bv q.c0.a)#uscalar, BitVec.setWidth 8 (U32.bv q.c0.a >>> 8)#uscalar,
+                            BitVec.setWidth 8 (BitVec.setWidth 24 (U32.bv q.c0.a >>> 8) >>> 8)#uscalar,
+                            BitVec.setWidth 8
+                                (BitVec.setWidth 16 (BitVec.setWidth 24 (U32.bv q.c0.a >>> 8) >>> 8) >>> 8)#uscalar],
+                          ⋯⟩
+                  let s2 ←
+                    if Usize.ofNatCore (↑s).length ⋯ = Usize.ofNatCore (↑s1).length ⋯ then ok s1 else fail Error.panic
+                  let (s3, index_mut_back1) ←
+                    if 8 ≤ (↑(index_mut_back s2)).length then
+                        ok
+                          (⟨List.slice 4 8 ↑(index_mut_back s2), ⋯⟩, fun s' =>
+                            ⟨(↑(index_mut_back s2)).setSlice! 4 ↑s', ⋯⟩)
+                      else fail Error.panic
+                  let s4 ←
+                    lift
+                        ⟨[BitVec.setWidth 8 (U32.bv q.c0.b)#uscalar, BitVec.setWidth 8 (U32.bv q.c0.b >>> 8)#uscalar,
+                            BitVec.setWidth 8 (BitVec.setWidth 24 (U32.bv q.c0.b >>> 8) >>> 8)#uscalar,
+                            BitVec.setWidth 8
+                                (BitVec.setWidth 16 (BitVec.setWidth 24 (U32.bv q.c0.b >>> 8) >>> 8) >>> 8)#uscalar],
+                          ⋯⟩
+                  let s5 ←
+                    if Usize.ofNatCore (↑s3).length ⋯ = Usize.ofNatCore (↑s4).length ⋯ then ok s4 else fail Error.panic
+                  ok (index_mut_back1 s5)
+              let (s2, index_mut_back1) ←
+                if 16 ≤ (↑(index_mut_back s1)).length then
+                    ok
+                      (⟨List.slice 8 16 ↑(index_mut_back s1), ⋯⟩, fun s' => ⟨(↑(index_mut_back s1)).setSlice! 8 ↑s', ⋯⟩)
+                  else fail Error.panic
+              let x ←
+                if 4 ≤ (↑s2).length then ok (⟨List.take 4 ↑s2, ⋯⟩, fun s' => ⟨(↑s2).setSlice! 0 ↑s', ⋯⟩)
+                  else fail Error.panic
+              let s3 ←
+                let (s, index_mut_back) := x
+                  do
+                  let s1 ←
+                    lift
+                        ⟨[BitVec.setWidth 8 (U32.bv q.c1.a)#uscalar, BitVec.setWidth 8 (U32.bv q.c1.a >>> 8)#uscalar,
+                            BitVec.setWidth 8 (BitVec.setWidth 24 (U32.bv q.c1.a >>> 8) >>> 8)#uscalar,
+                            BitVec.setWidth 8
+                                (BitVec.setWidth 16 (BitVec.setWidth 24 (U32.bv q.c1.a >>> 8) >>> 8) >>> 8)#uscalar],
+                          ⋯⟩
+                  let s2 ←
+                    if Usize.ofNatCore (↑s).length ⋯ = Usize.ofNatCore (↑s1).length ⋯ then ok s1 else fail Error.panic
+                  let (s3, index_mut_back1) ←
+                    if 8 ≤ (↑(index_mut_back s2)).length then
+                        ok
+                          (⟨List.slice 4 8 ↑(index_mut_back s2), ⋯⟩, fun s' =>
+                            ⟨(↑(index_mut_back s2)).setSlice! 4 ↑s', ⋯⟩)
+                      else fail Error.panic
+                  let s4 ←
+                    lift
+                        ⟨[BitVec.setWidth 8 (U32.bv q.c1.b)#uscalar, BitVec.setWidth 8 (U32.bv q.c1.b >>> 8)#uscalar,
+                            BitVec.setWidth 8 (BitVec.setWidth 24 (U32.bv q.c1.b >>> 8) >>> 8)#uscalar,
+                            BitVec.setWidth 8
+                                (BitVec.setWidth 16 (BitVec.setWidth 24 (U32.bv q.c1.b >>> 8) >>> 8) >>> 8)#uscalar],
+                          ⋯⟩
+                  let s5 ←
+                    if Usize.ofNatCore (↑s3).length ⋯ = Usize.ofNatCore (↑s4).length ⋯ then ok s4 else fail Error.panic
+                  ok (index_mut_back1 s5)
+              ok (index_mut_back1 s3)
+          ok (to_slice_mut_back s1)) =
+        ok out ∧
+      ↑out =
+        [BitVec.setWidth 8 (U32.bv q.c0.a)#uscalar, BitVec.setWidth 8 (U32.bv q.c0.a >>> 8)#uscalar,
+          BitVec.setWidth 8 (BitVec.setWidth 24 (U32.bv q.c0.a >>> 8) >>> 8)#uscalar,
+          BitVec.setWidth 8 (BitVec.setWidth 16 (BitVec.setWidth 24 (U32.bv q.c0.a >>> 8) >>> 8) >>> 8)#uscalar,
+          BitVec.setWidth 8 (U32.bv q.c0.b)#uscalar, BitVec.setWidth 8 (U32.bv q.c0.b >>> 8)#uscalar,
+          BitVec.setWidth 8 (BitVec.setWidth 24 (U32.bv q.c0.b >>> 8) >>> 8)#uscalar,
+          BitVec.setWidth 8 (BitVec.setWidth 16 (BitVec.setWidth 24 (U32.bv q.c0.b >>> 8) >>> 8) >>> 8)#uscalar,
+          BitVec.setWidth 8 (U32.bv q.c1.a)#uscalar, BitVec.setWidth 8 (U32.bv q.c1.a >>> 8)#uscalar,
+          BitVec.setWidth 8 (BitVec.setWidth 24 (U32.bv q.c1.a >>> 8) >>> 8)#uscalar,
+          BitVec.setWidth 8 (BitVec.setWidth 16 (BitVec.setWidth 24 (U32.bv q.c1.a >>> 8) >>> 8) >>> 8)#uscalar,
+          BitVec.setWidth 8 (U32.bv q.c1.b)#uscalar, BitVec.setWidth 8 (U32.bv q.c1.b >>> 8)#uscalar,
+          BitVec.setWidth 8 (BitVec.setWidth 24 (U32.bv q.c1.b >>> 8) >>> 8)#uscalar,
+          BitVec.setWidth 8 (BitVec.setWidth 16 (BitVec.setWidth 24 (U32.bv q.c1.b >>> 8) >>> 8) >>> 8)#uscalar]
+/Users/dominic/ZK/.worktrees/cx-cones-p6/docs/research/100bit-spend-path-20261013/lean/CheckpointP6EncodeK.lean:21:4: warning: This simp argument is unused:
+  core.slice.index.SliceIndexRangeUsizeSlice
+
+Hint: Omit it from the simp argument list.
+  simp [̵e̵n̵c̵o̵d̵e̵_̵k̵,̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵Q̵M̵3̵1̵.̵w̵r̵i̵t̵e̵_̵l̵e̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵C̵M̵3̵1̵.̵w̵r̵i̵t̵e̵_̵l̵e̵_̵b̵y̵t̵e̵s̵,̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵,̵[̲e̲n̲c̲o̲d̲e̲_̲k̲,̲ ̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲Q̲M̲3̲1̲.̲w̲r̲i̲t̲e̲_̲l̲e̲_̲b̲y̲t̲e̲s̲,̲ ̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲C̲M̲3̲1̲.̲w̲r̲i̲t̲e̲_̲l̲e̲_̲b̲y̲t̲e̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲M̲3̲1̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲,̲ core.slice.index.Slice.index_mut,
+      c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵,̵core.slice.index.SliceIndexRangeUsizeSlice.index_mut, c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵_̵m̵u̵t̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵r̵e̵p̵e̵a̵t̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵3̵2̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵L̵E̵B̵y̵t̵e̵s̵]̵c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲_̲m̲u̲t̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲r̲e̲p̲e̲a̲t̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲y̲t̲e̲s̲,̲ ̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲3̲2̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲,̲ ̲B̲i̲t̲V̲e̲c̲.̲t̲o̲L̲E̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-cones-p6/docs/research/100bit-spend-path-20261013/lean/CheckpointP6EncodeK.lean:24:4: warning: This simp argument is unused:
+  Array.from_slice
+
+Hint: Omit it from the simp argument list.
+  simp [encode_k, ̲aspis_core.field.QM31.write_le_bytes,
+  ̵  ̵ ̵ ̵aspis_core.field.CM31.write_le_bytes,
+  ̲ ̲ ̲ ̲ ̲aspis_core.field.M31.to_le_bytes,
+  ̵  ̵ ̵ ̵core.slice.index.Slice.index_mut,
+      core.slice.index.SliceIndexRangeUsizeSlice,
+      core.slice.index.SliceIndexRangeUsizeSlice.index_mut,
+  ̵  ̵ ̵ ̵core.slice.Slice.copy_from_slice,A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵_̵m̵u̵t̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵
+      Array.f̵r̵t̲o_̲s̲l̲i̲c̲e̲_̲mu̲t̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_slice, ̲Array.repeat, ̲Slice.len, ̲Slice.length, ̲bytes,
+      core.num.U32.to_le_bytes, ̲BitVec.toLEBytes]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CheckpointP6EncodeK.encode_k_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

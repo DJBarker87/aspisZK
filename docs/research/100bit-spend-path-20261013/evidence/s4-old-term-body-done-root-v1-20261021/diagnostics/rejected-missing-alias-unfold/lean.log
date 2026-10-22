@@ -1,0 +1,59 @@
+/tmp/root-s4-concrete-reverse-head-v1-20261021/sources/S4ConcreteReverseHeadRootV1.lean:36:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+in the target expression
+  AspisR1FastDotsFixedInnerBodyStepBridgeV1.NewTermBody ops q g slot iter sums = ok (done sums)
+
+case none
+ops : Ops
+q : Std.Array U8 608#usize
+g : Std.Array Wide 29#usize
+slot : Usize
+iter : Range
+sums : Std.Array U64 8#usize
+it : core.ops.range.Range (UScalar UScalarTy.Usize)
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, it)
+hbody :
+  fast_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0.body ops q g slot iter
+      sums =
+    ok (done sums)
+hrest :
+  (let (o, iter1) := (none, it)
+    match o with
+    | none => ok (done sums)
+    | some term => do
+      let i ← slot * 120#usize
+      let i1 ← term * 4#usize
+      let i2 ← i + i1
+      let i3 ← i + i1
+      let i4 ← i3 + 4#usize
+      let s ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) q
+            { start := i2, «end» := i4 }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+      let a2 ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+      let o1 ← ops.m31FromBytes a2
+      let scalar ← core.option.Option.unwrap o1
+      let we ← g.index_usize term
+      let coefficient ← ops.wideToLimbs we
+      let i5 ← ops.wideLimbCount
+      let sums1 ←
+        fast_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0_loop0 ops
+            { start := 0#usize, «end» := i5 } sums scalar coefficient
+      ok (cont (iter1, sums1))) =
+    ok (done sums)
+⊢ AspisR1FastDotsFixedInnerBodyStepBridgeV1.NewTermBody ops q g slot iter sums = ok (done sums)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1FastDotsConcreteReverseHeadRootV1.old_term_body_done_fixed_body' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

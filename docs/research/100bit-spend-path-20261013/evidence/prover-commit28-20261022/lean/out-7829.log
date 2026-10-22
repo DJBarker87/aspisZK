@@ -1,0 +1,311 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInit28.lean:32:14: error: Tactic `rfl` failed: The left-hand side
+  have i := publicBytes.len;
+  do
+  let r ← core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i
+  let r1 ←
+    core.result.Result.map_err
+        (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError hash) r ()
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let s ← lift (Array.make 1#usize [0#u8] r1_wire.SemanticTranscript.new._proof_4).to_slice
+      let a ← lift (core.num.U32.to_le_bytes val)
+      let s1 ← lift a.to_slice
+      let s2 ← lift (Array.to_slice root)
+      let s3 ← lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, publicBytes, s2] ⋯).to_slice
+      let a1 ← hash.digest token s3
+      ok (core.result.Result.Ok { state := a1, hash := token, next_row := 0#u8 })
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_wire.SemanticTranscript H)
+        (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  do
+    let length ← liftM (fail e)
+    match length with
+      | core.result.Result.Err a => pure (core.result.Result.Err r1_wire.Error.Public)
+      | core.result.Result.Ok length => do
+        let state ←
+          hash.digest token
+              (Array.make 5#usize
+                  [r1_wire.DOMAIN, (Array.make 1#usize [0#u8] start._proof_4).to_slice,
+                    (core.num.U32.to_le_bytes length).to_slice, publicBytes, Array.to_slice root]
+                  ⋯).to_slice
+        pure (core.result.Result.Ok { state := state, hash := token, next_row := 0#u8 })
+
+case fail
+H : Type
+hash : aspis_core.digest.Digest32 H
+token : H
+publicBytes : Slice U8
+root : Bytes32
+e : Error
+h : core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from publicBytes.len = fail e
+⊢ (have i := publicBytes.len;
+    do
+    let r ← core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i
+    let r1 ←
+      core.result.Result.map_err
+          (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError hash) r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let s ← lift (Array.make 1#usize [0#u8] r1_wire.SemanticTranscript.new._proof_4).to_slice
+        let a ← lift (core.num.U32.to_le_bytes val)
+        let s1 ← lift a.to_slice
+        let s2 ← lift (Array.to_slice root)
+        let s3 ← lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, publicBytes, s2] ⋯).to_slice
+        let a1 ← hash.digest token s3
+        ok (core.result.Result.Ok { state := a1, hash := token, next_row := 0#u8 })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let length ← liftM (fail e)
+    match length with
+      | core.result.Result.Err a => pure (core.result.Result.Err r1_wire.Error.Public)
+      | core.result.Result.Ok length => do
+        let state ←
+          hash.digest token
+              (Array.make 5#usize
+                  [r1_wire.DOMAIN, (Array.make 1#usize [0#u8] start._proof_4).to_slice,
+                    (core.num.U32.to_le_bytes length).to_slice, publicBytes, Array.to_slice root]
+                  ⋯).to_slice
+        pure (core.result.Result.Ok { state := state, hash := token, next_row := 0#u8 })
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInit28.lean:33:11: error: Tactic `rfl` failed: The left-hand side
+  have i := publicBytes.len;
+  do
+  let r ← core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i
+  let r1 ←
+    core.result.Result.map_err
+        (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError hash) r ()
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let s ← lift (Array.make 1#usize [0#u8] r1_wire.SemanticTranscript.new._proof_4).to_slice
+      let a ← lift (core.num.U32.to_le_bytes val)
+      let s1 ← lift a.to_slice
+      let s2 ← lift (Array.to_slice root)
+      let s3 ← lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, publicBytes, s2] ⋯).to_slice
+      let a1 ← hash.digest token s3
+      ok (core.result.Result.Ok { state := a1, hash := token, next_row := 0#u8 })
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_wire.SemanticTranscript H)
+        (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  do
+    let length ← liftM div
+    match length with
+      | core.result.Result.Err a => pure (core.result.Result.Err r1_wire.Error.Public)
+      | core.result.Result.Ok length => do
+        let state ←
+          hash.digest token
+              (Array.make 5#usize
+                  [r1_wire.DOMAIN, (Array.make 1#usize [0#u8] start._proof_4).to_slice,
+                    (core.num.U32.to_le_bytes length).to_slice, publicBytes, Array.to_slice root]
+                  ⋯).to_slice
+        pure (core.result.Result.Ok { state := state, hash := token, next_row := 0#u8 })
+
+case div
+H : Type
+hash : aspis_core.digest.Digest32 H
+token : H
+publicBytes : Slice U8
+root : Bytes32
+h : core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from publicBytes.len = div
+⊢ (have i := publicBytes.len;
+    do
+    let r ← core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i
+    let r1 ←
+      core.result.Result.map_err
+          (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError hash) r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let s ← lift (Array.make 1#usize [0#u8] r1_wire.SemanticTranscript.new._proof_4).to_slice
+        let a ← lift (core.num.U32.to_le_bytes val)
+        let s1 ← lift a.to_slice
+        let s2 ← lift (Array.to_slice root)
+        let s3 ← lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, publicBytes, s2] ⋯).to_slice
+        let a1 ← hash.digest token s3
+        ok (core.result.Result.Ok { state := a1, hash := token, next_row := 0#u8 })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let length ← liftM div
+    match length with
+      | core.result.Result.Err a => pure (core.result.Result.Err r1_wire.Error.Public)
+      | core.result.Result.Ok length => do
+        let state ←
+          hash.digest token
+              (Array.make 5#usize
+                  [r1_wire.DOMAIN, (Array.make 1#usize [0#u8] start._proof_4).to_slice,
+                    (core.num.U32.to_le_bytes length).to_slice, publicBytes, Array.to_slice root]
+                  ⋯).to_slice
+        pure (core.result.Result.Ok { state := state, hash := token, next_row := 0#u8 })
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInit28.lean:35:20: error: Tactic `rfl` failed: The left-hand side
+  have i := publicBytes.len;
+  do
+  let r ← core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i
+  let r1 ←
+    core.result.Result.map_err
+        (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError hash) r ()
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let s ← lift (Array.make 1#usize [0#u8] r1_wire.SemanticTranscript.new._proof_4).to_slice
+      let a ← lift (core.num.U32.to_le_bytes val)
+      let s1 ← lift a.to_slice
+      let s2 ← lift (Array.to_slice root)
+      let s3 ← lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, publicBytes, s2] ⋯).to_slice
+      let a1 ← hash.digest token s3
+      ok (core.result.Result.Ok { state := a1, hash := token, next_row := 0#u8 })
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_wire.SemanticTranscript H)
+        (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  do
+    let length ← liftM (ok (core.result.Result.Ok a✝))
+    match length with
+      | core.result.Result.Err a => pure (core.result.Result.Err r1_wire.Error.Public)
+      | core.result.Result.Ok length => do
+        let state ←
+          hash.digest token
+              (Array.make 5#usize
+                  [r1_wire.DOMAIN, (Array.make 1#usize [0#u8] start._proof_4).to_slice,
+                    (core.num.U32.to_le_bytes length).to_slice, publicBytes, Array.to_slice root]
+                  ⋯).to_slice
+        pure (core.result.Result.Ok { state := state, hash := token, next_row := 0#u8 })
+
+case ok.Ok
+H : Type
+hash : aspis_core.digest.Digest32 H
+token : H
+publicBytes : Slice U8
+root : Bytes32
+a✝ : U32
+h : core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from publicBytes.len = ok (core.result.Result.Ok a✝)
+⊢ (have i := publicBytes.len;
+    do
+    let r ← core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i
+    let r1 ←
+      core.result.Result.map_err
+          (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError hash) r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let s ← lift (Array.make 1#usize [0#u8] r1_wire.SemanticTranscript.new._proof_4).to_slice
+        let a ← lift (core.num.U32.to_le_bytes val)
+        let s1 ← lift a.to_slice
+        let s2 ← lift (Array.to_slice root)
+        let s3 ← lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, publicBytes, s2] ⋯).to_slice
+        let a1 ← hash.digest token s3
+        ok (core.result.Result.Ok { state := a1, hash := token, next_row := 0#u8 })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let length ← liftM (ok (core.result.Result.Ok a✝))
+    match length with
+      | core.result.Result.Err a => pure (core.result.Result.Err r1_wire.Error.Public)
+      | core.result.Result.Ok length => do
+        let state ←
+          hash.digest token
+              (Array.make 5#usize
+                  [r1_wire.DOMAIN, (Array.make 1#usize [0#u8] start._proof_4).to_slice,
+                    (core.num.U32.to_le_bytes length).to_slice, publicBytes, Array.to_slice root]
+                  ⋯).to_slice
+        pure (core.result.Result.Ok { state := state, hash := token, next_row := 0#u8 })
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInit28.lean:35:20: error: Tactic `rfl` failed: The left-hand side
+  have i := publicBytes.len;
+  do
+  let r ← core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i
+  let r1 ←
+    core.result.Result.map_err
+        (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError hash) r ()
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let s ← lift (Array.make 1#usize [0#u8] r1_wire.SemanticTranscript.new._proof_4).to_slice
+      let a ← lift (core.num.U32.to_le_bytes val)
+      let s1 ← lift a.to_slice
+      let s2 ← lift (Array.to_slice root)
+      let s3 ← lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, publicBytes, s2] ⋯).to_slice
+      let a1 ← hash.digest token s3
+      ok (core.result.Result.Ok { state := a1, hash := token, next_row := 0#u8 })
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_wire.SemanticTranscript H)
+        (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  do
+    let length ← liftM (ok (core.result.Result.Err a✝))
+    match length with
+      | core.result.Result.Err a => pure (core.result.Result.Err r1_wire.Error.Public)
+      | core.result.Result.Ok length => do
+        let state ←
+          hash.digest token
+              (Array.make 5#usize
+                  [r1_wire.DOMAIN, (Array.make 1#usize [0#u8] start._proof_4).to_slice,
+                    (core.num.U32.to_le_bytes length).to_slice, publicBytes, Array.to_slice root]
+                  ⋯).to_slice
+        pure (core.result.Result.Ok { state := state, hash := token, next_row := 0#u8 })
+
+case ok.Err
+H : Type
+hash : aspis_core.digest.Digest32 H
+token : H
+publicBytes : Slice U8
+root : Bytes32
+a✝ : core.num.error.TryFromIntError
+h : core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from publicBytes.len = ok (core.result.Result.Err a✝)
+⊢ (have i := publicBytes.len;
+    do
+    let r ← core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i
+    let r1 ←
+      core.result.Result.map_err
+          (r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError hash) r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let s ← lift (Array.make 1#usize [0#u8] r1_wire.SemanticTranscript.new._proof_4).to_slice
+        let a ← lift (core.num.U32.to_le_bytes val)
+        let s1 ← lift a.to_slice
+        let s2 ← lift (Array.to_slice root)
+        let s3 ← lift (Array.make 5#usize [r1_wire.DOMAIN, s, s1, publicBytes, s2] ⋯).to_slice
+        let a1 ← hash.digest token s3
+        ok (core.result.Result.Ok { state := a1, hash := token, next_row := 0#u8 })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let length ← liftM (ok (core.result.Result.Err a✝))
+    match length with
+      | core.result.Result.Err a => pure (core.result.Result.Err r1_wire.Error.Public)
+      | core.result.Result.Ok length => do
+        let state ←
+          hash.digest token
+              (Array.make 5#usize
+                  [r1_wire.DOMAIN, (Array.make 1#usize [0#u8] start._proof_4).to_slice,
+                    (core.num.U32.to_le_bytes length).to_slice, publicBytes, Array.to_slice root]
+                  ⋯).to_slice
+        pure (core.result.Result.Ok { state := state, hash := token, next_row := 0#u8 })
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInit28.lean:45:19: error: Application type mismatch: The argument
+  ProverCommitWalk28.rejected (Array.repeat 32#usize 0#u8)
+has type
+  ProverCommitWalk28.Outcome
+but is expected to have type
+  Unit
+in the application
+  pure (ProverCommitWalk28.rejected (Array.repeat 32#usize 0#u8))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInit28.lean:46:19: error: Type mismatch
+  ProverCommitWalk28.continuation effect
+has type
+  ProverCommitWalk28.SemanticState →
+    ProverCommitWalk28.Records → AspisR1SimControl21.transport.Variant → M ProverCommitWalk28.Outcome
+but is expected to have type
+  M Unit
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInit28.lean:47:6: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+'R1Z.ProverCommitInit28.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitInit28.walk_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

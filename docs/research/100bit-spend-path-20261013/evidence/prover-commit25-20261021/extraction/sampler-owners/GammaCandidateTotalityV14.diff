@@ -1,0 +1,37 @@
+--- retained/GammaCandidateTotalityV14
++++ env-J/GammaCandidateTotalityV14
+@@ -225,14 +225,7 @@
+       exact hadd1
+     refine ⟨out, ?_⟩
+     unfold AspisR1GammaCaller.sampler.gamma_sample
+-    rw [hlow']
+-    rw [bind_pair_ok]
+-    rw [hn]
+-    simp only [bind_tc_ok]
+-    rw [hadd1']
+-    rw [bind_pair_ok]
+-    rw [hbool]
+-    simp only [Bool.false_eq_true, if_false, bind_tc_ok, hdecode]
++    simp only [hlow',bind_tc_ok,hn,hadd1',hbool,Bool.false_eq_true,if_false,hdecode]
+   · have hcarry1pos : 0 < carry1.val := by
+       have hne : carry1.val ≠ 0 := by
+         intro hz
+@@ -280,17 +273,7 @@
+       exact hadd2
+     refine ⟨out, ?_⟩
+     unfold AspisR1GammaCaller.sampler.gamma_sample
+-    rw [hlow']
+-    rw [bind_pair_ok]
+-    rw [hn]
+-    simp only [bind_tc_ok]
+-    rw [hadd1']
+-    rw [bind_pair_ok]
+-    rw [hbool]
+-    rw [if_pos rfl]
+-    rw [hadd2']
+-    rw [bind_pair_ok]
+-    simp only [bind_tc_ok, hdecode]
++    simp only [hlow',bind_tc_ok,hn,hadd1',hbool,if_true,hadd2',hdecode]
+ 
+ 
+ #print axioms candidate_gamma_total

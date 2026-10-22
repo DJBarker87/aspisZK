@@ -1,0 +1,117 @@
+import R1Z.SimCostCollect5
+import R1Z.ProverCommitFuelJoin22
+
+/-! Worst-case cost of selection on the retained independent five-word fuel
+tape. This includes explicit byte zero tests. It does not charge production
+of the tape, nor assert a source coupling for the shipped coin callback. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.SimCostRetry5
+open R1Z.SimCostWriter R1Z.SimCostCollect5 R0Z.FsStatement R0Z.FsGood R0Z.FsAbort
+
+/-- Three RAM ticks per byte: load, zero comparison, Boolean/control update. -/
+def zeroBytes : (n : Nat) → (Fin n → UInt8) → Costed Bool
+  | 0, _ => (true,0)
+  | n+1, bytes =>
+    bind (zeroBytes n (fun i => bytes i.succ)) fun tail =>
+      ((bytes 0 == 0) && tail,3)
+
+theorem zeroBytes_erase (n : Nat) (bytes : Fin n → UInt8) :
+    (zeroBytes n bytes).1 = true ↔ ∀ i, bytes i=0 := by
+  induction n with
+  | zero => simp [zeroBytes]
+  | succ n ih =>
+    simp only [zeroBytes, erase_bind, Bool.and_eq_true, beq_iff_eq, ih]
+    constructor
+    · rintro ⟨h0,ht⟩ i
+      exact Fin.cases h0 ht i
+    · intro h
+      exact ⟨h 0, fun i => h i.succ⟩
+
+theorem zeroBytes_cost (n : Nat) (bytes : Fin n → UInt8) :
+    (zeroBytes n bytes).2 = 3*n := by
+  induction n with
+  | zero => rfl
+  | succ n ih => simp only [zeroBytes, cost_bind, ih]; omega
+
+attribute [local irreducible] zeroBytes
+
+def zeroWord (word : OracleAnswer) : Costed Bool := zeroBytes 32 word
+
+theorem zeroWord_erase (word : OracleAnswer) :
+    (zeroWord word).1 = true ↔ word=(fun _ => 0) := by
+  rw [zeroWord, zeroBytes_erase]
+  exact ⟨fun h => funext h, fun h i => congrFun h i⟩
+
+theorem zeroWord_cost (word : OracleAnswer) : (zeroWord word).2 = 96 :=
+  zeroBytes_cost 32 word
+
+/-- Stop at the first nonzero answer; two further control/output ticks per
+visited word and one base-case tick. All supplied-word zero tests are charged. -/
+def search : (n : Nat) → (Fin n → OracleAnswer) → Costed (Option OracleAnswer)
+  | 0, _ => (none,1)
+  | n+1, words =>
+    bind (zeroWord (words 0)) fun zero =>
+      if zero then
+        bind (search n (fun i => words i.succ)) fun out => (out,2)
+      else (some (words 0),2)
+
+theorem search_none (n : Nat) (words : Fin n → OracleAnswer) :
+    (search n words).1 = none ↔ ∀ i, words i=(fun _ => 0) := by
+  induction n with
+  | zero => simp [search]
+  | succ n ih =>
+    simp only [search, erase_bind]
+    by_cases hz : (zeroWord (words 0)).1 = true
+    · simp only [hz, ↓reduceIte, erase_bind, ih]
+      have h0 := (zeroWord_erase (words 0)).mp hz
+      exact ⟨fun h => Fin.forall_fin_succ.mpr ⟨h0,h⟩,
+        fun h => fun i => h i.succ⟩
+    · have hzFalse : (zeroWord (words 0)).1 = false := Bool.eq_false_iff.mpr hz
+      simp only [hzFalse, Bool.false_eq_true, ↓reduceIte, Option.some_ne_none, false_iff]
+      intro h
+      exact hz ((zeroWord_erase _).mpr (h 0))
+
+theorem search_bound (n : Nat) (words : Fin n → OracleAnswer) :
+    (search n words).2 ≤ 98*n+1 := by
+  induction n with
+  | zero => exact Nat.le_refl _
+  | succ n ih =>
+    have hh := ih (fun i => words i.succ)
+    simp only [search, cost_bind, zeroWord_cost]
+    split <;> simp only [cost_bind] <;> omega
+
+attribute [local irreducible] search
+
+def allSearch (tape : ProverCommitFuelJoin22.Tape) :=
+  collect 24 (fun i => search 5 (tape i))
+
+theorem allSearch_bound (tape : ProverCommitFuelJoin22.Tape) :
+    (allSearch tape).2 ≤ 11832 := by
+  exact collect_bound 24 491 _ (fun i => search_bound 5 (tape i))
+
+/-- Exact failure event for the selector, under the retained uniform tape
+carrier. This reuses the certified fuel law; it is not a shipped-source law. -/
+theorem exhaustion_mass :
+    eventMass (fun tape : ProverCommitFuelJoin22.Tape =>
+      ∃ i : Fin 24, (search 5 (tape i)).1 = none) ≤ 1/(2 : ℚ)^120 := by
+  have he : (fun tape : ProverCommitFuelJoin22.Tape =>
+      ∃ i : Fin 24, (search 5 (tape i)).1 = none) =
+      (fun tape => ∃ i, ProverCommitFuelJoin22.failure i tape) := by
+    funext tape
+    apply propext
+    simp only [search_none, ProverCommitFuelJoin22.failure,
+      ProverCommitFuelMass22.exhausted, ProverCommitFuelMass22.k]
+  rw [he]
+  exact (ProverCommitFuelMass22.union_bound ProverCommitFuelJoin22.failure
+    ProverCommitFuelJoin22.failure_mass).trans ProverCommitFuelMass22.charge_le
+
+#print axioms zeroBytes_erase
+#print axioms zeroBytes_cost
+#print axioms zeroWord_erase
+#print axioms zeroWord_cost
+#print axioms search_none
+#print axioms search_bound
+#print axioms allSearch_bound
+#print axioms exhaustion_mass
+end R1Z.SimCostRetry5

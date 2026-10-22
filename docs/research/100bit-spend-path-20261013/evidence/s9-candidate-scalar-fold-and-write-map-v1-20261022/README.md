@@ -1,0 +1,9 @@
+# S9 candidate scalar fold and array-write mapping
+
+PROVED locally: the actual generated candidate scalar_factor maps to the retained concrete P6 scalar_factor over the same mapped input arrays. The theorem covers Result success, failure and divergence and transports the generated fold accumulator/closure state. It reuses the existing generated-fold/range-fold correspondence and the checked per-call callback operation bridge; no operation-success or scalar-meaning premise is introduced. Equal normalized generated fold bodies are checked definitionally, not inferred from source span equality.
+
+PROVED generic prerequisite: a successful bounded Array.update commutes with the pointwise carrier map and returns the same mapped output array. The explicit bound and actual update-success premise remain in this generic theorem; branch transport will discharge them internally for its fixed indices.
+
+OPEN: complete candidate branch-tail/body/outer-helper refinement, final four-output coefficient composition, actual Rust/caller/library correspondence, candidate adoption and final source/artifact re-pins, coherent replay and the composed 100-bit theorem. These are source/model links, not a security conclusion. The explicit-array candidate remains separate from production.
+
+Exact target, source revision, status, command, tool/import/source/object hashes, wall time, peak RSS, observed swaps and named standard-axiom reports are retained. No compiled objects are included. Warm Lean 4.32 dependencies were reused, with one local -j1 -M4400 focused job at a time under the atomic mutex and RSS watchdog. macOS swap is observational. Failed earlier source attempts and their receipts remain separately named in /tmp; no failed target is counted as proved. Run `python3 -B check_packet.py` to inspect evidence without compiling Lean.

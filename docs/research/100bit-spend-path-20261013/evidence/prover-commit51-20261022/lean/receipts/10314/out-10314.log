@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaskWrites51.lean:55:43: error: Tactic `decide` failed for proposition
+  UScalar.size UScalarTy.U8 = 256
+because its `Decidable` instance
+  instDecidableEqNat (UScalar.size UScalarTy.U8) 256
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqNat` and `Nat.decEq`, reduction got stuck at the `Decidable` instance
+  match h : (UScalar.size UScalarTy.U8).beq 256 with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaskWrites51.lean:65:73: error: Type mismatch
+  this
+has type
+  4#u8 ≠ 0#u8
+but is expected to have type
+  ↑?m.371 ≠ 0
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaskWrites51.lean:67:49: error: Type mismatch: After simplification, term
+  hremval
+ has type
+  ↑rem = ↑i % ↑?m.371
+but is expected to have type
+  ↑rem = ↑i % 4
+'R1Z.ProverCommitMaskWrites51.index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaskWrites51.decode_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaskWrites51.go' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

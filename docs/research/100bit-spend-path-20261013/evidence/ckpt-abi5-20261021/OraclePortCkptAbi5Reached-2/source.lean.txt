@@ -1,0 +1,128 @@
+import Stage2ContinuationQueryAdvance
+
+/-! Dynamic reached-counter provenance for the emitted owned query loop,
+including its Rust error branch. No CFG fact is used as a value invariant.
+Arithmetic backend adoption and the pending.finish value remain separate. -/
+set_option autoImplicit false
+namespace AspisR1.OraclePortCkptAbi5Reached
+open Aeneas Aeneas.Std Result ControlFlow AspisR1Stage2
+abbrev A := verifier.Accumulator
+abbrev B := verifier.BatchedWeights
+abbrev R := core.result.Result (A × B) verifier.Error
+abbrev Step := A → B → Result R
+
+def body (stop : Nat) (step : Step) : R → Result (ControlFlow R R)
+  | .Err e => ok (.done (.Err e))
+  | .Ok (a,b) => if stop ≤ a.next.val then ok (.done (.Ok (a,b))) else do
+      let next ← step a b
+      ok (.cont next)
+
+inductive Chain (stop : Nat) (step : Step) : A → B → A → B → Nat → Prop
+  | done (a : A) (b : B) (atEnd : a.next.val = stop) : Chain stop step a b a b 0
+  | step {a a1 out : A} {b b1 bout : B} {n : Nat}
+      (active : a.next.val < stop) (call : step a b = ok (.Ok (a1,b1)))
+      (tail : Chain stop step a1 b1 out bout n) : Chain stop step a b out bout (n+1)
+
+theorem chain_endpoint (stop : Nat) (step : Step) (a out : A) (b bout : B) (n : Nat)
+    (chain : Chain stop step a b out bout n) : out.next.val = stop := by
+  induction chain with
+  | done _ _ atEnd => exact atEnd
+  | step _ _ _ ih => exact ih
+
+theorem successful_chain (stop : Nat) (step : Step)
+    (advance : ∀ a a1 b b1, step a b = ok (.Ok (a1,b1)) → a1.next.val = a.next.val+1)
+    (a out : A) (b bout : B) (bounded : a.next.val ≤ stop)
+    (success : loop (body stop step) (.Ok (a,b)) = ok (.Ok (out,bout))) :
+    Chain stop step a b out bout (stop-a.next.val) := by
+  induction fuel : stop-a.next.val generalizing a b with
+  | zero =>
+    have atEnd : a.next.val = stop := by omega
+    rw [loop.eq_def] at success
+    have eq : a = out ∧ b = bout := by simpa [body,atEnd] using success
+    obtain ⟨rfl,rfl⟩ := eq
+    exact Chain.done a b atEnd
+  | succ n ih =>
+    have active : a.next.val < stop := by omega
+    rw [loop.eq_def] at success
+    simp only [body,if_neg (show ¬ stop ≤ a.next.val from by omega)] at success
+    cases call : step a b with
+    | fail e => simp [call] at success
+    | div => simp [call] at success
+    | ok next =>
+      have tail : loop (body stop step) next = ok (.Ok (out,bout)) := by simpa [call] using success
+      cases next with
+      | Err e => rw [loop.eq_def] at tail; cases tail
+      | Ok pair =>
+        obtain ⟨a1,b1⟩ := pair
+        have moves := advance a a1 b b1 call
+        exact Chain.step active call (ih a1 b1 (by omega) tail (by omega))
+
+/-- The actual emitted loop body, at any endpoint, has this owned/error
+semantics. Unlike the older twelve-call lemma it is not fixed to end=22. -/
+theorem emitted_body (call : QueryCall) (proof : Slice U8) (p : verifier.Prepared)
+    (g : Array Stage2E 29#usize) (obs : Option (verifier.Phase → Result Unit))
+    (geometry : verifier.QueryGeometry) (stop : Usize) :
+    verifier.candidate.query_loop_loop.body call proof p g obs geometry stop =
+      body stop.val (fun a b => call proof p a g obs geometry b) := by
+  funext state
+  cases state with
+  | Err e => rfl
+  | Ok pair => obtain ⟨a,b⟩ := pair; rfl
+
+/-- The advance premise is discharged using the actual checked query body.
+This does not assume its arithmetic result, nor replace failed calls by success. -/
+theorem reached_calls (aops : AccumulateOps) (ops : QueryOps)
+    (proof : Slice U8) (p : verifier.Prepared)
+    (g : Array Stage2E 29#usize) (obs : Option (verifier.Phase → Result Unit))
+    (geometry : verifier.QueryGeometry) (stop : Usize)
+    (a out : A) (b bout : B) (bounded : a.next.val ≤ stop.val)
+    (success : verifier.candidate.query_loop (verifier.candidate.queryWithOps aops ops)
+      proof p a g obs geometry b stop = ok (.Ok (out,bout))) :
+    Chain stop.val (fun a b => verifier.candidate.queryWithOps aops ops proof p a g obs geometry b)
+      a b out bout (stop.val-a.next.val) := by
+  refine successful_chain stop.val _
+    (fun x y u v h => query_next aops ops proof p x y g obs geometry u v h)
+    a out b bout bounded ?_
+  simpa only [verifier.candidate.query_loop,verifier.candidate.query_loop_loop,
+    emitted_body] using success
+
+/-- Ten TX1 calls and exactly next=10 follow from successful checked execution
+starting at zero; the start must still be derived from Rust Accumulator::new. -/
+theorem tx1_next (aops : AccumulateOps) (ops : QueryOps)
+    (proof : Slice U8) (p : verifier.Prepared)
+    (g : Array Stage2E 29#usize) (obs : Option (verifier.Phase → Result Unit))
+    (geometry : verifier.QueryGeometry) (a out : A) (b bout : B)
+    (start : a.next.val = 0)
+    (success : verifier.candidate.query_loop (verifier.candidate.queryWithOps aops ops)
+      proof p a g obs geometry b 10#usize = ok (.Ok (out,bout))) :
+    Chain 10 (fun a b => verifier.candidate.queryWithOps aops ops proof p a g obs geometry b)
+      a b out bout 10 ∧ out.next.val = 10 := by
+  have chain := reached_calls aops ops proof p g obs geometry 10#usize a out b bout (by omega) success
+  have exactChain : Chain 10
+      (fun a b => verifier.candidate.queryWithOps aops ops proof p a g obs geometry b)
+      a b out bout 10 := by simpa only [start,Nat.sub_zero] using chain
+  exact ⟨exactChain,chain_endpoint _ _ _ _ _ _ _ exactChain⟩
+
+/-- The same checked dynamic body supplies twelve TX2 calls and next=22. -/
+theorem tx2_next (aops : AccumulateOps) (ops : QueryOps)
+    (proof : Slice U8) (p : verifier.Prepared)
+    (g : Array Stage2E 29#usize) (obs : Option (verifier.Phase → Result Unit))
+    (geometry : verifier.QueryGeometry) (a out : A) (b bout : B)
+    (start : a.next.val = 10)
+    (success : verifier.candidate.query_loop (verifier.candidate.queryWithOps aops ops)
+      proof p a g obs geometry b 22#usize = ok (.Ok (out,bout))) :
+    Chain 22 (fun a b => verifier.candidate.queryWithOps aops ops proof p a g obs geometry b)
+      a b out bout 12 ∧ out.next.val = 22 := by
+  have chain := reached_calls aops ops proof p g obs geometry 22#usize a out b bout (by omega) success
+  have exactChain : Chain 22
+      (fun a b => verifier.candidate.queryWithOps aops ops proof p a g obs geometry b)
+      a b out bout 12 := by simpa only [start] using chain
+  exact ⟨exactChain,chain_endpoint _ _ _ _ _ _ _ exactChain⟩
+
+#print axioms tx2_next
+#print axioms chain_endpoint
+#print axioms successful_chain
+#print axioms emitted_body
+#print axioms reached_calls
+#print axioms tx1_next
+end AspisR1.OraclePortCkptAbi5Reached

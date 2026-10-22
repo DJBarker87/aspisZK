@@ -1,0 +1,76 @@
+import R1Z.ProverCommitInterpolationOutput48
+import R1Z.ProverCommitLagrangeProduct48
+/-! Complete owned interpolation output equals the model's standard Lagrange
+interpolant. This theorem does not assume the desired coefficient image. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitInterpolationModel48
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open ProverCommitInterpolationEmbed48 (embed)
+open ProverCommitInterpolationRow48 ProverCommitInterpolationOutput48
+open ProverCommitInterpolationSchedule48
+open Polynomial
+open scoped BigOperators
+
+theorem basis_map {K L : Type} [Field K] [Field L] (f : K →+* L) (i : Fin 28) :
+    (Lagrange.basis Finset.univ (fun j : Fin 28 => (j.val : K)) i).map f=
+      Lagrange.basis Finset.univ (fun j : Fin 28 => (j.val : L)) i := by
+  unfold Lagrange.basis
+  change (Polynomial.mapRingHom f) (∏ j ∈ (Finset.univ : Finset (Fin 28)).erase i,
+    Lagrange.basisDivisor (i.val : K) (j.val : K))=_
+  rw [_root_.map_prod]
+  apply Finset.prod_congr rfl
+  intro j hj
+  simp only [Polynomial.coe_mapRingHom,Lagrange.basisDivisor,Polynomial.map_mul,
+    Polynomial.map_C,Polynomial.map_sub,Polynomial.map_X,_root_.map_inv₀,_root_.map_sub,map_natCast]
+
+theorem contribution_basis (q : Old.Q) (i : Fin 28) :
+    contribution q i.val=C (decode q)*Lagrange.basis Finset.univ (fun j : Fin 28 => (j.val : QM31Exact)) i := by
+  have h := congrArg (Polynomial.map embed)
+    (ProverCommitLagrangeProduct48.normalized_basis (K := ProverCommitM31Ops48.M) i)
+  rw [Polynomial.map_mul,Polynomial.map_C,basis_map] at h
+  rw [contribution,← h]
+  simp only [map_mul]
+  ring
+
+theorem sum_range (values : Nat → Old.Q) (start n : Nat) :
+    rowSum values start n=∑ k : Fin n, contribution (values (start+k.val)) (start+k.val) := by
+  induction n generalizing start with
+  | zero => simp only [rowSum,Fin.sum_univ_zero]
+  | succ n ih =>
+    rw [rowSum,Fin.sum_univ_succ,ih]
+    simp only [Fin.val_zero,Nat.add_zero]
+    congr 1
+    apply Finset.sum_congr rfl
+    intro k hk
+    have he : (start+1)+k.val=start+(Fin.succ k).val := by
+      change (start+1)+k.val=start+(k.val+1)
+      omega
+    rw [he]
+
+theorem sum_model (values : Nat → Old.Q) :
+    rowSum values 0 28=Lagrange.interpolate Finset.univ
+      (fun j : Fin 28 => (j.val : QM31Exact)) (fun j => decode (values j.val)) := by
+  rw [sum_range,Lagrange.interpolate_apply]
+  simp only [Nat.zero_add]
+  apply Finset.sum_congr rfl
+  intro i hi
+  exact contribution_basis (values i.val) i
+
+theorem interpolate_model (values : Nat → Old.Q) :
+    ∃ ys : Nat → Old.Q,
+      interpolate (ProverCommitQArray48.array 28#usize values)=ok (ProverCommitQArray48.array 28#usize ys) ∧
+      (∀ k, k < 28 → Canonical (ys k)) ∧
+      qpoly ys=Lagrange.interpolate Finset.univ
+        (fun j : Fin 28 => (j.val : QM31Exact)) (fun j => decode (values j.val)) := by
+  obtain ⟨ys,hy,hcy,hdy⟩ := interpolate_value values
+  exact ⟨ys,hy,hcy,hdy.trans (sum_model values)⟩
+
+#print axioms basis_map
+#print axioms contribution_basis
+#print axioms sum_range
+#print axioms sum_model
+#print axioms interpolate_model
+end R1Z.ProverCommitInterpolationModel48

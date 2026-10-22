@@ -1,0 +1,7 @@
+# Selected S9 high-prefix totality
+
+PROVED: canonical selected ap0 and extra reads suffice to construct the side-zero seed read, concrete kpowers array, scalar-factor output with canonical low, and the q2 read plus q4/q8/q12/q16 arithmetic results with canonical outputs. The proof reuses existing generated-kpowers, extracted scalar-fold and same-output canonicality theorems; it supplies no successful operation as an input premise.
+
+Scope: this is the selected P6 source-shaped arithmetic prefix, not complete activeBody, generated-candidate or frozen Rust caller totality. It returns the same successful operations needed by the subsequent composition; it does not establish their surrounding execution without that join. The term-array construction, sums, both branch bodies, loop and top-wrapper construction remain next. Actual Rust/library correspondence, caller/parser canonicality, adoption, frozen source/artifacts, coherent replay and the complete 100-bit soundness theorem remain OPEN. No production source changed.
+
+Focused verification: Lean4.32, -j1 -M4400, mutex and aggregate RSS watchdog; exact source/import/tool hashes and standard-axiom audits retained. The check passed in14.868s below3.3GB with zero observed swaps. Warm imports are pinned, not a coherent final release replay. No compiled objects included. Run python3 -B check_packet.py to validate the packet without recompiling.

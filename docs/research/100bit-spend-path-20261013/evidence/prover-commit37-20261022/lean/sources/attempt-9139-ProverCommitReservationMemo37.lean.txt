@@ -1,0 +1,79 @@
+import R1Z.ProverCommitReservationRom37
+
+/-! Exact conditional ROM counterexample to charging reservation memo hits
+only to the existing simulator-domain seed event. One prior query, one
+entry chosen as its answer; the nonce is still independent uniform. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitReservationMemo37
+open R0Z R0Z.FsStatement R0Z.FsAbort R0Z.FsGood R0Z.HvzkV
+open ProverCommitReservationRom37
+attribute [local instance] Classical.propDecidable
+
+/-- After a prior query at `known` has answer `entry`, the other coordinates
+remain uniform. This is a conditional ROM slice, not a constant hash model.
+The adversary inserts exactly the learned answer in its initial ledger. -/
+def memoHit (known entry : OracleAnswer)
+    (r : OracleAnswer × ({j : OracleAnswer // j ≠ known} → OracleAnswer)) : Prop :=
+  (LazyTable.splitAt known).symm (entry,r.2) r.1 = entry
+
+theorem conditional_memo_mass (known entry : OracleAnswer) :
+    eventMass (memoHit known entry) =
+      2 / (2 : ℚ)^256 - (1 / (2 : ℚ)^256)^2 := by
+  unfold eventMass
+  rw [R0Z.LawTransport.mean_product]
+  have inner (nonce : OracleAnswer) :
+      mean (fun rest : {j : OracleAnswer // j ≠ known} → OracleAnswer =>
+        if memoHit known entry (nonce,rest) then (1 : ℚ) else 0) =
+      if nonce = known then 1 else 1 / (2 : ℚ)^256 := by
+    by_cases hn : nonce = known
+    · subst nonce
+      simp [memoHit,LazyTable.splitAt,mean_const]
+    · have uniform := QueryScanSharedHistoryMass.eval_point_mass
+        (U := OracleAnswer) (⟨nonce,hn⟩ : {j : OracleAnswer // j ≠ known}) entry
+      rw [QueryScanSharedHistoryMass.answer_cardinality,Nat.cast_pow,Nat.cast_ofNat] at uniform
+      simpa only [eventMass,memoHit,LazyTable.splitAt,Equiv.coe_fn_symm_mk,dif_neg hn,if_neg hn] using uniform
+  simp only [inner]
+  have shape (nonce : OracleAnswer) :
+      (if nonce = known then (1 : ℚ) else 1 / (2 : ℚ)^256) =
+      (if nonce = known then (1 : ℚ) else 0) * (1 - 1 / (2 : ℚ)^256) +
+        1 / (2 : ℚ)^256 := by
+    have algebra (p : ℚ) (h : Prop) [Decidable h] :
+        (if h then 1 else p) = (if h then 1 else 0) * (1-p) + p := by
+      split_ifs <;> ring
+    exact algebra _ _
+  simp_rw [shape]
+  rw [R0Z.FsAbortBounds.mean_add'',R0Z.FsAbortBounds.mean_mul_const,mean_const]
+  have point := QueryScanSharedHistoryMass.point_mass known
+  rw [QueryScanSharedHistoryMass.answer_cardinality,Nat.cast_pow,Nat.cast_ofNat] at point
+  have pointmean : mean (fun nonce : OracleAnswer => if nonce = known then (1 : ℚ) else 0) =
+      1 / (2 : ℚ)^256 := point
+  rw [pointmean]
+  rw [show 2 / (2 : ℚ)^256 = 2 * (1 / (2 : ℚ)^256) from (mul_one_div _ _).symm]
+  exact (show ∀ p : ℚ, p*(1-p)+p = 2*p-p^2 by intro p; ring) _
+
+/-- The single-entry 2^-256 bound fails when the memo-hit event is omitted.
+The failure occurs before any rejection conditioning. -/
+theorem memo_exceeds_fresh_bound (known entry : OracleAnswer) :
+    1 / (2 : ℚ)^256 < eventMass (memoHit known entry) := by
+  rw [conditional_memo_mass]
+  have hp : 0 < 1 / (2 : ℚ)^256 := by positivity
+  have hlt : 1 / (2 : ℚ)^256 < 1 := by norm_num
+  rw [show 2 / (2 : ℚ)^256 = 2 * (1 / (2 : ℚ)^256) from (mul_one_div _ _).symm]
+  generalize (1 / (2 : ℚ)^256) = p at *
+  nlinarith
+
+/-- The exact prior-query list in this ROM slice never triggers the old
+simulator event, for any independent simulator seed. Nonzero filtering of
+the nonce does not change this pointwise event disjointness. -/
+theorem old_event_absent (known entry seed : OracleAnswer) :
+    ¬ ProverCommitSeedEvent19.seedGuess [(reservationInput known,entry)] seed := by
+  rintro ⟨q,member,point⟩
+  have eq : q = (reservationInput known,entry) := by simpa using member
+  subst q
+  exact not_simulator_seedPoint known seed point
+
+#print axioms conditional_memo_mass
+#print axioms memo_exceeds_fresh_bound
+#print axioms old_event_absent
+end R1Z.ProverCommitReservationMemo37

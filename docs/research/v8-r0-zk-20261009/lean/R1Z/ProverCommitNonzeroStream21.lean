@@ -1,0 +1,57 @@
+import R1Z.ProverCommitNonzero20
+/-! Shared-callback obstruction localized to the tape stream. This does not
+supply an admitted P_R1 draw or a probability law for the concrete HOST_HASH. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitNonzeroStream21
+open Aeneas Aeneas.Std Result ProverCommitSimulatorCoin18 ProverCommitNonzero20
+attribute [local instance] Classical.propDecidable
+
+def streamPart (request : Slice (Slice U8)) : Option (List U8) :=
+  (request.val[3]?).map (fun bytes => bytes.val)
+
+theorem frame_stream (seed : Bytes32) (attempt : U32) (stream : U8) (counter : U64) :
+    streamPart (frame seed attempt stream counter) = some [stream] := by
+  rfl
+
+def zeroStream (zero : Bytes32) (base : Hash) (target : U8) : Hash := fun request =>
+  if streamPart request=some [target] then ok zero else base request
+
+/-- One consistent callback changes only the target stream, across every
+seed, attempt, counter and wraparound. There is no fresh independent oracle. -/
+theorem target_answer (zero seed : Bytes32) (base : Hash) (attempt : U32)
+    (target : U8) (counter : U64) :
+    zeroStream zero base target (frame seed attempt target counter)=ok zero := by
+  simp only [zeroStream,frame_stream,ite_true]
+
+theorem other_answer (zero seed : Bytes32) (base : Hash) (attempt : U32)
+    (target stream : U8) (counter : U64) (different : stream≠target) :
+    zeroStream zero base target (frame seed attempt stream counter)=
+      base (frame seed attempt stream counter) := by
+  simp only [zeroStream,frame_stream]
+  have distinct : (some [stream] : Option (List U8))≠some [target] := by
+    intro h
+    have same : stream=target := by simpa only [Option.some.injEq,List.cons.injEq,and_true] using h
+    exact different same
+  exact if_neg distinct
+
+/-- Arbitrarily long unsuccessful searches coexist with unchanged answers
+on every other coin stream, including the transcript and root streams. -/
+theorem target_zero_prefix (zero seed : Bytes32) (base : Hash) (attempt : U32)
+    (target : U8) (n : Nat) (counter : U64) :
+    search zero (zeroStream zero base target) seed attempt target n counter=ok none := by
+  induction n generalizing counter with
+  | zero => rfl
+  | succ n ih =>
+    simp only [search,extracted_step,target_answer,bind_tc_ok]
+    change (if zero=zero then
+      search zero (zeroStream zero base target) seed attempt target n (U64.wrapping_add counter 1#u64)
+      else ok (some (zero,U64.wrapping_add counter 1#u64)))=ok none
+    rw [if_pos rfl]
+    exact ih _
+
+#print axioms frame_stream
+#print axioms target_answer
+#print axioms other_answer
+#print axioms target_zero_prefix
+end R1Z.ProverCommitNonzeroStream21

@@ -770,3 +770,81 @@ mod prefix_parser_tests {
         }
     }
 }
+
+// Owned state: the consumed byte prefix never borrows across recursion.
+// Short suffixes follow chunks_exact(32): they are not validated.
+#[cfg(any(kani,aeneas_ref))]
+pub mod fields20 {
+    use alloc::vec::Vec;
+    use aspis_core::field::{WideExact,QM31};
+    use super::Error;
+    pub fn validate(row:u8,payload:Vec<u8>,value:usize)->Result<(),Error> {
+        if payload.len()<32 { return Ok(()); }
+        let bytes=&payload[..32];
+        let x=match WideExact::from_le_bytes(bytes) { Some(x)=>x, None=>return Err(Error::NonCanonical {row,value}) };
+        if x.c1()!=QM31::ZERO { return Err(Error::NonCanonical {row,value}); }
+        let tail=payload[32..].to_vec();
+        validate(row,tail,value+1)
+    }
+}
+
+// Fresh owned transcript state for every row. Hash reads still use the
+// unchanged source sample_block_validated; no new hash implementation.
+#[cfg(any(kani,aeneas_ref))]
+pub mod semantic20 {
+    use alloc::vec::Vec;
+    use aspis_core::{Digest32,field::QM31};
+    use super::{Error,SemanticTranscript,row_shape,fields20};
+    pub fn checked(row:u8,record:&[u8])->Result<(),Error> {
+        let (tag,size)=match row_shape(row) {Some(shape)=>shape,None=>return Err(Error::InvalidRow)};
+        if record.len()!=5+size {return Err(Error::Length{row});}
+        if record[0]!=tag {return Err(Error::Tag{row});}
+        if u32::from_le_bytes([record[1],record[2],record[3],record[4]]) as usize !=size {
+            return Err(Error::Length{row});
+        }
+        if row>=14 {
+            match fields20::validate(row,record[5..].to_vec(),0) {Ok(())=>(),Err(e)=>return Err(e)}
+        }
+        Ok(())
+    }
+    pub fn semantic<H:Digest32>(mut state:SemanticTranscript<H>,row:u8,record:Vec<u8>)
+        ->(Result<QM31,Error>,SemanticTranscript<H>) {
+        if row>24 {return (Err(Error::InvalidRow),state);}
+        if row!=state.next_row {
+            return (Err(Error::RowOrder{expected:state.next_row,actual:row}),state);
+        }
+        match checked(row,&record) {Ok(())=>(),Err(e)=>return (Err(e),state)}
+        let block=match state.sample_block_validated(row,&record) {
+            Ok(block)=>block,Err(e)=>return (Err(e),state)
+        };
+        (Ok(crate::sampler::qm31_sample(&block)),state)
+    }
+    pub fn rows<H:Digest32>(state:SemanticTranscript<H>,records:Vec<Vec<u8>>,row:usize,
+        mut sem:[QM31;25])->(Result<[QM31;25],Error>,SemanticTranscript<H>) {
+        if row==25 {return (Ok(sem),state);}
+        let (value,state)=semantic(state,row as u8,records[row].clone());
+        match value {
+            Err(e)=>(Err(e),state),
+            Ok(value)=>{sem[row]=value;rows(state,records,row.wrapping_add(1),sem)}
+        }
+    }
+}
+
+// Explicit field-cell fuel for proof-only Kani substitution. The generic
+// owned recursion remains the retained reference; Lean proves equality under
+// its existing length bound before this helper is used in a caller gate.
+#[cfg(any(kani,aeneas_ref))]
+pub mod fields29 {
+    use alloc::vec::Vec;
+    use aspis_core::field::{WideExact,QM31};
+    use super::Error;
+    pub fn finite(row:u8,payload:Vec<u8>,value:usize,remaining:usize)->Result<(),Error> {
+        if remaining==0 {return Ok(());}
+        if payload.len()<32 {return Ok(());}
+        let bytes=&payload[..32];
+        let x=match WideExact::from_le_bytes(bytes) {Some(x)=>x,None=>return Err(Error::NonCanonical{row,value})};
+        if x.c1()!=QM31::ZERO {return Err(Error::NonCanonical{row,value});}
+        let tail=payload[32..].to_vec();
+        finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+    }
+}

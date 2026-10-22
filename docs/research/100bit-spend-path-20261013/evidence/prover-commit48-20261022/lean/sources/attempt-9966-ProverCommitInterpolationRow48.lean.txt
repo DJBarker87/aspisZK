@@ -1,0 +1,65 @@
+import R1Z.ProverCommitInterpolationAccumulate48
+import R1Z.ProverCommitInterpolationInitial48
+import R1Z.ProverCommitInterpolationInverse48
+import R1Z.ProverCommitInterpolationEmbed48
+/-! A complete owned interpolation row: initialized factors, proved nonzero
+inverse, four-limb scaling, then all 28 accumulated coefficients. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitInterpolationRow48
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open ProverCommitInterpolationEmbed48 (embed)
+open ProverCommitInterpolationSchedule48
+
+def qpoly (xs : Nat → Old.Q) : Polynomial QM31Exact :=
+  ProverCommitInterpolationPoly48.poly 28 (fun k => decode (xs k))
+
+def row (xs : Nat → Old.Q) (q : Old.Q) (i : U8) : Result (Aeneas.Std.Array field.QM31 28#usize) := do
+  let (basis,den) ← ProverCommitInterpolationInitial48.prepare i
+  let inv ← inverse_ref den
+  let scale ← scalar_ref (ProverCommitNativeQ48.source q) inv
+  accumulate (ProverCommitQArray48.array 28#usize xs) basis scale 0#u8 28#u8
+
+attribute [local irreducible] ProverCommitQArray48.array ProverCommitM31Array48.array
+  ProverCommitBasisPolynomial48.poly qpoly polyProd denProd
+
+theorem row_value (xs : Nat → Old.Q) (hxs : ∀ k, k < 28 → Canonical (xs k))
+    (q : Old.Q) (i : U8) (hi : i.val < 28) :
+    ∃ ys : Nat → Old.Q, row xs q i=ok (ProverCommitQArray48.array 28#usize ys) ∧
+      (∀ k, k < 28 → Canonical (ys k)) ∧
+      qpoly ys=qpoly xs+Polynomial.C (decode q*embed ((denProd i.val 0 28)⁻¹))*
+        (polyProd i.val 0 28).map embed := by
+  obtain ⟨basis,den,hprep,hcb,hcd,hpb,hdd,hn⟩ := ProverCommitInterpolationInitial48.prepare_exact i hi
+  obtain ⟨inv,hinv,hcinv,hdinv⟩ := ProverCommitInterpolationInverse48.inverse_exact den hn
+  obtain ⟨hscale,hcscale,hdscale⟩ := ProverCommitScalar48.source_exact q inv
+  obtain ⟨ys,hy,hcy,hdy⟩ := ProverCommitInterpolationAccumulate48.accumulate_value 28 xs hxs basis
+    (ProverCommitScalar48.product q inv) 0#u8 28#u8 rfl (by scalar_tac)
+  refine ⟨ys,?_,hcy,?_⟩
+  · unfold row
+    rw [hprep]
+    change (do
+      let inv ← inverse_ref den
+      let scale ← scalar_ref (ProverCommitNativeQ48.source q) inv
+      accumulate (ProverCommitQArray48.array 28#usize xs)
+        (ProverCommitM31Array48.array 28#usize basis) scale 0#u8 28#u8)=_
+    simp only [hinv,hscale,bind_tc_ok,hy]
+  · change ProverCommitM31Ops48.decode inv=(ProverCommitM31Ops48.decode den)⁻¹ at hdinv
+    have hv : ∀ k, k < 28 → decode (ys k)=decode (xs k)+
+        (decode q*embed ((denProd i.val 0 28)⁻¹))*embed (ProverCommitM31Ops48.decode (basis k)) := by
+      intro k hk
+      rw [hdy k hk,if_pos (by change 0 ≤ k ∧ k < 0+28;omega),hdscale,
+        ProverCommitInterpolationEmbed48.source_embed,hdinv,hdd,
+        ProverCommitInterpolationEmbed48.source_embed]
+    rw [← hpb]
+    apply Polynomial.ext
+    intro k
+    simp only [qpoly,ProverCommitBasisPolynomial48.poly,Polynomial.coeff_add,
+      Polynomial.coeff_C_mul,Polynomial.coeff_map,ProverCommitInterpolationPoly48.coeff]
+    by_cases hk : k < 28
+    · simp only [if_pos hk,hv k hk]
+    · simp only [if_neg hk,map_zero,mul_zero,add_zero]
+
+#print axioms row_value
+end R1Z.ProverCommitInterpolationRow48

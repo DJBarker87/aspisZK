@@ -1,0 +1,38 @@
+{
+  "source_ports": [
+    {
+      "source": "docs/research/100bit-spend-path-20261013/lean/bridge-selected-current-20261018/ExtractedSourceSemanticSampler.lean",
+      "source_sha256": "d41101022e80a5948f00f30280485b932a068045877c2dcc3b4a0a07f6a10166",
+      "port": "docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitSemanticSampler22.lean",
+      "port_sha256": "192b8eae459671c09e43758ddba5628281fa0280be007736918bf8eb9ec336a4"
+    },
+    {
+      "source": "docs/research/100bit-spend-path-20261013/lean/R4TransportCircleCoordinates.lean",
+      "source_sha256": "99fba36305603d3b2159304760a4de76d3ecf9bc10d3b6a9bd2a235ec289df97",
+      "port": "docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitCircleSampler22.lean",
+      "port_sha256": "73ae9d00df0e0ca3e637df46b519ae3cd0e2fef8a85b1dcb9a395ad1ceba9e81"
+    }
+  ],
+  "shared_source": [
+    {
+      "file": "crates/aspis-r1-cost-probe/src/sampler.rs",
+      "sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "size_bytes": 8161,
+      "identical_to_r4_source_inventory": true
+    },
+    {
+      "file": "crates/aspis-core/src/r0_transcript.rs",
+      "sha256": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+      "size_bytes": 11522,
+      "identical_to_r4_source_inventory": true
+    }
+  ],
+  "edits": [
+    "Replace large caller import with exact cached sampler and SqueezeOracleBridge",
+    "Retain four low digits, same decode and algebraMap, no sampler reimplementation",
+    "Change namespace to avoid collision",
+    "Add sampler-total corollary from existing sample_total",
+    "Circle proof unchanged apart from namespace and imported semantic sampler name"
+  ],
+  "source_library_boundary": "Retained circle wrapper emission and source identification reused; actual caller reachability, policy shell and native TLS not concluded"
+}

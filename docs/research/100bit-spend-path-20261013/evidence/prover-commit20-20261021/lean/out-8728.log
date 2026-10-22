@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTableHistory20.lean:21:4: error: unsolved goals
+case pos
+query : List UInt8
+tail : List Entry
+ih : List.lookup query tail = lookup tail query
+value : OracleAnswer
+⊢ (match query == query with
+    | true => some value
+    | false => lookup tail query) =
+    some value
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTableHistory20.lean:23:4: error: unsolved goals
+case neg
+query : List UInt8
+tail : List Entry
+ih : List.lookup query tail = lookup tail query
+key : List UInt8
+value : OracleAnswer
+same : ¬key = query
+reverse : query ≠ key
+⊢ (match query == key with
+    | true => some value
+    | false => lookup tail query) =
+    lookup tail query
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTableHistory20.lean:24:22: warning: This simp argument is unused:
+  reverse
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵a̵m̵e̵,̵r̵e̵v̵e̵r̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲s̲a̲m̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitTableHistory20.lookup_std' depends on axioms: [sorryAx, Quot.sound]
+'R1Z.ProverCommitTableHistory20.programmed_writes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTableHistory20.programmed_writes_history' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

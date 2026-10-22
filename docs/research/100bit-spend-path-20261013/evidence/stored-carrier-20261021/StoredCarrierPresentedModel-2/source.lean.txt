@@ -1,0 +1,67 @@
+import OraclePortHeadlineFrozenPerAttempt
+import R9PoolRuntimeBinding
+
+/-! A precisely delimited logical specialization, NOT the frozen driver.
+The designated observation is the existing annotation compiler, with a
+presented complete-buffer guard. No source execution join is claimed here. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.StoredCarrierPresentedModel
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortStoredExperimentC4 OraclePortStoredAdmissionC4 OraclePortRuntimeBindingC7
+open R9PoolRuntimeBinding
+
+attribute [local instance] Classical.propDecidable
+
+def written (pub : Input → Bytes) (i : Input) : Inputs := ⟨i.stored, pub i⟩
+
+def presentedRun (current : Input → Inputs) (run : RunView) : RunView :=
+  (run.1, ({run.2.1 with stored := (current run.2.1).proof}, run.2.2))
+
+/-- A guard on the whole proof/public buffers followed by the designated
+observation. Actual upload, AccountInfo, checkpoint ABI and CPI execution
+must separately be refined to any logical constructor used at release. -/
+def runtime (D : LiteralByteProtocol.Decoder) (rust : Verifier) (P : Prover)
+    (hash : Bytes → State) (pub : Input → Bytes) (current : Input → Inputs) : Runtime :=
+  bind (annotatedWith D rust (canon P)) fun run =>
+    if digestMatches hash (written pub run.2.1) (current run.2.1) then
+      .done (some (presentedRun current run)) else .done none
+
+/-- Exactly the existing P2′ same-complete-input-buffer contract, not
+injectivity of a digest. P2/P3/P4 effects are absent from this constructor. -/
+def P2PrimeForInputs (hash : Bytes → State) (pub : Input → Bytes)
+    (current : Input → Inputs) : Prop :=
+  ∀ i, P2Prime hash (written pub i) (current i)
+
+theorem presented_same (hash : Bytes → State) (pub : Input → Bytes)
+    (current : Input → Inputs) (run : RunView)
+    (hp : P2PrimeForInputs hash pub current)
+    (hd : digestMatches hash (written pub run.2.1) (current run.2.1)) :
+    presentedRun current run = run := by
+  have same := accepted_same_inputs hash (written pub run.2.1) (current run.2.1)
+    (hp run.2.1) hd
+  have bytes := congrArg Inputs.proof same
+  change (current run.2.1).proof = run.2.1.stored at bytes
+  rcases run with ⟨log, ⟨⟨statement, proof, stored⟩, accepted⟩⟩
+  change (current ⟨statement, proof, stored⟩).proof = stored at bytes
+  unfold presentedRun
+  dsimp only
+  rw [bytes]
+
+theorem binding (D : LiteralByteProtocol.Decoder) (rust : Verifier) (P : Prover)
+    (hash : Bytes → State) (pub : Input → Bytes) (current : Input → Inputs)
+    (hp : P2PrimeForInputs hash pub current) :
+    StoredCarrierBinding D rust P (runtime D rust P hash pub current) := by
+  intro H run hr _
+  simp only [runtime, eval_bind] at hr
+  split at hr
+  next hd =>
+    have eq := Option.some.inj hr
+    exact eq.symm.trans (presented_same hash pub current _ hp hd)
+  next => contradiction
+
+#print axioms presented_same
+#print axioms binding
+end AspisR1.StoredCarrierPresentedModel
+end

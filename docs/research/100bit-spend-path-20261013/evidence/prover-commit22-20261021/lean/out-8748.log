@@ -1,0 +1,86 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuel22.lean:37:13: error: unsolved goals
+case found.succ
+zero : Bytes32
+hash : Hash
+seed : Bytes32
+attempt : U32
+stream : U8
+n : ℕ
+counter✝ final : U64
+answer✝ : Bytes32
+counter next : U64
+answer : Bytes32
+step : AspisR1SimulatorCoin18.sim.coin_owned18 hash seed attempt stream counter = ok (answer, next)
+nonzero : answer ≠ zero
+k : ℕ
+within : 1 ≤ k + 1
+⊢ (let (answer, next) := (answer, next)
+    if answer = zero then ProverCommitNonzero20.search zero hash seed attempt stream k next
+    else ok (some (answer, next))) =
+    ok (some (answer, next))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuel22.lean:43:6: error: Type mismatch
+  ih k (Decidable.byContradiction fun a => agrees._proof_3 n k within a)
+has type
+  ProverCommitNonzero20.search zero hash seed attempt stream k middle = ok (some (answer, final))
+but is expected to have type
+  (let (answer, next) := (zero, middle)
+    if answer = zero then ProverCommitNonzero20.search zero hash seed attempt stream k next
+    else ok (some (answer, next))) =
+    ok (some (answer, final))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuel22.lean:37:72: warning: This simp argument is unused:
+  if_neg nonzero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵N̵o̵n̵z̵e̵r̵o̵2̵0̵.̵s̵e̵a̵r̵c̵h̵,̵s̵t̵e̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵n̵e̵g̵ ̵n̵o̵n̵z̵e̵r̵o̵]̵[̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲N̲o̲n̲z̲e̲r̲o̲2̲0̲.̲s̲e̲a̲r̲c̲h̲,̲ ̲s̲t̲e̲p̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuel22.lean:42:62: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverCommitNonzero20.search, ̲step, ̲bind_tc_ok,̵i̵t̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuel22.lean:58:13: error: unsolved goals
+case succ.fail
+zero : Bytes32
+hash : Hash
+seed : Bytes32
+attempt : U32
+stream : U8
+extra : ℕ
+result : Bytes32 × U64
+n : ℕ
+ih :
+  ∀ (counter : U64),
+    ProverCommitNonzero20.search zero hash seed attempt stream n counter = ok (some result) →
+      ProverCommitNonzero20.search zero hash seed attempt stream (n + extra) counter = ok (some result)
+counter : U64
+e : Error
+step : AspisR1SimulatorCoin18.sim.coin_owned18 hash seed attempt stream counter = fail e
+success : fail e = ok (some result)
+⊢ ProverCommitNonzero20.search zero hash seed attempt stream (n + 1 + extra) counter = ok (some result)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuel22.lean:59:10: error: unsolved goals
+case succ.div
+zero : Bytes32
+hash : Hash
+seed : Bytes32
+attempt : U32
+stream : U8
+extra : ℕ
+result : Bytes32 × U64
+n : ℕ
+ih :
+  ∀ (counter : U64),
+    ProverCommitNonzero20.search zero hash seed attempt stream n counter = ok (some result) →
+      ProverCommitNonzero20.search zero hash seed attempt stream (n + extra) counter = ok (some result)
+counter : U64
+step : AspisR1SimulatorCoin18.sim.coin_owned18 hash seed attempt stream counter = div
+success : div = ok (some result)
+⊢ ProverCommitNonzero20.search zero hash seed attempt stream (n + 1 + extra) counter = ok (some result)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuel22.lean:64:8: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFuel22.lean:66:8: error: `simp` made no progress
+'R1Z.ProverCommitFuel22.agrees' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitFuel22.stable' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

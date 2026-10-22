@@ -1,0 +1,18 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: function `arbitrary_binary` is never used
+  --> weights-init.rs:55:5
+   |
+55 |  fn arbitrary_binary(_x:K,_y:K)->K {arbitrary_qm()}
+   |     ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+error: Using the stub attribute requires activating the unstable `stubbing` feature
+  --> weights-init.rs:59:2
+   |
+59 |  #[kani::stub(crate::field::QM31::sub,arbitrary_binary)]
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this error originates in the attribute macro `kani::stub` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.

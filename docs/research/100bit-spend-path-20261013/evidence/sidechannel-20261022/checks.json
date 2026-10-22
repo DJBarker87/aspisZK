@@ -1,0 +1,274 @@
+{
+  "kind": "tiny exact source-expression/model checks",
+  "source_revision": "d898485aeb430d91aa4497fee563e1f89909943f",
+  "exit": 0,
+  "wall_seconds": 0.11795954219996929,
+  "checks": [
+    {
+      "name": "canonical add two-run counterexample",
+      "source": "crates/aspis-core/src/field.rs:88",
+      "examples": [
+        {
+          "a": 0,
+          "b": 1,
+          "branch": false,
+          "value": 1
+        },
+        {
+          "a": 2147483646,
+          "b": 1,
+          "branch": true,
+          "value": 0
+        }
+      ],
+      "limitation": "Source expression evaluated in Python, not an instrumented native trace; helper inputs canonical, not a same-public full-spend witness pair."
+    },
+    {
+      "name": "Mersenne reduction branch",
+      "source": "crates/aspis-core/src/field.rs:40",
+      "examples": [
+        {
+          "input": 0,
+          "branch": false,
+          "value": 0
+        },
+        {
+          "input": 2147483647,
+          "branch": true,
+          "value": 0
+        },
+        {
+          "input": 4611686009837453316,
+          "branch": false,
+          "value": 1
+        }
+      ],
+      "limitation": "Input P can arise as a lazy sum; product-specific reachability is not asserted for P."
+    },
+    {
+      "name": "canonical negation",
+      "source": "crates/aspis-core/src/field.rs:125",
+      "examples": [
+        {
+          "x": 0,
+          "branch": true,
+          "value": 0
+        },
+        {
+          "x": 1,
+          "branch": false,
+          "value": 2147483646
+        }
+      ],
+      "limitation": "Canonical helper values; direct source counterexample."
+    },
+    {
+      "name": "limb rejection count",
+      "source": "crates/aspis-prover/src/state_only_hiding.rs:361; state_only_entropy.rs:794",
+      "examples": [
+        {
+          "draws": 1,
+          "candidate": 0,
+          "exhausted": false
+        },
+        {
+          "draws": 2,
+          "candidate": 0,
+          "exhausted": false
+        },
+        {
+          "draws": 16,
+          "exhausted": true
+        }
+      ],
+      "limitation": "Explicit word streams; finding depends on private coins, independently of witness. Does not find a SHA256 seed realizing a chosen stream."
+    },
+    {
+      "name": "gamma wrapped branch",
+      "source": "crates/aspis-r1-cost-probe/src/sampler.rs:115",
+      "examples": [
+        {
+          "rank": "0",
+          "wrapped": false
+        },
+        {
+          "rank": "452312846898269724422641179697543667450922081019251166843171382875033436160",
+          "wrapped": true
+        }
+      ],
+      "limitation": "Actual 256-bit input ranks, both representable. Fixed rank test, not a ROM probability claim."
+    },
+    {
+      "name": "64-byte entropy exact capped geometric normalization",
+      "source": "crates/aspis-prover/src/state_only_entropy.rs:202",
+      "examples": {
+        "success_per_draw": "(1-2^-256)^2",
+        "success_at_n": "(1-(1-2^-256)^2)^(n-1)*(1-2^-256)^2, 1<=n<=16",
+        "zero_exhaustion": "(1-(1-2^-256)^2)^16"
+      },
+      "limitation": "Conditional on every RNG call succeeding with independent uniform bytes; arbitrary environment failures stop this distribution."
+    },
+    {
+      "name": "retry hazard normalization",
+      "source": "crates/aspis-r1-cost-probe/src/prover.rs:354",
+      "examples": {
+        "reject": "1/3",
+        "success": "1/2",
+        "abort": "1/6",
+        "mass": "sum_{k=0}^7 r^k(a+e)+r^8 = 1"
+      },
+      "limitation": "Toy rational hazards verify the formula only; these are not measured or proved R1 probabilities."
+    },
+    {
+      "name": "pole-set cardinality can depend on tuple limbs",
+      "source": "crates/aspis-statement/src/logup.rs:75; crates/aspis-r1-cost-probe/src/host_semantic.rs:273",
+      "examples": [
+        {
+          "lambda_value": 1,
+          "tags": [
+            1,
+            2
+          ],
+          "first_limbs": [
+            0,
+            0
+          ],
+          "pole_set": [
+            1,
+            2
+          ],
+          "cardinality": 2
+        },
+        {
+          "lambda_value": 1,
+          "tags": [
+            1,
+            2
+          ],
+          "first_limbs": [
+            0,
+            2147483646
+          ],
+          "pole_set": [
+            1
+          ],
+          "cardinality": 1
+        }
+      ],
+      "limitation": "Local two-tuple obstruction only. Not instantiated to the fixed forest registry or a same-public valid-spend witness pair; does not prove an exploitable deployed count gap."
+    },
+    {
+      "name": "same query list does not determine duplicate trace",
+      "source": "crates/aspis-core/src/r0_transcript.rs:202",
+      "examples": [
+        {
+          "draws": 22,
+          "duplicate_branches": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "queries": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ]
+        },
+        {
+          "draws": 23,
+          "duplicate_branches": [
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "queries": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ]
+        }
+      ],
+      "limitation": "Candidate words model the scan; no SHA256 preimage asserted. Early stop-before-next-word and selected advance are covered by source, not this simplified output model."
+    }
+  ],
+  "kani": "not run",
+  "lean": "not run",
+  "compiled_or_hardware_measurements": "none"
+}

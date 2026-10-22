@@ -1,0 +1,76 @@
+import R1Z.ProverCommitMaterialTransport16
+import R1Z.ProverCommitMaterialSupport
+/-! Assembly of the existing extracted owned components with retained state.
+This reference begins after nonce reservation/seed derivation and allocation;
+it is not a refinement certificate for the shipped outer builder. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitReturned16
+open Aeneas Aeneas.Std Result AspisR1ProverMaterial14
+open R1Z.ProverCommitMaterialRecursion (Hash State Values QValues)
+open R1Z.ProverCommitMaterialSupport
+abbrev Error := state_only_hiding.StateOnlyMaskBuildError
+
+structure ReturnedMaterial where
+  c1 : Values
+  mask_only_c1 : alloc.vec.Vec Values
+  g : QValues
+  h1_padding : QValues
+  mask_nonce : Array U8 32#usize
+
+/-- Owned assembly, in the source's order. Supplied buffers expose allocation
+and capacity responsibilities instead of silently assuming them. Partial
+material is not returned on any error; the retained expander state is. -/
+def assemble (hash : Hash) (domain : Slice U8) (state : State)
+    (cells : Usize) (c1 : Values) (columns : alloc.vec.Vec Values)
+    (g padding : QValues) (dependent : Usize) (active : Array Bool 1024#usize)
+    (nonce : Array U8 32#usize) :
+    Result (core.result.Result ReturnedMaterial Error × State) := do
+  let (status, c1, afterC1) ←
+    prover_commit_reference.collect_m31_owned hash domain state cells c1
+  match status with
+  | .Err e => ok (.Err e, afterC1)
+  | .Ok () =>
+    let (status, columns, afterColumns) ←
+      prover_commit_reference.material_columns_owned hash domain afterC1 columns
+        0#usize 10#usize dependent active
+    match status with
+    | .Err e => ok (.Err e, afterColumns)
+    | .Ok () =>
+      let (status, g, afterG) ←
+        prover_commit_reference.collect_qm31_owned hash domain afterColumns 1024#usize g
+      match status with
+      | .Err e => ok (.Err e, afterG)
+      | .Ok () =>
+        let (status, g) ← prover_commit_reference.balance_qm31_owned g dependent active
+        match status with
+        | .Err e => ok (.Err e, afterG)
+        | .Ok () =>
+          let (status, padding, final) ←
+            prover_commit_reference.material_padding_owned hash domain afterG padding
+              0#usize dependent active
+          match status with
+          | .Err e => ok (.Err e, final)
+          | .Ok () =>
+            let (status, padding) ←
+              prover_commit_reference.balance_qm31_owned padding dependent active
+            match status with
+            | .Err e => ok (.Err e, final)
+            | .Ok () => ok (.Ok ⟨c1, columns, g, padding, nonce⟩, final)
+
+/-- All four families in the returned object use one retained material oracle.
+Agreement on that domain transports the complete assembly, including errors,
+balancing and final cursor; it requires no enumeration of 1024-row vectors. -/
+theorem assembly_oracle_support (left right : Hash) (domain : Slice U8)
+    (same : SameFrames left right domain) (state : State) (cells : Usize)
+    (c1 : Values) (columns : alloc.vec.Vec Values) (g padding : QValues)
+    (dependent : Usize) (active : Array Bool 1024#usize) (nonce : Array U8 32#usize) :
+    assemble left domain state cells c1 columns g padding dependent active nonce =
+    assemble right domain state cells c1 columns g padding dependent active nonce := by
+  simp only [assemble,
+    raw_collection_support left right domain same,
+    indexed_columns_support left right domain same,
+    qm_collection_support left right domain same,
+    indexed_padding_support left right domain same _ _ 0#usize _ _ (by decide)]
+
+#print axioms assembly_oracle_support
+end R1Z.ProverCommitReturned16

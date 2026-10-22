@@ -1,0 +1,130 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNativeSquare49.lean:33:46: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(core.convert.num.FromU64U32.from ?a)
+in the target expression
+  (↑a + ↑b) % UScalar.size UScalarTy.U64 *
+        (((↑a + ↑field.P) % UScalar.size UScalarTy.U64 + (UScalar.size UScalarTy.U64 - ↑b)) %
+          UScalar.size UScalarTy.U64) %
+      UScalar.size UScalarTy.U64 =
+    (↑a + ↑b) * (↑a + P - ↑b)
+
+a b : U32
+ha : ↑a < P
+hb : ↑b < P
+hp : ↑field.P = P
+hl : ↑a + ↑b < 2 ^ 32
+hr : ↑a + P - ↑b < 2 ^ 32
+hbase : ↑a + P < 2 ^ 64
+hsub : ↑b ≤ ↑a + P
+hmul : (↑a + ↑b) * (↑a + P - ↑b) < 2 ^ 64
+⊢ (↑a + ↑b) % UScalar.size UScalarTy.U64 *
+        (((↑a + ↑field.P) % UScalar.size UScalarTy.U64 + (UScalar.size UScalarTy.U64 - ↑b)) %
+          UScalar.size UScalarTy.U64) %
+      UScalar.size UScalarTy.U64 =
+    (↑a + ↑b) * (↑a + P - ↑b)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNativeSquare49.lean:50:2: error: unsolved goals
+case refine_1
+x : U64
+z : U32
+hz : AspisR1Qm31ArithmeticProbe.field.reduce_u64 x = ok z
+hv : ↑z = ↑x % AspisV8R17.RawReducer.P
+hc : ↑z < AspisV8R17.RawReducer.P
+checked : AspisR1ProducerChecked47.field.reduce_u64 x = ok z
+h : field.reduce_u64 x = ok (id z)
+⊢ ok (id z) = ok z
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNativeSquare49.lean:60:2: error: unsolved goals
+case refine_1
+x : Old.C
+hx : Canonical x
+a : U32
+ha : field.M31.reduce_u64 (operand x.a x.b) = ok a
+hca : ↑a < P
+hva : ↑↑a = ↑↑(operand x.a x.b)
+ab : U32
+hab : field.M31.mul x.a x.b = ok ab
+hcab : ProverCommitM31Ops48.canonical ab
+hvab : ProverCommitM31Ops48.decode ab = ProverCommitM31Ops48.decode x.a * ProverCommitM31Ops48.decode x.b
+b : U32
+hb : field.M31.add ab ab = ok b
+hcb : ProverCommitM31Ops48.canonical b
+hvb : ProverCommitM31Ops48.decode b = ProverCommitM31Ops48.decode ab + ProverCommitM31Ops48.decode ab
+⊢ (do
+      let m ←
+        field.M31.reduce_u64
+            (((core.convert.num.FromU64U32.from x.a).wrapping_add (core.convert.num.FromU64U32.from x.b)).wrapping_mul
+              (((core.convert.num.FromU64U32.from x.a).wrapping_add
+                    (core.convert.num.FromU64U32.from field.P)).wrapping_sub
+                (core.convert.num.FromU64U32.from x.b)))
+      ok { a := m, b := b }) =
+    ok { a := a, b := b }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNativeSquare49.lean:64:70: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  j ≥ 0
+  i ≥ 0
+  h ≥ 0
+  h - i ≥ 1
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 1
+  e - g ≥ 1
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  c - i + j ≤ -1
+where
+ c := ↑P
+ d := ↑↑a
+ e := ↑ProverCommitM31Ops48.P
+ f := ↑↑ab
+ g := ↑↑b
+ h := ↑AspisR1.ExtractedCurrentTowerAdd.P
+ i := ↑↑x.b
+ j := ↑↑x.a
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNativeSquare49.lean:72:6: error: Tactic `rfl` failed: The left-hand side
+  ProverCommitM31Ops48.decode x.a * ProverCommitM31Ops48.decode x.b +
+    ProverCommitM31Ops48.decode x.a * ProverCommitM31Ops48.decode x.b
+is not definitionally equal to the right-hand side
+  (value x * value x).im
+
+case refine_2.im
+x : Old.C
+hx : Canonical x
+a : U32
+ha : field.M31.reduce_u64 (operand x.a x.b) = ok a
+hca : ↑a < P
+hva : ↑↑a = ↑((↑x.a + ↑x.b) * (↑x.a + P - ↑x.b))
+ab : U32
+hab : field.M31.mul x.a x.b = ok ab
+hcab : ProverCommitM31Ops48.canonical ab
+hvab : ProverCommitM31Ops48.decode ab = ProverCommitM31Ops48.decode x.a * ProverCommitM31Ops48.decode x.b
+b : U32
+hb : field.M31.add ab ab = ok b
+hcb : ProverCommitM31Ops48.canonical b
+hvb : ProverCommitM31Ops48.decode b = ProverCommitM31Ops48.decode ab + ProverCommitM31Ops48.decode ab
+hr : ↑↑a = ↑↑x.a ^ 2 - ↑↑x.b ^ 2
+⊢ ProverCommitM31Ops48.decode x.a * ProverCommitM31Ops48.decode x.b +
+      ProverCommitM31Ops48.decode x.a * ProverCommitM31Ops48.decode x.b =
+    (value x * value x).im
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNativeSquare49.lean:61:6: warning: This simp argument is unused:
+  operand
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵i̵e̵l̵d̵.̵C̵M̵3̵1̵.̵s̵q̵u̵a̵r̵e̵,̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵d̵o̵u̵b̵l̵e̵,̵s̵o̵u̵r̵c̵e̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵R̵e̵l̵e̵a̵s̵e̵4̵7̵.̵c̵o̵n̵v̵C̵,̵f̵r̵o̵m̵C̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵o̵p̵e̵r̵a̵n̵d̵,̵h̵a̵,̵h̵a̵b̵,̵h̵b̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲f̲i̲e̲l̲d̲.̲C̲M̲3̲1̲.̲s̲q̲u̲a̲r̲e̲,̲ ̲f̲i̲e̲l̲d̲.̲M̲3̲1̲.̲d̲o̲u̲b̲l̲e̲,̲ ̲s̲o̲u̲r̲c̲e̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲R̲e̲l̲e̲a̲s̲e̲4̲7̲.̲c̲o̲n̲v̲C̲,̲ ̲f̲r̲o̲m̲C̲,̲ ̲h̲a̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲b̲,̲ ̲h̲b̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNativeSquare49.lean:61:14: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [field.CM31.square, ̲field.M31.double, ̲source, ̲ProverCommitRelease47.convC, ̲fromC,
+       ̵ ̵operand, ̲ha,̵h̵a̵b, ̲hb, ̲lift, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitNativeSquare49.widen' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitNativeSquare49.operand_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitNativeSquare49.reduce_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitNativeSquare49.square' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

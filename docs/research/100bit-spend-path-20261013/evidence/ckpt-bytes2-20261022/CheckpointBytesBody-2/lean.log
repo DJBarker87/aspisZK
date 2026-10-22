@@ -1,0 +1,1619 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:20:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:27:49: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:28:60: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:43:150: error: No goals to be solved
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:49:135: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:56:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:70:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ↑i < 16
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (OraclePortPhysicalFrameDraft.magic ++ [2, 10, 1, 0, 0, 0, 0, 0])[↑i]?
+v : U8
+run : body_byte p a hp hu (↑⟨↑i, h16⟩)#usize = ok v
+byte :
+  (OraclePortPhysicalFrameDraft.magic ++ [2, 10, 1, 0, 0, 0, 0, 0])[↑⟨↑i, h16⟩]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:86:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ↑i < 48
+k : UScalar UScalarTy.Usize := (↑i - 16)#usize
+kb : ↑k < 32
+idx : 16 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (AspisV8R19.SourceDuplexStep.bytes (stateOf hp))[↑k]?
+pos : 16 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte : (AspisV8R19.SourceDuplexStep.bytes (stateOf hp))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:102:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ↑i < 80
+k : UScalar UScalarTy.Usize := (↑i - 48)#usize
+kb : ↑k < 32
+idx : 48 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (AspisV8R19.SourceDuplexStep.bytes (stateOf hu))[↑k]?
+pos : 48 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte : (AspisV8R19.SourceDuplexStep.bytes (stateOf hu))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:118:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ↑i < 112
+k : UScalar UScalarTy.Usize := (↑i - 80)#usize
+kb : ↑k < 32
+idx : 80 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (AspisV8R19.SourceDuplexStep.bytes (stateOf p.state))[↑k]?
+pos : 80 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte : (AspisV8R19.SourceDuplexStep.bytes (stateOf p.state))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:134:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ↑i < 144
+k : UScalar UScalarTy.Usize := (↑i - 112)#usize
+kb : ↑k < 32
+idx : 112 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (AspisV8R19.SourceDuplexStep.bytes (stateOf (↑p.roots)[↑0]))[↑k]?
+pos : 112 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte :
+  (AspisV8R19.SourceDuplexStep.bytes (stateOf (↑p.roots)[0]))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:150:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ↑i < 176
+k : UScalar UScalarTy.Usize := (↑i - 144)#usize
+kb : ↑k < 32
+idx : 144 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (AspisV8R19.SourceDuplexStep.bytes (stateOf (↑p.roots)[↑1]))[↑k]?
+pos : 144 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte :
+  (AspisV8R19.SourceDuplexStep.bytes (stateOf (↑p.roots)[1]))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:166:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ↑i < 208
+k : UScalar UScalarTy.Usize := (↑i - 176)#usize
+kb : ↑k < 32
+idx : 176 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (OraclePortCheckpointAbiC5.encodeE (exactE p.gamma ⋯))[↑k]?
+pos : 176 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte : (OraclePortCheckpointAbiC5.encodeE (exactE p.gamma ⋯))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:182:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ↑i < 240
+k : UScalar UScalarTy.Usize := (↑i - 208)#usize
+kb : ↑k < 32
+idx : 208 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (OraclePortCheckpointAbiC5.encodeE (exactE p.kappa ⋯))[↑k]?
+pos : 208 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte : (OraclePortCheckpointAbiC5.encodeE (exactE p.kappa ⋯))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:198:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ↑i < 272
+k : UScalar UScalarTy.Usize := (↑i - 240)#usize
+kb : ↑k < 32
+idx : 240 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (OraclePortCheckpointAbiC5.encodeE (exactE (↑p.alpha)[↑0] ⋯))[↑k]?
+pos : 240 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte :
+  (OraclePortCheckpointAbiC5.encodeE (exactE (↑p.alpha)[0] ⋯))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:214:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ¬↑i < 272
+h304 : ↑i < 304
+k : UScalar UScalarTy.Usize := (↑i - 272)#usize
+kb : ↑k < 32
+idx : 272 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (OraclePortCheckpointAbiC5.encodeE (exactE (↑p.alpha)[↑1] ⋯))[↑k]?
+pos : 272 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte :
+  (OraclePortCheckpointAbiC5.encodeE (exactE (↑p.alpha)[1] ⋯))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:230:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ¬↑i < 272
+h304 : ¬↑i < 304
+h320 : ↑i < 320
+k : UScalar UScalarTy.Usize := (↑i - 304)#usize
+kb : ↑k < 16
+idx : 304 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (OraclePortCheckpointAbiC5.encodeK (exactK p.rho ⋯))[↑k]?
+pos : 304 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte : (OraclePortCheckpointAbiC5.encodeK (exactK p.rho ⋯))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:242:232: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  0 ≤ d ≤ 21
+  0 ≤ c ≤ 3
+  0 ≤ c + 4*d ≤ 87
+  0 ≤ b ≤ 21
+  -3 ≤ 4*b - c - 4*d ≤ 0
+  4*b + e ≥ 88
+where
+ b := ↑(↑i - 320) / 4
+ c := ↑↑k
+ d := ↑↑⟨(↑i - 320) / 4, ordinal⟩
+ e := ↑↑((↑i - 320) % 4)#usize
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:248:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  320 + 4 * ↑j + ↑k
+in the target expression
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[320 + (4 * ↑j + ↑k)]? =
+    (((fun i => le32 ↑i) ∘ fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩) j)[↑k]?
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ¬↑i < 272
+h304 : ¬↑i < 304
+h320 : ¬↑i < 320
+h408 : ↑i < 408
+ordinal : (↑i - 320) / 4 < 22
+j : Fin 22 := ⟨(↑i - 320) / 4, ordinal⟩
+k : UScalar UScalarTy.Usize := ((↑i - 320) % 4)#usize
+kb : ↑k < 4
+idx : 320 + 4 * ↑j + ↑k = ↑i
+localByte :
+  ∃ v, body_byte p a hp hu i = ok v ∧ (le32 ↑(↑p.queries)[↑j])[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[320 + (4 * ↑j + ↑k)]? =
+    (((fun i => le32 ↑i) ∘ fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩) j)[↑k]?
+pos : 320 + 4 * ↑j + ↑k = ↑i
+⊢ ∃ v,
+    body_byte p a hp hu i = ok v ∧
+      (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical)
+            (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu))[↑i]? =
+        some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    p.roots
+  has type
+    Std.Array (Std.Array U8 32#usize) 2#usize
+  but is expected to have type
+    { l // l.length = ↑2#usize }
+  in the application
+    ↑p.roots
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:263:233: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  0 ≤ d ≤ 9
+  0 ≤ c ≤ 15
+  0 ≤ c + 16*d ≤ 159
+  0 ≤ b ≤ 9
+  -15 ≤ 16*b - c - 16*d ≤ 0
+  16*b + e ≥ 160
+where
+ b := ↑(↑i - 408) / 16
+ c := ↑↑k
+ d := ↑↑⟨(↑i - 408) / 16, ordinal⟩
+ e := ↑↑((↑i - 408) % 16)#usize
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:270:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  408 + 16 * ↑j + ↑k
+in the target expression
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[408 + (16 * ↑j + ↑k)]? =
+    ((OraclePortCheckpointAbiC5.encodeK ∘ fun j => exactK (↑p.semantic_alpha)[↑j] ⋯) j)[↑k]?
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ¬↑i < 272
+h304 : ¬↑i < 304
+h320 : ¬↑i < 320
+h408 : ¬↑i < 408
+h568 : ↑i < 568
+ordinal : (↑i - 408) / 16 < 10
+j : Fin 10 := ⟨(↑i - 408) / 16, ordinal⟩
+k : UScalar UScalarTy.Usize := ((↑i - 408) % 16)#usize
+kb : ↑k < 16
+idx : 408 + 16 * ↑j + ↑k = ↑i
+localByte :
+  ∃ v,
+    body_byte p a hp hu i = ok v ∧
+      (OraclePortCheckpointAbiC5.encodeK (exactK (↑p.semantic_alpha)[↑j] ⋯))[↑k]? =
+        some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[408 + (16 * ↑j + ↑k)]? =
+    ((OraclePortCheckpointAbiC5.encodeK ∘ fun j => exactK (↑p.semantic_alpha)[↑j] ⋯) j)[↑k]?
+pos : 408 + 16 * ↑j + ↑k = ↑i
+⊢ ∃ v,
+    body_byte p a hp hu i = ok v ∧
+      (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical)
+            (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu))[↑i]? =
+        some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    p.roots
+  has type
+    Std.Array (Std.Array U8 32#usize) 2#usize
+  but is expected to have type
+    { l // l.length = ↑2#usize }
+  in the application
+    ↑p.roots
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:293:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ¬↑i < 272
+h304 : ¬↑i < 304
+h320 : ¬↑i < 320
+h408 : ¬↑i < 408
+h568 : ¬↑i < 568
+h584 : ↑i < 584
+k : UScalar UScalarTy.Usize := (↑i - 568)#usize
+kb : ↑k < 16
+idx : 568 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    ((OraclePortCheckpointAbiC5.encodeK ∘ fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯)
+        ⟨0, ⋯⟩)[↑k]?
+pos : 568 + (16 * 0 + ↑k) = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte :
+  (OraclePortCheckpointAbiC5.encodeK (exactK (↑p.z)[0].x ⋯))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:313:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ¬↑i < 272
+h304 : ¬↑i < 304
+h320 : ¬↑i < 320
+h408 : ¬↑i < 408
+h568 : ¬↑i < 568
+h584 : ¬↑i < 584
+h600 : ↑i < 600
+k : UScalar UScalarTy.Usize := (↑i - 584)#usize
+kb : ↑k < 16
+idx : 584 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    ((OraclePortCheckpointAbiC5.encodeK ∘ fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯)
+        ⟨1, ⋯⟩)[↑k]?
+pos : 568 + (16 * 1 + ↑k) = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte :
+  (OraclePortCheckpointAbiC5.encodeK (exactK (↑p.z)[0].y ⋯))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:333:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ¬↑i < 272
+h304 : ¬↑i < 304
+h320 : ¬↑i < 320
+h408 : ¬↑i < 408
+h568 : ¬↑i < 568
+h584 : ¬↑i < 584
+h600 : ¬↑i < 600
+h616 : ↑i < 616
+k : UScalar UScalarTy.Usize := (↑i - 600)#usize
+kb : ↑k < 16
+idx : 600 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    ((OraclePortCheckpointAbiC5.encodeK ∘ fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯)
+        ⟨2, ⋯⟩)[↑k]?
+pos : 568 + (16 * 2 + ↑k) = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte :
+  (OraclePortCheckpointAbiC5.encodeK (exactK (↑p.z)[1].x ⋯))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:353:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ¬↑i < 272
+h304 : ¬↑i < 304
+h320 : ¬↑i < 320
+h408 : ¬↑i < 408
+h568 : ¬↑i < 568
+h584 : ¬↑i < 584
+h600 : ¬↑i < 600
+h616 : ¬↑i < 616
+h632 : ↑i < 632
+k : UScalar UScalarTy.Usize := (↑i - 616)#usize
+kb : ↑k < 16
+idx : 616 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    ((OraclePortCheckpointAbiC5.encodeK ∘ fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯)
+        ⟨3, ⋯⟩)[↑k]?
+pos : 568 + (16 * 3 + ↑k) = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte :
+  (OraclePortCheckpointAbiC5.encodeK (exactK (↑p.z)[1].y ⋯))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:369:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ¬↑i < 272
+h304 : ¬↑i < 304
+h320 : ¬↑i < 320
+h408 : ¬↑i < 408
+h568 : ¬↑i < 568
+h584 : ¬↑i < 584
+h600 : ¬↑i < 600
+h616 : ¬↑i < 616
+h632 : ¬↑i < 632
+h664 : ↑i < 664
+k : UScalar UScalarTy.Usize := (↑i - 632)#usize
+kb : ↑k < 32
+idx : 632 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (OraclePortCheckpointAbiC5.encodeE (exactE p.claim ⋯))[↑k]?
+pos : 632 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte : (OraclePortCheckpointAbiC5.encodeE (exactE p.claim ⋯))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:385:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ¬↑i < 272
+h304 : ¬↑i < 304
+h320 : ¬↑i < 320
+h408 : ¬↑i < 408
+h568 : ¬↑i < 568
+h584 : ¬↑i < 584
+h600 : ¬↑i < 600
+h616 : ¬↑i < 616
+h632 : ¬↑i < 632
+h664 : ¬↑i < 664
+h696 : ↑i < 696
+k : UScalar UScalarTy.Usize := (↑i - 664)#usize
+kb : ↑k < 32
+idx : 664 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (OraclePortCheckpointAbiC5.encodeE (exactE a.rhs ⋯))[↑k]?
+pos : 664 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte : (OraclePortCheckpointAbiC5.encodeE (exactE a.rhs ⋯))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:401:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OraclePortCheckpointAbiC5.body
+      { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+        kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+        queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+        coordinates := fun j =>
+          exactK
+            (match ↑j with
+            | 0 => (↑p.z)[0].x
+            | 1 => (↑p.z)[0].y
+            | 2 => (↑p.z)[1].x
+            | x => (↑p.z)[1].y)
+            ⋯,
+        claim := exactE p.claim ⋯ }
+      { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+      (stateOf hp) (stateOf hu))[↑i]?
+in the target expression
+  (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+case pos
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ¬↑i < 272
+h304 : ¬↑i < 304
+h320 : ¬↑i < 320
+h408 : ¬↑i < 408
+h568 : ¬↑i < 568
+h584 : ¬↑i < 584
+h600 : ¬↑i < 600
+h616 : ¬↑i < 616
+h632 : ¬↑i < 632
+h664 : ¬↑i < 664
+h696 : ¬↑i < 696
+h712 : ↑i < 712
+k : UScalar UScalarTy.Usize := (↑i - 696)#usize
+kb : ↑k < 16
+idx : 696 + ↑k = ↑i
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[↑i]? =
+    (OraclePortCheckpointAbiC5.encodeK (exactK a.power ⋯))[↑k]?
+pos : 696 + ↑k = ↑i
+v : U8
+run : body_byte p a hp hu i = ok v
+byte : (OraclePortCheckpointAbiC5.encodeK (exactK a.power ⋯))[↑k]? = some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+⊢ (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical) (accumulator (fields p a size qb) canonical)
+        (stateOf hp) (stateOf hu))[↑i]? =
+    some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:412:231: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  0 ≤ d ≤ 63
+  0 ≤ c ≤ 15
+  0 ≤ c + 16*d ≤ 1023
+  0 ≤ b ≤ 63
+  -15 ≤ 16*b - c - 16*d ≤ 0
+  16*b + e ≥ 1024
+where
+ b := ↑(↑i - 712) / 16
+ c := ↑↑k
+ d := ↑↑⟨(↑i - 712) / 16, ordinal⟩
+ e := ↑↑((↑i - 712) % 16)#usize
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:419:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  712 + 16 * ↑j + ↑k
+in the target expression
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[712 + (16 * ↑j + ↑k)]? =
+    ((OraclePortCheckpointAbiC5.encodeK ∘ fun j => exactK (↑a.weights)[↑j] ⋯) j)[↑k]?
+
+case neg
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CanonicalFields (fields p a size qb)
+next : ↑a.next = 10
+i : Usize
+bound : ↑i < 1736
+h16 : ¬↑i < 16
+h48 : ¬↑i < 48
+h80 : ¬↑i < 80
+h112 : ¬↑i < 112
+h144 : ¬↑i < 144
+h176 : ¬↑i < 176
+h208 : ¬↑i < 208
+h240 : ¬↑i < 240
+h272 : ¬↑i < 272
+h304 : ¬↑i < 304
+h320 : ¬↑i < 320
+h408 : ¬↑i < 408
+h568 : ¬↑i < 568
+h584 : ¬↑i < 584
+h600 : ¬↑i < 600
+h616 : ¬↑i < 616
+h632 : ¬↑i < 632
+h664 : ¬↑i < 664
+h696 : ¬↑i < 696
+h712 : ¬↑i < 712
+ordinal : (↑i - 712) / 16 < 64
+j : Fin 64 := ⟨(↑i - 712) / 16, ordinal⟩
+k : UScalar UScalarTy.Usize := ((↑i - 712) % 16)#usize
+kb : ↑k < 16
+idx : 712 + 16 * ↑j + ↑k = ↑i
+localByte :
+  ∃ v,
+    body_byte p a hp hu i = ok v ∧
+      (OraclePortCheckpointAbiC5.encodeK (exactK (↑a.weights)[↑j] ⋯))[↑k]? =
+        some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+cast : (↑i)#usize = i
+lookup :
+  (OraclePortCheckpointAbiC5.body
+        { state := stateOf p.state, roots := fun j => stateOf (↑p.roots)[↑j], gamma := exactE p.gamma ⋯,
+          kappa := exactE p.kappa ⋯, alpha := fun j => exactE (↑p.alpha)[↑j] ⋯, rho := exactK p.rho ⋯,
+          queries := fun j => ⟨↑(↑p.queries)[↑j], ⋯⟩, semanticAlpha := fun j => exactK (↑p.semantic_alpha)[↑j] ⋯,
+          coordinates := fun j =>
+            exactK
+              (match ↑j with
+              | 0 => (↑p.z)[0].x
+              | 1 => (↑p.z)[0].y
+              | 2 => (↑p.z)[1].x
+              | x => (↑p.z)[1].y)
+              ⋯,
+          claim := exactE p.claim ⋯ }
+        { weights := fun j => exactK (↑a.weights)[↑j] ⋯, rhs := exactE a.rhs ⋯, power := exactK a.power ⋯, next := 10 }
+        (stateOf hp) (stateOf hu))[712 + (16 * ↑j + ↑k)]? =
+    ((OraclePortCheckpointAbiC5.encodeK ∘ fun j => exactK (↑a.weights)[↑j] ⋯) j)[↑k]?
+pos : 712 + 16 * ↑j + ↑k = ↑i
+⊢ ∃ v,
+    body_byte p a hp hu i = ok v ∧
+      (OraclePortCheckpointAbiC5.body (prepared (fields p a size qb) canonical)
+            (accumulator (fields p a size qb) canonical) (stateOf hp) (stateOf hu))[↑i]? =
+        some (AspisV8R19.SqueezeOracleBridge.decodeByte v)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    p.roots
+  has type
+    Std.Array (Std.Array U8 32#usize) 2#usize
+  but is expected to have type
+    { l // l.length = ↑2#usize }
+  in the application
+    ↑p.roots
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes2/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBody.lean:66:105: warning: This simp argument is unused:
+  List.getElem_cons_succ
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵r̵a̵c̵l̵e̵P̵o̵r̵t̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵A̵b̵i̵C̵5̵.̵o̵f̵f̵s̵e̵t̵s̵,̵O̵r̵a̵c̵l̵e̵P̵o̵r̵t̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵A̵b̵i̵C̵5̵.̵b̵l̵o̵c̵k̵s̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵p̵r̵e̵p̵a̵r̵e̵d̵,̵a̵c̵c̵u̵m̵u̵l̵a̵t̵o̵r̵,̵f̵i̵e̵l̵d̵s̵]̵[̲O̲r̲a̲c̲l̲e̲P̲o̲r̲t̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲A̲b̲i̲C̲5̲.̲o̲f̲f̲s̲e̲t̲s̲,̲ ̲O̲r̲a̲c̲l̲e̲P̲o̲r̲t̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲A̲b̲i̲C̲5̲.̲b̲l̲o̲c̲k̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲p̲r̲e̲p̲a̲r̲e̲d̲,̲ ̲a̲c̲c̲u̲m̲u̲l̲a̲t̲o̲r̲,̲ ̲f̲i̲e̲l̲d̲s̲]̲ at lookup
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CheckpointBytesBody.body_block' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytesBody.body_byte_c5' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

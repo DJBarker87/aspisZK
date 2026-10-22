@@ -1,0 +1,102 @@
+import CheckpointBytes5Inputs
+import CheckpointBytesBodyDecodeJoin
+
+/-! Ordered checkpoint writer at the retained selector/content boundary.
+Pure Vec materialization is represented by its bytes; sourceBody is the
+previous kernel-checked 1736-byte selector, not an assumed C5 body. The native
+writer's allocation/Vec owner remains at the existing explicit P6 boundary. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CheckpointBytes5Writer
+open Aeneas Aeneas.Std Result
+open AspisR1Stage2 CheckpointBytes5Effect CheckpointBytes5Inputs
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open MultiproofConeCanonical CheckpointBytesDecodeC5 CheckpointBytesDigest
+open AspisR1DigestLogCarrier (flatten)
+open AspisR1Stage2.WireTx2 (singletonParts checksumParts)
+abbrev Prepared := OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.verifier.Prepared
+abbrev Accumulator := OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.verifier.Accumulator
+
+def u8 (b : Byte) : U8 := U8.ofNat b.val (by have := b.isLt; scalar_tac)
+
+theorem u8_roundtrip (b : Byte) : AspisV8R19.SqueezeOracleBridge.decodeByte (u8 b) = b := by
+  apply Fin.ext
+  rfl
+
+theorem bytes_roundtrip (bs : Bytes) : bytesOf (bs.map u8) = bs := by
+  simp only [bytesOf,List.map_map,Function.comp_def,u8_roundtrip,List.map_id_fun]
+
+def bodySlice (p : Prepared) (a : Accumulator) (hp hu : Digest) : Slice U8 :=
+  ⟨(sourceBody p a hp hu).map u8,by
+    simp only [List.length_map,sourceBody,List.length_ofFn]
+    scalar_tac⟩
+
+def finish (p : Prepared) (a : Accumulator) (hp hu hc : Digest) : Slice U8 :=
+  ⟨(sourceBody p a hp hu).map u8 ++ hc.val,by
+    simp only [List.length_append,List.length_map,sourceBody,List.length_ofFn,hc.property]
+    scalar_tac⟩
+
+def writer (p : Prepared) (a : Accumulator) (proof public1 : Slice U8) : Code (Slice U8) := do
+  let hp ← read (singletonParts proof)
+  let hu ← read (singletonParts public1)
+  let hc ← read (checksumParts (bodySlice p a hp hu))
+  pure (finish p a hp hu hc)
+
+theorem finish_bytes (p : Prepared) (a : Accumulator) (hp hu hc : Digest) :
+    bytesOf (finish p a hp hu hc).val = sourceBody p a hp hu ++ bytes (stateOf hc) := by
+  simp only [finish,bytesOf,List.map_append]
+  rw [← bytesOf,bytes_roundtrip,← bytes_stateOf]
+
+theorem writer_effects {Hash : Type} (D : aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (H : Bytes → State) (oracle : Oracle D hash H)
+    (p : Prepared) (a : Accumulator) (proof public1 ck : Slice U8)
+    (size : a.weights.val.length = 64)
+    (qb : ∀ j : Fin 22, (p.queries.val[j.val]'(by simpa [p.queries.property] using j.isLt)).val < 262144)
+    (canonical : CheckpointBytesBlocks.CanonicalFields (CheckpointBytesBody.fields p a size qb))
+    (next : a.next.val = 10) (before after : Log)
+    (success : run D hash (writer p a proof public1) before = ok (ck,after)) :
+    let pm := CheckpointBytesBlocks.prepared (CheckpointBytesBody.fields p a size qb) canonical
+    let am := CheckpointBytesBlocks.accumulator (CheckpointBytesBody.fields p a size qb) canonical
+    let stored := bytesOf proof.val
+    let pub := bytesOf public1.val
+    let address := OraclePortPhysicalFrameDraft.domain ++
+      OraclePortCheckpointAbiC5.body pm am (H stored) (H pub)
+    bytesOf ck.val = OraclePortCheckpointAbiC5.encode H stored pub pm am ∧
+    observe after = observe before ++
+      [(stored,H stored),(pub,H pub),(address,H address)] := by
+  have erased := run_success D hash (writer p a proof public1) before after ck success
+  simp only [writer,erase_bind,erase_read,erase_pure] at erased
+  obtain ⟨hp,hpCall,h⟩ := OraclePortCkptAbiTry.bind_success _ _ _ erased
+  obtain ⟨hu,huCall,h⟩ := OraclePortCkptAbiTry.bind_success _ _ _ h
+  obtain ⟨hc,hcCall,h⟩ := OraclePortCkptAbiTry.bind_success _ _ _ h
+  have ckEq := Result.ok.inj h
+  have actual : run D hash (writer p a proof public1) before =
+      ok (finish p a hp hu hc, ((before ++ [(singletonParts proof,hp)]) ++
+        [(singletonParts public1,hu)]) ++ [(checksumParts (bodySlice p a hp hu),hc)]) := by
+    simp only [writer,run_bind,run_read,run_pure,hpCall,huCall,hcCall,
+      bind_tc_ok,Aeneas.Std.uncurry]
+  have logEq := congrArg Prod.snd (Result.ok.inj (actual.symm.trans success))
+  dsimp only at ckEq logEq
+  have hpEq := oracle _ _ hpCall
+  have huEq := oracle _ _ huCall
+  rw [singleton_input] at hpEq huEq
+  have body := CheckpointBytesDecodeC5.source_body_c5 p a hp hu size qb canonical next
+  rw [hpEq,huEq] at body
+  have hcEq := oracle _ _ hcCall
+  rw [checksum_input] at hcEq
+  change stateOf hc = H (OraclePortPhysicalFrameDraft.domain ++ bytesOf ((sourceBody p a hp hu).map u8)) at hcEq
+  rw [bytes_roundtrip,body] at hcEq
+  constructor
+  · rw [← ckEq,finish_bytes,body,hcEq]
+    rfl
+  · rw [← logEq]
+    simp only [observe,List.map_append,List.map_cons,List.map_nil]
+    simp only [hpEq,huEq,hcEq,singleton_input,checksum_input,bodySlice,bytes_roundtrip,body,
+      List.append_assoc,List.cons_append,List.nil_append]
+
+#print axioms u8_roundtrip
+#print axioms bytes_roundtrip
+#print axioms finish_bytes
+#print axioms writer_effects
+end AspisR1.CheckpointBytes5Writer
+end

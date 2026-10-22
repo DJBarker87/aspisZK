@@ -1,0 +1,181 @@
+   Compiling publication33-gate v0.1.0 (/home/dombarker/project-offloads/codex-cx-prover-commit43-20261022/publication)
+warning: unexpected `cfg` condition name: `kani`
+   --> lib.rs:116:7
+    |
+116 | #[cfg(kani)] mod proofs {
+    |       ^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: failed to resolve item path `aspis_public_nonce_padding43::owner::generate`: path `aspis_public_nonce_padding43` does not correspond to any item; did you mean `crate::aspis_public_nonce_padding43`?
+
+warning: associated items `new`, `insert`, and `entry` are never used
+  --> lib.rs:10:5
+   |
+ 9 | impl<K:Ord,V> BTreeMap<K,V> {
+   | --------------------------- associated items in this implementation
+10 |  fn new()->Self {Self{entries:[None,None,None,None],len:0}}
+   |     ^^^
+...
+14 |  fn insert(&mut self,k:K,v:V)->Option<V> {
+   |     ^^^^^^
+...
+24 |  fn entry(&mut self,k:K)->Entry<'_,K,V> {Entry(self,k)}
+   |     ^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `Entry` is never constructed
+  --> lib.rs:57:8
+   |
+57 | struct Entry<'a,K,V>(&'a mut BTreeMap<K,V>,K);
+   |        ^^^^^
+
+warning: type `Error` is more private than the item `append_nodes`
+   --> lib.rs:103:1
+    |
+103 | pub fn append_nodes(mut out:Vec<u8>,nodes:Vec<u8>,cap:usize)->Result<Vec<u8>,Error> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `append_nodes` is reachable at visibility `pub`
+    |
+note: but type `Error` is only usable at visibility `pub(crate)`
+   --> lib.rs:74:31
+    |
+ 74 | #[derive(Debug,PartialEq,Eq)] enum Error {Transcript,Parse}
+    |                               ^^^^^^^^^^
+    = note: `#[warn(private_interfaces)]` on by default
+
+warning: method `or_insert_with` is never used
+  --> lib.rs:59:5
+   |
+58 | impl<'a,K:Ord,V> Entry<'a,K,V> {
+   | ------------------------------ method in this implementation
+59 |  fn or_insert_with(self,f:impl FnOnce()->V)->&'a mut V {
+   |     ^^^^^^^^^^^^^^
+
+warning: struct `Drawn` is never constructed
+  --> lib.rs:67:25
+   |
+67 | #[derive(Clone)] struct Drawn {queries:Vec<u32>}
+   |                         ^^^^^
+
+warning: struct `Eval` is never constructed
+  --> lib.rs:68:8
+   |
+68 | struct Eval {bytes:[u8;4],calls:Cell<usize>}
+   |        ^^^^
+
+warning: struct `View` is never constructed
+  --> lib.rs:69:8
+   |
+69 | struct View {q1:Eval}
+   |        ^^^^
+
+warning: function `eval_at` is never used
+  --> lib.rs:70:4
+   |
+70 | fn eval_at(q:&Eval,i:usize)->u8 {q.calls.set(q.calls.get()+1);q.bytes[i%4] ^ i as u8}
+   |    ^^^^^^^
+
+warning: function `encoded` is never used
+  --> lib.rs:71:4
+   |
+71 | fn encoded(v:impl Iterator<Item=u8>)->Vec<u8> {v.collect()}
+   |    ^^^^^^^
+
+warning: struct `Coins` is never constructed
+  --> lib.rs:72:8
+   |
+72 | struct Coins {seed:u8,next:usize}
+   |        ^^^^^
+
+warning: method `coin` is never used
+  --> lib.rs:73:16
+   |
+73 | impl Coins {fn coin(&mut self)->[u8;32] {let x=[self.seed ^ self.next as u8;32];self.next+=1;x}}
+   | ----------     ^^^^
+   | |
+   | method in this implementation
+
+warning: variant `Transcript` is never constructed
+  --> lib.rs:74:43
+   |
+74 | #[derive(Debug,PartialEq,Eq)] enum Error {Transcript,Parse}
+   |                                    -----  ^^^^^^^^^^
+   |                                    |
+   |                                    variant in this enum
+   |
+   = note: `Error` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: type alias `Table` is never used
+  --> lib.rs:75:6
+   |
+75 | type Table=BTreeMap<Vec<u8>,[u8;32]>;
+   |      ^^^^^
+
+warning: function `native_folded` is never used
+ --> native-loops.rs:1:4
+  |
+1 | fn native_folded(drawn:&Drawn,view:&View,mut folded:BTreeMap<usize,Vec<u8>>)->BTreeMap<usize,Vec<u8>> {
+  |    ^^^^^^^^^^^^^
+
+warning: function `native_leaves` is never used
+ --> native-loops.rs:4:4
+  |
+4 | fn native_leaves(opened:&BTreeMap<usize,(u8,Vec<u8>,Vec<u8>)>,folded:&BTreeMap<usize,Vec<u8>>,commit_coins:&mut Coins)->(BTreeMap<usi...
+  |    ^^^^^^^^^^^^^
+
+warning: function `native_publish` is never used
+ --> native-loops.rs:8:4
+  |
+8 | fn native_publish(drawn:&Drawn,opened:&BTreeMap<usize,(u8,Vec<u8>,Vec<u8>)>,leaves1:&BTreeMap<usize,(Vec<u8>,[u8;32])>,leaves2:&BTree...
+  |    ^^^^^^^^^^^^^^
+
+warning: function `native_merge` is never used
+  --> native-loops.rs:16:4
+   |
+16 | fn native_merge(mut table:Table,transcript:Table)->Result<Table,Error> {
+   |    ^^^^^^^^^^^^
+
+warning: function `folded_rec` is never used
+  --> lib.rs:79:4
+   |
+79 | fn folded_rec(q:&[u32],view:&View,mut out:BTreeMap<usize,Vec<u8>>)->BTreeMap<usize,Vec<u8>> {
+   |    ^^^^^^^^^^
+
+warning: function `publish_rec` is never used
+  --> lib.rs:88:4
+   |
+88 | fn publish_rec(q:&[u32],o:&BTreeMap<usize,(u8,Vec<u8>,Vec<u8>)>,
+   |    ^^^^^^^^^^^
+
+warning: function `merge_rec` is never used
+  --> lib.rs:96:4
+   |
+96 | fn merge_rec(mut table:Table,reads:&[(Vec<u8>,[u8;32])])->Result<Table,Error> {
+   |    ^^^^^^^^^
+
+warning: enum `CodecError` is never used
+   --> lib.rs:108:47
+    |
+108 | #[derive(Clone,Copy,Debug,PartialEq,Eq)] enum CodecError {Length,NonZeroHigh}
+    |                                               ^^^^^^^^^^
+
+warning: function `compact_values` is never used
+   --> lib.rs:109:4
+    |
+109 | fn compact_values(logical:&[u8],out:&mut Vec<u8>)->Result<(),CodecError> {
+    |    ^^^^^^^^^^^^^^
+
+ERROR Code failed to compile
+warning: `publication33-gate` (lib) generated 23 warnings
+error: could not compile `publication33-gate` (lib); 23 warnings emitted
+
+Caused by:
+  process didn't exit successfully: `/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon-driver charon-dont-cache-this-1559157-1792651591168188484 /home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/rustc --crate-name publication33_gate --edition=2021 lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values())' -C metadata=bdb54cb89cb8c532 -C extra-filename=-9e7b0dc71b1fe3ee --out-dir /home/dombarker/project-offloads/codex-cx-prover-commit43-20261022/charon-target/x86_64-unknown-linux-gnu/release/deps --target x86_64-unknown-linux-gnu -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-cx-prover-commit43-20261022/charon-target/x86_64-unknown-linux-gnu/release/deps -L dependency=/home/dombarker/project-offloads/codex-cx-prover-commit43-20261022/charon-target/release/deps -C link-arg=-Wl,--threads=4` (exit status: 2)

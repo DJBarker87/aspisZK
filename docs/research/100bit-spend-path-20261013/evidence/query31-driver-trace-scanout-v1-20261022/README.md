@@ -1,0 +1,7 @@
+# DriverTrace to full `scanOut` result
+
+This source-only Lean packet proves the generated eight-block `DriverTrace` refines the full-array Q22 `scanOut` call. It preserves the original eight-element `blocks` and `advances` arrays (mapped through `decodeState`) and returns the exact accepted U32 values plus the same final decoded state. The `initial` oracle fallback is arbitrary. The proof uses the source state's validity and zero draw counter, plus the exact successful `DriverTrace`; each intermediate advance is read from the original array by its index witness. At `stop7`, the final source scan may return either Boolean: true uses the stopped constructor, false continues to `Run.done`.
+
+The theorem is `AspisR1Query31DriverTraceScanOutV1.successful_driver_trace_scanOut`. It does not itself establish that an upstream source-default state has Q22 state `q0`; an accepted source-default bridge may specialize it.
+
+Validation used the pinned Lean 4.32 executable and exact absolute `LEAN_PATH` in `receipt/LEAN_PATH.txt`. The compiler log includes the successful `#print axioms` output `[propext, Classical.choice, Quot.sound]`. Exact launch source revision, exit, wall time, RSS and swap are recorded in `manifest.json` and `receipt/`. Two earlier failed compiler iterations shared and overwrote the temporary attempt paths; their individual source/log/receipt artifacts are unavailable. This packet retains only the final successful compile and does not claim to preserve those earlier diagnostics. Compiled objects are intentionally excluded.

@@ -1,0 +1,79 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:62:29: error(lean.unknownIdentifier): Unknown constant `Except.bind_err`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:64:18: error(lean.unknownIdentifier): Unknown constant `Except.bind_ok`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:65:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (do
+      let nodes ← Except.ok nodes
+      if List.length nodes > slot.cap then Except.error Error.parse
+        else Except.ok (out ++ nodes ++ List.replicate (slot.cap - List.length nodes) 0)) =
+    Except.ok result
+of `ok`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case ok
+out : Bytes
+slot : Slot
+result nodes : Bytes
+hn : slot.nodes = Except.ok nodes
+ok :
+  (do
+      let nodes ← Except.ok nodes
+      if List.length nodes > slot.cap then Except.error Error.parse
+        else Except.ok (out ++ nodes ++ List.replicate (slot.cap - List.length nodes) 0)) =
+    Except.ok result
+⊢ List.length result = List.length out + slot.cap
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:88:47: error(lean.unknownIdentifier): Unknown constant `Except.bind_err`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:88:19: error: Type mismatch: After simplification, term
+  ih (Except.error e)
+ has type
+  @Eq (Except Error Bytes)
+    (List.foldl (fun result slot => result.bind fun bytes => appendSlot bytes slot) (Except.error e) ss)
+    ((Except.error e).bind (slots ss))
+but is expected to have type
+  @Eq (Except Error Bytes)
+    (List.foldl (fun result slot => result.bind fun bytes => appendSlot bytes slot)
+      ((Except.error e).bind fun bytes => appendSlot bytes s) ss)
+    ((Except.error e).bind (slots (s :: ss)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:89:47: error(lean.unknownIdentifier): Unknown constant `Except.bind_ok`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:89:17: error: unsolved goals
+case cons.ok
+ss✝ : List Slot
+out : Bytes
+s : Slot
+ss : List Slot
+ih :
+  ∀ (initial : Except Error Bytes),
+    List.foldl (fun result slot => result.bind fun bytes => appendSlot bytes slot) initial ss = initial.bind (slots ss)
+bytes : Bytes
+⊢ ((Except.ok bytes).bind fun bytes => appendSlot bytes s).bind (slots ss) =
+    (Except.ok bytes).bind fun x => (appendSlot x s).bind (slots ss)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:100:31: error(lean.unknownIdentifier): Unknown constant `Except.bind_err`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:102:20: error(lean.unknownIdentifier): Unknown constant `Except.bind_ok`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:109:14: error: unexpected token 'prefix'; expected '_' or identifier
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:109:22: error: unexpected identifier; expected prec
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:111:12: error: unexpected token '←'; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:111:21: error: unexpected token 'let'; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:112:30: error: unexpected token 'if'; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:117:18: error: unexpected token 'prefix'; expected '_' or identifier
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:117:26: error: unexpected identifier; expected prec
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:119:12: error: unexpected token '←'; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:119:21: error: unexpected token 'let'; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:120:38: error: unexpected token 'if'; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:125:23: error: unexpected token 'prefix'; expected '_' or identifier
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:125:31: error: unexpected identifier; expected prec
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:127:23: error: unexpected identifier; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:127:67: error: unexpected identifier; expected ':'
+'R1Z.ProverCommitPublish43.query_step' depends on axioms: [propext]
+'R1Z.ProverCommitPublish43.query_loop' does not depend on any axioms
+'R1Z.ProverCommitPublish43.query_exact' depends on axioms: [propext]
+'R1Z.ProverCommitPublish43.slot_length' depends on axioms: [sorryAx]
+'R1Z.ProverCommitPublish43.slots_loop' depends on axioms: [sorryAx]
+'R1Z.ProverCommitPublish43.slots_length' depends on axioms: [propext, sorryAx, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:165:14: error(lean.unknownIdentifier): Unknown constant `assemble_loop`
+'R1Z.ProverCommitPublish43.proof_error' does not depend on any axioms
+'R1Z.ProverCommitPublish43.replay_error' does not depend on any axioms
+'R1Z.ProverCommitPublish43.replay_disagreement' does not depend on any axioms
+'R1Z.ProverCommitPublish43.merkle_collision' does not depend on any axioms
+'R1Z.ProverCommitPublish43.merge_error' does not depend on any axioms
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,39 @@
+import R1Z.ProverCommitPairCounter47
+import R1Z.ProverCommitSubtraction47
+/-! Symbolic array update/replicate image, independent of any concrete table. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitArrayValue47
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitPairCounter47
+
+theorem update (n : Usize) (xs : Nat → Old.Q) (i : Usize) (hi : i.val<n.val) (x : Old.Q) :
+    Array.update (sourceArray n xs) i (ProverCommitNativeOps47.embedded x) =
+      ok (sourceArray n (Function.update xs i.val x)) := by
+  have hidx : i.val<(sourceArray n xs).val.length := by simp only [sourceArray,List.length_ofFn];exact hi
+  obtain ⟨out,hout,hset⟩ := WP.spec_imp_exists
+    (Array.update_spec (sourceArray n xs) i (ProverCommitNativeOps47.embedded x) hidx)
+  rw [hout]
+  apply congrArg Result.ok
+  rw [hset]
+  apply Subtype.ext
+  change (sourceArray n xs).val.set i.val (ProverCommitNativeOps47.embedded x) =
+    (sourceArray n (Function.update xs i.val x)).val
+  apply List.ext_getElem
+  · simp only [List.length_set,sourceArray,List.length_ofFn]
+  · intro k hk1 hk2
+    simp only [sourceArray,List.getElem_set,List.getElem_ofFn]
+    by_cases h : k=i.val
+    · subst k
+      simp only [Function.update_self,if_true]
+    · simp only [Ne.symm h,if_false,Function.update_of_ne h]
+
+/-- The initial array is pointwise the canonical source ONE. -/
+theorem ones : Array.repeat 512#usize field.wide_exact.WideExact.ONE =
+    sourceArray 512#usize (fun _ => ProverCommitSubtraction47.one) := by
+  rw [ProverCommitSubtraction47.source_one]
+  apply Subtype.ext
+  simp only [Array.repeat,sourceArray,List.ofFn_const]
+
+#print axioms update
+#print axioms ones
+end R1Z.ProverCommitArrayValue47

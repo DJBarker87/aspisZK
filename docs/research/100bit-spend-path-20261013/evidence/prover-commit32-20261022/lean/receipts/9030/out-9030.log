@@ -1,0 +1,35 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublication32.lean:71:4: error: unsolved goals
+case pos
+table : IndexMap
+key : Usize
+fuel : ℕ
+ih :
+  ∀ (pos : Usize),
+    ↑pos ≤ (↑table).length →
+      (↑table).length - ↑pos < fuel →
+        AspisR1Publish32.sim.owned32.index_get table key pos = ok (lookup key (List.drop ↑pos ↑table))
+pos : Usize
+hi : ↑pos ≤ (↑table).length
+hf : (↑table).length - ↑pos < fuel + 1
+done : pos = alloc.vec.Vec.len table
+hp : ↑pos = (↑table).length
+⊢ ok none = ok (lookup key (List.drop ↑(alloc.vec.Vec.len table) ↑table))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublication32.lean:72:30: warning: This simp argument is unused:
+  List.drop_eq_nil_of_le (by omega : table.val.length ≤ pos.val)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵o̵n̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵e̵q̵_̵n̵i̵l̵_̵o̵f̵_̵l̵e̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵ ̵:̵ ̵t̵a̵b̵l̵e̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵ ̵≤̵ ̵p̵o̵s̵.̵v̵a̵l̵)̵,̵l̵o̵o̵k̵u̵p̵]̵[̲d̲o̲n̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲l̲o̲o̲k̲u̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublication32.lean:72:93: warning: This simp argument is unused:
+  lookup
+
+Hint: Omit it from the simp argument list.
+  simp only [done, ̲if_true, ̲List.drop_eq_nil_of_le (by omega : table.val.length ≤ pos.val),̵l̵o̵o̵k̵u̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitPublication32.lookup_refines' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublication32.next_cursor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublication32.lookup_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

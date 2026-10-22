@@ -1,0 +1,102 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Decision.lean:47:37: error(lean.unknownIdentifier): Unknown identifier `typedRows`
+
+Note: It is not possible to treat `typedRows` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Decision.lean:59:41: error: unsolved goals
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+reserved : Bool
+wp : CheckpointBytes5Writer.Prepared
+wa : CheckpointBytes5Writer.Accumulator
+proof public1 : Slice U8
+stored : Bytes
+parsed : Parsed
+q : Fin 22 → Fin 262144
+tr : ErasedPrefix
+m : ErasedMessage
+i : SourceInputs
+v : LiteralOpeningView.View
+guard : OraclePortAdmission.Guard tr
+parser : OraclePortStoredParserC4.parseReached stored tr = some parsed
+query : OraclePortSelectedDraft.queries tr = some q
+input : OraclePortStoredDecisionDraftC4.input parsed q tr = some i
+view : LiteralOpeningView.read sorry = some v
+batchOk : (eval H (batch parsed q batch0)).2 = true
+caller : S2S10CallerBinding D hash H proof public1 stored tr.statement.pubBytes
+provenance :
+  S1S7S8StateProvenance wp wa
+    (prepared (OraclePortAcceptedContextC6.context parsed i v) i.data (SelectedChallengeMap.rhoOf i.rho) q)
+    (OraclePortCheckpointStateC3.write (model i.data (SelectedChallengeMap.rhoOf i.rho) q)).accumulator
+p : verifier.Prepared
+a : verifier.Accumulator
+after : Log
+success : run D hash (stage reserved wp wa proof public1) [] = ok (core.result.Result.Ok (p, a), after)
+checkpoint :
+  (observe after, some (resumedSource i.data p a)) = eval H (OraclePortFrozen2.checkpoint stored parsed q tr i v)
+reached :
+  eval H
+      (OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes (OraclePortAcceptedContextC6.context parsed i v)
+        i.data (SelectedChallengeMap.rhoOf i.rho) q) =
+    eval H (OraclePortFrozen2.checkpoint stored parsed q tr i v)
+strict :
+  (observe after, some (resumedSource i.data p a)) =
+    eval H
+      (OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes (OraclePortAcceptedContextC6.context parsed i v)
+        i.data (SelectedChallengeMap.rhoOf i.rho) q)
+⊢ ((eval H (batch parsed q batch0)).1 ++
+        ((eval H
+              (OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                (OraclePortAcceptedContextC6.context parsed i v) i.data (SelectedChallengeMap.rhoOf i.rho) q)).1 ++
+          (eval H
+              (match
+                (eval H
+                    (OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                      (OraclePortAcceptedContextC6.context parsed i v) i.data (SelectedChallengeMap.rhoOf i.rho)
+                      q)).2 with
+              | none => Program.done false
+              | some state => stage2 parsed q tr i state)).1),
+      (eval H
+          (match
+            (eval H
+                (OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                  (OraclePortAcceptedContextC6.context parsed i v) i.data (SelectedChallengeMap.rhoOf i.rho) q)).2 with
+          | none => Program.done false
+          | some state => stage2 parsed q tr i state)).2) =
+    ((eval H (batch parsed q batch0)).1 ++
+        (eval H
+            (match some i, LiteralOpeningView.read (OraclePortStoredDecisionDraftC4.typedRows parsed q tr) with
+            | some i, some v =>
+              AspisV8R19.OracleProgramOps.bind
+                (OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                  (OraclePortAcceptedContextC6.context parsed i v) i.data (SelectedChallengeMap.rhoOf i.rho) q)
+                fun resumed =>
+                match resumed with
+                | none => Program.done false
+                | some a => stage2 parsed q tr i a
+            | x, x_1 => Program.done false)).1,
+      (eval H
+          (match some i, LiteralOpeningView.read (OraclePortStoredDecisionDraftC4.typedRows parsed q tr) with
+          | some i, some v =>
+            AspisV8R19.OracleProgramOps.bind
+              (OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                (OraclePortAcceptedContextC6.context parsed i v) i.data (SelectedChallengeMap.rhoOf i.rho) q)
+              fun resumed =>
+              match resumed with
+              | none => Program.done false
+              | some a => stage2 parsed q tr i a
+          | x, x_1 => Program.done false)).2)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Decision.lean:71:65: warning: This simp argument is unused:
+  view
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵r̵a̵c̵l̵e̵P̵o̵r̵t̵C̵k̵p̵t̵A̵b̵i̵5̵D̵e̵c̵i̵s̵i̵o̵n̵.̵s̵t̵r̵i̵c̵t̵D̵e̵c̵i̵s̵i̵o̵n̵,̵i̵f̵_̵p̵o̵s̵ ̵g̵u̵a̵r̵d̵,̵p̵a̵r̵s̵e̵r̵,̵q̵u̵e̵r̵y̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵a̵t̵c̵h̵O̵k̵,̵i̵f̵_̵t̵r̵u̵e̵,̵O̵r̵a̵c̵l̵e̵P̵o̵r̵t̵C̵k̵p̵t̵A̵b̵i̵5̵D̵e̵c̵i̵s̵i̵o̵n̵.̵s̵t̵r̵i̵c̵t̵A̵f̵t̵e̵r̵,̵i̵n̵p̵u̵t̵,̵v̵i̵e̵w̵]̵[̲O̲r̲a̲c̲l̲e̲P̲o̲r̲t̲C̲k̲p̲t̲A̲b̲i̲5̲D̲e̲c̲i̲s̲i̲o̲n̲.̲s̲t̲r̲i̲c̲t̲D̲e̲c̲i̲s̲i̲o̲n̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲g̲u̲a̲r̲d̲,̲ ̲p̲a̲r̲s̲e̲r̲,̲ ̲q̲u̲e̲r̲y̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲a̲t̲c̲h̲O̲k̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲O̲r̲a̲c̲l̲e̲P̲o̲r̲t̲C̲k̲p̲t̲A̲b̲i̲5̲D̲e̲c̲i̲s̲i̲o̲n̲.̲s̲t̲r̲i̲c̲t̲A̲f̲t̲e̲r̲,̲ ̲i̲n̲p̲u̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CheckpointBytes5Decision.bindObservation_eval' depends on axioms: [propext]
+'AspisR1.CheckpointBytes5Decision.decision_success_join' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

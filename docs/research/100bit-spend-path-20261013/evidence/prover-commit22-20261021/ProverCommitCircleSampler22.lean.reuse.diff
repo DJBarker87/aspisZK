@@ -1,0 +1,35 @@
+--- docs/research/100bit-spend-path-20261013/lean/R4TransportCircleCoordinates.lean
++++ docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitCircleSampler22.lean
+@@ -1,13 +1,13 @@
+ import AspisR1CircleSampleWrapper.RawCircleSampleActualPolicyUnconditionalV1
+ import AspisR1CircleSampleWrapper.RawCircleSampleActualFallbackCoordinatesV1
+-import ExtractedSourceSemanticSampler
++import R1Z.ProverCommitSemanticSampler22
+ 
+ /-! Exact circle coordinates, including both fallbacks, for the retained
+ extracted wrapper. Current caller/source pinning is a separate obligation. -/
+ set_option autoImplicit false
+ noncomputable section
+-namespace AspisR1CircleSampleWrapper.R4TransportCircleCoordinates
+-open Aeneas Aeneas.Std Result
++namespace R1Z.ProverCommitCircleSampler22
++open Aeneas Aeneas.Std Result AspisR1CircleSampleWrapper
+ open AspisV8R15.ExactTowerBase
+ open AspisV8R19.SamplerClosureProductCorrectness
+ open AspisV8R19.SamplerClosureCircleSourceExecution
+@@ -31,7 +31,7 @@
+   rw [hpub] at hw
+   have he : fromPublicQM pub = q := Result.ok.inj (hw.symm.trans hq)
+   rw [← he]
+-  exact AspisR1PublicPreparation.SourceSemanticSampler.sample_qm31 block pub hpub
++  exact R1Z.ProverCommitSemanticSampler22.sample_qm31 block pub hpub
+ 
+ theorem encoded_coordinates (t : QM31Exact × QM31Exact) :
+     coordinates (fromR72Point (encodePoint t)) =
+@@ -87,5 +87,5 @@
+ #print axioms parameter_eq
+ #print axioms encoded_coordinates
+ #print axioms circle_total_coordinates
+-end AspisR1CircleSampleWrapper.R4TransportCircleCoordinates
++end R1Z.ProverCommitCircleSampler22
+ end

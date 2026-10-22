@@ -1,0 +1,60 @@
+import MultiproofConeRead32
+import MultiproofConeLevelIteration
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeNodeDomain
+open Aeneas Aeneas.Std Result MultiproofConeRef
+
+/-- Only oracle totality is assumed; no digest value or acceptance law. -/
+def HashTotal {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X) : Prop :=
+  ∀ parts, ∃ value, D.digest hash parts = ok value
+
+@[local step] theorem hash_spec {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (parts : Slice (Slice U8)) :
+    D.digest hash parts ⦃ _ =>  True ⦄ := by
+  obtain ⟨out,eqout⟩ := total parts
+  simp only [eqout,WP.spec_ok]
+
+@[local step] theorem read_spec (bytes : Slice U8) (bound : 32 ≤ bytes.val.length) :
+    reference.read32 bytes ⦃ _ =>  True ⦄ := by
+  obtain ⟨out,eqout,_⟩ := MultiproofConeRead32.read32_total bytes bound
+  simp only [eqout,WP.spec_ok]
+
+/-- The per-row domain also tracks the strictly advancing input cursor and
+safe write prefix. n is held fixed until the end-of-level assignment. -/
+def RowDomain (physical : Slice U8) (s : reference.Scratch) (i w : Usize) : Prop :=
+  0 < s.n.val ∧ s.n.val ≤ 16 ∧ i.val ≤ s.n.val ∧ w.val ≤ i.val ∧ s.«at».val ≤ physical.val.length
+
+def Progress (physical : Slice U8) (s : reference.Scratch) (i w : Usize) : reference.Row → Prop
+  | .Stop stopped =>  stopped=s
+  | .Next next ni nw =>  next.n=s.n ∧ RowDomain physical next ni nw ∧
+      i.val < ni.val ∧ nw.val=w.val+1
+
+@[local step] theorem write_spec {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (physical : Slice U8) (s : reference.Scratch)
+    (left right : Array U8 32#usize) (ni cursor : Usize) (index : U32) (w i : Usize)
+    (domain : RowDomain physical s i w) (active : i.val < s.n.val)
+    (niBound : i.val < ni.val ∧ ni.val ≤ s.n.val) (atBound : cursor.val ≤ physical.val.length) :
+    reference.write_parent D hash s left right ni cursor index w ⦃ out =>  Progress physical s i w out ⦄ := by
+  unfold reference.write_parent
+  simp only [RowDomain] at domain
+  step*  <;>  simp_all [Progress,RowDomain]  <;>  scalar_tac
+
+/-- Checked extracted node step: rejection is exact and successful rows
+preserve every cursor bound needed for the finite node induction. -/
+theorem binary_step_progress {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (physical : Slice U8) (s : reference.Scratch)
+    (i w : Usize) (domain : RowDomain physical s i w) (active : i.val < s.n.val) :
+    ∃ out, reference.binary_step D hash s physical i w=ok out ∧ Progress physical s i w out := by
+  have spec : reference.binary_step D hash s physical i w ⦃ out =>  Progress physical s i w out ⦄ := by
+    unfold reference.binary_step
+    have dom := domain
+    simp only [RowDomain] at dom
+    step*  <;>  simp_all [Progress,RowDomain]  <;>  scalar_tac
+  exact WP.spec_imp_exists spec
+
+#print axioms hash_spec
+#print axioms read_spec
+#print axioms write_spec
+#print axioms binary_step_progress
+end AspisR1.MultiproofConeNodeDomain

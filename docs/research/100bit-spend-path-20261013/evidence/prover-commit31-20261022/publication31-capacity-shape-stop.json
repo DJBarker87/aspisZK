@@ -1,0 +1,35 @@
+[
+  {
+    "pid": 797137,
+    "args": [
+      "timeout",
+      "600",
+      "cargo",
+      "kani",
+      "--no-assertion-reach-checks",
+      "-j",
+      "4",
+      "-p",
+      "aspis-r1-cost-probe",
+      "--features",
+      "r1p-check",
+      "--lib",
+      "--exact",
+      "--harness",
+      "sim::constructed_kani31::node_capacity",
+      "-Z",
+      "function-contracts",
+      "-Z",
+      "stubbing",
+      "-Z",
+      "unstable-options",
+      "--output-format",
+      "terse",
+      "--cbmc-args",
+      "--unwinding-assertions",
+      "--object-bits",
+      "10"
+    ],
+    "reason": "Dynamic Vec allocation/resize sizes inflate pointer state even without maps; isolate fixed boundary shapes before pressure."
+  }
+]

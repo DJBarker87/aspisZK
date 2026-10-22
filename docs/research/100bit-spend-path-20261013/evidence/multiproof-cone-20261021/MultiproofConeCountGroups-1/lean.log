@@ -1,0 +1,55 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeCountGroups.lean:59:54: error: Tactic `rfl` failed: The left-hand side
+  (i / 2 :: (sourceLevel fuel (if false = true then List.drop 1 [] else [])).1,
+    (sourceLevel fuel (if false = true then List.drop 1 [] else [])).2 +
+      (2 - ([i].length - (if false = true then List.drop 1 [] else []).length)))
+is not definitionally equal to the right-hand side
+  (i / 2 :: (countLevel fuel (if false = true then List.drop 1 [] else [])).1,
+    (countLevel fuel (if false = true then List.drop 1 [] else [])).2 + if false = true then 0 else 1)
+
+case succ.cons.nil
+fuel : ℕ
+ih : ∀ (is : List ℕ), List.Pairwise (fun x1 x2 => x1 < x2) is → sourceLevel fuel is = countLevel fuel is
+i : ℕ
+sorted : List.Pairwise (fun x1 x2 => x1 < x2) [i]
+⊢ (i / 2 :: (sourceLevel fuel (if false = true then List.drop 1 [] else [])).1,
+      (sourceLevel fuel (if false = true then List.drop 1 [] else [])).2 +
+        (2 - ([i].length - (if false = true then List.drop 1 [] else []).length))) =
+    (i / 2 :: (countLevel fuel (if false = true then List.drop 1 [] else [])).1,
+      (countLevel fuel (if false = true then List.drop 1 [] else [])).2 + if false = true then 0 else 1)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeCountGroups.lean:70:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  sourceLevel fuel (j :: tail)
+in the target expression
+  (i / 2 :: (sourceLevel fuel (if false = true then List.drop 1 (j :: tail) else j :: tail)).1,
+      (sourceLevel fuel (if false = true then List.drop 1 (j :: tail) else j :: tail)).2 +
+        (2 - ((i :: j :: tail).length - (if false = true then List.drop 1 (j :: tail) else j :: tail).length))) =
+    countLevel (fuel + 1) (i :: j :: tail)
+
+case neg
+fuel : ℕ
+ih : ∀ (is : List ℕ), List.Pairwise (fun x1 x2 => x1 < x2) is → sourceLevel fuel is = countLevel fuel is
+i j : ℕ
+tail : List ℕ
+sorted : List.Pairwise (fun x1 x2 => x1 < x2) (i :: j :: tail)
+later : List.Pairwise (fun x1 x2 => x1 < x2) (j :: tail)
+both : ¬paired i j
+⊢ (i / 2 :: (sourceLevel fuel (if false = true then List.drop 1 (j :: tail) else j :: tail)).1,
+      (sourceLevel fuel (if false = true then List.drop 1 (j :: tail) else j :: tail)).2 +
+        (2 - ((i :: j :: tail).length - (if false = true then List.drop 1 (j :: tail) else j :: tail).length))) =
+    countLevel (fuel + 1) (i :: j :: tail)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeCountGroups.lean:59:37: warning: This simp argument is unused:
+  ih [] (by simp)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵u̵n̵t̵L̵e̵v̵e̵l̵,̵i̵h̵ ̵[̵]̵ ̵(̵b̵y̵ ̵s̵i̵m̵p̵)̵]̵[̲c̲o̲u̲n̲t̲L̲e̲v̲e̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeCountGroups.lean:69:39: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵t̵h̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲b̲o̲t̲h̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConeCountGroups.same_parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeCountGroups.drop_group' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeCountGroups.source_level_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,106 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Join.lean:36:57: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Join.lean:97:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  observe history
+in the target expression
+  List.map (fun event => (AspisR1DigestLogCarrier.flatten event.1, CheckpointBytesDigest.stateOf event.2)) history ++
+      List.map (fun event => (AspisR1DigestLogCarrier.flatten event.1, CheckpointBytesDigest.stateOf event.2))
+        [(calls.proofParts, calls.proofDigest), (calls.publicParts, calls.publicDigest),
+          (calls.checksumParts, calls.checksumDigest)] =
+    List.map (fun event => (AspisR1DigestLogCarrier.flatten event.1, CheckpointBytesDigest.stateOf event.2)) before ++
+      six H stored pub (OraclePortPhysicalFrameDraft.domain ++ body pm am (H stored) (H pub))
+
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+reserved : Bool
+wp : CheckpointBytes5Writer.Prepared
+wa : CheckpointBytes5Writer.Accumulator
+proof public1 : Slice U8
+stored pub : Bytes
+pm : Prepared
+am : QueryAccumulator.State K E
+caller : S2S10CallerBinding D hash H proof public1 stored pub
+provenance : S1S7S8StateProvenance wp wa pm am
+p : verifier.Prepared
+a : verifier.Accumulator
+before after : Log
+success :
+  (do
+      let (a, next) ← run D hash (CheckpointBytes5Writer.writer wp wa proof public1) before
+      run D hash
+          (CheckpointBytes5Resume.program (CheckpointBytes4Ops.ops reserved) a proof public1 transport.Variant.S2)
+          next) =
+    ok (core.result.Result.Ok (p, a), after)
+ck : Slice U8
+history : Log
+writerRun : run D hash (CheckpointBytes5Writer.writer wp wa proof public1) before = ok (ck, history)
+resumeRun :
+  run D hash (CheckpointBytes5Resume.program (CheckpointBytes4Ops.ops reserved) ck proof public1 transport.Variant.S2)
+      history =
+    ok (core.result.Result.Ok (p, a), after)
+encoding : bytesOf ↑ck = encode H stored pub pm am
+writerLog :
+  observe history =
+    observe before ++
+      [(stored, H stored), (pub, H pub),
+        (OraclePortPhysicalFrameDraft.domain ++ body pm am (H stored) (H pub),
+          H (OraclePortPhysicalFrameDraft.domain ++ body pm am (H stored) (H pub)))]
+sourceSuccess :
+  verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) D ck proof public1 transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+modelNext : am.next = 10
+fields : BodyMatches p a pm am
+next : ↑a.next = am.next
+reservedEq : reserved = true
+calls : Tx2ResumeDigests.Calls D hash ck proof public1
+trace :
+  run D hash (CheckpointBytes5Resume.program (CheckpointBytes4Ops.ops reserved) ck proof public1 transport.Variant.S2)
+      history =
+    ok
+      (core.result.Result.Ok (p, a),
+        history ++
+          [(calls.proofParts, calls.proofDigest), (calls.publicParts, calls.publicDigest),
+            (calls.checksumParts, calls.checksumDigest)])
+length : (↑ck).length = 1768
+readLog :
+  observe
+      [(calls.proofParts, calls.proofDigest), (calls.publicParts, calls.publicDigest),
+        (calls.checksumParts, calls.checksumDigest)] =
+    [(stored, H stored), (pub, H pub),
+      (OraclePortPhysicalFrameDraft.domain ++ body pm am (H stored) (H pub),
+        H (OraclePortPhysicalFrameDraft.domain ++ body pm am (H stored) (H pub)))]
+logEq :
+  history ++
+      [(calls.proofParts, calls.proofDigest), (calls.publicParts, calls.publicDigest),
+        (calls.checksumParts, calls.checksumDigest)] =
+    after
+⊢ List.map (fun event => (AspisR1DigestLogCarrier.flatten event.1, CheckpointBytesDigest.stateOf event.2)) history ++
+      List.map (fun event => (AspisR1DigestLogCarrier.flatten event.1, CheckpointBytesDigest.stateOf event.2))
+        [(calls.proofParts, calls.proofDigest), (calls.publicParts, calls.publicDigest),
+          (calls.checksumParts, calls.checksumDigest)] =
+    List.map (fun event => (AspisR1DigestLogCarrier.flatten event.1, CheckpointBytesDigest.stateOf event.2)) before ++
+      six H stored pub (OraclePortPhysicalFrameDraft.domain ++ body pm am (H stored) (H pub))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.CheckpointBytes5Join.error_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytes5Join.success_conditioned_checkpoint_stage_join' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CheckpointBytes5Join.successful_fields_and_reads' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CheckpointBytes5Join.successful_stage' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

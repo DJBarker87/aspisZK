@@ -1,0 +1,107 @@
+import R1Z.SimCostCollect5
+import R1Z.SimCostView
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.SimCostFormula5
+open AspisWideTower R1Z.SimCostWriter R0Z.HonestView R1Z.Batched R1Z.SimCostCollect5
+attribute [local irreducible] collect collect2 collect3
+
+def batched (f : R1Bat → Costed WideExact) : Costed (R1Bat → WideExact) :=
+  bind (collect 7 (fun i => f (.round0 i))) fun r0 =>
+  bind (collect 7 (fun i => f (.round1 i))) fun r1 =>
+  bind (collect 262144 (fun i => f (.folded i))) fun folded =>
+  bind (collect 64 (fun i => f (.final i))) fun final =>
+    (fun | .round0 i => r0 i | .round1 i => r1 i
+         | .folded i => folded i | .final i => final i, 8)
+
+theorem batched_erase (f : R1Bat → Costed WideExact) :
+    (batched f).1 = fun i => (f i).1 := by
+  simp only [batched, erase_bind, collect_erase]
+  funext i
+  cases i <;> rfl
+
+theorem batched_bound (f : R1Bat → Costed WideExact) (c : Nat)
+    (hf : ∀ i, (f i).2 ≤ c) : (batched f).2 ≤ 262222*(c+2)+8 := by
+  have h0 := collect_bound 7 c (fun i => f (.round0 i)) (fun i => hf _)
+  have h1 := collect_bound 7 c (fun i => f (.round1 i)) (fun i => hf _)
+  have h2 := collect_bound 262144 c (fun i => f (.folded i)) (fun i => hf _)
+  have h3 := collect_bound 64 c (fun i => f (.final i)) (fun i => hf _)
+  simp only [batched, cost_bind]
+  omega
+
+attribute [local irreducible] batched
+
+def payload (f : PayloadCell R1Bat → Costed WideExact) : Costed (Payload WideExact R1Bat) :=
+  bind (f .maskSum) fun ms =>
+  bind (collect2 10 28 (fun j i => f (.semanticCoeff j i))) fun sem =>
+  bind (collect2 3 29 (fun j i => f (.pointClaim j i))) fun point =>
+  bind (collect 29 (fun i => f (.extraClaim i))) fun extra =>
+  bind (collect2 2 29 (fun j i => f (.ood j i))) fun ood =>
+  bind (f .inactiveSum) fun inactive =>
+  bind (collect3 262144 4 29 (fun q s c => f (.opened q s c))) fun opened =>
+  bind (batched (fun i => f (.bat i))) fun bat =>
+    (fun | .maskSum => ms | .semanticCoeff j i => sem j i
+         | .pointClaim j i => point j i | .extraClaim i => extra i
+         | .ood j i => ood j i | .inactiveSum => inactive
+         | .opened q s c => opened q s c | .bat i => bat i, 16)
+
+theorem payload_erase (f : PayloadCell R1Bat → Costed WideExact) :
+    (payload f).1 = fun i => (f i).1 := by
+  simp only [payload, erase_bind, collect_erase, collect2_erase,
+    collect3_erase, batched_erase]
+  funext i
+  cases i <;> rfl
+
+def payloadBudget (c : Nat) : Nat :=
+  c + 10*(28*(c+2)+2) + 3*(29*(c+2)+2) + 29*(c+2) +
+    2*(29*(c+2)+2) + c + 262144*(4*(29*(c+2)+2)+2) +
+    (262222*(c+2)+8) + 16
+
+theorem payload_bound (f : PayloadCell R1Bat → Costed WideExact) (c : Nat)
+    (hf : ∀ i, (f i).2 ≤ c) : (payload f).2 ≤ payloadBudget c := by
+  have hm := hf .maskSum
+  have hs := collect2_bound 10 28 c (fun j i => f (.semanticCoeff j i)) (fun j i => hf _)
+  have hp := collect2_bound 3 29 c (fun j i => f (.pointClaim j i)) (fun j i => hf _)
+  have he := collect_bound 29 c (fun i => f (.extraClaim i)) (fun i => hf _)
+  have ho := collect2_bound 2 29 c (fun j i => f (.ood j i)) (fun j i => hf _)
+  have hi := hf .inactiveSum
+  have hopen := collect3_bound 262144 4 29 c (fun q s c => f (.opened q s c))
+    (fun q s c => hf _)
+  have hb := batched_bound (fun i => f (.bat i)) c (fun i => hf _)
+  simp only [payload, cost_bind]
+  unfold payloadBudget
+  omega
+
+attribute [local irreducible] payload
+
+/-- Both inputs are supplied coordinate arrays; each pair of coordinate
+loads costs two ticks, in addition to the certified addition algorithm. -/
+def addRun (p : Payload WideExact R1Bat × Payload WideExact R1Bat) :=
+  payload (fun i => bind (tick 2) (fun _ => SimCostWide5.add.run (p.1 i,p.2 i)))
+
+theorem add_erase (p : Payload WideExact R1Bat × Payload WideExact R1Bat) :
+    (addRun p).1 = p.1+p.2 := by
+  simp only [addRun, payload_erase, erase_bind, SimCostWide5.add.erase]
+  rfl
+
+theorem add_bound (p : Payload WideExact R1Bat × Payload WideExact R1Bat) :
+    (addRun p).2 ≤ 432020838 := by
+  apply (payload_bound _ 12 ?_).trans
+  · norm_num [payloadBudget]
+  · intro i
+    simp only [cost_bind, tick, SimCostWide5.add, SimCostWide5.add_cost]
+    exact Nat.le_refl _
+
+def add : Stage (fun p : Payload WideExact R1Bat × Payload WideExact R1Bat => p.1+p.2)
+    432020838 where
+  run := addRun
+  erase := add_erase
+  bound := add_bound
+
+#print axioms batched_erase
+#print axioms batched_bound
+#print axioms payload_erase
+#print axioms payload_bound
+#print axioms add_erase
+#print axioms add_bound
+end R1Z.SimCostFormula5

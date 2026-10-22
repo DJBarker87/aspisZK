@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundScaled48.lean:42:4: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq (Result (List Source)) (scales (List.ofFn fun x => source (xs ↑x)))
+    (ok (List.ofFn fun x => source (ProverCommitWideScalar48.product (xs ↑x) 536870912#u32)))
+but is expected to have type
+  @Eq (Result (List Source)) (scales (List.ofFn fun i => source (xs ↑i)))
+    (ok (List.ofFn fun k => source (ProverCommitWideScalar48.product (xs ↑k) 536870912#u32)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundScaled48.lean:46:8: error: Invalid rewrite argument: Expected an equality or iff proof or definition name, but `ys ?k` is a value of type
+  Raw
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (536870912 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.ProverCommitRoundScaled48.scale_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRoundScaled48.scaled_output' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

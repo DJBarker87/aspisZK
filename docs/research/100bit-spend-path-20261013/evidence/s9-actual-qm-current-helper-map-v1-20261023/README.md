@@ -1,0 +1,3 @@
+# Actual QM31 multiplication to installed helper map
+
+This packet records one focused theorem: the actual extracted-source `QM31.mul` call maps, with its full `Result`, through the CurrentWide representation to the installed concrete helper `FieldOps.qmMul`. The theorem requires canonical mapped operands. Its transitive axiom report is retained in `proof/lean.log`; it depends on `[propext, Classical.choice, Quot.sound]`. The successful Lean run took 21.745 seconds, with 3,170,140,160 bytes peak aggregate RSS, 3,199,254,528 bytes peak process RSS, and zero swaps. Compiled objects are referenced by hash and omitted. This does not claim binary/runtime refinement or a complete caller proof.

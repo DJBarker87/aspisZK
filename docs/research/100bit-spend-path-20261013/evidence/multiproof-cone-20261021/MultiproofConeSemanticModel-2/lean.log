@@ -1,0 +1,43 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeSemanticModel.lean:22:16: error: Tactic `rfl` failed: The left-hand side
+  do
+    let tail ← semanticRows fuel (row + 1) (List.drop (5 + (rowShape row).2 / 2) wire)
+    pure ((List.take 5 wire ++ expand ((rowShape row).2 / 32) (slice wire 5 ((rowShape row).2 / 2))) :: tail)
+is not definitionally equal to the right-hand side
+  Option.map
+    (fun tail => (List.take 5 wire ++ expand ((rowShape row).2 / 32) (slice wire 5 ((rowShape row).2 / 2))) :: tail)
+    (semanticRows fuel (row + 1) (List.drop (5 + (rowShape row).2 / 2) wire))
+
+case neg
+fuel row : ℕ
+wire : Bytes
+h✝³ : 14 ≤ row
+h✝² : ¬List.length wire < 5 + (rowShape row).2 / 2
+h✝¹ : ¬List.take 5 wire ≠ ⟨(rowShape row).1 % 256, ⋯⟩ :: le32 (rowShape row).2
+h✝ : ¬(14 ≤ row ∧ ¬canonical (slice wire 5 ((rowShape row).2 / 2)))
+⊢ (do
+      let tail ← semanticRows fuel (row + 1) (List.drop (5 + (rowShape row).2 / 2) wire)
+      pure ((List.take 5 wire ++ expand ((rowShape row).2 / 32) (slice wire 5 ((rowShape row).2 / 2))) :: tail)) =
+    Option.map
+      (fun tail => (List.take 5 wire ++ expand ((rowShape row).2 / 32) (slice wire 5 ((rowShape row).2 / 2))) :: tail)
+      (semanticRows fuel (row + 1) (List.drop (5 + (rowShape row).2 / 2) wire))
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeSemanticModel.lean:22:16: error: Tactic `rfl` failed: The left-hand side
+  do
+    let tail ← semanticRows fuel (row + 1) (List.drop (5 + (rowShape row).2) wire)
+    pure ((List.take 5 wire ++ slice wire 5 (rowShape row).2) :: tail)
+is not definitionally equal to the right-hand side
+  Option.map (fun tail => (List.take 5 wire ++ slice wire 5 (rowShape row).2) :: tail)
+    (semanticRows fuel (row + 1) (List.drop (5 + (rowShape row).2) wire))
+
+case neg
+fuel row : ℕ
+wire : Bytes
+h✝³ : ¬14 ≤ row
+h✝² : ¬List.length wire < 5 + (rowShape row).2
+h✝¹ : ¬List.take 5 wire ≠ ⟨(rowShape row).1 % 256, ⋯⟩ :: le32 (rowShape row).2
+h✝ : ¬(14 ≤ row ∧ ¬canonical (slice wire 5 (rowShape row).2))
+⊢ (do
+      let tail ← semanticRows fuel (row + 1) (List.drop (5 + (rowShape row).2) wire)
+      pure ((List.take 5 wire ++ slice wire 5 (rowShape row).2) :: tail)) =
+    Option.map (fun tail => (List.take 5 wire ++ slice wire 5 (rowShape row).2) :: tail)
+      (semanticRows fuel (row + 1) (List.drop (5 + (rowShape row).2) wire))
+'AspisR1.MultiproofConeSemanticModel.row_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

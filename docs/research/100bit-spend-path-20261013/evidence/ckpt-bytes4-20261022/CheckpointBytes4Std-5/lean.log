@@ -1,0 +1,27 @@
+def Aeneas.Std.core.num.U32.from_le_bytes : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Aeneas.Std.U32 :=
+fun a => BitVec.cast ⋯ (BitVec.fromLEBytes (List.map Aeneas.Std.U8.bv ↑a))#uscalar
+@[reducible] def Aeneas.Std.core.cmp.PartialEqU8 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.U8 Aeneas.Std.U8 :=
+{ eq := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU8.eq,
+  ne := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU8.ne }
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+@[reducible] def BitVec.fromLEBytes._f : (l : List Byte) → List.below l → BitVec (8 * l.length) :=
+fun l f =>
+  (match (motive := (l : List Byte) → List.below l → BitVec (8 * l.length)) l with
+    | [] => fun x => 0#(8 * [].length)
+    | b :: l => fun x => BitVec.setWidth (8 * (b :: l).length) b ||| BitVec.setWidth (8 * (b :: l).length) x.1 <<< 8)
+    f
+@[reducible] def Aeneas.Std.core.cmp.impls.PartialEqU8.eq : Aeneas.Std.U8 → Aeneas.Std.U8 → Bool :=
+fun x y => decide (x = y)
+def Aeneas.Std.core.slice.Slice.iter_mut : {T : Type} →
+  Aeneas.Std.Slice T →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.slice.iter.IterMut T × (Aeneas.Std.core.slice.iter.IterMut T → Aeneas.Std.Slice T)) :=
+fun {T} slice => Aeneas.Std.Result.ok ({ slice := slice }, fun it => it.slice)
+def Aeneas.Std.Array.make.{u} : {α : Type u} →
+  (n : Aeneas.Std.Usize) →
+    (init : List α) → autoParam (init.length = ↑n) Aeneas.Std.Array.make._auto_1 → Aeneas.Std.Array α n :=
+fun {α} n init hl => ⟨init, hl⟩
+def Aeneas.Std.UScalar.cast : {src_ty : Aeneas.Std.UScalarTy} →
+  (tgt_ty : Aeneas.Std.UScalarTy) → Aeneas.Std.UScalar src_ty → Aeneas.Std.UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar

@@ -1,0 +1,102 @@
+import MultiproofConeP6Composition
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.MultiproofConeP6Verify
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConePhysicalProgram MultiproofConePhysicalTransport MultiproofConePhysicalViews
+open MultiproofConeNodeDomain MultiproofConeLevelIteration MultiproofConeP6Composition
+open OraclePortFrozenOrder
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+attribute [local instance] Classical.propDecidable
+
+/-- The owned ABI wrapper, with only the height-loop implementation variable.
+All early returns, the valid-index scan and final checked root/cursor reads
+are retained literally from the extracted owned reference. P6 accounts for
+the shipped wrapper/library lowering, rather than a new whole-function gate. -/
+def wrapper (run : reference.Scratch → Result reference.Level)
+    (root : Digest) (s : reference.Scratch) (nodes : Slice U8) :
+    Result (Bool × reference.Scratch) := do
+  if s.n = 0#usize then ok (false,s) else
+  if s.n > 16#usize then ok (false,s) else
+  let b ← reference.valid_indices s.idx s.n 0#usize
+  if b then
+    let i := Slice.len nodes
+    let i1 ← i % 32#usize
+    if i1 != 0#usize then ok (false,s) else
+    let l ← run {s with «at»:=0#usize}
+    match l with
+    | .Stop out => ok (false,out)
+    | .Done out =>
+      if out.n = 1#usize then
+        let i2 ← Array.index_usize out.idx 0#usize
+        if i2 = 0#u32 then
+          let a ← Array.index_usize out.val 0#usize
+          let b1 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a root
+          if b1 then
+            let i3 := Slice.len nodes
+            ok (out.«at»=i3,out)
+          else ok (false,out)
+        else ok (false,out)
+      else ok (false,out)
+  else ok (false,s)
+
+/-- Full shipped-loop denotation at the named P6 boundary, to the actual
+generated owned verifier, on EVERY scratch/root/physical input in the
+bounded binary domain. In particular no acceptance or sortedness is assumed.
+Only local node P6, not whole-level/whole-verifier equality, is a premise. -/
+theorem verify_in_place_owned {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (H : Address → Digest) (law : ∀ input, D.digest hash input=ok (H input))
+    (source : Node) (gate : NodeGate H source)
+    (root : Digest) (s : reference.Scratch) (physical : Slice U8)
+    (size : physical.val.length≤5504) :
+    wrapper (fun state => (eval H (levels source 18 state physical)).2) root s physical =
+      reference.verify_owned D hash root s physical := by
+  by_cases zero : s.n=0#usize
+  · simp only [wrapper,reference.verify_owned,if_pos zero]
+  · by_cases large : s.n>16#usize
+    · simp only [wrapper,reference.verify_owned,if_neg zero,if_pos large]
+    · have positive : 0<s.n.val := by
+        by_contra bad
+        exact zero (UScalar.eq_of_val_eq (by change s.n.val=0;omega))
+      have bound : s.n.val≤16 := by change ¬s.n.val>16 at large;omega
+      have domain : Domain physical {s with «at»:=0#usize} := ⟨positive,bound,by simp⟩
+      have composition := eighteen_owned D hash H law source gate physical size
+        {s with «at»:=0#usize} domain
+      simp only [wrapper,reference.verify_owned,if_neg zero,if_neg large,composition]
+      rfl
+
+/-- Observed ABI used by batch_tree. The caller supplies a reset cursor.
+The verified source loop is substituted before root testing; rejected
+partial scratch and all issued requests are retained. -/
+def verifyState (source : Node) (root : Digest) (physical : Slice U8) (s : reference.Scratch) :
+    Program Bytes State (Bool × reference.Scratch) :=
+  if wellFormed ((live s 0 s.n.val).map Prod.fst) ∧ physical.val.length%32=0 then
+    bind (transport (levels source 18 s physical))
+      (fun result => .done (MultiproofConeVerifyState.finishState root physical s result))
+  else .done (false,s)
+
+theorem verifyState_eq {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (H : Bytes → State) (law : ∀ input, D.digest hash input=ok (rawOracle H input))
+    (source : Node) (gate : NodeGate (rawOracle H) source)
+    (root : Digest) (physical : Slice U8) (size : physical.val.length≤5504)
+    (s : reference.Scratch) (zero : s.«at».val=0) :
+    eval H (verifyState source root physical s)=
+      eval H (MultiproofConeVerifyState.verifyState root physical s) := by
+  by_cases guard : wellFormed ((live s 0 s.n.val).map Prod.fst) ∧ physical.val.length%32=0
+  · have len : ((live s 0 s.n.val).map Prod.fst).length=s.n.val := by
+      simp [MultiproofConeRootGuard.live_length]
+    have positive : 0<s.n.val := by
+      by_contra bad
+      have empty : (live s 0 s.n.val).map Prod.fst=[] := List.length_eq_zero_iff.mp (by omega)
+      exact guard.1.1 empty
+    have domain : Domain physical s := ⟨positive,by have := guard.1.2.1;omega,by omega⟩
+    simp only [verifyState,MultiproofConeVerifyState.verifyState,if_pos guard,
+      eval_bind,transport_observation,levels_eq D hash (rawOracle H) law source gate physical size 18 s domain]
+  · simp only [verifyState,MultiproofConeVerifyState.verifyState,if_neg guard]
+
+#print axioms verify_in_place_owned
+#print axioms verifyState_eq
+end AspisR1.MultiproofConeP6Verify
+end

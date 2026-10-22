@@ -1,0 +1,3 @@
+# Aeneas symbolic-call policy (pinned source finding)
+
+Strict-v3 Aeneas source: `lean-candidates/s4-stdlib-fromfn-isolation-v1-20261021/tool-candidate/InterpStatements.ml`, SHA256 `1f1b6527bce296728cce288648e6b5f6aa4fd0f1387a06af33fee2642244b616`. In symbolic mode a regular call looks up its declaration only to instantiate the function signature; the symbolic-call evaluator then allocates a fresh symbolic return. It does not interpret the callee body. Concrete mode performs the body lookup and executes a `StructuredBody`. Thus transparent selection can expose a separate Lean definition but cannot inline `Guard.push` into a symbolic caller or repair the call-site loan join. No build or selector retry was run.

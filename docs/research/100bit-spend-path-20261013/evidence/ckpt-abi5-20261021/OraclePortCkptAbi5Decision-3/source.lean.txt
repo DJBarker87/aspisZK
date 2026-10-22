@@ -1,0 +1,73 @@
+import OraclePortCkptAbi5Stage
+
+/-! Total reference/model composition at the actual frozen2 checkpoint
+position. This is not a lowering of the frozen Rust decision. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortCkptAbi5Decision
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortStoredDecisionDraftC4
+open OraclePortFrozen2
+open RawCutTranscriptRun (ErasedPrefix ErasedMessage)
+attribute [local instance] Classical.propDecidable
+attribute [local irreducible] OraclePortFrozen2.checkpoint OraclePortFrozen2.stage2
+  OraclePortCkptAbi5Stage.strictStage
+
+def strictAfter (stored : Bytes) (p : Parsed) (q : Fin 22 → Fin 262144)
+    (tr : ErasedPrefix) : Program Bytes State Bool :=
+  match input p q tr, LiteralOpeningView.read (typedRows p q tr) with
+  | some i, some v => bind (OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+      (OraclePortAcceptedContextC6.context p i v) i.data
+      (SelectedChallengeMap.rhoOf i.rho) q) fun resumed =>
+      match resumed with
+      | none => .done false
+      | some a => stage2 p q tr i a
+  | _, _ => .done false
+
+theorem after_observation (H : Bytes → State) (stored : Bytes) (p : Parsed)
+    (q : Fin 22 → Fin 262144) (tr : ErasedPrefix) (query : queries tr = some q) :
+    eval H (strictAfter stored p q tr) = eval H (afterBatch0 stored p q tr) := by
+  cases hi : input p q tr with
+  | none => simp only [strictAfter,afterBatch0,hi]
+  | some i =>
+    cases hv : LiteralOpeningView.read (typedRows p q tr) with
+    | none => simp only [strictAfter,afterBatch0,hi,hv]
+    | some v =>
+      simp only [strictAfter,afterBatch0,hi,hv,eval_bind,
+        OraclePortCkptAbi5Stage.reached_stage H stored p q tr i v hi query]
+      rfl
+
+/-- Same batch0/strict-reader/batch1 order and returned-state dependency. -/
+def strictDecision : OraclePortStoredExperimentC4.Decision := fun stored tr _ =>
+  if OraclePortAdmission.Guard tr then
+    match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+    | some p, some q => bind (batch p q batch0) fun ok =>
+        if ok then strictAfter stored p q tr else .done false
+    | _, _ => .done false
+  else .done false
+
+/-- Total equality of ordered observations, including all rejection paths.
+The concrete Rust driver identity remains outside this reference theorem. -/
+theorem decision_observation (H : Bytes → State) (stored : Bytes)
+    (tr : ErasedPrefix) (m : ErasedMessage) :
+    eval H (strictDecision stored tr m) = eval H (dV_frozen2 stored tr m) := by
+  by_cases guard : OraclePortAdmission.Guard tr
+  · cases hp : OraclePortStoredParserC4.parseReached stored tr with
+    | none => simp only [strictDecision,dV_frozen2,if_pos guard,hp]
+    | some p =>
+      cases hq : queries tr with
+      | none => simp only [strictDecision,dV_frozen2,if_pos guard,hp,hq]
+      | some q =>
+        simp only [strictDecision,dV_frozen2,if_pos guard,hp,hq,eval_bind]
+        cases hb : (eval H (batch p q batch0)).2 with
+        | false => rfl
+        | true =>
+          simp only [↓reduceIte]
+          rw [after_observation H stored p q tr hq]
+  · simp only [strictDecision,dV_frozen2,if_neg guard]
+
+#print axioms after_observation
+#print axioms decision_observation
+end AspisR1.OraclePortCkptAbi5Decision
+end

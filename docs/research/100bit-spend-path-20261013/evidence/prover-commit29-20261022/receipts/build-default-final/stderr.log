@@ -1,0 +1,142 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling version_check v0.9.5
+
+thread 'rustc' panicked at /home/runner/work/platform-tools/platform-tools/out/rust/compiler/rustc_codegen_ssa/src/back/write.rs:1160:10:
+failed to spawn helper thread: Os { code: 11, kind: WouldBlock, message: "Resource temporarily unavailable" }
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: core::result::unwrap_failed
+   3: rustc_codegen_ssa::back::write::start_executing_work::<rustc_codegen_llvm::LlvmCodegenBackend>
+   4: rustc_codegen_ssa::back::write::start_async_codegen::<rustc_codegen_llvm::LlvmCodegenBackend>
+   5: rustc_codegen_ssa::base::codegen_crate::<rustc_codegen_llvm::LlvmCodegenBackend>
+   6: <rustc_codegen_llvm::LlvmCodegenBackend as rustc_codegen_ssa::traits::backend::CodegenBackend>::codegen_crate
+   7: <rustc_interface::queries::Linker>::codegen_and_build_linker
+   8: <std::thread::local::LocalKey<core::cell::Cell<*const ()>>>::with::<rustc_middle::ty::context::tls::enter_context<<rustc_middle::ty::context::GlobalCtxt>::enter<rustc_interface::passes::create_and_enter_global_ctxt<core::option::Option<rustc_interface::queries::Linker>, rustc_driver_impl::run_compiler::{closure#0}::{closure#2}>::{closure#2}::{closure#0}, core::option::Option<rustc_interface::queries::Linker>>::{closure#1}, core::option::Option<rustc_interface::queries::Linker>>::{closure#0}, core::option::Option<rustc_interface::queries::Linker>>
+   9: <rustc_middle::ty::context::TyCtxt>::create_global_ctxt::<core::option::Option<rustc_interface::queries::Linker>, rustc_interface::passes::create_and_enter_global_ctxt<core::option::Option<rustc_interface::queries::Linker>, rustc_driver_impl::run_compiler::{closure#0}::{closure#2}>::{closure#2}::{closure#0}>
+  10: <rustc_interface::passes::create_and_enter_global_ctxt<core::option::Option<rustc_interface::queries::Linker>, rustc_driver_impl::run_compiler::{closure#0}::{closure#2}>::{closure#2} as core::ops::function::FnOnce<(&rustc_session::session::Session, rustc_middle::ty::context::CurrentGcx, alloc::sync::Arc<rustc_data_structures::jobserver::Proxy>, &std::sync::once_lock::OnceLock<rustc_middle::ty::context::GlobalCtxt>, &rustc_data_structures::sync::worker_local::WorkerLocal<rustc_middle::arena::Arena>, &rustc_data_structures::sync::worker_local::WorkerLocal<rustc_hir::Arena>, rustc_driver_impl::run_compiler::{closure#0}::{closure#2})>>::call_once::{shim:vtable#0}
+  11: rustc_interface::passes::create_and_enter_global_ctxt::<core::option::Option<rustc_interface::queries::Linker>, rustc_driver_impl::run_compiler::{closure#0}::{closure#2}>
+  12: rustc_interface::interface::run_compiler::<(), rustc_driver_impl::run_compiler::{closure#0}>::{closure#1}
+  13: <scoped_tls::ScopedKey<rustc_span::SessionGlobals>>::set::<rustc_interface::util::run_in_thread_with_globals<rustc_interface::util::run_in_thread_pool_with_globals<rustc_interface::interface::run_compiler<(), rustc_driver_impl::run_compiler::{closure#0}>::{closure#1}, ()>::{closure#0}, ()>::{closure#0}::{closure#0}::{closure#0}, ()>
+  14: rustc_span::create_session_globals_then::<(), rustc_interface::util::run_in_thread_with_globals<rustc_interface::util::run_in_thread_pool_with_globals<rustc_interface::interface::run_compiler<(), rustc_driver_impl::run_compiler::{closure#0}>::{closure#1}, ()>::{closure#0}, ()>::{closure#0}::{closure#0}::{closure#0}>
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+error: the compiler unexpectedly panicked. this is a bug.
+
+note: we would appreciate a bug report: https://github.com/rust-lang/rust/issues/new?labels=C-bug%2C+I-ICE%2C+T-compiler&template=ice.md
+
+note: please make sure that you have updated to the latest nightly
+
+note: please attach the file at `/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/rustc-ice-2026-10-21T23_28_55-519759.txt` to your bug report
+
+note: compiler flags: --crate-type lib -C embed-bitcode=no -C debug-assertions=off -C strip=debuginfo
+
+note: some of the compiler flags provided by cargo are hidden
+
+query stack during panic:
+end of query stack
+error: could not compile `version_check` (lib)
+
+Caused by:
+  process didn't exit successfully: `/home/dombarker/.rustup/toolchains/1.89.0-sbpf-solana-v1.52/bin/rustc --crate-name version_check --edition=2015 /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debug-assertions=off --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values())' -C metadata=89050607b4e06ee9 -C extra-filename=-4e74b7ac0f9d2865 --out-dir /home/dombarker/project-offloads/codex-cx-prover-commit29-20261022/sbf-target-verifier/release/deps -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-cx-prover-commit29-20261022/sbf-target-verifier/release/deps --cap-lints allow` (exit status: 101)
+warning: build failed, waiting for other jobs to finish...
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "-m64" "/tmp/rustcVBeaXK/symbols.o" "<3 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,libcfg_if-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/tmp/rustcVBeaXK/raw-dylibs" "-B<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld" "-fuse-ld=lld" "-Wl,-znostart-stop-gc" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/home/dombarker/project-offloads/codex-cx-prover-commit29-20261022/sbf-target-verifier/release/build/serde_core-aa7e9744c82b8f7d/build_script_build-aa7e9744c82b8f7d" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-Wl,--strip-debug" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: terminate called after throwing an instance of 'std::system_error'
+            what():  Resource temporarily unavailable
+          PLEASE submit a bug report to https://github.com/llvm/llvm-project/issues/ and include the crash backtrace.
+          Stack dump:
+          0.    Program arguments: /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld -flavor gnu -plugin /usr/libexec/gcc/x86_64-linux-gnu/13/liblto_plugin.so -plugin-opt=/usr/libexec/gcc/x86_64-linux-gnu/13/lto-wrapper -plugin-opt=-fresolution=/tmp/ccjSxRKn.res --build-id --eh-frame-hdr -m elf_x86_64 --hash-style=gnu --as-needed -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -z now -z relro -o /home/dombarker/project-offloads/codex-cx-prover-commit29-20261022/sbf-target-verifier/release/build/serde_core-aa7e9744c82b8f7d/build_script_build-aa7e9744c82b8f7d /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86_64-linux-gnu/13/crtbeginS.o -L/tmp/rustcVBeaXK/raw-dylibs -L/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib -L/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld -L/usr/lib/gcc/x86_64-linux-gnu/13 -L/usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/13/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/13/../../.. /tmp/rustcVBeaXK/symbols.o /home/dombarker/project-offloads/codex-cx-prover-commit29-20261022/sbf-target-verifier/release/build/serde_core-aa7e9744c82b8f7d/build_script_build-aa7e9744c82b8f7d.build_script_build.f0b7f6ed44d4c8f7-cgu.0.rcgu.o /home/dombarker/project-offloads/codex-cx-prover-commit29-20261022/sbf-target-verifier/release/build/serde_core-aa7e9744c82b8f7d/build_script_build-aa7e9744c82b8f7d.build_script_build.f0b7f6ed44d4c8f7-cgu.1.rcgu.o /home/dombarker/project-offloads/codex-cx-prover-commit29-20261022/sbf-target-verifier/release/build/serde_core-aa7e9744c82b8f7d/build_script_build-aa7e9744c82b8f7d.9nj5650bpab6d44murvfi3tmz.rcgu.o --as-needed -Bstatic /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libstd-12196dcb71a5f6be.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libpanic_unwind-e8729601a15ce944.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libobject-9474be32f3c3f4a1.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libmemchr-d18ea11ca569d693.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libaddr2line-39bcb3fced147641.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libgimli-b9fe6a8e2b0465a1.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_demangle-e3858c5956aaad92.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libstd_detect-02d788cd8e335a85.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libhashbrown-e49e1d8f7c74a4fb.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_alloc-9dddab66d87c4728.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libminiz_oxide-a7776dee6fd97e92.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libadler2-245c849803f5f643.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libunwind-a03475e0d6f6ba68.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcfg_if-52144767bbafeff3.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/liblibc-ca490c9c8eea4098.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/librustc_std_workspace_core-046f9f8d0729f340.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/liballoc-782d6afba002f5e6.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcore-6f25ee4b9b6b6317.rlib /home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcompiler_builtins-ed4d5560e1dfcbb2.rlib -Bdynamic -lgcc_s -lutil -lrt -lpthread -lm -ldl -lc -znostart-stop-gc --eh-frame-hdr -z noexecstack --gc-sections -z relro -z now --strip-debug /usr/lib/gcc/x86_64-linux-gnu/13/crtendS.o /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/crtn.o
+          Stack dump without symbol names (ensure you have llvm-symbolizer in your PATH or set the environment var `LLVM_SYMBOLIZER_PATH` to point to it):
+          0  rust-lld       0x0000610684015cf0
+          1  rust-lld       0x00006106840132b1
+          2  libc.so.6      0x00007f96f7045330
+          3  libc.so.6      0x00007f96f709ec0c pthread_kill + 284
+          4  libc.so.6      0x00007f96f704527e gsignal + 30
+          5  libc.so.6      0x00007f96f70288ff abort + 223
+          6  libstdc++.so.6 0x00007f96f74a5ff5
+          7  libstdc++.so.6 0x00007f96f74bb0da
+          8  libstdc++.so.6 0x00007f96f74a5a55 std::unexpected() + 0
+          9  libstdc++.so.6 0x00007f96f74bb391
+          10 libstdc++.so.6 0x00007f96f74aa2a5 std::__throw_system_error(int) + 167
+          11 libstdc++.so.6 0x00007f96f74aa311
+          12 rust-lld       0x0000610687431f78
+          13 rust-lld       0x0000610687432559
+          14 rust-lld       0x00006106874328bd
+          15 rust-lld       0x000061068417a969
+          16 rust-lld       0x0000610684182aea
+          17 rust-lld       0x00006106841836b4
+          18 rust-lld       0x000061068404980e
+          19 rust-lld       0x0000610683f8ae7e
+          20 rust-lld       0x0000610683eb4b7b
+          21 libc.so.6      0x00007f96f702a1ca
+          22 libc.so.6      0x00007f96f702a28b __libc_start_main + 139
+          23 rust-lld       0x0000610683f8a675
+          collect2: fatal error: ld terminated with signal 6 [Aborted], core dumped
+          compilation terminated.
+          
+
+error: could not compile `serde_core` (build script) due to 1 previous error
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "-m64" "/tmp/rustcacVCca/symbols.o" "<3 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,libcfg_if-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/tmp/rustcacVCca/raw-dylibs" "-B<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld" "-fuse-ld=lld" "-Wl,-znostart-stop-gc" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/home/dombarker/project-offloads/codex-cx-prover-commit29-20261022/sbf-target-verifier/release/build/proc-macro2-4ccfd0bc6b8d82f4/build_script_build-4ccfd0bc6b8d82f4" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-Wl,--strip-debug" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: terminate called after throwing an instance of 'std::system_error'
+            what():  Resource temporarily unavailable
+          PLEASE submit a bug report to https://github.com/llvm/llvm-project/issues/ and include the crash backtrace.
+          Stack dump without symbol names (ensure you have llvm-symbolizer in your PATH or set the environment var `LLVM_SYMBOLIZER_PATH` to point to it):
+          0  rust-lld       0x00005f97ca270cf0
+          1  rust-lld       0x00005f97ca26e2b1
+          2  libc.so.6      0x00007fb32c445330
+          3  libc.so.6      0x00007fb32c49ec0c pthread_kill + 284
+          4  libc.so.6      0x00007fb32c44527e gsignal + 30
+          5  libc.so.6      0x00007fb32c4288ff abort + 223
+          6  libstdc++.so.6 0x00007fb32c8a5ff5
+          7  libstdc++.so.6 0x00007fb32c8bb0da
+          8  libstdc++.so.6 0x00007fb32c8a5a55 std::unexpected() + 0
+          9  libstdc++.so.6 0x00007fb32c8bb391
+          10 libstdc++.so.6 0x00007fb32c8aa2a5 std::__throw_system_error(int) + 167
+          11 libstdc++.so.6 0x00007fb32c8aa311
+          12 rust-lld       0x00005f97cd68bd03
+          13 libstdc++.so.6 0x00007fb32c8ecdb4
+          14 libc.so.6      0x00007fb32c49cb84
+          15 libc.so.6      0x00007fb32c529ecc
+          collect2: fatal error: ld terminated with signal 6 [Aborted], core dumped
+          compilation terminated.
+          
+
+error: could not compile `proc-macro2` (build script) due to 1 previous error
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "-m64" "/tmp/rustcwYoAEt/symbols.o" "<2 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,libcfg_if-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/tmp/rustcwYoAEt/raw-dylibs" "-B<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld" "-fuse-ld=lld" "-Wl,-znostart-stop-gc" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/home/dombarker/project-offloads/codex-cx-prover-commit29-20261022/sbf-target-verifier/release/build/quote-158d427fd1727142/build_script_build-158d427fd1727142" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-Wl,--strip-debug" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: terminate called after throwing an instance of 'std::system_error'
+            what():  Resource temporarily unavailable
+          PLEASE submit a bug report to https://github.com/llvm/llvm-project/issues/ and include the crash backtrace.
+          Stack dump without symbol names (ensure you have llvm-symbolizer in your PATH or set the environment var `LLVM_SYMBOLIZER_PATH` to point to it):
+          0  rust-lld       0x00005eb630efecf0
+          1  rust-lld       0x00005eb630efc2b1
+          2  libc.so.6      0x00007fdf88245330
+          3  libc.so.6      0x00007fdf8829ec0c pthread_kill + 284
+          4  libc.so.6      0x00007fdf8824527e gsignal + 30
+          5  libc.so.6      0x00007fdf882288ff abort + 223
+          6  libstdc++.so.6 0x00007fdf886a5ff5
+          7  libstdc++.so.6 0x00007fdf886bb0da
+          8  libstdc++.so.6 0x00007fdf886a5a55 std::unexpected() + 0
+          9  libstdc++.so.6 0x00007fdf886bb391
+          10 libstdc++.so.6 0x00007fdf886aa2a5 std::__throw_system_error(int) + 167
+          11 libstdc++.so.6 0x00007fdf886aa311
+          12 rust-lld       0x00005eb634319d03
+          13 libstdc++.so.6 0x00007fdf886ecdb4
+          14 libc.so.6      0x00007fdf8829cb84
+          15 libc.so.6      0x00007fdf88329ecc
+          collect2: fatal error: ld terminated with signal 6 [Aborted], core dumped
+          compilation terminated.
+          
+
+error: could not compile `quote` (build script) due to 1 previous error

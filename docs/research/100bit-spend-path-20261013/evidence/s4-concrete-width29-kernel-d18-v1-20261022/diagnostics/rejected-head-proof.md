@@ -1,0 +1,3 @@
+# Rejected first elaboration
+
+The first `D18S4ConcreteWidth29KernelV1` elaboration had one proof-shape error at the head projection: after unfolding `localWord`, the expected right side retained the `LiteralTypedWords.word` lane split as an `if n < 26 then ... else ...`; the supplied theorem was already specialized to `n < 26`. The same failed run printed `sorryAx` under Lean error recovery, so that output was rejected and is not the accepted theorem/audit. The changed proof adds `hn` to the simplifier. Accepted retry: exit 0, 7.694 seconds, peak RSS 4,073,619,456 bytes, swap 0; final and imported-leaf axioms are standard-only.

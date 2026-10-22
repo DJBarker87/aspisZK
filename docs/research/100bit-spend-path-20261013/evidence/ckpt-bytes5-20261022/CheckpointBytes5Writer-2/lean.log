@@ -1,0 +1,42 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Writer.lean:26:67: error: unsolved goals
+bs : Bytes
+⊢ List.map (fun x => x) bs = bs
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Writer.lean:27:65: warning: This simp argument is unused:
+  List.map_id_fun
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵y̵t̵e̵s̵O̵f̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵d̵e̵f̵,̵u̵8̵_̵r̵o̵u̵n̵d̵t̵r̵i̵p̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵i̵d̵_̵f̵u̵n̵]̵[̲b̲y̲t̲e̲s̲O̲f̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲m̲a̲p̲,̲ ̲F̲u̲n̲c̲t̲i̲o̲n̲.̲c̲o̲m̲p̲_̲d̲e̲f̲,̲ ̲u̲8̲_̲r̲o̲u̲n̲d̲t̲r̲i̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Writer.lean:48:32: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  bytesOf ↑?b
+in the target expression
+  sourceBody p a hp hu ++ List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑hc =
+    sourceBody p a hp hu ++ bytes (stateOf hc)
+
+p : Prepared
+a : Accumulator
+hp hu hc : Digest
+⊢ sourceBody p a hp hu ++ List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑hc =
+    sourceBody p a hp hu ++ bytes (stateOf hc)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    hc
+  has type
+    Digest
+  but is expected to have type
+    { l // l.length = ↑32#usize }
+  in the application
+    ↑hc
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Writer.lean:54:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Writer.lean:87:2: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisR1.CheckpointBytes5Writer.u8_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytes5Writer.bytes_roundtrip' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytes5Writer.finish_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytes5Writer.writer_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

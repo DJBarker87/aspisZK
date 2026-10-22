@@ -1,0 +1,25 @@
+/tmp/root-s4-query-array-order-v1-20261022/sources/S4QueryArrayOrderV1.lean:23:24: error: unsolved goals
+out : Std.Array U32 22#usize
+xs : List ℕ
+q : Fin 22 → Fin 262144
+hdecode : LiteralQueryRead.decode xs = some q
+horder : List.map (fun x => ↑x) ↑out = xs
+j : Fin 22
+hxs : (List.ofFn fun j => ↑(q j)) = xs
+he : List.map (fun x => ↑x) ↑out = List.ofFn fun i => ↑(q i)
+hj : ↑j < (↑out).length
+hleft : (List.map (fun x => ↑x) ↑out)[↑j]? = some ↑(↑out)[↑j]
+⊢ [↑(q 0), ↑(q 1), ↑(q 2), ↑(q 3), ↑(q 4), ↑(q 5), ↑(q 6), ↑(q 7), ↑(q 8), ↑(q 9), ↑(q 10), ↑(q 11), ↑(q 12), ↑(q 13),
+        ↑(q 14), ↑(q 15), ↑(q 16), ↑(q 17), ↑(q 18), ↑(q 19), ↑(q 20), ↑(q 21)][↑j] =
+    ↑(q j)
+/tmp/root-s4-query-array-order-v1-20261022/sources/S4QueryArrayOrderV1.lean:21:47: warning: This simp argument is unused:
+  hj
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵j̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S4QueryArrayOrderV1.array_entry_eq_literal_query' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

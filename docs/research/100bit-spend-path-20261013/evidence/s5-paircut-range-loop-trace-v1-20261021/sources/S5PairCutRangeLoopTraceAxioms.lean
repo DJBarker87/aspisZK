@@ -1,0 +1,2 @@
+import S5PairCutRangeLoopTraceV1
+#print axioms AspisR1S5PairCutRangeLoopTraceV1.successful_run_has_trace

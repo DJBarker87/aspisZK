@@ -1,0 +1,41 @@
+import MultiproofConeSemanticRows
+
+/-! Owned Aeneas reference to frozen parser, on every byte input. Production
+source adoption and the stored-to-reached decoder/caller binding are separate. -/
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeParserTotal
+open Aeneas Aeneas.Std Result
+open OraclePortCompactDraft MultiproofConeCanonical MultiproofConeParserControl
+
+theorem rows_join : RowsJoin := by
+  intro bytes length
+  have h := MultiproofConeSemanticRows.rows_total 27 0#u8 bytes
+    (alloc.vec.Vec.new (alloc.vec.Vec U8)) (by rfl) (by rfl) (by omega)
+  simpa only [decodedRows,alloc.vec.Vec.new,List.map_nil,List.nil_append,Option.map_id_fun',id_eq,show (0#u8).val=0 from rfl]
+    using h
+
+/-- Total reference result including rejection, without a RowsJoin premise. -/
+theorem parse_total (bytes : Slice U8) :
+    (do let result ← MultiproofParserRef.parser_reference.parse bytes
+        ok (result.map decodedRows)) =
+      ok ((parse (bytesOf bytes.val)).map Parsed.semantic) :=
+  parse_of_rows rows_join bytes
+
+/-- Accepted reference parses return exactly the frozen semantic rows. This
+is not a whole source-verifier AcceptedRunJoin. -/
+theorem accepted_parse (bytes : Slice U8) (actual : alloc.vec.Vec (alloc.vec.Vec U8))
+    (accepted : MultiproofParserRef.parser_reference.parse bytes=ok (some actual)) :
+    ∃ parsed, parse (bytesOf bytes.val)=some parsed ∧ parsed.wire=bytesOf bytes.val ∧ decodedRows actual=parsed.semantic := by
+  have h := parse_total bytes
+  rw [accepted] at h
+  simp only [bind_tc_ok,Option.map_some] at h
+  cases hp : parse (bytesOf bytes.val) with
+  | none => simp only [hp,Option.map_none] at h;cases h
+  | some parsed =>
+    simp only [hp,Option.map_some] at h
+    exact ⟨parsed,rfl,(parse_header _ _ hp).2,Option.some.inj (Result.ok.inj h)⟩
+
+#print axioms rows_join
+#print axioms parse_total
+#print axioms accepted_parse
+end AspisR1.MultiproofConeParserTotal

@@ -1,0 +1,38 @@
+{
+  "classification": "read-only Rust source inventory for LLBC foreign children; no Charon/Aeneas body or Lean theorem is claimed for these methods",
+  "toolchain": "rustc 1.98.0-nightly (14210df0e27ccd7d9e6a05b8085cbd438e4bbc65), host x86_64-unknown-linux-gnu, target information from LLBC says little endian",
+  "rust_src_root": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src",
+  "source_files": {
+    "option.rs": "7cf61204b05d98a95bc2e322d5fbfc1f4f91505109971917d9a7fb47151c50e6",
+    "num/uint_macros.rs": "27b60f61c397a3e42930743c72fdbd01497f3d04bd5ab8cc65a53747fa236454",
+    "slice/index.rs": "1bf3c8e2dacb8d09393c5ac7d51fd8496e4d270e583c40979c5c6364b59e2ea9",
+    "slice/mod.rs": "354992a6a3d69a0185eef9044a07ea5180e767bdb467aef55e69ee3d44317840"
+  },
+  "foreign_children": [
+    {
+      "llbc_name": "core::option::{impl}::unwrap",
+      "source": "option.rs:1010",
+      "relevant_source": "match self { Some(val) => val, None => unwrap_failed() }",
+      "contract_shape": "Some returns its payload; None panics/diverges"
+    },
+    {
+      "llbc_name": "core::num::{impl}::from_le_bytes",
+      "source": "num/uint_macros.rs:4083-4085, 4126-4129, 808-813",
+      "relevant_source": "Self::from_le(Self::from_ne_bytes(bytes)); from_ne_bytes uses mem::transmute; from_le is identity when target_endian is little",
+      "contract_shape": "for this pinned little-endian target, four bytes yield the corresponding little-endian u32; transmute/target-endian behavior remains a primitive implementation boundary"
+    },
+    {
+      "llbc_name": "core::slice::{impl}::len",
+      "source": "slice/mod.rs:116",
+      "relevant_source": "ptr::metadata(self)",
+      "contract_shape": "slice metadata length"
+    },
+    {
+      "llbc_name": "core::slice::index::{impl}::index",
+      "source": "slice/index.rs:362-381",
+      "relevant_source": "for Range<usize>, checks checked_sub(end,start) and end <= slice.len(), then constructs the range using unsafe pointer/length helper; otherwise slice_index_fail",
+      "contract_shape": "under start <= end <= len, returns the selected subslice; otherwise panics/diverges"
+    }
+  ],
+  "formal_boundary": "These source observations identify exact minimal primitive contracts for any later checked adapter. They are not imported assumptions and do not justify a Lean axiom."
+}

@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSparseParams50.lean:35:70: error: Tactic `assumption` failed
+
+p : ℕ → Old.Q
+hp : ∀ i < 10, Canonical (p i)
+width trailing : U8
+suffix : Usize
+j : Fin ↑trailing
+⊢ ↑suffix < 2 ^ ↑trailing
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSparseParams50.lean:55:39: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (↑⟨_a, hsb⟩).testBit (↑trailing - 1 - ↑j) = ProverCommitSparsePredicate50.rawOne (p (↑width + ↑j))
+Error: Application type mismatch: The argument
+  hsb
+has type
+  ↑suffix < 2 ^ ↑trailing
+but is expected to have type
+  _a < 2 ^ ↑trailing
+in the application
+  ⟨_a, hsb⟩
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+p : ℕ → Old.Q
+hp : ∀ i < 10, Canonical (p i)
+width : U8
+hw : sparse_scan50.width (ProverCommitQArray48.array 10#usize p) 10#u8 = ok width
+hwb : ↑width ≤ 10
+hbool : ∀ (i : ℕ), ↑width ≤ i → i < 10 → ProverCommitSparsePredicate50.rawBool (p i) = true
+hmax : ↑width = 0 ∨ ProverCommitSparsePredicate50.rawBool (p (↑width - 1)) = false
+trailing : U8 := U8.wrapping_sub 10#u8 width
+htr : ↑trailing = 10 - ↑width
+hsum : ↑width + ↑trailing = 10
+start : Usize := core.convert.num.FromUsizeU8.from width
+hstart : ↑start = ↑width
+suffix : Usize
+hs : sparse_scan50.suffix (ProverCommitQArray48.array 10#usize p) start trailing = ok suffix
+hsv : ↑suffix = R0P.rowCode ↑trailing fun i => ProverCommitSparsePredicate50.rawOne (p (↑start + ↑i))
+hsb : ↑suffix < 2 ^ ↑trailing
+j : Fin ↑trailing
+hi : ↑width + ↑j < 10
+hb : ProverCommitSparsePredicate50.rawBool (p (↑width + ↑j)) = true
+⊢ (↑⟨↑suffix, hsb⟩).testBit (↑trailing - 1 - ↑j) = ProverCommitSparsePredicate50.rawOne (p (↑width + ↑j))
+'R1Z.ProverCommitSparseParams50.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSparseParams50.parameters' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,93 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "packet": "s4-tx2-powers-query-source-cut-v1-20261021",
+  "status": "green-typed-tx2-powers-to-query-loop-source-cut",
+  "classification": "Typed source cut of the emitted tx2_common control-flow segment from successful weights.powers(29,p.gamma) through the query_loop call. Explicit operation fields retain the actual argument positions for observer marks, inactive/folded-root reads, batch merkle, geometry, pending weights and query_loop. The success theorem proves the same powers array is forwarded; the existing query-loop proof consumes that call, conditional on the emitted per-call increment property. This is not a compiled complete tx2_common owner or an implementation proof for weights.powers.",
+  "modules": [
+    {
+      "module": "S4Tx2PowersQuerySourceCutV1",
+      "source": "sources/S4Tx2PowersQuerySourceCutV1.lean",
+      "source_sha256": "a98a4917790a5c7c2b040bfc412d5aa58968560f0f46573c8a8300a46eba3145",
+      "object_sha256": "5253617fc821051b1e805aa812c50160f92a47af3e4162f16215ff6fe6f31274",
+      "producer_receipt": "producer/receipt.json",
+      "command": "producer/command.json",
+      "time": "producer/time.log",
+      "log": "producer/lean.log",
+      "source_revision_at_launch": "e746e660e0a137aa0bcad59843bbb112d05a6106",
+      "exit_status": 0,
+      "wall_seconds": 1.9540447080507874,
+      "peak_rss_bytes": 2248785920,
+      "swap_bytes": 0,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    }
+  ],
+  "direct_imports": [
+    "Stage2ContinuationQueryLoop"
+  ],
+  "direct_import_source_map": {
+    "Stage2ContinuationQueryLoop": {
+      "source": "../stage2-continuation-20261020/proofs/query-loop-v4/source.lean",
+      "source_sha256": "c398ba41273939ac739a064eee492976988027ff1b1d6f33657480b17aed0def",
+      "object_sha256": "20a8d68464f20012572d37f1228045ac2a42a5776e3d5f8281f7180b24c0d450",
+      "producer_packet": "stage2-continuation-20261020/proofs/query-loop-v4"
+    }
+  },
+  "source_bindings": {
+    "complete_emitted_funs_source": {
+      "path": "source-pins/Funs.lean",
+      "sha256": "b3aa665deadedac1f04233f5535bce0774cfed34e6ee7f979657982504d97c2b",
+      "expected_sha256": "b3aa665deadedac1f04233f5535bce0774cfed34e6ee7f979657982504d97c2b"
+    },
+    "emitted_types_source": {
+      "path": "source-pins/Types.lean",
+      "sha256": "e48b04f110817ce911f9f2471266a92a2244fa4f2154ef2b272359a49b52dd5b",
+      "expected_sha256": "e48b04f110817ce911f9f2471266a92a2244fa4f2154ef2b272359a49b52dd5b"
+    },
+    "rust_tx2_common_source_revision": "2ec37343acfb1b857cbec6569ad3175930a962bb",
+    "rust_tx2_common_file": "crates/aspis-r1-cost-probe/src/candidate.rs",
+    "rust_tx2_common_full_file_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+    "rust_tx2_common_fragment": {
+      "path": "source-pins/tx2_common.rs",
+      "sha256": "9e927542736d60330cea204a54c4b9b923a29d7351da7b664a74eb21c854a300"
+    },
+    "generated_funs_final_binding": {
+      "path": "../stage2-continuation-20261020/proofs/final-binding.json",
+      "sha256": "e81003e61cd8aacd7341a92884ebb61212721fb634aaa45bd01b6ff574dc8122",
+      "source_revision": "2ec37343acfb1b857cbec6569ad3175930a962bb"
+    },
+    "rust_weights_powers_source": {
+      "source_revision": "2ec37343acfb1b857cbec6569ad3175930a962bb",
+      "file": "crates/aspis-r1-cost-probe/src/weights.rs",
+      "full_file_path": "source-pins/weights.rs",
+      "full_file_sha256": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+      "function_source_sha256": "3919d83b539f8819c40251a84625b582ac88338fed2fa14b18951a69c0e1d018",
+      "scope": "The exact Rust operation used by tx2; source checker confirms powers has the stateful core::array::from_fn body. This does not itself prove the P6 operational model or Aeneas external-operation correspondence."
+    }
+  },
+  "compiler": {
+    "path": "/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+    "sha256": "1b370cfcbf44e80d1b004ab1b1ab9a4c73951f9f7c242140bcff9bc577576554"
+  },
+  "resource": {
+    "threads": 1,
+    "lean_memory_mb": 4400,
+    "swap_max_mb": 0,
+    "peak_rss_bytes_from_time_log": 3736977408
+  },
+  "limitations": [
+    "The operation fields are explicit typed boundaries: they are not yet identified with the concrete generated class-dispatch definitions or all operation bodies in the full tx2 FunsExternal owner.",
+    "The query_values callback remains the explicit QueryCall parameter of the existing query-loop cut; no source join to the concrete emitted query_values implementation is proved.",
+    "P6 std array::from_fn correspondence and final accepted-run/headline join remain open.",
+    "The full tx2_common Funs source is pinned and source-checked, but there is no compiled whole-caller Funs owner in this packet."
+  ],
+  "diagnostics": [
+    "diagnostics/separate-gamma-first-draft/ contains pre-correction packet artifacts.",
+    "diagnostics/operations-corrected-but-unapplied-results.md records the type-directed fix.",
+    "repin-s8-20261020 remains STOPPED_TRANSLATOR_BORROW_CONTEXT_FAILURE / REPIN-OWED."
+  ],
+  "s8_owner_status": "STOPPED_TRANSLATOR_BORROW_CONTEXT_FAILURE / REPIN-OWED, as recorded in the pinned repin-s8-20261020 manifest."
+}

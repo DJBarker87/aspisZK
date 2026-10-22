@@ -1,0 +1,49 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSparseProduct50.lean:20:54: warning: This simp argument is unused:
+  Nat.add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵i̵n̵.̵v̵a̵l̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵v̵a̵l̵_̵s̵u̵c̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵z̵e̵r̵o̵,̵N̵a̵t̵.̵a̵d̵d̵_̵a̵s̵s̵o̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵c̵o̵m̵m̵,̵N̵a̵t̵.̵a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵]̵[̲F̲i̲n̲.̲v̲a̲l̲_̲z̲e̲r̲o̲,̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲s̲u̲c̲c̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲z̲e̲r̲o̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲c̲o̲m̲m̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲l̲e̲f̲t̲_̲c̲o̲m̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSparseProduct50.lean:38:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ProverCommitSampleBits49.bit pref ↑width ↑i
+in the target expression
+  (if ProverCommitSampleBits49.bit pref (↑width) (↑0#usize + ↑i) = true then decode (p (↑0#usize + ↑i))
+    else 1 - decode (p (↑0#usize + ↑i))) =
+    if ProverCommitBooleanEnum49.tail ↑width ⟨↑pref, hb⟩ i = true then (fun i => decode (p ↑i)) i
+    else 1 - (fun i => decode (p ↑i)) i
+
+p : ℕ → Old.Q
+hp : ∀ i < 10, Canonical (p i)
+width : U8
+hw : ↑width ≤ 10
+pref : Usize
+hb : ↑pref < 2 ^ ↑width
+z : Old.Q
+hz :
+  sparse50.weight (ProverCommitQArray48.array 10#usize p) pref width 0#usize width
+      (ProverCommitNativeQ48.source ProverCommitSubtraction47.one) =
+    ok (ProverCommitNativeQ48.source z)
+hcz : Canonical z
+hdz : decode z = decode ProverCommitSubtraction47.one * ProverCommitSparseWeight50.product p pref ↑width ↑width ↑0#usize
+i : Fin ↑width
+hi : i ∈ Finset.univ
+⊢ (if ProverCommitSampleBits49.bit pref (↑width) (↑0#usize + ↑i) = true then decode (p (↑0#usize + ↑i))
+    else 1 - decode (p (↑0#usize + ↑i))) =
+    if ProverCommitBooleanEnum49.tail ↑width ⟨↑pref, hb⟩ i = true then (fun i => decode (p ↑i)) i
+    else 1 - (fun i => decode (p ↑i)) i
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.ProverCommitSparseProduct50.product_fin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSparseProduct50.full_weight' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,135 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:34:16: error(lean.unknownIdentifier): Unknown identifier `OracleAnswer`
+
+Note: It is not possible to treat `OracleAnswer` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:40:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:45:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:64:17: error: Tactic `rfl` failed: The left-hand side
+  (match ask schedule kind s with
+      | (result, after) =>
+        match result with
+        | Except.error e => (Except.error e, after)
+        | Except.ok a => ioChain schedule rest after).2.burned
+is not definitionally equal to the right-hand side
+  s.burned
+
+case cons.error
+schedule : Schedule
+kind : Kind
+rest : List Kind
+ih : ∀ (s : State), (ioChain schedule rest s).2.burned = s.burned
+s : State
+e : IOError
+h : (ask schedule kind s).1 = Except.error e
+⊢ (match ask schedule kind s with
+        | (result, after) =>
+          match result with
+          | Except.error e => (Except.error e, after)
+          | Except.ok a => ioChain schedule rest after).2.burned =
+    s.burned
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:77:57: error(lean.unknownIdentifier): Unknown identifier `OracleAnswer`
+
+Note: It is not possible to treat `OracleAnswer` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:89:13: error(lean.unknownIdentifier): Unknown identifier `OracleAnswer`
+
+Note: It is not possible to treat `OracleAnswer` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:92:13: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:96:13: error(lean.unknownIdentifier): Unknown identifier `OracleAnswer`
+
+Note: It is not possible to treat `OracleAnswer` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:98:59: error: unsolved goals
+case alreadyExists
+schedule : Schedule
+unix : Bool
+nonce : sorry
+s : State
+failed : (ask schedule Kind.create s).1 = Except.error IOError.alreadyExists
+⊢ (match schedule (List.length s.history) Kind.create s.history with
+        | Except.error IOError.alreadyExists =>
+          (Except.error ReservationError.duplicate,
+            { history := s.history ++ [(Kind.create, schedule (List.length s.history) Kind.create s.history)],
+              cursor := s.cursor, burned := s.burned })
+        | Except.error e =>
+          (Except.error (ReservationError.io e),
+            { history := s.history ++ [(Kind.create, schedule (List.length s.history) Kind.create s.history)],
+              cursor := s.cursor, burned := s.burned })
+        | Except.ok a =>
+          (Except.mapError ReservationError.io
+              (ioChain schedule (writes unix)
+                  { history := s.history ++ [(Kind.create, schedule (List.length s.history) Kind.create s.history)],
+                    cursor := s.cursor, burned := nonce :: s.burned }).1,
+            (ioChain schedule (writes unix)
+                { history := s.history ++ [(Kind.create, schedule (List.length s.history) Kind.create s.history)],
+                  cursor := s.cursor, burned := nonce :: s.burned }).2)).2.burned =
+    s.burned
+
+case other
+schedule : Schedule
+unix : Bool
+nonce : sorry
+s : State
+a✝ : ℕ
+failed : (ask schedule Kind.create s).1 = Except.error (IOError.other a✝)
+⊢ (match schedule (List.length s.history) Kind.create s.history with
+        | Except.error IOError.alreadyExists =>
+          (Except.error ReservationError.duplicate,
+            { history := s.history ++ [(Kind.create, schedule (List.length s.history) Kind.create s.history)],
+              cursor := s.cursor, burned := s.burned })
+        | Except.error e =>
+          (Except.error (ReservationError.io e),
+            { history := s.history ++ [(Kind.create, schedule (List.length s.history) Kind.create s.history)],
+              cursor := s.cursor, burned := s.burned })
+        | Except.ok a =>
+          (Except.mapError ReservationError.io
+              (ioChain schedule (writes unix)
+                  { history := s.history ++ [(Kind.create, schedule (List.length s.history) Kind.create s.history)],
+                    cursor := s.cursor, burned := nonce :: s.burned }).1,
+            (ioChain schedule (writes unix)
+                { history := s.history ++ [(Kind.create, schedule (List.length s.history) Kind.create s.history)],
+                  cursor := s.cursor, burned := nonce :: s.burned }).2)).2.burned =
+    s.burned
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:99:37: warning: This simp argument is unused:
+  failed
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵s̵e̵r̵v̵e̵,̵f̵a̵i̵l̵e̵d̵,̵a̵s̵k̵]̵[̲r̲e̲s̲e̲r̲v̲e̲,̲ ̲a̲s̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:122:31: error(lean.unknownIdentifier): Unknown identifier `Secret`
+
+Note: It is not possible to treat `Secret` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:134:5: error: unexpected token 'continue'; expected '_' or identifier
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:148:5: error: unexpected token 'continue'; expected '_' or identifier
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:159:22: error(lean.unknownIdentifier): Unknown identifier `Secret`
+
+Note: It is not possible to treat `Secret` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:160:20: error(lean.unknownIdentifier): Unknown identifier `Secret`
+
+Note: It is not possible to treat `Secret` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:161:16: error(lean.unknownIdentifier): Unknown identifier `withPrepared`
+
+Note: It is not possible to treat `withPrepared` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:162:18: error(lean.unknownIdentifier): Unknown identifier `withPrepared`
+
+Note: It is not possible to treat `withPrepared` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:163:6: error(lean.unknownIdentifier): Unknown identifier `fail_closed`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:162:65: error: unsolved goals
+Witness Proof : Type
+schedule : Schedule
+tape : ℕ → Candidate
+unix : Bool
+s after : State
+e : Error
+failed : prepare schedule tape unix s = (Except.error e, after)
+w : Witness
+real : Witness → sorry → State → Except Error Proof × State
+ideal : Unit → sorry → State → Except Error Proof × State
+⊢ observable sorry = observable sorry
+'R1Z.ProverCommitEnvironment35.ask_blind' depends on axioms: [propext, sorryAx]
+'R1Z.ProverCommitEnvironment35.ask_retains' depends on axioms: [sorryAx]
+'R1Z.ProverCommitEnvironment35.chain_retains' depends on axioms: [sorryAx]
+'R1Z.ProverCommitEnvironment35.create_retained' depends on axioms: [propext, sorryAx]
+'R1Z.ProverCommitEnvironment35.create_failed' depends on axioms: [propext, sorryAx]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:171:14: error(lean.unknownIdentifier): Unknown constant `fail_closed`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironment35.lean:172:14: error(lean.unknownIdentifier): Unknown constant `failure_replay`
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

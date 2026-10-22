@@ -1,0 +1,38 @@
+import OraclePortCkptAbi2StdInventory
+
+/-! Content semantics for the bounded-list Vec model used by the builder
+track. The explicit machine-size bound supplies model totality. No claim
+about physical allocation success, failure, or destructor behavior is made. -/
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1.OraclePortCkptAbi2Vec
+
+theorem push_exact {T : Type} (v : alloc.vec.Vec T) (x : T)
+    (bound : v.val.length + 1 ≤ Usize.max) :
+    alloc.vec.Vec.push v x = ok ⟨v.val ++ [x],by simpa using bound⟩ := by
+  unfold alloc.vec.Vec.push
+  simp only [bound,decide_true,Bool.or_true,↓reduceDIte,List.concat_eq_append]
+
+def appendModel {T : Type} (v : alloc.vec.Vec T) : List T → Result (alloc.vec.Vec T)
+  | [] => ok v
+  | x::xs => do
+      let out ← alloc.vec.Vec.push v x
+      appendModel out xs
+
+theorem append_exact {T : Type} (v : alloc.vec.Vec T) (xs : List T)
+    (bound : v.val.length + xs.length ≤ Usize.max) :
+    appendModel v xs = ok ⟨v.val ++ xs,by simpa using bound⟩ := by
+  induction xs generalizing v with
+  | nil => simp only [appendModel,List.append_nil]; rfl
+  | cons x xs ih =>
+    have first : v.val.length + 1 ≤ Usize.max := by
+      simp only [List.length_cons] at bound
+      omega
+    rw [appendModel,push_exact v x first]
+    simp only [bind_tc_ok]
+    rw [ih _ (by simp only [List.length_append,List.length_singleton]; simp only [List.length_cons] at bound; omega)]
+    simp only [List.append_assoc,List.singleton_append]
+
+#print axioms push_exact
+#print axioms append_exact
+end AspisR1.OraclePortCkptAbi2Vec

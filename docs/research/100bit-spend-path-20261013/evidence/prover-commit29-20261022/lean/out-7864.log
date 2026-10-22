@@ -1,0 +1,65 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFields29.lean:32:14: error: unsolved goals
+case succ
+row : U8
+n : ℕ
+ih :
+  ∀ (remaining : Usize) (payload : Bytes) (value : Usize),
+    ↑remaining = n →
+      r1_wire.fields29.finite row payload value remaining = ProverCommitFields20.finite row payload value n
+remaining : Usize
+payload : Bytes
+value : Usize
+count : ↑remaining = n + 1
+nonzero : remaining ≠ 0#usize
+dec : ↑(remaining.wrapping_sub 1#usize) = n
+tailRun :
+  ∀ (p : alloc.vec.Vec U8) (v : Usize),
+    r1_wire.fields29.finite row p v (remaining.wrapping_sub 1#usize) = ProverCommitFields20.finite row p v n
+⊢ (if alloc.vec.Vec.len payload < 32#usize then ok (core.result.Result.Ok ())
+    else do
+      let bytes ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) payload { «end» := 32#usize }
+      let o ← aspis_core.field.wide_exact.WideExact.from_le_bytes bytes
+      match o with
+        | none => ok (core.result.Result.Err (r1_wire.Error.NonCanonical row value))
+        | some x => do
+          let q ← aspis_core.field.wide_exact.WideExact.impl.c1 x
+          let b ←
+            core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 q
+                aspis_core.field.QM31.ZERO
+          if b = true then ok (core.result.Result.Err (r1_wire.Error.NonCanonical row value))
+            else do
+              let s ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) payload { start := 32#usize }
+              let tail ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+              r1_wire.fields29.finite row tail (core.num.Usize.wrapping_add value 1#usize)
+                  (core.num.Usize.wrapping_sub remaining 1#usize)) =
+    if alloc.vec.Vec.len payload < 32#usize then ok (core.result.Result.Ok ())
+    else do
+      let bytes ← alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) payload { «end» := 32#usize }
+      let parsed ← aspis_core.field.wide_exact.WideExact.from_le_bytes bytes
+      match parsed with
+        | none => ok (core.result.Result.Err (r1_wire.Error.NonCanonical row value))
+        | some x => do
+          let q ← aspis_core.field.wide_exact.WideExact.impl.c1 x
+          let bad ←
+            core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 q
+                aspis_core.field.QM31.ZERO
+          if bad = true then ok (core.result.Result.Err (r1_wire.Error.NonCanonical row value))
+            else do
+              let suffix ←
+                alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) payload { start := 32#usize }
+              let tail ← alloc.slice.Slice.to_vec core.clone.CloneU8 suffix
+              ProverCommitFields20.finite row tail (value.wrapping_add 1#usize) n
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFields29.lean:40:76: warning: This simp argument is unused:
+  tailRun
+
+Hint: Omit it from the simp argument list.
+  simp only [nonzero, ̲if_false, ̲ProverCommitFields20.finite, ̲lift, ̲bind_tc_ok,̵t̵a̵i̵l̵R̵u̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitFields29.sub_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitFields29.finite_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitFields29.bounded_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1SimSemantic20.r1_wire.fields29.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

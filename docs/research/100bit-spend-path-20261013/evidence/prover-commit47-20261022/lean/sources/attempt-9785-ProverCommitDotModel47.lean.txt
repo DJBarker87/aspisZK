@@ -1,0 +1,39 @@
+import R1Z.ProverCommitPairValue47
+import R1Z.ProverCommitEval47
+/-! Symbolic dot-product to retained model evaluator; no concrete reduction. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitDotModel47
+open ProverCommitPairValue47 AspisV8R15.ExactTowerBase AspisCircleTensorBinding
+open scoped BigOperators
+attribute [local irreducible] dot ProverCommitEval47.pairEval
+
+theorem dot_congr (n i : Nat) (q b b' : Nat → QM31Exact)
+    (h : ∀ j, i ≤ j → j < i + n → b j = b' j) : dot q b n i=dot q b' n i := by
+  induction n generalizing i with
+  | zero => rw [dot,dot]
+  | succ n ih =>
+    have hi := h i (by omega) (by omega)
+    have ht := ih (i+1) (fun j hj hj' => h j (by omega) (by omega))
+    simp only [dot,hi,ht]
+
+theorem dot_sum (n i : Nat) (q b : Nat → QM31Exact) :
+    dot q b n i =
+      (∑ j : Fin n, q (2*(i+j.val))*b (i+j.val),
+       ∑ j : Fin n, q (2*(i+j.val)+1)*b (i+j.val)) := by
+  induction n generalizing i with
+  | zero => simp [dot]
+  | succ n ih =>
+    simp only [dot,ih,Fin.sum_univ_succ,Fin.val_zero,Fin.val_succ,Nat.add_zero,
+      Nat.add_assoc,Nat.add_left_comm,Nat.add_comm]
+
+theorem dot_model (q : Nat → QM31Exact) (x : QM31Exact) :
+    dot q (naturalLineValue x) 512 0 =
+      ProverCommitEval47.pairEval (fun i : Fin 1024 => q i.val) x := by
+  rw [dot_sum]
+  simp only [Nat.zero_add,ProverCommitEval47.pairEval]
+
+#print axioms dot_congr
+#print axioms dot_sum
+#print axioms dot_model
+end R1Z.ProverCommitDotModel47

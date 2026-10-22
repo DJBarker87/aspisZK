@@ -1,0 +1,62 @@
+import MultiproofConeNodeAdoption
+import OraclePortFrozenOrderSlot
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeModelBoundary
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConeNodeDomain OraclePortFrozenOrder
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+
+/-- The source XOR guard agrees with the model guard only after the strict
+ascending live-prefix invariant has been established. -/
+theorem paired_iff (a b : Nat) (ascending : a<b) : b=a^^^1 ↔ paired a b := by
+  have quot : (a^^^1)/2=a/2 := by rw [Nat.xor_div_two];simp
+  have parity := Nat.xor_mod_two_eq_one (a:=a) (b:=1)
+  have modA := Nat.mod_lt a (by decide : 0<2)
+  have modX := Nat.mod_lt (a^^^1) (by decide : 0<2)
+  simp only [show 1%2=1 from rfl,iff_true,not_true_eq_false] at parity
+  unfold paired
+  omega
+
+/-- Explicit obstruction to using the certified cursor domain as the model
+simulation invariant. This does not claim such a prefix reaches batch_tree. -/
+theorem descending_guards : (0#u32)=(1#u32)^^^1#u32 ∧ ¬paired 1 0 := by
+  constructor
+  · decide
+  · simp [paired]
+
+@[local step] theorem parent_produced {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (s : reference.Scratch) (left right : Array U8 32#usize)
+    (ni cursor : Usize) (index : U32) (w : Usize) (bound : w.val<16) :
+    reference.write_parent D hash s left right ni cursor index w
+      ⦃ out => ∃ next nw, out=reference.Row.Next next ni nw ⦄ := by
+  unfold reference.write_parent
+  step* <;> scalar_tac
+
+/-- The actual extracted source-shaped step hashes the reversed occupied
+pair without asking for a supplied sibling. -/
+theorem descending_source {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (s : reference.Scratch)
+    (n : s.n=2#usize) (first : s.idx.val[0]!=(1#u32)) (second : s.idx.val[1]!=(0#u32)) :
+    ∃ next ni nw, reference.binary_step D hash s ⟨[],by simp⟩ 0#usize 0#usize=
+      ok (.Next next ni nw) := by
+  have spec : reference.binary_step D hash s ⟨[],by simp⟩ 0#usize 0#usize
+      ⦃ out => ∃ next ni nw, out=reference.Row.Next next ni nw ⦄ := by
+    unfold reference.binary_step
+    step* <;> simp_all [n,first,second] <;> scalar_tac
+  obtain ⟨out,eqout,next,ni,nw,rfl⟩ := WP.spec_imp_exists spec
+  exact ⟨next,ni,nw,eqout⟩
+
+/-- The frozen level model instead rejects the same descending live prefix,
+with no oracle reads. n/i/w/at bounds alone cannot supply RowJoin. -/
+theorem descending_model (H : Bytes → State) (v w : State) :
+    eval H (runLevel 2 [(1,v),(0,w)] [])=([],none) := by
+  simp [runLevel,paired,SemanticRecordCodec.decodeState,eval]
+
+#print axioms paired_iff
+#print axioms descending_guards
+#print axioms parent_produced
+#print axioms descending_source
+#print axioms descending_model
+end AspisR1.MultiproofConeModelBoundary

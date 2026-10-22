@@ -1,0 +1,16 @@
+def Aeneas.Std.UScalar.shiftLeft : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then ok (x.bv.shiftLeft s#uscalar) else fail Error.integerOverflow
+def Aeneas.Std.UScalar.cast : {src_ty : UScalarTy} → (tgt_ty : UScalarTy) → UScalar src_ty → UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+def Aeneas.Std.core.num.U32.from_le_bytes : Std.Array U8 4#usize → U32 :=
+fun a => BitVec.cast ⋯ (BitVec.fromLEBytes (List.map U8.bv ↑a))#uscalar
+BitVec.toNat_or {v : ℕ} (x y : BitVec v) : (x ||| y).toNat = x.toNat ||| y.toNat
+BitVec.toNat_shiftLeft {v n : ℕ} {x : BitVec v} : (x <<< n).toNat = x.toNat <<< n % 2 ^ v
+BitVec.toNat_setWidth {n : ℕ} (i : ℕ) (x : BitVec n) : (BitVec.setWidth i x).toNat = x.toNat % 2 ^ i
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3Word.lean:14:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.cast_val`
+Aeneas.Std.UScalar.eq_of_val_eq {ty : UScalarTy} {i j : UScalar ty} : ↑i = ↑j → i = j

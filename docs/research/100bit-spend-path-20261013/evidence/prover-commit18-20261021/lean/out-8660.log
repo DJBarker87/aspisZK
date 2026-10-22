@@ -1,0 +1,106 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropySymmetry18.lean:28:48: error: unsolved goals
+e : SecP ≃ SecP
+secret : SecP
+⊢ (match decode (erase secret) with
+    | none => erase secret
+    | some secret => erase (e secret)) =
+    erase (e secret)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropySymmetry18.lean:29:19: warning: This simp argument is unused:
+  erase
+
+Hint: Omit it from the simp argument list.
+  simp only [lift, e̵r̵a̵s̵e̵,̵ ̵decode_success]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropySymmetry18.lean:29:26: warning: This simp argument is unused:
+  decode_success
+
+Hint: Omit it from the simp argument list.
+  simp only [lift, erase,̵ ̵d̵e̵c̵o̵d̵e̵_̵s̵u̵c̵c̵e̵s̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropySymmetry18.lean:35:16: error: unsolved goals
+case some
+e : SecP ≃ SecP
+raw : Candidate
+secret : SecP
+hd : decode raw = some secret
+⊢ decode (erase (e secret)) = some (e secret)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropySymmetry18.lean:35:40: warning: This simp argument is unused:
+  erase
+
+Hint: Omit it from the simp argument list.
+  simp only [lift, hd, e̵r̵a̵s̵e̵,̵ ̵decode_success, Option.map_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropySymmetry18.lean:35:47: warning: This simp argument is unused:
+  decode_success
+
+Hint: Omit it from the simp argument list.
+  simp only [lift, hd, erase, d̵e̵c̵o̵d̵e̵_̵s̵u̵c̵c̵e̵s̵s̵,̵ ̵Option.map_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropySymmetry18.lean:46:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decode raw
+in the target expression
+  (match decode (lift e raw) with
+    | none => lift e raw
+    | some secret => erase (e.symm secret)) =
+    raw
+
+case some
+e : SecP ≃ SecP
+raw : Candidate
+secret : SecP
+hd : decode raw = some secret
+⊢ (match decode (lift e raw) with
+    | none => lift e raw
+    | some secret => erase (e.symm secret)) =
+    raw
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropySymmetry18.lean:53:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decode raw
+in the target expression
+  (match decode (lift e.symm raw) with
+    | none => lift e.symm raw
+    | some secret => erase (e secret)) =
+    raw
+
+case some
+e : SecP ≃ SecP
+raw : Candidate
+secret : SecP
+hd : decode raw = some secret
+⊢ (match decode (lift e.symm raw) with
+    | none => lift e.symm raw
+    | some secret => erase (e secret)) =
+    raw
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropySymmetry18.lean:100:18: error: unsolved goals
+case error
+a b : SecP
+e : Equiv.Perm SecP := Equiv.swap a b
+transported : law (fun r => rawGenerate ((drawsEquiv e) r)) (Except.ok b) = law rawGenerate (Except.ok b)
+raw : RawRand
+error : Error Unit
+hr : rawGenerate raw = Except.error error
+⊢ Except.error error = Except.ok b ↔ Except.error error = Except.ok a
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropySymmetry18.lean:100:44: warning: This simp argument is unused:
+  Except.noConfusion
+
+Hint: Omit it from the simp argument list.
+  simp only [Except.map,̵ ̵E̵x̵c̵e̵p̵t̵.̵n̵o̵C̵o̵n̵f̵u̵s̵i̵o̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitEntropySymmetry18.erase_of_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEntropySymmetry18.lift_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEntropySymmetry18.decode_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEntropySymmetry18.run_equivariant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEntropySymmetry18.rawGenerate_equivariant' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitEntropySymmetry18.successful_law_equal' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

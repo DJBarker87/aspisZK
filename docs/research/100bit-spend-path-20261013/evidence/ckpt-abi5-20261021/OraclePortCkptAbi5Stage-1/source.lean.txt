@@ -1,0 +1,69 @@
+import OraclePortCkptAbiReference
+import OraclePortCkptAbi2Reached
+import OraclePortFrozen2Decision
+import OraclePortFrozen2Digests
+
+/-! Exact ordered-observation adoption of the short-circuit saved-ten reference
+by the two-transaction checkpoint model. This does not identify Rust callers. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortCkptAbi5Stage
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortCheckpointAbiC5 OraclePortCheckpointResumeC5
+open RawCutTranscriptRun (ErasedPrefix ErasedMessage)
+open RecordedBinaryExperimentBin (SourceInputs)
+attribute [local irreducible] OraclePortCheckpointStateC3.advance
+  OraclePortCheckpointStateC3.write QueryAccumulator.run QueryAccumulator.run22
+
+/-- The strict reader's output drives the twelve remaining steps. -/
+def strictStage (stored pub : Bytes) (c : Context) (d : MatchingSupport.Data E)
+    (rho : K) (q : Fin 22 → Fin 262144) :
+    Program Bytes State (Option (QueryAccumulator.State K E)) :=
+  bind (OraclePortCkptAbiReference.writeResume stored pub c d rho q)
+    (fun decoded => .done (decoded.map (OraclePortCkptAbiReference.resumed d)))
+
+/-- All worlds, arbitrary retained proof/public bytes, authentic saved-ten
+state and distinct queries: equality includes every address and answer. -/
+theorem stage_observation (H : Bytes → State) (stored pub : Bytes) (c : Context)
+    (d : MatchingSupport.Data E) (rho : K) (q : Fin 22 → Fin 262144)
+    (unique : Function.Injective q) :
+    eval H (strictStage stored pub c d rho q) =
+      eval H (OraclePortCheckpointOracleC5.writeResume stored pub c d rho q) := by
+  have decoded : (eval H (OraclePortCkptAbiReference.resume stored pub
+      (save H stored pub c d rho q).checkpoint)).2 =
+      some (prepared c d rho q,
+        (OraclePortCheckpointStateC3.write (model d rho q)).accumulator) := by
+    rw [OraclePortCkptAbiReference.resume_saved,if_pos unique]
+  have reached := (OraclePortCkptAbiReference.accepted_saved_fields H stored pub c d rho q _ decoded).2.2.2
+  apply Prod.ext
+  · simp only [strictStage,eval_bind,eval,List.append_nil]
+    rw [OraclePortCkptAbiReference.writeResume_trace,
+      OraclePortFrozen2Digests.six_ordered_reads]
+    rfl
+  · simp only [strictStage,eval_bind,eval]
+    rw [OraclePortCkptAbiReference.writeResume_trace,if_pos unique]
+    simp only [Option.map_some]
+    rw [reached,OraclePortCheckpointOracleC5.writeResume_value]
+
+/-- For the actual reached sampler row, distinctness follows from decoding.
+The context is reconstructed from p/i/v exactly as dV_frozen2 does. -/
+theorem reached_stage (H : Bytes → State) (stored : Bytes)
+    (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+    (tr : ErasedPrefix) (i : SourceInputs) (v : LiteralOpeningView.View)
+    (input : OraclePortStoredDecisionDraftC4.input p q tr = some i)
+    (queries : OraclePortStoredDecisionDraftC4.queries tr = some q) :
+    eval H (strictStage stored tr.statement.pubBytes
+      (OraclePortAcceptedContextC6.context p i v) i.data
+      (SelectedChallengeMap.rhoOf i.rho) q) =
+      eval H (OraclePortFrozen2.checkpoint stored p q tr i v) := by
+  have fields := (OraclePortStoredDecisionDraftC4.input_fields p q tr i input).1
+  have decoded : LiteralQueryRead.decode i.queryBytes = some q := by
+    simpa [OraclePortStoredDecisionDraftC4.queries,fields.2.1] using queries
+  exact stage_observation H stored _ _ _ _ q
+    (LiteralQueryRead.decode_success _ _ decoded).2
+
+#print axioms stage_observation
+#print axioms reached_stage
+end AspisR1.OraclePortCkptAbi5Stage
+end

@@ -1,0 +1,56 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitStoredCaller49.lean:36:59: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  dite (i < ↑5#usize) ?m.97 ?m.98
+in the target expression
+  (if h : ↑⟨i, hi⟩ < 5 then ProverCommitPointWeight49.row (fun i => p ↑i) ⋯ ⟨↑⟨i, hi⟩, h⟩ else fun x => zero)
+      (↑j / 4 ^ i % 4) =
+    ProverCommitPointWeight49.selected (fun i => p ↑i) ⋯ ⟨↑j, hj⟩ i
+
+p : ℕ → Old.Q
+hp : ∀ i < 10, Canonical (p i)
+j : Usize
+hj : ↑j < 1024
+rows : ℕ → ℕ → Old.Q
+hrows : point_rows.all (ProverCommitQArray48.array 10#usize p) = ok (matrix rows)
+hcrows : ∀ (i k : ℕ), i < 5 → k < 4 → Canonical (rows i k)
+heq : ∀ (i : Fin 5), rows ↑i = ProverCommitPointRows49.target p hp ↑i
+i : ℕ
+hi : i < ↑5#usize
+⊢ (if h : ↑⟨i, hi⟩ < 5 then ProverCommitPointWeight49.row (fun i => p ↑i) ⋯ ⟨↑⟨i, hi⟩, h⟩ else fun x => zero)
+      (↑j / 4 ^ i % 4) =
+    ProverCommitPointWeight49.selected (fun i => p ↑i) ⋯ ⟨↑j, hj⟩ i
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    hi
+  has type
+    @LT.lt ℕ instLTNat i ↑5#usize
+  but is expected to have type
+    @LT.lt ℕ instLTNat i 5
+  in the application
+    ⟨i, hi⟩
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitStoredCaller49.lean:55:103: error: unsolved goals
+x y : Old.Q
+hx : Canonical x
+hy : Canonical y
+j : Usize
+hj : ↑j < 1024
+hr :
+  factors.circle_rows (ProverCommitNativeQ48.source x) (ProverCommitNativeQ48.source y) =
+    ok (matrix (ProverCommitCircleWeight49.rows x y hx hy))
+i : ℕ
+hi : i < ↑5#usize
+⊢ ProverCommitCircleWeight49.rows x y hx hy i (↑j / 4 ^ i % 4) =
+    if h : i < 5 then ProverCommitCircleWeight49.rows x y hx hy i (↑j / 4 ^ i % 4) else zero
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitStoredCaller49.lean:58:60: warning: This simp argument is unused:
+  dif_pos hi
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵s̵e̵l̵e̵c̵t̵e̵d̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵C̵i̵r̵c̵l̵e̵W̵e̵i̵g̵h̵t̵4̵9̵.̵s̵e̵l̵e̵c̵t̵e̵d̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵i̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲s̲e̲l̲e̲c̲t̲e̲d̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲C̲i̲r̲c̲l̲e̲W̲e̲i̲g̲h̲t̲4̲9̲.̲s̲e̲l̲e̲c̲t̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitStoredCaller49.array_congr' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitStoredCaller49.point_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitStoredCaller49.circle_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

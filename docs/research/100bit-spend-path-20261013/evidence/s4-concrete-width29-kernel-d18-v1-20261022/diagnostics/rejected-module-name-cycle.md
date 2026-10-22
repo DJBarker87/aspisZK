@@ -1,0 +1,3 @@
+# Rejected parser module-name selection
+
+An earlier consumer profile selected a parser-witness extension object under the same module stem as its fixed-array parser predecessor (`S4TailParserEmbeddingV1`). The extension imported that same stem, making the selected resolution cyclic/invalid. That attempt is not accepted evidence. The accepted build uses the unique module name `S4TailParserWitnessEmbeddingV1` from attempt15 and separately pins the fixed-array predecessor object from attempt5. Both exact producer command/receipt JSON files are retained under `evidence/`; the selected LEAN_PATH in `evidence/LEAN_PATH.txt` records the object ordering.

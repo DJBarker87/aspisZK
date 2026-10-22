@@ -1,0 +1,47 @@
+import R1Z.ProverCommitBoundaryValue49
+import R1Z.ProverCommitNativeQ48
+/-! Complete four-limb boundary owner equals p(0)+p(1). Its arithmetic result
+is unconditional on raw input words; no caller guard identity is postulated. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitBoundaryPolynomial49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitBoundaryValue49
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open Polynomial
+
+def run (p : Nat → Old.Q) : Result field.QM31 := do
+  let a ← Boundary49.limb (ProverCommitBoundarySum49.array (fun i => ProverCommitLimbBytes47.sourceLimb (p i) 0))
+  let b ← Boundary49.limb (ProverCommitBoundarySum49.array (fun i => ProverCommitLimbBytes47.sourceLimb (p i) 1))
+  let c ← Boundary49.limb (ProverCommitBoundarySum49.array (fun i => ProverCommitLimbBytes47.sourceLimb (p i) 2))
+  let d ← Boundary49.limb (ProverCommitBoundarySum49.array (fun i => ProverCommitLimbBytes47.sourceLimb (p i) 3))
+  ok {c0:={a:=a,b:=b},c1:={a:=c,b:=d}}
+
+theorem run_output (p : Nat → Old.Q) : run p=ok (ProverCommitNativeQ48.source (output p)) := by
+  simp only [run,(word_spec p 0).1,(word_spec p 1).1,(word_spec p 2).1,(word_spec p 3).1,bind_tc_ok]
+  rfl
+
+def poly (p : Nat → Old.Q) := ProverCommitInterpolationPoly48.poly 28 (fun i => decode (p i))
+
+theorem polynomial_boundary (p : Nat → Old.Q) : decode (output p)=(poly p).eval 0+(poly p).eval 1 := by
+  have hz : (poly p).eval 0=decode (p 0) := by
+    rw [← Polynomial.coeff_zero_eq_eval_zero,poly,ProverCommitInterpolationPoly48.coeff,if_pos (by decide)]
+  have ho : (poly p).eval 1=decode (p 0)+ProverCommitBoundaryValue49.sum p 27 1 := by
+    simp only [poly,ProverCommitInterpolationPoly48.poly,Polynomial.eval_finset_sum,
+      Polynomial.eval_monomial,one_pow,mul_one]
+    rw [Finset.sum_range_succ',ProverCommitBoundaryValue49.sum_poly]
+    simp only [Nat.add_comm 1]
+    rw [add_comm]
+  rw [output_value,hz,ho]
+  ring
+
+theorem exact_result (p : Nat → Old.Q) :
+    run p=ok (ProverCommitNativeQ48.source (output p)) ∧
+      ProverCommitSubfieldOps47.Canonical (output p) ∧
+      decode (output p)=(poly p).eval 0+(poly p).eval 1 :=
+  ⟨run_output p,output_canonical p,polynomial_boundary p⟩
+
+#print axioms run_output
+#print axioms polynomial_boundary
+#print axioms exact_result
+end R1Z.ProverCommitBoundaryPolynomial49

@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCoinSequence27.lean:43:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  evaluate (next ?a✝) ?s
+in the target expression
+  (let (answer, s') := (answer, state)
+    do
+    let tail ← evaluate (next answer) s'
+    ok { value := tail.value, state := tail.state, history := (parts, answer) :: tail.history }) =
+    ok (referenceRun (Program.call parts next) s)
+
+case call.mk
+Value : Type
+parts : Parts
+next : Bytes32 → Program Parts Bytes32 Value
+ih : ∀ (a : Bytes32) (s : Machine), evaluate (next a) s = ok (referenceRun (next a) s)
+s : Machine
+answer : ProverCommitCoinCall27.Bytes32
+state : Machine
+step : expected s parts = (answer, state)
+⊢ (let (answer, s') := (answer, state)
+    do
+    let tail ← evaluate (next answer) s'
+    ok { value := tail.value, state := tail.state, history := (parts, answer) :: tail.history }) =
+    ok (referenceRun (Program.call parts next) s)
+'R1Z.ProverCommitCoinSequence27.generated_sequence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCoinSequence27.step_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

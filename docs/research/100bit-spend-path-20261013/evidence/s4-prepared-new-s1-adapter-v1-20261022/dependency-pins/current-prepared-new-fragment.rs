@@ -1,0 +1,18 @@
+    pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H,g:&mut [E;29])->Result<Box<Self>,Error> {
+        let mut t=Transcript::new(hash,sem.transcript.state(),v.variant);
+        let gamma=t.scalar(27,v.y1,true);
+        let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);
+        let alpha0=t.scalar(29,v.round0,false);
+        let (alpha,row)=if v.variant.folds()==2 {
+            let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(v.folded_root.unwrap());bytes.extend_from_slice(v.round1);
+            ([alpha0,t.scalar(30,&bytes,false)],31)
+        } else {
+            ([alpha0,E::ZERO],30)
+        };
+        let queries=t.queries(row,v.final_message)?;
+        let rho=t.scalar_k(row+1,&[]);
+        // Reuse this caller-owned scratch array in tx1; it is never serialized.
+        *g=powers::<29>(gamma);
+        let claim=prepared_claim(sem,v.y1,v.inactive,g,kappa)?;
+        Ok(Box::new(Self{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))
+    }

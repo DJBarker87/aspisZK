@@ -1,0 +1,79 @@
+import CheckpointBytes3EDecode
+import CheckpointBytes3Namespaces
+import CheckpointBytesReaderWidth
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CheckpointBytes3Reader
+open Aeneas Aeneas.Std Result
+open AspisR1Stage2 OraclePortCkptAbi2Unwrap MultiproofConeCanonical
+open CheckpointBytes3Namespaces
+
+/-- Aeneas panic is explicit. Bounded raw reads never select it. -/
+def raw (n : Usize) (r : verifier.Reader) : Result (Array U8 n × verifier.Reader) :=
+  verifier.Reader.rawWithUnwrap n (unwrapWithPanic (fun _ => fail .panic)) r
+
+def optionK : Option OraclePortCkptAbi2Extracted.aspis_core.field.QM31 →
+    core.result.Result aspis_core.field.QM31 verifier.Error
+  | none => .Err .Checkpoint
+  | some x => .Ok (fromK x)
+def optionE : Option OraclePortCkptAbi2Extracted.aspis_core.field.wide_exact.WideExact →
+    core.result.Result aspis_core.field.wide_exact.WideExact verifier.Error
+  | none => .Err .Checkpoint
+  | some x => .Ok (fromE x)
+
+/-- Concrete reader sequencing with the extracted reference field operation.
+Source from_le_bytes identification uses the separately pinned per-operation
+gates; this definition does not assert that external validation in the kernel. -/
+def readK (r : verifier.Reader) :
+    Result (core.result.Result aspis_core.field.QM31 verifier.Error × verifier.Reader) := do
+  let (b,out) ← raw 16#usize r
+  let q ← OraclePortCkptAbi2Extracted.decode_k_spec (Array.to_slice b)
+  ok (optionK q,out)
+
+def readE (r : verifier.Reader) :
+    Result (core.result.Result aspis_core.field.wide_exact.WideExact verifier.Error × verifier.Reader) := do
+  let (b,out) ← raw 32#usize r
+  let q ← OraclePortCkptAbi2Extracted.decode_e_spec (Array.to_slice b)
+  ok (optionE q,out)
+
+theorem read_k_c5 (r : verifier.Reader) (bound : r.at.val+16 ≤ r.bytes.val.length) :
+    ∃ b : Array U8 16#usize, ∃ out : verifier.Reader,
+      b.val = (r.bytes.val.drop r.at.val).take 16 ∧
+      out.at.val = r.at.val+16 ∧ out.bytes = r.bytes ∧
+      readK r = ok (optionK ((ExactLeafFieldCodec.decodeQM31 (bytesOf b.val)).map
+        CheckpointBytes3KDecode.rawK),out) := by
+  obtain ⟨b,out,run,contents,cursor,backing⟩ :=
+    raw_panic_unreachable r 16#usize (fun _ => fail .panic) bound
+  refine ⟨b,out,contents,cursor,backing,?_⟩
+  unfold readK raw
+  rw [run]
+  simp only [bind_tc_ok]
+  change (do
+    let q ← OraclePortCkptAbi2Extracted.decode_k_spec (Array.to_slice b)
+    ok (optionK q,out)) = _
+  rw [CheckpointBytes3KDecode.decode_k_identification (Array.to_slice b) (by exact b.property)]
+  rfl
+
+theorem read_e_c5 (r : verifier.Reader) (bound : r.at.val+32 ≤ r.bytes.val.length) :
+    ∃ b : Array U8 32#usize, ∃ out : verifier.Reader,
+      b.val = (r.bytes.val.drop r.at.val).take 32 ∧
+      out.at.val = r.at.val+32 ∧ out.bytes = r.bytes ∧
+      readE r = ok (optionE ((FoldedLeafCodec.decodeWide (bytesOf b.val)).map
+        CheckpointBytes3EDecode.rawE),out) := by
+  obtain ⟨b,out,run,contents,cursor,backing⟩ :=
+    raw_panic_unreachable r 32#usize (fun _ => fail .panic) bound
+  refine ⟨b,out,contents,cursor,backing,?_⟩
+  unfold readE raw
+  rw [run]
+  simp only [bind_tc_ok]
+  change (do
+    let q ← OraclePortCkptAbi2Extracted.decode_e_spec (Array.to_slice b)
+    ok (optionE q,out)) = _
+  rw [CheckpointBytes3EDecode.decode_e_identification (Array.to_slice b) (by exact b.property)]
+  rfl
+
+#print axioms read_k_c5
+#print axioms read_e_c5
+end AspisR1.CheckpointBytes3Reader
+end

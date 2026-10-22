@@ -1,0 +1,48 @@
+import CheckpointBytes4SuccessfulFields
+import CheckpointBytes4Std
+import OraclePortCkptAbi5Decision
+
+/-! Focused union, standard-axiom audit and actual interface signatures.
+This does not assert the missing source ordered-observation stage theorem. -/
+#print axioms AspisR1.CheckpointBytes4Comparison.list_eq_sound
+#print axioms AspisR1.CheckpointBytes4Comparison.ne_sound
+#print axioms AspisR1.CheckpointBytes4Comparison.successful_calls
+#print axioms AspisR1.CheckpointBytes4FixedWidth.decode_at
+#print axioms AspisR1.CheckpointBytes4FixedWidth.slice_slice
+#print axioms AspisR1.CheckpointBytes4FlatSections.list_success
+#print axioms AspisR1.CheckpointBytes4Layout.flat_fields
+#print axioms AspisR1.CheckpointBytes4Next.next_value
+#print axioms AspisR1.CheckpointBytes4Ops.semantic_identification
+#print axioms AspisR1.CheckpointBytes4Ops.weights_identification
+#print axioms AspisR1.CheckpointBytes4Ops.successful_fields
+#print axioms AspisR1.CheckpointBytes4Ops.successful_reservation
+#print axioms AspisR1.CheckpointBytes4QueryDecode.u32_value
+#print axioms AspisR1.CheckpointBytes4QueryDecode.query_values
+#print axioms AspisR1.CheckpointBytes4QueryWord.from_le_nat
+#print axioms AspisR1.CheckpointBytes4RawFields.raw_success
+#print axioms AspisR1.CheckpointBytes4RawFields.query_cursor
+#print axioms AspisR1.CheckpointBytes4ReaderFields.k_success
+#print axioms AspisR1.CheckpointBytes4ReaderFields.e_success
+#print axioms AspisR1.CheckpointBytes4SavedFields.body_matches
+#print axioms AspisR1.CheckpointBytes4SectionContents.semantic_contents
+#print axioms AspisR1.CheckpointBytes4SectionContents.weights_reads
+#print axioms AspisR1.CheckpointBytes4SectionContents.weights_contents
+#print axioms AspisR1.CheckpointBytes4Sections.read_k_identification
+#print axioms AspisR1.CheckpointBytes4Sections.read_list_identification
+#print axioms AspisR1.CheckpointBytes4Sections.read_list_length
+#print axioms AspisR1.CheckpointBytes4Sections.weight_loop_identification
+#print axioms AspisR1.CheckpointBytes4SemanticFields.semantic_fields
+#print axioms AspisR1.CheckpointBytes4SemanticFields.semantic_c5_fields
+#print axioms AspisR1.CheckpointBytes4SuccessfulFields.successful_saved_fields
+#print axioms AspisR1.CheckpointBytes4WeightFields.loop_fields
+#print axioms AspisR1.CheckpointBytes4Weights.replace_slot
+#print axioms AspisR1.CheckpointBytes4Weights.loop_success
+
+#print axioms AspisR1.OraclePortCkptAbi5Stage.reached_stage
+#print axioms AspisR1.OraclePortCkptAbi5Decision.decision_observation
+#print axioms AspisR1.OraclePortFrozen2Digests.six_ordered_reads
+#check AspisR1Stage2.verifier.resumeWithOps
+#print AspisR1Stage2.Tx2ResumeDigests.Calls
+#check AspisR1.CheckpointBytes4SuccessfulFields.successful_saved_fields
+#check AspisR1.OraclePortCkptAbi5Stage.reached_stage
+#check AspisR1.OraclePortCkptAbi5Decision.decision_observation

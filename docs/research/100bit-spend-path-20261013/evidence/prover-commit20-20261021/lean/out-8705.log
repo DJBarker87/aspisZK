@@ -1,0 +1,50 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTable20.lean:34:8: error: unsolved goals
+case nil
+Key Value : Type
+inst✝¹ : DecidableEq Key
+inst✝ : DecidableEq Value
+key : Key
+answer : Value
+collision : Bool
+⊢ decide True = true
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTable20.lean:38:4: error: unsolved goals
+case pos
+Key Value : Type
+inst✝¹ : DecidableEq Key
+inst✝ : DecidableEq Value
+key : Key
+answer : Value
+collision : Bool
+tail : List (Key × Value)
+ih : (decide ((insert tail key answer collision).2 = collision) || conflict (lookup tail key) answer) = true
+k : Key
+v : Value
+same : k = key
+⊢ (decide ((collision || decide (v ≠ answer)) = collision) || decide (v ≠ answer)) = true
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTable20.lean:48:37: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTable20.lean:95:4: error: Type mismatch
+  ih ?m.35
+has type
+  (writes ?m.35 true tail).2 = true
+but is expected to have type
+  (writes (insert table key answer true).1 (insert table key answer true).2 tail).2 = true
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTable20.lean:94:22: warning: This simp argument is unused:
+  insert_collision
+
+Hint: Omit it from the simp argument list.
+  simp only [̵w̵r̵i̵t̵e̵s̵,̵i̵n̵s̵e̵r̵t̵_̵c̵o̵l̵l̵i̵s̵i̵o̵n̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵o̵r̵]̵[̲w̲r̲i̲t̲e̲s̲,̲ ̲B̲o̲o̲l̲.̲t̲r̲u̲e̲_̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTable20.lean:94:39: warning: This simp argument is unused:
+  Bool.true_or
+
+Hint: Omit it from the simp argument list.
+  simp only [̵w̵r̵i̵t̵e̵s̵,̵i̵n̵s̵e̵r̵t̵_̵c̵o̵l̵l̵i̵s̵i̵o̵n̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵o̵r̵]̵[̲w̲r̲i̲t̲e̲s̲,̲ ̲i̲n̲s̲e̲r̲t̲_̲c̲o̲l̲l̲i̲s̲i̲o̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitTable20.insert_collision' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverCommitTable20.insert_lookup' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverCommitTable20.writes_lookup' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverCommitTable20.collision_sticky' depends on axioms: [sorryAx]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

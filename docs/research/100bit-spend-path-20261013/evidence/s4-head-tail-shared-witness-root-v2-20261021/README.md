@@ -1,0 +1,3 @@
+PROVED the same callback supplies head/N8/body/tail/product witnesses and the first tail scalar exact checked source slice and successful strict parser result.
+
+Limitations: FirstQueryInput preserves the actual slot*120,+104,+120 arithmetic, source byte slice and qm31FromBytes result for the same q used by the first checked push. Both later scalar read/parse witnesses remain in the same tail RunTrace. Concrete tail/parser/packing/add installed; scratch bounds, successful callback and remaining head/P6 source correspondence retain their prior scope. Full decoded dot functional equality, frozen caller/model and final raw per-attempt security remain open.

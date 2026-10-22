@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationOutput48.lean:29:69: error: unsolved goals
+values xs : ℕ → Old.Q
+i left : U8
+hn : left ≠ 0#u8
+hi : ↑i < 28
+hcast : ↑(UScalar.cast UScalarTy.Usize i) = ↑i
+⊢ (do
+      let basis1 ← (Array.repeat 28#usize field.M31.ZERO).update 0#usize field.M31.ONE
+      let (basis2, den) ← basis_factors basis1 field.M31.ONE 0#u8 i 0#u8 28#u8
+      let m ← inverse_ref den
+      let scale ← scalar_ref (ProverCommitNativeQ48.source (values ↑i)) m
+      let out1 ← accumulate (ProverCommitQArray48.array 28#usize xs) basis2 scale 0#u8 28#u8
+      rows (ProverCommitQArray48.array 28#usize values) out1 (i.wrapping_add 1#u8) (left.wrapping_sub 1#u8)) =
+    do
+    let x ← (Array.repeat 28#usize field.M31.ZERO).update 0#usize field.M31.ONE
+    let x ← basis_factors x field.M31.ONE 0#u8 i 0#u8 28#u8
+    let out ←
+      let (basis, den) := x
+        do
+        let inv ← inverse_ref den
+        let scale ← scalar_ref (ProverCommitNativeQ48.source (values ↑i)) inv
+        accumulate (ProverCommitQArray48.array 28#usize xs) basis scale 0#u8 28#u8
+    rows (ProverCommitQArray48.array 28#usize values) out (i.wrapping_add 1#u8) (left.wrapping_sub 1#u8)
+'R1Z.ProverCommitInterpolationOutput48.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitInterpolationOutput48.rows_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitInterpolationOutput48.zero_poly' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitInterpolationOutput48.interpolate_value' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

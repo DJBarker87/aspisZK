@@ -1,0 +1,261 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeRowEncoding.lean:37:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => bytesOf ↑⟨List.map UScalar.mk _a, ⋯⟩ = le32 32
+Error: Application type mismatch: The argument
+  BitVec.toLEBytes.eq_def (U32.bv 32#u32)
+has type
+  (U32.bv 32#u32).toLEBytes =
+    if 32 > 0 then BitVec.setWidth 8 (U32.bv 32#u32) :: (BitVec.setWidth (32 - 8) (U32.bv 32#u32 >>> 8)).toLEBytes
+    else []
+but is expected to have type
+  (U32.bv 32#u32).toLEBytes = _a
+in the application
+  congrArg (List.map UScalar.mk) (BitVec.toLEBytes.eq_def (U32.bv 32#u32))
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case pos
+row : ℕ
+size : Usize
+shape : ↑size = (rowShape row).2
+hc : UScalar.cast UScalarTy.U32 size = shapeWord row
+h✝ : row = 2
+⊢ bytesOf
+      ↑⟨List.map UScalar.mk
+            (if 32 > 0 then
+              BitVec.setWidth 8 (U32.bv 32#u32) :: (BitVec.setWidth (32 - 8) (U32.bv 32#u32 >>> 8)).toLEBytes
+            else []),
+          ⋯⟩ =
+    le32 32
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeRowEncoding.lean:50:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => bytesOf ↑⟨List.map UScalar.mk _a, ⋯⟩ = le32 32
+Error: Application type mismatch: The argument
+  BitVec.toLEBytes.eq_def (U32.bv 32#u32)
+has type
+  (U32.bv 32#u32).toLEBytes =
+    if 32 > 0 then BitVec.setWidth 8 (U32.bv 32#u32) :: (BitVec.setWidth (32 - 8) (U32.bv 32#u32 >>> 8)).toLEBytes
+    else []
+but is expected to have type
+  (U32.bv 32#u32).toLEBytes = _a
+in the application
+  congrArg (List.map UScalar.mk) (BitVec.toLEBytes.eq_def (U32.bv 32#u32))
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case pos
+row : ℕ
+size : Usize
+shape : ↑size = (rowShape row).2
+hc : UScalar.cast UScalarTy.U32 size = shapeWord row
+h✝¹ : ¬row = 2
+h✝ : row = 14
+⊢ bytesOf
+      ↑⟨List.map UScalar.mk
+            (if 32 > 0 then
+              BitVec.setWidth 8 (U32.bv 32#u32) :: (BitVec.setWidth (32 - 8) (U32.bv 32#u32 >>> 8)).toLEBytes
+            else []),
+          ⋯⟩ =
+    le32 32
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeRowEncoding.lean:63:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => bytesOf ↑⟨List.map UScalar.mk _a, ⋯⟩ = le32 896
+Error: Application type mismatch: The argument
+  BitVec.toLEBytes.eq_def (U32.bv 896#u32)
+has type
+  (U32.bv 896#u32).toLEBytes =
+    if 32 > 0 then BitVec.setWidth 8 (U32.bv 896#u32) :: (BitVec.setWidth (32 - 8) (U32.bv 896#u32 >>> 8)).toLEBytes
+    else []
+but is expected to have type
+  (U32.bv 896#u32).toLEBytes = _a
+in the application
+  congrArg (List.map UScalar.mk) (BitVec.toLEBytes.eq_def (U32.bv 896#u32))
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case pos
+row : ℕ
+size : Usize
+shape : ↑size = (rowShape row).2
+hc : UScalar.cast UScalarTy.U32 size = shapeWord row
+h✝² : ¬row = 2
+h✝¹ : ¬row = 14
+h✝ : 15 ≤ row ∧ row ≤ 24
+⊢ bytesOf
+      ↑⟨List.map UScalar.mk
+            (if 32 > 0 then
+              BitVec.setWidth 8 (U32.bv 896#u32) :: (BitVec.setWidth (32 - 8) (U32.bv 896#u32 >>> 8)).toLEBytes
+            else []),
+          ⋯⟩ =
+    le32 896
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeRowEncoding.lean:76:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => bytesOf ↑⟨List.map UScalar.mk _a, ⋯⟩ = le32 3712
+Error: Application type mismatch: The argument
+  BitVec.toLEBytes.eq_def (U32.bv 3712#u32)
+has type
+  (U32.bv 3712#u32).toLEBytes =
+    if 32 > 0 then BitVec.setWidth 8 (U32.bv 3712#u32) :: (BitVec.setWidth (32 - 8) (U32.bv 3712#u32 >>> 8)).toLEBytes
+    else []
+but is expected to have type
+  (U32.bv 3712#u32).toLEBytes = _a
+in the application
+  congrArg (List.map UScalar.mk) (BitVec.toLEBytes.eq_def (U32.bv 3712#u32))
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case pos
+row : ℕ
+size : Usize
+shape : ↑size = (rowShape row).2
+hc : UScalar.cast UScalarTy.U32 size = shapeWord row
+h✝³ : ¬row = 2
+h✝² : ¬row = 14
+h✝¹ : ¬(15 ≤ row ∧ row ≤ 24)
+h✝ : row = 25
+⊢ bytesOf
+      ↑⟨List.map UScalar.mk
+            (if 32 > 0 then
+              BitVec.setWidth 8 (U32.bv 3712#u32) :: (BitVec.setWidth (32 - 8) (U32.bv 3712#u32 >>> 8)).toLEBytes
+            else []),
+          ⋯⟩ =
+    le32 3712
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeRowEncoding.lean:89:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => bytesOf ↑⟨List.map UScalar.mk _a, ⋯⟩ = le32 928
+Error: Application type mismatch: The argument
+  BitVec.toLEBytes.eq_def (U32.bv 928#u32)
+has type
+  (U32.bv 928#u32).toLEBytes =
+    if 32 > 0 then BitVec.setWidth 8 (U32.bv 928#u32) :: (BitVec.setWidth (32 - 8) (U32.bv 928#u32 >>> 8)).toLEBytes
+    else []
+but is expected to have type
+  (U32.bv 928#u32).toLEBytes = _a
+in the application
+  congrArg (List.map UScalar.mk) (BitVec.toLEBytes.eq_def (U32.bv 928#u32))
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case pos
+row : ℕ
+size : Usize
+shape : ↑size = (rowShape row).2
+hc : UScalar.cast UScalarTy.U32 size = shapeWord row
+h✝⁴ : ¬row = 2
+h✝³ : ¬row = 14
+h✝² : ¬(15 ≤ row ∧ row ≤ 24)
+h✝¹ : ¬row = 25
+h✝ : row = 26
+⊢ bytesOf
+      ↑⟨List.map UScalar.mk
+            (if 32 > 0 then
+              BitVec.setWidth 8 (U32.bv 928#u32) :: (BitVec.setWidth (32 - 8) (U32.bv 928#u32 >>> 8)).toLEBytes
+            else []),
+          ⋯⟩ =
+    le32 928
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeRowEncoding.lean:102:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => bytesOf ↑⟨List.map UScalar.mk _a, ⋯⟩ = le32 0
+Error: Application type mismatch: The argument
+  BitVec.toLEBytes.eq_def (U32.bv 0#u32)
+has type
+  (U32.bv 0#u32).toLEBytes =
+    if 32 > 0 then BitVec.setWidth 8 (U32.bv 0#u32) :: (BitVec.setWidth (32 - 8) (U32.bv 0#u32 >>> 8)).toLEBytes else []
+but is expected to have type
+  (U32.bv 0#u32).toLEBytes = _a
+in the application
+  congrArg (List.map UScalar.mk) (BitVec.toLEBytes.eq_def (U32.bv 0#u32))
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case neg
+row : ℕ
+size : Usize
+shape : ↑size = (rowShape row).2
+hc : UScalar.cast UScalarTy.U32 size = shapeWord row
+h✝⁴ : ¬row = 2
+h✝³ : ¬row = 14
+h✝² : ¬(15 ≤ row ∧ row ≤ 24)
+h✝¹ : ¬row = 25
+h✝ : ¬row = 26
+⊢ bytesOf
+      ↑⟨List.map UScalar.mk
+            (if 32 > 0 then
+              BitVec.setWidth 8 (U32.bv 0#u32) :: (BitVec.setWidth (32 - 8) (U32.bv 0#u32 >>> 8)).toLEBytes
+            else []),
+          ⋯⟩ =
+    le32 0
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'_private.MultiproofConeRowEncoding.0.AspisR1.MultiproofConeRowEncoding.cast_exact' depends on axioms: [propext]
+'AspisR1.MultiproofConeRowEncoding.size_encoding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

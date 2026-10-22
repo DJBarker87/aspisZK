@@ -1,0 +1,40 @@
+import Aeneas
+import R1RetainedFieldByteCodec
+/-! Exact backend u32 little-endian bytes, using codec inversion rather than
+unfolding the retained encoder's private byte helper. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitWordBytes47
+open Aeneas Aeneas.Std AspisR1.RetainedFieldByteCodec
+
+def rawByte (x : U8) : AspisR1.RetainedFieldByteCodec.Byte := x.bv.toFin
+def rawWord (x : U32) : RawWord := x.bv.toFin
+
+def wordFn (x : U32) : WordBytes := fun i => rawByte
+  ((core.num.U32.to_le_bytes x).val[i.val]'(by
+    have h := (core.num.U32.to_le_bytes x).property
+    have four : (4#usize).val=4 := by scalar_tac
+    simpa only [h,four] using i.isLt))
+
+theorem decode_source (x : U32) : decodeWordLE (wordFn x)=rawWord x := by
+  apply Fin.ext
+  have hx := x.hSize
+  simp only [UScalar.size_def,UScalarTy.numBits] at hx
+  simp [decodeWordLE,wordFn,rawByte,rawWord,core.num.U32.to_le_bytes,
+    BitVec.toLEBytes,BitVec.toNat_setWidth,BitVec.toNat_ushiftRight,
+    Nat.shiftRight_eq_div_pow]
+  omega
+
+theorem word (x : U32) : (core.num.U32.to_le_bytes x).val.map rawByte =
+    List.ofFn (encodeWordLE (rawWord x)) := by
+  have hc : encodeWordLE (rawWord x)=wordFn x := by
+    rw [← decode_source x]
+    exact encodeWordLE_decodeWordLE _
+  rw [hc]
+  apply List.ext_getElem
+  · simp [core.num.U32.to_le_bytes,BitVec.toLEBytes]
+  · intro i hi hj
+    simp only [List.getElem_map,List.getElem_ofFn,wordFn]
+
+#print axioms decode_source
+#print axioms word
+end R1Z.ProverCommitWordBytes47

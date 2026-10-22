@@ -1,0 +1,212 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/GammaCandidateTotalityV14.lean:229:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let (x, y) ← ok (?a, ?b)
+    ?k x y
+in the target expression
+  (do
+      let __x ← ok (lowDigits, q)
+      match __x with
+        | (digits, quotient) => do
+          let i ← quotient + 1#u32
+          let __x ← candidateGammaHelpers.add digits i
+          match __x with
+            | (wrapped, digits1) =>
+              have __do_jp := fun digits2 => candidateGammaHelpers.decode digits2;
+              if wrapped = true then do
+                let __x ← candidateGammaHelpers.add digits1 1#u32
+                match __x with
+                  | (fst, digits3) => do
+                    let digits2 ← ok digits3
+                    __do_jp digits2
+              else do
+                let digits2 ← ok digits1
+                __do_jp digits2) =
+    ok out
+
+case pos
+block : Bytes32
+w✝ lowDigits : Std.Array U32 8#usize
+q : U32
+hlow : sampler.low_base_p_digits block = ok (lowDigits, q)
+left✝¹ : q = (↑w✝)[↑0#usize]
+left✝ : ExtractedQM31SamplerIndexedGeneratedBridge.values lowDigits = ordinaryDigits (rank block)
+right✝ : SamplerRepeatedPass.wordValue (ExtractedQM31SamplerPassLoop.words w✝).reverse = rank block / P ^ 8
+hlowModel : values lowDigits = ordinaryDigits (rank block) ∧ ↑q = rank block / P ^ 8
+hq : ↑q = rank block / Pn ^ 8
+hq256 : ↑q ≤ 256
+n : U32
+hn : q + 1#u32 = ok n
+hnval : ↑n = ↑q + 1
+hcanonical : Canonical lowDigits
+hnBound : ↑n ≤ 257
+hcanonicalIndexed : ExtractedIndexedAddSmallNatModelV1.Canonical lowDigits
+carry1 : U32
+digits1 : ExtractedIndexedAddSmallNatModelV1.Digits
+hadd1 :
+  AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p lowDigits n = ok (carry1 != 0#u32, digits1)
+hvalues1 :
+  ExtractedIndexedAddSmallNatModelV1.values digits1 =
+    (addDigits AspisR1.ExtractedIndexedAddSmallWrapperNatModelV1.P✝ (↑n)
+        (ExtractedIndexedAddSmallNatModelV1.values lowDigits)).1
+hcarry1 :
+  ↑carry1 =
+    (addDigits AspisR1.ExtractedIndexedAddSmallWrapperNatModelV1.P✝ (↑n)
+        (ExtractedIndexedAddSmallNatModelV1.values lowDigits)).2
+hvalues1' : values digits1 = (addDigits Pn (↑n) (values lowDigits)).1
+hcarry1' : ↑carry1 = (addDigits Pn (↑n) (values lowDigits)).2
+hcanonical1 : Canonical digits1
+hzero : carry1 = 0#u32
+hbool : (carry1 != 0#u32) = false
+out : GammaWide
+hdecode : candidateGammaHelpers.decode digits1 = ok out
+hlow' : candidateGammaHelpers.low block = ok (lowDigits, q)
+hadd1' : candidateGammaHelpers.add lowDigits n = ok (carry1 != 0#u32, digits1)
+⊢ (do
+      let __x ← ok (lowDigits, q)
+      match __x with
+        | (digits, quotient) => do
+          let i ← quotient + 1#u32
+          let __x ← candidateGammaHelpers.add digits i
+          match __x with
+            | (wrapped, digits1) =>
+              have __do_jp := fun digits2 => candidateGammaHelpers.decode digits2;
+              if wrapped = true then do
+                let __x ← candidateGammaHelpers.add digits1 1#u32
+                match __x with
+                  | (fst, digits3) => do
+                    let digits2 ← ok digits3
+                    __do_jp digits2
+              else do
+                let digits2 ← ok digits1
+                __do_jp digits2) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/GammaCandidateTotalityV14.lean:284:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let (x, y) ← ok (?a, ?b)
+    ?k x y
+in the target expression
+  (do
+      let __x ← ok (lowDigits, q)
+      match __x with
+        | (digits, quotient) => do
+          let i ← quotient + 1#u32
+          let __x ← candidateGammaHelpers.add digits i
+          match __x with
+            | (wrapped, digits1) =>
+              have __do_jp := fun digits2 => candidateGammaHelpers.decode digits2;
+              if wrapped = true then do
+                let __x ← candidateGammaHelpers.add digits1 1#u32
+                match __x with
+                  | (fst, digits3) => do
+                    let digits2 ← ok digits3
+                    __do_jp digits2
+              else do
+                let digits2 ← ok digits1
+                __do_jp digits2) =
+    ok out
+
+case neg
+block : Bytes32
+w✝ lowDigits : Std.Array U32 8#usize
+q : U32
+hlow : sampler.low_base_p_digits block = ok (lowDigits, q)
+left✝¹ : q = (↑w✝)[↑0#usize]
+left✝ : ExtractedQM31SamplerIndexedGeneratedBridge.values lowDigits = ordinaryDigits (rank block)
+right✝ : SamplerRepeatedPass.wordValue (ExtractedQM31SamplerPassLoop.words w✝).reverse = rank block / P ^ 8
+hlowModel : values lowDigits = ordinaryDigits (rank block) ∧ ↑q = rank block / P ^ 8
+hq : ↑q = rank block / Pn ^ 8
+hq256 : ↑q ≤ 256
+n : U32
+hn : q + 1#u32 = ok n
+hnval : ↑n = ↑q + 1
+hcanonical : Canonical lowDigits
+hnBound : ↑n ≤ 257
+hcanonicalIndexed : ExtractedIndexedAddSmallNatModelV1.Canonical lowDigits
+carry1 : U32
+digits1 : ExtractedIndexedAddSmallNatModelV1.Digits
+hadd1 :
+  AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p lowDigits n = ok (carry1 != 0#u32, digits1)
+hvalues1 :
+  ExtractedIndexedAddSmallNatModelV1.values digits1 =
+    (addDigits AspisR1.ExtractedIndexedAddSmallWrapperNatModelV1.P✝ (↑n)
+        (ExtractedIndexedAddSmallNatModelV1.values lowDigits)).1
+hcarry1 :
+  ↑carry1 =
+    (addDigits AspisR1.ExtractedIndexedAddSmallWrapperNatModelV1.P✝ (↑n)
+        (ExtractedIndexedAddSmallNatModelV1.values lowDigits)).2
+hvalues1' : values digits1 = (addDigits Pn (↑n) (values lowDigits)).1
+hcarry1' : ↑carry1 = (addDigits Pn (↑n) (values lowDigits)).2
+hcanonical1 : Canonical digits1
+hzero : ¬carry1 = 0#u32
+hcarry1pos : 0 < ↑carry1
+hbool : (carry1 != 0#u32) = true
+hcanonical1Indexed : ExtractedIndexedAddSmallNatModelV1.Canonical digits1
+carry2 : U32
+digits2 : ExtractedIndexedAddSmallNatModelV1.Digits
+hadd2 :
+  AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p digits1 1#u32 = ok (carry2 != 0#u32, digits2)
+hvalues2 :
+  ExtractedIndexedAddSmallNatModelV1.values digits2 =
+    (addDigits AspisR1.ExtractedIndexedAddSmallWrapperNatModelV1.P✝ (↑1#u32)
+        (ExtractedIndexedAddSmallNatModelV1.values digits1)).1
+hcarry2 :
+  ↑carry2 =
+    (addDigits AspisR1.ExtractedIndexedAddSmallWrapperNatModelV1.P✝ (↑1#u32)
+        (ExtractedIndexedAddSmallNatModelV1.values digits1)).2
+hcarry2zero : (addDigits Pn 1 (addDigits Pn (↑n) (values lowDigits)).1).2 = 0
+hcarry2' : ↑carry2 = (addDigits Pn 1 (values digits1)).2
+hcarry2val : ↑carry2 = 0
+hcarry2zeroU : carry2 = 0#u32
+hcanonical2 : Canonical digits2
+out : GammaWide
+hdecode : candidateGammaHelpers.decode digits2 = ok out
+hlow' : candidateGammaHelpers.low block = ok (lowDigits, q)
+hadd1' : candidateGammaHelpers.add lowDigits n = ok (carry1 != 0#u32, digits1)
+hadd2' : candidateGammaHelpers.add digits1 1#u32 = ok (carry2 != 0#u32, digits2)
+⊢ (do
+      let __x ← ok (lowDigits, q)
+      match __x with
+        | (digits, quotient) => do
+          let i ← quotient + 1#u32
+          let __x ← candidateGammaHelpers.add digits i
+          match __x with
+            | (wrapped, digits1) =>
+              have __do_jp := fun digits2 => candidateGammaHelpers.decode digits2;
+              if wrapped = true then do
+                let __x ← candidateGammaHelpers.add digits1 1#u32
+                match __x with
+                  | (fst, digits3) => do
+                    let digits2 ← ok digits3
+                    __do_jp digits2
+              else do
+                let digits2 ← ok digits1
+                __do_jp digits2) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1GammaCaller.DigitsModel.candidate_gamma_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

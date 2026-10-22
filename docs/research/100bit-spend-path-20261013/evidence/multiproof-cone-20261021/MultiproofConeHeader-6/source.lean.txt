@@ -1,0 +1,93 @@
+import MultiproofParserRef.Funs
+import OraclePortHeader
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeHeader
+open Aeneas Aeneas.Std Result
+open MultiproofParserRef
+open AspisV8R19.DuplexFrames
+
+def byteOf (x : U8) : AspisV8R19.DuplexFrames.Byte := ⟨x.val, by scalar_tac⟩
+def bytesOf (b : Slice U8) : Bytes := b.val.map byteOf
+
+/-- Total reference header equality on arbitrary stored slices, including
+short inputs. No 57,607-byte list is constructed or enumerated. -/
+theorem header_total (b : Slice U8) :
+    parser_reference.header b = ok (OraclePortHeader.accepts (bytesOf b)) := by
+  have len : (Slice.len b).val = b.val.length := rfl
+  by_cases hl : b.val.length = 57607
+  · have hlen : Slice.len b = 57607#usize := UScalar.eq_of_val_eq (len.trans hl)
+    generalize hxs : b.val = xs at hl
+    cases xs with
+    | nil => simp at hl
+    | cons b0 xs =>
+      cases xs with
+      | nil => simp at hl
+      | cons b1 xs =>
+        cases xs with
+        | nil => simp at hl
+        | cons b2 xs =>
+          cases xs with
+          | nil => simp at hl
+          | cons b3 xs =>
+            cases xs with
+            | nil => simp at hl
+            | cons b4 xs =>
+              cases xs with
+              | nil => simp at hl
+              | cons b5 xs =>
+                cases xs with
+                | nil => simp at hl
+                | cons b6 xs =>
+                  cases xs with
+                  | nil => simp at hl
+                  | cons b7 xs =>
+                    cases xs with
+                    | nil => simp at hl
+                    | cons b8 xs =>
+                      cases xs with
+                      | nil => simp at hl
+                      | cons b9 xs =>
+                        cases xs with
+                        | nil => simp at hl
+                        | cons b10 xs =>
+                          cases xs with
+                          | nil => simp at hl
+                          | cons b11 xs =>
+                            cases xs with
+                            | nil => simp at hl
+                            | cons b12 xs =>
+                              cases xs with
+                              | nil => simp at hl
+                              | cons b13 xs =>
+                                cases xs with
+                                | nil => simp at hl
+                                | cons b14 xs =>
+                                  cases xs with
+                                  | nil => simp at hl
+                                  | cons b15 xs =>
+                                    rw [parser_reference.header]
+                                    simp only [hlen, if_true]
+                                    simp only [Slice.index_usize, Slice.getElem?_Usize_eq,
+                                      hxs, List.getElem?_cons_zero, List.getElem?_cons_succ, bind_tc_ok,
+                                      UScalar.eq_equiv]
+                                    simp only [show (0#usize).val = 0 from rfl, show (1#usize).val = 1 from rfl, show (2#usize).val = 2 from rfl, show (3#usize).val = 3 from rfl, show (4#usize).val = 4 from rfl, show (5#usize).val = 5 from rfl, show (6#usize).val = 6 from rfl, show (7#usize).val = 7 from rfl, show (8#usize).val = 8 from rfl, show (9#usize).val = 9 from rfl, show (10#usize).val = 10 from rfl, show (11#usize).val = 11 from rfl, show (12#usize).val = 12 from rfl, show (13#usize).val = 13 from rfl, show (14#usize).val = 14 from rfl, show (15#usize).val = 15 from rfl, show (0#u8).val = 0 from rfl, show (2#u8).val = 2 from rfl, show (49#u8).val = 49 from rfl, show (51#u8).val = 51 from rfl, show (56#u8).val = 56 from rfl, show (66#u8).val = 66 from rfl, show (67#u8).val = 67 from rfl, show (80#u8).val = 80 from rfl, show (82#u8).val = 82 from rfl]
+                                    simp only [OraclePortHeader.accepts, bytesOf, List.length_map, hl, hxs,
+                                      OraclePortHeader.magic, byteOf]
+                                    simp only [List.map_cons, List.take_succ_cons, List.take_zero,
+                                      List.getElem?_cons_zero, List.getElem?_cons_succ,
+                                      List.drop_succ_cons, List.drop_zero, List.cons.injEq, Fin.mk.injEq,
+                                      byteOf, Fin.ext_iff, Option.some.injEq, List.replicate_succ,
+                                      List.replicate_zero, and_true, true_and]
+                                    simp only [List.getElem?_cons_zero, List.getElem?_cons_succ, bind_tc_ok]
+                                    simp only [show (0 : AspisV8R19.DuplexFrames.Byte).val = 0 from rfl, show (2 : AspisV8R19.DuplexFrames.Byte).val = 2 from rfl, show (49 : AspisV8R19.DuplexFrames.Byte).val = 49 from rfl, show (51 : AspisV8R19.DuplexFrames.Byte).val = 51 from rfl, show (56 : AspisV8R19.DuplexFrames.Byte).val = 56 from rfl, show (66 : AspisV8R19.DuplexFrames.Byte).val = 66 from rfl, show (67 : AspisV8R19.DuplexFrames.Byte).val = 67 from rfl, show (80 : AspisV8R19.DuplexFrames.Byte).val = 80 from rfl, show (82 : AspisV8R19.DuplexFrames.Byte).val = 82 from rfl]
+                                    split_ifs <;> simp_all
+
+  · have hlen : Slice.len b ≠ 57607#usize := by
+      intro he; apply hl; exact len.symm.trans (UScalar.val_eq_of_eq he)
+    have hm : OraclePortHeader.accepts (bytesOf b) = false :=
+      OraclePortHeader.rejects_wrong_length _ (by simpa only [bytesOf, List.length_map] using hl)
+    simp only [parser_reference.header,hlen,if_false,hm]
+
+#print axioms header_total
+end AspisR1.MultiproofConeHeader

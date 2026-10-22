@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerSuccess42.lean:25:36: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerSuccess42.lean:33:62: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerSuccess42.lean:62:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (forget (Except.ok model, final).1, (Except.ok model, final).2).2
+in the target expression
+  (Except.ok model, final) = (Except.ok model, after)
+
+nonce : ProverCommitOwnerZero42.Bytes
+schedule : Schedule
+tape : ℕ → owner.Raw
+s after : State
+secret : owner.Secret
+success : owner.generate (io schedule tape) nonce s = ok (core.result.Result.Ok secret, after)
+src : ok (core.result.Result.Ok secret, after) = ok (generate nonce schedule tape s)
+srcEq : (core.result.Result.Ok secret, after) = generate nonce schedule tape s
+hn :
+  match (core.result.Result.Ok secret, after).1 with
+  | core.result.Result.Err a => True
+  | core.result.Result.Ok secret => secret.nonce = nonce
+final : State
+model : ProverCommitPublicNonce40.Private
+hm :
+  have source := (core.result.Result.Ok secret, after);
+  have model := (Except.ok model, final);
+  (status source.1, source.2) = (forget model.1, model.2)
+target : ProverCommitPublicNonce40.generate (block nonce) schedule (fun n => raw (tape n)) s = (Except.ok model, final)
+sameState :
+  (status (core.result.Result.Ok secret, after).1, (core.result.Result.Ok secret, after).2).2 =
+    (forget (Except.ok model, final).1, (Except.ok model, final).2).2
+sameRaw : Except.ok (raw secret.raw) = Except.ok ↑model
+⊢ (Except.ok model, final) = (Except.ok model, after)
+'R1Z.ProverCommitOwnerSuccess42.run_nonce' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnerSuccess42.generate_nonce' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnerSuccess42.source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

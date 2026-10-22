@@ -1,0 +1,162 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:10:17: warning: Could not generate mvcgen spec for AspisR1.MultiproofConeLeaf.digest_eq_spec: (kernel) constant has already been declared 'AspisR1.MultiproofConeLeaf.digest_eq_spec.mvcgen_spec'
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:19:58: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 14
+  a ≥ 0
+  a - b ≤ 0
+where
+ a := ↑↑16#usize
+ b := ↑(↑s.n - 1)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:20:66: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 14
+  a ≥ 0
+  a - b ≤ 0
+where
+ a := ↑↑16#usize
+ b := ↑(↑s.n - 1)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:24:24: error: Ambiguous term
+  insert
+Possible interpretations:
+  MultiproofConeLiveLeaves.insert : (ℕ → ℕ) → ℕ → ℕ → (ℕ → ℕ) × ℕ
+  
+  Insert.insert : ?m.362 → ?m.363 → ?m.363
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:24:24: error: Ambiguous term
+  insert
+Possible interpretations:
+  MultiproofConeLiveLeaves.insert : (ℕ → ℕ) → ℕ → ℕ → (ℕ → ℕ) × ℕ
+  
+  Insert.insert : ?m.374 → ?m.375 → ?m.375
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:24:24: error: Ambiguous term
+  insert
+Possible interpretations:
+  MultiproofConeLiveLeaves.insert : (ℕ → ℕ) → ℕ → ℕ → (ℕ → ℕ) × ℕ
+  
+  Insert.insert : ?m.385 → ?m.386 → ?m.386
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:24:49: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+bound : ↑s.n < 16
+next : reference.Scratch
+h✝² : s.n > 0#usize
+i : Usize
+_✝² : [> let i ← s.n - 1#usize <]
+i_post1 : ↑i = ↑s.n - 1
+i1 : U32
+_✝¹ : [> let i1 ← s.idx.index_usize i <]
+a : Std.Array U8 32#usize
+_✝ : [> let a ← s.val.index_usize i <]
+b : Bool
+_ : [> let b ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a leaf <]
+success : reference.leaf_step s (↑s.idx)[↑s.n - 1] leaf = ok (some next)
+getLast : 0 < ↑s.n → (↑s.idx)[↑s.n - 1]?.getD default = (↑s.idx)[↑s.n - 1]
+i_post2 : 1 ≤ ↑s.n
+i1_post : index = (↑s.idx)[↑s.n - 1]
+h✝¹ : i1 = (↑s.idx)[↑s.n - 1]
+b_post : (↑s.val)[↑s.n - 1] = leaf
+h✝ : b = true
+⊢ ∀ (next : reference.Scratch) (a : s = next),
+    (keys next, ↑next.n) = MultiproofConeLiveLeaves.insert (keys next) ↑next.n ↑(↑next.idx)[↑next.n - 1]
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:24:49: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+bound : ↑s.n < 16
+next : reference.Scratch
+success : reference.leaf_step s index leaf = ok (some next)
+h✝¹ : s.n > 0#usize
+i : Usize
+_✝³ : [> let i ← s.n - 1#usize <]
+i_post1 : ↑i = ↑s.n - 1
+i1 : U32
+_✝² : [> let i1 ← s.idx.index_usize i <]
+a : Std.Array U32 16#usize
+_✝¹ : [> let a ← s.idx.update s.n index <]
+a1 : Std.Array (Std.Array U8 32#usize) 16#usize
+_✝ : [> let a1 ← s.val.update s.n leaf <]
+i2 : Usize
+_ : [> let i2 ← s.n + 1#usize <]
+getLast : 0 < ↑s.n → (↑s.idx)[↑s.n - 1]?.getD default = (↑s.idx)[↑s.n - 1]
+i_post2 : 1 ≤ ↑s.n
+i1_post : i1 = (↑s.idx)[↑s.n - 1]
+h✝ : ¬↑(↑s.idx)[↑s.n - 1] = ↑index
+a_post : a = s.idx.set s.n index
+a1_post : a1 = s.val.set s.n leaf
+i2_post : ↑i2 = ↑s.n + 1
+⊢ (keys { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := i2, «at» := s.at }, ↑s.n + 1) =
+    MultiproofConeLiveLeaves.insert (keys s) ↑s.n ↑index
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:24:49: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+next : reference.Scratch
+success : reference.leaf_step s index leaf = ok (some next)
+a : Std.Array U32 16#usize
+_✝¹ : [> let a ← s.idx.update s.n index <]
+a1 : Std.Array (Std.Array U8 32#usize) 16#usize
+_✝ : [> let a1 ← s.val.update s.n leaf <]
+i2 : Usize
+_ : [> let i2 ← s.n + 1#usize <]
+h✝ : ↑s.n = 0
+a_post : a = s.idx.set s.n index
+a1_post : a1 = s.val.set s.n leaf
+i2_post : ↑i2 = 1
+⊢ (keys { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := i2, «at» := s.at }, 1) =
+    MultiproofConeLiveLeaves.insert (keys s) 0 ↑index
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:24:31: warning: This simp argument is unused:
+  keys
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵i̵n̵s̵e̵r̵t̵,̵k̵e̵y̵s̵,̵g̵e̵t̵L̵a̵s̵t̵]̵[̲i̲n̲s̲e̲r̲t̲,̲ ̲g̲e̲t̲L̲a̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:24:36: warning: This simp argument is unused:
+  getLast
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵i̵n̵s̵e̵r̵t̵,̵k̵e̵y̵s̵,̵g̵e̵t̵L̵a̵s̵t̵]̵[̲i̲n̲s̲e̲r̲t̲,̲ ̲k̲e̲y̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:34:30: error: Application type mismatch: The argument
+  keys s a
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.20
+of sort `Type (?u.20 + 1)` in the application
+  @InitialSeg (keys s a)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:34:40: error(lean.unknownIdentifier): Unknown identifier `ndex.val`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:82:28: error: Application type mismatch: The argument
+  sorted
+has type
+  List.Pairwise (fun x1 x2 => x1 ≤ x2) packed
+but is expected to have type
+  ∀ (a b : ?m.39), ?m.40 a b → ?m.42 (?m.43 a) (?m.43 b)
+in the application
+  List.Pairwise.map ?m.43 sorted
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:83:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+packed : List U64
+sorted : List.Pairwise (fun x1 x2 => x1 ≤ x2) packed
+⊢ List.Pairwise ?m.40 packed
+'AspisR1.MultiproofConeLiveBatch.leaf_projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLiveBatch.leaf_sorted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLiveBatch.iterate_sorted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLiveBatch.eighteen_sorted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLiveBatch.projected_keys_sorted' depends on axioms: [propext, sorryAx, Quot.sound]

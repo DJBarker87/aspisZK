@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import hashlib,json,re
+root=Path(__file__).resolve().parent
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+m=json.loads((root/'manifest.json').read_text())
+src=root/m['source']; prof=root/m['profile']; rec=json.loads((root/m['launch_receipt']).read_text()); pre=json.loads((root/m['preflight']).read_text()); close=json.loads((root/m['closure_preflight']).read_text())
+assert sha(src)==m['source_sha256']==rec['source_sha256']
+assert sha(prof)==m['profile_sha256']==pre['profile_sha256']
+assert rec['exit_status']==0 and rec['object_sha256']==m['external_object_sha256'] and rec['process_swaps']==0
+assert pre['direct_imports']==m['direct_imports']
+assert not close['missing'] and len(close['owners'])==m['closure']['modules']
+log=(root/m['lean_raw_log']).read_text()
+for decl, axioms in m['theorems'].items():
+    match=re.search(re.escape("'"+decl+"' depends on axioms:")+r'([^\n]*(?:\n\s+[^\n]*){0,3})',log)
+    assert match, f'missing named axiom report for {decl}'
+    assert all(a in match.group(1) for a in axioms) and 'sorryAx' not in match.group(1), match.group(1)
+assert not list(root.rglob('*.olean')), 'source-only packet cannot include .olean files'
+print('PASS source-only packet; exact source, receipt, imports, closure and standard axioms verified')

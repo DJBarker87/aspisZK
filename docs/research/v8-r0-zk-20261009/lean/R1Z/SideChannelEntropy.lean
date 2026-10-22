@@ -1,0 +1,140 @@
+import R1Z.ProverCommitOwnerModel42
+import R0Z.AbsorptionLaw
+
+/-! Two-private-seed adapter. Permuting successful seed PAIRS preserves
+all zero-rejection positions, RNG status/count and retained ledger/history.
+This is the exact model used by the part-42 source-owner bridge, not the
+96-byte convenience adapter. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.SideChannelEntropy
+open R0Z ProverCommitLedger36
+open ProverCommitPublicNonce40
+attribute [local instance] Classical.propDecidable
+
+def lift (e : Private ≃ Private) (r : Raw) : Raw :=
+  match decode r with
+  | none => r
+  | some p => (e p).val
+
+theorem decode_lift (e : Private ≃ Private) (r : Raw) :
+    decode (lift e r) = (decode r).map e := by
+  cases hd : decode r with
+  | none => simp only [lift,hd,Option.map_none]
+  | some p => simp only [lift,hd,decode_success,Option.map_some]
+
+theorem erase_decode (r : Raw) (p : Private) (hd : decode r = some p) : p.val = r := by
+  unfold decode at hd
+  split at hd
+  · cases Option.some.inj hd; rfl
+  · cases hd
+
+def rawEquiv (e : Private ≃ Private) : Raw ≃ Raw where
+  toFun := lift e
+  invFun := lift e.symm
+  left_inv := by
+    intro r
+    cases hd : decode r with
+    | none => simp only [lift,hd]
+    | some p =>
+      have h : lift e r = (e p).val := by simp only [lift,hd]
+      rw [h]
+      simp only [lift,decode_success,Equiv.symm_apply_apply]
+      exact erase_decode r p hd
+  right_inv := by
+    intro r
+    cases hd : decode r with
+    | none => simp only [lift,hd]
+    | some p =>
+      have h : lift e.symm r = (e.symm p).val := by simp only [lift,hd]
+      rw [h]
+      simp only [lift,decode_success,Equiv.apply_symm_apply]
+      exact erase_decode r p hd
+
+theorem next_lift (e : Private ≃ Private) (schedule : Schedule)
+    (tape : Nat → Raw) (s : State) :
+    next schedule (fun n => lift e (tape n)) s =
+      ((next schedule tape s).1.map (lift e),(next schedule tape s).2) := by
+  unfold ProverCommitPublicNonce40.next
+  cases h : ask schedule .rng s with
+  | mk result after => cases result <;> rfl
+
+theorem run_lift (e : Private ≃ Private) (schedule : Schedule)
+    (tape : Nat → Raw) (fuel : Nat) (s : State) :
+    run schedule (fun n => lift e (tape n)) fuel s =
+      ((run schedule tape fuel s).1.map e,(run schedule tape fuel s).2) := by
+  induction fuel generalizing s with
+  | zero => rfl
+  | succ fuel ih =>
+    simp only [run,next_lift]
+    cases hn : next schedule tape s with
+    | mk result after =>
+      cases result with
+      | error err => rfl
+      | ok raw =>
+        simp only [Except.map,decode_lift]
+        cases hd : decode raw with
+        | none => exact ih after
+        | some p => rfl
+
+theorem generate_lift (e : Private ≃ Private) (nonce : Path)
+    (schedule : Schedule) (tape : Nat → Raw) (s : State) :
+    generate nonce schedule (fun n => lift e (tape n)) s =
+      ((generate nonce schedule tape s).1.map e,(generate nonce schedule tape s).2) := by
+  unfold generate
+  split
+  · rfl
+  · exact run_lift e schedule tape 16 s
+
+theorem next_history (schedule : Schedule) (tape : Nat → Raw) (s : State) :
+    (next schedule tape s).2.history =
+      s.history ++ [(.rng,faultResult (schedule s.history.length .rng s.history))] := by
+  simp only [ProverCommitPublicNonce40.next,ask,record,inject]
+  cases h : faultResult (schedule s.history.length .rng s.history) <;> rfl
+
+theorem run_count_cap (schedule : Schedule) (tape : Nat → Raw) (fuel : Nat) (s : State) :
+    (run schedule tape fuel s).2.history.length ≤ s.history.length+fuel := by
+  induction fuel generalizing s with
+  | zero => exact Nat.le_refl _
+  | succ fuel ih =>
+    have hnext := next_history schedule tape s
+    have hlen := congrArg List.length hnext
+    simp only [List.length_append,List.length_cons,List.length_nil] at hlen
+    unfold run
+    cases hn : next schedule tape s with
+    | mk result after =>
+      rw [hn] at hlen
+      dsimp only at hlen
+      cases result with
+      | error err => dsimp only; omega
+      | ok raw =>
+        dsimp only
+        cases hd : decode raw with
+        | none => dsimp only; have h := ih after; omega
+        | some p => dsimp only; omega
+
+theorem generate_count_cap (nonce : Path) (schedule : Schedule) (tape : Nat → Raw) (s : State) :
+    (generate nonce schedule tape s).2.history.length ≤ s.history.length+16 := by
+  unfold generate
+  split
+  · dsimp only; omega
+  · exact run_count_cap schedule tape 16 s
+
+/-- Exact same retained count/history for every seed-pair permutation,
+including every byte-blind fault schedule. Thus counts cannot be discarded
+as though successful nonzero seeds had been sampled without rejection. -/
+theorem count_history_preserved (e : Private ≃ Private) (nonce : Path)
+    (schedule : Schedule) (tape : Nat → Raw) (s : State) :
+    (generate nonce schedule (fun n => lift e (tape n)) s).2 =
+      (generate nonce schedule tape s).2 := by rw [generate_lift]
+
+#print axioms decode_lift
+#print axioms erase_decode
+#print axioms next_lift
+#print axioms run_lift
+#print axioms generate_lift
+#print axioms next_history
+#print axioms run_count_cap
+#print axioms generate_count_cap
+#print axioms count_history_preserved
+end R1Z.SideChannelEntropy

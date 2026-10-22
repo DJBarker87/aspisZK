@@ -1,0 +1,122 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:49:2: error: Type mismatch
+  ProverCommitWrapping47.bind id id (UScalar.add ?m.21 ?m.22) (ok (UScalar.wrapping_add ?m.21 ?m.22)) ?m.18 ?m.19
+    (add ?m.21 ?m.22) ?m.23
+has type
+  Refines id (UScalar.add ?m.21 ?m.22 >>= ?m.18) (ok (UScalar.wrapping_add ?m.21 ?m.22) >>= ?m.19)
+but is expected to have type
+  Refines id
+    (do
+      let i2 ← x >>> 31#u32
+      let x1 ← (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) + i2
+      let i5 ← x1 >>> 31#u32
+      let x2 ← (x1 &&& UScalar.cast UScalarTy.U64 2147483647#u32) + i5
+      if UScalar.cast UScalarTy.U32 x2 ≥ 2147483647#u32 then UScalar.cast UScalarTy.U32 x2 - 2147483647#u32
+        else ok (UScalar.cast UScalarTy.U32 x2))
+    (if
+        UScalar.cast UScalarTy.U32
+            (U64.wrapping_add
+              (U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+                UScalar.cast UScalarTy.U64 2147483647#u32)
+              ((U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32)).wrapping_shr
+                31#u32)) ≥
+          2147483647#u32 then
+      ok
+        (U32.wrapping_sub
+          (UScalar.cast UScalarTy.U32
+            (U64.wrapping_add
+              (U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+                UScalar.cast UScalarTy.U64 2147483647#u32)
+              ((U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32)).wrapping_shr
+                31#u32)))
+          2147483647#u32)
+    else
+      ok
+        (UScalar.cast UScalarTy.U32
+          (U64.wrapping_add
+            (U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+              UScalar.cast UScalarTy.U64 2147483647#u32)
+            ((U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32)).wrapping_shr
+              31#u32))))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:48:18: warning: This simp argument is unused:
+  id
+
+Hint: Omit it from the simp argument list.
+  simp only [lift,i̵d̵,̵ ̲shift31, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:48:21: warning: This simp argument is unused:
+  shift31
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵f̵t̵,̵i̵d̵,̵s̵h̵i̵f̵t̵3̵1̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲l̲i̲f̲t̲,̲ ̲i̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:69:2: error: Type mismatch
+  ProverCommitWrapping47.bind id id (UScalar.mul ?m.19 ?m.20) (ok (UScalar.wrapping_mul ?m.19 ?m.20)) ?m.16 ?m.17
+    (mul ?m.19 ?m.20) ?m.21
+has type
+  Refines id (UScalar.mul ?m.19 ?m.20 >>= ?m.16) (ok (UScalar.wrapping_mul ?m.19 ?m.20) >>= ?m.17)
+but is expected to have type
+  Refines id
+    (do
+      let i2 ← UScalar.cast UScalarTy.U64 x * UScalar.cast UScalarTy.U64 y
+      let i3 ← AspisR1ProducerChecked47.field.reduce_u64 i2
+      ok i3)
+    do
+    let i3 ←
+      AspisR1ProducerRelease47.field.reduce_u64
+          (U64.wrapping_mul (UScalar.cast UScalarTy.U64 x) (UScalar.cast UScalarTy.U64 y))
+    ok i3
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:68:18: warning: This simp argument is unused:
+  id
+
+Hint: Omit it from the simp argument list.
+  simp only [lift,i̵d̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRelease47.lean:99:2: error: Type mismatch
+  ProverCommitWrapping47.bind id convC (UScalar.add ?m.45 ?m.46) (ok (UScalar.wrapping_add ?m.45 ?m.46)) ?m.42 ?m.43
+    (add ?m.45 ?m.46) ?m.47
+has type
+  Refines convC (UScalar.add ?m.45 ?m.46 >>= ?m.42) (ok (UScalar.wrapping_add ?m.45 ?m.46) >>= ?m.43)
+but is expected to have type
+  Refines convC
+    (do
+      let i4 ← core.convert.num.FromU64U32.from x.a + core.convert.num.FromU64U32.from x.b
+      let i9 ← core.convert.num.FromU64U32.from y.a + core.convert.num.FromU64U32.from y.b
+      let i10 ← i4 * i9
+      let m2 ← AspisR1ProducerChecked47.field.M31.reduce_u64 i10
+      let m ← m0.sub m1
+      let m3 ← m2.sub m0
+      let m4 ← m3.sub m1
+      ok { a := m, b := m4 })
+    do
+    let m2 ←
+      AspisR1ProducerRelease47.field.M31.reduce_u64
+          (((core.convert.num.FromU64U32.from (convC x).a).wrapping_add
+                (core.convert.num.FromU64U32.from (convC x).b)).wrapping_mul
+            ((core.convert.num.FromU64U32.from (convC y).a).wrapping_add
+              (core.convert.num.FromU64U32.from (convC y).b)))
+    let m ← AspisR1ProducerRelease47.field.M31.sub m0 m1
+    let m3 ← m2.sub m0
+    let m4 ← m3.sub m1
+    ok { a := m, b := m4 }
+'R1Z.ProverCommitRelease47.mAdd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mSub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mDouble' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.shift31' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.reduce' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mReduce' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mMul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.addC' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.subC' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mulC' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.rC' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.addQ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.subQ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mulQ' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mulU' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.addE' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRelease47.mulE' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

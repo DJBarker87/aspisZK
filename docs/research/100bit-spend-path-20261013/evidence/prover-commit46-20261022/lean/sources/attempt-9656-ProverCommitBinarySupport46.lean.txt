@@ -1,0 +1,92 @@
+import R1Z.ProverCommitBinaryCursor46
+import R1Z.ProverCommitTreeSupport46
+/-! Missing sibling requests are supported by the tree's stored child maps.
+The input batch need only be a subset of the programmed leaf keys. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitBinarySupport46
+open Aeneas Aeneas.Std ProverCommitBinaryGroup46 ProverCommitTreeSupport46
+
+theorem sibling_parent (a : U32) : (a ^^^ 1#u32).val/2=a.val/2 := by
+  rw [UScalar.val_xor]
+  change (a.val ^^^ 1)/2=a.val/2
+  simpa [Nat.shiftRight_eq_div_pow] using
+    (Nat.shiftRight_xor_distrib (a := a.val) (b := 1) (i := 1))
+
+theorem group_parent (a : U32) (b : Option U32) : (group a b).parent.val=a.val/2 := by
+  unfold group
+  split <;> exact parent_val a
+
+theorem group_sibling (a : U32) (b : Option U32) (child : U32)
+    (mem : child ∈ (group a b).sibling.toList) : child.val/2=a.val/2 := by
+  unfold group at mem
+  split at mem
+  · cases mem
+  · simp only [Option.toList_some,List.mem_singleton] at mem
+    subst child
+    exact sibling_parent a
+
+/-- Every next-level occupied index is a parent of a current occupied index;
+every missing sibling has exactly such a parent. No sortedness is needed for
+this support implication (well-formedness is a separate source guard). -/
+theorem layer_support (xs : List U32) (s : Set Nat)
+    (covered : ∀ a ∈ xs, a.val ∈ s) :
+    (∀ p ∈ (layer xs).1, p.val ∈ parents s) ∧
+    (∀ child ∈ (layer xs).2, child.val/2 ∈ parents s) := by
+  cases xs with
+  | nil => simp only [layer,List.not_mem_nil,false_implies,implies_true,and_self]
+  | cons a tail =>
+    have h := layer_support (tail.drop ((group a tail.head?).consumed.val-1)) s
+      (fun v hv => covered v (List.mem_cons_of_mem a (List.mem_of_mem_drop hv)))
+    constructor
+    · intro p hp
+      rw [layer] at hp
+      simp only [List.mem_cons] at hp
+      rcases hp with hp | hp
+      · subst p
+        exact ⟨a.val,covered a (List.mem_cons_self ..),group_parent a tail.head?⟩
+      · exact h.1 p hp
+    · intro child hc
+      rw [layer] at hc
+      rcases List.mem_append.mp hc with hc | hc
+      · exact ⟨a.val,covered a (List.mem_cons_self ..),(group_sibling a tail.head? child hc).symm⟩
+      · exact h.2 child hc
+termination_by xs.length
+decreasing_by
+  simp only [List.length_drop,List.length_cons];omega
+
+def requests : Nat → List U32 → List (List U32)
+  | 0,_ => []
+  | n+1,xs => (layer xs).2 :: requests n (layer xs).1
+
+def Covers (needed : List U32) (keys : Set Nat) : Prop :=
+  ∀ child ∈ needed, child.val/2 ∈ keys
+
+theorem requests_support (n : Nat) (xs : List U32) (s : Set Nat)
+    (covered : ∀ a ∈ xs, a.val ∈ s) :
+    List.Forall₂ Covers (requests n xs) (shape n s) := by
+  induction n generalizing xs s with
+  | zero => exact .nil
+  | succ n ih =>
+    have h := layer_support xs s covered
+    exact .cons h.2 (ih (layer xs).1 (parents s) h.1)
+
+/-- The source-shaped eighteen-level construction supplies the whole callback
+support, with the same depth order used to request missing siblings. -/
+theorem stored_requests {Digest Coins : Type} (coin : Coins → Digest × Coins)
+    (root : Digest) (level : Map Digest) (coins : Coins) (reads : Nat)
+    (log : List (Digest × Digest × Digest)) (xs : List U32)
+    (covered : ∀ a ∈ xs, a.val ∈ support level) :
+    List.Forall₂ Covers (requests 18 xs)
+      ((ProverCommitTree44.levels ProverCommitTrustedStd24.modelMap
+        ProverCommitTrustedStd24.modelMap coin root 18 0
+        ⟨level,[],coins,reads,log⟩).children.map support) := by
+  rw [children_support]
+  exact requests_support 18 xs (support level) covered
+
+#print axioms sibling_parent
+#print axioms group_parent
+#print axioms group_sibling
+#print axioms layer_support
+#print axioms requests_support
+#print axioms stored_requests
+end R1Z.ProverCommitBinarySupport46

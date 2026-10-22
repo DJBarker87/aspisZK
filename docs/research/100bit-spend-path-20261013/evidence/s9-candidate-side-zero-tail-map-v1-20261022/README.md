@@ -1,0 +1,7 @@
+# Candidate S9 first-branch tail refinement
+
+PROVED locally: the exact candidate side-zero suffix, starting after the term sums, maps as a complete Result to the retained concrete P6 sideZeroTail. The theorem covers success, failure and divergence and returns the exact pointwise-mapped written array. It composes concrete multiplication maps and the already-proved bounded update map. No successful child operation or output-array relation is a premise.
+
+The source suffix is defined explicitly; joining it to the generated candidate parent body is a remaining obligation. This is one branch-tail theorem, not complete helper/caller refinement, candidate adoption, or a security conclusion. The side-one suffix, whole candidate body/loop and caller/library boundaries remain OPEN, as do final source/artifact re-pins, coherent replay and the 100-bit theorem. Production source is unchanged.
+
+Exact source revision, status, command, source/tool/import/object pins, wall time, peak RSS, observed swap and named standard-axiom reports are retained. The packet excludes compiled objects and reuses warm Lean 4.32 dependencies, with one local -j1 -M4400 job at a time under the atomic mutex and aggregate watchdog. macOS swap is observational. Failed layout/shape predecessor attempts remain separately named under /tmp and are not accepted proofs. Run `python3 -B check_packet.py` to inspect retained evidence without Lean.

@@ -1,0 +1,170 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitShift49.lean:38:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (ProverCommitQArray48.array ?m.252 ?m.253).update ?m.254 (ProverCommitNativeQ48.source ?z)
+in the target expression
+  (do
+      let q3 ← field.QM31.sub (ProverCommitNativeQ48.source (p ↑0#usize)) (ProverCommitNativeQ48.source ch)
+      let p1 ← (ProverCommitQArray48.array 28#usize p).update 0#usize q3
+      let q4 ← p1.index_usize 1#usize
+      let q5 ← q4.add (ProverCommitNativeQ48.source c)
+      p1.update 1#usize q5) =
+    ok (ProverCommitQArray48.array 28#usize out)
+
+case refine_1
+p : ℕ → Old.Q
+hp : ∀ k < 28, Canonical (p k)
+original eta0 inv half : Old.Q
+ho : Canonical original
+he : Canonical eta0
+hi : Canonical inv
+hh : Canonical half
+diff : Old.Q
+hd :
+  field.QM31.sub (ProverCommitNativeQ48.source original) (ProverCommitNativeQ48.source eta0) =
+    ok (ProverCommitNativeQ48.source diff)
+hcd : Canonical diff
+hdd : decode diff = decode original - decode eta0
+c : Old.Q
+hc :
+  field.QM31.mul (ProverCommitNativeQ48.source diff) (ProverCommitNativeQ48.source inv) =
+    ok (ProverCommitNativeQ48.source c)
+hcc : Canonical c
+hdc : decode c = decode diff * decode inv
+ch : Old.Q
+hch :
+  field.QM31.mul (ProverCommitNativeQ48.source c) (ProverCommitNativeQ48.source half) =
+    ok (ProverCommitNativeQ48.source ch)
+hcch : Canonical ch
+hdch : decode ch = decode c * decode half
+p0 : Old.Q
+hp0 :
+  field.QM31.sub (ProverCommitNativeQ48.source (p 0)) (ProverCommitNativeQ48.source ch) =
+    ok (ProverCommitNativeQ48.source p0)
+hcp0 : Canonical p0
+hdp0 : decode p0 = decode (p 0) - decode ch
+p1 : Old.Q
+hp1 :
+  field.QM31.add (ProverCommitNativeQ48.source (p 1)) (ProverCommitNativeQ48.source c) =
+    ok (ProverCommitNativeQ48.source p1)
+hcp1 : Canonical p1
+hdp1 : decode p1 = decode (p 1) + decode c
+out : ℕ → Old.Q := Function.update (Function.update p 0 p0) 1 p1
+⊢ (do
+      let q3 ← field.QM31.sub (ProverCommitNativeQ48.source (p ↑0#usize)) (ProverCommitNativeQ48.source ch)
+      let p1 ← (ProverCommitQArray48.array 28#usize p).update 0#usize q3
+      let q4 ← p1.index_usize 1#usize
+      let q5 ← q4.add (ProverCommitNativeQ48.source c)
+      p1.update 1#usize q5) =
+    ok (ProverCommitQArray48.array 28#usize out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (28 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitShift49.lean:38:46: error: Expected type must not contain metavariables
+  ↑?m.254 < ↑?m.252
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitShift49.lean:37:19: warning: This simp argument is unused:
+  hp0
+
+Hint: Omit it from the simp argument list.
+  simp only [hch,h̵p̵0̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitShift49.lean:73:2: error: unsolved goals
+case pos
+p out : ℕ → QM31Exact
+c half : QM31Exact
+h : ∀ (k : ℕ), out k = p k + if k = 0 then -c * half else if k = 1 then c else 0
+⊢ (if 0 < 28 then p 0 - c * half else 0).re.re =
+    ((-(c * half) + c * if 1 = 0 then 1 else 0) + if 0 < 28 then p 0 else 0).re.re
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitShift49.lean:75:4: error: unsolved goals
+case pos
+p out : ℕ → QM31Exact
+c half : QM31Exact
+h : ∀ (k : ℕ), out k = p k + if k = 0 then -c * half else if k = 1 then c else 0
+h0 : ¬1 = 0
+⊢ (if 1 < 28 then p 1 + c else 0).re.re = (c + if 1 < 28 then p 1 else 0).re.re
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitShift49.lean:77:6: error: unsolved goals
+case pos
+p out : ℕ → QM31Exact
+c half : QM31Exact
+h : ∀ (k : ℕ), out k = p k + if k = 0 then -c * half else if k = 1 then c else 0
+k : ℕ
+h0 : ¬k = 0
+h1 : ¬k = 1
+hk : k < 28
+⊢ (p k).re.re = (p k + c * if 1 = k then 1 else 0).re.re
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitShift49.lean:79:6: error: unsolved goals
+case neg
+p out : ℕ → QM31Exact
+c half : QM31Exact
+h : ∀ (k : ℕ), out k = p k + if k = 0 then -c * half else if k = 1 then c else 0
+k : ℕ
+h0 : ¬k = 0
+h1 : ¬k = 1
+hk : ¬k < 28
+⊢ (QuadraticAlgebra.re 0).re = (c * if 1 = k then 1 else 0).re.re
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitShift49.lean:66:66: error: unsolved goals
+case re.im
+p out : ℕ → QM31Exact
+c half : QM31Exact
+h : ∀ (k : ℕ), out k = p k + if k = 0 then -c * half else if k = 1 then c else 0
+k : ℕ
+⊢ ((ProverCommitInterpolationPoly48.poly 28 out).coeff k).re.im =
+    ((ProverCommitInterpolationPoly48.poly 28 p + Polynomial.C c * (X - Polynomial.C half)).coeff k).re.im
+
+case im.re
+p out : ℕ → QM31Exact
+c half : QM31Exact
+h : ∀ (k : ℕ), out k = p k + if k = 0 then -c * half else if k = 1 then c else 0
+k : ℕ
+⊢ ((ProverCommitInterpolationPoly48.poly 28 out).coeff k).im.re =
+    ((ProverCommitInterpolationPoly48.poly 28 p + Polynomial.C c * (X - Polynomial.C half)).coeff k).im.re
+
+case im.im
+p out : ℕ → QM31Exact
+c half : QM31Exact
+h : ∀ (k : ℕ), out k = p k + if k = 0 then -c * half else if k = 1 then c else 0
+k : ℕ
+⊢ ((ProverCommitInterpolationPoly48.poly 28 out).coeff k).im.im =
+    ((ProverCommitInterpolationPoly48.poly 28 p + Polynomial.C c * (X - Polynomial.C half)).coeff k).im.im
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitShift49.lean:80:22: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [h0,h̵1̵,̵ ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitShift49.shift_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitShift49.polynomial_shift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

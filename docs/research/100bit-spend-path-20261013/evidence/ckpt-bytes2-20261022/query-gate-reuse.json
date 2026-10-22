@@ -1,0 +1,50 @@
+{
+  "receipt": "docs/research/100bit-spend-path-20261013/evidence/ckpt-abi3-20261021/host/receipts/query-v1/receipt.json",
+  "receipt_sha256": "4850fc950d7656c3fd8d360070259c5300ce57f43d9310bd88a4857aaa1b7fbe",
+  "source_identity": "exact function bytes for validate_checkpoint_queries; reader-source container also retains original SHA",
+  "production_query_helper_sha256": "f2a088098414de0f58da65d726cb2bc6343c6b1ce0c25ff589141ca8f1c1a21f",
+  "unchanged_source_pins": {
+    "tools/oracle-port-ckpt-abi3/src/reader-source.rs": "c0c025f5585f55f9327f0345dc006811eac26811c947954284631025096802bc",
+    "tools/oracle-port-ckpt-abi3/src/section-proofs.rs": "c72143852ad664c35d0e468b0ac142947e1321d5ddd74c590a16807f52dda759"
+  },
+  "claim": "Result is Ok iff all 22 queries are <262144 and pairwise distinct; otherwise Error::Checkpoint",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "target": [
+    "timeout",
+    "300",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "tools/oracle-port-ckpt-abi3/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "sections::query_section",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--no-assertion-reach-checks",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "old",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--object-bits",
+    "12",
+    "--unwinding-assertions"
+  ],
+  "source_revision": "6881031b8cb445d89ffaaaa84d1d803a2bddc8a4",
+  "exit_status": 0,
+  "wall_seconds": 16.50445544393733,
+  "peak_rss_kib": 520500,
+  "swaps": 0,
+  "print_axioms": "N/A: reused Kani per-section gate"
+}

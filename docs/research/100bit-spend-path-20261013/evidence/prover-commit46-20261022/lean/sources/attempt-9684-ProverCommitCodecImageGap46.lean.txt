@@ -1,0 +1,54 @@
+import R1Z.ProverCommitCompactSource46
+/-! Codec acceptance is not a source-to-model image theorem. This witness is
+in the raw codec domain, not asserted reachable from the native generator. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitCodecImageGap46
+open ProverCommitCompact43
+open ProverCommitPublish43 (Bytes Error)
+
+def bad : Cell := fun i => if i.val<3 then 255 else if i.val=3 then 127 else 0
+
+def firstLimb (c : Cell) : Nat :=
+  (c ⟨0,by decide⟩).toNat + 256*(c ⟨1,by decide⟩).toNat +
+    65536*(c ⟨2,by decide⟩).toNat + 16777216*(c ⟨3,by decide⟩).toNat
+
+def CanonicalFirstImage (c : Cell) : Prop :=
+  ∃ word : Fin 2147483647, firstLimb c=word.val
+
+theorem bad_high_zero : highZero bad := by
+  intro i
+  simp only [bad]
+  rw [if_neg (by omega),if_neg (by omega)]
+
+theorem bad_limb : firstLimb bad=2147483647 := by
+  have h255 : (255 : UInt8).toNat=255 := rfl
+  have h127 : (127 : UInt8).toNat=127 := rfl
+  norm_num [firstLimb,bad,h255,h127]
+
+/-- The shipped compact-cell behavior (separately Kani checked) accepts a
+zero-high cell whose low first limb is exactly the noncanonical modulus. -/
+theorem codec_accepts : cell bad [] = .ok (low bad) := by
+  apply (cell_ok bad [] (low bad)).mpr
+  exact ⟨bad_high_zero,rfl⟩
+
+theorem no_canonical_first_image : ¬ CanonicalFirstImage bad := by
+  rintro ⟨word,hw⟩
+  have bound := word.isLt
+  rw [bad_limb] at hw
+  omega
+
+/-- Hence the generic byte publication certificate cannot supply the missing
+canonical/source-view image for every raw codec input. It must be proved for
+the concrete native generator, not added as a std or source-success law. -/
+theorem codec_does_not_supply_image :
+    ¬ (∀ c : Cell, cell c [] = .ok (low c) → CanonicalFirstImage c) := by
+  intro h
+  exact no_canonical_first_image (h bad codec_accepts)
+
+#print axioms bad_high_zero
+#print axioms bad_limb
+#print axioms codec_accepts
+#print axioms no_canonical_first_image
+#print axioms codec_does_not_supply_image
+end R1Z.ProverCommitCodecImageGap46

@@ -1,0 +1,59 @@
+import R1Z.ProverCommitRoundModel49
+import R1Z.ProverCommitGamma48
+import R1Z.ProverCommitArrayPad49
+/-! The second round's 256-entry source arrays embed into the shared 1024
+carrier; only their live prefix is read by the 64-fibre loop. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitRoundShape49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitWideOps48 ProverCommitMix48
+
+def pad (q : Nat → Raw) (i : Nat) : Raw := if i<256 then q i else ProverCommitGamma48.zero
+
+def lift256 (xs : Array Source 256#usize) : Array Source 1024#usize :=
+  ⟨xs.val++List.replicate 768 field.wide_exact.WideExact.ZERO,by
+    rw [List.length_append,List.length_replicate,xs.property];rfl⟩
+
+attribute [local irreducible] List.ofFn value source
+
+theorem lift_source (q : Nat → Raw) : lift256 (sourceArray 256#usize q)=sourceArray 1024#usize (pad q) := by
+  apply Subtype.ext
+  change List.ofFn (fun i : Fin 256 => source (q i.val))++List.replicate 768 field.wide_exact.WideExact.ZERO=
+    List.ofFn (fun i : Fin 1024 => source (pad q i.val))
+  simpa only [pad,apply_ite,←ProverCommitGamma48.source_zero] using
+    ProverCommitArrayPad49.pad_list 256 768 (fun j => source (q j)) field.wide_exact.WideExact.ZERO
+
+theorem pad_canonical (q : Nat → Raw) (hq : ∀ i, i<256 → canonical (q i)) :
+    ∀ i, i<1024 → canonical (pad q i) := by
+  intro i hi
+  unfold pad
+  split_ifs with h
+  · exact hq i h
+  · exact ProverCommitGamma48.zero_canonical
+
+def run (q w : Array Source 256#usize) : Result (List Source) :=
+  ProverCommitRoundScaled48.run 64 (lift256 q) (lift256 w)
+
+theorem second_coefficients (q w : Nat → Raw)
+    (hq : ∀ i, i<256 → canonical (q i)) (hw : ∀ i, i<256 → canonical (w i)) :
+    ∃ out : Nat → Raw, run (sourceArray 256#usize q) (sourceArray 256#usize w)=
+      ok (List.ofFn (fun k : Fin 7 => source (out k.val))) ∧
+      (∀ k, k<7 → canonical (out k)) ∧
+      ∀ k : Fin 7, value (out k.val)=
+        (AspisR1.RoundPairing.roundPolynomial (n:=64) (fun j => value (q j.val)) (fun j => value (w j.val))).coeff k.val := by
+  obtain ⟨out,hout,hcout,hdout⟩ := ProverCommitRoundModel49.coefficients 64 (by decide) (pad q) (pad w)
+    (pad_canonical q hq) (pad_canonical w hw)
+  refine ⟨out,?_,hcout,?_⟩
+  · simpa only [run,lift_source] using hout
+  · intro k
+    have hq' : (fun j : Fin 256 => value (pad q j.val))=(fun j : Fin 256 => value (q j.val)) := by
+      funext j;rw [pad,if_pos j.isLt]
+    have hw' : (fun j : Fin 256 => value (pad w j.val))=(fun j : Fin 256 => value (w j.val)) := by
+      funext j;rw [pad,if_pos j.isLt]
+    simpa only [hq',hw'] using hdout k
+
+#print axioms lift_source
+#print axioms pad_canonical
+#print axioms second_coefficients
+end R1Z.ProverCommitRoundShape49

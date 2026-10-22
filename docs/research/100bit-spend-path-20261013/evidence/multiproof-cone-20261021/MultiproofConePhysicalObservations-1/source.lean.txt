@@ -1,0 +1,96 @@
+import MultiproofConePhysicalNodeForm
+import MultiproofConePhysicalInputUnique
+import MultiproofConePhysicalTrace
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConePhysicalObservations
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConePhysicalProgram MultiproofConePhysicalDigest MultiproofConePhysicalNode
+open MultiproofConePhysicalNodeForm MultiproofConePhysicalInputUnique MultiproofConePhysicalTrace
+open MultiproofConeNodeDomain MultiproofConeNodeIteration MultiproofConeLevelIteration
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+
+def log (events : List Event) : List (Address × Digest) :=
+  events.map (fun e => (parts e.left e.right,e.digest))
+
+/-- Actual one-node ordered observation. The request is fixed before the
+answer; return equality alone is not used to infer this log. -/
+theorem node_observation {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (H : Address → Digest) (law : ∀ input, D.digest hash input=ok (H input))
+    (s after : reference.Scratch) (physical : Slice U8) (i w ni nw cursor : Usize)
+    (domain : RowDomain physical s i w) (active : i.val<s.n.val)
+    (left right digest : Digest) (input : Input physical s i left right ni cursor)
+    (hashed : D.digest hash (parts left right)=ok digest)
+    (success : reference.binary_step D hash s physical i w=ok (.Next after ni nw)) :
+    eval H (node s physical i w)=([(parts left right,digest)],ok (.Next after ni nw)) := by
+  have result := (node_result D hash H law s physical i w).trans success
+  rcases node_form s physical i w domain active with stopped | running
+  · rw [stopped] at result
+    cases result
+  · obtain ⟨l,r,next,cursorOut,reads,form⟩ := running
+    obtain ⟨rfl,rfl,rfl,rfl⟩ := input_unique physical s i left right l r ni cursor next cursorOut input reads
+    have answer : H (parts left right)=digest := by
+      rw [law] at hashed
+      exact Result.ok.inj hashed
+    apply Prod.ext
+    · rw [form]
+      simp only [writer,eval,answer]
+    · exact result
+
+theorem trace_length {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (physical : Slice U8) (s final : reference.Scratch) (i w : Usize)
+    (events : List Event) (trace : Trace D hash physical s i w final events)
+    (domain : RowDomain physical s i w) : events.length≤s.n.val-i.val := by
+  induction trace with
+  | done s i w halt => simp
+  | next s i w ni nw cursor parent left right digest after final es wb active nwval input hashed parentval state step rest ih =>
+    obtain ⟨out,eq,progress⟩ := binary_step_progress D hash total physical s i w domain active
+    rw [step] at eq;cases eq
+    have len := ih progress.2.1
+    have sameN := progress.1
+    have advance := progress.2.2.1
+    simp only [List.length_cons]
+    omega
+
+/-- The constructed chronological trace is the actual physical Program's log,
+including every answer and every subsequent scratch dependency. -/
+theorem trace_program {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (H : Address → Digest) (law : ∀ input, D.digest hash input=ok (H input))
+    (physical : Slice U8) (s final : reference.Scratch) (i w : Usize)
+    (events : List Event) (trace : Trace D hash physical s i w final events)
+    (fuel : Nat) (domain : RowDomain physical s i w) (bound : events.length≤fuel) :
+    eval H (MultiproofConePhysicalLevels.rows fuel s physical i w)=(log events,ok (.Done final)) := by
+  induction trace generalizing fuel with
+  | done s i w halt =>
+    cases fuel <;> simp only [MultiproofConePhysicalLevels.rows,halt,if_true,eval,log,List.map_nil]
+  | next s i w ni nw cursor parent left right digest after final es wb active nwval input hashed parentval state step rest ih =>
+    cases fuel with
+    | zero => simp only [List.length_cons] at bound;omega
+    | succ fuel =>
+      have halt : ¬i≥s.n := by scalar_tac
+      have nodeEq := node_observation D hash H law s after physical i w ni nw cursor domain active left right digest input hashed step
+      obtain ⟨out,eq,progress⟩ := binary_step_progress D hash (fun input => ⟨H input,law input⟩) physical s i w domain active
+      rw [step] at eq;cases eq
+      have tail := ih fuel progress.2.1 (by simp only [List.length_cons] at bound;omega)
+      simp only [MultiproofConePhysicalLevels.rows,halt,if_false,MultiproofConePhysicalLevels.bindRun,
+        eval_bind,nodeEq,checked,tail,log,List.map_cons,List.singleton_append]
+
+theorem level_observation {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (H : Address → Digest) (law : ∀ input, D.digest hash input=ok (H input))
+    (physical : Slice U8) (s final : reference.Scratch) (domain : Domain physical s)
+    (success : reference.level_rows D hash s physical 0#usize 0#usize=ok (.Done final)) :
+    ∃ events, Trace D hash physical s 0#usize 0#usize final events ∧
+      eval H (MultiproofConePhysicalLevels.level s physical)=(log events,ok (.Done final)) ∧
+      MultiproofConePhysicalLive.view final 0 final.n.val=events.map Event.output := by
+  have total : HashTotal D hash := fun input => ⟨H input,law input⟩
+  obtain ⟨events,trace,content,valid⟩ := level_trace D hash total physical s final domain success
+  have dom : RowDomain physical s 0#usize 0#usize := ⟨domain.1,domain.2.1,by simp,by simp,domain.2.2⟩
+  refine ⟨events,trace,?_,content⟩
+  exact trace_program D hash H law physical s final _ _ events trace s.n.val dom
+    (by simpa using trace_length D hash total physical s final _ _ events trace dom)
+
+#print axioms node_observation
+#print axioms trace_length
+#print axioms trace_program
+#print axioms level_observation
+end AspisR1.MultiproofConePhysicalObservations

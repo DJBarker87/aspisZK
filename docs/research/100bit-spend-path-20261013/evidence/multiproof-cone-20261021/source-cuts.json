@@ -1,0 +1,136 @@
+{
+  "schema": "frozen-parser-multiproof-cuts-v1",
+  "exact_items": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "marker": "pub const fn row_shape(",
+      "sha256": "de1b469aa2f57a1027902b3a7c03e33473e4266b608846d8efec4f6998757974",
+      "body": "pub const fn row_shape(row: u8) -> Option<(u8, usize)> {\n    match row {\n        0 | 1 | 3..=13 => Some((0, 0)),\n        2 => Some((1, 32)),\n        14 => Some((3, 32)),\n        15..=24 => Some((2, 28 * 32)),\n        25 => Some((4, (CLAIMS + LANES) * 32)),\n        26 => Some((5, LANES * 32)),\n        _ => None,\n    }\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn batch_keys(",
+      "sha256": "a9d17181d8b44c73585d26d1cc9c96ed62f9a00f881534b0536cddd9ef826476",
+      "body": "fn batch_keys(queries: &[u32; 22], lo: usize, n: usize, tree: usize) -> [u64; multiproof::MAX_BATCH] {\n    let mut keys = [0u64; multiproof::MAX_BATCH];\n    for j in 0..n {\n        let u = queries[lo + j];\n        let index = if tree == 2 { u / 4 } else { u };\n        keys[j] = (u64::from(index) << 8) | j as u64;\n    }\n    keys\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn sort_batch_keys(",
+      "sha256": "e260ee9fabe1ad1abb3394dc9322033e2bec3c9972c73798ff76a18fdaceb3c1",
+      "body": "fn sort_batch_keys(mut keys: [u64; multiproof::MAX_BATCH], n: usize) -> [u64; multiproof::MAX_BATCH] {\n    for i in 1..n {\n        let mut j = i;\n        while j > 0 && batch_key_at(&keys, j - 1) > batch_key_at(&keys, j) {\n            keys.swap(j - 1, j);\n            j -= 1;\n        }\n    }\n    keys\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn batch_leaf<",
+      "sha256": "33b6355d543fa6f0f38740a0df9eb2f98ed51bde483d882b53400115a7a749d8",
+      "body": "fn batch_leaf<H: Digest32>(hash: H, tree: usize, q: &[u8]) -> [u8; 32] {\n    match tree {\n        0 => {\n            let salt: [u8; 32] = q[608..640].try_into().unwrap();\n            private_leaf_hash_with_digest(hash, merkle::C1_TAG, &q[..480], &salt)\n        }\n        1 => {\n            let salt: [u8; 32] = q[640..672].try_into().unwrap();\n            private_leaf_hash_with_digest(hash, merkle::C2_TAG, &q[480..608], &salt)\n        }\n        _ => {\n            let salt: [u8; 32] = q[800..832].try_into().unwrap();\n            private_leaf_hash_with_digest(hash, 0x72, &q[672..800], &salt)\n        }\n    }\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn same_batch_leaf(",
+      "sha256": "de3a045cea8baadbd3c281d717cd75ecb1745a91d4a1826088660c2a4eb3d328",
+      "body": "fn same_batch_leaf(values: &[[u8; 32]; multiproof::MAX_BATCH], index: usize, leaf: [u8; 32]) -> bool {\n    values[index] == leaf\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn same_batch_index(",
+      "sha256": "724c8a8b71839cf9e47e4b76f92f1711b65edffc14436cc74d72fb33ff1cc829",
+      "body": "fn same_batch_index(values: &[u32; multiproof::MAX_BATCH], index: usize, expected: u32) -> bool {\n    values[index] == expected\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn batch_key_at(",
+      "sha256": "7ef2b5732841fa0b8c626f0b4e9e75989d528f51db5fac44c45aba16303f9ed5",
+      "body": "fn batch_key_at(keys: &[u64; multiproof::MAX_BATCH], index: usize) -> u64 {\n    keys[index]\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "marker": "pub enum Error {",
+      "sha256": "22db69005de3e99f6e4f67471d6ea291154de72a4af7c90edddea22a11de82d6",
+      "body": "pub enum Error {\n    Allocation,\n    RowOrder { expected: u8, actual: u8 },\n    InvalidRow,\n    Tag { row: u8 },\n    Length { row: u8 },\n    NonCanonical { row: u8, value: usize },\n    Boundary { round: usize },\n    Terminal,\n    EqualCirclePoints,\n    TrailingBytes,\n    Public, #[cfg(feature = \"r1p-check\")] ActivePole, // host retry loop only: Lean \u00acNoPole, no detail (LOG D73.4.1)\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "marker": "fn validate_record_fields(",
+      "sha256": "06140bae34dfd9a44117f2710c0d7c049ea7af5207a2093b23d5d223bdac4338",
+      "body": "fn validate_record_fields(row: u8, payload: &[u8]) -> Result<(), Error> {\n    for (value, bytes) in payload.chunks_exact(32).enumerate() {\n        let x = WideExact::from_le_bytes(bytes).ok_or(Error::NonCanonical { row, value })?;\n        if x.c1() != QM31::ZERO {\n            return Err(Error::NonCanonical { row, value });\n        }\n    }\n    Ok(())\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "marker": "pub fn parse_record(",
+      "sha256": "52080617919069a56a8268e243a1e3ba828f6a8d2bf74adae5d408ad2aa0c6b2",
+      "body": "pub fn parse_record(row: u8, record: &[u8]) -> Result<&[u8], Error> {\n    let (tag, size) = row_shape(row).ok_or(Error::InvalidRow)?;\n    if record.len() != 5 + size {\n        return Err(Error::Length { row });\n    }\n    if record[0] != tag {\n        return Err(Error::Tag { row });\n    }\n    if u32::from_le_bytes([record[1], record[2], record[3], record[4]]) as usize != size {\n        return Err(Error::Length { row });\n    }\n    let payload = &record[5..];\n    if row >= 14 {\n        validate_record_fields(row, payload)?;\n    }\n    Ok(payload)\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "marker": "pub struct Prefix<",
+      "sha256": "560464fbf38a33ad1f7852762a525cd5ab37318954a1912cc8efafe9cb59b0fa",
+      "body": "pub struct Prefix<'a> {\n    pub c1_root: &'a [u8; 32],\n    records: [&'a [u8]; 27],\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "marker": "fn parse_record_at<'a>",
+      "sha256": "25a4d06951d9fd60f8386cf2d36f2e167fe599184a9463e4c80aac594ae19db0",
+      "body": "fn parse_record_at<'a>(\n    bytes: &'a [u8],\n    row: u8,\n    offset: usize,\n) -> Result<(&'a [u8], usize), Error> {\n    let length = 5 + row_shape(row).unwrap().1;\n    let framed = bytes\n        .get(offset..offset + length)\n        .ok_or(Error::Length { row })?;\n    parse_record(row, framed)?;\n    Ok((framed, offset + length))\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "marker": "pub fn parse(bytes:",
+      "sha256": "ab59f2431b0de5e5e6feb533d322980b0f54f384df7036b583237fbe6370cdd7",
+      "body": "pub fn parse(bytes: &'a [u8]) -> Result<Self, Error> {\n        if bytes.len() < 32 {\n            return Err(Error::Length { row: 0 });\n        }\n        let c1_root = match bytes[..32].try_into() {\n            Ok(root) => root,\n            Err(_) => return Err(Error::Length { row: 0 }),\n        };\n        let (r0, offset) = parse_record_at(bytes, 0, 32)?;\n        let (r1, offset) = parse_record_at(bytes, 1, offset)?;\n        let (r2, offset) = parse_record_at(bytes, 2, offset)?;\n        let (r3, offset) = parse_record_at(bytes, 3, offset)?;\n        let (r4, offset) = parse_record_at(bytes, 4, offset)?;\n        let (r5, offset) = parse_record_at(bytes, 5, offset)?;\n        let (r6, offset) = parse_record_at(bytes, 6, offset)?;\n        let (r7, offset) = parse_record_at(bytes, 7, offset)?;\n        let (r8, offset) = parse_record_at(bytes, 8, offset)?;\n        let (r9, offset) = parse_record_at(bytes, 9, offset)?;\n        let (r10, offset) = parse_record_at(bytes, 10, offset)?;\n        let (r11, offset) = parse_record_at(bytes, 11, offset)?;\n        let (r12, offset) = parse_record_at(bytes, 12, offset)?;\n        let (r13, offset) = parse_record_at(bytes, 13, offset)?;\n        let (r14, offset) = parse_record_at(bytes, 14, offset)?;\n        let (r15, offset) = parse_record_at(bytes, 15, offset)?;\n        let (r16, offset) = parse_record_at(bytes, 16, offset)?;\n        let (r17, offset) = parse_record_at(bytes, 17, offset)?;\n        let (r18, offset) = parse_record_at(bytes, 18, offset)?;\n        let (r19, offset) = parse_record_at(bytes, 19, offset)?;\n        let (r20, offset) = parse_record_at(bytes, 20, offset)?;\n        let (r21, offset) = parse_record_at(bytes, 21, offset)?;\n        let (r22, offset) = parse_record_at(bytes, 22, offset)?;\n        let (r23, offset) = parse_record_at(bytes, 23, offset)?;\n        let (r24, offset) = parse_record_at(bytes, 24, offset)?;\n        let (r25, offset) = parse_record_at(bytes, 25, offset)?;\n        let (r26, offset) = parse_record_at(bytes, 26, offset)?;\n        if offset != bytes.len() {\n            return Err(Error::TrailingBytes);\n        }\n        Ok(Self {\n            c1_root,\n            records: [\n                r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17,\n                r18, r19, r20, r21, r22, r23, r24, r25, r26,\n            ],\n        })\n    }"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "marker": "pub fn record(&self,",
+      "sha256": "f3303392ed3c0371798bdd0cdc074e4ffd9a3366e7c099e77504a700df177131",
+      "body": "pub fn record(&self, row: u8) -> Result<&'a [u8], Error> {\n        if row >= 27 {\n            return Err(Error::InvalidRow);\n        }\n        Ok(self.records[row as usize])\n    }"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn opening(",
+      "sha256": "f1553150d5cc530cac778ac2f8dbda9308dd3fd9760312eaad9d91c019f1b3f5",
+      "body": "fn opening(proof: &[u8], i: usize) -> &[u8] {\n    let at = compact::OFF_OPENINGS + i * OPENING;\n    &proof[at..at + OPENING]\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "pub fn parse_shape(",
+      "sha256": "8f7e56683909f82a98b4beb729c3d1da63d56093440500b3bf10be000be2dc0f",
+      "body": "pub fn parse_shape(proof: &[u8]) -> Result<Variant, Error> {\n    if proof.len() != compact::PROOF_BYTES\n        || &proof[..8] != compact::MAGIC\n        || proof[8] != Variant::S2.tag()\n        || proof[9..16].iter().any(|&x| x != 0)\n    {\n        return Err(Error::Parse);\n    }\n    Ok(Variant::S2)\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "marker": "fn canonical_scan(",
+      "sha256": "ae1ce6a0063889b38c809344573e72258f02c8fba2c45c04e94dd46414f4fe21",
+      "body": "fn canonical_scan(proof: &[u8]) -> Result<(), Error> {\n    compact::check_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE])?;\n    echeck(&proof[compact::OFF_INACTIVE..compact::OFF_INACTIVE + 32], false)?;\n    echeck(&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT], false)?;\n    echeck(&proof[compact::OFF_ROUND1..compact::OFF_OPENINGS], false)?;\n    for i in 0..22 {\n        let q = opening(proof, i);\n        for s in 0..4 {\n            for l in 0..26 {\n                M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;\n            }\n            K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;\n            for l in 0..2 {\n                K::from_le_bytes(&q[480 + s * 32 + l * 16..480 + s * 32 + l * 16 + 16]).ok_or(Error::Parse)?;\n            }\n        }\n        echeck(&q[672..800], false)?;\n    }\n    Ok(())\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "marker": "fn echeck(",
+      "sha256": "7048dc298b2770e6daad4f46dc16bbb4911e7c2cd87e9784c07b3173e713b3f8",
+      "body": "fn echeck(b:&[u8],k:bool)->Result<(),Error> {\n    for c in b.chunks_exact(32) {let x=E::from_le_bytes(c).ok_or(Error::Parse)?;if k&&x.c1()!=K::ZERO {return Err(Error::Parse);}}\n    Ok(())\n}"
+    }
+  ],
+  "substitutions": [
+    "compact.rs: verifier::SEMANTIC_BYTES replaced by its pinned literal 13_831",
+    "multiproof verifier prefix: private well_formed and root_matches exposed pub(crate); bodies unchanged",
+    "batch helpers: private functions exposed pub(crate)",
+    "sort atomic step: exact let-j/while guard and swap/decrement body; while becomes one if; return continuation flag, owned keys and cursor",
+    "adoption_level: factor each exact binary_group body into the separately verified source_row wrapper; same i<n guard, chronological scratch/cursor update and n=w; return oracle ordinal/coordinate observation and use arbitrary independent per-call replies",
+    "binary_level: exact verify_in_place outer level body; fix Arity::Two, n/at become scalar references, success returns true, rejection scratch and local n retained",
+    "leaf_batch_iteration: exact candidate batch_tree key/read/hash/duplicate/write iteration; pass the selected opening as q and return its selected ordinal, cursor, event and count; hash replaced only by its separately verified observer wrapper; error/continue become the corresponding bool and poststate",
+    "node-count group: fix Arity::Two; index_at(&level,...) becomes index_at(level,...) for the mutable-reference wrapper; exact parent/group/write/increment order",
+    "binary group: extract Two match arm; i/at/w become mutable scalar references; false return preserved; exact parent/write order retained",
+    "wire validate_record_fields: expose pub(crate) in the proof copy; body unchanged",
+    "wire Error: add Debug derive for proof-crate test diagnostics only",
+    "parser: isolated Error/Variant carriers retain Parse and tag=2; wire validation and Prefix functions copied verbatim",
+    "leaf insertion: d becomes scalar reference; Merkle error becomes false and continue becomes true; exact writes retained"
+  ],
+  "whole_prefixes": {
+    "compact.rs": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+    "multiproof.rs": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3"
+  },
+  "outputs": {
+    "tools/multiproof-cone-20261021/src/frozen.rs": "f59d1db5d1816b8f2c988c1dbae7f0ba022bf0fe5feb35a23cd2ea1eed5e1ef5",
+    "tools/multiproof-cone-20261021/src/adoption_level.rs": "18dc407e6666e93a1d93fb3f2369c32d9cebea167d5f548987d32cf0c68defcd"
+  }
+}

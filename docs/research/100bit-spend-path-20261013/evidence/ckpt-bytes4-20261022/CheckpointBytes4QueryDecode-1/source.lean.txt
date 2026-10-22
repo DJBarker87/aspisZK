@@ -1,0 +1,51 @@
+import CheckpointBytes4QueryWord
+
+set_option autoImplicit false
+namespace AspisR1.CheckpointBytes4QueryDecode
+open Aeneas Aeneas.Std Result
+open AspisR1Stage2 CheckpointBytes4RawFields
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep OraclePortCompactDraft
+open MultiproofConeCanonical OraclePortCkptAbiSourceFields
+
+/-- The imported four-byte primitive has exactly C5's little-endian value. -/
+theorem u32_value (b : Array U8 4#usize) :
+    (core.num.U32.from_le_bytes b).val = little (bytesOf b.val) := by
+  change (BitVec.fromLEBytes (b.val.map U8.bv)).toNat = _
+  rw [CheckpointBytes4QueryWord.from_le_nat]
+  simp only [little,bytesOf,List.foldr_map,AspisV8R19.SqueezeOracleBridge.decodeByte]
+  rfl
+
+/-- Every executed physical query is tied to its own four-byte slice. -/
+theorem query_values (reserved : Bool) (r out : verifier.Reader) (qs : List U32)
+    (reads : QueryReads (CheckpointBytes4Ops.ops reserved) r qs out)
+    (bound : r.at.val+qs.length*4 ≤ r.bytes.val.length) :
+    ∀ j : Fin qs.length,
+      little (slice (bytesOf r.bytes.val) (r.at.val+j.val*4) 4) =
+        (qs[j.val]'j.isLt).val := by
+  induction reads with
+  | nil r => exact fun j => Fin.elim0 j
+  | @cons r next last b q qs first decode tail ih =>
+    obtain ⟨contents,cursor,backing⟩ := raw_success 4#usize r next b (by
+      simp only [List.length_cons] at bound
+      change r.at.val+4 ≤ r.bytes.val.length
+      omega) first
+    change next.at.val = r.at.val+4 at cursor
+    have nextBound : next.at.val+qs.length*4 ≤ next.bytes.val.length := by
+      rw [backing,cursor]
+      simp only [List.length_cons] at bound
+      omega
+    intro j
+    refine Fin.cases ?_ (fun k => ?_) j
+    · have eq : core.num.U32.from_le_bytes b = q := Result.ok.inj decode
+      have h := u32_value b
+      rw [eq,contents] at h
+      simpa only [Fin.val_zero,Nat.zero_mul,Nat.add_zero,List.getElem_cons_zero,
+        slice,bytesOf,List.map_drop,List.map_take] using h.symm
+    · have h := ih nextBound k
+      rw [backing,cursor] at h
+      simpa only [Fin.val_succ,List.getElem_cons_succ,
+        show r.at.val+(k.val+1)*4 = r.at.val+4+k.val*4 by omega] using h
+
+#print axioms u32_value
+#print axioms query_values
+end AspisR1.CheckpointBytes4QueryDecode

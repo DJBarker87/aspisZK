@@ -1,0 +1,51 @@
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinFinishExact.lean:45:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d - e ≤ 0
+  c ≥ 0
+  c - d ≤ -1
+  b ≥ 0
+  b - c ≤ 0
+  a ≥ 0
+  a - d ≥ 0
+where
+ a := ↑(alloc.vec.Vec.length raw)
+ b := ↑(↑old).length
+ c := ↑j
+ d := if ↑(alloc.vec.Vec.length old) ≤ ↑(↑raw).length then ↑(alloc.vec.Vec.length old) else ↑(↑raw).length
+ e := ↑(↑raw).length
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinFinishExact.lean:65:121: error: Tactic `decide` failed for proposition
+  Usize.max < 2 ^ UScalarTy.Usize.numBits
+because its `Decidable` instance
+  Usize.max.decLt (2 ^ UScalarTy.Usize.numBits)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, `Nat.decLe`, and `Nat.decLt`, reduction got stuck at the `Decidable` instance
+  match Usize.max.succ.ble (2 ^ UScalarTy.Usize.numBits), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinFinishExact.lean:65:42: error: unsolved goals
+raw : Raw
+old : Weights
+terms : Usize
+lengths : alloc.vec.Vec.length old ≤ alloc.vec.Vec.length raw
+out : FinishSlice
+run : BatchedWeights.finish { raw := raw, terms := terms } (toSlice old) = ok out
+shape : out = prefixWrite (valueAt { raw := raw, terms := terms }) 0 (↑(Slice.len (toSlice old))) (toSlice old)
+cells :
+  ∀ (i : Usize),
+    ↑i < ↑(Slice.len (toSlice old)) →
+      Slice.index_usize out i = ok (valueAt { raw := raw, terms := terms } ↑i) ∧
+        F.value { raw := raw, terms := terms } i = ok (valueAt { raw := raw, terms := terms } ↑i)
+len : (↑out).length = alloc.vec.Vec.length old
+j : ℕ
+hj : j < alloc.vec.Vec.length old
+this : (↑old).length ≤ Usize.max
+hb : Usize.max < 2 ^ UScalarTy.Usize.numBits
+⊢ j < 2 ^ UScalarTy.Usize.numBits
+'S8JoinFinishExact.prefix_length' depends on axioms: [propext]
+'S8JoinFinishExact.reference_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'S8JoinFinishExact.mutable_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

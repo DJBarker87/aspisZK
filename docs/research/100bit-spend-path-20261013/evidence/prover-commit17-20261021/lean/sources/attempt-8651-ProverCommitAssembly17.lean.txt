@@ -1,0 +1,75 @@
+import AspisR1ProverAssembly17.Funs
+/-! The outer owned Rust assembly, extracted as one source function. Callees
+remain symbolic, so proof checking never expands 1024-cell recurrences.
+Nonce reservation, entropy derivation and source borrowed-loop identification
+are outside this function and are not asserted here. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitAssembly17
+open Aeneas Aeneas.Std Result AspisR1ProverAssembly17
+abbrev State := prover_commit_reference.State
+abbrev Error := state_only_hiding.StateOnlyMaskBuildError
+abbrev Material := prover_commit_reference.OwnedMaterial17
+abbrev Hash := Slice (Slice U8) → Result (Array U8 32#usize)
+abbrev Values := alloc.vec.Vec aspis_core.field.M31
+abbrev QValues := alloc.vec.Vec aspis_core.field.QM31
+abbrev Output := Result (core.result.Result Material Error × State)
+
+/-- Continue only on success and pass on the exact state at that boundary.
+This includes both scalar errors and Aeneas failure/divergence. -/
+def thenState {α : Type}
+    (run : Result (core.result.Result Unit Error × α × State))
+    (next : α → State → Output) : Output := do
+  let (status, values, state) ← run
+  match status with
+  | .Err e => ok (.Err e, state)
+  | .Ok () => next values state
+
+def thenBalance (run : Result (core.result.Result Unit Error × QValues))
+    (state : State) (next : QValues → Output) : Output := do
+  let (status, values) ← run
+  match status with
+  | .Err e => ok (.Err e, state)
+  | .Ok () => next values
+
+def stages (hash : Hash) (domain : Slice U8) (state : State) (cells : Usize)
+    (c1 : Values) (columns : alloc.vec.Vec Values) (g padding : QValues)
+    (dependent : Usize) (active : Array Bool 1024#usize) (nonce : Array U8 32#usize) : Output :=
+  thenState (prover_commit_reference.collect_m31_owned hash domain state cells c1)
+    fun c1 afterC1 =>
+  thenState (prover_commit_reference.material_columns_owned hash domain afterC1 columns
+    0#usize 10#usize dependent active) fun columns afterColumns =>
+  thenState (prover_commit_reference.collect_qm31_owned hash domain afterColumns 1024#usize g)
+    fun g afterG =>
+  thenBalance (prover_commit_reference.balance_qm31_owned g dependent active) afterG fun g =>
+  thenState (prover_commit_reference.material_padding_owned hash domain afterG padding
+    0#usize dependent active) fun padding finalState =>
+  thenBalance (prover_commit_reference.balance_qm31_owned padding dependent active)
+    finalState fun padding =>
+  ok (.Ok ⟨c1, columns, g, padding, nonce⟩, finalState)
+
+/-- Exact error-preserving composition of the extracted owned Rust function.
+Only the small outer function is reduced; every recursive callee stays named. -/
+theorem extracted_stages (hash : Hash) (domain : Slice U8) (state : State) (cells : Usize)
+    (c1 : Values) (columns : alloc.vec.Vec Values) (g padding : QValues)
+    (dependent : Usize) (active : Array Bool 1024#usize) (nonce : Array U8 32#usize) :
+    prover_commit_reference.assemble_owned17 hash domain state cells c1 columns g padding
+      dependent active nonce =
+    stages hash domain state cells c1 columns g padding dependent active nonce := by
+  rfl
+
+/-- Even first-stage rejection retains the advanced state and publishes no
+partial material. This property is about the extracted reference's return. -/
+theorem first_stage_error (hash : Hash) (domain : Slice U8) (state after : State)
+    (cells : Usize) (c1 partialC1 : Values) (columns : alloc.vec.Vec Values)
+    (g padding : QValues) (dependent : Usize) (active : Array Bool 1024#usize)
+    (nonce : Array U8 32#usize) (error : Error)
+    (failed : prover_commit_reference.collect_m31_owned hash domain state cells c1 =
+      ok (.Err error, partialC1, after)) :
+    prover_commit_reference.assemble_owned17 hash domain state cells c1 columns g padding
+      dependent active nonce = ok (.Err error, after) := by
+  rw [extracted_stages]
+  simp only [stages, failed, thenState, bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
+
+#print axioms extracted_stages
+#print axioms first_stage_error
+end R1Z.ProverCommitAssembly17

@@ -1,0 +1,25 @@
+import Aeneas
+import R1RetainedFieldByteCodec
+/-! Exact backend u32 little-endian bytes, in the retained codec carrier. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitWordBytes47
+open Aeneas Aeneas.Std AspisR1.RetainedFieldByteCodec
+
+def rawByte (x : U8) : AspisR1.RetainedFieldByteCodec.Byte := x.bv.toFin
+def rawWord (x : U32) : RawWord := x.bv.toFin
+
+theorem word (x : U32) : (core.num.U32.to_le_bytes x).val.map rawByte =
+    List.ofFn (encodeWordLE (rawWord x)) := by
+  apply List.ext_getElem
+  · simp [core.num.U32.to_le_bytes,BitVec.toLEBytes]
+  · intro i hi hj
+    have hi4 : i<4 := by simpa [core.num.U32.to_le_bytes,BitVec.toLEBytes] using hi
+    have cases4 : i=0 ∨ i=1 ∨ i=2 ∨ i=3 := by omega
+    rcases cases4 with rfl | rfl | rfl | rfl <;>
+      apply Fin.ext <;>
+      simp [encodeWordLE,rawByte,rawWord,core.num.U32.to_le_bytes,
+        BitVec.toLEBytes,BitVec.toNat_setWidth,BitVec.toNat_ushiftRight,
+        Nat.shiftRight_eq_div_pow] <;> dsimp <;> omega
+
+#print axioms word
+end R1Z.ProverCommitWordBytes47

@@ -1,0 +1,80 @@
+import R1Z.ProverCommitPublicBinding40
+
+/-! Exhaustive classification of the frozen commitment address grammar.
+Derived private inputs remain in the existing protocol-ROM obligations;
+they are not misclassified as public merely because raw OS bytes are absent. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitHashClass40
+open R0Z.FsStatement LensR1 TranscriptR1 GamesR1PBin LayoutR1PBin ProverCommitPublicBinding40
+
+inductive Kind where
+  | publicOnly | rawField | rawLeaf | privateDerived
+  deriving DecidableEq
+
+def classify {e1 e2 : Nat} : CPos e1 e2 → Kind
+  | .inr (.inr (.inl _)) => .publicOnly
+  | .inr (.inr (.inr (.inl i))) => if i.val = 2 then .privateDerived else .rawField
+  | .inr (.inr (.inr (.inr (.inl _)))) => .rawLeaf
+  | _ => .privateDerived
+
+/-- Both binding inputs are preserved for arbitrary seeds, when their public
+nonce, statement digest and earlier public binding answer are preserved. -/
+theorem public_preserved {e1 e2 : Nat} (pub : List UInt8) (tag : UInt8)
+    (lv lv' : Fin 3 → Fib → List UInt8) (digest : OracleAnswer)
+    (rest rest' : RIdx → OracleAnswer) (nonce : NZ) (left right : Private)
+    (sameBinding : rest (qBind 0) = rest' (qBind 0)) (p : CPos e1 e2)
+    (isPublic : classify p = .publicOnly) :
+    gram pub tag lv (publicSec nonce left) digest rest p =
+      gram pub tag lv' (publicSec nonce right) digest rest' p := by
+  cases p with
+  | inl t => cases isPublic
+  | inr p =>
+    cases p with
+    | inl ex => cases ex <;> cases isPublic
+    | inr p =>
+      cases p with
+      | inl b => simp only [gram,publicSec,Fin.cases_zero]; rw [sameBinding]
+      | inr p =>
+        cases p with
+        | inl i =>
+          by_cases h : i.val = 2 <;> simp [classify,h] at isPublic
+        | inr p => cases p with
+          | inl salt => cases isPublic
+          | inr p => cases p <;> cases isPublic
+
+/-- Every raw-field derivation frame has precisely the private entropy suffix.
+The two source derivation domains consume the same seed, so they incur one
+suffix-guess event, rather than one charge per hash invocation. -/
+theorem field_suffix {e1 e2 : Nat} (pub : List UInt8) (tag : UInt8)
+    (lv : Fin 3 → Fib → List UInt8) (sec : SecP) (digest : OracleAnswer)
+    (rest : RIdx → OracleAnswer) (i : Fin 3) (raw : i.val ≠ 2) :
+    ProverCommitPrivateMemo40.point
+      (gram pub tag lv sec digest rest
+        (Sum.inr (Sum.inr (Sum.inr (Sum.inl i))) : CPos e1 e2)) (sec 1).val := by
+  by_cases h : i.val = 0
+  · simpa only [gram,h,if_true,ans] using
+      ProverCommitPrivateMemo40.source_suffix
+        (dMaskSeed ++ ans (rest (qBind 0)) ++ ctxEnc digest (sec 0).val) (sec 1).val
+  · have hi : i.val = 1 := by omega
+    simpa only [gram,h,hi,if_false,if_true,ans] using
+      ProverCommitPrivateMemo40.source_suffix
+        (dSourceSeed ++ ans (rest (qBind 0)) ++ ctxEnc digest (sec 0).val) (sec 1).val
+
+/-- Includes all three trees and arbitrary indices; no leaf universe is
+normalised or enumerated. -/
+theorem leaf_suffix {e1 e2 : Nat} (pub : List UInt8) (tag : UInt8)
+    (lv : Fin 3 → Fib → List UInt8) (sec : SecP) (digest : OracleAnswer)
+    (rest : RIdx → OracleAnswer) (t : Fin 3) (u : Fib) :
+    ProverCommitPrivateMemo40.point
+      (gram pub tag lv sec digest rest
+        (Sum.inr (Sum.inr (Sum.inr (Sum.inr (Sum.inl (t,u))))) : CPos e1 e2))
+      (sec 2).val := by
+  simpa only [gram,ans] using ProverCommitPrivateMemo40.source_suffix
+    (dLeafSalt ++ ans (rest (qBind 1)) ++ ans (sec 0).val ++ [treeTag t] ++ le32 u.val)
+    (sec 2).val
+
+#print axioms public_preserved
+#print axioms field_suffix
+#print axioms leaf_suffix
+end R1Z.ProverCommitHashClass40

@@ -1,0 +1,128 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:31:42: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+row : Usize
+bound : ↑row < 25
+one : ↑1#usize = 1
+⊢ 25 < UScalar.size UScalarTy.Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:70:21: error: unsolved goals
+case succ.ok.ok.ok.Ok.fail
+H : Type
+hash : aspis_core.digest.Digest32 H
+records : Records
+n : ℕ
+ih :
+  ∀ (row : Usize) (state : State H) (sem : Values),
+    ↑row + n = 25 → r1_wire.semantic20.rows hash state records row sem = finite hash records row n state sem
+row : Usize
+state : State H
+sem : Values
+count : ↑row + (n + 1) = 25
+more : row ≠ 25#usize
+value✝ : Bytes
+hi : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Bytes) records row = ok value✝
+record : alloc.vec.Vec U8
+hc : alloc.vec.CloneVec.clone core.clone.CloneU8 value✝ = ok record
+next : r1_wire.SemanticTranscript H
+value : aspis_core.field.QM31
+hs :
+  r1_wire.semantic20.semantic hash state (UScalar.cast UScalarTy.U8 row) record = ok (core.result.Result.Ok value, next)
+e : Error
+hu : Array.update sem row value = fail e
+⊢ (do
+      let sem1 ← Array.update sem row value
+      r1_wire.semantic20.rows hash next records (core.num.Usize.wrapping_add row 1#usize) sem1) =
+    do
+    let sem ← Array.update sem row value
+    finite hash records (row.wrapping_add 1#usize) n next sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:71:18: error: unsolved goals
+case succ.ok.ok.ok.Ok.div
+H : Type
+hash : aspis_core.digest.Digest32 H
+records : Records
+n : ℕ
+ih :
+  ∀ (row : Usize) (state : State H) (sem : Values),
+    ↑row + n = 25 → r1_wire.semantic20.rows hash state records row sem = finite hash records row n state sem
+row : Usize
+state : State H
+sem : Values
+count : ↑row + (n + 1) = 25
+more : row ≠ 25#usize
+value✝ : Bytes
+hi : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Bytes) records row = ok value✝
+record : alloc.vec.Vec U8
+hc : alloc.vec.CloneVec.clone core.clone.CloneU8 value✝ = ok record
+next : r1_wire.SemanticTranscript H
+value : aspis_core.field.QM31
+hs :
+  r1_wire.semantic20.semantic hash state (UScalar.cast UScalarTy.U8 row) record = ok (core.result.Result.Ok value, next)
+hu : Array.update sem row value = div
+⊢ (do
+      let sem1 ← Array.update sem row value
+      r1_wire.semantic20.rows hash next records (core.num.Usize.wrapping_add row 1#usize) sem1) =
+    do
+    let sem ← Array.update sem row value
+    finite hash records (row.wrapping_add 1#usize) n next sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:74:14: error: Type mismatch
+  ih (row.wrapping_add 1#usize) next after
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a + n = 25)
+          (increment row (Decidable.byContradiction fun a => extracted_finite._proof_8 n row count a))))
+      (Decidable.byContradiction fun a => extracted_finite._proof_9 n row count a))
+has type
+  r1_wire.semantic20.rows hash next records (row.wrapping_add 1#usize) after =
+    finite hash records (row.wrapping_add 1#usize) n next after
+but is expected to have type
+  (do
+      let sem1 ← Array.update sem row value
+      r1_wire.semantic20.rows hash next records (core.num.Usize.wrapping_add row 1#usize) sem1) =
+    do
+    let sem ← Array.update sem row value
+    finite hash records (row.wrapping_add 1#usize) n next sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:65:32: warning: This simp argument is unused:
+  Aeneas.Std.uncurry_apply_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵_̵a̵p̵p̵l̵y̵_̵p̵a̵i̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:70:35: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:71:32: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:73:25: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSemantic20.lean:73:36: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵l̵i̵f̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitSemantic20.increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSemantic20.extracted_finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1SimSemantic20.r1_wire.semantic20.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1SimSemantic20.r1_wire.semantic20.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1SimSemantic20.r1_wire.fields20.validate' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

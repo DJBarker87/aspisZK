@@ -1,0 +1,137 @@
+#![allow(unexpected_cfgs,non_snake_case,dead_code,static_mut_refs)]
+use std::ops::{Deref,DerefMut};
+#[derive(Clone,Copy)]
+struct Zeroizing<T>(T);
+impl<T> Zeroizing<T> {fn new(v:T)->Self {Self(v)}}
+impl<T> Deref for Zeroizing<T> {type Target=T;fn deref(&self)->&T {&self.0}}
+impl<T> DerefMut for Zeroizing<T> {fn deref_mut(&mut self)->&mut T {&mut self.0}}
+impl<const N:usize> AsRef<[u8]> for Zeroizing<[u8;N]> {fn as_ref(&self)->&[u8] {&self.0}}
+impl<const N:usize> AsMut<[u8]> for Zeroizing<[u8;N]> {fn as_mut(&mut self)->&mut [u8] {&mut self.0}}
+impl<const N:usize> Zeroizing<[u8;N]> {fn zeroize(&mut self) {self.0=[0;N];}}
+mod io {
+ #[derive(Clone,Copy,Debug,PartialEq,Eq)] pub enum ErrorKind {AlreadyExists,Other}
+ #[derive(Clone,Copy,Debug,PartialEq,Eq)] pub struct Error(pub ErrorKind);
+ impl Error {pub fn kind(&self)->ErrorKind {self.0}}
+ pub type Result<T> = core::result::Result<T,Error>;
+}
+#[derive(Clone,Copy,Debug,PartialEq,Eq)]
+enum Kind {Create,Magic,Digest,Nonce,FileSync,DirectoryOpen,DirectorySync,Rng}
+#[derive(Clone,Copy)]
+struct Environment {outcomes:[u8;16],calls:usize,trace:[Kind;16],created:bool,draws:usize,raw:[[u8;3];16],derived:usize,build_fail:bool}
+static mut ENV:Option<Environment>=None;
+fn with_env<T>(f:impl FnOnce(&mut Environment)->T)->T {unsafe {f(ENV.as_mut().unwrap())}}
+fn ask(kind:Kind)->io::Result<()> {
+ with_env(|e| {let i=e.calls;e.trace[i]=kind;e.calls+=1;
+ match e.outcomes[i] {0=>Ok(()),1=>Err(io::Error(io::ErrorKind::AlreadyExists)),_=>Err(io::Error(io::ErrorKind::Other))}})
+}
+struct OpenOptions;
+impl OpenOptions {
+ fn new()->Self {Self} fn write(&mut self,_:bool)->&mut Self {self} fn create_new(&mut self,_:bool)->&mut Self {self}
+ fn mode(&mut self,_:u32)->&mut Self {self}
+ fn open(&self,_:[u8;32])->io::Result<File> {ask(Kind::Create)?;with_env(|e|e.created=true);Ok(File{writes:0})}
+}
+struct File {writes:usize}
+impl File {
+ fn write_all(&mut self,_:&[u8])->io::Result<()> {let kind=[Kind::Magic,Kind::Digest,Kind::Nonce][self.writes];self.writes+=1;ask(kind)}
+ fn sync_all(&self)->io::Result<()> {ask(Kind::FileSync)}
+}
+fn sync_directory(_:&())->io::Result<()> {ask(Kind::DirectoryOpen)?;ask(Kind::DirectorySync)}
+const RESERVATION_MAGIC:&[u8]=b"Aspis reserve";
+struct DurableStateOnlyMaskNonceStore {directory:(),last_error:Option<io::ErrorKind>}
+impl DurableStateOnlyMaskNonceStore {fn reservation_path(&self,nonce:&[u8;32])->[u8;32] {*nonce}}
+trait StateOnlyMaskNonceStore {fn reserve(&mut self,statement_digest:[u8;32],mask_nonce:[u8;32])->bool;}
+include!("native-reserve.rs");
+const ENTROPY_RETRY_LIMIT:usize=16;
+#[derive(Clone,Copy,Debug,PartialEq,Eq)]
+enum StateOnlyAttemptEntropyError {Os,RepeatedZeroBlock}
+impl From<io::Error> for StateOnlyAttemptEntropyError {fn from(_:io::Error)->Self {Self::Os}}
+struct StateOnlyAttemptSecrets {mask_nonce:[u8;32],field_mask_entropy:Zeroizing<[u8;32]>,leaf_salt_seed:Zeroizing<[u8;32]>}
+mod getrandom {
+ use super::*;
+ pub fn fill(out:&mut [u8])->io::Result<()> {
+  ask(Kind::Rng)?;
+  let raw=with_env(|e| {let r=e.raw[e.draws];e.draws+=1;r});
+  // Arbitrary first byte, arbitrary zero/nonzero status in all three blocks.
+  // These compressed blocks are a bounded control gate, not the E1 law.
+  out[0]=raw[0];out[32]=raw[1];out[64]=raw[2];Ok(())
+ }
+}
+include!("native-generate.rs");
+#[derive(Clone,Copy)]
+struct StateOnlyHidingContext {statement_digest:[u8;32],mask_nonce:[u8;32],mask_layout_fingerprint:u64,layout_factor_fingerprint:u64}
+impl StateOnlyHidingContext {fn encode(&self)->[u8;1] {[0]}}
+const PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1:u64=1;
+const PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1:u64=2;
+const POOL_V1_SOURCE_SEED_DOMAIN:&[u8]=b"seed";
+type HashFn=fn(&[&[u8]])->[u8;32];
+#[derive(Debug,PartialEq,Eq)]
+enum StateOnlyMaskBuildError {Layout,ReusedMaskNonce,Sample}
+struct StateOnlyMaskMaterial;
+struct ReservedStateOnlyAttemptSecrets {mask_nonce:[u8;32],precommit_binding:[u8;32],reserved_context:StateOnlyHidingContext,leaf_salt_seed:Zeroizing<[u8;32]>,source_mask_seed:Zeroizing<[u8;32]>}
+struct PreReservedNonce {statement_digest:[u8;32],mask_nonce:[u8;32],consumed:bool}
+fn build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref(_:HashFn,_:[u8;32],_:StateOnlyHidingContext,_:&Zeroizing<[u8;32]>,pre:&mut PreReservedNonce)->Result<StateOnlyMaskMaterial,StateOnlyMaskBuildError> {
+ with_env(|e| {assert!(e.created);e.derived+=1;if e.build_fail {Err(StateOnlyMaskBuildError::Sample)} else {pre.consumed=true;Ok(StateOnlyMaskMaterial)}})
+}
+include!("native-build.rs");
+#[cfg(kani)]
+mod proofs {
+ use super::*;
+ fn setup()->Environment {Environment{outcomes:kani::any(),calls:0,trace:[Kind::Rng;16],created:false,draws:0,raw:kani::any(),derived:0,build_fail:kani::any()}}
+ fn install(e:Environment) {unsafe{ENV=Some(e)}}
+ fn read()->Environment {with_env(|e|*e)}
+ fn expected(e:Environment)->(io::Result<bool>,Environment) {
+  install(e);
+  let result=(|| {match ask(Kind::Create) {Ok(())=>with_env(|e|e.created=true),Err(x) if x.kind()==io::ErrorKind::AlreadyExists=>return Ok(false),Err(x)=>return Err(x)}
+   for kind in [Kind::Magic,Kind::Digest,Kind::Nonce,Kind::FileSync,Kind::DirectoryOpen,Kind::DirectorySync] {ask(kind)?;}
+   Ok(true)})();(result,read())
+ }
+ fn same(a:Environment,b:Environment) {
+  assert_eq!(a.calls,b.calls);assert_eq!(a.created,b.created);assert_eq!(a.draws,b.draws);assert_eq!(a.derived,b.derived);
+  for i in 0..16 {assert_eq!(a.trace[i],b.trace[i]);assert_eq!(a.outcomes[i],b.outcomes[i]);}
+ }
+ #[kani::proof] #[kani::unwind(18)]
+ fn reservation_all_paths() {
+  let e=setup();install(e);
+  let mut store=DurableStateOnlyMaskNonceStore{directory:(),last_error:Some(io::ErrorKind::Other)};
+  let digest:[u8;32]=kani::any();let nonce:[u8;32]=kani::any();
+  let result=store.reserve_fallible(digest,nonce);let after=read();
+  let (model,final_state)=expected(e);assert_eq!(result,model);same(after,final_state);assert_eq!(store.last_error,None);
+  assert_eq!(after.created,e.outcomes[0]==0);
+  install(e);let mut store=DurableStateOnlyMaskNonceStore{directory:(),last_error:None};
+  let accepted=store.reserve(digest,nonce);same(read(),after);
+  match result {Ok(v)=>{assert_eq!(accepted,v);assert_eq!(store.last_error,None)},Err(err)=>{assert!(!accepted);assert_eq!(store.last_error,Some(err.kind()))}}
+ }
+ #[kani::proof] #[kani::unwind(18)]
+ fn reservation_bytes_blind() {
+  let e=setup();install(e);let mut a=DurableStateOnlyMaskNonceStore{directory:(),last_error:None};
+  let ra=a.reserve_fallible(kani::any(),kani::any());let sa=read();
+  install(e);let mut b=DurableStateOnlyMaskNonceStore{directory:(),last_error:None};
+  let rb=b.reserve_fallible(kani::any(),kani::any());let sb=read();
+  assert_eq!(ra,rb);same(sa,sb);
+ }
+ #[kani::proof] #[kani::unwind(100)]
+ fn generate_failure_paths() {
+  let mut e=setup();let fail:usize=kani::any();kani::assume(fail<16);
+  for i in 0..16 {e.outcomes[i]=if i==fail {2}else{0};e.raw[i]=[0;3];}
+  install(e);assert!(matches!(StateOnlyAttemptSecrets::generate(),Err(StateOnlyAttemptEntropyError::Os)));
+  let after=read();assert_eq!(after.calls,fail+1);assert_eq!(after.draws,fail);assert!(!after.created);assert_eq!(after.derived,0);
+ }
+ #[kani::proof] #[kani::unwind(100)]
+ fn generate_zero_exhaustion() {
+  let mut e=setup();e.outcomes=[0;16];e.raw=[[0;3];16];install(e);
+  assert!(matches!(StateOnlyAttemptSecrets::generate(),Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)));
+  let after=read();assert_eq!(after.calls,16);assert_eq!(after.draws,16);assert!(!after.created);
+ }
+ #[kani::proof] #[kani::unwind(100)]
+ fn build_reserves_before_derivation() {
+  let e=setup();install(e);let nonce:[u8;32]=kani::any();
+  let secrets=StateOnlyAttemptSecrets{mask_nonce:nonce,field_mask_entropy:Zeroizing::new(kani::any()),leaf_salt_seed:Zeroizing::new(kani::any())};
+  let context=StateOnlyHidingContext{mask_nonce:nonce,statement_digest:kani::any(),mask_layout_fingerprint:1,layout_factor_fingerprint:2};
+  let mut store=DurableStateOnlyMaskNonceStore{directory:(),last_error:None};
+  let result=secrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1(|_|[1;32],kani::any(),context,&mut store);
+  let after=read();let success=(0..7).all(|i|e.outcomes[i]==0);
+  assert_eq!(after.derived,if success {1}else{0});assert_eq!(after.created,e.outcomes[0]==0);
+  if !success {assert!(matches!(result,Err(StateOnlyMaskBuildError::ReusedMaskNonce)));}
+  if success && e.build_fail {assert!(matches!(result,Err(StateOnlyMaskBuildError::Sample)));assert!(after.created);}
+ }
+}

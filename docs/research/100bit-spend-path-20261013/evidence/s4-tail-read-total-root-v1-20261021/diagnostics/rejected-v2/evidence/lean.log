@@ -1,0 +1,67 @@
+/tmp/root-s4-tail-read-total-v2-20261021/sources/S4TailReadTotalRootV1.lean:81:67: error: unexpected identifier; expected '}'
+/tmp/root-s4-tail-read-total-v2-20261021/sources/S4TailReadTotalRootV1.lean:109:65: error: unsolved goals
+ops : Ops
+a : Std.Array Std.U8 608#usize
+g : Std.Array Wide 29#usize
+slot term : Usize
+iter iter' : Range
+old next : Tail
+r : ReadWitness a g slot term
+q : QM
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some term, iter')
+hp : ops.qm31FromBytes r.bytes = ok (some q)
+hpush : ops.ebyKPush old r.coefficient q = ok (core.result.Result.Ok (), next)
+⊢ (do
+      let s ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := r.offset, «end» := r.finish } a.to_slice
+      let o1 ← ops.qm31FromBytes s
+      let q ←
+        match o1 with
+          | some x => ok x
+          | none => fail Error.panic
+      let (r, tail1) ← ops.ebyKPush old r.coefficient q
+      match r with
+        | core.result.Result.Ok x => ok x
+        | core.result.Result.Err a => fail Error.panic
+      ok (cont (iter', tail1))) =
+    ok (cont (iter', next))
+/tmp/root-s4-tail-read-total-v2-20261021/sources/S4TailReadTotalRootV1.lean:111:162: warning: This simp argument is unused:
+  r.hslice
+
+Hint: Omit it from the simp argument list.
+  simp [TailBody,
+      A̵s̵p̵i̵s̵R̵1̵F̵a̵s̵t̵D̵o̵t̵s̵C̵u̵r̵r̵e̵n̵t̵.̵f̵a̵s̵t̵_̵d̵o̵t̵s̵.̵f̵o̵u̵r̵_̵d̵o̵t̵s̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵M̵u̵t̵T̵u̵p̵l̵e̵U̵s̵i̵z̵e̵W̵i̵d̵e̵E̵x̵a̵c̵t̵.̵c̵a̵l̵l̵_̵m̵u̵t̵_̵l̵o̵o̵p̵1̵.̵b̵o̵d̵y̵,̵h̵n̵,̵r̵.̵h̵0̵,̵r̵.̵h̵1̵,̵r̵.̵h̵2̵,̵r̵.̵h̵3̵,̵r̵.̵h̵4̵,̵r̵.̵h̵r̵e̵a̵d̵,̵r̵.̵h̵5̵,̵r̵.̵h̵s̵l̵i̵c̵e̵,̵h̵p̵,̵h̵p̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵u̵n̵w̵r̵a̵p̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵]̵A̲s̲p̲i̲s̲R̲1̲F̲a̲s̲t̲D̲o̲t̲s̲C̲u̲r̲r̲e̲n̲t̲.̲f̲a̲s̲t̲_̲d̲o̲t̲s̲.̲f̲o̲u̲r̲_̲d̲o̲t̲s̲.̲c̲l̲o̲s̲u̲r̲e̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲F̲u̲n̲c̲t̲i̲o̲n̲F̲n̲M̲u̲t̲T̲u̲p̲l̲e̲U̲s̲i̲z̲e̲W̲i̲d̲e̲E̲x̲a̲c̲t̲.̲c̲a̲l̲l̲_̲m̲u̲t̲_̲l̲o̲o̲p̲1̲.̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲n̲,̲ ̲r̲.̲h̲0̲,̲ ̲r̲.̲h̲1̲,̲ ̲r̲.̲h̲2̲,̲ ̲r̲.̲h̲3̲,̲ ̲r̲.̲h̲4̲,̲ ̲r̲.̲h̲r̲e̲a̲d̲,̲ ̲r̲.̲h̲5̲,̲ ̲h̲p̲,̲ ̲h̲p̲u̲s̲h̲,̲ ̲c̲o̲r̲e̲.̲o̲p̲t̲i̲o̲n̲.̲O̲p̲t̲i̲o̲n̲.̲u̲n̲w̲r̲a̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲u̲n̲w̲r̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-tail-read-total-v2-20261021/sources/S4TailReadTotalRootV1.lean:111:171: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp [TailBody,
+      A̵s̵p̵i̵s̵R̵1̵F̵a̵s̵t̵D̵o̵t̵s̵C̵u̵r̵r̵e̵n̵t̵.̵f̵a̵s̵t̵_̵d̵o̵t̵s̵.̵f̵o̵u̵r̵_̵d̵o̵t̵s̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵M̵u̵t̵T̵u̵p̵l̵e̵U̵s̵i̵z̵e̵W̵i̵d̵e̵E̵x̵a̵c̵t̵.̵c̵a̵l̵l̵_̵m̵u̵t̵_̵l̵o̵o̵p̵1̵.̵b̵o̵d̵y̵,̵h̵n̵,̵r̵.̵h̵0̵,̵r̵.̵h̵1̵,̵r̵.̵h̵2̵,̵r̵.̵h̵3̵,̵r̵.̵h̵4̵,̵r̵.̵h̵r̵e̵a̵d̵,̵r̵.̵h̵5̵,̵r̵.̵h̵s̵l̵i̵c̵e̵,̵h̵p̵,̵h̵p̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵u̵n̵w̵r̵a̵p̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵]̵A̲s̲p̲i̲s̲R̲1̲F̲a̲s̲t̲D̲o̲t̲s̲C̲u̲r̲r̲e̲n̲t̲.̲f̲a̲s̲t̲_̲d̲o̲t̲s̲.̲f̲o̲u̲r̲_̲d̲o̲t̲s̲.̲c̲l̲o̲s̲u̲r̲e̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲F̲u̲n̲c̲t̲i̲o̲n̲F̲n̲M̲u̲t̲T̲u̲p̲l̲e̲U̲s̲i̲z̲e̲W̲i̲d̲e̲E̲x̲a̲c̲t̲.̲c̲a̲l̲l̲_̲m̲u̲t̲_̲l̲o̲o̲p̲1̲.̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲n̲,̲ ̲r̲.̲h̲0̲,̲ ̲r̲.̲h̲1̲,̲ ̲r̲.̲h̲2̲,̲ ̲r̲.̲h̲3̲,̲ ̲r̲.̲h̲4̲,̲ ̲r̲.̲h̲r̲e̲a̲d̲,̲ ̲r̲.̲h̲5̲,̲ ̲r̲.̲h̲s̲l̲i̲c̲e̲,̲ ̲h̲p̲u̲s̲h̲,̲ ̲c̲o̲r̲e̲.̲o̲p̲t̲i̲o̲n̲.̲O̲p̲t̲i̲o̲n̲.̲u̲n̲w̲r̲a̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲u̲n̲w̲r̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-tail-read-total-v2-20261021/sources/S4TailReadTotalRootV1.lean:111:174: warning: This simp argument is unused:
+  hpush
+
+Hint: Omit it from the simp argument list.
+  simp [TailBody,
+      A̵s̵p̵i̵s̵R̵1̵F̵a̵s̵t̵D̵o̵t̵s̵C̵u̵r̵r̵e̵n̵t̵.̵f̵a̵s̵t̵_̵d̵o̵t̵s̵.̵f̵o̵u̵r̵_̵d̵o̵t̵s̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵M̵u̵t̵T̵u̵p̵l̵e̵U̵s̵i̵z̵e̵W̵i̵d̵e̵E̵x̵a̵c̵t̵.̵c̵a̵l̵l̵_̵m̵u̵t̵_̵l̵o̵o̵p̵1̵.̵b̵o̵d̵y̵,̵h̵n̵,̵r̵.̵h̵0̵,̵r̵.̵h̵1̵,̵r̵.̵h̵2̵,̵r̵.̵h̵3̵,̵r̵.̵h̵4̵,̵r̵.̵h̵r̵e̵a̵d̵,̵r̵.̵h̵5̵,̵r̵.̵h̵s̵l̵i̵c̵e̵,̵h̵p̵,̵h̵p̵u̵s̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵u̵n̵w̵r̵a̵p̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵]̵A̲s̲p̲i̲s̲R̲1̲F̲a̲s̲t̲D̲o̲t̲s̲C̲u̲r̲r̲e̲n̲t̲.̲f̲a̲s̲t̲_̲d̲o̲t̲s̲.̲f̲o̲u̲r̲_̲d̲o̲t̲s̲.̲c̲l̲o̲s̲u̲r̲e̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲F̲u̲n̲c̲t̲i̲o̲n̲F̲n̲M̲u̲t̲T̲u̲p̲l̲e̲U̲s̲i̲z̲e̲W̲i̲d̲e̲E̲x̲a̲c̲t̲.̲c̲a̲l̲l̲_̲m̲u̲t̲_̲l̲o̲o̲p̲1̲.̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲n̲,̲ ̲r̲.̲h̲0̲,̲ ̲r̲.̲h̲1̲,̲ ̲r̲.̲h̲2̲,̲ ̲r̲.̲h̲3̲,̲ ̲r̲.̲h̲4̲,̲ ̲r̲.̲h̲r̲e̲a̲d̲,̲ ̲r̲.̲h̲5̲,̲ ̲r̲.̲h̲s̲l̲i̲c̲e̲,̲ ̲h̲p̲,̲ ̲c̲o̲r̲e̲.̲o̲p̲t̲i̲o̲n̲.̲O̲p̲t̲i̲o̲n̲.̲u̲n̲w̲r̲a̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲u̲n̲w̲r̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1FastDotsTailReadTotalRootV1.tail_reads_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsTailReadTotalRootV1.actual_tail_body_from_reads' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

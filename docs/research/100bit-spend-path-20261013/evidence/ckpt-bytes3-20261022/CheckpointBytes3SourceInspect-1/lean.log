@@ -1,0 +1,150 @@
+structure Aeneas.Std.core.slice.iter.Iter (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.Iter.slice : Aeneas.Std.Slice T
+  Aeneas.Std.core.slice.iter.Iter.i : ℕ
+constructor:
+  Aeneas.Std.core.slice.iter.Iter.mk {T : Type} (slice : Aeneas.Std.Slice T) (i : ℕ) : Aeneas.Std.core.slice.iter.Iter T
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3SourceInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.slice.iter.IteratorIter.next`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3SourceInspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.boxed.Box.new`
+structure Aeneas.Std.core.cmp.PartialEq (Self Rhs : Type) : Type
+number of parameters: 2
+fields:
+  Aeneas.Std.core.cmp.PartialEq.eq : Self → Rhs → Aeneas.Std.Result Bool
+  Aeneas.Std.core.cmp.PartialEq.ne : Self → Rhs → Aeneas.Std.Result Bool :=
+    fun self_1 other => do
+      let __do_lift ← self.eq self_1 other
+      Aeneas.Std.Result.ok !__do_lift
+constructor:
+  Aeneas.Std.core.cmp.PartialEq.mk {Self Rhs : Type} (eq ne : Self → Rhs → Aeneas.Std.Result Bool) :
+    Aeneas.Std.core.cmp.PartialEq Self Rhs
+structure Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.IterMut.slice : Aeneas.Std.Slice T
+  Aeneas.Std.core.slice.iter.IterMut.i : ℕ :=
+    0
+constructor:
+  Aeneas.Std.core.slice.iter.IterMut.mk {T : Type} (slice : Aeneas.Std.Slice T) (i : ℕ) :
+    Aeneas.Std.core.slice.iter.IterMut T
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  Aeneas.Std.core.slice.iter.IterMut T →
+    Aeneas.Std.Result
+      (Option T ×
+        Aeneas.Std.core.slice.iter.IterMut T ×
+          (Aeneas.Std.core.slice.iter.IterMut T → Option T → Aeneas.Std.core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    Aeneas.Std.Result.ok (some x, it, back)
+  else Aeneas.Std.Result.ok (none, it, fun it x => it)
+structure AspisR1Stage2.ResumeOps : Type 1
+number of parameters: 0
+fields:
+  AspisR1Stage2.ResumeOps.checkpointSize : AspisR1Stage2.transport.Variant → Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1Stage2.ResumeOps.tag : AspisR1Stage2.transport.Variant → Aeneas.Std.Result Aeneas.Std.U8
+  AspisR1Stage2.ResumeOps.finalLen : AspisR1Stage2.transport.Variant → Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1Stage2.ResumeOps.eq : {T U : Type} →
+      {N : Aeneas.Std.Usize} →
+        Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Slice T → Aeneas.Std.Array U N → Aeneas.Std.Result Bool
+  AspisR1Stage2.ResumeOps.ne : {T U : Type} →
+      {N : Aeneas.Std.Usize} →
+        Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Slice T → Aeneas.Std.Array U N → Aeneas.Std.Result Bool
+  AspisR1Stage2.ResumeOps.headerAny : Aeneas.Std.core.slice.iter.Iter Aeneas.Std.U8 →
+      Aeneas.Std.Result (Bool × Aeneas.Std.core.slice.iter.Iter Aeneas.Std.U8)
+  AspisR1Stage2.ResumeOps.raw : (N : Aeneas.Std.Usize) →
+      AspisR1Stage2.verifier.Reader →
+        Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 N × AspisR1Stage2.verifier.Reader)
+  AspisR1Stage2.ResumeOps.readE : AspisR1Stage2.verifier.Reader →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+            AspisR1Stage2.verifier.Error ×
+          AspisR1Stage2.verifier.Reader)
+  AspisR1Stage2.ResumeOps.readK : AspisR1Stage2.verifier.Reader →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AspisR1Stage2.aspis_core.field.QM31 AspisR1Stage2.verifier.Error ×
+          AspisR1Stage2.verifier.Reader)
+  AspisR1Stage2.ResumeOps.validate : Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)
+  AspisR1Stage2.ResumeOps.zeroK : Aeneas.Std.Result AspisR1Stage2.aspis_core.field.QM31
+  AspisR1Stage2.ResumeOps.filled : Aeneas.Std.Usize →
+      AspisR1Stage2.aspis_core.field.QM31 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31)
+            AspisR1Stage2.verifier.Error)
+  AspisR1Stage2.ResumeOps.readQueries : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U32 22#usize × Aeneas.Std.Usize)
+  AspisR1Stage2.ResumeOps.readSemanticAlpha : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result
+            (Aeneas.Std.Array AspisR1Stage2.aspis_core.field.QM31 10#usize × Aeneas.Std.Usize)
+            AspisR1Stage2.verifier.Error)
+  AspisR1Stage2.ResumeOps.readWeights : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Usize →
+        Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result
+              (Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 × Aeneas.Std.Usize)
+              AspisR1Stage2.verifier.Error)
+constructor:
+  AspisR1Stage2.ResumeOps.mk (checkpointSize : AspisR1Stage2.transport.Variant → Aeneas.Std.Result Aeneas.Std.Usize)
+    (tag : AspisR1Stage2.transport.Variant → Aeneas.Std.Result Aeneas.Std.U8)
+    (finalLen : AspisR1Stage2.transport.Variant → Aeneas.Std.Result Aeneas.Std.Usize)
+    (eq ne :
+      {T U : Type} →
+        {N : Aeneas.Std.Usize} →
+          Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Slice T → Aeneas.Std.Array U N → Aeneas.Std.Result Bool)
+    (headerAny :
+      Aeneas.Std.core.slice.iter.Iter Aeneas.Std.U8 →
+        Aeneas.Std.Result (Bool × Aeneas.Std.core.slice.iter.Iter Aeneas.Std.U8))
+    (raw :
+      (N : Aeneas.Std.Usize) →
+        AspisR1Stage2.verifier.Reader →
+          Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 N × AspisR1Stage2.verifier.Reader))
+    (readE :
+      AspisR1Stage2.verifier.Reader →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+              AspisR1Stage2.verifier.Error ×
+            AspisR1Stage2.verifier.Reader))
+    (readK :
+      AspisR1Stage2.verifier.Reader →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1Stage2.aspis_core.field.QM31 AspisR1Stage2.verifier.Error ×
+            AspisR1Stage2.verifier.Reader))
+    (validate :
+      Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error))
+    (zeroK : Aeneas.Std.Result AspisR1Stage2.aspis_core.field.QM31)
+    (filled :
+      Aeneas.Std.Usize →
+        AspisR1Stage2.aspis_core.field.QM31 →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31)
+              AspisR1Stage2.verifier.Error))
+    (readQueries :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U32 22#usize × Aeneas.Std.Usize))
+    (readSemanticAlpha :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result
+              (Aeneas.Std.Array AspisR1Stage2.aspis_core.field.QM31 10#usize × Aeneas.Std.Usize)
+              AspisR1Stage2.verifier.Error))
+    (readWeights :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Usize →
+          Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result
+                (Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 × Aeneas.Std.Usize)
+                AspisR1Stage2.verifier.Error)) :
+    AspisR1Stage2.ResumeOps

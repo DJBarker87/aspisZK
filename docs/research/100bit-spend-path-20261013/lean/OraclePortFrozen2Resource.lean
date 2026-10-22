@@ -1,0 +1,158 @@
+import OraclePortFrozenOrderEnvelopes
+
+/-! The old slot envelope discarded the last live resource. Retaining one
+unit, including on rejection, pays for one checkpoint read per slot. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.OraclePortFrozen2Resource
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft OraclePortFrozenOrder
+attribute [local instance] Classical.propDecidable
+
+def potential (o : Option (Live × Bytes)) : Nat := max 1 (weight o)
+
+theorem level (H : Bytes → State) (fuel : Nat) (live : Live) (nodes : Bytes) :
+    (eval H (runLevel fuel live nodes)).1.length +
+      potential (eval H (runLevel fuel live nodes)).2 ≤ max 1 (live.length + nodes.length / 32) := by
+  cases fuel with
+  | zero => simp only [runLevel,eval,List.length_nil,Nat.zero_add,potential,weight]
+            omega
+  | succ fuel =>
+    cases live with
+    | nil => simp [runLevel,eval,potential,weight]
+    | cons entry rest =>
+      rcases entry with ⟨i,v⟩
+      cases rest with
+      | nil =>
+        simp only [runLevel,Bool.false_eq_true,if_false]
+        cases hd : SemanticRecordCodec.decodeState (nodes.take 32) with
+        | none => simp [eval,potential,weight]
+        | some sibling =>
+          have bound := level_conservation H fuel [] (nodes.drop 32)
+          have enough : 32 ≤ nodes.length := by
+            have size : (nodes.take 32).length = 32 := by
+              unfold SemanticRecordCodec.decodeState at hd
+              split at hd
+              · assumption
+              · contradiction
+            rw [List.length_take] at size
+            omega
+          have div : (nodes.drop 32).length / 32 + 1 = nodes.length / 32 := by
+            rw [List.length_drop]; omega
+          simp only [eval,eval_bind,List.length_cons,List.length_append,List.length_nil]
+          cases out : (eval H (runLevel fuel [] (nodes.drop 32))).2 with
+          | none => simp only [out,Option.map_none,potential,weight,List.length_nil] at *; omega
+          | some pair =>
+            rcases pair with ⟨next,remaining⟩
+            simp only [out,Option.map_some,potential,weight,List.length_cons,List.length_nil] at *
+            omega
+      | cons entry tail =>
+        rcases entry with ⟨j,w⟩
+        simp only [runLevel,decide_eq_true_eq]
+        by_cases both : paired i j
+        · simp only [if_pos both,List.drop_succ_cons,List.drop_zero]
+          have bound := level_conservation H fuel tail nodes
+          simp only [eval,eval_bind,List.length_cons,List.length_append,List.length_nil]
+          cases out : (eval H (runLevel fuel tail nodes)).2 with
+          | none => simp only [out,Option.map_none,potential,weight,List.length_cons,List.length_nil] at *; omega
+          | some pair =>
+            rcases pair with ⟨next,remaining⟩
+            simp only [out,Option.map_some,potential,weight,List.length_cons,List.length_nil] at *
+            omega
+        · simp only [if_neg both]
+          cases hd : SemanticRecordCodec.decodeState (nodes.take 32) with
+          | none => simp [eval,potential,weight]
+          | some sibling =>
+            have bound := level_conservation H fuel ((j,w)::tail) (nodes.drop 32)
+            have enough : 32 ≤ nodes.length := by
+              have size : (nodes.take 32).length = 32 := by
+                unfold SemanticRecordCodec.decodeState at hd
+                split at hd
+                · assumption
+                · contradiction
+              rw [List.length_take] at size
+              omega
+            have div : (nodes.drop 32).length / 32 + 1 = nodes.length / 32 := by
+              rw [List.length_drop]; omega
+            simp only [eval,eval_bind,List.length_cons,List.length_append,List.length_nil]
+            cases out : (eval H (runLevel fuel ((j,w)::tail) (nodes.drop 32))).2 with
+            | none => simp only [out,Option.map_none,potential,weight,List.length_cons,List.length_nil] at *; omega
+            | some pair =>
+              rcases pair with ⟨next,remaining⟩
+              simp only [out,Option.map_some,potential,weight,List.length_cons,List.length_nil] at *
+              omega
+
+theorem levels (H : Bytes → State) (h : Nat) (live : Live) (nodes : Bytes) :
+    (eval H (runLevels h live nodes)).1.length +
+      potential (eval H (runLevels h live nodes)).2 ≤ max 1 (live.length + nodes.length / 32) := by
+  induction h generalizing live nodes with
+  | zero => simp [runLevels,eval,potential,weight]
+  | succ h ih =>
+    have bound := level H live.length live nodes
+    simp only [runLevels,eval_bind,List.length_append]
+    cases out : (eval H (runLevel live.length live nodes)).2 with
+    | none => simpa only [out,eval,List.length_nil,Nat.add_zero] using bound
+    | some pair =>
+      rcases pair with ⟨next,remaining⟩
+      have nextBound := ih next remaining
+      simp only [out,potential,weight] at bound
+      simp only
+      omega
+
+theorem inPlace (H : Bytes → State) (root : State) (live : Live) (nodes : Bytes)
+    (nonempty : live ≠ []) :
+    (eval H (verifyInPlace root live nodes)).1.length + 1 ≤ live.length + nodes.length / 32 := by
+  have positive : 0 < live.length := List.length_pos_iff.mpr nonempty
+  unfold verifyInPlace
+  split
+  · have bound := levels H 18 live nodes
+    have one : 1 ≤ potential (eval H (runLevels 18 live nodes)).2 := le_max_left _ _
+    simp only [eval_bind,eval,List.append_nil]
+    omega
+  · simp only [eval,List.length_nil]; omega
+
+theorem tail (H : Bytes → State) (p : Parsed) (batch kind : Nat) (live : Live)
+    (cap : 0 < capacity (3*batch+kind)) :
+    (eval H (slotTail p batch kind live)).1.length + 1 ≤ live.length + capacity (3*batch+kind) := by
+  unfold slotTail
+  dsimp only
+  split
+  · rename_i formed
+    have nonempty : live ≠ [] := by
+      intro empty
+      simp only [empty,List.map_nil,wellFormed,ne_eq,not_true_eq_false,false_and] at formed
+    split
+    · have bound := inPlace H (committedRoot p kind) live
+        ((slice p.wire (slotStart (3*batch+kind)) (32*capacity (3*batch+kind))).take
+          (32*nodeCount 18 (live.map Prod.fst))) nonempty
+      have len : ((slice p.wire (slotStart (3*batch+kind)) (32*capacity (3*batch+kind))).take
+          (32*nodeCount 18 (live.map Prod.fst))).length / 32 ≤ capacity (3*batch+kind) := by
+        rw [List.length_take]; omega
+      omega
+    · simp only [eval,List.length_nil]; omega
+  · simp only [eval,List.length_nil]; omega
+
+theorem slot (H : Bytes → State) (p : Parsed) (q : Fin 22 → Fin 262144) (batch kind : Nat)
+    (cap : 0 < capacity (3*batch+kind)) :
+    (eval H (verifySlot_frozen p q batch kind)).1.length + 1 ≤
+      2*(batchPositions batch).length + capacity (3*batch+kind) := by
+  have bound := leaves_bound H p q kind (sortedPositions q batch kind) []
+  have len : (sortedPositions q batch kind).length = (batchPositions batch).length := List.length_mergeSort ..
+  simp only [verifySlot_frozen,eval_bind,List.length_append]
+  cases out : (eval H (hashLeaves p q kind (sortedPositions q batch kind) [])).2 with
+  | none => simp only [out,eval,List.length_nil]; omega
+  | some live =>
+    have tb := tail H p batch kind live cap
+    simp only [out,leafWeight,List.length_nil,Nat.add_zero] at bound
+    simp only
+    omega
+
+#print axioms level
+#print axioms levels
+#print axioms inPlace
+#print axioms tail
+#print axioms slot
+end AspisR1.OraclePortFrozen2Resource
+end

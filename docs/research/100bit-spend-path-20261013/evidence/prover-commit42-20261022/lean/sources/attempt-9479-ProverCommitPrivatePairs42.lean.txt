@@ -1,0 +1,123 @@
+import R1Z.ProverCommitPrivateBounds42
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitPrivatePairs42
+open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.FsAbort R0Z.FsAbortBounds R0Z.HvzkV
+open GamesR1 GamesR1PBin CouplingR1PBin EventsR1PBin LayoutR1PBin LensR1 ProverCommitPrivateBounds42
+attribute [local instance] Classical.propDecidable
+variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+variable (W : R1Wire K CommitHandle Aux) (Pr : R1ProverP K CommitHandle Aux F W)
+  (h : HonestProver K) (B : PackBasis F)
+  (outputs : Statement K CommitHandle → Challenges K → Aux)
+  (x : Statement K CommitHandle) (w : h.Instance)
+
+theorem publicSec_update (nonce : NZ) (seeds : ProverCommitPublicBinding40.Private) (i : Fin 2) (z : NZ) :
+    ProverCommitPublicBinding40.publicSec nonce (Function.update seeds i z) =
+      Function.update (ProverCommitPublicBinding40.publicSec nonce seeds) i.succ z := by
+  funext j
+  refine Fin.cases ?_ (fun j => ?_) j
+  · rw [Function.update_of_ne (Fin.succ_ne_zero i).symm]
+    rfl
+  · by_cases eq : j=i
+    · subst j
+      rw [Function.update_self]
+      simp only [ProverCommitPublicBinding40.publicSec,Fin.cases_succ,Function.update_self]
+    · rw [Function.update_of_ne (fun e => eq (Fin.ext (by have he := congrArg Fin.val e; simp only [Fin.val_succ] at he; omega)))]
+      simp only [ProverCommitPublicBinding40.publicSec,Fin.cases_succ,Function.update_of_ne eq]
+
+theorem vector_update (first second : OracleAnswer) (q : RIdx)
+    (hq : ∀ b : Fin 2, q ≠ .inl b) (a : Carrier W Pr) (u : OracleAnswer) :
+    vector W Pr first second ((answerLens W Pr q).set a u) =
+      Function.update (vector W Pr first second a) (.inr (.inr (.inr q))) u := by
+  funext p
+  by_cases hp : p = .inr (.inr (.inr q))
+  · subst p
+    cases q with
+    | inl b => exact False.elim (hq b rfl)
+    | inr q => simp [vector,ProverCommitGlobal42.publicIndex,answerLens]
+  · simp [vector,answerLens,Function.update_of_ne hp]
+
+theorem answer_parts (first second : OracleAnswer) (q : RIdx)
+    (hq : ∀ b : Fin 2, q ≠ .inl b) (a : Carrier W Pr) (u : OracleAnswer) :
+    tapeR W Pr (vector W Pr first second ((answerLens W Pr q).set a u)) = tapeR W Pr (vector W Pr first second a) ∧
+    trOf (vector W Pr first second ((answerLens W Pr q).set a u)) = trOf (vector W Pr first second a) ∧
+    restOf (vector W Pr first second ((answerLens W Pr q).set a u)) =
+      Function.update (restOf (vector W Pr first second a)) q u := by
+  rw [vector_update W Pr first second q hq]
+  constructor
+  · have e1 : e₁Of (Function.update (vector W Pr first second a) (.inr (.inr (.inr q))) u) =
+          e₁Of (vector W Pr first second a) := by funext c; simp [e₁Of]
+    have e2 : e₂Of (Function.update (vector W Pr first second a) (.inr (.inr (.inr q))) u) =
+          e₂Of (vector W Pr first second a) := by funext c; simp [e₂Of]
+    simp only [tapeR,e1,e2]
+  · constructor
+    · funext j; simp [trOf]
+    · funext q'; by_cases eq : q'=q <;> simp [restOf,eq,Function.update_of_ne]
+
+theorem seed_inv (hb : RCommitBytes W Pr) (nonce : NZ) (digest first second : OracleAnswer)
+    (i : Fin 2) (a : Carrier W Pr) (z : NZ) (c : CPos Pr.E₁ Pr.E₂)
+    (independent : ¬ depS c (.inl i.succ)) :
+    address W Pr h B outputs x w nonce digest first second ((seedLens W Pr i).set a z) c =
+      address W Pr h B outputs x w nonce digest first second a c := by
+  simp only [address,attAddr,seedLens]
+  rw [hb,hb]
+  rw [publicSec_update]
+  exact gram_sec_update (W.pubBytes x) W.vtag _ _ digest _ i.succ z c independent
+
+theorem answer_inv (hb : RCommitBytes W Pr) (nonce : NZ) (digest first second : OracleAnswer)
+    (q : RIdx) (hq : ∀ b : Fin 2, q ≠ .inl b) (a : Carrier W Pr) (u : OracleAnswer)
+    (c : CPos Pr.E₁ Pr.E₂) (independent : ¬ depS c (.inr q)) :
+    address W Pr h B outputs x w nonce digest first second ((answerLens W Pr q).set a u) c =
+      address W Pr h B outputs x w nonce digest first second a c := by
+  have parts := answer_parts W Pr first second q hq a u
+  simp only [address,attAddr]
+  rw [hb,hb]
+  rw [parts.1,parts.2.1,parts.2.2]
+  convert gram_rest_update (W.pubBytes x) W.vtag _ _ digest _ q u c independent using 1
+  rfl
+
+/-- Both private positions, with fixed public nonce and memo bindings. No
+public coordinate is admitted as the source of the private-pair bound. -/
+theorem pair_all (hb : RCommitBytes W Pr) (hE₁ : Pr.E₁ ≤ 2^64) (hE₂ : Pr.E₂ ≤ 2^64)
+    (nonce : NZ) (digest first second : OracleAnswer)
+    (c c' : CPos Pr.E₁ Pr.E₂) (hc : privatePos W Pr c) (hc' : privatePos W Pr c') (hne : c ≠ c') :
+    PairFresh (fun a => address W Pr h B outputs x w nonce digest first second a c)
+      (fun a => address W Pr h B outputs x w nonce digest first second a c') (2^255) ∨
+    PairFresh (fun a => address W Pr h B outputs x w nonce digest first second a c')
+      (fun a => address W Pr h B outputs x w nonce digest first second a c) (2^255) := by
+  rcases fresh_or_sep hE₁ hE₂ c c' hne with left | right | separate
+  · refine Or.inr (private_pair W Pr h B outputs x w hb nonce digest first second c hc _ ?_ ?_)
+    · intro i hi a z
+      exact seed_inv W Pr h B outputs x w hb nonce digest first second i a z c' (hi ▸ left)
+    · intro q hq a u
+      exact answer_inv W Pr h B outputs x w hb nonce digest first second q
+        ((src_private W Pr c hc).2 q hq) a u c' (hq ▸ left)
+  · refine Or.inl (private_pair W Pr h B outputs x w hb nonce digest first second c' hc' _ ?_ ?_)
+    · intro i hi a z
+      exact seed_inv W Pr h B outputs x w hb nonce digest first second i a z c (hi ▸ right)
+    · intro q hq a u
+      exact answer_inv W Pr h B outputs x w hb nonce digest first second q
+        ((src_private W Pr c' hc').2 q hq) a u c (hq ▸ right)
+  · refine Or.inl (pairFresh_of_ne _ _ _ (fun a => ?_))
+    simp only [address,attAddr]
+    rw [hb,hb]
+    exact separate _ _ _ _ _ _
+
+theorem pair_mass (hb : RCommitBytes W Pr) (hE₁ : Pr.E₁ ≤ 2^64) (hE₂ : Pr.E₂ ≤ 2^64)
+    (nonce : NZ) (digest first second : OracleAnswer)
+    (c c' : CPos Pr.E₁ Pr.E₂) (hc : privatePos W Pr c) (hc' : privatePos W Pr c') (hne : c ≠ c') :
+    mass (fun a : Carrier W Pr => address W Pr h B outputs x w nonce digest first second a c =
+      address W Pr h B outputs x w nonce digest first second a c') ≤ 1/(2 : ℚ)^255 := by
+  simpa only [Nat.cast_pow,Nat.cast_ofNat] using
+    pairFresh_mass _ _ (2^255) (by positivity)
+      (pair_all W Pr h B outputs x w hb hE₁ hE₂ nonce digest first second c c' hc hc' hne)
+
+#print axioms publicSec_update
+#print axioms vector_update
+#print axioms answer_parts
+#print axioms seed_inv
+#print axioms answer_inv
+#print axioms pair_all
+#print axioms pair_mass
+end R1Z.ProverCommitPrivatePairs42

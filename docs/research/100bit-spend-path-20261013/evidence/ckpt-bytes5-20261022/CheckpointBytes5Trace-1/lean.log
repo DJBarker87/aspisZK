@@ -1,0 +1,351 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:92:2: error: 'change' tactic failed, pattern
+  (do
+      let value ← tail ops bytes v nextByte end1 storedChecksum checksumDigest
+      ok (value, before ++ [(chunks, digest)] ++ [(publicParts, publicDigest)] ++ [(checksumParts, checksumDigest)])) =
+    ?m.796
+is not definitionally equal to target
+  (let (a, next) := (size, before)
+    if (bytes.len != a) = true then ok (core.result.Result.Err verifier.Error.Checkpoint, next)
+    else
+      let (a, next) := (header, next)
+      do
+      let (a, next) ←
+        do
+          let a ←
+            core.cmp.impls.PartialEqShared.ne (slicePartialEq ops 8#usize core.cmp.PartialEqU8) a
+                (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8] program._proof_8)
+          ok (a, next)
+      if a = true then ok (core.result.Result.Err verifier.Error.Checkpoint, next)
+        else
+          let (a, next) := (tagByte, next)
+          let (a, next) := (tag, next)
+          if (a != a) = true then ok (core.result.Result.Err verifier.Error.Checkpoint, next)
+          else
+            let (a, next) := (nextByte, next)
+            if a > 22#u8 then ok (core.result.Result.Err verifier.Error.Checkpoint, next)
+            else
+              let (a, next) := (version, next)
+              if (a != 1#u8) = true then ok (core.result.Result.Err verifier.Error.Checkpoint, next)
+              else
+                let (a, next) := (reserved, next)
+                do
+                let (a, next) ←
+                  do
+                    let a ← core.slice.Slice.iter a
+                    ok (a, next)
+                let (a, next) ←
+                  do
+                    let a ← ops.headerAny a
+                    ok (a, next)
+                if a.1 = true then ok (core.result.Result.Err verifier.Error.Checkpoint, next)
+                  else
+                    let (a, next) := (end1, next)
+                    let (a, next) := (stored, next)
+                    let (a, next) := (chunks, next)
+                    do
+                    let (a, next) ←
+                      do
+                        let b ← digestInst.digest hash a
+                        ok (b, next ++ [(a, b)])
+                    let (a, next) ←
+                      do
+                        let a ← ops.ne core.cmp.PartialEqU8 a a
+                        ok (a, next)
+                    if a = true then ok (core.result.Result.Err verifier.Error.Checkpoint, next)
+                      else
+                        let (a, next) := (storedPublic, next)
+                        let (a, next) := (publicParts, next)
+                        do
+                        let (a, next) ←
+                          do
+                            let b ← digestInst.digest hash a
+                            ok (b, next ++ [(a, b)])
+                        let (a, next) ←
+                          do
+                            let a ← ops.ne core.cmp.PartialEqU8 a a
+                            ok (a, next)
+                        if a = true then ok (core.result.Result.Err verifier.Error.Checkpoint, next)
+                          else do
+                            let (a, next) ←
+                              do
+                                let a ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                      { start := a }
+                                ok (a, next)
+                            let (a, next) := (domain, next)
+                              do
+                              let (a, next) ←
+                                do
+                                  let a ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                        { «end» := a }
+                                  ok (a, next)
+                              let (a, next) ←
+                                do
+                                  let a ← lift (Array.make 2#usize [a, a] ⋯).to_slice
+                                  ok (a, next)
+                              let (a, next) ←
+                                do
+                                  let b ← digestInst.digest hash a
+                                  ok (b, next ++ [(a, b)])
+                              let a ← tail ops bytes v a a a a
+                              ok (a, next)) =
+    ok
+      (core.result.Result.Ok (p, acc),
+        before ++ [(chunks, digest), (publicParts, publicDigest), (checksumParts, checksumDigest)])
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:88:30: warning: This simp argument is unused:
+  hsizebad
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:88:39: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲ ̲h̲c̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:88:58: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:89:12: warning: This simp argument is unused:
+  hmagic
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:89:19: warning: This simp argument is unused:
+  hmagicbad
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:89:43: warning: This simp argument is unused:
+  htagbad
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:89:57: warning: This simp argument is unused:
+  if_neg hnextbad
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵ ̵h̵n̵e̵x̵t̵b̵a̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲ ̲h̲c̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:90:13: warning: This simp argument is unused:
+  hversionbad
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:90:35: warning: This simp argument is unused:
+  hiter
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:90:41: warning: This simp argument is unused:
+  hany
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:90:46: warning: This simp argument is unused:
+  hanybad
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:91:4: warning: This simp argument is unused:
+  hdigest
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:91:12: warning: This simp argument is unused:
+  hbad
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲b̲o̲d̲y̲,̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:91:17: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲b̲o̲d̲y̲,̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:91:28: warning: This simp argument is unused:
+  hpd
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲b̲o̲d̲y̲,̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:91:32: warning: This simp argument is unused:
+  hpb
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲b̲o̲d̲y̲,̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:91:36: warning: This simp argument is unused:
+  hpublicBad
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲s̲c̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:91:47: warning: This simp argument is unused:
+  hsc
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲b̲o̲d̲y̲,̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:91:59: warning: This simp argument is unused:
+  hbody
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲c̲p̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:91:65: warning: This simp argument is unused:
+  hcp
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲ ̲h̲c̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Trace.lean:91:69: warning: This simp argument is unused:
+  hcd
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵s̵i̵z̵e̵b̵a̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵h̵e̵a̵d̵e̵r̵,̵h̵m̵a̵g̵i̵c̵,̵h̵m̵a̵g̵i̵c̵b̵a̵d̵,̵h̵t̵a̵g̵b̵y̵t̵e̵,̵h̵t̵a̵g̵,̵h̵t̵a̵g̵b̵a̵d̵,̵h̵n̵e̵x̵t̵,̵i̵f̵_̵n̵e̵g̵[̲h̲s̲i̲z̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲i̲z̲e̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲h̲e̲a̲d̲e̲r̲,̲ ̲h̲m̲a̲g̲i̲c̲,̲ ̲h̲m̲a̲g̲i̲c̲b̲a̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲t̲a̲g̲b̲y̲t̲e̲,̲ ̲h̲t̲a̲g̲,̲ ̲h̲t̲a̲g̲b̲a̲d̲,̲ ̲h̲n̲e̲x̲t̲,̲ ̲i̲f̲_̲n̲e̲g̲ hnextbad, h̵v̵e̵r̵s̵i̵o̵n̵,̵h̵v̵e̵r̵s̵i̵o̵n̵b̵a̵d̵,̵h̵r̵e̵s̵e̵r̵v̵e̵d̵,̵h̵i̵t̵e̵r̵,̵h̵a̵n̵y̵,̵h̵a̵n̵y̵b̵a̵d̵,̵h̵e̵n̵d̵,̵h̵s̵t̵o̵r̵e̵d̵,̵h̵c̵h̵u̵n̵k̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵i̵g̵e̵s̵t̵,̵h̵b̵a̵d̵,̵h̵b̵,̵h̵s̵p̵,̵h̵p̵p̵,̵h̵p̵d̵,̵h̵p̵b̵,̵h̵p̵u̵b̵l̵i̵c̵B̵a̵d̵,̵h̵s̵c̵,̵h̵d̵o̵m̵a̵i̵n̵,̵h̵b̵o̵d̵y̵,̵h̵c̵p̵,̵h̵c̵d̵]̵h̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲h̲v̲e̲r̲s̲i̲o̲n̲b̲a̲d̲,̲ ̲h̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲h̲i̲t̲e̲r̲,̲ ̲h̲a̲n̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲a̲n̲y̲b̲a̲d̲,̲ ̲h̲e̲n̲d̲,̲ ̲h̲s̲t̲o̲r̲e̲d̲,̲ ̲h̲c̲h̲u̲n̲k̲s̲,̲ ̲h̲d̲i̲g̲e̲s̲t̲,̲ ̲h̲b̲a̲d̲,̲ ̲h̲b̲,̲ ̲h̲s̲p̲,̲ ̲h̲p̲p̲,̲ ̲h̲p̲d̲,̲ ̲h̲p̲b̲,̲ ̲h̲p̲u̲b̲l̲i̲c̲B̲a̲d̲,̲ ̲h̲s̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲d̲o̲m̲a̲i̲n̲,̲ ̲h̲b̲o̲d̲y̲,̲ ̲h̲c̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private.CheckpointBytes5Trace.0.AspisR1.CheckpointBytes5Trace.checkpoint_guard' does not depend on any axioms
+'_private.CheckpointBytes5Trace.0.AspisR1.CheckpointBytes5Trace.checkpoint_guard_prop' does not depend on any axioms
+'AspisR1.CheckpointBytes5Trace.successful_log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

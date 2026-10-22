@@ -1,0 +1,9 @@
+# S9 exact output-decoder leaves
+
+PROVED locally: the same branch output records yield the exact decoded first-branch cells 0/1 and second-branch cells 1/2/3. The lemmas derive the seed^4/seed^16 factors from those records' actual shared prefix power facts. They introduce no independent sum, scalar or intermediate-power witness. The records themselves remain explicit premises, constructed by the earlier checked same-execution two-body theorem.
+
+Small symbolic selector lemmas discharge literal branch conditions before decoder transport. Explicit alias-only normalization keeps the same array/field carriers without asking the kernel to unfold large field arithmetic. Earlier branch/alias failures are diagnostic, not accepted proofs; no recursion/heartbeat limit was raised.
+
+OPEN: combine these equations with the same scalar/polynomial sums to derive the complete original coefficient formula, connect the explicit candidate body/loop/caller to this selected model, adopt/re-pin final source/artifacts as appropriate, replay the coherent release closure and prove the composed 100-bit theorem. These local model equations do not close S9 or the security goal. Production is unchanged.
+
+Exact target/source revision/status/command, source/tool/import/object pins, time, RSS, observed swaps and standard-axiom reports are retained; compiled objects are external and excluded. Warm Lean 4.32 focused checks ran one at a time at -j1 -M4400 under the atomic mutex/RSS watchdog. macOS swaps are observational. An earlier Remaining2 attempt was stopped by the watchdog on foreign Lean concurrency; an isolated retry then exposed a selector-arity error. The accepted Remaining3 source fixes that error and has a separate successful receipt. Run `python3 -B check_packet.py` to inspect evidence without Lean.

@@ -1,0 +1,76 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationBasis48.lean:60:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (array 28#usize xs).update kidx ?z
+in the target expression
+  (do
+      let next ← field.M31.sub (if n = 0 then 0#u32 else xs (n - 1)) product
+      let basis1 ← (array 28#usize xs).update (UScalar.cast UScalarTy.Usize (left.wrapping_sub 1#u8)) next
+      basis_mul basis1 j (left.wrapping_sub 1#u8)) =
+    ok (array 28#usize ys)
+
+case succ.refine_1
+j : U32
+n : ℕ
+ih :
+  ∀ (xs : ℕ → U32),
+    (∀ k < 28, canonical (xs k)) →
+      ∀ (left : U8),
+        ↑left = n →
+          n ≤ 28 →
+            ∃ ys,
+              basis_mul (array 28#usize xs) j left = ok (array 28#usize ys) ∧
+                (∀ k < 28, canonical (ys k)) ∧
+                  ∀ k < 28, decode (ys k) = if k < n then coefficient xs j k else decode (xs k)
+xs : ℕ → U32
+hxs : ∀ k < 28, canonical (xs k)
+left : U8
+hleft : ↑left = n + 1
+bound : n + 1 ≤ 28
+hn : left ≠ 0#u8
+hdec : ↑(left.wrapping_sub 1#u8) = n
+kidx : UScalar UScalarTy.Usize := UScalar.cast UScalarTy.Usize (left.wrapping_sub 1#u8)
+hidx : ↑kidx = n
+hk : ↑kidx < ↑28#usize
+shifted : UScalar UScalarTy.U32 := if n = 0 then 0#u32 else xs (n - 1)
+hcshift : canonical shifted
+product : U32
+hprod : field.M31.mul (xs n) j = ok product
+hcprod : canonical product
+hdprod : decode product = decode (xs n) * decode j
+z : U32
+hz : field.M31.sub shifted product = ok z
+hcz : canonical z
+hdz : decode z = decode shifted - decode product
+next : ℕ → U32 := Function.update xs n z
+hcnext : ∀ k < 28, canonical (next k)
+ys : ℕ → U32
+hy : basis_mul (array 28#usize next) j (left.wrapping_sub 1#u8) = ok (array 28#usize ys)
+hcy : ∀ k < 28, canonical (ys k)
+hval : ∀ k < 28, decode (ys k) = if k < n then coefficient next j k else decode (next k)
+hshift : decode shifted = if n = 0 then 0 else decode (xs (n - 1))
+hvalue : decode z = coefficient xs j n
+⊢ (do
+      let next ← field.M31.sub (if n = 0 then 0#u32 else xs (n - 1)) product
+      let basis1 ← (array 28#usize xs).update (UScalar.cast UScalarTy.Usize (left.wrapping_sub 1#u8)) next
+      basis_mul basis1 j (left.wrapping_sub 1#u8)) =
+    ok (array 28#usize ys)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (28 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationBasis48.lean:59:28: warning: This simp argument is unused:
+  hz
+
+Hint: Omit it from the simp argument list.
+  simp only [hidx, ̲hprod,h̵z̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitInterpolationBasis48.basis_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

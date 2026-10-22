@@ -1,0 +1,53 @@
+import R1Z.SideChannelL1JointCoupling
+import R1Z.SideChannelEntropyLaw
+
+/-! Focused final axioms audit only; no native L1 release assertion. -/
+set_option autoImplicit false
+#print axioms R1Z.SideChannelL1AttemptRecord.erase_run
+#print axioms R1Z.SideChannelL1AttemptRecord.rejected_prefix
+#print axioms R1Z.SideChannelL1AttemptRecord.stopping_prefix
+#print axioms R1Z.SideChannelL1AttemptRecord.success_prefix
+#print axioms R1Z.SideChannelL1AttemptRecord.attempt_cap
+#print axioms R1Z.SideChannelL1AttemptRecord.callback_rejected_stops
+#print axioms R1Z.SideChannelL1AttemptRecord.tls_retained
+#print axioms R1Z.SideChannelL1AttemptRecord.returned_count_success
+#print axioms R1Z.SideChannelL1AttemptRecord.tls_trace_push
+#print axioms R1Z.SideChannelL1AttemptRecord.tls_check_push
+#print axioms R1Z.SideChannelRetryLaw.reached_iff
+#print axioms R1Z.SideChannelRetryLaw.entered_rejection_advances
+#print axioms R1Z.SideChannelRetryLaw.callback_abort_blocks_next
+#print axioms R1Z.SideChannelRetryLaw.run_length_gt_iff
+#print axioms R1Z.SideChannelRetryLaw.actual_entry_iff
+#print axioms R1Z.SideChannelRetryLaw.conditional_identity
+#print axioms R1Z.SideChannelRetryLaw.success_hazard
+#print axioms R1Z.SideChannelRetryLaw.abort_hazard
+#print axioms R1Z.SideChannelRetryLaw.entry_law
+#print axioms R1Z.SideChannelRetryLaw.all_rejected_exhausts
+#print axioms R1Z.SideChannelRetryLaw.actual_entry_mass
+#print axioms R1Z.SideChannelRetryLaw.exhaustion_prefix
+#print axioms R1Z.SideChannelRetryLaw.history_hazard
+#print axioms R1Z.SideChannelEntropy.decode_lift
+#print axioms R1Z.SideChannelEntropy.erase_decode
+#print axioms R1Z.SideChannelEntropy.next_lift
+#print axioms R1Z.SideChannelEntropy.run_lift
+#print axioms R1Z.SideChannelEntropy.generate_lift
+#print axioms R1Z.SideChannelEntropy.next_history
+#print axioms R1Z.SideChannelEntropy.run_count_cap
+#print axioms R1Z.SideChannelEntropy.generate_count_cap
+#print axioms R1Z.SideChannelEntropy.count_history_preserved
+#print axioms R1Z.SideChannelEntropyLaw.union_identity
+#print axioms R1Z.SideChannelEntropyLaw.pair_bad_exact
+#print axioms R1Z.SideChannelEntropyLaw.bad_exact
+#print axioms R1Z.SideChannelEntropyLaw.selected_rejections
+#print axioms R1Z.SideChannelEntropyLaw.sixteen_exhaustion
+#print axioms R1Z.SideChannelEntropyLaw.first_accepted
+#print axioms R1Z.SideChannelL1JointCoupling.dist_le_bad
+#print axioms R1Z.SideChannelL1JointCoupling.joint_union_bound
+#print axioms R1Z.SideChannelL1JointCoupling.retained_envelope_lt_target
+#print axioms R1Z.SideChannelL1JointCoupling.two_witness_candidate_numeric
+#print axioms R1Z.SideChannelL1JointCoupling.toy_public_laws
+#print axioms R1Z.SideChannelL1JointCoupling.toy_count_laws
+#print axioms R1Z.SideChannelL1JointCoupling.toy_left_test
+#print axioms R1Z.SideChannelL1JointCoupling.toy_right_test
+#print axioms R1Z.SideChannelEntropy.rawEquiv
+#print axioms R1Z.SideChannelL1JointCoupling.flip

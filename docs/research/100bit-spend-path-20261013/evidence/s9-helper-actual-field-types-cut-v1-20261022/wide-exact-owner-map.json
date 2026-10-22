@@ -1,0 +1,56 @@
+{
+  "schema": "focused-source-owner-comparison-v1",
+  "classification": "read-only exact-source comparison; not a Lean refinement theorem",
+  "actual_source_files": {
+    "crates/aspis-core/src/field.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "crates/aspis-core/src/field/wide_exact.rs": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
+  },
+  "retained_extraction_identity": "docs/research/100bit-spend-path-20261013/evidence/s1-current-wide-exact-field-20261020/evidence/current-source-identity.json",
+  "method_comparisons": [
+    {
+      "rust_method": "field::wide_exact::WideExact::mul",
+      "source_span": "crates/aspis-core/src/field/wide_exact.rs:112-126",
+      "body_sha256": "47c8044c02a35cb46e284c30597906a748a2e8904b3ed811189c5f19855b3462",
+      "attempt7_llbc": "def_id 11; Opaque; source span file_id 2 lines 112-126",
+      "proof_owner": "AspisR1CurrentWide.Proof.wide_mul_total_exact",
+      "proof_owner_source": "docs/research/100bit-spend-path-20261013/evidence/s1-current-wide-exact-field-20261020/sources/CurrentWideMulExactProduct.lean",
+      "proof_owner_source_sha256": "e333e1c5d32b2de3130f017cdc2c505f0ab7143abac14831fb313a9229700f36",
+      "status": "exact Rust input files match the S1 extraction identity; owner proves totality/canonicality/exact product for that extracted source. Attempt7's opaque call-to-owner declaration/carrier map remains open."
+    },
+    {
+      "rust_method": "field::wide_exact::WideExact::add",
+      "source_span": "crates/aspis-core/src/field/wide_exact.rs:81-88",
+      "body_sha256": "711892452ab80cd1a37abcdd41e42375b86d82b577586567da82c5eacadf0f4f",
+      "attempt7_llbc": "def_id 10; Opaque; source span file_id 2 lines 81-88",
+      "proof_owner": "AspisR1CurrentWide.Proof.wide_add_total_exact; wrapper AspisR1S9CurrentFieldOpsV1.actualWideAdd_total_exact",
+      "proof_owner_source": "docs/research/100bit-spend-path-20261013/evidence/s3-s9-selected-owner-cohort-v1-20261022/remote/attempt23/sources/CurrentWideLinearExact.lean",
+      "proof_owner_source_sha256": "27152bb19b6a8f3adef460c9d84524c54ae8ee8cff91f413957b31fb50f1fe4a",
+      "status": "exact Rust input files match the retained Aeneas extraction input identity; wrapper invokes that extracted operation through explicit toE/fromE conversions. Attempt7 call-to-owner declaration/carrier map remains open."
+    },
+    {
+      "rust_method": "field::wide_exact::WideExact::mul_m31",
+      "source_span": "crates/aspis-core/src/field/wide_exact.rs:190-198",
+      "body_sha256": "5e7bdbf0090b8501ebfb42f18e59eec33de255c439d40296787301df2736eb69",
+      "attempt7_llbc": "def_id 9; Opaque; source span file_id 2 lines 190-198",
+      "proof_owner": "AspisR1CurrentWide.Proof.wide_mul_m31_success; wrapper AspisR1S9CurrentFieldOpsV1.actualWideMulM31_success",
+      "proof_owner_source": "docs/research/100bit-spend-path-20261013/evidence/s3-s9-selected-owner-cohort-v1-20261022/remote/attempt23/sources/CurrentWideMulM31V13.lean",
+      "proof_owner_source_sha256": "c4a0898456642a8b4d114338611b471b88f0ac37a01e11a97fa8bd6529de271d",
+      "status": "exact Rust input files match the retained Aeneas extraction input identity; success theorem handles the source's rhs remainder before proving product meaning. Attempt7 call-to-owner declaration/carrier map remains open."
+    },
+    {
+      "rust_method": "field::wide_exact::WideExact::mul_qm31",
+      "source_span": "crates/aspis-core/src/field/wide_exact.rs:178-186",
+      "body_sha256": "617f4bfe9aaaabf3129ada726faaf601dfac8e1d978eb62ba007dcc6032fdf9f",
+      "attempt7_llbc": "def_id 8; Opaque; source span file_id 2 lines 178-186",
+      "proof_owner": "AspisR1S9GeneratedWideMulQM31V2.actualHelperOperation_success",
+      "proof_owner_source": "docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-fieldops-v1-20261021/sources/S3S9GeneratedWideMulQM31V2.lean",
+      "proof_owner_source_sha256": "cae5ce08eb6ec046de07fadb72f6fb32159615ecd9efcc6b798001806812ea45",
+      "status": "method bytes and source file are pinned; the owner reintroduces the emitted method body as a source-shaped Lean model and proves it equal to the current source model. Exact bridge from attempt7's new-crate opaque call to that owner remains open."
+    }
+  ],
+  "limitations": [
+    "The attempt7 LLBC marks all four methods Opaque, so its Aeneas output is not a checked Lean proof of their implementations.",
+    "The source-body hashes establish method identity, and retained owners establish results for the same frozen Rust source. They do not by themselves prove the generated declarations from different crate namespaces are equal or that the attempt7 opaque calls reduce to those owners.",
+    "No Lean source from the attempt7 Aeneas FunsExternal_Template is accepted or imported."
+  ]
+}

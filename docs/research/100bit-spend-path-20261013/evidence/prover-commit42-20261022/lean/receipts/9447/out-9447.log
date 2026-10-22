@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:64:4: error: unsolved goals
+case neg
+bytes : Bytes
+n : ℕ
+ih : ∀ (index : U8), ↑index + n = 32 → owner.zero bytes index = ok (decide (zeroFrom bytes ↑index))
+index : U8
+count : ↑index + (n + 1) = 32
+bound : ↑index < 32
+go : ¬index ≥ 32#u8
+pos : Usize := UScalar.cast UScalarTy.Usize index
+pv : ↑pos = ↑index
+read : Array.index_usize bytes pos = ok (↑bytes)[↑pos]
+elem : (↑bytes)[↑pos] = getByte bytes ⟨↑index, bound⟩
+step : owner.zero bytes (index.wrapping_add 1#u8) = ok (decide (zeroFrom bytes ↑(index.wrapping_add 1#u8)))
+split : zeroFrom bytes ↑index ↔ getByte bytes ⟨↑index, bound⟩ = 0#u8 ∧ zeroFrom bytes (↑index + 1)
+hz : ¬getByte bytes ⟨↑index, bound⟩ = 0#u8
+notAll : ¬zeroFrom bytes ↑index
+⊢ (if getByte bytes ⟨↑index, bound⟩ ≠ 0#u8 then ok false else owner.zero bytes (index.wrapping_add 1#u8)) = ok false
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:65:28: warning: This simp argument is unused:
+  hz
+
+Hint: Omit it from the simp argument list.
+  simp only [bne_iff_ne,h̵z̵,̵ ̲not_false_eq_true, ̲if_true, ̲notAll, ̲decide_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:65:31: warning: This simp argument is unused:
+  not_false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵n̵e̵_̵i̵f̵f̵_̵n̵e̵,̵h̵z̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵n̵o̵t̵A̵l̵l̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵]̵[̲b̲n̲e̲_̲i̲f̲f̲_̲n̲e̲,̲ ̲h̲z̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲n̲o̲t̲A̲l̲l̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:65:49: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [bne_iff_ne, ̲hz, ̲not_false_eq_true,i̵f̵_̵t̵r̵u̵e̵,̵ ̲notAll, ̲decide_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitOwnerZero42.next_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnerZero42.zero_from' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnerZero42.zero_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

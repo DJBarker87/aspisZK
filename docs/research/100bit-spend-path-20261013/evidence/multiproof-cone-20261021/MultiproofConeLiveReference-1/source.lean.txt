@@ -1,0 +1,47 @@
+import MultiproofConeLiveLeaves
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeLiveReference
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConeNodeDomain MultiproofConeLiveOrder
+attribute [local step] hash_spec read_spec
+
+def SourcePair (s : reference.Scratch) (i : Usize) : Prop :=
+  i.val+1<s.n.val ∧ s.idx.val[i.val+1]! = s.idx.val[i.val]! ^^^ 1#u32
+instance (s : reference.Scratch) (i : Usize) : Decidable (SourcePair s i) := by
+  unfold SourcePair;infer_instance
+
+def Shape (s : reference.Scratch) (i w : Usize) : reference.Row → Prop
+  | .Stop stopped => stopped=s
+  | .Next next ni nw => ∃ parent : U32,
+      next.idx=s.idx.set w parent ∧ parent.val=s.idx.val[i.val]!.val/2 ∧
+      ni.val=(if SourcePair s i then i.val+2 else i.val+1) ∧ nw.val=w.val+1
+
+@[local step] theorem write_shape {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (s : reference.Scratch) (left right : Array U8 32#usize)
+    (ni cursor : Usize) (index : U32) (w : Usize) (bound : w.val<16) :
+    reference.write_parent D hash s left right ni cursor index w
+      ⦃ out => ∃ next nw parent, out=reference.Row.Next next ni nw ∧
+        next.idx=s.idx.set w parent ∧ parent.val=index.val/2 ∧ nw.val=w.val+1 ⦄ := by
+  unfold reference.write_parent
+  step* <;> simp_all <;> scalar_tac
+
+/-- Exact index mutation and occupied-pair consumption of the actual extracted
+node body. No sortedness, source equation, or desired invariant is assumed. -/
+theorem binary_shape {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (total : HashTotal D hash) (physical : Slice U8) (s : reference.Scratch)
+    (i w : Usize) (domain : RowDomain physical s i w) (active : i.val<s.n.val) :
+    ∃ out, reference.binary_step D hash s physical i w=ok out ∧ Shape s i w out := by
+  have len : s.idx.val.length=16 := s.idx.property
+  have ib : i.val<s.idx.val.length := by obtain ⟨_,b,_,_,_⟩ := domain;omega
+  have gi := getElem!_pos s.idx.val i.val ib
+  have spec : reference.binary_step D hash s physical i w ⦃ out => Shape s i w out ⦄ := by
+    unfold reference.binary_step
+    have dom := domain
+    simp only [RowDomain] at dom
+    step* <;> simp_all [Shape,SourcePair,gi] <;> scalar_tac
+  exact WP.spec_imp_exists spec
+
+#print axioms write_shape
+#print axioms binary_shape
+end AspisR1.MultiproofConeLiveReference

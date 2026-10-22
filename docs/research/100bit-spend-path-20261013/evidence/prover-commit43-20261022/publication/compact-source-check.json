@@ -1,0 +1,7 @@
+{
+  "source": "crates/aspis-r1-cost-probe/src/compact.rs",
+  "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+  "exact_function": "pub fn compact_values(logical: &[u8], out: &mut Vec<u8>) -> Result<(), CodecError> {\n    if logical.len() % 32 != 0 {\n        return Err(CodecError::Length);\n    }\n    for v in logical.chunks_exact(32) {\n        if v[16..].iter().any(|&b| b != 0) {\n            return Err(CodecError::NonZeroHigh);\n        }\n        out.extend_from_slice(&v[..16]);\n    }\n    Ok(())\n}",
+  "normalized_whitespace_and_visibility_match": true,
+  "harness_function": "fn compact_values(logical:&[u8],out:&mut Vec<u8>)->Result<(),CodecError> {\n if logical.len()%32!=0 {return Err(CodecError::Length);}\n for v in logical.chunks_exact(32) {\n  if v[16..].iter().any(|&b|b!=0) {return Err(CodecError::NonZeroHigh);}\n  out.extend_from_slice(&v[..16]);\n }Ok(())\n}"
+}

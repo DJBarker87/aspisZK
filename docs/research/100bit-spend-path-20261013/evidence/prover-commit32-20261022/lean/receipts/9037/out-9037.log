@@ -1,0 +1,78 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSorted32.lean:101:10: error: unsolved goals
+case pos.refine_1
+table : IndexMap
+key : Usize
+value : Bytes
+fuel : ℕ
+ih :
+  ∀ (out : IndexMap) (pos : Usize),
+    ↑pos ≤ (↑table).length →
+      (↑table).length - ↑pos < fuel →
+        (↑out).length + ((↑table).length - ↑pos) + 1 ≤ Usize.max →
+          ∃ final,
+            sim.owned32.index_insert table key value pos out =
+                ok (final, (insert key value (List.drop ↑pos ↑table)).2) ∧
+              ↑final = ↑out ++ (insert key value (List.drop ↑pos ↑table)).1
+out : IndexMap
+pos : Usize
+hi : ↑pos ≤ (↑table).length
+hf : (↑table).length - ↑pos < fuel + 1
+room : (↑out).length + ((↑table).length - ↑pos) + 1 ≤ Usize.max
+done : ¬pos = alloc.vec.Vec.len table
+more : ↑pos < (↑table).length
+step : ↑(pos.wrapping_add 1#usize) = ↑pos + 1
+k : Usize
+v : Bytes
+hr : alloc.vec.Vec.index_usize table pos = ok (k, v)
+he : (k, v) = (↑table)[↑pos]
+hd : List.drop ↑pos ↑table = (k, v) :: List.drop (↑pos + 1) ↑table
+lt : ¬key < k
+eq : key = k
+next : alloc.vec.Vec (Usize × Bytes)
+hpush : alloc.vec.Vec.push out (key, value) = ok next
+hval : ↑next = ↑out ++ [(key, value)]
+hn : (↑next).length = (↑out).length + 1
+final : alloc.vec.Vec (Usize × alloc.vec.Vec U8)
+ht : sim.owned32.index_tail table (pos.wrapping_add 1#usize) next = ok final
+hfinal : ↑final = ↑next ++ List.drop ↑(pos.wrapping_add 1#usize) ↑table
+⊢ (do
+      let out1 ← alloc.vec.Vec.push out (k, value)
+      let v1 ← sim.owned32.index_tail table (pos.wrapping_add 1#usize) out1
+      ok (v1, some v)) =
+    ok (final, some v)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSorted32.lean:101:23: warning: This simp argument is unused:
+  lt
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵t̵,̵e̵q̵,̵l̵t̵_̵s̵e̵l̵f̵_̵i̵f̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵h̵p̵u̵s̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵h̵t̵,̵h̵d̵,̵i̵n̵s̵e̵r̵t̵]̵[̲e̲q̲,̲ ̲l̲t̲_̲s̲e̲l̲f̲_̲i̲f̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲h̲p̲u̲s̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲,̲ ̲h̲t̲,̲ ̲h̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲n̲s̲e̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSorted32.lean:101:64: warning: This simp argument is unused:
+  hpush
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵t̵,̵e̵q̵,̵l̵t̵_̵s̵e̵l̵f̵_̵i̵f̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵h̵p̵u̵s̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵h̵t̵,̵h̵d̵,̵i̵n̵s̵e̵r̵t̵]̵[̲l̲t̲,̲ ̲e̲q̲,̲ ̲l̲t̲_̲s̲e̲l̲f̲_̲i̲f̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲,̲ ̲h̲t̲,̲ ̲h̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲n̲s̲e̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSorted32.lean:101:86: warning: This simp argument is unused:
+  ht
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵t̵,̵e̵q̵,̵l̵t̵_̵s̵e̵l̵f̵_̵i̵f̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵h̵p̵u̵s̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵h̵t̵,̵h̵d̵,̵i̵n̵s̵e̵r̵t̵]̵[̲l̲t̲,̲ ̲e̲q̲,̲ ̲l̲t̲_̲s̲e̲l̲f̲_̲i̲f̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲h̲p̲u̲s̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲,̲ ̲h̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲n̲s̲e̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSorted32.lean:103:30: warning: This simp argument is unused:
+  lt
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵n̵s̵e̵r̵t̵,̵l̵t̵,̵e̵q̵,̵l̵t̵_̵s̵e̵l̵f̵_̵i̵f̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵]̵[̲i̲n̲s̲e̲r̲t̲,̲ ̲e̲q̲,̲ ̲l̲t̲_̲s̲e̲l̲f̲_̲i̲f̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲s̲i̲n̲g̲l̲e̲t̲o̲n̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitSorted32.insert_refines' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSorted32.tail_refines' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

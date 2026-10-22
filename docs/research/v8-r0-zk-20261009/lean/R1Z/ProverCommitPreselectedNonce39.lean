@@ -1,0 +1,119 @@
+import R1Z.ProverCommitReservationMemo39
+import R1Z.ProverCommitLedgerCoupling39
+
+/-! Source obstruction: generate_for_mask_nonce samples only the two private
+seeds. E1 cannot imply a distribution for a nonce supplied by its caller.
+The examples below do not evaluate any large finite universe. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitPreselectedNonce39
+open R0Z R0Z.FsStatement R0Z.FsAbort R0Z.FsGood R0Z.HvzkV GamesR1PBin
+open ProverCommitReservationRom37 ProverCommitReservationMemo39
+local instance (priority := 10000) allDecidable (p : Prop) : Decidable p :=
+  Classical.propDecidable p
+local instance (priority := 10000) allDecEq (U : Type) : DecidableEq U := Classical.decEq U
+
+/-- Exactly one prior query, chosen using the public preselected nonce. All
+private seed coins remain arbitrary, and can have the exact E1 law. -/
+def knownPrior (nonce : NZ) : List Entry := [(reservationInput nonce.val,0)]
+
+theorem known_memo (nonce : NZ) : memoGuess (knownPrior nonce) nonce := by
+  simp [memoGuess,knownPrior]
+
+theorem known_mass {Seeds : Type} [Fintype Seeds] [Nonempty Seeds] (nonce : NZ) :
+    eventMass (fun _ : Seeds => memoGuess (knownPrior nonce) nonce) = 1 := by
+  simp only [known_memo, eventMass, if_true, mean_const]
+
+/-- Failure already at Q=1, one attempt, so the existing Q cap cannot fix
+this. There is no ledger term and no hostile filesystem behaviour here. -/
+theorem not_requested_bound {Seeds : Type} [Fintype Seeds] [Nonempty Seeds]
+    (nonce : NZ) :
+    ¬ eventMass (fun _ : Seeds => memoGuess (knownPrior nonce) nonce) ≤ budget 1 1 := by
+  rw [known_mass]
+  norm_num [budget]
+
+attribute [-instance] allDecidable allDecEq
+attribute [local instance] Classical.propDecidable
+
+theorem complement_mass {U : Type} [Fintype U] [Nonempty U]
+    (good bad : U → Prop) (opposite : ∀ u, ¬ good u ↔ bad u) :
+    eventMass good + eventMass bad = 1 := by
+  unfold eventMass
+  rw [← R0Z.FsAbortBounds.mean_add'']
+  have shape : (fun u => (if good u then (1 : ℚ) else 0) +
+      (if bad u then (1 : ℚ) else 0)) = fun _ => 1 := by
+    funext u
+    by_cases hg : good u
+    · have hb : ¬ bad u := fun h => (opposite u).mpr h hg
+      simp only [if_pos hg,if_neg hb,add_zero]
+    · simp only [if_neg hg,if_pos ((opposite u).mp hg),zero_add]
+  rw [shape]
+  exact mean_const 1
+
+abbrev RawSeeds := Fin 2 → OracleAnswer
+
+def firstSuccess (raw : RawSeeds) : Prop := ∀ i, raw i ≠ 0
+
+/-- A uniform first 64-byte E1 draw succeeds with probability at least
+1 - 2/2^256. Later draws can only add successful cases. This avoids
+conditioning away source RNG rejection or the sixteen-draw limit. -/
+theorem first_success_lower :
+    1 - 2 / (2 : ℚ)^256 ≤ eventMass firstSuccess := by
+  have bad := R0Z.FsAbortBounds.mass_exists_le_card
+    (fun i : Fin 2 => fun raw : RawSeeds => raw i = 0) (1 / (2 : ℚ)^256)
+    (fun i => by
+      rw [CommitReadsR1.mass_coord (N := 2) (X := OracleAnswer) i
+        (fun a : OracleAnswer => a = 0)]
+      rw [R0Z.FsAbortBounds.mass_point,QueryScanSharedHistoryMass.answer_cardinality,
+        Nat.cast_pow,Nat.cast_ofNat])
+  have badBound : eventMass (fun raw : RawSeeds => ∃ i, raw i = 0) ≤
+      2 / (2 : ℚ)^256 := by
+    simpa only [eventMass,R0Z.FsAbortBounds.mass,Fintype.card_fin,Nat.cast_ofNat,
+      mul_one_div] using bad
+  have complement : eventMass firstSuccess +
+      eventMass (fun raw : RawSeeds => ∃ i, raw i = 0) = 1 := by
+    exact complement_mass firstSuccess (fun raw : RawSeeds => ∃ i, raw i = 0)
+      (by intro raw; simp only [firstSuccess,not_forall,not_not])
+  linarith
+
+/-- Even counting only first-draw successes under E1, one known reservation
+input violates the requested bound at the maximum allowed query/draw budget.
+No filesystem failure or ledger entry is involved. -/
+theorem raw_E1_exceeds (nonce : NZ) :
+    budget (2^64) 128 < eventMass
+      (fun raw : RawSeeds => firstSuccess raw ∧ memoGuess (knownPrior nonce) nonce) := by
+  have shape : (fun raw : RawSeeds => firstSuccess raw ∧ memoGuess (knownPrior nonce) nonce) =
+      firstSuccess := funext fun raw => propext (and_iff_left (known_memo nonce))
+  rw [shape]
+  exact lt_of_lt_of_le (by norm_num [budget]) first_success_lower
+
+/-- Any deterministic witness-based preselection is accepted by the API's
+nonce guard whenever both supplied values are nonzero. No witness argument
+in the *callee* can establish independence of the caller's nonce choice. -/
+def suppliedNonce (left right : NZ) (witnessBit : Bool) : NZ :=
+  if witnessBit then right else left
+
+theorem supplied_depends (left right : NZ) (different : left ≠ right) :
+    suppliedNonce left right false ≠ suppliedNonce left right true := by
+  simpa [suppliedNonce] using different
+
+/-- Same ledger, same ROM, same fault schedule; unequal caller-supplied
+nonces can have different native create_new outcomes. Injectivity of a hash
+is not assumed: the condition is simply that these two addresses differ. -/
+theorem distinct_create (left right : ProverCommitLedger36.Path)
+    (different : left ≠ right) :
+    (ProverCommitLedger36.createNew left ⟨none,[]⟩ ⟨[],0,[left]⟩).1 =
+        .error ProverCommitEnvironment35.IOError.alreadyExists ∧
+    (ProverCommitLedger36.createNew right ⟨none,[]⟩ ⟨[],0,[left]⟩).1 = .ok () := by
+  simp [ProverCommitLedger36.createNew,ProverCommitLedger36.inject,
+    ProverCommitLedger36.record,Ne.symm different]
+
+#print axioms known_memo
+#print axioms known_mass
+#print axioms not_requested_bound
+#print axioms complement_mass
+#print axioms first_success_lower
+#print axioms raw_E1_exceeds
+#print axioms supplied_depends
+#print axioms distinct_create
+end R1Z.ProverCommitPreselectedNonce39

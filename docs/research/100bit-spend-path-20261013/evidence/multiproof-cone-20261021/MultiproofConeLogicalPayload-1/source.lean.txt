@@ -1,0 +1,74 @@
+import MultiproofConeCompactScan
+import MultiproofConeExpansionLength
+import MultiproofConeRowShape
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.MultiproofConeLogicalPayload
+open Aeneas Aeneas.Std Result
+open OraclePortCompactDraft MultiproofConeCanonical
+attribute [local instance] Classical.propDecidable
+
+/-- Factored form of the two payload branches in semantic_rows. -/
+def prepare (row : U8) (payload : Slice U8) : Result (Option (alloc.vec.Vec U8)) := do
+  if row >= 14#u8 then
+    let good ← MultiproofParserRef.reference.check_values payload
+    if good then MultiproofParserRef.reference.expand_rows payload (alloc.vec.Vec.new U8)
+    else ok none
+  else
+    let logical ← alloc.slice.Slice.to_vec core.clone.CloneU8 payload
+    ok (some logical)
+
+def storedSize (row : Nat) : Nat :=
+  if 14≤row then (rowShape row).2/2 else (rowShape row).2
+
+def logicalBytes (row : Nat) (payload : Bytes) : Bytes :=
+  if 14≤row then expand ((rowShape row).2/32) payload else payload
+
+theorem good_total (row : U8) (payload : Slice U8)
+    (length : payload.val.length = storedSize row.val)
+    (good : 14≤row.val → canonical (bytesOf payload.val)) :
+    ∃ logical, prepare row payload = ok (some logical) ∧
+      bytesOf logical.val = logicalBytes row.val (bytesOf payload.val) ∧
+      logical.val.length ≤ 3712 := by
+  have sizeBound := (MultiproofConeRowShape.shape_properties row.val).2.1
+  have sizeAligned := (MultiproofConeRowShape.shape_properties row.val).2.2
+  by_cases compact : 14≤row.val
+  · have hc : row>=14#u8 := compact
+    have stored : payload.val.length=(rowShape row.val).2/2 := by
+      simpa only [storedSize,compact,if_true] using length
+    have aligned : payload.val.length%16=0 := by rw [stored];omega
+    have cap : 2*payload.val.length≤Usize.max := by rw [stored];scalar_tac
+    obtain ⟨logical,hl,hm,hsize⟩ := MultiproofConeExpansionLength.empty_accumulator payload aligned cap
+    refine ⟨logical,?_,?_,?_⟩
+    · simp only [prepare,hc,if_true,MultiproofConeCompactScan.check_values_total payload aligned,
+        good compact,decide_true,bind_tc_ok]
+      exact hl
+    · rw [logicalBytes,if_pos compact,←hm]
+      congr 2
+      omega
+    · omega
+  · have hc : ¬row>=14#u8 := compact
+    refine ⟨payload,?_,?_,?_⟩
+    · simp only [prepare,hc,if_false,MultiproofConeVecLaws.to_vec_bytes,bind_tc_ok]
+    · simp only [logicalBytes,compact,if_false]
+    · have stored : payload.val.length=(rowShape row.val).2 := by
+        simpa only [storedSize,compact,if_false] using length
+      omega
+
+theorem bad_rejected (row : U8) (payload : Slice U8)
+    (length : payload.val.length=storedSize row.val)
+    (compact : 14≤row.val) (bad : ¬canonical (bytesOf payload.val)) :
+    prepare row payload = ok none := by
+  have aligned := (MultiproofConeRowShape.shape_properties row.val).2.2
+  have stored : payload.val.length=(rowShape row.val).2/2 := by
+    simpa only [storedSize,compact,if_true] using length
+  have align : payload.val.length%16=0 := by rw [stored];omega
+  have hc : row>=14#u8 := compact
+  simp only [prepare,hc,if_true,MultiproofConeCompactScan.check_values_total payload align,
+    bad,decide_false,bind_tc_ok,if_false]
+
+#print axioms good_total
+#print axioms bad_rejected
+end AspisR1.MultiproofConeLogicalPayload
+end

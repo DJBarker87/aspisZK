@@ -1,0 +1,65 @@
+import MultiproofConeRef.Funs
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeLevelIteration
+open Aeneas Aeneas.Std Result MultiproofConeRef
+
+/-- Structural semantics of the source height loop. Rejection retains the
+level's exact partial scratch, and no later level is executed. -/
+def iterate (step : reference.Scratch → Result reference.Level) :
+    Nat → reference.Scratch → Result reference.Level
+  | 0, s => ok (.Done s)
+  | h+1, s => do
+    let out ← step s
+    match out with
+    | .Stop stopped => ok (.Stop stopped)
+    | .Done next => iterate step h next
+
+/-- Exact full-Result identity with the pinned extracted reference, proved by
+height induction, rather than unrolling a concrete height-18 term. -/
+theorem levels_eq_iteration {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (physical : Slice U8) (height : U32) (bound : height.val≤18)
+    (s : reference.Scratch) :
+    reference.levels D hash s physical height =
+      iterate (fun state => reference.level_rows D hash state physical 0#usize 0#usize) height.val s := by
+  generalize hn : height.val=n at bound ⊢
+  induction n generalizing height s with
+  | zero =>
+    have hz : height=0#u32 := UScalar.eq_of_val_eq hn
+    subst height
+    rw [reference.levels]
+    rfl
+  | succ n ih =>
+    have hnz : height≠0#u32 := by intro h;subst height;simp at hn
+    obtain ⟨pred,sub,predVal⟩ := WP.spec_imp_exists
+      (UScalar.sub_spec (x:=height) (y:=1#u32) (by scalar_tac))
+    have pv : pred.val=n := by scalar_tac
+    rw [reference.levels]
+    simp only [hnz,if_false,iterate]
+    cases row : reference.level_rows D hash s physical 0#usize 0#usize with
+    | fail error => rfl
+    | div => rfl
+    | ok level =>
+      cases level with
+      | Stop stopped => rfl
+      | Done next =>
+        simp only [bind_tc_ok,sub]
+        exact ih pred next pv (by omega)
+
+/-- The named one-level source certificate is the only substitution premise.
+It must be supplied at the P6 source/representation boundary; the theorem does
+not turn a model-checker receipt into a kernel proof of that premise. -/
+theorem adopt_eighteen {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (physical : Slice U8) (source : reference.Scratch → Result reference.Level)
+    (level_certificate : ∀ state, source state=
+      reference.level_rows D hash state physical 0#usize 0#usize)
+    (s : reference.Scratch) :
+    iterate source 18 s=reference.levels D hash s physical 18#u32 := by
+  have eqstep : source=(fun state => reference.level_rows D hash state physical 0#usize 0#usize) :=
+    funext level_certificate
+  rw [eqstep,levels_eq_iteration D hash physical 18#u32 (by decide) s]
+  rfl
+
+#print axioms levels_eq_iteration
+#print axioms adopt_eighteen
+end AspisR1.MultiproofConeLevelIteration

@@ -1,0 +1,71 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Verify.lean:62:45: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 1
+  0 ≤ a ≤ 5504
+where
+ a := ↑(↑physical).length
+ b := ↑↑0#usize
+/Users/dominic/ZK/.worktrees/cx-multiproof-p6b/docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Verify.lean:60:4: error: unsolved goals
+case neg
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+H : Address → Digest
+law : ∀ (input : Slice (Slice U8)), D.digest hash input = ok (H input)
+source : Node
+gate : NodeGate H source
+root : Digest
+s : reference.Scratch
+physical : Slice U8
+size : (↑physical).length ≤ 5504
+zero : ¬s.n = 0#usize
+large : ¬s.n > 16#usize
+positive : 0 < ↑s.n
+bound : ↑s.n ≤ 16
+domain : Domain physical { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize }
+composition :
+  (eval H (levels source 18 { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2 =
+    reference.levels D hash { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical 18#u32
+⊢ (do
+      let b ← reference.valid_indices s.idx s.n 0#usize
+      if b = true then do
+          let i1 ← physical.len % 32#usize
+          if (i1 != 0#usize) = true then ok (false, s)
+            else do
+              let l ← reference.levels D hash { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical 18#u32
+              match l with
+                | reference.Level.Stop out => ok (false, out)
+                | reference.Level.Done out =>
+                  if out.n = 1#usize then do
+                    let i2 ← out.idx.index_usize 0#usize
+                    if i2 = 0#u32 then do
+                        let a ← out.val.index_usize 0#usize
+                        let b1 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a root
+                        if b1 = true then ok (decide (out.at = physical.len), out) else ok (false, out)
+                      else ok (false, out)
+                  else ok (false, out)
+        else ok (false, s)) =
+    do
+    let b ← reference.valid_indices s.idx s.n 0#usize
+    if b = true then do
+        let i1 ← physical.len % 32#usize
+        if (i1 != 0#usize) = true then ok (false, s)
+          else do
+            let l ← reference.levels D hash { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical 18#u32
+            match l with
+              | reference.Level.Stop out => ok (false, out)
+              | reference.Level.Done out =>
+                if out.n = 1#usize then do
+                  let i2 ← out.idx.index_usize 0#usize
+                  if i2 = 0#u32 then do
+                      let a ← out.val.index_usize 0#usize
+                      let b1 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a root
+                      if b1 = true then ok (decide (out.at = physical.len), out) else ok (false, out)
+                    else ok (false, out)
+                else ok (false, out)
+      else ok (false, s)
+'AspisR1.MultiproofConeP6Verify.verify_in_place_owned' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.MultiproofConeP6Verify.verifyState_eq' depends on axioms: [propext, Classical.choice, Quot.sound]

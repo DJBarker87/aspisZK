@@ -1,0 +1,237 @@
+/tmp/root-s4-fixed-head-loop-transfer-v1-20261021/sources/S4FixedHeadLoopTransferRootV1.lean:37:20: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [hs,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-fixed-head-loop-transfer-v1-20261021/sources/S4FixedHeadLoopTransferRootV1.lean:42:20: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [hs,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-fixed-head-loop-transfer-v1-20261021/sources/S4FixedHeadLoopTransferRootV1.lean:53:9: error: unsolved goals
+case none
+ops : Ops
+q : Std.Array U8 608#usize
+g : Std.Array Wide 29#usize
+slot : Usize
+iter : StepBy
+limbs : Std.Array U64 8#usize
+it : core.iter.adapters.step_by.StepBy (core.ops.range.Range (UScalar UScalarTy.Usize))
+hnext :
+  core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      iter =
+    ok (none, it)
+hbody :
+  (do
+      let (o, iter1) ←
+        core.iter.adapters.step_by.IteratorStepBy.next
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) iter
+      match o with
+        | none => ok (done limbs)
+        | some start =>
+          have sums := Array.repeat 8#usize 0#u64;
+          do
+          let i ← start + 4#usize
+          let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+          let sums1 ←
+            AspisR1FastDotsCurrent.fast_dots.four_dots_one_loop0_loop0 ops { start := start, «end» := i1 } q g slot sums
+          let i2 ← sums1.index_usize 0#usize
+          let i3 ← lift (i2 &&& 2147483647#u64)
+          let i4 ← i2 >>> 31#i32
+          let i5 ← i3 + i4
+          let i6 ← limbs.index_usize 0#usize
+          let i7 ← i6 + i5
+          let limbs1 ← limbs.update 0#usize i7
+          let i8 ← sums1.index_usize 1#usize
+          let i9 ← lift (i8 &&& 2147483647#u64)
+          let i10 ← i8 >>> 31#i32
+          let i11 ← i9 + i10
+          let i12 ← limbs1.index_usize 1#usize
+          let i13 ← i12 + i11
+          let limbs2 ← limbs1.update 1#usize i13
+          let i14 ← sums1.index_usize 2#usize
+          let i15 ← lift (i14 &&& 2147483647#u64)
+          let i16 ← i14 >>> 31#i32
+          let i17 ← i15 + i16
+          let i18 ← limbs2.index_usize 2#usize
+          let i19 ← i18 + i17
+          let limbs3 ← limbs2.update 2#usize i19
+          let i20 ← sums1.index_usize 3#usize
+          let i21 ← lift (i20 &&& 2147483647#u64)
+          let i22 ← i20 >>> 31#i32
+          let i23 ← i21 + i22
+          let i24 ← limbs3.index_usize 3#usize
+          let i25 ← i24 + i23
+          let limbs4 ← limbs3.update 3#usize i25
+          let i26 ← sums1.index_usize 4#usize
+          let i27 ← lift (i26 &&& 2147483647#u64)
+          let i28 ← i26 >>> 31#i32
+          let i29 ← i27 + i28
+          let i30 ← limbs4.index_usize 4#usize
+          let i31 ← i30 + i29
+          let limbs5 ← limbs4.update 4#usize i31
+          let i32 ← sums1.index_usize 5#usize
+          let i33 ← lift (i32 &&& 2147483647#u64)
+          let i34 ← i32 >>> 31#i32
+          let i35 ← i33 + i34
+          let i36 ← limbs5.index_usize 5#usize
+          let i37 ← i36 + i35
+          let limbs6 ← limbs5.update 5#usize i37
+          let i38 ← sums1.index_usize 6#usize
+          let i39 ← lift (i38 &&& 2147483647#u64)
+          let i40 ← i38 >>> 31#i32
+          let i41 ← i39 + i40
+          let i42 ← limbs6.index_usize 6#usize
+          let i43 ← i42 + i41
+          let limbs7 ← limbs6.update 6#usize i43
+          let i44 ← sums1.index_usize 7#usize
+          let i45 ← lift (i44 &&& 2147483647#u64)
+          let i46 ← i44 >>> 31#i32
+          let i47 ← i45 + i46
+          let i48 ← limbs7.index_usize 7#usize
+          let i49 ← i48 + i47
+          let limbs8 ← limbs7.update 7#usize i49
+          ok (cont (iter1, limbs8))) =
+    ok (done limbs)
+hrest :
+  (let (o, iter1) := (none, it)
+    match o with
+    | none => ok (done limbs)
+    | some start =>
+      have sums := Array.repeat 8#usize 0#u64;
+      do
+      let i ← start + 4#usize
+      let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+      let sums1 ←
+        AspisR1FastDotsCurrent.fast_dots.four_dots_one_loop0_loop0 ops { start := start, «end» := i1 } q g slot sums
+      let i2 ← sums1.index_usize 0#usize
+      let i3 ← lift (i2 &&& 2147483647#u64)
+      let i4 ← i2 >>> 31#i32
+      let i5 ← i3 + i4
+      let i6 ← limbs.index_usize 0#usize
+      let i7 ← i6 + i5
+      let limbs1 ← limbs.update 0#usize i7
+      let i8 ← sums1.index_usize 1#usize
+      let i9 ← lift (i8 &&& 2147483647#u64)
+      let i10 ← i8 >>> 31#i32
+      let i11 ← i9 + i10
+      let i12 ← limbs1.index_usize 1#usize
+      let i13 ← i12 + i11
+      let limbs2 ← limbs1.update 1#usize i13
+      let i14 ← sums1.index_usize 2#usize
+      let i15 ← lift (i14 &&& 2147483647#u64)
+      let i16 ← i14 >>> 31#i32
+      let i17 ← i15 + i16
+      let i18 ← limbs2.index_usize 2#usize
+      let i19 ← i18 + i17
+      let limbs3 ← limbs2.update 2#usize i19
+      let i20 ← sums1.index_usize 3#usize
+      let i21 ← lift (i20 &&& 2147483647#u64)
+      let i22 ← i20 >>> 31#i32
+      let i23 ← i21 + i22
+      let i24 ← limbs3.index_usize 3#usize
+      let i25 ← i24 + i23
+      let limbs4 ← limbs3.update 3#usize i25
+      let i26 ← sums1.index_usize 4#usize
+      let i27 ← lift (i26 &&& 2147483647#u64)
+      let i28 ← i26 >>> 31#i32
+      let i29 ← i27 + i28
+      let i30 ← limbs4.index_usize 4#usize
+      let i31 ← i30 + i29
+      let limbs5 ← limbs4.update 4#usize i31
+      let i32 ← sums1.index_usize 5#usize
+      let i33 ← lift (i32 &&& 2147483647#u64)
+      let i34 ← i32 >>> 31#i32
+      let i35 ← i33 + i34
+      let i36 ← limbs5.index_usize 5#usize
+      let i37 ← i36 + i35
+      let limbs6 ← limbs5.update 5#usize i37
+      let i38 ← sums1.index_usize 6#usize
+      let i39 ← lift (i38 &&& 2147483647#u64)
+      let i40 ← i38 >>> 31#i32
+      let i41 ← i39 + i40
+      let i42 ← limbs6.index_usize 6#usize
+      let i43 ← i42 + i41
+      let limbs7 ← limbs6.update 6#usize i43
+      let i44 ← sums1.index_usize 7#usize
+      let i45 ← lift (i44 &&& 2147483647#u64)
+      let i46 ← i44 >>> 31#i32
+      let i47 ← i45 + i46
+      let i48 ← limbs7.index_usize 7#usize
+      let i49 ← i48 + i47
+      let limbs8 ← limbs7.update 7#usize i49
+      ok (cont (iter1, limbs8))) =
+    ok (done limbs)
+⊢ (let (o, iter1) := (none, it)
+    match o with
+    | none => ok (done limbs)
+    | some start => do
+      let i ← start + 4#usize
+      let i1 ← core.cmp.min core.cmp.OrdUsize i 26#usize
+      let sums1 ←
+        AspisR1FastDotsCurrent.fast_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop0
+            ops { start := start, «end» := i1 } q g slot (Array.repeat 8#usize 0#u64)
+      let i2 ← ops.wideLimbCount
+      let limbs1 ←
+        AspisR1FastDotsCurrent.fast_dots.four_dots.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact.call_mut_loop0_loop1
+            ops { start := 0#usize, «end» := i2 } limbs sums1
+      ok (cont (iter1, limbs1))) =
+    ok (done limbs)
+/tmp/root-s4-fixed-head-loop-transfer-v1-20261021/sources/S4FixedHeadLoopTransferRootV1.lean:91:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/root-s4-fixed-head-loop-transfer-v1-20261021/sources/S4FixedHeadLoopTransferRootV1.lean:103:17: error: Application type mismatch: The argument
+  ↑iter.iter.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.87
+of sort `Type (?u.87 + 1)` in the application
+  @PrincipalSeg ↑iter.iter.start
+/tmp/root-s4-fixed-head-loop-transfer-v1-20261021/sources/S4FixedHeadLoopTransferRootV1.lean:103:38: error(lean.unknownIdentifier): Unknown identifier `ter.iter.end.val`
+/tmp/root-s4-fixed-head-loop-transfer-v1-20261021/sources/S4FixedHeadLoopTransferRootV1.lean:110:24: error: Type mismatch
+  ↑iter.iter.start + ↑iter.step_by
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.106
+of sort `Type (?u.106 + 1)`
+/tmp/root-s4-fixed-head-loop-transfer-v1-20261021/sources/S4FixedHeadLoopTransferRootV1.lean:110:62: error(lean.unknownIdentifier): Unknown identifier `ter.iter.end.val`
+/tmp/root-s4-fixed-head-loop-transfer-v1-20261021/sources/S4FixedHeadLoopTransferRootV1.lean:113:35: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  b - c ≥ 0
+  a ≥ 1
+  a - b + c ≤ -1
+  a + c ≥ 0
+where
+ a := ↑↑iter.step_by
+ b := ↑↑iter.iter.end
+ c := ↑↑iter.iter.start
+/tmp/root-s4-fixed-head-loop-transfer-v1-20261021/sources/S4FixedHeadLoopTransferRootV1.lean:114:10: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 1
+  a ≥ 1
+where
+ a := ↑↑iter.step_by
+ b := ↑↑iter.iter.start
+/tmp/root-s4-fixed-head-loop-transfer-v1-20261021/sources/S4FixedHeadLoopTransferRootV1.lean:118:6: error: Type mismatch: After simplification, term
+  ht
+ has type
+  @Eq (Result (Std.Array Std.U64 8#usize)) (OldLoop ops iter' q g slot limbs') (ok out)
+but is expected to have type
+  @Eq (Result (Std.Array U64 8#usize)) (loop (oldStep ops q g slot) (iter', limbs')) (ok out)
+'AspisR1FastDotsFixedHeadLoopTransferRootV1.fixed_body_done_old_body' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsFixedHeadLoopTransferRootV1.fixed_head_loop_success_old_head_loop' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

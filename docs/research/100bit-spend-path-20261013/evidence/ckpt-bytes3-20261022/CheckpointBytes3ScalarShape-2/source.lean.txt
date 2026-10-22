@@ -1,0 +1,37 @@
+import CheckpointBytes3Word
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CheckpointBytes3ScalarShape
+open Aeneas Aeneas.Std Result
+open OraclePortCkptAbi2Extracted OraclePortCkptAbi4Decode CheckpointBytes3Word
+
+attribute [local instance] Classical.propDecidable
+
+def kWords (a b c d : U32) : RawK := ⟨⟨a,b⟩,⟨c,d⟩⟩
+
+theorem k_shape (b : Slice U8) (a c d e : U32)
+    (h0 : word_spec b 0#usize = ok a) (h1 : word_spec b 4#usize = ok c)
+    (h2 : word_spec b 8#usize = ok d) (h3 : word_spec b 12#usize = ok e) :
+    decode_k_spec b = if Canonical (kWords a c d e) then ok (some (kWords a c d e)) else ok none := by
+  simp only [decode_k_spec,h0,h1,h2,h3,bind_tc_ok,Array.index_usize,k_from_limbs]
+  simp [Array.make]
+  split <;> simp_all [Canonical,kWords]
+  split <;> simp_all [Canonical,kWords]
+  split <;> simp_all [Canonical,kWords]
+  split <;> simp_all [Canonical,kWords]
+  all_goals omega
+
+theorem k_no_panic (b : Slice U8) (width : b.val.length = 16) :
+    ∃ q, decode_k_spec b = ok q := by
+  have h0 := word_total b 0#usize (by simp only [width]; scalar_tac)
+  have h1 := word_total b 4#usize (by simp only [width]; scalar_tac)
+  have h2 := word_total b 8#usize (by simp only [width]; scalar_tac)
+  have h3 := word_total b 12#usize (by simp only [width]; scalar_tac)
+  rw [k_shape b _ _ _ _ h0 h1 h2 h3]
+  split <;> exact ⟨_,rfl⟩
+
+#print axioms k_shape
+#print axioms k_no_panic
+end AspisR1.CheckpointBytes3ScalarShape
+end

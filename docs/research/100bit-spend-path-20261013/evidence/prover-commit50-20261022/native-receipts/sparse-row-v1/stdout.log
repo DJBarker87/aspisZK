@@ -1,0 +1,101 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Checking harness sparse_gate::proofs::row...
+CBMC 6.8.0 (cbmc-6.8.0)
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-prover-commit41-20261022/kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/simulator_native50-3a63f90001a6ce25__RNvNtNtCscu6GZ0AOiKj_18simulator_native5011sparse_gate6proofs3row.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 12 object bits, 52 offset bits (user-specified)
+Starting Bounded Model Checking
+loop identifier memcmp.0 provided with unwindset does not match any loop
+Runtime Symex: 0.00333175s
+size of program expression: 307 steps
+slicing removed 128 assignments
+Generated 8 VCC(s), 7 remaining after simplification
+Runtime Postprocess Equation: 3.8327e-05s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.00167427s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 6.258e-06s
+Solving with CaDiCaL 2.0.0
+2199 variables, 6748 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 0.0046636s
+Runtime decision procedure: 0.00637737s
+
+RESULTS:
+Check 1: std::panic::Location::<'_>::caller.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "caller_location is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/374"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic/location.rs:147:9 in function std::panic::Location::<'_>::caller
+
+Check 2: sparse_gate::proofs::row.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to subtract with overflow"
+	 - Location: sparse.rs:30:32 in function sparse_gate::proofs::row
+
+Check 3: sparse_gate::proofs::row.assertion.2
+	 - Status: SUCCESS
+	 - Description: "attempt to shift left with overflow"
+	 - Location: sparse.rs:30:23 in function sparse_gate::proofs::row
+
+Check 4: sparse_gate::proofs::row.assertion.3
+	 - Status: SUCCESS
+	 - Description: "attempt to shift left with overflow"
+	 - Location: sparse.rs:30:68 in function sparse_gate::proofs::row
+
+Check 5: sparse_gate::proofs::row.assertion.4
+	 - Status: SUCCESS
+	 - Description: "attempt to shift left with overflow"
+	 - Location: sparse.rs:31:9 in function sparse_gate::proofs::row
+
+Check 6: sparse_gate::proofs::row.assertion.5
+	 - Status: SUCCESS
+	 - Description: "assertion failed: x == y"
+	 - Location: sparse.rs:32:3 in function sparse_gate::proofs::row
+
+Check 7: sparse_gate::proofs::row.assertion.6
+	 - Status: SUCCESS
+	 - Description: "assertion failed: y<1024"
+	 - Location: sparse.rs:32:19 in function sparse_gate::proofs::row
+
+Check 8: std::fmt::Arguments::<'_>::from_str.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to shift left with overflow"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/mod.rs:820:38 in function std::fmt::Arguments::<'_>::from_str
+
+Check 9: core::num::<impl usize>::wrapping_shl.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to subtract with overflow"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:2554:42 in function core::num::<impl usize>::wrapping_shl
+
+Check 10: core::panicking::panic_nounwind_fmt::runtime.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "call to foreign "Rust" function `_RNvCs1hStedNDpZ2_7___rustc17rust_begin_unwind` is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/new/choose"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs:110:17 in function core::panicking::panic_nounwind_fmt::runtime
+
+Check 11: core::num::<impl usize>::unchecked_shl.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "attempt to shift by excessive shift distance"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:1804:17 in function core::num::<impl usize>::unchecked_shl
+
+
+SUMMARY:
+ ** 0 of 11 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.030234143s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

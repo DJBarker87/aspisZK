@@ -1,0 +1,21 @@
+use super::CodeField;
+pub fn doubled_factor<E: CodeField>(b: usize, x: E) -> E {
+    let mut d = x;
+    for _ in 0..b {
+        d = double(d);
+    }
+    d
+}
+pub(crate) fn values<E: CodeField, const N: usize>(x: E) -> [E; N] {
+    let mut out = [E::ONE; N];
+    let mut width = 1;
+    let mut factor = x;
+    while width < N {
+        for j in 0..width.min(N - width) {
+            out[width + j] = out[j].mul(factor);
+        }
+        width *= 2;
+        factor = double(factor);
+    }
+    out
+}

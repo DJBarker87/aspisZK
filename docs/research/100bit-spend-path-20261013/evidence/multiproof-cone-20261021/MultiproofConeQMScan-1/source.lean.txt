@@ -1,0 +1,91 @@
+import MultiproofConeCanonical
+import MultiproofConeCodec
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.MultiproofConeQMScan
+open Aeneas Aeneas.Std Result
+
+private theorem if_ok_and (p : Prop) [Decidable p] (b : Bool) :
+    (if p then (ok b : Result Bool) else ok false) = ok (decide p && b) := by
+  by_cases hp : p <;> simp [hp]
+
+/-- The extracted four-limb check is the structural word model on every
+stored 16-byte value, including every noncanonical encoding. -/
+theorem qm_words (a : Array U8 16#usize) :
+    MultiproofConeRef.reference.canonical_qm a =
+      ok (MultiproofConeWordScan.wordsModel a.val) := by
+  rcases a with ⟨xs,hx⟩
+  change xs.length = 16 at hx
+  cases xs with
+  | nil => simp at hx
+  | cons b0 xs =>
+    cases xs with
+    | nil => simp at hx
+    | cons b1 xs =>
+      cases xs with
+      | nil => simp at hx
+      | cons b2 xs =>
+        cases xs with
+        | nil => simp at hx
+        | cons b3 xs =>
+          cases xs with
+          | nil => simp at hx
+          | cons b4 xs =>
+            cases xs with
+            | nil => simp at hx
+            | cons b5 xs =>
+              cases xs with
+              | nil => simp at hx
+              | cons b6 xs =>
+                cases xs with
+                | nil => simp at hx
+                | cons b7 xs =>
+                  cases xs with
+                  | nil => simp at hx
+                  | cons b8 xs =>
+                    cases xs with
+                    | nil => simp at hx
+                    | cons b9 xs =>
+                      cases xs with
+                      | nil => simp at hx
+                      | cons b10 xs =>
+                        cases xs with
+                        | nil => simp at hx
+                        | cons b11 xs =>
+                          cases xs with
+                          | nil => simp at hx
+                          | cons b12 xs =>
+                            cases xs with
+                            | nil => simp at hx
+                            | cons b13 xs =>
+                              cases xs with
+                              | nil => simp at hx
+                              | cons b14 xs =>
+                                cases xs with
+                                | nil => simp at hx
+                                | cons b15 xs =>
+                                  have hnil : xs = [] := List.eq_nil_of_length_eq_zero (by simpa using hx)
+                                  subst xs
+                                  simp only [MultiproofConeRef.reference.canonical_qm, Array.index_usize,
+                                    Array.getElem?_Usize_eq]
+                                  simp only [show (0#usize).val = 0 from rfl, show (1#usize).val = 1 from rfl, show (2#usize).val = 2 from rfl, show (3#usize).val = 3 from rfl, show (4#usize).val = 4 from rfl, show (5#usize).val = 5 from rfl, show (6#usize).val = 6 from rfl, show (7#usize).val = 7 from rfl, show (8#usize).val = 8 from rfl, show (9#usize).val = 9 from rfl, show (10#usize).val = 10 from rfl, show (11#usize).val = 11 from rfl, show (12#usize).val = 12 from rfl, show (13#usize).val = 13 from rfl, show (14#usize).val = 14 from rfl, show (15#usize).val = 15 from rfl,
+                                    List.getElem?_cons_zero, List.getElem?_cons_succ, bind_tc_ok]
+                                  simp only [MultiproofConeCodec.canonical_word_total, bind_tc_ok,
+                                    decide_eq_true_eq, if_ok_and, MultiproofConeWordScan.wordsModel, Bool.and_true]
+
+/-- Exact canonical-predicate refinement for the parser's actual QM31 helper. -/
+theorem qm_total (a : Array U8 16#usize) :
+    MultiproofParserRef.reference.canonical_qm a =
+      ok (decide (OraclePortCompactDraft.canonical (MultiproofConeCanonical.bytesOf a.val))) := by
+  have same : MultiproofParserRef.reference.canonical_qm a =
+      MultiproofConeRef.reference.canonical_qm a := by rfl
+  rw [same, qm_words]
+  exact (MultiproofConeWordScan.words_total (Array.to_slice a)).symm.trans
+    (MultiproofConeCanonical.scan_total (Array.to_slice a))
+
+#print axioms if_ok_and
+#print axioms qm_words
+#print axioms qm_total
+end AspisR1.MultiproofConeQMScan
+end

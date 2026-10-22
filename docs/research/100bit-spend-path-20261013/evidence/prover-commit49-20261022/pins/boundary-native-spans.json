@@ -1,0 +1,10 @@
+{
+  "source": "crates/aspis-core/src/state_only_sumcheck.rs",
+  "sha256": "e09008daaaea9f35e2a28b85ec06f38dba75dbc9e6741d53a13020123f00d78d",
+  "literal_accumulator": "    let first = polynomial[0];\n    let mut limbs = [\n        2 * u64::from(first.c0.a.0),\n        2 * u64::from(first.c0.b.0),\n        2 * u64::from(first.c1.a.0),\n        2 * u64::from(first.c1.b.0),\n    ];\n    for coefficient in &polynomial[1..] {\n        limbs[0] += u64::from(coefficient.c0.a.0);\n        limbs[1] += u64::from(coefficient.c0.b.0);\n        limbs[2] += u64::from(coefficient.c1.a.0);\n        limbs[3] += u64::from(coefficient.c1.b.0);\n    }\n",
+  "abstractions": [
+    "QM31/CM31/M31 have literal named scalar fields; no field calls are stubbed",
+    "returns the four integer accumulators before reduction; source reducer proof is separate",
+    "reference splits full 28-entry array into four limb arrays"
+  ]
+}

@@ -1,0 +1,168 @@
+import R1Z.ProverCommitPublicRawBridge34
+import R1Z.ProverCommitPublicImage33
+/-! D146's announced domain, using the actual extracted serializer carrier.
+`sourceImage` preserves every R0P.Public field; metadata omitted by the shipped
+serializer is not silently hashed. No nonzero withdrawal condition is added.
+This is an extracted-source/P6 statement, not an allocator or OS law. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitDomain34
+open R1Z.PrivacyR1AcctBasis
+open AspisR1 AspisR1PublicSerializer
+namespace Raw := AspisR1.PublicRawCore
+namespace Bridge := AspisR1PublicSerializer.RawBridge431
+
+abbrev Source := Whole431.Public
+abbrev SourceBytes := FieldsRefinement431.ByteVec
+
+def liftWord (w : Raw.Word) : K :=
+  algebraMap (ZMod AspisCircleGroupOrder.P) K (w.val : ZMod AspisCircleGroupOrder.P)
+
+def lowerWord (w : K) : Raw.Word :=
+  ⟨w.re.re.re.val, by
+    have bound := w.re.re.re.val_lt
+    norm_num [AspisCircleGroupOrder.P] at bound ⊢
+    omega⟩
+
+theorem lower_lift (w : Raw.Word) (hw : w.val < 2147483647) :
+    lowerWord (liftWord w) = w := by
+  apply Fin.ext
+  simp only [lowerWord,liftWord,base_coordinates]
+  change (w.val : ZMod AspisCircleGroupOrder.P).val = w.val
+  rw [ZMod.val_natCast, Nat.mod_eq_of_lt hw]
+
+def commonImage (c : Raw.Common) : R0P.Public K :=
+  { variant := .privateTransfer
+    anchor := fun i => liftWord (c.anchor i)
+    nullifier := fun i => liftWord (c.nullifier i)
+    assetId := liftWord c.assetId
+    recipient := none
+    change := fun i => liftWord (c.change i)
+    withdrawalAmount := none
+    nextPairIndex := c.nextPairIndex.val
+    snapshotFrontier := fun l i => liftWord (c.snapshotFrontier l i)
+    nextRoot := fun i => liftWord (c.nextRoot i)
+    nextFrontier := fun l i => liftWord (c.nextFrontier l i) }
+
+def image : Raw.Public → R0P.Public K
+  | .transfer c recipient => {commonImage c with
+      recipient := some (fun i => liftWord (recipient i))}
+  | .withdrawal c amount => {commonImage c with variant := .withdrawal,
+      withdrawalAmount := some (liftWord amount)}
+
+def lowerCommon (p : R0P.Public K) : Raw.Common :=
+  { anchor := fun i => lowerWord (p.anchor i)
+    nullifier := fun i => lowerWord (p.nullifier i)
+    assetId := lowerWord p.assetId
+    change := fun i => lowerWord (p.change i)
+    nextPairIndex := ⟨p.nextPairIndex % 2^64, Nat.mod_lt _ (by decide)⟩
+    snapshotFrontier := fun l i => lowerWord (p.snapshotFrontier l i)
+    nextRoot := fun i => lowerWord (p.nextRoot i)
+    nextFrontier := fun l i => lowerWord (p.nextFrontier l i) }
+
+def lower (p : R0P.Public K) : Raw.Public :=
+  match p.variant with
+  | .privateTransfer => .transfer (lowerCommon p)
+      (fun i => lowerWord ((p.recipient.getD (fun _ => 0)) i))
+  | .withdrawal => .withdrawal (lowerCommon p) (lowerWord (p.withdrawalAmount.getD 0))
+
+def commonCanonical (c : Raw.Common) : Prop :=
+  (∀ i, (c.anchor i).val < 2147483647) ∧
+  (∀ i, (c.nullifier i).val < 2147483647) ∧ c.assetId.val < 2147483647 ∧
+  (∀ i, (c.change i).val < 2147483647) ∧
+  (∀ l i, (c.snapshotFrontier l i).val < 2147483647) ∧
+  (∀ i, (c.nextRoot i).val < 2147483647) ∧
+  (∀ l i, (c.nextFrontier l i).val < 2147483647)
+
+theorem canonical_transfer (c : Raw.Common) (r : Raw.Digest)
+    (hc : Raw.Canonical (.transfer c r)) :
+    commonCanonical c ∧ ∀ i, (r i).val < 2147483647 := by
+  simpa [Raw.Canonical,Raw.words,Raw.headerWords,Raw.afterWords,
+    Raw.digestWords,Raw.frontierWords,commonCanonical,List.mem_flatMap,
+    forall_and, forall_comm, and_assoc, and_left_comm, and_comm] using hc
+
+theorem canonical_withdrawal (c : Raw.Common) (a : Raw.Word)
+    (hc : Raw.Canonical (.withdrawal c a)) :
+    commonCanonical c ∧ a.val < 2147483647 := by
+  simpa [Raw.Canonical,Raw.words,Raw.headerWords,Raw.afterWords,
+    Raw.digestWords,Raw.frontierWords,commonCanonical,List.mem_flatMap,
+    forall_and, forall_comm, and_assoc, and_left_comm, and_comm] using hc
+
+theorem lower_common (c : Raw.Common) (hc : commonCanonical c) :
+    lowerCommon (commonImage c) = c := by
+  rcases hc with ⟨ha,hn,hi,hc,hs,hr,hf⟩
+  have index : (⟨c.nextPairIndex.val % 2^64, Nat.mod_lt _ (by decide)⟩ : Raw.Index) =
+      c.nextPairIndex := Fin.ext (Nat.mod_eq_of_lt c.nextPairIndex.isLt)
+  simp only [lowerCommon,commonImage, lower_lift _ (ha _),lower_lift _ (hn _),
+    lower_lift _ hi,lower_lift _ (hc _),lower_lift _ (hs _ _),lower_lift _ (hr _),
+    lower_lift _ (hf _ _),index]
+
+theorem lower_image (p : Raw.Public) (hc : Raw.Canonical p) : lower (image p) = p := by
+  cases p with
+  | transfer c r =>
+    obtain ⟨hcommon,hr⟩ := canonical_transfer c r hc
+    have h := lower_common c hcommon
+    simpa only [lowerCommon,commonImage] using h
+      |> fun h => by
+        simpa only [lower,image,commonImage,lowerCommon,Option.getD_some,
+          lower_lift _ (hr _)] using congrArg (fun c => Raw.Public.transfer c r) h
+  | withdrawal c a =>
+    obtain ⟨hcommon,ha⟩ := canonical_withdrawal c a hc
+    have h := lower_common c hcommon
+    simpa only [lowerCommon,commonImage] using h
+      |> fun h => by
+        simpa only [lower,image,commonImage,lowerCommon,Option.getD_some,
+          lower_lift _ ha] using congrArg (fun c => Raw.Public.withdrawal c a) h
+
+/-- Fixed semantic field projection of the extracted shipped source record. -/
+def sourceImage (p : Source) : R0P.Public K := image (Bridge.project p)
+
+/-- Announced statement-domain restriction. The commitment component is not
+restricted here, and the adversary and its queries remain arbitrary. -/
+def DeployedStatement (x : R0P.Public K) : Prop :=
+  ∃ (p : Source) (out : SourceBytes), sourceImage p = x ∧
+    pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes p = Aeneas.Std.Result.ok (.Ok out)
+
+/-- Fixed byte function of the model statement; no chosen source witness. -/
+def pubBytes (x : R0P.Public K) : Raw.Bytes := Raw.encode (lower x)
+
+theorem source_bytes (p : Source) (out : SourceBytes)
+    (hs : pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes p =
+      Aeneas.Std.Result.ok (.Ok out)) :
+    out.val.map Bridge.rawByte = pubBytes (sourceImage p) := by
+  have h := Bridge.source_success_raw p out hs
+  unfold Raw.serialize at h
+  split at h
+  next hc =>
+    have hb := Option.some.inj h
+    rw [pubBytes,sourceImage,lower_image _ hc]
+    exact hb.symm
+  next hc => contradiction
+
+/-- Any successful representative has exactly the public bytes of its model
+statement, so witness choice cannot change the public transcript. -/
+theorem on_domain (x : R0P.Public K) (hx : DeployedStatement x) :
+    ∃ (p : Source) (out : SourceBytes), sourceImage p = x ∧
+      pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes p =
+        Aeneas.Std.Result.ok (.Ok out) ∧ out.val.map Bridge.rawByte = pubBytes x := by
+  obtain ⟨p,out,rfl,hs⟩ := hx
+  exact ⟨p,out,rfl,hs,source_bytes p out hs⟩
+
+/-- Outside the domain, no source representative can return any proof-input
+public bytes. This does not invent an API accepting arbitrary wide records. -/
+theorem outside_no_serializer_success (x : R0P.Public K) (hx : ¬ DeployedStatement x)
+    (p : Source) (hp : sourceImage p = x) (out : SourceBytes) :
+    pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes p ≠
+      Aeneas.Std.Result.ok (.Ok out) := by
+  intro hs
+  exact hx ⟨p,out,hp,hs⟩
+
+#print axioms lower_lift
+#print axioms canonical_transfer
+#print axioms canonical_withdrawal
+#print axioms lower_common
+#print axioms lower_image
+#print axioms source_bytes
+#print axioms on_domain
+#print axioms outside_no_serializer_success
+end R1Z.ProverCommitDomain34

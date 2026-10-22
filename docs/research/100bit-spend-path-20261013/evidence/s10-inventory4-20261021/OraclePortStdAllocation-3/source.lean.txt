@@ -1,0 +1,111 @@
+import OraclePortJoinSplitStd
+import OraclePortStdBuilder
+import OraclePortCkptAbi3OwnedIter
+
+/-! Library-model boundary for allocation and owned Vec operations. The
+reservation result is retained, including Allocation failure. These are
+content semantics: capacity, physical allocation and Drop are not modeled by
+Aeneas Vec. A source adopter must identify the actual reservation outcome;
+this module never asserts allocator success for all frozen inputs. -/
+set_option autoImplicit false
+namespace AspisR1.OraclePortStdAllocation
+open Aeneas Aeneas.Std Result
+open OraclePortCkptAbi2Vec OraclePortCkptAbi3OwnedIter
+
+inductive AllocationError where
+  | allocation
+  deriving DecidableEq
+
+/-- Mutable Vec content and error are returned, rather than discarded. -/
+def filled {T : Type} (n : Usize) (value : T) (reserved : Bool) :
+    Result (Except AllocationError (alloc.vec.Vec T)) :=
+  if reserved then do
+    let v ← appendModel (alloc.vec.Vec.new T) (List.replicate n.val value)
+    ok (.ok v)
+  else ok (.error .allocation)
+
+def filledSpec {T : Type} (n : Usize) (value : T) (reserved : Bool) :
+    Result (Except AllocationError (alloc.vec.Vec T)) :=
+  if reserved then ok (.ok ⟨List.replicate n.val value, by simp only [List.length_replicate]; scalar_tac⟩)
+  else ok (.error .allocation)
+
+theorem filled_exact {T : Type} (n : Usize) (value : T) (reserved : Bool) :
+    filled n value reserved = filledSpec n value reserved := by
+  cases reserved with
+  | false => rfl
+  | true =>
+    unfold filled filledSpec
+    simp only [↓reduceIte]
+    have bound : (alloc.vec.Vec.new T).val.length +
+        (List.replicate n.val value).length ≤ Usize.max := by
+      change 0 + (List.replicate n.val value).length ≤ Usize.max
+      simp only [List.length_replicate, Nat.zero_add]
+      scalar_tac
+    rw [append_exact _ _ bound]
+    rfl
+
+theorem filled_failure {T : Type} (n : Usize) (value : T) :
+    filled n value false = ok (.error .allocation) := rfl
+
+/-- Concrete declaration assignments, independent of the old owner labels. -/
+def heapFilledSite : OraclePortJoinSplitStd.Site :=
+  ⟨.trustedStd, "aspis_core::r0::heap::filled"⟩
+def vecPushSite : OraclePortJoinSplitStd.Site :=
+  ⟨.trustedStd, "alloc::vec::Vec::push"⟩
+def vecAppendSite : OraclePortJoinSplitStd.Site :=
+  ⟨.trustedStd, "alloc::vec::Vec::extend_from_slice"⟩
+def ownedIterSite : OraclePortJoinSplitStd.Site :=
+  ⟨.trustedStd, "alloc::vec::IntoIterator::into_iter/next"⟩
+def fromFnSite : OraclePortJoinSplitStd.Site :=
+  ⟨.trustedStd, "core::array::from_fn"⟩
+def mapNextSite : OraclePortJoinSplitStd.Site :=
+  ⟨.trustedStd, "core::iter::adapters::map::Map::next"⟩
+
+def inventory : List OraclePortJoinSplitStd.Site :=
+  [heapFilledSite, vecPushSite, vecAppendSite, ownedIterSite, fromFnSite, mapNextSite]
+
+theorem inventory_std : ∀ s ∈ inventory, s.owner = .trustedStd := by
+  intro s hs
+  simp only [inventory, List.mem_cons, List.not_mem_nil, or_false] at hs
+  rcases hs with h | h | h | h | h | h <;> subst s <;> rfl
+
+/-- A concrete typed instance for the filled helper alone. Other declarations
+are rejected, so the helper proof cannot grant trust to arbitrary std names. -/
+def signature (T : Type) : OraclePortJoinSplitStd.Signature :=
+  ⟨fun _ => Usize × T × Bool,
+   fun _ => Result (Except AllocationError (alloc.vec.Vec T))⟩
+
+def implementation (T : Type) : OraclePortJoinSplitStd.Implementation (signature T) :=
+  fun site args => .done (if site = heapFilledSite then
+    filled args.1 args.2.1 args.2.2 else .fail .panic)
+
+def specification (T : Type) : OraclePortJoinSplitStd.Implementation (signature T) :=
+  fun site args => .done (if site = heapFilledSite then
+    filledSpec args.1 args.2.1 args.2.2 else .fail .panic)
+
+theorem filled_cone_join (T : Type) : OraclePortJoinSplitStd.ConeJoin
+    (implementation T) (specification T) .trustedStd := by
+  intro site _ args
+  simp only [implementation, specification, filled_exact]
+
+/-- Coverage of the helper call includes both reservation outcomes, without
+asserting that this one-call tree is the frozen verifier. -/
+def helperTree {T : Type} (n : Usize) (value : T) (reserved : Bool) :
+    OraclePortJoinSplitStd.Calls (signature T)
+      (Result (Except AllocationError (alloc.vec.Vec T))) :=
+  .invoke heapFilledSite (n,value,reserved) fun result => .done result
+
+theorem helper_covered {T : Type} (n : Usize) (value : T) (reserved : Bool) :
+    OraclePortJoinSplitStd.Covered inventory (helperTree n value reserved) := by
+  exact ⟨by simp [inventory], fun _ => True.intro⟩
+
+#print axioms filled_cone_join
+#print axioms helper_covered
+
+#print axioms filled_exact
+#print axioms filled_failure
+#print axioms inventory_std
+#print axioms OraclePortCkptAbi2Vec.push_exact
+#print axioms OraclePortCkptAbi2Vec.append_exact
+#print axioms OraclePortCkptAbi3OwnedIter.owned_contents
+end AspisR1.OraclePortStdAllocation

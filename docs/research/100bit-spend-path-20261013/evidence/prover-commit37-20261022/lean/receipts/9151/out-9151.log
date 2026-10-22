@@ -1,0 +1,58 @@
+'R1Z.ProverCommitReservationRom37.reservation_length' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitReservationRom37.entry_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationRom37.fresh_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationRom37.prior_preserved' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitReservationRom37.not_simulator_seedPoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationRom37.queried_not_seedGuess' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationRom37.no_existing_event_containment' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitReservationMemo37.generic_memo_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationMemo37.conditional_memo_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationMemo37.memo_exceeds_fresh_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationMemo37.old_event_absent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationNonzero37.mixed_memo_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationNonzero37.nonzero_memo_exceeds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationNonzero37.rejected_prefix_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitReservationNonzero37.retry_query_not_covered' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitReservationFrames37.reservation_injective' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitReservationFrames37.reservation_control' does not depend on any axioms
+'R1Z.ProverCommitReservationFrames37.first_byte_separated' does not depend on any axioms
+'R1Z.ProverCommitReservationFrames37.state_control_separated' depends on axioms: [propext, Quot.sound]
+def R1Z.ProverCommitSeedEvent19.seedPoint : List UInt8 → R0Z.FsStatement.OracleAnswer → Prop :=
+fun a seed =>
+  List.take ((List.map R1Z.ProverCommitSaltBytes.byte ↑R1Z.ProverCommitSimulatorCoin18.domain).length + 32) a =
+    List.map R1Z.ProverCommitSaltBytes.byte ↑R1Z.ProverCommitSimulatorCoin18.domain ++ List.ofFn seed
+def R1Z.ProverCommitReservationRom37.reservationQueried : List R1Z.ProverCommitSeedEvent19.Entry →
+  R0Z.FsStatement.OracleAnswer → Prop :=
+fun queries nonce => ∃ entry ∈ queries, entry.1 = R1Z.ProverCommitReservationRom37.reservationInput nonce
+theorem R1Z.ProverCommitReservationNonzero37.retry_query_not_covered : ∀ (secret : R1Z.GamesR1PBin.SecP)
+  (seed : R0Z.FsStatement.OracleAnswer),
+  ∀ rejects < 16,
+    R1Z.ProverCommitEntropy18.generate (R1Z.ProverCommitReservationNonzero37.countdownNext secret) rejects =
+        (Except.ok secret, 0) ∧
+      ↑(secret 0) ≠ 0 ∧
+        R1Z.ProverCommitReservationRom37.reservationQueried
+            [(R1Z.ProverCommitReservationRom37.reservationInput ↑(secret 0), 0)] ↑(secret 0) ∧
+          ¬R1Z.ProverCommitSeedEvent19.seedGuess [(R1Z.ProverCommitReservationRom37.reservationInput ↑(secret 0), 0)]
+              seed :=
+fun secret seed rejects bound =>
+  ⟨id
+      (have fuel :=
+        Decidable.byContradiction fun a =>
+          R1Z.ProverCommitReservationNonzero37.retry_query_not_covered._proof_1 rejects bound a;
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              R1Z.ProverCommitEntropy18.run (R1Z.ProverCommitReservationNonzero37.countdownNext secret) _a rejects =
+                (Except.ok secret, 0))
+            fuel))
+        (R1Z.ProverCommitReservationNonzero37.rejected_prefix_success secret rejects (15 - rejects))),
+    ⟨(secret 0).property, R1Z.ProverCommitReservationRom37.queried_not_seedGuess (↑(secret 0)) seed⟩⟩
+exit=0
+window=1 slot=global env=J launcher=run-joint.sh

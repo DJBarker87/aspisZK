@@ -1,0 +1,84 @@
+/Users/dominic/ZK/.worktrees/cx-dv-twotx/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozen2Decision.lean:56:37: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [h̵,̵eval, ̲ih, ̲eval_bind, ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-dv-twotx/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozen2Decision.lean:62:9: error: Failed to rewrite using equation theorems for `slotPrograms`
+/Users/dominic/ZK/.worktrees/cx-dv-twotx/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozen2Decision.lean:83:29: warning: This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp only [afterBatch0, ̲hi̵,̵h̵v, ̲eval_bind, ̲checkpoint_value, ̲stage2, ̲eval_bind, ̲eval,
+          finish_value p q tr i hi query, ̲arithmetic, ̲hi]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-dv-twotx/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozen2Decision.lean:92:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  OraclePortShortCircuit.short (slotPrograms p q slots)
+in the target expression
+  (eval H
+        (AspisV8R19.OracleProgramOps.bind (batch p q batch0) fun ok =>
+          if ok = true then afterBatch0 stored p q tr else Program.done false)).2 =
+    (eval H
+        (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          AspisV8R19.OracleProgramOps.bind (OraclePortShortCircuit.short (slotPrograms p q slots)) fun ok =>
+            Program.done (ok && arithmetic p q tr)
+        | x, x_1 => Program.done false)).2
+
+case h_1
+H : Bytes → State
+stored : Bytes
+tr : ErasedPrefix
+m : ErasedMessage
+h✝ : OraclePortAdmission.Guard tr
+x✝¹ : Option Parsed
+x✝ : Option (Fin 22 → Fin 262144)
+p : Parsed
+q : Fin 22 → Fin 262144
+hp : OraclePortStoredParserC4.parseReached stored tr = some p
+hq : queries tr = some q
+⊢ (eval H
+        (AspisV8R19.OracleProgramOps.bind (batch p q batch0) fun ok =>
+          if ok = true then afterBatch0 stored p q tr else Program.done false)).2 =
+    (eval H
+        (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          AspisV8R19.OracleProgramOps.bind (OraclePortShortCircuit.short (slotPrograms p q slots)) fun ok =>
+            Program.done (ok && arithmetic p q tr)
+        | x, x_1 => Program.done false)).2
+/Users/dominic/ZK/.worktrees/cx-dv-twotx/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozen2Decision.lean:97:6: error: Tactic `rfl` failed: The left-hand side
+  (eval H (Program.done false)).2
+is not definitionally equal to the right-hand side
+  (eval H
+      (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+      | some p, some q =>
+        AspisV8R19.OracleProgramOps.bind (OraclePortShortCircuit.short (slotPrograms p q slots)) fun ok =>
+          Program.done (ok && arithmetic p q tr)
+      | x, x_1 => Program.done false)).2
+
+case h_2
+H : Bytes → State
+stored : Bytes
+tr : ErasedPrefix
+m : ErasedMessage
+h✝ : OraclePortAdmission.Guard tr
+x✝² : Option Parsed
+x✝¹ : Option (Fin 22 → Fin 262144)
+x✝ :
+  ∀ (p : Parsed) (q : Fin 22 → Fin 262144),
+    OraclePortStoredParserC4.parseReached stored tr = some p → queries tr = some q → False
+⊢ (eval H (Program.done false)).2 =
+    (eval H
+        (match OraclePortStoredParserC4.parseReached stored tr, queries tr with
+        | some p, some q =>
+          AspisV8R19.OracleProgramOps.bind (OraclePortShortCircuit.short (slotPrograms p q slots)) fun ok =>
+            Program.done (ok && arithmetic p q tr)
+        | x, x_1 => Program.done false)).2
+'AspisR1.OraclePortFrozen2.short_append' depends on axioms: [propext]
+'AspisR1.OraclePortFrozen2.batches' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortFrozen2.after_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortFrozen2.acceptance_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortFrozen2.accepted_details' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortFrozen2.admitted' depends on axioms: [propext, Classical.choice, Quot.sound]

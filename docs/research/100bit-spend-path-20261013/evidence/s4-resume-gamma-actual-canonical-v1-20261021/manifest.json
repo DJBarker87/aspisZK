@@ -1,0 +1,28 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "status": "PROVED: successful resume under source-cut Reader.e has flat canonical bounds on the exact Prepared.gamma returned by that same resume; raw reads remain the explicit operation slot",
+  "publication_base_revision": "6f59f538dfb6c8ecb786614d0885594eee45b837",
+  "module": "S4ResumeGammaActualCanonicalV1",
+  "source": "sources/S4ResumeGammaActualCanonicalV1.lean",
+  "source_sha256": "ce264da064425af88438c4331fcc6718133527d031b0f85544e17d9a37de16c6",
+  "object_sha256": "07b81da85216fc53b1fa65aa252f0cbd0a64fcadd5eeff6443ea242f63d0a813",
+  "attempt": "attempt-v3.receipt.json",
+  "owner_pins": "owner-pins.json",
+  "scope": "One read operation cut: ResumeOps.readE := readerE ops.raw. Successful_fields ties first `readE` result to returned Prepared.gamma. readerE_success_canonical gives 8 coordinate bounds. This does not prove raw Reader bytes/source installation or full tx2 caller acceptance.",
+  "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "metrics": {
+    "exit_status": 0,
+    "wall_seconds": 2.862,
+    "peak_rss_bytes": 2244476928,
+    "swap_bytes": 0
+  },
+  "checker": "check_packet.py",
+  "notes": "SourceFields theorem is from the exact current resume body owner; its first-E witness is reused, not reproved. The selected concrete Reader.e owner is a source-operation cut replacing raw/decode/ok_or calls as pinned.",
+  "note": "attempt-v3 recompiles the unchanged consumer against the revised ReaderE parent after removing the prior conflicting Reader carrier import. attempt-v2 remains retained with its original successful result; v1 root-path failure remains in diagnostics.",
+  "command": "attempt-v3.command.json",
+  "log": "attempt-v3.lean.log"
+}

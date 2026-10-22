@@ -1,0 +1,24 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitStep29.lean:70:59: error: unsolved goals
+H : Type
+hash : aspis_core.digest.Digest32 H
+state : State H
+row : U8
+records : Records
+sem : Values
+⊢ (do
+      let i ← lift (UScalar.cast UScalarTy.Usize row)
+      let v ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec U8)) records i
+      let record1 ← alloc.vec.CloneVec.clone core.clone.CloneU8 v
+      sim.owned29.semantic_step hash state row record1 sem) =
+    do
+    let index ← liftM (lift (UScalar.cast UScalarTy.Usize row))
+    let record ← liftM (alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec U8)) records index)
+    let record1 ← liftM (alloc.vec.CloneVec.clone core.clone.CloneU8 record)
+    sim.owned29.semantic_step hash state row record1 sem
+'R1Z.ProverCommitStep29.shift_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitStep29.extracted_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitStep29.iteration_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitStep29.extracted_selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitStep29.selected_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

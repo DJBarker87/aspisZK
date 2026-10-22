@@ -1,0 +1,83 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:52:4: error: Invalid alternative name `Err`: Expected `nil` or `cons`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:53:4: error: Invalid alternative name `Ok`: Expected `nil` or `cons`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:51:4: error: Alternative `nil` has not been provided
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:51:4: error: Alternative `cons` has not been provided
+case succ
+M : Type → Type
+inst✝³ : Monad M
+inst✝² : LawfulMonad M
+inst✝¹ : MonadLiftT Result M
+inst✝ : LawfulMonadLiftT Result M
+H : Type
+effect : H → Parts → M Bytes32
+records : Records
+n : ℕ
+ih :
+  ∀ (row : Usize) (state : State H) (sem : Values),
+    ↑row + n ≤ 25 →
+      rows effect records row n state sem = do
+        let result ← ProverCommitSemanticRows28.rows effect records row n state sem
+        pure (ProverCommitStep29.discard result)
+row : Usize
+state : State H
+sem : Values
+count : ↑row + (n + 1) ≤ 25
+rt : UScalar.cast UScalarTy.Usize (UScalar.cast UScalarTy.U8 row) = row
+⊢ (do
+      let index ← liftM (ok (UScalar.cast UScalarTy.U8 row))
+      let record ← liftM (alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec U8)) records row)
+      let record ← liftM (alloc.vec.CloneVec.clone core.clone.CloneU8 record)
+      let x ← ProverCommitSemanticProgram28.semantic effect state index record
+      let sample ←
+        match x.1 with
+          | core.result.Result.Err a => pure (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic)
+          | core.result.Result.Ok value => do
+            let index ← liftM (ok (UScalar.cast UScalarTy.Usize index))
+            let sem ← liftM (Array.update sem index value)
+            pure (core.result.Result.Ok (x.2, sem))
+      match sample with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok (next, sem) => rows effect records (row.wrapping_add 1#usize) n next sem) =
+    do
+    let x ← liftM (ok (UScalar.cast UScalarTy.U8 row))
+    let x_1 ← liftM (alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec U8)) records row)
+    let x_2 ← liftM (alloc.vec.CloneVec.clone core.clone.CloneU8 x_1)
+    let x ← ProverCommitSemanticProgram28.semantic effect state x x_2
+    let result ←
+      match x.1 with
+        | core.result.Result.Err e => pure (core.result.Result.Err e, x.2)
+        | core.result.Result.Ok value => do
+          let sem ← liftM (Array.update sem row value)
+          ProverCommitSemanticRows28.rows effect records (row.wrapping_add 1#usize) n x.2 sem
+    pure (ProverCommitStep29.discard result)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:42:6: warning: This simp argument is unused:
+  monadLift_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵o̵w̵s̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵S̵e̵m̵a̵n̵t̵i̵c̵R̵o̵w̵s̵2̵8̵.̵r̵o̵w̵s̵,̵i̵t̵e̵r̵a̵t̵i̵o̵n̵,̵l̵i̵f̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵o̵n̵a̵d̵L̵i̵f̵t̵_̵p̵u̵r̵e̵,̵p̵u̵r̵e̵_̵b̵i̵n̵d̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵r̵t̵]̵[̲r̲o̲w̲s̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲S̲e̲m̲a̲n̲t̲i̲c̲R̲o̲w̲s̲2̲8̲.̲r̲o̲w̲s̲,̲ ̲i̲t̲e̲r̲a̲t̲i̲o̲n̲,̲ ̲l̲i̲f̲t̲,̲ ̲p̲u̲r̲e̲_̲b̲i̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:42:21: warning: This simp argument is unused:
+  pure_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵o̵w̵s̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵S̵e̵m̵a̵n̵t̵i̵c̵R̵o̵w̵s̵2̵8̵.̵r̵o̵w̵s̵,̵i̵t̵e̵r̵a̵t̵i̵o̵n̵,̵l̵i̵f̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵o̵n̵a̵d̵L̵i̵f̵t̵_̵p̵u̵r̵e̵,̵p̵u̵r̵e̵_̵b̵i̵n̵d̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵r̵t̵]̵[̲r̲o̲w̲s̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲S̲e̲m̲a̲n̲t̲i̲c̲R̲o̲w̲s̲2̲8̲.̲r̲o̲w̲s̲,̲ ̲i̲t̲e̲r̲a̲t̲i̲o̲n̲,̲ ̲l̲i̲f̲t̲,̲ ̲m̲o̲n̲a̲d̲L̲i̲f̲t̲_̲p̲u̲r̲e̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:42:42: warning: This simp argument is unused:
+  rt
+
+Hint: Omit it from the simp argument list.
+  simp only [rows, ̲ProverCommitSemanticRows28.rows, ̲iteration, ̲lift,
+  ̵  ̵ ̵ ̵ ̵ ̵monadLift_pure, ̲pure_bind,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_assoc,̵r̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitRows29.cast_roundtrip' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitRows29.bind_same' depends on axioms: [Quot.sound]
+'R1Z.ProverCommitRows29.rows_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,66 @@
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinFinishExact.lean:17:39: error: Application type mismatch: The argument
+  old.property
+has type
+  (↑old).length ≤ Usize.max
+but is expected to have type
+  (↑raw).length ≤ Usize.max
+in the application
+  LE.le.trans (Nat.min_le_right (alloc.vec.Vec.length old) (↑raw).length) old.property
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinFinishExact.lean:29:64: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c - d ≤ -1
+  b ≥ 0
+  b - c ≤ 0
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑(alloc.vec.Vec.length raw)
+ b := ↑(alloc.vec.Vec.length out)
+ c := ↑j
+ d := ↑(↑out).length
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinFinishExact.lean:28:13: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinFinishExact.lean:49:10: error(lean.unknownIdentifier): Unknown identifier `S8Kani2MutableOutput.prefixWrite`
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinFinishExact.lean:49:44: error(lean.unknownIdentifier): Unknown identifier `S8Kani2PendingWrite.prefixWrite`
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinFinishExact.lean:47:44: error: unsolved goals
+raw : Raw
+old : Weights
+terms : Usize
+lengths : alloc.vec.Vec.length old ≤ alloc.vec.Vec.length raw
+out : FinishSlice
+run : BatchedWeights.finish { raw := raw, terms := terms } (toSlice old) = ok out
+shape : out = prefixWrite (valueAt { raw := raw, terms := terms }) 0 (↑(Slice.len (toSlice old))) (toSlice old)
+cells :
+  ∀ (i : Usize),
+    ↑i < ↑(Slice.len (toSlice old)) →
+      Slice.index_usize out i = ok (valueAt { raw := raw, terms := terms } ↑i) ∧
+        F.value { raw := raw, terms := terms } i = ok (valueAt { raw := raw, terms := terms } ↑i)
+⊢ (↑(prefixWrite (valueAt { raw := raw, terms := terms }) 0 (↑old).length ⟨List.map toFinish ↑old, ⋯⟩)).length =
+    (↑old).length
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinFinishExact.lean:54:49: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 0
+  c ≥ 0
+  c - f ≥ 0
+  b ≥ 0
+  b - c ≥ 1
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑(alloc.vec.Vec.length raw)
+ b := ↑(↑out).length
+ c := ↑j
+ d := ↑Usize.max
+ e := ↑(↑old).length
+ f := ↑2 ^ UScalarTy.Usize.numBits
+/Users/dominic/ZK/.worktrees/cx-s8-join/docs/research/100bit-spend-path-20261013/lean/S8JoinFinishExact.lean:60:71: error: Type mismatch: After simplification, term
+  hj
+ has type
+  @LT.lt ℕ instLTNat j (↑old).length
+but is expected to have type
+  @LT.lt ℕ instLTNat (↑i) (↑old).length
+'S8JoinFinishExact.reference_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'S8JoinFinishExact.mutable_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -141,3 +141,31 @@ Current highest-uncertainty work is whole Weights::pair extraction, the actual S
 `evidence/s4-actual-callback-three-push-bounds-root-v1-20261021/` connects the actual tail loop witnesses to the existing AcceptedPushTrace. With the source constructor and checked backend explicitly bound, the complete callback derives exactly three accepted pushes, final count3, both count-indexed word bounds and both preaccumulator bounds below 2^46. It retains that same tail output's finish operation and final wideAdd call for the next consumer. No independent child-push-success, accumulator-bound or initial-count assumptions are introduced. Final focused check 12.638s, peak process RSS 3,258,138,624 bytes, zero swaps, six standard-only axiom reports. This remains ACCEPTED-ONLY for a successful callback under the stated Ops bindings; it is not outer TOTAL.
 
 The supporting `s4-reused-count-bound-owner-root-v1-20261021` is the existing EbyKDotCountBoundV1 proof with only its import retargeted to the already checked S5QRaw owner, preserving all theorem bodies verbatim. This avoids old raw-namespace/import conflicts in the current S4 closure. Focused compile 25.589s, peak process RSS 3,187,261,440 bytes, zero swaps, four standard-only axiom reports. No cold dependency build or full manifest replay was run. Production source, artifacts and CU are unchanged.
+
+
+### Ordered checked-push products; focused ownership
+
+The source-only packet `evidence/s4-checked-push-product-trace-root-v1-20261021/` now proves that the same accepted checked backend trace evaluates to its ordered field-product accumulation. It reuses the one-push decoded-product theorem and derives every intermediate accumulator range from count preservation. Only starting count bounds and canonical values of the trace inputs are hypotheses. Focused check 10.358s, process RSS 3,261,153,280 bytes, zero swaps, standard axioms. The supporting `s4-reused-product-update-count-root-v1-20261021` preserves the existing one-push proof body verbatim, changing only its count-owner import to the coherent current closure; focused check 26.654s, RSS 3,196,715,008 bytes, zero swaps, standard axioms. Actual callback source-trace and coefficient-canonicality composition remain the next consumer, not an assumed consequence of the generic trace theorem.
+
+Per user direction, this session now works three completion tracks: S3/S9 together (one Weights::pair caller), S4, and S5. One worker owns each; root integrates checked results. S1/S2/S6 are offered to a separate Codex session. This is an ownership allocation, not a change to completion criteria or proof claims. No additional cones are being opened here. The current research advance through 450fe4796 does not change weights.rs, fast_dots.rs, wide_exact.rs, verifier.rs or candidate.rs against b2727acd3.
+
+
+### Integration target update and S3 component evidence
+
+The lead handoff `HANDOFF-SESSION-A-20261021.md` now identifies `OraclePortFrozenOrderHeadline.final_soundness` and `AcceptedRunJoin D rust` as the adopted integration target. Re-pin results must feed the matching `dV_frozen` arithmetic/driver stage; independent algebra or an explicit operation model is not itself a frozen-source join. This session retains S3/S9, S4 and S5, with S1/S2/S6 offered separately per the user's latest direction; the handoff's broader session-A allocation describes the aggregate responsibility.
+
+`evidence/s3-helper-classification-completion-v1-20261021/` assembles two existing green theorem owners without rerunning Lean: all 1024 actual row/inactive cells agree with the optimized table, and successful actual grouped helper output has the exact source-row functional under CanonicalLow. This closes those helper/classification components. Complete S3 remains open at the adopted cone interface: reached low-array provenance, full pair state/caller and identification with the frozen arithmetic model are still required, sharing the enclosing caller work with S9. The packet must not be read as moving that requirement out of S3 or as unrestricted helper totality. Its source/hash checker passes; no production change.
+
+
+Numerical fidelity note: the active user goal in this session still requires raw per-attempt failure at most 2^-100, without work/grinding normalization. The adopted OraclePortFrozenOrderHeadline Claims/per_query endpoint instead concludes failureModel <= (Q+1)*2^-100 in its stated Q range, retaining totalBound Q separately. This session therefore treats accepted-run source refinement as necessary common work, but does not treat completion of those joins or that query-normalized headline alone as completion of its raw per-attempt goal. No numerical constant, adversary restriction or success criterion has been changed here.
+
+
+### Checked finish, same-callback reduction and current addition
+
+Three S4 operation/composition packets are now source-frozen for integration without unchanged Lean replays:
+
+- `s4-tail-finish-source-map-v1-20261021`: explicit EbyK source-finish carrier adapter is total on every typed tail state, preserving both input arrays/count and yielding canonical output with all eight exact same-input residues modulo P (11.315s, aggregate RSS 3,183,214,592 bytes, zero swaps, three standard-only axiom reports).
+- `s4-callback-tail-finish-residues-v1-20261021`: successful actual callback under that adapter retains its own tail loop and finish calls, those same eight output residues, and its final wideAdd call (10.604s, aggregate RSS 3,206,201,344 bytes, zero swaps, one standard-only report).
+- `s4-current-wide-add-adapter-v1-20261021`: literal carrier maps and the existing current wide-add theorem give canonical output and decoded field addition for canonical operands (33.298s, aggregate RSS 3,147,939,840 bytes, zero swaps, two standard-only reports).
+
+These are explicit source-operation adapters and an accepted-success composition. Actual frozen Ops-slot installation, same-callback input/operand canonicality derivation and full dV_frozen arithmetic/result refinement remain open. The add theorem is total only on its stated canonical-operand domain. Source snapshots/import pins and focused compiler receipts are retained; no source re-extraction, production change or full manifest replay was performed by packaging.

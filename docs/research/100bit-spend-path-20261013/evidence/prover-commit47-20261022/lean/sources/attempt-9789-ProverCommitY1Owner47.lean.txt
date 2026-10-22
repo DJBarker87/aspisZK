@@ -1,0 +1,62 @@
+import R1Z.ProverCommitBasisValue47
+import R1Z.ProverCommitDotModel47
+/-! Complete natural-basis evaluation for the D144 owned reference. Actual
+sim::opening/iterator binding and tape-to-model provenance remain separate. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitY1Owner47
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitPairCounter47 ProverCommitPairValue47 ProverCommitDotModel47
+open AspisR1.ExtractedCurrentQM31Exact
+attribute [local irreducible] sourceArray dot ProverCommitEval47.pairEval ProverCommitEval47.messageEval
+
+def run (q : Nat → Old.Q) (x y : Old.Q) : Result field.wide_exact.WideExact := do
+  let b ← values (ProverCommitNativeOps47.embedded x)
+  evaluate (sourceArray 1024#usize q) b (ProverCommitNativeOps47.embedded y)
+
+theorem source_zero : field.wide_exact.WideExact.ZERO=ProverCommitNativeOps47.embedded zero := by
+  rw [field.wide_exact.WideExact.ZERO,field.QM31.ZERO]
+  rfl
+
+theorem value (q : Nat → Old.Q) (hq : ∀ j, j<1024 → Canonical (q j))
+    (x y : Old.Q) (hx : Canonical x) (hy : Canonical y) :
+    ∃ z : Old.Q, run q x y=ok (ProverCommitNativeOps47.embedded z) ∧ Canonical z ∧
+      decode z=ProverCommitEval47.messageEval (fun j : Fin 1024 => decode (q j.val)) (decode x) (decode y) := by
+  obtain ⟨b,hb,hcb,hbv⟩ := ProverCommitBasisValue47.values_exact x hx
+  obtain ⟨p0,p1,hp,hcp0,hcp1,hdp0,hdp1⟩ := source_value q b hq hcb zero zero zero_canonical zero_canonical
+  have hdot : dot (fun j => decode (q j)) (fun j => decode (b j)) 512 0 =
+      ProverCommitEval47.pairEval (fun j : Fin 1024 => decode (q j.val)) (decode x) := by
+    calc
+      _ = dot (fun j => decode (q j)) (AspisCircleTensorBinding.naturalLineValue (decode x)) 512 0 :=
+        dot_congr 512 0 _ _ _ (fun j _ hj => hbv j (by omega))
+      _ = _ := dot_model _ _
+  rw [zero_decode,zero_add,hdot] at hdp0 hdp1
+  obtain ⟨m,hm,hcm,hdm⟩ := ProverCommitNativeOps47.mul_exact y p1 hy hcp1
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitNativeOps47.add_exact p0 m hcp0 hcm
+  refine ⟨z,?_,hcz,?_⟩
+  · simp only [run,hb,bind_tc_ok,evaluate,source_zero,hp]
+    dsimp only
+    simp only [hm,hz,bind_tc_ok]
+  · rw [hdz,hdm,hdp0,hdp1]
+    rw [ProverCommitEval47.messageEval]
+
+/-- Arbitrary raw input words are accepted through the actual constructor's
+normalization. This removes the canonical-input premise from this reference
+value theorem; it does not assert a missing native caller equality. -/
+theorem raw_value (q : Nat → Old.Q) (x y : Old.Q) :
+    ∃ z : Old.Q,
+      run (fun j => ProverCommitNativeOps47.normalize (q j))
+        (ProverCommitNativeOps47.normalize x) (ProverCommitNativeOps47.normalize y) =
+          ok (ProverCommitNativeOps47.embedded z) ∧ Canonical z ∧
+      decode z=ProverCommitEval47.messageEval (fun j : Fin 1024 => decode (q j.val)) (decode x) (decode y) := by
+  obtain ⟨z,hz,hcz,hdz⟩ := value (fun j => ProverCommitNativeOps47.normalize (q j))
+    (fun j _ => ProverCommitNativeOps47.normalize_canonical (q j))
+    (ProverCommitNativeOps47.normalize x) (ProverCommitNativeOps47.normalize y)
+    (ProverCommitNativeOps47.normalize_canonical x) (ProverCommitNativeOps47.normalize_canonical y)
+  exact ⟨z,hz,hcz,by simpa only [ProverCommitNativeOps47.normalize_decode] using hdz⟩
+
+#print axioms source_zero
+#print axioms value
+#print axioms raw_value
+end R1Z.ProverCommitY1Owner47

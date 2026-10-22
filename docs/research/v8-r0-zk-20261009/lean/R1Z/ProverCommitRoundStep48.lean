@@ -1,0 +1,67 @@
+import AspisR1ProducerRelease47.Batched48
+import R1Z.ProverCommitFoldRange48
+/-! Exact native batched-round coefficient transition. Array/permutation and
+wrapping-index bounds are discharged before arithmetic is composed. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitRoundStep48
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitWideOps48 ProverCommitMix48
+
+def perm (t : Nat) : Nat := if t=0 then 0 else 4-t
+
+theorem permutation (t : Usize) (ht : t.val < 4) :
+    ∃ p : Usize, Array.index_usize (Array.make 4#usize [0#usize,3#usize,2#usize,1#usize]) t=ok p ∧
+      p.val=perm t.val ∧ p.val < 4 := by
+  have h : t=0#usize ∨ t=1#usize ∨ t=2#usize ∨ t=3#usize := by scalar_tac
+  rcases h with h|h|h|h <;> subst t
+  · exact ⟨0#usize,rfl,rfl,by decide⟩
+  · exact ⟨3#usize,rfl,rfl,by decide⟩
+  · exact ⟨2#usize,rfl,rfl,by decide⟩
+  · exact ⟨1#usize,rfl,rfl,by decide⟩
+
+attribute [local irreducible] sourceArray source value
+
+theorem step (q w xs : Nat → Raw) (hq : ∀ k, k < 1024 → canonical (q k))
+    (hw : ∀ k, k < 1024 → canonical (w k)) (hxs : ∀ k, k < 7 → canonical (xs k))
+    (d s t : Usize) (hd : d.val < 256) (hs : s.val < 4) (ht : t.val < 4) :
+    ∃ ys : Nat → Raw,
+      round_step (sourceArray 1024#usize q) (sourceArray 1024#usize w)
+        (sourceArray 7#usize xs) d s t=ok (sourceArray 7#usize ys) ∧
+      (∀ k, k < 7 → canonical (ys k)) ∧
+      ∀ k, k < 7 → value (ys k)=value (xs k)+
+        if k=s.val+perm t.val then value (q (4*d.val+s.val))*value (w (4*d.val+t.val)) else 0 := by
+  have seven : (7#usize).val=7 := rfl
+  have big : (1024#usize).val=1024 := rfl
+  obtain ⟨p,hp,hpv,hpb⟩ := permutation t ht
+  have hidx : (Usize.wrapping_add s p).val=s.val+p.val :=
+    ProverCommitBasisFillValue47.add_val s p (by omega)
+  have hqidx := ProverCommitFoldRange48.offset_val d hd s (by omega)
+  have hwidx := ProverCommitFoldRange48.offset_val d hd t (by omega)
+  obtain ⟨m,hm,hcm,hdm⟩ := mul_exact (q (4*d.val+s.val)) (w (4*d.val+t.val))
+    (hq _ (by omega)) (hw _ (by omega))
+  obtain ⟨z,hz,hcz,hdz⟩ := add_exact (xs (s.val+p.val)) m (hxs _ (by omega)) hcm
+  let ys := Function.update xs (s.val+p.val) z
+  refine ⟨ys,?_,?_,?_⟩
+  · rw [round_step,hp]
+    simp only [bind_tc_ok,lift]
+    rw [index _ _ _ (by rw [hidx];omega),index _ _ _ (by rw [hqidx];omega),
+      index _ _ _ (by rw [hwidx];omega)]
+    simp only [hidx,hqidx,hwidx,hm,hz,bind_tc_ok]
+    rw [ProverCommitWideArray48.update _ _ _ (by rw [hidx];omega)]
+    simp only [hidx]
+    rfl
+  · intro k hk
+    by_cases h : k=s.val+p.val
+    · subst k;simp only [ys,Function.update_self];exact hcz
+    · simp only [ys,Function.update_of_ne h];exact hxs k hk
+  · intro k hk
+    by_cases h : k=s.val+p.val
+    · subst k
+      simp only [ys,Function.update_self,hdz,hdm,hpv,if_true]
+    · have h' : k≠s.val+perm t.val := by rwa [← hpv]
+      simp only [ys,Function.update_of_ne h,if_neg h',add_zero]
+
+#print axioms permutation
+#print axioms step
+end R1Z.ProverCommitRoundStep48

@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitAdaptiveFuel23.lean:29:16: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  eventMass (markedFailure zero program) =
+    mean fun H =>
+      have r := (eval H (compile program ∅ id)).2;
+      if r.1 = true ∧ exhausted zero r.2 then 1 else 0
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.29} {β : α → Sort ?u.28} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+Address Answer : Type
+inst✝³ : DecidableEq Address
+inst✝² : Fintype Address
+inst✝¹ : Fintype Answer
+inst✝ : Nonempty Answer
+zero : Answer
+program : Marked Address Answer k
+bound :
+  (mean fun H =>
+      have r := (eval H (compile program ∅ id)).2;
+      if r.1 = true ∧ exhausted zero r.2 then 1 else 0) ≤
+    1 / ↑(Fintype.card Answer) ^ k
+⊢ eventMass (markedFailure zero program) =
+    mean fun H =>
+      have r := (eval H (compile program ∅ id)).2;
+      if r.1 = true ∧ exhausted zero r.2 then 1 else 0
+'R1Z.ProverCommitAdaptiveFuel23.adaptive_exhaustion' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitAdaptiveFuel23.source_exhaustion' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitAdaptiveFuel23.adaptive_union' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,51 @@
+--- current/sim.rs
++++ host-source-body/sim.rs
+@@ -519,6 +519,48 @@
+ #[path="sim_tests.rs"]
+ mod tests;
+ 
++// Owned reference for exactly one source Coins::coin transition.
++#[cfg(any(kani,aeneas_ref))]
++pub(crate) fn coin_owned18(hash:HashFn,seed:[u8;32],attempt:u32,stream:u8,next:u64)->([u8;32],u64) {
++    let answer=hash(&[b"UNPROVED:R1:SIM:COIN",&seed,&attempt.to_le_bytes(),&[stream],&next.to_le_bytes()]);
++    (answer,next+1)
++}
++#[cfg(kani)]
++mod simcoin18 {
++    use super::*;
++    static mut SEED:[u8;32]=[0;32];
++    static mut ATTEMPT:u32=0;
++    static mut STREAM:u8=0;
++    static mut NEXT:u64=0;
++    static mut ANSWER:[u8;32]=[0;32];
++    static mut CALLS:usize=0;
++    fn hash(parts:&[&[u8]])->[u8;32] {
++        assert_eq!(parts.len(),5);
++        assert_eq!(parts[0],b"UNPROVED:R1:SIM:COIN");
++        unsafe {
++            assert_eq!(parts[1],SEED);
++            assert_eq!(parts[2],ATTEMPT.to_le_bytes());
++            assert_eq!(parts[3],[STREAM]);
++            assert_eq!(parts[4],NEXT.to_le_bytes());
++            CALLS+=1;ANSWER
++        }
++    }
++    #[kani::proof]
++    #[kani::unwind(34)]
++    #[kani::stub(aspis_prover::host_hashv,hash)]
++    fn coin_transition() {
++        let seed:[u8;32]=kani::any();let attempt:u32=kani::any();let stream:u8=kani::any();let next:u64=kani::any();
++        kani::assume(next<u64::MAX);
++        let answer:[u8;32]=kani::any();
++        unsafe {SEED=seed;ATTEMPT=attempt;STREAM=stream;NEXT=next;ANSWER=answer;CALLS=0;}
++        let expected=coin_owned18(HOST_HASH,seed,attempt,stream,next);
++        assert_eq!(unsafe{CALLS},1);unsafe{CALLS=0;}
++        let mut actual=Coins{seed,attempt,stream,next};let observed=actual.coin();
++        assert_eq!(observed,expected.0);assert_eq!(actual.next,expected.1);
++        assert_eq!(actual.seed,seed);assert_eq!(actual.attempt,attempt);assert_eq!(actual.stream,stream);
++        assert_eq!(unsafe{CALLS},1);
++    }
++}
+ // Proof-only owned references. Not enabled in any production configuration.
+ #[cfg(any(kani,aeneas_ref))]
+ pub mod owned19 {

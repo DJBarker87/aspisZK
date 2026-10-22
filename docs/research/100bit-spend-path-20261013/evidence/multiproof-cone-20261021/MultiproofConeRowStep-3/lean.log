@@ -1,0 +1,275 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeRowStep.lean:41:24: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Type _abstMVar.0) → (x_1 : Type _abstMVar.1) → Result x_0 → (x_0 → Result x_1) → Result x_1
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeRowStep.lean:42:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if row ≥ 14#u8 then size / 2#usize else ok size
+in the target expression
+  (let (tag, size) := (tag, size)
+    Std.bind (if row ≥ 14#u8 then size / 2#usize else ok size) fun stored =>
+      Std.bind (5#usize + stored) fun i1 =>
+        if bytes.len < i1 then ok none
+        else
+          Std.bind (bytes.index_usize 0#usize) fun i2 =>
+            if (i2 != tag) = true then ok none
+            else
+              Std.bind (bytes.index_usize 1#usize) fun i3 =>
+                Std.bind (bytes.index_usize 2#usize) fun i4 =>
+                  Std.bind (bytes.index_usize 3#usize) fun i5 =>
+                    Std.bind (bytes.index_usize 4#usize) fun i6 =>
+                      Std.bind
+                        (core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                          (Array.make 4#usize [i3, i4, i5, i6] ⋯)
+                          (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 size)))
+                        fun b =>
+                        if b = true then ok none
+                        else
+                          Std.bind
+                            (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                              { start := 5#usize, «end» := i1 })
+                            fun payload =>
+                            if row ≥ 14#u8 then
+                              Std.bind (reference.check_values payload) fun b1 =>
+                                if b1 = true then
+                                  if row ≥ 14#u8 then
+                                    Std.bind (reference.expand_rows payload (alloc.vec.Vec.new U8)) fun o1 =>
+                                      match o1 with
+                                      | none => ok none
+                                      | some x =>
+                                        Std.bind
+                                          (core.slice.index.Slice.index
+                                            (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                            { «end» := 5#usize })
+                                          fun s =>
+                                          Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 s) fun framed =>
+                                            Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref)
+                                              fun framed1 =>
+                                              Std.bind (rows.push framed1) fun rows1 =>
+                                                Std.bind (row + 1#u8) fun i8 =>
+                                                  Std.bind
+                                                    (core.slice.index.Slice.index
+                                                      (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                                      { start := i1 })
+                                                    fun s2 => parser_reference.semantic_rows i8 s2 rows1
+                                  else
+                                    Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 payload) fun x =>
+                                      Std.bind
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                          bytes { «end» := 5#usize })
+                                        fun s =>
+                                        Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 s) fun framed =>
+                                          Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref)
+                                            fun framed1 =>
+                                            Std.bind (rows.push framed1) fun rows1 =>
+                                              Std.bind (row + 1#u8) fun i8 =>
+                                                Std.bind
+                                                  (core.slice.index.Slice.index
+                                                    (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                                    { start := i1 })
+                                                  fun s2 => parser_reference.semantic_rows i8 s2 rows1
+                                else ok none
+                            else
+                              if row ≥ 14#u8 then
+                                Std.bind (reference.expand_rows payload (alloc.vec.Vec.new U8)) fun o1 =>
+                                  match o1 with
+                                  | none => ok none
+                                  | some x =>
+                                    Std.bind
+                                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                        bytes { «end» := 5#usize })
+                                      fun s =>
+                                      Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 s) fun framed =>
+                                        Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref)
+                                          fun framed1 =>
+                                          Std.bind (rows.push framed1) fun rows1 =>
+                                            Std.bind (row + 1#u8) fun i8 =>
+                                              Std.bind
+                                                (core.slice.index.Slice.index
+                                                  (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                                  { start := i1 })
+                                                fun s2 => parser_reference.semantic_rows i8 s2 rows1
+                              else
+                                Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 payload) fun x =>
+                                  Std.bind
+                                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                      bytes { «end» := 5#usize })
+                                    fun s =>
+                                    Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 s) fun framed =>
+                                      Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref)
+                                        fun framed1 =>
+                                        Std.bind (rows.push framed1) fun rows1 =>
+                                          Std.bind (row + 1#u8) fun i8 =>
+                                            Std.bind
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                                { start := i1 })
+                                              fun s2 => parser_reference.semantic_rows i8 s2 rows1) =
+    if bytes.len < finish then ok none
+    else
+      Std.bind (headerChecks bytes tag size) fun good =>
+        if good = true then
+          Std.bind
+            (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+              { start := 5#usize, «end» := finish })
+            fun payload =>
+            Std.bind (prepare row payload) fun logical =>
+              match logical with
+              | none => ok none
+              | some value =>
+                Std.bind
+                  (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                    { «end» := 5#usize })
+                  fun prefixBytes =>
+                  Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 prefixBytes) fun framed =>
+                    Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed value.deref) fun framed1 =>
+                      Std.bind (rows.push framed1) fun rows1 =>
+                        Std.bind (row + 1#u8) fun nextRow =>
+                          Std.bind
+                            (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                              { start := finish })
+                            fun rest => parser_reference.semantic_rows nextRow rest rows1
+        else ok none
+
+row : U8
+bytes : Slice U8
+rows : alloc.vec.Vec (alloc.vec.Vec U8)
+tag : U8
+size stored finish : Usize
+notDone : ¬row ≥ 27#u8
+shape : reference.row_shape row = ok (some (tag, size))
+storage : (if row ≥ 14#u8 then size / 2#usize else ok size) = ok stored
+endOffset : 5#usize + stored = ok finish
+⊢ (let (tag, size) := (tag, size)
+    Std.bind (if row ≥ 14#u8 then size / 2#usize else ok size) fun stored =>
+      Std.bind (5#usize + stored) fun i1 =>
+        if bytes.len < i1 then ok none
+        else
+          Std.bind (bytes.index_usize 0#usize) fun i2 =>
+            if (i2 != tag) = true then ok none
+            else
+              Std.bind (bytes.index_usize 1#usize) fun i3 =>
+                Std.bind (bytes.index_usize 2#usize) fun i4 =>
+                  Std.bind (bytes.index_usize 3#usize) fun i5 =>
+                    Std.bind (bytes.index_usize 4#usize) fun i6 =>
+                      Std.bind
+                        (core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                          (Array.make 4#usize [i3, i4, i5, i6] ⋯)
+                          (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 size)))
+                        fun b =>
+                        if b = true then ok none
+                        else
+                          Std.bind
+                            (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                              { start := 5#usize, «end» := i1 })
+                            fun payload =>
+                            if row ≥ 14#u8 then
+                              Std.bind (reference.check_values payload) fun b1 =>
+                                if b1 = true then
+                                  if row ≥ 14#u8 then
+                                    Std.bind (reference.expand_rows payload (alloc.vec.Vec.new U8)) fun o1 =>
+                                      match o1 with
+                                      | none => ok none
+                                      | some x =>
+                                        Std.bind
+                                          (core.slice.index.Slice.index
+                                            (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                            { «end» := 5#usize })
+                                          fun s =>
+                                          Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 s) fun framed =>
+                                            Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref)
+                                              fun framed1 =>
+                                              Std.bind (rows.push framed1) fun rows1 =>
+                                                Std.bind (row + 1#u8) fun i8 =>
+                                                  Std.bind
+                                                    (core.slice.index.Slice.index
+                                                      (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                                      { start := i1 })
+                                                    fun s2 => parser_reference.semantic_rows i8 s2 rows1
+                                  else
+                                    Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 payload) fun x =>
+                                      Std.bind
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                          bytes { «end» := 5#usize })
+                                        fun s =>
+                                        Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 s) fun framed =>
+                                          Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref)
+                                            fun framed1 =>
+                                            Std.bind (rows.push framed1) fun rows1 =>
+                                              Std.bind (row + 1#u8) fun i8 =>
+                                                Std.bind
+                                                  (core.slice.index.Slice.index
+                                                    (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                                    { start := i1 })
+                                                  fun s2 => parser_reference.semantic_rows i8 s2 rows1
+                                else ok none
+                            else
+                              if row ≥ 14#u8 then
+                                Std.bind (reference.expand_rows payload (alloc.vec.Vec.new U8)) fun o1 =>
+                                  match o1 with
+                                  | none => ok none
+                                  | some x =>
+                                    Std.bind
+                                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                        bytes { «end» := 5#usize })
+                                      fun s =>
+                                      Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 s) fun framed =>
+                                        Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref)
+                                          fun framed1 =>
+                                          Std.bind (rows.push framed1) fun rows1 =>
+                                            Std.bind (row + 1#u8) fun i8 =>
+                                              Std.bind
+                                                (core.slice.index.Slice.index
+                                                  (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                                  { start := i1 })
+                                                fun s2 => parser_reference.semantic_rows i8 s2 rows1
+                              else
+                                Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 payload) fun x =>
+                                  Std.bind
+                                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                      bytes { «end» := 5#usize })
+                                    fun s =>
+                                    Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 s) fun framed =>
+                                      Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed x.deref)
+                                        fun framed1 =>
+                                        Std.bind (rows.push framed1) fun rows1 =>
+                                          Std.bind (row + 1#u8) fun i8 =>
+                                            Std.bind
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                                { start := i1 })
+                                              fun s2 => parser_reference.semantic_rows i8 s2 rows1) =
+    if bytes.len < finish then ok none
+    else
+      Std.bind (headerChecks bytes tag size) fun good =>
+        if good = true then
+          Std.bind
+            (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+              { start := 5#usize, «end» := finish })
+            fun payload =>
+            Std.bind (prepare row payload) fun logical =>
+              match logical with
+              | none => ok none
+              | some value =>
+                Std.bind
+                  (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                    { «end» := 5#usize })
+                  fun prefixBytes =>
+                  Std.bind (alloc.slice.Slice.to_vec core.clone.CloneU8 prefixBytes) fun framed =>
+                    Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed value.deref) fun framed1 =>
+                      Std.bind (rows.push framed1) fun rows1 =>
+                        Std.bind (row + 1#u8) fun nextRow =>
+                          Std.bind
+                            (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                              { start := finish })
+                            fun rest => parser_reference.semantic_rows nextRow rest rows1
+        else ok none
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (5 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.MultiproofConeRowStep.row_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

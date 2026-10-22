@@ -1,0 +1,121 @@
+import OraclePortFrozenOrderHeadline
+import OracleProgramLawExt
+
+/-! The charged experiment stops before terminal reads. Its proof metadata
+is computed from the same causal cuts as the adopted full experiment. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.StartChargePrefix
+open FS FS2 R0C.V3
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.AdaptiveFirstReadLaw
+open OraclePortStoredExperimentC4 OraclePortStoredAdmissionC4
+open OraclePortFrozenOrderConsumer
+
+abbrev prover (P : Prover) := OraclePortStoredProjectionC4.project (canon P)
+abbrev base (D : LiteralByteProtocol.Decoder) (P : Prover) :=
+  RawCutProverCompiler.experiment (prover P) (RawCutProverCompiler.verifier D (fun _ _ => true))
+
+def prefix (D : LiteralByteProtocol.Decoder) (P : Prover) :
+    RawRecordedOracleExtractionMassBin.Experiment :=
+  bind (RawCutProverCompiler.compiled D (fun _ _ => true)
+    (BinCompiledRunWordStability.wordsFromRun D) (prover P)) fun i => .done (i,true)
+
+theorem prefix_eval (D : LiteralByteProtocol.Decoder) (P : Prover) (H : Bytes → State) :
+    eval H (prefix D P) =
+      ((eval H (base D P)).1,
+        (((eval H (base D P)).2.1.1, RawCutTranscriptRun.proof
+          (BinCompiledRunWordStability.wordsFromRun D (eval H (base D P)))
+          (eval H (base D P)).2.1.2),true)) := by
+  simp only [prefix,eval_bind,RawCutProverCompiler.eval_compiled,eval,List.append_nil,base]
+
+theorem prover_eval (P : Prover) (H : Bytes → State) :
+    eval H (prover P) = ((eval H P).1,
+      ((eval H P).2.statement,R16CanonReduction.proof (eval H P).2.proof)) := by
+  rw [prover,OraclePortStoredProjectionC4.project_eval,canon_eval]
+  rfl
+
+theorem fibre_prover (s : Bytes) (P : Prover) :
+    OraclePortStoredReductionC7.pairProver s P = prover P := by
+  unfold OraclePortStoredReductionC7.pairProver prover
+    OraclePortStoredProjectionC4.project canon OraclePortStoredReductionC7.fixStored
+  induction P with
+  | done i => rfl
+  | ask a k ih =>
+    simp only [AspisV8R19.OracleProgramOps.bind]
+    congr 1
+    funext v
+    exact ih v
+
+/-- Full and prefix outputs have exactly the same submitted transcript.
+No probability distribution is replaced by a fixed stored-input fibre. -/
+theorem same_transcript (D : LiteralByteProtocol.Decoder) (P : Prover) (H : Bytes → State) :
+    (eval H (projected D P)).2.1 = (eval H (prefix D P)).2.1 := by
+  rw [projected_eval,OraclePortStoredReductionC7.annotated_selected,fibre_prover]
+  change (eval H (OracleDecisionPrereqStarts.annotated D _ _ (prover P))).2.1 = _
+  rw [OracleDecisionPrereqStarts.annotated,OracleDecisionFeasibilityCompiler.compiled_experiment_eval,
+    prefix_eval]
+  dsimp only
+  rw [OraclePortSamplerPrefixDraft.words_prefix,OraclePortSamplerPrefixDraft.output_pair]
+  rfl
+
+/-- Chronological causality: all reads of the charged experiment precede
+all terminal Merkle reads in the first pass of the actual recorded run. -/
+theorem chronological_prefix (D : LiteralByteProtocol.Decoder) (P : Prover) (H : Bytes → State) :
+    ∃ tail, (eval H (projected D P)).1 = (eval H (prefix D P)).1 ++ tail := by
+  rw [projected_eval,OraclePortStoredReductionC7.annotated_selected,fibre_prover]
+  change ∃ tail, (eval H (OracleDecisionPrereqStarts.annotated D _ _ (prover P))).1 = _
+  rw [OracleDecisionPrereqStarts.annotated,OracleDecisionFeasibilityCompiler.compiled_experiment_eval,
+    prefix_eval]
+  dsimp only
+  rw [OraclePortSamplerPrefixDraft.split_trace,List.append_assoc]
+  exact ⟨_,rfl⟩
+
+/-- A start already followed in the prefix cannot first occur in the terminal
+suffix. This preserves the actual first index, including prover duplicates. -/
+theorem first_start_before_terminal (D : LiteralByteProtocol.Decoder) (P : Prover)
+    (H : Bytes → State) (a : Bytes) (ha : Read (eval H (prefix D P)).1 a) :
+    firstIdx a (eval H (projected D P)).1 = firstIdx a (eval H (prefix D P)).1 := by
+  obtain ⟨tail,he⟩ := chronological_prefix D P H
+  rw [he]
+  exact OracleProgramRecording.firstIdx_append_of_read a _ tail ha
+
+theorem starts (D : LiteralByteProtocol.Decoder) (P : Prover) (Q : Nat)
+    (hq : ∀ H : Bytes → State, (eval H P).1.length ≤ Q) (H : Bytes → State) :
+    DecodedFirstReadUnionBound.decoderFirstReads RecordedBinaryExperimentBin.dec emptyTable
+      (eval H (prefix D P)).1 ≤ Q+34 := by
+  rw [prefix_eval]
+  unfold base
+  rw [RawCutProverCompiler.experiment_eval,
+    DecodedFirstReadUnionBound.decoderFirstReads_append]
+  have hp := DecoderQueryAccounting.starts_le_queries RecordedBinaryExperimentBin.dec
+    emptyTable (eval H (prover P)).1
+  rw [prover_eval] at hp
+  exact Nat.add_le_add (hp.trans (hq H)) (BinHonestQueryBudget.verifier_starts D
+    (fun _ _ => true) H _ _ _)
+
+/-- The observable reads only the charged prefix, reconstructed from the
+full record. Its fallback oracle values are never used. -/
+def recovered (D : LiteralByteProtocol.Decoder) (P : Prover)
+    (run : RawCutProverCompiler.RunView) : RawCutProverCompiler.RunView :=
+  eval (OracleProgramReplay.oracleOf run.1) (prefix D P)
+
+theorem recovered_eval (D : LiteralByteProtocol.Decoder) (P : Prover) (H : Bytes → State) :
+    recovered D P (eval H (projected D P)) = eval H (prefix D P) := by
+  apply OracleProgramReplay.eval_oracleOf H _ _ (FS.eval_consistent H _)
+  obtain ⟨tail,he⟩ := chronological_prefix D P H
+  intro a ha
+  rw [he,List.map_append]
+  exact List.mem_append_left _ ha
+
+#print axioms prefix_eval
+#print axioms prover_eval
+#print axioms fibre_prover
+#print axioms same_transcript
+#print axioms chronological_prefix
+#print axioms first_start_before_terminal
+#print axioms starts
+#print axioms recovered_eval
+end AspisR1.StartChargePrefix
+end

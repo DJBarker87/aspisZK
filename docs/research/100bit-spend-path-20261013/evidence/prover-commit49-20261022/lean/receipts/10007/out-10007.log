@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSampleSum49.lean:39:51: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a + c ≥ 2048
+  a + b ≤ 511
+where
+ a := ↑↑start
+ b := ↑↑(left.wrapping_sub 1#u16)
+ c := ↑↑1#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSampleSum49.lean:45:47: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 1
+  b - c ≥ 1
+  a ≥ 0
+  a + b ≤ 512
+where
+ a := ↑↑(left.wrapping_sub 1#u16)
+ b := ↑↑(start.wrapping_add 1#usize)
+ c := ↑↑512#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSampleSum49.lean:58:4: error: Tactic `apply` failed: could not unify the conclusion of `Finset.sum_congr rfl`
+  Finset.sum ?m.62 ?m.59 = Finset.sum ?m.62 ?m.60
+with the goal
+  decode (values j) = ∑ k ∈ Finset.range n, decode (values (j + (k + 1)))
+
+Note: The full type of `Finset.sum_congr rfl` is
+  (∀ x ∈ ?m.62, ?m.59 x = ?m.60 x) → Finset.sum ?m.62 ?m.59 = Finset.sum ?m.62 ?m.60
+
+case succ.e_a
+values : ℕ → Old.Q
+n : ℕ
+ih : ∀ (j : ℕ), total values j n = ∑ i ∈ Finset.range n, decode (values (j + i))
+j : ℕ
+⊢ decode (values j) = ∑ k ∈ Finset.range n, decode (values (j + (k + 1)))
+'R1Z.ProverCommitSampleSum49.sum_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSampleSum49.total_finset' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSampleSum49.partial_sum' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

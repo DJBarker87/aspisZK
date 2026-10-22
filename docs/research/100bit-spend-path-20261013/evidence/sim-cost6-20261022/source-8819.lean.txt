@@ -1,0 +1,99 @@
+import R1Z.SimCostWide5
+import R1Z.SimCostView
+
+/-! The shift suffix, after the terminal read has been supplied. Random-access
+updates below mean two reads and two writes to a supplied materialized payload;
+they do not certify materialization or evaluation of arbitrary input functions.
+The half constant is fixed field data. No enumeration of the payload occurs. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.SimCostShift6
+open AspisWideTower R1Z.SimCostWriter R0Z.HonestView R1Z.Batched Polynomial
+attribute [local instance] Classical.propDecidable
+
+abbrev c0 : PayloadCell R1Bat := .semanticCoeff 9 0
+abbrev c1 : PayloadCell R1Bat := .semanticCoeff 9 1
+
+/-- Symbolic sparsity, independent of the 30,671,382-cell enumeration. -/
+theorem dir_cell (c : PayloadCell R1Bat) :
+    R0Z.Shift.dir (K := WideExact) c =
+      if c = c0 then -(1/2 : WideExact) else if c = c1 then 1 else 0 := by
+  cases c with
+  | semanticCoeff j i =>
+    rw [R0Z.Shift.dir, R0Z.Shift.roundInclusion_semanticCoeff]
+    by_cases hj : j = 9
+    · subst j
+      simp only [if_true, coeff_sub, coeff_X, coeff_C]
+      by_cases hi0 : i = 0
+      · subst i; simp [c0, c1]
+      · by_cases hi1 : i = 1
+        · subst i; simp [c0, c1]
+        · have hv0 : i.val ≠ 0 := fun h => hi0 (Fin.ext h)
+          have hv1 : i.val ≠ 1 := fun h => hi1 (Fin.ext h)
+          simp [c0, c1, hi0, hi1, hv0, hv1]
+    · simp [hj, c0, c1]
+  | maskSum => rfl
+  | pointClaim j i => rfl
+  | extraClaim i => rfl
+  | ood j i => rfl
+  | inactiveSum => rfl
+  | opened q s i => rfl
+  | bat i => rfl
+
+/-- The exact two-cell update on supplied materialized values. -/
+def update (v : Payload WideExact R1Bat) (k : WideExact) : Costed (Payload WideExact R1Bat) :=
+  bind (SimCostWide5.mul.run (k,-(1/2))) fun delta =>
+  bind (SimCostWide5.add.run (v c0,delta)) fun a =>
+  bind (SimCostWide5.add.run (v c1,k)) fun b =>
+    (Function.update (Function.update v c0 a) c1 b,4)
+
+theorem update_erase (v : Payload WideExact R1Bat) (k : WideExact) :
+    (update v k).1 = v + k • R0Z.Shift.dir := by
+  simp only [update, erase_bind, SimCostWide5.mul.erase, SimCostWide5.add.erase]
+  funext c
+  simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul, dir_cell]
+  by_cases h0 : c = c0
+  · subst c; simp [c0, c1]
+  · by_cases h1 : c = c1
+    · subst c; simp [c0, c1]
+    · simp [Function.update_of_ne h0, Function.update_of_ne h1, h0, h1]
+
+theorem update_cost (v : Payload WideExact R1Bat) (k : WideExact) :
+    (update v k).2 = 194 := by
+  simp only [update, cost_bind, SimCostWide5.mul, SimCostWide5.mul_cost,
+    SimCostWide5.add, SimCostWide5.add_cost]
+
+/-- Takes the already computed original terminal value, not a free oracle
+for it. The caller must separately implement and charge originalOf. -/
+def suffix (a original : WideExact) (v : Payload WideExact R1Bat) :=
+  bind (SimCostWide5.add.run (a,-(1/2))) fun denominator =>
+  bind (SimCostWide5.inv.run denominator) fun inverse =>
+  bind (SimCostWide5.mul.run (original,inverse)) fun k => update v k
+
+theorem suffix_erase (a original : WideExact) (v : Payload WideExact R1Bat) :
+    (suffix a original v).1 = v + (original * (a-1/2)⁻¹) • R0Z.Shift.dir := by
+  simp only [suffix, erase_bind, SimCostWide5.add.erase, SimCostWide5.inv.erase,
+    SimCostWide5.mul.erase, update_erase, sub_eq_add_neg]
+
+theorem suffix_bound (a original : WideExact) (v : Payload WideExact R1Bat) :
+    (suffix a original v).2 ≤ 85439 := by
+  have hi := SimCostWide5.inv.bound (SimCostWide5.add.run (a,-(1/2))).1
+  simp only [suffix, cost_bind, update_cost, SimCostWide5.mul, SimCostWide5.mul_cost,
+    SimCostWide5.add, SimCostWide5.add_cost]
+  omega
+
+/-- Value bridge to the actual shift. This is deliberately not a Stage for
+shift: evaluation and cost of the supplied terminal read remain outstanding. -/
+theorem suffix_shift {F : Subfield WideExact} (pub : R0P.Public WideExact)
+    (B : R0P.PackBasis F) (ch : Challenges WideExact) (v : Payload WideExact R1Bat) :
+    (suffix (R0Z.MaskLayout.alpha ch 9) (R0Z.Shift.originalOf pub B ch v) v).1 =
+      R0Z.Shift.shift pub B ch v :=
+  suffix_erase _ _ _
+
+#print axioms dir_cell
+#print axioms update_erase
+#print axioms update_cost
+#print axioms suffix_erase
+#print axioms suffix_bound
+#print axioms suffix_shift
+end R1Z.SimCostShift6

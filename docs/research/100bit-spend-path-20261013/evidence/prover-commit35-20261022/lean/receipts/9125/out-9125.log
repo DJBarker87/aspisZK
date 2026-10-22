@@ -1,0 +1,26 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEnvironmentControl35.lean:50:39: error: unsolved goals
+Witness Proof : Type
+schedule : Schedule
+tape : ℕ → ProverCommitEntropy18.Candidate
+unix : Bool
+s after : State
+e : ProverCommitEnvironment35.Error
+failed : prepare schedule tape unix s = (Except.error e, after)
+w : Witness
+continuation : Witness → ℕ → Secret → State → Result (ProverCommitRetry34.Step Proof × State)
+fuel index : ℕ
+⊢ (let (result, after) := (ProverCommitRetry34.Step.stop (apiError e), after)
+    match result with
+    | ProverCommitRetry34.Step.done proof =>
+      ok (ProverCommitRetry34.Step.done { proof := proof, attempts := index + 1 }, after)
+    | ProverCommitRetry34.Step.retry =>
+      ProverCommitRetry34.run (attempt schedule tape unix w continuation) fuel (index + 1) after
+    | ProverCommitRetry34.Step.stop e => ok (ProverCommitRetry34.Step.stop e, after)) =
+    ok (ProverCommitRetry34.Step.stop (apiError e), after)
+'R1Z.ProverCommitEnvironmentControl35.public_failure_replay' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEnvironmentControl35.retry_failure_stops' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

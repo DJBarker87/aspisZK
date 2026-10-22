@@ -1,0 +1,75 @@
+import R1Z.ProverCommitPrivateBounds42
+
+/-! Normalization on the existing coupling carrier. The old nonce and binding
+coins become unused spare coordinates, rather than alleged private entropy.
+All private designated-field lenses commute with normalization. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitNormalCarrier42
+open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.FsAbort R0Z.FsAbortBounds R0Z.HvzkV
+open GamesR1 GamesR1PBin CouplingR1PBin EventsR1PBin LayoutR1PBin LensR1
+attribute [local instance] Classical.propDecidable
+variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+variable (W : R1Wire K CommitHandle Aux) (Pr : R1ProverP K CommitHandle Aux F W)
+
+def vec (first second : OracleAnswer) (v : Pos1 Pr.E₁ Pr.E₂ → OracleAnswer) :
+    Pos1 Pr.E₁ Pr.E₂ → OracleAnswer :=
+  fun p => match ProverCommitGlobal42.publicIndex W Pr p with
+    | none => v p
+    | some b => if b.val=0 then first else second
+
+def block (nonce : NZ) (first second : OracleAnswer) (a : AttS (F := F) W Pr) : AttS (F := F) W Pr :=
+  (Function.update a.1 0 nonce,vec W Pr first second a.2.1,a.2.2)
+
+def normalize {N : Nat} (nonce : Fin N → NZ) (answers : Fin N → Fin 2 → OracleAnswer)
+    (s : Fin N → AttS (F := F) W Pr) : Fin N → AttS (F := F) W Pr :=
+  fun k => block W Pr (nonce k) (answers k 0) (answers k 1) (s k)
+
+theorem vec_update (first second : OracleAnswer) (v : Pos1 Pr.E₁ Pr.E₂ → OracleAnswer)
+    (p : Pos1 Pr.E₁ Pr.E₂) (hp : ProverCommitGlobal42.publicIndex W Pr p=none) (u : OracleAnswer) :
+    vec W Pr first second (Function.update v p u) = Function.update (vec W Pr first second v) p u := by
+  funext j
+  by_cases eq : j=p
+  · subst j; simp [vec,hp]
+  · simp [vec,Function.update_of_ne eq]
+
+theorem block_sec (nonce : NZ) (first second : OracleAnswer) (i : Fin 3) (hi : i ≠ 0)
+    (a : AttS (F := F) W Pr) (z : NZ) :
+    block W Pr nonce first second ((secL W Pr i).set a z) =
+      (secL W Pr i).set (block W Pr nonce first second a) z := by
+  simp only [block,secL]
+  congr 1
+  exact Function.update_comm (Ne.symm hi) _ _ _
+
+theorem block_rest (nonce : NZ) (first second : OracleAnswer) (q : RIdx)
+    (hq : ∀ b : Fin 2, q ≠ .inl b) (a : AttS (F := F) W Pr) (u : OracleAnswer) :
+    block W Pr nonce first second ((vL W Pr (.inr (.inr (.inr q)))).set a u) =
+      (vL W Pr (.inr (.inr (.inr q)))).set (block W Pr nonce first second a) u := by
+  simp only [block,vL]
+  congr 1
+  apply vec_update
+  cases q with
+  | inl b => exact False.elim (hq b rfl)
+  | inr q => rfl
+
+/-- Component commutation lifts to an arbitrary attempt without touching
+any retained table, spare tape, other attempt, or rejected history entry. -/
+theorem normalize_lens {N : Nat} (nonce : Fin N → NZ) (answers : Fin N → Fin 2 → OracleAnswer)
+    {U : Type} (L : Lens (AttS (F := F) W Pr) U)
+    (commute : ∀ nonce first second a u, block W Pr nonce first second (L.set a u) =
+      L.set (block W Pr nonce first second a) u)
+    (k : Fin N) (s : Fin N → AttS (F := F) W Pr) (u : U) :
+    normalize W Pr nonce answers ((Lens.fnAt k L).set s u) =
+      (Lens.fnAt k L).set (normalize W Pr nonce answers s) u := by
+  funext j
+  by_cases eq : j=k
+  · subst j
+    simp only [normalize,Lens.fnAt_set_eq,commute]
+  · simp only [normalize,Lens.fnAt_set_ne _ _ _ _ _ eq]
+
+#print axioms vec_update
+#print axioms block_sec
+#print axioms block_rest
+#print axioms normalize_lens
+end R1Z.ProverCommitNormalCarrier42

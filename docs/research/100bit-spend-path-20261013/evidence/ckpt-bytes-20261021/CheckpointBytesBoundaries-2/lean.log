@@ -1,0 +1,531 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBoundaries.lean:11:129: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i1 ←
+      if 4#System.Platform.numBits = 0#System.Platform.numBits then fail Error.divisionByZero
+        else ok (Div.div 32#System.Platform.numBits 4#System.Platform.numBits#uscalar)
+    let i2 ←
+      match
+          (↑(Array.make 8#usize [q.c0.c0.a, q.c0.c0.b, q.c0.c1.a, q.c0.c1.b, q.c1.c0.a, q.c1.c0.b, q.c1.c1.a, q.c1.c1.b]
+                ⋯))[↑i1]? with
+        | none => fail Error.arrayOutOfBounds
+        | some x => ok x
+    let i3 ← 32#usize % 4#usize
+    let i4 ← 8#usize * i3
+    let i5 ← i2 >>> i4
+    ok (UScalar.cast UScalarTy.U8 i5)
+is not definitionally equal to the right-hand side
+  fail Error.arrayOutOfBounds
+
+q : aspis_core.field.wide_exact.WideExact
+⊢ (do
+      let i1 ←
+        if 4#System.Platform.numBits = 0#System.Platform.numBits then fail Error.divisionByZero
+          else ok (Div.div 32#System.Platform.numBits 4#System.Platform.numBits#uscalar)
+      let i2 ←
+        match
+            (↑(Array.make 8#usize
+                  [q.c0.c0.a, q.c0.c0.b, q.c0.c1.a, q.c0.c1.b, q.c1.c0.a, q.c1.c0.b, q.c1.c1.a, q.c1.c1.b]
+                  ⋯))[↑i1]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      let i3 ← 32#usize % 4#usize
+      let i4 ← 8#usize * i3
+      let i5 ← i2 >>> i4
+      ok (UScalar.cast UScalarTy.U8 i5)) =
+    fail Error.arrayOutOfBounds
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBoundaries.lean:11:102: warning: This simp argument is unused:
+  instHDivUScalarResult
+
+Hint: Omit it from the simp argument list.
+  simp [̵e̵_̵b̵y̵t̵e̵,̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵w̵i̵d̵e̵_̵e̵x̵a̵c̵t̵.̵W̵i̵d̵e̵E̵x̵a̵c̵t̵.̵t̵o̵_̵l̵i̵m̵b̵s̵,̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵U̵S̵c̵a̵l̵a̵r̵.̵d̵i̵v̵,̵H̵D̵i̵v̵.̵h̵D̵i̵v̵,̵i̵n̵s̵t̵H̵D̵i̵v̵U̵S̵c̵a̵l̵a̵r̵R̵e̵s̵u̵l̵t̵]̵[̲e̲_̲b̲y̲t̲e̲,̲ ̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲w̲i̲d̲e̲_̲e̲x̲a̲c̲t̲.̲W̲i̲d̲e̲E̲x̲a̲c̲t̲.̲t̲o̲_̲l̲i̲m̲b̲s̲,̲ ̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲U̲S̲c̲a̲l̲a̲r̲.̲d̲i̲v̲,̲
+  ̲ ̲ ̲ ̲ ̲H̲D̲i̲v̲.̲h̲D̲i̲v̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes/docs/research/100bit-spend-path-20261013/lean/CheckpointBytesBoundaries.lean:22:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i ←
+      do
+        let i ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[0#usize]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i1 ← ok (BitVec.setWidth 32 i.bv#uscalar)
+        let i2 ←
+          match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑0#usize ↑1#usize) with
+            | some x => ok x
+            | none => fail Error.integerOverflow
+        let i3 ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[i2]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i4 ← ok (BitVec.setWidth 32 i3.bv#uscalar)
+        let i5 ← i4.shiftLeft_IScalar 8#i32
+        let i6 ← ok (i1 ||| i5)
+        let i7 ←
+          match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑0#usize ↑2#usize) with
+            | some x => ok x
+            | none => fail Error.integerOverflow
+        let i8 ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[i7]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i9 ← ok (BitVec.setWidth 32 i8.bv#uscalar)
+        let i10 ← i9.shiftLeft_IScalar 16#i32
+        let i11 ← ok (i6 ||| i10)
+        let i12 ←
+          match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑0#usize ↑3#usize) with
+            | some x => ok x
+            | none => fail Error.integerOverflow
+        let i13 ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[i12]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i14 ← ok (BitVec.setWidth 32 i13.bv#uscalar)
+        let i15 ← i14.shiftLeft_IScalar 24#i32
+        ok (i11 ||| i15)
+    let i1 ←
+      do
+        let i ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[4#usize]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i1 ← ok (BitVec.setWidth 32 i.bv#uscalar)
+        let i2 ←
+          match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑4#usize ↑1#usize) with
+            | some x => ok x
+            | none => fail Error.integerOverflow
+        let i3 ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[i2]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i4 ← ok (BitVec.setWidth 32 i3.bv#uscalar)
+        let i5 ← i4.shiftLeft_IScalar 8#i32
+        let i6 ← ok (i1 ||| i5)
+        let i7 ←
+          match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑4#usize ↑2#usize) with
+            | some x => ok x
+            | none => fail Error.integerOverflow
+        let i8 ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[i7]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i9 ← ok (BitVec.setWidth 32 i8.bv#uscalar)
+        let i10 ← i9.shiftLeft_IScalar 16#i32
+        let i11 ← ok (i6 ||| i10)
+        let i12 ←
+          match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑4#usize ↑3#usize) with
+            | some x => ok x
+            | none => fail Error.integerOverflow
+        let i13 ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[i12]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i14 ← ok (BitVec.setWidth 32 i13.bv#uscalar)
+        let i15 ← i14.shiftLeft_IScalar 24#i32
+        ok (i11 ||| i15)
+    let i2 ←
+      do
+        let i ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[8#usize]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i1 ← ok (BitVec.setWidth 32 i.bv#uscalar)
+        let i2 ←
+          match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑8#usize ↑1#usize) with
+            | some x => ok x
+            | none => fail Error.integerOverflow
+        let i3 ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[i2]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i4 ← ok (BitVec.setWidth 32 i3.bv#uscalar)
+        let i5 ← i4.shiftLeft_IScalar 8#i32
+        let i6 ← ok (i1 ||| i5)
+        let i7 ←
+          match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑8#usize ↑2#usize) with
+            | some x => ok x
+            | none => fail Error.integerOverflow
+        let i8 ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[i7]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i9 ← ok (BitVec.setWidth 32 i8.bv#uscalar)
+        let i10 ← i9.shiftLeft_IScalar 16#i32
+        let i11 ← ok (i6 ||| i10)
+        let i12 ←
+          match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑8#usize ↑3#usize) with
+            | some x => ok x
+            | none => fail Error.integerOverflow
+        let i13 ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[i12]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i14 ← ok (BitVec.setWidth 32 i13.bv#uscalar)
+        let i15 ← i14.shiftLeft_IScalar 24#i32
+        ok (i11 ||| i15)
+    let i3 ←
+      do
+        let i ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[12#usize]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i1 ← ok (BitVec.setWidth 32 i.bv#uscalar)
+        let i2 ←
+          match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑12#usize ↑1#usize) with
+            | some x => ok x
+            | none => fail Error.integerOverflow
+        let i3 ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[i2]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i4 ← ok (BitVec.setWidth 32 i3.bv#uscalar)
+        let i5 ← i4.shiftLeft_IScalar 8#i32
+        let i6 ← ok (i1 ||| i5)
+        let i7 ←
+          match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑12#usize ↑2#usize) with
+            | some x => ok x
+            | none => fail Error.integerOverflow
+        let i8 ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[i7]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i9 ← ok (BitVec.setWidth 32 i8.bv#uscalar)
+        let i10 ← i9.shiftLeft_IScalar 16#i32
+        let i11 ← ok (i6 ||| i10)
+        let i12 ←
+          match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑12#usize ↑3#usize) with
+            | some x => ok x
+            | none => fail Error.integerOverflow
+        let i13 ←
+          match
+              ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                  ⋯⟩[i12]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        let i14 ← ok (BitVec.setWidth 32 i13.bv#uscalar)
+        let i15 ← i14.shiftLeft_IScalar 24#i32
+        ok (i11 ||| i15)
+    let i4 ←
+      match (Array.make 4#usize [i, i1, i2, i3] ⋯)[0#usize]? with
+        | none => fail Error.arrayOutOfBounds
+        | some x => ok x
+    if i4 ≥ 2147483647#u32 then ok none
+      else do
+        let i5 ←
+          match (Array.make 4#usize [i, i1, i2, i3] ⋯)[1#usize]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x
+        if i5 ≥ 2147483647#u32 then ok none
+          else do
+            let i6 ←
+              match (Array.make 4#usize [i, i1, i2, i3] ⋯)[2#usize]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            if i6 ≥ 2147483647#u32 then ok none
+              else do
+                let i7 ←
+                  match (Array.make 4#usize [i, i1, i2, i3] ⋯)[3#usize]? with
+                    | none => fail Error.arrayOutOfBounds
+                    | some x => ok x
+                if i7 ≥ 2147483647#u32 then ok none
+                  else do
+                    let q ←
+                      do
+                        let i_1 ←
+                          match (Array.make 4#usize [i, i1, i2, i3] ⋯)[0#usize]? with
+                            | none => fail Error.arrayOutOfBounds
+                            | some x => ok x
+                        let i1_1 ←
+                          match (Array.make 4#usize [i, i1, i2, i3] ⋯)[1#usize]? with
+                            | none => fail Error.arrayOutOfBounds
+                            | some x => ok x
+                        let i2_1 ←
+                          match (Array.make 4#usize [i, i1, i2, i3] ⋯)[2#usize]? with
+                            | none => fail Error.arrayOutOfBounds
+                            | some x => ok x
+                        let i3 ←
+                          match (Array.make 4#usize [i, i1, i2, i3] ⋯)[3#usize]? with
+                            | none => fail Error.arrayOutOfBounds
+                            | some x => ok x
+                        ok { c0 := { a := i_1, b := i1_1 }, c1 := { a := i2_1, b := i3 } }
+                    ok (some q)
+is not definitionally equal to the right-hand side
+  ok (some { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } })
+
+b : Slice U8 := ⟨List.replicate 17 0#u8, ⋯⟩
+⊢ (do
+      let i ←
+        do
+          let i ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[0#usize]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i1 ← ok (BitVec.setWidth 32 i.bv#uscalar)
+          let i2 ←
+            match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑0#usize ↑1#usize) with
+              | some x => ok x
+              | none => fail Error.integerOverflow
+          let i3 ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[i2]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i4 ← ok (BitVec.setWidth 32 i3.bv#uscalar)
+          let i5 ← i4.shiftLeft_IScalar 8#i32
+          let i6 ← ok (i1 ||| i5)
+          let i7 ←
+            match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑0#usize ↑2#usize) with
+              | some x => ok x
+              | none => fail Error.integerOverflow
+          let i8 ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[i7]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i9 ← ok (BitVec.setWidth 32 i8.bv#uscalar)
+          let i10 ← i9.shiftLeft_IScalar 16#i32
+          let i11 ← ok (i6 ||| i10)
+          let i12 ←
+            match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑0#usize ↑3#usize) with
+              | some x => ok x
+              | none => fail Error.integerOverflow
+          let i13 ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[i12]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i14 ← ok (BitVec.setWidth 32 i13.bv#uscalar)
+          let i15 ← i14.shiftLeft_IScalar 24#i32
+          ok (i11 ||| i15)
+      let i1 ←
+        do
+          let i ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[4#usize]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i1 ← ok (BitVec.setWidth 32 i.bv#uscalar)
+          let i2 ←
+            match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑4#usize ↑1#usize) with
+              | some x => ok x
+              | none => fail Error.integerOverflow
+          let i3 ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[i2]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i4 ← ok (BitVec.setWidth 32 i3.bv#uscalar)
+          let i5 ← i4.shiftLeft_IScalar 8#i32
+          let i6 ← ok (i1 ||| i5)
+          let i7 ←
+            match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑4#usize ↑2#usize) with
+              | some x => ok x
+              | none => fail Error.integerOverflow
+          let i8 ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[i7]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i9 ← ok (BitVec.setWidth 32 i8.bv#uscalar)
+          let i10 ← i9.shiftLeft_IScalar 16#i32
+          let i11 ← ok (i6 ||| i10)
+          let i12 ←
+            match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑4#usize ↑3#usize) with
+              | some x => ok x
+              | none => fail Error.integerOverflow
+          let i13 ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[i12]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i14 ← ok (BitVec.setWidth 32 i13.bv#uscalar)
+          let i15 ← i14.shiftLeft_IScalar 24#i32
+          ok (i11 ||| i15)
+      let i2 ←
+        do
+          let i ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[8#usize]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i1 ← ok (BitVec.setWidth 32 i.bv#uscalar)
+          let i2 ←
+            match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑8#usize ↑1#usize) with
+              | some x => ok x
+              | none => fail Error.integerOverflow
+          let i3 ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[i2]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i4 ← ok (BitVec.setWidth 32 i3.bv#uscalar)
+          let i5 ← i4.shiftLeft_IScalar 8#i32
+          let i6 ← ok (i1 ||| i5)
+          let i7 ←
+            match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑8#usize ↑2#usize) with
+              | some x => ok x
+              | none => fail Error.integerOverflow
+          let i8 ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[i7]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i9 ← ok (BitVec.setWidth 32 i8.bv#uscalar)
+          let i10 ← i9.shiftLeft_IScalar 16#i32
+          let i11 ← ok (i6 ||| i10)
+          let i12 ←
+            match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑8#usize ↑3#usize) with
+              | some x => ok x
+              | none => fail Error.integerOverflow
+          let i13 ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[i12]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i14 ← ok (BitVec.setWidth 32 i13.bv#uscalar)
+          let i15 ← i14.shiftLeft_IScalar 24#i32
+          ok (i11 ||| i15)
+      let i3 ←
+        do
+          let i ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[12#usize]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i1 ← ok (BitVec.setWidth 32 i.bv#uscalar)
+          let i2 ←
+            match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑12#usize ↑1#usize) with
+              | some x => ok x
+              | none => fail Error.integerOverflow
+          let i3 ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[i2]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i4 ← ok (BitVec.setWidth 32 i3.bv#uscalar)
+          let i5 ← i4.shiftLeft_IScalar 8#i32
+          let i6 ← ok (i1 ||| i5)
+          let i7 ←
+            match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑12#usize ↑2#usize) with
+              | some x => ok x
+              | none => fail Error.integerOverflow
+          let i8 ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[i7]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i9 ← ok (BitVec.setWidth 32 i8.bv#uscalar)
+          let i10 ← i9.shiftLeft_IScalar 16#i32
+          let i11 ← ok (i6 ||| i10)
+          let i12 ←
+            match UScalar.tryMkOpt UScalarTy.Usize (Add.add ↑12#usize ↑3#usize) with
+              | some x => ok x
+              | none => fail Error.integerOverflow
+          let i13 ←
+            match
+                ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8],
+                    ⋯⟩[i12]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          let i14 ← ok (BitVec.setWidth 32 i13.bv#uscalar)
+          let i15 ← i14.shiftLeft_IScalar 24#i32
+          ok (i11 ||| i15)
+      let i4 ←
+        match (Array.make 4#usize [i, i1, i2, i3] ⋯)[0#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      if i4 ≥ 2147483647#u32 then ok none
+        else do
+          let i5 ←
+            match (Array.make 4#usize [i, i1, i2, i3] ⋯)[1#usize]? with
+              | none => fail Error.arrayOutOfBounds
+              | some x => ok x
+          if i5 ≥ 2147483647#u32 then ok none
+            else do
+              let i6 ←
+                match (Array.make 4#usize [i, i1, i2, i3] ⋯)[2#usize]? with
+                  | none => fail Error.arrayOutOfBounds
+                  | some x => ok x
+              if i6 ≥ 2147483647#u32 then ok none
+                else do
+                  let i7 ←
+                    match (Array.make 4#usize [i, i1, i2, i3] ⋯)[3#usize]? with
+                      | none => fail Error.arrayOutOfBounds
+                      | some x => ok x
+                  if i7 ≥ 2147483647#u32 then ok none
+                    else do
+                      let q ←
+                        do
+                          let i_1 ←
+                            match (Array.make 4#usize [i, i1, i2, i3] ⋯)[0#usize]? with
+                              | none => fail Error.arrayOutOfBounds
+                              | some x => ok x
+                          let i1_1 ←
+                            match (Array.make 4#usize [i, i1, i2, i3] ⋯)[1#usize]? with
+                              | none => fail Error.arrayOutOfBounds
+                              | some x => ok x
+                          let i2_1 ←
+                            match (Array.make 4#usize [i, i1, i2, i3] ⋯)[2#usize]? with
+                              | none => fail Error.arrayOutOfBounds
+                              | some x => ok x
+                          let i3 ←
+                            match (Array.make 4#usize [i, i1, i2, i3] ⋯)[3#usize]? with
+                              | none => fail Error.arrayOutOfBounds
+                              | some x => ok x
+                          ok { c0 := { a := i_1, b := i1_1 }, c1 := { a := i2_1, b := i3 } }
+                      ok (some q)) =
+    ok (some { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } })
+'AspisR1.CheckpointBytesBoundaries.e_byte_out_of_range' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.CheckpointBytesBoundaries.k_accepts_trailing_byte' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

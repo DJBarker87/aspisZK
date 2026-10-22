@@ -1,0 +1,79 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerLedger42.lean:41:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  status source
+in the target expression
+  (let (generated, after) := (source, after)
+    match status generated with
+    | Except.error e => ok (Except.error (ProverCommitEnvironment35.Error.entropy e), after)
+    | Except.ok secret =>
+      let (result, final) := reserve schedule unix (address (block nonce)) after
+      ok (Except.mapError ProverCommitEnvironment35.Error.reservation (Except.map (fun x => secret) result), final)) =
+    ok
+      (Except.map Subtype.val
+          (match (model, final) with
+            | (result, after) =>
+              match result with
+              | Except.error e => (Except.error (ProverCommitEnvironment35.Error.entropy e), after)
+              | Except.ok secret =>
+                match reserve schedule unix (address (block nonce)) after with
+                | (reserved, final) =>
+                  (Except.mapError ProverCommitEnvironment35.Error.reservation (Except.map (fun x => secret) reserved),
+                    final)).1,
+        (match (model, final) with
+          | (result, after) =>
+            match result with
+            | Except.error e => (Except.error (ProverCommitEnvironment35.Error.entropy e), after)
+            | Except.ok secret =>
+              match reserve schedule unix (address (block nonce)) after with
+              | (reserved, final) =>
+                (Except.mapError ProverCommitEnvironment35.Error.reservation (Except.map (fun x => secret) reserved),
+                  final)).2)
+
+case mk.mk
+address : ProverCommitLedger36.Path → ProverCommitLedger36.Path
+nonce : ProverCommitOwnerZero42.Bytes
+schedule : Schedule
+tape : ℕ → owner.Raw
+unix : Bool
+s : State
+source : NativeStatus
+after : State
+hs : generate nonce schedule tape s = (source, after)
+model : Except ProverCommitPublicNonce40.EntropyError ProverCommitPublicNonce40.Private
+final : State
+eq :
+  have source := (source, after);
+  have model := (model, final);
+  (status source.1, source.2) = (forget model.1, model.2)
+hm : ProverCommitPublicNonce40.generate (block nonce) schedule (fun n => raw (tape n)) s = (model, final)
+state : after = final
+values : status source = forget model
+⊢ (let (generated, after) := (source, after)
+    match status generated with
+    | Except.error e => ok (Except.error (ProverCommitEnvironment35.Error.entropy e), after)
+    | Except.ok secret =>
+      let (result, final) := reserve schedule unix (address (block nonce)) after
+      ok (Except.mapError ProverCommitEnvironment35.Error.reservation (Except.map (fun x => secret) result), final)) =
+    ok
+      (Except.map Subtype.val
+          (match (model, final) with
+            | (result, after) =>
+              match result with
+              | Except.error e => (Except.error (ProverCommitEnvironment35.Error.entropy e), after)
+              | Except.ok secret =>
+                match reserve schedule unix (address (block nonce)) after with
+                | (reserved, final) =>
+                  (Except.mapError ProverCommitEnvironment35.Error.reservation (Except.map (fun x => secret) reserved),
+                    final)).1,
+        (match (model, final) with
+          | (result, after) =>
+            match result with
+            | Except.error e => (Except.error (ProverCommitEnvironment35.Error.entropy e), after)
+            | Except.ok secret =>
+              match reserve schedule unix (address (block nonce)) after with
+              | (reserved, final) =>
+                (Except.mapError ProverCommitEnvironment35.Error.reservation (Except.map (fun x => secret) reserved),
+                  final)).2)
+'R1Z.ProverCommitOwnerLedger42.prepared_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnerLedger42.continuation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,59 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReservationNonzero37.lean:80:4: error: Tactic `apply` failed: could not unify the conclusion of `success (countdownNext secret) 0 0 secret fuel`
+  run (countdownNext secret) (fuel + 1) 0 = (Except.ok secret, 0)
+with the goal
+  run (countdownNext secret) (0 + fuel + 1) 0 = (Except.ok secret, 0)
+
+Note: The full type of `success (countdownNext secret) 0 0 secret fuel` is
+  countdownNext secret 0 = (Except.ok fun i => ↑(secret i), 0) →
+    run (countdownNext secret) (fuel + 1) 0 = (Except.ok secret, 0)
+
+case zero
+secret : SecP
+fuel : ℕ
+⊢ run (countdownNext secret) (0 + fuel + 1) 0 = (Except.ok secret, 0)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReservationNonzero37.lean:85:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decode fun x => 0
+in the target expression
+  (match (Except.ok fun x => 0, rejects) with
+    | (status, after) =>
+      match status with
+      | Except.error e => (Except.error (Error.os e), after)
+      | Except.ok raw =>
+        match decode raw with
+        | some secrets => (Except.ok secrets, after)
+        | none => run (countdownNext secret) (rejects + 1 + fuel) after) =
+    (Except.ok secret, 0)
+
+case succ
+secret : SecP
+fuel rejects : ℕ
+ih : run (countdownNext secret) (rejects + fuel + 1) rejects = (Except.ok secret, 0)
+step : countdownNext secret (rejects + 1) = (Except.ok fun x => 0, rejects)
+⊢ (match (Except.ok fun x => 0, rejects) with
+    | (status, after) =>
+      match status with
+      | Except.error e => (Except.error (Error.os e), after)
+      | Except.ok raw =>
+        match decode raw with
+        | some secrets => (Except.ok secrets, after)
+        | none => run (countdownNext secret) (rejects + 1 + fuel) after) =
+    (Except.ok secret, 0)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReservationNonzero37.lean:98:48: error: (kernel) application type mismatch
+  id (Eq.refl true)
+argument has type
+  true = true
+but function has type
+  decide ({ lowerBound := some 16, upperBound := some 15 }.isImpossible = true) = true →
+    decide ({ lowerBound := some 16, upperBound := some 15 }.isImpossible = true) = true
+'R1Z.ProverCommitReservationNonzero37.mixed_memo_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationNonzero37.nonzero_memo_exceeds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationNonzero37.rejected_prefix_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitReservationNonzero37.retry_query_not_covered' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

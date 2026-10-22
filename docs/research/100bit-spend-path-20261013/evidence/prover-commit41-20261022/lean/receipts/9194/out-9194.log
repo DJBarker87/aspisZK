@@ -1,0 +1,46 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublicPrefix41.lean:47:47: error: unsolved goals
+pub : List UInt8
+tag : UInt8
+nonce digest first second : OracleAnswer
+rom : List UInt8 → OracleAnswer
+slice :
+  [(pub, rom pub), (binding pub tag digest nonce, rom (binding pub tag digest nonce)),
+      (binding1 digest nonce first, rom (binding1 digest nonce first))] =
+    [(pub, digest), (binding pub tag digest nonce, first), (binding1 digest nonce first, second)]
+hd : (pub, rom pub).2 = (pub, digest).2
+h0 : (binding pub tag digest nonce, rom (binding pub tag digest nonce)).2 = (binding pub tag digest nonce, first).2
+h1 : (binding1 digest nonce first, rom (binding1 digest nonce first)).2 = (binding1 digest nonce first, second).2
+⊢ [(pub, rom pub), (binding pub tag (rom pub) nonce, rom (binding pub tag (rom pub) nonce)),
+      (binding1 (rom pub) nonce (rom (binding pub tag (rom pub) nonce)),
+        rom (binding1 (rom pub) nonce (rom (binding pub tag (rom pub) nonce))))] =
+    [(pub, digest), (binding pub tag digest nonce, first), (binding1 digest nonce first, second)]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublicPrefix41.lean:52:19: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp only [reads, ̲hd̵,̵h̵0, ̲h1]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublicPrefix41.lean:52:22: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [reads, ̲hd, ̲h0̵,̵h̵1]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublicPrefix41.lean:52:25: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [reads, ̲hd, ̲h0,̵h̵1̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitPublicPrefix41.reads_preserved' depends on axioms: [propext]
+'R1Z.ProverCommitPublicPrefix41.reads_of_slice' depends on axioms: [sorryAx]
+'R1Z.ProverCommitPublicPrefix41.grammar_binding1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublicPrefix41.lookup_frozen' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublicPrefix41.context_local' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublicPrefix41.conditional_public_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublicPrefix41.raw_off_history' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

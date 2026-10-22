@@ -1,0 +1,7 @@
+{
+  "source": "crates/aspis-r1-cost-probe/src/sim.rs",
+  "sha256": "2594f50a303bd53ea6ed64d0e49cd986794065c32514eadbd32272b9ec9a4460",
+  "native_span": "            let kids=core::array::from_fn(|s|level.get(&(2*p+s)).copied().unwrap_or_else(||coins.coin()));\n            let answer=if depth+1==multiproof::LEAF_BITS {root} else {coins.coin()};\n            multiproof::binary_parent(ProgramOne{table,answer},&kids[0],&kids[1]);reads+=1;\n            next.insert(p,answer);kids_here.insert(p,kids);",
+  "only_body_rewrite": "reads+=1 becomes *reads+=1 because the single-transition harness retains the caller counter by mutable reference",
+  "trust": "BTreeMap get/insert are contract substitutes; from_fn invokes its callback in index order; binary_parent is a recording callee boundary, not a claimed concrete hash refinement"
+}

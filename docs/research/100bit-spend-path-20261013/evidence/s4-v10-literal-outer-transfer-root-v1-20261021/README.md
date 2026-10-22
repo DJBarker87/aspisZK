@@ -1,0 +1,3 @@
+PROVED complete literal typed V10 candidate outer function all-Result carrier transport to retained current fixed-v6 four_dots, with exact mapped output array.
+
+Limitations: The full emitted outer body is copied verbatim except its named helper slot; the helper equality is discharged by the complete literal helper theorem, not a child-equality premise. No canonicality or successful-child assumptions for transport; errors and divergence are preserved. Raw method Ops installation, Rust standard-library correspondence, original from_fn source/adoption boundary, frozen artifact integration and whole-cone S4 join remain open. Candidate source transport is not frozen source adoption, S4 closure or global soundness.

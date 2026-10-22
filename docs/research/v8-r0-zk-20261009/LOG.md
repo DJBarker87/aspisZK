@@ -7627,3 +7627,1174 @@ preparation formulas, actual WideExact arithmetic, predicate/retry and
 encoding composition, callback certificates, and the whole-experiment source
 join. This env-J attempt range is exhausted, so the track pauses until a new
 range is allocated.
+
+## D120 — CallerLaw discharged at the fixed decoder (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit11-20261021` (`r1p-final/PROVER-COMMIT11-20261021.md`).
+Byte-load and finite oracle cache correspondence with `wordsE` are proved,
+bounded scalar windows are composed over one retained global oracle, and
+`CallerLaw` is derived for the fixed operational reference decoder (the D118
+specialisation composed from the Kani-matched extracted references).
+`privacy_headline_owned_closed` (`docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineOwnedClosed.lean`) removes
+`R_commit_caller` with a deletion-only diff (the lead checked it). J8355: 32
+standard-axiom audits, zero swap; no production change. This is the current
+privacy headline. Open: shipped entry-point/outer-caller transport, i.e. that
+the shipped prover entry calls these references in this order (the isolated
+scalar-contract check timed out at 600 s even with all three verified summaries
+active), and all-family callback coverage.
+
+## D121 — prover commitment part 12 (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit12-20261021` (`r1p-final/PROVER-COMMIT12-20261021.md`).
+Proved: both one-iteration Kani checks of the shipped scalar loops pass
+against the verified next-word summaries; Lean proves the sixteen-try
+schedules and conditional state transport; the transcript, binary-parent and
+literal 17-call query-prefix checks pass. J8363: 13 standard-axiom audits,
+zero swap; no production change. No premise is removed. A checked
+counterexample shows the builder premise cannot hold for every currently
+permitted `input` (the free-parameter pattern again: fix `input` to the
+protocol's admitted input domain), and the direct shipped extraction pulls in
+`core::fmt::Formatter` (as in the checkpoint cone: stub the panic path after
+proving it unreachable). Open: shipped outer execution transport and
+all-family shared-oracle coverage.
+
+## D122 — builder premise discharged on the canonical admitted domain (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit13-20261021` (`r1p-final/PROVER-COMMIT13-20261021.md`).
+Per D121, the endpoint is specialised to D96's canonical admitted spend inputs,
+and `privacy_headline_admitted` (`docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitAdmittedEndpoint.lean`) removes `builder_premises` with a
+deletion-only diff after the specialisation (checked by the lead). Also
+proved, by 20 focused Kani checks: shipped stream-conversion safety with the
+formatter stubbed unreachable, both complete scalar result/state laws,
+query-caller result and retained-state transport around the sampler cut, and
+the seed and outer binding boundaries. J8372, standard axioms. This is the
+current privacy headline. Remaining premises: the two execution joins
+(`R_wire_builder_checker_D75_retry` and the ideal-side `G_sim_R_wire`), i.e.
+outer execution transport and all-family shared-oracle coverage. Blocker: the
+outer material loop (source lines 471–489) fails at Aeneas's loop-context join.
+Next: an owned indexed material-loop reference with per-iteration P6 equality.
+
+## D123 — prover commitment part 14: material loop (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit14-20261021` (`r1p-final/PROVER-COMMIT14-20261021.md`).
+The owned material schedule is extracted and its finite recursions proved;
+deterministic material oracle support and the bridge from scalar windows to
+the retained global cursor are proved; all nine M31 material-cell cases pass
+Kani (success, exhaustion, and prefixes of length ≤ 2). J8389: 33 standard-axiom
+audits, zero swap; no production change. No premise is removed. A
+counterexample shows that unrestricted `observer_program` replacement cannot
+supply history equality, so the real execution join needs the observer fixed
+to the protocol's. Open: arbitrary-prefix/QM31 source transport,
+returned-material assembly, the complete builder/checker/retry history, and
+all-family coverage; `G_sim_R_wire` stays named.
+
+## D124 — serialisation-order mismatch; the fixed-observer endpoint is model-only (2026-10-21, lead)
+
+Landed from `codex/cx-ser-join-20261021` (`r1p-final/SER-JOIN-20261021.md`)
+and `codex/cx-prover-commit15-20261021` (`r1p-final/PROVER-COMMIT15-20261021.md`).
+
+1. **Modelling error in D111.** The shipped prover splits the ordered q22
+   query array into its batches (10 + 12) and then sorts each batch. D111's
+   logical encoding splits `Finset.toList` of the query set and discards
+   order. `SerJoinOrderObstruction.cannot_match_both` proves that no single
+   encoding agrees with both of two valid query orders with the same set, and
+   the shipped sampler accepts both. This is not a leak (the order is
+   derived from the public transcript), but the privacy model must keep the
+   ordered q22, as the soundness model dV_frozen2 already does. D111's wire
+   discharge has to be redone over ordered queries. Also,
+   `RustSerializationJoin` was never a binder of the headline; it was only a
+   documented residual, which is a bookkeeping gap.
+2. **Model-only endpoint.** Specialising `observer_program` to the
+   constructed source's own observer makes both execution joins identities
+   (the model compared with itself), so they were deleted. The worker states
+   this correctly: it proves nothing about the Rust prover.
+   `privacy_headline_admitted` at that specialisation is a **model-level**
+   theorem. Lead ruling: the deployed privacy claim must carry one explicit
+   premise, `RustProverRefinement`, meaning the real shipped prover's whole run
+   (builder, checker, retry, serialisation and observer) equals the constructed
+   source outside the named bad event. Nothing may be described as deployed
+   privacy without it. J8399/J8500, standard axioms, zero swap.
+
+## D125 — deployed privacy endpoint with an explicit Rust refinement premise (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit16-20261021` (`r1p-final/PROVER-COMMIT16-20261021.md`).
+Per D124: `PrivacyR1HeadlineDeployed` (`lean/R1Z/PrivacyR1HeadlineDeployed.lean`)
+states deployed privacy with one explicit premise, `RustProverRefinement`. It
+says the given implementation's whole real run, and its ideal run, are each
+joined (`WholeRunJoin`) to the constructed source's, including the observer
+view, the ordered observer history and the decision, outside only the fixed
+model bad events `realBad` / `selectedBad`. It cannot be emptied by
+specialisation, and the privacy bound is unchanged. The model now keeps
+ordered queries: ordered 10 + 12 batches, public log re-encoding and
+adaptive-observer transport are proved, which repairs the D111 order mismatch.
+Also: universal extracted M31/QM31 prefix bridges, returned-material assembly
+support, and four section-wise codec Kani checks. J8640: 32 standard-axiom
+audits, zero swap. **Current privacy headlines:** the model-level
+`privacy_headline_admitted`, and the deployed `PrivacyR1HeadlineDeployed`,
+conditional on RustProverRefinement. Open (the content of that premise): the
+concrete runtime refinement, exact serialisation traversal, and
+borrowed-loop / outer-assembly identification. Three ordered-Vec Kani attempts
+timed out and were excluded.
+
+## D126 — prover commitment part 17; the Rust experiment must be made concrete (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit17-20261021` (`r1p-final/PROVER-COMMIT17-20261021.md`):
+ordered List and section composition of the serialiser; bounded serialiser
+emission-cell and ordered-query-element Kani checks; borrowed-cell checks;
+an extracted owned outer assembly with error-preserving Lean composition.
+J8655, standard axioms, zero swap. `RustProverRefinement` stays open. A checked
+countermodel shows it cannot be deleted while `rust : FSExperiments` is
+unrestricted. That is the free-parameter pattern again, and it does not refute
+the actual prover. Lead ruling: build `shippedProverExperiment : FSExperiments`
+as a concrete Lean object from the extracted owned references and the
+Kani-certified shipped = reference equalities (builder, checker, retry,
+serialiser, material, scalar callers), with its randomness and history
+adapter. Then prove both WholeRunJoins for `rust := shippedProverExperiment`.
+The residual is then only the P6 toolchain boundary (the Kani/Aeneas
+translation is trusted), which is already a named premise.
+
+## D127 — prover commitment part 18; seed-guess term missing from the bad event (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit18-20261021` (`r1p-final/PROVER-COMMIT18-20261021.md`):
+a bounded attempt-entropy model with retained errors and draw state; entropy
+failure transport under fixed bad events; bounded entropy symmetry with an
+unchanged draw history; the simulator's one-coin transition (Kani,
+owned-reference extraction and Lean); exact frame separation and finite-ROM
+marginal uniformity. J8674: 33 standard-axiom audits, zero swap. No concrete
+`shippedProverExperiment` yet; `RustProverRefinement` unchanged. Finding: the
+shared-oracle component has a seed-guess gap of 2^-256 − 2^-512, which is more
+than the query-scan-only allowance in `realBad`/`selectedBad`, so joint
+history equality cannot follow from marginal uniformity under the current bad
+event. Not an attack. Lead ruling: add an explicit seed-guess event (the
+adversary queries the simulator's seed point) to the fixed bad events,
+charged once at q·2^-256 for q oracle queries, and re-prove the privacy error
+bound, which stays far below 2^-100. Also open: the full simulator extraction
+(has_errors) and the timed-out entropy-exhaustion Kani check.
+
+## D128 — seed-guess event added; joint history coupling (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit19-20261021` (`r1p-final/PROVER-COMMIT19-20261021.md`).
+Per D127: the global simulator seed query budget and seed-query exceptions are
+added to the deployed refinement's fixed bad events, with containment and
+transport from the old premise to the new one, and the revised privacy bound
+stays < 2^-100. The bounded joint adaptive-history coupling is constructed,
+including programmed lookup and shared-oracle fallback, which closes the gap
+D127 found. Three entropy rejection checks pass, with the sixteen-draw Lean
+induction; owned simulator helpers are extracted. J8704: 42 standard-axiom
+audits, zero swap. Still open: the owned simulator's transcript/parser cone
+hits Aeneas `Not_found`, the table-source Kani check timed out,
+`shippedProverExperiment` is not yet constructed, and `RustProverRefinement`
+stays explicit. **Pending check:** the job appended a cfg(any(kani,aeneas_ref))
+module at the end of shipped `aspis-r1-cost-probe/src/sim.rs` (additions only,
+no lines moved, excluded from production builds) without rebuilding the ELFs.
+The next prover job must confirm all three frozen ELFs byte-identical as its
+first stage.
+
+## D129 — frozen ELF recheck at the research tip: all three match (2026-10-21, lead)
+
+Clears the D128 pending check. `codex/cx-elf-recheck-20261021` (evidence
+`100bit-spend-path-20261013/evidence/elf-recheck-20261021/RESULTS.md`) rebuilt
+the three frozen programs from the research tip, including the cfg-gated
+`sim.rs` addition. Default verifier `dfc2a91a…`, devnet `fb2fc048…` and Pool
+`121f3e29…` all **MATCH** (SHA-256 and byte-for-byte cmp; the unstripped
+linked ELFs also match). Capped builds, zero swap.
+
+## D130 — simulator semantic cone extracted (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit20-20261021` (`r1p-final/PROVER-COMMIT20-20261021.md`).
+The Aeneas `Not_found` is isolated to `validate_record_fields`. An owned
+validator, and the complete 25-row semantic cone, are extracted with no
+external templates. Proved: finite validator and row schedules, table-write
+semantics, per-entry table composition, and adaptive programmed-history
+composition. Focused Kani checks and the semantic differential fixtures pass.
+J8732: 21 standard-axiom audits, zero swap; no shipped change (D129 ELF
+evidence stands). Open: the actual overwrite-flag Kani check timed out at
+600 s; universal table/source transport; the later simulator traversal; and
+uncapped nonzero-loop treatment. `shippedProverExperiment` and the
+WholeRunJoins are not yet constructed.
+
+## D131 — prover commitment part 21; nonzero-search ruling (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit21-20261021` (`r1p-final/PROVER-COMMIT21-20261021.md`):
+arbitrary-prefix table composition with a split per-entry gate (which
+replaces the timed-out overwrite-flag check), universal owned-key transport,
+generic opening-control extraction, and both differential fixtures over
+complete ordered oracle histories and serialised traces. J8747: 24
+standard-axiom audits, zero swap; no shipped change. Open: universal BTreeMap
+transport, the concrete circle/sampler/TLS joins, and nonzero
+termination/divergence, now localised to one shared oracle stream.
+Lead ruling on divergence: the shipped loop draws until it gets a nonzero
+value, so it terminates with probability 1 and has no cap. Model it as a
+fuel-bounded loop with fuel k, a protocol constant fixed in the model. Runs
+that finish within k draws are identical; runs that exhaust k are added to the
+fixed bad events, charged at (1/p)^k per stream instance times the number of
+instances, with p the field size (≈ 2^-31 per draw). Choose k so the total
+charge is ≤ 2^-120, and re-prove the privacy bound stays < 2^-100.
+
+## D132 — prover commitment part 22: fuel-bounded nonzero search (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit22-20261021` (`r1p-final/PROVER-COMMIT22-20261021.md`).
+Per D131: a five-draw nonzero model agrees with terminating source runs within
+the fuel, and the shipped loop's Kani check passes. A fixed exhaustion charge
+of ≤ 2^-120 per side is added to the bad events, the old events are proved
+contained in the new ones, and the enlarged-event deployed privacy bound
+stays < 2^-100. Also proved: universal Lean Std.TreeMap transport over finite
+write schedules, and reuse of the concrete QM31 and circle sampler proofs,
+fallbacks included. J8772: 42 standard-axiom audits, zero swap; no shipped
+change. Open: the BTreeMap source gate was stopped near MemoryHigh, as
+AGENTS.md requires; native TLS reaches the unsupported `pthread_key_create`,
+so stub the thread-local accessor with a verified single-threaded contract;
+adaptive fuel/history transport; and the caller/policy assembly.
+`shippedProverExperiment` and the WholeRunJoins are not built yet. The
+prover track's env-J range 8600–8799 is nearly used up (8773+ remain).
+
+## D133 — prover commitment part 23; BTreeMap as a trusted std boundary (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit23-20261021` (`r1p-final/PROVER-COMMIT23-20261021.md`):
+single-thread TLS access semantics with a validated trace stub; adaptive fresh
+fuel bounds with the exact marked-answer law; split map source gates and
+write-schedule composition; the concrete rho/QM31 sampler policy and the
+programmed TLS slot; the joint adaptive history law with supplied and memoised
+draws. The TLS, one-entry lookup and iterator gates pass. J7486: 24
+standard-axiom audits, zero swap; no shipped change. The split BTreeMap
+insertion gate still approached MemoryHigh after two proof-shape changes and
+was stopped, per AGENTS.md. Lead ruling: do not verify std's B-tree internals.
+Put `std::collections::BTreeMap` (insert/get/iter as the prover uses them)
+in the trusted std/allocation cone (S10 pass 4), with its documented
+ordered-map semantics as the spec, i.e. the universal TreeMap model already
+proved. Record it as an explicit named trust item next to rustc/P7, so it
+is visible, not hidden. The single-thread assumption for TLS is recorded on
+the same list.
+
+## D134 — prover commitment part 24; coupling needs an independent fuel tape (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit24-20261021` (`r1p-final/PROVER-COMMIT24-20261021.md`).
+The trusted-std list is named (ordered map and single-thread TLS contracts,
+per D133). Also proved: adaptive map caller transport, room in the source
+search counters, and source-window freshness outside the seedGuess event.
+J7499: 24 standard-axiom audits, zero swap. Two obstructions, both about the
+proof construction, not about privacy:
+(1) `runJoin_not_model_function`: the RunJoin's extra fuel tape cannot be any
+deterministic function of the model coins and seed. Lead ruling: build the
+coupling on the product space (model coins × an independent uniform fuel
+tape), prove both marginals (the real run's coins are exactly that product,
+and the model ignores the fuel except on the already-charged exhaustion
+event), then derive the WholeRunJoin.
+(2) The retained Aeneas packet for `sampler.add_small_base_p` has an iterator
+ABI mismatch (`into_iter_back back`). Re-extract that function on its own
+with the pinned kit, or use an owned reference with Kani shipped = reference,
+and install unconditional gamma/ordinary/query policies from it.
+`shippedProverExperiment` and the endpoint are not built yet.
+
+## D135 — prover commitment part 25: product coupling built (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit25-20261021` (`r1p-final/PROVER-COMMIT25-20261021.md`).
+Per D134: the rejection-sampling coupling is built on independent product coins,
+with a product RunJoin for the retained rejection component state, adaptive
+rejection windows packed into the uniform source oracle, the finite-oracle
+marginal, and adaptive observer-history transport. Also: the circle caller is
+extracted with a total coordinate policy; total owned gamma/ordinary/rho
+scalar policies are installed; circle discriminants are namespaced for
+coherent imports; and the shipped add-small traversal is Kani-verified against
+the indexed reference (which replaces the mismatched retained packet). J7583:
+52 standard-axiom checks, zero swap; no shipped change. Open: the low-digit
+arithmetic gates timed out (600/180 s), the concrete query/source composition,
+`shippedProverExperiment`, both WholeRunJoins and the endpoint
+specialisation.
+
+## D136 — prover commitment part 26; CoinOracle is stateful (2026-10-21, lead)
+
+Landed from `codex/cx-prover-commit26-20261021` (`r1p-final/PROVER-COMMIT26-20261021.md`):
+low-digit arithmetic split into verified cells with a symbolic induction
+(replacing the timed-out gates); the concrete query policy installed and
+total, including first-stop; complete record validation transported into the
+circle caller; the coupled finite oracle installed in the concrete digest
+APIs. J7635: 40 standard-axiom checks, zero swap; no shipped change. Finding:
+the native `CoinOracle` advances a `RefCell` cursor and can return different
+answers for identical inputs, which makes it a coin tape, while the extracted
+`Digest32` interface returns no updated state. A native counterexample and a
+Lean determinism theorem show a stateless interpretation is invalid. Not a
+privacy issue. Lead ruling: interpret CoinOracle as a state-passing coin tape
+(cursor threaded explicitly), the same tape as the coin component of the D134
+product coupling. Extend the extracted interface so each call returns
+(digest, updated cursor, recording/collision effects), prove the extracted
+calls preserve exactly those effects, then assemble shippedProverExperiment.
+
+## D137 (lead, 2026-10-22 00:10): part 27 merged; coin tape effects proved, continuation port is the next obstruction
+
+Merged `codex/cx-prover-commit27-20261021` (report
+`r1p-final/PROVER-COMMIT27-20261021.md`). Proved: the extracted state-passing
+CoinOracle calls preserve exactly their (digest, cursor, recording/collision)
+effects, universally per call and by induction over adaptive call sequences;
+the D134 product-coupling marginals hold with the explicit cursor (concrete
+115-word tape); effectful semantic/circle/suffix caller skeletons. 34 axioms
+reports, standard axioms only. Per-call RefCell Kani gates and the 115-word
+read-address gate pass; monolithic 115-word checks timed out and are excluded.
+No shipped file changed (D129 ELF evidence still applies).
+Not established: the retained full walk/policy continuations still consume a
+pure `Digest32` (`Machine → … → Result Bytes32`), so they cannot take the new
+`Result (Bytes32 × Machine)` operation (J7673 installation probe). This is an
+interface-composition obstruction, not a privacy counterexample.
+`shippedProverExperiment`, both WholeRunJoins and the endpoint remain open;
+`RustProverRefinement` stays explicit; zero premises removed.
+Next (part 28): port the complete effectful continuation (replay reset, query
+selection, native trace, retries, commitment programming, ordered
+serialisation) to the state-passing operation, then the joins and endpoint.
+
+## D138 (lead, 2026-10-22 01:30): part 28 merged; continuations ported, native walk loop is the next obstruction
+
+Merged `codex/cx-prover-commit28-20261022` (report
+`r1p-final/PROVER-COMMIT28-20261022.md`). Closed the D137 interface mismatch:
+a generic monadic state lift, with kernel-checked source reconstruction, ports
+the complete transcript continuations to the state-passing CoinOracle.
+Composed the stateful semantic/circle/query/rho walk with ordered read
+history, replay reset, product marginals and extracted initialisation.
+35 axioms reports, standard axioms only, zero swap (J7831). No shipped change.
+Obstruction: Aeneas cannot extract the native `sim::walk` borrowed semantic
+loop (`sim.rs:165–177`, `for row in 0..25 { sem[row] = st.semantic(...)? }`;
+InterpJoin.ml:2209). Next (part 29): the P6 route for that loop: an owned
+reference loop, a per-iteration Kani shipped=reference check, a Lean induction
+over the 25 rows connecting it to the bounded stateful row continuation, then
+`shippedProverExperiment`, both WholeRunJoins and the endpoint.
+`RustProverRefinement` stays explicit; zero premises removed.
+
+## D139 (lead, 2026-10-22 05:10): part 29 merged; native caller gate times out, callee contract next
+
+Merged `codex/cx-prover-commit29-20261022` (report
+`r1p-final/PROVER-COMMIT29-20261022.md`). Added cfg(kani/aeneas_ref)-only
+owned modules `fields20`/`semantic20` in `aspis-r1-cost-probe` (`r1_wire.rs`,
+`sim.rs`); all three frozen ELFs rebuilt byte-identical (dfc2a91a…, fb2fc048…,
+121f3e29…), 492 shipped files pinned (`frozen-elf-final-check.json`).
+Proved for the owned reference: extracted iteration including record lookup,
+finite-row induction over rows 0..24, and composition through both circle
+points and the Transcript tail. Bounded field validation certified.
+26 axioms reports, standard axioms only.
+Obstruction: the native per-row Kani gate still times out at 600 s (rows 14
+and 15, where field validation starts), because the caller gate expands the
+whole callee. No counterexample. Next (part 30): a separately verified
+native/owned contract for the semantic callee (field validation, rejection
+state, ordered hash effects), used as a verified stub in the caller gate,
+then the native-to-owned walk equality, `shippedProverExperiment`, the joins
+and the endpoint. `RustProverRefinement` stays explicit; zero premises removed.
+
+## D140 (lead, 2026-10-22): simulator cost pass 5, partial
+
+Merged `codex/cx-sim-cost5-20261022` (report `r1p-final/SIM-COST5-20261022.md`).
+Proved in the primitive-RAM cost model: WideExact addition 10 ticks,
+multiplication 170, total inversion ≤ 85,065; materialised payload-array
+addition ≤ 429,399,348 ticks; all 24 five-draw fuel selections ≤ 11,832
+worst-case ticks, with exhaustion mass ≤ 2^-120 under the retained independent
+tape. 38 standard-axiom audits, zero swap; no shipped change.
+`sim_preparation` stays (empty deletion diff). Open: reference/mask/shift
+costs, predicate/callback/encoding certificates, preparation composition. The
+whole-experiment simulator source join is part 30's ideal `RunJoin`
+interface, named in the report and not duplicated.
+
+## D141 (lead, 2026-10-22 02:20): part 30 merged; native walk certified, outer owner next
+
+Merged `codex/cx-prover-commit30-20261022` (report
+`r1p-final/PROVER-COMMIT30-20261022.md`). Closed D139: the native semantic
+callee (field validation, rejection state, ordered hash effects) is verified
+on its own; all 25 per-row caller gates pass using that verified contract
+(331 s total, largest peak 629 MB); the Lean range owner composes the native
+loop with the stateful walk model. So the whole native `sim::walk` equals the
+stateful model walk, at the Kani/P6 boundary. Standard axioms only; no shipped
+change (part-29 ELF evidence reused).
+Obstruction: Charon translates `sim::sim_e_ablated` (`sim.rs:396`) with
+`has_errors=true` (five Iterator trait-clause mismatches: BTreeMap Iter and
+IntoIter, Enumerate, ChunksExactMut, Zip), so the outer retry/publication
+owner is not extracted. Two further named gaps from the report: no certified
+owner converts the source outputs (proof bytes, programming tables, status)
+into the `FSExperiments` real/ideal `ROMView` plus the observer's ordered
+transcript; and the entropy model retains OS failure and zero-draw events,
+which must stay explicit bad events, not be assumed away.
+Next (part 31): owned references for the `sim_e_ablated` publication loops
+certified against BTreeMap Iter/IntoIter per transition (conflict retention,
+key order, early exits); the eight-attempt retry/publication owner; the
+real-side `prove_masked_retrying_with` publication; then the source-to-
+`FSExperiments` conversion. `RustProverRefinement` stays explicit.
+
+## D142 (lead, 2026-10-22 02:25): simulator cost pass 6; ruling on callbacks
+
+Merged `codex/cx-sim-cost6-20261022` (report `r1p-final/SIM-COST6-20261022.md`).
+Proved: sparse WideExact shift suffix ≤ 85,439 ticks; the payload indexing and
+array-addition representation bridge; exact outer `firstGood` retry control
+8·C + 17 ticks. Standard axioms, zero swap (J8819–J8830); no shipped change.
+Finding (`no_uniform_callback_tariff`): with the endpoint's current
+quantifiers, the public-output callback and template/wire functions (frame,
+payload, final, pubBytes, decoder, lookup) range over an arbitrary family, so
+no numeric cost bound can hold (callback `bytes (C+1)` exceeds any C).
+**Lead ruling (free-parameter pattern):** these are protocol functions, not
+adversary inputs, so specialise them to the shipped R1 instance, the actual
+encoders and decoder used by the frozen simulator/prover. This is the same
+fix as earlier specialisations: a premise that is false for arbitrary
+parameter values is restated at the protocol's actual values. It restricts
+no adversary capability. The adversary's queries remain arbitrary, and cost
+stays relative to their length. The report must show the before/after
+quantifiers and confirm that no adversary-chosen input is among the fixed
+functions. Next (pass 7): the concrete callback/wire instance; reference/mask
+and terminal-read costs; the exact P_R1 predicate decision; composition into
+`SimCostIdeal.Preparation` with numeric C; endpoint without `sim_preparation`.
+
+## D143 (lead, 2026-10-22 02:30): simulator cost pass 7; rulings on pubBytes and observables
+
+Merged `codex/cx-sim-cost7-20261022` (report `r1p-final/SIM-COST7-20261022.md`):
+source inventory (22 pins) and the exact next interface; no Lean build, no
+shipped change. Correction to D142: the composed wire already fixes frame,
+payload, final, decoder and lookup; what remains quantified is `CommitHandle`,
+`Aux`, `pubBytes` (in `template`) and `outputs`.
+
+Lead rulings:
+1. **pubBytes.** Do not invent an error value. The model statement's fields
+   are typed in K, hence canonical. The obligation is that, for every model
+   statement, the shipped `r0::Public::public_bytes` on its source image
+   returns `Ok(pubBytes x)`; the Rust rejection branch is then provably
+   unreachable from model statements. This is a proof obligation, not a
+   choice.
+2. **Observables (`Aux`/`outputs`).** The adversary's view is what the
+   deployed system reveals: the public statement bytes, the submitted proof
+   bytes, and the oracle's answers to its own queries. The simulator's
+   programming table, attempt counts and timings are not published by the
+   protocol. They are internal to the local prover/simulator, so `outputs`
+   must be the projection onto exactly the published data, with a proof that
+   nothing else is observable in `FSExperiments`. **Timing and other side
+   channels are outside the privacy contract.** This is recorded as an explicit
+   scope line, not silently excluded, and is flagged to the user.
+3. This interface is the same source-to-`FSExperiments` conversion that
+   privacy part 31 item (4) is building. Pass 8 waits for part 31's result so
+   the conversion is built once.
+
+## D144 (lead, 2026-10-22 02:50): part 31 merged; extraction obstruction, lead direction on owned-reference style
+
+Merged `codex/cx-prover-commit31-20261022` (report
+`r1p-final/PROVER-COMMIT31-20261022.md`). Added cfg(kani/aeneas_ref)-only
+`sim_owned31.rs` (owned publication reference); five focused Kani checks pass;
+all three frozen ELFs rebuilt byte-identical, 493-file inventory matches.
+Obstruction: Charon accepts the indexed owner (`has_errors=false`) but Aeneas
+exits 2 at `sim_owned31.rs:151–159` (InterpMatchCtxs.ml:2739, loop fixed
+point). No new Lean theorem; `RustProverRefinement` stays explicit.
+
+Lead direction (AGENTS.md discipline §7, a repeated shared obstruction): parts
+28–31 each stopped on an Aeneas/Charon loop or iterator limitation. What worked
+(part 29 `fields20::validate`, part 30's callee split) was small, **structurally
+recursive** functions over owned values, with no while loops, iterators,
+BTreeMap, RefCell or `Instant` in the extracted code. Part 31's owner still
+has while loops mutating a BTreeMap inside a function that also takes timings.
+From part 32 on, an owned reference to be extracted must be: one function per
+loop; structural recursion on an owned Vec or a counter; maps modelled as a
+sorted association list, checked by Kani against the shipped BTreeMap
+per transition (insert/entry-or-insert/iteration order); timing calls
+removed (timings are not observable, D143). Verify each small function
+separately before composing.
+
+## D145 (lead, 2026-10-22 03:45): part 32 merged; correction to D144 on BTreeMap
+
+Merged `codex/cx-prover-commit32-20261022` (report
+`r1p-final/PROVER-COMMIT32-20261022.md`; relaunched once after a Codex
+capacity error, with a WIP snapshot commit kept). Proved in Lean, for the recursive sorted-list
+publication reference: lookup totality, insertion/replacement, query-order
+publication, sortedness, uniqueness and byte comparison. Standard axioms; all
+three frozen ELFs rebuilt byte-identical (cfg-gated `sim_owned32.rs`).
+Obstruction: the Kani check of the shipped BTreeMap transitions times out
+(600 s), even isolated.
+
+**Correction (lead error in D144).** D144 asked for Kani checks "against the
+shipped BTreeMap". That contradicts D133: BTreeMap internals are not verified;
+`std::collections::BTreeMap` is a named trusted item (`ProverCommitTrustedStd24.TrustedStd`:
+`btree_empty`, `btree_insert_state`, `btree_insert_previous`, `btree_get`,
+`btree_iter_ordered`, specifying it by the universal `Std.TreeMap` model). The
+timeout is the predictable cost of that mistake. Corrected route: verify the
+shipped *loop logic* with Kani with BTreeMap stubbed by an implementation of
+exactly the TrustedStd contract (the sorted-list model), and connect the
+native loop to the reference in Lean via the TrustedStd fields. If the shipped
+code uses `entry(..).or_insert_with`, add it to TrustedStd as one more named
+field with its documented semantics (get, then insert if absent), recorded
+visibly on the trust list. Do not add any other field.
+
+## D146 (lead, 2026-10-22 04:10): part 33 merged; correction to D143 ruling 1; statement-domain ruling
+
+Merged `codex/cx-prover-commit33-20261022` (report
+`r1p-final/PROVER-COMMIT33-20261022.md`). Per D145: exactly one TrustedStd
+field added, `btree_entry_or_insert_with` (hit: map unchanged, callback not
+invoked; miss: callback invoked once, value inserted and returned), a named Prop
+hypothesis, not an axiom. Proved: folded-loop, ordered-consumer, query-answer,
+merge and sorted-lookup transport; one bounded Kani lazy-entry transition
+check. Standard axioms; no shipped change.
+
+**Correction (lead error in D143 ruling 1).** D143 said model statement fields
+"are typed in K, hence canonical", so the Rust rejection branch would be
+unreachable. That is false: `ProverCommitPublicImage33` proves that `K` is
+`WideExact`, not M31 (an asset id can be the tower element `i`), and
+`nextPairIndex : Nat` can be 2^64, beyond u64. So no field-preserving source
+image exists for every model statement. The worker correctly stopped rather
+than add an unannounced admission premise.
+
+**Ruling (announced statement domain).** The deployed privacy claim ranges
+over the statements the deployed system can express: model statements that
+are the image of a shipped `r0::Public` value whose `public_bytes` returns
+`Ok`. Statements outside that image have no deployed counterpart. For them, the
+deployed prover returns an error before producing any proof, and nothing is
+published. That must be stated and proved as part of the domain. This is a
+restriction of the statement domain to what is representable, and it does
+not restrict the adversary. Within the domain the statement may still be
+adversarially chosen, and the queries remain arbitrary. The endpoint must show
+the before/after quantifier on `x`, and the report must mark this as a scope
+statement, visible in the headline, not a hidden premise.
+
+## D147 (lead, 2026-10-22 04:50): part 34 merged; ruling on OS entropy and ledger failures
+
+Merged `codex/cx-prover-commit34-20261022` (report
+`r1p-final/PROVER-COMMIT34-20261022.md`). Proved: the D146 statement domain
+(`ProverCommitDomain34.DeployedStatement`) with exact `public_bytes`
+agreement; no publication outside it; the structural eight-attempt retry
+owner (two native Kani control checks), keeping entropy errors distinct from
+retryable rejections; separate OS-failure and zero-exhaustion events, with
+zero exhaustion ≤ 3/2^256 on a uniform raw carrier. J9095 standard axioms;
+no shipped change, TrustedStd unchanged.
+Stop: source control gives no OS-error bound below 1 (proved), so OS and
+filesystem failures cannot be charged as a small δ.
+
+**Lead ruling: OS and filesystem are an adversarial environment, not a
+probability term.** Do not add a δ for OS/fs failure and do not assume an
+error-free OS. Instead:
+1. Model `getrandom::fill` outcomes, reservation create/write/fsync results
+   and duplicate-nonce errors as an **environment schedule chosen by the
+   adversary**, as a function of the call sequence (call index, call kind,
+   prior outcomes). The schedule must not see the secret bytes being
+   written: the OS is not assumed to leak file or RNG contents to the
+   adversary.
+2. Prove fail-closed behaviour on every failure path (`state_only_entropy.rs`
+   172–196 and 919–962, `prover.rs` 354–375): nothing witness-dependent is
+   published. Only a witness-independent error outcome is observable, and
+   the simulator can reproduce it from the same schedule.
+3. One named environment trust item, **E1 (OS RNG):** when `getrandom::fill`
+   returns Ok, its bytes are uniform and independent of everything else.
+   Record it on the trust list next to TrustedStd and P7, visible in the headline.
+   The existing zero-exhaustion term 3/2^256 stays in the bound.
+This makes privacy hold for every failure schedule, which is stronger than
+any probability bound on failures.
+
+## D148 (lead, 2026-10-22 05:20): part 35 merged; D147 refined: private ledger plus byte-blind faults
+
+Merged `codex/cx-prover-commit35-20261022` (report
+`r1p-final/PROVER-COMMIT35-20261022.md`). Proved: the byte-blind environment
+schedule, `fail_closed` and `failure_replay` (on any failure the real and
+witness-free simulator prefixes have identical observables, pointwise for
+every schedule, with no OS/fs probability charge), reservation retention, the
+extracted reservation bridge, and the E1-conditional zero-candidate bound.
+Native control checks pass; J9127, 16 theorems, standard axioms; no shipped
+change.
+Finding: D147's schedule (seeing only index, kind and prior statuses) cannot
+reproduce native `create_new`, whose occupied/fresh outcome depends on
+whether the reservation path is already in the ledger (Lean proof plus a
+real-filesystem probe). That is a lead modelling error in D147, not a privacy
+problem.
+
+**Refinement of D147.** The filesystem has real state. Model the reservation
+ledger as **private environment state** with faithful `create_new`
+semantics: it preserves existing entries and returns AlreadyExists iff the
+path is present. The byte-blind adversarial schedule injects faults
+(getrandom, create/write/fsync failures) around it. The adversary may choose
+the initial ledger and add entries, byte-blind: chosen without seeing
+any secret seed or path. A fresh path colliding with an adversary-chosen
+entry is a bad event, bounded from E1 by (number of entries × attempts)/|path
+space|, stated numerically. Add one named environment item, **E2
+(filesystem):** `create_new` is atomic create-if-absent (O_EXCL), and
+written/fsynced data persists. It sits on the trust list beside E1, TrustedStd
+and P7. The reservation path is not made public.
+
+## D149 (lead, 2026-10-22 05:30): part 36 merged; reservation address law comes from P1
+
+Merged `codex/cx-prover-commit36-20261022` (report
+`r1p-final/PROVER-COMMIT36-20261022.md`). Proved on the D148 model: private
+ledger membership with byte-blind faults, retention, duplicate handling,
+`fail_closed`/`failure_replay`; the exact E1 push-forward; the entry-count
+union bound with the address-law hypothesis visible; a consistent E2 model.
+J9134, 15 theorems, standard axioms; no shipped change.
+Finding: E1 and E2 do not by themselves imply that SHA-256-derived
+reservation paths avoid adversary-chosen entries (`E1_E2_without_uniform_paths`;
+for a generic hash, a constant address function gives mass 1). Correct: that
+inference needs a property of the hash.
+
+**Ruling.** The address law comes from **P1**, the random-oracle model for
+SHA-256 that the whole privacy and soundness argument already uses. No new
+assumption is added. Obligation: under P1, for adversary-chosen entries
+and every prior context, a fresh reservation address lands on an entry with
+probability ≤ (entries + queries that hit the same input)/2^256. The part
+"the adversary queried the oracle on this nonce input" is covered by the
+existing seed-guess event. **Check domain separation:** the reservation hash
+input must be disjoint from the protocol's oracle inputs (tag or length
+prefix). If it is, it is an independent ROM coordinate. If it isn't, prove
+the overlap is harmless or report it as a source finding. Do not change shipped
+code.
+
+## D150 (lead, 2026-10-22 05:45): part 37 merged; a new explicit reservation-guess event
+
+Merged `codex/cx-prover-commit37-20261022` (report
+`r1p-final/PROVER-COMMIT37-20261022.md`). Proved under P1 the fresh-address
+entry bound and the frame separation of the reservation input from the
+simulator-seed frame; control proofs for all 0–15 rejected nonce prefixes.
+J9151, 19 theorems, standard axioms; no shipped change.
+Finding (`no_existing_event_containment`): an adversary oracle query on the
+reservation input (a memo hit) is **not** contained in the existing
+`ProverCommitSeedEvent19.seedGuess`, which tests only the prefix
+`UNPROVED:R1:SIM:COIN || simulatorSeed`. So D149's statement that the seed-guess
+event already covered this was wrong (lead error).
+
+**Ruling.** Add one new, explicit bad event, `reservationGuess`: some
+adversary oracle query (or adversary-chosen ledger entry) equals a
+reservation input or path the prover generates. Bound it by the same counting as
+`seedGuess`: with a byte-blind adversary and uniform nonzero 32-byte nonces
+(E1), the mass is ≤ (Q + entries) · attempts / (2^256 − 1) per run. Add that
+term, stated numerically, **visibly to the headline bound** (before/after
+shown) rather than absorbing it. At protocol parameters it is far below the
+existing terms, so the < 2^-100 conclusion should still hold; prove that
+inequality, do not assert it.
+
+## D151 (lead, 2026-10-22 05:55): part 38 merged; ledger collisions coupled exactly, memo hits under the existing query budget
+
+Merged `codex/cx-prover-commit38-20261022` (report
+`r1p-final/PROVER-COMMIT38-20261022.md`). Proved: `reservationGuess` and its
+fixed-context counting bound; and, conditionally on Q, entries ≤ 2^64, the
+< 2^-100 numeric conclusion. The cap was not installed in the endpoint. J9159,
+15 theorems, standard axioms; shipped files byte-identical.
+Finding: under D148 the adversary may plant any finite ledger, including
+every path, so charging the whole `reservationGuess` mass gives 1. Correct;
+D150's charging of ledger entries was the wrong shape (lead error).
+
+**Ruling (two parts).**
+1. **Ledger collisions are coupled exactly and charged nothing.** The nonce and
+   its reservation path are witness-independent coins. The real and simulated
+   runs use the same nonce coins and the same ledger. A collision gives
+   AlreadyExists, then the fail-closed/duplicate path, identically in both
+   worlds. Obligation: prove the nonce and path are drawn and used before, and
+   independently of, any witness-dependent value (if not, report it as a source
+   finding). Then the ledger needs no size cap and contributes no term.
+2. **Memo hits are charged under the existing query budget.** An adversary
+   oracle query equal to a generated reservation input reveals the nonce-derived
+   value. Charge ≤ Q · attempts / (2^256 − 1) with the same Q ≤ 2^64 query budget
+   the headline already uses for `seedGuess` (`ProverCommitSeedEvent19.budget
+   (2^64)`). That is not a new restriction, and it is shown visibly in the bound.
+
+## D152 (lead, 2026-10-22 06:10): part 39 merged; the mask nonce is public and adversary-chosen
+
+Merged `codex/cx-prover-commit39-20261022` (report
+`r1p-final/PROVER-COMMIT39-20261022.md`). Proved
+(`ProverCommitLedgerCoupling39`): exact shared-ledger coupling for every
+finite ledger and schedule (state equality of the reservation transition and
+preparation prefix; collision implies duplicate, which stops both worlds
+identically). No ledger cap, no collision term. Also the conditional memo
+counting and < 2^-100 arithmetic. J9171, 18 theorems, standard axioms;
+shipped files byte-identical.
+Source finding (correct, and a lead error in D151): the deployed proof-account
+route calls `generate_for_mask_nonce(mask_nonce)` (`state_only_entropy.rs`
+202–224). The nonce is the caller-supplied proof-account public key (D38.4),
+not an OS draw. Only the 64 bytes of field entropy and leaf seed come from the
+OS. So D151's "the nonce is a uniform witness-independent coin" is false for
+the deployed path.
+
+**Ruling.** Model the mask nonce as **public and adversary-chosen**: quantify
+over it, and let the adversary pick it, possibly after earlier queries.
+Classify every hash input on this path by whether it contains private
+OS-drawn bytes:
+- Inputs built only from public data (the nonce, public statement) are public
+  oracle queries. The adversary may query them in advance, and the coupling
+  preserves them exactly in both worlds, with no charge (as the worker
+  recommends). The reservation path, if it depends only on the nonce, falls
+  here, and duplicates take the coupled fail-closed path (that is the
+  ledger's job: no mask reuse for a nonce).
+- Inputs containing the private 64 seed bytes are charged a memo-hit term,
+  ≤ Q · attempts / 2^256 per 32-byte seed under the existing Q ≤ 2^64 budget,
+  visibly in the headline.
+Do not switch the target to the 96-byte `generate()` adapter. The deployed
+route is the proof-account route.
+
+## D153 (lead, 2026-10-22 06:30): part 40 merged; public binding inputs need a conditional ROM law
+
+Merged `codex/cx-prover-commit40-20261022` (report
+`r1p-final/PROVER-COMMIT40-20261022.md`). Proved: private-seed memo counting
+with visible additions 4·Q·attempts/2^256 + 48/2^256, keeping < 2^-100
+(conditional on the remaining joins); the public-nonce preparation model with
+the part-39 ledger coupling kept; an exhaustive hash-family classification on
+the deployed path (`ProverCommitHashClass40.classify`, `hash-input-inventory.json`).
+J9186, 30 theorems, standard axioms; shipped files unchanged.
+Lead check of the classification: the masks, D-seed, leaf salts and Merkle
+nodes all derive from the private OS bytes (field entropy, leaf seed). The
+public-only inputs (public bytes, reservation, precommit and attempt
+bindings) carry no secret. So the public nonce is **not** a privacy attack.
+Obstruction: the old commitment argument (`EventsR1PBin.hit_cm`, `HitFresh`)
+assumed the first binding input was fresh, which is false once the nonce is
+public: the adversary can pre-query it with probability 1.
+Next (part 41): replace that use of `hit_cm` with the worker's specified
+public-prefix-aware conditional ROM law. Start from the adversary's prior
+queries and answers, reuse both binding answers in the same ROM, reserve the
+nonce in the shared ledger, and expose fresh private-derivation coordinates
+only outside the two raw-seed memo events. Then transport the joint adaptive
+law (with duplicate termination and retained rejected-attempt history) to the
+successful continuation, keeping the existing bounds on private-derived reads.
+No new trust item, nonce law or ledger cap.
+
+## D154 (lead, 2026-10-22 06:45): part 41 merged; conditional ROM law proved locally
+
+Merged `codex/cx-prover-commit41-20261022` (report
+`r1p-final/PROVER-COMMIT41-20261022.md`). Proved: the conditional
+public-prefix ROM law with retained adaptive histories; preservation of the
+public binding answers; memo-aware mixed-read agreement; the verifier's
+opening log is unchanged when the binding answers are replaced. The selected
+64-byte native entropy API passed its bounded control check, and its structural
+reference translates through Charon/Aeneas. 20 theorems, standard axioms;
+shipped files byte-identical. The job stopped because its env J allocation
+(9187–9399) was exhausted, not on a proof obstruction.
+Next (part 42, env J 9400–9799): instantiate the concrete `gAddr`/`attVec`
+conditional private-read bounds and the successful-continuation transport;
+the Lean bridge for the 64-byte owner and reservation-history composition;
+then publication, FS conversion, the joins and the endpoint.
+
+## D155 (lead, 2026-10-22 07:35): part 42 merged; private-read bounds instantiated
+
+Merged `codex/cx-prover-commit42-20261022` (report
+`r1p-final/PROVER-COMMIT42-20261022.md`). Proved: the private raw domains avoid
+the public bindings; concrete public-normalised private-read bounds and charged
+adaptive-hit bounds; global read agreement; the bridges from the generated
+64-byte entropy owner to the model, the reservation state and the retry
+callback. J9493, 56 theorems, standard axioms; shipped files unchanged; no new
+trust item.
+Obstruction (tool limit, no counterexample): the native Kani check of the
+sixteen-candidate nonzero comparison loop over arbitrary bytes times out at
+600 s; the isolated zero-test helper passes. Next (part 43): the P6 route:
+per-candidate native transition check, then a Lean induction over the 16
+iterations (as for the walk rows in part 30); then publication, FS conversion,
+joins and endpoint.
+
+## D156 (lead, 2026-10-22 08:15): part 43 merged; BTreeSet::from_iter joins TrustedStd
+
+Merged `codex/cx-prover-commit43-20261022` (report
+`r1p-final/PROVER-COMMIT43-20261022.md`). Proved: the native entropy candidate
+transition (per-candidate Kani with the zero-test contract) composed through
+the sixteen iterations in Lean, which closes D155; publication caller lemmas
+with ordered byte control; exact native node padding. J9535, 33 theorems,
+standard axioms; no shipped or trust change.
+Obstruction: the parent-node collection uses `BTreeSet::from_iter`, which
+extraction leaves as an external template.
+
+**Ruling (same policy as D133/D145).** `std::collections::BTreeSet` is a
+standard collection; do not verify its internals. Add exactly one named
+TrustedStd field for `BTreeSet::from_iter` followed by iteration: the
+result iterates the input's distinct elements in ascending order, i.e. the
+sorted, deduplicated list (`List.mergeSort` of `List.dedup`, or the
+`Finset` sort). Record it visibly on the trust list. Then prove that the
+parent traversal built on it is sorted and duplicate-free, and that it
+preserves the subsequent coin order.
+
+## D157 (lead, 2026-10-22 08:35): part 44 merged; standing rule for std collection methods
+
+Merged `codex/cx-prover-commit44-20261022` (report
+`r1p-final/PROVER-COMMIT44-20261022.md`). Added the D156 TrustedStd field for
+`BTreeSet::from_iter`. Proved: sorted, duplicate-free parent traversal with
+coin order and state preserved; the native parent transition (536 Kani checks)
+composed through all 18 tree levels. 15 theorems, standard axioms; shipped
+files unchanged.
+Obstruction: `BTreeMap::len` (which controls the final `program_tree`
+Merkle-error guard) is not among the TrustedStd fields and cannot be derived
+from them (countermodel). The direct native `indices.sort(); indices.dedup()`
+Kani diagnostic timed out at 600 s and was not rerun.
+
+**Standing rule (to stop one ruling per std method).** Extending D133/D145/D156:
+a worker may add a named TrustedStd field, without waiting for a lead ruling,
+for any **pure** std collection or slice method the shipped code actually
+calls (constructors, observers, `len`, `sort`, `sort_unstable`, `dedup`,
+`from_iter`, `iter`/`into_iter`, `contains`, `get`, `insert`, `remove`). The
+field must state exactly the method's documented semantics against the Lean model
+(`Std.TreeMap`/`TreeSet`, `List`), and the report must list every field added,
+with the call site. Not covered by this rule: anything with I/O, allocation
+failure, concurrency, interior mutability, hashing (`HashMap` ordering) or
+unsafe code. Those still need a ruling. So `BTreeMap::len` (= model size) and
+`slice::sort` + `Vec::dedup` (= sorted dedup list) are covered.
+
+## D158 (lead, 2026-10-22 08:50): part 45 merged; ProgramOne digest as state passing
+
+Merged `codex/cx-prover-commit45-20261022` (report
+`r1p-final/PROVER-COMMIT45-20261022.md`). Added three D157 TrustedStd fields
+(map length, scalar sort, dedup; listed with call sites). Proved: sort/dedup
+and length transport; the eighteen-level Merkle-error guard; transcript
+merge and read-count transport. J9636, 14 theorems, standard axioms; shipped
+sources unchanged.
+Obstruction: `ProgramOne::digest` mutates a shared `RefCell` programming table
+and collision flag, and its extracted return exposes neither. A countermodel shows
+that equal digest returns can lead to different publication outcomes. The worker
+correctly did not add an interior-mutability trust law.
+
+**Ruling (same route as D136/D137 for CoinOracle).** This is not a new trust
+law. Interpret `ProgramOne::digest` as **state passing**: each call takes and
+returns `(table, collision flag)` explicitly. Prove per call, with a Kani check
+of the shipped RefCell code against the state-passing reference, that it
+returns exactly the updated table and flag. Then reuse the part-28 generic
+monadic state lift to thread the state through the publication continuation.
+The single-thread fact needed for RefCell is the TLS single-thread item
+already on the trust list. Nothing is added.
+
+## D159 (user decision, 2026-10-22 10:20): side channels are in the privacy contract
+
+The user ruled ("cover them") that timing and other side channels are **inside**
+the privacy contract. This reverses the scope line in D143 rulings 2 and 3, which had put
+them out of scope. It raises the target and does not lower it. Attempt counts,
+retry counts and timings are now treated as potentially observable.
+
+Leakage model, in three levels, each stated separately and never merged:
+- **L1 (outcome counts):** the adversary sees the number of attempts/retries,
+  which call failed, error codes, reservation/ledger effects and the number,
+  order and sizes of everything the prover sends or writes. Proof obligation: the joint
+  law of these is simulatable without the witness (witness-independent, or a
+  function of public data and the simulator's own coins).
+- **L2 (source-level trace):** the sequence of branches taken, memory/array
+  indices, collection operations with key-dependent cost (e.g. BTreeMap
+  insertion paths), allocation sizes, loop trip counts and variable-latency
+  operations (division, inversion, early exits) must be witness-independent.
+  Formal route: relational (2-run) properties over the extracted/owned code
+  and Kani self-composition per function.
+- **L3 (compiled code and hardware):** compiler and CPU constant-time
+  behaviour **cannot be fully proved here**. It is either a named trust item
+  (the compiler preserves L2 constant-time; the CPU's used instructions have
+  data-independent latency), or measured (dudect-style tests, labelled as
+  measurement, never as proof).
+A witness-dependent retry or rejection-sampling count (for example a P_R1
+predicate whose acceptance depends on the witness) would be a protocol-level
+leak, and its fix (constant-work attempts or a witness-independent
+acceptance law) would be a change to the frozen prover. Any such
+finding is escalated to the user with a recommendation and is not patched silently.
+First step: a side-channel inventory of the deployed prover path
+(`r1p-final/SIDE-CHANNEL-AUDIT-20261022.md`), running alongside privacy
+part 46.
+
+## D160 (lead, 2026-10-22 10:40): part 46 merged; publication composed, source-view byte image next
+
+Merged `codex/cx-prover-commit46-20261022` (report
+`r1p-final/PROVER-COMMIT46-20261022.md`). Per D158: `ProgramOne::digest` is
+certified as state passing (per-call Kani against the reference) and threaded
+with the part-28 lift; binary multiproof transitions and child-map support are
+verified; compact proof-byte publication and exact table/flag finalisation are
+composed. J9691, standard axioms; shipped files unchanged.
+Obstruction: the byte-image bridge from `sim::semantic`/`sim::opening` outputs
+to the model payload, starting with `y1`. A counterexample shows that codec
+success alone does not give the image. It is not a privacy attack.
+Next (part 47): that bridge, field by field. Per D159, the source-to-
+`FSExperiments` conversion now has to carry the L1 observables too, so part 47
+stops before the conversion and waits for the side-channel audit.
+
+## D161 (lead, 2026-10-22 10:55): side-channel audit merged; three user decisions raised
+
+Merged `codex/cx-sidechannel-20261022` (report
+`r1p-final/SIDE-CHANNEL-AUDIT-20261022.md`, evidence `sidechannel-20261022/`):
+a source inventory of the proof-account prover route (55 pinned files), eight
+findings, and nine Python source-expression checks. These are not Kani or Lean
+proofs and not measurements. No shipped change.
+Findings, lead summary:
+- **F1 (L1):** the retry decision includes the no-pole check, which reads the
+  unmasked witness tuples. The attempt count is therefore not exactly
+  witness-independent. Its effect is bounded by the pole probability, about
+  |S|/|K| ≤ 4096/2^124 per attempt, which the privacy bound already charges.
+  So L1 can be met statistically by proof work (the coupling extended to the
+  whole attempt record), with no code change. Exact independence would
+  need a prover change.
+- **F2 (L2):** canonical field arithmetic branches on operand values
+  (`if x >= P` in add/sub/reduce; zero tests). On masked witness cells, the
+  branch probability depends on the witness. That is a real L2 timing/branch leak,
+  not closable by proof. It needs constant-time field kernels on the prover side.
+- F3 (private-coin rejection counts): witness-independent; proof work.
+  F4 (canonicality and balance guards): constant on the honest domain; proof
+  work. F5/F6 (challenge-derived indices, sparse evaluation, query scan,
+  Merkle sharing, checker elimination, simulator BTree costs): depend on
+  Fiat–Shamir values, so either a simulatability proof or oblivious
+  rewrites. F7: production TLS instrumentation retains per-check
+  timings and rejected-attempt challenge values, and `attempts` is
+  returned. These are host-observable.
+- **F8 (deployment):** no checked-in caller uses the audited proof-account
+  route. The R1 devnet runner calls `prove_masked_retrying`, which uses the
+  96-byte `generate()` (OS-drawn nonce); the live wallet adapter uses
+  `generate_for_mask_nonce` with the older V7 prover. The deployed prover route
+  is therefore not pinned.
+- L3: the prover is native host Rust (std, OS RNG, filesystem, TLS). The only
+  recorded target is x86_64-unknown-linux-gnu with rustc 1.94.1; no CPU or
+  binary pin.
+Raised to the user (escalation per AGENTS.md §8): the deployed route (F8),
+whether to change the host prover for L2 (F2, F5–F7), and the L3 platform.
+Proof-only L1 work proceeds meanwhile.
+
+## D162 (user decisions, 2026-10-22 11:05): route, constant-time prover, L3 platform
+
+The user decided the three D161 questions, each as the lead recommended:
+1. **Deployment route = proof-account route** (public nonce = proof-account key,
+   `generate_for_mask_nonce` → `prove_masked_retrying_with`), per the documented
+   design (D38.4). The client/caller will be changed to call it, with new source
+   pins and integration receipts. That is a host/client change; no verifier
+   change. The devnet runner's 96-byte route is not the target.
+2. **Constant-time host prover (L2).** Add constant-time field kernels and
+   fixed-shape loops on the prover side only, and gate off TLS instrumentation
+   in production builds. Constraints: the verifier ELFs stay byte-identical
+   (dfc2a91a…, fb2fc048…, 121f3e29…); proof bytes are unchanged; each kernel
+   gets a Kani/Lean equivalence proof to the current arithmetic and a two-run
+   branch/index-trace check. It is an adoption candidate on its own branch,
+   note-before-code, and is not frozen until its gates pass. Prior prover source
+   pins are re-checked against it.
+3. **L3 platform = x86_64 Linux native.** Pin the binary, compiler and flags, and
+   a CPU model. L3 evidence is a disassembly audit plus dudect-style
+   measurements, labelled as measurement, with compiler/CPU constant-time named
+   as trust items.
+
+## D163 (lead, 2026-10-22 11:50): L1 model layer merged; CT-kernel candidate passes against the new ELF pins
+
+Merged `codex/cx-l1-coupling-20261022` (report
+`r1p-final/SIDE-CHANNEL-L1-20261022.md`), proof-only. Proved: an ordered L1
+attempt record with retry-control erasure; the conditional retry hazards and
+iteration-entry laws for all eight attempts; capped two-seed entropy symmetry
+and the ideal draw-count law; generic joint-TV union tools, with a numerical
+candidate below 2^-100 that is **not** yet an established native bound.
+J9880 standard axioms; no shipped change. No TLS leak or valid-spend
+counterexample was found. Open: native event-producer refinement; the
+joint mask/count/TLS/oracle coupling; equal-circle and query-abort integration;
+composition with part 47.
+Constant-time kernel candidate (`codex/cx-ct-kernels-20261022`, kept unmerged
+as a candidate per D162; report `design/CT-KERNELS-20261022.md`): the design
+note came first; branch-free M31/CM31/QM31/WideExact kernels behind a host-only
+feature; TLS instrumentation gated off in production; 69 Kani harnesses
+(equivalence plus two-run trace) and 41 native tests pass; transfer and withdrawal fixture
+proofs are byte-identical. Its builds give default `40dc7574…`, devnet
+`12cb0bc2…`, Pool `121f3e29…`. Those are exactly the current pins after the
+user-approved S4 adoption (C3-BIN addendum 11:50), so the ELF gate **passes**:
+verifier bytes are unchanged by the candidate. Single-run fixture measurements:
+transfer 41.74 → 39.01 s, withdrawal 38.94 → 42.23 s (measurement only).
+Remaining L2 items: sampler, sparse evaluation, query scan, multiproof
+sharing, checker.
+
+## D164 (lead, 2026-10-22 12:25): part 47 merged; y1 image proved for the owned reference
+
+Merged `codex/cx-prover-commit47-20261022` (report
+`r1p-final/PROVER-COMMIT47-20261022.md`). Proved: release field normalisation
+and canonical embedded arithmetic; the recursive basis/evaluator with subfield
+range and exact decoding; the owned reference's exact byte image for all 29 `y1`
+lanes. J9799 standard axioms; shipped files unchanged; no new trust field.
+Open: binding the **shipped** `sim::semantic`/`sim::opening` to the owned
+reference. The worker retried Aeneas on shipped loops and iterators, which fails.
+Lead direction: the shipped side never goes through Aeneas. Use the P6 route
+that worked in parts 29–30 and 43–44: a per-iteration Kani check
+(shipped iteration = owned iteration, verified stubs for callees), then a Lean
+induction over the owned loop. The constant-time candidate (D162) does not touch the
+simulator, so this binding remains valid if the candidate is adopted.
+
+## D165 (lead, 2026-10-22 12:50): constant-time stage 3; cost and a design question
+
+Candidate branch `codex/cx-ct-kernels-20261022` (head `47397e5e16`, unmerged
+per D162; reports `design/CT-KERNELS-20261022.md` and
+`CT-CHECKER-ASSESSMENT-20261022.md`). The ELF gate is corrected to PASS against the
+adopted pins. Stages 3(a)–(e) are done with equivalence gates (Kani, exhaustive or
+per-step), paired source-trace checks, ELF identity and byte identity of the
+fixture proofs and public bytes: fixed-shape samplers; constant-work bounded
+rejection with the legacy stream state; a fixed tensor schedule for equality
+weights; a full-pair QueryScan with masked selection; oblivious multiproof
+sorting and sharing with fixed slots. Single-run prover wall time
+(transfer/withdrawal, measurement only): baseline about 40 s; after (a) 44/43;
+(b) 53/52; (c) 161/137; (d) 192/202; (e) 176/166.
+Stopped at (f): a generic padded constant-shape P_R1 elimination costs
+80.1 billion M31 coefficient updates per attempt (source bounds; not a
+lower bound for every algorithm). A structure-specific emitter would be needed.
+Lead assessment: items (c)–(f) are **challenge-dependent (c-q)** and (a)–(b) are
+**private-coin-dependent (c-s)**. None reads the witness directly. Their source traces are
+functions of public data, Fiat–Shamir challenges and independent coins, so
+L2 can instead be met by proving that this trace is **simulatable**: its joint law
+equals the simulator's up to the existing bad events. That gives an identical
+timing distribution in the real and ideal worlds, and needs no constant-time rewrite.
+The field arithmetic on witness-bearing values (F2) and the pole check (F1) read
+secrets directly and keep the constant-time kernels. Raised to the user.
+
+## D166 (user decision and lead, 2026-10-22 18:20): L2 by simulatable trace; part 48 merged
+
+**User decision (answering D165):** L2 for challenge- and private-coin-dependent
+steps is met by proving the source trace **simulatable**: its joint law in the
+real run equals the simulator's, up to the existing bad events. It is not met
+by constant-time rewrites. Constant-time kernels stay only where secrets are
+operands: the field arithmetic on witness-bearing values (F2) and the pole-check
+arithmetic (F1). Consequence for the candidate: keep stage 2 (field kernels and
+TLS gating), and drop the stage 3(a)–(e) fixed-shape rewrites from the
+adoption candidate (they stay on the branch history as measured evidence). This
+should restore prover time near the ~40 s baseline. The simulatable-trace
+obligations for F3, F5 and F6 join the L1 coupling as proof work.
+Part 48 merged (`codex/cx-prover-commit48-20261022`, report
+`r1p-final/PROVER-COMMIT48-20261022.md`): native iteration bindings by
+per-iteration Kani with owned-loop induction (the D164 route); interpolation
+equal to `Lagrange.interpolate` with its 896-byte image; primal and dual folds;
+gamma/kappa powers; seven-coefficient round accumulation. J9999 standard
+axioms; shipped files unchanged. Stopped on an exhausted env J range. Open:
+semantic samples and guards, final shift, weight-model correspondence, caller
+composition.
+
+## D167 (lead, 2026-10-22 18:50): constant-time candidate v2 per D166
+
+Branch `codex/cx-ct-kernels-v2-20261022` (head `2b7a80b65a`, an unmerged adoption
+candidate; v2 section in `design/CT-KERNELS-20261022.md`). It holds only the stage-2
+field kernels and TLS gating plus a constant-trace pole check (`ct_pole.rs`):
+branch-free QM31 equality and an eager scan over every slot, with no early exit.
+Six compositional Kani gates, instrumented two-run checks and a full-size native
+trace replay pass, and so do the fixture pole regressions. The verifier ELFs match
+the adopted pins, and the fixture proof/public bytes are identical. Single-run
+prover wall time (measurement only): transfer 38.51 s, withdrawal 37.95 s,
+back at the ~40 s baseline. The stage-3 rewrites stay only on the old branch.
+Remaining for L2: the simulatable-trace proof for the F3/F5/F6 steps (listed by
+file:line in the v2 section); then candidate adoption gates and the L3 receipt.
+
+## D168 (user feedback, 2026-10-22 18:55): prover slowdowns need a stop gate
+
+The user called the stage-3 constant-time slowdown (about 40 s to 170–200 s)
+unacceptable. It was never adopted: the v2 candidate (D167) is at the ~40 s
+baseline. The process failure was the lead's. The stage-3 prompt had no
+performance stop condition, so five successive slowdowns ran to completion
+before review. From now on, every job that changes prover or host code carries a wall-time
+budget gate: measure after each step and stop and escalate if any fixture's prover time
+rises more than 10% over baseline. The stage-3 branch is evidence only and is
+not a candidate.
+
+## D169 (user, 2026-10-22 19:00): stage-3 branch removed; prover target under 15 s
+
+On the user's instruction ("remove that shit if needed"), the stage-3
+fixed-shape branch `codex/cx-ct-kernels-20261022` was deleted. It was never in
+research. Its measurements are kept in D165; the v2 candidate is unaffected.
+**New user target: prover wall time under 15 s per proof** (about 38–42 s today,
+single-run on the x86_64 Linux build host). This is a performance requirement
+alongside the security contract, not a replacement for it. Next: a profiling
+job, with per-phase time, retry count and thread use, and a ranked list of
+speedups classified by whether proof bytes and the existing proofs/trust
+items survive. Notes: parallelism would touch the single-thread TLS trust item
+and the side-channel model; any change to proof bytes touches the verifier
+and soundness model and needs the user's approval.
+
+## D170 (lead, 2026-10-22 19:20): prover profile; P_R1 is 89% of prover time
+
+Merged `codex/cx-prover-speed-20261022` (measurement only;
+`design/PROVER-SPEED-20261022.md`). Five runs per fixture and variant on the build
+host (Intel Core Ultra 7 155H, 16 cores/22 threads, rustc 1.94.1), medians:
+research 37.25/37.24 s and CT v2 37.58/37.44 s (transfer/withdrawal); one
+attempt in every run. **P_R1 takes about 33 s**: emit 12.3, convert 4.7, build
+7.1, check 8.8. Everything else is about 4.3 s: semantic sumcheck 2.5,
+commitments and encodings 1.2, salts, hashing and Merkle under 0.7. So
+hashing and Merkle parallelism cannot reach the 15 s target. The target needs about a
+4x speedup of P_R1 (projected 12–13 s end to end). These are projections, not results.
+Next, per D169: a byte-preserving P_R1 speedup on the v2 candidate branch, using
+bounded workers, exact blocked/SIMD M31 arithmetic and removal of duplicated
+column construction. Accept/reject decisions and proof bytes stay identical,
+there are new Kani equivalence gates, and the deterministic exact checker stays
+(no randomized checking). P_R1 inputs are public challenges, so its trace falls under the D166
+simulatable-trace route. Workers change the thread model, so the TLS
+single-thread trust item must be re-examined (v2 already gates TLS recording off).
+
+## D171 (lead, 2026-10-22 20:45): P_R1 speedup on the v2 candidate, 37 s to 17.5 s
+
+On `codex/cx-ct-kernels-v2-20261022` (unmerged candidate; `design/PR1-SPEED-20261022.md`):
+step 1 (descriptor sharing) gave no gain and was reverted, with the negative result
+kept. Step 2 adds exact blocked arithmetic with two-fold Mersenne reduction (five Kani
+obligations). Step 3 adds bounded deterministic workers (at most 16 threads, fixed merge
+order) across emitter families, target rows, converter images, checker rows and
+builder columns. Median of 3 runs: P_R1 12.24/12.49 s, end-to-end **17.49/17.58 s**
+(transfer/withdrawal), from about 37–39 s. Every step: 1,000-challenge differential
+with zero verdict mismatches, byte-identical proof and public bytes, strict
+and dense verification, all three ELF pins rebuilt identical. An earlier stage-3
+form measured 16.0 s but did needless work on rejecting challenges. The final form
+fixes that at about +1.5 s on the accepting path; this trade-off is to be revisited.
+Under 15 s is not met yet. Remaining large items: emitter insertion (largest
+P_R1 phase), and the non-P_R1 remainder of about 5 s (semantic sumcheck point claims
+about 2.1 s over 28k independent evaluations; 29 lane encodings about 1 s), both
+parallelisable over public shapes. Trust note: the prover is now explicitly
+multithreaded in P_R1, on public data only. The TLS single-thread item is restated
+to cover only the gated-off recorder; the quiet panic hook covers the workers.
+
+## D172 (lead, 2026-10-22 21:05): prover under 15 s on the build host (v2 candidate)
+
+Step 4 on `codex/cx-ct-kernels-v2-20261022` (head `b2f95e269a`, unmerged candidate).
+(a) Reusing the first-lift rank result across certificate workers recovered the
+accepting path: 16.19/16.18 s. (b) Parallel emitter insertion gave no gain and was reverted.
+(c) Semantic sumcheck evaluations and lane encodings now run on 16 workers with fixed
+public work ranges and a deterministic merge; constant-time kernels are unchanged;
+two-mask traces show partition and work counts are independent of secrets.
+**Median end-to-end 13.63 s (transfer) and 13.98 s (withdrawal)**, from about 37–39 s.
+The user's under-15 s target is met on the build host. Every step kept byte-identical
+proof and public bytes, zero verdict mismatches over 1,000 challenge sets, local Kani
+gates and the three ELF pins.
+Caveats: measured on a 16-core/22-thread Core Ultra 7 155H; the time scales with
+the client's cores and is not a guarantee for smaller machines. The candidate is not
+adopted. Adoption still needs the native refinement rebinding for the changed P_R1 and
+evaluation code, the D166 joint trace transport, the expanded thread/TLS model, and
+the L3 receipt on the pinned platform.
+
+## D173 (lead, 2026-10-22 21:30): part 49 merged; simulator payload equality still open; cost control
+
+Merged `codex/cx-prover-commit49-20261022` (16 commits; report
+`r1p-final/PROVER-COMMIT49-20261022.md`). It covers statement points and
+point-weight callers, circle factors, the inactive table, native power/inverse
+kernels, the final half-shift and Libra column, raw coefficients, the full
+materialised weights with R1 functional correspondence, and the complete owned
+opening kernel with ordered coefficient bytes. Its final audit imports 93 modules
+and checks 241 theorems, standard axioms only. Shipped files unchanged.
+It stopped on an exhausted env J range (10000–10199). Six interfaces remain
+before native simulator output = `R0Z.RefPayload.simE` payload: the
+`qm31_sum_products_small::<3>` composition; the optimised
+`evaluate_state_only_polynomial` caller; the semantic oracle value
+(maskLinear + sem14·terminalValue, with the sparse-equality pruning and the
+P_R1 good-domain condition, including α9 ≠ ½, for the full caller); `Weights::new` outer
+composition and gamma batching; the source `encode_at`/`eval_at`/`nodes_for`/
+`phi_inverse`/leaf bindings; the final payload composition.
+Cost: part 48 used about 0.9M tokens and part 49 about 1.3M, against a requested
+0.4M. The worker cannot see its own token use, so from part 50 the env J range
+is the budget: 100 compile numbers per part.
+
+## D174 (lead, 2026-10-22 22:30): part 50 merged; budget held; two integration blockers
+
+Merged `codex/cx-prover-commit50-20261022` (report
+`r1p-final/PROVER-COMMIT50-20261022.md`). It used about 0.59M tokens, and the
+J10200–10299 budget held. Proved: the owned three-product Karatsuba composition
+(interface 1); the optimised degree-27 evaluator with prepared multiplication
+(interface 2); sparse prefix products, ordered column sums, scanner provenance
+and the owned sparse MLE model value; the selected-mask arithmetic kernels.
+Standard axioms; shipped files unchanged. Blockers: (i) the integration audit
+fails on duplicate, byte-identical `mul_m31` declarations in two extracted modules
+(`Linear50`, `Batched48`). This is the known cross-extraction naming problem
+(`IMPORT-UNION-20261021.md`), so apply the type-qualified naming fix or
+alias one to the other. (ii) Caller composition hit the kernel memory limit. Per
+AGENTS.md resource rule 5, it is not rerun with a larger cap: isolate the
+declaration, inspect its reduction shape and split it with symbolic lemmas.
+Next (part 51): both blockers, then interfaces 3–6.
+
+## D175 (lead, 2026-10-22 23:15): part 51 merged; authorised cold build of the terminal cone
+
+Merged `codex/cx-prover-commit51-20261022` (about 0.47M tokens; report
+`r1p-final/PROVER-COMMIT51-20261022.md`). Fixed D174's blockers: the duplicate
+`mul_m31` is replaced by reuse of the retained declaration; the memory-heavy caller
+is split through symbolic result sequencing (no cap raised). Proved: the selected
+mask coefficient producer and caller; all semantic mask column reads; the native
+mask basis and semantic extra functional bound to model carriers; coefficient
+provenance and the complete owned linear oracle value; terminal equality and the
+arithmetic suffix. J10368, 73 standard-axiom audits.
+Obstruction: the terminal integration imports a retained cone whose closure has
+535 modules, 495 without Env J objects. Building them one compile number at a
+time exceeds the budget. **Lead authorisation (AGENTS.md resource rules 1, 2 and 6):**
+treat this as one cold dependency build on the build host, not as proof attempts. Run
+one capped scope (MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0), reusing the pinned
+cache, with aggregate RSS monitored and a stop if it nears the cap. Record target, exit, wall,
+peak RSS and swap, under its own build label outside the proof-attempt range. A
+module that fails or is memory-killed is isolated and reported, never rerun with a
+larger cap. Session A's modules are only built, never edited.
+
+## D176 (lead, 2026-10-22 23:40): part 52 merged; the import-union naming fix is now on the critical path
+
+Merged `codex/cx-prover-commit52-20261022` (about 0.53M tokens; report
+`r1p-final/PROVER-COMMIT52-20261022.md`). The D175 cold build ran capped
+(490.65 s, peak RSS 4.17 GB, zero swap, 552 standard axiom reports). 261 modules
+compiled; module 262 (`ExtractedDecoderCallerBridge`) failed:
+`AspisR1TerminalDecoder.Types` and `AspisR1WithdrawalCaller.Types` both
+generate the unqualified instance `instDiscriminantPoolV1TransitionKindU8`. The
+arithmetic suffix passed separately (J10400–10402). This is the same shared
+obstruction as release gate 1 (`IMPORT-UNION-20261021.md`: generated discriminant
+instances take unqualified names, so separate extractions cannot be imported
+together), and it has now blocked real work. Per AGENTS.md discipline §7 it is fixed
+once, globally, before more privacy parts: adopt the prototyped
+`<fully-qualified-enum>.instDiscriminant` naming adapter for every generated Types
+module under `lean/` and rebuild the affected closures (capped). Session A's
+`lean-candidates` get the same adapter and script through the handoff note rather than
+lead edits. Privacy part 53 waits for it.

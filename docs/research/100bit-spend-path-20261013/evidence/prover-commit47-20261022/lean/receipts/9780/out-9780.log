@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitWordBytes47.lean:15:2: error: unsolved goals
+case h.inl
+x : U32
+hi : 0 < (List.map rawByte ↑(core.num.U32.to_le_bytes x)).length
+hj : 0 < (List.ofFn (encodeWordLE (rawWord x))).length
+hi4 : 0 < 4
+⊢ ↑x % 256 = ↑(AspisR1.RetainedFieldByteCodec.byteMod✝ ↑x)
+
+case h.inr.inl
+x : U32
+hi : 1 < (List.map rawByte ↑(core.num.U32.to_le_bytes x)).length
+hj : 1 < (List.ofFn (encodeWordLE (rawWord x))).length
+hi4 : 1 < 4
+⊢ ↑x / 256 % 256 = ↑(AspisR1.RetainedFieldByteCodec.byteMod✝ (↑x / 256))
+
+case h.inr.inr.inl
+x : U32
+hi : 2 < (List.map rawByte ↑(core.num.U32.to_le_bytes x)).length
+hj : 2 < (List.ofFn (encodeWordLE (rawWord x))).length
+hi4 : 2 < 4
+⊢ ↑x / 256 % 16777216 / 256 % 256 = ↑(AspisR1.RetainedFieldByteCodec.byteMod✝ (↑x / 65536))
+
+case h.inr.inr.inr
+x : U32
+hi : 3 < (List.map rawByte ↑(core.num.U32.to_le_bytes x)).length
+hj : 3 < (List.ofFn (encodeWordLE (rawWord x))).length
+hi4 : 3 < 4
+⊢ ↑x / 256 % 16777216 / 256 % 65536 / 256 % 256 = ↑(AspisR1.RetainedFieldByteCodec.byteMod✝ (↑x / 16777216))
+'R1Z.ProverCommitWordBytes47.word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

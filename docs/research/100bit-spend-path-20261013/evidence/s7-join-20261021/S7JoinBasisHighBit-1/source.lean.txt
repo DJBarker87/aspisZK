@@ -1,0 +1,32 @@
+import S7JoinBasisIdentity
+set_option autoImplicit false
+namespace AspisR1.S7JoinBasisHighBit
+open AspisCircleTensorBinding
+variable {K : Type*} [CommRing K]
+
+theorem bit_set (n j : Nat) (hj : j<2^n) :
+    (2^n+j).bitIndices.toFinset=insert n j.bitIndices.toFinset := by
+  ext b
+  simp only [List.mem_toFinset,Nat.mem_bitIndices,Finset.mem_insert]
+  have ht := Nat.testBit_two_pow_mul_add 1 hj b
+  simp only [Nat.mul_one] at ht
+  rw [ht]
+  by_cases hb : b<n
+  · have hne : b≠n := by omega
+    simp only [hb,if_pos,hne,false_or]
+  · have hz : j.testBit b=false := Nat.testBit_lt_two_pow
+      (hj.trans_le (Nat.pow_le_pow_right (by decide) (by omega)))
+    have he : b-n=0 ↔ b=n := by omega
+    simp only [hb,if_neg,Nat.testBit_one,he,hz,Bool.false_eq_true,or_false]
+
+theorem natural_high (x : K) (n j : Nat) (hj : j<2^n) :
+    naturalLineValue x (2^n+j)=naturalLineValue x j*doubledFactor x n := by
+  have hnot : n∉j.bitIndices.toFinset := by
+    simpa only [List.mem_toFinset,Nat.mem_bitIndices,Nat.testBit_lt_two_pow hj,
+      Bool.false_eq_true,not_false_eq_true]
+  unfold naturalLineValue
+  rw [bit_set n j hj,Finset.prod_insert hnot,mul_comm]
+
+#print axioms bit_set
+#print axioms natural_high
+end AspisR1.S7JoinBasisHighBit

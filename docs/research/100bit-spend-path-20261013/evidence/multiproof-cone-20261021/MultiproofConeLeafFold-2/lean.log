@@ -1,0 +1,114 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafFold.lean:62:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+q : Fin 22 → Fin 262144
+kind pos : ℕ
+b : ↑(q ⟨pos % 22, ⋯⟩) < 262144
+h✝ : kind = 2
+⊢ ↑(q ⟨pos % 22, ⋯⟩) / 4 ≤ UScalar.cMax UScalarTy.U32
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafFold.lean:94:6: error: Type mismatch
+  congrArg (fun x => ((leaf p kind pos, H (leaf p kind pos)) :: x.1, x.2))
+    (ih [(index q kind pos, H (leaf p kind pos))])
+has type
+  ((leaf p kind pos, H (leaf p kind pos)) ::
+        (eval H
+            (AspisV8R19.OracleProgramOps.bind (model p q kind rest [(index q kind pos, H (leaf p kind pos))]) fun out =>
+              Program.done (Option.map List.reverse out))).1,
+      (eval H
+          (AspisV8R19.OracleProgramOps.bind (model p q kind rest [(index q kind pos, H (leaf p kind pos))]) fun out =>
+            Program.done (Option.map List.reverse out))).2) =
+    ((leaf p kind pos, H (leaf p kind pos)) ::
+        (eval H (hashLeaves p q kind rest [(index q kind pos, H (leaf p kind pos))])).1,
+      (eval H (hashLeaves p q kind rest [(index q kind pos, H (leaf p kind pos))])).2)
+but is expected to have type
+  ((leaf p kind pos, H (leaf p kind pos)) ::
+          (eval H (model p q kind rest [(index q kind pos, H (leaf p kind pos))])).1 ++
+        [],
+      Option.map List.reverse (eval H (model p q kind rest [(index q kind pos, H (leaf p kind pos))])).2) =
+    ((leaf p kind pos, H (leaf p kind pos)) ::
+        (eval H (hashLeaves p q kind rest [(index q kind pos, H (leaf p kind pos))])).1,
+      (eval H (hashLeaves p q kind rest [(index q kind pos, H (leaf p kind pos))])).2)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafFold.lean:101:22: error: Type mismatch
+  congrArg (fun x => ((leaf p kind pos, H (leaf p kind pos)) :: x.1, x.2)) (ih ?m.156)
+has type
+  ((leaf p kind pos, H (leaf p kind pos)) ::
+        (eval H
+            (AspisV8R19.OracleProgramOps.bind (model p q kind rest ?m.156) fun out =>
+              Program.done (Option.map List.reverse out))).1,
+      (eval H
+          (AspisV8R19.OracleProgramOps.bind (model p q kind rest ?m.156) fun out =>
+            Program.done (Option.map List.reverse out))).2) =
+    ((leaf p kind pos, H (leaf p kind pos)) :: (eval H (hashLeaves p q kind rest ?m.156)).1,
+      (eval H (hashLeaves p q kind rest ?m.156)).2)
+but is expected to have type
+  ((leaf p kind pos, v) :: (eval H (model p q kind rest ((j, v) :: tail))).1 ++ [],
+      Option.map List.reverse (eval H (model p q kind rest ((j, v) :: tail))).2) =
+    ((leaf p kind pos, v) :: (eval H (hashLeaves p q kind rest ((j, v) :: tail))).1,
+      (eval H (hashLeaves p q kind rest ((j, v) :: tail))).2)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafFold.lean:101:22: error: Type mismatch
+  congrArg (fun x => ((leaf p kind pos, H (leaf p kind pos)) :: x.1, x.2)) (ih ?m.156)
+has type
+  ((leaf p kind pos, H (leaf p kind pos)) ::
+        (eval H
+            (AspisV8R19.OracleProgramOps.bind (model p q kind rest ?m.156) fun out =>
+              Program.done (Option.map List.reverse out))).1,
+      (eval H
+          (AspisV8R19.OracleProgramOps.bind (model p q kind rest ?m.156) fun out =>
+            Program.done (Option.map List.reverse out))).2) =
+    ((leaf p kind pos, H (leaf p kind pos)) :: (eval H (hashLeaves p q kind rest ?m.156)).1,
+      (eval H (hashLeaves p q kind rest ?m.156)).2)
+but is expected to have type
+  ((leaf p kind pos, v) :: (eval H (model p q kind rest ((index q kind pos, v) :: (j, v) :: tail))).1 ++ [],
+      Option.map List.reverse (eval H (model p q kind rest ((index q kind pos, v) :: (j, v) :: tail))).2) =
+    ((leaf p kind pos, v) :: (eval H (hashLeaves p q kind rest ((index q kind pos, v) :: (j, v) :: tail))).1,
+      (eval H (hashLeaves p q kind rest ((index q kind pos, v) :: (j, v) :: tail))).2)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafFold.lean:101:22: error: Type mismatch
+  congrArg (fun x => ((leaf p kind pos, H (leaf p kind pos)) :: x.1, x.2)) (ih ?m.156)
+has type
+  ((leaf p kind pos, H (leaf p kind pos)) ::
+        (eval H
+            (AspisV8R19.OracleProgramOps.bind (model p q kind rest ?m.156) fun out =>
+              Program.done (Option.map List.reverse out))).1,
+      (eval H
+          (AspisV8R19.OracleProgramOps.bind (model p q kind rest ?m.156) fun out =>
+            Program.done (Option.map List.reverse out))).2) =
+    ((leaf p kind pos, H (leaf p kind pos)) :: (eval H (hashLeaves p q kind rest ?m.156)).1,
+      (eval H (hashLeaves p q kind rest ?m.156)).2)
+but is expected to have type
+  ((leaf p kind pos, H (leaf p kind pos)) ::
+          (eval H (model p q kind rest ((index q kind pos, H (leaf p kind pos)) :: (j, v) :: tail))).1 ++
+        [],
+      Option.map List.reverse
+        (eval H (model p q kind rest ((index q kind pos, H (leaf p kind pos)) :: (j, v) :: tail))).2) =
+    ((leaf p kind pos, H (leaf p kind pos)) ::
+        (eval H (hashLeaves p q kind rest ((index q kind pos, H (leaf p kind pos)) :: (j, v) :: tail))).1,
+      (eval H (hashLeaves p q kind rest ((index q kind pos, H (leaf p kind pos)) :: (j, v) :: tail))).2)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafFold.lean:125:40: error: unsolved goals
+H : Bytes → State
+p : Parsed
+q : Fin 22 → Fin 262144
+kind pos : ℕ
+rest : List ℕ
+ih :
+  ∀ (s : reference.Scratch),
+    ↑s.n + rest.length ≤ 16 →
+      ∃ log out,
+        eval H (leaves p q kind rest s) = (log, ok out) ∧
+          eval H (model p q kind rest (revLive s)) = (log, Option.map revLive out) ∧
+            ∀ (t : reference.Scratch), out = some t → ↑t.n ≤ ↑s.n + rest.length
+s : reference.Scratch
+room : ↑s.n + (pos :: rest).length ≤ 16
+bound : ↑s.n < 16
+step : reference.leaf_step s (key q kind pos) (encodeState (H (leaf p kind pos))) = ok none
+content : none = push (index q kind pos) (H (leaf p kind pos)) (revLive s)
+eq : next s (key q kind pos) (encodeState (H (leaf p kind pos))) bound = none
+⊢ ([(leaf p kind pos, H (leaf p kind pos))], none) = ([(leaf p kind pos, H (leaf p kind pos))], Option.map revLive none)
+'AspisR1.MultiproofConeLeafFold.decode_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLeafFold.insert_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLeafFold.next_live' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLeafFold.next_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLeafFold.model_frozen' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.MultiproofConeLeafFold.leaves_join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

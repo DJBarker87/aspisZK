@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/IndexedCandidateGeneratedLoopBridgeV4.lean:28:60: error: unsolved goals
+rank : Words
+⊢ (do
+      let __x ←
+        loop
+            (fun x =>
+              if x.2.2 > 0#usize then do
+                let j1 ← x.2.2 - 1#usize
+                let i ← x.2.1 <<< 32#i32
+                let i1 ← x.1.index_usize j1
+                let i2 ← lift (core.convert.num.FromU64U32.from i1)
+                let dividend ← lift (i ||| i2)
+                let i3 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+                let i4 ← dividend / i3
+                let i5 ← lift (UScalar.cast UScalarTy.U32 i4)
+                let rank1 ← x.1.update j1 i5
+                let i6 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+                let remainder1 ← dividend % i6
+                ok (cont (rank1, remainder1, j1))
+              else ok (done (x.1, x.2.1)))
+            (rank, 0#u64, 8#usize)
+      let i ← lift (UScalar.cast UScalarTy.U32 __x.2)
+      ok (__x.1, i)) =
+    do
+    let (rank1, remainder) ←
+      loop
+          (fun x =>
+            if x.2.2 > 0#usize then do
+              let j1 ← x.2.2 - 1#usize
+              let i ← x.2.1 <<< 32#i32
+              let i1 ← x.1.index_usize j1
+              let i2 ← lift (core.convert.num.FromU64U32.from i1)
+              let dividend ← lift (i ||| i2)
+              let i3 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+              let i4 ← dividend / i3
+              let i5 ← lift (UScalar.cast UScalarTy.U32 i4)
+              let a ← x.1.update j1 i5
+              let i6 ← lift (core.convert.num.FromU64U32.from 2147483647#u32)
+              let remainder1 ← dividend % i6
+              ok (cont (a, remainder1, j1))
+            else ok (done (x.1, x.2.1)))
+          (rank, 0#u64, 8#usize)
+    let i ← lift (UScalar.cast UScalarTy.U32 remainder)
+    ok (rank1, i)
+'AspisR1.ExtractedQM31SamplerIndexedGeneratedBridge.generated_div_pass_eq_index' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.ExtractedQM31SamplerIndexedGeneratedBridge.values_set_take' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.ExtractedQM31SamplerIndexedGeneratedBridge.low_base_p_digits_loop1_unroll' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.ExtractedQM31SamplerIndexedGeneratedBridge.low_base_p_digits_loop1_correct' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.ExtractedQM31SamplerIndexedGeneratedBridge.low_base_p_digits_loop1_eight_indexed' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import subprocess,os,json,time,sys,hashlib,re,threading
+H=Path('/home/dombarker/project-offloads/codex-cx-prover-speed-20261022')
+mode,stage=sys.argv[1:];R=H/mode;O=H/'receipts'/(mode+'-'+stage);O.mkdir(parents=True)
+cg=Path('/sys/fs/cgroup'+Path('/proc/self/cgroup').read_text().split('0::')[1].strip())
+limits={n:(cg/n).read_text().strip() for n in ['memory.high','memory.max','memory.swap.max','pids.max']}
+assert limits==dict(zip(['memory.high','memory.max','memory.swap.max','pids.max'],map(str,[6*2**30,8*2**30,0,64]))),limits
+subprocess.run(['python3',str(H/'tools/admission.py'),str(O/'admission.json')],check=True)
+features='optimized-terminal,'+('r1p-check' if mode=='research' else 'ct-host-prover')
+env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='4',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(H/'target'),RUSTFLAGS='-C link-arg=-Wl,--threads=4')
+cmd=['cargo','build','--release','-p','aspis-r1-cost-probe','--example','speed_profile','--features',features,'-j','4','--locked'] if stage=='build' else [str(H/'bin'/mode),'5',str(H/('results-'+mode))]
+expected='optimized compilation only' if stage=='build' else 'ten proof generations (5 each fixture), encoding, P_R1 certificate emission/elimination; no compilation'
+print(expected,cmd,flush=True)
+start=time.monotonic();p=subprocess.Popen(['/usr/bin/time','-v','-o',str(O/'time.log'),*cmd],cwd=R,env=env,stdout=(O/'stdout.log').open('w'),stderr=(O/'stderr.log').open('w'))
+samples=[]
+while p.poll() is None:
+ if stage!='build':
+  for entry in Path('/proc').iterdir():
+   if entry.name.isdigit():
+    try:
+     if (entry/'comm').read_text().strip() in ['research','v2']:
+      d=(entry/'status').read_text();samples.append({'t':time.monotonic()-start,'pid':int(entry.name),'threads':int(re.search(r'Threads:\s+(\d+)',d)[1]),'rss_kib':int(re.search(r'VmRSS:\s+(\d+)',d)[1])})
+    except (OSError,TypeError):pass
+ time.sleep(1)
+rec={'mode':mode,'stage':stage,'command':cmd,'expected_work':expected,'exit':p.returncode,'wall_seconds':time.monotonic()-start,'source_revision':(R/'source-revision.txt').read_text().strip(),'features':features,'limits':limits,'cgroup':str(cg),'memory_peak':(cg/'memory.peak').read_text().strip(),'swap_peak':(cg/'memory.swap.peak').read_text().strip(),'toolchain':subprocess.check_output(['/home/dombarker/.cargo/bin/rustc','-Vv'],text=True),'cpu':subprocess.check_output(['lscpu'],text=True),'environment':{k:env.get(k) for k in ['RUSTFLAGS','CARGO_BUILD_JOBS','CARGO_TARGET_DIR']},'print_axioms':'N/A; no Lean','thread_samples':samples}
+if stage=='build' and p.returncode==0:
+ b=(H/'target/release/examples/speed_profile').read_bytes();(H/'bin').mkdir(exist_ok=True);q=H/'bin'/mode;q.write_bytes(b);q.chmod(0o755);rec['binary_sha256']=hashlib.sha256(b).hexdigest();rec['binary_bytes']=len(b)
+(O/'receipt.json').write_text(json.dumps(rec,indent=2)+'\n');sys.exit(p.returncode)

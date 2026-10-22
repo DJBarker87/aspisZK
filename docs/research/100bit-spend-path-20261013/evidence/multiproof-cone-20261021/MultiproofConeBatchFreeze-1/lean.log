@@ -1,0 +1,39 @@
+AspisR1.MultiproofConeFrozen2Stage.both_batches {X : Type} (D : MultiproofConeRef.aspis_core.digest.Digest32 X)
+  (hash : X) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (law :
+    ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input))
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8)
+  (views :
+    ∀ (b k : ℕ),
+      b < 2 →
+        k < 3 →
+          AspisR1.MultiproofConeCanonical.bytesOf ↑(nodes b k) =
+            AspisR1.OraclePortCompactDraft.slice p.wire (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+              (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k))) :
+  (∀ (s : MultiproofConeRef.reference.Scratch),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeFrozen2Stage.sourceBatch p q nodes 0 s)).2 = true →
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeFrozen2Stage.sourceBatch p q nodes 0 s) =
+          AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch0)) ∧
+    ∀ (s : MultiproofConeRef.reference.Scratch),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeFrozen2Stage.sourceBatch p q nodes 1 s)).2 = true →
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeFrozen2Stage.sourceBatch p q nodes 1 s) =
+          AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch1)
+'AspisR1.MultiproofConeLeafContent.step_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLeafFrozen.batch_leaves' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeCountPhysical.rows_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeCountPhysicalLevels.eighteen_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeCountPhysicalLevels.unread_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeCountBounds.eighteen_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConePadding.padding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeRootGuard.root_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConePhysicalVerify.accepted_verify' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeSlotTail.slot_count_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeSlotTail.accepted_tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeSlotState.accepted_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeBatches.accepted_sequence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeFrozen2Stage.both_batches' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeFrozen2Stage.accepted_outer' depends on axioms: [propext]
+'AspisR1.MultiproofConeSlotAdapters.slot_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortFrozen2Join.acceptedRunJoin_of_cones' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortHeadlineFrozen2PerAttempt.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,3 @@
+PROVED complete generated four_dots function forward execution through actual608-byte slice/shared-array conversion and all four callbacks, with canonical returned values.
+
+Limitations: Query length≥608, exact608-byte prefix array identity, canonical29-entry coefficients and exact SlotInput parser premises remain caller inputs. Every slice/conversion, loop, callback, packing, push, finish and addition success is derived. The explicit array operation is retained P6; RustStd/from_fn and exact frozen source operation realization, caller input provenance and final accepted-run/headline join remain open.

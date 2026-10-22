@@ -1,0 +1,65 @@
+import R1Z.ProverCommitSampleTail49
+/-! The owned prefix/sample/tail point, with a decoded big-endian formula.
+No semantic oracle implementation or success is assumed by these point laws. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitSamplePoint49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open ProverCommitSampleTail49
+
+def word (sample : U32) : Old.Q := ⟨⟨sample,0#u32⟩,⟨0#u32,0#u32⟩⟩
+
+theorem word_decode (sample : U32) : decode (word sample)=(sample.val : QM31Exact) := by rfl
+
+theorem word_canonical (sample : U32) (h : sample.val<28) : Canonical (word sample) := by
+  change (sample.val<AspisR1.ExtractedCurrentTowerAdd.P ∧ (0#u32).val<AspisR1.ExtractedCurrentTowerAdd.P) ∧
+    ((0#u32).val<AspisR1.ExtractedCurrentTowerAdd.P ∧ (0#u32).val<AspisR1.ExtractedCurrentTowerAdd.P)
+  refine ⟨⟨?_,by decide⟩,⟨by decide,by decide⟩⟩
+  change sample.val<2147483647
+  omega
+
+theorem sample_value (p : Nat → Old.Q) (r : Usize) (hr : r.val<10) (sample : U32) :
+    owned.sample (ProverCommitQArray48.array 10#usize p) r sample=
+      ok (ProverCommitQArray48.array 10#usize (Function.update p r.val (word sample))) := by
+  simp only [owned.sample,field.CM31.from_m31,field.QM31.from_cm31,
+    field.M31.ZERO,field.CM31.ZERO,bind_tc_ok]
+  exact ProverCommitQArray48.update 10#usize p r hr (word sample)
+
+def point (p : Nat → Old.Q) (r : Nat) (a : Usize) (sample : U32) : Nat → Old.Q :=
+  values (9-r) (Function.update p r (word sample)) r (9-r) a 0
+
+theorem point_decode (p : Nat → Old.Q) (r : Nat) (hr : r<10) (a : Usize)
+    (sample : U32) (k : Nat) (hk : k<10) :
+    decode (point p r a sample k)=
+      if k<r then decode (p k) else if k=r then (sample.val : QM31Exact)
+      else if ProverCommitSampleBits49.bit a (9-r) (k-r-1) then 1 else 0 := by
+  rw [point,values_at]
+  by_cases hpre : k<r
+  · rw [if_neg (by omega),Function.update_of_ne (by omega : k≠r),if_pos hpre]
+  · by_cases he : k=r
+    · subst k
+      rw [if_neg (by omega),Function.update_self,word_decode,if_neg (by omega),if_pos rfl]
+    · rw [if_pos (by omega),if_neg hpre,if_neg he]
+      unfold qbit
+      split <;> simp only [ProverCommitSubtraction47.one_decode,zero_decode]
+
+theorem point_result (p : Nat → Old.Q) (r rem a : Usize) (left : U8)
+    (hr : r.val<10) (hrem : rem.val=9-r.val) (hleft : left.val=9-r.val)
+    (sample : U32) :
+    (do
+      let p ← owned.sample (ProverCommitQArray48.array 10#usize p) r sample
+      owned.tail p r rem a 0#usize left)=
+      ok (ProverCommitQArray48.array 10#usize (point p r.val a sample)) := by
+  rw [sample_value p r hr sample]
+  simp only [bind_tc_ok]
+  rw [tail_value (9-r.val) _ _ _ _ _ _ hleft hr hrem (by change 0+(9-r.val)≤rem.val;omega)]
+  simp only [point,hrem,show (0#usize).val=0 from rfl]
+
+#print axioms word_decode
+#print axioms word_canonical
+#print axioms sample_value
+#print axioms point_decode
+#print axioms point_result
+end R1Z.ProverCommitSamplePoint49

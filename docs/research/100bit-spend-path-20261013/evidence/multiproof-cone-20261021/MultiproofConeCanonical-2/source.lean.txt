@@ -1,0 +1,96 @@
+import MultiproofConeEndian
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.MultiproofConeCanonical
+open Aeneas Aeneas.Std Result
+open AspisV8R19.DuplexFrames
+open AspisR1.RetainedFieldByteCodec
+open OraclePortCompactDraft
+attribute [local instance] Classical.propDecidable
+
+def bytesOf (xs : List U8) : Bytes := xs.map AspisV8R19.SqueezeOracleBridge.decodeByte
+
+private theorem slice_four_succ (a b c d : AspisV8R19.DuplexFrames.Byte) (xs : Bytes) (j : Nat) :
+    slice (a::b::c::d::xs) (4*(j+1)) 4 = slice xs (4*j) 4 := by
+  unfold slice
+  rw [show 4*(j+1)=4+4*j by omega, ← List.drop_drop]
+  rfl
+
+theorem canonical_four (a b c d : AspisV8R19.DuplexFrames.Byte) (xs : Bytes) :
+    canonical (a::b::c::d::xs) ↔
+      little [a,b,c,d] < 2147483647 ∧ canonical xs := by
+  have hl : (a::b::c::d::xs).length = xs.length+4 := by simp; omega
+  have hd : (xs.length+4)/4 = xs.length/4+1 := by omega
+  have hm : (xs.length+4)%4 = xs.length%4 := by omega
+  simp only [canonical, List.mem_range, hl, hd, hm]
+  constructor
+  · rintro ⟨hmod,checks⟩
+    refine ⟨?_,hmod,?_⟩
+    · simpa only [slice, List.drop_zero] using checks 0 (by omega)
+    · intro j hj
+      have hc := checks (j+1) (by omega)
+      simpa only [slice_four_succ] using hc
+  · rintro ⟨first,hmod,checks⟩
+    refine ⟨hmod,?_⟩
+    intro j hj
+    cases j with
+    | zero => simpa only [slice,List.drop_zero] using first
+    | succ j =>
+      rw [slice_four_succ]
+      exact checks j (by omega)
+
+theorem word_four (a b c d : U8) :
+    (core.num.U32.from_le_bytes (Array.make 4#usize [a,b,c,d])).val < 2147483647 ↔
+      little (bytesOf [a,b,c,d]) < 2147483647 := by
+  let word := Array.make 4#usize [a,b,c,d]
+  have hb : List.ofFn (M31ParserArray.arrayBytes word) = bytesOf [a,b,c,d] := by rfl
+  rw [← hb, MultiproofConeEndian.little_four]
+  exact MultiproofConeEndian.strict_word_iff word
+
+theorem words_meaning (xs : List U8) :
+    MultiproofConeWordScan.wordsModel xs = true ↔ canonical (bytesOf xs) := by
+  generalize hn : xs.length = n
+  induction n using Nat.strong_induction_on generalizing xs with
+  | h n ih =>
+    cases xs with
+    | nil => simp [MultiproofConeWordScan.wordsModel, bytesOf, canonical]
+    | cons a xs =>
+      cases xs with
+      | nil => simp [MultiproofConeWordScan.wordsModel, bytesOf, canonical]
+      | cons b xs =>
+        cases xs with
+        | nil => simp [MultiproofConeWordScan.wordsModel, bytesOf, canonical]
+        | cons c xs =>
+          cases xs with
+          | nil => simp [MultiproofConeWordScan.wordsModel, bytesOf, canonical]
+          | cons d xs =>
+            have ht := ih xs.length (by simp only [List.length_cons] at hn; omega) xs rfl
+            simp only [MultiproofConeWordScan.wordsModel, Bool.and_eq_true,
+              decide_eq_true_eq, bytesOf, List.map_cons, canonical_four]
+            exact and_congr (word_four a b c d) ht
+
+/-- Exact total all-input refinement to the frozen parser's canonical predicate. -/
+theorem scan_total (bytes : Slice U8) :
+    MultiproofParserRef.parser_reference.canonical_words bytes =
+      ok (decide (canonical (bytesOf bytes.val))) := by
+  rw [MultiproofConeWordScan.words_total]
+  apply congrArg ok
+  have meaning := words_meaning bytes.val
+  cases hb : MultiproofConeWordScan.wordsModel bytes.val with
+  | true => simp [meaning.mp hb]
+  | false =>
+    have hn : ¬ canonical (bytesOf bytes.val) := by
+      intro hc
+      have hh := meaning.mpr hc
+      rw [hb] at hh
+      contradiction
+    simp [hn]
+
+#print axioms slice_four_succ
+#print axioms canonical_four
+#print axioms word_four
+#print axioms words_meaning
+#print axioms scan_total
+end AspisR1.MultiproofConeCanonical
+end

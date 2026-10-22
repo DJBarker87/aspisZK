@@ -1,0 +1,55 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3ScalarShape.lean:13:22: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (Canonical (kWords a c d e))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3ScalarShape.lean:13:100: error: unsolved goals
+case isFalse
+b : Slice U8
+a c d e : U32
+h0 : word_spec b 0#usize = ok a
+h1 : word_spec b 4#usize = ok c
+h2 : word_spec b 8#usize = ok d
+h3 : word_spec b 12#usize = ok e
+h✝ : ↑(↑(Array.make 4#usize [a, c, d, e] ⋯))[0] < 2147483647
+⊢ (if 2147483647 ≤ ↑(↑(Array.make 4#usize [a, c, d, e] ⋯))[1] then ok none
+    else
+      if 2147483647 ≤ ↑(↑(Array.make 4#usize [a, c, d, e] ⋯))[2] then ok none
+      else
+        if 2147483647 ≤ ↑(↑(Array.make 4#usize [a, c, d, e] ⋯))[3] then ok none
+        else
+          ok
+            (some
+              {
+                c0 :=
+                  { a := (↑(Array.make 4#usize [a, c, d, e] ⋯))[0], b := (↑(Array.make 4#usize [a, c, d, e] ⋯))[1] },
+                c1 :=
+                  { a := (↑(Array.make 4#usize [a, c, d, e] ⋯))[2],
+                    b := (↑(Array.make 4#usize [a, c, d, e] ⋯))[3] } })) =
+    sorry ()
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3ScalarShape.lean:16:22: warning: This simp argument is unused:
+  Canonical
+
+Hint: Omit it from the simp argument list.
+  simp_all [C̵a̵n̵o̵n̵i̵c̵a̵l̵,̵kWords]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3ScalarShape.lean:16:32: warning: This simp argument is unused:
+  kWords
+
+Hint: Omit it from the simp argument list.
+  simp_all [Canonical,̵k̵W̵o̵r̵d̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes3/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes3ScalarShape.lean:29:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+b : Slice U8
+width : (↑b).length = 16
+h0 : word_spec b 0#usize = ok (pack (↑b)[↑0#usize] (↑b)[↑0#usize + 1] (↑b)[↑0#usize + 2] (↑b)[↑0#usize + 3])
+h1 : word_spec b 4#usize = ok (pack (↑b)[↑4#usize] (↑b)[↑4#usize + 1] (↑b)[↑4#usize + 2] (↑b)[↑4#usize + 3])
+h2 : word_spec b 8#usize = ok (pack (↑b)[↑8#usize] (↑b)[↑8#usize + 1] (↑b)[↑8#usize + 2] (↑b)[↑8#usize + 3])
+h3 : word_spec b 12#usize = ok (pack (↑b)[↑12#usize] (↑b)[↑12#usize + 1] (↑b)[↑12#usize + 2] (↑b)[↑12#usize + 3])
+⊢ ∃ q, sorry = ok q
+'AspisR1.CheckpointBytes3ScalarShape.k_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytes3ScalarShape.k_no_panic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

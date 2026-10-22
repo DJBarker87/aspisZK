@@ -1,0 +1,26 @@
+/Users/dominic/ZK/.worktrees/cx-dv-twotx/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozen2RoundTripLog.lean:49:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ -5
+  b ≥ 0
+  a ≥ 0
+where
+ a := ↑(eval H
+        (dV_frozen i.stored
+          (LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol D).transcript H i.statement i.proof 33))
+          (LiteralTranscript.erase (i.proof 33)))).1.length
+ b := ↑(List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H i.statement i.proof j).toProgram).1)
+        (List.range 33)).flatten.length
+ c := ↑(eval H
+        (OracleDecisionFeasibilityCore.onBytes (dV_frozen i.stored)
+          ((LiteralByteProtocol.protocol D).transcript H i.statement i.proof 33) (i.proof 33))).1.length
+ d := ↑(eval H
+        (OracleDecisionFeasibilityCore.onBytes (dV_frozen2 i.stored)
+          ((LiteralByteProtocol.protocol D).transcript H i.statement i.proof 33) (i.proof 33))).1.length
+'AspisR1.OraclePortFrozen2.roundtrip_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortFrozen2.verifier_six_inserted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortFrozen2.annotated_twelve_inserted' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

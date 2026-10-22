@@ -1,0 +1,119 @@
+import R1Z.SideChannelEntropy
+import R1Z.CommitReadsR1
+import R1Z.ProverCommitEntropyCharge40
+
+/-! Exact ideal all-Ok count law, separated from adversarial fault schedules.
+No concrete raw tape is enumerated. Coordinate products and symbolic
+inclusion/exclusion supply the result. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.SideChannelEntropyLaw
+open R0Z R0Z.FsAbortBounds R1Z.ProverCommitPublicNonce40
+attribute [local instance] Classical.propDecidable
+
+def u : ℚ := 1 / (2 : ℚ)^256
+def bad (r : Raw) : Prop := ∃ i, r i = 0
+
+theorem union_identity {A : Type} [Fintype A] (p q : A → Prop) :
+    mass (fun a => p a ∨ q a) + mass (fun a => p a ∧ q a) = mass p + mass q := by
+  unfold mass
+  rw [←mean_add'',←mean_add'']
+  congr 1
+  funext a
+  by_cases hp : p a <;> by_cases hq : q a <;> simp [hp,hq]
+
+theorem bad_exact : mass bad = 2*u-u*u := by
+  have shape : bad = fun r : Raw => r 0 = 0 ∨ r 1 = 0 := by
+    funext r
+    apply propext
+    constructor
+    · rintro ⟨i,hi⟩
+      fin_cases i <;> simp_all
+    · rintro (h | h)
+      · exact ⟨0,h⟩
+      · exact ⟨1,h⟩
+  have h0 : mass (fun r : Raw => r 0 = 0) = u := by
+    rw [CommitReadsR1.mass_coord (N := 2) (X := R0Z.FsStatement.OracleAnswer) 0]
+    rw [mass_point,QueryScanSharedHistoryMass.answer_cardinality,Nat.cast_pow,Nat.cast_ofNat]
+    rfl
+  have h1 : mass (fun r : Raw => r 1 = 0) = u := by
+    rw [CommitReadsR1.mass_coord (N := 2) (X := R0Z.FsStatement.OracleAnswer) 1]
+    rw [mass_point,QueryScanSharedHistoryMass.answer_cardinality,Nat.cast_pow,Nat.cast_ofNat]
+    rfl
+  have both : (fun r : Raw => r 0 = 0 ∧ r 1 = 0) = fun r => r = fun _ => 0 := by
+    funext r
+    apply propext
+    constructor
+    · intro h
+      funext i
+      fin_cases i <;> simp_all
+    · intro h
+      subst r
+      exact ⟨rfl,rfl⟩
+  have hb : mass (fun r : Raw => r 0 = 0 ∧ r 1 = 0) = u*u := by
+    rw [both,mass_point,Fintype.card_fun,Fintype.card_fin,
+      QueryScanSharedHistoryMass.answer_cardinality,Nat.cast_pow,Nat.cast_pow,Nat.cast_ofNat]
+    simp only [u,one_div,pow_two,inv_mul_cancel₀]
+    ring
+  have h := union_identity (fun r : Raw => r 0 = 0) (fun r : Raw => r 1 = 0)
+  rw [←shape,hb,h0,h1] at h
+  linarith
+
+/-- For a finite raw uniform tape, all selected candidate rejections factor.
+This is an ideal fresh-draw calculation, not an OS-availability premise. -/
+theorem selected_rejections {I : Type} [Fintype I] [DecidableEq I] (chosen : Finset I) :
+    mass (fun tape : I → Raw => ∀ i ∈ chosen, bad (tape i)) = (2*u-u*u)^chosen.card := by
+  have h := CommitReadsR1.mass_forall_mem chosen (fun r : Raw => decide (bad r))
+  have one := CommitReadsR1.mass_forall_mem (Finset.univ : Finset (Fin 1))
+    (fun r : Raw => decide (bad r))
+  have scalar : (((Finset.univ.filter (fun r : Raw => bad r)).card : ℚ) / Fintype.card Raw) = mass bad := by
+    simp only [mass,R0Z.mean,Finset.sum_boole]
+  simpa only [decide_eq_true_eq,scalar,bad_exact] using h
+
+/-- On an all-Ok schedule, 16 rejected two-seed draws exhaust the cap. -/
+theorem sixteen_exhaustion :
+    mass (fun tape : Fin 16 → Raw => ∀ i, bad (tape i)) = (2*u-u*u)^16 := by
+  simpa only [Finset.mem_univ,forall_const,Finset.card_univ,Fintype.card_fin] using
+    selected_rejections (Finset.univ : Finset (Fin 16))
+
+/-- First acceptance at n+1: use the mass difference of two rejection
+prefixes. No retry parameter is asserted for the outer prover. -/
+theorem first_accepted (n : Nat) :
+    mass (fun tape : Fin (n+1) → Raw =>
+      (∀ i ∈ Finset.univ.erase (Fin.last n), bad (tape i)) ∧ ¬ bad (tape (Fin.last n))) =
+      (2*u-u*u)^n * (1-(2*u-u*u)) := by
+  let before : (Fin (n+1) → Raw) → Prop := fun tape =>
+    ∀ i ∈ Finset.univ.erase (Fin.last n), bad (tape i)
+  let first : (Fin (n+1) → Raw) → Prop := fun tape => before tape ∧ ¬bad (tape (Fin.last n))
+  let allbad : (Fin (n+1) → Raw) → Prop := fun tape => ∀ i, bad (tape i)
+  have partition : mass before = mass first + mass allbad := by
+    unfold mass
+    rw [←mean_add'']
+    congr 1
+    funext tape
+    have all_iff : allbad tape ↔ before tape ∧ bad (tape (Fin.last n)) := by
+      constructor
+      · exact fun h => ⟨fun i _ => h i,h _⟩
+      · rintro ⟨h,last⟩ i
+        by_cases same : i=Fin.last n
+        · simpa only [same] using last
+        · exact h i (Finset.mem_erase.mpr ⟨same,Finset.mem_univ i⟩)
+    by_cases hb : before tape <;> by_cases hl : bad (tape (Fin.last n)) <;>
+      simp [first,all_iff,hb,hl]
+  have hb : mass before = (2*u-u*u)^n := by
+    have h := selected_rejections (Finset.univ.erase (Fin.last n))
+    simpa only [Finset.card_erase_of_mem (Finset.mem_univ _),Finset.card_univ,
+      Fintype.card_fin,Nat.add_sub_cancel] using h
+  have ha : mass allbad = (2*u-u*u)^(n+1) := by
+    simpa only [Finset.mem_univ,forall_const,Finset.card_univ,Fintype.card_fin] using
+      selected_rejections (Finset.univ : Finset (Fin (n+1)))
+  change mass first = _
+  rw [hb,ha,pow_succ] at partition
+  linarith
+
+#print axioms union_identity
+#print axioms bad_exact
+#print axioms selected_rejections
+#print axioms sixteen_exhaustion
+#print axioms first_accepted
+end R1Z.SideChannelEntropyLaw

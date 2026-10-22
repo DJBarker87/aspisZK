@@ -1,0 +1,6 @@
+#![allow(unexpected_cfgs)]
+pub mod field;pub mod r0;
+use field::{WideExact as E,QM31};
+pub fn eval(q:&[E;1024],x:QM31,y:QM31)->E {
+ r0::encoder::eval_message(q,r0::domain::Point{x:E::from_qm31(x),y:E::from_qm31(y)})
+}

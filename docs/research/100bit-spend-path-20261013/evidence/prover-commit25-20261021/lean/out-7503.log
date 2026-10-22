@@ -1,0 +1,76 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductRun25.lean:20:4: error: Application type mismatch: The argument
+  fun i => (q i).1
+has type
+  Fin count → NZ 0
+but is expected to have type
+  Model Rest
+in the application
+  Prod.mk fun i => (q i).1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductRun25.lean:20:38: error: unexpected token ','; expected command
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductRun25.lean:29:4: error: Type mismatch
+  swap_involution ?m.56 ?m.57 ?m.58
+has type
+  @swap ?m.55 ?m.56 ?m.57 (swap ?m.56 ?m.57 ?m.58) = ?m.58
+but is expected to have type
+  @swap OracleAnswer 0 k ((swap 0 k (coins i, tape i)).1, (swap 0 k (coins i, tape i)).2) = (coins i, tape i)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductRun25.lean:34:8: error: Type mismatch
+  congrArg Prod.fst (h i)
+has type
+  (swap 0 k ((swap 0 k (coins i, tape i)).1, (swap 0 k (coins i, tape i)).2)).1 = (coins i, tape i).1
+but is expected to have type
+  (exchange (exchange (((coins, rest), seed), tape))).1.1.1 i = (((coins, rest), seed), tape).1.1.1 i
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductRun25.lean:35:8: error: Tactic `rfl` failed: The left-hand side
+  (exchange (exchange (((coins, rest), seed), tape))).1.1.2
+is not definitionally equal to the right-hand side
+  (((coins, rest), seed), tape).1.1.2
+
+case fst.fst.snd
+Rest : Type
+tape : Tape
+seed : OracleAnswer
+coins : Coins
+rest : Rest
+h : ∀ (i : Fin count), swap 0 k ((swap 0 k (coins i, tape i)).1, (swap 0 k (coins i, tape i)).2) = (coins i, tape i)
+⊢ (exchange (exchange (((coins, rest), seed), tape))).1.1.2 = (((coins, rest), seed), tape).1.1.2
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductRun25.lean:36:6: error: Tactic `rfl` failed: The left-hand side
+  (exchange (exchange (((coins, rest), seed), tape))).1.2
+is not definitionally equal to the right-hand side
+  (((coins, rest), seed), tape).1.2
+
+case fst.snd
+Rest : Type
+tape : Tape
+seed : OracleAnswer
+coins : Coins
+rest : Rest
+h : ∀ (i : Fin count), swap 0 k ((swap 0 k (coins i, tape i)).1, (swap 0 k (coins i, tape i)).2) = (coins i, tape i)
+⊢ (exchange (exchange (((coins, rest), seed), tape))).1.2 = (((coins, rest), seed), tape).1.2
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductRun25.lean:38:4: error: Type mismatch
+  congrArg Prod.snd (h i)
+has type
+  (swap 0 k ((swap 0 k (coins i, tape i)).1, (swap 0 k (coins i, tape i)).2)).2 = (coins i, tape i).2
+but is expected to have type
+  (exchange (exchange (((coins, rest), seed), tape))).2 i = (((coins, rest), seed), tape).2 i
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductRun25.lean:56:10: error: Application type mismatch: The argument
+  mp_equiv (exchangeEquiv Rest)
+has type
+  MP ⇑(exchangeEquiv Rest)
+but is expected to have type
+  MP fun s => (regroup Rest) (exchange s)
+in the application
+  mp_comp (mp_equiv (exchangeEquiv Rest))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductRun25.lean:57:14: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductRun25.lean:66:11: error(lean.unknownIdentifier): Unknown identifier `source_marginal`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductRun25.lean:101:4: error: 'change' tactic failed, pattern
+  next (fun i => first 0 (swap 0 k (s.1.1.1 i, s.2 i)).2) s.1.1.2 = ?m.129
+is not definitionally equal to target
+  runtime next ((cp Rest).toR s) = model next ((cp Rest).toM s).1.1
+'R1Z.ProverCommitProductRun25.exchange_involution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProductRun25.lean:107:14: error(lean.unknownIdentifier): Unknown constant `source_marginal`
+'R1Z.ProverCommitProductRun25.cp' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProductRun25.model_marginal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProductRun25.runJoin' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

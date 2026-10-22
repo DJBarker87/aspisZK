@@ -1,0 +1,78 @@
+import MultiproofConeSlotState
+import OraclePortFrozen2Decision
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.MultiproofConeBatches
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConePhysicalProgram MultiproofConePhysicalTransport MultiproofConeSlotState
+open OraclePortFrozenOrder OraclePortSelectedDraft OraclePortCompactDraft
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+
+/-- Source short-circuit, with the actual idx/val poststate threaded from C1
+to C2 to folded. No oracle reads are issued for a skipped suffix. -/
+def sequence (p : Parsed) (q : Fin 22 → Fin 262144) (nodes : Nat → Nat → Slice U8) :
+    List (Nat × Nat) → reference.Scratch → Program Bytes State (Bool × reference.Scratch)
+  | [],s => .done (true,s)
+  | (batch,kind)::rest,s => bind (slotState p q batch kind (nodes batch kind) s) fun out =>
+      if out.1 then sequence p q nodes rest out.2 else .done out
+
+/-- Accepted-run log/value join for the concrete multiproof-stage composition.
+Every slot join is instantiated by accepted_slot; no per-slot equality or
+whole-stage adoption premise is retained. Caller lowering is outside this cut. -/
+theorem accepted_sequence {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (H : Bytes → State) (law : ∀ input, D.digest hash input=ok (rawOracle H input))
+    (p : Parsed) (q : Fin 22 → Fin 262144) (nodes : Nat → Nat → Slice U8)
+    (ss : List (Nat × Nat)) (s : reference.Scratch)
+    (views : ∀ b k, (b,k)∈ss → MultiproofConeCanonical.bytesOf (nodes b k).val=
+      slice p.wire (slotStart (3*b+k)) (32*capacity (3*b+k)))
+    (accepted : (eval H (sequence p q nodes ss s)).2.1=true) :
+    ((eval H (sequence p q nodes ss s)).1,(eval H (sequence p q nodes ss s)).2.1)=
+      eval H (OraclePortShortCircuit.short (slotPrograms p q ss)) := by
+  induction ss generalizing s with
+  | nil => rfl
+  | cons bk rest ih =>
+    rcases bk with ⟨b,k⟩
+    cases head : eval H (slotState p q b k (nodes b k) s) with
+    | mk log out =>
+      rcases out with ⟨ok,after⟩
+      cases ok with
+      | false =>
+        simp only [sequence,eval_bind,head,Bool.false_eq_true,if_false,eval] at accepted
+      | true =>
+        have slotAccepted : (eval H (slotState p q b k (nodes b k) s)).2.1=true := by rw [head]
+        have first := accepted_slot D hash H law p q b k (nodes b k) s
+          (views b k (by simp)) slotAccepted
+        rw [head] at first
+        have tailAccepted : (eval H (sequence p q nodes rest after)).2.1=true := by
+          simpa only [sequence,eval_bind,head,if_true] using accepted
+        have next := ih after (fun b k mem => views b k (List.mem_cons_of_mem _ mem)) tailAccepted
+        simp only [sequence,slotPrograms,List.map_cons,OraclePortShortCircuit.short,eval_bind,
+          head,if_true,←first]
+        exact congrArg (fun x : List (Bytes × State) × Bool => (log++x.1,x.2)) next
+
+/-- These are the two exact three-slot calls used by dV_frozen2, separated by
+the checkpoint/resume path, rather than a reordered six-slot authentication. -/
+theorem accepted_three {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (H : Bytes → State) (law : ∀ input, D.digest hash input=ok (rawOracle H input))
+    (p : Parsed) (q : Fin 22 → Fin 262144) (nodes : Nat → Nat → Slice U8)
+    (batch : Nat) (s : reference.Scratch)
+    (views : ∀ k, k<3 → MultiproofConeCanonical.bytesOf (nodes batch k).val=
+      slice p.wire (slotStart (3*batch+k)) (32*capacity (3*batch+k)))
+    (accepted : (eval H (sequence p q nodes [(batch,0),(batch,1),(batch,2)] s)).2.1=true) :
+    ((eval H (sequence p q nodes [(batch,0),(batch,1),(batch,2)] s)).1,
+      (eval H (sequence p q nodes [(batch,0),(batch,1),(batch,2)] s)).2.1)=
+      eval H (OraclePortFrozen2.batch p q [(batch,0),(batch,1),(batch,2)]) := by
+  apply accepted_sequence D hash H law p q nodes _ s _ accepted
+  intro b k mem
+  simp only [List.mem_cons,List.not_mem_nil,or_false,Prod.mk.injEq] at mem
+  rcases mem with ⟨rfl,rfl⟩ | ⟨rfl,rfl⟩ | ⟨rfl,rfl⟩
+  · exact views 0 (by decide)
+  · exact views 1 (by decide)
+  · exact views 2 (by decide)
+
+#print axioms accepted_sequence
+#print axioms accepted_three
+end AspisR1.MultiproofConeBatches
+end

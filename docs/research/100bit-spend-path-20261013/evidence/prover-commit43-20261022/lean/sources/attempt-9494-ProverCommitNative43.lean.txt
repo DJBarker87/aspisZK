@@ -1,0 +1,96 @@
+import R1Z.ProverCommitOwnerRun42
+/-! P6 candidate composition. The external candidate boundary is checked by
+Kani on arbitrary full draws (not a whole-loop harness). This module proves
+its finite native Range<usize> denotation against the extracted owner. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitNative43
+open Aeneas Aeneas.Std Result AspisR1PublicNonce41
+open ProverCommitOwnerZero42 ProverCommitOwnerBytes42 ProverCommitOwnerRun42
+open ProverCommitLedger36
+attribute [local instance] Classical.propDecidable
+
+def candidate (nonce : Bytes) (schedule : Schedule) (tape : Nat → owner.Raw)
+    (s : State) : Option NativeStatus × State :=
+  let (result,after) := next schedule tape s
+  match result with
+  | .Err e => (some (.Err (.Os e)),after)
+  | .Ok r => if block r.field=0 ∨ block r.leaf=0 then (none,after)
+      else (some (.Ok ⟨nonce,r⟩),after)
+
+theorem run_step (nonce : Bytes) (schedule : Schedule) (tape : Nat → owner.Raw)
+    (n : Nat) (s : State) :
+    run nonce schedule tape (n+1) s =
+      let (result,after) := candidate nonce schedule tape s
+      match result with
+      | none => run nonce schedule tape n after
+      | some result => (result,after) := by
+  simp only [run,candidate]
+  cases next schedule tape s with
+  | mk result after =>
+    cases result with
+    | Err e => rfl
+    | Ok r => split <;> rfl
+
+def range (nonce : Bytes) (schedule : Schedule) (tape : Nat → owner.Raw)
+    (index : Usize) : Nat → State → NativeStatus × State
+  | 0,s => (.Err .RepeatedZero,s)
+  | n+1,s =>
+    if index < 16#usize then
+      let (result,after) := candidate nonce schedule tape s
+      match result with
+      | some result => (result,after)
+      | none => range nonce schedule tape (Usize.wrapping_add index 1#usize) n after
+    else (.Err .RepeatedZero,s)
+
+theorem increment (index : Usize) (bound : index.val<16) :
+    (Usize.wrapping_add index 1#usize).val=index.val+1 := by
+  rw [Usize.wrapping_add_val_eq]
+  have one : (1#usize).val=1 := by scalar_tac
+  rw [one]
+  apply Nat.mod_eq_of_lt
+  have cap := (16#usize).hSize
+  change 16 < UScalar.size .Usize at cap
+  omega
+
+theorem range_run (nonce : Bytes) (schedule : Schedule) (tape : Nat → owner.Raw)
+    (n : Nat) (index : Usize) (s : State) (count : index.val+n=16) :
+    range nonce schedule tape index n s = run nonce schedule tape n s := by
+  induction n generalizing index s with
+  | zero => rfl
+  | succ n ih =>
+    have bound : index.val<16 := by omega
+    have more : index < 16#usize := by scalar_tac
+    rw [range,if_pos more,run_step]
+    cases candidate nonce schedule tape s with
+    | mk result after =>
+      cases result with
+      | some result => rfl
+      | none => exact ih _ after (by rw [increment index bound];omega)
+
+def generate (nonce : Bytes) (schedule : Schedule) (tape : Nat → owner.Raw)
+    (s : State) : NativeStatus × State :=
+  if block nonce=0 then (.Err .RepeatedZero,s)
+    else range nonce schedule tape 0#usize 16 s
+
+theorem generate_owner (nonce : Bytes) (schedule : Schedule)
+    (tape : Nat → owner.Raw) (s : State) :
+    owner.generate (io schedule tape) nonce s = ok (generate nonce schedule tape s) := by
+  rw [generate_exact]
+  unfold ProverCommitOwnerRun42.generate generate
+  rw [range_run nonce schedule tape 16 0#usize s (by scalar_tac)]
+
+theorem continuation {Observation : Type} (nonce : Bytes) (schedule : Schedule)
+    (tape : Nat → owner.Raw) (s : State)
+    (observe : NativeStatus × State → Observation) :
+    (owner.generate (io schedule tape) nonce s).map observe =
+      ok (observe (generate nonce schedule tape s)) := by
+  rw [generate_owner]
+  rfl
+
+#print axioms run_step
+#print axioms increment
+#print axioms range_run
+#print axioms generate_owner
+#print axioms continuation
+end R1Z.ProverCommitNative43

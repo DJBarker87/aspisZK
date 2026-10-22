@@ -1,0 +1,34 @@
+
+mod sparse_gate {
+#[derive(Clone,Copy,Debug,PartialEq,Eq)] struct K(u32);
+#[derive(Clone,Copy,Debug,PartialEq,Eq)] struct Trace{n:usize,args:[(u8,u32,u32);2],answers:[u32;2]}
+impl Trace{fn call(&mut self,o:u8,a:K,b:K)->K{let i=self.n;self.n+=1;self.args[i]=(o,a.0,b.0);K(self.answers[i])}}
+fn native(p:[K;10],prefix:usize,width:usize,i:usize,acc:K,t:&mut Trace)->K{
+ let bit=(prefix>>(width-1-i))&1;
+ let factor=if bit==0 {t.call(0,K(1),p[i])} else {p[i]};
+ t.call(1,acc,factor)
+}
+fn owner(p:[K;10],prefix:usize,width:u8,i:usize,left:u8,acc:K,t:&mut Trace)->(K,usize,u8){
+ let shift=usize::from(width).wrapping_sub(1).wrapping_sub(i);
+ let bit=prefix.wrapping_shr(shift as u32)&1;
+ let value=p[i];let factor=if bit==0{t.call(0,K(1),value)}else{value};
+ let next=i.wrapping_add(1);let remaining=left-1;
+ (t.call(1,acc,factor),next,remaining)
+}
+#[cfg(kani)] mod proofs{use super::*;
+ #[kani::proof] #[kani::unwind(12)] fn iteration(){
+  let raw:[u32;10]=kani::any();let p=raw.map(K);let prefix:usize=kani::any();let width:u8=kani::any();let i:usize=kani::any();let left:u8=kani::any();
+  kani::assume(width<=10 && left>0 && i+usize::from(left)<=usize::from(width));
+  let acc=K(kani::any());let mut a=Trace{n:0,args:[(0,0,0);2],answers:kani::any()};let mut b=a;
+  let x=native(p,prefix,usize::from(width),i,acc,&mut a);
+  let y=owner(p,prefix,width,i,left,acc,&mut b);
+  assert_eq!(x,y.0);assert_eq!(i+1,y.1);assert_eq!(left-1,y.2);assert_eq!(a,b);
+ }
+ #[kani::proof] fn row(){
+  let prefix:usize=kani::any();let suffix:usize=kani::any();let trailing:u8=kani::any();kani::assume(trailing<=10);
+  kani::assume(prefix<(1usize<<(10-trailing)));kani::assume(suffix<(1usize<<trailing));
+  let x=(prefix<<usize::from(trailing))|suffix;let y=prefix.wrapping_shl(u32::from(trailing))|suffix;
+  assert_eq!(x,y);assert!(y<1024);
+ }
+}
+}

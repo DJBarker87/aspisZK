@@ -1,0 +1,132 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundStep48.lean:46:34: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - f ≥ 0
+  0 ≤ a ≤ 255
+  -3 ≤ 4*a - c ≤ 0
+  -3 ≤ 4*a - e ≤ 0
+  0 ≤ 4*a + b - c ≤ 3
+where
+ a := ↑↑d
+ b := ↑↑(s.wrapping_add p)
+ c := ↑↑((Usize.wrapping_mul 4#usize d).wrapping_add s)
+ e := ↑↑((Usize.wrapping_mul 4#usize d).wrapping_add t)
+ f := ↑↑7#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundStep48.lean:46:68: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  c ≥ 0
+  c - f ≥ 0
+  b ≥ 0
+  0 ≤ a ≤ 255
+  -3 ≤ 4*a - c ≤ 0
+  -3 ≤ 4*a - e ≤ 0
+  0 ≤ 4*a + b - c ≤ 3
+where
+ a := ↑↑d
+ b := ↑↑(s.wrapping_add p)
+ c := ↑↑((Usize.wrapping_mul 4#usize d).wrapping_add s)
+ e := ↑↑((Usize.wrapping_mul 4#usize d).wrapping_add t)
+ f := ↑↑1024#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundStep48.lean:47:33: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 0
+  c ≥ 0
+  b ≥ 0
+  0 ≤ a ≤ 255
+  -3 ≤ 4*a - c ≤ 0
+  -3 ≤ 4*a - e ≤ 0
+  0 ≤ 4*a + b - c ≤ 3
+where
+ a := ↑↑d
+ b := ↑↑(s.wrapping_add p)
+ c := ↑↑((Usize.wrapping_mul 4#usize d).wrapping_add s)
+ e := ↑↑((Usize.wrapping_mul 4#usize d).wrapping_add t)
+ f := ↑↑1024#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundStep48.lean:49:59: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - f ≥ 0
+  0 ≤ a ≤ 255
+  -3 ≤ 4*a - c ≤ 0
+  -3 ≤ 4*a - e ≤ 0
+  0 ≤ 4*a + b - c ≤ 3
+where
+ a := ↑↑d
+ b := ↑↑(s.wrapping_add p)
+ c := ↑↑((Usize.wrapping_mul 4#usize d).wrapping_add s)
+ e := ↑↑((Usize.wrapping_mul 4#usize d).wrapping_add t)
+ f := ↑↑7#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundStep48.lean:59:60: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑p
+in the target expression
+  ?m.431
+
+q w xs : ℕ → Raw
+hq : ∀ k < 1024, canonical (q k)
+hw : ∀ k < 1024, canonical (w k)
+hxs : ∀ k < 7, canonical (xs k)
+d s t : Usize
+hd : ↑d < 256
+hs : ↑s < 4
+ht : ↑t < 4
+p : Usize
+hp : (Array.make 4#usize [0#usize, 3#usize, 2#usize, 1#usize] ⋯).index_usize t = ok p
+hpv : ↑p = perm ↑t
+hpb : ↑p < 4
+hidx : ↑(s.wrapping_add p) = ↑s + ↑p
+hqidx : ↑((Usize.wrapping_mul 4#usize d).wrapping_add s) = 4 * ↑d + ↑s
+hwidx : ↑((Usize.wrapping_mul 4#usize d).wrapping_add t) = 4 * ↑d + ↑t
+m : Raw
+hm : field.wide_exact.WideExact.mul (source (q (4 * ↑d + ↑s))) (source (w (4 * ↑d + ↑t))) = ok (source m)
+hcm : canonical m
+hdm : value m = value (q (4 * ↑d + ↑s)) * value (w (4 * ↑d + ↑t))
+z : Raw
+hz : field.wide_exact.WideExact.add (source (xs (↑s + ↑p))) (source m) = ok (source z)
+hcz : canonical z
+hdz : value z = value (xs (↑s + ↑p)) + value m
+ys : ℕ → Raw := Function.update xs (↑s + ↑p) z
+hk : ↑s + ↑p < 7
+⊢ ?m.431
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundStep48.lean:58:4: error: unsolved goals
+case pos
+q w xs : ℕ → Raw
+hq : ∀ k < 1024, canonical (q k)
+hw : ∀ k < 1024, canonical (w k)
+hxs : ∀ k < 7, canonical (xs k)
+d s t : Usize
+hd : ↑d < 256
+hs : ↑s < 4
+ht : ↑t < 4
+p : Usize
+hp : (Array.make 4#usize [0#usize, 3#usize, 2#usize, 1#usize] ⋯).index_usize t = ok p
+hpv : ↑p = perm ↑t
+hpb : ↑p < 4
+hidx : ↑(s.wrapping_add p) = ↑s + ↑p
+hqidx : ↑((Usize.wrapping_mul 4#usize d).wrapping_add s) = 4 * ↑d + ↑s
+hwidx : ↑((Usize.wrapping_mul 4#usize d).wrapping_add t) = 4 * ↑d + ↑t
+m : Raw
+hm : field.wide_exact.WideExact.mul (source (q (4 * ↑d + ↑s))) (source (w (4 * ↑d + ↑t))) = ok (source m)
+hcm : canonical m
+hdm : value m = value (q (4 * ↑d + ↑s)) * value (w (4 * ↑d + ↑t))
+z : Raw
+hz : field.wide_exact.WideExact.add (source (xs (↑s + ↑p))) (source m) = ok (source z)
+hcz : canonical z
+hdz : value z = value (xs (↑s + ↑p)) + value m
+ys : ℕ → Raw := Function.update xs (↑s + ↑p) z
+hk : ↑s + ↑p < 7
+⊢ value (xs (↑s + ↑p)) + value m =
+    value (xs (↑s + ↑p)) + if ↑s + ↑p = ↑s + perm ↑t then value (q (4 * ↑d + ↑s)) * value (w (4 * ↑d + ↑t)) else 0
+'R1Z.ProverCommitRoundStep48.permutation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRoundStep48.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

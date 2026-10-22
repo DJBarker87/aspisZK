@@ -1,0 +1,82 @@
+--- retained/Query31UnrolledDriverFirstStop
++++ env-J/Query31UnrolledDriverFirstStop
+@@ -394,7 +394,8 @@
+     DriverTrace scanFn blocks advances scan0 accepted next := by
+   unfold queries_from_pairs_with_scan at h
+   obtain ⟨b0, hblock0, h⟩ := bind_success _ _ _ h
+-  obtain ⟨stop0, s1, hscan0, h⟩ := pair_bind_success _ _ _ h
++  obtain ⟨pair0, hscan0, h⟩ := bind_success (scanFn scan0 b0) _ _ h
++  rcases pair0 with ⟨stop0, s1⟩
+   cases stop0 with
+   | true =>
+       change finishAdvance advances 0#usize s1 = _ at h
+@@ -402,7 +403,8 @@
+       exact DriverTrace.stop0 b0 s1 hblock0 hscan0 hf.1 hf.2
+   | false =>
+   obtain ⟨b1, hblock1, h⟩ := bind_success _ _ _ h
+-  obtain ⟨stop1, s2, hscan1, h⟩ := pair_bind_success _ _ _ h
++  obtain ⟨pair1, hscan1, h⟩ := bind_success (scanFn s1 b1) _ _ h
++  rcases pair1 with ⟨stop1, s2⟩
+   cases stop1 with
+   | true =>
+       change finishAdvance advances 1#usize s2 = _ at h
+@@ -410,7 +412,8 @@
+       exact DriverTrace.stop1 b0 s1 b1 s2 hblock0 hblock1 hscan0 hscan1 hf.1 hf.2
+   | false =>
+   obtain ⟨b2, hblock2, h⟩ := bind_success _ _ _ h
+-  obtain ⟨stop2, s3, hscan2, h⟩ := pair_bind_success _ _ _ h
++  obtain ⟨pair2, hscan2, h⟩ := bind_success (scanFn s2 b2) _ _ h
++  rcases pair2 with ⟨stop2, s3⟩
+   cases stop2 with
+   | true =>
+       change finishAdvance advances 2#usize s3 = _ at h
+@@ -418,7 +421,8 @@
+       exact DriverTrace.stop2 b0 s1 b1 s2 b2 s3 hblock0 hblock1 hblock2 hscan0 hscan1 hscan2 hf.1 hf.2
+   | false =>
+   obtain ⟨b3, hblock3, h⟩ := bind_success _ _ _ h
+-  obtain ⟨stop3, s4, hscan3, h⟩ := pair_bind_success _ _ _ h
++  obtain ⟨pair3, hscan3, h⟩ := bind_success (scanFn s3 b3) _ _ h
++  rcases pair3 with ⟨stop3, s4⟩
+   cases stop3 with
+   | true =>
+       change finishAdvance advances 3#usize s4 = _ at h
+@@ -426,7 +430,8 @@
+       exact DriverTrace.stop3 b0 s1 b1 s2 b2 s3 b3 s4 hblock0 hblock1 hblock2 hblock3 hscan0 hscan1 hscan2 hscan3 hf.1 hf.2
+   | false =>
+   obtain ⟨b4, hblock4, h⟩ := bind_success _ _ _ h
+-  obtain ⟨stop4, s5, hscan4, h⟩ := pair_bind_success _ _ _ h
++  obtain ⟨pair4, hscan4, h⟩ := bind_success (scanFn s4 b4) _ _ h
++  rcases pair4 with ⟨stop4, s5⟩
+   cases stop4 with
+   | true =>
+       change finishAdvance advances 4#usize s5 = _ at h
+@@ -434,7 +439,8 @@
+       exact DriverTrace.stop4 b0 s1 b1 s2 b2 s3 b3 s4 b4 s5 hblock0 hblock1 hblock2 hblock3 hblock4 hscan0 hscan1 hscan2 hscan3 hscan4 hf.1 hf.2
+   | false =>
+   obtain ⟨b5, hblock5, h⟩ := bind_success _ _ _ h
+-  obtain ⟨stop5, s6, hscan5, h⟩ := pair_bind_success _ _ _ h
++  obtain ⟨pair5, hscan5, h⟩ := bind_success (scanFn s5 b5) _ _ h
++  rcases pair5 with ⟨stop5, s6⟩
+   cases stop5 with
+   | true =>
+       change finishAdvance advances 5#usize s6 = _ at h
+@@ -442,7 +448,8 @@
+       exact DriverTrace.stop5 b0 s1 b1 s2 b2 s3 b3 s4 b4 s5 b5 s6 hblock0 hblock1 hblock2 hblock3 hblock4 hblock5 hscan0 hscan1 hscan2 hscan3 hscan4 hscan5 hf.1 hf.2
+   | false =>
+   obtain ⟨b6, hblock6, h⟩ := bind_success _ _ _ h
+-  obtain ⟨stop6, s7, hscan6, h⟩ := pair_bind_success _ _ _ h
++  obtain ⟨pair6, hscan6, h⟩ := bind_success (scanFn s6 b6) _ _ h
++  rcases pair6 with ⟨stop6, s7⟩
+   cases stop6 with
+   | true =>
+       change finishAdvance advances 6#usize s7 = _ at h
+@@ -450,7 +457,8 @@
+       exact DriverTrace.stop6 b0 s1 b1 s2 b2 s3 b3 s4 b4 s5 b5 s6 b6 s7 hblock0 hblock1 hblock2 hblock3 hblock4 hblock5 hblock6 hscan0 hscan1 hscan2 hscan3 hscan4 hscan5 hscan6 hf.1 hf.2
+   | false =>
+   obtain ⟨b7, hblock7, h⟩ := bind_success _ _ _ h
+-  obtain ⟨stop7, s8, hscan7, h⟩ := pair_bind_success _ _ _ h
++  obtain ⟨pair7, hscan7, h⟩ := bind_success (scanFn s7 b7) _ _ h
++  rcases pair7 with ⟨stop7, s8⟩
+   have hf := finishAdvance_success advances 7#usize s8 accepted next (by
+     change finishAdvance advances 7#usize s8 = _
+     exact h)

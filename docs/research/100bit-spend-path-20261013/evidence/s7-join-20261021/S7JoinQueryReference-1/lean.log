@@ -1,0 +1,74 @@
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/Users/dominic/ZK/.worktrees/cx-s7-join/docs/research/100bit-spend-path-20261013/lean/S7JoinQueryReference.lean:20:82: error: unsolved goals
+K : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod P) K
+alpha : K
+V : Fin 262144 → K
+u : Fin 65536
+⊢ V (childIndex u 0) * 2⁻¹ * alpha * SecondFoldRestoration.inverse0 u +
+                                  V (childIndex u 0) * 2⁻¹ * alpha ^ 2 * SecondFoldRestoration.inverse2 u +
+                                V (childIndex u 0) * 2⁻¹ ^ 2 +
+                              V (childIndex u 0) * alpha ^ 3 * SecondFoldRestoration.inverse0 u *
+                                SecondFoldRestoration.inverse2 u -
+                            V (childIndex u 1) * 2⁻¹ * alpha * SecondFoldRestoration.inverse0 u +
+                          V (childIndex u 1) * 2⁻¹ * alpha ^ 2 * SecondFoldRestoration.inverse2 u +
+                        V (childIndex u 1) * 2⁻¹ ^ 2 -
+                      V (childIndex u 1) * alpha ^ 3 * SecondFoldRestoration.inverse0 u *
+                        SecondFoldRestoration.inverse2 u +
+                    2⁻¹ * alpha * V (childIndex u 2) * SecondFoldRestoration.inverse1 u -
+                  2⁻¹ * alpha * V (childIndex u 3) * SecondFoldRestoration.inverse1 u -
+                2⁻¹ * alpha ^ 2 * V (childIndex u 2) * SecondFoldRestoration.inverse2 u -
+              2⁻¹ * alpha ^ 2 * V (childIndex u 3) * SecondFoldRestoration.inverse2 u +
+            2⁻¹ ^ 2 * V (childIndex u 2) +
+          2⁻¹ ^ 2 * V (childIndex u 3) -
+        alpha ^ 3 * V (childIndex u 2) * SecondFoldRestoration.inverse1 u * SecondFoldRestoration.inverse2 u +
+      alpha ^ 3 * V (childIndex u 3) * SecondFoldRestoration.inverse1 u * SecondFoldRestoration.inverse2 u =
+    V (childIndex u 0) * 2⁻¹ * alpha * SecondFoldRestoration.inverse0 u + V (childIndex u 0) * 2⁻¹ ^ 2 -
+                    V (childIndex u 1) * 2⁻¹ * alpha * SecondFoldRestoration.inverse0 u +
+                  V (childIndex u 1) * 2⁻¹ ^ 2 +
+                2⁻¹ * alpha * V (childIndex u 2) * SecondFoldRestoration.inverse1 u -
+              2⁻¹ * alpha * V (childIndex u 3) * SecondFoldRestoration.inverse1 u +
+            2⁻¹ ^ 2 * V (childIndex u 2) +
+          2⁻¹ ^ 2 * V (childIndex u 3) +
+        alpha ^ 2 *
+          Matrix.vecHead
+            (Matrix.vecTail
+              ![V (childIndex u 0) * 2⁻¹ * SecondFoldRestoration.inverse0 u -
+                      V (childIndex u 1) * 2⁻¹ * SecondFoldRestoration.inverse0 u +
+                    2⁻¹ * V (childIndex u 2) * SecondFoldRestoration.inverse1 u -
+                  2⁻¹ * V (childIndex u 3) * SecondFoldRestoration.inverse1 u,
+                V (childIndex u 0) * 2⁻¹ * SecondFoldRestoration.inverse2 u +
+                      V (childIndex u 1) * 2⁻¹ * SecondFoldRestoration.inverse2 u -
+                    2⁻¹ * V (childIndex u 2) * SecondFoldRestoration.inverse2 u -
+                  2⁻¹ * V (childIndex u 3) * SecondFoldRestoration.inverse2 u,
+                V (childIndex u 0) * SecondFoldRestoration.inverse0 u * SecondFoldRestoration.inverse2 u -
+                      V (childIndex u 1) * SecondFoldRestoration.inverse0 u * SecondFoldRestoration.inverse2 u -
+                    V (childIndex u 2) * SecondFoldRestoration.inverse1 u * SecondFoldRestoration.inverse2 u +
+                  V (childIndex u 3) * SecondFoldRestoration.inverse1 u * SecondFoldRestoration.inverse2 u]) +
+      alpha ^ 3 *
+        Matrix.vecHead
+          (Matrix.vecTail
+            (Matrix.vecTail
+              ![V (childIndex u 0) * 2⁻¹ * SecondFoldRestoration.inverse0 u -
+                      V (childIndex u 1) * 2⁻¹ * SecondFoldRestoration.inverse0 u +
+                    2⁻¹ * V (childIndex u 2) * SecondFoldRestoration.inverse1 u -
+                  2⁻¹ * V (childIndex u 3) * SecondFoldRestoration.inverse1 u,
+                V (childIndex u 0) * 2⁻¹ * SecondFoldRestoration.inverse2 u +
+                      V (childIndex u 1) * 2⁻¹ * SecondFoldRestoration.inverse2 u -
+                    2⁻¹ * V (childIndex u 2) * SecondFoldRestoration.inverse2 u -
+                  2⁻¹ * V (childIndex u 3) * SecondFoldRestoration.inverse2 u,
+                V (childIndex u 0) * SecondFoldRestoration.inverse0 u * SecondFoldRestoration.inverse2 u -
+                      V (childIndex u 1) * SecondFoldRestoration.inverse0 u * SecondFoldRestoration.inverse2 u -
+                    V (childIndex u 2) * SecondFoldRestoration.inverse1 u * SecondFoldRestoration.inverse2 u +
+                  V (childIndex u 3) * SecondFoldRestoration.inverse1 u * SecondFoldRestoration.inverse2 u]))
+'AspisR1.S7JoinQueryReference.query_value_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S7JoinQueryReference.query_basis_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S7JoinQueryReference.query_values_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,17 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+error[E0053]: method `index` has an incompatible type for trait
+ --> lib.rs:6:21
+  |
+6 |  fn index(&self,key:&&usize)->&Self::Output {assert_eq!(**key,self.key);&self.kids}
+  |                     ^^^^^^^ expected `usize`, found `&usize`
+  |
+  = note: expected signature `fn(&Table, &_) -> &_`
+             found signature `fn(&Table, &&_) -> &_`
+help: change the parameter type to match the trait
+  |
+6 -  fn index(&self,key:&&usize)->&Self::Output {assert_eq!(**key,self.key);&self.kids}
+6 +  fn index(&self,key:&usize)->&Self::Output {assert_eq!(**key,self.key);&self.kids}
+  |
+
+For more information about this error, try `rustc --explain E0053`.
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.

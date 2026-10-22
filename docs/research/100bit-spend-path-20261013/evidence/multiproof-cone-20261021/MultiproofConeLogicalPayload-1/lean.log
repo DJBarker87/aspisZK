@@ -1,0 +1,50 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLogicalPayload.lean:25:40: error(lean.unknownIdentifier): Unknown identifier `Bytes`
+
+Note: It is not possible to treat `Bytes` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLogicalPayload.lean:25:49: error(lean.unknownIdentifier): Unknown identifier `Bytes`
+
+Note: It is not possible to treat `Bytes` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLogicalPayload.lean:47:10: error: Failed to rewrite using equation theorems for `logicalBytes`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLogicalPayload.lean:53:4: error: unsolved goals
+case neg.refine_1
+row : U8
+payload : Slice U8
+length : (↑payload).length = storedSize ↑row
+good : 14 ≤ ↑row → canonical (bytesOf ↑payload)
+sizeBound : (rowShape ↑row).2 ≤ 3712
+sizeAligned : (rowShape ↑row).2 % 32 = 0
+compact : ¬14 ≤ ↑row
+hc : ¬row ≥ 14#u8
+⊢ (do
+      let logical ← ok payload
+      ok (some logical)) =
+    ok (some payload)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLogicalPayload.lean:53:72: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵e̵p̵a̵r̵e̵,̵h̵c̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵V̵e̵c̵L̵a̵w̵s̵.̵t̵o̵_̵v̵e̵c̵_̵b̵y̵t̵e̵s̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲p̲r̲e̲p̲a̲r̲e̲,̲ ̲h̲c̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲V̲e̲c̲L̲a̲w̲s̲.̲t̲o̲_̲v̲e̲c̲_̲b̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLogicalPayload.lean:47:10: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLogicalPayload.lean:62:37: error: unsolved goals
+row : U8
+payload : Slice U8
+length : (↑payload).length = storedSize ↑row
+compact : 14 ≤ ↑row
+bad : ¬canonical (bytesOf ↑payload)
+aligned : (rowShape ↑row).2 % 32 = 0
+stored : (↑payload).length = (rowShape ↑row).2 / 2
+align : (↑payload).length % 16 = 0
+hc : row ≥ 14#u8
+⊢ (if false = true then MultiproofParserRef.reference.expand_rows payload (alloc.vec.Vec.new U8) else ok none) = ok none
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLogicalPayload.lean:69:32: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [prepare, ̲hc, ̲if_true, ̲MultiproofConeCompactScan.check_values_total payload align, ̲b̲a̲d̲,̲
+      b̵a̵d,̵d̵ecide_false, ̲bind_tc_ok,̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConeLogicalPayload.good_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLogicalPayload.bad_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

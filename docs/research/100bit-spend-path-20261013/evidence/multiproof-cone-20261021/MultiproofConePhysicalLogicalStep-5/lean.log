@@ -1,0 +1,61 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:65:4: error: unsolved goals
+case neg
+fuel : ℕ
+physical : Slice U8
+s : reference.Scratch
+i ni cursor : Usize
+left right : MultiproofConePhysicalProgram.Digest
+active : ↑i < ↑s.n
+input : Input physical s i left right ni cursor
+len : ↑s.n - ↑i = ↑s.n - (↑i + 1) + 1
+more : ↑i + 1 < ↑s.n
+len2 : ↑s.n - (↑i + 1) = ↑s.n - (↑i + 2) + 1
+pair : ¬SourcePair s i
+notNat : ¬↑(↑s.idx)[↑i + 1]! = ↑(↑s.idx)[↑i]! ^^^ 1
+⊢ (match SemanticRecordCodec.decodeState (List.take 32 (remaining physical s.at)) with
+    | none => Program.done none
+    | some sibling =>
+      Program.ask
+        (BinMerkle32Path.nodeInput
+          (if ↑(↑s.idx)[↑i]! % 2 = 0 then OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!) sibling
+          else OracleDecisionMultiTree.children sibling (decodeState (↑s.val)[↑i]!)))
+        fun d =>
+        AspisV8R19.OracleProgramOps.bind
+          (sourceLevel fuel
+            ((↑(↑s.idx)[↑i + 1]!, decodeState (↑s.val)[↑i + 1]!) :: live s (↑i + 1 + 1) (↑s.n - (↑i + 2)))
+            (List.drop 32 (remaining physical s.at)))
+          fun out => Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)) =
+    Program.ask (flatten (parts left right)) fun answer =>
+      AspisV8R19.OracleProgramOps.bind (sourceLevel fuel (live s (↑ni) (↑s.n - ↑ni)) (remaining physical cursor))
+        fun out => Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, answer) :: x.1, x.2)) out)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:68:2: error: unsolved goals
+case neg
+fuel : ℕ
+physical : Slice U8
+s : reference.Scratch
+i ni cursor : Usize
+left right : MultiproofConePhysicalProgram.Digest
+active : ↑i < ↑s.n
+input : Input physical s i left right ni cursor
+len : ↑s.n - ↑i = ↑s.n - (↑i + 1) + 1
+more : ¬↑i + 1 < ↑s.n
+len2 : ↑s.n - (↑i + 1) = 0
+⊢ (match SemanticRecordCodec.decodeState (List.take 32 (remaining physical s.at)) with
+    | none => Program.done none
+    | some sibling =>
+      Program.ask
+        (BinMerkle32Path.nodeInput
+          (if ↑(↑s.idx)[↑i]! % 2 = 0 then OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!) sibling
+          else OracleDecisionMultiTree.children sibling (decodeState (↑s.val)[↑i]!)))
+        fun d =>
+        AspisV8R19.OracleProgramOps.bind (sourceLevel fuel [] (List.drop 32 (remaining physical s.at))) fun out =>
+          Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)) =
+    Program.ask (flatten (parts left right)) fun answer =>
+      AspisV8R19.OracleProgramOps.bind (sourceLevel fuel (live s (↑ni) (↑s.n - ↑ni)) (remaining physical cursor))
+        fun out => Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, answer) :: x.1, x.2)) out)
+'AspisR1.MultiproofConePhysicalLogicalStep.pair_nat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConePhysicalLogicalStep.source_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConePhysicalLogicalStep.logical_step' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

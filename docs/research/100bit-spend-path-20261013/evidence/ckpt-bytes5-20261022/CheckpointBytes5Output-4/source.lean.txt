@@ -1,0 +1,69 @@
+import CheckpointBytes4SuccessfulFields
+
+/-! Total numeric interpretation of the returned source accumulator. Reduction
+mod p is explicit on arbitrary raw words; saved canonical words roundtrip.
+No output equality or decoder callback is supplied as a hypothesis. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CheckpointBytes5Output
+open Aeneas Aeneas.Std
+open AspisR1Stage2 CheckpointBytes4ReaderFields CheckpointBytes4SavedFields
+open RetainedFieldByteCodec RetainedExactLimbCodec OraclePortCheckpointAbiC5
+
+def limb (q : aspis_core.field.QM31) (j : Fin 4) : U32 :=
+  match j.val with | 0 => q.c0.a | 1 => q.c0.b | 2 => q.c1.a | _ => q.c1.b
+
+def ofK (q : aspis_core.field.QM31) : K :=
+  qm31ExactLimbEquiv (fun j => ⟨(limb q j).val % 2147483647, Nat.mod_lt _ (by decide)⟩)
+
+theorem ofK_source (x : K) : ofK (sourceK x) = x := by
+  rw [ofK, ← qm31ExactLimbEquiv.apply_symm_apply x]
+  congr 1
+  funext j
+  apply Fin.ext
+  fin_cases j <;>
+    simp only [limb,sourceK,CheckpointBytes3Namespaces.fromK,
+      CheckpointBytes3KDecode.rawK,CheckpointBytes3KDecode.rawLimbs,
+      CheckpointBytes3ScalarShape.kWords,M31ParserRefinement.valueToU32_val]
+  all_goals exact Nat.mod_eq_of_lt (qm31ExactLimbEquiv.symm x _).isLt
+
+def ofE (q : aspis_core.field.wide_exact.WideExact) : E := ⟨ofK q.c0,ofK q.c1⟩
+
+theorem ofE_source (x : E) : ofE (sourceE x) = x := by
+  change (⟨ofK (sourceK x.re),ofK (sourceK x.im)⟩ : E) = x
+  rw [ofK_source,ofK_source]
+
+def queries (p : verifier.Prepared) : Fin 22 → Fin 262144 := fun j =>
+  ⟨((p.queries.val.map UScalar.val)[j.val]?.getD 0) % 262144,Nat.mod_lt _ (by decide)⟩
+
+def accumulator (a : verifier.Accumulator) : QueryAccumulator.State K E where
+  weights := fun j => ofK ((a.weights.val[j.val]?).getD (sourceK 0))
+  rhs := ofE a.rhs
+  power := ofK a.power
+  next := a.next.val
+
+theorem fields_observation (p : verifier.Prepared) (a : verifier.Accumulator)
+    (pm : OraclePortCheckpointAbiC5.Prepared) (am : QueryAccumulator.State K E)
+    (fields : BodyMatches p a pm am) (next : a.next.val = am.next) :
+    ofK p.rho = pm.rho ∧ queries p = pm.queries ∧ accumulator a = am := by
+  refine ⟨?_,?_,?_⟩
+  · rw [fields.rho,ofK_source]
+  · funext j
+    apply Fin.ext
+    simp only [queries,fields.queries,List.getElem?_ofFn,j.isLt,↓reduceDIte,
+      Option.getD_some,Nat.mod_eq_of_lt (pm.queries j).isLt]
+  · cases am with
+    | mk weights rhs power n =>
+      change (⟨_,_,_,_⟩ : QueryAccumulator.State K E) = ⟨weights,rhs,power,n⟩
+      congr 1
+      · funext j
+        simp only [accumulator,fields.weights,List.getElem?_map,List.getElem?_ofFn,
+          j.isLt,↓reduceDIte,Option.map_some,Option.getD_some,ofK_source]
+      · exact (congrArg ofE fields.rhs).trans (ofE_source rhs)
+      · exact (congrArg ofK fields.power).trans (ofK_source power)
+
+#print axioms ofK_source
+#print axioms ofE_source
+#print axioms fields_observation
+end AspisR1.CheckpointBytes5Output
+end

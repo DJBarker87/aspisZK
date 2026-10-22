@@ -1,0 +1,28 @@
+   Compiling codec-image46 v0.1.0 (/home/dombarker/project-offloads/codex-cx-prover-commit46-20261022/codec-image)
+warning: type `CodecError` is more private than the item `compact_values`
+  --> main.rs:39:1
+   |
+39 | pub fn compact_values(logical: &[u8], out: &mut Vec<u8>) -> Result<(), CodecError> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `compact_values` is reachable at visibility `pub`
+   |
+note: but type `CodecError` is only usable at visibility `pub(crate)`
+  --> main.rs:6:31
+   |
+ 6 | #[derive(Debug,PartialEq,Eq)] enum CodecError {Length,NonZeroHigh,NonCanonical}
+   |                               ^^^^^^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: variant `NonCanonical` is never constructed
+ --> main.rs:6:67
+  |
+6 | #[derive(Debug,PartialEq,Eq)] enum CodecError {Length,NonZeroHigh,NonCanonical}
+  |                                    ----------                     ^^^^^^^^^^^^
+  |                                    |
+  |                                    variant in this enum
+  |
+  = note: `CodecError` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `codec-image46` (bin "codec-image46") generated 2 warnings
+    Finished `release` profile [optimized] target(s) in 0.14s
+     Running `target/release/codec-image46`

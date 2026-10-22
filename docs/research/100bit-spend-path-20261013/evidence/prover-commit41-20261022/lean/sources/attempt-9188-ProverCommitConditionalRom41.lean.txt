@@ -1,0 +1,64 @@
+import R1Z.LazyFrozen
+import R1Z.ProverCommitJointHistory19
+
+/-! Conditional lazy programming with an already observed adaptive prefix.
+The law is stated with an indicator, so impossible histories are included
+without conditioning on a zero-probability event. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitConditionalRom41
+open R0Z R0Z.FsStatement R0Z.FsGood R0Z.HvzkV R1Z.LazyFrozen ProverCommitSeedEvent19
+attribute [local instance] Classical.propDecidable
+variable {A U : Type} [DecidableEq A]
+
+/-- An arbitrary observation determined by the frozen coordinates is retained,
+including joint observations rather than just the table marginal. -/
+theorem conditional_law [Fintype A] [Fintype U] [Nonempty U]
+    (Fr : Finset A) {m : Nat}
+    (a : Fin m → (Fin m → U) → (A → U) → A) (causal : CausalF Fr a)
+    {C : Type} (observe : (A → U) → C)
+    (locality : ∀ t t', (∀ y ∈ Fr, t y = t' y) → observe t = observe t')
+    (c : C) (test : (A → U) → ℚ) :
+    mean (fun p : (A → U) × (Fin m → U) =>
+      if observe p.1 = c then test (progF Fr a p.1 p.2) else 0) =
+    mean (fun t : A → U => if observe t = c then test t else 0) := by
+  have same (t : A → U) (u : Fin m → U) : observe (progF Fr a t u) = observe t :=
+    locality _ _ (fun y hy => progF_frozen Fr a t u y hy)
+  simpa only [same] using mean_progF Fr a causal
+    (fun t => if observe t = c then test t else 0)
+
+/-- Equality with a fixed history is a frozen-coordinate event whenever all
+addresses in that history are frozen. Both directions matter: programming
+cannot create that history from a different one. -/
+theorem history_fiber (program : OProg) (fuel : Nat) (history : List Entry)
+    (Fr : Finset (List UInt8))
+    (covered : ∀ e ∈ history, e.1 ∈ Fr)
+    (left right : List UInt8 → OracleAnswer)
+    (agree : ∀ y ∈ Fr, left y = right y) :
+    runLog program left fuel = history ↔ runLog program right fuel = history := by
+  constructor
+  · intro h
+    have eq := ProverCommitJointHistory19.runLog_agrees program left right fuel
+      (fun e he => (agree e.1 (covered e (h ▸ he))).symm)
+    exact eq.trans h
+  · intro h
+    have eq := ProverCommitJointHistory19.runLog_agrees program right left fuel
+      (fun e he => agree e.1 (covered e (h ▸ he)))
+    exact eq.trans h
+
+/-- Repeated and early-terminated adaptive histories are retained verbatim
+under frozen programming; rejected attempts are just entries in this list. -/
+theorem programmed_history (program : OProg) (fuel : Nat) (history : List Entry)
+    (Fr : Finset (List UInt8)) (covered : ∀ e ∈ history, e.1 ∈ Fr)
+    {m : Nat} (a : Fin m → (Fin m → OracleAnswer) →
+      (List UInt8 → OracleAnswer) → List UInt8)
+    (table : List UInt8 → OracleAnswer) (coins : Fin m → OracleAnswer) :
+    runLog program (progF Fr a table coins) fuel = history ↔
+      runLog program table fuel = history :=
+  history_fiber program fuel history Fr covered _ _
+    (fun y hy => progF_frozen Fr a table coins y hy)
+
+#print axioms conditional_law
+#print axioms history_fiber
+#print axioms programmed_history
+end R1Z.ProverCommitConditionalRom41

@@ -1,0 +1,73 @@
+import S7Kani3BasisTotal
+
+/-! Exact values and frame for the complete emitted basis block, including
+all 256 array cells. No per-iteration result or invariant is assumed. -/
+set_option autoImplicit false
+namespace AspisR1.S7JoinBasisBlock
+open Aeneas Aeneas.Std Result
+open S7Kani2BasisLoop (Basis basis_block_owned)
+open S7Kani2PrefixLoop (wordMul multiply_word)
+
+def cell (b : Basis) (k : Nat) : U32 := b.val[k]?.getD 0#u32
+
+theorem set_at (b : Basis) (i : Usize) (x : U32) (k : Nat) (hk : k<256) :
+    cell (b.set i x) k = if k=i.val then x else cell b k := by
+  have hb : b.val.length=256 := b.property
+  simp only [cell,Array.set_val_eq,List.getElem?_set]
+  split
+  · rename_i he
+    simp only [he, hk, hb, decide_true, Bool.true_and, if_pos, Option.getD_some]
+  · rfl
+
+/-- Values written by [j,n) and framing everywhere else. -/
+theorem block_exact (b : Basis) (node : U32) (n j : Usize) (fuel : Nat)
+    (hn : n.val≤128) (remaining : j.val+fuel=n.val) :
+    ∃ out, basis_block_owned AspisR1Qm31ArithmeticProbe.field.M31.mul b node n j=ok out ∧
+      ∀ k, k<256 → cell out k =
+        if n.val+j.val≤k ∧ k<2*n.val then wordMul (cell b (k-n.val)) node else cell b k := by
+  induction fuel generalizing b j with
+  | zero =>
+      have stop : j ≥ n := by scalar_tac
+      refine ⟨b,?_,?_⟩
+      · rw [basis_block_owned]; simp only [stop,if_pos]
+      · intro k hk
+        have hno : ¬(n.val+j.val≤k ∧ k<2*n.val) := by omega
+        rw [if_neg hno]
+  | succ fuel ih =>
+      have running : ¬j≥n := by scalar_tac
+      obtain ⟨m,hr,hm⟩ := WP.spec_imp_exists (Array.index_usize_spec b j
+        (by simp only [b.property]; change j.val<256; omega))
+      have hmat : m=cell b j.val := by
+        simp only [cell,List.getElem?_eq_getElem (by simpa only [b.property] using (show j.val<256 by omega)),Option.getD_some]
+        exact hm
+      obtain ⟨i,hi,hiv⟩ := AspisR1.ExtractedCurrentReducerOps.tryMk_success
+        (ty:=.Usize) (n.val+j.val) (by scalar_tac)
+      have hadd : (n+j : Result Usize)=ok i := hi
+      obtain ⟨b1,hw,hb1⟩ := WP.spec_imp_exists (Array.update_spec b i (wordMul m node)
+        (by simp only [b.property]; change i.val<256; omega))
+      obtain ⟨j1,hinc,hj1⟩ := S7Kani2AccumulatorLoop.increment j (by omega)
+      obtain ⟨out,hout,hvals⟩ := ih b1 j1 (by omega)
+      refine ⟨out,?_,?_⟩
+      · rw [basis_block_owned]
+        simp only [running,if_false,hr,multiply_word,hadd,hw,hinc,bind_tc_ok]
+        exact hout
+      · intro k hk
+        rw [hvals k hk,hb1]
+        by_cases hnew : n.val+j1.val≤k ∧ k<2*n.val
+        · have hold : n.val+j.val≤k ∧ k<2*n.val := by omega
+          have hsmall : k-n.val<256 := by omega
+          have hne : k-n.val≠i.val := by omega
+          rw [if_pos hnew,if_pos hold,set_at _ _ _ _ hsmall,if_neg hne]
+        · rw [if_neg hnew,set_at _ _ _ _ hk]
+          by_cases he : k=i.val
+          · have hold : n.val+j.val≤k ∧ k<2*n.val := by omega
+            rw [if_pos he,if_pos hold,hmat]
+            congr 1
+            congr 1
+            omega
+          · have hold : ¬(n.val+j.val≤k ∧ k<2*n.val) := by omega
+            rw [if_neg he,if_neg hold]
+
+#print axioms set_at
+#print axioms block_exact
+end AspisR1.S7JoinBasisBlock

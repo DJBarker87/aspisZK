@@ -1,0 +1,118 @@
+import StartChargePrefix
+import StartChargeHit
+
+/-! Completion and no-hit are proved on the charged prefix itself. No
+terminal-only decoder start is excluded by a byte-domain assumption. -/
+set_option autoImplicit false
+set_option backward.isDefEq.respectTransparency true
+set_option backward.isDefEq.respectTransparency.types true
+noncomputable section
+namespace AspisR1.StartChargeCompletion
+open FS FS2 FS2.Duplex R0C.V3
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open AspisV8R19.AdaptiveFirstReadLaw
+open StartChargePrefix
+open RawCutWordsFromView (frame)
+open CanonicalCutEnrichedTranscript
+attribute [local irreducible] LiteralClassifier.bad
+
+/-- The exact decoding statement, localized to one oracle world. -/
+def Decodes (D : LiteralByteProtocol.Decoder) (H : Bytes → State)
+    (v : RawCutProverCompiler.RunView) : Prop :=
+  ∀ n a, n < 33 → firstCell ((LiteralByteProtocol.protocol D).chain H
+      v.2.1.1 v.2.1.2 n) = some a →
+    ∃ own pend g, RecordedBinaryExperimentBin.dec a (tableBefore emptyTable v.1 a) =
+      some (own,pend,g) ∧
+      bfollow g (traceFrom v.1 a) own pend (tableBefore emptyTable v.1 a) =
+        some ((LiteralByteProtocol.protocol D).transcript H v.2.1.1 v.2.1.2 n,
+          (LiteralByteProtocol.protocol D).msg v.2.1.2 n,
+          (LiteralByteProtocol.protocol D).chal H v.2.1.1 v.2.1.2 n)
+
+theorem decodes (D : LiteralByteProtocol.Decoder) (P : OraclePortStoredExperimentC4.Prover)
+    (H : Bytes → State) (Q : Nat)
+    (hQ : firstReads emptyTable (eval H (base D P)).1 ≤ Q)
+    (hout : ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv
+      BinRawByteCollisionTargets.pred Q) emptyTable (eval H (base D P)).1)
+    (format : RWireCheckedFormat.Format (eval H (base D P)).2.1.2)
+    (tag : (eval H (base D P)).2.1.1.tag = 2) :
+    Decodes D H (eval H (charged D P)) := by
+  obtain ⟨hv,r1,w1,b2,w2,r2,b30,w30,v30,h0,h2,h30,hp2,hp30⟩ := format
+  intro n a hn hfirst
+  have decoded := RWireRawFullPublicRun.adaptive_run_decodes_and_follows D
+    (fun _ _ => true) (prover P) H Q hQ hout hv tag
+    r1 w1 b2 w2 r2 b30 w30 v30 h0 h2 h30 hp2 hp30 n hn
+  obtain ⟨own,pend,g,hd,hf⟩ := decoded
+  rw [charged_eval] at hfirst ⊢
+  dsimp only at hfirst ⊢
+  rw [RawCutTranscriptRun.chain_eq] at hfirst
+  have he : frame D H (eval H (base D P)).2.1.1 (eval H (base D P)).2.1.2 n = a := by
+    unfold frame
+    rw [hfirst]
+    rfl
+  rw [← he]
+  refine ⟨own,pend,g,hd,?_⟩
+  rw [hf,RawCutTranscriptRun.transcript_eq]
+  apply congrArg some
+  refine Prod.ext rfl (Prod.ext rfl ?_)
+  unfold FS2.Protocol.chal
+  rw [RawCutTranscriptRun.chain_eq]
+
+private theorem firstCell_map {I J A C : Type} [DecidableEq I] [Inhabited A]
+    (f : I → J) (s : Sampler I A C) :
+    firstCell (ProgramSamplerMap.map f s) = (firstCell s).map f := by
+  cases s <;> rfl
+
+theorem chains_read (D : LiteralByteProtocol.Decoder) :
+    ChainsRead (LiteralByteProtocol.protocol D) := by
+  intro i p m hi
+  change firstCell (ProgramSamplerMap.map Addr.toBytes (LiteralTranscript.samp i p m)) ≠ none
+  rw [firstCell_map]
+  have hn : firstCell (LiteralTranscript.samp i p m) ≠ none :=
+    UnifiedSampler.firstCell_some _ _ _ _ _
+  cases h : firstCell (LiteralTranscript.samp i p m) with
+  | none => exact absurd h hn
+  | some a => simp
+
+theorem prefix_chain_read (D : LiteralByteProtocol.Decoder)
+    (P : OraclePortStoredExperimentC4.Prover) (H : Bytes → State)
+    (n : Nat) (a : Bytes) (hn : n < 33)
+    (ha : firstCell ((LiteralByteProtocol.protocol D).chain H
+      (eval H (charged D P)).2.1.1 (eval H (charged D P)).2.1.2 n) = some a) :
+    Read (eval H (charged D P)).1 a := by
+  rw [← same_transcript D P H] at ha
+  exact transcript_start_read D P H n hn a ha
+
+theorem protocol_rounds (D : LiteralByteProtocol.Decoder) :
+    (LiteralByteProtocol.protocol D).r = 33 := rfl
+
+attribute [local irreducible] LiteralByteProtocol.protocol StartChargePrefix.charged
+
+/-- A bad submitted round produces a hit in the prefix; terminal chains
+are irrelevant to this implication. -/
+theorem hit_in_prefix (D : LiteralByteProtocol.Decoder)
+    (P : OraclePortStoredExperimentC4.Prover) (H : Bytes → State)
+    (hdec : Decodes D H (eval H (charged D P)))
+    (hhit : GenericNoHit.hitFrom LiteralClassifier.bad (eval H (charged D P)).2.1.1 []
+      ((LiteralByteProtocol.protocol D).transcript H (eval H (charged D P)).2.1.1
+        (eval H (charged D P)).2.1.2 33).rounds) :
+    hitsChain3 RecordedBinaryExperimentBin.dec RawAdaptiveClassifierHitDensity.classifier
+      emptyTable (eval H (charged D P)).1 := by
+  have hr := protocol_rounds D
+  apply StartChargeHit.hit_implies_chain (LiteralByteProtocol.protocol D) LiteralClassifier.bad
+    RecordedBinaryExperimentBin.dec H (eval H (charged D P))
+  · intro n a hn hf
+    exact prefix_chain_read D P H n a (by simpa only [hr] using hn) hf
+  · exact chains_read D
+  · intro n a hn hf
+    exact hdec n a (by simpa only [hr] using hn) hf
+  · simpa only [hr] using hhit
+
+#print axioms decodes
+#print axioms firstCell_map
+#print axioms chains_read
+#print axioms prefix_chain_read
+#print axioms protocol_rounds
+#print axioms hit_in_prefix
+end AspisR1.StartChargeCompletion
+end

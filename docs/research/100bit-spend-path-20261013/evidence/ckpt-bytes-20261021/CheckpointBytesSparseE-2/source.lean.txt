@@ -1,0 +1,44 @@
+import CheckpointBytesBodyArithmetic
+import CheckpointBytesEC5
+
+set_option autoImplicit false
+namespace AspisR1.CheckpointBytesSparseE
+open Aeneas Aeneas.Std Result
+open OraclePortCkptAbi2Extracted OraclePortCkptAbi4Decode OraclePortCkptAbi5Codec
+open CheckpointBytesBodyArithmetic CheckpointBytesEC5
+abbrev Prepared := aspis_r1_cost_probe.verifier.Prepared
+abbrev Accumulator := aspis_r1_cost_probe.verifier.Accumulator
+
+def field (p : Prepared) (a : Accumulator) : Fin 6 → CheckpointBytesE.RawE :=
+  ![p.gamma,p.kappa,p.alpha.val[0]'(by simp [p.alpha.property]),
+    p.alpha.val[1]'(by simp [p.alpha.property]),p.claim,a.rhs]
+
+def offset : Fin 6 → Nat := ![176,208,240,272,632,664]
+
+/-- Sparse execution of the six wide parts; field bytes are not unfolded. -/
+theorem dispatch (p : Prepared) (a : Accumulator) (hp hu : Array U8 32#usize)
+    (part : Fin 6) (i : Usize) (bound : i.val < 32) :
+    body_byte p a hp hu (Usize.ofNat (offset part+i.val)
+      (by fin_cases part <;> simp [offset] <;> scalar_tac)) =
+      e_byte (field p a part) i := by
+  have cast : Usize.ofNat i.val (by scalar_tac) = i := by
+    apply UScalar.eq_of_val_eq; simp
+  fin_cases part <;>
+    simp (disch := scalar_tac) [body_byte,offset,field,sub_exact,div_exact,rem_exact,
+      Array.index_usize,Array.make,p.alpha.property,Nat.add_div,Nat.add_mod,
+      Nat.div_eq_of_lt bound,Nat.mod_eq_of_lt bound,cast]
+
+/-- All six source-dispatched wide parts have exact C5 field bytes. -/
+theorem c5_bytes (p : Prepared) (a : Accumulator) (hp hu : Array U8 32#usize)
+    (part : Fin 6) (canonical : CanonicalWide (field p a part))
+    (i : Usize) (bound : i.val < 32) :
+    ∃ v, body_byte p a hp hu (Usize.ofNat (offset part+i.val)
+      (by fin_cases part <;> simp [offset] <;> scalar_tac)) = ok v ∧
+      (OraclePortCheckpointAbiC5.encodeE (exactE (field p a part) canonical))[i.val]? =
+        some (AspisV8R19.SqueezeOracleBridge.decodeByte v) := by
+  rw [dispatch p a hp hu part i bound]
+  exact e_byte_c5 _ canonical i bound
+
+#print axioms dispatch
+#print axioms c5_bytes
+end AspisR1.CheckpointBytesSparseE

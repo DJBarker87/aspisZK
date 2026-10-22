@@ -1,0 +1,3 @@
+PROVED owned strict scanner acceptance supplies the same indexed opening canonicality, then constructs the complete P6 four-dot execution and literal field equations.
+
+Limitations: Proof length 57607, row j<22 and exact source-slice identity remain explicit input bindings. The scanner is the owned parser reference; correspondence with the actual production scanner and stored-proof/caller reachability remains open. The typed608-byte prefix identity and canonical29 coefficient inputs remain explicit. P6 array construction, actual source/Std/runtime operations, caller and final artifact bindings remain open. No production source change or whole-S4/global soundness closure.

@@ -1,0 +1,13 @@
+import OraclePortCkptAbi2Unwrap
+
+/-! Inventory of the exact imported Vec model; allocation semantics must not
+be inferred from the name of a standard-library adapter. -/
+open Lean in
+run_cmd do
+  let env ← getEnv
+  let prefix := `Aeneas.Std.alloc.vec
+  for (name, _) in env.constants.toList do
+    if prefix.isPrefixOf name then logInfo m!"{name}"
+#print Aeneas.Std.alloc.vec.Vec
+#print Aeneas.Std.alloc.vec.Vec.push
+#print axioms AspisR1.OraclePortCkptAbi2Unwrap.savedTen_panic_unreachable

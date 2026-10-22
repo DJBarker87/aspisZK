@@ -1,0 +1,38 @@
+import R1Z.ProverCommitExtraMath51
+/-! The source extra evaluator equals the model's exact coefficient functional. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitExtraModel51
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open scoped BigOperators
+
+theorem dot_value (q : Nat → Old.Q) (a b : QM31Exact) :
+    AspisR0.RoundNormalization.dot
+      (fun j : Fin 1024 => ProverCommitExtraMath51.weight a b j.val)
+      (fun j : Fin 1024 => decode (q j.val))=
+      ProverCommitExtra48.polynomial q 0 a 28+ProverCommitExtra48.polynomial q 28 b 28 := by
+  rw [ProverCommitExtraMath51.source_polynomial,ProverCommitExtraMath51.source_polynomial]
+  unfold AspisR0.RoundNormalization.dot
+  change (∑ i : Fin 1024, (fun j : Nat => ProverCommitExtraMath51.weight a b j*decode (q j)) i.val)=_
+  rw [Fin.sum_univ_eq_sum_range]
+  exact ProverCommitExtraMath51.dot_polynomial _ a b
+
+theorem exact_result (q : Nat → Old.Q) (hq : ∀ j, j<1024 → Canonical (q j))
+    (a b : Old.Q) (ha : Canonical a) (hb : Canonical b)
+    (alpha : Fin 10 → QM31Exact) (h8 : decode a=alpha 8) (h9 : decode b=alpha 9) :
+    ∃ z : Old.Q, extra (ProverCommitExtra48.sourceArray q) (ProverCommitNativeQ48.source a)
+      (ProverCommitNativeQ48.source b)=ok (ProverCommitNativeQ48.source z) ∧ Canonical z ∧
+      decode z=AspisR0.RoundNormalization.dot (R0P.SemSource.libraWeight alpha)
+        (fun j : Fin 1024 => decode (q j.val)) := by
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitExtra48.extra_value q hq a b ha hb
+  refine ⟨z,hz,hcz,?_⟩
+  rw [hdz,←dot_value]
+  congr 1
+  funext j
+  simp only [ProverCommitExtraMath51.weight,R0P.SemSource.libraWeight,h8,h9]
+
+#print axioms dot_value
+#print axioms exact_result
+end R1Z.ProverCommitExtraModel51

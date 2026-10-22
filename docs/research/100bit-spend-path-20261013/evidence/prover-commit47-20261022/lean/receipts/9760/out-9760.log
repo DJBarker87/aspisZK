@@ -1,0 +1,110 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPairValue47.lean:47:63: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  1 ≤ d ≤ 512
+  2*d - e ≥ 2
+  c ≥ 0
+  c + d ≤ 512
+where
+ c := ↑n
+ d := ↑↑(i.wrapping_add 1#usize)
+ e := ↑↑1024#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPairValue47.lean:49:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (ProverCommitNativeOps47.embedded p0).add (ProverCommitNativeOps47.embedded m0)
+in the target expression
+  (do
+      let a ← ok (ProverCommitNativeOps47.embedded m0)
+      let p0 ← (ProverCommitNativeOps47.embedded p0).add a
+      let b ← (sourceArray 1024#usize q).index_usize ((Usize.wrapping_mul 2#usize i).wrapping_add 1#usize)
+      let b ← field.wide_exact.WideExact.mul b (ProverCommitNativeOps47.embedded (basis ↑i))
+      let p1 ← (ProverCommitNativeOps47.embedded p1).add b
+      finite n (sourceArray 1024#usize q) (sourceArray 512#usize basis) (i.wrapping_add 1#usize) p0 p1) =
+    ok (ProverCommitNativeOps47.embedded a, ProverCommitNativeOps47.embedded b)
+
+case succ.refine_1
+q basis : ℕ → Old.Q
+hq : ∀ j < 1024, Canonical (q j)
+hb : ∀ j < 512, Canonical (basis j)
+n : ℕ
+ih :
+  ∀ (i : Usize),
+    ↑i + n ≤ 512 →
+      ∀ (p0 p1 : Old.Q),
+        Canonical p0 →
+          Canonical p1 →
+            ∃ a b,
+              finite n (sourceArray 1024#usize q) (sourceArray 512#usize basis) i (ProverCommitNativeOps47.embedded p0)
+                    (ProverCommitNativeOps47.embedded p1) =
+                  ok (ProverCommitNativeOps47.embedded a, ProverCommitNativeOps47.embedded b) ∧
+                Canonical a ∧
+                  Canonical b ∧
+                    decode a = decode p0 + (dot (fun j => decode (q j)) (fun j => decode (basis j)) n ↑i).1 ∧
+                      decode b = decode p1 + (dot (fun j => decode (q j)) (fun j => decode (basis j)) n ↑i).2
+i : Usize
+bound : ↑i + (n + 1) ≤ 512
+p0 p1 : Old.Q
+hp0 : Canonical p0
+hp1 : Canonical p1
+hi : ↑i < 512
+he : ↑(Usize.wrapping_mul 2#usize i) = 2 * ↑i
+ho : ↑((Usize.wrapping_mul 2#usize i).wrapping_add 1#usize) = 2 * ↑i + 1
+hn : ↑(i.wrapping_add 1#usize) = ↑i + 1
+m0 : Old.Q
+hm0 :
+  (ProverCommitNativeOps47.embedded (q (2 * ↑i))).mul (ProverCommitNativeOps47.embedded (basis ↑i)) =
+    ok (ProverCommitNativeOps47.embedded m0)
+hcm0 : Canonical m0
+hdm0 : decode m0 = decode (q (2 * ↑i)) * decode (basis ↑i)
+s0 : Old.Q
+hs0 :
+  (ProverCommitNativeOps47.embedded p0).add (ProverCommitNativeOps47.embedded m0) =
+    ok (ProverCommitNativeOps47.embedded s0)
+hcs0 : Canonical s0
+hds0 : decode s0 = decode p0 + decode m0
+m1 : Old.Q
+hm1 :
+  (ProverCommitNativeOps47.embedded (q (2 * ↑i + 1))).mul (ProverCommitNativeOps47.embedded (basis ↑i)) =
+    ok (ProverCommitNativeOps47.embedded m1)
+hcm1 : Canonical m1
+hdm1 : decode m1 = decode (q (2 * ↑i + 1)) * decode (basis ↑i)
+s1 : Old.Q
+hs1 :
+  (ProverCommitNativeOps47.embedded p1).add (ProverCommitNativeOps47.embedded m1) =
+    ok (ProverCommitNativeOps47.embedded s1)
+hcs1 : Canonical s1
+hds1 : decode s1 = decode p1 + decode m1
+a b : Old.Q
+htail :
+  finite n (sourceArray 1024#usize q) (sourceArray 512#usize basis) (i.wrapping_add 1#usize)
+      (ProverCommitNativeOps47.embedded s0) (ProverCommitNativeOps47.embedded s1) =
+    ok (ProverCommitNativeOps47.embedded a, ProverCommitNativeOps47.embedded b)
+hca : Canonical a
+hcb : Canonical b
+hda : decode a = decode s0 + (dot (fun j => decode (q j)) (fun j => decode (basis j)) n ↑(i.wrapping_add 1#usize)).1
+hdb : decode b = decode s1 + (dot (fun j => decode (q j)) (fun j => decode (basis j)) n ↑(i.wrapping_add 1#usize)).2
+⊢ (do
+      let a ← ok (ProverCommitNativeOps47.embedded m0)
+      let p0 ← (ProverCommitNativeOps47.embedded p0).add a
+      let b ← (sourceArray 1024#usize q).index_usize ((Usize.wrapping_mul 2#usize i).wrapping_add 1#usize)
+      let b ← field.wide_exact.WideExact.mul b (ProverCommitNativeOps47.embedded (basis ↑i))
+      let p1 ← (ProverCommitNativeOps47.embedded p1).add b
+      finite n (sourceArray 1024#usize q) (sourceArray 512#usize basis) (i.wrapping_add 1#usize) p0 p1) =
+    ok (ProverCommitNativeOps47.embedded a, ProverCommitNativeOps47.embedded b)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1024 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPairValue47.lean:78:8: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'R1Z.ProverCommitPairValue47.finite_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPairValue47.source_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

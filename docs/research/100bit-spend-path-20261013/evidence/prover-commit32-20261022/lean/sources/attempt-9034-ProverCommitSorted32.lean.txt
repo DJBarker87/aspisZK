@@ -1,0 +1,44 @@
+import R1Z.ProverCommitPublication32
+set_option autoImplicit false
+namespace R1Z.ProverCommitSorted32
+open Aeneas Aeneas.Std Result R1Z.ProverCommitPublication32
+open AspisR1IndexInsert32
+
+/-- Exact tail-copy semantics, including the explicit vector-capacity bound. -/
+theorem tail_refines (fuel : Nat) (table out : IndexMap) (pos : Usize)
+    (hi : pos.val ≤ table.val.length) (hf : table.val.length-pos.val < fuel)
+    (room : out.val.length + (table.val.length-pos.val) ≤ Usize.max) :
+    ∃ final, sim.owned32.index_tail table pos out = ok final ∧
+      final.val = out.val ++ table.val.drop pos.val := by
+  induction fuel generalizing pos out with
+  | zero => omega
+  | succ fuel ih =>
+    rw [sim.owned32.index_tail]
+    by_cases done : pos = alloc.vec.Vec.len table
+    · have hp : pos.val = table.val.length := congrArg UScalar.val done
+      simp only [if_pos done,List.drop_eq_nil_of_le (by omega : table.val.length ≤ pos.val),List.append_nil]
+      exact ⟨out,rfl,rfl⟩
+    · have more : pos.val < table.val.length := by
+        have ne : pos.val ≠ table.val.length := by
+          intro eq
+          apply done
+          apply UScalar.eq_of_val_eq
+          exact eq
+        omega
+      obtain ⟨entry,hr,he⟩ := WP.spec_imp_exists (alloc.vec.Vec.index_usize_spec table pos more)
+      have hd : table.val.drop pos.val = entry :: table.val.drop (pos.val+1) := by
+        rw [he]
+        exact List.drop_eq_getElem_cons more
+      obtain ⟨next,hpush,hval⟩ := WP.spec_imp_exists
+        (alloc.vec.Vec.push_spec out entry (by omega))
+      have hlen : next.val.length = out.val.length+1 := by simp only [hval,List.length_append,List.length_singleton]
+      have step := next_cursor table pos more
+      obtain ⟨final,ht,hfval⟩ := ih next (Usize.wrapping_add pos 1#usize)
+        (by omega) (by omega) (by omega)
+      refine ⟨final,?_,?_⟩
+      · simp only [if_neg done,alloc.vec.Vec.index_slice_index,hr,bind_tc_ok,BuiltinClone,hpush,lift,ht]
+      · rw [hfval,hval,step,hd]
+        simp only [List.append_assoc,List.singleton_append]
+
+#print axioms tail_refines
+end R1Z.ProverCommitSorted32

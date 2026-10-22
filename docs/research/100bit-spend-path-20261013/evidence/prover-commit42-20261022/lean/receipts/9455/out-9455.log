@@ -1,0 +1,133 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerRun42.lean:37:2: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+fuel : U8
+positive : 0 < ↑fuel
+⊢ ↑(fuel.wrapping_sub 1#u8) = ↑fuel - 1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerRun42.lean:63:10: error: Type mismatch
+  tail after
+    (Eq.mpr (id (congrArg (fun _a => _a = n) (fuel_sub fuel positive)))
+      (Decidable.byContradiction fun a => run_exact._proof_9 n fuel count a))
+has type
+  owner.run (io schedule tape) nonce (fuel.wrapping_sub 1#u8) after = ok (run nonce schedule tape n after)
+but is expected to have type
+  (let (result, after) := (core.result.Result.Ok r, after)
+    match result with
+    | core.result.Result.Ok raw1 =>
+      if decide (block raw1.field = 0) = true then
+        owner.run { fill := fun s => ok (next schedule tape s) } nonce (fuel.wrapping_sub 1#u8) after
+      else
+        if decide (block raw1.leaf = 0) = true then
+          owner.run { fill := fun s => ok (next schedule tape s) } nonce (fuel.wrapping_sub 1#u8) after
+        else ok (core.result.Result.Ok { nonce := nonce, raw := raw1 }, after)
+    | core.result.Result.Err e => ok (core.result.Result.Err (owner.Error.Os e), after)) =
+    ok (run nonce schedule tape n after)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerRun42.lean:67:12: error: Type mismatch
+  tail after
+    (Eq.mpr (id (congrArg (fun _a => _a = n) (fuel_sub fuel positive)))
+      (Decidable.byContradiction fun a => run_exact._proof_9 n fuel count a))
+has type
+  owner.run (io schedule tape) nonce (fuel.wrapping_sub 1#u8) after = ok (run nonce schedule tape n after)
+but is expected to have type
+  (let (result, after) := (core.result.Result.Ok r, after)
+    match result with
+    | core.result.Result.Ok raw1 =>
+      if decide (block raw1.field = 0) = true then
+        owner.run { fill := fun s => ok (next schedule tape s) } nonce (fuel.wrapping_sub 1#u8) after
+      else
+        if decide (block raw1.leaf = 0) = true then
+          owner.run { fill := fun s => ok (next schedule tape s) } nonce (fuel.wrapping_sub 1#u8) after
+        else ok (core.result.Result.Ok { nonce := nonce, raw := raw1 }, after)
+    | core.result.Result.Err e => ok (core.result.Result.Err (owner.Error.Os e), after)) =
+    ok (run nonce schedule tape n after)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerRun42.lean:68:10: error: unsolved goals
+case neg
+nonce : Bytes
+schedule : Schedule
+tape : ℕ → owner.Raw
+n : ℕ
+ih : ∀ (fuel : U8) (s : State), ↑fuel = n → owner.run (io schedule tape) nonce fuel s = ok (run nonce schedule tape n s)
+fuel : U8
+s : State
+count : ↑fuel = n + 1
+notzero : fuel ≠ 0#u8
+positive : 0 < ↑fuel
+tail :
+  ∀ (s : State),
+    ↑(fuel.wrapping_sub 1#u8) = n →
+      owner.run (io schedule tape) nonce (fuel.wrapping_sub 1#u8) s = ok (run nonce schedule tape n s)
+after : State
+r : owner.Raw
+step : next schedule tape s = (core.result.Result.Ok r, after)
+hf : ¬block r.field = 0
+hl : ¬block r.leaf = 0
+⊢ (let (result, after) := (core.result.Result.Ok r, after)
+    match result with
+    | core.result.Result.Ok raw1 =>
+      if decide (block raw1.field = 0) = true then do
+        let i ← lift (fuel.wrapping_sub 1#u8)
+        owner.run { fill := fun s => ok (next schedule tape s) } nonce i after
+      else
+        if decide (block raw1.leaf = 0) = true then do
+          let i ← lift (fuel.wrapping_sub 1#u8)
+          owner.run { fill := fun s => ok (next schedule tape s) } nonce i after
+        else ok (core.result.Result.Ok { nonce := nonce, raw := raw1 }, after)
+    | core.result.Result.Err e => ok (core.result.Result.Err (owner.Error.Os e), after)) =
+    ok (core.result.Result.Ok { nonce := nonce, raw := r }, after)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerRun42.lean:62:24: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵f̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵t̵r̵u̵e̵_̵o̵r̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲f̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerRun42.lean:64:24: warning: This simp argument is unused:
+  decide_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵f̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵f̵a̵l̵s̵e̵_̵o̵r̵]̵[̲h̲f̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerRun42.lean:64:37: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵f̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵f̵a̵l̵s̵e̵_̵o̵r̵]̵[̲h̲f̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerRun42.lean:64:56: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵f̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵f̵a̵l̵s̵e̵_̵o̵r̵]̵[̲h̲f̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerRun42.lean:66:26: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵l̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲l̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerRun42.lean:68:26: warning: This simp argument is unused:
+  decide_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵l̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲h̲l̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerRun42.lean:68:39: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵l̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲h̲l̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitOwnerRun42.fuel_sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnerRun42.run_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnerRun42.generate_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

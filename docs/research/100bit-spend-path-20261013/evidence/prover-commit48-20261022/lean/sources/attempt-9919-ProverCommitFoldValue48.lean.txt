@@ -1,0 +1,80 @@
+import R1Z.ProverCommitFoldRange48
+/-! Exact interval value induction for both native primal fold passes.
+The input coefficient array is immutable; updates preserve all other cells. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitFoldValue48
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitWideOps48 ProverCommitMix48 ProverCommitFoldRange48
+attribute [local irreducible] sourceArray source value ProverCommitFoldCell48.polynomial
+
+def cellValue (q : Nat → Raw) (a : Raw) (k : Nat) : Exact :=
+  ProverCommitFoldCell48.polynomial (fun j => q (4*k+j)) (value a)
+
+theorem range_value (inputSize outputSize : Usize)
+    (sizes : inputSize.val=4*outputSize.val) (capacity : outputSize.val≤256)
+    (q xs : Nat → Raw)
+    (hq : ∀ k, k<inputSize.val → canonical (q k))
+    (hxs : ∀ k, k<outputSize.val → canonical (xs k))
+    (a : Raw) (ha : canonical a) (n : Nat) (i : Usize) (bound : i.val+n≤outputSize.val) :
+    ∃ ys : Nat → Raw,
+      range inputSize outputSize n (sourceArray inputSize q) (source a) (sourceArray outputSize xs) i=
+        ok (sourceArray outputSize ys) ∧
+      (∀ k, k<outputSize.val → canonical (ys k)) ∧
+      ∀ k, k<outputSize.val → value (ys k)=
+        if i.val≤k ∧ k<i.val+n then cellValue q a k else value (xs k) := by
+  induction n generalizing xs i with
+  | zero =>
+    refine ⟨xs,rfl,hxs,?_⟩
+    intro k hk
+    rw [if_neg (by omega)]
+  | succ n ih =>
+    have hi : i.val<256 := by omega
+    have ho : i.val<outputSize.val := by omega
+    have h0 : (Usize.wrapping_mul 4#usize i).val=4*i.val := four_val i hi
+    have h1 : (Usize.wrapping_add (Usize.wrapping_mul 4#usize i) 1#usize).val=4*i.val+1 := offset_val i hi _ (by decide)
+    have h2 : (Usize.wrapping_add (Usize.wrapping_mul 4#usize i) 2#usize).val=4*i.val+2 := offset_val i hi _ (by decide)
+    have h3 : (Usize.wrapping_add (Usize.wrapping_mul 4#usize i) 3#usize).val=4*i.val+3 := offset_val i hi _ (by decide)
+    have hn : (Usize.wrapping_add i 1#usize).val=i.val+1 := ProverCommitPairCounter47.next_val i (by omega)
+    let cellQ : Nat → Raw := fun j => q (4*i.val+j)
+    obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitFoldCell48.cell cellQ
+      (fun j hj => hq _ (by rw [sizes];omega)) a ha
+    let next := Function.update xs i.val z
+    have hcnext : ∀ k, k<outputSize.val → canonical (next k) := by
+      intro k hk
+      by_cases he : k=i.val
+      · subst k;simpa only [next,Function.update_self] using hcz
+      · simpa only [next,Function.update_of_ne he] using hxs k hk
+    obtain ⟨ys,hy,hcy,hval⟩ := ih next hcnext (Usize.wrapping_add i 1#usize) (by rw [hn];omega)
+    refine ⟨ys,?_,hcy,?_⟩
+    · rw [range,index _ _ _ (by rw [h0,sizes];omega)]
+      simp only [bind_tc_ok,h0]
+      rw [index _ _ _ (by rw [h1,sizes];omega)]
+      simp only [bind_tc_ok,h1]
+      rw [index _ _ _ (by rw [h2,sizes];omega)]
+      simp only [bind_tc_ok,h2]
+      rw [index _ _ _ (by rw [h3,sizes];omega)]
+      simp only [bind_tc_ok,h3]
+      have hc : Array.make 4#usize [source (q (4*i.val)),source (q (4*i.val+1)),
+          source (q (4*i.val+2)),source (q (4*i.val+3))]=sourceArray 4#usize cellQ := by
+        simpa only [cellQ,Nat.add_zero] using four_array cellQ
+      rw [hc,hz]
+      simp only [bind_tc_ok]
+      rw [ProverCommitWideArray48.update _ _ i ho]
+      simp only [bind_tc_ok]
+      exact hy
+    · intro k hk
+      rw [hval k hk,hn]
+      by_cases he : k=i.val
+      · have htail : ¬(i.val+1≤k ∧ k<i.val+1+n) := by omega
+        have hall : i.val≤k ∧ k<i.val+(n+1) := by omega
+        rw [if_neg htail,if_pos hall]
+        simp only [next,he,Function.update_self]
+        exact hdz
+      · by_cases ht : i.val+1≤k ∧ k<i.val+1+n
+        · rw [if_pos ht,if_pos (by omega)]
+        · rw [if_neg ht,if_neg (by omega)]
+          simp only [next,Function.update_of_ne he]
+
+#print axioms range_value
+end R1Z.ProverCommitFoldValue48

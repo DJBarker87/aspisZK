@@ -1,0 +1,24 @@
+{
+  "source": "crates/aspis-r1-cost-probe/src/sim.rs",
+  "source_sha256": "2594f50a303bd53ea6ed64d0e49cd986794065c32514eadbd32272b9ec9a4460",
+  "source_line": 388,
+  "native_guard": "if level.len()!=1||level.get(&0)!=Some(&root) {return Err(Error::Merkle);}",
+  "accepted_trustedstd_fields": [
+    "btree_empty",
+    "btree_insert_state",
+    "btree_insert_previous",
+    "btree_get",
+    "btree_iter_ordered",
+    "btree_entry_or_insert_with",
+    "btree_set_from_iter_ordered",
+    "tls_live_key",
+    "tls_single_thread"
+  ],
+  "has_native_length_law": false,
+  "required_interface": "For each reachable level state s, native BTreeMap::len(s) equals (map.decode s).toList.length, with usize conversion exact and no missing source result/error branch.",
+  "why_required": "The native length value controls the Merkle early error before publication and affects transcript.len bookkeeping later.",
+  "diagnostic": "Charon/Aeneas emit an external BTreeMap.len template; inert .lean.txt only, never installed or imported.",
+  "logical_gap_theorem": "R1Z.ProverCommitLengthGap44.length_not_determined",
+  "not_a_source_counterexample": true,
+  "no_additional_trust_added": true
+}

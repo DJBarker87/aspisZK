@@ -1,0 +1,89 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitAssembly17.lean:57:82: error: unsolved goals
+hash : Hash
+domain : Slice U8
+state : State
+cells : Usize
+c1 : Values
+columns : alloc.vec.Vec Values
+g padding : QValues
+dependent : Usize
+active : Std.Array Bool 1024#usize
+nonce : Std.Array U8 32#usize
+⊢ (do
+      let __x ← prover_commit_reference.collect_m31_owned hash domain state cells c1
+      match __x.1 with
+        | core.result.Result.Ok a => do
+          let __x_1 ←
+            prover_commit_reference.material_columns_owned hash domain __x.2.2 columns 0#usize 10#usize dependent active
+          match __x_1.1 with
+            | core.result.Result.Ok a => do
+              let __x_2 ← prover_commit_reference.collect_qm31_owned hash domain __x_1.2.2 1024#usize g
+              match __x_2.1 with
+                | core.result.Result.Ok a => do
+                  let __x_3 ← prover_commit_reference.balance_qm31_owned __x_2.2.1 dependent active
+                  match __x_3.1 with
+                    | core.result.Result.Ok a => do
+                      let __x_4 ←
+                        prover_commit_reference.material_padding_owned hash domain __x_2.2.2 padding 0#usize dependent
+                            active
+                      match __x_4.1 with
+                        | core.result.Result.Ok a => do
+                          let __x_5 ← prover_commit_reference.balance_qm31_owned __x_4.2.1 dependent active
+                          match __x_5.1 with
+                            | core.result.Result.Ok a =>
+                              ok
+                                (core.result.Result.Ok
+                                    { c1 := __x.2.1, columns := __x_1.2.1, g := __x_3.2, padding := __x_5.2,
+                                      nonce := nonce },
+                                  __x_4.2.2)
+                            | core.result.Result.Err e => ok (core.result.Result.Err e, __x_4.2.2)
+                        | core.result.Result.Err e => ok (core.result.Result.Err e, __x_4.2.2)
+                    | core.result.Result.Err e => ok (core.result.Result.Err e, __x_2.2.2)
+                | core.result.Result.Err e => ok (core.result.Result.Err e, __x_2.2.2)
+            | core.result.Result.Err e => ok (core.result.Result.Err e, __x_1.2.2)
+        | core.result.Result.Err e => ok (core.result.Result.Err e, __x.2.2)) =
+    do
+    let __x ← prover_commit_reference.collect_m31_owned hash domain state cells c1
+    match __x.1 with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, __x.2.2)
+      | core.result.Result.Ok a => do
+        let __x_1 ←
+          prover_commit_reference.material_columns_owned hash domain __x.2.2 columns 0#usize 10#usize dependent active
+        match __x_1.1 with
+          | core.result.Result.Err e => ok (core.result.Result.Err e, __x_1.2.2)
+          | core.result.Result.Ok a => do
+            let __x_2 ← prover_commit_reference.collect_qm31_owned hash domain __x_1.2.2 1024#usize g
+            match __x_2.1 with
+              | core.result.Result.Err e => ok (core.result.Result.Err e, __x_2.2.2)
+              | core.result.Result.Ok a => do
+                let __x_3 ← prover_commit_reference.balance_qm31_owned __x_2.2.1 dependent active
+                match __x_3.1 with
+                  | core.result.Result.Err e => ok (core.result.Result.Err e, __x_2.2.2)
+                  | core.result.Result.Ok a => do
+                    let __x_4 ←
+                      prover_commit_reference.material_padding_owned hash domain __x_2.2.2 padding 0#usize dependent
+                          active
+                    match __x_4.1 with
+                      | core.result.Result.Err e => ok (core.result.Result.Err e, __x_4.2.2)
+                      | core.result.Result.Ok a => do
+                        let __x_5 ← prover_commit_reference.balance_qm31_owned __x_4.2.1 dependent active
+                        match __x_5.1 with
+                          | core.result.Result.Err e => ok (core.result.Result.Err e, __x_4.2.2)
+                          | core.result.Result.Ok a =>
+                            ok
+                              (core.result.Result.Ok
+                                  { c1 := __x.2.1, columns := __x_1.2.1, g := __x_3.2, padding := __x_5.2,
+                                    nonce := nonce },
+                                __x_4.2.2)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitAssembly17.lean:59:4: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [prover_commit_reference.assemble_owned17, stages, thenState, thenBalance,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitAssembly17.extracted_stages' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitAssembly17.first_stage_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

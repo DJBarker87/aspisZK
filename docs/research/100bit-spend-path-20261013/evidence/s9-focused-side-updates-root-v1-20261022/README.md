@@ -1,0 +1,9 @@
+# S9 decoded two-side update algebra
+
+Proved: the exact decoded q4/q8/q12/q16 square/multiply chain, four high terms, and two successive side updates produce `S2LibraFactoredIdentity.factored` at every output index. The first side preserves untouched cells; the second consumes the first side's cell 1 and overwrites cells 2/3. The result holds for arbitrary old output cells and both zero and nonzero challenges. `two_side_updates_eq_original` consumes the existing 56-coefficient identity for these same inputs.
+
+This is the algebra consumer requested by the generated-helper loop worker. It does not prove a successful helper, operation refinement, the initialized-buffer semantics of Rust `from_fn`, or the enclosing `Weights::pair` caller. Those are explicit separate obligations; whole S9 and 100-bit security remain open. The mathematical statement assumes only a commutative semiring; there are no execution-success or whole-cone equality premises.
+
+Focused Lean 4.32 compilation: exit 0, 6.576 s, process peak 1,504,296,960 bytes, aggregate peak 1,485,111,296 bytes, observed process swaps 0. One local process, `-j1 -M4400`, atomic owned lock, aggregate RSS/time watchdog. The five named axiom reports contain standard axioms only. A warning about an unnecessary tactic sequence is retained; no option override was added. Source and imported object pins, exact argv/profile, receipt and raw logs are included; compiled objects are excluded. The failed first source and logs are retained and not counted as proved.
+
+Source linkage: the current `weights.rs` helper body is identical to the retained extracted source cut (SHA-256 `741b0a147a82edfbc47b363e50e5163662cd82be8af21f769699e1d3c9506f2a`). This pin is evidence for selecting the decoded schedule, not a proof that decoding actual execution obeys it. The emitted loop worker must establish that connection.

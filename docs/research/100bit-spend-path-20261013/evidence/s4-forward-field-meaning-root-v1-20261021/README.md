@@ -1,0 +1,3 @@
+PROVED complete generated four_dots forward execution together with same-output canonicality and four source field-functional results on the same exact 608-byte prefix and coefficient array. Reuses the proved operation-record equality and the existing field-functional theorem; no parent/child execution success premise.
+
+Limitations: The explicit caller premises remain q length, exact prefix identity, all29 coefficient coordinate bounds, and all4 slots strict parser acceptance. The selected arrayFromFn is the retained P6 interpretation; Rust Std/LLBC correspondence and concrete caller provenance remain open. This does not close source/runtime, release artifacts, or the final 100-bit soundness theorem.

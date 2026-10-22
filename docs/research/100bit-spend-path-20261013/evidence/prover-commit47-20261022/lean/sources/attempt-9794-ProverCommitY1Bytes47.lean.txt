@@ -1,0 +1,87 @@
+import R1Z.ProverCommitY1Owner47
+import R1Z.ProverCommitLimbBytes47
+import R1Z.PhaseMessageEncodingBin
+/-! All 29 cells of the owned y1 reference have the exact model byte image.
+This is not a proof that the shipped opening caller executes this reference. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitY1Bytes47
+open Aeneas Aeneas.Std Result ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitValueRange47 ProverCommitCompact43
+open AspisR1.ExtractedCurrentQM31Exact
+attribute [local irreducible] ProverCommitEval47.messageEval ProverCommitEval47.pairEval
+  ProverCommitCompact43.values List.ofFn
+
+abbrev Coefficients := Fin 29 → Nat → Old.Q
+
+def output (c : Coefficients) (x y : Old.Q) (lane : Fin 29) : Old.Q :=
+  Classical.choose (ProverCommitY1Owner47.raw_value (c lane) x y)
+
+theorem output_spec (c : Coefficients) (x y : Old.Q) (lane : Fin 29) :
+    ProverCommitY1Owner47.run (fun j => ProverCommitNativeOps47.normalize (c lane j))
+      (ProverCommitNativeOps47.normalize x) (ProverCommitNativeOps47.normalize y) =
+        ok (ProverCommitNativeOps47.embedded (output c x y lane)) ∧
+    Canonical (output c x y lane) ∧
+    decode (output c x y lane)=ProverCommitEval47.messageEval
+      (fun j : Fin 1024 => decode (c lane j.val)) (decode x) (decode y) :=
+  Classical.choose_spec (ProverCommitY1Owner47.raw_value (c lane) x y)
+
+def model (c : Coefficients) (x y : Old.Q) (lane : Fin 29) : E :=
+  ProverCommitEval47.messageEval (fun j : Fin 1024 => embed (decode (c lane j.val)))
+    (embed (decode x)) (embed (decode y))
+
+def cell (c : Coefficients) (x y : Old.Q) (lane : Fin 29) : Cell :=
+  ProverCommitLimbBytes47.sourceCell (output c x y lane) (output_spec c x y lane).2.1
+
+theorem cell_model (c : Coefficients) (x y : Old.Q) (lane : Fin 29) :
+    cell c x y lane=bytes (model c x y lane) := by
+  rw [cell,ProverCommitLimbBytes47.source_image,model,ProverCommitEval47.message_embed]
+  rw [(output_spec c x y lane).2.2]
+
+theorem cell_decode (c : Coefficients) (x y : Old.Q) (lane : Fin 29) :
+    AspisR1.FoldedLeafCodec.decodeWide ((List.ofFn (cell c x y lane)).map UInt8.toFin)=
+      some (model c x y lane) := by
+  rw [cell_model]
+  exact bytes_decode _
+
+theorem cell_list (x : E) : List.ofFn (bytes x)=PhaseMessageEncodingBin.wideBytes x := by
+  simp only [PhaseMessageEncodingBin.wideBytes,AspisR1.FoldedLeafCodec.encodeWide,List.map_ofFn,bytes]
+
+def cells (c : Coefficients) (x y : Old.Q) : List Cell := List.ofFn (cell c x y)
+def logical (c : Coefficients) (x y : Old.Q) : ProverCommitPublish43.Bytes :=
+  AspisR1.FixedWidthDecoder.encode List.ofFn (cell c x y)
+
+theorem logical_model (c : Coefficients) (x y : Old.Q) :
+    logical c x y=PhaseMessageEncodingBin.encoded PhaseMessageEncodingBin.wideBytes (model c x y) := by
+  simp only [logical,PhaseMessageEncodingBin.encoded,AspisR1.FixedWidthDecoder.encode,
+    List.flatMap_def,List.map_ofFn]
+  apply congrArg List.flatten
+  apply congrArg List.ofFn
+  funext lane
+  rw [cell_model,cell_list]
+
+theorem cells_high_zero (c : Coefficients) (x y : Old.Q) : ∀ v∈cells c x y, highZero v := by
+  intro v hv
+  rw [cells] at hv
+  obtain ⟨lane,rfl⟩ := List.mem_ofFn.mp hv
+  rw [cell,ProverCommitLimbBytes47.source_image]
+  exact embedded_high_zero _
+
+theorem compact_exact (c : Coefficients) (x y : Old.Q) :
+    values (cells c x y) []=.ok (((cells c x y).map low).flatten) := by
+  exact (values_ok _ _ _).mpr ⟨cells_high_zero c x y,rfl⟩
+
+theorem compact_length (c : Coefficients) (x y : Old.Q) :
+    (((cells c x y).map low).flatten).length=464 := by
+  have h := values_length _ _ _ (compact_exact c x y)
+  simpa only [List.length_nil,cells,List.length_ofFn] using h
+
+#print axioms output_spec
+#print axioms cell_model
+#print axioms cell_decode
+#print axioms cell_list
+#print axioms logical_model
+#print axioms cells_high_zero
+#print axioms compact_exact
+#print axioms compact_length
+end R1Z.ProverCommitY1Bytes47

@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import argparse,hashlib,json,os,re,signal,subprocess,time
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+TOOLS=Path('/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016')
+AENEAS=TOOLS/'bin/aeneas'
+PINS={'charon-target/release/charon':'daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8','charon-target/release/charon-driver':'efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45','bin/aeneas':'959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3'}
+def dump(p,x):p.write_text(json.dumps(x,indent=2,sort_keys=True)+'\n')
+ap=argparse.ArgumentParser();ap.add_argument('--root',type=Path,required=True);ap.add_argument('--phase',choices=['charon','aeneas'],required=True);ap.add_argument('--attempt',default='v1');a=ap.parse_args()
+w=a.root;kit=w/'input';pins=json.loads((kit/'source-pins.json').read_text())
+for name,h in pins['kit_files'].items():assert sha(kit/name)==h,name
+assert sha(kit/pins['source_snapshot']['path'])==pins['source_snapshot']['sha256']
+assert pins['features']==['r0','private-leaf-salts']
+assert pins['method_text'] in (kit/'lib.rs').read_text(), 'method source bytes absent from isolated cut'
+for name,h in PINS.items():assert sha(AENEAS if name=='bin/aeneas' else TOOLS/name)==h,name
+cgline=Path('/proc/self/cgroup').read_text().strip();assert cgline.startswith('0::')
+cg=Path('/sys/fs/cgroup')/cgline[3:].lstrip('/')
+limits={n:(cg/n).read_text().strip() for n in ['memory.high','memory.max','memory.swap.max']}
+assert limits=={'memory.high':str(2*2**30),'memory.max':str(3*2**30),'memory.swap.max':'0'},limits
+out=w/'runs'/(a.phase+'-'+a.attempt);out.mkdir(parents=True,exist_ok=False);(out/'input-snapshot').mkdir()
+for f in kit.iterdir():
+ if f.is_file(): (out/'input-snapshot'/f.name).write_bytes(f.read_bytes())
+llbc=w/'Pair.llbc';gen=w/'generated'
+opaque=pins['opaque_paths']
+if a.phase=='charon':
+ cmd=[str(TOOLS/'charon-target/release/charon'),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::result::_::map_err','--start-from','crate::weights::pair_root',*sum((['--opaque',x] for x in opaque),[]),'--dest-file',str(llbc),'--','--locked','--offline','--release','--lib','--no-default-features','--features','r0,private-leaf-salts','--jobs','1']
+else:
+ prev=json.loads((w/('runs/charon-'+a.attempt+'/receipt.json')).read_text());assert prev['exit_status']==0 and llbc.is_file()
+ raw=json.loads(llbc.read_text());assert raw and not raw['has_errors'],'reject invalid LLBC before Aeneas'
+ cmd=[str(AENEAS),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR1WeightsPairCut','-dest',str(gen),'-subdir','AspisR1WeightsPairCut','-split-files','-emit-json',str(llbc)]
+env=dict(os.environ);env.update(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',RUSTUP_TOOLCHAIN='nightly-2026-06-01',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(w/'target'),CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true')
+for key in ['RUSTFLAGS','RUSTC_WRAPPER','RUSTC_WORKSPACE_WRAPPER','CARGO_ENCODED_RUSTFLAGS','CHARON_TOOLCHAIN_IS_IN_PATH']:env.pop(key,None)
+dump(out/'command.json',cmd);dump(out/'environment.json',{n:env.get(n) for n in ['PATH','RUSTUP_TOOLCHAIN','CARGO_BUILD_JOBS','CARGO_NET_OFFLINE','CARGO_TARGET_DIR','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS']})
+before=(cg/'memory.events').read_text();start=time.monotonic();sampled=0;timed_out=False
+with (out/'stdout.log').open('x') as log:
+ p=subprocess.Popen(['/usr/bin/time','-v','-o',str(out/'time.log'),*cmd],cwd=kit,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+ while p.poll() is None:
+  sampled=max(sampled,int((cg/'memory.current').read_text()))
+  if time.monotonic()-start>180:
+   timed_out=True;os.killpg(p.pid,signal.SIGTERM)
+   try:p.wait(timeout=3)
+   except subprocess.TimeoutExpired:os.killpg(p.pid,signal.SIGKILL)
+   break
+  time.sleep(.2)
+ p.wait()
+timing=(out/'time.log').read_text() if (out/'time.log').exists() else ''
+def number(label):
+ m=re.search(re.escape(label)+r':\s*(\d+)',timing);return int(m[1]) if m else None
+outputs={}
+if llbc.is_file():outputs['Pair.llbc']=sha(llbc)
+if gen.exists():
+ for f in gen.rglob('*'):
+  if f.is_file():outputs[str(f.relative_to(w))]=sha(f)
+receipt={'phase':a.phase,'exit_status':p.returncode,'wall_seconds':time.monotonic()-start,'peak_process_rss_kib':number('Maximum resident set size (kbytes)'),'process_swaps':number('Swaps'),'sampled_cgroup_peak_bytes':sampled,'cgroup_memory_peak_cumulative':int((cg/'memory.peak').read_text()),'cgroup_swap_current':int((cg/'memory.swap.current').read_text()),'memory_events_before':before,'memory_events_after':(cg/'memory.events').read_text(),'limits':limits,'timed_out':timed_out,'source_revision':pins['source_revision'],'source_pins_sha256':sha(kit/'source-pins.json'),'tool_pins':PINS,'runner_sha256':sha(Path(__file__)),'command':cmd,'outputs':outputs,'scope':pins['classification'],'time_expected':'Minimal source-cut Cargo check/Charon or Aeneas lowering only; no Lean proof or runtime execution.'}
+dump(out/'receipt.json',receipt);print(json.dumps(receipt),flush=True);raise SystemExit(p.returncode)

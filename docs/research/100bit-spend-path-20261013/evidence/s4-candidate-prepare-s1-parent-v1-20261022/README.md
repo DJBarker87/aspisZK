@@ -1,0 +1,7 @@
+# S4 candidate prepare parent with the S1 Prepared.new adapter
+
+This packet proves that a successful execution of the emitted `verifier.candidate.prepare` control-flow body reaches the accepted S1 `Prepared.new` body with the same output and scratch array. The generated parent body is copied into a parameterized Lean definition; its final constructor child is replaced by `prepareByS1Body`. `prepareWithS1New_success_powers` then obtains the returned gamma/powers relation from the S1 child theorem.
+
+`Leaves` names the other direct helper/external operations used by the parent. They remain explicit parameters, so this theorem does not prove that the frozen runtime installs those implementations. The packet checks the copied body against the pinned generated `Funs.lean`, modulo the listed leaf substitutions and the one `Prepared.new` substitution. Rust source hashes and excerpts pin the intended frozen caller and constructor sources. This is a source-shaped operation cut, not a proof that the complete frozen Rust caller or `std::array::from_fn` is refined to these Lean slots.
+
+The Lean 4.32 focused compile passed with standard axioms `[propext, Classical.choice, Quot.sound]`; exit 0, 10.226 seconds, aggregate RSS 2,246,557,696 bytes, process swaps 0. The compiled object is retained outside the repository and is not included here. Attempts v2 and v3 are preserved as diagnostics; v2 exposed the required `lift` around the generated pure vector operation, and v3 exposed constructor naming/control-flow issues.

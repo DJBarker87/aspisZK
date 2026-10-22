@@ -1,0 +1,121 @@
+import AspisR1Padding43.Funs
+import R1Z.ProverCommitPublish43
+set_option autoImplicit false
+namespace R1Z.ProverCommitPadding43
+open Aeneas Aeneas.Std Result
+abbrev Bytes := alloc.vec.Vec U8
+
+theorem extend (out nodes : Bytes) (room : out.val.length+nodes.val.length≤Usize.max) :
+    ∃ after, alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out
+      (alloc.vec.Vec.deref nodes)=ok after ∧ after.val=out.val++nodes.val := by
+  obtain ⟨cloned,hc,he⟩ := WP.spec_imp_exists
+    (Slice.clone_spec (s := alloc.vec.Vec.deref nodes)
+      (clone := core.clone.CloneU8.clone) (by intros;rfl))
+  have hc' : Slice.clone core.clone.CloneU8.clone (alloc.vec.Vec.deref nodes) =
+      ok (alloc.vec.Vec.deref nodes) := hc.trans (congrArg Result.ok he.symm)
+  let after : Bytes := ⟨out.val++nodes.val,by simpa only [List.length_append] using room⟩
+  refine ⟨after,?_,rfl⟩
+  unfold alloc.vec.Vec.extend_from_slice
+  rw [dif_pos (show out.length+(alloc.vec.Vec.deref nodes).length≤Usize.max from room)]
+  split
+  · rename_i s hs
+    have eq : s=alloc.vec.Vec.deref nodes := Result.ok.inj (hs.symm.trans hc')
+    subst s
+    rfl
+  · rename_i e hs
+    rw [hc'] at hs
+    cases hs
+  · rename_i hs
+    rw [hc'] at hs
+    cases hs
+
+theorem reject (out nodes : Bytes) (cap : Usize) (large : nodes.val.length>cap.val) :
+    AspisR1Padding43.append_nodes out nodes cap = ok (.Err .Parse) := by
+  rw [AspisR1Padding43.append_nodes]
+  have more : alloc.vec.Vec.len nodes > cap := by scalar_tac
+  simp only [more,if_true]
+
+/-- The bound is on the intermediate native addition, before subtraction.
+The actual six fixed slot caps and 57,607-byte output fit far below it. -/
+theorem accepts (out nodes : Bytes) (cap : Usize) (fits : nodes.val.length≤cap.val)
+    (room : out.val.length+nodes.val.length+cap.val≤Usize.max) :
+    ∃ result, AspisR1Padding43.append_nodes out nodes cap=ok (.Ok result) ∧
+      result.val=out.val++nodes.val++List.replicate (cap.val-nodes.val.length) 0#u8 := by
+  obtain ⟨after,ha,hv⟩ := extend out nodes (by omega)
+  have len : after.val.length=out.val.length+nodes.val.length := by
+    rw [hv,List.length_append]
+  have notlarge : ¬ alloc.vec.Vec.len nodes > cap := by scalar_tac
+  have add : (Usize.wrapping_add (alloc.vec.Vec.len after) cap).val=after.val.length+cap.val := by
+    rw [Usize.wrapping_add_val_eq]
+    change (after.val.length+cap.val) % UScalar.size .Usize = _
+    apply Nat.mod_eq_of_lt
+    rw [UScalar.size_def,UScalarTy.Usize_numBits_eq]
+    have max := Usize.max_succ_eq_pow
+    omega
+  have sub : (Usize.wrapping_sub (Usize.wrapping_add (alloc.vec.Vec.len after) cap)
+      (alloc.vec.Vec.len nodes)).val=out.val.length+cap.val := by
+    rw [Usize.wrapping_sub_val_eq,add]
+    change ((after.val.length+cap.val+(UScalar.size .Usize-nodes.val.length)) %
+      UScalar.size .Usize)=out.val.length+cap.val
+    have size : Usize.max+1=UScalar.size .Usize := by
+      rw [UScalar.size_def,UScalarTy.Usize_numBits_eq]
+      exact Usize.max_succ_eq_pow
+    have bound : out.val.length+cap.val<UScalar.size .Usize := by omega
+    have cb : cap.val<UScalar.size .Usize := by omega
+    have num : after.val.length+cap.val+(UScalar.size .Usize-nodes.val.length) =
+        (out.val.length+cap.val)+UScalar.size .Usize := by omega
+    rw [num,Nat.add_mod,Nat.mod_self,Nat.add_zero,Nat.mod_mod]
+    exact Nat.mod_eq_of_lt bound
+  let finalLen := Usize.wrapping_sub (Usize.wrapping_add (alloc.vec.Vec.len after) cap)
+    (alloc.vec.Vec.len nodes)
+  obtain ⟨result,hr,he⟩ := WP.spec_imp_exists
+    (alloc.vec.Vec.resize_spec core.clone.CloneU8 after finalLen 0#u8 rfl)
+  change alloc.vec.Vec.resize core.clone.CloneU8 after
+    (Usize.wrapping_sub (Usize.wrapping_add (alloc.vec.Vec.len after) cap)
+      (alloc.vec.Vec.len nodes)) 0#u8=ok result at hr
+  refine ⟨result,?_,?_⟩
+  · simp only [AspisR1Padding43.append_nodes,notlarge,if_false,ha,bind_tc_ok,lift,hr]
+  · rw [he]
+    have flen : finalLen.val=out.val.length+cap.val := sub
+    simp only [List.resize,flen,Nat.zero_le,if_true]
+    rw [List.take_of_length_le (by omega),hv]
+    congr 1
+    simp only [List.length_append]
+    congr 1
+    omega
+
+def byte (b : U8) : UInt8 := ⟨b.bv⟩
+
+def project (out : Result (core.result.Result Bytes AspisR1Padding43.Error)) :
+    Result (Except ProverCommitPublish43.Error ProverCommitPublish43.Bytes) := do
+  let out ← out
+  pure (match out with
+    | .Ok bytes => .ok (bytes.val.map byte)
+    | .Err .Parse => .error .parse
+    | .Err .Transcript => .error .transcript)
+
+/-- Concrete source helper installed into the publication byte owner; both
+branches are covered, and no vector operation or caller equality is assumed. -/
+theorem model (out nodes : Bytes) (cap : Usize)
+    (room : out.val.length+nodes.val.length+cap.val≤Usize.max) :
+    project (AspisR1Padding43.append_nodes out nodes cap) =
+      ok (ProverCommitPublish43.appendSlot (out.val.map byte)
+        ⟨.ok (nodes.val.map byte),cap.val⟩) := by
+  by_cases large : nodes.val.length>cap.val
+  · rw [reject out nodes cap large]
+    simp only [project,bind_tc_ok,ProverCommitPublish43.appendSlot,
+      bind,Except.bind,List.length_map,large,if_true]
+    rfl
+  · obtain ⟨result,hr,hv⟩ := accepts out nodes cap (by omega) room
+    rw [hr]
+    simp only [project,bind_tc_ok,ProverCommitPublish43.appendSlot,
+      bind,Except.bind,List.length_map,large,if_false]
+    rw [hv,List.map_append,List.map_append,List.map_replicate]
+    rfl
+
+#print axioms model
+
+#print axioms extend
+#print axioms reject
+#print axioms accepts
+end R1Z.ProverCommitPadding43

@@ -1,0 +1,60 @@
+import MultiproofParserRef.Funs
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeWordScan
+open Aeneas Aeneas.Std Result
+open MultiproofParserRef
+
+def wordsModel : List U8 → Bool
+  | [] => true
+  | a::b::c::d::rest =>
+      decide ((core.num.U32.from_le_bytes (Array.make 4#usize [a,b,c,d])).val < 2147483647) &&
+        wordsModel rest
+  | _ => false
+
+/-- Total recursion over arbitrary stored slices. The recurrence never
+normalizes a concrete proof-sized list. The byte-order identification with
+the frozen parser's `little` remains a separate codec lemma. -/
+theorem words_total (bytes : Slice U8) :
+    parser_reference.canonical_words bytes = ok (wordsModel bytes.val) := by
+  generalize hn : bytes.val.length = n
+  induction n using Nat.strong_induction_on generalizing bytes with
+  | h n ih =>
+    rcases bytes with ⟨xs,bound⟩
+    cases xs with
+    | nil => rw [parser_reference.canonical_words]; rfl
+    | cons a xs =>
+      cases xs with
+      | nil => rw [parser_reference.canonical_words]; rfl
+      | cons b xs =>
+        cases xs with
+        | nil => rw [parser_reference.canonical_words]; rfl
+        | cons c xs =>
+          cases xs with
+          | nil => rw [parser_reference.canonical_words]; rfl
+          | cons d xs =>
+            let tail : Slice U8 := ⟨xs, by scalar_tac⟩
+            have ht := ih xs.length (by simpa only [List.length_cons] using
+              (by omega : xs.length < (a::b::c::d::xs).length)) tail rfl
+            rw [parser_reference.canonical_words]
+            simp only [core.slice.Slice.is_empty, List.length_cons,
+              Nat.succ_ne_zero, decide_false, bind_tc_ok, Bool.false_eq_true, if_false]
+            have hb : ¬ Slice.len (⟨a::b::c::d::xs,bound⟩ : Slice U8) < 4#usize := by
+              change ¬ (a::b::c::d::xs).length < 4
+              simp only [List.length_cons]; omega
+            simp only [hb, if_false]
+            simp only [Slice.index_usize, Slice.getElem?_Usize_eq,
+              List.getElem?_cons_zero, List.getElem?_cons_succ, bind_tc_ok]
+            simp only [reference.canonical_word, lift, bind_tc_ok]
+            split
+            · simp only [core.slice.index.Slice.index,
+                core.slice.index.SliceIndexRangeFromUsizeSlice,
+                core.slice.index.SliceIndexRangeFromUsizeSlice.index]
+              simp only [show 4 ≤ (a::b::c::d::xs).length by simp; omega,
+                if_true, bind_tc_ok]
+              change parser_reference.canonical_words tail = ok _
+              simpa only [wordsModel, Bool.true_and] using ht
+            · simp_all only [wordsModel, decide_eq_false_iff_not, Bool.false_and]
+
+#print axioms words_total
+end AspisR1.MultiproofConeWordScan

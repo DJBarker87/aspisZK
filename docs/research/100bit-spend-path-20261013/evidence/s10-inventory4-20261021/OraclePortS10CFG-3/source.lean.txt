@@ -1,0 +1,58 @@
+import Mathlib.Data.List.Basic
+
+/-! A finite CFG cut certificate proves a chronological path property.
+No bytecode, mutable carrier or oracle-program equality follows from a cut. -/
+set_option autoImplicit false
+namespace AspisR1.OraclePortS10CFG
+
+inductive Path (edge : Nat → Nat → Prop) : Nat → Nat → List Nat → Prop where
+  | start (v : Nat) : Path edge v v [v]
+  | step {root src dst : Nat} {visits : List Nat} :
+      Path edge root src visits → edge src dst →
+      Path edge root dst (visits ++ [dst])
+
+def Dominates (edge : Nat → Nat → Prop) (root cut target : Nat) : Prop :=
+  ∀ visits, Path edge root target visits → cut ∈ visits
+
+theorem root_mem {edge : Nat → Nat → Prop} {root target : Nat} {visits : List Nat}
+    (path : Path edge root target visits) : root ∈ visits := by
+  induction path with
+  | start => exact List.mem_singleton_self _
+  | step path _ ih => exact List.mem_append_left _ ih
+
+theorem avoiding_mark {edge : Nat → Nat → Prop} {root cut target : Nat}
+    {visits : List Nat} (mark : Nat → Bool) (initial : mark root = true)
+    (closed : ∀ x y, edge x y → y ≠ cut → mark x = true → mark y = true)
+    (path : Path edge root target visits) (avoids : cut ∉ visits) :
+    mark target = true := by
+  induction path with
+  | start => exact initial
+  | @step src dst visits path step ih =>
+    have preceding : cut ∉ visits := fun h => avoids (List.mem_append_left _ h)
+    have last : dst ≠ cut := by
+      intro eq
+      subst dst
+      exact avoids (List.mem_append_right _ (List.mem_singleton_self cut))
+    exact closed src dst step last (ih preceding)
+
+theorem dominates_of_cut {edge : Nat → Nat → Prop} {root cut target : Nat}
+    (mark : Nat → Bool) (initial : mark root = true) (excluded : mark target = false)
+    (closed : ∀ x y, edge x y → y ≠ cut → mark x = true → mark y = true) :
+    Dominates edge root cut target := by
+  intro visits path
+  apply Classical.byContradiction
+  intro avoids
+  have yes := avoiding_mark mark initial closed path avoids
+  rw [excluded] at yes
+  cases yes
+
+theorem root_dominates (edge : Nat → Nat → Prop) (root target : Nat) :
+    Dominates edge root root target := by
+  intro visits path
+  exact root_mem path
+
+#print axioms root_mem
+#print axioms avoiding_mark
+#print axioms dominates_of_cut
+#print axioms root_dominates
+end AspisR1.OraclePortS10CFG

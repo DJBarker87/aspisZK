@@ -1,0 +1,43 @@
+/Users/dominic/ZK/.worktrees/cx-dv-twotx/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozen2Trace.lean:30:81: error: Application type mismatch: The argument
+  old
+has type
+  (eval H (dV_frozen stored tr m)).2 = true
+but is expected to have type
+  (eval H (dV_frozen2 stored tr m)).2 = true
+in the application
+  accepted_details stored tr m H old
+/Users/dominic/ZK/.worktrees/cx-dv-twotx/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozen2Trace.lean:56:10: error(lean.unknownIdentifier): Unknown identifier `Read`
+
+Note: It is not possible to treat `Read` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/cx-dv-twotx/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozen2Trace.lean:57:4: error(lean.unknownIdentifier): Unknown identifier `Read`
+
+Note: It is not possible to treat `Read` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/cx-dv-twotx/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozen2Trace.lean:58:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+H : Bytes → State
+stored : Bytes
+tr : ErasedPrefix
+m : ErasedMessage
+ha : (eval H (dV_frozen2 stored tr m)).2 = true
+a : Bytes
+hr : sorry
+x✝ :
+  ∃ p q i v,
+    OraclePortAdmission.Guard tr ∧
+      OraclePortStoredParserC4.parseReached stored tr = some p ∧
+        queries tr = some q ∧
+          OraclePortStoredDecisionDraftC4.input p q tr = some i ∧
+            LiteralOpeningView.read (typedRows p q tr) = some v ∧
+              (eval H (batch p q batch0)).2 = true ∧
+                (eval H (batch p q batch1)).2 = true ∧
+                  eval H (dV_frozen2 stored tr m) =
+                      ((eval H (batch p q batch0)).1 ++ (eval H (checkpoint stored p q tr i v)).1 ++
+                          (eval H (batch p q batch1)).1,
+                        true) ∧
+                    eval H (dV_frozen stored tr m) =
+                      ((eval H (batch p q batch0)).1 ++ (eval H (batch p q batch1)).1, true)
+⊢ sorry
+'AspisR1.OraclePortFrozen2.accepted_trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/Users/dominic/ZK/.worktrees/cx-dv-twotx/docs/research/100bit-spend-path-20261013/lean/OraclePortFrozen2Trace.lean:73:14: error(lean.unknownIdentifier): Unknown constant `old_read`
+'AspisR1.OraclePortFrozen2.six_inserted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

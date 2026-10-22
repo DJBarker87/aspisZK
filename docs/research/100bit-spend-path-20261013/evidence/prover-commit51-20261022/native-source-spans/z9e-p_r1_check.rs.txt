@@ -1,0 +1,25 @@
+pub fn p_r1_check(ch: &R1PublicChallenges) -> (bool, R1CheckTimes) {
+    let mut tm = R1CheckTimes::default();
+    install_quiet_hook();
+    QUIET.with(|q| q.set(true));
+    let verdict = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| -> Option<bool> {
+        let t = Instant::now();
+        let p = public_data(ch)?;
+        tm.public_data = t.elapsed().as_secs_f64();
+        let t = Instant::now();
+        let (cert, _) = emit(&p);
+        tm.emit = t.elapsed().as_secs_f64();
+        let cert = cert?;
+        let t = Instant::now();
+        let ln = Lanes::new(&p.cx);
+        let (mut pb, cc) = convert(&p, &cert, &ln)?;
+        extracted_builders(&p, &cert, &ln, &mut pb)?;
+        tm.builders = t.elapsed().as_secs_f64();
+        let t = Instant::now();
+        let ok = ck::check(&pb, &cc);
+        tm.check = t.elapsed().as_secs_f64();
+        Some(ok)
+    }));
+    QUIET.with(|q| q.set(false));
+    (matches!(verdict, Ok(Some(true))), tm)
+}

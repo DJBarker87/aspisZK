@@ -1,0 +1,160 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitLedger36.lean:57:34: error: Tactic `assumption` failed
+
+case h_1
+path : Path
+a : Action
+s : State
+x✝ : Option ℕ
+e✝ : ℕ
+heq✝ : a.fault = some e✝
+⊢ (if path ∈ (inject a s).ledger then
+          (Except.error IOError.alreadyExists,
+            { history := (inject a s).history ++ [(Kind.create, Except.error IOError.alreadyExists)],
+              cursor := (inject a s).cursor, ledger := (inject a s).ledger })
+        else
+          (Except.error (IOError.other e✝),
+            { history := (inject a s).history ++ [(Kind.create, Except.error (IOError.other e✝))],
+              cursor := (inject a s).cursor, ledger := (inject a s).ledger })).1 =
+      Except.error IOError.alreadyExists ↔
+    path ∈ (inject a s).ledger
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitLedger36.lean:58:2: error: unsolved goals
+case h_2.none
+path : Path
+a : Action
+s : State
+x✝ : Option ℕ
+heq✝ : a.fault = none
+⊢ (if path ∈ (inject a s).ledger then
+          (Except.error IOError.alreadyExists,
+            { history := (inject a s).history ++ [(Kind.create, Except.error IOError.alreadyExists)],
+              cursor := (inject a s).cursor, ledger := (inject a s).ledger })
+        else
+          (Except.ok (),
+            { history := (inject a s).history ++ [(Kind.create, Except.ok ())], cursor := (inject a s).cursor,
+              ledger := path :: (inject a s).ledger })).1 =
+      Except.error IOError.alreadyExists ↔
+    path ∈ (inject a s).ledger
+
+case h_2.some
+path : Path
+a : Action
+s : State
+x✝ : Option ℕ
+heq✝ : a.fault = none
+val✝ : ℕ
+⊢ (if path ∈ (inject a s).ledger then
+          (Except.error IOError.alreadyExists,
+            { history := (inject a s).history ++ [(Kind.create, Except.error IOError.alreadyExists)],
+              cursor := (inject a s).cursor, ledger := (inject a s).ledger })
+        else
+          (Except.ok (),
+            { history := (inject a s).history ++ [(Kind.create, Except.ok ())], cursor := (inject a s).cursor,
+              ledger := path :: (inject a s).ledger })).1 =
+      Except.error IOError.alreadyExists ↔
+    path ∈ (inject a s).ledger
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitLedger36.lean:57:23: warning: This simp argument is unused:
+  true_iff
+
+Hint: Omit it from the simp argument list.
+  simp only [record,̵ ̵t̵r̵u̵e̵_̵i̵f̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitLedger36.lean:65:4: error: Type mismatch
+  h
+has type
+  old ∈ (inject a s).ledger
+but is expected to have type
+  old ∈
+    (have t := inject a s;
+        if path ∈ t.ledger then record Kind.create (Except.error IOError.alreadyExists) t
+        else record Kind.create (Except.error (IOError.other e✝)) t).2.ledger
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitLedger36.lean:67:14: error: Type mismatch
+  List.mem_cons_of_mem ?m.79 h
+has type
+  old ∈ ?m.79 :: (inject a s).ledger
+but is expected to have type
+  old ∈
+    (have t := inject a s;
+        if path ∈ t.ledger then record Kind.create (Except.error IOError.alreadyExists) t
+        else
+          record Kind.create (Except.ok ())
+            { history := t.history, cursor := t.cursor, ledger := path :: t.ledger }).2.ledger
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitLedger36.lean:68:16: error: Type mismatch
+  h
+has type
+  old ∈ (inject a s).ledger
+but is expected to have type
+  old ∈
+    (have t := inject a s;
+        if path ∈ t.ledger then record Kind.create (Except.error IOError.alreadyExists) t
+        else
+          record Kind.create (Except.ok ())
+            { history := t.history, cursor := t.cursor, ledger := path :: t.ledger }).2.ledger
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitLedger36.lean:75:4: error: Dependent elimination failed: Failed to solve equation
+  Except.ok () =
+    (have t := inject a s;
+      if path ∈ t.ledger then record Kind.create (Except.error IOError.alreadyExists) t
+      else record Kind.create (Except.error (IOError.other e✝)) t).1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitLedger36.lean:76:2: error: unsolved goals
+case h_2.none
+path : Path
+a : Action
+s : State
+x✝ : Option ℕ
+heq✝ : a.fault = none
+ok :
+  (if path ∈ (inject a s).ledger then
+        (Except.error IOError.alreadyExists,
+          { history := (inject a s).history ++ [(Kind.create, Except.error IOError.alreadyExists)],
+            cursor := (inject a s).cursor, ledger := (inject a s).ledger })
+      else
+        (Except.ok (),
+          { history := (inject a s).history ++ [(Kind.create, Except.ok ())], cursor := (inject a s).cursor,
+            ledger := path :: (inject a s).ledger })).1 =
+    Except.ok ()
+⊢ path ∈
+    (if path ∈ (inject a s).ledger then
+          (Except.error IOError.alreadyExists,
+            { history := (inject a s).history ++ [(Kind.create, Except.error IOError.alreadyExists)],
+              cursor := (inject a s).cursor, ledger := (inject a s).ledger })
+        else
+          (Except.ok (),
+            { history := (inject a s).history ++ [(Kind.create, Except.ok ())], cursor := (inject a s).cursor,
+              ledger := path :: (inject a s).ledger })).2.ledger
+
+case h_2.some
+path : Path
+a : Action
+s : State
+x✝ : Option ℕ
+heq✝ : a.fault = none
+val✝ : ℕ
+ok :
+  (if path ∈ (inject a s).ledger then
+        (Except.error IOError.alreadyExists,
+          { history := (inject a s).history ++ [(Kind.create, Except.error IOError.alreadyExists)],
+            cursor := (inject a s).cursor, ledger := (inject a s).ledger })
+      else
+        (Except.ok (),
+          { history := (inject a s).history ++ [(Kind.create, Except.ok ())], cursor := (inject a s).cursor,
+            ledger := path :: (inject a s).ledger })).1 =
+    Except.ok ()
+⊢ path ∈
+    (if path ∈ (inject a s).ledger then
+          (Except.error IOError.alreadyExists,
+            { history := (inject a s).history ++ [(Kind.create, Except.error IOError.alreadyExists)],
+              cursor := (inject a s).cursor, ledger := (inject a s).ledger })
+        else
+          (Except.ok (),
+            { history := (inject a s).history ++ [(Kind.create, Except.ok ())], cursor := (inject a s).cursor,
+              ledger := path :: (inject a s).ledger })).2.ledger
+'R1Z.ProverCommitLedger36.alreadyExists_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedger36.create_preserves' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedger36.created_present' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedger36.chain_preserves' does not depend on any axioms
+'R1Z.ProverCommitLedger36.reservation_retained' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedger36.duplicate_path' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedger36.fail_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLedger36.failure_replay' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

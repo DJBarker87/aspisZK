@@ -1,0 +1,6 @@
+import AspisR1CurrentCaller.Types
+import S4TenQueryFieldResultsRootV1
+import S4ConcreteKernelOpsRootV1
+#print AspisR1CurrentCaller.verifier.Error.instDiscriminant
+#print axioms AspisR1S4TenQueryFieldResultsRootV1.ten_queries_have_field_results
+#print axioms AspisR1FastDotsConcreteKernelOpsRootV1.original_four_total_and_field_results

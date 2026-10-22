@@ -1,0 +1,128 @@
+import AspisR1BinaryGroup46.Funs
+import R1Z.ProverCommitProgramLog46
+/-! Binary multiproof group arithmetic, separately checked against the native
+generate and node_count group bodies. Native map indexing remains a caller
+support obligation rather than a total std lookup assumption. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitBinaryGroup46
+open Aeneas Aeneas.Std Result
+abbrev Group := AspisR1BinaryGroup46.Group
+
+def group (a : U32) (b : Option U32) : Group :=
+  let parent := U32.wrapping_shr a 1#u32
+  if b = some (a ^^^ 1#u32) then ⟨parent,2#usize,none⟩
+    else ⟨parent,1#usize,some (a ^^^ 1#u32)⟩
+
+theorem group_exact (a : U32) (b : Option U32) :
+    AspisR1BinaryGroup46.reference a b = ok (group a b) := by
+  cases b with
+  | none => rfl
+  | some b =>
+    by_cases h : b = a ^^^ 1#u32
+    · simp [AspisR1BinaryGroup46.reference,group,h,lift]
+    · simp [AspisR1BinaryGroup46.reference,group,h,lift]
+
+theorem parent_val (a : U32) : (U32.wrapping_shr a 1#u32).val = a.val/2 := by
+  change (a.bv.ushiftRight _).toNat = _
+  simp [BitVec.toNat_ushiftRight,Nat.shiftRight_eq_div_pow]
+
+/-- No third strictly increasing child can share a binary parent. This is
+why a two-lookahead native per-group certificate frames the whole suffix. -/
+theorem no_third_child (a b c : Nat) (ab : a<b) (bc : b<c)
+    (same : a/2=b/2) : c/2 ≠ a/2 := by omega
+
+theorem group_count (a : U32) (b : Option U32) :
+    (group a b).sibling.toList.length = 2-(group a b).consumed.val := by
+  unfold group
+  split <;> rfl
+
+/-- List reference, consuming one or two occupied nodes per parent. -/
+def layer : List U32 → List U32 × List U32
+  | [] => ([],[])
+  | a::tail =>
+    let g := group a tail.head?
+    let rest := layer (tail.drop (g.consumed.val-1))
+    (g.parent::rest.1,g.sibling.toList ++ rest.2)
+termination_by xs => xs.length
+decreasing_by
+  have h := List.length_drop_le tail (group a tail.head?).consumed.val
+  simp only [List.length_drop,List.length_cons]
+  omega
+
+def countLayer : List U32 → List U32 × Nat
+  | [] => ([],0)
+  | a::tail =>
+    let g := group a tail.head?
+    let rest := countLayer (tail.drop (g.consumed.val-1))
+    (g.parent::rest.1,2-g.consumed.val+rest.2)
+termination_by xs => xs.length
+decreasing_by
+  simp only [List.length_drop,List.length_cons]
+  omega
+
+theorem layer_count (xs : List U32) :
+    (countLayer xs).1=(layer xs).1 ∧ (countLayer xs).2=(layer xs).2.length := by
+  induction xs using List.length_induction with
+  | nil => exact ⟨rfl,rfl⟩
+  | cons a tail ih =>
+    have hlen : (tail.drop ((group a tail.head?).consumed.val-1)).length < (a::tail).length := by
+      simp only [List.length_drop,List.length_cons];omega
+    have h := ih _ hlen
+    rw [layer,countLayer]
+    constructor
+    · exact congrArg (List.cons (group a tail.head?).parent) h.1
+    · rw [List.length_append,← h.2,group_count]
+
+def levels (node : Nat → U32 → R1Z.ProverCommitPublish43.Bytes) :
+    Nat → Nat → List U32 → R1Z.ProverCommitPublish43.Bytes
+  | 0,_,_ => []
+  | n+1,depth,xs =>
+    let step := layer xs
+    (step.2.map (node depth)).flatten ++ levels node n (depth+1) step.1
+
+def count : Nat → List U32 → Nat
+  | 0,_ => 0
+  | n+1,xs => let step := countLayer xs;step.2+count n step.1
+
+theorem levels_length (node : Nat → U32 → R1Z.ProverCommitPublish43.Bytes)
+    (nodeLength : ∀ d i, (node d i).length=32) (n depth : Nat) (xs : List U32) :
+    (levels node n depth xs).length = 32*count n xs := by
+  have flatlen (d : Nat) (keys : List U32) :
+      ((keys.map (node d)).flatten).length=32*keys.length := by
+    induction keys with
+    | nil => rfl
+    | cons k ks ih =>
+      simp only [List.map_cons,List.flatten_cons,List.length_append,nodeLength,ih,List.length_cons]
+      omega
+  induction n generalizing depth xs with
+  | zero => rfl
+  | succ n ih =>
+    rw [levels,List.length_append,flatlen,ih,count]
+    have h := layer_count xs
+    rw [h.1,h.2,Nat.mul_add]
+
+/-- Both early rejection and the final byte/count guard are retained. -/
+def generate (node : Nat → U32 → R1Z.ProverCommitPublish43.Bytes)
+    (wellFormed : List U32 → Bool) (xs : List U32) : Option R1Z.ProverCommitPublish43.Bytes :=
+  if wellFormed xs then
+    let out := levels node 18 0 xs
+    if out.length = 32*count 18 xs then some out else none
+  else none
+
+theorem generate_exact (node : Nat → U32 → R1Z.ProverCommitPublish43.Bytes)
+    (nodeLength : ∀ d i, (node d i).length=32)
+    (wellFormed : List U32 → Bool) (xs : List U32) :
+    generate node wellFormed xs =
+      if wellFormed xs then some (levels node 18 0 xs) else none := by
+  unfold generate
+  rw [levels_length node nodeLength]
+  simp only [ite_true]
+
+#print axioms group_exact
+#print axioms parent_val
+#print axioms no_third_child
+#print axioms group_count
+#print axioms layer_count
+#print axioms levels_length
+#print axioms generate_exact
+end R1Z.ProverCommitBinaryGroup46

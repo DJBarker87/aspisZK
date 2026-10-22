@@ -1,0 +1,105 @@
+import CheckpointBytes3Reader
+import OraclePortCkptAbi5Weights
+
+/-! Kernel content refinement for sequential K sections. The raw reader and
+its failure remain explicit; scalar decoding is identified with C5 on the
+actual fixed-width array, for all inputs and all rejection positions. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CheckpointBytes4Sections
+open Aeneas Aeneas.Std Result
+open AspisR1Stage2 CheckpointBytes3Reader
+abbrev K := aspis_core.field.QM31
+abbrev ReadK := verifier.Reader → Result (core.result.Result K verifier.Error × verifier.Reader)
+
+def c5ReadK (r : verifier.Reader) :
+    Result (core.result.Result K verifier.Error × verifier.Reader) := do
+  let (b,out) ← raw 16#usize r
+  ok (optionK ((ExactLeafFieldCodec.decodeQM31 (MultiproofConeCanonical.bytesOf b.val)).map
+    CheckpointBytes3KDecode.rawK),out)
+
+/-- All outcomes, with no bounds/canonicality/allocator hypothesis. -/
+theorem read_k_identification (r : verifier.Reader) : readK r = c5ReadK r := by
+  unfold readK c5ReadK
+  congr 1
+  funext pair
+  rcases pair with ⟨b,out⟩
+  rw [CheckpointBytes3KDecode.decode_k_identification (Array.to_slice b) b.property]
+  rfl
+
+/-- Explicit short circuit: an Err never invokes the suffix. -/
+def readList (read : ReadK) : Nat → verifier.Reader →
+    Result (core.result.Result (List K × verifier.Reader) verifier.Error)
+  | 0, r => ok (.Ok ([],r))
+  | n+1, r => do
+      let (value,out) ← read r
+      match value with
+      | .Err e => ok (.Err e)
+      | .Ok x => do
+          let rest ← readList read n out
+          match rest with
+          | .Err e => ok (.Err e)
+          | .Ok (xs,last) => ok (.Ok (x::xs,last))
+
+theorem read_list_identification (n : Nat) (r : verifier.Reader) :
+    readList readK n r = readList c5ReadK n r := by
+  have same : readK = c5ReadK := funext read_k_identification
+  rw [same]
+
+/-- A successful section has exactly the requested number of values. -/
+theorem read_list_length (read : ReadK) (n : Nat) (r last : verifier.Reader)
+    (xs : List K) (success : readList read n r = ok (.Ok (xs,last))) :
+    xs.length = n := by
+  induction n generalizing r xs with
+  | zero =>
+    have eq := core.result.Result.Ok.inj (Result.ok.inj success)
+    have eq := congrArg Prod.fst eq
+    simp only at eq
+    rw [← eq]
+    rfl
+  | succ n ih =>
+    unfold readList at success
+    obtain ⟨⟨value,out⟩,_,tail⟩ := OraclePortCkptAbiTry.bind_success _ _ _ success
+    cases value with
+    | Err e => cases tail
+    | Ok x =>
+      dsimp only at tail
+      obtain ⟨rest,run,tail⟩ := OraclePortCkptAbiTry.bind_success _ _ _ tail
+      cases rest with
+      | Err e => cases tail
+      | Ok pair =>
+        rcases pair with ⟨ys,finish⟩
+        have eq := core.result.Result.Ok.inj (Result.ok.inj tail)
+        have ex := congrArg Prod.fst eq
+        have er := congrArg Prod.snd eq
+        dsimp only at ex er
+        subst xs last
+        simp only [List.length_cons,ih out ys run]
+
+/-- Mutable source-loop content. `next` and its writeback closure are the
+imported std operations, rather than an assumed vector assignment law. -/
+def weightLoop (read : ReadK) : Nat → verifier.Reader → core.slice.iter.IterMut K →
+    Result (core.result.Result (core.slice.iter.IterMut K × verifier.Reader) verifier.Error)
+  | 0, r, it => ok (.Ok (it,r))
+  | n+1, r, it => do
+      let (slot,rest,back) ← core.slice.iter.IteratorIterMut.next it
+      match slot with
+      | none => fail .panic
+      | some _ => do
+          let (value,out) ← read r
+          match value with
+          | .Err e => ok (.Err e)
+          | .Ok x => weightLoop read n out (back rest (some x))
+
+theorem weight_loop_identification (n : Nat) (r : verifier.Reader)
+    (it : core.slice.iter.IterMut K) :
+    weightLoop readK n r it = weightLoop c5ReadK n r it := by
+  have same : readK = c5ReadK := funext read_k_identification
+  rw [same]
+
+#print axioms read_k_identification
+#print axioms read_list_identification
+#print axioms read_list_length
+#print axioms weight_loop_identification
+end AspisR1.CheckpointBytes4Sections
+end

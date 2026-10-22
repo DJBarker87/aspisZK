@@ -1,0 +1,248 @@
+{
+  "schema": "checkpoint-abi4-precise-remainder-v1",
+  "source_pins": [
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi2Reached.lean",
+      "sha256": "afe03f7672b1ff0516ea1a56a4914debd6f0137187b53a39dcb9653767e1af1f"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiSourceFields.lean",
+      "sha256": "a1dc0b134bcbad497b87635c6afee3d8e9b85836c8404a7120e9c5494142e552"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbiSourceBacking.lean",
+      "sha256": "9698fd2a4116cafb8b0b2d492b99d3ec0c81a99386d4ecd1475b4c0c224bdade"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi3Sections.lean",
+      "sha256": "c8082293698536536dc9c30454d63dbee2366cb9dc863c06300f1d940ed97971"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi2Extracted/Funs.lean",
+      "sha256": "d8243cb4197e83ab368b0bc18d3d072ad3361239c7a21c8316366c27954b7fbf"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/OraclePortCheckpointAbiC5.lean",
+      "sha256": "fc3ea258fc6fd8bbf97bf67247b588083e1e93e725770e4c92d57955fcb8249d"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/OraclePortCheckpointResumeC5.lean",
+      "sha256": "12703c7128cec0520bad915ae07d6e19eda95f8910464f0f2f863d7a35fc4f65"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/OraclePortCheckpointStateC3.lean",
+      "sha256": "a80fb4bf84e15a8c09da80713195793b8f9698fb47ee496c45f369b3558b9c31"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/OraclePortFrozenOrderDecision.lean",
+      "sha256": "4df198bb9020bc009fe0ecdb5c4486028bb5834595dbbe4b611882dbbf4c4658"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/OraclePortFrozenOrderJoin.lean",
+      "sha256": "b02edd7ead9f4654af7e71255ef2b553b07ace21bdf28878de17920da8fba9ad"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/OraclePortFrozenOrderHeadline.lean",
+      "sha256": "0b8e11f733c57b46d42f0a729a89a71a9966c39a7ddf271bc49ea4866c5163eb"
+    }
+  ],
+  "fields": [
+    {
+      "name": "header",
+      "offset": 0,
+      "width": 16,
+      "source": "variant=S2; next=10; status=1; reserved=0",
+      "provenance_required": "reached TX1 split guard and query-loop next",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "proofHash",
+      "offset": 16,
+      "width": 32,
+      "source": "digest(proof)",
+      "provenance_required": "entry proof suffix identity",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "publicHash",
+      "offset": 48,
+      "width": 32,
+      "source": "digest(public)",
+      "provenance_required": "borrowed stage1 / reconstructed stage2 bytes; P2-prime",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "state",
+      "offset": 80,
+      "width": 32,
+      "source": "p.state",
+      "provenance_required": "Prepared::new t.state; full transcript step order",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "root0",
+      "offset": 112,
+      "width": 32,
+      "source": "p.roots[0]",
+      "provenance_required": "semantic Verified roots",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "root1",
+      "offset": 144,
+      "width": 32,
+      "source": "p.roots[1]",
+      "provenance_required": "semantic Verified roots",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "gamma",
+      "offset": 176,
+      "width": 32,
+      "source": "p.gamma",
+      "provenance_required": "Prepared::new scalar(27,y1,true)",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "kappa",
+      "offset": 208,
+      "width": 32,
+      "source": "p.kappa",
+      "provenance_required": "Prepared::new scalar(28,inactive,false)",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "alpha0",
+      "offset": 240,
+      "width": 32,
+      "source": "p.alpha[0]",
+      "provenance_required": "Prepared::new scalar(29,round0,false)",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "alpha1",
+      "offset": 272,
+      "width": 32,
+      "source": "p.alpha[1]",
+      "provenance_required": "S2 scalar(30,folded_root ++ round1,false)",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "rho",
+      "offset": 304,
+      "width": 16,
+      "source": "p.rho",
+      "provenance_required": "scalar_k(row+1,[]) and exact K representation",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "queries",
+      "offset": 320,
+      "width": 88,
+      "source": "p.queries",
+      "provenance_required": "t.queries(row,final_message); ordered q/unique/bounded",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "semanticAlpha",
+      "offset": 408,
+      "width": 160,
+      "source": "p.semantic_alpha",
+      "provenance_required": "sem.alpha and all ten K encodings",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "coordinates",
+      "offset": 568,
+      "width": 64,
+      "source": "p.z[0].x,y,p.z[1].x,y",
+      "provenance_required": "sem.z in exact x0,y0,x1,y1 order",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "claim",
+      "offset": 632,
+      "width": 32,
+      "source": "p.claim",
+      "provenance_required": "prepared_claim; actual powers/dots/semantic values",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "rhs",
+      "offset": 664,
+      "width": 32,
+      "source": "a.rhs",
+      "provenance_required": "Accumulator::new and query_values steps 0..10",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "power",
+      "offset": 696,
+      "width": 16,
+      "source": "a.power",
+      "provenance_required": "initial ONE and reached rho^10",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "weights",
+      "offset": 712,
+      "width": 1024,
+      "source": "a.weights",
+      "provenance_required": "64 initial ZERO; lazy pending accumulation; pending.finish",
+      "complete_source_to_C5": false
+    },
+    {
+      "name": "checksum",
+      "offset": 1736,
+      "width": 32,
+      "source": "digest(domain ++ body)",
+      "provenance_required": "immutable 1736 bytes and exact ordered hash call",
+      "complete_source_to_C5": false
+    }
+  ],
+  "remaining": [
+    {
+      "id": "reader-adoption",
+      "required": "Instantiate resumeWithOps operations by actual emitted raw/e/k/query/semantic/weights operations. Construct fields and offsets with exact rejection Results, checked bounds and Box/allocation; fixed_composition atomic equalities are not discharged.",
+      "local_progress": "Actual std shared interval and mutable next/back content laws; strict extracted decoder canonicality only."
+    },
+    {
+      "id": "extracted-byte-C5",
+      "required": "Map U8/U32 and four/eight raw limbs to exact fields, identify all 18 body blocks plus checksum with body_byte and C5.encode at every bounded index. The pass-2 extraction is the sparse Rust reference, not a newly extracted full checkpoint/resume caller.",
+      "local_progress": "Successful strict reference decoding yields canonical limbs; arbitrary writer raw limbs still cannot be quotiented without domain proof."
+    },
+    {
+      "id": "reached-prepared",
+      "required": "Build Context from actual Rust sem/transcript/claims and prove it equals model prepared for accepted_inputs p,q,i. Context remains universally arbitrary in accepted_reference_resume.",
+      "owners": "S1/S5/S9 preparation and transcript; checkpoint composes, does not redefine their models."
+    },
+    {
+      "id": "reached-accumulator",
+      "required": "Initial 64 ZERO/rhs ZERO/power ONE/next0; simulate query_loop until next10 including lazy BatchedWeights, geometry, errors; prove pending.finish gives C3.write(model i.data rho q).accumulator.",
+      "owners": "S7 query accumulation; S8/factored row/field owners; checkpoint composition."
+    },
+    {
+      "id": "allocation",
+      "required": "For accepted-run refinement, connect successful try_reserve_exact/resize and Box construction to exact list contents and prove allocation errors cannot reach acceptance; unconditional allocator availability is not required. A separate claim about physical capacity/allocator/Drop needs richer operational state; content-only std state cannot recover requested capacity.",
+      "status": "not supplied by existing std content model"
+    },
+    {
+      "id": "callers",
+      "required": "Typed frozen TX1/Pool TX2 source Calls, concrete Site/Signature, returned-state dependencies, ordinary errors, all six checkpoint reads interleaved after batch0 and before batch1. Current dV_frozen has no checkpoint stage: establish complete-program read accounting/transport before claiming AcceptedVerifierJoin.",
+      "status": "source/CFG observation only"
+    },
+    {
+      "id": "two-pass",
+      "required": "AcceptedRunJoin.annotated exact enriched two-pass observation, or independent enrichment verdict stability plus raw join.",
+      "status": "open; not implied by a successful fixture, writer proof, or single-pass result"
+    },
+    {
+      "id": "runtime",
+      "required": "Same account snapshot/proof suffix/public reconstruction and stage1 checkpoint adoption; P2/P2-prime retained.",
+      "status": "separate unchanged obligation"
+    }
+  ],
+  "complete_checkpoint_cone": false,
+  "accepted_run_join": false,
+  "headline_premises_removed": 0
+}

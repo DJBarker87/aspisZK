@@ -1,0 +1,145 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:11:17: warning: Could not generate mvcgen spec for AspisR1.MultiproofConeLeaf.digest_eq_spec: (kernel) constant has already been declared 'AspisR1.MultiproofConeLeaf.digest_eq_spec.mvcgen_spec'
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:29:28: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 16
+  0 ≤ d ≤ 4294967295
+  0 ≤ c ≤ 14
+  c - e ≤ -1
+where
+ c := ↑(↑s.n - 1)
+ d := ↑↑i1
+ e := ↑Usize.max
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:29:28: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 16
+  0 ≤ d ≤ 4294967295
+  0 ≤ c ≤ 14
+  c - e ≤ -1
+where
+ c := ↑(↑s.n - 1)
+ d := ↑↑i1
+ e := ↑Usize.max
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:29:28: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ e ≤ 4294967295
+  d ≥ 16
+  0 ≤ c ≤ 4294967295
+  c - e ≤ -1
+  2 ≤ b ≤ 16
+  b - d ≤ 0
+where
+ b := ↑↑i2
+ c := ↑↑(↑s.idx)[↑s.n - 1]
+ d := ↑Usize.max
+ e := ↑↑index
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:29:28: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 1
+where
+ b := ↑Usize.max
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:28:52: warning: This simp argument is unused:
+  List.getElem?_eq_getElem
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵n̵e̵x̵t̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵]̵[̲n̲e̲x̲t̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲!̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲?̲_̲g̲e̲t̲D̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:62:28: error: Application type mismatch: The argument
+  front
+has type
+  (view s 0 ↑s.n).reverse = cell s (↑s.n - 1) :: (view s 0 (↑s.n - 1)).reverse
+but is expected to have type
+  (view s 0 ↑s.n).reverse = (↑(↑s.idx)[↑s.n - 1]!, leaf) :: (view s 0 (↑s.n - 1)).reverse
+in the application
+  congrArg some front
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:68:6: error: 'change' tactic failed, pattern
+  (view { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := s.n, «at» := s.at } 0 (↑s.n + 1)).reverse = ?m.224
+is not definitionally equal to target
+  some
+      (view { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := UScalar.ofNat (↑s.n + 1) ⋯, «at» := s.at } 0
+          ↑(UScalar.ofNat (↑s.n + 1) ⋯)).reverse =
+    some ((↑index, leaf) :: (↑(↑s.idx)[↑s.n - 1]!, (↑s.val)[↑s.n - 1]!) :: (view s 0 (↑s.n - 1)).reverse)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:78:4: error: Type mismatch
+  Eq.trans (write_cell s s.n index leaf s.at bound 0 (Decidable.byContradiction fun a => next_content._proof_6 s a))
+    (if_pos (Eq.symm zero))
+has type
+  cell { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := s.n, «at» := s.at } 0 = (↑index, leaf)
+but is expected to have type
+  Option.map (fun t => (List.map (fun j => cell t j) (List.range ↑t.n)).reverse)
+      (if 0 < 0 ∧ (↑s.idx)[0 - 1]! = index then if (↑s.val)[0 - 1]! = leaf then some s else none
+      else some { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := UScalar.ofNat 1 ⋯, «at» := s.at }) =
+    some [(↑index, leaf)]
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:61:26: warning: This simp argument is unused:
+  eq_self_iff_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵i̵g̵e̵s̵t̵,̵e̵q̵_̵s̵e̵l̵f̵_̵i̵f̵f̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵]̵[̲d̲i̲g̲e̲s̲t̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:74:20: warning: This simp argument is unused:
+  not_lt.mpr (by omega : s.n.val ≤ 0)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵x̵t̵,̵n̵o̵t̵_̵l̵t̵.̵m̵p̵r̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵ ̵:̵ ̵s̵.̵n̵.̵v̵a̵l̵≤̵0̵)̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵z̵e̵r̵o̵,̵v̵i̵e̵w̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵r̵e̵v̵e̵r̵s̵e̵_̵n̵i̵l̵,̵i̵n̵s̵e̵r̵t̵]̵[̲n̲e̲x̲t̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲,̲ ̲z̲e̲r̲o̲,̲ ̲v̲i̲e̲w̲,̲ ̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲_̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲r̲e̲v̲e̲r̲s̲e̲_̲n̲i̲l̲,̲ ̲i̲n̲s̲e̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:74:54: warning: This simp argument is unused:
+  false_and
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵x̵t̵,̵n̵o̵t̵_̵l̵t̵.̵m̵p̵r̵[̲n̲e̲x̲t̲,̲ ̲n̲o̲t̲_̲l̲t̲.̲m̲p̲r̲ (by omega : s̵.̵n̵.̵v̵a̵l̵≤̵0̵)̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵z̵e̵r̵o̵,̵v̵i̵e̵w̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵r̵e̵v̵e̵r̵s̵e̵_̵n̵i̵l̵,̵i̵n̵s̵e̵r̵t̵]̵s̲.̲n̲.̲v̲a̲l̲ ̲≤̲ ̲0̲)̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲,̲ ̲z̲e̲r̲o̲,̲ ̲v̲i̲e̲w̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲r̲e̲v̲e̲r̲s̲e̲_̲n̲i̲l̲,̲ ̲i̲n̲s̲e̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:74:64: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵x̵t̵,̵n̵o̵t̵_̵l̵t̵.̵m̵p̵r̵[̲n̲e̲x̲t̲,̲ ̲n̲o̲t̲_̲l̲t̲.̲m̲p̲r̲ (by omega : s̵.̵n̵.̵v̵a̵l̵≤̵0̵)̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵z̵e̵r̵o̵,̵v̵i̵e̵w̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵r̵e̵v̵e̵r̵s̵e̵_̵n̵i̵l̵,̵i̵n̵s̵e̵r̵t̵]̵s̲.̲n̲.̲v̲a̲l̲ ̲≤̲ ̲0̲)̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲,̲ ̲z̲e̲r̲o̲,̲ ̲v̲i̲e̲w̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲r̲e̲v̲e̲r̲s̲e̲_̲n̲i̲l̲,̲ ̲i̲n̲s̲e̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:75:6: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵x̵t̵,̵n̵o̵t̵_̵l̵t̵.̵m̵p̵r̵[̲n̲e̲x̲t̲,̲ ̲n̲o̲t̲_̲l̲t̲.̲m̲p̲r̲ (by omega : s̵.̵n̵.̵v̵a̵l̵≤̵0̵)̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵z̵e̵r̵o̵,̵v̵i̵e̵w̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵r̵e̵v̵e̵r̵s̵e̵_̵n̵i̵l̵,̵i̵n̵s̵e̵r̵t̵]̵s̲.̲n̲.̲v̲a̲l̲ ̲≤̲ ̲0̲)̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲z̲e̲r̲o̲,̲ ̲v̲i̲e̲w̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲_̲z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲r̲e̲v̲e̲r̲s̲e̲_̲n̲i̲l̲,̲ ̲i̲n̲s̲e̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:76:15: warning: This simp argument is unused:
+  List.range_one
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵_̵o̵n̵e̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵a̵d̵d̵,̵L̵i̵s̵t̵.̵r̵e̵v̵e̵r̵s̵e̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲a̲d̲d̲,̲ ̲L̲i̲s̲t̲.̲r̲e̲v̲e̲r̲s̲e̲_̲s̲i̲n̲g̲l̲e̲t̲o̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:76:30: warning: This simp argument is unused:
+  List.map_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵_̵o̵n̵e̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵a̵d̵d̵,̵L̵i̵s̵t̵.̵r̵e̵v̵e̵r̵s̵e̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲_̲o̲n̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲a̲d̲d̲,̲ ̲L̲i̲s̲t̲.̲r̲e̲v̲e̲r̲s̲e̲_̲s̲i̲n̲g̲l̲e̲t̲o̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:76:44: warning: This simp argument is unused:
+  List.map_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵_̵o̵n̵e̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵a̵d̵d̵,̵L̵i̵s̵t̵.̵r̵e̵v̵e̵r̵s̵e̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲_̲o̲n̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲a̲d̲d̲,̲ ̲L̲i̲s̲t̲.̲r̲e̲v̲e̲r̲s̲e̲_̲s̲i̲n̲g̲l̲e̲t̲o̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:76:70: warning: This simp argument is unused:
+  List.reverse_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵_̵o̵n̵e̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵a̵d̵d̵,̵L̵i̵s̵t̵.̵r̵e̵v̵e̵r̵s̵e̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲_̲o̲n̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲a̲d̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConeLeafContent.step_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLeafContent.view_snoc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLeafContent.next_content' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

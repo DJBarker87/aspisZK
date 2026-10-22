@@ -1,0 +1,47 @@
+import MultiproofConeCanonical
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeCanonicalAppend
+open AspisV8R19.DuplexFrames
+open OraclePortCompactDraft
+open MultiproofConeCanonical
+
+/-- Word-aligned section boundaries preserve exactly the frozen canonical
+predicate; no comparison crosses a salt or framing boundary. -/
+theorem canonical_append (prefix suffix : Bytes) (aligned : prefix.length % 4 = 0) :
+    canonical (prefix ++ suffix) ↔ canonical prefix ∧ canonical suffix := by
+  generalize hn : prefix.length = n
+  induction n using Nat.strong_induction_on generalizing prefix with
+  | h n ih =>
+    cases prefix with
+    | nil => simp [canonical]
+    | cons a xs =>
+      cases xs with
+      | nil => simp at aligned
+      | cons b xs =>
+        cases xs with
+        | nil => simp at aligned
+        | cons c xs =>
+          cases xs with
+          | nil => simp at aligned
+          | cons d xs =>
+            have tailAligned : xs.length % 4 = 0 := by
+              simp only [List.length_cons] at aligned
+              omega
+            have tail := ih xs.length (by simp only [List.length_cons] at hn; omega)
+              xs tailAligned rfl
+            simp only [List.cons_append, canonical_four]
+            rw [tail]
+            simp only [and_assoc]
+
+theorem canonical_take_drop (xs : Bytes) (n : Nat)
+    (aligned : n % 4 = 0) (bound : n ≤ xs.length) :
+    canonical xs ↔ canonical (xs.take n) ∧ canonical (xs.drop n) := by
+  have htake : (xs.take n).length % 4 = 0 := by
+    rw [List.length_take, Nat.min_eq_left bound]
+    exact aligned
+  simpa only [List.take_append_drop] using canonical_append (xs.take n) (xs.drop n) htake
+
+#print axioms canonical_append
+#print axioms canonical_take_drop
+end AspisR1.MultiproofConeCanonicalAppend

@@ -1,0 +1,53 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeSortStep.lean:20:38: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+keys : Std.Array U64 16#usize
+cursor : Usize
+bound : ↑cursor < 16
+h✝¹ : ¬cursor = 0#usize
+i : Usize
+_✝¹ : [> let i ← cursor - 1#usize <]
+i_post1 : ↑i = ↑cursor - 1
+i_post2 : 1 ≤ ↑cursor
+left : U64
+_✝ : [> let left ← keys.index_usize i <]
+right : U64
+_ : [> let right ← keys.index_usize cursor <]
+left_post : left = (↑keys)[↑cursor - 1]
+right_post : right = (↑keys)[↑cursor]
+h✝ : ↑(↑keys)[↑cursor - 1] ≤ ↑(↑keys)[↑cursor]
+⊢ ↑cursor = 0 ∨ ↑((↑keys)[↑cursor - 1]?.getD default) ≤ ↑(↑keys)[↑cursor]
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeSortStep.lean:20:38: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+keys : Std.Array U64 16#usize
+cursor : Usize
+bound : ↑cursor < 16
+h✝¹ : ¬cursor = 0#usize
+i : Usize
+_✝³ : [> let i ← cursor - 1#usize <]
+i_post1 : ↑i = ↑cursor - 1
+i_post2 : 1 ≤ ↑cursor
+left : U64
+_✝² : [> let left ← keys.index_usize i <]
+right : U64
+_✝¹ : [> let right ← keys.index_usize cursor <]
+keys1 : Std.Array U64 16#usize
+_✝ : [> let keys1 ← keys.update i right <]
+keys2 : Std.Array U64 16#usize
+_ : [> let keys2 ← keys1.update cursor left <]
+left_post : left = (↑keys)[↑cursor - 1]
+right_post : right = (↑keys)[↑cursor]
+h✝ : ↑(↑keys)[↑cursor] < ↑(↑keys)[↑cursor - 1]
+keys1_post : keys1 = keys.set i (↑keys)[↑cursor]
+keys2_post : keys2 = (keys.set i (↑keys)[↑cursor]).set cursor (↑keys)[↑cursor - 1]
+⊢ ↑(↑keys)[↑cursor] < ↑((↑keys)[↑cursor - 1]?.getD default) ∧
+    (keys.set i (↑keys)[↑cursor]).set cursor (↑keys)[↑cursor - 1] =
+      (keys.set i (↑keys)[↑cursor]).set cursor ((↑keys)[↑cursor - 1]?.getD default)
+'AspisR1.MultiproofConeSortStep.insert_step_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

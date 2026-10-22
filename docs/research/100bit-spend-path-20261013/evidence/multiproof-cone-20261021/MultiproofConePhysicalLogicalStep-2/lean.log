@@ -1,0 +1,288 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:39:4: error: unsolved goals
+case neg
+s : reference.Scratch
+i : Usize
+more : ↑i + 1 < ↑s.n
+len : ↑s.n - (↑i + 1) = ↑s.n - (↑i + 2) + 1
+eq : SourcePair s i ↔ ↑(↑s.idx)[↑i + 1]! = ↑(↑s.idx)[↑i]! ^^^ 1
+paired : ¬SourcePair s i
+notNat : ↑(↑s.idx)[↑i + 1]! = ↑(↑s.idx)[↑i]! ^^^ 1 → False
+⊢ decide (↑(↑s.idx)[↑i + 1]! = ↑(↑s.idx)[↑i]! ^^^ 1) = false
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:40:24: warning: This simp argument is unused:
+  notNat
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵a̵i̵r̵e̵d̵,̵n̵o̵t̵N̵a̵t̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵]̵[̲p̲a̲i̲r̲e̲d̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:65:4: error: Tactic `rfl` failed: The left-hand side
+  if decide (↑(↑s.idx)[↑i + 1]! = ↑(↑s.idx)[↑i]! ^^^ 1) = true then
+    Program.ask
+      (BinMerkle32Path.nodeInput
+        (OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!)
+          ((↑(↑s.idx)[↑i + 1]!, decodeState (↑s.val)[↑i + 1]!) :: live s (↑i + 1 + 1) (↑s.n - (↑i + 2))).head!.2))
+      fun d =>
+      AspisV8R19.OracleProgramOps.bind
+        (sourceLevel fuel
+          (List.drop 1 ((↑(↑s.idx)[↑i + 1]!, decodeState (↑s.val)[↑i + 1]!) :: live s (↑i + 1 + 1) (↑s.n - (↑i + 2))))
+          (remaining physical s.at))
+        fun out => Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)
+  else
+    match SemanticRecordCodec.decodeState (List.take 32 (remaining physical s.at)) with
+    | none => Program.done none
+    | some sibling =>
+      Program.ask
+        (BinMerkle32Path.nodeInput
+          (if ↑(↑s.idx)[↑i]! % 2 = 0 then OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!) sibling
+          else OracleDecisionMultiTree.children sibling (decodeState (↑s.val)[↑i]!)))
+        fun d =>
+        AspisV8R19.OracleProgramOps.bind
+          (sourceLevel fuel
+            ((↑(↑s.idx)[↑i + 1]!, decodeState (↑s.val)[↑i + 1]!) :: live s (↑i + 1 + 1) (↑s.n - (↑i + 2)))
+            (List.drop 32 (remaining physical s.at)))
+          fun out => Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)
+is not definitionally equal to the right-hand side
+  Program.ask
+    (BinMerkle32Path.nodeInput
+      (OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!) (decodeState (↑s.val)[↑i + 1]!)))
+    fun answer =>
+    AspisV8R19.OracleProgramOps.bind (sourceLevel fuel (live s (↑i + 2) (↑s.n - (↑i + 2))) (remaining physical s.at))
+      fun out => Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, answer) :: x.1, x.2)) out)
+
+case pos
+fuel : ℕ
+physical : Slice U8
+s : reference.Scratch
+i ni : Usize
+active : ↑i < ↑s.n
+len : ↑s.n - ↑i = ↑s.n - (↑i + 1) + 1
+pair : SourcePair s i
+nextVal : ↑ni = ↑i + 2
+len2 : ↑s.n - (↑i + 1) = ↑s.n - (↑i + 2) + 1
+⊢ (if decide (↑(↑s.idx)[↑i + 1]! = ↑(↑s.idx)[↑i]! ^^^ 1) = true then
+      Program.ask
+        (BinMerkle32Path.nodeInput
+          (OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!)
+            ((↑(↑s.idx)[↑i + 1]!, decodeState (↑s.val)[↑i + 1]!) :: live s (↑i + 1 + 1) (↑s.n - (↑i + 2))).head!.2))
+        fun d =>
+        AspisV8R19.OracleProgramOps.bind
+          (sourceLevel fuel
+            (List.drop 1 ((↑(↑s.idx)[↑i + 1]!, decodeState (↑s.val)[↑i + 1]!) :: live s (↑i + 1 + 1) (↑s.n - (↑i + 2))))
+            (remaining physical s.at))
+          fun out => Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)
+    else
+      match SemanticRecordCodec.decodeState (List.take 32 (remaining physical s.at)) with
+      | none => Program.done none
+      | some sibling =>
+        Program.ask
+          (BinMerkle32Path.nodeInput
+            (if ↑(↑s.idx)[↑i]! % 2 = 0 then OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!) sibling
+            else OracleDecisionMultiTree.children sibling (decodeState (↑s.val)[↑i]!)))
+          fun d =>
+          AspisV8R19.OracleProgramOps.bind
+            (sourceLevel fuel
+              ((↑(↑s.idx)[↑i + 1]!, decodeState (↑s.val)[↑i + 1]!) :: live s (↑i + 1 + 1) (↑s.n - (↑i + 2)))
+              (List.drop 32 (remaining physical s.at)))
+            fun out => Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)) =
+    Program.ask
+      (BinMerkle32Path.nodeInput
+        (OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!) (decodeState (↑s.val)[↑i + 1]!)))
+      fun answer =>
+      AspisV8R19.OracleProgramOps.bind (sourceLevel fuel (live s (↑i + 2) (↑s.n - (↑i + 2))) (remaining physical s.at))
+        fun out => Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, answer) :: x.1, x.2)) out)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:75:6: error: Tactic `rfl` failed: The left-hand side
+  if
+      (match live s (↑i + 1) (↑s.n - (↑i + 1)) with
+        | (j, snd) :: tail => decide (j = ↑(↑s.idx)[↑i]! ^^^ 1)
+        | [] => false) =
+        true then
+    Program.ask
+      (BinMerkle32Path.nodeInput
+        (OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!)
+          (List.head! (live s (↑i + 1) (↑s.n - (↑i + 1)))).2))
+      fun d =>
+      AspisV8R19.OracleProgramOps.bind
+        (sourceLevel fuel (List.drop 1 (live s (↑i + 1) (↑s.n - (↑i + 1)))) (remaining physical s.at)) fun out =>
+        Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)
+  else
+    Program.ask
+      (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!) (decodeState right)))
+      fun d =>
+      AspisV8R19.OracleProgramOps.bind
+        (sourceLevel fuel (live s (↑i + 1) (↑s.n - (↑i + 1))) (List.drop 32 (remaining physical s.at))) fun out =>
+        Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)
+is not definitionally equal to the right-hand side
+  Program.ask
+    (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!) (decodeState right)))
+    fun answer =>
+    AspisV8R19.OracleProgramOps.bind
+      (sourceLevel fuel (live s (↑i + 1) (↑s.n - (↑i + 1))) (List.drop 32 (remaining physical s.at))) fun out =>
+      Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, answer) :: x.1, x.2)) out)
+
+case pos
+fuel : ℕ
+physical : Slice U8
+s : reference.Scratch
+i ni cursor : Usize
+right : MultiproofConePhysicalProgram.Digest
+active : ↑i < ↑s.n
+len : ↑s.n - ↑i = ↑s.n - (↑i + 1) + 1
+pair : ¬SourcePair s i
+nextVal : ↑ni = ↑i + 1
+cursorVal : ↑cursor = ↑s.at + 32
+rest : remaining physical cursor = List.drop 32 (remaining physical s.at)
+even : ↑(↑s.idx)[↑i]! % 2 = 0
+bytes : ↑right = List.take 32 (List.drop ↑s.at ↑physical)
+⊢ (if
+        (match live s (↑i + 1) (↑s.n - (↑i + 1)) with
+          | (j, snd) :: tail => decide (j = ↑(↑s.idx)[↑i]! ^^^ 1)
+          | [] => false) =
+          true then
+      Program.ask
+        (BinMerkle32Path.nodeInput
+          (OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!)
+            (List.head! (live s (↑i + 1) (↑s.n - (↑i + 1)))).2))
+        fun d =>
+        AspisV8R19.OracleProgramOps.bind
+          (sourceLevel fuel (List.drop 1 (live s (↑i + 1) (↑s.n - (↑i + 1)))) (remaining physical s.at)) fun out =>
+          Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)
+    else
+      Program.ask
+        (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!) (decodeState right)))
+        fun d =>
+        AspisV8R19.OracleProgramOps.bind
+          (sourceLevel fuel (live s (↑i + 1) (↑s.n - (↑i + 1))) (List.drop 32 (remaining physical s.at))) fun out =>
+          Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)) =
+    Program.ask
+      (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!) (decodeState right)))
+      fun answer =>
+      AspisV8R19.OracleProgramOps.bind
+        (sourceLevel fuel (live s (↑i + 1) (↑s.n - (↑i + 1))) (List.drop 32 (remaining physical s.at))) fun out =>
+        Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, answer) :: x.1, x.2)) out)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:78:6: error: Tactic `rfl` failed: The left-hand side
+  if
+      (match live s (↑i + 1) (↑s.n - (↑i + 1)) with
+        | (j, snd) :: tail => decide (j = ↑(↑s.idx)[↑i]! ^^^ 1)
+        | [] => false) =
+        true then
+    Program.ask
+      (BinMerkle32Path.nodeInput
+        (OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!)
+          (List.head! (live s (↑i + 1) (↑s.n - (↑i + 1)))).2))
+      fun d =>
+      AspisV8R19.OracleProgramOps.bind
+        (sourceLevel fuel (List.drop 1 (live s (↑i + 1) (↑s.n - (↑i + 1)))) (remaining physical s.at)) fun out =>
+        Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)
+  else
+    Program.ask
+      (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children (decodeState left) (decodeState (↑s.val)[↑i]!)))
+      fun d =>
+      AspisV8R19.OracleProgramOps.bind
+        (sourceLevel fuel (live s (↑i + 1) (↑s.n - (↑i + 1))) (List.drop 32 (remaining physical s.at))) fun out =>
+        Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)
+is not definitionally equal to the right-hand side
+  Program.ask
+    (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children (decodeState left) (decodeState (↑s.val)[↑i]!)))
+    fun answer =>
+    AspisV8R19.OracleProgramOps.bind
+      (sourceLevel fuel (live s (↑i + 1) (↑s.n - (↑i + 1))) (List.drop 32 (remaining physical s.at))) fun out =>
+      Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, answer) :: x.1, x.2)) out)
+
+case neg
+fuel : ℕ
+physical : Slice U8
+s : reference.Scratch
+i ni cursor : Usize
+left : MultiproofConePhysicalProgram.Digest
+active : ↑i < ↑s.n
+len : ↑s.n - ↑i = ↑s.n - (↑i + 1) + 1
+pair : ¬SourcePair s i
+nextVal : ↑ni = ↑i + 1
+cursorVal : ↑cursor = ↑s.at + 32
+rest : remaining physical cursor = List.drop 32 (remaining physical s.at)
+even : ¬↑(↑s.idx)[↑i]! % 2 = 0
+bytes : ↑left = List.take 32 (List.drop ↑s.at ↑physical)
+⊢ (if
+        (match live s (↑i + 1) (↑s.n - (↑i + 1)) with
+          | (j, snd) :: tail => decide (j = ↑(↑s.idx)[↑i]! ^^^ 1)
+          | [] => false) =
+          true then
+      Program.ask
+        (BinMerkle32Path.nodeInput
+          (OracleDecisionMultiTree.children (decodeState (↑s.val)[↑i]!)
+            (List.head! (live s (↑i + 1) (↑s.n - (↑i + 1)))).2))
+        fun d =>
+        AspisV8R19.OracleProgramOps.bind
+          (sourceLevel fuel (List.drop 1 (live s (↑i + 1) (↑s.n - (↑i + 1)))) (remaining physical s.at)) fun out =>
+          Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)
+    else
+      Program.ask
+        (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children (decodeState left) (decodeState (↑s.val)[↑i]!)))
+        fun d =>
+        AspisV8R19.OracleProgramOps.bind
+          (sourceLevel fuel (live s (↑i + 1) (↑s.n - (↑i + 1))) (List.drop 32 (remaining physical s.at))) fun out =>
+          Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, d) :: x.1, x.2)) out)) =
+    Program.ask
+      (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children (decodeState left) (decodeState (↑s.val)[↑i]!)))
+      fun answer =>
+      AspisV8R19.OracleProgramOps.bind
+        (sourceLevel fuel (live s (↑i + 1) (↑s.n - (↑i + 1))) (List.drop 32 (remaining physical s.at))) fun out =>
+        Program.done (Option.map (fun x => ((↑(↑s.idx)[↑i]! / 2, answer) :: x.1, x.2)) out)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:57:42: warning: This simp argument is unused:
+  source_guard
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵e̵c̵o̵d̵e̵E̵n̵t̵r̵y̵,̵c̵e̵l̵l̵,̵s̵o̵u̵r̵c̵e̵L̵e̵v̵e̵l̵,̵s̵o̵u̵r̵c̵e̵_̵g̵u̵a̵r̵d̵]̵[̲d̲e̲c̲o̲d̲e̲E̲n̲t̲r̲y̲,̲ ̲c̲e̲l̲l̲,̲ ̲s̲o̲u̲r̲c̲e̲L̲e̲v̲e̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:63:15: warning: This simp argument is unused:
+  pair
+
+Hint: Omit it from the simp argument list.
+  simp only [p̵a̵i̵r̵,̵decide_true, ̲if_true, ̲len2, ̲live_cons, ̲decodeEntry, ̲cell]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:63:20: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵a̵i̵r̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵l̵e̵n̵2̵,̵l̵i̵v̵e̵_̵c̵o̵n̵s̵,̵d̵e̵c̵o̵d̵e̵E̵n̵t̵r̵y̵,̵c̵e̵l̵l̵]̵[̲p̲a̲i̲r̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲l̲e̲n̲2̲,̲ ̲l̲i̲v̲e̲_̲c̲o̲n̲s̲,̲ ̲d̲e̲c̲o̲d̲e̲E̲n̲t̲r̲y̲,̲ ̲c̲e̲l̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:63:32: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [pair, ̲decide_true,i̵f̵_̵t̵r̵u̵e̵,̵ ̲len2, ̲live_cons, ̲decodeEntry, ̲cell]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:68:15: warning: This simp argument is unused:
+  pair
+
+Hint: Omit it from the simp argument list.
+  simp only [p̵a̵i̵r̵,̵decide_false, ̲if_false, ̲sibling_decode physical s.«̵at»̵ sibling bytes]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:68:20: warning: This simp argument is unused:
+  decide_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵a̵i̵r̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵s̵i̵b̵l̵i̵n̵g̵_̵d̵e̵c̵o̵d̵e̵[̲p̲a̲i̲r̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲s̲i̲b̲l̲i̲n̲g̲_̲d̲e̲c̲o̲d̲e̲ physical s̵.̵«̵a̵t̵»̵s̲.̲a̲t̲ sibling bytes]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalLogicalStep.lean:68:33: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [pair, ̲decide_false,i̵f̵_̵f̵a̵l̵ ̲se̵,̵s̵ibling_decode physical s.«̵at»̵ sibling bytes]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConePhysicalLogicalStep.pair_nat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConePhysicalLogicalStep.source_guard' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.MultiproofConePhysicalLogicalStep.logical_step' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

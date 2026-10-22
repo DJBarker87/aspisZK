@@ -1,0 +1,46 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone2/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLevelIteration.lean:15:11: error: unexpected token 'partial'; expected '=>'
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone2/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLevelIteration.lean:15:19: error: unexpected token '=>'; expected 'lemma'
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone2/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLevelIteration.lean:15:40: error: unexpected token ')'; expected 'lemma'
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone2/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLevelIteration.lean:43:6: error: Alternative `Done` has not been provided
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone2/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLevelIteration.lean:42:15: error: unsolved goals
+case succ.ok.Stop
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+physical : Slice U8
+n : ℕ
+ih :
+  ∀ (height : U32) (s : reference.Scratch),
+    ↑height = n →
+      n ≤ 18 →
+        reference.levels D hash s physical height =
+          iterate (fun state => reference.level_rows D hash state physical 0#usize 0#usize) n s
+height : U32
+s : reference.Scratch
+hn : ↑height = n + 1
+bound : n + 1 ≤ 18
+hnz : height ≠ 0#u32
+pred : UScalar UScalarTy.U32
+sub : height - 1#u32 = ok pred
+predVal : ↑pred = ↑height - ↑1#u32 ∧ ↑1#u32 ≤ ↑height
+pv : ↑pred = n
+a✝ : reference.Scratch
+row : reference.level_rows D hash s physical 0#usize 0#usize = ok (reference.Level.Stop a✝)
+⊢ (do
+      let l ← ok (reference.Level.Stop a✝)
+      match l with
+        | reference.Level.Stop a => ok l
+        | reference.Level.Done next => do
+          let i ← height - 1#u32
+          reference.levels D hash next physical i) =
+    sorry
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone2/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLevelIteration.lean:38:28: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone2/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLevelIteration.lean:44:20: error: unexpected token '=>'; expected 'lemma'
+'AspisR1.MultiproofConeLevelIteration.levels_eq_iteration' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.MultiproofConeLevelIteration.adopt_eighteen' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

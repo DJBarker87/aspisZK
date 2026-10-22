@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitShippedTransport.lean:50:4: error: Tactic `split_ifs` failed: no if-then-else conditions to split
+
+case e_a
+A : Type
+nextWord : A → Result (U32 × A)
+n : ℕ
+ih : ∀ (s : A), source.finite nextWord n s = mask.finite nextWord n s
+s : A
+word : U32
+after : A
+⊢ (do
+      let candidate ← lift (word &&& 2147483647#u32)
+      if candidate < AspisR1ProverCaller7.aspis_core.field.P then ok (after, some (core.result.Result.Ok candidate))
+        else source.finite nextWord n after) =
+    do
+    let candidate ← lift (word &&& 2147483647#u32)
+    if candidate < AspisR1ProverCaller7.aspis_core.field.P then ok (after, some (core.result.Result.Ok candidate))
+      else mask.finite nextWord n after
+'R1Z.ProverCommitShippedTransport.finite_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitShippedTransport.source_finite_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitShippedTransport.mask_scalar_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitShippedTransport.source_scalar_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

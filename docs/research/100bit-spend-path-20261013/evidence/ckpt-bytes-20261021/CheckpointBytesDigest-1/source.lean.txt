@@ -1,0 +1,20 @@
+import CheckpointBytesEC5
+
+set_option autoImplicit false
+namespace AspisR1.CheckpointBytesDigest
+open Aeneas Aeneas.Std Result
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open MultiproofConeCanonical
+
+def stateOf (b : Array U8 32#usize) : State := fun j =>
+  AspisV8R19.SqueezeOracleBridge.decodeByte
+    (b.val[j.val]'(by simpa [b.property] using j.isLt))
+
+theorem bytes_stateOf (b : Array U8 32#usize) : bytes (stateOf b) = bytesOf b.val := by
+  apply List.ext_getElem
+  · simp [bytes,bytesOf,b.property]
+  · intro i hi hj
+    simp [bytes,bytesOf,stateOf] at hi ⊢
+
+#print axioms bytes_stateOf
+end AspisR1.CheckpointBytesDigest

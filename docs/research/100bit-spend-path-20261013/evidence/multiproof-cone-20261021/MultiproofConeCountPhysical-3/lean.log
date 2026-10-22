@@ -1,0 +1,104 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeCountPhysical.lean:16:82: warning: This simp argument is unused:
+  Function.comp_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵e̵l̵l̵s̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵_̵s̵u̵c̵c̵_̵e̵q̵_̵m̵a̵p̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵,̵N̵a̵t̵.̵a̵d̵d̵_̵z̵e̵r̵o̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵a̵p̵p̵l̵y̵]̵[̲c̲e̲l̲l̲s̲,̲ ̲L̲i̲s̲t̲.̲r̲a̲n̲g̲e̲_̲s̲u̲c̲c̲_̲e̲q̲_̲m̲a̲p̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲m̲a̲p̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeCountPhysical.lean:94:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  match unread k n (i + 1) with
+  | j :: tail => decide (paired (k i) j)
+  | [] => false
+in the target expression
+  (cells k 0 w ++ [k i / 2] ++ (countLevel fuel (unread k n (advance k n i))).1,
+      (c + if pairAt k n i then 0 else 1) + (countLevel fuel (unread k n (advance k n i))).2) =
+    (cells k 0 w ++
+        k i / 2 ::
+          (countLevel fuel
+              (if
+                  (match unread k n (i + 1) with
+                    | j :: tail => decide (paired (k i) j)
+                    | [] => false) =
+                    true then
+                List.drop 1 (unread k n (i + 1))
+              else unread k n (i + 1))).1,
+      c +
+        ((countLevel fuel
+              (if
+                  (match unread k n (i + 1) with
+                    | j :: tail => decide (paired (k i) j)
+                    | [] => false) =
+                    true then
+                List.drop 1 (unread k n (i + 1))
+              else unread k n (i + 1))).2 +
+          if
+              (match unread k n (i + 1) with
+                | j :: tail => decide (paired (k i) j)
+                | [] => false) =
+                true then
+            0
+          else 1))
+
+case pos
+n fuel : ℕ
+ih :
+  ∀ (k : ℕ → ℕ) (i w c : ℕ),
+    w ≤ i →
+      i ≤ n →
+        rows fuel k n i w c =
+          (cells k 0 w ++ (countLevel fuel (unread k n i)).1, c + (countLevel fuel (unread k n i)).2)
+k : ℕ → ℕ
+i w c : ℕ
+safe : w ≤ i
+endBound : i ≤ n
+active : i < n
+bounds : i + 1 ≤ advance k n i ∧ advance k n i ≤ n
+tail :
+  (match unread k n (i + 1) with
+      | j :: tail => decide (paired (k i) j)
+      | [] => false) =
+      decide (pairAt k n i) ∧
+    (if decide (pairAt k n i) = true then List.drop 1 (unread k n (i + 1)) else unread k n (i + 1)) =
+      unread k n (advance k n i)
+⊢ (cells k 0 w ++ [k i / 2] ++ (countLevel fuel (unread k n (advance k n i))).1,
+      (c + if pairAt k n i then 0 else 1) + (countLevel fuel (unread k n (advance k n i))).2) =
+    (cells k 0 w ++
+        k i / 2 ::
+          (countLevel fuel
+              (if
+                  (match unread k n (i + 1) with
+                    | j :: tail => decide (paired (k i) j)
+                    | [] => false) =
+                    true then
+                List.drop 1 (unread k n (i + 1))
+              else unread k n (i + 1))).1,
+      c +
+        ((countLevel fuel
+              (if
+                  (match unread k n (i + 1) with
+                    | j :: tail => decide (paired (k i) j)
+                    | [] => false) =
+                    true then
+                List.drop 1 (unread k n (i + 1))
+              else unread k n (i + 1))).2 +
+          if
+              (match unread k n (i + 1) with
+                | j :: tail => decide (paired (k i) j)
+                | [] => false) =
+                true then
+            0
+          else 1))
+'AspisR1.MultiproofConeCountPhysical.cells_cons' depends on axioms: [propext, Quot.sound]
+'AspisR1.MultiproofConeCountPhysical.unread_cons' depends on axioms: [propext, Quot.sound]
+'AspisR1.MultiproofConeCountPhysical.cells_write' depends on axioms: [propext, Quot.sound]
+'AspisR1.MultiproofConeCountPhysical.unread_write' depends on axioms: [propext, Quot.sound]
+'AspisR1.MultiproofConeCountPhysical.advance_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeCountPhysical.group_tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeCountPhysical.rows_projection' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.MultiproofConeCountPhysical.level_projection' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

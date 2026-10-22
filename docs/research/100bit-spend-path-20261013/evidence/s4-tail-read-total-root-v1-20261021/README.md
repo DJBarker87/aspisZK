@@ -1,0 +1,3 @@
+PROVED all checked arithmetic, coefficient reads and sixteen-byte input slices in the actual S4 tail body succeed from slot<4 and term<2 alone. The same read witness installs the actual source body accepted parser/push branch.
+
+Limitations: The read theorem has no parser, push-success, accumulator or coefficient canonicality premise; it removes the forward read/arithmetic failure frontier only. The body continuation theorem explicitly requires iterator next, strict parser acceptance and an accepted push for the SAME read witness. It is not whole-call totality. Whole fixed source caller, P6/Std correspondence, input parser provenance and full soundness remain open. Production source unchanged.

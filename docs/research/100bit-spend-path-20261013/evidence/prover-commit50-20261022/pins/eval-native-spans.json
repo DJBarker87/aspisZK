@@ -1,0 +1,7 @@
+{
+  "source": "crates/aspis-core/src/state_only_sumcheck.rs",
+  "sha256": "e09008daaaea9f35e2a28b85ec06f38dba75dbc9e6741d53a13020123f00d78d",
+  "verbatim": "pub fn evaluate_state_only_polynomial(\n    polynomial: &StateOnlySumcheckPolynomial,\n    challenge: QM31,\n) -> QM31 {\n    let x2 = challenge.square();\n    let x3 = challenge.mul(x2);\n    let x4 = x2.square();\n    let powers = [challenge, x2, x3];\n    let prepared_x4 = PreparedQm31Multiplier::new(x4);\n    let block_value = |block: usize| {\n        let start = 4 * block;\n        polynomial[start].add(qm31_sum_products3(\n            powers,\n            [\n                polynomial[start + 1],\n                polynomial[start + 2],\n                polynomial[start + 3],\n            ],\n        ))\n    };\n    let mut accumulator = block_value(6);\n    let mut block = 6usize;\n    while block > 0 {\n        block -= 1;\n        accumulator = prepared_x4.mul(accumulator).add(block_value(block));\n    }\n    accumulator\n}\n",
+  "owner_sha256": "f5080f8ac69756f81cfa65df7068a4ea35e8d8cf9e614bad7f3d648fe3205496",
+  "abstractions": "Complete seven-block caller with paired universal QM31 square/mul/add, sum-products3 and prepared constructor/mul callees. Exact call operands and order; prepared object represented by an opaque scalar handle, since only its separately verified constructor/mul interface is observed. Source p reference versus owned by-value array, and usize versus bounded u8 loop. Both have full 28-input context. No field or model value law inferred from stubs."
+}

@@ -1,0 +1,47 @@
+import OraclePortCkptAbi4Decode
+
+/-! Canonical raw-to-exact byte representation. These laws concern the
+extracted reference fields and C5; they do not adopt the production reader. -/
+set_option autoImplicit false
+namespace AspisR1.OraclePortCkptAbi5Codec
+open Aeneas Aeneas.Std Result
+open OraclePortCkptAbi4Decode
+open RetainedFieldByteCodec RetainedExactLimbCodec OraclePortCompactDraft
+
+def limbs (q : RawK) (h : Canonical q) : QM31Limbs :=
+  ![⟨q.c0.a.val,h.1⟩,⟨q.c0.b.val,h.2.1⟩,
+    ⟨q.c1.a.val,h.2.2.1⟩,⟨q.c1.b.val,h.2.2.2⟩]
+
+def exactK (q : RawK) (h : Canonical q) : OraclePortCheckpointAbiC5.K :=
+  qm31ExactLimbEquiv (limbs q h)
+
+/-- Four raw words, in emitted field order, give precisely C5's bytes when
+strict decoding has established their canonical bounds. -/
+theorem c5_k_bytes (q : RawK) (h : Canonical q) :
+    OraclePortCheckpointAbiC5.encodeK (exactK q h) = (words q).flatMap le32 := by
+  change List.ofFn (encodeQM31LE (qm31ExactLimbEquiv.symm
+    (qm31ExactLimbEquiv (limbs q h)) )) = _
+  rw [Equiv.symm_apply_apply]
+  apply List.ext_getElem
+  · simp only [List.length_ofFn,words,List.flatMap_cons,List.flatMap_nil,
+      List.length_append,List.length_nil,le32,List.length_map,List.length_range]
+  · intro i hi hj
+    have bound : i < 16 := by simpa only [List.length_ofFn] using hi
+    have index : i = (⟨i,bound⟩ : Fin 16).val := rfl
+    revert hi hj
+    rw [index]
+    generalize (⟨i,bound⟩ : Fin 16) = j
+    fin_cases j <;> intro hi hj <;> first | rfl | (apply Fin.ext; simp [encodeQM31LE,encodeM31LE,encodeWordLE,limbs,words,le32,List.range_succ])
+
+/-- C5's wide codec is the ordered concatenation of its two K codecs. -/
+theorem c5_wide_halves (x : OraclePortCheckpointAbiC5.E) :
+    OraclePortCheckpointAbiC5.encodeE x =
+      OraclePortCheckpointAbiC5.encodeK x.re ++ OraclePortCheckpointAbiC5.encodeK x.im := by
+  simp only [OraclePortCheckpointAbiC5.encodeE,FoldedLeafCodec.encodeWide,
+    WideExactLimbCodec.pairExactEquiv,StrictWideByteCodec.encodeWideLE]
+  rw [List.ofFn_finAppend]
+  rfl
+
+#print axioms c5_k_bytes
+#print axioms c5_wide_halves
+end AspisR1.OraclePortCkptAbi5Codec

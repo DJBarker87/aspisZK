@@ -1,0 +1,59 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitY1Owner47.lean:38:2: error: unsolved goals
+case refine_1
+q : ℕ → Old.Q
+hq : ∀ j < 1024, Canonical (q j)
+x y : Old.Q
+hx : Canonical x
+hy : Canonical y
+b : ℕ → Old.Q
+hb : values (ProverCommitNativeOps47.embedded x) = ok (sourceArray 512#usize b)
+hcb : ∀ k < 512, Canonical (b k)
+hbv : ∀ k < 512, decode (b k) = AspisCircleTensorBinding.naturalLineValue (decode x) k
+p0 p1 : Old.Q
+hp :
+  pairs (sourceArray 1024#usize q) (sourceArray 512#usize b) 0#usize 512#u16 (ProverCommitNativeOps47.embedded zero)
+      (ProverCommitNativeOps47.embedded zero) =
+    ok (ProverCommitNativeOps47.embedded p0, ProverCommitNativeOps47.embedded p1)
+hcp0 : Canonical p0
+hcp1 : Canonical p1
+hdp0 : decode p0 = (ProverCommitEval47.pairEval (fun j => decode (q ↑j)) (decode x)).1
+hdp1 : decode p1 = (ProverCommitEval47.pairEval (fun j => decode (q ↑j)) (decode x)).2
+hdot :
+  dot (fun j => decode (q j)) (fun j => decode (b j)) 512 0 =
+    ProverCommitEval47.pairEval (fun j => decode (q ↑j)) (decode x)
+m : Old.Q
+hm :
+  (ProverCommitNativeOps47.embedded y).mul (ProverCommitNativeOps47.embedded p1) =
+    ok (ProverCommitNativeOps47.embedded m)
+hcm : Canonical m
+hdm : decode m = decode y * decode p1
+z : Old.Q
+hz :
+  (ProverCommitNativeOps47.embedded p0).add (ProverCommitNativeOps47.embedded m) =
+    ok (ProverCommitNativeOps47.embedded z)
+hcz : Canonical z
+hdz : decode z = decode p0 + decode m
+⊢ (let (p0, p1) := (ProverCommitNativeOps47.embedded p0, ProverCommitNativeOps47.embedded p1)
+    do
+    let we ← (ProverCommitNativeOps47.embedded y).mul p1
+    p0.add we) =
+    ok (ProverCommitNativeOps47.embedded z)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitY1Owner47.lean:38:57: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [run, ̲hb, ̲bind_tc_ok, ̲evaluate, ̲source_zero, ̲hp, ̲hm̵,̵h̵z]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitY1Owner47.lean:38:60: warning: This simp argument is unused:
+  hz
+
+Hint: Omit it from the simp argument list.
+  simp only [run, ̲hb, ̲bind_tc_ok, ̲evaluate, ̲source_zero, ̲hp, ̲hm,̵h̵z̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitY1Owner47.source_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitY1Owner47.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitY1Owner47.raw_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

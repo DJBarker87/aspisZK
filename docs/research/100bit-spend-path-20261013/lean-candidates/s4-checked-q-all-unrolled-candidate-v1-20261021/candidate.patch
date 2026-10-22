@@ -1,0 +1,14 @@
+--- frozen/fast_pairing.rs
++++ candidate/fast_pairing.rs
+@@ -21,7 +21,10 @@
+     }
+     impl Q {
+         pub const ZERO:Self=Self([0;4]);pub const ONE:Self=Self([1,0,0,0]);
+-        pub fn from_limbs(x:[u32;4])->Option<Self>{if x.iter().all(|&v|v<P){Some(Self(x))}else{None}}
++        pub fn from_limbs(x:[u32;4])->Option<Self>{
++            let [a,b,c,d]=x;
++            if a<P && b<P && c<P && d<P {Some(Self([a,b,c,d]))}else{None}
++        }
+         pub fn from_m31(x:u32)->Option<Self>{if x<P{Some(Self([x,0,0,0]))}else{None}}
+         pub const fn limbs(self)->[u32;4]{self.0}
+         /// WideExact owns private, canonical coordinates; this constructor

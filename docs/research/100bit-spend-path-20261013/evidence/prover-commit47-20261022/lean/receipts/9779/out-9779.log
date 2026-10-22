@@ -1,0 +1,55 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBasisValue47.lean:52:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  2 ^ depth
+in the target expression
+  k < 2 ^ (depth + 1)
+
+x : QM31Exact
+n : ℕ
+ih :
+  ∀ (depth : ℕ),
+    depth + n ≤ 9 →
+      ∀ (width : Usize),
+        ↑width = 2 ^ depth →
+          ∀ (xs : ℕ → Old.Q),
+            (∀ k < 512, Canonical (xs k)) →
+              (∀ k < ↑width, decode (xs k) = naturalLineValue x k) →
+                ∀ (factor : Old.Q),
+                  Canonical factor →
+                    decode factor = doubledFactor x depth →
+                      ∃ ys,
+                        stagesN n (sourceArray 512#usize xs) width (ProverCommitNativeOps47.embedded factor) =
+                            ok (sourceArray 512#usize ys) ∧
+                          (∀ k < 512, Canonical (ys k)) ∧ ∀ k < 2 ^ (depth + n), decode (ys k) = naturalLineValue x k
+depth : ℕ
+room : depth + (n + 1) ≤ 9
+width : Usize
+hw : ↑width = 2 ^ depth
+xs : ℕ → Old.Q
+hxs : ∀ k < 512, Canonical (xs k)
+hvalues : ∀ k < ↑width, decode (xs k) = naturalLineValue x k
+factor : Old.Q
+hcf : Canonical factor
+hfactor : decode factor = doubledFactor x depth
+cap : 2 * ↑width ≤ 512
+nextValues : ℕ → Old.Q
+nextFactor : Old.Q
+hfill :
+  fill (sourceArray 512#usize xs) 0#usize (UScalar.cast UScalarTy.U16 width) width
+      (ProverCommitNativeOps47.embedded factor) =
+    ok (sourceArray 512#usize nextValues)
+hdouble :
+  ProverCommitSubtraction47.double (ProverCommitNativeOps47.embedded factor) =
+    ok (ProverCommitNativeOps47.embedded nextFactor)
+hcvalues : ∀ k < 512, Canonical (nextValues k)
+hcfactor : Canonical nextFactor
+hv : ∀ k < 2 * ↑width, decode (nextValues k) = naturalLineValue x k
+hf : decode nextFactor = doubledFactor x (depth + 1)
+hnext : ↑(width.wrapping_mul 2#usize) = 2 ^ (depth + 1)
+k : ℕ
+hk : k < 2 ^ (depth + 1)
+⊢ k < 2 * ↑width
+'R1Z.ProverCommitBasisValue47.stages_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitBasisValue47.stages_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitBasisValue47.values_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

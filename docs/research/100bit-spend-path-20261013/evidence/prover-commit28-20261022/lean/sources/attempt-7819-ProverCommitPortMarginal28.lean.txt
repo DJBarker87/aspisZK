@@ -1,0 +1,57 @@
+import R1Z.ProverCommitLogged28
+import R1Z.ProverCommitMachineMarginal27
+/-! Product marginals for arbitrary complete stateful continuations, including
+the ordered observer. No finite call-tree reification or successful-run
+conditioning is required. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitPortMarginal28
+open Aeneas Aeneas.Std Result R0Z R0Z.FsStatement R0Z.LawTransport
+open ProverCommitStateLift28 ProverCommitLogged28 ProverCommitProductOracle25
+open ProverCommitMachineMarginal27
+private def answerFinite : Fintype OracleAnswer := inferInstance
+attribute [local instance] answerFinite
+attribute [local irreducible] answerFinite
+private def inputFinite : Fintype Input := inferInstance
+attribute [local instance] inputFinite
+attribute [local irreducible] inputFinite
+
+def makeInitial (bound : Nat) (fits : 65 ≤ bound) (seed : OracleAnswer)
+    (attempt : Fin 8) (recording : Bool) (t : Tab bound) : LoggedMachine :=
+  (initialMachine bound fits seed attempt recording t,[])
+
+theorem source_law {A : Type} (bound : Nat) [Fintype (RomFiniteBin.Address bound)]
+    (fits : 65 ≤ bound) (seed : OracleAnswer) (attempt : Fin 8) (recording : Bool)
+    (continuation : Port LoggedMachine A) (test : Result (A × LoggedMachine) → ℚ) :
+    mean (fun p : Input × Tab bound => test (continuation
+      (makeInitial bound fits seed attempt recording (table bound fits seed p)))) =
+    mean (fun t : Tab bound => test (continuation
+      (makeInitial bound fits seed attempt recording t))) := by
+  exact (QueryScanIdealHistory.mean_fintype_transport _ _ _).trans
+    ((source_oracle_uniform bound fits seed
+      (fun t => test (continuation (makeInitial bound fits seed attempt recording t)))).trans
+      (QueryScanIdealHistory.mean_fintype_transport _ _ _))
+
+theorem model_law {A : Type} (bound : Nat) [Fintype (RomFiniteBin.Address bound)]
+    (fits : 65 ≤ bound) (seed : OracleAnswer) (attempt : Fin 8) (recording : Bool)
+    (continuation : Port LoggedMachine A) (test : Result (A × LoggedMachine) → ℚ) :
+    mean (fun p : Input × Tab bound => test (continuation
+      (makeInitial bound fits seed attempt recording p.2))) =
+    mean (fun t : Tab bound => test (continuation
+      (makeInitial bound fits seed attempt recording t))) := by
+  exact (QueryScanIdealHistory.mean_fintype_transport _ _ _).trans
+    ((R1Z.CouplingR1PBin.mp_snd
+      (fun t => test (continuation (makeInitial bound fits seed attempt recording t)))).trans
+      (QueryScanIdealHistory.mean_fintype_transport _ _ _))
+
+theorem initial_product (bound : Nat) (fits : 65 ≤ bound) (seed : OracleAnswer)
+    (attempt : Fin 8) (recording : Bool) (p : Input × Tab bound) :
+    makeInitial bound fits seed attempt recording (table bound fits seed p) =
+    makeInitial bound fits seed attempt recording p.2 := by
+  unfold makeInitial
+  rw [ProverCommitMachineMarginal27.initial_product]
+
+#print axioms source_law
+#print axioms model_law
+#print axioms initial_product
+end R1Z.ProverCommitPortMarginal28

@@ -1,0 +1,133 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCoinCall27.lean:52:61: error: Ambiguous term
+  insert
+Possible interpretations:
+  ProverCommitCoinTape27.insert : (?m.67 → Option ?m.68) → ?m.67 → ?m.68 → Option ?m.68 × (?m.67 → Option ?m.68)
+  
+  Insert.insert : ?m.67 → ?m.68 → ?m.68
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCoinCall27.lean:52:11: error: unsolved goals
+case some.none
+s : Machine
+parts : ProverCommitOracleEffect26.Parts
+table : Table
+rec : s.record = some table
+previous : table (ProverCommitStreamBytes.wireBytes parts) = none
+⊢ (let (previous, table1) :=
+      ProverCommitCoinTape27.insert table (ProverCommitStreamBytes.wireBytes parts)
+        ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8))
+    match previous with
+    | none =>
+      ok
+        ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8),
+          { coins := s.coins, next := s.next.wrapping_add 1#usize, record := some table1, collision := s.collision })
+    | some old => do
+      let b ← different old ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8))
+      if b = true then
+          ok
+            ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8),
+              { coins := s.coins, next := s.next.wrapping_add 1#usize, record := some table1, collision := true })
+        else
+          ok
+            ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8),
+              { coins := s.coins, next := s.next.wrapping_add 1#usize, record := some table1,
+                collision := s.collision })) =
+    ok
+      ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8),
+        { coins := s.coins, next := s.next.wrapping_add 1#usize,
+          record :=
+            some fun q =>
+              if q = ProverCommitStreamBytes.wireBytes parts then
+                some ((↑s.coins)[↑s.next]?.getD (Array.repeat 32#usize 0#u8))
+              else table q,
+          collision := s.collision })
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCoinCall27.lean:54:58: error: Ambiguous term
+  insert
+Possible interpretations:
+  ProverCommitCoinTape27.insert : (?m.80 → Option ?m.81) → ?m.80 → ?m.81 → Option ?m.81 × (?m.80 → Option ?m.81)
+  
+  Insert.insert : ?m.80 → ?m.81 → ?m.81
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCoinCall27.lean:55:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  different ?a ?b
+in the target expression
+  (let (o, o1) := (some table, none)
+    match o with
+    | none =>
+      ok (answer s, { coins := s.coins, next := s.next.wrapping_add 1#usize, record := o1, collision := s.collision })
+    | some table =>
+      let (previous, table1) := ProverCommitCoinTape27.insert table (ProverCommitStreamBytes.wireBytes parts) (answer s)
+      match previous with
+      | none =>
+        ok
+          (answer s,
+            { coins := s.coins, next := s.next.wrapping_add 1#usize, record := some table1, collision := s.collision })
+      | some old => do
+        let b ← different old (answer s)
+        if b = true then
+            ok
+              (answer s,
+                { coins := s.coins, next := s.next.wrapping_add 1#usize, record := some table1, collision := true })
+          else
+            ok
+              (answer s,
+                { coins := s.coins, next := s.next.wrapping_add 1#usize, record := some table1,
+                  collision := s.collision })) =
+    ok (expected s parts)
+
+case some.some
+s : Machine
+parts : ProverCommitOracleEffect26.Parts
+table : Table
+rec : s.record = some table
+old : Bytes32
+previous : table (ProverCommitStreamBytes.wireBytes parts) = some old
+⊢ (let (o, o1) := (some table, none)
+    match o with
+    | none =>
+      ok (answer s, { coins := s.coins, next := s.next.wrapping_add 1#usize, record := o1, collision := s.collision })
+    | some table =>
+      let (previous, table1) := ProverCommitCoinTape27.insert table (ProverCommitStreamBytes.wireBytes parts) (answer s)
+      match previous with
+      | none =>
+        ok
+          (answer s,
+            { coins := s.coins, next := s.next.wrapping_add 1#usize, record := some table1, collision := s.collision })
+      | some old => do
+        let b ← different old (answer s)
+        if b = true then
+            ok
+              (answer s,
+                { coins := s.coins, next := s.next.wrapping_add 1#usize, record := some table1, collision := true })
+          else
+            ok
+              (answer s,
+                { coins := s.coins, next := s.next.wrapping_add 1#usize, record := some table1,
+                  collision := s.collision })) =
+    ok (expected s parts)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCoinCall27.lean:54:41: warning: This simp argument is unused:
+  rec
+
+Hint: Omit it from the simp argument list.
+  simp only [core.option.Option.take,r̵e̵c̵,̵ ̲mapRecording, ̲insert, ̲previous, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCoinCall27.lean:54:65: warning: This simp argument is unused:
+  previous
+
+Hint: Omit it from the simp argument list.
+  simp only [core.option.Option.take, ̲rec, ̲mapRecording, ̲insert,p̵r̵e̵v̵i̵o̵u̵s̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitCoinCall27.read_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCoinCall27.call_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

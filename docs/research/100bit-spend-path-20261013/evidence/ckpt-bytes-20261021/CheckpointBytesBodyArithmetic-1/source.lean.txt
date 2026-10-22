@@ -1,0 +1,31 @@
+import CheckpointBytesArithmetic
+
+set_option autoImplicit false
+namespace AspisR1.CheckpointBytesBodyArithmetic
+open Aeneas Aeneas.Std Result
+
+theorem sub_exact (i j : Usize) (order : j.val ≤ i.val) :
+    i-j = ok (Usize.ofNat (i.val-j.val) (by scalar_tac)) := by
+  obtain ⟨k,hk,hv⟩ := WP.spec_imp_exists (UScalar.sub_spec (x:=i) (y:=j) order)
+  have eq : k = Usize.ofNat (i.val-j.val) (by scalar_tac) := by
+    apply UScalar.eq_of_val_eq; simpa using hv
+  simpa only [eq] using hk
+
+theorem div_exact (i j : Usize) (small : i.val < 65536) (nonzero : j.val ≠ 0) :
+    i/j = ok (Usize.ofNat (i.val/j.val) (by have := Nat.div_le_self i.val j.val; scalar_tac)) := by
+  obtain ⟨k,hk,hv⟩ := UScalar.div_spec (x:=i) (y:=j) nonzero
+  have eq : k = Usize.ofNat (i.val/j.val) (by have := Nat.div_le_self i.val j.val; scalar_tac) := by
+    apply UScalar.eq_of_val_eq; simpa using hv
+  simpa only [eq] using hk
+
+theorem rem_exact (i j : Usize) (small : j.val < 65536) (nonzero : j.val ≠ 0) :
+    i%j = ok (Usize.ofNat (i.val%j.val) (by have := Nat.mod_lt i.val (by omega : 0<j.val); scalar_tac)) := by
+  obtain ⟨k,hk,hv⟩ := WP.spec_imp_exists (UScalar.rem_spec (x:=i) (y:=j) nonzero)
+  have eq : k = Usize.ofNat (i.val%j.val) (by have := Nat.mod_lt i.val (by omega : 0<j.val); scalar_tac) := by
+    apply UScalar.eq_of_val_eq; simpa using hv
+  simpa only [eq] using hk
+
+#print axioms sub_exact
+#print axioms div_exact
+#print axioms rem_exact
+end AspisR1.CheckpointBytesBodyArithmetic

@@ -1,0 +1,66 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "packet": "s4-query-values-four-callback-claim-powers-v1-20261021",
+  "status": "green-claim-powers-coordinate-premise-consumer",
+  "classification": "On the same successful query-values call, replaces the 29 independent S4 coordinate-bound assumptions by canonical Claim gamma, successful ClaimPowers, and an explicit fieldwise array identity from the query caller input to the mapped ClaimPowers output. Four callback field-result propositions remain opaque; no existential payloads are eliminated.",
+  "modules": [
+    {
+      "module": "S4QueryValuesFourCallbackClaimPowersV1",
+      "source": "sources/S4QueryValuesFourCallbackClaimPowersV1.lean",
+      "source_sha256": "a2fb2f04712d46a5d5d7d0fe6d911d5ab1f48974cdeab8060b167d741559b713",
+      "object_sha256": "b67ac9ab2ad6453c06b69947d84db157928885d70075f030045f43d26ead8dd9",
+      "producer_receipt": "producers/ClaimPowersConsumer/receipt.json",
+      "command": "producers/ClaimPowersConsumer/command.json",
+      "time": "producers/ClaimPowersConsumer/time.log",
+      "log": "producers/ClaimPowersConsumer/lean.log",
+      "source_revision_at_launch": "7e3e8e6cb1568654239fa1a726212ef5afc70a55",
+      "exit_status": 0,
+      "wall_seconds": 25.73,
+      "peak_rss_bytes": 3586916352,
+      "swap_bytes": 0,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    }
+  ],
+  "direct_imports": [
+    "S4QueryValuesFourCallbackFieldResultV2",
+    "FourDotsClaimPowerCoordinateBridgeV1"
+  ],
+  "direct_import_source_map": {
+    "S4QueryValuesFourCallbackFieldResultV2": {
+      "source": "../s4-query-values-four-callback-field-result-v2-20261021/sources/S4QueryValuesFourCallbackFieldResultV2.lean",
+      "source_sha256": "be8abc3db201b965920779abc9f3c922c4ccc14ba715487117acb3e6f1d5d107",
+      "object_sha256": "339ceefcd1c43c363eefaa5f2f9534f71461dc235e11766ec6c9794db40a0843",
+      "producer_packet": "s4-query-values-four-callback-field-result-v2-20261021"
+    },
+    "FourDotsClaimPowerCoordinateBridgeV1": {
+      "source": "../s4-claim-power-coordinate-bridge-v2/sources/FourDotsClaimPowerCoordinateBridgeV1.lean",
+      "source_sha256": "7d60340d9d047ba740568aaf292a4781bf433b2941c8c287593bc2cf735c0353",
+      "object_sha256": "0bb62f35381ae09da6027dbc6bdaf9f8739e863266c62bd7f7bc1a357e2bac82",
+      "producer_packet": "s4-claim-power-coordinate-bridge-v2",
+      "local_missing_artifact_rebuild": "producers/ClaimPowerBridgeLocalRebuild/receipt.json",
+      "local_rebuilt_object_sha256": null
+    }
+  },
+  "limitations": [
+    "The caller must still provide the exact array identity prefixArrayToCurrent gPrefix = claimArrayToFast claimPowers; this packet does not prove that the source caller constructs that identity.",
+    "Canonicality of gamma and success of ClaimPowers are explicit premises here.",
+    "Rust std/P6 `array::from_fn` correspondence and the final accepted-run/headline join remain open."
+  ],
+  "compiler": {
+    "path": "/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+    "sha256": "1b370cfcbf44e80d1b004ab1b1ab9a4c73951f9f7c242140bcff9bc577576554"
+  },
+  "resource": {
+    "threads": 1,
+    "lean_memory_mb": 4400,
+    "swap_max_mb": 0
+  },
+  "diagnostics": [
+    "diagnostics/attempt-v1/"
+  ],
+  "reused_owner_rebuild_note": "Accepted bridge source/hash was pinned by s4-claim-power-coordinate-bridge-v2. Its object was absent from local warm caches; one focused compile recreated the exact pinned object SHA against already-cached imports. No dependency build or source change."
+}

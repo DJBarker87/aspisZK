@@ -1,0 +1,20 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBytes.lean:55:2: error: No goals to be solved
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+@[backward_defeq] theorem BitVec.fromLEBytes.eq_1 : BitVec.fromLEBytes [] = 0#(8 * [].length) :=
+Eq.refl (BitVec.fromLEBytes [])
+@[backward_defeq] theorem BitVec.fromLEBytes.eq_2 : ∀ (b : Byte) (l_2 : List Byte),
+  BitVec.fromLEBytes (b :: l_2) =
+    BitVec.setWidth (8 * (b :: l_2).length) b |||
+      BitVec.setWidth (8 * (b :: l_2).length) (BitVec.fromLEBytes l_2) <<< 8 :=
+fun b l_2 => Eq.refl (BitVec.fromLEBytes (b :: l_2))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBytes.lean:60:7: error(lean.unknownIdentifier): Unknown constant `Nat.shiftLeft_add_eq_or`
+Nat.shiftLeft_add_eq_or_of_lt {i b : ℕ} (b_lt : b < 2 ^ i) (a : ℕ) : a <<< i + b = a <<< i ||| b
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedBytes.lean:62:7: error(lean.unknownIdentifier): Unknown constant `BitVec.toNat_zeroExtend`
+BitVec.toNat_append {m n : ℕ} (x : BitVec m) (y : BitVec n) : (x ++ y).toNat = x.toNat <<< n ||| y.toNat
+BitVec.toNat_concat {w : ℕ} (x : BitVec w) (b : Bool) : (x.concat b).toNat = x.toNat * 2 + b.toNat
+'R1Z.ProverCommitOwnedDecoder.index_byteAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.offset_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnedDecoder.readBlock_byteWord' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

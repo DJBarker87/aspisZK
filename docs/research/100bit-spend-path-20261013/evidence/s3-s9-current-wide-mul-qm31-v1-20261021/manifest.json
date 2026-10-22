@@ -1,0 +1,130 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "packet": "s3-s9-current-wide-mul-qm31-v1-20261021",
+  "status": "GREEN focused Lean semantic model; Rust/generated-source correspondence and FieldOps installation OPEN",
+  "scope": "Proves total checked canonicalization on canonical QM31 inputs and, for successful selected current QM31 multiplication, canonical WideExact output with coordinatewise decoded products. It does not establish equality to the emitted Rust method or close the enclosing helper/caller.",
+  "modules": [
+    {
+      "module": "S3S9CurrentWideMulQM31V3",
+      "source": "sources/S3S9CurrentWideMulQM31V3.lean",
+      "source_sha256": "7e2984dd5c20bd596f4d67e3fca731498afa7fea11ca1a455c3c726388c93bc1",
+      "object_sha256": "1a8f338a8ffcb6770fb25d600453aa0f11b19c1ac0a1aca5a3fed13647cff179",
+      "receipt": "evidence/receipt.json",
+      "preflight": "evidence/preflight.json",
+      "command": "evidence/command.json",
+      "exit_status": 0,
+      "wall_seconds": 2.407,
+      "peak_process_rss_kib": 3913432,
+      "scope_memory_peak_bytes": 367058944,
+      "swap_bytes": 0,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "source_revision": null,
+      "source_revision_status": "actual launch Git HEAD not captured; configured preflight revision is retained in evidence but is not asserted as launch revision"
+    }
+  ],
+  "direct_import_source_map": {
+    "KpowersCurrentQMSemanticsV1": {
+      "repository_path": "docs/research/100bit-spend-path-20261013/evidence/s3-s9-kpowers-current-qm-semantics-v1-20261021/sources/KpowersCurrentQMSemanticsV1.lean",
+      "source_sha256": "1a6fa5e475a00caee43a66905848c450962da28729357ac49552cc006c78fb74",
+      "object_sha256": "b9a9cca7f66a6b609275e5c8350aeb0b3fe0391065045846e07b3987019aeba9",
+      "producer_manifest": "docs/research/100bit-spend-path-20261013/evidence/s3-s9-kpowers-current-qm-semantics-v1-20261021/manifest.json"
+    },
+    "CurrentWideField": {
+      "repository_path": "docs/research/100bit-spend-path-20261013/evidence/session-b-current-wide-arithmetic-20261020/sources/CurrentWideField.lean",
+      "source_sha256": "5effff1e8a8b841a7e3c55fcf880767bae118c0b66a613874caeab21597f7c5a",
+      "object_sha256": "9530fed93633c80d4ee634d9a3130284262887662b398349060b9ae8c88cb3c2",
+      "producer_manifest": "docs/research/100bit-spend-path-20261013/evidence/session-b-current-wide-arithmetic-20261020/manifest.json"
+    }
+  },
+  "compiler": {
+    "path": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+    "sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+  },
+  "resource": {
+    "argv_core": [
+      "lean",
+      "-j1",
+      "-M",
+      "4400",
+      "-R",
+      "<source-root>",
+      "-o",
+      "<object>",
+      "<source>"
+    ],
+    "memory_high_bytes": 1073741824,
+    "memory_max_bytes": 2147483648,
+    "memory_swap_max_bytes": 0,
+    "process_rss_note": "GNU time reports process RSS including shared mappings; cgroup scope peak is the scoped memory measure",
+    "admission": "evidence/admission-proof.json",
+    "reservation": "evidence/reservation-proof.json"
+  },
+  "rust_source": {
+    "path": "crates/aspis-core/src/field/wide_exact.rs",
+    "sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+    "method": "WideExact::mul_qm31 at line 178; canonical_qm31 at line 283",
+    "correspondence_status": "source body inspected and pinned; no generated-body/source equivalence theorem or mechanical body checker is included"
+  },
+  "limitations": [
+    "The proof only installs QM31 multiplication semantics in a source-shaped model; other five operation slots are not instantiated by this packet.",
+    "The Lean model assumes canonicality of the right operand to prove canonicalization is the identity, and successful current QM multiplication for the output theorem.",
+    "It does not prove the outer P6/from_fn/fold helper call trace or the frozen Rust Weights::pair result/state/error behavior.",
+    "The configured source revision in preflight.json is not reliable launch provenance; actual launch Git HEAD is explicitly unknown."
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "59b06bc5cd6cee9f3cdce753e5d93c09939fcb32fcf736ba9adf499799625918",
+      "size_bytes": 1434
+    },
+    {
+      "path": "check_packet.py",
+      "sha256": "c4e94627ab6759f20acff103abdaa01b590d9cd7544f2e0c2b980da57a91b08c",
+      "size_bytes": 2254
+    },
+    {
+      "path": "evidence/admission-proof.json",
+      "sha256": "1291d135442780ec7f9ebb5060179deb329e36e659ab3383a0ad399d4862b8fa",
+      "size_bytes": 150648
+    },
+    {
+      "path": "evidence/command.json",
+      "sha256": "4f3b2c088bc12549462341ec7caeeea25af3e6fafb792625c36d66ddd6cf49b4",
+      "size_bytes": 14234
+    },
+    {
+      "path": "evidence/lean.log",
+      "sha256": "6d695dba4368e49ccdf3104975e2ffdc2981ce2cbbcef20671d181e7fe41b726",
+      "size_bytes": 709
+    },
+    {
+      "path": "evidence/preflight.json",
+      "sha256": "2b16e2ea533a677d1e1dd9b4eab74d4d071946fe128843d2c99210362fe54140",
+      "size_bytes": 14888
+    },
+    {
+      "path": "evidence/receipt.json",
+      "sha256": "76497f1e2c2852f057cc7d6d9ac234842dfbebfcd8f77338dee2882d1b0ca995",
+      "size_bytes": 530
+    },
+    {
+      "path": "evidence/reservation-proof.json",
+      "sha256": "3a413158a305d5ccb9acf8f27468e021efbb58341db087fded13c036cadd5d33",
+      "size_bytes": 845
+    },
+    {
+      "path": "evidence/time.log",
+      "sha256": "58e3763b7ad4786c6b34e4d36785143afc6370cf23632ab5793639aa7ef4bcfc",
+      "size_bytes": 14643
+    },
+    {
+      "path": "sources/S3S9CurrentWideMulQM31V3.lean",
+      "sha256": "7e2984dd5c20bd596f4d67e3fca731498afa7fea11ca1a455c3c726388c93bc1",
+      "size_bytes": 7892
+    }
+  ]
+}

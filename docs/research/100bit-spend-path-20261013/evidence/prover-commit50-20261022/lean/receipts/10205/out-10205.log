@@ -1,0 +1,180 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTotals50.lean:34:48: error: Expected type must not contain metavariables
+  ↑0#usize < ↑?m.179
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTotals50.lean:35:48: error: Expected type must not contain metavariables
+  ↑1#usize < ↑?m.179
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTotals50.lean:36:48: error: Expected type must not contain metavariables
+  ↑2#usize < ↑?m.179
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTotals50.lean:37:38: error: Application type mismatch: The argument
+  hc
+has type
+  ↑c < 3
+but is expected to have type
+  ↑c < ↑?m.179
+in the application
+  ProverCommitArray49.index ?m.179 ?m.180 c hc
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTotals50.lean:37:73: error: Application type mismatch: The argument
+  hh
+has type
+  ↑h < 3
+but is expected to have type
+  ↑h < ↑?m.179
+in the application
+  ProverCommitArray49.index ?m.179 ?m.180 h hh
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTotals50.lean:40:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Array.make 3#usize [a 0 ↑c ↑h, a 1 ↑c ↑h, a 2 ↑c ↑h] ⋯
+in the target expression
+  (do
+      let a1 ←
+        (ProverCommitArray49.array 3#usize fun i =>
+                ProverCommitArray49.array 3#usize fun c => ProverCommitArray49.array 3#usize (a i c)).index_usize
+            0#usize
+      let a2 ← a1.index_usize c
+      let m ← a2.index_usize h
+      let a3 ←
+        (ProverCommitArray49.array 3#usize fun i =>
+                ProverCommitArray49.array 3#usize fun c => ProverCommitArray49.array 3#usize (a i c)).index_usize
+            1#usize
+      let a4 ← a3.index_usize c
+      let m1 ← a4.index_usize h
+      let a5 ←
+        (ProverCommitArray49.array 3#usize fun i =>
+                ProverCommitArray49.array 3#usize fun c => ProverCommitArray49.array 3#usize (a i c)).index_usize
+            2#usize
+      let a6 ← a5.index_usize c
+      let m2 ← a6.index_usize h
+      let a7 ←
+        (ProverCommitArray49.array 3#usize fun i =>
+                ProverCommitArray49.array 3#usize fun c => ProverCommitArray49.array 3#usize (b i c)).index_usize
+            0#usize
+      let a8 ← a7.index_usize c
+      let m3 ← a8.index_usize h
+      let a9 ←
+        (ProverCommitArray49.array 3#usize fun i =>
+                ProverCommitArray49.array 3#usize fun c => ProverCommitArray49.array 3#usize (b i c)).index_usize
+            1#usize
+      let a10 ← a9.index_usize c
+      let m4 ← a10.index_usize h
+      let a11 ←
+        (ProverCommitArray49.array 3#usize fun i =>
+                ProverCommitArray49.array 3#usize fun c => ProverCommitArray49.array 3#usize (b i c)).index_usize
+            2#usize
+      let a12 ← a11.index_usize c
+      let m5 ← a12.index_usize h
+      channels.sum (Array.make 3#usize [m, m1, m2] ⋯) (Array.make 3#usize [m3, m4, m5] ⋯) 0#usize 3#u8 0#u64) =
+    ok z
+
+case refine_1
+a b : ℕ → ℕ → ℕ → U32
+c h : Usize
+hc : ↑c < 3
+hh : ↑h < 3
+ha : ∀ i < 3, ↑(a i ↑c ↑h) < AspisCircleGroupOrder.P
+hb : ∀ i < 3, ↑(b i ↑c ↑h) < AspisCircleGroupOrder.P
+hbnd :
+  ProverCommitChannelSum49.sum (fun i => a i ↑c ↑h) (fun i => b i ↑c ↑h) 3 0 ≤ 3 * (ProverCommitChannelSum49.P - 1) ^ 2
+z : U64
+hz :
+  channels.sum (ProverCommitM31Array48.array 3#usize fun i => a i ↑c ↑h)
+      (ProverCommitM31Array48.array 3#usize fun i => b i ↑c ↑h) 0#usize 3#u8 0#u64 =
+    ok z
+hzv : ↑z = ↑0#u64 + ProverCommitChannelSum49.sum (fun i => a i ↑c ↑h) (fun i => b i ↑c ↑h) 3 ↑0#usize
+⊢ (do
+      let a1 ←
+        (ProverCommitArray49.array 3#usize fun i =>
+                ProverCommitArray49.array 3#usize fun c => ProverCommitArray49.array 3#usize (a i c)).index_usize
+            0#usize
+      let a2 ← a1.index_usize c
+      let m ← a2.index_usize h
+      let a3 ←
+        (ProverCommitArray49.array 3#usize fun i =>
+                ProverCommitArray49.array 3#usize fun c => ProverCommitArray49.array 3#usize (a i c)).index_usize
+            1#usize
+      let a4 ← a3.index_usize c
+      let m1 ← a4.index_usize h
+      let a5 ←
+        (ProverCommitArray49.array 3#usize fun i =>
+                ProverCommitArray49.array 3#usize fun c => ProverCommitArray49.array 3#usize (a i c)).index_usize
+            2#usize
+      let a6 ← a5.index_usize c
+      let m2 ← a6.index_usize h
+      let a7 ←
+        (ProverCommitArray49.array 3#usize fun i =>
+                ProverCommitArray49.array 3#usize fun c => ProverCommitArray49.array 3#usize (b i c)).index_usize
+            0#usize
+      let a8 ← a7.index_usize c
+      let m3 ← a8.index_usize h
+      let a9 ←
+        (ProverCommitArray49.array 3#usize fun i =>
+                ProverCommitArray49.array 3#usize fun c => ProverCommitArray49.array 3#usize (b i c)).index_usize
+            1#usize
+      let a10 ← a9.index_usize c
+      let m4 ← a10.index_usize h
+      let a11 ←
+        (ProverCommitArray49.array 3#usize fun i =>
+                ProverCommitArray49.array 3#usize fun c => ProverCommitArray49.array 3#usize (b i c)).index_usize
+            2#usize
+      let a12 ← a11.index_usize c
+      let m5 ← a12.index_usize h
+      channels.sum (Array.make 3#usize [m, m1, m2] ⋯) (Array.make 3#usize [m3, m4, m5] ⋯) 0#usize 3#u8 0#u64) =
+    ok z
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTotals50.lean:38:6: warning: This simp argument is unused:
+  show (0#usize).val = 0 from rfl
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵t̵o̵t̵a̵l̵s̵5̵0̵.̵c̵h̵a̵n̵n̵e̵l̵,̵c̵u̵b̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵A̵r̵r̵a̵y̵4̵9̵.̵i̵n̵d̵e̵x̵ ̵_̵ ̵_̵ ̵0̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵A̵r̵r̵a̵y̵4̵9̵.̵i̵n̵d̵e̵x̵ ̵_̵ ̵_̵ ̵1̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵A̵r̵r̵a̵y̵4̵9̵.̵i̵n̵d̵e̵x̵ ̵_̵ ̵_̵ ̵2̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵A̵r̵r̵a̵y̵4̵9̵.̵i̵n̵d̵e̵x̵ ̵_̵ ̵_̵ ̵c̵ ̵h̵c̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵A̵r̵r̵a̵y̵4̵9̵.̵i̵n̵d̵e̵x̵ ̵_̵ ̵_̵ ̵h̵ ̵h̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵s̵h̵o̵w̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵0̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵s̵h̵o̵w̵ ̵(̵1̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵1̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵s̵h̵o̵w̵ ̵(̵2̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵2̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲t̲o̲t̲a̲l̲s̲5̲0̲.̲c̲h̲a̲n̲n̲e̲l̲,̲ ̲c̲u̲b̲e̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲A̲r̲r̲a̲y̲4̲9̲.̲i̲n̲d̲e̲x̲ ̲_̲ ̲_̲ ̲0̲#̲u̲s̲i̲z̲e̲ ̲(̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲A̲r̲r̲a̲y̲4̲9̲.̲i̲n̲d̲e̲x̲ ̲_̲ ̲_̲ ̲1̲#̲u̲s̲i̲z̲e̲ ̲(̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲)̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲A̲r̲r̲a̲y̲4̲9̲.̲i̲n̲d̲e̲x̲ ̲_̲ ̲_̲ ̲2̲#̲u̲s̲i̲z̲e̲ ̲(̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲)̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲A̲r̲r̲a̲y̲4̲9̲.̲i̲n̲d̲e̲x̲ ̲_̲ ̲_̲ ̲c̲ ̲h̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲A̲r̲r̲a̲y̲4̲9̲.̲i̲n̲d̲e̲x̲ ̲_̲ ̲_̲ ̲h̲ ̲h̲h̲,̲ ̲s̲h̲o̲w̲ ̲(̲1̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲1̲ ̲f̲r̲o̲m̲ ̲r̲f̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲(̲2̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲2̲ ̲f̲r̲o̲m̲ ̲r̲f̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTotals50.lean:38:36: warning: This simp argument is unused:
+  show (1#usize).val = 1 from rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [totals50.channel, ̲cube,
+  ̵  ̵ ̵ ̵ ̵ ̵ProverCommitArray49.index _ _ 0#usize (by decide),
+       ̵ ̵ProverCommitArray49.index _ _ 1#usize (by decide),
+       ̵ ̵ProverCommitArray49.index _ _ 2#usize (by decide),
+  ̵  ̵ ̵ ̵ ̵ ̵ProverCommitArray49.index _ _ c hc,
+  ̲ ̲ ̲ ̲ ̲ProverCommitArray49.index _ _ h hh,
+  ̵  ̵ ̵ ̵ ̵ ̵show (0#usize).val ̲= ̲0 from rfl,s̵h̵o̵w̵ ̵(̵1̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵1̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵
+       ̵ ̵show (2#usize).val ̲= ̲2 from rfl, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTotals50.lean:39:6: warning: This simp argument is unused:
+  show (2#usize).val = 2 from rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [totals50.channel, ̲cube,
+  ̵  ̵ ̵ ̵ ̵ ̵ProverCommitArray49.index _ _ 0#usize (by decide),
+       ̵ ̵ProverCommitArray49.index _ _ 1#usize (by decide),
+       ̵ ̵ProverCommitArray49.index _ _ 2#usize (by decide),
+  ̵  ̵ ̵ ̵ ̵ ̵ProverCommitArray49.index _ _ c hc,
+  ̲ ̲ ̲ ̲ ̲ProverCommitArray49.index _ _ h hh,
+  ̵  ̵ ̵ ̵ ̵ ̵show (0#usize).val ̲= ̲0 from rfl,s̵h̵o̵w̵ ̵(̵1̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵1̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵
+       ̵ ̵show (2̵1̲#usize).val ̲=2̵ 1̲ ̲from rfl, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTotals50.lean:39:36: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵o̵t̵a̵l̵s̵5̵0̵.̵c̵h̵a̵n̵n̵e̵l̵,̵c̵u̵b̵e̵,̵[̲t̲o̲t̲a̲l̲s̲5̲0̲.̲c̲h̲a̲n̲n̲e̲l̲,̲ ̲c̲u̲b̲e̲,̲ ProverCommitArray49.index _ _ 0#usize (by decide),
+      ProverCommitArray49.index _ _ 1#usize (by decide),
+      ProverCommitArray49.index _ _ 2#usize (by decide), ProverCommitArray49.index _ _ c h̵c̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵A̵r̵r̵a̵y̵4̵9̵.̵i̵n̵d̵e̵x̵h̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲A̲r̲r̲a̲y̲4̲9̲.̲i̲n̲d̲e̲x̲ _ _ h hh, show (̵0̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵0̵(̲0̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲0̲ from r̵f̵l̵,̵s̵h̵o̵w̵ ̵(̵1̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵1̵ ̵f̵r̵o̵m̵ ̵rfl,
+      show (̵2̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵2̵(̲1̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲1̲ from r̵f̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵r̲f̲l̲,̲ ̲s̲h̲o̲w̲ ̲(̲2̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲2̲ ̲f̲r̲o̲m̲ ̲r̲f̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitTotals50.array3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTotals50.channel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitTotals50.all' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,36 @@
+--- docs/research/100bit-spend-path-20261013/evidence/s4-fromfn-loop-join-diagnostic-v1-20261022/source/InterpMatchCtxs.v2.ml	2026-10-22 04:47:36
++++ docs/research/100bit-spend-path-20261013/evidence/s4-fromfn-loop-join-diagnostic-v1-20261022/source/InterpMatchCtxs.v3.ml	2026-10-22 04:47:28
+@@ -335,6 +335,22 @@
+     borrow_proj_to_abs = !borrow_proj_to_abs;
+     loan_proj_to_abs = !loan_proj_to_abs;
+   }
++
++(* Unlike [ty_has_regions_in_pred], this visitor traverses dyn-trait
++   internals regardless of [Config.type_analysis_ignore_dyn]. The guarded
++   associated-projection case must not skip a region hidden in a dyn type. *)
++let ty_has_regions_complete (ty : ty) : bool =
++  let obj =
++    object
++      inherit [_] iter_ty as super
++      method! visit_region _ _ = raise Found
++      method! visit_TDynTrait env tr = super#visit_TDynTrait env tr
++    end
++  in
++  try
++    obj#visit_ty () ty;
++    false
++  with Found -> true
+ 
+ (** Match two types during a join.
+ 
+@@ -422,8 +438,8 @@
+       TPtrMetadata ty
+   | TTraitType _, TTraitType _
+     when phys_eq ty0 ty1
+-         && not (ty_has_regions_in_pred (fun _ -> true) ty0)
+-         && not (ty_has_regions_in_pred (fun _ -> true) ty1) ->
++         && not (ty_has_regions_complete ty0)
++         && not (ty_has_regions_complete ty1) ->
+       (* A region-free associated projection that is literally the same LLBC
+          type needs no region reconciliation. Do not generalize this to
+          distinct projections or types carrying regions. *)

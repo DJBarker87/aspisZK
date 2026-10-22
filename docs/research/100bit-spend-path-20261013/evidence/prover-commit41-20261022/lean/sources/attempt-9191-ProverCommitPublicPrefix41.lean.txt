@@ -1,0 +1,136 @@
+import R1Z.ProverCommitConditionalRom41
+import R1Z.ProverCommitHashClass40
+
+/-! Concrete public bindings in one retained finite ROM. No binding answer is
+resampled. The public nonce policy may depend on the entire earlier log. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitPublicPrefix41
+open R0Z R0Z.FsStatement R0Z.HvzkV R1Z.GamesR1 R1Z.GamesR1PBin
+open LensR1 LayoutR1PBin LazyFrozen ProverCommitSeedEvent19 ProverCommitPublicBinding40
+attribute [local instance] Classical.propDecidable
+
+def binding1 (digest nonce first : OracleAnswer) : List UInt8 :=
+  dBind1 ++ ans first ++ ctxEnc digest nonce ++ descr
+
+def inputs (pub : List UInt8) (tag : UInt8) (nonce digest first : OracleAnswer) :
+    List (List UInt8) := [pub,binding pub tag digest nonce,binding1 digest nonce first]
+
+def reads (pub : List UInt8) (tag : UInt8) (nonce : OracleAnswer)
+    (rom : List UInt8 → OracleAnswer) : List Entry :=
+  let d := rom pub
+  let a := binding pub tag d nonce
+  let b := binding1 d nonce (rom a)
+  [(pub,d),(a,rom a),(b,rom b)]
+
+/-- All three reads, including pre-existing binding answers, use one ROM. -/
+theorem reads_preserved (pub : List UInt8) (tag : UInt8) (nonce : OracleAnswer)
+    (left right : List UInt8 → OracleAnswer)
+    (same : ∀ a ∈ inputs pub tag nonce (left pub)
+      (left (binding pub tag (left pub) nonce)), left a = right a) :
+    reads pub tag nonce left = reads pub tag nonce right := by
+  have hd := same pub (by simp [inputs])
+  have h0 := same (binding pub tag (left pub) nonce) (by simp [inputs])
+  have h1 := same (binding1 (left pub) nonce (left (binding pub tag (left pub) nonce)))
+    (by simp [inputs])
+  simp only [reads,← hd,← h0,← h1]
+
+/-- The second public read is precisely the second binding branch of gram. -/
+theorem grammar_binding1 {e1 e2 : Nat} (pub : List UInt8) (tag : UInt8)
+    (lv : Fin 3 → Fib → List UInt8) (digest : OracleAnswer)
+    (rest : RIdx → OracleAnswer) (nonce : NZ) (seeds : Private) :
+    gram pub tag lv (publicSec nonce seeds) digest rest
+      (Sum.inr (Sum.inr (Sum.inl 1)) : CPos e1 e2) =
+      binding1 digest nonce.val (rest (qBind 0)) := by
+  simp [gram,publicSec,binding1]
+
+/-- Out-of-range strings retain the finite ROM's specified zero answer. -/
+def frozen (bound : Nat) (addresses : List (List UInt8)) : Finset (RomFiniteBin.Address bound) :=
+  (addresses.filterMap (RomFiniteBin.decode bound)).toFinset
+
+theorem lookup_frozen (bound : Nat) (addresses : List (List UInt8))
+    (left right : RomFiniteBin.Address bound → OracleAnswer)
+    (same : ∀ y ∈ frozen bound addresses, left y = right y)
+    (a : List UInt8) (member : a ∈ addresses) :
+    RomFiniteBin.lookup bound left a = RomFiniteBin.lookup bound right a := by
+  unfold RomFiniteBin.lookup
+  cases hd : RomFiniteBin.decode bound a with
+  | none => rfl
+  | some y =>
+    apply same
+    simp only [frozen,List.mem_toFinset,List.mem_filterMap]
+    exact ⟨a,member,hd⟩
+
+/-- Indicator for one possible public/adaptive context. Binding answers and
+prior oracle observations are fixed jointly; no independence is asserted. -/
+def context (bound : Nat) (program : OProg) (fuel : Nat) (history : List Entry)
+    (addresses : List (List UInt8)) (answers : List Entry)
+    (table : RomFiniteBin.Address bound → OracleAnswer) : Prop :=
+  runLog program (RomFiniteBin.lookup bound table) fuel = history ∧
+    ProverCommitPublicNonce40.publicReads (RomFiniteBin.lookup bound table) addresses = answers
+
+/-- The frozen set includes every prior query, with repetitions retained in
+history, and all public prefix addresses. -/
+def contextFrozen (bound : Nat) (history : List Entry) (addresses : List (List UInt8)) :=
+  frozen bound (history.map Prod.fst ++ addresses)
+
+theorem context_local (bound : Nat) (program : OProg) (fuel : Nat) (history : List Entry)
+    (addresses : List (List UInt8)) (answers : List Entry)
+    (left right : RomFiniteBin.Address bound → OracleAnswer)
+    (same : ∀ y ∈ contextFrozen bound history addresses, left y = right y) :
+    context bound program fuel history addresses answers left ↔
+      context bound program fuel history addresses answers right := by
+  have agree (a : List UInt8) (ha : a ∈ history.map Prod.fst ++ addresses) :=
+    lookup_frozen bound _ left right same a ha
+  have logEq := ProverCommitConditionalRom41.history_fiber program fuel history
+    (history.map Prod.fst).toFinset
+    (fun e he => by simp only [List.mem_toFinset]; exact List.mem_map.mpr ⟨e,he,rfl⟩)
+    (RomFiniteBin.lookup bound left) (RomFiniteBin.lookup bound right)
+    (fun y hy => agree y (List.mem_append_left _ (List.mem_toFinset.mp hy)))
+  have readsEq := ProverCommitPublicNonce40.public_reads_preserved
+    (RomFiniteBin.lookup bound left) (RomFiniteBin.lookup bound right) addresses
+    (fun a ha => agree a (List.mem_append_right _ ha))
+  simp only [context,logEq,readsEq]
+
+/-- The public-prefix-aware conditional ROM law at actual byte addresses.
+The nonce may be selected after the fixed adaptive history. The three
+addresses are the statement digest and both dependent public bindings. -/
+theorem conditional_public_prefix (bound : Nat) [Fintype (RomFiniteBin.Address bound)]
+    (program : OProg) (fuel : Nat) (history : List Entry)
+    (choose : List Entry → OracleAnswer) (pub : List UInt8) (tag : UInt8)
+    (digest first : OracleAnswer) (answers : List Entry) {m : Nat}
+    (a : Fin m → (Fin m → OracleAnswer) →
+      (RomFiniteBin.Address bound → OracleAnswer) → RomFiniteBin.Address bound)
+    (causal : CausalF (contextFrozen bound history
+      (inputs pub tag (choose history) digest first)) a)
+    (test : (RomFiniteBin.Address bound → OracleAnswer) → ℚ) :
+    let addresses := inputs pub tag (choose history) digest first
+    let Fr := contextFrozen bound history addresses
+    mean (fun p : (RomFiniteBin.Address bound → OracleAnswer) × (Fin m → OracleAnswer) =>
+      if context bound program fuel history addresses answers p.1 then
+        test (progF Fr a p.1 p.2) else 0) =
+    mean (fun table : RomFiniteBin.Address bound → OracleAnswer =>
+      if context bound program fuel history addresses answers table then test table else 0) := by
+  dsimp only
+  simpa only [eq_iff_iff,iff_true] using ProverCommitConditionalRom41.conditional_law _ a causal
+    (fun table => context bound program fuel history
+      (inputs pub tag (choose history) digest first) answers table)
+    (fun left right same => propext (context_local _ _ _ _ _ _ left right same)) True test
+
+/-- Off the raw-seed memo event no derivation with that suffix can be an
+adversary's earlier queried address, regardless of its public prefix. -/
+theorem raw_off_history (history : List Entry) (seed : OracleAnswer)
+    (off : ¬ ProverCommitPrivateMemo40.guessed history seed)
+    (frame : List UInt8) (e : Entry) (member : e ∈ history) :
+    frame ++ List.ofFn seed ≠ e.1 := by
+  intro eq
+  apply off
+  exact ⟨e,member,eq ▸ ProverCommitPrivateMemo40.source_suffix frame seed⟩
+
+#print axioms reads_preserved
+#print axioms grammar_binding1
+#print axioms lookup_frozen
+#print axioms context_local
+#print axioms conditional_public_prefix
+#print axioms raw_off_history
+end R1Z.ProverCommitPublicPrefix41

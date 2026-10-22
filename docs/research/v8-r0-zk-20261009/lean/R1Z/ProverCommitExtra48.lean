@@ -1,0 +1,82 @@
+import AspisR1ProducerRelease47.Extra48
+import R1Z.ProverCommitNativeQ48
+import R1Z.ProverCommitBasisFillValue47
+/-! Exact reverse-Horner semantic extras. Both 28-coefficient polynomials
+are composed symbolically, without reducing an interpolation table. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitExtra48
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+
+def sourceArray (q : Nat → Old.Q) : Array field.QM31 1024#usize :=
+  ⟨List.ofFn (fun i : Fin (1024#usize).val => ProverCommitNativeQ48.source (q i.val)),by simp only [List.length_ofFn]⟩
+
+theorem index (q : Nat → Old.Q) (i : Usize) (hi : i.val < 1024) :
+    Array.index_usize (sourceArray q) i=ok (ProverCommitNativeQ48.source (q i.val)) := by
+  rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ hi]
+  simp only [sourceArray,List.getElem_ofFn]
+
+def polynomial (q : Nat → Old.Q) (offset : Nat) (x : QM31Exact) : Nat → QM31Exact
+ | 0 => 0
+ | n+1 => polynomial q offset x n+decode (q (offset+n))*x^n
+
+attribute [local irreducible] sourceArray polynomial ProverCommitNativeQ48.source
+
+theorem horner_value (q : Nat → Old.Q) (hq : ∀ j, j < 1024 → Canonical (q j))
+    (offset : Usize) (n : Nat) (left : U8) (hleft : left.val=n)
+    (bound : offset.val+n ≤ 1024) (small : n ≤ 28)
+    (x s : Old.Q) (hx : Canonical x) (hs : Canonical s) :
+    ∃ z : Old.Q, horner (sourceArray q) offset left (ProverCommitNativeQ48.source x)
+        (ProverCommitNativeQ48.source s)=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ decode z=decode s*(decode x)^n+polynomial q offset.val (decode x) n := by
+  induction n generalizing left s with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    refine ⟨s,?_,hs,?_⟩
+    · rw [horner,hz];rfl
+    · rw [polynomial,pow_zero,mul_one,add_zero]
+  | succ n ih =>
+    have hn : left≠0#u8 := by scalar_tac
+    have hdec : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    have hcast : (UScalar.cast .Usize (U8.wrapping_sub left 1#u8)).val=n := by scalar_tac
+    have hidx : (Usize.wrapping_add offset (UScalar.cast .Usize (U8.wrapping_sub left 1#u8))).val=offset.val+n := by
+      rw [ProverCommitBasisFillValue47.add_val _ _ (by rw [hcast];omega),hcast]
+    obtain ⟨product,hprod,hcprod,hdprod⟩ := ProverCommitNativeQ48.mul s x hs hx
+    obtain ⟨next,hnext,hcnext,hdnext⟩ := ProverCommitNativeQ48.add product (q (offset.val+n)) hcprod (hq _ (by omega))
+    obtain ⟨z,hz,hcz,hdz⟩ := ih _ hdec (by omega) (by omega) next hcnext
+    refine ⟨z,?_,hcz,?_⟩
+    · rw [horner]
+      simp only [hn,if_false,lift,hprod,bind_tc_ok]
+      rw [index q _ (by rw [hidx];omega)]
+      simp only [hidx,hnext,bind_tc_ok]
+      exact hz
+    · rw [hdz,hdnext,hdprod,polynomial,pow_succ]
+      ring
+
+theorem source_zero : field.QM31.ZERO=ProverCommitNativeQ48.source zero := by
+  simp only [field.QM31.ZERO,ProverCommitNativeQ48.source,ProverCommitRelease47.convQ,
+    ProverCommitRelease47.convC,fromQ,fromC,zero]
+
+theorem extra_value (q : Nat → Old.Q) (hq : ∀ j, j < 1024 → Canonical (q j))
+    (a b : Old.Q) (ha : Canonical a) (hb : Canonical b) :
+    ∃ z : Old.Q, extra (sourceArray q) (ProverCommitNativeQ48.source a) (ProverCommitNativeQ48.source b)=
+        ok (ProverCommitNativeQ48.source z) ∧ Canonical z ∧
+      decode z=polynomial q 0 (decode a) 28+polynomial q 28 (decode b) 28 := by
+  obtain ⟨left,hl,hcl,hdl⟩ := horner_value q hq 0#usize 28 28#u8 rfl (by scalar_tac) (by omega) a zero ha zero_canonical
+  obtain ⟨right,hr,hcr,hdr⟩ := horner_value q hq 28#usize 28 28#u8 rfl (by scalar_tac) (by omega) b zero hb zero_canonical
+  obtain ⟨first,hfirst,hcfirst,hdfirst⟩ := ProverCommitNativeQ48.add zero left zero_canonical hcl
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitNativeQ48.add first right hcfirst hcr
+  refine ⟨z,?_,hcz,?_⟩
+  · simp only [extra,source_zero,hl,hr,hfirst,hz,bind_tc_ok]
+  · rw [hdz,hdfirst,hdl,hdr]
+    simp only [zero_decode,zero_mul,zero_add,show (0#usize).val=0 from rfl,
+      show (28#usize).val=28 from rfl]
+
+#print axioms index
+#print axioms horner_value
+#print axioms source_zero
+#print axioms extra_value
+end R1Z.ProverCommitExtra48

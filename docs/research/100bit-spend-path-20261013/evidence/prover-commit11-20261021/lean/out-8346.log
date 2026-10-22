@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnedEndpoint.lean:53:2: error: Tactic `rfl` failed: The left-hand side
+  ProverCommitSourceDecoder.quotientDecoder e
+is not definitionally equal to the right-hand side
+  Option.map (⇑(Equiv.refl (SourceTape AspisWideTower.WideExact ProverCommitWordCarrier.sourceBase)))
+    (ProverCommitSourceDecoder.quotientDecoder e)
+
+CommitHandle Aux : Type
+template : R1Wire K CommitHandle Aux
+input : HonestProver K
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+e :
+  (Fin
+        (prover base (base.pubBytes x).length h B outputs x
+              (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                opens)).toProver.E₁ →
+      OracleAnswer) ×
+    (Fin
+        (prover base (base.pubBytes x).length h B outputs x
+              (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                opens)).toProver.E₂ →
+      OracleAnswer)
+⊢ ProverCommitSourceDecoder.quotientDecoder e =
+    Option.map (⇑(Equiv.refl (SourceTape AspisWideTower.WideExact ProverCommitWordCarrier.sourceBase)))
+      (ProverCommitSourceDecoder.quotientDecoder e)
+'R1Z.ProverCommitOwnedEndpoint.caller_law' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

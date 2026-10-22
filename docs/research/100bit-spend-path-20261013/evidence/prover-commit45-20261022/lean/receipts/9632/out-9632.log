@@ -1,0 +1,57 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublication45.lean:31:12: error: Tactic `rfl` failed: The left-hand side
+  Option.map (decode map kids) (some s)
+is not definitionally equal to the right-hand side
+  if ProverCommitStd45.rootGuard modelMap (decode map kids s).level root = true then some (decode map kids s) else none
+
+case isTrue
+Digest Coins State Kids Thread Slot Output : Type
+cmp : ℕ → ℕ → Ordering
+inst✝³ : Std.TransCmp cmp
+inst✝² : Std.LawfulEqCmp cmp
+inst✝¹ : DecidableEq Thread
+inst✝ : DecidableEq Digest
+map : MapAPI ℕ Digest State cmp
+kids : MapAPI ℕ (Digest × Digest) Kids cmp
+tls : TLSAPI Thread Slot Output
+thread : Thread
+schedule : List (Thread × ProverCommitTLS23.Access Slot Output)
+mapLaw : TrustedStd map tls thread schedule
+root : Digest
+s : ProverCommitTree44.Tree State Kids Coins Digest
+h✝ : ProverCommitStd45.rootGuard modelMap (map.decode s.level) root = true
+⊢ Option.map (decode map kids) (some s) =
+    if ProverCommitStd45.rootGuard modelMap (decode map kids s).level root = true then some (decode map kids s)
+    else none
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublication45.lean:31:12: error: Tactic `rfl` failed: The left-hand side
+  Option.map (decode map kids) none
+is not definitionally equal to the right-hand side
+  if ProverCommitStd45.rootGuard modelMap (decode map kids s).level root = true then some (decode map kids s) else none
+
+case isFalse
+Digest Coins State Kids Thread Slot Output : Type
+cmp : ℕ → ℕ → Ordering
+inst✝³ : Std.TransCmp cmp
+inst✝² : Std.LawfulEqCmp cmp
+inst✝¹ : DecidableEq Thread
+inst✝ : DecidableEq Digest
+map : MapAPI ℕ Digest State cmp
+kids : MapAPI ℕ (Digest × Digest) Kids cmp
+tls : TLSAPI Thread Slot Output
+thread : Thread
+schedule : List (Thread × ProverCommitTLS23.Access Slot Output)
+mapLaw : TrustedStd map tls thread schedule
+root : Digest
+s : ProverCommitTree44.Tree State Kids Coins Digest
+h✝ : ¬ProverCommitStd45.rootGuard modelMap (map.decode s.level) root = true
+⊢ Option.map (decode map kids) none =
+    if ProverCommitStd45.rootGuard modelMap (decode map kids s).level root = true then some (decode map kids s)
+    else none
+'R1Z.ProverCommitPublication45.tree_return' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublication45.guarded_eighteen_levels' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitPublication45.publication_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublication45.publication_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,26 @@
+import R1Z.ProverCommitReservationNonzero37
+import R1Z.ProverCommitReservationFrames37
+
+/-! One final audit of the new focused dependency closure. No release theorem. -/
+#print axioms R1Z.ProverCommitReservationRom37.reservation_length
+#print axioms R1Z.ProverCommitReservationRom37.entry_mass
+#print axioms R1Z.ProverCommitReservationRom37.fresh_coordinate
+#print axioms R1Z.ProverCommitReservationRom37.prior_preserved
+#print axioms R1Z.ProverCommitReservationRom37.not_simulator_seedPoint
+#print axioms R1Z.ProverCommitReservationRom37.queried_not_seedGuess
+#print axioms R1Z.ProverCommitReservationRom37.no_existing_event_containment
+#print axioms R1Z.ProverCommitReservationMemo37.generic_memo_mass
+#print axioms R1Z.ProverCommitReservationMemo37.conditional_memo_mass
+#print axioms R1Z.ProverCommitReservationMemo37.memo_exceeds_fresh_bound
+#print axioms R1Z.ProverCommitReservationMemo37.old_event_absent
+#print axioms R1Z.ProverCommitReservationNonzero37.mixed_memo_mass
+#print axioms R1Z.ProverCommitReservationNonzero37.nonzero_memo_exceeds
+#print axioms R1Z.ProverCommitReservationNonzero37.rejected_prefix_success
+#print axioms R1Z.ProverCommitReservationNonzero37.retry_query_not_covered
+#print axioms R1Z.ProverCommitReservationFrames37.reservation_injective
+#print axioms R1Z.ProverCommitReservationFrames37.reservation_control
+#print axioms R1Z.ProverCommitReservationFrames37.first_byte_separated
+#print axioms R1Z.ProverCommitReservationFrames37.state_control_separated
+#print R1Z.ProverCommitSeedEvent19.seedPoint
+#print R1Z.ProverCommitReservationRom37.reservationQueried
+#print R1Z.ProverCommitReservationNonzero37.retry_query_not_covered

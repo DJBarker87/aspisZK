@@ -1,0 +1,85 @@
+import Mathlib.Data.List.Basic
+/-! Ordered serializer composition. The four phases follow prover.rs; their
+byte-producing callbacks are explicit. This file does not import Kani facts
+or assert that an abstract callback is a shipped implementation. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitTraversal17
+
+inductive Section where
+  | header | transcript | openings | nodes
+  deriving DecidableEq, Repr
+
+def sections : List Section := [.header, .transcript, .openings, .nodes]
+
+/-- Each invocation appends exactly one element, keeping all old elements. -/
+def pushAll {α β : Type} (emit : α → β) : List α → List β → List β
+  | [], prefix => prefix
+  | a :: rest, prefix => pushAll emit rest (prefix ++ [emit a])
+
+theorem pushAll_eq {α β : Type} (emit : α → β) (xs : List α) (prefix : List β) :
+    pushAll emit xs prefix = prefix ++ xs.map emit := by
+  induction xs generalizing prefix with
+  | nil => simp only [pushAll, List.map_nil, List.append_nil]
+  | cons a xs ih =>
+    rw [pushAll, ih]
+    simp only [List.map_cons, List.append_assoc, List.singleton_append]
+
+/-- Arbitrary length and contents; no fixed Vec prefix is inferred from a
+bounded Kani check. Instantiation to Rust still requires a Vec model link. -/
+theorem pushAll_length {α β : Type} (emit : α → β) (xs : List α) (prefix : List β) :
+    (pushAll emit xs prefix).length = prefix.length + xs.length := by
+  rw [pushAll_eq, List.length_append, List.length_map]
+
+def serialize {Byte : Type} (bytes : Section → List Byte) (prefix : List Byte) : List Byte :=
+  (pushAll bytes sections []).foldl (· ++ ·) prefix
+
+theorem fixed_section_order {Byte : Type} (bytes : Section → List Byte) (prefix : List Byte) :
+    serialize bytes prefix = prefix ++ bytes .header ++ bytes .transcript ++
+      bytes .openings ++ bytes .nodes := by
+  rfl
+
+/-- Compose four local equalities in the fixed source order. These hypotheses
+must be supplied by a source proof; solver receipts are not Lean axioms. -/
+theorem section_composition {Byte : Type} (left right : Section → List Byte)
+    (header : left .header = right .header)
+    (transcript : left .transcript = right .transcript)
+    (openings : left .openings = right .openings)
+    (nodes : left .nodes = right .nodes) (prefix : List Byte) :
+    serialize left prefix = serialize right prefix := by
+  simp only [fixed_section_order, header, transcript, openings, nodes]
+
+/-- Emission after the ordered 10+12 split, before sorting/deduplication. -/
+def batch {α : Type} (queries : List α) (second : Bool) : List α :=
+  if second then queries.drop 10 else queries.take 10
+
+theorem batch_push {α β : Type} (project : α → β) (queries : List α)
+    (second : Bool) (prefix : List β) :
+    pushAll project (batch queries second) prefix =
+      prefix ++ (batch queries second).map project :=
+  pushAll_eq project (batch queries second) prefix
+
+theorem ordered_split {α β : Type} (project : α → β) (queries : List α) :
+    (batch queries false).map project ++ (batch queries true).map project =
+      queries.map project := by
+  simp only [batch, Bool.false_eq_true, ↓reduceIte]
+  rw [← List.map_append, List.take_append_drop]
+
+/-- The source's four phases have these lengths on successful assembly.
+This is an arithmetic consequence of those lengths, not their certification. -/
+theorem stored_length {Byte : Type} (bytes : Section → List Byte)
+    (hh : (bytes .header).length = 16)
+    (ht : (bytes .transcript).length = 10039)
+    (ho : (bytes .openings).length = 22 * 832)
+    (hn : (bytes .nodes).length = 32 * (146+146+128+172+172+150)) :
+    (serialize bytes []).length = 57607 := by
+  rw [fixed_section_order]
+  simp only [List.length_append, List.length_nil, hh, ht, ho, hn]
+
+#print axioms pushAll_eq
+#print axioms pushAll_length
+#print axioms fixed_section_order
+#print axioms section_composition
+#print axioms batch_push
+#print axioms ordered_split
+#print axioms stored_length
+end R1Z.ProverCommitTraversal17

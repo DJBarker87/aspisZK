@@ -1,0 +1,67 @@
+import MultiproofConeCodec
+import MultiproofConeRead16
+import MultiproofConeSlices
+import MultiproofConeVecLaws
+import MultiproofConeExpandModel
+
+set_option autoImplicit false
+namespace AspisR1.MultiproofConeExpansion
+open Aeneas Aeneas.Std Result
+open OraclePortCompactDraft MultiproofConeCanonical MultiproofConeSlices
+open MultiproofConeVecLaws MultiproofConeExpandModel
+
+theorem expand_total (bytes : Slice U8) (out : alloc.vec.Vec U8)
+    (aligned : bytes.val.length % 16 = 0)
+    (capacity : out.val.length + 2*bytes.val.length ≤ Usize.max) :
+    ∃ result, MultiproofParserRef.reference.expand_rows bytes out = ok (some result) ∧
+      bytesOf result.val = bytesOf out.val ++ expand (bytes.val.length/16) (bytesOf bytes.val) := by
+  generalize hn : bytes.val.length = n
+  induction n using Nat.strong_induction_on generalizing bytes out with
+  | h n ih =>
+    rw [←hn]
+    rw [MultiproofParserRef.reference.expand_rows]
+    by_cases empty : bytes.val.length = 0
+    · simp only [core.slice.Slice.is_empty,Slice.length,empty,decide_true,bind_tc_ok,if_true]
+      refine ⟨out,rfl,?_⟩
+      simp only [empty,Nat.zero_div,expand,List.range_zero,List.map_nil,List.flatten_nil,List.append_nil]
+    · have bound : 16 ≤ bytes.val.length := by omega
+      have notShort : ¬ Slice.len bytes < 16#usize := by change ¬bytes.val.length < 16; omega
+      obtain ⟨chunk,hread,hchunk⟩ := MultiproofConeRead16.read16_total bytes bound
+      have hexpand : ∃ a, MultiproofParserRef.reference.expand_chunk chunk = ok a ∧
+          a.val = chunk.val ++ List.replicate 16 (0#u8) :=
+        MultiproofConeCodec.expand_chunk_total chunk
+      obtain ⟨a,ha,haval⟩ := hexpand
+      have alen : a.val.length = 32 := a.property
+      obtain ⟨next,hnext,hnextval⟩ := extend_total out (Array.to_slice a) (by
+        change out.val.length + a.val.length ≤ Usize.max
+        rw [alen]
+        omega)
+      let rest : Slice U8 := Slice.drop bytes 16#usize
+      have restLength : rest.val.length = bytes.val.length - 16 := by
+        simp only [rest,Slice.getElem!_val_drop,List.length_drop,show (16#usize).val=16 from rfl]
+      have nextLength : next.val.length = out.val.length+32 := by
+        rw [hnextval,List.length_append]
+        change out.val.length+a.val.length = _
+        rw [alen]
+      have restAligned : rest.val.length%16=0 := by rw [restLength];omega
+      have restCapacity : next.val.length+2*rest.val.length≤Usize.max := by
+        rw [nextLength,restLength];omega
+      obtain ⟨result,hresult,hmeaning⟩ := ih rest.val.length (by rw [restLength];omega)
+        rest next restAligned restCapacity rfl
+      simp only [core.slice.Slice.is_empty,Slice.length,empty,decide_false,bind_tc_ok,if_false,
+        notShort,hread,ha,lift,hnext,drop_total bytes 16#usize bound]
+      refine ⟨result,hresult,?_⟩
+      rw [hmeaning,hnextval]
+      change bytesOf (out.val ++ a.val) ++ expand (rest.val.length/16) (bytesOf rest.val) = _
+      rw [bytes_append,haval,bytes_append,bytes_zero]
+      have chunkBytes : bytesOf chunk.val = (bytesOf bytes.val).take 16 := by
+        rw [hchunk]
+        simp only [bytesOf,List.map_take]
+      have restBytes : bytesOf rest.val = (bytesOf bytes.val).drop 16 := by
+        simp only [rest,Slice.getElem!_val_drop,bytesOf,List.map_drop,show (16#usize).val=16 from rfl]
+      have quotient : bytes.val.length/16=rest.val.length/16+1 := by rw [restLength];omega
+      rw [quotient,expand_step,chunkBytes,restBytes]
+      simp only [List.append_assoc]
+
+#print axioms expand_total
+end AspisR1.MultiproofConeExpansion

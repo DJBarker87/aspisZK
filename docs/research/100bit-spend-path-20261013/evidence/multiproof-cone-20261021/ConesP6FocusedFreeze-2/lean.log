@@ -1,0 +1,42 @@
+structure AspisR1.S7P6AccumulatorIterations.Invariant (old : S8OwnedP6Finish.Weights) (t : ℕ)
+  (s : AspisR1.S7JoinAccumulation.State) (sum : S7Kani3CallerTrace.Sum) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S7P6AccumulatorIterations.Invariant.width : (↑s.output).length = 64
+  AspisR1.S7P6AccumulatorIterations.Invariant.power : AspisR1.S7JoinBackendCarriers.Canonical s.power
+  AspisR1.S7P6AccumulatorIterations.Invariant.rhs : AspisR1.S7JoinAccumulation.CanonicalE s.rhs
+  AspisR1.S7P6AccumulatorIterations.Invariant.history : S7Kani3CallerTrace.PushTrace old s.raw sum
+  AspisR1.S7P6AccumulatorIterations.Invariant.phase : AspisR1.S7JoinRowsTrace.Progress t 0 s.raw
+constructor:
+  AspisR1.S7P6AccumulatorIterations.Invariant.mk {old : S8OwnedP6Finish.Weights} {t : ℕ}
+    {s : AspisR1.S7JoinAccumulation.State} {sum : S7Kani3CallerTrace.Sum} (width : (↑s.output).length = 64)
+    (power : AspisR1.S7JoinBackendCarriers.Canonical s.power) (rhs : AspisR1.S7JoinAccumulation.CanonicalE s.rhs)
+    (history : S7Kani3CallerTrace.PushTrace old s.raw sum) (phase : AspisR1.S7JoinRowsTrace.Progress t 0 s.raw) :
+    AspisR1.S7P6AccumulatorIterations.Invariant old t s sum
+structure AspisR1.S8P6ReturnedFinish.Caller (raw : S8OwnedP6Finish.Raw) (destination : S8OwnedP6Finish.Weights)
+  (a : AspisR1.S8P6ReturnedFinish.Acc) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S8P6ReturnedFinish.Caller.size : Aeneas.Std.alloc.vec.Vec.length destination = 64
+  AspisR1.S8P6ReturnedFinish.Caller.lengths : Aeneas.Std.alloc.vec.Vec.length destination ≤
+      Aeneas.Std.alloc.vec.Vec.length raw
+  AspisR1.S8P6ReturnedFinish.Caller.fields : ∀ (l : Fin 64) (row : S8OwnedP6ValueModel.Row),
+      (↑raw)[↑l]? = some row → AspisR1.S8JoinFinishField.rawValue row = a.weights l
+constructor:
+  AspisR1.S8P6ReturnedFinish.Caller.mk {raw : S8OwnedP6Finish.Raw} {destination : S8OwnedP6Finish.Weights}
+    {a : AspisR1.S8P6ReturnedFinish.Acc} (size : Aeneas.Std.alloc.vec.Vec.length destination = 64)
+    (lengths : Aeneas.Std.alloc.vec.Vec.length destination ≤ Aeneas.Std.alloc.vec.Vec.length raw)
+    (fields :
+      ∀ (l : Fin 64) (row : S8OwnedP6ValueModel.Row),
+        (↑raw)[↑l]? = some row → AspisR1.S8JoinFinishField.rawValue row = a.weights l) :
+    AspisR1.S8P6ReturnedFinish.Caller raw destination a
+'AspisR1.S7P6AccumulatorIterations.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S8P6ReturnedFinish.mutable_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S8P6ReturnedFinish.finish_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S8P6ReturnedFinish.stage_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CheckpointP6EncodeK.encode_k_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CheckpointP6KBytes.word_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CheckpointP6KBytes.encode_k_c5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbi5Decision.decision_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+/Users/dominic/ZK/.worktrees/cx-cones-p6/docs/research/100bit-spend-path-20261013/lean/ConesP6FocusedFreeze.lean:20:14: error(lean.unknownIdentifier): Unknown constant `AspisR1.OraclePortFrozen2Join.acceptedRunJoin_of_cones`
+'AspisR1.OraclePortHeadlineFrozen2PerAttempt.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]

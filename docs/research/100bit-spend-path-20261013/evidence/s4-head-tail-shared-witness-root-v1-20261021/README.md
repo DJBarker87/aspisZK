@@ -1,0 +1,3 @@
+PROVED single emitted callback supplies aligned head iterator, BaseLoop, N8 reducer output, packed body, checked tail product trace, finish and final decoded addition.
+
+Limitations: The head iterator/limbs/vals/body and tail witnesses are obtained from one source callback decomposition; no second successful callback or independent body equality is assumed. The installed theorem has concrete tail/parser/packing/add operations and retains scratch coordinate bounds and callback success. Base head and array/P6 source refinement, complete decoded dot functional identity and frozen caller/model correspondence remain open. No full-call totality or final raw per-attempt soundness conclusion is claimed.

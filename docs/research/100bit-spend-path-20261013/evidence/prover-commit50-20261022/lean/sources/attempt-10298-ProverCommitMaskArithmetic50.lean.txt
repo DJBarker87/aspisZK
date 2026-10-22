@@ -1,0 +1,52 @@
+import R1Z.ProverCommitMaskFinish50
+import R1Z.ProverCommitMaskHorner50
+import R1Z.ProverCommitMaskCoefficients50
+/-! Selected-mask arithmetic composition. The named input coefficient law is
+retained, not claimed discharged: the actual 26-write source array producer
+must establish it before this becomes a complete source mask theorem. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitMaskArithmetic50
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+variable {F : Subfield QM31Exact}
+attribute [local irreducible] ProverCommitInterpolationPoly48.poly ProverCommitMaskPolynomial50.polynomial
+
+theorem input_polynomial (B : R0P.PackBasis F) (c1 : Fin 16 → QM31Exact) (mo : Fin 10 → QM31Exact)
+    (q : Nat → Old.Q)
+    (coefficients : ∀ k, k<27 → decode (q k)=(ProverCommitMaskPolynomial50.polynomial B c1 mo).coeff k) :
+    ProverCommitInterpolationPoly48.poly 27 (fun k => decode (q k))=ProverCommitMaskPolynomial50.polynomial B c1 mo := by
+  rw [←ProverCommitMaskCoefficients50.reconstruct B c1 mo]
+  apply Polynomial.ext
+  intro k
+  rw [ProverCommitInterpolationPoly48.coeff,ProverCommitInterpolationPoly48.coeff]
+  by_cases hk : k<27
+  · rw [if_pos hk,if_pos hk]
+    exact coefficients k hk
+  · rw [if_neg hk,if_neg hk]
+
+theorem caller (B : R0P.PackBasis F) (c1 : Fin 16 → QM31Exact) (mo : Fin 10 → QM31Exact)
+    (p q : Nat → Old.Q) (g : Old.Q)
+    (hp : ∀ i, i<10 → Canonical (p i)) (hq : ∀ i, i<27 → Canonical (q i)) (hg : Canonical g)
+    (coefficients : ∀ k, k<27 → decode (q k)=(ProverCommitMaskPolynomial50.polynomial B c1 mo).coeff k) :
+    ∃ z : Old.Q, (do
+      let (l0,l16) ← linear50.eval (ProverCommitQArray48.array 10#usize p)
+      let shared ← mask_horner50.eval (ProverCommitQArray48.array 27#usize q) l0
+      mask_finish50.eval shared l16 (ProverCommitNativeQ48.source g))=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ decode z=R0P.Mask.maskValue B c1 mo (decode g) (fun i : Fin 10 => decode (p i.val)) := by
+  obtain ⟨l0,l16,hlinear,hc0,hc16,hd0,hd16⟩ := ProverCommitLinear50.forms p hp
+  obtain ⟨shared,hshared,hcshared,hdshared⟩ := ProverCommitMaskHorner50.exact_result q hq l0 hc0
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitMaskFinish50.exact_result shared l16 g hcshared hc16 hg
+  refine ⟨z,?_,hcz,?_⟩
+  · rw [hlinear]
+    simp only [bind_tc_ok]
+    change (do
+      let shared ← mask_horner50.eval (ProverCommitQArray48.array 27#usize q) (ProverCommitNativeQ48.source l0)
+      mask_finish50.eval shared (ProverCommitNativeQ48.source l16) (ProverCommitNativeQ48.source g))=_
+    rw [hshared];exact hz
+  · rw [hdz,hdshared,hd0,hd16,input_polynomial B c1 mo q coefficients]
+    exact ProverCommitMaskPolynomial50.eval_mask B c1 mo (decode g) (fun i : Fin 10 => decode (p i.val))
+
+#print axioms input_polynomial
+#print axioms caller
+end R1Z.ProverCommitMaskArithmetic50

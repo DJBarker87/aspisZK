@@ -1,0 +1,32 @@
+def Aeneas.Std.Array.{u} : Type u → Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some x => Result.ok x
+AspisR1FastDotsV10TypedInnerBodyOpsV1.mapWideArray {N : Usize}
+  (g : Std.Array AspisR1FastDotsV10TypedInnerBodyOpsV1.V10Wide N) :
+  Std.Array AspisR1FastDotsCurrent.aspis_core.field.wide_exact.WideExact N
+AspisR1FastDotsV10TypedInnerBodyOpsV1.mapWideArray_index {N : Usize}
+  (g : Std.Array AspisR1FastDotsV10TypedInnerBodyOpsV1.V10Wide N) (i : Usize) :
+  (AspisR1FastDotsV10TypedInnerBodyOpsV1.mapWideArray g).index_usize i =
+    AspisR1FastDotsV10TypedInnerBodyOpsV1.mapResult AspisR1FastDotsV10CarrierMapV1.wideToEbyK (g.index_usize i)
+        9.31 real         0.77 user         1.50 sys
+          2213494784  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              106548  page reclaims
+               75798  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               13138  voluntary context switches
+               61755  involuntary context switches
+         20995375601  instructions retired
+          8399404221  cycles elapsed
+           377409320  peak memory footprint

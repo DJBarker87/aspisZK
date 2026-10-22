@@ -1,0 +1,7 @@
+# S9 arithmetic totality leaves
+
+PROVED: canonical mapped ap0 and powers reads suffice for the actual generated-candidate scalar_factor call to succeed, with its output mapping to the exact concrete P6 result. No successful child-call premise is retained. Concrete QM31 multiplication separately succeeds and preserves canonical outputs for canonical operands, by reusing the existing extracted multiplication specification. See manifest.json for exact targets, focused receipts and axioms.
+
+The scalar result is scoped to candidate933 (retained-four-multiply attempt2), as pinned in the sibling candidate-helper-original-coefficients packet. The QM multiplication theorem is a concrete arithmetic leaf. These are not whole-helper totality proofs. Canonical inputs remain explicit. Caller/parser provenance, full helper construction, Rust/library correspondence, adoption, artifact binding, coherent release replay and the full 100-bit soundness theorem remain OPEN. Production source is unchanged.
+
+Validation: one focused Lean4.32 compile per changed source with -j1 -M4400, mutex and aggregate RSS watchdog. Both checks passed below3.3GB, observed zero swaps and only standard axioms. Warm imported objects are pinned in preflights; no coherent replay or heavy regression was run. Historical failed v1/v2 elaboration attempts are retained in the named local workspaces and are not accepted proofs. No compiled objects included. Run python3 -B check_packet.py for evidence validation without compilation.

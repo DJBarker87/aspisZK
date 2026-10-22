@@ -1,0 +1,85 @@
+import MultiproofConePhysicalLogicalStep
+import MultiproofConePhysicalObservations
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.MultiproofConePhysicalSourceLevel
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConePhysicalProgram MultiproofConePhysicalDigest MultiproofConePhysicalTrace
+open MultiproofConePhysicalObservations MultiproofConePhysicalTransport MultiproofConePhysicalViews
+open MultiproofConePhysicalLogicalStep MultiproofConePhysicalLive MultiproofConePhysicalAddress
+open MultiproofConeNodeDomain MultiproofConeNodeIteration MultiproofConeLevelIteration
+open MultiproofConeOrderedLevel OraclePortFrozenOrder
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep AspisV8R19.SqueezeOracleBridge
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+
+def observedLog (events : List Event) : List (Bytes × State) :=
+  (log events).map (fun e => (flatten e.1,decodeState e.2))
+
+def outputs (events : List Event) : Live := (events.map Event.output).map decodeEntry
+
+/-- The actual physical chronological witness is evaluated by the ordered
+logical source level, retaining exact request/answer order and remaining bytes. -/
+theorem trace_source {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (H : Bytes → State) (law : ∀ input, D.digest hash input=ok (rawOracle H input))
+    (physical : Slice U8) (s final : reference.Scratch) (i w : Usize)
+    (events : List Event) (trace : Trace D hash physical s i w final events)
+    (fuel : Nat) (domain : RowDomain physical s i w) (bound : events.length≤fuel) :
+    eval H (sourceLevel fuel (live s i.val (s.n.val-i.val)) (remaining physical s.«at»)) =
+      (observedLog events,some (outputs events,remaining physical final.«at»)) := by
+  induction trace generalizing fuel with
+  | done s i w halt =>
+    have count : s.n.val-i.val=0 := by change s.n.val≤i.val at halt;omega
+    cases fuel <;> simp only [count,live_empty,sourceLevel,eval,observedLog,log,outputs,List.map_nil]
+  | next s i w ni nw cursor parent left right digest after final es wb active nwval input hashed parentval state step rest ih =>
+    cases fuel with
+    | zero => simp only [List.length_cons] at bound;omega
+    | succ fuel =>
+      obtain ⟨out,eq,progress⟩ := binary_step_progress D hash
+        (fun input => ⟨rawOracle H input,law input⟩) physical s i w domain active
+      rw [step] at eq;cases eq
+      have tail := ih fuel progress.2.1 (by simp only [List.length_cons] at bound;omega)
+      have nextBound : ni.val≤s.n.val := by
+        have dom := progress.2.1
+        rw [progress.1] at dom
+        exact dom.2.2.1
+      have untouched : live after ni.val (after.n.val-ni.val)=live s ni.val (s.n.val-ni.val) := by
+        rw [state]
+        exact live_unread s w parent digest cursor wb ni.val (s.n.val-ni.val)
+          (by have := domain.2.2.2.1;have := progress.2.2.1;omega)
+          (by have := domain.2.1;omega)
+      have atEq : after.«at»=cursor := by rw [state]
+      have answer : H (flatten (parts left right))=decodeState digest := by
+        rw [law] at hashed
+        have eq := congrArg decodeState (Result.ok.inj hashed)
+        simpa only [rawOracle,state_roundtrip] using eq
+      rw [logical_step fuel physical s i ni cursor left right active input]
+      simp only [eval,eval_bind,answer,←untouched,←atEq,tail,Option.map_some,
+        observedLog,log,outputs,List.map_cons,Event.output,decodeEntry,List.singleton_append]
+
+/-- Complete accepted physical level/log comparison against the frozen model.
+Only initial physical bounds/order and the actual successful Result remain. -/
+theorem level_join {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X)
+    (H : Bytes → State) (law : ∀ input, D.digest hash input=ok (rawOracle H input))
+    (physical : Slice U8) (s final : reference.Scratch) (domain : Domain physical s)
+    (sorted : MultiproofConeLiveOrder.Strict (MultiproofConeLivePreservation.keys s) 0 s.n.val)
+    (success : reference.level_rows D hash s physical 0#usize 0#usize=ok (.Done final)) :
+    ∃ rawLog,
+      eval (rawOracle H) (MultiproofConePhysicalLevels.level s physical)=(rawLog,ok (.Done final)) ∧
+      eval H (runLevel (live s 0 s.n.val).length (live s 0 s.n.val) (remaining physical s.«at»)) =
+        (rawLog.map (fun e => (flatten e.1,decodeState e.2)),some (live final 0 final.n.val,remaining physical final.«at»)) := by
+  have total : HashTotal D hash := fun input => ⟨rawOracle H input,law input⟩
+  obtain ⟨events,trace,source,content⟩ := level_observation D hash (rawOracle H) law physical s final domain success
+  have dom : RowDomain physical s 0#usize 0#usize := ⟨domain.1,domain.2.1,by simp,by simp,domain.2.2⟩
+  have target := trace_source D hash H law physical s final _ _ events trace s.n.val dom
+    (by simpa using trace_length D hash total physical s final _ _ events trace dom)
+  have liveContent : live final 0 final.n.val=outputs events := by rw [live,content];rfl
+  refine ⟨log events,source,?_⟩
+  have len : (live s 0 s.n.val).length=s.n.val := by simp [live,view]
+  rw [len,←MultiproofConeOrderedLevel.level_program s.n.val _ _ (live_sorted s s.n.val sorted)]
+  simpa only [observedLog,liveContent,show (0#usize).val=0 from rfl,Nat.sub_zero] using target
+
+#print axioms trace_source
+#print axioms level_join
+end AspisR1.MultiproofConePhysicalSourceLevel
+end

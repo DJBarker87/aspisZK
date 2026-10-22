@@ -1,0 +1,68 @@
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+inductive Aeneas.Std.Result.{u} : Type u → Type u
+number of parameters: 1
+constructors:
+Aeneas.Std.Result.ok : {α : Type u} → α → Result α
+Aeneas.Std.Result.fail : {α : Type u} → Error → Result α
+Aeneas.Std.Result.div : {α : Type u} → Result α
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi4/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi4Decode.lean:67:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have i := b.len;
+    if (i != 32#usize) = true then ok none
+    else do
+      let i1 ← word_spec b 0#usize
+      let i2 ← word_spec b 4#usize
+      let i3 ← word_spec b 8#usize
+      let i4 ← word_spec b 12#usize
+      let i5 ← word_spec b 16#usize
+      let i6 ← word_spec b 20#usize
+      let i7 ← word_spec b 24#usize
+      let i8 ← word_spec b 28#usize
+      aspis_core.field.wide_exact.WideExact.from_limbs (Array.make 8#usize [i1, i2, i3, i4, i5, i6, i7, i8] ⋯)) =
+    ok (some q)
+of `success`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+b : Slice U8
+q : aspis_core.field.wide_exact.WideExact
+success :
+  (have i := b.len;
+    if (i != 32#usize) = true then ok none
+    else do
+      let i1 ← word_spec b 0#usize
+      let i2 ← word_spec b 4#usize
+      let i3 ← word_spec b 8#usize
+      let i4 ← word_spec b 12#usize
+      let i5 ← word_spec b 16#usize
+      let i6 ← word_spec b 20#usize
+      let i7 ← word_spec b 24#usize
+      let i8 ← word_spec b 28#usize
+      aspis_core.field.wide_exact.WideExact.from_limbs (Array.make 8#usize [i1, i2, i3, i4, i5, i6, i7, i8] ⋯)) =
+    ok (some q)
+⊢ CanonicalWide q
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi4/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi4Decode.lean:87:38: error: unsolved goals
+q : RawK
+h0 : ↑q.c0.a < 2147483647
+h1 : ↑q.c0.b < 2147483647
+h2 : ↑q.c1.a < 2147483647
+h3 : ↑q.c1.b < 2147483647
+⊢ OraclePortCompactDraft.le32 (↑↑q.c0.a).val ++
+      (OraclePortCompactDraft.le32 (↑↑q.c0.b).val ++
+        (OraclePortCompactDraft.le32 (↑↑q.c1.a).val ++ (OraclePortCompactDraft.le32 (↑↑q.c1.b).val ++ []))) =
+    List.flatMap (fun n => OraclePortCompactDraft.le32 n.val) do
+      let a ← [↑q.c0.a, ↑q.c0.b, ↑q.c1.a, ↑q.c1.b]
+      pure ↑a
+'AspisR1.OraclePortCkptAbi4Decode.decoded_wide_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortCkptAbi4Decode.canonical_words_bytes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OraclePortCkptAbi4Decode.from_limbs_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbi4Decode.decoded_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]

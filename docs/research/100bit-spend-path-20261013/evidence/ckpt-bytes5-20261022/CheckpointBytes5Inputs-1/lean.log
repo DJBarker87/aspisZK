@@ -1,0 +1,52 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Inputs.lean:42:4: error: Type mismatch: After simplification, term
+  Eq.symm c.proofInput
+ has type
+  ok c.proofParts = ok (Array.make 1#usize [proof] ⋯).to_slice
+but is expected to have type
+  c.proofParts = (Array.make 1#usize [proof] ⋯).to_slice
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Inputs.lean:44:4: error: Type mismatch: After simplification, term
+  Eq.symm c.publicInput
+ has type
+  ok c.publicParts = ok (Array.make 1#usize [public1] ⋯).to_slice
+but is expected to have type
+  c.publicParts = (Array.make 1#usize [public1] ⋯).to_slice
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Inputs.lean:46:4: error: Type mismatch: After simplification, term
+  Eq.symm c.domainInput
+ has type
+  ok c.checksumDomain =
+    ok
+      (Array.make 22#usize
+          [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8,
+            99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+          ⋯).to_slice
+but is expected to have type
+  c.checksumDomain =
+    (Array.make 22#usize
+        [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8,
+          99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+        checksumDomain._proof_21).to_slice
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Inputs.lean:48:4: error: Type mismatch: After simplification, term
+  Eq.symm c.checksumInput
+ has type
+  ok c.checksumParts = ok (Array.make 2#usize [checksumDomain, c.checksumBody] ⋯).to_slice
+but is expected to have type
+  c.checksumParts = (Array.make 2#usize [checksumDomain, c.checksumBody] ⋯).to_slice
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Inputs.lean:52:4: error: 'change' tactic failed, pattern
+  (↑ck).length = 32 + ↑c.checksumEnd
+is not definitionally equal to target
+  match ok c.checksumEnd with
+  | ok z => ↑32#usize ≤ ↑ck.len ∧ ↑ck.len = ↑z + ↑32#usize ∧ z.bv = ck.len.bv - 32#usize.bv
+  | fail e => ↑ck.len < ↑32#usize
+  | x => ⊥
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Inputs.lean:56:44: warning: This simp argument is unused:
+  core.slice.index.SliceIndexRangeToUsizeSlice
+
+Hint: Omit it from the simp argument list.
+  simp only [core.slice.index.Slice.index,c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵,̵
+        core.slice.index.SliceIndexRangeToUsizeSlice.index] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CheckpointBytes5Inputs.singleton_input' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytes5Inputs.checksum_input' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytes5Inputs.calls_inputs' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytes5Inputs.calls_observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

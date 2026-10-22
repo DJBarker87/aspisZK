@@ -1,0 +1,66 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalNode.lean:7:17: warning: Could not generate mvcgen spec for AspisR1.MultiproofConePhysicalDigest.write_observed: (kernel) constant has already been declared 'AspisR1.MultiproofConePhysicalDigest.write_observed.mvcgen_spec'
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalNode.lean:59:106: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁴ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝³ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝² : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝² : i1 < s.n
+i2 : U32
+_✝¹ : [> let i2 ← s.idx.index_usize i1 <]
+i3 : U32
+_✝ : [> let i3 ← lift (index ^^^ 1#u32) <]
+i5 : Usize
+_ : [> let i5 ← physical.len - s.at <]
+i2_post : i2 = (↑s.idx)[↑i + 1]
+i3_post1 : ↑i3 = ↑((↑s.idx)[↑i] ^^^ 1#u32)
+i3_post2 : i3.bv = (↑s.idx)[↑i].bv ^^^ 1#u32.bv
+h✝¹ : ¬(↑s.idx)[↑i + 1] = i3
+i5_post1 : ↑i5 = ↑(Usize.ofNatCore (↑physical).length ⋯) - ↑s.at
+i5_post2 : ↑s.at ≤ ↑(Usize.ofNatCore (↑physical).length ⋯)
+h✝ : i5 < 32#usize
+⊢ True ∧ ¬(↑i + 1 < ↑s.n ∧ (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i] ^^^ 1#u32) ∧ (↑physical).length - ↑s.at < 32
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalNode.lean:59:88: warning: This simp argument is unused:
+  gi
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵O̵b̵s̵e̵r̵v̵e̵d̵,̵S̵o̵u̵r̵c̵e̵P̵a̵i̵r̵,̵g̵i̵,̵g̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵]̵[̲O̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲S̲o̲u̲r̲c̲e̲P̲a̲i̲r̲,̲ ̲g̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalNode.lean:59:91: warning: This simp argument is unused:
+  gn
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵O̵b̵s̵e̵r̵v̵e̵d̵,̵S̵o̵u̵r̵c̵e̵P̵a̵i̵r̵,̵g̵i̵,̵g̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵]̵[̲O̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲S̲o̲u̲r̲c̲e̲P̲a̲i̲r̲,̲ ̲g̲i̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConePhysicalNode.read_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConePhysicalNode.binary_observed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

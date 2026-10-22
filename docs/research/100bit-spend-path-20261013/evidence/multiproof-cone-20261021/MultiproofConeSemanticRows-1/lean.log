@@ -1,0 +1,156 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeSemanticRows.lean:31:4: error: unsolved goals
+case pos
+row : U8
+bytes : Slice U8
+rows : alloc.vec.Vec (alloc.vec.Vec U8)
+height : ↑row + 0 = 27
+rowCount : (↑rows).length = ↑row
+wireBound : (↑bytes).length ≤ 6983
+done : row ≥ 27#u8
+empty : (↑bytes).length = 0
+nilBytes : bytesOf ↑bytes = []
+⊢ (do
+      let result ← ok (some rows)
+      ok (Option.map decodedRows result)) =
+    ok (some (decodedRows rows))
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeSemanticRows.lean:88:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let x ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes { «end» := 5#usize }
+    let x ← alloc.slice.Slice.to_vec core.clone.CloneU8 x
+    let x ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 x logical.deref
+    let nextRows ← rows.push x
+    MultiproofParserRef.parser_reference.semantic_rows next (bytes.drop finish) nextRows
+in the target expression
+  (do
+      let result ←
+        do
+          let logical ← prepare row (sub bytes 5#usize finish)
+          match logical with
+            | none => ok none
+            | some value => do
+              let prefixBytes ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                    { «end» := 5#usize }
+              let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 prefixBytes
+              let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed value.deref
+              let rows1 ← rows.push framed1
+              let nextRow ← row + 1#u8
+              let rest ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                    { start := finish }
+              MultiproofParserRef.parser_reference.semantic_rows nextRow rest rows1
+      ok (Option.map decodedRows result)) =
+    ok
+      (Option.map (fun tail => decodedRows rows ++ tail)
+        (Option.map (fun tail => (headerBytes ↑row ++ logicalBytes (↑row) (bytesOf ↑payload)) :: tail)
+          (semanticRows fuel (↑row + 1) (List.drop (5 + storedSize ↑row) (bytesOf ↑bytes)))))
+
+case pos
+fuel : ℕ
+ih :
+  ∀ (row : U8) (bytes : Slice U8) (rows : alloc.vec.Vec (alloc.vec.Vec U8)),
+    ↑row + fuel = 27 →
+      (↑rows).length = ↑row →
+        (↑bytes).length ≤ 6983 →
+          (do
+              let result ← MultiproofParserRef.parser_reference.semantic_rows row bytes rows
+              ok (Option.map decodedRows result)) =
+            ok (Option.map (fun tail => decodedRows rows ++ tail) (semanticRows fuel (↑row) (bytesOf ↑bytes)))
+row : U8
+bytes : Slice U8
+rows : alloc.vec.Vec (alloc.vec.Vec U8)
+height : ↑row + (fuel + 1) = 27
+rowCount : (↑rows).length = ↑row
+wireBound : (↑bytes).length ≤ 6983
+rowBound : ↑row < 27
+tag : U8
+size : Usize
+stored finish : UScalar UScalarTy.Usize
+next : UScalar UScalarTy.U8
+table : MultiproofParserRef.reference.row_shape row = ok (some (tag, size))
+storage : (if row ≥ 14#u8 then size / 2#usize else ok size) = ok stored
+finishEq : 5#usize + stored = ok finish
+nextEq : row + 1#u8 = ok next
+tagValue : ↑tag = (rowShape ↑row).1
+sizeValue : ↑size = (rowShape ↑row).2
+storedValue : ↑stored = storedSize ↑row
+finishValue : ↑finish = 5 + ↑stored
+nextValue : ↑next = ↑row + 1
+notDone : ¬row ≥ 27#u8
+shortIff : List.length (bytesOf ↑bytes) < 5 + storedSize ↑row ↔ (↑bytes).length < ↑finish
+short : ¬(↑bytes).length < ↑finish
+machineShort : ¬bytes.len < finish
+finishBound : ↑finish ≤ (↑bytes).length
+fiveBound : 5 ≤ (↑bytes).length
+header : List.take 5 (bytesOf ↑bytes) = headerBytes ↑row
+order : ↑5#usize ≤ ↑finish
+payload : Slice U8 := sub bytes 5#usize finish
+payloadLength : (↑payload).length = storedSize ↑row
+payloadBytes : bytesOf ↑payload = slice (bytesOf ↑bytes) 5 (storedSize ↑row)
+good : 14 ≤ ↑row → canonical (bytesOf ↑payload)
+logical : alloc.vec.Vec U8
+hlogical : prepare row payload = ok (some logical)
+logicalMeaning : bytesOf ↑logical = logicalBytes (↑row) (bytesOf ↑payload)
+logicalBound : (↑logical).length ≤ 3712
+notBad : ¬(14 ≤ ↑row ∧ ¬canonical (bytesOf ↑payload))
+nextRows : alloc.vec.Vec (alloc.vec.Vec U8)
+hframe : frameAndPush bytes logical rows = ok nextRows
+frameMeaning : decodedRows nextRows = decodedRows rows ++ [List.take 5 (bytesOf ↑bytes) ++ bytesOf ↑logical]
+frameLength : (↑nextRows).length = (↑rows).length + 1
+cont :
+  (do
+      let x ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes { «end» := 5#usize }
+      let x ← alloc.slice.Slice.to_vec core.clone.CloneU8 x
+      let x ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 x logical.deref
+      let nextRows ← rows.push x
+      MultiproofParserRef.parser_reference.semantic_rows next (bytes.drop finish) nextRows) =
+    MultiproofParserRef.parser_reference.semantic_rows next (bytes.drop finish) nextRows
+⊢ (do
+      let result ←
+        do
+          let logical ← prepare row (sub bytes 5#usize finish)
+          match logical with
+            | none => ok none
+            | some value => do
+              let prefixBytes ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                    { «end» := 5#usize }
+              let framed ← alloc.slice.Slice.to_vec core.clone.CloneU8 prefixBytes
+              let framed1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 framed value.deref
+              let rows1 ← rows.push framed1
+              let nextRow ← row + 1#u8
+              let rest ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                    { start := finish }
+              MultiproofParserRef.parser_reference.semantic_rows nextRow rest rows1
+      ok (Option.map decodedRows result)) =
+    ok
+      (Option.map (fun tail => decodedRows rows ++ tail)
+        (Option.map (fun tail => (headerBytes ↑row ++ logicalBytes (↑row) (bytesOf ↑payload)) :: tail)
+          (semanticRows fuel (↑row + 1) (List.drop (5 + storedSize ↑row) (bytesOf ↑bytes)))))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (5 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeSemanticRows.lean:77:21: warning: This simp argument is unused:
+  hlogical
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵l̵o̵g̵i̵c̵a̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵n̵o̵t̵B̵a̵d̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲n̲o̲t̲B̲a̲d̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone/docs/research/100bit-spend-path-20261013/lean/MultiproofConeSemanticRows.lean:77:30: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵l̵o̵g̵i̵c̵a̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵n̵o̵t̵B̵a̵d̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲h̲l̲o̲g̲i̲c̲a̲l̲,̲ ̲n̲o̲t̲B̲a̲d̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConeSemanticRows.rows_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

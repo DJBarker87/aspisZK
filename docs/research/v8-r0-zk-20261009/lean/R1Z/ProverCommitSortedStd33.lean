@@ -1,0 +1,49 @@
+import R1Z.ProverCommitMapInvariant32
+import R1Z.ProverCommitTrustedStd24
+set_option autoImplicit false
+namespace R1Z.ProverCommitSortedStd33
+open Aeneas.Std R1Z.ProverCommitPublication32 R1Z.ProverCommitSorted32
+
+/-- An early stop is a real miss on a strictly sorted list. -/
+theorem absent (key : Usize) (xs : List (Usize × Bytes))
+    (h : ∀ entry ∈ xs, key < entry.1) : ProverCommitTable20.lookup xs key = none := by
+  induction xs with
+  | nil => rfl
+  | cons entry tail ih =>
+    have ne : entry.1 ≠ key := ne_of_gt (h entry (List.mem_cons_self ..))
+    simp only [ProverCommitTable20.lookup,if_neg ne]
+    exact ih (fun e he => h e (List.mem_cons_of_mem _ he))
+
+/-- The extracted early-stop lookup equals the std graph lookup, not merely
+its own insertion's answer. All finite sorted tables and all byte values. -/
+theorem lookup_graph (key : Usize) (xs : List (Usize × Bytes))
+    (sorted : xs.Pairwise (fun a b => a.1 < b.1)) :
+    lookup key xs = ProverCommitTable20.lookup xs key := by
+  induction xs with
+  | nil => rfl
+  | cons entry tail ih =>
+    rcases entry with ⟨k,v⟩
+    obtain ⟨head,ht⟩ := List.pairwise_cons.mp sorted
+    by_cases eq : key=k
+    · subst k; simp only [lookup,ProverCommitTable20.lookup,ite_true]
+    · have ne : k≠key := Ne.symm eq
+      simp only [lookup,ProverCommitTable20.lookup,if_neg eq,if_neg ne]
+      by_cases lt : key<k
+      · simp only [if_pos lt]
+        exact (absent key tail (fun e he => lt_trans lt (head e he))).symm
+      · simp only [if_neg lt]
+        exact ih ht
+
+/-- A decoded std tree with the same entries has exactly the extracted
+lookup semantics. This is the bridge through ordered iteration and get. -/
+theorem lookup_tree {cmp : Usize → Usize → Ordering}
+    [Std.TransCmp cmp] [Std.LawfulEqCmp cmp] (tree : Std.TreeMap Usize Bytes cmp)
+    (sorted : tree.toList.Pairwise (fun a b => a.1 < b.1)) (key : Usize) :
+    lookup key tree.toList = tree[key]? := by
+  classical
+  rw [lookup_graph key tree.toList sorted, ProverCommitTreeMap22.lookup_toList]
+
+#print axioms absent
+#print axioms lookup_graph
+#print axioms lookup_tree
+end R1Z.ProverCommitSortedStd33

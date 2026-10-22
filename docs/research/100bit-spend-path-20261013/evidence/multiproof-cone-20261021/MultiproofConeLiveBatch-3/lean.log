@@ -1,0 +1,145 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:10:17: warning: Could not generate mvcgen spec for AspisR1.MultiproofConeLeaf.digest_eq_spec: (kernel) constant has already been declared 'AspisR1.MultiproofConeLeaf.digest_eq_spec.mvcgen_spec'
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:31:6: error: unsolved goals
+case pos
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+bound : ↑s.n < 16
+next : reference.Scratch
+success : reference.leaf_step s index leaf = ok (some next)
+len : (↑s.idx).length = 16
+h✝² : s.n > 0#usize
+i : Usize
+_✝³ : [> let i ← s.n - 1#usize <]
+i_post1 : ↑i = ↑s.n - 1
+i_post2 : 1 ≤ ↑s.n
+i1 : U32
+_✝² : [> let i1 ← s.idx.index_usize i <]
+a : Std.Array U32 16#usize
+_✝¹ : [> let a ← s.idx.update s.n index <]
+a_post : a = s.idx.set s.n index
+a1 : Std.Array (Std.Array U8 32#usize) 16#usize
+_✝ : [> let a1 ← s.val.update s.n leaf <]
+a1_post : a1 = s.val.set s.n leaf
+i2 : Usize
+_ : [> let i2 ← s.n + 1#usize <]
+i2_post : ↑i2 = ↑s.n + 1
+h✝¹ : 0 < ↑s.n
+getLast : ↑((↑s.idx)[↑s.n - 1]?.getD default) = ↑(↑s.idx)[↑s.n - 1]
+i1_post : ↑i1 = ↑(↑s.idx)[↑s.n - 1]
+h✝ : ¬↑(↑s.idx)[↑s.n - 1] = ↑index
+_h✝¹⁻⁰ : ↑s.n < Usize.max
+_h.2 : ↑s.n ≤ Usize.max + 1
+_h.3 : ↑s.n ≤ Usize.max
+_h.4 : ↑(↑s.idx)[↑s.n - 1] ≤ 4294967295
+_h.7 : ↑index ≤ 4294967295
+_h.1 : 16 ≤ Usize.max
+⊢ keys { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := i2, «at» := s.at } ↑s.n = ↑index
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:34:6: error: unsolved goals
+case neg
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+bound : ↑s.n < 16
+next : reference.Scratch
+success : reference.leaf_step s index leaf = ok (some next)
+len : (↑s.idx).length = 16
+h✝² : s.n > 0#usize
+i : Usize
+_✝³ : [> let i ← s.n - 1#usize <]
+i_post1 : ↑i = ↑s.n - 1
+i_post2 : 1 ≤ ↑s.n
+i1 : U32
+_✝² : [> let i1 ← s.idx.index_usize i <]
+a : Std.Array U32 16#usize
+_✝¹ : [> let a ← s.idx.update s.n index <]
+a_post : a = s.idx.set s.n index
+a1 : Std.Array (Std.Array U8 32#usize) 16#usize
+_✝ : [> let a1 ← s.val.update s.n leaf <]
+a1_post : a1 = s.val.set s.n leaf
+i2 : Usize
+_ : [> let i2 ← s.n + 1#usize <]
+i2_post : ↑i2 = ↑s.n + 1
+h✝¹ : 0 < ↑s.n
+getLast : ↑((↑s.idx)[↑s.n - 1]?.getD default) = ↑(↑s.idx)[↑s.n - 1]
+i1_post : ↑i1 = ↑(↑s.idx)[↑s.n - 1]
+h✝ : ¬↑(↑s.idx)[↑s.n - 1] = ↑index
+_h✝¹⁻⁰ : ↑s.n < Usize.max
+_h.2 : ↑s.n ≤ Usize.max + 1
+_h.3 : ↑s.n ≤ Usize.max
+_h.4 : ↑(↑s.idx)[↑s.n - 1] ≤ 4294967295
+_h.7 : ↑index ≤ 4294967295
+_h.1 : 16 ≤ Usize.max
+j : ℕ
+eq : ¬j = ↑s.n
+⊢ keys { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := i2, «at» := s.at } j = ↑((↑s.idx)[j]?.getD default)
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:32:8: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s.idx
+  has type
+    Std.Array U32 16#usize
+  but is expected to have type
+    { l // l.length = ↑16#usize }
+  in the application
+    ↑s.idx
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:34:8: error: `simp` made no progress
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:26:53: warning: This simp argument is unused:
+  getLast
+
+Hint: Omit it from the simp argument list.
+  simp_all [MultiproofConeLiveLeaves.insert, ̲keys,̵g̵e̵t̵L̵a̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:32:14: warning: This simp argument is unused:
+  Array.set_val_eq
+
+Hint: Omit it from the simp argument list.
+  simp [A̵r̵r̵a̵y̵.̵s̵e̵t̵_̵v̵a̵l̵_̵e̵q̵,̵List.getElem!_eq_getElem?_getD,
+            List.getElem?_set_self (by omega : s.n.val ̲< ̲s.idx.val.length)]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:32:31: warning: This simp argument is unused:
+  List.getElem!_eq_getElem?_getD
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵r̵r̵a̵y̵.̵s̵e̵t̵_̵v̵a̵l̵_̵e̵q̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵[̲A̲r̲r̲a̲y̲.̲s̲e̲t̲_̲v̲a̲l̲_̲e̲q̲,̲ List.getElem?_set_self (by omega : s̵.̵n̵.̵v̵a̵l̵<̵s̵.̵i̵d̵x̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵)̵]̵s̲.̲n̲.̲v̲a̲l̲ ̲<̲ ̲s̲.̲i̲d̲x̲.̲v̲a̲l̲.̲l̲e̲n̲g̲t̲h̲)̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:33:10: warning: This simp argument is unused:
+  List.getElem?_set_self (by omega : s.n.val < s.idx.val.length)
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵r̵r̵a̵y̵.̵s̵e̵t̵_̵v̵a̵l̵_̵e̵q̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵s̵e̵t̵_̵s̵e̵l̵f̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵ ̵:̵ ̵s̵.̵n̵.̵v̵a̵l̵<̵s̵.̵i̵d̵x̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵)̵]̵[̲A̲r̲r̲a̲y̲.̲s̲e̲t̲_̲v̲a̲l̲_̲e̲q̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲!̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲?̲_̲g̲e̲t̲D̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:34:14: warning: This simp argument is unused:
+  Array.set_val_eq
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵r̵r̵a̵y̵.̵s̵e̵t̵_̵v̵a̵l̵_̵e̵q̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵[̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲!̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲?̲_̲g̲e̲t̲D̲,̲ List.getElem?_set_ne (Ne.symm e̵q̵)̵,̵e̵q̵]̵e̲q̲)̲,̲ ̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:34:31: warning: This simp argument is unused:
+  List.getElem!_eq_getElem?_getD
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵r̵r̵a̵y̵.̵s̵e̵t̵_̵v̵a̵l̵_̵e̵q̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵[̲A̲r̲r̲a̲y̲.̲s̲e̲t̲_̲v̲a̲l̲_̲e̲q̲,̲ List.getElem?_set_ne (Ne.symm e̵q̵)̵,̵e̵q̵]̵e̲q̲)̲,̲ ̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone4/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLiveBatch.lean:35:10: warning: This simp argument is unused:
+  List.getElem?_set_ne (Ne.symm eq)
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵r̵r̵a̵y̵.̵s̵e̵t̵_̵v̵a̵l̵_̵e̵q̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵s̵e̵t̵_̵n̵e̵ ̵(̵N̵e̵.̵s̵y̵m̵m̵ ̵e̵q̵)̵,̵e̵q̵]̵[̲A̲r̲r̲a̲y̲.̲s̲e̲t̲_̲v̲a̲l̲_̲e̲q̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲!̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲?̲_̲g̲e̲t̲D̲,̲ ̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConeLiveBatch.leaf_projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLiveBatch.leaf_sorted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLiveBatch.iterate_sorted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLiveBatch.eighteen_sorted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLiveBatch.projected_keys_sorted' depends on axioms: [propext, Quot.sound]

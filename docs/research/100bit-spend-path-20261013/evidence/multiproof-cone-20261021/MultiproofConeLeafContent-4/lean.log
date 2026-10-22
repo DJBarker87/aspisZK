@@ -1,0 +1,258 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:11:17: warning: Could not generate mvcgen spec for AspisR1.MultiproofConeLeaf.digest_eq_spec: (kernel) constant has already been declared 'AspisR1.MultiproofConeLeaf.digest_eq_spec.mvcgen_spec'
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:28:89: error: unsolved goals
+s : reference.Scratch
+index : U32
+leaf : Digest
+bound : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+h✝³ : s.n > 0#usize
+i : Usize
+_✝² : [> let i ← s.n - 1#usize <]
+i_post1 : ↑i = ↑s.n - 1
+i_post2 : 1 ≤ ↑s.n
+i1 : U32
+_✝¹ : [> let i1 ← s.idx.index_usize i <]
+a : Std.Array U8 32#usize
+_✝ : [> let a ← s.val.index_usize i <]
+b : Bool
+_ : [> let b ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a leaf <]
+h✝² : 0 < ↑s.n
+b_post : (↑s.val)[↑s.n - 1] = leaf
+h✝¹ : b = true
+getLast : ↑((↑s.idx)[↑s.n - 1]?.getD default) = ↑(↑s.idx)[↑s.n - 1]
+i1_post : ↑index = ↑(↑s.idx)[↑s.n - 1]
+h✝ : ↑i1 = ↑(↑s.idx)[↑s.n - 1]
+_h✝⁻⁰ : ↑s.n ≤ Usize.max + 1
+_h.1 : ↑s.n ≤ Usize.max
+_h.3 : ↑(↑s.idx)[↑s.n - 1] ≤ 4294967295
+_h.0 : 16 ≤ Usize.max
+⊢ some s =
+    if (↑s.idx)[↑s.n - 1]?.getD default = index then if (↑s.val)[↑s.n - 1]?.getD default = leaf then some s else none
+    else some { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := UScalar.ofNat (↑s.n + 1) ⋯, «at» := s.at }
+
+s : reference.Scratch
+index : U32
+leaf : Digest
+bound : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+h✝³ : s.n > 0#usize
+i : Usize
+_✝² : [> let i ← s.n - 1#usize <]
+i_post1 : ↑i = ↑s.n - 1
+i_post2 : 1 ≤ ↑s.n
+i1 : U32
+_✝¹ : [> let i1 ← s.idx.index_usize i <]
+a : Std.Array U8 32#usize
+_✝ : [> let a ← s.val.index_usize i <]
+b : Bool
+_ : [> let b ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a leaf <]
+h✝² : 0 < ↑s.n
+a_post : a = (↑s.val)[↑s.n - 1]
+b_post : ¬(↑s.val)[↑s.n - 1] = leaf
+h✝¹ : b = false
+getLast : ↑((↑s.idx)[↑s.n - 1]?.getD default) = ↑(↑s.idx)[↑s.n - 1]
+i1_post : ↑index = ↑(↑s.idx)[↑s.n - 1]
+h✝ : ↑i1 = ↑(↑s.idx)[↑s.n - 1]
+_h✝⁻⁰ : ↑s.n ≤ Usize.max + 1
+_h.1 : ↑s.n ≤ Usize.max
+_h.3 : ↑(↑s.idx)[↑s.n - 1] ≤ 4294967295
+_h.0 : 16 ≤ Usize.max
+⊢ none =
+    if (↑s.idx)[↑s.n - 1]?.getD default = index then if (↑s.val)[↑s.n - 1]?.getD default = leaf then some s else none
+    else some { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := UScalar.ofNat (↑s.n + 1) ⋯, «at» := s.at }
+
+s : reference.Scratch
+index : U32
+leaf : Digest
+bound : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+h✝² : s.n > 0#usize
+i : Usize
+_✝³ : [> let i ← s.n - 1#usize <]
+i_post1 : ↑i = ↑s.n - 1
+i_post2 : 1 ≤ ↑s.n
+i1 : U32
+_✝² : [> let i1 ← s.idx.index_usize i <]
+a : Std.Array U32 16#usize
+_✝¹ : [> let a ← s.idx.update s.n index <]
+a_post : a = s.idx.set s.n index
+a1 : Std.Array (Std.Array U8 32#usize) 16#usize
+_✝ : [> let a1 ← s.val.update s.n leaf <]
+a1_post : a1 = s.val.set s.n leaf
+i2 : Usize
+_ : [> let i2 ← s.n + 1#usize <]
+i2_post : ↑i2 = ↑s.n + 1
+h✝¹ : 0 < ↑s.n
+getLast : ↑((↑s.idx)[↑s.n - 1]?.getD default) = ↑(↑s.idx)[↑s.n - 1]
+i1_post : ↑i1 = ↑(↑s.idx)[↑s.n - 1]
+h✝ : ¬↑(↑s.idx)[↑s.n - 1] = ↑index
+_h✝⁻⁰ : ↑s.n < Usize.max
+_h.1 : ↑s.n ≤ Usize.max + 1
+_h.2 : ↑s.n ≤ Usize.max
+_h.4 : ↑(↑s.idx)[↑s.n - 1] ≤ 4294967295
+_h.5 : ↑index ≤ 4294967295
+_h.0 : 16 ≤ Usize.max
+⊢ i2 = UScalar.ofNat (↑s.n + 1) ⋯
+
+s : reference.Scratch
+index : U32
+leaf : Digest
+bound : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+a : Std.Array U32 16#usize
+_✝¹ : [> let a ← s.idx.update s.n index <]
+a_post : a = s.idx.set s.n index
+a1 : Std.Array (Std.Array U8 32#usize) 16#usize
+_✝ : [> let a1 ← s.val.update s.n leaf <]
+a1_post : a1 = s.val.set s.n leaf
+i2 : Usize
+_ : [> let i2 ← s.n + 1#usize <]
+h✝¹ : ↑s.n ≤ 0
+i2_post : ↑i2 = 1
+h✝ : ↑s.n = 0
+_h.0 : 1 ≤ Usize.max
+_h.1 : 16 ≤ Usize.max
+⊢ i2 = UScalar.ofNat 1 ⋯
+s : reference.Scratch
+index : U32
+leaf : Digest
+bound : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+h✝³ : s.n > 0#usize
+i : Usize
+_✝² : [> let i ← s.n - 1#usize <]
+i_post1 : ↑i = ↑s.n - 1
+i_post2 : 1 ≤ ↑s.n
+i1 : U32
+_✝¹ : [> let i1 ← s.idx.index_usize i <]
+a : Std.Array U8 32#usize
+_✝ : [> let a ← s.val.index_usize i <]
+b : Bool
+_ : [> let b ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a leaf <]
+h✝² : 0 < ↑s.n
+b_post : (↑s.val)[↑s.n - 1] = leaf
+h✝¹ : b = true
+getLast : ↑((↑s.idx)[↑s.n - 1]?.getD default) = ↑(↑s.idx)[↑s.n - 1]
+i1_post : ↑index = ↑(↑s.idx)[↑s.n - 1]
+h✝ : ↑i1 = ↑(↑s.idx)[↑s.n - 1]
+_h✝⁻⁰ : ↑s.n ≤ Usize.max + 1
+_h.1 : ↑s.n ≤ Usize.max
+_h.3 : ↑(↑s.idx)[↑s.n - 1] ≤ 4294967295
+_h.0 : 16 ≤ Usize.max
+⊢ some s =
+    if (↑s.idx)[↑s.n - 1]?.getD default = index then if (↑s.val)[↑s.n - 1]?.getD default = leaf then some s else none
+    else some { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := UScalar.ofNat (↑s.n + 1) ⋯, «at» := s.at }
+s : reference.Scratch
+index : U32
+leaf : Digest
+bound : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+h✝³ : s.n > 0#usize
+i : Usize
+_✝² : [> let i ← s.n - 1#usize <]
+i_post1 : ↑i = ↑s.n - 1
+i_post2 : 1 ≤ ↑s.n
+i1 : U32
+_✝¹ : [> let i1 ← s.idx.index_usize i <]
+a : Std.Array U8 32#usize
+_✝ : [> let a ← s.val.index_usize i <]
+b : Bool
+_ : [> let b ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a leaf <]
+h✝² : 0 < ↑s.n
+a_post : a = (↑s.val)[↑s.n - 1]
+b_post : ¬(↑s.val)[↑s.n - 1] = leaf
+h✝¹ : b = false
+getLast : ↑((↑s.idx)[↑s.n - 1]?.getD default) = ↑(↑s.idx)[↑s.n - 1]
+i1_post : ↑index = ↑(↑s.idx)[↑s.n - 1]
+h✝ : ↑i1 = ↑(↑s.idx)[↑s.n - 1]
+_h✝⁻⁰ : ↑s.n ≤ Usize.max + 1
+_h.1 : ↑s.n ≤ Usize.max
+_h.3 : ↑(↑s.idx)[↑s.n - 1] ≤ 4294967295
+_h.0 : 16 ≤ Usize.max
+⊢ none =
+    if (↑s.idx)[↑s.n - 1]?.getD default = index then if (↑s.val)[↑s.n - 1]?.getD default = leaf then some s else none
+    else some { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := UScalar.ofNat (↑s.n + 1) ⋯, «at» := s.at }
+s : reference.Scratch
+index : U32
+leaf : Digest
+bound : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+h✝² : s.n > 0#usize
+i : Usize
+_✝³ : [> let i ← s.n - 1#usize <]
+i_post1 : ↑i = ↑s.n - 1
+i_post2 : 1 ≤ ↑s.n
+i1 : U32
+_✝² : [> let i1 ← s.idx.index_usize i <]
+a : Std.Array U32 16#usize
+_✝¹ : [> let a ← s.idx.update s.n index <]
+a_post : a = s.idx.set s.n index
+a1 : Std.Array (Std.Array U8 32#usize) 16#usize
+_✝ : [> let a1 ← s.val.update s.n leaf <]
+a1_post : a1 = s.val.set s.n leaf
+i2 : Usize
+_ : [> let i2 ← s.n + 1#usize <]
+i2_post : ↑i2 = ↑s.n + 1
+h✝¹ : 0 < ↑s.n
+getLast : ↑((↑s.idx)[↑s.n - 1]?.getD default) = ↑(↑s.idx)[↑s.n - 1]
+i1_post : ↑i1 = ↑(↑s.idx)[↑s.n - 1]
+h✝ : ¬↑(↑s.idx)[↑s.n - 1] = ↑index
+_h✝⁻⁰ : ↑s.n < Usize.max
+_h.1 : ↑s.n ≤ Usize.max + 1
+_h.2 : ↑s.n ≤ Usize.max
+_h.4 : ↑(↑s.idx)[↑s.n - 1] ≤ 4294967295
+_h.5 : ↑index ≤ 4294967295
+_h.0 : 16 ≤ Usize.max
+⊢ i2 = UScalar.ofNat (↑s.n + 1) ⋯
+s : reference.Scratch
+index : U32
+leaf : Digest
+bound : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+a : Std.Array U32 16#usize
+_✝¹ : [> let a ← s.idx.update s.n index <]
+a_post : a = s.idx.set s.n index
+a1 : Std.Array (Std.Array U8 32#usize) 16#usize
+_✝ : [> let a1 ← s.val.update s.n leaf <]
+a1_post : a1 = s.val.set s.n leaf
+i2 : Usize
+_ : [> let i2 ← s.n + 1#usize <]
+h✝¹ : ↑s.n ≤ 0
+i2_post : ↑i2 = 1
+h✝ : ↑s.n = 0
+_h.0 : 1 ≤ Usize.max
+_h.1 : 16 ≤ Usize.max
+⊢ i2 = UScalar.ofNat 1 ⋯
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:31:21: warning: This simp argument is unused:
+  getLast
+
+Hint: Omit it from the simp argument list.
+  simp_all [next,̵g̵e̵t̵L̵a̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:67:4: error: unsolved goals
+case neg
+s : reference.Scratch
+index : U32
+leaf : Digest
+bound : ↑s.n < 16
+nonempty : 0 < ↑s.n
+size : ↑s.n = ↑s.n - 1 + 1
+front : (view s 0 ↑s.n).reverse = cell s (↑s.n - 1) :: (view s 0 (↑s.n - 1)).reverse
+same : ¬(↑s.idx)[↑s.n - 1]! = index
+ne : ↑index ≠ ↑(↑s.idx)[↑s.n - 1]!
+write :
+  view { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := s.n, «at» := s.at } 0 (↑s.n + 1) =
+    view s 0 ↑s.n ++ [(↑index, leaf)]
+⊢ (↑index, leaf) :: cell s (↑s.n - 1) :: (view s 0 (↑s.n - 1)).reverse =
+    (↑index, leaf) :: (↑(↑s.idx)[↑s.n - 1]!, (↑s.val)[↑s.n - 1]!) :: (view s 0 (↑s.n - 1)).reverse
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone6/docs/research/100bit-spend-path-20261013/lean/MultiproofConeLeafContent.lean:64:26: warning: This simp argument is unused:
+  eq_self_iff_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵i̵g̵e̵s̵t̵,̵e̵q̵_̵s̵e̵l̵f̵_̵i̵f̵f̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵]̵[̲d̲i̲g̲e̲s̲t̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConeLeafContent.step_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLeafContent.view_snoc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeLeafContent.next_content' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,38 @@
+import R1Z.ProverCommitRoundMath49
+import R1Z.ProverCommitRoundScaled48
+import R1Z.ProverCommitQuarter48
+/-! All seven actual owned round coefficients equal the retained R1 round
+polynomial, for any valid source prefix (including both 256/64 fibre counts). -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitRoundModel49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitWideOps48 ProverCommitMix48
+open ProverCommitRoundOutput48 ProverCommitRoundLoop48
+
+theorem terms_math (q w : Nat → Raw) (us : List Triple) (k : Nat) :
+    terms q w us k=ProverCommitRoundMath49.terms (fun i => value (q i)) (fun i => value (w i)) us k := by
+  induction us with
+  | nil => rfl
+  | cons u us ih =>
+    simp only [terms,ProverCommitRoundMath49.terms,List.map_cons,List.sum_cons] at ih ⊢
+    rw [ih]
+
+theorem coefficients (n : Nat) (hn : n≤256) (q w : Nat → Raw)
+    (hq : ∀ k, k<1024 → canonical (q k)) (hw : ∀ k, k<1024 → canonical (w k)) :
+    ∃ out : Nat → Raw, ProverCommitRoundScaled48.run n (sourceArray 1024#usize q) (sourceArray 1024#usize w)=
+      ok (List.ofFn (fun k : Fin 7 => source (out k.val))) ∧
+      (∀ k, k<7 → canonical (out k)) ∧
+      ∀ k : Fin 7, value (out k.val)=
+        (AspisR1.RoundPairing.roundPolynomial (n:=n) (fun j => value (q j.val)) (fun j => value (w j.val))).coeff k.val := by
+  obtain ⟨out,hout,hcout,hdout⟩ := ProverCommitRoundScaled48.scaled_output n hn q w hq hw
+  refine ⟨out,hout,hcout,?_⟩
+  intro k
+  rw [hdout k.val k.isLt,terms_math,
+    ProverCommitRoundMath49.terms_sum _ _ n hn k.val,
+    ProverCommitQuarter48.factor_quarter,ProverCommitRoundMath49.model_coeff (fun j => value (q j)) (fun j => value (w j)) n k.val]
+  exact mul_comm _ _
+
+#print axioms terms_math
+#print axioms coefficients
+end R1Z.ProverCommitRoundModel49

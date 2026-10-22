@@ -1,0 +1,149 @@
+import R1Z.ProverCommitMaterialRecursion
+/-! Arbitrary owned prefixes and QM31 collection. The standard Vec capacity
+bound is explicit. This does not instantiate an untranslated Rust loop. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitMaterialPrefix
+open Aeneas Aeneas.Std Result AspisR1ProverMaterial14
+open R1Z.ProverCommitMaterialRecursion (State Hash Status Values QValues)
+abbrev Error := state_only_hiding.StateOnlyMaskBuildError
+
+def collect {α : Type} (step : State → Result (core.result.Result α Error × State)) :
+    Nat → State → Result (core.result.Result (List α) Error × State)
+  | 0, state => ok (.Ok [], state)
+  | n+1, state => do
+    let (sample, after) ← step state
+    match sample with
+    | .Err e => ok (.Err e, after)
+    | .Ok value =>
+      let (tail, final) ← collect step n after
+      match tail with
+      | .Err e => ok (.Err e, final)
+      | .Ok values => ok (.Ok (value::values), final)
+
+def accumulate {α : Type} (step : State → Result (core.result.Result α Error × State)) :
+    Nat → alloc.vec.Vec α → State → Result (Status × alloc.vec.Vec α × State)
+  | 0, values, state => ok (.Ok (), values, state)
+  | n+1, values, state => do
+    let (sample, after) ← step state
+    match sample with
+    | .Err e => ok (.Err e, values, after)
+    | .Ok value =>
+      let fresh ← alloc.vec.Vec.push values value
+      accumulate step n fresh after
+
+def erase {α : Type} (run : Result (Status × alloc.vec.Vec α × State)) :
+    Result (core.result.Result (List α) Error × State) := do
+  let (status, values, state) ← run
+  match status with
+  | .Err e => ok (.Err e, state)
+  | .Ok () => ok (.Ok values.val, state)
+
+def prepend {α : Type} (values : List α)
+    (run : Result (core.result.Result (List α) Error × State)) :
+    Result (core.result.Result (List α) Error × State) := do
+  let (sample, state) ← run
+  match sample with
+  | .Err e => ok (.Err e, state)
+  | .Ok tail => ok (.Ok (values ++ tail), state)
+
+/-- The prefix may have any length and contents. All scalar errors and final
+states are retained, while unpublished partial vector contents are erased. -/
+theorem arbitrary_prefix {α : Type}
+    (step : State → Result (core.result.Result α Error × State))
+    (n : Nat) (values : alloc.vec.Vec α) (state : State)
+    (room : values.val.length + n ≤ Usize.max) :
+    erase (accumulate step n values state) = prepend values.val (collect step n state) := by
+  induction n generalizing values state with
+  | zero => simp only [accumulate, erase, collect, prepend, bind_tc_ok,
+      Aeneas.Std.uncurry_apply_pair, List.append_nil]
+  | succ n ih =>
+    simp only [accumulate, collect]
+    cases hs : step state with
+    | fail e => rfl
+    | div => rfl
+    | ok pair =>
+      rcases pair with ⟨sample, after⟩
+      simp only [bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
+      cases sample with
+      | Err e => rfl
+      | Ok value =>
+        obtain ⟨fresh, pushed, contents⟩ := WP.spec_imp_exists
+          (alloc.vec.Vec.push_spec values value (by omega))
+        simp only [pushed, bind_tc_ok]
+        rw [ih fresh after (by rw [contents, List.length_append]; simp only [List.length_singleton]; omega)]
+        rw [contents]
+        unfold prepend
+        cases ht : collect step n after with
+        | fail e => rfl
+        | div => rfl
+        | ok pair =>
+          rcases pair with ⟨tail, final⟩
+          simp only [bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
+          cases tail with
+          | Err e => rfl
+          | Ok tail => simp only [List.append_assoc, List.singleton_append, bind_tc_ok,
+              Aeneas.Std.uncurry_apply_pair]
+
+/-- Induction over prefix length: prepending independent existing storage
+never changes the scalar call schedule or any successful appended suffix. -/
+theorem prepend_assoc {α : Type} (left right : List α)
+    (run : Result (core.result.Result (List α) Error × State)) :
+    prepend (left ++ right) run = prepend left (prepend right run) := by
+  induction left with
+  | nil =>
+    cases run with
+    | fail e => rfl
+    | div => rfl
+    | ok pair => rcases pair with ⟨sample, state⟩; cases sample <;> rfl
+  | cons a left ih =>
+    cases run with
+    | fail e => rfl
+    | div => rfl
+    | ok pair =>
+      rcases pair with ⟨sample, state⟩
+      cases sample with
+      | Err e => rfl
+      | Ok tail => simp only [prepend, bind_tc_ok, Aeneas.Std.uncurry_apply_pair, List.append_assoc]
+
+theorem m31_accumulate (hash : Hash) (domain : Slice U8) (n : Nat)
+    (values : Values) (state : State) :
+    ProverCommitMaterialRecursion.finite hash domain n values state =
+      accumulate (prover_commit_reference.limb_caller hash domain) n values state := by
+  induction n generalizing values state with
+  | zero => rfl
+  | succ n ih => simp only [ProverCommitMaterialRecursion.finite, accumulate, ih]; rfl
+
+theorem m31_prefix (hash : Hash) (domain : Slice U8) (n : Nat)
+    (values : Values) (state : State) (room : values.val.length + n ≤ Usize.max) :
+    erase (ProverCommitMaterialRecursion.finite hash domain n values state) =
+      prepend values.val (collect (prover_commit_reference.limb_caller hash domain) n state) := by
+  rw [m31_accumulate]
+  exact arbitrary_prefix _ n values state room
+
+theorem qm31_accumulate (hash : Hash) (domain : Slice U8) (n : Nat)
+    (values : QValues) (state : State) :
+    ProverCommitMaterialRecursion.qmFinite hash domain n values state =
+      accumulate (prover_commit_reference.qm31_caller hash domain) n values state := by
+  induction n generalizing values state with
+  | zero => rfl
+  | succ n ih => simp only [ProverCommitMaterialRecursion.qmFinite, accumulate, ih]; rfl
+
+theorem qm31_prefix (hash : Hash) (domain : Slice U8) (n : Nat)
+    (values : QValues) (state : State) (room : values.val.length + n ≤ Usize.max) :
+    erase (ProverCommitMaterialRecursion.qmFinite hash domain n values state) =
+      prepend values.val (collect (prover_commit_reference.qm31_caller hash domain) n state) := by
+  rw [qm31_accumulate]
+  exact arbitrary_prefix _ n values state room
+
+#print axioms arbitrary_prefix
+
+#print axioms prepend_assoc
+
+#print axioms m31_accumulate
+
+#print axioms m31_prefix
+
+#print axioms qm31_accumulate
+
+#print axioms qm31_prefix
+end R1Z.ProverCommitMaterialPrefix

@@ -1,0 +1,79 @@
+import AspisR1ProducerRelease47.SparseSum50
+import R1Z.ProverCommitSparseProduct50
+import R1Z.ProverCommitSparseAddress50
+/-! Complete ordered sparse weighted-column sum. This theorem does not
+assume a weight-array or returned-sum image. Scanner and pruning remain separate. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitSparseSum50
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open scoped BigOperators
+
+def weight (p : Nat → QM31Exact) (width pref : Nat) : QM31Exact :=
+  ∏ i : Fin width, if pref.testBit (width-1-i.val) then p i.val else 1-p i.val
+
+def term (p col : Nat → Old.Q) (width trailing suffix pref : Nat) : QM31Exact :=
+  weight (fun i => decode (p i)) width pref*decode (col (pref*2^trailing+suffix))
+
+def total (p col : Nat → Old.Q) (width trailing suffix : Nat) : Nat → Nat → QM31Exact
+ | 0,_ => 0
+ | n+1,pref => term p col width trailing suffix pref+total p col width trailing suffix n (pref+1)
+
+attribute [local irreducible] ProverCommitQArray48.array ProverCommitNativeQ48.source weight term total
+
+theorem sum (p col : Nat → Old.Q)
+    (hp : ∀ i, i<10 → Canonical (p i)) (hc : ∀ j, j<1024 → Canonical (col j))
+    (width trailing : U8) (hwidth : width.val+trailing.val=10)
+    (suffix pref : Usize) (hs : suffix.val<2^trailing.val)
+    (n : Nat) (left : U16) (hleft : left.val=n) (bound : pref.val+n≤2^width.val)
+    (acc : Old.Q) (hacc : Canonical acc) :
+    ∃ z : Old.Q, sparse_sum50.sum (ProverCommitQArray48.array 10#usize p)
+      (ProverCommitQArray48.array 1024#usize col) width trailing suffix pref left
+      (ProverCommitNativeQ48.source acc)=ok (ProverCommitNativeQ48.source z) ∧ Canonical z ∧
+      decode z=decode acc+total p col width.val trailing.val suffix.val n pref.val := by
+  induction n generalizing pref left acc with
+  | zero =>
+    have hz : left=0#u16 := by scalar_tac
+    refine ⟨acc,?_,hacc,?_⟩
+    · rw [sparse_sum50.sum,hz];rfl
+    · rw [total,add_zero]
+  | succ n ih =>
+    have hn : left≠0#u16 := by scalar_tac
+    have hdec : (U16.wrapping_sub left 1#u16).val=n := by
+      rw [U16.wrapping_sub_val_eq]
+      have hl := left.hSize
+      rw [UScalar.size_def] at hl
+      rw [UScalar.size_def]
+      change left.val<65536 at hl
+      change (left.val+(65536-1))%65536=n
+      omega
+    have hpow : 2^width.val≤1024 := by
+      have h : 2^width.val≤2^10 := Nat.pow_le_pow_right (by decide) (by omega)
+      exact h
+    have hinc : (core.num.Usize.wrapping_add pref 1#usize).val=pref.val+1 := by
+      change (Usize.wrapping_add pref 1#usize).val=_
+      simpa only [show (1#usize).val=1 from rfl] using
+        ProverCommitBasisFillValue47.add_val pref 1#usize (by change pref.val+1<2048;omega)
+    obtain ⟨w,hw,hcw,hdw⟩ := ProverCommitSparseProduct50.full_weight p hp width (by omega) pref (by omega)
+    have hdw' : decode w=weight (fun i => decode (p i)) width.val pref.val := by
+      simpa only [weight,ProverCommitSparse50.weight,ProverCommitBooleanEnum49.tail] using hdw
+    obtain ⟨r,hr,hrv,hrb⟩ := ProverCommitSparseAddress50.row pref suffix trailing (by omega)
+      (by
+        have he : 10-trailing.val=width.val := by omega
+        rw [he]
+        omega) hs
+    obtain ⟨prod,hprod,hcprod,hdprod⟩ := ProverCommitNativeQ48.mul w (col r.val) hcw (hc _ hrb)
+    obtain ⟨next,hnext,hcnext,hdnext⟩ := ProverCommitNativeQ48.add acc prod hacc hcprod
+    obtain ⟨z,hz,hcz,hdz⟩ := ih _ _ hdec (by rw [hinc];omega) next hcnext
+    refine ⟨z,?_,hcz,?_⟩
+    · rw [sparse_sum50.sum]
+      simp only [hn,if_false,ProverCommitSampleTail49.source_one,hw,bind_tc_ok,hr]
+      rw [ProverCommitQArray48.index 1024#usize col r hrb]
+      simp only [bind_tc_ok,hprod,hnext,lift]
+      exact hz
+    · rw [hdz,hdnext,hdprod,hdw',hrv,hinc,total,term]
+      exact add_assoc _ _ _
+
+#print axioms sum
+end R1Z.ProverCommitSparseSum50

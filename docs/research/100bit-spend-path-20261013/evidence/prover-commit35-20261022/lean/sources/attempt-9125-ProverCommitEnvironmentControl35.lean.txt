@@ -1,0 +1,55 @@
+import R1Z.ProverCommitEnvironmentSource35
+/-! Public API error projection and eight-attempt stopping rule. Only source
+Entropy/Semantic errors leave this environment prefix; detailed filesystem
+errors remain local. This does not install the missing native filesystem law. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitEnvironmentControl35
+open Aeneas Aeneas.Std Result ProverCommitEnvironment35
+
+def apiError : ProverCommitEnvironment35.Error → ProverCommitRetry34.Error
+  | .entropy _ => .Entropy
+  | .reservation _ => .Semantic
+
+def publicResult {Proof : Type} (out : Except ProverCommitEnvironment35.Error Proof × State) :
+    Except ProverCommitRetry34.Error Proof := out.1.mapError apiError
+
+theorem public_failure_replay {Witness Proof : Type} (schedule : Schedule)
+    (tape : Nat → ProverCommitEntropy18.Candidate) (unix : Bool)
+    (s after : State) (e : ProverCommitEnvironment35.Error)
+    (failed : prepare schedule tape unix s = (.error e,after))
+    (w : Witness)
+    (real : Witness → Secret → State → Except ProverCommitEnvironment35.Error Proof × State)
+    (ideal : Unit → Secret → State → Except ProverCommitEnvironment35.Error Proof × State) :
+    publicResult (withPrepared schedule tape unix s w real) =
+      publicResult (withPrepared schedule tape unix s () ideal) := by
+  rw [fail_closed schedule tape unix s after e failed w real,
+    fail_closed schedule tape unix s after e failed () ideal]
+
+/-- Successful continuation may reject and retain all its state changes.
+Environment failure has a distinct origin and always stops the retry owner. -/
+def attempt {Witness Proof : Type} (schedule : Schedule)
+    (tape : Nat → ProverCommitEntropy18.Candidate) (unix : Bool) (w : Witness)
+    (continuation : Witness → Nat → Secret → State →
+      Result (ProverCommitRetry34.Step Proof × State)) :
+    ProverCommitRetry34.Attempt State Proof := fun index s =>
+  match prepare schedule tape unix s with
+  | (.error e,after) => ok (.stop (apiError e),after)
+  | (.ok secret,after) => continuation w index secret after
+
+/-- No later attempt, derivation, proof constructor or publication is called
+once the environment prefix has failed. This applies at any retry index. -/
+theorem retry_failure_stops {Witness Proof : Type} (schedule : Schedule)
+    (tape : Nat → ProverCommitEntropy18.Candidate) (unix : Bool)
+    (s after : State) (e : ProverCommitEnvironment35.Error)
+    (failed : prepare schedule tape unix s = (.error e,after))
+    (w : Witness)
+    (continuation : Witness → Nat → Secret → State →
+      Result (ProverCommitRetry34.Step Proof × State)) (fuel index : Nat) :
+    ProverCommitRetry34.run (attempt schedule tape unix w continuation) (fuel+1) index s =
+      ok (.stop (apiError e),after) := by
+  simp only [ProverCommitRetry34.run,attempt,failed,bind_tc_ok]
+
+#print axioms public_failure_replay
+#print axioms retry_failure_stops
+end R1Z.ProverCommitEnvironmentControl35

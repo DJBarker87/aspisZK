@@ -1,0 +1,50 @@
+import R0Z.HvzkS
+/-! A countermodel to deleting the deployed refinement premise while leaving
+its arbitrary FSExperiments argument unrestricted. This is not an attack on
+Aspis: the deliberately leaking experiment below is not the shipped prover. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitRuntimeObstruction17
+open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.FsAbort R0Z.HvzkS
+variable {K CommitHandle Aux Bat : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+  [HonestView.BatchedLayer K Bat]
+
+/-- The public oracle-history length is a deliberately leaked real/ideal bit.
+Both random carriers are inhabited singletons, with honest uniform laws. -/
+def leaking (v : View K CommitHandle Aux Bat) (answer : OracleAnswer) :
+    FSExperiments K CommitHandle Aux Bat F where
+  Adversary := Unit
+  RealRand := Unit
+  IdealRand := Unit
+  real := fun _ _ _ _ _ _ _ => ⟨v, []⟩
+  ideal := fun _ _ _ _ => ⟨v, [([], answer)]⟩
+  observe := fun _ run => run.observerOracle.isEmpty
+
+instance real_finite (v : View K CommitHandle Aux Bat) (answer : OracleAnswer) :
+    Fintype (leaking (F := F) v answer).RealRand := inferInstanceAs (Fintype Unit)
+instance real_nonempty (v : View K CommitHandle Aux Bat) (answer : OracleAnswer) :
+    Nonempty (leaking (F := F) v answer).RealRand := inferInstanceAs (Nonempty Unit)
+instance ideal_finite (v : View K CommitHandle Aux Bat) (answer : OracleAnswer) :
+    Fintype (leaking (F := F) v answer).IdealRand := inferInstanceAs (Fintype Unit)
+instance ideal_nonempty (v : View K CommitHandle Aux Bat) (answer : OracleAnswer) :
+    Nonempty (leaking (F := F) v answer).IdealRand := inferInstanceAs (Nonempty Unit)
+
+/-- Local codec/builder results independent of `rust` cannot imply privacy of
+all values of that argument. An actual runtime identification remains needed. -/
+theorem no_unrestricted_endpoint (v : View K CommitHandle Aux Bat) (answer : OracleAnswer)
+    (h : HonestProver K) (B : PackBasis F)
+    (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle) (w : h.Instance) (hw : h.public w = x.1)
+    (sim : Challenges K → Tape K F → View K CommitHandle Aux Bat)
+    (ε : ℚ) (small : ε < 1) :
+    ¬ ZK_FSS h B outputs (leaking v answer) x sim ε := by
+  intro hp
+  have bound := hp () w hw
+  change |mean (fun _ : Unit => (1 : ℚ)) - mean (fun _ : Unit => (0 : ℚ))| ≤ ε at bound
+  rw [mean_const, mean_const] at bound
+  simp only [sub_zero, abs_one] at bound
+  exact (not_le_of_gt small) bound
+
+#print axioms no_unrestricted_endpoint
+end R1Z.ProverCommitRuntimeObstruction17

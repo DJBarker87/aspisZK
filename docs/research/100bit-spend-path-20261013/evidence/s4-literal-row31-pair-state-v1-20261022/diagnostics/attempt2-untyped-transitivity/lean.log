@@ -1,0 +1,51 @@
+/tmp/root-s4-literal-row31-pair-state-v1-20261022/sources/S4LiteralRow31PairStateV1.lean:70:5: error: invalid 'by' tactic, expected type has not been provided
+/tmp/root-s4-literal-row31-pair-state-v1-20261022/sources/S4LiteralRow31PairStateV1.lean:48:52: error: unsolved goals
+Hash : Type
+D : aspis_core.Digest32 Hash
+before absorbed : transcript.Transcript Hash
+payload : Slice U8
+hcall : transcript.Transcript.absorb D before 31#u8 payload = ok absorbed
+fits : List.length (framed payload) ≤ SelectedTranscriptParams.D
+P : LiteralTranscript.Prefix
+hstate :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState before.state
+blocks states : ℕ → Bytes32
+hstart : states 0 = absorbed.state
+hs : ∀ k < 8, D.digest absorbed.hash (readParts (states k) 2#u8) = ok (states (k + 1))
+hb : ∀ k < 8, D.digest absorbed.hash (readParts (states k) 1#u8) = ok (blocks k)
+H : Bytes → State
+hdigest :
+  ∀ (hash : Hash) (parts : Slice (Slice U8)) (out : Std.Array U8 32#usize),
+    D.digest hash parts = ok out → decodeState out = H (flatten parts)
+xs : List ℕ
+state : State
+hout :
+  (AspisV8R19.MemoizedProgramLaw.eval H
+        (LiteralByteSampler.samp 31 P (LiteralTranscript.Message.payload (message payload fits))).toProgram).2 =
+    (Value.queries (Except.ok xs), state)
+b : SelectedTranscriptParams.Message := message payload fits
+H' : Addr SelectedTranscriptParams.L → State := fun a => H a.toBytes
+qr : Except ℕ (List ℕ) × State :=
+  pairsRun Q22.q0 (pairs (fun k => decodeState (blocks k)) fun k => decodeState (states k)) (decodeState (states 0))
+hsource :
+  (AspisV8R19.MemoizedProgramLaw.eval (fun a => H a.toBytes)
+        (LiteralTranscript.samp 31 P (LiteralTranscript.Message.payload b)).toProgram).2 =
+    UnifiedSampler.liftQuery
+      (pairsRun Q22.q0 (pairs (fun k => decodeState (blocks k)) fun k => decodeState (states k))
+        (decodeState (states 0)))
+hmap :
+  (AspisV8R19.MemoizedProgramLaw.eval H
+        (LiteralByteSampler.samp 31 P (LiteralTranscript.Message.payload b)).toProgram).2 =
+    (AspisV8R19.OracleProgramOps.mapView Addr.toBytes
+        (AspisV8R19.MemoizedProgramLaw.eval (fun a => H a.toBytes)
+          (LiteralTranscript.samp 31 P (LiteralTranscript.Message.payload b)).toProgram)).2
+hbyteSource :
+  (AspisV8R19.MemoizedProgramLaw.eval H
+        (LiteralByteSampler.samp 31 P (LiteralTranscript.Message.payload b)).toProgram).2 =
+    UnifiedSampler.liftQuery qr
+⊢ pairsRun Q22.q0 (pairs (fun k => decodeState (blocks k)) fun k => decodeState (states k)) (decodeState (states 0)) =
+    (Except.ok xs, state)
+'AspisR1.S4LiteralRow31PairStateV1.row31_success_pair_eq_source_pairs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

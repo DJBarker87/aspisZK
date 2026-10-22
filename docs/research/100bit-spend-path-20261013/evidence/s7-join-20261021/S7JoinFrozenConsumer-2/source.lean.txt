@@ -1,0 +1,102 @@
+import S7JoinAccumulatorReference
+import OraclePortFrozenOrderDecision
+
+/-! Total replacement of the exact dV_frozen arithmetic consumer by the S7
+field reference. This preserves the existing data-reader and query-decoding
+checks, all failures, and the entire oracle program. It is not an extracted
+Rust caller refinement. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.S7JoinFrozenConsumer
+open FS FS2
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft
+open OraclePortStoredExperimentC4 OraclePortStoredDecisionDraftC4
+open RecordedBinaryExperimentBin (SourceInputs)
+open LiteralAcceptanceTerminal
+open RawCutTranscriptRun (ErasedPrefix ErasedMessage)
+attribute [local instance] Classical.propDecidable
+
+def referenceCheck (data : MatchingSupport.Data LiteralTranscript.E)
+    (q : Fin 22 → Fin 262144) (rho : AspisV8R15.ExactTowerBase.QM31Exact) : Prop :=
+  let s := S7JoinAccumulatorReference.run LiteralOpeningView.eK data q rho
+  (∑ l : Fin 64, data.f l*LiteralOpeningView.eK (s.weights l))=s.rhs
+
+def typedReference (rs : TranscriptRounds) (i : SourceInputs) : Bool :=
+  match LiteralMatchingData.read rs with
+  | none => false
+  | some data => decide (
+      data=i.data ∧ LiteralPairingChecks.checks rs ∧
+      R16DecisionQueryModel.verify data i.queryBytes=true ∧
+      R3SemanticRemainingJoins.EquationEndpoint i.decoded rs data ∧
+      ∀ q : Fin 22 → Fin 262144,
+        LiteralQueryRead.decode i.queryBytes=some q →
+        referenceCheck data q (SelectedChallengeMap.rhoOf i.rho))
+
+theorem referenceCheck_iff (data : MatchingSupport.Data LiteralTranscript.E)
+    (q : Fin 22 → Fin 262144) (rho : AspisV8R15.ExactTowerBase.QM31Exact) :
+    referenceCheck data q rho ↔
+      HchecksAccumulator.ClosedSum LiteralOpeningView.eK data q rho :=
+  S7JoinAccumulatorReference.check_iff_closed_sum _ _ _ _
+
+theorem typedReference_eq (rs : TranscriptRounds) (i : SourceInputs) :
+    typedReference rs i=D0TypedChecks.verify rs i := by
+  simp only [typedReference,D0TypedChecks.verify,referenceCheck_iff]
+  <;> rfl
+
+def arithmeticReference (p : Parsed) (q : Fin 22 → Fin 262144)
+    (tr : ErasedPrefix) : Bool :=
+  match input p q tr with
+  | none => false
+  | some i => typedReference (typedRows p q tr) i
+
+theorem arithmetic_eq (p : Parsed) (q : Fin 22 → Fin 262144) (tr : ErasedPrefix) :
+    arithmeticReference p q tr=arithmetic p q tr := by
+  simp only [arithmeticReference,arithmetic,typedReference_eq]
+  <;> rfl
+
+def referenceDecision : Decision := fun stored tr _ =>
+  if OraclePortAdmission.Guard tr then
+    match OraclePortStoredParserC4.parseReached stored tr,queries tr with
+    | some p,some q =>
+        bind (OraclePortShortCircuit.short (OraclePortFrozenOrder.slotPrograms p q slots))
+          fun ok => .done (ok && arithmeticReference p q tr)
+    | _,_ => .done false
+  else .done false
+
+/-- Equality of full programs, so no accepted-only or log-permutation premise
+is needed for this mathematical replacement. -/
+theorem decision_eq : referenceDecision=OraclePortFrozenOrder.dV_frozen := by
+  funext stored tr m
+  simp only [referenceDecision,OraclePortFrozenOrder.dV_frozen,arithmetic_eq]
+  <;> rfl
+
+/-- Accepted frozen decisions reach precisely this reference check on every
+query vector decoded by the original arithmetic consumer. -/
+theorem accepted_reference (stored : Bytes) (tr : ErasedPrefix) (m : ErasedMessage)
+    (H : Bytes → State)
+    (ha : (eval H (OraclePortFrozenOrder.dV_frozen stored tr m)).2=true) :
+    ∃ p q i,
+      OraclePortStoredParserC4.parseReached stored tr=some p ∧ queries tr=some q ∧
+      input p q tr=some i ∧
+      ∀ decoded : Fin 22 → Fin 262144,
+        LiteralQueryRead.decode i.queryBytes=some decoded →
+        referenceCheck i.data decoded (SelectedChallengeMap.rhoOf i.rho) := by
+  obtain ⟨_,p,q,hp,hq,_,harith⟩ := OraclePortFrozenOrder.accepted stored tr m H ha
+  cases hi : input p q tr with
+  | none => simp only [arithmetic,hi,Bool.false_eq_true] at harith
+  | some i =>
+      have ht : D0TypedChecks.verify (typedRows p q tr) i=true := by
+        simpa only [arithmetic,hi] using harith
+      refine ⟨p,q,i,hp,hq,hi,?_⟩
+      intro decoded hd
+      exact (referenceCheck_iff _ _ _).mpr
+        ((D0TypedChecks.accepted_components _ i ht).2.2.2.2 decoded hd)
+
+#print axioms referenceCheck_iff
+#print axioms typedReference_eq
+#print axioms arithmetic_eq
+#print axioms decision_eq
+#print axioms accepted_reference
+end AspisR1.S7JoinFrozenConsumer

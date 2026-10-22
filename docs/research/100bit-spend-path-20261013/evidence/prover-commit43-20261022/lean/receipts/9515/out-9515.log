@@ -1,0 +1,125 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:107:6: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Type _abstMVar.0) → (x_1 : Type _abstMVar.1) → Result x_0 → (x_0 → Result x_1) → Result x_1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:108:4: error: Tactic `rfl` failed: The left-hand side
+  pure (Except.error ProverCommitPublish43.Error.parse)
+is not definitionally equal to the right-hand side
+  ok do
+    let nodes ← Except.ok (List.map byte ↑nodes)
+    if List.length nodes > ↑cap then Except.error ProverCommitPublish43.Error.parse
+      else Except.ok (List.map byte ↑out ++ nodes ++ List.replicate (↑cap - List.length nodes) 0)
+
+case pos
+out nodes : Bytes
+cap : Usize
+room : (↑out).length + (↑nodes).length + ↑cap ≤ Usize.max
+large : (↑nodes).length > ↑cap
+⊢ pure (Except.error ProverCommitPublish43.Error.parse) =
+    ok do
+      let nodes ← Except.ok (List.map byte ↑nodes)
+      if List.length nodes > ↑cap then Except.error ProverCommitPublish43.Error.parse
+        else Except.ok (List.map byte ↑out ++ nodes ++ List.replicate (↑cap - List.length nodes) 0)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:112:6: error: Ambiguous term
+  bind
+Possible interpretations:
+  Std.bind : Result ?m.74 → (?m.74 → Result ?m.75) → Result ?m.75
+  
+  Bind.bind : ?m.74 ?m.76 → (?m.76 → ?m.74 ?m.77) → ?m.74 ?m.77
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:114:4: error: Tactic `rfl` failed: The left-hand side
+  pure (Except.ok (List.map byte ↑out ++ List.map byte ↑nodes ++ List.replicate (↑cap - (↑nodes).length) (byte 0#u8)))
+is not definitionally equal to the right-hand side
+  ok do
+    let nodes ← Except.ok (List.map byte ↑nodes)
+    if List.length nodes > ↑cap then Except.error ProverCommitPublish43.Error.parse
+      else Except.ok (List.map byte ↑out ++ nodes ++ List.replicate (↑cap - List.length nodes) 0)
+
+case neg
+out nodes : Bytes
+cap : Usize
+room : (↑out).length + (↑nodes).length + ↑cap ≤ Usize.max
+large : ¬(↑nodes).length > ↑cap
+result : alloc.vec.Vec U8
+hr : AspisR1Padding43.append_nodes out nodes cap = ok (core.result.Result.Ok result)
+hv : ↑result = ↑out ++ ↑nodes ++ List.replicate (↑cap - (↑nodes).length) 0#u8
+⊢ pure (Except.ok (List.map byte ↑out ++ List.map byte ↑nodes ++ List.replicate (↑cap - (↑nodes).length) (byte 0#u8))) =
+    ok do
+      let nodes ← Except.ok (List.map byte ↑nodes)
+      if List.length nodes > ↑cap then Except.error ProverCommitPublish43.Error.parse
+        else Except.ok (List.map byte ↑out ++ nodes ++ List.replicate (↑cap - List.length nodes) 0)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:107:11: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵j̵e̵c̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵p̵p̵e̵n̵d̵S̵l̵o̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵l̵a̵r̵g̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲p̲r̲o̲j̲e̲c̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲p̲p̲e̲n̲d̲S̲l̲o̲t̲,̲ ̲b̲i̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲m̲a̲p̲,̲ ̲l̲a̲r̲g̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:107:23: warning: This simp argument is unused:
+  List.length_map
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵j̵e̵c̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵p̵p̵e̵n̵d̵S̵l̵o̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵l̵a̵r̵g̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲p̲r̲o̲j̲e̲c̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲p̲p̲e̲n̲d̲S̲l̲o̲t̲,̲ ̲b̲i̲n̲d̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲l̲a̲r̲g̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:107:39: warning: This simp argument is unused:
+  large
+
+Hint: Omit it from the simp argument list.
+  simp only [project, ̲bind_tc_ok, ̲ProverCommitPublish43.appendSlot,
+  ̵  ̵ ̵ ̵ ̵ ̵bind, ̲Except.bind,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲List.length_map,l̵a̵r̵g̵e̵,̵ ̲if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:107:45: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵j̵e̵c̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵p̵p̵e̵n̵d̵S̵l̵o̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵l̵a̵r̵g̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲p̲r̲o̲j̲e̲c̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲p̲p̲e̲n̲d̲S̲l̲o̲t̲,̲ ̲b̲i̲n̲d̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲m̲a̲p̲,̲ ̲l̲a̲r̲g̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:112:11: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵j̵e̵c̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵p̵p̵e̵n̵d̵S̵l̵o̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵l̵a̵r̵g̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲p̲r̲o̲j̲e̲c̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲p̲p̲e̲n̲d̲S̲l̲o̲t̲,̲ ̲b̲i̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲m̲a̲p̲,̲ ̲l̲a̲r̲g̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:112:23: warning: This simp argument is unused:
+  List.length_map
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵j̵e̵c̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵p̵p̵e̵n̵d̵S̵l̵o̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵l̵a̵r̵g̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲p̲r̲o̲j̲e̲c̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲p̲p̲e̲n̲d̲S̲l̲o̲t̲,̲ ̲b̲i̲n̲d̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲l̲a̲r̲g̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:112:39: warning: This simp argument is unused:
+  large
+
+Hint: Omit it from the simp argument list.
+  simp only [project, ̲bind_tc_ok, ̲ProverCommitPublish43.appendSlot,
+  ̵  ̵ ̵ ̵ ̵ ̵bind, ̲Except.bind,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲List.length_map,l̵a̵r̵g̵e̵,̵ ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPadding43.lean:112:45: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵j̵e̵c̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵p̵p̵e̵n̵d̵S̵l̵o̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵l̵a̵r̵g̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲p̲r̲o̲j̲e̲c̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲p̲p̲e̲n̲d̲S̲l̲o̲t̲,̲ ̲b̲i̲n̲d̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲m̲a̲p̲,̲ ̲l̲a̲r̲g̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitPadding43.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPadding43.extend' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitPadding43.reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPadding43.accepts' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

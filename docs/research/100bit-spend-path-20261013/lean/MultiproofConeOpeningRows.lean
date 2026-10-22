@@ -1,0 +1,85 @@
+import MultiproofConeOpeningScan
+import MultiproofConeBool
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.MultiproofConeOpeningRows
+open Aeneas Aeneas.Std Result
+open AspisV8R19.DuplexFrames
+open OraclePortCompactDraft
+open MultiproofConeCanonical MultiproofConeSlices MultiproofConeBool
+attribute [local instance] Classical.propDecidable
+
+def AllOpenings (count : Nat) (wire : Bytes) : Prop :=
+  ∀ j, j < count → openingCanonical (slice wire (832*j) 832)
+
+private theorem slice_step (wire : Bytes) (j : Nat) :
+    slice wire (832*(j+1)) 832 = slice (wire.drop 832) (832*j) 832 := by
+  unfold slice
+  rw [show 832*(j+1)=832+832*j by omega, ← List.drop_drop]
+
+theorem all_step (count : Nat) (wire : Bytes) :
+    AllOpenings (count+1) wire ↔
+      openingCanonical (wire.take 832) ∧ AllOpenings count (wire.drop 832) := by
+  constructor
+  · intro all
+    refine ⟨?_,?_⟩
+    · simpa only [AllOpenings,slice,Nat.mul_zero,List.drop_zero] using all 0 (by omega)
+    · intro j hj
+      simpa only [slice_step] using all (j+1) (by omega)
+  · rintro ⟨first,tail⟩ j hj
+    cases j with
+    | zero => simpa only [slice,Nat.mul_zero,List.drop_zero] using first
+    | succ j => rw [slice_step]; exact tail j (by omega)
+
+/-- Count induction over the actual extracted row recursion, not an unrolled
+22-opening scanner. The exact byte-length premise comes from the stored layout. -/
+theorem rows_total (bytes : Slice U8) (remaining : U8)
+    (length : bytes.val.length = 832*remaining.val) :
+    MultiproofParserRef.parser_reference.opening_rows bytes remaining =
+      ok (decide (AllOpenings remaining.val (bytesOf bytes.val))) := by
+  generalize hn : remaining.val = n at length ⊢
+  induction n generalizing remaining bytes with
+  | zero =>
+    have hz : remaining = 0#u8 := UScalar.eq_of_val_eq hn
+    subst remaining
+    rw [MultiproofParserRef.parser_reference.opening_rows]
+    simp [core.slice.Slice.is_empty,Slice.length,length,AllOpenings]
+  | succ n ih =>
+    have hne : remaining ≠ 0#u8 := by
+      intro h
+      have hv := UScalar.val_eq_of_eq h
+      change remaining.val = 0 at hv
+      omega
+    have bound : (832#usize).val ≤ bytes.val.length := by change 832 ≤ bytes.val.length; omega
+    have notShort : ¬ Slice.len bytes < 832#usize := by change ¬ bytes.val.length < 832; omega
+    let head := sub bytes 0#usize 832#usize
+    have headLength : head.val.length = 832 := by
+      simpa only [head,show (0#usize).val=0 from rfl,show (832#usize).val=832 from rfl,Nat.sub_zero]
+        using sub_length bytes 0#usize 832#usize (by decide) bound
+    let rest := Slice.drop bytes 832#usize
+    have restLength : rest.val.length = bytes.val.length-832 := by
+      simp only [rest,Slice.getElem!_val_drop,List.length_drop,show (832#usize).val=832 from rfl]
+    obtain ⟨pred,hpred,hpost⟩ := WP.spec_imp_exists
+      (UScalar.sub_spec (x:=remaining) (y:=1#u8) (by scalar_tac))
+    have hp : pred.val = n := by scalar_tac
+    have nextLength : rest.val.length = 832*n := by rw [restLength]; omega
+    have ht := ih (Slice.drop bytes 832#usize) pred hp nextLength
+    have headBytes : bytesOf (sub bytes 0#usize 832#usize).val = (bytesOf bytes.val).take 832 := by
+      simp only [head,bytes_sub,show (0#usize).val=0 from rfl,
+        show (832#usize).val=832 from rfl,Nat.sub_zero,slice,List.drop_zero]
+    have restBytes : bytesOf (Slice.drop bytes 832#usize).val = (bytesOf bytes.val).drop 832 := by
+      simp only [rest,Slice.getElem!_val_drop,bytesOf,List.map_drop,
+        show (832#usize).val=832 from rfl]
+    rw [MultiproofParserRef.parser_reference.opening_rows]
+    simp only [hne,if_false,notShort,prefix_total bytes 832#usize bound,bind_tc_ok,
+      MultiproofConeOpeningScan.opening_total (sub bytes 0#usize 832#usize) headLength,decide_eq_true_eq,
+      drop_total bytes 832#usize bound,hpred,ht,result_if_conj]
+    apply result_decide_congr
+    rw [headBytes,restBytes,all_step]
+
+#print axioms slice_step
+#print axioms all_step
+#print axioms rows_total
+end AspisR1.MultiproofConeOpeningRows
+end

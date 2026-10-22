@@ -1,0 +1,74 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi5/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi5Reached.lean:84:10: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+aops : AccumulateOps
+ops : QueryOps
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array Stage2E 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geometry : verifier.QueryGeometry
+stop : Usize
+a out : A
+b bout : B
+bounded : ↑a.next ≤ ↑stop
+success :
+  verifier.candidate.query_loop (verifier.candidate.queryWithOps aops ops) proof p a g obs geometry b stop =
+    ok (core.result.Result.Ok (out, bout))
+⊢ loop (body ↑stop fun a b => verifier.candidate.queryWithOps aops ops proof p a g obs geometry b)
+      (core.result.Result.Ok (a, b)) =
+    ok (core.result.Result.Ok (out, bout))
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi5/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi5Reached.lean:86:4: error: Type mismatch: After simplification, term
+  success
+ has type
+  loop
+      (fun state1 =>
+        body (↑stop) (fun a b => verifier.candidate.queryWithOps aops ops proof p a g obs geometry b) state1)
+      (core.result.Result.Ok (a, b)) =
+    ok (core.result.Result.Ok (out, bout))
+but is expected to have type
+  ∀ (a a1 : A) (b b1 : B),
+    verifier.candidate.queryWithOps aops ops proof p a g obs geometry b = ok (core.result.Result.Ok (a1, b1)) →
+      ↑a1.next = ↑a.next + 1
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi5/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi5Reached.lean:101:29: error: don't know how to synthesize placeholder for argument `step`
+context:
+aops : AccumulateOps
+ops : QueryOps
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array Stage2E 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geometry : verifier.QueryGeometry
+a out : A
+b bout : B
+start : ↑a.next = 0
+success :
+  verifier.candidate.query_loop (verifier.candidate.queryWithOps aops ops) proof p a g obs geometry b 10#usize =
+    ok (core.result.Result.Ok (out, bout))
+chain :
+  Chain (↑10#usize) (fun a b => verifier.candidate.queryWithOps aops ops proof p a g obs geometry b) a b out bout
+    (↑10#usize - ↑a.next)
+⊢ Step
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi5/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi5Reached.lean:99:45: error: unsolved goals
+aops : AccumulateOps
+ops : QueryOps
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array Stage2E 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geometry : verifier.QueryGeometry
+a out : A
+b bout : B
+start : ↑a.next = 0
+success :
+  verifier.candidate.query_loop (verifier.candidate.queryWithOps aops ops) proof p a g obs geometry b 10#usize =
+    ok (core.result.Result.Ok (out, bout))
+chain :
+  Chain (↑10#usize) (fun a b => verifier.candidate.queryWithOps aops ops proof p a g obs geometry b) a b out bout
+    (↑10#usize - ↑a.next)
+⊢ Chain 10 (fun a b => verifier.candidate.queryWithOps aops ops proof p a g obs geometry b) a b out bout 10 ∧
+    ↑out.next = 10
+'AspisR1.OraclePortCkptAbi5Reached.chain_endpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbi5Reached.successful_chain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbi5Reached.emitted_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbi5Reached.reached_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.OraclePortCkptAbi5Reached.tx1_next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

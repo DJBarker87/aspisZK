@@ -1,0 +1,52 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCircle25.lean:75:49: error: unsolved goals
+H : Type
+hash : aspis_core.digest.Digest32 H
+state next : State H
+record : alloc.vec.Vec U8
+block : Bytes32
+order : state.next_row = 25#u8
+checked : r1_wire.semantic20.checked 25#u8 record.deref = ok (core.result.Result.Ok ())
+sampled :
+  r1_wire.SemanticTranscript.sample_block_validated hash state 25#u8 record.deref =
+    ok (core.result.Result.Ok block, next)
+value : Std.Array aspis_core.field.QM31 2#usize
+h : policy.point block false = ok value
+meaning :
+  decode value =
+    [(↑(ProverCommitCircleSampler22.model block (row false))).1,
+      (↑(ProverCommitCircleSampler22.model block (row false))).2]
+⊢ (match 25#u8 with
+    | 25#8#uscalar => ok (core.result.Result.Ok value, next)
+    | 26#8#uscalar => ok (core.result.Result.Err (r1_wire.Error.RowOrder 25#u8 26#u8), state)
+    | x => ok (core.result.Result.Err r1_wire.Error.InvalidRow, state)) =
+    ok (core.result.Result.Ok value, next)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCircle25.lean:92:49: error: unsolved goals
+H : Type
+hash : aspis_core.digest.Digest32 H
+state next : State H
+record : alloc.vec.Vec U8
+block : Bytes32
+order : state.next_row = 26#u8
+checked : r1_wire.semantic20.checked 26#u8 record.deref = ok (core.result.Result.Ok ())
+sampled :
+  r1_wire.SemanticTranscript.sample_block_validated hash state 26#u8 record.deref =
+    ok (core.result.Result.Ok block, next)
+value : Std.Array aspis_core.field.QM31 2#usize
+h : policy.point block true = ok value
+meaning :
+  decode value =
+    [(↑(ProverCommitCircleSampler22.model block (row true))).1,
+      (↑(ProverCommitCircleSampler22.model block (row true))).2]
+⊢ (match 26#u8 with
+    | 25#8#uscalar => ok (core.result.Result.Err (r1_wire.Error.RowOrder 26#u8 25#u8), state)
+    | 26#8#uscalar => ok (core.result.Result.Ok value, next)
+    | x => ok (core.result.Result.Err r1_wire.Error.InvalidRow, state)) =
+    ok (core.result.Result.Ok value, next)
+'R1Z.ProverCommitCircle25.wrapper_roundtrip' does not depend on any axioms
+'R1Z.ProverCommitCircle25.semantic_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCircle25.points_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCircle25.sample_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCircle25.first_caller' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCircle25.second_caller' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,1059 @@
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalNode.lean:7:17: warning: Could not generate mvcgen spec for AspisR1.MultiproofConePhysicalDigest.write_observed: (kernel) constant has already been declared 'AspisR1.MultiproofConePhysicalDigest.write_observed.mvcgen_spec'
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalNode.lean:86:6: error: unsolved goals
+case pos
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁹ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁸ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁷ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝³ : i1 < s.n
+i2 : U32
+_✝⁶ : [> let i2 ← s.idx.index_usize i1 <]
+i2_post : i2 = (↑s.idx)[↑i1]
+i3 : U32
+_✝⁵ : [> let i3 ← lift (index ^^^ 1#u32) <]
+i3_post1 : ↑i3 = ↑(index ^^^ 1#u32)
+i3_post2 : i3.bv = index.bv ^^^ 1#u32.bv
+h✝² : ¬i2 = i3
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s value sibling i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts value sibling) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ↑(↑s.idx)[↑i]! % 2 = 0
+⊢ value = (↑s.val)[↑i]! ∧ True
+
+case neg
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁹ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁸ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁷ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝³ : i1 < s.n
+i2 : U32
+_✝⁶ : [> let i2 ← s.idx.index_usize i1 <]
+i2_post : i2 = (↑s.idx)[↑i1]
+i3 : U32
+_✝⁵ : [> let i3 ← lift (index ^^^ 1#u32) <]
+i3_post1 : ↑i3 = ↑(index ^^^ 1#u32)
+i3_post2 : i3.bv = index.bv ^^^ 1#u32.bv
+h✝² : ¬i2 = i3
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s value sibling i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts value sibling) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ¬↑(↑s.idx)[↑i]! % 2 = 0
+⊢ value = sibling ∧ sibling = (↑s.val)[↑i]!
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalNode.lean:86:6: error: unsolved goals
+case pos
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁹ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁸ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁷ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝³ : i1 < s.n
+i2 : U32
+_✝⁶ : [> let i2 ← s.idx.index_usize i1 <]
+i2_post : i2 = (↑s.idx)[↑i1]
+i3 : U32
+_✝⁵ : [> let i3 ← lift (index ^^^ 1#u32) <]
+i3_post1 : ↑i3 = ↑(index ^^^ 1#u32)
+i3_post2 : i3.bv = index.bv ^^^ 1#u32.bv
+h✝² : ¬i2 = i3
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : ¬i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s sibling value i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts sibling value) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ↑(↑s.idx)[↑i]! % 2 = 0
+⊢ sibling = (↑s.val)[↑i]! ∧ value = sibling
+
+case neg
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁹ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁸ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁷ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝³ : i1 < s.n
+i2 : U32
+_✝⁶ : [> let i2 ← s.idx.index_usize i1 <]
+i2_post : i2 = (↑s.idx)[↑i1]
+i3 : U32
+_✝⁵ : [> let i3 ← lift (index ^^^ 1#u32) <]
+i3_post1 : ↑i3 = ↑(index ^^^ 1#u32)
+i3_post2 : i3.bv = index.bv ^^^ 1#u32.bv
+h✝² : ¬i2 = i3
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : ¬i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s sibling value i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts sibling value) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ¬↑(↑s.idx)[↑i]! % 2 = 0
+⊢ True ∧ value = (↑s.val)[↑i]!
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalNode.lean:86:6: error: unsolved goals
+case pos
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁷ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁶ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁵ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝² : ¬i1 < s.n
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s value sibling i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts value sibling) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ↑(↑s.idx)[↑i]! % 2 = 0
+⊢ value = (↑s.val)[↑i]! ∧ True
+
+case neg
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁷ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁶ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁵ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝² : ¬i1 < s.n
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s value sibling i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts value sibling) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ¬↑(↑s.idx)[↑i]! % 2 = 0
+⊢ value = sibling ∧ sibling = (↑s.val)[↑i]!
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalNode.lean:86:6: error: unsolved goals
+case pos
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁷ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁶ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁵ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝² : ¬i1 < s.n
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : ¬i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s sibling value i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts sibling value) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ↑(↑s.idx)[↑i]! % 2 = 0
+⊢ sibling = (↑s.val)[↑i]! ∧ value = sibling
+
+case neg
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁷ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁶ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁵ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝² : ¬i1 < s.n
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : ¬i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s sibling value i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts sibling value) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ¬↑(↑s.idx)[↑i]! % 2 = 0
+⊢ True ∧ value = (↑s.val)[↑i]!
+case pos
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁹ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁸ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁷ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝³ : i1 < s.n
+i2 : U32
+_✝⁶ : [> let i2 ← s.idx.index_usize i1 <]
+i2_post : i2 = (↑s.idx)[↑i1]
+i3 : U32
+_✝⁵ : [> let i3 ← lift (index ^^^ 1#u32) <]
+i3_post1 : ↑i3 = ↑(index ^^^ 1#u32)
+i3_post2 : i3.bv = index.bv ^^^ 1#u32.bv
+h✝² : ¬i2 = i3
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s value sibling i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts value sibling) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ↑(↑s.idx)[↑i]! % 2 = 0
+⊢ value = (↑s.val)[↑i]! ∧ True
+case neg
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁹ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁸ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁷ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝³ : i1 < s.n
+i2 : U32
+_✝⁶ : [> let i2 ← s.idx.index_usize i1 <]
+i2_post : i2 = (↑s.idx)[↑i1]
+i3 : U32
+_✝⁵ : [> let i3 ← lift (index ^^^ 1#u32) <]
+i3_post1 : ↑i3 = ↑(index ^^^ 1#u32)
+i3_post2 : i3.bv = index.bv ^^^ 1#u32.bv
+h✝² : ¬i2 = i3
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s value sibling i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts value sibling) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ¬↑(↑s.idx)[↑i]! % 2 = 0
+⊢ value = sibling ∧ sibling = (↑s.val)[↑i]!
+case pos
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁹ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁸ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁷ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝³ : i1 < s.n
+i2 : U32
+_✝⁶ : [> let i2 ← s.idx.index_usize i1 <]
+i2_post : i2 = (↑s.idx)[↑i1]
+i3 : U32
+_✝⁵ : [> let i3 ← lift (index ^^^ 1#u32) <]
+i3_post1 : ↑i3 = ↑(index ^^^ 1#u32)
+i3_post2 : i3.bv = index.bv ^^^ 1#u32.bv
+h✝² : ¬i2 = i3
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : ¬i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s sibling value i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts sibling value) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ↑(↑s.idx)[↑i]! % 2 = 0
+⊢ sibling = (↑s.val)[↑i]! ∧ value = sibling
+case neg
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁹ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁸ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁷ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝³ : i1 < s.n
+i2 : U32
+_✝⁶ : [> let i2 ← s.idx.index_usize i1 <]
+i2_post : i2 = (↑s.idx)[↑i1]
+i3 : U32
+_✝⁵ : [> let i3 ← lift (index ^^^ 1#u32) <]
+i3_post1 : ↑i3 = ↑(index ^^^ 1#u32)
+i3_post2 : i3.bv = index.bv ^^^ 1#u32.bv
+h✝² : ¬i2 = i3
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : ¬i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s sibling value i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts sibling value) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ¬↑(↑s.idx)[↑i]! % 2 = 0
+⊢ True ∧ value = (↑s.val)[↑i]!
+case pos
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁷ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁶ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁵ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝² : ¬i1 < s.n
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s value sibling i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts value sibling) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ↑(↑s.idx)[↑i]! % 2 = 0
+⊢ value = (↑s.val)[↑i]! ∧ True
+case neg
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁷ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁶ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁵ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝² : ¬i1 < s.n
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s value sibling i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts value sibling) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ¬↑(↑s.idx)[↑i]! % 2 = 0
+⊢ value = sibling ∧ sibling = (↑s.val)[↑i]!
+case pos
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁷ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁶ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁵ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝² : ¬i1 < s.n
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : ¬i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s sibling value i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts sibling value) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ↑(↑s.idx)[↑i]! % 2 = 0
+⊢ sibling = (↑s.val)[↑i]! ∧ value = sibling
+case neg
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+total : HashTotal D hash
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+ib : ↑i < 16
+gi : (↑s.idx)[↑i]! = (↑s.idx)[↑i]
+gv : (↑s.val)[↑i]! = (↑s.val)[↑i]
+gn : ∀ (h : ↑i + 1 < ↑s.n), (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i + 1]
+gr : ∀ (h : ↑i + 1 < ↑s.n), (↑s.val)[↑i + 1]! = (↑s.val)[↑i + 1]
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+index : U32
+_✝⁷ : [> let index ← s.idx.index_usize i <]
+index_post : index = (↑s.idx)[↑i]
+value : Std.Array U8 32#usize
+_✝⁶ : [> let value ← s.val.index_usize i <]
+value_post : value = (↑s.val)[↑i]
+i1 : Usize
+_✝⁵ : [> let i1 ← i + 1#usize <]
+i1_post : ↑i1 = ↑i + 1
+h✝² : ¬i1 < s.n
+i5 : Usize
+_✝⁴ : [> let i5 ← physical.len - s.at <]
+i5_post1 : ↑i5 = ↑physical.len - ↑s.at
+i5_post2 : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬i5 < 32#usize
+i6 : Usize
+_✝³ : [> let i6 ← s.at + 32#usize <]
+i6_post : ↑i6 = ↑s.at + 32
+s1 : Slice U8
+_✝² : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := s.at, «end» := i6 } physical <]
+s1_post1 : ↑s1 = List.slice ↑s.at ↑i6 ↑physical
+s1_post2 : s1.length = ↑i6 - ↑s.at
+sibling : Std.Array U8 32#usize
+_✝¹ : [> let sibling ← reference.read32 s1 <]
+sibling_post : ↑sibling = List.take 32 ↑s1
+i7 : U32
+_✝ : [> let i7 ← lift (index &&& 1#u32) <]
+i7_post1 : ↑i7 = ↑(index &&& 1#u32)
+i7_post2 : i7.bv = index.bv &&& 1#u32.bv
+h✝ : ¬i7 = 0#u32
+out : Std.Array U8 32#usize
+_ : [> let out ← reference.write_parent D hash s sibling value i1 i6 index w <]
+x✝³ : U32
+x✝² : Usize
+x✝¹ : reference.Row
+out_post1 : D.digest hash (parts sibling value) = ok out
+out_post2 : ↑x✝³ = ↑index / 2
+out_post3 : ↑x✝² = ↑w + 1
+out_post4 x✝ : x✝¹ = reference.Row.Next { idx := s.idx.set w x✝³, val := s.val.set w out, n := s.n, «at» := i6 } i1 x✝²
+noPair : ¬SourcePair s i
+even : ¬↑(↑s.idx)[↑i]! % 2 = 0
+⊢ True ∧ value = (↑s.val)[↑i]!
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalNode.lean:59:119: warning: This simp argument is unused:
+  gi
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵g̵i̵,̵g̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵]̵[̲g̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalNode.lean:59:122: warning: This simp argument is unused:
+  gn
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵g̵i̵,̵g̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵]̵[̲g̲i̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-multiproof-cone5/docs/research/100bit-spend-path-20261013/lean/MultiproofConePhysicalNode.lean:59:125: warning: This simp argument is unused:
+  Slice.len
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵g̵i̵,̵g̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵]̵[̲g̲i̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲g̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.MultiproofConePhysicalNode.read_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConePhysicalNode.binary_observed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

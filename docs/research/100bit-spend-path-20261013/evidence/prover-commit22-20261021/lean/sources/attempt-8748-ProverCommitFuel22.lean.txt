@@ -1,0 +1,71 @@
+import R1Z.ProverCommitNonzero20
+/-! Finite big-step semantics for the shipped draw-until-nonzero control.
+The relation describes successful terminating runs; it asserts no uniform
+termination bound. Each step uses the actual extracted coin transition. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitFuel22
+open Aeneas Aeneas.Std Result ProverCommitSimulatorCoin18
+
+def fuel : Nat := 5
+
+def instances : Nat := 8 * 3
+
+inductive Finishes (zero : Bytes32) (hash : Hash) (seed : Bytes32)
+    (attempt : U32) (stream : U8) : Nat → U64 → Bytes32 → U64 → Prop
+  | found (counter next : U64) (answer : Bytes32)
+      (step : AspisR1SimulatorCoin18.sim.coin_owned18 hash seed attempt stream counter =
+        ok (answer,next)) (nonzero : answer ≠ zero) :
+      Finishes zero hash seed attempt stream 1 counter answer next
+  | retry (n : Nat) (counter middle final : U64) (answer : Bytes32)
+      (step : AspisR1SimulatorCoin18.sim.coin_owned18 hash seed attempt stream counter =
+        ok (zero,middle))
+      (rest : Finishes zero hash seed attempt stream n middle answer final) :
+      Finishes zero hash seed attempt stream (n+1) counter answer final
+
+/-- Exact output and final retained counter on every run finishing within k.
+No cap is added to Rust; this is a model comparison on terminating runs. -/
+theorem agrees {zero : Bytes32} {hash : Hash} {seed : Bytes32}
+    {attempt : U32} {stream : U8} {n : Nat} {counter final : U64} {answer : Bytes32}
+    (run : Finishes zero hash seed attempt stream n counter answer final)
+    (k : Nat) (within : n ≤ k) :
+    ProverCommitNonzero20.search zero hash seed attempt stream k counter =
+      ok (some (answer,final)) := by
+  induction run generalizing k with
+  | found counter next answer step nonzero =>
+    cases k with
+    | zero => omega
+    | succ k => simp only [ProverCommitNonzero20.search,step,bind_tc_ok,if_neg nonzero]
+  | retry n counter middle final answer step rest ih =>
+    cases k with
+    | zero => omega
+    | succ k =>
+      simp only [ProverCommitNonzero20.search,step,bind_tc_ok,ite_true]
+      exact ih k (by omega)
+
+/-- Increasing fuel cannot change a successful result, including its counter. -/
+theorem stable (zero : Bytes32) (hash : Hash) (seed : Bytes32)
+    (attempt : U32) (stream : U8) (n extra : Nat) (counter : U64)
+    (result : Bytes32 × U64)
+    (success : ProverCommitNonzero20.search zero hash seed attempt stream n counter =
+      ok (some result)) :
+    ProverCommitNonzero20.search zero hash seed attempt stream (n+extra) counter =
+      ok (some result) := by
+  induction n generalizing counter with
+  | zero => cases success
+  | succ n ih =>
+    simp only [ProverCommitNonzero20.search] at success ⊢
+    cases step : AspisR1SimulatorCoin18.sim.coin_owned18 hash seed attempt stream counter with
+    | fail e => simp only [step,bind_tc_fail] at success
+    | div => simp only [step,bind_tc_div] at success
+    | ok pair =>
+      rcases pair with ⟨answer,next⟩
+      simp only [step,bind_tc_ok] at success ⊢
+      by_cases hz : answer=zero
+      · simp only [if_pos hz] at success ⊢
+        exact ih next success
+      · simp only [if_neg hz] at success ⊢
+        exact success
+
+#print axioms agrees
+#print axioms stable
+end R1Z.ProverCommitFuel22

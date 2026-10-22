@@ -1,0 +1,30 @@
+/tmp/root-s4-canonical-qm-word-v1-20261021/sources/S4CanonicalQmWordRootV1.lean:31:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c - d ≤ -1
+  b ≥ 0
+  b - c ≥ 1
+where
+ b := ↑(List.ofFn (qm31LimbBytes (arrayBytes16 a) limb)).length
+ c := ↑i
+ d := ↑(List.length (slice (bytesOf ↑a) (4 * ↑limb) 4))
+/tmp/root-s4-canonical-qm-word-v1-20261021/sources/S4CanonicalQmWordRootV1.lean:36:85: error: unsolved goals
+a : Std.Array U8 16#usize
+hc : canonical (bytesOf ↑a)
+hall : ∀ (limb : Fin 4), ↑(decodeWordLE (qm31LimbBytes (arrayBytes16 a) limb)) < m31Modulus
+limbs : QM31Limbs := fun limb => ⟨↑(decodeWordLE (qm31LimbBytes (arrayBytes16 a) limb)), ⋯⟩
+⊢ ok
+      (some
+        (AspisR1FastDotsCurrentQmParserRootV1.limbsToCurrent fun limb =>
+          ⟨↑(decodeWordLE (qm31LimbBytes (arrayBytes16 a) limb)), ⋯⟩)) =
+    ok (some (AspisR1FastDotsCurrentQmParserRootV1.limbsToCurrent limbs))
+'AspisR1FastDotsCanonicalQmWordRootV1.canonical_slice' depends on axioms: [propext, Quot.sound]
+'AspisR1FastDotsCanonicalQmWordRootV1.limb_bytes_list' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1FastDotsCanonicalQmWordRootV1.canonical_qm_parser_forward' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

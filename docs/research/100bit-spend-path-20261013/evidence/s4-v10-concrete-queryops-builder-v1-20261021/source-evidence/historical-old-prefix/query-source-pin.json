@@ -1,0 +1,23 @@
+{
+  "function": "crate::verifier::candidate::query_values",
+  "source_path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+  "source_sha256": "a6508483fe1144ba83f1ca11b712e39e1dd5c2b96da7330ad442372273eaf6d7",
+  "source_revision": "c8ea8dd49c81ab970b9dbee8d8b47718f9beb005",
+  "body_prefix_span_bytes": [
+    6650,
+    6786
+  ],
+  "body_prefix_sha256": "d46397152fdf62c2da775e3a45d5423ed5bdb40db421b5496fe391e0cadf5024",
+  "source_statements": [
+    "let i = a.next;",
+    "let u = p.queries[i] as usize;",
+    "let q = opening(proof, i);",
+    "let dots = crate::fast_dots::four_dots(q, g);"
+  ],
+  "adapter_changes": [
+    "extracts only the source prefix before trace/folding/accumulation",
+    "renames root to query_values_forward_prefix",
+    "returns (i,u,q,dots) to expose the values",
+    "retains context parameters for a typed cut"
+  ]
+}

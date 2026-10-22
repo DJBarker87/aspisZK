@@ -1,0 +1,67 @@
+import R1Z.ProverCommitOwnerModel42
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitOwnerSuccess42
+open Aeneas Aeneas.Std Result AspisR1PublicNonce41
+open ProverCommitOwnerBytes42 ProverCommitOwnerRun42 ProverCommitOwnerModel42 ProverCommitLedger36
+attribute [local instance] Classical.propDecidable
+
+theorem run_nonce (nonce : ProverCommitOwnerZero42.Bytes) (schedule : Schedule)
+    (tape : Nat → owner.Raw) (n : Nat) (s : State) :
+    match (ProverCommitOwnerRun42.run nonce schedule tape n s).1 with
+    | .Err _ => True
+    | .Ok secret => secret.nonce=nonce := by
+  induction n generalizing s with
+  | zero => trivial
+  | succ n ih =>
+    simp only [ProverCommitOwnerRun42.run]
+    cases step : ProverCommitOwnerRun42.next schedule tape s with
+    | mk result after =>
+      cases result with
+      | Err e => trivial
+      | Ok r =>
+        by_cases bad : block r.field=0 ∨ block r.leaf=0
+        · simp only [bad,if_true]; exact ih after
+        · simp only [bad,if_false]; rfl
+
+theorem generate_nonce (nonce : ProverCommitOwnerZero42.Bytes) (schedule : Schedule)
+    (tape : Nat → owner.Raw) (s : State) :
+    match (ProverCommitOwnerRun42.generate nonce schedule tape s).1 with
+    | .Err _ => True
+    | .Ok secret => secret.nonce=nonce := by
+  by_cases zero : block nonce=0
+  · simp only [ProverCommitOwnerRun42.generate,zero,if_true]; trivial
+  · simp only [ProverCommitOwnerRun42.generate,zero,if_false]
+    exact run_nonce nonce schedule tape 16 s
+
+/-- Successful generated output retains the full public nonce, both private
+blocks and the entire model state. No array suffix is erased from this join. -/
+theorem source_success (nonce : ProverCommitOwnerZero42.Bytes) (schedule : Schedule)
+    (tape : Nat → owner.Raw) (s after : State) (secret : owner.Secret)
+    (success : owner.generate (io schedule tape) nonce s = ok (.Ok secret,after)) :
+    secret.nonce=nonce ∧ ∃ model : ProverCommitPublicNonce40.Private,
+      ProverCommitPublicNonce40.generate (block nonce) schedule (fun n => raw (tape n)) s =
+        (.ok model,after) ∧ raw secret.raw=model.val := by
+  have src := generate_exact nonce schedule tape s
+  rw [success] at src
+  have srcEq := Result.ok.inj src
+  have hn := generate_nonce nonce schedule tape s
+  rw [←srcEq] at hn
+  refine ⟨hn,?_⟩
+  have hm := generate_model nonce schedule tape s
+  rw [←srcEq] at hm
+  cases target : ProverCommitPublicNonce40.generate (block nonce) schedule (fun n => raw (tape n)) s with
+  | mk result final =>
+    rw [target] at hm
+    cases result with
+    | error e => cases (congrArg Prod.fst hm)
+    | ok model =>
+      have sameState := congrArg Prod.snd hm
+      have sameRaw := congrArg Prod.fst hm
+      dsimp only [status,forget,Except.map] at sameRaw
+      exact ⟨model,by rw [←sameState],Except.ok.inj sameRaw⟩
+
+#print axioms run_nonce
+#print axioms generate_nonce
+#print axioms source_success
+end R1Z.ProverCommitOwnerSuccess42

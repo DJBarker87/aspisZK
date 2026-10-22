@@ -1,0 +1,52 @@
+import R1Z.ProverCommitSparsePredicate50
+/-! Entire reverse scanner: exact returned prefix width, Boolean suffix,
+and the maximality boundary. No scanner-output premise is supplied. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitSparseWidth50
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitSparsePredicate50 (rawBool)
+
+theorem width (p : Nat → Old.Q) (n : Nat) (left : U8)
+    (hl : left.val=n) (hn : n≤10) :
+    ∃ out : U8, sparse_scan50.width (ProverCommitQArray48.array 10#usize p) left=ok out ∧
+      out.val≤n ∧ (∀ i, out.val≤i → i<n → rawBool (p i)=true) ∧
+      (out.val=0 ∨ rawBool (p (out.val-1))=false) := by
+  induction n generalizing left with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    refine ⟨0#u8,?_,by change 0≤0;omega,?_,Or.inl rfl⟩
+    · rw [sparse_scan50.width,hz];rfl
+    · intro i hi hn;omega
+  | succ n ih =>
+    have hz : left≠0#u8 := by scalar_tac
+    have hdec : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    let idx := core.convert.num.FromUsizeU8.from (U8.wrapping_sub left 1#u8)
+    have hidx : idx.val=n := by scalar_tac
+    have hstep : sparse_scan50.width (ProverCommitQArray48.array 10#usize p) left=
+        (do
+          let b ← sparse_scan50.boolean (ProverCommitNativeQ48.source (p n))
+          if b then sparse_scan50.width (ProverCommitQArray48.array 10#usize p) (U8.wrapping_sub left 1#u8)
+            else ok left) := by
+      rw [sparse_scan50.width]
+      simp only [hz,if_false,lift,bind_tc_ok]
+      rw [ProverCommitQArray48.index 10#usize p idx (by change idx.val<10;rw [hidx];omega)]
+      simp only [bind_tc_ok]
+      rw [hidx]
+    cases hb : rawBool (p n)
+    · refine ⟨left,?_,by omega,?_,Or.inr ?_⟩
+      · rw [hstep,ProverCommitSparsePredicate50.boolean_result,hb];rfl
+      · intro i hi hi';omega
+      · have he : left.val-1=n := by omega
+        rw [he];exact hb
+    · obtain ⟨out,hout,hbound,hsuffix,hmax⟩ := ih _ hdec (by omega)
+      refine ⟨out,?_,by omega,?_,hmax⟩
+      · rw [hstep,ProverCommitSparsePredicate50.boolean_result,hb];exact hout
+      · intro i hi hi'
+        by_cases he : i=n
+        · rw [he];exact hb
+        · exact hsuffix i hi (by omega)
+
+#print axioms width
+end R1Z.ProverCommitSparseWidth50

@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSeedEvent19.lean:113:43: error: unsolved goals
+M : Type
+inst✝¹ : Fintype M
+inst✝ : Nonempty M
+old : Fin 8 → M → Prop
+queries : M → List Entry
+q : ℕ
+bound : ∀ (m : M), (queries m).length ≤ q
+sub : ∀ (r : M × OracleAnswer), (∃ i, augmented old queries i r) → (∃ i, old i r.1) ∨ seedGuess (queries r.1) r.2
+h :
+  (eventMass fun s => ∃ i, augmented old queries i s) ≤
+    (FsAbortBounds.mass fun s => ∃ i, old i s.1) + FsAbortBounds.mass fun s => seedGuess (queries s.1) s.2
+⊢ (mean fun c => mean fun r => if ∃ i, old i c then 1 else 0) = mean fun s => if ∃ i, old i s then 1 else 0
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSeedEvent19.lean:121:16: error: Application type mismatch: The argument
+  add_le_add_left (seed_mass queries q bound) ?m.159
+has type
+  (eventMass fun (r : M × OracleAnswer) => seedGuess (queries r.1) r.2) + ?m.159 ≤ budget q + ?m.159
+but is expected to have type
+  ((eventMass fun (m : M) => ∃ i, old i m) + eventMass fun r => seedGuess (queries r.1) r.2) ≤
+    (eventMass fun m => ∃ i, old i m) + budget q
+in the application
+  LE.le.trans h (add_le_add_left (seed_mass queries q bound) ?m.159)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSeedEvent19.lean:116:15: warning: This simp argument is unused:
+  mean_const
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵m̵e̵a̵n̵_̵c̵o̵n̵s̵t̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitSeedEvent19.seedPoint_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSeedEvent19.source_point' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSeedEvent19.point_mass_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSeedEvent19.list_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSeedEvent19.budget_mono' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSeedEvent19.seed_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSeedEvent19.old_contained' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSeedEvent19.union_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

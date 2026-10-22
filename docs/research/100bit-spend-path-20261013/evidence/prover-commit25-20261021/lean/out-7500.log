@@ -1,0 +1,218 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProduct25.lean:38:6: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  (if h_1 :
+        (if h : False then
+                ((swap zero n (coin, fun i => tape i.succ)).1,
+                  Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+              else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+            0 =
+          zero then
+      ((swap zero n
+            ((if h : False then
+                  ((swap zero n (coin, fun i => tape i.succ)).1,
+                    Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+                else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).1,
+              fun i =>
+              (if h : False then
+                    ((swap zero n (coin, fun i => tape i.succ)).1,
+                      Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+                  else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+                i.succ)).1,
+        Fin.cons zero
+          (swap zero n
+              ((if h : False then
+                    ((swap zero n (coin, fun i => tape i.succ)).1,
+                      Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+                  else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).1,
+                fun i =>
+                (if h : False then
+                      ((swap zero n (coin, fun i => tape i.succ)).1,
+                        Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+                    else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+                  i.succ)).2)
+    else
+      (⟨(if h : False then
+                ((swap zero n (coin, fun i => tape i.succ)).1,
+                  Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+              else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+            0,
+          ⋯⟩,
+        Fin.cons
+          ↑(if h : False then
+                ((swap zero n (coin, fun i => tape i.succ)).1,
+                  Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+              else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).1
+          fun i =>
+          (if h : False then
+                ((swap zero n (coin, fun i => tape i.succ)).1,
+                  Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+              else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+            i.succ)) =
+    (coin, tape)
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.37} {β : α → Sort ?u.36} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case neg
+A : Type
+zero : A
+n : ℕ
+ih : ∀ (p : NZ zero × (Fin n → A)), swap zero n (swap zero n p) = p
+coin : NZ zero
+tape : Fin (n + 1) → A
+h : ¬tape 0 = zero
+⊢ (if h_1 :
+        (if h : False then
+                ((swap zero n (coin, fun i => tape i.succ)).1,
+                  Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+              else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+            0 =
+          zero then
+      ((swap zero n
+            ((if h : False then
+                  ((swap zero n (coin, fun i => tape i.succ)).1,
+                    Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+                else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).1,
+              fun i =>
+              (if h : False then
+                    ((swap zero n (coin, fun i => tape i.succ)).1,
+                      Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+                  else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+                i.succ)).1,
+        Fin.cons zero
+          (swap zero n
+              ((if h : False then
+                    ((swap zero n (coin, fun i => tape i.succ)).1,
+                      Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+                  else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).1,
+                fun i =>
+                (if h : False then
+                      ((swap zero n (coin, fun i => tape i.succ)).1,
+                        Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+                    else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+                  i.succ)).2)
+    else
+      (⟨(if h : False then
+                ((swap zero n (coin, fun i => tape i.succ)).1,
+                  Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+              else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+            0,
+          ⋯⟩,
+        Fin.cons
+          ↑(if h : False then
+                ((swap zero n (coin, fun i => tape i.succ)).1,
+                  Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+              else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).1
+          fun i =>
+          (if h : False then
+                ((swap zero n (coin, fun i => tape i.succ)).1,
+                  Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+              else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+            i.succ)) =
+    (coin, tape)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProduct25.lean:36:24: warning: This simp argument is unused:
+  dif_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [swap, ̲h,d̵i̵f̵_̵n̵e̵g̵,̵ ̲Fin.cons_zero, ̲Fin.cons_succ, ̲coin.property]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProduct25.lean:36:32: warning: This simp argument is unused:
+  Fin.cons_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵w̵a̵p̵,̵h̵,̵d̵i̵f̵_̵n̵e̵g̵,̵F̵i̵n̵.̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵c̵o̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵]̵[̲s̲w̲a̲p̲,̲ ̲h̲,̲ ̲d̲i̲f̲_̲n̲e̲g̲,̲ ̲F̲i̲n̲.̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲c̲o̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProduct25.lean:36:46: warning: This simp argument is unused:
+  Fin.cons_succ
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵w̵a̵p̵,̵h̵,̵d̵i̵f̵_̵n̵e̵g̵,̵F̵i̵n̵.̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵c̵o̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵]̵[̲s̲w̲a̲p̲,̲ ̲h̲,̲ ̲d̲i̲f̲_̲n̲e̲g̲,̲ ̲F̲i̲n̲.̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲c̲o̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProduct25.lean:36:60: warning: This simp argument is unused:
+  coin.property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵w̵a̵p̵,̵h̵,̵d̵i̵f̵_̵n̵e̵g̵,̵F̵i̵n̵.̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵c̵o̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵]̵[̲s̲w̲a̲p̲,̲ ̲h̲,̲ ̲d̲i̲f̲_̲n̲e̲g̲,̲ ̲F̲i̲n̲.̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲F̲i̲n̲.̲c̲o̲n̲s̲_̲s̲u̲c̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProduct25.lean:73:4: error: unsolved goals
+case pos
+A : Type
+zero : A
+coin : NZ zero
+n : ℕ
+ih : ∀ (tape : Fin n → A), first zero (swap zero n (coin, tape)).2 = if exhausted zero tape then none else some ↑coin
+tape : Fin (n + 1) → A
+h : tape 0 = zero
+ex : exhausted zero tape ↔ exhausted zero fun i => tape i.succ
+⊢ (if True then if exhausted zero fun i => tape i.succ then none else some ↑coin else some zero) =
+    if exhausted zero fun i => tape i.succ then none else some ↑coin
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProduct25.lean:80:4: error: unsolved goals
+case neg
+A : Type
+zero : A
+coin : NZ zero
+n : ℕ
+ih : ∀ (tape : Fin n → A), first zero (swap zero n (coin, tape)).2 = if exhausted zero tape then none else some ↑coin
+tape : Fin (n + 1) → A
+h : ¬tape 0 = zero
+ex : ¬exhausted zero tape
+⊢ (if
+        (if h : False then
+                ((swap zero n (coin, fun i => tape i.succ)).1,
+                  Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+              else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+            0 =
+          zero then
+      first zero fun i =>
+        (if h : False then
+              ((swap zero n (coin, fun i => tape i.succ)).1, Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+            else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+          i.succ
+    else
+      some
+        ((if h : False then
+              ((swap zero n (coin, fun i => tape i.succ)).1, Fin.cons zero (swap zero n (coin, fun i => tape i.succ)).2)
+            else (⟨tape 0, ⋯⟩, Fin.cons ↑coin fun i => tape i.succ)).2
+          0)) =
+    some ↑coin
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProduct25.lean:77:66: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵w̵a̵p̵,̵h̵,̵d̵i̵f̵_̵p̵o̵s̵,̵f̵i̵r̵s̵t̵,̵F̵i̵n̵.̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵[̲s̲w̲a̲p̲,̲ ̲h̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲,̲ ̲f̲i̲r̲s̲t̲,̲ ̲F̲i̲n̲.̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲F̲i̲n̲.̲c̲o̲n̲s̲_̲s̲u̲c̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProduct25.lean:81:24: warning: This simp argument is unused:
+  dif_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [swap, ̲h,d̵i̵ ̲f_̵n̵e̵g̵,̵f̵irst, ̲Fin.cons_zero, ̲coin.property, ̲if_false, ̲ex]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProduct25.lean:81:38: warning: This simp argument is unused:
+  Fin.cons_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵w̵a̵p̵,̵h̵,̵d̵i̵f̵_̵n̵e̵g̵,̵f̵i̵r̵s̵t̵,̵F̵i̵n̵.̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵c̵o̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵e̵x̵]̵[̲s̲w̲a̲p̲,̲ ̲h̲,̲ ̲d̲i̲f̲_̲n̲e̲g̲,̲ ̲f̲i̲r̲s̲t̲,̲ ̲c̲o̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲e̲x̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProduct25.lean:81:52: warning: This simp argument is unused:
+  coin.property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵w̵a̵p̵,̵h̵,̵d̵i̵f̵_̵n̵e̵g̵,̵f̵i̵r̵s̵t̵,̵F̵i̵n̵.̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵c̵o̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵e̵x̵]̵[̲s̲w̲a̲p̲,̲ ̲h̲,̲ ̲d̲i̲f̲_̲n̲e̲g̲,̲ ̲f̲i̲r̲s̲t̲,̲ ̲F̲i̲n̲.̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲e̲x̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitProduct25.swap_involution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProduct25.raw_marginal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProduct25.model_marginal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProduct25.first_swap' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProduct25.coupling' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProduct25.instances_marginal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,11 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-abi2/docs/research/100bit-spend-path-20261013/lean/OraclePortCkptAbi2StdInventory.lean:8:7: error: ill-formed syntax
+def Aeneas.Std.alloc.vec.Vec.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Aeneas.Std.Usize.max }
+@[irreducible] def Aeneas.Std.alloc.vec.Vec.push.{u} : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → α → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec α) :=
+fun {α} v x =>
+  let nlen := (↑v).length + 1;
+  if h : (decide (nlen ≤ Aeneas.Std.U32.max) || decide (nlen ≤ Aeneas.Std.Usize.max)) = true then
+    Aeneas.Std.Result.ok ⟨(↑v).concat x, ⋯⟩
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.maximumSizeExceeded
+'AspisR1.OraclePortCkptAbi2Unwrap.savedTen_panic_unreachable' depends on axioms: [propext, Classical.choice, Quot.sound]

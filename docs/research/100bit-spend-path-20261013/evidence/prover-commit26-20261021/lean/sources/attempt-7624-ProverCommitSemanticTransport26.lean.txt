@@ -1,0 +1,80 @@
+import R1Z.ProverCommitCircle25
+import R1Z.ProverCommitFields20
+/-! Nominal execution transport between the independently extracted semantic
+and circle callers, retaining Aeneas failure/divergence and wire errors. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitSemanticTransport26
+open Aeneas Aeneas.Std Result
+
+def mapR {α β : Type} (f : α → β) (m : Result α) : Result β := do
+  let value ← m
+  ok (f value)
+
+theorem map_bind {α β γ : Type} (f : β → γ) (m : Result α) (k : α → Result β) :
+    mapR f (do let a ← m; k a) = (do let a ← m; mapR f (k a)) := by
+  cases m <;> rfl
+
+theorem map_if {α β : Type} (f : α → β) (p : Prop) [Decidable p]
+    (a b : Result α) : mapR f (if p then a else b) = if p then mapR f a else mapR f b := by
+  by_cases h : p <;> simp [h]
+
+theorem map_ok {α β : Type} (f : α → β) (value : α) : mapR f (ok value) = ok (f value) := rfl
+
+abbrev SW := AspisR1SimSemantic20.aspis_core.field.wide_exact.WideExact
+abbrev CW := AspisR1CircleCaller25.aspis_core.field.wide_exact.WideExact
+
+def fromWide (v : SW) : CW :=
+  ⟨⟨⟨v.c0.c0.a,v.c0.c0.b⟩,⟨v.c0.c1.a,v.c0.c1.b⟩⟩,
+   ⟨⟨v.c1.c0.a,v.c1.c0.b⟩,⟨v.c1.c1.a,v.c1.c1.b⟩⟩⟩
+
+theorem limbs (words : Array U32 8#usize) :
+    mapR (Option.map fromWide) (AspisR1SimSemantic20.aspis_core.field.wide_exact.WideExact.from_limbs words) =
+      AspisR1CircleCaller25.aspis_core.field.wide_exact.WideExact.from_limbs words := by
+  simp only [AspisR1SimSemantic20.aspis_core.field.wide_exact.WideExact.from_limbs,
+    AspisR1CircleCaller25.aspis_core.field.wide_exact.WideExact.from_limbs,
+    AspisR1SimSemantic20.aspis_core.field.P,AspisR1CircleCaller25.aspis_core.field.P,map_bind,map_if,map_ok]
+  rfl
+
+theorem bytes (data : Slice U8) :
+    mapR (Option.map fromWide) (AspisR1SimSemantic20.aspis_core.field.wide_exact.WideExact.from_le_bytes data) =
+      AspisR1CircleCaller25.aspis_core.field.wide_exact.WideExact.from_le_bytes data := by
+  simp only [AspisR1SimSemantic20.aspis_core.field.wide_exact.WideExact.from_le_bytes,
+    AspisR1CircleCaller25.aspis_core.field.wide_exact.WideExact.from_le_bytes,
+    AspisR1SimSemantic20.aspis_core.field.wide_exact.WideExact.BYTE_LEN,
+    AspisR1CircleCaller25.aspis_core.field.wide_exact.WideExact.BYTE_LEN,map_bind,map_if,map_ok,limbs]
+  rfl
+
+theorem zero_test (x : SW) :
+    core.cmp.PartialEq.ne.trait_default AspisR1CircleCaller25.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+      (fromWide x).c1 AspisR1CircleCaller25.aspis_core.field.QM31.ZERO =
+    core.cmp.PartialEq.ne.trait_default AspisR1SimSemantic20.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+      x.c1 AspisR1SimSemantic20.aspis_core.field.QM31.ZERO := by
+  simp only [core.cmp.PartialEq.ne.trait_default,
+    AspisR1CircleCaller25.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31,
+    AspisR1CircleCaller25.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq,
+    AspisR1CircleCaller25.aspis_core.field.CM31.Insts.CoreCmpPartialEqCM31.eq,
+    AspisR1CircleCaller25.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
+    AspisR1CircleCaller25.aspis_core.field.QM31.ZERO,
+    AspisR1SimSemantic20.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31,
+    AspisR1SimSemantic20.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq,
+    AspisR1SimSemantic20.aspis_core.field.CM31.Insts.CoreCmpPartialEqCM31.eq,
+    AspisR1SimSemantic20.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
+    AspisR1SimSemantic20.aspis_core.field.QM31.ZERO,
+    fromWide]
+  rfl
+
+def errorMap (r : core.result.Result Unit AspisR1SimSemantic20.r1_wire.Error) :
+    core.result.Result Unit AspisR1CircleCaller25.r1_wire.Error :=
+  match r with
+  | .Ok value => .Ok value
+  | .Err error => .Err (ProverCommitCircle25.fromError error)
+
+#print axioms zero_test
+
+#print axioms map_bind
+#print axioms map_if
+#print axioms map_ok
+#print axioms limbs
+#print axioms bytes
+end R1Z.ProverCommitSemanticTransport26

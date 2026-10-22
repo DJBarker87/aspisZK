@@ -1,0 +1,22 @@
+import OraclePortCkptAbi2Unwrap
+import OraclePortCkptAbi2Reached
+import OraclePortCkptAbi2Vec
+import OraclePortCkptAbi2DriverObstruction
+import OraclePortCkptAbi2Extracted.Funs
+
+/-! Focused union audit only. No complete source checkpoint cone, reader,
+AcceptedRunJoin or coherent frozen release is asserted by these imports. -/
+#print axioms AspisR1.OraclePortCkptAbi2Unwrap.unwrap_ok
+#print axioms AspisR1.OraclePortCkptAbi2Unwrap.raw_panic_unreachable
+#print axioms AspisR1.OraclePortCkptAbi2Unwrap.raw_panic_independent
+#print axioms AspisR1.OraclePortCkptAbi2Unwrap.savedTen_panic_unreachable
+#print axioms AspisR1.OraclePortCkptAbi2Reached.accepted_inputs
+#print axioms AspisR1.OraclePortCkptAbi2Reached.accepted_reference_resume
+#print axioms AspisR1.OraclePortCkptAbi2Vec.push_exact
+#print axioms AspisR1.OraclePortCkptAbi2Vec.append_exact
+#print axioms AspisR1.OraclePortCkptAbi2DriverObstruction.checkpointThen_length
+#print axioms AspisR1.OraclePortCkptAbi2DriverObstruction.checkpointThen_verdict
+#print axioms AspisR1.OraclePortCkptAbi2DriverObstruction.checkpointThen_not_erased
+#print axioms OraclePortCkptAbi2Extracted.body_byte
+#print axioms OraclePortCkptAbi2Extracted.decode_k_spec
+#print axioms OraclePortCkptAbi2Extracted.decode_e_spec

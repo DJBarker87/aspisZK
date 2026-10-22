@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitConcreteMask51.lean:31:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ProverCommitMaskColumns51.value p c ↑27
+in the target expression
+  decode z =
+    R0P.Mask.maskValue ProverCommitQBasis51.basis (fun i => honestClaims t (fun j => decode (p ↑j)) 0 (Fin.castLE ⋯ i))
+      (fun i => honestClaims t (fun j => decode (p ↑j)) 0 ⟨16 + ↑i, ⋯⟩) (ProverCommitMaskColumns51.value p c 27)
+      fun i => decode (p ↑i)
+
+p : ℕ → Old.Q
+hp : ∀ i < 10, Canonical (p i)
+c : ℕ → ℕ → Old.Q
+hc : ∀ i < 29, ∀ j < 1024, Canonical (c i j)
+t : R0P.Trace QM31Exact
+ht : ∀ (l : Fin 29) (j : Fin 1024), decode (c ↑l ↑j) = t l j
+z : Old.Q
+hz :
+  ProverCommitMaskRead51.run (ProverCommitQArray48.array 10#usize p) (ProverCommitMaskColumns51.columns c)
+      (ProverCommitQArray48.array 1024#usize (c 27)) =
+    ok (ProverCommitNativeQ48.source z)
+hcz : Canonical z
+hdz :
+  decode z =
+    R0P.Mask.maskValue ProverCommitQBasis51.basis (fun i => honestClaims t (fun j => decode (p ↑j)) 0 (Fin.castLE ⋯ i))
+      (fun i => honestClaims t (fun j => decode (p ↑j)) 0 ⟨16 + ↑i, ⋯⟩) (ProverCommitMaskColumns51.value p c 27)
+      fun i => decode (p ↑i)
+h1 :
+  (fun i => ProverCommitMaskColumns51.value p c ↑i) = fun i =>
+    honestClaims t (fun j => decode (p ↑j)) 0 (Fin.castLE ⋯ i)
+h2 :
+  (fun i => ProverCommitMaskColumns51.value p c (16 + ↑i)) = fun i =>
+    honestClaims t (fun j => decode (p ↑j)) 0 ⟨16 + ↑i, ⋯⟩
+⊢ decode z =
+    R0P.Mask.maskValue ProverCommitQBasis51.basis (fun i => honestClaims t (fun j => decode (p ↑j)) 0 (Fin.castLE ⋯ i))
+      (fun i => honestClaims t (fun j => decode (p ↑j)) 0 ⟨16 + ↑i, ⋯⟩) (honestClaims t (fun j => decode (p ↑j)) 0 27)
+      fun i => decode (p ↑i)
+'R1Z.ProverCommitConcreteMask51.exact_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

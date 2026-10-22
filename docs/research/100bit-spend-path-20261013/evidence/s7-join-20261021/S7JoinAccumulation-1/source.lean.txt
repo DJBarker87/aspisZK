@@ -1,0 +1,94 @@
+import S7JoinQueryRows
+
+/-! Complete observer-off owned accumulator carrier port: checked basis and
+raw Vec loop, terms, mixed RHS update, power multiplication and cursor advance.
+Adoption at the original extracted caller and opening/fold ABI is separate. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.S7JoinAccumulation
+open Aeneas Aeneas.Std Result
+open S7Kani2AccumulatorLoop (K E BatchedWeights)
+open S7JoinBackendCarriers
+open S7Kani2BackendArithmetic (Wide CanonicalWide)
+open S7Kani3CallerTrace (PushTrace Sum)
+open S7JoinRowsTrace (Progress)
+
+def toWide (x : E) : Wide := ⟨toQ x.c0,toQ x.c1⟩
+def fromWide (x : Wide) : E := ⟨fromQ x.c0,fromQ x.c1⟩
+def CanonicalE (x : E) : Prop := Canonical x.c0 ∧ Canonical x.c1
+
+theorem toWide_canonical (x : E) (hx : CanonicalE x) : CanonicalWide (toWide x) :=
+  ⟨(canonical_iff _).mp hx.1,(canonical_iff _).mp hx.2⟩
+
+theorem fromWide_canonical (x : Wide) (hx : CanonicalWide x) : CanonicalE (fromWide x) := by
+  constructor
+  · apply (canonical_iff _).mpr
+    simpa only [fromWide,to_from] using hx.1
+  · apply (canonical_iff _).mpr
+    simpa only [fromWide,to_from] using hx.2
+
+def rhsUpdate (rhs value : E) (power : K) : Result E := do
+  let product ← S7Kani3CanonicalBackend.mulMixed (toWide value) (toQ power)
+  let sum ← S7Kani2BackendArithmetic.addWide (toWide rhs) product
+  ok (fromWide sum)
+
+theorem rhs_exact (rhs value : E) (power : K)
+    (hr : CanonicalE rhs) (hv : CanonicalE value) :
+    ∃ z, rhsUpdate rhs value power=ok z ∧ CanonicalE z ∧
+      decodeK z.c0=decodeK rhs.c0+decodeK value.c0*decodeK power ∧
+      decodeK z.c1=decodeK rhs.c1+decodeK value.c1*decodeK power := by
+  obtain ⟨p,hp,hpc,hp0,hp1⟩ := S7Kani3CanonicalBackend.mixed_total_exact
+    (toWide value) (toQ power) (toWide_canonical value hv)
+  obtain ⟨r,hrun,hrc,hr0,hr1⟩ := S7Kani2BackendArithmetic.addWide_exact
+    (toWide rhs) p (toWide_canonical rhs hr) hpc
+  refine ⟨fromWide r,by simp only [rhsUpdate,hp,hrun,bind_tc_ok],
+    fromWide_canonical r hrc,?_,?_⟩
+  · change ExtractedCurrentQM31Exact.decode (toQ (fromQ r.c0))=_
+    rw [to_from,hr0,hp0]
+    rfl
+  · change ExtractedCurrentQM31Exact.decode (toQ (fromQ r.c1))=_
+    rw [to_from,hr1,hp1]
+    rfl
+
+structure State where
+  output : alloc.vec.Vec K
+  raw : BatchedWeights
+  rhs : E
+  power : K
+  next : Usize
+
+def accumulate (s : State) (rho : K) (node : U32) (value : E) : Result State := do
+  let raw ← S7JoinQueryRows.query_rows s.output s.raw node s.power s.next
+  let rhs ← rhsUpdate s.rhs value s.power
+  let power ← multiply s.power rho
+  let next ← s.next+1#usize
+  ok ⟨s.output,raw,rhs,power,next⟩
+
+/-- Every checked mutable/arithmetic effect of this complete carrier port is
+derived. Neither whole-call success nor a post-state equation is assumed. -/
+theorem total_exact (old : S8OwnedP6Finish.Weights) (s : State) (sum : Sum)
+    (rho : K) (node : U32) (value : E) (t : Nat)
+    (hout : s.output.val.length=64) (hn : s.next.val≤22) (ht : t<22)
+    (hpower : Canonical s.power) (hrho : Canonical rho)
+    (hrhs : CanonicalE s.rhs) (hvalue : CanonicalE value)
+    (history : PushTrace old s.raw sum) (hphase : Progress t 0 s.raw) :
+    ∃ out sumOut, accumulate s rho node value=ok out ∧ out.output=s.output ∧
+      PushTrace old out.raw sumOut ∧ Progress (t+1) 0 out.raw ∧
+      CanonicalE out.rhs ∧ Canonical out.power ∧ out.next.val=s.next.val+1 ∧
+      decodeK out.power=decodeK s.power*decodeK rho ∧
+      decodeK out.rhs.c0=decodeK s.rhs.c0+decodeK value.c0*decodeK s.power ∧
+      decodeK out.rhs.c1=decodeK s.rhs.c1+decodeK value.c1*decodeK s.power := by
+  obtain ⟨raw,sumOut,hraw,htrace,hprogress⟩ := S7JoinQueryRows.query_rows_exact
+    old s.output s.raw sum node s.power s.next t hout hn ht hpower history hphase
+  obtain ⟨rhs,hr,hcan,hr0,hr1⟩ := rhs_exact s.rhs value s.power hrhs hvalue
+  obtain ⟨power,hp,hpc,hpd⟩ := multiply_exact s.power rho hpower hrho
+  obtain ⟨next,hnext,hnextval⟩ := S7Kani2AccumulatorLoop.increment s.next (by omega)
+  refine ⟨⟨s.output,raw,rhs,power,next⟩,sumOut,?_,rfl,htrace,hprogress,
+    hcan,hpc,hnextval,hpd,hr0,hr1⟩
+  simp only [accumulate,hraw,hr,hp,hnext,bind_tc_ok]
+
+#print axioms toWide_canonical
+#print axioms fromWide_canonical
+#print axioms rhs_exact
+#print axioms total_exact
+end AspisR1.S7JoinAccumulation

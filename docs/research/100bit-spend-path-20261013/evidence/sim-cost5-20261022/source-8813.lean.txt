@@ -1,0 +1,38 @@
+import R1Z.SimCostCollect5
+import R1Z.SimCostView
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.SimCostFormula5
+open AspisWideTower R1Z.SimCostWriter R0Z.HonestView R1Z.Batched R1Z.SimCostCollect5
+attribute [local irreducible] collect collect2 collect3
+
+def batched (f : R1Bat → Costed WideExact) : Costed (R1Bat → WideExact) :=
+  bind (collect 7 (fun i => f (.round0 i))) fun r0 =>
+  bind (collect 7 (fun i => f (.round1 i))) fun r1 =>
+  bind (collect 262144 (fun i => f (.folded i))) fun folded =>
+  bind (collect 64 (fun i => f (.final i))) fun final =>
+    (fun | .round0 i => r0 i | .round1 i => r1 i
+         | .folded i => folded i | .final i => final i, 8)
+
+#check batched
+
+theorem batched_erase (f : R1Bat → Costed WideExact) :
+    (batched f).1 = fun i => (f i).1 := by
+  simp only [batched, erase_bind, collect_erase]
+  funext i
+  cases i <;> rfl
+
+#print axioms batched_erase
+
+theorem batched_bound (f : R1Bat → Costed WideExact) (c : Nat)
+    (hf : ∀ i, (f i).2 ≤ c) : (batched f).2 ≤ 262222*(c+2)+8 := by
+  have h0 := collect_bound 7 c (fun i => f (.round0 i)) (fun i => hf _)
+  have h1 := collect_bound 7 c (fun i => f (.round1 i)) (fun i => hf _)
+  have h2 := collect_bound 262144 c (fun i => f (.folded i)) (fun i => hf _)
+  have h3 := collect_bound 64 c (fun i => f (.final i)) (fun i => hf _)
+  simp only [batched, cost_bind]
+  omega
+
+
+#print axioms batched_bound
+end R1Z.SimCostFormula5
