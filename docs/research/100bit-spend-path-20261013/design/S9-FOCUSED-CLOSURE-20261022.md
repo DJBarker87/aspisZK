@@ -256,3 +256,19 @@ candidate branch tail, and separate output-decoder leaves before the final
 four-output coefficient composition. Failed elaboration/import attempts are
 retained and are not counted as proofs. The frozen production helper remains
 unchanged; the explicit-array helper is still a candidate.
+
+
+The scalar-fold and write-map items above are now PROVED locally in
+`0c2c0722f`: the full generated candidate scalar_factor preserves all Result
+constructors under carrier mapping to the retained concrete P6 function;
+bounded successful array writes return the same mapped output array.
+`e827fd13d` joins the actual successful candidate body to the same actual P6
+power array, scalar-factor result and ordered term array. This reuses the
+previously proved candidate explicit-power array bridge and its retained
+fourth multiplication rather than introducing a separate power-array premise.
+
+The complete branch-tail/body join and final four-output coefficient theorem
+remain OPEN. Decoder-output composition exposed unresolved conditional
+branches; development diagnostics identified those literal branch reductions
+as the obstruction behind expensive implicit equality checking. Diagnostics
+and failed attempts are not accepted sources. No proof limits were raised.
