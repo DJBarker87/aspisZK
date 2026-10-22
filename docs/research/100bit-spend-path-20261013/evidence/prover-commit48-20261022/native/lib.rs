@@ -16,6 +16,7 @@ fn call(op:u8,a:E,b:E)->E {unsafe {
 fn trace()->([Call;8],usize) {unsafe {(CALLS,NEXT)}}
 impl E {
  const ONE:Self=E(1);
+ fn mul_m31(self,b:M31)->E {call(4,self,E(b.0))}
  fn add(self,b:E)->E {call(1,self,b)}
  fn mul(self,b:E)->E {call(2,self,b)}
  fn sub(self,b:E)->E {call(3,self,b)}
@@ -57,3 +58,5 @@ include!("powers-iterations.rs");
 include!("extra-iterations.rs");
 include!("interpolate-iterations.rs");
 include!("interpolate-outer.rs");
+include!("dual-binding.rs");
+include!("round-binding.rs");

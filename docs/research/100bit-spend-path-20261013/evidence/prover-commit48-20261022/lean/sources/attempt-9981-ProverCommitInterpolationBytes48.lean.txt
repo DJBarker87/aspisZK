@@ -1,0 +1,59 @@
+import R1Z.ProverCommitInterpolationModel48
+import R1Z.ProverCommitLimbBytes47
+/-! Exact 896-byte image of the complete owned interpolator. This is the
+unshifted polynomial payload; it does not assume native round sample provenance. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitInterpolationBytes48
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+
+def output (values : Nat → Old.Q) : Nat → Old.Q :=
+  Classical.choose (ProverCommitInterpolationModel48.interpolate_model values)
+
+theorem output_spec (values : Nat → Old.Q) :
+    interpolate (ProverCommitQArray48.array 28#usize values)=ok (ProverCommitQArray48.array 28#usize (output values)) ∧
+      (∀ k, k < 28 → Canonical (output values k)) ∧
+      ProverCommitInterpolationRow48.qpoly (output values)=Lagrange.interpolate Finset.univ
+        (fun j : Fin 28 => (j.val : QM31Exact)) (fun j => decode (values j.val)) :=
+  Classical.choose_spec (ProverCommitInterpolationModel48.interpolate_model values)
+
+def model (values : Nat → Old.Q) : Polynomial QM31Exact :=
+  Lagrange.interpolate Finset.univ (fun j : Fin 28 => (j.val : QM31Exact)) (fun j => decode (values j.val))
+
+theorem coefficient (values : Nat → Old.Q) (k : Fin 28) :
+    decode (output values k.val)=(model values).coeff k.val := by
+  have h := congrArg (fun p : Polynomial QM31Exact => p.coeff k.val) (output_spec values).2.2
+  simpa only [ProverCommitInterpolationRow48.qpoly,ProverCommitInterpolationPoly48.coeff,
+    if_pos k.isLt,model] using h
+
+def cell (values : Nat → Old.Q) (k : Fin 28) : Fin 32 → UInt8 :=
+  ProverCommitLimbBytes47.sourceCell (output values k.val) ((output_spec values).2.1 k.val k.isLt)
+
+theorem cell_image (values : Nat → Old.Q) (k : Fin 28) :
+    cell values k=ProverCommitValueRange47.bytes
+      (ProverCommitEval47.embed ((model values).coeff k.val)) := by
+  rw [cell,ProverCommitLimbBytes47.source_image,coefficient]
+
+def encoded (values : Nat → Old.Q) : List UInt8 :=
+  (List.ofFn (fun k : Fin 28 => List.ofFn (cell values k))).flatten
+
+def modelEncoded (values : Nat → Old.Q) : List UInt8 :=
+  (List.ofFn (fun k : Fin 28 => List.ofFn (ProverCommitValueRange47.bytes
+    (ProverCommitEval47.embed ((model values).coeff k.val))))).flatten
+
+theorem encoded_image (values : Nat → Old.Q) : encoded values=modelEncoded values := by
+  simp only [encoded,modelEncoded,cell_image]
+
+theorem byte_count (values : Nat → Old.Q) : (encoded values).length=28*32 := by
+  rw [encoded,List.length_flatten]
+  simp only [List.map_ofFn,List.length_ofFn,List.ofFn_const,List.sum_replicate]
+  rfl
+
+#print axioms output_spec
+#print axioms coefficient
+#print axioms cell_image
+#print axioms encoded_image
+#print axioms byte_count
+end R1Z.ProverCommitInterpolationBytes48

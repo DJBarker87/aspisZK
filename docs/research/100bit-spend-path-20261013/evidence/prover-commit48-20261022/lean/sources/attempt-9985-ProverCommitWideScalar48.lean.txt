@@ -1,0 +1,65 @@
+import AspisR1ProducerRelease47.Batched48
+import R1Z.ProverCommitScalar48
+import R1Z.ProverCommitWideOps48
+import R1Z.ProverCommitNativeOps47
+import R1Z.ProverCommitValueRange47
+/-! Exact native full-width base-scalar multiplication, including its actual
+rhs normalization. All eight raw source coordinates are admitted. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitWideScalar48
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitWideOps48
+
+def product (x : Raw) (y : U32) : Raw :=
+  (ProverCommitScalar48.product x.1 (ProverCommitNativeOps47.normalizeWord y),
+   ProverCommitScalar48.product x.2 (ProverCommitNativeOps47.normalizeWord y))
+
+def factor (y : U32) : Exact :=
+  ProverCommitValueRange47.embed (ProverCommitScalar48.embed y)
+
+theorem qm_scalar (x : Old.Q) (y : U32) :
+    field.QM31.mul_m31 (ProverCommitNativeQ48.source x) y=
+      ok (ProverCommitNativeQ48.source (ProverCommitScalar48.product x y)) := by
+  simp only [field.QM31.mul_m31,field.CM31.mul_m31,ProverCommitNativeQ48.source,
+    ProverCommitRelease47.convQ,ProverCommitRelease47.convC,fromQ,fromC,
+    ProverCommitInverse48.release_multiply,bind_tc_ok,ProverCommitScalar48.product]
+
+theorem normalized_embed (y : U32) :
+    ProverCommitScalar48.embed (ProverCommitNativeOps47.normalizeWord y)=ProverCommitScalar48.embed y := by
+  simp only [ProverCommitScalar48.embed,ProverCommitNativeOps47.normalize_cast]
+
+theorem product_canonical (x : Raw) (y : U32) : canonical (product x y) :=
+  ⟨ProverCommitScalar48.product_canonical _ _,ProverCommitScalar48.product_canonical _ _⟩
+
+theorem product_value (x : Raw) (y : U32) : value (product x y)=value x*factor y := by
+  apply QuadraticAlgebra.ext
+  · change AspisR1.ExtractedCurrentQM31Exact.decode (product x y).1=_
+    simp only [product,ProverCommitScalar48.product_value,normalized_embed,value,factor,
+      ProverCommitValueRange47.embed]
+    simp
+  · change AspisR1.ExtractedCurrentQM31Exact.decode (product x y).2=_
+    simp only [product,ProverCommitScalar48.product_value,normalized_embed,value,factor,
+      ProverCommitValueRange47.embed]
+    simp
+
+theorem source_exact (x : Raw) (y : U32) :
+    field.wide_exact.WideExact.mul_m31 (source x) y=ok (source (product x y)) ∧
+      canonical (product x y) ∧ value (product x y)=value x*factor y := by
+  refine ⟨?_,product_canonical x y,product_value x y⟩
+  simp only [field.wide_exact.WideExact.mul_m31,field.P,ProverCommitNativeOps47.rem_source,
+    source,pack,ProverCommitRelease47.convE,bind_tc_ok]
+  change (do
+    let lo ← field.QM31.mul_m31 (ProverCommitNativeQ48.source x.1) (ProverCommitNativeOps47.normalizeWord y)
+    let hi ← field.QM31.mul_m31 (ProverCommitNativeQ48.source x.2) (ProverCommitNativeOps47.normalizeWord y)
+    ok (⟨lo,hi⟩ : field.wide_exact.WideExact))=_
+  simp only [qm_scalar,bind_tc_ok,product]
+  rfl
+
+#print axioms qm_scalar
+#print axioms normalized_embed
+#print axioms product_canonical
+#print axioms product_value
+#print axioms source_exact
+end R1Z.ProverCommitWideScalar48

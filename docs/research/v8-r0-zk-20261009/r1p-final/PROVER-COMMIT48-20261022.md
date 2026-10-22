@@ -290,6 +290,29 @@ pair destructuring/association in the outer loop. Their diagnostics are
 retained. The successful bridge uses the proved initializer/factor Result,
 then an explicit monadic expression; no options, assumptions or caps changed.
 
+## Stage 9: standard interpolation model and byte image
+
+J9977 proves the symbolic normalized omitted-node product equals the standard
+Lagrange basis for every node; J9980 composes this with all source-owner rows.
+`InterpolationModel48.interpolate_model` returns canonical coefficients and
+an equality to `Lagrange.interpolate Finset.univ` on nodes 0–27 for arbitrary
+raw input words. It contains no supplied coefficient/model-image identity.
+J9982 proves every coefficient's embedded 32-byte image, the complete ordered
+896-byte payload image, and its length. This is the **unshifted owned
+interpolator output**, not a native semantic-round theorem: source sample
+provenance, boundary guards, final shift and native caller composition remain.
+J9976/78/79/81 are retained focused drafts; J9981's length proof attempted
+excess reduction and hit the default heartbeat limit. The replacement keeps
+the output/model cells opaque and proves only list shape; no cap was raised.
+
+The next opening helpers are separately extracted from `batched-owner`, with
+no shipped-code extraction. J9983 checks the rebound owner declarations.
+J9985 proves the actual WideExact scalar source operation on arbitrary raw
+low/high words, including the scalar's `% P` normalization; outputs are
+canonical. J9986 proves the dual fold cell's exact reverse-order polynomial
+and quarter scaling. These do not discharge the complete weight producer,
+materialization, round/fold callers, or simulator payload equality.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

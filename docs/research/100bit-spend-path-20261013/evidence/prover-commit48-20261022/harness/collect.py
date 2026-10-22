@@ -11,18 +11,23 @@ def sync(remote,local,extra=()):
 
 
 sync(R,E/'pins',('--exclude=/program-one-transition-*','--exclude=/binary-group-v*','--exclude=/binary-cursor-v*','--exclude=/stored-node-v*','--include=/*-reservations.json','--include=/*-inputs.json','--include=/*-llbc.json','--include=/lean-*.json','--include=/revision.txt','--include=/frozen-elf-final-check.json','--exclude=*'))
+# Batch all scoped text receipt paths in one rsync transfer. Refresh every log,
+# including receipts captured before the corresponding process completed.
 records=[]
-for pin in sorted((E/'pins').glob('lean-*.json')):
+pins=sorted((E/'pins').glob('lean-*.json'))
+paths=[]
+for pin in pins:
+ rec=json.loads(pin.read_text());a=str(rec['attempt'])
+ for kind,ext in [('out','log'),('time','log'),('sha','txt')]:
+  paths.append(kind+'-'+a+'.'+ext)
+stage=E/'lean'/'collected-text';stage.mkdir(parents=True,exist_ok=True)
+subprocess.run(['rsync','-az','--files-from=-',HOST+':/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/',str(stage)+'/'],input='\n'.join(paths)+'\n',text=True,check=True)
+for pin in pins:
  rec=json.loads(pin.read_text());a=str(rec['attempt'])
  dest=E/'lean'/'receipts'/a;dest.mkdir(parents=True,exist_ok=True)
- if a in ('9700',):
-  rec.update(exit_status=[],launcher_exit_status=65,compiler_launched=False,wall=None,peak_rss_kib=None,swaps=None,print_axioms=[],errors=['Launcher refused an existing receipt number; no compiler ran. Existing receipt belongs to another module and is deliberately not copied or attributed.'],source_revision=(E/'pins'/'revision.txt').read_text().strip())
-  rec['source_snapshot']=str(next((E/'lean'/'sources').glob('attempt-'+a+'-*')).relative_to(E))
-  records.append(rec)
-  continue
  for kind,ext in [('out','log'),('time','log'),('sha','txt')]:
-  if True:  # Refresh text receipts, including a log previously copied before completion.
-   subprocess.run(['scp','-q',HOST+':/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/'+kind+'-'+a+'.'+ext,str(dest)],check=True)
+  name=kind+'-'+a+'.'+ext
+  (dest/name).write_bytes((stage/name).read_bytes())
  log=(dest/('out-'+a+'.log')).read_text();tl=(dest/('time-'+a+'.log')).read_text()
  def field(s):
   m=re.search(re.escape(s)+r':\s*(.+)',tl);return m[1] if m else None
@@ -34,6 +39,8 @@ for pin in sorted((E/'pins').glob('lean-*.json')):
  rec['exact_command']=['sh',R+'/run-joint.sh',a,rec['module'][:-5],'J','7000','8',rec['deps_fingerprint']]
  rec['source_revision_description']='Task base revision plus this exact source SHA256 and retained dependency-object fingerprint; no attribution to an unchanged checkout.'
  records.append(rec)
+for p in stage.iterdir():p.unlink()
+stage.rmdir()
 records.sort(key=lambda r:r['attempt'])
 (E/'lean'/'attempts.json').write_text(json.dumps(records,indent=2)+'\n')
 

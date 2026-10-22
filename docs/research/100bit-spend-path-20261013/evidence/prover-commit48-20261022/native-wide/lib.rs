@@ -33,3 +33,4 @@ pub mod field;
 }
 include!("weights-init.rs");
 include!("scalar-binding.rs");
+include!("wide-scalar-binding.rs");
