@@ -1,0 +1,35 @@
+{
+  "label": "source-derived operation counts per completed attempt, not dynamic counters or formal cost proofs",
+  "trees": 3,
+  "leaves_per_tree": 262144,
+  "levels": 18,
+  "parent_hashes_per_tree": 262143,
+  "all_tree_leaf_hashv_calls": 786432,
+  "all_tree_parent_hashv_calls": 786429,
+  "all_tree_hashv_calls": 1572861,
+  "salts": 786432,
+  "binding_hashes_in_current_salt_loop": 786432,
+  "salt_hashes": 786432,
+  "salt_hashv_calls": 1572864,
+  "tree_plus_salt_hashv_calls": 3145725,
+  "leaf_value_bytes": {
+    "C1": 480,
+    "C2": 128,
+    "folded": 128
+  },
+  "sha256_compressions_tree_only": 5505018,
+  "notes": [
+    "SHA256 leaf input: two domain bytes + value + 32-byte salt; SHA256 parent: one domain byte + two 32-byte children. Padding included in compression count.",
+    "Folded tree still hashes 262144 leaves: only first 65536 carry evaluated values; padded leaves have different private salts and cannot share one leaf hash.",
+    "Salt count includes full folded padded domain. Each salt derives an identical-per-attempt binding hash followed by its unique leaf hash.",
+    "Mask expanders, seed derivation, transcript, challenge sampling, multiproof verification and all retries add other calls; total above is not total prover hashing.",
+    "Retries require independent secrets and redoing secret-dependent commitments; these counts multiply by completed construction attempts, not necessarily every early failed attempt."
+  ],
+  "source_refs": [
+    "crates/aspis-r1-cost-probe/src/prover.rs:189,208",
+    "crates/aspis-r1-cost-probe/src/host_commitment.rs:155",
+    "crates/aspis-r1-cost-probe/src/multiproof.rs:233",
+    "crates/aspis-prover/src/state_only_entropy.rs:568",
+    "crates/aspis-core/src/state_only_private_merkle.rs:34"
+  ]
+}

@@ -8626,3 +8626,61 @@ gamma/kappa powers; seven-coefficient round accumulation. J9999 standard
 axioms; shipped files unchanged. Stopped on an exhausted env J range. Open:
 semantic samples and guards, final shift, weight-model correspondence, caller
 composition.
+
+## D167 (lead, 2026-10-22 18:50): constant-time candidate v2 per D166
+
+Branch `codex/cx-ct-kernels-v2-20261022` (head `2b7a80b65a`, an unmerged adoption
+candidate; v2 section in `design/CT-KERNELS-20261022.md`). It holds only the stage-2
+field kernels and TLS gating plus a constant-trace pole check (`ct_pole.rs`):
+branch-free QM31 equality and an eager scan over every slot, with no early exit.
+Six compositional Kani gates, instrumented two-run checks and a full-size native
+trace replay pass, and so do the fixture pole regressions. The verifier ELFs match
+the adopted pins, and the fixture proof/public bytes are identical. Single-run
+prover wall time (measurement only): transfer 38.51 s, withdrawal 37.95 s,
+back at the ~40 s baseline. The stage-3 rewrites stay only on the old branch.
+Remaining for L2: the simulatable-trace proof for the F3/F5/F6 steps (listed by
+file:line in the v2 section); then candidate adoption gates and the L3 receipt.
+
+## D168 (user feedback, 2026-10-22 18:55): prover slowdowns need a stop gate
+
+The user called the stage-3 constant-time slowdown (about 40 s to 170–200 s)
+unacceptable. It was never adopted: the v2 candidate (D167) is at the ~40 s
+baseline. The process failure was the lead's. The stage-3 prompt had no
+performance stop condition, so five successive slowdowns ran to completion
+before review. From now on, every job that changes prover or host code carries a wall-time
+budget gate: measure after each step and stop and escalate if any fixture's prover time
+rises more than 10% over baseline. The stage-3 branch is evidence only and is
+not a candidate.
+
+## D169 (user, 2026-10-22 19:00): stage-3 branch removed; prover target under 15 s
+
+On the user's instruction ("remove that shit if needed"), the stage-3
+fixed-shape branch `codex/cx-ct-kernels-20261022` was deleted. It was never in
+research. Its measurements are kept in D165; the v2 candidate is unaffected.
+**New user target: prover wall time under 15 s per proof** (about 38–42 s today,
+single-run on the x86_64 Linux build host). This is a performance requirement
+alongside the security contract, not a replacement for it. Next: a profiling
+job, with per-phase time, retry count and thread use, and a ranked list of
+speedups classified by whether proof bytes and the existing proofs/trust
+items survive. Notes: parallelism would touch the single-thread TLS trust item
+and the side-channel model; any change to proof bytes touches the verifier
+and soundness model and needs the user's approval.
+
+## D170 (lead, 2026-10-22 19:20): prover profile; P_R1 is 89% of prover time
+
+Merged `codex/cx-prover-speed-20261022` (measurement only;
+`design/PROVER-SPEED-20261022.md`). Five runs per fixture and variant on the build
+host (Intel Core Ultra 7 155H, 16 cores/22 threads, rustc 1.94.1), medians:
+research 37.25/37.24 s and CT v2 37.58/37.44 s (transfer/withdrawal); one
+attempt in every run. **P_R1 takes about 33 s**: emit 12.3, convert 4.7, build
+7.1, check 8.8. Everything else is about 4.3 s: semantic sumcheck 2.5,
+commitments and encodings 1.2, salts, hashing and Merkle under 0.7. So
+hashing and Merkle parallelism cannot reach the 15 s target. The target needs about a
+4x speedup of P_R1 (projected 12–13 s end to end). These are projections, not results.
+Next, per D169: a byte-preserving P_R1 speedup on the v2 candidate branch, using
+bounded workers, exact blocked/SIMD M31 arithmetic and removal of duplicated
+column construction. Accept/reject decisions and proof bytes stay identical,
+there are new Kani equivalence gates, and the deterministic exact checker stays
+(no randomized checking). P_R1 inputs are public challenges, so its trace falls under the D166
+simulatable-trace route. Workers change the thread model, so the TLS
+single-thread trust item must be re-examined (v2 already gates TLS recording off).
