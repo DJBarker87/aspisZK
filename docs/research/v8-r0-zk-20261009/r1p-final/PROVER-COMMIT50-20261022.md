@@ -234,3 +234,91 @@ theorem privacy_headline_deployed
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
 ```
+
+## Final audit: FAILED; budget exhausted
+
+J10299, exact target `R1Z.ProverCommitAudit50`, fails at imports: exit 1,
+wall 0.95 s, peak RSS 3246284 KiB, zero swaps. The exact diagnostic is:
+
+```
+import AspisR1ProducerRelease47.Linear50 failed, environment already contains 'AspisR1ProducerRelease47.field.QM31.mul_m31' from AspisR1ProducerRelease47.Batched48
+```
+
+No `#print axioms` command in this final audit executes. The failed audit
+source is preserved verbatim as
+`lean/sources/attempt-10299-ProverCommitAudit50.lean.txt` in the evidence;
+it is not retained as an accepted module in the proof tree. Audit source
+SHA256: `40874c72f2f2e2c38086bbf02c5ef6c551b3bd24ab397661eb01f02f1f51f92f`.
+The audit source revision is `7ea294e32bf10d02b9b8ec34b9631678a367337e`, plus its
+frozen source/dependency fingerprints. Actual task base is
+`3b95419ce01a5709a7cd19d71c794cf815999041`, not an attribution of these new
+results to the earlier research revision quoted in the prompt.
+
+Static inspection confirms **both** `field.CM31.mul_m31` and
+`field.QM31.mul_m31` are byte-identical between `Linear50` and retained
+`Batched48`. `pins/integration-collision.json` records both declaration hashes
+and the exact repair/rebuild schedule. Next continuation must import/reuse
+those two declarations from `Batched48` in `Linear50`, remove the duplicates,
+and rebuild these six affected targets in order:
+
+1. `AspisR1ProducerRelease47.Linear50`
+2. `R1Z.ProverCommitScale50`
+3. `R1Z.ProverCommitLinearLoop50`
+4. `R1Z.ProverCommitLinear50`
+5. `AspisR1ProducerRelease47.MaskFinish50`
+6. `R1Z.ProverCommitMaskFinish50`
+
+Then repeat the integration audit with new authorized numbers. No uncompiled
+source repair is installed after this allocation ends. The failed J10298
+concrete arithmetic caller also needs reduction-shape isolation; it must not
+be rerun unchanged or with a larger cap.
+
+`pins/final-lean-freeze.json` freezes 52 individually accepted focused modules
+and 91 public theorem statements. Their original focused `#print axioms`
+results are all subsets of `[propext, Classical.choice, Quot.sound]`. This is
+**not** a successful combined import/axioms audit: no claim that these results
+currently compose with the entire retained part-49 cone is made. There is no
+complete frozen-manifest release replay or security closure claim.
+
+`pins/final-integrity-check.json` accounts for all 100 numbers: 97 compiler
+attempts (56 successful) and three retired preflight refusals (10200, 10217,
+10243). It verifies accepted source hashes and receipts, unchanged endpoint
+snapshots, no forbidden proof escapes or raised maximum options, no binary/
+olean/LLBC/archive delivery, and all 491 shipped files unchanged from task base.
+The ELF rebuild rule was not triggered. Retained pins remain default
+40dc7574… / devnet 12cb0bc2… / Pool 121f3e29…; no fresh ELF rebuild is claimed.
+
+**Stopping condition: J10200–J10299 is exhausted.** In addition, J10299 exposes
+a concrete integration collision and J10298 a concrete kernel resource failure.
+Neither is a counterexample to the desired simulator equality. No further
+compile was launched, and no historical proof is reassigned to this new cone.
+
+## Exact remaining continuation interfaces
+
+1. The new three-product arithmetic and optimized evaluator have focused owned
+   value proofs and native gates. Integrate the cone after the duplicate-declaration
+   repair above; do not promote those local results to whole simulator refinement.
+2. Finish semantic source provenance: source Vec emission/iteration into the
+   sparse MLE; actual tape columns and statement-point claims; actual selected
+   coefficient-array writes (including the zero cell at exponent 23); model-basis
+   instantiation; semantic terminal and extra/original/eta0 values. Compose
+   sample sums, interpolation and optimized evaluation into the exact
+   `PayloadSplit.rounds`/`originalRounds` targets and prove boundary/terminal
+   guard success. Establish the source P_R1 good-domain condition, including
+   alpha[9] != half. The exact oracle target remains
+   `R0Z.PayloadSplit.maskLinear π B a τ + ch.sem14 * terminalValue pub
+   (ch.sem0) (ch.sem1) (ch.sem2) (ch.sem13) (zc ch) B
+   (honestClaims (0 : Trace K) a) a`.
+3. Then interface 4: complete `Weights::new` allocation/layout/reuse/iteration,
+   its input representation laws, gamma batching of all 1024 coefficients and
+   tape/variant provenance as `coeffsOf AspisR1.rowEquiv τ`.
+4. Then interface 5: actual source `encode_at`, `eval_at`, `nodes_for`,
+   `phi_inverse`, opened/folded leaves and semantic/opening caller composition.
+5. Final endpoint is still complete native simulator payload equal to
+   `shift pub B ch (refPayload+ A π B ch (Partition.equiv.symm t))`, the
+   `R0Z.RefPayload.simE` payload. It is unproved. Interfaces 4–6 were not reached
+   within this allocation. STOP there before FSExperiments conversion or joins.
+
+`RustProverRefinement` remains explicit in the unchanged deployed theorem;
+no premise, quantifier, failure event, metric, conclusion or bound is weakened.
+**Target not yet established.**
