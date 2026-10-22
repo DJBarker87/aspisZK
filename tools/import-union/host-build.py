@@ -49,8 +49,13 @@ for rec in plan['ordered']:
     p = W / 'sources' / (m.replace('.', '/') + '.lean')
     assert sha(p) == rec['sha256'], m
     deps = [(i, str(obj(i)), sha(obj(i))) for i in rec['imports']]
-    fingerprint = hashlib.sha256(json.dumps(deps, sort_keys=True).encode()).hexdigest()
+    fingerprint_input = deps if 'environment_epoch' not in plan else {'deps':deps,'environment_epoch':plan['environment_epoch']}
+    fingerprint = hashlib.sha256(json.dumps(fingerprint_input, sort_keys=True).encode()).hexdigest()
     previous = [r for r in records if r['module'] == m and r['source_sha256'] == sha(p) and r['deps_fingerprint'] == fingerprint]
+    compatible_success = [r for r in records if r['module'] == m and r['source_sha256'] == sha(p) and r['exit'] == 0
+                          and [(i,h) for i,_,h in r['deps']] == [(i,h) for i,_,h in deps]]
+    if not previous and compatible_success:
+        previous = compatible_success
     if previous:
         r = previous[-1]
         if r['exit'] == 0 and obj(m) == W / 'objects' / (m.replace('.', '/') + '.olean') and sha(obj(m)) == r['object_sha256']:
@@ -92,6 +97,7 @@ for rec in plan['ordered']:
     text = log.read_text()
     r = {'label': label, 'module': m, 'command': cmd, 'lean_path': env['LEAN_PATH'],
          'source_revision': plan['revision'], 'source_sha256': sha(p), 'deps': deps,
+         'environment_epoch': plan.get('environment_epoch', 'initial'),
          'deps_fingerprint': fingerprint, 'exit': rc, 'wall_seconds': time.monotonic()-start,
          'aggregate_peak_rss_bytes_sampled': peak_rss,
          'cgroup_memory_peak_bytes': cgval('memory.peak'), 'swap_bytes': cgval('memory.swap.current'),
