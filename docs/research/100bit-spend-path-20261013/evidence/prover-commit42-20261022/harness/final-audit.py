@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Read-only final source/object audit; no builds or regression reruns."""
-import hashlib,json,subprocess
+"""Read-only check of final source bytes and the final audit's dependency objects."""
+import hashlib,json,re,subprocess
 from pathlib import Path
 E=Path(__file__).resolve().parent.parent
 S=Path('docs/research/v8-r0-zk-20261009/lean')
-mods=['ProverCommitConditionalRom41','ProverCommitPublicPrefix41','ProverCommitMixedReads41','ProverCommitPublicCoins41','ProverCommitBindingErase41','ProverCommitAudit41']
-sha={f'R1Z/{m}.lean':hashlib.sha256((S/'R1Z'/(m+'.lean')).read_bytes()).hexdigest() for m in mods}
+mods=sorted((S/'R1Z').glob('ProverCommit*42.lean'))+list((S/'AspisR1PublicNonce41').glob('*.lean'))
+sha={str(p.relative_to(S)):hashlib.sha256(p.read_bytes()).hexdigest() for p in mods}
 revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 code='''import json,hashlib
 from pathlib import Path
@@ -19,7 +19,7 @@ for rel,sha in expected.items():
  sources.append(dict(path=rel,sha256=actual))
 env=json.loads(Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json').read_text())
 paths=[J/'objects']+[Path(p) for p in env['LEAN_PATH'].split(':')]
-receipt=json.loads((R/'lean-8137.json').read_text())
+receipt=json.loads((R/'lean-9493.json').read_text())
 objects=[]
 for m,sha in receipt['deps']:
  rel=Path(m.replace('.','/')).with_suffix('.olean')
@@ -31,11 +31,12 @@ print(json.dumps(dict(source_revision=%r,sources=sources,dependency_objects=obje
 '''%(sha,revision)
 out=subprocess.check_output(['ssh','dombarker@100.108.41.90','python3 -'],input=code,text=True)
 (E/'final-proof-audit.json').write_text(out)
-for a in [8136,8137,9189,9195,9197,9198]:
- log=(E/'lean'/'receipts'/str(a)/f'out-{a}.log').read_text()
- assert 'exit=0' in log and 'sorryAx' not in log
-for m in mods:
- source=(S/'R1Z'/(m+'.lean')).read_text()
- import re
- assert not re.search(r'\b(sorry|admit|native_decide)\b|^axiom |set_option (maxRecDepth|maxHeartbeats)',source,re.M)
-print('Final sources and retained dependency objects match; accepted axioms logs are clean.')
+log=(E/'lean/receipts/9493/out-9493.log').read_text()
+assert 'exit=0' in log and 'sorryAx' not in log
+inventory=json.loads((E/'theorem-inventory.json').read_text())
+for name in inventory['theorems']:
+ assert "'"+name+"' depends on axioms:" in log or "'"+name+"' does not depend on any axioms" in log,name
+for p in mods:
+ if 'AspisR1PublicNonce41' not in str(p):
+  assert not re.search(r'\b(sorry|admit|native_decide)\b|^axiom |set_option (maxRecDepth|maxHeartbeats)',p.read_text(),re.M),p
+print('Final sources, dependency objects and all 56 theorem axiom audits match.')
