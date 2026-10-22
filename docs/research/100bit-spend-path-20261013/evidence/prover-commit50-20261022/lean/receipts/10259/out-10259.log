@@ -1,0 +1,48 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSparseSum50.lean:46:6: error: 'change' tactic failed, pattern
+  ↑left < 65536
+is not definitionally equal to target
+  ↑left < UScalar.size UScalarTy.U16
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSparseSum50.lean:60:62: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSparseSum50.lean:60:7: error: unsolved goals
+p col : ℕ → Old.Q
+hp : ∀ i < 10, Canonical (p i)
+hc : ∀ j < 1024, Canonical (col j)
+width trailing : U8
+hwidth : ↑width + ↑trailing = 10
+suffix : Usize
+hs : ↑suffix < 2 ^ ↑trailing
+n : ℕ
+ih :
+  ∀ (pref : Usize) (left : U16),
+    ↑left = n →
+      ↑pref + n ≤ 2 ^ ↑width →
+        ∀ (acc : Old.Q),
+          Canonical acc →
+            ∃ z,
+              sparse_sum50.sum (ProverCommitQArray48.array 10#usize p) (ProverCommitQArray48.array 1024#usize col) width
+                    trailing suffix pref left (ProverCommitNativeQ48.source acc) =
+                  ok (ProverCommitNativeQ48.source z) ∧
+                Canonical z ∧ decode z = decode acc + total p col (↑width) (↑trailing) (↑suffix) n ↑pref
+pref : Usize
+left : U16
+hleft : ↑left = n + 1
+bound : ↑pref + (n + 1) ≤ 2 ^ ↑width
+acc : Old.Q
+hacc : Canonical acc
+hn : left ≠ 0#u16
+hdec : ↑(left.wrapping_sub 1#u16) = n
+hpow : 2 ^ ↑width ≤ 1024
+hinc : ↑(core.num.Usize.wrapping_add pref 1#usize) = ↑pref + 1
+w : Old.Q
+hw :
+  sparse50.weight (ProverCommitQArray48.array 10#usize p) pref width 0#usize width
+      (ProverCommitNativeQ48.source ProverCommitSubtraction47.one) =
+    ok (ProverCommitNativeQ48.source w)
+hcw : Canonical w
+hdw : decode w = ProverCommitSparse50.weight (fun i => decode (p ↑i)) (ProverCommitBooleanEnum49.tail ↑width ⟨↑pref, ⋯⟩)
+hdw' : decode w = weight (fun i => decode (p i)) ↑width ↑pref
+he : 10 - ↑trailing = ↑width
+⊢ ↑pref < 2 ^ (10 - ↑trailing)
+'R1Z.ProverCommitSparseSum50.sum' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

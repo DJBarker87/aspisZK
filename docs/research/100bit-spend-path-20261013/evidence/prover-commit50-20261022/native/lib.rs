@@ -50,3 +50,7 @@ fn owner_totals(p:[[[u64;3];3];3])->[[u64;3];3] {
 include!("prepared.rs");
 
 include!("eval.rs");
+
+include!("sparse.rs");
+
+include!("sparse-sum.rs");

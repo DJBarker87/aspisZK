@@ -91,3 +91,34 @@ no option/cap was raised. The rejected concrete helper is retained only in
 attempt snapshots, not the deliverable proof tree.
 All accepted printed axioms are standard. No pure std trust field or shipped
 source was changed. The complete semantic oracle and later interfaces remain.
+
+## Stage 3a: sparse equality factors, rows and complete weighted sum
+
+The generic pruning identities prove Boolean suffixes remove exactly zero
+weights. `SparseRows50.row` identifies arbitrary source MSB-first rows with
+existing model `eqWeight (toR0 p)`. `SparseConcat50`/`SparseEnum50` prove the
+actual prefix·2^trailing+suffix row enumeration is bijective, with the exact
+appended bit vector, and prove dense-to-sparse weighted-sum equality without
+expanding a Boolean cube. J10261 audits these enumeration/pruning results.
+
+J10247 proves the actual source bit-shift/mask condition and canonical factor;
+J10249/54 prove the entire owned prefix product equals its mathematical weight.
+J10255 proves source shift/or assembly, its exact natural value and <1024 bound.
+J10260 proves the complete owned ordered sparse weighted-column sum, including
+every generated weight, selected array read and field operation. Canonical
+point/column inputs and public bounds suffice; no weight-array/sum image is a
+premise. Scanner/suffix provenance and the link to complete native MLE remain.
+
+Native gates: sparse-factor transition 0.904 s / 163524 KiB; row assembly
+0.312 s / 141428 KiB; full 1024-column weighted-read transition 65.127 s /
+3415572 KiB; all exit 0, zero swaps. The first factor harness failed because
+its own precondition added unconstrained usize values before constraining
+bounds; constraining those values first fixes the harness. No source defect
+is inferred from that rejected harness. The first sparse owner extraction
+fails in Aeneas borrow merging; a separate factor helper fixes it. A stale
+previous extraction reached the binder after that failure; J10243 is refused
+before compilation, retired, and the binder now checks expected declarations.
+Later extraction outputs use distinct version directories. A missing brace
+in the first sum-owner draft is retained as a Rust compile failure, then fixed.
+All Lean failures, source/dependency fingerprints and resource receipts remain;
+accepted axiom sets are standard. No shipped file or new TrustedStd field changed.

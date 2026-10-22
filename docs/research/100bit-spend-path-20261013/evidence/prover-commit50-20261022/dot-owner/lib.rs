@@ -104,3 +104,32 @@ pub fn eval(p:[K;28],x:K)->K {
  go(p,powers,prepared,6,acc)
 }
 }
+
+pub mod sparse50 {
+use super::field::QM31 as K;
+pub fn factor(value:K,bit:usize)->K {if bit==0 {K::ONE.sub(value)} else {value}}
+pub fn weight(point:[K;10],prefix:usize,width:u8,i:usize,left:u8,acc:K)->K {
+ if left==0 {acc} else {
+  let shift=usize::from(width).wrapping_sub(1).wrapping_sub(i);
+  let bit=prefix.wrapping_shr(shift as u32)&1;
+  let value=point[i];
+  let factor=factor(value,bit);
+  weight(point,prefix,width,i.wrapping_add(1),left-1,acc.mul(factor))
+ }
+}
+pub fn row(prefix:usize,trailing:u8,suffix:usize)->usize {
+ prefix.wrapping_shl(u32::from(trailing))|suffix
+}
+}
+
+pub mod sparse_sum50 {
+use super::{field::QM31 as K,sparse50};
+pub fn sum(point:[K;10],column:[K;1024],width:u8,trailing:u8,suffix:usize,pref:usize,left:u16,acc:K)->K {
+ if left==0 {acc} else {
+  let weight=sparse50::weight(point,pref,width,0,width,K::ONE);
+  let row=sparse50::row(pref,trailing,suffix);
+  let value=column[row];let product=weight.mul(value);
+  sum(point,column,width,trailing,suffix,pref.wrapping_add(1),left-1,acc.add(product))
+ }
+}
+}

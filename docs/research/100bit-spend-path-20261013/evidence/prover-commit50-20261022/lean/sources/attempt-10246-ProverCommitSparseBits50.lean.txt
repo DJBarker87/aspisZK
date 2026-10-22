@@ -1,0 +1,50 @@
+import AspisR1ProducerRelease47.Sparse50
+import R1Z.ProverCommitSampleTail49
+/-! Actual source shift/mask arithmetic and canonical equality-weight factor. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitSparseBits50
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitSampleBits49
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open ProverCommitSubtraction47 (one one_canonical one_decode)
+
+def selected (width : U8) (i prefix : Usize) : Usize :=
+  core.num.Usize.wrapping_shr prefix (UScalar.cast .U32
+    (core.num.Usize.wrapping_sub
+      (core.num.Usize.wrapping_sub (core.convert.num.FromUsizeU8.from width) 1#usize) i)) &&& 1#usize
+
+theorem condition (width : U8) (i prefix : Usize) (hi : i.val<width.val) (hw : width.val≤10) :
+    selected width i prefix=0#usize ↔ bit prefix width.val i.val=false := by
+  let remaining := core.convert.num.FromUsizeU8.from width
+  have hrem : remaining.val=width.val := by scalar_tac
+  have hfirst : (core.num.Usize.wrapping_sub remaining 1#usize).val=width.val-1 := by
+    change (Usize.wrapping_sub remaining 1#usize).val=_
+    rw [sub_value remaining 1#usize (by change 1≤remaining.val;omega),hrem]
+    rfl
+  have hsub : (core.num.Usize.wrapping_sub (core.num.Usize.wrapping_sub remaining 1#usize) i).val=
+      width.val-1-i.val := by
+    change (Usize.wrapping_sub (core.num.Usize.wrapping_sub remaining 1#usize) i).val=_
+    rw [sub_value _ i (by rw [hfirst];omega),hfirst]
+  have hcast : (UScalar.cast .U32 (core.num.Usize.wrapping_sub
+      (core.num.Usize.wrapping_sub remaining 1#usize) i)).val=width.val-1-i.val := by scalar_tac
+  have eqzero (v : Usize) : v=0#usize ↔ v.val=0 := by constructor <;> intro h <;> scalar_tac
+  rw [eqzero]
+  change ((Usize.wrapping_shr prefix (UScalar.cast .U32 (core.num.Usize.wrapping_sub
+      (core.num.Usize.wrapping_sub remaining 1#usize) i))) &&& 1#usize).val=0 ↔ _
+  rw [bit_value _ _ (by rw [hcast];omega),hcast]
+  simp only [bit,decide_eq_false_iff_not,not_not]
+
+theorem factor (x : Old.Q) (hx : Canonical x) (b : Usize) :
+    ∃ z : Old.Q, sparse50.factor (ProverCommitNativeQ48.source x) b=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ decode z=if b=0#usize then 1-decode x else decode x := by
+  by_cases hb : b=0#usize
+  · obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitNativeQ48.sub one x one_canonical hx
+    refine ⟨z,?_,hcz,?_⟩
+    · rw [sparse50.factor,if_pos hb,ProverCommitSampleTail49.source_one];exact hz
+    · rw [if_pos hb,hdz,one_decode]
+  · exact ⟨x,by rw [sparse50.factor,if_neg hb],hx,by rw [if_neg hb]⟩
+
+#print axioms condition
+#print axioms factor
+end R1Z.ProverCommitSparseBits50
