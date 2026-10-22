@@ -1,0 +1,152 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:31:28: error(lean.unknownIdentifier): Unknown identifier `aspis_core.digest.Digest32`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:36:26: error(lean.unknownIdentifier): Unknown identifier `aspis_core.digest.Digest32`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:46:39: error(lean.unknownIdentifier): Unknown identifier `aspis_core.digest.Digest32`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:54:16: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b ← ok v✝
+    erase D hash (bind (c b) k)
+is not definitionally equal to the right-hand side
+  do
+    let a ←
+      do
+        let b ← ok v✝
+        erase D hash (c b)
+    erase D hash (k a)
+
+case step.ok
+A B H : Type
+D : sorry
+hash : H
+k : A → Code B
+B✝ : Type
+c : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    erase D hash (c a >>= k) = do
+      let a ← erase D hash (c a)
+      erase D hash (k a)
+v✝ : B✝
+⊢ (do
+      let b ← ok v✝
+      erase D hash (bind (c b) k)) =
+    do
+    let a ←
+      do
+        let b ← ok v✝
+        erase D hash (c b)
+    erase D hash (k a)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:58:34: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b ← ok v✝
+    erase D hash (bind (c b) k)
+is not definitionally equal to the right-hand side
+  do
+    let a ←
+      do
+        let b ← ok v✝
+        erase D hash (c b)
+    erase D hash (k a)
+
+case read.ok
+A B H : Type
+D : sorry
+hash : H
+k : A → Code B
+parts : Parts
+c : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    erase D hash (c a >>= k) = do
+      let a ← erase D hash (c a)
+      erase D hash (k a)
+v✝ : Digest
+⊢ (do
+      let b ← ok v✝
+      erase D hash (bind (c b) k)) =
+    do
+    let a ←
+      do
+        let b ← ok v✝
+        erase D hash (c b)
+    erase D hash (k a)
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:53:15: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [i̵h̵,̵erase]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:57:15: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [i̵h̵,̵erase]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:53:18: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:53:18: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:53:18: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:53:18: warning: declaration uses `sorry`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:60:37: error(lean.unknownIdentifier): Unknown identifier `aspis_core.digest.Digest32`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:63:35: error(lean.unknownIdentifier): Unknown identifier `aspis_core.digest.Digest32`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:64:76: error: Tactic `rfl` failed: The left-hand side
+  erase D hash (read p)
+is not definitionally equal to the right-hand side
+  ok v✝
+
+case ok
+H : Type
+D : sorry
+hash : H
+p : Parts
+v✝ : Digest
+⊢ erase D hash (read p) = ok v✝
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:64:76: error: Tactic `rfl` failed: The left-hand side
+  erase D hash (read p)
+is not definitionally equal to the right-hand side
+  fail e✝
+
+case fail
+H : Type
+D : sorry
+hash : H
+p : Parts
+e✝ : Error
+⊢ erase D hash (read p) = fail e✝
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:64:76: error: Tactic `rfl` failed: The left-hand side
+  erase D hash (read p)
+is not definitionally equal to the right-hand side
+  div
+
+case div
+H : Type
+D : sorry
+hash : H
+p : Parts
+⊢ erase D hash (read p) = div
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:66:37: error(lean.unknownIdentifier): Unknown identifier `aspis_core.digest.Digest32`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:69:38: error(lean.unknownIdentifier): Unknown identifier `aspis_core.digest.Digest32`
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes5/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes5Effect.lean:80:4: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.135
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case read
+A H : Type
+D : sorry
+hash : H
+a : A
+parts : Parts
+k : Digest → Code A
+ih : ∀ (a_1 : Digest) (before after : Log), run D hash (k a_1) before = ok (a, after) → erase D hash (k a_1) = ok a
+before after : Log
+success : run D hash (Code.read parts k) before = ok (a, after)
+x✝ : ?m.135
+call : sorry = x✝
+⊢ erase D hash (Code.read parts k) = ok a
+'AspisR1.CheckpointBytes5Effect.bind_run' does not depend on any axioms
+'AspisR1.CheckpointBytes5Effect.erase_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytes5Effect.erase_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytes5Effect.erase_read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytes5Effect.erase_pure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CheckpointBytes5Effect.run_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
