@@ -1,0 +1,230 @@
+/private/tmp/root-s9-pair-helper-loop-map-v1-20261022/sources/S9PairHelperLoopMapV1.lean:65:6: error: Type mismatch: After simplification, term
+  hactive
+ has type
+  AspisR1S9CandidateFoldMapPrimitivesV1.mapResult AspisR1S9PairCallerActiveBodyMapV1.pairToCandidateFlow
+      (ok (cont (iter1, middle))) =
+    AspisR1S9CandidateBodyPrefixV1.candidateActiveBody
+      (AspisR1S9PairCallerActiveBodyMapV1.mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+      (AspisR1S9PairCallerActiveBodyMapV1.mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+      (AspisR1S9PairCallerActiveBodyMapV1.mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) 0#usize
+      iter1 (AspisR1S9PairCallerActiveBodyMapV1.mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW initial)
+but is expected to have type
+  AspisR1S9CandidateBodyPrefixV1.candidateActiveBody (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) 0#usize iter1
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW initial) =
+    ok (cont (iter1, mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW middle))
+/private/tmp/root-s9-pair-helper-loop-map-v1-20261022/sources/S9PairHelperLoopMapV1.lean:95:6: error: Type mismatch: After simplification, term
+  hactive
+ has type
+  AspisR1S9CandidateFoldMapPrimitivesV1.mapResult AspisR1S9PairCallerActiveBodyMapV1.pairToCandidateFlow
+      (ok (cont (iter2, output))) =
+    AspisR1S9CandidateBodyPrefixV1.candidateActiveBody
+      (AspisR1S9PairCallerActiveBodyMapV1.mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+      (AspisR1S9PairCallerActiveBodyMapV1.mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+      (AspisR1S9PairCallerActiveBodyMapV1.mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) iter1.start
+      iter2 (AspisR1S9PairCallerActiveBodyMapV1.mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW middle)
+but is expected to have type
+  AspisR1S9CandidateBodyPrefixV1.candidateActiveBody (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) iter1.start iter2
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW middle) =
+    ok (cont (iter2, mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW output))
+/private/tmp/root-s9-pair-helper-loop-map-v1-20261022/sources/S9PairHelperLoopMapV1.lean:122:32: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1S9CandidateHelperV1.weights.factored_s2_libra_weights_loop.body
+    (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+    (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+    (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) AspisR1S9PairTwoBodyCallsV1.start0
+    (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW initial)
+in the target expression
+  (match
+      AspisR1S9CandidateTwoBodyCallsV1.body (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+        (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+        (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra)
+        (AspisR1S9CandidateTwoBodyCallsV1.start0,
+          mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW initial) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (AspisR1S9CandidateTwoBodyCallsV1.body (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+            (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+            (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW output)
+
+ap0 ap1 : PairW
+extra : Std.Array PairQ 2#usize
+initial output : PairW
+hloop :
+  AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop AspisR1S9PairTwoBodyCallsV1.start0 ap0 ap1 extra
+      initial =
+    ok output
+iter1 iter2 : AspisR1S9PairTwoBodyCallsV1.R
+middle : AspisR1S9PairTwoBodyCallsV1.W
+hnext0 :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize AspisR1S9PairTwoBodyCallsV1.start0 =
+    ok (some 0#usize, iter1)
+left✝³ : ↑iter1.start = 1
+left✝² : iter1.end = 2#usize
+hbody0 :
+  AspisR1S9PairTwoBodyCallsV1.body ap0 ap1 extra (AspisR1S9PairTwoBodyCallsV1.start0, initial) =
+    ok (cont (iter1, middle))
+hnext1 : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter1 = ok (some iter1.start, iter2)
+left✝¹ : ↑iter2.start = 2
+left✝ : iter2.end = 2#usize
+hbody1 : AspisR1S9PairTwoBodyCallsV1.body ap0 ap1 extra (iter1, middle) = ok (cont (iter2, output))
+hnext2 : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter2 = ok (none, iter2)
+hbody2 : AspisR1S9PairTwoBodyCallsV1.body ap0 ap1 extra (iter2, output) = ok (done output)
+hcbody0 :
+  AspisR1S9CandidateHelperV1.weights.factored_s2_libra_weights_loop.body
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) AspisR1S9PairTwoBodyCallsV1.start0
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW initial) =
+    ok (cont (iter1, mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW middle))
+hcbody1 :
+  AspisR1S9CandidateHelperV1.weights.factored_s2_libra_weights_loop.body
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) iter1
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW middle) =
+    ok (cont (iter2, mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW output))
+hcbody2 :
+  AspisR1S9CandidateHelperV1.weights.factored_s2_libra_weights_loop.body
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) iter2
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW output) =
+    ok (done (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW output))
+⊢ (match
+      AspisR1S9CandidateTwoBodyCallsV1.body (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+        (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+        (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra)
+        (AspisR1S9CandidateTwoBodyCallsV1.start0,
+          mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW initial) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (AspisR1S9CandidateTwoBodyCallsV1.body (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+            (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+            (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW output)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/private/tmp/root-s9-pair-helper-loop-map-v1-20261022/sources/S9PairHelperLoopMapV1.lean:130:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop AspisR1S9PairTwoBodyCallsV1.start0 ap0 ap1 extra
+    initial
+in the target expression
+  AspisR1S9CandidateFoldMapPrimitivesV1.mapResult (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW)
+      (loop
+        (fun x =>
+          match x with
+          | (iter1, weights1) =>
+            AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop.body ap0 ap1 extra iter1 weights1)
+        (AspisR1S9PairTwoBodyCallsV1.start0, initial)) =
+    loop
+      (fun x =>
+        match x with
+        | (iter1, weights1) =>
+          AspisR1S9CandidateHelperV1.weights.factored_s2_libra_weights_loop.body
+            (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+            (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+            (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) iter1 weights1)
+      (AspisR1S9CandidateTwoBodyCallsV1.start0, mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW initial)
+
+ap0 ap1 : PairW
+extra : Std.Array PairQ 2#usize
+initial output : PairW
+hloop :
+  AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop AspisR1S9PairTwoBodyCallsV1.start0 ap0 ap1 extra
+      initial =
+    ok output
+iter1 iter2 : AspisR1S9PairTwoBodyCallsV1.R
+middle : AspisR1S9PairTwoBodyCallsV1.W
+hnext0 :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize AspisR1S9PairTwoBodyCallsV1.start0 =
+    ok (some 0#usize, iter1)
+left✝³ : ↑iter1.start = 1
+left✝² : iter1.end = 2#usize
+hbody0 :
+  AspisR1S9PairTwoBodyCallsV1.body ap0 ap1 extra (AspisR1S9PairTwoBodyCallsV1.start0, initial) =
+    ok (cont (iter1, middle))
+hnext1 : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter1 = ok (some iter1.start, iter2)
+left✝¹ : ↑iter2.start = 2
+left✝ : iter2.end = 2#usize
+hbody1 : AspisR1S9PairTwoBodyCallsV1.body ap0 ap1 extra (iter1, middle) = ok (cont (iter2, output))
+hnext2 : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter2 = ok (none, iter2)
+hbody2 : AspisR1S9PairTwoBodyCallsV1.body ap0 ap1 extra (iter2, output) = ok (done output)
+hcbody0 :
+  AspisR1S9CandidateHelperV1.weights.factored_s2_libra_weights_loop.body
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) AspisR1S9PairTwoBodyCallsV1.start0
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW initial) =
+    ok (cont (iter1, mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW middle))
+hcbody1 :
+  AspisR1S9CandidateHelperV1.weights.factored_s2_libra_weights_loop.body
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) iter1
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW middle) =
+    ok (cont (iter2, mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW output))
+hcbody2 :
+  AspisR1S9CandidateHelperV1.weights.factored_s2_libra_weights_loop.body
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) iter2
+      (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW output) =
+    ok (done (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW output))
+hcloop :
+  loop
+      (AspisR1S9CandidateTwoBodyCallsV1.body (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+        (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+        (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra))
+      (AspisR1S9CandidateTwoBodyCallsV1.start0, mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW initial) =
+    ok (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW output)
+⊢ AspisR1S9CandidateFoldMapPrimitivesV1.mapResult (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW)
+      (loop
+        (fun x =>
+          match x with
+          | (iter1, weights1) =>
+            AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop.body ap0 ap1 extra iter1 weights1)
+        (AspisR1S9PairTwoBodyCallsV1.start0, initial)) =
+    loop
+      (fun x =>
+        match x with
+        | (iter1, weights1) =>
+          AspisR1S9CandidateHelperV1.weights.factored_s2_libra_weights_loop.body
+            (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap0)
+            (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW ap1)
+            (mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateQ extra) iter1 weights1)
+      (AspisR1S9CandidateTwoBodyCallsV1.start0, mapArray AspisR1S9PairCallerCandidateMapV1.pairToCandidateW initial)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
