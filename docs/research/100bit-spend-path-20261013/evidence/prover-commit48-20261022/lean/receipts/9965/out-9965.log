@@ -1,0 +1,253 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationRow48.lean:40:2: error: unsolved goals
+case refine_1
+xs : ℕ → Old.Q
+hxs : ∀ k < 28, Canonical (xs k)
+q : Old.Q
+i : U8
+hi : ↑i < 28
+basis : ℕ → U32
+den : U32
+hprep : ProverCommitInterpolationInitial48.prepare i = ok (ProverCommitM31Array48.array 28#usize basis, den)
+hcb : ∀ k < 28, ProverCommitM31Ops48.canonical (basis k)
+hcd : ProverCommitM31Ops48.canonical den
+hpb : ProverCommitBasisPolynomial48.poly basis = polyProd (↑i) 0 28
+hdd : ProverCommitM31Ops48.decode den = denProd (↑i) 0 28
+hn : den ≠ 0#u32
+inv : U32
+hinv : inverse_ref den = ok inv
+hcinv : ↑inv < AspisCircleGroupOrder.P
+hdinv : ProverCommitInverse48.decode inv = (ProverCommitInverse48.decode den)⁻¹
+hscale :
+  scalar_ref (ProverCommitNativeQ48.source q) inv =
+    ok (ProverCommitNativeQ48.source (ProverCommitScalar48.product q inv))
+hcscale : Canonical (ProverCommitScalar48.product q inv)
+hdscale : decode (ProverCommitScalar48.product q inv) = decode q * ProverCommitScalar48.embed inv
+ys : ℕ → Old.Q
+hy :
+  accumulate (ProverCommitQArray48.array 28#usize xs) (ProverCommitM31Array48.array 28#usize basis)
+      (ProverCommitNativeQ48.source (ProverCommitScalar48.product q inv)) 0#u8 28#u8 =
+    ok (ProverCommitQArray48.array 28#usize ys)
+hcy : ∀ j < 28, Canonical (ys j)
+hdy :
+  ∀ j < 28,
+    decode (ys j) =
+      decode (xs j) +
+        if ↑0#u8 ≤ j ∧ j < ↑0#u8 + 28 then
+          decode (ProverCommitScalar48.product q inv) * ProverCommitScalar48.embed (basis j)
+        else 0
+⊢ (let (basis, den) := (ProverCommitM31Array48.array 28#usize basis, den)
+    do
+    let inv ← inverse_ref den
+    let scale ← scalar_ref (ProverCommitNativeQ48.source q) inv
+    accumulate (ProverCommitQArray48.array 28#usize xs) basis scale 0#u8 28#u8) =
+    ok (ProverCommitQArray48.array 28#usize ys)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationRow48.lean:45:54: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ProverCommitInverse48.decode inv
+in the target expression
+  decode (xs k) + decode q * embed (ProverCommitM31Ops48.decode inv) * ProverCommitScalar48.embed (basis k) =
+    decode (xs k) + decode q * embed (denProd (↑i) 0 28)⁻¹ * embed (ProverCommitM31Ops48.decode (basis k))
+
+xs : ℕ → Old.Q
+hxs : ∀ k < 28, Canonical (xs k)
+q : Old.Q
+i : U8
+hi : ↑i < 28
+basis : ℕ → U32
+den : U32
+hprep : ProverCommitInterpolationInitial48.prepare i = ok (ProverCommitM31Array48.array 28#usize basis, den)
+hcb : ∀ k < 28, ProverCommitM31Ops48.canonical (basis k)
+hcd : ProverCommitM31Ops48.canonical den
+hpb : ProverCommitBasisPolynomial48.poly basis = polyProd (↑i) 0 28
+hdd : ProverCommitM31Ops48.decode den = denProd (↑i) 0 28
+hn : den ≠ 0#u32
+inv : U32
+hinv : inverse_ref den = ok inv
+hcinv : ↑inv < AspisCircleGroupOrder.P
+hdinv : ProverCommitInverse48.decode inv = (ProverCommitInverse48.decode den)⁻¹
+hscale :
+  scalar_ref (ProverCommitNativeQ48.source q) inv =
+    ok (ProverCommitNativeQ48.source (ProverCommitScalar48.product q inv))
+hcscale : Canonical (ProverCommitScalar48.product q inv)
+hdscale : decode (ProverCommitScalar48.product q inv) = decode q * ProverCommitScalar48.embed inv
+ys : ℕ → Old.Q
+hy :
+  accumulate (ProverCommitQArray48.array 28#usize xs) (ProverCommitM31Array48.array 28#usize basis)
+      (ProverCommitNativeQ48.source (ProverCommitScalar48.product q inv)) 0#u8 28#u8 =
+    ok (ProverCommitQArray48.array 28#usize ys)
+hcy : ∀ j < 28, Canonical (ys j)
+hdy :
+  ∀ j < 28,
+    decode (ys j) =
+      decode (xs j) +
+        if ↑0#u8 ≤ j ∧ j < ↑0#u8 + 28 then
+          decode (ProverCommitScalar48.product q inv) * ProverCommitScalar48.embed (basis j)
+        else 0
+k : ℕ
+hk : k < 28
+⊢ decode (xs k) + decode q * embed (ProverCommitM31Ops48.decode inv) * ProverCommitScalar48.embed (basis k) =
+    decode (xs k) + decode q * embed (denProd (↑i) 0 28)⁻¹ * embed (ProverCommitM31Ops48.decode (basis k))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationRow48.lean:41:2: error: unsolved goals
+case refine_2.re.im
+xs : ℕ → Old.Q
+hxs : ∀ k < 28, Canonical (xs k)
+q : Old.Q
+i : U8
+hi : ↑i < 28
+basis : ℕ → U32
+den : U32
+hprep : ProverCommitInterpolationInitial48.prepare i = ok (ProverCommitM31Array48.array 28#usize basis, den)
+hcb : ∀ k < 28, ProverCommitM31Ops48.canonical (basis k)
+hcd : ProverCommitM31Ops48.canonical den
+hpb : ProverCommitBasisPolynomial48.poly basis = polyProd (↑i) 0 28
+hdd : ProverCommitM31Ops48.decode den = denProd (↑i) 0 28
+hn : den ≠ 0#u32
+inv : U32
+hinv : inverse_ref den = ok inv
+hcinv : ↑inv < AspisCircleGroupOrder.P
+hdinv : ProverCommitInverse48.decode inv = (ProverCommitInverse48.decode den)⁻¹
+hscale :
+  scalar_ref (ProverCommitNativeQ48.source q) inv =
+    ok (ProverCommitNativeQ48.source (ProverCommitScalar48.product q inv))
+hcscale : Canonical (ProverCommitScalar48.product q inv)
+hdscale : decode (ProverCommitScalar48.product q inv) = decode q * ProverCommitScalar48.embed inv
+ys : ℕ → Old.Q
+hy :
+  accumulate (ProverCommitQArray48.array 28#usize xs) (ProverCommitM31Array48.array 28#usize basis)
+      (ProverCommitNativeQ48.source (ProverCommitScalar48.product q inv)) 0#u8 28#u8 =
+    ok (ProverCommitQArray48.array 28#usize ys)
+hcy : ∀ j < 28, Canonical (ys j)
+hdy :
+  ∀ j < 28,
+    decode (ys j) =
+      decode (xs j) +
+        if ↑0#u8 ≤ j ∧ j < ↑0#u8 + 28 then
+          decode (ProverCommitScalar48.product q inv) * ProverCommitScalar48.embed (basis j)
+        else 0
+hv :
+  ∀ k < 28,
+    decode (ys k) =
+      decode (xs k) + decode q * embed (denProd (↑i) 0 28)⁻¹ * embed (ProverCommitM31Ops48.decode (basis k))
+k : ℕ
+⊢ ((qpoly ys).coeff k).re.im =
+    ((qpoly xs +
+              Polynomial.C (decode q * embed (denProd (↑i) 0 28)⁻¹) *
+                Polynomial.map embed (ProverCommitBasisPolynomial48.poly basis)).coeff
+          k).re.im
+
+case refine_2.im.re
+xs : ℕ → Old.Q
+hxs : ∀ k < 28, Canonical (xs k)
+q : Old.Q
+i : U8
+hi : ↑i < 28
+basis : ℕ → U32
+den : U32
+hprep : ProverCommitInterpolationInitial48.prepare i = ok (ProverCommitM31Array48.array 28#usize basis, den)
+hcb : ∀ k < 28, ProverCommitM31Ops48.canonical (basis k)
+hcd : ProverCommitM31Ops48.canonical den
+hpb : ProverCommitBasisPolynomial48.poly basis = polyProd (↑i) 0 28
+hdd : ProverCommitM31Ops48.decode den = denProd (↑i) 0 28
+hn : den ≠ 0#u32
+inv : U32
+hinv : inverse_ref den = ok inv
+hcinv : ↑inv < AspisCircleGroupOrder.P
+hdinv : ProverCommitInverse48.decode inv = (ProverCommitInverse48.decode den)⁻¹
+hscale :
+  scalar_ref (ProverCommitNativeQ48.source q) inv =
+    ok (ProverCommitNativeQ48.source (ProverCommitScalar48.product q inv))
+hcscale : Canonical (ProverCommitScalar48.product q inv)
+hdscale : decode (ProverCommitScalar48.product q inv) = decode q * ProverCommitScalar48.embed inv
+ys : ℕ → Old.Q
+hy :
+  accumulate (ProverCommitQArray48.array 28#usize xs) (ProverCommitM31Array48.array 28#usize basis)
+      (ProverCommitNativeQ48.source (ProverCommitScalar48.product q inv)) 0#u8 28#u8 =
+    ok (ProverCommitQArray48.array 28#usize ys)
+hcy : ∀ j < 28, Canonical (ys j)
+hdy :
+  ∀ j < 28,
+    decode (ys j) =
+      decode (xs j) +
+        if ↑0#u8 ≤ j ∧ j < ↑0#u8 + 28 then
+          decode (ProverCommitScalar48.product q inv) * ProverCommitScalar48.embed (basis j)
+        else 0
+hv :
+  ∀ k < 28,
+    decode (ys k) =
+      decode (xs k) + decode q * embed (denProd (↑i) 0 28)⁻¹ * embed (ProverCommitM31Ops48.decode (basis k))
+k : ℕ
+⊢ ((qpoly ys).coeff k).im.re =
+    ((qpoly xs +
+              Polynomial.C (decode q * embed (denProd (↑i) 0 28)⁻¹) *
+                Polynomial.map embed (ProverCommitBasisPolynomial48.poly basis)).coeff
+          k).im.re
+
+case refine_2.im.im
+xs : ℕ → Old.Q
+hxs : ∀ k < 28, Canonical (xs k)
+q : Old.Q
+i : U8
+hi : ↑i < 28
+basis : ℕ → U32
+den : U32
+hprep : ProverCommitInterpolationInitial48.prepare i = ok (ProverCommitM31Array48.array 28#usize basis, den)
+hcb : ∀ k < 28, ProverCommitM31Ops48.canonical (basis k)
+hcd : ProverCommitM31Ops48.canonical den
+hpb : ProverCommitBasisPolynomial48.poly basis = polyProd (↑i) 0 28
+hdd : ProverCommitM31Ops48.decode den = denProd (↑i) 0 28
+hn : den ≠ 0#u32
+inv : U32
+hinv : inverse_ref den = ok inv
+hcinv : ↑inv < AspisCircleGroupOrder.P
+hdinv : ProverCommitInverse48.decode inv = (ProverCommitInverse48.decode den)⁻¹
+hscale :
+  scalar_ref (ProverCommitNativeQ48.source q) inv =
+    ok (ProverCommitNativeQ48.source (ProverCommitScalar48.product q inv))
+hcscale : Canonical (ProverCommitScalar48.product q inv)
+hdscale : decode (ProverCommitScalar48.product q inv) = decode q * ProverCommitScalar48.embed inv
+ys : ℕ → Old.Q
+hy :
+  accumulate (ProverCommitQArray48.array 28#usize xs) (ProverCommitM31Array48.array 28#usize basis)
+      (ProverCommitNativeQ48.source (ProverCommitScalar48.product q inv)) 0#u8 28#u8 =
+    ok (ProverCommitQArray48.array 28#usize ys)
+hcy : ∀ j < 28, Canonical (ys j)
+hdy :
+  ∀ j < 28,
+    decode (ys j) =
+      decode (xs j) +
+        if ↑0#u8 ≤ j ∧ j < ↑0#u8 + 28 then
+          decode (ProverCommitScalar48.product q inv) * ProverCommitScalar48.embed (basis j)
+        else 0
+hv :
+  ∀ k < 28,
+    decode (ys k) =
+      decode (xs k) + decode q * embed (denProd (↑i) 0 28)⁻¹ * embed (ProverCommitM31Ops48.decode (basis k))
+k : ℕ
+⊢ ((qpoly ys).coeff k).im.im =
+    ((qpoly xs +
+              Polynomial.C (decode q * embed (denProd (↑i) 0 28)⁻¹) *
+                Polynomial.map embed (ProverCommitBasisPolynomial48.poly basis)).coeff
+          k).im.im
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationRow48.lean:40:25: warning: This simp argument is unused:
+  hinv
+
+Hint: Omit it from the simp argument list.
+  simp only [row, ̲hprep, ̲hi̵n̵v̵,̵h̵scale, ̲bind_tc_ok, ̲hy]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationRow48.lean:40:30: warning: This simp argument is unused:
+  hscale
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵o̵w̵,̵h̵p̵r̵e̵p̵,̵h̵i̵n̵v̵,̵h̵s̵c̵a̵l̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵y̵]̵[̲r̲o̲w̲,̲ ̲h̲p̲r̲e̲p̲,̲ ̲h̲i̲n̲v̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationRow48.lean:40:48: warning: This simp argument is unused:
+  hy
+
+Hint: Omit it from the simp argument list.
+  simp only [row, ̲hprep, ̲hinv, ̲hscale, ̲bind_tc_ok,̵h̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitInterpolationRow48.row_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

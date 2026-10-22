@@ -261,6 +261,35 @@ the preceding dependency had failed; its number is retired. No full
 manifest replay or shipped-source extraction was performed. The full
 interpolator and simulator payload image remain open.
 
+## Stage 8: complete owned interpolation output
+
+`InterpolationAccumulate48.accumulate_value` proves every selected coefficient
+update and canonicality for an arbitrary interval. `InterpolationRow48.row_value`
+composes the initialized factors, nonzero denominator, exact inverse and scalar
+multiplication into the normalized omitted-node polynomial contribution.
+`InterpolationOutput48.interpolate_value` then composes all 28 source-owner
+rows, for arbitrary raw QM31 input words, into the explicit interpolation sum.
+This closes the complete owned interpolator's value/canonicality law, not the
+native simulator caller or complete payload law. The bridge to the standard
+`Lagrange.interpolate` definition is the next focused target.
+
+Kani `outer_interpolation::proofs::factor_iteration` checks the literal native
+selected-node body against the owned descending-counter body for every legal
+node and degree, including skip behavior and every primitive operand/result
+trace: exit 0, wall 115.403 s, peak RSS 1039104 KiB, swaps 0. Its only control
+rewrite is `continue` to returning the unchanged iteration state, documented
+with source/body hashes. `accumulator_iteration` checks the literal native
+coefficient update against the owned update: exit 0, wall 3.487 s, peak RSS
+298204 KiB, swaps 0. All native field operations remain universal callee
+results here; their exact arithmetic contracts are separately proved.
+
+Accepted J9963 accumulator, J9964 embedding, J9966 complete row and J9975
+complete interpolator print only standard axioms. J9962 lacked an explicit
+array import; J9965 was the initial row bridge; J9967–J9974 isolate monadic
+pair destructuring/association in the outer loop. Their diagnostics are
+retained. The successful bridge uses the proved initializer/factor Result,
+then an explicit monadic expression; no options, assumptions or caps changed.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

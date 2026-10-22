@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationOutput48.lean:43:8: error: typeclass instance problem is stuck
+  LawfulMonad ?m.118
+
+Note: Lean will not try to resolve this typeclass instance problem because the first and second type arguments to `LawfulMonad` are metavariables. These arguments must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+values xs : ℕ → Old.Q
+i left : U8
+hn : left ≠ 0#u8
+hi : ↑i < 28
+hcast : ↑(UScalar.cast UScalarTy.Usize i) = ↑i
+basis : ℕ → U32
+den : U32
+left✝³ : ∀ k < 28, ProverCommitM31Ops48.canonical (basis k)
+left✝² : ProverCommitM31Ops48.canonical den
+left✝¹ : ProverCommitBasisPolynomial48.poly basis = polyProd (↑i) 0 28
+left✝ : ProverCommitM31Ops48.decode den = denProd (↑i) 0 28
+right✝ : den ≠ 0#u32
+hprep :
+  basis_factors (ProverCommitM31Array48.array 28#usize ProverCommitInterpolationInitial48.initial) field.M31.ONE 0#u8 i
+      0#u8 28#u8 =
+    ok (ProverCommitM31Array48.array 28#usize basis, den)
+⊢ (let (basis2, den) := (ProverCommitM31Array48.array 28#usize basis, den)
+    do
+    let m ← inverse_ref den
+    let scale ← scalar_ref (ProverCommitNativeQ48.source (values ↑i)) m
+    let out1 ← accumulate (ProverCommitQArray48.array 28#usize xs) basis2 scale 0#u8 28#u8
+    rows (ProverCommitQArray48.array 28#usize values) out1 (i.wrapping_add 1#u8) (left.wrapping_sub 1#u8)) =
+    do
+    let out ←
+      let (basis, den) := (ProverCommitM31Array48.array 28#usize basis, den)
+        do
+        let inv ← inverse_ref den
+        let scale ← scalar_ref (ProverCommitNativeQ48.source (values ↑i)) inv
+        accumulate (ProverCommitQArray48.array 28#usize xs) basis scale 0#u8 28#u8
+    rows (ProverCommitQArray48.array 28#usize values) out (i.wrapping_add 1#u8) (left.wrapping_sub 1#u8)
+'R1Z.ProverCommitInterpolationOutput48.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitInterpolationOutput48.rows_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitInterpolationOutput48.zero_poly' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitInterpolationOutput48.interpolate_value' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh
