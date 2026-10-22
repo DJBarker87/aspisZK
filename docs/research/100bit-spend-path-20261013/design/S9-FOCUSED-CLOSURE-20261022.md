@@ -695,3 +695,26 @@ upstream operand provenance, production compiler/artifact refinement, and
 final security composition remain open. These proofs do not close S9 or
 establish the overall 100-bit claim. No production source or CU artifact
 changed in this continuation.
+
+
+## Continued source joins — 23 October
+
+PROVED `a5497d8661`: actual QM31.mul, mapped through CurrentWide, equals
+the installed helper qmMul as a complete Result on canonical inputs. This
+discharges the operation-dispatch seam left by the checked arithmetic proof;
+it does not assume a successful actual call. The accepted focused v5 check
+exited 0 in 21.745 seconds, process peak 3,199,254,528 bytes, zero swaps,
+standard axioms only. Earlier failed drafts are not accepted proofs.
+The same commit records actual Wide source mul_by_r/mul_u carrier maps to
+the genuine QM extraction's corresponding operations/formula, preserving
+failure and divergence (13.508 seconds, zero swaps, standard axioms).
+
+The genuine square/mixed source extraction is retained in `e5ee3804e4`;
+its normalized Types and Funs owners passed independently and are retained
+in `07d3128c57`. These compile-only owners are not semantic proofs. Full
+Wide product, canonical square and mixed-product semantic joins remain
+in progress. Production source hashes for field.rs, wide_exact.rs and
+weights.rs still match the extraction pins. No production code changed.
+The release cone, runtime/artifact correspondence and 100-bit target remain
+open. All four session slots resumed active work after an avoidable idle
+handoff; root owns the serial local compile/integration queue.
