@@ -83,3 +83,58 @@ have exact command/script/revision, exit/wall/RSS/swap and reservation receipts
 under this directory. Raw harness receipts retain the historical hard-coded
 revision field; analysis-manifest explicitly corrects it to the source-input
 pin. `#print axioms`: N/A for new work; no theorem was added or compiled.
+
+## Stage 3: declaration, instance and edge deltas
+
+`mir-diff.json` lists every changed frozen MIR signature/body with raw and
+coordinate-normalized hashes, both inline-scope sets and call-edge deltas.
+Each verifier has one added helper, four removed closures and twelve changed
+bodies (17 records); 4,634 current emitted functions replace 4,637 historical
+ones. Pool has 4,921 unchanged functions. `change-assessment.json` explains
+each record and records its proposed owner. The direct changes are the S4 dot
+entry/helper, S5 canonical constructor, and S3 powers loop; unchanged callers
+change through the old/new inline scopes of these bodies. This includes
+S8 `EbyKDot::push`, `checked_q`, `prepared_claim`, Prepared::new, TX2_common
+and four Weights methods. No other substantive MIR body delta was observed.
+
+`mono-exact-diff.json` retains all 91 changed exact compiler mono-record
+spellings per verifier. `mono-diff.json` groups them into 35 buckets after
+source-coordinate normalization; the exact list prevents distinct closure
+spans from disappearing into that grouping. `llvm-diff.json` lists every
+changed emitted declaration/definition multiset (160 per verifier), full-text
+hashes and direct-call deltas. Metadata and layout-only text changes are
+included, not called source semantic changes.
+
+`elf-diff.json` retains every old/new symbol record within all 306 changed
+symbol-name groups per verifier, including duplicate names, sizes, addresses
+and raw instruction-body hashes. The 31 changed endpoint-name edge multisets
+are individually listed, with full old and new instruction-address call tables
+in the retained ELF graphs. No same-name instances are guessed equal. Four
+symbol names are added (the dot helper and three powers specializations), and
+three old array::try_from_fn symbol names disappear. Pool's symbol, body,
+instance and edge comparisons have no delta. All new/removed edge callers are
+the adopted routines, their reached callers, or the removed array lowering.
+
+The final comparison is v3. v1 lacked the exact mono/LLVM text lists; v2 added
+them; v3 corrected symbol-name grouping to retain duplicate records rather
+than selecting one. Their exact script snapshots and receipts remain retained.
+Only the final diff-manifest hashes identify the final exhaustive output.
+This is a Python evidence correction, not an unchanged build rerun.
+
+`declaration-ownership.json` pins the 14,189 newly emitted generic-body records
+(4,634/4,634/4,921) with one proposed semantic owner per occurrence. The full
+8.2 MiB JSONL and 31,994,054-byte MIR calls/inline-scope census remain on the
+host with exact SHA/size pins. `ownership-reconciliation.json` includes the
+lead's 161-entry overlay (160 historical candidates plus the new helper),
+explicit historical closure dispositions, and current census summary. Caller
+glue placement remains a lowering obligation, never a new trust admission.
+These generic supersets are not complete deployed reachable declaration sets.
+
+The whole 488-file source diff is **not confined to three files**: sixteen
+files differ, including thirteen pre-existing prover/simulator/wire/statement/
+checkpoint-test differences. All are listed with old/new hashes in
+`change-assessment.json`. The narrower observed frozen MIR body/call delta is
+confined to the three adopted files and their inlined callers; no unexplained
+selected-compiler body change or Pool artifact change was found. This does not
+assert global semantic equivalence or a full extraction of the current tree.
+`gates.json` remains INCOMPLETE/exit 2, with S2 caller identities explicitly open.
