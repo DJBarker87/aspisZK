@@ -1870,3 +1870,59 @@ identical-header/True diagnostic passes, localizing the problem to proof
 composition rather than the header. These diagnostics do not establish
 the combined result. Frozen Std/from_fn and operation installation remain
 open regardless of this local composition.
+
+## Frozen-library seam localized; changed transparent input obtained
+
+The statement-level guarded-tool diagnostic localizes the first Guard
+loan mismatch to `continue` after the opaque `push_unchecked` call, not
+the preceding length reborrow. Its old extracted input gives that method
+no body: the post-state introduces a new mutable loan and the next join
+cannot recover the old loop loan. This is evidence about that candidate
+translation, not a theorem that transparency alone repairs the join.
+
+A fresh narrowly selected Charon input now retains transparent bodies
+for Guard push/drop and the selected MaybeUninit/ControlFlow operations.
+The resulting LLBC SHA is
+`551bbefc19ef647c0670f119bfac8f2589d677169c49101fc7b584d0b71fa3bc`: 76
+functions, 28 types, no reported extraction errors, 0.403s, 130064 KiB
+process RSS, zero swap, capped at 1 GiB high/2 GiB max. Aeneas replay of
+this changed input has not yet passed. Unsafe callees and union support
+remain to be examined. This is explicitly a Rust 1.98 frontend feasibility
+input, not an extraction from the SBF Rust 1.89 toolchain; the pinned old
+source and selected-body comparisons do not erase that distinction.
+
+The proposed stricter associated-projection guard is also unbuilt: its
+region visitor traverses dyn-trait internals independently of the analysis
+configuration. Existing Python tests model its predicate only; they are
+not OCaml execution or proof of tool correctness. No candidate lowering
+or source refactor has been adopted. The explicit-array alternative still
+fails the preregistered B1 gate; the owner has been asked whether to accept
+its measured regression rather than silently relaxing that gate.
+
+## Same-caller first-transaction composition is now checked
+
+The previously failing combined consumer is now green in
+`s4-tx1-exact-gamma-batches-v1-20261022`.
+`same_prepare_and_loop_exact_batches` applies the already checked ten-query
+theorem in stages, avoiding the expensive single dependent application.
+It combines preparation and loop facts for the same returned p/g, and
+its batch gamma is exactly the mapped `p.gamma`. Focused Lean 4.32 exit 0,
+16.478s, aggregate RSS 4,013,998,080 bytes, process RSS 4,024,221,696
+bytes, zero swap, standard axioms.
+
+`accepted_tx1_exact_gamma_batches` then derives split=10 plus the actual
+installed preparation witness and all ten exact batch results from one
+successful installed sourceCaller tx1. It derives the preparation and loop
+facts internally; no independent gamma, powers, or per-query success premise
+is added. Focused Lean 4.32 exit 0, 17.172s, aggregate RSS 3,939,352,576
+bytes, process RSS 3,956,604,928 bytes, zero swap, standard axioms.
+Primary review inspected both full statements, transparent result
+definitions, proof bodies and the full-consumer named axiom report. The
+packet checker passes. Failed candidates are retained; one overwritten
+failure log is explicitly identified as unavailable rather than recreated.
+
+These results close the first-transaction model composition alongside the
+previous twelve-query settlement model composition. They retain strict scan
+binding, remaining caller leaf/source operation bindings, and the frozen
+Std/source implementation seam. They do not establish full S4 closure or
+the implementation-linked 100-bit theorem.
