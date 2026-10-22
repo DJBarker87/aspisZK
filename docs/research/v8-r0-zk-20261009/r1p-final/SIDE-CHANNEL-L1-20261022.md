@@ -59,3 +59,34 @@ peak RSS 4,169,768 KiB, swaps 0. J9866 failed because `prefix` is a Lean
 syntax keyword; renamed the binder. The identities are exact for this
 instrumented terminating reference. They do not supply any numerical
 acceptance hazard or discharge native callee/event refinement.
+
+## Stage 3 — two-seed counts and history
+
+`SideChannelEntropy.generate_lift` proves that every permutation of successful
+nonzero seed pairs preserves the complete entropy prefix state, including RNG
+statuses/count, cursor and ledger additions, for **every** byte-blind schedule.
+Rejected raw candidates stay fixed. `generate_count_cap` bounds the number
+of appended RNG history entries by sixteen. These use the exact two-block
+model from `ProverCommitOwnerModel42.generate_model`; the existing part-42
+bridge supplies source-owner correspondence, with its retained P6 boundary.
+
+`SideChannelEntropyLaw` proves by symbolic coordinate products that, under
+uniform independent raw draws and the all-Ok schedule, u=2^-256 gives:
+
+- rejected candidate mass r=2u-u²;
+- first acceptance at n+1 has mass r^n(1-r);
+- sixteen-candidate exhaustion has mass r^16.
+
+The first-acceptance theorem is an ideal finite raw-tape calculation; it is
+not a numerical geometric law for outer prover retries. General faults use
+the exact conditional hazards from stage 2. Entropy state equivariance is
+proved jointly, while composition with the later masked transcript remains
+open.
+
+J9869 and J9872 pass, standard axioms; walls 2.04s/2.13s, peak RSS
+4,162,908/4,174,032 KiB, swaps 0. J9868 failed on an ambiguous helper and a
+missing match simplification. J9870 reached the Lean memory limit (peak
+7,168,988 KiB, exit 1) in concrete `bad_exact`; it was **not** rerun unchanged
+or with a larger cap. Replaced it with generic `pair_bad_exact`, then applied
+the existing answer-cardinality theorem symbolically. J9871 exposed one
+rational normalization step, fixed in J9872. Raw logs retain all failures.

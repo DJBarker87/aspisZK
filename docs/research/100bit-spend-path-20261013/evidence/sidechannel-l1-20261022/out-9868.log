@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SideChannelEntropy.lean:58:9: error: ambiguous term, use fully qualified name, possible interpretations [ProverCommitPublicNonce40.next,
+ ProverCommitLedger36.next]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SideChannelEntropy.lean:92:13: error: Ambiguous term
+  next
+Possible interpretations:
+  ProverCommitPublicNonce40.next : Schedule → (ℕ → Raw) → State → Except ProverCommitEnvironment35.IOError Raw × State
+  
+  ProverCommitLedger36.next : Schedule →
+    (ℕ → ProverCommitEntropy18.Candidate) →
+      State → Except ProverCommitEnvironment35.IOError ProverCommitEntropy18.Candidate × State
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SideChannelEntropy.lean:92:2: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/SideChannelEntropy.lean:113:38: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a + b - c ≥ -1
+  a + b - d ≤ -2
+where
+ a := ↑(List.length s.history)
+ b := ↑fuel
+ c := ↑(List.length (run schedule tape fuel after).2.history)
+ d := ↑(List.length
+    (match none with
+        | none => run schedule tape fuel after
+        | some secret => (Except.ok secret, after)).2.history)
+'R1Z.SideChannelEntropy.decode_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SideChannelEntropy.erase_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SideChannelEntropy.next_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SideChannelEntropy.run_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SideChannelEntropy.generate_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SideChannelEntropy.next_history' depends on axioms: [sorryAx]
+'R1Z.SideChannelEntropy.run_count_cap' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SideChannelEntropy.generate_count_cap' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.SideChannelEntropy.count_history_preserved' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
