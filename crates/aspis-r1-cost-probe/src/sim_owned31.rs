@@ -147,17 +147,22 @@ pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<S
         let base:Vec<[M31;1024]>=(0..26).map(|l|coeffs[l].map(|x|M31(x.to_limbs()[0]))).collect();
         let ext:Vec<[K;1024]>=(26..29).map(|l|coeffs[l].map(|x|x.c0())).collect();
         let mut opened:BTreeMap<usize,([[E;29];4],Vec<u8>,Vec<u8>)>=BTreeMap::new();
-        for &u in &drawn.queries {
-            let u=u as usize;
+        let mut qi=0;
+        while qi<drawn.queries.len() {
+            let u=drawn.queries[qi] as usize;
             let mut values=[[E::ZERO;29];4];
             values=base_values(base.clone(),u,0,values);
             values=ext_values(ext.clone(),u,26,values);
             let c1v=c1_bytes(values,0,Vec::with_capacity(480));
             let c2v=c2_bytes(values,0,Vec::with_capacity(128));
-            opened.insert(u,(values,c1v,c2v));
+            opened.insert(u,(values,c1v,c2v));qi+=1;
         }
         let mut folded:BTreeMap<usize,Vec<u8>>=BTreeMap::new();
-        for &u in &drawn.queries { let v=u as usize/4; folded.entry(v).or_insert_with(||encoded((4*v..4*v+4).map(|i|eval_at(&view.q1,i)))); }
+        let mut qi=0;
+        while qi<drawn.queries.len() {
+            let v=drawn.queries[qi] as usize/4;
+            folded.entry(v).or_insert_with(||encoded((4*v..4*v+4).map(|i|eval_at(&view.q1,i))));qi+=1;
+        }
         let mut leaves1=BTreeMap::new();let mut leaves2=BTreeMap::new();let mut leavesf=BTreeMap::new();
         let opened_entries=entries(opened.clone());
         let mut i=0;
@@ -184,11 +189,12 @@ pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<S
         compact::compact_values(&records.y1,&mut out).map_err(|_|Error::Semantic)?;
         out.extend_from_slice(&records.inactive);out.extend_from_slice(&records.c0);
         out.extend_from_slice(&records.folded_root);out.extend_from_slice(&records.c1);out.extend_from_slice(&records.fin);
-        for &u in &drawn.queries {
-            let u=u as usize;let (_,c1v,c2v)=&opened[&u];
+        let mut qi=0;
+        while qi<drawn.queries.len() {
+            let u=drawn.queries[qi] as usize;let (_,c1v,c2v)=&opened[&u];
             out.extend_from_slice(c1v);out.extend_from_slice(c2v);
             out.extend_from_slice(&leaves1[&u].1);out.extend_from_slice(&leaves2[&u].1);
-            out.extend_from_slice(&folded[&(u/4)]);out.extend_from_slice(&leavesf[&(u/4)].1);
+            out.extend_from_slice(&folded[&(u/4)]);out.extend_from_slice(&leavesf[&(u/4)].1);qi+=1;
         }
         if out.len()!=compact::OFF_NODES {return Err(Error::Parse);}
         for (batch,range) in [(0,0..compact::SPLIT),(1,compact::SPLIT..compact::QUERIES)] {

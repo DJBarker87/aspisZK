@@ -57,3 +57,35 @@ All scopes use 6G high / 8G max / zero swap / 64 tasks. Full commands, source
 hashes, dependency fingerprints, exits, times, peaks and swap counts are in
 `evidence/prover-commit31-20261022/rust-receipts.jsonl` beside exact source
 snapshots. `#print axioms` is N/A for Rust; no Lean attempt has been consumed.
+
+## Stage 3 — demonstrated owner extraction obstruction
+
+V9 replaces both inner opening-byte loops with owned recursion. V10 also
+replaces all three query traversals with index loops. Charon accepts these
+sources with `has_errors=false`. Aeneas still exits 2 at
+`sim_owned31.rs:151–159`, the first query's opening-value/publication loop,
+with `Internal error, please file an issue` from
+`interp/InterpMatchCtxs.ml:2739`, through the loop fixed-point equivalence
+check. This is the same assertion after eliminating the inner loops and the
+shared slice iterator. No generated Lean owner is accepted.
+
+**Exact next interface:** an independently extracted, owned query-publication
+transition/driver returning the updated ordered `opened` map, with ownership
+of the base/ext coefficient vectors and query counter explicit, then its
+composition into the attempt owner without the failing ambient loop-context
+join. It must retain the actual encode_at contracts and cover duplicate
+query replacement and serialization order. The current file is a proof-only
+reference and extraction diagnostic, not a certified complete source owner.
+
+The later real entropy/reservation publication and source-output-to-ROMView/
+ordered-observer conversion still depend on that source ownership boundary.
+They have not been discharged, and neither WholeRunJoin nor
+`shippedProverExperiment` is constructed. `RustProverRefinement` stays
+explicit. There is no deletion of a premise, no changed quantifier, carrier,
+failure event or numerical budget, and no new cryptographic assumption.
+
+The fixed-size capacity checks `oversized`, `exact`, `padded` each pass with
+unwinding assertions (3.449/3.960/3.917 s, respectively; peak RSS
+452704/452520/452396 KiB, zero swaps). They check arbitrary bytes in a
+2-byte prefix and 2-byte node block at caps 1, 2, 3; they are bounded boundary
+checks, not a universal proof of dynamic-length publication.
