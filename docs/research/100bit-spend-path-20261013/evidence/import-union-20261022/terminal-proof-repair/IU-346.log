@@ -1,0 +1,67 @@
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/ScheduleCompletePacking.lean:76:13: warning: This simp argument is unused:
+  bind_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/ScheduleCompletePacking.lean:102:2: error: unsolved goals
+case refine_1
+point : Std.Array QM 10#usize
+selectors : Selectors
+packed : Std.Array QM 24#usize
+public1 : Public
+openings : Openings
+pub : R0P.Public Wide
+hpoint : CanonicalArray point
+hbox : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = ok selectors
+hp : CanonicalArray packed
+hz : CanonicalArray openings.z
+hv : pub.variant = modelVariant public1.variant
+initial absorption : Std.Array field.QM31 16#usize
+hsource : ScheduleEnclosingBridge.source public1 openings selectors = ok (initial, absorption)
+hci : ∀ (i : Fin 16), AbsorptionCallback.Canonical (AbsorptionCallback.sourceCell initial i)
+hca : ∀ (i : Fin 16), AbsorptionCallback.Canonical (AbsorptionCallback.sourceCell absorption i)
+hvi :
+  ∀ (i : Fin 16),
+    ExtractedMaskQM31Exact.decode (AbsorptionCallback.sourceCell initial i) =
+      R0P.scheduleInitial (ScheduleProgram.modelVariant public1.variant) (ScheduleProgram.exactOpenings openings)
+        (ScheduleProgram.pointSelector point) i
+hva :
+  ∀ (i : Fin 16),
+    ExtractedMaskQM31Exact.decode (AbsorptionCallback.sourceCell absorption i) =
+      R0P.scheduleAbsorption (ScheduleProgram.modelVariant public1.variant) (ScheduleProgram.exactOpenings openings)
+        (ScheduleProgram.pointSelector point) i
+hciArray : CanonicalArray initial
+hcaArray : CanonicalArray absorption
+hlist :
+  List.ofFn (arrayVector initial) ++ List.ofFn (arrayVector absorption) =
+    R0P.scheduleFamily.residuals pub (mapOpenings f (exactOpenings openings)) fun i => f (pointSelector point i)
+out : Std.Array QM 24#usize
+hpack : SchedulePacking.run packed initial absorption = ok out
+hcout : CanonicalArray out
+hvout :
+  ∀ (j : Fin 24),
+    f (decoded out j) =
+      f (decoded packed j) +
+        R0P.pack4 PackB fun k =>
+          selectList 0 (List.ofFn (arrayVector initial) ++ List.ofFn (arrayVector absorption)) (4 * ↑j + ↑k)
+⊢ (let (initial, absorption) := (initial, absorption)
+    SchedulePacking.run packed initial absorption) =
+    ok out
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/ScheduleCompletePacking.lean:103:41: warning: This simp argument is unused:
+  hpack
+
+Hint: Omit it from the simp argument list.
+  simp only [run, hsource, bind_tc_ok,̵ ̵h̵p̵a̵c̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ScheduleCompletePacking.mapped_initial_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ScheduleCompletePacking.mapped_absorption_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ScheduleCompletePacking.arrayVector_list_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ScheduleCompletePacking.arrays_to_wide_family' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ScheduleCompletePacking.enclosing_eq_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ScheduleCompletePacking.actual_enclosing_scheduleFamily' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

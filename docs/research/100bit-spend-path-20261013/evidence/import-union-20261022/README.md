@@ -99,3 +99,8 @@ IU-332–344 retain intermediate diagnostics and failed normalization attempts;
 IU-334/335/338 hit the existing heartbeat guard. No limit was raised and none
 of those failed proofs is accepted. The replacement avoids arithmetic
 reduction and makes the helper's shape explicit.
+
+IU-346 exposed the concrete-pair version of the same combinator in
+`ScheduleCompletePacking.actual_enclosing_scheduleFamily`. Adding the pinned
+`Aeneas.Std.uncurry_apply_pair` theorem to its existing `simp only` list is the
+entire repair; focused IU-347 passes. No statement or witness changed.
