@@ -238,3 +238,21 @@ join the complete candidate body and outer helper to the model; discharge
 actual caller/library boundaries; adopt and re-pin artifacts if the candidate
 is accepted; complete S10/coherent replay and the security experiment.
 No complete S9 cone or 100-bit conclusion follows from these focused checks.
+
+
+PROVED continuation: `9d91565e3` derives the scalar polynomial from the same
+actual PERM/ap0 reads; `7af29b2dd` derives firstTwo/firstThree/allFour from the
+same returned term array and ordered additions. `05ad3ba6b` proves the
+candidate's explicit term array maps to the retained callback trace;
+`60eb143ab` composes that result with the successful actual generated body,
+its exact child calls and its high-array canonicality. These results discharge
+local read/term/sum identification obligations; they do not close the complete
+candidate body or the four-output coefficient theorem.
+
+Current focused frontier: scalar-fold carrier transport (all fold state and
+failure/divergence joins checked in development; constant mapping repair still
+pending a fully green target), fixed-index array-update transport for the
+candidate branch tail, and separate output-decoder leaves before the final
+four-output coefficient composition. Failed elaboration/import attempts are
+retained and are not counted as proofs. The frozen production helper remains
+unchanged; the explicit-array helper is still a candidate.
