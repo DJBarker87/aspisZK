@@ -1,0 +1,13 @@
+# Original-port full tx2 twelve-query result
+
+`AspisR1.S4OriginalPortFullTx2TwelveV1.original_port_full_tx2_twelve_exact_batches` starts from success of the complete emitted-body `tx2_common` source cut with the S4 slots fixed to the retained Reader.e adapter and source powers implementation, and with the loop callback set to the original P6-installed dots port. The theorem uses `tx2CommonFullSourceCut_success_reaches_query_loop` to obtain the resume, powers, and actual query-loop witnesses from that same success. It derives gamma canonicality from that actual resume and derives the matching `ClaimPowers` array and coordinate map from the actual source powers output. It then lifts all twelve actual calls from the same successful loop to the accepted original-port per-query result: actual query index/cast, opening, parser values, four-dot returned array, and the exact four decoded `width29Batch` values.
+
+The only S4-independent caller/context premise retained by this consumer is strict scan success, `hscan`. The complete source-cut `Ops` record and non-S4 operations remain explicit inputs. This is a selected source-owned model endpoint; it does not prove frozen Rust Std `from_fn` correspondence, global generated Funs or runtime installation, or upstream transaction authentication that supplies strict scan. It does not use the V10 candidate.
+
+Lean 4.32.0 compiled the focused file successfully: exit 0, wall 16.772 seconds, peak aggregate RSS 3,959,324,672 bytes, peak process RSS 3,975,643,136 bytes, zero swaps. Axiom report: `[propext, Classical.choice, Quot.sound]`. The selected import closure check found 7,477 modules and no missing imports. `receipt.json`, `command.json`, `preflight.json`, `lean.log`, `time.log`, and `LEAN_PATH.txt` preserve the successful run; `manifest.json` pins the source and direct/import-owner objects.
+
+The resulting `.olean` is not included. Its external path and SHA-256 are retained in the receipt and manifest. The checker validates source-only metadata without requiring a binary in this packet.
+
+## Failed focused attempts
+
+Attempts 1 and 2 are preserved with their source snapshots, exact receipts, Lean logs, and commands. Attempt 1 exposed ambiguous aliases (`QueryCall`, `ClaimE`) and reached recursion-depth exhaustion while constructing the large dependent result. Attempt 2 fixed those and reduced the remaining issue to returning the cursor equality at the wrong representation (`acc.next.val = 10` versus `acc.next = 10#usize`). The green attempt 3 carries the exact cursor equality and separately derives its numeric value for the loop theorem.

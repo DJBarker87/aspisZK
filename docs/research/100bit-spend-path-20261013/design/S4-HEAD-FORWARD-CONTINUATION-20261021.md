@@ -1819,3 +1819,27 @@ reports, source/body checkers and candidate receipts. These results advance
 the source-shaped composition while retaining the frozen Std/library,
 operation installation and final two-transaction/security joins. S4 and the
 implementation-linked 100-bit goal remain open.
+
+## Original-port twelve-call settlement composition
+
+The checked `s4-original-port-twelve-query-batches-d18-v1-20261022` packet
+derives all twelve reached query calls and their exact four batch values
+from the same successful original-port loop. The full-tx2 packet
+`s4-original-port-full-tx2-twelve-d18-v1-20261022` obtains this loop from
+one successful source-shaped settlement cut and ties its powers and
+canonical gamma to the actual returned resume gamma. Focused Lean runs
+passed in 16.230s and 16.772s, zero swap, standard axioms. No independent
+per-query success or freely chosen gamma premise is introduced.
+
+The checked `s4-tx1-installed-prepare-bridge-v1-20261022` removes the broad
+prepare-binding premise for the explicitly installed S1 construction. Its
+public gamma witness remains existential: the proof selects the returned
+gamma, but the conclusion does not yet expose this equality. A stronger
+small consumer is in progress. Focused compile passed in 18.060s with
+zero swap and standard axioms.
+
+All three are source-shaped model compositions. Frozen Std/from_fn
+correspondence, concrete operation installation, remaining caller leaves
+and scan binding remain open. These packets do not close S4. Primary
+review inspected statements and the full-tx2 named standard-axiom report;
+packet checks passed without repeating unchanged Lean compiles.
