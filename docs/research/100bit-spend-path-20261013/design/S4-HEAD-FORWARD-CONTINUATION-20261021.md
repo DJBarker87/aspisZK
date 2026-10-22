@@ -1276,3 +1276,69 @@ seam intact and still exceeds B1. The existing generated indexed-powers
 candidate is now being bound to the full tx2 cut; frozen-source adoption or
 Std correspondence remains an explicit unresolved release boundary. No
 performance exception or source adoption is inferred here.
+
+
+## Both candidate caller cuts reach the selected packed-word model
+
+`s4-selected-packed-tx-consumers-v1-20261022` composes the actual ten-query
+stage1 and twelve-query settlement consumers with SelectedPackedReturnEvidence.
+The exact original caller/callback successes remain, and the same parsed-wire
+and per-position recovered-map predicates instantiate the model inputs.
+Repeated indices need no uniqueness assumption. Two named public theorems
+passed with standard axioms: exit 0, 8.132s, peak RSS 4,075,012,096 bytes,
+swap 0. This is conditional source-cut composition; actual Merkle recovery,
+source/model sampler equality and source adoption remain open.
+
+## Generated early-powers body removes the S4 candidate P6 powers premise
+
+`s4-early-powers-generated-full-tx2-fields-d18-v1-20261022` binds the actual
+retained emitted early_powers::<29> body to ClaimPowers by full Result
+equality, then installs that body in the complete candidate tx2 source cut.
+The ReaderE composition derives gamma canonicality from the same actual
+resume and derives all twelve callbacks' returned local batch values from
+the same generated powers result. No independently successful
+sourceP6WeightsPowers or caller-supplied gamma canonicality is required.
+The candidate patch, generated body/source checker, exact owner pins and
+standard-axiom reports are retained. Focused runs: binding 24.576s, full
+fields 8.719s, ReaderE/returned values 5.426s; peak process RSS below 4.08 GB.
+Swap fields that were not captured are explicitly null, not zero. This is
+not final release evidence. Frozen Std/from_fn equivalence and source
+adoption are not inferred.
+
+## Sampler retained run, materialized array views, and digest boundary
+
+`s4-row31-literal-run-witness-v1-20261022` strengthens the retained literal
+sampler validity result: it now retains the exact list-valued run equality
+as well as the decoded Fin22 query function (exit 0, 3.91s, RSS
+3,067,379,712 bytes, swap 0, standard axioms).
+`s4-row31-source-pairs-join-v1-20261022` proves the corresponding list output
+of the ordered eight-pair source schedule under the original prior-state,
+absorb, actual read-success and digest-interpretation contracts (exit 0,
+5.712s, RSS 3,426,369,536 bytes, swap 0, standard axioms).
+
+`s4-query-array-views-v1-20261022` derives the exact decoded block/advance
+list views of the eight actual materialized pair arrays from the existing
+schedule witnesses (exit 0, 10.962s, RSS 3,278,569,472 bytes, swap 0,
+standard axioms). No independently asserted array-output equality is added.
+The parent source-call theorem retains the head state and stateChain needed
+for the remaining source-function/array join.
+
+`s4-source-byte-oracle-v1-20261022` gives a byte-addressed presentation of
+the existing canonical source oracle and proves its successful canonical
+Input calls are interpreted correctly (exit 0, 4.627s, RSS 3,269,935,104
+bytes, swap 0, standard axioms). It does not close the actual four-slice
+opening absorb: the canonical Input grammar has three slices, and arbitrary
+Digest32 dictionaries may distinguish groupings despite equal flat bytes.
+The selected SolanaDigest delegates to hashv. The historical J1.R16 runtime
+contract/P3 specifies hashing concatenated slices; the current-pin
+reacceptance document is a draft and release cluster observation remains
+pending. A concrete wrapper/model specialization under that existing runtime
+specification is being proved, without claiming a new assumption accepted
+or a proof of syscall internals. The canonical third slice for the opening
+call is lengthBytes++payload; it must not be confused with a semantic
+ValidatedRecord.framed that can include its record tag.
+
+All packet checkers above passed primary review. Prior setup/proof failures
+are retained or summarized as diagnostics. These are focused standard-axiom
+results, not the coherent final closure. Frozen-source S4 and the complete
+implementation-linked 100-bit target remain unestablished.
