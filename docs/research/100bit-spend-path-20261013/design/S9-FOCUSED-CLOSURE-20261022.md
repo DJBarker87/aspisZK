@@ -290,3 +290,27 @@ source adoption and final artifacts, S10/coherent replay and composed security.
 The conditional assembler is not a full-body correspondence theorem. All
 checks above are focused warm-cache compiles with standard axioms only; no
 production code was changed and the 100-bit target is not yet established.
+
+
+PROVED selected-model arithmetic milestone: `9cef9deb3` composes the two
+same-execution body witnesses into all four factored S2 coefficients, then
+reuses the existing `original_eq_factored` theorem to derive the original
+S2 coefficients for a successful selected P6 helper loop. Both challenge
+seeds are tied to that execution's actual extra[0]/extra[1] reads. The
+explicit canonical-read premises and selected-model boundary remain.
+Evidence: evidence/s9-selected-helper-original-coefficients-v1-20261022/.
+
+PROVED transport progress in `cc8aaba3b`: the actual generated-candidate
+loop maps to the concrete P6 loop conditional on the explicit same-call
+suffix transport premise and canonical reads. The complete ordered term
+prefix separately preserves Result and the exact first2/first3/all triple;
+no successful sum or desired output equality is assumed. The second-branch
+ordered tail transport is checked in `015ba86bf`.
+
+Current implementation-join frontier: compose the checked sum prefix with
+both checked tails at actual candidateAfterTerms/p6AfterTerms, including
+Result bind association and branch dispatch, then discharge the conditional
+loop/top wrapper's suffix premise. These checks do not establish candidate
+adoption, frozen Rust/library/caller refinement, final artifact binding,
+S10/coherent replay or the composed security experiment. No whole S9 closure
+or 100-bit result is claimed. Production source and CU are unchanged.
