@@ -7989,3 +7989,27 @@ tape. 38 standard-axiom audits, zero swap; no shipped change.
 costs, predicate/callback/encoding certificates, preparation composition. The
 whole-experiment simulator source join is part 30's ideal `RunJoin`
 interface, named in the report and not duplicated.
+
+## D141 (lead, 2026-10-22 02:20): part 30 merged; native walk certified, outer owner next
+
+Merged `codex/cx-prover-commit30-20261022` (report
+`r1p-final/PROVER-COMMIT30-20261022.md`). Closed D139: the native semantic
+callee (field validation, rejection state, ordered hash effects) is verified
+on its own; all 25 per-row caller gates pass using that verified contract
+(331 s total, largest peak 629 MB); the Lean range owner composes the native
+loop with the stateful walk model. So the whole native `sim::walk` equals the
+stateful model walk, at the Kani/P6 boundary. Standard axioms only; no shipped
+change (part-29 ELF evidence reused).
+Obstruction: Charon translates `sim::sim_e_ablated` (`sim.rs:396`) with
+`has_errors=true` (five Iterator trait-clause mismatches: BTreeMap Iter and
+IntoIter, Enumerate, ChunksExactMut, Zip), so the outer retry/publication
+owner is not extracted. Two further named gaps from the report: no certified
+owner converts the source outputs (proof bytes, programming tables, status)
+into the `FSExperiments` real/ideal `ROMView` plus the observer's ordered
+transcript; and the entropy model retains OS failure and zero-draw events,
+which must stay explicit bad events, not be assumed away.
+Next (part 31): owned references for the `sim_e_ablated` publication loops
+certified against BTreeMap Iter/IntoIter per transition (conflict retention,
+key order, early exits); the eight-attempt retry/publication owner; the
+real-side `prove_masked_retrying_with` publication; then the source-to-
+`FSExperiments` conversion. `RustProverRefinement` stays explicit.
