@@ -391,3 +391,38 @@ optimized flags and one build job. v1/v2 are excluded fixture-bound failures
 assertions enabled. All exact source/tool/dependency pins and three receipts
 are retained source-only. Checker reproduces the accepted source and passes;
 no assertion replay. Kani result, so #print axioms is not applicable.
+
+## Complete reference byte-heap image, same caller result
+
+`S126SdkAccountImageExportV1.borrowed_stage1_sized_account_image` strengthens
+the previous sized saved-account export with an exact whole buffer-heap
+identity, using the SAME returned checkpoint and original account2 descriptor:
+`buffers out=(buffers initial).set account.data_slot.val checkpoint`.
+The initial account2 read is also a conclusion. This specifies all bytes and
+lengths of every other physical data slot, including extra data cells; no
+independent buffer-frame or slot-range premise is added. Fixed initial
+proof/public, exact suffix, actual source-current-first, final account2
+read/1768 size and all account/lamports metadata conclusions are retained.
+The sole enclosing premise is still the same complete accepted installed
+borrowed reference execution. It does not claim arbitrary-child termination,
+native runtime/source correspondence or the cross-TX account frame.
+
+`S2SdkCheckpointImageV1` proves the reached writer's whole-image setter and
+complete release transport first. `S2SdkFixedImageFirstV1` then derives the
+image from the enclosing source body rather than asking the caller for it.
+The final bridge identifies its checkpoint with the previous current-first
+checkpoint by the single final account2 view; no extra child equality is used.
+
+| Smallest changed target / accepted attempt | Exit | Wall s | RSS bytes | Swap | Axioms reports |
+| --- | --- | --- | --- | --- | --- |
+| S2SdkCheckpointImageV1 / s2-sdk-checkpoint-image-v2 | 0 | 19.665971125 | 3217195008 | 0 | 2 |
+| S2SdkFixedImageFirstV1 / s2-sdk-fixed-image-first-v1 | 0 | 19.102119417 | 3398287360 | 0 | 3 |
+| S126SdkAccountImageExportV1 / s126-sdk-account-image-export-v1 | 0 | 16.647883916 | 3246227456 | 0 | 1 |
+
+All six audits are standard-only, local atomic lock, -j1 -M4400, pinned
+Lean4.32/tool/source/direct imports. The separate account-image import
+manifest records5635 selected object hashes; no compiled objects distributed.
+The first helper draft had a mutable-index name typo and failed elaboration;
+its auto error-placeholder axioms are excluded, never accepted evidence.
+Source-only checker passes without unchanged proof replay. No production
+source, protocol, metric, frozen ELF or other cone was changed. S2 remains open.
