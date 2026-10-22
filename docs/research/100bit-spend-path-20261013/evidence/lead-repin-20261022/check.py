@@ -47,7 +47,7 @@ def walk(o,src,loc='$'):
  if isinstance(o,dict):
   path=o.get('path') or o.get('retained_source') or o.get('source_path')
   if path:
-   for h in ['sha256','source_sha256','hash']:
+   for h in ['sha256','source_sha256','hash','expected']:
     if isinstance(o.get(h),str):add(src,loc,path,o[h])
   for k,v in o.items():
    if isinstance(v,str) and re.fullmatch('[0-9a-f]{64}',v):
@@ -80,7 +80,7 @@ for name in ['fast_dots','fast_pairing','weights']:
   s=raw.decode();counts=collections.Counter();out={}
   for m in re.finditer(r'\b(?:pub(?:\([^)]*\))?\s+)?(?:const\s+)?fn\s+(\w+)\s*(?:<|\()',s):
    n=m.group(1);counts[n]+=1;marker=s[m.start():s.index('{',m.start())]
-   b,lo,hi=item(s,marker);out[(n,counts[n])]=(b,lo,hi)
+   b,_,_=item(s[m.start():],marker);lo=s[:m.start()].count('\n')+1;hi=lo+b.decode().count('\n');out[(n,counts[n])]=(b,lo,hi)
   return out
  a=funcs(git('show',BASE+':'+path));b=funcs((R/path).read_bytes())
  for key in sorted(a.keys()|b.keys()):
