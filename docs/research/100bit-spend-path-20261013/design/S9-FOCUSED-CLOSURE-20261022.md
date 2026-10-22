@@ -314,3 +314,25 @@ loop/top wrapper's suffix premise. These checks do not establish candidate
 adoption, frozen Rust/library/caller refinement, final artifact binding,
 S10/coherent replay or the composed security experiment. No whole S9 closure
 or 100-bit result is claimed. Production source and CU are unchanged.
+
+
+PROVED candidate-helper milestone (supersedes the open suffix/coefficient
+items above): `049163e113` derives all four original S2 coefficient equations
+and all four canonical returned cells from the actual generated-candidate
+helper success and explicit canonical-input conditions. The universal suffix
+transport is constructed from the actual same-call continuation: `hsuffix`
+is no longer a theorem premise. Actual extra[0]/extra[1] reads bind both seeds.
+`e56f92fb53` pins this result specifically to attempt-2 candidate source
+SHA 9338607afd636f43b3b830bbf9cf3cc0ced1fa7cc78b266282969e519577bccf;
+it does not apply to the source-only 9ce draft or unchanged production helper.
+Evidence: evidence/s9-candidate-helper-original-coefficients-v1-20261022/.
+Both commits are pushed on research.
+
+RETAINED: successful helper execution and canonical caller/challenge reads.
+Next proof work constructs successful execution from canonical inputs, reusing
+existing extracted-fold and concrete arithmetic totality. Side one needs a
+canonical old cell 1; side zero establishes that invariant for the second
+iteration. The real caller, deployed Rust/Std correspondence, candidate
+adoption, frozen artifact binding, S10/coherent replay and composed security
+experiment remain OPEN. These focused checks do not close S9 or establish
+the 100-bit target. No production code or CU changed.
