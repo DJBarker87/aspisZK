@@ -7976,3 +7976,16 @@ native/owned contract for the semantic callee (field validation, rejection
 state, ordered hash effects), used as a verified stub in the caller gate,
 then the native-to-owned walk equality, `shippedProverExperiment`, the joins
 and the endpoint. `RustProverRefinement` stays explicit; zero premises removed.
+
+## D140 (lead, 2026-10-22): simulator cost pass 5, partial
+
+Merged `codex/cx-sim-cost5-20261022` (report `r1p-final/SIM-COST5-20261022.md`).
+Proved in the primitive-RAM cost model: WideExact addition 10 ticks,
+multiplication 170, total inversion ≤ 85,065; materialised payload-array
+addition ≤ 429,399,348 ticks; all 24 five-draw fuel selections ≤ 11,832
+worst-case ticks, with exhaustion mass ≤ 2^-120 under the retained independent
+tape. 38 standard-axiom audits, zero swap; no shipped change.
+`sim_preparation` stays (empty deletion diff). Open: reference/mask/shift
+costs, predicate/callback/encoding certificates, preparation composition. The
+whole-experiment simulator source join is part 30's ideal `RunJoin`
+interface, named in the report and not duplicated.
