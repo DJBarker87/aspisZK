@@ -8760,3 +8760,23 @@ alias one to the other. (ii) Caller composition hit the kernel memory limit. Per
 AGENTS.md resource rule 5, it is not rerun with a larger cap: isolate the
 declaration, inspect its reduction shape and split it with symbolic lemmas.
 Next (part 51): both blockers, then interfaces 3–6.
+
+## D175 (lead, 2026-10-22 23:15): part 51 merged; authorised cold build of the terminal cone
+
+Merged `codex/cx-prover-commit51-20261022` (about 0.47M tokens; report
+`r1p-final/PROVER-COMMIT51-20261022.md`). Fixed D174's blockers: the duplicate
+`mul_m31` is replaced by reuse of the retained declaration; the memory-heavy caller
+is split through symbolic result sequencing (no cap raised). Proved: the selected
+mask coefficient producer and caller; all semantic mask column reads; the native
+mask basis and semantic extra functional bound to model carriers; coefficient
+provenance and the complete owned linear oracle value; terminal equality and the
+arithmetic suffix. J10368, 73 standard-axiom audits.
+Obstruction: the terminal integration imports a retained cone whose closure has
+535 modules, 495 without Env J objects. Building them one compile number at a
+time exceeds the budget. **Lead authorisation (AGENTS.md resource rules 1, 2 and 6):**
+treat this as one cold dependency build on the build host, not as proof attempts. Run
+one capped scope (MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0), reusing the pinned
+cache, with aggregate RSS monitored and a stop if it nears the cap. Record target, exit, wall,
+peak RSS and swap, under its own build label outside the proof-attempt range. A
+module that fails or is memory-killed is isolated and reported, never rerun with a
+larger cap. Session A's modules are only built, never edited.
