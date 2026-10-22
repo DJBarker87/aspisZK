@@ -8110,3 +8110,33 @@ native loop to the reference in Lean via the TrustedStd fields. If the shipped
 code uses `entry(..).or_insert_with`, add it to TrustedStd as one more named
 field with its documented semantics (get, then insert if absent), recorded
 visibly on the trust list. Do not add any other field.
+
+## D146 (lead, 2026-10-22 04:10): part 33 merged; correction to D143 ruling 1; statement-domain ruling
+
+Merged `codex/cx-prover-commit33-20261022` (report
+`r1p-final/PROVER-COMMIT33-20261022.md`). Per D145: exactly one TrustedStd
+field added, `btree_entry_or_insert_with` (hit: map unchanged, callback not
+invoked; miss: callback invoked once, value inserted and returned), a named Prop
+hypothesis, not an axiom. Proved: folded-loop, ordered-consumer, query-answer,
+merge and sorted-lookup transport; one bounded Kani lazy-entry transition
+check. Standard axioms; no shipped change.
+
+**Correction (lead error in D143 ruling 1).** D143 said model statement fields
+"are typed in K, hence canonical", so the Rust rejection branch would be
+unreachable. That is false: `ProverCommitPublicImage33` proves that `K` is
+`WideExact`, not M31 (an asset id can be the tower element `i`), and
+`nextPairIndex : Nat` can be 2^64, beyond u64. So no field-preserving source
+image exists for every model statement. The worker correctly stopped rather
+than add an unannounced admission premise.
+
+**Ruling (announced statement domain).** The deployed privacy claim ranges
+over the statements the deployed system can express: model statements that
+are the image of a shipped `r0::Public` value whose `public_bytes` returns
+`Ok`. Statements outside that image have no deployed counterpart. For them, the
+deployed prover returns an error before producing any proof, and nothing is
+published. That must be stated and proved as part of the domain. This is a
+restriction of the statement domain to what is representable, and it does
+not restrict the adversary. Within the domain the statement may still be
+adversarially chosen, and the queries remain arbitrary. The endpoint must show
+the before/after quantifier on `x`, and the report must mark this as a scope
+statement, visible in the headline, not a hidden premise.
