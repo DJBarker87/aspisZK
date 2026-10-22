@@ -1999,3 +1999,96 @@ native frame, actual whole-SDK, TOTAL or S1/S2/S6 closure is claimed.
 Read-only research reinspection at380b084451eaede1bb03fd0f4da7e692367a8de9
 is recorded separately: the aggregate freeze decision remains b2727acd,
 with the previously recorded S4 adoption changes requiring re-pinning.
+
+### 2026-10-22 — actual SDK method contracts pass; caller composition still open
+
+S2 is **OPEN**. No enclosing native caller premise was removed by this batch.
+The reference caller theorem at `aec76bb39` remains ACCEPTED-ONLY; it does not
+identify its heap with an arbitrary actual SDK execution. S6 and S1 consequently
+retain that caller connection, in addition to their previously listed residuals.
+
+The new source-only `sdk-live-contracts` packet checks the actual
+`solana-account-info=2.3.0` bodies of `try_data_len`, `try_borrow_data` and
+`try_borrow_mut_data`. Isolated SDK copies add proof annotations only. Removing
+the recorded annotation restores the original lib.rs SHA256
+`6b59aba664bb70fda6e17bcc8cf6eb41fc0bc9d8bcbb797bd70c1b107809c29a`.
+No SDK or production source body changed. The method contracts cover exact
+success/AccountBorrowFailed status, signed borrow-counter transitions, the
+counter-only write frame, and (for live guards) their complete two-word host
+representation. The harness drops the actual guards and checks restoration.
+It includes all byte values and lengths0..10MiB, every signed data/lamport
+counter, nonzero usize Rc headers, and all metadata on its one-account fixture.
+This is a bounded host-ABI source-helper check, not unrestricted Lean TOTAL,
+general runtime heap embedding, SBF ABI correspondence, or whole SDK closure.
+
+| Actual method contract | Exit | Wall seconds | Peak RSS KiB | Swap |
+|---|---:|---:|---:|---:|
+| sdk-live-length-join-v1 |0|32.672|3029240|0|
+| sdk-live-shared-join-v1 |0|15.336|1496880|0|
+| sdk-live-exclusive-join-v1 |0|15.245|1496440|0|
+
+All776/763/763 non-cover checks pass and each has3 reached covers. No stubs
+are used. Separate source/property metadata audits pin the actual contracted
+SDK function, write frame, generated artifacts by hash, lock, tools and proof
+receipts. `#print axioms` is N/A for these Rust/Kani checks. Exact sources and
+receipts govern target provenance: the host receipt's inherited
+`source_revision=d8fc9db...` is bookkeeping, not a claim that this tree was
+compiled from that Git commit. All heavy scopes had fresh admission and
+MemoryHigh6G/MemoryMax8G/MemorySwapMax0; inspection scopes used1G/2G/0.
+
+Direct verified-stub composition is **not proved**. v7 codegen rejected missing
+local method proof registrations; v8 registered all three but Kani then required
+`Arbitrary` instances for `Ref`, `RefMut` and `ProgramError` return types that
+are unavailable. No restricted or fabricated Arbitrary instance was installed.
+Real-guard model alternatives are explicitly UNPROVED and excluded: the paired
+shared v1/v2/v3 checks were stopped at199.161/146.603/244.595 seconds, with
+6553044/6571092/6563904KiB peaks. Reducing storage to64bytes in v3 did not
+resolve the problem. Length model v1 was stopped at338.760s/6582548KiB;
+v2 timed out at604.724s/6637068KiB. Replacing derived error equality with
+constructor matches was insufficient. The native/reference prefix v10 also
+timed out at211.925s/6529868KiB. All have swap0 and terminal failed receipts;
+none supplies equivalence, a frame certificate, or evidence of a counterexample.
+
+The alias inspection was stopped without returning value-set results
+(exit15,360.245s,1118556KiB,swap0). A successful function inventory establishes
+only that unused shared/exclusive model bodies and derived ProgramError
+equality were absent from the length-v2 program. It does not identify the
+solver's root cause. Pointer provenance, inactive String-drop glue and fixture
+destruction remain hypotheses, not diagnoses. No unchanged retries or higher
+caps are justified by these results.
+
+The next decomposition isolates the unchanged **native-only decoder-prefix
+frame**, without loading or executing the second owned-reference program.
+The same arbitrary native SDK fixture, decoder-error cut and permitted counter/
+hit writes remain. This separates the concrete write-frame obligation from
+paired-program composition; codegen alone does not establish it. If it passes,
+the actual scan transport, success continuations, concrete child installation,
+general runtime heap and ordered error/state/log/oracle join still remain.
+If source fission is needed, it must be an isolated candidate preserving actual
+SDK guards and errors, with explicit equivalence and re-pin gates; no such
+candidate is adopted here. The frozen component target remains b2727acd and
+the raw100-bit per-attempt target remains **not yet established**.
+
+Follow-up native-only checks are terminal and excluded. Removing the entire
+owned-reference execution did not make DFCC pass: native-prefix-frame-v1 timed
+out (exit1,193.726s,6543220KiB,swap0). The next version removes DFCC entirely,
+chooses one unconstrained root/index, and checks that original byte and all
+Vec addresses/lengths/capacities after the unchanged native decoder-error
+prefix. This is a different pointwise proof obligation, not an assumed frame
+or restricted byte fixture. It too timed out (native-point-frame-v1,
+exit1,183.295s,4429492KiB,swap0). Thus the second execution and per-byte DFCC
+instrumentation are not individually sufficient explanations for the timeout.
+There is no new native byte-frame theorem, extensional composition theorem,
+or enclosing premise removal. Both deadlines killed their solver groups;
+subsequent process inspection found no matching solver. The unchanged native
+source is retained at sdk-shared-prefix-v11/v12, together with their codegen,
+admission, raw pipeline, timeout and terminal resource receipts. Neither
+unchanged job should be repeated or run with a higher cap.
+
+Read-only source inspection at research0c2c0722f23103f30f25c0cf66169795dcdebc66
+confirms that program lib.rs, adapter and verifier.rs remain byte-identical to
+their b2727acd versions. This is recorded in
+`sdk-live-source-freeze-20261022.json`; it does not establish equality of all
+dependencies or release artifacts and does not supersede the freeze authority.
+The focused packet checker accepts only the three actual-method contracts.
+No Lean source changed and no unchanged Lean/full manifest replay was run.

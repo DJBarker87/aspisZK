@@ -144,6 +144,12 @@ fn planned_scan(_: &[u8])->bool{false}''')
  for count in [58295,1880,1768]:s=s.replace('Vec::from(kani::any::<[u8;'+str(count)+']>())','symbolic_buffer::<'+str(count)+'>()')
 canonical='canonical-data' in sys.argv[2:]
 if canonical:s=s.replace('let data_slots:[usize;3]=kani::any();','let data_slots:[usize;3]=[0,1,2];')
+constructor_errors='constructor-errors' in sys.argv[2:]
+if constructor_errors:
+ before='assert_eq!(actual,Err(ProgramError::InvalidAccountData));'
+ assert s.count(before)==1;s=s.replace(before,'assert!(matches!(&actual,Err(ProgramError::InvalidAccountData)));')
+ before='assert_eq!(actual,expected,"native reached decoder implies same complete reference decoder/error");'
+ assert s.count(before)==1;s=s.replace(before,'assert!(matches!((&actual,&expected),(Err(ProgramError::InvalidAccountData),Err(ProgramError::InvalidAccountData))),"native reached decoder implies same complete reference decoder/error");')
 (O/'src/lib.rs').write_text(s)
 c=(E/'sources/sdk-native-context-v9/Cargo.toml').read_text().replace('name="aspis-s126-sdk-native-context-v1"','name="aspis-s126-sdk-shared-prefix"').replace('aspis-s126-owned-sdk-snapshots={path="/home/dombarker/project-offloads/s126-real-sdk-20261021/owned-sdk-snapshots-v1"}','aspis-s126-owned-sdk-borrowed={path="/home/dombarker/project-offloads/s126-real-sdk-20261021/owned-sdk-borrowed-v1"}')
 (O/'Cargo.toml').write_text(c)
@@ -158,3 +164,6 @@ if canonical:
 
 if havoc_inputs:
  p=O/'source-cut.json';m=json.loads(p.read_text());m['input_constructor']='Harness-only fresh Box<MaybeUninit<[u8;N]>>, linked CBMC __CPROVER_havoc_slice on the entire byte allocation, then assume_init and boxed-slice into_vec. All bytes arbitrary, no buffer copies or fixed values. The native SDK and complete reference consume the same allocations; intrinsic initialization semantics/exact C implementation are explicit tool trust.';p.write_text(json.dumps(m,indent=2)+'\n')
+
+if constructor_errors:
+ p=O/'source-cut.json';m=json.loads(p.read_text());m['error_assertions']='Constructor-complete matches replace derived ProgramError/Result PartialEq/Debug assertions in the proof harness only. Both results must be exactly Err(InvalidAccountData), preserving full status equality at this decoder-error cut; no payload/error/state premise is removed. Frozen SDK/caller and complete reference bodies, input domains and enforced native frame are unchanged.';p.write_text(json.dumps(m,indent=2)+'\n')
