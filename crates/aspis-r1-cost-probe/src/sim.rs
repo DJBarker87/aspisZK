@@ -587,3 +587,7 @@ pub mod owned29 {
     }
 
 }
+
+#[cfg(any(kani,aeneas_ref))]
+#[path="sim_owned31.rs"]
+pub mod owned31;
