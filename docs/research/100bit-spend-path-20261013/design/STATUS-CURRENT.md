@@ -71,6 +71,12 @@ because the shipped prover batches by order, not by set.
 | `RustProverRefinement` (explicit since D125, `PrivacyR1HeadlineDeployed`) | the real shipped prover's whole run (builder, checker, retry, ordered serialisation, observer) equals the constructed source outside the bad event | lead: prover part 16 |
 | Ordered-q22 wire encoding | done (D125): ordered 10+12 batches, bound unchanged | — |
 
+**Scope (user, 2026-10-22, LOG D159):** timing and other side channels are inside
+the privacy contract. Leakage levels L1 (attempt/retry/error counts), L2
+(source-level branch/index/trip-count trace) and L3 (compiled code and
+hardware; trust item or measurement only). A side-channel inventory of the
+deployed prover is the first step.
+
 ## Release gates still to run
 
 1. The cross-cone instance-naming fix (`IMPORT-UNION-20261021.md`), so that
