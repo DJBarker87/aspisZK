@@ -528,3 +528,30 @@ placeholders in failed logs are not accepted axioms. No full unchanged replay
 or resource override. The enclosing actual-native successful-execution premise
 is STILL not discharged; this removes only its paired byte-initialization
 subconditions after the exact checked observations are installed.
+
+## Complete actual native/reference SUCCESS, now with unseeded bytes
+
+See S2-NATIVE-REFERENCE-SUCCESS-20261022.md for the exact quantified domain,
+source/cut boundaries, before/after reference-success premise audit, metrics,
+retained failed attempts and remaining enclosing obligations. The checked
+successful pair now runs original SDK/copy/implicit cleanup with arbitrary
+ORIGINAL proof/prefix/tag/public/checkpoint bytes, arbitrary common1768-byte
+first output, same typed call order/semantic public/k/None, same saved checkpoint
+and restored borrow/Rc state. Native acceptance derives the reached prefix.
+It uses a real pre-native checkpoint clone; no zero/tag/prefix initializer or
+independent reference accepted-run premise. Source-reached control/metadata
+class and pure child/scan/comparison ports remain explicit. Original proof/
+public ALLOCATION identities are proved; initial byte identities still need
+native input/write-frame composition. Pointer identity alone is not credited.
+
+Accepted unseeded pair5513 non-cover checks/2 covers,123.508s,5644272KiB,swap0;
+seeded predecessor5480/2,86.004s,6195480KiB,swap0. Raw exit10 is cover-only,
+all enabled assertions independently audited. Four ordered-tail prerequisite
+checks also pass; no whole-memory frame is inferred from their ordinary link.
+The whole proof/public coordinate strengthening timed out,190.584s,
+6504172KiB,swap0, excluded. A changed focused native-footprint check removes
+those large value muxes and second reference execution; it also timed out
+at SSA conversion,202.587s,6514536KiB,swap0. Both failed replacements
+are source-only retained/excluded in sdk-native-frame-replacements; neither
+is accepted evidence. The next step is per-step footprint composition, not
+an unchanged retry or a cap increase. No cap raised, shipped source or other cone changed.

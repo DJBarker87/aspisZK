@@ -2349,3 +2349,17 @@ S2-CROSS-TX-CARRIER-DECISION-20261022.md records the distinct hash-to-byte
 transport obligation. No shipped source, security metric or other cone changed.
 Authority is the adopted25866ec overlay plus approved S4; earlier references
 to b2727acd alone are historical and superseded by the recorded overlay audit.
+
+## 2026-10-22 complete successful native/reference pair, unseeded bytes
+
+The exact handoff is S2-NATIVE-REFERENCE-SUCCESS-20261022.md. This supersedes
+the successful-entry-only status for the new paired necessary-control domain:
+complete native and complete borrowed-reference callers now both succeed on
+the SAME arbitrary first checkpoint, with original native copy/implicit Drop
+and actual SDK methods. The newer pair removes every byte initializer; full
+proof/prefix/tag/public/checkpoint bytes are arbitrary. The real initial CP
+clone is passed to the reference. Actual fixed INITIAL proof/public byte
+binding, control/source-port installation, runtime/oracle/TX2 and the enclosing
+native -> installed-reference premise remain open and are not hidden in a
+wrapper. Source-only checkers match the production native caller/helper bodies
+and audit complete property inventories. No whole S2/S6/S1 closure is claimed.
