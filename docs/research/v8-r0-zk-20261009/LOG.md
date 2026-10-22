@@ -7957,3 +7957,22 @@ reference loop, a per-iteration Kani shipped=reference check, a Lean induction
 over the 25 rows connecting it to the bounded stateful row continuation, then
 `shippedProverExperiment`, both WholeRunJoins and the endpoint.
 `RustProverRefinement` stays explicit; zero premises removed.
+
+## D139 (lead, 2026-10-22 05:10): part 29 merged; native caller gate times out, callee contract next
+
+Merged `codex/cx-prover-commit29-20261022` (report
+`r1p-final/PROVER-COMMIT29-20261022.md`). Added cfg(kani/aeneas_ref)-only
+owned modules `fields20`/`semantic20` in `aspis-r1-cost-probe` (`r1_wire.rs`,
+`sim.rs`); all three frozen ELFs rebuilt byte-identical (dfc2a91a…, fb2fc048…,
+121f3e29…), 492 shipped files pinned (`frozen-elf-final-check.json`).
+Proved for the owned reference: extracted iteration including record lookup,
+finite-row induction over rows 0..24, and composition through both circle
+points and the Transcript tail. Bounded field validation certified.
+26 axioms reports, standard axioms only.
+Obstruction: the native per-row Kani gate still times out at 600 s (rows 14
+and 15, where field validation starts), because the caller gate expands the
+whole callee. No counterexample. Next (part 30): a separately verified
+native/owned contract for the semantic callee (field validation, rejection
+state, ordered hash effects), used as a verified stub in the caller gate,
+then the native-to-owned walk equality, `shippedProverExperiment`, the joins
+and the endpoint. `RustProverRefinement` stays explicit; zero premises removed.
