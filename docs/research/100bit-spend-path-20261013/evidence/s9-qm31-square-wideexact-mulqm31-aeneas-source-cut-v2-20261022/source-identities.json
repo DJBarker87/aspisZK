@@ -1,0 +1,160 @@
+{
+  "candidate_weights": {
+    "path": "lean-candidates/s9-explicit-helper-v1-20261022/attempt2/candidate/src/weights.rs",
+    "sha256": "9338607afd636f43b3b830bbf9cf3cc0ced1fa7cc78b266282969e519577bccf"
+  },
+  "frozen_weights": {
+    "path": "crates/aspis-r1-cost-probe/src/weights.rs",
+    "sha256": "28b558ffa9f5b004188c7f50b1597fe681186f54fb4d52a3bd125df4f2481137"
+  },
+  "actual_core_field": {
+    "path": "crates/aspis-core/src/field.rs",
+    "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+  },
+  "actual_core_wide_exact": {
+    "path": "crates/aspis-core/src/field/wide_exact.rs",
+    "sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
+  },
+  "variant_source": {
+    "path": "crates/aspis-r1-cost-probe/src/transport.rs",
+    "sha256": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7"
+  },
+  "snippets": {
+    "field_90_byte_body": {
+      "sha256": "0be69c81ca5a33634bb1f9440b904d6d83ecb7b3336061eee9932473cd100445",
+      "bytes": 90
+    },
+    "factored_s2_libra_weights": {
+      "sha256": "7bb4e1d23187b9b6dea3a84532a250ce433f6dbb6627560a99089db02ce95a0a"
+    },
+    "twofold_libra_weights": {
+      "sha256": "b664756d6a3eb2f4fbe0e75a3c978728effac51a5d87dc3166f072dbc9c22dbe"
+    },
+    "Weights_scalar_factor": {
+      "sha256": "7fd91d4bc2a81941dbb5131875750801842fb368d45659e51316057ec6b1f7a0"
+    },
+    "Weights_struct": {
+      "sha256": "4ae531975d2e60d8085682b6a8a1d5cb05aa826b3b613bf06f0584fe1d99fd99"
+    },
+    "S2_projection_statement": {
+      "sha256": "f9b65df89522e12156f729f77dc0f7ea22e9ebfa61bce3ec373d7937233c8088",
+      "text": "let libra=if self.variant==Variant::S2 {factored_s2_libra_weights(&ap0,&ap1,self.extra)}else{twofold_libra_weights(&low,self.extra)};"
+    },
+    "Variant_enum": {
+      "sha256": "f3eda658f72dd4b8c52e82bb012784793746a4e5d32a47c5ad48f96aa843b9e1"
+    }
+  },
+  "adaptations": [
+    "Minimal crate/module shim for focused extraction only.",
+    "Two top-level reachability shims added: focused_qm31_square and focused_wide_exact_mul_qm31.",
+    "Actual field.rs and wide_exact.rs are byte-identical to pinned production source snapshots.",
+    "No opaque arithmetic selectors; reachable field arithmetic must remain transparent."
+  ],
+  "opaque_arithmetic_bodies": {
+    "QM31.mul": {
+      "source_path": "crates/aspis-core/src/field.rs",
+      "source_file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "method_body_sha256": "7e538107feb215c05141c196f523de52c79fb74c6c975389942749c8db760de8",
+      "method_body_bytes": 399,
+      "method_text": "pub fn mul(self, rhs: QM31) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMul);\n        let m0 = self.c0.mul(rhs.c0);\n        let m1 = self.c1.mul(rhs.c1);\n        let m2 = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));\n        QM31 {\n            c0: m0.add(mul_by_r(m1)),\n            c1: m2.sub(m0).sub(m1),\n        }\n    }",
+      "lean_arithmetic_owner": "AspisR1S9ConcreteFieldOpsV1.actualQMMul",
+      "correspondence_status": "source method pin only; source-to-Lean owner refinement is not discharged by this packet"
+    },
+    "QM31.square": {
+      "source_path": "crates/aspis-core/src/field.rs",
+      "source_file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "method_body_sha256": "7222724dc2c355245fb1c9118301b6eb8d4a6711c35645ae5be13e87ce3124cf",
+      "method_body_bytes": 364,
+      "method_text": "pub fn square(self) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSquare);\n        let c0_square = self.c0.square();\n        let c1_square = self.c1.square();\n        QM31 {\n            c0: c0_square.add(mul_by_r(c1_square)),\n            c1: self.c0.mul(self.c1).double(),\n        }\n    }",
+      "lean_arithmetic_owner": "AspisR1S9ConcreteFieldOpsV1.actualQMSquare",
+      "correspondence_status": "source method pin only; source-to-Lean owner refinement is not discharged by this packet"
+    },
+    "WideExact.add": {
+      "source_path": "crates/aspis-core/src/field/wide_exact.rs",
+      "source_file_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+      "method_body_sha256": "711892452ab80cd1a37abcdd41e42375b86d82b577586567da82c5eacadf0f4f",
+      "method_body_bytes": 260,
+      "method_text": "pub fn add(self, rhs: Self) -> Self {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EAdd);\n        Self {\n            c0: self.c0.add(rhs.c0),\n            c1: self.c1.add(rhs.c1),\n        }\n    }",
+      "lean_arithmetic_owner": "AspisR1S9CurrentFieldOpsV1.actualWideAdd",
+      "correspondence_status": "source method pin only; source-to-Lean owner refinement is not discharged by this packet"
+    },
+    "WideExact.mul": {
+      "source_path": "crates/aspis-core/src/field/wide_exact.rs",
+      "source_file_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+      "method_body_sha256": "47c8044c02a35cb46e284c30597906a748a2e8904b3ed811189c5f19855b3462",
+      "method_body_bytes": 581,
+      "method_text": "pub fn mul(self, rhs: Self) -> Self {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMul);\n        #[cfg(all(feature = \"r0-e4-reference\", not(target_os = \"solana\")))]\n        if crate::r0::equality_trace::is_reference() {\n            return self.mul_re3(rhs);\n        }\n        let ac = self.c0.mul(rhs.c0);\n        let bd = self.c1.mul(rhs.c1);\n        let cross = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));\n        Self {\n            c0: ac.add(mul_u(bd)),\n            c1: cross.sub(ac).sub(bd),\n        }\n    }",
+      "lean_arithmetic_owner": "AspisR1S9CurrentFieldOpsV1.actualWideMul",
+      "correspondence_status": "source method pin only; source-to-Lean owner refinement is not discharged by this packet"
+    },
+    "WideExact.mul_m31": {
+      "source_path": "crates/aspis-core/src/field/wide_exact.rs",
+      "source_file_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+      "method_body_sha256": "5e7bdbf0090b8501ebfb42f18e59eec33de255c439d40296787301df2736eb69",
+      "method_body_bytes": 300,
+      "method_text": "pub fn mul_m31(self, rhs: M31) -> Self {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMulF);\n        let rhs = M31(rhs.0 % P);\n        Self {\n            c0: self.c0.mul_m31(rhs),\n            c1: self.c1.mul_m31(rhs),\n        }\n    }",
+      "lean_arithmetic_owner": "AspisR1S9CurrentFieldOpsV1.actualWideMulM31",
+      "correspondence_status": "source method pin only; source-to-Lean owner refinement is not discharged by this packet"
+    },
+    "WideExact.mul_qm31": {
+      "source_path": "crates/aspis-core/src/field/wide_exact.rs",
+      "source_file_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+      "method_body_sha256": "617f4bfe9aaaabf3129ada726faaf601dfac8e1d978eb62ba007dcc6032fdf9f",
+      "method_body_bytes": 299,
+      "method_text": "pub fn mul_qm31(self, rhs: QM31) -> Self {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMulK);\n        let rhs = canonical_qm31(rhs);\n        Self {\n            c0: self.c0.mul(rhs),\n            c1: self.c1.mul(rhs),\n        }\n    }",
+      "lean_arithmetic_owner": "AspisR1S9GeneratedWideMulQM31V2.actualHelperOperation",
+      "correspondence_status": "source method pin only; source-to-Lean owner refinement is not discharged by this packet"
+    }
+  },
+  "cut_files": {
+    "input/Cargo.toml": {
+      "sha256": "915e35f169498536b9f242db476e12505d943d75e09eb015aafc2f6bdee033c2"
+    },
+    "input/Cargo.lock": {
+      "sha256": "348e49a934acd165f83de9097622fccf44bd4038d9b576c04f79cdf3b1caf4a6"
+    },
+    "input/src/lib.rs": {
+      "sha256": "50a98f6e55774fe7af65e00525c13a9da7709b267b61d9d08ddc8572f47c86f8"
+    },
+    "input/src/weights.rs": {
+      "sha256": "d6f396ebfdd9ead4a595f0b4223a2f1d1667b4e82d553b6301853cc079f45089"
+    },
+    "input/src/transport.rs": {
+      "sha256": "d0a3f280356ce00629c4f585ce1ca0aae1057fa88e6f275000ad463ae3851b7e"
+    }
+  },
+  "reachability_harness": {
+    "path": "input/src/lib.rs",
+    "sha256": "dd76f7e80480073406748608f0c9fe643eb70cb774fabd09c66090b20f293c85",
+    "method": "focused_wide_exact_mul",
+    "meaning": "top-level reachability shim only; invokes exact actual WideExact::mul; all core field/wide_exact source files copied byte-for-byte"
+  },
+  "transparent_target": {
+    "method": "WideExact.mul",
+    "source_path": "crates/aspis-core/src/field/wide_exact.rs",
+    "source_file_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+    "source_span": "lines 112-126",
+    "body_sha256": "47c8044c02a35cb46e284c30597906a748a2e8904b3ed811189c5f19855b3462",
+    "correspondence_status": "selected exact source body; LLBC/Aeneas emission will be checked in this attempt"
+  },
+  "selected_transparent_targets": {
+    "QM31.square": {
+      "source_path": "crates/aspis-core/src/field.rs",
+      "source_file_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "method_body_sha256": "7222724dc2c355245fb1c9118301b6eb8d4a6711c35645ae5be13e87ce3124cf",
+      "method_body_bytes": 364,
+      "method_text": "pub fn square(self) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSquare);\n        let c0_square = self.c0.square();\n        let c1_square = self.c1.square();\n        QM31 {\n            c0: c0_square.add(mul_by_r(c1_square)),\n            c1: self.c0.mul(self.c1).double(),\n        }\n    }",
+      "lean_arithmetic_owner": "AspisR1S9ConcreteFieldOpsV1.actualQMSquare",
+      "correspondence_status": "source method pin only; source-to-Lean owner refinement is not discharged by this packet"
+    },
+    "WideExact.mul_qm31": {
+      "source_path": "crates/aspis-core/src/field/wide_exact.rs",
+      "source_file_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+      "method_body_sha256": "617f4bfe9aaaabf3129ada726faaf601dfac8e1d978eb62ba007dcc6032fdf9f",
+      "method_body_bytes": 299,
+      "method_text": "pub fn mul_qm31(self, rhs: QM31) -> Self {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMulK);\n        let rhs = canonical_qm31(rhs);\n        Self {\n            c0: self.c0.mul(rhs),\n            c1: self.c1.mul(rhs),\n        }\n    }",
+      "lean_arithmetic_owner": "AspisR1S9GeneratedWideMulQM31V2.actualHelperOperation",
+      "correspondence_status": "source method pin only; source-to-Lean owner refinement is not discharged by this packet"
+    }
+  }
+}
