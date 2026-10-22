@@ -1428,3 +1428,26 @@ arrays. Exit 0, 26.272s, peak RSS 3,452,387,328 bytes, swap 0, standard
 axioms. A failed broad simp attempt expanded ofFn; the replacement uses
 the symbolic getElem?_ofFn lemma. Diagnostics and the focused checker are
 retained. No dependencies or unchanged full regression were rebuilt.
+
+
+## Candidate entry now derives both successful execution and exact batches
+
+`s4-candidate-total-local-values-v1-20261022` composes the retained
+source-body-checked concrete V10 entry endpoint, strict opening decode and
+the width29 kernel theorem. `candidate_entry_total_exact_batches` derives
+the complete entry result, all four returned canonical values and their
+exact four width29 batch meanings for the same decoded source opening.
+No successful entry/helper/callback call or independently chosen typed
+opening is assumed. Canonical gamma, the same ClaimPowers output, incoming
+coefficient-array identity and strict scanner/frame inputs remain explicit.
+This strengthens the earlier accepted-call-only value consumer; it is still
+a candidate helper theorem rather than frozen-source or global soundness.
+Focused run: exit 0, 29.334s, peak RSS 3,999,563,776 bytes, swap 0, standard
+axioms. Initial binder syntax failure retained; no unchanged dependencies
+were rebuilt. Packet checker passed.
+
+The isolated three-file candidate is published for concrete review in
+draft PR https://github.com/DJBarker87/aspisZK/pull/10. It is unadopted and
+unmerged. The draft explicitly retains all six B1 CU comparison failures,
+source/refinement obligations and the implementation-linked target. It does
+not propose merging the historical experimental branch wholesale.
