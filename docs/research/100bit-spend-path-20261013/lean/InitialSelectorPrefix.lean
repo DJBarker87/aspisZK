@@ -155,6 +155,12 @@ theorem same_boxed_success (point : Array QM 10#usize) (selectors : Selectors) (
   · simp only [run, hnodes, bind_tc_ok, hr0, hr1, hs01, hr25, hs0125,
       hr30, hcommon, hr27, hr28, hr29, AspisR1.InitialVariantExact.source,
       hvt, hlow0, hsFirst, hsFull, hfull, hrate]
+    change ((do
+      let sumFirst ← field.QM31.add common transfer
+      let sumFull ← field.QM31.add sumFirst fixed
+      let full ← field.QM31.mul low0 sumFull
+      Result.ok { high0 := h0, high1 := h1, high25 := h25, high30 := h30, nodes := nodes, transfer := transfer, fixed := fixed, privateEight := privateEight, privateTwo := privateTwo, low0 := low0, full := full, rate := rate }) : Result (Registers QM)) = _
+    simp only [hsFirst, hsFull, hfull, bind_tc_ok]
   · exact ⟨hc0, hc1, hc25, hc30, hcnodes, hctransfer, hcfixed, hcEight, hcTwo, hclow0, hcfull, hcrate⟩
   · simp only [decodeRegisters, model]
     rw [hvfull, hvrate, hvsFull, hvsFirst, hvcommon, hvs0125, hvs01,

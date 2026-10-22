@@ -49,6 +49,8 @@ def main():
         before = p.read_bytes()
         after, count = transform(before)
         if count:
+            if p.is_symlink() or not p.resolve().is_relative_to(repo):
+                raise ValueError('refuse migration through a source symlink: '+str(p))
             records.append({'path': p.relative_to(repo).as_posix(),
                             'before_sha256': hashlib.sha256(before).hexdigest(),
                             'after_sha256': hashlib.sha256(after).hexdigest(),

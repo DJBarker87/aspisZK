@@ -42,6 +42,11 @@ lines=(H/(scan['label']+'.log')).read_text().splitlines()
 raw={key:[json.loads(l[len(prefix):]) for l in lines if l.startswith(prefix)] for key,prefix in
      [('modules','RAW_MODULE '),('declarations','RAW_DECL '),('duplicate_types','RAW_DUP_TYPE '),('duplicates','RAW_DUP ')]}
 modules={r[0]:{'path':r[1],'imports':r[2]} for r in raw['modules']}
+object_pins={r['module']:r for r in json.loads((H/'raw-object-pins.json').read_text())}
+assert object_pins.keys()==modules.keys(), 'incomplete union object pins'
+for m,rec in latest.items():
+    if m in object_pins and rec['exit']==0:
+        assert object_pins[m]['sha256']==rec['object_sha256'], ('object drift',m)
 changed=set(plan['changed_modules'])&modules.keys()
 affected=set(changed)
 while True:

@@ -65,6 +65,18 @@ unchanged full regression. The final receipt packet retains failed logs and
 commands as well as their replacements. The namespace/cached-artifact repairs
 change the build environment, not the formal claims.
 
+## Terminal proof replay repair
+
+IU-321 exposed a pre-existing simplifier boundary in
+`InitialSelectorPrefix.same_boxed_success`: a concrete tuple-destructuring
+`let` remained before three already-proved Result operations. A focused proof
+repair explicitly changes that goal to its definitionally equal bind chain,
+then uses only the existing operation equalities and `bind_tc_ok`. The theorem
+statement, hypotheses, witness and arithmetic are unchanged. IU-326 passes
+with standard axioms; five failed diagnostic/reduction attempts are retained
+in `terminal-proof-repair/` and are excluded from accepted evidence. No failed
+object was accepted and no dependent was built through a failed source.
+
 ## Final validation
 
 Final build results, raw duplicate scan and closure validation are recorded
