@@ -1863,3 +1863,96 @@ S6 and S1 retain the shared actual caller boundary; no whole S1/S2/S6 or
 raw100-bit per-attempt closure is claimed. The next concrete work is a shared
 source decoder/encoder/gate/first witness and compositional native-state
 transport; another unchanged whole-array or paired-stage replay is excluded.
+
+### 2026-10-22 — shared decoded-statement/encoder/gate/current-first witness
+
+The previous next strengthening is now checked for the complete **reference**
+caller. `S2SdkLinkedCallerV1.stage1_linked_first` and
+`owned_stage1_linked_first` consume one enclosing successful stage1 execution,
+including its reverse finalizer. Their `LinkedFirst` conclusion contains one
+boxed decoded statement, its actual common and semantic-public projections,
+its candidate encoder output, the same proof Vec's suffix range and full
+admission gate, and the reached `first_decoded` call on those public/proof
+bytes. No child-success, independently selected candidate, parse-match,
+prefix/tag or seed-fixed-point premise is supplied separately. Targeted
+normalization of the reached original `map_err (Ok candidate)` preserves the
+actual candidate value across the error mapper; the mapper is not replaced.
+This strengthens the earlier `GuardedFirst` conclusion without changing its
+accepted-run quantification or carrier. It does not yet identify these
+existential buffers with an arbitrary native SDK heap.
+
+`S126SdkLinkedCurrentV1.owned_stage1_source_linked_first` and
+`borrowed_stage1_source_linked_first` install the actual source decoder and
+candidate encoder in that same enclosing reference execution. Their
+`SourceLinkedFirst` conclusion exposes the **same actual decoder statement**,
+its common afterstate and actual encoder candidate, the original proof
+Vec/suffix/gate and the current `firstCurrent` call. The existing checked S6
+reuse theorem transports the already derived decoder success; no second parse
+or independent `firstCurrent` success is assumed. The borrowed version
+consumes the complete borrowed/owned equality, including reverse release.
+These are ACCEPTED-ONLY reference caller theorems, not TOTAL native execution
+or a concrete installation of every remaining verifier Ops slot.
+
+Focused local `lake env lean -j1 -M4400` receipts, serialized under the atomic
+local lock, are `s2-sdk-linked-caller-v2` (exit0,27.707706958s,
+3174350848B RSS,swap0) and `s126-sdk-linked-current-v2`
+(exit0,20.599522041s,3195207680B RSS,swap0). Both files print two axiom
+reports containing only propext/Classical.choice/Quot.sound. Failed v1
+elaborations are retained and excluded. Exact source/tool/direct-import and
+selected transitive import pins accompany the successful receipts; no
+unchanged full manifest replay ran.
+
+There is also a narrower native result, separately accepted as
+`sdk-native-entry-cut-v2`: all2515 non-cover properties pass and all3 covers
+are reached (raw CBMC exit10,52.224s,2152704KiB RSS,swap0). Across arbitrary
+unseeded buffer bytes, independent data/lamport slot maps, metadata, signed
+borrow counters and all nonzero Rc headers, reaching the actual688-byte
+proof-prefix comparison derives canonical data slots. Only688-byte memcmp
+calls are marked and forced to return1; other lengths use the original libc
+model. The native body/helper prefix remains unchanged. This is a
+**pre-comparison entry** result, not original comparison equivalence or
+first/verifier-entry linkage. One inherited cover caption mentions verifier
+entry; its checked predicate is actually the pre-comparison marker. The
+source-only `sdk-native-entry-audit-v1` (exit0,0.270s,48028KiB RSS,swap0)
+checks the nonzero tagged marker's actual unsigned-long type/initializer,
+exact C cut and replacement-before-append ordering. It prevents attributing
+the cut to a recursively replaced comparison or a zero-initialized ghost.
+
+The stronger native first-entry link and shared-allocation frame have **not**
+been proved. All heavy attempts had fresh admission, High6G/Max8G/Swap0:
+
+| Attempt | Unclosed check | Exit | Wall seconds | RSS KiB | Swaps |
+|---|---|---:|---:|---:|---:|
+| sdk-shared-prefix-check-v2 | DFCC shared native/borrowed prefix frame |1|189.095|374116|0|
+| sdk-shared-prefix-check-v3 | Reachability cuts beyond decoder; solver timeout |1|208.480|6390144|0|
+| sdk-shared-prefix-check-v4 | Exact arbitrary Vec construction; solver timeout |1|206.314|6389772|0|
+| sdk-shared-prefix-check-v5 | Canonical data-slot focused frame; solver timeout |1|204.687|6390068|0|
+| sdk-native-context-check-v16 | All-alias native first-entry normalization |1|183.480|6391780|0|
+| sdk-native-entry-cut-v3 | Arbitrary comparison reply and first-entry link |1|243.262|see correction|0|
+
+The v3 entry-cut timeout handler lacked `import os`, so it raised NameError
+before killing CBMC. Its historical runner receipt's122944KiB peak excludes
+the orphan and **must not be reported as the solver peak**. The retained
+cgroup peak is6594756608B; the orphan was observed at6444080KiB RSS. After
+verifying PID1722041/PGID1722041 and its exact ready-program command, it was
+killed and absence confirmed. `voluntary-stop.json` records this correction.
+The driver now imports os; the failed run is excluded and has not been rerun
+unchanged or with a higher cap. Source-only failed sources/commands/receipts
+and small logs or large-log hashes are retained, along with the pinned Kani
+arbitrary-Vec constructor source. No frame or first-link claim follows from
+any timeout.
+
+The packet checker now selects71 current Lean targets and22 SDK cuts. Those
+counts describe evidence selection, not component closure. S2 still needs the
+general actual SDK/native-to-reference state/heap connection, concrete child
+installation and complete errors/log/state/ordered-oracle transport. The
+native context still has fixed rooted buffer lengths and common successful
+typed child hooks and a pure scan abstraction. The richer reference witness
+removes the independent decoder/encoder/gate/current-first matching premises
+at that reference boundary; it does not discharge those native premises.
+S6 retains actual caller/runtime installation and S1 retains original
+Prepared::new/prepared_claim preparation/trace/caller correspondence and the
+S4 adoption re-pin consequences. The b2727acd component freeze remains
+explicit; no production source changed. The raw100-bit per-attempt target
+remains **not yet established**. The next native proof should split state and
+loop steps rather than replay any unchanged whole-stage solver attempt.

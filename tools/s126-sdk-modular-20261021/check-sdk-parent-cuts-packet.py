@@ -486,6 +486,46 @@ assert 'Type........: const struct ' in emission['constant']
 assert '{ 0, 0, 0, 0, 0, 0, 0, 0 }' in emission['constant']
 assert json.loads((E/'diagnostics/sdk-paired-equalcmp-check-v5/timeout.json').read_text())['status']=='not_proved'
 
+# Independent pre-comparison entry certificate: do not upgrade to first-entry.
+tag='sdk-native-entry-cut-v2'
+source=E/'sources/sdk-native-context-v13/src/lib.rs'
+cut=json.loads((source.parents[1]/'source-cut.json').read_text())
+ni=json.loads((E/(tag+'-input.json')).read_text())
+rp=E/'receipts'/tag/'receipt.json';rr=json.loads(rp.read_text())
+assert ni['source_sha256']==cut['source_sha256']==sha(source)
+assert ni['codegen_input_sha256']==sha(E/'sdk-native-context-codegen-v17-input.json')
+assert rr['exit_status']==10 and rr['swaps']==0 and rr['limits']['memory.swap.max']=='0'
+assert rr['limits']['memory.max']=='8589934592'
+props=json.loads((E/'diagnostics'/tag/'properties-without-traces.json').read_text())
+nc=[p for p in props if p['sourceLocation'].get('propertyClass')!='cover']
+cv=[p for p in props if p['sourceLocation'].get('propertyClass')=='cover']
+assert len(nc)==2515 and all(p['status']=='SUCCESS' for p in nc)
+assert len(cv)==3 and all(p['status']=='FAILURE' for p in cv)
+audit=E/'receipts/sdk-native-entry-audit-v1/entry-audit.json'
+a=json.loads(audit.read_text());ap=json.loads((E/'sdk-native-entry-audit-v1-input.json').read_text())
+ar=json.loads((audit.parent/'receipt.json').read_text())
+assert ar['exit_status']==0 and ar['swaps']==0 and ar['limits']['memory.swap.max']=='0'
+assert a['proof_input_sha256']==ap['proof_input_sha256']==sha(E/(tag+'-input.json'))
+assert a['proof_receipt_sha256']==sha(rp) and a['program_sha256']==ap['program_sha256']
+assert a['replace_command_index']<a['append_body_command_index']
+for name in ['entry-cut-body.c','entry-cut-declaration.c']:
+ p=E/'diagnostics'/tag/name
+ assert ni['tool_pins']['/home/dombarker/project-offloads/s126-real-sdk-20261021/'+tag+'/'+name]==sha(p)
+body=(E/'diagnostics'/tag/'entry-cut-body.c').read_text()
+assert 'if(n==688){'+ni['marker_symbol']+'+=1;return 1;}' in body
+assert 'return memcmp(a,b,n);' in body
+assert 'unsigned long int' in a['marker'] and '{ 1, 0, 0, 0, 0, 0, 165, 81 }' in a['marker']
+with tempfile.TemporaryDirectory() as d:
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-native-entry-normalization.py'),str(E/'sources/sdk-native-context-v9'),d,'prefix-entry-cut'],check=True)
+ assert (Path(d)/'src/lib.rs').read_bytes()==source.read_bytes()
+ assert json.loads((Path(d)/'source-cut.json').read_text())==cut
+accepted[tag]=dict(source_sha256=sha(source),receipt_sha256=sha(rp),raw_exit_status=10,noncover_successes=len(nc),reachable_covers=len(cv),wall_seconds=rr['wall_seconds'],peak_rss_kib=rr['peak_rss_kib'],swaps=0,qualification=a['qualification'])
+# The stronger first-link run has no proof and its historical runner RSS omits
+# an orphan. Preserve correction rather than treating that low peak as evidence.
+stop=json.loads((E/'diagnostics/sdk-native-entry-cut-v3/voluntary-stop.json').read_text())
+assert stop['status']=='not_proved' and stop['observed_orphan_rss_kib']==6444080
+assert 'import sys,json,hashlib,subprocess,signal,re,os' in (R/'tools/s126-sdk-modular-20261021/run-sdk-native-entry-cut-host.py').read_text()
+
 assert all(not p['has_errors'] for p in json.loads((E/'llbc-pins.json').read_text()))
 flags=[json.loads(p.read_text())['rustflags'] for p in (E/'compiler-flags').glob('*/*.json')]
 assert flags and all('opt-level=3' in r and 'overflow-checks=yes' in r and '--kani-compiler' in r for r in flags)

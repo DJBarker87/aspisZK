@@ -49,6 +49,9 @@ receipts += ['sdk-paired-decoder-entry-codegen-v1','sdk-paired-decoder-entry-cod
 receipts += ['sdk-native-context-codegen-v6','sdk-native-observer-emission-properties-v1']
 receipts += ['sdk-native-tagged-copy-contract-v1']
 receipts += ['sdk-native-context-codegen-v7','sdk-native-context-codegen-v8','sdk-native-rc-observer-emission-properties-v1','sdk-native-full-rc-observer-emission-properties-v1','sdk-kani-sysroot-pins-v1','sdk-native-full-rc-copy-contract-v1']
+folders += [f'sdk-shared-prefix-v{i}' for i in range(1,6)]+[f'sdk-native-context-v{i}' for i in range(12,15)]
+new_diagnostics += [f'sdk-shared-prefix-check-v{i}' for i in range(2,6)]+['sdk-native-context-check-v16']+[f'sdk-native-entry-cut-v{i}' for i in range(1,4)]
+receipts += [f'sdk-shared-prefix-codegen-v{i}' for i in range(1,6)]+[f'sdk-shared-prefix-check-v{i}' for i in range(2,6)]+[f'sdk-native-context-codegen-v{i}' for i in range(16,19)]+['sdk-native-context-check-v16']+[f'sdk-native-entry-cut-v{i}' for i in range(1,4)]+['sdk-native-entry-audit-v1']
 pins=[]
 for name in folders:
  p=H/name
@@ -89,6 +92,9 @@ for name in ['run-sdk-proof-length-cut-host.py','audit-sdk-length-cut-host.py','
 p=H/'kit/audit-native-observer-emission-host.py';copy(p,Path('runner')/p.name)
 for name in ['prepare-sdk-native-rc-domain.py','audit-native-rc-observer-emission-host.py','audit-native-full-rc-observer-emission-host.py','pin-kani-sysroot-host.py','prepare-sdk-seed.py','inspect-sdk-seed-host.py','prepare-sdk-native-unseeded.py','prepare-sdk-native-buffer-frames.py','audit-native-unseeded-observer-emission-host.py']:
  p=H/'kit'/name;copy(p,Path('runner')/p.name)
+for name in ['prepare-sdk-shared-prefix.py','run-sdk-shared-prefix-host.py','prepare-sdk-native-entry-normalization.py','run-sdk-native-entry-cut-host.py','audit-sdk-native-entry-host.py']:
+ p=H/'kit'/name;copy(p,Path('runner')/p.name)
+p=Path('/home/dombarker/.kani/kani-0.67.0/library/kani/src/vec.rs');copy(p,Path('tool-and-freeze-pins')/'kani-vec.rs')
 p=Path('/home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c');copy(p,Path('tool-and-freeze-pins')/'kani_lib.c')
 p=H/'kit/trace-cbmc-exception.cpp'
 if p.is_file():copy(p,Path('runner')/p.name)
