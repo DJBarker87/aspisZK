@@ -150,3 +150,8 @@ IU-421. Its consumer `ExtractedDecoderPublicBinding` exposed an undeclared
 `PublicCodecAgreement` dependency (IU-425). The unchanged pure agreement module
 passes IU-426, and adding its explicit import makes the consumer pass IU-427.
 This adds the missing dependency to the plan; theorem statements are unchanged.
+
+IU-528 found the prepared-input tuple in `AspisR1.PoseidonSamePointArray`.
+Adding `uncurry_apply_pair` to its existing source-success simplification is
+the only change; focused IU-529 passes in 2.51 s. The arithmetic model,
+quantifiers and canonicality hypotheses are unchanged.
