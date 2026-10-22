@@ -1,0 +1,281 @@
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/ScheduleEnclosingBridge.lean:31:12: error: Tactic `rfl` failed: The left-hand side
+  let (transfer_first, fixed, private_chunk_eight, private_chunk_two) := (fst✝, snd✝)
+  do
+  let q9 ← selectors.low.index_usize 0#usize
+  let q10 ← { c0 := c0✝³, c1 := c1✝³ }.add transfer_first
+  let q11 ← q10.add fixed
+  let full_initial_selector ← q9.mul q11
+  let rate_initial_selector ← q9.mul { c0 := c0✝¹⁰, c1 := c1✝¹⁰ }
+  let full ← field.PreparedQm31Multiplier.new full_initial_selector
+  let q12 ← full_initial_selector.add rate_initial_selector
+  let full_or_rate ← field.PreparedQm31Multiplier.new q12
+  let initial ←
+    array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+        AspisR1InitialCandidate.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+        field.QM31.ZERO (full_or_rate, openings, full)
+  let q13 ← { c0 := c0✝⁸, c1 := c1✝⁸ }.add { c0 := c0✝⁴, c1 := c1✝⁴ }
+  let note_first ← q13.add transfer_first
+  let q14 ← { c0 := c0✝⁹, c1 := c1✝⁹ }.mul_m31 AspisR1ScheduleDomainCandidate.spend.DOMAIN_OWNER_KEY
+  let q15 ← note_first.mul_m31 AspisR1ScheduleDomainCandidate.spend.DOMAIN_NOTE
+  let q16 ← q14.add q15
+  let q17 ← { c0 := c0✝⁶, c1 := c1✝⁶ }.mul_m31 AspisR1ScheduleDomainCandidate.spend.DOMAIN_NULLIFIER
+  let domain ← q16.add q17
+  let q18 ← { c0 := c0✝⁹, c1 := c1✝⁹ }.mul_m31 8#u32
+  let q19 ← note_first.mul_m31 18#u32
+  let q20 ← q18.add q19
+  let q21 ← { c0 := c0✝⁶, c1 := c1✝⁶ }.mul_m31 16#u32
+  let length ← q20.add q21
+  let q22 ← initial.index_usize AspisR1InitialCandidate.poseidon2.RATE
+  let q23 ← q9.mul domain
+  let q24 ← q22.sub q23
+  let initial1 ← initial.update AspisR1InitialCandidate.poseidon2.RATE q24
+  let i ← AspisR1InitialCandidate.poseidon2.RATE + 1#usize
+  let q25 ← initial1.index_usize i
+  let q26 ← q9.mul length
+  let q27 ← q25.sub q26
+  let initial2 ← initial1.update i q27
+  let q28 ← { c0 := c0✝⁹, c1 := c1✝⁹ }.add { c0 := c0✝⁸, c1 := c1✝⁸ }
+  let q29 ← selectors.high.index_usize 2#usize
+  let q30 ← q28.add q29
+  let q31 ← q30.add { c0 := c0✝⁶, c1 := c1✝⁶ }
+  let q32 ← selectors.high.index_usize 26#usize
+  let q33 ← q31.add q32
+  let q34 ← q33.add { c0 := c0✝⁴, c1 := c1✝⁴ }
+  let q35 ← selectors.high.index_usize 31#usize
+  let chunk_eight ← q34.add q35
+  let q36 ← selectors.high.index_usize 3#usize
+  let q37 ← selectors.high.index_usize 32#usize
+  let chunk_two ← q36.add q37
+  let chunk_eight1 ← chunk_eight.add private_chunk_eight
+  let chunk_two1 ← chunk_two.add private_chunk_two
+  let q38 ← selectors.low.index_usize 12#usize
+  let absorption ←
+    AspisR1AbsorptionCandidate.pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal q38 fixed chunk_two1
+        chunk_eight1 { c0 := c0✝¹⁰, c1 := c1✝¹⁰ } openings.z
+  ok (initial2, absorption)
+is not definitionally equal to the right-hand side
+  do
+    let p ←
+      let (transfer, fixed, privateEight, privateTwo) := (fst✝, snd✝)
+        do
+        let low0 ← selectors.low.index_usize 0#usize
+        let sumFirst ← { c0 := c0✝³, c1 := c1✝³ }.add transfer
+        let sumFull ← sumFirst.add fixed
+        let full ← low0.mul sumFull
+        let rate ← low0.mul { c0 := c0✝¹⁰, c1 := c1✝¹⁰ }
+        ok
+            { high0 := { c0 := c0✝⁹, c1 := c1✝⁹ }, high1 := { c0 := c0✝⁸, c1 := c1✝⁸ },
+              high25 := { c0 := c0✝⁶, c1 := c1✝⁶ }, high30 := { c0 := c0✝⁴, c1 := c1✝⁴ },
+              nodes := { c0 := c0✝¹⁰, c1 := c1✝¹⁰ }, transfer := transfer, fixed := fixed, privateEight := privateEight,
+              privateTwo := privateTwo, low0 := low0, full := full, rate := rate }
+    let x ← field.PreparedQm31Multiplier.new p.full
+    let x_1 ← field.QM31.add p.full p.rate
+    let x_2 ← field.PreparedQm31Multiplier.new x_1
+    let initial ←
+      array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+          AspisR1InitialCandidate.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+          field.QM31.ZERO (x_2, openings, x)
+    let x ← field.QM31.add p.high1 p.high30
+    let x ← x.add p.transfer
+    let x_3 ← field.QM31.mul_m31 p.high0 AspisR1ScheduleDomainCandidate.spend.DOMAIN_OWNER_KEY
+    let x_4 ← x.mul_m31 AspisR1ScheduleDomainCandidate.spend.DOMAIN_NOTE
+    let x_5 ← x_3.add x_4
+    let x_6 ← field.QM31.mul_m31 p.high25 AspisR1ScheduleDomainCandidate.spend.DOMAIN_NULLIFIER
+    let x_7 ← x_5.add x_6
+    let x_8 ← field.QM31.mul_m31 p.high0 8#u32
+    let x ← x.mul_m31 18#u32
+    let x ← x_8.add x
+    let x_9 ← field.QM31.mul_m31 p.high25 16#u32
+    let x ← x.add x_9
+    let (domain, length) := (x_7, x)
+      do
+      let x ← initial.index_usize AspisR1InitialCandidate.poseidon2.RATE
+      let x_10 ← field.QM31.mul p.low0 domain
+      let x ← field.QM31.sub x x_10
+      let x ← initial.update AspisR1InitialCandidate.poseidon2.RATE x
+      let x_11 ← AspisR1InitialCandidate.poseidon2.RATE + 1#usize
+      let x_12 ← x.index_usize x_11
+      let x_13 ← field.QM31.mul p.low0 length
+      let x_14 ← field.QM31.sub x_12 x_13
+      let initial1 ← x.update x_11 x_14
+      let x ← field.QM31.add p.high0 p.high1
+      let x_15 ← selectors.high.index_usize 2#usize
+      let x ← x.add x_15
+      let x ← x.add p.high25
+      let x_16 ← selectors.high.index_usize 26#usize
+      let x ← x.add x_16
+      let x ← x.add p.high30
+      let x_17 ← selectors.high.index_usize 31#usize
+      let x ← x.add x_17
+      let x_18 ← selectors.high.index_usize 3#usize
+      let x_19 ← selectors.high.index_usize 32#usize
+      let x_20 ← x_18.add x_19
+      let x ← x.add p.privateEight
+      let x_21 ← x_20.add p.privateTwo
+      let x_22 ← selectors.low.index_usize 12#usize
+      let absorption ←
+        AspisR1AbsorptionCandidate.pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal x_22 p.fixed x_21 x
+            p.nodes openings.z
+      ok (initial1, absorption)
+
+case mk.mk.mk.mk.mk.mk.mk.mk.mk.mk.mk.mk
+public1 : Public
+openings : Openings
+selectors : Selectors
+c0✝¹⁰ c1✝¹⁰ : field.CM31
+a✝¹¹ :
+  AspisR1SumHighCandidate.pool_v1.pair_forest_semantic_terminal.sum_high selectors
+      (Array.make 2#usize [{ start := 4#usize, «end» := 25#usize }, { start := 33#usize, «end» := 57#usize }]
+          AspisR1ScheduleEnclosingCandidate.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption._proof_7).to_slice =
+    ok { c0 := c0✝¹⁰, c1 := c1✝¹⁰ }
+c0✝⁹ c1✝⁹ : field.CM31
+a✝¹⁰ : selectors.high.index_usize 0#usize = ok { c0 := c0✝⁹, c1 := c1✝⁹ }
+c0✝⁸ c1✝⁸ : field.CM31
+a✝⁹ : selectors.high.index_usize 1#usize = ok { c0 := c0✝⁸, c1 := c1✝⁸ }
+c0✝⁷ c1✝⁷ : field.CM31
+a✝⁸ : { c0 := c0✝⁹, c1 := c1✝⁹ }.add { c0 := c0✝⁸, c1 := c1✝⁸ } = ok { c0 := c0✝⁷, c1 := c1✝⁷ }
+c0✝⁶ c1✝⁶ : field.CM31
+a✝⁷ : selectors.high.index_usize 25#usize = ok { c0 := c0✝⁶, c1 := c1✝⁶ }
+c0✝⁵ c1✝⁵ : field.CM31
+a✝⁶ : { c0 := c0✝⁷, c1 := c1✝⁷ }.add { c0 := c0✝⁶, c1 := c1✝⁶ } = ok { c0 := c0✝⁵, c1 := c1✝⁵ }
+c0✝⁴ c1✝⁴ : field.CM31
+a✝⁵ : selectors.high.index_usize 30#usize = ok { c0 := c0✝⁴, c1 := c1✝⁴ }
+c0✝³ c1✝³ : field.CM31
+a✝⁴ : { c0 := c0✝⁵, c1 := c1✝⁵ }.add { c0 := c0✝⁴, c1 := c1✝⁴ } = ok { c0 := c0✝³, c1 := c1✝³ }
+c0✝² c1✝² : field.CM31
+a✝³ : selectors.high.index_usize 27#usize = ok { c0 := c0✝², c1 := c1✝² }
+c0✝¹ c1✝¹ : field.CM31
+a✝² : selectors.high.index_usize 28#usize = ok { c0 := c0✝¹, c1 := c1✝¹ }
+c0✝ c1✝ : field.CM31
+a✝¹ : selectors.high.index_usize 29#usize = ok { c0 := c0✝, c1 := c1✝ }
+fst✝ : field.QM31
+snd✝ : field.QM31 × field.QM31 × field.QM31
+a✝ :
+  AspisR1InitialVariantCandidate.pool_v1.pair_forest_semantic_terminal.initial_variant_selectors public1.variant
+      { c0 := c0✝², c1 := c1✝² } { c0 := c0✝¹, c1 := c1✝¹ } { c0 := c0✝, c1 := c1✝ } =
+    ok (fst✝, snd✝)
+⊢ (let (transfer_first, fixed, private_chunk_eight, private_chunk_two) := (fst✝, snd✝)
+    do
+    let q9 ← selectors.low.index_usize 0#usize
+    let q10 ← { c0 := c0✝³, c1 := c1✝³ }.add transfer_first
+    let q11 ← q10.add fixed
+    let full_initial_selector ← q9.mul q11
+    let rate_initial_selector ← q9.mul { c0 := c0✝¹⁰, c1 := c1✝¹⁰ }
+    let full ← field.PreparedQm31Multiplier.new full_initial_selector
+    let q12 ← full_initial_selector.add rate_initial_selector
+    let full_or_rate ← field.PreparedQm31Multiplier.new q12
+    let initial ←
+      array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+          AspisR1InitialCandidate.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+          field.QM31.ZERO (full_or_rate, openings, full)
+    let q13 ← { c0 := c0✝⁸, c1 := c1✝⁸ }.add { c0 := c0✝⁴, c1 := c1✝⁴ }
+    let note_first ← q13.add transfer_first
+    let q14 ← { c0 := c0✝⁹, c1 := c1✝⁹ }.mul_m31 AspisR1ScheduleDomainCandidate.spend.DOMAIN_OWNER_KEY
+    let q15 ← note_first.mul_m31 AspisR1ScheduleDomainCandidate.spend.DOMAIN_NOTE
+    let q16 ← q14.add q15
+    let q17 ← { c0 := c0✝⁶, c1 := c1✝⁶ }.mul_m31 AspisR1ScheduleDomainCandidate.spend.DOMAIN_NULLIFIER
+    let domain ← q16.add q17
+    let q18 ← { c0 := c0✝⁹, c1 := c1✝⁹ }.mul_m31 8#u32
+    let q19 ← note_first.mul_m31 18#u32
+    let q20 ← q18.add q19
+    let q21 ← { c0 := c0✝⁶, c1 := c1✝⁶ }.mul_m31 16#u32
+    let length ← q20.add q21
+    let q22 ← initial.index_usize AspisR1InitialCandidate.poseidon2.RATE
+    let q23 ← q9.mul domain
+    let q24 ← q22.sub q23
+    let initial1 ← initial.update AspisR1InitialCandidate.poseidon2.RATE q24
+    let i ← AspisR1InitialCandidate.poseidon2.RATE + 1#usize
+    let q25 ← initial1.index_usize i
+    let q26 ← q9.mul length
+    let q27 ← q25.sub q26
+    let initial2 ← initial1.update i q27
+    let q28 ← { c0 := c0✝⁹, c1 := c1✝⁹ }.add { c0 := c0✝⁸, c1 := c1✝⁸ }
+    let q29 ← selectors.high.index_usize 2#usize
+    let q30 ← q28.add q29
+    let q31 ← q30.add { c0 := c0✝⁶, c1 := c1✝⁶ }
+    let q32 ← selectors.high.index_usize 26#usize
+    let q33 ← q31.add q32
+    let q34 ← q33.add { c0 := c0✝⁴, c1 := c1✝⁴ }
+    let q35 ← selectors.high.index_usize 31#usize
+    let chunk_eight ← q34.add q35
+    let q36 ← selectors.high.index_usize 3#usize
+    let q37 ← selectors.high.index_usize 32#usize
+    let chunk_two ← q36.add q37
+    let chunk_eight1 ← chunk_eight.add private_chunk_eight
+    let chunk_two1 ← chunk_two.add private_chunk_two
+    let q38 ← selectors.low.index_usize 12#usize
+    let absorption ←
+      AspisR1AbsorptionCandidate.pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal q38 fixed chunk_two1
+          chunk_eight1 { c0 := c0✝¹⁰, c1 := c1✝¹⁰ } openings.z
+    ok (initial2, absorption)) =
+    do
+    let p ←
+      let (transfer, fixed, privateEight, privateTwo) := (fst✝, snd✝)
+        do
+        let low0 ← selectors.low.index_usize 0#usize
+        let sumFirst ← { c0 := c0✝³, c1 := c1✝³ }.add transfer
+        let sumFull ← sumFirst.add fixed
+        let full ← low0.mul sumFull
+        let rate ← low0.mul { c0 := c0✝¹⁰, c1 := c1✝¹⁰ }
+        ok
+            { high0 := { c0 := c0✝⁹, c1 := c1✝⁹ }, high1 := { c0 := c0✝⁸, c1 := c1✝⁸ },
+              high25 := { c0 := c0✝⁶, c1 := c1✝⁶ }, high30 := { c0 := c0✝⁴, c1 := c1✝⁴ },
+              nodes := { c0 := c0✝¹⁰, c1 := c1✝¹⁰ }, transfer := transfer, fixed := fixed, privateEight := privateEight,
+              privateTwo := privateTwo, low0 := low0, full := full, rate := rate }
+    let x ← field.PreparedQm31Multiplier.new p.full
+    let x_1 ← field.QM31.add p.full p.rate
+    let x_2 ← field.PreparedQm31Multiplier.new x_1
+    let initial ←
+      array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+          AspisR1InitialCandidate.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+          field.QM31.ZERO (x_2, openings, x)
+    let x ← field.QM31.add p.high1 p.high30
+    let x ← x.add p.transfer
+    let x_3 ← field.QM31.mul_m31 p.high0 AspisR1ScheduleDomainCandidate.spend.DOMAIN_OWNER_KEY
+    let x_4 ← x.mul_m31 AspisR1ScheduleDomainCandidate.spend.DOMAIN_NOTE
+    let x_5 ← x_3.add x_4
+    let x_6 ← field.QM31.mul_m31 p.high25 AspisR1ScheduleDomainCandidate.spend.DOMAIN_NULLIFIER
+    let x_7 ← x_5.add x_6
+    let x_8 ← field.QM31.mul_m31 p.high0 8#u32
+    let x ← x.mul_m31 18#u32
+    let x ← x_8.add x
+    let x_9 ← field.QM31.mul_m31 p.high25 16#u32
+    let x ← x.add x_9
+    let (domain, length) := (x_7, x)
+      do
+      let x ← initial.index_usize AspisR1InitialCandidate.poseidon2.RATE
+      let x_10 ← field.QM31.mul p.low0 domain
+      let x ← field.QM31.sub x x_10
+      let x ← initial.update AspisR1InitialCandidate.poseidon2.RATE x
+      let x_11 ← AspisR1InitialCandidate.poseidon2.RATE + 1#usize
+      let x_12 ← x.index_usize x_11
+      let x_13 ← field.QM31.mul p.low0 length
+      let x_14 ← field.QM31.sub x_12 x_13
+      let initial1 ← x.update x_11 x_14
+      let x ← field.QM31.add p.high0 p.high1
+      let x_15 ← selectors.high.index_usize 2#usize
+      let x ← x.add x_15
+      let x ← x.add p.high25
+      let x_16 ← selectors.high.index_usize 26#usize
+      let x ← x.add x_16
+      let x ← x.add p.high30
+      let x_17 ← selectors.high.index_usize 31#usize
+      let x ← x.add x_17
+      let x_18 ← selectors.high.index_usize 3#usize
+      let x_19 ← selectors.high.index_usize 32#usize
+      let x_20 ← x_18.add x_19
+      let x ← x.add p.privateEight
+      let x_21 ← x_20.add p.privateTwo
+      let x_22 ← selectors.low.index_usize 12#usize
+      let absorption ←
+        AspisR1AbsorptionCandidate.pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal x_22 p.fixed x_21 x
+            p.nodes openings.z
+      ok (initial1, absorption)
+'AspisR1.ScheduleEnclosingBridge.enclosing_eq_program' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.ScheduleEnclosingBridge.actual_schedule_arrays' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

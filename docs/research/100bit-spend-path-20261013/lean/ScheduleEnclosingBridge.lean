@@ -14,6 +14,11 @@ abbrev source := AspisR1ScheduleEnclosingCandidate.pool_v1.pair_forest_semantic_
 
 theorem enclosing_eq_program (public1 : Public) (openings : Openings) (selectors : Selectors) :
     source public1 openings selectors = AspisR1.ScheduleProgram.run public1 openings selectors := by
+  have uncurry_as_projections {α β γ : Type} (f : α → β → γ) :
+      Aeneas.Std.uncurry f = fun p : α × β => f p.1 p.2 := by
+    funext p
+    rcases p with ⟨a, b⟩
+    exact Aeneas.Std.uncurry_apply_pair f a b
   unfold source
     AspisR1ScheduleEnclosingCandidate.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption
     AspisR1.ScheduleProgram.run AspisR1.InitialSelectorPrefix.run AspisR1.InitialArrayExecution.run
@@ -21,7 +26,7 @@ theorem enclosing_eq_program (public1 : Public) (openings : Openings) (selectors
     AspisR1.SumHighTwoRanges.pair AspisR1.SumHighTwoRanges.nodeRange1 AspisR1.SumHighTwoRanges.nodeRange2
     AspisR1.ScheduleDomainArithmetic.owner AspisR1.ScheduleDomainArithmetic.note AspisR1.ScheduleDomainArithmetic.nullifier
     AspisR1.InitialArrayWrites.RATE AspisR1.InitialArrayExecution.callbackInst
-  simp only [lift, bind_tc_ok, bind_assoc]
+  simp only [lift, bind_tc_ok, bind_assoc, uncurry_as_projections]
 
 theorem actual_schedule_arrays (point : Array QM 10#usize) (selectors : Selectors)
     (public1 : Public) (openings : Openings)

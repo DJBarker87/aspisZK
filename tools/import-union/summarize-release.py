@@ -14,28 +14,44 @@ sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
 records = [json.loads(l) for l in (H/'modules.jsonl').read_text().splitlines()]
 plan = json.loads((H/'plan.json').read_text())
 latest = {r['module']:r for r in records}
+def parse_axioms(text):
+    result=[]
+    pending=[]
+    for line in text.splitlines():
+        if 'depends on axioms:' in line or 'does not depend on any axioms' in line:
+            pending=[line]
+        elif pending:
+            pending.append(line)
+        if pending and (']' in line or 'does not depend on any axioms' in line):
+            result.append('\n'.join(pending))
+            pending=[]
+    assert not pending, ('truncated axioms output',pending)
+    return result
 checks = []
 for rec in plan['ordered']:
     r = latest.get(rec['module'])
     assert r and r['exit']==0, ('unfinished target',rec['module'],r)
     assert r['source_sha256']==rec['sha256'], rec['module']
     assert sha(ROOT/rec['path'])==rec['sha256'], ('source drift',rec['path'])
+    committed=subprocess.check_output(['git','show',plan['revision']+':'+rec['path']],cwd=ROOT)
+    assert hashlib.sha256(committed).hexdigest()==rec['sha256'], ('uncommitted source',rec['path'])
     text=(H/(r['label']+'.log')).read_text()
     timing=(H/(r['label']+'.time')).read_text()
     peak=int(re.search(r'Maximum resident set size \(kbytes\): (\d+)',timing)[1])
     swaps=int(re.search(r'Swaps: (\d+)',timing)[1])
     assert swaps==0, rec['module']
     assert r['swap_bytes']==0, rec['module']
-    for line in r['axioms_output']:
+    axioms_output=parse_axioms(text)
+    for line in axioms_output:
         if 'depends on axioms:' in line:
-            names=set(re.search(r'\[(.*?)\]',line)[1].split(', '))-{''}
+            names={n.strip() for n in re.search(r'\[(.*?)\]',line,re.S)[1].replace('\n','').split(',')}-{''}
             assert names <= {'propext','Classical.choice','Quot.sound'}, line
-    checks.append({'module':rec['module'],'label':r['label'],'source_revision':r['source_revision'],
+    checks.append({'module':rec['module'],'label':r['label'],'source_revision':plan['revision'],'compiled_at_revision':r['source_revision'],
                    'source_sha256':r['source_sha256'],'deps_fingerprint':r['deps_fingerprint'],
                    'exit':r['exit'],'wall_seconds':r['wall_seconds'],'peak_rss_kib':peak,
                    'aggregate_peak_rss_bytes_sampled':r['aggregate_peak_rss_bytes_sampled'],
-                   'swaps':swaps,'swap_bytes':r['swap_bytes'],'axioms_output':r['axioms_output'],
-                   'axioms_note':'No axiom-print command in unchanged dependency' if not r['axioms_output'] else 'Standard axioms only',
+                   'swaps':swaps,'swap_bytes':r['swap_bytes'],'axioms_output':axioms_output,
+                   'axioms_note':'No axiom-print command in unchanged dependency' if not axioms_output else 'Standard axioms only',
                    'object_sha256':r['object_sha256']})
 scan=latest['RawUnionScan']
 lines=(H/(scan['label']+'.log')).read_text().splitlines()
@@ -59,7 +75,7 @@ assert affected<=compiled, ('stale transitive dependents', sorted(affected-compi
 closure={'raw_union_modules':len(modules),'changed_types_or_generated_roots':sorted(changed),
          'transitive_dependents_including_roots':sorted(affected),
          'all_affected_rebuilt':True,'rebuild_count':len(checks),'compiled_outside_union':sorted(compiled-modules.keys()),
-         'terminal_roots':[m for m in plan['targets'] if m.startswith('AspisR1.')],
+         'terminal_roots':['AspisR1.CompositionPartsAfterValidationExact','AspisR1.PoseidonCandidatePackedFamilyResidual','TerminalPartsArithmeticExact'],
          'closure_boundary':'Selected retained union; archived alternate providers are migration inputs, not simultaneous modules.'}
 for name in ['AspisR1.CompositionPartsAfterValidationExact','AspisR1.PoseidonCandidatePackedFamilyResidual','TerminalPartsArithmeticExact','ExtractedDecoderCallerBridge','OraclePortHeadlineFrozen2PerAttempt','R1Z.PrivacyR1HeadlineDeployed']:
     assert name in modules, ('missing required union member',name)

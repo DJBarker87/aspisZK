@@ -89,3 +89,13 @@ the same finite tuple-let boundary at IU-330. Its proof now explicitly states
 the definitionally equal one-write bind chain, then uses `hwrites` and
 `bind_tc_ok`; focused IU-331 passes. Statement, hypotheses and witnesses are
 unchanged. Its failure and replacement are retained with the prefix repair.
+
+The enclosing bridge next failed at IU-332. Raw-expression inspection found
+that its apparent tuple `let` is Aeneas's `uncurry` combinator. The final local
+lemma `uncurry_as_projections` proves its function-level projection form from
+`uncurry_apply_pair`, so bind normalization works symbolically. IU-345 passes
+in 1.75 s with standard axioms. Statements and hypotheses are unchanged.
+IU-332–344 retain intermediate diagnostics and failed normalization attempts;
+IU-334/335/338 hit the existing heartbeat guard. No limit was raised and none
+of those failed proofs is accepted. The replacement avoids arithmetic
+reduction and makes the helper's shape explicit.
