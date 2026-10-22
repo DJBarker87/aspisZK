@@ -625,3 +625,50 @@ generated global discriminant instance clashes with the finish model. A
 collision-safe explicit instance and dependent reader proofs are being
 re-pinned together on the NUC before joint caller use. No historical object
 is silently being relabelled as the new cohort.
+
+
+## Joint reader and actual operation continuation
+
+PROVED `528ea91ef7`: the collision-safe actual-carrier/Owned/Pair reader
+cohort checked together on the NUC. Its final full-Result theorem maps the
+actual selected reader to the selected Pair reader on the same buffer/index;
+the same successful read yields Pair/P6 canonicality. No new index bound or
+successful-read premise is added to the Result map. This does not derive
+canonicality of `ap0`, `ap1` or `w.extra` merely from projection success: the
+selected projection receives those values as arguments. Their upstream read
+provenance is still an explicit caller boundary. Thirteen focused stages were
+checked in the selected cohort, not the final global release closure.
+
+PROVED `ade422bbf7` and `b0f017d994`: genuine wrapping wide addition on
+canonical operands agrees with the installed helper operation, returns a
+canonical value, and its decoded value is exactly the field sum. The same
+output witness is used throughout. These results reuse CurrentWide's existing
+semantic laws; they are source-body joins, not new field algebra.
+
+The scalar-multiplication extraction issue was resolved by an explicitly
+labelled top-level reachability shim. Attempt16 emits the real unchanged
+WideExact.mul_m31 method and the complete scalar arithmetic cone, including
+M31.mul and reduce_u64; the shim itself is not the proof target. Normalized
+Types and Funs compiled independently (11.990 and 14.810 seconds, less than
+2.24 GB RSS, zero swap). Their source-body arithmetic map is still pending.
+Existing R22 wrapping multiplication/reducer results were located for reuse;
+no duplicate overflow-bound proof is intended. The next independent genuine
+source cut targets QM31.mul. Production artifact correspondence and the
+implementation-linked 100-bit target remain not yet established.
+
+
+PROVED actual reducer and base multiplication: `ac71dde588` checks the full
+source-shaped two-fold reducer against R22 for arbitrary U64 words, including
+the final guard/subtraction; `051ab5aec5` identifies the genuine extracted
+M31.mul output with R22.wrappingMul for arbitrary U32 operands. Existing R22
+modular arithmetic/totality is reused. `86f9ffe1b0` connects the independent
+QM31 extraction's primitive bodies to the same scalar source and canonical
+add/sub proofs. `1b3470afca` aligns the actual CM cross term and complete
+emitted operation graph. The complete CM/QM/Wide products and full scalar
+source-to-helper result transport are the next consumers, still open.
+
+The WideExact product's full reachable field-arithmetic source cone is now
+retained in `eb7cf417ad`. This is nonempty extraction evidence, not its
+semantic proof. No shipped Rust, protocol parameters, proof size, or CU
+artifact changed during these checks. Final runtime/artifact refinement and
+the composed 100-bit per-attempt soundness result remain open.
