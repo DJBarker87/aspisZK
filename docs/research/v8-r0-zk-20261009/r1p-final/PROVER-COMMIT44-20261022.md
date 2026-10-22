@@ -38,7 +38,7 @@ pending at this stage checkpoint. No shipped source changes or ELF rebuild.
 
 ## Stage 2: native parent transition and eighteen levels
 
-The per-parent native transition check passes all checks for arbitrary full
+The per-parent native transition check passes all 536 checks for arbitrary full
 32-byte child/coin/root values and all source depths 0–17 and parent indices
 below 2^17. It checks lazy left-then-right missing-child coins, the final-level
 root substitution, both writes, one read-count increment, and the complete
@@ -76,3 +76,158 @@ zero swaps and standard axioms. These overwrite shared source/objects only
 with the same tracked source bytes; branch-specific snapshots retain the
 previous source/objects. Other dependent release modules have not been
 replayed and no coherent release replay is claimed.
+
+## Demonstrated next source interface: native map length
+
+**Publication is incomplete; target not yet established.** The next guarded
+source return in `sim.rs:389` is:
+
+```rust
+if level.len()!=1||level.get(&0)!=Some(&root) {return Err(Error::Merkle);}
+```
+
+The nine accepted TrustedStd fields specify empty, insert state/previous,
+get, ordered iteration, lazy entry insertion, the D156 BTreeSet collector,
+and the two TLS properties. None specifies **native `BTreeMap::len`**.
+It is used again in `transcript.len()` at final publication. Replacing it
+with the decoded entry-list length without a proof would silently add a
+source/library law and can change the visible early error.
+
+The focused original-root-guard diagnostic keeps BTreeMap opaque, per D145.
+Charon exits 0 (0.174 s / 152,036 KiB) and Aeneas exits 0
+(0.304 s / 62,304 KiB), zero swaps, `has_errors=false`. The generated
+`root_guard` calls `alloc.collections.btree.map.BTreeMap.len`, and the
+external file declares its unresolved template. All generated output is
+retained as inert `.lean.txt` under `root-guard/generated/`; none is installed
+or imported into the proof environment. Existing get semantics do not
+supply the missing length projection. The complete source pin, field
+inventory and exact next interface are in `root-guard/interface-audit.json`.
+
+`ProverCommitLengthGap44.length_not_determined` provides a formal interface
+countermodel: every accepted TrustedStd law holds for the very same singleton
+map, get result, root and TLS instance; reported lengths zero and one still
+produce different root-guard outcomes. This is **not a counterexample to Rust
+BTreeMap**. It proves that the missing length identification is not a
+consequence of the accepted fields. J9622 accepts it: exit 0, 1.21 s,
+2,532,244 KiB, zero swaps, standard axioms.
+
+**Exact next deliverable:** establish, for every reachable native level map,
+that `BTreeMap::len` returns precisely the decoded ordered-entry cardinality,
+with the usize image exact and the source result/error behavior retained.
+Use that interface to close the `program_tree` root guard and the final
+transcript read count. Adding another TrustedStd field is not authorized by
+this task, and no length field, callback success law or source instance is
+silently introduced. No collection internals are claimed verified.
+
+Per the stopping rule, the remaining native publication certificate,
+source-to-FSExperiments conversion, `shippedProverExperiment`, both concrete
+WholeRunJoins, and endpoint premise removal stop here. The local ordered-byte,
+merge/error and parent-control theorems have not been promoted to a complete
+source experiment. D143's published-data projection and D146's announced
+source-representable deployment domain remain the intended contract. The
+public nonce and byte-blind environment remain adversary inputs in the
+existing local models; there is no new nonce law or ledger cap.
+
+## Verbatim endpoint before/after: unchanged
+
+Both full files, including all section binders and theorem body, are saved
+byte-identically in `endpoint/before.lean.txt` and `endpoint/after.lean.txt`.
+The quantifier on `x` and the arbitrary runtime carrier remain unchanged.
+No D146 domain narrowing or D143 observable projection is claimed installed
+in an endpoint lacking its source join.
+
+Before binders:
+
+```lean
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+
+variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
+```
+
+After binders:
+
+```lean
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+
+variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
+```
+
+Before theorem:
+
+```lean
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+After theorem:
+
+```lean
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+## Focused audit and source/artifact scope
+
+J9623 accepts `R1Z.ProverCommitAudit44`: exit 0, 1.73 s, peak RSS
+4,108,520 KiB, zero swaps. It prints all 15 new top theorems, the updated
+TrustedStd consistency witness and the unchanged deployed endpoint, all
+with axiom lists contained in [propext, Classical.choice, Quot.sound].
+`final-proof-audit.json` checks every final installed changed source hash
+and the audit receipt's dependency object hashes; `theorem-inventory.json`
+lists the exact new statements. Exact target/command, source revision plus
+source snapshots, source SHA256, dependency fingerprint, exit, wall, RSS,
+swap, errors and full axiom lines are in `lean/attempts.json` and receipts.
+No unchanged full regression or frozen manifest replay ran; the source
+closure is not ready for a formal release replay.
+
+Only the authorized BTreeSet field is added inside the existing TrustedStd
+item. The named trust list remains P1, P7, TrustedStd, E1, E2; P6 remains an
+explicit source/native evidence boundary. Timing and other side channels
+remain outside the announced D143 privacy contract.
+
+All 491 tracked files under `crates/` and `programs/` remain byte-identical to the
+task base, with no new untracked shipped file (`shipped-sources-unchanged.json`).
+The shipped-file rule does not trigger an ELF rebuild; unchanged-artifact
+evidence is reused only for unchanged artifacts. No local Lean or cold
+dependency build, uncapped host job, new resource option, new Lean axiom,
+wallet/account key operation, push or merge occurred. No binary, object,
+LLBC, ELF, tarball or local target directory is committed.
+
+The direct native `indices.sort(); indices.dedup()` diagnostic, launched
+before the length-interface finding, stops at its 600-second limit:
+`sort-dedup-v1`, exit 124, wall 600.002 s, zero swaps, aggregate cgroup peak
+5,516,099,584 bytes. GNU-time's 15,296 KiB reaped-parent RSS does not measure
+CBMC's descendants; it is retained without being misreported as the peak.
+The test uses actual standard-library sorting, no collection substitute,
+all input lengths 0–12 and arbitrary u32 values. It does not establish the
+sorted/dedup source bridge and is not rerun unchanged or with a larger cap.
+That remains a further publication obligation after the native length
+interface. No unfinished host job remains. The native/extraction manifest
+`native-attempts.json` keeps every accepted, superseded, rejected and timed-out
+run distinct, with exact commands, input hashes, revision and scope fields.
+
+Stage commits: `e5dff6608` (one std field and ordered parent transport),
+`88ab46652` (native transition and eighteen-level composition). The final
+commit records the length obstruction, focused audit and this handoff.
+
+`git diff --check` over the final staged change reports only the original
+blank EOF lines in the two generated external-template `.lean.txt` evidence
+files. Their bytes are retained as emitted; no source/proof whitespace error
+is suppressed. The final host scope inventory is `host-jobs-finished.json`.
+**Target not yet established.**
