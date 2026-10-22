@@ -1,0 +1,112 @@
+import R1Z.ProverCommitProgramOne46
+import R1Z.ProverCommitPublication45
+import R1Z.ProverCommitPublish43
+/-! Ordered ProgramOne calls retain all overwrites and the collision state.
+The log can contain leaf and node calls from all three trees; no set/dedup
+operation is applied to the programming history. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitProgramLog46
+open Aeneas Aeneas.Std Result ProverCommitTrustedStd24 ProverCommitProgramOne46
+attribute [local instance] Classical.propDecidable
+variable {Key Table Thread Slot Output : Type}
+variable {cmp : Key → Key → Ordering} [Std.TransCmp cmp] [Std.LawfulEqCmp cmp]
+abbrev Request := Bytes32 × Parts
+
+def run (map : MapAPI Key Bytes32 Table cmp) (address : Parts → Key) :
+    List Request → ProverCommitStateLift28.Port (State Table) (List Bytes32)
+  | [] => pure []
+  | (answer,parts)::tail => do
+    let value ← ProverCommitStateLift28.read
+      (fun s p => AspisR1ProgramOne46.program (recording map address) s answer p) parts
+    let rest ← run map address tail
+    pure (value::rest)
+
+def expected (map : MapAPI Key Bytes32 Table cmp) (address : Parts → Key) :
+    List Request → State Table → List Bytes32 × State Table
+  | [],state => ([],state)
+  | (answer,parts)::tail,state =>
+    let step := reference map address answer state parts
+    let rest := expected map address tail step.2
+    (step.1::rest.1,rest.2)
+
+theorem run_exact (map : MapAPI Key Bytes32 Table cmp) (address : Parts → Key)
+    (requests : List Request) (state : State Table) :
+    run map address requests state = ok (expected map address requests state) := by
+  induction requests generalizing state with
+  | nil => rfl
+  | cons request tail ih =>
+    rcases request with ⟨answer,parts⟩
+    simp only [run,ProverCommitStateLift28.bind_run,ProverCommitStateLift28.read_run,
+      call_exact,bind_tc_ok,ih,expected]
+    rfl
+
+theorem returned_answers (map : MapAPI Key Bytes32 Table cmp) (address : Parts → Key)
+    (requests : List Request) (state : State Table) :
+    (expected map address requests state).1 = requests.map Prod.fst := by
+  induction requests generalizing state with
+  | nil => rfl
+  | cons request tail ih =>
+    rcases request with ⟨answer,parts⟩
+    simp only [expected,reference,List.map_cons,ih]
+
+theorem append (map : MapAPI Key Bytes32 Table cmp) (address : Parts → Key)
+    (first second : List Request) (state : State Table) :
+    expected map address (first ++ second) state =
+      let a := expected map address first state
+      let b := expected map address second a.2
+      (a.1 ++ b.1,b.2) := by
+  induction first generalizing state with
+  | nil => rfl
+  | cons request tail ih =>
+    rcases request with ⟨answer,parts⟩
+    simp only [List.cons_append,expected,ih,List.cons_append]
+
+theorem sticky (map : MapAPI Key Bytes32 Table cmp) (address : Parts → Key)
+    (requests : List Request) (table : Table) :
+    (expected map address requests ⟨table,true⟩).2.collision = true := by
+  induction requests generalizing table with
+  | nil => rfl
+  | cons request tail ih =>
+    rcases request with ⟨answer,parts⟩
+    simpa only [expected,reference,Bool.true_or] using
+      ih (map.insert table (address parts) answer).1
+
+variable [DecidableEq Thread]
+variable (map : MapAPI Key Bytes32 Table cmp) (tls : TLSAPI Thread Slot Output)
+  (thread : Thread) (schedule : List (Thread × ProverCommitTLS23.Access Slot Output))
+  (trusted : TrustedStd map tls thread schedule)
+include trusted
+
+theorem expected_decode (address : Parts → Key)
+    (requests : List Request) (state : State Table) :
+    (expected map address requests state).map id (decode map) =
+      expected modelMap address requests (decode map state) := by
+  induction requests generalizing state with
+  | nil => rfl
+  | cons request tail ih =>
+    rcases request with ⟨answer,parts⟩
+    have h := reference_decode map tls thread schedule trusted address answer state parts
+    have hs := congrArg Prod.snd h
+    have hr := ih (reference map address answer state parts).2
+    rw [hs] at hr
+    exact congrArg (fun p => (answer::p.1,p.2)) hr
+
+/-- Ordered all-tree programming, followed by an arbitrary publication
+consumer. The consumer sees the final table and flag, never only digests. -/
+theorem publication_consumer {A : Type} (address : Parts → Key)
+    (requests : List Request) (state : State Table)
+    (publish : List Bytes32 × State (Std.TreeMap Key Bytes32 cmp) → A) :
+    (do let result ← run map address requests state
+        ok (publish (result.map id (decode map)))) =
+      ok (publish (expected modelMap address requests (decode map state))) := by
+  rw [run_exact]
+  simp only [bind_tc_ok,expected_decode map tls thread schedule trusted]
+
+#print axioms run_exact
+#print axioms returned_answers
+#print axioms append
+#print axioms sticky
+#print axioms expected_decode
+#print axioms publication_consumer
+end R1Z.ProverCommitProgramLog46

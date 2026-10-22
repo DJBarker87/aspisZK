@@ -1,0 +1,95 @@
+import AspisR1ProgramOne46.Funs
+import R1Z.ProverCommitExtractedCoin27
+import R1Z.ProverCommitStateLift28
+import R1Z.ProverCommitTrustedStd24
+/-! D158 ProgramOne state passing. The native per-call RefCell certificate
+is retained separately; this module verifies its extracted owned reference.
+No interior-mutability field is introduced into TrustedStd. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitProgramOne46
+open Aeneas Aeneas.Std Result
+open ProverCommitTrustedStd24
+attribute [local instance] Classical.propDecidable
+abbrev Bytes32 := ProverCommitCoinCall27.Bytes32
+abbrev Parts := ProverCommitOracleEffect26.Parts
+abbrev State := AspisR1ProgramOne46.ProgramState
+variable {Key Table Thread Slot Output : Type}
+variable {cmp : Key → Key → Ordering} [Std.TransCmp cmp] [Std.LawfulEqCmp cmp]
+
+/-- The comparison code is byte-for-byte the previously verified split
+comparison; reuse its universal array theorem rather than reducing arrays. -/
+theorem different_eq (a b : Bytes32) :
+    AspisR1ProgramOne46.different a b = ok (decide (a ≠ b)) := by
+  exact ProverCommitExtractedCoin27.different_eq a b
+
+def recording (map : MapAPI Key Bytes32 Table cmp) (address : Parts → Key) :
+    AspisR1ProgramOne46.Recording Table where
+  insert table parts answer :=
+    let next := map.insert table (address parts) answer
+    ok (next.2,next.1)
+
+def reference (map : MapAPI Key Bytes32 Table cmp) (address : Parts → Key)
+    (answer : Bytes32) (state : State Table) (parts : Parts) : Bytes32 × State Table :=
+  let next := map.insert state.table (address parts) answer
+  (answer,⟨next.1,state.collision || ProverCommitTable20.conflict next.2 answer⟩)
+
+/-- Every owned call returns exactly the updated map and sticky flag.
+No empty-map, no-collision, key-length, or call-count restriction. -/
+theorem call_exact (map : MapAPI Key Bytes32 Table cmp) (address : Parts → Key)
+    (answer : Bytes32) (state : State Table) (parts : Parts) :
+    AspisR1ProgramOne46.program (recording map address) state answer parts =
+      ok (reference map address answer state parts) := by
+  simp only [AspisR1ProgramOne46.program,recording,bind_tc_ok]
+  cases old : (map.insert state.table (address parts) answer).2 with
+  | none => simp [old,reference,ProverCommitTable20.conflict]
+  | some previous =>
+    rw [different_eq]
+    by_cases same : previous = answer
+    · simp [same,reference,old,ProverCommitTable20.conflict]
+    · simp [same,reference,old,ProverCommitTable20.conflict]
+
+/-- Reuse the part-28 monadic lift: every publication continuation receives
+the exact updated table and flag, including verifier errors as values. -/
+theorem continuation_exact {A : Type} (map : MapAPI Key Bytes32 Table cmp)
+    (address : Parts → Key) (answer : Bytes32)
+    (continuation : ProverCommitStateLift28.Effect (State Table) →
+      ProverCommitStateLift28.Port (State Table) A) (state : State Table) :
+    continuation (fun s p => AspisR1ProgramOne46.program (recording map address) s answer p) state =
+      continuation (fun s p => ok (reference map address answer s p)) state := by
+  apply ProverCommitStateLift28.install
+  intro s p
+  exact call_exact map address answer s p
+
+def decode (map : MapAPI Key Bytes32 Table cmp) (state : State Table) :=
+  State.mk (map.decode state.table) state.collision
+
+variable [DecidableEq Thread]
+variable (map : MapAPI Key Bytes32 Table cmp) (tls : TLSAPI Thread Slot Output)
+  (thread : Thread) (schedule : List (Thread × ProverCommitTLS23.Access Slot Output))
+  (trusted : TrustedStd map tls thread schedule)
+include trusted
+
+/-- Both map state and returned previous value use existing D133 fields. -/
+theorem reference_decode (address : Parts → Key) (answer : Bytes32)
+    (state : State Table) (parts : Parts) :
+    (reference map address answer state parts).map id (decode map) =
+      reference modelMap address answer (decode map state) parts := by
+  simp only [reference,decode,Prod.map,trusted.btree_insert_state,
+    trusted.btree_insert_previous,modelMap,ProverCommitTreeOps23.treeInsert]
+
+/-- Native owned call, decoded, including its returned digest and sticky flag. -/
+theorem call_decode (address : Parts → Key) (answer : Bytes32)
+    (state : State Table) (parts : Parts) :
+    (do let result ← AspisR1ProgramOne46.program (recording map address) state answer parts
+        ok (result.map id (decode map))) =
+      ok (reference modelMap address answer (decode map state) parts) := by
+  rw [call_exact]
+  simp only [bind_tc_ok,reference_decode map tls thread schedule trusted]
+
+#print axioms different_eq
+#print axioms call_exact
+#print axioms continuation_exact
+#print axioms reference_decode
+#print axioms call_decode
+end R1Z.ProverCommitProgramOne46

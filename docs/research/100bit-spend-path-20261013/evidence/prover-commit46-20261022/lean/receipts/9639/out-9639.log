@@ -1,0 +1,113 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:47:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1ProgramOne46.different ?a ?b
+in the target expression
+  (let (previous, table) := (some previous, (map.insert state.table (address parts) answer).1)
+    match previous with
+    | none => ok (answer, { table := table, collision := state.collision })
+    | some old => do
+      let b ← AspisR1ProgramOne46.different old answer
+      if b = true then ok (answer, { table := table, collision := true })
+        else ok (answer, { table := table, collision := state.collision })) =
+    ok (reference map address answer state parts)
+
+case some
+Key Table : Type
+cmp : Key → Key → Ordering
+inst✝¹ : Std.TransCmp cmp
+inst✝ : Std.LawfulEqCmp cmp
+map : MapAPI Key Bytes32 Table cmp
+address : Parts → Key
+answer : Bytes32
+state : State Table
+parts : Parts
+previous : Bytes32
+old : (map.insert state.table (address parts) answer).2 = some previous
+⊢ (let (previous, table) := (some previous, (map.insert state.table (address parts) answer).1)
+    match previous with
+    | none => ok (answer, { table := table, collision := state.collision })
+    | some old => do
+      let b ← AspisR1ProgramOne46.different old answer
+      if b = true then ok (answer, { table := table, collision := true })
+        else ok (answer, { table := table, collision := state.collision })) =
+    ok (reference map address answer state parts)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:65:2: error(lean.unknownIdentifier): Unknown constant `R1Z.ProverCommitProgramOne46.State.mk`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:76:55: error(lean.unknownIdentifier): Unknown identifier `decode`
+
+Note: It is not possible to treat `decode` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:77:41: error(lean.unknownIdentifier): Unknown identifier `decode`
+
+Note: It is not possible to treat `decode` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:78:23: error(lean.unknownIdentifier): Unknown identifier `decode`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:77:68: error: unsolved goals
+Key Table Thread Slot Output : Type
+cmp : Key → Key → Ordering
+inst✝² : Std.TransCmp cmp
+inst✝¹ : Std.LawfulEqCmp cmp
+inst✝ : DecidableEq Thread
+map : MapAPI Key Bytes32 Table cmp
+tls : TLSAPI Thread Slot Output
+thread : Thread
+schedule : List (Thread × ProverCommitTLS23.Access Slot Output)
+trusted : TrustedStd map tls thread schedule
+address : Parts → Key
+answer : Bytes32
+state : State Table
+parts : Parts
+⊢ (id answer,
+      sorry
+        { table := (map.insert state.table (address parts) answer).1,
+          collision :=
+            state.collision || ProverCommitTable20.conflict (map.decode state.table)[address parts]? answer }) =
+    (answer,
+      { table := sorry.table.insert (address parts) answer,
+        collision := sorry.collision || ProverCommitTable20.conflict sorry.table[address parts]? answer })
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:78:39: warning: This simp argument is unused:
+  trusted.btree_insert_state
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵f̵e̵r̵e̵n̵c̵e̵,̵d̵e̵c̵o̵d̵e̵,̵P̵r̵o̵d̵.̵m̵a̵p̵,̵t̵r̵u̵s̵t̵e̵d̵.̵b̵t̵r̵e̵e̵_̵i̵n̵s̵e̵r̵t̵_̵s̵t̵a̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵t̵r̵u̵s̵t̵e̵d̵.̵b̵t̵r̵e̵e̵_̵i̵n̵s̵e̵r̵t̵_̵p̵r̵e̵v̵i̵o̵u̵s̵,̵m̵o̵d̵e̵l̵M̵a̵p̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵T̵r̵e̵e̵O̵p̵s̵2̵3̵.̵t̵r̵e̵e̵I̵n̵s̵e̵r̵t̵]̵[̲r̲e̲f̲e̲r̲e̲n̲c̲e̲,̲ ̲d̲e̲c̲o̲d̲e̲,̲ ̲P̲r̲o̲d̲.̲m̲a̲p̲,̲ ̲t̲r̲u̲s̲t̲e̲d̲.̲b̲t̲r̲e̲e̲_̲i̲n̲s̲e̲r̲t̲_̲p̲r̲e̲v̲i̲o̲u̲s̲,̲ ̲m̲o̲d̲e̲l̲M̲a̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲T̲r̲e̲e̲O̲p̲s̲2̲3̲.̲t̲r̲e̲e̲I̲n̲s̲e̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:86:45: error(lean.unknownIdentifier): Unknown identifier `decode`
+
+Note: It is not possible to treat `decode` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:85:27: error(lean.unknownIdentifier): Unknown identifier `decode`
+
+Note: It is not possible to treat `decode` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:88:24: error(lean.unknownIdentifier): Unknown identifier `reference_decode`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:86:73: error: unsolved goals
+Key Table Thread Slot Output : Type
+cmp : Key → Key → Ordering
+inst✝² : Std.TransCmp cmp
+inst✝¹ : Std.LawfulEqCmp cmp
+inst✝ : DecidableEq Thread
+map : MapAPI Key Bytes32 Table cmp
+tls : TLSAPI Thread Slot Output
+thread : Thread
+schedule : List (Thread × ProverCommitTLS23.Access Slot Output)
+trusted : TrustedStd map tls thread schedule
+address : Parts → Key
+answer : Bytes32
+state : State Table
+parts : Parts
+⊢ ok (Prod.map id sorry (reference map address answer state parts)) = ok (reference modelMap address answer sorry parts)
+'R1Z.ProverCommitProgramOne46.different_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProgramOne46.call_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProgramOne46.continuation_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:93:14: error(lean.unknownIdentifier): Unknown constant `reference_decode`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:94:14: error(lean.unknownIdentifier): Unknown constant `call_decode`
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

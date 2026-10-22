@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:39:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverCommitProgramOne46.call_exact`:
+  [Std.TransCmp cmp]
+  [Std.LawfulEqCmp cmp]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Std.TransCmp cmp] [Std.LawfulEqCmp cmp] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitProgramOne46.lean:78:68: error: unsolved goals
+Key Table Thread Slot Output : Type
+cmp : Key → Key → Ordering
+inst✝² : Std.TransCmp cmp
+inst✝¹ : Std.LawfulEqCmp cmp
+inst✝ : DecidableEq Thread
+map : MapAPI Key Bytes32 Table cmp
+tls : TLSAPI Thread Slot Output
+thread : Thread
+schedule : List (Thread × ProverCommitTLS23.Access Slot Output)
+trusted : TrustedStd map tls thread schedule
+address : Parts → Key
+answer : Bytes32
+state : State Table
+parts : Parts
+⊢ (id answer,
+      { table := (map.decode state.table).insert (address parts) answer,
+        collision :=
+          state.collision || ProverCommitTable20.conflict (map.decode state.table)[address parts]? answer }) =
+    (answer,
+      { table := (map.decode state.table).insert (address parts) answer,
+        collision := state.collision || ProverCommitTable20.conflict (map.decode state.table)[address parts]? answer })
+'R1Z.ProverCommitProgramOne46.different_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProgramOne46.call_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProgramOne46.continuation_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProgramOne46.reference_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitProgramOne46.call_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

@@ -1,7 +1,7 @@
 """Host-only extraction of this job's owned effect interface."""
 from pathlib import Path
 import subprocess,os,json,hashlib
-R=Path('/home/dombarker/project-offloads/codex-cx-prover-commit46-20261021')
+R=Path('/home/dombarker/project-offloads/codex-cx-prover-commit46-20261022')
 CHARON='/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon'
 AENEAS='/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static'
 os.chdir(R/'owned')
