@@ -1,0 +1,60 @@
+import AspisV8R15.ExactTowerBase
+import Mathlib.Algebra.BigOperators.Fin
+import Mathlib.Tactic.Ring.Basic
+/-! Symbolic linear reconstruction of the nine Karatsuba channels. This is
+algebra only; native component construction/reconstruction still need binding. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitChannelAlgebra49
+open scoped BigOperators
+abbrev C (M : Type) [CommRing M] := QuadraticAlgebra M (-1) 0
+
+def R (M : Type) [CommRing M] : C M := ⟨2,1⟩
+abbrev Q (M : Type) [CommRing M] := QuadraticAlgebra (C M) (R M) 0
+abbrev Data (M : Type) := Fin 3 → Fin 3 → M
+variable {M : Type} [CommRing M]
+
+def fromCM (s : Fin 3 → M) : C M := ⟨s 0-s 1,s 2-s 0-s 1⟩
+
+def reconstruct (s : Data M) : Q M :=
+  ⟨fromCM (s 0)+R M*fromCM (s 1),fromCM (s 2)-fromCM (s 0)-fromCM (s 1)⟩
+
+def cmComponents (x : C M) : Fin 3 → M := ![x.re,x.im,x.re+x.im]
+
+def components (x : Q M) : Data M := ![cmComponents x.re,cmComponents x.im,cmComponents (x.re+x.im)]
+
+def channels (x y : Q M) : Data M := fun i j => components x i j*components y i j
+
+theorem reconstruct_product (x y : Q M) : reconstruct (channels x y)=x*y := by
+  apply QuadraticAlgebra.ext <;> apply QuadraticAlgebra.ext <;>
+    simp [reconstruct,fromCM,channels,components,cmComponents,R] <;> ring
+
+theorem reconstruct_zero : reconstruct (0 : Data M)=0 := by
+  apply QuadraticAlgebra.ext <;> apply QuadraticAlgebra.ext <;> simp [reconstruct,fromCM,R]
+
+theorem reconstruct_add (s t : Data M) : reconstruct (s+t)=reconstruct s+reconstruct t := by
+  apply QuadraticAlgebra.ext <;> apply QuadraticAlgebra.ext <;>
+    simp only [QuadraticAlgebra.re_add,QuadraticAlgebra.im_add] <;>
+    simp [reconstruct,fromCM,R] <;> ring
+
+def hom : Data M →+ Q M where
+  toFun := reconstruct
+  map_zero' := reconstruct_zero
+  map_add' := reconstruct_add
+
+theorem reconstruct_sum_products {I : Type} [Fintype I] (x y : I → Q M) :
+    reconstruct (fun c h => ∑ i : I, components (x i) c h*components (y i) c h)=∑ i : I, x i*y i := by
+  have hdata : (fun c h => ∑ i : I, components (x i) c h*components (y i) c h)=∑ i : I, channels (x i) (y i) := by
+    funext c h
+    simp only [Finset.sum_apply,channels]
+  rw [hdata]
+  change hom (∑ i : I, channels (x i) (y i))=_
+  rw [map_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  exact reconstruct_product (x i) (y i)
+
+#print axioms reconstruct_product
+#print axioms reconstruct_zero
+#print axioms reconstruct_add
+#print axioms reconstruct_sum_products
+end R1Z.ProverCommitChannelAlgebra49

@@ -90,3 +90,9 @@ include!("material-binding.rs");
 include!("dual-binding.rs");
 
 include!("round-shape-binding.rs");
+
+include!("channel-binding.rs");
+
+include!("reconstruction-binding.rs");
+
+include!("reconstruct-c-binding.rs");

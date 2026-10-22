@@ -338,6 +338,48 @@ limits. All accepted printed axioms are standard. This is a complete owned
 opening-kernel value/byte path, not complete native simulator output equality.
 No shipped change or deployed-premise removal; no FSExperiments work.
 
+## Stage 14: optimized scalar channels and tower reconstruction
+
+J10189/91/92 prove the owned three-input U64 channel counter, no-overflow
+bound, one-reduction dot product, and exact base-field sum. J10194 proves
+Karatsuba reconstruction and its linearity over arbitrary finite sums in a
+generic quadratic tower. J10195–98 bind the actual three-reduction CM helper,
+R multiplication, and complete QM31 reconstruction to that algebra, with
+canonical output for arbitrary U64 totals. These results do not yet compose
+the native nine-channel component preparation and outer three-input loop.
+The prepared-multiplier path also remains open.
+
+Accepted focused targets and resource fields (exit 0, zero swaps throughout):
+
+| Attempt | Exact target | Wall | Peak RSS KiB |
+|---|---|---:|---:|
+| J10189 | AspisR1ProducerRelease47.Channels49 | 1.25 s | 2612716 |
+| J10191 | R1Z.ProverCommitChannelSum49 | 2.22 s | 4061532 |
+| J10192 | R1Z.ProverCommitChannelModel49 | 1.82 s | 4038540 |
+| J10194 | R1Z.ProverCommitChannelAlgebra49 | 2.30 s | 2437756 |
+| J10195 | AspisR1ProducerRelease47.Reconstruction49 | 1.05 s | 2612204 |
+| J10196 | R1Z.ProverCommitReconstructC49 | 1.64 s | 4040472 |
+| J10197 | R1Z.ProverCommitReconstructQ49 | 1.65 s | 4040640 |
+| J10198 | R1Z.ProverCommitReconstructModel49 | 1.66 s | 4031816 |
+
+Source attribution is task base c6be35873ed67abf55956e4e2cac411260bea973
+plus each retained source SHA and dependency fingerprint in `lean/attempts.json`.
+Every new theorem prints only standard axioms; the two owned-definition
+modules contain no new theorem. J10190 and J10193 are rejected simplification
+drafts, retained with diagnostics and replaced without increasing limits.
+
+Native gates `channel-v3`, `reconstruction-v1`, and `reconstruct-c-v1` pass
+in 1.495/0.862/0.514 s, peak RSS 175408/175792/148512 KiB, zero swaps.
+The channel gate uses a bounded product callee, whose arithmetic is separately
+proved by the multiplication and channel-bound lemmas. The full reconstruction
+caller gate uses the verified CM helper; the separate CM gate checks its body.
+These are callee operand/result trace checks, not an L2 operation-count law.
+`channel-v1` timed out at 180.003 s (exit 124, cgroup peak 147124224 bytes;
+wrapper RSS does not represent all children). `channel-v2` hit the array
+memcmp unwind assertion; nine explicit scalar comparisons replace that
+comparison in v3, with unchanged unwind/cgroup limits. All failures and exact
+source snapshots remain archived. No shipped code was extracted by Aeneas.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

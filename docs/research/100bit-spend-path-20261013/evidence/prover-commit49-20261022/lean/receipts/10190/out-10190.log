@@ -1,0 +1,33 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitChannelSum49.lean:76:17: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitChannelSum49.lean:90:4: error: Tactic `rfl` failed: The left-hand side
+  ↑(↑0#u64 + sum a b 3 ↑0#usize)
+is not definitionally equal to the right-hand side
+  ↑(sum a b 3 0)
+
+case refine_2
+a b : ℕ → U32
+ha : ∀ i < 3, ↑(a i) < P
+hb : ∀ i < 3, ↑(b i) < P
+hbound : sum a b 3 0 ≤ 3 * (P - 1) ^ 2
+total : U64
+ht :
+  channels.sum (ProverCommitM31Array48.array 3#usize a) (ProverCommitM31Array48.array 3#usize b) 0#usize 3#u8 0#u64 =
+    ok total
+htv : ↑total = ↑0#u64 + sum a b 3 ↑0#usize
+z : U32
+hz : field.M31.reduce_u64 total = ok z
+hcz : ↑z < ProverCommitNativeSquare49.P
+hvz : ↑↑z = ↑↑total
+⊢ ↑(↑0#u64 + sum a b 3 ↑0#usize) = ↑(sum a b 3 0)
+'R1Z.ProverCommitChannelSum49.product_bound' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitChannelSum49.sum_bound' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitChannelSum49.sum_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitChannelSum49.dot3_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
