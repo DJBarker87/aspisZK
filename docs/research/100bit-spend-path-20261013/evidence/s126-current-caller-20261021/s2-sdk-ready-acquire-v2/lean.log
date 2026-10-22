@@ -1,0 +1,43 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkReadyAcquireV1.lean:33:58: error: unsolved goals
+case refl
+sdk : OwnedSdk
+slot : Usize
+cell : OwnedDataCell
+read : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+allowed : shared_allowed cell.borrowed = ok true
+valid : ↑slot < (↑sdk.data_cells).length
+hactual : cell = (↑sdk.data_cells)[↑slot]
+hread : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+hmut :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (cell, sdk.data_cells.set slot)
+next : Isize
+left✝ : cell.borrowed + 1#isize = ok next
+checked : cell.borrowed.checked_add 1#isize = some next
+value : ↑next = ↑cell.borrowed + 1
+⊢ (do
+      let o ← lift (some next)
+      let i ←
+        match o with
+          | some x => ok x
+          | none => fail Error.panic
+      ok
+          (core.result.Result.Ok (),
+            { accounts := sdk.accounts,
+              data_cells :=
+                sdk.data_cells.set slot
+                  { bytes := cell.bytes, borrowed := i, strong := cell.strong, weak := cell.weak },
+              lamports_cells := sdk.lamports_cells })) =
+    ok
+      (core.result.Result.Ok (),
+        { accounts := sdk.accounts,
+          data_cells :=
+            sdk.data_cells.set slot { bytes := cell.bytes, borrowed := next, strong := cell.strong, weak := cell.weak },
+          lamports_cells := sdk.lamports_cells })
+'AspisS2OwnedStage1.SdkReference.ReadyAcquire.checkpoint_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ReadyAcquire.shared_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
