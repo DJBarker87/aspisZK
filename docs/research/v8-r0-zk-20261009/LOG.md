@@ -8410,3 +8410,25 @@ with the call site. Not covered by this rule: anything with I/O, allocation
 failure, concurrency, interior mutability, hashing (`HashMap` ordering) or
 unsafe code. Those still need a ruling. So `BTreeMap::len` (= model size) and
 `slice::sort` + `Vec::dedup` (= sorted dedup list) are covered.
+
+## D158 (lead, 2026-10-22 08:50): part 45 merged; ProgramOne digest as state passing
+
+Merged `codex/cx-prover-commit45-20261022` (report
+`r1p-final/PROVER-COMMIT45-20261022.md`). Added three D157 TrustedStd fields
+(map length, scalar sort, dedup; listed with call sites). Proved: sort/dedup
+and length transport; the eighteen-level Merkle-error guard; transcript
+merge and read-count transport. J9636, 14 theorems, standard axioms; shipped
+sources unchanged.
+Obstruction: `ProgramOne::digest` mutates a shared `RefCell` programming table
+and collision flag, and its extracted return exposes neither. A countermodel shows
+that equal digest returns can lead to different publication outcomes. The worker
+correctly did not add an interior-mutability trust law.
+
+**Ruling (same route as D136/D137 for CoinOracle).** This is not a new trust
+law. Interpret `ProgramOne::digest` as **state passing**: each call takes and
+returns `(table, collision flag)` explicitly. Prove per call, with a Kani check
+of the shipped RefCell code against the state-passing reference, that it
+returns exactly the updated table and flag. Then reuse the part-28 generic
+monadic state lift to thread the state through the publication continuation.
+The single-thread fact needed for RefCell is the TLS single-thread item
+already on the trust list. Nothing is added.
