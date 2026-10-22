@@ -1,0 +1,60 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtra48.lean:14:89: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtra48.lean:19:13: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitExtra48.lean:74:67: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  0 + ?a
+in the target expression
+  polynomial q (↑0#usize) (decode a) 28 + (0 * decode b ^ 28 + polynomial q (↑28#usize) (decode b) 28) =
+    polynomial q 0 (decode a) 28 + polynomial q 28 (decode b) 28
+
+case refine_2
+q : ℕ → Old.Q
+hq : ∀ j < 1024, Canonical (q j)
+a b : Old.Q
+ha : Canonical a
+hb : Canonical b
+left : Old.Q
+hl :
+  horner (sourceArray q) 0#usize 28#u8 (ProverCommitNativeQ48.source a) (ProverCommitNativeQ48.source zero) =
+    ok (ProverCommitNativeQ48.source left)
+hcl : Canonical left
+hdl : decode left = decode zero * decode a ^ 28 + polynomial q (↑0#usize) (decode a) 28
+right : Old.Q
+hr :
+  horner (sourceArray q) 28#usize 28#u8 (ProverCommitNativeQ48.source b) (ProverCommitNativeQ48.source zero) =
+    ok (ProverCommitNativeQ48.source right)
+hcr : Canonical right
+hdr : decode right = decode zero * decode b ^ 28 + polynomial q (↑28#usize) (decode b) 28
+first : Old.Q
+hfirst :
+  field.QM31.add (ProverCommitNativeQ48.source zero) (ProverCommitNativeQ48.source left) =
+    ok (ProverCommitNativeQ48.source first)
+hcfirst : Canonical first
+hdfirst : decode first = decode zero + decode left
+z : Old.Q
+hz :
+  field.QM31.add (ProverCommitNativeQ48.source first) (ProverCommitNativeQ48.source right) =
+    ok (ProverCommitNativeQ48.source z)
+hcz : Canonical z
+hdz : decode z = decode first + decode right
+⊢ polynomial q (↑0#usize) (decode a) 28 + (0 * decode b ^ 28 + polynomial q (↑28#usize) (decode b) 28) =
+    polynomial q 0 (decode a) 28 + polynomial q 28 (decode b) 28
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.ProverCommitExtra48.index' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtra48.horner_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtra48.source_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitExtra48.extra_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

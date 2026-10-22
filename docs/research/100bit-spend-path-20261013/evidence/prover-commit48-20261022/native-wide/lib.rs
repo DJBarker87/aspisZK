@@ -32,3 +32,4 @@ pub mod field;
  fn wide_from_m31(value:M31)->E {E::from_qm31(qm_from_m31(value))}
 }
 include!("weights-init.rs");
+include!("scalar-binding.rs");

@@ -1,0 +1,63 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitM31Array48.lean:12:6: error(lean.unknownIdentifier): Unknown identifier `ProverCommitArrayIndex25.array_index_usize_ok`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitM31Array48.lean:11:68: error: unsolved goals
+size : Usize
+xs : ℕ → U32
+i : Usize
+hi : ↑i < ↑size
+⊢ (array size xs).index_usize i = ok (xs ↑i)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitM31Array48.lean:45:29: error: Tactic `rfl` failed: The left-hand side
+  if 0#usize = 0#usize then ok field.M31.ZERO
+  else do
+    let i ← lift (Usize.wrapping_sub 0#usize 1#usize)
+    (array 28#usize xs).index_usize i
+is not definitionally equal to the right-hand side
+  ok (if ↑0#usize = 0 then 0#u32 else xs (↑0#usize - 1))
+
+case pos
+xs : ℕ → U32
+hk : ↑0#usize < 28
+⊢ (if 0#usize = 0#usize then ok field.M31.ZERO
+    else do
+      let i ← lift (Usize.wrapping_sub 0#usize 1#usize)
+      (array 28#usize xs).index_usize i) =
+    ok (if ↑0#usize = 0 then 0#u32 else xs (↑0#usize - 1))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitM31Array48.lean:49:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (array ?m.80 ?m.81).index_usize ?m.82
+in the target expression
+  (do
+      let i ← ok (k.wrapping_sub 1#usize)
+      (array 28#usize xs).index_usize i) =
+    ok (if ↑k = 0 then 0#u32 else xs (↑k - 1))
+
+case neg
+xs : ℕ → U32
+k : Usize
+hk : ↑k < 28
+hz : ¬k = 0#usize
+hp : 0 < ↑k
+⊢ (do
+      let i ← ok (k.wrapping_sub 1#usize)
+      (array 28#usize xs).index_usize i) =
+    ok (if ↑k = 0 then 0#u32 else xs (↑k - 1))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (28 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitM31Array48.lean:49:47: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ a ≤ 26
+where
+ a := ↑(↑k - 1)
+'R1Z.ProverCommitM31Array48.index' depends on axioms: [propext, sorryAx]
+'R1Z.ProverCommitM31Array48.update' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitM31Array48.previous_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitM31Array48.predecessor_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

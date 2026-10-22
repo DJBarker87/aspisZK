@@ -1,0 +1,57 @@
+#![allow(unexpected_cfgs)]
+pub mod field;
+use field::{QM31 as K,CM31,M31};
+pub fn square_ref(x:M31,left:u8)->M31 {
+ if left==0 {x} else {square_ref(x.mul(x),left-1)}
+}
+pub fn inverse_ref(x:M31)->M31 {
+ assert!(x.0!=0);
+ let t2=x.mul(x).mul(x);
+ let t4=square_ref(t2,2).mul(t2);
+ let t8=square_ref(t4,4).mul(t4);
+ let t16=square_ref(t8,8).mul(t8);
+ let t24=square_ref(t16,8).mul(t8);
+ let t28=square_ref(t24,4).mul(t4);
+ let t29=t28.mul(t28).mul(x);
+ let t30=t29.mul(t29);
+ t30.mul(t30).mul(x)
+}
+pub fn scalar_ref(x:K,y:M31)->K {
+ K{c0:CM31{a:x.c0.a.mul(y),b:x.c0.b.mul(y)},c1:CM31{a:x.c1.a.mul(y),b:x.c1.b.mul(y)}}
+}
+pub fn basis_mul(mut basis:[M31;28],j:M31,left:u8)->[M31;28] {
+ if left==0 {basis} else {
+  let k=(left-1) as usize;
+  let shifted=if k==0 {M31::ZERO} else {basis[k-1]};
+  let next=shifted.sub(basis[k].mul(j));
+  basis[k]=next;
+  basis_mul(basis,j,left-1)
+ }
+}
+pub fn basis_factors(basis:[M31;28],den:M31,degree:u8,i:u8,j:u8,left:u8)->([M31;28],M31) {
+ if left==0 {(basis,den)} else {
+  if i==j {basis_factors(basis,den,degree,i,j+1,left-1)} else {
+   let basis=basis_mul(basis,M31(j as u32),degree+2);
+   let den=den.mul(M31(i as u32).sub(M31(j as u32)));
+   basis_factors(basis,den,degree+1,i,j+1,left-1)
+  }
+ }
+}
+pub fn accumulate(mut out:[K;28],basis:[M31;28],scale:K,k:u8,left:u8)->[K;28] {
+ if left==0 {out} else {
+  let index=k as usize;
+  let next=out[index].add(scalar_ref(scale,basis[index]));
+  out[index]=next;
+  accumulate(out,basis,scale,k+1,left-1)
+ }
+}
+pub fn rows(values:[K;28],out:[K;28],i:u8,left:u8)->[K;28] {
+ if left==0 {out} else {
+  let mut basis=[M31::ZERO;28];basis[0]=M31::ONE;
+  let (basis,den)=basis_factors(basis,M31::ONE,0,i,0,28);
+  let scale=scalar_ref(values[i as usize],inverse_ref(den));
+  let out=accumulate(out,basis,scale,0,28);
+  rows(values,out,i+1,left-1)
+ }
+}
+pub fn interpolate(values:[K;28])->[K;28] {rows(values,[K::ZERO;28],0,28)}

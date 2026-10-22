@@ -1,7 +1,7 @@
 # Part 48: shipped simulator binding and payload image
 
 **Target not yet established.** Work in progress on
-`codex/cx-prover-commit48-20261022`, based on `26b922be6`.
+`codex/cx-prover-commit48-20261022`, based on actual worktree revision `617fc58aaf` (D164; a descendant of `26b922be6`).
 
 D164 scope: shipped per-iteration Kani bindings, Lean induction over the owned
 loops, then the complete native simulator payload byte image. No Aeneas on
@@ -160,3 +160,173 @@ RSS, zero swaps) with the raw-zero assertion retained. This is only the
 callee-trace context gate. The retained S7 inverse theorem and its immediate
 helper objects are absent from the shared env-J cache; no complete inverse
 source binding or interpolation certificate is attributed to this check.
+
+## Stage 5: direct semantic arithmetic, inverse binding, and extras
+
+J9931 checks a focused copy of the retained S7 fixed-inverse algebra against
+the current release multiplier, avoiding its unrelated geometry imports and
+missing cache objects. The native chain context and square iteration gates
+pass (0.954 / 0.767 s, 138244 / 136604 KiB RSS, zero swaps). The raw-zero
+assertion and its Result failure are retained. The resulting
+`ProverCommitInverse48.inverse_exact` / `inverse_canonical` establish the
+source-owner fixed chain's exact inverse and output range. This does not
+identify the semantic interpolator or prove its denominators nonzero.
+J9930 is a rejected missing-namespace-import draft, not accepted evidence.
+
+J9932 checks direct canonical release QM31 add/mul/sub, without requiring an
+embedded WideExact carrier. The source reverse-Horner transition for
+`host_semantic::extra` passes on arbitrary legal side/index and full 1024-cell
+coefficient arrays (1.336 s, 175460 KiB RSS, zero swaps). The recursive owner
+translates; reused field declarations are body-identical (J9933). J9935 proves
+both complete 28-coefficient polynomials have their exact field values.
+J9934's fixed-size array proof initially exceeds the default recursion depth;
+it is replaced with the named `List.length_ofFn` lemma, not a raised limit.
+The other rejected draft is an unresolved final zero/literal rewrite.
+
+D157's additional pure std fields, in
+`ProverCommitIteratorConsumer48.TrustedStd`, are `iterator_rev`,
+`iterator_fold`, and `iterator_flat_map`. Call sites are
+`host_semantic.rs::extra` (`iter().rev().fold`) and
+`prover.rs::encoded` (`into_iter().flat_map(...).collect`). The fields state
+only ordered list reversal, left fold, and flatten-after-map. No callback
+arithmetic, field image, source success, allocator totality or privacy law is
+included. J9936 proves the consistency instance and consumer transports
+without axioms.
+
+J9937 composes the actual power owner and all 29 coefficient-mix iterations:
+`ProverCommitBatchMix48.value_exact` gives the exact gamma-weighted sum,
+without a supplied power-array identity. This is still a coefficient-cell
+producer theorem, not the missing whole simulator source-to-model instance.
+
+## Stage 6: interpolation reference and focused primitive checks
+
+The first structurally recursive interpolation reference fails in Aeneas at
+its conditional predecessor read (`lib.rs:25`, `InterpBorrows.ml:2731`). It
+contains no shipped loops, iterators, maps or timing. The replacement isolates
+the predecessor read in an owned scalar helper; that helper translates on
+its own, and the changed complete owner then translates. The original failure
+and source are retained. This is a source change and focused preflight, not
+an unchanged retry or a source-side Aeneas run.
+
+J9938 checks the resulting owner definitions after every reused arithmetic
+body (including inline-attributed constants) is compared with the retained
+release declarations. J9939 proves the coordinate scalar reference exactly
+multiplies the decoded QM31 by the decoded base-field word and always returns
+canonical limbs. Its native `QM31::mul_m31` callee-trace binding also passes
+(0.504 s, 172936 KiB RSS, zero swaps). J9940 checks the exact canonical
+M31 add/sub/mul contracts needed by interpolation. J9942 checks the array and
+predecessor primitives; J9945 proves the complete descending coefficient-update
+invariant. The native basis-step gate passes (1.882 s, 170832 KiB RSS, zero
+swaps). J9941 / J9943 / J9944 are rejected import, literal, and monadic-let
+rewrite drafts, all retained separately.
+
+The Lagrange factor/denominator invariants, complete interpolation value,
+semantic round sums/guards, remaining weight/round/opened-leaf images, and
+the complete native simulator payload equality are not yet established.
+No callee-equality or model-image law is postulated to skip them.
+
+J9947 proves the arbitrary-size polynomial coefficient and multiplication
+shape lemmas. J9949 identifies the separately extracted inverse and square
+counters with the proved release fixed chain, including raw-zero Result
+failure. J9950 composes the descending update with the polynomial shape law:
+the source owner multiplies by X-j and preserves the required upper-zero
+region. These are generic lemmas for the next denominator/factor induction;
+they are not a complete interpolation or native payload theorem. J9946 and
+J9948 are rejected conditional/Decidable-instance rewrite drafts.
+
+All shipped files are unchanged relative to the actual D164 worktree base
+`617fc58aaf`; this is the comparison used for the shipped-file rule. The
+user-mentioned `26b922be6` is an earlier ancestor with intervening shipped
+changes already present before this task. No ELF rebuild is triggered by this
+worker's changes; no stale ELF pins are adopted. The current S4 pins remain
+40dc7574… / 12cb0bc2… / 121f3e29….
+
+## Verbatim endpoint before/after: unchanged
+
+The complete endpoint module, including every section binder, definition,
+and theorem proof, is byte-identical in `endpoint/before.lean.txt` and
+`endpoint/after.lean.txt` in the evidence directory. The following verbatim
+excerpts retain the x/rust binders and complete theorem statement. No D146
+domain restriction is installed before the source join exists; x and rust
+still have their original quantifiers. No conclusion, failure event or bound
+is changed, and RustProverRefinement remains explicit.
+
+Before:
+
+```lean
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+local notation "decode" => ownedDecode
+
+variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
+  [Fintype rust.RealRand] [Nonempty rust.RealRand]
+  [Fintype rust.IdealRand] [Nonempty rust.IdealRand]
+  (observer_program : rust.Adversary → View K CommitHandle Aux R1Bat →
+    List (List UInt8 × OracleAnswer) → OProg)
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+After:
+
+```lean
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+local notation "decode" => ownedDecode
+
+variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
+  [Fintype rust.RealRand] [Nonempty rust.RealRand]
+  [Fintype rust.IdealRand] [Nonempty rust.IdealRand]
+  (observer_program : rust.Adversary → View K CommitHandle Aux R1Bat →
+    List (List UInt8 × OracleAnswer) → OProg)
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+
+
+## Final focused audit and archive
+
+J9799 audits all 135 newly added theorem declarations and the unchanged
+conditional deployed endpoint: exit 0, wall 1.76 s, peak RSS 4122868 KiB,
+zero swaps. Every accepted axiom list is a subset of [propext,
+Classical.choice, Quot.sound]. The count describes audit coverage only.
+`final-proof-audit.json` verifies the exact installed sources and all
+dependency objects in that final receipt. The complete source overlay is
+`f6c2399bb70dfeebaf26ee1ab9e89dcdce48f175`; its source hashes are recorded
+in `final-source-freeze.json`. No source changes follow that audit.
+
+`shipped-sources-unchanged.json` verifies all 491 tracked crates/programs
+files against the actual task base `dfd30a6f5`, with no untracked shipped
+file. `source-bindings.json` checks the copied field and literal helper
+bodies. `native-source-archives.json` identifies the exact package source
+version for each native/extraction command, including overwritten
+diagnostic drafts; `native-attempts.json` distinguishes accepted checks,
+timeouts and tool errors. `host-final-inventory.json` records hash/size
+pins and tool versions. No binary, ELF, .olean, LLBC, tarball or local
+target directory is committed.
+
+Stage commits are `536f50a47`, `0e6051535`, `0fa5fde0c`, `d6c3dfe63`, and
+`f6c2399bb`; the final handoff commit adds completed metadata only.
+`git-log-from-common-base.txt` records history through the source freeze.
+**Target not yet established; zero deployed endpoint premises removed.**
+The actual native generator byte-image bridge and complete simulator
+payload equality remain the next obligations, with the demonstrated
+extraction/binding obstruction. J9799 consumes the last assigned sequential
+compile number; no further compilation is launched.

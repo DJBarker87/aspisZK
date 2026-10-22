@@ -1,0 +1,81 @@
+import R1Z.ProverCommitInterpolationPoly48
+import R1Z.ProverCommitM31Ops48
+import Mathlib.Algebra.Polynomial.Eval.Defs
+/-! Symbolic omitted-point products and the exact interpolation degree
+schedule. No concrete denominator or 28-factor term is evaluated. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitInterpolationSchedule48
+open Polynomial
+variable {K : Type} [CommRing K]
+
+def degree (i j : Nat) : Nat := j-(if i < j then 1 else 0)
+
+theorem degree_le (i j : Nat) : degree i j ≤ j := by unfold degree;omega
+
+theorem skipped_degree (i : Nat) : degree i (i+1)=degree i i := by simp [degree]
+
+theorem selected_degree (i j : Nat) (different : i≠j) : degree i (j+1)=degree i j+1 := by
+  unfold degree
+  by_cases h : i < j
+  · have h' : i < j+1 := by omega
+    rw [if_pos h,if_pos h'];omega
+  · have h' : ¬i < j+1 := by omega
+    rw [if_neg h,if_neg h']
+
+theorem selected_room (i j : Nat) (hi : i < 28) (hj : j < 28) (different : i≠j) :
+    degree i j+2 ≤ 28 := by
+  unfold degree
+  by_cases h : i < j
+  · rw [if_pos h];omega
+  · rw [if_neg h];omega
+
+def polyProd (i start : Nat) : Nat → K[X]
+ | 0 => 1
+ | n+1 => if i=start then polyProd i (start+1) n
+     else (X-C (start : K))*polyProd i (start+1) n
+
+def denProd (i start : Nat) : Nat → K
+ | 0 => 1
+ | n+1 => if i=start then denProd i (start+1) n
+     else ((i : K)-(start : K))*denProd i (start+1) n
+
+theorem self_eval (i start n : Nat) :
+    (polyProd (K := K) i start n).eval (i : K)=denProd i start n := by
+  induction n generalizing start with
+  | zero => simp only [polyProd,denProd,eval_one]
+  | succ n ih =>
+    by_cases h : i=start
+    · simp only [polyProd,denProd,h,if_true,ih]
+    · simp only [polyProd,denProd,h,if_false,eval_mul,eval_sub,eval_X,eval_C,ih]
+
+theorem nat_cast_ne (i j : Nat) (hi : i < 28) (hj : j < 28) (different : i≠j) :
+    (i : ProverCommitM31Ops48.M)≠(j : ProverCommitM31Ops48.M) := by
+  intro h
+  have large : 28 < ProverCommitM31Ops48.P := by decide
+  have hip : i < ProverCommitM31Ops48.P := by omega
+  have hjp : j < ProverCommitM31Ops48.P := by omega
+  have hv := congrArg ZMod.val h
+  rw [ZMod.val_natCast_of_lt hip,ZMod.val_natCast_of_lt hjp] at hv
+  exact different hv
+
+theorem denominator_nonzero (i start n : Nat) (hi : i < 28) (bound : start+n ≤ 28) :
+    denProd (K := ProverCommitM31Ops48.M) i start n≠0 := by
+  induction n generalizing start with
+  | zero => simp only [denProd,ne_eq,one_ne_zero,not_false_eq_true]
+  | succ n ih =>
+    by_cases h : i=start
+    · rw [denProd,if_pos h]
+      exact ih (start+1) (by omega)
+    · rw [denProd,if_neg h]
+      exact mul_ne_zero (sub_ne_zero.mpr (nat_cast_ne i start hi (by omega) h))
+        (ih (start+1) (by omega))
+
+#print axioms degree_le
+#print axioms skipped_degree
+#print axioms selected_degree
+#print axioms selected_room
+#print axioms self_eval
+#print axioms nat_cast_ne
+#print axioms denominator_nonzero
+end R1Z.ProverCommitInterpolationSchedule48
