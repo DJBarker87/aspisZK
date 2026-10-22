@@ -108,6 +108,24 @@ The boundary owner's namespace is nominally rebound to `Boundary49` to avoid
 an `owned.sum` collision; its arithmetic declaration bodies are unchanged.
 No new trust field or shipped-source change.
 
+## Stage 5: point-factor values and transported point weights
+
+J10043 proves all four source-owned point/circle factor values and the exact
+doubling factor. J10045 composes every factor of the five-entry product.
+J10046 constructs the point factors from arbitrary canonical source point
+coordinates, selects the radix-four digits, and proves the complete product
+is the model's transported Boolean equality weight. There is no supplied
+factor-array/model identity. This closes the arithmetic and model relation
+of the point-factor helper chain; statement-point construction, full unsafe
+Weights initialization and its source raw-index/caller composition remain.
+The native raw-product transition passes at every legal S2 kind/digit/index,
+with full factors and exact arithmetic operands (1.528 s, 157120 KiB, zero swaps).
+J10041 is a focused namespace port of the retained D18 point-factor theorem
+(the old `R1D18PointWeights` object is absent), with all private/public theorem
+axioms printed. J10040 is that missing-object preflight, no compiler launch.
+J10042/44 are rejected index/simplifier drafts. All accepted axiom lists are
+standard; `quad_canonical` is axiom-free. No max options added. No shipped change.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

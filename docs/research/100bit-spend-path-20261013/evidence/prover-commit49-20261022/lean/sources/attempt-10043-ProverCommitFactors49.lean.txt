@@ -1,0 +1,86 @@
+import AspisR1ProducerRelease47.Factors49
+import R1Z.ProverCommitQArray48
+import R1Z.ProverCommitSampleTail49
+import R1Z.ProverCommitPointTensor49
+import AspisFormal.V5FriNaturalBasisRadix4
+/-! Canonical source-owned point and circle factor cells. No constructor or
+geometric row correspondence is assumed by these arithmetic laws. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitFactors49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitSubtraction47 (one one_canonical one_decode)
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+
+def quad (a b c d : Old.Q) (k : Nat) : Old.Q :=
+  if k=0 then a else if k=1 then b else if k=2 then c else d
+
+theorem quad_array (a b c d : Old.Q) :
+    Array.make 4#usize [ProverCommitNativeQ48.source a,ProverCommitNativeQ48.source b,
+        ProverCommitNativeQ48.source c,ProverCommitNativeQ48.source d]=
+      ProverCommitQArray48.array 4#usize (quad a b c d) := by
+  apply Subtype.ext
+  rfl
+
+theorem quad_canonical (a b c d : Old.Q) (ha : Canonical a) (hb : Canonical b)
+    (hc : Canonical c) (hd : Canonical d) (k : Nat) : Canonical (quad a b c d k) := by
+  unfold quad
+  split
+  · exact ha
+  · split
+    · exact hb
+    · split
+      · exact hc
+      · exact hd
+
+theorem point_exact (a b : Old.Q) (ha : Canonical a) (hb : Canonical b) :
+    ∃ out : Nat → Old.Q, factors.point (ProverCommitNativeQ48.source a) (ProverCommitNativeQ48.source b)=
+      ok (ProverCommitQArray48.array 4#usize out) ∧
+      (∀ k, k<4 → Canonical (out k)) ∧
+      ∀ k : Fin 4, decode (out k.val)=ProverCommitPointTensor49.pairFactor (decode a) (decode b) k.val := by
+  obtain ⟨na,hna,hcna,hdna⟩ := ProverCommitNativeQ48.sub one a one_canonical ha
+  obtain ⟨nb,hnb,hcnb,hdnb⟩ := ProverCommitNativeQ48.sub one b one_canonical hb
+  obtain ⟨p0,hp0,hcp0,hdp0⟩ := ProverCommitNativeQ48.mul na nb hcna hcnb
+  obtain ⟨p1,hp1,hcp1,hdp1⟩ := ProverCommitNativeQ48.mul a nb ha hcnb
+  obtain ⟨p2,hp2,hcp2,hdp2⟩ := ProverCommitNativeQ48.mul na b hcna hb
+  obtain ⟨p3,hp3,hcp3,hdp3⟩ := ProverCommitNativeQ48.mul a b ha hb
+  refine ⟨quad p0 p1 p2 p3,?_,?_,?_⟩
+  · simp only [factors.point,ProverCommitSampleTail49.source_one,hna,hnb,hp0,hp1,hp2,hp3,
+      bind_tc_ok,quad_array]
+  · intro k hk
+    exact quad_canonical _ _ _ _ hcp0 hcp1 hcp2 hcp3 k
+  · intro k
+    fin_cases k <;> simp [quad,ProverCommitPointTensor49.pairFactor,hdp0,hdp1,hdp2,hdp3,hdna,hdnb,one_decode]
+
+theorem circle_exact (x y : Old.Q) (hx : Canonical x) (hy : Canonical y) :
+    ∃ out : Nat → Old.Q, factors.circle (ProverCommitNativeQ48.source x) (ProverCommitNativeQ48.source y)=
+      ok (ProverCommitQArray48.array 4#usize out) ∧
+      (∀ k, k<4 → Canonical (out k)) ∧
+      ∀ k : Fin 4, decode (out k.val)=![1,decode y,decode x,decode x*decode y] k := by
+  obtain ⟨xy,hxy,hcxy,hdxy⟩ := ProverCommitNativeQ48.mul x y hx hy
+  refine ⟨quad one y x xy,?_,?_,?_⟩
+  · simp only [factors.circle,hxy,bind_tc_ok,ProverCommitSampleTail49.source_one,quad_array]
+  · intro k hk
+    exact quad_canonical _ _ _ _ one_canonical hy hx hcxy k
+  · intro k
+    fin_cases k <;> simp [quad,one_decode,hdxy]
+
+theorem double_exact (x : Old.Q) (hx : Canonical x) :
+    ∃ z : Old.Q, factors.double (ProverCommitNativeQ48.source x)=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ decode z=AspisCircleTensorBinding.doubledFactor (decode x) 1 := by
+  obtain ⟨xx,hxx,hcxx,hdxx⟩ := ProverCommitNativeQ48.mul x x hx hx
+  obtain ⟨twice,ht,hct,hdt⟩ := ProverCommitNativeQ48.add xx xx hcxx hcxx
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitNativeQ48.sub twice one hct one_canonical
+  refine ⟨z,?_,hcz,?_⟩
+  · simp only [factors.double,hxx,ht,ProverCommitSampleTail49.source_one,hz,bind_tc_ok]
+  · rw [hdz,hdt,hdxx,one_decode]
+    simp only [AspisCircleTensorBinding.doubledFactor]
+    ring
+
+#print axioms quad_array
+#print axioms quad_canonical
+#print axioms point_exact
+#print axioms circle_exact
+#print axioms double_exact
+end R1Z.ProverCommitFactors49
