@@ -133,3 +133,57 @@ pub fn sum(point:[K;10],column:[K;1024],width:u8,trailing:u8,suffix:usize,pref:u
  }
 }
 }
+
+pub mod sparse_scan50 {
+use super::field::QM31 as K;
+pub fn one(x:K)->bool {
+ x.c0.a.0==1 && x.c0.b.0==0 && x.c1.a.0==0 && x.c1.b.0==0
+}
+pub fn boolean(x:K)->bool {
+ x.c0.b.0==0 && x.c1.a.0==0 && x.c1.b.0==0 && (x.c0.a.0==0 || x.c0.a.0==1)
+}
+pub fn width(point:[K;10],left:u8)->u8 {
+ if left==0 {0} else {
+  let n=left-1;let value=point[usize::from(n)];
+  if boolean(value) {width(point,n)} else {left}
+ }
+}
+pub fn suffix(point:[K;10],start:usize,left:u8)->usize {
+ if left==0 {0} else {
+  let n=left-1;
+  let prev=suffix(point,start,n);
+  let value=point[start.wrapping_add(usize::from(n))];
+  prev.wrapping_shl(1)|usize::from(one(value))
+ }
+}
+}
+
+pub mod mle50 {
+use super::{field::QM31 as K,sparse_scan50,sparse_sum50};
+pub fn count(width:u8)->u16 {1u16.wrapping_shl(u32::from(width))}
+pub fn mle(point:[K;10],column:[K;1024])->K {
+ let width=sparse_scan50::width(point,10);let trailing=10-width;
+ let suffix=sparse_scan50::suffix(point,usize::from(width),trailing);
+ sparse_sum50::sum(point,column,width,trailing,suffix,0,count(width),K::ZERO)
+}
+}
+
+pub mod linear50 {
+use super::field::{QM31 as K,M31};
+pub fn go(point:[K;10],left:u8,suffix:K,weighted:K)->(K,K) {
+ if left==0 {(suffix,weighted)} else {
+  let n=left-1;let next=suffix.add(point[usize::from(n)]);
+  let weighted=if n==0 {weighted} else {weighted.add(next)};
+  go(point,n,next,weighted)
+ }
+}
+pub fn eval(point:[K;10])->(K,K) {
+ let (suffix,weighted)=go(point,10,K::ZERO,K::ZERO);
+ (suffix.mul_m31(M31(3)).add(weighted.mul_m31(M31(22))),
+  suffix.mul_m31(M31(275)).add(weighted.mul_m31(M31(150))))
+}
+pub fn power26(x:K)->K {
+ let x2=x.square();let x4=x2.square();let x8=x4.square();let x16=x8.square();
+ x16.mul(x8).mul(x2)
+}
+}

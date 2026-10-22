@@ -54,3 +54,5 @@ include!("eval.rs");
 include!("sparse.rs");
 
 include!("sparse-sum.rs");
+
+include!("scan.rs");

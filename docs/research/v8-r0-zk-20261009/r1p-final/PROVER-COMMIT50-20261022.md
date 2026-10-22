@@ -122,3 +122,25 @@ Later extraction outputs use distinct version directories. A missing brace
 in the first sum-owner draft is retained as a Rust compile failure, then fixed.
 All Lean failures, source/dependency fingerprints and resource receipts remain;
 accepted axiom sets are standard. No shipped file or new TrustedStd field changed.
+
+## Stage 3b: trailing scanner, suffix provenance and owned MLE caller
+
+J10265 proves the actual raw zero/one predicates and their canonical decode
+laws. J10267 proves the complete reverse scanner, including the returned
+prefix width, every Boolean suffix coordinate, and the maximality boundary.
+J10268 identifies the entire source-owned suffix encoding with existing
+`R0P.rowCode`; J10271 proves the actual count and caller parameters, including
+all bounds and decoded suffix bits. J10272 proves `Mle50.model_result`: the
+complete owned sparse MLE succeeds, is canonical, and equals the existing
+`dot (eqWeight (toR0 p)) column`, for arbitrary canonical point/column inputs.
+No scanner width, suffix value, weight array or output/model image is assumed.
+
+The full native `iter().rev().take_while(...).count()` and slice suffix loop
+are checked directly by Kani against the recursive owners on arbitrary full
+raw QM31 arrays. Gate exit 0, 6.970 s, 795760 KiB, zero swaps. This is paired
+with the prefix/row/weighted-read gates already recorded. Source Vec emission
+and iterator caller assembly still need their explicit composition; the owned
+MLE theorem is not promoted to whole native semantic-oracle success. No
+TrustedStd field is added. J10272 exits 0 in 1.72 s, peak 4046620 KiB, zero
+swaps, standard axioms only. Rejected parser, scalar and dependent-index drafts
+are retained with their replacements. Shipped files remain unchanged.
