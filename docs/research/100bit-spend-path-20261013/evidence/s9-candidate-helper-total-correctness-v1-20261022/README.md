@@ -1,0 +1,9 @@
+# Candidate helper total correctness
+
+PROVED for the generated helper pinned to candidate weights.rs SHA256 `9338607afd636f43b3b830bbf9cf3cc0ced1fa7cc78b266282969e519577bccf`: canonical mapped ap0/ap1 reads and canonical actual challenge reads construct a successful public helper execution, all four canonical output cells, actual two-seed read witnesses and all original S2 coefficient equations. The final theorem is `AspisR1S9CandidateHelperTopTotalV1.candidate_helper_top_total`.
+
+Before: the successful-run correspondence required helper success as a premise. After: the final theorem constructs that success from canonical inputs. Intermediate side-one construction requires canonical old cell 1; the actual side-zero execution establishes it, so it is absent from the final theorem. No successful helper/body/suffix premise remains. Canonical input-read contracts remain explicit and must be discharged by the actual caller. The input arrays have the stated fixed lengths; this is not a theorem for arbitrary malformed byte buffers.
+
+This packet does not apply to the separate source-only 9ce draft or unchanged production helper. Actual caller/decoder correspondence, Rust library operational correspondence, adoption and frozen artifact binding, coherent release replay and the composed 100-bit security theorem remain OPEN. No production code changed. Fixture CU evidence is separate and is not a formal worst-case cost proof.
+
+Validation: eight smallest changed modules, sequential focused Lean 4.32 checks at -j1 -M4400, atomic mutex and aggregate RSS watchdog; exact source revisions, source/import/tool hashes, status, time, RSS, observed swaps and standard-axiom reports are retained per module. Existing unchanged arithmetic and successful-run proofs were reused. These warm-cache checks are not a coherent release replay. No compiled binaries are included. Run `python3 -B check_packet.py` to check retained evidence without compiling.

@@ -384,3 +384,24 @@ and current S9 caches. The remaining common objects match. This does not
 authorize silently mixing cohorts: a focused S3 dependency-frontier rebuild
 against the selected S9 owners is being prepared on the NUC before composing
 the field-readback adapter. No coherent release replay is claimed.
+
+
+PROVED generated-candidate helper total correctness (candidate weights SHA
+9338607afd636f43b3b830bbf9cf3cc0ced1fa7cc78b266282969e519577bccf).
+Canonical input-read contracts alone now construct the actual candidate public
+wrapper success, all four canonical output cells, actual challenge witnesses
+and all original S2 coefficients. No helper/body/suffix success premise
+remains. Side zero establishes the old-cell canonicality required by side one.
+Eight focused modules passed with standard axioms, zero observed swaps and
+below 3.3 GB aggregate RSS. Evidence:
+evidence/s9-candidate-helper-total-correctness-v1-20261022/.
+
+The NUC selected-owner parser frontier has also compiled successfully; its
+receipts are being packaged separately. This is a focused frontier rebuild,
+not the complete coherent release replay. A new exact-source decoder cut
+transparently extracts the actual field/from_le_bytes/from_limbs bodies;
+extraction success is not yet a Lean source-refinement theorem. The earlier
+caller projection's stubbed field is not treated as actual field identity.
+Actual caller/source and Rust library correspondence, adoption/artifact
+binding and security composition remain OPEN. S9 release closure and the
+100-bit target are not yet established. Production source and CU unchanged.
