@@ -8432,3 +8432,36 @@ returns exactly the updated table and flag. Then reuse the part-28 generic
 monadic state lift to thread the state through the publication continuation.
 The single-thread fact needed for RefCell is the TLS single-thread item
 already on the trust list. Nothing is added.
+
+## D159 (user decision, 2026-10-22 10:20): side channels are in the privacy contract
+
+The user ruled ("cover them") that timing and other side channels are **inside**
+the privacy contract. This reverses the scope line in D143 rulings 2 and 3, which had put
+them out of scope. It raises the target and does not lower it. Attempt counts,
+retry counts and timings are now treated as potentially observable.
+
+Leakage model, in three levels, each stated separately and never merged:
+- **L1 (outcome counts):** the adversary sees the number of attempts/retries,
+  which call failed, error codes, reservation/ledger effects and the number,
+  order and sizes of everything the prover sends or writes. Proof obligation: the joint
+  law of these is simulatable without the witness (witness-independent, or a
+  function of public data and the simulator's own coins).
+- **L2 (source-level trace):** the sequence of branches taken, memory/array
+  indices, collection operations with key-dependent cost (e.g. BTreeMap
+  insertion paths), allocation sizes, loop trip counts and variable-latency
+  operations (division, inversion, early exits) must be witness-independent.
+  Formal route: relational (2-run) properties over the extracted/owned code
+  and Kani self-composition per function.
+- **L3 (compiled code and hardware):** compiler and CPU constant-time
+  behaviour **cannot be fully proved here**. It is either a named trust item
+  (the compiler preserves L2 constant-time; the CPU's used instructions have
+  data-independent latency), or measured (dudect-style tests, labelled as
+  measurement, never as proof).
+A witness-dependent retry or rejection-sampling count (for example a P_R1
+predicate whose acceptance depends on the witness) would be a protocol-level
+leak, and its fix (constant-work attempts or a witness-independent
+acceptance law) would be a change to the frozen prover. Any such
+finding is escalated to the user with a recommendation and is not patched silently.
+First step: a side-channel inventory of the deployed prover path
+(`r1p-final/SIDE-CHANNEL-AUDIT-20261022.md`), running alongside privacy
+part 46.
