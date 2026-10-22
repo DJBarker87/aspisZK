@@ -18,6 +18,7 @@ for mode,pin,manifest,features,filename in [
  out=H/'artifacts'/(stage+'-'+mode);out.mkdir(parents=True,exist_ok=False)
  cmd=['env','-u','RUSTFLAGS','/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf','--manifest-path',str(R/'programs'/manifest/'Cargo.toml'),'--sbf-out-dir',str(out),'--features',features,'--skip-tools-install','--offline','-j','4','--','--locked']
  code=subprocess.run(['python3',str(R/'tools/ct-kernels-20261022/run-host.py'),'elf-'+stage+'-'+mode,*cmd],env=env).returncode
+ for key in out.glob("*keypair.json"):key.chmod(0o600)
  artifact=out/filename
  row=dict(mode=mode,exit_status=code,expected_sha256=pin)
  if artifact.exists():

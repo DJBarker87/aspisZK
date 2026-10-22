@@ -5,9 +5,9 @@ import subprocess,json,hashlib,sys
 R=Path(__file__).resolve().parents[2];stage=sys.argv[1];name=sys.argv[2]
 assert stage.replace('-','').isalnum() and name.replace('-','').isalnum()
 E=R/'docs/research/100bit-spend-path-20261013/evidence'/name;E.mkdir(exist_ok=True)
-remote='dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-ct-kernels-20261022/src/'
-subprocess.run(['rsync','-az','--include=/'+stage+'-*/***','--include=/elf-'+stage+'-*/***','--exclude=*',remote+'receipts/',str(E/'receipts')+'/'],check=True)
-subprocess.run(['rsync','-az','--include=/reservation-'+stage+'-*.json','--include=/reservation-elf-'+stage+'-*.json','--exclude=*',remote,str(E)+'/'],check=True)
+remote='dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-ct-kernels-v2-20261022/src/'
+subprocess.run(['rsync','-az','--include=/'+stage+'-*/***','--include=/elf-'+('v2final' if stage=='v2' else stage)+'-*/***','--exclude=*',remote+'receipts/',str(E/'receipts')+'/'],check=True)
+subprocess.run(['rsync','-az','--include=/reservation-'+stage+'-*.json','--include=/reservation-elf-'+('v2final' if stage=='v2' else stage)+'-*.json','--exclude=*',remote,str(E)+'/'],check=True)
 for src,dst in [('elf-identities.json','elf-identities.json'),(stage+'-fixture-identities.json','fixture-identities.json')]:
  subprocess.run(['rsync','-az',remote+src,str(E/dst)],check=True)
 rows=[]
