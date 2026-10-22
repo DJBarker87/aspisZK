@@ -197,3 +197,81 @@ Previously passing v1 windows are partial historical evidence; no full entry
 frame, successful native/reference join or whole S2 closure follows. Source
 scan/comparison/typed-child installation, first-result/writeback effects,
 valid runtime heap interpretation and ordered oracle transport remain.
+
+## Complete corrected first-entry coverage and successful reference constructor
+
+`sdk-first-entry-v2/` contains all17 corrected original-SDK entry cases:
+15 proof windows plus public and checkpoint roots, no pending cases. Each
+complete enabled inventory is reconciled against the raw all-properties log;
+all noncovers succeed and both entry covers are reached. Per-target source,
+lock, tool/import dependency pins, fresh admission, exit10 (the two reached
+covers), exact wall/RSS/swap are in its receipts and `qualification.json`.
+`local-check.json` records the local source-only audit. The checker reproduces
+all17 source generators, requires identical source domains except coordinate
+selection, and reuses the unchanged generic `S2SdkNativeFrameCoverageV1`
+index/list proof (source20a9919c…). No unchanged Lean or solver replay ran.
+These are actual original SDK first-entry byte/scalar/typed-call checks,
+unlike the earlier decoder-error prefix. They still stop at first entry and
+require actual child/gate/scan/runtime instantiation; no post-return frame or
+whole S2 theorem is inferred from coverage.
+
+`sdk-observer-codegen-mismatch/` retains the two failed v1 cases, complete
+reports and exact generated-goto inspection. The corrected v2 source uses
+uniquely tagged callback retention. The affected window4 passes after this
+source correction; the entire17-case corrected family was then checked.
+The actual release observer source is unchanged literal None.
+
+`sdk-reference-first/` checks complete borrowed-reference successful stage1
+from native-derived scalar facts, canonical slots, original buffers,
+admitted comparison status/tag image, scanner=false and shared successful
+typed children. All4195 enabled noncovers succeed; both covers reached:
+raw exit10,65.312s,4708660KiB RSS,swap0, fresh6G/8G/0. Same decoded-public
+projection, original first wrapper/None, initial proof/public pointers,
+checkpoint output byte and restored counters/metadata are checked together.
+Its source-only checker independently reconciles the complete raw inventory,
+reproduces source and verifies every pre/post dependency pin. Checkpoint Vec
+allocation replacement is distinguished from copied byte equality. This is
+conditional reference construction, not a source-child installation theorem.
+
+## Same-call checkpoint writer premise removed at the reference layer
+
+New `CheckpointWriter.owned_stage1_fixed_saved_current` and
+`borrowed_stage1_fixed_saved_current` in `S126SdkFixedSavedCurrentV1.lean`
+consume one complete installed stage1 success and derive, together:
+
+- initial account0 proof and account1 public byte views;
+- full proof length58295 and its exact [688,58295) suffix of length57607;
+- actual source decode of those public bytes;
+- actual current-first success on those same bytes/suffix/split, with the
+  existing decoded-reuse/None/source tx1 connection;
+- final heap bytes at the ORIGINAL account2 data slot equal the SAME returned
+  checkpoint, after the complete guard-release finalizer.
+
+Before, `borrowed_stage1_fixed_input_witness` returned a current-first
+checkpoint without asserting its saved final bytes. The new result retains
+that same fixed-input/current-first conclusion and adds same-checkpoint
+retention at the original slot. It does not add a writer, child-success,
+range, clone, buffer-frame or independent saved-checkpoint premise.
+The single accepted installed reference execution remains its only premise.
+Account metadata stability, physical native storage embedding and TX2
+writer/account/reader transport are distinct, still open claims.
+
+Focused Lean4.32 checks, one local mkdir lock, -j1 -M4400:
+
+| Target / accepted receipt | Exit | Wall s | Peak RSS bytes | Swap | Axioms |
+| --- | --- | --- | --- | --- | --- |
+| S2SdkCheckpointWriterV1 / s2-sdk-checkpoint-writer-v3 | 0 | 16.529665833 | 3232088064 | 0 | 2 standard-only reports |
+| S2SdkSavedFirstV1 / s2-sdk-saved-first-v5 | 0 | 24.676025625 | 3232694272 | 0 | 3 standard-only reports |
+| S2SdkFixedSavedFirstV1 / s2-sdk-fixed-saved-first-v2 | 0 | 22.872966667 | 3246161920 | 0 | 3 standard-only reports |
+| S126SdkFixedSavedCurrentV1 / s126-sdk-fixed-saved-current-v1 | 0 | 11.026304500 | 3228614656 | 0 | 2 standard-only reports |
+
+Standard-only means subsets of propext/Classical.choice/Quot.sound. Failed
+historical drafts and superseded green intermediates are retained, excluded
+from accepted targets; no sorry source, custom axioms, native_decide or resource
+option override is used. Focused import hashes cover seven old/new accepted
+targets and5616 selected objects; objects are not distributed. This is a
+focused cached proof, not a coherent final release rebuild. Four caller files
+are unchanged at the adopted S4 freeze, explicitly pinned in
+`caller-source-adoption-overlay-20261022.json`; changed transitive S4/powers
+semantics remain their owners' re-pin obligations. No shipped source or ELF
+was changed. Whole S1/S2/S6 and the100-bit target remain unestablished.

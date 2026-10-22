@@ -8,7 +8,8 @@ H=Path('/home/dombarker/project-offloads/s126-real-sdk-20261021');O=H/sys.argv[1
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 def copy(p,r):
  q=O/r;q.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,q)
-versions=[f'first-entry-root0-window{i}-v1' for i in range(15)]+['first-entry-root1-v1','first-entry-root2-v1'];accepted={};pending=[]
+revision=sys.argv[2] if len(sys.argv)>2 else 'v2';assert revision in ['v1','v2']
+versions=[f'first-entry-root0-window{i}-{revision}' for i in range(15)]+[f'first-entry-root1-{revision}',f'first-entry-root2-{revision}'];accepted={};pending=[]
 for v in versions:
  tag='sdk-'+v;P=H/('sdk-shared-prefix-'+v);audit=H/tag/'entry-audit.json'
  if not audit.exists():pending.append(v);continue
@@ -31,9 +32,9 @@ for v in versions:
   for rel,d in pin['files'].items():
    assert sha(root/rel)==d;(copy(root/rel,Path('dependencies')/package/rel))
  accepted[v]=dict(noncover_successes=a['noncover_successes'],reached_covers=len(a['reached_covers']),receipt_sha256=sha(H/'receipts'/tag/'receipt.json'),source_sha256=sha(P/'src/lib.rs'),wall_seconds=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],swaps=r['swaps'])
-for n in ['run-modular-host.py','run-sdk-shared-prefix-host.py','audit-native-first-entry-host.py','run-native-first-entry-queue-host.py','capped.py','reservation.py']:copy(H/'kit'/n,Path('runner')/n)
+for n in ['run-modular-host.py','run-sdk-shared-prefix-host.py','audit-native-first-entry-host.py','run-native-first-entry-queue-host.py','run-native-first-entry-v2-queue-host.py','capped.py','reservation.py']:copy(H/'kit'/n,Path('runner')/n)
 for worker in ['a','b']:
- for p in (H/f'sdk-first-entry-queue-{worker}-v1').iterdir():
+ for p in (H/f'sdk-first-entry-queue-{worker}-{revision}').iterdir():
   if p.suffix in ['.json','.log']:copy(p,Path('queues')/worker/p.name)
 (O/'qualification.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',accepted=accepted,pending=pending,qualification=__doc__,remaining='Coordinate coverage is first-entry only under pure scan/comparison overapproximations and typed successful child cuts. No SDK models or owned reference. Actual source child/scan/gate installation, general valid runtime heap embedding, returned first and successful writeback/Drop/oracle composition still required.'),indent=2)+'\n')
 (O/'manifest.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',files={str(p.relative_to(O)):sha(p) for p in O.rglob('*') if p.is_file()}),indent=2)+'\n')

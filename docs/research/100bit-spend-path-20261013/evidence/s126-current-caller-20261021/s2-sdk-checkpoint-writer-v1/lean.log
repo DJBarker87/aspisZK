@@ -1,0 +1,45 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCheckpointWriterV1.lean:14:83: error: unsolved goals
+sdk : OwnedSdk
+slot : Usize
+old : OwnedDataCell
+bytes : alloc.vec.Vec U8
+valid : ↑slot < (↑sdk.data_cells).length
+left✝ : old = (↑sdk.data_cells)[↑slot]
+index :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (old, sdk.data_cells.set slot)
+⊢ (do
+      let cell ←
+        match
+            ⟨(↑sdk.data_cells).set ↑slot
+                  { bytes := bytes, borrowed := old.borrowed, strong := old.strong, weak := old.weak },
+                ⋯⟩[↑slot]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      ok cell.bytes) =
+    ok bytes
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCheckpointWriterV1.lean:18:22: warning: This simp argument is unused:
+  List.getElem?_set_self valid
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵B̵y̵t̵e̵s̵,̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵i̵n̵d̵e̵x̵_̵s̵l̵i̵c̵e̵_̵i̵n̵d̵e̵x̵,̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵s̵e̵t̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵s̵e̵t̵_̵s̵e̵l̵f̵ ̵v̵a̵l̵i̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲r̲e̲a̲d̲B̲y̲t̲e̲s̲,̲ ̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲i̲n̲d̲e̲x̲_̲s̲l̲i̲c̲e̲_̲i̲n̲d̲e̲x̲,̲ ̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲s̲e̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCheckpointWriterV1.lean:18:51: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [readBytes, ̲alloc.vec.Vec.index_slice_index, ̲alloc.vec.Vec.index_usize,
+      alloc.vec.Vec.set, ̲List.getElem?_set_self valid,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS2OwnedStage1.SdkReference.CheckpointWriter.written_bytes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.CheckpointWriter.released_written_bytes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -5,7 +5,12 @@ This is an additive proof/source-cut packet, not a production verifier change.
 
 ## Freeze and scope
 
-- Authoritative verifier source: `b2727acd3abf79315d18b754a260f58f4b1c6326`.
+- Historical extraction source: `b2727acd3abf79315d18b754a260f58f4b1c6326`.
+- Current adopted source overlay: `25866ec331cc7ce27dd9956609c11d32fa8fa58a`, containing
+  user-authorized S4 adoption `29cbab431742f7e899870595167efa193a379f0a`; C3-BIN
+  2026-10-22 11:50–12:40 addenda supersede old ELF/source authority. Four caller
+  files are byte-identical, recorded in `caller-source-adoption-overlay-20261022.json`.
+  This identity overlay does not reassign historical transitive S4/powers proofs.
 - Research parent: `d8fc9db732c70ef8dd1dd548184326318d5e1ad1`.
 - Isolated branch/worktree: `codex/s126-caller-20261021`, `.worktrees/s126-caller-20261021`.
 - Compact QM31, depth-18 binary multiproof, two verification/settlement transactions;
@@ -2300,3 +2305,21 @@ and their ordered effects. Native decoder-error frames do not prove it.
 TX2 reconstruction/retention, remaining lead interface fields, original
 Prepared/prepared_claim trace correspondence, full R22 and release re-pin/
 coherent replay remain required. No shipped source or release artifact changed.
+
+## 2026-10-22 successful-entry and checkpoint-writer progress
+
+The latest exact handoff is `S126-FIXED-INPUT-HANDOFF-20261022.md`.
+All17 corrected original-SDK first-entry coordinate gates are checked and
+source-only audited, extending the older decoder-error-prefix scope. The
+complete borrowed-reference success constructor is also checked under the
+stated native-derived facts and child/gate/scan conditions. These do not yet
+instantiate the actual runtime/caller/source/oracle join.
+
+At the extracted reference layer, the complete installed caller now derives
+fixed initial proof/public views, actual decode/current-first, exact compact
+suffix and SAME returned checkpoint saved at the original account2 slot
+after full release (`CheckpointWriter.borrowed_stage1_fixed_saved_current`).
+No independent writer/child/range/frame premise is added. Physical native
+storage, account metadata, cross-transaction checkpoint/TX2 public transport,
+actual child installation and ordered oracle correspondence remain. The lead's
+fourteen-field `S2CallerFacts` is still not populated in full; no cone closure.
