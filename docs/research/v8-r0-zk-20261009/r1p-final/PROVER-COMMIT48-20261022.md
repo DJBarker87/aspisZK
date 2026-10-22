@@ -241,6 +241,26 @@ changes already present before this task. No ELF rebuild is triggered by this
 worker's changes; no stale ELF pins are adopted. The current S4 pins remain
 40dc7574… / 12cb0bc2… / 121f3e29….
 
+## Stage 7: omitted-node product and source initialization
+
+`InterpolationSchedule48` proves the exact skipped-node degree schedule,
+polynomial/denominator products, their evaluation identity, and nonzero
+M31 denominators for the 28 distinct nodes. `InterpolationFactors48`
+propagates these invariants through the entire owned factor loop.
+`InterpolationInitial48.prepare_exact` closes the actual zero-array/one-cell
+initialization and all 27 selected factors, including the nonzero raw-word
+condition consumed by the inverse. `QArray48` supplies symbolic QM31 array
+index/update and zero initialization for the next accumulator proof.
+
+Accepted focused attempts: J9952 schedule, J9955 indices, J9958 factors,
+J9960 QM31 arrays and J9961 initialization. All print only the standard
+axioms; exact timing, RSS, zero swap and source/dependency fingerprints
+are in the attempt receipts. J9951/53/56/57/59 are failed local theorem
+iterations, retained as diagnostics. J9954 did not launch a compiler because
+the preceding dependency had failed; its number is retired. No full
+manifest replay or shipped-source extraction was performed. The full
+interpolator and simulator payload image remain open.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,
@@ -298,35 +318,3 @@ theorem privacy_headline_deployed
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
 ```
-
-
-
-## Final focused audit and archive
-
-J9799 audits all 135 newly added theorem declarations and the unchanged
-conditional deployed endpoint: exit 0, wall 1.76 s, peak RSS 4122868 KiB,
-zero swaps. Every accepted axiom list is a subset of [propext,
-Classical.choice, Quot.sound]. The count describes audit coverage only.
-`final-proof-audit.json` verifies the exact installed sources and all
-dependency objects in that final receipt. The complete source overlay is
-`f6c2399bb70dfeebaf26ee1ab9e89dcdce48f175`; its source hashes are recorded
-in `final-source-freeze.json`. No source changes follow that audit.
-
-`shipped-sources-unchanged.json` verifies all 491 tracked crates/programs
-files against the actual task base `dfd30a6f5`, with no untracked shipped
-file. `source-bindings.json` checks the copied field and literal helper
-bodies. `native-source-archives.json` identifies the exact package source
-version for each native/extraction command, including overwritten
-diagnostic drafts; `native-attempts.json` distinguishes accepted checks,
-timeouts and tool errors. `host-final-inventory.json` records hash/size
-pins and tool versions. No binary, ELF, .olean, LLBC, tarball or local
-target directory is committed.
-
-Stage commits are `536f50a47`, `0e6051535`, `0fa5fde0c`, `d6c3dfe63`, and
-`f6c2399bb`; the final handoff commit adds completed metadata only.
-`git-log-from-common-base.txt` records history through the source freeze.
-**Target not yet established; zero deployed endpoint premises removed.**
-The actual native generator byte-image bridge and complete simulator
-payload equality remain the next obligations, with the demonstrated
-extraction/binding obstruction. J9799 consumes the last assigned sequential
-compile number; no further compilation is launched.

@@ -1,0 +1,103 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationFactors48.lean:54:67: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+i : U8
+hi : ↑i < 28
+n : ℕ
+ih :
+  ∀ (xs : ℕ → U32),
+    (∀ k < 28, canonical (xs k)) →
+      ∀ (den : U32),
+        canonical den →
+          ∀ (deg j left : U8),
+            ↑left = n →
+              ↑j + n = 28 →
+                ↑deg = degree ↑i ↑j →
+                  (∀ k < 28, ↑deg + 1 ≤ k → decode (xs k) = 0) →
+                    ∃ ys denOut,
+                      basis_factors (array 28#usize xs) den deg i j left = ok (array 28#usize ys, denOut) ∧
+                        (∀ k < 28, canonical (ys k)) ∧
+                          canonical denOut ∧
+                            poly ys = poly xs * polyProd (↑i) (↑j) n ∧ decode denOut = decode den * denProd (↑i) (↑j) n
+xs : ℕ → U32
+hxs : ∀ k < 28, canonical (xs k)
+den : U32
+hden : canonical den
+deg j left : U8
+hleft : ↑left = n + 1
+count : ↑j + (n + 1) = 28
+hdeg : ↑deg = degree ↑i ↑j
+space : ∀ k < 28, ↑deg + 1 ≤ k → decode (xs k) = 0
+hn : left ≠ 0#u8
+hdec : ↑(left.wrapping_sub 1#u8) = n
+hj : ↑j < 28
+hjnext : ↑(j.wrapping_add 1#u8) = ↑j + 1
+same : ¬i = j
+different : ↑i ≠ ↑j
+room : ↑deg + 2 ≤ 28
+⊢ ↑(deg.wrapping_add 2#u8) = ↑deg + 2
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitInterpolationFactors48.lean:62:69: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+i : U8
+hi : ↑i < 28
+n : ℕ
+ih :
+  ∀ (xs : ℕ → U32),
+    (∀ k < 28, canonical (xs k)) →
+      ∀ (den : U32),
+        canonical den →
+          ∀ (deg j left : U8),
+            ↑left = n →
+              ↑j + n = 28 →
+                ↑deg = degree ↑i ↑j →
+                  (∀ k < 28, ↑deg + 1 ≤ k → decode (xs k) = 0) →
+                    ∃ ys denOut,
+                      basis_factors (array 28#usize xs) den deg i j left = ok (array 28#usize ys, denOut) ∧
+                        (∀ k < 28, canonical (ys k)) ∧
+                          canonical denOut ∧
+                            poly ys = poly xs * polyProd (↑i) (↑j) n ∧ decode denOut = decode den * denProd (↑i) (↑j) n
+xs : ℕ → U32
+hxs : ∀ k < 28, canonical (xs k)
+den : U32
+hden : canonical den
+deg j left : U8
+hleft : ↑left = n + 1
+count : ↑j + (n + 1) = 28
+hdeg : ↑deg = degree ↑i ↑j
+space : ∀ k < 28, ↑deg + 1 ≤ k → decode (xs k) = 0
+hn : left ≠ 0#u8
+hdec : ↑(left.wrapping_sub 1#u8) = n
+hj : ↑j < 28
+hjnext : ↑(j.wrapping_add 1#u8) = ↑j + 1
+same : ¬i = j
+different : ↑i ≠ ↑j
+room : ↑deg + 2 ≤ 28
+hwidth : ↑(deg.wrapping_add 2#u8) = ↑deg + 2
+basis : ℕ → U32
+hbasis :
+  basis_mul (array 28#usize xs) (UScalar.cast UScalarTy.U32 j) (deg.wrapping_add 2#u8) = ok (array 28#usize basis)
+hcbasis : ∀ k < 28, canonical (basis k)
+hpolybasis : poly basis = (Polynomial.X - Polynomial.C (decode (UScalar.cast UScalarTy.U32 j))) * poly xs
+hspacebasis : ∀ k < 28, ↑deg + 2 ≤ k → decode (basis k) = 0
+difference : U32
+hdiff : field.M31.sub (UScalar.cast UScalarTy.U32 i) (UScalar.cast UScalarTy.U32 j) = ok difference
+hcdiff : canonical difference
+hddiff : decode difference = decode (UScalar.cast UScalarTy.U32 i) - decode (UScalar.cast UScalarTy.U32 j)
+denNext : U32
+hdenNext : field.M31.mul den difference = ok denNext
+hcdenNext : canonical denNext
+hdDenNext : decode denNext = decode den * decode difference
+⊢ ↑(deg.wrapping_add 1#u8) = ↑deg + 1
+'R1Z.ProverCommitInterpolationFactors48.factors_value' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh
