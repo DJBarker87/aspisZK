@@ -25,5 +25,7 @@ for pin in sorted((E/'pins').glob('lean-*.json')):
  snapshot=next((E/'lean'/'sources').glob('attempt-'+a+'-*'),None)
  if snapshot:rec['source_snapshot']=str(snapshot.relative_to(E));assert hashlib.sha256(snapshot.read_bytes()).hexdigest()==rec['source_sha256']
  rec['source_revision']=(E/'pins'/'revision.txt').read_text().strip()
+ rec['exact_command']=['sh',R+'/run-joint.sh',a,rec['module'][:-5],'J','7000','8',rec['deps_fingerprint']]
+ rec['source_revision_description']='Task base revision plus this exact source SHA256 and retained dependency-object fingerprint; no attribution to an unchanged checkout.'
  records.append(rec)
 (E/'lean'/'attempts.json').write_text(json.dumps(records,indent=2)+'\n')

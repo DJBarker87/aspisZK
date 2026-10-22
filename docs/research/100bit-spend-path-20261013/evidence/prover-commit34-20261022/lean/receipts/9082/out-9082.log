@@ -1,0 +1,34 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRetrySource34.lean:40:44: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+index : Usize
+hi : ↑index ≤ 8
+one : ↑1#usize = 1
+⊢ 9 < UScalar.size UScalarTy.Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRetrySource34.lean:75:8: error: Type mismatch: After simplification, term
+  ih (fuel.wrapping_sub 1#usize) (index.wrapping_add 1#usize) after sub hb
+ has type
+  @Eq (Result (Step (Published P) × S))
+    (do
+      let out ← owner.retry ops (fuel.wrapping_sub 1#usize) (index.wrapping_add 1#usize) after
+      ok (decodeRun out))
+    (run (policy ops) n (↑index + 1) after)
+but is expected to have type
+  @Eq (Result (Step (Published P) × S))
+    (do
+      let out ← owner.retry ops (fuel.wrapping_sub 1#usize) (index.wrapping_add 1#usize) after
+      ok (decodeRun out))
+    (let (result, after) := (Step.retry, after)
+    match result with
+    | Step.done proof => ok (Step.done { proof := proof, attempts := ↑index + 1 }, after)
+    | Step.retry => run (policy ops) n (↑index + 1) after
+    | Step.stop e => ok (Step.stop e, after))
+'R1Z.ProverCommitRetrySource34.word_val' depends on axioms: [propext]
+'R1Z.ProverCommitRetrySource34.add_one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRetrySource34.source_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRetrySource34.eight_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

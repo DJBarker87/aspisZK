@@ -22,7 +22,7 @@ def wordByte (x : Word) (i : Fin 4) : Byte :=
 def wordBytes (x : Word) : Bytes := List.ofFn (wordByte x)
 
 def lowWord (x : Index) : Word :=
-  ⟨x.val % 2 ^ 32, Nat.mod_lt _ (by decide)⟩
+  ⟨x.val % 2 ^ 32, Nat.mod_lt _ (Nat.two_pow_pos 32)⟩
 
 def highWord (x : Index) : Word :=
   ⟨x.val / 2 ^ 32, by have hx := x.isLt; omega⟩

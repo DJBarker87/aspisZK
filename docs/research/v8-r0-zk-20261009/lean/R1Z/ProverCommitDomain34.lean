@@ -55,7 +55,7 @@ def lowerCommon (p : R0P.Public K) : PublicRawCore.Common :=
     nullifier := fun i => lowerWord (p.nullifier i)
     assetId := lowerWord p.assetId
     change := fun i => lowerWord (p.change i)
-    nextPairIndex := ⟨p.nextPairIndex % 2^64, Nat.mod_lt _ (by decide)⟩
+    nextPairIndex := ⟨p.nextPairIndex % 2^64, Nat.mod_lt _ (Nat.two_pow_pos 64)⟩
     snapshotFrontier := fun l i => lowerWord (p.snapshotFrontier l i)
     nextRoot := fun i => lowerWord (p.nextRoot i)
     nextFrontier := fun l i => lowerWord (p.nextFrontier l i) }
@@ -93,7 +93,7 @@ theorem canonical_withdrawal (c : PublicRawCore.Common) (a : PublicRawCore.Word)
 theorem lower_common (c : PublicRawCore.Common) (hc : commonCanonical c) :
     lowerCommon (commonImage c) = c := by
   rcases hc with ⟨ha,hn,hi,hc,hs,hr,hf⟩
-  have index : (⟨c.nextPairIndex.val % 2^64, Nat.mod_lt _ (by decide)⟩ : PublicRawCore.Index) =
+  have index : (⟨c.nextPairIndex.val % 2^64, Nat.mod_lt _ (Nat.two_pow_pos 64)⟩ : PublicRawCore.Index) =
       c.nextPairIndex := Fin.ext (Nat.mod_eq_of_lt c.nextPairIndex.isLt)
   simp only [lowerCommon,commonImage, lower_lift _ (ha _),lower_lift _ (hn _),
     lower_lift _ hi,lower_lift _ (hc _),lower_lift _ (hs _ _),lower_lift _ (hr _),

@@ -23,7 +23,6 @@ def aspis_core.field.M31 := Std.U32
 /-- [aspis_statement_public_serializer_extract::aspis_core::state_only_prefix::r0::Error]
     Source: 'lib.rs', lines 18:4-30:5
     Visibility: public -/
-@[discriminant isize]
 inductive aspis_core.state_only_prefix.r0.Error where
 | Allocation : aspis_core.state_only_prefix.r0.Error
 | RowOrder : Std.U8 → Std.U8 → aspis_core.state_only_prefix.r0.Error
@@ -92,7 +91,6 @@ structure pool_v1.payment_relation.PoolV1WithdrawalPublicV1 where
 
 /-- [aspis_statement_public_serializer_extract::pool_v1::pair_forest_semantic_terminal::CompiledVariant]
     Source: 'lib.rs', lines 125:0-128:1 -/
-@[discriminant isize]
 inductive pool_v1.pair_forest_semantic_terminal.CompiledVariant where
 | PrivateTransfer : pool_v1.pair_forest_semantic_terminal.CompiledVariant
 | Withdrawal : pool_v1.pair_forest_semantic_terminal.CompiledVariant
@@ -114,7 +112,6 @@ structure pool_v1.pair_forest_semantic_terminal.SemanticPublic where
 /-- [aspis_statement_public_serializer_extract::pool_v1::pair_forest_semantic_terminal::r0::Public]
     Source: 'lib.rs', lines 184:4-193:5
     Visibility: public -/
-@[discriminant isize]
 inductive pool_v1.pair_forest_semantic_terminal.r0.Public where
 | Transfer :
   pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 →
@@ -124,5 +121,34 @@ inductive pool_v1.pair_forest_semantic_terminal.r0.Public where
   pool_v1.payment_relation.PoolV1WithdrawalPublicV1 →
   pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 →
   pool_v1.pair_forest_semantic_terminal.r0.Public
+
+-- Explicit, namespace-qualified instances replace the historical attribute
+-- generator, whose short global names collide with other extraction bundles.
+def aspis_core.state_only_prefix.r0.Error.read_discriminant : aspis_core.state_only_prefix.r0.Error → Isize
+  | .Allocation => 0#isize
+  | .RowOrder _ _ => 1#isize
+  | .InvalidRow => 2#isize
+  | .Tag _ => 3#isize
+  | .Length _ => 4#isize
+  | .NonCanonical _ _ => 5#isize
+  | .Boundary _ => 6#isize
+  | .Terminal => 7#isize
+  | .EqualCirclePoints => 8#isize
+  | .TrailingBytes => 9#isize
+  | .Public => 10#isize
+instance errorDiscriminant34 : Discriminant aspis_core.state_only_prefix.r0.Error Isize where
+  read_discriminant := aspis_core.state_only_prefix.r0.Error.read_discriminant
+
+def pool_v1.pair_forest_semantic_terminal.CompiledVariant.read_discriminant : pool_v1.pair_forest_semantic_terminal.CompiledVariant → Isize
+  | .PrivateTransfer => 0#isize
+  | .Withdrawal => 1#isize
+instance variantDiscriminant34 : Discriminant pool_v1.pair_forest_semantic_terminal.CompiledVariant Isize where
+  read_discriminant := pool_v1.pair_forest_semantic_terminal.CompiledVariant.read_discriminant
+
+def pool_v1.pair_forest_semantic_terminal.r0.Public.read_discriminant : pool_v1.pair_forest_semantic_terminal.r0.Public → Isize
+  | .Transfer _ _ => 0#isize
+  | .Withdrawal _ _ => 1#isize
+instance publicDiscriminant34 : Discriminant pool_v1.pair_forest_semantic_terminal.r0.Public Isize where
+  read_discriminant := pool_v1.pair_forest_semantic_terminal.r0.Public.read_discriminant
 
 end AspisR1PublicSerializer

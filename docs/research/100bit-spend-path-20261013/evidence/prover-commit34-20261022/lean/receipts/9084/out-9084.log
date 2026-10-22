@@ -1,0 +1,75 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropy34.lean:37:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (generate next (initial r)).1
+in the target expression
+  zeroBad next initial r
+
+State OsError R : Type
+next : State → Except OsError Candidate × State
+initial : R → State
+r : R
+hz : zeroBad next initial r
+e : OsError
+he : (generate next (initial r)).1 = Except.error (Error.os e)
+⊢ False
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropy34.lean:44:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mean ?f + mean ?g
+in the target expression
+  (mean fun s => if failed next initial s then 1 else 0) =
+    eventMass (osBad next initial) + eventMass (zeroBad next initial)
+
+State OsError R : Type
+inst✝ : Fintype R
+next : State → Except OsError Candidate × State
+initial : R → State
+⊢ (mean fun s => if failed next initial s then 1 else 0) =
+    eventMass (osBad next initial) + eventMass (zeroBad next initial)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropy34.lean:56:54: error: unsolved goals
+State OsError R : Type
+inst✝¹ : Fintype R
+inst✝ : Nonempty R
+initial : R → State
+error : OsError
+⊢ (mean fun s => if ∃ e, Except.error (Error.os error) = Except.error (Error.os e) then 1 else 0) = 1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropy34.lean:58:17: warning: This simp argument is unused:
+  exists_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵e̵x̵i̵s̵t̵s̵_̵e̵q̵,̵i̵f̵_̵t̵r̵u̵e̵,̵e̵v̵e̵n̵t̵M̵a̵s̵s̵,̵m̵e̵a̵n̵_̵c̵o̵n̵s̵t̵]̵[̲r̲u̲n̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲e̲v̲e̲n̲t̲M̲a̲s̲s̲,̲ ̲m̲e̲a̲n̲_̲c̲o̲n̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropy34.lean:58:27: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵e̵x̵i̵s̵t̵s̵_̵e̵q̵,̵i̵f̵_̵t̵r̵u̵e̵,̵e̵v̵e̵n̵t̵M̵a̵s̵s̵,̵m̵e̵a̵n̵_̵c̵o̵n̵s̵t̵]̵[̲r̲u̲n̲,̲ ̲e̲x̲i̲s̲t̲s̲_̲e̲q̲,̲ ̲e̲v̲e̲n̲t̲M̲a̲s̲s̲,̲ ̲m̲e̲a̲n̲_̲c̲o̲n̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropy34.lean:58:45: warning: This simp argument is unused:
+  mean_const
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵e̵x̵i̵s̵t̵s̵_̵e̵q̵,̵i̵f̵_̵t̵r̵u̵e̵,̵e̵v̵e̵n̵t̵M̵a̵s̵s̵,̵m̵e̵a̵n̵_̵c̵o̵n̵s̵t̵]̵[̲r̲u̲n̲,̲ ̲e̲x̲i̲s̲t̲s̲_̲e̲q̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲e̲v̲e̲n̲t̲M̲a̲s̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropy34.lean:87:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FsAbortBounds.mass fun f => ?E (f ?k)
+in the target expression
+  (FsAbortBounds.mass fun raw => raw i = 0) ≤ 1 / 2 ^ 256
+
+i : Fin 3
+⊢ (FsAbortBounds.mass fun raw => raw i = 0) ≤ 1 / 2 ^ 256
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropy34.lean:103:19: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEntropy34.lean:113:62: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'R1Z.ProverCommitEntropy34.bad_disjoint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEntropy34.failure_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEntropy34.always_os_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEntropy34.no_universal_os_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEntropy34.decode_none_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEntropy34.candidate_bad_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEntropy34.zero_failure_first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEntropy34.uniform_zero_mass' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitEntropy34.eight_failure_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh
