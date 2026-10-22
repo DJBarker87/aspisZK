@@ -8349,3 +8349,19 @@ Next (part 42, env J 9400–9799): instantiate the concrete `gAddr`/`attVec`
 conditional private-read bounds and the successful-continuation transport;
 the Lean bridge for the 64-byte owner and reservation-history composition;
 then publication, FS conversion, the joins and the endpoint.
+
+## D155 (lead, 2026-10-22 07:35): part 42 merged; private-read bounds instantiated
+
+Merged `codex/cx-prover-commit42-20261022` (report
+`r1p-final/PROVER-COMMIT42-20261022.md`). Proved: the private raw domains avoid
+the public bindings; concrete public-normalised private-read bounds and charged
+adaptive-hit bounds; global read agreement; the bridges from the generated
+64-byte entropy owner to the model, the reservation state and the retry
+callback. J9493, 56 theorems, standard axioms; shipped files unchanged; no new
+trust item.
+Obstruction (tool limit, no counterexample): the native Kani check of the
+sixteen-candidate nonzero comparison loop over arbitrary bytes times out at
+600 s; the isolated zero-test helper passes. Next (part 43): the P6 route:
+per-candidate native transition check, then a Lean induction over the 16
+iterations (as for the walk rows in part 30); then publication, FS conversion,
+joins and endpoint.
