@@ -272,3 +272,21 @@ remain OPEN. Decoder-output composition exposed unresolved conditional
 branches; development diagnostics identified those literal branch reductions
 as the obstruction behind expensive implicit equality checking. Diagnostics
 and failed attempts are not accepted sources. No proof limits were raised.
+
+
+Further PROVED local obligations: `48fd1096d` checks all five exact output
+decoder leaves; `18428eea5` assembles the same candidate prefix into a fixed
+P6 body output, retaining the explicit universal same-call `hsuffix` premise;
+`4242dda4f` proves the actual generated-candidate two-call loop shape,
+with evidence in evidence/s9-candidate-loop-two-call-shape-v1-20261022/.
+That statement retains the actual successful candidate loop equation and
+derives both same-execution body results, iterator transitions, shared middle
+array and returned output without substituting the P6 model.
+
+Still OPEN: the coefficient theorem consuming the five leaves (alias/type
+elaboration remains unresolved), the complete ordered branch-tail map and
+therefore discharge of `hsuffix`, complete helper/caller/library refinement,
+source adoption and final artifacts, S10/coherent replay and composed security.
+The conditional assembler is not a full-body correspondence theorem. All
+checks above are focused warm-cache compiles with standard axioms only; no
+production code was changed and the 100-bit target is not yet established.
