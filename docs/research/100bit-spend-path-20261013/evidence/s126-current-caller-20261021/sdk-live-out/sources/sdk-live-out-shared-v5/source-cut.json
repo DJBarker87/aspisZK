@@ -1,0 +1,12 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_sha256": "fe56293b943c01601bf21e0fe1c23c1a36fc0b6d4d7e1783dec9b48e3278f2b1",
+  "qualification": "Unit-return adapter writing the actual Result into an initialized error slot.\nRetains real Ref/Error types; overwriting the required initial error drops no guard.\nCandidates until every contract and composed bridge check passes. This avoids\nKani's unsupported Arbitrary generation for foreign returned guard types;\nno SDK source change, alternate guard or simplified result carrier is used.\n",
+  "view_length_bound": 10485760,
+  "domain": "All view lengths0..10485760, arbitrary backing bytes, actual AccountInfo metadata and signed counters/Rc fields. Bounds below10MiB are restricted primitive instances; native accepted-class coverage remains required.",
+  "mode": "shared",
+  "method": "try_borrow_data",
+  "original_sdk_source_sha256": "6b59aba664bb70fda6e17bcc8cf6eb41fc0bc9d8bcbb797bd70c1b107809c29a",
+  "expected_time": "Cached optimized compilation then one actual SDK unit-output contract or its verified real-guard bridge on the existing10MiB/all signed-counter/all nonzero Rc domain.",
+  "remaining": "Every actual contract/frame/bridge/safety check and cover must pass. Then complete native caller composition and full heap/runtime/ABI/child/oracle/TX2/S1/S6 binding. Generation is not proof."
+}

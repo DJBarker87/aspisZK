@@ -1,0 +1,27 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+error[E0596]: cannot borrow `out.0` as mutable, as `Fn` closures cannot mutate their captured variables
+  --> src/lib.rs:11:6
+   |
+ 8 | #[kani::ensures(|_| {
+   |                 --- in this closure
+...
+11 |   Ok(guard)=>before>=0 && before<isize::MAX && now==before+1 && std::mem::size_of_val(guard)==2*std::mem::size_of::<usize>() &&
+   |      ^^^^^ cannot borrow as mutable
+...
+17 | fn sdk_out<'b,'a>(account:&'b AccountInfo<'a>,out:&mut Reply<'b,'a>) {
+   |                                               --- `out` declared here, outside the closure
+
+error[E0596]: cannot borrow `out.0` as mutable, as `Fn` closures cannot mutate their captured variables
+  --> src/lib.rs:14:7
+   |
+ 8 | #[kani::ensures(|_| {
+   |                 --- in this closure
+...
+14 |   Err(e)=>matches!(e,ProgramError::AccountBorrowFailed) && (before<0 || before==isize::MAX) && now==before,
+   |       ^ cannot borrow as mutable
+...
+17 | fn sdk_out<'b,'a>(account:&'b AccountInfo<'a>,out:&mut Reply<'b,'a>) {
+   |                                               --- `out` declared here, outside the closure
+
+For more information about this error, try `rustc --explain E0596`.
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.

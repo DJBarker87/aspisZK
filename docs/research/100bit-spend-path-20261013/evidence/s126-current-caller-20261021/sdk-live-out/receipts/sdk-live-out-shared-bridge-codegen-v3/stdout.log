@@ -1,0 +1,20 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+error: generic parameters may not be used in const operations
+ --> src/lib.rs:6:72
+  |
+6 | #[kani::modifies(out.as_mut_ptr().cast::<[u8;std::mem::size_of::<Reply<'b,'a>>()]>(), counter(account).cast_mut().cast::<isize>())]
+  |                                                                        ^^ cannot perform const operation using `'b`
+  |
+  = note: lifetime parameters may not be used in const expressions
+  = help: add `#![feature(generic_const_exprs)]` to allow generic const expressions
+
+error: generic parameters may not be used in const operations
+ --> src/lib.rs:6:75
+  |
+6 | #[kani::modifies(out.as_mut_ptr().cast::<[u8;std::mem::size_of::<Reply<'b,'a>>()]>(), counter(account).cast_mut().cast::<isize>())]
+  |                                                                           ^^ cannot perform const operation using `'a`
+  |
+  = note: lifetime parameters may not be used in const expressions
+  = help: add `#![feature(generic_const_exprs)]` to allow generic const expressions
+
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
