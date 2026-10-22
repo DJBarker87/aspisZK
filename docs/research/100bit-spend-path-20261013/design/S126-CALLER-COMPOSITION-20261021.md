@@ -2159,3 +2159,95 @@ terminal receipt and timeout are retained; no solver from these jobs remains
 live. A further decomposition must change the byte-frame proof representation
 or establish the complete common-spec method transport, rather than repeat
 these unchanged native jobs. The priority and closure criteria remain S2 first.
+
+### 2026-10-22 — complete native decoder-prefix observation partitions
+
+**S2 remains OPEN; no enclosing successful native caller premise has been
+removed.** The original-SDK decoder-error prefix now has a complete checked
+partition of its original buffer observations. This supersedes the earlier
+statement that no native byte-frame result exists, at precisely this bounded
+prefix scope. It does not establish successful stage1 correspondence.
+
+The new source-only packet is
+`evidence/s126-current-caller-20261021/sdk-native-frame-windows/manifest.json`.
+The focused checker is `tools/s126-sdk-modular-20261021/check-native-frame-packet.py`.
+It verifies every manifest hash, exact enabled property inventory, source/body
+pins, unchanged arbitrary native inputs, and that partitions differ only in
+the ghost root/index. Original SDK methods are executed without replacement
+stubs. Every buffer byte is arbitrary; data and lamport aliases remain
+independent, as do all signed borrow counters and nonzero usize Rc headers.
+The original full 58295/1880/1768-byte allocations and Vec descriptors are
+retained. Instruction/account lengths remain 0..3.
+
+Public/root1 and checkpoint/root2 all-properties checks pass every 1969
+noncover property and reach both covers. Proof/root0 is split into fifteen
+aligned 4096-byte observation windows, truncating the last at 58295. Window0
+passes 1970 noncovers; windows1..14 pass 1971 each; every case reaches both
+covers. Differences in counts arise from the ghost-window scalar checks.
+These are complete enabled inventories, not selected byte-only checks. Raw
+CBMC exit10 denotes the two reached covers; the checker rejects any other
+failed, missing, duplicate or unchecked property. Exact per-target wall time,
+RSS and zero-swap receipts are retained. Window solver time ranges73.982 to
+177.923s (window0 137.223s); maximum RSS2917116KiB. Root1/root2 use
+23.465/22.600s and1033628/1040712KiB. All solvers have fresh admission,
+MemoryHigh6G/MemoryMax8G/MemorySwapMax0. Two sequential queues never reserve
+more than16G for these solvers. Metadata audits have1G/2G/0 scopes.
+
+`S2SdkNativeFrameCoverageV1.lean` proves `index_covered`,
+`proof_buffer_frame`, `bounded_buffer_frame`, and `all_buffers_frame` by
+division/remainder and list extensionality, without concrete byte reduction.
+Every proof index is representable by the exact u16/4096 window observer.
+The smallest changed target passes on Lean4.32.0 with-j1-M4400 in0.669s,
+804072KiB RSS, zero swaps; all four axiom reports are[propext,Quot.sound].
+Bundled Init/Omega import and tool hashes are in the Lean audit overlay;
+source SHA20a9919c3f57b884d830d6c76ee4ac1728be998c5ba7d0ac68504f7d90a742b8.
+The unknown local Lean lock was retained. No cold dependency build or unchanged
+full replay ran. The initial coverage attempt failed due to multiplication
+order (0.838s,816240KiB); its error-recovery sorryAx report is excluded, and
+its exact failed source is retained. There is no sorry in the accepted source.
+
+The first plain-output renderer omitted IDs containing Rust bracket types
+and multiline descriptions. The complete raw solver logs were retained.
+`audit-native-root-frame-host.py` reconstructs exact IDs against each enabled
+inventory, retaining the old incomplete renderer separately. Corrected
+`properties-complete-v2.json` and `property-audit-v2.json` establish complete
+coverage. This was a reporting defect; no solver success was inferred from
+the incomplete reports and no unchanged solver replay was needed.
+
+An additional native-only `sdk-native-entry-facts-v1` check derives admission
+facts from decoder entry: exact instruction length/selector/split, three
+accounts and pairwise-distinct keys, proof/public readonly nonsigner flags,
+checkpoint ownership/writable flags, original public/checkpoint allocation
+identity, and shared/exclusive borrow-counter admission. It passes all1889
+noncovers and reaches both covers (24.970s,918208KiB,swap0), with the exact
+decoder-cut InvalidAccountData result. No owned reference runs in that check.
+Its complete inventory/report is independently checked by the focused packet
+checker. It does not derive checkpoint zero bytes from an abstract scan result.
+
+The unrestricted root0 observation still timed out (183.944s,4020356KiB), and
+executing the native plus complete reference on the same original buffers
+without DFCC still timed out (187.124s,6504020KiB). Both are excluded, preserved
+and not rerun unchanged or with higher caps. Successful partition checks do
+not promote either timeout into a paired source correspondence proof.
+
+**Remaining premises and next concrete deliverable:** native decoder-entry
+facts plus the independently checked byte frames must construct the emitted
+reference admission state, using actual std-any/source-scan transport.
+The source/cut transport must justify replacing the decoder-error observation
+with the actual installed decoder and successful continuation. Then the
+actual successful native stage1 must join the existing installed
+`borrowed_stage1_source_linked_first` theorem, preserving child errors, guard
+lifetimes, checkpoint effects, release observer None and ordered oracle trace.
+General runtime/host-ABI embedding remains explicit. These are implementation
+obligations, not cryptographic assumptions; the new coverage theorem does not
+hide or discharge them by packaging them as a record. S1 original Prepared
+correspondence and S6 actual-caller binding remain open behind this connection.
+No TOTAL, full S2/S6/S1, or raw100-bit conclusion follows from this packet.
+
+The authority remains the b2727acd freeze; no shipped source changed. Exact
+candidate source hashes and de1e75322 context are authoritative for these new
+uncommitted checks. Historical capped receipt source_revision d8fc9db is host
+bookkeeping, not a new freeze or a claim that these candidates exist at that
+revision. Lean's log-derived audit overlay supersedes the generic raw receipt's
+inapplicable N/A axiom field. Aggregate adoption/re-pin and final coherent
+release dependency replay remain required before a release claim.

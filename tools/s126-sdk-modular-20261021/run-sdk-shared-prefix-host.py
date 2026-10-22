@@ -1,24 +1,31 @@
 #!/usr/bin/env python3
 """Actual native SDK decoder-entry frame and same-allocation reference cut.
 Only the exact native pure std-any is overapproximated by a read-only Boolean
-return. The native write frame is explicitly DFCC-enforced before linking the
-CBMC library. No byte equality is assumed; no property is selected or dropped.
+return. Default mode enforces the native DFCC contract. Pointwise mode checks
+explicit before/after observations instead; separated-pair mode checks the
+pair without assuming a frame. Single-byte mode explicitly selects one
+property and cannot establish the complete safety/frame inventory by itself.
 """
 from pathlib import Path
-import sys,json,hashlib,subprocess,os,signal,re
+import sys,json,hashlib,subprocess,os,signal,re,tomllib
 H=Path('/home/dombarker/project-offloads/s126-real-sdk-20261021');B=Path('/home/dombarker/.kani/kani-0.67.0/bin')
 havoc_inputs='havoc-inputs' in sys.argv
-pointwise='pointwise' in sys.argv
+pair='separated-pair' in sys.argv
+pointwise='pointwise' in sys.argv or pair
 plain='plain' in sys.argv
+single='single-byte' in sys.argv
+if single:assert plain and pointwise
 tag,version=sys.argv[1:3];P=H/('sdk-shared-prefix-'+version);O=H/tag
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 pin=H/('sdk-shared-prefix-codegen-'+version+'-input.json');inp=json.loads(pin.read_text())
 assert sha(P/'src/lib.rs')==inp['source_sha256']
+assert sha(P/'Cargo.toml')==inp['cargo_sha256']
+crate_name=tomllib.loads((P/'Cargo.toml').read_text())['package']['name'].replace('-','_')
 wanted='proofs::native_owned_decoder_prefix';line=next(i+1 for i,s in enumerate((P/'src/lib.rs').read_text().splitlines()) if 'fn native_owned_decoder_prefix()' in s)
 selected=[]
 for metadata in (H/'target/kani').rglob('aspis_s126_sdk_shared_prefix*.kani-metadata.json'):
  for row in json.loads(metadata.read_text()).get('proof_harnesses',[]):
-  if row['pretty_name']==wanted and row['original_start_line']==line and (row['attributes']['kind']=='Proof' if pointwise else row['attributes']['kind']=={'ProofForContract':{'target_fn':'native_prefix'}}):selected.append((metadata,row))
+  if row['crate_name']==crate_name and row['pretty_name']==wanted and row['original_start_line']==line and (row['attributes']['kind']=='Proof' if pointwise else row['attributes']['kind']=={'ProofForContract':{'target_fn':'native_prefix'}}):selected.append((metadata,row))
 assert len(selected)==1,selected
 metadata,row=selected[0];raw=Path(row['goto_file']);assert raw.is_file() and raw.name.endswith('.symtab.out')
 if not pointwise:assert row['contract'] and not row['contract']['recursion_tracker']
@@ -51,9 +58,20 @@ if 'run' not in sys.argv:
   (O/'initializer-declaration.c').write_text('#include <stddef.h>\nsize_t s126_havoc_input(unsigned char *,size_t);\nsize_t (*s126_keep_initializer)(unsigned char *,size_t)=s126_havoc_input;\n')
   (O/'initializer-body.c').write_text('#include <stddef.h>\nvoid __CPROVER_havoc_slice(void *,size_t);\nsize_t s126_havoc_input(unsigned char *p,size_t n){__CPROVER_havoc_slice(p,n);return n;}\n')
  subprocess.run(['python3',str(H/'kit/reservation.py'),str(H/(tag+'-admission.json'))],check=True,stdout=subprocess.DEVNULL)
- (H/(tag+'-input.json')).write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',source_sha256=sha(P/'src/lib.rs'),borrowed_source_sha256=sha(H/'owned-sdk-borrowed-v1/src/lib.rs'),codegen_input_sha256=sha(pin),raw_goto_sha256=sha(raw),harness_metadata_sha256=sha(metadata),harness_metadata=row,pretty_names_sha256=sha(namePath),runner_sha256=sha(Path(__file__)),tool_pins={str(p):sha(p) for p in [B/'goto-cc',B/'goto-instrument',B/'cbmc',libc]+([O/'initializer-declaration.c',O/'initializer-body.c'] if havoc_inputs else [])},abstracted_function=scan,abstracted_pretty_name=pretty,commands=cmds,qualification=('Pointwise native-prefix byte/descriptor/scalar before-after checks; no DFCC, no owned reference loaded. Same read-only std-any overapproximation. Extensional/runtime/scan/caller composition remains required.' if pointwise else __doc__),property_scope='All reachable assertions and source safety/unwinding checks; no selection',timeout_seconds=180,retained='Reached-decoder scope, concrete native/source scan transport, decoder cut instance and later-stage/runtime/oracle joins remain explicit. Codegen and failed checks are not proof evidence.'),indent=2)+'\n')
- raise SystemExit(subprocess.call(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'kit/capped.py'),str(H/'receipts'/tag),'Native prefix: '+('symbolic pointwise before/after assertions, no DFCC' if pointwise else 'explicit DFCC frame')+', pure scan overapproximation and one180s CBMC check; no arithmetic evaluation','--','python3',__file__,tag,version,'run',*(['havoc-inputs'] if havoc_inputs else []),*(['pointwise'] if pointwise else []),*(['plain'] if plain else [])]))
+ (H/(tag+'-input.json')).write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',source_sha256=sha(P/'src/lib.rs'),borrowed_source_sha256=sha(H/'owned-sdk-borrowed-v1/src/lib.rs'),codegen_input_sha256=sha(pin),raw_goto_sha256=sha(raw),harness_metadata_sha256=sha(metadata),harness_metadata=row,pretty_names_sha256=sha(namePath),runner_sha256=sha(Path(__file__)),tool_pins={str(p):sha(p) for p in [B/'goto-cc',B/'goto-instrument',B/'cbmc',libc]+([O/'initializer-declaration.c',O/'initializer-body.c'] if havoc_inputs else [])},abstracted_function=scan,abstracted_pretty_name=pretty,commands=cmds,qualification=('Pointwise native-prefix byte/descriptor/scalar before-after checks; no DFCC, no owned reference loaded. Same read-only std-any overapproximation. Extensional/runtime/scan/caller composition remains required.' if pointwise else __doc__),property_scope=('Only named byte-preservation assertion. All other safety/unwinding/cover/caller properties require their checked union.' if single else 'All reachable assertions and source safety/unwinding checks; no selection'),timeout_seconds=180,retained='Reached-decoder scope, concrete native/source scan transport, decoder cut instance and later-stage/runtime/oracle joins remain explicit. Codegen and failed checks are not proof evidence.'),indent=2)+'\n')
+ if pair:
+  p=H/(tag+'-input.json');m=json.loads(p.read_text());m['qualification']='Actual SDK native/full borrowed-reference decoder-prefix pair. No DFCC/native frame is assumed. Independent byte-frame certificates and input-heap composition are required separately; ordinary proof, no SDK method stubs.';p.write_text(json.dumps(m,indent=2)+'\n')
+ raise SystemExit(subprocess.call(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'kit/capped.py'),str(H/'receipts'/tag),'Native prefix: '+('native/reference pair, frame certified separately' if pair else 'symbolic pointwise before/after assertions, no DFCC' if pointwise else 'explicit DFCC frame')+', pure scan overapproximation and one180s CBMC check; no arithmetic evaluation','--','python3',__file__,tag,version,'run',*(['havoc-inputs'] if havoc_inputs else []),*(['pointwise'] if pointwise else []),*(['plain'] if plain else []),*(['single-byte'] if single else []),*(['separated-pair'] if pair else [])]))
 for i,cmd in enumerate(cmds):
+ if plain and i==len(cmds)-1:
+  invcmd=cmd.copy();invcmd[-1:-1]=['--show-properties','--json-ui']
+  inventory=subprocess.run(invcmd,capture_output=True,text=True,timeout=180,check=True).stdout
+  (O/'property-inventory.json').write_text(inventory)
+  props=[p for item in json.loads(inventory) for p in item.get('properties',[])]
+  if single:
+   selected=[p for p in props if p['description']=='"arbitrary native-prefix account byte preserved"'];assert len(selected)==1
+   cmd[-1:-1]=['--property',selected[0]['name']]
+   (O/'property-selection.json').write_text(json.dumps(dict(command=cmd,selected_properties=selected,unselected_property_count=len(props)-1,program_sha256=sha(Path(cmd[-1])),qualification='Single allocation/byte assertion partition only; no credit for unselected safety/unwinding/caller properties.'),indent=2)+'\n')
  with (O/('step'+str(i)+'.log')).open('w') as log:
   p=subprocess.Popen(cmd,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
   try:p.wait(timeout=180)
@@ -63,9 +81,20 @@ for i,cmd in enumerate(cmds):
  else:
   rows=[]
   if plain:
+   expected={p['name']:p for p in props};current=None;block=[]
    for line in (O/('step'+str(i)+'.log')).read_text().splitlines():
-    m=re.fullmatch(r'\[([^\]]+)\] (.*): (SUCCESS|FAILURE|UNKNOWN|NOT_CHECKED|UNREACHABLE)',line)
-    if m:rows.append(dict(property=m[1],description=m[2],status=m[3]))
+    end=line.find('] ') if line.startswith('[') else -1
+    while end>=0 and line[1:end] not in expected:end=line.find('] ',end+2)
+    if end>=0:
+     assert current is None,('unterminated property',current)
+     current=line[1:end];block=[line[end+2:]]
+    elif current is not None:block.append(line)
+    if current is not None:
+     m=re.fullmatch(r'(.*): (SUCCESS|FAILURE|UNKNOWN|UNREACHABLE|NOT CHECKED|ERROR)','\n'.join(block),re.S)
+     if m:rows.append(dict(property=current,description=m[1],status=m[2]));current=None;block=[]
+   assert current is None
+   assert len(rows)==len({r['property'] for r in rows})
+   assert {r['property'] for r in rows}==({p['name'] for p in selected} if single else set(expected))
   else:
    for item in json.loads((O/('step'+str(i)+'.log')).read_text()):rows += [{k:v for k,v in r.items() if k!='trace'} for r in item.get('result',[])]
   (O/'properties-without-traces.json').write_text(json.dumps(rows,indent=2)+'\n')
