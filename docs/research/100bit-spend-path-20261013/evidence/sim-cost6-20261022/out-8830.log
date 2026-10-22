@@ -1,0 +1,45 @@
+'R1Z.SimCostShift6.dir_cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostShift6.update_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostShift6.updateRun_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostShift6.updateRun_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostShift6.suffixRun_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostShift6.suffixRun_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostShift6.suffixRun_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostShift6.suffix_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostShift6.suffix_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostRepresentation6.decode_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostRepresentation6.encode_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostRepresentation6.arrayAdd_payload' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostRepresentation6.payload_add_correct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostOuterRetry6.scan_spec' depends on axioms: [propext, Quot.sound]
+'R1Z.SimCostOuterRetry6.scan_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostOuterRetry6.scan_firstGood' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostOuterRetry6.eight_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostCallbacks6.metadata_output_cost' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostCallbacks6.view_output_cost' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostCallbacks6.no_uniform_callback_tariff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostCallbacks6.no_uniform_callback_relative_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostRepresentation6.index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PrivacyR1HeadlineV2SimProto.privacy_headline_v2_sim_proto' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitDeployedFuel22.RustProverRefinement' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure R1Z.ProverCommitFuelJoin22.RunJoin {R M V : Type} [Fintype R] [Fintype M] (runtime : R → V) (model : M → V)
+  (old : Fin 8 → M → Prop) (queries : M → List R1Z.ProverCommitSeedEvent19.Entry) : Type 1
+number of parameters: 9
+fields:
+  R1Z.ProverCommitFuelJoin22.RunJoin.cp : R0Z.FsAbort.Coupling R
+      ((M × R0Z.FsStatement.OracleAnswer) × R1Z.ProverCommitFuelJoin22.Tape)
+  R1Z.ProverCommitFuelJoin22.RunJoin.agreement : ∀ (s : self.cp.S),
+      (¬∃ i, R1Z.ProverCommitFuelJoin22.bad old queries i (self.cp.toM s)) →
+        runtime (self.cp.toR s) = model (self.cp.toM s).1.1
+constructor:
+  R1Z.ProverCommitFuelJoin22.RunJoin.mk {R M V : Type} [Fintype R] [Fintype M] {runtime : R → V} {model : M → V}
+    {old : Fin 8 → M → Prop} {queries : M → List R1Z.ProverCommitSeedEvent19.Entry}
+    (cp : R0Z.FsAbort.Coupling R ((M × R0Z.FsStatement.OracleAnswer) × R1Z.ProverCommitFuelJoin22.Tape))
+    (agreement :
+      ∀ (s : cp.S),
+        (¬∃ i, R1Z.ProverCommitFuelJoin22.bad old queries i (cp.toM s)) → runtime (cp.toR s) = model (cp.toM s).1.1) :
+    R1Z.ProverCommitFuelJoin22.RunJoin runtime model old queries
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
