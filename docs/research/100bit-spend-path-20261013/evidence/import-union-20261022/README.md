@@ -139,3 +139,8 @@ IU-371 pass was erroneous and has been corrected.
 IU-384 found an ambiguous `dite_true` name (`Aeneas` versus root) in
 `DigestFixedBinding.false_target`. Qualifying `_root_.dite_true` is the only
 change; focused IU-385 passes in 2.0 s. Statements are unchanged.
+
+IU-407 found concrete iterator-result tuples in the outer public digest fuel
+proof. Adding `uncurry_apply_pair` to its two existing next-result
+simplification lists is the entire change; focused IU-408 passes in 1.75 s.
+Its twenty-level symbolic induction and model theorem statements are unchanged.
