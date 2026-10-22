@@ -1,3 +1,4 @@
+import AspisR1ProducerRelease47.Batched48
 import AspisR1ProducerRelease47.SparseScan50
 import AspisR1ProducerRelease47.SparseSum50
 import AspisR1ProducerRelease47.Sparse50
@@ -13,18 +14,6 @@ callee declaration body byte-for-byte. No external template is installed. -/
 open Aeneas Aeneas.Std Result ControlFlow Error
 noncomputable section
 namespace AspisR1ProducerRelease47
-def field.CM31.mul_m31
-  (self : field.CM31) (rhs : field.M31) : Result field.CM31 := do
-  let m ← field.M31.mul self.a rhs
-  let m1 ← field.M31.mul self.b rhs
-  ok { a := m, b := m1 }
-
-def field.QM31.mul_m31
-  (self : field.QM31) (rhs : field.M31) : Result field.QM31 := do
-  let c ← field.CM31.mul_m31 self.c0 rhs
-  let c1 ← field.CM31.mul_m31 self.c1 rhs
-  ok { c0 := c, c1 }
-
 def linear50.go
   (point : Array field.QM31 10#usize) (left : Std.U8) (suffix : field.QM31)
   (weighted : field.QM31) :
