@@ -1413,3 +1413,18 @@ versus State-level words18, then scanner-chain and final-output composition.
 The prior-prefix state relation remains required. The generic digest law can
 now be instantiated for the proved P3 model, but its production wrapper and
 shared-oracle probability law are separate obligations.
+
+
+## Ordered decoder interface ready for the concrete scanner join
+
+`s4-query-array-order-v1-20261022` reuses
+`LiteralQueryRead.decode_success` to prove that an actual Array U32 22
+whose value list equals the successfully decoded literal query list agrees
+at every Fin22 coordinate with the decoded query function. The theorem
+does not supply the list equality: that is the ongoing concrete scanner
+refinement obligation. It provides the final ordered coordinate transport
+needed for Prepared.queries rather than treating query sets as ordered
+arrays. Exit 0, 26.272s, peak RSS 3,452,387,328 bytes, swap 0, standard
+axioms. A failed broad simp attempt expanded ofFn; the replacement uses
+the symbolic getElem?_ofFn lemma. Diagnostics and the focused checker are
+retained. No dependencies or unchanged full regression were rebuilt.
