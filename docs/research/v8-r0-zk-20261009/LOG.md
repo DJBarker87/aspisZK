@@ -8227,3 +8227,26 @@ input must be disjoint from the protocol's oracle inputs (tag or length
 prefix). If it is, it is an independent ROM coordinate. If it isn't, prove
 the overlap is harmless or report it as a source finding. Do not change shipped
 code.
+
+## D150 (lead, 2026-10-22 05:45): part 37 merged; a new explicit reservation-guess event
+
+Merged `codex/cx-prover-commit37-20261022` (report
+`r1p-final/PROVER-COMMIT37-20261022.md`). Proved under P1 the fresh-address
+entry bound and the frame separation of the reservation input from the
+simulator-seed frame; control proofs for all 0–15 rejected nonce prefixes.
+J9151, 19 theorems, standard axioms; no shipped change.
+Finding (`no_existing_event_containment`): an adversary oracle query on the
+reservation input (a memo hit) is **not** contained in the existing
+`ProverCommitSeedEvent19.seedGuess`, which tests only the prefix
+`UNPROVED:R1:SIM:COIN || simulatorSeed`. So D149's statement that the seed-guess
+event already covered this was wrong (lead error).
+
+**Ruling.** Add one new, explicit bad event, `reservationGuess`: some
+adversary oracle query (or adversary-chosen ledger entry) equals a
+reservation input or path the prover generates. Bound it by the same counting as
+`seedGuess`: with a byte-blind adversary and uniform nonzero 32-byte nonces
+(E1), the mass is ≤ (Q + entries) · attempts / (2^256 − 1) per run. Add that
+term, stated numerically, **visibly to the headline bound** (before/after
+shown) rather than absorbing it. At protocol parameters it is far below the
+existing terms, so the < 2^-100 conclusion should still hold; prove that
+inequality, do not assert it.
