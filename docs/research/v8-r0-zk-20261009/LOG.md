@@ -8333,3 +8333,19 @@ only outside the two raw-seed memo events. Then transport the joint adaptive
 law (with duplicate termination and retained rejected-attempt history) to the
 successful continuation, keeping the existing bounds on private-derived reads.
 No new trust item, nonce law or ledger cap.
+
+## D154 (lead, 2026-10-22 06:45): part 41 merged; conditional ROM law proved locally
+
+Merged `codex/cx-prover-commit41-20261022` (report
+`r1p-final/PROVER-COMMIT41-20261022.md`). Proved: the conditional
+public-prefix ROM law with retained adaptive histories; preservation of the
+public binding answers; memo-aware mixed-read agreement; the verifier's
+opening log is unchanged when the binding answers are replaced. The selected
+64-byte native entropy API passed its bounded control check, and its structural
+reference translates through Charon/Aeneas. 20 theorems, standard axioms;
+shipped files byte-identical. The job stopped because its env J allocation
+(9187–9399) was exhausted, not on a proof obstruction.
+Next (part 42, env J 9400–9799): instantiate the concrete `gAddr`/`attVec`
+conditional private-read bounds and the successful-continuation transport;
+the Lean bridge for the 64-byte owner and reservation-history composition;
+then publication, FS conversion, the joins and the endpoint.
