@@ -33,6 +33,28 @@ under `evidence/prover-commit37-20261022/`. Each job has its own capped scope
 (MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; Lean -M7000).
 No cold dependency build or full regression ran.
 
+## Stage 2: conditional ROM memo counterexample
+
+`ProverCommitReservationMemo37.generic_memo_mass` computes the exact
+conditional ROM mass after one prior query. Fix a nonce `known` and its
+oracle answer `entry`; the adversary chooses one ledger entry equal to that
+answer. All remaining coordinates stay independently uniform. For an
+independent uniform raw nonce the hit mass is `2/N - 1/N²`, N = 2^256,
+strictly greater than the fresh-entry bound `1/N`.
+`conditional_memo_mass` and `memo_exceeds_fresh_bound` specialize this
+symbolically to the actual 256-bit carrier. This is an actual conditioned
+ROM model, unlike part 36's generic constant-hash countermodel.
+`old_event_absent` proves the old simulator-domain event has mass zero for
+that prior query list for every simulator seed. The missing memo-hit charge
+therefore matters quantitatively as well as pointwise.
+
+J9137–J9145 are rejected elaboration drafts (decision/Fintype instance
+normalization; no resource-cap violation and no recursion limit raised).
+J9146 compiles the four final theorems, exit 0, wall 1.97 s, peak RSS
+4,061,132 KiB, zero swaps; only standard axioms. This raw-draw computation
+is explicitly before nonzero conditioning; no complete native retry bound
+is claimed from it.
+
 ## Remaining work
 
 The exact native reservation query-event transport is under investigation.
