@@ -104,3 +104,9 @@ IU-346 exposed the concrete-pair version of the same combinator in
 `ScheduleCompletePacking.actual_enclosing_scheduleFamily`. Adding the pinned
 `Aeneas.Std.uncurry_apply_pair` theorem to its existing `simp only` list is the
 entire repair; focused IU-347 passes. No statement or witness changed.
+
+IU-350 found the same concrete iterator-result pair in
+`OccupancyLiteralLoop.loop_success_fuel`. Its base and step simplification
+lists now include `uncurry_apply_pair`; focused IU-351 passes. The fuel
+induction, sparse lane shape, arithmetic lemmas, statement and hypotheses are
+unchanged. The recurrence was not evaluated on a generated concrete cell.
