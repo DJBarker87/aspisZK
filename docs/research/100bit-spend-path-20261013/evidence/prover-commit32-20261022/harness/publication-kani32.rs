@@ -1,0 +1,57 @@
+
+#[cfg(kani)]
+mod publication32 {
+    use super::owned32::*;
+    use std::collections::BTreeMap;
+    fn maps()->(IndexMap,BTreeMap<usize,Vec<u8>>) {
+        let a:usize=kani::any();let b:usize=kani::any();
+        let va=vec![kani::any::<u8>()];let vb=vec![kani::any::<u8>()];
+        let (xs,_)=index_insert(Vec::new(),a,va.clone(),0,Vec::new());
+        let (xs,_)=index_insert(xs,b,vb.clone(),0,Vec::new());
+        let mut m=BTreeMap::new();m.insert(a,va);m.insert(b,vb);
+        (xs,m)
+    }
+    #[kani::proof]
+    #[kani::unwind(12)]
+    fn insert_replace_order() {
+        let (xs,mut m)=maps();
+        let k:usize=kani::any();let v=vec![kani::any::<u8>()];
+        let (ys,old)=index_insert(xs,k,v.clone(),0,Vec::new());
+        let previous=m.insert(k,v);
+        assert_eq!(old,previous);
+        assert_eq!(ys.len(),m.len());
+        let mut at=0;
+        for (key,value) in m {assert_eq!(ys[at].0,key);assert_eq!(ys[at].1,value);at+=1;}
+    }
+    #[kani::proof]
+    #[kani::unwind(12)]
+    fn entry_lazy() {
+        let (xs,mut m)=maps();
+        let k:usize=kani::any();let v=vec![kani::any::<u8>()];
+        let mut invoked=false;
+        m.entry(k).or_insert_with(||{invoked=true;v.clone()});
+        let absent=index_absent(xs.clone(),k);
+        assert_eq!(absent,invoked);
+        let ys=if absent {index_insert(xs,k,v,0,Vec::new()).0}else{xs};
+        assert_eq!(index_get(ys,k,0),m.get(&k).cloned());
+    }
+    #[kani::proof]
+    #[kani::unwind(12)]
+    fn lookup() {
+        let (xs,m)=maps();let k:usize=kani::any();
+        assert_eq!(index_get(xs,k,0),m.get(&k).cloned());
+    }
+    #[kani::proof]
+    #[kani::unwind(16)]
+    fn query_order_duplicates() {
+        let k:u32=kani::any();let j:u32=kani::any();
+        let a=vec![kani::any::<u8>()];let b=vec![kani::any::<u8>()];
+        let (xs,_)=index_insert(Vec::new(),k as usize,a.clone(),0,Vec::new());
+        let (xs,_)=index_insert(xs,j as usize,b.clone(),0,Vec::new());
+        let mut m=BTreeMap::new();m.insert(k as usize,a);m.insert(j as usize,b);
+        let queries=vec![k,j,k];
+        let mut expected=Vec::new();
+        for q in &queries {expected.extend_from_slice(&m[&(*q as usize)]);}
+        assert_eq!(publish_queries(queries,xs,0,Vec::new()),Some(expected));
+    }
+}
