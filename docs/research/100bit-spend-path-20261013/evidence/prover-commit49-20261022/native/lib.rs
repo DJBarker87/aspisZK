@@ -27,7 +27,7 @@ fn native_tail(mut point:[E;10],r:usize,remaining:usize,assignment:usize,offset:
  point[r+1+offset]=if (assignment>>(remaining-1-offset))&1==0 {E(0)} else {E::ONE};point
 }
 fn owner_tail(mut point:[E;10],round:usize,remaining:usize,assignment:usize,offset:usize)->[E;10] {
- point[round+1+offset]=if (assignment>>(remaining-1-offset))&1==0 {E(0)} else {E::ONE};point
+ point[round+1+offset]=if (assignment>>((remaining-1-offset) as u32))&1==0 {E(0)} else {E::ONE};point
 }
 fn native_sum(value:E,oracle:Result<E,u8>)->Result<E,u8> {Ok(value.add(oracle?))}
 fn owner_sum(value:E,oracle:Result<E,u8>)->Result<E,u8> {match oracle {Err(e)=>Err(e),Ok(x)=>Ok(value.add(x))}}

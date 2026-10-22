@@ -1,0 +1,53 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSampleBits49.lean:20:47: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+assignment : Usize
+s : U32
+small : ↑s < 32
+⊢ 32 ≤ UScalarTy.Usize.numBits
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSampleBits49.lean:19:30: warning: This simp argument is unused:
+  BitVec.toNat_ushiftRight
+
+Hint: Omit it from the simp argument list.
+  simp only [BitVec.toNat_and,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵u̵s̵h̵i̵f̵t̵R̵i̵g̵h̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSampleBits49.lean:38:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(remaining.wrapping_sub 1#usize)
+in the target expression
+  ↑((remaining.wrapping_sub 1#usize).wrapping_sub offset) = ↑remaining - 1 - ↑offset
+
+remaining offset assignment : Usize
+positive : ↑offset < ↑remaining
+bound : ↑remaining ≤ 9
+⊢ ↑((remaining.wrapping_sub 1#usize).wrapping_sub offset) = ↑remaining - 1 - ↑offset
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSampleBits49.lean:43:8: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_inj`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSampleBits49.lean:34:55: error: unsolved goals
+remaining offset assignment : Usize
+positive : ↑offset < ↑remaining
+bound : ↑remaining ≤ 9
+hsub : ↑((remaining.wrapping_sub 1#usize).wrapping_sub offset) = ↑remaining - 1 - ↑offset
+hcast : ↑(UScalar.cast UScalarTy.U32 ((remaining.wrapping_sub 1#usize).wrapping_sub offset)) = ↑remaining - 1 - ↑offset
+⊢ assignment.wrapping_shr (UScalar.cast UScalarTy.U32 ((remaining.wrapping_sub 1#usize).wrapping_sub offset)) &&&
+        1#usize =
+      0#usize ↔
+    bit assignment ↑remaining ↑offset = false
+'R1Z.ProverCommitSampleBits49.sub_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSampleBits49.bit_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSampleBits49.condition' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

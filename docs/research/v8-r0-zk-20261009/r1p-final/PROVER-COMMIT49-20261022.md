@@ -50,6 +50,26 @@ No pure std trust fields added. No shipped files changed. Target remains open:
 semantic point/oracle correspondence and guards, inverse binding, weights,
 all remaining native callers and complete ordered model payload image.
 
+## Stage 2: exact sample-point and Boolean enumeration correspondence
+
+J10014/16/18/21/25 establish the scalar bit interpretation, the complete owned
+tail update, the complete sample point, the big-endian assignment bijection,
+and the equality of the sample-point sum with the existing model's
+`HonestView.roundPoint` sum. `SampleModel49.point_model` assumes only the
+already-received challenge prefix, not a point-array or sample-output image.
+`sum_points` transports arbitrary point functions; the actual native semantic
+oracle still needs its value/success law. The explicit owner shift-count cast
+is checked by `tail-cast-v2` (0.331 s, 134216 KiB, zero swaps).
+J10026 proves boundary preservation and terminal adjustment of the shifted
+polynomial, with the half and inverse/nonzero conditions exposed. It does not
+claim those conditions or the native guard arithmetic have been discharged.
+
+All accepted declarations print only standard axioms. Failed intermediate
+syntax/carrier/simp drafts are retained. J10012 is a transient aggregate-memory
+reservation refusal, before a compiler launch. The subsequent authorized
+reservation succeeds; no cap or host reservation policy is changed.
+No native source is extracted and no shipped file changes.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

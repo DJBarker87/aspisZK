@@ -1,0 +1,50 @@
+import R1Z.ProverCommitSampleBits49
+import Mathlib.Data.Fintype.Pi
+import Mathlib.Data.Fintype.Card
+import Mathlib.Algebra.BigOperators.Group.Finset.Pi
+/-! Big-endian enumeration is a bijection, so the source's integer traversal
+has exactly the model's Boolean-tail sum. No finite cube is reduced. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitBooleanEnum49
+open scoped BigOperators
+
+def tail (n : Nat) (a : Fin (2^n)) (i : Fin n) : Bool := a.val.testBit (n-1-i.val)
+
+theorem injective (n : Nat) : Function.Injective (tail n) := by
+  intro a b h
+  apply Fin.ext
+  apply Nat.eq_of_testBit_eq
+  intro i
+  by_cases hi : i<n
+  · have hv := congrFun h (⟨n-1-i,by omega⟩ : Fin n)
+    have he : n-1-(n-1-i)=i := by omega
+    simpa only [tail,he] using hv
+  · have hp : 2^n≤2^i := Nat.pow_le_pow_right (by decide) (by omega)
+    rw [Nat.testBit_lt_two_pow (lt_of_lt_of_le a.isLt hp),
+      Nat.testBit_lt_two_pow (lt_of_lt_of_le b.isLt hp)]
+
+theorem bijective (n : Nat) : Function.Bijective (tail n) := by
+  refine ⟨injective n,?_⟩
+  by_contra hn
+  have hc := Fintype.card_lt_of_injective_not_surjective (tail n) (injective n) hn
+  simpa only [Fintype.card_fin,Fintype.card_fun,Fintype.card_bool] using hc
+
+def equiv (n : Nat) : Fin (2^n) ≃ (Fin n → Bool) := Equiv.ofBijective (tail n) (bijective n)
+
+theorem sum_tail {K : Type} [AddCommMonoid K] (n : Nat) (f : (Fin n → Bool) → K) :
+    (∑ a : Fin (2^n), f (tail n a))=∑ b : Fin n → Bool, f b :=
+  Equiv.sum_comp (equiv n) f
+
+theorem bit_tail (n : Nat) (a : Fin (2^n)) (word : Aeneas.Std.Usize)
+    (hw : word.val=a.val) (i : Fin n) :
+    ProverCommitSampleBits49.bit word n i.val=tail n a i := by
+  rw [ProverCommitSampleBits49.bit,hw,tail,Nat.testBit_eq_decide_div_mod_eq]
+  congr 1
+  omega
+
+#print axioms injective
+#print axioms bijective
+#print axioms sum_tail
+#print axioms bit_tail
+end R1Z.ProverCommitBooleanEnum49
