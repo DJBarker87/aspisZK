@@ -1,3 +1,4 @@
+import PublicCodecAgreement
 import ExtractedDecoderPublicBridge
 
 /-! Fixed carrier transport for the actual ASF8 decoder's returned statement.

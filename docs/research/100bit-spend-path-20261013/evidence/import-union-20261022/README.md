@@ -144,3 +144,9 @@ IU-407 found concrete iterator-result tuples in the outer public digest fuel
 proof. Adding `uncurry_apply_pair` to its two existing next-result
 simplification lists is the entire change; focused IU-408 passes in 1.75 s.
 Its twenty-level symbolic induction and model theorem statements are unchanged.
+
+The part-52 obstruction is cleared: `ExtractedDecoderCallerBridge` passes at
+IU-421. Its consumer `ExtractedDecoderPublicBinding` exposed an undeclared
+`PublicCodecAgreement` dependency (IU-425). The unchanged pure agreement module
+passes IU-426, and adding its explicit import makes the consumer pass IU-427.
+This adds the missing dependency to the plan; theorem statements are unchanged.
