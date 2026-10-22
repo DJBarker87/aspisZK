@@ -20,6 +20,9 @@
 extern crate alloc;
 use alloc::vec::Vec;
 
+#[cfg(feature = "native-kernels")]
+pub mod native_m31;
+
 /// The M31 modulus.
 pub const P: u64 = 0x7fff_ffff;
 
@@ -67,6 +70,28 @@ pub fn kimg_ok(
     to: usize,
     ts: usize,
 ) -> bool {
+    #[cfg(feature = "native-kernels")]
+    if s <= native_m31::MAX_TERMS {
+        let mut ok = true;
+        let mut base = 0;
+        while base < nrows {
+            let width = core::cmp::min(native_m31::TILE, nrows - base);
+            let mut acc = [0u64; native_m31::TILE];
+            for p in 0..s {
+                let t = idx[io+p] as usize;
+                let y = c[co+p];
+                for k in 0..width {
+                    acc[k] += native_m31::mul(m[t*st+base+k], y) as u64;
+                }
+            }
+            for k in 0..width {
+                let v = (m[j*st+base+k] as u64 + acc[k] % P) % P;
+                ok &= v == tgt[to+(base+k)*ts] as u64;
+            }
+            base += width;
+        }
+        return ok;
+    }
     let mut ok = true;
     let mut i: usize = 0;
     while i < nrows {
@@ -136,6 +161,26 @@ pub fn ents_ok(
 /// One row of a product test: for every j < nj,
 /// sum_{p<len} a[ao + i*len + p] * b[bo + p*nj + j] == c[co + i*nj + j].
 pub fn prod_row_ok(a: &[u32], ao: usize, b: &[u32], bo: usize, c: &[u32], co: usize, i: usize, nj: usize, len: usize) -> bool {
+    #[cfg(feature = "native-kernels")]
+    if len <= native_m31::MAX_TERMS {
+        let mut ok = true;
+        let mut base = 0;
+        while base < nj {
+            let width = core::cmp::min(native_m31::TILE, nj-base);
+            let mut acc = [0u64; native_m31::TILE];
+            for p in 0..len {
+                let x = a[ao+i*len+p];
+                for k in 0..width {
+                    acc[k] += native_m31::mul(x,b[bo+p*nj+base+k]) as u64;
+                }
+            }
+            for k in 0..width {
+                ok &= acc[k] % P == c[co+i*nj+base+k] as u64;
+            }
+            base += width;
+        }
+        return ok;
+    }
     let mut ok = true;
     let mut j: usize = 0;
     while j < nj {

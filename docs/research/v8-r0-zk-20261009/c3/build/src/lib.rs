@@ -16,6 +16,10 @@
 extern crate alloc;
 use alloc::vec::Vec;
 
+#[cfg(feature = "native-kernels")]
+#[path = "../../check/src/native_m31.rs"]
+pub mod native_m31;
+
 pub const P: u64 = 0x7fff_ffff;
 
 pub fn fadd(x: u32, y: u32) -> u32 {
@@ -25,7 +29,10 @@ pub fn fsub(x: u32, y: u32) -> u32 {
     ((x as u64 % P + P - y as u64 % P) % P) as u32
 }
 pub fn fmul(x: u32, y: u32) -> u32 {
-    ((x as u64 * y as u64) % P) as u32
+    #[cfg(feature = "native-kernels")]
+    { return native_m31::mul(x,y); }
+    #[cfg(not(feature = "native-kernels"))]
+    { ((x as u64 * y as u64) % P) as u32 }
 }
 pub fn qadd(x: [u32; 4], y: [u32; 4]) -> [u32; 4] {
     [fadd(x[0], y[0]), fadd(x[1], y[1]), fadd(x[2], y[2]), fadd(x[3], y[3])]

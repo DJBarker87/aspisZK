@@ -1,0 +1,61 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: function `mul` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_m31.rs:12:8
+   |
+12 | pub fn mul(x: u32, y: u32) -> u32 { reduce(x as u64 * y as u64) }
+   |        ^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `sub_product` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_m31.rs:15:8
+   |
+15 | pub fn sub_product(x: u32, s: u32, b: u32) -> u32 {
+   |        ^^^^^^^^^^^
+
+warning: function `madd` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_m31.rs:21:8
+   |
+21 | pub fn madd(acc: u32, x: u32, y: u32) -> u32 {
+   |        ^^^^
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Thread 3: Checking harness proofs::subtract_after_product...
+Thread 2: Checking harness proofs::image_update_after_product...
+Thread 1: Checking harness proofs::bounded_accumulator_step...
+Thread 0: Checking harness proofs::tile_partition_preserves_order...
+Thread 2: 
+VERIFICATION RESULT:
+ ** 0 of 10 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.06681866s
+
+Thread 3: 
+VERIFICATION RESULT:
+ ** 0 of 5 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.0762431s
+
+Thread 2: Checking harness proofs::reduction_all_u64...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 37 failed (1 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.8706121s
+
+Thread 2: 
+VERIFICATION RESULT:
+ ** 0 of 8 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 3.1126757s
+

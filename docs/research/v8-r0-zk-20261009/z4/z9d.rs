@@ -75,17 +75,20 @@ fn image(f: &Fam, e: usize, rows: usize, sel: &dyn Fn(&Src3) -> &[u32]) -> Vec<u
     let j = f.ej[e] as usize;
     let po = f.epo[e] as usize;
     let cc = &f.ccs[e];
-    (0..rows)
-        .map(|t| {
-            let mut acc = sel(&f.srcs[j].1)[t] as u64;
-            for (p, c) in cc.iter().enumerate() {
-                let s = f.pidx[po + p] as usize;
-                let x = sel(&f.srcs[s].1)[t] as u64;
-                acc = (acc + x * *c as u64 % PM) % PM;
+    let mut out = vec![0u32; rows];
+    let tile = aspis_r1_cert_check::native_m31::TILE;
+    for base in (0..rows).step_by(tile) {
+        let width = core::cmp::min(tile, rows-base);
+        for k in 0..width { out[base+k] = sel(&f.srcs[j].1)[base+k]; }
+        for (p, c) in cc.iter().enumerate() {
+            let s = f.pidx[po+p] as usize;
+            let src = sel(&f.srcs[s].1);
+            for k in 0..width {
+                out[base+k] = aspis_r1_cert_check::native_m31::madd(out[base+k],src[base+k],*c);
             }
-            acc as u32
-        })
-        .collect()
+        }
+    }
+    out
 }
 fn matmul(a: &[u32], b: &[u32], ni: usize, nj: usize, len: usize) -> Vec<u32> {
     let mut out = vec![0u32; ni * nj];

@@ -65,8 +65,13 @@ fn dot(a: &[u32], b: &[u32]) -> u32 {
 /// v -= s * b  (elementwise, from index `from`).
 #[inline]
 fn axpy_sub(v: &mut [u32], s: u32, b: &[u32]) {
-    for (x, y) in v.iter_mut().zip(b) {
-        *x = subm(*x, mulm(s, *y));
+    let n = core::cmp::min(v.len(), b.len());
+    let tiled = n / 8 * 8;
+    for (x,y) in v[..tiled].chunks_exact_mut(8).zip(b[..tiled].chunks_exact(8)) {
+        for k in 0..8 { x[k] = aspis_r1_cert_check::native_m31::sub_product(x[k],s,y[k]); }
+    }
+    for (x,y) in v[tiled..n].iter_mut().zip(&b[tiled..n]) {
+        *x = aspis_r1_cert_check::native_m31::sub_product(*x,s,*y);
     }
 }
 fn scale_in(v: &mut [u32], s: u32) {

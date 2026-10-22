@@ -1,0 +1,198 @@
+     Locking 1 package to latest compatible version
+      Adding aspis-r1-cert-check v0.0.0 (/home/dombarker/project-offloads/codex-cx-ct-kernels-v2-20261022/pr1-step2/docs/research/v8-r0-zk-20261009/c3/check)
+   Compiling aspis-r1-cert-check v0.0.0 (/home/dombarker/project-offloads/codex-cx-ct-kernels-v2-20261022/pr1-step2/docs/research/v8-r0-zk-20261009/c3/check)
+   Compiling pr1-native-kernel-gates v0.1.0 (/home/dombarker/project-offloads/codex-cx-ct-kernels-v2-20261022/pr1-step2/tools/pr1-speed-20261022/stage2-gates)
+warning: unexpected `cfg` condition name: `kani`
+ --> gates.rs:3:7
+  |
+3 | #[cfg(kani)]
+  |       ^^^^
+  |
+  = help: expected names are: `docsrs`, `feature`, and `test` and 31 more
+  = help: consider using a Cargo feature instead
+  = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+           [lints.rust]
+           unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+  = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+  = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: constant `P` is never used
+ --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_m31.rs:4:11
+  |
+4 | pub const P: u64 = 0x7fff_ffff;
+  |           ^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `reduce` is never used
+ --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_m31.rs:6:8
+  |
+6 | pub fn reduce(x: u64) -> u32 {
+  |        ^^^^^^
+
+warning: function `mul` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_m31.rs:12:8
+   |
+12 | pub fn mul(x: u32, y: u32) -> u32 { reduce(x as u64 * y as u64) }
+   |        ^^^
+
+warning: function `sub_product` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_m31.rs:15:8
+   |
+15 | pub fn sub_product(x: u32, s: u32, b: u32) -> u32 {
+   |        ^^^^^^^^^^^
+
+warning: function `madd` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_m31.rs:21:8
+   |
+21 | pub fn madd(acc: u32, x: u32, y: u32) -> u32 {
+   |        ^^^^
+
+warning: constant `MAX_TERMS` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_m31.rs:26:11
+   |
+26 | pub const MAX_TERMS: usize = 1 << 20;
+   |           ^^^^^^^^^
+
+warning: constant `TILE` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_m31.rs:27:11
+   |
+27 | pub const TILE: usize = 8;
+   |           ^^^^
+
+warning: `pr1-native-kernel-gates` (lib) generated 8 warnings
+warning: the `#![no_std]` attribute can only be used at the crate root
+  --> reference_check.rs:19:1
+   |
+19 | #![no_std]
+   | ^^^^^^^^^^
+   |
+   = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `MAX_TERMS` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_m31.rs:26:11
+   |
+26 | pub const MAX_TERMS: usize = 1 << 20;
+   |           ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `piv_ok` is never used
+  --> reference_check.rs:81:8
+   |
+81 | pub fn piv_ok(idx: &[u32], io: usize, s: usize, lane: &[u32], lj: u32) -> bool {
+   |        ^^^^^^
+
+warning: function `ents_ok` is never used
+  --> reference_check.rs:96:8
+   |
+96 | pub fn ents_ok(
+   |        ^^^^^^^
+
+warning: function `prod_ok` is never used
+   --> reference_check.rs:149:8
+    |
+149 | pub fn prod_ok(a: &[u32], ao: usize, b: &[u32], bo: usize, c: &[u32], co: usize, ni: usize, nj: usize, len: usize) -> bool {
+    |        ^^^^^^^
+
+warning: function `id_row_ok` is never used
+   --> reference_check.rs:160:8
+    |
+160 | pub fn id_row_ok(c: &[u32], co: usize, i: usize, w: usize) -> bool {
+    |        ^^^^^^^^^
+
+warning: function `id_ok` is never used
+   --> reference_check.rs:171:8
+    |
+171 | pub fn id_ok(c: &[u32], co: usize, w: usize) -> bool {
+    |        ^^^^^
+
+warning: function `ech_row_ok` is never used
+   --> reference_check.rs:182:8
+    |
+182 | pub fn ech_row_ok(e: &[u32], n: usize, lst: &[u32], a: usize, r: usize) -> bool {
+    |        ^^^^^^^^^^
+
+warning: function `ech_ok` is never used
+   --> reference_check.rs:193:8
+    |
+193 | pub fn ech_ok(e: &[u32], n: usize, lst: &[u32], r: usize) -> bool {
+    |        ^^^^^^
+
+warning: function `perm_left_ok` is never used
+   --> reference_check.rs:204:8
+    |
+204 | pub fn perm_left_ok(lst: &[u32], tag: &[u32], n: usize) -> bool {
+    |        ^^^^^^^^^^^^
+
+warning: function `perm_right_ok` is never used
+   --> reference_check.rs:215:8
+    |
+215 | pub fn perm_right_ok(lst: &[u32], tag: &[u32], n: usize) -> bool {
+    |        ^^^^^^^^^^^^^
+
+warning: function `nvec_row_ok` is never used
+   --> reference_check.rs:227:8
+    |
+227 | pub fn nvec_row_ok(nm: &[u32], e: &[u32], n: usize, tag: &[u32], r: usize, f: usize, ff: usize) -> bool {
+    |        ^^^^^^^^^^^
+
+warning: function `nvec_ok` is never used
+   --> reference_check.rs:243:8
+    |
+243 | pub fn nvec_ok(nm: &[u32], e: &[u32], n: usize, lst: &[u32], tag: &[u32], r: usize, k: usize) -> bool {
+    |        ^^^^^^^
+
+warning: function `lifts_ok` is never used
+   --> reference_check.rs:255:8
+    |
+255 | pub fn lifts_ok(o: &[u32], u: &[u32], id: &[u32], lw: &[u32], loff: &[u32], nl: usize) -> bool {
+    |        ^^^^^^^^
+
+warning: function `mm` is never used
+   --> reference_check.rs:270:8
+    |
+270 | pub fn mm(x: u32, y: u32) -> u64 {
+    |        ^^
+
+warning: function `half_ok` is never used
+   --> reference_check.rs:275:8
+    |
+275 | pub fn half_ok(a: &[u32], h: &[u32]) -> bool {
+    |        ^^^^^^^
+
+warning: struct `Pub` is never constructed
+   --> reference_check.rs:299:12
+    |
+299 | pub struct Pub {
+    |            ^^^
+
+warning: struct `Cert` is never constructed
+   --> reference_check.rs:333:12
+    |
+333 | pub struct Cert {
+    |            ^^^^
+
+warning: function `check_qprime` is never used
+   --> reference_check.rs:370:8
+    |
+370 | pub fn check_qprime(pb: &Pub, c: &Cert) -> bool {
+    |        ^^^^^^^^^^^^
+
+warning: function `check_bcond` is never used
+   --> reference_check.rs:384:8
+    |
+384 | pub fn check_bcond(pb: &Pub, c: &Cert) -> bool {
+    |        ^^^^^^^^^^^
+
+warning: function `check` is never used
+   --> reference_check.rs:407:8
+    |
+407 | pub fn check(pb: &Pub, c: &Cert) -> bool {
+    |        ^^^^^
+
+warning: `pr1-native-kernel-gates` (lib test) generated 23 warnings (2 duplicates)
+    Finished `release` profile [optimized] target(s) in 0.42s
+     Running unittests gates.rs (/home/dombarker/project-offloads/codex-cx-ct-kernels-v2-20261022/pr1-target/release/deps/pr1_native_kernel_gates-4b609b17b55c30cf)
+   Doc-tests pr1_native_kernel_gates
