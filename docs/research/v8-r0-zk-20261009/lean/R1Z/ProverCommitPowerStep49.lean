@@ -1,0 +1,48 @@
+import R1Z.ProverCommitNativeQSquare49
+/-! Symbolic exponent recurrence and the source U8 cursor's parity/shift. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitPowerStep49
+open Aeneas Aeneas.Std
+
+theorem shift (x : U8) : (U8.wrapping_shr x 1#u32).val=x.val/2 := by
+  change (x.val >>> 1)=_
+  rw [Nat.shiftRight_eq_div_pow]
+
+theorem bit (x : U8) : (x &&& 1#u8).val=x.val%2 := by
+  change (x.bv &&& (1#u8).bv).toNat=_
+  rw [BitVec.toNat_and]
+  exact Nat.and_two_pow_sub_one_eq_mod _ 1
+
+theorem condition (x : U8) : ((x &&& 1#u8) != 0#u8)=decide (x.val%2≠0) := by
+  have hz : (x &&& 1#u8)=0#u8 ↔ x.val%2=0 := by
+    constructor
+    · intro h;have hv := congrArg (fun a : U8 => a.val) h;simpa only [bit,show (0#u8).val=0 from rfl] using hv
+    · intro h;apply UScalar.eq_of_val_eq;simpa only [bit,show (0#u8).val=0 from rfl] using h
+  by_cases h : (x &&& 1#u8)=0#u8
+  · have hm := hz.mp h
+    simp [h,hm]
+  · have hm : x.val%2≠0 := fun h0 => h (hz.mpr h0)
+    simp [h,hm]
+
+theorem step {K : Type*} [CommMonoid K] (base acc : K) (n : Nat) :
+    (if n%2≠0 then acc*base else acc)*(base*base)^(n/2)=acc*base^n := by
+  have hn := Nat.mod_add_div n 2
+  have hr := Nat.mod_lt n (by decide : 0<2)
+  rw [←pow_two,←pow_mul]
+  by_cases h : n%2=0
+  · simp only [h,ne_eq,not_true_eq_false,if_false]
+    congr 1
+    congr 1
+    omega
+  · have hm : n%2=1 := by omega
+    simp only [h,ne_eq,not_false_eq_true,if_true]
+    have he : n=2*(n/2)+1 := by omega
+    calc
+      _ = acc*(base^(2*(n/2))*base) := by ac_rfl
+      _ = _ := by rw [←pow_succ,←he]
+
+#print axioms shift
+#print axioms bit
+#print axioms condition
+#print axioms step
+end R1Z.ProverCommitPowerStep49

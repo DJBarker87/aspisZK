@@ -193,6 +193,30 @@ successful target/status/wall/RSS/swap/source/dependency/axiom receipts are in
 `lean/attempts.json`. Every printed axiom is standard. This finishes raw weight
 column zero, not the complete weight constructor or caller composition.
 
+## Stage 9: current full-width power and inverse kernels
+
+J10084–10103 prove current release complex arithmetic, optimized CM31 and
+QM31 square, negation, zero testing, complex inverse, QM31 inverse (including
+raw-zero rejection), and the complete owned square-and-multiply recursion.
+`NativePower49.power` takes arbitrary canonical accumulator/base and every U8
+exponent, returning exactly `acc * base^n`; no power-output image is supplied.
+`NativeQInverse49.inverse` discharges the norm assertion using the retained
+literal field's rootlessness; `reject_zero` covers its other branch.
+The native gate `kernel-transitions-v1` passes in 1.111 s / 150712 KiB,
+zero swaps, comparing complete operation/operand traces for power iterations
+(source U64 cursor <=255 vs owned U8), complex inverse and QM31 inverse.
+Primitive arithmetic and zero predicates are separate Lean obligations, not
+assumed true by those trace stubs. Only the independent owner is extracted.
+
+J10085 rejects the extractor's inferred i32 shift count; the explicit u32
+count in v2 fixes it. A retry with the old receipt name is refused before
+launching a tool. J10088 hits the kernel memory limit in `operand_value`
+(7170328 KiB); the replacement splits generic wrapping add/sub/mul facts from
+the concrete operand graph, and J10089 passes at 4053612 KiB / 1.98 s under
+the unchanged cap. Other rejected syntax/cast/decidable-equality drafts and
+all receipts are retained. Every accepted theorem prints only standard axioms.
+No deployed endpoint premise is removed and no shipped file changed.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,
