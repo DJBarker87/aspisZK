@@ -434,3 +434,30 @@ replay and security composition. No source-only 9ce draft or unchanged
 production helper inherits the candidate 933 theorem. No new CU measurement
 or production source change occurred. S9 release closure and the per-attempt
 100-bit target remain not established.
+
+
+PROVED actual-reader-backed caller slot: e197a8bf4e replaces the chosen old
+decodeField slot in a distinct candidate adapter with the source-pinned owned
+reader and an explicit nested carrier map. Successful calls supply that same
+reader execution, source-selected bytes, eight canonical limbs and canonical
+selected P6 values. No old decoder-success premise remains in this adapter.
+
+PROVED bounded checked/wrapping agreement: the unchanged V8 R152 generic
+lemmas were compiled against the selected cache and reused. For i.val < 48,
+the owned reader equals the checked generic reader with the exact same
+decoder and bytes. The small bound was explicit in that local theorem.
+
+PROVED caller BODY discharges the index bound: a successfully continued
+selected projection body contains a same-execution libra[j] read from the
+four-element array, forcing j.val < 4. It therefore yields canonical actual
+field output and checked-reader agreement at that same j without an assumed
+iterator invariant or caller-provided index bound. Evidence:
+evidence/s9-pair-projection-field-bounds-v1-20261022/.
+Focused check: 23.345 s, 3.20 GB aggregate RSS, zero observed swaps, standard
+axioms. This is the exact selected projection body; full production caller
+identity and whole-loop/refinement composition remain OPEN.
+
+The NUC helper-carrier transport is being rebuilt against this actual-reader
+adapter cohort. A genuine helper/projection Rust cut using actual core types
+is in preparation to replace the earlier fake-carrier extraction boundary.
+There is still no S9 release closure or composed 100-bit security result.
