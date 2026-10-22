@@ -8202,3 +8202,28 @@ space|, stated numerically. Add one named environment item, **E2
 (filesystem):** `create_new` is atomic create-if-absent (O_EXCL), and
 written/fsynced data persists. It sits on the trust list beside E1, TrustedStd
 and P7. The reservation path is not made public.
+
+## D149 (lead, 2026-10-22 05:30): part 36 merged; reservation address law comes from P1
+
+Merged `codex/cx-prover-commit36-20261022` (report
+`r1p-final/PROVER-COMMIT36-20261022.md`). Proved on the D148 model: private
+ledger membership with byte-blind faults, retention, duplicate handling,
+`fail_closed`/`failure_replay`; the exact E1 push-forward; the entry-count
+union bound with the address-law hypothesis visible; a consistent E2 model.
+J9134, 15 theorems, standard axioms; no shipped change.
+Finding: E1 and E2 do not by themselves imply that SHA-256-derived
+reservation paths avoid adversary-chosen entries (`E1_E2_without_uniform_paths`;
+for a generic hash, a constant address function gives mass 1). Correct: that
+inference needs a property of the hash.
+
+**Ruling.** The address law comes from **P1**, the random-oracle model for
+SHA-256 that the whole privacy and soundness argument already uses. No new
+assumption is added. Obligation: under P1, for adversary-chosen entries
+and every prior context, a fresh reservation address lands on an entry with
+probability ≤ (entries + queries that hit the same input)/2^256. The part
+"the adversary queried the oracle on this nonce input" is covered by the
+existing seed-guess event. **Check domain separation:** the reservation hash
+input must be disjoint from the protocol's oracle inputs (tag or length
+prefix). If it is, it is an independent ROM coordinate. If it isn't, prove
+the overlap is harmless or report it as a source finding. Do not change shipped
+code.
