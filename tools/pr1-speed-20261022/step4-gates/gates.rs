@@ -29,3 +29,17 @@ fn main() {}
   }
  }
 }
+#[cfg(kani)] mod proofs {
+ #[kani::proof]
+ fn sumcheck_public_index() {
+  let remaining:usize=kani::any();kani::assume(remaining<=9);
+  let assignments=1usize<<remaining;
+  let sample:usize=kani::any();let assignment:usize=kani::any();
+  kani::assume(sample<28 && assignment<assignments);
+  let i=sample*assignments+assignment;
+  assert!(i<28*assignments);
+  assert_eq!(i/assignments,sample);assert_eq!(i%assignments,assignment);
+  if assignment+1<assignments {assert_eq!((i+1)/assignments,sample);assert_eq!((i+1)%assignments,assignment+1);}
+  else if sample+1<28 {assert_eq!((i+1)/assignments,sample+1);assert_eq!((i+1)%assignments,0);}
+ }
+}

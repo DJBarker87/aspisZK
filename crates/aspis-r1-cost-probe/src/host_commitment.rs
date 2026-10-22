@@ -166,6 +166,28 @@ impl Commitment {
         saved
             .try_reserve_exact(lanes.len())
             .map_err(|_| Error::Allocation)?;
+        #[cfg(feature="ct-host-prover")]
+        {
+            // Validate in source order before launching a public lane partition.
+            for &l in &lanes {
+                if messages[l].iter().any(|x|x.to_limbs()[if l<26 {1}else{4}..].iter().any(|&d|d!=0)) {
+                    return Err(Error::WrongField);
+                }
+                saved.push(messages[l]);
+            }
+            let encoded=crate::host_work::map(200,lanes.len(),|i| {
+                let l=lanes[i];
+                let coefficients=variant.coefficients(&messages[l]);
+                if l<26 {
+                    domain.encode(&coefficients.map(|x|M31(x.to_limbs()[0]))).map(Word::Base)
+                } else {
+                    domain.encode(&coefficients.map(|x|x.c0())).map(Word::Secure)
+                }
+            });
+            for word in encoded {words.push(word?);}
+        }
+        #[cfg(not(feature="ct-host-prover"))]
+        {
         for &l in &lanes {
             if messages[l].iter().any(|x| {
                 x.to_limbs()[if l < 26 { 1 } else { 4 }..]
@@ -183,6 +205,7 @@ impl Commitment {
                 Word::Secure(domain.encode(&coefficients.map(|x| x.c0()))?)
             });
             saved.push(messages[l]);
+        }
         }
         let mut leaves = filled(FIBRE_COUNT, [0; 32])?;
         for (u, digest) in leaves.iter_mut().enumerate() {

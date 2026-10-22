@@ -1,0 +1,86 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: constant `THREADS` is never used
+ --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:6:11
+  |
+6 | pub const THREADS: usize = 16;
+  |           ^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `range` is never used
+ --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:8:8
+  |
+8 | pub fn range(n: usize, k: usize) -> (usize, usize) {
+  |        ^^^^^
+
+warning: function `is_worker` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:15:8
+   |
+15 | pub fn is_worker() -> bool { ACTIVE.with(Cell::get) }
+   |        ^^^^^^^^^
+
+warning: struct `Active` is never constructed
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:16:8
+   |
+16 | struct Active(bool);
+   |        ^^^^^^
+
+warning: associated function `enter` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:18:8
+   |
+17 | impl Active {
+   | ----------- associated function in this implementation
+18 |     fn enter() -> Self { Self(ACTIVE.with(|a| a.replace(true))) }
+   |        ^^^^^
+
+warning: function `ordered_map` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:24:8
+   |
+24 | pub fn ordered_map<T: Send, F: Fn(usize) -> T + Sync>(n: usize, f: F) -> Vec<T> {
+   |        ^^^^^^^^^^^
+
+warning: function `ordered_families` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:27:8
+   |
+27 | pub fn ordered_families<T: Send, F: Fn(usize)->T + Sync>(n:usize,f:F)->Vec<T> {
+   |        ^^^^^^^^^^^^^^^^
+
+warning: function `ordered_map_inner` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:30:4
+   |
+30 | fn ordered_map_inner<T: Send,F: Fn(usize)->T+Sync>(n:usize,f:F,force:bool)->Vec<T> {
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: struct `LiftGate` is never constructed
+ --> lift_gate.rs:2:19
+  |
+2 | pub(super) struct LiftGate {
+  |                   ^^^^^^^^
+
+warning: methods `publish` and `wait` are never used
+  --> lift_gate.rs:7:19
+   |
+ 6 | impl LiftGate {
+   | ------------- methods in this implementation
+ 7 |     pub(super) fn publish(&self, ok: bool) {
+   |                   ^^^^^^^
+...
+11 |     pub(super) fn wait(&self) -> bool {
+   |                   ^^^^
+
+warning: struct `LiftGateGuard` is never constructed
+  --> lift_gate.rs:19:19
+   |
+19 | pub(super) struct LiftGateGuard<'a>(pub(super) &'a LiftGate);
+   |                   ^^^^^^^^^^^^^
+
+Checking harness proofs::sumcheck_public_index...
+
+VERIFICATION RESULT:
+ ** 0 of 37 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.7292748s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

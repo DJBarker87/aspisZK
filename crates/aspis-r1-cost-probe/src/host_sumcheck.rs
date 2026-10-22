@@ -39,13 +39,32 @@
         transcript: &mut SemanticTranscript<H>,
         output: &mut Vec<u8>,
         initial_claim: QM31,
-        mut oracle: impl FnMut(&[QM31; 10]) -> Result<QM31, Error>,
+        oracle: impl Fn(&[QM31; 10]) -> Result<QM31, Error> + Sync,
     ) -> Result<([QM31; 10], QM31), Error> {
         let mut point = [QM31::ZERO; 10];
         let mut running = initial_claim;
         for round in 0..10 {
             let remaining = 9 - round;
             let mut values = [QM31::ZERO; 28];
+            #[cfg(feature="ct-host-prover")]
+            {
+                let assignments=1usize<<remaining;
+                let evaluations=crate::host_work::map(100+round,28*assignments,|i| {
+                    let sample=i/assignments;let assignment=i%assignments;
+                    let mut at=point;
+                    at[round]=QM31::from_cm31(CM31::from_m31(M31(sample as u32)));
+                    for offset in 0..remaining {
+                        at[round+1+offset]=if (assignment>>(remaining-1-offset))&1==0 {QM31::ZERO}else{QM31::ONE};
+                    }
+                    oracle(&at)
+                });
+                // Same sample and assignment order, including error selection.
+                for (i,value) in evaluations.into_iter().enumerate() {
+                    values[i/assignments]=values[i/assignments].add(value?);
+                }
+            }
+            #[cfg(not(feature="ct-host-prover"))]
+            {
             for (sample, value) in values.iter_mut().enumerate() {
                 point[round] = QM31::from_cm31(CM31::from_m31(M31(sample as u32)));
                 for assignment in 0..1usize << remaining {
@@ -59,6 +78,7 @@
                     }
                     *value = value.add(oracle(&point)?);
                 }
+            }
             }
             let polynomial = interpolate(&values);
             if state_only_boundary_sum(&polynomial) != running {
