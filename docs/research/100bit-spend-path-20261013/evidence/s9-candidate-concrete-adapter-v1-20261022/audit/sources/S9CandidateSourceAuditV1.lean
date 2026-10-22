@@ -1,0 +1,7 @@
+import AspisR1S9CandidateHelperV1.Funs
+import S9CandidateHelperOperationBridgeV1
+#print axioms AspisR1S9CandidateHelperV1.weights.factored_s2_libra_weights
+#print axioms AspisR1S9CandidateHelperV1.weights.factored_s2_libra_weights_loop
+#print axioms AspisR1S9CandidateHelperV1.weights.Weights.scalar_factor
+#print axioms AspisR1S9CandidateHelperV1.core.iter.traits.iterator.Iterator.fold.default
+#print axioms AspisR1S9CandidateHelperV1.core.iter.traits.iterator.Iterator.fold.default_loop
