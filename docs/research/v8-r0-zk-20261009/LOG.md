@@ -8605,3 +8605,24 @@ equals the simulator's up to the existing bad events. That gives an identical
 timing distribution in the real and ideal worlds, and needs no constant-time rewrite.
 The field arithmetic on witness-bearing values (F2) and the pole check (F1) read
 secrets directly and keep the constant-time kernels. Raised to the user.
+
+## D166 (user decision and lead, 2026-10-22 18:20): L2 by simulatable trace; part 48 merged
+
+**User decision (answering D165):** L2 for challenge- and private-coin-dependent
+steps is met by proving the source trace **simulatable**: its joint law in the
+real run equals the simulator's, up to the existing bad events. It is not met
+by constant-time rewrites. Constant-time kernels stay only where secrets are
+operands: the field arithmetic on witness-bearing values (F2) and the pole-check
+arithmetic (F1). Consequence for the candidate: keep stage 2 (field kernels and
+TLS gating), and drop the stage 3(a)–(e) fixed-shape rewrites from the
+adoption candidate (they stay on the branch history as measured evidence). This
+should restore prover time near the ~40 s baseline. The simulatable-trace
+obligations for F3, F5 and F6 join the L1 coupling as proof work.
+Part 48 merged (`codex/cx-prover-commit48-20261022`, report
+`r1p-final/PROVER-COMMIT48-20261022.md`): native iteration bindings by
+per-iteration Kani with owned-loop induction (the D164 route); interpolation
+equal to `Lagrange.interpolate` with its 896-byte image; primal and dual folds;
+gamma/kappa powers; seven-coefficient round accumulation. J9999 standard
+axioms; shipped files unchanged. Stopped on an exhausted env J range. Open:
+semantic samples and guards, final shift, weight-model correspondence, caller
+composition.
