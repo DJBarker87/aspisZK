@@ -230,6 +230,56 @@ for phase in ['charon','aeneas']:
  assert inp['source_sha256']==sha(copy/'src/lib.rs') and inp['tool_pins']
  assert inp['owned_sdk_dependency_sha256']==sha(B/'evidence/s126-current-caller-20261021/modular-host/sources/owned-sdk-v3/src/lib.rs')
 
+gate=E/'sources/sdk-proof-gate-v1'
+source,cut,rp=checked('sdk-proof-gate-join-v2','sdk-proof-gate-v1',(4,5))
+accepted['sdk-proof-gate-join-v2'].update(qualification='Actual SDK Ref over every length0..58296 and arbitrary full bytes/candidate: exact frozen length/prefix/tag guard equals extracted scalar reference, including rejection paths. No prefix/tag seed or pure-child stub. Complete parent composition/runtime embedding and higher native lengths remain separate. All773 assertions pass; 4/5 compiled covers only, with a duplicated prefix-mismatch source location; no per-location/all-cover reachability claim.',covers_total=5)
+with tempfile.TemporaryDirectory() as d:
+ out=Path(d)/'src';subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-proof-gate.py'),str(out)],check=True)
+ assert (out/'src/lib.rs').read_bytes()==source.read_bytes()
+ assert json.loads((out/'source-cut.json').read_text())==cut
+ i=Path(d)/'raw';i.mkdir();o=Path(d)/'adapt'
+ for p in (gate/'generated/AspisS2SdkProofGate').glob('*.lean.txt'):(i/p.name[:-4]).write_bytes(p.read_bytes())
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/adapt-sdk-proof-gate.py'),str(i),str(o)],check=True)
+ for p in o.iterdir():assert p.read_bytes()==(S/p.name).read_bytes(),p
+for phase in ['charon','aeneas']:
+ r=json.loads((E/'receipts'/('sdk-proof-gate-v1-'+phase)/'receipt.json').read_text())
+ inp=json.loads((gate/(phase+'-input.json')).read_text())
+ assert r['exit_status']==0 and r['swaps']==0 and r['limits']['memory.swap.max']=='0'
+ assert inp['source_sha256']==sha(source) and inp['tool_pins']
+audit=json.loads((E/'receipts/sdk-proof-gate-properties-v2/property-audit.json').read_text())
+assert audit['source_sha256']==sha(source) and audit['proof_receipt_sha256']==sha(rp)
+pins=json.loads((E/'sdk-proof-gate-properties-v2-input.json').read_text())
+assert pins['harness_metadata']['attributes']['kind']=='Proof'
+assert pins['proof_input_sha256']==sha(E/'sdk-proof-gate-join-v2-input.json')
+covers=audit['selected_properties'];assert len(covers)==5
+assert len({(p['sourceLocation']['line'],p['description']) for p in covers})==4
+
+frameSource,frameCut,frameReceipt=checked('sdk-proof-gate-frame-v1','sdk-proof-gate-v3',(4,5))
+accepted['sdk-proof-gate-frame-v1'].update(qualification='Same complete frozen guard and typed native Ref, now with checked empty modifies set. Exact status equality and pointer/length/counter checks retained, all826 assertions pass. Finite0..58296 length domain; 4/5 covers with duplicated prefix source location, no all-covers claim. Parent/runtime/higher-length composition remains explicit.',covers_total=5)
+assert '#[cfg_attr(kani,kani::modifies())]' in frameSource.read_text()
+assert '#[kani::proof_for_contract(native_gate)]' in frameSource.read_text()
+with tempfile.TemporaryDirectory() as d:
+ out=Path(d)/'src';subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-proof-gate.py'),str(out),'frame'],check=True)
+ assert (out/'src/lib.rs').read_bytes()==frameSource.read_bytes()
+ assert json.loads((out/'source-cut.json').read_text())==frameCut
+ out=Path(d)/'parent';subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/make-sdk-proof-prefix-parent.py'),str(out)],check=True)
+ assert (out/'S2SdkProofPrefixParentV1.lean').read_bytes()==(S/'S2SdkProofPrefixParentV1.lean').read_bytes()
+def rust_fn(text,name):
+ a=text.index('pub fn '+name+'(');i=text.index('{',a)+1;depth=1
+ while depth:depth+=(text[i]=='{')-(text[i]=='}');i+=1
+ return text[a:i]
+for name in ['native_gate','prefix_different','reference_gate']:
+ assert rust_fn(source.read_text(),name)==rust_fn(frameSource.read_text(),name)
+auditPath=E/'receipts/sdk-proof-gate-frame-properties-v2/property-audit.json'
+audit=json.loads(auditPath.read_text())
+assert audit['source_sha256']==sha(frameSource) and audit['proof_receipt_sha256']==sha(frameReceipt)
+assert any(p['class']=='assigns' for p in audit['selected_properties'])
+assert sum(p['class']=='cover' for p in audit['selected_properties'])==5
+pins=json.loads((E/'sdk-proof-gate-frame-properties-v2-input.json').read_text())
+assert pins['program_sha256']==audit['program_sha256']
+assert pins['harness_metadata']['attributes']['kind']=={'ProofForContract':{'target_fn':'native_gate'}}
+assert pins['proof_input_sha256']==sha(E/'sdk-proof-gate-frame-v1-input.json')
+
 snap=E/'sources/owned-sdk-snapshots-v1'
 with tempfile.TemporaryDirectory() as d:
  out=Path(d)/'src';subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-snapshot-reference.py'),str(out)],check=True)
@@ -263,4 +313,4 @@ assert flags and all('opt-level=3' in r and 'overflow-checks=yes' in r and '--ka
 for p in E.rglob('*'):
  if p.is_file():assert p.suffix not in ['.olean','.o','.a','.so','.dylib','.llbc','.bc','.out']
 (E/'accepted-cuts.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',qualification='Checked finite SDK operation/lifecycle domains and exact pure snapshot adaptation. Reached phase cuts are explicit. Complete actual stage1 child instances and ordered caller join remain open; timed-out/context/codegen/preflight evidence is excluded from accepted cuts.',cuts=accepted),indent=2)+'\n')
-print('PASS seventeen SDK cuts and complete owned-parent copy-loop adaptation; enclosing native caller joins remain open')
+print('PASS nineteen SDK cuts and complete owned-parent copy-loop adaptation; enclosing native caller joins remain open')

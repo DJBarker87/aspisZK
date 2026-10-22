@@ -32,6 +32,8 @@ folders += ['sdk-paired-context-v6','sdk-native-context-v5']
 receipts += ['sdk-paired-context-check-v5','sdk-paired-context-check-v6','sdk-paired-context-codegen-v6','sdk-native-context-codegen-v5']
 folders += ['sdk-paired-context-v7','sdk-paired-context-v8','sdk-paired-context-v9','owned-sdk-borrowed-v1']
 receipts += ['sdk-native-context-check-v9','sdk-paired-context-codegen-v7','sdk-paired-context-check-v7','sdk-paired-context-codegen-v8','sdk-paired-context-codegen-v9','sdk-paired-context-check-v9','owned-sdk-borrowed-v1-charon','owned-sdk-borrowed-v1-aeneas']
+folders += ['sdk-proof-gate-v1','sdk-proof-gate-v2','sdk-proof-gate-v3']
+receipts += ['sdk-proof-gate-join-v1','sdk-proof-gate-join-v2','sdk-proof-gate-v1-charon','sdk-proof-gate-v1-aeneas','sdk-proof-gate-properties-v1','sdk-proof-gate-properties-v2','sdk-proof-gate-other-lengths-v1','sdk-proof-gate-frame-v1','sdk-proof-gate-frame-properties-v1','sdk-proof-gate-frame-properties-v2']
 pins=[]
 for name in folders:
  p=H/name
@@ -56,9 +58,9 @@ for tag in ['sdk-paired-context-check-v1','sdk-paired-context-check-v2','sdk-pai
    out=O/'diagnostics'/tag;out.mkdir(exist_ok=True,parents=True)
    (out/(p.stem+'-pin.json')).write_text(json.dumps(dict(path=str(p),bytes=p.stat().st_size,sha256=sha(p),qualification='Large raw trace retained on host; complete trace-free property projection exported, no binary or large trace distributed.'),indent=2)+'\n')
 for p in (H/'target/kani/x86_64-unknown-linux-gnu/debug/.fingerprint').glob('*/*.json'):
- if any(k in p.parent.name for k in ['sdk-heap-','sdk-shared-write-frame','owned-sdk-snapshots','sdk-paired-context','sdk-prefix-context','sdk-native-context','sdk-metadata-prefix','sdk-call-context','sdk-finish','sdk-std-copy','sdk-stub-preflight']):copy(p,Path('compiler-flags')/p.parent.name/p.name)
+ if any(k in p.parent.name for k in ['sdk-heap-','sdk-shared-write-frame','owned-sdk-snapshots','sdk-paired-context','sdk-prefix-context','sdk-native-context','sdk-metadata-prefix','sdk-call-context','sdk-finish','sdk-std-copy','sdk-proof-gate','sdk-stub-preflight']):copy(p,Path('compiler-flags')/p.parent.name/p.name)
 for p in (H/'kit').glob('*.py'):
- if any(k in p.name for k in ['heap-join','snapshot','paired-context','parent-cuts','write-frame','write-frame-properties','run-modular','metadata-prefix','statement-fields','reservation','finish-join','finish-contract','finish-step','finish-fixed-frame','std-copy','owned-sdk-copy','context-properties','owned-sdk-borrowed','sdk-borrowed','finish-verified','finish-contract-join','smt-preflight','prepared-sdk','trace-cbmc-exception']):copy(p,Path('runner')/p.name)
+ if any(k in p.name for k in ['heap-join','snapshot','paired-context','parent-cuts','write-frame','write-frame-properties','run-modular','metadata-prefix','statement-fields','reservation','finish-join','finish-contract','finish-step','finish-fixed-frame','std-copy','owned-sdk-copy','context-properties','sdk-proof-gate','owned-sdk-borrowed','sdk-borrowed','finish-verified','finish-contract-join','smt-preflight','prepared-sdk','trace-cbmc-exception']):copy(p,Path('runner')/p.name)
 p=H/'kit/trace-cbmc-exception.cpp'
 if p.is_file():copy(p,Path('runner')/p.name)
 for rel in ['z3-tool-v1/tool-pins.json','source-freeze-revalidation-20261022.json']:

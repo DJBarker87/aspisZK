@@ -1362,3 +1362,126 @@ Final focused receipt `s2-sdk-borrowed-equivalence-v12`: target
 (`body_eq`, `stage1_eq`, `stage1_current_first`) contain only `propext`,
 `Classical.choice`, `Quot.sound`. Source/tool/direct-import hashes and exact
 `lake env lean -j1 -M4400` invocation are in the receipt/command packet.
+
+
+## Stage1 proof-prefix guard: native checked frame and enclosing reference join
+
+The native contexts above seed the688-byte candidate prefix and tag696=2.
+The new gate removes that restriction *at the isolated source-fragment
+boundary*. `sdk-proof-gate-v1::native_gate` contains the exact frozen stage1
+statements from `let proof_length = verifier::PROOF_BYTES` through the complete
+length/prefix/tag rejection condition. It takes an actual SDK `Ref`, retains
+full `ProgramError`, and returns the exact `(proof_start,proof_end)` on success.
+Its scalar reference is extracted from that same checked Rust crate. No scan,
+decoder, validator, encoder or verifier hook is used in this certificate. No
+canonical parser or multiproof work owned by the lead is redone.
+
+`sdk-proof-gate-join-v2`: exit0,132.314s,2718772KiB RSS,swap0; all773 assertions
+pass. For every58296-byte storage array, every length0..58296, every688-byte
+candidate and arbitrary SDK metadata, the exact native guard and scalar
+reference agree on their complete result, including prefix/tag/length errors.
+The function retains the SDK buffer pointer/length and live borrow counter.
+The harness-selection v1 failure ran no proof and remains excluded.
+
+`sdk-proof-gate-frame-v1`: exit0,146.047s,3578036KiB RSS,swap0; all826 assertions
+pass. This additionally proves the exact guard's **empty modifies set**, not
+just matching selected observations. Both native guard bodies and both scalar
+reference/helper bodies are byte-equal between the two checked crates; only
+the native contract annotation/harness kind differ. There is no unproved
+contract stub. Source ownership, actual SDK types and all ordinary returned
+error variants are retained.
+
+Both jobs use High6G/Max8G/Swap0, one optimized Kani job and unwinding assertions.
+Each reports4/5 compiled covers. The compiler duplicates the prefix-mismatch
+source location: four original source cover intentions yield five properties.
+The accepted claim is all functional/frame assertions passing, not every cover
+or per-location reachability. Fresh metadata-only v2 audits select the exact
+harness kind and original line, pin the proof input/program/metadata, and show
+the assigns properties. An attempted metadata audit reused an existing output
+name and stopped before execution; its v1 output is not the selected audit.
+The successful v2 audits run no solver replay.
+
+The10MiB wrong-length native candidate was reviewed and stopped at
+167.862s,6400316KiB,swap0: encoding a huge symbolic allocation for a path that
+should reject before byte access reached about6.4GiB. It establishes nothing;
+its source, stop reason and terminal receipt are retained and excluded.
+No larger cap or unchanged rerun follows. In particular, the native guard
+certificate is **not** advertised for every runtime length up to10MiB.
+
+The following Lean results consume the new reference and complete caller:
+
+- `S2SdkProofPrefixTotalV1.prefix_total`: TOTAL comparison at every representable
+  pair of slice lengths. Every read and increment is derived; the exact Boolean
+  means the candidate fits and every consumed byte agrees. No loop/index/add
+  success is supplied. The proof decreases remaining candidate length.
+- `S2SdkProofGateTotalV1.gate_total` and `wrong_length_reject`: TOTAL full reference
+  gate, including all wrong lengths and exactly the Ok/InvalidAccountData image.
+  Checked688+57607=58295,688+8=696 and the reached-length tag-index bound are
+  discharged. This all-length theorem is for the extracted reference, not an
+  extension of the stopped native10MiB job.
+- `S2SdkProofComparatorV1.scalarNe_eq_standard`: exact full-Result equality of the
+  scalar loop wrapper and the installed standard U8 slice comparator, for all
+  contents and lengths. The generic List proof reuses each primitive U8 result;
+  no concrete688-cell kernel normalization is used.
+- `S2SdkProofPrefixParentV1.body_eq_loop` and `stage1_eq`: the **complete installed
+  owned stage1** consumes that equality at both real comparison sites, including
+  all errors, SDK fields and final reverse guard release. No prefix/tag pass,
+  comparator/child success or range premise remains in these equalities. These
+  are unconditional Result equalities, not termination of arbitrary child Ops.
+- `S2SdkProofGateJoinV1.caller_prefix_eq`: the full-buffer scalar reference loop
+  is the same comparison as the actual reached Vec prefix-range operation in
+  the complete caller. It consumes the existing exact frame-operation theorem;
+  the reached58295-byte length supplies its range bound.
+- `stage1_borrowed_eq` then binds that complete scalar-comparison caller to the
+  already checked full borrowed SDK reference, with no execution premise.
+  `stage1_current_first` consumes the equality in the enclosing installed caller
+  theorem: one complete reference success supplies actual decoding and current
+  `firstCurrent` on the same public bytes, without independent parse/projection/
+  verifier-child success. This last theorem is ACCEPTED-ONLY at reference scope.
+
+Before, the full owned caller reached the standard slice comparator, while
+only native contexts with matching seeded prefixes were checked. After, both
+full reference caller branches are equated to the total scalar loop, that loop
+is connected to their exact prefix slice, and the isolated actual SDK guard
+is checked against the same extracted scalar reference with arbitrary prefix/
+tag bytes and no write effects. The complete native caller theorem has **not**
+been inferred from the isolated guard. Native-to-reference descriptor/runtime
+embedding, native higher-length rejection, actual child/scan/reply interpretation,
+exact error/log binding and ordered oracle/two-pass caller transport remain.
+`ops.op10`, `ops.op11` and current verifier Ops retain their previously stated
+source-instance obligations. S2 and the shared actual-SDK S6 gap remain OPEN;
+S1 retains original preparation/powers/caller obligations. No production source
+or adopted wire parameters change, and there is no new source-adoption decision.
+Any future adopted source candidate still requires full equivalence and re-pin.
+The100-bit per-attempt target is not yet established.
+
+Focused local checks use the atomic lock, `-j1 -M4400`, source/tool/import hashes,
+zero swaps and only standard axioms. A foreign S4 local job held the lock during
+one wait; it was left untouched. No unchanged full regression was run. Pins and
+raw source-only extraction evidence are in the packet; no binaries are exported.
+
+| Smallest changed target | Selected receipt | Exit | Wall seconds | RSS bytes | Swap |
+|---|---|---:|---:|---:|---:|
+| `S2SdkProofGateModelV1` | `s2-sdk-proof-gate-model-v2` | 0 | 8.359057 | 3204907008 | 0 |
+| `S2SdkProofPrefixTotalV1` | `s2-sdk-proof-prefix-total-v2` | 0 | 26.295021 | 3226615808 | 0 |
+| `S2SdkProofGateTotalV1` | `s2-sdk-proof-gate-total-v4` | 0 | 20.781145 | 3240050688 | 0 |
+| `S2SdkProofComparatorV1` | `s2-sdk-proof-comparator-v3` | 0 | 19.798327 | 3116613632 | 0 |
+| `S2SdkProofPrefixParentV1` | `s2-sdk-proof-prefix-parent-v3` | 0 | 10.617364 | 3255484416 | 0 |
+| `S2SdkProofGateJoinV1` | `s2-sdk-proof-gate-join-v2` | 0 | 12.727309 | 3158392832 | 0 |
+
+Read-only research inspection at `a72cb615acf11f76a867cee282465c17df20eae9` confirms both shipped files
+remain byte-identical to freeze `b2727acd3abf79315d18b754a260f58f4b1c6326`. The latest handoff's13:05 update
+still names `OraclePortHeadlineFrozen2PerAttempt.final_soundness` and the
+matching `dV_frozen2` stages. No older query-normalized headline is substituted
+for the raw per-attempt contract, and no freeze is inferred from research
+proof commits.
+
+Host receipt `source_revision` remains the generic runner's historical
+`d8fc9db...` marker; it is not the new candidate or frozen-source revision.
+The source-cut freeze and exact input SHA, Cargo lock, tool pins and matched
+function bodies identify the checked sources. The superseded frame-property
+v1 input was rewritten before an output-name preflight rejection; it is
+explicitly unselected. Fresh v2 audit pins are used. Final consistency audit
+selects65 current source targets and11773 cached import objects. These counts
+are consistency evidence, not security closure; a coherent release replay
+remains required.
