@@ -8743,3 +8743,20 @@ composition and gamma batching; the source `encode_at`/`eval_at`/`nodes_for`/
 Cost: part 48 used about 0.9M tokens and part 49 about 1.3M, against a requested
 0.4M. The worker cannot see its own token use, so from part 50 the env J range
 is the budget: 100 compile numbers per part.
+
+## D174 (lead, 2026-10-22 22:30): part 50 merged; budget held; two integration blockers
+
+Merged `codex/cx-prover-commit50-20261022` (report
+`r1p-final/PROVER-COMMIT50-20261022.md`). It used about 0.59M tokens, and the
+J10200–10299 budget held. Proved: the owned three-product Karatsuba composition
+(interface 1); the optimised degree-27 evaluator with prepared multiplication
+(interface 2); sparse prefix products, ordered column sums, scanner provenance
+and the owned sparse MLE model value; the selected-mask arithmetic kernels.
+Standard axioms; shipped files unchanged. Blockers: (i) the integration audit
+fails on duplicate, byte-identical `mul_m31` declarations in two extracted modules
+(`Linear50`, `Batched48`). This is the known cross-extraction naming problem
+(`IMPORT-UNION-20261021.md`), so apply the type-qualified naming fix or
+alias one to the other. (ii) Caller composition hit the kernel memory limit. Per
+AGENTS.md resource rule 5, it is not rerun with a larger cap: isolate the
+declaration, inspect its reduction shape and split it with symbolic lemmas.
+Next (part 51): both blockers, then interfaces 3–6.
