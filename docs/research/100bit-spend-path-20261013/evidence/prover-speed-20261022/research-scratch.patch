@@ -1,0 +1,378 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -40,3 +40,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++pub mod speed_prof;
+--- a/crates/aspis-r1-cost-probe/src/prover.rs
++++ b/crates/aspis-r1-cost-probe/src/prover.rs
+@@ -10,12 +10,16 @@
+ pub struct Backend {pub hash:HashFn,pub variant:Variant,pub domain:EncodingDomain,pub messages:Vec<Message<E>>,pub c1:Option<Commitment>,pub c2:Option<Commitment>,c1_salts:Option<crate::host_commitment::PrivateSalts>,c2_salts:Option<crate::host_commitment::PrivateSalts>}
+ impl Commitments for Backend {
+     fn c1(&mut self,columns:[Column<'_>;27])->Result<[u8;32],SError>{
++let _speed_guard = crate::speed_prof::span("commit_c1");
++
+         for (i,c) in columns.into_iter().enumerate(){self.messages[if i<26{i}else{28}]=match c {Column::Base(v)=>v.map(E::from_m31),Column::Extension(v)=>v.map(E::from_qm31)};}
+         let salts=self.c1_salts.take().ok_or(SError::Public)?;
+         let c=Commitment::new_salted(self.hash,&self.domain,CommitmentTime::C1,&self.messages,self.variant,salts).map_err(|_|SError::Public)?;
+         let root=c.root();self.c1=Some(c);Ok(root)
+     }
+     fn c2(&mut self,columns:[&[K;1024];2])->Result<[u8;32],SError>{
++let _speed_guard = crate::speed_prof::span("commit_c2");
++
+         for (i,c) in columns.into_iter().enumerate(){self.messages[26+i]=c.map(E::from_qm31);}
+         let salts=self.c2_salts.take().ok_or(SError::Public)?;
+         let c=Commitment::new_salted(self.hash,&self.domain,CommitmentTime::C2,&self.messages,self.variant,salts).map_err(|_|SError::Public)?;
+@@ -23,11 +27,15 @@
+     }
+ }
+ pub fn round(q:&[E],w:&[E])->[E;7] {
++let _speed_guard = crate::speed_prof::span("sumcheck_round");
++
+     assert_eq!(q.len(),w.len());let mut c=[E::ZERO;7];
+     for d in 0..q.len()/4 {for s in 0..4 {for t in 0..4 {c[s+PERM[t]]=c[s+PERM[t]].add(q[4*d+s].mul(w[4*d+t]));}}}
+     c.map(|x|x.mul_m31(QUARTER))
+ }
+ pub fn fold(q:&[E],alpha:E,dual:bool)->Vec<E> {
++let _speed_guard = crate::speed_prof::span("sumcheck_fold");
++
+     q.chunks_exact(4).map(|h| {
+         if dual {h[0].add(alpha.mul(h[3].add(alpha.mul(h[2].add(alpha.mul(h[1])))))).mul_m31(QUARTER)}
+         else {h[0].add(alpha.mul(h[1].add(alpha.mul(h[2].add(alpha.mul(h[3]))))))}
+@@ -110,6 +118,8 @@
+     attempt:StateOnlyAttemptSecrets,
+     nonce_store:&mut DurableStateOnlyMaskNonceStore,
+ )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
++let _speed_guard = crate::speed_prof::span("attempt_context");
++
+     let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
+     let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),attempt.mask_nonce());
+     let binding=hash(&[b"UNPROVED:R1:P3:PRIVATE-ATTEMPT",&public_bytes,&[variant.tag()],&context.encode()]);
+@@ -126,13 +136,15 @@
+     attempt:StateOnlyAttemptSecrets,
+     nonce_store:&mut impl StateOnlyMaskNonceStore,
+ )->Result<(Vec<u8>,MaskedFixtureAudit),Error> {
+-    let (reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,context,nonce_store).map_err(mask_error)?;
++let _speed_guard = crate::speed_prof::span("mask_apply_audit");
++
++    let (reserved,material)={let _g=crate::speed_prof::span("reservation_and_mask_material");attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,context,nonce_store).map_err(mask_error)?};
+     #[cfg(all(test,feature="r1p-check"))]
+     if test_hooks::forced_exhaustion(reserved.mask_nonce()) { return Err(mask_error(StateOnlyMaskBuildError::MaskSampleExhausted)); }
+     let mut noised_c1=compiled.semantic_c1.clone();
+     let applied=apply_pool_v1_pair_forest_mask_material_v1(&mut noised_c1,material).map_err(|_|Error::Semantic)?;
+     let masks=pool_v1_pair_forest_copy_active_row_masks_v1().map_err(|_|Error::Semantic)?;
+-    let d: [K;1024]=reserved.derive_pool_v1_pair_forest_zero_factor_d(hash,context).map_err(mask_error)?.try_into().map_err(|_|Error::Semantic)?;
++    let d: [K;1024]={let _g=crate::speed_prof::span("profile21_d");reserved.derive_pool_v1_pair_forest_zero_factor_d(hash,context).map_err(mask_error)?.try_into().map_err(|_|Error::Semantic)?};
+     if applied.g.len()!=1024 || applied.h1_padding.len()!=1024 { return Err(Error::Semantic); }
+     let g: [K;1024]=core::array::from_fn(|i|applied.g[i]);
+     let h1_padding: [K;1024]=core::array::from_fn(|i|applied.h1_padding[i]);
+@@ -187,6 +199,8 @@
+ }
+ 
+ fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateOnlyHidingContext,hash:HashFn,tag:u8)->Result<PrivateSalts,Error> {
++let _speed_guard = crate::speed_prof::span("salts");
++
+     let mut salts=Vec::new();salts.try_reserve_exact(aspis_core::r0::FIBRE_COUNT).map_err(|_|Error::Allocation)?;
+     let mut result=Ok(salts);
+     let mut index=0usize;
+@@ -206,6 +220,8 @@
+ /// message is the logical byte string of the retired eight-way format; only
+ /// the roots (binary trees) and the stored encoding differ. R1 is variant S2.
+ fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext))->Result<Vec<u8>,Error> {
++let _speed_guard = crate::speed_prof::span("opening_sumcheck_other");
++
+     use crate::{compact,multiproof};
+     let _=public;
+     if variant!=Variant::S2 { return Err(Error::Semantic); }
+@@ -221,15 +237,17 @@
+     let weights=w.materialize(kappa)?;
+     let c0=round(&q,&weights);let c0bytes=encoded(c0);
+     let alpha0=t.scalar(29,&c0bytes,false);let q1=fold(&q,alpha0,false);let w1=fold(&weights,alpha0,true);
+-    let folded_word=backend.domain.evaluate(&q1,0).map_err(|_|Error::Allocation)?;
++    let folded_word={let _g=crate::speed_prof::span("folded_encoding");backend.domain.evaluate(&q1,0).map_err(|_|Error::Allocation)?};
+     let (reserved,context)=salts;
+     let folded_salts=derive_private_salts(reserved,context,hash,0x72)?;
+-    let mut leaves=Vec::with_capacity(1<<18);
++    let leaf_guard=crate::speed_prof::span("folded_leaves");
++let mut leaves=Vec::with_capacity(1<<18);
+     for u in 0..1<<18 {
+         let values=if u<1<<16 {encoded(folded_word[4*u..4*u+4].iter().copied())}else{vec![0;128]};
+         leaves.push(aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,&values,folded_salts.get(u)));
+     }
+-    let tree=multiproof::BinaryTree::new(LegacyHashFn(hash),leaves).ok_or(Error::Allocation)?;
++    drop(leaf_guard);
++let tree=multiproof::BinaryTree::new(LegacyHashFn(hash),leaves).ok_or(Error::Allocation)?;
+     let root=tree.root();
+     let c1=round(&q1,&w1);let c1bytes=encoded(c1);
+     let mut payload=root.to_vec();payload.extend_from_slice(&c1bytes);
+@@ -242,7 +260,8 @@
+         alpha:sem.alpha,z:[[sem.z[0].x,sem.z[0].y],[sem.z[1].x,sem.z[1].y]],
+         gamma,kappa,alpha0,alpha1,queries:queries.to_vec(),
+     },sem.roots[0])?;
+-    let mut out=Vec::with_capacity(compact::PROOF_BYTES);
++    let _publish=crate::speed_prof::span("publication");
++let mut out=Vec::with_capacity(compact::PROOF_BYTES);
+     out.extend_from_slice(compact::MAGIC);
+     out.extend_from_slice(&[variant.tag(),0,0,0,0,0,0,0]);
+     compact::compact_semantic(&sem.bytes,&mut out).map_err(|_|Error::Semantic)?;
+@@ -305,6 +324,8 @@
+ /// P_R1 on one attempt. R1 is variant S2; P_R1 is not defined for the others.
+ #[cfg(feature="r1p-check")]
+ fn public_check(variant:Variant,challenges:&R1PublicChallenges,c1_root:[u8;32])->Result<(),Error> {
++let _speed_guard = crate::speed_prof::span("p_r1");
++
+     if variant!=Variant::S2 { return Err(Error::Semantic); }
+     #[cfg(test)]
+     test_hooks::observe_challenges(challenges);
+@@ -359,9 +380,11 @@
+     nonce_store:&mut DurableStateOnlyMaskNonceStore,
+     mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,
+ )->Result<RetriedProof,Error> {
++let _speed_guard = crate::speed_prof::span("retry_loop");
++
+     if variant!=Variant::S2 { return Err(Error::Semantic); }
+     for k in 0..ATTEMPT_CAP {
+-        let attempt=next_attempt(k)?;
++        let attempt={let _g=crate::speed_prof::span("entropy");next_attempt(k)?};
+         match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {
+             Ok((proof,audit))=>return Ok(RetriedProof{proof,audit,attempts:k+1}),
+             Err(Error::Rejected)=>continue,
+--- a/crates/aspis-r1-cost-probe/src/host_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/host_semantic.rs
+@@ -32,6 +32,8 @@
+         columns: &[Vec<QM31>; 29],
+         point: &[QM31; 10],
+     ) -> Result<[[QM31; 29]; 3], Error> {
++let _speed_guard = crate::speed_prof::span("semantic_point_claims");
++
+         let mut claims = [[QM31::ZERO; 29]; 3];
+         for (p, at) in wire::statement_points(point).iter().enumerate() {
+             for (lane, column) in columns.iter().enumerate() {
+@@ -154,7 +156,7 @@
+             mask_sum,
+             |point| {
+                 let claims = point_claims(&columns, point)?;
+-                let terminal = public.terminal_qm31(&claims, point, &challenges).map_err(|_|Error::Public)?;
++                let terminal = {let _g=crate::speed_prof::span("semantic_terminal");public.terminal_qm31(&claims, point, &challenges).map_err(|_|Error::Public)?};
+                 let mask = aspis_core::state_only_hiding::state_only_selected_mask_value(
+                     &core::array::from_fn(|i| claims[0][i]),
+                     &core::array::from_fn(|i| claims[0][16 + i]),
+@@ -225,6 +227,8 @@
+     hash: H,
+     variant: crate::transport::Variant,
+ ) -> Result<BuiltSemantics<H>, Error> {
++let _speed_guard = crate::speed_prof::span("semantic");
++
+     if noised_semantic_c1.c1.len() != 16
+         || compiled.semantic_c1.c1.len() != 16
+         || &compiled.public_statement != public.transition()
+@@ -275,6 +279,8 @@
+     lambda: QM31,
+     chi: QM31,
+ ) -> Result<bool, Error> {
++let _speed_guard = crate::speed_prof::span("pole_check");
++
+     #[cfg(test)]
+     if crate::prover::test_hooks::forced_pole() {
+         return Ok(false);
+--- a/crates/aspis-r1-cost-probe/src/host_sumcheck.rs
++++ b/crates/aspis-r1-cost-probe/src/host_sumcheck.rs
+@@ -41,6 +41,8 @@
+         initial_claim: QM31,
+         mut oracle: impl FnMut(&[QM31; 10]) -> Result<QM31, Error>,
+     ) -> Result<([QM31; 10], QM31), Error> {
++let _speed_guard = crate::speed_prof::span("semantic_sumcheck");
++
+         let mut point = [QM31::ZERO; 10];
+         let mut running = initial_claim;
+         for round in 0..10 {
+--- a/crates/aspis-r1-cost-probe/src/host_commitment.rs
++++ b/crates/aspis-r1-cost-probe/src/host_commitment.rs
+@@ -8,6 +8,8 @@
+ }
+ impl EncodingDomain {
+     pub fn new() -> Result<Self, Error> {
++let _speed_guard = crate::speed_prof::span("encoding_domain");
++
+         let mut xy = filled(
+             FIBRE_COUNT,
+             Point {
+@@ -56,6 +58,8 @@
+     /// Exact §3 encoder at every stored index, O(N log 1024), using
+     /// N_(2j)(x)=N_j(2x²−1), N_(2j+1)(x)=x*N_j(2x²−1).
+     pub fn encode<T: CodeField>(&self, message: &Message<T>) -> Result<Vec<T>, Error> {
++let _speed_guard = crate::speed_prof::span("encoding");
++
+         let mut channels = Vec::new();
+         channels
+             .try_reserve_exact(4)
+@@ -184,7 +188,8 @@
+             });
+             saved.push(messages[l]);
+         }
+-        let mut leaves = filled(FIBRE_COUNT, [0; 32])?;
++        let leaf_guard=crate::speed_prof::span("commit_leaves");
++let mut leaves = filled(FIBRE_COUNT, [0; 32])?;
+         for (u, digest) in leaves.iter_mut().enumerate() {
+             let mut bytes = [0u8; 480];
+             let mut at = 0;
+@@ -203,6 +208,7 @@
+                 merkle::leaf(hash, tag, &bytes[..at])
+             };
+         }
++        drop(leaf_guard);
+         Ok(Self {
+             time,
+             lanes,
+--- a/crates/aspis-r1-cost-probe/src/multiproof.rs
++++ b/crates/aspis-r1-cost-probe/src/multiproof.rs
+@@ -231,6 +231,8 @@
+ #[cfg(feature = "prover")]
+ impl BinaryTree {
+     pub fn new<H: Digest32>(hash: H, leaves: Vec<[u8; 32]>) -> Option<Self> {
++let _speed_guard = crate::speed_prof::span("tree_parents");
++
+         if leaves.len() != 1 << LEAF_BITS {
+             return None;
+         }
+--- a/crates/aspis-r1-cost-probe/src/weights.rs
++++ b/crates/aspis-r1-cost-probe/src/weights.rs
+@@ -126,6 +126,8 @@
+ impl Weights {
+     #[inline(never)]
+     pub fn new(variant:Variant,alpha:&[K;10],z:&[SecureCirclePoint;2])->Result<Box<Self>,Error> {
++let _speed_guard = crate::speed_prof::span("weights");
++
+         let mut out=aspis_core::r0::heap::uninit::<Self>().map_err(|_|Error::Allocation)?;
+         unsafe {
+             let p=out.as_mut_ptr();
+@@ -294,6 +296,8 @@
+         Ok(pair)
+     }
+     pub fn materialize(&self,kappa:E)->Result<Vec<E>,Error> {
++let _speed_guard = crate::speed_prof::span("weights_materialize");
++
+         let kp=powers::<7>(kappa);
+         let mut w=aspis_core::r0::heap::filled(1024,E::ZERO).map_err(|_|Error::Allocation)?;
+         for (j,v) in w.iter_mut().enumerate() {for kind in 0..7 {*v=v.add(kp[kind].mul_qm31(self.raw(kind,j)));}}
+--- a/crates/aspis-r1-cost-probe/src/transcript.rs
++++ b/crates/aspis-r1-cost-probe/src/transcript.rs
+@@ -5,6 +5,8 @@
+ pub struct Transcript<H: Digest32> { pub state:[u8;32], hash:H }
+ impl<H: Digest32> Transcript<H> {
+     pub fn new(hash:H, semantic_state:[u8;32], variant:Variant) -> Self {
++let _speed_guard = crate::speed_prof::span("transcript");
++
+         #[cfg(not(feature = "private-leaf-salts"))]
+         let domain: &[u8] = b"UNPROVED:R1:COST-PROBE:P2";
+         #[cfg(feature = "private-leaf-salts")]
+@@ -12,15 +14,21 @@
+         Self { state:hash.digest(&[domain,&[variant.tag()],&semantic_state]), hash }
+     }
+     pub fn absorb(&mut self, row:u8, payload:&[u8]) {
++let _speed_guard = crate::speed_prof::span("transcript");
++
+         self.state=self.hash.digest(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);
+     }
+     pub fn block(&mut self,row:u8,payload:&[u8])->[u8;32] {
++let _speed_guard = crate::speed_prof::span("transcript");
++
+         self.absorb(row,payload);
+         let block=self.hash.digest(&[&self.state,&[1]]);
+         self.state=self.hash.digest(&[&self.state,&[2]]);
+         block
+     }
+     pub fn scalar(&mut self,row:u8,payload:&[u8],nonzero:bool)->E {
++let _speed_guard = crate::speed_prof::span("transcript");
++
+         let block=self.block(row,payload);
+         let out=if nonzero {crate::sampler::gamma_sample(&block)} else {crate::sampler::ordinary_sample(&block)};
+         crate::trace::value(4,row as usize,out); out
+@@ -29,10 +37,14 @@
+     /// residual has at most 21 roots even when sampled from the K subfield.
+     /// Gamma and both folding challenges continue to use E.
+     pub fn scalar_k(&mut self,row:u8,payload:&[u8])->aspis_core::field::QM31 {
++let _speed_guard = crate::speed_prof::span("transcript");
++
+         let out=crate::sampler::qm31_sample(&self.block(row,payload));
+         crate::trace::value(4,row as usize,E::from_qm31(out)); out
+     }
+     pub fn queries(&mut self, row:u8, payload:&[u8])->Result<[u32;22],crate::verifier::Error> {
++let _speed_guard = crate::speed_prof::span("transcript");
++
+         self.absorb(row,payload);
+         let mut blocks=[[0;32];8];let mut advances=blocks; let mut state=self.state;
+         blocks[0]=self.hash.digest(&[&state,&[1]]);
+--- a/crates/aspis-r1-cost-probe/src/speed_prof.rs
++++ b/crates/aspis-r1-cost-probe/src/speed_prof.rs
+@@ -0,0 +1,6 @@
++use std::{cell::RefCell, time::Instant, collections::BTreeMap, vec::Vec};
++std::thread_local! {static STATE: RefCell<(Vec<f64>, BTreeMap<&'static str,(f64,f64,u64)>)> = RefCell::new((Vec::new(), BTreeMap::new()));}
++pub struct Span { label: &'static str, start: Instant }
++pub fn span(label: &'static str)->Span { STATE.with(|s| s.borrow_mut().0.push(0.0)); Span{label,start:Instant::now()} }
++impl Drop for Span {fn drop(&mut self){let elapsed=self.start.elapsed().as_secs_f64(); STATE.with(|s|{let mut s=s.borrow_mut(); let child=s.0.pop().unwrap();if let Some(p)=s.0.last_mut(){*p+=elapsed;}let r=s.1.entry(self.label).or_default();r.0+=elapsed;r.1+=elapsed-child;r.2+=1;});}}
++pub fn take()->BTreeMap<&'static str,(f64,f64,u64)>{STATE.with(|s|{assert!(s.borrow().0.is_empty()); core::mem::take(&mut s.borrow_mut().1)})}
+--- a/crates/aspis-r1-cost-probe/examples/speed_profile.rs
++++ b/crates/aspis-r1-cost-probe/examples/speed_profile.rs
+@@ -0,0 +1,25 @@
++use aspis_prover::{state_only_entropy::{DurableStateOnlyMaskNonceStore,StateOnlyAttemptSecrets},HOST_HASH};
++use aspis_r1_cost_probe::{prover,transport::Variant,verifier,dense,speed_prof};
++use aspis_core::digest::LegacyHashFn;
++use std::{time::Instant,path::Path};
++use serde_json::json;
++fn main(){
++ assert!(!cfg!(debug_assertions));
++ let args:Vec<_>=std::env::args().collect();let n:usize=args[1].parse().unwrap();let out=Path::new(&args[2]);std::fs::create_dir(out).unwrap();
++ let mut rows=vec![];
++ for i in 0..n {for withdrawal in [false,true] {
++ let fixture=aspis_prover::r0_fixture::prepare(withdrawal);
++ let public=aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_statement_v1(&fixture.statement).unwrap().to_vec();
++ let dir=out.join(format!("ledger-{i}-{withdrawal}"));let mut ledger=DurableStateOnlyMaskNonceStore::open(&dir).unwrap();
++ let _=speed_prof::take();
++ let start=Instant::now();
++ let result=prover::prove_masked_retrying_with(fixture.public(),&fixture.compiled,Variant::S2,HOST_HASH,&mut ledger,|_|{
++ let mut nonce=[0u8;32];getrandom::fill(&mut nonce).unwrap();StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce).map_err(|_|verifier::Error::Entropy)
++ }).expect("successful retry loop");
++ let seconds=start.elapsed().as_secs_f64();let phases=speed_prof::take();
++ let checkpoint=verifier::tx1(fixture.public(),&public,&result.proof,verifier::SPLIT,LegacyHashFn(HOST_HASH),None).unwrap();
++ verifier::tx2(&public,&result.proof,&checkpoint,LegacyHashFn(HOST_HASH),None).unwrap();dense::verify(fixture.public(),&result.proof,HOST_HASH).unwrap();
++ let row=json!({"fixture":if withdrawal {"withdrawal"}else{"transfer"},"run":i,"wall_seconds":seconds,"attempts":result.attempts,"proof_bytes":result.proof.len(),"verified_strict_dense":true,"phases_inclusive_exclusive_calls":phases});
++ println!("SPEED_ROW {}",row);rows.push(row);std::fs::write(out.join("rows.json"),serde_json::to_vec_pretty(&rows).unwrap()).unwrap();
++ }}
++}
+--- a/crates/aspis-prover/src/state_only_entropy.rs
++++ b/crates/aspis-prover/src/state_only_entropy.rs
+@@ -405,9 +405,11 @@
+         {
+             return Err(StateOnlyMaskBuildError::Layout);
+         }
++        let speed_reserve=std::time::Instant::now();
+         if !nonce_store.reserve(context.statement_digest, context.mask_nonce) {
+             return Err(StateOnlyMaskBuildError::ReusedMaskNonce);
+         }
++        std::eprintln!("SPEED_RESERVATION {}",speed_reserve.elapsed().as_secs_f64());
+         let mut pre_reserved = PreReservedNonce {
+             statement_digest: context.statement_digest,
+             mask_nonce: context.mask_nonce,
+--- a/docs/research/v8-r0-zk-20261009/z4/z9e.rs
++++ b/docs/research/v8-r0-zk-20261009/z4/z9e.rs
+@@ -208,7 +208,10 @@
+         let t = Instant::now();
+         let ln = Lanes::new(&p.cx);
+         let (mut pb, cc) = convert(&p, &cert, &ln)?;
++        let convert_seconds=t.elapsed().as_secs_f64();
++        let tb=Instant::now();
+         extracted_builders(&p, &cert, &ln, &mut pb)?;
++        eprintln!("SPEED_CHECK_SPLIT {} {}",convert_seconds,tb.elapsed().as_secs_f64());
+         tm.builders = t.elapsed().as_secs_f64();
+         let t = Instant::now();
+         let ok = ck::check(&pb, &cc);
+@@ -216,5 +219,6 @@
+         Some(ok)
+     }));
+     QUIET.with(|q| q.set(false));
++    eprintln!("SPEED_CHECK {} {} {} {}",tm.public_data,tm.emit,tm.builders,tm.check);
+     (matches!(verdict, Ok(Some(true))), tm)
+ }

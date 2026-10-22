@@ -1,0 +1,57 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -177,6 +177,8 @@
+ 
+ impl<H: Digest32> SemanticTranscript<H> {
+     pub fn new(hash: H, public_bytes: &[u8], c1_root: &[u8; 32]) -> Result<Self, Error> {
++let _speed_guard=crate::speed_prof::span("semantic_transcript");
++
+         let length = u32::try_from(public_bytes.len()).map_err(|_| Error::Public)?;
+         Ok(Self {
+             state: hash.digest(&[DOMAIN, &[0], &length.to_le_bytes(), public_bytes, c1_root]),
+@@ -246,6 +248,8 @@
+         ))
+     }
+     pub fn semantic(&mut self, row: u8, framed: &[u8]) -> Result<QM31, Error> {
++let _speed_guard=crate::speed_prof::span("semantic_transcript");
++
+         if row > 24 {
+             return Err(Error::InvalidRow);
+         }
+@@ -258,6 +262,8 @@
+         row: u8,
+         framed: &[u8],
+     ) -> Result<SecureCirclePoint, Error> {
++let _speed_guard=crate::speed_prof::span("semantic_transcript");
++
+         let circle_row = match row {
+             25 => CircleRow::First,
+             26 => CircleRow::Second,
+--- a/docs/research/v8-r0-zk-20261009/z4/z9e.rs
++++ b/docs/research/v8-r0-zk-20261009/z4/z9e.rs
+@@ -202,13 +202,17 @@
+         let p = public_data(ch)?;
+         tm.public_data = t.elapsed().as_secs_f64();
+         let t = Instant::now();
+-        let (cert, _) = emit(&p);
++        let (cert, info) = emit(&p);
++        eprintln!("SPEED_EMIT_SPLIT {} {} {}", info.t_lifts,info.t_qprime,info.t_bcond);
+         tm.emit = t.elapsed().as_secs_f64();
+         let cert = cert?;
+         let t = Instant::now();
+         let ln = Lanes::new(&p.cx);
+         let (mut pb, cc) = convert(&p, &cert, &ln)?;
++        let convert_seconds=t.elapsed().as_secs_f64();
++        let tb=Instant::now();
+         extracted_builders(&p, &cert, &ln, &mut pb)?;
++        eprintln!("SPEED_CHECK_SPLIT {} {}",convert_seconds,tb.elapsed().as_secs_f64());
+         tm.builders = t.elapsed().as_secs_f64();
+         let t = Instant::now();
+         let ok = ck::check(&pb, &cc);
+@@ -216,5 +220,6 @@
+         Some(ok)
+     }));
+     QUIET.with(|q| q.set(false));
++    eprintln!("SPEED_CHECK {} {} {} {}",tm.public_data,tm.emit,tm.builders,tm.check);
+     (matches!(verdict, Ok(Some(true))), tm)
+ }

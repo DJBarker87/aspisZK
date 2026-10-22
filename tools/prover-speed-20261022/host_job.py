@@ -6,6 +6,7 @@ mode,stage=sys.argv[1:];R=H/mode;O=H/'receipts'/(mode+'-'+stage);O.mkdir(parents
 cg=Path('/sys/fs/cgroup'+Path('/proc/self/cgroup').read_text().split('0::')[1].strip())
 limits={n:(cg/n).read_text().strip() for n in ['memory.high','memory.max','memory.swap.max','pids.max']}
 assert limits==dict(zip(['memory.high','memory.max','memory.swap.max','pids.max'],map(str,[6*2**30,8*2**30,0,64]))),limits
+subprocess.run(['python3',str(H/'tools/admission.py'),str(O/'admission.json')],check=True)
 features='optimized-terminal,'+('r1p-check' if mode=='research' else 'ct-host-prover')
 env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='4',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(H/'target'),RUSTFLAGS='-C link-arg=-Wl,--threads=4')
 cmd=['cargo','build','--release','-p','aspis-r1-cost-probe','--example','speed_profile','--features',features,'-j','4','--locked'] if stage=='build' else [str(H/'bin'/mode),'5',str(H/('results-'+mode))]
