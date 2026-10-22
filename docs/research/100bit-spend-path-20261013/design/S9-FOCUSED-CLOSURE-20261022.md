@@ -150,3 +150,64 @@ checked array writes and branch arithmetic to the retained two-side identity.
 Only the root launches local Lean. The shared mutex is respected across other
 live Codex sessions; failed attempts and diagnostic axiom reports are not
 accepted theorem evidence. No unchanged full replay is launched.
+
+## Concrete execution and candidate-source continuation
+
+The S4 source adoption is recorded in `S4-ADOPTION-DECISION-20261022.md`;
+production `weights.rs` is pinned at SHA-256
+`28b558ffa9f5b004188c7f50b1597fe681186f54fb4d52a3bd125df4f2481137`.
+The separate S9 candidate below has not been adopted. Earlier statements in
+this working log about rejected extraction attempts refer to those particular
+attempts, not to the subsequent successful focused candidate extraction.
+
+PROVED local execution links are committed in `f8b20aacb`, packet
+`evidence/s9-accepted-execution-links-v1-20261022/`. One successful active
+body supplies a shared low/high-power witness and its exact remaining
+continuation. The post-scalar continuation exposes the same four term
+results, ordered sums and branch continuation. Concrete accepted operations
+preserve canonicality and decoded arithmetic of the same returned values.
+The second-branch suffix has exact update equations and preserves cell zero.
+Input canonicality and checked-source-read premises remain explicit; these
+suffix results are not a whole-helper or enclosing-caller theorem.
+
+MEASURED candidate gates are committed in `428a54b5b`, packet
+`evidence/s9-explicit-helper-current-gates-v1-20261022/`. The candidate
+changes only `factored_s2_libra_weights`, replacing its N=4 power/term array
+construction with explicit operations in the same order, including the unused
+fourth QM multiplication. Its source SHA is
+`9338607afd636f43b3b830bbf9cf3cc0ced1fa7cc78b266282969e519577bccf`.
+The actual candidate native build, SBF build, six fixtures and strict stack
+check passed. Against the authorized frozen baseline, stage-1 increases are
+at most 10,817 CU and settlement increases at most 8,099 CU, within the
+12,000 CU per-transaction allowance. Outputs match on these fixtures.
+Legacy B1 and the older +10,000 settlement comparison fail and remain
+recorded. These are measurements, not all-input bounds or equivalence proofs.
+
+PROVED concrete carrier transport and compiled generated candidate source
+are committed in `8a667eeac`, packet
+`evidence/s9-candidate-concrete-adapter-v1-20261022/`. The six raw opaque
+operation axioms have been replaced with typed, invertible carrier mappings
+to the existing concrete operation owner. Full Result transport includes
+failure and divergence. Types, the external definitions and the actual
+generated helper compile. The helper, scalar-factor function and generated
+Std iterator fold have transitive standard-only axiom reports. Generated
+option overrides are removed; namespace qualification fixes a generated
+local-variable shadowing error. The raw Aeneas diagnostic files are retained
+separately and are not accepted imports. Source extraction success and
+compilation do not establish the complete arithmetic specification.
+
+The next composition must preserve the actual source witnesses throughout:
+low polynomial meaning, high-term array and source reads, ordered sum
+meanings, the q16 power meaning, and the same intermediate/final arrays.
+A formula with unconstrained existential sums is only an intermediate
+suffix result; it does not close the coefficient relation. A monolithic
+side-zero composition hit the default 200,000-heartbeat limit, so it is
+being split at the shared-prefix/branch boundary without increasing limits
+or changing its mathematical obligations.
+
+OPEN: the complete two-body semantic composition; candidate array/fold/body
+transport; actual enclosing caller and relevant library correspondence;
+final source/artifact re-pins and S10 integration; the composed security
+experiment and raw 100-bit conclusion. No complete S9 cone or 100-bit result
+is claimed. Focused receipts reuse pinned warm dependencies and do not
+constitute the final coherent release replay.
