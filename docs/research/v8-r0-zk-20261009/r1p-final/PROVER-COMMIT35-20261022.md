@@ -225,3 +225,9 @@ created, deleted or modified. Nothing was pushed or merged.
 create_new ledger transition/exposure interface described above; then complete
 native publication, observation conversion, concrete experiment and both
 whole-run joins. RustProverRefinement remains explicit.
+
+Final source checkpoint: `e8d60ec27`. The read-only source/object audit checks
+eight modules and every retained dependency hash against that commit and the
+recorded exact source overlays. It performs no compilation or repeated
+regression. `final-proof-audit.json` and `shipped-sources-unchanged.json`
+record this check. Next unused Env J attempt is J9128.
