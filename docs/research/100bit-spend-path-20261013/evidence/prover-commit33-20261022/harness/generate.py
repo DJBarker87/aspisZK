@@ -13,7 +13,7 @@ folded=take('        for &u in &drawn.queries { let v=', '        let mut leaves
 leaves=take('        for (&u,(_,c1v,c2v)) in &opened', '        let (p1,r1)=')
 publish=take('        for &u in &drawn.queries {\n            let u=u as usize;let (_,c1v,c2v)=', '        if out.len()!=compact::OFF_NODES')
 merge=take('        for (a,v) in transcript {', '        times.program=')
-output='fn native_folded(drawn:&Drawn,view:&View)->BTreeMap<usize,Vec<u8>> {let mut folded=BTreeMap::new();\n'+folded+'folded}\n'
+output='fn native_folded(drawn:&Drawn,view:&View,mut folded:BTreeMap<usize,Vec<u8>>)->BTreeMap<usize,Vec<u8>> {\n'+folded+'folded}\n'
 output+='fn native_leaves(opened:&BTreeMap<usize,(u8,Vec<u8>,Vec<u8>)>,folded:&BTreeMap<usize,Vec<u8>>,commit_coins:&mut Coins)->(BTreeMap<usize,(Vec<u8>,[u8;32])>,BTreeMap<usize,(Vec<u8>,[u8;32])>,BTreeMap<usize,(Vec<u8>,[u8;32])>) {let mut leaves1=BTreeMap::new();let mut leaves2=BTreeMap::new();let mut leavesf=BTreeMap::new();\n'
 # Native loops take &opened and &folded; wrapper owns snapshots to preserve spans verbatim.
 output=output.replace(' {let mut leaves1=', ' {let opened=opened.clone();let folded=folded.clone();let mut leaves1=')

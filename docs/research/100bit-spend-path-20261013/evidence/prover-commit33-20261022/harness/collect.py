@@ -9,6 +9,7 @@ def sync(remote,local,extra=()):
  local.mkdir(parents=True,exist_ok=True)
  subprocess.run(['rsync','-az',*extra,HOST+':'+remote+'/',str(local)+'/'],check=True)
 sync(R+'/receipts',E/'receipts')
+sync(R+'/input-snapshots',E/'input-snapshots')
 sync(R,E/'pins',('--include=/*-inputs.json','--include=/*-llbc.json','--include=/lean-*.json','--include=/revision.txt','--include=/frozen-elf-final-check.json','--exclude=*'))
 records=[]
 for pin in sorted((E/'pins').glob('lean-*.json')):

@@ -1,4 +1,4 @@
-fn native_folded(drawn:&Drawn,view:&View)->BTreeMap<usize,Vec<u8>> {let mut folded=BTreeMap::new();
+fn native_folded(drawn:&Drawn,view:&View,mut folded:BTreeMap<usize,Vec<u8>>)->BTreeMap<usize,Vec<u8>> {
         for &u in &drawn.queries { let v=u as usize/4; folded.entry(v).or_insert_with(||encoded((4*v..4*v+4).map(|i|eval_at(&view.q1,i)))); }
 folded}
 fn native_leaves(opened:&BTreeMap<usize,(u8,Vec<u8>,Vec<u8>)>,folded:&BTreeMap<usize,Vec<u8>>,commit_coins:&mut Coins)->(BTreeMap<usize,(Vec<u8>,[u8;32])>,BTreeMap<usize,(Vec<u8>,[u8;32])>,BTreeMap<usize,(Vec<u8>,[u8;32])>) {let opened=opened.clone();let folded=folded.clone();let mut leaves1=BTreeMap::new();let mut leaves2=BTreeMap::new();let mut leavesf=BTreeMap::new();
