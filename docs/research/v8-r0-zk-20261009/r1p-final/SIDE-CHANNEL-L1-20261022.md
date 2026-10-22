@@ -174,3 +174,49 @@ These are missing proofs, not new cryptographic or runtime trust items.
 No `FullRecordAgreement`/similar premise has been installed to relabel the
 requested conclusion as an assumption. The generic TV theorem is deliberately
 not advertised as the requested concrete `SideChannelL1JointCoupling` result.
+
+## Final focused validation and delivery
+
+`SideChannelL1Audit.lean` imports the final new-module closure and audits
+every added theorem, plus both proof-bearing equivalence definitions.
+J9880 exits 0 with only subsets of `{propext, Classical.choice, Quot.sound}`.
+All builds ran on the host, each under MemoryHigh=6G, MemoryMax=8G,
+MemorySwapMax=0, TasksMax=64, Lean -M7000. No local Lean job was started.
+Final direct dependency object hashes were rechecked after the audit;
+`object-pins.json` records SHA-256/size and the Lean 4.32 toolchain identity.
+
+| Final module | Attempt | Exit | Wall | Peak RSS KiB | Swaps | Source revision at attempt |
+|---|---:|---:|---|---:|---:|---|
+| SideChannelL1AttemptRecord | 9877 | 0 | 0:02.16 | 4194228 | 0 | `e9ec0ad899735bfa9c87918e64dbf62abb38794a` |
+| SideChannelRetryLaw | 9878 | 0 | 0:01.95 | 4173960 | 0 | `e9ec0ad899735bfa9c87918e64dbf62abb38794a` |
+| SideChannelEntropy | 9869 | 0 | 0:02.04 | 4162908 | 0 | `26d1bcb2f9874050b43deea499f912aabd4da53f` |
+| SideChannelEntropyLaw | 9872 | 0 | 0:02.13 | 4174032 | 0 | `26d1bcb2f9874050b43deea499f912aabd4da53f` |
+| SideChannelL1JointCoupling | 9879 | 0 | 0:01.99 | 4172920 | 0 | `bb2b277eefbec7ce50f2ee49e4c59c06331ab51c` |
+| SideChannelL1Audit | 9880 | 0 | 0:01.54 | 4135452 | 0 | `bb2b277eefbec7ce50f2ee49e4c59c06331ab51c` |
+
+Each `attempt-N.json` also pins exact source SHA, direct dependency hashes,
+fingerprint, command, cap and full time fields; `sources/` keeps exact
+candidate bytes. `out-N.log` retains full wrapped axiom lines and errors.
+The source-revision field is the committed baseline at launch; candidate
+bytes, including uncommitted edits, are identified by the source SHA/snapshot.
+Failed attempts remain evidence but are excluded from the final proof set.
+
+`verify.py` passes source/snapshot pins, final exit/axiom checks, direct
+object-dependency consistency, shipped source pins and the changed-file
+allowlist. Source/metadata whitespace checks pass. Two space-only diagnostic
+lines in the **raw** J9868 logs are retained byte-for-byte; the unrestricted
+`git diff --check` output and the raw-log exclusion are recorded explicitly
+in `validation.json`.
+
+This is focused model-proof evidence against cached env-J dependencies,
+not a coherent full release replay or a source/artifact L1 privacy certificate.
+No frozen manifest replay, Rust/Kani/SBF build, benchmark, deployment, key
+operation or ELF identity check ran. No crates/programs or ProverCommit*
+module was edited, so the shipped-file ELF rebuild condition was not triggered.
+All work is committed on `codex/cx-l1-coupling-20261022`; nothing was pushed.
+E1/E2/P1 and the inherited refinement/TrustedStd boundaries are retained;
+none is discharged or strengthened by the generic TV lemmas.
+
+The next deliverable is the native full-record producer/refinement and its
+joint mask/read-vector transport, followed by the part-47 publication join.
+Until then, **native L1 target not yet established**.
