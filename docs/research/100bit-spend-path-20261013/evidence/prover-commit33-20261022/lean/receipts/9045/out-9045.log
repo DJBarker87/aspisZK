@@ -1,0 +1,121 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublication33.lean:27:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverCommitPublication33.folded_loop_rec`:
+  [Std.TransCmp cmp]
+  [Std.LawfulEqCmp cmp]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Std.TransCmp cmp] [Std.LawfulEqCmp cmp] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublication33.lean:65:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (map.decode (map.entry_or_insert_with s (key q) fun x => make (key q)).1,
+      (map.entry_or_insert_with s (key q) fun x => make (key q)).2).1
+in the target expression
+  (map.decode (folded map key make qs (map.entry_or_insert_with s (key q) fun x => make (key q)).1).1,
+      (folded map key make qs (map.entry_or_insert_with s (key q) fun x => make (key q)).1).2) =
+    folded modelMap key make qs (map.decode (map.entry_or_insert_with s (key q) fun x => make (key q)).1)
+
+case cons.none
+Key Value State Thread Slot Output Query : Type
+cmp : Key → Key → Ordering
+inst✝² : Std.TransCmp cmp
+inst✝¹ : Std.LawfulEqCmp cmp
+inst✝ : DecidableEq Thread
+map : MapAPI Key Value State cmp
+tls : TLSAPI Thread Slot Output
+thread : Thread
+schedule : List (Thread × ProverCommitTLS23.Access Slot Output)
+trusted : TrustedStd map tls thread schedule
+key : Query → Key
+make : Key → Value
+q : Query
+qs : List Query
+ih :
+  ∀ (s : State),
+    (map.decode (folded map key make qs s).1, (folded map key make qs s).2) = folded modelMap key make qs (map.decode s)
+s : State
+rest :
+  (map.decode (folded map key make qs (map.entry_or_insert_with s (key q) fun x => make (key q)).1).1,
+      (folded map key make qs (map.entry_or_insert_with s (key q) fun x => make (key q)).1).2) =
+    folded modelMap key make qs (map.decode (map.entry_or_insert_with s (key q) fun x => make (key q)).1)
+found : (map.decode s)[key q]? = none
+step :
+  (map.decode (map.entry_or_insert_with s (key q) fun x => make (key q)).1,
+      (map.entry_or_insert_with s (key q) fun x => make (key q)).2) =
+    ((map.decode s).insert (key q) (make (key q)), make (key q), true)
+hs :
+  (map.decode (map.entry_or_insert_with s (key q) fun x => make (key q)).1,
+        (map.entry_or_insert_with s (key q) fun x => make (key q)).2).1 =
+    ((map.decode s).insert (key q) (make (key q)), make (key q), true).1
+hc :
+  (map.decode (map.entry_or_insert_with s (key q) fun x => make (key q)).1,
+          (map.entry_or_insert_with s (key q) fun x => make (key q)).2).2.2 =
+    ((map.decode s).insert (key q) (make (key q)), make (key q), true).2.2
+⊢ (map.decode (folded map key make (q :: qs) s).1, (folded map key make (q :: qs) s).2) =
+    folded modelMap key make (q :: qs) (map.decode s)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublication33.lean:73:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (map.decode (map.entry_or_insert_with s (key q) fun x => make (key q)).1,
+      (map.entry_or_insert_with s (key q) fun x => make (key q)).2).1
+in the target expression
+  (map.decode (folded map key make qs (map.entry_or_insert_with s (key q) fun x => make (key q)).1).1,
+      (folded map key make qs (map.entry_or_insert_with s (key q) fun x => make (key q)).1).2) =
+    folded modelMap key make qs (map.decode (map.entry_or_insert_with s (key q) fun x => make (key q)).1)
+
+case cons.some
+Key Value State Thread Slot Output Query : Type
+cmp : Key → Key → Ordering
+inst✝² : Std.TransCmp cmp
+inst✝¹ : Std.LawfulEqCmp cmp
+inst✝ : DecidableEq Thread
+map : MapAPI Key Value State cmp
+tls : TLSAPI Thread Slot Output
+thread : Thread
+schedule : List (Thread × ProverCommitTLS23.Access Slot Output)
+trusted : TrustedStd map tls thread schedule
+key : Query → Key
+make : Key → Value
+q : Query
+qs : List Query
+ih :
+  ∀ (s : State),
+    (map.decode (folded map key make qs s).1, (folded map key make qs s).2) = folded modelMap key make qs (map.decode s)
+s : State
+rest :
+  (map.decode (folded map key make qs (map.entry_or_insert_with s (key q) fun x => make (key q)).1).1,
+      (folded map key make qs (map.entry_or_insert_with s (key q) fun x => make (key q)).1).2) =
+    folded modelMap key make qs (map.decode (map.entry_or_insert_with s (key q) fun x => make (key q)).1)
+v : Value
+found : (map.decode s)[key q]? = some v
+step :
+  (map.decode (map.entry_or_insert_with s (key q) fun x => make (key q)).1,
+      (map.entry_or_insert_with s (key q) fun x => make (key q)).2) =
+    (map.decode s, v, false)
+hs :
+  (map.decode (map.entry_or_insert_with s (key q) fun x => make (key q)).1,
+        (map.entry_or_insert_with s (key q) fun x => make (key q)).2).1 =
+    (map.decode s, v, false).1
+hc :
+  (map.decode (map.entry_or_insert_with s (key q) fun x => make (key q)).1,
+          (map.entry_or_insert_with s (key q) fun x => make (key q)).2).2.2 =
+    (map.decode s, v, false).2.2
+⊢ (map.decode (folded map key make (q :: qs) s).1, (folded map key make (q :: qs) s).2) =
+    folded modelMap key make (q :: qs) (map.decode s)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublication33.lean:90:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverCommitPublication33.ordered_consumer`:
+  [Std.TransCmp cmp]
+  [Std.LawfulEqCmp cmp]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Std.TransCmp cmp] [Std.LawfulEqCmp cmp] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublication33.lean:97:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverCommitPublication33.query_answers`:
+  [Std.TransCmp cmp]
+  [Std.LawfulEqCmp cmp]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Std.TransCmp cmp] [Std.LawfulEqCmp cmp] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'R1Z.ProverCommitPublication33.folded_loop_rec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublication33.folded_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublication33.folded_loop_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublication33.ordered_consumer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublication33.query_answers' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

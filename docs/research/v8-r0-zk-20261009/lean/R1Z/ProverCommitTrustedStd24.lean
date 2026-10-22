@@ -17,6 +17,9 @@ structure MapAPI (Key Value MapState : Type) (cmp : Key → Key → Ordering) wh
   insert : MapState → Key → Value → MapState × Option Value
   get : MapState → Key → Option Value
   entries : MapState → List (Key × Value)
+  /-- Returned bool records callback invocation; hit does not evaluate it.
+  The publication callee is pure field evaluation, with no mutable effects. -/
+  entry_or_insert_with : MapState → Key → (Unit → Value) → MapState × Value × Bool
 
 /-- One live TLS key, with thread/key lifetime fixed for the invocation.
 Different keys must be instantiated separately, without type-erased casts. -/
@@ -35,6 +38,14 @@ structure TrustedStd [DecidableEq Thread]
   btree_insert_previous : ∀ s k v, (map.insert s k v).2 = (map.decode s)[k]?
   btree_get : ∀ s k, map.get s k = (map.decode s)[k]?
   btree_iter_ordered : ∀ s, map.entries s = (map.decode s).toList
+  /-- D145's one added trusted std operation. Existing value is retained on a
+  hit with no callback; a miss calls once, inserts and returns its result. -/
+  btree_entry_or_insert_with : ∀ s k make,
+    let result := map.entry_or_insert_with s k make
+    (map.decode result.1, result.2) =
+      match (map.decode s)[k]? with
+      | some v => (map.decode s, v, false)
+      | none => let v := make (); ((map.decode s).insert k v, v, true)
   tls_live_key : ∀ t f store, tls.access t f store = ProverCommitTLS23.native t f store
   tls_single_thread : ProverCommitTLS23.SingleThreaded thread schedule
 
@@ -100,6 +111,10 @@ def modelMap : MapAPI Key Value (Std.TreeMap Key Value cmp) cmp where
   insert := ProverCommitTreeOps23.treeInsert
   get := fun s k => s[k]?
   entries := Std.TreeMap.toList
+  entry_or_insert_with := fun s k make =>
+    match s[k]? with
+    | some v => (s,v,false)
+    | none => let v := make (); (s.insert k v,v,true)
 
 def modelTLS : TLSAPI Thread Slot Output where
   access := ProverCommitTLS23.native
@@ -108,7 +123,7 @@ theorem model_consistent (t : Thread) :
     TrustedStd (modelMap (Key := Key) (Value := Value) (cmp := cmp))
       (modelTLS (Thread := Thread) (Slot := Slot) (Output := Output)) t [] := by
   refine ⟨rfl, fun _ _ _ => rfl, fun _ _ _ => rfl, fun _ _ => rfl,
-    fun _ => rfl, fun _ _ _ => rfl, ?_⟩
+    fun _ => rfl, fun _ _ _ => rfl, fun _ _ _ => rfl, ?_⟩
   intro entry h
   exact False.elim (List.not_mem_nil h)
 
