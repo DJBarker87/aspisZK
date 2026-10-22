@@ -34,6 +34,9 @@ folders += ['sdk-paired-context-v7','sdk-paired-context-v8','sdk-paired-context-
 receipts += ['sdk-native-context-check-v9','sdk-paired-context-codegen-v7','sdk-paired-context-check-v7','sdk-paired-context-codegen-v8','sdk-paired-context-codegen-v9','sdk-paired-context-check-v9','owned-sdk-borrowed-v1-charon','owned-sdk-borrowed-v1-aeneas']
 folders += ['sdk-proof-gate-v1','sdk-proof-gate-v2','sdk-proof-gate-v3']
 receipts += ['sdk-proof-gate-join-v1','sdk-proof-gate-join-v2','sdk-proof-gate-v1-charon','sdk-proof-gate-v1-aeneas','sdk-proof-gate-properties-v1','sdk-proof-gate-properties-v2','sdk-proof-gate-other-lengths-v1','sdk-proof-gate-frame-v1','sdk-proof-gate-frame-properties-v1','sdk-proof-gate-frame-properties-v2']
+folders += ['sdk-proof-gate-v4','memcmp-equal-v1','observer-emission-v1','observer-emission-v2','observer-emission-v3','sdk-paired-context-v10']
+new_diagnostics=['sdk-proof-length-cut-v1','sdk-proof-length-cut-v2','sdk-proof-length-cut-v3','sdk-proof-length-frame-cut-v1','sdk-proof-length-frame-cut-v2']+[f'sdk-paired-equalcmp-check-v{i}' for i in range(1,6)]
+receipts += new_diagnostics+['sdk-proof-length-frame-codegen-v1','sdk-proof-length-frame-properties-v1','sdk-proof-length-frame-properties-v2','memcmp-equal-join-v1','observer-emission-check-v1','observer-emission-check-v2','observer-emission-check-v3','sdk-paired-context-codegen-v10','sdk-observer-emission-properties-v1','sdk-observer-emission-properties-v2']
 pins=[]
 for name in folders:
  p=H/name
@@ -50,6 +53,13 @@ for mode in ['shared','exclusive']:
  for suffix in ['-input.json','-admission.json']:
   p=H/('sdk-'+mode+'-properties-v3'+suffix)
   if p.is_file():copy(p,p.name)
+for tag in new_diagnostics:
+ for p in (H/tag).iterdir():
+  if p.suffix in ['.json','.c','.py']:copy(p,Path('diagnostics')/tag/p.name)
+  elif p.suffix=='.log' and p.stat().st_size<1024*1024:copy(p,Path('diagnostics')/tag/p.name)
+  elif p.suffix=='.log':
+   out=O/'diagnostics'/tag;out.mkdir(exist_ok=True,parents=True)
+   (out/(p.stem+'-pin.json')).write_text(json.dumps(dict(path=str(p),bytes=p.stat().st_size,sha256=sha(p),qualification='Large raw diagnostic log retained on host; no proof follows from a diagnostic or timeout.'),indent=2)+'\n')
 for tag in ['sdk-paired-context-check-v1','sdk-paired-context-check-v2','sdk-paired-context-check-v3','sdk-native-context-check-v1','sdk-prefix-context-check-v1','sdk-prefix-context-check-v2','sdk-prefix-context-check-v3','sdk-native-context-check-v2','sdk-native-context-check-v3','sdk-call-prefix-check-v1','sdk-paired-context-check-v4','sdk-native-context-check-v4','sdk-native-context-check-v5','sdk-native-context-check-v6','sdk-native-context-check-v7','sdk-native-context-check-v8','sdk-prefix-context-check-v4','sdk-prefix-context-check-v5','sdk-call-prefix-check-v2','sdk-std-copy-smt-preflight-v1','sdk-std-copy-smt-preflight-v2','sdk-prefix-context-check-v6','sdk-prefix-context-flat-v1','sdk-prefix-smt-exception-v1','sdk-call-prefix-check-v3','sdk-paired-context-check-v5','sdk-paired-context-check-v6','sdk-native-context-check-v9','sdk-paired-context-check-v7','sdk-paired-context-check-v9']:
  for p in (H/tag).glob('*.json'):copy(p,Path('diagnostics')/tag/p.name)
  for p in (H/tag).glob('*.log'):
@@ -61,6 +71,10 @@ for p in (H/'target/kani/x86_64-unknown-linux-gnu/debug/.fingerprint').glob('*/*
  if any(k in p.parent.name for k in ['sdk-heap-','sdk-shared-write-frame','owned-sdk-snapshots','sdk-paired-context','sdk-prefix-context','sdk-native-context','sdk-metadata-prefix','sdk-call-context','sdk-finish','sdk-std-copy','sdk-proof-gate','sdk-stub-preflight']):copy(p,Path('compiler-flags')/p.parent.name/p.name)
 for p in (H/'kit').glob('*.py'):
  if any(k in p.name for k in ['heap-join','snapshot','paired-context','parent-cuts','write-frame','write-frame-properties','run-modular','metadata-prefix','statement-fields','reservation','finish-join','finish-contract','finish-step','finish-fixed-frame','std-copy','owned-sdk-copy','context-properties','sdk-proof-gate','owned-sdk-borrowed','sdk-borrowed','finish-verified','finish-contract-join','smt-preflight','prepared-sdk','trace-cbmc-exception']):copy(p,Path('runner')/p.name)
+for name in ['run-sdk-proof-length-cut-host.py','audit-sdk-length-cut-host.py','prepare-memcmp-equal.py','prepare-observer-emission.py','prepare-sdk-ghost-storage.py','run-sdk-paired-equalcmp-host.py','audit-observer-emission-host.py','memcmp688-declaration.c','memcmp688-equal.c']:
+ p=H/'kit'/name
+ if p.is_file():copy(p,Path('runner')/p.name)
+p=Path('/home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c');copy(p,Path('tool-and-freeze-pins')/'kani_lib.c')
 p=H/'kit/trace-cbmc-exception.cpp'
 if p.is_file():copy(p,Path('runner')/p.name)
 for rel in ['z3-tool-v1/tool-pins.json','source-freeze-revalidation-20261022.json']:

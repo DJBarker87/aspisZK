@@ -1485,3 +1485,100 @@ explicitly unselected. Fresh v2 audit pins are used. Final consistency audit
 selects65 current source targets and11773 cached import objects. These counts
 are consistency evidence, not security closure; a coherent release replay
 remains required.
+
+## 22 October continuation: native wrong-length frame and observer emission
+
+Read-only research inspection at `23392f8056c0fd9d2376d147d7f5ecb97f033aba`
+still finds both shipped program/adapter files byte-identical to freeze
+`b2727acd3abf79315d18b754a260f58f4b1c6326`. The handoff's latest23:35
+dependency addendum retains S2 caller binding as a dependency of the lead's
+cones. The adopted endpoint remains
+`OraclePortHeadlineFrozen2PerAttempt.final_soundness` against `dV_frozen2`.
+
+The isolated native guard now has a checked **all-wrong-length empty frame**:
+`sdk-proof-length-frame-cut-v2`, raw CBMC exit10,14.556s,1322392KiB RSS,swap0.
+All809 non-cover properties pass, including23 assigns properties, frees,
+contract postconditions and unwinding checks. Both covers are reached (raw
+CBMC reports their witnesses as FAILURE). Every slice length0..10485760
+except58295 rejects with the actual InvalidAccountData result. The sole
+additional body cut replaces `memcmp` with assert(false);assume(false), whose
+assertion passes: the comparison is proved unreachable, never assumed equal.
+The actual SDK Ref, full ProgramError and frozen guard statements remain.
+
+This complements `sdk-proof-gate-frame-v1` for the matching length and closes
+the native guard's explicit0..10MiB **component** domain. It removes the
+higher-length restriction at that component boundary. It does not discharge
+runtime heap/descriptor embedding or the enclosing native caller premise.
+The extracted scalar reference's TOTAL Lean result is reused unchanged.
+
+The first reconstructed frame attempt (`sdk-proof-length-frame-cut-v1`)
+omitted the normal Kani contract enforcement pass. Metadata audit v1 caught
+the absence of assigns properties; its functional assertions alone are not
+frame evidence and it is excluded. V2 adds the exact metadata-selected
+`--dfcc <harness> --enforce-contract <contracted-function>` before library
+addition, as in the pinned Kani driver. Fresh properties audit v2 pins the
+same ready program, receipt, source and809 passing properties. Earlier cut
+attempts, the missing-libc failure and incomplete metadata audit remain
+excluded. Normal Kani libc source is exported alongside its SHA pin.
+
+The paired caller diagnostic exposed a genuine **emission discrepancy in
+this Kani context**, not an established production-source counterexample:
+native `observer()->verifier::Observer {None}` is emitted as a load from the
+mutable harness `proofs::OBSERVED` allocation. This is already present in raw
+compiler output before custom linking. A new proof in the unchanged full
+crate reproduces it through normal cargo-kani: `observer-emission-check-v2`,
+exit1,0.751s,188600KiB,swap0; exactly the literal-None assertion fails among20
+checks after an arbitrary ghost write. A standalone small Option<fn()> test
+passes, so no blanket claim about every Kani compilation is made.
+
+`prepare-sdk-ghost-storage.py` wraps each harness-only mutable global in an
+allocation with a distinct tag and projects the same value at every access.
+All initial ghost values, symbolic input domains, contracts and assertions
+remain; the entire source prefix before cfg(kani), including stage1,
+first_decoded and observer, is byte-identical. The corresponding normal
+reproduction (`observer-emission-check-v3`) passes all20 checks: exit0,
+0.670s,189068KiB,swap0. Raw paired-context audit v2 confirms both actual
+observer bodies load the same **const** eight-zero-byte allocation, with no
+ghost read. This is a harness remedy plus focused emission evidence, not a
+general repair proof for Kani or a complete source/caller theorem. No observer
+assertion is removed, no None premise is assumed, and no tool/source candidate
+is adopted into production.
+
+Relevant upstream Kani0.67.0 source is retained with URLs and hashes under
+`tool-and-freeze-pins/kani-0.67.0-source`: allocation caching in operand.rs,
+static registration in static_var.rs and the driver contract-enforcement
+sequence. It informs diagnosis; the installed tool binaries retain their
+separate pins. There is no unreviewed compiler patch in these checks.
+
+`memcmp-equal-join-v1` also checks a scoped leaf through normal Kani/libc:
+equal688-byte owned arrays at the same start or in distinct objects give0
+with an empty write set, exit0,9.525s,397304KiB,swap0. This is not an arbitrary
+overlapping-heap lemma. The attempted C specialization must assert readable
+regions, the checked layout class and all688 equal bytes. Its first array
+equality encoding incorrectly compared whole root arrays despite a cast;
+it is excluded. The revised diagnostic copies each prefix into an actual
+fixed local array before asserting equality. Its model transport remains
+unproved and the paired run `sdk-paired-equalcmp-check-v5` times out:
+exit1,187.022s,6391060KiB,swap0. It establishes no caller correspondence.
+No unchanged rerun or larger memory cap follows. The next caller check must
+split the buffer-byte/frame step from stage control and compose the checked
+steps, rather than retrying the whole-stage formula.
+
+Before/after enclosing obligation: the actual native-to-owned stage1 binding
+premise is **unchanged**. Native guard range/frame coverage improves and the
+observer discrepancy is isolated without weakening its assertion. Still
+required are concrete SDK/runtime descriptor embedding, installed child and
+scan/reply joins, exact error/log effects, and ordered two-pass oracle/caller
+transport. `ops.op10`, `ops.op11` and verifier Ops retain their stated source
+instance obligations. S2, shared actual-SDK S6, and original preparation/powers/
+caller S1 remain OPEN. The100-bit per-attempt target is not yet established.
+
+All new solver/metadata jobs use fresh host admission and explicit cgroup
+caps with MemorySwapMax=0; no local Lean source changes or replay were needed.
+The previous65-target Lean evidence and standard-three-axiom audits are
+reused, not rerun. `#print axioms` is N/A for these Kani/metadata jobs.
+Exact source/tool/input/resource/terminal receipts are source-only in the
+packet. Custom exit10 is never relabelled as a normal cargo-kani success.
+`git diff --check` reports only preserved whitespace in raw diagnostic/compiler
+logs; those evidence bytes are kept unchanged. Source and prose have no new
+whitespace findings.

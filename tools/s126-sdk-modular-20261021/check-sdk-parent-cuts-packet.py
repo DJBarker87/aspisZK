@@ -307,10 +307,59 @@ for phase in ['charon','aeneas']:
  assert r['exit_status']==0 and r['swaps']==0 and r['limits']['memory.swap.max']=='0'
  assert inp['source_sha256']==sha(borrowed/'src/lib.rs') and inp['tool_pins']
 
+lengthTag='sdk-proof-length-frame-cut-v2'
+lengthSource=E/'sources/sdk-proof-gate-v4/src/lib.rs'
+lengthCut=json.loads((lengthSource.parents[1]/'source-cut.json').read_text())
+lengthInput=json.loads((E/(lengthTag+'-input.json')).read_text())
+lengthReceipt=E/'receipts'/lengthTag/'receipt.json';lr=json.loads(lengthReceipt.read_text())
+assert lengthCut['source_sha256']==lengthInput['source_sha256']==sha(lengthSource)
+assert lr['exit_status']==10 and lr['swaps']==0 and lr['limits']['memory.swap.max']=='0'
+assert lr['limits']['memory.max']=='8589934592'
+meta=lengthInput['harness_metadata']
+assert meta['attributes']['kind']=={'ProofForContract':{'target_fn':'native_gate'}}
+enforce=[c for c in lengthInput['commands'] if '--enforce-contract' in c]
+assert len(enforce)==1 and '--dfcc' in enforce[0]
+assert meta['contract']['contracted_function_name'] in enforce[0]
+assert lengthInput['kani_lib_c_sha256']==sha(E/'tool-and-freeze-pins/kani_lib.c')
+assert lengthInput['runner_sha256']==sha(R/'tools/s126-sdk-modular-20261021/run-sdk-proof-length-cut-host.py')
+props=json.loads((E/'diagnostics'/lengthTag/'properties-without-traces.json').read_text())
+noncover=[p for p in props if p['sourceLocation'].get('propertyClass')!='cover']
+covers=[p for p in props if p['sourceLocation'].get('propertyClass')=='cover']
+assert noncover and all(p['status']=='SUCCESS' for p in noncover)
+assert len(covers)==2 and all(p['status']=='FAILURE' for p in covers)
+assert any(p['property'].startswith('memcmp.') for p in noncover)
+assert len([p for p in noncover if p['sourceLocation'].get('propertyClass')=='assigns'])==23
+audit=json.loads((E/'receipts/sdk-proof-length-frame-properties-v2/property-audit.json').read_text())
+assert audit['proof_receipt_sha256']==sha(lengthReceipt) and audit['source_sha256']==sha(lengthSource)
+with tempfile.TemporaryDirectory() as d:
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-proof-gate.py'),d,'other-lengths-frame'],check=True)
+ assert (Path(d)/'src/lib.rs').read_bytes()==lengthSource.read_bytes()
+ assert json.loads((Path(d)/'source-cut.json').read_text())==lengthCut
+assert lengthCut['frozen_guard_sha256']==json.loads((E/'sources/sdk-proof-gate-v3/source-cut.json').read_text())['frozen_guard_sha256']
+accepted[lengthTag]=dict(source_sha256=sha(lengthSource),receipt_sha256=sha(lengthReceipt),raw_exit_status=10,noncover_successes=len(noncover),reachable_covers=2,wall_seconds=lr['wall_seconds'],peak_rss_kib=lr['peak_rss_kib'],swaps=0,qualification='Actual frozen guard rejects all wrong lengths in the explicit0..10MiB storage domain, with checked empty write frame and comparison unreachable. Runtime heap embedding and enclosing caller installation remain open.')
+
+# Retain the normal-pipeline compiler discrepancy and its harness-only remedy.
+for tag,expected in [('observer-emission-check-v2',1),('observer-emission-check-v3',0)]:
+ receipt=json.loads((E/'receipts'/tag/'receipt.json').read_text())
+ assert receipt['exit_status']==expected and receipt['swaps']==0
+assert '1 of 20 failed' in (E/'receipts/observer-emission-check-v2/stdout.log').read_text()
+assert '0 of 20 failed' in (E/'receipts/observer-emission-check-v3/stdout.log').read_text()
+with tempfile.TemporaryDirectory() as d:
+ out=Path(d)/'tagged'
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-ghost-storage.py'),str(E/'sources/sdk-paired-context-v9'),str(out)],check=True)
+ assert (out/'src/lib.rs').read_bytes()==(E/'sources/sdk-paired-context-v10/src/lib.rs').read_bytes()
+emission=json.loads((E/'receipts/sdk-observer-emission-properties-v2/emission-audit.json').read_text())
+paired=json.loads((E/'sdk-paired-equalcmp-check-v5-input.json').read_text())
+assert emission['raw_goto_sha256']==paired['raw_goto_sha256']
+assert len(emission['observers'])==2 and all('proofs' not in x for x in emission['observers'])
+assert 'Type........: const struct ' in emission['constant']
+assert '{ 0, 0, 0, 0, 0, 0, 0, 0 }' in emission['constant']
+assert json.loads((E/'diagnostics/sdk-paired-equalcmp-check-v5/timeout.json').read_text())['status']=='not_proved'
+
 assert all(not p['has_errors'] for p in json.loads((E/'llbc-pins.json').read_text()))
 flags=[json.loads(p.read_text())['rustflags'] for p in (E/'compiler-flags').glob('*/*.json')]
 assert flags and all('opt-level=3' in r and 'overflow-checks=yes' in r and '--kani-compiler' in r for r in flags)
 for p in E.rglob('*'):
  if p.is_file():assert p.suffix not in ['.olean','.o','.a','.so','.dylib','.llbc','.bc','.out']
 (E/'accepted-cuts.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',qualification='Checked finite SDK operation/lifecycle domains and exact pure snapshot adaptation. Reached phase cuts are explicit. Complete actual stage1 child instances and ordered caller join remain open; timed-out/context/codegen/preflight evidence is excluded from accepted cuts.',cuts=accepted),indent=2)+'\n')
-print('PASS nineteen SDK cuts and complete owned-parent copy-loop adaptation; enclosing native caller joins remain open')
+print('PASS twenty SDK cuts and complete owned-parent copy-loop adaptation; enclosing native caller joins remain open')

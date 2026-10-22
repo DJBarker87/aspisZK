@@ -1,0 +1,63 @@
+[
+  {
+    "program": "CBMC 6.8.0 (cbmc-6.8.0)"
+  },
+  {
+    "messageText": "CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux",
+    "messageType": "STATUS-MESSAGE"
+  },
+  {
+    "messageText": "Reading GOTO program from file /home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-paired-equalcmp-check-v3/ready.out",
+    "messageType": "STATUS-MESSAGE"
+  },
+  {
+    "messageText": "Generating GOTO Program",
+    "messageType": "STATUS-MESSAGE"
+  },
+  {
+    "messageText": "Adding CPROVER library (x86_64)",
+    "messageType": "STATUS-MESSAGE"
+  },
+  {
+    "messageText": "Removal of function pointers and virtual functions",
+    "messageType": "STATUS-MESSAGE"
+  },
+  {
+    "messageText": "Generic Property Instrumentation",
+    "messageType": "STATUS-MESSAGE"
+  }--- begin invariant violation report ---
+Invariant check failed
+File: ../src/goto-symex/goto_symex.cpp:48 function: symex_assign
+Condition: assignments must be type consistent, got
+Reason: lhs.type() == rhs.type()
+Backtrace:
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0xa67492) [0x55bebb8d1492]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0xa6820d) [0x55bebb8d220d]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x17bc49) [0x55bebafe5c49]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x3e30e6) [0x55bebb24d0e6]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x487e78) [0x55bebb2f1e78]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x480e7b) [0x55bebb2eae7b]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x4831e8) [0x55bebb2ed1e8]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x2b241a) [0x55bebb11c41a]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x483348) [0x55bebb2ed348]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x4834b7) [0x55bebb2ed4b7]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x482adb) [0x55bebb2ecadb]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x294421) [0x55bebb0fe421]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x292c3f) [0x55bebb0fcc3f]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x15bb18) [0x55bebafc5b18]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x1580d3) [0x55bebafc20d3]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x14f01f) [0x55bebafb901f]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x13cbb9) [0x55bebafa6bb9]
+/lib/x86_64-linux-gnu/libc.so.6(+0x2a1ca) [0x743039e2a1ca]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x8b) [0x743039e2a28b]
+/home/dombarker/.kani/kani-0.67.0/bin/cbmc(+0x1509b5) [0x55bebafba9b5]
+
+Diagnostics: 
+<< EXTRA DIAGNOSTICS >>
+c_bool
+  * width: 8
+bool
+source location: file /home/dombarker/project-offloads/s126-real-sdk-20261021/kit/memcmp688-equal.c line 16 function s126_memcmp688_equal
+<< END EXTRA DIAGNOSTICS >>
+
+--- end invariant violation report ---

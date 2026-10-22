@@ -64,10 +64,7 @@ pub fn reference_gate(proof_data:&[u8],candidate:&[u8;688])->Result<(usize,usize
  }
 }
 '''
-if len(sys.argv)>2 and sys.argv[2]=='frame':
- s=s.replace('pub fn native_gate(', '#[cfg_attr(kani,kani::modifies())]\npub fn native_gate(',1)
- s=s.replace('#[kani::proof] #[kani::unwind(700)]', '#[kani::proof_for_contract(native_gate)] #[kani::unwind(700)]')
-if len(sys.argv)>2 and sys.argv[2]=='other-lengths':
+if len(sys.argv)>2 and sys.argv[2] in ['other-lengths','other-lengths-frame']:
  a=s.index(' #[kani::proof] #[kani::unwind(700)]');b=s.index('\n}\n',a)
  s=s[:a]+''' #[kani::proof] #[kani::unwind(8)]
  fn actual_sdk_guard_other_lengths() {
@@ -86,6 +83,11 @@ if len(sys.argv)>2 and sys.argv[2]=='other-lengths':
   kani::cover!(length==10485760,"maximum runtime buffer rejects without scanning");
   kani::cover!(length==0,"empty runtime buffer rejects without scanning");
  }'''+s[b:]
+if len(sys.argv)>2 and sys.argv[2] in ['frame','other-lengths-frame']:
+ s=s.replace('pub fn native_gate(', '#[cfg_attr(kani,kani::modifies())]\npub fn native_gate(',1)
+ s=s.replace('#[kani::proof] #[kani::unwind(', '#[kani::proof_for_contract(native_gate)] #[kani::unwind(')
+ if sys.argv[2]=='other-lengths-frame':
+  s=s.replace('#[cfg_attr(kani,kani::modifies())]', '#[cfg_attr(kani,kani::requires(proof_data.len()!=58295))]\n#[cfg_attr(kani,kani::ensures(|result| matches!(result,Err(ProgramError::InvalidAccountData))))]\n#[cfg_attr(kani,kani::modifies())]',1)
 (O/'src/lib.rs').write_text(s)
 host='/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src'
 (O/'Cargo.toml').write_text('''[package]
@@ -104,8 +106,8 @@ overflow-checks=true
 sha=lambda t:hashlib.sha256(t.encode()).hexdigest()
 (O/'source-cut.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',freeze=rev,path=path,source_sha256=sha(s),frozen_guard=guard,frozen_guard_sha256=sha(guard),qualification=__doc__,domain='Actual AccountInfo/Ref guard over all58296 storage-byte arrays, every slice length0..58296, arbitrary688-byte candidate and complete SDK metadata. Exact full ProgramError equality includes length/prefix/tag errors. No seeded prefix or tag, no scan/decoder/verifier hook. Higher lengths, arbitrary runtime heap/borrow construction, complete parent fission and ordered caller composition remain explicit.'),indent=2)+'\n')
 
-if len(sys.argv)>2 and sys.argv[2]=='other-lengths':
+if len(sys.argv)>2 and sys.argv[2] in ['other-lengths','other-lengths-frame']:
  p=O/'source-cut.json';meta=json.loads(p.read_text());meta['domain']='Actual AccountInfo/Ref over all10485760-byte storage arrays, arbitrary candidate/metadata and every slice length0..10485760 except58295. The complete unchanged native guard must reject InvalidAccountData without prefix/tag traversal; exact pointer/length/counter observations retained. Together with the separate matching-length/prefix/tag certificate this covers the runtime10MiB length domain, subject to the still-explicit runtime heap/parent composition gate.';p.write_text(json.dumps(meta,indent=2)+'\n')
 
-if len(sys.argv)>2 and sys.argv[2]=='frame':
+if len(sys.argv)>2 and sys.argv[2] in ['frame','other-lengths-frame']:
  p=O/'source-cut.json';meta=json.loads(p.read_text());meta['frame']='Empty modifies set on the exact native SDK Ref guard; proof_for_contract must verify no caller memory write. The same full return equality and pointer/length/counter checks remain. No unproved contract stub is used.';p.write_text(json.dumps(meta,indent=2)+'\n')

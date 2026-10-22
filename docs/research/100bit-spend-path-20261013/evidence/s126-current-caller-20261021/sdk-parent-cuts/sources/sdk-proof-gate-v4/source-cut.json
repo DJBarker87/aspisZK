@@ -1,0 +1,11 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+  "source_sha256": "a289556f191067f4342027388bd231819263f4b4a052620475f494cde6b4240f",
+  "frozen_guard": "    let proof_length = verifier::PROOF_BYTES;\n    let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;\n    let proof_end = proof_start.checked_add(proof_length)\n        .ok_or(ProgramError::InvalidAccountData)?;\n    if proof_data.len() != proof_end\n        || proof_data[..proof_start] != candidate\n        || proof_data[proof_start + 8] != Variant::S2.tag()\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n",
+  "frozen_guard_sha256": "34dc960220aaca9b41f9c2c51dc8269bd466d046c138d490f3fb371385567052",
+  "qualification": "Isolate the exact frozen stage1 length/prefix/tag guard, all rejection paths.\nNo production changes. Native SDK Ref and full ProgramError remain concrete.\nThe scalar reference is a proof candidate until native equality, totality and\ncomplete parent fission/composition gates are checked.\n",
+  "domain": "Actual AccountInfo/Ref over all10485760-byte storage arrays, arbitrary candidate/metadata and every slice length0..10485760 except58295. The complete unchanged native guard must reject InvalidAccountData without prefix/tag traversal; exact pointer/length/counter observations retained. Together with the separate matching-length/prefix/tag certificate this covers the runtime10MiB length domain, subject to the still-explicit runtime heap/parent composition gate.",
+  "frame": "Empty modifies set on the exact native SDK Ref guard; proof_for_contract must verify no caller memory write. The same full return equality and pointer/length/counter checks remain. No unproved contract stub is used."
+}
