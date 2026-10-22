@@ -1,0 +1,14 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+error[E0384]: cannot assign to immutable argument `carry`
+ --> points-iterations.rs:6:2
+  |
+6 |  carry=bit_and_carry;(successor,carry)
+  |  ^^^^^^^^^^^^^^^^^^^ cannot assign to immutable argument
+  |
+help: consider making this binding mutable
+  |
+2 | fn native_successor_step(z:&[E;10],mut successor:[E;10],coordinate:usize,mut carry:E)->([E;10],E) {
+  |                                                                          +++
+
+For more information about this error, try `rustc --explain E0384`.
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.

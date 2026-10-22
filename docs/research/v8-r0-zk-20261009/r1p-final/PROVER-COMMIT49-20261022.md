@@ -126,6 +126,23 @@ axioms printed. J10040 is that missing-object preflight, no compiler launch.
 J10042/44 are rejected index/simplifier drafts. All accepted axiom lists are
 standard; `quad_canonical` is axiom-free. No max options added. No shipped change.
 
+## Stage 6: source statement points and their point-weight consumers
+
+J10051 proves all ten successor carry transitions, canonicality and exact
+`SemSource.successorPoint` value. J10052 proves both source absorption toggles
+and the complete three-point output equal the existing model's
+`openingPoints`, after the documented MSB/LSB reversal. J10053 composes this
+producer with all three point-weight factor products. No statement-point
+identity is supplied as a caller hypothesis. Full Weights allocation, factor
+matrix initialization and remaining raw-kind/caller composition are still open.
+J10047 checks the extracted counter definitions; J10048/49 are rejected
+carry-index drafts. J10050 is a dependency preflight refusal, no compiler launch.
+Native successor transition v2 passes (0.510 s, 145580 KiB), as does the complete
+two-cell absorption (0.551 s, 157884 KiB); both zero swaps. Successor v1 is a
+Rust mutability compile error, retained. All checks retain every input/output
+coordinate, carry and arithmetic operand/call order. Accepted Lean axioms are
+standard. No pure std contract or shipped-source changes.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

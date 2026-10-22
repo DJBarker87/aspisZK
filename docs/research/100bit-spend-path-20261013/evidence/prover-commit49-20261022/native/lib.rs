@@ -70,3 +70,5 @@ include!("weights-iterations.rs");
 include!("boundary-iterations.rs");
 
 include!("factor-iterations.rs");
+
+include!("points-iterations.rs");
