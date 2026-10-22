@@ -1,0 +1,19 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "protocol_freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "source_sha256": "e1936aa38f72f353317914e578d55f0a7921ca9b30642fbc047a88f10fe375a5",
+  "mode": "normalized",
+  "native_finish_source": "    if checkpoint.len() != checkpoint_data.len() {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    checkpoint_data.copy_from_slice(&checkpoint);\n    #[cfg(feature=\"cu-profiling\")]\n    {\n    msg!(\"r1:pool-adapter-stage1-checkpoint-written\");\n    solana_program::log::sol_log_compute_units();\n    }\n    Ok(())\n}",
+  "native_finish_sha256": "14185708e043dae0f7116752dbf54d8dfa461d71d4bb2168764ba0c037f49208",
+  "owned_finish_source": " if result.len()!=sdk.data_cells[checkpoint.data_slot].bytes.len() {return Err(ProgramError::InvalidAccountData);}\n // Owned heap bytes, not an SDK slice descriptor or pointer, are replaced.\n // The actual SDK copy/write frame is a separate concrete operation certificate.\n sdk.data_cells[checkpoint.data_slot].bytes=result;\n Ok(())\n}",
+  "owned_finish_sha256": "0e05f59d0934a02bb32289e007421f45ebf0b4cfe4c833aa74ab5c0f5f81c07d",
+  "max_buffer_bytes": 58295,
+  "reply_max_bytes": 1769,
+  "qualification": "Full native/owned post-child state comparison using the exact checked\nall-reply-length frozen finish contract with a constant ghost destination.\nSource normalization, outer child replies and caller/log transport remain open.\n",
+  "domain": "Actual full SDK and full OwnedSdk, distinct58295/1880/1768 data nodes/all bytes, all metadata and signed counters, independent lamport aliases, real Rc headers. Every reply length0..1769 and all bytes. Complete status/acquisition trace/drop counters/Rc metadata and arbitrary byte in every root compared. Exact destination ghost pointer is the actual checkpoint root; all leaf preconditions must be checked. Earlier reached-entry normalization and source caller/child/log/heap-embedding transports remain open.",
+  "remaining": "Discharge this normalized-entry premise from the earlier native source metadata/decoder/proof framing/tx1-entry cuts, and compose the actual child returned-reply and SDK embedding transports. No global adversary restriction or whole S2 closure follows from this candidate.",
+  "finish_leaf_source_sha256": "20422749a61ea858514215733a847efb7609d0ea0f77c6af25e800d0883b6e9b",
+  "finish_definition_sha256": "64afc8c4b7336b1dde1db8cd2903e58d54b6b4c999ffc189baf5718ff61378dd",
+  "leaf_proof": "sdk-finish-fixed-frame-join-v4",
+  "owner_drop": "Borrowed reply helper; explicit drop(reply) occurs immediately after helper return and before proof/public/checkpoint guard destruction, preserving the original owned-helper drop order."
+}

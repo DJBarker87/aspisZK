@@ -1044,3 +1044,141 @@ closes neither those cuts nor actual whole-SDK totality. S6 still shares the
 native caller gap; S1 still needs its original preparation/caller and power
 range/trace joins. S1/S2/S6 and the100-bit target remain OPEN. No protocol or
 security-contract decision is requested by this reference-only progress.
+
+## Addendum 2026-10-22 — native finish errors and caller backend diagnosis
+
+`3a32a80b7` is committed and pushed on the isolated branch. It contains the
+complete owned-parent copy-loop equality above. Research HEAD
+`0d1f7dbc6e198b44419c2d51660d1115428ca3e0` was then inspected read-only: both
+program/adapter files still match the authoritative b2727acd3 freeze. All226
+previously pinned extraction-workspace source/package files were rehashed and
+still match. The revalidation is source identity only, not artifact identity.
+
+The native finish contract now includes every reply length0..1769, all bytes
+and every observed checkpoint coordinate, with the actual1768-byte RefMut
+destination. It proves exact Ok/InvalidAccountData status, copied byte on
+success, unchanged pre-call byte on length rejection, and the same fixed-array
+write frame. The frozen block itself is unchanged; only the reference helper
+borrows the Vec, keeping its owner/drop with the caller. This widens the prior
+successful-length leaf instead of adding an accepted-only antecedent.
+`sdk-finish-fixed-frame-join-v4`: exit0,51.150s,2338348KiB,swap0,930 properties,
+3/3 covers,High6G/Max8G/Swap0. The metadata audit is read-only:
+exit0,0.285s,54672KiB,swap0,1147 static properties,70 selected,High1G/Max2G/Swap0.
+No total whole-stage claim follows from this bounded leaf.
+
+Kani verified stubs require an Arbitrary return type; SDK ProgramError lacks
+that implementation. The first state composition therefore stopped at
+compilation. The replacement retains the exact native function and FULL SDK
+ProgramError, and checks a concrete return encoder: Ok maps to true,
+InvalidAccountData to false, every other original variant reaches a checked
+panic. The caller reconstructs the exact original SDK result. It changes no
+SDK/account carrier. `sdk-finish-fixed-frame-join-v5`: exit0,123.590s,
+4633856KiB,swap0,all883 properties successful,High6G/Max8G/Swap0. Its compiled
+inventory has four cover properties for three source intentions, with two
+properties at the first-byte cover location; the aggregate is3/4. No claim
+that every compiled cover passed is made. The packet accepts its functional
+contract, records that cover qualification, and retains v4's independently
+checked full-ProgramError block/three cover intentions. v5's read-only audit:
+exit0,0.269s,54140KiB,swap0,1101 static properties,72 selected,High1G/Max2G/Swap0.
+
+The source continuation candidate calls that verified borrowed helper, then
+explicitly drops the owned reply before proof/public/checkpoint guards, and
+reconstructs the full SDK result. The whole native/owned continuation checks
+remain UNPROVED: both the arbitrary-root observation and a later checkpoint
+observation still expanded to about6GiB and were reviewed/stopped. Their
+sources, admissions, exact commands, stop reasons and terminal receipts are
+retained. In particular the latter omits observing other root contents, so even
+a future successful run needs the separately checked destination-only native
+frame and full owned record-update frame composed before whole-heap equality
+can be claimed. No account bytes, status, alias or drop effect is silently
+removed from a claimed whole-source theorem.
+
+The original caller SAT shape also remains excluded: tighter global40 /
+memcmp689 unwinding with assertions, selected postcopy/precondition/cover
+properties, and CBMC's alternate array encoding each timed out under the same
+6G/8G/0 caps. These are changed proof configurations, not unchanged full Lean
+replays or larger-cap retries. All safety and unwinding checks remain enabled.
+
+A private pinned Z3 binary was installed only in the task's build-host tool
+workspace (version4.15.4, exact wheel/tool hashes exported, no binaries). The
+small verified-copy bridge passes the SMT backend: all142 raw non-cover
+properties SUCCESS and its one cover counterexample reaches the intended
+point; raw exit10 is retained. The larger SDK callers instead return conversion
+error `map::at`, not a counterexample or proof. A diagnostic exception observer
+(no verifier result accepted from it) locates the throw in
+`smt2_convt::convert_type`, called by recursive symbol/type discovery. The
+upstream6.8 converter's datatype lookup and solver profiles were inspected:
+[converter](https://raw.githubusercontent.com/diffblue/cbmc/cbmc-6.8.0/src/solvers/smt2/smt2_conv.cpp),
+[solver dispatch](https://raw.githubusercontent.com/diffblue/cbmc/cbmc-6.8.0/src/solvers/smt2/smt2_dec.cpp).
+The flat-structure SMT profile with the SAME pinned Z3 also passes the small
+bridge: all142 raw non-cover properties SUCCESS,1 reached cover,raw exit10,
+0.332s,45008KiB,swap0,High1G/Max2G/Swap0. It avoids the diagnosed datatype lookup;
+no Rust type, source carrier, check or security metric is changed by choosing
+a different complete SMT encoding. Full caller use is still a candidate.
+
+An exact native scan (without the previous nondeterministic scan-body cut)
+was also tried and timed out; no scan-abstraction premise was discharged by
+that attempt. A scalar counter-observer harness preserves all signed values,
+aliases and native functions but still hits the original SMT conversion error;
+it is not accepted evidence. These diagnostic paths are distinct from the
+already checked total native scan/reference proofs.
+
+Prepared GOTO copies are retained privately with source/codegen/command pins.
+A later codegen can replace a warm metadata entry, so the new prepared runner
+checks the original source/codegen pins, hashes the retained prepared program,
+uses it read-only, and changes only the solver encoding. It verifies that the
+program hash remains unchanged afterwards. Timeouts kill the whole owned child
+process group, including an external solver. This is cache reuse, not a new
+source freeze or a substitute for the final coherent release replay.
+
+The capper's historical `source_revision=d8fc9...` field is an old workspace
+label. It is not the authoritative protocol freeze or a claim that newly
+compiled candidates existed at that revision. Exact candidate Rust source
+hashes, generated source, commands and tools are in each input packet; the
+actual native source blocks are checked against b2727acd3. Do not reassign a
+historical proof to a different source on the basis of that legacy label.
+
+S2 remains OPEN. The complete SDK/runtime-to-owned binding and composition of
+its source prefix, child reply, errors/logs, return/drop and frame cuts into the
+actual enclosing caller are still required. So are ordered oracle-log and
+two-pass annotated caller transport into the concrete source instance consumed
+by dV_frozen2. S6 shares that actual SDK binding; S1 retains its preparation,
+original power totality/trace and caller obligations. The100-bit target is not
+yet established. No production adoption or protocol decision is requested by
+these source-only candidates; adopting one later requires its full equivalence,
+integration and release-artifact re-pin gates.
+
+## Native entry normalization — checked, enclosing transport still open
+
+`sdk-call-prefix-check-v3` strengthens the complete actual native tx1-entry
+cut, without fixing an initial alias map. At every reached tx1 callback it
+asserts that the INITIAL data-slot map is `[0,1,2]`; the original all-alias-map,
+all-signed-counter and real full statement-field inputs remain quantified.
+Every one of2035 raw non-cover properties is SUCCESS and both transfer and
+withdrawal covers are reached (raw cover FAILURE is the expected witness).
+Raw exit10,111.855s,4413460KiB,swap0,High6G/Max8G/Swap0. Exact source/tool/codegen
+and property projection are exported; the checker regenerates source and
+qualification. The native functions remain literal frozen functions.
+
+Before: the normalized parent candidate supplied `[0,1,2]` independently.
+After: that relation is derived at the actual source child-entry cut over all
+initial slot maps in the stated three-root format domain. This is a genuine
+native caller premise discharge AT THAT CUT. Actual child interpretation and
+prefix transport to arbitrary returned replies remain necessary; the cut
+still returns Ok(empty Vec), causing the following length guard to reject.
+The admitted proof-prefix/tag equations are explicit. No unconditional whole
+SDK theorem or ordered oracle-log result is inferred from the slot assertion.
+
+The newly normalized paired parent still timed out (v5: exit1,185.009s,
+6388404KiB,swap0). A subsequent input-construction candidate removes only the
+redundant self-root Rc clone/replacement/drop under `[0,1,2]` and asserts
+pointer identity and strong count2 before injecting the same arbitrary signed
+counters. It retains all native source functions, every SDK/owned field and
+all bytes; its equivalence to the canonical input construction must remain
+explicit. Its whole-parent result is not yet established.
+
+The flat-structure SMT prefix gets past the diagnosed conversion failure but
+also times out, so the backend diagnostic has not closed a source obligation.
+No larger cap or unchanged full replay follows from that result. The next
+source deliverable remains the complete native/owned caller binding, not a
+larger collection of helper counts. S1/S2/S6 remain OPEN.

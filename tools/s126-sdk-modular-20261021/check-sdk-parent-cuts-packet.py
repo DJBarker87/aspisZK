@@ -6,7 +6,7 @@ R=Path(__file__).resolve().parents[2];B=R/'docs/research/100bit-spend-path-20261
 E=B/'evidence/s126-current-caller-20261021/sdk-parent-cuts';S=B/'lean-candidates/s126-caller-boundary-20261021'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 accepted={}
-def checked(tag,folder):
+def checked(tag,folder,expected_covers=None):
  source=E/'sources'/folder/'src/lib.rs';cut=json.loads((source.parents[1]/'source-cut.json').read_text())
  assert cut['source_sha256']==sha(source)
  inp=json.loads((E/(tag+'-input.json')).read_text());assert inp['source_sha256']==sha(source)
@@ -16,7 +16,8 @@ def checked(tag,folder):
  assert r['exit_status']==0 and r['swaps']==0 and r['limits']['memory.swap.max']=='0'
  assert r['limits']['memory.max']=='8589934592' and '--unwinding-assertions' in r['command']
  log=(receipt.parent/'stdout.log').read_text();counts=re.search(r'0 of (\d+) failed',log);assert counts
- covers=re.search(r'(\d+) of (\d+) cover properties satisfied',log);assert covers and covers[1]==covers[2]
+ covers=re.search(r'(\d+) of (\d+) cover properties satisfied',log);assert covers
+ assert (tuple(map(int,covers.groups()))==expected_covers if expected_covers is not None else covers[1]==covers[2])
  packages={p['name']:p for p in tomllib.loads((source.parents[1]/'Cargo.lock').read_text())['package']}
  for p,v in [('solana-program','2.3.0'),('solana-account-info','2.3.0'),('solana-program-error','2.2.2')]:assert packages[p]['version']==v and packages[p]['checksum']
  accepted[tag]=dict(source_sha256=sha(source),receipt_sha256=sha(receipt),assertions=int(counts[1]),covers=int(covers[1]),wall_seconds=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],swaps=0)
@@ -100,6 +101,31 @@ with tempfile.TemporaryDirectory() as d:
  assert json.loads((Path(d)/'source-cut.json').read_text())==cut
  assert (Path(d)/'statement-fields.json').read_bytes()==(callSource.parents[1]/'statement-fields.json').read_bytes()
 accepted[callTag]=dict(source_sha256=sha(callSource),receipt_sha256=sha(rp),raw_exit_status=10,noncover_successes=len(noncover),reachable_covers=2,wall_seconds=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],swaps=0,qualification='Full native SDK tx1-entry prefix. Actual typed object/public/proof/k/None arguments checked; all statement value fields quantified. Reply fixed to Ok(empty Vec), causing following size guard to reject; actual child interpretation/prefix transport and post-child writeback remain explicit. Error mapper reachability assertion is proved, not assumed.')
+normalizationTag='sdk-call-prefix-check-v3'
+normalizationSource=E/'sources/sdk-call-context-v2/src/lib.rs'
+normalizationCut=json.loads((normalizationSource.parents[1]/'source-cut.json').read_text())
+normalizationCodegen=json.loads((E/'sdk-call-prefix-codegen-v3-input.json').read_text())
+assert normalizationCodegen['source_sha256']==normalizationCut['source_sha256']==sha(normalizationSource)
+normalizationReceipt=E/'receipts'/normalizationTag/'receipt.json';nr=json.loads(normalizationReceipt.read_text())
+assert nr['exit_status']==10 and nr['swaps']==0 and nr['limits']['memory.swap.max']=='0'
+rows=json.loads((E/'diagnostics'/normalizationTag/'properties-without-traces.json').read_text())
+noncover=[r for r in rows if r['sourceLocation'].get('propertyClass')!='cover']
+covers=[r for r in rows if r['sourceLocation'].get('propertyClass')=='cover']
+assert noncover and all(r['status']=='SUCCESS' for r in noncover)
+assert len(covers)==2 and all(r['status']=='FAILURE' for r in covers)
+assert any('actual tx1-entry derives canonical descriptor slots' in r['description'] for r in noncover)
+assert 'let data_slots:[usize;3]=kani::any();' in normalizationSource.read_text()
+assert 'ENTRY_SLOTS=data_slots' in normalizationSource.read_text()
+ni=json.loads((E/(normalizationTag+'-input.json')).read_text())
+assert ni['artifact_selection']['source_sha256']==sha(normalizationSource)
+assert ni['artifact_selection']['codegen_input_sha256']==sha(E/'sdk-call-prefix-codegen-v3-input.json')
+assert '--unwinding-assertions' in ni['commands'][-1]
+with tempfile.TemporaryDirectory() as d:
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-paired-context.py'),d,'call','fields','unreachable-error','unused','entry-slots'],check=True)
+ assert (Path(d)/'src/lib.rs').read_bytes()==normalizationSource.read_bytes()
+ assert json.loads((Path(d)/'source-cut.json').read_text())==normalizationCut
+accepted[normalizationTag]=dict(source_sha256=sha(normalizationSource),receipt_sha256=sha(normalizationReceipt),raw_exit_status=10,noncover_successes=len(noncover),reachable_covers=2,wall_seconds=nr['wall_seconds'],peak_rss_kib=nr['peak_rss_kib'],swaps=0,qualification='Full actual native tx1-entry cut additionally derives the initial descriptor slot map [0,1,2] from all alias-map inputs. Real statement values, SDK fields/counters and pointer/k/None checks retained. Common successful typed child hooks and fixed empty reply still require actual-child/prefix transport. No whole-stage source or ordered oracle join claimed.')
+
 stepSource,stepCut,stepReceipt=checked('sdk-finish-step-join-v3','sdk-finish-step-v3')
 stepText=stepSource.read_text()
 assert '#[cfg_attr(kani,kani::modifies(target))]' in stepText
@@ -120,22 +146,32 @@ with tempfile.TemporaryDirectory() as d:
 # Whole-copy leaf contracts and exact complete owned-parent composition.
 for tag,folder,generator in [
  ('sdk-finish-fixed-frame-join-v3','sdk-finish-fixed-frame-v3','prepare-sdk-finish-fixed-frame.py'),
+ ('sdk-finish-fixed-frame-join-v4','sdk-finish-fixed-frame-v4','prepare-sdk-finish-fixed-frame.py'),
+ ('sdk-finish-fixed-frame-join-v5','sdk-finish-fixed-frame-v5','prepare-sdk-finish-fixed-frame.py'),
  ('sdk-std-copy-frame-join-v1','sdk-std-copy-frame-v1','prepare-sdk-std-copy-frame.py'),
  ('sdk-std-copy-bridge-join-v1','sdk-std-copy-frame-v1','prepare-sdk-std-copy-frame.py')]:
- source,cut,rp=checked(tag,folder)
+ source,cut,rp=checked(tag,folder,(3,4) if tag.endswith('fixed-frame-join-v5') else None)
  with tempfile.TemporaryDirectory() as d:
-  subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021'/generator),d],check=True)
+  subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021'/generator),d]+(['all-reply-lengths','bool-outcome'] if tag.endswith('fixed-frame-join-v5') else ['all-reply-lengths'] if tag.endswith('fixed-frame-join-v4') else []),check=True)
   assert (Path(d)/'src/lib.rs').read_bytes()==source.read_bytes()
   assert json.loads((Path(d)/'source-cut.json').read_text())==cut
  accepted[tag]['qualification']=cut['qualification']+' Specialized leaf/bridge only; no enclosing native caller instance.'
  if 'fixed-frame' in tag:
-  audit=json.loads((E/'receipts/sdk-finish-fixed-frame-properties-v3/property-audit.json').read_text())
-  pins=json.loads((E/'sdk-finish-fixed-frame-properties-v3-input.json').read_text())
+  version=tag.rsplit('-',1)[1]
+  audit=json.loads((E/('receipts/sdk-finish-fixed-frame-properties-'+version+'/property-audit.json')).read_text())
+  pins=json.loads((E/('sdk-finish-fixed-frame-properties-'+version+'-input.json')).read_text())
   assert audit['source_sha256']==pins['source_sha256']==sha(source)
   assert audit['proof_receipt_sha256']==pins['proof_receipt_sha256']==sha(rp)
   assert audit['program_sha256']==pins['program_sha256']
   assert any(p['class']=='assigns' for p in audit['selected_properties'])
   assert any('expected' in p['description'] for p in audit['selected_properties'])
+  if version=='v5':
+   covers=[p for p in audit['selected_properties'] if p['class']=='cover']
+   assert len(covers)==4
+   assert sum(p['description']=='fixed-size native whole copy first byte' for p in covers)==2
+   assert 'Err(_)=>panic!' in source.read_text() and 'match native_finish(' in source.read_text()
+   accepted[tag]['covers_total']=4
+   accepted[tag]['cover_qualification']='3/4 aggregate; compiler duplicates the first-byte cover location. No per-location reachability or all-covers claim. All883 assertions passed; v4 independently checks the full-ProgramError block and all three original cover intentions.'
  if tag=='sdk-std-copy-frame-join-v1':
   audit=json.loads((E/'receipts/sdk-std-copy-frame-properties-v1/property-audit.json').read_text())
   pins=json.loads((E/'sdk-std-copy-frame-properties-v1-input.json').read_text())
@@ -186,4 +222,4 @@ assert flags and all('opt-level=3' in r and 'overflow-checks=yes' in r and '--ka
 for p in E.rglob('*'):
  if p.is_file():assert p.suffix not in ['.olean','.o','.a','.so','.dylib','.llbc','.bc','.out']
 (E/'accepted-cuts.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',qualification='Checked finite SDK operation/lifecycle domains and exact pure snapshot adaptation. Reached phase cuts are explicit. Complete actual stage1 child instances and ordered caller join remain open; timed-out/context/codegen/preflight evidence is excluded from accepted cuts.',cuts=accepted),indent=2)+'\n')
-print('PASS thirteen SDK cuts and complete owned-parent copy-loop adaptation; enclosing native caller joins remain open')
+print('PASS sixteen SDK cuts and complete owned-parent copy-loop adaptation; enclosing native caller joins remain open')

@@ -229,6 +229,38 @@ if len(sys.argv)>5 and sys.argv[5]=='std-copy':
  s=s.replace(' let output_len:usize=kani::any();kani::assume(output_len<=1769);', ' let output_len=1768usize;')
  s=s.replace('  let observed:usize=kani::any();kani::assume(observed<1768);\n', '')
  s=s.replace(' unsafe{PHASE=0;CALLS=[[0;4];2];}', ' let observed:usize=kani::any();kani::assume(observed<1768);\n unsafe{OBSERVED=observed;EXPECTED=plan().output[observed];PHASE=0;CALLS=[[0;4];2];}')
+entry_slots='entry-slots' in sys.argv[6:]
+normalized_data='normalized-data' in sys.argv[6:]
+if entry_slots:
+ assert mode=='call'
+ s=s.replace('static mut PHASE:usize=0;','static mut PHASE:usize=0;\nstatic mut ENTRY_SLOTS:[usize;3]=[0;3];')
+ s=s.replace(' let phase=unsafe{PHASE};assert!(phase<2);assert!(observer.is_none());', ' let phase=unsafe{PHASE};assert!(phase<2);assert_eq!(unsafe{ENTRY_SLOTS},[0,1,2],"actual tx1-entry derives canonical descriptor slots");assert!(observer.is_none());')
+ s=s.replace(' unsafe{PHASE=0;CALLS=[[0;4];2];}', ' unsafe{ENTRY_SLOTS=data_slots;PHASE=0;CALLS=[[0;4];2];}')
+if normalized_data:
+ assert mode in ['paired','native']
+ s=s.replace('let data_slots:[usize;3]=kani::any();','let data_slots:[usize;3]=[0,1,2];')
+canonical_ctor='canonical-ctor' in sys.argv[6:]
+if canonical_ctor:
+ assert normalized_data
+ assignment='accounts[i].data=data_roots[data_slots[i]].clone();'
+ assert s.count(assignment)==1
+ s=s.replace(assignment,'')
+ marker=' let initial_counts:[isize;3]=kani::any();'
+ checks=' for i in 0..3 {assert!(std::rc::Rc::ptr_eq(&accounts[i].data,&data_roots[i]));assert_eq!(std::rc::Rc::strong_count(&data_roots[i]),2); }\n'
+ assert marker in s;s=s.replace(marker,checks+marker)
+direct_query='direct-query' in sys.argv[6:]
+if direct_query:
+ assert mode=='native' and normalized_data and canonical_ctor
+ old='  assert_eq!(checkpoint[observed],plan().output[observed]);drop(checkpoint);'
+ assert s.count(old)==1
+ s=s.replace(old,'  assert_eq!(checkpoint.as_ptr(),unsafe{NATIVE_ROOT_PTRS[2]},"actual post-call SDK checkpoint descriptor remains bound to root2");drop(checkpoint);\n  assert_eq!(unsafe{NATIVE_ROOT_PTRS[2].add(observed).read()},plan().output[observed]);')
+scalar_counters='scalar-counters' in sys.argv[6:]
+if scalar_counters:
+ s=s.replace('.cast::<std::cell::Cell<isize>>()','.cast::<isize>()')
+ for name,initial in [('counters','initial_counts'),('lamport_counters','initial_lamport_counts')]:
+  s=s.replace('(*'+name+'[i]).get()','*'+name+'[i]')
+  for value in [initial+'[i]','0']:
+   s=s.replace('(*'+name+'[i]).set('+value+')','*('+name+'[i] as *mut isize)='+value)
 (O/'src/lib.rs').write_text(s)
 host='/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src'
 (O/'Cargo.toml').write_text('''[package]
@@ -274,4 +306,22 @@ if std_copy_pin is not None:
  m['retained_cuts'].append('Actual inherent std copy byte instance uses the exact proved primitive contract/bridge. Every reached u8/1768-byte/observed-byte precondition must hold. The frozen SDK body itself is unchanged. Harness prefix initialization uses the equivalent nonoverlapping pointer copy, avoiding an unrelated688-byte std-copy stub instance.')
  m['retained_cuts'].append('Verifier reply length is fixed1768 in this accepted-parent context; connect to actual successful tx1 via the checked R22 checkpoint-size fact. Wrong-size successful child replies are outside this context.')
  m['domain']='Full native metadata/alias/signed-counter inputs and full owned SDK state. Both real statement variants/all value fields; arbitrary688-byte candidate; proof bytes subject to admitted prefix/tag equations. Public/checkpoint bytes arbitrary. Common successful full typed child replies; arbitrary1768-byte verifier output (with one unused1769th plan byte). Verified std copy summary preserves every SDK object outside the checkpoint destination. Accepted-only parent assertion; native scan/child/input embedding and ordered-log interpretations must still be composed.'
+ p.write_text(json.dumps(m,indent=2)+'\n')
+
+if scalar_counters:
+ p=O/'source-cut.json';m=json.loads(p.read_text());m['counter_observation']='Harness-only direct isize loads/stores at the pinned SDK borrow-counter address, replacing the equivalent transparent Cell<isize> get/set observers. Constructor-zero checks remain. Full frozen native functions, all signed values, heap cells, aliases and account semantics are unchanged; constructor-zero and native guard-effect assertions must pass before scalar address correspondence is accepted.'
+ p.write_text(json.dumps(m,indent=2)+'\n')
+
+if entry_slots or normalized_data:
+ p=O/'source-cut.json';m=json.loads(p.read_text())
+ if entry_slots:m['entry_normalization']='At every reached actual tx1 callback, ASSERT that the full native SDK data-slot map is [0,1,2]. All initial alias maps still quantified. Callback returns Ok(empty Vec) as before; actual child interpretation and prefix transport remain open.'
+ if normalized_data:m['entry_normalization']='Data slots fixed [0,1,2] only in this candidate. Must derive this entry relation from actual source descriptor guards and the separately checked tx1-entry normalization certificate before composing an unrestricted caller claim. All bytes/counters/metadata and independent lamport aliases retained.'
+ p.write_text(json.dumps(m,indent=2)+'\n')
+
+if canonical_ctor:
+ p=O/'source-cut.json';m=json.loads(p.read_text());m['constructor_normalization']='Under the explicitly derived data_slots=[0,1,2] input relation, omit only redundant harness self-root Rc clone/replacement/drop. Account data Rc pointers and strong counts2 are explicitly asserted before injecting the same arbitrary signed counters. Full original native SDK functions and complete owned reference unchanged. This is an input-construction optimization, with pointer/count identity assertions, not a new account carrier or reduced byte/state domain.'
+ p.write_text(json.dumps(m,indent=2)+'\n')
+
+if direct_query:
+ p=O/'source-cut.json';m=json.loads(p.read_text());m['byte_observation']='First ASSERT the actual post-call SDK checkpoint descriptor pointer equals the original root2 pointer; then read the same byte through that saved raw pointer after dropping the shared guard. Full real SDK execution retained. No source/account carrier replacement. This proves native checkpoint value/counter/argument assertions only; complete owned state and other-node frame composition remain separate.'
  p.write_text(json.dumps(m,indent=2)+'\n')
