@@ -8173,3 +8173,32 @@ error-free OS. Instead:
    The existing zero-exhaustion term 3/2^256 stays in the bound.
 This makes privacy hold for every failure schedule, which is stronger than
 any probability bound on failures.
+
+## D148 (lead, 2026-10-22 05:20): part 35 merged; D147 refined: private ledger plus byte-blind faults
+
+Merged `codex/cx-prover-commit35-20261022` (report
+`r1p-final/PROVER-COMMIT35-20261022.md`). Proved: the byte-blind environment
+schedule, `fail_closed` and `failure_replay` (on any failure the real and
+witness-free simulator prefixes have identical observables, pointwise for
+every schedule, with no OS/fs probability charge), reservation retention, the
+extracted reservation bridge, and the E1-conditional zero-candidate bound.
+Native control checks pass; J9127, 16 theorems, standard axioms; no shipped
+change.
+Finding: D147's schedule (seeing only index, kind and prior statuses) cannot
+reproduce native `create_new`, whose occupied/fresh outcome depends on
+whether the reservation path is already in the ledger (Lean proof plus a
+real-filesystem probe). That is a lead modelling error in D147, not a privacy
+problem.
+
+**Refinement of D147.** The filesystem has real state. Model the reservation
+ledger as **private environment state** with faithful `create_new`
+semantics: it preserves existing entries and returns AlreadyExists iff the
+path is present. The byte-blind adversarial schedule injects faults
+(getrandom, create/write/fsync failures) around it. The adversary may choose
+the initial ledger and add entries, byte-blind: chosen without seeing
+any secret seed or path. A fresh path colliding with an adversary-chosen
+entry is a bad event, bounded from E1 by (number of entries × attempts)/|path
+space|, stated numerically. Add one named environment item, **E2
+(filesystem):** `create_new` is atomic create-if-absent (O_EXCL), and
+written/fsynced data persists. It sits on the trust list beside E1, TrustedStd
+and P7. The reservation path is not made public.
