@@ -39,4 +39,4 @@ for mode in ['default','devnet','pool']:
     cmp=subprocess.run(['cmp','--silent',str(elf),str(prior)]).returncode
     results[mode]=dict(sha256=sha,size_bytes=elf.stat().st_size,expected_sha256=expected[mode],cmp_exit=cmp,byte_identical=sha==expected[mode] and cmp==0,receipt=json.loads((H/'receipts'/('build-'+mode+'-publication32')/'receipt.json').read_text()))
     assert results[mode]['byte_identical'],results[mode]
-(H/'frozen-elf-final-check.json').write_text(json.dumps(dict(source_revision=(H/'revision.txt').read_text().strip(),source_hashes={str(p.relative_to(H/'frozen-src')):hashlib.sha256(p.read_bytes()).hexdigest() for p in (H/'frozen-src').rglob('*.rs')},programs=results),indent=2)+'\n')
+(H/'frozen-elf-final-check.json').write_text(json.dumps(dict(source_revision=(H/'sbf-revision.txt').read_text().strip(),source_hashes={str(p.relative_to(H/'frozen-src')):hashlib.sha256(p.read_bytes()).hexdigest() for p in (H/'frozen-src').rglob('*.rs')},programs=results),indent=2)+'\n')

@@ -112,6 +112,35 @@ theorem insert_refines (fuel : Nat) (table out : IndexMap) (key : Usize)
           · rw [hfinal,hval,hd]
             simp only [insert,lt,eq,if_false,List.append_assoc,List.singleton_append]
 
+/-- Insertion returns exactly the previous lookup value, including a miss. -/
+theorem insert_old (key : Usize) (value : Bytes) (xs : List (Usize × Bytes)) :
+    (insert key value xs).2 = lookup key xs := by
+  induction xs with
+  | nil => rfl
+  | cons entry xs ih =>
+    rcases entry with ⟨k,v⟩
+    by_cases lt : key<k
+    · have ne : key≠k := ne_of_lt lt
+      simp only [insert,if_pos lt,lookup,if_neg ne,Prod.snd]
+    · by_cases eq : key=k
+      · simp only [insert,if_neg lt,if_pos eq,lookup,Prod.snd]
+      · simp only [insert,if_neg lt,if_neg eq,lookup,Prod.snd,ih]
+
+/-- The newly inserted bytes are the value returned to every duplicate query. -/
+theorem lookup_insert (key : Usize) (value : Bytes) (xs : List (Usize × Bytes)) :
+    lookup key (insert key value xs).1 = some value := by
+  induction xs with
+  | nil => simp only [insert,lookup,ite_true]
+  | cons entry xs ih =>
+    rcases entry with ⟨k,v⟩
+    by_cases lt : key<k
+    · simp only [insert,if_pos lt,Prod.fst,lookup,ite_true]
+    · by_cases eq : key=k
+      · simp only [insert,if_neg lt,if_pos eq,Prod.fst,lookup,ite_true]
+      · simp only [insert,if_neg lt,if_neg eq,Prod.fst,lookup,ih]
+
+#print axioms insert_old
+#print axioms lookup_insert
 #print axioms insert_refines
 #print axioms tail_refines
 end R1Z.ProverCommitSorted32
