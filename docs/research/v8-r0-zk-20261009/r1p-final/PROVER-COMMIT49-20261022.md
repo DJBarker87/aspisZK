@@ -87,6 +87,27 @@ The raw-method result is explicit and arithmetic callees are universal paired
 answers; no model-weight law is hidden in the stubs. Full copied field sources
 remain byte-identical to the shipped files. No shipped file changed.
 
+## Stage 4: actual optimized boundary arithmetic
+
+The source boundary helper is a four-limb integer accumulator, not the old
+QM31 addition chain. Native Kani checks its complete 28-coefficient accumulator
+against four separated scalar owners, for arbitrary full u32 words: exit 0,
+17.103 s, 1025404 KiB, zero swaps. The exact literal source accumulator and
+source hash are retained in `pins/boundary-native-spans.json`. No field call
+is stubbed in that gate; reduction is separately proved.
+J10035 proves the complete scalar counter and current release reduction modulo
+P. J10036 proves the reconstructed canonical QM31 equals twice coefficient zero
+plus the remaining coefficient sum. J10038 composes all four scalar Results and
+proves `BoundaryPolynomial49.exact_result`: the complete four-limb reference
+returns a canonical value whose decode is p(0)+p(1), on arbitrary raw input
+words. The native accumulator split and source reducer are the binding boundary;
+this does not yet prove the semantic caller's boundary comparison succeeds.
+J10034 and J10037 are rejected range/import drafts; J10033 checks extracted
+owner definitions. All accepted declarations print only standard axioms.
+The boundary owner's namespace is nominally rebound to `Boundary49` to avoid
+an `owned.sum` collision; its arithmetic declaration bodies are unchanged.
+No new trust field or shipped-source change.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

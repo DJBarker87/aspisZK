@@ -1,0 +1,92 @@
+import AspisR1ProducerRelease47.Boundary49
+import R1Z.ProverCommitBasisCounter47
+import R1Z.ProverCommitBasisFillValue47
+import R1Z.ProverCommitInverse48
+/-! Integer limb accumulation of the current optimized boundary helper. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitBoundarySum49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+
+def array (q : Nat → U32) : Array U32 28#usize :=
+  ⟨List.ofFn (fun i : Fin (28#usize).val => q i.val),by simp only [List.length_ofFn]⟩
+
+theorem index (q : Nat → U32) (i : Usize) (hi : i.val<28) :
+    Array.index_usize (array q) i=ok (q i.val) := by
+  rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ hi]
+  simp only [array,List.getElem_ofFn]
+
+def sum (q : Nat → U32) : Nat → Nat → Nat
+ | 0,_ => 0
+ | n+1,j => (q j).val+sum q n (j+1)
+
+theorem sum_bound (q : Nat → U32) (n j : Nat) : sum q n j≤n*(2^32-1) := by
+  induction n generalizing j with
+  | zero => simp only [sum,Nat.zero_mul,Nat.le_refl]
+  | succ n ih =>
+    rw [sum,Nat.succ_mul]
+    have hq := (q j).hSize
+    change (q j).val<2^32 at hq
+    have htail := ih (j+1)
+    omega
+
+attribute [local irreducible] array
+
+theorem sum_value (q : Nat → U32) (n : Nat) (i : Usize) (left : U8) (hleft : left.val=n)
+    (bound : i.val+n≤28) (total : U64) (safe : total.val+sum q n i.val<2^64) :
+    ∃ z : U64, Boundary49.sum (array q) i left total=ok z ∧
+      z.val=total.val+sum q n i.val := by
+  induction n generalizing i left total with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    refine ⟨total,?_,?_⟩
+    · rw [Boundary49.sum,hz];rfl
+    · rw [sum,Nat.add_zero]
+  | succ n ih =>
+    have hn : left≠0#u8 := by scalar_tac
+    have ht : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    have hi : (Usize.wrapping_add i 1#usize).val=i.val+1 := by
+      simpa only [show (1#usize).val=1 from rfl] using
+        ProverCommitBasisFillValue47.add_val i 1#usize (by change i.val+1<2048;omega)
+    let next := U64.wrapping_add total (core.convert.num.FromU64U32.from (q i.val))
+    have hw : (core.convert.num.FromU64U32.from (q i.val)).val=(q i.val).val := by scalar_tac
+    have hnext : next.val=total.val+(q i.val).val := by
+      have hs : total.val+(q i.val).val<2^64 := by rw [sum] at safe;omega
+      dsimp only [next]
+      scalar_tac
+    obtain ⟨z,hz,hzv⟩ := ih _ _ ht (by rw [hi];omega) next (by rw [hnext,hi];rw [sum] at safe;omega)
+    refine ⟨z,?_,?_⟩
+    · rw [Boundary49.sum]
+      simp only [hn,if_false,index q i (by omega),lift,bind_tc_ok]
+      exact hz
+    · rw [hzv,hnext,hi,sum];omega
+
+theorem limb_value (q : Nat → U32) :
+    ∃ z : U32, Boundary49.limb (array q)=ok z ∧
+      z.val=(2*(q 0).val+sum q 27 1)%AspisCircleGroupOrder.P ∧
+      z.val<AspisCircleGroupOrder.P := by
+  let initial := U64.wrapping_mul 2#u64 (core.convert.num.FromU64U32.from (q 0))
+  have hq := (q 0).hSize
+  have hv : initial.val=2*(q 0).val := by dsimp only [initial];scalar_tac
+  have hb := sum_bound q 27 1
+  obtain ⟨total,ht,htv⟩ := sum_value q 27 1#usize 27#u8 rfl (by decide) initial
+    (by rw [hv];change (q 0).val<2^32 at hq;change 2*(q 0).val+sum q 27 1<2^64;omega)
+  obtain ⟨z,hz,hzv,hzc⟩ := AspisR1.ExtractedCurrentReducer.current_reduce_mod total
+  have checked : AspisR1ProducerChecked47.field.reduce_u64 total=ok z := by
+    rw [R1Z.ProverCommitPrimitive47.reduce,hz]
+  have release := ProverCommitRelease47.reduce total z checked
+  refine ⟨z,?_,?_,hzc⟩
+  · rw [Boundary49.limb,index q 0#usize (by decide)]
+    simp only [lift,bind_tc_ok,show (0#usize).val=0 from rfl]
+    rw [ht]
+    simp only [bind_tc_ok]
+    exact release
+  · rw [hzv,htv,hv]
+    rfl
+
+#print axioms index
+#print axioms sum_bound
+#print axioms sum_value
+#print axioms limb_value
+end R1Z.ProverCommitBoundarySum49
