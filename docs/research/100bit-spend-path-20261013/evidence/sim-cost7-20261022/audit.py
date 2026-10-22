@@ -32,7 +32,7 @@ for name,content in expected.items():
  p=ev/name
  if '--check' in sys.argv: assert p.read_text()==content, name
  else: p.write_text(content)
-record=dict(kind='source inspection; no formal release result',source_revision='b641f67ac',
+record=dict(kind='source inspection; no formal release result',source_revision=subprocess.check_output(['git','rev-parse','b641f67ac'],text=True).strip(),
  files=files,endpoint_signature_sha256=hashlib.sha256(signature.encode()).hexdigest(),
  theorem_changes=[],shipped_source_changes=[],formal_builds=[],
  missing_interface='source public serialization and complete observable metadata to total R1Wire/Meta instance')
