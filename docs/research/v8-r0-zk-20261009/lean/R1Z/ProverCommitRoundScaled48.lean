@@ -1,0 +1,53 @@
+import R1Z.ProverCommitRoundOutput48
+import R1Z.ProverCommitWideScalar48
+/-! Complete quarter-scaled seven-coefficient owned round output, for the
+first 256 fibres or any valid prefix. Weight/source model provenance is separate. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitRoundScaled48
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitWideOps48 ProverCommitMix48
+open ProverCommitRoundLoop48 ProverCommitRoundOutput48
+
+def scales : List Source → Result (List Source)
+ | [] => ok []
+ | x::xs => do
+   let y ← field.wide_exact.WideExact.mul_m31 x 536870912#u32
+   let ys ← scales xs
+   ok (y::ys)
+
+theorem scale_list (xs : List Raw) :
+    scales (xs.map source)=ok (xs.map (fun x => source (ProverCommitWideScalar48.product x 536870912#u32))) := by
+  induction xs with
+  | nil => rfl
+  | cons x xs ih =>
+    simp only [List.map_cons,scales,(ProverCommitWideScalar48.source_exact x 536870912#u32).1,ih,bind_tc_ok]
+
+def run (n : Nat) (q w : Array Source 1024#usize) : Result (List Source) := do
+  let out ← ProverCommitRoundOutput48.run n q w
+  scales out.val
+
+theorem scaled_output (n : Nat) (hn : n ≤ 256) (q w : Nat → Raw)
+    (hq : ∀ k, k < 1024 → canonical (q k)) (hw : ∀ k, k < 1024 → canonical (w k)) :
+    ∃ ys : Nat → Raw, run n (sourceArray 1024#usize q) (sourceArray 1024#usize w)=
+      ok (List.ofFn (fun k : Fin 7 => source (ys k.val))) ∧
+      (∀ k, k < 7 → canonical (ys k)) ∧
+      ∀ k, k < 7 → value (ys k)=terms q w (indices n) k*ProverCommitWideScalar48.factor 536870912#u32 := by
+  obtain ⟨xs,hxs,hcxs,hdxs⟩ := accumulation n hn q w hq hw
+  let ys := fun k => ProverCommitWideScalar48.product (xs k) 536870912#u32
+  refine ⟨ys,?_,?_,?_⟩
+  · rw [run,hxs]
+    simp only [bind_tc_ok]
+    change scales (List.ofFn (fun k : Fin 7 => source (xs k.val)))=
+      ok (List.ofFn (fun k : Fin 7 => source (ys k.val)))
+    have h := scale_list (List.ofFn (fun k : Fin 7 => xs k.val))
+    simpa only [List.map_ofFn,Function.comp_def] using h
+  · intro k hk
+    exact ProverCommitWideScalar48.product_canonical _ _
+  · intro k hk
+    change value (ProverCommitWideScalar48.product (xs k) 536870912#u32)=_
+    rw [ProverCommitWideScalar48.product_value,hdxs k hk]
+
+#print axioms scale_list
+#print axioms scaled_output
+end R1Z.ProverCommitRoundScaled48

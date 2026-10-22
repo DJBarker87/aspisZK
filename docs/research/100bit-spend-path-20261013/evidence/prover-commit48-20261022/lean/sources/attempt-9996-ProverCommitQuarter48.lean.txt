@@ -1,0 +1,22 @@
+import R1Z.ProverCommitWideScalar48
+import R1Z.ProverCommitM31Ops48
+import Mathlib.Tactic.NormNum
+/-! The shipped M31 quarter constant is exactly inverse four in the full tower. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitQuarter48
+open ProverCommitWideOps48
+open ProverCommitM31Ops48 (M)
+
+theorem base_quarter : (536870912 : M)=(4 : M)⁻¹ := by
+  have h4 : (4 : M)≠0 := by norm_num [ProverCommitM31Ops48.M,AspisCircleGroupOrder.P]
+  apply (eq_inv_iff_mul_eq_one₀ h4).2
+  norm_num [ProverCommitM31Ops48.M,AspisCircleGroupOrder.P]
+
+theorem factor_quarter : ProverCommitWideScalar48.factor (536870912#u32)=(4 : Exact)⁻¹ := by
+  change (algebraMap M Exact) (536870912 : M)=(4 : Exact)⁻¹
+  rw [base_quarter,map_inv₀,map_ofNat]
+
+#print axioms base_quarter
+#print axioms factor_quarter
+end R1Z.ProverCommitQuarter48

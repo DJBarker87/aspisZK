@@ -313,6 +313,42 @@ canonical. J9986 proves the dual fold cell's exact reverse-order polynomial
 and quarter scaling. These do not discharge the complete weight producer,
 materialization, round/fold callers, or simulator payload equality.
 
+## Stage 10: complete owned round arithmetic and final allocation boundary
+
+J9989 proves the exact batched-round coefficient transition, including the
+four-entry permutation, wrapping-index bounds, canonicality and arithmetic
+image. Kani `round_proofs::coefficient_iteration` passes for the full
+1024-cell arrays and every legal d/s/t: exit 0, wall 15.393 s, peak RSS
+593308 KiB, swaps 0. `full_width_scalar` passes at v2 (1.410 s,
+200760 KiB, swaps 0); v1 was held before compilation by aggregate reservation.
+The dual-cell native trace gate passes (0.788 s, 171284 KiB, swaps 0).
+
+J9992 proves counter sequence values and bounds. J9991 composes an arbitrary
+legal transition list; J9994 instantiates the complete nested counter order
+and zero-array initialization. J9997 composes the final seven scalar calls:
+`RoundScaled48.scaled_output` returns all seven canonical output coefficients,
+with their exact quarter-scaled sum. It covers 256 first-pass fibres and any
+prefix, including 64 for the second pass **when supplied full source arrays**;
+it is not yet a direct 256-element source caller for the second pass.
+J9998 identifies the shipped quarter constant with inverse four in the fixed
+tower. J9987/88/90/93/95/96 are retained local bound/type/normalization drafts.
+All accepted declarations print only the standard axioms.
+
+The assigned J9900–J9999 allocation now has only the reserved final audit
+attempt remaining. After that audit, no authorized compile number remains.
+This is the stopping obstruction for this handoff; it is not evidence of an
+Aeneas failure on the replacement owners or a false simulator theorem.
+
+**Target not yet established.** Remaining concrete obligations are native
+semantic sample/oracle and boundary/terminal guards; the last-round shift;
+weight producer and materialization values versus the R1 model; complete
+dual-fold/round/opened-leaf callers; source coefficient/tape provenance;
+then composition of every semantic/opening payload field and its ordered
+byte image. The next deliverable is the native semantic sample transition
+binding and owned partial-Boolean-sum induction, consuming the now-proved
+standard interpolation output. No complete native simulator payload equality,
+FSExperiments conversion, join or deployed premise removal is claimed.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,
