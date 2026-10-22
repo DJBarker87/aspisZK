@@ -1,0 +1,65 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes4/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes4WeightFields.lean:48:6: error: unsolved goals
+case cons.Ok.refine_1
+read : ReadK
+suffix : List K
+last : verifier.Reader
+out : core.slice.iter.IterMut K
+y : K
+old : List K
+ih :
+  ∀ (pre : List K) (r : verifier.Reader) (bound : (pre ++ old ++ suffix).length ≤ Usize.max),
+    weightLoop read old.length r { slice := ⟨pre ++ old ++ suffix, bound⟩, i := pre.length } =
+        ok (core.result.Result.Ok (out, last)) →
+      ∃ xs,
+        readList read old.length r = ok (core.result.Result.Ok (xs, last)) ∧
+          ↑out.slice = pre ++ xs ++ suffix ∧ out.i = pre.length + old.length
+pre : List K
+r : verifier.Reader
+bound : (pre ++ y :: old ++ suffix).length ≤ Usize.max
+slot : pre.length < (pre ++ y :: old ++ suffix).length
+success :
+  (let (slot, rest, back) :=
+      (some ⟨pre ++ y :: old ++ suffix, bound⟩[pre.length],
+        { slice := ⟨pre ++ y :: old ++ suffix, bound⟩, i := pre.length + 1 }, fun it' x =>
+        match x with
+        | none => it'
+        | some x => { slice := it'.slice.setAtNat pre.length x, i := it'.i })
+    match slot with
+    | none => fail Error.panic
+    | some val => do
+      let (value, out) ← read r
+      match value with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok x => weightLoop read old.length out (back rest (some x))) =
+    ok (core.result.Result.Ok (out, last))
+next : verifier.Reader
+x : K
+readRun : read r = ok (core.result.Result.Ok x, next)
+tail :
+  weightLoop read old.length next { slice := ⟨pre ++ [x] ++ old ++ suffix, ⋯⟩, i := pre.length + 1 } =
+    ok (core.result.Result.Ok (out, last))
+newBound : (pre ++ [x] ++ old ++ suffix).length ≤ Usize.max
+tailRun :
+  weightLoop read old.length next { slice := ⟨pre ++ [x] ++ old ++ suffix, newBound⟩, i := (pre ++ [x]).length } =
+    ok (core.result.Result.Ok (out, last))
+xs : List K
+run : readList read old.length next = ok (core.result.Result.Ok (xs, last))
+contents : ↑out.slice = pre ++ [x] ++ xs ++ suffix
+cursor : out.i = (pre ++ [x]).length + old.length
+⊢ (let (value, out) := (core.result.Result.Ok x, next)
+    match value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok x => do
+      let rest ← readList read old.length out
+      match rest with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))) =
+    ok (core.result.Result.Ok (x :: xs, last))
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes4/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes4WeightFields.lean:48:64: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_cons, ̲readList, ̲readRun, ̲bind_tc_ok,̵r̵u̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.CheckpointBytes4WeightFields.loop_fields' depends on axioms: [propext, sorryAx, Quot.sound]

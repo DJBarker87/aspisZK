@@ -1,0 +1,77 @@
+import CheckpointBytes4ReaderFields
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CheckpointBytes4FlatSections
+open Aeneas Aeneas.Std Result
+open AspisR1Stage2 CheckpointBytes3Reader CheckpointBytes4Sections CheckpointBytes4ReaderFields
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep OraclePortCompactDraft
+open MultiproofConeCanonical OraclePortCheckpointAbiC5
+
+/-- The ordered operational decoder joins C5's flat fixed-width decoder.
+All decoded values and the exact final cursor/backing follow from source
+success, with no assumed section-output equality. -/
+theorem list_success (n : Nat) (r last : verifier.Reader) (xs : List CheckpointBytes4Sections.K)
+    (bound : r.at.val+n*16 ≤ r.bytes.val.length)
+    (success : readList readK n r = ok (.Ok (xs,last))) :
+    ∃ values : Fin n → OraclePortCheckpointAbiC5.K,
+      decodeKs n (slice (bytesOf r.bytes.val) r.at.val (n*16)) = some values ∧
+      xs = (List.ofFn values).map sourceK ∧
+      last.at.val = r.at.val+n*16 ∧ last.bytes = r.bytes := by
+  induction n generalizing r xs with
+  | zero =>
+    have eq := core.result.Result.Ok.inj (Result.ok.inj success)
+    have hx := congrArg Prod.fst eq
+    have hr := congrArg Prod.snd eq
+    dsimp only at hx hr
+    subst xs last
+    refine ⟨Fin.elim0,?_,rfl,by omega,rfl⟩
+    simp only [Nat.zero_mul,decodeKs,FixedWidthDecoder.decode,slice,List.take_zero,
+      List.length_nil,↓reduceIte]
+  | succ n ih =>
+    unfold readList at success
+    obtain ⟨⟨value,next⟩,readRun,tail⟩ := OraclePortCkptAbiTry.bind_success _ _ _ success
+    cases value with
+    | Err e => cases tail
+    | Ok x =>
+      obtain ⟨xModel,headDecode,headValue,cursor,backing⟩ :=
+        k_success r next x (by omega) readRun
+      obtain ⟨rest,restRun,tail⟩ := OraclePortCkptAbiTry.bind_success _ _ _ tail
+      cases rest with
+      | Err e => cases tail
+      | Ok pair =>
+        rcases pair with ⟨ys,finish⟩
+        have eq := core.result.Result.Ok.inj (Result.ok.inj tail)
+        have hx := congrArg Prod.fst eq
+        have hr := congrArg Prod.snd eq
+        dsimp only at hx hr
+        subst xs last
+        obtain ⟨values,decode,contents,lastCursor,lastBacking⟩ := ih next ys
+          (by rw [backing,cursor]; omega) restRun
+        refine ⟨Fin.cons xModel values,?_,?_,by omega,lastBacking.trans backing⟩
+        · have headBlock :
+              (slice (bytesOf r.bytes.val) r.at.val ((n+1)*16)).take 16 =
+                slice (bytesOf r.bytes.val) r.at.val 16 := by
+            simp only [slice,List.take_take]
+            congr 1
+            omega
+          have tailBlock :
+              (slice (bytesOf r.bytes.val) r.at.val ((n+1)*16)).drop 16 =
+                slice (bytesOf next.bytes.val) next.at.val (n*16) := by
+            rw [backing,cursor]
+            simp only [slice,List.drop_take,List.drop_drop]
+            congr 1 <;> omega
+          change (do
+            let h ← ExactLeafFieldCodec.decodeQM31
+              ((slice (bytesOf r.bytes.val) r.at.val ((n+1)*16)).take 16)
+            let t ← decodeKs n
+              ((slice (bytesOf r.bytes.val) r.at.val ((n+1)*16)).drop 16)
+            pure ((Fin.cons h t) : Fin (n+1) → OraclePortCheckpointAbiC5.K)) = _
+          rw [headBlock,tailBlock,headDecode]
+          rw [decode]
+          rfl
+        · simp only [List.ofFn_succ,List.map_cons,Fin.cons_zero,Fin.cons_succ,headValue,contents]
+
+#print axioms list_success
+end AspisR1.CheckpointBytes4FlatSections
+end

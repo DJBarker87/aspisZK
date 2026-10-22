@@ -1,0 +1,62 @@
+import CheckpointBytes4Weights
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CheckpointBytes4WeightFields
+open Aeneas Aeneas.Std Result
+open AspisR1Stage2 CheckpointBytes4Sections CheckpointBytes4Weights
+
+/-- Invert a successful physical mutable loop. No decoded-output equality is
+assumed: the returned Vec is recovered from the executed read calls. -/
+theorem loop_fields (read : ReadK) (old pre suffix : List K)
+    (r last : verifier.Reader) (out : core.slice.iter.IterMut K)
+    (bound : (pre ++ old ++ suffix).length ≤ Usize.max)
+    (success : weightLoop read old.length r ⟨⟨pre ++ old ++ suffix,bound⟩,pre.length⟩ =
+      ok (.Ok (out,last))) :
+    ∃ xs, readList read old.length r = ok (.Ok (xs,last)) ∧
+      out.slice.val = pre ++ xs ++ suffix ∧ out.i = pre.length + old.length := by
+  induction old generalizing pre r with
+  | nil =>
+    have eq := core.result.Result.Ok.inj (Result.ok.inj success)
+    have hi := congrArg Prod.fst eq
+    have hr := congrArg Prod.snd eq
+    dsimp only at hi hr
+    subst out last
+    exact ⟨[],rfl,rfl,by simp⟩
+  | cons y old ih =>
+    have slot : pre.length < (pre ++ y::old ++ suffix).length := by
+      simp only [List.length_append,List.length_cons]; omega
+    simp only [List.length_cons,weightLoop,core.slice.iter.IteratorIterMut.next] at success
+    rw [dif_pos (show pre.length < (Slice.len ⟨pre ++ y::old ++ suffix,bound⟩).val from slot)] at success
+    simp only [bind_tc_ok] at success
+    obtain ⟨⟨value,next⟩,readRun,tail⟩ := OraclePortCkptAbiTry.bind_success _ _ _ success
+    cases value with
+    | Err e => cases tail
+    | Ok x =>
+      change weightLoop read old.length next
+        ⟨Slice.setAtNat (⟨pre ++ y::old ++ suffix,bound⟩ : Slice K) pre.length x,
+          pre.length+1⟩ = _ at tail
+      rw [replace_slot] at tail
+      have newBound : ((pre ++ [x]) ++ old ++ suffix).length ≤ Usize.max := by
+        simpa [List.length_append] using bound
+      have tailRun : weightLoop read old.length next
+          ⟨⟨(pre ++ [x]) ++ old ++ suffix,newBound⟩,(pre ++ [x]).length⟩ =
+          ok (.Ok (out,last)) := by
+        simpa only [List.length_append,List.length_singleton] using tail
+      obtain ⟨xs,run,contents,cursor⟩ := ih (pre ++ [x]) next newBound tailRun
+      refine ⟨x::xs,?_,?_,?_⟩
+      · rw [List.length_cons,readList,readRun]
+        change (do
+          let rest ← readList read old.length next
+          match rest with
+          | .Err e => ok (.Err e)
+          | .Ok (ys,finish) => ok (.Ok (x::ys,finish))) = _
+        rw [run]
+        rfl
+      · simpa only [List.append_assoc,List.singleton_append] using contents
+      · simpa only [List.length_append,List.length_singleton,List.length_cons,
+          List.length_nil,Nat.zero_add,Nat.add_assoc,Nat.add_comm 1] using cursor
+
+#print axioms loop_fields
+end AspisR1.CheckpointBytes4WeightFields
+end

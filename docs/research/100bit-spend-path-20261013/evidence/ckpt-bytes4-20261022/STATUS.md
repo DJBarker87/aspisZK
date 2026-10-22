@@ -71,3 +71,33 @@ bytes, swaps 0. Accepted Ops-2: exit 0, wall 23.49622887512669 s, peak RSS
 3672702976 bytes, swaps 0. All six theorem reports standard; exact source
 revision and commands in receipts. First attempts are retained elaboration
 failures, never accepted evidence. No full replay or shipped change.
+
+## Flat semantic and weight section contents
+
+`CheckpointBytes4ReaderFields.k_success` / `e_success` recover exact flat C5
+slice decodes, source namespace values, cursor and backing from any bounded
+successful reader. `CheckpointBytes4FlatSections.list_success` joins the
+operational short-circuit decoder to `OraclePortCheckpointAbiC5.decodeKs`,
+with every value and exact cursor/backing; induction is symbolic in section
+length, never normalization of checkpoint bytes.
+
+`CheckpointBytes4SemanticFields.semantic_fields` inverts the exact ten
+unrolled reads. `CheckpointBytes4WeightFields.loop_fields` inverts the actual
+std mutable next/back loop on arbitrary initial values and prefix/suffix.
+`CheckpointBytes4SectionContents.semantic_contents` and `weights_contents`
+consume these facts with the flat C5 join, identifying **all** returned
+semantic/weight values and their exact ending cursor. No output equality,
+canonical-input fixture or allocation availability is assumed. Bounds only
+assert that the section bytes are present; full checkpoint cursor composition
+must derive them from the checked 1768-byte layout.
+
+Accepted current attempts: ReaderFields-1 (4.584296790882945 s, 3666132992 B),
+FlatSections-3 (4.620009125210345 s, 3668557824 B), WeightFields-3
+(4.876395749859512 s, 3669622784 B), SemanticFields-4 (4.543316458817571 s,
+3676241920 B), SectionContents-2 (4.679313125088811 s, 3663544320 B).
+All exit 0, swaps 0 and standard axioms. Ops-3 is now current (the generic
+comparison explicitly checks equal lengths before element comparison),
+4.653885749634355 s, 3681533952 B, exit 0, swaps 0, standard axioms.
+Dependent SemanticFields was rebuilt once after that source change.
+Failed attempts and exact hashes, source revisions and axiom lines remain
+in manifest.json and per-attempt receipts. No failed recovery proof counts.

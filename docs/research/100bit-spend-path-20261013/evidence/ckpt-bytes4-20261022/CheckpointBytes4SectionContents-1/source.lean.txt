@@ -1,0 +1,79 @@
+import CheckpointBytes4FlatSections
+import CheckpointBytes4SemanticFields
+import CheckpointBytes4WeightFields
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CheckpointBytes4SectionContents
+open Aeneas Aeneas.Std Result
+open AspisR1Stage2 CheckpointBytes4Sections CheckpointBytes4Ops CheckpointBytes4ReaderFields
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep OraclePortCompactDraft
+open MultiproofConeCanonical OraclePortCheckpointAbiC5
+
+/-- Kernel semantic-section refinement to the flat C5 decoder at any bounded
+source offset. The result includes all ten outputs and the exact cursor. -/
+theorem semantic_contents (bytes : Slice U8) (start finish : Usize)
+    (values : Array CheckpointBytes4Sections.K 10#usize)
+    (bound : start.val+160 ≤ bytes.val.length)
+    (success : readSemanticAlpha bytes start = ok (.Ok (values,finish))) :
+    ∃ model : Fin 10 → OraclePortCheckpointAbiC5.K,
+      decodeKs 10 (slice (bytesOf bytes.val) start.val 160) = some model ∧
+      values.val = (List.ofFn model).map sourceK ∧ finish.val = start.val+160 := by
+  obtain ⟨last,run,cursor⟩ := CheckpointBytes4SemanticFields.semantic_fields
+    CheckpointBytes3Reader.readK bytes start finish values success
+  obtain ⟨model,decode,contents,lastCursor,_⟩ := CheckpointBytes4FlatSections.list_success
+    10 ⟨bytes,start⟩ last values.val bound run
+  exact ⟨model,decode,contents,by rw [← cursor]; exact lastCursor⟩
+
+/-- Every successful weight helper run recovers its actual ordered reads and
+all returned Vec contents. Initial values and allocation availability are
+unrestricted; only the actual execution's success is used. -/
+theorem weights_reads (bytes : Slice U8) (start finish : Usize)
+    (initial out : alloc.vec.Vec CheckpointBytes4Sections.K)
+    (success : readWeights bytes start initial = ok (.Ok (out,finish))) :
+    ∃ last : verifier.Reader,
+      readList CheckpointBytes3Reader.readK initial.val.length ⟨bytes,start⟩ =
+        ok (.Ok (out.val,last)) ∧ last.at = finish := by
+  unfold readWeights weightsUsing at success
+  obtain ⟨result,run,tail⟩ := OraclePortCkptAbiTry.bind_success _ _ _ success
+  cases result with
+  | Err e => cases tail
+  | Ok pair =>
+    rcases pair with ⟨it,last⟩
+    have eq := core.result.Result.Ok.inj (Result.ok.inj tail)
+    have hv := congrArg Prod.fst eq
+    have hc := congrArg Prod.snd eq
+    dsimp only at hv hc
+    subst out finish
+    have startRun : weightLoop CheckpointBytes3Reader.readK initial.val.length
+        ⟨bytes,start⟩ ⟨⟨[] ++ initial.val ++ [],by simpa using initial.property⟩,[].length⟩ =
+        ok (.Ok (it,last)) := by
+      simpa only [List.nil_append,List.append_nil,List.length_nil] using run
+    obtain ⟨xs,reads,contents,_⟩ := CheckpointBytes4WeightFields.loop_fields
+      CheckpointBytes3Reader.readK initial.val [] [] ⟨bytes,start⟩ last it
+      (by simpa using initial.property) startRun
+    simp only [List.nil_append,List.append_nil] at contents
+    refine ⟨last,?_,rfl⟩
+    simpa only [contents] using reads
+
+/-- Kernel weight-section refinement to C5's flat decoder, for every initial
+Vec and all outputs on successful execution. -/
+theorem weights_contents (bytes : Slice U8) (start finish : Usize)
+    (initial out : alloc.vec.Vec CheckpointBytes4Sections.K)
+    (bound : start.val+initial.val.length*16 ≤ bytes.val.length)
+    (success : readWeights bytes start initial = ok (.Ok (out,finish))) :
+    ∃ model : Fin initial.val.length → OraclePortCheckpointAbiC5.K,
+      decodeKs initial.val.length
+        (slice (bytesOf bytes.val) start.val (initial.val.length*16)) = some model ∧
+      out.val = (List.ofFn model).map sourceK ∧
+      finish.val = start.val+initial.val.length*16 := by
+  obtain ⟨last,run,cursor⟩ := weights_reads bytes start finish initial out success
+  obtain ⟨model,decode,contents,lastCursor,_⟩ := CheckpointBytes4FlatSections.list_success
+    initial.val.length ⟨bytes,start⟩ last out.val bound run
+  exact ⟨model,decode,contents,by rw [← cursor]; exact lastCursor⟩
+
+#print axioms semantic_contents
+#print axioms weights_reads
+#print axioms weights_contents
+end AspisR1.CheckpointBytes4SectionContents
+end

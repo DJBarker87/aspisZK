@@ -1,0 +1,69 @@
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes4/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes4FlatSections.lean:69:29: error: Application type mismatch: The argument
+  t
+has type
+  Fin n → OraclePortCheckpointAbiC5.K
+but is expected to have type
+  (i : Fin ?m.628) → ?m.629 i.succ
+in the application
+  Fin.cons ?m.630 t
+/Users/dominic/ZK/.worktrees/cx-ckpt-bytes4/docs/research/100bit-spend-path-20261013/lean/CheckpointBytes4FlatSections.lean:74:43: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  sourceK xModel
+in the target expression
+  x :: ys = sourceK (Fin.cons xModel values 0) :: List.map sourceK (List.ofFn fun i => Fin.cons xModel values i.succ)
+
+case succ.Ok.Ok.refine_2
+n : ℕ
+r : verifier.Reader
+bound : ↑r.at + (n + 1) * 16 ≤ (↑r.bytes).length
+next : verifier.Reader
+x : CheckpointBytes4Sections.K
+readRun : readK r = ok (core.result.Result.Ok x, next)
+xModel : ExactLeafFieldCodec.QM31Exact
+headDecode : ExactLeafFieldCodec.decodeQM31 (slice (bytesOf ↑r.bytes) (↑r.at) 16) = some xModel
+headValue : sourceK xModel = x
+cursor : ↑next.at = ↑r.at + 16
+backing : next.bytes = r.bytes
+ys : List CheckpointBytes4Sections.K
+finish : verifier.Reader
+restRun : readList readK n next = ok (core.result.Result.Ok (ys, finish))
+ih :
+  ∀ (r : verifier.Reader) (xs : List CheckpointBytes4Sections.K),
+    ↑r.at + n * 16 ≤ (↑r.bytes).length →
+      readList readK n r = ok (core.result.Result.Ok (xs, finish)) →
+        ∃ values,
+          decodeKs n (slice (bytesOf ↑r.bytes) (↑r.at) (n * 16)) = some values ∧
+            xs = List.map sourceK (List.ofFn values) ∧ ↑finish.at = ↑r.at + n * 16 ∧ finish.bytes = r.bytes
+success :
+  (do
+      let (value, out) ← readK r
+      match value with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok x => do
+          let rest ← readList readK n out
+          match rest with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))) =
+    ok (core.result.Result.Ok (x :: ys, finish))
+tail✝ :
+  (let (value, out) := (core.result.Result.Ok x, next)
+    match value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok x => do
+      let rest ← readList readK n out
+      match rest with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))) =
+    ok (core.result.Result.Ok (x :: ys, finish))
+tail :
+  (match core.result.Result.Ok (ys, finish) with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))) =
+    ok (core.result.Result.Ok (x :: ys, finish))
+eq : (x :: ys, finish) = (x :: ys, finish)
+values : Fin n → OraclePortCheckpointAbiC5.K
+decode : decodeKs n (slice (bytesOf ↑next.bytes) (↑next.at) (n * 16)) = some values
+contents : ys = List.map sourceK (List.ofFn values)
+lastCursor : ↑finish.at = ↑next.at + n * 16
+lastBacking : finish.bytes = next.bytes
+⊢ x :: ys = sourceK (Fin.cons xModel values 0) :: List.map sourceK (List.ofFn fun i => Fin.cons xModel values i.succ)
+'AspisR1.CheckpointBytes4FlatSections.list_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

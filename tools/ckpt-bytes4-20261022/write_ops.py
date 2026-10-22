@@ -20,7 +20,8 @@ def listEq {T U : Type} (inst : core.cmp.PartialEq T U) : List T → List U → 
   | _, _ => ok false
 
 def eq {T U : Type} {N : Usize} (inst : core.cmp.PartialEq T U)
-    (s : Slice T) (a : Array U N) : Result Bool := listEq inst s.val a.val
+    (s : Slice T) (a : Array U N) : Result Bool :=
+  if s.val.length = a.val.length then listEq inst s.val a.val else ok false
 
 def ne {T U : Type} {N : Usize} (inst : core.cmp.PartialEq T U)
     (s : Slice T) (a : Array U N) : Result Bool := do
