@@ -502,3 +502,29 @@ The strongest reference theorem remains
 borrowed_stage1_sized_account_image, with the sole full accepted installed
 reference execution premise. This update does not pretend that native first
 entry has discharged that premise. S2/S6/S1 remain OPEN; target not established.
+
+## Paired-input byte initialization is identity under the existing source laws
+
+`S2FirstEntryNormalizationV1` now reuses, rather than reproves, the exact
+standard comparator and total scanner. `proof_image_identity` derives that
+overwriting the688-byte prefix with the common candidate and setting tag696
+to2 leaves the ORIGINAL full proof byte list unchanged. Its premises are the
+exact source standard comparison returnedfalse and original tag2.
+`checkpoint_image_identity` derives that the fixture's zero1768-byte buffer
+is the original buffer from length1768 and the exact scanner returnedfalse.
+`context_transport` applies both equalities in any complete result/state
+context, so these byte initializations need not be assumed separately.
+This is value equality, not a replacement SDK carrier or a proof of native
+pointer/lifetime equivalence. Native source/iterator/comparator interpretation
+and the control-field normalization/source-fission gates remain explicit.
+
+Focused accepted attempt s2-first-entry-normalization-v3: exit0,
+17.769590500s,3247423488bytes peak RSS,swap0, three standard-only axiom reports
+(propext,Classical.choice,Quot.sound); atomic local lock,-j1,-M4400.
+Exact sources/tools/import closure are pinned in the source-only packet.
+v1 failed to find a warm-cache module with the default search path; v2 had a
+reserved-word identifier syntax error. Both are excluded; compiler error
+placeholders in failed logs are not accepted axioms. No full unchanged replay
+or resource override. The enclosing actual-native successful-execution premise
+is STILL not discharged; this removes only its paired byte-initialization
+subconditions after the exact checked observations are installed.
