@@ -28,3 +28,31 @@ Rust uses four jobs, release optimization, and
 `RUSTFLAGS='-C link-arg=-Wl,--threads=4'`.
 Exact source hashes, dependency fingerprints, target/status/wall/RSS/swaps,
 source attribution and printed axioms are retained per attempt.
+
+## Stage 1: component preparation and complete three-product value
+
+J10203 proves `Prepare50.q`: all nine prepared coordinates are canonical and
+are precisely the symbolic tower components, including CM `a+b` and QM
+`c0+c1`. J10206 proves every entire three-input scalar accumulation and the
+complete nine-total matrix. J10209 proves `Dot50.exact_result`: the independent
+owned caller succeeds, returns canonical QM31, and decodes to
+`∑ i : Fin 3, decode (x i.val) * decode (y i.val)` for arbitrary canonical inputs.
+No prepared-coordinate, accumulator, or output/model identity is a premise.
+
+Native preparation and all-27-product aggregation gates pass, with complete
+output matrices; preparation also checks paired arithmetic operands and order.
+The aggregation products are arbitrary bounded callee answers. Their integer
+multiplication and canonical bound are separately proved by the retained
+`NativeSquare49.mul64` and `ChannelSum49.product_bound`. This composes retained
+part-49 channel transition/reconstruction gates with the new value proof;
+it does not prove equality of the reordered complete caller's timing trace.
+The prepared-multiplier path needed by the next interface remains next work.
+
+J10200 was refused before compilation by the copied launcher's old range guard;
+it is retired. The launcher now accepts only J10200–J10299 and retains global
+Lean serialization and the 6G/8G/0/64 caps. J10202/05/08 are rejected carrier,
+array-size inference and literal-index drafts; their replacement sources pass.
+All accepted axioms are subsets of `[propext, Classical.choice, Quot.sound]`.
+Focused receipts in `lean/attempts.json` record exact source attribution,
+source/dependency fingerprints, target/status/time/RSS/swaps and axiom lines.
+No shipped file changed; no deployed endpoint premise is removed.

@@ -1,0 +1,70 @@
+import AspisR1ProducerRelease47.Run50
+import R1Z.ProverCommitTotals50
+/-! Complete owned three-product kernel, from canonical QM31 inputs.
+Preparation, all nine integer totals and current release reconstruction are
+composed without an assumed output/model image. Native schedule gates are separate. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitDot50
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitPrepare50 (triple)
+open AspisV8R15.ExactTowerBase
+open AspisR1.ExtractedCurrentQM31Exact (decode)
+open ProverCommitChannelAlgebra49 (components)
+open scoped BigOperators
+
+def qarray (x : Nat → Old.Q) :=
+  ProverCommitArray49.array 3#usize (fun i => ProverCommitNativeQ48.source (x i))
+
+theorem prepare3 (x : Nat → Old.Q) (hx : ∀ i, i<3 → Canonical (x i)) :
+    ∃ a : Nat → Nat → Nat → U32,
+      run50.prepare3 (qarray x)=ok (ProverCommitTotals50.cube a) ∧
+      (∀ i c h, i<3 → c<3 → h<3 → (a i c h).val<AspisCircleGroupOrder.P) ∧
+      (∀ i c h : Fin 3, ((a i.val c.val h.val).val : M31Exact)=components (decode (x i.val)) c h) := by
+  obtain ⟨a,ha,hca,hva⟩ := ProverCommitPrepare50.q (x 0) (hx 0 (by decide))
+  obtain ⟨b,hb,hcb,hvb⟩ := ProverCommitPrepare50.q (x 1) (hx 1 (by decide))
+  obtain ⟨c,hc,hcc,hvc⟩ := ProverCommitPrepare50.q (x 2) (hx 2 (by decide))
+  refine ⟨triple a b c,?_,?_,?_⟩
+  · simp only [run50.prepare3,qarray,
+      ProverCommitArray49.index 3#usize _ 0#usize (by decide),
+      ProverCommitArray49.index 3#usize _ 1#usize (by decide),
+      ProverCommitArray49.index 3#usize _ 2#usize (by decide),show (0#usize).val=0 from rfl,
+      show (1#usize).val=1 from rfl,show (2#usize).val=2 from rfl,bind_tc_ok,ha,hb,hc]
+    exact congrArg Result.ok (ProverCommitPrepare50.triple_array _ _ _)
+  · intro i j k hi hj hk
+    unfold triple
+    split
+    · exact hca j k hj hk
+    · split
+      · exact hcb j k hj hk
+      · exact hcc j k hj hk
+  · intro i j k
+    fin_cases i
+    · exact hva j k
+    · exact hvb j k
+    · exact hvc j k
+
+theorem exact_result (x y : Nat → Old.Q)
+    (hx : ∀ i, i<3 → Canonical (x i)) (hy : ∀ i, i<3 → Canonical (y i)) :
+    ∃ z : Old.Q, run50.run (qarray x) (qarray y)=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ decode z=∑ i : Fin 3, decode (x i.val)*decode (y i.val) := by
+  obtain ⟨a,ha,hca,hva⟩ := prepare3 x hx
+  obtain ⟨b,hb,hcb,hvb⟩ := prepare3 y hy
+  obtain ⟨s,hs,hvs⟩ := ProverCommitTotals50.all a b hca hcb
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitReconstructModel49.exact_result s
+  refine ⟨z,?_,hcz,?_⟩
+  · simp only [run50.run,ha,hb,hs,hz,bind_tc_ok]
+  · rw [hdz]
+    have heq : (fun c h : Fin 3 => ((s c.val h.val).val : M31Exact))=
+        (fun c h : Fin 3 => ∑ i : Fin 3, components (decode (x i.val)) c h*components (decode (y i.val)) c h) := by
+      funext c h
+      rw [hvs c h]
+      apply Finset.sum_congr rfl
+      intro i hi
+      rw [hva i c h,hvb i c h]
+    rw [heq]
+    exact ProverCommitChannelAlgebra49.reconstruct_sum_products _ _
+
+#print axioms prepare3
+#print axioms exact_result
+end R1Z.ProverCommitDot50

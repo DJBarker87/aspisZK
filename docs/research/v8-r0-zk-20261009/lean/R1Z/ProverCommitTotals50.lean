@@ -1,0 +1,88 @@
+import AspisR1ProducerRelease47.Totals50
+import R1Z.ProverCommitPrepare50
+/-! Complete nine-channel accumulation on three canonical prepared inputs.
+The owned scalar loop is proved by ChannelSum49.sum_value. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitTotals50
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrepare50 (triple)
+open AspisV8R15.ExactTowerBase
+open scoped BigOperators
+
+def cube (a : Nat → Nat → Nat → U32) :=
+  ProverCommitArray49.array 3#usize (fun i => ProverCommitArray49.array 3#usize
+    (fun c => ProverCommitArray49.array 3#usize (a i c)))
+
+theorem array3 {A : Type} (f : Nat → A) :
+    Array.make 3#usize [f 0,f 1,f 2]=ProverCommitArray49.array 3#usize f := by rfl
+
+theorem channel (a b : Nat → Nat → Nat → U32) (c h : Usize)
+    (hc : c.val<3) (hh : h.val<3)
+    (ha : ∀ i, i<3 → (a i c.val h.val).val<AspisCircleGroupOrder.P)
+    (hb : ∀ i, i<3 → (b i c.val h.val).val<AspisCircleGroupOrder.P) :
+    ∃ z : U64, totals50.channel (cube a) (cube b) c h=ok z ∧
+      (z.val : M31Exact)=∑ i : Fin 3,
+        ((a i.val c.val h.val).val : M31Exact)*((b i.val c.val h.val).val : M31Exact) := by
+  have hbnd := ProverCommitChannelSum49.sum_bound _ _ ha hb 3 0 (by decide)
+  obtain ⟨z,hz,hzv⟩ := ProverCommitChannelSum49.sum_value
+    (fun i => a i c.val h.val) (fun i => b i c.val h.val) 3 0#usize 3#u8 rfl (by decide) 0#u64
+    (by change 0+ProverCommitChannelSum49.sum _ _ 3 0<2^64
+        change ProverCommitChannelSum49.sum _ _ 3 0≤3*(2147483647-1)^2 at hbnd
+        omega)
+  refine ⟨z,?_,?_⟩
+  · simp only [totals50.channel,cube,
+      ProverCommitArray49.index 3#usize _ 0#usize (by decide),
+      ProverCommitArray49.index 3#usize _ 1#usize (by decide),
+      ProverCommitArray49.index 3#usize _ 2#usize (by decide),
+      ProverCommitArray49.index 3#usize _ c hc,ProverCommitArray49.index 3#usize _ h hh,
+      show (0#usize).val=0 from rfl,show (1#usize).val=1 from rfl,
+      show (2#usize).val=2 from rfl,bind_tc_ok]
+    rw [array3 (fun i => a i c.val h.val),array3 (fun i => b i c.val h.val)]
+    exact hz
+  · rw [hzv]
+    simpa only [show (0#u64).val=0 from rfl,show (0#usize).val=0 from rfl,Nat.zero_add] using
+      ProverCommitChannelModel49.cast_sum (fun i => a i c.val h.val) (fun i => b i c.val h.val) 3 0
+
+theorem all (a b : Nat → Nat → Nat → U32)
+    (ha : ∀ i c h, i<3 → c<3 → h<3 → (a i c h).val<AspisCircleGroupOrder.P)
+    (hb : ∀ i c h, i<3 → c<3 → h<3 → (b i c h).val<AspisCircleGroupOrder.P) :
+    ∃ s : Nat → Nat → U64, totals50.all (cube a) (cube b)=ok (ProverCommitReconstructQ49.matrix s) ∧
+      (∀ c h : Fin 3, ((s c.val h.val).val : M31Exact)=∑ i : Fin 3,
+        ((a i.val c.val h.val).val : M31Exact)*((b i.val c.val h.val).val : M31Exact)) := by
+  obtain ⟨z00,hz00,hv00⟩ := channel a b 0#usize 0#usize (by decide) (by decide)
+    (fun i hi => ha i 0 0 hi (by decide) (by decide)) (fun i hi => hb i 0 0 hi (by decide) (by decide))
+  obtain ⟨z01,hz01,hv01⟩ := channel a b 0#usize 1#usize (by decide) (by decide)
+    (fun i hi => ha i 0 1 hi (by decide) (by decide)) (fun i hi => hb i 0 1 hi (by decide) (by decide))
+  obtain ⟨z02,hz02,hv02⟩ := channel a b 0#usize 2#usize (by decide) (by decide)
+    (fun i hi => ha i 0 2 hi (by decide) (by decide)) (fun i hi => hb i 0 2 hi (by decide) (by decide))
+  obtain ⟨z10,hz10,hv10⟩ := channel a b 1#usize 0#usize (by decide) (by decide)
+    (fun i hi => ha i 1 0 hi (by decide) (by decide)) (fun i hi => hb i 1 0 hi (by decide) (by decide))
+  obtain ⟨z11,hz11,hv11⟩ := channel a b 1#usize 1#usize (by decide) (by decide)
+    (fun i hi => ha i 1 1 hi (by decide) (by decide)) (fun i hi => hb i 1 1 hi (by decide) (by decide))
+  obtain ⟨z12,hz12,hv12⟩ := channel a b 1#usize 2#usize (by decide) (by decide)
+    (fun i hi => ha i 1 2 hi (by decide) (by decide)) (fun i hi => hb i 1 2 hi (by decide) (by decide))
+  obtain ⟨z20,hz20,hv20⟩ := channel a b 2#usize 0#usize (by decide) (by decide)
+    (fun i hi => ha i 2 0 hi (by decide) (by decide)) (fun i hi => hb i 2 0 hi (by decide) (by decide))
+  obtain ⟨z21,hz21,hv21⟩ := channel a b 2#usize 1#usize (by decide) (by decide)
+    (fun i hi => ha i 2 1 hi (by decide) (by decide)) (fun i hi => hb i 2 1 hi (by decide) (by decide))
+  obtain ⟨z22,hz22,hv22⟩ := channel a b 2#usize 2#usize (by decide) (by decide)
+    (fun i hi => ha i 2 2 hi (by decide) (by decide)) (fun i hi => hb i 2 2 hi (by decide) (by decide))
+  refine ⟨triple (triple z00 z01 z02) (triple z10 z11 z12) (triple z20 z21 z22),?_,?_⟩
+  · simp only [totals50.all,hz00,hz01,hz02,hz10,hz11,hz12,hz20,hz21,hz22,bind_tc_ok]
+    exact congrArg Result.ok (ProverCommitPrepare50.triple_array _ _ _)
+  · intro c h
+    fin_cases c <;> fin_cases h
+    · exact hv00
+    · exact hv01
+    · exact hv02
+    · exact hv10
+    · exact hv11
+    · exact hv12
+    · exact hv20
+    · exact hv21
+    · exact hv22
+
+#print axioms array3
+#print axioms channel
+#print axioms all
+end R1Z.ProverCommitTotals50
