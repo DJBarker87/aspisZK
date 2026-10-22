@@ -90,3 +90,50 @@ pressure. `show-step-loops` identifies the native validation and byte-comparison
 loops. The replacement uses global unwind 40 and `memcmp.0:904`, retaining
 unwinding assertions; no source input bound or covered error is weakened.
 The replacement gate is pending. No whole-function harness has been used.
+
+
+## Stage 3: record lookup, native range counter and final source audit
+
+The original P6 step accepted an already selected row record. It did not cover
+the native `r.semantic[row]` lookup. The added `owned29::iteration` selects and
+clones that record before calling the owned step. `iteration29-v1` extracts
+this complete one-iteration owner without opacity (Charon 31.546 s,
+578644 KiB RSS; Aeneas 1.150 s, 114048 KiB RSS; exit 0 and zero swaps).
+`extracted_selected` reconstructs that owner including index failure and clone;
+`selected_effects` installs the concrete oracle machine in it.
+
+`range_model` relates the native u8 Range counter to the bounded usize row
+owner, with symbolic no-wrap/increment lemmas. J7858 passes all five step audits
+(2.01 s, 4093136 KiB); J7859 passes all eight row audits (2.16 s, 4114124 KiB);
+J7860 refreshes the five walk audits against those changed dependency hashes
+(2.03 s, 4100096 KiB). All exit 0, zero swaps, allowed axioms only. J7853 was
+refused by the reservation preflight before a compiler launch; it is recorded
+separately and was not represented as a Lean replay.
+
+J7861 is the final changed-cone axioms audit: exit 0, 1.85 s,
+4131592 KiB RSS, zero swaps. All 22 lines (18 new theorems, both extracted
+owners and both retained endpoints) use only the allowed standard axioms.
+This remains a reference/source-owner audit, not evidence that the missing
+native per-iteration gate passed or that a concrete FS experiment exists.
+
+All three frozen ELFs were rebuilt again after adding the record-selection
+owner: exits 0, 2.743/2.266/0.377 s, RSS 200040/202720/100784 KiB, zero swaps.
+All three remain byte-identical; `frozen-source-inventory.json` compares all
+492 tracked shipped files, manifests/lock and Cargo configuration with the
+exact rebuilt snapshot, with no differences.
+
+The symbolic-row 901-byte check `step29-records-v4` timed out with exit 124
+at 600.483 s and no verdict. The cgroup peak was 6702342144 bytes. GNU time
+reported only the timeout parent's 15488 KiB RSS, so that value must **not**
+be promoted to the solver peak: direct process sampling reached 6525556 KiB.
+The scope used zero swap. No counterexample or memory-kill is inferred.
+
+Replacing the symbolic row with concrete row cases makes the complete native
+lookup preflight for row 0 / an empty record pass (13.052 s, 1102052 KiB RSS,
+zero swaps). This is an error-path check, not the full 25-row gate. Row 14
+with arbitrary records up to 37 bytes and row 15 up to 901 bytes are pending.
+Every check compares the literal native iteration statement with the extracted
+owned iteration, using arbitrary state/semantic cells and the 27-record
+constructor invariant. Ordered hash framing/answers and all errors are checked.
+The only callee congruence cut is the same pure sampler's arbitrary common
+result, with identical input and call count required on both executions.

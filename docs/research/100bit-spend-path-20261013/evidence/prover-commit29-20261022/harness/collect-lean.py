@@ -4,7 +4,9 @@ from pathlib import Path
 E=Path(__file__).resolve().parent.parent
 p=E/'lean';p.mkdir(exist_ok=True)
 rows=[]
+skip={int(x) for arg in sys.argv[3:] if arg.startswith('--skip=') for x in arg[7:].split(',')}
 for a in range(int(sys.argv[1]),int(sys.argv[2])):
+ if a in skip:continue
  for n in [f'out-{a}.log',f'time-{a}.log']:
   subprocess.run(['scp','dombarker@100.108.41.90:/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/'+n,str(p/n)],check=True)
  subprocess.run(['scp',f'dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-prover-commit29-20261022/lean-{a}.json',str(p)],check=True)

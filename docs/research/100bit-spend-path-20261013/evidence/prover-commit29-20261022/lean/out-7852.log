@@ -1,0 +1,29 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:87:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(UScalar.wrapping_add ?x ?y)
+in the target expression
+  ↑(row.wrapping_add 1#u8) = ↑row + 1
+
+row : U8
+bound : ↑row < 25
+⊢ ↑(row.wrapping_add 1#u8) = ↑row + 1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.ProverCommitRows29.cast_roundtrip' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitRows29.bind_same' depends on axioms: [Quot.sound]
+'R1Z.ProverCommitRows29.lift_ok' does not depend on any axioms
+'R1Z.ProverCommitRows29.rows_model' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRows29.range_cast' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitRows29.range_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRows29.range_increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRows29.range_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

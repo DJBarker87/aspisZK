@@ -577,4 +577,13 @@ pub mod owned29 {
             Ok(value)=>{sem[row as usize]=value;Ok((st,sem))}
         }
     }
+    // Record selection is part of the native iteration, before the semantic
+    // call. Index failure and cloning remain explicit in its extracted owner.
+    pub fn iteration<H:Digest32>(st:SemanticTranscript<H>,row:u8,
+        records:Vec<Vec<u8>>,sem:[K;25])
+        ->Result<(SemanticTranscript<H>,[K;25]),Error> {
+        let record=records[row as usize].clone();
+        semantic_step(st,row,record,sem)
+    }
+
 }

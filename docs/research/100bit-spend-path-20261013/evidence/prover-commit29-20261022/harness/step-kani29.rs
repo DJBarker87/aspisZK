@@ -2,26 +2,30 @@
 mod step_kani29 {
     use super::*;
     #[derive(Clone,Copy)]
-    pub struct Oracle<'a>(&'a RefCell<OracleState>);
-    pub struct OracleState {
-        answers:[[u8;32];3], calls:Vec<Vec<Vec<u8>>>, next:usize, replay:bool,
+    pub struct Oracle<'a>(&'a RefCell<OracleState<'a>>);
+    pub struct OracleState<'a> {
+        answers:[[u8;32];3], initial:[u8;32], row:u8, record:&'a[u8], next:usize,
     }
     impl Digest32 for Oracle<'_> {
         fn digest(&self,parts:&[&[u8]])->[u8;32] {
             let mut s=self.0.borrow_mut();
             let i=s.next; assert!(i<3);
-            if s.replay {
-                assert_eq!(s.calls[i].len(),parts.len());
-                for j in 0..parts.len() {assert_eq!(s.calls[i][j].as_slice(),parts[j]);}
+            if i==0 {
+                assert_eq!(parts.len(),3);
+                assert_eq!(parts[0],&s.initial);
+                assert_eq!(parts[1],&[0,0xa0+s.row]);
+                assert_eq!(parts[2],s.record);
             } else {
-                s.calls.push(parts.iter().map(|part|part.to_vec()).collect());
+                assert_eq!(parts.len(),2);
+                assert_eq!(parts[0],&s.answers[0]);
+                assert_eq!(parts[1],&[i as u8]);
             }
             s.next+=1; s.answers[i]
         }
     }
     // Filled verbatim from the single native loop statement by install-kani.py.
     fn shipped_iteration<H:Digest32>(mut st:SemanticTranscript<H>, row:u8,
-        record:Vec<u8>,mut sem:[K;25])->Result<(SemanticTranscript<H>,[K;25]),Error> {
+        r:&Records,mut sem:[K;25])->Result<(SemanticTranscript<H>,[K;25]),Error> {
         NATIVE_ITERATION
         Ok((st,sem))
     }
@@ -38,24 +42,26 @@ mod step_kani29 {
             SAMPLE_OUTPUT
         }
     }
-    fn check<const N:usize>() {
+    fn check<const N:usize,const ROW:u8>() {
         let x:[u32;4]=kani::any();
         unsafe {SAMPLE_OUTPUT=K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}};SAMPLE_REPLAY=false;SAMPLE_NEXT=0;}
 
-        let row:u8=kani::any();kani::assume(row<25);
+        let row:u8=ROW;assert!(row<25);
         let next:u8=kani::any(); let initial:[u8;32]=kani::any();
         let limbs:[[u32;4];25]=kani::any();
         let sem=limbs.map(|x|K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}});
         let bytes:[u8;N]=kani::any();let len:usize=if N==0 {0} else {kani::any()};kani::assume(len<=N);
         let record=bytes[..len].to_vec();
-        let oracle=RefCell::new(OracleState{answers:kani::any(),calls:Vec::new(),next:0,replay:false});
+        let oracle=RefCell::new(OracleState{answers:kani::any(),initial,row,record:&bytes[..len],next:0});
         let state=crate::r1_wire::make_kani29(Oracle(&oracle),initial,next);
-        let actual=shipped_iteration(state,row,record.clone(),sem);
+        let r=Records{c1_root:[0;32],semantic:(0..27usize).map(|i|if i==row as usize {record.clone()} else {Vec::new()}).collect(),
+            y1:Vec::new(),inactive:[0;32],c0:Vec::new(),folded_root:[0;32],c1:Vec::new(),fin:Vec::new()};
+        let actual=shipped_iteration(state,row,&r,sem);
         let calls=oracle.borrow().next;
         let samples=unsafe {let n=SAMPLE_NEXT;SAMPLE_NEXT=0;SAMPLE_REPLAY=true;n};
-        {let mut s=oracle.borrow_mut();s.next=0;s.replay=true;}
+        oracle.borrow_mut().next=0;
         let state=crate::r1_wire::make_kani29(Oracle(&oracle),initial,next);
-        let reference=owned29::semantic_step(state,row,record,sem);
+        let reference=owned29::iteration(state,row,r.semantic,sem);
         assert_eq!(oracle.borrow().next,calls);
         assert_eq!(unsafe {SAMPLE_NEXT},samples);
         match (actual,reference) {
@@ -64,6 +70,7 @@ mod step_kani29 {
             _=>assert!(false),
         }
     }
-    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::unwind(40)] fn empty_record(){check::<0>()}
-    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::unwind(40)] fn all_semantic_records(){check::<901>()}
+    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::unwind(40)] fn empty_record(){check::<0,0>()}
+    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::unwind(40)] fn short_records(){check::<37,14>()}
+    #[kani::proof] #[kani::stub(crate::sampler::qm31_sample,shared_sample)] #[kani::unwind(40)] fn all_semantic_records(){check::<901,15>()}
 }

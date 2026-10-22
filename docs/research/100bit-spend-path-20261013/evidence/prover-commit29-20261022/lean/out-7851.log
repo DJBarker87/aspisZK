@@ -1,0 +1,88 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:87:63: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+row : U8
+bound : ↑row < 25
+⊢ UScalar.cast UScalarTy.Usize (row.wrapping_add 1#u8) = Usize.wrapping_add (UScalar.cast UScalarTy.Usize row) 1#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:111:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  rangeRows effect records (row.wrapping_add 1#u8) n next after
+in the target expression
+  (match core.result.Result.Ok (next, after) with
+    | core.result.Result.Err e => pure (core.result.Result.Err e)
+    | core.result.Result.Ok (next, sem) => rangeRows effect records (row.wrapping_add 1#u8) n next sem) =
+    match core.result.Result.Ok (next, after) with
+    | core.result.Result.Err e => pure (core.result.Result.Err e)
+    | core.result.Result.Ok (next, sem) =>
+      rows effect records (Usize.wrapping_add (UScalar.cast UScalarTy.Usize row) 1#usize) n next sem
+
+case succ.Ok
+M : Type → Type
+inst✝³ : Monad M
+inst✝² : LawfulMonad M
+inst✝¹ : MonadLiftT Result M
+inst✝ : LawfulMonadLiftT Result M
+H : Type
+effect : H → Parts → M Bytes32
+records : Records
+n : ℕ
+ih :
+  ∀ (row : U8) (state : State H) (sem : Values),
+    ↑row + n = 25 →
+      rangeRows effect records row n state sem = rows effect records (UScalar.cast UScalarTy.Usize row) n state sem
+row : U8
+state : State H
+sem : Values
+count : ↑row + (n + 1) = 25
+bound : ↑row < 25
+more : row < 25#u8
+record✝ record : alloc.vec.Vec U8
+next : State H
+after : Values
+⊢ (match core.result.Result.Ok (next, after) with
+    | core.result.Result.Err e => pure (core.result.Result.Err e)
+    | core.result.Result.Ok (next, sem) => rangeRows effect records (row.wrapping_add 1#u8) n next sem) =
+    match core.result.Result.Ok (next, after) with
+    | core.result.Result.Err e => pure (core.result.Result.Err e)
+    | core.result.Result.Ok (next, sem) =>
+      rows effect records (Usize.wrapping_add (UScalar.cast UScalarTy.Usize row) 1#usize) n next sem
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRows29.lean:111:55: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+M : Type → Type
+inst✝³ : Monad M
+inst✝² : LawfulMonad M
+inst✝¹ : MonadLiftT Result M
+inst✝ : LawfulMonadLiftT Result M
+H : Type
+effect : H → Parts → M Bytes32
+records : Records
+n : ℕ
+ih :
+  ∀ (row : U8) (state : State H) (sem : Values),
+    ↑row + n = 25 →
+      rangeRows effect records row n state sem = rows effect records (UScalar.cast UScalarTy.Usize row) n state sem
+row : U8
+state : State H
+sem : Values
+count : ↑row + (n + 1) = 25
+bound : ↑row < 25
+more : row < 25#u8
+record✝ record : alloc.vec.Vec U8
+next : State H
+after : Values
+⊢ ↑(row.wrapping_add 1#u8) + n = 25
+'R1Z.ProverCommitRows29.cast_roundtrip' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitRows29.bind_same' depends on axioms: [Quot.sound]
+'R1Z.ProverCommitRows29.lift_ok' does not depend on any axioms
+'R1Z.ProverCommitRows29.rows_model' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRows29.range_cast' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitRows29.range_increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRows29.range_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

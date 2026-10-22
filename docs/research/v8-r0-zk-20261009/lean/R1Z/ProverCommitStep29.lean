@@ -54,7 +54,35 @@ theorem iteration_effects (state : State Unit) (row : U8) (record : alloc.vec.Ve
   exact install _ _ ProverCommitCoinCall27.call_exact
     (fun e => iteration (ProverCommitControl28.dictionary e) state row record sem) machine
 
+def selectedIteration {M : Type → Type} [Monad M] [MonadLiftT Result M] {H : Type}
+    (effect : H → Parts → M Bytes32) (state : State H) (row : U8)
+    (records : Records) (sem : Values) : M (Output H) := do
+  let index ← lift (UScalar.cast .Usize row)
+  let record ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec U8)) records index
+  let record ← alloc.vec.CloneVec.clone core.clone.CloneU8 record
+  iteration effect state row record sem
+
+/-- Includes native record selection and its index failure, before the
+semantic call, `?` exit and selected array write. -/
+theorem extracted_selected {H : Type} (hash : aspis_core.digest.Digest32 H)
+    (state : State H) (row : U8) (records : Records) (sem : Values) :
+    sim.owned29.iteration hash state row records sem =
+    selectedIteration hash.digest state row records sem := by
+  unfold sim.owned29.iteration selectedIteration
+  simp only [← extracted_step,liftM,monadLift_self]
+
+theorem selected_effects (state : State Unit) (row : U8) (records : Records)
+    (sem : Values) (machine : ProverCommitCoinCall27.Machine) :
+    selectedIteration (ProverCommitControl28.dictionary ProverCommitControl28.extracted)
+      state row records sem machine =
+    selectedIteration (ProverCommitControl28.dictionary ProverCommitControl28.reference)
+      state row records sem machine := by
+  exact install _ _ ProverCommitCoinCall27.call_exact
+    (fun e => selectedIteration (ProverCommitControl28.dictionary e) state row records sem) machine
+
 #print axioms shift_count
 #print axioms extracted_step
 #print axioms iteration_effects
+#print axioms extracted_selected
+#print axioms selected_effects
 end R1Z.ProverCommitStep29
