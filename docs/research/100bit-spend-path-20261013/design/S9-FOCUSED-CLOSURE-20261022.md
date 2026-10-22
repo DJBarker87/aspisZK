@@ -672,3 +672,26 @@ retained in `eb7cf417ad`. This is nonempty extraction evidence, not its
 semantic proof. No shipped Rust, protocol parameters, proof size, or CU
 artifact changed during these checks. Final runtime/artifact refinement and
 the composed 100-bit per-attempt soundness result remain open.
+
+
+## Genuine scalar and QM product totality
+
+PROVED `8291f4020e`: the actual extracted WideExact.mul_m31 call succeeds
+on a canonical wide input, returns a canonical value, and decodes to the
+exact scalar product. The scalar may be any stored U32 word. The proof uses
+the existing S3 powers totality owner and the new complete source-to-current
+Result maps; it does not assume that the source call succeeds.
+
+PROVED `a8f9e36942`: the genuine QM31.mul extraction maps unconditionally
+to R22's wrapping product. On canonical inputs it agrees with the retained
+checked product, and same-call success and canonical output are derived.
+Three focused checks passed (12.622, 12.714 and 16.298 seconds), below 2.25 GB
+process RSS, zero swaps, standard axioms only. The packet retains failed
+drafts separately from accepted evidence. Existing R22 arithmetic is reused.
+
+The scalar and QM connections to the installed helper are still being
+checked. Full WideExact product, square and mixed-product source bridges,
+upstream operand provenance, production compiler/artifact refinement, and
+final security composition remain open. These proofs do not close S9 or
+establish the overall 100-bit claim. No production source or CU artifact
+changed in this continuation.
