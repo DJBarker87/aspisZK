@@ -405,3 +405,32 @@ caller projection's stubbed field is not treated as actual field identity.
 Actual caller/source and Rust library correspondence, adoption/artifact
 binding and security composition remain OPEN. S9 release closure and the
 100-bit target are not yet established. Production source and CU unchanged.
+
+
+PROVED decoder source-body chain (2026-10-22 continuation): the source-pinned
+owned copy of the actual field decoder maps to the existing parser for every
+from_limbs/from_le_bytes Result, including rejections and divergence.
+Successful execution of the owned weights.field body yields its exact
+range-selected slice, 32-byte length, eight limb bounds and unchanged packed
+value. The successful reader result is also canonical in the retained
+current-finish/current-wide carrier, without assuming an old decodeField
+wrapper succeeds. The canonical consumer passed locally with standard
+axioms, 24.523 s, 3.17 GB aggregate RSS and zero observed swaps; its packet
+is being prepared. Exact readback and decoder packets are committed:
+8ba65b7b45 (limbs), 2712ef9b7d (bytes), f656b659e1 (reader).
+
+The selected parser owner frontier passed on the NUC (19 changed targets,
+one accepted owner reused); this is not a whole release replay. The bounded
+range source-value model now agrees with Aeneas next, with explicit two/four
+iteration tables and no assumed step results. Pinned Rust source snapshots
+have matching fold/range bodies. This does not identify the SBF compiler
+binary or prove compiled operational correspondence (2c9037de54).
+
+OPEN next: attach the proved actual reader to the caller adapter (whose old
+chosen decodeField wrapper is still distinct), prove caller-helper carrier
+simulation, establish bounded-index/readback correspondence and actual caller
+reachability, then adoption/frozen source and artifact joins, coherent release
+replay and security composition. No source-only 9ce draft or unchanged
+production helper inherits the candidate 933 theorem. No new CU measurement
+or production source change occurred. S9 release closure and the per-attempt
+100-bit target remain not established.
