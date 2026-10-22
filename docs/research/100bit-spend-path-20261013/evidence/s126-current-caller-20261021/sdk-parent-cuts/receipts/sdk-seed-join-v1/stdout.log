@@ -1,0 +1,27 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unnecessary `unsafe` block
+  --> src/lib.rs:12:70
+   |
+12 | #[cfg_attr(kani,kani::modifies(bytes.as_mut_ptr().cast::<[u8;688]>(),unsafe{bytes.as_mut_ptr().add(696)}))]
+   | ---------------------------------------------------------------------^^^^^^
+   | |                                                                    |
+   | |                                                                    unnecessary `unsafe` block
+   | because it's nested under this `unsafe` block
+   |
+   = note: `#[warn(unused_unsafe)]` (part of `#[warn(unused)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Checking harness proofs::native_seed_byte_and_frame...
+
+CBMC failed with status 15
+VERIFICATION:- FAILED
+
+Manual Harness Summary:
+Verification failed for - proofs::native_seed_byte_and_frame
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

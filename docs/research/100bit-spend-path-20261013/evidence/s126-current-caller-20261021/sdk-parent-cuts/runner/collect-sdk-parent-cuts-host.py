@@ -38,10 +38,12 @@ folders += ['sdk-proof-gate-v4','memcmp-equal-v1','observer-emission-v1','observ
 folders += ['sdk-paired-decoder-entry-v1','sdk-paired-decoder-entry-v2']
 folders += ['sdk-native-context-v6']
 folders += ['sdk-native-context-v7','sdk-native-context-v8']
+folders += ['sdk-seed-v1','sdk-seed-v2','sdk-seed-v3','sdk-native-context-v9','sdk-native-context-v10','sdk-native-context-v11']
 new_diagnostics=['sdk-proof-length-cut-v1','sdk-proof-length-cut-v2','sdk-proof-length-cut-v3','sdk-proof-length-frame-cut-v1','sdk-proof-length-frame-cut-v2']+[f'sdk-paired-equalcmp-check-v{i}' for i in range(1,6)]
 new_diagnostics += [f'sdk-paired-decoder-entry-check-v{i}' for i in range(1,5)]
 new_diagnostics += ['sdk-native-context-check-v10']
-new_diagnostics += ['sdk-native-context-check-v11','sdk-native-context-check-v12']
+new_diagnostics += ['sdk-native-context-check-v11','sdk-native-context-check-v12','sdk-native-context-check-v13','sdk-native-context-check-v14','sdk-native-context-check-v15']
+receipts += ['sdk-seed-join-v1','sdk-seed-join-v2','sdk-seed-frame-v3','sdk-seed-properties-v2','sdk-seed-properties-v3','sdk-native-context-codegen-v13','sdk-native-context-codegen-v14','sdk-native-context-codegen-v15','sdk-native-unseeded-observer-emission-properties-v1']
 receipts += new_diagnostics+['sdk-proof-length-frame-codegen-v1','sdk-proof-length-frame-properties-v1','sdk-proof-length-frame-properties-v2','memcmp-equal-join-v1','observer-emission-check-v1','observer-emission-check-v2','observer-emission-check-v3','sdk-paired-context-codegen-v10','sdk-observer-emission-properties-v1','sdk-observer-emission-properties-v2']
 receipts += ['sdk-paired-decoder-entry-codegen-v1','sdk-paired-decoder-entry-codegen-v2','sdk-decoder-entry-loop-inventory-v1']
 receipts += ['sdk-native-context-codegen-v6','sdk-native-observer-emission-properties-v1']
@@ -85,7 +87,7 @@ for name in ['run-sdk-proof-length-cut-host.py','audit-sdk-length-cut-host.py','
  p=H/'kit'/name
  if p.is_file():copy(p,Path('runner')/p.name)
 p=H/'kit/audit-native-observer-emission-host.py';copy(p,Path('runner')/p.name)
-for name in ['prepare-sdk-native-rc-domain.py','audit-native-rc-observer-emission-host.py','audit-native-full-rc-observer-emission-host.py','pin-kani-sysroot-host.py']:
+for name in ['prepare-sdk-native-rc-domain.py','audit-native-rc-observer-emission-host.py','audit-native-full-rc-observer-emission-host.py','pin-kani-sysroot-host.py','prepare-sdk-seed.py','inspect-sdk-seed-host.py','prepare-sdk-native-unseeded.py','prepare-sdk-native-buffer-frames.py','audit-native-unseeded-observer-emission-host.py']:
  p=H/'kit'/name;copy(p,Path('runner')/p.name)
 p=Path('/home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c');copy(p,Path('tool-and-freeze-pins')/'kani_lib.c')
 p=H/'kit/trace-cbmc-exception.cpp'

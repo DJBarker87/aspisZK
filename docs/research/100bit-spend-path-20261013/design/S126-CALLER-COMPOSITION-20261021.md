@@ -1760,3 +1760,106 @@ The enclosing rejected-run Lean theorems above remain the new reference-side
 frame result. There is no new theorem claiming complete native-to-owned
 stage1 equality. Lean receipts record base revision e4bccb2a3 plus exact new
 source snapshots/SHA values; those exact snapshots are included here.
+
+### Unseeded native caller and enclosing same-buffer gate witness
+
+The selected complete native caller now removes the harness's proof-prefix/tag
+initializer altogether. `prepare-sdk-native-unseeded.py` deletes exactly the
+raw copy688/tag696 assignment from native v8 and adds no assumptions. The
+complete source/helper/contract/ghost prefix before `native_parent_arguments`
+is byte-identical. Every original assertion and all twelve arbitrary nonzero
+usize Rc fields remain; proof58295, public1880, checkpoint1768 and encoder
+candidate688 are independent arbitrary input arrays. Invalid prefix/tag runs
+are handled by the unchanged source guard. No initializer-equivalence premise
+is needed for this new caller domain.
+
+**`sdk-native-context-check-v13`**, source `sdk-native-context-v9`, checks all
+2546 non-cover properties SUCCESS and reaches all5 covers (raw CBMC exit10,
+not relabelled exit0),167.756s,4366072KiB peak RSS,swap0. This genuinely removes
+the seeded-prefix/tag restriction from the enclosing checked native context.
+The source gate, account operations, same-buffer typed child argument checks,
+observer assertion, successful checkpoint byte writeback and returned borrow/
+Rc scalar checks are retained. The matching copy leaf is reused from v8 only
+after checking the **entire unchanged helper/ghost/contract prefix**, including
+its proof_for_contract function, byte-for-byte. No unchanged leaf/full replay
+is run. The exact new raw observer artifact is independently audited in
+`sdk-native-unseeded-observer-emission-properties-v1`: exit0,0.286s,
+48844KiB,swap0; it loads const None, without a mutable ghost dependency.
+
+The checked Lean reference also derives its own gate rather than accepting
+independent prefix/tag hypotheses:
+
+- `S2SdkGateAdmittedImageV1.admitted_cells` derives length58295, every one of
+  the688 exact candidate-prefix cells and tag696=2 from the actual extracted
+  `reference_gate` success. `admitted_seed_fixed` proves the mathematical
+  prefix/tag image equals the original byte at **every Nat coordinate**,
+  including invalid indices and the untouched suffix. This is ACCEPTED-ONLY;
+  the previously checked `gate_total` remains the separate TOTAL theorem.
+- `S2SdkAdmittedCallerV1.caller_guard` identifies the actual emitted Vec prefix
+  range/comparator/tag operations on one Vec with the full-buffer gate.
+- `stage1_guarded_first` consumes **one complete installed reference stage1
+  success, including its final release**, and derives one joint witness:
+  the very same proof Vec's [688,58295) range is passed to its reached
+  `first_decoded`, its matching candidate passes the extracted gate, and its
+  prefix/tag image is identical at every coordinate. No independent comparator
+  success, tag match, prefix validity, child success or fixed-point premise
+  appears in the enclosing theorem. The witness does not expose a separate
+  statement/encoder-source equality; that richer shared-decoder/encoder join
+  remains a next strengthening, rather than an implied claim.
+
+The final focused receipts are `s2-sdk-gate-admitted-image-v3` (exit0,
+14.655595s,3238952960B RSS,swap0, two standard-only axiom reports) and
+`s2-sdk-admitted-caller-v6` (exit0,25.305688s,3231727616B RSS,swap0, two
+standard-only reports). Earlier failed elaborations are retained and excluded:
+reserved identifier/coordinate coercion errors in the first file; scalar
+constant/condition normalization and an expensive generic continuation search
+in the second. Its v5 hits the default200000 heartbeat limit; v6 uses symbolic
+checked-add facts, targeted scalar/boolean normalization and direct premise
+selection, with **no resource-option override**. A failed compiler's error
+recovery axiom lines are not accepted proof evidence. The successful packet
+checker selects69 current Lean targets and21 SDK cuts, not a whole-cone replay.
+
+The abandoned initializer approach is explicitly **not proved**:
+
+| Attempt | Changed encoding | Exit | Wall seconds | RSS KiB | Swaps |
+|---|---|---:|---:|---:|---:|
+| sdk-seed-join-v1 | Whole proof-array coordinate postcondition; stopped |1|199.483|6407372|0|
+| sdk-seed-join-v2 | Typed688-byte prefix view; stopped |1|226.682|6412944|0|
+| sdk-seed-frame-v3 | Write-frame/tag only; stopped |1|88.964|6387628|0|
+| sdk-native-context-check-v14 | Added arbitrary proof/public/checkpoint frame queries; timeout |1|183.982|6388764|0|
+| sdk-native-context-check-v15 | Only extra rejected-checkpoint byte query; timeout |1|184.095|3433992|0|
+
+These runs use fresh admission, High6G/Max8G/Swap0. Their sources, stops,
+receipts and diagnostics are retained. They establish no initializer or added
+native frame assertion; no cap was raised. The exact unseeded caller result
+v13 supersedes the need for initializer transport, not the failed checks'
+status. The first property-inspector metadata (`sdk-seed-properties-v2`)
+incorrectly described a successful proof receipt. It is **superseded/excluded**:
+`sdk-seed-properties-v3` explicitly says its metadata establishes no assertion
+or write-frame property. The failed attempted metadata rerun hit the immutable
+receipt-directory guard; only the v3 corrected audit is used. No seed audit is
+included among accepted SDK cuts.
+
+Read-only research inspection also found adoption merge29cbab431 for the
+other owner's three S4 source files. `research-caller-readonly-20261022.json`
+records the observed research revision and exact working/commit/frozen hashes.
+The program adapter/first, verifier and candidate files still match b2727acd;
+weights/fast_dots/fast_pairing have changed. This packet does **not** silently
+re-pin those other-owner dependencies or claim the old S4/from_fn results for
+the newly adopted implementation. The retained b2727acd component target and
+all226 host-source checks remain explicit. Consolidated source/artifact
+re-pinning must account for the adopted S4 change and affected S1 powers
+caller, with that owner's equivalence/adoption gates; this local S2 progress
+changes no shipped source or security contract.
+
+S2 is still OPEN: fixed public/checkpoint native lengths, common successful
+actual typed child hooks, pure scan abstraction, canonical data/lamport slot
+construction and runtime heap transport remain in the native context. Concrete
+child implementation installation, general native-to-owned correspondence,
+full errors/logs/state and ordered oracle transport are not discharged here.
+The complete reference rejection-buffer theorem remains valid but the new
+native rejected-checkpoint byte frame was **not** established by v14/v15.
+S6 and S1 retain the shared actual caller boundary; no whole S1/S2/S6 or
+raw100-bit per-attempt closure is claimed. The next concrete work is a shared
+source decoder/encoder/gate/first witness and compositional native-state
+transport; another unchanged whole-array or paired-stage replay is excluded.

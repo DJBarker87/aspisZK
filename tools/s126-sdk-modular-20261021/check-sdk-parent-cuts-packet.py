@@ -226,6 +226,51 @@ for version,tag,codegen,full,count,coversCount,auditTag in [
   accepted[tag]=dict(prior,source_sha256=sha(source),receipt_sha256=sha(receipt),noncover_successes=len(nc),reachable_covers=len(cv),wall_seconds=rr['wall_seconds'],peak_rss_kib=rr['peak_rss_kib'],qualification=prior['qualification']+' All twelve Rc strong/internal-weak fields are now arbitrary nonzero usize inputs, getter/layout correspondence is checked and all are restored before teardown. This removes the constructor-Rc-count restriction at the checked native caller boundary; arbitrary heap/source/child/ordered-log transport remains open.')
 checked('sdk-native-full-rc-copy-contract-v1','sdk-native-context-v8')
 accepted.pop('sdk-native-tagged-copy-contract-v1')
+# Remove the seeded proof prefix/tag restriction without a new source callee.
+unseeded=E/'sources/sdk-native-context-v9/src/lib.rs'
+uCut=json.loads((unseeded.parents[1]/'source-cut.json').read_text())
+uBase=E/'sources/sdk-native-context-v8/src/lib.rs'
+assert uCut['source_sha256']==sha(unseeded) and uCut['base_source_sha256']==sha(uBase)
+with tempfile.TemporaryDirectory() as d:
+ out=Path(d)/'unseeded'
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-native-unseeded.py'),str(uBase.parents[1]),str(out)],check=True)
+ assert (out/'src/lib.rs').read_bytes()==unseeded.read_bytes()
+ assert json.loads((out/'source-cut.json').read_text())==uCut
+ut=unseeded.read_text();bt=uBase.read_text()
+assert ut[:ut.index('fn native_parent_arguments()')]==bt[:bt.index('fn native_parent_arguments()')]
+assert 'b0[696]=2' not in ut and 'copy_nonoverlapping(plan().candidate.as_ptr()' not in ut
+assert ut.count('kani::assume(')==bt.count('kani::assume(')
+tag='sdk-native-context-check-v13';rp=E/'receipts'/tag/'receipt.json';rr=json.loads(rp.read_text())
+assert rr['exit_status']==10 and rr['swaps']==0 and rr['limits']['memory.swap.max']=='0'
+props=json.loads((E/'diagnostics'/tag/'properties-without-traces.json').read_text())
+nc=[p for p in props if p['sourceLocation'].get('propertyClass')!='cover'];cv=[p for p in props if p['sourceLocation'].get('propertyClass')=='cover']
+assert len(nc)==2546 and all(p['status']=='SUCCESS' for p in nc)
+assert len(cv)==5 and all(p['status']=='FAILURE' for p in cv)
+ipath=E/(tag+'-input.json');ip=json.loads(ipath.read_text())
+assert ip['artifact_selection']['source_sha256']==sha(unseeded)
+assert ip['artifact_selection']['codegen_input_sha256']==sha(E/'sdk-native-context-codegen-v13-input.json')
+assert not ip['selected_properties'] and '--unwinding-assertions' in ip['commands'][-1]
+auditTag='sdk-native-unseeded-observer-emission-properties-v1'
+ap=json.loads((E/(auditTag+'-input.json')).read_text());audit=json.loads((E/'receipts'/auditTag/'emission-audit.json').read_text())
+assert ap['native_input_sha256']==sha(ipath) and ap['prepared_sha256']==ip['input_goto_sha256']
+assert ap['raw_goto_sha256']==audit['raw_goto_sha256'] and len(audit['observers'])==1
+assert 'Type........: const struct ' in audit['constant'] and '{ 0, 0, 0, 0, 0, 0, 0, 0 }' in audit['constant']
+prior=accepted.pop('sdk-native-context-check-v12')
+accepted[tag]=dict(prior,source_sha256=sha(unseeded),receipt_sha256=sha(rp),noncover_successes=len(nc),reachable_covers=len(cv),wall_seconds=rr['wall_seconds'],peak_rss_kib=rr['peak_rss_kib'],qualification='Complete unchanged native SDK caller checked with arbitrary independent proof bytes and encoder candidate: the seed prefix/tag initializer and its input-domain restriction are removed. All previous scalar/caller/success-writeback and None assertions remain. The matching copy leaf is reused only after byte-identical complete helper/ghost prefix comparison against v8. Common successful actual typed child hooks, fixed buffer lengths, pure scan abstraction, runtime heap embedding, concrete child identities, exact error/log and ordered oracle transport remain explicit; this is not S2 closure.')
+# Whole-array initializer and extra native frame attempts are diagnostics only.
+for tag in ['sdk-seed-join-v1','sdk-seed-join-v2','sdk-seed-frame-v3','sdk-native-context-check-v14','sdk-native-context-check-v15']:
+ failed=json.loads((E/'receipts'/tag/'receipt.json').read_text())
+ assert failed['exit_status']!=0 and tag not in accepted
+for version,option in [('v1',[]),('v2',['prefix-view']),('v3',['frame-only'])]:
+ source=E/'sources'/('sdk-seed-'+version)
+ with tempfile.TemporaryDirectory() as d:
+  out=Path(d)/'seed'
+  subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-seed.py'),str(out),*option],check=True)
+  assert (out/'src/lib.rs').read_bytes()==(source/'src/lib.rs').read_bytes()
+  assert json.loads((out/'source-cut.json').read_text())==json.loads((source/'source-cut.json').read_text())
+seedAudit=json.loads((E/'receipts/sdk-seed-properties-v3/property-audit.json').read_text())
+assert 'no assertion or write-frame property' in seedAudit['qualification']
+
 sysroot=json.loads((E/'receipts/sdk-kani-sysroot-pins-v1/sysroot-pins.json').read_text())
 assert sysroot['archives'] and '53732d5e0' in sysroot['versions']['rustc-version']
 for prefix in ['libcore-','liballoc-','libstd-']:
