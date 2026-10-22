@@ -98,3 +98,61 @@ inferred signed shift literal; an explicit `1u32` in the owned reference is
 retranslated and passes a new native check. Shipped code is unchanged.
 J9646 is a prelaunch dependency refusal with no compilation. Rejected Lean
 drafts are retained and never treated as accepted proofs.
+
+
+## Stage 2: compact codecs, byte front and finalisation
+
+J9666 proves symbolic per-level and eighteen-level occupancy/count bounds
+(≤288 nodes, ≤9,216 node bytes for a 16-entry batch). J9668 proves the native
+well-formedness guard through two additional pure std observer fields in
+`ProverCommitBatchGuard46.TrustedBatch`: `slice_windows2_all_lt` specifies
+`windows(2).all` as an adjacent strict chain; `slice_iter_all_lt` specifies
+the pure all-indices-below-bound predicate. The chain-to-pairwise implication
+is proved using natural-order transitivity, not added as a source law.
+Call sites are `multiproof.rs:57–58`.
+
+`ProverCommitMultiproof46.source_bytes` / `constructed_bytes` compose the
+per-group owner and the stored-node callback into exact ordered node bytes.
+`reference_length` proves their count/length equation. This is the structural
+P6 owner and construction invariant, not an imported theorem about Rust syntax
+or a totality assumption on arbitrary child maps. Source arrays/cursors and
+this owner are related by the retained native transition gates and framing
+argument, as in parts 30/43/44.
+
+A fifth pure std field is added, in
+`ProverCommitCompactSource46.TrustedChunks`: `slice_chunks_exact32`, giving
+ordered full 32-byte chunks and discarding an incomplete trailing suffix,
+exactly at `compact.rs:113`. Every enumerated chunk index is proved in bounds.
+The full compact-value owner retains the initial divisibility rejection,
+every high-half rejection, low-half bytes and output length. The native
+32-byte cell gate from part 43 is reused unchanged; it is not rerun or claimed
+as a complete source codec by itself.
+
+`ProverCommitCompactRows46.compact_source` composes all 27 semantic rows,
+frames and payload slices, the initial 13,831-byte guard and final cursor
+check. Slice capacity follows from the fixed small metadata sum, not a
+source-success premise. The native row-context gate passes (1.060 s,
+144,464 KiB RSS, zero swap): arbitrary u8 row, current cursor ≤13,831,
+identical exact slice windows and append order, and the same arbitrary
+compact_values result/post-state, including error. Its row body and
+`row_shape` body are verbatim; pure std slice/Vec plumbing is projected to
+window identities/append history. This is the contextual congruence cut;
+the separate cell/chunk proof supplies codec behavior.
+
+`ProverCommitFront46.proof_source` assembles the exact S2 header, compact
+semantic and y1 bytes, raw suffix, ordered repeated query payloads, slots,
+and both 28,359/57,607-byte guards. It retains explicit node-result slots;
+the multiproof owner above supplies the concrete node-byte component.
+`ProverCommitFinalize46.finish_decode` preserves replay errors/disagreement,
+Merkle collision rejection, first-conflict ordered transcript merge, exact
+returned table and all returned counters. `programming_publication` feeds
+that finalizer the complete updated ProgramOne table/flag after its ordered
+call sequence. No digest-return equality is substituted for shared effects.
+
+These establish deterministic publication components and their structural
+owner equations over raw source fields and the named std API. They are **not
+a complete sim_e/source-view image or source-to-FSExperiments certificate**.
+No new cryptographic or source-callee success assumption is introduced. In
+particular no field assumes canonical native opening values, a mathematical
+payload image, or equality with simE. All five additional std fields and their
+call sites are listed above; the original TrustedStd24 remains unchanged.

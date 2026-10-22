@@ -1,0 +1,104 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFinalize46.lean:55:15: error: unsolved goals
+case ok.ok.true.true
+Key Table Thread Slot Output : Type
+cmp : Key → Key → Ordering
+inst✝² : Std.TransCmp cmp
+inst✝¹ : Std.LawfulEqCmp cmp
+inst✝ : DecidableEq Thread
+map : MapAPI Key Bytes32 Table cmp
+tls : TLSAPI Thread Slot Output
+thread : Thread
+schedule : List (Thread × ProverCommitTLS23.Access Slot Output)
+std : TrustedStd map tls thread schedule
+state : State Table
+transcript : Table
+k reads : ℕ
+proof : Bytes
+hc : state.collision = true
+⊢ Except.map (decode map) (Except.error Error.merkle) = Except.error Error.merkle
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFinalize46.lean:60:17: error: unsolved goals
+case ok.ok.true.false.none
+Key Table Thread Slot Output : Type
+cmp : Key → Key → Ordering
+inst✝² : Std.TransCmp cmp
+inst✝¹ : Std.LawfulEqCmp cmp
+inst✝ : DecidableEq Thread
+map : MapAPI Key Bytes32 Table cmp
+tls : TLSAPI Thread Slot Output
+thread : Thread
+schedule : List (Thread × ProverCommitTLS23.Access Slot Output)
+std : TrustedStd map tls thread schedule
+state : State Table
+transcript : Table
+k reads : ℕ
+proof : Bytes
+hc : state.collision = false
+hp : ProverCommitPublication45.publication map state.table transcript = none
+h : none = ProverCommitPublication45.publication modelMap (map.decode state.table) (map.decode transcript)
+⊢ Except.map (decode map) (Except.error Error.transcript) = Except.error Error.transcript
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFinalize46.lean:64:24: error: unsolved goals
+case ok.ok.true.false.some
+Key Table Thread Slot Output : Type
+cmp : Key → Key → Ordering
+inst✝² : Std.TransCmp cmp
+inst✝¹ : Std.LawfulEqCmp cmp
+inst✝ : DecidableEq Thread
+map : MapAPI Key Bytes32 Table cmp
+tls : TLSAPI Thread Slot Output
+thread : Thread
+schedule : List (Thread × ProverCommitTLS23.Access Slot Output)
+std : TrustedStd map tls thread schedule
+state : State Table
+transcript : Table
+k reads : ℕ
+proof : Bytes
+hc : state.collision = false
+result : Table × ℕ
+hp : ProverCommitPublication45.publication map state.table transcript = some result
+h :
+  some (map.decode result.1, result.2) =
+    ProverCommitPublication45.publication modelMap (map.decode state.table) (map.decode transcript)
+⊢ Except.map (decode map)
+      (Except.ok
+        { proof := proof, table := result.1, attempts := k + 1, transcriptReads := result.2,
+          commitmentReads := reads }) =
+    Except.ok
+      { proof := proof, table := map.decode result.1, attempts := k + 1, transcriptReads := result.2,
+        commitmentReads := reads }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFinalize46.lean:56:48: warning: This simp argument is unused:
+  Except.map_error
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵i̵n̵i̵s̵h̵,̵h̵c̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵r̵o̵g̵r̵a̵m̵O̵n̵e̵4̵6̵.̵d̵e̵c̵o̵d̵e̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵E̵x̵c̵e̵p̵t̵.̵m̵a̵p̵_̵e̵r̵r̵o̵r̵]̵[̲f̲i̲n̲i̲s̲h̲,̲ ̲h̲c̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲r̲o̲g̲r̲a̲m̲O̲n̲e̲4̲6̲.̲d̲e̲c̲o̲d̲e̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFinalize46.lean:63:48: warning: This simp argument is unused:
+  Except.map_error
+
+Hint: Omit it from the simp argument list.
+  simp only [finish, ̲hc, ̲ProverCommitProgramOne46.decode, ̲Except.bind, ̲Bool.not_true,
+                Bool.false_eq_true, ̲if_false, ̲hp, ̲← ̲h,̵E̵x̵c̵e̵p̵t̵.̵m̵a̵p̵_̵e̵r̵r̵o̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFinalize46.lean:67:48: warning: This simp argument is unused:
+  Except.map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [finish, ̲hc, ̲ProverCommitProgramOne46.decode, ̲Except.bind, ̲Bool.not_true,
+                Bool.false_eq_true, ̲if_false, ̲hp, ̲← ̲h,E̵x̵c̵e̵p̵t̵.̵m̵a̵p̵_̵o̵k̵,̵ ̲decode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFinalize46.lean:67:62: warning: This simp argument is unused:
+  decode
+
+Hint: Omit it from the simp argument list.
+  simp only [finish, ̲hc, ̲ProverCommitProgramOne46.decode, ̲Except.bind, ̲Bool.not_true,
+                Bool.false_eq_true, ̲if_false, ̲hp, ̲← ̲h, ̲Except.map_ok,̵d̵e̵c̵o̵d̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitFinalize46.finish_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitFinalize46.programming_publication' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

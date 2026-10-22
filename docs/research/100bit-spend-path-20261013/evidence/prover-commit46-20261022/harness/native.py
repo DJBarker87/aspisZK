@@ -4,9 +4,9 @@ from pathlib import Path
 E=Path(__file__).resolve().parent.parent
 H='/home/dombarker/project-offloads/codex-cx-prover-commit46-20261022'
 name=sys.argv[1]
-assert name in ['program-one-transition-v1','program-one-transition-v2','binary-group-v1','binary-group-v2','binary-group-v3','binary-cursor-v1','stored-node-v1','stored-node-v2','stored-node-v3']
-subdir='stored-node' if name.startswith('stored-node') else ('multiproof' if name.startswith('binary-') else 'harness')
-harness='stored_node' if name.startswith('stored-node') else 'binary_cursor_transition' if name.startswith('binary-cursor') else ('binary_group' if name.startswith('binary-') else 'program_one_transition')
+assert name in ['program-one-transition-v1','program-one-transition-v2','binary-group-v1','binary-group-v2','binary-group-v3','binary-cursor-v1','stored-node-v1','stored-node-v2','stored-node-v3','compact-row-v1']
+subdir='compact-row' if name.startswith('compact-row') else 'stored-node' if name.startswith('stored-node') else ('multiproof' if name.startswith('binary-') else 'harness')
+harness='compact_row_context' if name.startswith('compact-row') else 'stored_node' if name.startswith('stored-node') else 'binary_cursor_transition' if name.startswith('binary-cursor') else ('binary_group' if name.startswith('binary-') else 'program_one_transition')
 files=[E/subdir/'lib.rs',E/subdir/'Cargo.toml']
 if subdir=='harness':files.append(E/'harness/owned.rs')
 (E/'pins'/f'{name}-inputs.json').write_text(json.dumps(dict(source_revision=(E/'pins/revision.txt').read_text().strip(),sources={str(p.relative_to(E)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}),indent=2)+'\n')

@@ -1,0 +1,121 @@
+import R1Z.ProverCommitStoredNode46
+import R1Z.ProverCommitBatchGuard46
+/-! Complete structural binary multiproof owner, instantiated with the stored
+child-map invariant. Native source attribution is via the separately checked
+cursor/count and callback transitions, not an assumed caller-success field. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitMultiproof46
+open Aeneas Aeneas.Std Result ProverCommitTrustedStd24 ProverCommitStdIndex46
+open ProverCommitBinaryGroup46 ProverCommitBinarySupport46 ProverCommitTreeSupport46
+open ProverCommitStoredNode46
+abbrev Bytes := ProverCommitPublish43.Bytes
+
+def bytes (d : Digest) : Bytes := d.val.map (fun b => b.val.toUInt8)
+
+theorem bytes_length (d : Digest) : (bytes d).length=32 := by
+  simpa only [bytes,List.length_map] using d.property
+
+def value (table : Kids) (child : U32) : Digest :=
+  let kids := (table[child.val/2]?).getD (Array.repeat 32#usize 0#u8,Array.repeat 32#usize 0#u8)
+  if child.val%2=0 then kids.1 else kids.2
+
+variable (index : Kids → Nat → Result (Digest × Digest))
+  (std : TrustedIndex (modelMap (Key := Nat) (Value := Digest × Digest) (cmp := compare)) index)
+include std
+
+theorem node_exact (table : Kids) (child : U32) (mem : child.val/2 ∈ table) :
+    node index [table] 0 child = ok (value table child) := by
+  cases hk : table[child.val/2]? with
+  | none => simp only [Std.TreeMap.mem_iff_isSome_getElem?,hk,Option.isSome_none,Bool.false_eq_true] at mem
+  | some kids =>
+    simp only [node,List.getElem?_cons_zero,index_found modelMap index std table (child.val/2) kids hk,
+      bind_tc_ok,value,hk,Option.getD_some]
+
+theorem nodes_exact (table : Kids) (needed : List U32) (covers : Covers needed (support table)) :
+    needed.mapM (fun child => do let d ← node index [table] 0 child;ok (bytes d)) =
+      ok (needed.map (fun child => bytes (value table child))) := by
+  induction needed with
+  | nil => rfl
+  | cons child rest ih =>
+    have hc := covers child (List.mem_cons_self ..)
+    have ht : Covers rest (support table) := fun c hc => covers c (List.mem_cons_of_mem child hc)
+    simp only [List.mapM_cons,node_exact index std table child hc,bind_tc_ok,ih ht,List.map_cons]
+    rfl
+
+omit std
+
+def sourceBytes : Nat → List U32 → List Kids → Result Bytes
+  | 0,_,_ => ok []
+  | _+1,_,[] => .fail .panic
+  | n+1,xs,table::tables => do
+    let step ← ProverCommitBinaryCursor46.source xs.length xs
+    let out ← step.2.mapM (fun child => do let d ← node index [table] 0 child;ok (bytes d))
+    let rest ← sourceBytes n step.1 tables
+    ok (out.flatten ++ rest)
+
+def referenceBytes : Nat → List U32 → List Kids → Bytes
+  | 0,_,_ => []
+  | _+1,_,[] => []
+  | n+1,xs,table::tables =>
+    ((layer xs).2.map (fun child => bytes (value table child))).flatten ++
+      referenceBytes n (layer xs).1 tables
+
+include std
+
+theorem source_bytes (n : Nat) (xs : List U32) (children : List Kids)
+    (covers : List.Forall₂ Covers (requests n xs) (children.map support)) :
+    sourceBytes index n xs children = ok (referenceBytes n xs children) := by
+  induction n generalizing xs children with
+  | zero => rfl
+  | succ n ih =>
+    cases children with
+    | nil => simp only [requests,List.map_nil] at covers;cases covers
+    | cons table tables =>
+      simp only [requests,List.map_cons] at covers
+      cases covers with
+      | cons head tail =>
+        rw [sourceBytes,ProverCommitBinaryCursor46.native_layer]
+        simp only [bind_tc_ok,nodes_exact index std table (layer xs).2 head,
+          ih (layer xs).1 tables tail,referenceBytes]
+
+omit std
+
+theorem reference_length (n : Nat) (xs : List U32) (children : List Kids)
+    (length : n≤children.length) : (referenceBytes n xs children).length=32*count n xs := by
+  have flatlen (table : Kids) (needed : List U32) :
+      ((needed.map (fun child => bytes (value table child))).flatten).length=32*needed.length := by
+    induction needed with
+    | nil => rfl
+    | cons child rest ih =>
+      simp only [List.map_cons,List.flatten_cons,List.length_append,bytes_length,ih,List.length_cons]
+      omega
+  induction n generalizing xs children with
+  | zero => rfl
+  | succ n ih =>
+    cases children with
+    | nil => simp only [List.length_nil] at length;omega
+    | cons table tables =>
+      rw [referenceBytes,List.length_append,flatlen,ih (layer xs).1 tables (by simpa using length),count]
+      have h := layer_count xs
+      rw [h.1,h.2,Nat.mul_add]
+
+include std
+
+/-- The constructed child maps make every callback succeed and fix all node
+bytes in their exact level/parent/slot order. -/
+theorem constructed_bytes {Coins : Type} (coin : Coins → Digest × Coins)
+    (root : Digest) (level : Map Digest) (coins : Coins) (reads : Nat)
+    (log : List (Digest × Digest × Digest)) (xs : List U32)
+    (covered : ∀ a ∈ xs, a.val ∈ support level) :
+    let children := (ProverCommitTree44.levels modelMap modelMap coin root 18 0
+      ⟨level,[],coins,reads,log⟩).children
+    sourceBytes index 18 xs children = ok (referenceBytes 18 xs children) := by
+  exact source_bytes index std 18 xs _ (stored_requests coin root level coins reads log xs covered)
+
+#print axioms bytes_length
+#print axioms node_exact
+#print axioms nodes_exact
+#print axioms source_bytes
+#print axioms reference_length
+#print axioms constructed_bytes
+end R1Z.ProverCommitMultiproof46

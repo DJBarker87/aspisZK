@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitFront46.lean:44:46: error: Tactic `rfl` failed: The left-hand side
+  match Except.ok a✝ with
+  | Except.error e => ok (Except.error e)
+  | Except.ok out =>
+    match referenceValues f.y1 out with
+    | Except.error e => ok (Except.error e)
+    | Except.ok out => ok (Except.ok (out ++ suffix f))
+is not definitionally equal to the right-hand side
+  ok do
+    let out ← Except.ok a✝
+    let out ← referenceValues f.y1 out
+    Except.ok (out ++ suffix f)
+
+case ok
+api : API
+std : TrustedChunks api
+f : Fields
+a✝ : Bytes
+⊢ (match Except.ok a✝ with
+    | Except.error e => ok (Except.error e)
+    | Except.ok out =>
+      match referenceValues f.y1 out with
+      | Except.error e => ok (Except.error e)
+      | Except.ok out => ok (Except.ok (out ++ suffix f))) =
+    ok do
+      let out ← Except.ok a✝
+      let out ← referenceValues f.y1 out
+      Except.ok (out ++ suffix f)
+'R1Z.ProverCommitFront46.front_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitFront46.proof_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

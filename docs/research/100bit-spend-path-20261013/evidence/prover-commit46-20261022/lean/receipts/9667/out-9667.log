@@ -1,0 +1,22 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBatchGuard46.lean:30:19: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (xs ≠ [] ∧ Valid xs)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBatchGuard46.lean:34:2: error: Tactic `tauto` failed
+
+api : API
+std : TrustedBatch api
+xs : List U32
+⊢ (((xs ≠ [] ∧ xs.length ≤ 16) ∧ List.Pairwise (fun a b => ↑a < ↑b) xs) ∧ ∀ a ∈ xs, ↑a < 2 ^ 18) ↔ sorry = true
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBatchGuard46.lean:33:66: warning: This simp argument is unused:
+  Valid
+
+Hint: Omit it from the simp argument list.
+  simp only [guard, ̲std.slice_windows2_all_lt, ̲std.slice_iter_all_lt, ̲Bool.and_eq_true,
+      Bool.not_eq_true', ̲List.isEmpty_eq_false_iff, ̲decide_eq_true_eq,V̵a̵l̵i̵d̵,̵ ̲List.isChain_iff_pairwise]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitBatchGuard46.guard_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitBatchGuard46.model_consistent' does not depend on any axioms
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

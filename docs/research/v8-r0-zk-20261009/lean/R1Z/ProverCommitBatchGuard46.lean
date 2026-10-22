@@ -1,0 +1,44 @@
+import R1Z.ProverCommitBinaryBudget46
+import Mathlib.Data.List.Chain
+/-! D157's pure std windows/all observers at multiproof.rs:67-71. Predicates
+here are the used pure u32 comparisons; no effectful callback is trusted. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitBatchGuard46
+open Aeneas Aeneas.Std ProverCommitBinaryBudget46
+
+local instance : IsTrans U32 (fun a b => a.val < b.val) where
+  trans _ _ _ hab hbc := Nat.lt_trans hab hbc
+
+local instance (xs : List U32) : Decidable (Valid xs) :=
+  inferInstanceAs (Decidable (xs.Pairwise (fun a b => a.val<b.val) ∧
+    xs.length≤16 ∧ ∀ a∈xs, a.val<2^18))
+
+structure API where
+  windows2AllLt : List U32 → Bool
+  iterAllLt : List U32 → Nat → Bool
+
+structure TrustedBatch (api : API) : Prop where
+  slice_windows2_all_lt : ∀ xs,
+    api.windows2AllLt xs = decide (xs.IsChain (fun a b => a.val<b.val))
+  slice_iter_all_lt : ∀ xs bound,
+    api.iterAllLt xs bound = decide (∀ a∈xs, a.val<bound)
+
+def model : API where
+  windows2AllLt xs := decide (xs.IsChain (fun a b => a.val<b.val))
+  iterAllLt xs bound := decide (∀ a∈xs, a.val<bound)
+
+def guard (api : API) (xs : List U32) : Bool :=
+  !xs.isEmpty && decide (xs.length≤16) && api.windows2AllLt xs && api.iterAllLt xs (2^18)
+
+theorem guard_exact (api : API) (std : TrustedBatch api) (xs : List U32) :
+    guard api xs = decide (xs≠[] ∧ Valid xs) := by
+  apply Bool.eq_iff_iff.mpr
+  simp only [guard,std.slice_windows2_all_lt,std.slice_iter_all_lt,Bool.and_eq_true,
+    Bool.not_eq_true',List.isEmpty_eq_false_iff,decide_eq_true_eq,Valid,List.isChain_iff_pairwise]
+  tauto
+
+theorem model_consistent : TrustedBatch model := ⟨fun _ => rfl,fun _ _ => rfl⟩
+
+#print axioms guard_exact
+#print axioms model_consistent
+end R1Z.ProverCommitBatchGuard46
