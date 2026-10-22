@@ -1471,3 +1471,23 @@ axioms. Packet checker passed; no unchanged dependency was rebuilt. This is
 forward totality for the installed candidate dots slot, not complete query
 or caller totality. Candidate adoption, frozen-source lowering and global
 authentication/sampler/runtime/security composition remain open.
+
+
+## Actual per-block source decoder now matches the sampler words
+
+Primary review of `query31-byte-sampler-bridge-v1-20261022` checked the
+source statement and packet checker.
+`AspisR1QueryWordsSamplerBridgeV1.query_words_success_sampler_words18`
+proves a successful actual extracted query_words call returns the exact
+ordered eight words `SamplerWords.words 18 (decodeState block)` for that
+same byte block. It reuses the source byte-mask theorem and retained
+SamplerWordBridge.source_word / array roundtrip, so no independent byte
+interpretation or model-word equality is assumed. The record-by-record
+little-endian window and 18-bit mask correspondences are derived.
+
+Focused run: exit 0, 6.921s, peak aggregate RSS 3,268,329,472 bytes, swap 0,
+standard axioms; exact source/object pins and zero-missing selected closure
+retained. This closes the per-block decoder-value gap. The same DriverTrace
+first-stop/scanOut and finish-output composition is still in progress;
+complete query output, prior-prefix, production hash-wrapper and shared
+oracle law are not inferred from this local result.
