@@ -184,3 +184,24 @@ Only additive Lean and task tools/receipts changed. No shipped file, existing
 Lean module, session A candidate, shared object, wallet or key changed. No
 ELF rebuild trigger, host env J attempt, large build, full release replay,
 push, merge, or 100-bit/security closure claim. No JSON >5 MB is included.
+
+## Focused union, audit and finish
+
+`CheckpointBytes4Freeze` attempt 1: exit 0, wall 24.86700424971059 s,
+peak RSS 3543695360 bytes, swaps 0, source revision
+`92ace793e180cf85f2485d19f9197202083d866e`. Its 36 public/inherited axiom
+reports are all standard subsets. Four private helper reports are additionally
+checked in their defining-module receipts; every new theorem has a report.
+The union also prints the actual Result/Calls/Program interface signatures
+supporting the stated stage-boundary gap. Exact command, source/import/cache
+hashes and dependency fingerprints are in the freeze receipt and manifest.
+
+`python3 -B tools/ckpt-bytes4-20261022/audit.py` exits 0. It checks current
+source and owned dependency hashes, every final receipt/axiom report, absence
+of forbidden proof declarations/options, no shipped/candidate changes and no
+JSON over 5 MB. The 19-module focused union reuses pinned caches; it is not a
+coherent frozen-release replay. No unchanged full regression was rerun.
+
+The source-stage join and frozen Rust source-program interpretation remain
+explicitly false in audit-result.json. The current output adoption result
+is ready for the ordered-effect source-stage consumer identified above.
