@@ -7,8 +7,11 @@ mod publication32 {
     fn maps()->(IndexMap,BTreeMap<usize,Vec<u8>>) {
         let a:usize=kani::any();let b:usize=kani::any();
         let va=vec![kani::any::<u8>()];let vb=vec![kani::any::<u8>()];
-        let (xs,_)=index_insert(Vec::new(),a,va.clone(),0,Vec::new());
-        let (xs,_)=index_insert(xs,b,vb.clone(),0,Vec::new());
+        // Construct the sorted pre-state directly. This gate checks one
+        // transition, rather than symbolically re-running two setup transitions.
+        let xs=if a<b {vec![(a,va.clone()),(b,vb.clone())]}
+            else if a==b {vec![(b,vb.clone())]}
+            else {vec![(b,vb.clone()),(a,va.clone())]};
         let mut m=BTreeMap::new();m.insert(a,va);m.insert(b,vb);
         (xs,m)
     }
@@ -22,7 +25,7 @@ mod publication32 {
         assert_eq!(old,previous);
         assert_eq!(ys.len(),m.len());
         let mut at=0;
-        for (key,value) in m {assert_eq!(ys[at].0,key);assert_eq!(ys[at].1,value);at+=1;}
+        for (key,value) in &m {assert_eq!(&ys[at].0,key);assert_eq!(&ys[at].1,value);at+=1;}
     }
     #[kani::proof]
     #[kani::unwind(12)]
