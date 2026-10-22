@@ -1,7 +1,7 @@
 impl StateOnlyAttemptSecrets {
 fn candidate(mask_nonce:[u8;32])->Option<Result<Self,StateOnlyAttemptEntropyError>> {
             let mut bytes = Zeroizing::new([0u8; 64]);
-            if getrandom::fill(bytes.as_mut()).is_err() { return Some(Err(StateOnlyAttemptEntropyError::Os)); }
+            match getrandom::fill(bytes.as_mut()) {Ok(())=>(),Err(e)=>return Some(Err(e.into()))};
 
             let mut field_mask_entropy = Zeroizing::new([0u8; 32]);
             let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);

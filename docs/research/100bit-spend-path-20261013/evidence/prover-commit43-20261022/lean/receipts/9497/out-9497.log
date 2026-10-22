@@ -1,0 +1,76 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:65:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (do
+      let nodes ← Except.ok nodes
+      if List.length nodes > slot.cap then Except.error Error.parse
+        else Except.ok (out ++ nodes ++ List.replicate (slot.cap - List.length nodes) 0)) =
+    Except.ok result
+of `ok`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case ok
+out : Bytes
+slot : Slot
+result nodes : Bytes
+hn : slot.nodes = Except.ok nodes
+ok :
+  (do
+      let nodes ← Except.ok nodes
+      if List.length nodes > slot.cap then Except.error Error.parse
+        else Except.ok (out ++ nodes ++ List.replicate (slot.cap - List.length nodes) 0)) =
+    Except.ok result
+⊢ List.length result = List.length out + slot.cap
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:62:29: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [hn,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵] at ok
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:64:18: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [hn,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵] at ok
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:89:17: error: unsolved goals
+case cons.ok
+ss✝ : List Slot
+out : Bytes
+s : Slot
+ss : List Slot
+ih :
+  ∀ (initial : Except Error Bytes),
+    List.foldl (fun result slot => result.bind fun bytes => appendSlot bytes slot) initial ss = initial.bind (slots ss)
+bytes : Bytes
+⊢ List.foldl
+      (fun result slot =>
+        match result with
+        | Except.error err => Except.error err
+        | Except.ok v => appendSlot v slot)
+      (appendSlot bytes s) ss =
+    match appendSlot bytes s with
+    | Except.error err => Except.error err
+    | Except.ok v => slots ss v
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublish43.lean:89:59: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [List.foldl_cons, ̲Except.bind,i̵h̵,̵ ̲slots]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitPublish43.query_step' depends on axioms: [propext]
+'R1Z.ProverCommitPublish43.query_loop' does not depend on any axioms
+'R1Z.ProverCommitPublish43.query_exact' depends on axioms: [propext]
+'R1Z.ProverCommitPublish43.slot_length' depends on axioms: [sorryAx]
+'R1Z.ProverCommitPublish43.slots_loop' depends on axioms: [sorryAx]
+'R1Z.ProverCommitPublish43.slots_length' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverCommitPublish43.assemble_loop' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverCommitPublish43.proof_error' does not depend on any axioms
+'R1Z.ProverCommitPublish43.replay_error' does not depend on any axioms
+'R1Z.ProverCommitPublish43.replay_disagreement' does not depend on any axioms
+'R1Z.ProverCommitPublish43.merkle_collision' does not depend on any axioms
+'R1Z.ProverCommitPublish43.merge_error' does not depend on any axioms
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

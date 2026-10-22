@@ -10,7 +10,7 @@ end=s.index('\n        }\n        Err(StateOnlyAttemptEntropyError::RepeatedZero
 body=s[start:end]
 # Only return wrapping changes: native success exits the loop; owner transition
 # returns Some on terminal outcomes and None on the native fall-through edge.
-body=body.replace('getrandom::fill(bytes.as_mut())?;', 'if getrandom::fill(bytes.as_mut()).is_err() { return Some(Err(StateOnlyAttemptEntropyError::Os)); }')
+body=body.replace('getrandom::fill(bytes.as_mut())?;', 'match getrandom::fill(bytes.as_mut()) {Ok(())=>(),Err(e)=>return Some(Err(e.into()))};')
 body=body.replace('return Ok(Self {','return Some(Ok(Self {').replace('                });','                }));')
 out='impl StateOnlyAttemptSecrets {\nfn candidate(mask_nonce:[u8;32])->Option<Result<Self,StateOnlyAttemptEntropyError>> {\n'+body+'\n None\n}\n}\n'
 (H/'native-candidate.rs').write_text(out)
