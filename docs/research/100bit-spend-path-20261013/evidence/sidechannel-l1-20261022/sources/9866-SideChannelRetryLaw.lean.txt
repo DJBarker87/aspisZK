@@ -1,0 +1,133 @@
+import R1Z.SideChannelL1AttemptRecord
+import R0Z.FsAbortBounds
+
+/-! Exact finite-carrier hazard identities. The carrier may contain the
+whole ROM, raw tapes, adversarial policy and retained history. No iid,
+stationarity or fixed acceptance probability is assumed. Iterations are
+zero-based internally; human attempt k is index k-1. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.SideChannelRetryLaw
+open SideChannelL1AttemptRecord
+open R0Z.FsAbortBounds
+attribute [local instance] Classical.propDecidable
+variable {State Proof Sample : Type}
+
+/-- Counterfactual continuation states are harmless: only the prefix before
+first success/non-Rejected error is entered. Every actual update is retained. -/
+def stateAt (owner : Owner State Proof) (initial : State) : Nat → State
+  | 0 => initial
+  | k+1 => (owner k (stateAt owner initial k)).2
+
+def recordAt (owner : Owner State Proof) (initial : State) (k : Nat) :=
+  (owner k (stateAt owner initial k)).1
+
+def reached (owner : Owner State Proof) (initial : State) : Nat → Prop
+  | 0 => True
+  | k+1 => reached owner initial k ∧ (recordAt owner initial k).result = .retry
+
+def rejectionPrefix (owner : Owner State Proof) (initial : State) (k : Nat) : Prop :=
+  ∀ j, j < k → (recordAt owner initial j).result = .retry
+
+theorem reached_iff (owner : Owner State Proof) (initial : State) (k : Nat) :
+    reached owner initial k ↔ rejectionPrefix owner initial k := by
+  induction k with
+  | zero => simp [reached,rejectionPrefix]
+  | succ k ih =>
+    rw [reached,ih]
+    constructor
+    · rintro ⟨prefix,last⟩ j hj
+      rcases Nat.lt_succ_iff_lt_or_eq.mp hj with before | same
+      · exact prefix j before
+      · simpa only [same] using last
+    · intro prefix
+      exact ⟨fun j hj => prefix j (Nat.lt_succ_of_lt hj),prefix k (Nat.lt_succ_self k)⟩
+
+/-- This is the exact native step recurrence from the erased richer owner.
+Callback errors are already stop, even if their error label is Rejected. -/
+theorem entered_rejection_advances (owner : Owner State Proof) (initial : State)
+    (k : Nat) (prefix : reached owner initial k)
+    (retry : (recordAt owner initial k).result = .retry) :
+    reached owner initial (k+1) := ⟨prefix,retry⟩
+
+theorem callback_abort_blocks_next (owner : Owner State Proof) (initial : State)
+    (k : Nat) (e : Error)
+    (stop : (recordAt owner initial k).result = .stop e) :
+    ¬ reached owner initial (k+1) := by
+  rintro ⟨_,retry⟩
+  rw [stop] at retry
+  cases retry
+
+abbrev mass [Fintype Sample] (event : Sample → Prop) := R0Z.FsAbortBounds.mass event
+
+/-- Zero-mass conditioning uses the conventional value zero; the product
+identity remains true, so no impossible history is excluded. -/
+def hazard [Fintype Sample] (prefix event : Sample → Prop) : ℚ :=
+  mass (fun s => prefix s ∧ event s) / mass prefix
+
+theorem conditional_identity [Fintype Sample] (prefix event : Sample → Prop) :
+    mass (fun s => prefix s ∧ event s) = mass prefix * hazard prefix event := by
+  by_cases zero : mass prefix = 0
+  · have bound := mass_mono (fun s => prefix s ∧ event s) prefix (fun _ h => h.1)
+    have nonneg := mass_nonneg (fun s => prefix s ∧ event s)
+    have null : mass (fun s => prefix s ∧ event s) = 0 := le_antisymm (zero ▸ bound) nonneg
+    simp only [null,zero,zero_mul]
+  · unfold hazard
+    field_simp
+
+/-- Human attempt k ranges from one through eight. All randomness and
+history dependence stays in owners/initial, hence in the conditional hazard. -/
+def C (owners : Sample → Owner State Proof) (initial : Sample → State) (k : Nat) : Sample → Prop :=
+  fun s => rejectionPrefix (owners s) (initial s) (k-1)
+
+def S (owners : Sample → Owner State Proof) (initial : Sample → State) (k : Nat) : Sample → Prop :=
+  fun s => ∃ proof, (recordAt (owners s) (initial s) (k-1)).result = .done proof
+
+def E (owners : Sample → Owner State Proof) (initial : Sample → State) (k : Nat) (e : Error) : Sample → Prop :=
+  fun s => (recordAt (owners s) (initial s) (k-1)).result = .stop e
+
+theorem success_hazard [Fintype Sample] (owners : Sample → Owner State Proof)
+    (initial : Sample → State) (k : Fin 8) :
+    mass (fun s => C owners initial (k.val+1) s ∧ S owners initial (k.val+1) s) =
+      mass (C owners initial (k.val+1)) *
+        hazard (C owners initial (k.val+1)) (S owners initial (k.val+1)) :=
+  conditional_identity _ _
+
+theorem abort_hazard [Fintype Sample] (owners : Sample → Owner State Proof)
+    (initial : Sample → State) (k : Fin 8) (e : Error) :
+    mass (fun s => C owners initial (k.val+1) s ∧ E owners initial (k.val+1) e s) =
+      mass (C owners initial (k.val+1)) *
+        hazard (C owners initial (k.val+1)) (E owners initial (k.val+1) e) :=
+  conditional_identity _ _
+
+theorem entry_law [Fintype Sample] (owners : Sample → Owner State Proof)
+    (initial : Sample → State) (k : Fin 8) :
+    mass (fun s => reached (owners s) (initial s) k.val) =
+      mass (C owners initial (k.val+1)) := by
+  apply mass_congr
+  intro s
+  simpa only [C,Nat.add_sub_cancel] using reached_iff (owners s) (initial s) k.val
+
+/-- All eight rejections, not a power of one unconditional rejection mass. -/
+theorem exhaustion_prefix (owner : Owner State Proof) (initial : State) :
+    reached owner initial 8 ↔ ∀ k : Fin 8, (recordAt owner initial k.val).result = .retry := by
+  rw [reached_iff]
+  exact ⟨fun h k => h k.val k.isLt,fun h j hj => h ⟨j,hj⟩⟩
+
+/-- History-conditioned identities use the SAME history on both factors;
+this handles callback faults and all precise failure-origin predicates too. -/
+theorem history_hazard [Fintype Sample] (history prefix event : Sample → Prop) :
+    mass (fun s => (history s ∧ prefix s) ∧ event s) =
+      mass (fun s => history s ∧ prefix s) *
+        hazard (fun s => history s ∧ prefix s) event := conditional_identity _ _
+
+#print axioms reached_iff
+#print axioms entered_rejection_advances
+#print axioms callback_abort_blocks_next
+#print axioms conditional_identity
+#print axioms success_hazard
+#print axioms abort_hazard
+#print axioms entry_law
+#print axioms exhaustion_prefix
+#print axioms history_hazard
+end R1Z.SideChannelRetryLaw

@@ -43,3 +43,19 @@ TLS append/count/retention semantics. **Not established:** every native
 callee emits the declared record, honest-domain constant guards, or joint
 privacy of this record. `source-map.json` is a manual source map, not a
 source-refinement proof. It does not discharge those obligations.
+
+## Stage 2 — conditional retry identities
+
+`R1Z/SideChannelRetryLaw.lean` proves the rejection-prefix characterization,
+callback-stop rule, cap-exhaustion execution and the audit's conditional
+success/abort/entry identities for every `k : Fin 8` (human attempt k+1).
+The finite carrier can retain the entire ROM, policy, ledger and seed tape;
+no independence or stationarity premise is added. History-conditioned
+identities and arbitrary failure-origin predicates use the same conditional
+mass. Zero-mass prefixes are handled without excluding them.
+
+J9867 passes: ten audited theorems, standard axioms, wall 1.79s,
+peak RSS 4,169,768 KiB, swaps 0. J9866 failed because `prefix` is a Lean
+syntax keyword; renamed the binder. The identities are exact for this
+instrumented terminating reference. They do not supply any numerical
+acceptance hazard or discharge native callee/event refinement.
