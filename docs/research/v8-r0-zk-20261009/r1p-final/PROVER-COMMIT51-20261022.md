@@ -24,3 +24,19 @@ wall time, peak RSS, swap and full printed axioms are recorded in
 `lean/attempts.json` and `lean/receipts/` in that evidence directory.
 All jobs use MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64;
 Lean retains the 7000 MiB internal limit. No cap increase is used.
+
+## Stage 2: symbolic caller split
+
+The old J10298 failed at `ProverCommitMaskArithmetic50.caller` with kernel
+excessive memory consumption: exit 1, 19.10 s, 7170376 KiB, zero swaps.
+The replacement first proves `ProverCommitBind51.three` over an arbitrary
+carrier and arbitrary Result-valued callees. Concrete source conversion,
+array construction, and all three callees are locally opaque at the composition
+boundary. No large computation is reduced; the existing individual arithmetic
+proofs are reused. `ProverCommitMaskArithmetic51.caller` keeps the exact old
+coefficient-law premise, input quantifiers and conclusion. It passes J10311:
+exit 0, 1.82 s, 4046236 KiB, zero swaps, standard axioms only.
+J10307/08 are rejected symbolic let-normalization drafts; J10310 proves the
+corrected helper. J10309 is retired before compilation (missing dependency
+object). The coefficient producer remains the next obligation; this conditional
+caller is not complete native selected-mask success.
