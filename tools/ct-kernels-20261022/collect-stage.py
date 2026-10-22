@@ -16,8 +16,13 @@ for p in sorted((E/'receipts').glob('*/receipt.json')):
  assert r['limits']=={'memory.high':str(6*2**30),'memory.max':str(8*2**30),'memory.swap.max':'0','pids.max':'64'}
  rows.append({k:r[k] for k in ['attempt','target','source_revision','exit_status','wall_seconds','peak_rss_kib','cgroup_memory_peak_bytes','swaps','print_axioms']})
 assert len(rows)>=5,rows
+failed=[r for r in rows if r['exit_status']]
+if stage=='v2':
+ assert [(r['attempt'],r['exit_status']) for r in failed]==[('v2-pole-regression',101)],failed
+else:
+ assert not failed,failed
 assert all(r['byte_equal'] and r['expected_sha256']==r['sha256'] for r in json.loads((E/'elf-identities.json').read_text()))
 assert json.loads((E/'fixture-identities.json').read_text())['proof_and_public_byte_identity']
-(E/'summary.json').write_text(json.dumps(dict(stage=stage,status='passes at documented per-step and source L2 boundary',attempts=rows),indent=2)+'\n')
+(E/'summary.json').write_text(json.dumps(dict(stage=stage,status='accepted gates pass at documented compositional/source boundary; failed scope attempt retained separately',failed_attempts=[r['attempt'] for r in failed],attempts=rows),indent=2)+'\n')
 (E/'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+str(p.relative_to(E))+'\n' for p in sorted(E.rglob('*')) if p.is_file() and p.name!='SHA256SUMS'))
 print(json.dumps(dict(stage=stage,attempts=len(rows),evidence=str(E))))
