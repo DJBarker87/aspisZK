@@ -8684,3 +8684,23 @@ there are new Kani equivalence gates, and the deterministic exact checker stays
 (no randomized checking). P_R1 inputs are public challenges, so its trace falls under the D166
 simulatable-trace route. Workers change the thread model, so the TLS
 single-thread trust item must be re-examined (v2 already gates TLS recording off).
+
+## D171 (lead, 2026-10-22 20:45): P_R1 speedup on the v2 candidate, 37 s to 17.5 s
+
+On `codex/cx-ct-kernels-v2-20261022` (unmerged candidate; `design/PR1-SPEED-20261022.md`):
+step 1 (descriptor sharing) gave no gain and was reverted, with the negative result
+kept. Step 2 adds exact blocked arithmetic with two-fold Mersenne reduction (five Kani
+obligations). Step 3 adds bounded deterministic workers (at most 16 threads, fixed merge
+order) across emitter families, target rows, converter images, checker rows and
+builder columns. Median of 3 runs: P_R1 12.24/12.49 s, end-to-end **17.49/17.58 s**
+(transfer/withdrawal), from about 37–39 s. Every step: 1,000-challenge differential
+with zero verdict mismatches, byte-identical proof and public bytes, strict
+and dense verification, all three ELF pins rebuilt identical. An earlier stage-3
+form measured 16.0 s but did needless work on rejecting challenges. The final form
+fixes that at about +1.5 s on the accepting path; this trade-off is to be revisited.
+Under 15 s is not met yet. Remaining large items: emitter insertion (largest
+P_R1 phase), and the non-P_R1 remainder of about 5 s (semantic sumcheck point claims
+about 2.1 s over 28k independent evaluations; 29 lane encodings about 1 s), both
+parallelisable over public shapes. Trust note: the prover is now explicitly
+multithreaded in P_R1, on public data only. The TLS single-thread item is restated
+to cover only the gated-off recorder; the quiet panic hook covers the workers.
