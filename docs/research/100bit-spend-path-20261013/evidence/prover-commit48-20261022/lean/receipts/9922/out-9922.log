@@ -1,0 +1,137 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:13:49: error: Type mismatch
+  sourceArray size (Function.update xs (↑i) z)
+has type
+  Std.Array Source size
+but is expected to have type
+  _root_.Array Source
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:13:4: error: could not synthesize default value for parameter 'h' using tactics
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:13:4: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+size : Usize
+xs : ℕ → Raw
+i : Usize
+z : Raw
+⊢ ↑i < Array.size ?m.2
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:13:14: error: Application type mismatch: The argument
+  sourceArray size xs
+has type
+  Std.Array Source size
+but is expected to have type
+  _root_.Array Source
+in the application
+  @Array.set Source (sourceArray size xs)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:56:93: error(lean.unknownIdentifier): Unknown identifier `set_source`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:55:6: error: unsolved goals
+case pos.refine_1
+size : Usize
+capacity : ↑size ≤ 256
+x : Raw
+hx : canonical x
+xs : ℕ → Raw
+hxs : ∀ k < ↑size, canonical (xs k)
+p : Raw
+hp : canonical p
+left : U8
+i : Usize
+hi : ↑i < ↑size
+hn : left ≠ 0#u8
+next : ℕ → Raw := Function.update xs (↑i) p
+hcnext : ∀ k < ↑size, canonical (next k)
+ih :
+  ∀ (xs : ℕ → Raw),
+    (∀ k < ↑size, canonical (xs k)) →
+      ∀ (p : Raw),
+        canonical p →
+          ∀ (left : U8),
+            ↑left = 0 →
+              ∀ (i : Usize),
+                ↑i + 0 ≤ ↑size →
+                  ∃ ys,
+                    power_fill (sourceArray size xs) (source x) (source p) i left = ok (sourceArray size ys) ∧
+                      (∀ k < ↑size, canonical (ys k)) ∧
+                        ∀ k < ↑size,
+                          value (ys k) = if ↑i ≤ k ∧ k < ↑i + 0 then value p * value x ^ (k - ↑i) else value (xs k)
+hleft : ↑left = 0 + 1
+bound : ↑i + (0 + 1) ≤ ↑size
+hlast : left = 1#u8
+⊢ (if 1#u8 = 0#u8 then ok (sourceArray size xs)
+    else
+      let (_, index_mut_back) := (source (xs ↑i), (sourceArray size xs).set i)
+      ok (index_mut_back (source p))) =
+    ok (sourceArray size next)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:59:8: error: unsolved goals
+case pos
+size : Usize
+capacity : ↑size ≤ 256
+x : Raw
+hx : canonical x
+xs : ℕ → Raw
+hxs : ∀ k < ↑size, canonical (xs k)
+p : Raw
+hp : canonical p
+left : U8
+i : Usize
+hi : ↑i < ↑size
+hn : left ≠ 0#u8
+next : ℕ → Raw := Function.update xs (↑i) p
+hcnext : ∀ k < ↑size, canonical (next k)
+ih :
+  ∀ (xs : ℕ → Raw),
+    (∀ k < ↑size, canonical (xs k)) →
+      ∀ (p : Raw),
+        canonical p →
+          ∀ (left : U8),
+            ↑left = 0 →
+              ∀ (i : Usize),
+                ↑i + 0 ≤ ↑size →
+                  ∃ ys,
+                    power_fill (sourceArray size xs) (source x) (source p) i left = ok (sourceArray size ys) ∧
+                      (∀ k < ↑size, canonical (ys k)) ∧
+                        ∀ k < ↑size,
+                          value (ys k) = if ↑i ≤ k ∧ k < ↑i + 0 then value p * value x ^ (k - ↑i) else value (xs k)
+hleft : ↑left = 0 + 1
+bound : ↑i + (0 + 1) ≤ ↑size
+hlast : left = 1#u8
+hk : ↑i < ↑size
+⊢ value p = if ↑i ≤ ↑i ∧ ↑i < ↑i + (0 + 1) then value p else value (xs ↑i)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:70:85: error(lean.unknownIdentifier): Unknown identifier `set_source`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:71:8: error: Type mismatch
+  hy
+has type
+  power_fill (sourceArray size next) (source x) (source product) (i.wrapping_add 1#usize) (left.wrapping_sub 1#u8) =
+    ok (sourceArray size ys)
+but is expected to have type
+  (let (_, index_mut_back) := (source (xs ↑i), (sourceArray size xs).set i)
+    power_fill (index_mut_back (source p)) (source x) (source product) (i.wrapping_add 1#usize)
+      (left.wrapping_sub 1#u8)) =
+    ok (sourceArray size ys)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:56:19: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵,̵if_false, ̲Array.index_mut_usize, ̲index _ _ i hi, ̲bind_tc_ok, ̲hlast, ̲if_true,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲set_source]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:56:22: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵n̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵_̵u̵s̵i̵z̵e̵,̵i̵n̵d̵e̵x̵[̲h̲n̲,̲ ̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲_̲u̲s̲i̲z̲e̲,̲ ̲i̲n̲d̲e̲x̲ _ _ i h̵i̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵l̵a̵s̵t̵,̵i̵f̵_̵t̵r̵u̵e̵,̵s̵e̵t̵_̵s̵o̵u̵r̵c̵e̵]̵h̲i̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲l̲a̲s̲t̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲s̲e̲t̲_̲s̲o̲u̲r̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:59:55: warning: This simp argument is unused:
+  if_pos (by omega)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵e̵x̵t̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵s̵e̵l̵f̵,̵i̵f̵_̵p̵o̵s̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵)̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵p̵o̵w̵_̵z̵e̵r̵o̵,̵m̵u̵l̵_̵o̵n̵e̵]̵[̲n̲e̲x̲t̲,̲ ̲F̲u̲n̲c̲t̲i̲o̲n̲.̲u̲p̲d̲a̲t̲e̲_̲s̲e̲l̲f̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲ ̲p̲o̲w̲_̲z̲e̲r̲o̲,̲ ̲m̲u̲l̲_̲o̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:86:14: error(lean.unknownIdentifier): Unknown constant `set_source`
+'R1Z.ProverCommitPowers48.fill_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

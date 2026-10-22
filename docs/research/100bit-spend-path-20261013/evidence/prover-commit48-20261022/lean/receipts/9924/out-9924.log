@@ -1,0 +1,131 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:57:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (sourceArray ?size ?xs).set ?i (source ?z)
+in the target expression
+  (if 1#u8 = 0#u8 then ok (sourceArray size xs)
+    else
+      let (_, index_mut_back) := (source (xs ↑i), (sourceArray size xs).set i)
+      ok (index_mut_back (source p))) =
+    ok (sourceArray size next)
+
+case pos.refine_1
+size : Usize
+capacity : ↑size ≤ 256
+x : Raw
+hx : canonical x
+xs : ℕ → Raw
+hxs : ∀ k < ↑size, canonical (xs k)
+p : Raw
+hp : canonical p
+left : U8
+i : Usize
+hi : ↑i < ↑size
+hn : left ≠ 0#u8
+next : ℕ → Raw := Function.update xs (↑i) p
+hcnext : ∀ k < ↑size, canonical (next k)
+ih :
+  ∀ (xs : ℕ → Raw),
+    (∀ k < ↑size, canonical (xs k)) →
+      ∀ (p : Raw),
+        canonical p →
+          ∀ (left : U8),
+            ↑left = 0 →
+              ∀ (i : Usize),
+                ↑i + 0 ≤ ↑size →
+                  ∃ ys,
+                    power_fill (sourceArray size xs) (source x) (source p) i left = ok (sourceArray size ys) ∧
+                      (∀ k < ↑size, canonical (ys k)) ∧
+                        ∀ k < ↑size,
+                          value (ys k) = if ↑i ≤ k ∧ k < ↑i + 0 then value p * value x ^ (k - ↑i) else value (xs k)
+hleft : ↑left = 0 + 1
+bound : ↑i + (0 + 1) ≤ ↑size
+hlast : left = 1#u8
+⊢ (if 1#u8 = 0#u8 then ok (sourceArray size xs)
+    else
+      let (_, index_mut_back) := (source (xs ↑i), (sourceArray size xs).set i)
+      ok (index_mut_back (source p))) =
+    ok (sourceArray size next)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:74:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (sourceArray ?size ?xs).set ?i (source ?z)
+in the target expression
+  (let (_, index_mut_back) := (source (xs ↑i), (sourceArray size xs).set i)
+    power_fill (index_mut_back (source p)) (source x) (source product) (i.wrapping_add 1#usize)
+      (left.wrapping_sub 1#u8)) =
+    ok (sourceArray size ys)
+
+case neg.refine_1
+size : Usize
+capacity : ↑size ≤ 256
+x : Raw
+hx : canonical x
+n : ℕ
+ih :
+  ∀ (xs : ℕ → Raw),
+    (∀ k < ↑size, canonical (xs k)) →
+      ∀ (p : Raw),
+        canonical p →
+          ∀ (left : U8),
+            ↑left = n →
+              ∀ (i : Usize),
+                ↑i + n ≤ ↑size →
+                  ∃ ys,
+                    power_fill (sourceArray size xs) (source x) (source p) i left = ok (sourceArray size ys) ∧
+                      (∀ k < ↑size, canonical (ys k)) ∧
+                        ∀ k < ↑size,
+                          value (ys k) = if ↑i ≤ k ∧ k < ↑i + n then value p * value x ^ (k - ↑i) else value (xs k)
+xs : ℕ → Raw
+hxs : ∀ k < ↑size, canonical (xs k)
+p : Raw
+hp : canonical p
+left : U8
+hleft : ↑left = n + 1
+i : Usize
+bound : ↑i + (n + 1) ≤ ↑size
+hi : ↑i < ↑size
+hn : left ≠ 0#u8
+next : ℕ → Raw := Function.update xs (↑i) p
+hcnext : ∀ k < ↑size, canonical (next k)
+nz : ¬n = 0
+hmore : left ≠ 1#u8
+hdec : ↑(left.wrapping_sub 1#u8) = n
+hinc : ↑(i.wrapping_add 1#usize) = ↑i + 1
+product : Raw
+hprod : field.wide_exact.WideExact.mul (source p) (source x) = ok (source product)
+hcprod : canonical product
+hdprod : value product = value p * value x
+ys : ℕ → Raw
+hy :
+  power_fill (sourceArray size next) (source x) (source product) (i.wrapping_add 1#usize) (left.wrapping_sub 1#u8) =
+    ok (sourceArray size ys)
+hcy : ∀ k < ↑size, canonical (ys k)
+hval :
+  ∀ k < ↑size,
+    value (ys k) =
+      if ↑(i.wrapping_add 1#usize) ≤ k ∧ k < ↑(i.wrapping_add 1#usize) + n then
+        value product * value x ^ (k - ↑(i.wrapping_add 1#usize))
+      else value (next k)
+⊢ (let (_, index_mut_back) := (source (xs ↑i), (sourceArray size xs).set i)
+    power_fill (index_mut_back (source p)) (source x) (source product) (i.wrapping_add 1#usize)
+      (left.wrapping_sub 1#u8)) =
+    ok (sourceArray size ys)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPowers48.lean:56:25: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [hlast, ̲if_f̵a̵l̵s̵e̵,̵i̵f̵_̵true, ̲Array.index_mut_usize, ̲index _ _ i hi, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverCommitPowers48.set_source' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitPowers48.fill_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

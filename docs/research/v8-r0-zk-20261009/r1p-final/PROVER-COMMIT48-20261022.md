@@ -120,3 +120,43 @@ the source gamma-power producer or source coefficient arrays have already
 been identified with the full model trace. Those producer bindings remain
 explicit work, as do the fold-array value induction and remaining semantic
 and opening fields.
+
+## Stage 4: complete primal folds, powers, and initializer boundary
+
+J9917 / J9921 prove both counter owners' finite denotation and the generic
+interval value invariant. J9929 composes all 256 first-fold and 64 second-fold
+cells and proves each full-width final cell's exact 32-byte image, in
+`ProverCommitFoldOutput48.fin_bytes`. The input mixed coefficients still have
+to be composed with the actual native coefficient/mix caller and the retained
+R1 batched payload. This is a fold-kernel image, not the complete model payload.
+
+The power owner translates without external templates. `bind-powers.py`
+compares reused field bodies and records the nominal `fill` → `power_fill`
+rename, avoiding a collision with the existing basis owner. Native gamma and
+kappa transition checks pass (2.325 / 1.129 s, 172024 / 172488 KiB RSS, zero
+swaps), including the last iteration's return without another multiplication.
+J9925 proves the entire owned counter by symbolic array update induction;
+J9928 proves both complete source-owner power arrays equal the exact field
+powers, for arbitrary full-width canonical input. No power-array or
+callee-success hypothesis is supplied. J9918–J9919 and J9922–J9924 are
+rejected syntax, carrier-resolution, and let-pattern drafts; J9926 has an
+unresolved final conditional rewrite. They are not accepted proof evidence.
+J9927 is a dependency-preflight refusal, with no compiler attempt, because
+J9926 had failed. Its proposed input is retained; its number is retired.
+
+`Weights::new` uses unsafe partial initialization, outside D157's pure-std
+permission. Its literal constructor body is therefore checked directly with
+full native QM31-shaped fields, arbitrary canonical arithmetic results and
+arbitrary canonical statement-point helper output. All initialized fields
+are read and checked, and variant/points/extras are preserved. This focused
+Kani gate passes (28.034 s, 2016128 KiB RSS, zero swaps). It supplies no
+weight-value/model equality, allocation-totality, or privacy claim. Its first
+invocation is a compiler rejection because the stubbing flag was absent;
+the replacement enables that feature without changing or raising resource
+limits. No unsafe std law is added.
+
+A native fixed-inverse-chain context gate also passes (0.954 s, 138244 KiB
+RSS, zero swaps) with the raw-zero assertion retained. This is only the
+callee-trace context gate. The retained S7 inverse theorem and its immediate
+helper objects are absent from the shared env-J cache; no complete inverse
+source binding or interpolation certificate is attributed to this check.

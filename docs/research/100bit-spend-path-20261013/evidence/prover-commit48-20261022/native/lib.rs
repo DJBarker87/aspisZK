@@ -53,3 +53,4 @@ include!("iterations.rs");
  }
 }
 include!("opening-iterations.rs");
+include!("powers-iterations.rs");

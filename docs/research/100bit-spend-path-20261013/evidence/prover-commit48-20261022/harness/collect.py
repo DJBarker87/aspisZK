@@ -21,7 +21,7 @@ for pin in sorted((E/'pins').glob('lean-*.json')):
   records.append(rec)
   continue
  for kind,ext in [('out','log'),('time','log'),('sha','txt')]:
-  if not (dest/(kind+'-'+a+'.'+ext)).exists():
+  if True:  # Refresh text receipts, including a log previously copied before completion.
    subprocess.run(['scp','-q',HOST+':/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/'+kind+'-'+a+'.'+ext,str(dest)],check=True)
  log=(dest/('out-'+a+'.log')).read_text();tl=(dest/('time-'+a+'.log')).read_text()
  def field(s):

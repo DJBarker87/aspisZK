@@ -31,3 +31,4 @@ pub mod field;
  fn qm_from_m31(value:M31)->QM31 {QM31::from_cm31(cm_from_m31(value))}
  fn wide_from_m31(value:M31)->E {E::from_qm31(qm_from_m31(value))}
 }
+include!("weights-init.rs");
