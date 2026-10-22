@@ -83,3 +83,9 @@ Final build results, raw duplicate scan and closure validation are recorded
 alongside this file after completion. `summarize-release.py` validates those
 receipts without rerunning Lean. Exact per-module AGENTS fields belong in
 `release-targets.json`; final aggregate fields belong in `summary.json`.
+
+The immediately dependent `ScheduleProgram.same_boxed_source_success` exposed
+the same finite tuple-let boundary at IU-330. Its proof now explicitly states
+the definitionally equal one-write bind chain, then uses `hwrites` and
+`bind_tc_ok`; focused IU-331 passes. Statement, hypotheses and witnesses are
+unchanged. Its failure and replacement are retained with the prefix repair.

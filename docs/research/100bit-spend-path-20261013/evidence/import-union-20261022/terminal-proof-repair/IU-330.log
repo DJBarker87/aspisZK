@@ -1,0 +1,111 @@
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/ScheduleProgram.lean:56:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/ScheduleProgram.lean:91:2: error: unsolved goals
+case refine_1
+point : Std.Array QM 10#usize
+selectors : Selectors
+public1 : Public
+openings : Openings
+hpoint : CanonicalArray point
+hbox : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = ok selectors
+hz : CanonicalArray openings.z
+hzCells : ∀ (i : Fin 16), Canonical (sourceCell openings.z i)
+p : InitialSelectorPrefix.Registers SumHighInnerLoop.QM
+hprefix : InitialSelectorPrefix.run public1.variant selectors = ok p
+hcp : InitialSelectorPrefix.canonicalRegisters p
+hmp :
+  InitialSelectorPrefix.decodeRegisters p =
+    InitialSelectorPrefix.model (InitialVariantExact.modelVariant public1.variant)
+      (InitialSelectorPrefix.pointSelector point)
+_hc0 : SumHighInnerLoop.Canonical p.high0
+_hc1 : SumHighInnerLoop.Canonical p.high1
+_hc25 : SumHighInnerLoop.Canonical p.high25
+_hc30 : SumHighInnerLoop.Canonical p.high30
+_hcnodes : SumHighInnerLoop.Canonical p.nodes
+_hct : SumHighInnerLoop.Canonical p.transfer
+_hcfixed : SumHighInnerLoop.Canonical p.fixed
+_hc8 : SumHighInnerLoop.Canonical p.privateEight
+_hc2 : SumHighInnerLoop.Canonical p.privateTwo
+hclow : SumHighInnerLoop.Canonical p.low0
+hcfull : SumHighInnerLoop.Canonical p.full
+hcrate : SumHighInnerLoop.Canonical p.rate
+expected : InitialSelectorPrefix.Registers SelectorValueLaneModelComposition.ExactQM :=
+  InitialSelectorPrefix.model (modelVariant public1.variant) (pointSelector point)
+hfull : decode p.full = expected.full
+hrate : decode p.rate = expected.rate
+hlow : decode p.low0 = expected.low0
+initial : Std.Array InitialArrayExecution.QM 16#usize
+hinitial : InitialArrayExecution.run p.full p.rate openings = ok initial
+hcinitial : ∀ (i : Fin 16), Canonical (sourceCell initial i)
+hvinitial :
+  ∀ (i : Fin 16),
+    decode (sourceCell initial i) =
+      (if ↑i < 8 then decode p.full + decode p.rate else decode p.full) * decode (sourceCell openings.z i)
+domain length : ScheduleDomainArithmetic.QM
+hdomain : ScheduleDomainArithmetic.run p.high0 p.high1 p.high25 p.high30 p.transfer = ok (domain, length)
+hcdomain : ScheduleDomainToModel.Canonical domain
+hclength : ScheduleDomainToModel.Canonical length
+hvdomain :
+  decode domain =
+    ScheduleDomainToModel.domainModel
+      (InitialSelectorPrefix.model (InitialVariantExact.modelVariant public1.variant)
+        (InitialSelectorPrefix.pointSelector point))
+hvlength :
+  decode length =
+    ScheduleDomainToModel.lengthModel
+      (InitialSelectorPrefix.model (InitialVariantExact.modelVariant public1.variant)
+        (InitialSelectorPrefix.pointSelector point))
+initial1 : Std.Array InitialArrayWrites.QM 16#usize
+hwrites : InitialArrayWrites.run initial p.low0 domain length = ok initial1
+hcinitial1 : ∀ (i : Fin 16), InitialArrayWrites.Canonical (sourceCell initial1 i)
+hvwrites :
+  ∀ (i : Fin 16),
+    decode (sourceCell initial1 i) =
+      if ↑i = 8 then decode (sourceCell initial i) - decode p.low0 * decode domain
+      else
+        if ↑i = 9 then decode (sourceCell initial i) - decode p.low0 * decode length else decode (sourceCell initial i)
+a : AbsorptionSelectorSetup.Registers AbsorptionSelectorSetup.QM
+hsetup : AbsorptionSelectorSetup.run p selectors = ok a
+hma :
+  AbsorptionSelectorSetup.decodeRegisters a =
+    AbsorptionSelectorSetup.model (modelVariant public1.variant) (AbsorptionSelectorSetup.pointSelector point)
+hcalow : AbsorptionSelectorSetup.Canonical a.low
+hcafixed : AbsorptionSelectorSetup.Canonical a.fixed
+hcatwo : AbsorptionSelectorSetup.Canonical a.two
+hcaeight : AbsorptionSelectorSetup.Canonical a.eight
+hcanodes : AbsorptionSelectorSetup.Canonical a.nodes
+absorption : Std.Array AbsorptionCallback.QM 16#usize
+habsorption :
+  AspisR1AbsorptionCandidate.pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal a.low a.fixed a.two a.eight
+      a.nodes openings.z =
+    ok absorption
+hcabsorption : ∀ (i : Fin 16), Canonical (sourceCell absorption i)
+hvabsorption :
+  ∀ (i : Fin 16),
+    decode (sourceCell absorption i) =
+      R0P.scheduleAbsorptionLiteral (decode a.low) (decode a.fixed) (decode a.two) (decode a.eight) (decode a.nodes)
+        (fun j => decode (sourceCell openings.z j)) i
+expectedA : AbsorptionSelectorSetup.Registers SelectorValueLaneModelComposition.ExactQM :=
+  AbsorptionSelectorSetup.model (modelVariant public1.variant) (pointSelector point)
+halow : decode a.low = expectedA.low
+hafixed : decode a.fixed = expectedA.fixed
+hatwo : decode a.two = expectedA.two
+haeight : decode a.eight = expectedA.eight
+hanodes : decode a.nodes = expectedA.nodes
+hzModel : (fun i => decode (sourceCell openings.z i)) = (exactOpenings openings).z
+hinitialModel :
+  ∀ (i : Fin 16), decode (sourceCell initial i) = ScheduleInitialModel.baseValue expected (exactOpenings openings).z i
+⊢ (let (domain, length) := (domain, length)
+    do
+    let initial1 ← InitialArrayWrites.run initial p.low0 domain length
+    ok (initial1, absorption)) =
+    ok (initial1, absorption)
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/ScheduleProgram.lean:92:60: warning: This simp argument is unused:
+  hwrites
+
+Hint: Omit it from the simp argument list.
+  simp only [run, hprefix, bind_tc_ok, hinitial, hdomain, hw̵r̵i̵t̵e̵s,̵ ̵h̵s̵etup, habsorption]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ScheduleProgram.same_boxed_source_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
