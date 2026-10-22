@@ -139,6 +139,10 @@ pub fn ents_ok(
     out: &[u32],
     zero: &[u32],
 ) -> bool {
+    #[cfg(feature="native-workers")]
+    if !native_workers::is_worker() && m >= native_workers::THREADS*2 && m <= 1 << 20 {
+        return native_workers::ordered_map(m, |e| ents_ok(&ej[e..e+1],&es[e..e+1],&epo[e..e+1],&eco[e..e+1],idx,coef,1,lane,wl,z1,s1,z2,s2,n2,g,sg,ng,&out[e*ng..],zero)).into_iter().fold(true, |a,b| a & b);
+    }
     let mut ok = true;
     let mut e: usize = 0;
     while e < m {
@@ -192,6 +196,10 @@ pub fn prod_row_ok(a: &[u32], ao: usize, b: &[u32], bo: usize, c: &[u32], co: us
 
 /// A (ni x len) * B (len x nj) == C (ni x nj), row-major, at offsets.
 pub fn prod_ok(a: &[u32], ao: usize, b: &[u32], bo: usize, c: &[u32], co: usize, ni: usize, nj: usize, len: usize) -> bool {
+    #[cfg(feature="native-workers")]
+    if ni <= 1 << 20 && ni >= native_workers::THREADS*2 {
+        return native_workers::ordered_map(ni, |i| prod_row_ok(a,ao,b,bo,c,co,i,nj,len)).into_iter().fold(true, |a,b| a & b);
+    }
     let mut ok = true;
     let mut i: usize = 0;
     while i < ni {
@@ -457,3 +465,6 @@ pub fn check(pb: &Pub, c: &Cert) -> bool {
     let bc = check_bcond(pb, c);
     h & qc & li & qp & bc
 }
+
+#[cfg(feature="native-workers")]
+pub mod native_workers;

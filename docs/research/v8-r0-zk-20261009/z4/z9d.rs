@@ -135,10 +135,7 @@ fn convert(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert)> {
         round[t * RW..(t + 1) * RW].copy_from_slice(&s.round);
     }
     let m = fq.ej.len();
-    let mut rho = Vec::with_capacity(m * RW);
-    for e in 0..m {
-        rho.extend(image(&fq, e, RW, &|s| &s.round));
-    }
+    let rho = ck::native_workers::ordered_map(m, |entry| image(&fq,entry,RW,&|s| &s.round)).into_iter().flatten().collect();
     if c.qp_y.len() != RW {
         return None;
     }
@@ -180,10 +177,7 @@ fn convert(p: &Pub, c: &Cert, ln: &Lanes) -> Option<(ck::Pub, ck::Cert)> {
         ground[t * RW..(t + 1) * RW].copy_from_slice(&s.round);
         gbat[t * bwr..(t + 1) * bwr].copy_from_slice(&s.bat);
     }
-    let mut beta = Vec::with_capacity(mg * bwr);
-    for e2 in 0..mg {
-        beta.extend(image(&fg, e2, bwr, &|s| &s.bat));
-    }
+    let beta = ck::native_workers::ordered_map(mg, |entry| image(&fg,entry,bwr,&|s| &s.bat)).into_iter().flatten().collect();
     if c.bc_y.len() != k {
         return None;
     }

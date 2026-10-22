@@ -363,6 +363,8 @@ pub fn own_col(out: Vec<u32>, al: &[u32], zz: &[u32], tr: &[u32], sx: &[u32], sy
 }
 /// The own matrix of n referenced sources (column t at t*os).
 pub fn fill_own(al: &[u32], zz: &[u32], tr: &[u32], sx: &[u32], sy: &[u32], inact: &[u32], kind: &[u32], srow: &[u32], slimb: &[u32], n: usize, os: usize, nq: usize) -> Vec<u32> {
+    #[cfg(feature="native-workers")]
+    if n <= 1 << 20 { return aspis_r1_cert_check::native_workers::ordered_map(n, |t| own_col(Vec::new(), al,zz,tr,sx,sy,inact,kind[t] as usize,srow[t] as usize,slimb[t] as usize,os,24+4*nq,24+16*nq)).into_iter().flatten().collect(); }
     let mut out: Vec<u32> = Vec::new();
     let mut t: usize = 0;
     while t < n {
@@ -544,6 +546,8 @@ pub fn rel_row(out: Vec<u32>, al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32],
 }
 /// The checker's relation matrix pb.rel: q = 8 nr rows, bw = 8 (78 + nf) columns, row-major.
 pub fn fill_rel(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], fpos: &[u32], rk: &[u32], ru: &[u32], li: &[u32], x16: &[u32], nf: usize, q: usize) -> Vec<u32> {
+    #[cfg(feature="native-workers")]
+    if q <= 1 << 20 { return aspis_r1_cert_check::native_workers::ordered_map(q, |t| rel_row(Vec::new(),al,zz,tr,inact,ti,op,fpos,rk,ru,li,x16,nf,t)).into_iter().flatten().collect(); }
     let mut out: Vec<u32> = Vec::new();
     let mut x: usize = 0;
     while x < q {
@@ -825,6 +829,8 @@ pub fn round_col(out: Vec<u32>, al: &[u32], tr: &[u32], inact: &[u32], c: usize,
 }
 /// The round columns of n referenced sources (pb.round, pb.ground).
 pub fn fill_round(al: &[u32], tr: &[u32], inact: &[u32], kind: &[u32], srow: &[u32], slimb: &[u32], n: usize) -> Vec<u32> {
+    #[cfg(feature="native-workers")]
+    if n <= 1 << 20 { return aspis_r1_cert_check::native_workers::ordered_map(n, |t| round_col(Vec::new(),al,tr,inact,kind[t] as usize,srow[t] as usize,slimb[t] as usize)).into_iter().flatten().collect(); }
     let mut out: Vec<u32> = Vec::new();
     let mut t: usize = 0;
     while t < n {
@@ -923,6 +929,8 @@ pub fn gbat_col(out: Vec<u32>, al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32]
 }
 /// The G batched columns of n referenced G sources (pb.gbat), column t at 8 (78 + nf) t.
 pub fn fill_gbat(al: &[u32], zz: &[u32], tr: &[u32], inact: &[u32], ti: &[u32], op: &[u32], x18: &[u32], srow: &[u32], slimb: &[u32], n: usize, nf: usize) -> Vec<u32> {
+    #[cfg(feature="native-workers")]
+    if n <= 1 << 20 { return aspis_r1_cert_check::native_workers::ordered_map(n, |t| gbat_col(Vec::new(),al,zz,tr,inact,ti,op,x18,nf,srow[t] as usize,slimb[t] as usize)).into_iter().flatten().collect(); }
     let mut out: Vec<u32> = Vec::new();
     let mut t: usize = 0;
     while t < n {

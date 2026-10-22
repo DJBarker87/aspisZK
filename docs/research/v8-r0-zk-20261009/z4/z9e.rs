@@ -185,7 +185,7 @@ fn install_quiet_hook() {
     QUIET_HOOK.call_once(|| {
         let previous = std::panic::take_hook();
         std::panic::set_hook(Box::new(move |info| {
-            if !QUIET.with(|q| q.get()) {
+            if !QUIET.with(|q| q.get()) && !ck::native_workers::is_worker() {
                 previous(info)
             }
         }));

@@ -1,0 +1,51 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: function `is_worker` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:15:8
+   |
+15 | pub fn is_worker() -> bool { ACTIVE.with(Cell::get) }
+   |        ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `Active` is never constructed
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:16:8
+   |
+16 | struct Active(bool);
+   |        ^^^^^^
+
+warning: associated function `enter` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:18:8
+   |
+17 | impl Active {
+   | ----------- associated function in this implementation
+18 |     fn enter() -> Self { Self(ACTIVE.with(|a| a.replace(true))) }
+   |        ^^^^^
+
+warning: function `ordered_map` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:24:8
+   |
+24 | pub fn ordered_map<T: Send, F: Fn(usize) -> T + Sync>(n: usize, f: F) -> Vec<T> {
+   |        ^^^^^^^^^^^
+
+warning: function `ordered_families` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:27:8
+   |
+27 | pub fn ordered_families<T: Send, F: Fn(usize)->T + Sync>(n:usize,f:F)->Vec<T> {
+   |        ^^^^^^^^^^^^^^^^
+
+warning: function `ordered_map_inner` is never used
+  --> ../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:30:4
+   |
+30 | fn ordered_map_inner<T: Send,F: Fn(usize)->T+Sync>(n:usize,f:F,force:bool)->Vec<T> {
+   |    ^^^^^^^^^^^^^^^^^
+
+Thread 1: Checking harness proofs::ordered_partition...
+Thread 1: 
+VERIFICATION RESULT:
+ ** 0 of 32 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 33.340626s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

@@ -346,197 +346,39 @@ fn emit(p: &Pub) -> (Option<Cert>, EmitInfo) {
         }
     };
     let ln = Lanes::new(&p.cx);
-    // Lifts.
-    let mut tt = Instant::now();
-    let mut lifts = vec![];
-    for c in 0..17 {
-        let w = lift_width(c);
-        let mut e = TagEch::new(w);
-        let mut sel = vec![];
-        for m in lift_members(c) {
-            if let Ins::Pivot = e.insert(lift_src(&p.cx, c, m)) {
-                sel.push(m);
-                if sel.len() == w {
-                    break;
-                }
-            }
-        }
-        info.lift_ranks.push(sel.len());
-        if sel.len() < w {
-            info.fail = Some("lift rank below width");
-            return (None, info);
-        }
-        // O_S: column t = obs(src sel[t]); O_S * U = I  <=>  U = O_S^-1.
-        let cols: Vec<Vec<u32>> = sel.iter().map(|&m| lift_src(&p.cx, c, m)).collect();
-        let os = transpose(&cols.iter().map(|c| c.as_slice()).collect::<Vec<_>>(), w);
-        let uinv = invert(&os).expect("selected columns are independent");
-        lifts.push(Lift { sel, uinv });
-    }
-    info.t_lifts = tt.elapsed().as_secs_f64();
-    tt = Instant::now();
-    // QPrime: per-lane own kernel vectors, round images into a tagged echelon R.
-    let targets = chain_targets(a);
-    let mut rech = TagEch::new(RW);
-    let mut kept: Vec<LaneKer> = vec![];
-    let mut qp_y: Option<Vec<Vec<u32>>> = None;
-    let try_targets = |rech: &TagEch| -> Option<Vec<Vec<u32>>> { targets.iter().map(|b| rech.express(b.clone())).collect() };
-    'lanes: for li in 0..LANES {
-        let mut own = TagEch::new(own_width(li));
-        let mut piv: Vec<u32> = vec![];
-        let mut piv_round: Vec<Vec<u32>> = vec![];
-        let mut lk = LaneKer { lane: li as u32, piv: vec![], ents: vec![] };
-        for i in 0..ln.count(li) {
-            let s = src3(&ln, li, i);
-            match own.insert(s.own.clone()) {
-                Ins::Pivot => {
-                    piv.push(i as u32);
-                    piv_round.push(s.round);
-                }
-                Ins::Zero(t) => {
-                    let c = kernel_coeffs(t);
-                    let mut rho = s.round.clone();
-                    for (pidx, cp) in c.iter().enumerate() {
-                        if *cp != 0 {
-                            // rho = round_j + sum c_p round_p
-                            axpy_sub(&mut rho, negm(*cp), &piv_round[pidx]);
-                        }
-                    }
-                    if let Ins::Pivot = rech.insert(rho) {
-                        lk.ents.push((i as u32, c));
-                        if rech.rank() >= 1080 {
-                            if let Some(y) = try_targets(&rech) {
-                                lk.piv = piv.clone();
-                                kept.push(lk.clone());
-                                qp_y = Some(y);
-                                break 'lanes;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        lk.piv = piv;
-        if !lk.ents.is_empty() {
-            kept.push(lk);
+    // Cheap original first-lift rank gate before later certificate work.
+    // The complete lift family still runs below, including this first lift.
+    let w=lift_width(0);
+    let mut first=TagEch::new(w);
+    for m in lift_members(0) {
+        if let Ins::Pivot=first.insert(lift_src(&p.cx,0,m)) {
+            if first.rank()==w {break;}
         }
     }
-    info.rank_r = rech.rank();
-    if qp_y.is_none() {
-        qp_y = try_targets(&rech);
+    if first.rank()<w {
+        info.lift_ranks.push(first.rank());info.fail=Some("lift rank below width");
+        return (None,info);
     }
-    let Some(qp_y) = qp_y else {
-        info.fail = Some("QPrime_R1");
-        info.t_qprime = tt.elapsed().as_secs_f64();
-        return (None, info);
-    };
-    // Entry e of R (in pivot order) is the e-th kept entry in lane order (pivot order = push order).
-    info.qp_entries = kept.iter().map(|l| l.ents.len()).sum();
-    info.qp_lanes_used = kept.len();
-    info.t_qprime = tt.elapsed().as_secs_f64();
-    tt = Instant::now();
-    // BCondG: reduced echelon of Rel with tags.
-    let bwr = p.lay.bw - BAT0;
-    let q = p.rels.len();
-    let mut re = TagEch::new(bwr);
-    let mut relpiv_src: Vec<usize> = vec![]; // which relation row each pivot came from
-    for (k, f) in p.rels.iter().enumerate() {
-        if let Ins::Pivot = re.insert(f.clone()) {
-            relpiv_src.push(k);
+    enum Part { L(Option<Vec<Lift>>,EmitInfo), Q(Option<(Vec<LaneKer>,Vec<Vec<u32>>)>,EmitInfo), B(Option<(Vec<Vec<u32>>,Vec<u32>,Vec<u32>,LaneKer,Vec<Vec<u32>>)>,EmitInfo) }
+    let mut parts = aspis_r1_cert_check::native_workers::ordered_families(3, |i| {
+        let mut part_info=EmitInfo::default();
+        match i {
+            0 => {let x=emit_lifts(p,&mut part_info);Part::L(x,part_info)},
+            1 => {let x=emit_qprime(p,&ln,&mut part_info);Part::Q(x,part_info)},
+            _ => {let x=emit_bcond(p,&ln,&mut part_info);Part::B(x,part_info)},
         }
-    }
-    let r = re.rank();
-    info.rel_rank = r;
-    // Back-substitute to reduced form; tags are over pivot-source relations -> map to all q.
-    let mut rows: Vec<(Vec<u32>, Vec<u32>)> = re
-        .rows
-        .iter()
-        .map(|(v, t)| {
-            let mut uq = vec![0u32; q];
-            for (e, x) in t.iter().enumerate() {
-                uq[relpiv_src[e]] = *x;
-            }
-            (v.clone(), uq)
-        })
-        .collect();
-    let cols = re.cols.clone();
-    for k in 0..r {
-        let ck = cols[k];
-        let (pv, pt) = rows[k].clone();
-        for k2 in 0..r {
-            if k2 != k && rows[k2].0[ck] != 0 {
-                let s = rows[k2].0[ck];
-                axpy_sub(&mut rows[k2].0, s, &pv);
-                axpy_sub(&mut rows[k2].1, s, &pt);
-            }
-        }
-    }
-    let bc_piv: Vec<u32> = cols.iter().map(|&c| c as u32).collect();
-    let bc_fr: Vec<u32> = (0..bwr).filter(|c| re.piv[*c].is_none()).map(|c| c as u32).collect();
-    let nvec: Vec<Vec<u32>> = bc_fr
-        .iter()
-        .map(|&f| {
-            let mut n = vec![0u32; bwr];
-            n[f as usize] = 1;
-            for k in 0..r {
-                n[cols[k]] = negm(rows[k].0[f as usize]);
-            }
-            n
-        })
-        .collect();
-    let bc_u: Vec<Vec<u32>> = rows.iter().map(|(_, t)| t.clone()).collect();
-    // V_G: G lane kernel of [own; round], bat images into a tagged echelon.
-    let g = 10;
-    let mut zero = TagEch::new(own_width(g) + RW);
-    let mut gpiv: Vec<u32> = vec![];
-    let mut gpiv_bat: Vec<Vec<u32>> = vec![];
-    let mut gk = LaneKer { lane: g as u32, piv: vec![], ents: vec![] };
-    let mut vech = TagEch::new(bwr);
-    let mut bc_y = None;
-    let try_n = |vech: &TagEch| -> Option<Vec<Vec<u32>>> { nvec.iter().map(|n| vech.express(n.clone())).collect() };
-    for i in 0..ln.count(g) {
-        let s = src3(&ln, g, i);
-        let mut zv = s.own.clone();
-        zv.extend(&s.round);
-        match zero.insert(zv) {
-            Ins::Pivot => {
-                gpiv.push(i as u32);
-                gpiv_bat.push(s.bat);
-            }
-            Ins::Zero(c) => {
-                let mut b = s.bat.clone();
-                for (pidx, cp) in c.iter().enumerate() {
-                    if *cp != 0 {
-                        axpy_sub(&mut b, negm(*cp), &gpiv_bat[pidx]);
-                    }
-                }
-                if let Ins::Pivot = vech.insert(b) {
-                    gk.ents.push((i as u32, c));
-                    if vech.rank() >= nvec.len() {
-                        bc_y = try_n(&vech);
-                        if bc_y.is_some() {
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    gk.piv = gpiv;
-    info.g_piv = gk.piv.len();
-    info.vg_rank = vech.rank();
-    if bc_y.is_none() {
-        bc_y = try_n(&vech);
-    }
-    info.t_bcond = tt.elapsed().as_secs_f64();
-    let Some(bc_y) = bc_y else {
-        info.fail = Some("BCondG_R1");
-        return (None, info);
-    };
-    if p.qs.len() > 22 {
-        info.fail = Some("QueryCard");
-        return (None, info);
-    }
-    (Some(Cert { hinv, qp: kept, qp_y, bc_u, bc_piv, bc_fr, bc_g: gk, bc_y, lifts }), info)
+    }).into_iter();
+    let Part::L(lifts,li)=parts.next().unwrap() else {unreachable!()};
+    info.lift_ranks=li.lift_ranks;info.t_lifts=li.t_lifts;
+    let Some(lifts)=lifts else {info.fail=li.fail;return (None,info)};
+    let Part::Q(q,qi)=parts.next().unwrap() else {unreachable!()};
+    info.rank_r=qi.rank_r;info.qp_entries=qi.qp_entries;info.qp_lanes_used=qi.qp_lanes_used;info.t_qprime=qi.t_qprime;
+    let Some((kept,qp_y))=q else {info.fail=qi.fail;return (None,info)};
+    let Part::B(b,bi)=parts.next().unwrap() else {unreachable!()};
+    info.rel_rank=bi.rel_rank;info.g_piv=bi.g_piv;info.vg_rank=bi.vg_rank;info.t_bcond=bi.t_bcond;
+    let Some((bc_u,bc_piv,bc_fr,gk,bc_y))=b else {info.fail=bi.fail;return (None,info)};
+    if p.qs.len()>22 {info.fail=Some("QueryCard");return (None,info)}
+    (Some(Cert { hinv, qp: kept, qp_y, bc_u, bc_piv, bc_fr, bc_g:gk, bc_y, lifts }),info)
 }
 
 // ------------------------------------------------------------ checker
@@ -820,3 +662,197 @@ pub(crate) fn main() {
 
 #[path = "z9d.rs"]
 pub(crate) mod z9d;
+
+fn emit_lifts(p:&Pub,info:&mut EmitInfo)->Option<Vec<Lift>> {
+    let tt = Instant::now();
+    let mut lifts = vec![];
+    for c in 0..17 {
+        let w = lift_width(c);
+        let mut e = TagEch::new(w);
+        let mut sel = vec![];
+        for m in lift_members(c) {
+            if let Ins::Pivot = e.insert(lift_src(&p.cx, c, m)) {
+                sel.push(m);
+                if sel.len() == w {
+                    break;
+                }
+            }
+        }
+        info.lift_ranks.push(sel.len());
+        if sel.len() < w {
+            info.fail = Some("lift rank below width");
+            return None;
+        }
+        // O_S: column t = obs(src sel[t]); O_S * U = I  <=>  U = O_S^-1.
+        let cols: Vec<Vec<u32>> = sel.iter().map(|&m| lift_src(&p.cx, c, m)).collect();
+        let os = transpose(&cols.iter().map(|c| c.as_slice()).collect::<Vec<_>>(), w);
+        let uinv = invert(&os).expect("selected columns are independent");
+        lifts.push(Lift { sel, uinv });
+    }
+    info.t_lifts = tt.elapsed().as_secs_f64();
+    Some(lifts)
+}
+fn emit_qprime(p:&Pub,ln:&Lanes,info:&mut EmitInfo)->Option<(Vec<LaneKer>,Vec<Vec<u32>>)> {
+    let a=&p.a; let tt=Instant::now();
+    let targets = chain_targets(a);
+    let mut rech = TagEch::new(RW);
+    let mut kept: Vec<LaneKer> = vec![];
+    let mut qp_y: Option<Vec<Vec<u32>>> = None;
+    let try_targets = |rech: &TagEch| -> Option<Vec<Vec<u32>>> { aspis_r1_cert_check::native_workers::ordered_map(targets.len(), |i| rech.express(targets[i].clone())).into_iter().collect() };
+    'lanes: for li in 0..LANES {
+        let mut own = TagEch::new(own_width(li));
+        let mut piv: Vec<u32> = vec![];
+        let mut piv_round: Vec<Vec<u32>> = vec![];
+        let mut lk = LaneKer { lane: li as u32, piv: vec![], ents: vec![] };
+        for i in 0..ln.count(li) {
+            let s = src3(&ln, li, i);
+            match own.insert(s.own.clone()) {
+                Ins::Pivot => {
+                    piv.push(i as u32);
+                    piv_round.push(s.round);
+                }
+                Ins::Zero(t) => {
+                    let c = kernel_coeffs(t);
+                    let mut rho = s.round.clone();
+                    for (pidx, cp) in c.iter().enumerate() {
+                        if *cp != 0 {
+                            // rho = round_j + sum c_p round_p
+                            axpy_sub(&mut rho, negm(*cp), &piv_round[pidx]);
+                        }
+                    }
+                    if let Ins::Pivot = rech.insert(rho) {
+                        lk.ents.push((i as u32, c));
+                        if rech.rank() >= 1080 {
+                            if let Some(y) = try_targets(&rech) {
+                                lk.piv = piv.clone();
+                                kept.push(lk.clone());
+                                qp_y = Some(y);
+                                break 'lanes;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        lk.piv = piv;
+        if !lk.ents.is_empty() {
+            kept.push(lk);
+        }
+    }
+    info.rank_r = rech.rank();
+    if qp_y.is_none() {
+        qp_y = try_targets(&rech);
+    }
+    let Some(qp_y) = qp_y else {
+        info.fail = Some("QPrime_R1");
+        info.t_qprime = tt.elapsed().as_secs_f64();
+        return None;
+    };
+    // Entry e of R (in pivot order) is the e-th kept entry in lane order (pivot order = push order).
+    info.qp_entries = kept.iter().map(|l| l.ents.len()).sum();
+    info.qp_lanes_used = kept.len();
+    info.t_qprime = tt.elapsed().as_secs_f64();
+    Some((kept,qp_y))
+}
+fn emit_bcond(p:&Pub,ln:&Lanes,info:&mut EmitInfo)->Option<(Vec<Vec<u32>>,Vec<u32>,Vec<u32>,LaneKer,Vec<Vec<u32>>)> {
+    let tt=Instant::now();
+    // BCondG: reduced echelon of Rel with tags.
+    let bwr = p.lay.bw - BAT0;
+    let q = p.rels.len();
+    let mut re = TagEch::new(bwr);
+    let mut relpiv_src: Vec<usize> = vec![]; // which relation row each pivot came from
+    for (k, f) in p.rels.iter().enumerate() {
+        if let Ins::Pivot = re.insert(f.clone()) {
+            relpiv_src.push(k);
+        }
+    }
+    let r = re.rank();
+    info.rel_rank = r;
+    // Back-substitute to reduced form; tags are over pivot-source relations -> map to all q.
+    let mut rows: Vec<(Vec<u32>, Vec<u32>)> = re
+        .rows
+        .iter()
+        .map(|(v, t)| {
+            let mut uq = vec![0u32; q];
+            for (e, x) in t.iter().enumerate() {
+                uq[relpiv_src[e]] = *x;
+            }
+            (v.clone(), uq)
+        })
+        .collect();
+    let cols = re.cols.clone();
+    for k in 0..r {
+        let ck = cols[k];
+        let (pv, pt) = rows[k].clone();
+        for k2 in 0..r {
+            if k2 != k && rows[k2].0[ck] != 0 {
+                let s = rows[k2].0[ck];
+                axpy_sub(&mut rows[k2].0, s, &pv);
+                axpy_sub(&mut rows[k2].1, s, &pt);
+            }
+        }
+    }
+    let bc_piv: Vec<u32> = cols.iter().map(|&c| c as u32).collect();
+    let bc_fr: Vec<u32> = (0..bwr).filter(|c| re.piv[*c].is_none()).map(|c| c as u32).collect();
+    let nvec: Vec<Vec<u32>> = bc_fr
+        .iter()
+        .map(|&f| {
+            let mut n = vec![0u32; bwr];
+            n[f as usize] = 1;
+            for k in 0..r {
+                n[cols[k]] = negm(rows[k].0[f as usize]);
+            }
+            n
+        })
+        .collect();
+    let bc_u: Vec<Vec<u32>> = rows.iter().map(|(_, t)| t.clone()).collect();
+    // V_G: G lane kernel of [own; round], bat images into a tagged echelon.
+    let g = 10;
+    let mut zero = TagEch::new(own_width(g) + RW);
+    let mut gpiv: Vec<u32> = vec![];
+    let mut gpiv_bat: Vec<Vec<u32>> = vec![];
+    let mut gk = LaneKer { lane: g as u32, piv: vec![], ents: vec![] };
+    let mut vech = TagEch::new(bwr);
+    let mut bc_y = None;
+    let try_n = |vech: &TagEch| -> Option<Vec<Vec<u32>>> { aspis_r1_cert_check::native_workers::ordered_map(nvec.len(), |i| vech.express(nvec[i].clone())).into_iter().collect() };
+    for i in 0..ln.count(g) {
+        let s = src3(&ln, g, i);
+        let mut zv = s.own.clone();
+        zv.extend(&s.round);
+        match zero.insert(zv) {
+            Ins::Pivot => {
+                gpiv.push(i as u32);
+                gpiv_bat.push(s.bat);
+            }
+            Ins::Zero(c) => {
+                let mut b = s.bat.clone();
+                for (pidx, cp) in c.iter().enumerate() {
+                    if *cp != 0 {
+                        axpy_sub(&mut b, negm(*cp), &gpiv_bat[pidx]);
+                    }
+                }
+                if let Ins::Pivot = vech.insert(b) {
+                    gk.ents.push((i as u32, c));
+                    if vech.rank() >= nvec.len() {
+                        bc_y = try_n(&vech);
+                        if bc_y.is_some() {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    gk.piv = gpiv;
+    info.g_piv = gk.piv.len();
+    info.vg_rank = vech.rank();
+    if bc_y.is_none() {
+        bc_y = try_n(&vech);
+    }
+    info.t_bcond = tt.elapsed().as_secs_f64();
+    let Some(bc_y) = bc_y else {
+        info.fail = Some("BCondG_R1");
+        return None;
+    };
+    Some((bc_u,bc_piv,bc_fr,gk,bc_y))
+}

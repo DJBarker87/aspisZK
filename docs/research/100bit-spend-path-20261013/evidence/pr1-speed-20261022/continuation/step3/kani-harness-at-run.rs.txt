@@ -1,0 +1,40 @@
+extern crate alloc;
+#[path="../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs"]
+mod production;
+#[cfg(kani)]
+mod proofs {
+ use super::production::*;
+ #[kani::proof]
+ fn ordered_partition() {
+  let n:usize=kani::any();let k:usize=kani::any();kani::assume(k<THREADS);
+  let (a,b)=range(n,k);
+  assert!(a<=b && b<=n);
+  assert!(b-a<=n/THREADS+1);
+  if k==0 {assert_eq!(a,0);}
+  if k+1<THREADS {assert_eq!(b,range(n,k+1).0);}else{assert_eq!(b,n);}
+ }
+}
+#[cfg(test)]
+mod tests {
+ use super::production::*;
+ #[test]
+ fn schedules_nested_teams_and_panic_order() {
+  use std::sync::atomic::{AtomicUsize,Ordering::*};
+  let live=AtomicUsize::new(0);let peak=AtomicUsize::new(0);
+  for trial in 0..32 {
+   let result=ordered_map(64+trial,|i|{
+    let count=live.fetch_add(1,SeqCst)+1;peak.fetch_max(count,SeqCst);
+    for _ in 0..((i*13+trial)%7){std::thread::yield_now();}
+    let nested=ordered_map(32,|j|i*32+j);
+    live.fetch_sub(1,SeqCst);nested
+   });
+   assert_eq!(result,(0..64+trial).map(|i|(0..32).map(|j|i*32+j).collect::<Vec<_>>()).collect::<Vec<_>>());
+   assert_eq!(live.load(SeqCst),0);assert!(peak.load(SeqCst)<=THREADS);assert!(!is_worker());
+  }
+  for fail in [0,3,17,33,63] {
+   let result=std::panic::catch_unwind(||ordered_map(64,|i|{if i==fail || i==63 {std::panic::panic_any(i);}i}));
+   let panic=result.unwrap_err();assert_eq!(*panic.downcast::<usize>().unwrap(),fail);assert!(!is_worker());
+  }
+  assert_eq!(ordered_families(3,|i|i),vec![0,1,2]);
+ }
+}
