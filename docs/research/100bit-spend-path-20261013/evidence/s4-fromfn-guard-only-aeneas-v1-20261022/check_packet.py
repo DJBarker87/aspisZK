@@ -25,4 +25,5 @@ assert admit['verified_limits']==rec['caps']
 text=(out/'stdout.log').read_text()
 assert 'Unhandled `BuiltinOrAuto` for trait 7' in text and 'Generated_Types.BuiltinPointee' in text
 assert not any(p.suffix in {'.lean','.olean','.ilean'} for p in out.rglob('*') if p.is_file())
+assert not any(q.suffix in {'.pyc','.so','.o','.bin','.olean','.ilean'} for q in R.rglob('*') if q.is_file()), 'source-only packet'
 print('guard-only transformed LLBC and bounded Aeneas failure evidence PASS; no Lean output claimed')

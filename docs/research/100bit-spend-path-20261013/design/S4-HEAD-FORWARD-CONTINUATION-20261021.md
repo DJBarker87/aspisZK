@@ -1940,3 +1940,22 @@ repaired using retained raw files; no unchanged build was repeated.
 The packet checker passes. This is a candidate tool build, not a successful
 from_fn translation, a generally validated associated-type normalization
 rule, or a frozen-source proof.
+
+## Changed Guard input reaches the original loop join again
+
+The Guard-only extraction and first Aeneas run are retained in
+`s4-fromfn-guard-only-extraction-v1-20261022` and
+`s4-fromfn-guard-only-aeneas-v1-20261022`. Actual Charon/Cargo/time
+PID membership and High=1 GiB/Max=2 GiB/SwapMax=0 were verified.
+An initial changed-input translation stops before interpretation on a
+Pointee metadata signature; it emits no Lean.
+
+The narrower source selectors remove additional slice-index and length
+bodies which had introduced that signature. This reaches interpretation
+again but still fails the Guard loop join even with push/drop bodies
+transparent and MaybeUninit opaque. Thus transparency alone does not
+repair the loop abstraction; no such repair or frozen-source refinement
+is claimed. Exact narrowed-input, runtime and cap evidence are being
+reviewed in their separate source-only packets. Source call-policy and
+supported inlining mechanisms are the next uncertainty to resolve before
+any further interpreter patch.
