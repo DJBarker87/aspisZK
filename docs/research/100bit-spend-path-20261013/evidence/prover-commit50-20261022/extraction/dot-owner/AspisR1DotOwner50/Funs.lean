@@ -57,6 +57,16 @@ def field.M31.sub (self : field.M31) (rhs : field.M31) : Result field.M31 := do
        ok s1
   else ok s
 
+/-- [simulator_dot_owner50::field::{simulator_dot_owner50::field::M31}::mul]:
+    Source: 'field.rs', lines 133:4-137:5
+    Visibility: public -/
+def field.M31.mul (self : field.M31) (rhs : field.M31) : Result field.M31 := do
+  let i ← lift (UScalar.cast .U64 self)
+  let i1 ← lift (UScalar.cast .U64 rhs)
+  let i2 ← lift (Std.U64.wrapping_mul i i1)
+  let i3 ← field.reduce_u64 i2
+  ok i3
+
 /-- [simulator_dot_owner50::field::{simulator_dot_owner50::field::M31}::reduce_u64]:
     Source: 'field.rs', lines 153:4-155:5
     Visibility: public -/
@@ -87,6 +97,102 @@ def field.CM31.sub
   let m ← field.M31.sub self.a rhs.a
   let m1 ← field.M31.sub self.b rhs.b
   ok { a := m, b := m1 }
+
+/-- [simulator_dot_owner50::field::{simulator_dot_owner50::field::CM31}::mul]:
+    Source: 'field.rs', lines 306:4-320:5
+    Visibility: public -/
+def field.CM31.mul
+  (self : field.CM31) (rhs : field.CM31) : Result field.CM31 := do
+  let m0 ← field.M31.mul self.a rhs.a
+  let m1 ← field.M31.mul self.b rhs.b
+  let i := self.a
+  let i1 ← lift (core.convert.num.FromU64U32.from i)
+  let i2 := self.b
+  let i3 ← lift (core.convert.num.FromU64U32.from i2)
+  let i4 ← lift (Std.U64.wrapping_add i1 i3)
+  let i5 := rhs.a
+  let i6 ← lift (core.convert.num.FromU64U32.from i5)
+  let i7 := rhs.b
+  let i8 ← lift (core.convert.num.FromU64U32.from i7)
+  let i9 ← lift (Std.U64.wrapping_add i6 i8)
+  let i10 ← lift (Std.U64.wrapping_mul i4 i9)
+  let m2 ← field.M31.reduce_u64 i10
+  let m ← field.M31.sub m0 m1
+  let m3 ← field.M31.sub m2 m0
+  let m4 ← field.M31.sub m3 m1
+  ok { a := m, b := m4 }
+
+/-- [simulator_dot_owner50::field::{simulator_dot_owner50::field::CM31}::square]:
+    Source: 'field.rs', lines 325:4-335:5
+    Visibility: public -/
+def field.CM31.square (self : field.CM31) : Result field.CM31 := do
+  let i := self.a
+  let i1 ← lift (core.convert.num.FromU64U32.from i)
+  let i2 := self.b
+  let i3 ← lift (core.convert.num.FromU64U32.from i2)
+  let i4 ← lift (Std.U64.wrapping_add i1 i3)
+  let i5 ← lift (core.convert.num.FromU64U32.from i)
+  let i6 ← lift (core.convert.num.FromU64U32.from field.P)
+  let i7 ← lift (Std.U64.wrapping_add i5 i6)
+  let i8 ← lift (core.convert.num.FromU64U32.from i2)
+  let i9 ← lift (Std.U64.wrapping_sub i7 i8)
+  let i10 ← lift (Std.U64.wrapping_mul i4 i9)
+  let m ← field.M31.reduce_u64 i10
+  let m1 ← field.M31.mul self.a self.b
+  let m2 ← field.M31.double m1
+  ok { a := m, b := m2 }
+
+/-- [simulator_dot_owner50::field::{simulator_dot_owner50::field::CM31}::double]:
+    Source: 'field.rs', lines 346:4-348:5
+    Visibility: public -/
+def field.CM31.double (self : field.CM31) : Result field.CM31 := do
+  field.CM31.add self self
+
+/-- [simulator_dot_owner50::field::mul_by_r]:
+    Source: 'field.rs', lines 860:0-866:1 -/
+def field.mul_by_r (x : field.CM31) : Result field.CM31 := do
+  let m ← field.M31.double x.a
+  let m1 ← field.M31.sub m x.b
+  let m2 ← field.M31.double x.b
+  let m3 ← field.M31.add x.a m2
+  ok { a := m1, b := m3 }
+
+/-- [simulator_dot_owner50::field::{simulator_dot_owner50::field::QM31}::add]:
+    Source: 'field.rs', lines 896:4-903:5
+    Visibility: public -/
+def field.QM31.add
+  (self : field.QM31) (rhs : field.QM31) : Result field.QM31 := do
+  let c ← field.CM31.add self.c0 rhs.c0
+  let c1 ← field.CM31.add self.c1 rhs.c1
+  ok { c0 := c, c1 }
+
+/-- [simulator_dot_owner50::field::{simulator_dot_owner50::field::QM31}::mul]:
+    Source: 'field.rs', lines 935:4-945:5
+    Visibility: public -/
+def field.QM31.mul
+  (self : field.QM31) (rhs : field.QM31) : Result field.QM31 := do
+  let m0 ← field.CM31.mul self.c0 rhs.c0
+  let m1 ← field.CM31.mul self.c1 rhs.c1
+  let c ← field.CM31.add self.c0 self.c1
+  let c1 ← field.CM31.add rhs.c0 rhs.c1
+  let m2 ← field.CM31.mul c c1
+  let c2 ← field.mul_by_r m1
+  let c3 ← field.CM31.add m0 c2
+  let c4 ← field.CM31.sub m2 m0
+  let c5 ← field.CM31.sub c4 m1
+  ok { c0 := c3, c1 := c5 }
+
+/-- [simulator_dot_owner50::field::{simulator_dot_owner50::field::QM31}::square]:
+    Source: 'field.rs', lines 951:4-960:5
+    Visibility: public -/
+def field.QM31.square (self : field.QM31) : Result field.QM31 := do
+  let c0_square ← field.CM31.square self.c0
+  let c1_square ← field.CM31.square self.c1
+  let c ← field.mul_by_r c1_square
+  let c1 ← field.CM31.add c0_square c
+  let c2 ← field.CM31.mul self.c0 self.c1
+  let c3 ← field.CM31.double c2
+  ok { c0 := c1, c1 := c3 }
 
 /-- [simulator_dot_owner50::dot50::prepare_c]:
     Source: 'lib.rs', lines 5:0-5:55
@@ -249,5 +355,115 @@ def run50.run
   let b ← run50.prepare3 y
   let a1 ← totals50.all a b
   reconstruction.q a1
+
+/-- [simulator_dot_owner50::prepared50::prepare]:
+    Source: 'lib.rs', lines 66:0-71:1
+    Visibility: public -/
+def prepared50.prepare
+  (x : field.QM31) : Result (Array (Array field.M31 3#usize) 3#usize) := do
+  let a ← dot50.prepare_c x.c0
+  let b ← dot50.prepare_c x.c1
+  let c ← field.CM31.add x.c0 x.c1
+  let c1 ← dot50.prepare_c c
+  ok (Array.make 3#usize [ a, b, c1 ])
+
+/-- [simulator_dot_owner50::prepared50::cm]:
+    Source: 'lib.rs', lines 72:0-76:1
+    Visibility: public -/
+def prepared50.cm
+  (left : Array field.M31 3#usize) (right : field.CM31) :
+  Result field.CM31
+  := do
+  let m ← Array.index_usize left 0#usize
+  let m0 ← field.M31.mul m right.a
+  let m1 ← Array.index_usize left 1#usize
+  let m11 ← field.M31.mul m1 right.b
+  let m2 ← Array.index_usize left 2#usize
+  let m3 ← field.M31.add right.a right.b
+  let m21 ← field.M31.mul m2 m3
+  let m4 ← field.M31.sub m0 m11
+  let m5 ← field.M31.sub m21 m0
+  let m6 ← field.M31.sub m5 m11
+  ok { a := m4, b := m6 }
+
+/-- [simulator_dot_owner50::prepared50::combine]:
+    Source: 'lib.rs', lines 77:0-79:1
+    Visibility: public -/
+def prepared50.combine
+  (m0 : field.CM31) (m1 : field.CM31) (m2 : field.CM31) :
+  Result field.QM31
+  := do
+  let c ← reconstruction.mul_r m1
+  let c1 ← field.CM31.add m0 c
+  let c2 ← field.CM31.sub m2 m0
+  let c3 ← field.CM31.sub c2 m1
+  ok { c0 := c1, c1 := c3 }
+
+/-- [simulator_dot_owner50::prepared50::mul]:
+    Source: 'lib.rs', lines 80:0-84:1
+    Visibility: public -/
+def prepared50.mul
+  (left : Array (Array field.M31 3#usize) 3#usize) (right : field.QM31) :
+  Result field.QM31
+  := do
+  let a ← Array.index_usize left 0#usize
+  let m0 ← prepared50.cm a right.c0
+  let a1 ← Array.index_usize left 1#usize
+  let m1 ← prepared50.cm a1 right.c1
+  let a2 ← Array.index_usize left 2#usize
+  let c ← field.CM31.add right.c0 right.c1
+  let m2 ← prepared50.cm a2 c
+  prepared50.combine m0 m1 m2
+
+/-- [simulator_dot_owner50::eval50::block]:
+    Source: 'lib.rs', lines 89:0-92:1
+    Visibility: public -/
+def eval50.block
+  (p : Array field.QM31 28#usize) (powers : Array field.QM31 3#usize)
+  (j : Std.Usize) :
+  Result field.QM31
+  := do
+  let start ← lift (core.num.Usize.wrapping_mul j 4#usize)
+  let q ← Array.index_usize p start
+  let i ← lift (core.num.Usize.wrapping_add start 1#usize)
+  let q1 ← Array.index_usize p i
+  let i1 ← lift (core.num.Usize.wrapping_add start 2#usize)
+  let q2 ← Array.index_usize p i1
+  let i2 ← lift (core.num.Usize.wrapping_add start 3#usize)
+  let q3 ← Array.index_usize p i2
+  let q4 ← run50.run powers (Array.make 3#usize [ q1, q2, q3 ])
+  field.QM31.add q q4
+
+/-- [simulator_dot_owner50::eval50::go]:
+    Source: 'lib.rs', lines 93:0-100:1
+    Visibility: public -/
+def eval50.go
+  (p : Array field.QM31 28#usize) (powers : Array field.QM31 3#usize)
+  (prepared : Array (Array field.M31 3#usize) 3#usize) (left : Std.U8)
+  (acc : field.QM31) :
+  Result field.QM31
+  := do
+  if left = 0#u8
+  then ok acc
+  else
+    let n ← lift (Std.U8.wrapping_sub left 1#u8)
+    let product ← prepared50.mul prepared acc
+    let i ← lift (core.convert.num.FromUsizeU8.from n)
+    let value ← eval50.block p powers i
+    let q ← field.QM31.add product value
+    eval50.go p powers prepared n q
+partial_fixpoint
+
+/-- [simulator_dot_owner50::eval50::eval]:
+    Source: 'lib.rs', lines 101:0-105:1
+    Visibility: public -/
+def eval50.eval
+  (p : Array field.QM31 28#usize) (x : field.QM31) : Result field.QM31 := do
+  let x2 ← field.QM31.square x
+  let x3 ← field.QM31.mul x x2
+  let x4 ← field.QM31.square x2
+  let prepared ← prepared50.prepare x4
+  let acc ← eval50.block p (Array.make 3#usize [ x, x2, x3 ]) 6#usize
+  eval50.go p (Array.make 3#usize [ x, x2, x3 ]) prepared 6#u8 acc
 
 end AspisR1DotOwner50

@@ -1,0 +1,65 @@
+import R1Z.ProverCommitRadixExact50
+import R1Z.ProverCommitEvalLoop50
+import R1Z.ProverCommitNativeQSquare49
+/-! Complete optimized degree-27 evaluator, including actual powers and
+prepared constructor. No evaluator or intermediate-result image is assumed. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitEval50
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitPrepare50 (triple)
+open AspisV8R15.ExactTowerBase
+open AspisR1.ExtractedCurrentQM31Exact (decode)
+
+attribute [local irreducible] ProverCommitRadix50.block ProverCommitRadix50.blocks ProverCommitInterpolationPoly48.poly
+
+theorem exact_result (q : Nat → Old.Q) (x : Old.Q)
+    (hq : ∀ i, i<28 → Canonical (q i)) (hx : Canonical x) :
+    ∃ z : Old.Q, eval50.eval (ProverCommitEvalBlock50.source q) (ProverCommitNativeQ48.source x)=
+      ok (ProverCommitNativeQ48.source z) ∧ Canonical z ∧
+      decode z=(ProverCommitInterpolationPoly48.poly 28 (fun i => decode (q i))).eval (decode x) := by
+  obtain ⟨x2,h2,hc2,hv2⟩ := ProverCommitNativeQSquare49.square x hx
+  obtain ⟨x3,h3,hc3,hv3⟩ := ProverCommitNativeQ48.mul x x2 hx hc2
+  obtain ⟨x4,h4,hc4,hv4⟩ := ProverCommitNativeQSquare49.square x2 hc2
+  have hv2' : decode x2=(decode x)^2 := by rw [hv2,pow_two]
+  have hv3' : decode x3=(decode x)^3 := by rw [hv3,hv2'];ring
+  have hv4' : decode x4=(decode x)^4 := by rw [hv4,hv2'];ring
+  let powers := triple x x2 x3
+  have hp : ∀ i, i<3 → Canonical (powers i) := by
+    intro i hi
+    unfold powers triple
+    split
+    · exact hx
+    · split
+      · exact hc2
+      · exact hc3
+  have hv : ∀ i : Fin 3, decode (powers i.val)=(decode x)^(i.val+1) := by
+    intro i
+    fin_cases i
+    · change decode x=(decode x)^1
+      rw [pow_one]
+    · exact hv2'
+    · exact hv3'
+  obtain ⟨a,ha,hca,hva⟩ := ProverCommitPrepared50.prepare x4 hc4
+  rw [hv4'] at hva
+  obtain ⟨acc,hacc,hcacc,hvacc⟩ := ProverCommitEvalBlock50.block q powers (decode x) hq hp hv 6#usize (by decide)
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitEvalLoop50.go q powers (decode x) hq hp hv a hva
+    6 6#u8 rfl (by decide) acc hcacc
+  refine ⟨z,?_,hcz,?_⟩
+  · rw [eval50.eval]
+    simp only [h2,h3,h4,ha,bind_tc_ok]
+    change (do
+      let acc ← eval50.block (ProverCommitEvalBlock50.source q) (ProverCommitDot50.qarray powers) 6#usize
+      eval50.go (ProverCommitEvalBlock50.source q) (ProverCommitDot50.qarray powers)
+        (ProverCommitPrepared50.matrix a) 6#u8 acc)=_
+    rw [hacc];exact hz
+  · rw [hdz,hvacc]
+    rw [show (6#usize).val=6 from rfl]
+    set_option pp.explicit true in trace_state
+    exact ProverCommitRadixExact50.top (fun i => decode (q i)) (decode x)
+
+
+set_option pp.explicit true in
+#check ProverCommitRadixExact50.top
+#print axioms exact_result
+end R1Z.ProverCommitEval50

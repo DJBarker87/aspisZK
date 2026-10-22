@@ -1,0 +1,47 @@
+import R1Z.ProverCommitEvalBlock50
+import R1Z.ProverCommitPrepared50
+/-! Induction over every owned reverse radix-four iteration. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitEvalLoop50
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisV8R15.ExactTowerBase
+open AspisR1.ExtractedCurrentQM31Exact (decode)
+open ProverCommitChannelAlgebra49 (components)
+
+theorem go (q powers : Nat → Old.Q) (x : QM31Exact)
+    (hq : ∀ i, i<28 → Canonical (q i))
+    (hp : ∀ i, i<3 → Canonical (powers i))
+    (hv : ∀ i : Fin 3, decode (powers i.val)=x^(i.val+1))
+    (a : Nat → Nat → U32)
+    (ha : ∀ i j : Fin 3, ((a i.val j.val).val : M31Exact)=components (x^4) i j)
+    (n : Nat) (left : U8) (hleft : left.val=n) (hn : n≤6)
+    (acc : Old.Q) (hacc : Canonical acc) :
+    ∃ z : Old.Q, eval50.go (ProverCommitEvalBlock50.source q) (ProverCommitDot50.qarray powers)
+      (ProverCommitPrepared50.matrix a) left (ProverCommitNativeQ48.source acc)=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ decode z=decode acc*(x^4)^n+ProverCommitRadix50.blocks (fun i => decode (q i)) x n := by
+  induction n generalizing left acc with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    refine ⟨acc,?_,hacc,?_⟩
+    · rw [eval50.go,hz];rfl
+    · rw [ProverCommitRadix50.blocks,pow_zero,mul_one,add_zero]
+  | succ n ih =>
+    have hz : left≠0#u8 := by scalar_tac
+    have hdec : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    let j := core.convert.num.FromUsizeU8.from (U8.wrapping_sub left 1#u8)
+    have hj : j.val=n := by scalar_tac
+    obtain ⟨p,hp0,hcp,hvp⟩ := ProverCommitPrepared50.mul a (x^4) acc hacc ha
+    obtain ⟨v,hv0,hcv,hvv⟩ := ProverCommitEvalBlock50.block q powers x hq hp hv j (by rw [hj];omega)
+    obtain ⟨next,hnext,hcnext,hvnext⟩ := ProverCommitNativeQ48.add p v hcp hcv
+    obtain ⟨z,hz0,hcz,hvz⟩ := ih _ hdec (by omega) next hcnext
+    refine ⟨z,?_,hcz,?_⟩
+    · rw [eval50.go]
+      simp only [hz,if_false,lift,bind_tc_ok,hp0,hv0,hnext]
+      exact hz0
+    · rw [hvz,hvnext,hvp,hvv,hj,ProverCommitRadix50.blocks,pow_succ]
+      ring
+
+#print axioms go
+end R1Z.ProverCommitEvalLoop50

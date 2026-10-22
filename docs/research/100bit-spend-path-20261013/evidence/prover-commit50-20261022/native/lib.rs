@@ -46,3 +46,7 @@ fn owner_totals(p:[[[u64;3];3];3])->[[u64;3];3] {
   for c in 0..3 {for h in 0..3 {assert_eq!(a[c][h],b[c][h]);}}
  }
 }
+
+include!("prepared.rs");
+
+include!("eval.rs");
