@@ -1,0 +1,37 @@
+import R1Z.SimCostView
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.SimCostShift6
+open R0Z.HonestView R1Z.Batched Polynomial
+attribute [local instance] Classical.propDecidable
+abbrev c0 : PayloadCell R1Bat := .semanticCoeff 9 0
+abbrev c1 : PayloadCell R1Bat := .semanticCoeff 9 1
+
+/-- Symbolic sparsity, independent of the 30,671,382-cell enumeration. -/
+theorem dir_cell {K : Type} [Field K] (c : PayloadCell R1Bat) :
+    R0Z.Shift.dir (K := K) c =
+      if c = c0 then -(1/2 : K) else if c = c1 then 1 else 0 := by
+  cases c with
+  | semanticCoeff j i =>
+    rw [R0Z.Shift.dir, R0Z.Shift.roundInclusion_semanticCoeff]
+    by_cases hj : j = 9
+    · subst j
+      simp only [if_true, coeff_sub, coeff_X, coeff_C]
+      by_cases hi0 : i = 0
+      · subst i; simp [c0, c1]
+      · by_cases hi1 : i = 1
+        · subst i; simp [c0, c1]
+        · have hv0 : i.val ≠ 0 := fun h => hi0 (Fin.ext h)
+          have hv1 : i.val ≠ 1 := fun h => hi1 (Fin.ext h)
+          simp [c0, c1, hi0, hi1, hv0, hv1]
+    · simp [hj, c0, c1]
+  | maskSum => rfl
+  | pointClaim j i => rfl
+  | extraClaim i => rfl
+  | ood j i => rfl
+  | inactiveSum => rfl
+  | opened q s i => rfl
+  | bat i => rfl
+
+#print axioms dir_cell
+end R1Z.SimCostShift6
