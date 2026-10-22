@@ -4,8 +4,7 @@
 Scope: semantic samples and guards, final shift, weight-model correspondence,
 and native caller composition. No FSExperiments conversion or joins.
 Fresh authorized range J10000–J10199 supersedes the earlier range in the prompt.
-No shipped source changes are planned; any such change triggers all three
-frozen ELF rebuilds against 40dc7574… / 12cb0bc2… / 121f3e29….
+All 491 shipped files are unchanged from the actual task base c6be35873ed67abf55956e4e2cac411260bea973. The shipped-file rebuild rule was not triggered; no fresh ELF rebuild is claimed. Retained release pins: 40dc7574… / 12cb0bc2… / 121f3e29….
 
 ## Validation
 
@@ -437,3 +436,80 @@ theorem privacy_headline_deployed
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
 ```
+
+
+## Final audit and demonstrated stopping condition
+
+J10199, exact target `R1Z.ProverCommitAudit49`, exits 0 in 1.81 s,
+peak RSS 4202656 KiB, zero swaps, under the unchanged 6G/8G/0/64 scope.
+Source revision is actual task base
+`c6be35873ed67abf55956e4e2cac411260bea973` plus the exact frozen sources
+and dependency fingerprints in `pins/final-lean-freeze.json`. Audit source SHA256:
+`daab856f3704dbe0baa714be0ce6d853cc02b0025b1cbeaa33c815d380f8728e`.
+Its 242 printed results cover all 241 public part-49 theorems and the unchanged
+deployed endpoint; all axiom sets are subsets of
+`[propext, Classical.choice, Quot.sound]`. Three private theorems were audited
+in their original focused targets. All 93 frozen modules import together.
+This is an import/axioms audit, not a complete frozen-manifest release replay.
+
+`pins/final-integrity-check.json` confirms current sources match accepted
+receipts, endpoint snapshots match the current entire endpoint module,
+and all 491 shipped-file hashes match the task base. Main proof sources have
+no sorry/admit/axiom/native_decide or raised maximum options. No compiled
+binaries, olean, LLBC or archive artifacts are delivered. Diagnostic logs are
+retained verbatim, including their original trailing whitespace. Frozen source,
+features and toolchain attribution remain in the input pins and host receipts;
+no historical proof is reassigned to the earlier 26b922be6 checkout.
+No FSExperiments conversion/join, deployed-premise removal, L2 cost closure,
+or complete simulator refinement is claimed.
+
+**Stopping obstruction: the authorized J10000–J10199 allocation is exhausted.**
+Launcher refusals are explicitly retired, not silently reused. No compile
+outside the allocation was attempted. The requested full equality remains
+unproved; this is not a mathematical impossibility or a counterexample.
+No single completed result is promoted to that equality.
+
+## Exact remaining continuation interfaces
+
+1. Compose actual `qm31_sum_products_small::<3>` component preparation
+   (including each CM `a+b` and the outer `c0+c1`), all nine channels across
+   three inputs, and the proved reconstruction. Required conclusion: success,
+   canonical QM31 output, and decode equal to
+   `∑ i : Fin 3, decode (left i) * decode (right i)`, without an assumed
+   result/model image. The separate current `PreparedQm31Multiplier::new/mul`
+   path still needs its corresponding value proof.
+2. Bind the optimized `evaluate_state_only_polynomial` caller for arbitrary
+   canonical 28 coefficients and challenge: canonical output, decode equal to
+   `(ProverCommitInterpolationPoly48.poly 28 decodecoeff).eval decodea`.
+   Current x²/x³/x⁴, scalar/reconstruction, boundary and field kernels are
+   available. The seven-block radix-4 owned-loop induction and its source
+   transition gate remain.
+3. Prove actual semantic oracle success/value from tape columns, sparse
+   multilinear evaluation, selected mask, extra constant and terminal value.
+   The mathematical oracle target is precisely
+   `R0Z.PayloadSplit.maskLinear π B a τ + ch.sem14 *
+   terminalValue pub (ch.sem0) (ch.sem1) (ch.sem2) (ch.sem13)
+   (zc ch) B (honestClaims (0 : Trace K) a) a`.
+   It is not simply `HonestView.oracle τ`. The sparse-equality-weight helper
+   needs prefix/trailing-Boolean pruning and selected-mask provenance. Compose
+   actual boundary/terminal guard success and running claims, interpolation
+   degree facts, and original/eta0 values into the proved final-shift arithmetic.
+   `PayloadSplit.rounds` and `originalRounds` remain the exact round targets.
+   The source P_R1 good-domain condition (including α9 != half) is not yet
+   established for the complete caller.
+4. Compose complete `Weights::new` outer allocation, layout, reuse and Vec
+   iteration with the proved seven raw producers and full materialized-array
+   model theorem. Discharge its explicit α/kappa/circle representation inputs.
+   Prove actual source gamma batching of all 1024 coefficients and tape/variant
+   coefficient provenance as `coeffsOf AspisR1.rowEquiv τ`.
+5. Bind source `sim::encode_at`, `eval_at`, `nodes_for`, `phi_inverse`, and
+   opened/folded leaves. Instantiate the existing complete owned opening kernel
+   and ordered 7/7/64 byte-stream theorems with those actual canonical batch
+   and weight arrays; then compose the whole semantic/opening caller.
+6. Final endpoint remains complete native simulator output equal to the
+   `R0Z.RefPayload.simE` model payload, namely
+   `shift pub B ch (refPayload+ A π B ch (Partition.equiv.symm t))`.
+   STOP after that payload equality, before FSExperiments conversion or joins.
+   `RustProverRefinement` stays explicit in the deployed theorem until its
+   separate obligations are proved. The unchanged verbatim endpoint above
+   records that fact, with its original x/rust quantifiers and bound.
