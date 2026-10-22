@@ -80,3 +80,7 @@ include!("inactive-binding.rs");
 include!("kernel-binding.rs");
 
 include!("libra-binding.rs");
+
+include!("point-rows-binding.rs");
+
+include!("stored-binding.rs");

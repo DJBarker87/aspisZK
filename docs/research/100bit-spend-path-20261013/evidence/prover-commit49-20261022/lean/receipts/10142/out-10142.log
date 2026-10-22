@@ -1,0 +1,74 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPointRows49.lean:85:13: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (matrix rows).update d (ProverCommitQArray48.array 4#usize (target p hp ↑d))
+in the target expression
+  (do
+      let a1 ← ok (ProverCommitQArray48.array 4#usize (target p hp ↑d))
+      let out1 ← (matrix rows).update d a1
+      point_rows.fill (ProverCommitQArray48.array 10#usize p) out1 (d.wrapping_add 1#usize) (left.wrapping_sub 1#u8)) =
+    ok (matrix out)
+
+case succ.refine_1
+p : ℕ → Old.Q
+hp : ∀ i < 10, Canonical (p i)
+n : ℕ
+ih :
+  ∀ (rows : ℕ → ℕ → Old.Q),
+    (∀ (i k : ℕ), i < 5 → k < 4 → Canonical (rows i k)) →
+      ∀ (d : Usize) (left : U8),
+        ↑left = n →
+          ↑d + n ≤ 5 →
+            ∃ out,
+              point_rows.fill (ProverCommitQArray48.array 10#usize p) (matrix rows) d left = ok (matrix out) ∧
+                (∀ (i k : ℕ), i < 5 → k < 4 → Canonical (out i k)) ∧
+                  ∀ (i : Fin 5), out ↑i = if ↑d ≤ ↑i ∧ ↑i < ↑d + n then target p hp ↑i else rows ↑i
+rows : ℕ → ℕ → Old.Q
+hrows : ∀ (i k : ℕ), i < 5 → k < 4 → Canonical (rows i k)
+d : Usize
+left : U8
+hleft : ↑left = n + 1
+bound : ↑d + (n + 1) ≤ 5
+hn : left ≠ 0#u8
+hd : ↑d < 5
+hdec : ↑(left.wrapping_sub 1#u8) = n
+hinc : ↑(d.wrapping_add 1#usize) = ↑d + 1
+changed : ℕ → ℕ → Old.Q := Function.update rows (↑d) (target p hp ↑d)
+hc : ∀ (i k : ℕ), i < 5 → k < 4 → Canonical (changed i k)
+out : ℕ → ℕ → Old.Q
+hout :
+  point_rows.fill (ProverCommitQArray48.array 10#usize p) (matrix changed) (d.wrapping_add 1#usize)
+      (left.wrapping_sub 1#u8) =
+    ok (matrix out)
+hcout : ∀ (i k : ℕ), i < 5 → k < 4 → Canonical (out i k)
+heq :
+  ∀ (i : Fin 5),
+    out ↑i = if ↑(d.wrapping_add 1#usize) ≤ ↑i ∧ ↑i < ↑(d.wrapping_add 1#usize) + n then target p hp ↑i else changed ↑i
+coords :
+  ↑(Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize (tau ↑d))) = ↑(ProverCommitPointWeight49.a ⟨↑d, hd⟩) ∧
+    ↑(Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize (tau ↑d))) = ↑(ProverCommitPointWeight49.b ⟨↑d, hd⟩)
+ha : ↑(Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize (tau ↑d))) < 10
+hb : ↑(Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize (tau ↑d))) < 10
+hs :
+  factors.point (ProverCommitNativeQ48.source (p ↑(Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize (tau ↑d)))))
+      (ProverCommitNativeQ48.source (p ↑(Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize (tau ↑d))))) =
+    ok (ProverCommitQArray48.array 4#usize (target p hp ↑d))
+⊢ (do
+      let a1 ← ok (ProverCommitQArray48.array 4#usize (target p hp ↑d))
+      let out1 ← (matrix rows).update d a1
+      point_rows.fill (ProverCommitQArray48.array 10#usize p) out1 (d.wrapping_add 1#usize) (left.wrapping_sub 1#u8)) =
+    ok (matrix out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.ProverCommitPointRows49.target_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPointRows49.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPointRows49.fill' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

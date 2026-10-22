@@ -249,6 +249,36 @@ snapshot reveals the mismatch. Aligning the constant's type with Half49 fixes
 it (J10138: 3.88 s / 4048524 KiB), without raising any limit. All diagnostics
 and source snapshots are retained. No shipped file or deployed premise changed.
 
+## Stage 11: initialized factor reads and seven raw value composition
+
+J10140/43/44 prove the literal TAU table, source coordinate arithmetic and
+entire five-row point-factor fill. J10146 binds actual stored matrix reads,
+including source shift/mask digits, to the complete factor product. J10150
+composes both point and circle initializers with those stored reads/products.
+J10148 identifies all seven mathematical raw rows with existing R1
+`Batched.ell` on basis vectors, hence their kappa sum with `weightsR1`.
+The sums remain symbolic; only the seven functional kinds are split.
+
+J10154/56 compose seven helper values starting from the original alpha array,
+including `points.all` and alpha[8]/alpha[9] reads. No statement-point,
+factor-value or power-array image is supplied as a premise. Canonicality and
+exact inactive/three-point/Libra/two-circle values are conclusions. These are
+pure value-composition theorems: they do not assert source call counts for a
+reference that recomputes a pure constructor per read. The complete native
+outer Weights allocation/layout and reuse, materialized 1024-array, and
+higher opening callers remain explicit obligations.
+
+Native gates pass: full arbitrary-context point-row write (3.425 s /
+152836 KiB) and complete S2 raw dispatch (3.419 s / 154676 KiB), zero swaps.
+The latter checks all seven kinds and legal coefficient indices, including
+all five stored multiplications. Primitive inactive and power helpers are
+proved separately. Source pins include weights.rs and transport.rs's TAU.
+Failed drafts J10141/42/47/49/51/53/55 are retained. In particular, the first
+seven-result composition reaches recursion depth; isolating generic storage,
+canonicality and map lemmas fixes it without raising any option. Every
+accepted printed axiom is standard. No shipped change or deployed-premise
+removal. Target not yet established.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

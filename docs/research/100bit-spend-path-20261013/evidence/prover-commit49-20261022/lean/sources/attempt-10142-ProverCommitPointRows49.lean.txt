@@ -1,0 +1,101 @@
+import R1Z.ProverCommitPointRowIndex49
+import R1Z.ProverCommitCircleRows49
+/-! Complete owned point-factor fill, retaining raw row identities for the
+subsequent stored-factor lookup. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitPointRows49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitCircleRows49
+open ProverCommitPointRowIndex49
+
+variable (p : Nat → Old.Q) (hp : ∀ i, i<10 → Canonical (p i))
+
+def target (d : Nat) : Nat → Old.Q :=
+  if h : d<5 then ProverCommitPointWeight49.row (fun i : Fin 10 => p i.val) (fun i => hp i.val i.isLt) ⟨d,h⟩
+  else fun _ => zero
+
+theorem target_canonical (d k : Nat) (hd : d<5) (hk : k<4) : Canonical (target p hp d k) := by
+  rw [target,dif_pos hd]
+  exact (ProverCommitPointWeight49.row_spec (fun i : Fin 10 => p i.val) (fun i => hp i.val i.isLt) ⟨d,hd⟩).2.1 k hk
+
+theorem step (d : Usize) (hd : d.val<5) :
+    (do
+      let t ← Array.index_usize point_rows.TAU d
+      let a ← Array.index_usize (ProverCommitQArray48.array 10#usize p)
+        (Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize t))
+      let b ← Array.index_usize (ProverCommitQArray48.array 10#usize p)
+        (Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize t))
+      factors.point a b)=ok (ProverCommitQArray48.array 4#usize (target p hp d.val)) := by
+  have hc := coordinates d hd
+  have hab := (ProverCommitPointWeight49.a ⟨d.val,hd⟩).isLt
+  have hbb := (ProverCommitPointWeight49.b ⟨d.val,hd⟩).isLt
+  rw [tau_index d hd]
+  simp only [bind_tc_ok]
+  rw [ProverCommitQArray48.index _ _ _ (by rw [hc.1];exact hab)]
+  simp only [bind_tc_ok]
+  rw [ProverCommitQArray48.index _ _ _ (by rw [hc.2];exact hbb)]
+  simp only [bind_tc_ok]
+  rw [hc.1,hc.2,target,dif_pos hd]
+  exact (ProverCommitPointWeight49.row_spec (fun i : Fin 10 => p i.val) (fun i => hp i.val i.isLt) ⟨d.val,hd⟩).1
+
+attribute [local irreducible] matrix target ProverCommitQArray48.array ProverCommitNativeQ48.source
+
+theorem fill (n : Nat) (rows : Nat → Nat → Old.Q)
+    (hrows : ∀ i k, i<5 → k<4 → Canonical (rows i k))
+    (d : Usize) (left : U8) (hleft : left.val=n) (bound : d.val+n ≤ 5) :
+    ∃ out : Nat → Nat → Old.Q,
+      point_rows.fill (ProverCommitQArray48.array 10#usize p) (matrix rows) d left=ok (matrix out) ∧
+      (∀ i k, i<5 → k<4 → Canonical (out i k)) ∧
+      ∀ i : Fin 5, out i.val=if d.val ≤ i.val ∧ i.val<d.val+n then target p hp i.val else rows i.val := by
+  induction n generalizing rows d left with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    refine ⟨rows,?_,hrows,?_⟩
+    · rw [point_rows.fill,hz];rfl
+    · intro i;rw [if_neg (by omega)]
+  | succ n ih =>
+    have hn : left≠0#u8 := by scalar_tac
+    have hd : d.val<5 := by omega
+    have hdec : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    have hinc : (Usize.wrapping_add d 1#usize).val=d.val+1 := by
+      simpa only [show (1#usize).val=1 from rfl] using
+        ProverCommitBasisFillValue47.add_val d 1#usize (by change d.val+1<2048;omega)
+    let changed := Function.update rows d.val (target p hp d.val)
+    have hc : ∀ i k, i<5 → k<4 → Canonical (changed i k) := by
+      intro i k hi hk
+      by_cases he : i=d.val
+      · subst i;simpa only [changed,Function.update_self] using target_canonical p hp d.val k hd hk
+      · simpa only [changed,Function.update_of_ne he] using hrows i k hi hk
+    obtain ⟨out,hout,hcout,heq⟩ := ih changed hc _ _ hdec (by rw [hinc];omega)
+    refine ⟨out,?_,hcout,?_⟩
+    · have hs := step p hp d hd
+      rw [point_rows.fill]
+      simp only [hn,if_false,lift,bind_tc_ok]
+      simp only [tau_index d hd,bind_tc_ok] at hs ⊢
+      have coords := coordinates d hd
+      have ha : (Usize.wrapping_sub 9#usize (Usize.wrapping_mul 2#usize (tau d.val))).val<10 := by rw [coords.1];exact (ProverCommitPointWeight49.a ⟨d.val,hd⟩).isLt
+      have hb : (Usize.wrapping_sub 8#usize (Usize.wrapping_mul 2#usize (tau d.val))).val<10 := by rw [coords.2];exact (ProverCommitPointWeight49.b ⟨d.val,hd⟩).isLt
+      rw [ProverCommitQArray48.index _ _ _ ha] at hs ⊢
+      simp only [bind_tc_ok] at hs ⊢
+      rw [ProverCommitQArray48.index _ _ _ hb] at hs ⊢
+      simp only [bind_tc_ok] at hs ⊢
+      rw [hs,matrix_update rows d hd (target p hp d.val)]
+      simp only [bind_tc_ok]
+      exact hout
+    · intro i
+      rw [heq,hinc]
+      by_cases he : i.val=d.val
+      · rw [if_neg (by omega),if_pos (by omega)]
+        simp only [changed,he,Function.update_self]
+      · by_cases ht : d.val+1 ≤ i.val ∧ i.val<d.val+1+n
+        · rw [if_pos ht,if_pos (by omega)]
+        · rw [if_neg ht,if_neg (by omega)]
+          simp only [changed,Function.update_of_ne he]
+
+#print axioms target_canonical
+#print axioms step
+#print axioms fill
+end R1Z.ProverCommitPointRows49
