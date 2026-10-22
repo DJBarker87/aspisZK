@@ -596,3 +596,32 @@ extraction has five transparent declarations and compiled no-option owners.
 Its canonical-input map to checked arithmetic is in progress, reusing
 existing small-word bounds while avoiding a cold legacy proof rebuild.
 The overall S9 release cone and 100-bit composition are still OPEN.
+
+
+## Canonical bridge across the overflow-profile difference
+
+PROVED in `evidence/s9-wide-add-m31-canonical-map-v1-20261022/`
+(commit `653f85fb9a`): for two canonical U32 field words, the actual
+no-override extracted wrapping M31.add and the retained checked M31.add both
+succeed with the identical stored word. The proof establishes intermediate
+bounds and the modulo formula; it does not assume successful addition.
+This replaces the invalid unrestricted source-hash-based equivalence claim.
+Focused check: 17.568 seconds, below 3.22 GB RSS, zero swaps, standard axioms.
+The normalized genuine source Types and Funs owners were checked separately.
+
+The two-, four- and eight-component lifts are proved and committed
+(`aa5d3e1529`, `289d886919`). The installed-helper connection and output
+canonicality also passed (S9WideAddConcreteMapV1, focused check 19.087 seconds,
+less than 3.20 GB process RSS, zero swap, standard axioms). It uses the same
+actual-source output witness; no independent successful operation is assumed. A fresh narrow source
+Charon extraction of WideExact.mul_m31 and its complete reachable scalar-arithmetic
+cone has succeeded on the NUC. The first Aeneas translation exited zero but
+emitted empty namespaces and is rejected; a nonempty translation is still
+required. Extraction alone does not prove its arithmetic map. Actual compiler flags for the deployed SBF artifact remain unpinned;
+these source-body results do not close production MIR/runtime correspondence.
+
+The actual reader proof's original small import cohort is valid but its
+generated global discriminant instance clashes with the finish model. A
+collision-safe explicit instance and dependent reader proofs are being
+re-pinned together on the NUC before joint caller use. No historical object
+is silently being relabelled as the new cohort.
