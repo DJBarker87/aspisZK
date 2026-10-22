@@ -1451,3 +1451,23 @@ draft PR https://github.com/DJBarker87/aspisZK/pull/10. It is unadopted and
 unmerged. The draft explicitly retains all six B1 CU comparison failures,
 source/refinement obligations and the implementation-linked target. It does
 not propose merging the historical experimental branch wholesale.
+
+
+## Installed candidate dots slot no longer assumes dots-call success
+
+`s4-queryops-total-local-values-v1-20261022` installs the total exact
+candidate entry into the existing concrete QueryOps builder and derives
+the same returned Full array's exact local batch values through the retained
+carrier decoder theorem. Compared with
+`concrete_candidate_dots_success_has_endpoint_fields`, the new
+`candidate_queryops_dots_total_exact_batches` has no successful dots-call
+`hcall` premise and no preselected returned array. It derives them from the
+same strict frame/scanner and canonical incoming powers contracts. No
+rejection path is discarded from a claimed all-input result: the theorem is
+explicitly scoped to those checked inputs.
+
+Focused run: exit 0, 25.195s, peak RSS 4,050,337,792 bytes, swap 0, standard
+axioms. Packet checker passed; no unchanged dependency was rebuilt. This is
+forward totality for the installed candidate dots slot, not complete query
+or caller totality. Candidate adoption, frozen-source lowering and global
+authentication/sampler/runtime/security composition remain open.

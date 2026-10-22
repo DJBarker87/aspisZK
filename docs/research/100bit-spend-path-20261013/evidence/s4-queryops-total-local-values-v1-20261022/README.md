@@ -1,0 +1,3 @@
+PROVED actual installed candidate QueryOps.dots slot succeeds and its returned Full values equal the exact four local width29 batches.
+
+Limitations: The previous accepted-only endpoint took a successful dots invocation as hcall; this theorem derives that success instead. Requires canonical gamma, the same ClaimPowers output, incoming coefficient-array identity and strict scanner/frame inputs. Candidate source only; no frozen Std/from_fn refinement or adoption is asserted. This proves one source-installed dots slot, not full query/caller execution, authenticated reconstruction or shared-oracle probability law. No final coherent release replay or implementation-linked 100-bit result.
