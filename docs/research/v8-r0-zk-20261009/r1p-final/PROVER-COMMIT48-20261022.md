@@ -349,6 +349,48 @@ binding and owned partial-Boolean-sum induction, consuming the now-proved
 standard interpolation output. No complete native simulator payload equality,
 FSExperiments conversion, join or deployed premise removal is claimed.
 
+## Final focused audit and archive
+
+J9999 (`R1Z.ProverCommitAudit48`) passes: exit 0, wall 1.95 s, peak RSS
+4189020 KiB, swaps 0. It audits all 160 new theorem declarations and the
+unchanged conditional deployed endpoint. Every printed axiom list is a subset
+of [propext, Classical.choice, Quot.sound]. The count describes coverage only.
+The final source revision is `f0c32fd093`; `pins/final-source-freeze.json`
+records all 54 changed Lean files. `pins/final-proof-audit.json` checks their
+exact installed bytes and every dependency-object hash in the final receipt.
+No Lean source changes follow the audit.
+
+`lean/attempts.json` records all 98 actual compile attempts with exact target,
+source SHA, dependency fingerprint, command, exit, wall, peak RSS, swap,
+source revision and full printed axiom/error text. J9927 and J9954 are the
+only unused compiler numbers; both were retired by failed dependency
+preflight, with their source snapshots retained. Together with J9999 this
+exhausts the assigned allocation. `native-attempts.json` indexes 38 native
+and extraction receipts; prelaunch reservation holds are recorded separately.
+Input snapshots retain rejected versions. Some older native receipt labels
+say “evaluator” or “weight initializer” for a later helper; the exact scoped
+command/harness and source snapshot identify the executed target.
+
+`pins/shipped-sources-unchanged.json` checks all 491 tracked crates/programs
+files against `617fc58aaf` and confirms no untracked shipped file. Every
+copied full field source is byte-identical to this frozen shipped source;
+`pins/copied-field-source-bindings.json` records those hashes. Consequently
+no ELF rebuild was triggered. No ELF, .olean, LLBC, tarball or target directory
+is committed. Endpoint snapshots and verbatim statements below are unchanged.
+
+This is a focused cached-object audit, not a full frozen release replay.
+The full manifest was not launched while the native simulator source image
+remains incomplete. Five named pure std contracts were added during this
+part (chunks_exact, zip, rev, fold, flat_map); their consistency models compile
+without axioms. They do not include unsafe/allocator totality, weight values,
+source payload equality or a privacy claim. Existing native arithmetic proofs
+are reused only at the recorded identical callee bodies.
+
+**Target not yet established; zero deployed endpoint premises removed.**
+Work stops because the assigned compile allocation is exhausted. The exact
+remaining obligations and next deliverable are listed in Stage 10. No
+FSExperiments conversion or joins were attempted. No push or merge occurred.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,
