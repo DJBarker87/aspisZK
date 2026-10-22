@@ -10,10 +10,13 @@ accepted={'AspisR1IndexInsert32.Types':9021,'AspisR1IndexInsert32.Funs':9022,
  'R1Z.ProverCommitPublication32':9032,'R1Z.ProverCommitSorted32':9040,
  'R1Z.ProverCommitProgram32':9039,'R1Z.ProverCommitMapInvariant32':9043}
 checks=[]
+revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 records={r['attempt']:r for r in json.loads((E/'lean/attempts.json').read_text())}
 for module,attempt in accepted.items():
  p=L/(module.replace('.','/')+'.lean');sha=hashlib.sha256(p.read_bytes()).hexdigest()
  r=records[attempt]
+ committed=subprocess.check_output(['git','show',revision+':'+str(p)])
+ assert hashlib.sha256(committed).hexdigest()==sha,(module,'uncommitted proof source')
  assert r['source_sha256']==sha,(module,attempt,'source drift')
  assert r['exit_status']==['0'],r
  lines=r['print_axioms'];assert all('sorryAx' not in line for line in lines)
@@ -33,5 +36,5 @@ assert all(v['byte_identical'] and v['cmp_exit']==0 and v['receipt']['exit_statu
 endpoint=json.loads((E/'endpoint/identity.json').read_text())
 assert hashlib.sha256(Path(endpoint['path']).read_bytes()).hexdigest()==endpoint['sha256']
 assert (E/'endpoint/deletion.diff').read_bytes()==b''
-(E/'final-proof-audit.json').write_text(json.dumps(dict(checked_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),accepted_sources=checks,shipped_inputs_checked=len(source['pins']),endpoint_premises_deleted=0,full_manifest_replayed=False,scope='Focused source/helper evidence only; no native publication owner or whole-run refinement is claimed'),indent=2)+'\n')
+(E/'final-proof-audit.json').write_text(json.dumps(dict(proof_source_revision=revision,accepted_sources=checks,shipped_inputs_checked=len(source['pins']),endpoint_premises_deleted=0,full_manifest_replayed=False,scope='Focused source/helper evidence only; no native publication owner or whole-run refinement is claimed'),indent=2)+'\n')
 print('Final proof bytes and axioms match accepted focused receipts; frozen sources match.')

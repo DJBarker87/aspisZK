@@ -1,7 +1,7 @@
 # Prover commitment continuation 32
 
 Base: 26b922be6. Branch: codex/cx-prover-commit32-20261022.
-Work in progress. Target not yet established.
+Blocked at the native ordered-map transition gate. Target not yet established.
 
 D143/D144 govern this continuation: sorted owned association lists and small
 recursive extracted functions; public statement bytes, submitted proof bytes,
@@ -162,8 +162,8 @@ not attributed to the accepted proof bytes.
 
 | Final module | Env J attempt | Wall s | Peak RSS KiB |
 |---|---:|---:|---:|
-| AspisR1IndexInsert32.Types | 9021 | see receipt | see receipt |
-| AspisR1IndexInsert32.Funs | 9022 | see receipt | see receipt |
+| AspisR1IndexInsert32.Types | 9021 | 0:01.49 | 2509796 |
+| AspisR1IndexInsert32.Funs | 9022 | 0:01.37 | 2521460 |
 | AspisR1Publish32.Types | 9023 | 1.41 | 2506064 |
 | AspisR1Publish32.Funs | 9024 | 1.40 | 2517148 |
 | AspisR1Program32.Types | 9033 | 1.20 | 2513696 |
@@ -187,4 +187,104 @@ the same Kani Rust BTreeMap and narrows the unwind bound from 12 to 4 for the
 at-most-two-entry pre-state (at most three post-insert entries). Unwinding
 assertions remain enabled: an insufficient bound is a failure, not an
 assumption. This is a source/recursion-shape diagnostic, not a relaxation of
-the theorem's quantifiers. Its receipt is pending at this checkpoint.
+the theorem's quantifiers. It ultimately exits 124 at 600.253 seconds; the final receipt is retained.
+
+Final accepted Lean source bytes are pinned by commit `3384569ae` and checked
+against the focused attempt hashes by `final-proof-audit.json`. Historical
+attempt metadata identifies the initial Rust base `113bbc4f2` plus the exact
+per-attempt Lean source overlay and imported-object dependency fingerprint;
+it must not be read as claiming those later proof files existed in that base.
+Rejected drafts remain distinct source snapshots. The generated module import
+mapping is the only compatibility edit to the Aeneas output.
+
+
+## Demonstrated obstruction and exact next interface
+
+The native gate remains unaccepted after changing setup to direct sorted
+pre-states, changing whole-output comparison to a universally selected entry
+and byte, changing solver/object representation, restricting to empty or
+singleton pre-states, and finally isolating the exact source in a minimal
+crate with unwind 4. The interruption was recovered, and the requested
+`sim::publication32::insert_replace_order` was rerun with changed harnesses.
+These are bounded resource/tool failures, not counterexamples or an
+impossibility result about the source algorithm.
+
+Final completed diagnostic timeouts (all exit 124 and zero swaps):
+
+| Gate | Wall seconds | Scope peak bytes |
+|---|---:|---:|
+| publication32-insert-v5 | 600.105 | 6594351104 |
+| publication32-insert-v6 | 600.199 | 6601904128 |
+| publication32-insert-v7 | 600.313 | 6659194880 |
+| publication32-lookup-v1 | 600.161 | 6631309312 |
+| publication32-lookup-v2 | 600.287 | 6665220096 |
+| publication32-entry-v1 | 600.003 | 6268243968 |
+| publication32-single-insert-v1 | 600.395 | 6681976832 |
+| publication32-isolated-insert-v2 | 600.253 | 6612606976 |
+
+The last command's reported GNU-time peak RSS is 15,304 KiB. Timeout can
+terminate descendants before GNU time accounts for their RSS, so this wrapper
+metric is not represented as the actual prover-process peak. The aggregate
+scope peak is 6,612,606,976 bytes; sampled live CBMC RSS exceeded 6 GiB. Full
+commands, caps, times, source/input pins and N/A axioms fields are joined in
+`rust-receipts.jsonl`. No cap was raised and no killed-by-pressure job was
+retried unchanged. Each ten-minute run stops at its mandatory review point.
+The isolated v1 CLI diagnostic exits 2 because the unstable CBMC options flag
+was missing; v2 adds that flag. Neither is reported as a successful Kani gate.
+
+**Exact next interface:** establish the native `BTreeMap<usize, Vec<u8>>`
+insertion/replacement/ordered-iteration transition against
+`R1Z.ProverCommitSorted32.insert`: starting from the ordered entries of the
+native pre-state, `index_insert(..., 0, [])` must return the native post-state's
+ordered entries and exactly the previous value returned by `BTreeMap::insert`.
+The pending bounded target is
+`sim::publication32::insert_replace_order`, with exact minimal harness/source
+pins under `harness/map-gate/` and `publication32-isolated-insert-v2-inputs.json`.
+A passing diagnostic is still a bounded check; the general native/TrustedStd
+interface must remain explicit until its required source correspondence is
+established. Lazy entry behavior, folded publication, and the programming map
+must receive their own transition checks before owner composition.
+
+After that boundary, the next source driver must own base/ext coefficient
+vectors and the query counter, retain the actual `encode_at` contracts,
+replace duplicate opening entries, and serialize in the original query order.
+The numeric-map and byte-publisher proofs here do not calculate those
+opening cells or construct the complete `sim_e_ablated` publication owner.
+The recursion-style extraction failure from D144 is bypassed for the small
+roots; the source-to-native-map verification boundary is not discharged.
+
+## Retained obligations and stopping state
+
+Stage 1 is partial. The complete opening/folded/programming owner and its
+composition remain open. Stages 2–5 were not completed: there is no certified
+eight-attempt publication owner, real entropy/reservation publication owner,
+source-to-FSExperiments conversion, concrete `shippedProverExperiment`, or
+concrete real/ideal WholeRunJoins. `RustProverRefinement` is retained exactly;
+zero premises, quantifiers, carriers, failure events or budgets changed.
+No new cryptographic assumption is introduced.
+
+The inherited entropy source boundary continues to distinguish immediate OS
+failure and sixteen rejected zero-block draws (`ProverCommitEntropy18.os_error`,
+`zero_draws`, `ProverCommitEntropyJoin18.failure_mass_le_bad`). No OS law,
+OS-failure numerical bound, zero-mass claim, or durable reservation proof is
+supplied in this continuation. The canonical model-statement image and the
+shipped `Public::public_bytes = Ok(pubBytes x)` theorem remain obligations;
+no error value was invented and no unreachable rejection branch was assumed.
+
+D143 fixes the observable to public statement bytes, submitted proof bytes,
+and answers to the adversary's own oracle queries. Programming tables, counts
+and timings are internal under that contract. **Timing and other side channels
+are outside the privacy contract.** This continuation records that scope; it
+does not claim the missing observer-factorization/FSExperiments proof.
+
+No full frozen formal manifest was replayed because its source-refinement
+preflight is not green. No unchanged adversarial/runtime/reproducible-build
+suite was repeated. The required three frozen SBF rebuilds were performed
+once and compare byte-identical. Final focused proof source/hash/axioms audits
+pass. All job processes in this job's host directory have finished; pinned
+sources and caches are retained. No local target directory was created, no
+wallet/key was created or deleted, no other worktree was changed, and nothing
+was pushed or merged. `branch-commits.txt` records branch history through proof checkpoint `3384569ae`.
+
+**Target not yet established.** Stop at the demonstrated native ordered-map
+transition verification obstruction rather than composing an assumed owner.
