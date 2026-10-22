@@ -1,0 +1,166 @@
+{
+  "revision": "d2f87886c27f78cc98bef5c1f02d9128bc309fb1",
+  "scope": "generate_for_mask_nonce -> prove_masked_retrying_with, S2 with private-leaf-salts and r1p-check; reachable call-site families, not an executable source-refinement certificate",
+  "excluded": "96-byte generate adapter; fixture APIs; legacy profile21/profile22/spend/other Pool variants; cfg(test) hooks; unselected unsalted leaf branch",
+  "files": {
+    "crates/aspis-r1-cost-probe/src/prover.rs": {
+      "sha256": "76aafd05e9b9459253f810be324b80fa5404449f93d03edb5697cddc669d2c42",
+      "size": 25854
+    },
+    "crates/aspis-prover/src/state_only_entropy.rs": {
+      "sha256": "6b5a9c8737cc2b832d29bc7dab4660533195d7fe5c46104dc1e6ea2659252934",
+      "size": 60677
+    },
+    "crates/aspis-prover/src/state_only_hiding.rs": {
+      "sha256": "e4c35f4a4eac0786e076a777cb241e92ff6e2d4141424b29734b0b8e384058c0",
+      "size": 67607
+    },
+    "crates/aspis-core/src/state_only_private_merkle.rs": {
+      "sha256": "6f9f030ea3add192358330f8012c81884a1f599e7dcd6b95ca837a5584ecd451",
+      "size": 4033
+    },
+    "crates/aspis-r1-cost-probe/src/multiproof.rs": {
+      "sha256": "4c7e15f34b2a7ffd22ae5e47c3c58517c7855011cc6054ba2562c0399eb16bb3",
+      "size": 12915
+    },
+    "crates/aspis-r1-cost-probe/src/r1_wire.rs": {
+      "sha256": "7479389501c3d2510f639546e0d834dbc42e2bed33c6b5d38c89b8b6318ae3b8",
+      "size": 33298
+    },
+    "crates/aspis-r1-cost-probe/src/transcript.rs": {
+      "sha256": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "size": 5173
+    },
+    "crates/aspis-r1-cost-probe/src/host_commitment.rs": {
+      "sha256": "9afd423191513a8fcd1e9951df8c9e12349e9ecdd1749e8e697f192e7576b735",
+      "size": 9250
+    },
+    "crates/aspis-r1-cost-probe/src/host_semantic.rs": {
+      "sha256": "f45fbab6c7e5de8f315266fb78579f38b7b1931f56d55b126d9311dc88852136",
+      "size": 14794
+    },
+    "crates/aspis-r1-cost-probe/src/sim.rs": {
+      "sha256": "2594f50a303bd53ea6ed64d0e49cd986794065c32514eadbd32272b9ec9a4460",
+      "size": 32532
+    }
+  },
+  "families": [
+    {
+      "role": "public-statement",
+      "classification": "public-only",
+      "file": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line_start": 114,
+      "line_end": 115,
+      "note": "H(public_bytes), public context and precommit binding; public nonce, tag, statement only",
+      "excerpt": "    let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),attempt.mask_nonce());\n    let binding=hash(&[b\"UNPROVED:R1:P3:PRIVATE-ATTEMPT\",&public_bytes,&[variant.tag()],&context.encode()]);"
+    },
+    {
+      "role": "reservation",
+      "classification": "public-only",
+      "file": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line_start": 901,
+      "line_end": 916,
+      "note": "SHA256(reservation domain || public nonce), no private seed; ledger path itself is not published",
+      "excerpt": "    pub fn last_error(&self) -> Option<io::ErrorKind> {\n        self.last_error\n    }\n\n    fn reservation_path(&self, mask_nonce: &[u8; 32]) -> PathBuf {\n        // The nonce is burned globally within this wallet ledger, even if a\n        // caller tries to reuse it under a different statement digest.\n        let mut hasher = Sha256::new();\n        hasher.update(ATTEMPT_RESERVATION_DOMAIN);\n        hasher.update(mask_nonce);\n        let digest: [u8; 32] = hasher.finalize().into();\n        let mut name = String::with_capacity(69);\n        for byte in digest {\n            use std::fmt::Write as _;\n            write!(&mut name, \"{byte:02x}\").expect(\"writing to String cannot fail\");\n        }"
+    },
+    {
+      "role": "attempt-binding",
+      "classification": "public-only",
+      "file": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line_start": 862,
+      "line_end": 875,
+      "note": "H(pool binding domain || precommit binding || context || fixed descriptor); PRIVATE in name does not make its bytes secret",
+      "excerpt": "\npub fn pool_v1_private_attempt_binding(\n    hash: HashFn,\n    precommit_binding: &[u8; 32],\n    context: StateOnlyHidingContext,\n) -> [u8; 32] {\n    hash(&[\n        POOL_V1_PRIVATE_ATTEMPT_BINDING_DOMAIN,\n        precommit_binding,\n        &context.encode(),\n        POOL_V1_PRIVATE_WIRE_DESCRIPTOR,\n    ])\n}\n"
+    },
+    {
+      "role": "mask-seed",
+      "classification": "raw-field-suffix",
+      "file": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line_start": 397,
+      "line_end": 413,
+      "note": "H(mask seed domain || binding || context || field seed32)",
+      "excerpt": "fn derive_state_only_mask_seed_from_entropy_ref(\n    hash: HashFn,\n    precommit_binding: [u8; 32],\n    context: StateOnlyHidingContext,\n    private_entropy: &[u8; 32],\n) -> Result<[u8; 32], StateOnlyMaskBuildError> {\n    if *private_entropy == [0; 32] {\n        return Err(StateOnlyMaskBuildError::ZeroPrivateEntropy);\n    }\n    Ok(hash(&[\n        MASK_SEED_DOMAIN,\n        &precommit_binding,\n        &context.encode(),\n        private_entropy,\n    ]))\n}\n"
+    },
+    {
+      "role": "source-seed",
+      "classification": "raw-field-suffix",
+      "file": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line_start": 426,
+      "line_end": 432,
+      "note": "H(source seed domain || binding || context || same field seed32)",
+      "excerpt": "        let source_mask_seed = Zeroizing::new(hash(&[\n            POOL_V1_SOURCE_SEED_DOMAIN,\n            &precommit_binding,\n            &context.encode(),\n            self.field_mask_entropy.as_ref(),\n        ]));\n        self.field_mask_entropy.zeroize();"
+    },
+    {
+      "role": "leaf-salt",
+      "classification": "raw-leaf-suffix",
+      "file": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line_start": 567,
+      "line_end": 587,
+      "note": "H(leaf salt domain || public attempt binding || nonce || tree || index || leaf seed32); all three trees",
+      "excerpt": "    /// context must be replayed; atomic/spend and crossed Pool contexts fail.\n    pub fn derive_pool_v1_leaf_salt(\n        &self,\n        hash: HashFn,\n        context: StateOnlyHidingContext,\n        tree_tag: u8,\n        leaf_index: u32,\n    ) -> Result<[u8; 32], StateOnlyMaskBuildError> {\n        self.validate_pool_v1_context(context)?;\n        let attempt_binding =\n            pool_v1_private_attempt_binding(hash, &self.precommit_binding, context);\n        Ok(hash(&[\n            LEAF_SALT_DOMAIN,\n            &attempt_binding,\n            &self.mask_nonce,\n            &[tree_tag],\n            &leaf_index.to_le_bytes(),\n            self.leaf_salt_seed.as_ref(),\n        ]))\n    }\n"
+    },
+    {
+      "role": "mask-blocks",
+      "classification": "private-derived",
+      "file": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line_start": 1496,
+      "line_end": 1499,
+      "note": "H(mask expand domain || derived mask seed32 || counter64)",
+      "excerpt": "\nfn state_only_mask_expander_block(hash: HashFn, seed: [u8;32], counter: u64) -> [u8;32] {\n    hash(&[MASK_EXPAND_DOMAIN, &seed, &counter.to_le_bytes()])\n}"
+    },
+    {
+      "role": "d-seed",
+      "classification": "private-derived",
+      "file": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line_start": 647,
+      "line_end": 654,
+      "note": "H(D domain || public attempt binding || derived source seed32)",
+      "excerpt": "        let mut expander = Profile21SourceExpander::new(\n            hash,\n            hash(&[\n                POOL_V1_D_SEED_DOMAIN,\n                &attempt_binding,\n                self.source_mask_seed.as_ref(),\n            ]),\n        );"
+    },
+    {
+      "role": "d-blocks",
+      "classification": "private-derived",
+      "file": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line_start": 1256,
+      "line_end": 1258,
+      "note": "H(profile21 expand domain || derived D seed32 || counter64)",
+      "excerpt": "fn profile21_source_expander_block(hash: HashFn, seed: [u8;32], counter: u64) -> [u8;32] {\n    hash(&[PROFILE21_SOURCE_EXPAND_DOMAIN, &seed, &counter.to_le_bytes()])\n}"
+    },
+    {
+      "role": "private-leaves",
+      "classification": "private-derived-and-semantic",
+      "file": "crates/aspis-core/src/state_only_private_merkle.rs",
+      "line_start": 29,
+      "line_end": 50,
+      "note": "H(0x10 || tree || encoded masked values || derived salt32); caller C1/C2 and folded",
+      "excerpt": "pub fn private_leaf_hash(\n    hash: HashFn,\n    tree_tag: u8,\n    value: &[u8],\n    salt: &[u8; STATE_ONLY_PRIVATE_LEAF_SALT_BYTES],\n) -> [u8; 32] {\n    private_leaf_hash_with_digest(LegacyHashFn(hash), tree_tag, value, salt)\n}\n\n/// The same three-slice leaf grammar with a statically selected backend.\n#[inline]\npub fn private_leaf_hash_with_digest<H: Digest32>(\n    hash: H,\n    tree_tag: u8,\n    value: &[u8],\n    salt: &[u8; STATE_ONLY_PRIVATE_LEAF_SALT_BYTES],\n) -> [u8; 32] {\n    hash.digest(&[&[DOM_LEAF, tree_tag], value, salt])\n}\n\n#[cfg(test)]\nmod tests {"
+    },
+    {
+      "role": "binary-nodes-roots",
+      "classification": "private-derived",
+      "file": "crates/aspis-r1-cost-probe/src/multiproof.rs",
+      "line_start": 48,
+      "line_end": 80,
+      "note": "H(0x12 || left digest || right digest), including roots",
+      "excerpt": "#[inline(always)]\npub fn binary_parent<H: Digest32>(hash: H, left: &[u8; 32], right: &[u8; 32]) -> [u8; 32] {\n    hash.digest(&[&[BINARY_NODE_TAG], left, right])\n}\n\n/// Strictly increasing and inside the leaf domain.\nfn well_formed(indices: &[u32]) -> bool {\n    !indices.is_empty()\n        && indices.len() <= MAX_BATCH\n        && indices.windows(2).all(|w| w[0] < w[1])\n        && indices.iter().all(|&i| i < 1 << LEAF_BITS)\n}\n\n#[inline(always)]\nfn index_at(indices: &[u32; MAX_BATCH], index: usize) -> u32 {\n    indices[index]\n}\n\n#[inline(always)]\nfn value_at(values: &[[u8; 32]; MAX_BATCH], index: usize) -> [u8; 32] { values[index] }\n\n#[inline(always)]\nfn root_matches(values: &[[u8; 32]; MAX_BATCH], root: &[u8; 32]) -> bool { values[0] == *root }\n\n#[inline(always)]\nfn occupied_binary_parent<H: Digest32>(hash: H, values: &[[u8; 32]; MAX_BATCH], index: usize) -> [u8; 32] {\n    hash.digest(&[&[BINARY_NODE_TAG], &values[index], &values[index + 1]])\n}\n\n#[inline(always)]\nfn sibling_binary_parent<H: Digest32>(hash: H, values: &[[u8; 32]; MAX_BATCH], index: usize, sibling: &[u8], left: bool) -> [u8; 32] {\n    if left { hash.digest(&[&[BINARY_NODE_TAG], &values[index], sibling]) }\n    else { hash.digest(&[&[BINARY_NODE_TAG], sibling, &values[index]]) }"
+    },
+    {
+      "role": "semantic-transcript",
+      "classification": "private-derived-and-semantic",
+      "file": "crates/aspis-r1-cost-probe/src/r1_wire.rs",
+      "line_start": 173,
+      "line_end": 207,
+      "note": "Initial framing includes commitment root; semantic absorb/draw/update uses state and encoded messages",
+      "excerpt": "    state: [u8; 32],\n    hash: H,\n    next_row: u8,\n}\n\nimpl<H: Digest32> SemanticTranscript<H> {\n    pub fn new(hash: H, public_bytes: &[u8], c1_root: &[u8; 32]) -> Result<Self, Error> {\n        let length = u32::try_from(public_bytes.len()).map_err(|_| Error::Public)?;\n        Ok(Self {\n            state: hash.digest(&[DOMAIN, &[0], &length.to_le_bytes(), public_bytes, c1_root]),\n            hash,\n            next_row: 0,\n        })\n    }\n    pub fn state(&self) -> [u8; 32] {\n        self.state\n    }\n    pub fn next_row(&self) -> u8 {\n        self.next_row\n    }\n\n    fn sample_block_validated(&mut self, row: u8, framed: &[u8]) -> Result<[u8; 32], Error> {\n        if row != self.next_row {\n            return Err(Error::RowOrder {\n                expected: self.next_row,\n                actual: row,\n            });\n        }\n        // Exactly one absorb, one squeeze and one advance. Both reads\n        // use s_abs; advancing from the challenge block would be wrong.\n        let absorbed = self.hash.digest(&[&self.state, &[0, 0xa0 + row], framed]);\n        let block = self.hash.digest(&[&absorbed, &[1]]);\n        self.state = self.hash.digest(&[&absorbed, &[2]]);\n        self.next_row += 1;\n        Ok(block)"
+    },
+    {
+      "role": "tail-transcript",
+      "classification": "private-derived-and-semantic",
+      "file": "crates/aspis-r1-cost-probe/src/transcript.rs",
+      "line_start": 7,
+      "line_end": 62,
+      "note": "Transcript new/absorb/draw/update and query scan blocks; seeded by semantic state",
+      "excerpt": "    pub fn new(hash:H, semantic_state:[u8;32], variant:Variant) -> Self {\n        #[cfg(not(feature = \"private-leaf-salts\"))]\n        let domain: &[u8] = b\"UNPROVED:R1:COST-PROBE:P2\";\n        #[cfg(feature = \"private-leaf-salts\")]\n        let domain: &[u8] = b\"UNPROVED:R1:PRIVATE-SALTED:P3\";\n        Self { state:hash.digest(&[domain,&[variant.tag()],&semantic_state]), hash }\n    }\n    pub fn absorb(&mut self, row:u8, payload:&[u8]) {\n        self.state=self.hash.digest(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);\n    }\n    pub fn block(&mut self,row:u8,payload:&[u8])->[u8;32] {\n        self.absorb(row,payload);\n        let block=self.hash.digest(&[&self.state,&[1]]);\n        self.state=self.hash.digest(&[&self.state,&[2]]);\n        block\n    }\n    pub fn scalar(&mut self,row:u8,payload:&[u8],nonzero:bool)->E {\n        let block=self.block(row,payload);\n        let out=if nonzero {crate::sampler::gamma_sample(&block)} else {crate::sampler::ordinary_sample(&block)};\n        crate::trace::value(4,row as usize,out); out\n    }\n    /// Final query-residual batching: at most 22 coefficients, so a nonzero\n    /// residual has at most 21 roots even when sampled from the K subfield.\n    /// Gamma and both folding challenges continue to use E.\n    pub fn scalar_k(&mut self,row:u8,payload:&[u8])->aspis_core::field::QM31 {\n        let out=crate::sampler::qm31_sample(&self.block(row,payload));\n        crate::trace::value(4,row as usize,E::from_qm31(out)); out\n    }\n    pub fn queries(&mut self, row:u8, payload:&[u8])->Result<[u32;22],crate::verifier::Error> {\n        self.absorb(row,payload);\n        let mut blocks=[[0;32];8];let mut advances=blocks; let mut state=self.state;\n        blocks[0]=self.hash.digest(&[&state,&[1]]);\n        advances[0]=self.hash.digest(&[&state,&[2]]);state=advances[0];\n        blocks[1]=self.hash.digest(&[&state,&[1]]);\n        advances[1]=self.hash.digest(&[&state,&[2]]);state=advances[1];\n        blocks[2]=self.hash.digest(&[&state,&[1]]);\n        advances[2]=self.hash.digest(&[&state,&[2]]);state=advances[2];\n        blocks[3]=self.hash.digest(&[&state,&[1]]);\n        advances[3]=self.hash.digest(&[&state,&[2]]);state=advances[3];\n        blocks[4]=self.hash.digest(&[&state,&[1]]);\n        advances[4]=self.hash.digest(&[&state,&[2]]);state=advances[4];\n        blocks[5]=self.hash.digest(&[&state,&[1]]);\n        advances[5]=self.hash.digest(&[&state,&[2]]);state=advances[5];\n        blocks[6]=self.hash.digest(&[&state,&[1]]);\n        advances[6]=self.hash.digest(&[&state,&[2]]);state=advances[6];\n        blocks[7]=self.hash.digest(&[&state,&[1]]);\n        advances[7]=self.hash.digest(&[&state,&[2]]);state=advances[7];\n        let (q,state)=aspis_core::r0_transcript::queries_from_pairs(&blocks,&advances).map_err(|_|crate::verifier::Error::Transcript)?;\n        self.state=state;\n        { let u=q[0]; crate::trace::value(5,0,E::from_m31(aspis_core::field::M31(u))); }\n        { let u=q[1]; crate::trace::value(5,1,E::from_m31(aspis_core::field::M31(u))); }\n        { let u=q[2]; crate::trace::value(5,2,E::from_m31(aspis_core::field::M31(u))); }\n        { let u=q[3]; crate::trace::value(5,3,E::from_m31(aspis_core::field::M31(u))); }\n        { let u=q[4]; crate::trace::value(5,4,E::from_m31(aspis_core::field::M31(u))); }\n        { let u=q[5]; crate::trace::value(5,5,E::from_m31(aspis_core::field::M31(u))); }\n        { let u=q[6]; crate::trace::value(5,6,E::from_m31(aspis_core::field::M31(u))); }"
+    }
+  ]
+}
