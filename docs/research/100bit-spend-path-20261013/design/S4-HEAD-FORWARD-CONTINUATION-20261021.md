@@ -1595,3 +1595,47 @@ outer loop is underway, retaining scan/finish callee boundaries. Neither
 the P3 specialization nor the forthcoming model scanner composition may
 be described as full production sampler refinement until that source
 boundary is discharged. Frozen-source S4 and global soundness remain open.
+
+
+## Concrete first-stop trace now yields exact scanOut output and state
+
+Primary review checked the source and checker of
+`query31-driver-trace-scanout-v1-20261022`.
+`successful_driver_trace_scanOut` consumes the same full block/advance
+arrays and actual first-stop DriverTrace, valid initial scan state and zero
+initial draws. It proves the entire scanOut pair equals the returned query
+array's value list and the decoded selected advance. Its model starts at
+q22StateOf that actual initial state; the source default lemma supplies q0
+for the default specialization. All eight stop cases are covered, including
+the final lastStop=false shape by continuing into the zero-length finish.
+Earlier advances are derived from the typed array, never assumed as source
+reads. False scans derive draws=8*i, keeping each visited guard below 64.
+Focused exit 0, 16.066s, peak process RSS 3,509,338,112 bytes, swap 0,
+standard axioms. The packet honestly records that earlier temporary failed
+attempts were overwritten; only the final successful attempt has complete
+source/receipt/log evidence. No missing diagnostic is fabricated.
+
+`s4-row31-source-trace-consumer-v1-20261022` internally discharges the
+pair-array views from the same materializedOutputs witness and combines
+that source scanner result with the literal same-pair result. It derives
+array-value-list equality with literal xs; no desired output equality is
+assumed. Its exact traceResult input can now be supplied by the theorem
+above. Focused exit 0, 20.636s, peak aggregate RSS 3,426,779,136 bytes,
+swap 0, standard axioms. Source and packet checker reviewed. The next
+entry-level consumer eliminates independently supplied pair/array/trace
+witnesses using one full successful chosen-model query schedule.
+
+`s4-query-zero-counter-start-v1-20261022` proves zero accepted/draw counters
+project any typed backing array to q0 and yield validState. No backing-array
+zero-content property is needed for that projection. Actual source default
+counter provenance remains to be supplied by the constructor extraction;
+the theorem does not assert full source-state equality or prove Std
+DefaultArray. Focused exit 0, 15.322s, peak process RSS 2,251,194,368 bytes,
+swap 0, standard axioms. Metadata normalizes one direct module identifier
+from path spelling to Lean spelling without changing compiler execution;
+original metadata and explanation retained. Packet checker reviewed.
+
+The unrolled source-shaped DriverTrace and the unchanged production
+queries_from_pairs loop are still distinct. The production-loop extraction
+and refinement remain required; none of these results is a source adoption
+or an implementation-linked security theorem.
