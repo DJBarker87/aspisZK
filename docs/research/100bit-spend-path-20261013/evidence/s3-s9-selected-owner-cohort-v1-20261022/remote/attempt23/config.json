@@ -1,0 +1,242 @@
+{
+  "collector": "/home/dombarker/project-offloads/r1-circle-sample-wrapper-extraction-v2/collect-cgroups.py",
+  "collector_sha256": "4fc152ea4f88742fb460c301ae17446f1d1ba9162acdaafb37d80e60c4907800",
+  "global_lock": "/tmp/aspis-global-extraction-admission-20261019.lock",
+  "lean": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean",
+  "lean_path": [
+    "/home/dombarker/project-offloads/d18-s3-s9-cohort-recompile-v1-20261022/attempt23/attempt/objects"
+  ],
+  "lean_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+  "scope_memory_high_bytes": 3221225472,
+  "scope_memory_max_bytes": 4294967296,
+  "source_revision": "66ad188f737fe32021035ff284e853bc791cab93",
+  "stages": [
+    {
+      "direct_imports": {
+        "AspisV8R17.QM31WordResidues": "d1729e0d8b5540245c5c07b51982e035b2c1d1af47e60af639f8616cce28dbad",
+        "AspisV8R17.QuadraticTowerOperations": "2827f779513b8de9b61f6351e520b6c08b4ebf8cc9b56eb8ce10d7960e0e903d"
+      },
+      "module": "AspisV8R17.QM31WordTower",
+      "object_sha256": "2df87de121f49ffad1b83e362dce53bac025f9b0d405c384607cec995701aca8",
+      "phase": "stage01",
+      "source": "sources/AspisV8R17/QM31WordTower.lean",
+      "source_sha256": "66325008271913c8c589885ca3405e07e04b8ff75698996868b01e2cdd742b0a"
+    },
+    {
+      "direct_imports": {
+        "AspisV8R17.QM31WordTower": "FROM_STAGE_stage01",
+        "ExtractedCurrentQM31Mul": "86efe0116916eb71213af73f34e379befbe86eec20b27eabc077c6cde2c08b78"
+      },
+      "module": "ExtractedCurrentQM31Tower",
+      "object_sha256": "dbbe03abd3db14427d43665bf4f2d4bfe106c3ba15a246ecc83868180e086fc0",
+      "phase": "stage02",
+      "source": "sources/ExtractedCurrentQM31Tower.lean",
+      "source_sha256": "c350218ee48adef372f56b6f108a916dccacff6057c548b462b0f824a883e881"
+    },
+    {
+      "direct_imports": {
+        "AspisV8R15.ExactTowerBase": "30c1572411f706429a513826d20612746a7501c6f9e29b9159ae70ae32ea486e",
+        "ExtractedCurrentQM31Tower": "FROM_STAGE_stage02"
+      },
+      "module": "ExtractedCurrentQM31Exact",
+      "object_sha256": "d6667fe29d9791d584282466cbe5460240b10b5c331d81f18f251ddb1aa838b1",
+      "phase": "stage03",
+      "source": "sources/ExtractedCurrentQM31Exact.lean",
+      "source_sha256": "8ebed6587ee751e9296218f2618185d4c49de533a094232c62c551705add0e34"
+    },
+    {
+      "direct_imports": {
+        "CurrentWideQMBridge": "ad7b12797434a387e5e9a38f4f56f81adb506b2951a96d9161402de1502ea538",
+        "ExtractedCurrentQM31Exact": "FROM_STAGE_stage03"
+      },
+      "module": "CurrentWideQMField",
+      "object_sha256": "e1d1a8b9c2b7d1ddd980db0dda08031b3a5c9cc607cdb3ffe269b576981b5b3e",
+      "phase": "stage04",
+      "source": "sources/CurrentWideQMField.lean",
+      "source_sha256": "08593ab8b96bef020f5e28990acf217647b170fc9ee43d9e8f0cd6bb43eb01fc"
+    },
+    {
+      "direct_imports": {
+        "CurrentWideQMField": "FROM_STAGE_stage04",
+        "WideTower": "45f5730e31adf683819c2b5c8a39c70a6ec99f67b5d80f36878ee4052f8197b9"
+      },
+      "module": "CurrentWideField",
+      "object_sha256": "9530fed93633c80d4ee634d9a3130284262887662b398349060b9ae8c88cb3c2",
+      "phase": "stage05",
+      "source": "sources/CurrentWideField.lean",
+      "source_sha256": "5effff1e8a8b841a7e3c55fcf880767bae118c0b66a613874caeab21597f7c5a"
+    },
+    {
+      "direct_imports": {
+        "CurrentWideField": "FROM_STAGE_stage05",
+        "R17CurrentDomainCanonical": "0de91abdb03a671e03dad1805f4c1998338396da559c4c093f3dc1257e65c377"
+      },
+      "module": "CurrentWideMulU",
+      "object_sha256": "fb0609de78c851afac985908b49faba62ae73e7f9f21895ff64f806b9d71a558",
+      "phase": "stage06",
+      "source": "sources/CurrentWideMulU.lean",
+      "source_sha256": "55d09d482b96255b73b2b3019ae04f75d30a463aae6029af540b34f91d013867"
+    },
+    {
+      "direct_imports": {
+        "AspisV8R15.ExactTowerBase": "30c1572411f706429a513826d20612746a7501c6f9e29b9159ae70ae32ea486e",
+        "AspisV8R17.QM31WordTower": "FROM_STAGE_stage01",
+        "CurrentWideQMField": "FROM_STAGE_stage04",
+        "ExtractedCurrentTowerAdd": "c7821fbdd783ddbb93fadcb1b7ad8fe904d64ee336512c413927f74da0db0312"
+      },
+      "module": "CurrentWideQMSubV5",
+      "object_sha256": "cbafe2c21cac7e058ff0703bbe32c7873d774585e3f1791c73cb82f38439f4ca",
+      "phase": "stage07",
+      "source": "sources/CurrentWideQMSubV5.lean",
+      "source_sha256": "0c28c55fdaf98ee80497d2827d40880884351b187d7cc89fff9276cd69711b4c"
+    },
+    {
+      "direct_imports": {
+        "CurrentWideMulU": "FROM_STAGE_stage06",
+        "CurrentWideQMSubV5": "FROM_STAGE_stage07"
+      },
+      "module": "CurrentWideProduct",
+      "object_sha256": "f010a1f6ecd992a9a3e4a2661a26b45bdfcfb6e570b8f873f184eb591bb24346",
+      "phase": "stage08",
+      "source": "sources/CurrentWideProduct.lean",
+      "source_sha256": "e558a866be1601e0bf24f1d9ddaf0162099fd7f70dfd90b6778a0c4a7ca28d1c"
+    },
+    {
+      "direct_imports": {
+        "AspisV8R15.ExactTowerBase": "30c1572411f706429a513826d20612746a7501c6f9e29b9159ae70ae32ea486e",
+        "AspisV8R17.QM31WordTower": "FROM_STAGE_stage01",
+        "CurrentWideQMField": "FROM_STAGE_stage04"
+      },
+      "module": "CurrentWideQMMulM31V5",
+      "object_sha256": "8c959ce115e0299a916499044eba96edc2927f5532c15aaa0e15154d7a5ad01d",
+      "phase": "stage09",
+      "source": "sources/CurrentWideQMMulM31V5.lean",
+      "source_sha256": "a017ade52bb3d8c9212e4224299b54842ade6e3d7f6e8087e8d22383fa0fbb1a"
+    },
+    {
+      "direct_imports": {
+        "CurrentWideField": "FROM_STAGE_stage05",
+        "CurrentWideQMMulM31V5": "FROM_STAGE_stage09",
+        "R17CurrentM31Semantics": "efab4e22e81bc0eea9db75cf536ea59dd933a28f6a9ff33f23efa0f1c0e22103",
+        "WideTower": "45f5730e31adf683819c2b5c8a39c70a6ec99f67b5d80f36878ee4052f8197b9"
+      },
+      "module": "CurrentWideMulM31V13",
+      "object_sha256": "274968c5fbaf555ca223f60358bae69ce10f3478c21c3ec40c11eb6d34a7869c",
+      "phase": "stage10",
+      "source": "sources/CurrentWideMulM31V13.lean",
+      "source_sha256": "c4a0898456642a8b4d114338611b471b88f0ac37a01e11a97fa8bd6529de271d"
+    },
+    {
+      "direct_imports": {
+        "CurrentWideMulM31V13": "FROM_STAGE_stage10",
+        "CurrentWideProduct": "FROM_STAGE_stage08",
+        "FinishCandidateEquations": "78f62e3029c67257a30fd99063c387add106b068eef918c114834d89e0277eb6"
+      },
+      "module": "CurrentFinishArithmetic",
+      "object_sha256": "5edd21dfc6f56ebea717c5b2ee0c290c1c988b261c44d0f4faa91ae7b76ccaf6",
+      "phase": "stage11",
+      "source": "sources/CurrentFinishArithmetic.lean",
+      "source_sha256": "1231a46b7d36dfcff38149d2efa03f13ef689abdb97a1ee1ca3eaea17216518e"
+    },
+    {
+      "direct_imports": {
+        "CurrentFinishArithmetic": "FROM_STAGE_stage11",
+        "CurrentWideEqSemanticV7": "73e9824b6014424d39804ca1fc706c15ae1fc445742d003a0c30488123ea1efa"
+      },
+      "module": "CurrentFinishEquality",
+      "object_sha256": "1a06d9d987a316785f400f3e805da0b522095daa32ef762fed675f1798774054",
+      "phase": "stage12",
+      "source": "sources/CurrentFinishEquality.lean",
+      "source_sha256": "762fb39866839b0fdca6031bdfdcf912c7e3c4342cf16e9b1a77840b75355691"
+    },
+    {
+      "direct_imports": {
+        "CurrentFinishArithmetic": "FROM_STAGE_stage11",
+        "ExtractedRecordByteCanonicality": "1f7406232cab30165799f257dac60b50074ca353300147c23fb1639200404419",
+        "WeightsFieldSuccess": "988b67e4c1b59ffdcd168ff3383645fdef6614b1650e09a476903949990dcd48"
+      },
+      "module": "FinishFieldSelectorAdapterV2",
+      "object_sha256": "c7ed8358d4c8e583aa1df9f4e612e3928eab210340d651eed63f087ed086126f",
+      "phase": "stage13",
+      "source": "sources/FinishFieldSelectorAdapterV2.lean",
+      "source_sha256": "5249244624c5d79e570c52a29030a9b8dc773b150063e915c523cd309d121364"
+    },
+    {
+      "direct_imports": {
+        "CurrentFinishEquality": "FROM_STAGE_stage12",
+        "FinishFieldSelectorAdapterV2": "FROM_STAGE_stage13"
+      },
+      "module": "CurrentFinishField",
+      "object_sha256": "2d772d761555bd8df0218abde9a2194a46fb640fcfa494e7323fcc8213b67f65",
+      "phase": "stage14",
+      "source": "sources/CurrentFinishField.lean",
+      "source_sha256": "69fe81d0957ace9d09f792e56a20a705abef6661cc49e32cda400b123a5e4514"
+    },
+    {
+      "direct_imports": {
+        "CurrentWideField": "FROM_STAGE_stage05",
+        "CurrentWideMulCanonical": "39473f50617bd36a6f43b49dae5c474efe1aa35d18ccc50a45c89871e0228428"
+      },
+      "module": "CurrentWideMulSourceGraph",
+      "object_sha256": "1941b833e5407340bd6396324946d40dd4fc98009c8898a5eb8316d70cf1e51e",
+      "phase": "stage15",
+      "source": "sources/CurrentWideMulSourceGraph.lean",
+      "source_sha256": "143fe3c0c272f4b3701dd1702fff8e997f098c5bca1ee16cf04f4a584635f524"
+    },
+    {
+      "direct_imports": {
+        "CurrentWideMulSourceGraph": "FROM_STAGE_stage15"
+      },
+      "module": "CurrentWideMulExact",
+      "object_sha256": "9adcb5bb77075f0a6b7686001986fb8334f89f9032e2df19c1cbeed7011dc164",
+      "phase": "stage16",
+      "source": "sources/CurrentWideMulExact.lean",
+      "source_sha256": "792e469dc80cf9d393895a815f0ef348cc97deac9131eb3f7938f83072503b3c"
+    },
+    {
+      "direct_imports": {
+        "CurrentWideMulExact": "FROM_STAGE_stage16"
+      },
+      "module": "CurrentWideMulExactProduct",
+      "object_sha256": "b9d8b464eb58d6a5b510acba6b07ca0fb91b7ac99b7c6dad264fda2248e85c13",
+      "phase": "stage17",
+      "source": "sources/CurrentWideMulExactProduct.lean",
+      "source_sha256": "e333e1c5d32b2de3130f017cdc2c505f0ab7143abac14831fb313a9229700f36"
+    },
+    {
+      "direct_imports": {
+        "CurrentWideMulExactProduct": "FROM_STAGE_stage17"
+      },
+      "module": "CurrentWideLinearExact",
+      "object_sha256": "9611abbd61ffacd417404d84efb9db54a2741dbfa46bfccd74c4691c81840f5a",
+      "phase": "stage18",
+      "source": "sources/CurrentWideLinearExact.lean",
+      "source_sha256": "27152bb19b6a8f3adef460c9d84524c54ae8ee8cff91f413957b31fb50f1fe4a"
+    },
+    {
+      "direct_imports": {
+        "AspisR1GroupedPairActualFieldOpsV3.Funs": "48e192c8592f7ee042edea1856ea28cc27f280c871ec53879a0f59e58e192d3a",
+        "CurrentFinishField": "FROM_STAGE_stage14",
+        "CurrentWideLinearExact": "FROM_STAGE_stage18"
+      },
+      "module": "S3ActualFieldOpsComplete",
+      "object_sha256": "daa45aebe98eeea71e81dd7291aeb055d7d686e19261f80253f6af05e3d54bd3",
+      "phase": "stage19",
+      "source": "sources/S3ActualFieldOpsComplete.lean",
+      "source_sha256": "cf50535432a6b2d1067cd5d9e07c5297fb0490b628c3e15c9df43907184bc3e7"
+    },
+    {
+      "direct_imports": {
+        "FinishFieldSelectorAdapterV2": "FROM_STAGE_stage13",
+        "S3ActualFieldOpsComplete": "FROM_STAGE_stage19",
+        "WeightsFieldSuccess": "988b67e4c1b59ffdcd168ff3383645fdef6614b1650e09a476903949990dcd48"
+      },
+      "module": "S3ActualFieldParserBridgeV1",
+      "object_sha256": "0027396b6e09f8bac7c87c189c96ef687a1fcbb956a143186393898e08dd6a2b",
+      "phase": "stage20",
+      "source": "sources/S3ActualFieldParserBridgeV1.lean",
+      "source_sha256": "e56de9a7899ca455fc760259f79b529da7d6f2cbd1356d7812f1612e132a0a57"
+    }
+  ],
+  "unit": "d18-s3-s9-cohort-recompile-v23"
+}
