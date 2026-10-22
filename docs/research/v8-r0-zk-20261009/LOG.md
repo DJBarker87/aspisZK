@@ -8780,3 +8780,21 @@ cache, with aggregate RSS monitored and a stop if it nears the cap. Record targe
 peak RSS and swap, under its own build label outside the proof-attempt range. A
 module that fails or is memory-killed is isolated and reported, never rerun with a
 larger cap. Session A's modules are only built, never edited.
+
+## D176 (lead, 2026-10-22 23:40): part 52 merged; the import-union naming fix is now on the critical path
+
+Merged `codex/cx-prover-commit52-20261022` (about 0.53M tokens; report
+`r1p-final/PROVER-COMMIT52-20261022.md`). The D175 cold build ran capped
+(490.65 s, peak RSS 4.17 GB, zero swap, 552 standard axiom reports). 261 modules
+compiled; module 262 (`ExtractedDecoderCallerBridge`) failed:
+`AspisR1TerminalDecoder.Types` and `AspisR1WithdrawalCaller.Types` both
+generate the unqualified instance `instDiscriminantPoolV1TransitionKindU8`. The
+arithmetic suffix passed separately (J10400–10402). This is the same shared
+obstruction as release gate 1 (`IMPORT-UNION-20261021.md`: generated discriminant
+instances take unqualified names, so separate extractions cannot be imported
+together), and it has now blocked real work. Per AGENTS.md discipline §7 it is fixed
+once, globally, before more privacy parts: adopt the prototyped
+`<fully-qualified-enum>.instDiscriminant` naming adapter for every generated Types
+module under `lean/` and rebuild the affected closures (capped). Session A's
+`lean-candidates` get the same adapter and script through the handoff note rather than
+lead edits. Privacy part 53 waits for it.
