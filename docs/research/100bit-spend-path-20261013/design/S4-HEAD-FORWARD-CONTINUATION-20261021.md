@@ -1161,3 +1161,21 @@ commitment-authentication identities, source-candidate adoption or frozen
 from_fn correspondence, full caller composition, stage-1 transcript-gamma
 binding and final coherent dependency replay remain open. S4 and the
 implementation-linked 100-bit target are not declared closed.
+
+
+## Same Current returned array reaches recovered-word model inputs
+
+`s4-current-array-model-inputs-v1-20261022` composes the concrete four-slot
+result with the existing recovered-word transport. The theorem
+`AspisR1.S4CurrentArrayModelInputsV1.same_current_array_is_model_input`
+identifies the decoding of that exact returned Current array with the four
+first-fold inputs of TypedRecoveredWords.word under the actual field
+embeddings. The same four callback results and the same opening are retained;
+no desired returned-value equation is assumed. Primitive packed-map byte
+identities and same-opening decoder facts remain explicit.
+
+Focused exit 0, 7.423s, peak RSS 4,064,755,712 bytes, swap 0, standard axioms.
+Two preceding setup failures (missing selected kernel root, then incomplete
+model import closure) are retained; no source-theorem change was required.
+The packet checker passed. No whole-caller or final source-freeze closure is
+claimed by this mathematical/source-carrier composition.
