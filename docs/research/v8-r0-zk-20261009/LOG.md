@@ -8626,3 +8626,17 @@ gamma/kappa powers; seven-coefficient round accumulation. J9999 standard
 axioms; shipped files unchanged. Stopped on an exhausted env J range. Open:
 semantic samples and guards, final shift, weight-model correspondence, caller
 composition.
+
+## D167 (lead, 2026-10-22 18:50): constant-time candidate v2 per D166
+
+Branch `codex/cx-ct-kernels-v2-20261022` (head `2b7a80b65a`, an unmerged adoption
+candidate; v2 section in `design/CT-KERNELS-20261022.md`). It holds only the stage-2
+field kernels and TLS gating plus a constant-trace pole check (`ct_pole.rs`):
+branch-free QM31 equality and an eager scan over every slot, with no early exit.
+Six compositional Kani gates, instrumented two-run checks and a full-size native
+trace replay pass, and so do the fixture pole regressions. The verifier ELFs match
+the adopted pins, and the fixture proof/public bytes are identical. Single-run
+prover wall time (measurement only): transfer 38.51 s, withdrawal 37.95 s,
+back at the ~40 s baseline. The stage-3 rewrites stay only on the old branch.
+Remaining for L2: the simulatable-trace proof for the F3/F5/F6 steps (listed by
+file:line in the v2 section); then candidate adoption gates and the L3 receipt.
