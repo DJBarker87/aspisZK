@@ -16,10 +16,10 @@ def run(name,cmd):
    if v!='max' and (p.parent/'cgroup.procs').read_text().strip():caps.append(dict(path=str(p.parent),bytes=int(v)))
   except OSError:pass
  assert sum(x['bytes'] for x in caps)+8*2**30<=55*2**30,caps
- (H/(name+'-inputs.json')).write_text(json.dumps(dict(source_revision=(H/'revision.txt').read_text().strip(),hashes={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in [Path(CHARON),Path(AENEAS),H/'harness/owner.rs',H/'harness/lib.rs',H/'harness/native-retry.rs']},reservations=caps),indent=2)+'\n')
- subprocess.run(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'harness/capped.py'),str(H/'receipts'/name),'Optimized MIR compilation and structural retry translation; no arithmetic execution','--',*cmd],check=True)
-p=H/'extraction/owner34.llbc'
-run('owner34-charon-v1',[CHARON,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--start-from','aspis_retry_owner34::owner::retry','--dest-file',str(p),'--','--manifest-path',str(H/'harness/Cargo.toml'),'--offline','--release','--lib','--jobs','4'])
+ (H/(name+'-inputs.json')).write_text(json.dumps(dict(source_revision=(H/'revision.txt').read_text().strip(),hashes={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in [Path(CHARON),Path(AENEAS),H/'harness/owner.rs',H/'harness/lib.rs',H/'harness/native-reserve.rs']},reservations=caps),indent=2)+'\n')
+ subprocess.run(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'harness/capped.py'),str(H/'receipts'/name),'Optimized MIR compilation and structural reservation translation; no arithmetic execution','--',*cmd],check=True)
+p=H/'extraction/owner35.llbc'
+run('owner35-charon-v2',[CHARON,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--start-from','aspis_environment_owner35::owner::reserve','--dest-file',str(p),'--','--manifest-path',str(H/'harness/Cargo.toml'),'--offline','--release','--lib','--jobs','4'])
 d=json.loads(p.read_text());assert d['has_errors'] is False
-(H/'owner34-llbc.json').write_text(json.dumps(dict(has_errors=d['has_errors'],sha256=hashlib.sha256(p.read_bytes()).hexdigest(),size_bytes=p.stat().st_size),indent=2)+'\n')
-run('owner34-aeneas-v1',[AENEAS,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR1Retry34','-dest',str(H/'extraction/generated'),'-subdir','AspisR1Retry34','-split-files','-emit-json',str(p)])
+(H/'owner35-llbc.json').write_text(json.dumps(dict(has_errors=d['has_errors'],sha256=hashlib.sha256(p.read_bytes()).hexdigest(),size_bytes=p.stat().st_size),indent=2)+'\n')
+run('owner35-aeneas-v1',[AENEAS,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR1Environment35','-dest',str(H/'extraction/generated'),'-subdir','AspisR1Environment35','-split-files','-emit-json',str(p)])
