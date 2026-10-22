@@ -27,6 +27,11 @@ structure MapAPI (Key Value MapState : Type) (cmp : Key → Key → Ordering) wh
   /-- Native BTreeSet::from_iter followed by consuming ascending iteration.
   The natural carrier denotes source usize keys, not arbitrary field values. -/
   set_from_iter : List Nat → List Nat
+  /-- Successful native observer, in the natural image of usize. -/
+  len : MapState → Nat
+  /-- slice::sort and Vec::dedup on the used natural image of u32 indices. -/
+  slice_sort : List Nat → List Nat
+  vec_dedup : List Nat → List Nat
 
 /-- One live TLS key, with thread/key lifetime fixed for the invocation.
 Different keys must be instantiated separately, without type-erased casts. -/
@@ -56,6 +61,12 @@ structure TrustedStd [DecidableEq Thread]
   /-- D156: exactly one additional library law. Collection and iteration
   have no user callbacks and consume no application coins. -/
   btree_set_from_iter_ordered : ∀ input, map.set_from_iter input = ascendingDistinct input
+  /-- D157: cardinality, with no truncation in the usize image. -/
+  btree_len : ∀ s, map.len s = (map.decode s).toList.length
+  /-- D157: ascending stable sort for the used scalar keys. -/
+  slice_sort_ascending : ∀ xs, map.slice_sort xs = xs.mergeSort (· ≤ ·)
+  /-- D157: remove consecutive duplicates; callers sort first. -/
+  vec_dedup_adjacent : ∀ xs, map.vec_dedup xs = xs.destutter (· ≠ ·)
   tls_live_key : ∀ t f store, tls.access t f store = ProverCommitTLS23.native t f store
   tls_single_thread : ProverCommitTLS23.SingleThreaded thread schedule
 
@@ -126,6 +137,9 @@ def modelMap : MapAPI Key Value (Std.TreeMap Key Value cmp) cmp where
     | some v => (s,v,false)
     | none => let v := make (); (s.insert k v,v,true)
   set_from_iter := ascendingDistinct
+  len := fun s => s.toList.length
+  slice_sort := fun xs => xs.mergeSort (· ≤ ·)
+  vec_dedup := fun xs => xs.destutter (· ≠ ·)
 
 def modelTLS : TLSAPI Thread Slot Output where
   access := ProverCommitTLS23.native
@@ -134,7 +148,7 @@ theorem model_consistent (t : Thread) :
     TrustedStd (modelMap (Key := Key) (Value := Value) (cmp := cmp))
       (modelTLS (Thread := Thread) (Slot := Slot) (Output := Output)) t [] := by
   refine ⟨rfl, fun _ _ _ => rfl, fun _ _ _ => rfl, fun _ _ => rfl,
-    fun _ => rfl, fun _ _ _ => rfl, fun _ => rfl, fun _ _ _ => rfl, ?_⟩
+    fun _ => rfl, fun _ _ _ => rfl, fun _ => rfl, fun _ => rfl, fun _ => rfl, fun _ => rfl, fun _ _ _ => rfl, ?_⟩
   intro entry h
   exact False.elim (List.not_mem_nil h)
 
