@@ -19,7 +19,12 @@ def imports(path):
 B=Path(__file__).resolve().parents[2]/'docs/research/100bit-spend-path-20261013'
 E=B/'evidence/s126-current-caller-20261021'
 manifest=json.loads((E/'accepted-targets.json').read_text())
-focus=set(sys.argv[1:])
+args=sys.argv[1:]
+output=None
+if '--output' in args:
+ i=args.index('--output');output=args[i+1];del args[i:i+2]
+ assert Path(output).name==output and output.endswith('.json')
+focus=set(args)
 if focus:
  assert focus<=manifest['targets'].keys(),focus-manifest['targets'].keys()
  manifest['targets']={n:r for n,r in manifest['targets'].items() if n in focus}
@@ -50,5 +55,5 @@ for target,r in accepted.items():
   todo+=all_modules[key]['imports']
  r['transitive_modules']=sorted(seen)
 out=dict(schema='focused-extractor-proof-packet-v1',note='Object hashes only; compiled objects are not distributed. Focused cached compilation, not coherent release rebuild.',targets={n:dict(source_sha256=r['source_sha256'],object_sha256=r['object_sha256'],modules=r['transitive_modules']) for n,r in accepted.items()},modules=list(all_modules.values()))
-(E/('focused-import-pins.json' if focus else 'selected-import-pins.json')).write_text('{\n'+',\n'.join(json.dumps(k)+': '+ ('[\n'+',\n'.join(json.dumps(row,separators=(",",":")) for row in v)+'\n]' if k=='modules' else json.dumps(v,separators=(",",":"))) for k,v in out.items())+'\n}\n')
+(E/(output or ('focused-import-pins.json' if focus else 'selected-import-pins.json'))).write_text('{\n'+',\n'.join(json.dumps(k)+': '+ ('[\n'+',\n'.join(json.dumps(row,separators=(",",":")) for row in v)+'\n]' if k=='modules' else json.dumps(v,separators=(",",":"))) for k,v in out.items())+'\n}\n')
 print(json.dumps(dict(targets=len(accepted),objects=len(all_modules))))
