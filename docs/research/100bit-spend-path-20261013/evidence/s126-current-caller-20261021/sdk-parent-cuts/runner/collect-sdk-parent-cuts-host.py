@@ -52,6 +52,9 @@ receipts += ['sdk-native-context-codegen-v7','sdk-native-context-codegen-v8','sd
 folders += [f'sdk-shared-prefix-v{i}' for i in range(1,6)]+[f'sdk-native-context-v{i}' for i in range(12,15)]
 new_diagnostics += [f'sdk-shared-prefix-check-v{i}' for i in range(2,6)]+['sdk-native-context-check-v16']+[f'sdk-native-entry-cut-v{i}' for i in range(1,4)]
 receipts += [f'sdk-shared-prefix-codegen-v{i}' for i in range(1,6)]+[f'sdk-shared-prefix-check-v{i}' for i in range(2,6)]+[f'sdk-native-context-codegen-v{i}' for i in range(16,19)]+['sdk-native-context-check-v16']+[f'sdk-native-entry-cut-v{i}' for i in range(1,4)]+['sdk-native-entry-audit-v1']
+folders += ['sdk-native-context-v15','sdk-native-context-v16','sdk-shared-prefix-v6']
+new_diagnostics += ['sdk-native-entry-cut-v4','sdk-native-entry-cut-v5','sdk-shared-prefix-check-v6']
+receipts += ['sdk-native-context-codegen-v19','sdk-native-context-codegen-v20','sdk-native-entry-cut-v4','sdk-native-entry-cut-v5','sdk-shared-prefix-codegen-v6','sdk-shared-prefix-check-v6']
 pins=[]
 for name in folders:
  p=H/name

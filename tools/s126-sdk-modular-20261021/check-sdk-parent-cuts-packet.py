@@ -526,6 +526,18 @@ stop=json.loads((E/'diagnostics/sdk-native-entry-cut-v3/voluntary-stop.json').re
 assert stop['status']=='not_proved' and stop['observed_orphan_rss_kib']==6444080
 assert 'import sys,json,hashlib,subprocess,signal,re,os' in (R/'tools/s126-sdk-modular-20261021/run-sdk-native-entry-cut-host.py').read_text()
 
+# Changed input constructors did not close either native obligation.
+failed=json.loads((E/'diagnostics/sdk-native-entry-cut-v4/properties-without-traces.json').read_text())
+assert any(p['status']=='FAILURE' and p['sourceLocation'].get('propertyClass')=='unsupported_construct' and 's126_input_bytes' in p['description'] for p in failed)
+assert all(p['status']=='SUCCESS' for p in failed if p['sourceLocation'].get('propertyClass')=='cover')
+for tag in ['sdk-native-entry-cut-v5','sdk-shared-prefix-check-v6']:
+ r=json.loads((E/'receipts'/tag/'receipt.json').read_text())
+ assert r['exit_status']==1 and r['swaps']==0 and r['limits']['memory.swap.max']=='0'
+ assert json.loads((E/'diagnostics'/tag/'timeout.json').read_text())['status']=='not_proved'
+ assert tag not in accepted
+cleanup=json.loads((E.parent/'latest-constructor-timeout-cleanup.json').read_text())
+assert cleanup['matching_live_cbmc_processes']==[]
+
 assert all(not p['has_errors'] for p in json.loads((E/'llbc-pins.json').read_text()))
 flags=[json.loads(p.read_text())['rustflags'] for p in (E/'compiler-flags').glob('*/*.json')]
 assert flags and all('opt-level=3' in r and 'overflow-checks=yes' in r and '--kani-compiler' in r for r in flags)

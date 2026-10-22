@@ -132,6 +132,16 @@ fn unreachable_encode(_:&PoolV1PairVerifiedAfterstateV1)->Result<[u8;688],PoolV1
 exact_vec='exact-vec' in sys.argv[2:]
 if exact_vec:
  for count in [58295,1880,1768]:s=s.replace('Vec::from(kani::any::<[u8;'+str(count)+']>())','kani::vec::exact_vec::<u8,'+str(count)+'>()')
+havoc_inputs='havoc-inputs' in sys.argv[2:]
+if havoc_inputs:
+ s=s.replace('fn planned_scan(_: &[u8])->bool{false}','''#[inline(never)] fn s126_input_bytes(p:*mut u8,n:usize)->usize {let _=(p,n);panic!("input initialization must be linked before verification")}
+fn symbolic_buffer<const N:usize>()->Vec<u8>{
+ let mut bytes=Box::<[u8;N]>::new_uninit();
+ s126_input_bytes(bytes.as_mut_ptr().cast(),N);
+ let bytes:Box<[u8]>=unsafe{bytes.assume_init()};bytes.into_vec()
+}
+fn planned_scan(_: &[u8])->bool{false}''')
+ for count in [58295,1880,1768]:s=s.replace('Vec::from(kani::any::<[u8;'+str(count)+']>())','symbolic_buffer::<'+str(count)+'>()')
 canonical='canonical-data' in sys.argv[2:]
 if canonical:s=s.replace('let data_slots:[usize;3]=kani::any();','let data_slots:[usize;3]=[0,1,2];')
 (O/'src/lib.rs').write_text(s)
@@ -145,3 +155,6 @@ if exact_vec:
  p=O/'source-cut.json';m=json.loads(p.read_text());m['input_constructor']='Pinned Kani library vec::exact_vec<u8,N>: Box::new(any<[u8;N]>()) followed by boxed-slice into_vec; every input byte remains independently arbitrary. No buffer byte is fixed, left uninitialized, or assumed. Native source, model, assertions and enforced write set are unchanged.';p.write_text(json.dumps(m,indent=2)+'\n')
 if canonical:
  p=O/'source-cut.json';m=json.loads(p.read_text());m['canonical_input_context']='Data slots are[0,1,2], independently arbitrary lamport aliases remain. The separate unseeded sdk-native-entry-cut-v2 derives this condition for actual proof-prefix comparison entry across every data alias. This focused prefix frame/pair is conditional on that normalized input context; composition from actual accepted execution still must consume both cuts and the exact native guard. No arbitrary-runtime or whole-S2 closure follows.';p.write_text(json.dumps(m,indent=2)+'\n')
+
+if havoc_inputs:
+ p=O/'source-cut.json';m=json.loads(p.read_text());m['input_constructor']='Harness-only fresh Box<MaybeUninit<[u8;N]>>, linked CBMC __CPROVER_havoc_slice on the entire byte allocation, then assume_init and boxed-slice into_vec. All bytes arbitrary, no buffer copies or fixed values. The native SDK and complete reference consume the same allocations; intrinsic initialization semantics/exact C implementation are explicit tool trust.';p.write_text(json.dumps(m,indent=2)+'\n')

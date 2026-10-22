@@ -7,8 +7,9 @@ callee entry, not comparison equivalence or a full returned-stage theorem.
 from pathlib import Path
 import sys,json,hashlib,subprocess,signal,re,os
 H=Path('/home/dombarker/project-offloads/s126-real-sdk-20261021');B=Path('/home/dombarker/.kani/kani-0.67.0/bin')
-first_link='first-link' in sys.argv
-tag=sys.argv[1];O=H/tag;P=H/('sdk-native-context-v14' if first_link else 'sdk-native-context-v13');pin=H/('sdk-native-context-codegen-v18-input.json' if first_link else 'sdk-native-context-codegen-v17-input.json');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+havoc_inputs='havoc-inputs' in sys.argv
+first_link='first-link' in sys.argv or havoc_inputs
+tag=sys.argv[1];O=H/tag;P=H/('sdk-native-context-v16' if havoc_inputs else 'sdk-native-context-v14' if first_link else 'sdk-native-context-v13');pin=H/('sdk-native-context-codegen-v20-input.json' if havoc_inputs else 'sdk-native-context-codegen-v18-input.json' if first_link else 'sdk-native-context-codegen-v17-input.json');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 assert json.loads(pin.read_text())['source_sha256']==sha(P/'src/lib.rs')
 line=next(i+1 for i,s in enumerate((P/'src/lib.rs').read_text().splitlines()) if 'fn native_parent_arguments()' in s)
 selected=[]
@@ -37,15 +38,23 @@ cmds=[
 if first_link:
  cmds.insert(4,[str(B/'goto-instrument'),'--generate-function-body','^s126_cmp_choice$','--generate-function-body-options','nondet-return',str(O/'entry.out'),str(O/'choice.out')])
  cmds[5][-2]=str(O/'choice.out')
+if havoc_inputs:
+ initializer=[k for k,v in names.items() if str(v).endswith('::s126_input_bytes')]
+ assert len(initializer)==1,initializer
+ cmds[1][1:1]=['--replace-calls',initializer[0]+':s126_havoc_input']
 if 'run' not in sys.argv:
  assert not O.exists();O.mkdir()
  (O/'entry-cut-declaration.c').write_text('#include <stddef.h>\nint s126_entry_memcmp(const void *,const void *,size_t);\nint (*s126_keep_entry_declaration)(const void *,const void *,size_t)=s126_entry_memcmp;\n')
  (O/'entry-cut-body.c').write_text('#include <stddef.h>\nextern size_t '+marker+';\nint memcmp(const void *,const void *,size_t);\nint s126_entry_memcmp(const void *a,const void *b,size_t n){\n if(n==688){'+marker+'+=1;return 1;}\n return memcmp(a,b,n);\n}\n')
+ if havoc_inputs:
+  with (O/'entry-cut-declaration.c').open('a') as f:f.write('size_t s126_havoc_input(unsigned char *,size_t);\nsize_t (*s126_keep_initializer)(unsigned char *,size_t)=s126_havoc_input;\n')
  if first_link:
   p=O/'entry-cut-body.c';s=p.read_text().replace('int memcmp(', 'int s126_cmp_choice(void);\nint memcmp(',1).replace('+=1;return 1;}', '+=1;return s126_cmp_choice();}');p.write_text(s)
+ if havoc_inputs:
+  with (O/'entry-cut-body.c').open('a') as f:f.write('void __CPROVER_havoc_slice(void *,size_t);\nsize_t s126_havoc_input(unsigned char *p,size_t n){__CPROVER_havoc_slice(p,n);return n; }\n')
  subprocess.run(['python3',str(H/'kit/reservation.py'),str(H/(tag+'-admission.json'))],check=True,stdout=subprocess.DEVNULL)
  (H/(tag+'-input.json')).write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',source_sha256=sha(P/'src/lib.rs'),codegen_input_sha256=sha(pin),prepared_goto_sha256=sha(prepared),harness_metadata_sha256=sha(metadata),harness_metadata=row,pretty_names_sha256=sha(namePath),marker_symbol=marker,scan_overapproximation=scans[0],runner_sha256=sha(Path(__file__)),tool_pins={str(p):sha(p) for p in [B/'goto-cc',B/'goto-instrument',B/'cbmc',libc,O/'entry-cut-declaration.c',O/'entry-cut-body.c']},commands=cmds,qualification=__doc__+(' This successor uses arbitrary read-only comparison replies and also verifies the original first-entry linkage; no688-byte comparison is executed or assumed.' if first_link else ''),property_scope='All reachable source assertions and safety/unwinding checks; no property selection',timeout_seconds=180,retained='Comparison-body and later-source transport require the independently checked native guard/reference instance; marker cut itself does not execute or validate the688-byte comparison. Fixed root lengths, common typed child replies, native scan overapproximation, runtime heap embedding, ordered global correspondence remain explicit.'),indent=2)+'\n')
- raise SystemExit(subprocess.call(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'kit/capped.py'),str(H/'receipts'/tag),'Cached native pre-comparison SDK normalization cut; other libc comparisons unchanged, then one180s all-properties CBMC check','--','python3',__file__,tag,'run',*(['first-link'] if first_link else [])]))
+ raise SystemExit(subprocess.call(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'kit/capped.py'),str(H/'receipts'/tag),'Cached native pre-comparison SDK normalization cut; other libc comparisons unchanged, then one180s all-properties CBMC check','--','python3',__file__,tag,'run',*(['havoc-inputs'] if havoc_inputs else ['first-link'] if first_link else [])]))
 for i,cmd in enumerate(cmds):
  with (O/('step'+str(i)+'.log')).open('w') as log:
   p=subprocess.Popen(cmd,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)

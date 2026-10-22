@@ -1956,3 +1956,46 @@ S4 adoption re-pin consequences. The b2727acd component freeze remains
 explicit; no production source changed. The raw100-bit per-attempt target
 remains **not yet established**. The next native proof should split state and
 loop steps rather than replay any unchanged whole-stage solver attempt.
+
+### 2026-10-22 — input-construction experiment excluded; no native upgrade
+
+The successful shared reference caller witness above is committed/pushed at
+`aec76bb39`. Follow-up native experiments changed **harness input allocation
+only**, leaving the frozen adapter body intact. Fresh byte allocations are
+filled in place using a linked CBMC byte-havoc intrinsic before Rust
+`assume_init`; no zero/prefix/tag constraint was introduced. The intrinsic's
+primary source declaration is URL/hash pinned in
+`cbmc-input-constructor-source-pin.json`. It is additional explicit tool
+semantics, not source correspondence evidence.
+
+The first version (`sdk-native-context-v15`,
+`sdk-native-entry-cut-v4`) fails Kani's reachable unsupported-foreign-call
+check. Every cover is unreached; raw exit10 here is **failure**, not the
+successful reached-cover exit10 interpretation of v2. Its19.745s,
+1420364KiB RSS,swap0 receipt and failed property projection are retained and
+excluded. The successor replaces a compiled Rust harness initializer call
+with the exact linked C implementation, avoiding that unsupported boundary;
+no adapter function is replaced by the initializer.
+
+That successor (`sdk-native-context-v16`,
+`sdk-native-entry-cut-v5`) still times out (exit1,185.879s,
+6392520KiB RSS,swap0). The same construction applied to the smaller full
+native/borrowed decoder-entry frame (`sdk-shared-prefix-v6`,
+`sdk-shared-prefix-check-v6`) also times out (exit1,208.489s,
+6390024KiB RSS,swap0). Their corresponding optimized codegens19/20 and
+shared6 succeed, but codegen is not proof. All scopes had fresh admission,
+High6G/Max8G/Swap0, and the existing180s per-stage deadline. Both timeout
+handlers now kill their solver groups correctly; subsequent process-table
+inspection confirms no matching orphan. Exact failed source/tool/command/
+resource evidence and the cleanup record are retained; none is accepted.
+
+This experiment does not establish that large input-array copies alone cause
+the resource problem: removing those copies did not make either check pass.
+Do not repeat these unchanged or raise their caps. The next decomposition
+needs to isolate the particular SDK transition/frame relation that grows,
+then compose it with the existing primitive borrow and parser results.
+The accepted native result remains pre-comparison v2; no first-entry, new
+native frame, actual whole-SDK, TOTAL or S1/S2/S6 closure is claimed.
+Read-only research reinspection at380b084451eaede1bb03fd0f4da7e692367a8de9
+is recorded separately: the aggregate freeze decision remains b2727acd,
+with the previously recorded S4 adoption changes requiring re-pinning.
