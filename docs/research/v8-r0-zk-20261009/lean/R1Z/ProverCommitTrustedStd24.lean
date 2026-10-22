@@ -1,5 +1,6 @@
 import R1Z.ProverCommitTreeOps23
 import R1Z.ProverCommitTLS23
+import Mathlib.Data.Finset.Sort
 /-! D133 trusted standard-library boundary, alongside P6 (runtime) and P7
 (compiler/artifact). These are named hypotheses, never Lean axioms. No field
 mentions privacy, a prover experiment, a coupling, or a source caller law.
@@ -8,6 +9,9 @@ set_option autoImplicit false
 namespace R1Z.ProverCommitTrustedStd24
 variable {Key Value MapState Thread Slot Output : Type}
 variable {cmp : Key → Key → Ordering} [Std.TransCmp cmp] [Std.LawfulEqCmp cmp]
+
+/-- Ascending distinct natural keys: the used BTreeSet<usize> image. -/
+def ascendingDistinct (input : List Nat) : List Nat := input.toFinset.sort (· ≤ ·)
 
 /-- The used successful ordered-map API. Allocation failure remains in P6;
 this API does not assert an allocator's totality or identify raw pointers. -/
@@ -20,6 +24,9 @@ structure MapAPI (Key Value MapState : Type) (cmp : Key → Key → Ordering) wh
   /-- Returned bool records callback invocation; hit does not evaluate it.
   The publication callee is pure field evaluation, with no mutable effects. -/
   entry_or_insert_with : MapState → Key → (Unit → Value) → MapState × Value × Bool
+  /-- Native BTreeSet::from_iter followed by consuming ascending iteration.
+  The natural carrier denotes source usize keys, not arbitrary field values. -/
+  set_from_iter : List Nat → List Nat
 
 /-- One live TLS key, with thread/key lifetime fixed for the invocation.
 Different keys must be instantiated separately, without type-erased casts. -/
@@ -27,7 +34,7 @@ structure TLSAPI (Thread Slot Output : Type) where
   access : Thread → ProverCommitTLS23.Access Slot Output →
     (Thread → Slot) → (Thread → Slot) × Output
 
-/-- Explicit named trust list: std BTreeMap insert/get/iter, and live-key
+/-- Explicit named trust list: std BTreeMap insert/get/iter, BTreeSet collect/iter, and live-key
 single-thread TLS. Only the designated schedule is assumed single-threaded;
 map operation laws quantify over every map state and key, including repeats. -/
 structure TrustedStd [DecidableEq Thread]
@@ -46,6 +53,9 @@ structure TrustedStd [DecidableEq Thread]
       match (map.decode s)[k]? with
       | some v => (map.decode s, v, false)
       | none => let v := make (); ((map.decode s).insert k v, v, true)
+  /-- D156: exactly one additional library law. Collection and iteration
+  have no user callbacks and consume no application coins. -/
+  btree_set_from_iter_ordered : ∀ input, map.set_from_iter input = ascendingDistinct input
   tls_live_key : ∀ t f store, tls.access t f store = ProverCommitTLS23.native t f store
   tls_single_thread : ProverCommitTLS23.SingleThreaded thread schedule
 
@@ -115,6 +125,7 @@ def modelMap : MapAPI Key Value (Std.TreeMap Key Value cmp) cmp where
     match s[k]? with
     | some v => (s,v,false)
     | none => let v := make (); (s.insert k v,v,true)
+  set_from_iter := ascendingDistinct
 
 def modelTLS : TLSAPI Thread Slot Output where
   access := ProverCommitTLS23.native
@@ -123,7 +134,7 @@ theorem model_consistent (t : Thread) :
     TrustedStd (modelMap (Key := Key) (Value := Value) (cmp := cmp))
       (modelTLS (Thread := Thread) (Slot := Slot) (Output := Output)) t [] := by
   refine ⟨rfl, fun _ _ _ => rfl, fun _ _ _ => rfl, fun _ _ => rfl,
-    fun _ => rfl, fun _ _ _ => rfl, fun _ _ _ => rfl, ?_⟩
+    fun _ => rfl, fun _ _ _ => rfl, fun _ => rfl, fun _ _ _ => rfl, ?_⟩
   intro entry h
   exact False.elim (List.not_mem_nil h)
 
