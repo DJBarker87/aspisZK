@@ -2,6 +2,7 @@
 #[cfg(kani)]
 mod publication32 {
     use super::owned32::*;
+    use alloc::{vec,vec::Vec};
     use std::collections::BTreeMap;
     fn maps()->(IndexMap,BTreeMap<usize,Vec<u8>>) {
         let a:usize=kani::any();let b:usize=kani::any();
