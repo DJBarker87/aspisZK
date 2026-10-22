@@ -8250,3 +8250,28 @@ term, stated numerically, **visibly to the headline bound** (before/after
 shown) rather than absorbing it. At protocol parameters it is far below the
 existing terms, so the < 2^-100 conclusion should still hold; prove that
 inequality, do not assert it.
+
+## D151 (lead, 2026-10-22 05:55): part 38 merged; ledger collisions coupled exactly, memo hits under the existing query budget
+
+Merged `codex/cx-prover-commit38-20261022` (report
+`r1p-final/PROVER-COMMIT38-20261022.md`). Proved: `reservationGuess` and its
+fixed-context counting bound; and, conditionally on Q, entries ≤ 2^64, the
+< 2^-100 numeric conclusion. The cap was not installed in the endpoint. J9159,
+15 theorems, standard axioms; shipped files byte-identical.
+Finding: under D148 the adversary may plant any finite ledger, including
+every path, so charging the whole `reservationGuess` mass gives 1. Correct;
+D150's charging of ledger entries was the wrong shape (lead error).
+
+**Ruling (two parts).**
+1. **Ledger collisions are coupled exactly and charged nothing.** The nonce and
+   its reservation path are witness-independent coins. The real and simulated
+   runs use the same nonce coins and the same ledger. A collision gives
+   AlreadyExists, then the fail-closed/duplicate path, identically in both
+   worlds. Obligation: prove the nonce and path are drawn and used before, and
+   independently of, any witness-dependent value (if not, report it as a source
+   finding). Then the ledger needs no size cap and contributes no term.
+2. **Memo hits are charged under the existing query budget.** An adversary
+   oracle query equal to a generated reservation input reveals the nonce-derived
+   value. Charge ≤ Q · attempts / (2^256 − 1) with the same Q ≤ 2^64 query budget
+   the headline already uses for `seedGuess` (`ProverCommitSeedEvent19.budget
+   (2^64)`). That is not a new restriction, and it is shown visibly in the bound.
