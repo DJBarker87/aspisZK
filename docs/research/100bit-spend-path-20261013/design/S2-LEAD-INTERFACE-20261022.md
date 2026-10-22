@@ -72,17 +72,40 @@ open. These are compatible local statements, not an inhabitant of the above
 caller interface. The 21 October header fixture's zero suffix is not a
 universal proof-buffer preservation theorem.
 
-At inspection, neither the assigned checkout nor the root checkout's
-`lean-candidates`/S2 evidence contained the reported new SDK 10/15-window
-packet. Its location was requested from the lead. The 10/15 status is therefore
-user-reported, not independently verified here. Do not silently promote it
-to a universal same-byte theorem. Pending direct inspection, the remaining
-mismatches are: (1) address/length vs byte contents; (2) independently successful
-windows vs the complete reached-call domain; (3) within-transaction vs retained
-cross-transaction snapshot; (4) U8 slices vs `List (Fin 256)` via `bytesOf`;
-(5) total multiproof oracle law vs success-conditioned checkpoint law;
-(6) logical S7 reference vs actual raw accumulator; (7) observer token vs real
-callback Option; (8) permitted account effects vs blanket preservation.
+The current packet was subsequently located, read-only, in the
+`s126-caller-20261021` worktree (branch `codex/s126-caller-20261021`).
+Exact source/qualification hashes and inspection time are recorded in
+`evidence/s2-interface-20261022/session-a-crosscheck.json`. Some files are
+uncommitted there; this interface imports none of them. No A file was changed.
+The observed `qualification.json` now lists **all fifteen** proof windows,
+plus the public/checkpoint root frames, superseding the prompt's 10/15 report.
+This is inspection of its accepted list, not an independent Kani rerun.
+
+| Actual session A statement | Match / remaining mismatch |
+|---|---|
+| `AspisS2SdkNativeFrameCoverage.proof_buffer_frame` | All fifteen windows plus **both** 58295-byte lengths imply full before=after. This frames the **whole account**, not the cone's 57607-byte suffix. `S2LeadInterface.proof_suffix_bytes` provides the explicit range/content carrier conversion. |
+| `all_buffers_frame` | Requires lengths, all proof windows, and every public/checkpoint cell on one common before/after execution. It is mathematical composition; its own statement says native source-certificate instantiation remains external. |
+| Native root/window harnesses and `qualification.json` | Actual original SDK, arbitrary buffer bytes, bounded heap/alias domain, **decoder-error prefix**, pure readonly std-any overapproximation. This does not cover the successful first_decoded/verifier/checkpoint-write path or unrestricted runtime states. All-window coverage does not repair this domain mismatch. |
+| `SdkReference.Installation.observer_none` and `first_success` | Actual owned Option None and current-tx1 call, with digest/error syscall and verifier-child interpretation explicit. Useful exact carrier link, not a native-to-owned whole-stage theorem. |
+| `ProofGate.Linked.owned_stage1_linked_first` | From complete owned-stage1 success derives `LinkedFirst` with an actual suffix Vec.index over [688,58295), public decode/common/semantic provenance and guarded candidate prefix. But `LinkedFirst` existentially chooses proofData/publicBytes/proofBytes: it does not identify these with externally fixed stored/pub or native snapshots. Export that identity-bearing witness, not just the existential proposition. |
+| `SdkReference.Reachability.stage1_current_call` | Existential successful actual current tx1/None from installed owned success; its own comment retains real SDK heap/snapshot and full source/trace correspondence. No TX2/checkpoint cross-transaction identity follows. |
+
+Concrete unresolved fields are therefore successful-domain proof/public
+snapshot identities; snapshot-to-Slice/Vec/carrier conversion; common-execution
+window instantiation; TX2 reconstructed public bytes and verifier-checkpoint
+retention; six node views and compact y1 input; whole caller-block ordering and
+None transport; account metadata/effect framing; the local digest law. The
+source admits [3,11] as well as [3,10], but current candidate.tx1 rejects k≠10
+before parsing: the ten/twelve schedule is success-conditioned, not a claim
+that every admitted route reaches the checkpoint.
+
+A second checked carrier mismatch is the **distinct extracted Digest32
+structures** in AspisR1Stage2 and MultiproofConeRef. The new `multiproofDigest`
+constructs the latter from the former's exact Copy/digest implementation;
+its adoption for the actual native backend remains P6. The checkpoint oracle
+law is success-conditioned; the multiproof law is total. `checkpoint_oracle`
+proves the implication in the valid direction, through the digest/state
+roundtrip. Neither law comes from a buffer-preservation theorem.
 
 ## Trust and adoption boundary
 
@@ -93,3 +116,40 @@ kept outside `S2CallerFacts`; collecting it is not proving it. The interface
 is conditional organization plus checked composition. Instantiating S2,
 remaining S7/S8/P6/source/Pool joins, both raw/annotation passes, and a coherent
 release replay still remain before the 100-bit target is established.
+
+## Checked implementation and limits
+
+`lean/S2LeadInterface.lean` defines fourteen named S2 input fields and six
+checked theorems: range-to-byte suffix conversion, strong-to-weak oracle
+transport, exact checkpoint binding at any reached site, joint caller-premise
+composition, the P6 both-batches instantiation, and the reached compact-y1
+scanner instantiation. The arithmetic inputs to `compose` remain the exact
+existing `PushTrace old state sum` and old-length=64. It derives S8's actual
+`CallerInvariant` and S7's construction-owned initial Progress; it does **not**
+claim general resumed Progress, canonical power, output length, saved-ten-state
+provenance, raw-field meaning, or complete S7 caller closure from these facts.
+These are the independent lead-cone obligations listed above. Once those are
+proved at the actual execution, only the S2 record needs instantiating on the
+S2 side; this is not a claim that the independent obligations are already closed.
+
+The dispatch order field is a coarse order of caller blocks; per-query order,
+all 140 S10 relations, and the native-to-owned contextual refinement remain
+separate. The account frame is fixed to the verifier adapter: only TX1 account2
+**data** may change, with its metadata preserved; Pool settlement is outside
+that footprint. Checkpoint input snapshots include save/TX2/resume, but no
+checkpoint encoding/output equality is assumed.
+
+Focused local compile `S2LeadInterface`, attempt6: exit0, 28.946s,
+peak RSS3,649,601,536bytes, swaps0. All six axiom reports are subsets of
+`[propext, Classical.choice, Quot.sound]`. Source revision
+`fa149da7f353d31311f7c545df1c5175c4515fab`, with the exact new-source SHA and
+ordered cached dependency hashes recorded in `evidence/s2-interface-20261022/`.
+The two prelaunch-only waits and three excluded failed drafts are retained;
+no failed source was rerun unchanged. The accepted compile used the user's
+explicit before-14:00 parallel permission, a private worker lock and the pinned
+local binary with `-j1 -M4400 -DElab.async=false`. No shared object was changed,
+no cold dependency build or host env J job was launched, and no unchanged
+accepted compile or full regression was repeated. `audit.py` checks every
+added theorem's accepted axiom report and the exact conclusion-free field list.
+`FIELD-AUDIT.md` records the semantic audit; digest and account-local equations
+are required input/backend/frame facts, not verifier-output/log conclusions.
