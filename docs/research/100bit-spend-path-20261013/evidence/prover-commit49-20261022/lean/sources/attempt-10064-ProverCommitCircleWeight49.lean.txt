@@ -1,0 +1,67 @@
+import R1Z.ProverCommitCircleOutput49
+import R1Z.ProverCommitCircleModel49
+import R1Z.ProverCommitFactorProduct49
+/-! Construct and consume all five circle-factor rows. The raw product equals
+the existing selected natural-circle weight; no factor image law is supplied. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitCircleWeight49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open scoped BigOperators
+
+variable (x y : Old.Q) (hx : Canonical x) (hy : Canonical y)
+
+def rows : Nat → Nat → Old.Q := Classical.choose (ProverCommitCircleOutput49.rows_exact x y hx hy)
+
+theorem rows_spec :
+    factors.circle_rows (ProverCommitNativeQ48.source x) (ProverCommitNativeQ48.source y)=
+      ok (ProverCommitCircleRows49.matrix (rows x y hx hy)) ∧
+      (∀ d k, d<5 → k<4 → Canonical (rows x y hx hy d k)) ∧
+      ∀ d : Fin 5, ∀ k : Fin 4, decode (rows x y hx hy d.val k.val)=
+        ProverCommitCircleOutput49.model (decode x) (decode y) d.val k :=
+  Classical.choose_spec (ProverCommitCircleOutput49.rows_exact x y hx hy)
+
+def selected (j : Fin 1024) (d : Nat) : Old.Q :=
+  if h : d<5 then rows x y hx hy d ((j.val/4^d)%4) else zero
+
+theorem selected_canonical (j : Fin 1024) (d : Nat) (hd : d<5) :
+    Canonical (selected x y hx hy j d) := by
+  rw [selected,dif_pos hd]
+  exact (rows_spec x y hx hy).2.1 _ _ hd (Nat.mod_lt _ (by decide))
+
+theorem selected_value (j : Fin 1024) (d : Fin 5) :
+    decode (selected x y hx hy j d.val)=ProverCommitCircleOutput49.model (decode x) (decode y) d.val
+      ⟨(j.val/4^d.val)%4,Nat.mod_lt _ (by decide)⟩ := by
+  rw [selected,dif_pos d.isLt]
+  exact (rows_spec x y hx hy).2.2 d _
+
+theorem model_product (x y : QM31Exact) (j : Fin 1024) :
+    (∏ d : Fin 5, ProverCommitCircleOutput49.model x y d.val ⟨(j.val/4^d.val)%4,Nat.mod_lt _ (by decide)⟩)=
+      ProverCommitCircleModel49.circleWeight x y j.val := by
+  rw [ProverCommitCircleModel49.circleWeight_base4]
+  simp only [←AspisV5FriNaturalBasisRadix4.doubledFactor_add]
+  simp [Fin.prod_univ_succ,Fin.prod_univ_zero,ProverCommitCircleOutput49.model,
+    ProverCommitCircleFill49.model,ProverCommitCircleModel49.firstFactor,
+    ProverCommitCircleModel49.radixFactor]
+
+theorem raw_exact (j : Fin 1024) :
+    ∃ z : Old.Q,
+      factors.product (ProverCommitQArray48.array 5#usize (selected x y hx hy j))
+        0#usize 5#u8 field.QM31.ONE=ok (ProverCommitNativeQ48.source z) ∧ Canonical z ∧
+      decode z=ProverCommitCircleModel49.circleWeight (decode x) (decode y) j.val := by
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitFactorProduct49.raw_exact (selected x y hx hy j)
+    (selected_canonical x y hx hy j)
+  refine ⟨z,hz,hcz,?_⟩
+  rw [hdz]
+  simp only [selected_value]
+  exact model_product _ _ j
+
+#print axioms rows_spec
+#print axioms selected_canonical
+#print axioms selected_value
+#print axioms model_product
+#print axioms raw_exact
+#print axioms ProverCommitCircleModel49.naturalLineValue_zero
+end R1Z.ProverCommitCircleWeight49

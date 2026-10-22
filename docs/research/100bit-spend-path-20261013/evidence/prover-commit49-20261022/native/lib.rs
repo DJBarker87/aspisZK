@@ -6,14 +6,14 @@
 #[derive(Clone,Copy,Debug,PartialEq,Eq)] struct E(u32);
 #[derive(Clone,Copy,Debug,PartialEq,Eq)] struct Call {op:u8,a:E,b:E}
 const EMPTY:Call=Call{op:0,a:E(0),b:E(0)};
-static mut ANSWERS:[u32;8]=[0;8];
-static mut CALLS:[Call;8]=[EMPTY;8];
+static mut ANSWERS:[u32;16]=[0;16];
+static mut CALLS:[Call;16]=[EMPTY;16];
 static mut NEXT:usize=0;
-fn reset(answers:[u32;8]) {unsafe {ANSWERS=answers;CALLS=[EMPTY;8];NEXT=0;}}
+fn reset(answers:[u32;16]) {unsafe {ANSWERS=answers;CALLS=[EMPTY;16];NEXT=0;}}
 fn call(op:u8,a:E,b:E)->E {unsafe {
- let i=NEXT;assert!(i<8);CALLS[i]=Call{op,a,b};NEXT+=1;E(ANSWERS[i])
+ let i=NEXT;assert!(i<16);CALLS[i]=Call{op,a,b};NEXT+=1;E(ANSWERS[i])
 }}
-fn trace()->([Call;8],usize) {unsafe {(CALLS,NEXT)}}
+fn trace()->([Call;16],usize) {unsafe {(CALLS,NEXT)}}
 impl E {
  const ONE:Self=E(1);
  fn mul_m31(self,b:M31)->E {call(4,self,E(b.0))}
@@ -72,3 +72,5 @@ include!("boundary-iterations.rs");
 include!("factor-iterations.rs");
 
 include!("points-iterations.rs");
+
+include!("circle-iterations.rs");

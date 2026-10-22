@@ -1,0 +1,22 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitCircleProduct49.lean:37:2: error: 'change' tactic failed, pattern
+  model x y 0 ⟨↑j % 4, ⋯⟩ *
+      (model x y 1 ⟨↑j / 4 % 4, ⋯⟩ *
+        (model x y 2 ⟨↑j / 16 % 4, ⋯⟩ * (model x y 3 ⟨↑j / 64 % 4, ⋯⟩ * (model x y 4 ⟨↑j / 256 % 4, ⋯⟩ * 1)))) =
+    ?m.147
+is not definitionally equal to target
+  model x y ↑0 ⟨↑j / 4 ^ ↑0 % 4, ⋯⟩ *
+      (model x y ↑1 ⟨↑j / 4 ^ ↑1 % 4, ⋯⟩ *
+        (model x y ↑2 ⟨↑j / 4 ^ ↑2 % 4, ⋯⟩ *
+          (model x y ↑3 ⟨↑j / 4 ^ ↑3 % 4, ⋯⟩ * (model x y ↑4 ⟨↑j / 4 ^ ↑4 % 4, ⋯⟩ * 1)))) =
+    ProverCommitCircleModel49.firstFactor x y ⟨↑j % 4, ⋯⟩ *
+            ProverCommitCircleModel49.radixFactor (doubledFactor x 1) ⟨↑j / 4 % 4, ⋯⟩ *
+          ProverCommitCircleModel49.radixFactor (doubledFactor (doubledFactor x 1) 2) ⟨↑j / 16 % 4, ⋯⟩ *
+        ProverCommitCircleModel49.radixFactor (doubledFactor (doubledFactor (doubledFactor x 1) 2) 2) ⟨↑j / 64 % 4, ⋯⟩ *
+      ProverCommitCircleModel49.radixFactor (doubledFactor (doubledFactor (doubledFactor (doubledFactor x 1) 2) 2) 2)
+        ⟨↑j / 256 % 4, ⋯⟩
+'R1Z.ProverCommitCircleProduct49.product_five' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitCircleProduct49.model_zero' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitCircleProduct49.model_row' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitCircleProduct49.model_product' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

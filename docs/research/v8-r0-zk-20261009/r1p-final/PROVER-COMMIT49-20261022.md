@@ -143,6 +143,37 @@ Rust mutability compile error, retained. All checks retain every input/output
 coordinate, carry and arithmetic operand/call order. Accepted Lean axioms are
 standard. No pure std contract or shipped-source changes.
 
+## Stage 7: complete circle-factor rows and circle functional
+
+J10055 proves the source bit-shift/mask digit equals the mathematical radix-four
+digit. J10057/59 supply generic nested-array updates and exact line-factor rows.
+J10061 composes every circle-fill stage; J10063 proves complete initialization
+and all five canonical factor rows. J10072 proves selecting and multiplying them
+is the selected natural-circle weight. J10069/74 identify that weight with the
+model evaluator on a basis vector, including its WideExact embedding. No
+constructor-factor/model-image equality is supplied. This is the circle helper
+chain; full Weights storage/caller assembly remains open.
+
+Native circle-fill transition: exit 0, 2.207 s, 149744 KiB, zero swaps. Native
+point-factor expression: exit 0, 0.506 s, 145456 KiB, zero swaps. Both check the
+full current state and paired arithmetic operand/order traces. The arithmetic
+trace buffer grows to 16 for the nine-call fill transition; earlier evidence
+retains its exact eight-entry snapshots. Aeneas' pure denotation shares repeated
+equal arithmetic calls (point complements and double's mul(x,x)); the Lean
+value laws use deterministic pure arithmetic. No source trace-count equality
+is inferred from that denotation. L2 composition is outside this job.
+
+J10062 ports the existing generic selected circle factorization without its
+unused NeZero(2) binder. J10071 is the focused generic five-factor product.
+The concrete draft J10064 and J10068 hit the default heartbeat limit during
+carrier/index normalization. The replacement keeps field operations opaque,
+proves the product over an abstract field, and rewrites finite indices and
+Nat division by one explicitly. It passes in 1.10 s / 2169208 KiB. No cap or
+option was raised. All final printed axioms are standard. Rejected drafts and
+all diagnostics are retained. Factor extraction v2 adds only owned line/fill
+functions; selected old factor/arithmetic declarations remain identical and
+are rebound against v2 to keep the final input pin current. No shipped change.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

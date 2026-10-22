@@ -13,4 +13,16 @@ pub fn product(q:[K;5],i:usize,left:u8,s:K)->K {
   product(q,i+1,left-1,next)
  }
 }
+
+pub fn line(x:K,y:K)->[K;4] {[K::ONE,x,y,x.mul(y)]}
+pub fn lines(mut out:[[K;4];5],d:usize,left:u8,x:K)->[[K;4];5] {
+ if left==0 {out} else {
+  let y=double(x);out[d]=line(x,y);let next=double(y);
+  lines(out,d+1,left-1,next)
+ }
+}
+pub fn circle_rows(x:K,y:K)->[[K;4];5] {
+ let mut out=[[K::ZERO;4];5];out[0]=circle(x,y);
+ lines(out,1,4,double(x))
+}
 }

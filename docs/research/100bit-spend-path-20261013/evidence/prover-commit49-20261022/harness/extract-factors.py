@@ -22,6 +22,6 @@ def run(name,cmd):
  (R/(name+'-inputs.json')).write_text(json.dumps(dict(source_sha256=hashlib.sha256(Path('lib.rs').read_bytes()).hexdigest(),reservations=caps,tools={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in [CHARON,AENEAS]}),indent=2)+'\n')
  subprocess.run(['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(R/'harness/capped.py'),str(R/'receipts'/name),'Optimized compilation and extraction of explicit-state digest, no arithmetic elimination','--',*cmd],check=True)
 (R/'extraction').mkdir(exist_ok=True)
-run('factor-owner-charon-v1',[CHARON,'cargo','--preset','aeneas','--start-from','crate::factors','--mir','built','--sysroot','default','--dest-file',str(R/'extraction/factor-owner49.llbc'),'--','--release','--lib','--jobs','4'])
+run('factor-owner-charon-v2',[CHARON,'cargo','--preset','aeneas','--start-from','crate::factors','--mir','built','--sysroot','default','--dest-file',str(R/'extraction/factor-owner49.llbc'),'--','--release','--lib','--jobs','4'])
 data=json.loads((R/'extraction/factor-owner49.llbc').read_text());assert not data['has_errors']
-run('factor-owner-aeneas-v1',[AENEAS,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR1FactorOwner49','-dest',str(R/'extraction/factor-owner'),'-subdir','AspisR1FactorOwner49','-split-files','-emit-json',str(R/'extraction/factor-owner49.llbc')])
+run('factor-owner-aeneas-v2',[AENEAS,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR1FactorOwner49','-dest',str(R/'extraction/factor-owner'),'-subdir','AspisR1FactorOwner49','-split-files','-emit-json',str(R/'extraction/factor-owner49.llbc')])

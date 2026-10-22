@@ -131,6 +131,13 @@ def field.mul_by_r (x : field.CM31) : Result field.CM31 := do
   let m3 ← field.M31.add x.a m2
   ok { a := m1, b := m3 }
 
+/-- [simulator_factor_owner49::field::{simulator_factor_owner49::field::QM31}::ZERO]
+    Source: 'field.rs', lines 869:4-878:6
+    Visibility: public -/
+@[global_simps, irreducible]
+def field.QM31.ZERO : field.QM31 :=
+  { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }
+
 /-- [simulator_factor_owner49::field::{simulator_factor_owner49::field::QM31}::ONE]
     Source: 'field.rs', lines 879:4-888:6
     Visibility: public -/
@@ -218,5 +225,47 @@ def factors.product
     let i2 ← lift (Std.U8.wrapping_sub left 1#u8)
     factors.product q i1 i2 next
 partial_fixpoint
+
+/-- [simulator_factor_owner49::factors::line]:
+    Source: 'lib.rs', lines 17:0-17:51
+    Visibility: public -/
+def factors.line
+  (x : field.QM31) (y : field.QM31) : Result (Array field.QM31 4#usize) := do
+  let q ← field.QM31.mul x y
+  ok (Array.make 4#usize [ field.QM31.ONE, x, y, q ])
+
+/-- [simulator_factor_owner49::factors::lines]:
+    Source: 'lib.rs', lines 18:0-23:1
+    Visibility: public -/
+def factors.lines
+  (out : Array (Array field.QM31 4#usize) 5#usize) (d : Std.Usize)
+  (left : Std.U8) (x : field.QM31) :
+  Result (Array (Array field.QM31 4#usize) 5#usize)
+  := do
+  if left = 0#u8
+  then ok out
+  else
+    let y ← factors.double x
+    let a ← factors.line x y
+    let out1 ← Array.update out d a
+    let next ← factors.double y
+    let i ← lift (Std.Usize.wrapping_add d 1#usize)
+    let i1 ← lift (Std.U8.wrapping_sub left 1#u8)
+    factors.lines out1 i i1 next
+partial_fixpoint
+
+/-- [simulator_factor_owner49::factors::circle_rows]:
+    Source: 'lib.rs', lines 24:0-27:1
+    Visibility: public -/
+def factors.circle_rows
+  (x : field.QM31) (y : field.QM31) :
+  Result (Array (Array field.QM31 4#usize) 5#usize)
+  := do
+  let a := Array.repeat 4#usize field.QM31.ZERO
+  let out := Array.repeat 5#usize a
+  let a1 ← factors.circle x y
+  let out1 ← Array.update out 0#usize a1
+  let q ← factors.double x
+  factors.lines out1 1#usize 4#u8 q
 
 end AspisR1FactorOwner49

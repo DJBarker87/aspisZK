@@ -1,0 +1,63 @@
+import R1Z.ProverCommitCircleModel49
+import R1Z.ProverCommitEval47
+/-! The circle raw coefficient row is the model evaluator on a basis vector.
+Only the unique matching pair index is selected; no 512-term cube is reduced. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitCircleFunctional49
+open AspisCircleTensorBinding
+open scoped BigOperators
+variable {K : Type} [Field K]
+
+def part (q : Fin 1024 → K) (x : K) (s : Fin 2) : K :=
+  ∑ i : Fin 512, q ⟨2*i.val+s.val,by have := i.isLt;have := s.isLt;omega⟩ * naturalLineValue x i.val
+
+theorem single_part (j : Fin 1024) (x : K) (s : Fin 2) :
+    part (Pi.single j 1) x s=if j.val%2=s.val then naturalLineValue x (j.val/2) else 0 := by
+  let i : Fin 512 := ⟨j.val/2,by have := j.isLt;omega⟩
+  by_cases hs : j.val%2=s.val
+  · rw [if_pos hs,part]
+    rw [Finset.sum_eq_single i]
+    · have he : (⟨2*i.val+s.val,by have := i.isLt;have := s.isLt;omega⟩ : Fin 1024)=j := by
+        apply Fin.ext
+        dsimp only [i]
+        omega
+      rw [he,Pi.single_eq_same,one_mul]
+    · intro k hk hki
+      have he : (⟨2*k.val+s.val,by have := k.isLt;have := s.isLt;omega⟩ : Fin 1024)≠j := by
+        intro he
+        have hval := congrArg Fin.val he
+        apply hki
+        apply Fin.ext
+        dsimp only [i]
+        omega
+      rw [Pi.single_eq_of_ne he,zero_mul]
+    · intro hi
+      exact (hi (Finset.mem_univ i)).elim
+  · rw [if_neg hs,part]
+    apply Finset.sum_eq_zero
+    intro i hi
+    have he : (⟨2*i.val+s.val,by have := i.isLt;have := s.isLt;omega⟩ : Fin 1024)≠j := by
+      intro he
+      have hval := congrArg Fin.val he
+      have hslt := s.isLt
+      apply hs
+      omega
+    rw [Pi.single_eq_of_ne he,zero_mul]
+
+theorem message_single (j : Fin 1024) (x y : K) :
+    ProverCommitEval47.messageEval (Pi.single j 1) x y=ProverCommitCircleModel49.circleWeight x y j.val := by
+  change part (Pi.single j 1) x 0+y*part (Pi.single j 1) x 1=_
+  rw [single_part,single_part]
+  unfold ProverCommitCircleModel49.circleWeight
+  by_cases h : j.val%2=0
+  · simp only [h,show (0:Fin 2).val=0 from rfl,show (1:Fin 2).val=1 from rfl,
+      if_true,if_neg (by decide : (0:Nat)≠1),mul_zero,add_zero,mul_one]
+  · have ho : j.val%2=1 := by omega
+    simp only [ho,show (0:Fin 2).val=0 from rfl,show (1:Fin 2).val=1 from rfl,
+      if_true,if_neg (by decide : (1:Nat)≠0),zero_add]
+    ring
+
+#print axioms single_part
+#print axioms message_single
+end R1Z.ProverCommitCircleFunctional49
