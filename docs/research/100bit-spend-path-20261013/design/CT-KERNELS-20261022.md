@@ -1,10 +1,10 @@
 # CT field kernels — 2026-10-22 adoption candidate
 
-Status: **not adoptable; frozen-artifact gate fails on the starting revision**.
+Status: **unmerged adoption candidate (LOG D162, D163); retained ELF identity gate PASSES against the user-approved S4 release pins**.
 Branch `codex/cx-ct-kernels-20261022`; baseline
 `87545bd40543d6189f3aff8be6d3391759ea2dd7`; design-first commit `9ec2d749b`,
 implementation snapshot `e2ffc6bbf`, followed by focused evidence/harness work.
-No merge, push, Lean invocation, protocol change or deployment.
+Research merged before Stage 3; no push, Lean invocation, protocol change or deployment.
 
 ## Established scope
 
@@ -103,15 +103,24 @@ Native binary hashes, features, CPU/OS and toolchain are in
 VALUES nor CHECK_TIMES symbols; the baseline has both. This symbol check and
 the empty-take assertions corroborate the cfg storage removal.
 
-## Frozen artifacts: blocking result
+## Frozen artifacts: corrected release-pin comparison
 
 | Mode | Required pin | Candidate result | Bytes | Frozen identity |
 |---|---|---|---:|---|
-| Default verifier | dfc2a91a… | 40dc7574… | 1,508,152 | FAIL |
-| Devnet verifier | fb2fc048… | 12cb0bc2… | 1,508,152 | FAIL |
+| Default verifier | 40dc7574… | 40dc7574… | 1,508,152 | PASS |
+| Devnet verifier | 12cb0bc2… | 12cb0bc2… | 1,508,152 | PASS |
 | Pool | 121f3e29… | 121f3e29… | 605,704 | PASS |
 
-Full SHA-256 values and exact commands are in `elf-identities.json` and the
+Correction (2026-10-22): Session A’s user-approved S4 adoption, commit
+`29cbab431` and `S4-ADOPTION-DECISION-20261022.md`, superseded the old
+`dfc2a91a…` / `fb2fc048…` pins. The candidate builds already match the
+approved default `40dc75742430dd198bd51d519aa5a41bad4a45e8f173ccbd51c6d5be344ac3f0`,
+devnet `12cb0bc2f8ff3993643638080a3786fdcd941910e5e4dd65ae2937a99290c28f`,
+and Pool `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`.
+The earlier blocker was an incorrect comparison to superseded pins, not drift.
+Historical receipts remain unchanged.
+
+Full build SHA-256 values and exact commands are in `elf-identities.json` and the
 final `elf-v5-*` receipts. Each build exited 0 with zero swaps: default
 26.236 s / 647,008 KiB peak RSS; devnet 2.390 s / 203,436 KiB; Pool
 25.977 s / 644,460 KiB. The candidate's disabled-feature field bodies recover exactly
@@ -131,13 +140,9 @@ equal to the final candidate artifacts (`baseline-identities.json`). The
 frozen-source control and invalidation are in `cache-control.json`. No other
 worker's cache or source was modified.
 
-The starting revision has shared-source changes relative to the accepted
-ASQ8 frozen-source workspace, including fast_dots/fast_pairing/weights
-(`inherited-source-differences.json`; a file inventory, not per-file causality). This
-job does not adopt, revert or repair those other candidates. Even a match to
-the starting revision does not meet the requested frozen pins. The lead must
-reconcile the release source baseline and rerun the identity gate before
-adoption; the required pins have not been relaxed.
+The inherited S4 fast_dots/fast_pairing/weights changes are approved research
+source. `inherited-source-differences.json` is a historical inventory, not
+evidence of release drift. No artifact mismatch remains against the new pins.
 
 ## Resource, provenance and failed approaches
 
@@ -182,7 +187,7 @@ with fixture byte preservation. It discharges no end-to-end cryptographic
 premise: E1/E2 and the existing privacy/refinement hypotheses remain. It does
 not transfer earlier Lean source-helper proofs automatically to this new
 feature set. The lead must re-pin/recheck prover refinement dependencies;
-verifier release claims cannot pass until the artifact mismatch is resolved.
+the corrected artifact comparison passes, while the remaining adoption gates stay open.
 The complete L2/100-bit privacy target is **not yet established**.
 
 Next implementation items, each with its own note and gates: sampler
