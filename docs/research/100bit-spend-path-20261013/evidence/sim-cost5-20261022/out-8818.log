@@ -1,0 +1,59 @@
+'R1Z.SimCostWide5.add_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.add_cost' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.mul_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.mul_cost' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.power_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.power_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.inverse_exponent_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.inverse_power' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.inv_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.inv_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostCollect5.collect_erase' depends on axioms: [propext, Quot.sound]
+'R1Z.SimCostCollect5.collect_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostCollect5.collect2_erase' depends on axioms: [propext, Quot.sound]
+'R1Z.SimCostCollect5.collect2_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostCollect5.collect3_erase' depends on axioms: [propext, Quot.sound]
+'R1Z.SimCostCollect5.collect3_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostFormula5.arrayAdd_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostFormula5.arrayAdd_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostFormula5.payloadEquiv' does not depend on any axioms
+'R1Z.SimCostFormula5.payload_nat_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostFormula5.payload_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostFormula5.full_array_add_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostRetry5.zeroBytes_erase' depends on axioms: [propext, Quot.sound]
+'R1Z.SimCostRetry5.zeroBytes_cost' depends on axioms: [propext, Quot.sound]
+'R1Z.SimCostRetry5.zeroWord_erase' depends on axioms: [propext, Quot.sound]
+'R1Z.SimCostRetry5.zeroWord_cost' depends on axioms: [propext, Quot.sound]
+'R1Z.SimCostRetry5.search_none' depends on axioms: [propext, Quot.sound]
+'R1Z.SimCostRetry5.search_bound' depends on axioms: [propext, Quot.sound]
+'R1Z.SimCostRetry5.allSearch_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostRetry5.exhaustion_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostWide5.inv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostFormula5.arrayAdd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.SimCostIdeal.Preparation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PrivacyR1HeadlineV2SimProto.privacy_headline_v2_sim_proto' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitDeployedFuel22.RustProverRefinement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitFuelJoin22.RunJoin' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure R1Z.ProverCommitFuelJoin22.RunJoin {R M V : Type} [Fintype R] [Fintype M] (runtime : R → V) (model : M → V)
+  (old : Fin 8 → M → Prop) (queries : M → List R1Z.ProverCommitSeedEvent19.Entry) : Type 1
+number of parameters: 9
+fields:
+  R1Z.ProverCommitFuelJoin22.RunJoin.cp : R0Z.FsAbort.Coupling R
+      ((M × R0Z.FsStatement.OracleAnswer) × R1Z.ProverCommitFuelJoin22.Tape)
+  R1Z.ProverCommitFuelJoin22.RunJoin.agreement : ∀ (s : self.cp.S),
+      (¬∃ i, R1Z.ProverCommitFuelJoin22.bad old queries i (self.cp.toM s)) →
+        runtime (self.cp.toR s) = model (self.cp.toM s).1.1
+constructor:
+  R1Z.ProverCommitFuelJoin22.RunJoin.mk {R M V : Type} [Fintype R] [Fintype M] {runtime : R → V} {model : M → V}
+    {old : Fin 8 → M → Prop} {queries : M → List R1Z.ProverCommitSeedEvent19.Entry}
+    (cp : R0Z.FsAbort.Coupling R ((M × R0Z.FsStatement.OracleAnswer) × R1Z.ProverCommitFuelJoin22.Tape))
+    (agreement :
+      ∀ (s : cp.S),
+        (¬∃ i, R1Z.ProverCommitFuelJoin22.bad old queries i (cp.toM s)) → runtime (cp.toR s) = model (cp.toM s).1.1) :
+    R1Z.ProverCommitFuelJoin22.RunJoin runtime model old queries
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
