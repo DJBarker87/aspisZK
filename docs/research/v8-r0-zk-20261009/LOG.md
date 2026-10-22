@@ -8640,3 +8640,14 @@ prover wall time (measurement only): transfer 38.51 s, withdrawal 37.95 s,
 back at the ~40 s baseline. The stage-3 rewrites stay only on the old branch.
 Remaining for L2: the simulatable-trace proof for the F3/F5/F6 steps (listed by
 file:line in the v2 section); then candidate adoption gates and the L3 receipt.
+
+## D168 (user feedback, 2026-10-22 18:55): prover slowdowns need a stop gate
+
+The user called the stage-3 constant-time slowdown (about 40 s to 170–200 s)
+unacceptable. It was never adopted: the v2 candidate (D167) is at the ~40 s
+baseline. The process failure was the lead's. The stage-3 prompt had no
+performance stop condition, so five successive slowdowns ran to completion
+before review. From now on, every job that changes prover or host code carries a wall-time
+budget gate: measure after each step and stop and escalate if any fixture's prover time
+rises more than 10% over baseline. The stage-3 branch is evidence only and is
+not a candidate.
