@@ -16,5 +16,5 @@ for p in Path('/sys/fs/cgroup').rglob('memory.max'):
  except OSError:pass
 assert sum(x['bytes'] for x in caps)+8*2**30<=55*2**30,caps
 (H/(name+'-inputs.json')).write_text(json.dumps(dict(source_revision=(H/'revision.txt').read_text().strip(),hashes={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (H/'harness').iterdir() if p.is_file()},reservations=caps),indent=2)+'\n')
-cmd=['cargo','kani','--no-assertion-reach-checks','--lib','--exact','--harness',target,'-Z','unstable-options','--output-format','regular','--cbmc-args','--unwinding-assertions','--object-bits','12']
+cmd=['cargo','kani','--no-assertion-reach-checks','--lib','--exact','--harness',target,'-Z','unstable-options','--output-format','regular','--cbmc-args','--unwinding-assertions','--object-bits','12','--unwindset','memcmp.0:33']
 sys.exit(subprocess.run(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'harness/capped.py'),str(H/'receipts'/name),'Kani compile then publication loop logic with sorted-list TrustedStd substitute; no finite-field arithmetic','--','timeout','600',*cmd]).returncode)

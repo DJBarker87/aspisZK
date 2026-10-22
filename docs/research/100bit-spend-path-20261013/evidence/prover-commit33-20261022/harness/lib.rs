@@ -119,7 +119,7 @@ fn merge_rec(mut table:Table,reads:&[(Vec<u8>,[u8;32])])->Result<Table,Error> {
   let expected=folded_rec(&drawn.queries,&b,initial);
   assert!(actual==expected);assert!(a.q1.calls.get()==b.q1.calls.get());
  }
- #[kani::proof] #[kani::unwind(40)]
+ #[kani::proof] #[kani::unwind(8)]
  fn leaf_order_and_query_publication() {
   let drawn=queries();let mut opened=BTreeMap::new();let mut folded=BTreeMap::new();
   let cells:[u8;3]=kani::any();
@@ -139,7 +139,7 @@ fn merge_rec(mut table:Table,reads:&[(Vec<u8>,[u8;32])])->Result<Table,Error> {
   let at:usize=kani::any();
   if at<actual.len() {assert!(actual[at]==expected[at]);}
  }
- #[kani::proof] #[kani::unwind(40)]
+ #[kani::proof] #[kani::unwind(8)]
  fn transcript_merge() {
   let n:usize=kani::any();let m:usize=kani::any();kani::assume(n<=2 && m<=2);
   let keys:[u8;4]=kani::any();let vals:[u8;4]=kani::any();
