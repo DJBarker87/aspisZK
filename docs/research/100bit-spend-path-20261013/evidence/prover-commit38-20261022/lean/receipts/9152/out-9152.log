@@ -1,0 +1,68 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReservationGuess38.lean:25:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  True
+but is expected to have type
+  Fintype.card UInt8 ^ 32 = 115792089237316195423570985008687907853269984665640564039457584007913129639936
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReservationGuess38.lean:38:4: error: Type mismatch
+  h
+has type
+  (eventMass fun n => reservationInput ↑n = input) ≤ 1 / ↑(2 ^ 256 - 1)
+but is expected to have type
+  (eventMass fun nonce => reservationInput ↑nonce = input) ≤ Rat.divInt 1 (Int.subNatNat (2 ^ 256) 1)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReservationGuess38.lean:70:76: error: unsolved goals
+queries : List (List UInt8)
+entries : List OracleAnswer
+⊢ (mean fun c => mean fun r => if reservationInput ↑c ∈ queries then 1 else 0) =
+    mean fun s => if reservationInput ↑s ∈ queries then 1 else 0
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReservationGuess38.lean:78:10: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReservationGuess38.lean:82:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eventMass fun r => reservationInput ↑r.1 ∈ queries
+in the target expression
+  (FsAbortBounds.mass fun s => reservationInput ↑s.1 ∈ queries ∨ s.2 ∈ entries) ≤
+    (FsAbortBounds.mass fun r => reservationInput ↑r.1 ∈ queries) + FsAbortBounds.mass fun r => r.2 ∈ entries
+
+queries : List (List UInt8)
+entries : List OracleAnswer
+hq : (eventMass fun r => reservationInput ↑r.1 ∈ queries) = eventMass fun nonce => reservationInput ↑nonce ∈ queries
+he : (eventMass fun r => r.2 ∈ entries) = eventMass fun path => path ∈ entries
+h :
+  (FsAbortBounds.mass fun s => reservationInput ↑s.1 ∈ queries ∨ s.2 ∈ entries) ≤
+    (FsAbortBounds.mass fun r => reservationInput ↑r.1 ∈ queries) + FsAbortBounds.mass fun r => r.2 ∈ entries
+⊢ (eventMass fun r => reservationGuess queries entries r.1 r.2) ≤ budget queries.length entries.length 1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReservationGuess38.lean:73:15: warning: This simp argument is unused:
+  mean_const
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵m̵e̵a̵n̵_̵c̵o̵n̵s̵t̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitReservationGuess38.lean:101:23: error: unsolved goals
+M : Type
+inst✝¹ : Fintype M
+inst✝ : Nonempty M
+attempts queries entries : ℕ
+bad : Fin attempts → M → Prop
+per_attempt : ∀ (i : Fin attempts), eventMass (bad i) ≤ budget queries entries 1
+h : (FsAbortBounds.mass fun s => ∃ i, bad i s) ≤ ↑(Fintype.card (Fin attempts)) * budget queries entries 1
+⊢ ↑(Fintype.card (Fin attempts)) * ↑queries *
+        (1 / 115792089237316195423570985008687907853269984665640564039457584007913129639935) +
+      ↑(Fintype.card (Fin attempts)) * ↑entries *
+        (1 / 115792089237316195423570985008687907853269984665640564039457584007913129639935) =
+    ↑queries * ↑attempts * (1 / 115792089237316195423570985008687907853269984665640564039457584007913129639935) +
+      ↑entries * ↑attempts * (1 / 115792089237316195423570985008687907853269984665640564039457584007913129639935)
+'R1Z.ProverCommitReservationGuess38.nonzero_card' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationGuess38.query_point' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationGuess38.query_list' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationGuess38.fresh_slice' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitReservationGuess38.attempt_union' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh
