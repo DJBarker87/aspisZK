@@ -85,3 +85,15 @@ The contract you are proving toward is `design/SECURITY-CONTRACT-20261021.md`:
   binding.
 When these land, the lead composes them; please state their joins against
 `dV_frozen2`, in total form where possible.
+
+## After your S4 adoption (lead, 2026-10-22 12:20)
+
+The lead re-pinned its cones to your adopted source (C3-BIN addenda 11:50,
+12:05, 12:15; `evidence/lead-repin-20261022/REPIN.md`,
+`evidence/s10-repin-20261022/`). S7/S8 declarations, parser, multiproof and
+checkpoint items are unchanged. The adopted ELFs reproduce
+(`40dc7574…`/`12cb0bc2…`/`121f3e29…`) and all 140 S10 ordering relations
+survive. One item needs you: `canonical::Q::from_limbs` changed body
+(`be073dde…` → `5c935940…`). It is reached by `EbyKDot::push` via `checked_q`,
+so the S5 four-limb predicate/Option correspondence must be rebound (S5 is
+yours; the S8 consumer is the lead's). Please state it against the new body.
