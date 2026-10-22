@@ -1,0 +1,149 @@
+/tmp/root-s4-selected-packed-return-v1-20261022/sources/S4SelectedPackedReturnV1.lean:81:67: error: unsolved goals
+rest : QueryOps
+proof : Slice U8
+p : verifier.Prepared
+a : verifier.Accumulator
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+powers : Std.Array ClaimE 29#usize
+gamma : ClaimE
+parsed : OraclePortCompactDraft.Parsed
+hlen : (↑proof).length = 57607
+hwire : parsed.wire = MultiproofConeCanonical.bytesOf ↑proof
+queries : Fin 22 → Fin 262144
+recovered0 recovered1 : ℕ → Option Bytes
+hauth0 : ∀ pos < 22, recovered0 (index queries 0 pos) = some (payload parsed 0 pos)
+hauth1 : ∀ pos < 22, recovered1 (index queries 1 pos) = some (payload parsed 1 pos)
+i : U32
+u : Usize
+q : Slice U8
+values : Std.Array aspis_core.field.wide_exact.WideExact 4#usize
+currentValues : Std.Array AspisR1FastDotsCurrent.aspis_core.field.wide_exact.WideExact 4#usize
+arrayQ : Std.Array U8 608#usize
+v0 v1 v2 v3 : AspisR1FastDotsCurrent.aspis_core.field.wide_exact.WideExact
+c1 : MixedLeafEncoding.C1
+c2 : MixedLeafEncoding.C2
+hi : p.queries.index_usize a.next = ok i
+hu : lift (UScalar.cast UScalarTy.Usize i) = ok u
+hopening : sourceOpening proof a.next = ok q
+hread : ↑q = List.slice (10055 + ↑a.next * 832) (10055 + ↑a.next * 832 + 832) ↑proof
+hdots : (concreteCandidateQueryOps rest).dots q g = ok values
+hcurrent : AspisR1S4FullQueryValuesPrefixV1.currentArrayToFull currentValues = values
+ha : ↑arrayQ = List.slice 0 ↑608#usize ↑q
+hcanonical :
+  ∀ x ∈ ↑currentValues, AspisR1CurrentWide.Proof.CanonicalWide (AspisR1FastDotsTailWideAddCurrentV1.s4ToCurrentE x)
+hlist : ↑currentValues = [v0, v1, v2, v3]
+hf0 :
+  AspisR1FastDotsLiteralCallbackValueRootV1.LiteralFieldResult
+    (AspisR1FastDotsForwardLiteralValueRootV1.literalOps AspisR1FastDotsConcreteKernelOpsRootV1.concreteOps) arrayQ
+    (AspisR1FastDotsClaimPowerCoordinateBridgeV1.claimArrayToFast powers) 0#usize v0
+hf1 :
+  AspisR1FastDotsLiteralCallbackValueRootV1.LiteralFieldResult
+    (AspisR1FastDotsForwardLiteralValueRootV1.literalOps AspisR1FastDotsConcreteKernelOpsRootV1.concreteOps) arrayQ
+    (AspisR1FastDotsClaimPowerCoordinateBridgeV1.claimArrayToFast powers) 1#usize v1
+hf2 :
+  AspisR1FastDotsLiteralCallbackValueRootV1.LiteralFieldResult
+    (AspisR1FastDotsForwardLiteralValueRootV1.literalOps AspisR1FastDotsConcreteKernelOpsRootV1.concreteOps) arrayQ
+    (AspisR1FastDotsClaimPowerCoordinateBridgeV1.claimArrayToFast powers) 2#usize v2
+hf3 :
+  AspisR1FastDotsLiteralCallbackValueRootV1.LiteralFieldResult
+    (AspisR1FastDotsForwardLiteralValueRootV1.literalOps AspisR1FastDotsConcreteKernelOpsRootV1.concreteOps) arrayQ
+    (AspisR1FastDotsClaimPowerCoordinateBridgeV1.claimArrayToFast powers) 3#usize v3
+hc1 : MixedLeafDecoder.decodeC1 (List.take 480 (List.map ExtractedRecordByteValue.rawByte ↑arrayQ)) = some c1
+hc2 : MixedLeafDecoder.decodeC2 (List.drop 480 (List.map ExtractedRecordByteValue.rawByte ↑arrayQ)) = some c2
+hbytes :
+  List.map ExtractedRecordByteValue.rawByte ↑arrayQ = MixedLeafEncoding.encodeC1 c1 ++ MixedLeafEncoding.encodeC2 c2
+hlocal :
+  List.map (fun x => AspisR1CurrentPreparedClaim.Concrete.decode (stage2ToClaim x)) ↑values =
+    List.ofFn fun slot =>
+      AspisV6Width29CorrelatedAgreement.width29Batch (AspisR1D18S4ConcreteWidth29KernelV1.localWord c1 c2 slot)
+        (AspisR1CurrentPreparedClaim.Concrete.decode gamma)
+hbound : ↑a.next < 22
+pos : Fin 22 := ⟨↑a.next, hbound⟩
+hpayload :
+  payload parsed 0 ↑a.next = List.take 480 (List.map ExtractedRecordByteValue.rawByte ↑arrayQ) ∧
+    payload parsed 1 ↑a.next = List.drop 480 (List.map ExtractedRecordByteValue.rawByte ↑arrayQ)
+⊢ (if 0 = 2 then ↑(queries ⟨↑a.next, ⋯⟩) / 4 else ↑(queries ⟨↑a.next, ⋯⟩)) = ↑(queries pos)
+/tmp/root-s4-selected-packed-return-v1-20261022/sources/S4SelectedPackedReturnV1.lean:84:67: error: unsolved goals
+rest : QueryOps
+proof : Slice U8
+p : verifier.Prepared
+a : verifier.Accumulator
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+powers : Std.Array ClaimE 29#usize
+gamma : ClaimE
+parsed : OraclePortCompactDraft.Parsed
+hlen : (↑proof).length = 57607
+hwire : parsed.wire = MultiproofConeCanonical.bytesOf ↑proof
+queries : Fin 22 → Fin 262144
+recovered0 recovered1 : ℕ → Option Bytes
+hauth0 : ∀ pos < 22, recovered0 (index queries 0 pos) = some (payload parsed 0 pos)
+hauth1 : ∀ pos < 22, recovered1 (index queries 1 pos) = some (payload parsed 1 pos)
+i : U32
+u : Usize
+q : Slice U8
+values : Std.Array aspis_core.field.wide_exact.WideExact 4#usize
+currentValues : Std.Array AspisR1FastDotsCurrent.aspis_core.field.wide_exact.WideExact 4#usize
+arrayQ : Std.Array U8 608#usize
+v0 v1 v2 v3 : AspisR1FastDotsCurrent.aspis_core.field.wide_exact.WideExact
+c1 : MixedLeafEncoding.C1
+c2 : MixedLeafEncoding.C2
+hi : p.queries.index_usize a.next = ok i
+hu : lift (UScalar.cast UScalarTy.Usize i) = ok u
+hopening : sourceOpening proof a.next = ok q
+hread : ↑q = List.slice (10055 + ↑a.next * 832) (10055 + ↑a.next * 832 + 832) ↑proof
+hdots : (concreteCandidateQueryOps rest).dots q g = ok values
+hcurrent : AspisR1S4FullQueryValuesPrefixV1.currentArrayToFull currentValues = values
+ha : ↑arrayQ = List.slice 0 ↑608#usize ↑q
+hcanonical :
+  ∀ x ∈ ↑currentValues, AspisR1CurrentWide.Proof.CanonicalWide (AspisR1FastDotsTailWideAddCurrentV1.s4ToCurrentE x)
+hlist : ↑currentValues = [v0, v1, v2, v3]
+hf0 :
+  AspisR1FastDotsLiteralCallbackValueRootV1.LiteralFieldResult
+    (AspisR1FastDotsForwardLiteralValueRootV1.literalOps AspisR1FastDotsConcreteKernelOpsRootV1.concreteOps) arrayQ
+    (AspisR1FastDotsClaimPowerCoordinateBridgeV1.claimArrayToFast powers) 0#usize v0
+hf1 :
+  AspisR1FastDotsLiteralCallbackValueRootV1.LiteralFieldResult
+    (AspisR1FastDotsForwardLiteralValueRootV1.literalOps AspisR1FastDotsConcreteKernelOpsRootV1.concreteOps) arrayQ
+    (AspisR1FastDotsClaimPowerCoordinateBridgeV1.claimArrayToFast powers) 1#usize v1
+hf2 :
+  AspisR1FastDotsLiteralCallbackValueRootV1.LiteralFieldResult
+    (AspisR1FastDotsForwardLiteralValueRootV1.literalOps AspisR1FastDotsConcreteKernelOpsRootV1.concreteOps) arrayQ
+    (AspisR1FastDotsClaimPowerCoordinateBridgeV1.claimArrayToFast powers) 2#usize v2
+hf3 :
+  AspisR1FastDotsLiteralCallbackValueRootV1.LiteralFieldResult
+    (AspisR1FastDotsForwardLiteralValueRootV1.literalOps AspisR1FastDotsConcreteKernelOpsRootV1.concreteOps) arrayQ
+    (AspisR1FastDotsClaimPowerCoordinateBridgeV1.claimArrayToFast powers) 3#usize v3
+hc1 : MixedLeafDecoder.decodeC1 (List.take 480 (List.map ExtractedRecordByteValue.rawByte ↑arrayQ)) = some c1
+hc2 : MixedLeafDecoder.decodeC2 (List.drop 480 (List.map ExtractedRecordByteValue.rawByte ↑arrayQ)) = some c2
+hbytes :
+  List.map ExtractedRecordByteValue.rawByte ↑arrayQ = MixedLeafEncoding.encodeC1 c1 ++ MixedLeafEncoding.encodeC2 c2
+hlocal :
+  List.map (fun x => AspisR1CurrentPreparedClaim.Concrete.decode (stage2ToClaim x)) ↑values =
+    List.ofFn fun slot =>
+      AspisV6Width29CorrelatedAgreement.width29Batch (AspisR1D18S4ConcreteWidth29KernelV1.localWord c1 c2 slot)
+        (AspisR1CurrentPreparedClaim.Concrete.decode gamma)
+hbound : ↑a.next < 22
+pos : Fin 22 := ⟨↑a.next, hbound⟩
+hpayload :
+  payload parsed 0 ↑a.next = List.take 480 (List.map ExtractedRecordByteValue.rawByte ↑arrayQ) ∧
+    payload parsed 1 ↑a.next = List.drop 480 (List.map ExtractedRecordByteValue.rawByte ↑arrayQ)
+hindex0 : index queries 0 ↑a.next = ↑(queries pos)
+⊢ (if 1 = 2 then ↑(queries ⟨↑a.next, ⋯⟩) / 4 else ↑(queries ⟨↑a.next, ⋯⟩)) = ↑(queries pos)
+/tmp/root-s4-selected-packed-return-v1-20261022/sources/S4SelectedPackedReturnV1.lean:82:47: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [index, Nat.mod_eq_of_lt hbound,̵ ̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/root-s4-selected-packed-return-v1-20261022/sources/S4SelectedPackedReturnV1.lean:85:47: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [index, Nat.mod_eq_of_lt hbound,̵ ̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S4SelectedPackedReturnV1.returned_values_match_selected_packed_word' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

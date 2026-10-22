@@ -1235,3 +1235,44 @@ binding, commitment authentication, stage-1 transcript gamma correspondence,
 frozen from_fn refinement or source-candidate adoption, release pins and the
 coherent final dependency replay remain open. S4 is not declared fully
 closed and the implementation-linked 100-bit target is not established.
+
+
+## Same callback reaches the selected packed word, including repeated indices
+
+`s4-format-payload-alignment-v1-20261022` proves the source 608-byte opening
+prefix/suffix equals the model's kind-0/kind-1 payloads. It establishes byte
+framing, not Merkle authentication. Focused exit 0, 16.256s, peak process RSS
+3,642,163,200 bytes, swap 0, standard axioms.
+
+`s4-query-returned-model-transport-v1-20261022` retains the same callback
+witness and gives conditional transport to a recovered word when its maps
+contain that exact opening's bytes. Focused exit 0, 37.795s, peak process RSS
+3,941,728,256 bytes, swap 0, standard axioms.
+
+The concrete consumer in `s4-selected-packed-return-v1-20261022`,
+`AspisR1.S4SelectedPackedReturnV1.returned_values_match_selected_packed_word`,
+instantiates that byte correspondence with the existing global first-occurrence
+packed maps. It derives the actual reached position bound from the successful
+source query-array read, retains the original source index/cast/opening/dots
+success, and proves the actual returned Full values equal the model's four
+first-fold inputs at that position. Existing `packed_agrees` and explicit
+per-position recovered-map authentication handle repeated indices across
+batches; no query uniqueness premise is added. Focused exit 0, 4.557s, peak
+process RSS 4,071,997,440 bytes, swap 0, standard axioms. A preceding limited
+index-branch-normalization failure is retained. All three packet checkers
+passed primary review.
+
+The actual authentication predicates and same parsed-wire binding are still
+inputs. In particular, this join does not identify source Prepared.queries
+with the transcript-derived model query function. The ongoing sampler review
+corrected an interface description: the literal row31 challenge carries a
+List Nat of query values, not U32LE-encoded bytes. The missing source/model
+link is equality of sampler outcomes under the same absorbed row/payload
+and eight oracle block/advance pairs, not a byte codec theorem.
+
+The one-file fast_dots candidate already has retained extraction, optimized
+build and fixture evidence. It leaves the frozen weights::powers from_fn
+seam intact and still exceeds B1. The existing generated indexed-powers
+candidate is now being bound to the full tx2 cut; frozen-source adoption or
+Std correspondence remains an explicit unresolved release boundary. No
+performance exception or source adoption is inferred here.

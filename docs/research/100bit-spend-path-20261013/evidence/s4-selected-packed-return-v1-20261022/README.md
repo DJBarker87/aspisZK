@@ -1,0 +1,3 @@
+PROVED exact callback returned values equal first-fold inputs of the global first-occurrence packed word under the existing per-position recovery predicate.
+
+Limitations: The existing authenticated recovered-map predicates, same parsed wire binding and proof length are explicit inputs. Repeated query indices need no uniqueness assumption: existing packed_agrees supplies the common first-occurrence map value. Source/model query sampler correspondence and stage1 transcript gamma binding remain upstream. Candidate source adoption or frozen Std refinement, non-S4 source bindings, final coherent replay and global security closure remain open.
