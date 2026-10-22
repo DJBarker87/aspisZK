@@ -556,3 +556,22 @@ release cone. Ongoing: actual core-extraction carrier/body correspondence,
 actual four-step projection accumulation and its caller contracts, then the
 remaining production/refinement/release joins and composed security result.
 Production code and measured CU artifacts have not changed in these proofs.
+
+
+PROVED actual-core carrier/decoder joins: attempt7's generated field type
+carriers map injectively to the owned reader types (3f0f8503ad); the literal
+transparent from_limbs body maps on the same input array (a83d55ed44), and
+from_le_bytes maps on the same input slice (40ffdb8bfc). Sources, body spans,
+Rust/tool hashes and focused receipts are retained in the corresponding
+evidence/s9-actual-* packets. These results do not discharge the six opaque
+arithmetic call boundaries.
+
+Important source-binding refinement discovered in the genuine addition cut:
+the retained checked arithmetic extraction forced release overflow checks,
+whereas the adopted candidate SBF receipt has no aspis-core overflow-check
+override. The no-override addition cut therefore emits wrapping M31.add,
+which cannot be equated to checked addition for unrestricted inputs from
+Rust source hashes alone. The required next bridge is guarded by canonical
+inputs and proved primitive bounds; a forced-checked extraction is diagnostic,
+not production-MIR correspondence. There is no arithmetic source closure
+claim yet, and production source/ELF/CU artifacts remain unchanged.
