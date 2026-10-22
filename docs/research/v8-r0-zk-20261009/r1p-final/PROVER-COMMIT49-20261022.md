@@ -14,6 +14,42 @@ run in MemoryHigh=6G MemoryMax=8G MemorySwapMax=0 TasksMax=64 scopes with
 RUSTFLAGS='-C link-arg=-Wl,--threads=4'. Every actual attempt retains its
 source, dependencies, exit, time, RSS, swaps, revision and printed axioms.
 
+## Stage 1: oracle-result sum and final shift kernel
+
+J10009 proves `SampleSum49.sum_value` / `partial_sum`: the entire owned
+counter returns a canonical QM31 with the exact ordered sum, for every
+prefix up to 512 explicit oracle results. The semantic oracle-result provenance
+is still an independent caller obligation; no oracle law or payload identity
+is supplied by this theorem. J10011 proves `Shift49.shift_value` and
+`polynomial_shift`: the two updated coefficients represent exactly
+`p + C ((original-eta0)*inv) * (X-C half)`. This is after the inverse returns;
+its native inversion contract and the semantic meanings of the inputs remain.
+Both accepted files print only [propext, Classical.choice, Quot.sound].
+
+Native Kani passes: tail transition (0.315 s / 134004 KiB), oracle sum with
+both success/error (0.408 s / 140912 KiB), and complete 10x28-array shift
+context (2.832 s / 288000 KiB), all zero swaps. Universal arithmetic answers
+are paired with exact operand/call traces. No arithmetic truth is inferred
+from those callee stubs. `pins/native-spans.json` records source and control
+abstractions. The counter owner alone is extracted; shipped code is not.
+
+The first Charon run accidentally includes unused field iterator declarations
+and reports four trait transformation errors. Restricting its root to the
+new owned module removes them. The first Lean extraction exposes a backend
+usize shift-count mismatch; an explicit u32 cast fixes the owner. The retained
+arithmetic bodies are checked against the release extraction; newly reached
+literal constants/embeddings are emitted exactly. J10000/04/07/08/10 are
+rejected drafts, with diagnostics retained. J10001 is a missing-dependency
+preflight refusal; J10002/05 are unchanged-input launcher refusals, with no
+compiler executed. Those numbers are retired. J10003/06 validate the owner
+bindings; the latter reuses the already-defined ONE from Basis to avoid an
+import collision. Every overwritten shared source/object is snapshotted by
+the launcher; no prior theorem's source body is changed.
+
+No pure std trust fields added. No shipped files changed. Target remains open:
+semantic point/oracle correspondence and guards, inverse binding, weights,
+all remaining native callers and complete ordered model payload image.
+
 ## Verbatim endpoint before/after: unchanged
 
 The complete endpoint module, including every section binder, definition,

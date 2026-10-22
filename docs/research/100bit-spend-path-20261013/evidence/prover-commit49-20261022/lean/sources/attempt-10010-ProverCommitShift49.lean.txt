@@ -1,0 +1,85 @@
+import AspisR1ProducerRelease47.Samples49
+import R1Z.ProverCommitQArray48
+import R1Z.ProverCommitInterpolationPoly48
+/-! Exact two-coefficient shift after inversion. The inverse producer and
+semantic meaning of original/eta_term0 are separate caller obligations. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitShift49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+
+attribute [local irreducible] ProverCommitQArray48.array ProverCommitNativeQ48.source
+
+theorem shift_value (p : Nat → Old.Q) (hp : ∀ k, k<28 → Canonical (p k))
+    (original eta0 inv half : Old.Q) (ho : Canonical original) (he : Canonical eta0)
+    (hi : Canonical inv) (hh : Canonical half) :
+    ∃ out : Nat → Old.Q,
+      owned.shift (ProverCommitQArray48.array 28#usize p)
+        (ProverCommitNativeQ48.source original) (ProverCommitNativeQ48.source eta0)
+        (ProverCommitNativeQ48.source inv) (ProverCommitNativeQ48.source half)=
+        ok (ProverCommitQArray48.array 28#usize out) ∧
+      (∀ k, k<28 → Canonical (out k)) ∧
+      (∀ k, decode (out k)=decode (p k)+
+        (if k=0 then -(decode original-decode eta0)*decode inv*decode half
+         else if k=1 then (decode original-decode eta0)*decode inv else 0)) := by
+  obtain ⟨diff,hd,hcd,hdd⟩ := ProverCommitNativeQ48.sub original eta0 ho he
+  obtain ⟨c,hc,hcc,hdc⟩ := ProverCommitNativeQ48.mul diff inv hcd hi
+  obtain ⟨ch,hch,hcch,hdch⟩ := ProverCommitNativeQ48.mul c half hcc hh
+  obtain ⟨p0,hp0,hcp0,hdp0⟩ := ProverCommitNativeQ48.sub (p 0) ch (hp 0 (by omega)) hcch
+  obtain ⟨p1,hp1,hcp1,hdp1⟩ := ProverCommitNativeQ48.add (p 1) c (hp 1 (by omega)) hcc
+  let out := Function.update (Function.update p 0 p0) 1 p1
+  refine ⟨out,?_,?_,?_⟩
+  · rw [owned.shift]
+    simp only [hd,hc,bind_tc_ok]
+    rw [ProverCommitQArray48.index _ _ _ (by decide)]
+    simp only [show (0#usize).val=0 from rfl,hch,hp0,bind_tc_ok]
+    rw [ProverCommitQArray48.update _ _ _ (by decide)]
+    simp only [bind_tc_ok]
+    rw [ProverCommitQArray48.index _ _ _ (by decide)]
+    simp only [show (0#usize).val=0 from rfl,show (1#usize).val=1 from rfl,
+      Function.update_of_ne (by decide : (1:Nat)≠0),hp1,bind_tc_ok]
+    exact ProverCommitQArray48.update _ _ _ (by decide) _
+  · intro k hk
+    by_cases h1 : k=1
+    · subst k;simpa only [out,Function.update_self] using hcp1
+    · by_cases h0 : k=0
+      · subst k;simpa only [out,Function.update_of_ne (by decide : (0:Nat)≠1),Function.update_self] using hcp0
+      · simpa only [out,Function.update_of_ne h1,Function.update_of_ne h0] using hp k hk
+  · intro k
+    by_cases h0 : k=0
+    · subst k
+      simp only [out,Function.update_of_ne (by decide : (0:Nat)≠1),Function.update_self,if_true]
+      rw [hdp0,hdch,hdc,hdd];ring
+    · by_cases h1 : k=1
+      · subst k
+        simp only [out,Function.update_self,if_neg (by decide : (1:Nat)≠0),if_true]
+        rw [hdp1,hdc,hdd]
+      · simp only [out,Function.update_of_ne h1,Function.update_of_ne h0,if_neg h0,if_neg h1,add_zero]
+
+open Polynomial
+
+theorem polynomial_shift (p out : Nat → QM31Exact) (c half : QM31Exact)
+    (h : ∀ k, out k=p k+(if k=0 then -c*half else if k=1 then c else 0)) :
+    ProverCommitInterpolationPoly48.poly 28 out=
+      ProverCommitInterpolationPoly48.poly 28 p+C c*(X-C half) := by
+  apply Polynomial.ext
+  intro k
+  rw [ProverCommitInterpolationPoly48.coeff,Polynomial.coeff_add,
+    ProverCommitInterpolationPoly48.coeff]
+  simp only [mul_sub,Polynomial.coeff_sub,Polynomial.coeff_C_mul,Polynomial.coeff_X,
+    Polynomial.coeff_C]
+  by_cases h0 : k=0
+  · subst k;simp only [h,if_true,if_neg (by decide : (0:Nat)≠1)];ring
+  · by_cases h1 : k=1
+    · subst k;simp only [h,if_true,if_neg (by decide : (1:Nat)≠0)];ring
+    · by_cases hk : k<28
+      · rw [if_pos hk,if_pos hk,h]
+        simp only [h0,h1,Ne.symm h0,Ne.symm h1,if_false];ring
+      · rw [if_neg hk,if_neg hk]
+        simp only [h0,h1,Ne.symm h0,Ne.symm h1,if_false];ring
+
+#print axioms shift_value
+#print axioms polynomial_shift
+end R1Z.ProverCommitShift49

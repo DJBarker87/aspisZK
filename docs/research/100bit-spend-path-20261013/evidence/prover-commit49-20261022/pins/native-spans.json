@@ -1,0 +1,22 @@
+{
+  "source": "crates/aspis-r1-cost-probe/src/sim.rs",
+  "sha256": "2594f50a303bd53ea6ed64d0e49cd986794065c32514eadbd32272b9ec9a4460",
+  "spans": {
+    "tail": {
+      "start_line": 290,
+      "end_line": 292,
+      "literal": "                for offset in 0..remaining {\n                    point[r+1+offset]=if (assignment>>(remaining-1-offset))&1==0 {K::ZERO} else {K::ONE};\n                }\n"
+    },
+    "shift": {
+      "start_line": 308,
+      "end_line": 310,
+      "literal": "        let c=original.sub(ch.eta.mul(term0(&alpha)?)).mul(inv);\n        polys[9][0]=polys[9][0].sub(c.mul(half));\n        polys[9][1]=polys[9][1].add(c);\n"
+    }
+  },
+  "abstractions": [
+    "K => opaque u32 handle with universal symbolic arithmetic call results",
+    "f and term0 Result effects exposed at caller boundary; no oracle law assumed",
+    "tail iteration evaluated at arbitrary legal current cursor",
+    "shift selects row 9; caller computes eta*term0 before owner shift"
+  ]
+}

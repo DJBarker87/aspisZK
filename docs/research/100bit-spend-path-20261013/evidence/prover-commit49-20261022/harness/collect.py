@@ -15,6 +15,8 @@ sync(R,E/'pins',('--exclude=/program-one-transition-*','--exclude=/binary-group-
 # including receipts captured before the corresponding process completed.
 records=[]
 pins=sorted((E/'pins').glob('lean-*.json'))
+available=set(subprocess.check_output(['ssh',HOST,"find /home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence -maxdepth 1 -name 'out-10*.log' -printf '%f\\n'"],text=True).splitlines())
+pins=[p for p in pins if 'out-'+str(json.loads(p.read_text())['attempt'])+'.log' in available]
 paths=[]
 for pin in pins:
  rec=json.loads(pin.read_text());a=str(rec['attempt'])
