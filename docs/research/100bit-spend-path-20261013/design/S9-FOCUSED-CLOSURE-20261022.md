@@ -475,3 +475,32 @@ standard axioms. This is a source-cut BODY result, not whole-loop or full
 production source/refinement closure. The helper transport and genuine
 actual-core-type Rust cut remain in progress; the 100-bit target remains
 not established.
+
+
+Genuine actual-core-type Rust cut feasibility is now GREEN: Charon and Aeneas
+translate the exact candidate helper, real field reader/decoder and selected
+projection with the actual copied core field types. Six arithmetic methods
+and the non-S2 twofold function are explicit opaque boundaries; the S2 helper,
+reader and projection are transparent. Source-only extraction evidence:
+evidence/s9-helper-actual-field-types-cut-v1-20261022/.
+The raw generated Lean remains diagnostic, not an accepted proof or axiom
+source. Correct selectors use a wildcard for the inherent impl path component:
+the pinned Charon matcher does not implement explicit inherent-impl matching.
+Existing successful helper command settings were reused to avoid the Rust
+1.98 Try-trait model mismatch from overly broad standard-library includes.
+
+All six actual arithmetic method source bodies match retained extraction
+inputs used by the chosen semantic owners. WideExact mul/add/mul_m31 reuse
+S1/S3 exact arithmetic; mul_qm31 uses the qualified S3 generated-source model.
+QM31 mul inherits currentQMOps; square uses actualQMSquare and its retained
+selected-mask extraction. Exact source/tool/owner references and the residual
+new-cut opaque-call/carrier bridge are recorded in the two source packets.
+Source identity is not a proof that the new cut's generated declarations have
+already been connected to the chosen owners, nor an ELF/runtime theorem.
+
+The NUC Pair-to-Candidate scalar callback/fold and scalar-factor Result maps
+have passed against the actual-reader-backed adapter cohort. The full body
+map remains open: prefix, high-term construction, and post-term branch/array
+transport are now assigned separately for parallel completion. No conditional
+tail-map premise is counted as discharged. Whole-loop/caller integration,
+release binding, coherent replay and 100-bit composition remain open.
