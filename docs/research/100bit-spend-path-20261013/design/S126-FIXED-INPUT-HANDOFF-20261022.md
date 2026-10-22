@@ -268,8 +268,9 @@ Focused Lean4.32 checks, one local mkdir lock, -j1 -M4400:
 Standard-only means subsets of propext/Classical.choice/Quot.sound. Failed
 historical drafts and superseded green intermediates are retained, excluded
 from accepted targets; no sorry source, custom axioms, native_decide or resource
-option override is used. Focused import hashes cover seven old/new accepted
-targets and5616 selected objects; objects are not distributed. This is a
+option override is used. The separate `checkpoint-writer-import-pins.json` covers seven old/new accepted
+targets and5618 selected objects; the earlier three-target focused import manifest
+is retained unchanged for its checker. objects are not distributed. This is a
 focused cached proof, not a coherent final release rebuild. Four caller files
 are unchanged at the adopted S4 freeze, explicitly pinned in
 `caller-source-adoption-overlay-20261022.json`; changed transitive S4/powers
