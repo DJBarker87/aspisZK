@@ -1,0 +1,3 @@
+PROVED generated candidate early powers followed by installed candidate dots is total and returns exact local batch values, deriving all intermediate success and coefficient identity witnesses.
+
+Limitations: Canonical source gamma and strict scanner/frame contracts remain explicit. No successful powers or dots result, independently chosen powers array or coefficient-map equality is a premise. Scoped to the source-body-checked candidate helper pipeline; not frozen Std/from_fn equivalence or candidate adoption. Actual caller reachability, authenticated reconstruction, query/gamma transcript correspondence, shared oracle law and global soundness remain open. Focused reused-cache compilation, not final coherent release replay.

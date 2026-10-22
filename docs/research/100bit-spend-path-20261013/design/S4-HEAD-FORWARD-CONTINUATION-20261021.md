@@ -1491,3 +1491,31 @@ retained. This closes the per-block decoder-value gap. The same DriverTrace
 first-stop/scanOut and finish-output composition is still in progress;
 complete query output, prior-prefix, production hash-wrapper and shared
 oracle law are not inferred from this local result.
+
+
+## Generated powers-to-dots forward pipeline and finish projection
+
+`s4-earlypowers-dots-total-v1-20261022` reuses the actual emitted
+early-powers binding and its all-N mathematical totality theorem at the
+actual N=29 monomorphization. From canonical source gamma and the strict
+scanner/frame contracts it derives the successful generated powers result,
+its coefficient identity, successful installed dots result and exact four
+local batch values. No independently successful powers/dots call, chosen
+power array or coefficient-map equality is a premise. This strengthens the
+previous slot theorem by deriving those intermediate contracts. It remains
+a candidate helper pipeline: no caller reachability, authentication,
+transcript gamma/query relation or probabilistic security is inferred.
+Focused exit 0, 8.496s, peak process RSS 4,037,410,816 bytes, swap 0, standard
+axioms. An initial missing retained early-prefix import closure failure is
+recorded; the successful retry appended the parent's pinned profile without
+rebuilding unchanged modules. Packet checker passed.
+
+`query31-finish-accepted-values-v1-20261022` was separately reviewed and
+its checker passed. `finish_success_accepted_values` derives the exact
+returned array's natural-value list from the same terminal source state's
+Q22 accepted list. Successful finish supplies accepted_len=22; the source
+array length makes its accepted prefix the full returned array. No valid
+state or independent finish-output equality is assumed. Focused exit 0,
+11.886s, peak aggregate RSS 2,229,354,496 bytes, swap 0, standard axioms.
+The source trace/first-stop construction is still open and remains distinct
+from this local finish projection.
