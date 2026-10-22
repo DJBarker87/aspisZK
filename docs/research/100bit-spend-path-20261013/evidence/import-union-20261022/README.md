@@ -135,3 +135,7 @@ kernel conversion in the old branch proof; no cap or heartbeat increase was
 used. IU-371/373/374/376/377/378 memory failures and the intervening diagnostics
 are retained; they are not accepted evidence. The earlier note claiming an
 IU-371 pass was erroneous and has been corrected.
+
+IU-384 found an ambiguous `dite_true` name (`Aeneas` versus root) in
+`DigestFixedBinding.false_target`. Qualifying `_root_.dite_true` is the only
+change; focused IU-385 passes in 2.0 s. Statements are unchanged.
