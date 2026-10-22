@@ -8480,3 +8480,42 @@ success alone does not give the image. It is not a privacy attack.
 Next (part 47): that bridge, field by field. Per D159, the source-to-
 `FSExperiments` conversion now has to carry the L1 observables too, so part 47
 stops before the conversion and waits for the side-channel audit.
+
+## D161 (lead, 2026-10-22 10:55): side-channel audit merged; three user decisions raised
+
+Merged `codex/cx-sidechannel-20261022` (report
+`r1p-final/SIDE-CHANNEL-AUDIT-20261022.md`, evidence `sidechannel-20261022/`):
+a source inventory of the proof-account prover route (55 pinned files), eight
+findings, and nine Python source-expression checks. These are not Kani or Lean
+proofs and not measurements. No shipped change.
+Findings, lead summary:
+- **F1 (L1):** the retry decision includes the no-pole check, which reads the
+  unmasked witness tuples. The attempt count is therefore not exactly
+  witness-independent. Its effect is bounded by the pole probability, about
+  |S|/|K| ≤ 4096/2^124 per attempt, which the privacy bound already charges.
+  So L1 can be met statistically by proof work (the coupling extended to the
+  whole attempt record), with no code change. Exact independence would
+  need a prover change.
+- **F2 (L2):** canonical field arithmetic branches on operand values
+  (`if x >= P` in add/sub/reduce; zero tests). On masked witness cells, the
+  branch probability depends on the witness. That is a real L2 timing/branch leak,
+  not closable by proof. It needs constant-time field kernels on the prover side.
+- F3 (private-coin rejection counts): witness-independent; proof work.
+  F4 (canonicality and balance guards): constant on the honest domain; proof
+  work. F5/F6 (challenge-derived indices, sparse evaluation, query scan,
+  Merkle sharing, checker elimination, simulator BTree costs): depend on
+  Fiat–Shamir values, so either a simulatability proof or oblivious
+  rewrites. F7: production TLS instrumentation retains per-check
+  timings and rejected-attempt challenge values, and `attempts` is
+  returned. These are host-observable.
+- **F8 (deployment):** no checked-in caller uses the audited proof-account
+  route. The R1 devnet runner calls `prove_masked_retrying`, which uses the
+  96-byte `generate()` (OS-drawn nonce); the live wallet adapter uses
+  `generate_for_mask_nonce` with the older V7 prover. The deployed prover route
+  is therefore not pinned.
+- L3: the prover is native host Rust (std, OS RNG, filesystem, TLS). The only
+  recorded target is x86_64-unknown-linux-gnu with rustc 1.94.1; no CPU or
+  binary pin.
+Raised to the user (escalation per AGENTS.md §8): the deployed route (F8),
+whether to change the host prover for L2 (F2, F5–F7), and the L3 platform.
+Proof-only L1 work proceeds meanwhile.
