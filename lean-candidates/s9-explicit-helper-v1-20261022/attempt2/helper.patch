@@ -1,0 +1,25 @@
+--- a/crates/aspis-r1-cost-probe/src/weights.rs
++++ b/crates/aspis-r1-cost-probe/src/weights.rs
+@@ -99,11 +99,20 @@
+ fn factored_s2_libra_weights(ap0:&[E;4],ap1:&[E;4],extra:[K;2])->[E;4] {
+     let mut weights=[E::ZERO;4];
+     for side in 0..2 {
+-        let q=kpowers::<4>(extra[side]);
++        let q0=K::ONE;
++        let q1=q0.mul(extra[side]);
++        let q2=q1.mul(extra[side]);
++        let q3=q2.mul(extra[side]);
++        let _q4=q3.mul(extra[side]);
++        let q=[q0,q1,q2,q3];
+         let q4=q[2].square();let q8=q4.square();let q12=q8.mul(q4);let q16=q8.square();
+         let low=Weights::scalar_factor(&q,ap0);
+         let high_powers=[K::ONE,q4,q8,q12];
+-        let terms:[E;4]=core::array::from_fn(|r|ap1[PERM[r]].mul_qm31(high_powers[r]).mul_m31(QUARTER));
++        let term0=ap1[PERM[0]].mul_qm31(high_powers[0]).mul_m31(QUARTER);
++        let term1=ap1[PERM[1]].mul_qm31(high_powers[1]).mul_m31(QUARTER);
++        let term2=ap1[PERM[2]].mul_qm31(high_powers[2]).mul_m31(QUARTER);
++        let term3=ap1[PERM[3]].mul_qm31(high_powers[3]).mul_m31(QUARTER);
++        let terms=[term0,term1,term2,term3];
+         let first2=terms[0].add(terms[1]);let first3=first2.add(terms[2]);let all=first3.add(terms[3]);
+         if side==0 {
+             weights[0]=low.mul(all);
