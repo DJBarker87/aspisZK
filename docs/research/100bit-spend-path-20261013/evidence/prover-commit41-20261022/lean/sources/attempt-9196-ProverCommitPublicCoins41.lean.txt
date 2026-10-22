@@ -1,0 +1,80 @@
+import R1Z.ProverCommitPublicPrefix41
+
+/-! Public coordinates are memo answers, while unused independent coins stay
+on the coupling space. This avoids claiming a uniform binding-answer law
+conditional on an already observed binding answer. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitPublicCoins41
+open R0Z R0Z.FsStatement R1Z.LazyFrozen R1Z.LazyTable
+attribute [local instance] Classical.propDecidable
+variable {A U : Type} [DecidableEq A]
+
+def normalize {m : Nat} (positions : Finset (Fin m)) (values coins : Fin m → U) : Fin m → U :=
+  fun i => if i ∈ positions then values i else coins i
+
+def addresses {m : Nat} (positions : Finset (Fin m)) (values : Fin m → U)
+    (a : Fin m → (Fin m → U) → (A → U) → A) :=
+  fun i coins table => a i (normalize positions values coins) table
+
+/-- Normalising public coordinates preserves causality. The public values
+are fixed on this conditional context; they are not independent new draws. -/
+theorem addresses_causal (Fr : Finset A) {m : Nat} (positions : Finset (Fin m))
+    (values : Fin m → U) (a : Fin m → (Fin m → U) → (A → U) → A)
+    (causal : CausalF Fr a) : CausalF Fr (addresses positions values a) := by
+  intro i u u' t t' h ht
+  apply causal i _ _ t t' _ ht
+  intro j hj
+  by_cases hp : j ∈ positions
+  · simp only [normalize,if_pos hp]
+  · simp only [normalize,if_neg hp]; exact h j hj
+
+/-- Uniform spare coins at public positions are unused. The table law,
+jointly with the fixed public context, remains exact. -/
+theorem conditional_law [Fintype A] [Fintype U] [Nonempty U]
+    (Fr : Finset A) {m : Nat} (positions : Finset (Fin m)) (values : Fin m → U)
+    (a : Fin m → (Fin m → U) → (A → U) → A) (causal : CausalF Fr a)
+    {C : Type} (observe : (A → U) → C)
+    (locality : ∀ t t', (∀ y ∈ Fr, t y = t' y) → observe t = observe t')
+    (c : C) (test : (A → U) → ℚ) :
+    mean (fun p : (A → U) × (Fin m → U) => if observe p.1 = c then
+      test (progF Fr (addresses positions values a) p.1 p.2) else 0) =
+    mean (fun table : A → U => if observe table = c then test table else 0) :=
+  ProverCommitConditionalRom41.conditional_law Fr _
+    (addresses_causal Fr positions values a causal) observe locality c test
+
+/-- Freshness is required only of private reads. Public positions are
+read from the retained table. Distinctness below concerns earlier addresses
+of a private read; repeated public positions cost nothing. -/
+theorem run_eq (Fr : Finset A) {m : Nat} (positions : Finset (Fin m))
+    (values : Fin m → U) (a : Fin m → (Fin m → U) → (A → U) → A)
+    (causal : CausalF Fr a) (table : A → U) (coins actual : Fin m → U)
+    (memo : ∀ i, i ∈ positions →
+      a i (normalize positions values coins) table ∈ Fr ∧
+      values i = table (a i (normalize positions values coins) table))
+    (fresh : ∀ i, i ∉ positions → a i (normalize positions values coins) table ∉ Fr)
+    (distinct : ∀ i, i ∉ positions → ∀ j, j < i →
+      a j (normalize positions values coins) table ≠ a i (normalize positions values coins) table)
+    (run : ∀ i, actual i = progF Fr (addresses positions values a) table coins
+      (a i actual (progF Fr (addresses positions values a) table coins))) :
+    actual = normalize positions values coins := by
+  let programmed := progF Fr (addresses positions values a) table coins
+  have frozen : ∀ y ∈ Fr, programmed y = table y :=
+    fun y hy => progF_frozen Fr _ table coins y hy
+  apply run_unique (fun i v => a i v table)
+    (fun i v v' h => causal i v v' table table h (fun _ _ => rfl))
+    programmed actual (normalize positions values coins)
+  · intro i
+    rw [run i,causal i actual actual _ table (fun _ _ => rfl) frozen]
+  · intro i
+    by_cases hp : i ∈ positions
+    · simp only [normalize,if_pos hp]
+      exact (memo i hp).2.trans (frozen _ (memo i hp).1).symm
+    · have answered := progF_first Fr (addresses positions values a) table coins i
+        (fresh i hp) (distinct i hp)
+      simpa only [normalize,if_neg hp] using answered.symm
+
+#print axioms addresses_causal
+#print axioms conditional_law
+#print axioms run_eq
+end R1Z.ProverCommitPublicCoins41

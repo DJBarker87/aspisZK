@@ -1,0 +1,48 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublicPrefix41.lean:14:12: error(lean.unknownIdentifier): Unknown identifier `ans`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublicPrefix41.lean:44:52: error: unsolved goals
+e1 e2 : ℕ
+pub : List UInt8
+tag : UInt8
+lv : Fin 3 → Fib → List UInt8
+digest : OracleAnswer
+rest : RIdx → OracleAnswer
+nonce : NZ
+seeds : Private
+⊢ LensR1.ans (rest (qBind 0)) = sorry ()
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublicPrefix41.lean:45:23: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitPublicPrefix41.lean:115:2: error: Type mismatch
+  ProverCommitConditionalRom41.conditional_law
+    (contextFrozen bound history (inputs pub tag (choose history) digest first)) a causal
+    (fun table => context bound program fuel history (inputs pub tag (choose history) digest first) answers table)
+    (fun left right same =>
+      propext
+        (context_local bound program fuel history (inputs pub tag (choose history) digest first) answers left right
+          same))
+    True test
+has type
+  (mean fun p =>
+      if context bound program fuel history (inputs pub tag (choose history) digest first) answers p.1 = True then
+        test (progF (contextFrozen bound history (inputs pub tag (choose history) digest first)) a p.1 p.2)
+      else 0) =
+    mean fun t =>
+      if context bound program fuel history (inputs pub tag (choose history) digest first) answers t = True then test t
+      else 0
+but is expected to have type
+  (mean fun p =>
+      if context bound program fuel history (inputs pub tag (choose history) digest first) answers p.1 then
+        test (progF (contextFrozen bound history (inputs pub tag (choose history) digest first)) a p.1 p.2)
+      else 0) =
+    mean fun table =>
+      if context bound program fuel history (inputs pub tag (choose history) digest first) answers table then test table
+      else 0
+'R1Z.ProverCommitPublicPrefix41.reads_preserved' depends on axioms: [propext, sorryAx]
+'R1Z.ProverCommitPublicPrefix41.grammar_binding1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublicPrefix41.lookup_frozen' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublicPrefix41.context_local' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitPublicPrefix41.conditional_public_prefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverCommitPublicPrefix41.raw_off_history' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh
