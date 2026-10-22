@@ -1673,3 +1673,22 @@ they are not a reason to expand the S4 closure task into further adjacent
 sampler work. Candidate adoption remains unapproved and the strict B1 gate
 remains failed. Frozen S4 and the implementation-linked 100-bit target
 remain open.
+
+## Exact SBF installation's array source is available
+
+`evidence/s4-fromfn-sbf-sysroot-source-v1-20261022` supersedes the earlier
+source-availability claim: read-only inspection found array/mod.rs and
+ops/try_trait.rs in the retained platform-tools v1.52 sysroot on the NUC.
+Their complete hashes match the retained upstream Rust 1.89 comparator.
+The source chain is from_fn, NeverShortCircuit wrapper, try_from_fn,
+try_from_fn_erased and Guard.push_unchecked, with ascending initialized
+indices. Source snapshots and checker were reviewed; checker PASS.
+This records source availability and matching bodies, not a Lean theorem
+or proof that those files produced the rustc binary (whose commit is unknown).
+
+The next extraction blockers are concrete: the retained generic extraction
+fails in Try associated-output resolution; its monomorphized alternative
+fails on an erased region. Work is now directed at those tool failures.
+Neither the successful P6 stateful trace theorem nor bounded Kani evidence
+discharges source-to-P6 lowering by itself. Exact source availability
+removes a factual uncertainty, but frozen S4 remains open.

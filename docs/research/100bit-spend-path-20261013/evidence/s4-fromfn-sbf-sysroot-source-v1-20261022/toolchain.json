@@ -1,0 +1,35 @@
+{
+  "schema": "s4-sbf-stdlib-source-snapshot-v1",
+  "platform_tools": "Solana platform-tools v1.52",
+  "rustc_path": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/bin/rustc",
+  "sysroot": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust",
+  "rustc_version_output": "rustc 1.89.0-dev\nbinary: rustc\ncommit-hash: unknown\ncommit-date: unknown\nhost: x86_64-unknown-linux-gnu\nrelease: 1.89.0-dev\nLLVM version: 20.1.7\n",
+  "rustc_binary_sha256": "d95c95b68e321ad76634e1fd26b0a7c20ccdbae9ad9ca733f3ae2f2b4a0b6002",
+  "source_files": [
+    {
+      "relative_path": "source-snapshot/core/src/array/mod.rs",
+      "sysroot_path": "lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "sha256": "b5239b8af6bb1eb99b589518161f7fcf017dc80c275620517d145974cf7029a1",
+      "bytes": 32590,
+      "upstream_comparator": "evidence/s4-fromfn-order-kani-v1-20261021/std-source/rust-1.89-upstream/array-mod.rs"
+    },
+    {
+      "relative_path": "source-snapshot/core/src/ops/try_trait.rs",
+      "sysroot_path": "lib/rustlib/src/rust/library/core/src/ops/try_trait.rs",
+      "sha256": "bea48e635d47037be935806d3f5917a4954a88994c3c3663e8a1d44685b96dfa",
+      "bytes": 16790,
+      "upstream_comparator": "evidence/s4-fromfn-order-kani-v1-20261021/std-source/rust-1.89-upstream/try_trait.rs"
+    }
+  ],
+  "collection": {
+    "method": "read-only ssh/scp from the installed NUC platform-tools sysroot",
+    "host": "dombarker@100.108.41.90",
+    "command": "ssh ... dombarker@100.108.41.90 'rustc -Vv; rustc --print sysroot; sha256sum core array/try_trait/rustc; inspect from_fn declarations'; scp only the two listed source files",
+    "build_or_compilation_run": false
+  },
+  "limits": [
+    "The rustc binary reports commit-hash unknown; exact compiler source revision is not established.",
+    "Source presence and same-file hashes do not prove the source was compiled into this binary.",
+    "No Lean/Aeneas operational correspondence theorem is included."
+  ]
+}
