@@ -8035,3 +8035,31 @@ quantifiers and confirm that no adversary-chosen input is among the fixed
 functions. Next (pass 7): the concrete callback/wire instance; reference/mask
 and terminal-read costs; the exact P_R1 predicate decision; composition into
 `SimCostIdeal.Preparation` with numeric C; endpoint without `sim_preparation`.
+
+## D143 (lead, 2026-10-22 02:30): simulator cost pass 7; rulings on pubBytes and observables
+
+Merged `codex/cx-sim-cost7-20261022` (report `r1p-final/SIM-COST7-20261022.md`):
+source inventory (22 pins) and the exact next interface; no Lean build, no
+shipped change. Correction to D142: the composed wire already fixes frame,
+payload, final, decoder and lookup; what remains quantified is `CommitHandle`,
+`Aux`, `pubBytes` (in `template`) and `outputs`.
+
+Lead rulings:
+1. **pubBytes.** Do not invent an error value. The model statement's fields
+   are typed in K, hence canonical. The obligation is that, for every model
+   statement, the shipped `r0::Public::public_bytes` on its source image
+   returns `Ok(pubBytes x)`; the Rust rejection branch is then provably
+   unreachable from model statements. This is a proof obligation, not a
+   choice.
+2. **Observables (`Aux`/`outputs`).** The adversary's view is what the
+   deployed system reveals: the public statement bytes, the submitted proof
+   bytes, and the oracle's answers to its own queries. The simulator's
+   programming table, attempt counts and timings are not published by the
+   protocol. They are internal to the local prover/simulator, so `outputs`
+   must be the projection onto exactly the published data, with a proof that
+   nothing else is observable in `FSExperiments`. **Timing and other side
+   channels are outside the privacy contract.** This is recorded as an explicit
+   scope line, not silently excluded, and is flagged to the user.
+3. This interface is the same source-to-`FSExperiments` conversion that
+   privacy part 31 item (4) is building. Pass 8 waits for part 31's result so
+   the conversion is built once.
