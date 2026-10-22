@@ -1,0 +1,64 @@
+import R0P.MaskValue
+import R1Z.ProverCommitInterpolationPoly48
+import Mathlib.Algebra.Polynomial.BigOperators
+/-! Mathematical selected-mask coefficient inventory. Exponent 23 is the
+named omitted cell; native coefficient-array production remains separate. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitMaskPolynomial50
+open Polynomial
+open scoped BigOperators
+variable {K : Type} [Field K] {F : Subfield K}
+
+def polynomial (B : R0P.PackBasis F) (c1 : Fin 16 → K) (mo : Fin 10 → K) : K[X] :=
+  (∑ c : Fin 16, monomial (R0P.Mask.factorExponent c).val
+    (R0P.Mask.mulTowerBasis B (c1 c) ⟨c.val%4,Nat.mod_lt _ (by decide)⟩))+
+  ∑ c : Fin 10, monomial (R0P.Mask.maskOnlyFactorExponent c).val
+    (R0P.Mask.mulTowerBasis B (mo c) ⟨c.val%4,Nat.mod_lt _ (by decide)⟩)
+
+theorem eval_shared (B : R0P.PackBasis F) (c1 : Fin 16 → K) (mo : Fin 10 → K) (a : Fin 10 → K) :
+    (polynomial B c1 mo).eval (R0P.Mask.maskLinear 0 a)=
+      (∑ c, (R0P.Mask.maskFactors B a).c1 c*c1 c)+
+      ∑ c, (R0P.Mask.maskFactors B a).maskOnly c*mo c := by
+  unfold polynomial
+  rw [Polynomial.eval_add,Polynomial.eval_finsetSum,Polynomial.eval_finsetSum]
+  apply congrArg₂ (·+·)
+  · apply Finset.sum_congr rfl
+    intro c hc
+    rw [Polynomial.eval_monomial]
+    dsimp only [R0P.Mask.maskFactors,R0P.Mask.mulTowerBasis]
+    ring
+  · apply Finset.sum_congr rfl
+    intro c hc
+    rw [Polynomial.eval_monomial]
+    dsimp only [R0P.Mask.maskFactors,R0P.Mask.mulTowerBasis]
+    ring
+
+theorem eval_mask (B : R0P.PackBasis F) (c1 : Fin 16 → K) (mo : Fin 10 → K) (g : K) (a : Fin 10 → K) :
+    (polynomial B c1 mo).eval (R0P.Mask.maskLinear 0 a)+(1+R0P.Mask.maskLinear 16 a^26)*g=
+      R0P.Mask.maskValue B c1 mo g a := by
+  rw [eval_shared,R0P.Mask.maskValue]
+  change (_+_)+(R0P.Mask.maskFactors B a).explicitG*g=(_+(R0P.Mask.maskFactors B a).explicitG*g)+_
+  ac_rfl
+
+theorem factor_ne_23 (c : Fin 16) : (R0P.Mask.factorExponent c).val≠23 := by
+  dsimp [R0P.Mask.factorExponent]
+  split_ifs <;> have := c.isLt <;> omega
+
+theorem mask_only_ne_23 (c : Fin 10) : (R0P.Mask.maskOnlyFactorExponent c).val≠23 := by
+  dsimp [R0P.Mask.maskOnlyFactorExponent]
+  split_ifs <;> have := c.isLt <;> omega
+
+theorem omitted_23 (B : R0P.PackBasis F) (c1 : Fin 16 → K) (mo : Fin 10 → K) :
+    (polynomial B c1 mo).coeff 23=0 := by
+  have h1 (c : Fin 16) : (23:Nat)≠(R0P.Mask.factorExponent c).val := Ne.symm (factor_ne_23 c)
+  have h2 (c : Fin 10) : (23:Nat)≠(R0P.Mask.maskOnlyFactorExponent c).val := Ne.symm (mask_only_ne_23 c)
+  simp only [polynomial,Polynomial.coeff_add,Polynomial.finsetSum_coeff,Polynomial.coeff_monomial,
+    h1,h2,if_false,Finset.sum_const_zero,add_zero]
+
+#print axioms eval_shared
+#print axioms eval_mask
+#print axioms factor_ne_23
+#print axioms mask_only_ne_23
+#print axioms omitted_23
+end R1Z.ProverCommitMaskPolynomial50

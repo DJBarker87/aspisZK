@@ -1,0 +1,538 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+Checking harness mask_finish_gate::proofs::finish...
+CBMC 6.8.0 (cbmc-6.8.0)
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-prover-commit41-20261022/kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/simulator_native50-319e00bbb7ef8d8e__RNvNtNtCscu6GZ0AOiKj_18simulator_native5016mask_finish_gate6proofs6finish.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 12 object bits, 52 offset bits (user-specified)
+Starting Bounded Model Checking
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSThmmEINtB5_14SlicePartialEqBD_E5equalCscu6GZ0AOiKj_18simulator_native50.0 iteration 1 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[(u8, u32, u32)] as core::slice::cmp::SlicePartialEq<(u8, u32, u32)>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSThmmEINtB5_14SlicePartialEqBD_E5equalCscu6GZ0AOiKj_18simulator_native50.0 iteration 2 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[(u8, u32, u32)] as core::slice::cmp::SlicePartialEq<(u8, u32, u32)>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSThmmEINtB5_14SlicePartialEqBD_E5equalCscu6GZ0AOiKj_18simulator_native50.0 iteration 3 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[(u8, u32, u32)] as core::slice::cmp::SlicePartialEq<(u8, u32, u32)>>::equal thread 0
+Unwinding loop _RNvXs2_NtNtCsci0VKyKEi6N_4core5slice3cmpSThmmEINtB5_14SlicePartialEqBD_E5equalCscu6GZ0AOiKj_18simulator_native50.0 iteration 4 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs line 124 column 9 function <[(u8, u32, u32)] as core::slice::cmp::SlicePartialEq<(u8, u32, u32)>>::equal thread 0
+Unwinding loop memcmp.0 iteration 1 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 2 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 3 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 4 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 5 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 6 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 7 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 8 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 9 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 10 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 11 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 12 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 13 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 14 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 15 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Unwinding loop memcmp.0 iteration 16 file <builtin-library-memcmp> line 25 function memcmp thread 0
+Runtime Symex: 0.0433214s
+size of program expression: 1700 steps
+slicing removed 1026 assignments
+Generated 608 VCC(s), 2 remaining after simplification
+Runtime Postprocess Equation: 0.000483415s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.00564009s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 4.99e-06s
+Solving with CaDiCaL 2.0.0
+8153 variables, 15963 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 0.00825209s
+Runtime decision procedure: 0.0139494s
+
+RESULTS:
+Check 1: memcmp.precondition.1
+	 - Status: SUCCESS
+	 - Description: "memcmp region 1 readable"
+	 - Location: <builtin-library-memcmp>:19 in function memcmp
+
+Check 2: memcmp.precondition.2
+	 - Status: SUCCESS
+	 - Description: "memcpy region 2 readable"
+	 - Location: <builtin-library-memcmp>:21 in function memcmp
+
+Check 3: mask_finish_gate::Trace::call.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: mask-finish.rs:5:60 in function mask_finish_gate::Trace::call
+
+Check 4: mask_finish_gate::Trace::call.assertion.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: mask-finish.rs:5:70 in function mask_finish_gate::Trace::call
+
+Check 5: mask_finish_gate::Trace::call.assertion.3
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: mask-finish.rs:5:97 in function mask_finish_gate::Trace::call
+
+Check 6: <[(u8, u32, u32)] as core::slice::cmp::SlicePartialEq<(u8, u32, u32)>>::equal.assertion.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs:126:16 in function <[(u8, u32, u32)] as core::slice::cmp::SlicePartialEq<(u8, u32, u32)>>::equal
+
+Check 7: <[(u8, u32, u32)] as core::slice::cmp::SlicePartialEq<(u8, u32, u32)>>::equal.assertion.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs:126:29 in function <[(u8, u32, u32)] as core::slice::cmp::SlicePartialEq<(u8, u32, u32)>>::equal
+
+Check 8: <[(u8, u32, u32)] as core::slice::cmp::SlicePartialEq<(u8, u32, u32)>>::equal.assertion.3
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/cmp.rs:129:13 in function <[(u8, u32, u32)] as core::slice::cmp::SlicePartialEq<(u8, u32, u32)>>::equal
+
+Check 9: mask_finish_gate::proofs::finish.assertion.1
+	 - Status: SUCCESS
+	 - Description: "assertion failed: native(shared,linear,g,&mut a) == owner(shared,linear,g,&mut b)"
+	 - Location: mask-finish.rs:16:2 in function mask_finish_gate::proofs::finish
+
+Check 10: mask_finish_gate::proofs::finish.assertion.2
+	 - Status: SUCCESS
+	 - Description: "assertion failed: a == b"
+	 - Location: mask-finish.rs:16:75 in function mask_finish_gate::proofs::finish
+
+Check 11: memcmp.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: <builtin-library-memcmp>:27 in function memcmp
+
+Check 12: memcmp.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: <builtin-library-memcmp>:27 in function memcmp
+
+Check 13: memcmp.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: <builtin-library-memcmp>:27 in function memcmp
+
+Check 14: memcmp.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: <builtin-library-memcmp>:27 in function memcmp
+
+Check 15: memcmp.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: <builtin-library-memcmp>:27 in function memcmp
+
+Check 16: memcmp.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: <builtin-library-memcmp>:27 in function memcmp
+
+Check 17: memcmp.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: <builtin-library-memcmp>:27 in function memcmp
+
+Check 18: memcmp.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: <builtin-library-memcmp>:27 in function memcmp
+
+Check 19: memcmp.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: <builtin-library-memcmp>:27 in function memcmp
+
+Check 20: memcmp.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: <builtin-library-memcmp>:27 in function memcmp
+
+Check 21: memcmp.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: <builtin-library-memcmp>:27 in function memcmp
+
+Check 22: memcmp.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: <builtin-library-memcmp>:27 in function memcmp
+
+Check 23: <mask_finish_gate::Trace as std::cmp::PartialEq>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: mask-finish.rs:4:54 in function <mask_finish_gate::Trace as std::cmp::PartialEq>::eq
+
+Check 24: <mask_finish_gate::Trace as std::cmp::PartialEq>::eq.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: mask-finish.rs:4:54 in function <mask_finish_gate::Trace as std::cmp::PartialEq>::eq
+
+Check 25: <mask_finish_gate::Trace as std::cmp::PartialEq>::eq.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: mask-finish.rs:4:54 in function <mask_finish_gate::Trace as std::cmp::PartialEq>::eq
+
+Check 26: <mask_finish_gate::Trace as std::cmp::PartialEq>::eq.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: mask-finish.rs:4:54 in function <mask_finish_gate::Trace as std::cmp::PartialEq>::eq
+
+Check 27: <mask_finish_gate::Trace as std::cmp::PartialEq>::eq.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: mask-finish.rs:4:54 in function <mask_finish_gate::Trace as std::cmp::PartialEq>::eq
+
+Check 28: <mask_finish_gate::Trace as std::cmp::PartialEq>::eq.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: mask-finish.rs:4:54 in function <mask_finish_gate::Trace as std::cmp::PartialEq>::eq
+
+Check 29: <mask_finish_gate::Trace as std::cmp::PartialEq>::eq.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: mask-finish.rs:4:54 in function <mask_finish_gate::Trace as std::cmp::PartialEq>::eq
+
+Check 30: <mask_finish_gate::Trace as std::cmp::PartialEq>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: mask-finish.rs:4:54 in function <mask_finish_gate::Trace as std::cmp::PartialEq>::eq
+
+Check 31: <mask_finish_gate::Trace as std::cmp::PartialEq>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: mask-finish.rs:4:54 in function <mask_finish_gate::Trace as std::cmp::PartialEq>::eq
+
+Check 32: <mask_finish_gate::Trace as std::cmp::PartialEq>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: mask-finish.rs:4:54 in function <mask_finish_gate::Trace as std::cmp::PartialEq>::eq
+
+Check 33: <mask_finish_gate::Trace as std::cmp::PartialEq>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: mask-finish.rs:4:54 in function <mask_finish_gate::Trace as std::cmp::PartialEq>::eq
+
+Check 34: <mask_finish_gate::Trace as std::cmp::PartialEq>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: mask-finish.rs:4:54 in function <mask_finish_gate::Trace as std::cmp::PartialEq>::eq
+
+Check 35: std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne
+
+Check 36: std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne
+
+Check 37: std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne
+
+Check 38: std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne
+
+Check 39: std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne
+
+Check 40: std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne
+
+Check 41: std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne
+
+Check 42: std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne
+
+Check 43: std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne
+
+Check 44: std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne
+
+Check 45: std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne
+
+Check 46: std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::ne
+
+Check 47: mask_finish_gate::Trace::call.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: mask-finish.rs:5:53 in function mask_finish_gate::Trace::call
+
+Check 48: mask_finish_gate::Trace::call.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: mask-finish.rs:5:53 in function mask_finish_gate::Trace::call
+
+Check 49: mask_finish_gate::Trace::call.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: mask-finish.rs:5:53 in function mask_finish_gate::Trace::call
+
+Check 50: mask_finish_gate::Trace::call.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: mask-finish.rs:5:53 in function mask_finish_gate::Trace::call
+
+Check 51: mask_finish_gate::Trace::call.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: mask-finish.rs:5:53 in function mask_finish_gate::Trace::call
+
+Check 52: mask_finish_gate::Trace::call.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: mask-finish.rs:5:53 in function mask_finish_gate::Trace::call
+
+Check 53: mask_finish_gate::Trace::call.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: mask-finish.rs:5:60 in function mask_finish_gate::Trace::call
+
+Check 54: mask_finish_gate::Trace::call.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: mask-finish.rs:5:60 in function mask_finish_gate::Trace::call
+
+Check 55: mask_finish_gate::Trace::call.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: mask-finish.rs:5:60 in function mask_finish_gate::Trace::call
+
+Check 56: mask_finish_gate::Trace::call.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: mask-finish.rs:5:60 in function mask_finish_gate::Trace::call
+
+Check 57: mask_finish_gate::Trace::call.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: mask-finish.rs:5:60 in function mask_finish_gate::Trace::call
+
+Check 58: mask_finish_gate::Trace::call.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: mask-finish.rs:5:60 in function mask_finish_gate::Trace::call
+
+Check 59: mask_finish_gate::Trace::call.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: mask-finish.rs:5:70 in function mask_finish_gate::Trace::call
+
+Check 60: mask_finish_gate::Trace::call.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: mask-finish.rs:5:70 in function mask_finish_gate::Trace::call
+
+Check 61: mask_finish_gate::Trace::call.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: mask-finish.rs:5:70 in function mask_finish_gate::Trace::call
+
+Check 62: mask_finish_gate::Trace::call.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: mask-finish.rs:5:70 in function mask_finish_gate::Trace::call
+
+Check 63: mask_finish_gate::Trace::call.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: mask-finish.rs:5:70 in function mask_finish_gate::Trace::call
+
+Check 64: mask_finish_gate::Trace::call.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: mask-finish.rs:5:70 in function mask_finish_gate::Trace::call
+
+Check 65: mask_finish_gate::Trace::call.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: mask-finish.rs:5:70 in function mask_finish_gate::Trace::call
+
+Check 66: mask_finish_gate::Trace::call.pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: mask-finish.rs:5:97 in function mask_finish_gate::Trace::call
+
+Check 67: mask_finish_gate::Trace::call.pointer_dereference.20
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: mask-finish.rs:5:97 in function mask_finish_gate::Trace::call
+
+Check 68: mask_finish_gate::Trace::call.pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: mask-finish.rs:5:97 in function mask_finish_gate::Trace::call
+
+Check 69: mask_finish_gate::Trace::call.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: mask-finish.rs:5:97 in function mask_finish_gate::Trace::call
+
+Check 70: mask_finish_gate::Trace::call.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: mask-finish.rs:5:97 in function mask_finish_gate::Trace::call
+
+Check 71: mask_finish_gate::Trace::call.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: mask-finish.rs:5:97 in function mask_finish_gate::Trace::call
+
+Check 72: mask_finish_gate::Trace::call.array_bounds.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: mask-finish.rs:5:97 in function mask_finish_gate::Trace::call
+
+Check 73: <mask_finish_gate::K as std::cmp::PartialEq>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: mask-finish.rs:3:50 in function <mask_finish_gate::K as std::cmp::PartialEq>::eq
+
+Check 74: <mask_finish_gate::K as std::cmp::PartialEq>::eq.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: mask-finish.rs:3:50 in function <mask_finish_gate::K as std::cmp::PartialEq>::eq
+
+Check 75: <mask_finish_gate::K as std::cmp::PartialEq>::eq.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: mask-finish.rs:3:50 in function <mask_finish_gate::K as std::cmp::PartialEq>::eq
+
+Check 76: <mask_finish_gate::K as std::cmp::PartialEq>::eq.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: mask-finish.rs:3:50 in function <mask_finish_gate::K as std::cmp::PartialEq>::eq
+
+Check 77: <mask_finish_gate::K as std::cmp::PartialEq>::eq.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: mask-finish.rs:3:50 in function <mask_finish_gate::K as std::cmp::PartialEq>::eq
+
+Check 78: <mask_finish_gate::K as std::cmp::PartialEq>::eq.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: mask-finish.rs:3:50 in function <mask_finish_gate::K as std::cmp::PartialEq>::eq
+
+Check 79: <mask_finish_gate::K as std::cmp::PartialEq>::eq.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: mask-finish.rs:3:50 in function <mask_finish_gate::K as std::cmp::PartialEq>::eq
+
+Check 80: <mask_finish_gate::K as std::cmp::PartialEq>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: mask-finish.rs:3:50 in function <mask_finish_gate::K as std::cmp::PartialEq>::eq
+
+Check 81: <mask_finish_gate::K as std::cmp::PartialEq>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: mask-finish.rs:3:50 in function <mask_finish_gate::K as std::cmp::PartialEq>::eq
+
+Check 82: <mask_finish_gate::K as std::cmp::PartialEq>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: mask-finish.rs:3:50 in function <mask_finish_gate::K as std::cmp::PartialEq>::eq
+
+Check 83: <mask_finish_gate::K as std::cmp::PartialEq>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: mask-finish.rs:3:50 in function <mask_finish_gate::K as std::cmp::PartialEq>::eq
+
+Check 84: <mask_finish_gate::K as std::cmp::PartialEq>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: mask-finish.rs:3:50 in function <mask_finish_gate::K as std::cmp::PartialEq>::eq
+
+Check 85: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 86: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 87: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 88: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 89: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 90: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 91: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 92: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 93: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 94: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 95: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+Check 96: std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1867:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u32>::ne
+
+
+SUMMARY:
+ ** 0 of 96 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.08312144s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

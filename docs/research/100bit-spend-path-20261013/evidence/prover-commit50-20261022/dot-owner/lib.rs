@@ -187,3 +187,35 @@ pub fn power26(x:K)->K {
  x16.mul(x8).mul(x2)
 }
 }
+
+pub mod mask_horner50 {
+use super::{field::{QM31 as K,M31},prepared50};
+pub fn go(q:[K;27],prepared:[[M31;3];3],left:u8,acc:K)->K {
+ if left==0 {acc} else {
+  let n=left-1;let value=prepared50::mul(prepared,acc).add(q[usize::from(n)]);
+  go(q,prepared,n,value)
+ }
+}
+pub fn eval(q:[K;27],x:K)->K {
+ let prepared=prepared50::prepare(x);go(q,prepared,26,q[26])
+}
+}
+
+pub mod tower50 {
+use super::field::{QM31 as K,CM31 as C};
+pub fn cm_i(x:C)->C {C{a:x.b.neg(),b:x.a}}
+pub fn mul(x:K,coordinate:u8)->K {
+ if coordinate==0 {x} else if coordinate==1 {K{c0:cm_i(x.c0),c1:cm_i(x.c1)}}
+ else if coordinate==2 {K{c0:super::reconstruction::mul_r(x.c1),c1:x.c0}}
+ else if coordinate==3 {K{c0:cm_i(super::reconstruction::mul_r(x.c1)),c1:cm_i(x.c0)}}
+ else {panic!("tower coordinate out of range")}
+
+}
+}
+
+pub mod mask_finish50 {
+use super::{field::QM31 as K,linear50};
+pub fn eval(shared:K,explicit_linear:K,g:K)->K {
+ shared.add(K::ONE.add(linear50::power26(explicit_linear)).mul(g))
+}
+}

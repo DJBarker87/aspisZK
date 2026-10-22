@@ -144,3 +144,93 @@ MLE theorem is not promoted to whole native semantic-oracle success. No
 TrustedStd field is added. J10272 exits 0 in 1.72 s, peak 4046620 KiB, zero
 swaps, standard axioms only. Rejected parser, scalar and dependent-index drafts
 are retained with their replacements. Shipped files remain unchanged.
+
+## Stage 3c: selected-mask arithmetic kernels and symbolic coefficient inventory
+
+J10283 proves the actual optimized two linear forms equal model `maskLinear 0`
+and `maskLinear 16`, starting with canonical point inputs. The full reverse
+statistic counter and raw four-limb scaling are proved separately. The complete
+power-26 chain returns a canonical result with the exact power value. The native
+linear/power gate passes in 1.753 s / 179320 KiB, zero swaps. J10285 proves the
+complete prepared Horner evaluator of 27 arbitrary canonical coefficients;
+its native full-context gate passes in 2.651 s / 259776 KiB, zero swaps.
+
+J10289 proves all four optimized tower-basis operations, with canonical output
+and exact value. The first owned Rust scalar `match` extracts to a Lean pattern
+that selects the panic fallback at literal zero; that rejected declaration and
+proof draft are retained. Replacing only the independent owner's match by
+scalar tests gives the correctly bounded dispatch; J10288/89 pass. No shipped
+source is edited. Native tower v2 checks this exact if-dispatch against the
+shipped usize match, including full output/operand traces, in 0.728 s /
+164616 KiB, zero swaps. J10292 adapts the helper to `Mask.mulTowerBasis`, retaining
+only the two explicit input equations for B.i and B.u; their complete caller
+instantiation remains open.
+
+J10294/95 prove the symbolic selected-mask polynomial inventory, exact zero at
+omitted exponent 23, the zero suffix above degree 26, reconstruction from its
+27 mathematical coefficients, and evaluation equal to the model mask value.
+These do not assert that the actual source coefficient-array producer has
+those values. J10297 proves the actual final shared + (1+L16^26)*g arithmetic;
+its native paired-callee gate passes in 0.431 s / 148196 KiB, zero swaps.
+All accepted theorem axiom sets are standard. No TrustedStd field is added.
+
+**Rejected final composition (J10298).** The attempted arithmetic caller retains
+a named input coefficient law for the unproved 26-write producer. Its concrete
+kernel check hits the unchanged 7,000 MiB limit: exit 1, wall 19.10 s, peak
+7170376 KiB, zero swaps. The source and diagnostics are archived in the attempt
+receipts. It is removed from the accepted proof tree, not rerun and not given
+a larger cap. The printed self-reference in that failed declaration is not an
+accepted axiom or proof. No claim is made that even this conditional caller
+composition compiled. Next: isolate the concrete term/instance reduction,
+keep the caller arithmetic abstract, then discharge the actual coefficient
+producer law before claiming complete selected-mask success.
+
+## Verbatim deployed endpoint before/after: unchanged
+
+Before:
+
+```lean
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+local notation "decode" => ownedDecode
+
+variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
+  [Fintype rust.RealRand] [Nonempty rust.RealRand]
+  [Fintype rust.IdealRand] [Nonempty rust.IdealRand]
+  (observer_program : rust.Adversary → View K CommitHandle Aux R1Bat →
+    List (List UInt8 × OracleAnswer) → OProg)
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+After:
+
+```lean
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+local notation "decode" => ownedDecode
+
+variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
+  [Fintype rust.RealRand] [Nonempty rust.RealRand]
+  [Fintype rust.IdealRand] [Nonempty rust.IdealRand]
+  (observer_program : rust.Adversary → View K CommitHandle Aux R1Bat →
+    List (List UInt8 × OracleAnswer) → OProg)
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```

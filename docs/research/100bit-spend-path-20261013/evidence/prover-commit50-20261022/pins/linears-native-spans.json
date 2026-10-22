@@ -1,0 +1,8 @@
+{
+  "source": "crates/aspis-core/src/state_only_hiding.rs",
+  "sha256": "cc1039531cfe07518542d386668e9572e3eacf5127e8ec441c32bec20d116cd2",
+  "verbatim_linear": "fn selected_mask_linears(point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS]) -> (QM31, QM31) {\n    let mut suffix = QM31::ZERO;\n    let mut weighted = QM31::ZERO;\n    for variable in (0..STATE_ONLY_HIDING_SUMCHECK_ROUNDS).rev() {\n        suffix = suffix.add(point[variable]);\n        if variable != 0 {\n            weighted = weighted.add(suffix);\n        }\n    }\n    (\n        suffix.mul_m31(M31(3)).add(weighted.mul_m31(M31(22))),\n        suffix.mul_m31(M31(275)).add(weighted.mul_m31(M31(150))),\n    )\n}\n",
+  "verbatim_power26": "fn mask_power_26(value: QM31) -> QM31 {\n    let x2 = value.square();\n    let x4 = x2.square();\n    let x8 = x4.square();\n    let x16 = x8.square();\n    x16.mul(x8).mul(x2)\n}\n",
+  "owner_sha256": "6d79eda29d0e00bd1a89ea030e8051dcd2da175978b5b90fd947c2c55854f337",
+  "abstractions": "Full native reverse sufficient-statistic loop and scalar-combination caller, plus complete 26-power chain. Paired universal QM31 add/mul/square/mul_m31 answers, exact operation/operand order. Arithmetic value laws are separate Lean theorems."
+}

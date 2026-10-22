@@ -56,3 +56,11 @@ include!("sparse.rs");
 include!("sparse-sum.rs");
 
 include!("scan.rs");
+
+include!("linears.rs");
+
+include!("mask-horner.rs");
+
+include!("tower.rs");
+
+include!("mask-finish.rs");

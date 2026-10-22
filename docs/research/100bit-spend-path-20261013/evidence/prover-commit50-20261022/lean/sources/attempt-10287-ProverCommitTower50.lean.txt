@@ -1,0 +1,86 @@
+import AspisR1ProducerRelease47.Tower50
+import R1Z.ProverCommitNativeNeg49
+import R1Z.ProverCommitNativeQ48
+/-! Current optimized multiplication by the four tower basis elements. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitTower50
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisV8R15.ExactTowerBase
+open AspisR1.ExtractedCurrentQM31Exact (decode)
+
+def ci : CM31Exact := ⟨0,1⟩
+def basis (j : Fin 4) : QM31Exact := ![1,⟨ci,0⟩,⟨0,1⟩,⟨0,ci⟩] j
+
+theorem cm_i (x : Old.C) (hx : ProverCommitNativeC49.Canonical x) :
+    ∃ z : Old.C, tower50.cm_i (ProverCommitNativeC49.source x)=ok (ProverCommitNativeC49.source z) ∧
+      ProverCommitNativeC49.Canonical z ∧ ProverCommitNativeC49.value z=ci*ProverCommitNativeC49.value x := by
+  obtain ⟨a,ha,hca,hda⟩ := ProverCommitNativeNeg49.neg_word x.b hx.2
+  refine ⟨⟨a,x.a⟩,?_,⟨hca,hx.1⟩,?_⟩
+  · simp only [tower50.cm_i,ProverCommitNativeC49.source,ProverCommitRelease47.convC,fromC,ha,bind_tc_ok]
+  · apply QuadraticAlgebra.ext
+    · change (a.val : M31Exact)=_
+      rw [hda]
+      simp [ci,QuadraticAlgebra.re_mul,ProverCommitNativeC49.value,ProverCommitMulU48.decodeC]
+    · change (x.a.val : M31Exact)=_
+      simp [ci,QuadraticAlgebra.im_mul,ProverCommitNativeC49.value,ProverCommitMulU48.decodeC]
+
+theorem mul (x : Old.Q) (hx : Canonical x) (j : Fin 4) (word : U8) (hw : word.val=j.val) :
+    ∃ z : Old.Q, tower50.mul (ProverCommitNativeQ48.source x) word=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ decode z=basis j*decode x := by
+  fin_cases j
+  · have he : word=0#u8 := by scalar_tac
+    refine ⟨x,?_,hx,?_⟩
+    · rw [he,tower50.mul];rfl
+    · simp only [basis,Matrix.cons_val_zero,one_mul]
+  · have he : word=1#u8 := by scalar_tac
+    obtain ⟨a,ha,hca,hda⟩ := cm_i x.c0 hx.1
+    obtain ⟨b,hb,hcb,hdb⟩ := cm_i x.c1 hx.2
+    refine ⟨⟨a,b⟩,?_,⟨hca,hcb⟩,?_⟩
+    · rw [he,tower50.mul]
+      change (do
+        let a ← tower50.cm_i (ProverCommitNativeC49.source x.c0)
+        let b ← tower50.cm_i (ProverCommitNativeC49.source x.c1)
+        ok ({c0:=a,c1:=b} : field.QM31))=_
+      rw [ha];simp only [bind_tc_ok,hb];rfl
+    · apply QuadraticAlgebra.ext
+      · change ProverCommitNativeC49.value a=_
+        rw [hda];simp [basis,QuadraticAlgebra.re_mul]
+      · change ProverCommitNativeC49.value b=_
+        rw [hdb];simp [basis,QuadraticAlgebra.im_mul]
+  · have he : word=2#u8 := by scalar_tac
+    obtain ⟨a,ha,hca,hda⟩ := ProverCommitNativeC49.mul_r x.c1 hx.2
+    have ha' : reconstruction.mul_r (ProverCommitNativeC49.source x.c1)=ok (ProverCommitNativeC49.source a) := ha
+    refine ⟨⟨a,x.c0⟩,?_,⟨hca,hx.1⟩,?_⟩
+    · rw [he,tower50.mul]
+      change (do
+        let a ← reconstruction.mul_r (ProverCommitNativeC49.source x.c1)
+        ok ({c0:=a,c1:=ProverCommitNativeC49.source x.c0} : field.QM31))=_
+      rw [ha'];rfl
+    · apply QuadraticAlgebra.ext
+      · change ProverCommitNativeC49.value a=_
+        rw [hda];simp [basis,QuadraticAlgebra.re_mul]
+      · change ProverCommitNativeC49.value x.c0=_
+        simp [basis,QuadraticAlgebra.im_mul]
+  · have he : word=3#u8 := by scalar_tac
+    obtain ⟨r,hr,hcr,hdr⟩ := ProverCommitNativeC49.mul_r x.c1 hx.2
+    have hr' : reconstruction.mul_r (ProverCommitNativeC49.source x.c1)=ok (ProverCommitNativeC49.source r) := hr
+    obtain ⟨a,ha,hca,hda⟩ := cm_i r hcr
+    obtain ⟨b,hb,hcb,hdb⟩ := cm_i x.c0 hx.1
+    refine ⟨⟨a,b⟩,?_,⟨hca,hcb⟩,?_⟩
+    · rw [he,tower50.mul]
+      change (do
+        let r ← reconstruction.mul_r (ProverCommitNativeC49.source x.c1)
+        let a ← tower50.cm_i r
+        let b ← tower50.cm_i (ProverCommitNativeC49.source x.c0)
+        ok ({c0:=a,c1:=b} : field.QM31))=_
+      rw [hr'];simp only [bind_tc_ok,ha,hb];rfl
+    · apply QuadraticAlgebra.ext
+      · change ProverCommitNativeC49.value a=_
+        rw [hda,hdr];simp [basis,QuadraticAlgebra.re_mul];ring
+      · change ProverCommitNativeC49.value b=_
+        rw [hdb];simp [basis,QuadraticAlgebra.im_mul]
+
+#print axioms cm_i
+#print axioms mul
+end R1Z.ProverCommitTower50

@@ -1,0 +1,56 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitLinear50.lean:50:2: error: unsolved goals
+case refine_1
+p : ℕ → Old.Q
+hp : ∀ i < 10, Canonical (p i)
+s w : Old.Q
+hgo :
+  linear50.go (ProverCommitQArray48.array 10#usize p) 10#u8 (ProverCommitNativeQ48.source zero)
+      (ProverCommitNativeQ48.source zero) =
+    ok (ProverCommitNativeQ48.source s, ProverCommitNativeQ48.source w)
+hcs : Canonical s
+hcw : Canonical w
+hvalues :
+  (decode s, decode w) =
+    (0 + ProverCommitLinearMath50.sum (fun i => decode (p i)) 10,
+      0 + ↑(10 - 1) * 0 + ProverCommitLinearMath50.weighted (fun i => decode (p i)) 10)
+hvs : decode s = ProverCommitLinearMath50.sum (fun i => decode (p i)) 10
+hvw : decode w = ProverCommitLinearMath50.weighted (fun i => decode (p i)) 10
+s3 : Old.Q
+hs3 : field.QM31.mul_m31 (ProverCommitNativeQ48.source s) 3#u32 = ok (ProverCommitNativeQ48.source s3)
+hcs3 : Canonical s3
+hvs3 : decode s3 = decode s * ↑↑3#u32
+w22 : Old.Q
+hw22 : field.QM31.mul_m31 (ProverCommitNativeQ48.source w) 22#u32 = ok (ProverCommitNativeQ48.source w22)
+hcw22 : Canonical w22
+hvw22 : decode w22 = decode w * ↑↑22#u32
+a : Old.Q
+ha :
+  field.QM31.add (ProverCommitNativeQ48.source s3) (ProverCommitNativeQ48.source w22) =
+    ok (ProverCommitNativeQ48.source a)
+hca : Canonical a
+hva : decode a = decode s3 + decode w22
+s275 : Old.Q
+hs275 : field.QM31.mul_m31 (ProverCommitNativeQ48.source s) 275#u32 = ok (ProverCommitNativeQ48.source s275)
+hcs275 : Canonical s275
+hvs275 : decode s275 = decode s * ↑↑275#u32
+w150 : Old.Q
+hw150 : field.QM31.mul_m31 (ProverCommitNativeQ48.source w) 150#u32 = ok (ProverCommitNativeQ48.source w150)
+hcw150 : Canonical w150
+hvw150 : decode w150 = decode w * ↑↑150#u32
+b : Old.Q
+hb :
+  field.QM31.add (ProverCommitNativeQ48.source s275) (ProverCommitNativeQ48.source w150) =
+    ok (ProverCommitNativeQ48.source b)
+hcb : Canonical b
+hvb : decode b = decode s275 + decode w150
+⊢ (do
+      let q5 ← ok (ProverCommitNativeQ48.source b)
+      ok (ProverCommitNativeQ48.source a, q5)) =
+    ok (ProverCommitNativeQ48.source a, ProverCommitNativeQ48.source b)
+'R1Z.ProverCommitLinear50.form0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLinear50.form16' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLinear50.chain' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverCommitLinear50.forms' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitLinear50.power26' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
