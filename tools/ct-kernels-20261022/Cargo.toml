@@ -1,0 +1,18 @@
+[package]
+name = "ct-kernel-gates"
+version = "0.1.0"
+edition = "2021"
+[workspace]
+[features]
+default = ["ct-host-prover"]
+ct-host-prover = ["aspis-core/ct-host-prover"]
+[profile.dev]
+opt-level = 3
+[profile.release]
+overflow-checks = true
+
+[lib]
+path = "lib.rs"
+
+[dependencies]
+aspis-core = { path = "../../crates/aspis-core" }

@@ -292,14 +292,14 @@ pub use aspis_z4b_probe::{R1CheckTimes, R1PublicChallenges};
 
 #[cfg(feature="r1p-check")]
 std::thread_local! {
-    static CHECK_TIMES: core::cell::RefCell<Vec<R1CheckTimes>> = const { core::cell::RefCell::new(Vec::new()) };
+    #[cfg(not(feature="ct-host-prover"))] static CHECK_TIMES: core::cell::RefCell<Vec<R1CheckTimes>> = const { core::cell::RefCell::new(Vec::new()) };
 }
 
 /// Durations of the P_R1 checks run on this thread since the last call.
 /// Only durations are kept: never a verdict's reason, a challenge or a root.
 #[cfg(feature="r1p-check")]
 pub fn take_check_times() -> Vec<R1CheckTimes> {
-    CHECK_TIMES.with(|v| core::mem::take(&mut *v.borrow_mut()))
+    #[cfg(not(feature="ct-host-prover"))] { CHECK_TIMES.with(|v| core::mem::take(&mut *v.borrow_mut())) } #[cfg(feature="ct-host-prover")] { Vec::new() }
 }
 
 /// P_R1 on one attempt. R1 is variant S2; P_R1 is not defined for the others.
@@ -314,7 +314,7 @@ fn public_check(variant:Variant,challenges:&R1PublicChallenges,c1_root:[u8;32])-
     }
     let _=c1_root;
     let (accepted,times)=aspis_z4b_probe::p_r1_check(challenges);
-    CHECK_TIMES.with(|v| v.borrow_mut().push(times));
+    #[cfg(not(feature="ct-host-prover"))] CHECK_TIMES.with(|v| v.borrow_mut().push(times)); #[cfg(feature="ct-host-prover")] let _ = times;
     if accepted {Ok(())} else {Err(Error::Rejected)}
 }
 

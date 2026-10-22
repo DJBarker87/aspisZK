@@ -28,7 +28,7 @@ pub const M31_HALF: M31 = M31(0x4000_0000);
 pub const M31_QUARTER: M31 = M31(0x2000_0000);
 
 #[inline(always)]
-fn reduce_u64(x: u64) -> u32 {
+#[cfg(not(feature = "ct-host-prover"))] fn reduce_u64(x: u64) -> u32 {
     // reference_canonical: two mask/shift folds bring any u64 to at most
     // P+3, then one conditional subtract canonicalizes. Supporting the full
     // u64 range lets four maximal M31 products be accumulated before one
@@ -59,7 +59,7 @@ impl M31 {
     // them within SBF's signed branch displacement.
     #[cfg_attr(feature = "r0-r91-audit", inline(never))]
     #[cfg_attr(not(feature = "r0-r91-audit"), inline(always))]
-    pub fn add(self, rhs: M31) -> M31 {
+    #[cfg(not(feature = "ct-host-prover"))] pub fn add(self, rhs: M31) -> M31 {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FAdd);
         #[cfg(feature = "r0-r91-audit")]
@@ -91,7 +91,7 @@ impl M31 {
     // them within SBF's signed branch displacement.
     #[cfg_attr(feature = "r0-r91-audit", inline(never))]
     #[cfg_attr(not(feature = "r0-r91-audit"), inline(always))]
-    pub fn sub(self, rhs: M31) -> M31 {
+    #[cfg(not(feature = "ct-host-prover"))] pub fn sub(self, rhs: M31) -> M31 {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FSub);
         #[cfg(feature = "r0-r91-audit")]
@@ -119,7 +119,7 @@ impl M31 {
     }
 
     #[inline(always)]
-    pub fn neg(self) -> M31 {
+    #[cfg(not(feature = "ct-host-prover"))] pub fn neg(self) -> M31 {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FNeg);
         if self.0 == 0 {
@@ -158,7 +158,7 @@ impl M31 {
     /// accumulation when SBF carry-chain additions beat repeated u64
     /// canonicalization.
     #[inline(always)]
-    pub fn reduce_u128(value: u128) -> M31 {
+    #[cfg(not(feature = "ct-host-prover"))] pub fn reduce_u128(value: u128) -> M31 {
         let mask = P as u128;
         let value = (value & mask) + (value >> 31);
         let value = (value & mask) + (value >> 31);
@@ -231,7 +231,7 @@ impl M31 {
     }
 
     #[inline(always)]
-    pub fn is_zero(self) -> bool {
+    #[cfg(not(feature = "ct-host-prover"))] pub fn is_zero(self) -> bool {
         self.0 == 0
     }
 
@@ -403,7 +403,7 @@ impl CM31 {
     }
 
     #[inline(always)]
-    pub fn is_zero(self) -> bool {
+    #[cfg(not(feature = "ct-host-prover"))] pub fn is_zero(self) -> bool {
         self.a.is_zero() && self.b.is_zero()
     }
 
@@ -982,7 +982,7 @@ impl QM31 {
     }
 
     #[inline(always)]
-    pub fn is_zero(self) -> bool {
+    #[cfg(not(feature = "ct-host-prover"))] pub fn is_zero(self) -> bool {
         self.c0.is_zero() && self.c1.is_zero()
     }
 
@@ -3266,3 +3266,32 @@ fn r0_sub_fallback(a: u32, b: u32) -> M31 {
     let s = a + P - b;
     M31(if s >= P { s - P } else { s })
 }
+
+// Appended so disabled candidate code preserves frozen panic source locations.
+#[cfg(feature = "ct-host-prover")]
+pub mod ct;
+#[cfg(all(feature = "ct-host-prover", target_os = "solana"))]
+compile_error!("ct-host-prover must never be enabled in a verifier SBF build");
+#[cfg(all(feature = "ct-host-prover", any(feature = "r0-r91-audit", feature = "r0-e4-reference", feature = "r0-op-count")))]
+compile_error!("ct-host-prover is incompatible with arithmetic audit instrumentation");
+#[cfg(feature = "ct-host-prover")]
+#[inline(always)]
+fn reduce_u64(x: u64) -> u32 { ct::reduce64(x) }
+#[cfg(feature = "ct-host-prover")]
+impl M31 {
+    #[inline(always)]
+    pub fn add(self, rhs: Self) -> Self { Self(ct::add(self.0, rhs.0)) }
+    #[inline(always)]
+    pub fn sub(self, rhs: Self) -> Self { Self(ct::sub(self.0, rhs.0)) }
+    #[inline(always)]
+    pub fn neg(self) -> Self { Self(ct::neg(self.0)) }
+    #[inline(always)]
+    pub fn is_zero(self) -> bool { ct::is_zero(self.0) }
+    #[inline(always)]
+    pub fn reduce_u128(value: u128) -> Self { Self(ct::reduce128(value)) }
+}
+
+#[cfg(feature = "ct-host-prover")]
+impl CM31 { #[inline(always)] pub fn is_zero(self) -> bool { self.a.is_zero() & self.b.is_zero() } }
+#[cfg(feature = "ct-host-prover")]
+impl QM31 { #[inline(always)] pub fn is_zero(self) -> bool { self.c0.is_zero() & self.c1.is_zero() } }

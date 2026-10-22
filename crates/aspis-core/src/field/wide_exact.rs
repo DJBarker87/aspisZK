@@ -187,7 +187,7 @@ impl WideExact {
 
     /// Scalar multiplication without lifting to a full E product.
     #[inline(always)]
-    pub fn mul_m31(self, rhs: M31) -> Self {
+    #[cfg(not(feature = "ct-host-prover"))] pub fn mul_m31(self, rhs: M31) -> Self {
         #[cfg(feature = "r0-op-count")]
         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMulF);
         let rhs = M31(rhs.0 % P);
@@ -197,7 +197,7 @@ impl WideExact {
         }
     }
 
-    pub fn is_zero(self) -> bool {
+    #[cfg(not(feature = "ct-host-prover"))] pub fn is_zero(self) -> bool {
         self.c0.is_zero() && self.c1.is_zero()
     }
 
@@ -280,7 +280,7 @@ impl WideExact {
 }
 
 #[inline(always)]
-fn canonical_qm31(value: QM31) -> QM31 {
+#[cfg(not(feature = "ct-host-prover"))] fn canonical_qm31(value: QM31) -> QM31 {
     let reduce = |x: M31| M31(x.0 % P);
     QM31 {
         c0: CM31 {
@@ -625,4 +625,21 @@ mod tests {
         assert_canonical(x.add(x));
         assert_canonical(x.sub(x.neg()));
     }
+}
+
+#[cfg(feature = "ct-host-prover")]
+#[inline(always)]
+fn canonical_qm31(value: QM31) -> QM31 {
+    let reduce = |x: M31| M31(super::ct::reduce64(x.0 as u64));
+    QM31 { c0: CM31 { a: reduce(value.c0.a), b: reduce(value.c0.b) }, c1: CM31 { a: reduce(value.c1.a), b: reduce(value.c1.b) } }
+}
+#[cfg(feature = "ct-host-prover")]
+impl WideExact {
+    #[inline(always)]
+    pub fn mul_m31(self, rhs: M31) -> Self {
+        let rhs = M31(super::ct::reduce64(rhs.0 as u64));
+        Self { c0: self.c0.mul_m31(rhs), c1: self.c1.mul_m31(rhs) }
+    }
+    #[inline(always)]
+    pub fn is_zero(self) -> bool { self.c0.is_zero() & self.c1.is_zero() }
 }
