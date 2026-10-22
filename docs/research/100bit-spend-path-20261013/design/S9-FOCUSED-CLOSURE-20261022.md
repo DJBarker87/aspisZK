@@ -504,3 +504,19 @@ map remains open: prefix, high-term construction, and post-term branch/array
 transport are now assigned separately for parallel completion. No conditional
 tail-map premise is counted as discharged. Whole-loop/caller integration,
 release binding, coherent replay and 100-bit composition remain open.
+
+
+PROVED same-run iterator preservation: actual Pair afterLow, activeBody and
+generated source body successful executions return Continue with exactly the
+iterator obtained from their range-next step. No canonicality, arithmetic
+success or independent tail execution premise is added. Two focused targets
+passed (19.198 s and 16.156 s, below 3.23 GB process RSS, zero swaps); all
+three theorem reports use only standard axioms. Evidence:
+evidence/s9-pair-flowproofs-v1-20261022/.
+
+The scalar-factor Result transport is committed at 2adb24fdf8. The active
+prefix map through all eleven child calls has passed on the NUC with an
+explicit universal afterLow-map premise; this conditional result does not
+close S9. Work is joining the four-term prefix and exact source suffix,
+retaining the same bound PERM[3] value instead of positing an independent
+second read. Full-loop/refinement/release and 100-bit composition remain open.
