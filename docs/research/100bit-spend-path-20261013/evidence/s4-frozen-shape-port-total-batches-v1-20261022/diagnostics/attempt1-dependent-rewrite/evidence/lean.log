@@ -1,0 +1,74 @@
+/tmp/root-s4-frozen-shape-port-total-batches-v1-20261022/sources/S4FrozenShapePortTotalBatchesV1.lean:51:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    ∀ (j : Fin 29),
+      AspisR1FastDotsTailFieldProductRootV1.wideDecoded (↑_a)[↑j] =
+        AspisR1CurrentPreparedClaim.Concrete.decode gamma ^ ↑j
+Error: Application type mismatch: The argument
+  S4ClaimPowersSemanticV1.successful_powers_exact._proof_1 powers j
+has type
+  ↑j < (↑(claimArrayToFast powers)).length
+but is expected to have type
+  ↑j < (↑_a).length
+in the application
+  (↑_a)[↑j]
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+proof : Slice U8
+j : ℕ
+q : Slice U8
+a : Std.Array U8 608#usize
+g : Std.Array Wide 29#usize
+gamma : ClaimE
+powers : Std.Array ClaimE 29#usize
+hgamma : ClaimCanonical gamma
+hpowers : AspisR1CurrentPreparedClaim.ClaimPowers.powers 29#usize gamma = ok powers
+hcaller : g = claimArrayToFast powers
+hlen : (↑proof).length = 57607
+hj : j < 22
+hread : ↑q = List.slice (10055 + j * 832) (10055 + j * 832 + 832) ↑proof
+hscan : MultiproofParserRef.parser_reference.scan proof = ok true
+ha : ↑a = List.slice 0 ↑608#usize ↑q
+values : Std.Array Wide 4#usize
+v0 v1 v2 v3 : Wide
+hsource : AspisR1FastDotsCurrent.fast_dots.four_dots (install concreteOps) q g = ok values
+hcanonical : ∀ x ∈ ↑values, AspisR1CurrentWide.Proof.CanonicalWide (AspisR1FastDotsTailWideAddCurrentV1.s4ToCurrentE x)
+hvalues : ↑values = [v0, v1, v2, v3]
+h0 :
+  AspisR1FastDotsLiteralCallbackValueRootV1.LiteralFieldResult
+    (AspisR1FastDotsForwardLiteralValueRootV1.literalOps concreteOps) a g 0#usize v0
+h1 :
+  AspisR1FastDotsLiteralCallbackValueRootV1.LiteralFieldResult
+    (AspisR1FastDotsForwardLiteralValueRootV1.literalOps concreteOps) a g 1#usize v1
+h2 :
+  AspisR1FastDotsLiteralCallbackValueRootV1.LiteralFieldResult
+    (AspisR1FastDotsForwardLiteralValueRootV1.literalOps concreteOps) a g 2#usize v2
+h3 :
+  AspisR1FastDotsLiteralCallbackValueRootV1.LiteralFieldResult
+    (AspisR1FastDotsForwardLiteralValueRootV1.literalOps concreteOps) a g 3#usize v3
+c1 : C1
+c2 : C2
+hd1 : decodeC1 (List.take 480 (List.map ExtractedRecordByteValue.rawByte ↑a)) = some c1
+hd2 : decodeC2 (List.drop 480 (List.map ExtractedRecordByteValue.rawByte ↑a)) = some c2
+hbytes : List.map ExtractedRecordByteValue.rawByte ↑a = encodeC1 c1 ++ encodeC2 c2
+hexact :
+  ∀ (j : Fin 29),
+    AspisR1FastDotsTailFieldProductRootV1.wideDecoded (↑(claimArrayToFast powers))[↑j] =
+      AspisR1CurrentPreparedClaim.Concrete.decode gamma ^ ↑j
+⊢ ∃ values c1 c2,
+    AspisR1FastDotsCurrent.fast_dots.four_dots (install concreteOps) q g = ok values ∧
+      (∀ x ∈ ↑values, AspisR1CurrentWide.Proof.CanonicalWide (AspisR1FastDotsTailWideAddCurrentV1.s4ToCurrentE x)) ∧
+        decodeC1 (List.take 480 (List.map ExtractedRecordByteValue.rawByte ↑a)) = some c1 ∧
+          decodeC2 (List.drop 480 (List.map ExtractedRecordByteValue.rawByte ↑a)) = some c2 ∧
+            List.map (fun x => AspisR1CurrentWide.Proof.decodeWide (AspisR1FastDotsTailWideAddCurrentV1.s4ToCurrentE x))
+                ↑values =
+              List.ofFn fun slot =>
+                AspisV6Width29CorrelatedAgreement.width29Batch
+                  (AspisR1D18S4ConcreteWidth29KernelV1.localWord c1 c2 slot)
+                  (AspisR1CurrentPreparedClaim.Concrete.decode gamma)
+'AspisR1.S4FrozenShapePortTotalBatchesV1.frozen_shape_port_total_exact_batches' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1692,3 +1692,61 @@ fails on an erased region. Work is now directed at those tool failures.
 Neither the successful P6 stateful trace theorem nor bounded Kani evidence
 discharges source-to-P6 lowering by itself. Exact source availability
 removes a factual uncertainty, but frozen S4 remains open.
+
+## Original extracted control body: total exact four-batch port theorem
+
+`s4-frozen-shape-port-total-batches-v1-20261022` proves
+`frozen_shape_port_total_exact_batches` for the original extracted
+`AspisR1FastDotsCurrent.fast_dots.four_dots (install concreteOps)`, rather
+than the fixed-call V10 candidate. It composes the existing scanned-opening
+forward proof with same-opening decoding, exact ClaimPowers semantics and
+the four-slot width-29 theorem. It derives successful execution, canonical
+outputs and all four mathematical batches; successful dot/callback calls,
+four independent output witnesses and an independent decoded opening are
+not inputs. The retained inputs are scanner/frame/prefix facts, canonical
+gamma and the same successful ClaimPowers/input-array correspondence.
+
+This theorem is explicitly at the installed P6/library port. It does not
+prove that the frozen Rust library or enclosing caller installs those
+operations. It therefore advances the original-body path without adopting
+the V10 candidate, while retaining the actual source-lowering obligations.
+Focused exit 0, 28.754s, peak process RSS 3,959,226,368 bytes, aggregate
+3,948,167,168 bytes, swap 0, standard axioms. The failed dependent-rewrite
+attempt is retained and rejected; substitution in a local dependent claim
+fixes the proof without numerical reduction or a broader replay.
+
+## Reused Prepared.new body now has a current-carrier adapter
+
+`s4-prepared-new-s1-adapter-v1-20261022` maps current caller fields to the
+retained S1 source-shaped Prepared body and maps the result back.
+`prepareByS1Body_success_powers` derives the same constructor run's powers
+call, returned gamma and returned scratch correspondence. The selected
+Rust method bodies match after removing only the historical inline
+attribute. Its focused axioms run exited 0 in 2.642s, peak process RSS
+2,267,627,520 bytes, aggregate 2,245,246,976 bytes, swap 0, standard axioms.
+Primary review read the whole theorem and named compiler report; both
+packets' checkers passed. This sem/view-level constructor adapter is not
+yet the complete parent candidate.prepare operation. The parent body and
+its leaf-operation installation remain explicit work; arbitrary
+hprepareBinding has not been discharged by definition.
+
+## Reused extraction evidence corrects the next library blocker
+
+The existing stdlib isolation tool-candidate already tested a Try-associated
+type resolver: the retained positive v2 input passed that check and failed
+later on a mutable-reference Copy; the negative input remained rejected.
+No duplicate build of that unchanged experiment was launched. Its resolver
+compares erased trait references, so it is not accepted as the reviewed
+exact-instance implementation. That stricter draft remains a candidate.
+
+The v2 LLBC was produced with Rust 1.98 nightly, not by SBF Rust 1.89.
+Selected array algorithm bodies match the installed SBF source after
+comment/whitespace removal; wrap_mut_1 additionally differs by a const
+closure marker. This is source-body comparison, not cross-toolchain LLBC
+identity. The first post-Try failure is the scoped shared reborrow used by
+`guard.array_mut.len()`, represented as copying a mutable reference into a
+temporary followed by a shared reborrow. It is not the Guard constructor.
+Changing Copy to Move would invalidate the live Guard field. A candidate
+lowering is being investigated with preserved regions and exclusive temp
+uses; unsafe initialization/write/drop lowering remains further work.
+None of this closes frozen S4 or the implementation-linked security target.

@@ -1,0 +1,294 @@
+/tmp/s4-prepared-new-s1-adapter-v1/sources/S4PreparedNewS1AdapterV1.lean:19:83: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/s4-prepared-new-s1-adapter-v1/sources/S4PreparedNewS1AdapterV1.lean:21:88: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/s4-prepared-new-s1-adapter-v1/sources/S4PreparedNewS1AdapterV1.lean:23:97: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/s4-prepared-new-s1-adapter-v1/sources/S4PreparedNewS1AdapterV1.lean:27:34: error(lean.unknownIdentifier): Unknown identifier `AspisR1CurrentCaller.transcript.Transcript`
+/tmp/s4-prepared-new-s1-adapter-v1/sources/S4PreparedNewS1AdapterV1.lean:37:28: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/s4-prepared-new-s1-adapter-v1/sources/S4PreparedNewS1AdapterV1.lean:52:59: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/s4-prepared-new-s1-adapter-v1/sources/S4PreparedNewS1AdapterV1.lean:54:13: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/tmp/s4-prepared-new-s1-adapter-v1/sources/S4PreparedNewS1AdapterV1.lean:65:73: error(lean.invalidField): Invalid field `map`: The environment does not contain `Aeneas.Std.Result.map`, so it is not possible to project the field `map` from an expression
+  r
+of type `Result α`
+/tmp/s4-prepared-new-s1-adapter-v1/sources/S4PreparedNewS1AdapterV1.lean:105:10: error: unsolved goals
+case Err.Parse
+H : Type
+B : PreparedScratchModel.Boundaries
+d : aspis_core.digest.Digest32 H
+sem : AspisR1CurrentCaller.r1_semantic.Verified H
+v : AspisR1CurrentCaller.verifier.View
+hash : H
+out : AspisR1CurrentCaller.verifier.Prepared
+scratchIn scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+h :
+  (do
+      let (inner, scratch) ←
+        PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn)
+      pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+pair :
+  core.result.Result AspisR1PublicPreparation.verifier.Prepared AspisR1PublicPreparation.verifier.Error ×
+    Std.Array aspis_core.field.WideExact 29#usize
+hmodel :
+  PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn) = ok pair
+hmap :
+  (let (inner, scratch) := pair
+    pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+hinner :
+  (match pair.1 with
+    | core.result.Result.Ok p => core.result.Result.Ok (preparedFromP p)
+    | core.result.Result.Err e => core.result.Result.Err (errorFromP e)) =
+    core.result.Result.Ok out
+hscratch : wArrayFromP pair.2 = scratch
+⊢ ∃ gamma powers, out.gamma = wFromP gamma ∧ B.powers 29#usize gamma = ok powers ∧ wArrayFromP powers = scratch
+
+case Err.Semantic
+H : Type
+B : PreparedScratchModel.Boundaries
+d : aspis_core.digest.Digest32 H
+sem : AspisR1CurrentCaller.r1_semantic.Verified H
+v : AspisR1CurrentCaller.verifier.View
+hash : H
+out : AspisR1CurrentCaller.verifier.Prepared
+scratchIn scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+h :
+  (do
+      let (inner, scratch) ←
+        PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn)
+      pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+pair :
+  core.result.Result AspisR1PublicPreparation.verifier.Prepared AspisR1PublicPreparation.verifier.Error ×
+    Std.Array aspis_core.field.WideExact 29#usize
+hmodel :
+  PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn) = ok pair
+hmap :
+  (let (inner, scratch) := pair
+    pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+hinner :
+  (match pair.1 with
+    | core.result.Result.Ok p => core.result.Result.Ok (preparedFromP p)
+    | core.result.Result.Err e => core.result.Result.Err (errorFromP e)) =
+    core.result.Result.Ok out
+hscratch : wArrayFromP pair.2 = scratch
+⊢ ∃ gamma powers, out.gamma = wFromP gamma ∧ B.powers 29#usize gamma = ok powers ∧ wArrayFromP powers = scratch
+
+case Err.Transcript
+H : Type
+B : PreparedScratchModel.Boundaries
+d : aspis_core.digest.Digest32 H
+sem : AspisR1CurrentCaller.r1_semantic.Verified H
+v : AspisR1CurrentCaller.verifier.View
+hash : H
+out : AspisR1CurrentCaller.verifier.Prepared
+scratchIn scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+h :
+  (do
+      let (inner, scratch) ←
+        PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn)
+      pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+pair :
+  core.result.Result AspisR1PublicPreparation.verifier.Prepared AspisR1PublicPreparation.verifier.Error ×
+    Std.Array aspis_core.field.WideExact 29#usize
+hmodel :
+  PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn) = ok pair
+hmap :
+  (let (inner, scratch) := pair
+    pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+hinner :
+  (match pair.1 with
+    | core.result.Result.Ok p => core.result.Result.Ok (preparedFromP p)
+    | core.result.Result.Err e => core.result.Result.Err (errorFromP e)) =
+    core.result.Result.Ok out
+hscratch : wArrayFromP pair.2 = scratch
+⊢ ∃ gamma powers, out.gamma = wFromP gamma ∧ B.powers 29#usize gamma = ok powers ∧ wArrayFromP powers = scratch
+
+case Err.Relation
+H : Type
+B : PreparedScratchModel.Boundaries
+d : aspis_core.digest.Digest32 H
+sem : AspisR1CurrentCaller.r1_semantic.Verified H
+v : AspisR1CurrentCaller.verifier.View
+hash : H
+out : AspisR1CurrentCaller.verifier.Prepared
+scratchIn scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+h :
+  (do
+      let (inner, scratch) ←
+        PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn)
+      pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+pair :
+  core.result.Result AspisR1PublicPreparation.verifier.Prepared AspisR1PublicPreparation.verifier.Error ×
+    Std.Array aspis_core.field.WideExact 29#usize
+hmodel :
+  PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn) = ok pair
+hmap :
+  (let (inner, scratch) := pair
+    pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+hinner :
+  (match pair.1 with
+    | core.result.Result.Ok p => core.result.Result.Ok (preparedFromP p)
+    | core.result.Result.Err e => core.result.Result.Err (errorFromP e)) =
+    core.result.Result.Ok out
+hscratch : wArrayFromP pair.2 = scratch
+⊢ ∃ gamma powers, out.gamma = wFromP gamma ∧ B.powers 29#usize gamma = ok powers ∧ wArrayFromP powers = scratch
+
+case Err.Merkle
+H : Type
+B : PreparedScratchModel.Boundaries
+d : aspis_core.digest.Digest32 H
+sem : AspisR1CurrentCaller.r1_semantic.Verified H
+v : AspisR1CurrentCaller.verifier.View
+hash : H
+out : AspisR1CurrentCaller.verifier.Prepared
+scratchIn scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+h :
+  (do
+      let (inner, scratch) ←
+        PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn)
+      pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+pair :
+  core.result.Result AspisR1PublicPreparation.verifier.Prepared AspisR1PublicPreparation.verifier.Error ×
+    Std.Array aspis_core.field.WideExact 29#usize
+hmodel :
+  PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn) = ok pair
+hmap :
+  (let (inner, scratch) := pair
+    pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+hinner :
+  (match pair.1 with
+    | core.result.Result.Ok p => core.result.Result.Ok (preparedFromP p)
+    | core.result.Result.Err e => core.result.Result.Err (errorFromP e)) =
+    core.result.Result.Ok out
+hscratch : wArrayFromP pair.2 = scratch
+⊢ ∃ gamma powers, out.gamma = wFromP gamma ∧ B.powers 29#usize gamma = ok powers ∧ wArrayFromP powers = scratch
+
+case Err.Query
+H : Type
+B : PreparedScratchModel.Boundaries
+d : aspis_core.digest.Digest32 H
+sem : AspisR1CurrentCaller.r1_semantic.Verified H
+v : AspisR1CurrentCaller.verifier.View
+hash : H
+out : AspisR1CurrentCaller.verifier.Prepared
+scratchIn scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+h :
+  (do
+      let (inner, scratch) ←
+        PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn)
+      pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+pair :
+  core.result.Result AspisR1PublicPreparation.verifier.Prepared AspisR1PublicPreparation.verifier.Error ×
+    Std.Array aspis_core.field.WideExact 29#usize
+hmodel :
+  PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn) = ok pair
+hmap :
+  (let (inner, scratch) := pair
+    pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+hinner :
+  (match pair.1 with
+    | core.result.Result.Ok p => core.result.Result.Ok (preparedFromP p)
+    | core.result.Result.Err e => core.result.Result.Err (errorFromP e)) =
+    core.result.Result.Ok out
+hscratch : wArrayFromP pair.2 = scratch
+⊢ ∃ gamma powers, out.gamma = wFromP gamma ∧ B.powers 29#usize gamma = ok powers ∧ wArrayFromP powers = scratch
+
+case Err.Checkpoint
+H : Type
+B : PreparedScratchModel.Boundaries
+d : aspis_core.digest.Digest32 H
+sem : AspisR1CurrentCaller.r1_semantic.Verified H
+v : AspisR1CurrentCaller.verifier.View
+hash : H
+out : AspisR1CurrentCaller.verifier.Prepared
+scratchIn scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+h :
+  (do
+      let (inner, scratch) ←
+        PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn)
+      pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+pair :
+  core.result.Result AspisR1PublicPreparation.verifier.Prepared AspisR1PublicPreparation.verifier.Error ×
+    Std.Array aspis_core.field.WideExact 29#usize
+hmodel :
+  PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn) = ok pair
+hmap :
+  (let (inner, scratch) := pair
+    pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+hinner :
+  (match pair.1 with
+    | core.result.Result.Ok p => core.result.Result.Ok (preparedFromP p)
+    | core.result.Result.Err e => core.result.Result.Err (errorFromP e)) =
+    core.result.Result.Ok out
+hscratch : wArrayFromP pair.2 = scratch
+⊢ ∃ gamma powers, out.gamma = wFromP gamma ∧ B.powers 29#usize gamma = ok powers ∧ wArrayFromP powers = scratch
+
+case Err.Allocation
+H : Type
+B : PreparedScratchModel.Boundaries
+d : aspis_core.digest.Digest32 H
+sem : AspisR1CurrentCaller.r1_semantic.Verified H
+v : AspisR1CurrentCaller.verifier.View
+hash : H
+out : AspisR1CurrentCaller.verifier.Prepared
+scratchIn scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+h :
+  (do
+      let (inner, scratch) ←
+        PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn)
+      pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+pair :
+  core.result.Result AspisR1PublicPreparation.verifier.Prepared AspisR1PublicPreparation.verifier.Error ×
+    Std.Array aspis_core.field.WideExact 29#usize
+hmodel :
+  PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn) = ok pair
+hmap :
+  (let (inner, scratch) := pair
+    pure (mappedPreparedInner inner, wArrayFromP scratch)) =
+    ok (core.result.Result.Ok out, scratch)
+hinner :
+  (match pair.1 with
+    | core.result.Result.Ok p => core.result.Result.Ok (preparedFromP p)
+    | core.result.Result.Err e => core.result.Result.Err (errorFromP e)) =
+    core.result.Result.Ok out
+hscratch : wArrayFromP pair.2 = scratch
+⊢ ∃ gamma powers, out.gamma = wFromP gamma ∧ B.powers 29#usize gamma = ok powers ∧ wArrayFromP powers = scratch
+/tmp/s4-prepared-new-s1-adapter-v1/sources/S4PreparedNewS1AdapterV1.lean:107:42: error: Type mismatch: After simplification, term
+  hinner
+ has type
+  (match pair.1 with
+    | core.result.Result.Ok p => core.result.Result.Ok (preparedFromP p)
+    | core.result.Result.Err e => core.result.Result.Err (errorFromP e)) =
+    core.result.Result.Ok out
+but is expected to have type
+  preparedFromP p = out
+/tmp/s4-prepared-new-s1-adapter-v1/sources/S4PreparedNewS1AdapterV1.lean:110:8: error: Type mismatch: After simplification, term
+  hmodel
+ has type
+  PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn) = ok pair
+but is expected to have type
+  PreparedScratchModel.prepare B (currentDigestToP d) (verifiedToP sem) (viewToP v) hash (wArrayToP scratchIn) =
+    ok (core.result.Result.Ok p, pair.2)
