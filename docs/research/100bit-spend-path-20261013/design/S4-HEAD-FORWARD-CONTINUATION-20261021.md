@@ -1992,7 +1992,7 @@ inspected each complete statement, result predicate and proof body.
 three Rust blobs and their accepted source/body proofs. The accepted
 early-powers patch reconstructs the complete proposed weights.rs byte for
 byte. The unchanged query_values caller selects fast_dots(q,g), and the
-unchanged Prepared.new caller selects powers29(gamma) into that scratch.
+unchanged Prepared.new caller selects `powers::<29>(gamma)` into that scratch.
 The reused source checkers pass without rerunning their Lean compiles.
 This checks the candidate selection, not an adoption of the candidate.
 
