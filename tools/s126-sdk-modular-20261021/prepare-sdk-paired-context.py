@@ -254,6 +254,23 @@ if direct_query:
  old='  assert_eq!(checkpoint[observed],plan().output[observed]);drop(checkpoint);'
  assert s.count(old)==1
  s=s.replace(old,'  assert_eq!(checkpoint.as_ptr(),unsafe{NATIVE_ROOT_PTRS[2]},"actual post-call SDK checkpoint descriptor remains bound to root2");drop(checkpoint);\n  assert_eq!(unsafe{NATIVE_ROOT_PTRS[2].add(observed).read()},plan().output[observed]);')
+paired_query='paired-query' in sys.argv[6:]
+if paired_query:
+ assert mode=='paired' and normalized_data and canonical_ctor
+ s=s.replace('static mut PHASE:usize=0;','static mut PHASE:usize=0;\nstatic mut OUTPUT_PTRS:[*const u8;2]=[core::ptr::null();2];')
+ old=' Ok(plan().output[..plan().output_len].to_vec())'
+ assert s.count(old)==1
+ s=s.replace(old,' let output=plan().output[..plan().output_len].to_vec();\n unsafe{OUTPUT_PTRS[phase]=output.as_ptr();}\n Ok(output)')
+ old='  assert_eq!(checkpoint[observed],plan().output[observed]);assert_eq!(model.data_cells[2].bytes[observed],checkpoint[observed]);drop(checkpoint);'
+ assert s.count(old)==1
+ s=s.replace(old,'  assert_eq!(checkpoint.len(),1768);assert_eq!(checkpoint.as_ptr(),unsafe{NATIVE_ROOT_PTRS[2]});drop(checkpoint);\n  let actual_byte=unsafe{NATIVE_ROOT_PTRS[2].add(observed).read()};\n  assert_eq!(actual_byte,plan().output[observed]);\n  assert_eq!(model.data_cells[2].bytes.len(),1768);\n  assert_eq!(model.data_cells[2].bytes.as_ptr(),unsafe{OUTPUT_PTRS[1]},"complete owned parent preserves returned checkpoint allocation");\n  assert_eq!(unsafe{OUTPUT_PTRS[1].add(observed).read()},actual_byte);')
+borrowed_buffers='borrowed-buffers' in sys.argv[6:]
+if borrowed_buffers:
+ assert mode=='paired'
+ s=s.replace('#[kani::stub(aspis_s126_owned_sdk_snapshots::public_snapshot,public_snapshot)]\n','').replace('#[kani::stub(aspis_s126_owned_sdk_snapshots::proof_snapshot,proof_snapshot)]\n','')
+ s=s.replace('fn planned_zero_scan(_:Vec<u8>)->bool','fn planned_zero_scan(_:&[u8])->bool')
+ s=s.replace('aspis_s126_owned_sdk_snapshots','aspis_s126_owned_sdk_borrowed')
+ s=s.replace('unsafe{PUBLIC_SNAPSHOT_PTR}','unsafe{MODEL_ROOT_PTRS[1]}').replace('unsafe{PROOF_SNAPSHOT_PTR}','unsafe{MODEL_ROOT_PTRS[0]}')
 scalar_counters='scalar-counters' in sys.argv[6:]
 if scalar_counters:
  s=s.replace('.cast::<std::cell::Cell<isize>>()','.cast::<isize>()')
@@ -324,4 +341,14 @@ if canonical_ctor:
 
 if direct_query:
  p=O/'source-cut.json';m=json.loads(p.read_text());m['byte_observation']='First ASSERT the actual post-call SDK checkpoint descriptor pointer equals the original root2 pointer; then read the same byte through that saved raw pointer after dropping the shared guard. Full real SDK execution retained. No source/account carrier replacement. This proves native checkpoint value/counter/argument assertions only; complete owned state and other-node frame composition remain separate.'
+ p.write_text(json.dumps(m,indent=2)+'\n')
+
+if paired_query:
+ p=O/'source-cut.json';m=json.loads(p.read_text());m['byte_observation']='Full paired native/owned execution retained. First ASSERT native SDK checkpoint descriptor equals original root2 and its length1768; ASSERT complete owned parent cell2 descriptor equals the actual returned phase1 checkpoint allocation and length1768. Then compare the same observed bytes through these independently bound saved pointers. All prior metadata/counter/lamport checks retained. Ghost pointer recording does not change the full typed reply or SDK/owned carriers.'
+ p.write_text(json.dumps(m,indent=2)+'\n')
+
+if borrowed_buffers:
+ p=O/'Cargo.toml';c=p.read_text();old='aspis-s126-owned-sdk-snapshots={path="/home/dombarker/project-offloads/s126-real-sdk-20261021/owned-sdk-snapshots-v1"}'
+ assert old in c;c=c.replace(old,'aspis-s126-owned-sdk-borrowed={path="/home/dombarker/project-offloads/s126-real-sdk-20261021/owned-sdk-borrowed-v1"}');p.write_text(c)
+ p=O/'source-cut.json';m=json.loads(p.read_text());m['owned_reference']='Full owned-sdk-borrowed-v1 candidate, retaining all SDK fields and already-owned initial byte buffers. Model decoder and first_decoded must use the same original public Vec pointer; proof uses its original Vec pointer. No public/proof clone stubs are installed. Complete old/new owned parent equality remains a separate required gate before replacing the previous extracted reference.'
  p.write_text(json.dumps(m,indent=2)+'\n')

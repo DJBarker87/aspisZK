@@ -1,0 +1,19 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "source_sha256": "3c3464bc644a0f065c109b3bec788613aefc9ee8617a0612e8f62d7ee9459cd5",
+  "parent_source_sha256": "f7f48747293a94e840cb8d570b9992c10237fff2a19c1d780950f59389d3f134",
+  "qualification": "Full owned SDK candidate reborrows its already-owned public/proof buffers.\nPreserve decode/validation/encoding/proof-acquire/error order and final release.\nNo production change or state/carrier erasure. Whole-parent equivalence required.\n",
+  "changes": [
+    "same full SDK/account/data/lamport/guard declarations and all fields",
+    "checkpoint scan borrows its owned bytes instead of cloning",
+    "decoder borrows public bytes in an explicit short scope before proof acquisition",
+    "after unchanged validation/encoding/proof acquisition, reborrow the same public Vec and proof Vec for the unchanged guards/first_decoded",
+    "same typed statement, error mapping, checkpoint update and reverse guard release"
+  ],
+  "remaining": [
+    "extract without borrow-elaboration failure",
+    "literal protocol/SDK/Ops identity and complete old/new owned parent equivalence, all statuses and states",
+    "native SDK/caller/child/scan/error/oracle-log transport; no adoption or re-pin implied"
+  ]
+}

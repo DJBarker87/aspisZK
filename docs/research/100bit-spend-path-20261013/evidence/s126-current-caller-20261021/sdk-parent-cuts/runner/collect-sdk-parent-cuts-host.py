@@ -30,6 +30,8 @@ folders += ['sdk-call-context-v2','sdk-paired-context-v5']
 receipts += ['sdk-call-prefix-codegen-v3','sdk-call-prefix-check-v3','sdk-paired-context-codegen-v5','sdk-std-copy-smt-preflight-v2','sdk-prefix-context-check-v6','sdk-prefix-context-flat-v1','sdk-prefix-smt-exception-v1']
 folders += ['sdk-paired-context-v6','sdk-native-context-v5']
 receipts += ['sdk-paired-context-check-v5','sdk-paired-context-check-v6','sdk-paired-context-codegen-v6','sdk-native-context-codegen-v5']
+folders += ['sdk-paired-context-v7','sdk-paired-context-v8','sdk-paired-context-v9','owned-sdk-borrowed-v1']
+receipts += ['sdk-native-context-check-v9','sdk-paired-context-codegen-v7','sdk-paired-context-check-v7','sdk-paired-context-codegen-v8','sdk-paired-context-codegen-v9','sdk-paired-context-check-v9','owned-sdk-borrowed-v1-charon','owned-sdk-borrowed-v1-aeneas']
 pins=[]
 for name in folders:
  p=H/name
@@ -46,7 +48,7 @@ for mode in ['shared','exclusive']:
  for suffix in ['-input.json','-admission.json']:
   p=H/('sdk-'+mode+'-properties-v3'+suffix)
   if p.is_file():copy(p,p.name)
-for tag in ['sdk-paired-context-check-v1','sdk-paired-context-check-v2','sdk-paired-context-check-v3','sdk-native-context-check-v1','sdk-prefix-context-check-v1','sdk-prefix-context-check-v2','sdk-prefix-context-check-v3','sdk-native-context-check-v2','sdk-native-context-check-v3','sdk-call-prefix-check-v1','sdk-paired-context-check-v4','sdk-native-context-check-v4','sdk-native-context-check-v5','sdk-native-context-check-v6','sdk-native-context-check-v7','sdk-native-context-check-v8','sdk-prefix-context-check-v4','sdk-prefix-context-check-v5','sdk-call-prefix-check-v2','sdk-std-copy-smt-preflight-v1','sdk-std-copy-smt-preflight-v2','sdk-prefix-context-check-v6','sdk-prefix-context-flat-v1','sdk-prefix-smt-exception-v1','sdk-call-prefix-check-v3','sdk-paired-context-check-v5','sdk-paired-context-check-v6']:
+for tag in ['sdk-paired-context-check-v1','sdk-paired-context-check-v2','sdk-paired-context-check-v3','sdk-native-context-check-v1','sdk-prefix-context-check-v1','sdk-prefix-context-check-v2','sdk-prefix-context-check-v3','sdk-native-context-check-v2','sdk-native-context-check-v3','sdk-call-prefix-check-v1','sdk-paired-context-check-v4','sdk-native-context-check-v4','sdk-native-context-check-v5','sdk-native-context-check-v6','sdk-native-context-check-v7','sdk-native-context-check-v8','sdk-prefix-context-check-v4','sdk-prefix-context-check-v5','sdk-call-prefix-check-v2','sdk-std-copy-smt-preflight-v1','sdk-std-copy-smt-preflight-v2','sdk-prefix-context-check-v6','sdk-prefix-context-flat-v1','sdk-prefix-smt-exception-v1','sdk-call-prefix-check-v3','sdk-paired-context-check-v5','sdk-paired-context-check-v6','sdk-native-context-check-v9','sdk-paired-context-check-v7','sdk-paired-context-check-v9']:
  for p in (H/tag).glob('*.json'):copy(p,Path('diagnostics')/tag/p.name)
  for p in (H/tag).glob('*.log'):
   if p.stat().st_size<1024*1024:copy(p,Path('diagnostics')/tag/p.name)
@@ -56,7 +58,7 @@ for tag in ['sdk-paired-context-check-v1','sdk-paired-context-check-v2','sdk-pai
 for p in (H/'target/kani/x86_64-unknown-linux-gnu/debug/.fingerprint').glob('*/*.json'):
  if any(k in p.parent.name for k in ['sdk-heap-','sdk-shared-write-frame','owned-sdk-snapshots','sdk-paired-context','sdk-prefix-context','sdk-native-context','sdk-metadata-prefix','sdk-call-context','sdk-finish','sdk-std-copy','sdk-stub-preflight']):copy(p,Path('compiler-flags')/p.parent.name/p.name)
 for p in (H/'kit').glob('*.py'):
- if any(k in p.name for k in ['heap-join','snapshot','paired-context','parent-cuts','write-frame','write-frame-properties','run-modular','metadata-prefix','statement-fields','reservation','finish-join','finish-contract','finish-step','finish-fixed-frame','std-copy','owned-sdk-copy','context-properties','finish-verified','finish-contract-join','smt-preflight','prepared-sdk','trace-cbmc-exception']):copy(p,Path('runner')/p.name)
+ if any(k in p.name for k in ['heap-join','snapshot','paired-context','parent-cuts','write-frame','write-frame-properties','run-modular','metadata-prefix','statement-fields','reservation','finish-join','finish-contract','finish-step','finish-fixed-frame','std-copy','owned-sdk-copy','context-properties','owned-sdk-borrowed','sdk-borrowed','finish-verified','finish-contract-join','smt-preflight','prepared-sdk','trace-cbmc-exception']):copy(p,Path('runner')/p.name)
 p=H/'kit/trace-cbmc-exception.cpp'
 if p.is_file():copy(p,Path('runner')/p.name)
 for rel in ['z3-tool-v1/tool-pins.json','source-freeze-revalidation-20261022.json']:

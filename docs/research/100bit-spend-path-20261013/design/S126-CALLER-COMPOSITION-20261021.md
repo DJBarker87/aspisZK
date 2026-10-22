@@ -1182,3 +1182,107 @@ also times out, so the backend diagnostic has not closed a source obligation.
 No larger cap or unchanged full replay follows from that result. The next
 source deliverable remains the complete native/owned caller binding, not a
 larger collection of helper counts. S1/S2/S6 remain OPEN.
+
+## Native complete writeback context — checked
+
+`sdk-native-context-check-v9` executes the complete real frozen SDK stage1
+through successful writeback, with the proved std-copy contract. All2178 raw
+non-cover properties are SUCCESS and transfer/withdrawal covers are reached:
+raw exit10,129.640s,4529696KiB,swap0,High6G/Max8G/Swap0. All reachable properties
+were selected; this is not the earlier postcopy-only property subset.
+
+Its after-call observation first checks that the actual SDK checkpoint view's
+pointer equals the original root2 pointer, drops that shared guard, and reads
+the same observed byte through the saved root pointer. The observed byte equals
+the arbitrary full1768-byte returned checkpoint. Actual boxed/projection/public/
+proof/k/None argument checks and restoration of all signed data/lamport counters
+on returned paths remain in the complete native caller. This gets past the
+prior empty-reply cut and establishes the native successful writeback property
+at this explicitly stated context scope.
+
+The source-entry-derived `[0,1,2]` normalization and pointer/strong-count-checked
+canonical input construction are retained. Decoder/validator/encoder/verifier
+hooks are still common successful full-typed replies; the native scan is still
+the documented nondeterministic overapproximation. Actual child interpretation,
+prefix/reply transport, runtime heap embedding and complete source/owned/error/
+state/log composition remain OPEN. These facts do not disappear because the
+complete native successful continuation now checks. No whole-source TOTAL or
+100-bit release conclusion is asserted.
+
+A new paired observation candidate records the actual returned phase1 Vec
+pointer before moving it, checks that the complete owned parent's cell2 has
+THAT pointer and length1768, checks the actual SDK checkpoint pointer/length,
+and only then compares bytes through the two bound pointers. Both complete
+executions and all prior SDK/owned metadata/counter checks remain. This changes
+only ghost observations, not either carrier or source implementation. It is
+terminal with timeout (v7: exit1,185.503s,6470816KiB,swap0); no paired
+result is established. The prior self-root input
+construction candidate v6 timed out: exit1,184.989s,6387744KiB,swap0,6G/8G/0.
+
+
+## Borrowed-buffer reference: checked scan and acquisition seam (2026-10-22)
+
+The paired borrowed-buffer candidate v9 also timed out: exit1,185.915s,
+6440172KiB,swap0,High6G/Max8G/Swap0. This does not discharge whole-stage
+correspondence. No increased cap or identical rerun is proposed. Its source,
+codegen and terminal resource receipts are retained; v8's dependency-alias
+codegen failure is retained separately and is not accepted proof evidence.
+
+`owned-sdk-borrowed-v1` reborrows buffers already owned by the complete SDK
+reference. It retains all thirty SDK/protocol types and all twelve Ops fields,
+checked literal-equal by `adapt-sdk-borrowed.py`, without an opaque SDK carrier.
+The short decoder borrow ends before unchanged validation, encoding and proof
+acquisition; the verifier then reborrows the original public and proof Vecs.
+Charon/Aeneas extraction succeeded under the capped host policy. The adapted
+complete reference compiled locally as `S2SdkBorrowedReferenceV1`: exit0,
+14.409653333s,2283601920 bytes RSS,swap0. This is a candidate reference;
+complete original/new body equivalence is still a required gate.
+
+Two subsequent kernel proofs address that gate directly:
+
+- `S2SdkBorrowedScanV1.borrowedScan_eq_sourceScan` proves TOTAL equality of
+  the candidate's complete borrowed checkpoint scan subcomputation and the
+  previously checked actual-source iterator scanner. Invalid slots, all-zero
+  and nonzero buffers are included. No scan-success, range or all-zero premise
+  remains. It reuses the established source iterator proof rather than proving
+  parsing or multiproofs again. Focused receipt `s2-sdk-borrowed-scan-v2`:
+  exit0,10.544526166s,2244132864 bytes RSS,swap0.
+- `S2SdkBorrowedBufferFrameV1.acquire_reborrow_eq` equates the complete
+  emitted shared-acquisition/re-read/continuation subcomputation with the
+  original acquisition/captured-buffer continuation. The sole reached-read
+  premise is the earlier actual public cell read; there is no assumed
+  acquisition success, slot range, byte frame, nonalias condition or increment
+  range. The full SDK passed to the continuation and all Result failure,
+  divergence and ordinary error behaviour are retained. Its byte-read frame
+  includes invalid queried slots and arbitrary acquired/queried aliases.
+  Focused receipt `s2-sdk-borrowed-buffer-frame-v7`: exit0,12.179691417s,
+  2213330944 bytes RSS,swap0. This discharges the acquisition byte-preservation
+  premise at this seam, not the enclosing stage-1 theorem.
+
+All three local targets used the atomic local lock, `-j1 -M4400`; accepted
+`#print axioms` output contains only `propext`, `Classical.choice`, `Quot.sound`.
+Failed local drafts and their exit statuses are retained and excluded by the
+source-hash/current-success receipt selector. No unchanged full replay ran.
+The packet checker regenerates the borrowed Rust source and Lean adaptation,
+checks successful capped extraction receipts and pins tools/imports separately.
+No compiled artifacts are distributed.
+
+Next enclosing deliverable: consume the scan equality and acquisition/re-read
+continuation equality in the *complete* old/new emitted stage1 body and outer
+release theorem, with every error/state effect preserved. This is not yet
+proved. Actual native heap embedding, typed child/scan/prefix/reply
+interpretation, and ordered/two-pass caller composition remain OPEN after it.
+S1 and S6 retain their previously documented shared caller premises; neither
+is promoted to closed by these S2 seams. No production source decision or
+adoption is made. Re-pin/equivalence obligations remain explicit if a source
+candidate is eventually adopted. Read-only research revision
+`82df37dd2b8a1f3d68aed4421e5507be0dfd6a76` retains byte-identical shipped program
+and adapter files against freeze `b2727acd3abf79315d18b754a260f58f4b1c6326`;
+the two-file comparison is separately recorded, not a whole-dependency replay.
+The 100-bit per-attempt target remains not yet established.
+
+Final consistency audit selected 58 current source targets and pinned 11766
+cached import objects; these are evidence consistency counts, not security
+closure counts. No unchanged formal replay was run. `git diff --check` reports
+only preserved upstream extraction/log whitespace (including the literal adapted
+reference emission); raw evidence and its recorded source hashes are retained.

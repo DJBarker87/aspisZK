@@ -1,0 +1,47 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkBorrowedScanV1.lean:9:57: error: unsolved goals
+bytes : alloc.vec.Vec U8
+offset : Usize
+⊢ (if offset < Usize.ofNatCore (↑bytes).length ⋯ then do
+      let i2 ←
+        match ⟨↑bytes, ⋯⟩[offset]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      if (i2 != 0#u8) = true then ok (ControlFlow.done (some true))
+        else do
+          let i3 ← offset + 1#usize
+          ok (ControlFlow.cont i3)
+    else ok (ControlFlow.done none)) =
+    if offset < Usize.ofNatCore (↑bytes).length ⋯ then do
+      let i2 ←
+        match bytes[↑offset]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      if (i2 != 0#u8) = true then ok (ControlFlow.done (some true))
+        else do
+          let i3 ← offset + 1#usize
+          ok (ControlFlow.cont i3)
+    else ok (ControlFlow.done none)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkBorrowedScanV1.lean:17:40: error: unsolved goals
+bytes : alloc.vec.Vec U8
+⊢ (do
+      let pending_return ← loop (fun i1 => owned_checkpoint_nonzero_loop.body bytes i1) 0#usize
+      match pending_return with
+        | none => ok false
+        | some b => ok b) =
+    do
+    let pending_return ← loop (fun i1 => owned_checkpoint_nonzero_loop.body bytes i1) 0#usize
+    match pending_return with
+      | none => ok false
+      | some b => ok b
+'AspisS2OwnedStage1.SdkReference.BorrowedScan.step_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedScan.scan_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedScan.borrowedScan_eq_sourceScan' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

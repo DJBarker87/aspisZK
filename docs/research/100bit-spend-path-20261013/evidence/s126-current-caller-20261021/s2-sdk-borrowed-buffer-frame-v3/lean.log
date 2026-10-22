@@ -1,0 +1,37 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkBorrowedBufferFrameV1.lean:65:50: error: unsolved goals
+case none.some
+before after : OwnedSdk
+slot : Usize
+same : buffers after = buffers before
+val✝ : OwnedDataCell
+observed : none = some val✝.bytes
+a : (↑after.data_cells)[↑slot]? = none
+b : (↑before.data_cells)[↑slot]? = some val✝
+⊢ fail Error.arrayOutOfBounds = ok val✝.bytes
+
+case some.none
+before after : OwnedSdk
+slot : Usize
+same : buffers after = buffers before
+val✝ : OwnedDataCell
+observed : some val✝.bytes = none
+a : (↑after.data_cells)[↑slot]? = some val✝
+b : (↑before.data_cells)[↑slot]? = none
+⊢ ok val✝.bytes = fail Error.arrayOutOfBounds
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.readBytes_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.acquire_preserves_read' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.counter_update_buffers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.acquire_source_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.acquire_buffers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

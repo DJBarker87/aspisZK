@@ -126,6 +126,33 @@ with tempfile.TemporaryDirectory() as d:
  assert json.loads((Path(d)/'source-cut.json').read_text())==normalizationCut
 accepted[normalizationTag]=dict(source_sha256=sha(normalizationSource),receipt_sha256=sha(normalizationReceipt),raw_exit_status=10,noncover_successes=len(noncover),reachable_covers=2,wall_seconds=nr['wall_seconds'],peak_rss_kib=nr['peak_rss_kib'],swaps=0,qualification='Full actual native tx1-entry cut additionally derives the initial descriptor slot map [0,1,2] from all alias-map inputs. Real statement values, SDK fields/counters and pointer/k/None checks retained. Common successful typed child hooks and fixed empty reply still require actual-child/prefix transport. No whole-stage source or ordered oracle join claimed.')
 
+nativeTag='sdk-native-context-check-v9'
+nativeSource=E/'sources/sdk-native-context-v5/src/lib.rs'
+nativeCut=json.loads((nativeSource.parents[1]/'source-cut.json').read_text())
+nativeCodegen=json.loads((E/'sdk-native-context-codegen-v5-input.json').read_text())
+assert nativeCodegen['source_sha256']==nativeCut['source_sha256']==sha(nativeSource)
+nativeReceipt=E/'receipts'/nativeTag/'receipt.json';nr=json.loads(nativeReceipt.read_text())
+assert nr['exit_status']==10 and nr['swaps']==0 and nr['limits']['memory.swap.max']=='0'
+rows=json.loads((E/'diagnostics'/nativeTag/'properties-without-traces.json').read_text())
+noncover=[r for r in rows if r['sourceLocation'].get('propertyClass')!='cover']
+covers=[r for r in rows if r['sourceLocation'].get('propertyClass')=='cover']
+assert noncover and all(r['status']=='SUCCESS' for r in noncover)
+assert len(covers)==2 and all(r['status']=='FAILURE' for r in covers)
+assert any('actual post-call SDK checkpoint descriptor remains bound to root2' in r['description'] for r in noncover)
+assert any('NATIVE_ROOT_PTRS[2].add(observed).read()' in r['description'] for r in noncover)
+ni=json.loads((E/(nativeTag+'-input.json')).read_text())
+assert ni['artifact_selection']['source_sha256']==sha(nativeSource)
+assert ni['artifact_selection']['codegen_input_sha256']==sha(E/'sdk-native-context-codegen-v5-input.json')
+assert '--unwinding-assertions' in ni['commands'][-1] and not ni['selected_properties']
+assert nativeCut['std_copy_certificate']['leaf_proof']=='sdk-std-copy-frame-join-v1'
+assert nativeCut['std_copy_certificate']['bridge_proof']=='sdk-std-copy-bridge-join-v1'
+assert 'entry_normalization' in nativeCut and 'constructor_normalization' in nativeCut
+with tempfile.TemporaryDirectory() as d:
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-paired-context.py'),d,'native','fields','unreachable-error','std-copy','normalized-data','canonical-ctor','direct-query'],check=True)
+ assert (Path(d)/'src/lib.rs').read_bytes()==nativeSource.read_bytes()
+ assert json.loads((Path(d)/'source-cut.json').read_text())==nativeCut
+accepted[nativeTag]=dict(source_sha256=sha(nativeSource),receipt_sha256=sha(nativeReceipt),raw_exit_status=10,noncover_successes=len(noncover),reachable_covers=2,wall_seconds=nr['wall_seconds'],peak_rss_kib=nr['peak_rss_kib'],swaps=0,qualification='Full real native SDK stage1 through successful arbitrary1768-byte writeback: actual decoded-object/public/proof/k/None arguments, post-SDK checkpoint descriptor/observed value and all returned counter restorations checked. Input descriptor normalization has its own source-entry certificate. Common successful typed child hooks, actual child/prefix/scan/runtime embedding and full owned/state/log composition remain explicit. This is not an unconditional actual-source or total whole-stage join.')
+
 stepSource,stepCut,stepReceipt=checked('sdk-finish-step-join-v3','sdk-finish-step-v3')
 stepText=stepSource.read_text()
 assert '#[cfg_attr(kani,kani::modifies(target))]' in stepText
@@ -216,10 +243,24 @@ for phase in ['charon','aeneas']:
  inp=json.loads((snap/(phase+'-input.json')).read_text())
  assert r['exit_status']==0 and r['swaps']==0 and r['limits']['memory.swap.max']=='0'
  assert inp['source_sha256']==sha(snap/'src/lib.rs') and inp['tool_pins']
+borrowed=E/'sources/owned-sdk-borrowed-v1'
+with tempfile.TemporaryDirectory() as d:
+ out=Path(d)/'src';subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-owned-sdk-borrowed.py'),str(out)],check=True)
+ assert (out/'src/lib.rs').read_bytes()==(borrowed/'src/lib.rs').read_bytes()
+ i=Path(d)/'raw';i.mkdir();o=Path(d)/'adapt'
+ for p in (borrowed/'generated/AspisS2SdkOwned').glob('*.lean.txt'):(i/p.name[:-4]).write_bytes(p.read_bytes())
+ subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/adapt-sdk-borrowed.py'),str(i),str(o)],check=True)
+ for p in o.iterdir():assert p.read_bytes()==(S/p.name).read_bytes(),p
+for phase in ['charon','aeneas']:
+ r=json.loads((E/'receipts'/('owned-sdk-borrowed-v1-'+phase)/'receipt.json').read_text())
+ inp=json.loads((borrowed/(phase+'-input.json')).read_text())
+ assert r['exit_status']==0 and r['swaps']==0 and r['limits']['memory.swap.max']=='0'
+ assert inp['source_sha256']==sha(borrowed/'src/lib.rs') and inp['tool_pins']
+
 assert all(not p['has_errors'] for p in json.loads((E/'llbc-pins.json').read_text()))
 flags=[json.loads(p.read_text())['rustflags'] for p in (E/'compiler-flags').glob('*/*.json')]
 assert flags and all('opt-level=3' in r and 'overflow-checks=yes' in r and '--kani-compiler' in r for r in flags)
 for p in E.rglob('*'):
  if p.is_file():assert p.suffix not in ['.olean','.o','.a','.so','.dylib','.llbc','.bc','.out']
 (E/'accepted-cuts.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',qualification='Checked finite SDK operation/lifecycle domains and exact pure snapshot adaptation. Reached phase cuts are explicit. Complete actual stage1 child instances and ordered caller join remain open; timed-out/context/codegen/preflight evidence is excluded from accepted cuts.',cuts=accepted),indent=2)+'\n')
-print('PASS sixteen SDK cuts and complete owned-parent copy-loop adaptation; enclosing native caller joins remain open')
+print('PASS seventeen SDK cuts and complete owned-parent copy-loop adaptation; enclosing native caller joins remain open')
