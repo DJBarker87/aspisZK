@@ -1,0 +1,70 @@
+import R1Z.ProverCommitHashClass40
+
+/-! Keep the D147 zero-exhaustion allowance explicit. OS/fs faults and public
+nonce duplicates are coupled; their occurrence is not a probability charge. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitEntropyCharge40
+open R0Z R0Z.FsStatement R0Z.FsAbort R0Z.FsGood R0Z.HvzkV
+attribute [local instance] Classical.propDecidable
+
+def zeroBudget : ℚ := 3 / (2 : ℚ)^256
+
+/-- Two private slices in the selected API; the retained three-slice numeric
+allowance remains a conservative upper bound, without sampling the nonce. -/
+theorem raw_pair_zero : eventMass (fun raw : ProverCommitPublicNonce40.Raw =>
+    ∃ i, raw i = 0) ≤ zeroBudget := by
+  have h := R0Z.FsAbortBounds.mass_exists_le_card
+    (fun i : Fin 2 => fun raw : ProverCommitPublicNonce40.Raw => raw i = 0)
+    (1 / (2 : ℚ)^256) (fun i => by
+      rw [CommitReadsR1.mass_coord (N := 2) (X := OracleAnswer) i
+        (fun a : OracleAnswer => a = 0)]
+      rw [R0Z.FsAbortBounds.mass_point,QueryScanSharedHistoryMass.answer_cardinality,
+        Nat.cast_pow,Nat.cast_ofNat])
+  have hb : eventMass (fun raw : ProverCommitPublicNonce40.Raw => ∃ i, raw i = 0) ≤
+      2 / (2 : ℚ)^256 := by
+    simpa only [eventMass,R0Z.FsAbortBounds.mass,Fintype.card_fin,Nat.cast_ofNat,
+      mul_one_div] using h
+  exact hb.trans (by unfold zeroBudget; positivity)
+
+/-- Eight attempts per world, not 128 successful generations. -/
+theorem eight_zero {M : Type} [Fintype M] (bad : Fin 8 → M → Prop)
+    (per_attempt : ∀ i, eventMass (bad i) ≤ zeroBudget) :
+    eventMass (fun m => ∃ i, bad i m) ≤ 8 * zeroBudget := by
+  simpa only [eventMass,R0Z.FsAbortBounds.mass,Fintype.card_fin,Nat.cast_ofNat] using
+    R0Z.FsAbortBounds.mass_exists_le_card bad zeroBudget per_attempt
+
+/-- Headline arithmetic envelope with both raw-seed memo and retained zero
+terms visible. This does not instantiate the missing whole-run coupling. -/
+theorem total_lt_target {scan q attempts : Nat}
+    (hs : scan ≤ 2^65) (hq : q ≤ 2^64) (ha : attempts ≤ 128) :
+    1 / (2 : ℚ)^109 + 1 / (2 : ℚ)^137 + 1 / (2 : ℚ)^454 +
+      QueryScanFreshUnion.freshBudget scan + 2 * ProverCommitSeedEvent19.budget q +
+      2 * ProverCommitFuelMass22.charge +
+      4 * ProverCommitPrivateMemo40.budget q attempts + 16 * zeroBudget <
+        1 / (2 : ℚ)^100 := by
+  have h137 := QueryScanHistoryRealNumerics.dyadic_mono (by omega : 109 ≤ 137)
+  have h454 := QueryScanHistoryRealNumerics.dyadic_mono (by omega : 109 ≤ 454)
+  have hf := QueryScanFreshNumerics.fresh_budget_small hs
+  have hseed : ProverCommitSeedEvent19.budget q ≤ 1 / (2 : ℚ)^109 :=
+    (ProverCommitSeedEvent19.budget_mono hq).trans (by
+      rw [ProverCommitSeedJoin19.budget_pow64]
+      exact QueryScanHistoryRealNumerics.dyadic_mono (by omega : 109 ≤ 192))
+  have hc := ProverCommitFuelMass22.charge_le.trans
+    (QueryScanHistoryRealNumerics.dyadic_mono (by omega : 109 ≤ 120))
+  have hr := (ProverCommitPrivateMemo40.bounded_charge hq ha).trans
+    (QueryScanHistoryRealNumerics.dyadic_mono (by omega : 109 ≤ 185))
+  have hz : zeroBudget ≤ 1 / (2 : ℚ)^109 := by norm_num [zeroBudget]
+  have upper : 1 / (2 : ℚ)^109 + 1 / (2 : ℚ)^137 + 1 / (2 : ℚ)^454 +
+      QueryScanFreshUnion.freshBudget scan + 2 * ProverCommitSeedEvent19.budget q +
+      2 * ProverCommitFuelMass22.charge +
+      4 * ProverCommitPrivateMemo40.budget q attempts + 16 * zeroBudget ≤
+        32 / (2 : ℚ)^109 := by
+    have pos : 0 ≤ 1 / (2 : ℚ)^109 := by positivity
+    linarith
+  exact upper.trans_lt (by norm_num)
+
+#print axioms raw_pair_zero
+#print axioms eight_zero
+#print axioms total_lt_target
+end R1Z.ProverCommitEntropyCharge40

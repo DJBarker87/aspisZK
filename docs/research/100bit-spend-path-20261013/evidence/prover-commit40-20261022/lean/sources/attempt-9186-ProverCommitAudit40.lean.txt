@@ -1,0 +1,32 @@
+import R1Z.ProverCommitEntropyCharge40
+/-! Final focused audit, not a release or full-manifest replay. -/
+#print axioms R1Z.ProverCommitPrivateMemo40.point_unique
+#print axioms R1Z.ProverCommitPrivateMemo40.source_suffix
+#print axioms R1Z.ProverCommitPrivateMemo40.point_mass
+#print axioms R1Z.ProverCommitPrivateMemo40.list_mass
+#print axioms R1Z.ProverCommitPrivateMemo40.budget_mono
+#print axioms R1Z.ProverCommitPrivateMemo40.context_mass
+#print axioms R1Z.ProverCommitPrivateMemo40.attempts_mass
+#print axioms R1Z.ProverCommitPrivateMemo40.bounded_charge
+#print axioms R1Z.ProverCommitPrivateMemo40.total_lt_target
+#print axioms R1Z.ProverCommitPublicNonce40.zero_guard
+#print axioms R1Z.ProverCommitPublicNonce40.decode_success
+#print axioms R1Z.ProverCommitPublicNonce40.run_os_error
+#print axioms R1Z.ProverCommitPublicNonce40.run_success
+#print axioms R1Z.ProverCommitPublicNonce40.adaptive_prefix
+#print axioms R1Z.ProverCommitPublicNonce40.reservation_uses_public_nonce
+#print axioms R1Z.ProverCommitPublicNonce40.duplicate_stops
+#print axioms R1Z.ProverCommitPublicNonce40.fail_closed
+#print axioms R1Z.ProverCommitPublicNonce40.public_reservation
+#print axioms R1Z.ProverCommitPublicNonce40.public_reads_preserved
+#print axioms R1Z.ProverCommitPublicNonce40.memo_preserved
+#print axioms R1Z.ProverCommitPublicBinding40.grammar_binding
+#print axioms R1Z.ProverCommitPublicBinding40.public_hit_mass
+#print axioms R1Z.ProverCommitPublicBinding40.no_hidden_nonce_freshness
+#print axioms R1Z.ProverCommitPublicBinding40.public_hit_exceeds_private_charge
+#print axioms R1Z.ProverCommitHashClass40.public_preserved
+#print axioms R1Z.ProverCommitHashClass40.field_suffix
+#print axioms R1Z.ProverCommitHashClass40.leaf_suffix
+#print axioms R1Z.ProverCommitEntropyCharge40.raw_pair_zero
+#print axioms R1Z.ProverCommitEntropyCharge40.eight_zero
+#print axioms R1Z.ProverCommitEntropyCharge40.total_lt_target

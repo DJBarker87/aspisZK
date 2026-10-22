@@ -7,6 +7,9 @@ and answers to the adversary's own oracle queries. Timing and other side
 channels are outside the privacy contract. Trust list: P1, P7, TrustedStd,
 E1 (successful OS draws uniform and independent), E2 (atomic durable ledger).
 No OS/fs failure probability or ledger-size restriction is introduced.
+The new conditional arithmetic envelope visibly adds `4*Q*attempts/2^256`
+(two raw seeds, two worlds) and retains `16*(3/2^256)` for zero exhaustion.
+It is proved <2^-100, but is not yet a deployed privacy theorem.
 
 ## Stage 1: private raw-seed memo counting
 
@@ -42,18 +45,24 @@ theorem total_lt_target {q r : Nat} (hq : q ≤ 2^65) (hr : r ≤ 2^64) :
       2 * charge < 1 / (2 : ℚ)^100
 ```
 
-After (new conditional numerical envelope, not yet installed at the endpoint):
+After (final conditional numerical envelope, not yet installed at the endpoint):
 
 ```lean
 theorem total_lt_target {scan q attempts : Nat}
     (hs : scan ≤ 2^65) (hq : q ≤ 2^64) (ha : attempts ≤ 128) :
     1 / (2 : ℚ)^109 + 1 / (2 : ℚ)^137 + 1 / (2 : ℚ)^454 +
       QueryScanFreshUnion.freshBudget scan + 2 * ProverCommitSeedEvent19.budget q +
-      2 * ProverCommitFuelMass22.charge + 4 * budget q attempts <
+      2 * ProverCommitFuelMass22.charge +
+      4 * ProverCommitPrivateMemo40.budget q attempts + 16 * zeroBudget <
         1 / (2 : ℚ)^100
 ```
 
-The existing seedGuess charge is retained separately. The prior part-39
+The existing seedGuess charge is retained separately. `zeroBudget` is exactly
+`3 / (2 : ℚ)^256`, retained conservatively for the two-slice API; eight
+attempts in each of two worlds yield `16 * zeroBudget`. `raw_pair_zero`
+proves the two-slice raw-zero bound; `eight_zero` proves the attempt union
+without independence between attempt events. Transport to the actual
+execution remains an obligation, just as for the memo term. The prior part-39
 conditional nonce memo term is superseded for this route by exact public-query
 preservation; no uniform-nonce assumption is retained. Native execution and
 FS experiment conversion remain to be connected before a deployed headline
@@ -217,3 +226,54 @@ theorem privacy_headline_deployed
       1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
 ```
+
+## Retained zero allowance and final verification
+
+The final numerical envelope additionally keeps the zero-candidate term
+explicit. J9185 compiles `ProverCommitEntropyCharge40.raw_pair_zero`,
+`eight_zero` and `total_lt_target`: exit 0, wall 2.21 s, peak RSS
+4,174,204 KiB, zero swaps, standard axioms only. J9184 was a rejected tactic
+draft, replaced by an exact rational inequality. The bound is conservative:
+the selected API draws two private blocks; the retained per-attempt allowance
+is 3/2^256. OS/fs faults and public nonce duplicates remain exactly coupled,
+with no probabilistic availability assumption. No zero-failure event is
+assumed impossible or silently conditioned away.
+
+J9183 audited the initial 27-theorem cone. Adding the explicit zero allowance
+changed that cone; J9186 is the final focused audit of all **30** new top
+theorems: target `R1Z.ProverCommitAudit40`, exit 0, wall **1.76 s**, peak RSS
+**4,131,900 KiB**, **zero swaps**. Every full `#print axioms` line uses only
+[propext, Classical.choice, Quot.sound]. These are focused proof results,
+not a release/full-manifest result. Failed elaboration receipts are retained
+and never used as accepted theorem evidence.
+
+Task base is `c059caec4afe606fc6f9685851a8989874a8c456`; each attempt records
+its exact source SHA256, retained source overlay, dependency-object
+fingerprint, command, exit status, wall time, peak RSS, swaps, diagnostics
+and full axioms output in `lean/attempts.json` and raw receipts. The final
+read-only source/object audit checks the final local module bytes against the
+installed host modules and all dependency-object hashes used by J9186.
+Only new part-40 modules were installed; no inherited shared source/object
+was overwritten. Replaced part-40 drafts were snapshotted by attempt.
+
+All compiler invocations used the pinned Env J launcher on the build host,
+Lean -M7000, MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64.
+Observed reservation was 24 GiB populated plus this 8 GiB scope, below 55 GiB.
+No uncapped build, local Lean compile, Rust/Kani, Aeneas, SBF build or unchanged
+full regression ran. No full frozen manifest was launched past the failed
+public-freshness preflight. Existing runtime/ELF evidence is reused only for
+unchanged artifacts, not as proof of the missing source join.
+
+All **491** tracked files under crates/programs match the task base byte for
+byte (`shipped-sources-unchanged.json`). No such file changed; the shipped-file
+rule therefore does not trigger a three-ELF rebuild. No binary, .olean, ELF,
+tarball or local target directory was added. No wallet/account keys or funds
+were created, modified or removed. `git diff --check` passes. No push or merge
+was performed.
+
+Stage commits: `d2f87886c` (private memo counting), `e92f5e7ac` (public nonce
+prefix, hash classification and false old freshness interface); the final
+commit contains the retained zero allowance, final audit and receipts.
+Next unused assigned Env J attempt: **J9187**. No premise was removed from
+the deployed endpoint; the exact next interface is the public-prefix-aware
+conditional ROM law described above. The target remains **not yet established**.
