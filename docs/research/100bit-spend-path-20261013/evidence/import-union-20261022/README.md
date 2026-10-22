@@ -116,3 +116,8 @@ IU-353 found the symbolic and concrete forms in
 uses the same locally proved projection lemma; the success composition uses
 `uncurry_apply_pair`. Focused IU-354 passes in 5.26 s. All statements and the
 12-cell model derivation remain unchanged.
+
+IU-370 found the same iterator-result pair in the research-tree module
+`AspisR1TerminalDigestBindingCandidate.LoopExact` (not `lean-candidates`). Its
+two existing next-result simplifications now use `uncurry_apply_pair`;
+focused IU-371 passes. Fuel induction and arithmetic are unchanged.

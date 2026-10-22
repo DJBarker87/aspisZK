@@ -141,7 +141,7 @@ theorem loop_success_fuel
       refine ⟨base, ?_, hbase, ?_⟩
       · change add_digest_binding_loop iter base selector opened start expected rightTweak = .ok base
         rw [add_digest_binding_loop.eq_def]
-        simp only [hnext, bind_tc_ok]
+        simp only [hnext, bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
       · intro j
         have hj : j.val < iter.start.val := by omega
         exact hprefix j hj
@@ -251,7 +251,7 @@ theorem loop_success_fuel
       refine ⟨final, ?_, hfinalCanonical, ?_⟩
       · change add_digest_binding_loop iter base selector opened start expected rightTweak = .ok final
         rw [add_digest_binding_loop.eq_def]
-        simp only [hnext, bind_tc_ok]
+        simp only [hnext, bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
         by_cases hright : rightTweak
         · cases hinc : (lane + 1#usize : Result Usize) with
           | fail e => simp [targetAfterLane, hright, hinc] at htarget
