@@ -229,3 +229,12 @@ No push or merge occurred. Trust list remains P1, P7, TrustedStd, E1, E2;
 P6 native/source boundaries remain explicit evidence boundaries. D143's
 observables and exclusion of timing/other side channels remain the announced
 scope. **Target not yet established.**
+
+Stage commits: `342401b00` (candidate/16-step owner), `4469c4ad7` (ordered
+publication caller lemmas and native gates), `c780848eb` (concrete source
+padding, source-interface diagnostic and focused audit). The final reporting
+commit adds this handoff note. Raw rejected compiler logs and generated
+external templates retain their original whitespace; a base-to-final
+`git diff --check` reports only those evidence bytes (two template EOF blank
+lines and three compiler-log trailing spaces). No proof/source whitespace
+error is suppressed, and raw evidence is not rewritten to clear the check.
