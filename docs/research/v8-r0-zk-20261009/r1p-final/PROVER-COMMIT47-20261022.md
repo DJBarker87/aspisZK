@@ -1,6 +1,6 @@
-# Part 47: concrete simulator payload byte image
+# Part 47: owned y1 evaluation and byte image; native-generator target remains open
 
-Work in progress. Target not yet established. Branch `codex/cx-prover-commit47-20261022`.
+**Target not yet established.** Branch `codex/cx-prover-commit47-20261022`.
 
 Scope: concrete `sim::semantic` and `sim::opening` bytes, starting with y1,
 then complete native simulator payload equality. Stop before FSExperiments
@@ -124,3 +124,144 @@ type mismatch (J9786). The replacement proves a pure `BitVec 32` byte lemma
 and only then transports the scalar wrapper; J9788 passes. Rejected drafts,
 including their nonaccepted axiom output, remain in the receipts and are
 never imported as accepted evidence.
+
+## Stage 4: pointwise y1 byte composition and stopping boundary
+
+J9798 checks `ProverCommitY1Bytes47.component` / `every_lane`: for every
+raw coefficient family, raw x/y pair, and each of the 29 lanes, the normalized
+owned evaluator returns a canonical value whose complete 32-byte cell decodes
+to the exact wide natural-message evaluation. The source range comes from
+constructor normalization and the proved arithmetic/basis/evaluator owners.
+No codec-success or model-image premise is supplied. This establishes the
+**reference's** pointwise y1 byte image. It is not a theorem that the actual
+`sim::opening` caller executes that reference or that its coefficient/tape
+provenance is the complete simulator's mathematical payload.
+
+An attempted larger 29-lane encoding/compacting composition is deliberately
+not accepted. J9793–J9797 are stopped with exit 143 after respectively
+2:09.78, 2:07.76, 0:26.01, 2:56.63 and 1:28.25 (zero swaps, roughly 4 GiB
+RSS). Buffered diagnostics exposed an ambiguous E carrier in two drafts;
+other interrupted runs produce no verdict. Import/opacity instrumentation
+and a smaller existential pointwise statement replace that attempt. J9798
+passes in 1.73 s at 3981524 KiB RSS. No increased Lean resource option,
+larger memory cap, unchanged retry, or success claim for an interrupted
+aggregate is used. The abandoned aggregate source snapshots are retained.
+
+**Demonstrated remaining obstruction and next deliverable.** The exact native
+helpers still fail extraction at the loop/iterator interfaces described
+above. Their recursive references now have complete arithmetic/value/byte
+proofs, but the contextual native-loop-to-reference binding has not been
+installed. Next: prove those native per-transition/iteration bindings under
+the permitted pure std iterator contracts, connect the actual source
+coefficient and tape projections, and install y1 in the publication fields.
+Then prove the remaining semantic/opening/query/leaf components and the
+complete native simulator output equality. No native/source equality law is
+added as a hypothesis to bypass this obligation. The other components and
+complete output equality requested in part 47 remain open.
+
+The final audit uses J9799, the last number in this task's allocated range.
+No attempt outside the allocation or in the side-channel audit's 9800–9899
+range is used. No FSExperiments conversion, shippedProverExperiment,
+WholeRunJoin, or endpoint premise-removal work is started.
+
+D159's L1 observable is inside the required privacy contract. This work
+proves no side-channel privacy law and does not adopt the superseded D143
+timing exclusion. No concurrent side-channel file is edited. The retained
+conditional endpoint below does not establish the enlarged D159 contract
+until its missing observable/refinement joins are supplied.
+
+## Validation scope and trust
+
+All builds run on the dedicated host. Scopes use MemoryHigh=6G, MemoryMax=8G,
+MemorySwapMax=0, TasksMax=64; Lean uses -M7000. Optimized Rust extraction
+uses --release and -j4 with RUSTFLAGS='-C link-arg=-Wl,--threads=4'. Kani
+work is symbolic primitive checking, not an unoptimized arithmetic release
+gate. Reservations are checked against the 55 GiB host limit; unavailable
+slots wait before compilation. No local Lean or cold dependency build runs.
+
+No shipped crates/programs file changes. The shipped-file rule is not
+triggered; no ELF rebuild runs. Existing ELF/runtime evidence is reused only
+for unchanged artifacts and does not certify a new source join. This is
+focused proof evidence, not a coherent release replay. No unchanged full
+regression or complete frozen manifest runs while the source image and
+experiment joins remain open.
+
+Trust remains P1, P7, TrustedStd, E1 and E2, with P6 explicit as the native
+source/tool/binding boundary. No std field, cryptographic assumption,
+interior-mutability law, allocation-totality law, adversary restriction,
+nonce law, ledger cap, or caller-success premise is added. The source
+representability scope from D146 is not silently changed or installed as an
+endpoint premise. No wallet/key/fund operation, push, or merge occurs.
+
+The exact section-6 target, source SHA, dependency fingerprint, command, exit,
+wall time, peak RSS, swaps, source base/overlay revision, complete axiom lines
+and failed-draft errors are in `../../100bit-spend-path-20261013/evidence/
+prover-commit47-20261022/lean/attempts.json` and `lean/receipts/`. Native and
+extraction receipts, command/limit records, source-body bindings and input
+pins are adjacent. Historical J9700 is a prelaunch refusal, never attributed
+to this task; J9747 is retired before any launcher/compile.
+
+The narrow release extraction overwrote the checked LLBC filename. The
+checked generated Lean inputs, exact flags, tool hashes and text receipts
+remain retained; no hash of an unavailable original checked LLBC is claimed.
+LLBC artifacts themselves and all binaries/objects remain off-branch.
+
+## Verbatim endpoint before/after: unchanged
+
+The complete endpoint module, including every section binder, definition,
+and theorem proof, is byte-identical in `endpoint/before.lean.txt` and
+`endpoint/after.lean.txt` in the evidence directory. The following verbatim
+excerpts retain the x/rust binders and complete theorem statement. No D146
+domain restriction is installed before the source join exists; x and rust
+still have their original quantifiers. No conclusion, failure event or bound
+is changed, and RustProverRefinement remains explicit.
+
+Before:
+
+```lean
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+local notation "decode" => ownedDecode
+
+variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
+  [Fintype rust.RealRand] [Nonempty rust.RealRand]
+  [Fintype rust.IdealRand] [Nonempty rust.IdealRand]
+  (observer_program : rust.Adversary → View K CommitHandle Aux R1Bat →
+    List (List UInt8 × OracleAnswer) → OProg)
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+After:
+
+```lean
+variable (outputs : Statement K CommitHandle → Challenges K → Aux)
+    (x : Statement K CommitHandle)
+local notation "h" => PhaseWireLog2Bin.honest input
+local notation "decode" => ownedDecode
+
+variable (rust : FSExperiments K CommitHandle Aux R1Bat F)
+  [Fintype rust.RealRand] [Nonempty rust.RealRand]
+  [Fintype rust.IdealRand] [Nonempty rust.IdealRand]
+  (observer_program : rust.Adversary → View K CommitHandle Aux R1Bat →
+    List (List UInt8 × OracleAnswer) → OProg)
+
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+
