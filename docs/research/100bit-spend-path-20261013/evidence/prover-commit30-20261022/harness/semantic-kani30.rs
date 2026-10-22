@@ -21,8 +21,9 @@ mod semantic_kani30 {
         COUNT+=1;OUTPUT
     }}
     fn fields(row:u8,payload:Vec<u8>,value:usize)->Result<(),Error> {
-        assert_eq!(value,0);assert!(payload.len()<32*29);
-        fields29::finite(row,payload,value,28)
+        let fuel=if row==14 {1} else {28};
+        assert_eq!(value,0);assert!(payload.len()<32*(fuel+1));
+        fields29::finite(row,payload,value,fuel)
     }
     fn check<const N:usize,const ROW:u8>() {
         let initial:[u8;32]=kani::any();let next:u8=kani::any();

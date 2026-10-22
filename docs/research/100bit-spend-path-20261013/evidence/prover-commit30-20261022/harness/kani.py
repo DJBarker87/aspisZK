@@ -7,7 +7,8 @@ lane=int(os.environ.get('PROVER_KANI_LANE','0')); assert lane in range(3)
 worker_lock=(H/f'rust-worker-lane{lane}.lock').open('a')
 fcntl.flock(worker_lock,fcntl.LOCK_EX)
 name,target=sys.argv[1:3]
-os.chdir(H/'src')
+source=H/os.environ.get('PROVER_SOURCE','src')
+os.chdir(source)
 os.environ.update(PATH='/home/dombarker/.cargo/bin:'+os.environ['PATH'], CARGO_TARGET_DIR=str(H/('kani-contract-target' if lane==0 else f'kani-lane{lane}-target')), CARGO_BUILD_JOBS='4', CARGO_NET_OFFLINE='true', RUSTFLAGS='-C link-arg=-Wl,--threads=4')
 def reservation():
     caps=[]
@@ -22,7 +23,7 @@ while sum(x['bytes'] for x in caps)+8*2**30 > 55*2**30:
     print('Reservation hold:', sum(x['bytes'] for x in caps)/2**30, '+ 8 GiB', flush=True)
     time.sleep(30)
     caps=reservation()
-(H/(name+'-inputs.json')).write_text(json.dumps(dict(reservations=caps,source_revision=(H/'revision.txt').read_text().strip(),source_hashes={str(p.relative_to(H/'src')):hashlib.sha256(p.read_bytes()).hexdigest() for p in list((H/'src/crates/aspis-prover/src').glob('*.rs'))+list((H/'src/crates/aspis-core/src').rglob('*.rs'))+list((H/'src/crates/aspis-r1-cost-probe/src').glob('*.rs'))+[H/'src/Cargo.lock',H/'src/crates/aspis-prover/Cargo.toml',H/'src/crates/aspis-core/Cargo.toml']}),indent=2)+'\n')
+(H/(name+'-inputs.json')).write_text(json.dumps(dict(reservations=caps,source_revision=(H/'revision.txt').read_text().strip(),source_hashes={str(p.relative_to(source)):hashlib.sha256(p.read_bytes()).hexdigest() for p in list((source/'crates/aspis-prover/src').glob('*.rs'))+list((source/'crates/aspis-core/src').rglob('*.rs'))+list((source/'crates/aspis-r1-cost-probe/src').glob('*.rs'))+[source/'Cargo.lock',source/'crates/aspis-prover/Cargo.toml',source/'crates/aspis-core/Cargo.toml']}),indent=2)+'\n')
 cmd=['cargo','kani','--no-assertion-reach-checks','-j','4','-p','aspis-r1-cost-probe','--lib','--exact','--harness',target,'-Z','function-contracts','-Z','stubbing','-Z','unstable-options','--output-format','terse','--cbmc-args','--unwinding-assertions']
 bits=os.environ.get('KANI_OBJECT_BITS')
 if bits:
