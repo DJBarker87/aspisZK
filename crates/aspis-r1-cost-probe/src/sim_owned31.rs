@@ -32,10 +32,81 @@ pub fn append_nodes(mut out:Vec<u8>,nodes:Vec<u8>,cap:usize)->Result<Vec<u8>,Err
     Ok(out)
 }
 
+/// Exact limb serialization; avoids Charon's mutable-chunk/zip lowering.
+pub fn wide_bytes(value:E)->[u8;32] {
+    let limbs=value.to_limbs();let mut output=[0;32];let mut i=0;
+    while i<8 {
+        let bytes=limbs[i].to_le_bytes();let mut j=0;
+        while j<4 {output[4*i+j]=bytes[j];j+=1;}i+=1;
+    }
+    output
+}
+
+pub fn leaf_pair(mut leaves1:BTreeMap<usize,(Vec<u8>,[u8;32])>,
+    mut leaves2:BTreeMap<usize,(Vec<u8>,[u8;32])>,u:usize,
+    c1:Vec<u8>,c2:Vec<u8>,salt1:[u8;32],salt2:[u8;32])
+    ->(BTreeMap<usize,(Vec<u8>,[u8;32])>,BTreeMap<usize,(Vec<u8>,[u8;32])>) {
+    leaves1.insert(u,(c1,salt1));leaves2.insert(u,(c2,salt2));(leaves1,leaves2)
+}
+pub fn folded_leaf(mut leaves:BTreeMap<usize,(Vec<u8>,[u8;32])>,u:usize,
+    value:Vec<u8>,salt:[u8;32])->BTreeMap<usize,(Vec<u8>,[u8;32])> {
+    leaves.insert(u,(value,salt));leaves
+}
+
+pub fn put_cell<T:Copy>(mut values:[[T;29];4],row:usize,lane:usize,value:T)->[[T;29];4] {
+    let mut selected=values[row];selected[lane]=value;values[row]=selected;values
+}
+
+fn base_values(base:Vec<[M31;1024]>,u:usize,lane:usize,mut values:[[E;29];4])->[[E;29];4] {
+    if lane==26 {return values;}
+    let v=encode_at(&base[lane],u);
+    values=put_cell(values,0,lane,E::from_m31(v[0]));
+    values=put_cell(values,1,lane,E::from_m31(v[1]));
+    values=put_cell(values,2,lane,E::from_m31(v[2]));
+    values=put_cell(values,3,lane,E::from_m31(v[3]));
+    base_values(base,u,lane+1,values)
+}
+fn ext_values(ext:Vec<[K;1024]>,u:usize,lane:usize,mut values:[[E;29];4])->[[E;29];4] {
+    if lane==29 {return values;}
+    let v=encode_at(&ext[lane-26],u);
+    values=put_cell(values,0,lane,E::from_qm31(v[0]));
+    values=put_cell(values,1,lane,E::from_qm31(v[1]));
+    values=put_cell(values,2,lane,E::from_qm31(v[2]));
+    values=put_cell(values,3,lane,E::from_qm31(v[3]));
+    ext_values(ext,u,lane+1,values)
+}
+
+fn c1_bytes(values:[[E;29];4],at:usize,mut output:Vec<u8>)->Vec<u8> {
+    if at==108 {return output;}
+    let slot=at/27;let column=at%27;
+    let lane=if column<26 {column} else {28};
+    let count=if lane<26 {4} else {16};
+    output.extend_from_slice(&wide_bytes(values[slot][lane])[..count]);
+    c1_bytes(values,at+1,output)
+}
+fn c2_bytes(values:[[E;29];4],at:usize,mut output:Vec<u8>)->Vec<u8> {
+    if at==8 {return output;}
+    output.extend_from_slice(&wide_bytes(values[at/2][26+at%2])[..16]);
+    c2_bytes(values,at+1,output)
+}
+
+// Instrumentation boundary: exact operations on the native SimTimes, retained
+// opaquely because the extractor cannot symbolically evaluate f64 addition.
+fn empty_times()->SimTimes {SimTimes::default()}
+fn record_time(mut times:SimTimes,start:std::time::Instant,phase:u8)->SimTimes {
+    let elapsed=start.elapsed().as_secs_f64();
+    match phase {
+        0=>times.draw+=elapsed,1=>times.p_r1+=elapsed,2=>times.tape=elapsed,
+        3=>times.semantic=elapsed,4=>times.opening=elapsed,
+        5=>times.program=elapsed,_=>times.total=elapsed,
+    }
+    times
+}
+
 pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<Simulated,Error> {
     let variant=Variant::S2;
     let start=std::time::Instant::now();
-    let mut times=SimTimes::default();
+    let mut times=empty_times();
     let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;
     for k in 0..ATTEMPT_CAP {
         // 1–2. Coins and the draw.
@@ -48,27 +119,27 @@ pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<S
         let roots=[root_coins.coin(),root_coins.coin(),root_coins.coin()];
         let state=RefCell::new(CoinState{coins:answers,next:0,record:None,collision:false});
         let drawn=walk(CoinOracle(&state),&public_bytes,&Records::placeholder()?,variant);
-        times.draw+=t.elapsed().as_secs_f64();
+        times=record_time(times,t,0);
         let drawn=match drawn {Ok(d) if state.borrow().next==115 && d.z[0]!=d.z[1]=>d,_=>continue};
         // 3. P_R1 on the drawn challenges.
         let t=std::time::Instant::now();
         let check=R1PublicChallenges{alpha:core::array::from_fn(|i|drawn.sem[15+i]),z:[[drawn.z[0].x,drawn.z[0].y],[drawn.z[1].x,drawn.z[1].y]],
             gamma:drawn.gamma,kappa:drawn.kappa,alpha0:drawn.alpha0,alpha1:drawn.alpha1,queries:drawn.queries.to_vec()};
         let (accepted,_)=aspis_z4b_probe::p_r1_check(&check);
-        times.p_r1+=t.elapsed().as_secs_f64();
+        times=record_time(times,t,1);
         if !accepted {continue;}
         // 4. The tape.
         let t=std::time::Instant::now();
         let tau=tape(&public_bytes,variant,&mut tape_coins)?;
-        times.tape=t.elapsed().as_secs_f64();
+        times=record_time(times,t,2);
         // 5. The view.
         let t=std::time::Instant::now();
         let (semantic_records,columns)=semantic(public,&tau,&drawn,&roots[1],variant,ablation)?;
-        times.semantic=t.elapsed().as_secs_f64();
+        times=record_time(times,t,3);
         let t=std::time::Instant::now();
         let mut view=opening(&columns,&tau,&drawn,variant)?;
         view.semantic=semantic_records;
-        times.opening=t.elapsed().as_secs_f64();
+        times=record_time(times,t,4);
         // 6. Commitment programming and serialisation.
         let t=std::time::Instant::now();
         let table=RefCell::new((Table::new(),false));
@@ -79,11 +150,10 @@ pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<S
         for &u in &drawn.queries {
             let u=u as usize;
             let mut values=[[E::ZERO;29];4];
-            for l in 0..26 { let v=encode_at(&base[l],u); for s in 0..4 {values[s][l]=E::from_m31(v[s]);} }
-            for l in 26..29 { let v=encode_at(&ext[l-26],u); for s in 0..4 {values[s][l]=E::from_qm31(v[s]);} }
-            let mut c1v=Vec::with_capacity(480);let mut c2v=Vec::with_capacity(128);
-            for s in 0..4 { for l in (0..26).chain(core::iter::once(28)) {c1v.extend_from_slice(&values[s][l].to_le_bytes()[..if l<26 {4} else {16}]);} }
-            for s in 0..4 { for l in 26..28 {c2v.extend_from_slice(&values[s][l].to_le_bytes()[..16]);} }
+            values=base_values(base.clone(),u,0,values);
+            values=ext_values(ext.clone(),u,26,values);
+            let c1v=c1_bytes(values,0,Vec::with_capacity(480));
+            let c2v=c2_bytes(values,0,Vec::with_capacity(128));
             opened.insert(u,(values,c1v,c2v));
         }
         let mut folded:BTreeMap<usize,Vec<u8>>=BTreeMap::new();
@@ -93,14 +163,14 @@ pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<S
         let mut i=0;
         while i<opened_entries.len() {
             let (u,(_,c1v,c2v))=opened_entries[i].clone();
-            leaves1.insert(u,(c1v,commit_coins.coin()));
-            leaves2.insert(u,(c2v,commit_coins.coin()));i+=1;
+            let salt1=commit_coins.coin();let salt2=commit_coins.coin();
+            (leaves1,leaves2)=leaf_pair(leaves1,leaves2,u,c1v,c2v,salt1,salt2);i+=1;
         }
         let folded_entries=entries(folded.clone());
         let mut i=0;
         while i<folded_entries.len() {
             let (v,fv)=folded_entries[i].clone();
-            leavesf.insert(v,(fv,commit_coins.coin()));i+=1;
+            leavesf=folded_leaf(leavesf,v,fv,commit_coins.coin());i+=1;
         }
         let (p1,r1)=program_tree(&table,&mut commit_coins,merkle::C1_TAG,&leaves1,roots[0])?;
         let (p2,r2)=program_tree(&table,&mut commit_coins,merkle::C2_TAG,&leaves2,roots[1])?;
@@ -144,8 +214,8 @@ pub fn sim_e_ablated(public:Public<'_>,seed:[u8;32],ablation:Ablation)->Result<S
         let transcript=state.record.unwrap();
         let transcript_reads=transcript.len();
         table=merge(table,entries(transcript))?;
-        times.program=t.elapsed().as_secs_f64();
-        times.total=start.elapsed().as_secs_f64();
+        times=record_time(times,t,5);
+        times=record_time(times,start,6);
         return Ok(Simulated{proof:out,table,attempts:k+1,transcript_reads,commitment_reads:r1+r2+rf,times});
     }
     Err(Error::AttemptsExhausted)
