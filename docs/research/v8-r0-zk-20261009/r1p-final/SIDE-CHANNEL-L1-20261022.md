@@ -1,6 +1,6 @@
 # Proof-account route L1 closure — 2026-10-22
 
-Status: work in progress; target not yet established.
+Status: partial model/control handoff; native L1 target not yet established.
 
 Scope: D162 public proof-account nonce → `generate_for_mask_nonce` →
 `prove_masked_retrying_with`, S2, native prover/r1p-check/private-leaf-salts.
@@ -90,3 +90,87 @@ missing match simplification. J9870 reached the Lean memory limit (peak
 or with a larger cap. Replaced it with generic `pair_bad_exact`, then applied
 the existing answer-cardinality theorem symbolically. J9871 exposed one
 rational normalization step, fixed in J9872. Raw logs retain all failures.
+
+## Stage 4 — joint TV tools, numerical candidate and the open source join
+
+`SideChannelL1JointCoupling.dist_le_bad` proves the actual finite rational
+TV inequality on arbitrary observation types. `joint_union_bound` charges
+each member of a named bad-event family once. These are generic mathematical
+tools: their agreement and per-event bounds have **not** been instantiated
+for a complete native L1 record.
+
+The retained part-40 numerical envelope is below 2^-100. The explicit
+worst-budget two-witness *candidate*, obtained by doubling that envelope,
+also satisfies the target:
+
+```
+2 * (2^-109 + 2^-137 + 2^-454 + 2^-118 + 2*2^-192
+     + 48/(2147483647)^5 + 2^-183 + 48*2^-256) < 2^-100.
+```
+
+This is `two_witness_candidate_numeric`, not a native TV theorem. The
+terms come from the retained model/pole, query, seed, mask-fuel, private-memo
+and entropy allowances. Their native joint event assignment remains open;
+they must not be added again as separate L1 penalties. No bound or exact
+excess for the complete native L1 law has been established here.
+
+The module also gives a concrete two-bit countermodel to a **proof
+inference**: a public bit `w xor coin` has identical laws for both witnesses,
+and count `if coin then 1 else 2` is witness-independent. Observing them
+jointly reveals w with certainty. This is proved in Lean, including test
+masses 1 and 0. It is not a valid-spend pair, a SHA preimage, or evidence that
+the actual TLS implementation leaks in this way. No actual TLS witness leak
+or full valid-spend counterexample was found; no TLS field was dropped.
+
+J9876 passes (wall 2.01s, peak 4,172,976 KiB, swaps 0). J9873 failed only on
+ambiguous `dist`; J9874 passed before the final numerical addition. J9875
+then connected prefix events to the actual returned record-list positions:
+`actual_entry_iff` and `actual_entry_mass` characterize all eight entered
+iterations, and all-rejected control really reaches cap exhaustion. J9877
+adds explicit RNG-status/count, checker-call, failure-origin and return-count
+projections. J9878 rebuilds its retry-law dependent. These focused source/
+dependency changes are the reasons for the reruns.
+
+### Existing public machinery reused and its limits
+
+- Parts 39–40: `ProverCommitPublicNonce40.public_reservation` applies the
+  exact shared-ledger coupling, for unrestricted public nonce and arbitrary
+  finite retained ledger. Public binding/address memo hits are not rare
+  events and have no new reservation-guess penalty.
+- Part 42: the two-private-block owner/model equality is the entropy
+  source boundary used above. `ProverCommitGlobalRun42.continuation` transports
+  an arbitrary observer of the normalized read vector **for one witness**.
+  It does not prove equality of two witnesses' full L1 histories.
+- Part 46: `ProverCommitFinalize46.finish_decode` and
+  `programming_publication` preserve proof/table/flag finalization. Neither
+  statement supplies a full native L1 event producer. D160's source-view
+  byte-image work remains with part 47; its files were not edited.
+
+### What prevents the requested closure
+
+Priority 1 is only partly closed: the richer event grammar/reference and
+retry control are checked, but native per-callee event refinement is missing.
+Priority 2 (the concrete joint coupling) is open. In particular:
+
+1. Construct the native L1 producer and prove its event/refinement equation,
+   including partial `write_all` operations, exact error origins, honest
+   guard invariants, post-gamma allocation/error prefixes, CHECK_TIMES pushes
+   and full ordered trace bytes. An arbitrary `Owner` is not that theorem.
+2. Extend the witness-mask transport to **jointly** preserve successful mask
+   values, rejection/refill counts, retained ROM/ledger state and every
+   rejected-attempt TLS prefix. Entropy-prefix symmetry is not sufficient for
+   the later masked transcript. Do not infer this from marginal hiding.
+3. Install the equal-circle and query-exhaustion abort branches and their
+   TLS/checker prefixes in the same source coupling. If shared challenge
+   blocks couple these events exactly, prove it there; if a new bad event is
+   needed, provide its conditional bound and charge it once. No new rare-event
+   allowance is assumed here.
+4. Join part 47's native byte image to the published proof/oracle view and
+   the complete L1 record, then perform the FS conversion. Initial TLS values
+   must be retained/conditioned as prior observable history, alongside the ROM
+   and ledger, rather than reset at the start of each proof.
+
+These are missing proofs, not new cryptographic or runtime trust items.
+No `FullRecordAgreement`/similar premise has been installed to relabel the
+requested conclusion as an assumption. The generic TV theorem is deliberately
+not advertised as the requested concrete `SideChannelL1JointCoupling` result.

@@ -58,6 +58,67 @@ theorem callback_abort_blocks_next (owner : Owner State Proof) (initial : State)
   rw [stop] at retry
   cases retry
 
+/-- Entered iterations are exactly the source owner's returned record
+positions. This connects the conditional event to executed control, rather
+than merely defining an abstract rejection-prefix probability. -/
+theorem run_length_gt_iff (owner : Owner State Proof) (initial : State)
+    (fuel index k : Nat) :
+    k < (run owner fuel index (stateAt owner initial index)).1.attempts.length ↔
+      k < fuel ∧ ∀ j, index ≤ j → j < index+k →
+        (recordAt owner initial j).result = .retry := by
+  induction fuel generalizing index k with
+  | zero => simp only [run,List.length_nil,Nat.not_lt_zero,false_and]
+  | succ fuel ih =>
+    have step : owner index (stateAt owner initial index) =
+        (recordAt owner initial index,stateAt owner initial (index+1)) := rfl
+    cases k with
+    | zero =>
+      simp only [run,step]
+      cases hr : (recordAt owner initial index).result <;>
+        simp only [List.length_cons,List.length_nil,Nat.zero_lt_succ,Nat.add_zero,true_and]
+      all_goals
+        constructor
+        · intro _ j lower upper; omega
+        · intro _; trivial
+    | succ k =>
+      simp only [run,step]
+      cases hr : (recordAt owner initial index).result with
+      | done proof =>
+        simp only [List.length_cons,List.length_nil]
+        constructor
+        · intro h; omega
+        · rintro ⟨_,prior⟩
+          have impossible := prior index (Nat.le_refl _) (by omega)
+          rw [hr] at impossible
+          cases impossible
+      | stop e =>
+        simp only [List.length_cons,List.length_nil]
+        constructor
+        · intro h; omega
+        · rintro ⟨_,prior⟩
+          have impossible := prior index (Nat.le_refl _) (by omega)
+          rw [hr] at impossible
+          cases impossible
+      | retry =>
+        simp only [List.length_cons,Nat.succ_lt_succ_iff]
+        rw [ih (index+1) k]
+        constructor
+        · rintro ⟨small,prior⟩
+          refine ⟨by omega,?_⟩
+          intro j lower upper
+          by_cases same : j=index
+          · simpa only [same] using hr
+          · exact prior j (by omega) (by omega)
+        · rintro ⟨small,prior⟩
+          exact ⟨by omega,fun j lower upper => prior j (by omega) (by omega)⟩
+
+theorem actual_entry_iff (owner : Owner State Proof) (initial : State) (k : Fin 8) :
+    k.val < (run owner 8 0 initial).1.attempts.length ↔
+      rejectionPrefix owner initial k.val := by
+  have h := run_length_gt_iff owner initial 8 0 k.val
+  simpa only [stateAt,Nat.zero_add,Nat.zero_le,forall_const,and_iff_right k.isLt,
+    rejectionPrefix] using h
+
 abbrev mass [Fintype Sample] (event : Sample → Prop) := R0Z.FsAbortBounds.mass event
 
 /-- Zero-mass conditioning uses the conventional value zero; the product
@@ -124,6 +185,14 @@ theorem all_rejected_exhausts (owner : Owner State Proof) (initial : State)
     have rest := ih (index+1) (fun j hj => prior j (by omega))
     exact ⟨rest.1,congrArg Nat.succ rest.2⟩
 
+theorem actual_entry_mass [Fintype Sample] (owners : Sample → Owner State Proof)
+    (initial : Sample → State) (k : Fin 8) :
+    mass (fun s => k.val < (run (owners s) 8 0 (initial s)).1.attempts.length) =
+      mass (C owners initial (k.val+1)) := by
+  apply mass_congr
+  intro s
+  simpa only [C,Nat.add_sub_cancel] using actual_entry_iff (owners s) (initial s) k
+
 /-- All eight rejections, not a power of one unconditional rejection mass. -/
 theorem exhaustion_prefix (owner : Owner State Proof) (initial : State) :
     reached owner initial 8 ↔ ∀ k : Fin 8, (recordAt owner initial k.val).result = .retry := by
@@ -140,11 +209,14 @@ theorem history_hazard [Fintype Sample] (history prior event : Sample → Prop) 
 #print axioms reached_iff
 #print axioms entered_rejection_advances
 #print axioms callback_abort_blocks_next
+#print axioms run_length_gt_iff
+#print axioms actual_entry_iff
 #print axioms conditional_identity
 #print axioms success_hazard
 #print axioms abort_hazard
 #print axioms entry_law
 #print axioms all_rejected_exhausts
+#print axioms actual_entry_mass
 #print axioms exhaustion_prefix
 #print axioms history_hazard
 end R1Z.SideChannelRetryLaw

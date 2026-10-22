@@ -89,6 +89,24 @@ def run {State Proof : Type} (owner : Owner State Proof) : Nat → Nat → State
 
 def events {Proof : Type} (r : Run Proof) := r.attempts.flatMap Attempt.events
 
+/-- Requested L1 projections are derived from the retained event order,
+so a later take cannot erase earlier records from the per-run observation. -/
+def rngStatuses {Proof : Type} (r : Run Proof) : List IOStatus :=
+  (events r).filterMap (fun | .rngReturn status => some status | _ => none)
+
+def rngCallCount {Proof : Type} (r : Run Proof) := (rngStatuses r).length
+
+def checkerInvocations {Proof : Type} (r : Run Proof) : Nat :=
+  ((events r).filterMap (fun | .call .checker n => some n | _ => none)).length
+
+def failures {Proof : Type} (r : Run Proof) : List Failure :=
+  (events r).filterMap (fun | .failure origin => some origin | _ => none)
+
+def returnedAttempts {Proof : Type} (r : Run Proof) : Option Nat :=
+  match r.result with
+  | .done published => some published.attempts
+  | _ => none
+
 def observedTLS {Proof : Type} (initial : TLS) (r : Run Proof) := replayTLS initial (events r)
 
 /-- The richer owner erases to the existing source-control owner, preserving
@@ -157,6 +175,10 @@ theorem tls_retained {Proof : Type} (initial : TLS) (r : Run Proof)
     (noEvents : events r = []) : observedTLS initial r = initial := by
   simp only [observedTLS,noEvents,replayTLS,List.foldl_nil]
 
+theorem returned_count_success {Proof : Type} (r : Run Proof)
+    (published : ProverCommitRetry34.Published Proof) (success : r.result = .done published) :
+    returnedAttempts r = some published.attempts := by simp only [returnedAttempts,success]
+
 theorem tls_trace_push (s : TLS) (x : TraceValue) :
     replayTLS s [.tracePush x] = ⟨s.values ++ [x],s.checks⟩ := rfl
 
@@ -170,6 +192,7 @@ theorem tls_check_push (s : TLS) (accepted : Bool) :
 #print axioms attempt_cap
 #print axioms callback_rejected_stops
 #print axioms tls_retained
+#print axioms returned_count_success
 #print axioms tls_trace_push
 #print axioms tls_check_push
 end R1Z.SideChannelL1AttemptRecord
