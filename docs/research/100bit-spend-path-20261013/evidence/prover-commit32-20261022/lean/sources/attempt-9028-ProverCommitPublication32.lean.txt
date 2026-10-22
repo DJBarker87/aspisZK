@@ -1,0 +1,58 @@
+import AspisR1Publish32.Funs
+import AspisR1IndexInsert32.Funs
+set_option autoImplicit false
+namespace R1Z.ProverCommitPublication32
+open Aeneas Aeneas.Std Result
+abbrev Bytes := alloc.vec.Vec U8
+abbrev IndexMap := alloc.vec.Vec (Usize × Bytes)
+
+/-- A bounded vector cursor cannot wrap before its last element. -/
+theorem next_cursor (table : IndexMap) (pos : Usize)
+    (h : pos.val < table.val.length) :
+    (Usize.wrapping_add pos 1#usize).val = pos.val+1 := by
+  rw [Usize.wrapping_add_val_eq]
+  have bound := table.property
+  have size := Usize.max_succ_eq_pow
+  have one : (1#usize).val = 1 := by scalar_tac
+  have nowrap : pos.val+1 < UScalar.size .Usize := by
+    change pos.val+1 < 2^System.Platform.numBits
+    omega
+  rw [one, Nat.mod_eq_of_lt nowrap]
+
+/-- Lookup on every finite owned table terminates without an indexing error.
+Sortedness is needed for the map interpretation, but not for this totality fact. -/
+theorem lookup_total (fuel : Nat) (table : IndexMap) (key pos : Usize)
+    (hi : pos.val ≤ table.val.length) (hf : table.val.length-pos.val < fuel) :
+    ∃ value, AspisR1Publish32.sim.owned32.index_get table key pos = ok value := by
+  induction fuel generalizing pos with
+  | zero => omega
+  | succ fuel ih =>
+    rw [AspisR1Publish32.sim.owned32.index_get]
+    by_cases done : pos = alloc.vec.Vec.len table
+    · simp only [done,if_true]
+      exact ⟨none,rfl⟩
+    · have more : pos.val < table.val.length := by
+        have ne : pos.val ≠ table.val.length := by
+          intro eq
+          apply done
+          apply UScalar.eq_of_val_eq
+          exact eq
+        omega
+      obtain ⟨entry,hr,_⟩ := WP.spec_imp_exists (alloc.vec.Vec.index_usize_spec table pos more)
+      have step := next_cursor table pos more
+      obtain ⟨value,ht⟩ := ih (Usize.wrapping_add pos 1#usize) (by omega) (by omega)
+      rcases entry with ⟨k,v⟩
+      simp only [done,if_false,alloc.vec.Vec.index_slice_index,hr,bind_tc_ok,BuiltinClone]
+      by_cases eq : key = k
+      · simp only [eq,if_true]
+        exact ⟨some v,rfl⟩
+      · simp only [eq,if_false]
+        by_cases lt : key < k
+        · simp only [lt,if_true]
+          exact ⟨none,rfl⟩
+        · simp only [lt,if_false,lift,bind_tc_ok,ht]
+          exact ⟨value,rfl⟩
+
+#print axioms next_cursor
+#print axioms lookup_total
+end R1Z.ProverCommitPublication32
