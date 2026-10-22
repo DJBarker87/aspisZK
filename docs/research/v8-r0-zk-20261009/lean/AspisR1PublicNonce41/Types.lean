@@ -31,10 +31,15 @@ structure owner.Secret where
 /-- [aspis_public_nonce_owner41::owner::Error]
     Source: 'owner.rs', lines 7:0-7:38
     Visibility: public -/
-@[discriminant isize]
+-- The generated global instance name collides with the prover extraction.
 inductive owner.Error (E : Type) where
 | Os : E → owner.Error E
 | RepeatedZero : owner.Error E
+
+instance errorDiscriminant42 {E : Type} : Discriminant (owner.Error E) Isize where
+  read_discriminant e := match e with
+    | .Os _ => 0#isize
+    | .RepeatedZero => 1#isize
 
 /-- Trait declaration: [aspis_public_nonce_owner41::owner::IO]
     Source: 'owner.rs', lines 8:0-8:56

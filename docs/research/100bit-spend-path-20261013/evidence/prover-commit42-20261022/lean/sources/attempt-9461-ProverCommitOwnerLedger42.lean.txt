@@ -1,0 +1,68 @@
+import R1Z.ProverCommitOwnerModel42
+
+/-! Reservation composition for the selected public nonce owner. The source
+owner is evaluated, not replaced with a fresh-success callback. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitOwnerLedger42
+open Aeneas Aeneas.Std Result AspisR1PublicNonce41
+open ProverCommitOwnerBytes42 ProverCommitOwnerRun42 ProverCommitOwnerModel42
+open ProverCommitLedger36
+attribute [local instance] Classical.propDecidable
+abbrev Error := ProverCommitEnvironment35.Error
+
+def prepared (address : Path → Path) (nonce : ProverCommitOwnerZero42.Bytes)
+    (schedule : Schedule) (tape : Nat → owner.Raw) (unix : Bool) (s : State) :
+    Result (Except Error ProverCommitPublicNonce40.Raw × State) := do
+  let (generated,after) ← owner.generate (io schedule tape) nonce s
+  match status generated with
+  | .error e => ok (.error (.entropy e),after)
+  | .ok secret =>
+    let (result,final) := reserve schedule unix (address (block nonce)) after
+    ok (result.map (fun _ => secret) |>.mapError ProverCommitEnvironment35.Error.reservation,final)
+
+theorem prepared_model (address : Path → Path) (nonce : ProverCommitOwnerZero42.Bytes)
+    (schedule : Schedule) (tape : Nat → owner.Raw) (unix : Bool) (s : State) :
+    prepared address nonce schedule tape unix s =
+      let (result,after) := ProverCommitPublicNonce40.prepare address (block nonce)
+        schedule (fun n => raw (tape n)) unix s
+      ok (result.map Subtype.val,after) := by
+  have eq := generate_model nonce schedule tape s
+  rw [prepared,generate_exact]
+  simp only [bind_tc_ok]
+  unfold ProverCommitPublicNonce40.prepare
+  cases hs : ProverCommitOwnerRun42.generate nonce schedule tape s with
+  | mk source after =>
+    cases hm : ProverCommitPublicNonce40.generate (block nonce) schedule (fun n => raw (tape n)) s with
+    | mk model final =>
+      rw [hs,hm] at eq
+      have state : after=final := congrArg Prod.snd eq
+      have values : status source=forget model := congrArg Prod.fst eq
+      dsimp only at state values
+      rw [values,state]
+      cases model with
+      | error e => rfl
+      | ok secret =>
+        dsimp only [forget,Except.map]
+        cases hr : reserve schedule unix (address (block nonce)) final with
+        | mk reserved last => cases reserved <;> rfl
+
+/-- Exact continuation transport, including failure. This does not assert a
+law for the mask-building or publication continuation. -/
+theorem continuation {P : Type} (address : Path → Path)
+    (nonce : ProverCommitOwnerZero42.Bytes) (schedule : Schedule)
+    (tape : Nat → owner.Raw) (unix : Bool) (s : State)
+    (next : Except Error ProverCommitPublicNonce40.Raw → State → Result P) :
+    (do let (result,after) ← prepared address nonce schedule tape unix s
+        next result after) =
+    (let (result,after) := ProverCommitPublicNonce40.prepare address (block nonce)
+        schedule (fun n => raw (tape n)) unix s
+     next (result.map Subtype.val) after) := by
+  rw [prepared_model]
+  cases h : ProverCommitPublicNonce40.prepare address (block nonce)
+    schedule (fun n => raw (tape n)) unix s
+  rfl
+
+#print axioms prepared_model
+#print axioms continuation
+end R1Z.ProverCommitOwnerLedger42

@@ -1,0 +1,52 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:11:3: error: unexpected token 'at'; expected identifier
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:15:31: error: unexpected token 'at'; expected term
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:20:2: error: 'change' tactic failed, pattern
+  (↑i + 1) % 256 = ↑i + 1
+is not definitionally equal to target
+  (↑i + ↑1#u8) % UScalar.size UScalarTy.U8 = ↑i + 1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:39:107: error: unexpected token 'at'; expected term
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:25:33: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (zeroFrom bytes ↑index)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:27:9: error: unsolved goals
+case zero
+bytes : Bytes
+index : U8
+count : ↑index + 0 = 32
+stop : index ≥ 32#u8
+all : zeroFrom bytes ↑index
+⊢ ok true = ok sorry
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:32:14: error: unsolved goals
+case elem
+bytes : Bytes
+n : ℕ
+ih : ∀ (index : U8), ↑index + n = 32 → owner.zero bytes index = ok sorry
+index : U8
+count : ↑index + (n + 1) = 32
+bound : ↑index < 32
+go : ¬index ≥ 32#u8
+pos : Usize := UScalar.cast UScalarTy.Usize index
+pv : ↑pos = ↑index
+read : Array.index_usize bytes pos = ok (↑bytes)[↑pos]
+⊢ (↑bytes)[↑pos] = sorry
+
+case succ
+bytes : Bytes
+n : ℕ
+ih : ∀ (index : U8), ↑index + n = 32 → owner.zero bytes index = ok sorry
+index : U8
+count : ↑index + (n + 1) = 32
+bound : ↑index < 32
+go : ¬index ≥ 32#u8
+pos : Usize := UScalar.cast UScalarTy.Usize index
+pv : ↑pos = ↑index
+read : Array.index_usize bytes pos = ok (↑bytes)[↑pos]
+elem : (↑bytes)[↑pos] = sorry
+⊢ owner.zero bytes index = ok sorry
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:65:44: error: unexpected token 'at'; expected term
+'R1Z.ProverCommitOwnerZero42.next_index' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnerZero42.zero_from' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerZero42.lean:71:14: error(lean.unknownIdentifier): Unknown constant `zero_spec`
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

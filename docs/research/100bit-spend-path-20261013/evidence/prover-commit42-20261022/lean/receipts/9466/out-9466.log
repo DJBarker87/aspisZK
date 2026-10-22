@@ -1,0 +1,97 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerLedger42.lean:42:16: error: unsolved goals
+case mk.mk.error
+address : ProverCommitLedger36.Path → ProverCommitLedger36.Path
+nonce : ProverCommitOwnerZero42.Bytes
+schedule : Schedule
+tape : ℕ → owner.Raw
+unix : Bool
+s : State
+source : NativeStatus
+after : State
+hs : generate nonce schedule tape s = (source, after)
+final : State
+state : after = final
+e : ProverCommitPublicNonce40.EntropyError
+eq :
+  have source := (source, after);
+  have model := (Except.error e, final);
+  (status source.1, source.2) = (forget model.1, model.2)
+hm : ProverCommitPublicNonce40.generate (block nonce) schedule (fun n => raw (tape n)) s = (Except.error e, final)
+values : status source = Except.map Subtype.val (Except.error e)
+⊢ (match Except.map Subtype.val (Except.error e) with
+    | Except.error e => ok (Except.error (ProverCommitEnvironment35.Error.entropy e), final)
+    | Except.ok secret =>
+      let (result, final) := reserve schedule unix (address (block nonce)) final
+      ok (Except.mapError ProverCommitEnvironment35.Error.reservation (Except.map (fun x => secret) result), final)) =
+    ok (Except.map Subtype.val (Except.error (ProverCommitEnvironment35.Error.entropy e)), final)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitOwnerLedger42.lean:46:27: error: unsolved goals
+case mk.mk.ok.mk.error
+address : ProverCommitLedger36.Path → ProverCommitLedger36.Path
+nonce : ProverCommitOwnerZero42.Bytes
+schedule : Schedule
+tape : ℕ → owner.Raw
+unix : Bool
+s : State
+source : NativeStatus
+after : State
+hs : generate nonce schedule tape s = (source, after)
+final : State
+state : after = final
+secret : ProverCommitPublicNonce40.Private
+eq :
+  have source := (source, after);
+  have model := (Except.ok secret, final);
+  (status source.1, source.2) = (forget model.1, model.2)
+hm : ProverCommitPublicNonce40.generate (block nonce) schedule (fun n => raw (tape n)) s = (Except.ok secret, final)
+values : status source = Except.map Subtype.val (Except.ok secret)
+last : State
+a✝ : ProverCommitEnvironment35.ReservationError
+hr : reserve schedule unix (address (block nonce)) final = (Except.error a✝, last)
+⊢ (match Except.map Subtype.val (Except.ok secret) with
+    | Except.error e => ok (Except.error (ProverCommitEnvironment35.Error.entropy e), final)
+    | Except.ok secret =>
+      ok
+        (Except.mapError ProverCommitEnvironment35.Error.reservation (Except.map (fun x => secret) (Except.error a✝)),
+          last)) =
+    ok
+      (Except.map Subtype.val
+          (Except.mapError ProverCommitEnvironment35.Error.reservation
+            (Except.map (fun x => secret) (Except.error a✝))),
+        last)
+
+case mk.mk.ok.mk.ok
+address : ProverCommitLedger36.Path → ProverCommitLedger36.Path
+nonce : ProverCommitOwnerZero42.Bytes
+schedule : Schedule
+tape : ℕ → owner.Raw
+unix : Bool
+s : State
+source : NativeStatus
+after : State
+hs : generate nonce schedule tape s = (source, after)
+final : State
+state : after = final
+secret : ProverCommitPublicNonce40.Private
+eq :
+  have source := (source, after);
+  have model := (Except.ok secret, final);
+  (status source.1, source.2) = (forget model.1, model.2)
+hm : ProverCommitPublicNonce40.generate (block nonce) schedule (fun n => raw (tape n)) s = (Except.ok secret, final)
+values : status source = Except.map Subtype.val (Except.ok secret)
+last : State
+a✝ : Unit
+hr : reserve schedule unix (address (block nonce)) final = (Except.ok a✝, last)
+⊢ (match Except.map Subtype.val (Except.ok secret) with
+    | Except.error e => ok (Except.error (ProverCommitEnvironment35.Error.entropy e), final)
+    | Except.ok secret =>
+      ok
+        (Except.mapError ProverCommitEnvironment35.Error.reservation (Except.map (fun x => secret) (Except.ok a✝)),
+          last)) =
+    ok
+      (Except.map Subtype.val
+          (Except.mapError ProverCommitEnvironment35.Error.reservation (Except.map (fun x => secret) (Except.ok a✝))),
+        last)
+'R1Z.ProverCommitOwnerLedger42.prepared_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitOwnerLedger42.continuation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh
