@@ -8825,3 +8825,16 @@ before release. Not migrated: 56 `lean-candidates` files (session A's, with the 
 instructions in their handoff; the s126 S2 candidates are now the lead's and are migrated
 when S2 imports them). The worker committed a 57.6 MB raw scan against the 5 MB rule;
 it is replaced in the tree by its hash record (it remains in history).
+
+## D179 (lead, 2026-10-23 04:30): part 53 merged; encoder via the owned route
+
+Merged `codex/cx-prover-commit53-20261023` (two Codex capacity relaunches with WIP
+snapshots; the final tree has no `sorry`). Proved: the migrated terminal-cone closure
+audit; retained Poseidon callable and composition contracts; the retained terminal output
+identified with the semantic terminal model; complete gamma batching; all three source
+claim rows equal to the honest claims; stored Weights materialisation; composed opening cells
+and ordered bytes; native `phi_inverse`. J10572: 30 modules, 59 standard-only reports.
+Stopped on the shipped encoder (`encode_at`): its iterator adapters are opaque and body
+extraction gives Charon trait errors. Direction, as in D144/D164: never extract shipped
+iterator code. Write a D144-style owned encoder, then per-iteration Kani shipped = owned,
+then Lean induction.
