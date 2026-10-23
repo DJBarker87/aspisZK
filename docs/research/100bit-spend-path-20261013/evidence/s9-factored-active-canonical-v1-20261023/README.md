@@ -1,0 +1,3 @@
+The actual factored private-four coefficient producer supplies the actual active loop coefficient canonicality, deriving final canonical parts from the same producer and active-loop successes. Canonical input power arrays, private QM31 coefficients and incoming parts remain explicit until the same-parent source composition; no coefficient-output canonicality is assumed. This is a pure helper composition, not whole spend soundness.
+
+Focused Lean check: 30.397 seconds; peak aggregate RSS 3186475008 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
