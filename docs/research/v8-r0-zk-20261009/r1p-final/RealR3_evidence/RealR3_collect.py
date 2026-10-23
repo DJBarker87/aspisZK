@@ -15,7 +15,7 @@ for remote in available:
  for kind in ['out','time','sha']:
   f=f'{kind}-{a}.'+('txt' if kind=='sha' else 'log')
   subprocess.run(['scp','-q',HOST+':/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/'+f,str(E/f)],check=True)
-for f in ['snapshots','scalar-*-inputs.json']:
+for f in ['snapshots','*-inputs.json']:
  subprocess.run(['rsync','-a',HOST+':'+H+'/'+f,str(E)+'/'],check=False)
 rows=[]
 for p in sorted(E.glob('111*-input.json')):
