@@ -106,3 +106,30 @@ fn S2J_cut4_preserve_prior_select_checkpoint() {
     assert_eq!(*public_account, owned[1]);
     assert_eq!(*checkpoint_account, owned[2]);
 }
+
+fn native_cut5<const N: usize>(accounts: &[&AccountRecord; N]) -> ProgramResult {
+    for (index, account) in accounts.iter().enumerate() {
+        if accounts[..index]
+            .iter()
+            .any(|previous| previous.key == account.key)
+        {
+            return Err(ProgramError::InvalidArgument);
+        }
+    }
+    Ok(())
+}
+fn owned_cut5(proof: AccountRecord, public: AccountRecord, cp: AccountRecord) -> ProgramResult {
+    if proof.key == public.key || proof.key == cp.key || public.key == cp.key {
+        Err(ProgramError::InvalidArgument)
+    } else { Ok(()) }
+}
+#[kani::proof]
+#[kani::unwind(35)]
+fn S2J_cut5_distinct_keys_original_records() {
+    let accounts: [AccountRecord;3] = kani::any();
+    let native = native_cut5(&[&accounts[0], &accounts[1], &accounts[2]]);
+    let owned = owned_cut5(accounts[0], accounts[1], accounts[2]);
+    assert_eq!(native, owned);
+    kani::cover!(native.is_ok());
+    kani::cover!(native == Err(ProgramError::InvalidArgument));
+}
