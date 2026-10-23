@@ -1,0 +1,79 @@
+{"attempt": "lean-094", "exit_status": 1, "wall_seconds": 2.2929467619978823, "peak_rss_kib": "4383328", "swaps": "0", "print_axioms": ["'AspisR1.S2W_D189Interpretation.native_observation' depends on axioms: [sorryAx, Quot.sound]", "'AspisR1.S2W_D189Interpretation.native_counter' does not depend on any axioms", "'AspisR1.S2W_D189Interpretation.owned_account_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.S2W_D189Interpretation.accepted_owned_frame' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]"]}
+S2W_D189Interpretation.lean:21:56: error: unexpected token '('; expected '}'
+S2W_D189Interpretation.lean:34:83: error: unsolved goals
+W F : Type
+L : Library W F
+sdk : S2TrustedSdkBorrow L
+encode : UInt8 → AspisV8R19.DuplexFrames.Byte
+metadata : F → ℕ → S2LeadInterface.Account
+n : ℕ
+w : W
+s : Heap F
+related : L.related w s
+valid : Valid s
+a : ℕ
+cell : L.accountData w a = (s.accounts a).1
+payload : L.cellPayload w (s.accounts a).1 = s.payload (s.accounts a).1
+⊢ (if a < n then
+      { key := (metadata s.ambient a).key, owner := (metadata s.ambient a).owner,
+        lamports := (metadata s.ambient a).lamports, data := sorry, signer := (metadata s.ambient a).signer,
+        writable := (metadata 
+...
+rror: Ambiguous term
+  run
+Possible interpretations:
+  S2W_Trace.run : AdapterRw.Ops → {A : Type} → Code A → Log → Result (A × Log)
+  
+  S2Trust.run : Heap ?m.148 → Op → Heap ?m.148 × Reply
+S2W_D189Interpretation.lean:73:13: error: unsolved goals
+case call.fail
+F A : Type
+ops : AdapterRw.Ops
+s : Heap F
+B✝ : Type
+call : Call B✝
+k : B✝ → Code A
+ih :
+  ∀ (a : B✝) (log : Log),
+    runOwned ops (k a) log s = thenResult (S2W_Trace.run ops (k a) log) fun answer => ok (answer.1, answer.2, s)
+log : Log
+e : Error
+invoked : invoke ops call = fail e
+⊢ fail e =
+    match S2W_Trace.run ops (Code.call call k) log with
+    | ok a => ok (a.1, a.2, s)
+    | fail e => fail e
+    | div => div
+S2W_D189Interpretation.lean:74:33: error: Ambiguous term
+  run
+Possible interpretations:
+  S2W_Trace.run : AdapterRw.Ops → {A : Type} → Code A → Log → Result (A × Log)
+  
+  S2Trust.run : Heap ?m.159 → Op → Heap ?m.159 × Reply
+S2W_D189Interpretation.lean:74:10: error: unsolved goals
+case call.div
+F A : Type
+ops : AdapterRw.Ops
+s : Heap F
+B✝ : Type
+call : Call B✝
+k : B✝ → Code A
+ih :
+  ∀ (a : B✝) (log : Log),
+    runOwned ops (k a) log s = thenResult (S2W_Trace.run ops (k a) log) fun answer => ok (answer.1, answer.2, s)
+log : Log
+invoked : invoke ops call = div
+⊢ div =
+    match S2W_Trace.run ops (Code.call call k) log with
+    | ok a => ok (a.1, a.2, s)
+    | fail e => fail e
+    | div => div
+'AspisR1.S2W_D189Interpretation.native_observation' depends on axioms: [sorryAx, Quot.sound]
+'AspisR1.S2W_D189Interpretation.native_counter' does not depend on any axioms
+'AspisR1.S2W_D189Interpretation.owned_account_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_D189Interpretation.accepted_owned_frame' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+
+Running as unit: run-re3d7578f87e847fb8a95744d57656d03.scope; invocation ID: 9ce8ff73f1ec484b8c8117c3665e3d6f
