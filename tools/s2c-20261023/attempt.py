@@ -23,7 +23,11 @@ if kind=='lean':
  # Reuse only the explicitly hash-checked adopted trust object, in this workspace.
  subprocess.run(['ssh',HOST,f'cmp {H}/S2TrustedSdkBorrow.lean /home/dombarker/project-offloads/codex-cx-s2-trust-20261023/S2TrustedSdkBorrow.lean && cp /home/dombarker/project-offloads/codex-cx-s2-trust-20261023/S2TrustedSdkBorrow.olean {H}/'],check=True)
 else:
- raise SystemExit('Kani configuration not yet installed')
+ sources=['kani-native/src/lib.rs','kani-native/src/statement.rs','kani-native/src/S2C_trusted.rs','kani-native/Cargo.toml']
+ subprocess.run(['rsync','-az',str(E/'kani-native')+'/',HOST+':'+H+'/kani-native/'],check=True)
+ command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path','kani-native/Cargo.toml','--target-dir','kani-target','-j','4','-Z','stubbing','-Z','function-contracts','-Z','unstable-options','--harness-timeout','120s','--exact','--harness',target,'--output-format','terse']
+ env={'CARGO_BUILD_JOBS':'4','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_NET_OFFLINE':'true','PATH':'/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin'}
+ deps={'native_source_manifest':hashlib.sha256((E/'native-dependencies.json').read_bytes()).hexdigest(),'expected_time':'optimized compilation then one named native operation SAT check','tools':'Kani 0.67.0 / CBMC 6.8.0'}
 cfg={'attempt':attempt,'kind':kind,'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'command':command,'sources':sources,'timeout':180,'deps_fingerprint':deps,'env':env}
 (E/(attempt+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 subprocess.run(['scp',str(E/(attempt+'.json')),HOST+':'+H+'/'+attempt+'.json'],check=True)
