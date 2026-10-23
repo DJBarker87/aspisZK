@@ -3,20 +3,12 @@ from pathlib import Path
 import json,re,hashlib,subprocess
 E=Path(__file__).resolve().parent;R=E.parents[4]
 HOST='dombarker@100.108.41.90';H='/home/dombarker/project-offloads/codex-cx-real-r3-20261023/evidence'
-subprocess.run(['rsync','-a','--exclude=RealR3_native','--exclude=kani-target',HOST+':'+H+'/receipts/',str(E/'receipts')+'/'],check=True)
-available=subprocess.check_output(['ssh',HOST,'ls '+H+'/111*-input.json'],text=True).splitlines()
-for remote in available:
- a=int(Path(remote).name.split('-')[0])
- p=E/(str(a)+'-input.json')
- # input availability decides what ran, not an attempted range census.
- for f in [f'{a}-input.json',f'{a}-launcher.log',f'lean-snapshots/{a}.lean.txt']:
-  q=E/f;q.parent.mkdir(parents=True,exist_ok=True)
-  subprocess.run(['scp','-q',HOST+':'+H+'/'+f,str(q)],check=True)
- for kind in ['out','time','sha']:
-  f=f'{kind}-{a}.'+('txt' if kind=='sha' else 'log')
-  subprocess.run(['scp','-q',HOST+':/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/'+f,str(E/f)],check=True)
-for f in ['snapshots','*-inputs.json']:
- subprocess.run(['rsync','-a',HOST+':'+H+'/'+f,str(E)+'/'],check=False)
+# Copy only evidence records, never replace locally maintained harness scripts.
+filters=['--include=/receipts/***','--include=/snapshots/***','--include=/lean-snapshots/***',
+ '--include=/*-inputs.json','--include=/111*-input.json','--include=/111*-launcher.log','--exclude=*']
+subprocess.run(['rsync','-a',*filters,HOST+':'+H+'/',str(E)+'/'],check=True)
+subprocess.run(['rsync','-a','--include=/out-111*.log','--include=/time-111*.log','--include=/sha-111*.txt','--exclude=*',
+ HOST+':/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/',str(E)+'/'],check=True)
 rows=[]
 for p in sorted(E.glob('111*-input.json')):
  a=int(p.name.split('-')[0]);i=json.loads(p.read_text());o=(E/f'out-{a}.log').read_text();t=(E/f'time-{a}.log').read_text();s=(E/'lean-snapshots'/f'{a}.lean.txt').read_bytes()
