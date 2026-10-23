@@ -1,138 +1,189 @@
-# Privacy endpoint restatement audit, 2026-10-23
+# Privacy endpoint against the mathematical ideal, 2026-10-23
 
-Branch `codex/cx-priv-restate-20261023`; inspected revision
-`235da438aa136271c0380b2f8f2acf57203ea032`. **Stopped on item 2's equivalence
-condition; target not yet established.** No new endpoint is claimed proved.
-Read the binding AGENTS.md security/proof rules, common worker rules,
-LOG D42–D68 and D184, and the actual endpoint definitions.
+Branch `codex/cx-priv-restate-20261023`. **The new conditional endpoint is
+proved; concrete deployed privacy remains conditional on the real run join.**
+Read LOG D184–D185, the root Security and proof discipline rules (especially
+section 3), and the common worker/build instructions. D185 explicitly resolves
+the earlier stop: the comparison contract is the ideal game with mathematical
+`simE`. The prior audit and stop remain in commits `0ddade8ebd` and
+`4528e0f9eb` (the obligation-map commit).
+No equivalence of the two fixed ideal experiments is asserted.
 
-## Stage 1: conclusion audit and explicit stop
+## Established claim and contract choice
 
-D184 correctly identifies a sufficient route to the standard simulation
-claim: couple deployed real execution to model real execution, then use the
-proved model comparison to the mathematical ideal simulator. Native
-`sim.rs` correspondence is unnecessary for that new comparison. However,
-this is a different theorem from the current **fixed-experiment** conclusion.
-The requested equivalence cannot be asserted for its actual quantifiers.
-This finding does not invalidate privacy of the deployed prover.
+Added only `lean/R1Z/PrivacyR1HeadlineDeployedReal.lean`:
+`R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed`.
+Its only refinement premise is `RustRealRefinement`, definitionally the first
+conjunct of `ProverCommitDeployedFuel22.RustProverRefinement`. It compares
+`rust.real` observed by `rust.observe` with `source.ideal(simE)` under the
+mapped ordered observer. Both existing endpoint modules, all their definitions
+and the old theorems are unchanged. No Rust, protocol, event definition or
+release artifact is changed.
 
-`FSExperiments` independently supplies `real`, `ideal`, and `observe`.
-`ZK_FSS` does not existentially quantify over an ideal implementation and does
-not identify it with the mathematical game. Its conclusion expands to:
+The theorem uses the existing `ProverCommitModelCore16.core_privacy` through
+`ProverCommitReencode16.privacy_transport` for source.real ≈ source.ideal.
+The real `ProverCommitFuelJoin22.test_bound` supplies the other edge.
+For every adversary and every valid honest witness, triangle inequality gives
 
-```lean
-∀ (adv : rust.Adversary) (w : h.Instance), h.public w = x.1 →
-  |mean (realTest h B outputs rust adv x w) -
-    mean (idealTestS rust adv x (simE h.transport B outputs x))| ≤ ε
+```text
+|R_rust - I_source| ≤ modelError + lazyBudget(8*n1)
+                     + 8/2^486 + seedBudget(2^64) + fuelCharge.
 ```
 
-The proposed comparison instead is (explanatory notation, **not an added
-or compiled declaration**):
+The proof then pads by the nonnegative already-charged ideal-side allowance
+`8/2^486 + seedBudget(2^64) + fuelCharge`, and uses the existing lazy-to-fresh
+bound. The exported envelope is **exactly** the old one:
 
-```lean
-∀ (adv : rust.Adversary) (w : h.Instance), h.public w = x.1 →
-  |mean (realTest h B outputs rust adv x w) -
-    mean (idealTestS source (RomObserverBin.observerMap rust observer_program adv)
-      x (simE h.transport B outputs x))| ≤ ε
+```text
+E = modelError W Pr L₁ L₂ + 16/2^486 + freshBudget(8*n1 W Pr+1)
+    + 2*seedBudget(2^64) + 2*fuelCharge
+E ≤ 1/2^109 + 1/2^137 + 1/2^454 + freshBudget(8*n1 W Pr+1)
+    + 2*seedBudget(2^64) + 2*fuelCharge
+E < 1/2^100.
 ```
 
-Let the three means be R, I_rust, and I_source. The old conclusion says
-`|R - I_rust| ≤ ε`; the proposed conclusion says `|R - I_source| ≤ ε`.
-Holding every real-side field fixed and changing only `rust.ideal` leaves
-the proposed proposition, model theorem, and conjunct 1 unchanged, but can
-change the old proposition. At the scalar level, R = I_source = 0 and
-I_rust = 1 satisfy the proposed bound and violate the old one for ε < 1.
-These are legitimate Boolean experiment probabilities. The FSExperiments
-interface imposes no law preventing the ideal field from ignoring its
-simulator argument. This is a counterexample to a general equivalence
-argument, not a constructed attack on the selected model or a claim that
-its concrete distribution has those particular means.
+No bad-event term is added, replaced, or implicitly assumed zero. Keeping the
+unused ideal allowance is deliberate: it preserves the exact headline budget.
 
-The current second join bounds the missing `|I_rust - I_source|` term;
-it does not give exact equality either. Removing it while retaining the
-same old conclusion is unsupported. A triangle inequality with nonzero
-ideal discrepancy is not a same-ε biconditional. Changing only the benchmark
-is a valid way to state the intended deployed simulation property, but is
-not a literal premise removal from the existing theorem. Under the explicit
-instruction to stop if the conclusions are not equivalent, no new Lean
-module, wrapper, or compile is submitted. Recommendation to the lead:
-explicitly approve a **different composed simulation theorem** with the
-mathematical ideal as its fixed benchmark, retaining the old theorem as-is.
-That needs no deployed native Rust simulator. It does not require weakening
-the adversary or security target.
+## What “old + conjunct 2 implies new” means precisely
 
-## Quantifiers, observations, error and efficiency
+In the old proof contract, the refinement certificate is `C1 ∧ C2`.
+The compiled theorem `old_refinement_implies` proves
+`(C1 ∧ C2) → RustRealRefinement` by the term `old.1`.
+Applying the compiled new headline then proves
+`(C1 ∧ C2) → NewHeadline(E)`. Consequently every valid instance of the old
+two-join theorem also has the new headline at exactly E; there is no added
+requirement. This is the precise certificate-level implication implementing
+D185's “old + conjunct 2 implies new”. In fact C2 is unused in this derivation.
+It does not certify the native Rust simulator, nor discharge C1 for Rust.
 
-The existing declaration is universal over `CommitHandle`, `Aux`, `template`,
-`outputs`, public `x`, `rust`, and `observer_program`; internally over every
-`adv` and every honest instance `w` with `h.public w = x.1`. It uses the
-fixed admitted builder. The proposed comparison need not change any of
-those quantifiers. In particular it must not silently install the D146
-source-representable statement domain or identify arbitrary `Aux` metadata
-with unit. Neither concrete deployed instance nor real join is supplied.
+Distinguish that implication from a claim about isolated probability bounds.
+Writing `OldBound(E) := |R_rust-I_rust| ≤ E`, C2 is an **except-bad** join,
+not exact equality: it yields `|I_rust-I_source| ≤ δ_ideal`, where
+`δ_ideal = 8/2^486 + seedBudget(2^64) + fuelCharge` after the existing mass
+bounds. `OldBound(E)` plus that inequality alone gives `NewBound(E+δ_ideal)`,
+not a same-E implication. The same-E result above is proved from the retained
+C1 and the model theorem, avoiding double-charging. No same-E biconditional
+between the raw old and new conclusions is claimed. Conversely, the new
+headline alone cannot establish any property of arbitrary `rust.ideal`.
+The earlier fixed-experiment counterexample remains valid; D185 chooses the
+mathematical benchmark rather than overturning that observation.
 
-The real observable stays the entire ROMView and Boolean decision. The
-observer map keeps `rust.observe adv` as its decision function; its adaptive
-query program is supplied by `observer_program`. The model retains its
-existing query fuel, query order, repeats, early exits and oracle answers.
-The ideal random carrier changes from `rust.IdealRand` to
-`source.IdealRand`; the ideal experiment and source observer interpretation
-change accordingly. A real-only endpoint should not need finite/nonempty
-instances for `rust.IdealRand`. Those are real changes to the statement,
-even though the deployed real observation is untouched.
+## Quantifiers, observations, error and simulator efficiency
 
-The current fuel endpoint's exact envelope is
-`modelError W Pr L₁ L₂ + 16/2^486 + freshBudget (8*n1 W Pr+1)
- + 2*seedBudget (2^64) + 2*fuelCharge`.
-Its conclusion also gives the displayed numeric upper bound and `< 2^-100`.
-A one-join triangle uses only the real mass, seed and fuel charges, so it
-could conservatively retain this entire envelope without new charges.
-This arithmetic sufficiency does not prove equivalence of the benchmarks.
-The old seed-only endpoint omits the two fuel charges and has the same
-benchmark issue. The exact fuel statement is reproduced below.
+The universal protocol context is unchanged: `CommitHandle`, `Aux`, `template`,
+`outputs`, public statement `x`, `rust`, and `observer_program`. The honest
+builder is fixed as before. Within the conclusion, **every** `rust.Adversary`
+and **every** `w : h.Instance` with `h.public w = x.1` remain quantified.
+There is no new statement/witness domain restriction, no fixed fixture, no
+restriction of adaptive observer queries, and no `Aux := Unit` specialization.
 
-Efficiency of the new benchmark would concern mathematical simE **and its
-whole ideal game**, not whether the never-deployed Rust cost probe matches
-it. The cost passes prove conditional run equality/relative bounds; the
-latest `SIM-COST7-20261022.md` expressly leaves concrete public/metadata
-selection, exact Boolean P_R1, full representation costs and a numeric
-preparation certificate open. It would be inaccurate to report an
-unconditional concrete simE cost bound as established. No such assumption
-is discharged or added by changing the benchmark.
+The real observable is the same full `ROMView` and Boolean observer decision;
+the join demands their equality outside the same fixed realBad, seed-guess
+and five-draw fuel events. It does not merely identify acceptance or roots.
+`RomObserverBin.observerMap` retains `rust.observe adv` and the supplied
+adaptive query program. Ordered history, duplicate queries, answers, retries,
+errors and aborts must still be represented by the real join. D143's deployed
+projection publishes statement/proof bytes and the adversary's oracle answers;
+internal tables/audit counters are not publication. L1/L2 side-channel
+transport remains a separate open obligation, not proved here.
 
-## Verbatim before and retained after
+What changes: the right experiment is source.ideal instead of rust.ideal;
+its random carrier is source.IdealRand instead of rust.IdealRand; its observer
+is interpreted through the existing map; the native ideal join C2 disappears.
+The new headline needs no Fintype/Nonempty instances for rust.IdealRand.
+The real Fintype/Nonempty context stays (Lean warns Nonempty is unused).
+The old ideal-carrier instances occur only in the separate compatibility
+projection lemma. E, the displayed numeric bound, and the `< 2^-100` target
+are identical. The deployed real observation has not changed. Thus this
+establishes the D185 simulation contract about deployed outputs, while the
+old fixed-experiment theorem additionally compares a native ideal implementation.
 
-Both snapshots are extracted from
-`lean/R1Z/ProverCommitDeployedFuel22.lean`, with the module's unchanged
-surrounding variables and local notations. They are verbatim declaration
-headers, excluding proof bodies. `privacy-restate-20261023/audit.py` checks
-them against the actual source; the retained after is identical because the
-stop condition prevents installing the proposed different conclusion.
+Efficiency now concerns the mathematical simulator and ideal-game computation.
+Reuse the SIM-COST results for that computation: `SimCostIdeal.run_erase`,
+`SimCostRelativeIdeal.run_relative`, the primitive/representation bounds of
+passes 5–6, and `SimCostOuterRetry6.scan_firstGood`/`eight_bound` (8*C+17).
+These are proved cost results for the mathematical computation with their
+stated preparation/decision and size hypotheses; no native sim.rs binding is
+needed for the new privacy inequality. The headline itself is a probability
+statement and adds no cost premise. Do not promote the existing relative cost
+results to an unconditional numerical efficiency certificate for arbitrary
+callbacks: D142–D143 and SIM-COST7 still require the concrete public/metadata
+instance, exact Boolean P_R1 cost, representation/preparation composition and
+numeric C. This work neither proves those obligations nor changes simE.
+
+## Verbatim before and after statements
+
+These declaration headers are extracted verbatim from the actual old and new
+modules. The surrounding notations and instances are in those linked sources;
+the snapshots `privacy-restate-20261023/{before,after}.lean.txt` are checked
+by `audit.py`. The before statement remains in the repository unchanged.
+
+Before, namespace `R1Z.ProverCommitDeployedFuel22`:
+
+```lean
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+After, namespace `R1Z.PrivacyR1HeadlineDeployedReal`:
+
+```lean
+theorem privacy_headline_deployed
+    (refinement : RustRealRefinement template outputs x rust observer_program)
+ :
+    (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+      |mean (realTest h B outputs rust adv x w) -
+        mean (idealTestS source (RomObserverBin.observerMap rust observer_program adv) x
+          (simE (h).transport B outputs x))| ≤
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge)) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+```
+
+The full refinement definitions (also verbatim):
 
 Before:
 
 ```lean
-theorem privacy_headline_deployed
-    (refinement : RustProverRefinement template outputs x rust observer_program)
- :
-    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
-      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
-    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
-      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
-    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad
+      (idealSeedQueries template outputs x rust observer_program adv)))
 ```
 
-After (retained unchanged; no new endpoint):
+After:
 
 ```lean
-theorem privacy_headline_deployed
-    (refinement : RustProverRefinement template outputs x rust observer_program)
- :
-    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
-      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
-    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
-      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
-    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100
+def RustRealRefinement : Prop :=
+  ∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))
 ```
 
 ## Stage 2: remaining real-side obligations
@@ -229,26 +280,51 @@ whether the never-deployed native simulator is bound to simE.
 
 ## Validation and handoff
 
-`python3 .../privacy-restate-20261023/audit.py` passes the endpoint/source
-assertions; the checked source SHA-256/size pins are in `source-audit.json`.
-`candidate-audit.json` is read-only git evidence, not candidate verification.
-`git diff --check` passes. Before/after endpoint snapshots match byte for byte.
-Historical proof/build/axioms evidence is referenced, not rerun or promoted
-to validation of a new theorem.
+Stage 1 source commit: `7669f7d878`; stage 2 receipts: `80ff33c16b`.
+The final report/audit stage is committed separately. No push or merge.
 
-No Lean or Rust compiler ran; assigned J10800–10899 are unconsumed. No new
-theorem, axiom, cost certificate, runtime claim, source join or formal release
-result: target/exit/wall/RSS/swap/axioms for a new formal build are all not
-applicable. No full regression/manifest, local dependency build, ELF rebuild
-or shared host source/object change occurred. All existing `.lean`, `crates/`
-and `programs/` sources are untouched. No wallet/key operation, push or merge.
+| Field | Recorded result |
+|---|---|
+| Exact target | `R1Z/PrivacyR1HeadlineDeployedReal.lean`, including `privacy_headline_deployed` and `old_refinement_implies` |
+| Environment/attempt | J10800 (J10801–10899 unused) |
+| Source revision | `7669f7d878` (full revision in `attempts.jsonl`) |
+| Source SHA-256 | `0374f534aaadcfcf3855dc9402feaae176f93f11687b0fab7773b075599e7b42` |
+| Dependency fingerprint | `43ba1775696887d0`; imported source/object pins in `dependencies-10800.json` |
+| Exit/wall/peak RSS/swaps | 0 / 12.16 s / 4,319,944 KiB / 0 |
+| Cgroup/Lean caps | MemoryHigh 5 GiB, MemoryMax 7 GiB, MemorySwapMax 0; Lean -M7000 |
+| Host reservation | 24 GiB populated before launch, 31 GiB including this job, below 55 GiB |
+| Axioms, both added theorems | `[propext, Classical.choice, Quot.sound]` |
 
-Stage 1 commit: `0ddade8ebd` (statement audit and stop). Stage 2 commits this
-independent obligation map and read-only candidate/source evidence. Exact
-claim established: the requested raw conclusion equivalence is unsupported
-by the FS interface; the standard real-to-mathematical-ideal simulation
-route is sufficient but is a different fixed-experiment proposition.
-No refinement premise is discharged. Next lead deliverable: decide explicitly
-whether to replace the literal equivalence requirement with that simulation
-contract, and then prove the new two-edge composition without claiming it
-recovers `ZK_FSS ... rust` absent a relation to `rust.ideal`.
+Complete axiom lines and warnings are retained in
+`privacy-restate-20261023/out-10800.log`; resource receipt in `time-10800.log`;
+normalized machine-readable result in `attempts.jsonl`. Both new theorems
+were audited in that single compile. Warnings are an unevaluated large
+exponent and unused Nonempty section instances; no limits were raised.
+No failed real compile, unchanged rerun, generated certificate, or cold build.
+The private launcher changes only the authorized attempt range from the
+existing launcher. Added one previously absent module/source/object to the
+shared J tree; no existing shared source/object was overwritten. Its sole
+direct imported source matches the repository SHA-256 exactly.
+
+`audit.py` checks the unchanged old endpoints against the historical pins,
+the exact before/after excerpts, identical numeric envelopes, the real-only
+proof references, and the compiled source hash/standard axiom receipt.
+`source-audit.json` records the current read-only source pins.
+`candidate-audit.json` is the retained read-only candidate inventory, not a new
+candidate verification. `git diff --check` passes. No existing Lean module,
+`crates/`, `programs/`, wallet or key changed.
+
+Validation is the focused new module against cached J dependencies, not a
+fresh coherent release-closure replay. Historical parts 27–45 and SIM-COST
+receipts are reused as cited evidence, not rerun; no Rust or SBF build was
+needed for this theorem-only change. No full frozen manifest was replayed.
+A final release still needs its coherent closure/artifact evidence.
+
+Stopped after the requested endpoint, compatibility projection, verbatim
+statement audit and obligation map. **Target not yet established for a
+concrete deployed Rust instance:** construct C1 by composing the selected
+64-byte entropy/reservation owner and actual `prove_masked_retrying_with`,
+then the successful builder/checker/prover/publication and complete adaptive
+observation transport, accounting for the unresolved events above. Candidate
+v2 adoption and joint L1/L2 side-channel transport remain separate gates.
+Native simulator binding is no longer on the critical path under D185.
