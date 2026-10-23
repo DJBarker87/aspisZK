@@ -1,0 +1,34 @@
+Port3_Constructor.lean:30:11: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.result.Result.map_err`
+Port3_Constructor.lean:43:4: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.result.Result.map_err`
+Port3_Constructor.lean:48:32: error: unsolved goals
+AllocError : Type
+ops : Leaves AllocError
+v : transport.Variant
+⊢ sorry = do
+    let i ← ops.finalLen v
+    let q ← ops.zero
+    let r ← ops.filled ops.copy i q
+    let r1 ← Port3_Initial.mapFilled r
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue weights => do
+        let rhs ← ops.zeroWide
+        let power ← ops.one
+        ok (core.result.Result.Ok { weights := weights, rhs := rhs, power := power, next := 0#usize })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Accumulator
+          (core.convert.FromSame verifier.Error) residual
+Port3_Constructor.lean:49:45: warning: This simp argument is unused:
+  map_error_exact
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵x̵t̵r̵a̵c̵t̵e̵d̵,̵P̵o̵r̵t̵3̵_̵I̵n̵i̵t̵i̵a̵l̵.̵e̵m̵i̵t̵t̵e̵d̵,̵m̵a̵p̵_̵e̵r̵r̵o̵r̵_̵e̵x̵a̵c̵t̵]̵[̲e̲x̲t̲r̲a̲c̲t̲e̲d̲,̲ ̲P̲o̲r̲t̲3̲_̲I̲n̲i̲t̲i̲a̲l̲.̲e̲m̲i̲t̲t̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port3_Constructor.lean:49:13: warning: declaration uses `sorry`
+Port3_Constructor.lean:54:11: error: Insufficient number of fields for `⟨...⟩` constructor: Constructor `Aeneas.Std.core.clone.Clone.mk` has 2 explicit field, but only 1 was provided
+'AspisR1.Port3_Constructor.map_error_exact' depends on axioms: [propext, sorryAx]
+'AspisR1.Port3_Constructor.normalization' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constructor.installed_constructor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constructor.initial_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constructor.allocation_rejects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
