@@ -44,3 +44,28 @@ fn S2J_cut1_bound_invocation() {
     kani::cover!(native.is_ok());
     kani::cover!(native.is_err());
 }
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, kani::Arbitrary)]
+struct AccountRecord {
+    key: [u8;32], owner: [u8;32], is_signer: bool, is_writable: bool,
+    executable: bool, rent_epoch: u64, data_slot: usize, lamports_slot: usize,
+}
+// Source :950, type-parametric slice indexing. Full AccountInfo decoding is
+// the explicit EntrypointDeserialization premise, not proved by this harness.
+fn native_cut2(accounts: &[AccountRecord]) -> &AccountRecord {
+    let proof_account = &accounts[0];
+    proof_account
+}
+#[kani::proof]
+#[kani::unwind(35)]
+fn S2J_cut2_select_original_record() {
+    let accounts: [AccountRecord;3] = kani::any();
+    let owned = accounts.to_vec();
+    let selected = native_cut2(&accounts);
+    let owned_selected = owned[0];
+    assert!(std::ptr::eq(selected, &accounts[0]));
+    assert_eq!(*selected, owned_selected);
+    // Original association is index0 even when slots or keys alias.
+    assert_eq!(selected.data_slot, accounts[0].data_slot);
+    assert_eq!(selected.lamports_slot, accounts[0].lamports_slot);
+}
