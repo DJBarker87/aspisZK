@@ -282,3 +282,20 @@ changed symbolic list proof passed in lean-051 (exit0, 2.170872s,
 Exact source revision, hashes, dependencies, command and cgroup limits are
 in `evidence/verifier-top-20261023/lean-05{0,1}/receipt.json`.
 No release claim, new runtime assumption or shipped-code change is made.
+
+## Continuation stage 5: typed oracle substitution
+
+`VTop_OracleCode` gives the already extracted `VTop_Trace.Code` an explicit
+oracle interpretation, including outer Aeneas failure/divergence and ordinary
+inner Rust rejection. A call consumes its original dependent arguments and
+returns its complete dependent state. `accepted_interpret_eq` proves local
+accepted-return observations substitute through that syntax, with exact
+ordered read concatenation and branch selection. Its only local law is
+`CallJoin`; no whole-verifier/model-order identity appears in its statement.
+
+This is a composition mechanism, not an instantiation of the frozen source
+oracle semantics. Its local success condition is outer Aeneas `ok`; inner
+Rust `Err` remains a returned value, so this mechanism's local law covers it
+as well. It must not be advertised as the weakest accepted-inner-run cone
+interface. The theorem checks in lean-052: exit0, 2.152566s, 4332744KiB RSS,
+swap0; standard axioms only, exact target/dependencies/revision in its receipt.
