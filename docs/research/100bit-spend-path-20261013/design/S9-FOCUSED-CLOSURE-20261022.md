@@ -748,3 +748,36 @@ Outer QM square, actual WideExact.mul_qm31, full WideExact.mul canonical
 semantics and the complete source/caller/release joins remain in progress.
 S9 and the overall 100-bit target are still OPEN. No production source or
 CU artifact changed in these proof checks.
+
+
+## Complete square and mixed source bodies — 23 October continuation
+
+PROVED `0b0fe6ecc8`: the combined source QM31.square preserves its complete
+Result into the selected checked square on canonical inputs. The proof follows
+the actual six-call sequence and derives intermediate canonicality from success
+of those same calls. The accepted v11 check took 14.453 seconds, aggregate peak
+2,538,930,176 bytes, zero swaps, six standard-axiom reports. Earlier memory-cap
+failures were replaced by named suffix proofs and an explicit mapper-head bridge,
+not rerun with larger caps.
+
+PROVED `f5dbde8cc1`: the CurrentWide four-remainder canonicalizer is total
+and returns canonical coordinates for every stored QM input. The same commit
+contains reusable full-Result success reflection, which recovers a successful
+source output from the success of its mapped result without a separate
+source-success premise.
+
+PROVED source-only packet `s9-combined-wide-mixed-to-current-v1-20261023`:
+the actual combined-cut WideExact.mul_qm31 body maps as a full Result into
+CurrentWide, with canonical self and arbitrary stored right operand. This includes
+the same canonicalizer and two QM multiplications. The focused check took
+23.907 seconds, aggregate peak 3,233,185,792 bytes, zero swaps, standard axioms.
+
+PROVED focused mixed-product helper join (19.733 seconds, zero swaps): the
+combined source body maps to installed concrete FieldOps.wideMulQM31.
+This is a source-to-helper relation, not surrounding caller refinement.
+
+Still OPEN: installed-helper square join and mixed-product total/exact consumer,
+full WideExact.mul
+canonical source composition, the actual surrounding caller and input provenance,
+production adoption/refinement and runtime/artifact correspondence. The full
+100-bit release claim remains OPEN. Production Rust and CU artifacts are unchanged.
