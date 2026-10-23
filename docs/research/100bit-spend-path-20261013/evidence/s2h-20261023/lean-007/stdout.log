@@ -1,0 +1,27 @@
+S2H_HeapUpdate.lean:71:2: error: Type mismatch: After simplification, term
+  update.data
+ has type
+  ∀ (slot_1 : ℕ) (cell_1 : OwnedDataCell),
+    (↑(setCounter sdk slot cell (-1)#isize).data_cells)[slot_1]? = some cell_1 →
+      h.allocated (m.dataCell slot_1) = true ∧
+        (h.payload (m.dataCell slot_1)).descriptor = m.descriptor slot_1 ∧
+          (m.descriptor slot_1).length = (↑cell_1.bytes).length ∧
+            put h.counter (m.dataCell ↑slot) (↑(-1)#isize) (m.dataCell slot_1) = ↑cell_1.borrowed ∧
+              h.ambient.strong (m.dataCell slot_1) = cell_1.strong ∧
+                h.ambient.weak (m.dataCell slot_1) = cell_1.weak ∧
+                  ∀ (i : ℕ) (byte : U8),
+                    (↑cell_1.bytes)[i]? = some byte → (h.payload (m.dataCell slot_1)).contents i = UInt8.ofNat ↑byte
+but is expected to have type
+  ∀ (slot_1 : ℕ) (cell_1 : OwnedDataCell),
+    (↑(setCounter sdk slot cell (-1)#isize).data_cells)[slot_1]? = some cell_1 →
+      h.allocated (m.dataCell slot_1) = true ∧
+        (h.payload (m.dataCell slot_1)).descriptor = m.descriptor slot_1 ∧
+          (m.descriptor slot_1).length = (↑cell_1.bytes).length ∧
+            put h.counter (m.dataCell ↑slot) (-1) (m.dataCell slot_1) = ↑cell_1.borrowed ∧
+              h.ambient.strong (m.dataCell slot_1) = cell_1.strong ∧
+                h.ambient.weak (m.dataCell slot_1) = cell_1.weak ∧
+                  ∀ (i : ℕ) (byte : U8),
+                    (↑cell_1.bytes)[i]? = some byte → (h.payload (m.dataCell slot_1)).contents i = UInt8.ofNat ↑byte
+'AspisR1.S2H.image_counter_update' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2H.image_shared_acquire' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2H.image_exclusive_acquire' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

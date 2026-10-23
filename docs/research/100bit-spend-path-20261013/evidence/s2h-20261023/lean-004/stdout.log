@@ -1,0 +1,74 @@
+S2H_HeapUpdate.lean:23:4: error: unsolved goals
+case pos
+Child Alloc Event : Type
+m : AllocationMap
+h : Heap (World Child Alloc Event)
+sdk : SDK
+image : HeapImage m h sdk
+slot : Usize
+cell : OwnedDataCell
+next : Isize
+read : (↑sdk.data_cells)[↑slot]? = some cell
+valid : ↑slot < (↑sdk.data_cells).length
+fetched :
+  (↑(setCounter sdk slot cell next).data_cells)[↑slot]? =
+    some { bytes := cell.bytes, borrowed := next, strong := cell.strong, weak := cell.weak }
+before :
+  h.allocated (m.dataCell ↑slot) = true ∧
+    (h.payload (m.dataCell ↑slot)).descriptor = m.descriptor ↑slot ∧
+      (m.descriptor ↑slot).length = (↑cell.bytes).length ∧
+        h.counter (m.dataCell ↑slot) = ↑cell.borrowed ∧
+          h.ambient.strong (m.dataCell ↑slot) = cell.strong ∧
+            h.ambient.weak (m.dataCell ↑slot) = cell.weak ∧
+              ∀ (i : ℕ) (byte : U8),
+                (↑cell.bytes)[i]? = some byte → (h.payload (m.dataCell ↑slot)).contents i = UInt8.ofNat ↑byte
+⊢ (if True then ↑next else h.counter (m.dataCell ↑slot)) = ↑next
+S2H_HeapUpdate.lean:33:21: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [put,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2H_HeapUpdate.lean:58:2: error: Type mismatch: After simplification, term
+  update
+ has type
+  HeapImage m
+    { accounts := h.accounts, ownerLive := h.ownerLive, allocated := h.allocated, payload := h.payload,
+      counter := put h.counter (m.dataCell ↑slot) (↑cell.borrowed + 1), external := h.external, guards := h.guards,
+      ambient := h.ambient }
+    (setCounter sdk slot cell next)
+but is expected to have type
+  HeapImage m
+    { accounts := h.accounts, ownerLive := h.ownerLive, allocated := h.allocated, payload := h.payload,
+      counter := put h.counter (m.dataCell ↑slot) (if True then ↑cell.borrowed + 1 else -1), external := h.external,
+      guards :=
+        { token := token, cell := m.dataCell ↑slot, owner := owner, kind := Kind.shared,
+            descriptor := (h.payload (m.dataCell ↑slot)).descriptor } ::
+          h.guards,
+      ambient := h.ambient }
+    (setCounter sdk slot cell next)
+S2H_HeapUpdate.lean:68:2: error: Type mismatch: After simplification, term
+  update
+ has type
+  HeapImage m
+    { accounts := h.accounts, ownerLive := h.ownerLive, allocated := h.allocated, payload := h.payload,
+      counter := put h.counter (m.dataCell ↑slot) ↑(-1)#isize, external := h.external, guards := h.guards,
+      ambient := h.ambient }
+    (setCounter sdk slot cell (-1)#isize)
+but is expected to have type
+  HeapImage m
+    { accounts := h.accounts, ownerLive := h.ownerLive, allocated := h.allocated, payload := h.payload,
+      counter :=
+        put h.counter (m.dataCell ↑slot)
+          (if Kind.exclusive = Kind.shared then h.counter (m.dataCell ↑slot) + 1 else -1),
+      external := h.external,
+      guards :=
+        { token := token, cell := m.dataCell ↑slot, owner := owner, kind := Kind.exclusive,
+            descriptor := (h.payload (m.dataCell ↑slot)).descriptor } ::
+          h.guards,
+      ambient := h.ambient }
+    (setCounter sdk slot cell (-1)#isize)
+'AspisR1.S2H.image_counter_update' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2H.image_shared_acquire' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2H.image_exclusive_acquire' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

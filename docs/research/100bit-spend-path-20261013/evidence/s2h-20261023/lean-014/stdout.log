@@ -1,0 +1,31 @@
+S2H_ReferencePorts.lean:46:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+S2H_ReferencePorts.lean:53:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+S2H_ReferencePorts.lean:99:2: error: unsolved goals
+case e_a.true
+C S : Type
+ops : S2E_Reference.Ops
+children : Children C S
+o : Original S
+h✝ : ¬(o.sdk.accounts.len != 7#usize) = true
+leading : Option (Slice U8)
+magic : Std.Array U8 4#usize
+magicSlice : Slice U8
+⊢ (if false = true then do
+      let cleared ← children.clear_return_data o.state
+      let (reply, validatedState) ← children.validate_asq8 cleared o.program o.sdk o.data
+      match reply with
+        | core.result.Result.Ok value => do
+          let (result, state, sdk) ← stage2_proof ops children validatedState o.sdk value
+          let finalState ← children.drop_statement state value.statement
+          ok (result, finalState, sdk)
+        | core.result.Result.Err error => ok (core.result.Result.Err error, validatedState, o.sdk)
+    else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData, o.state, o.sdk)) =
+    ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData, o.state, o.sdk)
+'AspisR1.S2H.stage1_evaluator_port' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2H.stage2_evaluator_port' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2H.evalStage1_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2H.evalStage2_certificate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

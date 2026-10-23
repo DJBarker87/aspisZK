@@ -1,0 +1,65 @@
+S2H_CutRelation.lean:64:4: error(lean.invalidField): Invalid field notation: Type of
+  account
+is not known; cannot resolve field `data_slot`
+
+Hint: Consider replacing the field projection `.data_slot` with a call to the function `SdkReference.OwnedAccount.data_slot`.
+S2H_CutRelation.lean:65:4: error(lean.invalidField): Invalid field notation: Type of
+  account
+is not known; cannot resolve field `lamports_slot`
+
+Hint: Consider replacing the field projection `.lamports_slot` with a call to the function `SdkReference.OwnedAccount.lamports_slot`.
+S2H_CutRelation.lean:90:10: error(lean.unknownIdentifier): Unknown identifier `HeapImage`
+
+Note: It is not possible to treat `HeapImage` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+S2H_CutRelation.lean:106:10: error(lean.unknownIdentifier): Unknown identifier `HeapImage`
+
+Note: It is not possible to treat `HeapImage` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+S2H_CutRelation.lean:114:15: error(lean.unknownIdentifier): Unknown identifier `CutRelated`
+
+Note: It is not possible to treat `CutRelated` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+S2H_CutRelation.lean:117:107: error: unsolved goals
+W Child Alloc Event : Type
+L : Library W (World Child Alloc Event)
+trust : S2TrustedSdkBorrow L
+o : Originals W Child Alloc Event
+n : W
+r : OwnedCut Child Alloc Event
+related : sorry
+i : ℕ
+account : OwnedAccount
+read : (↑r.sdk.accounts)[i]? = some account
+fields :
+  L.accountData n (o.allocations.handle i) = (r.heap.accounts (o.allocations.handle i)).1 ∧
+    L.accountLamports n (o.allocations.handle i) = (r.heap.accounts (o.allocations.handle i)).2 ∧
+      ((r.heap.accounts (o.allocations.handle i)).1 = (r.heap.accounts (o.allocations.handle i)).1 →
+          L.accountData n (o.allocations.handle i) = L.accountData n (o.allocations.handle i)) ∧
+        (r.heap.ownerLive (o.allocations.handle i) = true →
+          L.accountData n (o.allocations.handle i) ≠ L.accountLamports n (o.allocations.handle i))
+⊢ L.accountData n (o.allocations.handle i) = o.allocations.dataCell ↑account.data_slot ∧
+    L.accountLamports n (o.allocations.handle i) = o.allocations.lamportsCell ↑account.lamports_slot
+S2H_CutRelation.lean:129:15: error(lean.unknownIdentifier): Unknown identifier `CutRelated`
+
+Note: It is not possible to treat `CutRelated` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+S2H_CutRelation.lean:135:91: error: unsolved goals
+W Child Alloc Event : Type
+L : Library W (World Child Alloc Event)
+trust : S2TrustedSdkBorrow L
+o : Originals W Child Alloc Event
+n : W
+r : OwnedCut Child Alloc Event
+related : sorry
+slot : ℕ
+cell : OwnedDataCell
+read : (↑r.sdk.data_cells)[slot]? = some cell
+⊢ (L.cellPayload n (o.allocations.dataCell slot)).descriptor = o.allocations.descriptor slot ∧
+    (o.allocations.descriptor slot).length = (↑cell.bytes).length ∧
+      L.cellCounter n (o.allocations.dataCell slot) = ↑cell.borrowed ∧
+        ∀ (i : ℕ) (byte : U8),
+          (↑cell.bytes)[i]? = some byte → (L.cellPayload n (o.allocations.dataCell slot)).contents i = UInt8.ofNat ↑byte
+S2H_CutRelation.lean:149:15: error(lean.unknownIdentifier): Unknown identifier `CutRelated`
+
+Note: It is not possible to treat `CutRelated` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+S2H_CutRelation.lean:155:9: error: Tactic `rcases` failed: `x✝ : ?m.47` is not an inductive datatype
+'AspisR1.S2H.selected_account' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2H.selected_data' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2H.selected_token' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
