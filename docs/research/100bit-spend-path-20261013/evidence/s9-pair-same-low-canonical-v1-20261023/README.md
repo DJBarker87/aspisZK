@@ -1,0 +1,3 @@
+An actual successful Pair active body yields the complete same-execution prefix witnesses, its actual afterLow continuation and canonicality of that identical scalar low result. Reuses the constructed Candidate arithmetic prefix and exact operation maps. Existing mapped ap0/ap1/extra read canonicality contracts and side bound remain premises; upstream provenance remains open.
+
+Focused Lean check: 16.31 seconds; peak aggregate RSS 3230744576 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
