@@ -2,7 +2,13 @@
 
 Status: S6 OPEN; target not yet established. This is pure Result totality,
 not full source/runtime/SDK correspondence, accepted round-trip, or soundness.
-Authoritative source freeze remains 25866ec331cc7ce27dd9956609c11d32fa8fa58a.
+Historical codec source freeze: 25866ec331cc7ce27dd9956609c11d32fa8fa58a.
+Current stage-port target follows Session A's final handoff section and
+VERIFIER-TOP-20261023.md: owned adapter plus H5, default f8c0ec72621f…, devnet
+63ad3e9cc096…. All statement crate files and field.rs are byte-equal to current
+research b9a7a210291d2d989ee52aa3d2f5c2dfb904ffcd; see the complete hash list in
+s6-current-statement-source-compatibility.json. Other core modules are not
+claimed identical (state_only_prefix.rs changed).
 No production verifier changes. S2 belongs to the transferred owner.
 
 ## Enclosing obligations established
@@ -68,7 +74,8 @@ is installed in an accepted target. The scanner is
 
 ## Exact remaining work
 
-- Complete the full 1880-byte encoder/decoder composition and accepted inverse.
+- Complete the full decoder composition and accepted inverse. The 1880-byte
+  reference encoder totality is now established, as described below.
 - Prove contextual transport of the verified loop transformations and prior
   validation/codec references to the frozen source, including error/state
   behavior required by the enclosing execution.
@@ -81,3 +88,23 @@ is installed in an accepted target. The scanner is
 
 Any candidate adoption needs equivalence/contextual gates and explicit source,
 artifact and proof re-pins. The frozen release has not been silently replaced.
+
+## Full forest encoder and validator composition
+
+`AspisS6ForestParent.Total.validate_total` and `encode_total` are checked on
+both full native statement variants, with no canonical-input or child-success
+premises. The outer source bodies are unchanged; four children are installed:
+the two actual payment encoders, concrete lane-transition encoder reference and
+actual digest encoder. Complete native type definitions are checked equal to
+the existing type owner. The new extraction is source-only `s6-forest-parent`.
+One monadic constant required a formatter-only newline repair; the materializer
+checks equality after removing whitespace. No translation rule changed.
+
+Validation: source v2 exit0/9.475148s/2264023040B RSS; helpers v1
+exit0/5.587298s/2265088000B; validator v3 exit0/10.141072s/2273640448B;
+encoder v3 exit0/13.153696s/2253815808B. All zero swap, standard axioms only.
+The first range candidate incorrectly guessed enum tags 0/1; the source is
+repr(u8), PrivateTransfer=1 and Withdrawal=2. Lean rejected the false bound;
+accepted `kind_spec` proves the actual 1..2 range. Both excluded attempts are
+retained. This does not prove accepted decoding inverts encoding, nor full
+codec equality with original source, nor any SDK/caller state/trace join.
