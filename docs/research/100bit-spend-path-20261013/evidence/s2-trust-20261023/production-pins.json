@@ -101,6 +101,16 @@
     }
   ],
   "source_files": {
+    "sbf-std-lib.rs": {
+      "sha256": "f6f891589d2a49fa9824e38cff3662a92f53763010eca2eea99e339c3fd7b9c3",
+      "size": 28290,
+      "spans_inclusive": {
+        "std.cell_reexport": [
+          491,
+          491
+        ]
+      }
+    },
     "solana-account-info.rs": {
       "sha256": "6b59aba664bb70fda6e17bcc8cf6eb41fc0bc9d8bcbb797bd70c1b107809c29a",
       "size": 17513,
@@ -157,8 +167,12 @@
           1426,
           1433
         ],
-        "Ref_and_deref": [
+        "Ref": [
           1457,
+          1463
+        ],
+        "Ref.deref": [
+          1466,
           1474
         ],
         "BorrowRefMut.drop": [
@@ -166,12 +180,20 @@
           1802
         ],
         "BorrowRefMut.new": [
-          1804,
-          1820
+          1806,
+          1818
         ],
-        "RefMut_and_deref_derefmut": [
-          1839,
-          1870
+        "RefMut": [
+          1842,
+          1849
+        ],
+        "RefMut.deref": [
+          1852,
+          1860
+        ],
+        "RefMut.deref_mut": [
+          1863,
+          1869
         ]
       }
     }
@@ -190,7 +212,77 @@
       "pool-adapter",
       "private-leaf-salts"
     ],
-    "debug_refcell": false
+    "debug_refcell": "not enabled by adapter arguments; prebuilt core feature/source correspondence remains P6",
+    "archive_pins": {
+      "sysroot_realpath": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust",
+      "explicit_1_89_toolchain_realpath": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust",
+      "archives": [
+        {
+          "path": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/libcore-673053c840437f62.rlib",
+          "sha256": "a1f52278d174e0741f3b6269254cad81b6a1e2ecb1a7ce7f2460429d28dae09b",
+          "size": 37557376
+        },
+        {
+          "path": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/libstd-30a182e154ee17f6.rlib",
+          "sha256": "cd2b5fd502a9e0e871978a989c4a28a5c8daeef6dcb772b012d92d2b308c2a31",
+          "size": 6838294
+        }
+      ]
+    },
+    "actual_rustc_command": [
+      "/home/dombarker/.rustup/toolchains/1.89.0-sbpf-solana-v1.52/bin/rustc",
+      "--crate-name",
+      "aspis_r1_cost_probe_program",
+      "--edition=2021",
+      "programs/r1-cost-probe/src/lib.rs",
+      "--error-format=json",
+      "--json=diagnostic-rendered-ansi,artifacts,future-incompat",
+      "--crate-type",
+      "cdylib",
+      "--crate-type",
+      "lib",
+      "--emit=dep-info,link,llvm-ir,mir",
+      "-C",
+      "opt-level=3",
+      "-C",
+      "embed-bitcode=no",
+      "--cfg",
+      "feature=\"custom-heap\"",
+      "--cfg",
+      "feature=\"default\"",
+      "--cfg",
+      "feature=\"pool-adapter\"",
+      "--cfg",
+      "feature=\"private-leaf-salts\"",
+      "--check-cfg",
+      "cfg(docsrs,test)",
+      "--check-cfg",
+      "cfg(feature, values(\"cu-profiling\", \"custom-heap\", \"custom-panic\", \"default\", \"no-entrypoint\", \"pool-adapter\", \"private-leaf-salts\"))",
+      "-C",
+      "metadata=077ec40f5c16c420",
+      "--out-dir",
+      "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/sbf-target-verifier/sbpf-solana-solana/release/deps",
+      "--target",
+      "sbpf-solana-solana",
+      "-C",
+      "strip=debuginfo",
+      "-L",
+      "dependency=/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/sbf-target-verifier/sbpf-solana-solana/release/deps",
+      "-L",
+      "dependency=/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/sbf-target-verifier/release/deps",
+      "--extern",
+      "aspis_core=/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/sbf-target-verifier/sbpf-solana-solana/release/deps/libaspis_core-4a3ed68d4a8243dc.rlib",
+      "--extern",
+      "aspis_r1_cost_probe=/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/sbf-target-verifier/sbpf-solana-solana/release/deps/libaspis_r1_cost_probe-c76fd0236a37de9c.rlib",
+      "--extern",
+      "aspis_statement=/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/sbf-target-verifier/sbpf-solana-solana/release/deps/libaspis_statement-d03eaf1b5e276d25.rlib",
+      "--extern",
+      "solana_program=/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/sbf-target-verifier/sbpf-solana-solana/release/deps/libsolana_program-3c5bd87471b17593.rlib",
+      "-C",
+      "link-arg=--threads=4",
+      "-Zremap-cwd-prefix=",
+      "-Zprint-mono-items=yes"
+    ]
   },
   "limitations": [
     "Installed SBF sysroot source pinned; source presence does not prove compiler binary source correspondence. P6 remains explicit.",
@@ -203,5 +295,133 @@
     "lean_attempts": 0,
     "kani_runs": 0,
     "print_axioms": "N/A"
-  }
+  },
+  "adapter_inputs": {
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs": {
+      "sha256": "6a8e5799035458ed4c0093709da6da86fb29100303861ddd15212d3ad7dcdcfb",
+      "size": 41100
+    },
+    "programs/r1-cost-probe/Cargo.toml": {
+      "sha256": "6aa7d08708762ddadf3a6173b14256d7c5a3f1eba12e8631e9abb0c154eebe7b",
+      "size": 999
+    },
+    "Cargo.toml": {
+      "sha256": "3de458ef315222e2ac6facb0ca39f24286ab3bb6ed103eebc2c87a02761bd23e",
+      "size": 2465
+    }
+  },
+  "adapter_matches_read_only_s10_rebuild_workspace": true,
+  "adopted_build_reuse": {
+    "build-default-v2": {
+      "actual_source_revision": "7acf5cfb5fa49f4cf5d8e69566ba8221189c31ac",
+      "command": {
+        "command": [
+          "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+          "--manifest-path",
+          "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/src/programs/r1-cost-probe/Cargo.toml",
+          "--sbf-out-dir",
+          "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/build-default-v2/artifacts",
+          "--features",
+          "pool-adapter,private-leaf-salts",
+          "--skip-tools-install",
+          "--offline",
+          "-j",
+          "4",
+          "--",
+          "--locked"
+        ],
+        "env": {
+          "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/sbf-target-verifier",
+          "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS": "-C link-arg=--threads=4",
+          "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/rustc-diagnostics.py",
+          "S10_DIAGNOSTICS": "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/build-default-v2/diagnostics"
+        },
+        "expected_time": "optimized SBF compilation and diagnostic emission; no arithmetic release gate",
+        "wrapper_sha256": "fa74d69e097b6eab43809943614133081abb6beb19406018961402b86494ff84"
+      },
+      "comparison": {
+        "mode": "default",
+        "sha256": "40dc75742430dd198bd51d519aa5a41bad4a45e8f173ccbd51c6d5be344ac3f0",
+        "expected_sha256": "40dc75742430dd198bd51d519aa5a41bad4a45e8f173ccbd51c6d5be344ac3f0",
+        "bytes": 1508152,
+        "byte_identical": true
+      },
+      "receipt_sha256": "55cb09965ced6db94e586b84e25c802ae1a9a3d24f07b3e320b9322f36c6cd51"
+    },
+    "build-devnet-v1": {
+      "actual_source_revision": "7acf5cfb5fa49f4cf5d8e69566ba8221189c31ac",
+      "command": {
+        "command": [
+          "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+          "--manifest-path",
+          "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/src/programs/r1-cost-probe/Cargo.toml",
+          "--sbf-out-dir",
+          "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/build-devnet-v1/artifacts",
+          "--features",
+          "pool-adapter,private-leaf-salts",
+          "--skip-tools-install",
+          "--offline",
+          "-j",
+          "4",
+          "--",
+          "--locked"
+        ],
+        "env": {
+          "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/sbf-target-verifier",
+          "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS": "-C link-arg=--threads=4",
+          "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/rustc-diagnostics.py",
+          "S10_DIAGNOSTICS": "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/build-devnet-v1/diagnostics",
+          "ASPIS_R1_POOL_PROGRAM_ID": "BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs",
+          "ASPIS_R1_REGISTRY_PROGRAM_ID": "9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q"
+        },
+        "expected_time": "optimized SBF compilation and diagnostic emission; no arithmetic release gate",
+        "wrapper_sha256": "fa74d69e097b6eab43809943614133081abb6beb19406018961402b86494ff84"
+      },
+      "comparison": {
+        "mode": "devnet",
+        "sha256": "12cb0bc2f8ff3993643638080a3786fdcd941910e5e4dd65ae2937a99290c28f",
+        "expected_sha256": "12cb0bc2f8ff3993643638080a3786fdcd941910e5e4dd65ae2937a99290c28f",
+        "bytes": 1508152,
+        "byte_identical": true
+      },
+      "receipt_sha256": "f42f20d50943980576c6a0fce27cc96d20fdd4a817d433534929e3fcc1e1cf75"
+    },
+    "build-pool-v1": {
+      "actual_source_revision": "7acf5cfb5fa49f4cf5d8e69566ba8221189c31ac",
+      "command": {
+        "command": [
+          "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+          "--manifest-path",
+          "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/src/programs/aspis-pool/Cargo.toml",
+          "--sbf-out-dir",
+          "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/build-pool-v1/artifacts",
+          "--features",
+          "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+          "--skip-tools-install",
+          "--offline",
+          "-j",
+          "4",
+          "--",
+          "--locked"
+        ],
+        "env": {
+          "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/sbf-target-pool",
+          "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS": "-C link-arg=--threads=4",
+          "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/rustc-diagnostics.py",
+          "S10_DIAGNOSTICS": "/home/dombarker/project-offloads/codex-cx-s10-repin-20261022/build-pool-v1/diagnostics"
+        },
+        "expected_time": "optimized SBF compilation and diagnostic emission; no arithmetic release gate",
+        "wrapper_sha256": "fa74d69e097b6eab43809943614133081abb6beb19406018961402b86494ff84"
+      },
+      "comparison": {
+        "mode": "pool",
+        "sha256": "121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548",
+        "expected_sha256": "121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548",
+        "bytes": 605704,
+        "byte_identical": true
+      },
+      "receipt_sha256": "82d23b8c5d61d8ef2b4cdebb0610a835e2bed7931d0ab2b2d71444604f268878"
+    }
+  },
+  "source_files_match_checksum_verified_archives": true
 }

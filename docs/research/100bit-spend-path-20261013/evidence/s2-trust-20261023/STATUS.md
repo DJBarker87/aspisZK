@@ -99,3 +99,70 @@ with symbolic omega proofs; focused attempt006 passed with the same standard
 axiom set. Budget: Lean 6/100; Kani 21 command invocations, conservatively charged
 35/60 including failed invocations, unstarted batch tails and metric replays.
 Next: final conclusion-hiding/source/release-pin audit and handoff manifest.
+
+# Stage 5: audit and final handoff
+
+Audit entrypoints (read-only validation; no prover replay):
+
+- `python3 evidence/s2-trust-20261023/audit.py` from the research directory.
+- `python3 evidence/s2-trust-20261023/pin_sources.py` refreshes source/hash indexes.
+- `python3 evidence/s2-trust-20261023/finalize.py` validates accepted proof receipts.
+
+AUDIT.md inspects all fifteen full statements and their transitive local
+definitions. audit.json confirms the exact field inventory, only Std imports,
+no forbidden proof devices, every new theorem's axiom print, and the allowed
+new-module/evidence-only change set. No field mentions caller success, fixed
+caller bytes, outputs, logs, dV_frozen2 or S2CallerFacts. Primitive arbitrary
+slice contents and library Result arms are explicitly distinguished from caller
+conclusions; they are required local semantics, not a hidden accepted observation.
+
+production-pins.json now additionally pins the actual S10 rustc argv, the SBF
+core/std archive checksums/sizes, the installed std::cell re-export at std/lib.rs
+line491, separate Ref/RefMut type/deref/drop spans, adapter/workspace manifests,
+and all three adopted rebuild commands/artifact comparisons. The SDK lib.rs
+snapshots match the checksum-verified crate archives. The adopted lock and
+adapter source/manifest match the read-only S10 rebuild workspace. No diagnostic
+v7 lock is substituted. The SBF compiler still reports unknown source commit;
+version.md's Anza commit/source presence does not prove prebuilt core/compiler
+correspondence or prebuilt core feature configuration. Those remain visible P6
+limits; the binaries and installed source are separately pinned.
+
+Exact established claims:
+
+- `AspisR1.S2Trust.model_satisfies`: the fifteen-field trust structure is jointly
+  satisfiable over every valid related mathematical local state (arbitrary ambient
+  carrier), not only a selected successful acquisition.
+- `AspisR1.S2Trust.consistency`, initial_valid and the three schedule theorems:
+  admission is inhabited and failed borrows, moves, drops and writes are included.
+- Kani `step_contract`, fifteen named properties and `verified_stub_schedule`:
+  the bounded executable spec satisfies its primitive relation; verified stubs
+  support the checked schedule. Every final accepted result has exact command,
+  source/dependency/tool pins, exit, wall, RSS, swaps and axiom status. See
+  manifest.json and its accepted_lean/accepted_kani receipt lists.
+
+Discharged: joint satisfiability/non-vacuity of the proposed model interface.
+Retained: the already approved SDK/std typed interpretation trust, initial
+runtime/heap/provenance admission, P6 source/compiler/runtime binding and every
+caller/common-execution/Required14/child-effect/history/binary obligation.
+No extra trust ruling, new release metric, SDK certification or S2 closure is
+claimed. Final Rust consumer-only admission delta is retained in
+rust-harness-delta.diff; primitive/contract/property declarations are unchanged,
+so no old result is silently attributed to a changed callee.
+
+Validation actually run: focused new Lean modules; axiom prints for all seven
+new theorems (including the private helper); 17 unique accepted Kani checks;
+source/lock/archive comparisons; field/proof-device/change-scope audits. Reused:
+Std compiled cache, the unchanged primitive proof closure after the consumer-only
+edit, and the three S10 adopted ELF rebuilds. No full frozen manifest or unrelated
+runtime/adversarial suite was repeated. Raw tool logs preserve their whitespace;
+format checks on authored source/documentation are separate from raw receipts.
+
+Remaining blocker / next deliverable: instantiate the production typed Library
+relation and initial admission, prove unchanged-caller per-call/implicit-cleanup
+simulation and the E-indexed common execution certificate. Larger Rust projection
+capacities require fresh checks before use. Then fill Required14 and compose the
+actual child/effect/runtime/source/binary joins. S2 remains OPEN; target not yet
+established. No shipped file changed, so release ELFs were not rebuilt again;
+default40dc7574..., devnet12cb0bc2..., Pool121f3e29... pins remain unchanged.
+All this worker's host jobs are terminal. No push, merge, other-worktree mutation,
+or key cleanup occurred. Final budget: Lean6/100; Kani21 invocations, charged35/60.

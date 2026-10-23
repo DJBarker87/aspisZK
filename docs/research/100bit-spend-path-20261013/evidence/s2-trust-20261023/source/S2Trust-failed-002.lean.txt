@@ -1,0 +1,284 @@
+import Std
+
+/-! Route B primitive library semantics. No production runtime instance is supplied.
+Cell/token/location names below are abstract identities, never integer addresses.
+The interpretation relation must bind them to typed Rust values and provenance.
+The concrete machine is a consistency witness, not SDK certification. -/
+set_option autoImplicit false
+namespace AspisR1.S2Trust
+
+/-- SBF has 64-bit isize. The negative range is retained for external borrows,
+including split external mutable guards; this interface never creates splits. -/
+def maxCounter : Int := 9223372036854775807
+def minCounter : Int := -9223372036854775808
+
+structure Descriptor where
+  base : Nat
+  length : Nat
+  provenance : Nat
+  deriving DecidableEq
+
+/-- Exact typed slice descriptor and current contents. Empty slices are allowed.
+Only indices below length are accessible. The map is not a fabricated buffer. -/
+structure Payload where
+  descriptor : Descriptor
+  contents : Nat → UInt8
+
+inductive Kind where
+  | shared | exclusive
+  deriving DecidableEq
+
+structure Guard where
+  token : Nat
+  cell : Nat
+  owner : Nat
+  kind : Kind
+  descriptor : Descriptor
+  deriving DecidableEq
+
+/-- ambient includes all metadata, Rc counts, lamports, allocator and oracle state.
+accounts maps handles to data/lamports cell identities; aliases are permitted.
+external records already-live borrows outside the tracked local guard set. -/
+structure Heap (Ambient : Type) where
+  accounts : Nat → Nat × Nat
+  ownerLive : Nat → Bool
+  allocated : Nat → Bool
+  payload : Nat → Payload
+  counter : Nat → Int
+  external : Nat → Int
+  guards : List Guard
+  ambient : Ambient
+
+def lookup {F : Type} (s : Heap F) (t : Nat) : Option Guard :=
+  s.guards.find? (fun g => g.token == t)
+
+def count {F : Type} (s : Heap F) (c : Nat) (k : Kind) : Int :=
+  ((s.guards.filter (fun g => g.cell == c && g.kind == k)).length : Int)
+
+/-- Runtime admission is separate. In particular distinct keys do not imply
+cell disjointness. External shared guards and pre-existing conflicts survive.
+The external negative case has no tracked guards; no split/leak is introduced. -/
+def Valid {F : Type} (s : Heap F) : Prop :=
+  s.guards.Pairwise (fun g h => g.token ≠ h.token ∧ g.owner ≠ h.owner) ∧
+  (∀ c, minCounter ≤ s.counter c ∧ s.counter c ≤ maxCounter ∧
+    s.counter c = s.external c + count s c .shared - count s c .exclusive ∧
+    (count s c .exclusive > 0 → s.external c = 0 ∧ count s c .shared = 0 ∧
+      count s c .exclusive = 1) ∧
+    (s.external c < 0 → count s c .shared = 0 ∧ count s c .exclusive = 0)) ∧
+  (∀ g, g ∈ s.guards → s.allocated g.cell = true ∧
+    g.descriptor = (s.payload g.cell).descriptor) ∧
+  (∀ a, s.ownerLive a = true →
+    (s.accounts a).1 ≠ (s.accounts a).2 ∧ s.allocated (s.accounts a).1 = true)
+
+inductive Op where
+  | shared (account token owner : Nat)
+  | exclusive (account token owner : Nat)
+  | deref (token : Nat)
+  | write (token index : Nat) (value : UInt8)
+  | move (token destination : Nat)
+  | drop (token : Nat)
+  | errorMoveDrop
+
+/-- The Result discriminant is explicit. Err owns no token. A move acts on the
+single token owner whether inside a Result, argument, return or local slot. -/
+inductive Reply where
+  | guard (token : Nat)
+  | borrowFailed
+  | payload (value : Payload)
+  | unit
+
+def put {A : Type} (f : Nat → A) (c : Nat) (v : A) : Nat → A :=
+  fun d => if d = c then v else f d
+
+def acquire {F : Type} (s : Heap F) (c t o : Nat) (k : Kind) : Heap F :=
+  {s with counter := put s.counter c (if k = .shared then s.counter c + 1 else -1)
+          guards := ⟨t,c,o,k,(s.payload c).descriptor⟩ :: s.guards}
+
+def release {F : Type} (s : Heap F) (g : Guard) : Heap F :=
+  {s with counter := put s.counter g.cell
+            (if g.kind = .shared then s.counter g.cell - 1 else 0)
+          guards := s.guards.filter (fun h => h.token != g.token)}
+
+def relocate {F : Type} (s : Heap F) (t o : Nat) : Heap F :=
+  {s with guards := s.guards.map (fun g => if g.token = t then {g with owner := o} else g)}
+
+def writeAt {F : Type} (s : Heap F) (g : Guard) (i : Nat) (v : UInt8) : Heap F :=
+  {s with payload := put s.payload g.cell
+    {(s.payload g.cell) with contents := put (s.payload g.cell).contents i v}}
+
+def Fresh {F : Type} (s : Heap F) (t o : Nat) : Prop :=
+  lookup s t = none ∧ ∀ g, g ∈ s.guards → g.owner ≠ o
+
+/-- Legitimate library operations only: no stale owner, invalid token, free,
+realloc, split, clone, leak, lamport borrow, CPI or concurrency operation. -/
+def Enabled {F : Type} (s : Heap F) : Op → Prop
+  | .shared a t o | .exclusive a t o => s.ownerLive a = true ∧ Fresh s t o
+  | .deref t | .drop t => ∃ g, lookup s t = some g
+  | .write t i _ => ∃ g, lookup s t = some g ∧ g.kind = .exclusive ∧
+      i < (s.payload g.cell).descriptor.length
+  | .move t o => (∃ g, lookup s t = some g) ∧ ∀ g, g ∈ s.guards → g.owner ≠ o
+  | .errorMoveDrop => True
+
+/-- Executable mathematical specification. Out-of-domain operations are not
+licensed by the trust item. Their unit replies are not SDK error semantics. -/
+def run {F : Type} (s : Heap F) : Op → Heap F × Reply
+  | .shared a t o =>
+      let c := (s.accounts a).1
+      if 0 ≤ s.counter c ∧ s.counter c < maxCounter then
+        (acquire s c t o .shared, .guard t) else (s, .borrowFailed)
+  | .exclusive a t o =>
+      let c := (s.accounts a).1
+      if s.counter c = 0 then (acquire s c t o .exclusive, .guard t)
+      else (s, .borrowFailed)
+  | .deref t => match lookup s t with
+      | some g => (s, .payload (s.payload g.cell))
+      | none => (s, .unit)
+  | .write t i v => match lookup s t with
+      | some g => if g.kind = .exclusive ∧ i < (s.payload g.cell).descriptor.length
+          then (writeAt s g i v, .unit) else (s, .unit)
+      | none => (s, .unit)
+  | .move t o => (relocate s t o, .guard t)
+  | .drop t => match lookup s t with
+      | some g => (release s g, .unit)
+      | none => (s, .unit)
+  | .errorMoveDrop => (s, .borrowFailed)
+
+/-- A typed Rust interpretation supplies this carrier and relation. Neither
+an instance for production nor relatedness of its initial heap is proved here.
+The observations include BOTH RefCell/value dereferences and actual allocation
+identity, not raw usize equalities. accountData denotes Rc dereference. -/
+structure Library (W F : Type) where
+  related : W → Heap F → Prop
+  accountData : W → Nat → Nat
+  accountLamports : W → Nat → Nat
+  cellPayload : W → Nat → Payload
+  cellCounter : W → Nat → Int
+  liveGuard : W → Nat → Option Guard
+  allocated : W → Nat → Bool
+  run : W → Op → W × Reply
+
+def Matches {W F : Type} (L : Library W F) (w : W) (op : Op)
+    (expected : Heap F × Reply) : Prop :=
+  ∃ w', L.run w op = (w', expected.2) ∧ L.related w' expected.1
+
+/-- TRUST ITEM: pinned Solana AccountInfo 2.3.0 plus production SBF core RefCell
+semantics, exactly the fifteen route-B fields. Every fact ranges over arbitrary
+valid related local states, WITHOUT adapter acceptance. This is additional
+library trust, not a proof of SDK internals or a caller refinement. See
+../evidence/s2-trust-20261023/production-pins.json for pins and P6 limitations. -/
+structure S2TrustedSdkBorrow {W F : Type} (L : Library W F) : Prop where
+  account_data_cell : ∀ w s, L.related w s → Valid s → ∀ a b,
+    L.accountData w a = (s.accounts a).1 ∧
+    L.accountLamports w a = (s.accounts a).2 ∧
+    ((s.accounts a).1 = (s.accounts b).1 → L.accountData w a = L.accountData w b) ∧
+    (s.ownerLive a = true → L.accountData w a ≠ L.accountLamports w a)
+  cell_payload : ∀ w s, L.related w s → Valid s → ∀ c,
+    L.cellPayload w c = s.payload c
+  cell_counter : ∀ w s, L.related w s → Valid s → ∀ c,
+    L.cellCounter w c = s.counter c ∧ ∀ t, L.liveGuard w t = lookup s t
+  shared_ok : ∀ w s a t o, L.related w s → Valid s → Enabled s (.shared a t o) →
+    0 ≤ s.counter (s.accounts a).1 → s.counter (s.accounts a).1 < maxCounter →
+    Matches L w (.shared a t o) (acquire s (s.accounts a).1 t o .shared, .guard t)
+  shared_err : ∀ w s a t o, L.related w s → Valid s → Enabled s (.shared a t o) →
+    (s.counter (s.accounts a).1 < 0 ∨ s.counter (s.accounts a).1 = maxCounter) →
+    Matches L w (.shared a t o) (s, .borrowFailed)
+  exclusive_ok : ∀ w s a t o, L.related w s → Valid s → Enabled s (.exclusive a t o) →
+    s.counter (s.accounts a).1 = 0 →
+    Matches L w (.exclusive a t o) (acquire s (s.accounts a).1 t o .exclusive, .guard t)
+  exclusive_err : ∀ w s a t o, L.related w s → Valid s → Enabled s (.exclusive a t o) →
+    s.counter (s.accounts a).1 ≠ 0 → Matches L w (.exclusive a t o) (s, .borrowFailed)
+  shared_deref : ∀ w s t g, L.related w s → Valid s → lookup s t = some g →
+    g.kind = .shared → Matches L w (.deref t) (s, .payload (s.payload g.cell))
+  exclusive_deref : ∀ w s t g, L.related w s → Valid s → lookup s t = some g →
+    g.kind = .exclusive →
+    Matches L w (.deref t) (s, .payload (s.payload g.cell)) ∧
+    ∀ i v, i < (s.payload g.cell).descriptor.length →
+      Matches L w (.write t i v) (writeAt s g i v, .unit)
+  guard_move : ∀ w s t o, L.related w s → Valid s → Enabled s (.move t o) →
+    Matches L w (.move t o) (relocate s t o, .guard t)
+  shared_drop : ∀ w s t g, L.related w s → Valid s → lookup s t = some g →
+    g.kind = .shared → 0 < s.counter g.cell →
+    Matches L w (.drop t) (release s g, .unit)
+  exclusive_drop : ∀ w s t g, L.related w s → Valid s → lookup s t = some g →
+    g.kind = .exclusive → s.counter g.cell = -1 →
+    Matches L w (.drop t) (release s g, .unit)
+  error_move_drop : ∀ w s, L.related w s → Valid s →
+    Matches L w .errorMoveDrop (s, .borrowFailed)
+  borrow_frame : ∀ w s op, L.related w s → Valid s → Enabled s op →
+    Matches L w op (run s op)
+  guard_liveness : ∀ w s t g, L.related w s → Valid s → lookup s t = some g →
+    L.liveGuard w t = some g ∧ L.allocated w g.cell = true ∧
+    (L.cellPayload w g.cell).descriptor = g.descriptor
+
+/-- Identity interpretation: a nonempty concrete mathematical model, deliberately
+NOT a relation to Rust memory. No claim of certification follows from it. -/
+def model (F : Type) : Library (Heap F) F where
+  related := Eq
+  accountData := fun s a => (s.accounts a).1
+  accountLamports := fun s a => (s.accounts a).2
+  cellPayload := Heap.payload
+  cellCounter := Heap.counter
+  liveGuard := lookup
+  allocated := Heap.allocated
+  run := run
+
+private theorem model_matches {F : Type} (s : Heap F) (op : Op) :
+    Matches (model F) s op (run s op) := ⟨(run s op).1, rfl, rfl⟩
+
+/-- All fifteen fields are jointly satisfiable, for arbitrary ambient state.
+Universality is over all valid model states, not only the schedules below. -/
+theorem model_satisfies (F : Type) : S2TrustedSdkBorrow (model F) where
+  account_data_cell := by
+    intro w s h hv a b
+    cases h
+    exact ⟨rfl, rfl, fun h => h, fun h => (hv.2.2.2 a h).1⟩
+  cell_payload := by intro w s h _ c; cases h; rfl
+  cell_counter := by intro w s h _ c; cases h; exact ⟨rfl, fun _ => rfl⟩
+  shared_ok := by
+    intro w s a t o h _ _ hn hm
+    cases h
+    simpa only [run, if_pos (And.intro hn hm)] using model_matches w (.shared a t o)
+  shared_err := by
+    intro w s a t o h _ _ hn
+    cases h
+    have no : ¬ (0 ≤ w.counter (w.accounts a).1 ∧ w.counter (w.accounts a).1 < maxCounter) := by omega
+    simpa only [run, if_neg no] using model_matches w (.shared a t o)
+  exclusive_ok := by
+    intro w s a t o h _ _ hn
+    cases h
+    simpa only [run, if_pos hn] using model_matches w (.exclusive a t o)
+  exclusive_err := by
+    intro w s a t o h _ _ hn
+    cases h
+    simpa only [run, if_neg hn] using model_matches w (.exclusive a t o)
+  shared_deref := by
+    intro w s t g h _ hg _
+    cases h
+    simpa only [run, hg] using model_matches w (.deref t)
+  exclusive_deref := by
+    intro w s t g h _ hg hk
+    cases h
+    constructor
+    · simpa only [run, hg] using model_matches w (.deref t)
+    · intro i v hi
+      simpa only [run, hg, if_pos (And.intro hk hi)] using model_matches w (.write t i v)
+  guard_move := by intro w s t o h _ _; cases h; exact model_matches w (.move t o)
+  shared_drop := by
+    intro w s t g h _ hg _ _
+    cases h
+    simpa only [run, hg] using model_matches w (.drop t)
+  exclusive_drop := by
+    intro w s t g h _ hg _ _
+    cases h
+    simpa only [run, hg] using model_matches w (.drop t)
+  error_move_drop := by intro w s h _; cases h; exact model_matches w .errorMoveDrop
+  borrow_frame := by intro w s op h _ _; cases h; exact model_matches w op
+  guard_liveness := by
+    intro w s t g h hv hg
+    cases h
+    have mem : g ∈ w.guards := List.mem_of_find?_eq_some hg
+    exact ⟨hg, (hv.2.2.1 g mem).1, (hv.2.2.1 g mem).2.symm⟩
+
+#print axioms model_matches
+#print axioms model_satisfies
+end AspisR1.S2Trust

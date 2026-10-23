@@ -1,0 +1,11 @@
+--- source/s2-spec-v2.rs
++++ kani-spec/src/lib.rs
+@@ -289,7 +289,7 @@
+     #[kani::stub_verified(step)]
+     fn verified_stub_schedule() {
+         let mut s=state(); let a:usize=kani::any(); kani::assume(a<CELLS); let c=s.accounts[a];
+-        kani::assume(s.owner_live[a] && s.counter[c]==0 && s.guards[0].is_none() && vacant(&s,100) && vacant(&s,101));
++        kani::assume(s.owner_live[a] && s.counter[c]==0 && s.guards[0].is_none() && s.guards[1].is_none() && vacant(&s,100) && vacant(&s,101));
+         let original=s; let (n,r)=step(s,Op::Exclusive{account:a,token:0,owner:100}); assert_eq!(r,Reply::Guard(0)); s=n;
+         let (n,r)=step(s,Op::Shared{account:a,token:1,owner:101}); assert_eq!(r,Reply::BorrowFailed); s=n;
+         let (n,_)=step(s,Op::Move{token:0,destination:101}); s=n;
