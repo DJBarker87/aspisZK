@@ -1,0 +1,3 @@
+All four actual Pair term-prefix mixed products reflect from their own successful calls and exact reads to the pinned source WideExact.mul_qm31, preserving output equality and all four prefix term identities. The only arithmetic-domain premise is the public canonical mapped-ap1 read contract; coefficient normalization is internal. Actual upstream ap1 provenance and full S9 composition remain open.
+
+Focused Lean check: 22.837 seconds; peak aggregate RSS 3240640512 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
