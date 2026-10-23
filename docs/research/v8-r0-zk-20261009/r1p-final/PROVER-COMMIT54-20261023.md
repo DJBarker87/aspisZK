@@ -125,3 +125,34 @@ Accepted compiles (all exit 0; revision and exact hashes in each receipt):
 | J10634 | R1Z.ProverCommitEncoderNodes54 | 0:02.12 | 4121100 | 0 |
 | J10636 | R1Z.ProverCommitEncoderCircle54 | 0:01.90 | 4110296 | 0 |
 | J10640 | R1Z.ProverCommitEncoderGeometry54 | 0:01.91 | 4103248 | 0 |
+
+## Stage 4: owned eval_at and encode_at equal both exact encoders
+
+J10641 lifts all derived base-field nodes into WideExact. J10644 checks the
+combined owner extraction, whose retained node/collector/phi declarations are
+byte-identical. J10645 connects all 256-coefficient evaluations to
+exactFinalEncoder. J10646 proves the extracted complete eval_at result.
+J10648 proves the complete extracted encode_at result: every one of its four
+canonical outputs equals exactInitialEncoder at childIndex u s. The input
+point, all nine nodes, channel arrays and phi image are conclusions. No
+point/node/channel/model image is supplied. This is the complete owned
+WideExact computation; native M31/QM31 instantiation and caller bindings are
+still separate.
+
+J10642/43 reject an ambiguous name, numeral/array cast transparency and an
+implicit sum rewrite. The replacement uses opaque operations, an explicit
+length cast and an explicit symbolic Fin sum bridge. J10647 fixes the
+InitialMessage namespace by using its actual function carrier. Limits stay
+unchanged. All accepted printed axioms are standard.
+
+| Attempt | Exact module suffix | Exit | Wall s | Peak RSS KiB | Swaps |
+|---|---|---:|---:|---:|---:|
+| J10641 | R1Z.ProverCommitEncoderLift54 | 0 | 2.02 | 4104960 | 0 |
+| J10644 | AspisR1ProducerRelease47.EncoderComplete54 | 0 | 1.10 | 2633060 | 0 |
+| J10645 | R1Z.ProverCommitEncoderLine54 | 0 | 2.84 | 4107044 | 0 |
+| J10646 | R1Z.ProverCommitEncoderExact54 | 0 | 3.30 | 4102044 | 0 |
+| J10648 | R1Z.ProverCommitEncoderInitial54 | 0 | 2.54 | 4110112 | 0 |
+
+Complete-owner Charon/Aeneas exit 0/0, 2.054/0.498 s,
+212504/77968 KiB, zero swap, capped and optimized. Full receipts pin source
+revision and hashes. No shared object or shipped crate/program is changed.
