@@ -1,0 +1,3 @@
+Before: a local optimized helper theorem described its own output but did not identify the value stored in the actual Pair's final array.
+
+After: SAME SharedTrace or UnsharedTrace derives the source helper/low/write events, actual receiver identity, sufficient exact byte span, low canonicality and unchanged final0 through the active phase. The final0 read itself has the existing protocol inactive-row equation, on the SAME coefficient-run stream and actual low. Only source caller S2/alphaCan/exactspan and SAME operational trace remain; no independent field/child/row meaning premise is added. InactiveRowStored is an OUTPUT definition, not an assumed semantic contract.

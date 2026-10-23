@@ -1,0 +1,78 @@
+/private/tmp/a3-s9-final-parts-inactive-row-v1-check-20261023/sources/S9FinalPartsInactiveRowV1.lean:55:16: error(lean.unknownIdentifier): Unknown identifier `AspisR1S9PairLoop1SelfComponentV3.pair_loop1_first_component`
+/private/tmp/a3-s9-final-parts-inactive-row-v1-check-20261023/sources/S9FinalPartsInactiveRowV1.lean:49:60: error: unsolved goals
+allocation : AspisR1S9AllocationInterfaceV1.Allocation
+self : weights.Weights
+alpha : Slice W
+f : Slice U8
+kappa out : W
+partsFinal : Parts
+k : Std.Array W 7#usize
+hs2 : self.variant = transport.Variant.S2
+halpha : ∀ (i : Usize) (x : W), alpha.index_usize i = ok x → Can x
+hspan : f.len = Usize.wrapping_mul 64#usize 32#usize
+left✝² : alpha.len = 2#usize
+left✝¹ : weights.shared_two_point_guard self 2#usize = ok true
+left✝ : self.pair alpha f kappa = ok (core.result.Result.Ok out)
+n : Usize
+a0 a1 : AspisR1S9ActualProcessKindTensorReachedV1.W
+ap0 ap1 : Powers
+scratch scratchOut : AspisR1S9ActualProcessKindTensorReachedV1.Scratch
+partsRegular partsShared : Parts
+selfCommon : weights.Weights
+common : Std.Array aspis_core.field.QM31 16#usize
+partials : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 4#usize
+low : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 16#usize
+inactive : AspisR1S9ActualProcessKindTensorReachedV1.W
+partsInactive : Parts
+useFactored : Bool
+libra : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 4#usize
+hn : f.len / 32#usize = ok n
+hn64 : n = 64#usize
+ha0 : alpha.index_usize 0#usize = ok a0
+hap0 : weights.powers 4#usize a0 = ok ap0
+ha1 : alpha.index_usize 1#usize = ok a1
+hap1 : weights.powers 4#usize a1 = ok ap1
+hreserved :
+  aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok scratch)
+hregular :
+  weights.process_regular_kinds self true alpha f 2#usize n ap0 ap1 scratch
+      (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok (core.result.Result.Ok (), scratchOut, partsRegular)
+hcommon :
+  weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+      (Array.repeat 16#usize aspis_core.field.QM31.ZERO) =
+    ok (selfCommon, common)
+hpartials : weights.shared_partials f common = ok (core.result.Result.Ok partials)
+hhigh : weights.shared_high partials selfCommon ap0 ap1 partsRegular = ok (core.result.Result.Ok (), partsShared)
+hlow :
+  weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok low
+hinactive : weights.grouped_inactive_pair selfCommon f low = ok inactive
+hpartsInactive : Array.update partsShared 0#usize inactive = ok partsInactive
+huse : transport.Variant.Insts.CoreCmpPartialEqVariant.eq selfCommon.variant transport.Variant.S2 = ok useFactored
+hlibra :
+  (if useFactored = true then weights.factored_s2_libra_weights ap0 ap1 selfCommon.extra
+    else weights.twofold_libra_weights low selfCommon.extra) =
+    ok libra
+hactive : weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f partsInactive libra = ok partsFinal
+hk : weights.powers 7#usize kappa = ok k
+hsum :
+  weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } partsFinal k
+      aspis_core.field.wide_exact.WideExact.ZERO =
+    ok out
+hp0 :
+  ∀ (i : Usize) (v : AspisR1S9ActualPairWideCanonicalV1.W),
+    Array.index_usize ap0 i = ok v → AspisR1S9ActualPairWideCanonicalV1.Canonical v
+hp1 :
+  ∀ (i : Usize) (v : AspisR1S9ActualPairWideCanonicalV1.W),
+    Array.index_usize ap1 i = ok v → AspisR1S9ActualPairWideCanonicalV1.Canonical v
+⊢ InactiveRowStored true self alpha f partsFinal hspan
+'AspisR1S9FinalPartsInactiveRowV1.shared_trace_stored_inactive_row' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9FinalPartsInactiveRowV1.unshared_trace_stored_inactive_row' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

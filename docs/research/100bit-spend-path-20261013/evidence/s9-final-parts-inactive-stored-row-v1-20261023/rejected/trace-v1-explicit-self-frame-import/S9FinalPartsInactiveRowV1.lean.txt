@@ -1,0 +1,111 @@
+import S9InactiveFinalZeroCellV1
+import S9NativeS3SourceRowV1
+import S9FinalPartsSourceTraceV1
+import S9ActualPairPowersProducerV1
+import S9ActualLow16LoopMeaningV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1S9FinalPartsInactiveRowV1
+open AspisR1S9ProductionPairCutV1
+open AspisR1S9ActualProcessKindTensorReachedV1 (Powers Parts)
+open AspisR1S9NativeS3WeightBodyV1 (W Low Can decode)
+open AspisR1S9NativeS3OuterBodyV1 (Coefficients)
+open AspisR1S9InactiveFinalZeroCellV1 (cell0 exact_span_bytes_bound)
+open AspisR1.S3S9CurrentSourceModel
+variable [allocation : AspisR1S9AllocationInterfaceV1.Allocation]
+
+/-- OUTPUT relation: actual alpha/power/low/helper/write/active events all
+land on the explicit SAME final parts parameter. This is never an assumed
+semantic contract or a loose independently chosen vector. -/
+def InactiveRowStored (shared : Bool) (self : weights.Weights) (alpha : Slice W)
+    (f : Slice U8) (partsFinal : Parts)
+    (hspan : Slice.len f=Usize.wrapping_mul 64#usize 32#usize) : Prop :=
+  ∃ (a0 a1 : W) (ap0 ap1 : Powers) (low : Low)
+    (before middle : Parts) (libra : Array W 4#usize) (coefficients : Coefficients)
+    (hcoeff : weights.s2_grouped_inactive_pair_loop0 {start:=0#usize,«end»:=64#usize} f
+      (Array.repeat 12#usize aspis_core.field.wide_exact.WideExact.ZERO)=.ok coefficients),
+    Slice.index_usize alpha 0#usize=.ok a0 ∧ weights.powers 4#usize a0=.ok ap0 ∧
+    Slice.index_usize alpha 1#usize=.ok a1 ∧ weights.powers 4#usize a1=.ok ap1 ∧
+    (if shared then weights.Weights.pair_loop7 {start:=0#usize,«end»:=16#usize} ap0 ap1
+      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+     else weights.Weights.pair_loop15 {start:=0#usize,«end»:=16#usize} ap0 ap1
+      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO))=.ok low ∧
+    weights.grouped_inactive_pair self f low=.ok (cell0 partsFinal) ∧
+    Array.update before 0#usize (cell0 partsFinal)=.ok middle ∧
+    (if shared then weights.Weights.pair_loop8 {start:=0#usize,«end»:=4#usize} f middle libra
+     else weights.Weights.pair_loop16 {start:=0#usize,«end»:=4#usize} f middle libra)=.ok partsFinal ∧
+    Array.index_usize partsFinal 0#usize=.ok (cell0 partsFinal) ∧
+    Can (cell0 partsFinal) ∧ decode (cell0 partsFinal)=ungroupedPair
+      (fun j=>AspisR1S9NativeS3ZeroPrefixV1.successfulInput f coefficients
+        (exact_span_bytes_bound f hspan) hcoeff j.val)
+      (fun s=>(low.val.map decode).getD s.val 0) inactiveAtSource
+
+theorem shared_trace_stored_inactive_row (self : weights.Weights) (alpha : Slice W)
+    (f : Slice U8) (kappa out : W) (partsFinal : Parts) (k : Array W 7#usize)
+    (hs2 : self.variant=transport.Variant.S2)
+    (halpha : ∀ i x,Slice.index_usize alpha i=.ok x → Can x)
+    (hspan : Slice.len f=Usize.wrapping_mul 64#usize 32#usize)
+    (htrace : AspisR1S9FinalPartsSourceTraceV1.SharedTrace self alpha f kappa out partsFinal k) :
+    InactiveRowStored true self alpha f partsFinal hspan := by
+  rcases htrace with ⟨_,_,_,n,a0,a1,ap0,ap1,scratch,scratchOut,partsRegular,partsShared,selfCommon,common,partials,low,inactive,partsInactive,useFactored,libra,hn,hn64,ha0,hap0,ha1,hap1,hreserved,hregular,hcommon,hpartials,hhigh,hlow,hinactive,hpartsInactive,huse,hlibra,hactive,hk,hsum⟩
+  have hp0 := AspisR1S9ActualPairPowersProducerV1.actual_powers_four_native_reads_canonical
+    a0 ap0 (halpha 0#usize a0 ha0) hap0
+  have hp1 := AspisR1S9ActualPairPowersProducerV1.actual_powers_four_native_reads_canonical
+    a1 ap1 (halpha 1#usize a1 ha1) hap1
+  have hsame := AspisR1S9PairLoop1SelfComponentV3.pair_loop1_first_component
+    {start:=0#usize,«end»:=16#usize} self selfCommon
+    (Array.repeat 16#usize aspis_core.field.QM31.ZERO) common hcommon
+  subst selfCommon
+  have clow := (AspisR1S9ActualLow16LoopMeaningV1.actual_shared_low_loop_success
+    ap0 ap1 {start:=0#usize,«end»:=16#usize}
+    (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO) low
+    hp0 hp1 rfl rfl hlow).2
+  have hhelper := AspisR1S9InactiveFinalZeroCellV1.exact_s2_dispatch_helper
+    self f low inactive hs2 hspan hinactive
+  obtain ⟨coefficients,hcoeff,hmeaning,cinactive,hvalue⟩ :=
+    AspisR1S9NativeS3SourceRowV1.native_helper_success_source_row
+      f low inactive (exact_span_bytes_bound f hspan) clow hhelper
+  have hcell := AspisR1S9InactiveFinalZeroCellV1.write_active_cell0
+    f libra {start:=0#usize,«end»:=4#usize} partsShared partsInactive partsFinal inactive hpartsInactive hactive
+  refine ⟨a0,a1,ap0,ap1,low,partsShared,partsInactive,libra,coefficients,hcoeff,
+    ha0,hap0,ha1,hap1,hlow,?_,?_,hactive,
+    AspisR1S9InactiveFinalZeroCellV1.cell0_read partsFinal,?_,?_⟩
+  · simpa only [hcell] using hinactive
+  · simpa only [hcell] using hpartsInactive
+  · simpa only [hcell] using cinactive
+  · simpa only [hcell] using hvalue
+
+theorem unshared_trace_stored_inactive_row (self : weights.Weights) (alpha : Slice W)
+    (f : Slice U8) (kappa out : W) (partsFinal : Parts) (k : Array W 7#usize)
+    (hs2 : self.variant=transport.Variant.S2)
+    (halpha : ∀ i x,Slice.index_usize alpha i=.ok x → Can x)
+    (hspan : Slice.len f=Usize.wrapping_mul 64#usize 32#usize)
+    (htrace : AspisR1S9FinalPartsSourceTraceV1.UnsharedTrace self alpha f kappa out partsFinal k) :
+    InactiveRowStored false self alpha f partsFinal hspan := by
+  rcases htrace with ⟨_,_,_,n,a0,a1,ap0,ap1,scratch,scratchOut,partsRegular,low,inactive,partsInactive,useFactored,libra,hn,hn64,ha0,hap0,ha1,hap1,hreserved,hregular,hlow,hinactive,hpartsInactive,huse,hlibra,hactive,hk,hsum⟩
+  have hp0 := AspisR1S9ActualPairPowersProducerV1.actual_powers_four_native_reads_canonical
+    a0 ap0 (halpha 0#usize a0 ha0) hap0
+  have hp1 := AspisR1S9ActualPairPowersProducerV1.actual_powers_four_native_reads_canonical
+    a1 ap1 (halpha 1#usize a1 ha1) hap1
+  have clow := (AspisR1S9ActualLow16LoopMeaningV1.actual_low_loop_success
+    ap0 ap1 {start:=0#usize,«end»:=16#usize}
+    (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO) low
+    hp0 hp1 rfl rfl hlow).2
+  have hhelper := AspisR1S9InactiveFinalZeroCellV1.exact_s2_dispatch_helper
+    self f low inactive hs2 hspan hinactive
+  obtain ⟨coefficients,hcoeff,hmeaning,cinactive,hvalue⟩ :=
+    AspisR1S9NativeS3SourceRowV1.native_helper_success_source_row
+      f low inactive (exact_span_bytes_bound f hspan) clow hhelper
+  have hcell := AspisR1S9InactiveFinalZeroCellV1.write_unshared_active_cell0
+    f libra {start:=0#usize,«end»:=4#usize} partsRegular partsInactive partsFinal inactive hpartsInactive hactive
+  refine ⟨a0,a1,ap0,ap1,low,partsRegular,partsInactive,libra,coefficients,hcoeff,
+    ha0,hap0,ha1,hap1,hlow,?_,?_,hactive,
+    AspisR1S9InactiveFinalZeroCellV1.cell0_read partsFinal,?_,?_⟩
+  · simpa only [hcell] using hinactive
+  · simpa only [hcell] using hpartsInactive
+  · simpa only [hcell] using cinactive
+  · simpa only [hcell] using hvalue
+
+#print axioms shared_trace_stored_inactive_row
+#print axioms unshared_trace_stored_inactive_row
+end AspisR1S9FinalPartsInactiveRowV1
