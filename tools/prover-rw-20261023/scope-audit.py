@@ -18,8 +18,8 @@ record=dict(base=base,source_revision=subprocess.check_output(['git','rev-parse'
     files={p:dict(sha256=hashlib.sha256((r/p).read_bytes()).hexdigest(),bytes=(r/p).stat().st_size) for p in paths},
     scope='Selected host-only prover modules and optional aspis-prover dependency; shared verifier sources and core field/hash kernels unchanged.',
     module_gate='All changed host_* and prover modules require prover; aspis-prover is optional and prover-gated. Program manifests enable program-build, not prover/ct-host-prover.',
-    elf_rebuild_run=True,elf_identity_claim='See continuation/elf-byte-comparison.json for literal full-file comparison; later host-only source edits require closure assessment, not an unchanged SBF replay',
+    elf_rebuild_run=True,elf_identity_claim='See continuation/elf-byte-comparison-proverw002.json for literal full-file comparison; later host-only source edits require closure assessment, not an unchanged SBF replay',
     expected_elf_sha256={'default':'d7d42f770883401e0104fb6e044f61a132fea7359943db225d581c5740fcffd0','devnet':'2b2a9f0e7a2f93004ddbf207d02f5c5d5155d5c9bfdaeed21a78d638ae9be922','pool':'121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548'},
-    pin_source='continuation/elf-identities.json and elf-byte-comparison.json; actual capped proverw001 rebuilds and retained S2E artifacts',
+    pin_source='continuation/elf-identities.json and elf-byte-comparison-proverw002.json; actual capped proverw002 rebuilds and retained S2E artifacts',
     print_axioms='N/A: source scope audit')
 print(json.dumps(record,indent=2))

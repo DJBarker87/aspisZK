@@ -1,71 +1,94 @@
 {
   "adoption_candidate": true,
+  "source_checkpoint": "532c5e48ec",
   "stage1": "committed eb362eae2b before source changes",
-  "stage2": "STOP: intermediate retry/opening implementation; incomplete",
-  "stage3": "not started: performance stop",
-  "gate_a": {
-    "paired_full_runs": 10,
-    "full_bytes_status_audit_counts_identical": true,
-    "strict_verifier_acceptance": true,
-    "required_runs": 1000,
-    "rejected_attempt_coverage": false,
-    "complete": false
+  "stage2": "Incomplete: relative gate passes; 1000-pair corpus running; absolute quiet-host and complete leaf-contract gates pending",
+  "stage3": "Extraction preflights only; current Aeneas context-join failure, no accepted per-attempt/model theorem",
+  "relative_gate": {
+    "passed": true,
+    "evidence": "continuation/interleaved-pipeline-002.json",
+    "ratios": {
+      "transfer": 1.003434303276532,
+      "withdrawal": 1.0067503643590845
+    },
+    "workers": 16
   },
-  "gate_b": {
-    "pass_gate": false,
-    "comparison_exit_status": 3,
-    "results": [
-      {
-        "fixture": "transfer",
-        "samples": 5,
-        "workers": 16,
-        "baseline_median_seconds": 15.205470563,
-        "candidate_median_seconds": 16.415735081,
-        "ratio": 1.0795940193357105,
-        "under_15_seconds": false,
-        "within_10_percent": true
-      },
-      {
-        "fixture": "withdrawal",
-        "samples": 5,
-        "workers": 16,
-        "baseline_median_seconds": 15.678505408,
-        "candidate_median_seconds": 17.112834344,
-        "ratio": 1.0914837797784047,
-        "under_15_seconds": false,
-        "within_10_percent": true
-      }
-    ],
-    "measurement": "shared host, 16 workers; no causal slowdown attribution"
+  "absolute_gate": "Pending once at end on a quiet host, recorded load and no other capped jobs",
+  "elf_gate": {
+    "rebuilt": "proverw002",
+    "literal_bytes_equal": true,
+    "evidence": "continuation/elf-byte-comparison-proverw002.json",
+    "assessment": "Subsequent edits remain outside the SBF compile closure; source-scope.json"
   },
-  "gate_c": "not rebuilt; host-only source assessment and full inherited pins in source-scope.json",
-  "gate_d": "not run; unchanged arithmetic is not a substitute for a complete leaf-contract audit",
-  "l1": "not gated",
-  "lean_compiles": 0,
-  "kani_runs": 0,
-  "aeneas_runs": 0,
+  "differential_1000_complete": false,
+  "full_leaf_contract_gate_complete": false,
+  "lean_compiles_used": 0,
+  "kani_invocations_used": 13,
+  "kani_passing": 9,
+  "kani_timeouts": 3,
+  "kani_cli_rejections": 1,
+  "new_theorems": [],
   "assumptions_changed": [],
   "security_target": "not yet established",
+  "adopted": false,
   "merged": false,
   "pushed": false,
   "host_workspace": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023",
-  "retained": "all host ledgers, native binaries, full proof outputs; no account keys generated or deleted",
-  "print_axioms": "N/A: no formal proof attempted",
-  "continuation": {
-    "lead_ruling": "Relative same-session interleaved <=110% during implementation; absolute <15 s once on a quiet host at end",
-    "state": "Continuing implementation and focused extraction; stages 2/3 incomplete",
-    "latest_intermediate_relative_ratios": {
-      "transfer": 0.9708141197863583,
-      "withdrawal": 1.0051467099441551
+  "retained": "Host ledgers, native binaries and full proof outputs retained; generated SBF keypairs retained securely; no funded wallet cleanup",
+  "print_axioms": "N/A: no new Lean theorem compiled",
+  "historical_initial_stop": {
+    "adoption_candidate": true,
+    "stage1": "committed eb362eae2b before source changes",
+    "stage2": "STOP: intermediate retry/opening implementation; incomplete",
+    "stage3": "not started: performance stop",
+    "gate_a": {
+      "paired_full_runs": 10,
+      "full_bytes_status_audit_counts_identical": true,
+      "strict_verifier_acceptance": true,
+      "required_runs": 1000,
+      "rejected_attempt_coverage": false,
+      "complete": false
     },
-    "elf_rebuilt_and_full_bytes_equal": true,
-    "differential_1000_complete": false,
-    "full_leaf_contract_inventory_complete": false,
-    "lean_compiles_used": 0,
-    "kani_runs_used": 7,
-    "adopted": false,
-    "passing_new_kani_harnesses": 4,
-    "kani_timeouts": 2,
-    "kani_cli_rejections": 1
-  }
+    "gate_b": {
+      "pass_gate": false,
+      "comparison_exit_status": 3,
+      "results": [
+        {
+          "fixture": "transfer",
+          "samples": 5,
+          "workers": 16,
+          "baseline_median_seconds": 15.205470563,
+          "candidate_median_seconds": 16.415735081,
+          "ratio": 1.0795940193357105,
+          "under_15_seconds": false,
+          "within_10_percent": true
+        },
+        {
+          "fixture": "withdrawal",
+          "samples": 5,
+          "workers": 16,
+          "baseline_median_seconds": 15.678505408,
+          "candidate_median_seconds": 17.112834344,
+          "ratio": 1.0914837797784047,
+          "under_15_seconds": false,
+          "within_10_percent": true
+        }
+      ],
+      "measurement": "shared host, 16 workers; no causal slowdown attribution"
+    },
+    "gate_c": "not rebuilt; host-only source assessment and full inherited pins in source-scope.json",
+    "gate_d": "not run; unchanged arithmetic is not a substitute for a complete leaf-contract audit",
+    "l1": "not gated",
+    "lean_compiles": 0,
+    "kani_runs": 0,
+    "aeneas_runs": 0,
+    "assumptions_changed": [],
+    "security_target": "not yet established",
+    "merged": false,
+    "pushed": false,
+    "host_workspace": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023",
+    "retained": "all host ledgers, native binaries, full proof outputs; no account keys generated or deleted",
+    "print_axioms": "N/A: no formal proof attempted"
+  },
+  "authoritative_gate_ledger": "continuation/gate-ledger.json"
 }

@@ -210,3 +210,87 @@ variants, rejected-prefix success and real permission failure (143.27 s wall,
 evidence only. The current source has compiled via `extract-attempt-023`; full
 Aeneas translation remains stopped in `sample_source_d`. This checkpoint is
 partial Stage 2, with the 1,000-run and final timing gates still pending.
+
+### Later continuation checkpoint
+
+The all-class native preflight (`all-classes-paired-001`) passes twenty paired
+whole retry-owner executions, both variants in every tape class, including
+twelve full successful proof pairs and two forced rejected-prefix successes.
+Full records, L1 event order and public/proof bytes are equal; oracle logging
+was off for this run. Wall 420.81 s, peak RSS 710092 KiB, zero swaps. Its
+immutable `corpus-candidate-009` predates the latest ownership refinements.
+
+The final verifier dependency assessment triggered a fresh rebuild after the
+additional gated module declarations in lib.rs. `proverw002` default/devnet/Pool
+rebuilds exit 0, then literal byte comparisons against retained S2E files pass
+at all three required full pins. No binary or key file is committed. All
+generated SBF keypairs remain retained on the host with mode 600.
+
+Three exact single-cell volatile-write Kani frame contracts now pass for salt
+bytes, M31 and QM31, including arbitrary raw bits and an unchanged two-cell
+frame. These bodies are retained verbatim with SHA bindings in the contract
+kit. Ten new invocations total: seven passing harnesses, two timeouts and one
+CLI preflight rejection. The full leaf inventory remains open; these local
+contracts are not a whole-destructor, whole-pipeline or privacy theorem.
+
+Aeneas has progressed through semantic/sumcheck owners, opening batching,
+folding, opening transcript and compact publication. Fixed three-point,
+eight-pair and six-slot operations use explicit calls; small bounded owned
+collections use structural recursion. The query scan still consumes the same
+precomputed eight pairs, including unused suffixes. Current source fixes remain
+subject to the frozen 1,000-run and final interleaved gates. No Lean theorem
+has been checked; an assigned env J range is still required.
+
+### Owned phase checkpoint after extraction preflights
+
+The mask-column and balance owners, semantic oracle, sumcheck round owner,
+D-tail recurrence, commitment lanes, query scanner, and opening assembly have
+been refactored. This checkpoint is partial Stage 2, not adoption evidence.
+Charon attempt 051 compiles/extracts the current source; Aeneas translation
+remains a diagnostic until the complete cone succeeds and Lean checks it.
+The last full comparisons apply to their individually pinned predecessor
+binaries. A fresh final relative timing session and 1000-case corpus are pending.
+Two additional direct shipped CT field codec checks pass, taking this task to
+13 Kani invocations (9 pass, 3 timeout, 1 CLI rejection). The complete external
+contract inventory and per-attempt/model theorem remain open.
+
+### Frozen implementation checkpoint `532c5e48ec`
+
+Production source is pinned for the new native gates. `corpus-candidate-011`
+and `pipeline-002` build successfully in optimized mode, each under the original
+6G/8G/no-swap/64-task limits. Their binary hashes and complete source maps are
+retained in the corresponding receipts; the revision marker includes only the
+subsequent gate orchestration change. No source change is made while the final
+relative session and corpus use these immutable binaries.
+
+Charon `extract-attempt-051` exits 0 (108.776 s, 539180 KiB RSS, zero swap).
+Aeneas `aeneas-attempt-048` fails in the single-loop
+`Commitment::fill_opening`, source lines 196–204, with a context-join error
+(`InterpJoin.ml:2209`). Earlier query-scan and commitment-construction diagnostics
+are retained. No generated whole-attempt Lean program is accepted or compiled;
+no opaque external template is installed as an axiom. The 103-function external
+inventory is an obligation list, not a contract certificate.
+
+The current codec Kani checks invoke shipped CT field functions directly:
+`exact_full_width_codec` proves canonical eight-limb byte order and decoding
+(2.532 s, 300096 KiB RSS); `raw_qm31_embedding_codec` proves arbitrary raw
+four-limb normalization, subfield image and decoding (2.623 s, 304900 KiB RSS).
+Both exit 0, zero swap. These extend the local leaf evidence without asserting
+whole-prover equivalence or complete leaf coverage.
+
+The 120-second `dtail-kani-001` timeout is retained. Its cgroup peak is
+1236897792 bytes, with no memory events or swap. It has no proof verdict and
+is not retried unchanged or with a higher cap. The remaining formal deliverable
+is an accepted extraction of the actual attempt/caller plus a source-to-model
+proof that preserves all errors, effects, ordered oracle events and L1 records.
+The retained R1 outer-owner theorem still has its explicit PrefixContract and
+BodyContract premises. It does not instantiate the new body, RunJoin, fixed bad
+event/seed-query transport or L1/L2 joint law. Conjunct 1 remains open.
+
+`interleaved-pipeline-002` passes the relative implementation gate: transfer
+median v2 16.182755431 s, candidate 16.238331921 s (ratio 1.0034343033);
+withdrawal v2 15.989252766 s, candidate 16.097186048 s (ratio 1.0067503644).
+Five alternating pairs per fixture, 16 workers, all compared return fields and
+full proof/public bytes equal. Host contention is recorded; these numbers do
+not judge the final absolute gate. `corpus-1000-001` is now running its required
+1000 full retry-owner paired cases on the same frozen production source.
