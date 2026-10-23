@@ -1,0 +1,339 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "claim": "S2-D local E-indexed error algebra, trusted borrow case/drop lemmas, verbatim release observer None; native enclosing refinement NOT established",
+  "source_revision": "783e3e77d6535a8c7f18064305c05ed7caacd156",
+  "branch": "codex/cx-s2d-20261023",
+  "attempts": [
+    {
+      "attempt": "kani-001",
+      "kind": "kani",
+      "source_revision": "6e6a59bcc0bdd636c11d1b542b68fd9346a449ec",
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "--manifest-path",
+        "kani-spec/Cargo.toml",
+        "--target-dir",
+        "kani-target",
+        "--harness",
+        "S2D_checks::actual_release_observer_is_typed_none",
+        "--exact",
+        "--output-format",
+        "terse"
+      ],
+      "sources": [
+        "kani-spec/src/lib.rs",
+        "kani-spec/Cargo.toml"
+      ],
+      "env": {
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "timeout": 180,
+      "deps_fingerprint": "standalone verbatim source extraction, no dependency crates; Kani 0.67.0",
+      "expected_time": "optimized compile and constant Option discriminant check",
+      "exit_status": 1,
+      "wall_seconds": 0.013625079001940321,
+      "peak_rss_kib": "19360",
+      "swaps": "0",
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/s2d-kani-001.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": "11890688",
+      "source_hashes": {
+        "kani-spec/src/lib.rs": "c418f1f44968f16a06b36584548ece61d2de1a7692a9702e4a9b2a7274551a0f",
+        "kani-spec/Cargo.toml": "28d534ab93fa193494017d1860de810534996fcafa1c07d674c41d2e84387379"
+      },
+      "print_axioms": "N/A: Kani",
+      "status": "excluded failure",
+      "receipt": "kani-001/receipt.json"
+    },
+    {
+      "attempt": "kani-002",
+      "kind": "kani",
+      "source_revision": "6e6a59bcc0bdd636c11d1b542b68fd9346a449ec",
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "--manifest-path",
+        "kani-spec/Cargo.toml",
+        "--target-dir",
+        "kani-target",
+        "--harness",
+        "S2D_checks::actual_release_observer_is_typed_none",
+        "--exact",
+        "--output-format",
+        "terse"
+      ],
+      "sources": [
+        "kani-spec/src/lib.rs",
+        "kani-spec/Cargo.toml"
+      ],
+      "env": {
+        "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+        "CARGO_PROFILE_DEV_DEBUG": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "timeout": 180,
+      "deps_fingerprint": "standalone verbatim source extraction, no dependency crates; Kani 0.67.0",
+      "expected_time": "optimized compile and constant Option discriminant check",
+      "exit_status": 0,
+      "wall_seconds": 0.2480146220041206,
+      "peak_rss_kib": "111672",
+      "swaps": "0",
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/s2d-kani-002.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": "35213312",
+      "source_hashes": {
+        "kani-spec/src/lib.rs": "c418f1f44968f16a06b36584548ece61d2de1a7692a9702e4a9b2a7274551a0f",
+        "kani-spec/Cargo.toml": "28d534ab93fa193494017d1860de810534996fcafa1c07d674c41d2e84387379"
+      },
+      "print_axioms": "N/A: Kani",
+      "status": "accepted local evidence",
+      "receipt": "kani-002/receipt.json"
+    },
+    {
+      "attempt": "lean-001",
+      "kind": "lean",
+      "source_revision": "099ec9a912421bdc80c0b0e975f494d6ef7eafae",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2D_ErrorPrefixes.olean",
+        "S2D_ErrorPrefixes.lean"
+      ],
+      "sources": [
+        "S2D_ErrorPrefixes.lean",
+        "S2TrustedSdkBorrow.lean"
+      ],
+      "env": {
+        "LEAN_PATH": "."
+      },
+      "timeout": 180,
+      "deps_fingerprint": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550  /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean\nf6a63928f269aaf0812cfea36034db3c60b24a4b462dadbcffee81fecd9f697e  /home/dombarker/project-offloads/codex-cx-s2d-20261023/S2TrustedSdkBorrow.olean\n",
+      "expected_time": "focused elaboration",
+      "exit_status": 0,
+      "wall_seconds": 0.36230740300379694,
+      "peak_rss_kib": "770388",
+      "swaps": "0",
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/s2d-lean-001.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": "131088384",
+      "source_hashes": {
+        "S2D_ErrorPrefixes.lean": "a296926262ad403929114bf0c781669487b2623674dd099ebdd48b06df8a51a9",
+        "S2TrustedSdkBorrow.lean": "eb9e021c449f4c23b02d8cb68b7022bef4ac743f40918672f9f8816355ccb5e8"
+      },
+      "print_axioms": [
+        "'AspisR1.S2D.rejected_short_circuit' does not depend on any axioms",
+        "'AspisR1.S2D.aborted_short_circuit' does not depend on any axioms",
+        "'AspisR1.S2D.rejected_cleanup' depends on axioms: [propext]",
+        "'AspisR1.S2D.abort_has_no_normal_cleanup' depends on axioms: [propext]",
+        "'AspisR1.S2D.mapped_rejection_retains_effects' does not depend on any axioms",
+        "'AspisR1.S2D.thenDo_associative' depends on axioms: [propext]",
+        "'AspisR1.S2D.rejection_queries_retained' depends on axioms: [propext]",
+        "'AspisR1.S2D.successful_prefix_then_rejection' does not depend on any axioms"
+      ],
+      "status": "accepted local evidence",
+      "receipt": "lean-001/receipt.json"
+    },
+    {
+      "attempt": "lean-002",
+      "kind": "lean",
+      "source_revision": "099ec9a912421bdc80c0b0e975f494d6ef7eafae",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2D_BorrowErrors.olean",
+        "S2D_BorrowErrors.lean"
+      ],
+      "sources": [
+        "S2D_BorrowErrors.lean",
+        "S2TrustedSdkBorrow.lean"
+      ],
+      "env": {
+        "LEAN_PATH": "."
+      },
+      "timeout": 180,
+      "deps_fingerprint": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550  /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean\nf6a63928f269aaf0812cfea36034db3c60b24a4b462dadbcffee81fecd9f697e  /home/dombarker/project-offloads/codex-cx-s2d-20261023/S2TrustedSdkBorrow.olean\n",
+      "expected_time": "focused elaboration",
+      "exit_status": 0,
+      "wall_seconds": 0.3109256989991991,
+      "peak_rss_kib": "763124",
+      "swaps": "0",
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/s2d-lean-002.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": "126308352",
+      "source_hashes": {
+        "S2D_BorrowErrors.lean": "879a7538dc39ed4576c92cdf1d5cca0016f147b13aea9345a5660b0b03172a10",
+        "S2TrustedSdkBorrow.lean": "eb9e021c449f4c23b02d8cb68b7022bef4ac743f40918672f9f8816355ccb5e8"
+      },
+      "print_axioms": [
+        "'AspisR1.S2D.shared_failure' does not depend on any axioms",
+        "'AspisR1.S2D.exclusive_failure' does not depend on any axioms",
+        "'AspisR1.S2D.shared_total_cases' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.S2D.exclusive_total_cases' does not depend on any axioms",
+        "'AspisR1.S2D.failed_result_move_drop' does not depend on any axioms"
+      ],
+      "status": "accepted local evidence",
+      "receipt": "lean-002/receipt.json"
+    },
+    {
+      "attempt": "lean-003",
+      "kind": "lean",
+      "source_revision": "6e6a59bcc0bdd636c11d1b542b68fd9346a449ec",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2D_Cleanup.olean",
+        "S2D_Cleanup.lean"
+      ],
+      "sources": [
+        "S2D_Cleanup.lean",
+        "S2TrustedSdkBorrow.lean",
+        "S2D_BorrowErrors.lean"
+      ],
+      "env": {
+        "LEAN_PATH": "."
+      },
+      "timeout": 180,
+      "deps_fingerprint": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550  /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean\nf6a63928f269aaf0812cfea36034db3c60b24a4b462dadbcffee81fecd9f697e  /home/dombarker/project-offloads/codex-cx-s2d-20261023/S2TrustedSdkBorrow.olean\n62dc7de7a1fc24d8eec75fc6bccb8b0cb0de771dcbd52eb93116447962e598b8  /home/dombarker/project-offloads/codex-cx-s2d-20261023/S2D_BorrowErrors.olean\n",
+      "expected_time": "focused elaboration",
+      "exit_status": 1,
+      "wall_seconds": 0.2838792969996575,
+      "peak_rss_kib": "750984",
+      "swaps": "0",
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/s2d-lean-003.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": "115720192",
+      "source_hashes": {
+        "S2D_Cleanup.lean": "1286c04144ad3499ad04e9169355a301c261040073883f56e430364afe41732d",
+        "S2TrustedSdkBorrow.lean": "eb9e021c449f4c23b02d8cb68b7022bef4ac743f40918672f9f8816355ccb5e8",
+        "S2D_BorrowErrors.lean": "879a7538dc39ed4576c92cdf1d5cca0016f147b13aea9345a5660b0b03172a10"
+      },
+      "print_axioms": [
+        "'AspisR1.S2D.live_guard_count_positive' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2D.shared_drop_counter_positive' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.S2D.exclusive_drop_counter_negative_one' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2D.actual_guard_drop' depends on axioms: [sorryAx]"
+      ],
+      "status": "excluded failure",
+      "receipt": "lean-003/receipt.json"
+    },
+    {
+      "attempt": "lean-004",
+      "kind": "lean",
+      "source_revision": "6e6a59bcc0bdd636c11d1b542b68fd9346a449ec",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2D_Cleanup.olean",
+        "S2D_Cleanup.lean"
+      ],
+      "sources": [
+        "S2D_Cleanup.lean",
+        "S2TrustedSdkBorrow.lean",
+        "S2D_BorrowErrors.lean"
+      ],
+      "env": {
+        "LEAN_PATH": "."
+      },
+      "timeout": 180,
+      "deps_fingerprint": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550  /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean\nf6a63928f269aaf0812cfea36034db3c60b24a4b462dadbcffee81fecd9f697e  /home/dombarker/project-offloads/codex-cx-s2d-20261023/S2TrustedSdkBorrow.olean\n62dc7de7a1fc24d8eec75fc6bccb8b0cb0de771dcbd52eb93116447962e598b8  /home/dombarker/project-offloads/codex-cx-s2d-20261023/S2D_BorrowErrors.olean\n",
+      "expected_time": "focused elaboration",
+      "exit_status": 0,
+      "wall_seconds": 0.35648033599863993,
+      "peak_rss_kib": "761588",
+      "swaps": "0",
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/s2d-lean-004.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": "126275584",
+      "source_hashes": {
+        "S2D_Cleanup.lean": "1e31f9586f537811aec1fa2a65229b2388be5555e13c4801e93e502f47bd023d",
+        "S2TrustedSdkBorrow.lean": "eb9e021c449f4c23b02d8cb68b7022bef4ac743f40918672f9f8816355ccb5e8",
+        "S2D_BorrowErrors.lean": "879a7538dc39ed4576c92cdf1d5cca0016f147b13aea9345a5660b0b03172a10"
+      },
+      "print_axioms": [
+        "'AspisR1.S2D.live_guard_count_positive' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2D.shared_drop_counter_positive' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2D.exclusive_drop_counter_negative_one' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2D.actual_guard_drop' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "status": "accepted local evidence",
+      "receipt": "lean-004/receipt.json"
+    }
+  ],
+  "budget": {
+    "lean_used": 4,
+    "lean_limit": 100,
+    "kani_invocations_used": 2,
+    "kani_limit": 60
+  },
+  "tool_pins": {
+    "imported_sysroot_manifest": "/home/dombarker/project-offloads/codex-cx-s2-trust-20261023/lean-olean-manifest.json",
+    "manifest_file_sha256": "3736b74ca04cc067f9316407032bd0027706176f27b06f709377540b2bfff1eb",
+    "olean_count": 2433,
+    "all_cached_objects_match": true,
+    "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+    "kani_compiler_sha256": "f74488368997b6b4e0b417a2f5a3c8e598eccc907288c1a7875d9866056e9ffc",
+    "cbmc_sha256": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973",
+    "kani_rustc": "rustc 1.93.0-nightly (53732d5e0 2025-11-20)",
+    "inspection_only": true
+  },
+  "shipped_files_changed": false,
+  "elf_rebuild": "not triggered; no new ELF certification",
+  "replay": "receipt audit only; no repeated full regression",
+  "native_certificate": "uninstantiated; E and original input indices are not source provenance"
+}
