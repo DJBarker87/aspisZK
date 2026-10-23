@@ -1,0 +1,83 @@
+S2W_D189Consolidation.lean:129:64: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+'AspisR1.S2W_D189Consolidation.wrapper_frames' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_D189Consolidation.accepted_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+structure AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission {W : Type} (L : Library W (ℕ → Record)) (e : Entry)
+  (w : W) (n : ℕ) : Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.entry : AdapterRw.RuntimeEntrypointAdmission e.heap
+      (fun a => List.map nativeByte ↑(e.records (e.handles a).1).owned.key) n
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.related : L.related w e.heap
+constructor:
+  AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission.mk {W : Type} {L : Library W (ℕ → Record)} {e : Entry}
+    {w : W} {n : ℕ}
+    (entry :
+      AdapterRw.RuntimeEntrypointAdmission e.heap (fun a => List.map nativeByte ↑(e.records (e.handles a).1).owned.key)
+        n)
+    (related : L.related w e.heap) : RuntimeEntrypointAdmission L e w n
+theorem AspisR1.S2W_D189Consolidation.accepted_run : ∀ {W A E : Type} (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (ops : AdapterRw.Ops) (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+                  ∀ (sha256 H : Bytes → State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                          (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)),
+                          first native1 copy allocator e1 program data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            second native2 allocator e2 program data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (port : ChildConeJoin E ops),
+                                FirstMarks port →
+                                  SecondMarks port →
+                                    ∃ f s outer pre middle fs ss,
+                                      SourceCuts ops e1.first (e2.second secondSizes) saved f s ∧
+                                        S2W_ExpandedTrace.runExpanded ops (children port)
+                                              (S2W_Observation.two ops program e1.first data1 (e2.second secondSizes)
+                                                data2 slot)
+                                              [] =
+                                            ok
+                                              (core.result.Result.Ok saved,
+                                                S2W_ExpandedTrace.full (children port) outer) ∧
+                                          S2W_D189Interpretation.runOwned ops
+                                                (S2W_Observation.two ops program e1.first data1 (e2.second secondSizes)
+                                                  data2 slot)
+                                                [] e1.heap =
+                                              ok (core.result.Result.Ok saved, outer, e1.heap) ∧
+                                            projected port outer = S2W_SiteSchedule.timeline pre middle fs ss ∧
+                                              post2 = e2.heap ∧
+                                                before e1 e2 Site.tx1 =
+                                                    S2W_D189Interpretation.nativeObserve L encode e1.metadata 3 w1
+                                                      e1.heap.ambient ∧
+                                                  before e1 e2 Site.tx2 =
+                                                      S2W_D189Interpretation.nativeObserve L encode e2.metadata 7 w2
+                                                        e2.heap.ambient ∧
+                                                    ∀ (decode : HeaderDecode) (nodes : ℕ → ℕ → Slice U8)
+                                                      (y1 : Slice U8),
+                                                      CheckpointWriterConeJoin ops decode H f.semantic f.pub f.proof
+                                                          f.split →
+                                                        CheckpointReaderConeJoin ops decode H s.pub s.proof
+                                                            s.checkpoint →
+                                                          ∀
+                                                            (a :
+                                                              S2X.CheckpointVersionBinding
+                                                                (payloadBytes encode
+                                                                  (post1.payload (e1.heap.accounts 2).1) 1768)
+                                                                (bytesOf ↑s.checkpoint)),
+                                                            P2Prime H f.proof f.pub s.proof s.pub →
+                                                              S2W_ChildJoins.FirstEntryVerifierConeJoin f.proof → ⋯ :=
+fun {W A E} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 ops native1 native2 hashv extraction sha256 H p1
+    syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 port firstMarks
+    secondMarks =>
+  sorry (first_accepted native1 copy std allocator e1 program data1 state1 final1 saved post1 accepted1)

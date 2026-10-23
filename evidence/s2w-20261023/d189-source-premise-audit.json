@@ -1,0 +1,151 @@
+{
+  "status": "pass",
+  "ruling": "LOG D189, 2026-10-23 17:35; D188 extraction boundary unchanged",
+  "qualification": "Source syntax/primitive contract composition audit, not a new native SDK implementation proof. Initial typed runtime interpretation, private allocator separation, TrustedStd and source/binary trust remain explicit. Historical Kani004/union019 reused within their pinned domains; no Kani replay.",
+  "source_sha256": "246d96b479ef552b485a51a2a3d4c4dbe1ff4ef9c0527b6f9a872f296b60576b",
+  "entry_arrays_sha256": {
+    "1": "94b2fa806386bd094de6f437ac75d5cdac79ac2935e825ed8ab12eaafea31b21",
+    "2": "66c9f5f91d1c3950e9542648f7c65df410add5930c544b9406f3a2aeab654000"
+  },
+  "kani_reused": [
+    "kani-004",
+    "kani-019"
+  ],
+  "native_interpretation": {
+    "accounts": "Entry.handles / records / buffers / descriptor base and provenance; initial RuntimeEntrypointAdmission.related",
+    "sdk_fields": [
+      "account_data_cell",
+      "cell_payload",
+      "cell_counter",
+      "borrow_frame",
+      "shared_ok",
+      "shared_deref",
+      "shared_drop",
+      "exclusive_ok",
+      "exclusive_deref",
+      "exclusive_drop"
+    ],
+    "snapshots": "Exact source array expressions checked above; native wrapper selected-coordinate contracts + full-byte payload_bytes, to_vec_identity and borrow bracket restoration",
+    "copy": "Single actual source expression checked above; TrustedStd successful copy -> returned heap -> writeBracket; no independent post-state equation",
+    "allocation": "Runtime P2-P4 private allocator region plus std byte-copy/drop semantics; account projection only, no complete allocator equality claim",
+    "children": "owned_account_frame induction over exact extracted signatures; accepted_owned_frame on SAME outer log in final theorem output",
+    "public_route": "Authenticated writer/reader headers and complete-buffer P2Prime; FullForestAcceptedRoundtrip not needed or proved"
+  },
+  "premise_audit": {
+    "S2TrustedSdkBorrow": {
+      "source": "S2TrustedSdkBorrow.lean",
+      "source_sha256": "eb9e021c449f4c23b02d8cb68b7022bef4ac743f40918672f9f8816355ccb5e8",
+      "review": "SDK fifteen primitive fields; includes cell/payload/counter and operation frames; no adapter acceptance",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "TrustedStd": {
+      "source": "S2W_TrustedStd.lean",
+      "source_sha256": "a2f4da91efe686ec517dc7c5d6aaeb7414681878c562ed043b869f23ca13abfb",
+      "review": "Universal single slice-copy primitive semantics; no caller postcondition",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "RuntimeEntrypointAdmission": {
+      "source": "S2W_D189Consolidation.lean",
+      "source_sha256": "06b7872b97a9df5fb8843fae6a64e55a2258df7bee161b5073184a1918f31418",
+      "review": "Existing valid entry/alias/guard premises plus initial native SDK relatedness; no final accounts",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "Allocator": {
+      "source": "S2W_D189Wrappers.lean",
+      "source_sha256": "e41d41520f0da7eec5eb5f4d004427a37b80d5bb9a8093cd8c75bb2c68285a68",
+      "review": "Runtime private allocation/cleanup region operations; no account-state capability; failures abort accepted wrapper equations",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "AeneasExtraction": {
+      "source": "S2W_DigestExtraction.lean",
+      "source_sha256": "6df94cfaae95bc4ed3948d9386168834e3c21c7d546636fe64b54b96a3757298",
+      "review": "D188 owned source and exact digest extraction; no S2 observation",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "P1/RuntimeSyscall": {
+      "source": "S2W_ExtractionBoundary.lean",
+      "source_sha256": "16a1abbc7bb105f3f0c165102d2af9839307ad5b36d13adea22fb5e1aefd5ebc",
+      "review": "Hash realization and successful runtime syscall return values; no caller acceptance",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "CheckpointVersionBinding": {
+      "source": "S2X_RuntimeRetention.lean",
+      "source_sha256": "fed31dbdea3c80e6e78bfe633b80146e26374be84d9a021bec90d1709dc58336",
+      "review": "Existing protected ledger-version history, now indexed to actual post-write payload",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "P2Prime": {
+      "source": "S2W_AuthenticatedInputs.lean",
+      "source_sha256": "6b7d329889c1c3fd46063693dca54710ac040299074dddb9c8b8ab771540d4f8",
+      "review": "Existing complete-buffer runtime binding, activated by independently derived digest comparisons",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "CheckpointWriterConeJoin": {
+      "source": "S2W_AuthenticatedInputs.lean",
+      "source_sha256": "6b7d329889c1c3fd46063693dca54710ac040299074dddb9c8b8ab771540d4f8",
+      "review": "Local successful child header serialization and size",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "CheckpointReaderConeJoin": {
+      "source": "S2W_AuthenticatedInputs.lean",
+      "source_sha256": "6b7d329889c1c3fd46063693dca54710ac040299074dddb9c8b8ab771540d4f8",
+      "review": "Local successful child header digest comparisons",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "FirstEntryVerifierConeJoin": {
+      "source": "S2W_ChildJoins.lean",
+      "source_sha256": "63bbabf4e7eca1313e41faaa3126b93f8278e9a56c04f359490703d61be81760",
+      "review": "Child accepted parser provenance on the actual proof argument",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "MultiproofConeJoin": {
+      "source": "S2W_ChildJoins.lean",
+      "source_sha256": "63bbabf4e7eca1313e41faaa3126b93f8278e9a56c04f359490703d61be81760",
+      "review": "Child-local checked physical ranges for each batch",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "S8StageConeJoin": {
+      "source": "S2W_ChildJoins.lean",
+      "source_sha256": "63bbabf4e7eca1313e41faaa3126b93f8278e9a56c04f359490703d61be81760",
+      "review": "Child-local checked y1 range argument",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "ChildConeJoin": {
+      "source": "S2W_ExpandedChildren.lean",
+      "source_sha256": "712ef0b9ec788abdb70ee5427eee18ae27eabf7bfe8815a2513cdfe9d934ba39",
+      "review": "Typed child source execute plus value erasure; no account state input",
+      "contains_S2CallerFacts_conclusion": false
+    },
+    "FirstMarks/SecondMarks": {
+      "source": "S2W_TraceSplice.lean",
+      "source_sha256": "e7aabac0d4876180fce6b063fe70bfef4962f5476ccf4749fd88d45c572941f2",
+      "review": "Child-local site layout only; actual whole outer-log segments derived",
+      "contains_S2CallerFacts_conclusion": false
+    }
+  },
+  "removed_caller_hypotheses": [
+    "saveCut",
+    "tx2Cut",
+    "resumeCut",
+    "NodeRanges as caller cuts (retained only as child-local theorem ports)",
+    "firstChildY1Range as caller cut (retained only as child-local S8 port)",
+    "tx1ProofObservation",
+    "sameStoredProof",
+    "entrySize",
+    "savedAtWrite",
+    "OwnedSnapshotShape",
+    "NativeBinding",
+    "accountFrame",
+    "writtenMetadata"
+  ],
+  "axioms_policy": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "release_pins_reused": {
+    "default": "d7d42f770883401e0104fb6e044f61a132fea7359943db225d581c5740fcffd0",
+    "devnet": "2b2a9f0e7a2f93004ddbf207d02f5c5d5155d5c9bfdaeed21a78d638ae9be922",
+    "pool_prefix": "121f3e29"
+  }
+}
