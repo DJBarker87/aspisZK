@@ -8966,3 +8966,18 @@ R1 the retry/entropy/reservation owner on the selected caller (composing parts 3
 real commitment path (mask material, semantic build, commitments, Merkle, encoding); R3 the
 real transcript, sumcheck, opening and publication. All target the research prover. The v2
 candidate's differences transfer through its proved equivalence gates when it is adopted.
+
+## D187 (user decision, 2026-10-23 11:05): proof-friendly prover rewrite
+
+Real-prover refinement streams R1–R3 (merged): a host proof-account caller on the 64-byte
+route with a durable ledger, where duplicate nonces fail closed and the verifier ELFs are unchanged; native/owned
+control binding and an outer-owner bridge; mask-seed guards and context framing; transcript
+rows 0–14 by reused part-30 callee contracts. Each stream stalled on Kani timeouts over shipped
+prover loops (R2 at the scalar sampler contract, R3 at row 15), the same pattern S2 had before
+the adapter rewrite. R1's +27% caller timing is from a contended shared host and will be
+re-measured on a quiet host. **User decision:** rewrite the prover's control and per-attempt
+pipeline (retry owner, mask material, semantic build, transcript, commitments, publication)
+into owned, Aeneas-extractable code, with heavy arithmetic as small verified leaf kernels.
+Base it on the v2 constant-time candidate, which is the intended host prover. Gates: design
+note first; byte-identical proofs on fixtures for identical coins; at least 1,000 differential runs;
+median prover time under 15 s on the build host (D168/D169); the verifier untouched. Host-only.
