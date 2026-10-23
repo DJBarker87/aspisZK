@@ -1,0 +1,476 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "status": "PARTIAL; no concrete native Children instance; S2 target not yet established",
+  "source_revision": "eb2d772ef7936a96382cdc42a94261cc1c784f32",
+  "budget_used_conservatively": {
+    "lean": 12,
+    "kani": 2
+  },
+  "actual_lean_invocations": 11,
+  "limits": {
+    "lean": 100,
+    "kani": 60
+  },
+  "new_native_Required14_fields": [],
+  "shipped_changes": false,
+  "new_trust": false,
+  "final_focused_axioms_audit": "lean-012/receipt.json",
+  "contract_catalog": "contracts.json",
+  "copy_contract_and_consumer": [
+    "kani-001/receipt.json",
+    "kani-002/receipt.json"
+  ],
+  "excluded_setup_failure": "lean-005/setup-failure.json",
+  "object_inventory_format": "object-base.json + each objects-delta.json reconstruct exact selected_overlay_sha256; focused cached evidence, no coherent release replay",
+  "attempts": [
+    {
+      "receipt": "audit-001/receipt.json",
+      "attempt": "audit-001",
+      "kind": "audit",
+      "source_revision": "eb2d772ef7936a96382cdc42a94261cc1c784f32",
+      "command": [
+        "python3",
+        "S2G_tools.py"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 0.3189967409998644,
+      "peak_rss_kib": "37524",
+      "swaps": "0",
+      "print_axioms": "N/A: audit",
+      "deps_fingerprint": {
+        "scope": "revalidate reused tool/sysroot pins only; no compile or solver"
+      },
+      "status": "accepted scoped local result"
+    },
+    {
+      "receipt": "kani-001/receipt.json",
+      "attempt": "kani-001",
+      "kind": "kani",
+      "source_revision": "8e6587552b73ac5a469e99c04f35c19e28ccadc6",
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "--manifest-path",
+        "S2G-contracts/Cargo.toml",
+        "--target-dir",
+        "kani-target",
+        "-j",
+        "4",
+        "-Z",
+        "stubbing",
+        "-Z",
+        "function-contracts",
+        "-Z",
+        "unstable-options",
+        "--harness-timeout",
+        "120s",
+        "--exact",
+        "--harness",
+        "S2G_copy_contract",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 11.303869611001574,
+      "peak_rss_kib": "460132",
+      "swaps": "0",
+      "print_axioms": "N/A: kani",
+      "deps_fingerprint": {
+        "scope": "standalone byte-slice contract; pinned Kani sysroot; no Aspis dependency or native SDK/allocator claim"
+      },
+      "status": "accepted scoped local result"
+    },
+    {
+      "receipt": "kani-002/receipt.json",
+      "attempt": "kani-002",
+      "kind": "kani",
+      "source_revision": "8e6587552b73ac5a469e99c04f35c19e28ccadc6",
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "--manifest-path",
+        "S2G-contracts/Cargo.toml",
+        "--target-dir",
+        "kani-target",
+        "-j",
+        "4",
+        "-Z",
+        "stubbing",
+        "-Z",
+        "function-contracts",
+        "-Z",
+        "unstable-options",
+        "--harness-timeout",
+        "120s",
+        "--exact",
+        "--harness",
+        "S2G_copy_consumer",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 7.748950126995624,
+      "peak_rss_kib": "364320",
+      "swaps": "0",
+      "print_axioms": "N/A: kani",
+      "deps_fingerprint": {
+        "scope": "standalone byte-slice contract; pinned Kani sysroot; no Aspis dependency or native SDK/allocator claim"
+      },
+      "status": "accepted scoped local result"
+    },
+    {
+      "receipt": "lean-001/receipt.json",
+      "attempt": "lean-001",
+      "kind": "lean",
+      "source_revision": "05f7c7e442c92bc7a5a5791761b11565bd0c7f14",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2G_InstalledValues.olean",
+        "S2G_InstalledValues.lean"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 0.4594123980059521,
+      "peak_rss_kib": "1206440",
+      "swaps": "0",
+      "print_axioms": [],
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "6d99347aaac3b40352244df80182f3b399762ffd4569412c035cf742872f99c7",
+        "selected_object_count": 15009,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "status": "excluded failure; recovery axioms earn no proof credit"
+    },
+    {
+      "receipt": "lean-002/receipt.json",
+      "attempt": "lean-002",
+      "kind": "lean",
+      "source_revision": "05f7c7e442c92bc7a5a5791761b11565bd0c7f14",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2G_InstalledValues.olean",
+        "S2G_InstalledValues.lean"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 1.9826478300019517,
+      "peak_rss_kib": "3883968",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.S2G.mapFormat_success' does not depend on any axioms",
+        "'AspisR1.S2G.decode_contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.validate_contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.candidate_contract' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.first_contract' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "6d99347aaac3b40352244df80182f3b399762ffd4569412c035cf742872f99c7",
+        "selected_object_count": 15009,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "status": "excluded failure; recovery axioms earn no proof credit"
+    },
+    {
+      "receipt": "lean-003/receipt.json",
+      "attempt": "lean-003",
+      "kind": "lean",
+      "source_revision": "05f7c7e442c92bc7a5a5791761b11565bd0c7f14",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2G_InstalledValues.olean",
+        "S2G_InstalledValues.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 2.182467673002975,
+      "peak_rss_kib": "3898872",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.S2G.mapFormat_success' does not depend on any axioms",
+        "'AspisR1.S2G.decode_contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.validate_contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.candidate_contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.first_contract' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "6d99347aaac3b40352244df80182f3b399762ffd4569412c035cf742872f99c7",
+        "selected_object_count": 15009,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "status": "accepted scoped local result"
+    },
+    {
+      "receipt": "lean-004/receipt.json",
+      "attempt": "lean-004",
+      "kind": "lean",
+      "source_revision": "05f7c7e442c92bc7a5a5791761b11565bd0c7f14",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2G_Copy.olean",
+        "S2G_Copy.lean"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 1.6128684200011776,
+      "peak_rss_kib": "2630484",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.S2G.Copy.contract' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.Copy.records_frame' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "e636b05a6790f4748826fd4062f10ccfb7a9bee21ac9b99ffdb2d2afd725d251",
+        "selected_object_count": 15010,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "status": "excluded failure; recovery axioms earn no proof credit"
+    },
+    {
+      "receipt": "lean-006/receipt.json",
+      "attempt": "lean-006",
+      "kind": "lean",
+      "source_revision": "05f7c7e442c92bc7a5a5791761b11565bd0c7f14",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2G_Copy.olean",
+        "S2G_Copy.lean"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 1.4102394120054669,
+      "peak_rss_kib": "2633288",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.S2G.Copy.contract' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.Copy.records_frame' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "e636b05a6790f4748826fd4062f10ccfb7a9bee21ac9b99ffdb2d2afd725d251",
+        "selected_object_count": 15010,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "status": "excluded failure; recovery axioms earn no proof credit"
+    },
+    {
+      "receipt": "lean-007/receipt.json",
+      "attempt": "lean-007",
+      "kind": "lean",
+      "source_revision": "05f7c7e442c92bc7a5a5791761b11565bd0c7f14",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2G_Copy.olean",
+        "S2G_Copy.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 1.2251942099974258,
+      "peak_rss_kib": "2640444",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.S2G.Copy.contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.Copy.records_frame' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "e636b05a6790f4748826fd4062f10ccfb7a9bee21ac9b99ffdb2d2afd725d251",
+        "selected_object_count": 15010,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "status": "accepted scoped local result"
+    },
+    {
+      "receipt": "lean-008/receipt.json",
+      "attempt": "lean-008",
+      "kind": "lean",
+      "source_revision": "05f7c7e442c92bc7a5a5791761b11565bd0c7f14",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2G_Children.olean",
+        "S2G_Children.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 1.8037842350022402,
+      "peak_rss_kib": "3895792",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.S2G.Children.liftValue_success' does not depend on any axioms",
+        "'AspisR1.S2G.Children.decoder_contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.Children.unresolved_fields' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "550c39536869a645562ff492e8f6054cfc1d4a8de4856162efa00479a88cc0ad",
+        "selected_object_count": 15011,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "status": "accepted scoped local result"
+    },
+    {
+      "receipt": "lean-009/receipt.json",
+      "attempt": "lean-009",
+      "kind": "lean",
+      "source_revision": "8e6587552b73ac5a469e99c04f35c19e28ccadc6",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2G_Digest.olean",
+        "S2G_Digest.lean"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 0.13092340300499927,
+      "peak_rss_kib": "190572",
+      "swaps": "0",
+      "print_axioms": [],
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "7358de22bbed5dede47d40a1c60d79291d90abef1d7f5c6436d5a9263f7ff3ec",
+        "selected_object_count": 15012,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "status": "excluded failure; recovery axioms earn no proof credit"
+    },
+    {
+      "receipt": "lean-010/receipt.json",
+      "attempt": "lean-010",
+      "kind": "lean",
+      "source_revision": "8e6587552b73ac5a469e99c04f35c19e28ccadc6",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2G_Digest.olean",
+        "S2G_Digest.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 1.359408488999179,
+      "peak_rss_kib": "2632776",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.S2G.Digest.contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.Digest.reached_call' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ],
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "11710d4d88d7a38f667451fb471c6e84032b1865a88c7aeb7ba44027f5b2dc66",
+        "selected_object_count": 15243,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "status": "accepted scoped local result"
+    },
+    {
+      "receipt": "lean-011/receipt.json",
+      "attempt": "lean-011",
+      "kind": "lean",
+      "source_revision": "8e6587552b73ac5a469e99c04f35c19e28ccadc6",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2G_CopyImplication.olean",
+        "S2G_CopyImplication.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 0.31408499000099255,
+      "peak_rss_kib": "756188",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.S2G.CopyImplication.selected_byte' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.S2G.CopyImplication.other_cell' does not depend on any axioms"
+      ],
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "698c3512d82f09cafc501d9de91144e88cdeb1808887422f34910f362557e042",
+        "selected_object_count": 15244,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "status": "accepted scoped local result"
+    },
+    {
+      "receipt": "lean-012/receipt.json",
+      "attempt": "lean-012",
+      "kind": "lean",
+      "source_revision": "8e6587552b73ac5a469e99c04f35c19e28ccadc6",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2G_Exports.olean",
+        "S2G_Exports.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 1.5716944809973938,
+      "peak_rss_kib": "3879064",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.S2G.mapFormat_success' does not depend on any axioms",
+        "'AspisR1.S2G.decode_contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.validate_contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.candidate_contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.first_contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.Copy.contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.Copy.records_frame' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.Children.liftValue_success' does not depend on any axioms",
+        "'AspisR1.S2G.Children.decoder_contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.Children.unresolved_fields' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.Digest.contract' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.Digest.reached_call' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2G.CopyImplication.selected_byte' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.S2G.CopyImplication.other_cell' does not depend on any axioms"
+      ],
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "4d69ddd6e5e6440f1bda70d782ed2234c7a9d3a57898eac9bf7373ceeb9a0768",
+        "selected_object_count": 15245,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "status": "accepted scoped local result"
+    }
+  ]
+}

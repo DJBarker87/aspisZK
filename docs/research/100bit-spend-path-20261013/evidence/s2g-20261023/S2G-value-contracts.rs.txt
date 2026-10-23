@@ -1,0 +1,65 @@
+// Kani postcondition specifications, deliberately NOT compiled/registered stubs.
+// The Lean value implications are checked; native state/allocator/P6 transport
+// and callee contract checks are missing. In particular do not add modifies()
+// or use stub_verified on these templates on the strength of a pure theorem.
+// Statement/Afterstate are the complete native protocol types.
+
+// decode_public_statement_box(bytes):
+#[kani::ensures(|r: &Result<Box<Statement>, ProgramError>| match r {
+    Ok(s) => bytes.len() == 1880 && validate_pool_v1_pair_forest_terminal_statement_v1(s).is_ok(),
+    Err(_) => true,
+})]
+// Implied by S2G.decode_contract, AFTER the missing same-input native-to-installed
+// full statement/Result/Box port. It does not assert success on malformed bytes.
+
+// validate(statement):
+#[kani::ensures(|r: &Result<(), ProgramError>|
+    r.is_err() || validate_pool_v1_pair_forest_terminal_statement_v1(statement).is_ok())]
+// Implied by S2G.validate_contract after its native carrier port. If this SAME
+// statement came from S2G.decode, decode_contract supplies successful validation.
+// No arbitrary statement is assumed valid; errors are not specified by this
+// success-only weakening. Actual implementation still has its exact error map.
+
+// candidate(afterstate):
+#[kani::ensures(|r: &Result<[u8;688], ProgramError>| match r {
+    Ok(bytes) => encode_pool_v1_pair_verified_afterstate_v1(afterstate).as_ref() == Ok(bytes),
+    Err(_) => true,
+})]
+// Implied by S2G.candidate_contract after its native carrier port; complete
+// afterstate, identical output array. Not just a magic/prefix/hash comparison.
+
+// first(statement, public, proof, split): semantic postcondition is exact current
+// candidate.tx1(vops, currentDigest, publicOf(statement), public, proof, split,
+// (), None) = Ok(the SAME returned Vec). S2G.first_contract proves only that
+// value relation. NO executable Kani predicate can currently certify the
+// missing vops source/effect instance. In particular do NOT ensures(len==1768)
+// from first_contract: that length is currently derived at the CALLER gate.
+
+// second(public, proof, checkpoint): NO PROVED whole-child postcondition.
+// Missing exact actual tx2_authenticated → concrete S2E.second with the SAME
+// three slices, full Result, released None, ordered queries, returned state,
+// allocation/error behaviour; checkpoint/S7/S8/batches are predecessors only.
+
+// SolanaDigest(parts): the reified one-read postcondition is
+// (returned_digest, before ++ [(parts, returned_digest)]), with the actual
+// D.digest backend retained. S2G.Digest.contract and reached_call prove it.
+// Missing native hashv/reification/ROM binding: no active native digest stub.
+
+// copy_from_slice: executable verified contract is S2G-contracts/src/lib.rs.
+// requires both lengths1768, observed<1768, expected==source[observed];
+// modifies precisely destination[0..1768]; ensures destination[observed]==expected.
+// No arbitrary-index postcondition may be promoted to a single concretely
+// observed index: observed is universally arbitrary in both Kani/Lean proofs.
+
+// Remaining Children callbacks have NO enabled contract. Exact missing ports:
+// validate_asq8: native authenticated validation + reconstruction → SAME full
+// Validated(statement,proof_length), on SAME program/accounts/data; preserve
+// all reached PDA/Clock/hash/borrow/error events, with no successful suffix.
+// public: whole ASF8 encoder → exact returned Vec and error/state, both variants;
+// payment-encoder216 and semantic-public projections do not supply ASF8 bytes1880.
+// emit: result constructor+validation+encoding → exact set_return_data bytes,
+// including rejection/log prefix and no nonempty return write on prior failure.
+// clear_return_data: actual syscall → before history followed by set_return_data([]),
+// unchanged accounts and actual runtime error/rollback semantics.
+// drop_checkpoint/drop_statement: native owner consumption/deallocation → exact
+// state/allocator frame on admitted valid owners; SDK guard trust is insufficient.

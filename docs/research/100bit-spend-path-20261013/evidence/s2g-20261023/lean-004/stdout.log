@@ -1,0 +1,40 @@
+S2G_Copy.lean:11:22: error(lean.unknownIdentifier): Unknown identifier `copy_in_place`
+S2G_Copy.lean:10:82: error: expected a product type, got
+  ?m.1
+S2G_Copy.lean:22:48: error: unsolved goals
+sdk : OwnedSdk
+slot : Usize
+source : Slice U8
+valid : ↑slot < (↑sdk.data_cells).length
+sameLength : (↑(↑sdk.data_cells)[↑slot].bytes).length = (↑source).length
+run :
+  CopyLoop.copy_in_place sdk slot source =
+    ok
+      (if (↑(↑sdk.data_cells)[↑slot].bytes).length = (↑source).length then
+        (core.result.Result.Ok (), CopyLoop.replaceBytes sdk slot (↑sdk.data_cells)[↑slot] source)
+      else (core.result.Result.Err AspisS2OwnedStage1.solana_program_error.ProgramError.InvalidAccountData, sdk))
+⊢ sorry = ok (CopyLoop.replaceBytes sdk slot (↑sdk.data_cells)[↑slot] source)
+S2G_Copy.lean:25:18: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵p̵y̵,̵r̵u̵n̵,̵i̵f̵_̵p̵o̵s̵ ̵s̵a̵m̵e̵L̵e̵n̵g̵t̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲c̲o̲p̲y̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲s̲a̲m̲e̲L̲e̲n̲g̲t̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2G_Copy.lean:25:22: warning: This simp argument is unused:
+  if_pos sameLength
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵p̵y̵,̵r̵u̵n̵,̵i̵f̵_̵p̵o̵s̵ ̵s̵a̵m̵e̵L̵e̵n̵g̵t̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲c̲o̲p̲y̲,̲ ̲r̲u̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2G_Copy.lean:25:40: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵p̵y̵,̵r̵u̵n̵,̵i̵f̵_̵p̵o̵s̵ ̵s̵a̵m̵e̵L̵e̵n̵g̵t̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲c̲o̲p̲y̲,̲ ̲r̲u̲n̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲s̲a̲m̲e̲L̲e̲n̲g̲t̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2G_Copy.lean:25:13: warning: declaration uses `sorry`
+'AspisR1.S2G.Copy.contract' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2G.Copy.records_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
