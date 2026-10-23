@@ -55,8 +55,35 @@ assert 'stub_verified(S2K_encode_status)' not in (E/'S2K-native/src/lib.rs').rea
 assert json.loads((E/'kani-031/receipt.json').read_text())['exit_status']==0
 for n in [32,33,34]:
  assert 'CBMC timed out' in (E/f'kani-{n:03}/stdout.log').read_text()
+# New field/call cuts remain exact production source, with explicit substitutions.
+for name in ['field-cuts.json','result-field-cuts.json','admission-cuts.json']:
+ for c in json.loads((E/name).read_text()).values():
+  assert sha(R/c['source'])==c['source_sha256'],(name,c['source'])
+  assert c['cut'] in (R/c['source']).read_text(),(name,c['source'])
+for n in [n for n in range(35,58) if n!=42]+[59]:
+ assert json.loads((E/f'kani-{n:03}/receipt.json').read_text())['exit_status']==0,n
+assert json.loads((E/'kani-058/receipt.json').read_text())['exit_status']!=0
+assert 'mismatch in the number of generic parameters' in (E/'kani-058/stdout.log').read_text()
+assert json.loads((E/'kani-060/receipt.json').read_text())['exit_status']!=0
+assert 'reachability.rs:419' in (E/'kani-060/stdout.log').read_text()
+assert 'Failed to resolve' in (E/'kani-060/stdout.log').read_text()
+# The callee used by060 is exactly the u8-specialization verified by059.
+def generic_body(t):
+ a=t.index('fn S2K_copy_small_generic<');b=t.index('\n}',a)+2;return t[a:b]
+assert generic_body((E/'S2K-native/src/lib.rs').read_text())==generic_body((E/'kani-059/sources/S2K-native/src/lib.rs').read_text())
+assert 'S2K_copy_small_generic::<u8>' in (E/'kani-059/sources/S2K-native/src/lib.rs').read_text()
+for p in (D/'lean').glob('S2K_*.lean'):
+ assert any(r['kind']=='lean' and r['exit']==0 and
+   json.loads((E/r['path']).read_text())['source_hashes'].get(p.name)==sha(p) for r in rows),p
+# Naming-only adapter must recover the full raw generated function file.
+raw=(E/'extract-011-generated/S2K_ResultBytes/Funs.lean').read_text()
+adapt=(D/'lean/S2K_ResultBytes.lean').read_text().split('\n#print axioms',1)[0].rstrip()+'\n'
+assert adapt.replace('import Aeneas\n','import Aeneas\nimport S2K_ResultBytes.Types\n',1)==raw
+assert json.loads((E/'codec-lean-adapter.json').read_text())['inverse_exact']
+assert json.loads((E/'lean-070-note.json').read_text())['same_source_verified']
+assert len(json.loads((E/'lean-076/receipt.json').read_text())['print_axioms'])>=50
 h=json.loads((E/'host-audit.json').read_text());assert h['native_sources_all_match'];assert h['inherited_selected_objects']['all_match'];assert not h['own_remaining_processes']
 changed=subprocess.check_output(['git','diff','--name-only','4af6a0f6bf'],cwd=R,text=True).splitlines()
 assert all(f.startswith(('tools/s2k-20261023/','docs/research/100bit-spend-path-20261013/evidence/s2k-20261023/')) or f.startswith('docs/research/100bit-spend-path-20261013/lean/S2K_') or f in ['docs/research/100bit-spend-path-20261013/lean/S2K_Serialization.lean','docs/research/100bit-spend-path-20261013/design/S2K-20261023.md'] for f in changed),changed
-x=dict(schema='focused-extractor-proof-packet-v1',branch='codex/cx-s2k-20261023',receipts=rows,budget=dict(lean_attempts=sum(r['kind']=='lean' for r in rows),lean_cap=100,kani_runs=sum(r['kind']=='kani' for r in rows),kani_cap=60),redundant=['lean-070'],accepted_lean=[r['attempt'] for r in rows if r['kind']=='lean' and r['exit']==0 and r['attempt']!='lean-070'],accepted_kani=[r['attempt'] for r in rows if r['kind']=='kani' and r['exit']==0],excluded=[r['attempt'] for r in rows if r['exit']!=0],status='PARTIAL: emit success unclosed; ASQ8 and TX2 unstarted',shipped_source_changed=False,elf_pins='inherited only; no rebuild triggered',new_trust=False)
+x=dict(schema='focused-extractor-proof-packet-v1',branch='codex/cx-s2k-20261023',receipts=rows,budget=dict(lean_attempts=sum(r['kind']=='lean' for r in rows),lean_cap=100,kani_runs=sum(r['kind']=='kani' for r in rows),kani_cap=60),redundant=['lean-070'],accepted_lean=[r['attempt'] for r in rows if r['kind']=='lean' and r['exit']==0 and r['attempt']!='lean-070'],accepted_kani=[r['attempt'] for r in rows if r['kind']=='kani' and r['exit']==0],excluded=[r['attempt'] for r in rows if r['exit']!=0],status='BUDGET STOP: Kani60/60, Lean76/100; emit native composition open; ASQ8 and TX2 unstarted',shipped_source_changed=False,elf_pins='inherited only; no rebuild triggered',new_trust=False,auxiliary_receipts=[r for r in rows if r['kind'] not in ['lean','kani','audit']],terminal_blocker='kani-060: std slice-copy to verified generic u8 wrapper transfer fails in Kani reachability resolution before CBMC')
 (E/'manifest.json').write_text(json.dumps(x,indent=2)+'\n');print(json.dumps(dict(audit='PASS',receipts=len(rows),budget=x['budget'])))

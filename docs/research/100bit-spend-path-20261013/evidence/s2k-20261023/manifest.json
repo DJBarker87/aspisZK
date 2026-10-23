@@ -17,6 +17,13 @@
       "exit": 0
     },
     {
+      "path": "audit-003/receipt.json",
+      "sha256": "1c066bb4443d1c6ed3c6bddce84e5d7e0230fa658333129e8bc3a35c1252f137",
+      "kind": "audit",
+      "attempt": "audit-003",
+      "exit": 0
+    },
+    {
       "path": "extract-001/receipt.json",
       "sha256": "77b007972e3d5b9b8897bfae51be12065244ed10d2bb73e1eb165515ae4fd333",
       "kind": "charon",
@@ -505,6 +512,13 @@
       "kind": "kani",
       "attempt": "kani-059",
       "exit": 0
+    },
+    {
+      "path": "kani-060/receipt.json",
+      "sha256": "d6c1dbb64d19d148db3e3f2d73eb0734b6261e9d1f20162b72a5c95e5c2634aa",
+      "kind": "kani",
+      "attempt": "kani-060",
+      "exit": 1
     },
     {
       "path": "lean-001/receipt.json",
@@ -1042,7 +1056,7 @@
   "budget": {
     "lean_attempts": 76,
     "lean_cap": 100,
-    "kani_runs": 59,
+    "kani_runs": 60,
     "kani_cap": 60
   },
   "redundant": [
@@ -1142,6 +1156,7 @@
     "kani-034",
     "kani-042",
     "kani-058",
+    "kani-060",
     "lean-001",
     "lean-004",
     "lean-005",
@@ -1192,8 +1207,88 @@
     "lean-071",
     "lean-072"
   ],
-  "status": "PARTIAL: emit success unclosed; ASQ8 and TX2 unstarted",
+  "status": "BUDGET STOP: Kani60/60, Lean76/100; emit native composition open; ASQ8 and TX2 unstarted",
   "shipped_source_changed": false,
   "elf_pins": "inherited only; no rebuild triggered",
-  "new_trust": false
+  "new_trust": false,
+  "auxiliary_receipts": [
+    {
+      "path": "extract-001/receipt.json",
+      "sha256": "77b007972e3d5b9b8897bfae51be12065244ed10d2bb73e1eb165515ae4fd333",
+      "kind": "charon",
+      "attempt": "extract-001",
+      "exit": 101
+    },
+    {
+      "path": "extract-002/receipt.json",
+      "sha256": "4a2f6bbaebadf2c0fa09d50b7149266580afb080a3f2936a553e8209e6541509",
+      "kind": "charon",
+      "attempt": "extract-002",
+      "exit": 0
+    },
+    {
+      "path": "extract-003/receipt.json",
+      "sha256": "48d7cf4c2b8759556282ad3392abfeb22db0d8dea6b0eaa7eea5949361895eff",
+      "kind": "aeneas",
+      "attempt": "extract-003",
+      "exit": 2
+    },
+    {
+      "path": "extract-004/receipt.json",
+      "sha256": "0d8fb4cdd3735c672c18af65389daa51dfc8dc59587d8f5cbd69f792cef00faf",
+      "kind": "charon",
+      "attempt": "extract-004",
+      "exit": 0
+    },
+    {
+      "path": "extract-005/receipt.json",
+      "sha256": "71979c1452f930e58c2888e8b58e6795acbb10bdcde214dab7f8185b0a20e6b8",
+      "kind": "aeneas",
+      "attempt": "extract-005",
+      "exit": 0
+    },
+    {
+      "path": "extract-006/receipt.json",
+      "sha256": "f2e3faafbbd5f567a5ca8691043e8a6965fbb0f09a58b7f1abfdbfdbf33caf4f",
+      "kind": "charon",
+      "attempt": "extract-006",
+      "exit": 0
+    },
+    {
+      "path": "extract-007/receipt.json",
+      "sha256": "c9bf78d86fa510a5d6c25ca1a22871a3eb9d732dc42c0eff7f48dd7a1597b47e",
+      "kind": "aeneas",
+      "attempt": "extract-007",
+      "exit": 2
+    },
+    {
+      "path": "extract-008/receipt.json",
+      "sha256": "bf08f93e3ecacb016a3d8a111e71494f86b820baf03248ea44d6db211b258519",
+      "kind": "charon",
+      "attempt": "extract-008",
+      "exit": 0
+    },
+    {
+      "path": "extract-009/receipt.json",
+      "sha256": "7956a7330d8c04ef646838a1c2a93480d54314897c64f26bcd03fa667301f7d1",
+      "kind": "aeneas",
+      "attempt": "extract-009",
+      "exit": 2
+    },
+    {
+      "path": "extract-010/receipt.json",
+      "sha256": "057b7afc881e7dd2a6a9c42cc9d7c94c3c204becdf4049429d82b43cd1784fa8",
+      "kind": "charon",
+      "attempt": "extract-010",
+      "exit": 0
+    },
+    {
+      "path": "extract-011/receipt.json",
+      "sha256": "8b499dd5d4e73ff68d4c191814f118b176e696cf320cf1873bcaf6156576cc39",
+      "kind": "aeneas",
+      "attempt": "extract-011",
+      "exit": 0
+    }
+  ],
+  "terminal_blocker": "kani-060: std slice-copy to verified generic u8 wrapper transfer fails in Kani reachability resolution before CBMC"
 }
