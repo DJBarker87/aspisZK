@@ -1,0 +1,398 @@
+'AspisR1.Port4C_Pending.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryFields.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryFields.both_sizes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryInverse.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryGroups.outer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_CollectStd.next_group' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_CollectLoop.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_QueryIntervals.ten_twelve' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_QueryLoop.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_QueryState.observed_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_FlushState.exact_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_Installed.writer_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port4C_Installed.writer_fields : ∀ {CoreError W : Type} (base : VTop_Stages.Ops) (reserved : Bool)
+  (batch : AspisR1.Port3_NativeBatchBody.Ops) (geometryOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (queryOps : AspisR1.Port3_NativeQueryBody.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps W),
+  AspisR1.Port4C_BasisOuter.SessionABasis queryOps →
+    AspisR1.Port4C_QueryArithmetic.SessionABackends queryOps →
+      (∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+          (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+          (inverses : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+          (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+          queryOps.op16 alpha values inverses = Aeneas.Std.Result.ok value →
+            AspisR1.Port4C_QueryArithmetic.CanonE value) →
+        ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+          (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+          (proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize) (p : VTop_Stages.verifier.Prepared)
+          (a : VTop_Stages.verifier.Accumulator),
+          AspisR1.Port3_FlushInstall.Canonical p.rho →
+            AspisR1.VTop_Provenance.WriterPrefix
+                (AspisR1.Port4C_Installed.installed base reserved batch geometryOps queryOps finish) D hash semantic
+                proof split none p a →
+              reserved = true ∧
+                ↑split = 10 ∧
+                  ↑a.next = 10 ∧
+                    (↑a.weights).length = 64 ∧
+                      AspisR1.Port4C_QueryArithmetic.CanonE a.rhs ∧
+                        AspisR1.Port3_FlushInstall.Canonical a.power ∧
+                          (∀ q ∈ ↑a.weights, AspisR1.Port3_FlushInstall.Canonical q) ∧
+                            ∃ sum,
+                              ∀ (i : Fin 64),
+                                (AspisR1.CheckpointBytes5Output.accumulator a).weights i =
+                                  AspisR1.Port4C_SumField.weight sum ↑i :=
+fun {CoreError W} base reserved batch geometryOps queryOps finish basisBackend arithmetic lineCanonical {Hash} D hash
+    semantic proof split p a rhoCanonical reached =>
+  let ⟨zero, h✝⟩ := reached
+  let ⟨g, h✝¹⟩ := h✝
+  let ⟨prep, h✝²⟩ := h✝¹
+  let ⟨initial, h✝³⟩ := h✝²
+  let ⟨root, h✝⁴⟩ := h✝³
+  let ⟨geometry, h✝⁵⟩ := h✝⁴
+  let ⟨pending, h✝⁶⟩ := h✝⁵
+  let ⟨returned, h✝⁷⟩ := h✝⁶
+  let ⟨flushed, h✝⁸⟩ := h✝⁷
+  let ⟨parsed, h✝⁹⟩ := h✝⁸
+  let ⟨sv, h✝¹⁰⟩ := h✝⁹
+  let ⟨hs, right✝⟩ := h✝¹⁰
+  let ⟨hsv, right✝¹⟩ := right✝
+  let ⟨hparse, right✝²⟩ := right✝¹
+  let ⟨hscan, right✝³⟩ := right✝²
+  let ⟨hzero, right✝⁴⟩ := right✝³
+  let ⟨hprep, right✝⁵⟩ := right✝⁴
+  let ⟨hbranch, right✝⁶⟩ := right✝⁵
+  let ⟨hinit, right✝⁷⟩ := right✝⁶
+  let ⟨hbatch, right✝⁸⟩ := right✝⁷
+  let ⟨hgeom, right✝⁹⟩ := right✝⁸
+  let ⟨hpending, right✝¹⁰⟩ := right✝⁹
+  let ⟨hquery, right✝¹¹⟩ := right✝¹⁰
+  let ⟨hflush, right✝¹²⟩ := right✝¹¹
+  let ⟨hw, right✝¹³⟩ := right✝¹²
+  let ⟨hr, right✝¹⁴⟩ := right✝¹³
+  let ⟨hp, hn⟩ := right✝¹⁴
+  have splitValue :=
+    have eq := Aeneas.Std.Result.ok.inj hs;
+    Eq.ndrec (motive := fun sv =>
+      (AspisR1.Port4C_Installed.installed base reserved batch geometryOps queryOps finish).op16 =
+          Aeneas.Std.Result.ok sv →
+        ↑split = ↑sv → ↑split = 10)
+      (fun hs hsv => hsv) eq hs hsv;
+  have init :=
+    id
+      (fun hinit =>
+        Eq.mp
+          (congrArg (fun _a => _a = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok initial))
+            (AspisR1.Port3_Constructor.normalization (AspisR1.Port3_Constructor.leaves reserved)
+              AspisR1Stage2.transport.Variant.S2))
+          hinit)
+      hinit;
+  have initialFields := AspisR1.Port3_Initial.accepted_fields base reserved initial init;
+  have size :=
+    Eq.mpr (id (congrArg (fun _a => _a.length = 64) initialFields.right.left))
+      (Eq.mpr (id (congrArg (fun _a => _a = 64) List.length_replicate)) (Eq.refl 64));
+  have powerCanonical :=
+    Eq.mpr (id (congrArg (fun _a => AspisR1.Port3_FlushInstall.Canonical _a) initialFields.right.right.right.left))
+      (id (of_decide_eq_true (id (Eq.refl true))));
+  have rhsCanonical :=
+    Eq.mpr (id (congrArg (fun _a => AspisR1.Port4C_QueryArithmetic.CanonE _a) initialFields.right.right.left))
+      (id (of_decide_eq_true (id (Eq.refl true))));
+  have pendingFields := AspisR1.Port4C_Pending.accepted reserved initial.weights.deref pending size hpending;
+  have native :=
+    (AspisR1.Port3_QueryInstall.success_iff
+          (AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop
+            (AspisR1.Port3_QueryStage.release (AspisR1.Port4C_RowStd.install queryOps)) proof p initial g
+            (AspisR1.Port3_QueryInstall.observer none) geometry pending split)
+          returned).mp
+      hquery;
+  have commute := rfl;
+  have basis :=
+    { s3_s4_mul := basisBackend.s3_s4_mul, s3_s4_sub := basisBackend.s3_s4_sub,
+      s3_s4_double := basisBackend.s3_s4_double, zero := basisBackend.zero, one := basisBackend.one };
+  have arithmetic1 :=
+    { s3_s4_s5_mulE := arithmetic.s3_s4_s5_mulE, s3_s4_s5_addE := arithmetic.s3_s4_s5_addE,
+      s3_s4_s9_mulK := arithmetic.s3_s4_s9_mulK };
+  let ⟨sumOut, h✝¹¹⟩ :=
+    AspisR1.Port4C_QueryLoop.loop (AspisR1.Port3_QueryStage.release queryOps) basis arithmetic1
+      (AspisR1.Port3_PendingInstall.owned initial.weights.deref) proof p initial returned.1 g
+      (AspisR1.Port3_QueryInstall.observer none) geometry pending returned.2 split 0
+      (S7Kani3CallerTrace.initialSum (AspisR1.Port3_PendingInstall.owned initial.weights.deref)) size
+      (Eq.mpr (id (congrArg (fun _a => ↑_a ≤ ↑split) initialFields.right.right.right.right))
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg LE.le
+                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                    (of_decide_eq_true (id (Eq.refl true))))))
+              ↑split)
+            zero_le._simp_1)))
+      (Eq.mpr (id (congrArg (fun _a => 0 + (↑split - ↑_a) ≤ 22) initialFields.right.right.right.right))
+        (Eq.mpr (id (congrArg (fun _a => 0 + (_a - ↑0#usize) ≤ 22) splitValue))
+          (of_decide_eq_true (id (Eq.refl true)))))
+      powerCanonical rhoCanonical rhsCanonical lineCanonical pendingFields.right.right.right.right.left
+      pendingFields.right.right.right.right.right
+      (Eq.mp
+        (congrArg
+          (fun _a =>
+            AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop _a proof p initial g
+                (AspisR1.Port3_QueryInstall.observer none) geometry pending split =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok returned))
+          commute)
+        native)
+  let ⟨trace, right✝¹⁵⟩ := h✝¹¹
+  let ⟨progress, right✝¹⁶⟩ := right✝¹⁵
+  let ⟨next, right✝¹⁷⟩ := right✝¹⁶
+  let ⟨weights, right✝¹⁸⟩ := right✝¹⁷
+  let ⟨rhs, power⟩ := right✝¹⁸
+  have returnedSize := Eq.mpr (id (congrArg (fun _a => (↑_a).length = 64) weights)) size;
+  have rawSize := progress.right.left;
+  have flushFields :=
+    AspisR1.Port4C_FlushField.accepted (AspisR1.Port3_PendingInstall.owned initial.weights.deref) returned.2 sumOut
+      returned.1.weights.deref flushed returnedSize rawSize trace hflush;
+  have canonical :=
+    AspisR1.Port3_FlushInstall.accepted_canonical returned.2 returned.1.weights.deref flushed (id ⋯) hflush;
+  ⟨initialFields.left, ⟨splitValue, ⋯⟩⟩
+theorem AspisR1.Port4C_GeometryInverse.total : ∀ {CoreError : Type}
+  (ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError),
+  ops.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+    ops.op7 = Aeneas.Std.Result.ok 1#u32 →
+      ops.op11 = AspisR1.Port4C_InverseExecution.inverse_owned →
+        ∀ (flat inverse : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U32),
+          (↑flat).length ≤ 110 →
+            (↑inverse).length = (↑flat).length →
+              (∀ x ∈ ↑flat, AspisR1.S7JoinBasisMachine.decode x ≠ 0) →
+                ∃ out,
+                  AspisR1.Port4C_GeometryInverse.pipeline ops flat inverse = Aeneas.Std.Result.ok out ∧
+                    (↑out).length = (↑flat).length ∧
+                      ∀ j < (↑flat).length,
+                        AspisR1.S7JoinBasisMachine.decode (AspisR1.Port4C_BatchInverse.cell (↑out) j) =
+                          (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port4C_BatchInverse.cell (↑flat) j))⁻¹ :=
+fun {CoreError} ops multiply one inverseLeaf flat inverse bound size nonzero =>
+  let ⟨out, h✝⟩ :=
+    AspisR1.Port4C_OwnedGeometryInverse.total_exact flat (Aeneas.Std.alloc.vec.Vec.new Aeneas.Std.U32) inverse bound rfl
+      size nonzero
+  let ⟨run, right✝⟩ := h✝
+  let ⟨hlen, hvalues⟩ := right✝
+  let ⟨r, h✝¹⟩ :=
+    AspisR1.Port3_PushFrame.bind_success
+      (S7Kani2PrefixLoop.prefixes_owned flat (Aeneas.Std.alloc.vec.Vec.new Aeneas.Std.U32) 1#u32 0#usize)
+      (fun x => do
+        let suffix ← AspisR1.Port4C_InverseExecution.inverse_owned x.2.2
+        AspisR1.Port4C_OwnedInverse.inverse_owned flat x.2.1 inverse suffix flat.len)
+      out run
+  let ⟨hprefix, run⟩ := h✝¹
+  let ⟨suffix, h✝²⟩ :=
+    AspisR1.Port3_PushFrame.bind_success (AspisR1.Port4C_InverseExecution.inverse_owned r.2.2)
+      (fun x => AspisR1.Port4C_OwnedInverse.inverse_owned flat r.2.1 inverse x flat.len) out run
+  let ⟨hsuffix, run⟩ := h✝²
+  have native := AspisR1.Port4C_InverseLoop.from_owned ops multiply flat r.2.1 inverse out suffix flat.len bound run;
+  Exists.intro out
+    ⟨id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let (prefixes, product) ← _a
+                    let suffix ← ops.op11 product
+                    AspisR1.Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 ops
+                        (AspisR1.Port4C_Reverse.reverse flat.len) flat prefixes suffix inverse) =
+                  Aeneas.Std.Result.ok out)
+              (AspisR1.Port4C_GeometryInverse.prefix_reference ops multiply one flat.deref bound)))
+          (Eq.mpr
+            (id
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Aeneas.Std.bind_assoc_eq
+                      (S7Kani2PrefixLoop.prefixes_owned (AspisR1.Port4C_GeometryInverse.vec flat.deref)
+                        (Aeneas.Std.alloc.vec.Vec.new Aeneas.Std.U32) 1#u32 0#usize)
+                      (fun r => Aeneas.Std.Result.ok (r.2.1, r.2.2))
+                      (Aeneas.Std.uncurry fun prefixes product => do
+                        let suffix ← ops.op11 product
+                        AspisR1.Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 ops
+                            (AspisR1.Port4C_Reverse.reverse flat.len) flat prefixes suffix inverse))
+                    (congrArg
+                      (bind
+                        (S7Kani2PrefixLoop.prefixes_owned (AspisR1.Port4C_GeometryInverse.vec flat.deref)
+                          (Aeneas.Std.alloc.vec.Vec.new Aeneas.Std.U32) 1#u32 0#usize))
+                      (funext fun x =>
+                        Aeneas.Std.bind_tc_ok (x.2.1, x.2.2)
+                          (Aeneas.Std.uncurry fun prefixes product => do
+                            let suffix ← ops.op11 product
+                            AspisR1.Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 ops
+                                (AspisR1.Port4C_Reverse.reverse flat.len) flat prefixes suffix inverse)))))
+                (Aeneas.Std.Result.ok out)))
+            (id
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      (do
+                          let r ← _a
+                          let suffix ← ops.op11 r.2.2
+                          AspisR1.Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 ops
+                              (AspisR1.Port4C_Reverse.reverse flat.len) flat r.2.1 suffix inverse) =
+                        Aeneas.Std.Result.ok out)
+                    hprefix))
+                (Eq.mpr
+                  (id
+                    (congrArg (fun _a => _a = Aeneas.Std.Result.ok out)
+                      (Aeneas.Std.bind_tc_ok r fun r => do
+                        let suffix ← ops.op11 r.2.2
+                        AspisR1.Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 ops
+                            (AspisR1.Port4C_Reverse.reverse flat.len) flat r.2.1 suffix inverse)))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          (do
+                              let suffix ← _a r.2.2
+                              AspisR1.Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 ops
+                                  (AspisR1.Port4C_Reverse.reverse flat.len) flat r.2.1 suffix inverse) =
+                            Aeneas.Std.Result.ok out)
+                        inverseLeaf))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            (do
+                                let suffix ← _a
+                                AspisR1.Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 ops
+                                    (AspisR1.Port4C_Reverse.reverse flat.len) flat r.2.1 suffix inverse) =
+                              Aeneas.Std.Result.ok out)
+                          hsuffix))
+                      (Eq.mpr
+                        (id
+                          (congrArg (fun _a => _a = Aeneas.Std.Result.ok out)
+                            (Aeneas.Std.bind_tc_ok suffix fun suffix =>
+                              AspisR1.Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 ops
+                                (AspisR1.Port4C_Reverse.reverse flat.len) flat r.2.1 suffix inverse)))
+                        native)))))))),
+      ⟨hlen, hvalues⟩⟩
+theorem AspisR1.Port4C_QueryState.observed_step : ∀ (ops : AspisR1.Port3_NativeQueryBody.Ops),
+  AspisR1.Port4C_BasisOuter.SessionABasis ops →
+    AspisR1.Port4C_QueryArithmetic.SessionABackends ops →
+      ∀ (old : S8OwnedP6Finish.Weights) (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+        (a out : AspisR1Stage2.verifier.Accumulator) (g : Aeneas.Std.Array AspisR1Stage2.Stage2E 29#usize)
+        (obs : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit))
+        (geometry : AspisR1Stage2.verifier.QueryGeometry) (b bout : AspisR1Stage2.verifier.BatchedWeights)
+        (sum : S7Kani3CallerTrace.Sum) (t : ℕ),
+        (↑a.weights).length = 64 →
+          t < 22 →
+            AspisR1.Port3_FlushInstall.Canonical a.power →
+              AspisR1.Port3_FlushInstall.Canonical p.rho →
+                AspisR1.Port4C_QueryArithmetic.CanonE a.rhs →
+                  (∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+                      (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+                      (inverses : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+                      (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+                      ops.op16 alpha values inverses = Aeneas.Std.Result.ok value →
+                        AspisR1.Port4C_QueryArithmetic.CanonE value) →
+                    S7Kani3CallerTrace.PushTrace old (AspisR1.Port3_RowsInstall.toBW b) sum →
+                      AspisR1.S7JoinRowsTrace.Progress t 0 (AspisR1.Port3_RowsInstall.toBW b) →
+                        AspisR1.Port3_NativeQueryBody.verifier.candidate.query_values
+                              (AspisR1.Port4C_RowStd.install ops) proof p a g obs geometry b =
+                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out, bout)) →
+                          ∃ o sumOut,
+                            S7Kani3CallerTrace.PushTrace old (AspisR1.Port3_RowsInstall.toBW bout) sumOut ∧
+                              AspisR1.S7JoinRowsTrace.Progress (t + 1) 0 (AspisR1.Port3_RowsInstall.toBW bout) ∧
+                                AspisR1.Port4C_QueryState.state out sumOut =
+                                  AspisR1.QueryAccumulator.step AspisR1.LiteralOpeningView.eK
+                                    (AspisR1.CheckpointBytes5Output.ofK p.rho)
+                                    (fun x => AspisR1.CheckpointBytes5Output.ofE o.value)
+                                    (fun x i =>
+                                      AspisR1.Port4C_SumField.scalar
+                                        (AspisCircleTensorBinding.naturalLineValue
+                                          (AspisR1.S7JoinBasisMachine.decode o.node) ↑i))
+                                    (AspisR1.Port4C_QueryState.state a sum) :=
+fun ops basisBackend arithmetic old proof p a out g obs geometry b bout sum t size termBound hp hrho hrhs lineCanonical
+    history phase h =>
+  let ⟨o, h✝⟩ :=
+    AspisR1.Port4C_QueryMeaning.query ops basisBackend arithmetic old proof p a out g obs geometry b bout sum t size
+      termBound hp hrho hrhs lineCanonical history phase h
+  let ⟨sumOut, h✝¹⟩ := h✝
+  let ⟨trace, right✝⟩ := h✝¹
+  let ⟨progress, right✝¹⟩ := right✝
+  let ⟨sums, right✝²⟩ := right✝¹
+  let ⟨rhs, right✝³⟩ := right✝²
+  let ⟨power, right✝⁴⟩ := right✝³
+  let ⟨next, right✝⁵⟩ := right✝⁴
+  let ⟨left✝, right✝⁶⟩ := right✝⁵
+  let ⟨left✝¹, right✝⁷⟩ := right✝⁶
+  Exists.intro o
+    (Exists.intro sumOut
+      ⟨trace,
+        ⟨progress,
+          id
+            (id
+              ((fun {K E} [Field K] [Field E] weights weights_1 e_weights =>
+                  Eq.rec (motive := fun weights_2 e_weights =>
+                    ∀ (rhs rhs_1 : E),
+                      rhs = rhs_1 →
+                        ∀ (power power_1 : K),
+                          power = power_1 →
+                            ∀ (next next_1 : ℕ),
+                              next = next_1 →
+                                { weights := weights, rhs := rhs, power := power, next := next } =
+                                  { weights := weights_2, rhs := rhs_1, power := power_1, next := next_1 })
+                    (fun rhs rhs_1 e_rhs =>
+                      Eq.rec (motive := fun rhs_2 e_rhs =>
+                        ∀ (power power_1 : K),
+                          power = power_1 →
+                            ∀ (next next_1 : ℕ),
+                              next = next_1 →
+                                { weights := weights, rhs := rhs, power := power, next := next } =
+                                  { weights := weights, rhs := rhs_2, power := power_1, next := next_1 })
+                        (fun power power_1 e_power =>
+                          Eq.rec (motive := fun power_2 e_power =>
+                            ∀ (next next_1 : ℕ),
+                              next = next_1 →
+                                { weights := weights, rhs := rhs, power := power, next := next } =
+                                  { weights := weights, rhs := rhs, power := power_2, next := next_1 })
+                            (fun next next_1 e_next =>
+                              e_next ▸ Eq.refl { weights := weights, rhs := rhs, power := power, next := next })
+                            e_power)
+                        e_rhs)
+                    e_weights)
+                (fun i => AspisR1.Port4C_SumField.weight sumOut ↑i)
+                (fun j =>
+                  { weights := fun i => AspisR1.Port4C_SumField.weight sum ↑i,
+                          rhs := AspisR1.CheckpointBytes5Output.ofE a.rhs,
+                          power := AspisR1.CheckpointBytes5Output.ofK a.power, next := ↑a.next }.weights
+                      j +
+                    { weights := fun i => AspisR1.Port4C_SumField.weight sum ↑i,
+                          rhs := AspisR1.CheckpointBytes5Output.ofE a.rhs,
+                          power := AspisR1.CheckpointBytes5Output.ofK a.power, next := ↑a.next }.power *
+                      (fun x i =>
+                          AspisR1.Port4C_SumField.scalar
+                            (AspisCircleTensorBinding.naturalLineValue (AspisR1.S7JoinBasisMachine.decode o.node) ↑i))
+                        { weights := fun i => AspisR1.Port4C_SumField.weight sum ↑i,
+                            rhs := AspisR1.CheckpointBytes5Output.ofE a.rhs,
+                            power := AspisR1.CheckpointBytes5Output.ofK a.power, next := ↑a.next }.next
+                        j)
+                (funext fun i =>
+                  AspisR1.Port4C_SumField.update sum sumOut a.power
+                    (AspisCircleTensorBinding.naturalLineValue (AspisR1.S7JoinBasisMachine.decode o.node)) sums i)
+                (AspisR1.CheckpointBytes5Output.ofE out.rhs)
+                ({ weights := fun i => AspisR1.Port4C_SumField.weight sum ↑i,
+                      rhs := AspisR1.CheckpointBytes5Output.ofE a.rhs,
+                      power := AspisR1.CheckpointBytes5Output.ofK a.power, next := ↑a.next }.rhs +
+                  AspisR1.LiteralOpeningView.eK
+                      { weights := fun i => AspisR1.Port4C_SumField.weight sum ↑i,
+                          rhs := AspisR1.CheckpointBytes5Output.ofE a.rhs,
+                          power := AspisR1.CheckpointBytes5Output.ofK a.power, next := ↑a.next }.power *
+                    (fun x => AspisR1.CheckpointBytes5Output.ofE o.value)
+                      { weights := fun i => AspisR1.Port4C_SumField.weight sum ↑i,
+                          rhs := AspisR1.CheckpointBytes5Output.ofE a.rhs,
+                          power := AspisR1.CheckpointBytes5Output.ofK a.power, next := ↑a.next }.next)
+                rhs (AspisR1.CheckpointBytes5Output.ofK out.power)
+                ({ weights := fun i => AspisR1.Port4C_SumField.weight sum ↑i,
+                      rhs := AspisR1.CheckpointBytes5Output.ofE a.rhs,
+                      power := AspisR1.CheckpointBytes5Output.ofK a.power, next := ↑a.next }.power *
+                  AspisR1.CheckpointBytes5Output.ofK p.rho)
+                power (↑out.next)
+                ({ weights := fun i => AspisR1.Port4C_SumField.weight sum ↑i,
+                      rhs := AspisR1.CheckpointBytes5Output.ofE a.rhs,
+                      power := AspisR1.CheckpointBytes5Output.ofK a.power, next := ↑a.next }.next +
+                  1)
+                next))⟩⟩)
