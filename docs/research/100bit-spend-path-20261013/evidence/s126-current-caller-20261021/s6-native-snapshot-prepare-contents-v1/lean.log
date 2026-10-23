@@ -1,0 +1,332 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:14:50: error: unsolved goals
+⊢ ↑8#usize + (0 + 1) + 7 = 16
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:27:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC ++ List.replicate 792 0#u8).set (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION
+in the target expression
+  (↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC ++ List.replicate (800 - ↑8#usize) 0#u8).set 8 POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION =
+    header_bytes ++ List.replicate 784 0#u8
+
+h0 :
+  (List.replicate 800 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC =
+    ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC ++ List.replicate (800 - ↑8#usize) 0#u8
+h1 :
+  (↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC ++ List.replicate 792 0#u8).set (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION =
+    ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC ++ [POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION] ++ List.replicate 791 0#u8
+⊢ (↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC ++ List.replicate (800 - ↑8#usize) 0#u8).set 8 POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION =
+    header_bytes ++ List.replicate 784 0#u8
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:23:87: warning: This simp argument is unused:
+  Nat.reduceSub
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_nil, ̲List.nil_append, ̲POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.property,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵S̵u̵b̵] at h0
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:50:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (header_bytes ++ ↑format ++ List.replicate 752 0#u8).setSlice! (16 + ↑32#usize) ↑snapshot.pool
+in the target expression
+  (((((header_bytes ++ ↑format ++ List.replicate (784 - ↑32#usize) 0#u8).setSlice! 48 ↑snapshot.pool).setSlice! 80
+                  ↑snapshot.deployment_domain).setSlice!
+              112 ↑(core.num.U64.to_le_bytes snapshot.sequence)).setSlice!
+          120 ↑(core.num.U64.to_le_bytes snapshot.next_pair_index)).setSlice!
+      128 (DigestContents.chunks snapshot.current_root) =
+    prefix_bytes snapshot format ++ List.replicate 640 0#u8
+
+snapshot : PoolV1PairLiveSnapshotV1
+format : Std.Array U8 32#usize
+h0 :
+  (header_bytes ++ List.replicate 784 0#u8).setSlice! 16 ↑format =
+    header_bytes ++ ↑format ++ List.replicate (784 - ↑32#usize) 0#u8
+h1 :
+  (header_bytes ++ ↑format ++ List.replicate 752 0#u8).setSlice! (16 + ↑32#usize) ↑snapshot.pool =
+    header_bytes ++ ↑format ++ ↑snapshot.pool ++ List.replicate (752 - ↑32#usize) 0#u8
+⊢ (((((header_bytes ++ ↑format ++ List.replicate (784 - ↑32#usize) 0#u8).setSlice! 48 ↑snapshot.pool).setSlice! 80
+                  ↑snapshot.deployment_domain).setSlice!
+              112 ↑(core.num.U64.to_le_bytes snapshot.sequence)).setSlice!
+          120 ↑(core.num.U64.to_le_bytes snapshot.next_pair_index)).setSlice!
+      128 (DigestContents.chunks snapshot.current_root) =
+    prefix_bytes snapshot format ++ List.replicate 640 0#u8
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:45:103: warning: This simp argument is unused:
+  header_length
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵format.property,
+  ̲ ̲ ̲ ̲ ̲snapshot.pool.property, ̲snapshot.deployment_domain.property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.sequence).property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.next_pair_index).property,
+  ̲ ̲ ̲ ̲ ̲PaymentContents.digest_chunks_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:45:133: warning: This simp argument is unused:
+  snapshot.pool.property
+
+Hint: Omit it from the simp argument list.
+  simp only [header_length,
+  ̲ ̲ ̲ ̲ ̲format.property, ̲snapshot.p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵deployment_domain.property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.sequence).property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.next_pair_index).property,
+  ̲ ̲ ̲ ̲ ̲PaymentContents.digest_chunks_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:45:156: warning: This simp argument is unused:
+  snapshot.deployment_domain.property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵]̵[̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲s̲e̲q̲u̲e̲n̲c̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲n̲e̲x̲t̲_̲p̲a̲i̲r̲_̲i̲n̲d̲e̲x̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲a̲y̲m̲e̲n̲t̲C̲o̲n̲t̲e̲n̲t̲s̲.̲d̲i̲g̲e̲s̲t̲_̲c̲h̲u̲n̲k̲s̲_̲l̲e̲n̲g̲t̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:45:192: warning: This simp argument is unused:
+  (core.num.U64.to_le_bytes snapshot.sequence).property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵]̵[̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲d̲e̲p̲l̲o̲y̲m̲e̲n̲t̲_̲d̲o̲m̲a̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲n̲e̲x̲t̲_̲p̲a̲i̲r̲_̲i̲n̲d̲e̲x̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲a̲y̲m̲e̲n̲t̲C̲o̲n̲t̲e̲n̲t̲s̲.̲d̲i̲g̲e̲s̲t̲_̲c̲h̲u̲n̲k̲s̲_̲l̲e̲n̲g̲t̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:45:246: warning: This simp argument is unused:
+  (core.num.U64.to_le_bytes snapshot.next_pair_index).property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵]̵[̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲d̲e̲p̲l̲o̲y̲m̲e̲n̲t̲_̲d̲o̲m̲a̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲s̲e̲q̲u̲e̲n̲c̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲P̲a̲y̲m̲e̲n̲t̲C̲o̲n̲t̲e̲n̲t̲s̲.̲d̲i̲g̲e̲s̲t̲_̲c̲h̲u̲n̲k̲s̲_̲l̲e̲n̲g̲t̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:45:307: warning: This simp argument is unused:
+  PaymentContents.digest_chunks_length
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵]̵[̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲d̲e̲p̲l̲o̲y̲m̲e̲n̲t̲_̲d̲o̲m̲a̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲s̲e̲q̲u̲e̲n̲c̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲n̲e̲x̲t̲_̲p̲a̲i̲r̲_̲i̲n̲d̲e̲x̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:46:13: warning: This simp argument is unused:
+  List.length_append
+
+Hint: Omit it from the simp argument list.
+  simp only [L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h_̵a̵p̵p̵en̵d̵,̵h̵e̵ader_length, ̲format.property, ̲snapshot.pool.property,
+  ̲ ̲ ̲ ̲ ̲snapshot.deployment_domain.property, ̲(core.num.U64.to_le_bytes snapshot.sequence).property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.next_pair_index).property,
+  ̲ ̲ ̲ ̲ ̲PaymentContents.digest_chunks_length, ̲Nat.reduceAdd, ̲Nat.reduceSub] at h0
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:46:62: warning: This simp argument is unused:
+  snapshot.pool.property
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_append, ̲header_length, ̲format.property,
+  ̲ ̲ ̲ ̲ ̲snapshot.p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵deployment_domain.property, ̲(core.num.U64.to_le_bytes snapshot.sequence).property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.next_pair_index).property,
+  ̲ ̲ ̲ ̲ ̲PaymentContents.digest_chunks_length, ̲Nat.reduceAdd, ̲Nat.reduceSub] at h0
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:46:85: warning: This simp argument is unused:
+  snapshot.deployment_domain.property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵a̵p̵p̵e̵n̵d̵,̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵A̵d̵d̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵S̵u̵b̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲s̲e̲q̲u̲e̲n̲c̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲n̲e̲x̲t̲_̲p̲a̲i̲r̲_̲i̲n̲d̲e̲x̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲a̲y̲m̲e̲n̲t̲C̲o̲n̲t̲e̲n̲t̲s̲.̲d̲i̲g̲e̲s̲t̲_̲c̲h̲u̲n̲k̲s̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲A̲d̲d̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲S̲u̲b̲]̲ at h0
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:46:121: warning: This simp argument is unused:
+  (core.num.U64.to_le_bytes snapshot.sequence).property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵a̵p̵p̵e̵n̵d̵,̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵A̵d̵d̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵S̵u̵b̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲d̲e̲p̲l̲o̲y̲m̲e̲n̲t̲_̲d̲o̲m̲a̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲n̲e̲x̲t̲_̲p̲a̲i̲r̲_̲i̲n̲d̲e̲x̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲a̲y̲m̲e̲n̲t̲C̲o̲n̲t̲e̲n̲t̲s̲.̲d̲i̲g̲e̲s̲t̲_̲c̲h̲u̲n̲k̲s̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲A̲d̲d̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲S̲u̲b̲]̲ at h0
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:46:175: warning: This simp argument is unused:
+  (core.num.U64.to_le_bytes snapshot.next_pair_index).property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵a̵p̵p̵e̵n̵d̵,̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵A̵d̵d̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵S̵u̵b̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲d̲e̲p̲l̲o̲y̲m̲e̲n̲t̲_̲d̲o̲m̲a̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲s̲e̲q̲u̲e̲n̲c̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲a̲y̲m̲e̲n̲t̲C̲o̲n̲t̲e̲n̲t̲s̲.̲d̲i̲g̲e̲s̲t̲_̲c̲h̲u̲n̲k̲s̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲A̲d̲d̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲S̲u̲b̲]̲ at h0
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:46:236: warning: This simp argument is unused:
+  PaymentContents.digest_chunks_length
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_append, ̲header_length, ̲format.property, ̲snapshot.pool.property,
+  ̲ ̲ ̲ ̲ ̲snapshot.deployment_domain.property, ̲(core.num.U64.to_le_bytes snapshot.sequence).property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.next_pair_index).property,P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵,̵ ̲Nat.reduceAdd,
+  ̲ ̲ ̲ ̲ ̲Nat.reduceSub] at h0
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:46:273: warning: This simp argument is unused:
+  Nat.reduceAdd
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_append, ̲header_length, ̲format.property, ̲snapshot.pool.property,
+  ̲ ̲ ̲ ̲ ̲snapshot.deployment_domain.property, ̲(core.num.U64.to_le_bytes snapshot.sequence).property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.next_pair_index).property,
+  ̲ ̲ ̲ ̲ ̲PaymentContents.digest_chunks_length, ̲Nat.reduceA̵d̵d̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵Sub] at h0
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:46:287: warning: This simp argument is unused:
+  Nat.reduceSub
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_append, ̲header_length, ̲format.property, ̲snapshot.pool.property,
+  ̲ ̲ ̲ ̲ ̲snapshot.deployment_domain.property, ̲(core.num.U64.to_le_bytes snapshot.sequence).property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.next_pair_index).property,
+  ̲ ̲ ̲ ̲ ̲PaymentContents.digest_chunks_length, ̲Nat.reduceAdd,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵S̵u̵b̵] at h0
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:48:124: warning: This simp argument is unused:
+  header_length
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵format.property,
+  ̲ ̲ ̲ ̲ ̲snapshot.pool.property, ̲snapshot.deployment_domain.property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.sequence).property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.next_pair_index).property,
+  ̲ ̲ ̲ ̲ ̲PaymentContents.digest_chunks_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:48:138: warning: This simp argument is unused:
+  format.property
+
+Hint: Omit it from the simp argument list.
+  simp only [header_length,f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵
+  ̲ ̲ ̲ ̲ ̲snapshot.pool.property, ̲snapshot.deployment_domain.property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.sequence).property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.next_pair_index).property,
+  ̲ ̲ ̲ ̲ ̲PaymentContents.digest_chunks_length]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:48:177: warning: This simp argument is unused:
+  snapshot.deployment_domain.property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵]̵[̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲s̲e̲q̲u̲e̲n̲c̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲n̲e̲x̲t̲_̲p̲a̲i̲r̲_̲i̲n̲d̲e̲x̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲a̲y̲m̲e̲n̲t̲C̲o̲n̲t̲e̲n̲t̲s̲.̲d̲i̲g̲e̲s̲t̲_̲c̲h̲u̲n̲k̲s̲_̲l̲e̲n̲g̲t̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:48:213: warning: This simp argument is unused:
+  (core.num.U64.to_le_bytes snapshot.sequence).property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵]̵[̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲d̲e̲p̲l̲o̲y̲m̲e̲n̲t̲_̲d̲o̲m̲a̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲n̲e̲x̲t̲_̲p̲a̲i̲r̲_̲i̲n̲d̲e̲x̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲a̲y̲m̲e̲n̲t̲C̲o̲n̲t̲e̲n̲t̲s̲.̲d̲i̲g̲e̲s̲t̲_̲c̲h̲u̲n̲k̲s̲_̲l̲e̲n̲g̲t̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:48:267: warning: This simp argument is unused:
+  (core.num.U64.to_le_bytes snapshot.next_pair_index).property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵]̵[̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲d̲e̲p̲l̲o̲y̲m̲e̲n̲t̲_̲d̲o̲m̲a̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲s̲e̲q̲u̲e̲n̲c̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲P̲a̲y̲m̲e̲n̲t̲C̲o̲n̲t̲e̲n̲t̲s̲.̲d̲i̲g̲e̲s̲t̲_̲c̲h̲u̲n̲k̲s̲_̲l̲e̲n̲g̲t̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:48:328: warning: This simp argument is unused:
+  PaymentContents.digest_chunks_length
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵]̵[̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲d̲e̲p̲l̲o̲y̲m̲e̲n̲t̲_̲d̲o̲m̲a̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲s̲e̲q̲u̲e̲n̲c̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲n̲e̲x̲t̲_̲p̲a̲i̲r̲_̲i̲n̲d̲e̲x̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:49:85: warning: This simp argument is unused:
+  snapshot.deployment_domain.property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵a̵p̵p̵e̵n̵d̵,̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵A̵d̵d̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵S̵u̵b̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲s̲e̲q̲u̲e̲n̲c̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲n̲e̲x̲t̲_̲p̲a̲i̲r̲_̲i̲n̲d̲e̲x̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲a̲y̲m̲e̲n̲t̲C̲o̲n̲t̲e̲n̲t̲s̲.̲d̲i̲g̲e̲s̲t̲_̲c̲h̲u̲n̲k̲s̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲A̲d̲d̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲S̲u̲b̲]̲ at h1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:49:121: warning: This simp argument is unused:
+  (core.num.U64.to_le_bytes snapshot.sequence).property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵a̵p̵p̵e̵n̵d̵,̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵A̵d̵d̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵S̵u̵b̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲d̲e̲p̲l̲o̲y̲m̲e̲n̲t̲_̲d̲o̲m̲a̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲n̲e̲x̲t̲_̲p̲a̲i̲r̲_̲i̲n̲d̲e̲x̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲a̲y̲m̲e̲n̲t̲C̲o̲n̲t̲e̲n̲t̲s̲.̲d̲i̲g̲e̲s̲t̲_̲c̲h̲u̲n̲k̲s̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲A̲d̲d̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲S̲u̲b̲]̲ at h1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:49:175: warning: This simp argument is unused:
+  (core.num.U64.to_le_bytes snapshot.next_pair_index).property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵a̵p̵p̵e̵n̵d̵,̵h̵e̵a̵d̵e̵r̵_̵l̵e̵n̵g̵t̵h̵,̵f̵o̵r̵m̵a̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵p̵o̵o̵l̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵s̵n̵a̵p̵s̵h̵o̵t̵.̵d̵e̵p̵l̵o̵y̵m̵e̵n̵t̵_̵d̵o̵m̵a̵i̵n̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵s̵e̵q̵u̵e̵n̵c̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵(̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵6̵4̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵ ̵s̵n̵a̵p̵s̵h̵o̵t̵.̵n̵e̵x̵t̵_̵p̵a̵i̵r̵_̵i̵n̵d̵e̵x̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵A̵d̵d̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵S̵u̵b̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲h̲e̲a̲d̲e̲r̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲f̲o̲r̲m̲a̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲p̲o̲o̲l̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲d̲e̲p̲l̲o̲y̲m̲e̲n̲t̲_̲d̲o̲m̲a̲i̲n̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲(̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲6̲4̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲ ̲s̲n̲a̲p̲s̲h̲o̲t̲.̲s̲e̲q̲u̲e̲n̲c̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲a̲y̲m̲e̲n̲t̲C̲o̲n̲t̲e̲n̲t̲s̲.̲d̲i̲g̲e̲s̲t̲_̲c̲h̲u̲n̲k̲s̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲A̲d̲d̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲S̲u̲b̲]̲ at h1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:49:236: warning: This simp argument is unused:
+  PaymentContents.digest_chunks_length
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_append, ̲header_length, ̲format.property, ̲snapshot.pool.property,
+  ̲ ̲ ̲ ̲ ̲snapshot.deployment_domain.property, ̲(core.num.U64.to_le_bytes snapshot.sequence).property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.next_pair_index).property,P̵a̵y̵m̵e̵n̵t̵C̵o̵n̵t̵e̵n̵t̵s̵.̵d̵i̵g̵e̵s̵t̵_̵c̵h̵u̵n̵k̵s̵_̵l̵e̵n̵g̵t̵h̵,̵ ̲Nat.reduceAdd,
+  ̲ ̲ ̲ ̲ ̲Nat.reduceSub] at h1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:49:273: warning: This simp argument is unused:
+  Nat.reduceAdd
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_append, ̲header_length, ̲format.property, ̲snapshot.pool.property,
+  ̲ ̲ ̲ ̲ ̲snapshot.deployment_domain.property, ̲(core.num.U64.to_le_bytes snapshot.sequence).property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.next_pair_index).property,
+  ̲ ̲ ̲ ̲ ̲PaymentContents.digest_chunks_length, ̲Nat.reduceA̵d̵d̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵Sub] at h1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotPrepareContentsV1.lean:49:287: warning: This simp argument is unused:
+  Nat.reduceSub
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_append, ̲header_length, ̲format.property, ̲snapshot.pool.property,
+  ̲ ̲ ̲ ̲ ̲snapshot.deployment_domain.property, ̲(core.num.U64.to_le_bytes snapshot.sequence).property,
+  ̲ ̲ ̲ ̲ ̲(core.num.U64.to_le_bytes snapshot.next_pair_index).property,
+  ̲ ̲ ̲ ̲ ̲PaymentContents.digest_chunks_length, ̲Nat.reduceAdd,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵S̵u̵b̵] at h1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS6NativeSnapshotEncoderGraph.header_writes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS6NativeSnapshotEncoderGraph.prefix_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS6NativeSnapshotEncoderGraph.prepare_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

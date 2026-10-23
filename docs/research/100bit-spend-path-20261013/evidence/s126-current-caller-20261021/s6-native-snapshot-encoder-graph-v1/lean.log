@@ -1,0 +1,38 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotEncoderGraphV1.lean:19:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  encode_pool_v1_pair_live_snapshot_v1_loop (AspisR1.S2K.Iterator.cursor rows 0#usize) output
+in the target expression
+  encode_pool_v1_pair_live_snapshot_v1_loop { iter := { slice := Array.to_slice rows, i := 0 }, count := 0#usize }
+      output ⦃
+    result => ↑result = ↑(AspisS6NativeSnapshotLoop.fold (↑rows) 0 output) ⦄
+
+rows : AspisS6NativeSnapshotLoop.Rows
+output : Slice U8
+size : output.length = 800
+⊢ encode_pool_v1_pair_live_snapshot_v1_loop { iter := { slice := Array.to_slice rows, i := 0 }, count := 0#usize }
+      output ⦃
+    result => ↑result = ↑(AspisS6NativeSnapshotLoop.fold (↑rows) 0 output) ⦄
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotEncoderGraphV1.lean:39:23: warning: Possibly looping simp theorem: `prepare.eq_1`
+
+Note: Possibly caused by: `List.reduceReplicate`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotEncoderGraphV1.lean:39:13: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotEncoderGraphV1.lean:28:20: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisS6NativeSnapshotEncoderGraph.frontier_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS6NativeSnapshotEncoderGraph.encode_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

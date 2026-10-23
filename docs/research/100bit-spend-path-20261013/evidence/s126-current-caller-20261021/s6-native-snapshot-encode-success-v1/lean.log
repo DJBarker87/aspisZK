@@ -1,0 +1,24 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotEncodeSuccessV1.lean:15:57: error: unsolved goals
+snapshot : PoolV1PairLiveSnapshotV1
+output : Slice U8
+r : core.result.Result Unit PoolV1PairLiveSnapshotErrorV1
+_✝¹ : [> let r ← validate_pool_v1_pair_live_snapshot_v1 snapshot <]
+cf : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLiveSnapshotErrorV1) Unit
+_✝ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+residual : core.result.Result core.convert.Infallible PoolV1PairLiveSnapshotErrorV1
+r1 : PoolV1PairLiveSnapshotErrorV1
+_ :
+  [> let r1 ←
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+      (core.convert.FromSame PoolV1PairLiveSnapshotErrorV1) residual <]
+x✝¹ : PoolV1PairLiveSnapshotErrorV1
+x✝ : core.result.Result Unit PoolV1PairLiveSnapshotErrorV1
+size : (↑output).length = 800
+validated : r = core.result.Result.Ok ()
+r_post : validate_pool_v1_pair_live_snapshot_v1 snapshot = ok (core.result.Result.Ok ())
+h✝ : cf = core.ops.control_flow.ControlFlow.Break (core.result.Result.Err x✝¹)
+r1_post1 : residual = core.result.Result.Err x✝¹
+r1_post2 : r1 = x✝¹
+r1_post3 : x✝ = core.result.Result.Err x✝¹
+⊢ False
+'AspisS6NativeSnapshotEncoderGraph.encode_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

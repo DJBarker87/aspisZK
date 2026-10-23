@@ -1,0 +1,674 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotEncoderGraphV1.lean:34:115: error: unsolved goals
+snapshot : PoolV1PairLiveSnapshotV1
+output : Slice U8
+h✝¹ : ¬(output.len != 800#usize) = true
+r : core.result.Result Unit PoolV1PairLiveSnapshotErrorV1
+_✝²⁹ : [> let r ← validate_pool_v1_pair_live_snapshot_v1 snapshot <]
+r_post : validate_pool_v1_pair_live_snapshot_v1 snapshot = ok r
+cf : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLiveSnapshotErrorV1) Unit
+_✝²⁸ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+a✝ : Unit
+output1 : Slice U8
+_✝²⁷ : [> let output1 ← core.slice.Slice.fill core.clone.CloneU8 output 0#u8 <]
+output1_post2✝ : ↑output1 = List.replicate output.length 0#u8
+s : Slice U8
+index_mut_back : Slice U8 → Slice U8
+_✝²⁶ :
+  [> let(s, index_mut_back) ← core.slice.index.SliceIndexRangeToUsizeSlice.index_mut { «end» := 8#usize } output1 <]
+s_post3✝ : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑output1).setSlice! 0 ↑s'
+s1 : Slice U8
+_✝²⁵ : [> let s1 ← lift POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice <]
+s1_post✝ : s1 = POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice
+s2 : Slice U8
+_✝²⁴ : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1 <]
+s2_post✝ : s2 = s1
+output3 : Slice U8
+_✝²³ : [> let output3 ← (index_mut_back s2).update 8#usize POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION <]
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Slice U8
+_✝²² :
+  [> let(s3, index_mut_back1) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 16#usize, «end» := 48#usize } output3 <]
+a : Std.Array U8 32#usize
+_✝²¹ : [> let a ← POOL_V1_PAIR_TREE_FORMAT_BINDING <]
+s4 : Slice U8
+_✝²⁰ : [> let s4 ← lift a.to_slice <]
+s5 : Slice U8
+_✝¹⁹ : [> let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4 <]
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Slice U8
+_✝¹⁸ :
+  [> let(s6, index_mut_back2) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 48#usize, «end» := 80#usize }
+      (index_mut_back1 s5) <]
+s7 : Slice U8
+_✝¹⁷ : [> let s7 ← lift snapshot.pool.to_slice <]
+s8 : Slice U8
+_✝¹⁶ : [> let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7 <]
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Slice U8
+_✝¹⁵ :
+  [> let(s9, index_mut_back3) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 80#usize, «end» := 112#usize }
+      (index_mut_back2 s8) <]
+s10 : Slice U8
+_✝¹⁴ : [> let s10 ← lift snapshot.deployment_domain.to_slice <]
+s11 : Slice U8
+_✝¹³ : [> let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10 <]
+s12 : Slice U8
+index_mut_back4 : Slice U8 → Slice U8
+_✝¹² :
+  [> let(s12, index_mut_back4) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 112#usize, «end» := 120#usize }
+      (index_mut_back3 s11) <]
+a1 : Std.Array U8 8#usize
+_✝¹¹ : [> let a1 ← lift (core.num.U64.to_le_bytes snapshot.sequence) <]
+s13 : Slice U8
+_✝¹⁰ : [> let s13 ← lift a1.to_slice <]
+s14 : Slice U8
+_✝⁹ : [> let s14 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 s13 <]
+s15 : Slice U8
+index_mut_back5 : Slice U8 → Slice U8
+_✝⁸ :
+  [> let(s15, index_mut_back5) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 120#usize, «end» := 128#usize }
+      (index_mut_back4 s14) <]
+a2 : Std.Array U8 8#usize
+_✝⁷ : [> let a2 ← lift (core.num.U64.to_le_bytes snapshot.next_pair_index) <]
+s16 : Slice U8
+_✝⁶ : [> let s16 ← lift a2.to_slice <]
+s17 : Slice U8
+_✝⁵ : [> let s17 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 s16 <]
+s18 : Slice U8
+index_mut_back6 : Slice U8 → Slice U8
+_✝⁴ :
+  [> let(s18, index_mut_back6) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 128#usize, «end» := 160#usize }
+      (index_mut_back5 s17) <]
+a3 : Std.Array U8 32#usize
+_✝³ : [> let a3 ← atomic_statement.encode_digest_canonical snapshot.current_root <]
+s19 : Slice U8
+_✝² : [> let s19 ← lift a3.to_slice <]
+s20 : Slice U8
+_✝¹ : [> let s20 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s18 s19 <]
+s21 : Slice (Std.Array U32 8#usize)
+_✝ : [> let s21 ← lift snapshot.frontier.to_slice <]
+cf_post : ∀ (value : Unit), True → r = core.result.Result.Ok value
+h✝ : cf = core.ops.control_flow.ControlFlow.Continue a✝
+output1_post2 : ↑output1 = List.replicate (↑output).length 0#u8
+s_post3 : ∀ (s' : Slice U8), ↑(index_mut_back s') = (List.replicate (↑output).length 0#u8).setSlice! 0 ↑s'
+s_post1 : ↑s = List.slice 0 8 (List.replicate (↑output).length 0#u8)
+s_post2 : (List.slice 0 8 (List.replicate (↑output).length 0#u8)).length = 8
+s1_post : s1 = POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice
+s2_post : s2 = POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice
+output3_post :
+  output3 =
+    ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set (↑8#usize)
+        POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+      ⋯⟩
+s3_post1 :
+  ↑s3 =
+    List.slice 16 48
+      (((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set (↑8#usize)
+        POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION)
+s3_post2 :
+  (List.slice 16 48
+        (((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set (↑8#usize)
+          POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION)).length =
+    48 - 16
+s3_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back1 s2_1 =
+      Slice.setSlice!
+        ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set (↑8#usize)
+            POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+          ⋯⟩
+        16 ↑s2_1
+a_post : POOL_V1_PAIR_TREE_FORMAT_BINDING = ok a
+s4_post : s4 = a.to_slice
+s5_post : s5 = a.to_slice
+s6_post1 :
+  ↑s6 =
+    List.slice 48 80
+      ↑(Slice.setSlice!
+          ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+              (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+            ⋯⟩
+          16 ↑a.to_slice)
+s6_post2 :
+  (List.slice 48 80
+        ↑(Slice.setSlice!
+            ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+              ⋯⟩
+            16 ↑a.to_slice)).length =
+    80 - 48
+s6_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back2 s2_1 =
+      (Slice.setSlice!
+            ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+              ⋯⟩
+            16 ↑a.to_slice).setSlice!
+        48 ↑s2_1
+s7_post : s7 = snapshot.pool.to_slice
+s8_post : s8 = snapshot.pool.to_slice
+s9_post1 :
+  ↑s9 =
+    List.slice 80 112
+      ↑((Slice.setSlice!
+              ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                  (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                ⋯⟩
+              16 ↑a.to_slice).setSlice!
+          48 ↑snapshot.pool.to_slice)
+s9_post2 :
+  (List.slice 80 112
+        ↑((Slice.setSlice!
+                ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                    (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                  ⋯⟩
+                16 ↑a.to_slice).setSlice!
+            48 ↑snapshot.pool.to_slice)).length =
+    112 - 80
+s9_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back3 s2_1 =
+      ((Slice.setSlice!
+                ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                    (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                  ⋯⟩
+                16 ↑a.to_slice).setSlice!
+            48 ↑snapshot.pool.to_slice).setSlice!
+        80 ↑s2_1
+s10_post : s10 = snapshot.deployment_domain.to_slice
+s11_post : s11 = snapshot.deployment_domain.to_slice
+s12_post1 :
+  ↑s12 =
+    List.slice 112 120
+      ↑(((Slice.setSlice!
+                  ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                      (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                    ⋯⟩
+                  16 ↑a.to_slice).setSlice!
+              48 ↑snapshot.pool.to_slice).setSlice!
+          80 ↑snapshot.deployment_domain.to_slice)
+s12_post2 :
+  (List.slice 112 120
+        ↑(((Slice.setSlice!
+                    ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                        (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                      ⋯⟩
+                    16 ↑a.to_slice).setSlice!
+                48 ↑snapshot.pool.to_slice).setSlice!
+            80 ↑snapshot.deployment_domain.to_slice)).length =
+    120 - 112
+s12_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back4 s2_1 =
+      (((Slice.setSlice!
+                    ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                        (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                      ⋯⟩
+                    16 ↑a.to_slice).setSlice!
+                48 ↑snapshot.pool.to_slice).setSlice!
+            80 ↑snapshot.deployment_domain.to_slice).setSlice!
+        112 ↑s2_1
+a1_post : a1 = core.num.U64.to_le_bytes snapshot.sequence
+s13_post : s13 = (core.num.U64.to_le_bytes snapshot.sequence).to_slice
+s14_post : s14 = (core.num.U64.to_le_bytes snapshot.sequence).to_slice
+s15_post1 :
+  ↑s15 =
+    List.slice 120 128
+      ↑((((Slice.setSlice!
+                      ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                              ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                          (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                        ⋯⟩
+                      16 ↑a.to_slice).setSlice!
+                  48 ↑snapshot.pool.to_slice).setSlice!
+              80 ↑snapshot.deployment_domain.to_slice).setSlice!
+          112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice)
+s15_post2 :
+  (List.slice 120 128
+        ↑((((Slice.setSlice!
+                        ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                            (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                          ⋯⟩
+                        16 ↑a.to_slice).setSlice!
+                    48 ↑snapshot.pool.to_slice).setSlice!
+                80 ↑snapshot.deployment_domain.to_slice).setSlice!
+            112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice)).length =
+    128 - 120
+s15_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back5 s2_1 =
+      ((((Slice.setSlice!
+                        ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                            (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                          ⋯⟩
+                        16 ↑a.to_slice).setSlice!
+                    48 ↑snapshot.pool.to_slice).setSlice!
+                80 ↑snapshot.deployment_domain.to_slice).setSlice!
+            112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice).setSlice!
+        120 ↑s2_1
+a2_post : a2 = core.num.U64.to_le_bytes snapshot.next_pair_index
+s16_post : s16 = (core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice
+s17_post : s17 = (core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice
+s18_post1 :
+  ↑s18 =
+    List.slice 128 160
+      ↑(((((Slice.setSlice!
+                          ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                  ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                              (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                            ⋯⟩
+                          16 ↑a.to_slice).setSlice!
+                      48 ↑snapshot.pool.to_slice).setSlice!
+                  80 ↑snapshot.deployment_domain.to_slice).setSlice!
+              112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice).setSlice!
+          120 ↑(core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice)
+s18_post2 :
+  (List.slice 128 160
+        ↑(((((Slice.setSlice!
+                            ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                              ⋯⟩
+                            16 ↑a.to_slice).setSlice!
+                        48 ↑snapshot.pool.to_slice).setSlice!
+                    80 ↑snapshot.deployment_domain.to_slice).setSlice!
+                112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice).setSlice!
+            120 ↑(core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice)).length =
+    160 - 128
+s18_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back6 s2_1 =
+      (((((Slice.setSlice!
+                            ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                              ⋯⟩
+                            16 ↑a.to_slice).setSlice!
+                        48 ↑snapshot.pool.to_slice).setSlice!
+                    80 ↑snapshot.deployment_domain.to_slice).setSlice!
+                112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice).setSlice!
+            120 ↑(core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice).setSlice!
+        128 ↑s2_1
+a3_post : ↑a3 = AspisS6SourceCodec.DigestContents.chunks snapshot.current_root
+s19_post : s19 = a3.to_slice
+s20_post : s20 = a3.to_slice
+s21_post : s21 = snapshot.frontier.to_slice
+output10 : Slice U8
+_ :
+  [> let output10 ←
+    encode_pool_v1_pair_live_snapshot_v1_loop
+      { iter := { slice := snapshot.frontier.to_slice, i := 0 }, count := 0#usize }
+      ((((((Slice.setSlice!
+                            ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                              ⋯⟩
+                            16 ↑a.to_slice).setSlice!
+                        48 ↑snapshot.pool.to_slice).setSlice!
+                    80 ↑snapshot.deployment_domain.to_slice).setSlice!
+                112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice).setSlice!
+            120 ↑(core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice).setSlice!
+        128 ↑a3.to_slice) <]
+output10_post :
+  ↑output10 =
+    ↑(AspisS6NativeSnapshotLoop.fold (↑snapshot.frontier) 0
+        ((((((Slice.setSlice!
+                              ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                      ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                                  8 POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                                ⋯⟩
+                              16 ↑a.to_slice).setSlice!
+                          48 ↑snapshot.pool.to_slice).setSlice!
+                      80 ↑snapshot.deployment_domain.to_slice).setSlice!
+                  112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice).setSlice!
+              120 ↑(core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice).setSlice!
+          128 ↑a3.to_slice))
+⊢ ∀ (unit : Unit), True → ↑output10 = ↑(AspisS6NativeSnapshotLoop.fold (↑snapshot.frontier) 0 (prepare snapshot a))
+snapshot : PoolV1PairLiveSnapshotV1
+output : Slice U8
+h✝¹ : ¬(output.len != 800#usize) = true
+r : core.result.Result Unit PoolV1PairLiveSnapshotErrorV1
+_✝²⁹ : [> let r ← validate_pool_v1_pair_live_snapshot_v1 snapshot <]
+r_post : validate_pool_v1_pair_live_snapshot_v1 snapshot = ok r
+cf : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLiveSnapshotErrorV1) Unit
+_✝²⁸ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+a✝ : Unit
+output1 : Slice U8
+_✝²⁷ : [> let output1 ← core.slice.Slice.fill core.clone.CloneU8 output 0#u8 <]
+output1_post2✝ : ↑output1 = List.replicate output.length 0#u8
+s : Slice U8
+index_mut_back : Slice U8 → Slice U8
+_✝²⁶ :
+  [> let(s, index_mut_back) ← core.slice.index.SliceIndexRangeToUsizeSlice.index_mut { «end» := 8#usize } output1 <]
+s_post3✝ : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑output1).setSlice! 0 ↑s'
+s1 : Slice U8
+_✝²⁵ : [> let s1 ← lift POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice <]
+s1_post✝ : s1 = POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice
+s2 : Slice U8
+_✝²⁴ : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1 <]
+s2_post✝ : s2 = s1
+output3 : Slice U8
+_✝²³ : [> let output3 ← (index_mut_back s2).update 8#usize POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION <]
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Slice U8
+_✝²² :
+  [> let(s3, index_mut_back1) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 16#usize, «end» := 48#usize } output3 <]
+a : Std.Array U8 32#usize
+_✝²¹ : [> let a ← POOL_V1_PAIR_TREE_FORMAT_BINDING <]
+s4 : Slice U8
+_✝²⁰ : [> let s4 ← lift a.to_slice <]
+s5 : Slice U8
+_✝¹⁹ : [> let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4 <]
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Slice U8
+_✝¹⁸ :
+  [> let(s6, index_mut_back2) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 48#usize, «end» := 80#usize }
+      (index_mut_back1 s5) <]
+s7 : Slice U8
+_✝¹⁷ : [> let s7 ← lift snapshot.pool.to_slice <]
+s8 : Slice U8
+_✝¹⁶ : [> let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7 <]
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Slice U8
+_✝¹⁵ :
+  [> let(s9, index_mut_back3) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 80#usize, «end» := 112#usize }
+      (index_mut_back2 s8) <]
+s10 : Slice U8
+_✝¹⁴ : [> let s10 ← lift snapshot.deployment_domain.to_slice <]
+s11 : Slice U8
+_✝¹³ : [> let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10 <]
+s12 : Slice U8
+index_mut_back4 : Slice U8 → Slice U8
+_✝¹² :
+  [> let(s12, index_mut_back4) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 112#usize, «end» := 120#usize }
+      (index_mut_back3 s11) <]
+a1 : Std.Array U8 8#usize
+_✝¹¹ : [> let a1 ← lift (core.num.U64.to_le_bytes snapshot.sequence) <]
+s13 : Slice U8
+_✝¹⁰ : [> let s13 ← lift a1.to_slice <]
+s14 : Slice U8
+_✝⁹ : [> let s14 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 s13 <]
+s15 : Slice U8
+index_mut_back5 : Slice U8 → Slice U8
+_✝⁸ :
+  [> let(s15, index_mut_back5) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 120#usize, «end» := 128#usize }
+      (index_mut_back4 s14) <]
+a2 : Std.Array U8 8#usize
+_✝⁷ : [> let a2 ← lift (core.num.U64.to_le_bytes snapshot.next_pair_index) <]
+s16 : Slice U8
+_✝⁶ : [> let s16 ← lift a2.to_slice <]
+s17 : Slice U8
+_✝⁵ : [> let s17 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 s16 <]
+s18 : Slice U8
+index_mut_back6 : Slice U8 → Slice U8
+_✝⁴ :
+  [> let(s18, index_mut_back6) ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := 128#usize, «end» := 160#usize }
+      (index_mut_back5 s17) <]
+a3 : Std.Array U8 32#usize
+_✝³ : [> let a3 ← atomic_statement.encode_digest_canonical snapshot.current_root <]
+s19 : Slice U8
+_✝² : [> let s19 ← lift a3.to_slice <]
+s20 : Slice U8
+_✝¹ : [> let s20 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s18 s19 <]
+s21 : Slice (Std.Array U32 8#usize)
+_✝ : [> let s21 ← lift snapshot.frontier.to_slice <]
+cf_post : ∀ (value : Unit), True → r = core.result.Result.Ok value
+h✝ : cf = core.ops.control_flow.ControlFlow.Continue a✝
+output1_post2 : ↑output1 = List.replicate (↑output).length 0#u8
+s_post3 : ∀ (s' : Slice U8), ↑(index_mut_back s') = (List.replicate (↑output).length 0#u8).setSlice! 0 ↑s'
+s_post1 : ↑s = List.slice 0 8 (List.replicate (↑output).length 0#u8)
+s_post2 : (List.slice 0 8 (List.replicate (↑output).length 0#u8)).length = 8
+s1_post : s1 = POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice
+s2_post : s2 = POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice
+output3_post :
+  output3 =
+    ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set (↑8#usize)
+        POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+      ⋯⟩
+s3_post1 :
+  ↑s3 =
+    List.slice 16 48
+      (((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set (↑8#usize)
+        POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION)
+s3_post2 :
+  (List.slice 16 48
+        (((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set (↑8#usize)
+          POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION)).length =
+    48 - 16
+s3_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back1 s2_1 =
+      Slice.setSlice!
+        ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set (↑8#usize)
+            POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+          ⋯⟩
+        16 ↑s2_1
+a_post : POOL_V1_PAIR_TREE_FORMAT_BINDING = ok a
+s4_post : s4 = a.to_slice
+s5_post : s5 = a.to_slice
+s6_post1 :
+  ↑s6 =
+    List.slice 48 80
+      ↑(Slice.setSlice!
+          ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+              (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+            ⋯⟩
+          16 ↑a.to_slice)
+s6_post2 :
+  (List.slice 48 80
+        ↑(Slice.setSlice!
+            ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+              ⋯⟩
+            16 ↑a.to_slice)).length =
+    80 - 48
+s6_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back2 s2_1 =
+      (Slice.setSlice!
+            ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+              ⋯⟩
+            16 ↑a.to_slice).setSlice!
+        48 ↑s2_1
+s7_post : s7 = snapshot.pool.to_slice
+s8_post : s8 = snapshot.pool.to_slice
+s9_post1 :
+  ↑s9 =
+    List.slice 80 112
+      ↑((Slice.setSlice!
+              ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                  (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                ⋯⟩
+              16 ↑a.to_slice).setSlice!
+          48 ↑snapshot.pool.to_slice)
+s9_post2 :
+  (List.slice 80 112
+        ↑((Slice.setSlice!
+                ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                    (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                  ⋯⟩
+                16 ↑a.to_slice).setSlice!
+            48 ↑snapshot.pool.to_slice)).length =
+    112 - 80
+s9_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back3 s2_1 =
+      ((Slice.setSlice!
+                ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                    (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                  ⋯⟩
+                16 ↑a.to_slice).setSlice!
+            48 ↑snapshot.pool.to_slice).setSlice!
+        80 ↑s2_1
+s10_post : s10 = snapshot.deployment_domain.to_slice
+s11_post : s11 = snapshot.deployment_domain.to_slice
+s12_post1 :
+  ↑s12 =
+    List.slice 112 120
+      ↑(((Slice.setSlice!
+                  ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                      (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                    ⋯⟩
+                  16 ↑a.to_slice).setSlice!
+              48 ↑snapshot.pool.to_slice).setSlice!
+          80 ↑snapshot.deployment_domain.to_slice)
+s12_post2 :
+  (List.slice 112 120
+        ↑(((Slice.setSlice!
+                    ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                        (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                      ⋯⟩
+                    16 ↑a.to_slice).setSlice!
+                48 ↑snapshot.pool.to_slice).setSlice!
+            80 ↑snapshot.deployment_domain.to_slice)).length =
+    120 - 112
+s12_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back4 s2_1 =
+      (((Slice.setSlice!
+                    ⟨((List.replicate (↑output).length 0#u8).setSlice! 0 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                        (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                      ⋯⟩
+                    16 ↑a.to_slice).setSlice!
+                48 ↑snapshot.pool.to_slice).setSlice!
+            80 ↑snapshot.deployment_domain.to_slice).setSlice!
+        112 ↑s2_1
+a1_post : a1 = core.num.U64.to_le_bytes snapshot.sequence
+s13_post : s13 = (core.num.U64.to_le_bytes snapshot.sequence).to_slice
+s14_post : s14 = (core.num.U64.to_le_bytes snapshot.sequence).to_slice
+s15_post1 :
+  ↑s15 =
+    List.slice 120 128
+      ↑((((Slice.setSlice!
+                      ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                              ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                          (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                        ⋯⟩
+                      16 ↑a.to_slice).setSlice!
+                  48 ↑snapshot.pool.to_slice).setSlice!
+              80 ↑snapshot.deployment_domain.to_slice).setSlice!
+          112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice)
+s15_post2 :
+  (List.slice 120 128
+        ↑((((Slice.setSlice!
+                        ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                            (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                          ⋯⟩
+                        16 ↑a.to_slice).setSlice!
+                    48 ↑snapshot.pool.to_slice).setSlice!
+                80 ↑snapshot.deployment_domain.to_slice).setSlice!
+            112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice)).length =
+    128 - 120
+s15_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back5 s2_1 =
+      ((((Slice.setSlice!
+                        ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                            (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                          ⋯⟩
+                        16 ↑a.to_slice).setSlice!
+                    48 ↑snapshot.pool.to_slice).setSlice!
+                80 ↑snapshot.deployment_domain.to_slice).setSlice!
+            112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice).setSlice!
+        120 ↑s2_1
+a2_post : a2 = core.num.U64.to_le_bytes snapshot.next_pair_index
+s16_post : s16 = (core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice
+s17_post : s17 = (core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice
+s18_post1 :
+  ↑s18 =
+    List.slice 128 160
+      ↑(((((Slice.setSlice!
+                          ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                  ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                              (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                            ⋯⟩
+                          16 ↑a.to_slice).setSlice!
+                      48 ↑snapshot.pool.to_slice).setSlice!
+                  80 ↑snapshot.deployment_domain.to_slice).setSlice!
+              112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice).setSlice!
+          120 ↑(core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice)
+s18_post2 :
+  (List.slice 128 160
+        ↑(((((Slice.setSlice!
+                            ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                              ⋯⟩
+                            16 ↑a.to_slice).setSlice!
+                        48 ↑snapshot.pool.to_slice).setSlice!
+                    80 ↑snapshot.deployment_domain.to_slice).setSlice!
+                112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice).setSlice!
+            120 ↑(core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice)).length =
+    160 - 128
+s18_post3 :
+  ∀ (s2_1 : Slice U8),
+    index_mut_back6 s2_1 =
+      (((((Slice.setSlice!
+                            ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                              ⋯⟩
+                            16 ↑a.to_slice).setSlice!
+                        48 ↑snapshot.pool.to_slice).setSlice!
+                    80 ↑snapshot.deployment_domain.to_slice).setSlice!
+                112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice).setSlice!
+            120 ↑(core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice).setSlice!
+        128 ↑s2_1
+a3_post : ↑a3 = AspisS6SourceCodec.DigestContents.chunks snapshot.current_root
+s19_post : s19 = a3.to_slice
+s20_post : s20 = a3.to_slice
+s21_post : s21 = snapshot.frontier.to_slice
+output10 : Slice U8
+_ :
+  [> let output10 ←
+    encode_pool_v1_pair_live_snapshot_v1_loop
+      { iter := { slice := snapshot.frontier.to_slice, i := 0 }, count := 0#usize }
+      ((((((Slice.setSlice!
+                            ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                    ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                                (↑8#usize) POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                              ⋯⟩
+                            16 ↑a.to_slice).setSlice!
+                        48 ↑snapshot.pool.to_slice).setSlice!
+                    80 ↑snapshot.deployment_domain.to_slice).setSlice!
+                112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice).setSlice!
+            120 ↑(core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice).setSlice!
+        128 ↑a3.to_slice) <]
+output10_post :
+  ↑output10 =
+    ↑(AspisS6NativeSnapshotLoop.fold (↑snapshot.frontier) 0
+        ((((((Slice.setSlice!
+                              ⟨((List.replicate (↑output).length 0#u8).setSlice! 0
+                                      ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice).set
+                                  8 POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION,
+                                ⋯⟩
+                              16 ↑a.to_slice).setSlice!
+                          48 ↑snapshot.pool.to_slice).setSlice!
+                      80 ↑snapshot.deployment_domain.to_slice).setSlice!
+                  112 ↑(core.num.U64.to_le_bytes snapshot.sequence).to_slice).setSlice!
+              120 ↑(core.num.U64.to_le_bytes snapshot.next_pair_index).to_slice).setSlice!
+          128 ↑a3.to_slice))
+⊢ ∀ (unit : Unit), True → ↑output10 = ↑(AspisS6NativeSnapshotLoop.fold (↑snapshot.frontier) 0 (prepare snapshot a))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotEncoderGraphV1.lean:31:20: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisS6NativeSnapshotEncoderGraph.frontier_graph' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6NativeSnapshotEncoderGraph.encode_graph' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
