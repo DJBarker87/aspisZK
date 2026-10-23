@@ -253,3 +253,32 @@ logs and historical exact source snapshots retain their original whitespace.
 The final manifest excludes the superseded uniform checkpoint interfaces and
 their union audits from accepted final evidence; lean-047/048/049 establish
 the corrected prefix-indexed interface. No source or proof job remains live.
+
+## Continuation stage 4: audit of the requested endpoint's inputs
+
+The requested `AcceptedRunJoinFromCones` and deployed theorem are **not yet
+established**. The intended concrete construction is legitimate, but cannot
+be replaced by an implication for an unbound `rust : Verifier`.
+`S2W_DigestExtraction.AeneasExtraction` contains only native/owned `Result`
+identities and the digest source identity. Neither it nor Required14 binds
+`OraclePortRuntimeBindingC7.Verifier` to an oracle interpretation of the
+extracted typed stage tree. `ChildConeJoin.erasure` likewise determines
+returned values, not the meaning of its generic event carrier as ordered
+oracle reads. This is a missing construction/proof, not a new trust item.
+
+`VTop_ObservationBoundary.extraRead_value` / `extraRead_observation` formally
+show that even a complete returned state can stay identical while the oracle
+observation changes. `no_unbound_verifier_join` gives an explicit unrelated
+always-accepting 1162-read verifier that cannot satisfy the frozen2 join,
+using the existing 1161-read budget. This is **not** a counterexample to the
+actual extracted verifier or to the intended fully instantiated composition;
+it rules out inferring an arbitrary headline verifier's join from the
+value-only interfaces. In particular it does not refute future cone laws
+that explicitly bind the concrete oracle interpretation.
+
+Focused validation: lean-050 failed on two list-length elaborations; the
+changed symbolic list proof passed in lean-051 (exit0, 2.170872s,
+4322964KiB RSS, swap0). Every new theorem prints only standard axioms.
+Exact source revision, hashes, dependencies, command and cgroup limits are
+in `evidence/verifier-top-20261023/lean-05{0,1}/receipt.json`.
+No release claim, new runtime assumption or shipped-code change is made.
