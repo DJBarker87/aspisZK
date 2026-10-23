@@ -1,0 +1,46 @@
+{"attempt": "lean-063", "exit_status": 1, "wall_seconds": 2.399514521996025, "peak_rss_kib": "4384308", "swaps": "0", "print_axioms": ["'AspisR1.S2W_ChildEventPorts.returning_trace' depends on axioms: [propext]", "'AspisR1.S2W_ChildEventPorts.accepted_native_observed_inputs' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]"]}
+S2W_ChildEventPorts.lean:32:31: error: Type mismatch
+  ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) s.pub s.proof s.checkpoint () none
+has type
+  Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+but is expected to have type
+  Result (core.result.Result Unit AdapterRw.Cuts.PE)
+S2W_ChildEventPorts.lean:74:6: error(lean.unknownIdentifier): Unknown identifier `SecondEntryEventConeJoin`
+
+Note: It is not possible to treat `SecondEntryEventConeJoin` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+S2W_ChildEventPorts.lean:83:56: error: unsolved goals
+E : Type
+ops : AdapterRw.Ops
+native1 : S2W_ExtractionBou
+...
+ce fs ++ middle ++
+        [S2W_SiteSchedule.Event.site S2LeadInterface.Site.tx2] ++
+      secondEvents =
+    S2W_SiteSchedule.timeline pre middle fs ss
+'AspisR1.S2W_ChildEventPorts.returning_trace' depends on axioms: [propext]
+'AspisR1.S2W_ChildEventPorts.accepted_native_observed_inputs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+structure AspisR1.S2W_ChildEventPorts.FirstEntryEventConeJoin {E : Type} (ops : AdapterRw.Ops) (f : FirstCut)
+  (execution : ChildExecution E (core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE))
+  (segments : S2W_SiteSchedule.FirstSegments E) : Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_ChildEventPorts.FirstEntryEventConeJoin.erasure : forget execution =
+      AdapterRw.first_decoded ops f.semantic f.pub f.proof f.split
+  AspisR1.S2W_ChildEventPorts.FirstEntryEventConeJoin.sourceMarks : ∀
+      (result : core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE) (log : List (S2W_SiteSchedule.Event E)),
+      execution = ok (result, log) → log = S2W_SiteSchedule.firstTrace segments
+constructor:
+  AspisR1.S2W_ChildEventPorts.FirstEntryEventConeJoin.mk {E : Type} {ops : AdapterRw.Ops} {f : FirstCut}
+    {execution : ChildExecution E (core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE)}
+    {segments : S2W_SiteSchedule.FirstSegments E}
+    (erasure : forget execution = AdapterRw.first_decoded ops f.semantic f.pub f.proof f.split)
+    (sourceMarks :
+      ∀ (result : core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE) (log : List (S2W_SiteSchedule.Event E)),
+        execution = ok (result, log) → log = S2W_SiteSchedule.firstTrace segments) :
+    FirstEntryEventConeJoin ops f execution segments
+S2W_ChildEventPorts.lean:104:7: error(lean.unknownIdentifier): Unknown constant `SecondEntryEventConeJoin`
+
+Running as unit: run-r9e5039b726a94f1d817638a864a5bc8e.scope; invocation ID: 31ccda62d15347f4949d7afbc1dcbf3e

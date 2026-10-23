@@ -1,0 +1,45 @@
+{"attempt": "lean-062", "exit_status": 0, "wall_seconds": 2.4923273349995725, "peak_rss_kib": "4404204", "swaps": "0", "print_axioms": ["'AspisR1.S2W_InputSchedule.input_schedule' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_InputSchedule.accepted_native_input_schedule' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.S2W_InputSchedule.input_schedule' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_InputSchedule.accepted_native_input_schedule' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_InputSchedule.InputScheduleFacts (c : Inputs Observer) (ops : AdapterRw.Ops) (H : Bytes → State)
+  (stored pub saved : Bytes) (parsed : Parsed) : Prop
+number of parameters: 7
+fields:
+  AspisR1.S2W_InputSchedule.InputScheduleFacts.proofBytes : ∀ (site : Site),
+      c.reached site → bytesOf ↑(c.proof site) = stored
+  AspisR1.S2W_InputSchedule.InputScheduleFacts.publicBytes : ∀ (site : Site),
+      c.reached site → bytesOf ↑(c.publicInput site) = pub
+  Asp
+...
+putSchedule.InputScheduleFacts.callOrder : ∀ (a b : Site),
+      a.rank < b.rank → c.reached a → c.reached b → c.clock a < c.clock b
+  AspisR1.S2W_InputSchedule.InputScheduleFacts.oracle : CheckpointBytes5Inputs.Oracle (S2Z.Oracle.leadDigest ops) () H
+constructor:
+  AspisR1.S2W_InputSchedule.InputScheduleFacts.mk {c : Inputs Observer} {ops : AdapterRw.Ops} {H : Bytes → State}
+    {stored pub saved : Bytes} {parsed : Parsed}
+    (proofBytes : ∀ (site : Site), c.reached site → bytesOf ↑(c.proof site) = stored)
+    (publicBytes : ∀ (site : Site), c.reached site → bytesOf ↑(c.publicInput site) = pub)
+    (proofSuffix :
+      ∀ (site : Site),
+        c.reached site →
+          site = Site.tx1 ∨ site = Site.tx2 → c.proofAccount site = List.take 688 (c.proofAccount site) ++ stored)
+    (proofLength : List.length stored = 57607)
+    (checkpointBytes :
+      ∀ (site : Site),
+        c.reached site → site = Site.save ∨ site = Site.tx2 ∨ site = Site.resume → bytesOf ↑(c.checkpoint site) = saved)
+    (checkpointLength : List.length saved = 1768)
+    (nodeViews :
+      ∀ (b k : ℕ),
+        b < 2 →
+          k < 3 →
+            bytesOf ↑(c.nodes b k) =
+              slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + k))
+                (32 * OraclePortSelectedDraft.capacity (3 * b + k)))
+    (y1Input : c.reached Site.tx1 → c.y1 = S8JoinFrozenScan.segment (c.proof Site.tx1) 7031 464)
+    (observerNone : ∀ (site : Site), c.reached site → c.observer site = none)
+    (reachedPrefix : ∀ (a b : Site), a.rank < b.rank → c.reached b → c.reached a)
+    (callOrder : ∀ (a b : Site), a.rank < b.rank → c.reached a → c.reached b → c.clock a < c.clock b)
+    (oracle : CheckpointBytes5Inputs.Oracle (S2Z.Oracle.leadDigest ops) () H) :
+    InputScheduleFacts c ops H stored pub saved parsed
+
+Running as unit: run-r1098628f27514d6cbf947177b735864e.scope; invocation ID: cd659f9014f84e8fa224cc5f0fb103b3
