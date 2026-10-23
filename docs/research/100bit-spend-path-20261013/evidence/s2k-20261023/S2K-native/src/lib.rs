@@ -83,3 +83,57 @@ fn S2K_frontier_iteration() {
     kani::cover!(level==0 && i==48);
     kani::cover!(level==19 && i==687);
 }
+
+// Split replacement for kani004: direct Arbitrary buffer avoids the 688-step
+// from_fn initializer. Callee source statements are unchanged; selected write
+// and outside-region frame are checked separately.
+#[kani::proof]
+#[kani::unwind(34)]
+fn S2K_frontier_written_byte() {
+    let before:[u8;688]=kani::any();
+    let node=digest();let level:usize=kani::any();kani::assume(level<20);
+    let j:usize=kani::any();kani::assume(j<32);
+    let after=frontier_step(before,level,&node);
+    assert_eq!(after[48+32*level+j],(node[j/4].0 >> (8*(j%4))) as u8);
+    kani::cover!(level==0 && j==0);
+    kani::cover!(level==19 && j==31);
+}
+
+#[kani::proof]
+#[kani::unwind(34)]
+fn S2K_frontier_other_byte() {
+    let before:[u8;688]=kani::any();
+    let node=digest();let level:usize=kani::any();kani::assume(level<20);
+    let i:usize=kani::any();kani::assume(i<688);
+    let start=48+32*level;kani::assume(i<start || i>=start+32);
+    let after=frontier_step(before,level,&node);
+    assert_eq!(after[i],before[i]);
+    kani::cover!(i==0 && level==19);
+    kani::cover!(i==687 && level==0);
+}
+
+// Terminal isolation of kani005: fixed-size destination only. This does NOT
+// port the original indexed &mut output[start..start+32] to this destination.
+#[kani::proof]
+#[kani::unwind(34)]
+fn S2K_fixed_digest_copy() {
+    let mut output:[u8;32]=kani::any();
+    let node=digest();let j:usize=kani::any();kani::assume(j<32);
+    output.copy_from_slice(&encode_digest_canonical(&node));
+    assert_eq!(output[j],(node[j/4].0 >> (8*(j%4))) as u8);
+    kani::cover!(j==0);kani::cover!(j==31);
+}
+
+#[kani::proof]
+fn S2K_frontier_bounds() {
+    let level:usize=kani::any();kani::assume(level<20);
+    let start=48+32*level;
+    assert!(48<=start);
+    assert!(start+32<=688);
+    let j:usize=kani::any();kani::assume(j<32);
+    assert!(start+j<688);
+    assert_eq!((start+j-start)/4,j/4);
+    assert_eq!((start+j-start)%4,j%4);
+    kani::cover!(level==0 && j==0);
+    kani::cover!(level==19 && j==31);
+}
