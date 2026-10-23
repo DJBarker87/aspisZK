@@ -1,0 +1,60 @@
+S2D_Cleanup.lean:28:5: error: unknown tactic
+S2D_Cleanup.lean:27:52: error: unsolved goals
+Native Input W F : Type
+E : Native
+original : Input
+L : Library W F
+nativeCut : Native → Nat → W
+index : Nat
+c : BorrowCut E original L nativeCut index
+t : Nat
+g : Guard
+live : lookup c.state t = some g
+shared : g.kind = Kind.shared
+pos : 0 < count c.state g.cell Kind.shared
+left✝¹ : minCounter ≤ c.state.counter g.cell
+left✝ : c.state.counter g.cell ≤ maxCounter
+balance :
+  c.state.counter g.cell =
+    c.state.external g.cell + count c.state g.cell Kind.shared - count c.state g.cell Kind.exclusive
+exclusive :
+  count c.state g.cell Kind.exclusive > 0 →
+    c.state.external g.cell = 0 ∧ count c.state g.cell Kind.shared = 0 ∧ count c.state g.cell Kind.exclusive = 1
+external : c.state.external g.cell < 0 → count c.state g.cell Kind.shared = 0 ∧ count c.state g.cell Kind.exclusive = 0
+⊢ 0 ≤ c.state.external g.cell
+S2D_Cleanup.lean:23:34: error: unsolved goals
+Native Input W F : Type
+E : Native
+original : Input
+L : Library W F
+nativeCut : Native → Nat → W
+index : Nat
+c : BorrowCut E original L nativeCut index
+t : Nat
+g : Guard
+live : lookup c.state t = some g
+shared : g.kind = Kind.shared
+pos : 0 < count c.state g.cell Kind.shared
+left✝¹ : minCounter ≤ c.state.counter g.cell
+left✝ : c.state.counter g.cell ≤ maxCounter
+balance :
+  c.state.counter g.cell =
+    c.state.external g.cell + count c.state g.cell Kind.shared - count c.state g.cell Kind.exclusive
+exclusive :
+  count c.state g.cell Kind.exclusive > 0 →
+    c.state.external g.cell = 0 ∧ count c.state g.cell Kind.shared = 0 ∧ count c.state g.cell Kind.exclusive = 1
+external : c.state.external g.cell < 0 → count c.state g.cell Kind.shared = 0 ∧ count c.state g.cell Kind.exclusive = 0
+nonnegative : 0 ≤ c.state.external g.cell
+⊢ 0 < c.state.counter g.cell
+S2D_Cleanup.lean:54:14: error: Type mismatch
+  trust.shared_drop (nativeCut E index) c.state t g c.related c.valid live hk
+has type
+  0 < c.state.counter g.cell → Matches L (nativeCut E index) (Op.drop t) (release c.state g, Reply.unit)
+but is expected to have type
+  Matches L (nativeCut E index) (Op.drop t) (release c.state g, Reply.unit)
+S2D_Cleanup.lean:53:2: error: Alternative `exclusive` has not been provided
+S2D_Cleanup.lean:55:6: error: unexpected token '('; expected command
+'AspisR1.S2D.live_guard_count_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2D.shared_drop_counter_positive' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2D.exclusive_drop_counter_negative_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2D.actual_guard_drop' depends on axioms: [sorryAx]

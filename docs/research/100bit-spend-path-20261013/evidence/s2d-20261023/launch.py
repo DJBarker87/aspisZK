@@ -12,7 +12,7 @@ def call(args,**kw):return subprocess.run(args,check=True,**kw)
 call(['ssh',host,'mkdir -p '+remote+'/kani-spec/src'])
 sources=[]
 if kind=='lean':
- for name in [target,'S2TrustedSdkBorrow.lean']:
+ for name in [target,'S2TrustedSdkBorrow.lean'] + (['S2D_BorrowErrors.lean'] if target == 'S2D_Cleanup.lean' else []):
   src=root/'docs/research/100bit-spend-path-20261013/lean'/name
   call(['scp',str(src),host+':'+remote+'/'+name]); sources.append(name)
  command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M4400','-DElab.async=false','-o',target.replace('.lean','.olean'),target]
@@ -20,12 +20,12 @@ if kind=='lean':
 else:
  sources=['kani-spec/src/lib.rs','kani-spec/Cargo.toml']
  command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path','kani-spec/Cargo.toml','--target-dir','kani-target','--harness',target,'--exact','--output-format','terse']
- env={'CARGO_BUILD_JOBS':'4','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_NET_OFFLINE':'true'}
+ env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'4','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_NET_OFFLINE':'true'}
 for name in ['run_host.py','reservation.py','lakefile.toml','lean-toolchain']+(sources if kind=='kani' else []):
  call(['scp',str(base/name),host+':'+remote+'/'+name])
 # Reuse the already audited, unchanged trust object; never overwrite shared cache.
 call(['ssh',host,'cd '+remote+' && cmp S2TrustedSdkBorrow.lean ../codex-cx-s2-trust-20261023/S2TrustedSdkBorrow.lean && cp -n ../codex-cx-s2-trust-20261023/S2TrustedSdkBorrow.olean .']) if kind=='lean' else None
-deps=subprocess.check_output(['ssh',host,'sha256sum /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean '+remote+'/S2TrustedSdkBorrow.olean'],text=True) if kind=='lean' else 'standalone verbatim source extraction, no dependency crates; Kani 0.67.0'
+deps=subprocess.check_output(['ssh',host,'sha256sum /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean '+remote+'/S2TrustedSdkBorrow.olean '+ (remote+'/S2D_BorrowErrors.olean' if target == 'S2D_Cleanup.lean' else '')],text=True) if kind=='lean' else 'standalone verbatim source extraction, no dependency crates; Kani 0.67.0'
 cfg=dict(attempt=attempt,kind=kind,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),command=command,sources=sources,env=env,timeout=180,deps_fingerprint=deps,expected_time='focused elaboration' if kind=='lean' else 'optimized compile and constant Option discriminant check')
 (base/(attempt+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 call(['scp',str(base/(attempt+'.json')),host+':'+remote+'/'])
