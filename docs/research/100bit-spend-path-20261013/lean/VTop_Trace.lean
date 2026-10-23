@@ -36,7 +36,7 @@ inductive Call : Type → Type 1 where
 
 def invoke (ops : VTop_Stages.Ops) {A : Type} : Call A → Result A
   | @Call.op0 T E a0 a1 => ops.op0 (T := T) (E := E) a0 a1
-  | .op1 => ops.op1 
+  | .op1 => ops.op1
   | .op2 a0 => ops.op2 a0
   | .op3 a0 => ops.op3 a0
   | .op4 a0 => ops.op4 a0
@@ -49,16 +49,16 @@ def invoke (ops : VTop_Stages.Ops) {A : Type} : Call A → Result A
   | .op11 a0 a1 a2 => ops.op11 a0 a1 a2
   | .op12 a0 => ops.op12 a0
   | .op13 a0 a1 => ops.op13 a0 a1
-  | .op14 => ops.op14 
-  | .op15 => ops.op15 
-  | .op16 => ops.op16 
+  | .op14 => ops.op14
+  | .op15 => ops.op15
+  | .op16 => ops.op16
   | @Call.op17 N a0 => ops.op17 N a0
   | @Call.op18 H aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 => ops.op18 (H := H) aspis_coredigestDigest32Inst a0 a1 a2 a3 a4
   | .op19 a0 a1 a2 a3 => ops.op19 a0 a1 a2 a3
-  | .op20 => ops.op20 
-  | .op21 => ops.op21 
-  | .op22 => ops.op22 
-  | .op23 => ops.op23 
+  | .op20 => ops.op20
+  | .op21 => ops.op21
+  | .op22 => ops.op22
+  | .op23 => ops.op23
   | .unwrap32 a0 => ops.unwrap32 a0
 
 def operationId {A : Type} : Call A → Nat

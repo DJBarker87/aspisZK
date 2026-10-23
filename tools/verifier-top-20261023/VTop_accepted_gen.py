@@ -14,7 +14,7 @@ old='''      CheckpointWriterConeJoin ops checkpointHeader H f.semantic f.pub f.
       CheckpointReaderConeJoin ops checkpointHeader H s.pub s.proof s.checkpoint →'''
 assert old in statement
 statement=statement.replace(old,'''      VTop_Checkpoint.WriterProvenance stage
-        (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) () f.proof f.pub →''')
+        (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) () f.semantic f.proof f.split →''')
 statement=re.sub(r'\bops\b','(VTop_Entry.install adapter stage)',statement)
 proof=''' := by
   obtain ⟨f,s,outer,pre,middle,fs,ss,cuts,expanded,owned,layout,unchanged,firstBefore,secondBefore,continuation⟩ :=

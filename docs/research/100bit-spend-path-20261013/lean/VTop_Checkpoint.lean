@@ -1,4 +1,5 @@
 import VTop_Cuts
+import VTop_Provenance
 import ChildJoin_Checkpoint
 
 set_option autoImplicit false
@@ -18,7 +19,9 @@ def checkpointSlice (saved : alloc.vec.Vec U8) : Slice U8 := saved.deref
 size, caller acceptance, byte persistence or a Required14 conclusion. -/
 structure CheckpointSourceJoin (stage : Ops) {Hash : Type}
     (D : aspis_core.digest.Digest32 Hash) (hash : Hash) (reserved : Bool) : Prop where
-  writer : ∀ p a proof pub saved, stage.op8 D p a proof pub hash = ok saved →
+  writer : ∀ semantic proof pub split p a saved,
+    VTop_Provenance.WriterPrefix stage D hash semantic proof split none p a →
+    stage.op8 D p a proof pub hash = ok saved →
     ∃ before after, run (digest D) hash
       (CheckpointBytes5Writer.writer (CheckpointBytes3Namespaces.toPrepared p)
         (CheckpointBytes3Namespaces.toAccumulator a) proof pub) before =
@@ -28,12 +31,13 @@ structure CheckpointSourceJoin (stage : Ops) {Hash : Type}
     AspisR1Stage2.verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved)
       (digest D) ck proof pub .S2 hash = ok (.Ok (p,a))
 
-/-- Prepared/accumulator provenance for every successful writer call on these
-fixed buffers. This is a retained, stronger uniform provenance premise;
-it is not folded into source identity or inferred from stage acceptance. -/
+/-- Prepared/accumulator provenance only for the actual successful
+preparation/query/flush prefix, before invoking checkpoint serialization. -/
 def WriterProvenance (stage : Ops) {Hash : Type}
-    (D : aspis_core.digest.Digest32 Hash) (hash : Hash) (proof pub : Slice U8) : Prop :=
-  ∀ p a saved, stage.op8 D p a proof pub hash = ok saved →
+    (D : aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (proof : Slice U8) (split : Usize) : Prop :=
+  ∀ p a, VTop_Provenance.WriterPrefix stage D hash semantic proof split none p a →
     ∃ pm am, CheckpointBytes5Join.S1S7S8StateProvenance
       (CheckpointBytes3Namespaces.toPrepared p) (CheckpointBytes3Namespaces.toAccumulator a) pm am
 
@@ -45,7 +49,7 @@ theorem writer_join (adapter : AdapterRw.Ops) (stage : Ops)
     (oracle : CheckpointBytes5Inputs.Oracle
       (digest (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (VTop_Entry.install adapter stage))) () H)
     (provenance : WriterProvenance stage
-      (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (VTop_Entry.install adapter stage)) () proof pub) :
+      (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (VTop_Entry.install adapter stage)) () semantic proof split) :
     S2W_AuthenticatedInputs.CheckpointWriterConeJoin (VTop_Entry.install adapter stage)
       ChildJoin_Decoder.checkpointHeader H semantic pub proof split := by
   have both : ∀ saved, AdapterRw.first_decoded (VTop_Entry.install adapter stage)
@@ -54,9 +58,9 @@ theorem writer_join (adapter : AdapterRw.Ops) (stage : Ops)
         some (H (bytesOf proof.val),H (bytesOf pub.val)) ∧ saved.val.length = 1768 := by
     intro saved accepted
     have entry := VTop_Entry.first_accepted adapter stage semantic pub proof split saved accepted
-    obtain ⟨p,a,wrote⟩ := VTop_Cuts.writer_reached stage _ () semantic pub proof split none saved entry
-    obtain ⟨before,after,success⟩ := source.writer p a proof pub saved wrote
-    obtain ⟨pm,am,prov⟩ := provenance p a saved wrote
+    obtain ⟨p,a,reachedPrefix,wrote⟩ := VTop_Provenance.writer_prefix stage _ () semantic pub proof split none saved entry
+    obtain ⟨before,after,success⟩ := source.writer semantic proof pub split p a saved reachedPrefix wrote
+    obtain ⟨pm,am,prov⟩ := provenance p a reachedPrefix
     exact ChildJoin_Checkpoint.writer_header _ () H oracle _ _ pm am prov proof pub
       (checkpointSlice saved) before after success
   exact ⟨fun saved accepted => (both saved accepted).1,fun saved accepted => (both saved accepted).2⟩

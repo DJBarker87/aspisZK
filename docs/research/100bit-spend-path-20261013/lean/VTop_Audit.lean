@@ -1,3 +1,5 @@
+import VTop_Trace
+import VTop_Provenance
 import VTop_Order
 import VTop_Accepted
 
@@ -45,3 +47,6 @@ import VTop_Accepted
 #print AspisR1.VTop_Checkpoint.CheckpointSourceJoin
 #print AspisR1.VTop_Checkpoint.WriterProvenance
 #print AspisR1.VTop_Accepted.accepted_run
+
+#print axioms AspisR1.VTop_Provenance.writer_prefix
+#print AspisR1.VTop_Provenance.WriterPrefix

@@ -122,19 +122,31 @@ persistence is used to manufacture these headers.
 
 The exact retained premises are deliberately visible:
 
-- `CheckpointSourceJoin.writer`: every successful stage writer call transports
-  to the existing writer effect program, with namespace-converted Prepared
-  and Accumulator, the same proof/public arguments and actual returned bytes.
+- `CheckpointSourceJoin.writer`: a successful stage writer call preceded by
+  the actual successful `WriterPrefix` transports to the existing writer effect
+  program, with namespace-converted Prepared and Accumulator, the same
+  proof/public arguments and actual returned bytes.
 - `CheckpointSourceJoin.reader`: every successful stage resume call transports
   to `resumeWithOps (CheckpointBytes4Ops.ops reserved)` on the same checkpoint,
   proof/public inputs and returned Prepared/Accumulator.
 - Per-call digest/oracle interpretation, with fields copied between the two
   extracted Digest32 namespaces.
 - `WriterProvenance`: the original `S1S7S8StateProvenance` for namespace-converted
-  writer state. Its present form is uniform over every successful writer call
-  on the fixed buffers, hence **stronger** than supplying provenance only at a
-  selected reached cut. It is not claimed to be a weakened premise or to be
-  proved by acceptance.
+  writer state, conditional on the successful `WriterPrefix`. That prefix
+  contains the actual split guard, shape/scan, zero scratch, preparation branch,
+  initial accumulator, batch, geometry, pending, query-loop and flush equations
+  on the same raw fields. It contains no checkpoint output or encoding fact.
+  `VTop_Provenance.writer_prefix` derives it and the exact writer call together
+  from stage acceptance. Provenance itself remains a named S1/S7/S8 obligation.
+
+The initial uniform proposal in lean-020/028/034 was too strong: applying
+canonical reached-state provenance (and fixed-S2 serialization transport) to
+all successful arbitrary-state writer calls is not justified for the concrete
+writer. That proposal and its earlier union audits are superseded, with no
+closure credit for this overbroad interface. The final interface is restricted
+to the source-derived prefix. A first search-based prefix inversion timed out
+in lean-038; the replacement selects existing typed witness equations directly,
+then checks their conjunction (lean-045), without raising limits.
 
 `VTop_Accepted.accepted_run` specializes `ChildJoin_Accepted.accepted_run` to
 this installed dictionary and replaces its two header-contract continuation
@@ -149,7 +161,7 @@ dictionary. It does not use or add FullForestAcceptedRoundtrip.
 Before: arbitrary adapter dictionary, fixed decoder, independently supplied
 CheckpointWriterConeJoin and CheckpointReaderConeJoin, then Required14.
 After: the explicitly installed stage dictionary, successful source endpoint
-transport, oracle interpretation and uniform state provenance, then the same
+transport, oracle interpretation and prefix-indexed state provenance, then the same
 Required14 conclusion. This proves **conditional endpoint composition**;
 it is neither unconditional removal of checkpoint source refinement nor a
 proof that the new source-transport premises hold for the frozen children.
@@ -187,8 +199,8 @@ are unchanged by construction; no new CU measurement is claimed.
 
 ## Validation, pins and final resource receipt
 
-Final focused union: `VTop_Audit.lean`, lean-035, exit 0, wall 2.100030 s,
-peak RSS 4,390,116 KiB, swap 0. It imports the accepted-run specialization
+Final focused union: `VTop_Audit.lean`, lean-049, exit 0, wall 3.166975 s,
+peak RSS 4,390,696 KiB, swap 0. It imports the accepted-run specialization
 and both stage-order paths, prints all public new theorem axiom sets and the
 complete final checkpoint/source/provenance interfaces. Every accepted new
 theorem uses only a subset of `[propext, Classical.choice, Quot.sound]`.
@@ -197,7 +209,7 @@ Raw compiler-recovery sorryAx output and lean-003's Formatter-dependent model
 are retained as excluded historical evidence; no such premise occurs in the
 accepted sources or final union audit.
 
-Budget consumed: **34/100 actual Lean compile attempts, 0/60 Kani runs**.
+Budget consumed: **48/100 actual Lean compile attempts, 0/60 Kani runs** (49 allocated IDs, including the compiler-free preflight).
 Configuration lean-010 was a missing-source generator/setup failure and
 launched no compiler; it is separately recorded. Both deterministic heartbeat
 failures are retained with their source hashes and the subsequent source splits.
@@ -212,7 +224,7 @@ TasksMax=64. Charon used native Linux default private-leaf-salts, `aeneas_ref`,
 optimized release dependencies and one compiler job; exact flags are in JSON.
 `manifest.json` records every command/target receipt, revision, final source
 hash, direct dependency fingerprint, exit, wall, RSS, swap and complete axiom
-lines. Source revision for the final focused audit is `941210e7ed` plus the
+lines. Source revision for the final focused audit is `addab0ff67` plus the
 exact dirty-source hashes in its receipt. Old compiled dependency closures
 were reused read-only; this is **not a coherent H5 frozen release replay**.
 
@@ -232,3 +244,12 @@ Pool `121f3e29…`; they were **not independently rebuilt/reconfirmed here**.
 No full frozen manifest replay was run for this additive, conditional packet.
 Target not yet established; the next substantive deliverable is the concrete
 per-cone oracle/state interpretation and frozen2 model-order proof above.
+
+
+Final housekeeping: trailing whitespace was removed from the generated typed
+trace without changing its tokens (lean-036), and the audit pins that object
+directly. Authored module/tool/report whitespace checks pass. Raw compiler
+logs and historical exact source snapshots retain their original whitespace.
+The final manifest excludes the superseded uniform checkpoint interfaces and
+their union audits from accepted final evidence; lean-047/048/049 establish
+the corrected prefix-indexed interface. No source or proof job remains live.

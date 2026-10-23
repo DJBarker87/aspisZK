@@ -1,0 +1,54 @@
+{"attempt": "lean-046", "exit_status": 1, "wall_seconds": 3.921872507999069, "peak_rss_kib": "4376996", "swaps": "0", "print_axioms": ["'AspisR1.VTop_Checkpoint.writer_join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.VTop_Checkpoint.reader_join' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+VTop_Checkpoint.lean:61:16: error: unexpected token 'prefix'; expected rcasesPat
+VTop_Checkpoint.lean:61:4: error: Unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+VTop_Checkpoint.lean:54:71: error: unsolved goals
+adapter : AdapterRw.Ops
+stage : Ops
+H : Bytes → State
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split : Usize
+reserved : Bool
+source :
+  CheckpointSourceJoin stage (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (VTop_Entry.install adapter stage))
+    () reserved
+oracle :
+  CheckpointBytes5Inputs.Oracle
+    (digest (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDi
+...
+VTop_Checkpoint.lean:61:16: error: unexpected token 'prefix'; expected rcasesPat
+VTop_Checkpoint.lean:61:4: error: Unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+VTop_Checkpoint.lean:54:71: error: unsolved goals
+adapter : AdapterRw.Ops
+stage : Ops
+H : Bytes → State
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split : Usize
+reserved : Bool
+source :
+  CheckpointSourceJoin stage (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (VTop_Entry.install adapter stage))
+    () reserved
+oracle :
+  CheckpointBytes5Inputs.Oracle
+    (digest (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (VTop_Entry.install adapter stage))) () H
+provenance :
+  WriterProvenance stage (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (VTop_Entry.install adapter stage)) ()
+    semantic proof split
+both :
+  ∀ (saved : alloc.vec.Vec U8),
+    AdapterRw.first_decoded (VTop_Entry.install adapter stage) semantic pub proof split =
+        ok (core.result.Result.Ok saved) →
+      ChildJoin_Decoder.checkpointHeader (bytesOf ↑saved) = some (H (bytesOf ↑proof), H (bytesOf ↑pub)) ∧
+        (↑saved).length = 1768
+⊢ S2W_AuthenticatedInputs.CheckpointWriterConeJoin (VTop_Entry.install adapter stage) ChildJoin_Decoder.checkpointHeader
+    H semantic pub proof split
+VTop_Checkpoint.lean:61:22: error: unexpected token ','; expected ':'
+VTop_Checkpoint.lean:62:92: error: unexpected identifier; expected ':'
+VTop_Checkpoint.lean:63:48: error: unexpected identifier; expected ':'
+'AspisR1.VTop_Checkpoint.writer_join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.VTop_Checkpoint.reader_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rfdecefb8ed94420d9433b9bb07630da2.scope; invocation ID: 64de1496477448ef9aeefc8f5667279c

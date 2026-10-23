@@ -56,7 +56,7 @@ theorem accepted_run {W A E : Type}
       before e1 e2 .tx2 = S2W_D189Interpretation.nativeObserve L encode e2.metadata 7 w2 e2.heap.ambient ∧
       ∀ (nodes : Nat → Nat → Slice U8) (y1 : Slice U8),
       VTop_Checkpoint.WriterProvenance stage
-        (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (VTop_Entry.install adapter stage)) () f.proof f.pub →
+        (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (VTop_Entry.install adapter stage)) () f.semantic f.proof f.split →
       S2X.CheckpointVersionBinding
         (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768) (bytesOf s.checkpoint.val) →
       P2Prime H f.proof f.pub s.proof s.pub →

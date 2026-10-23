@@ -1,0 +1,53 @@
+{"attempt": "lean-048", "exit_status": 0, "wall_seconds": 4.570280020008795, "peak_rss_kib": "4407080", "swaps": "0", "print_axioms": ["'AspisR1.VTop_Accepted.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.VTop_Accepted.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.VTop_Accepted.accepted_run : ∀ {W A E : Type} (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapter : AdapterRw.Ops) (stage : VTop_Stages.Ops) (native1 : S2W_ExtractionBoundary.First)
+                (native2 : S2W_ExtractionBoundary.Second) (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+     
+...
+   reserved checkpointSource checkpointOracle port firstMarks secondMarks =>
+  let ⟨f, h✝⟩ :=
+    ChildJoin_Accepted.accepted_run L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
+      (VTop_Entry.install adapter stage) native1 native2 hashv extraction sha256 H p1 syscall program data1 data2 slot
+      state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 port firstMarks secondMarks
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨outer, h✝²⟩ := h✝¹
+  let ⟨pre, h✝³⟩ := h✝²
+  let ⟨middle, h✝⁴⟩ := h✝³
+  let ⟨fs, h✝⁵⟩ := h✝⁴
+  let ⟨ss, h✝⁶⟩ := h✝⁵
+  let ⟨cuts, right✝⟩ := h✝⁶
+  let ⟨expanded, right✝¹⟩ := right✝
+  let ⟨owned, right✝²⟩ := right✝¹
+  let ⟨layout, right✝³⟩ := right✝²
+  let ⟨unchanged, right✝⁴⟩ := right✝³
+  let ⟨firstBefore, right✝⁵⟩ := right✝⁴
+  let ⟨secondBefore, continuation⟩ := right✝⁵
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro outer
+        (Exists.intro pre
+          (Exists.intro middle
+            (Exists.intro fs
+              (Exists.intro ss
+                ⟨cuts,
+                  ⟨expanded,
+                    ⟨owned,
+                      ⟨layout,
+                        ⟨unchanged,
+                          ⟨firstBefore,
+                            ⟨secondBefore, fun nodes y1 provenance history p2prime entry multiproof scan =>
+                              continuation nodes y1
+                                (VTop_Checkpoint.writer_join adapter stage H f.semantic f.pub f.proof f.split reserved
+                                  checkpointSource checkpointOracle provenance)
+                                (VTop_Checkpoint.reader_join adapter stage H s.pub s.proof s.checkpoint reserved
+                                  checkpointSource checkpointOracle)
+                                history p2prime entry multiproof scan⟩⟩⟩⟩⟩⟩⟩))))))
+
+Running as unit: run-r21cc78e52a634acf870415f691ae5fab.scope; invocation ID: 7190e7c8a1cb4309b3ccbe7fc6840fc8

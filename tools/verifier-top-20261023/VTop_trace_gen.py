@@ -151,6 +151,7 @@ theorem erase_bind (ops : VTop_Stages.Ops) {A B : Type} (p : Code A) (k : A → 
 #print axioms erase_bind
 end AspisR1.VTop_Trace
 '''
+out='\n'.join(line.rstrip() for line in out.splitlines())+'\n'
 p=L/'VTop_Trace.lean'
 if '--check' in sys.argv:assert p.read_text()==out
 else:p.write_text(out)
