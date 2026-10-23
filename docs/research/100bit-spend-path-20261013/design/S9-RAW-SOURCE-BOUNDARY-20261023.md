@@ -1,7 +1,11 @@
 # Actual canonical raw implementation frontier
 
-Status: OPEN; highest-priority source obligation in the current dot-product
-path. The >=100-bit release target remains not yet established.
+Current status: canonical raw implementation, native operand/hook and exact
+Dot/EbyK body-substitution proofs are established. The final accepted-source
+backend consumer is being checked; full verifier/runtime/artifact security
+composition remains open. The >=100-bit release target is not yet established.
+The earlier open-frontier history below is retained and superseded by the
+progress entries at the end.
 
 The qualified production Pair extraction at Funs SHA256
 `371afe30d12820bac0bf1d84aba98c2fad12d0a7d071285013f00ed438046e03`
@@ -82,3 +86,22 @@ as an arbitrary-input actual Rust refinement. The actual raw source proof has
 a canonical-operand domain; invalid carriers remain outside its equality
 claim. Full pairing value, runtime/artifact and release security composition
 remain open; no 100-bit release claim follows from these local results.
+
+
+## Installed hook and source-body substitution established
+
+The same-operands equality now reaches the installed raw hook explicitly;
+`lean-candidates/s9-current-qraw-native-hook-v1-20261023/` retains the thin
+identity proof and its complete coherent import comparisons. The exact
+original Dot/EbyK source body is factored over its raw callee, and substituting
+the freshly extracted C implementation has complete Result equality with the
+installed mathematical-hook body under the native Wide eight-word bounds.
+All count/scalar/error branches are covered, not just a supplied successful
+scalar branch. See
+`lean-candidates/s9-current-qraw-ebyk-source-body-v1-20261023/`.
+The source-body check passed in 4.601 seconds, peak RSS 2.310 GB, zero swap,
+standard axioms. This discharges the raw arithmetic implementation contract on
+the actual valid operand domain. It is not an arbitrary-invalid-carrier raw
+identity, a general source/runtime/allocator proof, or a whole-spend security
+claim. The accepted-source-to-existing-S5 backend consumer and returned-Wide
+finish transport are separate compositions; the latter is continuing.
