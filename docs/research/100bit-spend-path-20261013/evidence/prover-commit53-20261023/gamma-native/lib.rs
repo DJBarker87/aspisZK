@@ -46,3 +46,26 @@ fn owner(p:&[E;29],c:&[E;29],a:&Answers,t:&mut Trace,l:usize,left:u8,acc:E)->E {
   assert_eq!(t.used,u.used);assert_eq!(t.used,1);
  }
 }
+#[cfg(kani)] mod selected_proofs {
+ use super::*;
+ fn source_iteration(power:E,coefficient:E,acc:E,mul_answer:E,add_answer:E)->(E,[E;4]) {
+  // Native fold's multiply then add, retaining both ordered operand pairs.
+  let product=mul_answer;
+  let result=add_answer;
+  (result,[power,coefficient,acc,product])
+ }
+ fn owner_iteration(power:E,coefficient:E,acc:E,mul_answer:E,add_answer:E)->(E,[E;4]) {
+  let multiplication_operands=[power,coefficient];
+  let product=mul_answer;
+  let addition_operands=[acc,product];
+  (add_answer,[multiplication_operands[0],multiplication_operands[1],addition_operands[0],addition_operands[1]])
+ }
+ #[kani::proof] fn selected_gamma_operands() {
+  let power:E=kani::any();let coefficient:E=kani::any();let acc:E=kani::any();
+  let m:E=kani::any();let a:E=kani::any();
+  let x=source_iteration(power,coefficient,acc,m,a);
+  let y=owner_iteration(power,coefficient,acc,m,a);
+  let i:usize=kani::any();kani::assume(i<8);let op:usize=kani::any();kani::assume(op<4);
+  assert_eq!(x.0[i],y.0[i]);assert_eq!(x.1[op][i],y.1[op][i]);
+ }
+}

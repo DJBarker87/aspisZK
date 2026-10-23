@@ -174,3 +174,37 @@ whole-29 trace diagnostic was stopped during Kani report processing at
 6568672 KiB RSS (276.747 s, zero swap), without raising caps. It is replaced
 by a universally quantified one-iteration trace check; the Lean induction
 already covers the full arithmetic sequence.
+
+## Stage 5: actual owned point claims
+
+J10531 checks a new extracted 29-column/three-point owner, whose unchanged
+MLE and statement-point declarations are reused only after byte equality.
+J10532 proves every column read succeeds canonically with its exact MLE value.
+J10534 proves `R1Z.ProverCommitClaims53.exact_result`: for arbitrary canonical
+point and tape columns, all **87 source claim outputs** equal
+`honestClaims (trace columns) (decoded point)`. Successor/absorption points,
+column evaluations and the complete three-row assembly are conclusions,
+not caller-supplied images. Native `host_semantic::point_claims` allocation,
+error layers and Vec iteration still need their separate source binding.
+J10533 is a tuple-normalization draft replaced by one `rfl` on the tiny
+three-element constructor. Accepted axioms are standard only.
+
+Claims Charon/Aeneas: exit 0/0; wall 1.276/0.478 s; peak RSS
+210196/69872 KiB; swaps 0/0; source revision `d015ebd5b5` plus exact owner
+and generated-source hashes in the binding manifest. J10531: 1.23 s,
+2637620 KiB; J10532: 2.54 s, 4129916 KiB; J10534: 1.86 s, 4152672 KiB;
+all exit 0, zero swaps, capped at 6G/8G/no swap/64 tasks.
+
+The gamma selected-operand native check passes (`gamma-native-v7`): exit 0,
+0.441 s, 130400 KiB, zero swaps, explicit Rust opt-level=3. It pairs arbitrary
+multiply/add answers with identical ordered operands; it does not prove
+field arithmetic, matrix reads, allocation, or the complete native caller.
+Those distinctions are explicit in the source pin. Earlier diagnostics and
+all source snapshots are retained: v1/v2/v6 are CLI preflight refusals; v3
+reports the memcmp unwind limit; v4/v5 are stopped report-processing growth
+(6568672/6627632 KiB, zero swaps). No cap is raised. v7 changes to the
+selected-operand interface and disables assertion-reach reporting.
+
+The current Weights constructor extraction is a separate work-in-progress
+continuation. J10535 is retired before compilation for a wrong retained
+module path; J10536 uses the actual retained inactive-source import.
