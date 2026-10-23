@@ -17,6 +17,9 @@ def imports(p):
  return [m for l in re.findall(r'^\s*import\s+([^\n]+)',p.read_text(),re.M) for m in l.split('--')[0].split()]
 canonical={m:BASE/'lean'/(m+'.lean') for m in ['R1D18Transport','R1PoseidonMap','R1SpendRelation','D18Transport','PoseidonMap','SpendRelation']}
 canonical['RawUnionScan']=ROOT/'tools/import-union/RawUnionScan.lean'
+# Current canonical protocol includes its documented specification-level default
+# extractor. The j1-r7-r8 archive predates that backward-compatible default.
+canonical['R1LiteralByteProtocol']=BASE/'lean/LiteralByteProtocol.lean'
 # This retained source already proves AppendBinding; older extraction archives
 # target the weaker legacy relation and are not eligible providers.
 canonical['R1SpendRelationExtraction']=BASE/'evidence/lean-j1-r2-requested-check-20261015/sources/R1SpendRelationExtraction.lean'
