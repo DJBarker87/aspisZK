@@ -527,3 +527,14 @@ assigned env J range is still absent. external-obligations-caller005.json
 records the remaining kernel/model boundaries without assuming their desired
 whole-body equality. The complete leaf-contract and source/model gates remain
 open. Production source remains frozen at 9c131667ca for the active corpus.
+
+### Corpus midpoint resource review
+
+At 510 matching pairs the run remains active, with the frozen production
+source unchanged. The midpoint snapshot records 1017569280 anonymous bytes,
+2428628992 file-cache bytes, peak total cgroup charge 6443712512 bytes,
+pids peak 37, zero swap, no OOM/max events and 74 GiB disk available.
+The 6 GiB soft-limit events reflect the retained oracle-log cache; the
+original 6G/8G/no-swap/64-task limits remain. See
+corpus-1000-002/resource-review-midpoint.json. This is a partial checkpoint,
+not a completed differential or absolute timing gate.
