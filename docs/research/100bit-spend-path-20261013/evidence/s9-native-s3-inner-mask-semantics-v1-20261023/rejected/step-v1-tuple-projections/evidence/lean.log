@@ -1,0 +1,191 @@
+/private/tmp/a3-s9-native-s3-weight-body-v1-check-20261023/sources/S9NativeS3WeightBodyV1.lean:58:6: error: Tactic `subst` failed: did not find equation for eliminating 'iterNext'
+
+case pos
+low : Low
+group : Usize
+iter iterOut : R
+weight out : W
+hend : ↑iter.end ≤ 16
+hlow : AspisR1S9NativeArrayCanonicalV1.ReadsCanonical low
+hweight : Can weight
+hbody :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done weight)
+        | some bit => do
+          let challenge ← Array.index_usize low bit
+          let i ← weights.S2_INACTIVE_MASKS.index_usize group
+          let i1 ← lift (AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+          let i2 ← lift (i &&& i1)
+          if (i2 != 0#u16) = true then do
+              let weight1 ← aspis_core.field.wide_exact.WideExact.add weight challenge
+              ok (cont (iter1, weight1))
+            else ok (cont (iter1, weight))) =
+    ok (cont (iterOut, out))
+iterNext : core.ops.range.Range (UScalar UScalarTy.Usize)
+bit : UScalar UScalarTy.Usize
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some bit, iterNext)
+h✝⁴ :
+  (let (o, iter1) := (some bit, iterNext)
+    match o with
+    | none => ok (done weight)
+    | some bit => do
+      let challenge ← Array.index_usize low bit
+      let i ← weights.S2_INACTIVE_MASKS.index_usize group
+      let i1 ← lift (AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+      let i2 ← lift (i &&& i1)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← aspis_core.field.wide_exact.WideExact.add weight challenge
+          ok (cont (iter1, weight1))
+        else ok (cont (iter1, weight))) =
+    ok (cont (iterOut, out))
+challenge : aspis_core.field.wide_exact.WideExact
+hread : Array.index_usize low bit = ok challenge
+h✝³ :
+  (do
+      let i ← weights.S2_INACTIVE_MASKS.index_usize group
+      let i1 ← lift (AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+      let i2 ← lift (i &&& i1)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← aspis_core.field.wide_exact.WideExact.add weight challenge
+          ok (cont (iterNext, weight1))
+        else ok (cont (iterNext, weight))) =
+    ok (cont (iterOut, out))
+mask : U16
+hmask : weights.S2_INACTIVE_MASKS.index_usize group = ok mask
+h✝² :
+  (do
+      let i1 ← lift (AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+      let i2 ← lift (mask &&& i1)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← aspis_core.field.wide_exact.WideExact.add weight challenge
+          ok (cont (iterNext, weight1))
+        else ok (cont (iterNext, weight))) =
+    ok (cont (iterOut, out))
+hpower : lift (AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit) = ok (AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+h✝¹ :
+  (do
+      let i2 ← lift (mask &&& AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← aspis_core.field.wide_exact.WideExact.add weight challenge
+          ok (cont (iterNext, weight1))
+        else ok (cont (iterNext, weight))) =
+    ok (cont (iterOut, out))
+hselected :
+  lift (mask &&& AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit) =
+    ok (mask &&& AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+hj : ↑bit < ↑iter.end
+hb : ↑bit < 16
+htest : (mask &&& AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit != 0#u16) = true ↔ ↑mask / 2 ^ ↑bit % 2 = 1
+hselect : (mask &&& AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit != 0#u16) = true
+h✝ :
+  (do
+      let weight1 ← aspis_core.field.wide_exact.WideExact.add weight challenge
+      ok (cont (iterNext, weight1))) =
+    ok (cont (iterOut, out))
+total : aspis_core.field.wide_exact.WideExact
+hadd : aspis_core.field.wide_exact.WideExact.add weight challenge = ok total
+h : ok (cont (iterNext, total)) = ok (cont (iterOut, out))
+he : (iterNext, total) = (iterOut, out)
+hi : (iterNext, total).1 = (iterOut, out).1
+ho : (iterNext, total).2 = (iterOut, out).2
+⊢ ∃ bit challenge mask,
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some bit, iterOut) ∧
+      Array.index_usize low bit = ok challenge ∧
+        weights.S2_INACTIVE_MASKS.index_usize group = ok mask ∧
+          ↑bit < 16 ∧ Can out ∧ decode out = decode weight + if ↑mask / 2 ^ ↑bit % 2 = 1 then decode challenge else 0
+/private/tmp/a3-s9-native-s3-weight-body-v1-check-20261023/sources/S9NativeS3WeightBodyV1.lean:67:6: error: Tactic `subst` failed: did not find equation for eliminating 'iterNext'
+
+case neg
+low : Low
+group : Usize
+iter iterOut : R
+weight out : W
+hend : ↑iter.end ≤ 16
+hlow : AspisR1S9NativeArrayCanonicalV1.ReadsCanonical low
+hweight : Can weight
+hbody :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done weight)
+        | some bit => do
+          let challenge ← Array.index_usize low bit
+          let i ← weights.S2_INACTIVE_MASKS.index_usize group
+          let i1 ← lift (AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+          let i2 ← lift (i &&& i1)
+          if (i2 != 0#u16) = true then do
+              let weight1 ← aspis_core.field.wide_exact.WideExact.add weight challenge
+              ok (cont (iter1, weight1))
+            else ok (cont (iter1, weight))) =
+    ok (cont (iterOut, out))
+iterNext : core.ops.range.Range (UScalar UScalarTy.Usize)
+bit : UScalar UScalarTy.Usize
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some bit, iterNext)
+h✝³ :
+  (let (o, iter1) := (some bit, iterNext)
+    match o with
+    | none => ok (done weight)
+    | some bit => do
+      let challenge ← Array.index_usize low bit
+      let i ← weights.S2_INACTIVE_MASKS.index_usize group
+      let i1 ← lift (AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+      let i2 ← lift (i &&& i1)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← aspis_core.field.wide_exact.WideExact.add weight challenge
+          ok (cont (iter1, weight1))
+        else ok (cont (iter1, weight))) =
+    ok (cont (iterOut, out))
+challenge : aspis_core.field.wide_exact.WideExact
+hread : Array.index_usize low bit = ok challenge
+h✝² :
+  (do
+      let i ← weights.S2_INACTIVE_MASKS.index_usize group
+      let i1 ← lift (AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+      let i2 ← lift (i &&& i1)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← aspis_core.field.wide_exact.WideExact.add weight challenge
+          ok (cont (iterNext, weight1))
+        else ok (cont (iterNext, weight))) =
+    ok (cont (iterOut, out))
+mask : U16
+hmask : weights.S2_INACTIVE_MASKS.index_usize group = ok mask
+h✝¹ :
+  (do
+      let i1 ← lift (AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+      let i2 ← lift (mask &&& i1)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← aspis_core.field.wide_exact.WideExact.add weight challenge
+          ok (cont (iterNext, weight1))
+        else ok (cont (iterNext, weight))) =
+    ok (cont (iterOut, out))
+hpower : lift (AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit) = ok (AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+h✝ :
+  (do
+      let i2 ← lift (mask &&& AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← aspis_core.field.wide_exact.WideExact.add weight challenge
+          ok (cont (iterNext, weight1))
+        else ok (cont (iterNext, weight))) =
+    ok (cont (iterOut, out))
+hselected :
+  lift (mask &&& AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit) =
+    ok (mask &&& AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit)
+hj : ↑bit < ↑iter.end
+hb : ↑bit < 16
+htest : (mask &&& AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit != 0#u16) = true ↔ ↑mask / 2 ^ ↑bit % 2 = 1
+hselect : ¬(mask &&& AspisR1S9ShiftCountCompatV1.u16Shl 1#u16 bit != 0#u16) = true
+h : ok (cont (iterNext, weight)) = ok (cont (iterOut, out))
+he : (iterNext, weight) = (iterOut, out)
+hi : (iterNext, weight).1 = (iterOut, out).1
+ho : (iterNext, weight).2 = (iterOut, out).2
+⊢ ∃ bit challenge mask,
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some bit, iterOut) ∧
+      Array.index_usize low bit = ok challenge ∧
+        weights.S2_INACTIVE_MASKS.index_usize group = ok mask ∧
+          ↑bit < 16 ∧ Can out ∧ decode out = decode weight + if ↑mask / 2 ^ ↑bit % 2 = 1 then decode challenge else 0
+'AspisR1S9NativeS3WeightBodyV1.native_weight_cont_decoded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

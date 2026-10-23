@@ -1,0 +1,3 @@
+Before: canonicality of the inner result alone did not identify the weight contribution. Checked old shift/bit conditions or an old Enum run could not be assumed for the current Range source.
+
+After: the real current bit<16 bound derives checked/wrapping equality; exact old bit algebra applies without a desired condition premise. SAME current source events then establish the decoded contribution and the whole selected-prefix value. Actual low/initial Can remain natural input guards, to be discharged by SAME low producer/source zero; no semantic output premise is added. Old physical iterator/runtime correspondence is not claimed.

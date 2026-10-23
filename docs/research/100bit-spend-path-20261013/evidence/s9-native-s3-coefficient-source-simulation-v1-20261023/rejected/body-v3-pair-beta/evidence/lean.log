@@ -1,0 +1,99 @@
+/private/tmp/a3-s9-native-s3-coefficient-body-v3-check-20261023/sources/S9NativeS3CoefficientBodyV1.lean:45:41: error: unsolved goals
+f : Slice U8
+iter iterOut : R
+c out : C
+hbytes : 2048 ≤ (↑f).length
+hend : ↑iter.end ≤ 64
+hcan : ReadsCanonical c
+hbody : weights.s2_grouped_inactive_pair_loop0.body f iter c = ok (cont (iterOut, out))
+j : Usize
+code : U8
+old value total : AspisR1S9NativeArrayCanonicalV1.W
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some j, iterOut)
+hcode : weights.S2_INACTIVE_GROUPS.index_usize j = ok code
+hfield : weights.field f j = ok value
+hadd : aspis_core.field.wide_exact.WideExact.add old value = ok total
+hold : Array.index_usize c (UScalar.cast UScalarTy.Usize code) = ok old
+hupdate : Array.update c (UScalar.cast UScalarTy.Usize code) total = ok out
+hj : ↑j < ↑iter.end
+hfit : (↑j + 1) * 32 ≤ (↑f).length
+hread : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.decodeField f j = ok (nativeToOld value)
+ho : AspisR1S9NativeArrayCanonicalV1.Canonical old
+hv : AspisR1S9ActualPairWideCanonicalV1.Canonical value
+hsum :
+  AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.add (nativeToOld old) (nativeToOld value) =
+    ok (nativeToOld total)
+holdMap :
+  AspisR1S9CandidateFoldMapPrimitivesV1.mapResult nativeToOld (ok old) =
+    (mapArray nativeToOld c).index_usize (UScalar.cast UScalarTy.Usize code)
+holdOld : (toOld c).index_usize (UScalar.cast UScalarTy.Usize code) = ok (nativeToOld old)
+hg : ↑(UScalar.cast UScalarTy.Usize code) < ↑12#usize
+outOld : Std.Array AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.S 12#usize
+hu : (mapArray nativeToOld c).update (UScalar.cast UScalarTy.Usize code) (nativeToOld total) = ok outOld
+he : mapArray nativeToOld out = outOld
+huOld : (toOld c).update (UScalar.cast UScalarTy.Usize code) (nativeToOld total) = ok (toOld out)
+hcodeOld : AspisR1GroupedPairActualFieldOpsV3.weights.S2_INACTIVE_GROUPS.index_usize j = ok code
+⊢ (let (o, iter1) := (some j, iterOut)
+    match o with
+    | none => ok (done (toOld c))
+    | some j => do
+      let i ← AspisR1GroupedPairActualFieldOpsV3.weights.S2_INACTIVE_GROUPS.index_usize j
+      let we ← (toOld c).index_usize (UScalar.cast UScalarTy.Usize i)
+      let we1 ← AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.decodeField f j
+      let we2 ← AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.add we we1
+      let a ← (toOld c).update (UScalar.cast UScalarTy.Usize i) we2
+      ok (cont (iter1, a))) =
+    ok (cont (iterOut, toOld out))
+/private/tmp/a3-s9-native-s3-coefficient-body-v3-check-20261023/sources/S9NativeS3CoefficientBodyV1.lean:70:13: warning: This simp argument is unused:
+  hcodeOld
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵c̵o̵d̵e̵O̵ld̵,̵l̵ift, ̲bind_tc_ok, ̲holdOld,
+  ̲ ̲ ̲ ̲ ̲AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.actualOperations,
+  ̵  ̵ ̵ ̵hread, ̲hsum, ̲huOld]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-native-s3-coefficient-body-v3-check-20261023/sources/S9NativeS3CoefficientBodyV1.lean:70:38: warning: This simp argument is unused:
+  holdOld
+
+Hint: Omit it from the simp argument list.
+  simp only [hcodeOld, ̲lift, ̲bind_tc_ok,h̵o̵l̵d̵O̵l̵d̵,̵
+  ̲ ̲ ̲ ̲ ̲AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.actualOperations,
+  ̵  ̵ ̵ ̵hread, ̲hsum, ̲huOld]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-native-s3-coefficient-body-v3-check-20261023/sources/S9NativeS3CoefficientBodyV1.lean:71:4: warning: This simp argument is unused:
+  hread
+
+Hint: Omit it from the simp argument list.
+  simp only [hcodeOld, ̲lift, ̲bind_tc_ok, ̲holdOld,
+  ̲ ̲ ̲ ̲ ̲AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.actualOperations,
+  ̵  ̵ ̵ ̵hr̵e̵a̵d̵,̵h̵sum, ̲huOld]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-native-s3-coefficient-body-v3-check-20261023/sources/S9NativeS3CoefficientBodyV1.lean:71:10: warning: This simp argument is unused:
+  hsum
+
+Hint: Omit it from the simp argument list.
+  simp only [hcodeOld, ̲lift, ̲bind_tc_ok, ̲holdOld,
+  ̲ ̲ ̲ ̲ ̲AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.actualOperations,
+  ̵  ̵ ̵ ̵hread, ̲hs̵um̵,̵h̵u̵Old]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-native-s3-coefficient-body-v3-check-20261023/sources/S9NativeS3CoefficientBodyV1.lean:71:15: warning: This simp argument is unused:
+  huOld
+
+Hint: Omit it from the simp argument list.
+  simp only [hcodeOld, ̲lift, ̲bind_tc_ok, ̲holdOld,
+  ̲ ̲ ̲ ̲ ̲AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.actualOperations,
+  ̵  ̵ ̵ ̵hread, ̲hsum,̵h̵u̵O̵l̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9NativeS3CoefficientBodyV1.native_field_success_canonical_of_fit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9NativeS3CoefficientBodyV1.source_group_tables_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9NativeS3CoefficientBodyV1.native_coefficient_cont_old_body' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

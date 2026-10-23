@@ -1,0 +1,141 @@
+import S9NativeS3WeightBodyV1
+import S9ArrayReadDropHeadV1
+import S9LoopInvariantPropertyV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result ControlFlow
+namespace AspisR1S9NativeS3WeightLoopV1
+open AspisR1S9ProductionPairCutV1
+open AspisR1S9NativeS3WeightBodyV1 (W R Low Can decode)
+abbrev Iter := R
+abbrev Wide := AspisWideTower.WideExact
+
+def actualSelectedPrefix (mask : Nat) : Nat → List Wide → Wide
+  | 0, _ => 0
+  | n + 1, xs => actualSelectedPrefix mask n xs +
+      (if (mask / 2 ^ n) % 2 = 1 then (xs.drop n).headD 0 else 0)
+
+
+theorem selected_prefix_step (mask n : Nat) (xs : List Wide) :
+    actualSelectedPrefix mask (n+1) xs=actualSelectedPrefix mask n xs+
+      (if (mask/2^n)%2=1 then (xs.drop n).headD 0 else 0) := rfl
+
+def sourceMask (group : Usize) : U16 :=
+  (weights.S2_INACTIVE_MASKS.val[group.val]?).getD 0#u16
+
+theorem source_mask_of_read (group : Usize) (mask : U16)
+    (h : Array.index_usize weights.S2_INACTIVE_MASKS group=.ok mask) : sourceMask group=mask := by
+  have hv := AspisR1S9ArrayReadDropHeadV1.array_read_option weights.S2_INACTIVE_MASKS group mask h
+  simp only [sourceMask,hv,Option.getD_some]
+
+private theorem bind_success {A B : Type} (m : Result A) (next : A → Result B) (out : B)
+    (h : (do let x ← m;next x)=.ok out) : ∃ x,m=.ok x ∧ next x=.ok out := by
+  cases m with
+  | fail e => simp only [bind_tc_fail] at h;cases h
+  | div => simp only [bind_tc_div] at h;cases h
+  | ok x => exact ⟨x,rfl,h⟩
+
+private theorem done_next_none (low : Low) (group : Usize) (iter : R) (weight out : W)
+    (h : weights.s2_grouped_inactive_pair_loop1_loop0.body low group iter weight=.ok (.done out)) :
+    ∃ iter1,core.iter.range.IteratorRange.next core.iter.range.StepUsize iter=.ok (none,iter1) := by
+  unfold weights.s2_grouped_inactive_pair_loop1_loop0.body at h
+  obtain ⟨next,hn,h⟩ := bind_success _ _ _ h
+  rcases next with ⟨opt,iterNext⟩
+  cases opt with
+  | none => exact ⟨iterNext,hn⟩
+  | some bit =>
+    obtain ⟨challenge,hread,h⟩ := bind_success _ _ _ h
+    obtain ⟨mask,hmask,h⟩ := bind_success _ _ _ h
+    obtain ⟨power,hpower,h⟩ := bind_success _ _ _ h
+    obtain ⟨selected,hselected,h⟩ := bind_success _ _ _ h
+    split at h
+    · obtain ⟨total,hadd,h⟩ := bind_success _ _ _ h;cases h
+    · cases h
+
+private theorem none_stopped (it it1 : Iter)
+    (hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize it=.ok (none,it1)) :
+    it.end.val ≤ it.start.val := by
+  have hs := core.iter.range.IteratorRange.next_UScalar_spec
+    (cloneInst:=core.clone.CloneUsize) (partialOrdInst:=core.cmp.PartialOrdUsize)
+    (by intros; rfl) (by intros; rfl) it
+  rw [hn,WP.spec_ok] at hs
+  by_cases hlt : it.start.val < it.end.val
+  · simp only [hlt,↓reduceIte] at hs
+    rcases hs with ⟨⟨ho,_⟩,_⟩
+    cases ho
+  · omega
+
+
+/-- SAME current native Range16 execution computes the existing selected-prefix
+recurrence on its actual low values and actual immutable source mask. No old
+Enum execution, mask-read success, bit-condition or weight meaning is assumed. -/
+theorem native_weight_loop_selected_prefix (low : Low) (group : Usize) (weight out : W)
+    (hlow : AspisR1S9NativeArrayCanonicalV1.ReadsCanonical low) (hweight : Can weight)
+    (h : weights.s2_grouped_inactive_pair_loop1_loop0 {start:=0#usize,«end»:=16#usize}
+      low group weight=.ok out) :
+    Can out ∧ decode out=decode weight+
+      actualSelectedPrefix (sourceMask group).val 16 (low.val.map decode) := by
+  let step := fun s : R × W => weights.s2_grouped_inactive_pair_loop1_loop0.body low group s.1 s.2
+  let inv := fun s : R × W => s.1.end.val=16 ∧ s.1.start.val≤16 ∧ Can s.2 ∧
+    decode s.2=decode weight+actualSelectedPrefix (sourceMask group).val s.1.start.val (low.val.map decode)
+  let post := fun result : W => Can result ∧ decode result=decode weight+
+    actualSelectedPrefix (sourceMask group).val 16 (low.val.map decode)
+  let measure := fun s : R × W => s.1.end.val-s.1.start.val
+  have hd : ∀ s result,inv s → step s=.ok (.done result) → post result := by
+    rintro ⟨r,c⟩ result ⟨he,hs,hcan,hmeaning⟩ hb
+    change r.end.val=16 at he
+    change r.start.val≤16 at hs
+    change decode c=decode weight+actualSelectedPrefix (sourceMask group).val r.start.val (low.val.map decode) at hmeaning
+    have hout := AspisR1S9S2WeightCanonicalV1.weight_body_done_same low group r c result hb
+    obtain ⟨r1,hn⟩ := done_next_none low group r c result hb
+    have hstop := none_stopped r r1 hn
+    have hstart : r.start.val=16 := by omega
+    subst result
+    exact ⟨hcan,by simpa only [hstart] using hmeaning⟩
+  have hc : ∀ s s',inv s → step s=.ok (.cont s') → inv s' := by
+    rintro ⟨r,c⟩ ⟨r1,c1⟩ ⟨he,hs,hcan,hmeaning⟩ hb
+    change r.end.val=16 at he
+    change r.start.val≤16 at hs
+    change decode c=decode weight+actualSelectedPrefix (sourceMask group).val r.start.val (low.val.map decode) at hmeaning
+    obtain ⟨bit,challenge,mask,hn,hread,hmask,hbit,cout,hvalue⟩ :=
+      AspisR1S9NativeS3WeightBodyV1.native_weight_cont_decoded
+        low group r r1 c c1 (by omega) hlow hcan hb
+    obtain ⟨hj,hlt,hadvance,hend⟩ := AspisR1S9ActualDotRangeBoundsV1.range_next_index_bounds r r1 bit hn
+    have hv : bit.val=r.start.val := congrArg (fun x : Usize => x.val) hj
+    have he1 : r1.end.val=16 := by rw [hend];exact he
+    have hs1 : r1.start.val≤16 := by omega
+    have hm := source_mask_of_read group mask hmask
+    have hhead := AspisR1S9ArrayReadDropHeadV1.array_read_map_drop_head decode 0 low bit challenge hread
+    have hstepValue : decode c1=decode weight+
+        actualSelectedPrefix (sourceMask group).val r1.start.val (low.val.map decode) := by
+      rw [hadvance,selected_prefix_step]
+      calc
+        decode c1=decode c+(if (mask.val/2^bit.val)%2=1 then decode challenge else 0) := hvalue
+        _ = (decode weight+actualSelectedPrefix (sourceMask group).val r.start.val (low.val.map decode))+
+            (if ((sourceMask group).val/2^r.start.val)%2=1
+              then ((low.val.map decode).drop r.start.val).headD 0 else 0) := by
+          rw [hmeaning,←hm,←hhead,hv]
+        _ = decode weight+(actualSelectedPrefix (sourceMask group).val r.start.val (low.val.map decode)+
+            (if ((sourceMask group).val/2^r.start.val)%2=1
+              then ((low.val.map decode).drop r.start.val).headD 0 else 0)) := add_assoc _ _ _
+    change r1.end.val=16 ∧ r1.start.val≤16 ∧ Can c1 ∧
+      decode c1=decode weight+actualSelectedPrefix (sourceMask group).val r1.start.val (low.val.map decode)
+    exact ⟨he1,hs1,cout,hstepValue⟩
+  have hm : ∀ s s',step s=.ok (.cont s') → measure s'<measure s := by
+    rintro ⟨r,c⟩ ⟨r1,c1⟩ hb
+    obtain ⟨bit,hn,_⟩ := AspisR1S9S2WeightCanonicalV1.weight_body_cont_source low group r r1 c c1 hb
+    obtain ⟨hj,hlt,hadvance,hend⟩ := AspisR1S9ActualDotRangeBoundsV1.range_next_index_bounds r r1 bit hn
+    change r1.end.val-r1.start.val < r.end.val-r.start.val
+    rw [hend,hadvance]
+    have hv : bit.val=r.start.val := congrArg (fun x : Usize => x.val) hj
+    omega
+  have hi : inv ({start:=0#usize,«end»:=16#usize},weight) := by
+    refine ⟨rfl,by decide,hweight,?_⟩
+    change decode weight=decode weight+0
+    exact (add_zero _).symm
+  have hr : Aeneas.Std.loop step ({start:=0#usize,«end»:=16#usize},weight)=.ok out := h
+  exact AspisR1S9LoopInvariantPropertyV1.loop_invariant_property step measure inv post hd hc hm _ out hi hr
+
+#print axioms selected_prefix_step
+#print axioms source_mask_of_read
+#print axioms native_weight_loop_selected_prefix
+end AspisR1S9NativeS3WeightLoopV1

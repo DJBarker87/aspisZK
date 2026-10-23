@@ -1,0 +1,1 @@
+Alpha reports initial full-runner/controller mutex-only attempts did not launch Lean; the accepted compilation receipt is from the explicitly listed green workspace. The retained v2 receipt is an actual failed compilation due only to unnormalized range-literal lower bounds; v3 changes those2proofs to explicit0<=n.

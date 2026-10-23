@@ -1,0 +1,118 @@
+import S9NativeS3CoefficientLoopV1
+import S3ActualLoop0SuccessReadbackV1
+import S3ActualLoop0WholePrefix
+import S9S3ZeroSeedReadOnlyV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1S9NativeS3ZeroPrefixV1
+open AspisR1S9ProductionPairCutV1
+open AspisR1S9NativeS3FieldReaderV1 (nativeToOld)
+open AspisR1S9NativeS3CoefficientBodyV1 (C toOld)
+open AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete
+  (S M decode decodeField DecodedMeaning PrefixMeaning CanonicalAccumulatorArray)
+
+theorem native_zero_value_maps :
+    nativeToOld aspis_core.field.wide_exact.WideExact.ZERO=
+      AspisR1GroupedPairActualFieldOpsV3.field.WideExact.ZERO := by
+  unfold nativeToOld aspis_core.field.wide_exact.WideExact.ZERO aspis_core.field.QM31.ZERO
+    AspisR1GroupedPairActualFieldOpsV3.field.WideExact.ZERO
+    AspisR1GroupedPairActualFieldOpsV3.field.QM31.ZERO
+  rfl
+
+theorem native_zero_array_maps :
+    toOld (Array.repeat 12#usize aspis_core.field.wide_exact.WideExact.ZERO)=
+      Array.repeat 12#usize AspisR1GroupedPairActualFieldOpsV3.field.WideExact.ZERO := by
+  apply Subtype.ext
+  simp only [toOld,AspisR1S9CandidateFoldMapPrimitivesV1.mapArray,Array.repeat,
+    List.map_replicate,native_zero_value_maps]
+
+theorem native_zero_coefficient_success_old (f : Slice U8) (out : C)
+    (hbytes : 2048 ≤ f.val.length)
+    (h : weights.s2_grouped_inactive_pair_loop0 {start:=0#usize,«end»:=64#usize} f
+      (Array.repeat 12#usize aspis_core.field.wide_exact.WideExact.ZERO)=.ok out) :
+    AspisR1GroupedPairActualFieldOpsV3.weights.s2_grouped_inactive_pair_loop0
+      AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.actualOperations
+      {start:=0#usize,«end»:=64#usize} f
+      (Array.repeat 12#usize AspisR1GroupedPairActualFieldOpsV3.field.WideExact.ZERO)=.ok (toOld out) := by
+  have ha := AspisR1S9NativeArrayCanonicalV1.repeat_canonical 12#usize
+    aspis_core.field.wide_exact.WideExact.ZERO
+    AspisR1S9ActualPairWideOutputCanonicalV1.zero_canonical
+  have hr := AspisR1S9NativeS3CoefficientLoopV1.native_coefficient_loop_success_old
+    f {start:=0#usize,«end»:=64#usize} _ out hbytes rfl (by decide) ha h
+  rw [native_zero_array_maps] at hr
+  exact hr
+
+/-- The input is defined from this SAME successful old reader run, itself
+obtained from the native run. This is a model value function, not a runtime
+extractor or a claim about extractor cost. -/
+noncomputable def successfulInput (f : Slice U8) (out : C)
+    (hbytes : 2048 ≤ f.val.length)
+    (h : weights.s2_grouped_inactive_pair_loop0 {start:=0#usize,«end»:=64#usize} f
+      (Array.repeat 12#usize aspis_core.field.wide_exact.WideExact.ZERO)=.ok out)
+    (n : Nat) : M :=
+  if hn : n<64 then
+    let oldRun := native_zero_coefficient_success_old f out hbytes h
+    let reads := AspisR1GroupedPairActualFieldOpsV3.ActualLoop0SuccessReadback.loop0_success_parser_reads
+      f {start:=0#usize,«end»:=64#usize}
+      (Array.repeat 12#usize AspisR1GroupedPairActualFieldOpsV3.field.WideExact.ZERO)
+      (toOld out) (by decide) rfl oldRun n (by omega) hn
+    decode (Classical.choose (Classical.choose_spec reads))
+  else 0
+
+/-- The SAME accepted native zero-seeded64 coefficient loop supplies EVERY
+strict old read needed by the existing semantic-prefix theorem. No hfields,
+initial canonicality, old loop success or coefficient meaning is assumed. -/
+theorem native_zero_coefficient_success_prefix (f : Slice U8) (out : C)
+    (hbytes : 2048 ≤ f.val.length)
+    (h : weights.s2_grouped_inactive_pair_loop0 {start:=0#usize,«end»:=64#usize} f
+      (Array.repeat 12#usize aspis_core.field.wide_exact.WideExact.ZERO)=.ok out) :
+    DecodedMeaning (toOld out) (PrefixMeaning (successfulInput f out hbytes h) (fun _ => 0) 64) ∧
+    CanonicalAccumulatorArray (toOld out) ∧
+    (∀ j : Usize,j.val<64 → ∃ x : S,decodeField f j=.ok x ∧
+      decode x=successfulInput f out hbytes h j.val) := by
+  let oldRun := native_zero_coefficient_success_old f out hbytes h
+  have hfields : ∀ j : Usize,j.val<64 → ∃ x : S,decodeField f j=.ok x ∧
+      decode x=successfulInput f out hbytes h j.val := by
+    intro j hj
+    let reads := AspisR1GroupedPairActualFieldOpsV3.ActualLoop0SuccessReadback.loop0_success_parser_reads
+      f {start:=0#usize,«end»:=64#usize}
+      (Array.repeat 12#usize AspisR1GroupedPairActualFieldOpsV3.field.WideExact.ZERO)
+      (toOld out) (by decide) rfl oldRun j.val (by omega) hj
+    let rest := Classical.choose_spec reads
+    let input := Classical.choose rest
+    have hrest := Classical.choose_spec rest
+    rcases hrest with ⟨raw,start,next,finish,selected,hidx,hread,hfield,hi,hn,hf,hs,hdecoded⟩
+    have hjEq : Classical.choose reads=j := UScalar.eq_of_val_eq hidx
+    have hr : decodeField f j=.ok input := by
+      calc
+        decodeField f j=decodeField f (Classical.choose reads) :=
+          congrArg (decodeField f) hjEq.symm
+        _ = .ok input := hread
+    refine ⟨input,hr,?_⟩
+    simp only [successfulInput,dif_pos hj] <;> rfl
+  have hseedCan : CanonicalAccumulatorArray
+      (Array.repeat 12#usize AspisR1GroupedPairActualFieldOpsV3.field.WideExact.ZERO) := by
+    intro k
+    change AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.Canonical
+      ((List.replicate 12 AspisR1GroupedPairActualFieldOpsV3.field.WideExact.ZERO)[k.val]'(by simpa using k.isLt))
+    rw [List.getElem_replicate]
+    exact AspisR1GroupedPairActualFieldOpsV3.NativeZeroReadbackReuseV1.zero_seed_canonical
+  have hseedMeaning : DecodedMeaning
+      (Array.repeat 12#usize AspisR1GroupedPairActualFieldOpsV3.field.WideExact.ZERO)
+      (PrefixMeaning (successfulInput f out hbytes h) (fun _ => 0) 0) :=
+    AspisR1GroupedPairActualFieldOpsV3.NativeZeroReadbackReuseV1.zero_seed_meaning
+  obtain ⟨result,hrun,hmeaning,hcanonical⟩ :=
+    AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.actual_loop0_whole_prefix
+      f (successfulInput f out hbytes h) (fun _ => 0)
+      {start:=0#usize,«end»:=64#usize}
+      (Array.repeat 12#usize AspisR1GroupedPairActualFieldOpsV3.field.WideExact.ZERO)
+      rfl rfl hseedMeaning hseedCan hfields
+  have he : result=toOld out := Result.ok.inj (hrun.symm.trans oldRun)
+  subst result
+  exact ⟨hmeaning,hcanonical,hfields⟩
+
+#print axioms native_zero_value_maps
+#print axioms native_zero_array_maps
+#print axioms native_zero_coefficient_success_old
+#print axioms native_zero_coefficient_success_prefix
+end AspisR1S9NativeS3ZeroPrefixV1

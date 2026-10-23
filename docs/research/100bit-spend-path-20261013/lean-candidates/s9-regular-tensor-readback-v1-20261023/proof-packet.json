@@ -1,0 +1,36 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "status": "proved same tensor output is same actual subsequent dot input slice",
+  "entry_theorems": [
+    "AspisR1S9RegularTensorReadbackV1.execution_tensor_readback"
+  ],
+  "claim": "Given exact accepted process_kind Execution output, Vec.deref scratchOut equals SAME tensorOut, by owned Vec.deref_mut/back definitions and actual source borrow/back equalities.",
+  "retained_hypotheses": [
+    "Existing exact Execution witness, itself DERIVED from accepted S2/folds2 process_kind",
+    "Existing owned Aeneas Vec primitive interpretation and explicit extraction/runtime boundary"
+  ],
+  "discharged_hypotheses": [
+    "Independent assumption that subsequent dot scratch reads refer to tensor producer output",
+    "Allocator-content or allocator-preservation assumption for this readback"
+  ],
+  "validation": {
+    "exit_status": 0,
+    "wall_seconds": 3.614,
+    "peak_process_rss_kib": 2638716,
+    "scope_memory_peak_bytes": 292208640,
+    "scope_swap_peak_bytes": 0,
+    "memory_events_before": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+    "memory_events_after": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+    "source_sha256": "b5888019c4ae4ab8797dc19e12fb1039ef85962d8fe46302bbff7c0226a9cfa5",
+    "object_sha256": "60ca0cb9e2b725d340c6b9f41914cb10dcd7c6409578fd79f53a7a7307ffe2d6"
+  },
+  "axioms": "standard3 only",
+  "dependencies": [
+    "s9-regular-kind-execution-v1-20261023 exact Execution818a7633",
+    "Existing pinned Aeneas Vec.deref_mut/deref definitions in selected warm cohort"
+  ],
+  "remaining": [
+    "Actual tensor output mathematical meanings and caller geometry must join ordinary regular sum on same read slice.",
+    "Actual runtime primitive/source/release and final security theorem remain open."
+  ]
+}
