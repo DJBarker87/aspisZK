@@ -177,3 +177,12 @@ unchanged. Previously accepted targets outside that closure are reused.
 This is a changed provider/dependency-input replay following a failed union,
 not an unchanged full regression. The final union and raw inventory must
 succeed against these corrected provider pins before this gate is accepted.
+
+The retained generated serializer source and canonical Types have identical
+carrier declarations after removing discriminant scaffolding and whitespace;
+all three canonical reader code maps match the generator's default constructor
+order (`serializer-provider-semantics.json`). The provider change alters no
+serialized fields or tag values. During the consumer replay, the newly rebuilt
+`ExtractedPublicCheckedBridge432` also required the explicit pure
+`PublicCodecAgreement` import (IU-545 failure, focused IU-546 success). No
+statement or hypothesis changed.
