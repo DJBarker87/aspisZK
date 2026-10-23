@@ -1,0 +1,3 @@
+PROVED for the generated Pair adapter: one successful helper execution starts at its actual zero-initialized array, reaches both observed body calls, preserves canonical mapped reads of the intermediate array, and yields canonical mapped reads of the final output. Only explicit upstream ap0/ap1/extra canonical-read contracts remain; no independently assumed body successes are added. This does not establish enclosing shipped Rust caller correspondence or S9 closure.
+
+Focused Lean check: 24.064 seconds; peak aggregate RSS 3265363968 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

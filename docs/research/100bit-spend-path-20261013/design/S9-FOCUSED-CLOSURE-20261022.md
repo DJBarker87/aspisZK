@@ -925,3 +925,20 @@ candidate changes allocation-failure behavior and is not adopted native source.
 
 The two-body adapter composition is being checked after correcting an earlier
 failed draft. No result from that failed check is counted as proved.
+
+
+PROVED continuation: `s9-pair-two-body-canonical-states-v1-20261023`
+connects one generated helper execution to both observed body calls, starting
+from its own zero initialization. The intermediate and final arrays satisfy
+the full mapped-read canonicality contract; upstream ap0/ap1/extra contracts
+remain explicit. Focused check: 24.064 s, 3,265,363,968 bytes peak aggregate
+RSS, zero swap, standard axioms only. This closes the adapter two-body
+canonicality composition, not enclosing shipped Rust source correspondence.
+
+PROVED candidate-only continuation:
+`s9-candidate-constructor-extra-exact-v1-20261023` derives the exact alpha[8]
+and alpha[9] reads from one successful initialized Box::new constructor
+execution and identifies the returned extra array. Focused check: 13.570 s,
+2,186,166,272 bytes peak aggregate RSS, zero swap, standard axioms only.
+The candidate generated Types and Funs also compiled independently. The
+native allocator, alpha provenance, SBF feasibility and adoption gaps remain.

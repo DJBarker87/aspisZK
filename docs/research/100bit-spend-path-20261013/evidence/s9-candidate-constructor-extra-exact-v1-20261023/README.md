@@ -1,0 +1,3 @@
+PROVED for the isolated initialized Box::new constructor candidate: one successful constructor execution yields its own alpha[8] and alpha[9] read witnesses, and extra contains exactly those values. Actual field and statement-point definitions are generated and transparent. This does not prove equivalence to the shipped raw-pointer constructor, allocation-failure behavior, alpha provenance, SBF feasibility, or deployment correspondence.
+
+Focused Lean check: 13.57 seconds; peak aggregate RSS 2186166272 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
