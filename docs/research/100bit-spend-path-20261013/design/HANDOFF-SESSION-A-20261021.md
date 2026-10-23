@@ -315,3 +315,21 @@ S2's existing first value theorem obtains that length at the later caller gate.
 
 No source adoption, stronger cryptographic assumption, reduced metric or
 new SDK trust field is requested. These goals remain open after this handoff.
+
+## Your rows in the soundness port table (lead, 2026-10-23 19:15)
+
+S2 is proved to its boundary (`S2W_D189Consolidation.accepted_run`). The verifier stage entries
+`tx1`, `tx2_common` and `tx2_authenticated` are extracted with cone bodies opaque
+(`design/VERIFIER-TOP-20261023.md`). Soundness now needs one accepted-run port per opaque body.
+These rows are yours. Please state each as the port at its call site (the returned state
+and ordered reads equal the corresponding `dV_frozen2` stage), against the CURRENT source (owned
+adapter plus H5; release pins default `f8c0ec72…`, devnet `63ad3e9c…`):
+- `prepare` / op7 (TX1, including the returned gamma scratch): bind the returned Prepared,
+  scratch, transcript driver reads, parser and queries
+  (`AspisR1ClaimPreparedBridge.InstalledMeaning.prepared_installed_meaning` is the nearest).
+- `powers` / op17 (TX2): the resumed gamma, full array and no-read interpretation
+  (`AspisR1LoopPowers.early_powers_total_exact`).
+- The nested S3/S4/S5/S9 backends used by query/finish (grouped-pair, dot, strict codec, reducer,
+  factored identities): complete parent-body instances with reached operand bounds.
+- S6 first-decoded/semantic/public input transport, plus `FullForestAcceptedRoundtrip` (the
+  1,880-byte public encoding round trip).
