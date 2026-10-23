@@ -1,0 +1,92 @@
+import AspisR1.CompositionCallable53
+import TerminalPartsArithmeticExact
+
+/-! The retained composition producer composed with terminal_parts arithmetic.
+Entry validation, native source binding and the final SemSource carrier bridge
+remain explicit upstream obligations; no source output image is assumed here. -/
+set_option autoImplicit false
+namespace AspisR1.TerminalCallable53
+noncomputable section
+open Aeneas Aeneas.Std Result
+open AspisR1SelectedMaskProbe
+open AspisR1.SemanticCompositionCoefficients
+open AspisR1TerminalDigestBindingCandidate.SemanticPublicPreparationCopy
+open scoped BigOperators
+abbrev QM := field.QM31
+abbrev Arr := Array QM 10#usize
+abbrev Claims := Array QM 84#usize
+abbrev Statement := AspisR1TerminalDecoder.PublicBinding.Statement
+abbrev Public := pool_v1.pair_forest_semantic_terminal.SemanticPublic
+abbrev Error := AspisR1.CompositionPartsTail.Error
+abbrev Canonical := AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM
+abbrev decode := AspisR1.ExtractedMaskQM31Exact.decode
+abbrev Output := QM × Array QM 16#usize × Arr × QM
+
+def run (public1 : Public) (claims : Claims) (point : Arr)
+    (lambda chi theta : QM) (zc : Arr) (mu : QM) : Result (core.result.Result Output Error) := do
+  let result ← AspisR1.CompositionPartsAfterValidation.run PoseidonCallable53.source
+    public1 claims point lambda chi theta
+  match result with
+  | .Err error => .ok (.Err error)
+  | .Ok (composition,z,mask,g,helper,active) => do
+    let terminal ← AspisR1.TerminalPartsArithmeticExact.run zc point composition helper active mu
+    .ok (.Ok (terminal,z,mask,g))
+
+theorem run_success (point zc : Arr) (s : Statement) (claims : Claims)
+    (lambda chi theta mu : QM)
+    (hpoint : CanonicalArray point) (hzc : CanonicalArray zc)
+    (hclaims : CanonicalArray claims)
+    (hlambda : Canonical lambda) (hchi : Canonical chi)
+    (htheta : Canonical theta) (hmu : Canonical mu)
+    {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+    (hash : H) (c1 : Array U8 32#usize)
+    (outTranscript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+    (hprep : AspisR1PublicPreparation.r1_semantic.public_transcript D
+      (AspisR1PublicPreparation.PreparationBinding.preparationPublic s)
+      hash c1 = .ok (.Ok outTranscript)) :
+    ∃ (openings : state_only_poseidon.StateOnlyPoseidonOpenings)
+      (selectors : pool_v1.pair_forest_copy_terminal.Selectors) (mask : Arr)
+      (helper composition g active terminal : QM),
+      pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = .ok selectors ∧
+      pool_v1.pair_forest_semantic_terminal.selected_claim claims 0#usize 26#usize = .ok helper ∧
+      AspisR1.CompositionPartsAfterValidation.run PoseidonCallable53.source
+        (copyFromStatement s) claims point lambda chi theta =
+        .ok (.Ok (composition,openings.z,mask,g,helper,active)) ∧
+      run (copyFromStatement s) claims point lambda chi theta zc mu =
+        .ok (.Ok (terminal,openings.z,mask,g)) ∧
+      Canonical terminal ∧
+      decode terminal =
+        R0P.SemSource.eqValue (AspisR1.EqualityValueLoop.decodedArray zc)
+          (AspisR1.EqualityValueLoop.decodedArray point) *
+          (∑ i : Fin 29, decode theta ^ i.val *
+            lanesFromModels (PoseidonCallable53.model point openings selectors)
+              (semanticLane24 (copyFromStatement s) openings point)
+              (R0P.copyEvaluateWithSelectors
+                (AspisR1.CopyEndpointExact.decodedCells openings.z) (decode helper)
+                (AspisR1.CopyEndpointExact.modelSelectors selectors) (decode lambda) (decode chi)
+                (copyFromStatement s).transition.live_snapshot.next_pair_index.val
+                (AspisR1.CopyLinkWeightExact.modelVariant
+                  (AspisR1.CompositionPartsAfterValidation.copyVariant (copyFromStatement s).variant))).1 i) +
+        decode mu * decode helper + (decode mu * decode mu) * ((1-decode active)*decode helper) := by
+  obtain ⟨openings,selectors,mask,helper,composition,g,active,
+    hz,hsucc,hxor,hbox,hhelper,hcomposition,hcompCan,hgCan,hactiveCan,hvalue⟩ :=
+    AspisR1.CompositionCallable53.run_success point s claims lambda chi theta
+      hpoint hclaims hlambda hchi htheta D hash c1 outTranscript hprep
+  obtain ⟨helper',hhelper',hcell,hhelperCan⟩ :=
+    AspisR1SelectedMaskProbe.selected_claim_success claims 0#usize 26#usize
+      (by decide) (by decide) hclaims
+  have heq : helper' = helper := Result.ok.inj (hhelper'.symm.trans hhelper)
+  have hh : Canonical helper := heq ▸ hhelperCan
+  obtain ⟨terminal,hterminal,hterminalCan,hterminalValue⟩ :=
+    AspisR1.TerminalPartsArithmeticExact.run_exact zc point composition helper active mu
+      hzc hpoint hcompCan hh hactiveCan hmu
+  refine ⟨openings,selectors,mask,helper,composition,g,active,terminal,
+    hbox,hhelper,hcomposition,?_,hterminalCan,?_⟩
+  · simp only [run,hcomposition,bind_tc_ok,hterminal]
+  · change decode terminal = _ at hterminalValue
+    change decode composition = _ at hvalue
+    rw [hterminalValue,hvalue]
+
+#print axioms run_success
+end
+end AspisR1.TerminalCallable53

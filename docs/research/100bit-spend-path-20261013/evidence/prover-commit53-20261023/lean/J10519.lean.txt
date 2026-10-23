@@ -1,0 +1,58 @@
+import AspisR1ProducerRelease47.Opening48
+/-! Extracted counter owner, with identical arithmetic callees rebound to the
+previously proved release extraction. bind-counter.py checks every reused
+callee declaration body byte-for-byte. No external template is installed. -/
+open Aeneas Aeneas.Std Result ControlFlow Error
+noncomputable section
+namespace AspisR1ProducerRelease47
+@[global_simps, irreducible]
+def field.wide_exact.WideExact.ZERO : field.wide_exact.WideExact :=
+  { c0 := field.QM31.ZERO, c1 := field.QM31.ZERO }
+
+def gamma53.cell
+  (coefficients : Array (Array field.wide_exact.WideExact 1024#usize) 29#usize)
+  (powers : Array field.wide_exact.WideExact 29#usize) (j : Std.Usize)
+  (lane : Std.Usize) (left : Std.U8) (acc : field.wide_exact.WideExact) :
+  Result field.wide_exact.WideExact
+  := do
+  if left = 0#u8
+  then ok acc
+  else
+    let i ← lift (Std.Usize.wrapping_add lane 1#usize)
+    let i1 ← lift (Std.U8.wrapping_sub left 1#u8)
+    let we ← Array.index_usize powers lane
+    let a ← Array.index_usize coefficients lane
+    let we1 ← Array.index_usize a j
+    let we2 ← field.wide_exact.WideExact.mul we we1
+    let we3 ← field.wide_exact.WideExact.add acc we2
+    gamma53.cell coefficients powers j i i1 we3
+partial_fixpoint
+
+def gamma53.fill
+  (coefficients : Array (Array field.wide_exact.WideExact 1024#usize) 29#usize)
+  (powers : Array field.wide_exact.WideExact 29#usize)
+  (out : Array field.wide_exact.WideExact 1024#usize) (j : Std.Usize)
+  (left : Std.U16) :
+  Result (Array field.wide_exact.WideExact 1024#usize)
+  := do
+  if left = 0#u16
+  then ok out
+  else
+    let we ←
+      gamma53.cell coefficients powers j 0#usize 29#u8
+        field.wide_exact.WideExact.ZERO
+    let out1 ← Array.update out j we
+    let i ← lift (Std.Usize.wrapping_add j 1#usize)
+    let i1 ← lift (Std.U16.wrapping_sub left 1#u16)
+    gamma53.fill coefficients powers out1 i i1
+partial_fixpoint
+
+def gamma53.all
+  (coefficients : Array (Array field.wide_exact.WideExact 1024#usize) 29#usize)
+  (powers : Array field.wide_exact.WideExact 29#usize) :
+  Result (Array field.wide_exact.WideExact 1024#usize)
+  := do
+  let a := Array.repeat 1024#usize field.wide_exact.WideExact.ZERO
+  gamma53.fill coefficients powers a 0#usize 1024#u16
+
+end AspisR1ProducerRelease47

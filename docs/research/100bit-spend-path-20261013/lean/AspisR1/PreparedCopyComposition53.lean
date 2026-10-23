@@ -1,0 +1,115 @@
+import AspisR1.PreparedSemanticCoefficients
+import AspisR1.CompositionCoefficientSlots
+import AspisR1SelectedMaskProbe.ActiveMaskBasisEvaluatorClosed
+import CompositionPartsTail
+import SelectorRowSemantic
+
+/-! Same-point semantic and Copy outputs consumed by the actual composition
+tail. Poseidon's source-to-model premise remains explicit until its separate
+value theorem is composed. No independent semantic/Copy model premise. -/
+set_option autoImplicit false
+namespace AspisR1.PreparedCopyComposition53
+noncomputable section
+open Aeneas Aeneas.Std Result
+open AspisR1SelectedMaskProbe
+open AspisR1.SemanticCompositionCoefficients
+open AspisR1TerminalDigestBindingCandidate.SemanticPublicPreparationCopy
+open scoped BigOperators
+abbrev CanonicalQM := AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM
+abbrev CopyOutput := AspisR1.CopyEvaluatorFactor.Output
+abbrev Variant := AspisR1.CopyLinkWeightExact.Variant
+abbrev decode := AspisR1.ExtractedMaskQM31Exact.decode
+attribute [local irreducible] R0P.copyLinks R0P.copyEvaluateWithSelectors
+  AspisR1.CopyEvaluateRowExact.retainedRow R0P.copyResidual R0P.copyActiveLiteral
+
+/-- Relates the actual outputs on the same openings/selectors to the source
+tail's 29 coefficients. Public preparation supplies all semantic public bounds.
+Variant/index and selected helper binding to the enclosing caller are not
+asserted by this component theorem. -/
+theorem components_and_tail
+    (point : Array QM 10#usize) (s : AspisR1TerminalDecoder.PublicBinding.Statement)
+    (openings : Openings) (poseidon : Array QM 4#usize)
+    (poseidonModel : Fin 4 → ExactQM)
+    (claims : Array QM 84#usize) (maskOnly : Array QM 10#usize)
+    (helper lambda chi theta : QM) (index : U64) (variant : Variant)
+    (hpoint : CanonicalArray point)
+    (hz : CanonicalArray openings.z) (hsucc : CanonicalArray openings.succ_z)
+    (hxor : CanonicalArray openings.xor12_z)
+    (hposeidon : CanonicalArray poseidon)
+    (hposeidonValue : ∀ i : Fin 4,
+      decode (poseidon.val[i.val]'(by simpa [poseidon.property] using i.isLt)) = poseidonModel i)
+    (hclaims : CanonicalArray claims)
+    (hhelper : CanonicalQM helper) (hlambda : CanonicalQM lambda)
+    (hchi : CanonicalQM chi) (htheta : CanonicalQM theta)
+    {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+    (hash : H) (c1 : Array U8 32#usize)
+    (outTranscript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+    (hprep : AspisR1PublicPreparation.r1_semantic.public_transcript D
+      (AspisR1PublicPreparation.PreparationBinding.preparationPublic s)
+      hash c1 = Result.ok (.Ok outTranscript)) :
+    ∃ (selectors : Selectors) (semantic : Array QM 24#usize)
+      (copy : CopyOutput) (out q : QM),
+      pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = .ok selectors ∧
+      AspisR1SemanticPackedBoundedCandidate.pool_v1.pair_forest_semantic_terminal.semantic_packed
+        (copyFromStatement s) openings selectors = .ok semantic ∧
+      AspisR1.CopyEvaluatorFactor.evaluate openings.z helper selectors lambda chi index variant = .ok copy ∧
+      AspisR1.CompositionPartsTail.run semantic poseidon theta copy.residual copy.active
+        claims openings.z maskOnly helper =
+          .ok (.Ok (out,openings.z,maskOnly,q,helper,copy.active)) ∧
+      CanonicalQM out ∧ CanonicalQM q ∧ CanonicalQM copy.active ∧
+      decode copy.active = R0P.copyActiveLiteral (AspisR1.CopyEndpointExact.modelSelectors selectors) ∧
+      decode out = ∑ i : Fin 29, decode theta ^ i.val *
+        lanesFromModels poseidonModel
+          (semanticLane24 (copyFromStatement s) openings point)
+          (R0P.copyEvaluateWithSelectors
+            (AspisR1.CopyEndpointExact.decodedCells openings.z) (decode helper)
+            (AspisR1.CopyEndpointExact.modelSelectors selectors) (decode lambda) (decode chi)
+            index.val (AspisR1.CopyLinkWeightExact.modelVariant variant)).1 i := by
+  obtain ⟨selectors,hbox,hhigh,hlow,hrows⟩ :=
+    AspisR1.SelectorRowSemantic.boxed_row_products point hpoint
+  obtain ⟨semantic,hsemanticRun,hsemanticCan,hsemanticValue⟩ :=
+    AspisR1.PreparedSemanticCoefficients.actual_coefficients point selectors s openings
+      hpoint hbox hz hsucc hxor D hash c1 outTranscript hprep
+  obtain ⟨copy,hcopyRun,hcopyCan,hactiveCan,hcopyValue⟩ :=
+    AspisR1SelectedMaskProbe.ActiveMaskBasisEvaluatorClosed.evaluate_success
+      openings.z helper selectors lambda chi index variant hz hhigh hlow hlambda hhelper hchi
+  let seed := (R0P.copyEvaluateWithSelectors
+    (AspisR1.CopyEndpointExact.decodedCells openings.z) (decode helper)
+    (AspisR1.CopyEndpointExact.modelSelectors selectors) (decode lambda) (decode chi)
+    index.val (AspisR1.CopyLinkWeightExact.modelVariant variant)).1
+  let lanes := lanesFromModels poseidonModel
+    (semanticLane24 (copyFromStatement s) openings point) seed
+  have hsem : ∀ i : Fin 24,
+      AspisR1.TerminalCompositionLoopAdapter.coefficient24 semantic i.val =
+        lanes (Fin.natAdd 4 (Fin.castAdd 1 i)) := by
+    intro i
+    have hcell : AspisR1.TerminalCompositionLoopAdapter.coefficient24 semantic i.val =
+        semanticLane24 (copyFromStatement s) openings point i := by
+      simpa only [AspisR1.TerminalCompositionLoopAdapter.coefficient24,
+        AspisR1.PreweightedLoopModel.decoded, i.isLt, ↓reduceDIte] using hsemanticValue i
+    exact hcell.trans (AspisR1.CompositionCoefficientSlots.semantic_slot
+      poseidonModel (semanticLane24 (copyFromStatement s) openings point) seed i).symm
+  have hpos : ∀ i : Fin 4,
+      AspisR1.TerminalCompositionLoopAdapter.coefficient4 poseidon i.val =
+        lanes (Fin.castAdd 25 i) := by
+    intro i
+    have hcell : AspisR1.TerminalCompositionLoopAdapter.coefficient4 poseidon i.val =
+        poseidonModel i := by
+      simpa only [AspisR1.TerminalCompositionLoopAdapter.coefficient4,i.isLt, ↓reduceDIte]
+        using hposeidonValue i
+    exact hcell.trans (AspisR1.CompositionCoefficientSlots.poseidon_slot
+      poseidonModel (semanticLane24 (copyFromStatement s) openings point) seed i).symm
+  have hseed : decode copy.residual = lanes 28 := by
+    have hvalue : decode copy.residual = seed := congrArg Prod.fst hcopyValue
+    exact hvalue.trans (AspisR1.CompositionCoefficientSlots.copy_slot
+      poseidonModel (semanticLane24 (copyFromStatement s) openings point) seed).symm
+  obtain ⟨out,q,htail,hout,hq,hqcell,hvalue⟩ :=
+    AspisR1.CompositionPartsTail.tail_success semantic poseidon theta copy.residual copy.active
+      claims openings.z maskOnly helper lanes htheta hcopyCan hsemanticCan hposeidon
+      hclaims hsem hpos hseed
+  refine ⟨selectors,semantic,copy,out,q,hbox,hsemanticRun,hcopyRun,htail,hout,hq,hactiveCan,?_,hvalue⟩
+  simpa only [R0P.copyEvaluateWithSelectors] using congrArg Prod.snd hcopyValue
+
+#print axioms components_and_tail
+end
+end AspisR1.PreparedCopyComposition53

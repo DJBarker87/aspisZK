@@ -1,0 +1,161 @@
+import AspisR1ProducerRelease47.Weights53
+import R1Z.ProverCommitRawSource49
+/-! Stored matrices are consumed without recomputing them. This is the S2
+source cut after allocation; the native unsafe allocation binding is separate. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitWeightsStorage53
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+abbrev Q := field.QM31
+abbrev Point := Array Q 10#usize
+abbrev Matrix := Array (Array Q 4#usize) 5#usize
+abbrev State := U8 × Array Matrix 5#usize × Array Point 3#usize × Array Q 2#usize
+
+theorem index5 {A : Type} (a b c d e : A) :
+    Array.index_usize (Array.make 5#usize [a,b,c,d,e]) 0#usize=ok a ∧
+    Array.index_usize (Array.make 5#usize [a,b,c,d,e]) 1#usize=ok b ∧
+    Array.index_usize (Array.make 5#usize [a,b,c,d,e]) 2#usize=ok c ∧
+    Array.index_usize (Array.make 5#usize [a,b,c,d,e]) 3#usize=ok d ∧
+    Array.index_usize (Array.make 5#usize [a,b,c,d,e]) 4#usize=ok e := by
+  constructor
+  · rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by decide)];rfl
+  constructor
+  · rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by decide)];rfl
+  constructor
+  · rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by decide)];rfl
+  constructor
+  · rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by decide)];rfl
+  · rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by decide)];rfl
+
+def state (p0 p1 p2 : Point) (r0 r1 r2 r3 r4 : Matrix) (a8 a9 : Q) : State :=
+  (2#u8,Array.make 5#usize [r0,r1,r2,r3,r4],Array.make 3#usize [p0,p1,p2],Array.make 2#usize [a8,a9])
+
+theorem raw_zero (s : State) (j : Usize) :
+    weights53.raw s 0#usize j=ProverCommitInactiveOutput49.run j := by
+  unfold weights53.raw ProverCommitInactiveOutput49.run
+  simp only [show (0#usize).val=0 from rfl]
+  cases AspisR1InactiveOwner49.owned.inactive j with
+  | fail e => rfl
+  | div => rfl
+  | ok b => cases b <;> rfl
+
+theorem raw_1 (p0 p1 p2 : Point) (r0 r1 r2 r3 r4 : Matrix) (a8 a9 : Q) (j : Usize) :
+    weights53.raw (state p0 p1 p2 r0 r1 r2 r3 r4 a8 a9) 1#usize j=stored.product r0 j 0#usize 5#u8 field.QM31.ONE := by
+  simp only [weights53.raw,state,
+    show (1#usize).val=1 from rfl,show (2#usize).val=2 from rfl,
+    show (3#usize).val=3 from rfl,show (4#usize).val=4 from rfl,
+    show (5#usize).val=5 from rfl,show (6#usize).val=6 from rfl,
+    if_pos (by decide : 1#usize<4#usize),if_pos (by decide : 2#usize<4#usize),
+    if_pos (by decide : 3#usize<4#usize),if_neg (by decide : ¬5#usize<4#usize),
+    if_neg (by decide : ¬6#usize<4#usize),
+    show Usize.wrapping_sub 1#usize 1#usize=0#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 2#usize 1#usize=1#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 3#usize 1#usize=2#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 5#usize 2#usize=3#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 6#usize 2#usize=4#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,bind_tc_ok]
+  exact congrArg (fun m : Result Matrix => m >>= fun r =>
+    stored.product r j 0#usize 5#u8 field.QM31.ONE) (index5 r0 r1 r2 r3 r4).1
+
+theorem raw_2 (p0 p1 p2 : Point) (r0 r1 r2 r3 r4 : Matrix) (a8 a9 : Q) (j : Usize) :
+    weights53.raw (state p0 p1 p2 r0 r1 r2 r3 r4 a8 a9) 2#usize j=stored.product r1 j 0#usize 5#u8 field.QM31.ONE := by
+  simp only [weights53.raw,state,
+    show (1#usize).val=1 from rfl,show (2#usize).val=2 from rfl,
+    show (3#usize).val=3 from rfl,show (4#usize).val=4 from rfl,
+    show (5#usize).val=5 from rfl,show (6#usize).val=6 from rfl,
+    if_pos (by decide : 1#usize<4#usize),if_pos (by decide : 2#usize<4#usize),
+    if_pos (by decide : 3#usize<4#usize),if_neg (by decide : ¬5#usize<4#usize),
+    if_neg (by decide : ¬6#usize<4#usize),
+    show Usize.wrapping_sub 1#usize 1#usize=0#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 2#usize 1#usize=1#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 3#usize 1#usize=2#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 5#usize 2#usize=3#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 6#usize 2#usize=4#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,bind_tc_ok]
+  exact congrArg (fun m : Result Matrix => m >>= fun r =>
+    stored.product r j 0#usize 5#u8 field.QM31.ONE) (index5 r0 r1 r2 r3 r4).2.1
+
+theorem raw_3 (p0 p1 p2 : Point) (r0 r1 r2 r3 r4 : Matrix) (a8 a9 : Q) (j : Usize) :
+    weights53.raw (state p0 p1 p2 r0 r1 r2 r3 r4 a8 a9) 3#usize j=stored.product r2 j 0#usize 5#u8 field.QM31.ONE := by
+  simp only [weights53.raw,state,
+    show (1#usize).val=1 from rfl,show (2#usize).val=2 from rfl,
+    show (3#usize).val=3 from rfl,show (4#usize).val=4 from rfl,
+    show (5#usize).val=5 from rfl,show (6#usize).val=6 from rfl,
+    if_pos (by decide : 1#usize<4#usize),if_pos (by decide : 2#usize<4#usize),
+    if_pos (by decide : 3#usize<4#usize),if_neg (by decide : ¬5#usize<4#usize),
+    if_neg (by decide : ¬6#usize<4#usize),
+    show Usize.wrapping_sub 1#usize 1#usize=0#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 2#usize 1#usize=1#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 3#usize 1#usize=2#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 5#usize 2#usize=3#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 6#usize 2#usize=4#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,bind_tc_ok]
+  exact congrArg (fun m : Result Matrix => m >>= fun r =>
+    stored.product r j 0#usize 5#u8 field.QM31.ONE) (index5 r0 r1 r2 r3 r4).2.2.1
+
+theorem raw_4 (p0 p1 p2 : Point) (r0 r1 r2 r3 r4 : Matrix) (a8 a9 : Q) (j : Usize) :
+    weights53.raw (state p0 p1 p2 r0 r1 r2 r3 r4 a8 a9) 4#usize j=extras.libra (Array.make 2#usize [a8,a9]) j := by
+  simp only [weights53.raw,state,
+    show (1#usize).val=1 from rfl,show (2#usize).val=2 from rfl,
+    show (3#usize).val=3 from rfl,show (4#usize).val=4 from rfl,
+    show (5#usize).val=5 from rfl,show (6#usize).val=6 from rfl,
+    if_pos (by decide : 1#usize<4#usize),if_pos (by decide : 2#usize<4#usize),
+    if_pos (by decide : 3#usize<4#usize),if_neg (by decide : ¬5#usize<4#usize),
+    if_neg (by decide : ¬6#usize<4#usize),
+    show Usize.wrapping_sub 1#usize 1#usize=0#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 2#usize 1#usize=1#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 3#usize 1#usize=2#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 5#usize 2#usize=3#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 6#usize 2#usize=4#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,bind_tc_ok]
+  rfl
+
+theorem raw_5 (p0 p1 p2 : Point) (r0 r1 r2 r3 r4 : Matrix) (a8 a9 : Q) (j : Usize) :
+    weights53.raw (state p0 p1 p2 r0 r1 r2 r3 r4 a8 a9) 5#usize j=stored.product r3 j 0#usize 5#u8 field.QM31.ONE := by
+  simp only [weights53.raw,state,
+    show (1#usize).val=1 from rfl,show (2#usize).val=2 from rfl,
+    show (3#usize).val=3 from rfl,show (4#usize).val=4 from rfl,
+    show (5#usize).val=5 from rfl,show (6#usize).val=6 from rfl,
+    if_pos (by decide : 1#usize<4#usize),if_pos (by decide : 2#usize<4#usize),
+    if_pos (by decide : 3#usize<4#usize),if_neg (by decide : ¬5#usize<4#usize),
+    if_neg (by decide : ¬6#usize<4#usize),
+    show Usize.wrapping_sub 1#usize 1#usize=0#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 2#usize 1#usize=1#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 3#usize 1#usize=2#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 5#usize 2#usize=3#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 6#usize 2#usize=4#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,bind_tc_ok]
+  exact congrArg (fun m : Result Matrix => m >>= fun r =>
+    stored.product r j 0#usize 5#u8 field.QM31.ONE) (index5 r0 r1 r2 r3 r4).2.2.2.1
+
+theorem raw_6 (p0 p1 p2 : Point) (r0 r1 r2 r3 r4 : Matrix) (a8 a9 : Q) (j : Usize) :
+    weights53.raw (state p0 p1 p2 r0 r1 r2 r3 r4 a8 a9) 6#usize j=stored.product r4 j 0#usize 5#u8 field.QM31.ONE := by
+  simp only [weights53.raw,state,
+    show (1#usize).val=1 from rfl,show (2#usize).val=2 from rfl,
+    show (3#usize).val=3 from rfl,show (4#usize).val=4 from rfl,
+    show (5#usize).val=5 from rfl,show (6#usize).val=6 from rfl,
+    if_pos (by decide : 1#usize<4#usize),if_pos (by decide : 2#usize<4#usize),
+    if_pos (by decide : 3#usize<4#usize),if_neg (by decide : ¬5#usize<4#usize),
+    if_neg (by decide : ¬6#usize<4#usize),
+    show Usize.wrapping_sub 1#usize 1#usize=0#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 2#usize 1#usize=1#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 3#usize 1#usize=2#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 5#usize 2#usize=3#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,
+    show Usize.wrapping_sub 6#usize 2#usize=4#usize from by apply UScalar.eq_of_val_eq; rw [ProverCommitSampleBits49.sub_value _ _ (by decide)]; rfl,bind_tc_ok]
+  exact congrArg (fun m : Result Matrix => m >>= fun r =>
+    stored.product r j 0#usize 5#u8 field.QM31.ONE) (index5 r0 r1 r2 r3 r4).2.2.2.2
+
+theorem row_eq (p0 p1 p2 : Point) (r0 r1 r2 r3 r4 : Matrix)
+    (a8 a9 x0 y0 x1 y1 : Q)
+    (h0 : point_rows.all p0=ok r0) (h1 : point_rows.all p1=ok r1) (h2 : point_rows.all p2=ok r2)
+    (h3 : factors.circle_rows x0 y0=ok r3) (h4 : factors.circle_rows x1 y1=ok r4) (j : Usize) :
+    weights53.row (state p0 p1 p2 r0 r1 r2 r3 r4 a8 a9) j=
+      ProverCommitRawValues49.run p0 p1 p2 a8 a9 x0 y0 x1 y1 j := by
+  unfold weights53.row ProverCommitRawValues49.run
+    ProverCommitStoredCaller49.point ProverCommitStoredCaller49.circle
+  simp only [h0,h1,h2,h3,h4,bind_tc_ok,raw_zero,raw_1,raw_2,raw_3,raw_4,raw_5,raw_6]
+
+#print axioms index5
+#print axioms raw_zero
+#print axioms raw_1
+#print axioms raw_2
+#print axioms raw_3
+#print axioms raw_4
+#print axioms raw_5
+#print axioms raw_6
+#print axioms row_eq
+end R1Z.ProverCommitWeightsStorage53

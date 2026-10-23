@@ -1,0 +1,7 @@
+import AspisR1.CompositionPartsAfterValidationExact
+import AspisR1.PoseidonCandidatePackedFamilyResidual
+import TerminalPartsArithmeticExact
+
+#print axioms AspisR1.CompositionPartsAfterValidationExact.run_success_of_poseidon_contract
+#print axioms AspisR1.PoseidonCandidatePackedFamilyResidual.boxed_candidate_is_packed_family
+#print axioms AspisR1.TerminalPartsArithmeticExact.run_exact

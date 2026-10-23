@@ -1,0 +1,86 @@
+import PoseidonLeadingPairExact
+import PoseidonInterpolatedFullPairExact
+import PoseidonCandidateProjectedScalarResidualFromBoxedV4
+
+/-! Callable contract for the retained source cut. This discharges the leading
+and full branch success/model premises. The cut's Rust/extraction provenance
+remains the explicit boundary recorded by the imported wrapper module. -/
+set_option autoImplicit false
+namespace AspisR1.PoseidonCallable53
+noncomputable section
+open Aeneas Aeneas.Std Result
+open AspisR1SelectedMaskProbe
+abbrev QM := field.QM31
+abbrev Point := Array QM 10#usize
+abbrev Openings := state_only_poseidon.StateOnlyPoseidonOpenings
+abbrev Selectors := pool_v1.pair_forest_copy_terminal.Selectors
+abbrev Packed := Array QM 4#usize
+abbrev Exact := AspisV8R15.ExactTowerBase.QM31Exact
+abbrev Canonical := AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM
+abbrev CanonicalArray := AspisR1.SumHighInnerLoop.CanonicalArray
+abbrev decode := AspisR1.ExtractedMaskQM31Exact.decode
+abbrev cell := AspisR1.PoseidonClosure2ArrayExact.cell4
+abbrev pointSelector := AspisR1.SelectorValueLaneModelComposition.pointSelector
+abbrev decodedOpenings := AspisR1.PoseidonSamePointResidualModel.decodedOpenings
+abbrev lane := AspisR1.PoseidonExternalPackedModel.lane
+abbrev iBasis := AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
+abbrev uBasis := AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis
+
+def source (openings : Openings) (selectors : Selectors) : Result Packed := do
+  let prepared ← AspisR1.PoseidonSelectorsSource.source selectors
+  AspisR1.PoseidonCandidateProjectedWrapperFactor.candidate_projected_source openings prepared
+
+def model (point : Point) (openings : Openings) (_selectors : Selectors) (g : Fin 4) : Exact :=
+  R0P.poseidonPackingFormula iBasis uBasis (fun j =>
+    R0P.poseidonScalarResidual (decodedOpenings openings)
+      (R0P.g2SumHigh (pointSelector point) 0 57 (by omega))
+      (R0P.g2Low (pointSelector point)) (lane g j))
+
+/-- Every output image and both packed branch calls are conclusions, rather
+than hypotheses. Canonical point and three canonical opening arrays suffice. -/
+theorem source_success
+    (openings : Openings) (point : Point) (selectors : Selectors)
+    (hpoint : CanonicalArray point)
+    (hz : CanonicalArray openings.z) (hsucc : CanonicalArray openings.succ_z)
+    (hxor : CanonicalArray openings.xor12_z)
+    (hbox : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = .ok selectors) :
+    ∃ out : Packed, source openings selectors = .ok out ∧
+      CanonicalArray out ∧ ∀ g : Fin 4, decode (cell out g) = model point openings selectors g := by
+  obtain ⟨prepared,hprepared,_,hlocal,hlocalEq,_,hlow⟩ :=
+    AspisR1.PoseidonSelectorsSource.boxed_success point selectors hpoint hbox
+  have hlowCan : CanonicalArray selectors.low := by
+    rw [hlocalEq] at hlocal
+    exact hlocal
+  have hlowModel : AspisR1.PoseidonInterpolatedFullPairExact.decodedState selectors.low =
+      R0P.g2Low (pointSelector point) := by
+    funext i
+    have hi : i.val < (16#usize).val := by simpa using i.isLt
+    have h := hlow i
+    rw [hlocalEq] at h
+    dsimp only [AspisR1.SelectorExpansionCorrectness.decodedArray,
+      AspisR1.SelectorExpansionCorrectness.decodedAt] at h
+    rw [dif_pos hi] at h
+    exact h
+  obtain ⟨leading,hleading,hleadingCan,hleadingModel⟩ :=
+    AspisR1.PoseidonLeadingPairExact.source_success openings hz hxor
+  obtain ⟨full,hfull,hfullCan,hfullModel⟩ :=
+    AspisR1.PoseidonInterpolatedFullPairExact.qm_source_success openings.z selectors.low hz hlowCan
+  have hfullValue : ∀ g : Fin 4, decode (cell full g) =
+      R0P.poseidonPackingFormula iBasis uBasis (fun j =>
+        R0P.poseidonInterpolatedFullPair (decodedOpenings openings).z
+          (R0P.g2Low (pointSelector point)) (lane g j)) := by
+    intro g
+    have h := hfullModel g
+    rw [hlowModel] at h
+    exact h
+  obtain ⟨prepared',internal,out,hprepared',hinternal,hout,hcan,hvalue⟩ :=
+    AspisR1.PoseidonCandidateProjectedScalarResidualFromBoxed.boxed_candidate_actual_scalar_residual
+      openings point selectors leading full hpoint hz hsucc hbox
+      hleading hfull hleadingCan hfullCan hleadingModel hfullValue
+  refine ⟨out,?_,hcan,hvalue⟩
+  simp only [source,hprepared',bind_tc_ok]
+  exact hout
+
+#print axioms source_success
+end
+end AspisR1.PoseidonCallable53

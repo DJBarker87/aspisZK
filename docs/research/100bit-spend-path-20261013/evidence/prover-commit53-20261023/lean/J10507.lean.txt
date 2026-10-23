@@ -1,0 +1,94 @@
+import AspisR1.CompositionCallable53
+import R1Z.ProverCommitQBasis51
+import AspisR1.PoseidonCandidatePackedFamilyResidual
+
+/-! Identify the complete retained 29-lane coefficient vector with the existing
+SemSource terminal model, using symbolic selector marginals and small slots. -/
+set_option autoImplicit false
+namespace AspisR1.TerminalLaneModel53
+noncomputable section
+open Aeneas Aeneas.Std Result
+open AspisR1SelectedMaskProbe
+open AspisR1.SemanticCompositionCoefficients
+abbrev Point := Array QM 10#usize
+abbrev Basis := R1Z.ProverCommitQBasis51.basis
+abbrev Selectors := pool_v1.pair_forest_copy_terminal.Selectors
+abbrev Public := pool_v1.pair_forest_semantic_terminal.SemanticPublic
+abbrev decode := AspisR1.ExtractedMaskQM31Exact.decode
+abbrev modelPoint := AspisR1.SelectorMarginalModel.modelPoint
+attribute [local irreducible] R0P.copyEvaluateWithSelectors R0P.copyLinks
+
+/-- Exact selector marginals from the source boxed constructor. -/
+theorem selectors_eq (point : Point) (selectors : Selectors)
+    (hpoint : CanonicalArray point)
+    (hbox : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = .ok selectors) :
+    AspisR1.CopyEndpointExact.modelSelectors selectors =
+      R0P.copySelectors (pointSelector point) := by
+  obtain ⟨_,_,hhigh,hlow⟩ := AspisR1.SelectorMarginalModel.boxed_marginals point selectors hpoint hbox
+  apply R0P.CopySelectors.ext
+  · exact funext hhigh
+  · exact funext hlow
+
+/-- Symbolic bounded List.ofFn read, independent of the field representation. -/
+theorem ofFn_getD {A : Type} {n : Nat} (f : Fin n → A) (i : Nat) (hi : i<n) (d : A) :
+    (List.ofFn f).getD i d = f ⟨i,hi⟩ := by
+  simp only [List.getD_eq_getElem?_getD,List.getElem?_ofFn,dif_pos hi,Option.getD_some]
+
+def copyValue (public1 : Public) (openings : Openings) (selectors : Selectors)
+    (helper lambda chi : QM) : ExactQM :=
+  (R0P.copyEvaluateWithSelectors (AspisR1.CopyEndpointExact.decodedCells openings.z)
+    (decode helper) (AspisR1.CopyEndpointExact.modelSelectors selectors)
+    (decode lambda) (decode chi) public1.transition.live_snapshot.next_pair_index.val
+    (AspisR1.CopyLinkWeightExact.modelVariant
+      (AspisR1.CompositionPartsAfterValidation.copyVariant public1.variant))).1
+
+def lanes (public1 : Public) (point : Point) (openings : Openings) (selectors : Selectors)
+    (helper lambda chi : QM) : Fin 29 → ExactQM :=
+  lanesFromModels (PoseidonCallable53.model point openings selectors)
+    (semanticLane24 public1 openings point) (copyValue public1 openings selectors helper lambda chi)
+
+theorem copyValue_eq (public1 : Public) (point : Point) (openings : Openings)
+    (selectors : Selectors) (helper lambda chi : QM)
+    (hpoint : CanonicalArray point)
+    (hbox : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = .ok selectors) :
+    copyValue public1 openings selectors helper lambda chi =
+      ((R0P.copyFamily (K := ExactQM)).residuals (exactPublic public1)
+        (decode lambda) (decode chi) (exactOpenings openings) (decode helper)
+        (pointSelector point)).getD 0 0 := by
+  have hv : AspisR1.CopyLinkWeightExact.modelVariant
+      (AspisR1.CompositionPartsAfterValidation.copyVariant public1.variant) =
+      (exactPublic public1).variant := by
+    cases public1.variant <;> rfl
+  unfold copyValue
+  rw [selectors_eq point selectors hpoint hbox,hv]
+  rfl
+
+/-- No independent semantic, Poseidon or Copy lane identity is assumed. -/
+theorem lanes_eq (public1 : Public) (point : Point) (openings : Openings)
+    (selectors : Selectors) (helper lambda chi : QM)
+    (hpoint : CanonicalArray point)
+    (hbox : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = .ok selectors) :
+    lanes public1 point openings selectors helper lambda chi =
+      R0P.SemSource.laneAt (exactPublic public1) (decode lambda) (decode chi) Basis
+        (exactOpenings openings) (decode helper) (R0P.SemSource.selAt (modelPoint point)) := by
+  rw [← AspisR1.SelectorMarginalModel.pointSelector_eq_selAt]
+  funext i
+  by_cases h4 : i.val<4
+  · simp only [lanes,lanesFromModels,dif_pos h4,R0P.SemSource.laneAt,if_pos h4]
+    rw [AspisR1.PoseidonCandidatePackedFamilyResidual.packed_family_formula]
+    rw [ofFn_getD _ _ h4]
+    rfl
+  · by_cases h28 : i.val<28
+    · simp only [lanes,lanesFromModels,dif_neg h4,dif_pos h28,
+        R0P.SemSource.laneAt,if_neg h4,if_pos h28]
+      rfl
+    · simp only [lanes,lanesFromModels,dif_neg h4,dif_neg h28,
+        R0P.SemSource.laneAt,if_neg h4,if_neg h28]
+      exact copyValue_eq public1 point openings selectors helper lambda chi hpoint hbox
+
+#print axioms selectors_eq
+#print axioms ofFn_getD
+#print axioms copyValue_eq
+#print axioms lanes_eq
+end
+end AspisR1.TerminalLaneModel53

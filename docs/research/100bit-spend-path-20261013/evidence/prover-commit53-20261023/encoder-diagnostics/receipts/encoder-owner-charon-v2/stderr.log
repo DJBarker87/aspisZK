@@ -1,0 +1,38 @@
+   Compiling aspis-r1-encoder53 v0.1.0 (/home/dombarker/project-offloads/codex-cx-prover-commit53-20261023/encoder-owner)
+error[E0599]: no associated function or constant named `from_m31` found for struct `field::wide_exact::WideExact` in the current scope
+   --> lib.rs:15:39
+    |
+ 15 |  eval_rec(&even,depth+1,nodes).add(E::from_m31(nodes[depth]).mul(eval_rec(&odd,depth+1,nodes)))
+    |                                       ^^^^^^^^ associated function or constant not found in `field::wide_exact::WideExact`
+    |
+   ::: field/wide_exact.rs:28:1
+    |
+ 28 | pub struct WideExact {
+    | -------------------- associated function or constant `from_m31` not found for this struct
+    |
+note: if you're trying to build a new `field::wide_exact::WideExact` consider using one of the following associated functions:
+      field::wide_exact::WideExact::new
+      field::wide_exact::WideExact::from_qm31
+      field::wide_exact::WideExact::from_limbs
+      field::wide_exact::WideExact::from_le_bytes
+   --> field/wide_exact.rs:55:5
+    |
+ 55 |     pub fn new(c0: QM31, c1: QM31) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 73 |     pub fn from_qm31(value: QM31) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+207 |     pub fn from_limbs(limbs: [u32; Self::LIMB_COUNT]) -> Option<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+255 |     pub fn from_le_bytes(bytes: &[u8]) -> Option<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: there is an associated function `from_qm31` with a similar name
+    |
+ 15 |  eval_rec(&even,depth+1,nodes).add(E::from_qm31(nodes[depth]).mul(eval_rec(&odd,depth+1,nodes)))
+    |                                            +
+
+For more information about this error, try `rustc --explain E0599`.
+ERROR Code failed to compile
+error: could not compile `aspis-r1-encoder53` (lib) due to 1 previous error
