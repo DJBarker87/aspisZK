@@ -241,3 +241,8 @@ or instances; all 614 theorem-name overlaps have exactly identical types.
 See evidence/import-union-20261022/summary.json for source revisions, resource
 fields, the two unchanged Formatter helper-audit exceptions, and full receipts.
 Candidate adoption remains Session A's work; no lean-candidates source was edited.
+
+When adopting S3, update the aggregate diagnostic check of the old anonymous
+`instDiscriminantErrorIsize` to the new qualified S3 instance name (or use
+`#synth Aeneas.Std.Discriminant AspisR1S3InactiveSource.r0.Error Aeneas.Std.Isize`).
+That old-name check intentionally describes the retained, untouched candidate.
