@@ -1,0 +1,94 @@
+S2W_TraceSplice.lean:10:68: error: unexpected token 'prefix'; expected '_' or identifier
+S2W_TraceSplice.lean:10:74: error: unexpected identifier; expected ':'
+S2W_TraceSplice.lean:11:24: error: unexpected token '++'; expected ':'
+S2W_TraceSplice.lean:12:40: error: unexpected token '++'; expected ':'
+S2W_TraceSplice.lean:78:75: error: unsolved goals
+case this
+E : Type
+ops : AdapterRw.Ops
+port : ChildConeJoin E ops
+first : FirstMarks port
+second : SecondMarks port
+outer : Log
+shape : tags outer = [false, true]
+pre : Log
+e1 : S2W_Trace.Event
+rest : List S2W_Trace.Event
+same : outer = pre ++ e1 :: rest
+left✝¹ : tags pre = []
+m1 : mark e1 = some false
+remaining : tags rest = [true]
+middle : Log
+e2 : S2W_Trace.Event
+post : List S2W_Trace.Event
+same2 : rest = middle ++ e2 :: post
+left✝ : tags middle = []
+m2 : mark e2 = some true
+right✝ : tags post = []
+fs : S2W_SiteSchedule.FirstSegments (Option E)
+layout1 : List.map project (events port e1) = S2W_SiteSchedule.firstTrace fs
+ss : S2W_SiteSchedule.SecondSegments (Option E)
+layout2 : List.map project (events port e2) = S2W_SiteSchedule.secondTrace ss
+⊢ ?m.142
+
+E : Type
+ops : AdapterRw.Ops
+port : ChildConeJoin E ops
+first : FirstMarks port
+second : SecondMarks port
+outer : Log
+shape : tags outer = [false, true]
+pre : Log
+e1 : S2W_Trace.Event
+rest : List S2W_Trace.Event
+same : outer = pre ++ e1 :: rest
+left✝¹ : tags pre = []
+m1 : mark e1 = some false
+remaining : tags rest = [true]
+middle : Log
+e2 : S2W_Trace.Event
+post : List S2W_Trace.Event
+same2 : rest = middle ++ e2 :: post
+left✝ : tags middle = []
+m2 : mark e2 = some true
+right✝ : tags post = []
+fs : S2W_SiteSchedule.FirstSegments (Option E)
+layout1 : List.map project (events port e1) = S2W_SiteSchedule.firstTrace fs
+ss : S2W_SiteSchedule.SecondSegments (Option E)
+layout2 : List.map project (events port e2) = S2W_SiteSchedule.secondTrace ss
+this : ?m.142 := ?this
+⊢ ∃ pre middle fs ss, projected port outer = S2W_SiteSchedule.timeline pre middle fs ss
+S2W_TraceSplice.lean:74:8: error: (kernel) declaration has metavariables 'AspisR1.S2W_TraceSplice.expanded_schedule'
+S2W_TraceSplice.lean:83:12: error: unexpected token ':='; expected ':'
+S2W_TraceSplice.lean:86:16: error: unexpected token ','; expected ':'
+S2W_TraceSplice.lean:93:19: error: unexpected token ','; expected ':'
+S2W_TraceSplice.lean:96:14: error(lean.unknownIdentifier): Unknown constant `run_shift`
+'AspisR1.S2W_TraceSplice.split_tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.invocation_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.invocation_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.expanded_schedule' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ expanded_schedule]
+structure AspisR1.S2W_TraceSplice.FirstMarks {E : Type} {ops : AdapterRw.Ops} (port : ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.FirstMarks.source : ∀ (event : S2W_Trace.Event),
+      mark event = some false → ∃ fs, List.map project (events port event) = S2W_SiteSchedule.firstTrace fs
+constructor:
+  AspisR1.S2W_TraceSplice.FirstMarks.mk {E : Type} {ops : AdapterRw.Ops} {port : ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        mark event = some false → ∃ fs, List.map project (events port event) = S2W_SiteSchedule.firstTrace fs) :
+    FirstMarks port
+structure AspisR1.S2W_TraceSplice.SecondMarks {E : Type} {ops : AdapterRw.Ops} (port : ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.SecondMarks.source : ∀ (event : S2W_Trace.Event),
+      mark event = some true → ∃ ss, List.map project (events port event) = S2W_SiteSchedule.secondTrace ss
+constructor:
+  AspisR1.S2W_TraceSplice.SecondMarks.mk {E : Type} {ops : AdapterRw.Ops} {port : ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        mark event = some true → ∃ ss, List.map project (events port event) = S2W_SiteSchedule.secondTrace ss) :
+    SecondMarks port

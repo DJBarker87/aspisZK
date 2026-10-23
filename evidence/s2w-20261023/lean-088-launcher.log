@@ -1,0 +1,57 @@
+{"attempt": "lean-088", "exit_status": 1, "wall_seconds": 2.4956919760006713, "peak_rss_kib": "4401088", "swaps": "0", "print_axioms": ["'AspisR1.S2W_TraceSplice.split_tag' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_TraceSplice.invocation_first' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_TraceSplice.invocation_second' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_TraceSplice.expanded_schedule' depends on axioms: [propext,\n Classical.choice,\n Quot.sound,\n expanded_schedule]"]}
+S2W_TraceSplice.lean:10:68: error: unexpected token 'prefix'; expected '_' or identifier
+S2W_TraceSplice.lean:10:74: error: unexpected identifier; expected ':'
+S2W_TraceSplice.lean:11:24: error: unexpected token '++'; expected ':'
+S2W_TraceSplice.lean:12:40: error: unexpected token '++'; expected ':'
+S2W_TraceSplice.lean:78:75: error: unsolved goals
+case this
+E : Type
+ops : AdapterRw.Ops
+port : ChildConeJoin E ops
+first : FirstMarks port
+second : SecondMarks port
+outer : Log
+shape : tags outer = [false, true]
+pre : Log
+e1 : S2W_Trace.Event
+rest : List S2W_Trace.Event
+same : outer = pre ++ e1 :: rest
+left✝¹ : tags pre = []
+m1 : mark e1 = some false
+remaining : tags rest = [true]
+middle : Log
+
+...
+pected token ','; expected ':'
+S2W_TraceSplice.lean:96:14: error(lean.unknownIdentifier): Unknown constant `run_shift`
+'AspisR1.S2W_TraceSplice.split_tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.invocation_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.invocation_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.expanded_schedule' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ expanded_schedule]
+structure AspisR1.S2W_TraceSplice.FirstMarks {E : Type} {ops : AdapterRw.Ops} (port : ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.FirstMarks.source : ∀ (event : S2W_Trace.Event),
+      mark event = some false → ∃ fs, List.map project (events port event) = S2W_SiteSchedule.firstTrace fs
+constructor:
+  AspisR1.S2W_TraceSplice.FirstMarks.mk {E : Type} {ops : AdapterRw.Ops} {port : ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        mark event = some false → ∃ fs, List.map project (events port event) = S2W_SiteSchedule.firstTrace fs) :
+    FirstMarks port
+structure AspisR1.S2W_TraceSplice.SecondMarks {E : Type} {ops : AdapterRw.Ops} (port : ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.SecondMarks.source : ∀ (event : S2W_Trace.Event),
+      mark event = some true → ∃ ss, List.map project (events port event) = S2W_SiteSchedule.secondTrace ss
+constructor:
+  AspisR1.S2W_TraceSplice.SecondMarks.mk {E : Type} {ops : AdapterRw.Ops} {port : ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        mark event = some true → ∃ ss, List.map project (events port event) = S2W_SiteSchedule.secondTrace ss) :
+    SecondMarks port
+
+Running as unit: run-r121e5b10801c450294efd0229c826901.scope; invocation ID: 8883621442cf46b29f584aa5849270df
