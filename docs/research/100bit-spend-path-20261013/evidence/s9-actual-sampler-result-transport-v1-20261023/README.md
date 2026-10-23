@@ -1,0 +1,3 @@
+PROVED: the focused actual sampler digit loops equal the existing public sampler loops for every state, and the actual whole sample Result maps coordinate-for-coordinate to the public sampler Result. The transport preserves success, failure and divergence and handles distinct nominal field types explicitly. It reuses the checked callback bridge and recorded typed shift-count compatibility port; it is not an ELF or whole-protocol refinement.
+
+Focused Lean check: 8.406 seconds; peak aggregate RSS 3200679936 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

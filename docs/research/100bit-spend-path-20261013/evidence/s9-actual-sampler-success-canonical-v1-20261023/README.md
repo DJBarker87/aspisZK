@@ -1,0 +1,3 @@
+PROVED: a successful call of the focused actual sampler returns a field element canonical in the existing current-field representation. This composes the coordinate-preserving full Result transport with the existing public sampler theorem, using the same block and returned value. Success remains an explicit premise; despite the historical module filename this packet does not claim actual sampler totality, runtime linkage or whole-protocol soundness.
+
+Focused Lean check: 14.166 seconds; peak aggregate RSS 3253387264 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

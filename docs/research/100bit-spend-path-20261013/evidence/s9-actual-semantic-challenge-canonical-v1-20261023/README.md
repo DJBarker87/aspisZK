@@ -1,0 +1,3 @@
+PROVED: the same successful focused actual semantic_validated execution returns a canonical challenge. The theorem reuses the checked readback of the sampler call made by that execution and its canonicality transport; it requires no independent successful sampler call. The focused owner and typed shift-count compatibility port are explicit boundaries. Full semantic-round/caller, runtime and security refinement remain open.
+
+Focused Lean check: 6.591 seconds; peak aggregate RSS 3215081472 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

@@ -1045,3 +1045,15 @@ swap), with only standard axioms. Its canonical alpha and ap0/ap1 input
 contracts and the same helper success remain explicit; it does not assert
 whole Pair caller refinement. Packets: s9-sampler-digit-loop-transport-v1-20261023
 and s9-constructor-helper-joint-v3-20261023.
+
+PROVED sampler source-owner bridge: the complete sampler Result now maps
+coordinate-for-coordinate to the existing public sampler, preserving failure
+and divergence (8.406 s focused check). The same successful actual sampler
+returns a canonical value (14.166 s), and the same successful focused
+semantic_validated execution returns that canonical challenge without an
+independent sampler-success premise (6.591 s). All three report standard
+axioms and zero swap, with approximately 3.2–3.3 GB peak aggregate RSS.
+These results reuse the existing public sampler theorem and the previous
+same-execution readback. Their source owner retains the explicitly typed
+shift-count compatibility port; semantic-round/caller correspondence and
+release artifact refinement are not thereby closed.
