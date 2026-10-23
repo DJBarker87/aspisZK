@@ -14,7 +14,7 @@ assert native.count('accounts[2].try_borrow_mut_data()?.copy_from_slice(&checkpo
 assert harness.count('accounts[2].try_borrow_mut_data()?.copy_from_slice(&checkpoint);')==1
 assert sha(L/'S2W_Snapshot.lean')==json.loads((E/'snapshot-emission/adaptation.json').read_text())['adapted_sha256']
 allowed={'propext','Classical.choice','Quot.sound'}
-current={'S2W_OracleAudit':'lean-001','S2W_Snapshot':'lean-003','S2W_SnapshotFacts':'lean-010','S2W_SnapshotJoin':'lean-012','S2W_Audit':'lean-013','S2W_Trace':'lean-016','S2W_Outer':'lean-021','S2W_OuterErasure':'lean-032','S2W_TraceFacts':'lean-026','S2W_Observation':'lean-033','S2W_ChildTrace':'lean-035','S2W_ContinuationAudit':'lean-037'}
+current={'S2W_OracleAudit':'lean-001','S2W_Snapshot':'lean-003','S2W_SnapshotFacts':'lean-010','S2W_SnapshotJoin':'lean-012','S2W_Audit':'lean-013','S2W_Trace':'lean-016','S2W_Outer':'lean-021','S2W_OuterErasure':'lean-032','S2W_TraceFacts':'lean-026','S2W_Observation':'lean-033','S2W_ChildTrace':'lean-035','S2W_ContinuationAudit':'lean-037','S2W_TrustedStd':'lean-038','S2W_ChildJoins':'lean-040','S2W_ClosureAudit':'lean-042'}
 for module,a in current.items():
  p=E/a/'receipt.json';v=json.loads(p.read_text());assert v['exit_status']==0
  assert v['source_hashes'][module+'.lean']==sha(L/(module+'.lean'))
@@ -32,7 +32,11 @@ for p in sorted(E.glob('*/receipt.json')):
  for f,digest in x['source_hashes'].items():assert sha(p.parent/'sources'/f)==digest,(p,f)
  assert (E/(x['attempt']+'-reservation.json')).exists(),p
  receipts.append({k:x.get(k) for k in ['attempt','kind','source_revision','source_hashes','deps_fingerprint','command','exit_status','wall_seconds','peak_rss_kib','swaps','cgroup_memory_peak_bytes','print_axioms']})
-lean=sum(x['kind']=='lean' for x in receipts);kani=sum(x['kind'].startswith('kani') for x in receipts)
+lean_compiles=sum(x['kind']=='lean' for x in receipts)
+preflights=[p.stem for p in sorted((R/'tools/s2w-20261023').glob('lean-*.json')) if not (E/p.stem/'receipt.json').exists()]
+assert preflights==['lean-039'],preflights
+assert 'FileNotFoundError: S2Y_ForestPublic' in (E/'lean-039-launcher.log').read_text()
+lean=lean_compiles+len(preflights);kani=sum(x['kind'].startswith('kani') for x in receipts)
 assert lean<=100 and kani<=60
 fields={
  'proofBytes':'Conditional inherited; same native invocation/site observations and authenticated TX2 proof identity open',
@@ -41,15 +45,15 @@ fields={
  'proofLength':'Discharged by inherited AdapterRw accepted TX1 proof shapes (actual native association still enclosing obligation)',
  'checkpointBytes':'Conditional inherited; CheckpointVersionBinding plus save/tx2/resume native cuts open',
  'checkpointLength':'Improved local source join: snapshot return + accepted owned TX1 derive1768 without OwnedSnapshotShape/entrySize; native association/savedAtWrite open',
- 'nodeViews':'Conditional inherited; NodeRanges, sameStoredProof and actual parser/physical internal sites open',
- 'y1Input':'Conditional inherited; firstChildY1Range, tx1ProofObservation and actual parser/internal site open',
+ 'nodeViews':'Child conditional via S2W_ChildJoins.internal_geometry; parser and NodeRanges are named first-entry/multiproof child boundaries, not S2 obligations; native embedding and runtime proof identity open',
+ 'y1Input':'Child conditional via S2W_ChildJoins.internal_geometry; primitive y1 range is S8 boundary, not S2 obligation; native tx1 argument projection open',
  'observerNone':'Conditional inherited; extracted observer=None; propagation into actual internal reached sites open',
  'reachedPrefix':'Open at native/internal sites; one accepted extracted outer trace and exact append-prefix split proved',
  'callOrder':'Open at nine native/internal sites; actual extracted TX1/TX2 trace segments are ordered, not synthetic rank clocks',
- 'accountFrame':'Open globally; native checkpoint-write destination leaf passed; other allocations/children/composition open',
+ 'accountFrame':'Open native wrapper composition; authorized std-copy full frame and local write leaf proved; account allocation/child-to-wrapper association remains',
  'writtenMetadata':'Open globally; per-operation destination metadata/lamports preservation passed; native site join open',
  'oracle':'Conditional; NativeBinding open, RuntimeSyscall successful-return law insufficient for exact unrestricted field; independently proved total-return/source theorem needed'}
-manifest={'schema':'focused-extractor-proof-packet-v1','source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'qualification':'Focused cached new modules and standalone native leaf gates. Extracted outer trace/erasure proved; no full native/internal-site observation, S2CallerFacts theorem or coherent release replay. Failed recovery axioms excluded. GNU time peak for timeout kani005 is parent-only; cgroup peak retained.','budget':{'lean_used':lean,'lean_limit':100,'kani_used':kani,'kani_limit':60},'current_lean':current,'fields':fields,'receipts':receipts,'production_source_pins':inv['sources'],'release_pins_reused':inv['release_pins']}
+manifest={'schema':'focused-extractor-proof-packet-v1','source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'qualification':'Focused cached source and child-boundary proofs, authorized pure std copy contract, and native leaf gates. All owned helper bodies already extracted. Native entry extraction still unsupported; no native S2CallerFacts or coherent release replay. Required14 oracle implies unrestricted backend return, not derived from successful-return RuntimeSyscall. Failed recovery axioms excluded. GNU time peak for timeout kani005 is parent-only; cgroup peak retained.','budget':{'lean_used':lean,'lean_compile_invocations':lean_compiles,'lean_preflight_failures':preflights,'lean_limit':100,'kani_used':kani,'kani_limit':60},'new_trust':['S2W_TrustedStd.TrustedStd.slice_copy_from_slice'],'child_join_structures':['FirstEntryVerifierConeJoin','MultiproofConeJoin','S8StageConeJoin','S7StageConeJoin','CheckpointConeJoin','FullForestConeJoin'],'current_lean':current,'fields':fields,'receipts':receipts,'production_source_pins':inv['sources'],'release_pins_reused':inv['release_pins']}
 text=json.dumps(manifest,indent=2)+'\n'
 if '--check' in sys.argv:
  old=json.loads((E/'manifest.json').read_text());assert {k:v for k,v in old.items() if k!='source_revision'}=={k:v for k,v in manifest.items() if k!='source_revision'}
