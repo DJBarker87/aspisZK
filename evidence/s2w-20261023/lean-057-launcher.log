@@ -1,0 +1,50 @@
+{"attempt": "lean-057", "exit_status": 1, "wall_seconds": 2.089879048988223, "peak_rss_kib": "4389900", "swaps": "0", "print_axioms": ["'AspisR1.S2W_NativeConsolidation.cuts_of_acceptance' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.S2W_NativeConsolidation.accepted_native_consolidation' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]"]}
+S2W_NativeConsolidation.lean:76:4: error: Type mismatch: After simplification, term
+  congrArg bytesOf shape2
+ has type
+  @Eq Bytes (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑raw2)
+    (List.take (↑688#usize) (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑raw2) ++
+      List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑proof2)
+but is expected to have type
+  @Eq Bytes (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑raw2)
+    (List.take 688 (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑raw2) ++
+      List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑proof2)
+'AspisR1.S2W_NativeConsolidation.cuts_of_acceptance' depends on axioms: [propext, sorryAx, Classical.choic
+...
+                                                                    (3 * b + k))) ∧
+                                                              y1 = S8JoinFrozenScan.segment f.proof 7031 464 ∧
+                                                                S8OwnedP6.check_values_owned y1 =
+                                                                  ok (core.result.Result.Ok ()) :=
+fun ops native1 native2 hashv extraction sha256 H p1 runtime program accounts1 accounts2 data1 data2 slot saved
+    accepted1 accepted2 =>
+  let ⟨f, h✝⟩ :=
+    cuts_of_acceptance ops native1 native2 hashv extraction program accounts1 accounts2 data1 data2 slot saved accepted1
+      accepted2
+  let ⟨s, cuts⟩ := h✝
+  let ⟨l1, h✝¹⟩ :=
+    accepted_native_observation ops native1 native2 hashv extraction program accounts1 accounts2 data1 data2 slot saved
+      accepted1 accepted2
+  let ⟨l2, h✝²⟩ := h✝¹
+  let ⟨suffix, h✝³⟩ := h✝²
+  let ⟨first, right✝⟩ := h✝³
+  let ⟨second, right✝¹⟩ := right✝
+  let ⟨both, right✝²⟩ := right✝¹
+  let ⟨extension, valid⟩ := right✝²
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro l1
+        (Exists.intro l2
+          (Exists.intro suffix
+            ⟨cuts,
+              ⟨first,
+                ⟨second,
+                  ⟨both,
+                    ⟨extension,
+                      ⟨valid,
+                        ⟨native_oracle ops native1 native2 hashv extraction sha256 H p1 runtime,
+                          fun decode y1 nodes writer reader version p2prime entry multiproof scan =>
+                          authenticated_geometry ops decode H f.semantic f.pub f.proof s.pub s.proof s.checkpoint y1
+                            nodes f.split saved cuts.first cuts.second writer reader version p2prime entry multiproof
+                            scan⟩⟩⟩⟩⟩⟩⟩))))
+
+Running as unit: run-r91e43d7233fe4e3bbfbe7f76cf8ff8ca.scope; invocation ID: 010e00f9ded64745b32cbd3ee2d70f5a

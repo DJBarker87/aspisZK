@@ -1,0 +1,42 @@
+'AspisR1.S2W_ExtractionBoundary.accepted_native_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_ExtractionBoundary.native_oracle' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_ExtractionBoundary.native_first_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_ExtractionBoundary.AeneasExtraction (ops : AdapterRw.Ops) (native1 : First) (native2 : Second)
+  (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction.stage1 : ∀ (program : Program) (accounts : Accounts)
+      (data : Slice U8),
+      native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction.stage2 : ∀ (program : Program) (accounts : Accounts) (data : Slice U8)
+      (slot : Slot),
+      native2 program accounts data slot = AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction.digest : ∀ (self : AdapterRw.SolanaDigest) (parts : Slice (Slice U8)),
+      ops.op43 self parts = hashv parts
+constructor:
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction.mk {ops : AdapterRw.Ops} {native1 : First} {native2 : Second}
+    {hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest}
+    (stage1 :
+      ∀ (program : Program) (accounts : Accounts) (data : Slice U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : Program) (accounts : Accounts) (data : Slice U8) (slot : Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digest : ∀ (self : AdapterRw.SolanaDigest) (parts : Slice (Slice U8)), ops.op43 self parts = hashv parts) :
+    AeneasExtraction ops native1 native2 hashv
+structure AspisR1.S2W_ExtractionBoundary.P1 (sha256 H : Bytes → State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.P1.realization : S2Z.Oracle.P1Realization sha256 H
+constructor:
+  AspisR1.S2W_ExtractionBoundary.P1.mk {sha256 H : Bytes → State} (realization : S2Z.Oracle.P1Realization sha256 H) :
+    P1 sha256 H
+structure AspisR1.S2W_ExtractionBoundary.RuntimeSyscall (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest)
+  (sha256 : Bytes → State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.returningValue : S2Z.Oracle.RuntimeSyscall hashv sha256
+constructor:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.mk {hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest}
+    {sha256 : Bytes → State} (returningValue : S2Z.Oracle.RuntimeSyscall hashv sha256) : RuntimeSyscall hashv sha256
