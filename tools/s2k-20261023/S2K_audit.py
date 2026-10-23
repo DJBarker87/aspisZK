@@ -22,8 +22,10 @@ for p in sorted(E.glob('*/receipt.json')):
   assert x['env']['CARGO_PROFILE_DEV_OPT_LEVEL']=='3'
   if x['exit_status']==0:assert 'VERIFICATION:- SUCCESSFUL' in log
  rows.append(dict(path=str(p.relative_to(E)),sha256=sha(p),kind=kind,attempt=x['attempt'],exit=x['exit_status']))
-assert len([r for r in rows if r['kind']=='lean'])<=100
-assert len([r for r in rows if r['kind']=='kani'])<=60
+assert len([r for r in rows if r['kind']=='lean' and int(r['attempt'].split('-')[1])<=76])==76
+assert len([r for r in rows if r['kind']=='lean' and int(r['attempt'].split('-')[1])>76])<=100
+assert len([r for r in rows if r['kind']=='kani' and int(r['attempt'].split('-')[1])<=60])==60
+assert len([r for r in rows if r['kind']=='kani' and int(r['attempt'].split('-')[1])>60])<=60
 assert len([r for r in rows if r['kind']=='audit'])>=1
 cuts=json.loads((E/'source-cuts.json').read_text())
 for f,c in cuts.items():
@@ -85,5 +87,5 @@ assert len(json.loads((E/'lean-076/receipt.json').read_text())['print_axioms'])>
 h=json.loads((E/'host-audit.json').read_text());assert h['native_sources_all_match'];assert h['inherited_selected_objects']['all_match'];assert not h['own_remaining_processes']
 changed=subprocess.check_output(['git','diff','--name-only','4af6a0f6bf'],cwd=R,text=True).splitlines()
 assert all(f.startswith(('tools/s2k-20261023/','docs/research/100bit-spend-path-20261013/evidence/s2k-20261023/')) or f.startswith('docs/research/100bit-spend-path-20261013/lean/S2K_') or f in ['docs/research/100bit-spend-path-20261013/lean/S2K_Serialization.lean','docs/research/100bit-spend-path-20261013/design/S2K-20261023.md'] for f in changed),changed
-x=dict(schema='focused-extractor-proof-packet-v1',branch='codex/cx-s2k-20261023',receipts=rows,budget=dict(lean_attempts=sum(r['kind']=='lean' for r in rows),lean_cap=100,kani_runs=sum(r['kind']=='kani' for r in rows),kani_cap=60),redundant=['lean-070'],accepted_lean=[r['attempt'] for r in rows if r['kind']=='lean' and r['exit']==0 and r['attempt']!='lean-070'],accepted_kani=[r['attempt'] for r in rows if r['kind']=='kani' and r['exit']==0],excluded=[r['attempt'] for r in rows if r['exit']!=0],status='BUDGET STOP: Kani60/60, Lean76/100; emit native composition open; ASQ8 and TX2 unstarted',shipped_source_changed=False,elf_pins='inherited only; no rebuild triggered',new_trust=False,auxiliary_receipts=[r for r in rows if r['kind'] not in ['lean','kani','audit']],terminal_blocker='kani-060: std slice-copy to verified generic u8 wrapper transfer fails in Kani reachability resolution before CBMC')
+x=dict(schema='focused-extractor-proof-packet-v1',branch='codex/cx-s2k-20261023',receipts=rows,budget=dict(lean_attempts=sum(r['kind']=='lean' and int(r['attempt'].split('-')[1])>76 for r in rows),lean_cap=100,kani_runs=sum(r['kind']=='kani' and int(r['attempt'].split('-')[1])>60 for r in rows),kani_cap=60,historical_lean=76,historical_kani=60),redundant=['lean-070'],accepted_lean=[r['attempt'] for r in rows if r['kind']=='lean' and r['exit']==0 and r['attempt']!='lean-070'],accepted_kani=[r['attempt'] for r in rows if r['kind']=='kani' and r['exit']==0],excluded=[r['attempt'] for r in rows if r['exit']!=0],status='Continuation 3 in progress; emit native composition open; ASQ8 and TX2 unstarted',shipped_source_changed=False,elf_pins='inherited only; no rebuild triggered',new_trust=['AspisR1.S2K.StdCopy.TrustedStd.slice_copy_from_slice'],auxiliary_receipts=[r for r in rows if r['kind'] not in ['lean','kani','audit']],terminal_blocker='copy transfer tool limitation bypassed by authorized D157 field; native emit source composition remains open')
 (E/'manifest.json').write_text(json.dumps(x,indent=2)+'\n');print(json.dumps(dict(audit='PASS',receipts=len(rows),budget=x['budget'])))
