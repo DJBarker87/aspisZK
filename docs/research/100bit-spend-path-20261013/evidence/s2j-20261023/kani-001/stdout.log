@@ -1,0 +1,43 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling autocfg v1.5.1
+   Compiling five8_core v0.1.2
+   Compiling solana-sanitize v2.2.1
+   Compiling solana-atomic-u64 v2.2.1
+   Compiling solana-msg v2.2.1
+   Compiling five8 v0.2.1
+   Compiling five8_const v0.1.4
+   Compiling num-traits v0.2.19
+   Compiling solana-decode-error v2.3.0
+   Compiling solana-pubkey v2.4.0
+   Compiling solana-instruction v2.3.3
+   Compiling solana-program-error v2.2.2
+   Compiling s2j-cut1 v0.1.0 (/home/dombarker/project-offloads/codex-cx-s2j-20261023/S2J-cut1)
+warning: function `S2J_cut1_unbound_invocation` should have a snake case name
+  --> src/lib.rs:25:4
+   |
+25 | fn S2J_cut1_unbound_invocation() {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `s2_j_cut1_unbound_invocation`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.96s
+Thread 0: Checking harness S2J_cut1_unbound_invocation...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 1 of 233 failed (4 unreachable)
+Failed Checks: assertion failed: native_cut1(&[], 3) == owned_cut1(&[3,10], 3)
+ File: "src/lib.rs", line 26, in S2J_cut1_unbound_invocation
+
+VERIFICATION:- FAILED
+Verification Time: 0.068198375s
+
+Manual Harness Summary:
+Verification failed for - S2J_cut1_unbound_invocation
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

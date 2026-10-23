@@ -1,0 +1,36 @@
+{
+  "attempt": "kani-001",
+  "kind": "kani",
+  "source_revision": "70219b1619464f8f883fff4ceb0d4fcfc5c8f2b9",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2J-cut1/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "--exact",
+    "--harness",
+    "S2J_cut1_unbound_invocation",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2J-cut1/Cargo.toml",
+    "S2J-cut1/src/lib.rs"
+  ],
+  "timeout": 120,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "deps_fingerprint": {
+    "scope": "first source guard only; native accounts.len projected; inherited CutRelated invocation blindness checked separately in Lean; no SDK/child reached"
+  },
+  "expected_time": "optimized tiny-crate compilation then constant cut1 relation diagnostic; no proof generation or elimination"
+}

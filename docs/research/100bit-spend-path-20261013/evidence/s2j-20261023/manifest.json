@@ -1,0 +1,108 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "status": "STOP at cut1: inherited relation lacks native invocation binding",
+  "budget": {
+    "lean": 2,
+    "kani": 1
+  },
+  "results": {
+    "kani-001": {
+      "kind": "kani",
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "--manifest-path",
+        "S2J-cut1/Cargo.toml",
+        "--target-dir",
+        "kani-target",
+        "-j",
+        "4",
+        "--exact",
+        "--harness",
+        "S2J_cut1_unbound_invocation",
+        "--output-format",
+        "terse"
+      ],
+      "source_revision": "70219b1619464f8f883fff4ceb0d4fcfc5c8f2b9",
+      "source_hashes": {
+        "S2J-cut1/Cargo.toml": "f80b8e9c05da7ba16febf349732dcd83dea1fb4915cad9b70e4f2ca9b921f099",
+        "S2J-cut1/src/lib.rs": "fd0cb77a8ea94de440b81ac1eca700078133f150c20ab9f070a8d6aca838f1e7"
+      },
+      "deps_fingerprint": {
+        "scope": "first source guard only; native accounts.len projected; inherited CutRelated invocation blindness checked separately in Lean; no SDK/child reached"
+      },
+      "exit_status": 1,
+      "wall_seconds": 1.360972603004484,
+      "peak_rss_kib": "170728",
+      "swaps": "0",
+      "print_axioms": "N/A: kani"
+    },
+    "lean-001": {
+      "kind": "lean",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2J_Cut1Obstruction.olean",
+        "S2J_Cut1Obstruction.lean"
+      ],
+      "source_revision": "70219b1619464f8f883fff4ceb0d4fcfc5c8f2b9",
+      "source_hashes": {
+        "S2J_Cut1Obstruction.lean": "9751cfe2479a00d1120d1fcad58e6821856e5e0092a8c721734db933cd93a2de"
+      },
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "682a58012af79b30191a075b835622371deb847ed59cdb62e0fe6e94d2b68290",
+        "selected_object_count": 48812,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "exit_status": 0,
+      "wall_seconds": 1.2999819260003278,
+      "peak_rss_kib": "2643900",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.S2J.invocation_blind' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2J.decisions_differ' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2J.cut1_relation_insufficient' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    "lean-002": {
+      "kind": "lean",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2J_Cut1Obstruction.olean",
+        "S2J_Cut1Obstruction.lean"
+      ],
+      "source_revision": "70219b1619464f8f883fff4ceb0d4fcfc5c8f2b9",
+      "source_hashes": {
+        "S2J_Cut1Obstruction.lean": "c71d9ca839ff8bae2f6bf1f578235961c8481cf877b925362ed3ad0919681e84"
+      },
+      "deps_fingerprint": {
+        "selected_overlay_sha256": "fc7f0df74f5acb823afd8c140b4075e1d14f9ceddced9c52be277109e209f779",
+        "selected_object_count": 48813,
+        "scope": "cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild"
+      },
+      "exit_status": 0,
+      "wall_seconds": 1.515957518000505,
+      "peak_rss_kib": "2640728",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.S2J.no_unbound_cut1_stepLaw' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2J.invocation_blind' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2J.decisions_differ' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2J.cut1_relation_insufficient' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    }
+  },
+  "native_cuts_closed": 0,
+  "required14_discharged": 0
+}
