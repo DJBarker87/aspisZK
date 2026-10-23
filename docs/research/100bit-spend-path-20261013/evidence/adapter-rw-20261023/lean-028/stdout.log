@@ -1,0 +1,3771 @@
+AdapterRwCuts.lean:79:2: warning: 'all_goals try simp only [error_bind_ne_ok] at *' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+AdapterRwCuts.lean:110:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro Account
+    (fun publicAccount =>
+      ∃ publicInput proofInput statement semantic selected split start finish,
+        accounts.index_usize 0#usize = ok ?m.6395 ∧
+          accounts.index_usize 1#usize = ok publicAccount ∧
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6395 = ok (core.result.Result.Ok proofInput) ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops publicAccount =
+                  ok (core.result.Result.Ok publicInput) ∧
+                ops.op49 publicInput = ok (core.result.Result.Ok statement) ∧
+                  ops.op23 statement = ok (core.result.Result.Ok ()) ∧
+                    statement.semantic_public = ok semantic ∧
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proofInput
+                            { start := start, «end» := finish } =
+                          ok selected ∧
+                        AdapterRw.first_decoded ops semantic publicInput selected split =
+                            ok (core.result.Result.Ok checkpoint) ∧
+                          proofInput.len = finish)
+    ?m.6398
+    (Exists.intro ?m.6401
+      (Exists.intro ?m.6404
+        (Exists.intro ?m.6407
+          (Exists.intro ?m.6410
+            (Exists.intro ?m.6413 (Exists.intro ?m.6416 (Exists.intro ?m.6419 (Exists.intro ?m.6422 ?m.6423))))))))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Account → Prop
+AdapterRwCuts.lean:110:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (Slice U8)
+    (fun publicInput =>
+      ∃ proofInput statement semantic selected split start finish,
+        accounts.index_usize 0#usize = ok ?m.6395 ∧
+          accounts.index_usize 1#usize = ok ?m.6398 ∧
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6395 = ok (core.result.Result.Ok proofInput) ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6398 = ok (core.result.Result.Ok publicInput) ∧
+                ops.op49 publicInput = ok (core.result.Result.Ok statement) ∧
+                  ops.op23 statement = ok (core.result.Result.Ok ()) ∧
+                    statement.semantic_public = ok semantic ∧
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proofInput
+                            { start := start, «end» := finish } =
+                          ok selected ∧
+                        AdapterRw.first_decoded ops semantic publicInput selected split =
+                            ok (core.result.Result.Ok checkpoint) ∧
+                          proofInput.len = finish)
+    ?m.6401
+    (Exists.intro ?m.6404
+      (Exists.intro ?m.6407
+        (Exists.intro ?m.6410
+          (Exists.intro ?m.6413 (Exists.intro ?m.6416 (Exists.intro ?m.6419 (Exists.intro ?m.6422 ?m.6423)))))))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Slice U8 → Prop
+AdapterRwCuts.lean:110:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (Slice U8)
+    (fun proofInput =>
+      ∃ statement semantic selected split start finish,
+        accounts.index_usize 0#usize = ok ?m.6395 ∧
+          accounts.index_usize 1#usize = ok ?m.6398 ∧
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6395 = ok (core.result.Result.Ok proofInput) ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6398 = ok (core.result.Result.Ok ?m.6401) ∧
+                ops.op49 ?m.6401 = ok (core.result.Result.Ok statement) ∧
+                  ops.op23 statement = ok (core.result.Result.Ok ()) ∧
+                    statement.semantic_public = ok semantic ∧
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proofInput
+                            { start := start, «end» := finish } =
+                          ok selected ∧
+                        AdapterRw.first_decoded ops semantic ?m.6401 selected split =
+                            ok (core.result.Result.Ok checkpoint) ∧
+                          proofInput.len = finish)
+    ?m.6404
+    (Exists.intro ?m.6407
+      (Exists.intro ?m.6410
+        (Exists.intro ?m.6413 (Exists.intro ?m.6416 (Exists.intro ?m.6419 (Exists.intro ?m.6422 ?m.6423))))))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Slice U8 → Prop
+AdapterRwCuts.lean:110:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+    (fun statement =>
+      ∃ semantic selected split start finish,
+        accounts.index_usize 0#usize = ok ?m.6395 ∧
+          accounts.index_usize 1#usize = ok ?m.6398 ∧
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6395 = ok (core.result.Result.Ok ?m.6404) ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6398 = ok (core.result.Result.Ok ?m.6401) ∧
+                ops.op49 ?m.6401 = ok (core.result.Result.Ok statement) ∧
+                  ops.op23 statement = ok (core.result.Result.Ok ()) ∧
+                    statement.semantic_public = ok semantic ∧
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ?m.6404
+                            { start := start, «end» := finish } =
+                          ok selected ∧
+                        AdapterRw.first_decoded ops semantic ?m.6401 selected split =
+                            ok (core.result.Result.Ok checkpoint) ∧
+                          Slice.len ?m.6404 = finish)
+    ?m.6407
+    (Exists.intro ?m.6410
+      (Exists.intro ?m.6413 (Exists.intro ?m.6416 (Exists.intro ?m.6419 (Exists.intro ?m.6422 ?m.6423)))))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 → Prop
+AdapterRwCuts.lean:110:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+    (fun semantic =>
+      ∃ selected split start finish,
+        accounts.index_usize 0#usize = ok ?m.6395 ∧
+          accounts.index_usize 1#usize = ok ?m.6398 ∧
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6395 = ok (core.result.Result.Ok ?m.6404) ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6398 = ok (core.result.Result.Ok ?m.6401) ∧
+                ops.op49 ?m.6401 = ok (core.result.Result.Ok ?m.6407) ∧
+                  ops.op23 ?m.6407 = ok (core.result.Result.Ok ()) ∧
+                    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                          ?m.6407 =
+                        ok semantic ∧
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ?m.6404
+                            { start := start, «end» := finish } =
+                          ok selected ∧
+                        AdapterRw.first_decoded ops semantic ?m.6401 selected split =
+                            ok (core.result.Result.Ok checkpoint) ∧
+                          Slice.len ?m.6404 = finish)
+    ?m.6410 (Exists.intro ?m.6413 (Exists.intro ?m.6416 (Exists.intro ?m.6419 (Exists.intro ?m.6422 ?m.6423))))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → Prop
+AdapterRwCuts.lean:110:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (Slice U8)
+    (fun selected =>
+      ∃ split start finish,
+        accounts.index_usize 0#usize = ok ?m.6395 ∧
+          accounts.index_usize 1#usize = ok ?m.6398 ∧
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6395 = ok (core.result.Result.Ok ?m.6404) ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6398 = ok (core.result.Result.Ok ?m.6401) ∧
+                ops.op49 ?m.6401 = ok (core.result.Result.Ok ?m.6407) ∧
+                  ops.op23 ?m.6407 = ok (core.result.Result.Ok ()) ∧
+                    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                          ?m.6407 =
+                        ok ?m.6410 ∧
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ?m.6404
+                            { start := start, «end» := finish } =
+                          ok selected ∧
+                        AdapterRw.first_decoded ops ?m.6410 ?m.6401 selected split =
+                            ok (core.result.Result.Ok checkpoint) ∧
+                          Slice.len ?m.6404 = finish)
+    ?m.6413 (Exists.intro ?m.6416 (Exists.intro ?m.6419 (Exists.intro ?m.6422 ?m.6423)))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Slice U8 → Prop
+AdapterRwCuts.lean:110:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro Usize
+    (fun split =>
+      ∃ start finish,
+        accounts.index_usize 0#usize = ok ?m.6395 ∧
+          accounts.index_usize 1#usize = ok ?m.6398 ∧
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6395 = ok (core.result.Result.Ok ?m.6404) ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6398 = ok (core.result.Result.Ok ?m.6401) ∧
+                ops.op49 ?m.6401 = ok (core.result.Result.Ok ?m.6407) ∧
+                  ops.op23 ?m.6407 = ok (core.result.Result.Ok ()) ∧
+                    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                          ?m.6407 =
+                        ok ?m.6410 ∧
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ?m.6404
+                            { start := start, «end» := finish } =
+                          ok ?m.6413 ∧
+                        AdapterRw.first_decoded ops ?m.6410 ?m.6401 ?m.6413 split =
+                            ok (core.result.Result.Ok checkpoint) ∧
+                          Slice.len ?m.6404 = finish)
+    ?m.6416 (Exists.intro ?m.6419 (Exists.intro ?m.6422 ?m.6423))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Usize → Prop
+AdapterRwCuts.lean:110:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro Usize
+    (fun start =>
+      ∃ finish,
+        accounts.index_usize 0#usize = ok ?m.6395 ∧
+          accounts.index_usize 1#usize = ok ?m.6398 ∧
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6395 = ok (core.result.Result.Ok ?m.6404) ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6398 = ok (core.result.Result.Ok ?m.6401) ∧
+                ops.op49 ?m.6401 = ok (core.result.Result.Ok ?m.6407) ∧
+                  ops.op23 ?m.6407 = ok (core.result.Result.Ok ()) ∧
+                    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                          ?m.6407 =
+                        ok ?m.6410 ∧
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ?m.6404
+                            { start := start, «end» := finish } =
+                          ok ?m.6413 ∧
+                        AdapterRw.first_decoded ops ?m.6410 ?m.6401 ?m.6413 ?m.6416 =
+                            ok (core.result.Result.Ok checkpoint) ∧
+                          Slice.len ?m.6404 = finish)
+    ?m.6419 (Exists.intro ?m.6422 ?m.6423)
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Usize → Prop
+AdapterRwCuts.lean:110:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro Usize
+    (fun finish =>
+      accounts.index_usize 0#usize = ok ?m.6395 ∧
+        accounts.index_usize 1#usize = ok ?m.6398 ∧
+          AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6395 = ok (core.result.Result.Ok ?m.6404) ∧
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.6398 = ok (core.result.Result.Ok ?m.6401) ∧
+              ops.op49 ?m.6401 = ok (core.result.Result.Ok ?m.6407) ∧
+                ops.op23 ?m.6407 = ok (core.result.Result.Ok ()) ∧
+                  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                        ?m.6407 =
+                      ok ?m.6410 ∧
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ?m.6404
+                          { start := ?m.6419, «end» := finish } =
+                        ok ?m.6413 ∧
+                      AdapterRw.first_decoded ops ?m.6410 ?m.6401 ?m.6413 ?m.6416 =
+                          ok (core.result.Result.Ok checkpoint) ∧
+                        Slice.len ?m.6404 = finish)
+    ?m.6422 ?m.6423
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Usize → Prop
+AdapterRwCuts.lean:110:38: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Usize
+AdapterRwCuts.lean:110:36: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Usize
+AdapterRwCuts.lean:110:34: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Usize
+AdapterRwCuts.lean:110:32: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Slice U8
+AdapterRwCuts.lean:110:30: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+AdapterRwCuts.lean:110:28: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+AdapterRwCuts.lean:110:26: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Slice U8
+AdapterRwCuts.lean:110:24: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Slice U8
+AdapterRwCuts.lean:110:22: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Account
+AdapterRwCuts.lean:110:20: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+x✝²⁵ : Result Bool
+a✝²⁵ : Bool
+heq✝²⁵ :
+  ops.op1 core.cmp.PartialEqU8 data
+      (Array.make 2#usize [3#u8, 10#u8] AdapterRw.r1_pool_adapter.owned.stage1_owned._proof_2) =
+    ok a✝²⁵
+h✝⁵ : a✝²⁵ = true
+h✝⁴ : ¬(accounts.len != 3#usize) = true
+x✝²⁴ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²⁴ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²⁴ : accounts.index_usize 0#usize = ok a✝²⁴
+x✝²³ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²³ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²³ : accounts.index_usize 1#usize = ok a✝²³
+x✝²² : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝²² : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝²² : accounts.index_usize 2#usize = ok a✝²²
+x✝²¹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²¹ : Unit
+heq✝²¹ :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a✝²⁴, a✝²³, a✝²²] ⋯) =
+    ok (core.result.Result.Ok a✝²¹)
+x✝²⁰ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝²⁰ : Unit
+heq✝²⁰ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²⁴ = ok (core.result.Result.Ok a✝²⁰)
+x✝¹⁹ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁹ : Unit
+heq✝¹⁹ : AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a✝²³ = ok (core.result.Result.Ok a✝¹⁹)
+x✝¹⁸ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁸ : Unit
+heq✝¹⁸ :
+  AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint ops a✝²² program true = ok (core.result.Result.Ok a✝¹⁸)
+x✝¹⁷ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁷ : Slice U8
+heq✝¹⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²² = ok (core.result.Result.Ok a✝¹⁷)
+x✝¹⁶ : Result (core.result.Result Unit AdapterRw.solana_program_error.ProgramError)
+a✝¹⁶ : Unit
+heq✝¹⁶ : AdapterRw.r1_pool_adapter.owned.require_zero a✝¹⁷ = ok (core.result.Result.Ok a✝¹⁶)
+x✝¹⁵ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁵ : Slice U8
+heq✝¹⁵ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²³ = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ :
+  Result
+    (core.result.Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+      AdapterRw.solana_program_error.ProgramError)
+a✝¹⁴ : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+heq✝¹⁴ : ops.op49 a✝¹⁵ = ok (core.result.Result.Ok a✝¹⁴)
+x✝¹³ :
+  Result
+    (core.result.Result Unit
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝¹³ : Unit
+heq✝¹³ : ops.op23 a✝¹⁴ = ok (core.result.Result.Ok a✝¹³)
+x✝¹² : Result AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+a✝¹² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+heq✝¹² : a✝¹⁴.common = ok a✝¹²
+x✝¹¹ :
+  Result
+    (core.result.Result (Std.Array U8 688#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+a✝¹¹ : Std.Array U8 688#usize
+heq✝¹¹ : ops.op26 a✝¹².lane_transition.candidate_afterstate = ok (core.result.Result.Ok a✝¹¹)
+x✝¹⁰ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝²⁴ = ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result Usize
+a✝⁹ : Usize
+heq✝⁹ : AdapterRw.aspis_r1_cost_probe.verifier.PROOF_BYTES = ok a✝⁹
+x✝⁸ : Result Usize
+a✝⁸ : Usize
+heq✝⁸ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁸
+x✝⁷ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁷ : Usize
+heq✝⁷ :
+  ops.op2 (a✝⁸.checked_add a✝⁹) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁷)
+h✝³ : ¬(a✝¹⁰.len != a✝⁷) = true
+x✝⁶ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁶ : core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝¹⁰ { «end» := a✝⁸ } = ok a✝⁶
+x✝⁵ : Result Bool
+a✝⁵ : Bool
+heq✝⁵ : ops.op0 core.cmp.PartialEqU8 a✝⁶ a✝¹¹ = ok a✝⁵
+h✝² : ¬a✝⁵ = true
+x✝⁴ : Result U8
+a✝⁴ : U8
+heq✝⁴ : a✝¹⁰.index_usize (a✝⁸.wrapping_add 8#usize) = ok a✝⁴
+h✝¹ : ¬(a✝⁴ != 2#u8) = true
+x✝³ : Result AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+a✝³ : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+heq✝³ : a✝¹⁴.semantic_public = ok a✝³
+x✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝¹⁰ { start := a✝⁸, «end» := a✝⁷ } =
+    ok a✝²
+x✝¹ : Result U8
+a✝¹ : U8
+heq✝¹ : data.index_usize 1#usize = ok a✝¹
+x✝ : Result (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+a✝ : alloc.vec.Vec U8
+heq✝ : AdapterRw.first_decoded ops a✝³ a✝¹⁵ a✝² (UScalar.cast UScalarTy.Usize a✝¹) = ok (core.result.Result.Ok a✝)
+h✝ : ¬(a✝.len != a✝¹⁷.len) = true
+accepted : ok (core.result.Result.Ok a✝) = ok (core.result.Result.Ok checkpoint)
+⊢ Account
+AdapterRwCuts.lean:142:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro Account
+    (fun proofAccount =>
+      ∃ checkpointAccount proofInput checkpointInput publicArray selected start finish,
+        AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+            ok (core.result.Result.Ok ?m.3735) ∧
+          accounts.index_usize 0#usize = ok proofAccount ∧
+            accounts.index_usize 6#usize = ok checkpointAccount ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops proofAccount =
+                  ok (core.result.Result.Ok proofInput) ∧
+                AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops checkpointAccount =
+                    ok (core.result.Result.Ok checkpointInput) ∧
+                  ops.op24 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                      ok (core.result.Result.Ok publicArray) ∧
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proofInput
+                          { start := start, «end» := finish } =
+                        ok selected ∧
+                      ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) publicArray.to_slice selected
+                            checkpointInput () none =
+                          ok (core.result.Result.Ok ()) ∧
+                        ops.op55 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                            ok (core.result.Result.Ok ()) ∧
+                          proofInput.len = finish)
+    ?m.3738
+    (Exists.intro ?m.3741
+      (Exists.intro ?m.3744
+        (Exists.intro ?m.3747
+          (Exists.intro ?m.3750 (Exists.intro ?m.3753 (Exists.intro ?m.3756 (Exists.intro ?m.3759 ?m.3760)))))))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Account → Prop
+AdapterRwCuts.lean:142:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro Account
+    (fun checkpointAccount =>
+      ∃ proofInput checkpointInput publicArray selected start finish,
+        AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+            ok (core.result.Result.Ok ?m.3735) ∧
+          accounts.index_usize 0#usize = ok ?m.3738 ∧
+            accounts.index_usize 6#usize = ok checkpointAccount ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3738 = ok (core.result.Result.Ok proofInput) ∧
+                AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops checkpointAccount =
+                    ok (core.result.Result.Ok checkpointInput) ∧
+                  ops.op24 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                      ok (core.result.Result.Ok publicArray) ∧
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proofInput
+                          { start := start, «end» := finish } =
+                        ok selected ∧
+                      ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) publicArray.to_slice selected
+                            checkpointInput () none =
+                          ok (core.result.Result.Ok ()) ∧
+                        ops.op55 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                            ok (core.result.Result.Ok ()) ∧
+                          proofInput.len = finish)
+    ?m.3741
+    (Exists.intro ?m.3744
+      (Exists.intro ?m.3747
+        (Exists.intro ?m.3750 (Exists.intro ?m.3753 (Exists.intro ?m.3756 (Exists.intro ?m.3759 ?m.3760))))))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Account → Prop
+AdapterRwCuts.lean:142:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (Slice U8)
+    (fun proofInput =>
+      ∃ checkpointInput publicArray selected start finish,
+        AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+            ok (core.result.Result.Ok ?m.3735) ∧
+          accounts.index_usize 0#usize = ok ?m.3738 ∧
+            accounts.index_usize 6#usize = ok ?m.3741 ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3738 = ok (core.result.Result.Ok proofInput) ∧
+                AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3741 =
+                    ok (core.result.Result.Ok checkpointInput) ∧
+                  ops.op24 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                      ok (core.result.Result.Ok publicArray) ∧
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proofInput
+                          { start := start, «end» := finish } =
+                        ok selected ∧
+                      ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) publicArray.to_slice selected
+                            checkpointInput () none =
+                          ok (core.result.Result.Ok ()) ∧
+                        ops.op55 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                            ok (core.result.Result.Ok ()) ∧
+                          proofInput.len = finish)
+    ?m.3744
+    (Exists.intro ?m.3747
+      (Exists.intro ?m.3750 (Exists.intro ?m.3753 (Exists.intro ?m.3756 (Exists.intro ?m.3759 ?m.3760)))))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Slice U8 → Prop
+AdapterRwCuts.lean:142:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (Slice U8)
+    (fun checkpointInput =>
+      ∃ publicArray selected start finish,
+        AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+            ok (core.result.Result.Ok ?m.3735) ∧
+          accounts.index_usize 0#usize = ok ?m.3738 ∧
+            accounts.index_usize 6#usize = ok ?m.3741 ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3738 = ok (core.result.Result.Ok ?m.3744) ∧
+                AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3741 =
+                    ok (core.result.Result.Ok checkpointInput) ∧
+                  ops.op24 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                      ok (core.result.Result.Ok publicArray) ∧
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ?m.3744
+                          { start := start, «end» := finish } =
+                        ok selected ∧
+                      ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) publicArray.to_slice selected
+                            checkpointInput () none =
+                          ok (core.result.Result.Ok ()) ∧
+                        ops.op55 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                            ok (core.result.Result.Ok ()) ∧
+                          Slice.len ?m.3744 = finish)
+    ?m.3747 (Exists.intro ?m.3750 (Exists.intro ?m.3753 (Exists.intro ?m.3756 (Exists.intro ?m.3759 ?m.3760))))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Slice U8 → Prop
+AdapterRwCuts.lean:142:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (Std.Array U8 1880#usize)
+    (fun publicArray =>
+      ∃ selected start finish,
+        AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+            ok (core.result.Result.Ok ?m.3735) ∧
+          accounts.index_usize 0#usize = ok ?m.3738 ∧
+            accounts.index_usize 6#usize = ok ?m.3741 ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3738 = ok (core.result.Result.Ok ?m.3744) ∧
+                AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3741 = ok (core.result.Result.Ok ?m.3747) ∧
+                  ops.op24 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                      ok (core.result.Result.Ok publicArray) ∧
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ?m.3744
+                          { start := start, «end» := finish } =
+                        ok selected ∧
+                      ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) publicArray.to_slice selected
+                            ?m.3747 () none =
+                          ok (core.result.Result.Ok ()) ∧
+                        ops.op55 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                            ok (core.result.Result.Ok ()) ∧
+                          Slice.len ?m.3744 = finish)
+    ?m.3750 (Exists.intro ?m.3753 (Exists.intro ?m.3756 (Exists.intro ?m.3759 ?m.3760)))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Std.Array U8 1880#usize → Prop
+AdapterRwCuts.lean:142:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (Slice U8)
+    (fun selected =>
+      ∃ start finish,
+        AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+            ok (core.result.Result.Ok ?m.3735) ∧
+          accounts.index_usize 0#usize = ok ?m.3738 ∧
+            accounts.index_usize 6#usize = ok ?m.3741 ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3738 = ok (core.result.Result.Ok ?m.3744) ∧
+                AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3741 = ok (core.result.Result.Ok ?m.3747) ∧
+                  ops.op24 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                      ok (core.result.Result.Ok ?m.3750) ∧
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ?m.3744
+                          { start := start, «end» := finish } =
+                        ok selected ∧
+                      ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) (Array.to_slice ?m.3750)
+                            selected ?m.3747 () none =
+                          ok (core.result.Result.Ok ()) ∧
+                        ops.op55 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                            ok (core.result.Result.Ok ()) ∧
+                          Slice.len ?m.3744 = finish)
+    ?m.3753 (Exists.intro ?m.3756 (Exists.intro ?m.3759 ?m.3760))
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Slice U8 → Prop
+AdapterRwCuts.lean:142:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro Usize
+    (fun start =>
+      ∃ finish,
+        AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+            ok (core.result.Result.Ok ?m.3735) ∧
+          accounts.index_usize 0#usize = ok ?m.3738 ∧
+            accounts.index_usize 6#usize = ok ?m.3741 ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3738 = ok (core.result.Result.Ok ?m.3744) ∧
+                AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3741 = ok (core.result.Result.Ok ?m.3747) ∧
+                  ops.op24 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                      ok (core.result.Result.Ok ?m.3750) ∧
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ?m.3744
+                          { start := start, «end» := finish } =
+                        ok ?m.3753 ∧
+                      ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) (Array.to_slice ?m.3750)
+                            ?m.3753 ?m.3747 () none =
+                          ok (core.result.Result.Ok ()) ∧
+                        ops.op55 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                            ok (core.result.Result.Ok ()) ∧
+                          Slice.len ?m.3744 = finish)
+    ?m.3756 (Exists.intro ?m.3759 ?m.3760)
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Usize → Prop
+AdapterRwCuts.lean:142:19: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro Usize
+    (fun finish =>
+      AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+          ok (core.result.Result.Ok ?m.3735) ∧
+        accounts.index_usize 0#usize = ok ?m.3738 ∧
+          accounts.index_usize 6#usize = ok ?m.3741 ∧
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3738 = ok (core.result.Result.Ok ?m.3744) ∧
+              AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops ?m.3741 = ok (core.result.Result.Ok ?m.3747) ∧
+                ops.op24 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                    ok (core.result.Result.Ok ?m.3750) ∧
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ?m.3744
+                        { start := ?m.3756, «end» := finish } =
+                      ok ?m.3753 ∧
+                    ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) (Array.to_slice ?m.3750)
+                          ?m.3753 ?m.3747 () none =
+                        ok (core.result.Result.Ok ()) ∧
+                      ops.op55 (AdapterRw.r1_pool_adapter.ValidatedAsqa.statement ?m.3735) =
+                          ok (core.result.Result.Ok ()) ∧
+                        Slice.len ?m.3744 = finish)
+    ?m.3759 ?m.3760
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Usize → Prop
+AdapterRwCuts.lean:142:36: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Usize
+AdapterRwCuts.lean:142:34: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Usize
+AdapterRwCuts.lean:142:32: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Slice U8
+AdapterRwCuts.lean:142:30: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Std.Array U8 1880#usize
+AdapterRwCuts.lean:142:28: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Slice U8
+AdapterRwCuts.lean:142:26: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Slice U8
+AdapterRwCuts.lean:142:24: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Account
+AdapterRwCuts.lean:142:22: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ Account
+AdapterRwCuts.lean:142:20: error: don't know how to synthesize placeholder for argument `w`
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+a✝¹⁴ : U64
+h✝³ : ¬(accounts.len != 7#usize) = true
+x✝¹³ : Result (Option (Slice U8))
+a✝¹³ : Option (Slice U8)
+heq✝¹³ : core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok a✝¹³
+x✝¹² : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹² :
+  core.array.Array.index
+      (core.ops.index.IndexSlice (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok a✝¹²
+x✝¹¹ : Result Bool
+a✝¹¹ : Bool
+heq✝¹¹ :
+  core.cmp.PartialEq.ne.trait_default
+      (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+        (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a✝¹³ (some a✝¹²) =
+    ok a✝¹¹
+h✝² : ¬a✝¹¹ = true
+x✝¹⁰ : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a✝¹⁰ : AdapterRw.r1_pool_adapter.ValidatedAsqa
+heq✝¹⁰ :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Ok a✝¹⁴) =
+    ok (core.result.Result.Ok a✝¹⁰)
+x✝⁹ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁹ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁹ : accounts.index_usize 0#usize = ok a✝⁹
+x✝⁸ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁸ : Slice U8
+heq✝⁸ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result AdapterRw.r1_pool_adapter.owned.OwnedAccount
+a✝⁷ : AdapterRw.r1_pool_adapter.owned.OwnedAccount
+heq✝⁷ : accounts.index_usize 6#usize = ok a✝⁷
+x✝⁶ : Result (core.result.Result (Slice U8) AdapterRw.solana_program_error.ProgramError)
+a✝⁶ : Slice U8
+heq✝⁶ : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a✝⁷ = ok (core.result.Result.Ok a✝⁶)
+x✝⁵ : Result Usize
+a✝⁵ : Usize
+heq✝⁵ : AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok a✝⁵
+x✝⁴ : Result (core.result.Result Usize AdapterRw.solana_program_error.ProgramError)
+a✝⁴ : Usize
+heq✝⁴ :
+  ops.op2 (a✝⁵.checked_add a✝¹⁰.proof_length) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a✝⁴)
+h✝¹ : ¬(a✝⁸.len != a✝⁴) = true
+x✝³ :
+  Result
+    (core.result.Result (Std.Array U8 1880#usize)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+a✝³ : Std.Array U8 1880#usize
+heq✝³ : ops.op24 a✝¹⁰.statement = ok (core.result.Result.Ok a✝³)
+x✝² : Result Usize
+a✝² : Usize
+heq✝² : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a✝²
+h✝ : ¬(a✝³.to_slice.len != a✝²) = true
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝⁸ { start := a✝⁵, «end» := a✝⁴ } =
+    ok a✝¹
+x✝ : Result (core.result.Result Unit AdapterRw.aspis_r1_cost_probe.verifier.Error)
+a✝ : Unit
+heq✝ :
+  ops.op13 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a✝³.to_slice a✝¹ a✝⁶ () none =
+    ok (core.result.Result.Ok a✝)
+accepted : ops.56 a✝¹⁰.statement = ok (core.result.Result.Ok ())
+⊢ AdapterRw.r1_pool_adapter.ValidatedAsqa
+'AspisR1.AdapterRw.Cuts.error_bind_ne_ok' depends on axioms: [propext]
+'AspisR1.AdapterRw.Cuts.bind_success' depends on axioms: [propext]
+'AspisR1.AdapterRw.Cuts.observer_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AdapterRw.Cuts.first_decoded_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AdapterRw.Cuts.stage1_checkpoint_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AdapterRw.Cuts.stage1_call' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.AdapterRw.Cuts.stage2_call' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

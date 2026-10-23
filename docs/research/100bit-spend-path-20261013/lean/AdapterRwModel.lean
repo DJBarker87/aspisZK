@@ -21,112 +21,106 @@ structure Ops where
       T U), (Slice T) → (Array U N) → Result Bool
   op1 : ∀ {T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq
       T U), (Slice T) → (Array U N) → Result Bool
-  op2 : ∀ {T : Type} {E : Type}, (Option T) → E → Result (core.result.Result T E)
-  op3 : ∀ {T : Type} (cmpPartialEqInst : core.cmp.PartialEq T T), (Option T) → (Option T) → Result Bool
-  op4 : ∀ {T : Type} {E : Type} (cloneCloneInst : core.clone.Clone T) (cloneCloneInst1
-      : core.clone.Clone E), (core.result.Result T E) → Result (core.result.Result T E)
-  op5 : ∀ {T : Type}, core.ops.range.RangeFull → (Slice T) → Result ((Slice T) × (Slice T →
+  op2 : ∀ {T : Type} (cmpPartialEqInst : core.cmp.PartialEq T T), (Option T) → (Option T) → Result Bool
+  op3 : ∀ {T : Type}, core.ops.range.RangeFull → (Slice T) → Result ((Slice T) × (Slice T →
         Slice T))
-  op6 : ∀ {T : Type}, core.ops.range.RangeFull → (Slice T) → Result (Slice T)
-  op7 : ∀ {T : Type}, core.ops.range.RangeFull → (MutRawPtr (Slice T)) → Result (MutRawPtr
+  op4 : ∀ {T : Type}, core.ops.range.RangeFull → (Slice T) → Result (Slice T)
+  op5 : ∀ {T : Type}, core.ops.range.RangeFull → (MutRawPtr (Slice T)) → Result (MutRawPtr
         (Slice T))
-  op8 : ∀ {T : Type}, core.ops.range.RangeFull → (ConstRawPtr (Slice T)) → Result (ConstRawPtr
+  op6 : ∀ {T : Type}, core.ops.range.RangeFull → (ConstRawPtr (Slice T)) → Result (ConstRawPtr
         (Slice T))
-  op9 : ∀ {T : Type}, core.ops.range.RangeFull → (Slice T) → Result ((Option (Slice T)) ×
+  op7 : ∀ {T : Type}, core.ops.range.RangeFull → (Slice T) → Result ((Option (Slice T)) ×
         (Option (Slice T) → Slice T))
-  op10 : ∀ {T : Type}, core.ops.range.RangeFull → (Slice T) → Result (Option (Slice T))
-  op11 : ∀ {T : Type}, (Slice T) → Result (Option T)
-  op12 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H), aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → (Slice
+  op8 : ∀ {T : Type}, core.ops.range.RangeFull → (Slice T) → Result (Option (Slice T))
+  op9 : ∀ {T : Type}, (Slice T) → Result (Option T)
+  op10 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H), aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public → (Slice
         Std.U8) → (Slice Std.U8) → Std.Usize → H → (Option
         (aspis_r1_cost_probe.verifier.Phase → Result Unit)) → Result
         (core.result.Result (alloc.vec.Vec Std.U8)
         aspis_r1_cost_probe.verifier.Error)
-  op13 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H), (Slice Std.U8) → (Slice Std.U8) → (Slice Std.U8) → H → (Option
+  op11 : ∀ {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H), (Slice Std.U8) → (Slice Std.U8) → (Slice Std.U8) → H → (Option
         (aspis_r1_cost_probe.verifier.Phase → Result Unit)) → Result
         (core.result.Result Unit aspis_r1_cost_probe.verifier.Error)
-  op14 : Result Std.Usize
-  op15 : aspis_r1_cost_probe.transport.Variant → Result Std.Usize
-  op16 : Result Std.U8
-  op17 : Result Std.U8
-  op18 : aspis_statement.pool_v1.format.VerifierPolicyV1 → Result
+  op12 : aspis_r1_cost_probe.transport.Variant → Result Std.Usize
+  op13 : Result Std.U8
+  op14 : Result Std.U8
+  op15 : aspis_statement.pool_v1.format.VerifierPolicyV1 → Result
         (core.result.Result Unit aspis_statement.pool_v1.format.PoolV1FormatError)
-  op19 : Result Std.U8
-  op20 : (Array aspis_core.field.M31 8#usize) → Result (core.result.Result Std.U8
+  op16 : Result Std.U8
+  op17 : (Array aspis_core.field.M31 8#usize) → Result (core.result.Result Std.U8
         aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
-  op21 : Result Std.U8
-  op22 : Result Std.Usize
-  op23 : Result Std.Usize
-  op24 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalPaymentV1
+  op18 : Result Std.U8
+  op19 : Result Std.Usize
+  op20 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalPaymentV1
         → Result (Array aspis_core.field.M31 8#usize)
-  op25 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+  op21 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
         → Result (core.result.Result Unit
         aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
-  op26 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+  op22 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
         → Result (core.result.Result (Array Std.U8 1880#usize)
         aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
-  op27 : (Slice Std.U8) → Result (core.result.Result
+  op23 : (Slice Std.U8) → Result (core.result.Result
         aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
         aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
-  op28 : Result Std.Usize
-  op29 : aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+  op24 : aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
         Result (core.result.Result (Array Std.U8 688#usize)
         aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
-  op30 : aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1 → Result Bool
-  op31 : aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1 → Result Bool
-  op32 : aspis_statement.pool_v1.verifier_registry.VerifierRegistryV2 → Result Bool
-  op33 : aspis_statement.pool_v1.verifier_registry.VerifierRegistryV2 → Result Bool
-  op34 : aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV2 → Std.U64
+  op25 : aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1 → Result Bool
+  op26 : aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1 → Result Bool
+  op27 : aspis_statement.pool_v1.verifier_registry.VerifierRegistryV2 → Result Bool
+  op28 : aspis_statement.pool_v1.verifier_registry.VerifierRegistryV2 → Result Bool
+  op29 : aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV2 → Std.U64
         → Result Bool
-  op35 : aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1 → Std.U64
+  op30 : aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1 → Std.U64
         → Result Bool
-  op36 : (Slice Std.U8) → Result (core.result.Result
+  op31 : (Slice Std.U8) → Result (core.result.Result
         aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1
         aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError)
-  op37 : (Slice Std.U8) → Result (core.result.Result
+  op32 : (Slice Std.U8) → Result (core.result.Result
         aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1
         aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError)
-  op38 : (Slice Std.U8) → Result (core.result.Result
+  op33 : (Slice Std.U8) → Result (core.result.Result
         aspis_statement.pool_v1.verifier_registry.VerifierRegistryV2
         aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError)
-  op39 : (Slice Std.U8) → Result (core.result.Result
+  op34 : (Slice Std.U8) → Result (core.result.Result
         aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV2
         aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError)
-  op40 : solana_program_error.ProgramError → Result
+  op35 : solana_program_error.ProgramError → Result
         solana_program_error.ProgramError
-  op41 : solana_pubkey.Pubkey → solana_pubkey.Pubkey → Result Bool
-  op42 : (Array Std.U8 32#usize) → Result solana_pubkey.Pubkey
-  op43 : (Slice (Slice Std.U8)) → solana_pubkey.Pubkey → Result
+  op36 : solana_pubkey.Pubkey → solana_pubkey.Pubkey → Result Bool
+  op37 : (Array Std.U8 32#usize) → Result solana_pubkey.Pubkey
+  op38 : (Slice (Slice Std.U8)) → solana_pubkey.Pubkey → Result
         (core.result.Result solana_pubkey.Pubkey solana_pubkey.PubkeyError)
-  op44 : solana_pubkey.Pubkey → Result (Array Std.U8 32#usize)
-  op45 : solana_pubkey.Pubkey → Result (Slice Std.U8)
-  op46 : Result solana_pubkey.Pubkey
-  op47 : SolanaDigest → Result SolanaDigest
-  op48 : SolanaDigest → (Slice (Slice Std.U8)) → Result (Array Std.U8 32#usize)
-  op49 : aspis_r1_cost_probe.verifier.Error → Result
+  op39 : solana_pubkey.Pubkey → Result (Array Std.U8 32#usize)
+  op40 : solana_pubkey.Pubkey → Result (Slice Std.U8)
+  op41 : Result solana_pubkey.Pubkey
+  op42 : SolanaDigest → Result SolanaDigest
+  op43 : SolanaDigest → (Slice (Slice Std.U8)) → Result (Array Std.U8 32#usize)
+  op44 : aspis_r1_cost_probe.verifier.Error → Result
         solana_program_error.ProgramError
-  op50 : Result (Array Std.U8 32#usize)
-  op51 : Result (Array Std.U8 32#usize)
-  op52 : (Slice Std.U8) → Result (core.result.Result
+  op45 : Result (Array Std.U8 32#usize)
+  op46 : Result (Array Std.U8 32#usize)
+  op47 : (Slice Std.U8) → Result (core.result.Result
         aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
         solana_program_error.ProgramError)
-  op53 : (Slice Std.U8) → Result (core.result.Result
+  op48 : (Slice Std.U8) → Result (core.result.Result
         aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1
         solana_program_error.ProgramError)
-  op54 : (Slice Std.U8) → Result (core.result.Result
+  op49 : (Slice Std.U8) → Result (core.result.Result
         aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestCheckpointV1
         solana_program_error.ProgramError)
-  op55 : (Slice Std.U8) → Result (core.result.Result
+  op50 : (Slice Std.U8) → Result (core.result.Result
         aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestLaneStateV1
         solana_program_error.ProgramError)
-  op56 : (Slice Std.U8) → Result (core.result.Result
+  op51 : (Slice Std.U8) → Result (core.result.Result
         r1_pool_adapter.ScannedAsqaProof solana_program_error.ProgramError)
-  op57 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
+  op52 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
         → r1_pool_adapter.AuthenticatedAsq8Accounts →
         aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
         Result (core.result.Result
         aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
         solana_program_error.ProgramError)
-  op58 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+  op53 : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
         → Result (core.result.Result Unit solana_program_error.ProgramError)
 
 
@@ -141,6 +135,19 @@ def Slice.Insts.CoreCmpPartialEqArray (ops : Ops) {T : Type} {U : Type} (N : Std
   ne := ops.op0 cmpPartialEqInst
 }
 
+/-- [core::option::{core::option::Option<T>}::ok_or]:
+    Source: '/rustc/library/core/src/option.rs', lines 1334:4-1334:73
+    Name pattern: [core::option::{core::option::Option<@T>}::ok_or]
+    Visibility: public -/
+@[rust_fun "core::option::{core::option::Option<@T>}::ok_or"]
+def core.option.Option.ok_or
+  {T : Type} {E : Type} (self : Option T) (err : E) :
+  Result (core.result.Result T E)
+  := do
+  match self with
+  | none => ok (core.result.Result.Err err)
+  | some v => ok (core.result.Result.Ok v)
+
 /-- Trait implementation: [core::option::{impl core::cmp::PartialEq<core::option::Option<T>> for core::option::Option<T>}]
     Source: '/rustc/library/core/src/option.rs', lines 2438:0-2438:56
     Name pattern: [core::cmp::PartialEq<core::option::Option<@T>, core::option::Option<@T>>] -/
@@ -149,9 +156,9 @@ def Slice.Insts.CoreCmpPartialEqArray (ops : Ops) {T : Type} {U : Type} (N : Std
 def core.option.Option.Insts.CoreCmpPartialEqOption (ops : Ops) {T : Type}
   (cmpPartialEqInst : core.cmp.PartialEq T T) : core.cmp.PartialEq (Option T)
   (Option T) := {
-  eq := ops.op3 cmpPartialEqInst
+  eq := ops.op2 cmpPartialEqInst
   ne := fun a b => do
-    let equal ← ops.op3 cmpPartialEqInst a b
+    let equal ← ops.op2 cmpPartialEqInst a b
     ok (!equal)
 }
 
@@ -169,6 +176,25 @@ def core.result.Result.map_err
   | core.result.Result.Ok t => ok (core.result.Result.Ok t)
   | core.result.Result.Err e =>
     let t ← opsfunctionFnOnceOTupleEFInst.call_once op e
+    ok (core.result.Result.Err t)
+
+/-- [core::result::{impl core::clone::Clone for core::result::Result<T, E>}::clone]:
+    Source: '/rustc/library/core/src/result.rs', lines 1898:4-1898:27
+    Name pattern: [core::result::{core::clone::Clone<core::result::Result<@T, @E>>}::clone]
+    Visibility: public -/
+@[rust_fun
+  "core::result::{core::clone::Clone<core::result::Result<@T, @E>>}::clone"]
+def core.result.Result.Insts.CoreCloneClone.clone
+  {T : Type} {E : Type} (cloneCloneInst : core.clone.Clone T) (cloneCloneInst1
+  : core.clone.Clone E) (self : core.result.Result T E) :
+  Result (core.result.Result T E)
+  := do
+  match self with
+  | core.result.Result.Ok x =>
+    let t ← cloneCloneInst.clone x
+    ok (core.result.Result.Ok t)
+  | core.result.Result.Err x =>
+    let t ← cloneCloneInst1.clone x
     ok (core.result.Result.Err t)
 
 /-- Trait implementation: [core::slice::cmp::{impl core::cmp::PartialEq<[U]> for [T]}]
@@ -202,18 +228,233 @@ def core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice (ops : Ops
   T) := {
   sealedInst :=
     core.ops.range.RangeFull.Insts.CoreSliceIndexPrivate_slice_indexSealed
-  get := ops.op10
+  get := ops.op8
   get_mut :=
-    ops.op9
-  get_unchecked :=
-    ops.op8
-  get_unchecked_mut :=
     ops.op7
-  index :=
+  get_unchecked :=
     ops.op6
-  index_mut :=
+  get_unchecked_mut :=
     ops.op5
+  index :=
+    ops.op4
+  index_mut :=
+    ops.op3
 }
+
+/-- [aspis_r1_cost_probe::compact::QUERIES]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 28:0-28:24
+    Name pattern: [aspis_r1_cost_probe::compact::QUERIES]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::QUERIES"]
+def aspis_r1_cost_probe.compact.QUERIES : Std.Usize := 22#usize
+
+/-- [aspis_r1_cost_probe::verifier::SEMANTIC_BYTES]
+    Source: 'crates/aspis-r1-cost-probe/src/verifier.rs', lines 8:0-8:30
+    Name pattern: [aspis_r1_cost_probe::verifier::SEMANTIC_BYTES]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::verifier::SEMANTIC_BYTES"]
+def aspis_r1_cost_probe.verifier.SEMANTIC_BYTES : Result Std.Usize := do
+  let i ← 29#usize * 32#usize
+  12903#usize + i
+
+/-- [aspis_r1_cost_probe::compact::LOGICAL_SEMANTIC]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 31:0-31:33
+    Name pattern: [aspis_r1_cost_probe::compact::LOGICAL_SEMANTIC]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::LOGICAL_SEMANTIC"]
+def aspis_r1_cost_probe.compact.LOGICAL_SEMANTIC : Result Std.Usize :=
+  aspis_r1_cost_probe.verifier.SEMANTIC_BYTES
+
+/-- [aspis_r1_cost_probe::compact::SEMANTIC_COMPACT_VALUES]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 33:0-33:40
+    Name pattern: [aspis_r1_cost_probe::compact::SEMANTIC_COMPACT_VALUES]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::SEMANTIC_COMPACT_VALUES"]
+def aspis_r1_cost_probe.compact.SEMANTIC_COMPACT_VALUES
+  : Result Std.Usize := do
+  let i ← 10#usize * 28#usize
+  let i1 ← 1#usize + i
+  let i2 ← 87#usize + 29#usize
+  let i3 ← i1 + i2
+  i3 + 29#usize
+
+/-- [aspis_r1_cost_probe::compact::COMPACT_SEMANTIC]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 34:0-34:33
+    Name pattern: [aspis_r1_cost_probe::compact::COMPACT_SEMANTIC]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::COMPACT_SEMANTIC"]
+def aspis_r1_cost_probe.compact.COMPACT_SEMANTIC : Result Std.Usize := do
+  let i ← aspis_r1_cost_probe.compact.SEMANTIC_COMPACT_VALUES
+  let i1 ← 16#usize * i
+  let i2 ← aspis_r1_cost_probe.compact.LOGICAL_SEMANTIC
+  i2 - i1
+
+/-- [aspis_r1_cost_probe::compact::COMPACT_Y1]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 35:0-35:27
+    Name pattern: [aspis_r1_cost_probe::compact::COMPACT_Y1]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::COMPACT_Y1"]
+def aspis_r1_cost_probe.compact.COMPACT_Y1 : Result Std.Usize :=
+  29#usize * 16#usize
+
+/-- [aspis_r1_cost_probe::compact::OPENING]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 37:0-37:24
+    Name pattern: [aspis_r1_cost_probe::compact::OPENING]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::OPENING"]
+def aspis_r1_cost_probe.compact.OPENING : Result Std.Usize := do
+  let i ← 480#usize + 128#usize
+  let i1 ← i + 32#usize
+  let i2 ← i1 + 32#usize
+  let i3 ← i2 + 128#usize
+  i3 + 32#usize
+
+/-- [aspis_r1_cost_probe::compact::OFF_SEMANTIC]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 38:0-38:29
+    Name pattern: [aspis_r1_cost_probe::compact::OFF_SEMANTIC]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::OFF_SEMANTIC"]
+def aspis_r1_cost_probe.compact.OFF_SEMANTIC : Std.Usize := 16#usize
+
+/-- [aspis_r1_cost_probe::compact::OFF_Y1]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 39:0-39:23
+    Name pattern: [aspis_r1_cost_probe::compact::OFF_Y1]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const "aspis_r1_cost_probe::compact::OFF_Y1"]
+def aspis_r1_cost_probe.compact.OFF_Y1 : Result Std.Usize := do
+  let i ← aspis_r1_cost_probe.compact.COMPACT_SEMANTIC
+  aspis_r1_cost_probe.compact.OFF_SEMANTIC + i
+
+/-- [aspis_r1_cost_probe::compact::OFF_INACTIVE]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 40:0-40:29
+    Name pattern: [aspis_r1_cost_probe::compact::OFF_INACTIVE]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::OFF_INACTIVE"]
+def aspis_r1_cost_probe.compact.OFF_INACTIVE : Result Std.Usize := do
+  let i ← aspis_r1_cost_probe.compact.OFF_Y1
+  let i1 ← aspis_r1_cost_probe.compact.COMPACT_Y1
+  i + i1
+
+/-- [aspis_r1_cost_probe::compact::OFF_ROUND0]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 41:0-41:27
+    Name pattern: [aspis_r1_cost_probe::compact::OFF_ROUND0]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::OFF_ROUND0"]
+def aspis_r1_cost_probe.compact.OFF_ROUND0 : Result Std.Usize := do
+  let i ← aspis_r1_cost_probe.compact.OFF_INACTIVE
+  i + 32#usize
+
+/-- [aspis_r1_cost_probe::compact::OFF_FOLDED_ROOT]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 42:0-42:32
+    Name pattern: [aspis_r1_cost_probe::compact::OFF_FOLDED_ROOT]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::OFF_FOLDED_ROOT"]
+def aspis_r1_cost_probe.compact.OFF_FOLDED_ROOT : Result Std.Usize := do
+  let i ← aspis_r1_cost_probe.compact.OFF_ROUND0
+  i + 224#usize
+
+/-- [aspis_r1_cost_probe::compact::OFF_ROUND1]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 43:0-43:27
+    Name pattern: [aspis_r1_cost_probe::compact::OFF_ROUND1]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::OFF_ROUND1"]
+def aspis_r1_cost_probe.compact.OFF_ROUND1 : Result Std.Usize := do
+  let i ← aspis_r1_cost_probe.compact.OFF_FOLDED_ROOT
+  i + 32#usize
+
+/-- [aspis_r1_cost_probe::compact::OFF_FINAL]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 44:0-44:26
+    Name pattern: [aspis_r1_cost_probe::compact::OFF_FINAL]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::OFF_FINAL"]
+def aspis_r1_cost_probe.compact.OFF_FINAL : Result Std.Usize := do
+  let i ← aspis_r1_cost_probe.compact.OFF_ROUND1
+  i + 224#usize
+
+/-- [aspis_r1_cost_probe::compact::FINAL_LEN]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 45:0-45:26
+    Name pattern: [aspis_r1_cost_probe::compact::FINAL_LEN]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::FINAL_LEN"]
+def aspis_r1_cost_probe.compact.FINAL_LEN : Std.Usize := 64#usize
+
+/-- [aspis_r1_cost_probe::compact::OFF_OPENINGS]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 46:0-46:29
+    Name pattern: [aspis_r1_cost_probe::compact::OFF_OPENINGS]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::OFF_OPENINGS"]
+def aspis_r1_cost_probe.compact.OFF_OPENINGS : Result Std.Usize := do
+  let i ← aspis_r1_cost_probe.compact.FINAL_LEN * 32#usize
+  let i1 ← aspis_r1_cost_probe.compact.OFF_FINAL
+  i1 + i
+
+/-- [aspis_r1_cost_probe::compact::OFF_NODES]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 47:0-47:26
+    Name pattern: [aspis_r1_cost_probe::compact::OFF_NODES]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::OFF_NODES"]
+def aspis_r1_cost_probe.compact.OFF_NODES : Result Std.Usize := do
+  let i ← aspis_r1_cost_probe.compact.OPENING
+  let i1 ← aspis_r1_cost_probe.compact.QUERIES * i
+  let i2 ← aspis_r1_cost_probe.compact.OFF_OPENINGS
+  i2 + i1
+
+/-- [aspis_r1_cost_probe::compact::FIXED]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 49:0-49:22
+    Name pattern: [aspis_r1_cost_probe::compact::FIXED]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const "aspis_r1_cost_probe::compact::FIXED"]
+def aspis_r1_cost_probe.compact.FIXED : Result Std.Usize :=
+  aspis_r1_cost_probe.compact.OFF_NODES
+
+/-- [aspis_r1_cost_probe::compact::MAX_NODES]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 51:0-51:26
+    Name pattern: [aspis_r1_cost_probe::compact::MAX_NODES]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::MAX_NODES"]
+def aspis_r1_cost_probe.compact.MAX_NODES : Result Std.Usize := do
+  let i ← 146#usize + 172#usize
+  let i1 ← 2#usize * i
+  let i2 ← 128#usize + 150#usize
+  i1 + i2
+
+/-- [aspis_r1_cost_probe::compact::MAX_PROOF]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 52:0-52:26
+    Name pattern: [aspis_r1_cost_probe::compact::MAX_PROOF]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::MAX_PROOF"]
+def aspis_r1_cost_probe.compact.MAX_PROOF : Result Std.Usize := do
+  let i ← aspis_r1_cost_probe.compact.MAX_NODES
+  let i1 ← 32#usize * i
+  let i2 ← aspis_r1_cost_probe.compact.FIXED
+  i2 + i1
+
+/-- [aspis_r1_cost_probe::compact::PROOF_BYTES]
+    Source: 'crates/aspis-r1-cost-probe/src/compact.rs', lines 66:0-66:28
+    Name pattern: [aspis_r1_cost_probe::compact::PROOF_BYTES]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_r1_cost_probe::compact::PROOF_BYTES"]
+def aspis_r1_cost_probe.compact.PROOF_BYTES : Result Std.Usize :=
+  aspis_r1_cost_probe.compact.MAX_PROOF
 
 /-- [aspis_r1_cost_probe::transport::{aspis_r1_cost_probe::transport::Variant}::tag]:
     Source: 'crates/aspis-r1-cost-probe/src/transport.rs', lines 6:4-6:26
@@ -234,8 +475,18 @@ def aspis_r1_cost_probe.transport.Variant.tag
     Visibility: public -/
 @[global_simps, irreducible, rust_const
   "aspis_r1_cost_probe::verifier::PROOF_BYTES"]
-def aspis_r1_cost_probe.verifier.PROOF_BYTES (ops : Ops) : Result Std.Usize :=
-  ops.op14
+def aspis_r1_cost_probe.verifier.PROOF_BYTES : Result Std.Usize :=
+  aspis_r1_cost_probe.compact.PROOF_BYTES
+
+/-- [aspis_statement::pool_v1::payment_relation::POOL_V1_PAYMENT_STATEMENT_BYTES]
+    Source: 'crates/aspis-statement/src/pool_v1/payment_relation.rs', lines 28:0-28:48
+    Name pattern: [aspis_statement::pool_v1::payment_relation::POOL_V1_PAYMENT_STATEMENT_BYTES]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_statement::pool_v1::payment_relation::POOL_V1_PAYMENT_STATEMENT_BYTES"]
+def aspis_statement.pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_BYTES
+  : Std.Usize :=
+  216#usize
 
 /-- [aspis_statement::pool_v1::pair_forest_terminal::POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES]
     Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 32:0-32:61
@@ -246,11 +497,9 @@ def aspis_r1_cost_probe.verifier.PROOF_BYTES (ops : Ops) : Result Std.Usize :=
 def aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES (ops : Ops)
   : Result Std.Usize := do
   let i ←
-    ops.op23
+    ops.op19
   let i1 ← 144#usize + i
-  let i2 ←
-    ops.op22
-  i1 + i2
+  i1 + aspis_statement.pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_BYTES
 
 /-- [aspis_statement::pool_v1::pair_forest_terminal::POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC]
     Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 39:0-39:61
@@ -269,13 +518,12 @@ def
     Visibility: public -/
 @[global_simps, irreducible, rust_const
   "aspis_statement::pool_v1::pair_forest_terminal::POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES"]
-def aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES (ops : Ops)
+def
+  aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES
   : Result Std.Usize := do
   let i ← 3#usize * 32#usize
   let i1 ← 8#usize + i
-  let i2 ←
-    ops.op22
-  i1 + i2
+  i1 + aspis_statement.pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_BYTES
 
 /-- [aspis_statement::pool_v1::pair_forest_terminal::{aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalStatementV1}::semantic_public]:
     Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 120:4-120:89
@@ -328,6 +576,17 @@ def
     common _ =>
     ok common
 
+/-- [aspis_statement::pool_v1::pair_terminal::POOL_V1_PAIR_VERIFIED_AFTERSTATE_PAYLOAD_BYTES]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_terminal.rs', lines 37:0-37:63
+    Name pattern: [aspis_statement::pool_v1::pair_terminal::POOL_V1_PAIR_VERIFIED_AFTERSTATE_PAYLOAD_BYTES]
+    Visibility: public -/
+@[global_simps, irreducible, rust_const
+  "aspis_statement::pool_v1::pair_terminal::POOL_V1_PAIR_VERIFIED_AFTERSTATE_PAYLOAD_BYTES"]
+def
+  aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_PAYLOAD_BYTES
+  : Std.Usize :=
+  680#usize
+
 /-- [aspis_statement::pool_v1::pair_terminal::POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES]
     Source: 'crates/aspis-statement/src/pool_v1/pair_terminal.rs', lines 39:0-39:55
     Name pattern: [aspis_statement::pool_v1::pair_terminal::POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES]
@@ -335,19 +594,18 @@ def
 @[global_simps, irreducible, rust_const
   "aspis_statement::pool_v1::pair_terminal::POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES"]
 def aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES (ops : Ops)
-  : Result Std.Usize := do
-  let i ←
-    ops.op28
-  8#usize + i
+  : Result Std.Usize :=
+  8#usize +
+    aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_PAYLOAD_BYTES
 
 /-- Trait implementation: [solana_program_error::{impl core::clone::Clone for solana_program_error::ProgramError}]
-    Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-ops.op49-2.2.2/src/lib.rs', lines 32:9-32:14
+    Source: '/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-ops.op44-2.2.2/src/lib.rs', lines 32:9-32:14
     Name pattern: [core::clone::Clone<solana_program_error::ProgramError>] -/
 @[reducible, rust_trait_impl
   "core::clone::Clone<solana_program_error::ProgramError>"]
 def solana_program_error.ProgramError.Insts.CoreCloneClone (ops : Ops) : core.clone.Clone
   solana_program_error.ProgramError := {
-  clone := ops.op40
+  clone := ops.op35
 }
 
 /-- Trait implementation: [solana_pubkey::{impl core::cmp::PartialEq<solana_pubkey::Pubkey> for solana_pubkey::Pubkey}]
@@ -357,7 +615,7 @@ def solana_program_error.ProgramError.Insts.CoreCloneClone (ops : Ops) : core.cl
   "core::cmp::PartialEq<solana_pubkey::Pubkey, solana_pubkey::Pubkey>"]
 impl_def solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey (ops : Ops) : core.cmp.PartialEq
   solana_pubkey.Pubkey solana_pubkey.Pubkey := {
-  eq := ops.op41
+  eq := ops.op36
   ne := core.cmp.PartialEq.ne.trait_default
     (solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey ops)
 }
@@ -366,7 +624,7 @@ impl_def solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey (ops : Ops) : core.cm
     Source: 'programs/r1-cost-probe/src/lib.rs', lines 9:9-9:14 -/
 @[reducible]
 def SolanaDigest.Insts.CoreCloneClone (ops : Ops) : core.clone.Clone SolanaDigest := {
-  clone := ops.op47
+  clone := ops.op42
 }
 
 /-- Trait implementation: [aspis_r1_cost_probe_program::{impl core::marker::Copy for aspis_r1_cost_probe_program::SolanaDigest}]
@@ -382,7 +640,7 @@ def SolanaDigest.Insts.CoreMarkerCopy (ops : Ops) : core.marker.Copy SolanaDiges
 def SolanaDigest.Insts.Aspis_coreDigestDigest32 (ops : Ops) : aspis_core.digest.Digest32
   SolanaDigest := {
   coremarkerCopyInst := (SolanaDigest.Insts.CoreMarkerCopy ops)
-  digest := ops.op48
+  digest := ops.op43
 }
 
 /-- [aspis_r1_cost_probe_program::(observer ops)]:
@@ -401,11 +659,11 @@ def first_decoded (ops : Ops)
   := do
   let o ← (observer ops)
   let r ←
-    ops.op12
+    ops.op10
       (SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) public1 public_bytes proof k
       () o
   core.result.Result.map_err (BuiltinFnOnce aspis_r1_cost_probe.verifier.Error
-    solana_program_error.ProgramError) r (ops.op49)
+    solana_program_error.ProgramError) r (ops.op44)
 
 /-- [aspis_r1_cost_probe_program::r1_pool_adapter::PROFILE_BINDING]
     Source: 'programs/r1-cost-probe/src/r1_pool_adapter.rs', lines 68:0-71:2 -/
@@ -594,7 +852,7 @@ def r1_pool_adapter.owned.OwnedAccount.data (ops : Ops)
     ok (core.result.Result.Ok s)
   | core.result.Result.Err error1 =>
     let pe ←
-      ops.op40 error1
+      ops.op35 error1
     ok (core.result.Result.Err pe)
 
 /-- [aspis_r1_cost_probe_program::r1_pool_adapter::owned::{aspis_r1_cost_probe_program::r1_pool_adapter::owned::OwnedAccount}::data_len]:
@@ -603,7 +861,7 @@ def r1_pool_adapter.owned.OwnedAccount.data_len (ops : Ops)
   (self : r1_pool_adapter.owned.OwnedAccount) :
   Result (core.result.Result Std.Usize solana_program_error.ProgramError)
   := do
-  ops.op4 core.clone.CloneUsize
+  core.result.Result.Insts.CoreCloneClone.clone core.clone.CloneUsize
     (solana_program_error.ProgramError.Insts.CoreCloneClone ops) self.length
 
 /-- [aspis_r1_cost_probe_program::r1_pool_adapter::owned::require_readonly_buffer]:
@@ -662,7 +920,7 @@ def r1_pool_adapter.owned.require_verifier_checkpoint (ops : Ops)
           match cf with
           | core.ops.control_flow.ControlFlow.Continue val =>
             let i ←
-              ops.op15
+              ops.op12
                 aspis_r1_cost_probe.transport.Variant.S2
             if val != i
             then
@@ -689,7 +947,7 @@ def r1_pool_adapter.owned.require_distinct_accounts_loop0_loop0.body (ops : Ops)
     let p ← r1_pool_adapter.owned.OwnedAccount.impl.key oa
     let oa1 ← Array.index_usize accounts index
     let p1 ← r1_pool_adapter.owned.OwnedAccount.impl.key oa1
-    let b ← ops.op41 p p1
+    let b ← ops.op36 p p1
     if b
     then
       ok (done (some (core.result.Result.Err
@@ -1071,8 +1329,8 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
   :
   Result (core.result.Result Unit solana_program_error.ProgramError)
   := do
-  let a ← ops.op44 pool_program
-  let a1 ← ops.op50
+  let a ← ops.op39 pool_program
+  let a1 ← ops.op45
   let b ← core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 a a1
   if b
   then
@@ -1080,14 +1338,14 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
       solana_program_error.ProgramError.InvalidAccountData)
   else
     let i ←
-      ops.op16
+      ops.op13
     let i1 ← lift (master.verifier_policy.flags &&& i)
     if i1 = 0#u8
     then
       ok (core.result.Result.Err
         solana_program_error.ProgramError.InvalidAccountData)
     else
-      let a2 ← ops.op51
+      let a2 ← ops.op46
       let b1 ←
         core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
           master.verifier_policy.registry_program a2
@@ -1115,7 +1373,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
               solana_program_error.ProgramError.InvalidAccountData)
           else
             let r ←
-              ops.op18
+              ops.op15
                 master.verifier_policy
             let r1 ←
               core.result.Result.map_err
@@ -1124,7 +1382,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
             let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
             match cf with
             | core.ops.control_flow.ControlFlow.Continue _ =>
-              let registry_program ← ops.op42 a2
+              let registry_program ← ops.op37 a2
               let r2 ←
                 (r1_pool_adapter.owned.require_readonly_account ops) registry_account
                   registry_program
@@ -1132,18 +1390,18 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
               match cf1 with
               | core.ops.control_flow.ControlFlow.Continue _ =>
                 let i2 ←
-                  ops.op17
+                  ops.op14
                 let i3 ← lift (master.verifier_policy.flags &&& i2)
                 if i3 != 0#u8
                 then
-                  let loader ← ops.op46
+                  let loader ← ops.op41
                   let r3 ←
                     (r1_pool_adapter.owned.OwnedAccount.data ops) registry_account
                   let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
                   match cf2 with
                   | core.ops.control_flow.ControlFlow.Continue val =>
                     let r4 ←
-                      ops.op38
+                      ops.op33
                         val
                     let r5 ←
                       core.result.Result.map_err
@@ -1156,7 +1414,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                         r1_pool_adapter.owned.OwnedAccount.impl.key
                           master_account
                       let s ←
-                        ops.op45
+                        ops.op40
                           p
                       let s1 ←
                         lift (Array.to_slice
@@ -1167,7 +1425,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                             r1_pool_adapter.VERIFIER_REGISTRY_V2_SEED, s, s1
                             ]))
                       let r6 ←
-                        ops.op43 s2
+                        ops.op38 s2
                           registry_program
                       let r7 ←
                         core.result.Result.map_err
@@ -1189,7 +1447,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                             solana_program_error.ProgramError.InvalidAccountData)
                         else
                           let s3 ←
-                            ops.op45
+                            ops.op40
                               registry_program
                           let s4 ←
                             lift (Array.to_slice
@@ -1198,7 +1456,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                             lift (Array.to_slice
                               (Array.make 2#usize [ s3, s4 ]))
                           let r8 ←
-                            ops.op43 s5
+                            ops.op38 s5
                               loader
                           let r9 ←
                             core.result.Result.map_err
@@ -1208,7 +1466,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                             core.result.Result.Insts.CoreOpsTry.branch r9
                           match cf5 with
                           | core.ops.control_flow.ControlFlow.Continue val3 =>
-                            let a4 ← ops.op44 p
+                            let a4 ← ops.op39 p
                             let b5 ←
                               core.array.equality.PartialEqArray.ne
                                 core.cmp.PartialEqU8 val1.pool a4
@@ -1236,7 +1494,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                     solana_program_error.ProgramError.InvalidAccountData)
                                 else
                                   let a5 ←
-                                    ops.op44
+                                    ops.op39
                                       registry_program
                                   let b8 ←
                                     core.array.equality.PartialEqArray.ne
@@ -1248,7 +1506,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                       solana_program_error.ProgramError.InvalidAccountData)
                                   else
                                     let a6 ←
-                                      ops.op44 loader
+                                      ops.op39 loader
                                     let b9 ←
                                       core.array.equality.PartialEqArray.ne
                                         core.cmp.PartialEqU8
@@ -1259,7 +1517,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                         solana_program_error.ProgramError.InvalidAccountData)
                                     else
                                       let a7 ←
-                                        ops.op44 val3
+                                        ops.op39 val3
                                       let b10 ←
                                         core.array.equality.PartialEqArray.ne
                                           core.cmp.PartialEqU8
@@ -1270,12 +1528,12 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                           solana_program_error.ProgramError.InvalidAccountData)
                                       else
                                         let b11 ←
-                                          ops.op33
+                                          ops.op28
                                             val1
                                         if b11
                                         then
                                           let b12 ←
-                                            ops.op32
+                                            ops.op27
                                               val1
                                           if b12
                                           then
@@ -1303,7 +1561,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                 core.ops.control_flow.ControlFlow.Continue
                                                 val4 =>
                                                 let r12 ←
-                                                  ops.op39
+                                                  ops.op34
                                                     val4
                                                 let r13 ←
                                                   core.result.Result.map_err
@@ -1317,7 +1575,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                   core.ops.control_flow.ControlFlow.Continue
                                                   val5 =>
                                                   let s6 ←
-                                                    ops.op45
+                                                    ops.op40
                                                       p
                                                   let s7 ←
                                                     lift (Array.to_slice
@@ -1337,7 +1595,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                         s6, s7, s8, s9
                                                         ]))
                                                   let r14 ←
-                                                    ops.op43
+                                                    ops.op38
                                                       s10 registry_program
                                                   let r15 ←
                                                     core.result.Result.map_err
@@ -1364,7 +1622,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                         solana_program_error.ProgramError.InvalidAccountData)
                                                     else
                                                       let s11 ←
-                                                        ops.op45
+                                                        ops.op40
                                                           verifier_program
                                                       let s12 ←
                                                         lift (Array.to_slice
@@ -1377,7 +1635,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                             s11, s12
                                                             ]))
                                                       let r16 ←
-                                                        ops.op43
+                                                        ops.op38
                                                           s13 loader
                                                       let r17 ←
                                                         core.result.Result.map_err
@@ -1391,7 +1649,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                         core.ops.control_flow.ControlFlow.Continue
                                                         val7 =>
                                                         let a8 ←
-                                                          ops.op44
+                                                          ops.op39
                                                             p
                                                         let b14 ←
                                                           core.array.equality.PartialEqArray.ne
@@ -1415,7 +1673,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                               solana_program_error.ProgramError.InvalidAccountData)
                                                           else
                                                             let a9 ←
-                                                              ops.op44
+                                                              ops.op39
                                                                 verifier_program
                                                             let b16 ←
                                                               core.array.equality.PartialEqArray.ne
@@ -1451,7 +1709,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                                     solana_program_error.ProgramError.InvalidAccountData)
                                                                 else
                                                                   let i4 ←
-                                                                    ops.op21
+                                                                    ops.op18
                                                                   if
                                                                     val5.statement_version
                                                                     != i4
@@ -1472,7 +1730,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                                       solana_program_error.ProgramError.InvalidAccountData)
                                                                     else
                                                                       let a10 ←
-                                                                        ops.op44
+                                                                        ops.op39
                                                                         val7
                                                                       let b20 ←
                                                                         core.array.equality.PartialEqArray.ne
@@ -1501,7 +1759,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                                           solana_program_error.ProgramError.InvalidAccountData)
                                                                         else
                                                                           let b22 ←
-                                                                            ops.op34
+                                                                            ops.op29
                                                                             val5
                                                                             current_slot
                                                                           if b22
@@ -1576,7 +1834,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                   match cf2 with
                   | core.ops.control_flow.ControlFlow.Continue val =>
                     let r4 ←
-                      ops.op36
+                      ops.op31
                         val
                     let r5 ←
                       core.result.Result.map_err
@@ -1589,7 +1847,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                         r1_pool_adapter.owned.OwnedAccount.impl.key
                           master_account
                       let s ←
-                        ops.op45
+                        ops.op40
                           p
                       let s1 ←
                         lift (Array.to_slice
@@ -1600,7 +1858,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                             r1_pool_adapter.VERIFIER_REGISTRY_SEED, s, s1
                             ]))
                       let r6 ←
-                        ops.op43 s2
+                        ops.op38 s2
                           registry_program
                       let r7 ←
                         core.result.Result.map_err
@@ -1621,7 +1879,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                           ok (core.result.Result.Err
                             solana_program_error.ProgramError.InvalidAccountData)
                         else
-                          let a4 ← ops.op44 p
+                          let a4 ← ops.op39 p
                           let b5 ←
                             core.array.equality.PartialEqArray.ne
                               core.cmp.PartialEqU8 val1.pool a4
@@ -1649,12 +1907,12 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                   solana_program_error.ProgramError.InvalidAccountData)
                               else
                                 let b8 ←
-                                  ops.op31
+                                  ops.op26
                                     val1
                                 if b8
                                 then
                                   let b9 ←
-                                    ops.op30
+                                    ops.op25
                                       val1
                                   if b9
                                   then
@@ -1682,7 +1940,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                         core.ops.control_flow.ControlFlow.Continue
                                         val3 =>
                                         let r10 ←
-                                          ops.op37
+                                          ops.op32
                                             val3
                                         let r11 ←
                                           core.result.Result.map_err
@@ -1696,7 +1954,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                           core.ops.control_flow.ControlFlow.Continue
                                           val4 =>
                                           let s3 ←
-                                            ops.op45
+                                            ops.op40
                                               p
                                           let s4 ←
                                             lift (Array.to_slice
@@ -1716,7 +1974,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                 s3, s4, s5, s6
                                                 ]))
                                           let r12 ←
-                                            ops.op43
+                                            ops.op38
                                               s7 registry_program
                                           let r13 ←
                                             core.result.Result.map_err
@@ -1742,7 +2000,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                 solana_program_error.ProgramError.InvalidAccountData)
                                             else
                                               let a5 ←
-                                                ops.op44 p
+                                                ops.op39 p
                                               let b11 ←
                                                 core.array.equality.PartialEqArray.ne
                                                   core.cmp.PartialEqU8
@@ -1763,7 +2021,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                     solana_program_error.ProgramError.InvalidAccountData)
                                                 else
                                                   let a6 ←
-                                                    ops.op44
+                                                    ops.op39
                                                       verifier_program
                                                   let b13 ←
                                                     core.array.equality.PartialEqArray.ne
@@ -1797,7 +2055,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                           solana_program_error.ProgramError.InvalidAccountData)
                                                       else
                                                         let i4 ←
-                                                          ops.op21
+                                                          ops.op18
                                                         if
                                                           val4.statement_version
                                                           != i4
@@ -1807,7 +2065,7 @@ def r1_pool_adapter.owned.authenticate_invariant_release_registry (ops : Ops)
                                                             solana_program_error.ProgramError.InvalidAccountData)
                                                         else
                                                           let b16 ←
-                                                            ops.op35
+                                                            ops.op30
                                                               val4 current_slot
                                                           if b16
                                                           then
@@ -1997,14 +2255,14 @@ def r1_pool_adapter.owned.authenticate_asq8_accounts (ops : Ops)
                 let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r6
                 match cf6 with
                 | core.ops.control_flow.ControlFlow.Continue val =>
-                  let r7 ← ops.op53 val
+                  let r7 ← ops.op48 val
                   let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r7
                   match cf7 with
                   | core.ops.control_flow.ControlFlow.Continue val1 =>
                     let p ←
                       r1_pool_adapter.owned.OwnedAccount.impl.key
                         master_account
-                    let a ← ops.op44 p
+                    let a ← ops.op39 p
                     let b ←
                       core.array.equality.PartialEqArray.ne
                         core.cmp.PartialEqU8 val1.identity.pool a
@@ -2014,17 +2272,17 @@ def r1_pool_adapter.owned.authenticate_asq8_accounts (ops : Ops)
                         solana_program_error.ProgramError.InvalidAccountData)
                     else
                       let i1 ←
-                        ops.op19
+                        ops.op16
                       if val1.initialized_lane_mask != i1
                       then
                         ok (core.result.Result.Err
                           solana_program_error.ProgramError.InvalidAccountData)
                       else
                         let p1 ←
-                          ops.op42
+                          ops.op37
                             val1.identity.asset_mint
                         let s ←
-                          ops.op45
+                          ops.op40
                             p1
                         let s1 ←
                           lift (Array.to_slice
@@ -2035,7 +2293,7 @@ def r1_pool_adapter.owned.authenticate_asq8_accounts (ops : Ops)
                               r1_pool_adapter.PAIR_FOREST_MASTER_SEED, s, s1
                               ]))
                         let r8 ←
-                          ops.op43 s2
+                          ops.op38 s2
                             pool_program
                         let r9 ←
                           core.result.Result.map_err
@@ -2072,14 +2330,14 @@ def r1_pool_adapter.owned.authenticate_asq8_accounts (ops : Ops)
                               | core.ops.control_flow.ControlFlow.Continue val3
                                 =>
                                 let r12 ←
-                                  ops.op54 val3
+                                  ops.op49 val3
                                 let cf11 ←
                                   core.result.Result.Insts.CoreOpsTry.branch
                                     r12
                                 match cf11 with
                                 | core.ops.control_flow.ControlFlow.Continue
                                   val4 =>
-                                  let a1 ← ops.op44 p
+                                  let a1 ← ops.op39 p
                                   let b2 ←
                                     core.array.equality.PartialEqArray.ne
                                       core.cmp.PartialEqU8 val4.master a1
@@ -2099,7 +2357,7 @@ def r1_pool_adapter.owned.authenticate_asq8_accounts (ops : Ops)
                                         solana_program_error.ProgramError.InvalidAccountData)
                                     else
                                       let s3 ←
-                                        ops.op45
+                                        ops.op40
                                           p
                                       let a2 ←
                                         lift (core.num.U64.to_le_bytes
@@ -2115,7 +2373,7 @@ def r1_pool_adapter.owned.authenticate_asq8_accounts (ops : Ops)
                                             s3, s4, s5
                                             ]))
                                       let r13 ←
-                                        ops.op43
+                                        ops.op38
                                           s6 pool_program
                                       let r14 ←
                                         core.result.Result.map_err
@@ -2151,7 +2409,7 @@ def r1_pool_adapter.owned.authenticate_asq8_accounts (ops : Ops)
                                             core.ops.control_flow.ControlFlow.Continue
                                             val6 =>
                                             let r16 ←
-                                              ops.op55
+                                              ops.op50
                                                 val6
                                             let cf14 ←
                                               core.result.Result.Insts.CoreOpsTry.branch
@@ -2161,7 +2419,7 @@ def r1_pool_adapter.owned.authenticate_asq8_accounts (ops : Ops)
                                               core.ops.control_flow.ControlFlow.Continue
                                               val7 =>
                                               let a3 ←
-                                                ops.op44 p
+                                                ops.op39 p
                                               let b5 ←
                                                 core.array.equality.PartialEqArray.ne
                                                   core.cmp.PartialEqU8
@@ -2177,7 +2435,7 @@ def r1_pool_adapter.owned.authenticate_asq8_accounts (ops : Ops)
                                                     solana_program_error.ProgramError.InvalidAccountData)
                                                 else
                                                   let s7 ←
-                                                    ops.op45
+                                                    ops.op40
                                                       p
                                                   let s8 ←
                                                     lift (Array.to_slice
@@ -2196,7 +2454,7 @@ def r1_pool_adapter.owned.authenticate_asq8_accounts (ops : Ops)
                                                         s7, s8, s9
                                                         ]))
                                                   let r17 ←
-                                                    ops.op43
+                                                    ops.op38
                                                       s10 pool_program
                                                   let r18 ←
                                                     core.result.Result.map_err
@@ -2223,16 +2481,16 @@ def r1_pool_adapter.owned.authenticate_asq8_accounts (ops : Ops)
                                                         solana_program_error.ProgramError.InvalidAccountData)
                                                     else
                                                       let a4 ←
-                                                        ops.op44
+                                                        ops.op39
                                                           p
                                                       let a5 ←
-                                                        ops.op44
+                                                        ops.op39
                                                           p
                                                       let a6 ←
-                                                        ops.op44
+                                                        ops.op39
                                                           p2
                                                       let a7 ←
-                                                        ops.op44
+                                                        ops.op39
                                                           p3
                                                       ok (core.result.Result.Ok
                                                         {
@@ -2420,14 +2678,14 @@ def r1_pool_adapter.owned.validate_asq8 (ops : Ops)
   := do
   let i := Slice.len instruction_data
   let i1 ←
-    (aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES ops)
+    aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES
   if i != i1
   then
     ok (core.result.Result.Err
       solana_program_error.ProgramError.InvalidInstructionData)
   else
     let r ←
-      ops.op27
+      ops.op23
         instruction_data
     let r1 ←
       core.result.Result.map_err
@@ -2452,7 +2710,7 @@ def r1_pool_adapter.owned.validate_asq8 (ops : Ops)
           ok (core.result.Result.Err
             solana_program_error.ProgramError.InvalidInstructionData)
         else
-          let a ← ops.op50
+          let a ← ops.op45
           let b2 ←
             core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
               val.pool_program a
@@ -2462,12 +2720,12 @@ def r1_pool_adapter.owned.validate_asq8 (ops : Ops)
               solana_program_error.ProgramError.InvalidInstructionData)
           else
             let pool_program ←
-              ops.op42 val.pool_program
+              ops.op37 val.pool_program
             let a1 ←
-              ops.op24
+              ops.op20
                 val.«public»
             let r2 ←
-              ops.op20
+              ops.op17
                 a1
             let r3 ←
               core.result.Result.map_err
@@ -2486,9 +2744,9 @@ def r1_pool_adapter.owned.validate_asq8 (ops : Ops)
                 let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
                 match cf3 with
                 | core.ops.control_flow.ControlFlow.Continue val3 =>
-                  let o ← ops.op11 accounts
+                  let o ← ops.op9 accounts
                   let r5 ←
-                    ops.op2 o
+                    core.option.Option.ok_or o
                       solana_program_error.ProgramError.NotEnoughAccountKeys
                   let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
                   match cf4 with
@@ -2497,12 +2755,12 @@ def r1_pool_adapter.owned.validate_asq8 (ops : Ops)
                     let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
                     match cf5 with
                     | core.ops.control_flow.ControlFlow.Continue val5 =>
-                      let r7 ← ops.op56 val5
+                      let r7 ← ops.op51 val5
                       let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r7
                       match cf6 with
                       | core.ops.control_flow.ControlFlow.Continue val6 =>
                         let r8 ←
-                          ops.op57 val val3
+                          ops.op52 val val3
                             val6.candidate_afterstate
                         let cf7 ←
                           core.result.Result.Insts.CoreOpsTry.branch r8
@@ -2653,12 +2911,12 @@ def r1_pool_adapter.owned.stage1_owned (ops : Ops)
                   let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r6
                   match cf6 with
                   | core.ops.control_flow.ControlFlow.Continue val1 =>
-                    let r7 ← ops.op52 val1
+                    let r7 ← ops.op47 val1
                     let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r7
                     match cf7 with
                     | core.ops.control_flow.ControlFlow.Continue val2 =>
                       let r8 ←
-                        ops.op25
+                        ops.op21
                           val2
                       let r9 ←
                         core.result.Result.map_err
@@ -2671,7 +2929,7 @@ def r1_pool_adapter.owned.stage1_owned (ops : Ops)
                           aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common
                             val2
                         let r10 ←
-                          ops.op29
+                          ops.op24
                             pvpftcv.lane_transition.candidate_afterstate
                         let r11 ←
                           core.result.Result.map_err
@@ -2689,13 +2947,13 @@ def r1_pool_adapter.owned.stage1_owned (ops : Ops)
                           match cf10 with
                           | core.ops.control_flow.ControlFlow.Continue val4 =>
                             let proof_length ←
-                              (aspis_r1_cost_probe.verifier.PROOF_BYTES ops)
+                              aspis_r1_cost_probe.verifier.PROOF_BYTES
                             let proof_start ←
                               (aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops)
                             let o ←
                               lift (Usize.checked_add proof_start proof_length)
                             let r13 ←
-                              ops.op2 o
+                              core.option.Option.ok_or o
                                 solana_program_error.ProgramError.InvalidAccountData
                             let cf11 ←
                               core.result.Result.Insts.CoreOpsTry.branch r13
@@ -2868,12 +3126,12 @@ def r1_pool_adapter.owned.stage1_owned (ops : Ops)
                     match cf6 with
                     | core.ops.control_flow.ControlFlow.Continue val1 =>
                       let r7 ←
-                        ops.op52 val1
+                        ops.op47 val1
                       let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r7
                       match cf7 with
                       | core.ops.control_flow.ControlFlow.Continue val2 =>
                         let r8 ←
-                          ops.op25
+                          ops.op21
                             val2
                         let r9 ←
                           core.result.Result.map_err
@@ -2887,7 +3145,7 @@ def r1_pool_adapter.owned.stage1_owned (ops : Ops)
                             aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common
                               val2
                           let r10 ←
-                            ops.op29
+                            ops.op24
                               pvpftcv.lane_transition.candidate_afterstate
                           let r11 ←
                             core.result.Result.map_err
@@ -2906,14 +3164,14 @@ def r1_pool_adapter.owned.stage1_owned (ops : Ops)
                             | core.ops.control_flow.ControlFlow.Continue val4
                               =>
                               let proof_length ←
-                                (aspis_r1_cost_probe.verifier.PROOF_BYTES ops)
+                                aspis_r1_cost_probe.verifier.PROOF_BYTES
                               let proof_start ←
                                 (aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops)
                               let o ←
                                 lift (Usize.checked_add proof_start
                                   proof_length)
                               let r13 ←
-                                ops.op2 o
+                                core.option.Option.ok_or o
                                   solana_program_error.ProgramError.InvalidAccountData
                               let cf11 ←
                                 core.result.Result.Insts.CoreOpsTry.branch r13
@@ -3117,7 +3375,7 @@ def r1_pool_adapter.owned.stage2_owned (ops : Ops)
               (aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops)
             let o1 ← lift (Usize.checked_add proof_start val.proof_length)
             let r3 ←
-              ops.op2 o1
+              core.option.Option.ok_or o1
                 solana_program_error.ProgramError.InvalidAccountData
             let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
             match cf3 with
@@ -3129,7 +3387,7 @@ def r1_pool_adapter.owned.stage2_owned (ops : Ops)
                   solana_program_error.ProgramError.InvalidAccountData)
               else
                 let r4 ←
-                  ops.op26
+                  ops.op22
                     val.statement
                 let r5 ←
                   core.result.Result.map_err
@@ -3154,17 +3412,17 @@ def r1_pool_adapter.owned.stage2_owned (ops : Ops)
                         val1 { start := proof_start, «end» := val3 }
                     let o2 ← (observer ops)
                     let r6 ←
-                      ops.op13
+                      ops.op11
                         (SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) s2 s3 val2
                         () o2
                     let r7 ←
                       core.result.Result.map_err (BuiltinFnOnce
                         aspis_r1_cost_probe.verifier.Error
-                        solana_program_error.ProgramError) r6 (ops.op49)
+                        solana_program_error.ProgramError) r6 (ops.op44)
                     let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r7
                     match cf5 with
                     | core.ops.control_flow.ControlFlow.Continue _ =>
-                      ops.op58 val.statement
+                      ops.op53 val.statement
                     | core.ops.control_flow.ControlFlow.Break residual =>
                       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                         Unit (core.convert.FromSame
