@@ -790,3 +790,32 @@ Still OPEN: full WideExact.mul
 canonical source composition, the actual surrounding caller and input provenance,
 production adoption/refinement and runtime/artifact correspondence. The full
 100-bit release claim remains OPEN. Production Rust and CU artifacts are unchanged.
+
+
+## Full source arithmetic and actual call boundaries
+
+PROVED source full WideExact.mul totality/exact semantics in focused packet
+`s9-source-wide-mul-total-exact-v1-20261023` (17.435 seconds, aggregate peak
+3,222,290,432 bytes, zero swaps, standard axioms). The source-to-Current
+full Result map covers the exact nine-operation source sequence, using a
+canonicality chain derived from those same reached calls. It composes the
+existing checked Wide product theorem rather than re-proving field algebra.
+
+PROVED actual frozen Pair-caller square and mixed-product operation maps,
+plus the actual generated Pair body's same-run square prefix. The square
+prefix derives canonicality from the selected extra read and ties the three
+source-cut results to the actual q4/q41/q8/q16 outputs. It does not supply
+canonicality of Weights.extra at its upstream producer.
+
+OPEN producer frontier identified concretely: Pair-step extraction receives
+Weights and does not contain Weights::new. The actual constructor copies
+alpha[8]/alpha[9] into extra; those values originate from semantic transcript
+sampling. The constructor/challenge-caller correspondence must be connected
+to the existing canonical sampler proofs. Raw proof-buffer field-reader
+canonicality alone does not establish this challenge provenance.
+
+Still OPEN in this lane: full Wide multiplication helper/Pair call join,
+exact four mixed-product calls through actual afterLow read witnesses,
+constructor/challenge and other upstream canonical-input provenance, and the
+composed source/caller/release result. No production Rust/CU artifact changed;
+S9 and the full 100-bit release claim remain OPEN.

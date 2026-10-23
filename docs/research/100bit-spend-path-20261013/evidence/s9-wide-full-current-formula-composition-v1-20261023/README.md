@@ -1,0 +1,3 @@
+The complete actual qcut formula for Wide multiplication maps as a full Result to the same checked CurrentWide sequence on canonical inputs. Two initial product transports compose with the proved named suffix; canonicality of both reached products comes from those same successful calls. The staged source formula is proved equal to the existing actual qcut formula. No independent intermediate-success hypotheses.
+
+Focused Lean check: 15.034 seconds; peak aggregate RSS 3217801216 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
