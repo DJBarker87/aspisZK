@@ -33,4 +33,16 @@ pub(crate) mod RealR3_context {
         ->(Result<QM31,Error>,SemanticTranscript<H>) {
         let out=apply(&mut st,row,&record);(out,st)
     }
+    static mut FIELD_RESULT:Result<(),Error>=Ok(());
+    static mut FIELD_CALLS:usize=0;
+    pub(crate) fn setup_fields(){unsafe{
+        assert_eq!(ROW,15);assert_eq!(RECORD.len(),901);FIELD_CALLS=0;
+        FIELD_RESULT=if kani::any(){Ok(())}else{Err(Error::NonCanonical{row:ROW,value:kani::any()})};
+    }}
+    pub(crate) fn field_count_reset()->usize{unsafe{let n=FIELD_CALLS;FIELD_CALLS=0;n}}
+    pub(crate) fn fields(row:u8,payload:&[u8])->Result<(),Error>{unsafe{
+        assert_eq!(row,ROW);assert_eq!(payload.len(),RECORD.len()-5);assert_eq!(payload.len(),896);
+        let j:usize=kani::any();kani::assume(j<payload.len());assert_eq!(payload[j],RECORD[5+j]);
+        FIELD_CALLS+=1;FIELD_RESULT
+    }}
 }

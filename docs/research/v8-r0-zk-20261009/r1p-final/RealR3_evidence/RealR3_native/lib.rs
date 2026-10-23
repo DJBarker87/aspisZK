@@ -260,22 +260,38 @@ pub(crate) mod RealR3_context {
         ->(Result<QM31,Error>,SemanticTranscript<H>) {
         let out=apply(&mut st,row,&record);(out,st)
     }
+    static mut FIELD_RESULT:Result<(),Error>=Ok(());
+    static mut FIELD_CALLS:usize=0;
+    pub(crate) fn setup_fields(){unsafe{
+        assert_eq!(ROW,15);assert_eq!(RECORD.len(),901);FIELD_CALLS=0;
+        FIELD_RESULT=if kani::any(){Ok(())}else{Err(Error::NonCanonical{row:ROW,value:kani::any()})};
+    }}
+    pub(crate) fn field_count_reset()->usize{unsafe{let n=FIELD_CALLS;FIELD_CALLS=0;n}}
+    pub(crate) fn fields(row:u8,payload:&[u8])->Result<(),Error>{unsafe{
+        assert_eq!(row,ROW);assert_eq!(payload.len(),RECORD.len()-5);assert_eq!(payload.len(),896);
+        let j:usize=kani::any();kani::assume(j<payload.len());assert_eq!(payload[j],RECORD[5+j]);
+        FIELD_CALLS+=1;FIELD_RESULT
+    }}
 }
 #[cfg(kani)] mod RealR3_context_proofs {
 use super::*;
 #[derive(Clone,Copy)] struct NoHash;
 impl Digest32 for NoHash {fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("hash outside summarized callee")}}
+// Compare against the existing expected record without a second 896-byte
+// symbolic shadow array or a harness input-copy loop.
+fn fields(row:u8,payload:&[u8])->Result<(),Error>{RealR3_context::fields(row,payload)}
 fn check<const N:usize,const PFX:usize>(row:u8){
  let initial:[u8;32]=kani::any();let next:u8=kani::any();let payload:[u8;N]=kani::any();let prefix:[u8;PFX]=kani::any();
- let x:[u32;4]=kani::any();let value=QM31{c0:field::CM31{a:field::M31(x[0]),b:field::M31(x[1])},c1:field::CM31{a:field::M31(x[2]),b:field::M31(x[3])}};
+  let x:[u32;4]=kani::any();let value=QM31{c0:field::CM31{a:field::M31(x[0]),b:field::M31(x[1])},c1:field::CM31{a:field::M31(x[2]),b:field::M31(x[3])}};
  // Independently constructed expected frame, not a call to wire::record.
  let (tag,size)=wire::row_shape(row).unwrap();assert_eq!(size,N);
  let mut frame=vec![tag];frame.extend_from_slice(&(N as u32).to_le_bytes());frame.extend_from_slice(&payload);
  RealR3_context::setup(frame,row,initial,next,value);
+ if row==15 {RealR3_context::setup_fields();}
  let mut st=SemanticTranscript{state:initial,hash:NoHash,next_row:next};let mut bytes=prefix.to_vec();
- let a=native(row,&payload,&mut st,&mut bytes);let calls=RealR3_context::count_reset();
+ let a=native(row,&payload,&mut st,&mut bytes);let calls=RealR3_context::count_reset();let field_calls=RealR3_context::field_count_reset();
  let (b,after,out)=owned(row,payload.to_vec(),SemanticTranscript{state:initial,hash:NoHash,next_row:next},prefix.to_vec());
- assert_eq!(calls,RealR3_context::count_reset());assert!(calls<=1);
+ assert_eq!(field_calls,RealR3_context::field_count_reset());assert_eq!(calls,RealR3_context::count_reset());assert!(calls<=1);
  assert_eq!(a,b);assert_eq!(st.state,after.state);assert_eq!(st.next_row,after.next_row);assert_eq!(bytes.len(),out.len());
  let j:usize=kani::any();kani::assume(j<bytes.len());assert_eq!(bytes[j],out[j]);
 }
@@ -327,4 +343,9 @@ fn check<const N:usize,const PFX:usize>(row:u8){
 #[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
 #[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
 #[kani::unwind(176)] fn row14(){check::<32,134>(14)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::stub(crate::wire::validate_record_fields,fields)]
+#[kani::unwind(1080)] fn row15(){check::<896,171>(15)}
 }
