@@ -201,3 +201,5 @@ The enumeration and comparison are now separate. Enumeration retains no global
 name/type map; exact comparisons run in source-pinned batches of at most 100
 candidate names. No cap or heartbeat change. The failed streamed file's final
 partial RAW_DUP_TYPE line is not accepted; it is retained as failure evidence.
+
+Final graph validation detected 32 additional consumers introduced through canonical provider imports (closure-completion.json). Rebuild those roots and their 88-module reverse closure; these are changed provider inputs, not an unchanged regression. Final source/hash validation also inventories the unchanged SamplerWordRead.unwrap_success/read_success audits mentioning the pre-existing opaque core.fmt.Formatter type. Those two incidental helper audits are not standard-only and are not among the union release audits. Every requested union audit and every newly added theorem must remain standard-only. No statement or opaque carrier is changed to suppress this inventory.
