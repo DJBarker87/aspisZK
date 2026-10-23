@@ -1,0 +1,3 @@
+One successful actual side-zero Pair body supplies its exact prefix, scalar low, four terms, three accumulations and first full multiplication; canonical low and all are derived from existing mapped input read contracts and those same reached computations. Upstream ap0/ap1/extra provenance remains explicit; this does not close the whole source caller or S9.
+
+Focused Lean check: 14.296 seconds; peak aggregate RSS 3228925952 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
