@@ -133,3 +133,25 @@ fn S2J_cut5_distinct_keys_original_records() {
     kani::cover!(native.is_ok());
     kani::cover!(native == Err(ProgramError::InvalidArgument));
 }
+
+fn readonly_buffer_meta_ok(is_signer: bool, is_writable: bool, executable: bool) -> ProgramResult {
+    if is_signer || is_writable || executable {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    Ok(())
+}
+fn native_cut6(account: &AccountRecord) -> ProgramResult {
+    readonly_buffer_meta_ok(account.is_signer, account.is_writable, account.executable)
+}
+fn owned_readonly(account: AccountRecord) -> ProgramResult {
+    if account.is_signer { Err(ProgramError::InvalidAccountData) }
+    else if account.is_writable { Err(ProgramError::InvalidAccountData) }
+    else if account.executable { Err(ProgramError::InvalidAccountData) }
+    else { Ok(()) }
+}
+#[kani::proof]
+#[kani::unwind(35)]
+fn S2J_cut6_proof_readonly_value() {
+    let accounts: [AccountRecord;3] = kani::any();
+    assert_eq!(native_cut6(&accounts[0]), owned_readonly(accounts[0]));
+}
