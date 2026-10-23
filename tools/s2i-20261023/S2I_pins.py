@@ -7,7 +7,23 @@ for root in paths:
  if not p.is_dir():continue
  for obj in sorted(p.rglob('*.olean')):
   key=str(obj.relative_to(p))
+  if key.startswith('merged-objects/'): continue
   if key not in seen:seen[key]={'path':str(obj),'sha256':hashlib.sha256(obj.read_bytes()).hexdigest(),'bytes':obj.stat().st_size}
+# Pin split-olean companions too; the flattened overlay must preserve them.
+for key,entry in list(seen.items()):
+ for suffix in ['.server','.private','.ir']:
+  companion=Path(entry['path']).with_suffix('.ir') if suffix=='.ir' else Path(entry['path']+suffix)
+  companion_key=str(Path(key).with_suffix('.ir')) if suffix=='.ir' else key+suffix
+  if companion.exists():
+   seen[companion_key]={'path':str(companion),'sha256':hashlib.sha256(companion.read_bytes()).hexdigest(),'bytes':companion.stat().st_size}
+# Lean resolves directory prefixes as a unit: merge the selected files into one
+# private overlay so migrated Types never masks an unchanged sibling Funs.
+overlay=B/'merged-objects';overlay.mkdir(exist_ok=True)
+for key,entry in seen.items():
+ dst=overlay/key;dst.parent.mkdir(parents=True,exist_ok=True)
+ if dst.is_symlink():dst.unlink()
+ dst.symlink_to(entry['path'])
+x['env']['LEAN_PATH']=str(overlay)+':'+x['env']['LEAN_PATH']
 (B/'lakefile.toml').write_text('name = "s2i"\nversion = "0.1.0"\n');(B/'lean-toolchain').write_text('leanprover/lean4:v4.32.0\n')
 pin=B/(x['attempt']+'-objects.json');pin.write_text(json.dumps(seen,sort_keys=True,indent=2)+'\n')
 x['deps_fingerprint']={'selected_overlay_sha256':hashlib.sha256(pin.read_bytes()).hexdigest(),'selected_object_count':len(seen),'scope':'cached focused overlay only; sysroot pins reused from S2E, not a coherent release rebuild'}
