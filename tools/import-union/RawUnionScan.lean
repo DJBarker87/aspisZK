@@ -23,8 +23,6 @@ private def readComplete (p : System.FilePath) : IO (ModuleData × ModuleData) :
 #eval show IO Unit from do
   let some path ← IO.getEnv "LEAN_PATH" | throw (IO.userError "LEAN_PATH missing")
   let roots := path.splitOn ":"
-  let excluded := ["Init", "Lean", "Std", "Mathlib", "Batteries", "Aeneas", "AeneasMeta",
-    "Aesop", "Qq", "Plausible", "ProofWidgets", "ImportGraph", "LeanSearchClient", "Lake"]
   let outputPath := "evidence/raw-union.jsonl"
   let out ← IO.FS.Handle.mk outputPath .write
   let mut pending := ["ImportUnionReleaseGate"]
@@ -34,7 +32,7 @@ private def readComplete (p : System.FilePath) : IO (ModuleData × ModuleData) :
   while !pending.isEmpty do
     let owner := pending.head!
     pending := pending.tail!
-    if visited.contains owner || excluded.contains (owner.splitOn ".").head! then continue
+    if visited.contains owner then continue
     visited := owner :: visited
     let mut found : Option System.FilePath := none
     for root in roots do

@@ -56,7 +56,10 @@ for rec in plan['ordered']:
 scan=latest['RawUnionScan']
 lines=(H/'raw-union.jsonl').read_text().splitlines()
 raw={key:[json.loads(l[len(prefix):]) for l in lines if l.startswith(prefix)] for key,prefix in
-     [('modules','RAW_MODULE '),('declarations','RAW_DECL '),('duplicate_types','RAW_DUP_TYPE '),('duplicates','RAW_DUP ')]}
+     [('modules','RAW_MODULE '),('declarations','RAW_DECL '),('duplicate_types','RAW_DUP_TYPE '),('duplicates','RAW_DUP '),('semantic_definitions','RAW_SEMANTIC_DEF ')]}
+for definition, required in [('AspisR1.SpendRelation.Rspend','AspisR1.SpendRelation.AppendBinding'),('AspisR1.SpendRelation.check','AspisR1.SpendRelation.appendCheck')]:
+    owners=[r for r in raw['semantic_definitions'] if r[0]==definition]
+    assert len(owners)==1 and owners[0][1]=='SpendRelation' and required in owners[0][3], ('legacy spend provider retained',owners)
 modules={r[0]:{'path':r[1],'imports':r[2]} for r in raw['modules']}
 object_pins={r['module']:r for r in json.loads((H/'raw-object-pins.json').read_text())}
 assert object_pins.keys()==modules.keys(), 'incomplete union object pins'
@@ -87,7 +90,7 @@ for row in raw['duplicates']:
     generated=bool(re.search(r'\.(eq(?:_\d+|_def|_unfold)?|congr_simp)$',name))
     rec={'name':name,'owners':owners,'identical_raw_types':same_type,'all_theorems':all(k=='theorem' for _,k in owners), 'allowed_generated_equation':bool(kernel_allowed and generated)}
     (allowed if rec['allowed_generated_equation'] else compatible_theorems if kernel_allowed else collisions).append(rec)
-for name,value in [('raw-module-graph',raw['modules']),('raw-declarations',raw['declarations']),('raw-duplicate-types',raw['duplicate_types']),('raw-duplicates',sorted(allowed+compatible_theorems+collisions,key=lambda r:r['name'])),('closure-check',closure),('release-targets',checks)]:
+for name,value in [('spend-definition-provider',raw['semantic_definitions']),('raw-module-graph',raw['modules']),('raw-declarations',raw['declarations']),('raw-duplicate-types',raw['duplicate_types']),('raw-duplicates',sorted(allowed+compatible_theorems+collisions,key=lambda r:r['name'])),('closure-check',closure),('release-targets',checks)]:
     (E/(name+'.json')).write_text(json.dumps(value,indent=2,sort_keys=True)+'\n')
 union=next(r for r in checks if r['module']=='ImportUnionReleaseGate')
 assert union['axioms_output'], 'union audits missing'
