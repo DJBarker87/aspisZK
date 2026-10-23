@@ -110,3 +110,125 @@ proved. The complete `OraclePortFrozen2Join.AcceptedRunJoin` observation is
 not proved. An operation-return log is not a digest-query log. No theorem here
 claims equality to `verifier D dV_frozen2`, equality of its two enriched
 annotation passes, or inhabitants of the thirteen `PerConeJoins` fields.
+
+## Stage 3: conditional checkpoint endpoint installation
+
+`VTop_Checkpoint.writer_join` / `reader_join` use the accepted-stage cuts and
+the *existing* `ChildJoin_Checkpoint.writer_header` / `reader_header` proofs.
+They derive both adapter checkpoint contracts for `install adapter stage`.
+The decoder stays the fixed C5 `checkpointHeader`. No `S2CallerFacts`, saved
+encoding, independently chosen checkpoint, hash injectivity or checkpoint
+persistence is used to manufacture these headers.
+
+The exact retained premises are deliberately visible:
+
+- `CheckpointSourceJoin.writer`: every successful stage writer call transports
+  to the existing writer effect program, with namespace-converted Prepared
+  and Accumulator, the same proof/public arguments and actual returned bytes.
+- `CheckpointSourceJoin.reader`: every successful stage resume call transports
+  to `resumeWithOps (CheckpointBytes4Ops.ops reserved)` on the same checkpoint,
+  proof/public inputs and returned Prepared/Accumulator.
+- Per-call digest/oracle interpretation, with fields copied between the two
+  extracted Digest32 namespaces.
+- `WriterProvenance`: the original `S1S7S8StateProvenance` for namespace-converted
+  writer state. Its present form is uniform over every successful writer call
+  on the fixed buffers, hence **stronger** than supplying provenance only at a
+  selected reached cut. It is not claimed to be a weakened premise or to be
+  proved by acceptance.
+
+`VTop_Accepted.accepted_run` specializes `ChildJoin_Accepted.accepted_run` to
+this installed dictionary and replaces its two header-contract continuation
+arguments by these endpoint applications. It retains checkpoint source
+transport and oracle interpretation as top premises and WriterProvenance in
+the continuation. The complete Required14 conclusion, reached-site relation,
+native wrapper execution/frame outputs, physical range child joins,
+checkpoint-version history, P2Prime, runtime/SDK/std/allocator/extraction and
+syscall premises are retained verbatim, specialized only to the installed
+dictionary. It does not use or add FullForestAcceptedRoundtrip.
+
+Before: arbitrary adapter dictionary, fixed decoder, independently supplied
+CheckpointWriterConeJoin and CheckpointReaderConeJoin, then Required14.
+After: the explicitly installed stage dictionary, successful source endpoint
+transport, oracle interpretation and uniform state provenance, then the same
+Required14 conclusion. This proves **conditional endpoint composition**;
+it is neither unconditional removal of checkpoint source refinement nor a
+proof that the new source-transport premises hold for the frozen children.
+
+## Exact outstanding obligation and handoff
+
+The requested full observation part of task (2), and therefore unconditional
+task (3), remain open. To reach the original JOIN-SPLIT target, instantiate a
+concrete release-specialized Signature, source/model Implementations, S10
+inventory and caller tree from the typed stage calls; provide the thirteen
+named per-cone refinements on those *same* carriers. In particular:
+
+1. S1 must identify the actual prepared state, gamma scratch and preparation
+   digest continuation with the reached transcript/parser/query state; the
+   source-call order theorem does not identify these mathematical values.
+2. Parser/compact, S7 and S8 must transport their actual returned raw fields,
+   geometry, pending weights and flush result into that reached model state.
+   S3/S4/S5/S6/S9 remain their owners' child dependencies, not new assumptions
+   silently hidden in an S2 proof.
+3. Multiproof must bind `stage.op5` to the physical batch source program, with
+   its ordered child reads and byte views. Checkpoint must instantiate the two
+   `CheckpointSourceJoin` source transports; endpoint header proofs alone do
+   not supply either transport.
+4. Substitute these concrete child observations into the extracted typed tree
+   and prove its model interpretation equals `verifier D dV_frozen2`, including
+   returned state, both annotation passes and enriched outputs. The full
+   model-order identity is not an added hypothesis in any new theorem here.
+
+This packet does **not** replace thirteen open joins by one assumed whole
+verifier equality. It also does not report typed event IDs as physical oracle
+reads. No new security conclusion, trust ruling or source adoption is proposed.
+There is no extraction-driven need for a Rust stage-glue restructuring at this
+boundary; no such rewrite or CU estimate is required. Shipped code and its CU
+are unchanged by construction; no new CU measurement is claimed.
+
+## Validation, pins and final resource receipt
+
+Final focused union: `VTop_Audit.lean`, lean-035, exit 0, wall 2.100030 s,
+peak RSS 4,390,116 KiB, swap 0. It imports the accepted-run specialization
+and both stage-order paths, prints all public new theorem axiom sets and the
+complete final checkpoint/source/provenance interfaces. Every accepted new
+theorem uses only a subset of `[propext, Classical.choice, Quot.sound]`.
+Private helper `bind_congr` is independently audited in lean-015 (Quot.sound).
+Raw compiler-recovery sorryAx output and lean-003's Formatter-dependent model
+are retained as excluded historical evidence; no such premise occurs in the
+accepted sources or final union audit.
+
+Budget consumed: **34/100 actual Lean compile attempts, 0/60 Kani runs**.
+Configuration lean-010 was a missing-source generator/setup failure and
+launched no compiler; it is separately recorded. Both deterministic heartbeat
+failures are retained with their source hashes and the subsequent source splits.
+No wall timeout or memory kill was rerun unchanged. The maximum process RSS
+across all jobs was 4,408,248 KiB; every receipt reports zero swaps.
+
+Every compile was one changed/split module with `lake env lean -j1 -M4400
+-DElab.async=false` on the host, with private objects, admission below the
+55 GiB reservation ceiling, and the shared global Lean lock. Every extraction
+and compile had its own scope: MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0,
+TasksMax=64. Charon used native Linux default private-leaf-salts, `aeneas_ref`,
+optimized release dependencies and one compiler job; exact flags are in JSON.
+`manifest.json` records every command/target receipt, revision, final source
+hash, direct dependency fingerprint, exit, wall, RSS, swap and complete axiom
+lines. Source revision for the final focused audit is `941210e7ed` plus the
+exact dirty-source hashes in its receipt. Old compiled dependency closures
+were reused read-only; this is **not a coherent H5 frozen release replay**.
+
+The packet audit (`python3 tools/verifier-top-20261023/VTop_manifest.py`) checks
+all receipt source hashes, fixed caps, final-source accepted compile coverage,
+standard axioms and unchanged initial shipped-source pins. The source-span
+audit (`VTop_source_audit.py`) independently checks Charon source text against
+the worktree. These inspections launch no Lean, Rust or solver process.
+
+No shipped source, existing Lean module, other worker's candidate, worktree,
+wallet/key, wire parameter or security contract changed. The source parameters
+remain compact proof 57,607 bytes, checkpoint 1,768 bytes, split 10/12 queries.
+No SBF/ELF or runtime suite ran; the three-ELF rebuild trigger did not fire.
+The C3-BIN 18:15 release pins remain default `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`,
+devnet `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`,
+Pool `121f3e29…`; they were **not independently rebuilt/reconfirmed here**.
+No full frozen manifest replay was run for this additive, conditional packet.
+Target not yet established; the next substantive deliverable is the concrete
+per-cone oracle/state interpretation and frozen2 model-order proof above.
