@@ -1,0 +1,3 @@
+The exact successful Pair adapter mixed multiplication retains its internal normalized coefficient and canonicality, same raw source operation result, mapped output identity, canonical mapped product, and exact componentwise decoded-product equation. Only canonicality of the left operand and this observed call success are premises; the right coefficient is unrestricted.
+
+Focused Lean check: 22.69 seconds; peak aggregate RSS 3191521280 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

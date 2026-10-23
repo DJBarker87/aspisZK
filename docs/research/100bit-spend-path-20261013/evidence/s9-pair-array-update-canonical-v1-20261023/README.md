@@ -1,0 +1,3 @@
+Generic successful-array-update preservation of canonical mapped reads, including nested carrier maps. The updated index uses the inserted value bound; all other successful reads retain their prior bound. Query index bounds are derived from success, so output invariants compose directly with the next update. No field arithmetic or source-caller claim is assumed.
+
+Focused Lean check: 10.559 seconds; peak aggregate RSS 2193080320 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
