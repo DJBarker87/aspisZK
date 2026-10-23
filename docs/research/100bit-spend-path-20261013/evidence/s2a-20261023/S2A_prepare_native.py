@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+"""Extend the inherited native FIRST-ENTRY cut with arbitrary error replies.
+One native caller, no paired reference run, fixed original input snapshots.
+The full typed statement/Box and candidate carriers are retained. Decoder,
+validator and encoder are open pure typed children, including mapped errors;
+this cut does not certify their implementation/installed interpretation.
+"""
+from pathlib import Path
+import subprocess, sys, json, hashlib
+R=Path(__file__).resolve().parents[5]
+O=Path(sys.argv[1]); assert not O.exists(); version=int(sys.argv[2]) if len(sys.argv)>2 else 1; assert version in [1,2,3]
+subprocess.run(['python3',str(R/'tools/s126-sdk-modular-20261021/prepare-sdk-native-constructor-ready.py'),str(O)],check=True)
+p=O/'src/lib.rs'; s=p.read_text()
+s=s.replace('mod proofs {','mod S2A_native {').replace('crate::proofs::','crate::S2A_native::')
+s=s.replace('fn native_owned_decoder_prefix()', 'fn S2A_native_prefix()')
+needle='fn plan()->'
+a=s.index(needle)
+s=s[:a]+'''static mut RETURNED:GhostStorage<[u8;3]>=GhostStorage{value:[0;3],allocation_tag:0x52ab000000000001};
+static mut INITIAL_PREFIX:GhostStorage<u8>=GhostStorage{value:0,allocation_tag:0x52ab000000000002};
+'''+s[a:]
+needle=' let boxed=Box::new(plan().statement);'; assert s.count(needle)==1
+s=s.replace(needle,''' if kani::any::<bool>() {
+  unsafe{RETURNED.value[0]=2;}
+  return Err(ProgramError::InvalidAccountData);
+ }
+ unsafe{RETURNED.value[0]=1;}
+'''+needle)
+needle='unsafe{CALLS.value[phase][1]+=1;}Ok(())'; assert s.count(needle)==1
+s=s.replace(needle,'''unsafe{CALLS.value[phase][1]+=1;}
+ if kani::any::<bool>() {
+  unsafe{RETURNED.value[1]=2;}
+  Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength)
+ } else {unsafe{RETURNED.value[1]=1;} Ok(())}''')
+needle='unsafe{CALLS.value[phase][2]+=1;}Ok(plan().candidate)'; assert s.count(needle)==1
+s=s.replace(needle,'''unsafe{CALLS.value[phase][2]+=1;}
+ if kani::any::<bool>() {
+  unsafe{RETURNED.value[2]=2;}
+  Err(PoolV1PairVerifierTransportErrorV1::WrongLength)
+ } else {unsafe{RETURNED.value[2]=1;} Ok(plan().candidate)}''')
+needle=' if plan().different {1}else{0}'; assert s.count(needle)==1
+s=s.replace(needle,''' assert_eq!(unsafe{root.add(index).read()},unsafe{INITIAL_PREFIX.value},"comparison reads original proof prefix coordinate");
+ if unsafe{root.add(index).read()} != unsafe{candidate.add(index).read()} || plan().different {1}else{0}''')
+needle=' let input=unsafe{ENTRY_SCALARS.value.unwrap()};'; assert s.count(needle)==1
+s=s.replace(needle,needle+'''
+ assert_eq!(unsafe{RETURNED.value},[1,1,1],"same E decoder, validator and encoder returned Ok in source order");
+ assert_eq!(unsafe{INITIAL_PREFIX.value},plan().candidate[unsafe{CMP_INDEX.value}],"original proof prefix equals the returned candidate at every selected coordinate");
+''')
+needle=' let cmp_index:usize=kani::any();kani::assume(cmp_index<688);'; assert s.count(needle)==1
+s=s.replace(needle,needle+'\n unsafe{RETURNED.value=[0;3];INITIAL_PREFIX.value=buffers[0][cmp_index];}')
+p.write_text(s)
+c=O/'Cargo.toml'; cargo=c.read_text().replace('aspis-s126-sdk-shared-prefix-constructor-ready-v4','s2a-native-prefix')
+c.write_text(cargo)
+p=O/'source-cut.json'; m=json.loads(p.read_text());m.update(source_sha256=hashlib.sha256(s.encode()).hexdigest(),qualification=__doc__,comparison_cut='Pointwise read-only overapproximation: a mismatching selected coordinate forces nonzero; matching coordinate leaves arbitrary nonzero/zero. Every true memcmp outcome is included. All other memcmp calls retain their real bodies. No proof bytes are initialized/assumed equal to candidate.',child_results='Each child freely chooses Ok or mapped Err. Full arbitrary typed decoder statement and encoder candidate are selected once; subsequent calls check the exact Box/common-afterstate object. No actual decoder/source-installation law is claimed.',required_next='Prove all assertions/safety/unwind/entry covers; apply existing scanner interpretation for zero checkpoint; bind actual pure child implementations and error/effect interpretation on E. Not full stage1 success or arbitrary SBF runtime.')
+p.write_text(json.dumps(m,indent=2)+'\n')
+
+# Permanent bounded source contexts; never retry the timed-out broad context.
+if version >= 2:
+ p=O/'src/lib.rs';s=p.read_text();a=s.index('#[kani::proof] #[kani::unwind(48)]');j=s.index('fn S2A_native_prefix(){',a);attrs=s[a:j];s=s[:a]+s[j:];s=s.replace('fn S2A_native_prefix(){','fn run_window(window:usize){')
+ s=s.replace('let cmp_index:usize=kani::any();kani::assume(cmp_index<688);','let cmp_offset:u8=kani::any();let cmp_index:usize=256*window+cmp_offset as usize;kani::assume(cmp_index<688);')
+ s=s.rstrip();assert s.endswith('}\n}');s=s[:-1]+''.join(attrs+f'fn S2A_prefix_window{w}(){{run_window({w});}}\n' for w in range(3))+'}\n'
+ if version == 3:
+  a=s.index('#[kani::proof] #[kani::unwind(48)]');j=s.index('fn S2A_prefix_window0()',a);attrs=s[a:j]
+  s=s[:a]+attrs+'fn S2A_tail_window0(){run_window(0); }\n'.replace('; }',';}')+attrs+'fn S2A_tail_window1(){run_window(1); }\n'.replace('; }',';}')+'}\n'
+  s=s.replace('256*window+cmp_offset as usize','512+128*window+(cmp_offset%128) as usize')
+ p.write_text(s)
+ c=O/'Cargo.toml';cargo=c.read_text().replace('name="s2a-native-prefix"','name="'+('s2a-native-prefix-windows' if version==2 else 's2a-native-tail-windows')+'"');c.write_text(cargo)
+ p=O/'source-cut.json';m=json.loads(p.read_text());m.update(source_sha256=hashlib.sha256(s.encode()).hexdigest(),replacement='Broad688 and final176 coordinate contexts exceeded160s; retain the checked256 head and128 tail source splits, no cap/time/unwind increases.',windows=([{'window':w,'start':256*w,'end':min(256*w+256,688)} for w in range(3)] if version==2 else [{'window':0,'start':512,'end':640},{'window':1,'start':640,'end':688}]))
+ p.write_text(json.dumps(m,indent=2)+'\n')

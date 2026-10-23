@@ -1,0 +1,27 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_sha256": "41fe1db57cd02c4a5d04a046a31e4c0a11d39a09652112f2c1625d22bc799186",
+  "qualification": "Extend the inherited native FIRST-ENTRY cut with arbitrary error replies.\nOne native caller, no paired reference run, fixed original input snapshots.\nThe full typed statement/Box and candidate carriers are retained. Decoder,\nvalidator and encoder are open pure typed children, including mapped errors;\nthis cut does not certify their implementation/installed interpretation.\n",
+  "scan_fission": {
+    "original": "checkpoint_data.iter().any(|byte| *byte != 0)",
+    "replacement": "{\n        let mut source_iter=checkpoint_data.iter();\n        crate::proofs::scan_enter(&source_iter);\n        let hit=source_iter.any(|byte| *byte != 0);\n        crate::proofs::scan_leave(hit);\n        hit\n    }",
+    "qualification": "Let-introduction around exactly one native iterator/any call. Additional calls only read/check or update tagged ghost storage; iterator has no destructor. Explicit equivalence/noninterference is a required certificate gate, not silently assumed."
+  },
+  "remaining": "All assertions and both covers must pass; instantiate existing concrete SDK iterator/std-any and exact prefix-gate laws at these checked native arguments. Construct the full reference execution from native-produced metadata/byte/child facts; actual child/oracle, continuation and runtime/TX2 transport remain. No whole S2.",
+  "comparison_cut": "Pointwise read-only overapproximation: a mismatching selected coordinate forces nonzero; matching coordinate leaves arbitrary nonzero/zero. Every true memcmp outcome is included. All other memcmp calls retain their real bodies. No proof bytes are initialized/assumed equal to candidate.",
+  "child_results": "Each child freely chooses Ok or mapped Err. Full arbitrary typed decoder statement and encoder candidate are selected once; subsequent calls check the exact Box/common-afterstate object. No actual decoder/source-installation law is claimed.",
+  "required_next": "Prove all assertions/safety/unwind/entry covers; apply existing scanner interpretation for zero checkpoint; bind actual pure child implementations and error/effect interpretation on E. Not full stage1 success or arbitrary SBF runtime.",
+  "replacement": "kani-013 final176-coordinate window timed out160s at6529700KiB. Split into two modulo128-offset windows [512,640),[640,688), no cap/time increases.",
+  "windows": [
+    {
+      "window": 0,
+      "start": 512,
+      "end": 640
+    },
+    {
+      "window": 1,
+      "start": 640,
+      "end": 688
+    }
+  ]
+}

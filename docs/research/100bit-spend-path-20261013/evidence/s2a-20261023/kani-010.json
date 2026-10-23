@@ -1,0 +1,36 @@
+{
+  "attempt": "kani-010",
+  "kind": "kani",
+  "source_revision": "56e9f046f3642739a117f87fc925ad443f3a0eeb",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "stubbing",
+    "--manifest-path",
+    "S2A-native-v2/Cargo.toml",
+    "--target-dir",
+    "S2A-native-target",
+    "--harness",
+    "S2A_native::S2A_prefix_window",
+    "--only-codegen",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2A-native-v2/src/lib.rs",
+    "S2A-native-v2/Cargo.toml",
+    "S2A-native-v2/source-cut.json"
+  ],
+  "timeout": 180,
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  },
+  "deps_fingerprint": "dependency source hashes to be recorded by host before launch; inherited repin-s6 typed child crate and solana-program2.3.0",
+  "expected_time": "optimized cold dependency compilation and GOTO/property generation only; actual solver will be a separate named entry-prefix gate",
+  "replacement_reason": "isolate broad native prefix comparison coordinate after kani-009 timeout; three bounded u8-offset windows, no cap/time increase."
+}
