@@ -1,0 +1,68 @@
+{"attempt": "lean-100", "exit_status": 1, "wall_seconds": 6.858346413995605, "peak_rss_kib": "4429144", "swaps": "0", "print_axioms": ["'AspisR1.Port3_FinishAny.comparison' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_FinishAny.accepted_dot' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port3_FinishAny.lean:23:34: error: Tactic `assumption` failed
+
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+obs : Option (verifier.Phase → Result Unit)
+x✝¹⁶ : Result aspis_core.field.wide_exact.WideExact
+a✝¹⁶ : aspis_core.field.wide_exact.WideExact
+heq✝¹⁶ : p.alpha.index_usize 0#usize = ok a✝¹⁶
+x✝¹⁵ : Result (core.result.Result aspis_core.field.wide_exact.WideExact verifier.Error)
+a✝¹⁵ : aspis_core.field.wide_exact.WideExact
+heq✝¹⁵ : verifier.finishRelationRoundWithOps ops v.round0 a✝¹⁶ p.claim 0#usize = ok (core.result.Result.Ok a✝¹⁵)
+x✝¹⁴ : Result Usize
+a✝¹⁴ : Usize
+heq✝¹⁴ : ops.folds p.variant = ok a✝¹⁴
+h✝³ : a✝¹⁴ = 2#usize
+x✝¹³ : Result aspi
+...
+esult (core.result.Result aspis_core.field.wide_exact.WideExact verifier.Error)
+a_2 : aspis_core.field.wide_exact.WideExact
+heq_1 : verifier.finishRelationRoundWithOps ops v.round0 a_1 p.claim 0#usize = ok (core.result.Result.Ok a_2)
+x_2 : Result Usize
+a_3 : Usize
+heq_2 : ops.folds p.variant = ok a_3
+x_3 : Result (core.result.Result W verifier.Error)
+a_4 : W
+x_4 : Result (Slice aspis_core.field.wide_exact.WideExact)
+a_5 : Slice aspis_core.field.wide_exact.WideExact
+x_5 : Result (core.result.Result E verifier.Error)
+a_6 : E
+x_6 : Result Unit
+a_7 : Unit
+x_7 : Result Unit
+a_8 : Unit
+x_8 : Result Bool
+x_9 : Result Unit
+a_10 : Unit
+x_10 : Result (core.result.Result E verifier.Error)
+a_11 : E
+x_11 : Result Unit
+a_12 : Unit
+x_12 : Result Unit
+a_13 : Unit
+x_13 : Result Bool
+x_14 : Result Unit
+a_15 : Unit
+h_1 : ¬↑a_3 = 2
+heq_3 : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok a_4)
+heq_4 : core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := a_3 } p.alpha.to_slice = ok a_5
+heq_5 : ops.pair a_4 a_5 v.final_message p.kappa = ok (core.result.Result.Ok a_6)
+heq_6 : ops.trace 16#u16 0#usize a_6 = ok a_7
+heq_7 : ops.trace 16#u16 1#usize a_2 = ok a_8
+heq_8 : ops.ne a_6 a_2 = ok false
+heq_9 : ops.mark obs verifier.Phase.Relation = ok a_10
+heq_10 : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok a_11)
+heq_11 : ops.trace 17#u16 0#usize a_11 = ok a_12
+heq_12 : ops.trace 17#u16 1#usize a.rhs = ok a_13
+h_3 : ↑a.next = 22
+heq_13 : ops.ne a_11 a.rhs = ok false
+heq_14 : ops.mark obs verifier.Phase.Final = ok a_15
+⊢ a.next = 22#usize
+'AspisR1.Port3_FinishAny.comparison' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_FinishAny.accepted_dot' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc364f621fcb7440cb03d4ed5731fdee2.scope; invocation ID: aef218660d7f430286991111b3a4f999
