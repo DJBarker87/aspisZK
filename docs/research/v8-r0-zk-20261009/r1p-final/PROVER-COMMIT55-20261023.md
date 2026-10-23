@@ -435,3 +435,72 @@ Source audit checks six frozen source pins and fourteen byte-identical field
 copies. No crates/ or programs/ file changed, so the shipped-file ELF rebuild
 rule is not triggered. The three release ELF pins remain inherited; they
 were not rebuilt or re-measured during this docs/proof-only continuation.
+
+## Final validation and remaining obligations
+
+The single final current-source import/axioms manifest is J10798,
+`R1Z.ProverCommitAudit55`: exit 0, wall 2.02 s, peak RSS 4417232 KiB,
+swap 0, source revision ea79f802635a8f266db8c8dbe3d18d2b4adfa1c7.
+Its exact source hash, direct cached dependency hashes, command and complete
+82 axiom reports are in lean/J10798.json. It imports all 32 current new source
+roots and audits all 81 new theorem declarations plus the unchanged deployed
+headline. Every accepted axiom set is a subset of
+[propext, Classical.choice, Quot.sound]. The integrity audit also checks every
+current source against its successful focused receipt, all new direct
+dependencies against the final audit's pinned objects, forbidden-proof/limit
+patterns, six frozen source pins, fourteen identical field copies, and the
+byte-identical deployed endpoint. `final-integrity.json` records the result.
+
+This is a coherent source-pinned cached import/axioms check. It is **not** a
+cold rebuild of all historical dependencies or a full frozen release replay.
+No complete native refinement or new formal release result is claimed, so
+no unchanged full release/adversarial/runtime/ELF regression is repeated.
+The retained build workspace/cache and earlier frozen release evidence are
+reused explicitly. All builds/extractions use capped host scopes; native
+arithmetic gates use opt-level=3, jobs=4 and linker threads=4. Waiting on the
+55 GiB host reservation invokes no compiler and does not justify raising caps.
+
+Attempts J10700–10774 and J10798 are accounted for. J10725/J10743 are retired
+dependency preflights; their inventory entries explicitly claim no compiler,
+source snapshot or timing receipt. They are not accepted formal results.
+J10775–10797 and J10799 are unused. Work stops at the demonstrated native
+1024-map/full-arithmetic gate obstructions, not because the numerical attempt
+budget was exhausted. Failed sources/gates are preserved; no failed gate is
+silently replaced by a weaker claim or retried unchanged.
+
+**Target not yet established:** native `sim_e_ablated` output =
+`R0Z.RefPayload.simE` payload has not been proved. The deployed
+`RustProverRefinement` premise and headline statement are unchanged.
+
+Remaining concrete obligations, in consumer order:
+
+1. Join the accepted full native split/channel collection and constructor
+   checks, optimized-power control and symbolic geometry induction to the
+   actual specialized native encoder calls. The full native CM31 arithmetic
+   step still times out; the literal full trait record still has part 54's
+   unused inverse extraction obstruction. The used-method projection results
+   remain valid and are not relabelled as full-record extraction.
+2. Complete the frozen/retained Poseidon binding. The accepted row/frame,
+   low-fold, local packing, sums and finish/internal checks are focused pieces;
+   no whole native external layer or whole native terminal theorem consumes
+   them yet. A source-literal loop induction must compose them.
+3. Bind complete 1024-cell base/extension array maps and outer 26/3-column
+   collection at sim.rs:435–451, then native byte Vec/chain and query-map
+   assembly to the retained opened/folded leaf interfaces. The two new full
+   map checks time out at 180 s. Scalar round trips establish only each
+   projection's arithmetic, not those complete collections.
+4. Bind the actual initial mask/S0 producer and its optimized extra folds
+   (the Boolean-sum identity is now proved), and execute the full ten-round
+   mutable point/running-value driver. Per-round interpolation, prefix,
+   initial/chain mathematical guards and complete final-round shift/guard
+   are proved as owned cuts, not one source driver.
+5. Connect the native draw/P_R1 acceptance, raw canonical challenges, circle
+   equations, tape and public-preparation success to those semantic/opening
+   cuts; compose all records, commitment programming, retries/abort behavior,
+   serialization and ordered oracle effects into the actual simulator.
+
+The exact next source consumer is the native base/ext projection immediately
+before the opened-query encoder calls. The next formal consumer is a native
+projection-map/collection invariant lifted into that caller, followed by the
+owned initial/ten-round semantic driver; wrapping the unchanged deployed
+premise would not discharge either obligation. No wallet/key cleanup occurs.
