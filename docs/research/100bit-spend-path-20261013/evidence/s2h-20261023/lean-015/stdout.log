@@ -1,0 +1,54 @@
+S2H_DropSteps.lean:20:2: error: Type mismatch: After simplification, term
+  update.data
+ has type
+  ∀ (slot_1 : ℕ) (cell_1 : OwnedDataCell),
+    (↑(setCounter sdk slot cell next).data_cells)[slot_1]? = some cell_1 →
+      h.allocated (m.dataCell slot_1) = true ∧
+        (h.payload (m.dataCell slot_1)).descriptor = m.descriptor slot_1 ∧
+          (m.descriptor slot_1).length = (↑cell_1.bytes).length ∧
+            put h.counter (m.dataCell ↑slot) (↑next) (m.dataCell slot_1) = ↑cell_1.borrowed ∧
+              h.ambient.strong (m.dataCell slot_1) = cell_1.strong ∧
+                h.ambient.weak (m.dataCell slot_1) = cell_1.weak ∧
+                  ∀ (i : ℕ) (byte : U8),
+                    (↑cell_1.bytes)[i]? = some byte → (h.payload (m.dataCell slot_1)).contents i = UInt8.ofNat ↑byte
+but is expected to have type
+  ∀ (slot_1 : ℕ) (cell_1 : OwnedDataCell),
+    (↑(setCounter sdk slot cell next).data_cells)[slot_1]? = some cell_1 →
+      h.allocated (m.dataCell slot_1) = true ∧
+        (h.payload (m.dataCell slot_1)).descriptor = m.descriptor slot_1 ∧
+          (m.descriptor slot_1).length = (↑cell_1.bytes).length ∧
+            put h.counter (m.dataCell ↑slot) (if g.kind = Kind.shared then h.counter (m.dataCell ↑slot) - 1 else 0)
+                  (m.dataCell slot_1) =
+                ↑cell_1.borrowed ∧
+              h.ambient.strong (m.dataCell slot_1) = cell_1.strong ∧
+                h.ambient.weak (m.dataCell slot_1) = cell_1.weak ∧
+                  ∀ (i : ℕ) (byte : U8),
+                    (↑cell_1.bytes)[i]? = some byte → (h.payload (m.dataCell slot_1)).contents i = UInt8.ofNat ↑byte
+S2H_DropSteps.lean:59:4: error: Type mismatch
+  ran
+has type
+  SdkReference.GuardRelease.dropShared sdk slot =
+    ok (SdkReference.GuardRelease.counterUpdate sdk slot (↑sdk.data_cells)[↑slot] next)
+but is expected to have type
+  SdkReference.GuardRelease.dropShared sdk slot = ok (setCounter sdk slot cell next)
+S2H_DropSteps.lean:75:4: error: Type mismatch
+  ran
+has type
+  SdkReference.GuardRelease.dropCheckpoint sdk slot =
+    ok (SdkReference.GuardRelease.counterUpdate sdk slot (↑sdk.data_cells)[↑slot] 0#isize)
+but is expected to have type
+  (do
+      let sdk1 ←
+        match { checkpoint := some slot, «public» := none, proof := none }.proof with
+          | none => ok sdk
+          | some slot => SdkReference.GuardRelease.dropShared sdk slot
+      let sdk2 ←
+        match { checkpoint := some slot, «public» := none, proof := none }.public with
+          | none => ok sdk1
+          | some slot => SdkReference.GuardRelease.dropShared sdk1 slot
+      match { checkpoint := some slot, «public» := none, proof := none }.checkpoint with
+        | none => ok sdk2
+        | some slot => SdkReference.GuardRelease.dropCheckpoint sdk2 slot) =
+    ok (setCounter sdk slot cell 0#isize)
+'AspisR1.S2H.image_release' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2H.guard_sdk_drop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

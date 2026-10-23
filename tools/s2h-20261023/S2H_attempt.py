@@ -8,7 +8,7 @@ prior=json.loads((D/'evidence/s2e-20261023/lean-023/receipt.json').read_text())
 paths=prior['env']['LEAN_PATH'].split(':');base='/home/dombarker/project-offloads/codex-cx-s2e-20261023'
 paths=[base if p=='.' else base+'/'+p if not p.startswith('/') else p for p in paths]
 paths += ['/home/dombarker/project-offloads/codex-cx-s2b-20261023/lead-overlay','/home/dombarker/project-offloads/codex-cx-s2b-20261023/objects']
-paths += ['/home/dombarker/project-offloads/codex-cx-s2f-20261023','/home/dombarker/project-offloads/codex-cx-s2g-20261023']
+paths += ['/home/dombarker/project-offloads/codex-cx-s2d-20261023','/home/dombarker/project-offloads/codex-cx-s2f-20261023','/home/dombarker/project-offloads/codex-cx-s2g-20261023']
 paths.insert(0,'/home/dombarker/project-offloads/codex-cx-import-union-20261022/objects')
 subprocess.run(['ssh',HOST,'mkdir','-p',H],check=True)
 needed=set()
