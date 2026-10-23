@@ -46,8 +46,13 @@ native=[]
 for directory in sorted((root/'native').iterdir()):
     receipt=json.loads((directory/'receipt.json').read_text())
     pins=json.loads((directory/'inputs.json').read_text())
-    assert hashlib.sha256((directory/'RealR1_reservation.rs.txt').read_bytes()).hexdigest()==pins['files']['RealR1_reservation.rs']
+    snapshot = 'RealR1_retry.rs' if directory.name.startswith('client-owned-') else 'RealR1_reservation.rs'
+    assert hashlib.sha256((directory/(snapshot+'.txt')).read_bytes()).hexdigest()==pins['files'][snapshot]
     native.append(dict(name=directory.name,**receipt,inputs=pins))
+    if directory.name.startswith('client-owned-'):
+        assert receipt['exit_status']==0 and 'SUCCESSFUL' in (directory/'stdout.log').read_text()
+        for name in ['RealR1_native_client.rs','RealR1_native_retry.rs']:
+            assert hashlib.sha256((directory/name).read_bytes()).hexdigest()==pins['files'][name]
     if directory.name.endswith('-v4'):
         assert receipt['exit_status']==0
         assert 'SUCCESSFUL' in (directory/'stdout.log').read_text()
@@ -59,12 +64,26 @@ caller=json.loads((root/'caller-gate.json').read_text())
 assert caller['exit_status']==1 and caller['checks']['actual_96byte_retry_call']
 assert not caller['checks']['selected_retry_call'] and not caller['checks']['selected_64byte_factory']
 
+new_audits=[]
+for number in [10917,10919]:
+    receipt=json.loads((root/'lean'/str(number)/'receipt.json').read_text())
+    assert receipt['exit_status']==0 and len(receipt['axioms'])==3
+    assert hashlib.sha256((lean/receipt['module']).read_bytes()).hexdigest()==receipt['source_sha256']
+    new_audits.extend(receipt['axioms'])
+build=json.loads((root/'client/source-pins.json').read_text())
+assert all(x['match'] and x['cmp_exit_status']==0 for x in build['artifacts'])
+for name,sha in build['pins'].items():
+    assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==sha,name
+performance=json.loads((root/'client/performance-gate.json').read_text())
+event=json.loads((root/'event-gate.json').read_text())
+assert not performance['passed'] and event['exit_status']==1
+
 record=dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             lean_compiles=sum('exit_status' in a for a in attempts),lean_preflight_refusals=2,
-            kani_commands=len(native),lean_budget=100,kani_budget=60,final_axiom_reports=len(final['axioms']),
+            kani_commands=len(native),lean_budget=100,kani_budget=60,final_axiom_reports=len(final['axioms'])+len(new_audits),new_axioms=new_audits,
             lean=attempts,native=native,caller_gate=caller,
             dependency_sources_compared=len(checks),dependency_migration_only_differences=[r for r in checks if not r['exact_source_equal']],
-            target_established=False,scope='Conditional reference real outer owner; no complete native experiment or deployment instance.',
-            artifacts='No shipped sources changed; no ELF rebuild; no new binary identity claimed.')
+            target_established=False,scope='New host library caller and conditional native-control/owned bridge; no complete native experiment, event image or deployed instance.',
+            artifacts=build['artifacts'],performance_gate=performance,event_gate=event)
 (root/'summary.json').write_text(json.dumps(record,indent=2)+'\n')
 print(json.dumps({k:record[k] for k in ['lean_compiles','kani_commands','final_axiom_reports','dependency_sources_compared','target_established']}))

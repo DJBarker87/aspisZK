@@ -1,0 +1,34 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR1_ClientBinding.lean:34:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(ProverCommitRetrySource34.word i)
+in the target expression
+  (do
+      let step ←
+        {
+                attempt := fun i s => do
+                  let pair ← attempt (↑i) s
+                  ok (encode pair) }.attempt
+            (ProverCommitRetrySource34.word i) s
+      ok (ProverCommitRetrySource34.decodeStep step)) =
+    attempt i s
+
+S P : Type
+attempt : Attempt S P
+i : ℕ
+hi : i < 8
+s : S
+size : 8 < UScalar.size UScalarTy.Usize
+hv : ↑(ProverCommitRetrySource34.word i) = i
+⊢ (do
+      let step ←
+        {
+                attempt := fun i s => do
+                  let pair ← attempt (↑i) s
+                  ok (encode pair) }.attempt
+            (ProverCommitRetrySource34.word i) s
+      ok (ProverCommitRetrySource34.decodeStep step)) =
+    attempt i s
+'R1Z.RealR1_ClientBinding.native_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.RealR1_ClientBinding.client_control' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.RealR1_ClientBinding.client_outer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
