@@ -3,7 +3,7 @@
 import hashlib,json,os,pathlib,subprocess,sys,time,shutil
 base=pathlib.Path(__file__).resolve().parent
 cfg=json.loads((base/sys.argv[1]).read_text())
-manifest=json.loads((base/'cache-manifest.json').read_text())
+manifest=json.loads((base/cfg.get('cache_manifest','cache-manifest.json')).read_text())
 new_objects={}
 for source,expected in cfg.get('new_dependencies',{}).items():
  assert hashlib.sha256((base/source).read_bytes()).hexdigest()==expected,source
@@ -12,7 +12,8 @@ for source,expected in cfg.get('new_dependencies',{}).items():
 cfg['new_dependency_objects']=new_objects
 for module,item in manifest['modules'].items():
  if '/.elan/toolchains/' in item['path']:continue
- obj=base/'objects'/pathlib.Path(*module.split('.')).with_suffix('.olean')
+ relobj=pathlib.Path(*module.split('.')).with_suffix('.olean')
+ obj=next((base/root/relobj for root in cfg.get('object_roots',['objects']) if (base/root/relobj).exists()))
  assert hashlib.sha256(obj.read_bytes()).hexdigest()==item['sha256'],module
 for rel,item in json.loads((base/'companion-manifest.json').read_text()).items():
  assert hashlib.sha256((base/'objects'/rel).read_bytes()).hexdigest()==item['sha256'],rel
