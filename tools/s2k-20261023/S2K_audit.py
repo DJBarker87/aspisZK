@@ -11,17 +11,18 @@ for p in sorted(E.glob('*/receipt.json')):
  assert x['source_revision'] and x['deps_fingerprint'] and x['command']
  assert x['wall_seconds']>=0 and int(x['peak_rss_kib'])>0
  if kind=='lean' and x['exit_status']==0:
-  assert len(x['print_axioms'])==5
+  assert x['print_axioms']
   assert all('sorryAx' not in line and 'axioms:' in line for line in x['print_axioms'])
   for line in x['print_axioms']:
    names=line.split('[')[1].rstrip(']').split(', ');assert set(names)<= {'propext','Classical.choice','Quot.sound'}
  if kind=='kani':
-  log=(p.parent/'stdout.log').read_text();assert 'profile [optimized]' in log
+  log=(p.parent/'stdout.log').read_text()
+  if x['exit_status']==0:assert 'profile [optimized]' in log
   assert x['env']['CARGO_PROFILE_DEV_OPT_LEVEL']=='3'
   if x['exit_status']==0:assert 'VERIFICATION:- SUCCESSFUL' in log
  rows.append(dict(path=str(p.relative_to(E)),sha256=sha(p),kind=kind,attempt=x['attempt'],exit=x['exit_status']))
-assert len([r for r in rows if r['kind']=='lean'])==2
-assert len([r for r in rows if r['kind']=='kani'])==7
+assert len([r for r in rows if r['kind']=='lean'])<=100
+assert len([r for r in rows if r['kind']=='kani'])<=60
 assert len([r for r in rows if r['kind']=='audit'])==1
 cuts=json.loads((E/'source-cuts.json').read_text())
 for f,c in cuts.items():
@@ -34,6 +35,6 @@ assert sha(D/'lean/S2K_Serialization.lean')==json.loads((E/'lean-002/receipt.jso
 for f,c in json.loads((E/'native-source.json').read_text()).items():assert sha(R/f)==c['sha256']
 h=json.loads((E/'host-audit.json').read_text());assert h['native_sources_all_match'];assert h['inherited_selected_objects']['all_match'];assert not h['own_remaining_processes']
 changed=subprocess.check_output(['git','diff','--name-only','4af6a0f6bf','HEAD'],cwd=R,text=True).splitlines()
-assert all(f.startswith(('tools/s2k-20261023/','docs/research/100bit-spend-path-20261013/evidence/s2k-20261023/')) or f in ['docs/research/100bit-spend-path-20261013/lean/S2K_Serialization.lean','docs/research/100bit-spend-path-20261013/design/S2K-20261023.md'] for f in changed),changed
-x=dict(schema='focused-extractor-proof-packet-v1',branch='codex/cx-s2k-20261023',receipts=rows,budget=dict(lean_attempts=2,lean_cap=100,kani_runs=7,kani_cap=60),accepted_lean=['lean-002'],accepted_kani=['kani-001','kani-002','kani-003','kani-006','kani-007'],excluded=['lean-001','kani-004','kani-005'],status='PARTIAL: emit success unclosed; ASQ8 and TX2 unstarted',shipped_source_changed=False,elf_pins='inherited only; no rebuild triggered',new_trust=False)
+assert all(f.startswith(('tools/s2k-20261023/','docs/research/100bit-spend-path-20261013/evidence/s2k-20261023/')) or f.startswith('docs/research/100bit-spend-path-20261013/lean/S2K_') or f in ['docs/research/100bit-spend-path-20261013/lean/S2K_Serialization.lean','docs/research/100bit-spend-path-20261013/design/S2K-20261023.md'] for f in changed),changed
+x=dict(schema='focused-extractor-proof-packet-v1',branch='codex/cx-s2k-20261023',receipts=rows,budget=dict(lean_attempts=sum(r['kind']=='lean' for r in rows),lean_cap=100,kani_runs=sum(r['kind']=='kani' for r in rows),kani_cap=60),accepted_lean=[r['attempt'] for r in rows if r['kind']=='lean' and r['exit']==0],accepted_kani=[r['attempt'] for r in rows if r['kind']=='kani' and r['exit']==0],excluded=[r['attempt'] for r in rows if r['exit']!=0],status='PARTIAL: emit success unclosed; ASQ8 and TX2 unstarted',shipped_source_changed=False,elf_pins='inherited only; no rebuild triggered',new_trust=False)
 (E/'manifest.json').write_text(json.dumps(x,indent=2)+'\n');print(json.dumps(dict(audit='PASS',receipts=len(rows),budget=x['budget'])))

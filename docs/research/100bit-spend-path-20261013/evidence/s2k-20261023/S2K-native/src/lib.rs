@@ -137,3 +137,5 @@ fn S2K_frontier_bounds() {
     kani::cover!(level==0 && j==0);
     kani::cover!(level==19 && j==31);
 }
+
+include!("S2K_concrete.rs");
