@@ -105,3 +105,18 @@ the actual valid operand domain. It is not an arbitrary-invalid-carrier raw
 identity, a general source/runtime/allocator proof, or a whole-spend security
 claim. The accepted-source-to-existing-S5 backend consumer and returned-Wide
 finish transport are separate compositions; the latter is continuing.
+
+
+## Actual-source backend consumer established
+
+The final concrete consumer now maps the SAME accepted actual-raw-instantiated
+EbyK push to the existing S5 concrete backend, preserving both sum arrays and
+count. Its only domain premise is the native Wide eight-coordinate bound;
+scalar validity is obtained from its own accepted source check. There is no
+independent child/backend success, scalar canonicality, history or abstract
+dot-meaning premise. See
+`lean-candidates/s9-current-qraw-source-backend-v1-20261023/`.
+Focused validation passed in 12.088 seconds, peak RSS 2.302 GB, zero swap,
+standard axioms. The returned-Wide finish-value transport and complete Pair
+composition remain separate. Earlier qualified-cut product results can now
+consume this concrete source backend only through this checked domain binding.
