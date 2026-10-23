@@ -1,0 +1,91 @@
+{
+  "source_revision": "f0cbdb80ff561dcaf1ff77cdcde992f19ef022c4",
+  "checked_driver": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+  "driver_sha256": "b267904b985adf2d432be68a77e5b5a697f69ae7a92ddad3ff84c60bfae84b62",
+  "checks": {
+    "selected_retry_call": false,
+    "selected_64byte_factory": false,
+    "actual_96byte_retry_call": true
+  },
+  "inventory": [
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 202,
+      "text": "pub fn generate_for_mask_nonce(",
+      "file_sha256": "6b5a9c8737cc2b832d29bc7dab4660533195d7fe5c46104dc1e6ea2659252934"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/examples/secure_attempt_gate.rs",
+      "line": 66,
+      "text": "let replay_same = StateOnlyAttemptSecrets::generate_for_mask_nonce(public_nonce)",
+      "file_sha256": "2529343ade7179caa3e674fc49abc87969d384f46191c6e1bf9292f9b47f1c6a"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/examples/secure_attempt_gate.rs",
+      "line": 78,
+      "text": "let replay_cross = StateOnlyAttemptSecrets::generate_for_mask_nonce(public_nonce)",
+      "file_sha256": "2529343ade7179caa3e674fc49abc87969d384f46191c6e1bf9292f9b47f1c6a"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 334,
+      "text": "prove_masked_retrying_with(public,compiled,variant,hash,nonce_store,|_|StateOnlyAttemptSecrets::generate().map_err(|_|Error::Entropy))",
+      "file_sha256": "76aafd05e9b9459253f810be324b80fa5404449f93d03edb5697cddc669d2c42"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 340,
+      "text": "/// `StateOnlyAttemptSecrets::generate_for_mask_nonce` with its public key.",
+      "file_sha256": "76aafd05e9b9459253f810be324b80fa5404449f93d03edb5697cddc669d2c42"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 354,
+      "text": "pub fn prove_masked_retrying_with(",
+      "file_sha256": "76aafd05e9b9459253f810be324b80fa5404449f93d03edb5697cddc669d2c42"
+    },
+    {
+      "path": "tools/prover-speed-20261022/speed_profile.rs",
+      "line": 16,
+      "text": "let result=prover::prove_masked_retrying_with(fixture.public(),&fixture.compiled,Variant::S2,HOST_HASH,&mut ledger,|_|{",
+      "file_sha256": "116e0f64a8854da88f3bdab0b6a7b46664b8bf7cade1ca3b61125df35b89a60e"
+    },
+    {
+      "path": "tools/prover-speed-20261022/speed_profile.rs",
+      "line": 17,
+      "text": "let mut nonce=[0u8;32];getrandom::fill(&mut nonce).unwrap();StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce).map_err(|_|verifier::Error::Entropy)",
+      "file_sha256": "116e0f64a8854da88f3bdab0b6a7b46664b8bf7cade1ca3b61125df35b89a60e"
+    },
+    {
+      "path": "tools/v7-live-pool-proof/src/lib.rs",
+      "line": 67,
+      "text": "let attempt = StateOnlyAttemptSecrets::generate_for_mask_nonce(plan.attempt_id)",
+      "file_sha256": "2b3a61fa928e08f4027519e30269b1a20ed74cfadaa272ac69f0b72ddc3b3c25"
+    },
+    {
+      "path": "tools/v7-live-pool-proof/src/lib.rs",
+      "line": 97,
+      "text": "let attempt = StateOnlyAttemptSecrets::generate_for_mask_nonce(plan.attempt_id)",
+      "file_sha256": "2b3a61fa928e08f4027519e30269b1a20ed74cfadaa272ac69f0b72ddc3b3c25"
+    },
+    {
+      "path": "xtask/src/v6_release.rs",
+      "line": 359,
+      "text": "let attempt = StateOnlyAttemptSecrets::generate_for_mask_nonce(proof_account.to_bytes())",
+      "file_sha256": "09b31ad2aaed686f67f982042c5d234711b4378e0dc6ed1e6e61eaadb65e7169"
+    },
+    {
+      "path": "xtask/src/v6_release.rs",
+      "line": 471,
+      "text": "let attempt = StateOnlyAttemptSecrets::generate_for_mask_nonce(proof_account.to_bytes())",
+      "file_sha256": "09b31ad2aaed686f67f982042c5d234711b4378e0dc6ed1e6e61eaadb65e7169"
+    }
+  ],
+  "exit_status": 1,
+  "wall_seconds": 0.44085050001740456,
+  "peak_rss_kib": 29376,
+  "swaps": 0,
+  "print_axioms": "N/A: static source check; no compiler launched",
+  "scope": "No production proof-account R1 callback pin identified; profiler and V7 occurrences remain visible.",
+  "next_deliverable": "Pin the actual selected client callback and its nonce policy; certify public-prefix and event producers. No shipped change authorized by this gate."
+}
