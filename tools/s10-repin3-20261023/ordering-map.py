@@ -40,7 +40,7 @@ def build():
   reselected_facts=[],header_matching='Explicit ProgramError, SDK macro aliases __Pubkey/__AccountInfo and adapter module qualification only; original and current headers retained per fact.',
   coordinate_changes=sum(r['block_coordinates_changed'] for r in facts),
   changed_bodies=sum(r['old_body_sha256']!=r['new_body_sha256'] for r in facts),
-  explanation='Compare the immediately previous adopted S10 re-pin to the owned-adapter build. Every fact retains exact selected-call keys and a separately checked new graph cut; source/model execution identities remain open.',
+  explanation='Compare the immediately previous adopted S10 re-pin to the adopted H5 build. Every fact retains exact selected-call keys and a separately checked new graph cut; source/model execution identities remain open.',
   source_order='OPEN: S2 caller identities, concrete carriers/source Calls tree and source/model ordered joins remain required',
   complete=False)
 if __name__=='__main__':

@@ -64,3 +64,56 @@ its capture finished, and elf-symbol-kinds-host retained old directory labels.
 The completed Pool build and a corrected path adapter allow replacement runs;
 no SBF rebuild or cap increase was needed. The failed script is retained under
 `tools/s10-repin3-20261023/historical/` where its bytes differ.
+
+## Stage 3: exhaustive delta and ownership reconciliation
+
+`mir-diff.json`, `alias-mir-diff.json`, `mono{,-exact}-diff.json`,
+`llvm-diff.json` and `elf-diff.json` list every changed declaration/instance
+or endpoint-name edge multiset, with original keys, old/new hashes and
+multiplicities. Duplicate signatures/symbols stay lists; no instance pairing
+is guessed. Full MIR/inline and ownership JSONL maps stay host-only with
+SHA-256/size pins. `change-assessment.json` classifies each changed MIR group
+and every changed edge caller; `changed-declaration-ownership.json` retains
+old/new source placement and proposed ownership per changed occurrence.
+
+| View | Default | Devnet | Pool |
+|---|---:|---:|---:|
+| Changed MIR signature groups | 57 | 57 | 1 |
+| Added / removed / body-changed | 9 / 20 / 28 | 9 / 20 / 28 | 0 / 0 / 1 |
+| Coordinate-normalized mono deltas | 137 | 137 | 0 |
+| Exact mono-record deltas | 170 | 170 | 0 |
+| LLVM emitted text groups | 167 | 167 | 4 |
+| ELF symbol-name groups | 308 | 308 | 0 |
+| Endpoint-name edge multiset deltas | 44 | 44 | 0 |
+
+The changed generic bodies are H5 weights/canonical arithmetic, their
+inlined checked_q/EbyKDot callers, the Core two-write helper and the owned
+require_zero scanner. This **does not** confirm adapter-only confinement or
+byte-identical children against re-pin2. The actual r1_pool_adapter.rs,
+fast_dots.rs and all 27 pre-stage adapter helper cuts remain byte-identical.
+Changed machine edge callers include weights helpers, Core's helper,
+verifier consumers, and removed old out-of-line heap/array support.
+Removed symbol names include canonical Dot::finish, finish_query_dot,
+heap::uninit and three try_from_fn instances; added names are
+Weights::box_from_parts, high_dot and process_kind. Raw hashes additionally
+include layout/relocation effects. No semantic equivalence follows.
+
+Pool's final ELF/mono/symbol/edge views are identical, despite a changed
+emitted generic Core state_only_statement_points body and four emitted LLVM
+text groups. Those non-final compiler observations are retained explicitly.
+The 64 verifier alias/coordinate-only groups are separately listed; the 57
+remaining groups are not normalized away as mere coordinates.
+
+One proposed owner or existing library boundary is assigned to each of
+1,040 nonzero ELF symbol occurrences and 14,227 emitted generic bodies
+(4,653/4,653/4,921), with no unassigned/double assignments. This uses the
+lead's 161-record overlay plus the retained disjoint policy for actual new
+source placements. Historical compiler IDs are not reused. The overlay
+remains a proposal; assigning ownership does not prove owner acceptance or
+complete reachable/inlined source correspondence.
+
+Both deterministic completeness gates exit **2**, recorded in
+`gate-validation.json`. S2 caller identities, final source-instance/inline
+binding, source Calls tree/carriers, owner acceptance, source/model ordered
+identities and coherent final release replay remain open. Zero assumptions
+or headline premises are removed. Target not yet established.
