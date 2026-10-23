@@ -1,0 +1,188 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR2_Context.lean:14:10: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR2_Context.lean:19:4: error: Function expected at
+  ((List.replicate 81 0#u8).set 0 1#u8).setSlice! 1 ↑c.statement_digest
+but this term has type
+  List (UScalar UScalarTy.U8)
+
+Note: Expected a function because this term is being applied to the argument
+  .setSlice!
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR2_Context.lean:26:34: error: unsolved goals
+c : aspis_core.state_only_hiding.StateOnlyHidingContext
+encoded1 : Std.Array U8 81#usize
+_✝¹³ :
+  [> let encoded1 ←
+    (Array.repeat 81#usize 0#u8).update 0#usize aspis_core.state_only_hiding.STATE_ONLY_HIDING_CONTEXT_VERSION <]
+s : Slice U8
+index_mut_back : Slice U8 → Std.Array U8 81#usize
+_✝¹² :
+  [> let(s, index_mut_back) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) encoded1
+      { start := 1#usize, «end» := 33#usize } <]
+s1 : Slice U8
+_✝¹¹ : [> let s1 ← lift c.statement_digest.to_slice <]
+s2 : Slice U8
+_✝¹⁰ : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1 <]
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Std.Array U8 81#usize
+_✝⁹ :
+  [> let(s3, index_mut_back1) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back s2) { start := 33#usize, «end» := 65#usize } <]
+s4 : Slice U8
+_✝⁸ : [> let s4 ← lift c.mask_nonce.to_slice <]
+s5 : Slice U8
+_✝⁷ : [> let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4 <]
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Std.Array U8 81#usize
+_✝⁶ :
+  [> let(s6, index_mut_back2) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back1 s5) { start := 65#usize, «end» := 73#usize } <]
+a : Std.Array U8 8#usize
+_✝⁵ : [> let a ← lift (core.num.U64.to_le_bytes c.mask_layout_fingerprint) <]
+a_post✝ : ↑a = List.map UScalar.mk c.mask_layout_fingerprint.bv.toLEBytes
+s7 : Slice U8
+_✝⁴ : [> let s7 ← lift a.to_slice <]
+s8 : Slice U8
+_✝³ : [> let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7 <]
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Std.Array U8 81#usize
+_✝² :
+  [> let(s9, index_mut_back3) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back2 s8) { start := 73#usize, «end» := 81#usize } <]
+a1 : Std.Array U8 8#usize
+_✝¹ : [> let a1 ← lift (core.num.U64.to_le_bytes c.layout_factor_fingerprint) <]
+a1_post✝ : ↑a1 = List.map UScalar.mk c.layout_factor_fingerprint.bv.toLEBytes
+s10 : Slice U8
+_✝ : [> let s10 ← lift a1.to_slice <]
+s11 : Slice U8
+_ : [> let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10 <]
+encoded1_post :
+  encoded1 =
+    Std.Array.set
+      ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+          0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+          0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, ⋯],
+        ⋯⟩
+      0#usize 1#u8
+s_post1 :
+  ↑s =
+    [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+      0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8]
+s_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back s') =
+      [1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+            0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+            0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, ⋯].setSlice!
+        1 ↑s'
+s1_post : s1 = ⟨↑c.statement_digest, ⋯⟩
+s2_post : s2 = ⟨↑c.statement_digest, ⋯⟩
+s3_post1 :
+  ↑s3 =
+    List.slice 33 65
+      ([1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+            0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+            0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, ⋯].setSlice!
+        1 ↑c.statement_digest)
+s3_post2 :
+  (List.slice 33 65
+        ([1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+              0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+              0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, ⋯].setSlice!
+          1 ↑c.statement_digest)).length =
+    32
+s3_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back1 s') =
+      ([1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, ⋯].setSlice!
+            1 ↑c.statement_digest).setSlice!
+        33 ↑s'
+s4_post : s4 = ⟨↑c.mask_nonce, ⋯⟩
+s5_post : s5 = ⟨↑c.mask_nonce, ⋯⟩
+s6_post1 :
+  ↑s6 =
+    List.slice 65 73
+      (([1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, ⋯].setSlice!
+            1 ↑c.statement_digest).setSlice!
+        33 ↑c.mask_nonce)
+s6_post2 :
+  (List.slice 65 73
+        (([1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                  0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                  0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, ⋯].setSlice!
+              1 ↑c.statement_digest).setSlice!
+          33 ↑c.mask_nonce)).length =
+    8
+s6_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back2 s') =
+      (([1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                    0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                    0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, ⋯].setSlice!
+                1 ↑c.statement_digest).setSlice!
+            33 ↑c.mask_nonce).setSlice!
+        65 ↑s'
+a_post : ↑a = List.map UScalar.mk c.mask_layout_fingerprint.bv.toLEBytes
+s7_post : s7 = ⟨List.map UScalar.mk c.mask_layout_fingerprint.bv.toLEBytes, ⋯⟩
+s8_post : s8 = ⟨List.map UScalar.mk c.mask_layout_fingerprint.bv.toLEBytes, ⋯⟩
+s9_post1 :
+  ↑s9 =
+    List.slice 73 81
+      ((([1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                    0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                    0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, ⋯].setSlice!
+                1 ↑c.statement_digest).setSlice!
+            33 ↑c.mask_nonce).setSlice!
+        65 (List.map UScalar.mk c.mask_layout_fingerprint.bv.toLEBytes))
+s9_post2 :
+  (List.slice 73 81
+        ((([1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                      0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                      0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, ⋯].setSlice!
+                  1 ↑c.statement_digest).setSlice!
+              33 ↑c.mask_nonce).setSlice!
+          65 (List.map UScalar.mk c.mask_layout_fingerprint.bv.toLEBytes))).length =
+    8
+s9_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back3 s') =
+      ((([1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                        0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                        0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, ⋯].setSlice!
+                    1 ↑c.statement_digest).setSlice!
+                33 ↑c.mask_nonce).setSlice!
+            65 (List.map UScalar.mk c.mask_layout_fingerprint.bv.toLEBytes)).setSlice!
+        73 ↑s'
+a1_post : ↑a1 = List.map UScalar.mk c.layout_factor_fingerprint.bv.toLEBytes
+s10_post : s10 = ⟨List.map UScalar.mk c.layout_factor_fingerprint.bv.toLEBytes, ⋯⟩
+s11_post : s11 = ⟨List.map UScalar.mk c.layout_factor_fingerprint.bv.toLEBytes, ⋯⟩
+⊢ ((([1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                      0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
+                      0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, ⋯].setSlice!
+                  1 ↑c.statement_digest).setSlice!
+              33 ↑c.mask_nonce).setSlice!
+          65 (List.map UScalar.mk c.mask_layout_fingerprint.bv.toLEBytes)).setSlice!
+      73 (List.map UScalar.mk c.layout_factor_fingerprint.bv.toLEBytes) =
+    sorry ()
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR2_Context.lean:28:50: warning: This simp argument is unused:
+  Array.set
+
+Hint: Omit it from the simp argument list.
+  simp_all [frame, Array.s̵e̵t̵,̵ ̵A̵rr̵a̵y̵.̵r̵epeat,
+  ̵  ̵ ̵ ̵Array.to_slice,
+  ̲  ̲ ̲ ̲aspis_core.state_only_hiding.STATE_ONLY_HIDING_CONTEXT_VERSION]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR2_Context.lean:28:43: warning: declaration uses `sorry`
+'R1Z.RealR2_Context.encode_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.RealR2_Context.encode_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
