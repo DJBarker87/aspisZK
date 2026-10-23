@@ -1,0 +1,53 @@
+/private/tmp/a3-s9-current-checkpoint-k-reader-accepted-v5-check-20261023/sources/S9CurrentCheckpointKDecoderReaderAcceptedV1.lean:87:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1S9ReaderKActualQMCanonicalV1.checkpointQMDecoder bytes.to_slice
+in the target expression
+  (let (bytes, r1) := (bytes, r0)
+    do
+    let o ← AspisR1S9ReaderKActualQMCanonicalV1.checkpointQMDecoder bytes.to_slice
+    let q ← AspisR1S9ReaderKActualQMCanonicalV1.optionOkOr✝ o
+    ok (q, r1)) =
+    ok (core.result.Result.Ok value, r0)
+
+case some
+raw : (n : Usize) → verifier.Reader → Result (Std.Array U8 n × verifier.Reader)
+reader : verifier.Reader
+bytes : Std.Array U8 16#usize
+r0 : verifier.Reader
+hraw : raw 16#usize reader = ok (bytes, r0)
+value : aspis_core.field.QM31
+hdecode : actualCheckpointDecoder bytes.to_slice = ok (some value)
+hold : AspisR1S9ReaderKActualQMCanonicalV1.checkpointQMDecoder bytes.to_slice = ok (some value)
+h✝¹ :
+  (do
+      let (bytes, reader1) ← raw 16#usize reader
+      let slice ← lift bytes.to_slice
+      let value ← actualCheckpointDecoder slice
+      let result ← optionOkOr value
+      ok (result, reader1)) =
+    ok (core.result.Result.Ok value, r0)
+h✝ :
+  (let (bytes, reader1) := (bytes, r0)
+    do
+    let value ← actualCheckpointDecoder bytes.to_slice
+    let result ← optionOkOr value
+    ok (result, reader1)) =
+    ok (core.result.Result.Ok value, r0)
+h : ok (core.result.Result.Ok value, r0) = ok (core.result.Result.Ok value, r0)
+hp : (core.result.Result.Ok value, r0) = (core.result.Result.Ok value, r0)
+⊢ (let (bytes, r1) := (bytes, r0)
+    do
+    let o ← AspisR1S9ReaderKActualQMCanonicalV1.checkpointQMDecoder bytes.to_slice
+    let q ← AspisR1S9ReaderKActualQMCanonicalV1.optionOkOr✝ o
+    ok (q, r1)) =
+    ok (core.result.Result.Ok value, r0)
+'AspisR1S9CurrentCheckpointKDecoderReaderAcceptedV1.actual_decoder_success_retained' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9CurrentCheckpointKDecoderReaderAcceptedV1.readerKCurrent_success_retained' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9CurrentCheckpointKDecoderReaderAcceptedV1.readerKCurrent_success_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

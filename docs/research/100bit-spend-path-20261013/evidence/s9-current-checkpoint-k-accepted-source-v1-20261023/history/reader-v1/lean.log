@@ -1,0 +1,47 @@
+/private/tmp/a3-s9-current-checkpoint-k-reader-accepted-v1-check-20261023/sources/S9CurrentCheckpointKDecoderReaderAcceptedV1.lean:32:45: error: Application type mismatch: The argument
+  h
+has type
+  mapResult (Option.map toStage2QM) (AspisR1S9CurrentCheckpointKDecoderV1.field.QM31.from_le_bytes bytes) = ok (some q)
+but is expected to have type
+  ok (some (toStage2QM value)) = ok (some q)
+in the application
+  ok.inj h
+/private/tmp/a3-s9-current-checkpoint-k-reader-accepted-v1-check-20261023/sources/S9CurrentCheckpointKDecoderReaderAcceptedV1.lean:35:6: error: 'change' tactic failed, pattern
+  mapResult (Option.map AspisR1S9ReaderKActualQMCanonicalV1.toCurrent)
+      (AspisR1DecodeKFullV10.aspis_core.field.QM31.from_le_bytes bytes) =
+    ok (some (toStage2QM value))
+is not definitionally equal to target
+  AspisR1S9ReaderKActualQMCanonicalV1.checkpointQMDecoder bytes = ok (some (toStage2QM value))
+/private/tmp/a3-s9-current-checkpoint-k-reader-accepted-v1-check-20261023/sources/S9CurrentCheckpointKDecoderReaderAcceptedV1.lean:81:4: error: Type mismatch
+  h
+has type
+  (do
+      let result ← optionOkOr (some value)
+      ok (result, r0)) =
+    ok (core.result.Result.Ok q, reader1)
+but is expected to have type
+  (let (bytes, r1) := (bytes, r0)
+    do
+    let o ← AspisR1S9ReaderKActualQMCanonicalV1.checkpointQMDecoder bytes.to_slice
+    let q ← AspisR1S9ReaderKActualQMCanonicalV1.optionOkOr✝ o
+    ok (q, r1)) =
+    ok (core.result.Result.Ok q, reader1)
+/private/tmp/a3-s9-current-checkpoint-k-reader-accepted-v1-check-20261023/sources/S9CurrentCheckpointKDecoderReaderAcceptedV1.lean:80:36: warning: This simp argument is unused:
+  hold
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵r̵a̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵h̵o̵l̵d̵]̵[̲h̲r̲a̲w̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9CurrentCheckpointKDecoderReaderAcceptedV1.actual_decoder_success_retained' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9CurrentCheckpointKDecoderReaderAcceptedV1.readerKCurrent_success_retained' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9CurrentCheckpointKDecoderReaderAcceptedV1.readerKCurrent_success_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

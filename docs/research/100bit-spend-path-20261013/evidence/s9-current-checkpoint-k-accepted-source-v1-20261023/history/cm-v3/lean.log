@@ -1,0 +1,230 @@
+/private/tmp/a3-s9-current-checkpoint-k-cm-map-v3-check-20261023/sources/S9CurrentCheckpointKDecoderCMMapV1.lean:87:49: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+          { start := 0#usize, «end» := 4#usize }
+    let x ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x
+    mapResult (Option.map toOldCM)
+        (match x with
+        | core.result.Result.Ok value => do
+          let o ← AspisR1DecodeKFullV10.aspis_core.field.M31.from_le_bytes value
+          let cf ← AspisR1S9CurrentCheckpointKDecoderV1.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s1 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                    { start := 4#usize, «end» := 8#usize }
+              let r1 ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s1
+              match r1 with
+                | core.result.Result.Ok value1 => do
+                  let o1 ← AspisR1DecodeKFullV10.aspis_core.field.M31.from_le_bytes value1
+                  let cf1 ← AspisR1S9CurrentCheckpointKDecoderV1.core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { a := val, b := val1 })
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      AspisR1S9CurrentCheckpointKDecoderV1.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                        AspisR1S9CurrentCheckpointKDecoderV1.field.CM31 residual
+                | core.result.Result.Err a => ok none
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              AspisR1S9CurrentCheckpointKDecoderV1.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                AspisR1S9CurrentCheckpointKDecoderV1.field.CM31 residual
+        | core.result.Result.Err a => ok none)
+is not definitionally equal to the right-hand side
+  do
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+          { start := 0#usize, «end» := 4#usize }
+    let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+    match r with
+      | core.result.Result.Ok value => do
+        let o ← AspisR1DecodeKFullV10.aspis_core.field.M31.from_le_bytes value
+        let cf ← AspisR1DecodeKFullV10.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let s1 ←
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                  { start := 4#usize, «end» := 8#usize }
+            let r1 ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s1
+            match r1 with
+              | core.result.Result.Ok value1 => do
+                let o1 ← AspisR1DecodeKFullV10.aspis_core.field.M31.from_le_bytes value1
+                let cf1 ← AspisR1DecodeKFullV10.core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { a := val, b := val1 })
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    AspisR1DecodeKFullV10.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                      AspisR1DecodeKFullV10.aspis_core.field.CM31 residual
+              | core.result.Result.Err a => ok none
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            AspisR1DecodeKFullV10.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+              AspisR1DecodeKFullV10.aspis_core.field.CM31 residual
+      | core.result.Result.Err a => ok none
+
+bytes : Slice U8
+⊢ (do
+      let x ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := 0#usize, «end» := 4#usize }
+      let x ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 x
+      mapResult (Option.map toOldCM)
+          (match x with
+          | core.result.Result.Ok value => do
+            let o ← AspisR1DecodeKFullV10.aspis_core.field.M31.from_le_bytes value
+            let cf ← AspisR1S9CurrentCheckpointKDecoderV1.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let s1 ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                      { start := 4#usize, «end» := 8#usize }
+                let r1 ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s1
+                match r1 with
+                  | core.result.Result.Ok value1 => do
+                    let o1 ← AspisR1DecodeKFullV10.aspis_core.field.M31.from_le_bytes value1
+                    let cf1 ←
+                      AspisR1S9CurrentCheckpointKDecoderV1.core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { a := val, b := val1 })
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        AspisR1S9CurrentCheckpointKDecoderV1.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                          AspisR1S9CurrentCheckpointKDecoderV1.field.CM31 residual
+                  | core.result.Result.Err a => ok none
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                AspisR1S9CurrentCheckpointKDecoderV1.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                  AspisR1S9CurrentCheckpointKDecoderV1.field.CM31 residual
+          | core.result.Result.Err a => ok none)) =
+    do
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+          { start := 0#usize, «end» := 4#usize }
+    let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+    match r with
+      | core.result.Result.Ok value => do
+        let o ← AspisR1DecodeKFullV10.aspis_core.field.M31.from_le_bytes value
+        let cf ← AspisR1DecodeKFullV10.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let s1 ←
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                  { start := 4#usize, «end» := 8#usize }
+            let r1 ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s1
+            match r1 with
+              | core.result.Result.Ok value1 => do
+                let o1 ← AspisR1DecodeKFullV10.aspis_core.field.M31.from_le_bytes value1
+                let cf1 ← AspisR1DecodeKFullV10.core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { a := val, b := val1 })
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    AspisR1DecodeKFullV10.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                      AspisR1DecodeKFullV10.aspis_core.field.CM31 residual
+              | core.result.Result.Err a => ok none
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            AspisR1DecodeKFullV10.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+              AspisR1DecodeKFullV10.aspis_core.field.CM31 residual
+      | core.result.Result.Err a => ok none
+/private/tmp/a3-s9-current-checkpoint-k-cm-map-v3-check-20261023/sources/S9CurrentCheckpointKDecoderCMMapV1.lean:85:4: warning: This simp argument is unused:
+  current_option_try_match
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1S9CurrentCheckpointKDecoderV1.field.CM31.from_le_bytes,
+      AspisR1DecodeKFullV10.aspis_core.field.CM31.from_le_bytes,
+  ̵  ̵ ̵ ̵c̵u̵r̵r̵e̵n̵t̵_̵op̵t̵i̵o̵n̵_̵t̵r̵y̵_̵m̵a̵t̵c̵h̵,̵o̵ld_option_try_match,
+  ̲ ̲ ̲ ̲ ̲m31_decoder_same,
+  ̵  ̵ ̵ ̵mapResult_bind, ̲mapResult_option_case, ̲mapResult_result_case, ̲mapResult_ok,
+      Option.map_none, ̲Option.map_some, ̲toOldCM]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-current-checkpoint-k-cm-map-v3-check-20261023/sources/S9CurrentCheckpointKDecoderCMMapV1.lean:85:29: warning: This simp argument is unused:
+  old_option_try_match
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1S9CurrentCheckpointKDecoderV1.field.CM31.from_le_bytes,
+      AspisR1DecodeKFullV10.aspis_core.field.CM31.from_le_bytes,
+  ̵  ̵ ̵ ̵current_option_try_match,o̵l̵d̵_̵o̵p̵t̵i̵o̵n̵_̵t̵r̵y̵_̵
+  ̲ ̲ ̲ ̲ ̲ma̵t̵c̵h̵,̵m̵31_decoder_same,
+  ̵  ̵ ̵ ̵mapResult_bind, ̲mapResult_option_case, ̲mapResult_result_case, ̲mapResult_ok,
+      Option.map_none, ̲Option.map_some, ̲toOldCM]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-current-checkpoint-k-cm-map-v3-check-20261023/sources/S9CurrentCheckpointKDecoderCMMapV1.lean:86:19: warning: This simp argument is unused:
+  mapResult_option_case
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1S9CurrentCheckpointKDecoderV1.field.CM31.from_le_bytes,
+      AspisR1DecodeKFullV10.aspis_core.field.CM31.from_le_bytes,
+  ̵  ̵ ̵ ̵current_option_try_match,
+  ̲ ̲ ̲ ̲ ̲old_option_try_match, ̲m31_decoder_same,
+  ̵  ̵ ̵ ̵mapResult_bind, ̲mapResult_o̵p̵t̵i̵o̵n̵_̵c̵a̵s̵e̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵result_case, ̲mapResult_ok,
+      Option.map_none, ̲Option.map_some, ̲toOldCM]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-current-checkpoint-k-cm-map-v3-check-20261023/sources/S9CurrentCheckpointKDecoderCMMapV1.lean:86:41: warning: This simp argument is unused:
+  mapResult_result_case
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1S9CurrentCheckpointKDecoderV1.field.CM31.from_le_bytes,
+      AspisR1DecodeKFullV10.aspis_core.field.CM31.from_le_bytes,
+  ̵  ̵ ̵ ̵current_option_try_match,
+  ̲ ̲ ̲ ̲ ̲old_option_try_match, ̲m31_decoder_same,
+  ̵  ̵ ̵ ̵mapResult_bind, ̲mapResult_option_case, ̲mapResult_r̵e̵s̵u̵l̵t̵_̵c̵a̵s̵e̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵ok,
+      Option.map_none, ̲Option.map_some, ̲toOldCM]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-current-checkpoint-k-cm-map-v3-check-20261023/sources/S9CurrentCheckpointKDecoderCMMapV1.lean:86:63: warning: This simp argument is unused:
+  mapResult_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1S9CurrentCheckpointKDecoderV1.field.CM31.from_le_bytes,
+      AspisR1DecodeKFullV10.aspis_core.field.CM31.from_le_bytes, c̵u̵r̵r̵e̵n̵t̵_̵o̵p̵t̵i̵o̵n̵_̵t̵r̵y̵_̵m̵a̵t̵c̵h̵,̵o̵l̵d̵_̵o̵p̵t̵i̵o̵n̵_̵t̵r̵y̵_̵m̵a̵t̵c̵h̵,̵m̵3̵1̵_̵d̵e̵c̵o̵d̵e̵r̵_̵s̵a̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵b̵i̵n̵d̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵o̵p̵t̵i̵o̵n̵_̵c̵a̵s̵e̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵r̵e̵s̵u̵l̵t̵_̵c̵a̵s̵e̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵n̵o̵n̵e̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵t̵o̵O̵l̵d̵C̵M̵]̵c̲u̲r̲r̲e̲n̲t̲_̲o̲p̲t̲i̲o̲n̲_̲t̲r̲y̲_̲m̲a̲t̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲o̲l̲d̲_̲o̲p̲t̲i̲o̲n̲_̲t̲r̲y̲_̲m̲a̲t̲c̲h̲,̲ ̲m̲3̲1̲_̲d̲e̲c̲o̲d̲e̲r̲_̲s̲a̲m̲e̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲b̲i̲n̲d̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲o̲p̲t̲i̲o̲n̲_̲c̲a̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲r̲e̲s̲u̲l̲t̲_̲c̲a̲s̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲n̲o̲n̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲,̲ ̲t̲o̲O̲l̲d̲C̲M̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-current-checkpoint-k-cm-map-v3-check-20261023/sources/S9CurrentCheckpointKDecoderCMMapV1.lean:87:4: warning: This simp argument is unused:
+  Option.map_none
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1S9CurrentCheckpointKDecoderV1.field.CM31.from_le_bytes,
+      AspisR1DecodeKFullV10.aspis_core.field.CM31.from_le_bytes, c̵u̵r̵r̵e̵n̵t̵_̵o̵p̵t̵i̵o̵n̵_̵t̵r̵y̵_̵m̵a̵t̵c̵h̵,̵o̵l̵d̵_̵o̵p̵t̵i̵o̵n̵_̵t̵r̵y̵_̵m̵a̵t̵c̵h̵,̵m̵3̵1̵_̵d̵e̵c̵o̵d̵e̵r̵_̵s̵a̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵b̵i̵n̵d̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵o̵p̵t̵i̵o̵n̵_̵c̵a̵s̵e̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵r̵e̵s̵u̵l̵t̵_̵c̵a̵s̵e̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵n̵o̵n̵e̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵t̵o̵O̵l̵d̵C̵M̵]̵c̲u̲r̲r̲e̲n̲t̲_̲o̲p̲t̲i̲o̲n̲_̲t̲r̲y̲_̲m̲a̲t̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲o̲l̲d̲_̲o̲p̲t̲i̲o̲n̲_̲t̲r̲y̲_̲m̲a̲t̲c̲h̲,̲ ̲m̲3̲1̲_̲d̲e̲c̲o̲d̲e̲r̲_̲s̲a̲m̲e̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲b̲i̲n̲d̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲o̲p̲t̲i̲o̲n̲_̲c̲a̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲r̲e̲s̲u̲l̲t̲_̲c̲a̲s̲e̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲o̲k̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲,̲ ̲t̲o̲O̲l̲d̲C̲M̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-current-checkpoint-k-cm-map-v3-check-20261023/sources/S9CurrentCheckpointKDecoderCMMapV1.lean:87:20: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1S9CurrentCheckpointKDecoderV1.field.CM31.from_le_bytes,
+      AspisR1DecodeKFullV10.aspis_core.field.CM31.from_le_bytes, c̵u̵r̵r̵e̵n̵t̵_̵o̵p̵t̵i̵o̵n̵_̵t̵r̵y̵_̵m̵a̵t̵c̵h̵,̵o̵l̵d̵_̵o̵p̵t̵i̵o̵n̵_̵t̵r̵y̵_̵m̵a̵t̵c̵h̵,̵m̵3̵1̵_̵d̵e̵c̵o̵d̵e̵r̵_̵s̵a̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵b̵i̵n̵d̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵o̵p̵t̵i̵o̵n̵_̵c̵a̵s̵e̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵r̵e̵s̵u̵l̵t̵_̵c̵a̵s̵e̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵n̵o̵n̵e̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵t̵o̵O̵l̵d̵C̵M̵]̵c̲u̲r̲r̲e̲n̲t̲_̲o̲p̲t̲i̲o̲n̲_̲t̲r̲y̲_̲m̲a̲t̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲o̲l̲d̲_̲o̲p̲t̲i̲o̲n̲_̲t̲r̲y̲_̲m̲a̲t̲c̲h̲,̲ ̲m̲3̲1̲_̲d̲e̲c̲o̲d̲e̲r̲_̲s̲a̲m̲e̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲b̲i̲n̲d̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲o̲p̲t̲i̲o̲n̲_̲c̲a̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲r̲e̲s̲u̲l̲t̲_̲c̲a̲s̲e̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲o̲k̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲n̲o̲n̲e̲,̲ ̲t̲o̲O̲l̲d̲C̲M̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-current-checkpoint-k-cm-map-v3-check-20261023/sources/S9CurrentCheckpointKDecoderCMMapV1.lean:87:36: warning: This simp argument is unused:
+  toOldCM
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1S9CurrentCheckpointKDecoderV1.field.CM31.from_le_bytes,
+      AspisR1DecodeKFullV10.aspis_core.field.CM31.from_le_bytes, c̵u̵r̵r̵e̵n̵t̵_̵o̵p̵t̵i̵o̵n̵_̵t̵r̵y̵_̵m̵a̵t̵c̵h̵,̵o̵l̵d̵_̵o̵p̵t̵i̵o̵n̵_̵t̵r̵y̵_̵m̵a̵t̵c̵h̵,̵m̵3̵1̵_̵d̵e̵c̵o̵d̵e̵r̵_̵s̵a̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵b̵i̵n̵d̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵o̵p̵t̵i̵o̵n̵_̵c̵a̵s̵e̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵r̵e̵s̵u̵l̵t̵_̵c̵a̵s̵e̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵n̵o̵n̵e̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵t̵o̵O̵l̵d̵C̵M̵]̵c̲u̲r̲r̲e̲n̲t̲_̲o̲p̲t̲i̲o̲n̲_̲t̲r̲y̲_̲m̲a̲t̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲o̲l̲d̲_̲o̲p̲t̲i̲o̲n̲_̲t̲r̲y̲_̲m̲a̲t̲c̲h̲,̲ ̲m̲3̲1̲_̲d̲e̲c̲o̲d̲e̲r̲_̲s̲a̲m̲e̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲b̲i̲n̲d̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲o̲p̲t̲i̲o̲n̲_̲c̲a̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲r̲e̲s̲u̲l̲t̲_̲c̲a̲s̲e̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲_̲o̲k̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲n̲o̲n̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9CurrentCheckpointKDecoderCMMapV1.current_option_try_match' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9CurrentCheckpointKDecoderCMMapV1.old_option_try_match' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9CurrentCheckpointKDecoderCMMapV1.m31_decoder_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9CurrentCheckpointKDecoderCMMapV1.cm_decoder_map' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

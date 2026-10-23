@@ -1,0 +1,3 @@
+The exact accepted V3 constructor double call produces a canonical field element whose decoded value is x*x+x*x-1. Its multiplication, addition and final subtraction successes are derived from the same source call. Existing exact field arithmetic is reused; this does not establish the complete circle-factor recurrence, runtime adoption, S9 or the composed security result.
+
+Focused Lean check: 17.797 seconds; peak aggregate RSS 3204366336 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
