@@ -1,0 +1,192 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeLateDecodedFramesV1.lean:22:102: error: unsolved goals
+bytes : Slice U8
+i1 : Usize
+_✝²² : [> let i1 ← POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES <]
+i1_post : i1 = 1520#usize
+h✝⁷ : ¬(bytes.len != i1) = true
+s : Slice U8
+_✝²¹ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 8#usize } bytes <]
+s_post1 : ↑s = List.slice 0 8 ↑bytes
+s_post2 : s.length = 8
+s1 : Slice U8
+_✝²⁰ :
+  [> let s1 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 8#usize }
+      POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice <]
+s1_post1 : ↑s1 = List.slice 0 8 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+s1_post2 : s1.length = 8 - 0
+b : Bool
+_✝¹⁹ : [> let b ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s s1 <]
+i2 : U8
+_✝¹⁸ : [> let i2 ← bytes.index_usize 8#usize <]
+i3 : U8
+_✝¹⁷ : [> let i3 ← bytes.index_usize 9#usize <]
+s2 : Slice U8
+_✝¹⁶ : [> let s2 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 10#usize, «end» := 12#usize } bytes <]
+a : Std.Array U8 2#usize
+_✝¹⁵ : [> let a ← AspisS6NativeSnapshotReadArray.read_array 2#usize s2 <]
+i4 : U16
+_✝¹⁴ : [> let i4 ← lift (core.num.U16.from_le_bytes a) <]
+i5 : Usize
+_✝¹³ : [> let i5 ← lift (UScalar.cast UScalarTy.Usize i4) <]
+s3 : Slice U8
+_✝¹² : [> let s3 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 12#usize, «end» := 16#usize } bytes <]
+a1 : Std.Array U8 4#usize
+_✝¹¹ : [> let a1 ← AspisS6NativeSnapshotReadArray.read_array 4#usize s3 <]
+i6 : U32
+_✝¹⁰ : [> let i6 ← lift (core.num.U32.from_le_bytes a1) <]
+i7 : Usize
+_✝⁹ : [> let i7 ← lift (UScalar.cast UScalarTy.Usize i6) <]
+s4 : Slice U8
+_✝⁸ : [> let s4 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 16#usize, «end» := 20#usize } bytes <]
+a2 : Std.Array U8 4#usize
+_✝⁷ : [> let a2 ← AspisS6NativeSnapshotReadArray.read_array 4#usize s4 <]
+i8 : U32
+_✝⁶ : [> let i8 ← lift (core.num.U32.from_le_bytes a2) <]
+i9 : Usize
+_✝⁵ : [> let i9 ← lift (UScalar.cast UScalarTy.Usize i8) <]
+i10 : Usize
+_✝⁴ : [> let i10 ← pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES <]
+s5 : Slice U8
+_✝³ : [> let s5 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 20#usize, «end» := 24#usize } bytes <]
+a3 : Std.Array U8 4#usize
+_✝² : [> let a3 ← AspisS6NativeSnapshotReadArray.read_array 4#usize s5 <]
+i11 : U32
+_✝¹ : [> let i11 ← lift (core.num.U32.from_le_bytes a3) <]
+i12 : Usize
+_✝ : [> let i12 ← lift (UScalar.cast UScalarTy.Usize i11) <]
+result : core.result.Result PoolV1PairLatePublicStatementV1 PoolV1PairLatePublicStatementErrorV1
+_ : [> let result ← decode_tail bytes <]
+x✝ : PoolV1PairLatePublicStatementV1
+b_post : false = true ↔ s ≠ s1
+h✝⁶ : ¬b = true
+i2_post : i2 = (↑bytes)[8]
+h✝⁵ : ¬((↑bytes)[8] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION) = true
+i3_post : i3 = (↑bytes)[9]
+h✝⁴ : ¬((↑bytes)[9] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT) = true
+s2_post1 : ↑s2 = List.slice 10 12 ↑bytes
+s2_post2 : s2.length = 12 - 10
+a_post : ↑a = List.slice 10 12 ↑bytes
+i4_post : i4 = core.num.U16.from_le_bytes a
+i5_post : i5 = UScalar.cast UScalarTy.Usize (core.num.U16.from_le_bytes a)
+h✝³ : ¬(UScalar.cast UScalarTy.Usize (core.num.U16.from_le_bytes a) != 32#usize) = true
+s3_post1 : ↑s3 = List.slice 12 16 ↑bytes
+s3_post2 : s3.length = 16 - 12
+a1_post : ↑a1 = List.slice 12 16 ↑bytes
+i6_post : i6 = core.num.U32.from_le_bytes a1
+i7_post : i7 = UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a1)
+h✝² : ¬(UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a1) != 800#usize) = true
+s4_post1 : ↑s4 = List.slice 16 20 ↑bytes
+s4_post2 : s4.length = 20 - 16
+a2_post : ↑a2 = List.slice 16 20 ↑bytes
+i8_post : i8 = core.num.U32.from_le_bytes a2
+i9_post : i9 = UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a2)
+i10_post : i10 = 688#usize
+h✝¹ : ¬(UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a2) != 688#usize) = true
+s5_post1 : ↑s5 = List.slice 20 24 ↑bytes
+s5_post2 : s5.length = 24 - 20
+a3_post : ↑a3 = List.slice 20 24 ↑bytes
+i11_post : i11 = core.num.U32.from_le_bytes a3
+i12_post : i12 = UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a3)
+h✝ : ¬(UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a3) != 1520#usize) = true
+result_post1 :
+  ∀ (statement : PoolV1PairLatePublicStatementV1),
+    core.result.Result.Ok x✝ = core.result.Result.Ok statement → tail_frame bytes statement
+result_post2 : result = core.result.Result.Ok x✝
+⊢ (∃ raw, ↑raw = ↑bytes ∧ header_frame raw) ∧ body_frame bytes x✝
+bytes : Slice U8
+i1 : Usize
+_✝²² : [> let i1 ← POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES <]
+i1_post : i1 = 1520#usize
+h✝⁷ : ¬(bytes.len != i1) = true
+s : Slice U8
+_✝²¹ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 8#usize } bytes <]
+s_post1 : ↑s = List.slice 0 8 ↑bytes
+s_post2 : s.length = 8
+s1 : Slice U8
+_✝²⁰ :
+  [> let s1 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 8#usize }
+      POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice <]
+s1_post1 : ↑s1 = List.slice 0 8 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+s1_post2 : s1.length = 8 - 0
+b : Bool
+_✝¹⁹ : [> let b ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s s1 <]
+i2 : U8
+_✝¹⁸ : [> let i2 ← bytes.index_usize 8#usize <]
+i3 : U8
+_✝¹⁷ : [> let i3 ← bytes.index_usize 9#usize <]
+s2 : Slice U8
+_✝¹⁶ : [> let s2 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 10#usize, «end» := 12#usize } bytes <]
+a : Std.Array U8 2#usize
+_✝¹⁵ : [> let a ← AspisS6NativeSnapshotReadArray.read_array 2#usize s2 <]
+i4 : U16
+_✝¹⁴ : [> let i4 ← lift (core.num.U16.from_le_bytes a) <]
+i5 : Usize
+_✝¹³ : [> let i5 ← lift (UScalar.cast UScalarTy.Usize i4) <]
+s3 : Slice U8
+_✝¹² : [> let s3 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 12#usize, «end» := 16#usize } bytes <]
+a1 : Std.Array U8 4#usize
+_✝¹¹ : [> let a1 ← AspisS6NativeSnapshotReadArray.read_array 4#usize s3 <]
+i6 : U32
+_✝¹⁰ : [> let i6 ← lift (core.num.U32.from_le_bytes a1) <]
+i7 : Usize
+_✝⁹ : [> let i7 ← lift (UScalar.cast UScalarTy.Usize i6) <]
+s4 : Slice U8
+_✝⁸ : [> let s4 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 16#usize, «end» := 20#usize } bytes <]
+a2 : Std.Array U8 4#usize
+_✝⁷ : [> let a2 ← AspisS6NativeSnapshotReadArray.read_array 4#usize s4 <]
+i8 : U32
+_✝⁶ : [> let i8 ← lift (core.num.U32.from_le_bytes a2) <]
+i9 : Usize
+_✝⁵ : [> let i9 ← lift (UScalar.cast UScalarTy.Usize i8) <]
+i10 : Usize
+_✝⁴ : [> let i10 ← pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES <]
+s5 : Slice U8
+_✝³ : [> let s5 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 20#usize, «end» := 24#usize } bytes <]
+a3 : Std.Array U8 4#usize
+_✝² : [> let a3 ← AspisS6NativeSnapshotReadArray.read_array 4#usize s5 <]
+i11 : U32
+_✝¹ : [> let i11 ← lift (core.num.U32.from_le_bytes a3) <]
+i12 : Usize
+_✝ : [> let i12 ← lift (UScalar.cast UScalarTy.Usize i11) <]
+result : core.result.Result PoolV1PairLatePublicStatementV1 PoolV1PairLatePublicStatementErrorV1
+_ : [> let result ← decode_tail bytes <]
+x✝ : PoolV1PairLatePublicStatementV1
+b_post : false = true ↔ s ≠ s1
+h✝⁶ : ¬b = true
+i2_post : i2 = (↑bytes)[8]
+h✝⁵ : ¬((↑bytes)[8] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION) = true
+i3_post : i3 = (↑bytes)[9]
+h✝⁴ : ¬((↑bytes)[9] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT) = true
+s2_post1 : ↑s2 = List.slice 10 12 ↑bytes
+s2_post2 : s2.length = 12 - 10
+a_post : ↑a = List.slice 10 12 ↑bytes
+i4_post : i4 = core.num.U16.from_le_bytes a
+i5_post : i5 = UScalar.cast UScalarTy.Usize (core.num.U16.from_le_bytes a)
+h✝³ : ¬(UScalar.cast UScalarTy.Usize (core.num.U16.from_le_bytes a) != 32#usize) = true
+s3_post1 : ↑s3 = List.slice 12 16 ↑bytes
+s3_post2 : s3.length = 16 - 12
+a1_post : ↑a1 = List.slice 12 16 ↑bytes
+i6_post : i6 = core.num.U32.from_le_bytes a1
+i7_post : i7 = UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a1)
+h✝² : ¬(UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a1) != 800#usize) = true
+s4_post1 : ↑s4 = List.slice 16 20 ↑bytes
+s4_post2 : s4.length = 20 - 16
+a2_post : ↑a2 = List.slice 16 20 ↑bytes
+i8_post : i8 = core.num.U32.from_le_bytes a2
+i9_post : i9 = UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a2)
+i10_post : i10 = 688#usize
+h✝¹ : ¬(UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a2) != 688#usize) = true
+s5_post1 : ↑s5 = List.slice 20 24 ↑bytes
+s5_post2 : s5.length = 24 - 20
+a3_post : ↑a3 = List.slice 20 24 ↑bytes
+i11_post : i11 = core.num.U32.from_le_bytes a3
+i12_post : i12 = UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a3)
+h✝ : ¬(UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a3) != 1520#usize) = true
+result_post1 :
+  ∀ (statement : PoolV1PairLatePublicStatementV1),
+    core.result.Result.Ok x✝ = core.result.Result.Ok statement → tail_frame bytes statement
+result_post2 : result = core.result.Result.Ok x✝
+⊢ (∃ raw, ↑raw = ↑bytes ∧ header_frame raw) ∧ body_frame bytes x✝
+'AspisS6NativeLateDecoderSplit.Frames.decode_frames' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

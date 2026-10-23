@@ -1,0 +1,381 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeLateDecodedFramesV1.lean:36:102: error: unsolved goals
+case h2
+bytes : Slice U8
+i1 : Usize
+_✝³⁸ : [> let i1 ← POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES <]
+i1_post : ↑i1 = 1520
+h✝¹⁸ : ¬(bytes.len != i1) = true
+s : Slice U8
+_✝³⁷ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 8#usize } bytes <]
+s_post1 : ↑s = List.slice 0 8 ↑bytes
+s_post2 : s.length = 8
+s1 : Slice U8
+_✝³⁶ :
+  [> let s1 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 8#usize }
+      POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice <]
+s1_post1 : ↑s1 = List.slice 0 8 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+s1_post2 : s1.length = 8 - 0
+b : Bool
+_✝³⁵ : [> let b ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s s1 <]
+i2 : U8
+_✝³⁴ : [> let i2 ← bytes.index_usize 8#usize <]
+i3 : U8
+_✝³³ : [> let i3 ← bytes.index_usize 9#usize <]
+s2 : Slice U8
+_✝³² : [> let s2 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 10#usize, «end» := 12#usize } bytes <]
+a : Std.Array U8 2#usize
+_✝³¹ : [> let a ← AspisS6NativeSnapshotReadArray.read_array 2#usize s2 <]
+i4 : U16
+_✝³⁰ : [> let i4 ← lift (core.num.U16.from_le_bytes a) <]
+i5 : Usize
+_✝²⁹ : [> let i5 ← lift (UScalar.cast UScalarTy.Usize i4) <]
+s3 : Slice U8
+_✝²⁸ : [> let s3 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 12#usize, «end» := 16#usize } bytes <]
+a1 : Std.Array U8 4#usize
+_✝²⁷ : [> let a1 ← AspisS6NativeSnapshotReadArray.read_array 4#usize s3 <]
+i6 : U32
+_✝²⁶ : [> let i6 ← lift (core.num.U32.from_le_bytes a1) <]
+i7 : Usize
+_✝²⁵ : [> let i7 ← lift (UScalar.cast UScalarTy.Usize i6) <]
+s4 : Slice U8
+_✝²⁴ : [> let s4 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 16#usize, «end» := 20#usize } bytes <]
+a2 : Std.Array U8 4#usize
+_✝²³ : [> let a2 ← AspisS6NativeSnapshotReadArray.read_array 4#usize s4 <]
+i8 : U32
+_✝²² : [> let i8 ← lift (core.num.U32.from_le_bytes a2) <]
+i9 : Usize
+_✝²¹ : [> let i9 ← lift (UScalar.cast UScalarTy.Usize i8) <]
+i10 : Usize
+_✝²⁰ : [> let i10 ← 8#usize + 680#usize <]
+s5 : Slice U8
+_✝¹⁹ : [> let s5 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 20#usize, «end» := 24#usize } bytes <]
+a3 : Std.Array U8 4#usize
+_✝¹⁸ : [> let a3 ← AspisS6NativeSnapshotReadArray.read_array 4#usize s5 <]
+i11 : U32
+_✝¹⁷ : [> let i11 ← lift (core.num.U32.from_le_bytes a3) <]
+i12 : Usize
+_✝¹⁶ : [> let i12 ← lift (UScalar.cast UScalarTy.Usize i11) <]
+i13 : U8
+_✝¹⁵ : [> let i13 ← bytes.index_usize 24#usize <]
+i14 : U8
+_✝¹⁴ : [> let i14 ← bytes.index_usize 25#usize <]
+i15 : U8
+_✝¹³ : [> let i15 ← bytes.index_usize 26#usize <]
+i16 : U8
+_✝¹² : [> let i16 ← bytes.index_usize 27#usize <]
+i17 : U8
+_✝¹¹ : [> let i17 ← bytes.index_usize 28#usize <]
+i18 : U8
+_✝¹⁰ : [> let i18 ← bytes.index_usize 29#usize <]
+i19 : U8
+_✝⁹ : [> let i19 ← bytes.index_usize 30#usize <]
+i20 : U8
+_✝⁸ : [> let i20 ← bytes.index_usize 31#usize <]
+i21 : Usize
+_✝⁷ : [> let i21 ← 32#usize + 800#usize <]
+s6 : Slice U8
+_✝⁶ : [> let s6 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 32#usize, «end» := i21 } bytes <]
+r4 : core.result.Result PoolV1PairLiveSnapshotV1 PoolV1PairLatePublicStatementErrorV1
+_✝⁵ : [> let r4 ← decode_pair_live_snapshot_boxed_v1 s6 <]
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    PoolV1PairLiveSnapshotV1
+_✝⁴ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r4 <]
+val : PoolV1PairLiveSnapshotV1
+s7 : Slice U8
+_✝³ : [> let s7 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i21 } bytes <]
+r5 : core.result.Result pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 PoolV1PairLatePublicStatementErrorV1
+_✝² : [> let r5 ← decode_pair_afterstate_boxed_v1 s7 <]
+cf1 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+_✝¹ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r5 <]
+val1 : pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+o : Option U64
+_✝ : [> let o ← lift (val.next_pair_index.checked_add 1#u64) <]
+b1 : Bool
+_ :
+  [> let b1 ←
+    core.cmp.PartialEq.ne.default (core.option.Option.Insts.CoreCmpPartialEqOption.eq core.cmp.PartialEqU64) o
+      (some val1.next_pair_index) <]
+b_post : decide (o ≠ some val1.next_pair_index) = true ↔ s ≠ s1
+h✝¹⁷ : ¬b = true
+i2_post : i2 = (↑bytes)[8]
+h✝¹⁶ : ¬((↑bytes)[8] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION) = true
+i3_post : i3 = (↑bytes)[9]
+h✝¹⁵ : ¬((↑bytes)[9] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT) = true
+s2_post1 : ↑s2 = List.slice 10 12 ↑bytes
+s2_post2 : s2.length = 12 - 10
+a_post : ↑a = List.slice 10 12 ↑bytes
+i4_post : i4 = core.num.U16.from_le_bytes a
+i5_post : i5 = UScalar.cast UScalarTy.Usize (core.num.U16.from_le_bytes a)
+h✝¹⁴ : ¬(UScalar.cast UScalarTy.Usize (core.num.U16.from_le_bytes a) != 32#usize) = true
+s3_post1 : ↑s3 = List.slice 12 16 ↑bytes
+s3_post2 : s3.length = 16 - 12
+a1_post : ↑a1 = List.slice 12 16 ↑bytes
+i6_post : i6 = core.num.U32.from_le_bytes a1
+i7_post : i7 = UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a1)
+h✝¹³ : ¬(UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a1) != 800#usize) = true
+s4_post1 : ↑s4 = List.slice 16 20 ↑bytes
+s4_post2 : s4.length = 20 - 16
+a2_post : ↑a2 = List.slice 16 20 ↑bytes
+i8_post : i8 = core.num.U32.from_le_bytes a2
+i9_post : i9 = UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a2)
+i10_post : ↑i10 = 8 + 680
+h✝¹² : ¬(UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a2) != i10) = true
+s5_post1 : ↑s5 = List.slice 20 24 ↑bytes
+s5_post2 : s5.length = 24 - 20
+a3_post : ↑a3 = List.slice 20 24 ↑bytes
+i11_post : i11 = core.num.U32.from_le_bytes a3
+i12_post : i12 = UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a3)
+h✝¹¹ : ¬(UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a3) != i1) = true
+i13_post : i13 = (↑bytes)[24]
+h✝¹⁰ : ¬((↑bytes)[24] != 0#u8) = true
+i14_post : i14 = (↑bytes)[25]
+h✝⁹ : ¬((↑bytes)[25] != 0#u8) = true
+i15_post : i15 = (↑bytes)[26]
+h✝⁸ : ¬((↑bytes)[26] != 0#u8) = true
+i16_post : i16 = (↑bytes)[27]
+h✝⁷ : ¬((↑bytes)[27] != 0#u8) = true
+i17_post : i17 = (↑bytes)[28]
+h✝⁶ : ¬((↑bytes)[28] != 0#u8) = true
+i18_post : i18 = (↑bytes)[29]
+h✝⁵ : ¬((↑bytes)[29] != 0#u8) = true
+i19_post : i19 = (↑bytes)[30]
+h✝⁴ : ¬((↑bytes)[30] != 0#u8) = true
+i20_post : i20 = (↑bytes)[31]
+h✝³ : ¬((↑bytes)[31] != 0#u8) = true
+i21_post : ↑i21 = 32 + 800
+s6_post1 : ↑s6 = List.slice 32 (32 + 800) ↑bytes
+s6_post2 : s6.length = 32 + 800 - 32
+r4_post :
+  ∀ (value : PoolV1PairLiveSnapshotV1),
+    r4 = core.result.Result.Ok value → decode_pool_v1_pair_live_snapshot_v1 s6 = ok (core.result.Result.Ok value)
+cf_post :
+  ∀ (value : PoolV1PairLiveSnapshotV1),
+    core.ops.control_flow.ControlFlow.Continue val = core.ops.control_flow.ControlFlow.Continue value →
+      r4 = core.result.Result.Ok value
+h✝² : cf = core.ops.control_flow.ControlFlow.Continue val
+s7_post1 : ↑s7 = List.drop (32 + 800) ↑bytes
+s7_post2 : s7.length = bytes.length - (32 + 800)
+r5_post :
+  ∀ (value : pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+    r5 = core.result.Result.Ok value →
+      pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1 s7 = ok (core.result.Result.Ok value)
+cf1_post :
+  ∀ (value : pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+    core.ops.control_flow.ControlFlow.Continue val1 = core.ops.control_flow.ControlFlow.Continue value →
+      r5 = core.result.Result.Ok value
+h✝¹ : cf1 = core.ops.control_flow.ControlFlow.Continue val1
+o_post :
+  match o with
+  | some z =>
+    ↑val.next_pair_index + 1 ≤ U64.max ∧ ↑z = ↑val.next_pair_index + 1 ∧ z.bv = val.next_pair_index.bv + U64.bv 1#u64
+  | none => U64.max < ↑val.next_pair_index + 1
+b1_post : false = decide (o ≠ some val1.next_pair_index)
+h✝ : ¬b1 = true
+⊢ ∀ (statement : PoolV1PairLatePublicStatementV1),
+    core.result.Result.Ok { live_snapshot := val, candidate_afterstate := val1 } = core.result.Result.Ok statement →
+      (∃ raw, ↑raw = ↑bytes ∧ header_frame raw) ∧
+        (∃ snapshot_input afterstate_input,
+            ↑snapshot_input = List.slice 32 832 ↑bytes ∧
+              ↑afterstate_input = List.drop 832 ↑bytes ∧
+                decode_pool_v1_pair_live_snapshot_v1 snapshot_input =
+                    ok (core.result.Result.Ok statement.live_snapshot) ∧
+                  pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1 afterstate_input =
+                    ok (core.result.Result.Ok statement.candidate_afterstate)) ∧
+          statement.live_snapshot.next_pair_index.checked_add 1#u64 =
+            some statement.candidate_afterstate.next_pair_index
+case h2
+bytes : Slice U8
+i1 : Usize
+_✝³⁸ : [> let i1 ← POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES <]
+i1_post : ↑i1 = 1520
+h✝¹⁸ : ¬(bytes.len != i1) = true
+s : Slice U8
+_✝³⁷ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 8#usize } bytes <]
+s_post1 : ↑s = List.slice 0 8 ↑bytes
+s_post2 : s.length = 8
+s1 : Slice U8
+_✝³⁶ :
+  [> let s1 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 8#usize }
+      POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice <]
+s1_post1 : ↑s1 = List.slice 0 8 ↑POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+s1_post2 : s1.length = 8 - 0
+b : Bool
+_✝³⁵ : [> let b ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s s1 <]
+i2 : U8
+_✝³⁴ : [> let i2 ← bytes.index_usize 8#usize <]
+i3 : U8
+_✝³³ : [> let i3 ← bytes.index_usize 9#usize <]
+s2 : Slice U8
+_✝³² : [> let s2 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 10#usize, «end» := 12#usize } bytes <]
+a : Std.Array U8 2#usize
+_✝³¹ : [> let a ← AspisS6NativeSnapshotReadArray.read_array 2#usize s2 <]
+i4 : U16
+_✝³⁰ : [> let i4 ← lift (core.num.U16.from_le_bytes a) <]
+i5 : Usize
+_✝²⁹ : [> let i5 ← lift (UScalar.cast UScalarTy.Usize i4) <]
+s3 : Slice U8
+_✝²⁸ : [> let s3 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 12#usize, «end» := 16#usize } bytes <]
+a1 : Std.Array U8 4#usize
+_✝²⁷ : [> let a1 ← AspisS6NativeSnapshotReadArray.read_array 4#usize s3 <]
+i6 : U32
+_✝²⁶ : [> let i6 ← lift (core.num.U32.from_le_bytes a1) <]
+i7 : Usize
+_✝²⁵ : [> let i7 ← lift (UScalar.cast UScalarTy.Usize i6) <]
+s4 : Slice U8
+_✝²⁴ : [> let s4 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 16#usize, «end» := 20#usize } bytes <]
+a2 : Std.Array U8 4#usize
+_✝²³ : [> let a2 ← AspisS6NativeSnapshotReadArray.read_array 4#usize s4 <]
+i8 : U32
+_✝²² : [> let i8 ← lift (core.num.U32.from_le_bytes a2) <]
+i9 : Usize
+_✝²¹ : [> let i9 ← lift (UScalar.cast UScalarTy.Usize i8) <]
+i10 : Usize
+_✝²⁰ : [> let i10 ← 8#usize + 680#usize <]
+s5 : Slice U8
+_✝¹⁹ : [> let s5 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 20#usize, «end» := 24#usize } bytes <]
+a3 : Std.Array U8 4#usize
+_✝¹⁸ : [> let a3 ← AspisS6NativeSnapshotReadArray.read_array 4#usize s5 <]
+i11 : U32
+_✝¹⁷ : [> let i11 ← lift (core.num.U32.from_le_bytes a3) <]
+i12 : Usize
+_✝¹⁶ : [> let i12 ← lift (UScalar.cast UScalarTy.Usize i11) <]
+i13 : U8
+_✝¹⁵ : [> let i13 ← bytes.index_usize 24#usize <]
+i14 : U8
+_✝¹⁴ : [> let i14 ← bytes.index_usize 25#usize <]
+i15 : U8
+_✝¹³ : [> let i15 ← bytes.index_usize 26#usize <]
+i16 : U8
+_✝¹² : [> let i16 ← bytes.index_usize 27#usize <]
+i17 : U8
+_✝¹¹ : [> let i17 ← bytes.index_usize 28#usize <]
+i18 : U8
+_✝¹⁰ : [> let i18 ← bytes.index_usize 29#usize <]
+i19 : U8
+_✝⁹ : [> let i19 ← bytes.index_usize 30#usize <]
+i20 : U8
+_✝⁸ : [> let i20 ← bytes.index_usize 31#usize <]
+i21 : Usize
+_✝⁷ : [> let i21 ← 32#usize + 800#usize <]
+s6 : Slice U8
+_✝⁶ : [> let s6 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 32#usize, «end» := i21 } bytes <]
+r4 : core.result.Result PoolV1PairLiveSnapshotV1 PoolV1PairLatePublicStatementErrorV1
+_✝⁵ : [> let r4 ← decode_pair_live_snapshot_boxed_v1 s6 <]
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    PoolV1PairLiveSnapshotV1
+_✝⁴ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r4 <]
+val : PoolV1PairLiveSnapshotV1
+s7 : Slice U8
+_✝³ : [> let s7 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i21 } bytes <]
+r5 : core.result.Result pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 PoolV1PairLatePublicStatementErrorV1
+_✝² : [> let r5 ← decode_pair_afterstate_boxed_v1 s7 <]
+cf1 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+_✝¹ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r5 <]
+val1 : pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+o : Option U64
+_✝ : [> let o ← lift (val.next_pair_index.checked_add 1#u64) <]
+b1 : Bool
+_ :
+  [> let b1 ←
+    core.cmp.PartialEq.ne.default (core.option.Option.Insts.CoreCmpPartialEqOption.eq core.cmp.PartialEqU64) o
+      (some val1.next_pair_index) <]
+b_post : decide (o ≠ some val1.next_pair_index) = true ↔ s ≠ s1
+h✝¹⁷ : ¬b = true
+i2_post : i2 = (↑bytes)[8]
+h✝¹⁶ : ¬((↑bytes)[8] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION) = true
+i3_post : i3 = (↑bytes)[9]
+h✝¹⁵ : ¬((↑bytes)[9] != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT) = true
+s2_post1 : ↑s2 = List.slice 10 12 ↑bytes
+s2_post2 : s2.length = 12 - 10
+a_post : ↑a = List.slice 10 12 ↑bytes
+i4_post : i4 = core.num.U16.from_le_bytes a
+i5_post : i5 = UScalar.cast UScalarTy.Usize (core.num.U16.from_le_bytes a)
+h✝¹⁴ : ¬(UScalar.cast UScalarTy.Usize (core.num.U16.from_le_bytes a) != 32#usize) = true
+s3_post1 : ↑s3 = List.slice 12 16 ↑bytes
+s3_post2 : s3.length = 16 - 12
+a1_post : ↑a1 = List.slice 12 16 ↑bytes
+i6_post : i6 = core.num.U32.from_le_bytes a1
+i7_post : i7 = UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a1)
+h✝¹³ : ¬(UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a1) != 800#usize) = true
+s4_post1 : ↑s4 = List.slice 16 20 ↑bytes
+s4_post2 : s4.length = 20 - 16
+a2_post : ↑a2 = List.slice 16 20 ↑bytes
+i8_post : i8 = core.num.U32.from_le_bytes a2
+i9_post : i9 = UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a2)
+i10_post : ↑i10 = 8 + 680
+h✝¹² : ¬(UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a2) != i10) = true
+s5_post1 : ↑s5 = List.slice 20 24 ↑bytes
+s5_post2 : s5.length = 24 - 20
+a3_post : ↑a3 = List.slice 20 24 ↑bytes
+i11_post : i11 = core.num.U32.from_le_bytes a3
+i12_post : i12 = UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a3)
+h✝¹¹ : ¬(UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes a3) != i1) = true
+i13_post : i13 = (↑bytes)[24]
+h✝¹⁰ : ¬((↑bytes)[24] != 0#u8) = true
+i14_post : i14 = (↑bytes)[25]
+h✝⁹ : ¬((↑bytes)[25] != 0#u8) = true
+i15_post : i15 = (↑bytes)[26]
+h✝⁸ : ¬((↑bytes)[26] != 0#u8) = true
+i16_post : i16 = (↑bytes)[27]
+h✝⁷ : ¬((↑bytes)[27] != 0#u8) = true
+i17_post : i17 = (↑bytes)[28]
+h✝⁶ : ¬((↑bytes)[28] != 0#u8) = true
+i18_post : i18 = (↑bytes)[29]
+h✝⁵ : ¬((↑bytes)[29] != 0#u8) = true
+i19_post : i19 = (↑bytes)[30]
+h✝⁴ : ¬((↑bytes)[30] != 0#u8) = true
+i20_post : i20 = (↑bytes)[31]
+h✝³ : ¬((↑bytes)[31] != 0#u8) = true
+i21_post : ↑i21 = 32 + 800
+s6_post1 : ↑s6 = List.slice 32 (32 + 800) ↑bytes
+s6_post2 : s6.length = 32 + 800 - 32
+r4_post :
+  ∀ (value : PoolV1PairLiveSnapshotV1),
+    r4 = core.result.Result.Ok value → decode_pool_v1_pair_live_snapshot_v1 s6 = ok (core.result.Result.Ok value)
+cf_post :
+  ∀ (value : PoolV1PairLiveSnapshotV1),
+    core.ops.control_flow.ControlFlow.Continue val = core.ops.control_flow.ControlFlow.Continue value →
+      r4 = core.result.Result.Ok value
+h✝² : cf = core.ops.control_flow.ControlFlow.Continue val
+s7_post1 : ↑s7 = List.drop (32 + 800) ↑bytes
+s7_post2 : s7.length = bytes.length - (32 + 800)
+r5_post :
+  ∀ (value : pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+    r5 = core.result.Result.Ok value →
+      pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1 s7 = ok (core.result.Result.Ok value)
+cf1_post :
+  ∀ (value : pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+    core.ops.control_flow.ControlFlow.Continue val1 = core.ops.control_flow.ControlFlow.Continue value →
+      r5 = core.result.Result.Ok value
+h✝¹ : cf1 = core.ops.control_flow.ControlFlow.Continue val1
+o_post :
+  match o with
+  | some z =>
+    ↑val.next_pair_index + 1 ≤ U64.max ∧ ↑z = ↑val.next_pair_index + 1 ∧ z.bv = val.next_pair_index.bv + U64.bv 1#u64
+  | none => U64.max < ↑val.next_pair_index + 1
+b1_post : false = decide (o ≠ some val1.next_pair_index)
+h✝ : ¬b1 = true
+⊢ ∀ (statement : PoolV1PairLatePublicStatementV1),
+    core.result.Result.Ok { live_snapshot := val, candidate_afterstate := val1 } = core.result.Result.Ok statement →
+      (∃ raw, ↑raw = ↑bytes ∧ header_frame raw) ∧
+        (∃ snapshot_input afterstate_input,
+            ↑snapshot_input = List.slice 32 832 ↑bytes ∧
+              ↑afterstate_input = List.drop 832 ↑bytes ∧
+                decode_pool_v1_pair_live_snapshot_v1 snapshot_input =
+                    ok (core.result.Result.Ok statement.live_snapshot) ∧
+                  pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1 afterstate_input =
+                    ok (core.result.Result.Ok statement.candidate_afterstate)) ∧
+          statement.live_snapshot.next_pair_index.checked_add 1#u64 =
+            some statement.candidate_afterstate.next_pair_index
+'AspisS6NativeLateDecoderFactored.Frames.decode_frames' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
