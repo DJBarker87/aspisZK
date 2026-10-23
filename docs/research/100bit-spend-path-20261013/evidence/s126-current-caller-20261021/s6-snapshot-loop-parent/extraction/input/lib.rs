@@ -1,0 +1,1 @@
+pub fn encode(snapshot:&aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLiveSnapshotV1,output:&mut[u8])->Result<(),aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLiveSnapshotErrorV1>{aspis_statement::pool_v1::pair_tree_profile::encode_pool_v1_pair_live_snapshot_v1(snapshot,output)}

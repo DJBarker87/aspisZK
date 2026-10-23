@@ -1,0 +1,61 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6OwnedFrontierTotalV1.lean:20:2: warning: 'all_goals (simp_all only [array_slice_length] <;> scalar_tac)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6OwnedFrontierTotalV1.lean:20:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6OwnedFrontierTotalV1.lean:39:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+iter : Range
+afterstate : Afterstate
+output : Std.Array U8 688#usize
+he : ↑iter.end = 20
+hs : ↑iter.start ≤ 20
+range : Range
+buffer : Std.Array U8 688#usize
+hend : ↑(range, buffer).1.end = 20
+hstart : ↑(range, buffer).1.start ≤ 20
+o : Option Usize
+iter1 : core.ops.range.Range Usize
+_ : [> let(o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize range <]
+o_post1 :
+  if ↑range.start < ↑range.end then o = some range.start ∧ ↑iter1.start = ↑range.start + 1
+  else o = none ∧ iter1.start = range.start
+o_post2 : iter1.end = range.end
+level : UScalar UScalarTy.Usize
+h✝ : o = some level
+⊢ ↑level < 20
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6OwnedFrontierTotalV1.lean:39:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+iter : Range
+afterstate : Afterstate
+output : Std.Array U8 688#usize
+he : ↑iter.end = 20
+hs : ↑iter.start ≤ 20
+range : Range
+buffer : Std.Array U8 688#usize
+hend : ↑(range, buffer).1.end = 20
+hstart : ↑(range, buffer).1.start ≤ 20
+o : Option Usize
+iter1 : core.ops.range.Range Usize
+_✝ : [> let(o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize range <]
+o_post1 :
+  if ↑range.start < ↑range.end then o = some range.start ∧ ↑iter1.start = ↑range.start + 1
+  else o = none ∧ iter1.start = range.start
+o_post2 : iter1.end = range.end
+level : UScalar UScalarTy.Usize
+h✝ : o = some level
+output1 : Std.Array U8 688#usize
+_ : [> let output1 ← frontier_step afterstate buffer level <]
+⊢ ↑iter1.end = 20 ∧ ↑iter1.start ≤ 20 ∧ 20 - ↑iter1.start < 20 - ↑range.start
+'AspisS6OwnedFrontier.Total.step_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6OwnedFrontier.Total.loop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS6OwnedFrontier.Total.frontier_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

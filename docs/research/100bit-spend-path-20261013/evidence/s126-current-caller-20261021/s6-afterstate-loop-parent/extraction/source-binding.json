@@ -1,0 +1,10 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "original_loop": "for (level, node) in afterstate.next_frontier.iter().enumerate() {\n        let start = 48 + 32 * level;\n        output[start..start + 32].copy_from_slice(&encode_digest_canonical(node));\n    }",
+  "replacement": "output = frontier_owned_reference(afterstate, output);",
+  "helpers": "fn frontier_step_reference(afterstate:&PoolV1PairVerifiedAfterstateV1,mut output:[u8;688],level:usize)->[u8;688] {\n let start=48+32*level;\n output[start..start+32].copy_from_slice(&encode_digest_canonical(&afterstate.next_frontier[level]));\n output\n}\nfn frontier_owned_reference(afterstate:&PoolV1PairVerifiedAfterstateV1,mut output:[u8;688])->[u8;688] {\n for level in 0..20 {output=frontier_step_reference(afterstate,output,level);}\n output\n}\n",
+  "predecessor": "s6-native-owned-frontier-v2",
+  "original_file_sha256": "03fc14126dab7d78688d6fab1d954cc116357f349652a37dee5b044d45e0bbea",
+  "candidate_file_sha256": "797f1f35e00503ae8ac86830e333cf27de969ff6b4ac1249ec2666d3cc0a85e2",
+  "qualification": "Only original foreach replaced by the exact checked full-native helper loop, names/native type alias restored. Original validation/header/errors unchanged. Two source child leaves must be installed, original validator has separate native equivalence evidence. No production adoption or SDK/contextual closure."
+}

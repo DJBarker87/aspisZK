@@ -1,0 +1,119 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6LateParentTotalV1.lean:25:6: warning: This simp argument is unused:
+  core.cmp.PartialEqU64
+
+Hint: Omit it from the simp argument list.
+  simp [AspisS6StdOptionMethods.option_eq,
+        AspisS6StdOptionMethods.core.option.Option.Insts.CoreCmpPartialEqOption.eq, c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵6̵4̵,̵ ̵liftFun2]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6LateParentTotalV1.lean:50:4: error: Tactic `unfold` failed to unfold `encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1.call_once` in
+  (have i := output.len;
+    do
+    let i1 ← POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES
+    if (i != i1) = true then ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.WrongLength, output)
+      else do
+        let o ← lift (statement.live_snapshot.next_pair_index.checked_add 1#u64)
+        let b ←
+          core.cmp.PartialEq.ne.default
+              { eq := AspisS6StdOptionMethods.option_eq core.cmp.PartialEqU64,
+                  ne := fun self other =>
+                    core.cmp.PartialEq.ne.default (AspisS6StdOptionMethods.option_eq core.cmp.PartialEqU64) self
+                      other }.eq
+              o (some statement.candidate_afterstate.next_pair_index)
+        if b = true then
+            ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch, output)
+          else do
+            let output1 ← core.slice.Slice.fill core.clone.CloneU8 output 0#u8
+            let (s, index_mut_back) ←
+              core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) output1
+                  { «end» := 8#usize }
+            let s1 ← lift POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+            let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+            have output2 : Slice U8 := index_mut_back s2
+            let output3 ← output2.update 8#usize 1#u8
+            let output4 ← output3.update 9#usize 2#u8
+            let (s3, index_mut_back1) ←
+              core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) output4
+                  { start := 10#usize, «end» := 12#usize }
+            let i2 ← lift (UScalar.cast UScalarTy.U16 32#usize)
+            let a ← lift (core.num.U16.to_le_bytes i2)
+            let s4 ← lift a.to_slice
+            let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+            have output5 : Slice U8 := index_mut_back1 s5
+            let (s6, index_mut_back2) ←
+              core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) output5
+                  { start := 12#usize, «end» := 16#usize }
+            let i3 ← lift (UScalar.cast UScalarTy.U32 800#usize)
+            let a1 ← lift (core.num.U32.to_le_bytes i3)
+            let s7 ← lift a1.to_slice
+            let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7
+            have output6 : Slice U8 := index_mut_back2 s8
+            let (s9, index_mut_back3) ←
+              core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) output6
+                  { start := 16#usize, «end» := 20#usize }
+            let i4 ← 8#usize + 680#usize
+            let i5 ← lift (UScalar.cast UScalarTy.U32 i4)
+            let a2 ← lift (core.num.U32.to_le_bytes i5)
+            let s10 ← lift a2.to_slice
+            let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10
+            have output7 : Slice U8 := index_mut_back3 s11
+            let (s12, index_mut_back4) ←
+              core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) output7
+                  { start := 20#usize, «end» := 24#usize }
+            let i6 ← lift (UScalar.cast UScalarTy.U32 i1)
+            let a3 ← lift (core.num.U32.to_le_bytes i6)
+            let s13 ← lift a3.to_slice
+            let s14 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 s13
+            have output8 : Slice U8 := index_mut_back4 s14
+            let i7 ← 32#usize + 800#usize
+            let (s15, index_mut_back5) ←
+              core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) output8
+                  { start := 32#usize, «end» := i7 }
+            let (r, s16) ← AspisS6SnapshotLoopParent.encode statement.live_snapshot s15
+            let r1 ←
+              match r with
+                | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                | core.result.Result.Err e => do
+                  let t ←
+                    encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+                        () e
+                  ok (core.result.Result.Err t)
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue a =>
+                have output9 := index_mut_back5 s16;
+                do
+                let r2 ← AspisS6AfterstateLoopParent.encode statement.candidate_afterstate
+                let r3 ←
+                  match r2 with
+                    | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                    | core.result.Result.Err e => do
+                      let t ←
+                        encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+                            () e
+                      ok (core.result.Result.Err t)
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let (s17, index_mut_back6) ←
+                      core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeFromUsizeSlice U8) output9
+                          { start := i7 }
+                    let s18 ← lift val.to_slice
+                    let s19 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s17 s18
+                    have output10 : Slice U8 := index_mut_back6 s19
+                    ok (core.result.Result.Ok (), output10)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r4 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+                    ok (r4, output9)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r2 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+                have output9 : Slice U8 := index_mut_back5 s16
+                ok (r2, output9)) ⦃
+    result => result.2.length = output.length ⦄
+'AspisS6LateParent.Total.size_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6LateParent.Total.option_u64_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6LateParent.Total.encode_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

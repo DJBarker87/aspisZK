@@ -1,0 +1,1 @@
+pub fn encode(statement:&aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1,output:&mut[u8])->Result<(),aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementErrorV1>{aspis_statement::pool_v1::pair_tree_profile::encode_pool_v1_pair_late_public_statement_v1(statement,output)}

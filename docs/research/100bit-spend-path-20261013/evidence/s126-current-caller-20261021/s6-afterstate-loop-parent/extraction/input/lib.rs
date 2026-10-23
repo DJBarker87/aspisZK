@@ -1,0 +1,1 @@
+pub fn encode(afterstate:&aspis_statement::pool_v1::pair_terminal::PoolV1PairVerifiedAfterstateV1)->Result<[u8;688],aspis_statement::pool_v1::pair_terminal::PoolV1PairVerifierTransportErrorV1>{aspis_statement::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1(afterstate)}
