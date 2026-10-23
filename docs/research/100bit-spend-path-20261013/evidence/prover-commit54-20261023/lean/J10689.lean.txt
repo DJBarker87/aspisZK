@@ -1,0 +1,70 @@
+import R1Z.ProverCommitEncoderGenericCollect54
+/-! Finite induction for the pointer/counter schemas checked by Kani against
+actual StepBy<Iter>/StepBy<Skip<Iter>> initialization, next and exhaustion.
+Pointer values are represented as offsets; no library axiom is introduced. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitEncoderIterator54
+
+structure State where
+  ptr : Nat
+  first : Bool
+  skip : Nat
+  deriving DecidableEq
+
+def schema (parity k : Nat) : State :=
+  if k=0 then ⟨0,true,parity⟩ else ⟨2*k-1+parity,false,0⟩
+
+def step {A : Type} (data : Nat → A) (n : Nat) (s : State) : Option (A × State) :=
+  let i := s.ptr + if s.first then s.skip else s.skip+1
+  if i<n then some (data i,⟨i+1,false,0⟩) else none
+
+theorem successful_step {A : Type} (data : Nat → A) (n parity k : Nat)
+    (hp : parity≤1) (hk : 2*k+parity<n) :
+    step data n (schema parity k)=some (data (2*k+parity),schema parity (k+1)) := by
+  by_cases hz : k=0
+  · subst k
+    simp only [schema,if_true,Nat.mul_zero,Nat.zero_add,step,Bool.true_eq,ite_true]
+    rw [if_pos hk,if_neg (by omega)]
+    congr 2
+    apply State.ext <;> simp <;> omega
+  · have hptr : 2*k-1+parity+(0+1)=2*k+parity := by omega
+    simp only [schema,if_neg hz,step,Bool.false_eq_true,ite_false,hptr,if_pos hk,
+      if_neg (by omega : k+1≠0)]
+    congr 2
+    apply State.ext <;> simp <;> omega
+
+theorem exhausted {A : Type} (data : Nat → A) (count parity : Nat) (hp : parity≤1) :
+    step data (2*count) (schema parity count)=none := by
+  by_cases hz : count=0
+  · subst count;simp [schema,step]
+  · have hptr : 2*count-1+parity+(0+1)=2*count+parity := by omega
+    simp only [schema,if_neg hz,step,Bool.false_eq_true,ite_false,hptr,if_neg (by omega)]
+
+def collect {A : Type} (data : Nat → A) (n : Nat) : Nat → State → Option (List A)
+ | 0,_ => some []
+ | left+1,s => do
+   let (x,next) ← step data n s
+   let tail ← collect data n left next
+   some (x::tail)
+
+theorem exact_sequence {A : Type} (data : Nat → A) (count parity k left : Nat)
+    (hp : parity≤1) (bound : k+left≤count) :
+    collect data (2*count) left (schema parity k)=
+      some (List.ofFn (fun i : Fin left => data (2*(k+i.val)+parity))) := by
+  induction left generalizing k with
+  | zero => simp [collect]
+  | succ left ih =>
+    rw [collect,successful_step data (2*count) parity k hp (by omega)]
+    simp only [Option.bind_some]
+    rw [ih (k+1) (by omega),List.ofFn_succ]
+    simp only [Option.bind_some,Nat.add_zero]
+    congr 3
+    funext i
+    congr 1
+    simp only [Fin.val_succ]
+    omega
+
+#print axioms successful_step
+#print axioms exhausted
+#print axioms exact_sequence
+end R1Z.ProverCommitEncoderIterator54

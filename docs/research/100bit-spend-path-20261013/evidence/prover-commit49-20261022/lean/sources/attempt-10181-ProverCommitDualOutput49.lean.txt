@@ -1,0 +1,34 @@
+import R1Z.ProverCommitDualFill49
+import R1Z.ProverCommitGamma48
+import R1Z.ProverCommitQuarter48
+import R1Z.ProverCommitDualMath49
+/-! Entire 256-entry dual fold equals the existing R1 dualFold. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitDualOutput49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitWideOps48 ProverCommitMix48 ProverCommitDualFill49
+
+theorem cell_model (q : Nat → Raw) (a : Exact) (i : Fin 256) :
+    cellValue q a i.val=AspisR1.RoundPairing.dualFold a (fun j : Fin 1024 => value (q j.val)) i := by
+  rw [cellValue,ProverCommitDualCell48.polynomial,ProverCommitQuarter48.factor_quarter]
+  exact ProverCommitDualMath49.horner_model (fun j => value (q j)) a i
+
+theorem all (q : Nat → Raw) (hq : ∀ k, k<1024 → canonical (q k))
+    (a : Raw) (ha : canonical a) :
+    ∃ out : Nat → Raw, dual.all (sourceArray 1024#usize q) (source a)=ok (sourceArray 256#usize out) ∧
+      (∀ i, i<256 → canonical (out i)) ∧
+      ∀ i : Fin 256, value (out i.val)=AspisR1.RoundPairing.dualFold (value a)
+        (fun j : Fin 1024 => value (q j.val)) i := by
+  obtain ⟨out,hout,hcout,hdout⟩ := fill q hq a ha 256 (fun _ => ProverCommitGamma48.zero)
+    (fun _ _ => ProverCommitGamma48.zero_canonical) 0#usize 256#u16 rfl (by decide)
+  refine ⟨out,?_,hcout,?_⟩
+  · rw [dual.all,ProverCommitGamma48.repeat_zero]
+    exact hout
+  · intro i
+    rw [hdout i.val i.isLt,if_pos (by have := i.isLt;change 0 ≤ i.val ∧ i.val<0+256;omega)]
+    exact cell_model q (value a) i
+
+#print axioms cell_model
+#print axioms all
+end R1Z.ProverCommitDualOutput49

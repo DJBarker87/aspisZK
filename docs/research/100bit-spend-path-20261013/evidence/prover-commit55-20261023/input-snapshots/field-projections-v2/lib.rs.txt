@@ -1,0 +1,118 @@
+#![allow(dead_code,unexpected_cfgs)]
+pub mod field;
+pub mod scalar;
+use scalar::CodeField;
+fn channel<T:Copy>(coefficients:&[T;1024],s:usize)->Vec<T> {
+ (0..256).map(|d|coefficients[4*d+s]).collect()
+}
+#[cfg(kani)] mod proofs {
+ use super::*;
+ #[kani::proof] #[kani::unwind(260)] fn m_channel() {
+  let raw:[u32;1024]=kani::any();let c:[field::M31;1024]=unsafe{std::mem::transmute(raw)};
+  let s:u8=kani::any();kani::assume(s<4);let k:u8=kani::any();let out=channel(&c,s as usize);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize],c[4*k as usize+s as usize]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn q_channel() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let s:u8=kani::any();kani::assume(s<4);let k:u8=kani::any();let out=channel(&c,s as usize);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize],c[4*k as usize+s as usize]);
+ }
+ #[kani::proof] #[kani::unwind(35)] fn constructors() {
+  let input:[[u32;8];10]=kani::any();let mut trace=[99usize;10];let mut n=0;
+  let out:[[u32;8];10]=core::array::from_fn(|i| {trace[n]=i;n+=1;input[i]});
+  assert_eq!(n,10);let word:u8=kani::any();kani::assume(word<8);
+  let k:u8=kani::any();kani::assume(k<10);assert_eq!(trace[k as usize],k as usize);assert_eq!(out[k as usize][word as usize],input[k as usize][word as usize]);
+  let mut trace=[99usize;9];let mut n=0;
+  let out:[[u32;8];9]=core::array::from_fn(|i| {trace[n]=i;n+=1;input[i]});
+  assert_eq!(n,9);let k:u8=kani::any();kani::assume(k<9);
+  assert_eq!(trace[k as usize],k as usize);assert_eq!(out[k as usize],input[k as usize]);
+  let mut trace=[99usize;4];let mut n=0;
+  let out:[[u32;8];4]=core::array::from_fn(|i| {trace[n]=i;n+=1;input[i]});
+  assert_eq!(n,4);let k:u8=kani::any();kani::assume(k<4);
+  assert_eq!(trace[k as usize],k as usize);assert_eq!(out[k as usize],input[k as usize]);
+ }
+ #[kani::proof] #[kani::unwind(35)] fn semantic_challenges() {
+  let sem:[[u32;4];25]=kani::any();
+  let alpha:[[u32;4];10]=core::array::from_fn(|i|sem[15+i]);
+  let zc:[[u32;4];10]=core::array::from_fn(|i|sem[3+i]);
+  let i:u8=kani::any();kani::assume(i<10);
+  assert_eq!(alpha[i as usize],sem[15+i as usize]);assert_eq!(zc[i as usize],sem[3+i as usize]);
+ }
+ #[kani::proof] #[kani::unwind(35)] fn projections() {
+  let m:u32=kani::any();let q:[u32;4]=kani::any();
+  kani::assume(m<field::P);for i in 0..4 {kani::assume(q[i]<field::P);}
+  let q:field::QM31=unsafe{std::mem::transmute(q)};
+  let b=field::WideExact::from_m31(field::M31(m));
+  let e=field::WideExact::from_qm31(q);
+  assert_eq!(field::M31(b.to_limbs()[0]),field::M31(m));assert_eq!(e.c0(),q);
+  assert_eq!(field::WideExact::from_m31(field::M31(b.to_limbs()[0])),b);
+  assert_eq!(field::WideExact::from_qm31(e.c0()),e);
+ }
+}
+
+#[cfg(kani)] mod fixed_channels {
+ use super::*;
+ #[kani::proof] #[kani::unwind(260)] fn m_channel_0() {
+  let raw:[[u32;1];1024]=kani::any();let c:[field::M31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,0);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize],c[4*k as usize+0]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn m_channel_1() {
+  let raw:[[u32;1];1024]=kani::any();let c:[field::M31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,1);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize],c[4*k as usize+1]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn m_channel_2() {
+  let raw:[[u32;1];1024]=kani::any();let c:[field::M31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,2);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize],c[4*k as usize+2]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn m_channel_3() {
+  let raw:[[u32;1];1024]=kani::any();let c:[field::M31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,3);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize],c[4*k as usize+3]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn q_channel_0() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,0);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize],c[4*k as usize+0]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn q_channel_1() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,1);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize],c[4*k as usize+1]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn q_channel_2() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,2);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize],c[4*k as usize+2]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn q_channel_3() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,3);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize],c[4*k as usize+3]);
+ }
+}
+
+fn native_power_step(mut base:field::CM31,mut exp:u64,mut acc:field::CM31)->(field::CM31,u64,field::CM31) {
+ if exp>0 {
+  if exp&1==1 {acc=acc.mul(base);}
+  base=base.square();exp>>=1;
+ }
+ (base,exp,acc)
+}
+fn owned_power_step(base:field::CM31,exp:u64,acc:field::CM31)->(field::CM31,u64,field::CM31) {
+ if exp==0 {(base,exp,acc)} else {
+  let next=if exp&1==1 {acc.mul(base)} else {acc};
+  (base.square(),exp>>1u32,next)
+ }
+}
+#[cfg(kani)] mod power {
+ use super::*;
+ #[kani::proof] #[kani::unwind(35)] fn transition() {
+  let raw:[u32;4]=kani::any();for i in 0..4 {kani::assume(raw[i]<field::P);}
+  let b=field::CM31::new(field::M31(raw[0]),field::M31(raw[1]));
+  let a=field::CM31::new(field::M31(raw[2]),field::M31(raw[3]));let exp:u64=kani::any();
+  assert_eq!(native_power_step(b,exp,a),owned_power_step(b,exp,a));
+ }
+}

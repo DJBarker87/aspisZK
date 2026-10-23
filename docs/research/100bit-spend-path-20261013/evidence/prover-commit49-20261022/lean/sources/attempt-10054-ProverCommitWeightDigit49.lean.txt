@@ -1,0 +1,32 @@
+import R1Z.ProverCommitSampleBits49
+/-! Source shift/mask indices of the five weight factors are the model's
+radix-four digits, for every stored index. No table is enumerated. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitWeightDigit49
+open Aeneas Aeneas.Std
+
+theorem shift_mask (j : Usize) (s : U32) (small : s.val<32) :
+    ((Usize.wrapping_shr j s) &&& 3#usize).val=(j.val/2^s.val)%4 := by
+  change ((j.bv.ushiftRight (s.val%UScalarTy.Usize.numBits)) &&& (3#usize).bv).toNat=_
+  simp only [BitVec.toNat_and]
+  have bits : 32≤UScalarTy.Usize.numBits := System.Platform.le_numBits
+  rw [Nat.mod_eq_of_lt (show s.val<UScalarTy.Usize.numBits by omega)]
+  change (j.val >>> s.val) &&& 3=_
+  rw [Nat.shiftRight_eq_div_pow]
+  exact Nat.and_two_pow_sub_one_eq_mod _ 2
+
+theorem digit (j : Usize) (d : Usize) (hd : d.val<5) :
+    ((Usize.wrapping_shr j (UScalar.cast .U32 (Usize.wrapping_mul 2#usize d))) &&& 3#usize).val=
+      (j.val/4^d.val)%4 := by
+  have hm : (Usize.wrapping_mul 2#usize d).val=2*d.val := by
+    rw [Usize.wrapping_mul_val_eq]
+    have hsize : 1024<UScalar.size .Usize := by scalar_tac
+    change (2*d.val)%UScalar.size .Usize=2*d.val
+    exact Nat.mod_eq_of_lt (by omega)
+  have hcast : (UScalar.cast .U32 (Usize.wrapping_mul 2#usize d)).val=2*d.val := by scalar_tac
+  rw [shift_mask _ _ (by rw [hcast];omega),hcast,←pow_mul]
+  rfl
+
+#print axioms shift_mask
+#print axioms digit
+end R1Z.ProverCommitWeightDigit49

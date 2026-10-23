@@ -1,0 +1,3 @@
+A successful actual Pair term prefix supplies all four ordered call records, preserving exact PERM/ap1/high reads, mixed multiplication and quarter-scaling results, and equality of each returned term to the actual prefix output. This structural same-execution theorem does not itself prove canonicality or upstream input provenance.
+
+Focused Lean check: 18.51 seconds; peak aggregate RSS 3222142976 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

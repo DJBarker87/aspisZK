@@ -1,0 +1,77 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR2_Context.lean:12:89: error: unsolved goals
+case h
+c : aspis_core.state_only_hiding.StateOnlyHidingContext
+encoded1 : Std.Array U8 81#usize
+_✝¹² :
+  [> let encoded1 ←
+    (Array.repeat 81#usize 0#u8).update 0#usize aspis_core.state_only_hiding.STATE_ONLY_HIDING_CONTEXT_VERSION <]
+encoded1_post :
+  encoded1 = (Array.repeat 81#usize 0#u8).set 0#usize aspis_core.state_only_hiding.STATE_ONLY_HIDING_CONTEXT_VERSION
+s : Slice U8
+index_mut_back : Slice U8 → Std.Array U8 81#usize
+_✝¹¹ :
+  [> let(s, index_mut_back) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) encoded1
+      { start := 1#usize, «end» := 33#usize } <]
+s_post1 : ↑s = List.slice 1 33 ↑encoded1
+s_post2 : s.length = 33 - 1
+s_post3 : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑encoded1).setSlice! 1 ↑s'
+s1 : Slice U8
+_✝¹⁰ : [> let s1 ← lift c.statement_digest.to_slice <]
+s1_post : s1 = c.statement_digest.to_slice
+s2 : Slice U8
+_✝⁹ : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1 <]
+s2_post : s2 = s1
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Std.Array U8 81#usize
+_✝⁸ :
+  [> let(s3, index_mut_back1) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back s2) { start := 33#usize, «end» := 65#usize } <]
+s3_post1 : ↑s3 = List.slice 33 65 ↑(index_mut_back s2)
+s3_post2 : s3.length = 65 - 33
+s3_post3 : ∀ (s' : Slice U8), ↑(index_mut_back1 s') = (↑(index_mut_back s2)).setSlice! 33 ↑s'
+s4 : Slice U8
+_✝⁷ : [> let s4 ← lift c.mask_nonce.to_slice <]
+s4_post : s4 = c.mask_nonce.to_slice
+s5 : Slice U8
+_✝⁶ : [> let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4 <]
+s5_post : s5 = s4
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Std.Array U8 81#usize
+_✝⁵ :
+  [> let(s6, index_mut_back2) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back1 s5) { start := 65#usize, «end» := 73#usize } <]
+s6_post1 : ↑s6 = List.slice 65 73 ↑(index_mut_back1 s5)
+s6_post2 : s6.length = 73 - 65
+s6_post3 : ∀ (s' : Slice U8), ↑(index_mut_back2 s') = (↑(index_mut_back1 s5)).setSlice! 65 ↑s'
+a : Std.Array U8 8#usize
+_✝⁴ : [> let a ← lift (core.num.U64.to_le_bytes c.mask_layout_fingerprint) <]
+a_post : ↑a = List.map UScalar.mk c.mask_layout_fingerprint.bv.toLEBytes
+s7 : Slice U8
+_✝³ : [> let s7 ← lift a.to_slice <]
+s7_post : s7 = a.to_slice
+s8 : Slice U8
+_✝² : [> let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7 <]
+s8_post : s8 = s7
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Std.Array U8 81#usize
+_✝¹ :
+  [> let(s9, index_mut_back3) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back2 s8) { start := 73#usize, «end» := 81#usize } <]
+s9_post1 : ↑s9 = List.slice 73 81 ↑(index_mut_back2 s8)
+s9_post2 : s9.length = 81 - 73
+s9_post3 : ∀ (s' : Slice U8), ↑(index_mut_back3 s') = (↑(index_mut_back2 s8)).setSlice! 73 ↑s'
+a1 : Std.Array U8 8#usize
+_✝ : [> let a1 ← lift (core.num.U64.to_le_bytes c.layout_factor_fingerprint) <]
+a1_post : ↑a1 = List.map UScalar.mk c.layout_factor_fingerprint.bv.toLEBytes
+s10 : Slice U8
+_ : [> let s10 ← lift a1.to_slice <]
+s10_post : s10 = a1.to_slice
+⊢ s9.length = s10.length
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR2_Context.lean:15:9: error(lean.unknownIdentifier): Unknown identifier `spec_imp_exists`
+'R1Z.RealR2_Context.encode_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

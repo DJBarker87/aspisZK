@@ -1,0 +1,3 @@
+The actual successful Pair mixed multiplication returns a canonical mapped product. The proof uses its same-run ap1 read canonicality, reflects the observed output to the exact source operation, and identifies that output with constructive source mixed-multiplication totality. The coefficient is normalized internally. Upstream read provenance remains a premise.
+
+Focused Lean check: 19.833 seconds; peak aggregate RSS 3249422336 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

@@ -1,0 +1,85 @@
+import R1Z.ProverCommitNativeGeometry55
+import R1Z.ProverCommitEncoderNode54
+import R1Z.ProverCommitArray49
+import R1Z.ProverCommitEncoderEval54
+/-! Complete nine-cell owned nodes_for output, preserving all cells outside
+an arbitrary fill interval. Domain geometry is identified separately. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitNativeNodes55
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitM31Ops48 ProverCommitEncoderNode54
+
+def array (xs : Nat → U32) : Array field.M31 9#usize :=
+  ProverCommitArray49.array 9#usize xs
+
+attribute [local irreducible] array nodeValue
+
+theorem fill (j : Usize) (hj : j.val<262144) (n : Nat) (d left : U8)
+    (hl : left.val=n) (bound : d.val+n≤9)
+    (xs : Nat → U32) (hxs : ∀ i, i<9 → canonical (xs i)) :
+    ∃ out : Nat → U32, nodes55.fill j d left (array xs)=ok (array out) ∧
+      (∀ i, i<9 → canonical (out i)) ∧
+      ∀ i, i<9 → decode (out i)=
+        if d.val ≤ i ∧ i<d.val+n then nodeValue j.val i else decode (xs i) := by
+  induction n generalizing d left xs with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    refine ⟨xs,?_,hxs,?_⟩
+    · rw [nodes55.fill,hz];rfl
+    · intro i hi;rw [if_neg (by omega)]
+  | succ n ih =>
+    have hne : left≠0#u8 := by scalar_tac
+    have hd : d.val<9 := by omega
+    have hdec : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    have hinc : (U8.wrapping_add d 1#u8).val=d.val+1 := by
+      rw [U8.wrapping_add_val_eq,show (1#u8).val=1 from rfl,
+        show UScalar.size .U8=256 by rw [UScalar.size_def];rfl]
+      exact Nat.mod_eq_of_lt (by omega)
+    have hcast : (UScalar.cast .Usize d).val=d.val := by scalar_tac
+    obtain ⟨v,hv,hcv,hdv⟩ := ProverCommitEncoderNode54.exact_result j hj d hd
+    let next := Function.update xs d.val v
+    have hcnext : ∀ i, i<9 → canonical (next i) := by
+      intro i hi
+      by_cases he : i=d.val
+      · subst i;simpa only [next,Function.update_self] using hcv
+      · simpa only [next,Function.update_of_ne he] using hxs i hi
+    obtain ⟨out,hout,hcout,hdout⟩ := ih (U8.wrapping_add d 1#u8) _ hdec (by rw [hinc];omega) next hcnext
+    refine ⟨out,?_,hcout,?_⟩
+    · rw [nodes55.fill]
+      simp only [hne,if_false,ProverCommitNativeGeometry55.node_same,hv,lift,bind_tc_ok]
+      have hu : Array.update (array xs) (UScalar.cast .Usize d) v=ok (array next) := by
+        unfold array
+        simpa only [hcast,next] using ProverCommitArray49.update 9#usize xs (UScalar.cast .Usize d)
+          (by rw [hcast];exact hd) v
+      rw [hu];simp only [bind_tc_ok];exact hout
+    · intro i hi
+      rw [hdout i hi,hinc]
+      by_cases he : i=d.val
+      · subst i
+        rw [if_neg (by omega),if_pos (by omega)]
+        simpa only [next,Function.update_self] using hdv
+      · by_cases ht : d.val+1 ≤ i ∧ i<d.val+1+n
+        · rw [if_pos ht,if_pos (by omega)]
+        · rw [if_neg ht,if_neg (by omega)]
+          simp only [next,Function.update_of_ne he]
+
+theorem exact_result (j : Usize) (hj : j.val<262144) :
+    ∃ out : Nat → U32, nodes55.nodes j=ok (ProverCommitEncoderEval54.nodes out) ∧
+      (∀ i, i<9 → canonical (out i)) ∧ ∀ i, i<9 → decode (out i)=nodeValue j.val i := by
+  obtain ⟨out,hout,hcout,hdout⟩ := fill j hj 9 0#u8 9#u8 rfl (by decide)
+    (fun _ => 0#u32) (by intro i hi;decide)
+  refine ⟨out,?_,hcout,?_⟩
+  · rw [nodes55.nodes]
+    have hz : Array.repeat 9#usize field.M31.ZERO=array (fun _ => 0#u32) := by
+      unfold array ProverCommitArray49.array
+      simp only [Array.repeat,field.M31.ZERO,List.ofFn_const]
+    rw [hz,hout]
+    unfold array ProverCommitArray49.array ProverCommitEncoderEval54.nodes
+    rfl
+  · intro i hi
+    simpa only [show (0#u8).val=0 from rfl,Nat.zero_add,Nat.zero_le,hi,and_self,if_true] using hdout i hi
+
+#print axioms fill
+#print axioms exact_result
+end R1Z.ProverCommitNativeNodes55

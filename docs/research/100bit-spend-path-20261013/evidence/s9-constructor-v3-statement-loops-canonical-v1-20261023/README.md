@@ -1,0 +1,3 @@
+PROVED: both actual generated statement-factor constructor loops preserve canonical factor reads from their exact initial factor invariant and canonical successful reads of the exact statement-points input. Source-step/child-call witnesses are derived from the same executions, with checked range decrease. The statement-point producer, whole-constructor join, arithmetic totality/source normalization and runtime/security refinement remain open.
+
+Focused Lean check: 12.938 seconds; peak aggregate RSS 2179317760 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

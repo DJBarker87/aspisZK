@@ -1,0 +1,38 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkBorrowedBufferFrameV1.lean:116:14: error: unsolved goals
+case ok.ok
+T : Type
+sdk : OwnedSdk
+acquired queried : Usize
+prior : OwnedDataCell
+reached : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells queried = ok prior
+k : core.result.Result Unit solana_program_error.ProgramError → OwnedSdk → alloc.vec.Vec U8 → Result T
+result : core.result.Result Unit solana_program_error.ProgramError
+out : OwnedSdk
+execution : owned_acquire_shared sdk acquired = ok (result, out)
+preserved : readBytes out queried = readBytes sdk queried
+original : readBytes sdk queried = ok prior.bytes
+cell : OwnedDataCell
+fetched : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) out.data_cells queried = ok cell
+read : ok cell.bytes = ok prior.bytes
+⊢ k result out prior.bytes =
+    let (result, out) := (result, out)
+    k result out prior.bytes
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.acquire_reborrow_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.readBytes_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.acquire_preserves_read' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.counter_update_buffers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.acquire_source_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.acquire_buffers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

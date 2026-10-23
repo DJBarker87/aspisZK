@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSampleModel49.lean:26:2: error: unsolved goals
+case pos
+ch : Challenges QM31Exact
+p : ℕ → Old.Q
+r : Fin 10
+hprefix : ∀ (i : Fin 10), ↑i < ↑r → decode (p ↑i) = alpha ch i
+a : Fin (2 ^ (9 - ↑r))
+word : Usize
+hw : ↑word = ↑a
+sample : U32
+i : Fin 10
+hpre : ↑i < ↑r
+⊢ alpha ch i =
+    if h : True then alpha ch i
+    else if heq : ↑i = ↑r then ↑↑sample else if tail (9 - ↑r) a ⟨↑i - ↑r - 1, ⋯⟩ = true then 1 else 0
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSampleModel49.lean:26:28: warning: This simp argument is unused:
+  dif_pos hpre
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵p̵r̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵h̵p̵r̵e̵,̵h̵p̵r̵e̵f̵i̵x̵[̲h̲p̲r̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲h̲p̲r̲e̲f̲i̲x̲ i hpre]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSampleModel49.lean:39:8: error: typeclass instance problem is stuck
+  AddCommMonoid ?m.75
+
+Note: Lean will not try to resolve this typeclass instance problem because the type argument to `AddCommMonoid` is a metavariable. This argument must be fully determined before Lean will try to resolve the typeclass.
+
+Hint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.
+'R1Z.ProverCommitSampleModel49.point_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitSampleModel49.sum_points' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

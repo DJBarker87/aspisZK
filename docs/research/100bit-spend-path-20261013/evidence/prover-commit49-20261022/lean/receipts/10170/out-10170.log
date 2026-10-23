@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundMath49.lean:21:14: error: unsolved goals
+case succ
+K : Type
+inst✝ : AddCommMonoid K
+f : ℕ → K
+n : ℕ
+ih : ∀ (i : Usize), ↑i + n ≤ 1024 → (List.map (fun j => f ↑j) (counters n i)).sum = ∑ j, f (↑i + ↑j)
+i : Usize
+bound : ↑i + (n + 1) ≤ 1024
+hv : ↑(i.wrapping_add 1#usize) = ↑i + 1
+⊢ f ↑i + ∑ x, f (↑i + (1 + ↑x)) = f ↑i + ∑ x, f (↑i + (↑x + 1))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundMath49.lean:29:38: error(lean.unknownIdentifier): Unknown constant `List.sum_flatMap`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundMath49.lean:30:35: error: 'change' tactic failed, pattern
+  0 + 4 ≤ 1024
+is not definitionally equal to target
+  ↑?m.67 + ?m.66 ≤ 1024
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundMath49.lean:30:2: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRoundMath49.lean:48:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.map (fun u => ?m.95 ↑u.1 ↑u.2.1 ↑u.2.2) (indices n)).sum
+in the target expression
+  (List.map
+        (fun u =>
+          if k = ↑u.2.1 + ProverCommitRoundStep48.perm ↑u.2.2 then q (4 * ↑u.1 + ↑u.2.1) * w (4 * ↑u.1 + ↑u.2.2) else 0)
+        (indices n)).sum =
+    ∑ d, ∑ s, ∑ t, if k = ↑s + (4 - ↑t) % 4 then q (4 * ↑d + ↑s) * w (4 * ↑d + ↑t) else 0
+
+K : Type
+inst✝ : Field K
+q w : ℕ → K
+n : ℕ
+hn : n ≤ 256
+k : ℕ
+⊢ (List.map
+        (fun u =>
+          if k = ↑u.2.1 + ProverCommitRoundStep48.perm ↑u.2.2 then q (4 * ↑u.1 + ↑u.2.1) * w (4 * ↑u.1 + ↑u.2.2) else 0)
+        (indices n)).sum =
+    ∑ d, ∑ s, ∑ t, if k = ↑s + (4 - ↑t) % 4 then q (4 * ↑d + ↑s) * w (4 * ↑d + ↑t) else 0
+'R1Z.ProverCommitRoundMath49.counter_sum' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRoundMath49.nested_sum' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRoundMath49.perm_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRoundMath49.terms_sum' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRoundMath49.model_coeff' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

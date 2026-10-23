@@ -1,0 +1,54 @@
+import CheckpointBytes5Inputs
+import MultiproofConePhysicalTransport
+
+/-! Lead-side carrier implications, isolated from the source import closure. Each theorem has one fixed execution index E.
+These implications do not prove that an admitted native execution supplies
+their frame, range, child or oracle premises. No native certificate is created. -/
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1.S2B_LeadCarriers
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open MultiproofConeCanonical CheckpointBytes5Effect
+
+/-- Transport supplied indexed original-suffix facts into the lead's
+byte carrier. Original account bytes split into prefix688 and this suffix. -/
+theorem proof_bytes {Execution : Type} (E : Execution)
+    (selected : Execution → Slice U8) (original : alloc.vec.Vec U8)
+    (shape : (selected E).val = (original.val.drop 688).take 57607)
+    (width : (selected E).val.length = 57607)
+    (split : original.val = original.val.take 688 ++ (selected E).val) :
+    bytesOf (selected E).val = OraclePortCompactDraft.slice (bytesOf original.val) 688 57607 ∧
+    (bytesOf (selected E).val).length = 57607 ∧
+    bytesOf original.val = (bytesOf original.val).take 688 ++ bytesOf (selected E).val := by
+  refine ⟨?_,?_,?_⟩
+  · rw [shape]
+    simp only [bytesOf,OraclePortCompactDraft.slice,List.map_take,List.map_drop]
+  · simpa only [bytesOf,List.length_map] using width
+  · have mapped := congrArg bytesOf split
+    simpa only [bytesOf,List.map_append,List.map_take] using mapped
+
+/-- The explicit digest-field transport and total oracle premise give the
+checkpoint cone's weaker successful-call interpretation. This consumes core
+carriers only; no concrete native digest/oracle equation is proved here. -/
+theorem digest_children {Execution : Type} (E : Execution)
+    (D : Execution → AspisR1Stage2.aspis_core.digest.Digest32 Unit)
+    (hashv : Execution → Parts → Result Digest) (H : Bytes → State)
+    (fields : ∀ parts, (D E).digest () parts = hashv E parts)
+    (law : ∀ parts, hashv E parts = ok (MultiproofConePhysicalTransport.rawOracle H parts)) :
+    (∀ parts, (D E).digest () parts = ok (MultiproofConePhysicalTransport.rawOracle H parts)) ∧
+    CheckpointBytes5Inputs.Oracle (D E) () H := by
+  have installed : ∀ parts, (D E).digest () parts =
+      ok (MultiproofConePhysicalTransport.rawOracle H parts) := fun parts =>
+    (fields parts).trans (law parts)
+  refine ⟨installed,?_⟩
+  intro parts digest success
+  have same := Result.ok.inj ((installed parts).symm.trans success)
+  subst digest
+  change AspisV8R19.SqueezeOracleBridge.decodeState
+    (AspisV8R19.SqueezeOracleBridge.encodeState
+      (H (AspisV8R19.SqueezeOracleBridge.flatten parts))) = _
+  exact AspisV8R19.SqueezeOracleBridge.state_roundtrip _
+
+#print axioms proof_bytes
+#print axioms digest_children
+end AspisR1.S2B_LeadCarriers

@@ -1,0 +1,16 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "parent_source_sha256": "f7f48747293a94e840cb8d570b9992c10237fff2a19c1d780950f59389d3f134",
+  "source_sha256": "ec696ccb71a2d5b3af110598fa0ffda5aa97ccb7c2854b102ff6ae6f80a5f522",
+  "changes": [
+    "factor the same public/proof Vec clone into two concrete nongeneric helper bodies",
+    "retain the entire original owned SDK, borrowed counters, AccountInfo metadata, ordinary statuses and all child call sites"
+  ],
+  "qualification": "Isolated pure snapshot fission of owned SDK reference, not production code.\nHelpers execute the identical Vec<u8>::clone; no operation is abstracted.\nAeneas full-body equivalence and native-context evidence remain explicit gates.\n",
+  "obligations": [
+    "compile source extraction",
+    "kernel-check complete old/new owned_stage1 equality after literal type/Ops reuse",
+    "use only concrete clone-preserving ghost observers in native context checks; no opaque byte-copy replacement",
+    "no production adoption or freeze/release-artifact re-pin implied"
+  ]
+}

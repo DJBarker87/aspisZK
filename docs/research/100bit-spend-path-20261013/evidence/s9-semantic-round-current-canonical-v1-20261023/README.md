@@ -1,0 +1,3 @@
+Every challenge in the ten-round model output alpha is canonical in the Current QM carrier. Reuses the existing proved semantic-run induction and verifier_round_alpha_canonical; the selected/current carrier conversion is axiom-free. This remains conditional on RoundModel.rounds success; current Rust caller and Weights constructor correspondence remain open.
+
+Focused Lean check: 10.329 seconds; peak aggregate RSS 3206742016 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

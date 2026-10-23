@@ -1,0 +1,837 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Checking harness inactive_proofs::complete_s2_inactive...
+CBMC 6.8.0 (cbmc-6.8.0)
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-prover-commit41-20261022/kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/simulator_native49-407b3576b1c02011__RNvNtCs62vpcqvsstX_18simulator_native4915inactive_proofs20complete_s2_inactive.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 12 object bits, 52 offset bits (user-specified)
+Starting Bounded Model Checking
+loop identifier memcmp.0 provided with unwindset does not match any loop
+Unwinding loop _RNvCs62vpcqvsstX_18simulator_native4913native_s2_row.0 iteration 1 file inactive-binding.rs line 11 column 2 function native_s2_row thread 0
+Unwinding loop _RNvCs62vpcqvsstX_18simulator_native4913native_s2_row.0 iteration 2 file inactive-binding.rs line 11 column 2 function native_s2_row thread 0
+Unwinding loop _RNvCs62vpcqvsstX_18simulator_native4913native_s2_row.0 iteration 3 file inactive-binding.rs line 11 column 2 function native_s2_row thread 0
+Unwinding loop _RNvCs62vpcqvsstX_18simulator_native4913native_s2_row.0 iteration 4 file inactive-binding.rs line 11 column 2 function native_s2_row thread 0
+Unwinding loop _RNvCs62vpcqvsstX_18simulator_native4913native_s2_row.0 iteration 5 file inactive-binding.rs line 11 column 2 function native_s2_row thread 0
+Unwinding loop _RNvCs62vpcqvsstX_18simulator_native4913native_s2_row.0 iteration 1 file inactive-binding.rs line 11 column 2 function native_s2_row thread 0
+Unwinding loop _RNvCs62vpcqvsstX_18simulator_native4913native_s2_row.0 iteration 2 file inactive-binding.rs line 11 column 2 function native_s2_row thread 0
+Unwinding loop _RNvCs62vpcqvsstX_18simulator_native4913native_s2_row.0 iteration 3 file inactive-binding.rs line 11 column 2 function native_s2_row thread 0
+Unwinding loop _RNvCs62vpcqvsstX_18simulator_native4913native_s2_row.0 iteration 4 file inactive-binding.rs line 11 column 2 function native_s2_row thread 0
+Unwinding loop _RNvCs62vpcqvsstX_18simulator_native4913native_s2_row.0 iteration 5 file inactive-binding.rs line 11 column 2 function native_s2_row thread 0
+aborting path on assume(false) at file lib.rs line 0 column 0 function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq thread 0
+Runtime Symex: 0.0487688s
+size of program expression: 2852 steps
+slicing removed 2035 assignments
+Generated 457 VCC(s), 25 remaining after simplification
+Runtime Postprocess Equation: 0.000372848s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.0127049s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 5.259e-06s
+Solving with CaDiCaL 2.0.0
+17153 variables, 59873 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 0.027238s
+Runtime decision procedure: 0.0400387s
+
+RESULTS:
+Check 1: inactive_proofs::complete_s2_inactive.assertion.1
+	 - Status: SUCCESS
+	 - Description: "assertion failed: native_s2_row(j) == owner_s2_row(j)"
+	 - Location: inactive-binding.rs:23:3 in function inactive_proofs::complete_s2_inactive
+
+Check 2: inactive_proofs::complete_s2_inactive.assertion.2
+	 - Status: SUCCESS
+	 - Description: "assertion failed: native_s2_inactive(native_s2_row(j)) == Ok(owner_s2_inactive(j))"
+	 - Location: inactive-binding.rs:24:3 in function inactive_proofs::complete_s2_inactive
+
+Check 3: owner_s2_row.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: inactive-binding.rs:17:34 in function owner_s2_row
+
+Check 4: owner_s2_row.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: inactive-binding.rs:17:34 in function owner_s2_row
+
+Check 5: owner_s2_row.assertion.2
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:17:34 in function owner_s2_row
+
+Check 6: owner_s2_row.arithmetic_overflow.2
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:17:34 in function owner_s2_row
+
+Check 7: owner_s2_row.assertion.3
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: inactive-binding.rs:17:46 in function owner_s2_row
+
+Check 8: owner_s2_row.arithmetic_overflow.3
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: inactive-binding.rs:17:46 in function owner_s2_row
+
+Check 9: owner_s2_row.assertion.4
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:17:45 in function owner_s2_row
+
+Check 10: owner_s2_row.arithmetic_overflow.4
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:17:45 in function owner_s2_row
+
+Check 11: owner_s2_row.assertion.5
+	 - Status: SUCCESS
+	 - Description: "attempt to multiply with overflow"
+	 - Location: inactive-binding.rs:17:43 in function owner_s2_row
+
+Check 12: owner_s2_row.assertion.6
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: inactive-binding.rs:17:34 in function owner_s2_row
+
+Check 13: owner_s2_row.assertion.7
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: inactive-binding.rs:17:61 in function owner_s2_row
+
+Check 14: owner_s2_row.arithmetic_overflow.5
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: inactive-binding.rs:17:61 in function owner_s2_row
+
+Check 15: owner_s2_row.assertion.8
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:17:60 in function owner_s2_row
+
+Check 16: owner_s2_row.arithmetic_overflow.6
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:17:60 in function owner_s2_row
+
+Check 17: owner_s2_row.assertion.9
+	 - Status: SUCCESS
+	 - Description: "attempt to multiply with overflow"
+	 - Location: inactive-binding.rs:17:57 in function owner_s2_row
+
+Check 18: owner_s2_row.assertion.10
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: inactive-binding.rs:17:34 in function owner_s2_row
+
+Check 19: owner_s2_row.assertion.11
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:17:74 in function owner_s2_row
+
+Check 20: owner_s2_row.arithmetic_overflow.7
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:17:74 in function owner_s2_row
+
+Check 21: owner_s2_row.assertion.12
+	 - Status: SUCCESS
+	 - Description: "attempt to multiply with overflow"
+	 - Location: inactive-binding.rs:17:71 in function owner_s2_row
+
+Check 22: owner_s2_row.assertion.13
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: inactive-binding.rs:17:34 in function owner_s2_row
+
+Check 23: owner_s2_row.assertion.14
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: inactive-binding.rs:17:85 in function owner_s2_row
+
+Check 24: owner_s2_row.arithmetic_overflow.8
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: inactive-binding.rs:17:85 in function owner_s2_row
+
+Check 25: owner_s2_row.assertion.15
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:17:84 in function owner_s2_row
+
+Check 26: owner_s2_row.arithmetic_overflow.9
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:17:84 in function owner_s2_row
+
+Check 27: owner_s2_row.assertion.16
+	 - Status: SUCCESS
+	 - Description: "attempt to multiply with overflow"
+	 - Location: inactive-binding.rs:17:80 in function owner_s2_row
+
+Check 28: owner_s2_row.assertion.17
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: inactive-binding.rs:17:34 in function owner_s2_row
+
+Check 29: native_s2_row.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: inactive-binding.rs:11:11 in function native_s2_row
+
+Check 30: native_s2_row.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to multiply with overflow"
+	 - Location: inactive-binding.rs:11:27 in function native_s2_row
+
+Check 31: native_s2_row.assertion.2
+	 - Status: SUCCESS
+	 - Description: "attempt to shift right with overflow"
+	 - Location: inactive-binding.rs:11:23 in function native_s2_row
+
+Check 32: native_s2_row.assertion.3
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: inactive-binding.rs:11:43 in function native_s2_row
+
+Check 33: native_s2_row.assertion.4
+	 - Status: SUCCESS
+	 - Description: "attempt to multiply with overflow"
+	 - Location: inactive-binding.rs:11:40 in function native_s2_row
+
+Check 34: native_s2_row.assertion.5
+	 - Status: SUCCESS
+	 - Description: "attempt to shift left with overflow"
+	 - Location: inactive-binding.rs:11:22 in function native_s2_row
+
+Check 35: core::num::<impl usize>::unchecked_add.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "attempt to compute `unchecked_add` which would overflow"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:729:17 in function core::num::<impl usize>::unchecked_add
+
+Check 36: native_s2_inactive.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: inactive-binding.rs:15:19 in function native_s2_inactive
+
+Check 37: native_s2_inactive.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: inactive-binding.rs:15:19 in function native_s2_inactive
+
+Check 38: native_s2_inactive.assertion.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: inactive-binding.rs:15:6 in function native_s2_inactive
+
+Check 39: native_s2_inactive.assertion.3
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:15:26 in function native_s2_inactive
+
+Check 40: native_s2_inactive.arithmetic_overflow.2
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:15:26 in function native_s2_inactive
+
+Check 41: native_s2_inactive.assertion.4
+	 - Status: SUCCESS
+	 - Description: "attempt to shift right with overflow"
+	 - Location: inactive-binding.rs:15:5 in function native_s2_inactive
+
+Check 42: std::panic::Location::<'_>::caller.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "caller_location is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/374"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic/location.rs:147:9 in function std::panic::Location::<'_>::caller
+
+Check 43: owner_s2_inactive.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: inactive-binding.rs:18:74 in function owner_s2_inactive
+
+Check 44: owner_s2_inactive.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: inactive-binding.rs:18:74 in function owner_s2_inactive
+
+Check 45: owner_s2_inactive.assertion.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: inactive-binding.rs:18:61 in function owner_s2_inactive
+
+Check 46: owner_s2_inactive.assertion.3
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:18:82 in function owner_s2_inactive
+
+Check 47: owner_s2_inactive.arithmetic_overflow.2
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: inactive-binding.rs:18:82 in function owner_s2_inactive
+
+Check 48: owner_s2_inactive.assertion.4
+	 - Status: SUCCESS
+	 - Description: "attempt to shift right with overflow"
+	 - Location: inactive-binding.rs:18:60 in function owner_s2_inactive
+
+Check 49: core::panicking::panic_nounwind_fmt::runtime.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "call to foreign "Rust" function `_RNvCs1hStedNDpZ2_7___rustc17rust_begin_unwind` is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/new/choose"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs:110:17 in function core::panicking::panic_nounwind_fmt::runtime
+
+Check 50: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: lib.rs:0:0 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 51: std::fmt::Arguments::<'_>::from_str.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to shift left with overflow"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/mod.rs:820:38 in function std::fmt::Arguments::<'_>::from_str
+
+Check 52: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 53: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 54: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 55: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 56: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 57: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 58: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 59: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 60: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 61: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 62: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 63: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 64: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 65: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 66: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 67: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 68: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 69: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 70: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 71: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.20
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 72: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 73: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 74: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 75: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 76: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.25
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 77: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.26
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 78: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.27
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 79: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.28
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 80: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.29
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 81: <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq.pointer_dereference.30
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:553:16 in function <std::result::Result<bool, u8> as std::cmp::PartialEq>::eq
+
+Check 82: std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:27 in function std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq
+
+Check 83: std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:27 in function std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq
+
+Check 84: std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:27 in function std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq
+
+Check 85: std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:27 in function std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq
+
+Check 86: std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:27 in function std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq
+
+Check 87: std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:27 in function std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq
+
+Check 88: std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:34 in function std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq
+
+Check 89: std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:34 in function std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq
+
+Check 90: std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:34 in function std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq
+
+Check 91: std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:34 in function std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq
+
+Check 92: std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:34 in function std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq
+
+Check 93: std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:34 in function std::cmp::impls::<impl std::cmp::PartialEq for &u8>::eq
+
+Check 94: std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:27 in function std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq
+
+Check 95: std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:27 in function std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq
+
+Check 96: std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:27 in function std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq
+
+Check 97: std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:27 in function std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq
+
+Check 98: std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:27 in function std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq
+
+Check 99: std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:27 in function std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq
+
+Check 100: std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:34 in function std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq
+
+Check 101: std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:34 in function std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq
+
+Check 102: std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:34 in function std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq
+
+Check 103: std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:34 in function std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq
+
+Check 104: std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:34 in function std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq
+
+Check 105: std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:2090:34 in function std::cmp::impls::<impl std::cmp::PartialEq for &bool>::eq
+
+Check 106: native_s2_row.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: inactive-binding.rs:11:43 in function native_s2_row
+
+Check 107: std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq
+
+Check 108: std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq
+
+Check 109: std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq
+
+Check 110: std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq
+
+Check 111: std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq
+
+Check 112: std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq
+
+Check 113: std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq
+
+Check 114: std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq
+
+Check 115: std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq
+
+Check 116: std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq
+
+Check 117: std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq
+
+Check 118: std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for u8>::eq
+
+Check 119: owner_s2_inactive.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: inactive-binding.rs:18:61 in function owner_s2_inactive
+
+Check 120: native_s2_inactive.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: inactive-binding.rs:15:6 in function native_s2_inactive
+
+Check 121: std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:50 in function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+
+Check 122: std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:50 in function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+
+Check 123: std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:50 in function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+
+Check 124: std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:50 in function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+
+Check 125: std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:50 in function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+
+Check 126: std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:50 in function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+
+Check 127: std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:59 in function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+
+Check 128: std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:59 in function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+
+Check 129: std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:59 in function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+
+Check 130: std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:59 in function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+
+Check 131: std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:59 in function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+
+Check 132: std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:59 in function std::cmp::impls::<impl std::cmp::PartialOrd for usize>::lt
+
+Check 133: std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq
+
+Check 134: std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq
+
+Check 135: std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq
+
+Check 136: std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq
+
+Check 137: std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq
+
+Check 138: std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:54 in function std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq
+
+Check 139: std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq
+
+Check 140: std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq
+
+Check 141: std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq
+
+Check 142: std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq
+
+Check 143: std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq
+
+Check 144: std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function std::cmp::impls::<impl std::cmp::PartialEq for bool>::eq
+
+Check 145: <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs:766:23 in function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+
+Check 146: <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs:766:23 in function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+
+Check 147: <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs:766:23 in function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+
+Check 148: <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs:766:23 in function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+
+Check 149: <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs:766:23 in function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+
+Check 150: <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs:766:23 in function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+
+Check 151: <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs:768:13 in function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+
+Check 152: <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs:768:13 in function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+
+Check 153: <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs:768:13 in function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+
+Check 154: <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs:768:13 in function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+
+Check 155: <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs:768:13 in function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+
+Check 156: <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs:768:13 in function <std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next
+
+
+SUMMARY:
+ ** 0 of 156 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.1201548s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

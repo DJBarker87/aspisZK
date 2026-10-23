@@ -1,0 +1,171 @@
+S2K_LateAdmission.lean:31:99: error: unsolved goals
+case h_1
+s : PoolV1PairLatePublicStatementV1
+before after : Slice U8
+x✝³⁶ : Result Usize
+a✝²⁹ : Usize
+heq✝³⁶ : POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES = ok a✝²⁹
+h✝¹ : ¬(before.len != a✝²⁹) = true
+x✝³⁵ : Result (Option U64)
+a✝²⁸ : Option U64
+heq✝³⁵ : lift (s.live_snapshot.next_pair_index.checked_add 1#u64) = ok a✝²⁸
+x✝³⁴ : Result Bool
+a✝²⁷ : Bool
+x✝³³ : Result (Slice U8)
+a✝²⁶ : Slice U8
+x✝³² : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁶ : Slice U8
+snd✝⁷ : Slice U8 → Slice U8
+heq✝³⁴ :
+  core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64) a✝²⁸
+      (some s.candidate_afterstate.next_pair_index) =
+    ok false
+h✝ : ¬a✝²⁷ = true
+heq✝³³ : core.slice.Slice.fill core.clone.CloneU8 before 0#u8 = ok a✝²⁶
+heq✝³² :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝²⁶ { «end» := 8#usize } =
+    ok (fst✝⁶, snd✝⁷)
+x✝³¹ : Result (Slice U8)
+a✝²⁵ : Slice U8
+heq✝³¹ : lift POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice = ok a✝²⁵
+x✝³⁰ : Result (Slice U8)
+a✝²⁴ : Slice U8
+heq✝³⁰ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁶ a✝²⁵ = ok a✝²⁴
+x✝²⁹ : Result (Slice U8)
+a✝²³ : Slice U8
+heq✝²⁹ : (snd✝⁷ a✝²⁴).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION = ok a✝²³
+x✝²⁸ : Result (Slice U8)
+a✝²² : Slice U8
+heq✝²⁸ : a✝²³.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT = ok a✝²²
+x✝²⁷ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁵ : Slice U8
+snd✝⁶ : Slice U8 → Slice U8
+heq✝²⁷ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝²²
+      { start := 10#usize, «end» := 12#usize } =
+    ok (fst✝⁵, snd✝⁶)
+x✝²⁶ : Result (UScalar UScalarTy.U16)
+a✝²¹ : UScalar UScalarTy.U16
+heq✝²⁶ : lift (UScalar.cast UScalarTy.U16 POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_HEADER_BYTES) = ok a✝²¹
+x✝²⁵ : Result (Std.Array U8 2#usize)
+a✝²⁰ : Std.Array U8 2#usize
+heq✝²⁵ : lift (core.num.U16.to_le_bytes a✝²¹) = ok a✝²⁰
+x✝²⁴ : Result (Slice U8)
+a✝¹⁹ : Slice U8
+heq✝²⁴ : lift a✝²⁰.to_slice = ok a✝¹⁹
+x✝²³ : Result (Slice U8)
+a✝¹⁸ : Slice U8
+heq✝²³ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁵ a✝¹⁹ = ok a✝¹⁸
+x✝²² : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁴ : Slice U8
+snd✝⁵ : Slice U8 → Slice U8
+heq✝²² :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝⁶ a✝¹⁸)
+      { start := 12#usize, «end» := 16#usize } =
+    ok (fst✝⁴, snd✝⁵)
+x✝²¹ : Result (UScalar UScalarTy.U32)
+a✝¹⁷ : UScalar UScalarTy.U32
+heq✝²¹ : lift (UScalar.cast UScalarTy.U32 POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES) = ok a✝¹⁷
+x✝²⁰ : Result (Std.Array U8 4#usize)
+a✝¹⁶ : Std.Array U8 4#usize
+heq✝²⁰ : lift (core.num.U32.to_le_bytes a✝¹⁷) = ok a✝¹⁶
+x✝¹⁹ : Result (Slice U8)
+a✝¹⁵ : Slice U8
+heq✝¹⁹ : lift a✝¹⁶.to_slice = ok a✝¹⁵
+x✝¹⁸ : Result (Slice U8)
+a✝¹⁴ : Slice U8
+heq✝¹⁸ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁴ a✝¹⁵ = ok a✝¹⁴
+x✝¹⁷ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝³ : Slice U8
+snd✝⁴ : Slice U8 → Slice U8
+heq✝¹⁷ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝⁵ a✝¹⁴)
+      { start := 16#usize, «end» := 20#usize } =
+    ok (fst✝³, snd✝⁴)
+x✝¹⁶ : Result Usize
+a✝¹³ : Usize
+heq✝¹⁶ : POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES = ok a✝¹³
+x✝¹⁵ : Result (UScalar UScalarTy.U32)
+a✝¹² : UScalar UScalarTy.U32
+heq✝¹⁵ : lift (UScalar.cast UScalarTy.U32 a✝¹³) = ok a✝¹²
+x✝¹⁴ : Result (Std.Array U8 4#usize)
+a✝¹¹ : Std.Array U8 4#usize
+heq✝¹⁴ : lift (core.num.U32.to_le_bytes a✝¹²) = ok a✝¹¹
+x✝¹³ : Result (Slice U8)
+a✝¹⁰ : Slice U8
+heq✝¹³ : lift a✝¹¹.to_slice = ok a✝¹⁰
+x✝¹² : Result (Slice U8)
+a✝⁹ : Slice U8
+heq✝¹² : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝³ a✝¹⁰ = ok a✝⁹
+x✝¹¹ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝² : Slice U8
+snd✝³ : Slice U8 → Slice U8
+heq✝¹¹ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝⁴ a✝⁹)
+      { start := 20#usize, «end» := 24#usize } =
+    ok (fst✝², snd✝³)
+x✝¹⁰ : Result (UScalar UScalarTy.U32)
+a✝⁸ : UScalar UScalarTy.U32
+heq✝¹⁰ : lift (UScalar.cast UScalarTy.U32 a✝²⁹) = ok a✝⁸
+x✝⁹ : Result (Std.Array U8 4#usize)
+a✝⁷ : Std.Array U8 4#usize
+heq✝⁹ : lift (core.num.U32.to_le_bytes a✝⁸) = ok a✝⁷
+x✝⁸ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁸ : lift a✝⁷.to_slice = ok a✝⁶
+x✝⁷ : Result (Slice U8)
+a✝⁵ : Slice U8
+heq✝⁷ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝² a✝⁶ = ok a✝⁵
+x✝⁶ : Result (UScalar UScalarTy.Usize)
+a✝⁴ : UScalar UScalarTy.Usize
+heq✝⁶ : 32#usize + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES = ok a✝⁴
+x✝⁵ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝¹ : Slice U8
+snd✝² : Slice U8 → Slice U8
+heq✝⁵ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝³ a✝⁵)
+      { start := 32#usize, «end» := a✝⁴ } =
+    ok (fst✝¹, snd✝²)
+x✝⁴ : Result (core.result.Result Unit PoolV1PairLiveSnapshotErrorV1 × Slice U8)
+snd✝¹ : Slice U8
+a✝³ : Unit
+heq✝⁴ : encode_pool_v1_pair_live_snapshot_v1 s.live_snapshot fst✝¹ = ok (core.result.Result.Ok a✝³, snd✝¹)
+x✝³ : Result (core.result.Result (Std.Array U8 688#usize) PoolV1PairVerifierTransportErrorV1)
+a✝² : Std.Array U8 688#usize
+heq✝³ : encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate = ok (core.result.Result.Ok a✝²)
+x✝² : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝ : Slice U8
+snd✝ : Slice U8 → Slice U8
+heq✝² :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (snd✝² snd✝¹) { start := a✝⁴ } =
+    ok (fst✝, snd✝)
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ : lift a✝².to_slice = ok a✝¹
+x✝ : Result (Slice U8)
+a✝ : Slice U8
+heq✝ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝ a✝¹ = ok a✝
+h : ok (core.result.Result.Ok (), snd✝ a✝) = ok (core.result.Result.Ok (), after)
+⊢ ∃ bytes, core.result.Result.Ok a✝² = core.result.Result.Ok bytes
+S2K_LateAdmission.lean:41:37: warning: This simp argument is unused:
+  Result.ok.injEq
+
+Hint: Omit it from the simp argument list.
+  simp_all only [R̵e̵s̵u̵l̵t̵.̵o̵k̵.̵i̵n̵j̵E̵q̵,̵Prod.mk.injEq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2K_LateAdmission.lean:41:53: warning: This simp argument is unused:
+  Prod.mk.injEq
+
+Hint: Omit it from the simp argument list.
+  simp_all only [Result.ok.injEq,̵P̵r̵o̵d̵.̵m̵k̵.̵i̵n̵j̵E̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2K_LateAdmission.lean:42:53: warning: This simp argument is unused:
+  Prod.mk.injEq
+
+Hint: Omit it from the simp argument list.
+  simp_all only [Result.ok.injEq,̵P̵r̵o̵d̵.̵m̵k̵.̵i̵n̵j̵E̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2K.LateAdmission.candidate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

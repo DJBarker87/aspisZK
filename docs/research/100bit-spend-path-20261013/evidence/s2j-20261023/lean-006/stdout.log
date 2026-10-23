@@ -1,0 +1,60 @@
+S2J_Cut2.lean:18:7: error: unexpected token ':'; expected 'add_aesop_rules', 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'def_eval_config_item', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'notation3', 'postfix', 'prefix', 'progress_array_spec', 'simproc', 'step_array_spec', 'syntax' or 'unif_hint'
+S2J_Cut2.lean:55:12: error: Type mismatch
+  S2F.Matches.abort related
+has type
+  S2F.Matches (SelectionRelated L observe fixed o) (S2F.Outcome.abort n) (S2F.Outcome.abort r)
+but is expected to have type
+  S2F.Matches (SelectionRelated L observe fixed o)
+    (match none with
+    | none => S2F.Outcome.abort n
+    | some a => S2F.Outcome.next (n.1, some { handle := (observe n.1).accountHandle 0, record := a }))
+    (match
+      match r.1.sdk.accounts[↑0#usize]? with
+      | none => fail Error.arrayOutOfBounds
+      | some x => ok x with
+    | ok a => S2F.Outcome.next (r.1, some a)
+    | fail e => S2F.Outcome.abort r
+    | div => S2F.Outcome.abort r)
+S2J_Cut2.lean:57:4: error: Tactic `apply` failed: could not unify the conclusion of `@S2F.Matches.next`
+  S2F.Matches ?rel (S2F.Outcome.next ?n) (S2F.Outcome.next ?r)
+with the goal
+  S2F.Matches (SelectionRelated L observe fixed o)
+    (match some a with
+    | none => S2F.Outcome.abort n
+    | some a => S2F.Outcome.next (n.1, some { handle := (observe n.1).accountHandle 0, record := a }))
+    (match
+      match r.1.sdk.accounts[↑0#usize]? with
+      | none => fail Error.arrayOutOfBounds
+      | some x => ok x with
+    | ok a => S2F.Outcome.next (r.1, some a)
+    | fail e => S2F.Outcome.abort r
+    | div => S2F.Outcome.abort r)
+
+Note: The full type of `@S2F.Matches.next` is
+  ∀ {E N R : Type} {rel : N → R → Prop} {n : N} {r : R},
+    rel n r → S2F.Matches rel (S2F.Outcome.next n) (S2F.Outcome.next r)
+
+case some
+W Child Alloc Event : Type
+L : Library W (World Child Alloc Event)
+observe : W → NativeArguments
+fixed : FixedInvocation
+o : Originals W Child Alloc Event
+n : W × Option AccountReference
+r : OwnedCut Child Alloc Event × Option OwnedAccount
+related : SelectionRelated L observe fixed o n r
+inv : InvocationRelated L observe fixed o n.1 r.1
+a : SdkReference.OwnedAccount
+read : (↑r.1.sdk.accounts)[0]? = some a
+⊢ S2F.Matches (SelectionRelated L observe fixed o)
+    (match some a with
+    | none => S2F.Outcome.abort n
+    | some a => S2F.Outcome.next (n.1, some { handle := (observe n.1).accountHandle 0, record := a }))
+    (match
+      match r.1.sdk.accounts[↑0#usize]? with
+      | none => fail Error.arrayOutOfBounds
+      | some x => ok x with
+    | ok a => S2F.Outcome.next (r.1, some a)
+    | fail e => S2F.Outcome.abort r
+    | div => S2F.Outcome.abort r)
+'AspisR1.S2J.cut2_stepLaw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

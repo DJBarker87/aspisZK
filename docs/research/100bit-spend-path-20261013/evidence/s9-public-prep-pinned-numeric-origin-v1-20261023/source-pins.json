@@ -1,0 +1,40 @@
+{
+  "schema": "public-preparation-source-pinned-numerical-rebase-v1",
+  "claim": "New pinned numerical reference owner; NOT claimed as reversible renaming of historic source-unpinned e1d3 cache",
+  "types_origin": "source-origin/Types.reference-origin.lean",
+  "types_origin_sha256": "bf7ee866a34989a162b3e8ce3039a5cae1543c07ff01b18c56c4840f3d5314c1",
+  "types_adapted_sha256": "9d700f7aaa942333953e25a588aed5f3ba250da91842d5c608ee99846c75899d",
+  "type_changes": [
+    "remove generated maxHeartbeats/maxRecDepth options only; already-qualified five instances and named remaining union Variant retained",
+    "expand the remaining named-union Variant macro explicitly, preserving tags0/1/2 and qualified instance; drop only that macro import. Reversible block map retained."
+  ],
+  "funs_origin": "source-origin/Funs.reference-origin.lean",
+  "funs_origin_sha256": "e98bb12315c0da46e34d99c74f41db6b40fa005b023cfd0679423d1452355650",
+  "funs_selected_sha256": "880455667a0fa35b3d273f0052b510981c9b16a44cc38e6a80aab4d3c5f437b8",
+  "numerical_declarations": [
+    "aspis_core.field.CM31.new",
+    "aspis_core.field.P",
+    "sampler.qm31_div_pass_loop.body",
+    "sampler.qm31_div_pass_loop",
+    "sampler.qm31_div_pass",
+    "sampler.qm31_digits_loop0.body",
+    "sampler.qm31_digits_loop0",
+    "sampler.qm31_digits_loop1.body",
+    "sampler.qm31_digits_loop1",
+    "sampler.qm31_digits",
+    "sampler.qm31_sample"
+  ],
+  "funs_changes": [
+    "select numerical declarations from pinned full source, with no parser/statement/helper claim",
+    "supply missing literal-array length proof by rfl for current Array.make API (four-element list length=4), preserving values; checked shift expression retained"
+  ],
+  "unknown_prior_cache_types_sha256": "e1d3e2db77e3e3730db804bb1a32d75546a18b4929a4e38a3017afd489450922",
+  "validation": "NO LEAN CHECK STARTED. Replay Type, numerical Funs, dependent transport and same-source sampler bridges before any proof claim.",
+  "variant_expansion": {
+    "before": "@[import_union_discriminant isize]\ninductive transport.Variant where\n| S1 : transport.Variant\n| S2 : transport.Variant\n| D : transport.Variant",
+    "after": "inductive transport.Variant where\n| S1 : transport.Variant\n| S2 : transport.Variant\n| D : transport.Variant\n\n-- Explicit instance-qualified expansion of the pinned named discriminant macro.\ndef transport.Variant.read_discriminant (x : transport.Variant) : Isize :=\n  match x with\n  | .S1 => 0#isize\n  | .S2 => 1#isize\n  | .D => 2#isize\n\ninstance _root_.AspisR1PublicPreparation.transport.Variant.instDiscriminant :\n    Aeneas.Std.Discriminant transport.Variant Isize where\n  read_discriminant := transport.Variant.read_discriminant",
+    "dropped_import": "import ImportUnionNamedDiscriminant\n"
+  },
+  "original_repo_types_path": "docs/research/100bit-spend-path-20261013/lean/extracted-public-preparation-c16-20261019/AspisR1PublicPreparation/Types.lean",
+  "original_repo_funs_path": "docs/research/100bit-spend-path-20261013/lean/extracted-public-preparation-c16-20261019/AspisR1PublicPreparation/Funs.lean"
+}

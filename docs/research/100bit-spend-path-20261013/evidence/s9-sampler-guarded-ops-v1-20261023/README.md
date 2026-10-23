@@ -1,0 +1,3 @@
+PROVED generic backend facts: checked left shift by the fixed valid count 32 equals wrapping left shift for every U64 input; checked unsigned subtraction equals wrapping subtraction whenever the subtrahend is no larger. These facts support source sampler callback refinement without assuming a remainder-value invariant. They do not alone establish the caller, sampler transport, source annotation normalization or 100-bit release claim.
+
+Focused Lean check: 10.13 seconds; peak aggregate RSS 2185412608 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

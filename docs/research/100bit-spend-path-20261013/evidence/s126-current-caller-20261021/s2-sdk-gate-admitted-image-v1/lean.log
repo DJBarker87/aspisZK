@@ -1,0 +1,54 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkGateAdmittedImageV1.lean:41:10: error: unsolved goals
+case this
+proof : Slice U8
+candidate : Std.Array U8 688#usize
+length : proof.len = 58295#usize
+lenVal : (↑proof).length = 58295
+run : prefix_different proof candidate.to_slice = ok false
+spec :
+  false = false ↔
+    (↑candidate.to_slice).length ≤ (↑proof).length ∧
+      ∀ j < (↑candidate.to_slice).length, CellEq proof candidate.to_slice j
+accepted :
+  (if false = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+    else do
+      let i1 ← 688#usize + 8#usize
+      let i2 ← proof.index_usize i1
+      if ↑i2 = 2 then ok (core.result.Result.Ok (688#usize, 58295#usize))
+        else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)) =
+    ok (core.result.Result.Ok (688#usize, 58295#usize))
+⊢ ?m.187
+
+case false
+proof : Slice U8
+candidate : Std.Array U8 688#usize
+length : proof.len = 58295#usize
+lenVal : (↑proof).length = 58295
+run : prefix_different proof candidate.to_slice = ok false
+spec :
+  false = false ↔
+    (↑candidate.to_slice).length ≤ (↑proof).length ∧
+      ∀ j < (↑candidate.to_slice).length, CellEq proof candidate.to_slice j
+accepted :
+  (if false = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+    else do
+      let i1 ← 688#usize + 8#usize
+      let i2 ← proof.index_usize i1
+      if ↑i2 = 2 then ok (core.result.Result.Ok (688#usize, 58295#usize))
+        else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)) =
+    ok (core.result.Result.Ok (688#usize, 58295#usize))
+this : ?m.187
+⊢ (∀ j < 688, CellEq proof candidate.to_slice j) ∧ (↑proof)[696]? = some 2#u8
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkGateAdmittedImageV1.lean:42:15: error: unexpected token ':='; expected ':'
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkGateAdmittedImageV1.lean:45:18: error: unexpected identifier; expected ':'
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkGateAdmittedImageV1.lean:71:12: error: unexpected token 'prefix'; expected rcasesPat
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkGateAdmittedImageV1.lean:71:18: error: unexpected token ','; expected ':'
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkGateAdmittedImageV1.lean:74:17: error: unexpected identifier; expected ':'
+'AspisS2OwnedStage1.SdkReference.ProofGate.admitted_cells' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ProofGate.admitted_seed_fixed' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

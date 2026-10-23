@@ -1,0 +1,78 @@
+import AspisR1ProducerRelease47.Samples49
+import R1Z.ProverCommitQArray48
+import R1Z.ProverCommitBasisCounter47
+import R1Z.ProverCommitBasisFillValue47
+/-! Complete owned partial-Boolean sum counter, at explicit oracle-result tape.
+The caller must still identify every tape entry with its semantic point call. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitSampleSum49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+
+def total (values : Nat → Old.Q) : Nat → Nat → QM31Exact
+ | _,0 => 0
+ | j,n+1 => decode (values j)+total values (j+1) n
+
+attribute [local irreducible] ProverCommitQArray48.array ProverCommitNativeQ48.source
+
+theorem sum_value (values : Nat → Old.Q)
+    (canonical : ∀ j, j<512 → Canonical (values j))
+    (start : Usize) (n : Nat) (left : U16) (hleft : left.val=n)
+    (bound : start.val+n≤512) (s : Old.Q) (hs : Canonical s) :
+    ∃ z : Old.Q,
+      owned.sum (ProverCommitQArray48.array 512#usize values) start left
+          (ProverCommitNativeQ48.source s)=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ decode z=decode s+total values start.val n := by
+  induction n generalizing start left s with
+  | zero =>
+    have hz : left=0#u16 := by scalar_tac
+    refine ⟨s,?_,hs,?_⟩
+    · rw [owned.sum,hz];rfl
+    · rw [total,add_zero]
+  | succ n ih =>
+    have hn : left≠0#u16 := by scalar_tac
+    have hdec : (U16.wrapping_sub left 1#u16).val=n := by
+      rw [ProverCommitPairCounter47.sub_one left (by omega)];omega
+    have hinc : (Usize.wrapping_add start 1#usize).val=start.val+1 :=
+      ProverCommitBasisFillValue47.add_val _ _ (by omega)
+    obtain ⟨next,hnext,hcn,hdn⟩ := ProverCommitNativeQ48.add s (values start.val) hs (canonical _ (by omega))
+    obtain ⟨z,hz,hcz,hdz⟩ := ih _ _ hdec (by rw [hinc];omega) next hcn
+    refine ⟨z,?_,hcz,?_⟩
+    · rw [owned.sum]
+      simp only [hn,if_false,lift,bind_tc_ok]
+      rw [ProverCommitQArray48.index _ _ _ (by omega)]
+      simp only [hnext,bind_tc_ok]
+      exact hz
+    · rw [hdz,hdn,hinc,total];ring
+
+theorem total_finset (values : Nat → Old.Q) (j n : Nat) :
+    total values j n=∑ i ∈ Finset.range n, decode (values (j+i)) := by
+  induction n generalizing j with
+  | zero => simp [total]
+  | succ n ih =>
+    rw [total,ih,Finset.sum_range_succ']
+    simp only [Nat.add_zero]
+    congr 1
+    apply Finset.sum_congr rfl
+    intro i hi
+    congr 2
+    omega
+
+theorem partial_sum (values : Nat → Old.Q)
+    (canonical : ∀ j, j<512 → Canonical (values j))
+    (n : Nat) (bound : n≤512) (left : U16) (hleft : left.val=n) :
+    ∃ z : Old.Q,
+      owned.sum (ProverCommitQArray48.array 512#usize values) 0#usize left
+        (ProverCommitNativeQ48.source zero)=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ decode z=∑ i ∈ Finset.range n, decode (values i) := by
+  obtain ⟨z,hz,hcz,hdz⟩ := sum_value values canonical 0#usize n left hleft
+    (by simpa using bound) zero zero_canonical
+  refine ⟨z,hz,hcz,?_⟩
+  simpa only [zero_decode,zero_add,show (0#usize).val=0 from rfl,total_finset,Nat.zero_add] using hdz
+
+#print axioms sum_value
+#print axioms total_finset
+#print axioms partial_sum
+end R1Z.ProverCommitSampleSum49

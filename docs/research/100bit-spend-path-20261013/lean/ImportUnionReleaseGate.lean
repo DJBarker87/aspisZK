@@ -1,0 +1,101 @@
+import R22TotalPacketAudit
+import R22TotalRowPacketAudit
+import R22TotalConstantPacketAudit
+import OraclePortHeadlineFrozen2PerAttempt
+import R1Z.PrivacyR1HeadlineDeployed
+import AspisR1.CompositionPartsAfterValidationExact
+import AspisR1.PoseidonCandidatePackedFamilyResidual
+import TerminalPartsArithmeticExact
+import ExtractedDecoderCallerBridge
+
+/-! Release-gate import union; compatibility only, with all endpoint premises retained. -/
+
+#print axioms AspisR1.R22TotalAcceptedComposition.sampledProduct_total
+#print axioms AspisR1.R22TotalAcceptedComposition.sampledProduct_R22
+#print axioms AspisR1.R22TotalAcceptedPath.accepted_path_R22
+#print axioms AspisR1.R22TotalCheckedComposition.success_noOverflow_agrees
+#print axioms AspisR1.R22TotalCheckedComposition.total_refinement_R22
+#print axioms AspisR1.R22TotalCheckedComposition.reached_refinement_R22
+#print axioms AspisR1.R22TotalCheckedComposition.extracted_total_R22
+#print axioms AspisR1.R22TotalCoreCones.strict_field_parser_R22
+#print axioms AspisR1.R22TotalCoreCones.reducer_R22
+#print axioms AspisR1.R22TotalCoreCones.m31_multiply_R22
+#print axioms AspisR1.R22TotalCoreCones.m31_reduce_wrapper_R22
+#print axioms AspisR1.R22TotalCoreCones.fixed_block_sampler_R22
+#print axioms AspisR1.R22TotalCoreCones.wrapping_multiply_model
+#print axioms AspisR1.R22TotalDomainObstructions.field_add_noncanonical_no_success
+#print axioms AspisR1.R22TotalDomainObstructions.field_add_all_storage_total_is_false
+#print axioms AspisR1.R22TotalDomainObstructions.recovered_outer_total
+#print axioms AspisR1.R22TotalDomainObstructions.recovery_hides_checked_overflow
+#print axioms AspisR1.R22TotalIndexedByteCone.source_total
+#print axioms AspisR1.R22TotalIndexedByteCone.indexed_bytes_R22
+#print axioms AspisR1.R22TotalLayoutCones.qm_embedding_R22
+#print axioms AspisR1.R22TotalLayoutCones.eight_limb_layout_R22
+#print axioms AspisR1.R22TotalReducerExecution.checked_foldCode
+#print axioms AspisR1.R22TotalReducerExecution.checked_reduceCode
+#print axioms AspisR1.R22TotalReducerExecution.reducer_R22
+#print axioms AspisR1.R22TotalReducerExecution.checked_multiplyCode
+#print axioms AspisR1.R22TotalReducerExecution.multiply_R22
+#print axioms AspisR1.R22TotalReducerExecution.wrapping_multiply_exact
+#print axioms AspisR1.R22TotalUnsignedPrimitives.add_success
+#print axioms AspisR1.R22TotalUnsignedPrimitives.sub_success
+#print axioms AspisR1.R22TotalUnsignedPrimitives.mul_success
+#print axioms AspisR1.R22TotalUnsignedPrimitives.cast_mod
+#print axioms AspisR1.R22TotalUnsignedPrimitives.cast_exact
+#print axioms AspisR1.R22TotalUnsignedPrimitives.wrapping_success_is_insufficient
+#print axioms AspisR1.R22TotalUnsignedPrimitives.addPrimitive
+#print axioms AspisR1.R22TotalUnsignedPrimitives.subPrimitive
+#print axioms AspisR1.R22TotalUnsignedPrimitives.mulPrimitive
+#print axioms AspisR1.R22TotalUnsignedPrimitives.castPrimitive
+#print axioms AspisR1.R22TotalReducerExecution.shiftPrimitive
+
+#print axioms AspisR1.R22TotalRowCones.row_R22
+#print axioms AspisR1.R22TotalRowCones.row_inactive_R22
+#print axioms AspisR1.R22TotalRowCones.wrapping_row_model
+
+#print axioms AspisR1.R22TotalStage2Constants.compact_SEMANTIC_COMPACT_VALUES_R22
+#print axioms AspisR1.R22TotalStage2Constants.verifier_SEMANTIC_BYTES_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_LOGICAL_SEMANTIC_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_COMPACT_SEMANTIC_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_Y1_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_COMPACT_Y1_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_INACTIVE_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_ROUND0_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_FOLDED_ROOT_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_ROUND1_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_FINAL_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_OPENINGS_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OPENING_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_OFF_NODES_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_MAX_NODES_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_FIXED_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_MAX_PROOF_R22
+#print axioms AspisR1.R22TotalStage2Constants.compact_PROOF_BYTES_R22
+#print axioms AspisR1.R22TotalStage2Constants.verifier_CHECKPOINT_FIXED_R22
+
+-- Session A owns S3 candidate adoption; its existing anonymous instance remains.
+#check AspisR1TerminalDecoder.pool_v1.historical_anchor.PoolV1TransitionKind.instDiscriminant
+#check AspisR1WithdrawalCaller.pool_v1.historical_anchor.PoolV1TransitionKind.instDiscriminant
+#check AspisR1Stage2.verifier.Error.instDiscriminant
+#check AspisR1Stage2.transport.Variant.instDiscriminant
+#check AspisR1Stage2.verifier.Phase.instDiscriminant
+#check instDiscriminantErrorIsize
+#check Aeneas.Std.Array.make.eq_1
+
+#print axioms AspisR1.OraclePortHeadlineFrozen2PerAttempt.final_soundness
+#print axioms R1Z.PrivacyR1HeadlineDeployed.privacy_headline_deployed
+#print axioms AspisR1TerminalDecoder.CallerBridge.from_to
+#print axioms AspisR1TerminalDecoder.CallerBridge.to_from
+#print axioms AspisR1TerminalDecoder.CallerBridge.digest_eq
+#print axioms AspisR1TerminalDecoder.CallerBridge.common_eq
+#print axioms AspisR1TerminalDecoder.CallerBridge.validator_eq
+#print axioms AspisR1TerminalDecoder.CallerBridge.encode_digest_eq
+#print axioms AspisR1TerminalDecoder.CallerBridge.encode_common_eq
+#print axioms AspisR1TerminalDecoder.CallerBridge.encoder_eq
+#print axioms AspisR1TerminalDecoder.CallerBridge.encoder_success
+#print axioms AspisR1TerminalDecoder.CallerBridge.terminal_success_encoder
+#print axioms AspisR1TerminalDecoder.CallerBridge.decoder_success_encoder
+#print axioms AspisR1.CompositionPartsAfterValidationExact.run_success_of_poseidon_contract
+#print axioms AspisR1.PoseidonCandidatePackedFamilyResidual.packed_family_formula
+#print axioms AspisR1.PoseidonCandidatePackedFamilyResidual.boxed_candidate_is_packed_family
+#print axioms AspisR1.TerminalPartsArithmeticExact.run_exact

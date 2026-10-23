@@ -1,0 +1,44 @@
+import R1Z.ProverCommitSamplePoint49
+import R1Z.ProverCommitBooleanEnum49
+import R0Z.HonestView
+/-! Native-owned sample points equal the existing semantic model's roundPoint.
+The challenge hprefix is explicit, and assignment order is transported by a
+proved bijection rather than assuming sample-array equality. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitSampleModel49
+open Aeneas.Std
+open ProverCommitPrimitive47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open ProverCommitSamplePoint49 ProverCommitBooleanEnum49
+open R0P R0P.Sumcheck R0P.SemSource R0Z.HonestView
+open scoped BigOperators
+
+theorem point_model (ch : Challenges QM31Exact) (p : Nat → Old.Q) (r : Fin 10)
+    (hprefix : ∀ i : Fin 10, i.val<r.val → decode (p i.val)=R0Z.HonestView.alpha ch i)
+    (a : Fin (2^(9-r.val))) (word : Usize) (hw : word.val=a.val) (sample : U32) :
+    (fun i : Fin 10 => decode (point p r.val word sample i.val))=
+      R0Z.HonestView.roundPoint ch r (sample.val : QM31Exact) (tail (9-r.val) a) := by
+  funext i
+  rw [point_decode p r.val r.isLt word sample i.val i.isLt]
+  unfold R0Z.HonestView.roundPoint
+  by_cases hpre : i.val<r.val
+  · rw [dif_pos hpre,if_pos hpre]
+    exact hprefix i hpre
+  · by_cases he : i.val=r.val
+    · simp only [dif_neg hpre,dif_pos he,if_neg hpre,if_pos he]
+    · simp only [dif_neg hpre,dif_neg he,if_neg hpre,if_neg he]
+      rw [bit_tail (9-r.val) a word hw ⟨i.val-r.val-1,by omega⟩]
+
+theorem sum_points (ch : Challenges QM31Exact) (p : Nat → Old.Q) (r : Fin 10)
+    (hprefix : ∀ i : Fin 10, i.val<r.val → decode (p i.val)=R0Z.HonestView.alpha ch i)
+    (words : Fin (2^(9-r.val)) → Usize) (hw : ∀ a, (words a).val=a.val)
+    (sample : U32) (f : (Fin 10 → QM31Exact) → QM31Exact) :
+    (∑ a : Fin (2^(9-r.val)), f (fun i : Fin 10 => decode (point p r.val (words a) sample i.val)))=
+      ∑ b : Fin (9-r.val) → Bool, f (R0Z.HonestView.roundPoint ch r (sample.val : QM31Exact) b) := by
+  simp_rw [point_model ch p r hprefix _ _ (hw _) sample]
+  exact sum_tail (K := QM31Exact) (9-r.val) (fun b => f (R0Z.HonestView.roundPoint ch r (sample.val : QM31Exact) b))
+
+#print axioms point_model
+#print axioms sum_points
+end R1Z.ProverCommitSampleModel49

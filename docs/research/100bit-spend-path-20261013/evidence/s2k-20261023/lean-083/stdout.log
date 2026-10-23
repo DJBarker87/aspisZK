@@ -1,0 +1,18 @@
+@[reducible] def Aeneas.Std.core.cmp.PartialEqU8 : core.cmp.PartialEq U8 U8 :=
+{ eq := liftFun2 core.cmp.impls.PartialEqU8.eq, ne := liftFun2 core.cmp.impls.PartialEqU8.ne }
+def Aeneas.Std.core.cmp.PartialEq.ne.trait_default : {Self Rhs : Type} →
+  core.cmp.PartialEq Self Rhs → Self → Rhs → Result Bool :=
+fun {Self Rhs} PartialEqInst self other => core.cmp.PartialEq.ne.default PartialEqInst.eq self other
+def Aeneas.Std.core.cmp.PartialEq.ne.default : {Self Rhs : Type} →
+  (Self → Rhs → Result Bool) → Self → Rhs → Result Bool :=
+fun {Self Rhs} eq self other => do
+  let __do_lift ← eq self other
+  ok (decide ¬__do_lift = true)
+@[reducible] def AspisR1TerminalDecoder.aspis_core.field.M31.Insts.CoreCmpPartialEqM31 : core.cmp.PartialEq
+  AspisR1TerminalDecoder.aspis_core.field.M31 AspisR1TerminalDecoder.aspis_core.field.M31 :=
+{ eq := AspisR1TerminalDecoder.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
+  ne := fun self other =>
+    core.cmp.PartialEq.ne.default AspisR1TerminalDecoder.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq self other }
+@[reducible] def Aeneas.Std.core.cmp.impls.PartialEqU8.ne : U8 → U8 → Bool :=
+fun x y => decide ¬x = y
+'AspisR1.S2K.Equality.array_self' depends on axioms: [propext]

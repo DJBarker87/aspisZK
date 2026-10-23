@@ -1,0 +1,101 @@
+{
+  "magic": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC);",
+    "range": [
+      0,
+      4
+    ],
+    "callee": null,
+    "afterstate_note": null
+  },
+  "version": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;",
+    "range": [
+      4,
+      5
+    ],
+    "callee": null,
+    "afterstate_note": null
+  },
+  "kind": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "output[5] = result.transition_kind as u8;",
+    "range": [
+      5,
+      6
+    ],
+    "callee": null,
+    "afterstate_note": null
+  },
+  "digest_version": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "output[6] = POOL_V1_DIGEST_ENCODING_VERSION;",
+    "range": [
+      6,
+      7
+    ],
+    "callee": null,
+    "afterstate_note": null
+  },
+  "lane": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "output[7] = result.output_lane;",
+    "range": [
+      7,
+      8
+    ],
+    "callee": null,
+    "afterstate_note": null
+  },
+  "master": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "output[RESULT_MASTER_OFFSET..RESULT_SELECTED_LANE_OFFSET]\n        .copy_from_slice(&result.master_account);",
+    "range": [
+      8,
+      40
+    ],
+    "callee": "S2K_copy32",
+    "afterstate_note": null
+  },
+  "selected": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "output[RESULT_SELECTED_LANE_OFFSET..RESULT_NULLIFIER_OFFSET]\n        .copy_from_slice(&result.selected_lane_account);",
+    "range": [
+      40,
+      72
+    ],
+    "callee": "S2K_copy32",
+    "afterstate_note": null
+  },
+  "nullifier": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "output[RESULT_NULLIFIER_OFFSET..RESULT_AFTERSTATE_OFFSET]\n        .copy_from_slice(&encode_digest_canonical(&result.nullifier));",
+    "range": [
+      72,
+      104
+    ],
+    "callee": "S2K_copy32",
+    "afterstate_note": null
+  },
+  "afterstate": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "output[RESULT_AFTERSTATE_OFFSET..].copy_from_slice(\n        &encode_pool_v1_pair_verified_afterstate_v1(&result.verified_afterstate)\n            .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Afterstate(error))?,\n    );",
+    "range": [
+      104,
+      792
+    ],
+    "callee": "S2K_copy688",
+    "afterstate_note": "arbitrary sub-encoder output bytes; status and encoding relation separate"
+  }
+}

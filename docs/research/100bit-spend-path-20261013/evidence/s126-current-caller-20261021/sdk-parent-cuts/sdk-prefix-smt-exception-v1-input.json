@@ -1,0 +1,43 @@
+{
+  "qualification": "Diagnostic exception stack only, never an accepted verification result.",
+  "commands": [
+    [
+      "g++",
+      "-std=c++17",
+      "-O2",
+      "-shared",
+      "-fPIC",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/kit/trace-cbmc-exception.cpp",
+      "-o",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-prefix-smt-exception-v1/exception-trace.so",
+      "-ldl"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/cbmc",
+      "--no-malloc-may-fail",
+      "--no-undefined-shift-check",
+      "--no-signed-overflow-check",
+      "--nan-check",
+      "--no-self-loops-to-assumptions",
+      "--no-pointer-primitive-check",
+      "--object-bits",
+      "16",
+      "--unwind",
+      "40",
+      "--unwindset",
+      "memcmp.0:689",
+      "--z3",
+      "--slice-formula",
+      "--unwinding-assertions",
+      "--json-ui",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-prefix-context-check-v4/ready.out"
+    ]
+  ],
+  "source_sha256": "6e4f441af232a9666b1bb1ff61ac691dacf987d91f76b9761c5edc6968f08199",
+  "program_sha256": "f5af94ac10b9e68a3fdcacc65589bf02aaab5dd2376f5f6c78055308143f33b2",
+  "tool_pins": {
+    "/home/dombarker/.kani/kani-0.67.0/bin/cbmc": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/z3-tool-v1/bin/z3": "1bfaf5bbe81fd0b7800500ee08eef426aaabe18f8b9c4c4c32adffcd72f86cd5"
+  },
+  "gpp_version": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+}

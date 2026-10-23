@@ -1,0 +1,95 @@
+import R1Z.ProverCommitOracleRounds55
+import R1Z.ProverCommitOriginal55
+import R1Z.ProverCommitSemanticFinal55
+/-! Complete owned round-9 interpolation and shift, with both terminal values
+produced from actual canonical claims/challenges. Public preparation and native
+caller/effect binding remain outside this theorem. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitFinalCaller55
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47 ProverCommitTerminalCarrier55
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open ProverCommitTerminalZero55 (Statement publicModel)
+open ProverCommitChallengePrefix55
+open R0Z.HonestView R0Z.PayloadSplit R0Z.Shift R0Z.RefPayload
+open ProverCommitInterpolationRow48
+variable {Bat : Type} [BatchedLayer QM31Exact Bat]
+
+def originalProduced (s : Statement) (sem : Nat → Old.Q) (c : Nat → Nat → Old.Q) (original : Old.Q) : Prop :=
+  ∃ (q : Fin 3 → Nat → Old.Q) (z : Array Selected 16#usize) (mask : Array Selected 10#usize)
+    (g terminal : Selected),
+    claims53.all (ProverCommitQArray48.array 10#usize (ProverCommitOriginal55.point sem))
+      (ProverCommitClaimsColumn53.columns c)=ok (Array.make 3#usize
+        [ProverCommitQArray48.array 29#usize (q 0),ProverCommitQArray48.array 29#usize (q 1),
+          ProverCommitQArray48.array 29#usize (q 2)]) ∧
+    ProverCommitTerminalClaims55.run s sem (ProverCommitOriginal55.point sem) q=ok (.Ok (terminal,z,mask,g)) ∧
+    field.QM31.mul (ProverCommitNativeQ48.source (sem 14))
+      (ProverCommitNativeQ48.source (fromSelected terminal))=ok (ProverCommitNativeQ48.source original)
+
+def zeroProduced (s : Statement) (sem : Nat → Old.Q) (eta0 : Old.Q) : Prop :=
+  ∃ (z : Array Selected 16#usize) (mask : Array Selected 10#usize) (g terminal : Selected),
+    ProverCommitTerminalZero55.run s sem (ProverCommitOriginal55.point sem)=ok (.Ok (terminal,z,mask,g)) ∧
+    field.QM31.mul (ProverCommitNativeQ48.source (sem 14))
+      (ProverCommitNativeQ48.source (fromSelected terminal))=ok (ProverCommitNativeQ48.source eta0)
+
+attribute [local irreducible] ProverCommitQBasis51.basis publicModel ProverCommitClaims53.trace
+  ProverCommitSemanticModel55.oracle R0P.SemSource.terminalValue qpoly
+  ProverCommitNativeQ48.source ProverCommitQArray48.array
+
+theorem exact_result (s : Statement) (sem p : Nat → Old.Q)
+    (hs : ∀ i, i<25 → Canonical (sem i)) (hp : ∀ i, i<10 → Canonical (p i))
+    (c : Nat → Nat → Old.Q) (hc : ∀ l, l<29 → ∀ i, i<1024 → Canonical (c l i))
+    (template : Challenges QM31Exact) (hprefix : Prefix sem p 9)
+    (words : Fin 512 → Usize) (hw : ∀ a, (words a).val=a.val)
+    (sample : Fin 28 → U32) (hsample : ∀ t, (sample t).val=t.val)
+    (hhalf : alpha (withSemantic template sem) 9≠1/2)
+    {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+    (hash : H) (c1 : Array U8 32#usize)
+    (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+    (hprep : AspisR1PublicPreparation.r1_semantic.public_transcript D
+      (AspisR1PublicPreparation.PreparationBinding.preparationPublic s) hash c1=ok (.Ok transcript)) :
+    ∃ (calls : Nat → Nat → Old.Q) (sums ys out : Nat → Old.Q) (original eta0 : Old.Q),
+      (∀ (t : Fin 28) (a : Fin 512), ProverCommitOracle55.run s sem
+        (ProverCommitSamplePoint49.point p 9 (words a) (sample t)) c=
+          ok (.Ok (ProverCommitNativeQ48.source (calls t.val a.val)))) ∧
+      (∀ t : Fin 28, owned.sum (ProverCommitQArray48.array 512#usize (calls t.val)) 0#usize 1#u16
+        (ProverCommitNativeQ48.source zero)=ok (ProverCommitNativeQ48.source (sums t.val))) ∧
+      interpolate (ProverCommitQArray48.array 28#usize sums)=ok (ProverCommitQArray48.array 28#usize ys) ∧
+      originalProduced s sem c original ∧ zeroProduced s sem eta0 ∧
+      ProverCommitFinalShift49.run (ProverCommitQArray48.array 28#usize ys)
+        (ProverCommitNativeQ48.source (sem 24)) (ProverCommitNativeQ48.source original)
+        (ProverCommitNativeQ48.source eta0)=ok (some (ProverCommitQArray48.array 28#usize out)) ∧
+      (∀ k, k<28 → Canonical (out k)) ∧
+      qpoly out=R0Z.Chain.roundPoly 9 (shift (publicModel s) ProverCommitQBasis51.basis
+        (withSemantic template sem) (refPayload (Bat := Bat) (publicModel s) ProverCommitQBasis51.basis
+          (withSemantic template sem)+L AspisR1.rowEquiv ProverCommitQBasis51.basis
+            (withSemantic template sem) (ProverCommitClaims53.trace c))) := by
+  obtain ⟨calls,sums,ys,hcalls,hccalls,hsums,hinterp,hcys,hpoly⟩ :=
+    ProverCommitOracleRounds55.exact_result s sem p hs hp c hc template 9 hprefix
+      words hw sample hsample 1#u16 rfl D hash c1 transcript hprep
+  obtain ⟨q,z,mask,g,terminal,original,hclaims,hterm,hmul,hco,hdo⟩ :=
+    ProverCommitOriginal55.exact_result s sem hs c hc template D hash c1 transcript hprep
+  obtain ⟨z0,mask0,g0,term0,ht0,hct0,hdt0⟩ := ProverCommitTerminalZero55.exact_result s sem
+    (ProverCommitOriginal55.point sem) hs (ProverCommitOriginal55.point_canonical sem hs)
+    D hash c1 transcript hprep
+  obtain ⟨eta0,he0,hce0,hde0⟩ := ProverCommitNativeQ48.mul (sem 14) (fromSelected term0)
+    (hs 14 (by decide)) hct0
+  have heimage : decode eta0=fOrig (publicModel s) ProverCommitQBasis51.basis
+      (withSemantic template sem) 0 (alpha (withSemantic template sem)) := by
+    rw [hde0,hdt0,ProverCommitOriginal55.point_image template sem]
+    simp only [fOrig,ProverCommitOracle55.zero_claims,withSemantic]
+    rfl
+  have haval : decode (sem 24)=alpha (withSemantic template sem) 9 := rfl
+  have hn : decode (sem 24)≠(2 : QM31Exact)⁻¹ := by
+    rw [haval];simpa only [one_div] using hhalf
+  obtain ⟨out,hout,hcout,hdout⟩ := ProverCommitFinalShift49.exact_result ys hcys (sem 24)
+    original eta0 (hs 24 (by decide)) hco hce0 hn
+  refine ⟨calls,sums,ys,out,original,eta0,hcalls,hsums,hinterp,
+    ⟨q,z,mask,g,terminal,hclaims,hterm,hmul⟩,⟨z0,mask0,g0,term0,ht0,he0⟩,hout,hcout,?_⟩
+  rw [ProverCommitSemanticFinal55.poly_eq_qpoly out,ProverCommitSemanticFinal55.poly_eq_qpoly ys] at hdout
+  rw [hdout,hpoly,hdo,heimage,haval,ProverCommitSemanticRounds55.payload_rounds,if_pos rfl]
+  simp only [one_div]
+
+#print axioms exact_result
+end R1Z.ProverCommitFinalCaller55

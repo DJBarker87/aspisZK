@@ -1,0 +1,49 @@
+{
+  "program_sha256": "38c340e82cd5b9d673c9caa066f1ebc79b3fa3c6be0a43f04aeff45556b18c82",
+  "command": [
+    "/home/dombarker/.kani/kani-0.67.0/bin/cbmc",
+    "--no-malloc-may-fail",
+    "--no-undefined-shift-check",
+    "--no-signed-overflow-check",
+    "--nan-check",
+    "--no-self-loops-to-assumptions",
+    "--no-pointer-primitive-check",
+    "--object-bits",
+    "16",
+    "--unwind",
+    "36",
+    "--sat-solver",
+    "cadical",
+    "--slice-formula",
+    "--unwinding-assertions",
+    "--property",
+    "proofs::actual_sdk_out_bridge.assertion.10",
+    "--trace",
+    "--json-ui",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_s126_sdk_live_out_shared_10485760_v7-0ffa26894ec0d165__RNvNtCsb87ceXOhu8g_42aspis_s126_sdk_live_out_shared_10485760_v76proofs21actual_sdk_out_bridge.out"
+  ],
+  "selected_property": {
+    "class": "assertion",
+    "description": "assertion failed: unsafe{(*counter).get()} == initial",
+    "expression": "var_101 != FALSE",
+    "name": "proofs::actual_sdk_out_bridge.assertion.10",
+    "sourceLocation": {
+      "column": "2",
+      "comment": "assertion failed: unsafe{(*counter).get()} == initial",
+      "file": "src/lib.rs",
+      "function": "proofs::actual_sdk_out_bridge",
+      "line": "71",
+      "pragma": [
+        "checked:bounds-check",
+        "checked:pointer-check",
+        "checked:div-by-zero-check",
+        "checked:signed-overflow-check",
+        "checked:undefined-shift-check",
+        "checked:pointer-primitive-check"
+      ],
+      "propertyClass": "assertion",
+      "propertyId": "proofs::actual_sdk_out_bridge.assertion.10"
+    }
+  },
+  "qualification": "Diagnostic counterexample extraction from the already failed conditional bridge. Selected-property result cannot establish any complete contract or caller theorem."
+}

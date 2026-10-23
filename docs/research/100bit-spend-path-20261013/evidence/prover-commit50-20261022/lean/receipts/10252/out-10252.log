@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSparseAddress50.lean:12:16: error: unsolved goals
+pref suffix n : ℕ
+hn : n ≤ 10
+hp : pref < 2 ^ (10 - n)
+hs : suffix < 2 ^ n
+⊢ 2 ^ 10 = 1024
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSparseAddress50.lean:33:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑pref * 2 ^ ↑trailing % 2 ^ UScalarTy.Usize.numBits
+in the target expression
+  pref.bv.toNat * 2 ^ ↑trailing % 2 ^ System.Platform.numBits ||| suffix.bv.toNat = ↑pref * 2 ^ ↑trailing + ↑suffix
+
+pref suffix : Usize
+trailing : U8
+hn : ↑trailing ≤ 10
+hp : ↑pref < 2 ^ (10 - ↑trailing)
+hs : ↑suffix < 2 ^ ↑trailing
+s : U32 := core.convert.num.FromU32U8.from trailing
+z : UScalar UScalarTy.Usize := core.num.Usize.wrapping_shl pref s ||| suffix
+hcast : ↑s = ↑trailing
+hbound : ↑pref * 2 ^ ↑trailing + ↑suffix < 1024
+hpartial : ↑pref * 2 ^ ↑trailing < UScalar.size UScalarTy.Usize
+bits : 32 ≤ UScalarTy.Usize.numBits
+hmod : ↑pref * 2 ^ ↑trailing < 2 ^ UScalarTy.Usize.numBits
+⊢ pref.bv.toNat * 2 ^ ↑trailing % 2 ^ System.Platform.numBits ||| suffix.bv.toNat = ↑pref * 2 ^ ↑trailing + ↑suffix
+'R1Z.ProverCommitSparseAddress50.bound' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverCommitSparseAddress50.row' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

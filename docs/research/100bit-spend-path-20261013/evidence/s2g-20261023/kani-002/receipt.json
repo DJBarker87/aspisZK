@@ -1,0 +1,62 @@
+{
+  "attempt": "kani-002",
+  "kind": "kani",
+  "source_revision": "8e6587552b73ac5a469e99c04f35c19e28ccadc6",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2G-contracts/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "S2G_copy_consumer",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2G-contracts/src/lib.rs",
+    "S2G-contracts/Cargo.toml"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "deps_fingerprint": {
+    "scope": "standalone byte-slice contract; pinned Kani sysroot; no Aspis dependency or native SDK/allocator claim"
+  },
+  "expected_time": "cached optimized compilation followed by one named std-copy contract property gate; no cryptographic arithmetic",
+  "exit_status": 0,
+  "wall_seconds": 7.748950126995624,
+  "peak_rss_kib": "364320",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r4bb85ae2a2d942008318b13f3af96786.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "381841408",
+  "source_hashes": {
+    "S2G-contracts/src/lib.rs": "cabbc5ddc1d825573e1a39f6df1b4a9afc615280a0b243b4ef9596dec8e5bd7e",
+    "S2G-contracts/Cargo.toml": "df48d4e5c1af53c5b5531b90754da7cf80b3ee43dafb61cad6cac91e7abca042"
+  },
+  "print_axioms": "N/A: kani"
+}

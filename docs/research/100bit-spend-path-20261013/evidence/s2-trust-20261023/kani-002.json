@@ -1,0 +1,34 @@
+{
+  "attempt": "kani-002",
+  "kind": "kani",
+  "source_revision": "3b0ac3bd9824393de4d932a0466609dff560f159",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "kani-spec/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-Z",
+    "function-contracts",
+    "--harness",
+    "checks::step_contract",
+    "--exact",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "kani-spec/src/lib.rs",
+    "kani-spec/Cargo.toml"
+  ],
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  },
+  "timeout": 180,
+  "expected_time": "optimized compilation followed by primitive transition contract SAT checking; no SDK internals",
+  "deps_fingerprint": "standalone no dependencies; Kani 0.67.0 rustc 1.93.0-nightly 53732d5e0; CBMC 6.8.0"
+}

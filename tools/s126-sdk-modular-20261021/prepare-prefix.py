@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+"""Exact stage1, changed harness boundary only: prove prefix argument identity."""
+from pathlib import Path
+import hashlib,json,sys
+R=Path(__file__).resolve().parents[2];E=R/'docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/sdk-source-snapshots/v3';O=Path(sys.argv[1]);(O/'src').mkdir(parents=True,exist_ok=True)
+s=(E/'src/lib.rs').read_text()
+old='if p.fail==4 {Err(())}else{Ok(vec![p.output;p.output_len])}'
+assert s.count(old)==1
+s=s.replace(old,'// Prefix certificate: argument assertions above occur before this return.\n  Err(())')
+s=s.replace('fn actual_sdk_stage1_binding()', 'fn actual_sdk_stage1_prefix_binding()')
+s=s.replace('statement:PoolV1PairForestTerminalStatementV1, fail:', 'fail:')
+s=s.replace('static mut PLAN:Option<Plan>=None;', 'static mut PLAN:Option<Plan>=None;\nstatic mut STATEMENT:Option<PoolV1PairForestTerminalStatementV1>=None;')
+s=s.replace('let boxed=Box::new(p.statement);', 'let boxed=Box::new(unsafe{STATEMENT.take().unwrap()});')
+s=s.replace('let mut proof=vec![0u8;688+PROOF]; proof[696]=2;\n proof[0]=kani::any();proof[696]=kani::any();', 'let mut proof:[u8;688+PROOF]=kani::any();')
+s=s.replace('let mut public:[u8;16]=kani::any();', 'let mut public:[u8;1880]=kani::any();')
+s=s.replace('let mut checkpoint=vec![0u8;CP];\n let occupied:bool=kani::any();if occupied {checkpoint[0]=1;}', 'let mut checkpoint=[0u8;CP];')
+s=s.replace('let p=Plan{statement:statement(),fail:', 'let p=Plan{fail:')
+s=s.replace('unsafe{PLAN=Some(p);CALLS=0;}', 'unsafe{PLAN=Some(p);STATEMENT=Some(statement());CALLS=0;}')
+s=s.replace('public_ptr:usize,public_len:usize,proof_ptr:usize', 'public_ptr:*const u8,public_len:usize,proof_ptr:*const u8')
+s=s.replace('static mut EXPECT_PTRS:[usize;4]=[0;4];', 'static mut EXPECT_PTRS:[*const ();4]=[core::ptr::null();4];')
+s=s.replace('as *const _ as usize','as *const _ as *const ()').replace('as *const _ as usize','as *const _ as *const ()')
+s=s.replace('s as *const _ as usize','s as *const _ as *const ()')
+s=s.replace('.as_ptr() as usize','.as_ptr()')
+s=s.replace('p.proof_ptr+688','unsafe{p.proof_ptr.add(688)}')
+s=s.replace('static mut PLAN:Option<Plan>=None;', 'static mut CANDIDATE:[u8;688]=[0;688];\nstatic mut PLAN:Option<Plan>=None;')
+s=s.replace('Ok([0;688])','Ok(unsafe{CANDIDATE})')
+s=s.replace('let mut proof:[u8;688+PROOF]=kani::any();','let candidate:[u8;688]=kani::any();\n let mut proof:[u8;688+PROOF]=kani::any();proof[..688].copy_from_slice(&candidate);proof[696]=2;')
+s=s.replace('STATEMENT=Some(statement());CALLS=0;', 'STATEMENT=Some(statement());CANDIDATE=candidate;CALLS=0;')
+s=s.replace('#[derive(Clone,Copy)] enum Phase { Prepare }', '#[derive(Clone,Copy)] enum Phase {Parsed,Semantic,SemanticPart(u8),Prepare,CheckpointRead,Merkle(usize),Query(usize),QueryPart(usize,u8),CheckpointWrite,Relation,Final}')
+s=s.replace('#[derive(Clone,Copy)] enum Variant { S2 }', '#[derive(Clone,Copy)] enum Variant {S1,S2,D}')
+s=s.replace('fn tag(self)->u8 {2}', 'fn tag(self)->u8 {match self {Self::S1=>1,Self::S2=>2,Self::D=>3}}')
+s=s.replace('if result.is_ok(){assert_eq!(unsafe{CALLS},1);assert_eq!(p.output_len,CP);assert_eq!(after[observed],p.output);}\n else {assert_eq!(after[observed],before);}', 'assert!(result.is_err());assert_eq!(after[observed],before);\n assert!(unsafe{CALLS}<=1);kani::cover!(unsafe{CALLS}==1);')
+(O/'src/lib.rs').write_text(s)
+c=(E/'Cargo.toml').read_text().replace('aspis-s126-real-sdk-boundary','aspis-s126-sdk-prefix-boundary');(O/'Cargo.toml').write_text(c)
+(O/'source-cut.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',qualification='Exact frozen stage1 and full SDK, prefix-call argument assertions only. tx1 returns Err after assertions. Does not certify the post-success checkpoint tail. Accepted-guard context only: checkpoint starts zero, proof prefix equals arbitrary encoded candidate, and proof tag is2. Those source guards need separate discharge. Other proof/public bytes and all typed statements are arbitrary. No checkpoint-success tail certificate.',parent_source_sha256=hashlib.sha256((E/'src/lib.rs').read_bytes()).hexdigest(),source_sha256=hashlib.sha256(s.encode()).hexdigest(),changes=['harness function name','tx1 harness boundary returns Err after argument assertions','harness checks prefix rejection and unchanged state; reached-call cover']),indent=2)+'\n')

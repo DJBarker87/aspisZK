@@ -1,0 +1,32 @@
+{
+  "attempt": "rust-003",
+  "kind": "rust",
+  "timeout": 480,
+  "command": [
+    "cargo",
+    "build",
+    "--release",
+    "--offline",
+    "--locked",
+    "-j",
+    "4",
+    "--manifest-path",
+    "src/tools/r1-cost-probe/Cargo.toml",
+    "--bin",
+    "adapter_rw_replay",
+    "--features",
+    "private-leaf-salts"
+  ],
+  "sources": [
+    "src/tools/r1-cost-probe/src/bin/adapter_rw_replay.rs",
+    "src/tools/r1-cost-probe/src/bin/readonly_runtime.rs",
+    "src/tools/r1-cost-probe/Cargo.lock"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/replay-target",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "expected_time": "optimized harness compilation/linking; no proof generation",
+  "change": "Remove optional historical metadata injection requiring patched LiteSVM; use pinned public API for ordinary fixture replay"
+}

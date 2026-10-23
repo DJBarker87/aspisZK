@@ -1,0 +1,14 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "protocol_freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "source_sha256": "17389d82671afdba9d0e5a2dd0ae7209f92c7d100113527e5f257e90a18cb5fb",
+  "native_finish_source": "    if checkpoint.len() != checkpoint_data.len() {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    checkpoint_data.copy_from_slice(&checkpoint);\n    #[cfg(feature=\"cu-profiling\")]\n    {\n    msg!(\"r1:pool-adapter-stage1-checkpoint-written\");\n    solana_program::log::sol_log_compute_units();\n    }\n    Ok(())\n}",
+  "native_finish_sha256": "14185708e043dae0f7116752dbf54d8dfa461d71d4bb2168764ba0c037f49208",
+  "owned_finish_source": " if result.len()!=sdk.data_cells[checkpoint.data_slot].bytes.len() {return Err(ProgramError::InvalidAccountData);}\n // Owned heap bytes, not an SDK slice descriptor or pointer, are replaced.\n // The actual SDK copy/write frame is a separate concrete operation certificate.\n sdk.data_cells[checkpoint.data_slot].bytes=result;\n Ok(())\n}",
+  "owned_finish_sha256": "0e05f59d0934a02bb32289e007421f45ebf0b4cfe4c833aa74ab5c0f5f81c07d",
+  "max_buffer_bytes": 1768,
+  "reply_max_bytes": 1769,
+  "qualification": "Real RefMut post-child length/copy/drop block versus complete owned heap.\nThis is the source continuation after the child reply, with actual SDK guards.\nIt does not prove the earlier child-call/SDK-to-reference execution transport.\n",
+  "domain": "Three real AccountInfo values and complete owned accounts/data/lamport heaps, independent alias maps, every signed data/lamport counter, arbitrary metadata and buffer bytes/lengths0..1768. Source guards are acquired in order to construct the reached post-child state; actual source last block retains RefMut. Arbitrary reply bytes and lengths0..1769. Every reached guard count, return status, observed byte in an arbitrary heap cell, metadata/header/lamport field and final counter is compared. Empty cells are handled without assuming an observation exists.",
+  "remaining": "Need earlier native source prefix/callee/returned-reply transport and embedding to instantiate this local post-child continuation in the whole source caller."
+}

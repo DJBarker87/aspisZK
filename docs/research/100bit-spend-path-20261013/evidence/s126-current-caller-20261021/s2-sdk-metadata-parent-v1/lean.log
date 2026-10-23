@@ -1,0 +1,40 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkMetadataParentV1.lean:1151:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  metadataWith (continuation0 ?ops ?sdk ?data ?guards) (continuation1 ?ops ?sdk ?data ?guards) ?ops ?program ?sdk ?data
+    ?guards
+in the target expression
+  (have guards := { checkpoint := none, «public» := none, proof := none };
+    do
+    let (status, heap, live) ←
+      metadataWith (continuation0 ops sdk data.deref guards) (continuation1 ops sdk data.deref guards) ops program sdk
+          data.deref guards
+    let finalHeap ← owned_release_guards heap live
+    ok (status, finalHeap)) =
+    have s := data.deref;
+    do
+    let (result, sdk1, guards) ←
+      owned_stage1_body ops program sdk s { checkpoint := none, «public» := none, proof := none }
+    let sdk2 ← owned_release_guards sdk1 guards
+    ok (result, sdk2)
+
+ops : Ops
+program : Std.Array U8 32#usize
+sdk : OwnedSdk
+data : alloc.vec.Vec U8
+⊢ (have guards := { checkpoint := none, «public» := none, proof := none };
+    do
+    let (status, heap, live) ←
+      metadataWith (continuation0 ops sdk data.deref guards) (continuation1 ops sdk data.deref guards) ops program sdk
+          data.deref guards
+    let finalHeap ← owned_release_guards heap live
+    ok (status, finalHeap)) =
+    have s := data.deref;
+    do
+    let (result, sdk1, guards) ←
+      owned_stage1_body ops program sdk s { checkpoint := none, «public» := none, proof := none }
+    let sdk2 ← owned_release_guards sdk1 guards
+    ok (result, sdk2)
+'AspisS2OwnedStage1.SdkReference.MetadataParent.body_factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS2OwnedStage1.SdkReference.MetadataParent.stage1_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

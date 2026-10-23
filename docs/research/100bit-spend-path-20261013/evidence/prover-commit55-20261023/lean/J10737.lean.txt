@@ -1,0 +1,61 @@
+import R1Z.ProverCommitPoseidonCallable55
+import AspisR1.TerminalModel53
+/-! The retained complete terminalValue result at the literal projected
+QName source cut. Entry validation and native source binding remain open. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitTerminalQName55
+noncomputable section
+open Aeneas Aeneas.Std Result AspisR1SelectedMaskProbe
+open AspisR1.SemanticCompositionCoefficients
+open AspisR1TerminalDigestBindingCandidate.SemanticPublicPreparationCopy
+open AspisR1.TerminalModel53 (QM Arr Claims Statement Canonical decode)
+
+def run (public1 : AspisR1.CompositionPartsAfterValidation.Public) (claims : Claims) (point : Arr)
+    (lambda chi theta : QM) (zc : Arr) (mu : QM) := do
+  let result ← AspisR1.CompositionPartsAfterValidation.run ProverCommitPoseidonCallable55.run
+    public1 claims point lambda chi theta
+  match result with
+  | .Err error => .ok (.Err error)
+  | .Ok (composition,z,mask,g,helper,active) => do
+    let terminal ← AspisR1.TerminalPartsArithmeticExact.run zc point composition helper active mu
+    .ok (.Ok (terminal,z,mask,g))
+
+theorem run_same (public1 : AspisR1.CompositionPartsAfterValidation.Public) (claims : Claims) (point : Arr)
+    (lambda chi theta : QM) (zc : Arr) (mu : QM) :
+    run public1 claims point lambda chi theta zc mu=
+      AspisR1.TerminalCallable53.run public1 claims point lambda chi theta zc mu := by
+  have hs : ProverCommitPoseidonCallable55.run=AspisR1.PoseidonCallable53.source := by
+    funext o selectors
+    exact ProverCommitPoseidonCallable55.source_same o selectors
+  simp only [run,AspisR1.TerminalCallable53.run,hs]
+
+theorem source_success (point zc : Arr) (s : Statement) (claims : Claims)
+    (lambda chi theta mu : QM)
+    (hpoint : CanonicalArray point) (hzc : CanonicalArray zc)
+    (hclaims : CanonicalArray claims)
+    (hlambda : Canonical lambda) (hchi : Canonical chi)
+    (htheta : Canonical theta) (hmu : Canonical mu)
+    {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+    (hash : H) (c1 : Array U8 32#usize)
+    (outTranscript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+    (hprep : AspisR1PublicPreparation.r1_semantic.public_transcript D
+      (AspisR1PublicPreparation.PreparationBinding.preparationPublic s)
+      hash c1 = .ok (.Ok outTranscript)) :
+    ∃ (z : Array QM 16#usize) (mask : Arr) (g terminal : QM),
+      run (copyFromStatement s) claims point lambda chi theta zc mu =
+        .ok (.Ok (terminal,z,mask,g)) ∧ Canonical terminal ∧
+      decode terminal = R0P.SemSource.terminalValue (exactPublic (copyFromStatement s))
+        (decode lambda) (decode chi) (decode theta) (decode mu)
+        (AspisR1.SelectorMarginalModel.modelPoint zc) TerminalLaneModel53.Basis
+        (TerminalClaimModel53.claims claims) (AspisR1.SelectorMarginalModel.modelPoint point) := by
+  obtain ⟨z,mask,g,terminal,hrun,hcan,hvalue⟩ := AspisR1.TerminalModel53.run_success
+    point zc s claims lambda chi theta mu hpoint hzc hclaims hlambda hchi htheta hmu
+    D hash c1 outTranscript hprep
+  refine ⟨z,mask,g,terminal,?_,hcan,hvalue⟩
+  rw [run_same]
+  exact hrun
+
+#print axioms run_same
+#print axioms source_success
+end
+end R1Z.ProverCommitTerminalQName55

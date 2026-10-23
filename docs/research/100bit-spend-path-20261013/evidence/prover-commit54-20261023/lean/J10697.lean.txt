@@ -1,0 +1,59 @@
+import AspisR1ProducerRelease47.EncoderQuery54
+import R1Z.ProverCommitFoldedBytes54
+import R1Z.ProverCommitOpenedBytes54
+/-! Query casts and folded parent division connected to the derived leaf images. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitLeafQuery54
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitWideOps48 ProverCommitMix48 ProverCommitOpeningBytes49
+
+attribute [local irreducible] leaves54.folded_values leaves54.opened_values
+  sourceArray source value canonical stream
+  PhaseLeafEncodingBin.foldedLeaf PhaseLeafEncodingBin.c1Leaf PhaseLeafEncodingBin.c2Leaf
+  ProverCommitOpenedValues54.coefficients ProverCommitGammaCoefficients53.wide
+  ProverCommitGammaCoefficients53.wideTrace ProverCommitOpenedColumn54.matrix
+  ProverCommitOpenedBytes54.c1 ProverCommitOpenedBytes54.c2
+
+theorem folded (f : Nat → Raw) (hf : ∀ i, i<256 → canonical (f i))
+    (q : U32) (u : Fin 262144) (hq : q.val=u.val) :
+    ∃ (out : Nat → Raw) (hcout : ∀ s, s<4 → canonical (out s)),
+      leaves54.folded_query (sourceArray 256#usize f) q=ok (sourceArray 4#usize out) ∧
+      stream 4 out hcout=PhaseLeafEncodingBin.foldedLeaf (fun i => value (f i.val))
+        ⟨u.val/4,by have := u.isLt;omega⟩ := by
+  trace "query: proof entry"
+  let j := UScalar.cast .Usize q
+  have hcast : (UScalar.cast .Usize q).val=q.val := by scalar_tac
+  have hj : j.val=u.val := hcast.trans hq
+  trace "query: cast established"
+  obtain ⟨v,hv,hvv,_⟩ := UScalar.div_bv_spec (y:=4#usize) j (by decide)
+  let parent : Fin 65536 := ⟨u.val/4,by have := u.isLt;omega⟩
+  have hp : v.val=parent.val := by simpa only [parent,hj] using hvv
+  obtain ⟨out,hcout,hout,hbytes⟩ := ProverCommitFoldedBytes54.exact_result f hf v parent hp
+  trace "query: folded bytes obtained"
+  refine ⟨out,hcout,?_,hbytes⟩
+  simp only [leaves54.folded_query,lift,bind_tc_ok]
+  change (do let i1 ← j / 4#usize; leaves54.folded_values (sourceArray 256#usize f) i1)=_
+  rw [hv]
+  exact hout
+
+theorem opened (c : Nat → Nat → ProverCommitPrimitive47.Old.Q)
+    (hc : ∀ l, l<29 → ∀ i, i<1024 → ProverCommitSubfieldOps47.Canonical (c l i))
+    (q : U32) (u : Fin 262144) (hq : q.val=u.val) :
+    ∃ (out : Nat → Nat → Raw) (hcout : ∀ s, s<4 → ∀ l, l<29 → canonical (out s l)),
+      leaves54.opened_query (ProverCommitOpenedValues54.coefficients (ProverCommitGammaCoefficients53.wide c hc)) q=
+        ok (ProverCommitOpenedColumn54.matrix out) ∧
+      ProverCommitOpenedBytes54.c1 out hcout=PhaseLeafEncodingBin.c1Leaf (ProverCommitGammaCoefficients53.wideTrace c) u ∧
+      ProverCommitOpenedBytes54.c2 out hcout=PhaseLeafEncodingBin.c2Leaf (ProverCommitGammaCoefficients53.wideTrace c) u := by
+  trace "query: proof entry"
+  let j := UScalar.cast .Usize q
+  have hcast : (UScalar.cast .Usize q).val=q.val := by scalar_tac
+  have hj : j.val=u.val := hcast.trans hq
+  trace "query: cast established"
+  simp only [leaves54.opened_query,lift,bind_tc_ok]
+  change ∃ out hcout, leaves54.opened_values _ j=_ ∧ _ ∧ _
+  exact ProverCommitOpenedBytes54.exact_result c hc j u hj
+
+#print axioms folded
+#print axioms opened
+end R1Z.ProverCommitLeafQuery54

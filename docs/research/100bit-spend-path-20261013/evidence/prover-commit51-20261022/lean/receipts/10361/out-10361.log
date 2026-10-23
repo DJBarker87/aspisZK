@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitTerminalEquality51.lean:24:48: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  R0P.SemSource.eqValue (fun i => ?a ↑i) fun i => ?b ↑i
+in the target expression
+  ProverCommitTerminalMath51.factor (decode (a 0)) (decode (b 0)) *
+      ProverCommitTerminalMath51.product (fun i => decode (a i)) (fun i => decode (b i)) 9 1 =
+    R0P.SemSource.eqValue (fun i => decode (a ↑i)) fun i => decode (b ↑i)
+
+case refine_2
+a b : ℕ → Old.Q
+ha : ∀ i < 10, Canonical (a i)
+hb : ∀ i < 10, Canonical (b i)
+factor : Old.Q
+hfactor :
+  terminal_eq51.factor (ProverCommitNativeQ48.source (a 0)) (ProverCommitNativeQ48.source (b 0)) =
+    ok (ProverCommitNativeQ48.source factor)
+hcfactor : Canonical factor
+hdfactor : decode factor = ProverCommitTerminalMath51.factor (decode (a 0)) (decode (b 0))
+z : Old.Q
+hz :
+  terminal_eq51.go (ProverCommitQArray48.array 10#usize a) (ProverCommitQArray48.array 10#usize b) 1#u8
+      (ProverCommitNativeQ48.source factor) =
+    ok (ProverCommitNativeQ48.source z)
+hcz : Canonical z
+hdz :
+  decode z = decode factor * ProverCommitTerminalMath51.product (fun i => decode (a i)) (fun i => decode (b i)) 9 ↑1#u8
+⊢ ProverCommitTerminalMath51.factor (decode (a 0)) (decode (b 0)) *
+      ProverCommitTerminalMath51.product (fun i => decode (a i)) (fun i => decode (b i)) 9 1 =
+    R0P.SemSource.eqValue (fun i => decode (a ↑i)) fun i => decode (b ↑i)
+'R1Z.ProverCommitTerminalEquality51.exact_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=global env=J launcher=run-joint.sh

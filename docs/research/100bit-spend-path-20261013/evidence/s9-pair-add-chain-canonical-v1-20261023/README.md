@@ -1,0 +1,3 @@
+The actual three Pair additions accumulate canonical terms into canonical first2, first3 and all. Every output is tied to its observed same-run add success. Uses the guarded source-wrapping-to-installed-add correspondence under canonical operands; it does not assume wrapping arithmetic equals checked arithmetic on arbitrary words.
+
+Focused Lean check: 17.354 seconds; peak aggregate RSS 3203596288 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

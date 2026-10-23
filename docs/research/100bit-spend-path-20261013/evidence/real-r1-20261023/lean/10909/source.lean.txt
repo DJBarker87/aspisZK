@@ -1,0 +1,137 @@
+import R1Z.RealR1_OuterOwner
+
+/-! A reachable-state version of the outer contract. An invariant may retain
+the fixed experiment's bad-event complement. No contract on an unentered
+attempt, a failed entropy callback, or a failed reservation is required.
+This is deterministic refinement, not a proof of the invariant's probability. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.RealR1_ReachableRetry
+open Aeneas Aeneas.Std Result AspisR1PublicNonce41
+open ProverCommitRetry34 RealR1_OuterOwner
+
+abbrev serializer :=
+  AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+
+def Ready {Extra : Type} (pub : Pub) (entropy : Entropy (Store Extra) Secret)
+    (pre : Prefix Extra) (schedule : ProverCommitLedger36.Schedule) (unix : Bool)
+    (index : Nat) (start : Store Extra) (secret : Secret) (bytes : PubBytes)
+    (ready : Store Extra) : Prop :=
+  ∃ generated path extra,
+    entropy index start = ok (.Ok secret,generated) ∧
+    serializer pub = ok (.Ok bytes) ∧
+    pre secret.1 bytes generated.2 = ok (.Ok path,extra) ∧
+    ProverCommitLedger36.reserve schedule unix path generated.1 = (.ok (),ready.1) ∧
+    ready.2 = extra
+
+/-- The R2/R3 contract is needed only at actual post-reservation body entries.
+The full returned state carries rejected-attempt oracle history and leakage.
+Establishing Inv initially and after rejection is an independent obligation. -/
+def PreparedBodyContract {Extra Proof : Type} (pub : Pub)
+    (entropy : Entropy (Store Extra) Secret) (pre : Prefix Extra)
+    (schedule : ProverCommitLedger36.Schedule) (unix : Bool)
+    (Inv : Nat → Store Extra → Prop) (left right : Body Extra Proof) : Prop :=
+  ∀ index start, index < 8 → Inv index start → ∀ secret bytes ready,
+    Ready pub entropy pre schedule unix index start secret bytes ready →
+    left secret bytes ready = right secret bytes ready
+
+theorem prepared_attempt {Extra Proof : Type} (pub : Pub)
+    (entropy : Entropy (Store Extra) Secret) (pre : Prefix Extra)
+    (schedule : ProverCommitLedger36.Schedule) (unix : Bool)
+    (Inv : Nat → Store Extra → Prop) (left right : Body Extra Proof)
+    (contract : PreparedBodyContract pub entropy pre schedule unix Inv left right)
+    (index : Nat) (start : Store Extra) (bound : index < 8) (safe : Inv index start) :
+    realAttempt pub entropy (reserved pre schedule unix left) index start =
+    realAttempt pub entropy (reserved pre schedule unix right) index start := by
+  unfold realAttempt
+  cases he : entropy index start with
+  | fail e => rfl
+  | div => rfl
+  | ok pair =>
+    rcases pair with ⟨status,generated⟩
+    cases status with
+    | Err e => rfl
+    | Ok secret =>
+      change checked pub (reserved pre schedule unix left secret) generated =
+        checked pub (reserved pre schedule unix right secret) generated
+      unfold checked
+      cases hs : serializer pub with
+      | fail e => rfl
+      | div => rfl
+      | ok status =>
+        cases status with
+        | Err e => rfl
+        | Ok bytes =>
+          have eq : reserved pre schedule unix left secret bytes generated =
+              reserved pre schedule unix right secret bytes generated := by
+            unfold reserved
+            cases hp : pre secret.1 bytes generated.2 with
+            | fail e => rfl
+            | div => rfl
+            | ok pair =>
+              rcases pair with ⟨status,extra⟩
+              cases status with
+              | Err e => rfl
+              | Ok path =>
+                cases hr : ProverCommitLedger36.reserve schedule unix path generated.1 with
+                | mk status after =>
+                  cases status with
+                  | error e => rfl
+                  | ok unit =>
+                    cases unit
+                    change left secret bytes (after,extra) = right secret bytes (after,extra)
+                    exact contract index start bound safe secret bytes (after,extra)
+                      ⟨generated,path,extra,he,hs,hp,hr,rfl⟩
+          simp only [eq]
+
+/-- Symbolic induction over at most eight iterations. Only entered retry
+transitions need preserve Inv; stop/success/fail/divergence have no suffix. -/
+theorem run_reachable {S P : Type} (left right : Attempt S P)
+    (Inv : Nat → S → Prop)
+    (step : ∀ index s, index < 8 → Inv index s → left index s = right index s)
+    (advance : ∀ index s after, index < 8 → Inv index s →
+      right index s = ok (.retry,after) → Inv (index+1) after)
+    (fuel index : Nat) (s : S) (bound : index+fuel ≤ 8) (safe : Inv index s) :
+    run left fuel index s = run right fuel index s := by
+  induction fuel generalizing index s with
+  | zero => rfl
+  | succ fuel ih =>
+    have entered : index < 8 := by omega
+    rw [run,run,step index s entered safe]
+    cases hr : right index s with
+    | fail e => rfl
+    | div => rfl
+    | ok pair =>
+      rcases pair with ⟨status,after⟩
+      cases status with
+      | done proof => rfl
+      | stop e => rfl
+      | retry =>
+        exact ih (index+1) after (by omega) (advance index s after entered safe hr)
+
+/-- Usable real outer-owner theorem with an opaque per-attempt body contract
+only at reachable successful reservations. The common public-prefix caller
+still needs its source instance; no ROM or native leakage producer is invented. -/
+theorem outer_owner_reachable {Extra Proof : Type} (pub : Pub)
+    (nonce : NoncePolicy Extra) (schedule : ProverCommitLedger36.Schedule)
+    (tape : Nat → owner.Raw) (unix : Bool) (pre : Prefix Extra)
+    (Inv : Nat → Store Extra → Prop) (left right : Body Extra Proof)
+    (contract : PreparedBodyContract pub (modelEntropy nonce schedule tape)
+      pre schedule unix Inv left right)
+    (advance : ∀ index s after, index < 8 → Inv index s →
+      realAttempt pub (modelEntropy nonce schedule tape) (reserved pre schedule unix right)
+        index s = ok (.retry,after) → Inv (index+1) after)
+    (s : Store Extra) (initial : Inv 0 s) :
+    selected true pub (nativeEntropy nonce schedule tape) (reserved pre schedule unix left) s =
+    selected true pub (modelEntropy nonce schedule tape) (reserved pre schedule unix right) s := by
+  have entropy : nativeEntropy nonce schedule tape = modelEntropy nonce schedule tape :=
+    funext fun i => funext (entropy_exact nonce schedule tape i)
+  rw [entropy]
+  exact run_reachable _ _ Inv
+    (prepared_attempt pub (modelEntropy nonce schedule tape) pre schedule unix Inv left right contract)
+    advance 8 0 s (by omega) initial
+
+#print axioms prepared_attempt
+#print axioms run_reachable
+#print axioms outer_owner_reachable
+end R1Z.RealR1_ReachableRetry

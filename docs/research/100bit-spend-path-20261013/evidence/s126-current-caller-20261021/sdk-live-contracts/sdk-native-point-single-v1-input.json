@@ -1,0 +1,56 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "command": [
+    "/home/dombarker/.kani/kani-0.67.0/bin/cbmc",
+    "--no-malloc-may-fail",
+    "--no-undefined-shift-check",
+    "--no-signed-overflow-check",
+    "--nan-check",
+    "--no-self-loops-to-assumptions",
+    "--no-pointer-primitive-check",
+    "--object-bits",
+    "16",
+    "--unwind",
+    "48",
+    "--sat-solver",
+    "cadical",
+    "--slice-formula",
+    "--unwinding-assertions",
+    "--property",
+    "proofs::native_owned_decoder_prefix.assertion.90",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-native-point-frame-check-v1/ready.out"
+  ],
+  "predecessor_input_sha256": "6a291aeeea9358fe6e395208497ae2abe7315ed65fa34da830ef7cf19b6b0347",
+  "property_inventory_sha256": "1e10dd697e7ded3329ff2020a9bd82d880e08bd699426e233adc8b82bc530a00",
+  "selected_properties": [
+    {
+      "class": "assertion",
+      "description": "\"arbitrary native-prefix account byte preserved\"",
+      "expression": "var_321 != FALSE",
+      "name": "proofs::native_owned_decoder_prefix.assertion.90",
+      "sourceLocation": {
+        "column": "2",
+        "comment": "\"arbitrary native-prefix account byte preserved\"",
+        "file": "src/lib.rs",
+        "function": "proofs::native_owned_decoder_prefix",
+        "line": "218",
+        "pragma": [
+          "checked:bounds-check",
+          "checked:pointer-check",
+          "checked:div-by-zero-check",
+          "checked:signed-overflow-check",
+          "checked:undefined-shift-check",
+          "checked:pointer-primitive-check"
+        ],
+        "propertyClass": "assertion",
+        "propertyId": "proofs::native_owned_decoder_prefix.assertion.90"
+      }
+    }
+  ],
+  "unselected_property_count": 2310,
+  "program_sha256": "6f614e8c3f991496971541eb74b63aa4292a7ba42e44f6b7549e0ff8cc63419b",
+  "tool_sha256": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973",
+  "runner_sha256": "62ee178bfd978959e7b18ab0934c50b29d36e1e8980c2f40bf57ce870ceab4dd",
+  "qualification": "First partition: the named byte-frame property on original SDK source.\nAll other properties remain unproved at this partition. A whole certificate\nrequires their complete checked union, including safety/unwinding and covers.\n",
+  "timeout_seconds": 180
+}

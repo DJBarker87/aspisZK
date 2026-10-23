@@ -1,0 +1,38 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "command": [
+    "/home/dombarker/.kani/kani-0.67.0/bin/cbmc",
+    "--no-malloc-may-fail",
+    "--no-undefined-shift-check",
+    "--no-signed-overflow-check",
+    "--nan-check",
+    "--no-self-loops-to-assumptions",
+    "--no-pointer-primitive-check",
+    "--object-bits",
+    "16",
+    "--unwind",
+    "40",
+    "--unwindset",
+    "memcmp.0:689",
+    "--bitwuzla",
+    "--external-smt2-solver",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/z3-tool-v1/bin/z3",
+    "--slice-formula",
+    "--unwinding-assertions",
+    "--json-ui",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-prefix-context-check-v4/ready.out"
+  ],
+  "source_sha256": "aacc949ef076480c93ca61d2150d4f279825f433dc63e8069a600057029fdb51",
+  "codegen_input_sha256": "bab31002dc33db7ad9d1021b9646c06d3284f105e14832783587b391a0cdb129",
+  "prior_input_sha256": "1ef40e013d05faf33ff2fdae9a15d2e214fe9d6a3bf55fe5e0a646af2920ad43",
+  "prior_receipt_sha256": "9fe6272989ccb9cf957724737e1422a3cefc9b8c5cf48f85342746f67234737f",
+  "program_sha256": "f5af94ac10b9e68a3fdcacc65589bf02aaab5dd2376f5f6c78055308143f33b2",
+  "tool_pins": {
+    "/home/dombarker/.kani/kani-0.67.0/bin/cbmc": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/z3-tool-v1/bin/z3": "1bfaf5bbe81fd0b7800500ee08eef426aaabe18f8b9c4c4c32adffcd72f86cd5"
+  },
+  "runner_sha256": "d8e29dee6d3520e1b43efd06777bcf3bfa6277aeece8e045264262c568f08c9b",
+  "qualification": "Reuse a pinned prepared caller GOTO; change only the SMT encoding profile.\nNo Rust/SDK/carrier change. Retain every check and inherited source cut.\n",
+  "solver": "Actual Z3 4.15.4 via CBMC Bitwuzla SMT-LIB encoding profile: flat structs, SMT arrays, no datatype map lookup. All inherited safety/unwinding checks retained.",
+  "inherited_cut": "Paired accepted-parent check under one named pure std-any overapproximation.\nThis is not an unconditional source theorem: exact scan/byte-view and child\ninterpretations must be composed from separately checked certificates.\nRaw CBMC assertion/cover statuses and exit are retained without re-labelling.\n"
+}

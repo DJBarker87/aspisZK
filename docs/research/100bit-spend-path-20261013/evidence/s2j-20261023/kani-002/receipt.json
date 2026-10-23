@@ -1,0 +1,55 @@
+{
+  "attempt": "kani-002",
+  "kind": "kani",
+  "source_revision": "09d811455542981eb4367c3caf5200eaf983d175",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2J-cut1/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "--exact",
+    "--harness",
+    "S2J_cut1_bound_invocation",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2J-cut1/Cargo.lock",
+    "S2J-cut1/Cargo.toml",
+    "S2J-cut1/src/lib.rs"
+  ],
+  "timeout": 120,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "deps_fingerprint": {
+    "scope": "first source guard only; lengths 0..3, symbolic count and bytes; SAME original slice and metadata; std array-to-slice equality port; no SDK/child reached; arbitrary length theorem is Lean shape1_port"
+  },
+  "expected_time": "optimized tiny-crate compilation then symbolic bound-input guard and TrustedStd comparison port; no proof generation or elimination",
+  "exit_status": 0,
+  "wall_seconds": 1.8801755730091827,
+  "peak_rss_kib": "262724",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rb4d1fb4bc5014006849de751a5c4a131.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "175505408",
+  "source_hashes": {
+    "S2J-cut1/Cargo.lock": "a836a44b71af5e50b14526f892d92eff33a9df3332157f735facd282770852e2",
+    "S2J-cut1/Cargo.toml": "f80b8e9c05da7ba16febf349732dcd83dea1fb4915cad9b70e4f2ca9b921f099",
+    "S2J-cut1/src/lib.rs": "2acf90d029ddf107ae04873b693cfda4612f69cd3eec53d6c8aa8d23c3053c9d"
+  },
+  "print_axioms": "N/A: kani"
+}

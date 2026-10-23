@@ -1,0 +1,17 @@
+{
+  "source_revision": "f592cee0ed08808a1823e7d532b7f2b2bf29f109",
+  "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+  "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+  "original_field_body": "    let mut output = [0u8; POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES];\n    output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC);\n    output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;\n    output[5] = result.transition_kind as u8;\n    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;\n    output[7] = result.output_lane;\n    output[RESULT_MASTER_OFFSET..RESULT_SELECTED_LANE_OFFSET]\n        .copy_from_slice(&result.master_account);\n    output[RESULT_SELECTED_LANE_OFFSET..RESULT_NULLIFIER_OFFSET]\n        .copy_from_slice(&result.selected_lane_account);\n    output[RESULT_NULLIFIER_OFFSET..RESULT_AFTERSTATE_OFFSET]\n        .copy_from_slice(&encode_digest_canonical(&result.nullifier));\n    output[RESULT_AFTERSTATE_OFFSET..].copy_from_slice(\n        &encode_pool_v1_pair_verified_afterstate_v1(&result.verified_afterstate)\n            .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Afterstate(error))?,\n    );\n",
+  "cut_body": "    let mut output = [0u8; POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES];\n    output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC);\n    output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;\n    output[5] = result.transition_kind as u8;\n    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;\n    output[7] = result.output_lane;\n    output[RESULT_MASTER_OFFSET..RESULT_SELECTED_LANE_OFFSET]\n        .copy_from_slice(&result.master_account);\n    output[RESULT_SELECTED_LANE_OFFSET..RESULT_NULLIFIER_OFFSET]\n        .copy_from_slice(&result.selected_lane_account);\n    output[RESULT_NULLIFIER_OFFSET..RESULT_AFTERSTATE_OFFSET]\n        .copy_from_slice(&encode_digest_canonical(&result.nullifier));\n    output[RESULT_AFTERSTATE_OFFSET..].copy_from_slice(afterstate);\n",
+  "word": "pub fn to_le_bytes(self) -> [u8; 4] {\n        self.0.to_le_bytes()\n    }",
+  "digest": "pub fn encode_digest_canonical(digest: &Digest) -> [u8; 32] {\n    let mut bytes = [0u8; 32];\n    for (index, value) in digest.iter().enumerate() {\n        bytes[index * 4..index * 4 + 4].copy_from_slice(&value.to_le_bytes());\n    }\n    bytes\n}",
+  "lib_sha256": "cfa1e3ffb3fc172fa57504f4e0a0967c9d8c4c12b530dfad7ea95cecd8b179d1",
+  "adaptations": [
+    "Reuse source-pinned constructor declarations unchanged.",
+    "Source field encoding cut begins after validate_result success.",
+    "The afterstate child result is an explicit688-byte parameter, substituted only at its already-checked copy boundary (Kani045).",
+    "Source constants retain values;688 and digest version1 match the pinned source.",
+    "No validation, SDK, allocator, syscall or successful-emitter premise is represented."
+  ]
+}

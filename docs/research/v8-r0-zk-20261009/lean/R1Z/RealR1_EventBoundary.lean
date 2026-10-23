@@ -1,0 +1,58 @@
+import R1Z.ProverCommitPrivateMemo40
+import R1Z.ProverCommitFuelJoin22
+import R1Z.LayoutR1PBin
+
+/-! Small obstruction to the proposed event-containment route. A real raw
+field-seed query uses the source-seed domain (ASCII a), not simulator coins
+(ASCII U). It can hit while every added seed/fuel exception is false. This
+is not a source/model output counterexample and not a privacy attack: proving
+agreement on these samples or changing the visible envelope remains work. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.RealR1_EventBoundary
+open R0Z.FsStatement
+
+def sourceInput (publicFrame : List UInt8) (field : OracleAnswer) : List UInt8 :=
+  LayoutR1PBin.dSourceSeed ++ publicFrame ++ List.ofFn field
+
+theorem raw_query_hit (publicFrame : List UInt8) (field answer : OracleAnswer) :
+    ProverCommitPrivateMemo40.guessed [(sourceInput publicFrame field,answer)] field := by
+  refine ⟨(sourceInput publicFrame field,answer),by simp,?_⟩
+  exact ProverCommitPrivateMemo40.source_suffix _ field
+
+theorem not_simulator_query (publicFrame : List UInt8) (field answer seed : OracleAnswer) :
+    ¬ ProverCommitSeedEvent19.seedGuess [(sourceInput publicFrame field,answer)] seed := by
+  rintro ⟨entry,member,point⟩
+  have eq : entry = (sourceInput publicFrame field,answer) := by simpa using member
+  subst entry
+  have heads := congrArg List.head? point
+  change some (97 : UInt8) = some (85 : UInt8) at heads
+  cases heads
+
+/-- No private memo exception can be silently attributed to the seed/fuel
+extension alone. The old model event is explicitly assumed absent, rather
+than asserting that a concrete source execution has been constructed. -/
+theorem fixed_extension_misses {M : Type} (old : Fin 8 → M → Prop) (m : M)
+    (safe : ∀ i, ¬ old i m) (publicFrame : List UInt8)
+    (field answer seed : OracleAnswer) :
+    ∃ tape : ProverCommitFuelJoin22.Tape,
+      ProverCommitPrivateMemo40.guessed [(sourceInput publicFrame field,answer)] field ∧
+      ¬ ∃ i, ProverCommitFuelJoin22.bad old
+        (fun _ => [(sourceInput publicFrame field,answer)]) i ((m,seed),tape) := by
+  let tape : ProverCommitFuelJoin22.Tape := fun _ _ _ => 1
+  have nofuel (j : Fin ProverCommitFuelMass22.count) : ¬ ProverCommitFuelJoin22.failure j tape := by
+    intro h
+    have zero := congrFun (h (⟨0,by decide⟩ : Fin ProverCommitFuelMass22.k)) (0 : Fin 32)
+    change (1 : UInt8) = 0 at zero
+    cases zero
+  refine ⟨tape,raw_query_hit publicFrame field answer,?_⟩
+  rintro ⟨i,h⟩
+  rcases h with (ho | hs) | ⟨_,j,hf⟩
+  · exact safe i ho
+  · exact not_simulator_query publicFrame field answer seed hs.2
+  · exact nofuel j hf
+
+#print axioms raw_query_hit
+#print axioms not_simulator_query
+#print axioms fixed_extension_misses
+end R1Z.RealR1_EventBoundary

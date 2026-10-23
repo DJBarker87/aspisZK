@@ -1,0 +1,3 @@
+The actual successful Pair mixed multiplication returns a canonical mapped output for any canonical left operand, including computed tail products. The coefficient is unrestricted and normalized internally. Proof derives source success and identifies this same output with source totality; no array-read or independently successful replacement call is assumed.
+
+Focused Lean check: 17.553 seconds; peak aggregate RSS 3214557184 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

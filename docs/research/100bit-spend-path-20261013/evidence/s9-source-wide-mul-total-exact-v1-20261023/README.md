@@ -1,0 +1,3 @@
+Actual extracted full Wide multiplication is total on canonical mapped operands. Its same successful source output maps to a canonical CurrentWide value with exact field-product decode. The proof reuses the complete actual source Result map, existing CurrentWide.wide_mul_total_exact and generic same-run success reflection; it adds no independent source-success premise. Caller/producer/runtime integration remains separate.
+
+Focused Lean check: 17.435 seconds; peak aggregate RSS 3222290432 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

@@ -1,0 +1,13 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_sha256": "7d38937694679dfff8452d4450364abe0824901ff467117a5cf5a592b67d5ced",
+  "native_source_prefix_sha256": "fe1a7a3f44603f3f76047dd9704d50ba39d0173966e7073685761913307f80e2",
+  "base_source_sha256": "340d9a4a2bb4bda94ee6d214e5a451299380f5804fb1f4457272c1cc4f7d3c14",
+  "borrowed_reference_source_sha256": "3c3464bc644a0f065c109b3bec788613aefc9ee8617a0612e8f62d7ee9459cd5",
+  "qualification": "Isolate the native prefix's frame before loading a second execution.\n\nNo SDK/model stubs are added. This intentionally proves only the native frame,\nwith the same arbitrary heap and decoder-error cut, not paired correspondence.\n",
+  "domain": "Same full arbitrary fixed-root buffers/SDK metadata/Rc counters/aliases as shared-prefix harness. Native only; no owned reference loaded or executed. Native source prefix hash is unchanged.",
+  "remaining": "All native DFCC safety/frame properties must pass. No reference success, shared-heap correspondence or full native stage1 success follows. Decoder-error and pure scan abstraction remain explicit.",
+  "unreachable_cuts": "Both native/owned first_decoded and actual validator/encoder receive assert-false panic cuts, not successful replies. Every cut reachability/safety assertion must pass. This removes statically retained verifier/arithmetic bodies from frame instrumentation; it does not assume their unreachability.",
+  "input_constructor": "Pinned Kani library vec::exact_vec<u8,N>: Box::new(any<[u8;N]>()) followed by boxed-slice into_vec; every input byte remains independently arbitrary. No buffer byte is fixed, left uninitialized, or assumed. Native source, model, assertions and enforced write set are unchanged.",
+  "error_assertions": "Constructor-complete matches replace derived ProgramError/Result PartialEq/Debug assertions in the proof harness only. Both results must be exactly Err(InvalidAccountData), preserving full status equality at this decoder-error cut; no payload/error/state premise is removed. Frozen SDK/caller and complete reference bodies, input domains and enforced native frame are unchanged."
+}

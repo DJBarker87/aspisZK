@@ -1,0 +1,29 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCheckpointWriterV1.lean:19:2: error: 'change' tactic failed, pattern
+  (do
+      let cell ←
+        match
+            ((↑sdk.data_cells).set ↑slot
+                { bytes := bytes, borrowed := old.borrowed, strong := old.strong, weak := old.weak })[↑slot]? with
+          | none => fail Error.arrayOutOfBounds
+          | some cell => ok cell
+      ok cell.bytes) =
+    ok bytes
+is not definitionally equal to target
+  (do
+      let cell ←
+        match
+            ⟨(↑sdk.data_cells).set ↑slot
+                  { bytes := bytes, borrowed := old.borrowed, strong := old.strong, weak := old.weak },
+                ⋯⟩[↑slot]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x
+      ok cell.bytes) =
+    ok bytes
+'AspisS2OwnedStage1.SdkReference.CheckpointWriter.written_bytes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.CheckpointWriter.released_written_bytes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,3 @@
+For the source-extracted SemanticTranscript.semantic_validated method, a successful Ok challenge exposes the exact successful qm31_sample call of that method and yields CurrentCanonicalQM by the existing universal byte-sampler theorem. The digest block is unrestricted. This is a local extracted-method theorem; actual semantic_rounds, constructor, whole-source and release correspondence remain open.
+
+Focused Lean check: 3.763 seconds; peak aggregate RSS 3213344768 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

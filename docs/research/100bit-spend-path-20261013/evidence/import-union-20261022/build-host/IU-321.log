@@ -1,0 +1,177 @@
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/InitialSelectorPrefix.lean:155:2: error: unsolved goals
+case refine_1
+point : Std.Array QM 10#usize
+selectors : Selectors
+v : Variant
+hpoint : CanonicalArray point
+hbox : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = ok selectors
+hhigh : SelectorExpansionCorrectness.canonicalArray selectors.high
+hlow : SelectorExpansionCorrectness.canonicalArray selectors.low
+hhighModel :
+  ∀ (h : Fin 64),
+    SelectorExpansionCorrectness.decodedArray selectors.high ↑h =
+      R0P.g2High (SelectorMarginalModel.pointSelector point) h
+hlowModel :
+  ∀ (l : Fin 16),
+    SelectorExpansionCorrectness.decodedArray selectors.low ↑l = R0P.g2Low (SelectorMarginalModel.pointSelector point) l
+nodes : field.QM31
+hnodes :
+  AspisR1SumHighCandidate.pool_v1.pair_forest_semantic_terminal.sum_high selectors
+      (SumHighTwoRanges.pair SumHighTwoRanges.nodeRange1 SumHighTwoRanges.nodeRange2) =
+    ok nodes
+hcnodes : Canonical nodes
+hvnodes : decode nodes = R0P.scheduleNodes (SelectorValueLaneModelComposition.pointSelector point)
+h0 : field.QM31
+hr0 : selectors.high.index_usize 0#usize = ok h0
+hc0 : Canonical h0
+hn0 : ↑0#usize = 0
+hv0 : decode h0 = highAt selectors 0
+hm0 : highAt selectors 0 = R0P.g2High (pointSelector point) 0
+hd0 : decode h0 = R0P.g2High (pointSelector point) 0
+h1 : field.QM31
+hr1 : selectors.high.index_usize 1#usize = ok h1
+hc1 : Canonical h1
+hn1 : ↑1#usize = 1
+hv1 : decode h1 = highAt selectors 1
+hm1 : highAt selectors 1 = R0P.g2High (pointSelector point) 1
+hd1 : decode h1 = R0P.g2High (pointSelector point) 1
+h25 : field.QM31
+hr25 : selectors.high.index_usize 25#usize = ok h25
+hc25 : Canonical h25
+hn25 : ↑25#usize = 25
+hv25 : decode h25 = highAt selectors 25
+hm25 : highAt selectors 25 = R0P.g2High (pointSelector point) 25
+hd25 : decode h25 = R0P.g2High (pointSelector point) 25
+h30 : field.QM31
+hr30 : selectors.high.index_usize 30#usize = ok h30
+hc30 : Canonical h30
+hn30 : ↑30#usize = 30
+hv30 : decode h30 = highAt selectors 30
+hm30 : highAt selectors 30 = R0P.g2High (pointSelector point) 30
+hd30 : decode h30 = R0P.g2High (pointSelector point) 30
+h27 : field.QM31
+hr27 : selectors.high.index_usize 27#usize = ok h27
+hc27 : Canonical h27
+hn27 : ↑27#usize = 27
+hv27 : decode h27 = highAt selectors 27
+hm27 : highAt selectors 27 = R0P.g2High (pointSelector point) 27
+hd27 : decode h27 = R0P.g2High (pointSelector point) 27
+h28 : field.QM31
+hr28 : selectors.high.index_usize 28#usize = ok h28
+hc28 : Canonical h28
+hn28 : ↑28#usize = 28
+hv28 : decode h28 = highAt selectors 28
+hm28 : highAt selectors 28 = R0P.g2High (pointSelector point) 28
+hd28 : decode h28 = R0P.g2High (pointSelector point) 28
+h29 : field.QM31
+hr29 : selectors.high.index_usize 29#usize = ok h29
+hc29 : Canonical h29
+hn29 : ↑29#usize = 29
+hv29 : decode h29 = highAt selectors 29
+hm29 : highAt selectors 29 = R0P.g2High (pointSelector point) 29
+hd29 : decode h29 = R0P.g2High (pointSelector point) 29
+sum01 : CurrentQM
+hs01 : h0.add h1 = ok sum01
+hcs01 : CurrentCanonicalQM sum01
+hvs01 : decode sum01 = decode h0 + decode h1
+sum0125 : CurrentQM
+hs0125 : field.QM31.add sum01 h25 = ok sum0125
+hcs0125 : CurrentCanonicalQM sum0125
+hvs0125 : decode sum0125 = decode sum01 + decode h25
+common : CurrentQM
+hcommon : field.QM31.add sum0125 h30 = ok common
+hccommon : CurrentCanonicalQM common
+hvcommon : decode common = decode sum0125 + decode h30
+transfer fixed privateEight privateTwo : InitialVariantExact.QM
+hvt : InitialVariantExact.source v h27 h28 h29 = ok (transfer, fixed, privateEight, privateTwo)
+hctransfer : InitialVariantExact.Canonical (transfer, fixed, privateEight, privateTwo).1
+hcfixed : InitialVariantExact.Canonical (transfer, fixed, privateEight, privateTwo).2.1
+hcEight : InitialVariantExact.Canonical (transfer, fixed, privateEight, privateTwo).2.2.1
+hcTwo : InitialVariantExact.Canonical (transfer, fixed, privateEight, privateTwo).2.2.2
+hvtuple :
+  (decode transfer, decode fixed, decode privateEight, decode privateTwo) =
+    R0P.scheduleVariantSelectors (InitialVariantExact.modelVariant v) (decode h27) (decode h28) (decode h29)
+ht :
+  decode transfer =
+    (R0P.scheduleVariantSelectors (InitialVariantExact.modelVariant v) (decode h27) (decode h28) (decode h29)).1
+hf :
+  decode fixed =
+    (R0P.scheduleVariantSelectors (InitialVariantExact.modelVariant v) (decode h27) (decode h28) (decode h29)).2.1
+he :
+  decode privateEight =
+    (R0P.scheduleVariantSelectors (InitialVariantExact.modelVariant v) (decode h27) (decode h28) (decode h29)).2.2.1
+htwo :
+  decode privateTwo =
+    (R0P.scheduleVariantSelectors (InitialVariantExact.modelVariant v) (decode h27) (decode h28) (decode h29)).2.2.2
+low0 : field.QM31
+hlow0 : selectors.low.index_usize 0#usize = ok low0
+hclow0 : Canonical low0
+hmLow : PathSelectorPrefix.lowAt selectors 0 = R0P.g2Low (pointSelector point) 0
+hvlow0 : decode low0 = PathSelectorPrefix.lowAt selectors 0
+hdLow : decode low0 = R0P.g2Low (pointSelector point) 0
+sumFirst : CurrentQM
+hsFirst : field.QM31.add common transfer = ok sumFirst
+hcsFirst : CurrentCanonicalQM sumFirst
+hvsFirst : decode sumFirst = decode common + decode transfer
+sumFull : CurrentQM
+hsFull : field.QM31.add sumFirst fixed = ok sumFull
+hcsFull : CurrentCanonicalQM sumFull
+hvsFull : decode sumFull = decode sumFirst + decode fixed
+full : CurrentQM
+hfull : low0.mul sumFull = ok full
+hcfull : CurrentCanonicalQM full
+hvfull : decode full = decode low0 * decode sumFull
+rate : CurrentQM
+hrate : low0.mul nodes = ok rate
+hcrate : CurrentCanonicalQM rate
+hvrate : decode rate = decode low0 * decode nodes
+⊢ (let (transfer, fixed, privateEight, privateTwo) := (transfer, fixed, privateEight, privateTwo)
+    do
+    let sumFirst ← field.QM31.add common transfer
+    let sumFull ← sumFirst.add fixed
+    let full ← low0.mul sumFull
+    ok
+        { high0 := h0, high1 := h1, high25 := h25, high30 := h30, nodes := nodes, transfer := transfer, fixed := fixed,
+          privateEight := privateEight, privateTwo := privateTwo, low0 := low0, full := full, rate := rate }) =
+    ok
+      { high0 := h0, high1 := h1, high25 := h25, high30 := h30, nodes := nodes, transfer := transfer, fixed := fixed,
+        privateEight := privateEight, privateTwo := privateTwo, low0 := low0, full := full, rate := rate }
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/InitialSelectorPrefix.lean:156:39: warning: This simp argument is unused:
+  AspisR1.InitialVariantExact.source
+
+Hint: Omit it from the simp argument list.
+  simp only [run, hnodes, bind_tc_ok, hr0, hr1, hs01, hr25, hs0125, hr30, hcommon, hr27, hr28,
+  ̲  ̲ ̲ ̲hr29, A̵s̵p̵i̵s̵R̵1̵.̵I̵n̵i̵t̵i̵a̵l̵V̵a̵r̵i̵a̵n̵t̵E̵x̵a̵c̵t̵.̵s̵o̵u̵r̵c̵e̵,̵hvt, hlow0, hsFirst, hsFull, hfull, hrate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/InitialSelectorPrefix.lean:157:18: warning: This simp argument is unused:
+  hsFirst
+
+Hint: Omit it from the simp argument list.
+  simp only [run, hnodes, bind_tc_ok, hr0, hr1, hs01, hr25, hs0125,
+  ̵  ̵ ̵ ̵ ̵ ̵hr30, hcommon, hr27, hr28,
+  ̲  ̲ ̲ ̲hr29, AspisR1.InitialVariantExact.source,
+  ̵  ̵ ̵ ̵ ̵ ̵hvt, hlow0, hsFi̵r̵s̵t̵,̵ ̵h̵s̵F̵ull, hfull, hrate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/InitialSelectorPrefix.lean:157:27: warning: This simp argument is unused:
+  hsFull
+
+Hint: Omit it from the simp argument list.
+  simp only [run, hnodes, bind_tc_ok, hr0, hr1, hs01, hr25, hs0125,
+  ̵  ̵ ̵ ̵ ̵ ̵hr30, hcommon, hr27, hr28,
+  ̲  ̲ ̲ ̲hr29, AspisR1.InitialVariantExact.source,
+  ̵  ̵ ̵ ̵ ̵ ̵hvt, hlow0, hsFirst, hs̵F̵u̵l̵l̵,̵ ̵h̵full, hrate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/InitialSelectorPrefix.lean:157:35: warning: This simp argument is unused:
+  hfull
+
+Hint: Omit it from the simp argument list.
+  simp only [run, hnodes, bind_tc_ok, hr0, hr1, hs01, hr25, hs0125,
+  ̵  ̵ ̵ ̵ ̵ ̵hr30, hcommon, hr27, hr28,
+  ̲  ̲ ̲ ̲hr29, AspisR1.InitialVariantExact.source,
+  ̵  ̵ ̵ ̵ ̵ ̵hvt, hlow0, hsFirst, hsFull, hf̵u̵l̵l̵,̵ ̵h̵rate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.InitialSelectorPrefix.same_boxed_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,71 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+error[E0599]: no function or associated item named `from_m31` found for struct `field::wide_exact::WideExact` in the current scope
+   --> lib.rs:42:27
+    |
+ 42 |   let b=field::WideExact::from_m31(field::M31(m));
+    |                           ^^^^^^^^ function or associated item not found in `field::wide_exact::WideExact`
+    |
+   ::: field/wide_exact.rs:28:1
+    |
+ 28 | pub struct WideExact {
+    | -------------------- function or associated item `from_m31` not found for this struct
+    |
+note: if you're trying to build a new `field::wide_exact::WideExact` consider using one of the following associated functions:
+      field::wide_exact::WideExact::new
+      field::wide_exact::WideExact::from_qm31
+      field::wide_exact::WideExact::from_limbs
+      field::wide_exact::WideExact::from_le_bytes
+   --> field/wide_exact.rs:55:5
+    |
+ 55 |     pub fn new(c0: QM31, c1: QM31) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 73 |     pub fn from_qm31(value: QM31) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+207 |     pub fn from_limbs(limbs: [u32; Self::LIMB_COUNT]) -> Option<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+255 |     pub fn from_le_bytes(bytes: &[u8]) -> Option<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: there is an associated function `from_qm31` with a similar name
+    |
+ 42 |   let b=field::WideExact::from_qm31(field::M31(m));
+    |                                +
+
+error[E0599]: no function or associated item named `from_m31` found for struct `field::wide_exact::WideExact` in the current scope
+   --> lib.rs:45:32
+    |
+ 45 |   assert_eq!(field::WideExact::from_m31(field::M31(b.to_limbs()[0])),b);
+    |                                ^^^^^^^^ function or associated item not found in `field::wide_exact::WideExact`
+    |
+   ::: field/wide_exact.rs:28:1
+    |
+ 28 | pub struct WideExact {
+    | -------------------- function or associated item `from_m31` not found for this struct
+    |
+note: if you're trying to build a new `field::wide_exact::WideExact` consider using one of the following associated functions:
+      field::wide_exact::WideExact::new
+      field::wide_exact::WideExact::from_qm31
+      field::wide_exact::WideExact::from_limbs
+      field::wide_exact::WideExact::from_le_bytes
+   --> field/wide_exact.rs:55:5
+    |
+ 55 |     pub fn new(c0: QM31, c1: QM31) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 73 |     pub fn from_qm31(value: QM31) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+207 |     pub fn from_limbs(limbs: [u32; Self::LIMB_COUNT]) -> Option<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+255 |     pub fn from_le_bytes(bytes: &[u8]) -> Option<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: there is an associated function `from_qm31` with a similar name
+    |
+ 45 |   assert_eq!(field::WideExact::from_qm31(field::M31(b.to_limbs()[0])),b);
+    |                                     +
+
+For more information about this error, try `rustc --explain E0599`.
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.

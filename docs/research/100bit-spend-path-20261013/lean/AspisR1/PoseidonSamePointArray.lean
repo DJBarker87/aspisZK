@@ -117,7 +117,7 @@ theorem source_success
   rw [hlow] at hfullDec hinternalDec
   change Decode ops.block = R0P.g2SumHigh (pointSelector point) 0 57 (by omega) at hblockModel
   refine ⟨out,?_,houtCan,?_⟩
-  · simpa only [source,hinputs,bind_tc_ok,AspisR1.PoseidonClosure2ArrayExact.run] using harray
+  · simpa only [source,hinputs,bind_tc_ok,Aeneas.Std.uncurry_apply_pair,AspisR1.PoseidonClosure2ArrayExact.run] using harray
   · intro i
     have hmodel := houtModel i
     change _ = AspisR1.PoseidonClosure2ArrayExact.model openings internalArray ops.block

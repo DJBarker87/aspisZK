@@ -1,0 +1,33 @@
+Focused SBF v2 reachable-symbol and stack-reference audit
+
+ELF sha256 (not included): 7ba3f0090c95b6b9ddfa4134ac027188a607c36987d0b479b025dc2794601a65
+ELF bytes: 1508096
+Rust library sha256 (not included): 2b6280baa70c4e2befdfdc702df3fac4cf0011118e3daae58450be372bcbfd85
+cargo-build-sbf sha256: 46e50d5d1bcc70abfd74f0b6281071ef91576031330d1d892622e1ea59445d6c
+
+aspis_r1_cost_probe::weights::Weights::box_from_parts::hcfab457221f1219c:
+  function section present in optimized SBF rlib; instruction lines=37
+  largest direct [r10 - offset] reference=0x20 (32 bytes)
+  disassembly has stack-address construction `r10 - 0x840` (2112 bytes) for aggregate copy passed into allocator; call path is kept out-of-line.
+
+aspis_r1_cost_probe::weights::Weights::new::h76fb764f043335f7:
+  function section present in optimized SBF rlib; instruction lines=2282
+  largest direct [r10 - offset] reference=0x9c8 (2504 bytes)
+  maximum direct stack slot offset is below 4096; compiler stack-check emitted no diagnostic for this symbol.
+
+Reachability relocation evidence:
+RELOCATION RECORDS FOR [.text._ZN19aspis_r1_cost_probe7weights7Weights3new17h76fb764f043335f7E]:
+OFFSET           TYPE                     VALUE
+0000000000000038 R_SBF_64_32              aspis_core::state_only_prefix::r0::statement_points::h5e18c946036feafa
+00000000000000a8 R_SBF_64_32              memset
+0000000000000250 R_SBF_64_64              .Lanon.89b260d760d5ca128f83618590565986.60
+0000000000003b68 R_SBF_64_32              aspis_r1_cost_probe::weights::double::h4a0b6f27d354c0ac
+0000000000003c10 R_SBF_64_32              aspis_r1_cost_probe::weights::double::h4a0b6f27d354c0ac
+0000000000003c58 R_SBF_64_32              aspis_r1_cost_probe::weights::double::h4a0b6f27d354c0ac
+0000000000004700 R_SBF_64_32              aspis_r1_cost_probe::weights::Weights::box_from_parts::hcfab457221f1219c
+0000000000004738 R_SBF_64_64              .Lanon.89b260d760d5ca128f83618590565986.74
+0000000000004748 R_SBF_64_32              core::panicking::panic_bounds_check::hf0c02a9253951be5
+0000000000004758 R_SBF_64_64              .Lanon.89b260d760d5ca128f83618590565986.75
+0000000000004768 R_SBF_64_32              core::panicking::panic_bounds_check::hf0c02a9253951be5
+
+Interpretation: the optimized crate archive retains an out-of-line `Weights::box_from_parts` function and `Weights::new` has a relocation to it. The SBF build stack checker reports 34 errors, identical to the 34 unrelated errors remaining from v1; v1 had 35 errors including only `Weights::new`, which is absent in v2. The final program still fails its whole-program stack gate due to unrelated functions.

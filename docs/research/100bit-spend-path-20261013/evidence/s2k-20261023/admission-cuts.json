@@ -1,0 +1,22 @@
+{
+  "binding": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "    let common = statement.common();\n    if result.transition_kind != statement.transition_kind()\n        || result.master_account != common.master_account\n        || result.selected_lane_account != common.selected_lane_account\n        || result.output_lane != common.output_lane\n        || result.nullifier != *statement.nullifier()\n        || result.verified_afterstate != common.lane_transition.candidate_afterstate\n    {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch);\n    }\n    Ok(())\n}\n"
+  },
+  "prefix": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "    let common = statement.common();\n    if common.master_account == [0u8; 32]\n        || common.checkpoint_account == [0u8; 32]\n        || common.selected_lane_account == [0u8; 32]\n    {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);\n    }\n    if usize::from(common.output_lane) >= POOL_V1_PAIR_FOREST_LANE_COUNT {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::InvalidOutputLane);\n    }\n"
+  },
+  "public_common": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "fn statement_public_common(\n    statement: &PoolV1PairForestTerminalStatementV1,\n) -> ([u8; 32], [u8; 32], u64, Digest, Digest, M31) {\n    match statement {\n        PoolV1PairForestTerminalStatementV1::PrivateTransfer { public, .. } => (\n            public.pool,\n            public.deployment_domain,\n            public.anchor_sequence,\n            public.anchor_root,\n            public.nullifier,\n            public.asset_id,\n        ),\n        PoolV1PairForestTerminalStatementV1::Withdrawal { public, .. } => (\n            public.pool,\n            public.deployment_domain,\n            public.anchor_sequence,\n            public.anchor_root,\n            public.nullifier,\n            public.asset_id,\n        ),\n    }\n}\n"
+  },
+  "lane": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut": "    let (pool, deployment, anchor_sequence, anchor, nullifier, _) =\n        statement_public_common(statement);\n    if pool != common.master_account {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::MasterBindingMismatch);\n    }\n    if deployment != common.lane_transition.live_snapshot.deployment_domain {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::DeploymentBindingMismatch);\n    }\n    if common.lane_transition.live_snapshot.pool != common.master_account {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::MasterBindingMismatch);\n    }\n    if anchor_sequence != common.checkpoint_sequence {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::CheckpointBindingMismatch);\n    }\n    if anchor != common.historical_global_anchor {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::HistoricalAnchorMismatch);\n    }\n    let expected_lane = pool_v1_pair_forest_output_lane_v1(&nullifier)\n        .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Account(error))?;\n    if expected_lane != common.output_lane {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch);\n    }\n"
+  }
+}

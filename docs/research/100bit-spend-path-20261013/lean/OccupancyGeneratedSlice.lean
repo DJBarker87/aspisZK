@@ -1,4 +1,5 @@
 import Aeneas.Std
+import ImportUnionNamedDiscriminant
 import Aeneas.Tactic.RustAttributes
 import Aeneas.Data.Discriminant
 import AspisR1SelectedMaskProbe.Types
@@ -42,7 +43,7 @@ structure pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 where
 
 /-- [aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::CompiledVariant]
     Source: 'src/statement/pool_v1/pair_forest_semantic_terminal.rs', lines 81:0-84:1 -/
-@[discriminant isize]
+@[import_union_discriminant isize]
 inductive pool_v1.pair_forest_semantic_terminal.CompiledVariant where
 | PrivateTransfer : pool_v1.pair_forest_semantic_terminal.CompiledVariant
 | Withdrawal : pool_v1.pair_forest_semantic_terminal.CompiledVariant

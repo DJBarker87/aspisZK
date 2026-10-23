@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+"""Collect focused parent-cut text evidence; never export compiled artifacts."""
+from pathlib import Path
+import hashlib,json,shutil
+H=Path('/home/dombarker/project-offloads/s126-real-sdk-20261021')
+O=H/'sdk-parent-cuts-export';O.mkdir(exist_ok=True)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+def copy(p,r):
+ q=O/r;q.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,q)
+folders=[f'sdk-heap-{mode}-v{v}' for mode in ['shared','exclusive','length','chain'] for v in [1,2]]
+folders += ['sdk-shared-write-frame-v3','sdk-exclusive-write-frame-v3','owned-sdk-snapshots-v1','sdk-paired-context-v1','sdk-stub-preflight-v2']
+folders += ['sdk-metadata-prefix-v1','sdk-metadata-prefix-v2','sdk-prefix-context-v1','sdk-prefix-context-v2','sdk-prefix-context-v3','sdk-native-context-v1']
+folders += ['sdk-native-context-v2','sdk-native-context-v3','sdk-paired-context-v2','sdk-call-context-v1']
+folders += ['sdk-finish-v1','sdk-finish-v2','sdk-finish-contract-v1','sdk-finish-contract-v2','sdk-finish-step-v1','sdk-finish-step-v2','sdk-finish-step-v3']
+receipts=[f'sdk-heap-{mode}-join-v{v}' for mode in ['shared','exclusive','length','chain'] for v in [1,2]]
+receipts += ['sdk-'+mode+'-'+kind+'-v3' for mode in ['shared','exclusive'] for kind in ['write-frame','write-properties']]
+receipts += ['owned-sdk-snapshots-v1-charon','owned-sdk-snapshots-v1-aeneas','sdk-paired-context-codegen-v1','sdk-paired-context-check-v1','sdk-private-stub-semantic-preflight-v3','sdk-private-stub-semantic-preflight-v4']
+receipts += ['sdk-metadata-prefix-join-v1','sdk-metadata-prefix-join-v2','sdk-paired-context-check-v2','sdk-paired-context-check-v3','sdk-native-context-codegen-v1','sdk-native-context-check-v1','sdk-prefix-context-codegen-v1','sdk-prefix-context-check-v1','sdk-prefix-context-codegen-v2','sdk-prefix-context-check-v2','sdk-prefix-context-codegen-v3','sdk-prefix-context-check-v3']
+receipts += ['sdk-native-context-codegen-v2','sdk-native-context-check-v2','sdk-native-context-codegen-v3','sdk-native-context-check-v3','sdk-paired-context-codegen-v2','sdk-call-prefix-codegen-v1','sdk-call-prefix-check-v1']
+receipts += ['sdk-finish-join-v1','sdk-finish-join-v2','sdk-finish-contract-join-v1','sdk-finish-contract-join-v2','sdk-finish-step-join-v1','sdk-finish-step-join-v2','sdk-finish-step-join-v3','sdk-finish-step-properties-v3']
+folders += ['owned-sdk-copy-v1','sdk-finish-fixed-frame-v1','sdk-finish-fixed-frame-v2','sdk-finish-fixed-frame-v3','sdk-std-copy-frame-v1','sdk-paired-context-v3','sdk-paired-context-v4','sdk-native-context-v4']
+receipts += ['owned-sdk-copy-v1-charon','owned-sdk-copy-v1-aeneas','sdk-finish-fixed-frame-join-v1','sdk-finish-fixed-frame-join-v2','sdk-finish-fixed-frame-join-v3','sdk-finish-fixed-frame-properties-v3','sdk-std-copy-frame-join-v1','sdk-std-copy-frame-properties-v1','sdk-std-copy-bridge-join-v1','sdk-std-copy-bridge-pipeline-v1','sdk-paired-context-codegen-v3','sdk-paired-context-codegen-v4','sdk-paired-context-check-v4','sdk-native-context-codegen-v4','sdk-native-context-check-v4','sdk-native-context-loops-v4']
+folders += ['sdk-finish-fixed-frame-v4','sdk-finish-verified-v1','sdk-finish-contract-join-v1']
+receipts += ['sdk-finish-fixed-frame-join-v4','sdk-finish-fixed-frame-properties-v4','sdk-finish-verified-join-v1','sdk-finish-contract-state-join-v1','sdk-native-context-check-v5','sdk-native-context-check-v6','sdk-native-context-properties-v4']
+folders += ['sdk-finish-fixed-frame-v5','sdk-finish-contract-join-v2']
+receipts += ['sdk-finish-fixed-frame-join-v5','sdk-finish-fixed-frame-properties-v5','sdk-finish-contract-state-join-v2']
+folders += ['sdk-finish-contract-join-v3','sdk-prefix-context-v4']
+receipts += ['sdk-finish-contract-state-join-v3','sdk-finish-contract-state-join-v4','sdk-native-context-check-v7','sdk-native-context-check-v8','sdk-prefix-context-check-v4','sdk-prefix-context-check-v5','sdk-call-prefix-check-v2','sdk-prefix-context-codegen-v4','z3-tool-v1','sdk-std-copy-smt-preflight-v1']
+folders += ['sdk-call-context-v2','sdk-paired-context-v5']
+receipts += ['sdk-call-prefix-codegen-v3','sdk-call-prefix-check-v3','sdk-paired-context-codegen-v5','sdk-std-copy-smt-preflight-v2','sdk-prefix-context-check-v6','sdk-prefix-context-flat-v1','sdk-prefix-smt-exception-v1']
+folders += ['sdk-paired-context-v6','sdk-native-context-v5']
+receipts += ['sdk-paired-context-check-v5','sdk-paired-context-check-v6','sdk-paired-context-codegen-v6','sdk-native-context-codegen-v5']
+folders += ['sdk-paired-context-v7','sdk-paired-context-v8','sdk-paired-context-v9','owned-sdk-borrowed-v1']
+receipts += ['sdk-native-context-check-v9','sdk-paired-context-codegen-v7','sdk-paired-context-check-v7','sdk-paired-context-codegen-v8','sdk-paired-context-codegen-v9','sdk-paired-context-check-v9','owned-sdk-borrowed-v1-charon','owned-sdk-borrowed-v1-aeneas']
+folders += ['sdk-proof-gate-v1','sdk-proof-gate-v2','sdk-proof-gate-v3']
+receipts += ['sdk-proof-gate-join-v1','sdk-proof-gate-join-v2','sdk-proof-gate-v1-charon','sdk-proof-gate-v1-aeneas','sdk-proof-gate-properties-v1','sdk-proof-gate-properties-v2','sdk-proof-gate-other-lengths-v1','sdk-proof-gate-frame-v1','sdk-proof-gate-frame-properties-v1','sdk-proof-gate-frame-properties-v2']
+folders += ['sdk-proof-gate-v4','memcmp-equal-v1','observer-emission-v1','observer-emission-v2','observer-emission-v3','sdk-paired-context-v10']
+folders += ['sdk-paired-decoder-entry-v1','sdk-paired-decoder-entry-v2']
+folders += ['sdk-native-context-v6']
+folders += ['sdk-native-context-v7','sdk-native-context-v8']
+folders += ['sdk-seed-v1','sdk-seed-v2','sdk-seed-v3','sdk-native-context-v9','sdk-native-context-v10','sdk-native-context-v11']
+new_diagnostics=['sdk-proof-length-cut-v1','sdk-proof-length-cut-v2','sdk-proof-length-cut-v3','sdk-proof-length-frame-cut-v1','sdk-proof-length-frame-cut-v2']+[f'sdk-paired-equalcmp-check-v{i}' for i in range(1,6)]
+new_diagnostics += [f'sdk-paired-decoder-entry-check-v{i}' for i in range(1,5)]
+new_diagnostics += ['sdk-native-context-check-v10']
+new_diagnostics += ['sdk-native-context-check-v11','sdk-native-context-check-v12','sdk-native-context-check-v13','sdk-native-context-check-v14','sdk-native-context-check-v15']
+receipts += ['sdk-seed-join-v1','sdk-seed-join-v2','sdk-seed-frame-v3','sdk-seed-properties-v2','sdk-seed-properties-v3','sdk-native-context-codegen-v13','sdk-native-context-codegen-v14','sdk-native-context-codegen-v15','sdk-native-unseeded-observer-emission-properties-v1']
+receipts += new_diagnostics+['sdk-proof-length-frame-codegen-v1','sdk-proof-length-frame-properties-v1','sdk-proof-length-frame-properties-v2','memcmp-equal-join-v1','observer-emission-check-v1','observer-emission-check-v2','observer-emission-check-v3','sdk-paired-context-codegen-v10','sdk-observer-emission-properties-v1','sdk-observer-emission-properties-v2']
+receipts += ['sdk-paired-decoder-entry-codegen-v1','sdk-paired-decoder-entry-codegen-v2','sdk-decoder-entry-loop-inventory-v1']
+receipts += ['sdk-native-context-codegen-v6','sdk-native-observer-emission-properties-v1']
+receipts += ['sdk-native-tagged-copy-contract-v1']
+receipts += ['sdk-native-context-codegen-v7','sdk-native-context-codegen-v8','sdk-native-rc-observer-emission-properties-v1','sdk-native-full-rc-observer-emission-properties-v1','sdk-kani-sysroot-pins-v1','sdk-native-full-rc-copy-contract-v1']
+folders += [f'sdk-shared-prefix-v{i}' for i in range(1,6)]+[f'sdk-native-context-v{i}' for i in range(12,15)]
+new_diagnostics += [f'sdk-shared-prefix-check-v{i}' for i in range(2,6)]+['sdk-native-context-check-v16']+[f'sdk-native-entry-cut-v{i}' for i in range(1,4)]
+receipts += [f'sdk-shared-prefix-codegen-v{i}' for i in range(1,6)]+[f'sdk-shared-prefix-check-v{i}' for i in range(2,6)]+[f'sdk-native-context-codegen-v{i}' for i in range(16,19)]+['sdk-native-context-check-v16']+[f'sdk-native-entry-cut-v{i}' for i in range(1,4)]+['sdk-native-entry-audit-v1']
+folders += ['sdk-native-context-v15','sdk-native-context-v16','sdk-shared-prefix-v6']
+new_diagnostics += ['sdk-native-entry-cut-v4','sdk-native-entry-cut-v5','sdk-shared-prefix-check-v6']
+receipts += ['sdk-native-context-codegen-v19','sdk-native-context-codegen-v20','sdk-native-entry-cut-v4','sdk-native-entry-cut-v5','sdk-shared-prefix-codegen-v6','sdk-shared-prefix-check-v6']
+pins=[]
+for name in folders:
+ p=H/name
+ for rel in ['src/lib.rs','Cargo.toml','Cargo.lock','source-cut.json','charon-input.json','aeneas-input.json','voluntary-stop.json','statement-fields.json']:
+  if (p/rel).is_file():copy(p/rel,Path('sources')/name/rel)
+ for f in (p/'generated').rglob('*.lean'):copy(f,Path('sources')/name/(str(f.relative_to(p))+'.txt'))
+ for f in p.glob('*.llbc'):pins.append(dict(source=name,path=str(f),sha256=sha(f),has_errors=json.loads(f.read_text())['has_errors']))
+for name in receipts:
+ for p in (H/'receipts'/name).glob('*'):
+  if p.suffix in ['.log','.json']:copy(p,Path('receipts')/name/p.name)
+ for suffix in ['-input.json','-admission.json']:
+  if (H/(name+suffix)).is_file():copy(H/(name+suffix),name+suffix)
+for mode in ['shared','exclusive']:
+ for suffix in ['-input.json','-admission.json']:
+  p=H/('sdk-'+mode+'-properties-v3'+suffix)
+  if p.is_file():copy(p,p.name)
+for tag in new_diagnostics:
+ for p in (H/tag).iterdir():
+  if p.suffix in ['.json','.c','.py']:copy(p,Path('diagnostics')/tag/p.name)
+  elif p.suffix=='.log' and p.stat().st_size<1024*1024:copy(p,Path('diagnostics')/tag/p.name)
+  elif p.suffix=='.log':
+   out=O/'diagnostics'/tag;out.mkdir(exist_ok=True,parents=True)
+   (out/(p.stem+'-pin.json')).write_text(json.dumps(dict(path=str(p),bytes=p.stat().st_size,sha256=sha(p),qualification='Large raw diagnostic log retained on host; no proof follows from a diagnostic or timeout.'),indent=2)+'\n')
+for tag in ['sdk-paired-context-check-v1','sdk-paired-context-check-v2','sdk-paired-context-check-v3','sdk-native-context-check-v1','sdk-prefix-context-check-v1','sdk-prefix-context-check-v2','sdk-prefix-context-check-v3','sdk-native-context-check-v2','sdk-native-context-check-v3','sdk-call-prefix-check-v1','sdk-paired-context-check-v4','sdk-native-context-check-v4','sdk-native-context-check-v5','sdk-native-context-check-v6','sdk-native-context-check-v7','sdk-native-context-check-v8','sdk-prefix-context-check-v4','sdk-prefix-context-check-v5','sdk-call-prefix-check-v2','sdk-std-copy-smt-preflight-v1','sdk-std-copy-smt-preflight-v2','sdk-prefix-context-check-v6','sdk-prefix-context-flat-v1','sdk-prefix-smt-exception-v1','sdk-call-prefix-check-v3','sdk-paired-context-check-v5','sdk-paired-context-check-v6','sdk-native-context-check-v9','sdk-paired-context-check-v7','sdk-paired-context-check-v9']:
+ for p in (H/tag).glob('*.json'):copy(p,Path('diagnostics')/tag/p.name)
+ for p in (H/tag).glob('*.log'):
+  if p.stat().st_size<1024*1024:copy(p,Path('diagnostics')/tag/p.name)
+  else:
+   out=O/'diagnostics'/tag;out.mkdir(exist_ok=True,parents=True)
+   (out/(p.stem+'-pin.json')).write_text(json.dumps(dict(path=str(p),bytes=p.stat().st_size,sha256=sha(p),qualification='Large raw trace retained on host; complete trace-free property projection exported, no binary or large trace distributed.'),indent=2)+'\n')
+for p in (H/'target/kani/x86_64-unknown-linux-gnu/debug/.fingerprint').glob('*/*.json'):
+ if any(k in p.parent.name for k in ['sdk-heap-','sdk-shared-write-frame','owned-sdk-snapshots','sdk-paired-context','sdk-prefix-context','sdk-native-context','sdk-metadata-prefix','sdk-call-context','sdk-finish','sdk-std-copy','sdk-proof-gate','sdk-stub-preflight']):copy(p,Path('compiler-flags')/p.parent.name/p.name)
+for p in (H/'kit').glob('*.py'):
+ if any(k in p.name for k in ['heap-join','snapshot','paired-context','parent-cuts','write-frame','write-frame-properties','run-modular','metadata-prefix','statement-fields','reservation','finish-join','finish-contract','finish-step','finish-fixed-frame','std-copy','owned-sdk-copy','context-properties','sdk-proof-gate','owned-sdk-borrowed','sdk-borrowed','finish-verified','finish-contract-join','smt-preflight','prepared-sdk','trace-cbmc-exception']):copy(p,Path('runner')/p.name)
+for name in ['run-sdk-proof-length-cut-host.py','audit-sdk-length-cut-host.py','prepare-memcmp-equal.py','prepare-observer-emission.py','prepare-sdk-ghost-storage.py','run-sdk-paired-equalcmp-host.py','audit-observer-emission-host.py','memcmp688-declaration.c','memcmp688-equal.c','prepare-sdk-decoder-entry.py','run-sdk-decoder-entry-host.py','inspect-decoder-entry-loops-host.py']:
+ p=H/'kit'/name
+ if p.is_file():copy(p,Path('runner')/p.name)
+p=H/'kit/audit-native-observer-emission-host.py';copy(p,Path('runner')/p.name)
+for name in ['prepare-sdk-native-rc-domain.py','audit-native-rc-observer-emission-host.py','audit-native-full-rc-observer-emission-host.py','pin-kani-sysroot-host.py','prepare-sdk-seed.py','inspect-sdk-seed-host.py','prepare-sdk-native-unseeded.py','prepare-sdk-native-buffer-frames.py','audit-native-unseeded-observer-emission-host.py']:
+ p=H/'kit'/name;copy(p,Path('runner')/p.name)
+for name in ['prepare-sdk-shared-prefix.py','run-sdk-shared-prefix-host.py','prepare-sdk-native-entry-normalization.py','run-sdk-native-entry-cut-host.py','audit-sdk-native-entry-host.py']:
+ p=H/'kit'/name;copy(p,Path('runner')/p.name)
+p=Path('/home/dombarker/.kani/kani-0.67.0/library/kani/src/vec.rs');copy(p,Path('tool-and-freeze-pins')/'kani-vec.rs')
+p=Path('/home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c');copy(p,Path('tool-and-freeze-pins')/'kani_lib.c')
+p=H/'kit/trace-cbmc-exception.cpp'
+if p.is_file():copy(p,Path('runner')/p.name)
+for rel in ['z3-tool-v1/tool-pins.json','source-freeze-revalidation-20261022.json','source-freeze-post-full-rc-20261022.json']:
+ p=H/rel
+ if p.is_file():copy(p,Path('tool-and-freeze-pins')/p.name)
+(O/'llbc-pins.json').write_text(json.dumps(pins,indent=2)+'\n')
+(O/'qualification.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',qualification='One-operation and lifecycle-cut SDK checks plus pure snapshot fission/extraction. Parent codegen is not proof; timed-out paired context excluded. No complete shipped stage1 or global soundness closure.'),indent=2)+'\n')
+print(O)

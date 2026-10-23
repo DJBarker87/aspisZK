@@ -1,0 +1,27 @@
+import hashlib,json,pathlib,tomllib
+p=pathlib.Path(__file__).resolve().parent
+root=p.parents[4]
+def sha(f): return hashlib.sha256(f.read_bytes()).hexdigest()
+lock=root/'Cargo.lock'
+packages=tomllib.loads(lock.read_text())['package']
+spans={'sbf-std-lib.rs':{'std.cell_reexport':[491,491]},'solana-account-info.rs':{'AccountInfo': [22,39], 'try_borrow_data':[121,125], 'try_borrow_mut_data':[127,131]},'solana-program.rs':{'account_info_reexport':[585,588]},'sbf-core-cell.rs':{'RefCell':[721,731], 'counter_and_tests':[795,820], 'RefCell.try_borrow':[1013,1036], 'RefCell.try_borrow_mut':[1106,1127], 'BorrowRef.new':[1397,1424], 'BorrowRef.drop':[1426,1433], 'Ref':[1457,1463], 'Ref.deref':[1466,1474], 'BorrowRefMut.drop':[1791,1802], 'BorrowRefMut.new':[1806,1818], 'RefMut':[1842,1849], 'RefMut.deref':[1852,1860], 'RefMut.deref_mut':[1863,1869]}}
+data={'source_revision':'0998f05ffa0256157a35b270d4097a096fa17748','adopted_lock':{'path':'Cargo.lock','sha256':sha(lock),'matches_s10_rebuild_lock':sha(lock)=='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'},'packages':[v for v in packages if v['name'] in ['solana-program','solana-account-info']], 'source_files':{n:{'sha256':sha(p/'source'/n),'size':(p/'source'/n).stat().st_size,'spans_inclusive':s} for n,s in spans.items()},'sbf':{'platform_tools':'v1.52','rustc':'1.89.0-dev','target':'sbpf-solana-solana','rust_source_repository':'https://github.com/anza-xyz/rust.git','version_md_source_commit':'790f1537507dbdb0da320fbb3b1c1eca3b33c474','rustc_sha256':'d95c95b68e321ad76634e1fd26b0a7c20ccdbae9ad9ca733f3ae2f2b4a0b6002','compiler_reports_commit':'unknown','sysroot':'/home/dombarker/.cache/solana/v1.52/platform-tools/rust','features':['default custom-heap','pool-adapter','private-leaf-salts'],'debug_refcell':'not enabled by adapter arguments; prebuilt core feature/source correspondence remains P6'},'limitations':['Installed SBF sysroot source pinned; source presence does not prove compiler binary source correspondence. P6 remains explicit.','Ref/RefMut have structural destruction of BorrowRef/BorrowRefMut; no separate Ref Drop impl. Ref has no DerefMut.','No SDK certification: this is a named trusted library boundary. No shipped files changed; inherited ELF rebuild evidence reused.'],'validation':{'kind':'read-only collection and hash comparison','exit':0,'lean_attempts':0,'kani_runs':0,'print_axioms':'N/A'}}
+data['sbf']['archive_pins']=json.loads((p/'sbf-archive-pins.json').read_text())
+data['sbf']['actual_rustc_command']=json.loads((p/'production-rustc-command.json').read_text())
+data['adapter_inputs']={str(f.relative_to(root)):{'sha256':sha(f),'size':f.stat().st_size} for f in [root/'programs/r1-cost-probe/src/r1_pool_adapter.rs',root/'programs/r1-cost-probe/Cargo.toml',root/'Cargo.toml']}
+assert data['adapter_inputs']['programs/r1-cost-probe/src/r1_pool_adapter.rs']['sha256']=='6a8e5799035458ed4c0093709da6da86fb29100303861ddd15212d3ad7dcdcfb'
+assert data['adapter_inputs']['programs/r1-cost-probe/Cargo.toml']['sha256']=='6aa7d08708762ddadf3a6173b14256d7c5a3f1eba12e8631e9abb0c154eebe7b'
+data['adapter_matches_read_only_s10_rebuild_workspace']=True
+data['adopted_build_reuse']={}
+build_manifest=json.loads((p.parent/'s10-repin-20261022/build-manifest.json').read_text())
+actual_revisions={b['name']:b['actual_source_revision'] for b in build_manifest['builds']}
+for name in ['build-default-v2','build-devnet-v1','build-pool-v1']:
+ d=p.parent/'s10-repin-20261022'/name
+ data['adopted_build_reuse'][name]={'actual_source_revision':actual_revisions[name],'command':json.loads((d/'command.json').read_text()),'comparison':json.loads((d/'artifact-comparison.json').read_text()),'receipt_sha256':sha(d/'receipt.json')}
+meta=json.loads((p/'tool-pins.json').read_text())
+for name, v in meta['registry_archive_comparison'].items():
+ filename='solana-account-info.rs' if 'account-info' in name else 'solana-program.rs'
+ assert data['source_files'][filename]['sha256']==v['archive_lib_rs_sha256']
+data['source_files_match_checksum_verified_archives']=True
+(p/'production-pins.json').write_text(json.dumps(data,indent=2)+'\n')
+print('production lock and sources pinned')

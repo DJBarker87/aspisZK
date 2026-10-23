@@ -1,0 +1,105 @@
+import AspisR1ProducerRelease47.Points49
+import R1Z.ProverCommitSampleTail49
+import R0Z.HonestView
+/-! Complete carry-loop source owner for the successor statement point. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitSuccessorPoint49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open R0P.SemSource
+
+def decoded (p : Nat → Old.Q) : Fin 10 → QM31Exact := fun i => decode (p i.val)
+
+theorem carry_step (p : Fin 10 → QM31Exact) (n : Nat) (hn : n<10) :
+    succCarry p (10-n)=p ⟨n,hn⟩*succCarry p (9-n) := by
+  have he : 10-n=(9-n)+1 := by omega
+  rw [he,succCarry,if_pos (by omega)]
+  congr 1
+  congr 1
+  apply Fin.ext
+  omega
+
+attribute [local irreducible] ProverCommitQArray48.array ProverCommitNativeQ48.source
+
+theorem successor_value (p out : Nat → Old.Q)
+    (hp : ∀ k, k<10 → Canonical (p k)) (hout : ∀ k, k<10 → Canonical (out k))
+    (n : Nat) (left : U8) (hleft : left.val=n) (hn : n≤10)
+    (carry : Old.Q) (hc : Canonical carry)
+    (hcarry : decode carry=succCarry (decoded p) (10-n)) :
+    ∃ z : Nat → Old.Q, points.successor (ProverCommitQArray48.array 10#usize p)
+        (ProverCommitQArray48.array 10#usize out) left (ProverCommitNativeQ48.source carry)=
+        ok (ProverCommitQArray48.array 10#usize z) ∧
+      (∀ k, k<10 → Canonical (z k)) ∧
+      ∀ k : Fin 10, decode (z k.val)=if k.val<n then successorPoint (decoded p) k else decode (out k.val) := by
+  induction n generalizing out left carry with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    refine ⟨out,?_,hout,?_⟩
+    · rw [points.successor,hz];rfl
+    · intro k;rw [if_neg (by omega)]
+  | succ n ih =>
+    have hnon : left≠0#u8 := by scalar_tac
+    have hdec : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    have hcast : (UScalar.cast .Usize (U8.wrapping_sub left 1#u8)).val=n := by scalar_tac
+    obtain ⟨bc,hbc,hcbc,hdbc⟩ := ProverCommitNativeQ48.mul (p n) carry (hp _ (by omega)) hc
+    obtain ⟨add,ha,hca,hda⟩ := ProverCommitNativeQ48.add (p n) carry (hp _ (by omega)) hc
+    obtain ⟨twice,ht,hct,hdt⟩ := ProverCommitNativeQ48.add bc bc hcbc hcbc
+    obtain ⟨cell,hcell,hccell,hdcell⟩ := ProverCommitNativeQ48.sub add twice hca hct
+    let next := Function.update out n cell
+    have hcnext : ∀ k, k<10 → Canonical (next k) := by
+      intro k hk
+      by_cases he : k=n
+      · subst k;simpa only [next,Function.update_self] using hccell
+      · simpa only [next,Function.update_of_ne he] using hout k hk
+    have hcarr : decode bc=succCarry (decoded p) (10-n) := by
+      rw [hdbc,hcarry,carry_step _ _ (by omega)]
+      have he : 10-(n+1)=9-n := by omega
+      rw [he]
+      rfl
+    have hvalue : decode cell=successorPoint (decoded p) ⟨n,by omega⟩ := by
+      rw [hdcell,hda,hdt,hdbc,hcarry]
+      have he : 10-(n+1)=9-n := by omega
+      rw [he]
+      rfl
+    obtain ⟨z,hz,hcz,hdz⟩ := ih next hcnext _ hdec (by omega) bc hcbc hcarr
+    refine ⟨z,?_,hcz,?_⟩
+    · rw [points.successor]
+      simp only [hnon,if_false,lift,bind_tc_ok]
+      rw [ProverCommitQArray48.index 10#usize p _ (by rw [hcast];change n<10;omega)]
+      simp only [hcast,hbc,ha,ht,hcell,bind_tc_ok]
+      rw [ProverCommitQArray48.update 10#usize out _ (by rw [hcast];change n<10;omega)]
+      simp only [bind_tc_ok,hcast]
+      exact hz
+    · intro k
+      rw [hdz]
+      by_cases hlt : k.val<n
+      · rw [if_pos hlt,if_pos (by omega)]
+      · rw [if_neg hlt]
+        by_cases he : k.val=n
+        · rw [if_pos (by omega)]
+          simp only [next,he,Function.update_self]
+          have hk : k=(⟨n,by omega⟩ : Fin 10) := Fin.ext he
+          rw [hvalue,hk]
+        · rw [if_neg (by omega)]
+          simp only [next,Function.update_of_ne he]
+
+theorem successor_exact (p : Nat → Old.Q) (hp : ∀ k, k<10 → Canonical (p k)) :
+    ∃ z : Nat → Old.Q, points.successor (ProverCommitQArray48.array 10#usize p)
+        (ProverCommitQArray48.array 10#usize p) 10#u8 field.QM31.ONE=
+        ok (ProverCommitQArray48.array 10#usize z) ∧
+      (∀ k, k<10 → Canonical (z k)) ∧
+      decoded z=successorPoint (decoded p) := by
+  obtain ⟨z,hz,hcz,hdz⟩ := successor_value p p hp hp 10 10#u8 rfl (by omega)
+    ProverCommitSubtraction47.one ProverCommitSubtraction47.one_canonical (by rw [ProverCommitSubtraction47.one_decode];rfl)
+  refine ⟨z,?_,hcz,?_⟩
+  · rw [ProverCommitSampleTail49.source_one];exact hz
+  · funext k
+    exact (hdz k).trans (if_pos k.isLt)
+
+#print axioms carry_step
+#print axioms successor_value
+#print axioms successor_exact
+end R1Z.ProverCommitSuccessorPoint49

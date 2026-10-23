@@ -1,0 +1,86 @@
+import R1Z.ProverCommitSampleBits49
+import R1Z.ProverCommitQArray48
+import R1Z.ProverCommitBasisCounter47
+/-! Complete owned Boolean-tail writes. Prefix coordinates and sample cell
+are preserved; each remaining coordinate is the selected big-endian bit. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitSampleTail49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitSampleBits49
+open ProverCommitSubtraction47 (one)
+
+def qbit (a : Usize) (remaining offset : Nat) : Old.Q :=
+  if bit a remaining offset then one else zero
+
+def values : Nat → (Nat → Old.Q) → Nat → Nat → Usize → Nat → Nat → Old.Q
+ | 0,p,_,_,_,_ => p
+ | n+1,p,r,rem,a,o => values n (Function.update p (r+1+o) (qbit a rem o)) r rem a (o+1)
+
+theorem source_one : field.QM31.ONE=ProverCommitNativeQ48.source one := by
+  simp only [field.QM31.ONE,ProverCommitNativeQ48.source,ProverCommitRelease47.convQ,
+    ProverCommitRelease47.convC,fromQ,fromC,one]
+
+attribute [local irreducible] ProverCommitQArray48.array ProverCommitNativeQ48.source
+
+theorem tail_value (n : Nat) (p : Nat → Old.Q)
+    (r rem a o : Usize) (left : U8) (hleft : left.val=n)
+    (round : r.val<10) (remaining : rem.val=9-r.val) (bound : o.val+n≤rem.val) :
+    owned.tail (ProverCommitQArray48.array 10#usize p) r rem a o left=
+      ok (ProverCommitQArray48.array 10#usize (values n p r.val rem.val a o.val)) := by
+  induction n generalizing p o left with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    rw [owned.tail,hz];rfl
+  | succ n ih =>
+    have hn : left≠0#u8 := by scalar_tac
+    have hdec : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    have ho : (Usize.wrapping_add o 1#usize).val=o.val+1 := by
+      simpa only [show (1#usize).val=1 from rfl] using
+        ProverCommitBasisFillValue47.add_val o 1#usize (by change o.val+1<2048;omega)
+    have hr : (Usize.wrapping_add (Usize.wrapping_add r 1#usize) o).val=r.val+1+o.val := by
+      have first : (Usize.wrapping_add r 1#usize).val=r.val+1 := by
+        simpa only [show (1#usize).val=1 from rfl] using
+          ProverCommitBasisFillValue47.add_val r 1#usize (by change r.val+1<2048;omega)
+      rw [ProverCommitBasisFillValue47.add_val _ _ (by rw [first];omega),first]
+    have hcond := condition rem o a (by omega) (by omega)
+    rw [owned.tail]
+    simp only [hn,if_false,lift,bind_tc_ok]
+    have hv : (if (Usize.wrapping_shr a (UScalar.cast .U32 (Usize.wrapping_sub
+        (Usize.wrapping_sub rem 1#usize) o)) &&& 1#usize)=0#usize
+        then ok field.QM31.ZERO else ok field.QM31.ONE)=
+        ok (ProverCommitNativeQ48.source (qbit a rem.val o.val)) := by
+      cases hb : bit a rem.val o.val
+      · rw [if_pos (hcond.mpr hb),qbit,hb,ProverCommitQArray48.source_zero];rfl
+      · have hnot : ¬(Usize.wrapping_shr a (UScalar.cast .U32 (Usize.wrapping_sub
+            (Usize.wrapping_sub rem 1#usize) o)) &&& 1#usize)=0#usize := by
+          intro h;have hf := hcond.mp h;rw [hb] at hf;cases hf
+        rw [if_neg hnot,qbit,hb,source_one];rfl
+    rw [hv]
+    simp only [bind_tc_ok]
+    rw [ProverCommitQArray48.update _ _ _ (by change _<10;rw [hr];omega)]
+    simp only [bind_tc_ok,hr]
+    rw [ih _ _ _ hdec (by rw [ho];omega)]
+    simp only [values,ho]
+
+theorem values_at (n : Nat) (p : Nat → Old.Q) (r rem : Nat) (a : Usize) (o k : Nat) :
+    values n p r rem a o k=
+      if r+1+o≤k ∧ k<r+1+o+n then qbit a rem (k-r-1) else p k := by
+  induction n generalizing p o with
+  | zero => simp only [values];rw [if_neg (by omega)]
+  | succ n ih =>
+    rw [values,ih]
+    by_cases he : k=r+1+o
+    · subst k
+      rw [if_neg (by omega),Function.update_self,if_pos (by omega)]
+      congr 1;omega
+    · by_cases hr : r+1+(o+1)≤k ∧ k<r+1+(o+1)+n
+      · rw [if_pos hr,if_pos (by omega)]
+      · rw [if_neg hr,Function.update_of_ne he,if_neg (by omega)]
+
+#print axioms source_one
+#print axioms tail_value
+#print axioms values_at
+end R1Z.ProverCommitSampleTail49

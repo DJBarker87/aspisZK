@@ -1,0 +1,70 @@
+import R1Z.ProverCommitFactors49
+import R1Z.ProverCommitBasisFillValue47
+/-! All five native raw-product factors, composed by owned-loop induction. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitFactorProduct49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open scoped BigOperators
+
+def product (q : Nat → Old.Q) : Nat → Nat → QM31Exact
+ | 0,_ => 1
+ | n+1,i => decode (q i)*product q n (i+1)
+
+attribute [local irreducible] ProverCommitQArray48.array ProverCommitNativeQ48.source
+
+theorem product_value (q : Nat → Old.Q) (hq : ∀ i, i<5 → Canonical (q i))
+    (n : Nat) (i : Usize) (left : U8) (hleft : left.val=n) (bound : i.val+n≤5)
+    (s : Old.Q) (hs : Canonical s) :
+    ∃ z : Old.Q, factors.product (ProverCommitQArray48.array 5#usize q) i left
+      (ProverCommitNativeQ48.source s)=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ decode z=decode s*product q n i.val := by
+  induction n generalizing i left s with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    refine ⟨s,?_,hs,?_⟩
+    · rw [factors.product,hz];rfl
+    · rw [product,mul_one]
+  | succ n ih =>
+    have hn : left≠0#u8 := by scalar_tac
+    have ht : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    have hi : (Usize.wrapping_add i 1#usize).val=i.val+1 := by
+      simpa only [show (1#usize).val=1 from rfl] using
+        ProverCommitBasisFillValue47.add_val i 1#usize (by change i.val+1<2048;omega)
+    obtain ⟨next,hnext,hcnext,hdnext⟩ := ProverCommitNativeQ48.mul s (q i.val) hs (hq _ (by omega))
+    obtain ⟨z,hz,hcz,hdz⟩ := ih _ _ ht (by rw [hi];omega) next hcnext
+    refine ⟨z,?_,hcz,?_⟩
+    · rw [factors.product]
+      simp only [hn,if_false,ProverCommitQArray48.index _ _ _ (by change i.val<5;omega),
+        hnext,lift,bind_tc_ok]
+      exact hz
+    · rw [hdz,hdnext,hi,product];ring
+
+theorem product_fin (q : Nat → Old.Q) (n i : Nat) :
+    product q n i=∏ j : Fin n, decode (q (i+j.val)) := by
+  induction n generalizing i with
+  | zero => simp only [product,Fin.prod_univ_zero]
+  | succ n ih =>
+    rw [product,ih]
+    simp only [Fin.prod_univ_succ,Fin.val_zero,Fin.val_succ,Nat.add_zero,
+      Nat.add_assoc,Nat.add_left_comm,Nat.add_comm]
+
+theorem raw_exact (q : Nat → Old.Q) (hq : ∀ i, i<5 → Canonical (q i)) :
+    ∃ z : Old.Q, factors.product (ProverCommitQArray48.array 5#usize q) 0#usize 5#u8 field.QM31.ONE=
+      ok (ProverCommitNativeQ48.source z) ∧ Canonical z ∧
+      decode z=∏ d : Fin 5, decode (q d.val) := by
+  obtain ⟨z,hz,hcz,hdz⟩ := product_value q hq 5 0#usize 5#u8 rfl (by decide)
+    ProverCommitSubtraction47.one ProverCommitSubtraction47.one_canonical
+  refine ⟨z,?_,hcz,?_⟩
+  · rw [ProverCommitSampleTail49.source_one]
+    exact hz
+  · simpa only [ProverCommitSubtraction47.one_decode,one_mul,product_fin,
+      show (0#usize).val=0 from rfl,Nat.zero_add] using hdz
+
+#print axioms product_value
+#print axioms product_fin
+#print axioms raw_exact
+end R1Z.ProverCommitFactorProduct49

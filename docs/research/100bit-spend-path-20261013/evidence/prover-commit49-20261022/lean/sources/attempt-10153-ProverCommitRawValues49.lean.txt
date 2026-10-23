@@ -1,0 +1,73 @@
+import R1Z.ProverCommitStoredCaller49
+import R1Z.ProverCommitInactiveOutput49
+import R1Z.ProverCommitLibra49
+import R1Z.ProverCommitRawVector49
+/-! Seven raw values from complete helper producers. The stored constructor's
+outer layout and allocation are separate source-caller obligations. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitRawValues49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open ProverCommitStoredCaller49
+
+open ProverCommitRawVector49 (values)
+
+def run (p0 p1 p2 : Array field.QM31 10#usize) (a8 a9 x0 y0 x1 y1 : field.QM31)
+    (j : Usize) : Result (Array field.QM31 7#usize) := do
+  let a ← ProverCommitInactiveOutput49.run j
+  let b ← point p0 j
+  let c ← point p1 j
+  let d ← point p2 j
+  let e ← extras.libra (Array.make 2#usize [a8,a9]) j
+  let f ← circle x0 y0 j
+  let g ← circle x1 y1 j
+  ok (Array.make 7#usize [a,b,c,d,e,f,g])
+
+def model (p : Fin 3 → Nat → Old.Q) (a8 a9 x0 y0 x1 y1 : Old.Q) (j : Fin 1024) : Fin 7 → QM31Exact :=
+  ![AspisR0.Opening.indicator R0P.copyInactiveRows (AspisR1.rowEquiv.symm j),
+    AspisR0.Opening.eqWeight (ProverCommitPointWeight49.reverse (fun i => decode (p 0 i.val))) (AspisR1.rowEquiv.symm j),
+    AspisR0.Opening.eqWeight (ProverCommitPointWeight49.reverse (fun i => decode (p 1 i.val))) (AspisR1.rowEquiv.symm j),
+    AspisR0.Opening.eqWeight (ProverCommitPointWeight49.reverse (fun i => decode (p 2 i.val))) (AspisR1.rowEquiv.symm j),
+    (if j.val<28 then decode a8^j.val else if j.val<56 then decode a9^(j.val-28) else 0),
+    ProverCommitEval47.messageEval (Pi.single j 1) (decode x0) (decode y0),
+    ProverCommitEval47.messageEval (Pi.single j 1) (decode x1) (decode y1)]
+
+theorem exact_result (p : Fin 3 → Nat → Old.Q) (hp : ∀ k i, i<10 → Canonical (p k i))
+    (a8 a9 x0 y0 x1 y1 : Old.Q) (ha8 : Canonical a8) (ha9 : Canonical a9)
+    (hx0 : Canonical x0) (hy0 : Canonical y0) (hx1 : Canonical x1) (hy1 : Canonical y1)
+    (j : Usize) (hj : j.val<1024) :
+    ∃ out : Nat → Old.Q,
+      run (ProverCommitQArray48.array 10#usize (p 0)) (ProverCommitQArray48.array 10#usize (p 1))
+        (ProverCommitQArray48.array 10#usize (p 2)) (ProverCommitNativeQ48.source a8) (ProverCommitNativeQ48.source a9)
+        (ProverCommitNativeQ48.source x0) (ProverCommitNativeQ48.source y0) (ProverCommitNativeQ48.source x1) (ProverCommitNativeQ48.source y1) j=
+        ok (ProverCommitQArray48.array 7#usize out) ∧
+      (∀ k, k<7 → Canonical (out k)) ∧
+      ∀ k : Fin 7, decode (out k.val)=model p a8 a9 x0 y0 x1 y1 ⟨j.val,hj⟩ k := by
+  obtain ⟨h0,hc0,hv0⟩ := ProverCommitInactiveOutput49.exact_result j hj
+  obtain ⟨b,hb,hcb,hvb⟩ := point_exact (p 0) (hp 0) j hj
+  obtain ⟨c,hc,hcc,hvc⟩ := point_exact (p 1) (hp 1) j hj
+  obtain ⟨d,hd,hcd,hvd⟩ := point_exact (p 2) (hp 2) j hj
+  obtain ⟨e,he,hce,hve⟩ := ProverCommitLibra49.exact_result a8 a9 ha8 ha9 j
+  obtain ⟨f,hf,hcf,hvf⟩ := circle_exact x0 y0 hx0 hy0 j hj
+  obtain ⟨g,hg,hcg,hvg⟩ := circle_exact x1 y1 hx1 hy1 j hj
+  let out := values (ProverCommitInactiveModel49.raw j) b c d e f g
+  refine ⟨out,?_,?_,?_⟩
+  · have ha : ProverCommitQArray48.array 2#usize (ProverCommitLibra49.entries a8 a9)=
+        Array.make 2#usize [ProverCommitNativeQ48.source a8,ProverCommitNativeQ48.source a9] := by
+      apply Subtype.ext;rfl
+    unfold ProverCommitLibra49.run at he
+    rw [ha] at he
+    simp only [run,h0,hb,hc,hd,he,hf,hg,bind_tc_ok]
+    exact (ProverCommitRawVector49.array_values _ _ _ _ _ _ _).symm
+  · intro k hk
+    exact ProverCommitRawVector49.canonical _ _ _ _ _ _ _ hc0 hcb hcc hcd hce hcf hcg k
+  · intro k
+    dsimp only [out]
+    rw [ProverCommitRawVector49.map_values]
+    simp only [hv0,hvb,hvc,hvd,hve,hvf,hvg]
+    rfl
+
+#print axioms exact_result
+end R1Z.ProverCommitRawValues49

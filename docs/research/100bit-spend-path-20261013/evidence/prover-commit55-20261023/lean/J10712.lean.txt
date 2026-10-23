@@ -1,0 +1,81 @@
+import R0Z.RefPayload
+import R0Z.PureRounds
+/-! The simulator's unshifted semantic function, initial/chain/terminal
+guards, and original-round contribution in the existing payload model.
+Source oracle and tape provenance are not assumed discharged here. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitSemanticModel55
+open R0P R0P.SemSource R0P.SemDegree R0P.Sumcheck
+open R0Z.HonestView R0Z.PayloadSplit R0Z.Shift R0Z.RefPayload
+open Polynomial
+variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+  {Bat : Type} [BatchedLayer K Bat]
+
+def oracle (pi : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F)
+    (ch : Challenges K) (t : Trace K) : PointFunction K :=
+  fun a => maskLinear pi B a t+fOrig pub B ch 0 a
+
+theorem degree (pi : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F)
+    (ch : Challenges K) (t : Trace K) : VDeg 10 (fun _ => 27) (oracle pi pub B ch t) := by
+  exact vdeg_add (maskLinear_vdeg pi B t) (vdeg_fOrig pub B ch 0)
+
+theorem original_rounds (pi : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F)
+    (ch : Challenges K) (t : Trace K) (r : Fin 10) :
+    rounds ch r (oracle pi pub B ch t)=rounds ch r (fun a => maskLinear pi B a t)+
+      rounds ch r (fOrig pub B ch 0) := by
+  exact map_add (rounds ch r) _ _
+
+theorem initial_guard (pi : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F)
+    (ch : Challenges K) (t : Trace K) :
+    (rounds ch 0 (oracle pi pub B ch t)).eval 0+
+      (rounds ch 0 (oracle pi pub B ch t)).eval 1=
+      bsumB 10 (fun b => maskLinear pi B (ofBool b) t)+S0 pub B ch := by
+  rw [original_rounds,eval_add,eval_add]
+  rw [show (rounds ch 0 (fun a => maskLinear pi B a t)).eval 0+
+        (rounds ch 0 (fOrig pub B ch 0)).eval 0+
+        ((rounds ch 0 (fun a => maskLinear pi B a t)).eval 1+
+        (rounds ch 0 (fOrig pub B ch 0)).eval 1)=
+      ((rounds ch 0 (fun a => maskLinear pi B a t)).eval 0+
+        (rounds ch 0 (fun a => maskLinear pi B a t)).eval 1)+
+      ((rounds ch 0 (fOrig pub B ch 0)).eval 0+
+        (rounds ch 0 (fOrig pub B ch 0)).eval 1) by ring]
+  rw [R0Z.Chain.rounds_initial ch _ (maskLinear_vdeg pi B t),
+    R0Z.Chain.rounds_initial ch _ (vdeg_fOrig pub B ch 0)]
+  rfl
+
+theorem chain_guard (pi : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F)
+    (ch : Challenges K) (t : Trace K) (r : Fin 9) :
+    (rounds ch r.succ (oracle pi pub B ch t)).eval 0+
+      (rounds ch r.succ (oracle pi pub B ch t)).eval 1=
+      (rounds ch r.castSucc (oracle pi pub B ch t)).eval (alpha ch r.castSucc) :=
+  R0Z.Chain.rounds_chain ch _ (degree pi pub B ch t) r
+
+theorem terminal_guard (pi : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F)
+    (ch : Challenges K) (t : Trace K) :
+    (rounds ch 9 (oracle pi pub B ch t)).eval (alpha ch 9)=
+      maskLinear pi B (alpha ch) t+fOrig pub B ch 0 (alpha ch) :=
+  eval_rounds_nine ch _ (degree pi pub B ch t)
+
+theorem original_image (pi : Fin 1024 ≃ Fin 1024) (pub : Public K) (B : PackBasis F)
+    (ch : Challenges K) (t : Trace K) :
+    originalOf pub B ch (refPayload (Bat := Bat) pub B ch+L pi B ch t)=
+      fOrig pub B ch t (alpha ch) := by
+  have hclaims : (fun j c => (refPayload (Bat := Bat) pub B ch+L pi B ch t) (.pointClaim j c))=
+      honestClaims t (alpha ch) := by
+    funext j c
+    rw [Pi.add_apply,refPayload_cell pub B ch (.pointClaim j c)
+      (by intro r i he;cases he) (by intro he;cases he),zero_add]
+    change claimsLinear (alpha ch) j c t=honestClaims t (alpha ch) j c
+    exact claimsLinear_apply _ _ _ _
+  unfold originalOf fOrig
+  rw [hclaims]
+
+#print axioms degree
+#print axioms original_rounds
+#print axioms initial_guard
+#print axioms chain_guard
+#print axioms terminal_guard
+#print axioms original_image
+end R1Z.ProverCommitSemanticModel55

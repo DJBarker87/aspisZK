@@ -1,0 +1,10 @@
+{
+  "original_sha256": "678d9e503a7cae1d2276cc8698342d82a1b09172e9cdf9bd01f3118f10e32014",
+  "adapted_sha256": "ffff2d9d212ab1a1041e209f481be9312e4cbdd03981f4d412903c02f7d40155",
+  "blocks": [
+    [
+      "@[discriminant isize]\ninductive r1_wire.Error where\n| Allocation : r1_wire.Error\n| RowOrder : Std.U8 \u2192 Std.U8 \u2192 r1_wire.Error\n| InvalidRow : r1_wire.Error\n| Tag : Std.U8 \u2192 r1_wire.Error\n| Length : Std.U8 \u2192 r1_wire.Error\n| NonCanonical : Std.U8 \u2192 Std.Usize \u2192 r1_wire.Error\n| Boundary : Std.Usize \u2192 r1_wire.Error\n| Terminal : r1_wire.Error\n| EqualCirclePoints : r1_wire.Error\n| TrailingBytes : r1_wire.Error\n| Public : r1_wire.Error",
+      "inductive r1_wire.Error where\n| Allocation : r1_wire.Error\n| RowOrder : Std.U8 \u2192 Std.U8 \u2192 r1_wire.Error\n| InvalidRow : r1_wire.Error\n| Tag : Std.U8 \u2192 r1_wire.Error\n| Length : Std.U8 \u2192 r1_wire.Error\n| NonCanonical : Std.U8 \u2192 Std.Usize \u2192 r1_wire.Error\n| Boundary : Std.Usize \u2192 r1_wire.Error\n| Terminal : r1_wire.Error\n| EqualCirclePoints : r1_wire.Error\n| TrailingBytes : r1_wire.Error\n| Public : r1_wire.Error\n\n-- Reversible naming-only expansion, following the retained stage-2 adapter.\ndef r1_wire.Error.read_discriminant (x : r1_wire.Error) : Isize :=\n  match x with\n  | .Allocation => 0#isize\n  | .RowOrder _ _ => 1#isize\n  | .InvalidRow => 2#isize\n  | .Tag _ => 3#isize\n  | .Length _ => 4#isize\n  | .NonCanonical _ _ => 5#isize\n  | .Boundary _ => 6#isize\n  | .Terminal => 7#isize\n  | .EqualCirclePoints => 8#isize\n  | .TrailingBytes => 9#isize\n  | .Public => 10#isize\n\ninstance _root_.AspisR1ActualSemanticRoundCutV1.r1_wire.Error.jointDiscriminant :\n    Aeneas.Std.Discriminant r1_wire.Error Isize where\n  read_discriminant := r1_wire.Error.read_discriminant"
+    ]
+  ]
+}

@@ -1,0 +1,254 @@
+{
+  "schema": "s2g-child-contract-catalog-v1",
+  "status": "PARTIAL; no concrete native Children instance",
+  "all_children": [
+    {
+      "child": "decode",
+      "kani_contract": "Ok(statement) implies input.len=1880 and the SAME complete statement validates; Err unrestricted; no native frame",
+      "lean_implication": "AspisR1.S2G.decode_contract; AspisR1.S2G.Children.decoder_contract",
+      "source_theorems": [
+        "AspisR1.S2A.InstalledCuts.decoded",
+        "AspisS2OwnedStage1.SourceInstallation.decoder_validated",
+        "AspisR1TerminalDecoder.DecoderSuccess.decode_success"
+      ],
+      "status": "pure installed value implication checked; Kani template disabled",
+      "missing_theorem": "native decode_public_statement_box on the original borrowed slice refines S2G.decode with field-preserving full statement/Box/Result carrier, exact ProgramError, allocation/abort and state/effects; no independent successful decode premise",
+      "native_children_field_closed": false
+    },
+    {
+      "child": "validate",
+      "kani_contract": "Ok implies exact actualValidator(statement)=Ok; for SAME decoded statement success is derived, not assumed",
+      "lean_implication": "AspisR1.S2G.validate_contract; AspisR1.S2G.decode_contract",
+      "source_theorems": [
+        "AspisS2OwnedStage1.SourceInstallation.decoder_validated",
+        "AspisR1TerminalDecoder.DecoderSuccess.decode_success_validated"
+      ],
+      "status": "pure installed value implication checked; Kani template disabled",
+      "missing_theorem": "native validator on that full decoded statement refines actualValidator and its exact error map/state, with read-only argument/heap/allocator frame on admitted inputs",
+      "native_children_field_closed": false
+    },
+    {
+      "child": "candidate",
+      "kani_contract": "Ok(bytes) implies actual 688-byte encoder on SAME full afterstate returns IDENTICAL bytes; Err unrestricted",
+      "lean_implication": "AspisR1.S2G.candidate_contract",
+      "source_theorems": [
+        "AspisS2OwnedStage1.SourceInstallation.actualEncoder",
+        "AspisR1.S2A.InstalledCuts.encoded"
+      ],
+      "status": "pure installed value implication checked; Kani template disabled",
+      "missing_theorem": "native encode_pool_v1_pair_verified_afterstate_v1 afterstate refines actualEncoder on CurrentCarrier.toDecoderAfterstate, including exact rejection and all state/read-only effects",
+      "native_children_field_closed": false
+    },
+    {
+      "child": "first",
+      "kani_contract": "Ok(cp) implies exact current candidate.tx1 with SAME statement public projection, public/proof/split/cp and observer None; NO cp length claim",
+      "lean_implication": "AspisR1.S2G.first_contract",
+      "source_theorems": [
+        "AspisS2OwnedStage1.SdkReference.Installation.first_success",
+        "AspisR1CurrentCaller.FirstComposition.first_current_prepared_new",
+        "AspisR1.MultiproofConeFrozen2Stage.both_batches"
+      ],
+      "status": "wrapper value implication checked; whole-child native contract missing",
+      "missing_theorem": "for ALL admitted reached first_decoded calls, concrete vops/currentDigest and source candidate.tx1 reify to SAME value and ordered effects; instantiate exact parser, batch0, ten query calls and checkpoint writer with S1/S3-S6/S9 provenance; retain all rejected prefixes and allocation/abort paths",
+      "native_children_field_closed": false
+    },
+    {
+      "child": "second",
+      "kani_contract": "No enabled stub: requires actual tx2_authenticated(public,proof,checkpoint,SolanaDigest,None) full Result/state/effect refinement",
+      "lean_implication": "no proved enclosing second statement/instance in inspected tree",
+      "source_theorems": [
+        "AspisR1.CheckpointBytes5Join.success_conditioned_checkpoint_stage_join",
+        "AspisR1.CheckpointBytes5Decision.decision_success_join",
+        "AspisR1.MultiproofConeFrozen2Stage.both_batches",
+        "AspisR1.S7JoinQueryRows.query_rows_exact",
+        "AspisR1.S8JoinFrozenScan.parsed_y1"
+      ],
+      "status": "missing whole-child theorem; predecessors only",
+      "missing_theorem": "same checkpoint/public/proof source tx2_authenticated refines resume, batch1, twelve query callbacks and finish with exact returned Result and full ordered queries/state; derive S1S7S8StateProvenance and all concrete callback instances, not merely matching roots or accepted booleans",
+      "native_children_field_closed": false
+    },
+    {
+      "child": "SolanaDigest",
+      "kani_contract": "Reified one-read returns actual D.digest(parts) and appends precisely (parts,digest); reached continuation receives that prefix",
+      "lean_implication": "AspisR1.S2G.Digest.contract; AspisR1.S2G.Digest.reached_call",
+      "source_theorems": [
+        "AspisR1.CheckpointBytes5Effect.run_read",
+        "AspisR1.CheckpointBytes5Effect.run_bind"
+      ],
+      "status": "reified interpreter implication checked; native digest stub disabled",
+      "missing_theorem": "pinned native SolanaDigest::digest/hashv on SAME ordered byte parts reifies to read parts and exact backend D.digest, then satisfies the retained per-call ROM/consistency law for all reached calls, including prefixes of rejected transactions; runtime query/log/rollback interpretation retained",
+      "native_children_field_closed": false
+    },
+    {
+      "child": "copy",
+      "kani_contract": "requires len(dst)=len(src)=1768, i<1768, expected=src[i]; modifies dst[0..1768]; ensures dst[i]=expected",
+      "lean_implication": "AspisR1.S2G.CopyImplication.selected_byte; AspisR1.S2G.CopyImplication.other_cell; AspisR1.S2G.Copy.contract",
+      "source_theorems": [
+        "AspisR1.S2C.copy_exact_byte",
+        "AspisR1.S2C.copy_other_cell",
+        "AspisS2OwnedStage1.SdkReference.CopyLoop.copy_in_place_total"
+      ],
+      "status": "Kani proof_for_contract and stub_verified consumer passed; owned/model implication checked",
+      "missing_theorem": "bind exact native SDK guard data region and SAME returned cp to safe disjoint source/destination slices and owned SDK slot at copy cut; establish original geometry and continue through cleanup. Local verified slice stub itself has no missing callee proof",
+      "native_children_field_closed": false
+    },
+    {
+      "child": "drop_checkpoint",
+      "kani_contract": "reuse existing S2C_checked_vec_drop empty-write contract ONLY for its checked Vec len/capacity1768, no-op SBF dealloc substitution and valid disjoint owners",
+      "lean_implication": "AspisR1.S2C.cleanup_metadata and cleanup_counters are conditional compositions, not owner implementations",
+      "source_theorems": [
+        "AspisR1.S2C.cleanup_metadata",
+        "AspisR1.S2C.cleanup_counters"
+      ],
+      "status": "reused bounded owner check; S2E stateful callback unfilled",
+      "missing_theorem": "actual valid returned Vec with its actual capacity, compiler implicit destruction and frozen allocator dispatch consumes SAME owner once, yields exact native/reference allocator state and preserves required original accounts/lamports/Rc/oracle fields",
+      "native_children_field_closed": false
+    },
+    {
+      "child": "drop_statement",
+      "kani_contract": "reuse existing S2C_checked_box_drop empty-write contract ONLY under checked actual statement layout and dealloc substitution",
+      "lean_implication": "AspisR1.S2C.cleanup_metadata is conditional on ownerStep/frame laws",
+      "source_theorems": [
+        "AspisR1.S2C.cleanup_metadata"
+      ],
+      "status": "reused bounded owner check; S2E stateful callback unfilled",
+      "missing_theorem": "actual SAME Box<full Statement> implicit destruction consumes owner once and refines S2E drop_statement with exact allocator/frame effects, on admitted runtime provenance/dispatch; no fictitious cleanup suffix on abort",
+      "native_children_field_closed": false
+    },
+    {
+      "child": "validate_asq8",
+      "kani_contract": "no enabled success stub; normalization byte identity is not authentication or ASF8 reconstruction",
+      "lean_implication": "AspisR1.OraclePortJoinSplitASQ8.pool_handoff has P6Normalization/success/suffix premises only",
+      "source_theorems": [
+        "AspisR1.OraclePortJoinSplitASQ8.pool_handoff",
+        "AspisR20Request.ASQ8Normalization.success_bytes"
+      ],
+      "status": "missing authenticated validate_asq8 whole-child theorem",
+      "missing_theorem": "for same program/full accounts/ASQ8 request native validate_asq8 returns SAME Validated(full statement,proof_length) or SAME error/state, deriving Clock/PDA/ownership/policy/reconstruction/validation/candidate-prefix facts and preserving reached hash/borrow/cleanup events",
+      "native_children_field_closed": false
+    },
+    {
+      "child": "public",
+      "kani_contract": "no enabled stub; requires full ASF8 forest-statement encoder, bytes1880, both variants, SAME complete statement",
+      "lean_implication": "semantic/payment projection theorems do not assert full ASF8 serializer equality",
+      "source_theorems": [
+        "AspisR1TerminalDecoder.CallerBridge.encoder_eq",
+        "AspisR1PublicPreparation.RepinS6First.reuse_decoded"
+      ],
+      "status": "missing full forest encoder native/installed statement",
+      "missing_theorem": "native encode_pool_v1_pair_forest_terminal_statement_v1(statement) refines concrete S2E.public full Vec including complete serialization, errors/allocator/state. Payment216 encoder_eq or semantic-public projection is insufficient",
+      "native_children_field_closed": false
+    },
+    {
+      "child": "emit",
+      "kani_contract": "no enabled stub; requires constructed result validation/encoding plus exact reached set_return_data(nonempty_bytes)",
+      "lean_implication": "no proved complete emit_result statement/effect instance in inspected tree",
+      "source_theorems": [],
+      "status": "missing emit_result whole-child theorem",
+      "missing_theorem": "native emit_result on SAME statement constructs SAME result fields, validates/encodes exact result bytes/magic/length and performs exactly its reached return-data/log effects; earlier Err emits no nonempty suffix and preserves earlier verifier queries",
+      "native_children_field_closed": false
+    },
+    {
+      "child": "clear_return_data",
+      "kani_contract": "no enabled stub; actual set_return_data(&[]) is a runtime event before validate_asq8",
+      "lean_implication": "no proved native syscall effect instance in inspected tree",
+      "source_theorems": [],
+      "status": "missing concrete runtime syscall port",
+      "missing_theorem": "actual set_return_data([]) step refines concrete S2E.clear_return_data with exact appended syscall event/return-data state and account frame under pinned runtime premises; effects of later rejection/abort/rollback explicit",
+      "native_children_field_closed": false
+    }
+  ],
+  "sources": {
+    "S1": {
+      "path": "lean-candidates/s1-prepared-installed-meaning-20261020/sources/CurrentPreparedInstalledMeaning.lean",
+      "sha256": "7023274abf13bad27550131f7de318680e4bbfcf147e793695ff8c1a9c7eb524",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "S3": {
+      "path": "evidence/s3-loop0-outer12-prefix-retention-v1-20261020/sources/S3ActualLoop0Outer12PrefixRetentionV1.lean",
+      "sha256": "b55f211ac1a2c15338c31f585eb1504e2f81b0878069690a8780d343667c09ae",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "S4": {
+      "path": "evidence/s4-candidate-total-local-values-v1-20261022/sources/S4CandidateTotalLocalValuesV1.lean",
+      "sha256": "98ff7930a842a8494b0f0cc037bb9eb7170cad6cbb29c406e3332c106ae6a039",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "S5": {
+      "path": "lean-candidates/s5-stage2-dot-residual-composition-20261020/sources/Stage2FinishPairing.lean",
+      "sha256": "0d2fde474112b45834ee9b19627937fc857fc95d5c376c9f711d9db21815dbe4",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "S6": {
+      "path": "lean/RepinS6First.lean",
+      "sha256": "cb143f84fe23b5adcfe79648493957ef1bb46c07319a2f9763910f5bb061698d",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "S9": {
+      "path": "evidence/s9-focused-side-updates-root-v1-20261022/sources/S9SourceSideUpdatesRootV1.lean",
+      "sha256": "497936e9dbbf5b70ad3b25021571774fb8cac6b42e50dc109b0f13a381d7f780",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "lean/MultiproofConeParserTotal.lean": {
+      "path": "lean/MultiproofConeParserTotal.lean",
+      "sha256": "cd477b20d66976aa1c3be9fd1338e0e982cd90dd80eb872c8839bdd020763558",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "lean/MultiproofConeFrozen2Stage.lean": {
+      "path": "lean/MultiproofConeFrozen2Stage.lean",
+      "sha256": "594d8dd73683b3ae9ffb3802471a46eecb8415b7988feea005a65cc3d24b6e67",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "lean/MultiproofConeP6Frozen2Stage.lean": {
+      "path": "lean/MultiproofConeP6Frozen2Stage.lean",
+      "sha256": "0810ebc5f5932534f46cc2e81cf1856d7251b02f26d37c33f65909517f52b1b1",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "lean/CheckpointBytes5Join.lean": {
+      "path": "lean/CheckpointBytes5Join.lean",
+      "sha256": "6e70715900d8c21c604d1e979705aae7d1434dab530e3907a32544ad22a1d54e",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "lean/CheckpointBytes5Decision.lean": {
+      "path": "lean/CheckpointBytes5Decision.lean",
+      "sha256": "f1b111fc6d02d1abac09cd6b2463d9141448764d26be9447e3d1d1ea8ef4df49",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "lean/S7JoinQueryRows.lean": {
+      "path": "lean/S7JoinQueryRows.lean",
+      "sha256": "97d3e716f4ea6af9ca2deffff29ba43ef4ac5badfa2bf4df1be89406b313d505",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "lean/S8JoinFrozenScan.lean": {
+      "path": "lean/S8JoinFrozenScan.lean",
+      "sha256": "62f02cb1f58c2021828311b57c145b4de56a7eb5a3b5fc480188d6c93065a4ad",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "lean/ExtractedDecoderCallerBridge.lean": {
+      "path": "lean/ExtractedDecoderCallerBridge.lean",
+      "sha256": "d7b5678e7626bcdfa93b630018b594332a484cbb92dc54151519bd9ca141c29d",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "lean/ExtractedTerminalCallerBridge.lean": {
+      "path": "lean/ExtractedTerminalCallerBridge.lean",
+      "sha256": "e6180de10311a1d68c4a7f58d38354a10f13586d8814d7fe27a88fdcb052523c",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "lean/ExtractedTerminalDecoderSuccess.lean": {
+      "path": "lean/ExtractedTerminalDecoderSuccess.lean",
+      "sha256": "1596e24845cde02afcf9d09f0dd965743d042a1bcf7c016de21d652aef9e10c7",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "lean/S2C_Cleanup.lean": {
+      "path": "lean/S2C_Cleanup.lean",
+      "sha256": "0a3c79a39a4a1d9a3569c6ee80f8607900e68d3989841b0638f4e7a12bb6e341",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    },
+    "lean/OraclePortJoinSplitASQ8.lean": {
+      "path": "lean/OraclePortJoinSplitASQ8.lean",
+      "sha256": "058bcc7acadeb2f243926cf39c6c27ad852f63f8340faea8b145babe054a742c",
+      "validation": "read-only complete statements; existing evidence reused, not replayed or adopted as a whole child"
+    }
+  },
+  "new_native_Required14_fields": []
+}

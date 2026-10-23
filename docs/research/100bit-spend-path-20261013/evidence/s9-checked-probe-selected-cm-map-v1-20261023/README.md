@@ -1,0 +1,3 @@
+# Checked arithmetic carrier transport
+
+The existing checked Qm31ArithmeticProbe and SelectedMaskProbe M31 operations are proved identical after exposing their pinned P constants. The CM add/sub/mul and mul_by_r calls map their complete Result through the explicit coordinate constructor; checked add-self maps to selected double. These maps hold for arbitrary stored inputs, preserving rejection and divergence, because they compare checked source bodies to checked source bodies. They do not identify wrapping source operations with checked operations without canonicality, prove the complete square, or establish production runtime refinement. Both focused runs passed with zero swap and standard axioms only. No compiled objects or full dependency inventories are included.

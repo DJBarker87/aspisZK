@@ -1,0 +1,108 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_sha256": "678117ac9c0b52ca78849fcf5f0d24d6e45838dbb8d9a347fd891b3c28cb9416",
+  "reused_compile_input_sha256": "4d1d433aac2ae6009ba5b2fc5c78860a1a86643a8a0d99656538e9ad1aadc995",
+  "reused_proof_exit_status": 1,
+  "raw_goto_sha256": "10f1ca251d5e2c879415e4629382cf89ac19bcd73f65f6ff95dc27e96f0e2542",
+  "harness_metadata_sha256": "1bd6bbaa05851e334caa357267bddccbe68ad14c67c90e69a5d319d7267bdd30",
+  "harness_metadata": {
+    "pretty_name": "proofs::actual_sdk_guard_other_lengths",
+    "mangled_name": "_RNvNtCskpGuPhK95k_25aspis_s126_sdk_proof_gate6proofs30actual_sdk_guard_other_lengths",
+    "crate_name": "aspis_s126_sdk_proof_gate",
+    "original_file": "src/lib.rs",
+    "original_start_line": 44,
+    "original_end_line": 59,
+    "goto_file": "/home/dombarker/project-offloads/s126-real-sdk-20261021/target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_s126_sdk_proof_gate-eda71b43b00692ae__RNvNtCskpGuPhK95k_25aspis_s126_sdk_proof_gate6proofs30actual_sdk_guard_other_lengths.symtab.out",
+    "attributes": {
+      "kind": "Proof",
+      "should_panic": false,
+      "solver": null,
+      "unwind_value": 8,
+      "stubs": [],
+      "verified_stubs": []
+    },
+    "contract": null,
+    "has_loop_contracts": false,
+    "is_automatically_generated": false
+  },
+  "pretty_names_sha256": "53b0202a8a44d4e48bc74711392a6ca9e49a73861e9d84f028d0341b444fe439",
+  "runner_sha256": "ef9bf88674af465fe4e7a80bbc6984cbe557afe734b8fdb58f9a74e334ed436a",
+  "tool_pins": {
+    "/home/dombarker/.kani/kani-0.67.0/bin/goto-cc": "ca585d7be4355a77b17b01eb19012ffcd1cb2b9372d0faba623b2485f174b210",
+    "/home/dombarker/.kani/kani-0.67.0/bin/goto-instrument": "4c6c6e630f7bfecada2d974f4a91b8031a8a6f5ced81319d34cf4ed9edf60e3e",
+    "/home/dombarker/.kani/kani-0.67.0/bin/cbmc": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973"
+  },
+  "commands": [
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/goto-cc",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_s126_sdk_proof_gate-eda71b43b00692ae__RNvNtCskpGuPhK95k_25aspis_s126_sdk_proof_gate6proofs30actual_sdk_guard_other_lengths.symtab.out",
+      "--function",
+      "_RNvNtCskpGuPhK95k_25aspis_s126_sdk_proof_gate6proofs30actual_sdk_guard_other_lengths",
+      "-o",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-proof-length-cut-v1/entry.out"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/goto-instrument",
+      "--add-library",
+      "--no-malloc-may-fail",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-proof-length-cut-v1/entry.out",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-proof-length-cut-v1/library.out"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/goto-instrument",
+      "--remove-function-body",
+      "memcmp",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-proof-length-cut-v1/library.out",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-proof-length-cut-v1/removed.out"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/goto-instrument",
+      "--generate-function-body",
+      "memcmp",
+      "--generate-function-body-options",
+      "assert-false-assume-false",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-proof-length-cut-v1/removed.out",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-proof-length-cut-v1/cut.out"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/goto-instrument",
+      "--generate-function-body-options",
+      "assert-false-assume-false",
+      "--generate-function-body",
+      ".*",
+      "--drop-unused-functions",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-proof-length-cut-v1/cut.out",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-proof-length-cut-v1/reachable.out"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/goto-instrument",
+      "--ensure-one-backedge-per-target",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-proof-length-cut-v1/reachable.out",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-proof-length-cut-v1/ready.out"
+    ],
+    [
+      "/home/dombarker/.kani/kani-0.67.0/bin/cbmc",
+      "--no-malloc-may-fail",
+      "--no-undefined-shift-check",
+      "--no-signed-overflow-check",
+      "--nan-check",
+      "--no-self-loops-to-assumptions",
+      "--no-pointer-primitive-check",
+      "--object-bits",
+      "16",
+      "--unwind",
+      "8",
+      "--sat-solver",
+      "cadical",
+      "--slice-formula",
+      "--unwinding-assertions",
+      "--json-ui",
+      "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-proof-length-cut-v1/ready.out"
+    ]
+  ],
+  "normal_pipeline_receipt_sha256": "6eb1b60a215ed8a9a8eaee1a43dfc43aa14961c7ccb3754d58772e2ed784468c",
+  "cut": "Only memcmp body -> assert(false); assume(false). Any reached comparison fails; this is a reachability proof, never an assumed equality.",
+  "property_scope": "All reachable assertions and source observations, full unwinding checks; no property selection",
+  "qualification": "Prove the actual frozen guard never reaches memcmp on any wrong runtime length.\nOnly memcmp's body is replaced by assert(false); assume(false), not by a\nsuccessful answer or an assumed comparison. All reachable source safety,\nreturn/frame observations and unwinding assertions must still pass.\n",
+  "timeout_seconds": 180
+}

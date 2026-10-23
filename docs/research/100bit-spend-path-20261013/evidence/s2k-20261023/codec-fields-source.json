@@ -1,0 +1,146 @@
+{
+  "source_revision": "f592cee0ed08808a1823e7d532b7f2b2bf29f109",
+  "lib_sha256": "23c92ff82453c097249ff5e99a4f55524ccb8d71e36f69787de9044c0a5a5dec",
+  "fields": [
+    {
+      "field": "magic",
+      "source_cut": {
+        "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+        "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+        "cut": "output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC);",
+        "range": [
+          0,
+          4
+        ],
+        "callee": null,
+        "afterstate_note": null
+      },
+      "parameter_replacements": {},
+      "body": "output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC);"
+    },
+    {
+      "field": "version",
+      "source_cut": {
+        "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+        "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+        "cut": "output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;",
+        "range": [
+          4,
+          5
+        ],
+        "callee": null,
+        "afterstate_note": null
+      },
+      "parameter_replacements": {},
+      "body": "output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;"
+    },
+    {
+      "field": "kind",
+      "source_cut": {
+        "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+        "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+        "cut": "output[5] = result.transition_kind as u8;",
+        "range": [
+          5,
+          6
+        ],
+        "callee": null,
+        "afterstate_note": null
+      },
+      "parameter_replacements": {
+        "result.transition_kind as u8": "kind"
+      },
+      "body": "output[5] = kind;"
+    },
+    {
+      "field": "digest_version",
+      "source_cut": {
+        "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+        "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+        "cut": "output[6] = POOL_V1_DIGEST_ENCODING_VERSION;",
+        "range": [
+          6,
+          7
+        ],
+        "callee": null,
+        "afterstate_note": null
+      },
+      "parameter_replacements": {},
+      "body": "output[6] = POOL_V1_DIGEST_ENCODING_VERSION;"
+    },
+    {
+      "field": "lane",
+      "source_cut": {
+        "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+        "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+        "cut": "output[7] = result.output_lane;",
+        "range": [
+          7,
+          8
+        ],
+        "callee": null,
+        "afterstate_note": null
+      },
+      "parameter_replacements": {
+        "result.output_lane": "lane"
+      },
+      "body": "output[7] = lane;"
+    },
+    {
+      "field": "master",
+      "source_cut": {
+        "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+        "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+        "cut": "output[RESULT_MASTER_OFFSET..RESULT_SELECTED_LANE_OFFSET]\n        .copy_from_slice(&result.master_account);",
+        "range": [
+          8,
+          40
+        ],
+        "callee": "S2K_copy32",
+        "afterstate_note": null
+      },
+      "parameter_replacements": {
+        "&result.master_account": "master"
+      },
+      "body": "output[RESULT_MASTER_OFFSET..RESULT_SELECTED_LANE_OFFSET]\n        .copy_from_slice(master);"
+    },
+    {
+      "field": "selected",
+      "source_cut": {
+        "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+        "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+        "cut": "output[RESULT_SELECTED_LANE_OFFSET..RESULT_NULLIFIER_OFFSET]\n        .copy_from_slice(&result.selected_lane_account);",
+        "range": [
+          40,
+          72
+        ],
+        "callee": "S2K_copy32",
+        "afterstate_note": null
+      },
+      "parameter_replacements": {
+        "&result.selected_lane_account": "selected"
+      },
+      "body": "output[RESULT_SELECTED_LANE_OFFSET..RESULT_NULLIFIER_OFFSET]\n        .copy_from_slice(selected);"
+    },
+    {
+      "field": "nullifier",
+      "source_cut": {
+        "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+        "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+        "cut": "output[RESULT_NULLIFIER_OFFSET..RESULT_AFTERSTATE_OFFSET]\n        .copy_from_slice(&encode_digest_canonical(&result.nullifier));",
+        "range": [
+          72,
+          104
+        ],
+        "callee": "S2K_copy32",
+        "afterstate_note": null
+      },
+      "parameter_replacements": {
+        "&result.nullifier": "nullifier"
+      },
+      "body": "output[RESULT_NULLIFIER_OFFSET..RESULT_AFTERSTATE_OFFSET]\n        .copy_from_slice(&encode_digest_canonical(nullifier));"
+    }
+  ],
+  "entry": "\npub fn S2K_reference_fields(master: [u8;32], selected: [u8;32], nullifier: Digest,\n    kind: u8, lane: u8, afterstate: [u8;688]) -> [u8;792] {\n    let output = [0u8;792];\n    let output = S2K_store_magic(output);\n    let output = S2K_store_version(output);\n    let output = S2K_store_kind(output,kind);\n    let output = S2K_store_digest_version(output);\n    let output = S2K_store_lane(output,lane);\n    let output = S2K_store_master(output,&master);\n    let output = S2K_store_selected(output,&selected);\n    let output = S2K_store_nullifier(output,&nullifier);\n    S2K_store_afterstate(output,&afterstate)\n}\n",
+  "scope": "Source field boundary reference, with immutable result fields explicit. Each store has native write/frame evidence. Not a whole emitter or validation-success substitute."
+}

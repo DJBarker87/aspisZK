@@ -1,0 +1,51 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedGuardAcquireV1.lean:95:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑(↑sdk.data_cells).length
+ b := ↑↑slot
+case pos
+sdk : OwnedSdk
+guards : LiveGuards
+slot : Usize
+cell : OwnedDataCell
+next : Isize
+fresh : guards.proof = none
+valid : ↑slot < (↑sdk.data_cells).length
+actual : cell = (↑sdk.data_cells)[↑slot]
+nonnegative : 0 ≤ ↑cell.borrowed
+value : ↑next = ↑cell.borrowed + 1
+checkpoint :
+  ∀ (slot : Usize),
+    guards.checkpoint = some slot →
+      ↑slot < (↑sdk.data_cells).length ∧ countAt sdk ↑slot = -1 ∧ guards.public ≠ some slot ∧ guards.proof ≠ some slot
+publicHeld :
+  ∀ (slot : Usize),
+    guards.public = some slot →
+      ↑slot < (↑sdk.data_cells).length ∧ (1 + if guards.proof = some slot then 1 else 0) ≤ countAt sdk ↑slot
+proofHeld :
+  ∀ (slot : Usize),
+    guards.proof = some slot →
+      ↑slot < (↑sdk.data_cells).length ∧ (1 + if guards.public = some slot then 1 else 0) ≤ countAt sdk ↑slot
+hcount : countAt sdk ↑slot = ↑cell.borrowed
+hother : { checkpoint := guards.checkpoint, «public» := guards.public, proof := some slot }.public = some slot
+hv : ↑slot < (↑sdk.data_cells).length
+hc : (1 + if guards.proof = some slot then 1 else 0) ≤ countAt sdk ↑slot
+lower : 1 ≤ countAt sdk ↑slot
+⊢ 2 ≤ if True then ↑next else countAt sdk ↑slot
+'AspisS2OwnedStage1.SdkReference.GuardAcquire.invariant_add_proof' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.GuardAcquire.invariant_add_public' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.GuardAcquire.index_success_valid' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.GuardAcquire.checkpoint_acquire_invariant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

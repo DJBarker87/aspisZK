@@ -1,0 +1,94 @@
+{
+  "after_elf_sha256": "4f3fe085058dad5600d5529180285512453dd236cf5836875cc158f7422ab18a",
+  "after_source_revision": "81521c77f7+candidate-sources.json",
+  "before_elf_sha256": "4ef3e2bf11fcc38e686ddfec8f29abab84bbedc60070d322484493583e5ad244",
+  "before_source_revision": "c2d4d0a3c5",
+  "build_receipts": [
+    {
+      "path": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/heap-old-pin.json",
+      "receipt": {
+        "bytes": 1508296,
+        "change": "let result = r1_pool_adapter::process(program_id,accounts,data);\n        #[cfg(target_os=\"solana\")]\n        unsafe {\n            let start=solana_program::entrypoint::HEAP_START_ADDRESS as usize;\n            let cursor=*(start as *const usize);\n            let used=start+256*1024-cursor+core::mem::size_of::<usize>();\n            solana_program::log::sol_log_64(0xada, used as u64, 256*1024, 0, 0);\n        }\n        return result;",
+        "command": [
+          "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+          "--manifest-path",
+          "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/heap-src-old/programs/r1-cost-probe/Cargo.toml",
+          "--sbf-out-dir",
+          "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/heap-artifacts-old",
+          "--features",
+          "pool-adapter,private-leaf-salts",
+          "--skip-tools-install",
+          "--offline",
+          "-j",
+          "4",
+          "--",
+          "--locked"
+        ],
+        "diagnostic_only": true,
+        "lib_after_sha256": "3f8688992e546bc25dc77398d6cc818a5a6087e1ba3e893dc3ff214dc5869af6",
+        "lib_before_sha256": "806264e5de0b54762872f72f129afad7c1ee5b71333c1a3375955dd8d6080172",
+        "mode": "old",
+        "sha256": "4ef3e2bf11fcc38e686ddfec8f29abab84bbedc60070d322484493583e5ad244"
+      },
+      "sha256": "596ca84814eb3a6841b74511df1459c2661da12bb2b0db9d7b4d787fbf3525b3"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/heap-new-pin.json",
+      "receipt": {
+        "bytes": 1511360,
+        "change": "let result = r1_pool_adapter::process(program_id,accounts,data);\n        #[cfg(target_os=\"solana\")]\n        unsafe {\n            let start=solana_program::entrypoint::HEAP_START_ADDRESS as usize;\n            let cursor=*(start as *const usize);\n            let used=start+256*1024-cursor+core::mem::size_of::<usize>();\n            solana_program::log::sol_log_64(0xada, used as u64, 256*1024, 0, 0);\n        }\n        return result;",
+        "command": [
+          "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+          "--manifest-path",
+          "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/heap-src-new/programs/r1-cost-probe/Cargo.toml",
+          "--sbf-out-dir",
+          "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/heap-artifacts-new",
+          "--features",
+          "pool-adapter,private-leaf-salts",
+          "--skip-tools-install",
+          "--offline",
+          "-j",
+          "4",
+          "--",
+          "--locked"
+        ],
+        "diagnostic_only": true,
+        "lib_after_sha256": "8be59ada8111e206ed422c6237d26540f24fce5b0537ec4b26e04e6e836ca180",
+        "lib_before_sha256": "e56fd18185d72d5b925da56fdd168a05c9bfea2da1c2d17058d097f74c66d4d8",
+        "mode": "new",
+        "sha256": "4f3fe085058dad5600d5529180285512453dd236cf5836875cc158f7422ab18a"
+      },
+      "sha256": "97c9818bfbaa7736b3d0f4dd4fd7c90af519fb95c8e552129e1ef8d0ffba37a3"
+    }
+  ],
+  "cargo_lock_sha256": "08de51efc17d86e1c371191bf3e8892c3cee86bf56dd3e10aea79d228a57b3f9",
+  "checkpoint": "Fb1cCszEoaa8Z78JPYN4SVLsrHYwD4KDEsZbVoUjWb2e",
+  "checkpoint_origin": "same fresh SVM's successful stage1",
+  "harness_binary_sha256": "8d287f158c6801c549a0ae3997a0c54e2ce4211b7f57a3b29f5fc9a8a6050953",
+  "harness_source_revision": "81521c77f7+owned-candidate",
+  "harness_source_sha256": "0cf01bf9f8dceb25f148234b9eb97fc7d1546a9a98f8f4133aec38539e093c65",
+  "keys_retained": true,
+  "pairs_per_elf": 1,
+  "payer": "8hMLRcaKay7TbomWLZBcEAM8SJQXaYwpb3LmrJ2vXTtp",
+  "program": "7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue",
+  "proof_sha256": "fbc921ceb417aa22d2d7a7fdd823c60305646f2311488b3c324435a582d372f8",
+  "public_sha256": "e201be4a028d74258c5344e7395bfabf7568af4ee7df0ec0c7b695f02fbacb15",
+  "readonly_metadata_runtime": {
+    "candidate_only": true,
+    "requested": null,
+    "signature_verification": false,
+    "source_sha256": "5f90f75623eb341fc4918e3cc2e6630d45014f791b1e0af91f7ee0e06878b0dc"
+  },
+  "registry_descriptors": "fixed synthetic V2 images, identical across runs; executable hash fields are not artifact certificates",
+  "runtime": {
+    "active_features_sha256": "f9eaa331f73707f9a339a54be4473f5689b069883a3df620c0bd7e692a3857ff",
+    "agave": "4.2.1",
+    "heap_bytes": 262144,
+    "limit_cu": 1400000,
+    "litesvm": "0.16.0",
+    "loaded_account_limit": 8388608,
+    "slot": 150
+  },
+  "scope": "current-route verifier CU; preloaded state; no registration or Pool settlement claim",
+  "setup_excluded_from_delta": true
+}

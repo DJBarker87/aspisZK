@@ -1,0 +1,52 @@
+import AspisR1ProducerRelease47.Samples49
+import R1Z.ProverCommitBasisFillValue47
+/-! Scalar bounds for the semantic sample point's big-endian Boolean tail. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitSampleBits49
+open Aeneas Aeneas.Std
+
+theorem sub_value (x y : Usize) (h : y.val≤x.val) :
+    (Usize.wrapping_sub x y).val=x.val-y.val := by
+  rw [Usize.wrapping_sub_val_eq]
+  have hy := y.hSize
+  have hx := x.hSize
+  have shift : x.val+(UScalar.size .Usize-y.val)=(x.val-y.val)+UScalar.size .Usize := by omega
+  rw [shift,Nat.add_mod_right,Nat.mod_eq_of_lt (by omega)]
+
+theorem bit_value (assignment : Usize) (s : U32) (small : s.val<32) :
+    ((Usize.wrapping_shr assignment s) &&& 1#usize).val=(assignment.val / 2^s.val)%2 := by
+  change ((assignment.bv.ushiftRight (s.val % UScalarTy.Usize.numBits)) &&& (1#usize).bv).toNat = _
+  simp only [BitVec.toNat_and,BitVec.toNat_ushiftRight]
+  have bits : 32≤UScalarTy.Usize.numBits := by exact System.Platform.le_numBits
+  have hm : s.val%UScalarTy.Usize.numBits=s.val := Nat.mod_eq_of_lt (by omega)
+  rw [hm]
+  change (assignment.val >>> s.val) &&& 1 = _
+  rw [Nat.shiftRight_eq_div_pow]
+  exact Nat.and_two_pow_sub_one_eq_mod _ 1
+
+def bit (assignment : Usize) (remaining offset : Nat) : Bool :=
+  decide ((assignment.val / 2^(remaining-1-offset))%2≠0)
+
+theorem condition (remaining offset assignment : Usize)
+    (positive : offset.val<remaining.val) (bound : remaining.val≤9) :
+    let s := UScalar.cast .U32 (Usize.wrapping_sub (Usize.wrapping_sub remaining 1#usize) offset)
+    ((Usize.wrapping_shr assignment s) &&& 1#usize)=0#usize ↔
+      bit assignment remaining.val offset.val=false := by
+  dsimp only
+  have hfirst : (Usize.wrapping_sub remaining 1#usize).val=remaining.val-1 := by
+    simpa only [show (1#usize).val=1 from rfl] using
+      sub_value remaining 1#usize (by change 1≤remaining.val;omega)
+  have hsub : (Usize.wrapping_sub (Usize.wrapping_sub remaining 1#usize) offset).val=
+      remaining.val-1-offset.val := by
+    rw [sub_value _ offset (by rw [hfirst];omega),hfirst]
+  have hcast : (UScalar.cast .U32 (Usize.wrapping_sub (Usize.wrapping_sub remaining 1#usize) offset)).val=
+      remaining.val-1-offset.val := by scalar_tac
+  have eqzero (v : Usize) : v=0#usize ↔ v.val=0 := by constructor <;> intro h <;> scalar_tac
+  rw [eqzero,bit_value _ _ (by rw [hcast];omega),hcast]
+  change _=0 ↔ _
+  simp only [bit,decide_eq_false_iff_not,not_not]
+
+#print axioms sub_value
+#print axioms bit_value
+#print axioms condition
+end R1Z.ProverCommitSampleBits49

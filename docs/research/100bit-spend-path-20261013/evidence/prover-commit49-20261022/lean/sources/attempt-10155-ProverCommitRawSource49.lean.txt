@@ -1,0 +1,80 @@
+import R1Z.ProverCommitRawValues49
+import R1Z.ProverCommitStatementPoints49
+/-! Raw helper composition starting from the original source alpha array.
+The complete point producer and the alpha[8]/alpha[9] reads are discharged. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitRawSource49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open R0P.SemSource ProverCommitSuccessorPoint49
+
+theorem index3_0 {A : Type} (a b c : A) :
+    Array.index_usize (Array.make 3#usize [a,b,c]) 0#usize=ok a := by
+  rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by decide)]
+  rfl
+
+theorem index3_1 {A : Type} (a b c : A) :
+    Array.index_usize (Array.make 3#usize [a,b,c]) 1#usize=ok b := by
+  rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by decide)]
+  rfl
+
+theorem index3_2 {A : Type} (a b c : A) :
+    Array.index_usize (Array.make 3#usize [a,b,c]) 2#usize=ok c := by
+  rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by decide)]
+  rfl
+
+def run (p : Array field.QM31 10#usize) (x0 y0 x1 y1 : field.QM31) (j : Usize) :
+    Result (Array field.QM31 7#usize) := do
+  let pts ← points.all p
+  let p0 ← Array.index_usize pts 0#usize
+  let p1 ← Array.index_usize pts 1#usize
+  let p2 ← Array.index_usize pts 2#usize
+  let a8 ← Array.index_usize p 8#usize
+  let a9 ← Array.index_usize p 9#usize
+  ProverCommitRawValues49.run p0 p1 p2 a8 a9 x0 y0 x1 y1 j
+
+def model (a : Fin 10 → QM31Exact) (x0 y0 x1 y1 : QM31Exact) (j : Fin 1024) : Fin 7 → QM31Exact :=
+  ![AspisR0.Opening.indicator R0P.copyInactiveRows (AspisR1.rowEquiv.symm j),
+    AspisR0.Opening.eqWeight (openingPoints a 0) (AspisR1.rowEquiv.symm j),
+    AspisR0.Opening.eqWeight (openingPoints a 1) (AspisR1.rowEquiv.symm j),
+    AspisR0.Opening.eqWeight (openingPoints a 2) (AspisR1.rowEquiv.symm j),
+    libraWeight a j,
+    ProverCommitEval47.messageEval (Pi.single j 1) x0 y0,
+    ProverCommitEval47.messageEval (Pi.single j 1) x1 y1]
+
+theorem exact_result (p : Nat → Old.Q) (hp : ∀ i, i<10 → Canonical (p i))
+    (x0 y0 x1 y1 : Old.Q) (hx0 : Canonical x0) (hy0 : Canonical y0)
+    (hx1 : Canonical x1) (hy1 : Canonical y1) (j : Usize) (hj : j.val<1024) :
+    ∃ out : Nat → Old.Q,
+      run (ProverCommitQArray48.array 10#usize p) (ProverCommitNativeQ48.source x0)
+        (ProverCommitNativeQ48.source y0) (ProverCommitNativeQ48.source x1) (ProverCommitNativeQ48.source y1) j=
+        ok (ProverCommitQArray48.array 7#usize out) ∧
+      (∀ k, k<7 → Canonical (out k)) ∧
+      ∀ k : Fin 7, decode (out k.val)=model (decoded p) (decode x0) (decode y0) (decode x1) (decode y1) ⟨j.val,hj⟩ k := by
+  obtain ⟨s,a,hpoints,hcs,hca,hmodel⟩ := ProverCommitStatementPoints49.points_exact p hp
+  let ps : Fin 3 → Nat → Old.Q := ![p,s,a]
+  have hc : ∀ k i, i<10 → Canonical (ps k i) := by
+    intro k i hi
+    fin_cases k
+    · exact hp i hi
+    · exact hcs i hi
+    · exact hca i hi
+  obtain ⟨out,hout,hcout,hdout⟩ := ProverCommitRawValues49.exact_result ps hc (p 8) (p 9) x0 y0 x1 y1
+    (hp 8 (by decide)) (hp 9 (by decide)) hx0 hy0 hx1 hy1 j hj
+  have hm : ProverCommitRawValues49.model ps (p 8) (p 9) x0 y0 x1 y1 ⟨j.val,hj⟩=
+      model (decoded p) (decode x0) (decode y0) (decode x1) (decode y1) ⟨j.val,hj⟩ := by
+    unfold ProverCommitRawValues49.model model
+    rw [hmodel 0,hmodel 1,hmodel 2]
+    rfl
+  refine ⟨out,?_,hcout,fun k => (hdout k).trans (congrFun hm k)⟩
+  · simp only [run,hpoints,bind_tc_ok,index3_0,index3_1,index3_2,
+      ProverCommitQArray48.index _ _ 8#usize (by decide),ProverCommitQArray48.index _ _ 9#usize (by decide)]
+    exact hout
+
+#print axioms index3_0
+#print axioms index3_1
+#print axioms index3_2
+#print axioms exact_result
+end R1Z.ProverCommitRawSource49

@@ -1,0 +1,135 @@
+S2F_Rejections.lean:11:77: error: unsolved goals
+C S : Type
+ops : S2E_Reference.Ops
+children : Children C S
+original : Original S
+error : PE
+rejected : shape1 ops original.data original.sdk.accounts.len = ok (core.result.Result.Err error)
+⊢ ok (core.result.Result.Err (core.convert.FromSame.from error), original.state, original.sdk) =
+    ok (core.result.Result.Err error, original.state, original.sdk)
+S2F_Rejections.lean:25:69: error: unsolved goals
+C S : Type
+ops : S2E_Reference.Ops
+children : Children C S
+original : Original S
+account : OwnedAccount
+post : SDK
+guards : LiveGuards
+error : PE
+shape : shape1 ops original.data original.sdk.accounts.len = ok (core.result.Result.Ok ())
+admitted : admission ops original.program original.sdk = ok (core.result.Result.Ok ())
+read :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount) original.sdk.accounts 2#usize = ok account
+borrow :
+  owned_acquire_checkpoint original.sdk { checkpoint := none, «public» := none, proof := none } account.data_slot =
+    ok (core.result.Result.Err error, post, guards)
+⊢ (let (r2, sdk1, guards) := (core.result.Result.Err error, post, guards)
+    do
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let (result, state1, sdk2) ← checkpoint_continuation ops children original.state sdk1 original.data
+        let sdk3 ← owned_release_guards sdk2 guards
+        ok (result, state1, sdk3)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let result ←
+          match residual with
+            | core.result.Result.Ok x =>
+              core.convert.Infallible.rec (fun x => Result (core.result.Result Unit solana_program_error.ProgramError))
+                x
+            | core.result.Result.Err e => ok (core.result.Result.Err (core.convert.FromSame.from e))
+        ok (result, original.state, sdk1)) =
+    ok (core.result.Result.Err error, original.state, post)
+S2F_Rejections.lean:37:97: error: unsolved goals
+C S : Type
+ops : S2E_Reference.Ops
+children : Children C S
+state : S
+sdk post : SDK
+validated : Validated
+proofSlot : Usize
+account : OwnedAccount
+error : PE
+read : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount) sdk.accounts 6#usize = ok account
+borrow : owned_acquire_shared sdk account.data_slot = ok (core.result.Result.Err error, post)
+⊢ (let (r, sdk1) := (core.result.Result.Err error, post)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let (result, state1) ← stage2_tail ops children state sdk1 validated proofSlot account.data_slot
+        let sdk2 ← release_shared sdk1 account.data_slot
+        ok (result, state1, sdk2)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let result ←
+          match residual with
+            | core.result.Result.Ok x =>
+              core.convert.Infallible.rec (fun x => Result (core.result.Result Unit solana_program_error.ProgramError))
+                x
+            | core.result.Result.Err e => ok (core.result.Result.Err (core.convert.FromSame.from e))
+        ok (result, state, sdk1)) =
+    ok (core.result.Result.Err error, state, post)
+S2F_Rejections.lean:47:104: error: unsolved goals
+C S : Type
+ops : S2E_Reference.Ops
+children : Children C S
+original : Original S
+badCount : original.sdk.accounts.len ≠ 7#usize
+⊢ (if original.sdk.accounts.len ≠ 7#usize then
+      ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData, original.state, original.sdk)
+    else do
+      let o ← core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) original.data { «end» := 4#usize }
+      let a ← ops.op13
+      let s ←
+        core.array.Array.index
+            (core.ops.index.IndexSlice
+              (S2E_Reference.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+            a ()
+      let b ←
+        core.cmp.PartialEq.ne.trait_default
+            (S2E_Reference.core.option.Option.Insts.CoreCmpPartialEqOption ops
+              (core.cmp.PartialEqShared (S2E_Reference.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+            o (some s)
+      if b = true then
+          ok
+            (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData, original.state,
+              original.sdk)
+        else do
+          let state1 ← children.clear_return_data original.state
+          let (r, state2) ← children.validate_asq8 state1 original.program original.sdk original.data
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (result, state3, sdk1) ← stage2_proof ops children state2 original.sdk val
+              let state4 ← children.drop_statement state3 val.statement
+              ok (result, state4, sdk1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let result ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame solana_program_error.ProgramError) residual
+              ok (result, state2, original.sdk)) =
+    ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData, original.state, original.sdk)
+S2F_Rejections.lean:48:31: warning: This simp argument is unused:
+  badCount
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵a̵g̵e̵2̵,̵b̵n̵e̵_̵i̵f̵f̵_̵n̵e̵,̵b̵a̵d̵C̵o̵u̵n̵t̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲s̲t̲a̲g̲e̲2̲,̲ ̲b̲n̲e̲_̲i̲f̲f̲_̲n̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2F_Rejections.lean:48:40: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵a̵g̵e̵2̵,̵b̵n̵e̵_̵i̵f̵f̵_̵n̵e̵,̵b̵a̵d̵C̵o̵u̵n̵t̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲s̲t̲a̲g̲e̲2̲,̲ ̲b̲n̲e̲_̲i̲f̲f̲_̲n̲e̲,̲ ̲b̲a̲d̲C̲o̲u̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2F.stage1_shape_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2F.stage1_checkpoint_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2F.stage2_checkpoint_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2F.stage2_count_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,13 @@
+import R1Z.ProverCommitRadixField50
+import R1Z.ProverCommitNativeQ48
+set_option autoImplicit false
+namespace R1Z.ProverCommitRadixExact50
+open AspisR1.ExtractedCurrentQM31Exact (QM31Exact)
+attribute [local irreducible] ProverCommitRadix50.block ProverCommitRadix50.blocks ProverCommitInterpolationPoly48.poly
+
+theorem top (f : Nat → QM31Exact) (x : QM31Exact) :
+    ProverCommitRadix50.block f x 6*(x^4)^6+ProverCommitRadix50.blocks f x 6=
+      (ProverCommitInterpolationPoly48.poly 28 f).eval x := by
+  exact ProverCommitRadixField50.top f x 6
+#print axioms top
+end R1Z.ProverCommitRadixExact50

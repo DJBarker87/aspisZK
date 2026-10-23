@@ -1,0 +1,122 @@
+#![allow(unexpected_cfgs, dead_code, static_mut_refs)]
+// E2's atomic presence primitive and byte-blind IO faults are explicit
+// substitutes, not claims about a native OS or filesystem implementation.
+mod io {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+    pub enum ErrorKind { AlreadyExists, Other(u8) }
+    #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+    pub struct Error(pub ErrorKind);
+    impl Error { pub fn kind(&self) -> ErrorKind { self.0 } }
+    pub type Result<T> = ResultAlias<T, Error>;
+    type ResultAlias<T, E> = core::result::Result<T, E>;
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+struct State {
+    faults: [u8; 7],
+    trace: [u8; 7],
+    calls: usize,
+    present: bool,
+    writes: [[u8; 32]; 3],
+    write_lengths: [usize; 3],
+}
+static mut STATE: Option<State> = None;
+fn access<T>(f: impl FnOnce(&mut State) -> T) -> T {
+    unsafe { f(STATE.as_mut().unwrap()) }
+}
+fn primitive(s: &mut State, kind: u8) -> io::Result<()> {
+    assert!(s.calls < 7);
+    s.trace[s.calls] = kind;
+    let fault = s.faults[s.calls];
+    s.calls += 1;
+    if kind == 0 && s.present {
+        return Err(io::Error(io::ErrorKind::AlreadyExists));
+    }
+    if fault != 0 { return Err(io::Error(io::ErrorKind::Other(fault))); }
+    if kind == 0 { s.present = true; }
+    Ok(())
+}
+struct OpenOptions;
+impl OpenOptions {
+    fn new() -> Self { Self }
+    fn write(&mut self, _: bool) -> &mut Self { self }
+    fn create_new(&mut self, _: bool) -> &mut Self { self }
+    fn mode(&mut self, _: u32) -> &mut Self { self }
+    fn open(&self, _: [u8; 32]) -> io::Result<File> {
+        access(|s| primitive(s, 0))?;
+        Ok(File { writes: 0 })
+    }
+}
+struct File { writes: usize }
+impl File {
+    fn write_all(&mut self, bytes: &[u8]) -> io::Result<()> {
+        let part = self.writes;
+        self.writes += 1;
+        access(|s| {
+            // Requested bytes are retained even on a write error. Partial OS
+            // writes are inside the write_all primitive boundary, not verified.
+            s.write_lengths[part] = bytes.len();
+            s.writes[part][..bytes.len()].copy_from_slice(bytes);
+            primitive(s, (part + 1) as u8)
+        })
+    }
+    fn sync_all(&self) -> io::Result<()> { access(|s| primitive(s, 4)) }
+}
+fn sync_directory(_: &()) -> io::Result<()> {
+    access(|s| primitive(s, 5))?;
+    access(|s| primitive(s, 6))
+}
+const RESERVATION_MAGIC: &[u8; 16] = b"ASPIS-MASK-V1\0\0\0"; // exact shipped bytes
+struct DurableStateOnlyMaskNonceStore { directory: (), last_error: Option<io::ErrorKind> }
+impl DurableStateOnlyMaskNonceStore {
+    // Address hashing is P1; only occupancy of the requested path is used here.
+    fn reservation_path(&self, nonce: &[u8; 32]) -> [u8; 32] { *nonce }
+}
+trait StateOnlyMaskNonceStore {
+    fn reserve(&mut self, statement_digest: [u8; 32], mask_nonce: [u8; 32]) -> bool;
+}
+include!("RealR1_native_reserve.rs");
+
+fn owned(mut s: State, digest: [u8; 32], nonce: [u8; 32]) -> (io::Result<bool>, State) {
+    match primitive(&mut s, 0) {
+        Err(e) if e.kind() == io::ErrorKind::AlreadyExists => return (Ok(false), s),
+        Err(e) => return (Err(e), s),
+        Ok(()) => (),
+    }
+    for kind in 1..7 {
+        if kind < 4 {
+            s.write_lengths[kind - 1] = if kind == 1 { 16 } else { 32 };
+            if kind == 1 { s.writes[0][..16].copy_from_slice(RESERVATION_MAGIC); }
+            else { s.writes[kind - 1] = if kind == 2 { digest } else { nonce }; }
+        }
+        if let Err(e) = primitive(&mut s, kind as u8) { return (Err(e), s); }
+    }
+    (Ok(true), s)
+}
+#[cfg(kani)]
+mod proofs {
+    use super::*;
+    #[kani::proof]
+    #[kani::unwind(34)]
+    fn faithful_reservation() {
+        let initial = State { faults: kani::any(), trace: [255; 7], calls: 0,
+                              present: kani::any(), writes: [[0; 32]; 3], write_lengths: [0; 3] };
+        let digest = kani::any();
+        let nonce = kani::any();
+        unsafe { STATE = Some(initial); }
+        let mut store = DurableStateOnlyMaskNonceStore { directory: (), last_error: None };
+        let got = store.reserve(digest, nonce);
+        let after = access(|s| *s);
+        let (expected, final_state) = owned(initial, digest, nonce);
+        assert_eq!(got, expected.unwrap_or(false));
+        assert_eq!(store.last_error, expected.err().map(|e| e.kind()));
+        assert_eq!(after.faults, final_state.faults);
+        assert_eq!(after.trace, final_state.trace);
+        assert_eq!(after.calls, final_state.calls);
+        assert_eq!(after.present, final_state.present);
+        assert_eq!(after.write_lengths, final_state.write_lengths);
+        for part in 0..3 { assert_eq!(after.writes[part], final_state.writes[part]); }
+        assert!(!initial.present || after.present);
+        if initial.present { assert!(!got); assert_eq!(after.calls, 1); }
+        if !initial.present && initial.faults[0] == 0 { assert!(after.present); }
+    }
+}

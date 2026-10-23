@@ -1,0 +1,36 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCopyLoopTotalV1.lean:27:6: error: Tactic `subst` failed: did not find equation for eliminating 'heap'
+
+case refine_1
+sdk : OwnedSdk
+slot : Usize
+source : Slice U8
+cell : OwnedDataCell
+valid : ↑slot < (↑sdk.data_cells).length
+actual : cell = (↑sdk.data_cells)[↑slot]
+sameLength : (↑cell.bytes).length = (↑source).length
+inv : OwnedSdk × Usize → Prop :=
+  fun state =>
+    ∃ bytes,
+      state.1 = replaceBytes sdk slot cell bytes ∧
+        (↑bytes).length = (↑source).length ∧ ↑state.2 ≤ (↑source).length ∧ PrefixEq bytes source ↑state.2
+heap : OwnedSdk
+offset : Usize
+bytes : alloc.vec.Vec U8
+heapEq : (heap, offset).1 = replaceBytes sdk slot cell bytes
+length : (↑bytes).length = (↑source).length
+ordered : ↑(heap, offset).2 ≤ (↑source).length
+copied : PrefixEq bytes source ↑(heap, offset).2
+⊢ (match (heap, offset) with
+    | (heap, offset) => copy_in_place_loop.body slot source heap offset) ⦃
+    r =>
+    match r with
+    | done y => y = replaceBytes sdk slot cell source
+    | cont x' => inv x' ∧ (↑source).length - ↑x'.2 < (↑source).length - ↑(heap, offset).2 ⦄
+'AspisS2OwnedStage1.SdkReference.CopyLoop.copy_loop_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.CopyLoop.copy_in_place_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

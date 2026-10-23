@@ -1,0 +1,17 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedBorrowTotalV1.lean:14:4: error: Tactic `apply` failed: could not unify the conclusion of `@IScalar.add_spec`
+  ?x + ?y ⦃ z => ↑z = ↑?x + ↑?y ⦄
+with the goal
+  counter + 1#isize ⦃ next => ↑next = ↑counter + 1 ⦄
+
+Note: The full type of `@IScalar.add_spec` is
+  ∀ {ty : IScalarTy} {x y : IScalar ty},
+    IScalar.min ty ≤ ↑x + ↑y → ↑x + ↑y ≤ IScalar.max ty → x + y ⦃ z => ↑z = ↑x + ↑y ⦄
+
+counter : Isize
+allowed : shared_allowed counter = ok true
+bounds : counter ≥ 0#isize ∧ counter < core.num.Isize.MAX
+⊢ counter + 1#isize ⦃ next => ↑next = ↑counter + 1 ⦄
+'AspisS2OwnedStage1.SdkReference.BorrowTotal.shared_increment_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

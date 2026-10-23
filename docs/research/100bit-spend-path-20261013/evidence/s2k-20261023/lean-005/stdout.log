@@ -1,0 +1,42 @@
+S2K_SourceStore.lean:31:4: error(lean.unknownIdentifier): Unknown constant `List.length_slice`
+S2K_SourceStore.lean:24:81: error: unsolved goals
+output : Std.Array U8 688#usize
+start stop : Usize
+bytes : Std.Array U8 32#usize
+order : ↑start ≤ ↑stop
+bound : ↑stop ≤ 688
+width : ↑stop - ↑start = 32
+size : (↑output).length = ↑688#usize
+bs : (↑bytes).length = ↑32#usize
+⊢ (do
+      let src ← lift ⟨↑bytes, ⋯⟩
+      let copied ←
+        if Usize.ofNatCore (List.slice ↑start ↑stop ↑output).length ⋯ = Usize.ofNatCore (↑src).length ⋯ then ok src
+          else fail Error.panic
+      ok ⟨(↑output).setSlice! ↑start ↑copied, ⋯⟩) =
+    ok (output.setSlice! ↑start ↑bytes)
+S2K_SourceStore.lean:31:23: warning: This simp argument is unused:
+  width
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.length, Slice.len, order, bound, size, core.slice.Slice.copy_from_slice,
+      List.length_slice, w̵i̵d̵t̵h̵,̵ ̵bs, Array.from_slice, Array.setSlice!]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2K_SourceStore.lean:31:30: warning: This simp argument is unused:
+  bs
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.length, Slice.len, order, bound, size, core.slice.Slice.copy_from_slice,
+      List.length_slice, width, b̵s̵,̵ ̵Array.from_slice, Array.setSlice!]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2K_SourceStore.lean:31:52: warning: This simp argument is unused:
+  Array.setSlice!
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.length, Slice.len, order, bound, size, core.slice.Slice.copy_from_slice,
+      List.length_slice, width, bs, Array.from_slice,̵ ̵A̵r̵r̵a̵y̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2K.SourceStore.store_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,10 @@
+{
+  "source": "crates/aspis-core/src/state_only_prefix.rs",
+  "sha256": "e9fa838650266890a16f74e7c5757a565a882668c42b6980a78b758b31a02f18",
+  "literal": "fn state_only_statement_points(z: &[QM31; 10]) -> [[QM31; 10]; 3] {\n    let mut successor = *z;\n    let mut carry = QM31::ONE;\n    for coordinate in (0..z.len()).rev() {\n        let bit = z[coordinate];\n        let bit_and_carry = bit.mul(carry);\n        successor[coordinate] = bit.add(carry).sub(bit_and_carry.add(bit_and_carry));\n        carry = bit_and_carry;\n    }\n    let mut absorption = *z;\n    for coordinate in [7usize, 6] {\n        absorption[coordinate] = QM31::ONE.sub(absorption[coordinate]);\n    }\n    [*z, successor, absorption]\n}\n",
+  "abstractions": [
+    "source successor at arbitrary legal reverse-iterator cursor, owned counter left=coordinate+1",
+    "complete two-cell absorption; all ten input/output cells retained",
+    "arithmetic answers universal and paired with exact operands/call order"
+  ]
+}

@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNativePower49.lean:16:58: error: Tactic `assumption` failed
+
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (exp : U8),
+      ↑exp = m →
+        ∀ (base acc : Old.Q),
+          Canonical base →
+            Canonical acc →
+              ∃ z,
+                kernels.power (ProverCommitNativeQ48.source base) exp (ProverCommitNativeQ48.source acc) =
+                    ok (ProverCommitNativeQ48.source z) ∧
+                  Canonical z ∧ decode z = decode acc * decode base ^ m
+exp : U8
+he : ↑exp = n
+base acc : Old.Q
+hb : Canonical base
+ha : Canonical acc
+hn : n = 0
+⊢ 0 = ↑0#u8
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNativePower49.lean:32:22: error: Type mismatch: After simplification, term
+  hm
+ has type
+  field.QM31.mul (ProverCommitNativeQ48.source acc) (ProverCommitNativeQ48.source base) =
+    ok (ProverCommitNativeQ48.source a)
+but is expected to have type
+  (if decide (n % 2 ≠ 0) = true then
+      field.QM31.mul (ProverCommitNativeQ48.source acc) (ProverCommitNativeQ48.source base)
+    else ok (ProverCommitNativeQ48.source acc)) =
+    ok (ProverCommitNativeQ48.source a)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNativePower49.lean:32:76: error: Type mismatch: After simplification, term
+  hva
+ has type
+  decode a = decode acc * decode base
+but is expected to have type
+  decode a = if n % 2 ≠ 0 then decode acc * decode base else decode acc
+'R1Z.ProverCommitNativePower49.power' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -100,7 +100,7 @@ theorem actual_enclosing_scheduleFamily (point : Array QM 10#usize) (selectors :
   obtain ⟨out, hpack, hcout, hvout⟩ := AspisR1.SchedulePacking.run_source_list packed initial absorption hp hciArray hcaArray
   refine ⟨out, ?_, hcout, ?_⟩
   · rw [enclosing_eq_run]
-    simp only [run, hsource, bind_tc_ok, hpack]
+    simp only [run, hsource, bind_tc_ok, Aeneas.Std.uncurry_apply_pair, hpack]
   · simpa only [hlist] using hvout
 
 #print axioms mapped_initial_list

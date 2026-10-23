@@ -1,0 +1,86 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2OwnedCheckpointScanTotalV1.lean:24:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (ZeroAt bytes ↑index)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2OwnedCheckpointScanTotalV1.lean:40:2: error: unsolved goals
+case pos
+bytes : alloc.vec.Vec U8
+index : Usize
+hi : ↑index < (↑bytes).length
+byte : U8
+hread : bytes.index_usize index = ok byte
+hbyte : byte = (↑bytes)[↑index]
+hread' : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U8) bytes index = ok byte
+hlength : (↑bytes).length ≤ Usize.max
+next : Usize
+hnext : index + 1#usize = ok next
+hnv : ↑next = ↑index + 1
+hcond : index < bytes.len
+hz : ZeroAt bytes ↑index ↔ byte = 0#u8
+hb : byte = 0#u8
+hzero : ZeroAt bytes ↑index
+⊢ cont next = sorry ()
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2OwnedCheckpointScanTotalV1.lean:42:2: error: unsolved goals
+case neg
+bytes : alloc.vec.Vec U8
+index : Usize
+hi : ↑index < (↑bytes).length
+byte : U8
+hread : bytes.index_usize index = ok byte
+hbyte : byte = (↑bytes)[↑index]
+hread' : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U8) bytes index = ok byte
+hlength : (↑bytes).length ≤ Usize.max
+next : Usize
+hnext : index + 1#usize = ok next
+hnv : ↑next = ↑index + 1
+hcond : index < bytes.len
+hz : ZeroAt bytes ↑index ↔ byte = 0#u8
+hb : ¬byte = 0#u8
+hnonzero : ¬ZeroAt bytes ↑index
+hv : ↑byte ≠ 0
+⊢ done (some true) = sorry ()
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2OwnedCheckpointScanTotalV1.lean:41:72: warning: This simp argument is unused:
+  hzero
+
+Hint: Omit it from the simp argument list.
+  simp [owned_checkpoint_nonzero_loop.body, hcond, hread', hb, hnext,̵ ̵h̵z̵e̵r̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2OwnedCheckpointScanTotalV1.lean:44:61: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp [owned_checkpoint_nonzero_loop.body, hcond, hread', hb̵,̵ ̵h̵v, hnonzero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2OwnedCheckpointScanTotalV1.lean:44:69: warning: This simp argument is unused:
+  hnonzero
+
+Hint: Omit it from the simp argument list.
+  simp [owned_checkpoint_nonzero_loop.body, hcond, hread', hb, hv,̵ ̵h̵n̵o̵n̵z̵e̵r̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2OwnedCheckpointScanTotalV1.lean:79:27: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.149 = ?m.149
+but is expected to have type
+  True
+in the application
+  Or.inl rfl
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2OwnedCheckpointScanTotalV1.lean:82:19: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case neg.mpr
+bytes : alloc.vec.Vec U8
+allZero : Prop := ∀ j < (↑bytes).length, ZeroAt bytes j
+i : Usize
+hib : ↑i ≤ (↑bytes).length
+hprefix : ∀ j < ↑i, ZeroAt bytes j
+hi : ¬↑i < (↑bytes).length
+hc : ¬i < bytes.len
+a✝ : allZero
+⊢ True
+'S2OwnedCheckpointScanTotalV1.scan_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'S2OwnedCheckpointScanTotalV1.scan_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

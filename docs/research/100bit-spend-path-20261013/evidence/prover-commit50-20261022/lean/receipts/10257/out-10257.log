@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSparseSum50.lean:43:58: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+p col : ℕ → Old.Q
+hp : ∀ i < 10, Canonical (p i)
+hc : ∀ j < 1024, Canonical (col j)
+width trailing : U8
+hwidth : ↑width + ↑trailing = 10
+suffix : Usize
+hs : ↑suffix < 2 ^ ↑trailing
+n : ℕ
+ih :
+  ∀ (pref : Usize) (left : U16),
+    ↑left = n →
+      ↑pref + n ≤ 2 ^ ↑width →
+        ∀ (acc : Old.Q),
+          Canonical acc →
+            ∃ z,
+              sparse_sum50.sum (ProverCommitQArray48.array 10#usize p) (ProverCommitQArray48.array 1024#usize col) width
+                    trailing suffix pref left (ProverCommitNativeQ48.source acc) =
+                  ok (ProverCommitNativeQ48.source z) ∧
+                Canonical z ∧ decode z = decode acc + total p col (↑width) (↑trailing) (↑suffix) n ↑pref
+pref : Usize
+left : U16
+hleft : ↑left = n + 1
+bound : ↑pref + (n + 1) ≤ 2 ^ ↑width
+acc : Old.Q
+hacc : Canonical acc
+hn : left ≠ 0#u16
+⊢ ↑(left.wrapping_sub 1#u16) = n
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitSparseSum50.lean:52:4: error: 'change' tactic failed, pattern
+  decode w = weight (fun i => decode (p i)) ↑width ↑pref
+is not definitionally equal to target
+  decode w = ProverCommitSparse50.weight (fun i => decode (p ↑i)) (ProverCommitBooleanEnum49.tail ↑width ⟨↑pref, ⋯⟩)
+'R1Z.ProverCommitSparseSum50.sum' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

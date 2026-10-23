@@ -1,0 +1,20 @@
+S2K_ResultHeader.lean:13:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.take n (List.take offset xs ++ ?m.28)
+in the target expression
+  List.take n
+      (List.take offset xs ++ List.take (min src.length (xs.length - offset)) src ++
+        List.drop (offset + min src.length (xs.length - offset)) xs) =
+    List.take n xs
+
+T : Type
+xs src : List T
+offset n : ℕ
+before : n ≤ offset
+size : n ≤ xs.length
+room : n ≤ (List.take offset xs).length
+⊢ List.take n
+      (List.take offset xs ++ List.take (min src.length (xs.length - offset)) src ++
+        List.drop (offset + min src.length (xs.length - offset)) xs) =
+    List.take n xs
+'AspisR1.S2K.ResultHeader.take_setSlice_prefix' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.S2K.ResultHeader.magic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

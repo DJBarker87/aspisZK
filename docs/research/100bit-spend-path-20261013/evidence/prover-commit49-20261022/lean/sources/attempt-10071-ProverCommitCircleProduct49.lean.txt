@@ -1,0 +1,55 @@
+import R1Z.ProverCommitCircleModel49
+/-! Generic symbolic five-factor product. Field operations and doubling factors
+remain opaque, avoiding reduction of the concrete quadratic-tower carrier. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitCircleProduct49
+open scoped BigOperators
+open AspisCircleTensorBinding
+variable {K : Type} [Field K]
+
+def model (x y : K) (d : Nat) (k : Fin 4) : K :=
+  if d=0 then ![1,y,x,x*y] k else
+    ![1,doubledFactor x (2*d-1),doubledFactor x (2*d),doubledFactor x (2*d-1)*doubledFactor x (2*d)] k
+
+theorem product_five {M : Type} [CommMonoid M] (f : Fin 5 → M) :
+    (∏ d : Fin 5, f d)=f 0*(f 1*(f 2*(f 3*(f 4*1)))) := by
+  simp only [Fin.prod_univ_succ,Fin.prod_univ_zero]
+  rfl
+
+theorem model_zero (x y : K) (k : Fin 4) : model x y 0 k=ProverCommitCircleModel49.firstFactor x y k := rfl
+
+theorem model_row (x y : K) (d : Nat) (hd : 0<d) (k : Fin 4) :
+    model x y d k=ProverCommitCircleModel49.radixFactor (doubledFactor x (2*d-1)) k := by
+  rw [model,if_neg (by omega)]
+  unfold ProverCommitCircleModel49.radixFactor
+  rw [←AspisV5FriNaturalBasisRadix4.doubledFactor_add]
+  have he : 2*d-1+1=2*d := by omega
+  rw [he]
+
+attribute [local irreducible] model doubledFactor ProverCommitCircleModel49.circleWeight
+  ProverCommitCircleModel49.firstFactor ProverCommitCircleModel49.radixFactor
+
+theorem model_product (x y : K) (j : Fin 1024) :
+    (∏ d : Fin 5, model x y d.val ⟨(j.val/4^d.val)%4,Nat.mod_lt _ (by decide)⟩)=
+      ProverCommitCircleModel49.circleWeight x y j.val := by
+  rw [product_five,ProverCommitCircleModel49.circleWeight_base4]
+  simp only [show (0:Fin 5).val=0 from rfl,show (1:Fin 5).val=1 from rfl,
+    show (2:Fin 5).val=2 from rfl,show (3:Fin 5).val=3 from rfl,show (4:Fin 5).val=4 from rfl,
+    show (4^0:Nat)=1 from rfl,show (4^1:Nat)=4 from rfl,show (4^2:Nat)=16 from rfl,
+    show (4^3:Nat)=64 from rfl,show (4^4:Nat)=256 from rfl,Nat.div_one]
+  change model x y 0 ⟨j.val%4,by omega⟩ *
+    (model x y 1 ⟨j.val/4%4,by omega⟩ *
+    (model x y 2 ⟨j.val/16%4,by omega⟩ *
+    (model x y 3 ⟨j.val/64%4,by omega⟩ *
+    (model x y 4 ⟨j.val/256%4,by omega⟩ * 1))))=_
+  rw [model_zero,model_row x y 1 (by omega),model_row x y 2 (by omega),
+    model_row x y 3 (by omega),model_row x y 4 (by omega)]
+  simp only [←AspisV5FriNaturalBasisRadix4.doubledFactor_add,mul_one]
+  ac_rfl
+
+#print axioms product_five
+#print axioms model_zero
+#print axioms model_row
+#print axioms model_product
+end R1Z.ProverCommitCircleProduct49

@@ -1,0 +1,3 @@
+PROVED: the fresh constructor V3 double body returns a canonical value on its same successful multiplication/addition/subtraction execution with canonical input. It reuses the checked generated QM multiplication and public add/sub canonicality lemmas and owns the exact ONE constant. This is a source arithmetic leaf; factor-loop inputs/canonicality and full source/runtime soundness remain open.
+
+Focused Lean check: 14.332 seconds; peak aggregate RSS 2204827648 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

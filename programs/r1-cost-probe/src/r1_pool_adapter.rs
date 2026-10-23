@@ -942,91 +942,9 @@ fn emit_result(statement: &PoolV1PairForestTerminalStatementV1) -> ProgramResult
     Ok(())
 }
 
-#[inline(never)]
-fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
-    if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {
-        return Err(ProgramError::InvalidInstructionData);
-    }
-    let proof_account = &accounts[0];
-    let public_account = &accounts[1];
-    let checkpoint_account = &accounts[2];
-    require_distinct_accounts(&[proof_account, public_account, checkpoint_account])?;
-    require_readonly_buffer(proof_account)?;
-    require_readonly_buffer(public_account)?;
-    require_verifier_checkpoint(checkpoint_account, program_id, true)?;
-    let mut checkpoint_data = checkpoint_account.try_borrow_mut_data()?;
-    if checkpoint_data.iter().any(|byte| *byte != 0) {
-        return Err(ProgramError::AccountAlreadyInitialized);
-    }
-    let public_data = public_account.try_borrow_data()?;
-    let statement = decode_public_statement_box(&public_data)?;
-    validate_pool_v1_pair_forest_terminal_statement_v1(&statement)
-        .map_err(|_| ProgramError::InvalidAccountData)?;
-    let candidate = encode_pool_v1_pair_verified_afterstate_v1(
-        &statement.common().lane_transition.candidate_afterstate,
-    )
-    .map_err(|_| ProgramError::InvalidAccountData)?;
-
-    let proof_data = proof_account.try_borrow_data()?;
-    let proof_length = verifier::PROOF_BYTES;
-    let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
-    let proof_end = proof_start.checked_add(proof_length)
-        .ok_or(ProgramError::InvalidAccountData)?;
-    if proof_data.len() != proof_end
-        || proof_data[..proof_start] != candidate
-        || proof_data[proof_start + 8] != Variant::S2.tag()
-    {
-        return Err(ProgramError::InvalidAccountData);
-    }
-    let checkpoint = super::first_decoded(statement.semantic_public(), &public_data, &proof_data[proof_start..proof_end], data[1] as usize)?;
-    if checkpoint.len() != checkpoint_data.len() {
-        return Err(ProgramError::InvalidAccountData);
-    }
-    checkpoint_data.copy_from_slice(&checkpoint);
-    #[cfg(feature="cu-profiling")]
-    {
-    msg!("r1:pool-adapter-stage1-checkpoint-written");
-    solana_program::log::sol_log_compute_units();
-    }
-    Ok(())
-}
-
-#[inline(never)]
-fn stage2(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {
-    if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..])
-    {
-        return Err(ProgramError::InvalidInstructionData);
-    }
-    program::set_return_data(&[]);
-    #[cfg(feature="cu-profiling")]
-    {
-    msg!("r1:pool-adapter-stage2-begin");
-    solana_program::log::sol_log_compute_units();
-    }
-    let validated = validate_asq8(program_id, accounts, data)?;
-    let proof_data = accounts[0].try_borrow_data()?;
-    let checkpoint_data = accounts[6].try_borrow_data()?;
-    let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;
-    let proof_end = proof_start.checked_add(validated.proof_length)
-        .ok_or(ProgramError::InvalidAccountData)?;
-    if proof_data.len() != proof_end {
-        return Err(ProgramError::InvalidAccountData);
-    }
-    let public_bytes = encode_pool_v1_pair_forest_terminal_statement_v1(&validated.statement)
-        .map_err(|_| ProgramError::InvalidInstructionData)?;
-    if public_bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES {
-        return Err(ProgramError::InvalidInstructionData);
-    }
-    verifier::tx2_authenticated(
-        &public_bytes,
-        &proof_data[proof_start..proof_end],
-        &checkpoint_data,
-        super::SolanaDigest,
-        super::observer(),
-    )
-    .map_err(super::error)?;
-    emit_result(&validated.statement)
-}
+#[path = "r1_pool_adapter_owned.rs"]
+mod owned;
+use owned::{stage1, stage2};
 
 #[inline(never)]
 pub(super) fn process(
@@ -1049,3 +967,7 @@ mod checkpoint_tests;
 
 #[path = "deployment_ids.rs"]
 mod deployment_ids;
+
+#[cfg(all(test, feature = "private-leaf-salts"))]
+#[path = "adapter_rw_tests.rs"]
+mod rw_tests;

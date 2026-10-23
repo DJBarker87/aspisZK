@@ -1,0 +1,37 @@
+{
+  "attempt": "kani-008",
+  "kind": "kani",
+  "source_revision": "bc3595d6952e2a2c229085efe901a6bd81fba0aa",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2J-cut1/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "--exact",
+    "--harness",
+    "S2J_cut6_proof_readonly_value",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2J-cut1/Cargo.lock",
+    "S2J-cut1/Cargo.toml",
+    "S2J-cut1/src/lib.rs"
+  ],
+  "timeout": 120,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "deps_fingerprint": {
+    "scope": "cut6/7 pure readonly value check: all three metadata flags symbolic; no whole-record equality; full frame is Lean unchanged-state StepLaw; replaced timeout kani007"
+  },
+  "expected_time": "optimized tiny-crate compilation then symbolic bound-input guard and TrustedStd comparison port; no proof generation or elimination"
+}

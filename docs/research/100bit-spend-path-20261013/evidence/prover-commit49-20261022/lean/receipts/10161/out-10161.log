@@ -1,0 +1,57 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialCell49.lean:36:13: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  embed (ProverCommitRawSource49.model ?a ?x0 ?y0 ?x1 ?y1 ?j ?k)
+in the target expression
+  value kappa ^ ↑k *
+      ProverCommitWideQM31Scalar49.embed
+        (ProverCommitRawSource49.model (decoded p) (decode x0) (decode y0) (decode x1) (decode y1) ⟨↑j, hj⟩ k) =
+    value kappa ^ ↑k *
+      ProverCommitWideRows49.rows (fun i => embed (decoded p i)) (embed (decode x0)) (embed (decode y0))
+        (embed (decode x1)) (embed (decode y1)) ⟨↑j, hj⟩ k
+
+case refine_2
+p : ℕ → Old.Q
+hp : ∀ i < 10, Canonical (p i)
+x0 y0 x1 y1 : Old.Q
+hx0 : Canonical x0
+hy0 : Canonical y0
+hx1 : Canonical x1
+hy1 : Canonical y1
+kappa : Raw
+hk : canonical kappa
+j : Usize
+hj : ↑j < 1024
+raw : ℕ → Old.Q
+hraw :
+  ProverCommitRawSource49.run (ProverCommitQArray48.array 10#usize p) (ProverCommitNativeQ48.source x0)
+      (ProverCommitNativeQ48.source y0) (ProverCommitNativeQ48.source x1) (ProverCommitNativeQ48.source y1) j =
+    ok (ProverCommitQArray48.array 7#usize raw)
+hcraw : ∀ k < 7, Canonical (raw k)
+hd :
+  ∀ (k : Fin 7),
+    decode (raw ↑k) =
+      ProverCommitRawSource49.model (decoded p) (decode x0) (decode y0) (decode x1) (decode y1) ⟨↑j, hj⟩ k
+z : Raw
+hz : ProverCommitWeightOutput49.cell (ProverCommitQArray48.array 7#usize raw) (source kappa) = ok (source z)
+hcz : canonical z
+hdz : value z = ∑ k, value kappa ^ ↑k * ProverCommitWideQM31Scalar49.embed (decode (raw ↑k))
+k : Fin 7
+hmem : k ∈ Finset.univ
+⊢ value kappa ^ ↑k *
+      ProverCommitWideQM31Scalar49.embed
+        (ProverCommitRawSource49.model (decoded p) (decode x0) (decode y0) (decode x1) (decode y1) ⟨↑j, hj⟩ k) =
+    value kappa ^ ↑k *
+      ProverCommitWideRows49.rows (fun i => embed (decoded p i)) (embed (decode x0)) (embed (decode y0))
+        (embed (decode x1)) (embed (decode y1)) ⟨↑j, hj⟩ k
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialCell49.lean:41:36: error: Ambiguous term
+  E
+Possible interpretations:
+  ProverCommitValueRange47.E : Type
+  
+  ProverCommitSubfieldOps47.E : Type
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitMaterialCell49.lean:53:19: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'R1Z.ProverCommitMaterialCell49.cell_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitMaterialCell49.cell_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

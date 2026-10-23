@@ -1,0 +1,47 @@
+import R1Z.ProverCommitEncoderGenericEval54
+import R1Z.ProverCommitM31Ops48
+/-! Concrete native M31 methods discharge the generic arithmetic interface.
+All unused CodeField fields are arbitrary; no inverse law is assumed. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitEncoderM31Ops54
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitM31Ops48 ProverCommitEncoderGenericEval54
+
+def ops (unused : scalar.CodeField field.M31) : scalar.CodeField field.M31 :=
+  { unused with
+    from_m31 := field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.from_m31
+    add := field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.add
+    sub := field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.sub
+    mul := field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.mul }
+
+theorem from_result (m : U32) (hm : m.val<2147483647) :
+    field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.from_m31 m=ok m := by
+  obtain ⟨r,hr,hrv⟩ := WP.spec_imp_exists (UScalar.rem_spec m
+    (show field.P.val≠0 by rw [field.P];decide))
+  have he : r=m := by
+    apply UScalar.eq_of_val_eq
+    rw [hrv]
+    change m.val%2147483647=m.val
+    exact Nat.mod_eq_of_lt hm
+  rw [field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.from_m31,hr,he]
+  rfl
+
+theorem arithmetic (unused : scalar.CodeField field.M31) :
+    Arithmetic (ops unused) canonical decode decode := by
+  constructor
+  · intro x y hx hy
+    simpa only [ops,field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.add] using add_exact x y hx hy
+  · intro x y hx hy
+    simpa only [ops,field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.mul] using mul_exact x y
+  · intro m hm
+    exact ⟨m,from_result m hm,hm,rfl⟩
+
+theorem sub_success (unused : scalar.CodeField field.M31) (x y : U32)
+    (hx : canonical x) (hy : canonical y) :
+    ∃ z, (ops unused).sub x y=ok z ∧ canonical z ∧ decode z=decode x-decode y := by
+  simpa only [ops,field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.sub] using sub_exact x y hx hy
+
+#print axioms from_result
+#print axioms arithmetic
+#print axioms sub_success
+end R1Z.ProverCommitEncoderM31Ops54

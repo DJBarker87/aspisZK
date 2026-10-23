@@ -1,0 +1,32 @@
+import R1Z.ProverCommitSparse50
+import Mathlib.Logic.Equiv.Prod
+/-! Complete Boolean-suffix elimination, stated as one full assignment sum.
+Index reassembly into native usize rows is a separate binding obligation. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitSparseSplit50
+open scoped BigOperators
+open ProverCommitSparse50
+variable {K : Type} [Field K]
+variable {I J : Type} [Fintype I] [Fintype J] [DecidableEq I] [DecidableEq J]
+
+theorem split_weight (p : I → K) (q : J → K) (a : I → Bool) (b : J → Bool) :
+    weight (Sum.elim p q) (Sum.elim a b)=weight p a*weight q b := by
+  simp only [weight,Fintype.prod_sum_type,Sum.elim_inl,Sum.elim_inr]
+
+theorem prune (p : I → K) (suffix : J → Bool) (f : (I ⊕ J → Bool) → K) :
+    (∑ b : I ⊕ J → Bool, weight (Sum.elim p (fun j => if suffix j then (1:K) else 0)) b*f b)=
+      ∑ a : I → Bool, weight p a*f (Sum.elim a suffix) := by
+  classical
+  let e := (Equiv.sumArrowEquivProdArrow I J Bool).symm
+  rw [← Equiv.sum_comp e]
+  change (∑ ab : (I → Bool) × (J → Bool),
+    weight (Sum.elim p (fun j => if suffix j then (1:K) else 0))
+      (Sum.elim ab.1 ab.2)*f (Sum.elim ab.1 ab.2))=_
+  rw [Fintype.sum_prod_type]
+  simp only [split_weight]
+  exact ProverCommitSparse50.prune p suffix (fun a b => f (Sum.elim a b))
+
+#print axioms split_weight
+#print axioms prune
+end R1Z.ProverCommitSparseSplit50

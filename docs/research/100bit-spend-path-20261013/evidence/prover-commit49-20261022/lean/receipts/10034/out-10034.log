@@ -1,0 +1,57 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBoundarySum49.lean:29:4: error: 'change' tactic failed, pattern
+  ↑(q j) < 2 ^ 32
+is not definitionally equal to target
+  ↑(q j) < UScalar.size UScalarTy.U32
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBoundarySum49.lean:57:6: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+q : ℕ → U32
+n : ℕ
+ih :
+  ∀ (i : Usize) (left : U8),
+    ↑left = n →
+      ↑i + n ≤ 28 →
+        ∀ (total : U64),
+          ↑total + sum q n ↑i < 2 ^ 64 → ∃ z, Boundary49.sum (array q) i left total = ok z ∧ ↑z = ↑total + sum q n ↑i
+i : Usize
+left : U8
+hleft : ↑left = n + 1
+bound : ↑i + (n + 1) ≤ 28
+total : U64
+safe : ↑total + sum q (n + 1) ↑i < 2 ^ 64
+hn : left ≠ 0#u8
+ht : ↑(left.wrapping_sub 1#u8) = n
+hi : ↑(i.wrapping_add 1#usize) = ↑i + 1
+next : U64 := total.wrapping_add (core.convert.num.FromU64U32.from (q ↑i))
+hw : ↑(core.convert.num.FromU64U32.from (q ↑i)) = ↑(q ↑i)
+hs : ↑total + ↑(q ↑i) < 2 ^ 64
+⊢ ↑(total.wrapping_add (core.convert.num.FromU64U32.from (q ↑i))) = ↑total + ↑(q ↑i)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBoundarySum49.lean:71:63: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+q : ℕ → U32
+initial : U64 := U64.wrapping_mul 2#u64 (core.convert.num.FromU64U32.from (q 0))
+hq : ↑(q 0) < UScalar.size UScalarTy.U32
+⊢ ↑(U64.wrapping_mul 2#u64 (core.convert.num.FromU64U32.from (q 0))) = 2 * ↑(q 0)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBoundarySum49.lean:74:16: error: 'change' tactic failed, pattern
+  ↑(q 0) < 2 ^ 32
+is not definitionally equal to target
+  ↑(q 0) < UScalar.size UScalarTy.U32
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitBoundarySum49.lean:84:4: error: Type mismatch
+  release
+has type
+  field.reduce_u64 total = ok (id z)
+but is expected to have type
+  field.M31.reduce_u64 total = ok z
+'R1Z.ProverCommitBoundarySum49.index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitBoundarySum49.sum_bound' depends on axioms: [propext, sorryAx]
+'R1Z.ProverCommitBoundarySum49.sum_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverCommitBoundarySum49.limb_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,70 @@
+import R1Z.ProverCommitWeightSum49
+import R1Z.ProverCommitGamma48
+/-! Whole seven-term weight cell with the actual kappa power producer, and
+whole 1024-term inactive contraction. Raw weight geometry remains separate. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitWeightOutput49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitWideOps48 ProverCommitMix48
+open ProverCommitWideQM31Scalar49 ProverCommitWeightSum49
+open AspisR1.ExtractedCurrentQM31Exact (decode)
+open scoped BigOperators
+
+def cell (raw : Array field.QM31 7#usize) (kappa1 : Source) : Result Source := do
+  let kp ← kappa kappa1
+  owned.cell kp raw 0#usize 7#u8 field.wide_exact.WideExact.ZERO
+
+theorem terms_powers (p : Nat → Raw) (raw : Nat → Old.Q) (x : Exact)
+    (hp : ∀ k, k<7 → value (p k)=x^k) (n j : Nat) (bound : j+n≤7) :
+    terms p raw n j=∑ i : Fin n, x^(j+i.val)*embed (decode (raw (j+i.val))) := by
+  induction n generalizing j with
+  | zero => simp only [terms,Fin.sum_univ_zero]
+  | succ n ih =>
+    rw [terms,hp j (by omega),ih (j+1) (by omega)]
+    simp only [Fin.sum_univ_succ,Fin.val_zero,Fin.val_succ,Nat.add_zero,
+      Nat.add_assoc,Nat.add_left_comm,Nat.add_comm]
+
+theorem cell_exact (raw : Nat → Old.Q) (x : Raw) (hx : canonical x) :
+    ∃ z : Raw, cell (ProverCommitQArray48.array 7#usize raw) (source x)=ok (source z) ∧
+      canonical z ∧ value z=∑ k : Fin 7, value x^k.val*embed (decode (raw k.val)) := by
+  obtain ⟨p,hp,hcp,hdp⟩ := ProverCommitGamma48.kappa_exact x hx
+  obtain ⟨z,hz,hcz,hdz⟩ := finite_value 7#usize (by decide) p raw hcp 7 0#usize (by decide)
+    ProverCommitGamma48.zero ProverCommitGamma48.zero_canonical
+  refine ⟨z,?_,hcz,?_⟩
+  · simp only [cell,hp,ProverCommitGamma48.source_zero,bind_tc_ok,cell_finite 7 7#u8 rfl,hz]
+  · rw [hdz,ProverCommitGamma48.zero_value,zero_add,show (0#usize).val=0 from rfl,terms_powers p raw (value x) hdp 7 0 (by omega)]
+    simp only [show (0#usize).val=0 from rfl,Nat.zero_add]
+
+theorem terms_finset (q : Nat → Raw) (raw : Nat → Old.Q) (n j : Nat) :
+    terms q raw n j=∑ i ∈ Finset.range n, value (q (j+i))*embed (decode (raw (j+i))) := by
+  induction n generalizing j with
+  | zero => simp only [terms,Finset.range_zero,Finset.sum_empty]
+  | succ n ih =>
+    rw [terms,ih,Finset.sum_range_succ']
+    simp only [Nat.add_zero]
+    rw [add_comm]
+    congr 1
+    apply Finset.sum_congr rfl
+    intro i hi
+    have he : j+1+i=j+(i+1) := by omega
+    rw [he]
+
+theorem inactive_exact (q : Nat → Raw) (raw : Nat → Old.Q)
+    (hq : ∀ j, j<1024 → canonical (q j)) :
+    ∃ z : Raw, owned.inactive (sourceArray 1024#usize q) (ProverCommitQArray48.array 1024#usize raw)
+        0#usize 1024#u16 field.wide_exact.WideExact.ZERO=ok (source z) ∧
+      canonical z ∧ value z=∑ j ∈ Finset.range 1024, value (q j)*embed (decode (raw j)) := by
+  obtain ⟨z,hz,hcz,hdz⟩ := finite_value 1024#usize (by decide) q raw hq 1024 0#usize (by decide)
+    ProverCommitGamma48.zero ProverCommitGamma48.zero_canonical
+  refine ⟨z,?_,hcz,?_⟩
+  · rw [inactive_finite 1024 1024#u16 rfl,ProverCommitGamma48.source_zero]
+    exact hz
+  · simpa only [ProverCommitGamma48.zero_value,zero_add,show (0#usize).val=0 from rfl,
+      terms_finset,Nat.zero_add] using hdz
+
+#print axioms terms_powers
+#print axioms cell_exact
+#print axioms terms_finset
+#print axioms inactive_exact
+end R1Z.ProverCommitWeightOutput49

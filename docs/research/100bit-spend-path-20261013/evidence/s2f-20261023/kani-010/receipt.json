@@ -1,0 +1,85 @@
+{
+  "attempt": "kani-010",
+  "kind": "kani",
+  "source_revision": "2f042ef7fb16175a779d56539ff5ebe304910f59",
+  "command": [
+    "cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2F-steps/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "S2F_shape2_clear",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2F-steps/Cargo.toml",
+    "S2F-steps/src/S2F_Trusted.rs",
+    "S2F-steps/src/lib.rs"
+  ],
+  "timeout": 180,
+  "deps_fingerprint": {
+    "trusted_spec_sha256": "e517d1b55d99ef3aa94df48bb8e6905f69816df8f6077f1f165e8fd874b27b2a",
+    "reused_contract": "s2a-20261023/kani-003 (three cells, three tokens, two payload coordinates)",
+    "reference_source": {
+      "programs/r1-cost-probe/src/r1_pool_adapter.rs": {
+        "sha256": "6a8e5799035458ed4c0093709da6da86fb29100303861ddd15212d3ad7dcdcfb",
+        "bytes": 41100
+      },
+      "docs/research/100bit-spend-path-20261013/evidence/s2e-20261023/S2E-reference/src/S2E_Reference.rs": {
+        "sha256": "8106a3a9b9b3bba65747e70debf5af24325409a8d0b4f93e29066a904b73a371",
+        "bytes": 10499
+      },
+      "docs/research/100bit-spend-path-20261013/lean/S2E_Model.lean": {
+        "sha256": "d787492ea58f67da7afc2b37a201d4706bf1bb9796745113ebba4e703afd55d2",
+        "bytes": 48057
+      },
+      "docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean": {
+        "sha256": "eb9e021c449f4c23b02d8cb68b7022bef4ac743f40918672f9f8816355ccb5e8",
+        "bytes": 12986
+      }
+    },
+    "qualification": "Source cut projections only; no typed native Library or SBF admission instance."
+  },
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER": "/home/dombarker/project-offloads/codex-cx-s2f-20261023/S2F_cc"
+  },
+  "expected_time": "cached optimized compilation then one named source-cut verification; no cryptographic arithmetic",
+  "exit_status": 0,
+  "wall_seconds": 1.9685598110008868,
+  "peak_rss_kib": "311656",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r8d9e9a76bb9240b5a88cde34dc99571b.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "228704256",
+  "source_hashes": {
+    "S2F-steps/Cargo.toml": "e6a93bf393665395c196618329f4a439f6474855e3d92a1613cf3c42f40a8301",
+    "S2F-steps/src/S2F_Trusted.rs": "e517d1b55d99ef3aa94df48bb8e6905f69816df8f6077f1f165e8fd874b27b2a",
+    "S2F-steps/src/lib.rs": "426355e2eeab1cc9c17b403f36941512c6ab74ec98a671027e749cb8d1be481b"
+  },
+  "print_axioms": "N/A: kani"
+}

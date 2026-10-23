@@ -1,0 +1,12 @@
+{
+  "helper": "\npub fn S2K_store_nullifier_bytes(mut output: [u8;792], encoded: &[u8;32]) -> [u8;792] {\n    output[RESULT_NULLIFIER_OFFSET..RESULT_AFTERSTATE_OFFSET].copy_from_slice(encoded);\n    output\n}\n\npub fn S2K_reference_bytes(master: [u8;32], selected: [u8;32], nullifier_bytes: [u8;32],\n    kind: u8, lane: u8, afterstate: [u8;688]) -> [u8;792] {\n    let output = [0u8;792];\n    let output = S2K_store_magic(output);\n    let output = S2K_store_version(output);\n    let output = S2K_store_kind(output,kind);\n    let output = S2K_store_digest_version(output);\n    let output = S2K_store_lane(output,lane);\n    let output = S2K_store_master(output,&master);\n    let output = S2K_store_selected(output,&selected);\n    let output = S2K_store_nullifier_bytes(output,&nullifier_bytes);\n    S2K_store_afterstate(output,&afterstate)\n}\n",
+  "lib_sha256": "8faa800ed88ba97a4da5d75ca122fb2df519e4933ac0bde9e5e91d11976b44b6",
+  "reason": "Aeneas extract009 fails in nullifier digest+copy field. Separate the already-checked pure digest call from its bounded typed32-byte copy.",
+  "contracts": [
+    "Kani002/006 raw digest bytes",
+    "Kani009 width32 contract",
+    "Kani053 nullifier field write/frame",
+    "S2K_DigestBytes.exact"
+  ],
+  "remaining": "Instantiate nullifier_bytes with the SAME actual digest output; no successful encoder assumption added."
+}

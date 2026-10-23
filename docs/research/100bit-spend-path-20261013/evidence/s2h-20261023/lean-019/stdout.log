@@ -1,0 +1,64 @@
+S2H_ReferenceErrors.lean:17:32: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+S2H_ReferenceErrors.lean:27:4: warning: This simp argument is unused:
+  statement_continuation.closure.Insts.CoreOpsFunctionFnOnceTupleProgramErrorProgramError
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵:̵=̵t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵:̵=̵t̵r̵u̵e̵}̵)̵{̲ ̲z̲e̲t̲a̲ ̲:̲=̲ ̲t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ ̲:̲=̲ ̲t̲r̲u̲e̲ ̲}̲)̲ only [̵s̵t̵a̵t̵e̵m̵e̵n̵t̵_̵c̵o̵n̵t̵i̵n̵u̵a̵t̵i̵o̵n̵,̵r̵e̵j̵e̵c̵t̵e̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲s̲t̲a̲t̲e̲m̲e̲n̲t̲_̲c̲o̲n̲t̲i̲n̲u̲a̲t̲i̲o̲n̲,̲ ̲r̲e̲j̲e̲c̲t̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ S2E_Reference.core.result.Result.map_err,
+      s̵t̵a̵t̵e̵m̵e̵n̵t̵_̵c̵o̵n̵t̵i̵n̵u̵a̵t̵i̵o̵n̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵P̵r̵o̵g̵r̵a̵m̵E̵r̵r̵o̵r̵P̵r̵o̵g̵r̵a̵m̵E̵r̵r̵o̵r̵,̵statement_continuation.closure.Insts.CoreOpsFunctionFnOnceTupleProgramErrorProgramError.call_once,
+      core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      core.convert.FromSame.from]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2H_ReferenceErrors.lean:31:32: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+S2H_ReferenceErrors.lean:46:32: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+S2H_ReferenceErrors.lean:60:113: error: Tactic `rfl` failed: The left-hand side
+  let (state1, sdk1, result) :=
+    (state, sdk, core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+  do
+  let state2 ← children.drop_checkpoint state1 checkpoint
+  ok (result, state2, sdk1)
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, after, sdk)
+
+C S : Type
+children : Children C S
+state after : S
+sdk : SDK
+slot : Usize
+cell : OwnedDataCell
+checkpoint : alloc.vec.Vec U8
+read : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+mismatch : checkpoint.len ≠ cell.bytes.len
+dropped : children.drop_checkpoint state checkpoint = ok after
+different : (checkpoint.len != cell.bytes.len) = true
+⊢ (let (state1, sdk1, result) :=
+      (state, sdk, core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+    do
+    let state2 ← children.drop_checkpoint state1 checkpoint
+    ok (result, state2, sdk1)) =
+    ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData, after, sdk)
+S2H_ReferenceErrors.lean:60:100: warning: This simp argument is unused:
+  dropped
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵:̵=̵t̵r̵u̵e̵,̵z̵e̵t̵a̵D̵e̵l̵t̵a̵:̵=̵t̵r̵u̵e̵}̵)̵{̲ ̲z̲e̲t̲a̲ ̲:̲=̲ ̲t̲r̲u̲e̲,̲ ̲z̲e̲t̲a̲D̲e̲l̲t̲a̲ ̲:̲=̲ ̲t̲r̲u̲e̲ ̲}̲)̲ only [̵a̵f̵t̵e̵r̵_̵f̵i̵r̵s̵t̵,̵r̵e̵a̵d̵,̵d̵i̵f̵f̵e̵r̵e̵n̵t̵,̵i̵f̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵d̵r̵o̵p̵p̵e̵d̵]̵[̲a̲f̲t̲e̲r̲_̲f̲i̲r̲s̲t̲,̲ ̲r̲e̲a̲d̲,̲ ̲d̲i̲f̲f̲e̲r̲e̲n̲t̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2H_ReferenceErrors.lean:71:77: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+'AspisR1.S2H.decode_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2H.validation_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2H.first_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2H.checkpoint_size_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2H.asq8_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2H.rejected_query_history' depends on axioms: [propext]

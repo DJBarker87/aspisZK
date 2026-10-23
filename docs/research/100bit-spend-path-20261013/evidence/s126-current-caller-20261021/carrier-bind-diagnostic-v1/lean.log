@@ -1,0 +1,36 @@
+theorem Aeneas.Std.bind_tc_ok.{u_1} : ∀ {α β : Type u_1} (x : α) (f : α → Result β),
+  (do
+      let y ← ok x
+      f y) =
+    f x :=
+fun {α β} x f => of_eq_true (eq_self (f x))
+theorem Aeneas.Std.bind_assoc_eq.{u} : ∀ {a b c : Type u} (e : Result a) (g : a → Result b) (h : b → Result c),
+  e >>= g >>= h = e >>= fun x => g x >>= h :=
+fun {a b c} e g h =>
+  id
+    (casesOn (motive := fun t => e = t → Std.bind (Std.bind e g) h = Std.bind e fun x => Std.bind (g x) h) e
+      (fun v h_1 =>
+        Eq.symm h_1 ▸
+          of_eq_true
+            (Eq.trans
+              (congr (congrArg Eq (congrFun' (congrArg Std.bind (bind_ok v g)) h))
+                (bind_ok v fun x => Std.bind (g x) h))
+              (eq_self (Std.bind (g v) h))))
+      (fun e_1 h_1 =>
+        Eq.symm h_1 ▸
+          of_eq_true
+            (Eq.trans
+              (congr (congrArg Eq (Eq.trans (congrFun' (congrArg Std.bind (bind_fail e_1 g)) h) (bind_fail e_1 h)))
+                (bind_fail e_1 fun x => Std.bind (g x) h))
+              (eq_self (fail e_1))))
+      (fun h_1 =>
+        Eq.symm h_1 ▸
+          of_eq_true
+            (Eq.trans
+              (congr (congrArg Eq (Eq.trans (congrFun' (congrArg Std.bind (bind_div g)) h) (bind_div h)))
+                (bind_div fun x => Std.bind (g x) h))
+              (eq_self div)))
+      (Eq.refl e))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentCarrierBindDiagnosticV1.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Result.bind`
+@[implicit_reducible] def Aeneas.Std.instBindResult.{u_1} : Bind Result :=
+{ bind := fun {α β} => Std.bind }

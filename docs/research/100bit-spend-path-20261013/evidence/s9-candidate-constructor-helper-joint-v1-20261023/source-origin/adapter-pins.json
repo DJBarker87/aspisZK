@@ -1,0 +1,14 @@
+{
+  "original_sha256": "e60ed7cb2d9834b3d928f1ef1b2c90f2aeef6653cbf5716499af2b4fb137ee34",
+  "adapted_sha256": "9b2cbf2c2ad8d539e0cdfee9b6308629ab0ba81a0df3575565b01f4b3bb21785",
+  "blocks": [
+    [
+      "@[discriminant isize]\ninductive Variant where\n| S1 : Variant\n| S2 : Variant\n| D : Variant",
+      "inductive Variant where\n| S1 : Variant\n| S2 : Variant\n| D : Variant\n\n-- Naming-only discriminant expansion, following the retained stage-2 adapter.\ndef Variant.read_discriminant (x : Variant) : Isize :=\n  match x with\n  | .S1 => 0#isize\n  | .S2 => 1#isize\n  | .D => 2#isize\n\ninstance _root_.AspisR1S9ActualWeightsNewBoxNewV1.Variant.jointDiscriminant :\n    Aeneas.Std.Discriminant Variant Isize where\n  read_discriminant := Variant.read_discriminant"
+    ],
+    [
+      "@[discriminant isize]\ninductive Error where\n| Allocation : Error",
+      "inductive Error where\n| Allocation : Error\n\n-- Naming-only discriminant expansion, following the retained stage-2 adapter.\ndef Error.read_discriminant (x : Error) : Isize :=\n  match x with\n  | .Allocation => 0#isize\n\ninstance _root_.AspisR1S9ActualWeightsNewBoxNewV1.Error.jointDiscriminant :\n    Aeneas.Std.Discriminant Error Isize where\n  read_discriminant := Error.read_discriminant"
+    ]
+  ]
+}

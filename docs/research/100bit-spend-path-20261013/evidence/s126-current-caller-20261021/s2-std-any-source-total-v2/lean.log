@@ -1,0 +1,42 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2StdAnySourceTotalV1.lean:33:13: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2StdAnySourceTotalV1.lean:51:8: error: unsolved goals
+case nil
+P Q : Type
+next : SourceIter P Q → Result (Option U8 × SourceIter P Q)
+remaining : P → Q → List U8
+reads : NextReads next remaining
+ptr : P
+endp : Q
+view : remaining ptr endp = []
+ptr' : P
+endp' : Q
+hnext :
+  next { ptr := ptr, end_or_len := endp, _marker := () } =
+    ok ([].head?, { ptr := ptr', end_or_len := endp', _marker := () })
+right✝ : remaining ptr' endp' = (remaining ptr endp).tail
+⊢ ok (ptr', endp', none) = ok (ptr', endp', if false = true then some true else none)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2StdAnySourceTotalV1.lean:65:6: error: Type mismatch: After simplification, term
+  hrun
+ has type
+  @Eq (Result (P × Q × Option Bool))
+    (anyLoop next
+      { FnOnceInst := { call_once := fun x byte => ok (byte != 0#u8) },
+        call_mut := fun state byte => ok (byte != 0#u8, state) }
+      ptr' endp' ())
+    (ok (ptrOut, endOut, if stdAny rest = true then some true else none))
+but is expected to have type
+  @Eq (Result (P × Q × Option Bool))
+    (anyLoop next
+      { FnOnceInst := { call_once := fun x byte => ok (byte != 0#u8) },
+        call_mut := fun state byte => ok (byte != 0#u8, state) }
+      ptr' endp' ())
+    (ok (ptrOut, endOut, if (if True then stdAny rest else true) = true then some true else none))
+'AspisS2StdAnySource.anyLoop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS2StdAnySource.sourceAny_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS2StdAnySource.guard_eq_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

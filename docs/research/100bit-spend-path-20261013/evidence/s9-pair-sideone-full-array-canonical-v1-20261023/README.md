@@ -1,0 +1,3 @@
+One successful generated Pair adapter afterLow side-one call preserves canonicality of all successful mapped output-array reads through the exact writes 1,2,3, deriving term/suffix calls from the same execution. Canonical low and existing mapped ap1/weights read contracts are retained; no fresh suffix/call success or canonical output is a premise.
+
+Focused Lean check: 17.8 seconds; peak aggregate RSS 3245293568 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

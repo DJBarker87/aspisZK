@@ -1,0 +1,38 @@
+{
+  "attempt": "kani-008",
+  "kind": "kani",
+  "source_revision": "3b0ac3bd9824393de4d932a0466609dff560f159",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "kani-spec/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-Z",
+    "function-contracts",
+    "--exact",
+    "--output-format",
+    "terse",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--harness",
+    "checks::account_data_cell"
+  ],
+  "sources": [
+    "kani-spec/src/lib.rs",
+    "kani-spec/Cargo.toml"
+  ],
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  },
+  "timeout": 180,
+  "expected_time": "isolated account_data_cell SAT check only; split unfinished tail of 600-second fifteen-harness batch, no completed check repeated",
+  "deps_fingerprint": "standalone no dependencies; Kani 0.67.0 rustc 1.93.0-nightly 53732d5e0; CBMC 6.8.0"
+}

@@ -1,0 +1,61 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedBorrowTotalV1.lean:57:54: error: unsolved goals
+sdk : OwnedSdk
+slot : Usize
+valid : ↑slot < (↑sdk.data_cells).length
+cell : OwnedDataCell
+hcell : cell = (↑sdk.data_cells)[↑slot]
+hread : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+right✝ :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (cell, sdk.data_cells.set slot)
+allowed : cell.borrowed ≥ 0#isize ∧ cell.borrowed < core.num.Isize.MAX
+⊢ ok (decide (True ∧ True)) = ok true
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedBorrowTotalV1.lean:57:2: error: unsolved goals
+case pos
+sdk : OwnedSdk
+slot : Usize
+valid : ↑slot < (↑sdk.data_cells).length
+cell : OwnedDataCell
+hcell : cell = (↑sdk.data_cells)[↑slot]
+hread : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+right✝ :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (cell, sdk.data_cells.set slot)
+allowed : cell.borrowed ≥ 0#isize ∧ cell.borrowed < core.num.Isize.MAX
+hb : shared_allowed cell.borrowed = ok true
+⊢ (if True then ok (core.result.Result.Ok cell.bytes.len)
+    else ok (core.result.Result.Err solana_program_error.ProgramError.AccountBorrowFailed)) =
+    ok (core.result.Result.Ok cell.bytes.len)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedBorrowTotalV1.lean:61:2: error: unsolved goals
+case neg
+sdk : OwnedSdk
+slot : Usize
+valid : ↑slot < (↑sdk.data_cells).length
+cell : OwnedDataCell
+hcell : cell = (↑sdk.data_cells)[↑slot]
+hread : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+right✝ :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (cell, sdk.data_cells.set slot)
+allowed : ¬(cell.borrowed ≥ 0#isize ∧ cell.borrowed < core.num.Isize.MAX)
+hb : shared_allowed cell.borrowed = ok false
+⊢ (if false = true then ok (core.result.Result.Ok cell.bytes.len)
+    else ok (core.result.Result.Err solana_program_error.ProgramError.AccountBorrowFailed)) =
+    ok (core.result.Result.Err solana_program_error.ProgramError.AccountBorrowFailed)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedBorrowTotalV1.lean:59:25: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [allowed,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS2OwnedStage1.SdkReference.BorrowTotal.cell_operations_total' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowTotal.data_len_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowTotal.shared_increment_total' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

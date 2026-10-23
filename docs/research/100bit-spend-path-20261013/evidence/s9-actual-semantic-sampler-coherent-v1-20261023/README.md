@@ -1,0 +1,3 @@
+PROVED: the same successful semantic_validated execution in the focused actual source owner returns a canonical challenge. This coherent source-only bundle records the checked sampler and readback dependency cohort, names-only type adapter and typed shift-count compatibility port. It does not close semantic-round/caller, MIR/ELF refinement or the full soundness theorem.
+
+Focused Lean check: 6.591 seconds; peak aggregate RSS 3215081472 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

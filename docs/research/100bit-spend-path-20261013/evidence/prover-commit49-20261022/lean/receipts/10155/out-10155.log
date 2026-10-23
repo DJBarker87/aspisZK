@@ -1,0 +1,79 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRawSource49.lean:69:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  toR0 (decoded (![p, s, a] 0))
+in the target expression
+  ![AspisR0.Opening.indicator R0P.copyInactiveRows (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      AspisR0.Opening.eqWeight (ProverCommitPointWeight49.reverse fun i => decode (ps 0 ↑i))
+        (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      AspisR0.Opening.eqWeight (ProverCommitPointWeight49.reverse fun i => decode (ps 1 ↑i))
+        (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      AspisR0.Opening.eqWeight (ProverCommitPointWeight49.reverse fun i => decode (ps 2 ↑i))
+        (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      if ↑⟨↑j, hj⟩ < 28 then decode (p 8) ^ ↑⟨↑j, hj⟩
+      else if ↑⟨↑j, hj⟩ < 56 then decode (p 9) ^ (↑⟨↑j, hj⟩ - 28) else 0,
+      ProverCommitEval47.messageEval (Pi.single ⟨↑j, hj⟩ 1) (decode x0) (decode y0),
+      ProverCommitEval47.messageEval (Pi.single ⟨↑j, hj⟩ 1) (decode x1) (decode y1)] =
+    ![AspisR0.Opening.indicator R0P.copyInactiveRows (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      AspisR0.Opening.eqWeight (openingPoints (decoded p) 0) (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      AspisR0.Opening.eqWeight (openingPoints (decoded p) 1) (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      AspisR0.Opening.eqWeight (openingPoints (decoded p) 2) (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      libraWeight (decoded p) ⟨↑j, hj⟩, ProverCommitEval47.messageEval (Pi.single ⟨↑j, hj⟩ 1) (decode x0) (decode y0),
+      ProverCommitEval47.messageEval (Pi.single ⟨↑j, hj⟩ 1) (decode x1) (decode y1)]
+
+p : ℕ → Old.Q
+hp : ∀ i < 10, Canonical (p i)
+x0 y0 x1 y1 : Old.Q
+hx0 : Canonical x0
+hy0 : Canonical y0
+hx1 : Canonical x1
+hy1 : Canonical y1
+j : Usize
+hj : ↑j < 1024
+s a : ℕ → Old.Q
+hpoints :
+  points.all (ProverCommitQArray48.array 10#usize p) =
+    ok
+      (Array.make 3#usize
+        [ProverCommitQArray48.array 10#usize p, ProverCommitQArray48.array 10#usize s,
+          ProverCommitQArray48.array 10#usize a]
+        ⋯)
+hcs : ∀ k < 10, Canonical (s k)
+hca : ∀ k < 10, Canonical (a k)
+hmodel : ∀ (i : Fin 3), toR0 (decoded (![p, s, a] i)) = openingPoints (decoded p) i
+ps : Fin 3 → ℕ → Old.Q := ![p, s, a]
+hc : ∀ (k : Fin 3), ∀ i < 10, Canonical (ps k i)
+out : ℕ → Old.Q
+hout :
+  ProverCommitRawValues49.run (ProverCommitQArray48.array 10#usize (ps 0)) (ProverCommitQArray48.array 10#usize (ps 1))
+      (ProverCommitQArray48.array 10#usize (ps 2)) (ProverCommitNativeQ48.source (p 8))
+      (ProverCommitNativeQ48.source (p 9)) (ProverCommitNativeQ48.source x0) (ProverCommitNativeQ48.source y0)
+      (ProverCommitNativeQ48.source x1) (ProverCommitNativeQ48.source y1) j =
+    ok (ProverCommitQArray48.array 7#usize out)
+hcout : ∀ k < 7, Canonical (out k)
+hdout : ∀ (k : Fin 7), decode (out ↑k) = ProverCommitRawValues49.model ps (p 8) (p 9) x0 y0 x1 y1 ⟨↑j, hj⟩ k
+⊢ ![AspisR0.Opening.indicator R0P.copyInactiveRows (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      AspisR0.Opening.eqWeight (ProverCommitPointWeight49.reverse fun i => decode (ps 0 ↑i))
+        (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      AspisR0.Opening.eqWeight (ProverCommitPointWeight49.reverse fun i => decode (ps 1 ↑i))
+        (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      AspisR0.Opening.eqWeight (ProverCommitPointWeight49.reverse fun i => decode (ps 2 ↑i))
+        (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      if ↑⟨↑j, hj⟩ < 28 then decode (p 8) ^ ↑⟨↑j, hj⟩
+      else if ↑⟨↑j, hj⟩ < 56 then decode (p 9) ^ (↑⟨↑j, hj⟩ - 28) else 0,
+      ProverCommitEval47.messageEval (Pi.single ⟨↑j, hj⟩ 1) (decode x0) (decode y0),
+      ProverCommitEval47.messageEval (Pi.single ⟨↑j, hj⟩ 1) (decode x1) (decode y1)] =
+    ![AspisR0.Opening.indicator R0P.copyInactiveRows (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      AspisR0.Opening.eqWeight (openingPoints (decoded p) 0) (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      AspisR0.Opening.eqWeight (openingPoints (decoded p) 1) (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      AspisR0.Opening.eqWeight (openingPoints (decoded p) 2) (AspisR1.rowEquiv.symm ⟨↑j, hj⟩),
+      libraWeight (decoded p) ⟨↑j, hj⟩, ProverCommitEval47.messageEval (Pi.single ⟨↑j, hj⟩ 1) (decode x0) (decode y0),
+      ProverCommitEval47.messageEval (Pi.single ⟨↑j, hj⟩ 1) (decode x1) (decode y1)]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRawSource49.lean:73:49: error: Expected type must not contain metavariables
+  ↑8#usize < ↑?m.534
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitRawSource49.lean:73:100: error: Expected type must not contain metavariables
+  ↑9#usize < ↑?m.534
+'R1Z.ProverCommitRawSource49.index3_0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRawSource49.index3_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRawSource49.index3_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRawSource49.exact_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

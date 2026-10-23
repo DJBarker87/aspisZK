@@ -1,0 +1,69 @@
+import AspisR1ProducerRelease47.EncoderPhi53
+import R1Z.ProverCommitWideSub53
+import R1Z.ProverCommitMix48
+/-! Complete inverse fibre transform for arbitrary canonical wide inputs.
+No domain point or channel result is assumed correct by this local theorem. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitEncoderPhi53
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitWideOps48 ProverCommitMix48
+
+def phi {K : Type} [Field K] (x y : K) (h : Fin 4 → K) : Fin 4 → K :=
+  ![h 0+y*h 1+x*h 2+x*y*h 3,
+    h 0-y*h 1+x*h 2-x*y*h 3,
+    h 0-y*h 1-x*h 2+x*y*h 3,
+    h 0+y*h 1-x*h 2-x*y*h 3]
+
+attribute [local irreducible] value source sourceArray
+
+theorem exact_result (x y : Raw) (hx : canonical x) (hy : canonical y)
+    (h : Nat → Raw) (hh : ∀ i, i<4 → canonical (h i)) :
+    ∃ out : Nat → Raw,
+      encoder53.phi_inverse (source x) (source y) (sourceArray 4#usize h)=
+        ok (sourceArray 4#usize out) ∧
+      (∀ i, i<4 → canonical (out i)) ∧
+      ∀ i : Fin 4, value (out i.val)=phi (value x) (value y) (fun i => value (h i.val)) i := by
+  obtain ⟨a,ha,hca,hda⟩ := ProverCommitWideOps48.mul_exact (y) (h 1) (hy) (hh 1 (by decide))
+  obtain ⟨b,hb,hcb,hdb⟩ := ProverCommitWideOps48.mul_exact (x) (h 2) (hx) (hh 2 (by decide))
+  obtain ⟨xy,hxy,hcxy,hdxy⟩ := ProverCommitWideOps48.mul_exact (x) (y) (hx) (hy)
+  obtain ⟨c,hc,hcc,hdc⟩ := ProverCommitWideOps48.mul_exact (xy) (h 3) (hcxy) (hh 3 (by decide))
+  obtain ⟨t0,ht0,hct0,hdt0⟩ := ProverCommitWideOps48.add_exact (h 0) (a) (hh 0 (by decide)) (hca)
+  obtain ⟨t1,ht1,hct1,hdt1⟩ := ProverCommitWideOps48.add_exact (t0) (b) (hct0) (hcb)
+  obtain ⟨o0,ho0,hco0,hdo0⟩ := ProverCommitWideOps48.add_exact (t1) (c) (hct1) (hcc)
+  obtain ⟨t2,ht2,hct2,hdt2⟩ := ProverCommitWideSub53.sub_exact (h 0) (a) (hh 0 (by decide)) (hca)
+  obtain ⟨t3,ht3,hct3,hdt3⟩ := ProverCommitWideOps48.add_exact (t2) (b) (hct2) (hcb)
+  obtain ⟨o1,ho1,hco1,hdo1⟩ := ProverCommitWideSub53.sub_exact (t3) (c) (hct3) (hcc)
+  obtain ⟨t4,ht4,hct4,hdt4⟩ := ProverCommitWideSub53.sub_exact (t2) (b) (hct2) (hcb)
+  obtain ⟨o2,ho2,hco2,hdo2⟩ := ProverCommitWideOps48.add_exact (t4) (c) (hct4) (hcc)
+  obtain ⟨t5,ht5,hct5,hdt5⟩ := ProverCommitWideSub53.sub_exact (t0) (b) (hct0) (hcb)
+  obtain ⟨o3,ho3,hco3,hdo3⟩ := ProverCommitWideSub53.sub_exact (t5) (c) (hct5) (hcc)
+  let out : Nat → Raw := fun i => match i with | 0 => o0 | 1 => o1 | 2 => o2 | _ => o3
+  refine ⟨out,?_,?_,?_⟩
+  · simp only [encoder53.phi_inverse,index 4#usize h 0#usize (by decide),
+      index 4#usize h 1#usize (by decide),index 4#usize h 2#usize (by decide),
+      index 4#usize h 3#usize (by decide),ha,hb,hxy,hc,ht0,ht1,ho0,ht2,ht3,ho1,ht4,ho2,ht5,ho3,bind_tc_ok]
+    rfl
+  · intro i hi
+    interval_cases i
+    · exact hco0
+    · exact hco1
+    · exact hco2
+    · exact hco3
+  · intro i
+    fin_cases i
+    · change value o0=_
+      rw [hdo0,hdt1,hdt0,hda,hdb,hdc,hdxy]
+      rfl
+    · change value o1=_
+      rw [hdo1,hdt3,hdt2,hda,hdb,hdc,hdxy]
+      rfl
+    · change value o2=_
+      rw [hdo2,hdt4,hdt2,hda,hdb,hdc,hdxy]
+      rfl
+    · change value o3=_
+      rw [hdo3,hdt5,hdt0,hda,hdb,hdc,hdxy]
+      rfl
+
+#print axioms exact_result
+end R1Z.ProverCommitEncoderPhi53

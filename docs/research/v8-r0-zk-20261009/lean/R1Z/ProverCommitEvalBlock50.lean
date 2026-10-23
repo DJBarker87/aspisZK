@@ -1,0 +1,77 @@
+import AspisR1ProducerRelease47.Eval50
+import R1Z.ProverCommitDot50
+import R1Z.ProverCommitRadix50
+/-! Exact radix-four block, from three proved powers and canonical coefficients. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitEvalBlock50
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitPrepare50 (triple)
+open AspisV8R15.ExactTowerBase
+open AspisR1.ExtractedCurrentQM31Exact (decode)
+open scoped BigOperators
+
+def source (q : Nat → Old.Q) := ProverCommitArray49.array 28#usize
+  (fun i => ProverCommitNativeQ48.source (q i))
+
+theorem index (q : Nat → Old.Q) (i : Usize) (hi : i.val<28) :
+    Array.index_usize (source q) i=ok (ProverCommitNativeQ48.source (q i.val)) :=
+  ProverCommitArray49.index 28#usize _ i hi
+
+theorem block (q powers : Nat → Old.Q) (x : AspisR1.ExtractedCurrentQM31Exact.QM31Exact)
+    (hq : ∀ i, i<28 → Canonical (q i))
+    (hp : ∀ i, i<3 → Canonical (powers i))
+    (hv : ∀ i : Fin 3, decode (powers i.val)=x^(i.val+1))
+    (j : Usize) (hj : j.val<7) :
+    ∃ z : Old.Q, eval50.block (source q) (ProverCommitDot50.qarray powers) j=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ decode z=ProverCommitRadix50.block (fun i => decode (q i)) x j.val := by
+  let start := core.num.Usize.wrapping_mul j 4#usize
+  have hstart : start.val=4*j.val := by
+    change (Usize.wrapping_mul j 4#usize).val=4*j.val
+    rw [Usize.wrapping_mul_val_eq]
+    have four : (4#usize).val=4 := by scalar_tac
+    rw [four,Nat.mod_eq_of_lt (by have := ProverCommitPairCounter47.usize_large;omega)]
+    omega
+
+  have hadd (k : Usize) (hk : k.val≤3) :
+      (core.num.Usize.wrapping_add start k).val=4*j.val+k.val := by
+    change (Usize.wrapping_add start k).val=4*j.val+k.val
+    rw [ProverCommitBasisFillValue47.add_val start k (by rw [hstart];omega),hstart]
+  let coeffs := triple (q (4*j.val+1)) (q (4*j.val+2)) (q (4*j.val+3))
+  have hcoeffs : ∀ i, i<3 → Canonical (coeffs i) := by
+    intro i hi
+    unfold coeffs triple
+    split
+    · exact hq _ (by omega)
+    · split <;> exact hq _ (by omega)
+  obtain ⟨d,hd,hcd,hvd⟩ := ProverCommitDot50.exact_result powers coeffs hp hcoeffs
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitNativeQ48.add (q (4*j.val)) d (hq _ (by omega)) hcd
+  refine ⟨z,?_,hcz,?_⟩
+  · rw [eval50.block]
+    simp only [lift,bind_tc_ok]
+    rw [index q start (by rw [hstart];omega)]
+    simp only [bind_tc_ok]
+    rw [index q _ (by rw [hadd 1#usize (by decide)];change 4*j.val+1<28;omega)]
+    simp only [bind_tc_ok]
+    rw [index q _ (by rw [hadd 2#usize (by decide)];change 4*j.val+2<28;omega)]
+    simp only [bind_tc_ok]
+    rw [index q _ (by rw [hadd 3#usize (by decide)];change 4*j.val+3<28;omega)]
+    simp only [bind_tc_ok]
+    rw [hstart,hadd 1#usize (by decide),hadd 2#usize (by decide),hadd 3#usize (by decide)]
+    change (do
+      let d ← run50.run (ProverCommitDot50.qarray powers) (ProverCommitDot50.qarray coeffs)
+      field.QM31.add (ProverCommitNativeQ48.source (q (4*j.val))) d)=_
+    rw [hd];exact hz
+  · rw [hdz,hvd]
+    simp only [Fin.sum_univ_succ,Fin.val_zero,Fin.val_succ,Fin.sum_univ_zero,add_zero]
+    have hv0 : decode (powers 0)=x := by simpa only [Fin.val_zero,pow_one] using (show decode (powers 0)=x^1 from hv 0)
+    have hv1 : decode (powers 1)=x^2 := hv 1
+    have hv2 : decode (powers 2)=x^3 := hv 2
+    change decode (q (4*j.val))+(decode (powers 0)*decode (q (4*j.val+1))+
+      (decode (powers 1)*decode (q (4*j.val+2))+decode (powers 2)*decode (q (4*j.val+3))))=_
+    rw [hv0,hv1,hv2,ProverCommitRadix50.block]
+    ring
+
+#print axioms index
+#print axioms block
+end R1Z.ProverCommitEvalBlock50

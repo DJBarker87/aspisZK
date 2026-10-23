@@ -1,0 +1,3 @@
+The extracted Pair adapter side-one suffix writes three canonical values at slots 1, 2, 3. Full and mixed product bounds are derived from the observed same-run calls and proved source-operation semantics. Returns the exact ordered update chain; retains canonical low, mapped ap1/weights read contracts and same term-prefix/suffix successes. Does not claim enclosing shipped Weights::pair correspondence.
+
+Focused Lean check: 16.549 seconds; peak aggregate RSS 3241721856 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

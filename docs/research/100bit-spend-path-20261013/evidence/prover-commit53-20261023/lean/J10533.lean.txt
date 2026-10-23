@@ -1,0 +1,56 @@
+import R1Z.ProverCommitClaimsColumn53
+import R1Z.ProverCommitRawSource49
+/-! Complete three-point producer: successor/absorption, every column MLE,
+and all source outputs equal honestClaims. No point or claim image is assumed. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitClaims53
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open ProverCommitSuccessorPoint49 (decoded)
+open R0P.SemSource
+
+def trace (c : Nat → Nat → Old.Q) : R0P.Trace QM31Exact := fun l j => decode (c l.val j.val)
+
+theorem value_model (p a : Nat → Old.Q) (c : Nat → Nat → Old.Q) (r : Fin 3) (l : Fin 29)
+    (hpoint : toR0 (decoded a)=openingPoints (decoded p) r) :
+    ProverCommitClaimsColumn53.value a c l.val=honestClaims (trace c) (decoded p) r l := by
+  change AspisR0.RoundNormalization.dot (AspisR0.Opening.eqWeight (toR0 (decoded a)))
+    (fun j : Fin 1024 => decode (c l.val j.val))=_
+  rw [hpoint]
+  rfl
+
+attribute [local irreducible] ProverCommitQArray48.array ProverCommitNativeQ48.source
+  ProverCommitClaimsColumn53.columns ProverCommitClaimsColumn53.value
+
+theorem exact_result (p : Nat → Old.Q) (hp : ∀ i, i<10 → Canonical (p i))
+    (c : Nat → Nat → Old.Q) (hc : ∀ l, l<29 → ∀ j, j<1024 → Canonical (c l j)) :
+    ∃ q : Fin 3 → Nat → Old.Q,
+      claims53.all (ProverCommitQArray48.array 10#usize p) (ProverCommitClaimsColumn53.columns c)=
+        ok (Array.make 3#usize [ProverCommitQArray48.array 29#usize (q 0),
+          ProverCommitQArray48.array 29#usize (q 1),ProverCommitQArray48.array 29#usize (q 2)]) ∧
+      (∀ r i, i<29 → Canonical (q r i)) ∧
+      ∀ r : Fin 3, ∀ l : Fin 29, decode (q r l.val)=honestClaims (trace c) (decoded p) r l := by
+  obtain ⟨s,a,hpoints,hcs,hca,hmodel⟩ := ProverCommitStatementPoints49.points_exact p hp
+  obtain ⟨q0,h0,hc0,hd0⟩ := ProverCommitClaimsColumn53.exact_result p hp c hc
+  obtain ⟨q1,h1,hc1,hd1⟩ := ProverCommitClaimsColumn53.exact_result s hcs c hc
+  obtain ⟨q2,h2,hc2,hd2⟩ := ProverCommitClaimsColumn53.exact_result a hca c hc
+  refine ⟨![q0,q1,q2],?_,?_,?_⟩
+  · simp only [claims53.all,hpoints,bind_tc_ok,
+      ProverCommitRawSource49.index3_0,ProverCommitRawSource49.index3_1,ProverCommitRawSource49.index3_2,
+      h0,h1,h2]
+  · intro r i hi
+    fin_cases r
+    · exact hc0 i hi
+    · exact hc1 i hi
+    · exact hc2 i hi
+  · intro r l
+    fin_cases r
+    · exact (hd0 l.val l.isLt).trans (value_model p p c 0 l (hmodel 0))
+    · exact (hd1 l.val l.isLt).trans (value_model p s c 1 l (hmodel 1))
+    · exact (hd2 l.val l.isLt).trans (value_model p a c 2 l (hmodel 2))
+
+#print axioms value_model
+#print axioms exact_result
+end R1Z.ProverCommitClaims53

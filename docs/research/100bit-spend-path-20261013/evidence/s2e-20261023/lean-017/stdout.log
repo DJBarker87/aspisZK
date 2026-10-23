@@ -1,0 +1,96 @@
+S2E_Execution.lean:45:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+S2E_Execution.lean:55:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+S2E_Execution.lean:69:11: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+S2E_Execution.lean:52:17: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual] at rest
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2E_Execution.lean:57:17: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at rest
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2E_Execution.lean:66:19: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual] at
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲rest
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2E_Execution.lean:125:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+S2E_Execution.lean:127:58: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at rest
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2E_Execution.lean:184:93: error: Application type mismatch: The argument
+  rest
+has type
+  (do
+      let (state1, sdk2, result) ←
+        match core.result.Result.Ok PUnit.unit with
+          | core.result.Result.Ok a => do
+            let i ← data.index_usize 1#usize
+            let i1 ← lift (UScalar.cast UScalarTy.Usize i)
+            let (result1, state2, sdk3) ←
+              first_and_copy children state acquired statement publicInput proofBytes.deref i1 ca.data_slot
+            ok (state2, sdk3, result1)
+          | core.result.Result.Err a => ok (state, acquired, core.result.Result.Ok PUnit.unit)
+      let sdk3 ← release_shared sdk2 pa.data_slot
+      ok (result, state1, sdk3)) =
+    ok (core.result.Result.Ok (), finalState, finalSdk)
+but is expected to have type
+  (do
+      let a ← data.index_usize 1#usize
+      ?m.481 a) =
+    ok ?m.482
+in the application
+  bind_success (data.index_usize 1#usize) ?m.481 ?m.482 rest
+S2E_Execution.lean:188:6: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+S2E_Execution.lean:170:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+S2E_Execution.lean:182:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+S2E_Execution.lean:172:58: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at rest
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2E.proof_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2E.E' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2E.execution_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2E.checkpoint_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2E.public_success' depends on axioms: [propext, Classical.choice, Quot.sound]

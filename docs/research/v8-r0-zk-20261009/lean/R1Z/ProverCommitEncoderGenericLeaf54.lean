@@ -1,0 +1,35 @@
+import R1Z.ProverCommitEncoderGenericChannels54
+import R1Z.ProverCommitEncoderGenericPhi54
+/-! Complete generic encoder with local operation premises only. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitEncoderGenericLeaf54
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitArray49 ProverCommitEncoderEval54 ProverCommitEncoderGenericEval54
+attribute [local irreducible] array
+theorem exact_result {E K : Type} [CommRing K] (inst : scalar.CodeField E)
+    (valid : E → Prop) (decode : E → K) (nv : U32 → K) (ops : Arithmetic inst valid decode nv)
+    (sub_success : ∀ x y, valid x → valid y → ∃ z, inst.sub x y=ok z ∧ valid z ∧ decode z=decode x-decode y)
+    (f : Nat → E) (hf : ∀ i, i<1024 → valid (f i))
+    (p : Nat → U32) (hp : ∀ i, i<9 → (p i).val<2147483647)
+    (x y : E) (hx : valid x) (hy : valid y) :
+    ∃ out : Nat → E,
+      generic54.encode_with_nodes inst (array 1024#usize f) (nodes p) (x) (y)=
+        ok (array 4#usize out) ∧
+      (∀ s, s<4 → valid (out s)) ∧
+      ∀ s : Fin 4, decode (out s.val)=ProverCommitEncoderPhi53.phi (decode x) (decode y)
+        (fun s => ProverCommitEncoderMath54.evaluate 8 (fun i => decode (f (4*i+s.val))) (fun i => nv (p i)) 0) s := by
+  obtain ⟨h,hh,hch,hdh⟩ := ProverCommitEncoderGenericChannels54.exact_result inst valid decode nv ops f hf p hp
+  obtain ⟨out,hout,hcout,hdout⟩ := ProverCommitEncoderGenericPhi54.exact_result inst valid decode nv ops sub_success x y hx hy h hch
+  refine ⟨out,?_,hcout,?_⟩
+  · rw [generic54.encode_with_nodes,hh]
+    simp only [bind_tc_ok]
+    exact hout
+  · intro s
+    rw [hdout s]
+    have he : (fun i : Fin 4 => decode (h i.val))=
+        (fun s : Fin 4 => ProverCommitEncoderMath54.evaluate 8 (fun i => decode (f (4*i+s.val)))
+          (fun i => nv (p i)) 0) := funext hdh
+    rw [he]
+
+#print axioms exact_result
+end R1Z.ProverCommitEncoderGenericLeaf54

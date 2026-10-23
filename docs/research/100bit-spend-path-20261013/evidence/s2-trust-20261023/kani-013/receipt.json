@@ -1,0 +1,55 @@
+{
+  "attempt": "kani-013",
+  "kind": "kani",
+  "source_revision": "3b0ac3bd9824393de4d932a0466609dff560f159",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "kani-spec/Cargo.toml",
+    "--target-dir",
+    "kani-metrics-1",
+    "-Z",
+    "function-contracts",
+    "--exact",
+    "--output-format",
+    "terse",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--harness",
+    "checks::exclusive_deref"
+  ],
+  "sources": [
+    "kani-spec/src/lib.rs",
+    "kani-spec/Cargo.toml"
+  ],
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  },
+  "timeout": 180,
+  "expected_time": "isolated exclusive_deref SAT proof; replacement for missing child peak RSS artifact in timed-out aggregate004, not a semantic/source change",
+  "deps_fingerprint": "standalone no dependencies; Kani 0.67.0 rustc 1.93.0-nightly 53732d5e0; CBMC 6.8.0",
+  "exit_status": 0,
+  "wall_seconds": 89.7257631800021,
+  "peak_rss_kib": "2150544",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r36a03ea636c24faea83ac2d59744ff9a.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "2287689728",
+  "source_hashes": {
+    "kani-spec/src/lib.rs": "2cfd2e25fc68df8b599b49158f3fca27a604fea31ea9eee9cb4b0a43d2a3e233",
+    "kani-spec/Cargo.toml": "85e87aec34ad924350d438290ea3e6d459ea6cea1f1e82090aa5b97f97a77752"
+  },
+  "print_axioms": "N/A: Kani"
+}

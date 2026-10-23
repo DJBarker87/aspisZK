@@ -1,0 +1,38 @@
+S2I_StageJoin.lean:36:46: error(lean.unknownIdentifier): Unknown identifier `MultiproofConePhysicalProgram.rawOracle`
+S2I_StageJoin.lean:38:25: error(lean.unknownIdentifier): Unknown identifier `OraclePortFrozenOrder.slotStart`
+S2I_StageJoin.lean:39:12: error(lean.unknownIdentifier): Unknown identifier `OraclePortFrozenOrder.capacity`
+S2I_StageJoin.lean:52:58: error: Application type mismatch: The argument
+  D
+has type
+  aspis_core.digest.Digest32 Hash
+but is expected to have type
+  MultiproofConeRef.aspis_core.digest.Digest32 ?m.124
+in the application
+  MultiproofConeFrozen2Stage.both_batches D
+S2I_StageJoin.lean:60:2: error: Type mismatch: After simplification, term
+  joined
+ has type
+  @Eq (List (Bytes × State) × Bool)
+    ((eval H (batch parsed q batch0)).1 ++
+        (bindObservation H (observe after, some (resumedSource i.data p a)) fun resumed =>
+            match resumed with
+            | none => Program.done false
+            | some state => stage2 parsed q tr i state).1,
+      (bindObservation H (observe after, some (resumedSource i.data p a)) fun resumed =>
+          match resumed with
+          | none => Program.done false
+          | some state => stage2 parsed q tr i state).2)
+    (eval H (dV_frozen2 stored tr m))
+but is expected to have type
+  @Eq (List (Bytes × State) × Bool)
+    ((eval H (batch parsed q batch0)).1 ++
+        (bindObservation H (observe after, some (resumedSource i.data p a)) fun resumed =>
+            match resumed with
+            | none => Program.done false
+            | some state => stage2 parsed q tr i state).1,
+      (bindObservation H (observe after, some (resumedSource i.data p a)) fun resumed =>
+          match resumed with
+          | none => Program.done false
+          | some state => stage2 parsed q tr i state).2)
+    (eval H (dV_frozen2 stored tr m))
+'AspisR1.S2I.StageJoin.ordered_checkpoint_batches' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

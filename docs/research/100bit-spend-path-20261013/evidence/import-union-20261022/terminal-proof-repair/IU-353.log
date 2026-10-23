@@ -1,0 +1,141 @@
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:29:19: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:30:8: warning: 'have h16 : (16#usize).val = 16 := by scalar_tac; omega' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:30:8: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:33:19: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:34:8: warning: 'have h12 : (12#usize).val = 12 := by scalar_tac; omega' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:34:8: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:38:22: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:45:26: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:47:23: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:53:39: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:71:73: error: unsolved goals
+input output : QM
+expected : field.M31
+opened : Std.Array QM 16#usize
+⊢ (do
+      let occupied ← opened.index_usize 0#usize
+      let inverse ← opened.index_usize 1#usize
+      let one_minus ← field.QM31.ONE.sub occupied
+      let both ← field.QM31.add input output
+      let q ← occupied.sub field.QM31.ONE
+      let q1 ← occupied.mul q
+      let q2 ← both.mul q1
+      let occupancy1 ← (Array.repeat 12#usize field.QM31.ZERO).update 0#usize q2
+      let q3 ← opened.index_usize 9#usize
+      let q4 ← q3.mul inverse
+      let q5 ← q4.sub occupied
+      let q6 ← both.mul q5
+      let occupancy2 ← occupancy1.update 1#usize q6
+      let q7 ← one_minus.mul inverse
+      let q8 ← both.mul q7
+      let a ← occupancy2.update 2#usize q8
+      let occupancy3 ←
+        pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal_loop
+            { start := 0#usize, «end» := poseidon2.DIGEST_ELEMS } opened one_minus a both
+      let q9 ← opened.index_usize 10#usize
+      let q10 ← q9.mul one_minus
+      let q11 ← field.QM31.mul input q10
+      let q12 ← pool_v1.pair_forest_semantic_terminal.lift_m31 expected
+      let q13 ← occupied.sub q12
+      let q14 ← field.QM31.mul output q13
+      let q15 ← q11.add q14
+      occupancy3.update 11#usize q15) =
+    do
+    let x ← opened.index_usize 0#usize
+    let x_1 ← opened.index_usize 1#usize
+    let x_2 ← field.QM31.ONE.sub x
+    let x_3 ← field.QM31.add input output
+    let x_4 ← field.QM31.sub x field.QM31.ONE
+    let x_5 ← field.QM31.mul x x_4
+    let x_6 ← x_3.mul x_5
+    let x_7 ← (Array.repeat 12#usize field.QM31.ZERO).update 0#usize x_6
+    let x_8 ← opened.index_usize 9#usize
+    let x_9 ← field.QM31.mul x_8 x_1
+    let x_10 ← x_9.sub x
+    let x_11 ← x_3.mul x_10
+    let x_12 ← x_7.update 1#usize x_11
+    let x_13 ← x_2.mul x_1
+    let x_14 ← x_3.mul x_13
+    let x_15 ← x_12.update 2#usize x_14
+    let (occupied, oneMinus, both, _q8, initial) := (x, x_2, x_3, x_14, x_15)
+      do
+      let occupancy3 ←
+        pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal_loop
+            { start := 0#usize, «end» := poseidon2.DIGEST_ELEMS } opened oneMinus initial both
+      let q9 ← opened.index_usize 10#usize
+      let q10 ← field.QM31.mul q9 oneMinus
+      let q11 ← field.QM31.mul input q10
+      let q12 ← pool_v1.pair_forest_semantic_terminal.lift_m31 expected
+      let q13 ← field.QM31.sub occupied q12
+      let q14 ← field.QM31.mul output q13
+      let q15 ← q11.add q14
+      occupancy3.update 11#usize q15
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:332:28: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:353:26: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:359:2: error: Type mismatch: After simplification, term
+  hlist
+ has type
+  [decode (↑out)[0], decode (↑out)[1], decode (↑out)[2], decode (↑out)[3], decode (↑out)[4], decode (↑out)[5],
+      decode (↑out)[6], decode (↑out)[7], decode (↑out)[8], decode (↑out)[9], decode (↑out)[10], decode (↑out)[11]] =
+    R0P.occupancyLanesLiteral (decode input) (decode output)
+      (R0P.occupancyExpected (OccupancyExpectedBridge.modelVariant variant)) fun i => decode (get16 opened i)
+but is expected to have type
+  (do
+      let occupancy3 ←
+        pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal_loop
+            { start := 0#usize, «end» := poseidon2.DIGEST_ELEMS } opened oneMinus initial both
+      OccupancyLiteralTail.tailRun input output expected opened occupied oneMinus occupancy3) =
+    ok out
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:150:39: warning: This simp argument is unused:
+  hloopSource
+
+Hint: Omit it from the simp argument list.
+  simp only [run, hprefix, bind_tc_ok, hl̵o̵o̵p̵S̵o̵u̵r̵c̵e̵,̵ ̵h̵tail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:150:52: warning: This simp argument is unused:
+  htail
+
+Hint: Omit it from the simp argument list.
+  simp only [run, hprefix, bind_tc_ok, hloopSource,̵ ̵h̵t̵a̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/OccupancyLiteralExecutionAll12ExactListPublic.lean:272:61: warning: This simp argument is unused:
+  hbothValue
+
+Hint: Omit it from the simp argument list.
+  simp [modelLanes, R0P.occupancyLanesLiteral, h̵b̵o̵t̵h̵V̵a̵l̵u̵e̵,̵honeMinusValue', hoccupiedGet']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.OccupancyLiteralExecutionAll12ExactListPublic.generated_eq_run' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.OccupancyLiteralExecutionAll12ExactListPublic.literal_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

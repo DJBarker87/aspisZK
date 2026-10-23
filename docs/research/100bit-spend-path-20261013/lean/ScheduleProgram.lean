@@ -90,6 +90,10 @@ theorem same_boxed_source_success (point : Array QM 10#usize) (selectors : Selec
   refine ⟨initial1, absorption, ?_, hcinitial1, hcabsorption, ?_, ?_⟩
   · simp only [AspisR1.AbsorptionLiteralExecution.source] at habsorption
     simp only [run, hprefix, bind_tc_ok, hinitial, hdomain, hwrites, hsetup, habsorption]
+    change ((do
+      let initial1 ← AspisR1.InitialArrayWrites.run initial p.low0 domain length
+      Result.ok (initial1, absorption)) : Result (Array QM 16#usize × Array QM 16#usize)) = _
+    simp only [hwrites, bind_tc_ok]
   · intro i
     have hv : decode (sourceCell initial1 i) =
         AspisR1.ScheduleInitialModel.initialValue expected (exactOpenings openings).z i := by

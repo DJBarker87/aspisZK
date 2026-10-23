@@ -1,0 +1,3 @@
+# Actual square operand and source graph
+
+On canonical U32 coordinates, the actual wrapping square operand returns the same word as the existing checked operand. A separate theorem splits the extracted CM31.square into that operand, reduction, coordinate multiplication and doubling in source order. These results do not yet identify the complete square with the checked square, its helper dispatch, or the production runtime. Both focused checks exited zero, used no swap and report only standard axioms. Exact receipts and pinned source are retained; no compiled objects or full dependency inventories are included.

@@ -1,0 +1,10 @@
+from pathlib import Path
+import json,subprocess,hashlib
+H=Path('/home/dombarker/project-offloads/s126-real-sdk-20261021');tag='sdk-live-out-shared-bridge-counterexample-v7';P=H/'target/kani/x86_64-unknown-linux-gnu/debug/deps';matches=list(P.glob('*sdk_live_out_shared_10485760_v7*actual_sdk_out_bridge.out'));assert len(matches)==1;program=matches[0]
+subprocess.run(['python3',str(H/'kit/reservation.py'),str(H/(tag+'-admission.json'))],check=True,stdout=subprocess.DEVNULL)
+cmd=['/home/dombarker/.kani/kani-0.67.0/bin/cbmc','--show-properties','--json-ui',str(program)]
+O=H/tag;O.mkdir(exist_ok=False)
+inventory=subprocess.run(cmd,capture_output=True,text=True,check=True);(O/'inventory.json').write_text(inventory.stdout);props=[p for x in json.loads(inventory.stdout) for p in x.get('properties',[])];selected=[p for p in props if p['description']=='assertion failed: unsafe{(*counter).get()} == initial'];assert len(selected)==1,selected
+cmd=['/home/dombarker/.kani/kani-0.67.0/bin/cbmc','--no-malloc-may-fail','--no-undefined-shift-check','--no-signed-overflow-check','--nan-check','--no-self-loops-to-assumptions','--no-pointer-primitive-check','--object-bits','16','--unwind','36','--sat-solver','cadical','--slice-formula','--unwinding-assertions','--property',selected[0]['name'],'--trace','--json-ui',str(program)]
+(H/(tag+'-input.json')).write_text(json.dumps(dict(program_sha256=hashlib.sha256(program.read_bytes()).hexdigest(),command=cmd,selected_property=selected[0],qualification='Diagnostic counterexample extraction from the already failed conditional bridge. Selected-property result cannot establish any complete contract or caller theorem.'),indent=2)+'\n')
+raise SystemExit(subprocess.call(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'kit/capped.py'),str(H/'receipts'/tag),'Extract the missing counterexample artifact for the failed SDK conditional bridge; not a release replay','--',*cmd]))

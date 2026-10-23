@@ -672,3 +672,590 @@ retained in `eb7cf417ad`. This is nonempty extraction evidence, not its
 semantic proof. No shipped Rust, protocol parameters, proof size, or CU
 artifact changed during these checks. Final runtime/artifact refinement and
 the composed 100-bit per-attempt soundness result remain open.
+
+
+## Genuine scalar and QM product totality
+
+PROVED `8291f4020e`: the actual extracted WideExact.mul_m31 call succeeds
+on a canonical wide input, returns a canonical value, and decodes to the
+exact scalar product. The scalar may be any stored U32 word. The proof uses
+the existing S3 powers totality owner and the new complete source-to-current
+Result maps; it does not assume that the source call succeeds.
+
+PROVED `a8f9e36942`: the genuine QM31.mul extraction maps unconditionally
+to R22's wrapping product. On canonical inputs it agrees with the retained
+checked product, and same-call success and canonical output are derived.
+Three focused checks passed (12.622, 12.714 and 16.298 seconds), below 2.25 GB
+process RSS, zero swaps, standard axioms only. The packet retains failed
+drafts separately from accepted evidence. Existing R22 arithmetic is reused.
+
+The scalar and QM connections to the installed helper are still being
+checked. Full WideExact product, square and mixed-product source bridges,
+upstream operand provenance, production compiler/artifact refinement, and
+final security composition remain open. These proofs do not close S9 or
+establish the overall 100-bit claim. No production source or CU artifact
+changed in this continuation.
+
+
+## Continued source joins — 23 October
+
+PROVED `a5497d8661`: actual QM31.mul, mapped through CurrentWide, equals
+the installed helper qmMul as a complete Result on canonical inputs. This
+discharges the operation-dispatch seam left by the checked arithmetic proof;
+it does not assume a successful actual call. The accepted focused v5 check
+exited 0 in 21.745 seconds, process peak 3,199,254,528 bytes, zero swaps,
+standard axioms only. Earlier failed drafts are not accepted proofs.
+The same commit records actual Wide source mul_by_r/mul_u carrier maps to
+the genuine QM extraction's corresponding operations/formula, preserving
+failure and divergence (13.508 seconds, zero swaps, standard axioms).
+
+The genuine square/mixed source extraction is retained in `e5ee3804e4`;
+its normalized Types and Funs owners passed independently and are retained
+in `07d3128c57`. These compile-only owners are not semantic proofs. Full
+Wide product, canonical square and mixed-product semantic joins remain
+in progress. Production source hashes for field.rs, wide_exact.rs and
+weights.rs still match the extraction pins. No production code changed.
+The release cone, runtime/artifact correspondence and 100-bit target remain
+open. All four session slots resumed active work after an avoidable idle
+handoff; root owns the serial local compile/integration queue.
+
+
+## Square and product source composition continuation
+
+PROVED `14237698a4`: the genuine combined-cut CM31.square call succeeds
+on canonical coordinates and its mapped Result is the selected checked square.
+Its proof reuses the existing square operand/reducer semantics. PROVED
+`e0dc3bc83a`: checked Probe arithmetic maps to the selected checked CM carrier
+for add/sub/mul/by-r/double, preserving the full Result. These checked-to-checked
+maps do not remove canonicality at the wrapping-to-checked boundary.
+
+PROVED `439786f092`: the combined-cut QM31.mul maps through all nine actual
+source calls to the genuine QM multiplication cut, preserving failure and
+divergence. A deterministic symbolic generator emits the named component
+transport applications and distinct scoped source/target binders; --check
+reproduces the kernel-checked source. The same packet contains a generic
+reached-success bind lemma; it does not itself supply concrete canonicality.
+PROVED `bd27377a5f`: the separate full Wide multiplication extraction's
+QM multiplication body maps to that same actual QM arithmetic cut.
+
+Two earlier QM transport attempts hit the local Lean internal memory cap.
+They were not rerun with more memory: an explicit map-function-head equality
+prevented accidental reduction of the applied generated arithmetic body.
+The replacement isolated subtraction proof passed in 11.578 seconds below
+2.25 GB, zero swaps, standard axioms. Prior failures remain diagnostics.
+
+Outer QM square, actual WideExact.mul_qm31, full WideExact.mul canonical
+semantics and the complete source/caller/release joins remain in progress.
+S9 and the overall 100-bit target are still OPEN. No production source or
+CU artifact changed in these proof checks.
+
+
+## Complete square and mixed source bodies — 23 October continuation
+
+PROVED `0b0fe6ecc8`: the combined source QM31.square preserves its complete
+Result into the selected checked square on canonical inputs. The proof follows
+the actual six-call sequence and derives intermediate canonicality from success
+of those same calls. The accepted v11 check took 14.453 seconds, aggregate peak
+2,538,930,176 bytes, zero swaps, six standard-axiom reports. Earlier memory-cap
+failures were replaced by named suffix proofs and an explicit mapper-head bridge,
+not rerun with larger caps.
+
+PROVED `f5dbde8cc1`: the CurrentWide four-remainder canonicalizer is total
+and returns canonical coordinates for every stored QM input. The same commit
+contains reusable full-Result success reflection, which recovers a successful
+source output from the success of its mapped result without a separate
+source-success premise.
+
+PROVED source-only packet `s9-combined-wide-mixed-to-current-v1-20261023`:
+the actual combined-cut WideExact.mul_qm31 body maps as a full Result into
+CurrentWide, with canonical self and arbitrary stored right operand. This includes
+the same canonicalizer and two QM multiplications. The focused check took
+23.907 seconds, aggregate peak 3,233,185,792 bytes, zero swaps, standard axioms.
+
+PROVED focused mixed-product helper join (19.733 seconds, zero swaps): the
+combined source body maps to installed concrete FieldOps.wideMulQM31.
+This is a source-to-helper relation, not surrounding caller refinement.
+
+PROVED focused square helper join (8.481 seconds, zero swaps): the actual
+source square maps to installed actualQMSquare under canonical input.
+
+PROVED source square total/exact consumer in `f5e50a17c0`: no independent
+source-success premise, canonical output and exact square decode. The focused
+check took 15.275 seconds, zero swaps, standard axioms. PROVED source mixed
+total/exact consumer (17.030 seconds, zero swaps, standard axioms): arbitrary
+right input is normalized by the same four-remainder call; the recovered source
+output is canonical and has the corresponding exact componentwise product decode.
+
+Still OPEN: full WideExact.mul
+canonical source composition, the actual surrounding caller and input provenance,
+production adoption/refinement and runtime/artifact correspondence. The full
+100-bit release claim remains OPEN. Production Rust and CU artifacts are unchanged.
+
+
+## Full source arithmetic and actual call boundaries
+
+PROVED source full WideExact.mul totality/exact semantics in focused packet
+`s9-source-wide-mul-total-exact-v1-20261023` (17.435 seconds, aggregate peak
+3,222,290,432 bytes, zero swaps, standard axioms). The source-to-Current
+full Result map covers the exact nine-operation source sequence, using a
+canonicality chain derived from those same reached calls. It composes the
+existing checked Wide product theorem rather than re-proving field algebra.
+
+PROVED actual frozen Pair-caller square and mixed-product operation maps,
+plus the actual generated Pair body's same-run square prefix. The square
+prefix derives canonicality from the selected extra read and ties the three
+source-cut results to the actual q4/q41/q8/q16 outputs. It does not supply
+canonicality of Weights.extra at its upstream producer.
+
+OPEN producer frontier identified concretely: Pair-step extraction receives
+Weights and does not contain Weights::new. The actual constructor copies
+alpha[8]/alpha[9] into extra; those values originate from semantic transcript
+sampling. The constructor/challenge-caller correspondence must be connected
+to the existing canonical sampler proofs. Raw proof-buffer field-reader
+canonicality alone does not establish this challenge provenance.
+
+Still OPEN in this lane: full Wide multiplication helper/Pair call join,
+exact four mixed-product calls through actual afterLow read witnesses,
+constructor/challenge and other upstream canonical-input provenance, and the
+composed source/caller/release result. No production Rust/CU artifact changed;
+S9 and the full 100-bit release claim remain OPEN.
+
+
+## Installed full multiplication and same-execution term children
+
+PROVED in `s9-wide-mul-pair-helper-bridge-v1-20261023`: the exact source
+WideExact.mul full Result maps to the installed concreteFieldOps.wideMul and
+the actual Pair caller arithmetic slot on corresponding canonical operands.
+The focused check passed in 16.206 seconds, aggregate RSS 3,214,835,712 bytes,
+zero swap, standard axioms only. The canonical operand domain remains explicit.
+
+PROVED in `s9-pair-term-children-v1-20261023`: success of an actual Pair term
+exposes that execution's PERM/ap1/high reads, mixed multiplication and quarter
+scaling successes. This supplies child-call witnesses rather than assuming
+independent executions succeed. Focused check: 22.232 seconds, aggregate RSS
+3,239,313,408 bytes, zero swap, standard axioms only.
+
+OPEN: use those child witnesses to connect all actual mixed-product reads;
+connect the actual full-width tail calls; establish upstream challenge and
+constructor provenance; compose the source/caller/release result. The actual
+Weights::new extraction reaches an unsupported raw-pointer field write in
+Aeneas. A separately extracted pure extra projection is only a candidate and
+does not discharge the actual constructor. Semantic sampler/caller links are
+being proved independently. Production Rust and CU artifacts are unchanged.
+S9 and the 100-bit release target remain not yet established.
+
+
+## Same-execution four-term and sampler links
+
+PROVED: `s9-pair-prefix-four-calls-v1-20261023` exposes all four actual
+term-prefix calls with exact reads, mixed products, quarter products and term
+output identities. `s9-pair-four-mixed-reflections-v1-20261023` connects each
+observed mixed product to its source-cut successful result. The canonical
+mapped-ap1 read contract remains an explicit premise; no fresh arithmetic
+call-success or canonical coefficient premise was added.
+
+PROVED: `s9-semantic-validated-canonical-v1-20261023` reflects the sampler
+success in the same extracted semantic_validated call and derives canonicality
+from the already-proved universal byte sampler. The digest block is arbitrary.
+This local method theorem does not supply current semantic_rounds or the
+unsafe Weights::new constructor correspondence.
+
+PROVED: `s9-pair-sidezero-mul-call-v1-20261023` exposes the actual side-zero
+continuation's three additions and full multiplication success.
+`s9-pair-wide-mul-same-call-v1-20261023` derives the raw source multiplication
+success from an observed Pair multiplication on corresponding canonical
+operands. Canonicality of the actual low/sum operands is being connected.
+
+All these focused checks passed with standard axioms and zero swap. No whole
+manifest replay, production Rust change or new CU benchmark was run. S9 and
+the full 100-bit soundness target remain OPEN.
+
+
+## Implementation frontier: adapter versus enclosing shipped Pair
+
+PROVED operation-level source semantics now cover the full Wide multiplication
+from a successful Pair-adapter call, including the exact source result, canonical
+actual mapped output and field-product decode. The mixed-operation proof also
+retains the internal normalized coefficient, its canonicality and exact decoded
+product. Three-add accumulation and generic nested-mapped array-update
+canonicality are checked; the side-zero and side-one adapter compositions use
+the actual same-execution child-call witnesses rather than fresh successes.
+
+Important scope correction: the generated Pair adapter is not yet proved to
+refine the enclosing shipped Weights::pair. The earlier extraction manifest
+explicitly marks its normalized caller candidate source_equivalent=false.
+The green adapter helper/projection decompositions do not remove that gap.
+In these packets, references to an actual Pair call mean the concrete call
+in the generated adapter, not an established whole-method Rust refinement.
+
+The current shipped Pair method and factored helper bodies were isolated
+without synthetic projection shims. Charon succeeded; Aeneas rejected outer
+breaks/returns in nested fallible loops. A guard-only candidate did not fix
+this. Isolating the fallible loops into small helpers is under feasibility
+test; it is not adopted source, and equivalence, artifact identity and CU
+impact are unestablished. Explicit field/parser/helper stub environments in
+the diagnostic cut remain correspondence obligations.
+
+Still OPEN: enclosing shipped Pair correspondence, sampler caller/constructor
+provenance, remaining input contracts and final source/release composition.
+No production Rust change, new CU measurement or full release replay has
+been performed here. S9 and the 100-bit soundness target remain unestablished.
+
+
+## Current focused continuation, 2026-10-23
+
+PROVED: the side-zero body and side-one body adapter packets now establish
+canonicality of every successful mapped read from their output arrays. Each
+uses the same execution's arithmetic and updates. The side-one result derives
+its low-input canonicality from the body prefix. All three packet checks passed;
+these are adapter results, not enclosing shipped Pair correspondence.
+
+CANDIDATE: the factored source caller now translates with the actual field,
+wide field, parser, twofold, grouped helper and accumulator source. The remaining
+explicit canonical Q.raw boundary is being connected to existing body-pinned
+proof owners. The selected path's tensor method is being incorporated; no
+unreachable placeholder is being treated as a proved native implementation.
+The Rust refactor remains isolated, with artifact identity and CU gates open.
+
+CANDIDATE: a fully initialized Box::new constructor extraction avoids the
+unsupported raw-pointer writes and has no external templates after replacing
+one fixed two-element iterator with its ordered writes. Types compiled; Funs
+and the same-execution extra-field theorem are being checked separately. This
+candidate changes allocation-failure behavior and is not adopted native source.
+
+The two-body adapter composition is being checked after correcting an earlier
+failed draft. No result from that failed check is counted as proved.
+
+
+PROVED continuation: `s9-pair-two-body-canonical-states-v1-20261023`
+connects one generated helper execution to both observed body calls, starting
+from its own zero initialization. The intermediate and final arrays satisfy
+the full mapped-read canonicality contract; upstream ap0/ap1/extra contracts
+remain explicit. Focused check: 24.064 s, 3,265,363,968 bytes peak aggregate
+RSS, zero swap, standard axioms only. This closes the adapter two-body
+canonicality composition, not enclosing shipped Rust source correspondence.
+
+PROVED candidate-only continuation:
+`s9-candidate-constructor-extra-exact-v1-20261023` derives the exact alpha[8]
+and alpha[9] reads from one successful initialized Box::new constructor
+execution and identifies the returned extra array. Focused check: 13.570 s,
+2,186,166,272 bytes peak aggregate RSS, zero swap, standard axioms only.
+The candidate generated Types and Funs also compiled independently. The
+native allocator, alpha provenance, SBF feasibility and adoption gaps remain.
+
+
+PROVED candidate-only follow-on:
+`s9-candidate-constructor-extra-current-canonical-v1-20261023` derives the
+full mapped-read canonicality contract for the returned extra array from that
+same constructor execution and the explicit mapped-alpha input contract.
+Focused check: 22.384 s, 3,255,173,120 bytes peak aggregate RSS, zero swap,
+standard axioms only. It does not establish actual alpha caller provenance.
+
+
+PROVED candidate boundary join:
+`s9-candidate-constructor-pair-extra-contract-v1-20261023` supplies the exact
+Pair helper extra-array canonical-read contract from one successful candidate
+constructor execution and its mapped-alpha input contract. All structural
+carrier maps compose exactly. Focused check: 21.878 s, 3,191,472,128 bytes
+peak aggregate RSS, zero swap, standard axioms only. The full helper joint
+import revealed a known autogenerated discriminant-instance name collision;
+this minimal-import join avoids it, while coherent instance-only normalization
+and dependent rebuilding remain necessary for the eventual whole theorem.
+
+
+PROVED candidate joint composition:
+`s9-candidate-constructor-helper-joint-v1-20261023` now imports the complete
+helper proof with the constructor environment and supplies the constructor's
+extra input directly to the helper. It derives canonical output reads from
+same-run constructor/helper successes and explicit alpha/ap0/ap1 contracts.
+The naming-only Types adapter is reversible, function bodies are unchanged,
+and every affected dependent was checked once in the new environment. The
+joint target passed in 18.943 s, 3,228,942,336 bytes peak aggregate RSS,
+zero swap, standard axioms only.
+
+MEASURED failure, retained:
+`s9-constructor-box-new-sbf-gate-v1-20261023` builds the first candidate but
+its constructor reaches stack offset 4,600, over the 4,096-byte limit by 504.
+That candidate is unsuitable for adoption despite the valid local proof.
+A second candidate moves final packing into a non-inlined helper. Its focused
+constructor diagnostics clear in the fresh optimized build; full stack audit,
+source re-extraction/proof and CU gates remain pending. Neither constructor
+candidate changes shipped source or establishes the 100-bit release claim.
+
+
+MEASURED candidate-v2 stack result:
+`s9-constructor-box-new-sbf-gate-v2-20261023` retains optimized disassembly
+and relocation proving the constructor reaches its out-of-line packing helper.
+The candidate constructor warning is removed; the other 34 function warnings
+are identical to v1. This is a constructor-specific pass only: the whole
+program stack gate is still failed. No CU or proof re-pin result is inferred.
+The next cost comparison layers this constructor onto the exact prior S9
+helper candidate 9338607a, against the existing B1 fixture baseline; it must
+fit the remaining +1,183/+3,901 headroom within the user's +12k allowance.
+
+OPEN new extraction blocker: full Pair source-cut Aeneas emission succeeds
+but the emitted Lean fails at mutable-capture FnOnce/FnMut and typed shifts.
+The failure is in raw generated output, not introduced by the Q.raw slot
+implementation. Minimal proof-friendly powers-loop candidates are being
+checked through both code generation and Lean compilation before any caller
+source feasibility claim is accepted. No unchanged failing replay is planned.
+
+
+MEASURED combined candidate CU gates:
+`s9-combined-helper-constructor-cu-gates-v1-20261023` layers only the split
+constructor onto the exact helper933 candidate. All six fixture outputs match.
+Relative to helper933, stage 1 adds zero CU and settlement adds 244 CU. Against
+the S4-approved stage1_cu/settlement_cu comparator, the largest increases are
+10,817/8,343 CU, within the user's 12,000-CU allowance. The separate legacy
+b1_* comparator does not pass and is retained as such. Historical baseline
+runner source/path pins exist but an execution-time baseline ELF digest was
+not recorded; the current same-path digest is distinguished from that fact.
+
+One reused OS-origin full-mask proof passes both verification/settlement legs
+on the exact combined candidate ELF: 1,206,885/1,148,259 CU, 295/882 bytes.
+This is one retained full-mask control, not a fresh draw or a constant/worst-case
+CU proof. Keys created by the test driver are retained securely outside Git;
+no key material or binaries are included in the packet. Source re-extraction,
+actual caller refinement and full release gates remain OPEN.
+
+
+PROVED focused constructor/sampler update (2026-10-23): commit 0499b04e22
+contains three checked proof packets against the fresh split-constructor V3
+extraction: exact extra projection, canonical reads of the complete extra
+array, and the corresponding Pair input contract. The extraction is from
+the candidate that passed the recorded constructor-specific stack and CU
+gates; it does not reuse the earlier stack-failing constructor as its source.
+All three focused checks report only standard axioms and zero swap. The
+sampler packet proves guarded subtraction and shift-count agreement; it is
+a primitive bridge, not yet the complete sampler transport.
+
+OPEN current arithmetic work: the new constructor QM multiplication carrier
+map and the sampler digit-loop transport each failed a focused check and
+have isolated proof goals under repair. No failing target is promoted as
+proved. Full Pair Lean compilation also exposed library-operation axioms,
+so compilation alone is not accepted as a proof result. A fresh source
+candidate removes those operations and must pass one coherent extraction,
+axiom audit and runtime-cost chain. S9 and the 100-bit theorem remain open.
+
+PROVED subsequent focused checks: the complete digit-loop callback equality
+now passes (7.571 s, 3,203,072,000-byte peak aggregate RSS, zero swap), after
+isolating the checked/wrapping final increment. The V3 constructor/helper
+composition also passes (20.54 s, 3,263,758,336-byte peak aggregate RSS, zero
+swap), with only standard axioms. Its canonical alpha and ap0/ap1 input
+contracts and the same helper success remain explicit; it does not assert
+whole Pair caller refinement. Packets: s9-sampler-digit-loop-transport-v1-20261023
+and s9-constructor-helper-joint-v3-20261023.
+
+PROVED sampler source-owner bridge: the complete sampler Result now maps
+coordinate-for-coordinate to the existing public sampler, preserving failure
+and divergence (8.406 s focused check). The same successful actual sampler
+returns a canonical value (14.166 s), and the same successful focused
+semantic_validated execution returns that canonical challenge without an
+independent sampler-success premise (6.591 s). All three report standard
+axioms and zero swap, with approximately 3.2–3.3 GB peak aggregate RSS.
+These results reuse the existing public sampler theorem and the previous
+same-execution readback. Their source owner retains the explicitly typed
+shift-count compatibility port; semantic-round/caller correspondence and
+release artifact refinement are not thereby closed.
+
+PROVED same-round producer/write: the parameterized emitted semantic-round
+body's success now implies a canonical challenge and the exact same-run
+alpha-array write (13.123 s, 3,255,566,336-byte aggregate RSS, zero swap,
+standard axioms). The enclosing whole-round success is inverted; no separate
+semantic_validated or sampler success assumption is introduced. Four external
+operations remain uniformly quantified Hooks. The checked definitional link
+to the parameterized emitted body and the strict source-shape checker are
+retained in s9-same-round-challenge-write-canonical-v1-20261023. The checker
+pins Rust/generated spans and compares the body after exactly the listed
+slot substitutions. This is not a MIR/ELF/runtime refinement theorem. The
+actual-only ten-call model and constructor input connection remain in flight.
+
+Coherent source retention: c33b6acfbe adds the sampler owner, reversible
+discriminant-name adapter, raw generated source, all focused dependency
+sources/receipts and an exact selected-span checker (blank lines ignored,
+one explicit typed shift-count port). No compiled binaries are included.
+
+PROVED constructor multiplication consumer: the new V3 generated QM31.mul
+now maps through every Result bind to the existing transparent multiplication
+cut, preserving failure/divergence. Reusing its total/canonical theorem proves
+canonical output from canonical inputs and the same successful generated call
+(12.741 s, 2,225,569,792-byte peak aggregate RSS, zero swap, standard axioms).
+Packet: s9-constructor-v3-mul-canonical-v1-20261023. The M31/CM operation map
+predecessor was separately checked (6.79 s) and is retained in the packet.
+This supplies an arithmetic leaf for factor construction; the factor loops
+and their caller inputs remain open.
+
+Source retention: 1c7cf390e4 commits the immutable exact-attributed attempt22
+constructor extraction and its names-only Types/Funs owner packet. Historical
+PENDING labels in the frozen extraction are preserved; the later focused
+proof packets supply the current checked projection/canonicality results.
+Fixed [7,6] source normalization and allocation/error refinement remain
+explicit boundaries.
+
+PROVED ten-round source-model producer: successful execution of the actual-
+carrier ten-round model yields the exact final array of ten same-run challenge
+values and canonicality of every successful read, with no independent alpha
+canonicality or per-round success premise (14.698 s, 3,259,482,112-byte aggregate
+RSS, zero swap, standard axioms). Its four external operation slots remain
+uniformly quantified; a complete Rust caller extraction/runtime link is open.
+
+PROVED remaining constructor arithmetic leaves: generated addition/subtraction
+(11.971 s, 2,212,446,208 bytes) and the double body (14.332 s, 2,204,827,648 bytes)
+are canonical on the same successful executions with canonical inputs. They
+reuse the existing checked primitive bounds and multiplication theorem. No
+wrapping-arithmetic canonicality is assumed for arbitrary inputs.
+
+PROVED generic loop tools: output-property and invariant-property lemmas
+compile with standard axioms (12.495/12.171 s, approximately 2.2 GB aggregate
+RSS, zero swap). Their concrete body invariants and measure decrease remain
+obligations in the constructor and Pair instances. The actual factor-loop
+instance, challenge-to-constructor connection and full Pair binding remain
+in flight; these generic tools are not counted as source-cone closure.
+
+PROVED composition removes constructor alpha premise: the ten-round source
+model now supplies the constructor's exact nested mapped-read alpha contract
+(17.952 s, 3,633,528,832-byte aggregate RSS, zero swap, standard axioms).
+The same successful constructor call then yields canonical reads of its
+extra array (15.218 s, 3,631,284,224 bytes, zero swap, standard axioms).
+This composes actual-carrier model executions and generated constructor
+executions; it does not replace missing Rust caller/runtime refinement with
+a cryptographic assumption. Uniform Hooks and existing constructor source
+normalizations remain explicit. The packet includes the coordinate carrier
+map and contract sources/receipts and explicit selected S9 shared-object pins;
+a coherent release replay is not claimed.
+
+Current next source task: extract the unchanged private semantic_rounds
+caller itself, instead of relying on a source-shape/order check for its ten
+calls. Fresh full Pair extraction now includes actual core field bodies;
+remaining actual r0 dependency bodies are being included before accepting
+its Lean source owner. Neither full Pair nor the source-to-release security
+statement is closed.
+
+PROVED constructor cell update: the same successful generated inner body
+provides all child arithmetic and mutable-array update witnesses; canonical
+input x and exact row-read contract imply canonical intermediate/output
+values and exact updated-row reads (18.041 s, 2,203,942,912-byte aggregate
+RSS, zero swap, standard axioms). Inner/outer loop instances remain pending.
+
+EXTRACTED actual private semantic_rounds caller: new source-only packet
+s9-actual-ten-round-caller-extraction-v1-20261023 retains nonempty source
+133–179 emission, exactly reused Types and single-round bytes, original
+tool output and the honestly recovered Charon wrapper receipt. The pinned
+source cut is current c66eba source plus an unused forwarding shim; it is
+not claimed byte-identical to the complete deployed source file. The new
+caller ZERO Result bind is being handled by a theorem uniform in its actual
+returned initial value, which all ten rounds overwrite. Caller acceptance
+or oracle-trace equivalence under replacing that value is not assumed.
+
+OPEN composition environment issue: importing the full helper chain with
+the semantic chain exposes the historical global Error-instance name
+collision (PublicPreparation.Types versus FinishRelationCurrent.Types).
+The existing qualified discriminant adapter is available, but the selected
+old PublicPrep Types object has no retained source identity. A new source-
+pinned numerical cohort and focused affected dependency replay are required;
+no reversible source-identity claim is made about that unknown old object.
+This does not justify a release-coherent proof claim from cached imports.
+
+PROVED whole inner constructor loop: actual generated inner-loop success
+preserves the initial canonical factor-row/x invariant through every step
+(12.601 s, 2,241,626,112-byte aggregate RSS, zero swap, standard axioms).
+The actual outer scans and first-phase statement-point producer remain open.
+
+PROVED arbitrary initial alpha generalization: the ten-round source model
+requires no canonicality of its initial repeated value; the final successful
+array reads are canonical because all ten values come from their same-round
+transcript calls (16.501 s, 3,271,491,584-byte aggregate RSS, zero swap, standard
+axioms). This handles the new emitted caller's explicit ZERO Result bind by
+same-call success inversion rather than replacing it and assuming trace
+equivalence. The emitted-caller proof itself is undergoing focused checks.
+
+CHECKED new source-pinned reference replay: all nine numerical reference/
+actual sampler targets passed, followed by the generalized caller, emitted
+caller, constructor alpha contract and helper composition in a complete
+selected-object environment. The former global Error-instance collision is
+resolved there. Independent alpha/sampler-success premises are discharged by
+the same actual emitted-caller execution; the canonical ap0/ap1 producers
+and same helper success remain explicit. Numerical reference origin/rebase
+and exact emitted-body slot substitution checkers pass. No whole source/
+runtime release replay or full Pair/security closure is claimed.
+
+PROVED constructor statement phase: both generated statement loops preserve
+canonical factor reads from their exact factor invariant and statement-point
+read contract (12.938 s, 2,179,317,760-byte aggregate RSS, zero swap, standard
+axioms). Pointscan loop and symbolic initial factors also passed; the actual
+statement-point producer/reverse carry and whole-constructor join remain in
+flight, as do concrete range/totality and source-normalization obligations.
+
+New actual Pair source progress (NUC evidence in the allocator-uniform
+candidate packet): full field+r0 bodies compile with standard-only Pair
+axioms after explicit kernel bounds replace 17 implicit native string proofs.
+The allocator is uniformly parameterized without preservation/content
+premises. Accepted heap fill has exact length for any returned Vec, and the
+actual S2 tensor proof initializes/canonicalizes all64 cells from arbitrary
+old scratch when constructor factors are canonical. This removes allocator-
+content dependence; primitive effects/runtime correspondence and full actual
+Pair-to-helper/source transport remain OPEN. No Rust/CU change was needed
+for the scratch proof.
+
+
+2026-10-23 continuation: actual producer and caller joins
+
+Target not yet established. These are focused accepted-run/source-model
+results for the retained constructor and extracted candidate Pair, not an
+adopted deployment or a complete S9/security theorem.
+
+The constructor now derives canonical statement points from its same-run
+reverse-carry and complement producer, then canonical factors from both
+factor phases. Independent point-producer canonicality was removed. Its
+remaining input guards are canonical semantic alpha and circle inputs, plus
+the same successful constructor execution. Seven concrete scalar/QM
+primitive totality results are included; unconditional constructor/loop
+totality is not inferred. See
+`evidence/s9-constructor-v3-factors-points-total-primitives-v1-20261023/`.
+The emitted semantic-round caller supplies the exact mapped alpha guard for
+this constructor: `evidence/s9-emitted-rounds-constructor-factors-v1-20261023/`.
+Semantic hooks and the source/runtime boundary remain explicit.
+
+The strict source resume supplies both exact fold challenges and their
+canonical limbs. The actual Array2 RangeTo2 operation is proved equal to
+the full array slice, with exact readback. Copying those same coordinates
+into the native candidate Pair carrier derives its canonical-alpha guard.
+The accepted same-input Pair theorem now obtains canonical powers and the
+same helper success without an independent alpha guard, length guard,
+powers-success premise or helper-success premise. See the packets
+`s9-resume-alpha-source-canonical-v1-20261023`,
+`s9-array-two-prefix-source-v1-20261023`,
+`s9-resume-alpha-native-pair-input-v1-20261023`, and
+`s9-resume-same-pair-canonical-powers-v1-20261023`.
+The enclosing concrete finish/newWeights installation is being composed;
+it must supply the same receiver and its S2 variant rather than assume them.
+
+Candidate Pair Wide addition now has full Result transport to the installed
+concrete helper on canonical inputs. Candidate Wide-by-M31 multiplication
+has unconditional full Result transport for arbitrary U32 scalars and
+operands, retaining its modulo reduction. Both reuse earlier checked
+arithmetic, preserve failures/divergence, and add no successful-child or
+output-contract hypothesis. See `s9-actual-pair-wide-add-*-v1-20261023` and
+`s9-actual-pair-mulm31-*-v1-20261023`. Other operation transports and the
+complete actual helper body are under composition; individual transports
+do not establish the helper or Pair as a whole.
+
+The original extracted fixed-[7,6] complement loop equals the two ordered
+writes as a complete Result computation under exactly three iterator
+observations (7,6,exhaustion). Arithmetic/index errors and divergence are
+retained; concrete Std iterator correspondence remains open. See
+`s9-complement-two-step-normalization-v1-20261023`.
+The retained circle wrapper also has a checked canonical-coordinate result
+covering secure and fallback branches, reusing existing R72 mathematics.
+Its current Rust callee/caller refinement remains open. Current-source
+circle Charon extraction succeeded; its new Aeneas run rejected a function
+pointer type in CM31::inv_with. A separately pinned older working toolchain
+is being tested without changing current Rust source.
+
+Focused checks use standard axioms with exact targets, source hashes,
+resource limits, timing/RSS/swap and retained failures in each packet.
+Cached dependencies were reused; no coherent final release replay,
+source adoption, new CU gate or compiled artifact pin is claimed here.
+Source normalization, Box/allocation effects, caller installation, whole
+constructor totality, the remaining source/refinement obligations and the
+composed security contract all remain required.

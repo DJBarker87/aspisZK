@@ -1,0 +1,3 @@
+PROVED: the source-pinned combined split-constructor candidate supplies the generated Pair helper exact extra-array canonical-read contract from its same constructor success and explicit mapped-alpha input contract. Carrier maps are composed exactly. Whole source/runtime correspondence and the input alpha producer still require composition; this packet alone does not close S9 or 100-bit soundness.
+
+Focused Lean check: 7.129 seconds; peak aggregate RSS 3187097600 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

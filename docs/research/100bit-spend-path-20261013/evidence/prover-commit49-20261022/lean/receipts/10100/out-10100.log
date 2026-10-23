@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitNativeQInverse49.lean:80:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b ← ok (decide (zero = zero))
+    if b = true then ok none
+      else do
+        let c ← (ProverCommitNativeQ48.source zero).c0.square
+        let c1 ← (ProverCommitNativeQ48.source zero).c1.square
+        let c2 ← kernels.mul_r c1
+        let norm ← c.sub c2
+        let ni ← kernels.inverse_c norm
+        let c3 ← (ProverCommitNativeQ48.source zero).c0.mul ni
+        let c4 ← (ProverCommitNativeQ48.source zero).c1.neg
+        let c5 ← c4.mul ni
+        ok (some { c0 := c3, c1 := c5 })
+is not definitionally equal to the right-hand side
+  ok none
+
+⊢ (do
+      let b ← ok (decide (zero = zero))
+      if b = true then ok none
+        else do
+          let c ← (ProverCommitNativeQ48.source zero).c0.square
+          let c1 ← (ProverCommitNativeQ48.source zero).c1.square
+          let c2 ← kernels.mul_r c1
+          let norm ← c.sub c2
+          let ni ← kernels.inverse_c norm
+          let c3 ← (ProverCommitNativeQ48.source zero).c0.mul ni
+          let c4 ← (ProverCommitNativeQ48.source zero).c1.neg
+          let c5 ← c4.mul ni
+          ok (some { c0 := c3, c1 := c5 })) =
+    ok none
+'R1Z.ProverCommitNativeQInverse49.zero_test' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitNativeQInverse49.zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitNativeQInverse49.norm_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitNativeQInverse49.inverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitNativeQInverse49.reject_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

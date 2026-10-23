@@ -1,0 +1,620 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:245:16: error: prefix normalization diagnostic
+case ok.ok.ok.ok.ok.ok.ok
+B : Boundaries
+H : Type
+D : aspis_core.digest.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+seed : Std.Array U8 32#usize
+h0 :
+  AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state (retainedDigest D)
+      { state := sem.transcript.state, hash := sem.transcript.hash, next_row := sem.transcript.next_row } =
+    ok seed
+t : AspisR1PublicPreparation.transcript.Transcript H
+h1 : AspisR1PublicPreparation.transcript.Transcript.new (retainedDigest D) hash seed (retainedVariant v.variant) = ok t
+gamma : AspisR1PublicPreparation.aspis_core.field.WideExact
+t1 : AspisR1PublicPreparation.transcript.Transcript H
+h2 : AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D) t 27#u8 v.y1 true = ok (gamma, t1)
+encoded : Std.Array U8 32#usize
+h3 : B.sampling.toBytes (retainedE v.inactive) = ok encoded
+bytes : Slice U8
+h4 : lift encoded.to_slice = ok bytes
+kappa : AspisR1PublicPreparation.aspis_core.field.WideExact
+t2 : AspisR1PublicPreparation.transcript.Transcript H
+h5 : AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D) t1 28#u8 bytes false = ok (kappa, t2)
+alpha0 : AspisR1PublicPreparation.aspis_core.field.WideExact
+t3 : AspisR1PublicPreparation.transcript.Transcript H
+h6 :
+  AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D) t2 29#u8 v.round0 false = ok (alpha0, t3)
+⊢ (Std.bind (retainedVariant v.variant).folds fun i =>
+      if i = 2#usize then
+        Std.bind (32#usize + 224#usize) fun i1 =>
+          Std.bind (core.option.Option.unwrap v.folded_root) fun a2 =>
+            Std.bind (lift a2.to_slice) fun s1 =>
+              Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) s1)
+                fun bytes1 =>
+                Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1) fun bytes2 =>
+                  Std.bind
+                    (Std.bind
+                      (AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D)
+                        { state := t3.state, hash := t3.hash } 30#u8 bytes2.deref false)
+                      (uncurry fun a t => ok (currentE a, { state := t.state, hash := t.hash })))
+                    (uncurry fun we t4 =>
+                      Std.bind
+                        (Std.bind
+                          (B.sampling.queries (retainedDigest D) { state := t4.state, hash := t4.hash } 31#u8
+                            v.final_message)
+                          (uncurry fun a t =>
+                            ok
+                              (match a with
+                                | core.result.Result.Ok x => core.result.Result.Ok x
+                                | core.result.Result.Err e => core.result.Result.Err (currentError e),
+                                { state := t.state, hash := t.hash })))
+                        (uncurry fun r t5 =>
+                          Std.bind (core.result.Result.Insts.CoreOpsTry.branch r) fun cf =>
+                            match cf with
+                            | core.ops.control_flow.ControlFlow.Continue val =>
+                              Std.bind (31#u8 + 1#u8) fun i2 =>
+                                Std.bind (lift (Std.Array.empty U8).to_slice) fun s3 =>
+                                  Std.bind
+                                    (Std.bind
+                                      (AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling (retainedDigest D)
+                                        { state := t5.state, hash := t5.hash } i2 s3)
+                                      (uncurry fun a t => ok (currentQ a, { state := t.state, hash := t.hash })))
+                                    (uncurry fun rho t6 =>
+                                      Std.bind (Std.bind (B.powers 29#usize gamma) fun g => ok (mapArray currentE g))
+                                        fun g1 =>
+                                        Std.bind
+                                          (Std.bind
+                                            (B.claim (retainedDigest D)
+                                              { roots := sem.roots,
+                                                challenges :=
+                                                  { lambda := retainedQ sem.challenges.lambda,
+                                                    chi := retainedQ sem.challenges.chi,
+                                                    theta := retainedQ sem.challenges.theta,
+                                                    zc := mapArray retainedQ sem.challenges.zc,
+                                                    mu := retainedQ sem.challenges.mu,
+                                                    eta := retainedQ sem.challenges.eta },
+                                                alpha := mapArray retainedQ sem.alpha,
+                                                claims := mapArray (mapArray retainedQ) sem.claims,
+                                                extra := mapArray retainedQ sem.extra,
+                                                before_z1 := mapArray retainedQ sem.before_z1,
+                                                state_before_z0 := sem.state_before_z0,
+                                                z := mapArray retainedPoint sem.z,
+                                                transcript :=
+                                                  { state := sem.transcript.state, hash := sem.transcript.hash,
+                                                    next_row := sem.transcript.next_row } }
+                                              v.y1 (retainedE v.inactive) (mapArray retainedE g1) kappa)
+                                            fun r => ok (currentR currentE r))
+                                          fun r1 =>
+                                          Std.bind (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                                            match cf1 with
+                                            | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                              ok
+                                                (core.result.Result.Ok
+                                                    { variant := v.variant, roots := sem.roots, gamma := currentE gamma,
+                                                      kappa := currentE kappa,
+                                                      alpha := Array.make 2#usize [currentE alpha0, we] ⋯, rho := rho,
+                                                      queries := val, semantic_alpha := sem.alpha, z := sem.z,
+                                                      claim := val1, state := t6.state },
+                                                  g1)
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              Std.bind
+                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                                fun r2 => ok (r2, g1))
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              Std.bind
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                fun r1 => ok (r1, g)))
+      else
+        Std.bind
+          (Std.bind (B.sampling.queries (retainedDigest D) { state := t3.state, hash := t3.hash } 30#u8 v.final_message)
+            (uncurry fun a t =>
+              ok
+                (match a with
+                  | core.result.Result.Ok x => core.result.Result.Ok x
+                  | core.result.Result.Err e => core.result.Result.Err (currentError e),
+                  { state := t.state, hash := t.hash })))
+          (uncurry fun r t4 =>
+            Std.bind (core.result.Result.Insts.CoreOpsTry.branch r) fun cf =>
+              match cf with
+              | core.ops.control_flow.ControlFlow.Continue val =>
+                Std.bind (30#u8 + 1#u8) fun i1 =>
+                  Std.bind (lift (Std.Array.empty U8).to_slice) fun s1 =>
+                    Std.bind
+                      (Std.bind
+                        (AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling (retainedDigest D)
+                          { state := t4.state, hash := t4.hash } i1 s1)
+                        (uncurry fun a t => ok (currentQ a, { state := t.state, hash := t.hash })))
+                      (uncurry fun rho t5 =>
+                        Std.bind (Std.bind (B.powers 29#usize gamma) fun g => ok (mapArray currentE g)) fun g1 =>
+                          Std.bind
+                            (Std.bind
+                              (B.claim (retainedDigest D)
+                                { roots := sem.roots,
+                                  challenges :=
+                                    { lambda := retainedQ sem.challenges.lambda, chi := retainedQ sem.challenges.chi,
+                                      theta := retainedQ sem.challenges.theta,
+                                      zc := mapArray retainedQ sem.challenges.zc, mu := retainedQ sem.challenges.mu,
+                                      eta := retainedQ sem.challenges.eta },
+                                  alpha := mapArray retainedQ sem.alpha,
+                                  claims := mapArray (mapArray retainedQ) sem.claims,
+                                  extra := mapArray retainedQ sem.extra, before_z1 := mapArray retainedQ sem.before_z1,
+                                  state_before_z0 := sem.state_before_z0, z := mapArray retainedPoint sem.z,
+                                  transcript :=
+                                    { state := sem.transcript.state, hash := sem.transcript.hash,
+                                      next_row := sem.transcript.next_row } }
+                                v.y1 (retainedE v.inactive) (mapArray retainedE g1) kappa)
+                              fun r => ok (currentR currentE r))
+                            fun r1 =>
+                            Std.bind (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                              match cf1 with
+                              | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                ok
+                                  (core.result.Result.Ok
+                                      { variant := v.variant, roots := sem.roots, gamma := currentE gamma,
+                                        kappa := currentE kappa,
+                                        alpha :=
+                                          Array.make 2#usize
+                                            [currentE alpha0,
+                                              currentE AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO]
+                                            ⋯,
+                                        rho := rho, queries := val, semantic_alpha := sem.alpha, z := sem.z,
+                                        claim := val1, state := t5.state },
+                                    g1)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                Std.bind
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                  fun r2 => ok (r2, g1))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                Std.bind
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual)
+                  fun r1 => ok (r1, g))) =
+    Std.bind
+      (Std.bind (retainedVariant v.variant).folds fun i =>
+        if i = 2#usize then
+          Std.bind (32#usize + 224#usize) fun i1 =>
+            Std.bind (core.option.Option.unwrap v.folded_root) fun a2 =>
+              Std.bind (lift a2.to_slice) fun s1 =>
+                Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) s1)
+                  fun bytes1 =>
+                  Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1) fun bytes2 =>
+                    Std.bind
+                      (AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D) t3 30#u8 bytes2.deref
+                        false)
+                      (uncurry fun we t4 =>
+                        Std.bind (B.sampling.queries (retainedDigest D) t4 31#u8 v.final_message)
+                          (uncurry fun r t5 =>
+                            Std.bind (core.result.Result.Insts.CoreOpsTry.branch r) fun cf =>
+                              match cf with
+                              | core.ops.control_flow.ControlFlow.Continue val =>
+                                Std.bind (31#u8 + 1#u8) fun i2 =>
+                                  Std.bind (lift (Std.Array.empty U8).to_slice) fun s3 =>
+                                    Std.bind
+                                      (AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling (retainedDigest D) t5
+                                        i2 s3)
+                                      (uncurry fun rho t6 =>
+                                        Std.bind (B.powers 29#usize gamma) fun g1 =>
+                                          Std.bind
+                                            (B.claim (retainedDigest D)
+                                              { roots := sem.roots,
+                                                challenges :=
+                                                  { lambda := retainedQ sem.challenges.lambda,
+                                                    chi := retainedQ sem.challenges.chi,
+                                                    theta := retainedQ sem.challenges.theta,
+                                                    zc := mapArray retainedQ sem.challenges.zc,
+                                                    mu := retainedQ sem.challenges.mu,
+                                                    eta := retainedQ sem.challenges.eta },
+                                                alpha := mapArray retainedQ sem.alpha,
+                                                claims := mapArray (mapArray retainedQ) sem.claims,
+                                                extra := mapArray retainedQ sem.extra,
+                                                before_z1 := mapArray retainedQ sem.before_z1,
+                                                state_before_z0 := sem.state_before_z0,
+                                                z := mapArray retainedPoint sem.z,
+                                                transcript :=
+                                                  { state := sem.transcript.state, hash := sem.transcript.hash,
+                                                    next_row := sem.transcript.next_row } }
+                                              v.y1 (retainedE v.inactive) g1 kappa)
+                                            fun r1 =>
+                                            Std.bind (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                                              match cf1 with
+                                              | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                                ok
+                                                  (core.result.Result.Ok
+                                                      { variant := retainedVariant v.variant, roots := sem.roots,
+                                                        gamma := gamma, kappa := kappa,
+                                                        alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho,
+                                                        queries := val, semantic_alpha := mapArray retainedQ sem.alpha,
+                                                        z := mapArray retainedPoint sem.z, claim := val1,
+                                                        state := t6.state },
+                                                    g1)
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                Std.bind
+                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    AspisR1PublicPreparation.verifier.Prepared
+                                                    (core.convert.FromSame AspisR1PublicPreparation.verifier.Error)
+                                                    residual)
+                                                  fun r2 => ok (r2, g1))
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                Std.bind
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    AspisR1PublicPreparation.verifier.Prepared
+                                    (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual)
+                                  fun r1 => ok (r1, mapArray retainedE g)))
+        else
+          Std.bind (B.sampling.queries (retainedDigest D) t3 30#u8 v.final_message)
+            (uncurry fun r t4 =>
+              Std.bind (core.result.Result.Insts.CoreOpsTry.branch r) fun cf =>
+                match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  Std.bind (30#u8 + 1#u8) fun i1 =>
+                    Std.bind (lift (Std.Array.empty U8).to_slice) fun s1 =>
+                      Std.bind (AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling (retainedDigest D) t4 i1 s1)
+                        (uncurry fun rho t5 =>
+                          Std.bind (B.powers 29#usize gamma) fun g1 =>
+                            Std.bind
+                              (B.claim (retainedDigest D)
+                                { roots := sem.roots,
+                                  challenges :=
+                                    { lambda := retainedQ sem.challenges.lambda, chi := retainedQ sem.challenges.chi,
+                                      theta := retainedQ sem.challenges.theta,
+                                      zc := mapArray retainedQ sem.challenges.zc, mu := retainedQ sem.challenges.mu,
+                                      eta := retainedQ sem.challenges.eta },
+                                  alpha := mapArray retainedQ sem.alpha,
+                                  claims := mapArray (mapArray retainedQ) sem.claims,
+                                  extra := mapArray retainedQ sem.extra, before_z1 := mapArray retainedQ sem.before_z1,
+                                  state_before_z0 := sem.state_before_z0, z := mapArray retainedPoint sem.z,
+                                  transcript :=
+                                    { state := sem.transcript.state, hash := sem.transcript.hash,
+                                      next_row := sem.transcript.next_row } }
+                                v.y1 (retainedE v.inactive) g1 kappa)
+                              fun r1 =>
+                              Std.bind (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                                match cf1 with
+                                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                  ok
+                                    (core.result.Result.Ok
+                                        { variant := retainedVariant v.variant, roots := sem.roots, gamma := gamma,
+                                          kappa := kappa,
+                                          alpha :=
+                                            Array.make 2#usize
+                                              [alpha0, AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO] ⋯,
+                                          rho := rho, queries := val, semantic_alpha := mapArray retainedQ sem.alpha,
+                                          z := mapArray retainedPoint sem.z, claim := val1, state := t5.state },
+                                      g1)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  Std.bind
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      AspisR1PublicPreparation.verifier.Prepared
+                                      (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual)
+                                    fun r2 => ok (r2, g1))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  Std.bind
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      AspisR1PublicPreparation.verifier.Prepared
+                      (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual)
+                    fun r1 => ok (r1, mapArray retainedE g)))
+      (uncurry fun r g =>
+        ok
+          (match r with
+            | core.result.Result.Ok x => core.result.Result.Ok (currentPrepared x)
+            | core.result.Result.Err e => core.result.Result.Err (currentError e),
+            mapArray currentE g))
+case ok.ok.ok.ok.ok.ok.ok
+B : Boundaries
+H : Type
+D : aspis_core.digest.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+seed : Std.Array U8 32#usize
+h0 :
+  AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state (retainedDigest D)
+      { state := sem.transcript.state, hash := sem.transcript.hash, next_row := sem.transcript.next_row } =
+    ok seed
+t : AspisR1PublicPreparation.transcript.Transcript H
+h1 : AspisR1PublicPreparation.transcript.Transcript.new (retainedDigest D) hash seed (retainedVariant v.variant) = ok t
+gamma : AspisR1PublicPreparation.aspis_core.field.WideExact
+t1 : AspisR1PublicPreparation.transcript.Transcript H
+h2 : AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D) t 27#u8 v.y1 true = ok (gamma, t1)
+encoded : Std.Array U8 32#usize
+h3 : B.sampling.toBytes (retainedE v.inactive) = ok encoded
+bytes : Slice U8
+h4 : lift encoded.to_slice = ok bytes
+kappa : AspisR1PublicPreparation.aspis_core.field.WideExact
+t2 : AspisR1PublicPreparation.transcript.Transcript H
+h5 : AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D) t1 28#u8 bytes false = ok (kappa, t2)
+alpha0 : AspisR1PublicPreparation.aspis_core.field.WideExact
+t3 : AspisR1PublicPreparation.transcript.Transcript H
+h6 :
+  AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D) t2 29#u8 v.round0 false = ok (alpha0, t3)
+⊢ (Std.bind (retainedVariant v.variant).folds fun i =>
+      if i = 2#usize then
+        Std.bind (32#usize + 224#usize) fun i1 =>
+          Std.bind (core.option.Option.unwrap v.folded_root) fun a2 =>
+            Std.bind (lift a2.to_slice) fun s1 =>
+              Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) s1)
+                fun bytes1 =>
+                Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1) fun bytes2 =>
+                  Std.bind
+                    (Std.bind
+                      (AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D)
+                        { state := t3.state, hash := t3.hash } 30#u8 bytes2.deref false)
+                      (uncurry fun a t => ok (currentE a, { state := t.state, hash := t.hash })))
+                    (uncurry fun we t4 =>
+                      Std.bind
+                        (Std.bind
+                          (B.sampling.queries (retainedDigest D) { state := t4.state, hash := t4.hash } 31#u8
+                            v.final_message)
+                          (uncurry fun a t =>
+                            ok
+                              (match a with
+                                | core.result.Result.Ok x => core.result.Result.Ok x
+                                | core.result.Result.Err e => core.result.Result.Err (currentError e),
+                                { state := t.state, hash := t.hash })))
+                        (uncurry fun r t5 =>
+                          Std.bind (core.result.Result.Insts.CoreOpsTry.branch r) fun cf =>
+                            match cf with
+                            | core.ops.control_flow.ControlFlow.Continue val =>
+                              Std.bind (31#u8 + 1#u8) fun i2 =>
+                                Std.bind (lift (Std.Array.empty U8).to_slice) fun s3 =>
+                                  Std.bind
+                                    (Std.bind
+                                      (AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling (retainedDigest D)
+                                        { state := t5.state, hash := t5.hash } i2 s3)
+                                      (uncurry fun a t => ok (currentQ a, { state := t.state, hash := t.hash })))
+                                    (uncurry fun rho t6 =>
+                                      Std.bind (Std.bind (B.powers 29#usize gamma) fun g => ok (mapArray currentE g))
+                                        fun g1 =>
+                                        Std.bind
+                                          (Std.bind
+                                            (B.claim (retainedDigest D)
+                                              { roots := sem.roots,
+                                                challenges :=
+                                                  { lambda := retainedQ sem.challenges.lambda,
+                                                    chi := retainedQ sem.challenges.chi,
+                                                    theta := retainedQ sem.challenges.theta,
+                                                    zc := mapArray retainedQ sem.challenges.zc,
+                                                    mu := retainedQ sem.challenges.mu,
+                                                    eta := retainedQ sem.challenges.eta },
+                                                alpha := mapArray retainedQ sem.alpha,
+                                                claims := mapArray (mapArray retainedQ) sem.claims,
+                                                extra := mapArray retainedQ sem.extra,
+                                                before_z1 := mapArray retainedQ sem.before_z1,
+                                                state_before_z0 := sem.state_before_z0,
+                                                z := mapArray retainedPoint sem.z,
+                                                transcript :=
+                                                  { state := sem.transcript.state, hash := sem.transcript.hash,
+                                                    next_row := sem.transcript.next_row } }
+                                              v.y1 (retainedE v.inactive) (mapArray retainedE g1) kappa)
+                                            fun r => ok (currentR currentE r))
+                                          fun r1 =>
+                                          Std.bind (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                                            match cf1 with
+                                            | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                              ok
+                                                (core.result.Result.Ok
+                                                    { variant := v.variant, roots := sem.roots, gamma := currentE gamma,
+                                                      kappa := currentE kappa,
+                                                      alpha := Array.make 2#usize [currentE alpha0, we] ⋯, rho := rho,
+                                                      queries := val, semantic_alpha := sem.alpha, z := sem.z,
+                                                      claim := val1, state := t6.state },
+                                                  g1)
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              Std.bind
+                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                                fun r2 => ok (r2, g1))
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              Std.bind
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                fun r1 => ok (r1, g)))
+      else
+        Std.bind
+          (Std.bind (B.sampling.queries (retainedDigest D) { state := t3.state, hash := t3.hash } 30#u8 v.final_message)
+            (uncurry fun a t =>
+              ok
+                (match a with
+                  | core.result.Result.Ok x => core.result.Result.Ok x
+                  | core.result.Result.Err e => core.result.Result.Err (currentError e),
+                  { state := t.state, hash := t.hash })))
+          (uncurry fun r t4 =>
+            Std.bind (core.result.Result.Insts.CoreOpsTry.branch r) fun cf =>
+              match cf with
+              | core.ops.control_flow.ControlFlow.Continue val =>
+                Std.bind (30#u8 + 1#u8) fun i1 =>
+                  Std.bind (lift (Std.Array.empty U8).to_slice) fun s1 =>
+                    Std.bind
+                      (Std.bind
+                        (AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling (retainedDigest D)
+                          { state := t4.state, hash := t4.hash } i1 s1)
+                        (uncurry fun a t => ok (currentQ a, { state := t.state, hash := t.hash })))
+                      (uncurry fun rho t5 =>
+                        Std.bind (Std.bind (B.powers 29#usize gamma) fun g => ok (mapArray currentE g)) fun g1 =>
+                          Std.bind
+                            (Std.bind
+                              (B.claim (retainedDigest D)
+                                { roots := sem.roots,
+                                  challenges :=
+                                    { lambda := retainedQ sem.challenges.lambda, chi := retainedQ sem.challenges.chi,
+                                      theta := retainedQ sem.challenges.theta,
+                                      zc := mapArray retainedQ sem.challenges.zc, mu := retainedQ sem.challenges.mu,
+                                      eta := retainedQ sem.challenges.eta },
+                                  alpha := mapArray retainedQ sem.alpha,
+                                  claims := mapArray (mapArray retainedQ) sem.claims,
+                                  extra := mapArray retainedQ sem.extra, before_z1 := mapArray retainedQ sem.before_z1,
+                                  state_before_z0 := sem.state_before_z0, z := mapArray retainedPoint sem.z,
+                                  transcript :=
+                                    { state := sem.transcript.state, hash := sem.transcript.hash,
+                                      next_row := sem.transcript.next_row } }
+                                v.y1 (retainedE v.inactive) (mapArray retainedE g1) kappa)
+                              fun r => ok (currentR currentE r))
+                            fun r1 =>
+                            Std.bind (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                              match cf1 with
+                              | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                ok
+                                  (core.result.Result.Ok
+                                      { variant := v.variant, roots := sem.roots, gamma := currentE gamma,
+                                        kappa := currentE kappa,
+                                        alpha :=
+                                          Array.make 2#usize
+                                            [currentE alpha0,
+                                              currentE AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO]
+                                            ⋯,
+                                        rho := rho, queries := val, semantic_alpha := sem.alpha, z := sem.z,
+                                        claim := val1, state := t5.state },
+                                    g1)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                Std.bind
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                  fun r2 => ok (r2, g1))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                Std.bind
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual)
+                  fun r1 => ok (r1, g))) =
+    Std.bind
+      (Std.bind (retainedVariant v.variant).folds fun i =>
+        if i = 2#usize then
+          Std.bind (32#usize + 224#usize) fun i1 =>
+            Std.bind (core.option.Option.unwrap v.folded_root) fun a2 =>
+              Std.bind (lift a2.to_slice) fun s1 =>
+                Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) s1)
+                  fun bytes1 =>
+                  Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1) fun bytes2 =>
+                    Std.bind
+                      (AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D) t3 30#u8 bytes2.deref
+                        false)
+                      (uncurry fun we t4 =>
+                        Std.bind (B.sampling.queries (retainedDigest D) t4 31#u8 v.final_message)
+                          (uncurry fun r t5 =>
+                            Std.bind (core.result.Result.Insts.CoreOpsTry.branch r) fun cf =>
+                              match cf with
+                              | core.ops.control_flow.ControlFlow.Continue val =>
+                                Std.bind (31#u8 + 1#u8) fun i2 =>
+                                  Std.bind (lift (Std.Array.empty U8).to_slice) fun s3 =>
+                                    Std.bind
+                                      (AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling (retainedDigest D) t5
+                                        i2 s3)
+                                      (uncurry fun rho t6 =>
+                                        Std.bind (B.powers 29#usize gamma) fun g1 =>
+                                          Std.bind
+                                            (B.claim (retainedDigest D)
+                                              { roots := sem.roots,
+                                                challenges :=
+                                                  { lambda := retainedQ sem.challenges.lambda,
+                                                    chi := retainedQ sem.challenges.chi,
+                                                    theta := retainedQ sem.challenges.theta,
+                                                    zc := mapArray retainedQ sem.challenges.zc,
+                                                    mu := retainedQ sem.challenges.mu,
+                                                    eta := retainedQ sem.challenges.eta },
+                                                alpha := mapArray retainedQ sem.alpha,
+                                                claims := mapArray (mapArray retainedQ) sem.claims,
+                                                extra := mapArray retainedQ sem.extra,
+                                                before_z1 := mapArray retainedQ sem.before_z1,
+                                                state_before_z0 := sem.state_before_z0,
+                                                z := mapArray retainedPoint sem.z,
+                                                transcript :=
+                                                  { state := sem.transcript.state, hash := sem.transcript.hash,
+                                                    next_row := sem.transcript.next_row } }
+                                              v.y1 (retainedE v.inactive) g1 kappa)
+                                            fun r1 =>
+                                            Std.bind (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                                              match cf1 with
+                                              | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                                ok
+                                                  (core.result.Result.Ok
+                                                      { variant := retainedVariant v.variant, roots := sem.roots,
+                                                        gamma := gamma, kappa := kappa,
+                                                        alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho,
+                                                        queries := val, semantic_alpha := mapArray retainedQ sem.alpha,
+                                                        z := mapArray retainedPoint sem.z, claim := val1,
+                                                        state := t6.state },
+                                                    g1)
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                Std.bind
+                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    AspisR1PublicPreparation.verifier.Prepared
+                                                    (core.convert.FromSame AspisR1PublicPreparation.verifier.Error)
+                                                    residual)
+                                                  fun r2 => ok (r2, g1))
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                Std.bind
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    AspisR1PublicPreparation.verifier.Prepared
+                                    (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual)
+                                  fun r1 => ok (r1, mapArray retainedE g)))
+        else
+          Std.bind (B.sampling.queries (retainedDigest D) t3 30#u8 v.final_message)
+            (uncurry fun r t4 =>
+              Std.bind (core.result.Result.Insts.CoreOpsTry.branch r) fun cf =>
+                match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  Std.bind (30#u8 + 1#u8) fun i1 =>
+                    Std.bind (lift (Std.Array.empty U8).to_slice) fun s1 =>
+                      Std.bind (AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling (retainedDigest D) t4 i1 s1)
+                        (uncurry fun rho t5 =>
+                          Std.bind (B.powers 29#usize gamma) fun g1 =>
+                            Std.bind
+                              (B.claim (retainedDigest D)
+                                { roots := sem.roots,
+                                  challenges :=
+                                    { lambda := retainedQ sem.challenges.lambda, chi := retainedQ sem.challenges.chi,
+                                      theta := retainedQ sem.challenges.theta,
+                                      zc := mapArray retainedQ sem.challenges.zc, mu := retainedQ sem.challenges.mu,
+                                      eta := retainedQ sem.challenges.eta },
+                                  alpha := mapArray retainedQ sem.alpha,
+                                  claims := mapArray (mapArray retainedQ) sem.claims,
+                                  extra := mapArray retainedQ sem.extra, before_z1 := mapArray retainedQ sem.before_z1,
+                                  state_before_z0 := sem.state_before_z0, z := mapArray retainedPoint sem.z,
+                                  transcript :=
+                                    { state := sem.transcript.state, hash := sem.transcript.hash,
+                                      next_row := sem.transcript.next_row } }
+                                v.y1 (retainedE v.inactive) g1 kappa)
+                              fun r1 =>
+                              Std.bind (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                                match cf1 with
+                                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                  ok
+                                    (core.result.Result.Ok
+                                        { variant := retainedVariant v.variant, roots := sem.roots, gamma := gamma,
+                                          kappa := kappa,
+                                          alpha :=
+                                            Array.make 2#usize
+                                              [alpha0, AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO] ⋯,
+                                          rho := rho, queries := val, semantic_alpha := mapArray retainedQ sem.alpha,
+                                          z := mapArray retainedPoint sem.z, claim := val1, state := t5.state },
+                                      g1)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  Std.bind
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      AspisR1PublicPreparation.verifier.Prepared
+                                      (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual)
+                                    fun r2 => ok (r2, g1))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  Std.bind
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      AspisR1PublicPreparation.verifier.Prepared
+                      (core.convert.FromSame AspisR1PublicPreparation.verifier.Error) residual)
+                    fun r1 => ok (r1, mapArray retainedE g)))
+      (uncurry fun r g =>
+        ok
+          (match r with
+            | core.result.Result.Ok x => core.result.Result.Ok (currentPrepared x)
+            | core.result.Result.Err e => core.result.Result.Err (currentError e),
+            mapArray currentE g))
+'AspisR1CurrentCaller.OriginalPreparedSource.prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CurrentCaller.OriginalPreparedSource.prepare_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

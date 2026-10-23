@@ -143,7 +143,7 @@ theorem loop_success_fuel
       · change pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal_loop
           iter opened oneMinus initial both = .ok initial
         rw [pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal_loop.eq_def]
-        simp only [hnext, bind_tc_ok]
+        simp only [hnext, bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
       · intro j
         by_cases hj : 3 ≤ j.val ∧ j.val < 11
         · have hproc : j.val < 3 + iter.start.val := by omega
@@ -248,7 +248,7 @@ theorem loop_success_fuel
       · change pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal_loop
           iter opened oneMinus initial both = .ok out
         rw [pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal_loop.eq_def]
-        simp only [hnext, bind_tc_ok]
+        simp only [hnext, bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
         change (do
           let i ← (UScalar.add 2#usize lane : Result Usize)
           let q ← Array.index_usize opened i

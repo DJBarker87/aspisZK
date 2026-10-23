@@ -1,0 +1,3 @@
+PROVED for the combined split-constructor candidate: its same successful run and explicit mapped-alpha canonical-read contract imply canonicality of every mapped returned-extra read. This uses the actual re-extracted box_from_parts constructor, not the earlier stack-failing inline constructor. Actual alpha provenance and full source/runtime composition remain open.
+
+Focused Lean check: 7.286 seconds; peak aggregate RSS 3196583936 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

@@ -1,0 +1,35 @@
+import R1Z.ProverCommitQBasis51
+import R1Z.ProverCommitMaskRead51
+/-! Concrete native tower instantiation: no basis representation premises. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitConcreteMask51
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open R0P.SemSource
+attribute [local irreducible] ProverCommitNativeQ48.source ProverCommitQArray48.array
+  ProverCommitMaskColumns51.value
+
+theorem exact_result (p : Nat → Old.Q) (hp : ∀ i, i<10 → Canonical (p i))
+    (c : Nat → Nat → Old.Q) (hc : ∀ i, i<29 → ∀ j, j<1024 → Canonical (c i j))
+    (t : R0P.Trace QM31Exact) (ht : ∀ l : Fin 29, ∀ j : Fin 1024, decode (c l.val j.val)=t l j) :
+    ∃ z : Old.Q, ProverCommitMaskRead51.run (ProverCommitQArray48.array 10#usize p) (ProverCommitMaskColumns51.columns c)
+      (ProverCommitQArray48.array 1024#usize (c 27))=ok (ProverCommitNativeQ48.source z) ∧
+      Canonical z ∧ decode z=R0P.Mask.maskValue ProverCommitQBasis51.basis
+        (fun i : Fin 16 => honestClaims t (fun j : Fin 10 => decode (p j.val)) 0 (Fin.castLE (by omega) i))
+        (fun i : Fin 10 => honestClaims t (fun j : Fin 10 => decode (p j.val)) 0 ⟨16+i.val,by omega⟩)
+        (honestClaims t (fun j : Fin 10 => decode (p j.val)) 0 27) (fun i : Fin 10 => decode (p i.val)) := by
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitMaskRead51.exact_result ProverCommitQBasis51.basis
+    ProverCommitQBasis51.basis_i ProverCommitQBasis51.basis_u p hp c hc
+  refine ⟨z,hz,hcz,?_⟩
+  have h1 : (fun i : Fin 16 => ProverCommitMaskColumns51.value p c i.val)=
+      (fun i : Fin 16 => honestClaims t (fun j : Fin 10 => decode (p j.val)) 0 (Fin.castLE (by omega) i)) := by
+    funext i;exact ProverCommitMaskRead51.claims_value p c t ht (Fin.castLE (by omega) i)
+  have h2 : (fun i : Fin 10 => ProverCommitMaskColumns51.value p c (16+i.val))=
+      (fun i : Fin 10 => honestClaims t (fun j : Fin 10 => decode (p j.val)) 0 ⟨16+i.val,by omega⟩) := by
+    funext i;exact ProverCommitMaskRead51.claims_value p c t ht ⟨16+i.val,by omega⟩
+  rw [h1,h2,ProverCommitMaskRead51.claims_value p c t ht 27] at hdz
+  exact hdz
+
+#print axioms exact_result
+end R1Z.ProverCommitConcreteMask51

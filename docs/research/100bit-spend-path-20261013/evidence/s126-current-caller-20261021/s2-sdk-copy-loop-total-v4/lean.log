@@ -1,0 +1,54 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCopyLoopTotalV1.lean:56:12: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 1
+  e ≥ 0
+  e - f ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - f ≥ 0
+  c - g ≤ -1
+  b ≥ 0
+  b - d ≤ -1
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑(↑sdk.data_cells).length
+ b := ↑↑slot
+ c := ↑(↑bytes).length
+ d := ↑(↑(replaceBytes sdk slot cell bytes).data_cells).length
+ e := ↑(↑(↑(replaceBytes sdk slot cell bytes).data_cells)[↑slot].bytes).length
+ f := ↑↑next
+ g := ↑↑(replaceBytes sdk slot cell (bytes.set offset byte), next).2
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCopyLoopTotalV1.lean:59:10: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 1
+  e ≥ 0
+  e - f ≥ 0
+  e - f + g ≥ 0
+  e ≥ 0
+  e + g ≥ 0
+  d ≥ 0
+  d - e + f - g ≥ 1
+  c ≥ 0
+  b ≥ 0
+  b - c ≤ -1
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑(↑sdk.data_cells).length
+ b := ↑↑slot
+ c := ↑(↑(replaceBytes sdk slot cell bytes).data_cells).length
+ d := ↑(↑(↑(replaceBytes sdk slot cell bytes).data_cells)[↑slot].bytes).length
+ e := ↑((↑source).length - ↑(replaceBytes sdk slot cell (bytes.set offset byte), next).2)
+ f := ↑((↑source).length - ↑offset)
+ g := ↑↑(replaceBytes sdk slot cell (bytes.set offset byte), next).2
+'AspisS2OwnedStage1.SdkReference.CopyLoop.copy_loop_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.CopyLoop.copy_in_place_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

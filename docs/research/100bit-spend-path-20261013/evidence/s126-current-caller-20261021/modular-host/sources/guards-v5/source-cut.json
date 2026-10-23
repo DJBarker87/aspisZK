@@ -1,0 +1,26 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "source_path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+  "source_sha256": "6a8e5799035458ed4c0093709da6da86fb29100303861ddd15212d3ad7dcdcfb",
+  "declarations": {
+    "readonly_buffer_meta_ok": {
+      "source": "fn readonly_buffer_meta_ok(\n    is_signer: bool,\n    is_writable: bool,\n    executable: bool,\n) -> ProgramResult {\n    if is_signer || is_writable || executable {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    Ok(())\n}",
+      "sha256": "fb1a50c27b8a73553a130024316b58c6f5010a981ed7d478decb7e34a4ba26cc"
+    },
+    "require_readonly_buffer": {
+      "source": "fn require_readonly_buffer(account: &AccountInfo<'_>) -> ProgramResult {\n    readonly_buffer_meta_ok(account.is_signer, account.is_writable, account.executable)\n}",
+      "sha256": "a689595c5dc95f770b6edf68d7382f399421362463dc6532718df003d79806b2"
+    },
+    "require_verifier_checkpoint": {
+      "source": "fn require_verifier_checkpoint(\n    account: &AccountInfo<'_>,\n    program_id: &Pubkey,\n    writable: bool,\n) -> ProgramResult {\n    if account.owner != program_id || account.is_signer || account.executable\n        || account.is_writable != writable\n        || account.try_data_len()? != verifier::checkpoint_size(Variant::S2)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    Ok(())\n}",
+      "sha256": "ab13ba4bbf7637fe2b1f76b049a00e904b77e3b93689ffbc1539d8fa018e1228"
+    },
+    "require_distinct_accounts": {
+      "source": "fn require_distinct_accounts<const N: usize>(accounts: &[&AccountInfo<'_>; N]) -> ProgramResult {\n    for (index, account) in accounts.iter().enumerate() {\n        if accounts[..index]\n            .iter()\n            .any(|previous| previous.key == account.key)\n        {\n            return Err(ProgramError::InvalidArgument);\n        }\n    }\n    Ok(())\n}",
+      "sha256": "680f454a76b667753d57ef2a36681edfa737f1ddc38f6f81af0632ad944722cb"
+    }
+  },
+  "code_sha256": "a931872f68846d81d6670bec30f7487fe61d114a791680dd565a9f363b46f88b",
+  "qualification": "Exact guards with actual SDK AccountInfo, including RefCell borrow conflict; all metadata and keys arbitrary. Checkpoint length domain 0..10485760; no data bytes are read by these guards. This is an explicit finite domain, not unrestricted account totality."
+}

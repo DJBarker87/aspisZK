@@ -1,0 +1,3 @@
+Any actual successful Pair full-width multiplication on canonical mapped operands has an exact successful pinned raw source multiplication, identical mapped output, canonical actual result and exact Wide field-product decode. Source success is constructed by the checked source totality theorem and joined to the observed call by full-Result equality. No independently successful replacement call or canonical output premise is assumed.
+
+Focused Lean check: 16.281 seconds; peak aggregate RSS 3212427264 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

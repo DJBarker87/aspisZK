@@ -8684,3 +8684,300 @@ there are new Kani equivalence gates, and the deterministic exact checker stays
 (no randomized checking). P_R1 inputs are public challenges, so its trace falls under the D166
 simulatable-trace route. Workers change the thread model, so the TLS
 single-thread trust item must be re-examined (v2 already gates TLS recording off).
+
+## D171 (lead, 2026-10-22 20:45): P_R1 speedup on the v2 candidate, 37 s to 17.5 s
+
+On `codex/cx-ct-kernels-v2-20261022` (unmerged candidate; `design/PR1-SPEED-20261022.md`):
+step 1 (descriptor sharing) gave no gain and was reverted, with the negative result
+kept. Step 2 adds exact blocked arithmetic with two-fold Mersenne reduction (five Kani
+obligations). Step 3 adds bounded deterministic workers (at most 16 threads, fixed merge
+order) across emitter families, target rows, converter images, checker rows and
+builder columns. Median of 3 runs: P_R1 12.24/12.49 s, end-to-end **17.49/17.58 s**
+(transfer/withdrawal), from about 37–39 s. Every step: 1,000-challenge differential
+with zero verdict mismatches, byte-identical proof and public bytes, strict
+and dense verification, all three ELF pins rebuilt identical. An earlier stage-3
+form measured 16.0 s but did needless work on rejecting challenges. The final form
+fixes that at about +1.5 s on the accepting path; this trade-off is to be revisited.
+Under 15 s is not met yet. Remaining large items: emitter insertion (largest
+P_R1 phase), and the non-P_R1 remainder of about 5 s (semantic sumcheck point claims
+about 2.1 s over 28k independent evaluations; 29 lane encodings about 1 s), both
+parallelisable over public shapes. Trust note: the prover is now explicitly
+multithreaded in P_R1, on public data only. The TLS single-thread item is restated
+to cover only the gated-off recorder; the quiet panic hook covers the workers.
+
+## D172 (lead, 2026-10-22 21:05): prover under 15 s on the build host (v2 candidate)
+
+Step 4 on `codex/cx-ct-kernels-v2-20261022` (head `b2f95e269a`, unmerged candidate).
+(a) Reusing the first-lift rank result across certificate workers recovered the
+accepting path: 16.19/16.18 s. (b) Parallel emitter insertion gave no gain and was reverted.
+(c) Semantic sumcheck evaluations and lane encodings now run on 16 workers with fixed
+public work ranges and a deterministic merge; constant-time kernels are unchanged;
+two-mask traces show partition and work counts are independent of secrets.
+**Median end-to-end 13.63 s (transfer) and 13.98 s (withdrawal)**, from about 37–39 s.
+The user's under-15 s target is met on the build host. Every step kept byte-identical
+proof and public bytes, zero verdict mismatches over 1,000 challenge sets, local Kani
+gates and the three ELF pins.
+Caveats: measured on a 16-core/22-thread Core Ultra 7 155H; the time scales with
+the client's cores and is not a guarantee for smaller machines. The candidate is not
+adopted. Adoption still needs the native refinement rebinding for the changed P_R1 and
+evaluation code, the D166 joint trace transport, the expanded thread/TLS model, and
+the L3 receipt on the pinned platform.
+
+## D173 (lead, 2026-10-22 21:30): part 49 merged; simulator payload equality still open; cost control
+
+Merged `codex/cx-prover-commit49-20261022` (16 commits; report
+`r1p-final/PROVER-COMMIT49-20261022.md`). It covers statement points and
+point-weight callers, circle factors, the inactive table, native power/inverse
+kernels, the final half-shift and Libra column, raw coefficients, the full
+materialised weights with R1 functional correspondence, and the complete owned
+opening kernel with ordered coefficient bytes. Its final audit imports 93 modules
+and checks 241 theorems, standard axioms only. Shipped files unchanged.
+It stopped on an exhausted env J range (10000–10199). Six interfaces remain
+before native simulator output = `R0Z.RefPayload.simE` payload: the
+`qm31_sum_products_small::<3>` composition; the optimised
+`evaluate_state_only_polynomial` caller; the semantic oracle value
+(maskLinear + sem14·terminalValue, with the sparse-equality pruning and the
+P_R1 good-domain condition, including α9 ≠ ½, for the full caller); `Weights::new` outer
+composition and gamma batching; the source `encode_at`/`eval_at`/`nodes_for`/
+`phi_inverse`/leaf bindings; the final payload composition.
+Cost: part 48 used about 0.9M tokens and part 49 about 1.3M, against a requested
+0.4M. The worker cannot see its own token use, so from part 50 the env J range
+is the budget: 100 compile numbers per part.
+
+## D174 (lead, 2026-10-22 22:30): part 50 merged; budget held; two integration blockers
+
+Merged `codex/cx-prover-commit50-20261022` (report
+`r1p-final/PROVER-COMMIT50-20261022.md`). It used about 0.59M tokens, and the
+J10200–10299 budget held. Proved: the owned three-product Karatsuba composition
+(interface 1); the optimised degree-27 evaluator with prepared multiplication
+(interface 2); sparse prefix products, ordered column sums, scanner provenance
+and the owned sparse MLE model value; the selected-mask arithmetic kernels.
+Standard axioms; shipped files unchanged. Blockers: (i) the integration audit
+fails on duplicate, byte-identical `mul_m31` declarations in two extracted modules
+(`Linear50`, `Batched48`). This is the known cross-extraction naming problem
+(`IMPORT-UNION-20261021.md`), so apply the type-qualified naming fix or
+alias one to the other. (ii) Caller composition hit the kernel memory limit. Per
+AGENTS.md resource rule 5, it is not rerun with a larger cap: isolate the
+declaration, inspect its reduction shape and split it with symbolic lemmas.
+Next (part 51): both blockers, then interfaces 3–6.
+
+## D175 (lead, 2026-10-22 23:15): part 51 merged; authorised cold build of the terminal cone
+
+Merged `codex/cx-prover-commit51-20261022` (about 0.47M tokens; report
+`r1p-final/PROVER-COMMIT51-20261022.md`). Fixed D174's blockers: the duplicate
+`mul_m31` is replaced by reuse of the retained declaration; the memory-heavy caller
+is split through symbolic result sequencing (no cap raised). Proved: the selected
+mask coefficient producer and caller; all semantic mask column reads; the native
+mask basis and semantic extra functional bound to model carriers; coefficient
+provenance and the complete owned linear oracle value; terminal equality and the
+arithmetic suffix. J10368, 73 standard-axiom audits.
+Obstruction: the terminal integration imports a retained cone whose closure has
+535 modules, 495 without Env J objects. Building them one compile number at a
+time exceeds the budget. **Lead authorisation (AGENTS.md resource rules 1, 2 and 6):**
+treat this as one cold dependency build on the build host, not as proof attempts. Run
+one capped scope (MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0), reusing the pinned
+cache, with aggregate RSS monitored and a stop if it nears the cap. Record target, exit, wall,
+peak RSS and swap, under its own build label outside the proof-attempt range. A
+module that fails or is memory-killed is isolated and reported, never rerun with a
+larger cap. Session A's modules are only built, never edited.
+
+## D176 (lead, 2026-10-22 23:40): part 52 merged; the import-union naming fix is now on the critical path
+
+Merged `codex/cx-prover-commit52-20261022` (about 0.53M tokens; report
+`r1p-final/PROVER-COMMIT52-20261022.md`). The D175 cold build ran capped
+(490.65 s, peak RSS 4.17 GB, zero swap, 552 standard axiom reports). 261 modules
+compiled; module 262 (`ExtractedDecoderCallerBridge`) failed:
+`AspisR1TerminalDecoder.Types` and `AspisR1WithdrawalCaller.Types` both
+generate the unqualified instance `instDiscriminantPoolV1TransitionKindU8`. The
+arithmetic suffix passed separately (J10400–10402). This is the same shared
+obstruction as release gate 1 (`IMPORT-UNION-20261021.md`: generated discriminant
+instances take unqualified names, so separate extractions cannot be imported
+together), and it has now blocked real work. Per AGENTS.md discipline §7 it is fixed
+once, globally, before more privacy parts: adopt the prototyped
+`<fully-qualified-enum>.instDiscriminant` naming adapter for every generated Types
+module under `lean/` and rebuild the affected closures (capped). Session A's
+`lean-candidates` get the same adapter and script through the handoff note rather than
+lead edits. Privacy part 53 waits for it.
+
+## D177 (user, 2026-10-23 01:05): lead decides for the next six hours
+
+The user is unavailable until about 07:00 and delegated all decisions to the lead in
+the meantime. Limits the lead keeps: no lowering of the security target, metric or
+adversary; no change to frozen verifier bytes or the protocol; any new trust item is
+named in the headline and logged with its reasons, so the user can reverse it; every
+such decision is listed in a morning summary.
+
+## D178 (lead, 2026-10-23 02:50): import-union fix merged (release gate 1)
+
+Merged `codex/cx-import-union-20261022` (`evidence/import-union-20261022/summary.json`).
+The prototyped adapter is promoted. 46 files and 130 generated discriminant
+attributes under `lean/` are migrated to type-qualified instance names, with hash
+manifests. 851 targets compiled, covering all 807 affected roots and consumers
+plus the terminal bridge that blocked part 52. Release gate
+`ImportUnionReleaseGate` (IU-1328): exit 0, 1.75 s, 4.59 GB, zero swap, 77
+standard-only axiom audits. A census over 8,164 modules and 566,510 declarations
+found zero duplicate definitions or instances; all 614 repeated theorem names have
+identical types. Lead audit of the diff: no existing theorem statement changed (only
+added helper lemmas and proof-script normalisations). Recorded separately: two unchanged
+`AspisV8R19.SamplerWordRead` audits list the extraction opaque `core.fmt.Formatter`.
+These are not in the frozen2 headline closure, but are to be eliminated or justified
+before release. Not migrated: 56 `lean-candidates` files (session A's, with the script and
+instructions in their handoff; the s126 S2 candidates are now the lead's and are migrated
+when S2 imports them). The worker committed a 57.6 MB raw scan against the 5 MB rule;
+it is replaced in the tree by its hash record (it remains in history).
+
+## D179 (lead, 2026-10-23 04:30): part 53 merged; encoder via the owned route
+
+Merged `codex/cx-prover-commit53-20261023` (two Codex capacity relaunches with WIP
+snapshots; the final tree has no `sorry`). Proved: the migrated terminal-cone closure
+audit; retained Poseidon callable and composition contracts; the retained terminal output
+identified with the semantic terminal model; complete gamma batching; all three source
+claim rows equal to the honest claims; stored Weights materialisation; composed opening cells
+and ordered bytes; native `phi_inverse`. J10572: 30 modules, 59 standard-only reports.
+Stopped on the shipped encoder (`encode_at`): its iterator adapters are opaque and body
+extraction gives Charon trait errors. Direction, as in D144/D164: never extract shipped
+iterator code. Write a D144-style owned encoder, then per-iteration Kani shipped = owned,
+then Lean induction.
+
+## D181 (lead, 2026-10-23 06:30): overnight summary for the user (decisions under D177)
+
+Decisions taken by the lead overnight, each reversible by the user:
+1. **S2 route B adopted** (C3-BIN 01:20): one new named trust item,
+   `S2TrustedSdkBorrow`, covering the Solana SDK `AccountInfo` data-borrow semantics and the `RefCell` guard
+   semantics in fifteen fields, pinned to solana-account-info 2.3.0. It is shown in the
+   headline trust list. Its fields are proved mutually consistent, and its Kani spec is checked.
+2. **Session A's S2 branch merged into research** (their handoff tip `0182d4eb4f`).
+3. **Import-union naming fix applied to all of `lean/`** (D178, release gate 1). Session A's
+   `lean-candidates` are untouched; they have the script. A 57.6 MB scan file was removed from the
+   tree (it remains in history).
+4. **Runtime abort and rollback** on allocation failure is to be stated under the existing runtime
+   premises P2–P4 and checked against the pinned runtime (C3-BIN 02:40).
+5. **S2 restructured depth-first** (C3-BIN 04:30), after five breadth jobs had not closed
+   the native step simulation.
+No security target, metric, adversary, protocol or verifier byte changed.
+Status: S2 is open with 0/14 Required14 fields discharged. A large conditional
+structure is proved (reference execution E for both stages, child value contracts, copy,
+cleanup, error and rejection laws, return-data events, emitter constructor and indexed
+writes). The native step simulation is at cut 1 of 30: the cut relation needed an
+invocation binding, and that job is now running. Privacy: parts 53–54 proved the terminal, weights,
+encoder and leaf bytes, and part 55 is running. Neither deployed target is established.
+
+## D180 (lead, 2026-10-23 06:25): part 54 merged
+
+Merged `codex/cx-prover-commit54-20261023` (report `r1p-final/PROVER-COMMIT54-20261023.md`;
+budget J10600–10699 used). The owned encoder is extracted and proved by induction. Proved:
+exact node geometry; encoder model identities; opened and folded leaf values with
+ordered bytes. Kani verifies the actual M31/QM31/WideExact iterator transitions through
+length 256 with verified stubs. 46 modules, 99 new theorems, standard axioms only.
+Remaining before native simulator output = payload: native allocation/collection and
+complete caller bindings; semantic guards; interpolation and challenge provenance.
+
+## D182 (user decision, 2026-10-23 07:10): rewrite the adapter caller in a proof-friendly shape
+
+The user asked why S2 had taken two days. Lead answer: S2 had been pursued as a proof that the
+existing SDK-borrow-heavy adapter glue equals the model. Kani and Aeneas repeatedly
+failed on that code (timeouts, translation errors, an internal Kani crash). Session A
+spent about two days on SDK internals, and the lead's overnight jobs were too broad
+and stopped at each first obstacle. S2-J did reach cuts 1–7 of 30 before stopping at
+cut 8 (the verified SDK stub's descriptor bound excludes the real 1,768-byte buffer).
+**User decision ("yes"):** rewrite stage 1 and stage 2 of `r1_pool_adapter.rs` in a
+proof-friendly shape. Copy each account buffer into an owned value once at entry, run all
+logic on owned values with no borrow guards held, and write the checkpoint back once at the
+end. Then extract it with Aeneas directly. This is a verifier source change, so there will
+be new ELF pins and a new freeze, with adoption gates; the extra compute units are
+measured first and reported. Its accept/reject behaviour, outputs, checkpoint bytes and account effects must equal
+the current adapter's. S2-J and S2-K were stopped. Their work is merged as
+evidence: cuts 1–7, emit pieces and child contracts. Proved cones (checkpoint bytes,
+multiproof, S7/S8, parser) are unaffected unless the rewrite touches their pinned
+functions.
+
+## D183 (lead, 2026-10-23 07:50): adapter rewrite: runtime-admission domain and error precedence
+
+The rewrite's stage-1 note (`design/ADAPTER-RW-20261023.md`) shows that copy-then-drop
+borrowing is not equivalent to the current adapter on the *raw SDK* input domain
+(arbitrary borrow counters, distinct keys sharing a data cell, externally held borrows).
+Lead ruling:
+1. **Domain = runtime admission.** Equivalence is required on the inputs the Solana
+   runtime can actually produce at the program entrypoint: each distinct account has its
+   own freshly created data cell with borrow counter 0, no borrow is held outside the
+   program, and duplicate account entries share a cell only when their keys are equal
+   (rejected by the existing distinct-key check). This is a fact about the runtime's
+   entrypoint deserialisation. It is stated as a named runtime premise beside P2–P4,
+   checked against the pinned runtime/SDK entrypoint source, and not inferred from distinct keys or
+   adapter acceptance. It does not restrict the adversary, who still chooses every
+   account, key, owner, flag, length and byte of data.
+2. **Accept set identical, errors may reorder.** On that domain the new adapter must
+   accept exactly the transactions the old one accepts, with identical return data,
+   checkpoint bytes and account effects. Rejection is rejection for soundness, so a
+   different error code or precedence on a rejected input is allowed, but each
+   difference must be listed. Where cheap, keep the original order (capture copy
+   results, consume errors in source order).
+3. **Resources:** the copies' heap use within the 256 KiB SBF bump heap and the CU cost
+   are measured and gated. Allocation failure aborts the transaction (no effects).
+
+## D184 (lead, 2026-10-23 09:10): part 55 merged; native Rust simulator binding stopped as unnecessary
+
+Merged `codex/cx-prover-commit55-20261023` (about 0.87M tokens): the owned semantic oracle
+with partial sums and interpolation; the original terminal and final semantic shift with
+the successful guard; guarded encoders; opening challenge images; standard axioms.
+**Lead finding (cost and scope).** Parts 46–55, and much of 30–33, bound the Rust
+*simulator* `crates/aspis-r1-cost-probe/src/sim.rs` (`simE`/`sim_e_ablated`, "UNPROVED
+COST PROBE", D44.3) to the model simulator. That serves only the *second* conjunct of
+`RustProverRefinement` (rust.ideal = source.ideal). The simulator is a proof device that
+is never deployed. Deployed privacy is a statement about the real prover's observable
+output: its distribution is within ε of the ideal game run with the mathematical simulator
+`simE`, whose efficiency is a property of `simE` (the SIM-COST passes, D116–D142). So the
+deployed headline needs only rust.real = source.real (conjunct 1) plus the model theorem
+source.real ≈ source.ideal. Restating the deployed endpoint as
+"rust.real ≈ source.ideal(simE)" is the same claim about deployed outputs, not a
+weakening. Before/after statements are to be shown verbatim in the restating job.
+Consequences: native `sim.rs` binding work stops (its results stay as evidence); privacy work
+goes to the real side (`prove_masked_retrying_with` and the prover, on the v2 candidate
+code paths where they differ), plus the L1/L2 side-channel obligations.
+
+## D185 (lead, 2026-10-23 09:15): privacy comparison contract is the mathematical simulator
+
+The restatement job (`r1p-final/PRIVACY-RESTATE-20261023.md`) correctly stopped. The
+existing deployed conclusion compares rust.real with `rust.ideal`, the ideal game run by a
+Rust implementation. The proposed one compares rust.real with `source.ideal(simE)`. As
+fixed-experiment propositions they differ, so this is a contract choice, not a proof step.
+**Lead ruling (logged for the user, reversible).** The privacy contract is the standard
+simulation definition: for every adversary, the deployed real experiment is within ε of the
+ideal game run with the efficient mathematical simulator `simE`, whose cost bound is proved
+for `simE` itself (the SIM-COST passes). The old conclusion together with conjunct 2 implies the
+new one; the old is stronger only in additionally certifying a Rust implementation of the
+simulator, which is never deployed and says nothing more about deployed outputs. The
+previous theorem is kept unchanged; the new endpoint is added beside it with before/after statements.
+Privacy work proceeds on conjunct 1 (the real side) using the worker's obligation map.
+
+## D186 (lead, 2026-10-23 09:25): real-side privacy endpoint proved; real-prover refinement plan
+
+Merged `codex/cx-priv-restate-20261023`. `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed`
+is proved from conjunct 1 alone. It compares deployed `rust.real` with `source.ideal(simE)`,
+with the same error envelope (J10800, standard axioms). The old theorems are unchanged.
+Lead assessment from the obligation map (`PRIVACY-RESTATE-20261023.md`): most of parts 27–55 bound
+simulator code or proved shared helpers. The native refinement of the **real** prover
+(`generate_for_mask_nonce` → `prove_masked_retrying_with` → prover.rs: masks, semantic
+build, commitments/Merkle, transcript/sumcheck, opening, publication) is largely
+unstarted as a whole, though many helper results transfer. Plan: three parallel
+depth-first streams, each budgeted and using the routes that work (D144 owned references,
+per-iteration Kani shipped = owned, Lean induction; never Aeneas on shipped iterator code):
+R1 the retry/entropy/reservation owner on the selected caller (composing parts 34–43); R2 the
+real commitment path (mask material, semantic build, commitments, Merkle, encoding); R3 the
+real transcript, sumcheck, opening and publication. All target the research prover. The v2
+candidate's differences transfer through its proved equivalence gates when it is adopted.
+
+## D187 (user decision, 2026-10-23 11:05): proof-friendly prover rewrite
+
+Real-prover refinement streams R1–R3 (merged): a host proof-account caller on the 64-byte
+route with a durable ledger, where duplicate nonces fail closed and the verifier ELFs are unchanged; native/owned
+control binding and an outer-owner bridge; mask-seed guards and context framing; transcript
+rows 0–14 by reused part-30 callee contracts. Each stream stalled on Kani timeouts over shipped
+prover loops (R2 at the scalar sampler contract, R3 at row 15), the same pattern S2 had before
+the adapter rewrite. R1's +27% caller timing is from a contended shared host and will be
+re-measured on a quiet host. **User decision:** rewrite the prover's control and per-attempt
+pipeline (retry owner, mask material, semantic build, transcript, commitments, publication)
+into owned, Aeneas-extractable code, with heavy arithmetic as small verified leaf kernels.
+Base it on the v2 constant-time candidate, which is the intended host prover. Gates: design
+note first; byte-identical proofs on fixtures for identical coins; at least 1,000 differential runs;
+median prover time under 15 s on the build host (D168/D169); the verifier untouched. Host-only.

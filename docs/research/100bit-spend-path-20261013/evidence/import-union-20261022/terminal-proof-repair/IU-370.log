@@ -1,0 +1,85 @@
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/AspisR1TerminalDigestBindingCandidate/LoopExact.lean:66:40: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/AspisR1TerminalDigestBindingCandidate/LoopExact.lean:67:56: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/AspisR1TerminalDigestBindingCandidate/LoopExact.lean:72:12: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/AspisR1TerminalDigestBindingCandidate/LoopExact.lean:73:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/AspisR1TerminalDigestBindingCandidate/LoopExact.lean:93:54: warning: This simp argument is unused:
+  hjA
+
+Hint: Omit it from the simp argument list.
+  simp [cellAt, hj, Array.set_val_eq, hEq, hcell,̵ ̵h̵j̵A̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/AspisR1TerminalDigestBindingCandidate/LoopExact.lean:95:22: warning: This simp argument is unused:
+  Array.set_val_eq
+
+Hint: Omit it from the simp argument list.
+  simp [cellAt, hj, A̵r̵r̵a̵y̵.̵s̵e̵t̵_̵v̵a̵l̵_̵e̵q̵,̵ ̵hne]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/AspisR1TerminalDigestBindingCandidate/LoopExact.lean:104:2: warning: 'change (a + b : Result Usize) = .ok c' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/AspisR1TerminalDigestBindingCandidate/LoopExact.lean:118:55: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/AspisR1TerminalDigestBindingCandidate/LoopExact.lean:142:6: error: unsolved goals
+case zero.refine_1
+opened : Std.Array QM 16#usize
+selector : QM
+initial : Std.Array QM 8#usize
+start : Usize
+expected : Std.Array M31 8#usize
+rightTweak : Bool
+hstart : ↑start + 8 ≤ 16
+hopened : CanonicalArray opened
+hselector : Canonical selector
+hinitial : CanonicalArray initial
+hexpected : ∀ (j : Fin 8), ↑(↑expected)[↑j] < AspisR1.ExtractedMaskTowerAdd.P
+base : Std.Array QM 8#usize
+iter : Range
+hend : ↑iter.end = 8
+hspan : ↑iter.start + 0 = 8
+hbase : CanonicalArray base
+hprefix :
+  ∀ (j : Fin 8),
+    ↑j < ↑iter.start →
+      AspisR1.ExtractedMaskQM31Exact.decode (cellAt base ↑j) =
+        AspisR1.ExtractedMaskQM31Exact.decode (cellAt initial ↑j) +
+          AspisR1.ExtractedMaskQM31Exact.decode selector * laneValue opened start expected rightTweak ↑j
+hunchanged :
+  ∀ (j : Fin 8),
+    ↑iter.start ≤ ↑j →
+      AspisR1.ExtractedMaskQM31Exact.decode (cellAt base ↑j) = AspisR1.ExtractedMaskQM31Exact.decode (cellAt initial ↑j)
+hstop : ↑iter.start ≥ ↑iter.end
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter)
+hiter : ↑iter.start = 8
+⊢ (let (o, iter1) := (none, iter)
+    match o with
+    | none => ok base
+    | some lane => do
+      let target ← expected.index_usize lane
+      let (iter2, target1) ←
+        if rightTweak = true then do
+            let i ← lane + 1#usize
+            let m ←
+              if i = poseidon2.DIGEST_ELEMS then target.add poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK else ok target
+            ok (iter1, m)
+          else ok (iter1, target)
+      let q ← base.index_usize lane
+      let i ← start + lane
+      let q1 ← opened.index_usize i
+      let q2 ← pool_v1.pair_forest_semantic_terminal.lift_m31 target1
+      let q3 ← q1.sub q2
+      let q4 ← field.QM31.mul selector q3
+      let q5 ← q.add q4
+      let a ← base.update lane q5
+      add_digest_binding_loop iter2 a selector opened start expected rightTweak) =
+    ok base

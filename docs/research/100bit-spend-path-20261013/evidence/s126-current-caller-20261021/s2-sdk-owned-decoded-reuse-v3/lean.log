@@ -1,0 +1,52 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedDecodedReuseV1.lean:142:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+    (CurrentCarrier.fromDecoderStatement decoded)
+in the target expression
+  (do
+      let p ← (CurrentCarrier.fromDecoderStatement decoded).semantic_public
+      ok (CurrentCarrier.toCurrentPublic p)) =
+    ok
+      (AspisR1CurrentCaller.FirstComposition.toCurrentPublic
+        (AspisR1PublicPreparation.PreparationBinding.preparationPublic decoded))
+
+ops : Ops
+verifierOps : AspisR1CurrentCaller.Ops
+program : Std.Array U8 32#usize
+sdk sdkOut : OwnedSdk
+data : alloc.vec.Vec U8
+h : owned_stage1 (Installation.install ops verifierOps) program sdk data = ok (core.result.Result.Ok (), sdkOut)
+bytes : Slice U8
+pub : Reachability.Public
+proof : Slice U8
+k : Usize
+cp : alloc.vec.Vec U8
+hfirst : first_decoded (Installation.install ops verifierOps) pub bytes proof k = ok (core.result.Result.Ok cp)
+decoded : AspisR1TerminalDecoder.PublicBinding.Statement
+hdecode : AspisR1PublicPreparation.S6DecoderScopedReuseV1.decodeActual bytes = ok (core.result.Result.Ok decoded)
+hbox :
+  AspisS2OwnedStage1.decode_public_statement_box (Installation.legacyHelperOps (Installation.install ops verifierOps))
+      bytes =
+    ok (core.result.Result.Ok (CurrentCarrier.fromDecoderStatement decoded))
+hpub :
+  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+      (CurrentCarrier.fromDecoderStatement decoded) =
+    ok pub
+hactual :
+  SourceInstallation.actualDecoder bytes = ok (core.result.Result.Ok (CurrentCarrier.fromDecoderStatement decoded))
+hp :
+  (do
+      let p ← (CurrentCarrier.fromDecoderStatement decoded).semantic_public
+      ok (CurrentCarrier.toCurrentPublic p)) =
+    ok
+      (AspisR1CurrentCaller.FirstComposition.toCurrentPublic
+        (AspisR1PublicPreparation.PreparationBinding.preparationPublic decoded))
+⊢ CurrentCarrier.toCurrentPublic pub =
+    AspisR1CurrentCaller.FirstComposition.toCurrentPublic
+      (AspisR1PublicPreparation.PreparationBinding.preparationPublic decoded)
+'AspisS2OwnedStage1.SdkReference.DecodedReuse.stage1_current_first' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.DecodedReuse.stage1_decoded_first' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,184 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "qualification": "Construct every field of the real frozen statement types symbolically.\nNo reduced carrier or canonicality assumption; all M31 storage words are u32.\nOnly padding bytes are omitted, since they are not Rust value fields.\n",
+  "source_sha256": "e4c27f2733a98d70a15411f02c3095842a5961405a79a6ebe1a856bd880302cc",
+  "types": {
+    "PoolV1PairForestTerminalCommonV1": {
+      "file": "pair_forest_terminal",
+      "source": "pub struct PoolV1PairForestTerminalCommonV1 {\n    pub master_account: [u8; 32],\n    pub checkpoint_account: [u8; 32],\n    pub selected_lane_account: [u8; 32],\n    pub output_lane: u8,\n    pub checkpoint_sequence: u64,\n    /// Historical global membership anchor reconstructed at trace block 56.\n    pub historical_global_anchor: Digest,\n    /// Exact selected-output-lane beforestate and candidate afterstate.\n    pub lane_transition: PoolV1PairLatePublicStatementV1,\n}",
+      "fields": [
+        [
+          "master_account",
+          "[u8; 32]"
+        ],
+        [
+          "checkpoint_account",
+          "[u8; 32]"
+        ],
+        [
+          "selected_lane_account",
+          "[u8; 32]"
+        ],
+        [
+          "output_lane",
+          "u8"
+        ],
+        [
+          "checkpoint_sequence",
+          "u64"
+        ],
+        [
+          "historical_global_anchor",
+          "Digest"
+        ],
+        [
+          "lane_transition",
+          "PoolV1PairLatePublicStatementV1"
+        ]
+      ]
+    },
+    "PoolV1PairLatePublicStatementV1": {
+      "file": "pair_tree_profile",
+      "source": "pub struct PoolV1PairLatePublicStatementV1 {\n    pub live_snapshot: PoolV1PairLiveSnapshotV1,\n    /// One appended pair advances the pair index by one even though a private\n    /// transfer fills two commitment slots (note indices `2i` and `2i+1`).\n    pub candidate_afterstate: PoolV1PairVerifiedAfterstateV1,\n}",
+      "fields": [
+        [
+          "live_snapshot",
+          "PoolV1PairLiveSnapshotV1"
+        ],
+        [
+          "candidate_afterstate",
+          "PoolV1PairVerifiedAfterstateV1"
+        ]
+      ]
+    },
+    "PoolV1PairLiveSnapshotV1": {
+      "file": "pair_tree_profile",
+      "source": "pub struct PoolV1PairLiveSnapshotV1 {\n    pub pool: [u8; 32],\n    pub deployment_domain: [u8; 32],\n    pub sequence: u64,\n    pub next_pair_index: u64,\n    pub current_root: Digest,\n    pub frontier: [Digest; POOL_V1_PAIR_TREE_DEPTH],\n}",
+      "fields": [
+        [
+          "pool",
+          "[u8; 32]"
+        ],
+        [
+          "deployment_domain",
+          "[u8; 32]"
+        ],
+        [
+          "sequence",
+          "u64"
+        ],
+        [
+          "next_pair_index",
+          "u64"
+        ],
+        [
+          "current_root",
+          "Digest"
+        ],
+        [
+          "frontier",
+          "[Digest; POOL_V1_PAIR_TREE_DEPTH]"
+        ]
+      ]
+    },
+    "PoolV1PairVerifiedAfterstateV1": {
+      "file": "pair_terminal",
+      "source": "pub struct PoolV1PairVerifiedAfterstateV1 {\n    pub next_pair_index: u64,\n    pub next_root: Digest,\n    pub next_frontier: [Digest; super::POOL_V1_PAIR_TREE_DEPTH],\n}",
+      "fields": [
+        [
+          "next_pair_index",
+          "u64"
+        ],
+        [
+          "next_root",
+          "Digest"
+        ],
+        [
+          "next_frontier",
+          "[Digest; super::POOL_V1_PAIR_TREE_DEPTH]"
+        ]
+      ]
+    },
+    "PoolV1PrivateTransferPublicV1": {
+      "file": "payment_relation",
+      "source": "pub struct PoolV1PrivateTransferPublicV1 {\n    pub pool: [u8; 32],\n    pub deployment_domain: [u8; 32],\n    pub anchor_sequence: u64,\n    pub anchor_root: Digest,\n    pub nullifier: Digest,\n    pub asset_id: M31,\n    pub recipient_commitment: Digest,\n    pub change_commitment: Digest,\n}",
+      "fields": [
+        [
+          "pool",
+          "[u8; 32]"
+        ],
+        [
+          "deployment_domain",
+          "[u8; 32]"
+        ],
+        [
+          "anchor_sequence",
+          "u64"
+        ],
+        [
+          "anchor_root",
+          "Digest"
+        ],
+        [
+          "nullifier",
+          "Digest"
+        ],
+        [
+          "asset_id",
+          "M31"
+        ],
+        [
+          "recipient_commitment",
+          "Digest"
+        ],
+        [
+          "change_commitment",
+          "Digest"
+        ]
+      ]
+    },
+    "PoolV1WithdrawalPublicV1": {
+      "file": "payment_relation",
+      "source": "pub struct PoolV1WithdrawalPublicV1 {\n    pub pool: [u8; 32],\n    pub deployment_domain: [u8; 32],\n    pub anchor_sequence: u64,\n    pub anchor_root: Digest,\n    pub nullifier: Digest,\n    pub asset_id: M31,\n    pub amount: u32,\n    pub destination_token_account: [u8; 32],\n    pub change_commitment: Digest,\n}",
+      "fields": [
+        [
+          "pool",
+          "[u8; 32]"
+        ],
+        [
+          "deployment_domain",
+          "[u8; 32]"
+        ],
+        [
+          "anchor_sequence",
+          "u64"
+        ],
+        [
+          "anchor_root",
+          "Digest"
+        ],
+        [
+          "nullifier",
+          "Digest"
+        ],
+        [
+          "asset_id",
+          "M31"
+        ],
+        [
+          "amount",
+          "u32"
+        ],
+        [
+          "destination_token_account",
+          "[u8; 32]"
+        ],
+        [
+          "change_commitment",
+          "Digest"
+        ]
+      ]
+    }
+  }
+}

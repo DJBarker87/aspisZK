@@ -1,4 +1,5 @@
 import Aeneas.Std
+import ImportUnionNamedDiscriminant
 import AspisR318BatchPrefixRaw
 import AspisR305BatchReverseRaw
 import AspisR278PrivateInverseRaw
@@ -20,7 +21,7 @@ namespace AspisR346AfterGuardsRaw
 
 /-- [aspis_v8_performance_host::Error]
     Source: '../relation_callback.rs', lines 62:27-62:101 -/
-@[discriminant isize]
+@[import_union_discriminant isize]
 inductive Error where
 | Length : Error
 | Canonical : Error

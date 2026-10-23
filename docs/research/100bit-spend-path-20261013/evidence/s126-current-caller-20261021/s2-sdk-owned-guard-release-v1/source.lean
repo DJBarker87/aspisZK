@@ -1,0 +1,73 @@
+import S2SdkOwnedBorrowTotalV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result WP
+namespace AspisS2OwnedStage1.SdkReference.GuardRelease
+
+/-- Total mathematical counter projection; valid-slot obligations are separate. -/
+def countAt (sdk : OwnedSdk) (index : Nat) : Int :=
+  (sdk.data_cells.val.map (fun cell => cell.borrowed.val)).getD index 0
+
+def counterUpdate (sdk : OwnedSdk) (slot : Usize) (cell : OwnedDataCell) (next : Isize) : OwnedSdk :=
+  {sdk with data_cells:=alloc.vec.Vec.set sdk.data_cells slot {cell with borrowed:=next}}
+
+theorem update_length (sdk : OwnedSdk) (slot : Usize) (cell : OwnedDataCell) (next : Isize) :
+    (counterUpdate sdk slot cell next).data_cells.val.length=sdk.data_cells.val.length := by
+  simp [counterUpdate,alloc.vec.Vec.set]
+
+theorem countAt_cell (sdk : OwnedSdk) (slot : Usize)
+    (valid : slot.val<sdk.data_cells.val.length) (cell : OwnedDataCell)
+    (hcell : cell=sdk.data_cells.val[slot.val]) :
+    countAt sdk slot.val=cell.borrowed.val := by
+  subst cell
+  simp [countAt,List.getD_eq_getElem?_getD,valid]
+
+theorem countAt_update (sdk : OwnedSdk) (slot : Usize) (cell : OwnedDataCell) (next : Isize)
+    (valid : slot.val<sdk.data_cells.val.length) (index : Nat) :
+    countAt (counterUpdate sdk slot cell next) index=
+      if slot.val=index then next.val else countAt sdk index := by
+  by_cases equal : slot.val=index
+  · subst index
+    simp [countAt,counterUpdate,alloc.vec.Vec.set,List.getD_eq_getElem?_getD,valid]
+  · simp [countAt,counterUpdate,alloc.vec.Vec.set,List.getD_eq_getElem?_getD,List.map_set,
+      List.getElem?_set,equal]
+
+/-- These are literal subterms of the emitted release function, exposed only
+for composition. `release_eq` checks the complete parent identity. -/
+def dropShared (sdk : OwnedSdk) (slot : Usize) : Result OwnedSdk := do
+  let cell ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot
+  let option ← lift (Isize.checked_sub cell.borrowed 1#isize)
+  let next ← core.option.Option.unwrap option
+  let (old,back) ← alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot
+  ok {sdk with data_cells:=back {old with borrowed:=next}}
+
+def dropCheckpoint (sdk : OwnedSdk) (slot : Usize) : Result OwnedSdk := do
+  let cell ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot
+  let option ← lift (Isize.checked_add cell.borrowed 1#isize)
+  let next ← core.option.Option.unwrap option
+  let (old,back) ← alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot
+  ok {sdk with data_cells:=back {old with borrowed:=next}}
+
+theorem release_eq (sdk : OwnedSdk) (guards : LiveGuards) :
+    owned_release_guards sdk guards=(do
+      let sdk1 ← match guards.proof with | none => ok sdk | some slot => dropShared sdk slot
+      let sdk2 ← match guards.«public» with | none => ok sdk1 | some slot => dropShared sdk1 slot
+      match guards.checkpoint with | none => ok sdk2 | some slot => dropCheckpoint sdk2 slot) := rfl
+
+theorem drop_shared_total (sdk : OwnedSdk) (slot : Usize)
+    (valid : slot.val<sdk.data_cells.val.length) (positive : 0<countAt sdk slot.val) :
+    ∃ (cell : OwnedDataCell) (next : Isize),
+      cell=sdk.data_cells.val[slot.val] ∧ next.val=countAt sdk slot.val-1 ∧
+      dropShared sdk slot=ok (counterUpdate sdk slot cell next) := by
+  obtain ⟨cell,hcell,hread,hmut⟩ := BorrowTotal.cell_operations_total sdk slot valid
+  have hcount := countAt_cell sdk slot valid cell hcell
+  obtain ⟨next,_,hchecked,hvalue⟩ := BorrowTotal.shared_decrement_total cell.borrowed (by omega)
+  refine ⟨cell,next,hcell,by omega,?_⟩
+  simp only [dropShared,hread,bind_tc_ok,hchecked,core.option.Option.unwrap,hmut]
+  rfl
+
+#print axioms update_length
+#print axioms countAt_cell
+#print axioms countAt_update
+#print axioms release_eq
+#print axioms drop_shared_total
+end AspisS2OwnedStage1.SdkReference.GuardRelease

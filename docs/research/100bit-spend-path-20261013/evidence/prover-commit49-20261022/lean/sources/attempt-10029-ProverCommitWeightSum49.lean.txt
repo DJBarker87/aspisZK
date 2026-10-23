@@ -1,0 +1,93 @@
+import R1Z.ProverCommitWideQM31Scalar49
+import R1Z.ProverCommitMix48
+import R1Z.ProverCommitQArray48
+/-! Exact interval contraction shared by the seven-term weight materializer
+and the 1024-term inactive dot product. Raw QM31 entries are normalized. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitWeightSum49
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitWideOps48 ProverCommitMix48
+open ProverCommitWideQM31Scalar49
+open AspisR1.ExtractedCurrentQM31Exact (decode)
+
+def terms (q : Nat → Raw) (raw : Nat → Old.Q) : Nat → Nat → Exact
+ | 0,_ => 0
+ | n+1,j => value (q j)*embed (decode (raw j))+terms q raw n (j+1)
+
+def finite (size : Usize) : Nat → Array Source size → Array field.QM31 size → Usize → Source → Result Source
+ | 0,_,_,_,s => ok s
+ | n+1,q,raw,j,s => do
+  let x ← Array.index_usize q j
+  let y ← Array.index_usize raw j
+  let product ← field.wide_exact.WideExact.mul_qm31 x y
+  let next ← field.wide_exact.WideExact.add s product
+  finite size n q raw (Usize.wrapping_add j 1#usize) next
+
+theorem cell_finite (n : Nat) (left : U8) (hleft : left.val=n)
+    (q : Array Source 7#usize) (raw : Array field.QM31 7#usize) (j : Usize) (s : Source) :
+    owned.cell q raw j left s=finite 7#usize n q raw j s := by
+  induction n generalizing left j s with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    rw [owned.cell,hz];rfl
+  | succ n ih =>
+    have hn : left≠0#u8 := by scalar_tac
+    have ht : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    rw [owned.cell]
+    simp only [hn,if_false,finite,lift,bind_tc_ok]
+    have tail : ∀ x, owned.cell q raw (Usize.wrapping_add j 1#usize)
+      (U8.wrapping_sub left 1#u8) x=finite 7#usize n q raw (Usize.wrapping_add j 1#usize) x := fun x => ih _ ht _ x
+    simp only [tail]
+
+theorem inactive_finite (n : Nat) (left : U16) (hleft : left.val=n)
+    (q : Array Source 1024#usize) (raw : Array field.QM31 1024#usize) (j : Usize) (s : Source) :
+    owned.inactive q raw j left s=finite 1024#usize n q raw j s := by
+  induction n generalizing left j s with
+  | zero =>
+    have hz : left=0#u16 := by scalar_tac
+    rw [owned.inactive,hz];rfl
+  | succ n ih =>
+    have hn : left≠0#u16 := by scalar_tac
+    have ht : (U16.wrapping_sub left 1#u16).val=n := by
+      rw [ProverCommitPairCounter47.sub_one left (by omega)];omega
+    rw [owned.inactive]
+    simp only [hn,if_false,finite,lift,bind_tc_ok]
+    have tail : ∀ x, owned.inactive q raw (Usize.wrapping_add j 1#usize)
+      (U16.wrapping_sub left 1#u16) x=finite 1024#usize n q raw (Usize.wrapping_add j 1#usize) x := fun x => ih _ ht _ x
+    simp only [tail]
+
+attribute [local irreducible] sourceArray ProverCommitQArray48.array source ProverCommitNativeQ48.source
+
+theorem finite_value (size : Usize) (small : size.val≤1024)
+    (q : Nat → Raw) (raw : Nat → Old.Q) (hq : ∀ j, j<size.val → canonical (q j))
+    (n : Nat) (j : Usize) (bound : j.val+n≤size.val) (s : Raw) (hs : canonical s) :
+    ∃ z : Raw,
+      finite size n (sourceArray size q) (ProverCommitQArray48.array size raw) j (source s)=ok (source z) ∧
+      canonical z ∧ value z=value s+terms q raw n j.val := by
+  induction n generalizing j s with
+  | zero =>
+    refine ⟨s,rfl,hs,?_⟩
+    rw [terms,add_zero]
+  | succ n ih =>
+    have hj : j.val<size.val := by omega
+    have hinc : (Usize.wrapping_add j 1#usize).val=j.val+1 := by
+      simpa only [show (1#usize).val=1 from rfl] using
+        ProverCommitBasisFillValue47.add_val j 1#usize (by change j.val+1<2048;omega)
+    obtain ⟨prod,hprod,hcprod,hdprod⟩ := value_exact (q j.val) (raw j.val) (hq _ hj)
+    obtain ⟨next,hnext,hcnext,hdnext⟩ := add_exact s prod hs hcprod
+    obtain ⟨z,hz,hcz,hdz⟩ := ih _ (by rw [hinc];omega) next hcnext
+    refine ⟨z,?_,hcz,?_⟩
+    · rw [finite,index size q j hj]
+      simp only [bind_tc_ok]
+      rw [ProverCommitQArray48.index size raw j hj]
+      simp only [hprod,hnext,bind_tc_ok]
+      exact hz
+    · rw [hdz,hdnext,hdprod,hinc,terms];ring
+
+#print axioms cell_finite
+#print axioms inactive_finite
+#print axioms finite_value
+end R1Z.ProverCommitWeightSum49

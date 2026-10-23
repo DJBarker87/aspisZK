@@ -1,0 +1,53 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverCommitEval50.lean:58:4: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+case refine_2
+q : ℕ → Old.Q
+x : Old.Q
+hq : ∀ i < 28, Canonical (q i)
+hx : Canonical x
+x2 : Old.Q
+h2 : field.QM31.square (ProverCommitNativeQ48.source x) = ok (ProverCommitNativeQ48.source x2)
+hc2 : Canonical x2
+hv2 : decode x2 = decode x * decode x
+x3 : Old.Q
+h3 :
+  field.QM31.mul (ProverCommitNativeQ48.source x) (ProverCommitNativeQ48.source x2) =
+    ok (ProverCommitNativeQ48.source x3)
+hc3 : Canonical x3
+hv3 : decode x3 = decode x * decode x2
+x4 : Old.Q
+h4 : field.QM31.square (ProverCommitNativeQ48.source x2) = ok (ProverCommitNativeQ48.source x4)
+hc4 : Canonical x4
+hv4 : decode x4 = decode x2 * decode x2
+hv2' : decode x2 = decode x ^ 2
+hv3' : decode x3 = decode x ^ 3
+hv4' : decode x4 = decode x ^ 4
+powers : ℕ → Old.Q := triple x x2 x3
+hp : ∀ i < 3, Canonical (powers i)
+hv : ∀ (i : Fin 3), decode (powers ↑i) = decode x ^ (↑i + 1)
+a : ℕ → ℕ → U32
+ha : prepared50.prepare (ProverCommitNativeQ48.source x4) = ok (ProverCommitPrepared50.matrix a)
+hca : ∀ (i j : ℕ), i < 3 → j < 3 → ↑(a i j) < AspisCircleGroupOrder.P
+hva : ∀ (i j : Fin 3), ↑↑(a ↑i ↑j) = ProverCommitChannelAlgebra49.components (decode x ^ 4) i j
+acc : Old.Q
+hacc :
+  eval50.block (ProverCommitEvalBlock50.source q) (ProverCommitDot50.qarray powers) 6#usize =
+    ok (ProverCommitNativeQ48.source acc)
+hcacc : Canonical acc
+hvacc : decode acc = ProverCommitRadix50.block (fun i => decode (q i)) (decode x) ↑6#usize
+z : Old.Q
+hz :
+  eval50.go (ProverCommitEvalBlock50.source q) (ProverCommitDot50.qarray powers) (ProverCommitPrepared50.matrix a) 6#u8
+      (ProverCommitNativeQ48.source acc) =
+    ok (ProverCommitNativeQ48.source z)
+hcz : Canonical z
+hdz : decode z = decode acc * (decode x ^ 4) ^ 6 + ProverCommitRadix50.blocks (fun i => decode (q i)) (decode x) 6
+⊢ ProverCommitRadix50.block (fun i => decode (q i)) (decode x) ↑6#usize * (decode x ^ 4) ^ 6 +
+      ProverCommitRadix50.blocks (fun i => decode (q i)) (decode x) 6 =
+    Polynomial.eval (decode x) (ProverCommitInterpolationPoly48.poly 28 fun i => decode (q i))
+'R1Z.ProverCommitEval50.exact_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

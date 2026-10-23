@@ -1,0 +1,97 @@
+import AspisR1ProducerRelease47.Samples49
+import AspisR1ProducerRelease47.Basis
+import AspisR1ProducerRelease47.Opening48
+import AspisR1ProducerRelease47.Pairs
+/-! Extracted explicit recursive node builder, with identical arithmetic callees rebound to the
+previously proved release extraction. bind-encoder-phi.py checks every reused
+callee declaration body byte-for-byte. No external template is installed. -/
+open Aeneas Aeneas.Std Result ControlFlow Error
+noncomputable section
+namespace AspisR1ProducerRelease47
+@[global_simps, irreducible]
+def field.CM31.ONE : field.CM31 := { a := 1#u32, b := 0#u32 }
+
+def field.CM31.new (a : field.M31) (b : field.M31) : Result field.CM31 := do
+  ok { a, b }
+
+def nodes54.reverse
+  (width : Std.U8) (value : Std.Usize) : Result Std.Usize := do
+  if width = 0#u8
+  then ok 0#usize
+  else
+    let w ← lift (Std.U8.wrapping_sub width 1#u8)
+    let i ← value % 2#usize
+    let i1 ← lift (Std.Usize.wrapping_shl 1#usize w)
+    let i2 ← lift (Std.Usize.wrapping_mul i i1)
+    let i3 ← value / 2#usize
+    let i4 ← nodes54.reverse w i3
+    ok (Std.Usize.wrapping_add i2 i4)
+partial_fixpoint
+
+def nodes54.pow
+  (base : field.CM31) (exp : Std.U64) (acc : field.CM31) :
+  Result field.CM31
+  := do
+  if exp = 0#u64
+  then ok acc
+  else
+    let i ← exp % 2#u64
+    let next ← if i = 1#u64
+                 then field.CM31.mul acc base
+                 else ok acc
+    let c ← field.CM31.mul base base
+    let i1 ← exp / 2#u64
+    nodes54.pow c i1 next
+partial_fixpoint
+
+def nodes54.tcheb (x : field.M31) : Result field.M31 := do
+  let m ← field.M31.mul x x
+  let m1 ← field.M31.double m
+  field.M31.sub m1 field.M31.ONE
+
+def nodes54.repeat (x : field.M31) (left : Std.U8) : Result field.M31 := do
+  if left = 0#u8
+  then ok x
+  else
+    let m ← nodes54.tcheb x
+    let i ← lift (Std.U8.wrapping_sub left 1#u8)
+    nodes54.repeat m i
+partial_fixpoint
+
+def nodes54.point (j : Std.Usize) : Result field.CM31 := do
+  let r ← nodes54.reverse 18#u8 j
+  let c ← field.CM31.new 2#u32 1268011823#u32
+  let i ← lift (UScalar.cast .U64 r)
+  let i1 ← lift (Std.U64.wrapping_mul 4096#u64 i)
+  let i2 ← lift (Std.U64.wrapping_add 1024#u64 i1)
+  nodes54.pow c i2 field.CM31.ONE
+
+def nodes54.node (j : Std.Usize) (depth : Std.U8) : Result field.M31 := do
+  let step ← lift (Std.Usize.wrapping_shl 1#usize depth)
+  let i ← j / step
+  let aligned ← lift (Std.Usize.wrapping_mul i step)
+  let c ← nodes54.point aligned
+  let i1 ← lift (Std.U8.wrapping_add depth 1#u8)
+  nodes54.repeat c.a i1
+
+def nodes54.fill
+  (j : Std.Usize) (d : Std.U8) (left : Std.U8) (out : Array field.M31 9#usize)
+  :
+  Result (Array field.M31 9#usize)
+  := do
+  if left = 0#u8
+  then ok out
+  else
+    let m ← nodes54.node j d
+    let i ← lift (UScalar.cast .Usize d)
+    let out1 ← Array.update out i m
+    let i1 ← lift (Std.U8.wrapping_add d 1#u8)
+    let i2 ← lift (Std.U8.wrapping_sub left 1#u8)
+    nodes54.fill j i1 i2 out1
+partial_fixpoint
+
+def nodes54.nodes (j : Std.Usize) : Result (Array field.M31 9#usize) := do
+  let a := Array.repeat 9#usize field.M31.ZERO
+  nodes54.fill j 0#u8 9#u8 a
+
+end AspisR1ProducerRelease47

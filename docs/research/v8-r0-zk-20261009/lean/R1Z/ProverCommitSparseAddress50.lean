@@ -1,0 +1,42 @@
+import R1Z.ProverCommitSparseBits50
+/-! Exact source shift/or row assembly, including the native word bound. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitSparseAddress50
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+
+theorem bound (pref suffix n : Nat) (hn : n≤10) (hp : pref<2^(10-n)) (hs : suffix<2^n) :
+    pref*2^n+suffix<1024 := by
+  calc
+    _ < (pref+1)*2^n := by rw [Nat.add_mul,Nat.one_mul];omega
+    _ ≤ 2^(10-n)*2^n := Nat.mul_le_mul_right _ (by omega)
+    _ = 1024 := by rw [←pow_add,Nat.sub_add_cancel hn];decide
+
+theorem row (pref suffix : Usize) (trailing : U8) (hn : trailing.val≤10)
+    (hp : pref.val<2^(10-trailing.val)) (hs : suffix.val<2^trailing.val) :
+    ∃ z : Usize, sparse50.row pref trailing suffix=ok z ∧
+      z.val=pref.val*2^trailing.val+suffix.val ∧ z.val<1024 := by
+  let s := core.convert.num.FromU32U8.from trailing
+  let z := (core.num.Usize.wrapping_shl pref s) ||| suffix
+  have hcast : s.val=trailing.val := by scalar_tac
+  have hbound := bound pref.val suffix.val trailing.val hn hp hs
+  have hpartial : pref.val*2^trailing.val<UScalar.size .Usize := by
+    have := ProverCommitPairCounter47.usize_large
+    omega
+  have hval : z.val=pref.val*2^trailing.val+suffix.val := by
+    change ((pref.bv <<< (s.val%UScalarTy.Usize.numBits)) ||| suffix.bv).toNat=_
+    rw [BitVec.toNat_or,BitVec.toNat_shiftLeft,hcast]
+    have bits : 32≤UScalarTy.Usize.numBits := System.Platform.le_numBits
+    rw [Nat.mod_eq_of_lt (show trailing.val<UScalarTy.Usize.numBits by omega)]
+    rw [Nat.shiftLeft_eq]
+    have hmod : pref.val*2^trailing.val<2^UScalarTy.Usize.numBits := by
+      simpa only [UScalar.size_def] using hpartial
+    change (pref.val*2^trailing.val%2^UScalarTy.Usize.numBits) ||| suffix.val=_
+    rw [Nat.mod_eq_of_lt hmod]
+    rw [Nat.mul_comm pref.val (2^trailing.val),←Nat.two_pow_add_eq_or_of_lt hs pref.val]
+  refine ⟨z,?_,hval,?_⟩
+  · rw [sparse50.row];rfl
+  · rw [hval];exact hbound
+
+#print axioms bound
+#print axioms row
+end R1Z.ProverCommitSparseAddress50

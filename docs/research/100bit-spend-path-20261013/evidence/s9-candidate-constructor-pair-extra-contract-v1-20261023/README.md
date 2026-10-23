@@ -1,0 +1,3 @@
+PROVED: the initialized Box::new constructor candidate supplies the exact mapped extra-array canonical-read contract required by the generated Pair helper, given the explicit input alpha canonical-read contract and that same constructor success. Structural carrier maps are composed exactly. Actual caller alpha provenance, shipped-constructor refinement, and the full helper joint-import environment remain open; this result uses minimal imports to avoid a known generated instance-name collision.
+
+Focused Lean check: 21.878 seconds; peak aggregate RSS 3191472128 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

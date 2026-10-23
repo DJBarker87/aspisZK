@@ -1,0 +1,29 @@
+diff --git a/docs/research/100bit-spend-path-20261013/lean/OccupancyLiteralExecutionAll12ExactListPublic.lean b/docs/research/100bit-spend-path-20261013/lean/OccupancyLiteralExecutionAll12ExactListPublic.lean
+index dda811544f..cea42eea3b 100644
+--- a/docs/research/100bit-spend-path-20261013/lean/OccupancyLiteralExecutionAll12ExactListPublic.lean
++++ b/docs/research/100bit-spend-path-20261013/lean/OccupancyLiteralExecutionAll12ExactListPublic.lean
+@@ -69,9 +69,14 @@ theorem generated_eq_run (input output : QM) (expected : field.M31)
+     (opened : Array QM 16#usize) :
+     pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal
+       input output expected opened = run input output expected opened := by
++  have uncurry_as_projections {α β γ : Type} (f : α → β → γ) :
++      Aeneas.Std.uncurry f = fun p : α × β => f p.1 p.2 := by
++    funext p
++    rcases p with ⟨a, b⟩
++    exact Aeneas.Std.uncurry_apply_pair f a b
+   simp only [pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal,
+     run, AspisR1.OccupancyLiteralPrefixReadsV2.prefixRun,
+-    AspisR1.OccupancyLiteralTail.tailRun, bind_assoc_eq, bind_tc_ok]
++    AspisR1.OccupancyLiteralTail.tailRun, bind_assoc_eq, bind_tc_ok, uncurry_as_projections]
+ 
+ theorem literal_success
+     (variant : pool_v1.pair_forest_semantic_terminal.CompiledVariant)
+@@ -147,7 +152,7 @@ theorem literal_success
+       honeMinusValue' hexpected
+   refine ⟨expected, out, hexpected, ?_, hcanOut, ?_⟩
+   rw [generated_eq_run input output expected opened]
+-  simp only [run, hprefix, bind_tc_ok, hloopSource, htail]
++  simp only [run, hprefix, bind_tc_ok, Aeneas.Std.uncurry_apply_pair, hloopSource, htail]
+   have hcells : ∀ i : Fin 12,
+       AspisR1.ExtractedMaskQM31Exact.decode (get12 out i) =
+       (modelLanes

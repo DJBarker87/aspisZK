@@ -1,0 +1,10 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "mode": "shared",
+  "source_sha256": "e134823b89458536e97dd807ca9df79661d7cd0b13d6adc037785d4dd6102d18",
+  "base_source_sha256": "51a672c1aeb5cd5225fab88ed35158a38e069745d204da119b0dd059f70b3b84",
+  "qualification": "Check exactly the actual std guard Drop operation, with a counter-only frame.\nNo SDK or guard model is stubbed. The custom harness obtains a real guard from\nthe original SDK and covers the same full metadata/counter/Rc/view domain.\n",
+  "contract": "#[cfg(kani)]\n#[kani::requires(std::mem::size_of_val(&guard)==2*std::mem::size_of::<usize>())]\n#[kani::requires(unsafe{*(std::ptr::addr_of!(guard).cast::<usize>().add(1))}==counter as usize)]\n#[kani::requires(unsafe{(*counter).get()}>0)]\n#[kani::modifies(counter.cast::<isize>())]\n#[kani::ensures(|_| unsafe{(*counter).get()}==old(unsafe{(*counter).get()})-1)]\nfn finish_guard(guard:std::cell::Ref<'_,&mut [u8]>,counter:*const Cell<isize>){drop(guard);}\n",
+  "domain": "Original SDK and actual std Ref/RefMut Drop, one actual typed AccountInfo,10MiB/all view lengths, arbitrary bytes/metadata, every signed data/lamport borrow flag and nonzero usize Rc header. Method supplies live guard; contract requires its exact borrow-counter pointer and positive(shared)/-1(exclusive) live count. Only that counter may be written, exact decrement/reset checked.",
+  "remaining": "Compose actual SDK acquisition postcondition and direct real-guard-model coupling before caller use. Guard types/layout, valid runtime heap embedding, complete native/owned source/child/oracle joins and successful stage1 transport remain explicit. No whole S2 or unrestricted TOTAL claim."
+}

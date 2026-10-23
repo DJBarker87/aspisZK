@@ -1,0 +1,52 @@
+import R1Z.ProverCommitEncoderCircle54
+import R1Z.ProverCommitEncoderAlignment54
+import R1Z.ProverCommitEncoderNode54
+/-! Alignment removes only a whole circle period after the relevant doubling.
+No 2^18-point table or generated concrete field cell is evaluated. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitEncoderGeometry54
+open AspisCircleGroupOrder AspisCircleTensorBinding AspisV5FriBitReverse
+open ProverCommitEncoderCircle54 ProverCommitEncoderAlignment54
+open ProverCommitEncoderNode54
+
+theorem period (d : Nat) (hd : d≤18) :
+    4096*2^(18-d)*2^(d+1)=2^31 := by
+  change (2 : Nat)^12*2^(18-d)*2^(d+1)=2^31
+  rw [←pow_add,←pow_add]
+  congr 1
+  omega
+
+theorem aligned_power (j d : Nat) (hd : d≤18) :
+    (g^(1024+4096*reverseBits 18 (aligned j d)))^(2^(d+1))=
+      (g^(1024+4096*reverseBits 18 j))^(2^(d+1)) := by
+  rw [←pow_mul,←pow_mul]
+  have hrev : reverseBits 18 (aligned j d)=reverseBits 18 j%2^(18-d) :=
+    aligned_reverse d 18 j hd
+  rw [hrev]
+  let r := reverseBits 18 j
+  let m := 2^(18-d)
+  let b := 2^(d+1)
+  have hperiod : 4096*m*b=2^31 := period d hd
+  have he : (1024+4096*r)*b=(1024+4096*(r%m))*b+2^31*(r/m) := by
+    calc
+      (1024+4096*r)*b=(1024+4096*(r%m+m*(r/m)))*b := by rw [Nat.mod_add_div]
+      _ = (1024+4096*(r%m))*b+(4096*m*b)*(r/m) := by ring
+      _ = _ := by rw [hperiod]
+  change g^((1024+4096*(r%m))*b)=g^((1024+4096*r)*b)
+  rw [he,pow_add,pow_mul g (2^31) (r/m),g_pow_2_31,one_pow,mul_one]
+
+theorem node_value (u : Fin 262144) (d : Nat) (hd : d≤18) :
+    nodeValue u.val d=doubledFactor (AspisV7ExactOneFoldDomains.storedFirstLineX18 u) d := by
+  unfold nodeValue
+  rw [generator_value,←map_pow]
+  have hre (z : C) : (embed z).re=X z := rfl
+  rw [hre]
+  rw [doubled_circle,aligned_power _ _ hd,←stored_power,←doubled_circle]
+  rw [show d+1=1+d by omega,AspisV5FriNaturalBasisRadix4.doubledFactor_add]
+  rw [AspisV7ExactOneFoldDomains.storedFirstLineX18_eq_doubled]
+
+#print axioms period
+#print axioms aligned_power
+#print axioms node_value
+end R1Z.ProverCommitEncoderGeometry54

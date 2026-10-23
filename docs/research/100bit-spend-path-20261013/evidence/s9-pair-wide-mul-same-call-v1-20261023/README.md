@@ -1,0 +1,3 @@
+An actual successful Pair wide multiplication on corresponding canonical source operands yields the successful pinned raw source WideExact.mul result with identical mapped output, by full-Result equality. Source success is derived from the observed call rather than assumed independently. Actual caller operand provenance remains open.
+
+Focused Lean check: 16.461 seconds; peak aggregate RSS 3211493376 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

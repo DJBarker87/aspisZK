@@ -1,0 +1,121 @@
+import R1Z.ProverCommitEncoderCollect54
+import R1Z.ProverCommitMix48
+/-! Canonical finite-height evaluation with all split vectors derived from source reads. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitEncoderEval54
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitWideOps48 ProverCommitMix48
+open ProverCommitEncoderCollect54
+
+def base (m : U32) : Raw := (⟨⟨m,0#u32⟩,⟨0#u32,0#u32⟩⟩,zero)
+
+theorem base_canonical (m : U32) (hm : m.val<2147483647) : canonical (base m) := by
+  change ((m.val<2147483647 ∧ (0#u32).val<2147483647) ∧ ((0#u32).val<2147483647 ∧ (0#u32).val<2147483647)) ∧ Canonical zero
+  exact ⟨⟨⟨hm,by decide⟩,⟨by decide,by decide⟩⟩,zero_canonical⟩
+
+theorem base_source (m : U32) (hm : m.val<2147483647) :
+    (do
+      let c ← field.CM31.from_m31 m
+      let q ← field.QM31.from_cm31 c
+      field.wide_exact.WideExact.from_qm31 q)=ok (source (base m)) := by
+  have hnorm : ProverCommitNativeOps47.normalizeWord m=m := by
+    apply UScalar.eq_of_val_eq
+    rw [ProverCommitNativeOps47.normalize_val,Nat.mod_eq_of_lt hm]
+  have ht := (ProverCommitNativeOps47.from_qm31 (base m).1).1
+  simp only [ProverCommitNativeOps47.normalize,base,hnorm,
+    show ProverCommitNativeOps47.normalizeWord 0#u32=0#u32 from rfl] at ht
+  simpa only [field.CM31.from_m31,field.QM31.from_cm31,bind_tc_ok,field.M31.ZERO,
+    field.CM31.ZERO,ProverCommitNativeOps47.embedded,source,pack,base,zero,
+    ProverCommitRelease47.convE,ProverCommitSubfieldOps47.embedded,
+    ProverCommitRelease47.convQ,ProverCommitRelease47.convC,fromQ,fromC] using ht
+
+def eval : Nat → (Nat → Exact) → (Nat → Exact) → Nat → Exact
+ | 0,c,_,_ => c 0
+ | h+1,c,n,d => eval h (fun i => c (2*i)) n (d+1)+n d*eval h (fun i => c (2*i+1)) n (d+1)
+
+def nodes (p : Nat → U32) : Array field.M31 9#usize :=
+  ⟨List.ofFn (fun i : Fin 9 => p i.val),by simp only [List.length_ofFn];rfl⟩
+
+theorem nodes_index (p : Nat → U32) (d : Usize) (hd : d.val<9) :
+    Array.index_usize (nodes p) d=ok (p d.val) := by
+  rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ hd]
+  simp only [nodes,List.getElem_ofFn]
+
+attribute [local irreducible] value source
+
+theorem exact_result (h : Nat) (hh : h≤8) (height depth : Usize)
+    (hheight : height.val=h) (hdepth : depth.val+h≤9)
+    (f : Nat → Raw) (hf : ∀ i, i<2^h → canonical (f i))
+    (c : Slice Source) (hc : c.val=List.ofFn (fun i : Fin (2^h) => source (f i.val)))
+    (p : Nat → U32) (hp : ∀ i, i<9 → (p i).val<2147483647) :
+    ∃ z : Raw, encoder54.eval_rec c depth height (nodes p)=ok (source z) ∧
+      canonical z ∧ value z=eval h (fun i => value (f i)) (fun i => value (base (p i))) depth.val := by
+  induction h generalizing height depth f c with
+  | zero =>
+    have hz : height=0#usize := by scalar_tac
+    refine ⟨f 0,?_,hf 0 (by simp),rfl⟩
+    rw [encoder54.eval_rec,hz]
+    simp only [ite_true]
+    rw [Slice.index_usize]
+    simp [hc]
+  | succ h ih =>
+    have hne : height≠0#usize := by scalar_tac
+    have hpow : 2^(h+1)=2*2^h := by rw [pow_succ,Nat.mul_comm]
+    have hsmall : 2^h≤256 := by
+      have := Nat.pow_le_pow_right (by decide : 1≤2) (show h≤8 by omega)
+      exact this
+    have hlen : c.val.length=2*2^h := by rw [hc,List.length_ofFn,hpow]
+    let n : Usize := Usize.ofNatCore (2^h) (by have hs:=usize_bound;scalar_tac)
+    have hn : n.val=2^h := rfl
+    have hdiv : Slice.len c / 2#usize=ok n := by
+      obtain ⟨z,hz,hval,hbv⟩ := UScalar.div_bv_spec (y:=2#usize) (Slice.len c) (by decide)
+      rw [hz]
+      congr 1
+      apply UScalar.eq_of_val_eq
+      have hlenv : (Slice.len c).val=2*2^h := hlen
+      rw [hval,hlenv]
+      change (2*2^h)/2=2^h
+      omega
+    obtain ⟨even,heven,hevenval⟩ := collect c 2#usize 0#usize 0#usize n (2^h) hn
+      (by change 0+2^h<1025;omega) (by decide) (by decide)
+      (by intro k hk;change 2*(0+k)+0<c.val.length;rw [hlen];omega)
+      (alloc.vec.Vec.new _) (by change 0+2^h≤1024;omega)
+    obtain ⟨odd,hodd,hoddval⟩ := collect c 2#usize 1#usize 0#usize n (2^h) hn
+      (by change 0+2^h<1025;omega) (by decide) (by decide)
+      (by intro k hk;change 2*(0+k)+1<c.val.length;rw [hlen];omega)
+      (alloc.vec.Vec.new _) (by change 0+2^h≤1024;omega)
+    have hevenlist : even.val=List.ofFn (fun i : Fin (2^h) => source (f (2*i.val))) := by
+      simpa only [alloc.vec.Vec.new,List.nil_append,hc,List.getElem_ofFn,
+        show (0#usize).val=0 from rfl,show (2#usize).val=2 from rfl,Nat.zero_add,Nat.add_zero] using hevenval
+    have hoddlist : odd.val=List.ofFn (fun i : Fin (2^h) => source (f (2*i.val+1))) := by
+      simpa only [alloc.vec.Vec.new,List.nil_append,hc,List.getElem_ofFn,
+        show (0#usize).val=0 from rfl,show (1#usize).val=1 from rfl,
+        show (2#usize).val=2 from rfl,Nat.zero_add] using hoddval
+    have hinc : (Usize.wrapping_add depth 1#usize).val=depth.val+1 :=
+      ProverCommitPairCounter47.next_val depth (by omega)
+    have hdec : (Usize.wrapping_sub height 1#usize).val=h := by
+      rw [sub_one height (by omega)];omega
+    obtain ⟨a,ha,hca,hda⟩ := ih (by omega) _ _ hdec (by rw [hinc];omega)
+      (fun i => f (2*i)) (by intro i hi;apply hf;rw [hpow];omega)
+      (alloc.vec.Vec.deref even) hevenlist
+    obtain ⟨b,hb,hcb,hdb⟩ := ih (by omega) _ _ hdec (by rw [hinc];omega)
+      (fun i => f (2*i+1)) (by intro i hi;apply hf;rw [hpow];omega)
+      (alloc.vec.Vec.deref odd) hoddlist
+    obtain ⟨prod,hprod,hcprod,hdprod⟩ := mul_exact (base (p depth.val)) b
+      (base_canonical _ (hp _ (by omega))) hcb
+    obtain ⟨z,hz,hcz,hdz⟩ := add_exact a prod hca hcprod
+    refine ⟨z,?_,hcz,?_⟩
+    · rw [encoder54.eval_rec]
+      simp only [hne,if_false,hdiv,heven,hodd,lift,bind_tc_ok,ha,hb,nodes_index p depth (by omega)]
+      have hbase := base_source (p depth.val) (hp _ (by omega))
+      simp only [field.CM31.from_m31,field.QM31.from_cm31,bind_tc_ok] at hbase ⊢
+      rw [hbase];simp only [bind_tc_ok];rw [hprod];simp only [bind_tc_ok];exact hz
+    · rw [hdz,hdprod,hda,hdb,hinc,eval]
+
+#print axioms base_canonical
+#print axioms base_source
+#print axioms nodes_index
+#print axioms exact_result
+end R1Z.ProverCommitEncoderEval54

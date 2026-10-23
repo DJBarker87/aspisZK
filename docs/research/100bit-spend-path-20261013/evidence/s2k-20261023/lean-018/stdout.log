@@ -1,0 +1,19 @@
+S2K_LoopStep.lean:90:4: error: Type mismatch: After simplification, term
+  lifted
+ has type
+  @Eq (Result (ControlFlow (Iter × Std.Array U8 688#usize) (Std.Array U8 688#usize)))
+    (do
+      let x ← lift bytes.to_slice
+      let x ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s x
+      ok (ControlFlow.cont (iter', back x)))
+    (ok (ControlFlow.cont (iter', output.setSlice! ↑(Usize.ofNatCore (48 + 32 * ↑level) ⋯) ↑bytes)))
+but is expected to have type
+  @Eq (Result (ControlFlow (Iter × Std.Array U8 688#usize) (Std.Array U8 688#usize)))
+    (do
+      let src ← lift bytes.to_slice
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s src
+      ok (ControlFlow.cont (iter', back copied)))
+    (ok (ControlFlow.cont (iter', output.setSlice! (48 + 32 * ↑level) ↑bytes)))
+'_private.S2K_LoopStep.0.AspisR1.S2K.LoopStep.mk' depends on axioms: [propext]
+'AspisR1.S2K.LoopStep.body_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2K.LoopStep.body_write' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,92 @@
+import S2TrustedSdkBorrow
+
+set_option autoImplicit false
+namespace AspisR1.S2Trust
+
+/-- Two-element slices with arbitrary cell identities and retained ambient data.
+accounts 0 and 1 deliberately alias one data cell, with distinct lamports cells. -/
+def initial (n : Int) : Heap Nat where
+  accounts := fun a => (0, a + 1)
+  ownerLive := fun _ => true
+  allocated := fun _ => true
+  payload := fun c => ⟨⟨4*c,2,c⟩, fun _ => 7⟩
+  counter := fun _ => n
+  external := fun _ => n
+  guards := []
+  ambient := 37
+
+/-- Admission is inhabited, including conflicts and saturation. External borrows
+are part of the ledger, not silently reset to zero. -/
+theorem initial_valid (n : Int) (lo : minCounter ≤ n) (hi : n ≤ maxCounter) :
+    Valid (initial n) := by
+  refine ⟨List.Pairwise.nil, ?_, ?_, ?_⟩
+  · intro c
+    simp [initial, count, lo, hi]
+  · intro g h
+    cases h
+  · intro a _
+    exact ⟨by simp [initial], rfl⟩
+
+/-- Shared guard schedules use aliases of the SAME account data cell. -/
+def sharedOne : Heap Nat := (run (initial 0) (.shared 0 10 100)).1
+def sharedTwo : Heap Nat := (run sharedOne (.shared 1 11 101)).1
+def moved : Heap Nat := (run sharedTwo (.move 10 102)).1
+def afterSecondDrop : Heap Nat := (run moved (.drop 11)).1
+def sharedDone : Heap Nat := (run afterSecondDrop (.drop 10)).1
+
+/-- Failed borrow creates no token; movement retains identity and changes the
+sole owner; each actual drop consumes one live token and restores its counter. -/
+theorem shared_schedule :
+    sharedTwo.counter 0 = 2 ∧
+    (run sharedTwo (.exclusive 0 12 103)).1.guards = sharedTwo.guards ∧
+    (run sharedTwo (.exclusive 0 12 103)).2 = .borrowFailed ∧
+    (lookup moved 10).map Guard.owner = some 102 ∧
+    (lookup moved 10).map Guard.cell = some 0 ∧
+    (lookup moved 11).map Guard.owner = some 101 ∧
+    afterSecondDrop.counter 0 = 1 ∧ sharedDone.counter 0 = 0 ∧
+    sharedDone.guards = [] ∧ sharedDone.ambient = 37 ∧
+    (sharedDone.payload 0).contents 0 = 7 := by
+  exact ⟨rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl⟩
+
+def exclusiveOne : Heap Nat := (run (initial 0) (.exclusive 0 20 200)).1
+def exclusiveMoved : Heap Nat := (run exclusiveOne (.move 20 201)).1
+def exclusiveWritten : Heap Nat := (run exclusiveMoved (.write 20 1 9)).1
+def exclusiveDone : Heap Nat := (run exclusiveWritten (.drop 20)).1
+
+/-- Write changes one payload position and preserves descriptor; drop retains
+those writes. The conflicting shared borrow and Err movement leave all intact. -/
+theorem exclusive_schedule :
+    exclusiveOne.counter 0 = -1 ∧
+    (run exclusiveOne (.shared 1 21 202)).2 = .borrowFailed ∧
+    (run exclusiveOne (.shared 1 21 202)).1.guards = exclusiveOne.guards ∧
+    (lookup exclusiveMoved 20).map Guard.owner = some 201 ∧
+    (exclusiveWritten.payload 0).contents 0 = 7 ∧
+    (exclusiveWritten.payload 0).contents 1 = 9 ∧
+    (exclusiveWritten.payload 1).contents 1 = 7 ∧
+    (exclusiveWritten.payload 0).descriptor = ((initial 0).payload 0).descriptor ∧
+    exclusiveDone.counter 0 = 0 ∧ exclusiveDone.guards = [] ∧
+    (exclusiveDone.payload 0).contents 1 = 9 ∧
+    (run exclusiveDone .errorMoveDrop).1 = exclusiveDone ∧
+    (run exclusiveDone .errorMoveDrop).2 = .borrowFailed := by
+  exact ⟨rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl⟩
+
+/-- Saturation, external shared conflicts, and pre-existing negative counters
+are represented. No arithmetic enumeration of a huge finite space occurs. -/
+theorem failure_schedules :
+    (run (initial maxCounter) (.shared 0 1 1)).2 = .borrowFailed ∧
+    (run (initial maxCounter) (.shared 0 1 1)).1 = initial maxCounter ∧
+    (run (initial (-2)) (.shared 0 1 1)).2 = .borrowFailed ∧
+    (run (initial 3) (.exclusive 0 1 1)).2 = .borrowFailed ∧
+    (run (initial (-2)) .errorMoveDrop).1 = initial (-2) := by
+  exact ⟨rfl,rfl,rfl,rfl,rfl⟩
+
+/-- Joint consistency and explicit non-vacuity, NOT SDK/source certification. -/
+theorem consistency : S2TrustedSdkBorrow (model Nat) ∧ Valid (initial 0) :=
+  ⟨model_satisfies Nat, initial_valid 0 (by unfold minCounter; omega) (by unfold maxCounter; omega)⟩
+
+#print axioms initial_valid
+#print axioms shared_schedule
+#print axioms exclusive_schedule
+#print axioms failure_schedules
+#print axioms consistency
+end AspisR1.S2Trust

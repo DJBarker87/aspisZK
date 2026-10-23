@@ -1,0 +1,70 @@
+S2K_AfterstateEncoding.lean:43:2: error: 'change' tactic failed, pattern
+  (do
+      let out ←
+        encode_pool_v1_pair_verified_afterstate_v1_loop (Iterator.cursor a.next_frontier 0#usize) (header a output)
+      ok (core.result.Result.Ok out)) =
+    ?m.29
+is not definitionally equal to target
+  (do
+      let output8 ←
+        encode_pool_v1_pair_verified_afterstate_v1_loop
+            { iter := { slice := ⟨↑a.next_frontier, ⋯⟩, i := 0 }, count := 0#usize }
+            ⟨(((((((↑output).setSlice! 0
+                                        ↑(Array.make 4#usize [65#u8, 83#u8, 74#u8, 65#u8]
+                                            POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC._proof_2)).set
+                                    4 POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION).set
+                                5 pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION).set
+                            6 pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                        7 1#u8).setSlice!
+                    8 ↑(core.num.U64.to_le_bytes a.next_pair_index)).setSlice!
+                16 ↑(DigestBytes.bytes a.next_root),
+              ⋯⟩
+      ok (core.result.Result.Ok output8)) =
+    ok
+      (core.result.Result.Ok
+        (AfterstateBytes.fold (↑a.next_frontier) 0
+          (((((((output.setSlice! 0
+                                    ↑(Array.make 4#usize [65#u8, 83#u8, 74#u8, 65#u8]
+                                        POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC._proof_2)).set
+                                4#usize POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION).set
+                            5#usize pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION).set
+                        6#usize pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                    7#usize 1#u8).setSlice!
+                8 ↑(core.num.U64.to_le_bytes a.next_pair_index)).setSlice!
+            16 ↑(DigestBytes.bytes a.next_root))))
+S2K_AfterstateEncoding.lean:42:12: warning: This simp argument is unused:
+  Array.set
+
+Hint: Omit it from the simp argument list.
+  simp [core.array.Array.index_mut, core.ops.index.IndexMutSlice, ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+      core.slice.index.Slice.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵IndexRangeToUsizeSlice,
+      core.slice.index.SliceIndexRangeToUsizeSlice.index_mut,
+      core.slice.index.SliceIndexRangeUsizeSlice,
+      core.slice.index.SliceIndexRangeUsizeSlice.index_mut,
+  ̵  ̵ ̵ ̵Array.to_slice, Array.from_slice,
+  ̲  ̲ ̲ ̲core.slice.Slice.copy_from_slice,
+  ̵  ̵ ̵ ̵Slice.length, Slice.len, Array.update, output.property,
+  ̲  ̲ ̲ ̲List.slice,
+  ̵  ̵ ̵ ̵pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC,
+  ̵  ̵ ̵ ̵core.slice.Slice.iter,
+  ̲  ̲ ̲ ̲core.iter.traits.iterator.Iterator.enumerate.trait_default,
+      core.iter.traits.iterator.Iterator.enumerate.default,
+  ̵  ̵ ̵ ̵header, Array.set,̵ ̵A̵r̵r̵a̵y̵.̵s̵e̵t̵Slice!]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2K_AfterstateEncoding.lean:42:23: warning: This simp argument is unused:
+  Array.setSlice!
+
+Hint: Omit it from the simp argument list.
+  simp [core.array.Array.index_mut, core.ops.index.IndexMutSlice, core.slice.index.Slice.index_mut,
+  ̲  ̲ ̲ ̲core.slice.index.SliceIndexRangeToUsizeSlice,
+      core.slice.index.SliceIndexRangeToUsizeSlice.index_mut,
+      core.slice.index.SliceIndexRangeUsizeSlice,
+      core.slice.index.SliceIndexRangeUsizeSlice.index_mut, Array.to_slice, Array.from_slice,
+  ̲  ̲ ̲ ̲core.slice.Slice.copy_from_slice, Slice.length, Slice.len, Array.update, output.property,
+  ̲  ̲ ̲ ̲List.slice, pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC, core.slice.Slice.iter,
+  ̲  ̲ ̲ ̲core.iter.traits.iterator.Iterator.enumerate.trait_default,
+      core.iter.traits.iterator.Iterator.enumerate.default, header, A̵r̵r̵a̵y̵.̵s̵e̵t̵,̵ ̵A̵r̵r̵a̵y̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵]̵A̲r̲r̲a̲y̲.̲s̲e̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2K.AfterstateEncoding.encode_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

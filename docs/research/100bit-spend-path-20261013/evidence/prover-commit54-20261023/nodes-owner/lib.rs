@@ -1,0 +1,37 @@
+#![allow(unexpected_cfgs)]
+pub mod field;
+pub mod nodes54 {
+use super::field::{M31,CM31};
+pub fn reverse(width:u8,value:usize)->usize {
+ if width==0 {0} else {
+  let w=width-1;
+  (value%2)*(1usize<<(w as u32))+reverse(w,value/2)
+ }
+}
+pub fn pow(base:CM31,exp:u64,acc:CM31)->CM31 {
+ if exp==0 {acc} else {
+  let next=if exp%2==1 {acc.mul(base)} else {acc};
+  pow(base.mul(base),exp/2,next)
+ }
+}
+pub fn tcheb(x:M31)->M31 {x.mul(x).double().sub(M31::ONE)}
+pub fn repeat(x:M31,left:u8)->M31 {
+ if left==0 {x} else {repeat(tcheb(x),left-1)}
+}
+pub fn point(j:usize)->CM31 {
+ let r=reverse(18,j);
+ pow(CM31::new(M31(2),M31(1268011823)),1024+4096*r as u64,CM31::ONE)
+}
+pub fn node(j:usize,depth:u8)->M31 {
+ let step=1usize<<(depth as u32);
+ let aligned=(j/step)*step;
+ repeat(point(aligned).a,depth+1)
+}
+pub fn fill(j:usize,d:u8,left:u8,mut out:[M31;9])->[M31;9] {
+ if left==0 {out} else {
+  out[d as usize]=node(j,d);
+  fill(j,d+1,left-1,out)
+ }
+}
+pub fn nodes(j:usize)->[M31;9] {fill(j,0,9,[M31::ZERO;9])}
+}

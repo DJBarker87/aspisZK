@@ -1,0 +1,3 @@
+The same successful side-one extracted Pair adapter suffix, its exact term-prefix result and existing ap1 read contract yield canonical first2/first3/all accumulations and the additional ap1 quarter-scaled value. Uses same-run reads and observed child calls; no independent arithmetic call success or canonical intermediate output is assumed.
+
+Focused Lean check: 35.87 seconds; peak aggregate RSS 3216949248 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

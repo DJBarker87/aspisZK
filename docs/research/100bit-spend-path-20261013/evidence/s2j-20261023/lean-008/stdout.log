@@ -1,0 +1,17 @@
+S2J_Cut2.lean:56:28: error: unsolved goals
+W Child Alloc Event : Type
+L : Library W (World Child Alloc Event)
+observe : W → NativeArguments
+fixed : FixedInvocation
+o : Originals W Child Alloc Event
+n : W × Option AccountReference
+r : OwnedCut Child Alloc Event × Option OwnedAccount
+related : SelectionRelated L observe fixed o n r
+inv : InvocationRelated L observe fixed o n.1 r.1
+⊢ (match (↑r.1.sdk.accounts)[0]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    match (↑r.1.sdk.accounts)[0]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x
+'AspisR1.S2J.cut2_stepLaw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,87 @@
+import R1Z.ProverCommitGammaCoefficients53
+import R1Z.ProverCommitWeightsModel53
+import R1Z.ProverCommitOpeningBytes49
+/-! Compose coefficient provenance, one stored weight object, both round
+polynomials and final primal fold. Native Vec/caller binding remains separate. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitOpeningModel53
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitWideOps48 ProverCommitMix48
+open ProverCommitValueRange47 (embed)
+open ProverCommitSuccessorPoint49 (decoded)
+open AspisR1.ExtractedCurrentQM31Exact (decode)
+
+variable (c : Nat → Nat → Old.Q) (hc : ∀ l, l<29 → ∀ j, j<1024 → Canonical (c l j))
+
+def run (p : Array field.QM31 10#usize) (x0 y0 x1 y1 : field.QM31)
+    (g k a b : Source) := do
+  let q ← ProverCommitGammaOutput53.run
+    (ProverCommitGammaCell53.table (ProverCommitGammaCoefficients53.wide c hc)) g
+  let w ← ProverCommitWeightsMaterial53.run p x0 y0 x1 y1 k
+  ProverCommitOpeningKernel49.run q w a b
+
+attribute [local irreducible] value source sourceArray ProverCommitGammaCoefficients53.wideTrace
+
+theorem q1_primal (ch : R0Z.HonestView.Challenges Exact) (t : R0P.Trace Exact) :
+    Batched.q1 AspisR1.rowEquiv ch t=AspisR1.RoundPairing.primalFold (ch.opening 2)
+      (Batched.batchR1 AspisR1.rowEquiv ch t) := by
+  change AspisV5ComponentCConcreteFoldLinearity.coefficientFoldLayer 256 (ch.opening 2)
+    (Batched.batchR1 AspisR1.rowEquiv ch t)=_
+  exact AspisR1.FoldCoefficientBridge.coefficientFoldLayer_eq_primalFold _ _
+
+theorem exact_result (p : Nat → Old.Q) (hp : ∀ i, i<10 → Canonical (p i))
+    (x0 y0 x1 y1 : Old.Q) (hx0 : Canonical x0) (hy0 : Canonical y0)
+    (hx1 : Canonical x1) (hy1 : Canonical y1) (g k a b : Raw)
+    (hg : canonical g) (hk : canonical k) (hca : canonical a) (hcb : canonical b)
+    (ch : R0Z.HonestView.Challenges Exact)
+    (hpoint : (fun i => embed (decoded p i))=R0Z.HonestView.alpha ch)
+    (hz0x : embed (decode x0)=(ch.circle 0).1.1)
+    (hz0y : embed (decode y0)=(ch.circle 0).1.2)
+    (hz1x : embed (decode x1)=(ch.circle 1).1.1)
+    (hz1y : embed (decode y1)=(ch.circle 1).1.2)
+    (hgch : value g=ch.opening 0) (hkch : value k=ch.opening 1)
+    (hach : value a=ch.opening 2) (hbch : value b=ch.opening 3) :
+    ∃ c0 q1 w1 c1 fin : Nat → Raw,
+      run c hc (ProverCommitQArray48.array 10#usize p)
+        (ProverCommitNativeQ48.source x0) (ProverCommitNativeQ48.source y0)
+        (ProverCommitNativeQ48.source x1) (ProverCommitNativeQ48.source y1)
+        (source g) (source k) (source a) (source b)=
+        ok (List.ofFn (fun i : Fin 7 => source (c0 i.val)),sourceArray 256#usize q1,
+          List.ofFn (fun i : Fin 7 => source (c1 i.val)),sourceArray 64#usize fin) ∧
+      (∀ i, i<7 → canonical (c0 i) ∧ canonical (c1 i)) ∧
+      (∀ i, i<256 → canonical (q1 i) ∧ canonical (w1 i)) ∧
+      (∀ i, i<64 → canonical (fin i)) ∧
+      (∀ i : Fin 256, value (q1 i.val)=AspisR1.RoundPairing.primalFold (ch.opening 2)
+        (Batched.batchR1 AspisR1.rowEquiv ch (ProverCommitGammaCoefficients53.wideTrace c)) i) ∧
+      (∀ i : Fin 256, value (w1 i.val)=Batched.w1 AspisR1.rowEquiv ch i) ∧
+      (∀ i : Fin 7, value (c0 i.val)=R0Z.HonestView.BatchedLayer.read (Bat:=Batched.R1Bat)
+        AspisR1.rowEquiv ch (ProverCommitGammaCoefficients53.wideTrace c) (.round0 i)) ∧
+      (∀ i : Fin 7, value (c1 i.val)=R0Z.HonestView.BatchedLayer.read (Bat:=Batched.R1Bat)
+        AspisR1.rowEquiv ch (ProverCommitGammaCoefficients53.wideTrace c) (.round1 i)) ∧
+      (∀ i : Fin 64, value (fin i.val)=R0Z.HonestView.BatchedLayer.read (Bat:=Batched.R1Bat)
+        AspisR1.rowEquiv ch (ProverCommitGammaCoefficients53.wideTrace c) (.final i)) := by
+  obtain ⟨q,hq,hcq,hdq⟩ := ProverCommitGammaCoefficients53.exact_result c hc g hg ch hgch
+  obtain ⟨w,hw,hcw,hdw⟩ := ProverCommitWeightsModel53.exact_result p hp x0 y0 x1 y1
+    hx0 hy0 hx1 hy1 k hk ch hpoint hz0x hz0y hz1x hz1y hkch
+  obtain ⟨c0,q1,w1,c1,fin,hr,hcc,hcf,hcfin,hq1,hw1,hd0,hd1,hdfin⟩ :=
+    ProverCommitOpeningKernel49.exact_result q w hcq hcw a b hca hcb
+  have eqQ : (fun i : Fin 1024 => value (q i.val))=
+      Batched.batchR1 AspisR1.rowEquiv ch (ProverCommitGammaCoefficients53.wideTrace c) := funext hdq
+  have eqW : (fun i : Fin 1024 => value (w i.val))=Batched.weightsR1 AspisR1.rowEquiv ch := funext hdw
+  refine ⟨c0,q1,w1,c1,fin,?_,hcc,hcf,hcfin,?_,?_,?_,?_,?_⟩
+  · simp only [run,hq,hw,bind_tc_ok,hr]
+  · simpa only [eqQ,hach] using hq1
+  · simpa only [eqW,hach,Batched.w1] using hw1
+  · intro i
+    rw [hd0 i,eqQ,eqW,Batched.read_round0]
+  · intro i
+    rw [hd1 i,eqQ,eqW,hach,Batched.read_round1,q1_primal,Batched.w1]
+  · intro i
+    rw [hdfin i,eqQ,hach,hbch,Batched.read_final,q1_primal,
+      AspisR1.FoldCoefficientBridge.coefficientFoldLayer_eq_primalFold]
+
+#print axioms q1_primal
+#print axioms exact_result
+end R1Z.ProverCommitOpeningModel53
