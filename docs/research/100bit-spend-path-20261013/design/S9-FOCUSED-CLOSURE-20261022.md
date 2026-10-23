@@ -1328,3 +1328,70 @@ source normalization and allocation effects, and concrete runtime/artifact
 refinement. The global source-to-model and security-experiment obligations
 remain governed by the gap map and security contract. **The 100-bit target
 is not yet established.**
+
+
+## 2026-10-23 continuation: constructor-to-actual-tensor composition
+
+This entry supersedes the earlier entry's outstanding constructor-factor and
+checkpoint-reader joins and its obsolete +12,000 CU allowance. The owner
+explicitly approved **+12,214 CU per transaction**, against the same comparator.
+The global 100-bit target remains **not yet established**.
+
+**Proved, extracted value semantics.** The same accepted constructor call now
+provides every statement D18 and circle-basis factor formula and canonical
+factor required by the native tensor theorem. The statement rows are connected
+to the existing protocol opening-point model, including its bit ordering.
+The actual pairing success supplies its own three shared or five unshared
+regular tensor-call traces; independent successful-tensor-call premises are
+removed in the final composition. The same accepted current checkpoint resume
+and finish select **one** constructor model for all these traces. Canonical
+alpha/z guards are derived from that reader path. Successful output reads below
+64 have the exact three-factor high-product meaning. Output length, complete
+weighted dot/pairing values, other finish operations and runtime simulation are
+not conclusions of these theorems.
+
+The source-only packets are:
+
+- `evidence/s9-constructor-source-phases-v1-20261023/`
+- `evidence/s9-constructor-table-native-tensor-v1-20261023/`
+- `evidence/s9-actual-constructor-native-tensor-v1-20261023/`
+- `evidence/s9-statement-d18-model-opening-factors-v1-20261023/`
+- `evidence/s9-complete-constructor-model-statement-factors-v1-20261023/`
+- `evidence/s9-actual-pair-same-tensor-witnesses-v1-20261023/`
+- `evidence/s9-current-reader-native-producer-path-v1-20261023/`
+- `evidence/s9-current-resume-finish-native-tensor-v1-20261023/`
+- `evidence/s9-current-resume-finish-real-tensor-model-v1-20261023/`
+
+Each retains the exact complete theorem source, focused target/receipt and
+standard-axiom audit; unchanged pinned dependencies were reused. No final
+manifest replay or source-to-runtime security closure is claimed.
+
+**Measured, isolated candidate.** The callback-free H5 candidate with two
+explicit ordered statement-point complement writes passes all six fixtures,
+the strict stack gate, and the retained full-random-mask sample. Stage-1 maximum
+increase is **12,214 CU**; settlement maximum is **2,296 CU** over the six
+fixtures and **2,301 CU** on the retained full-mask sample. This is one retained
+OS-random proof, not a fresh sampling campaign or an analytical worst-case
+bound. Final candidate ELF SHA256 is
+`f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`.
+See `evidence/s9-h5-explicit-complements-feasibility-v1-20261023/`.
+
+**Source architecture and trust.** The explicit writes remove the actual
+fixed-size Std iterator from the candidate source and match the already
+extracted V3 helper span byte for byte. The correct constructor extraction is
+the attempt22 exact-attribute cut. Stock Aeneas erases Box ownership/allocation
+at the value level: its generated packer returns the exact record, without a
+custom allocation-success premise. This identifies the translator trust
+boundary; it is not a Lean proof of the physical allocator, ABI, runtime abort
+law or adaptive oracle transport. See
+`evidence/s9-h5-constructor-sourcecut-reconciliation-v1-20261023/`.
+The candidate remains isolated pending the final runtime gates and explicit
+source-impact/freeze decision; no deployment is authorized by this report.
+
+**Next concrete obligations.** Decode actual scalar-factor results using the
+existing four-term theorem (authoritative PERM is `[0,3,2,1]`, with QUARTER),
+connect actual wide-field reads to the existing dot reader under its real index
+bounds, then compose the remaining weighted dot/shared-high/grouped-inactive
+and final kappa sum. Wrapping source offsets and checked model offsets must
+not be equated for arbitrary indices. Complete source/runtime/artifact and
+security-experiment obligations remain open under the authoritative gap map.

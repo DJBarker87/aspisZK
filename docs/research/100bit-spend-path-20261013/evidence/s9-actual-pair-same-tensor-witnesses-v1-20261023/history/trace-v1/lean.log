@@ -1,0 +1,354 @@
+/private/tmp/a3-s9-regular-kinds-trace-v1-check-20261023/sources/S9ActualRegularKindsTraceV1.lean:8:8: warning: automatically included section variable(s) unused in theorem `_private.S9ActualRegularKindsTraceV1.0.AspisR1S9ActualRegularKindsTraceV1.bind_success`:
+  allocation
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit allocation in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/private/tmp/a3-s9-regular-kinds-trace-v1-check-20261023/sources/S9ActualRegularKindsTraceV1.lean:61:12: error(lean.unknownIdentifier): Unknown identifier `r2`
+/private/tmp/a3-s9-regular-kinds-trace-v1-check-20261023/sources/S9ActualRegularKindsTraceV1.lean:61:6: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.217
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case true.Ok.unit.Continue
+allocation : AspisR1S9AllocationInterfaceV1.Allocation
+self : weights.Weights
+alpha : Slice W
+f : Slice U8
+folds n : Usize
+ap0 ap1 : Powers
+scratch scratchOut : Scratch
+parts partsOut : Parts
+h :
+  (do
+      let (r, scratch1, parts1) ← weights.process_kind self 2#usize alpha f folds n ap0 ap1 scratch parts
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r1, scratch2, parts2) ← weights.process_kind self 5#usize alpha f folds n ap0 ap1 scratch1 parts1
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let (r2, scratch3, parts3) ← weights.process_kind self 6#usize alpha f folds n ap0 ap1 scratch2 parts2
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (), scratch3, parts3)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r3 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r3, scratch3, parts3)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r2, scratch2, parts2)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+          ok (r1, scratch1, parts1)) =
+    ok (core.result.Result.Ok (), scratchOut, partsOut)
+s1 : alloc.vec.Vec aspis_core.field.QM31
+p1 : Std.Array aspis_core.field.wide_exact.WideExact 7#usize
+hc1 :
+  weights.process_kind self 2#usize alpha f folds n ap0 ap1 scratch parts =
+    ok (core.result.Result.Ok PUnit.unit, s1, p1)
+tail1 :
+  (let (r, scratch1, parts1) := (core.result.Result.Ok PUnit.unit, s1, p1)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let (r1, scratch2, parts2) ← weights.process_kind self 5#usize alpha f folds n ap0 ap1 scratch1 parts1
+        let cf1 ←
+          match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let (r2, scratch3, parts3) ← weights.process_kind self 6#usize alpha f folds n ap0 ap1 scratch2 parts2
+            let cf2 ←
+              match r2 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (), scratch3, parts3)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r3 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r3, scratch3, parts3)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame verifier.Error) residual
+            ok (r2, scratch2, parts2)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual
+        ok (r1, scratch1, parts1)) =
+    ok (core.result.Result.Ok (), scratchOut, partsOut)
+hc2 :
+  (match core.result.Result.Ok PUnit.unit with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Continue PUnit.unit)
+tail2 :
+  (match core.ops.control_flow.ControlFlow.Continue PUnit.unit with
+    | core.ops.control_flow.ControlFlow.Continue a => do
+      let (r1, scratch2, parts2) ← weights.process_kind self 5#usize alpha f folds n ap0 ap1 s1 p1
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r2, scratch3, parts3) ← weights.process_kind self 6#usize alpha f folds n ap0 ap1 scratch2 parts2
+          let cf2 ←
+            match r2 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (), scratch3, parts3)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r3, scratch3, parts3)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, scratch2, parts2)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r1 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual
+      ok (r1, s1, p1)) =
+    ok (core.result.Result.Ok (), scratchOut, partsOut)
+x✝ : ?m.217
+⊢ RegularTrace self true alpha f folds n ap0 ap1 scratch scratchOut parts partsOut
+/private/tmp/a3-s9-regular-kinds-trace-v1-check-20261023/sources/S9ActualRegularKindsTraceV1.lean:108:12: error(lean.unknownIdentifier): Unknown identifier `r2`
+/private/tmp/a3-s9-regular-kinds-trace-v1-check-20261023/sources/S9ActualRegularKindsTraceV1.lean:108:6: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.415
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case false.Ok.unit.Continue
+allocation : AspisR1S9AllocationInterfaceV1.Allocation
+self : weights.Weights
+alpha : Slice W
+f : Slice U8
+folds n : Usize
+ap0 ap1 : Powers
+scratch scratchOut : Scratch
+parts partsOut : Parts
+h :
+  (do
+      let (r, scratch1, parts1) ← weights.process_kind self 1#usize alpha f folds n ap0 ap1 scratch parts
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r1, scratch2, parts2) ← weights.process_kind self 2#usize alpha f folds n ap0 ap1 scratch1 parts1
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let (r2, scratch3, parts3) ← weights.process_kind self 3#usize alpha f folds n ap0 ap1 scratch2 parts2
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let (r3, scratch4, parts4) ← weights.process_kind self 5#usize alpha f folds n ap0 ap1 scratch3 parts3
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue a => do
+                      let (r4, scratch5, parts5) ←
+                        weights.process_kind self 6#usize alpha f folds n ap0 ap1 scratch4 parts4
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue a =>
+                          ok (core.result.Result.Ok (), scratch5, parts5)
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r5 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame verifier.Error) residual
+                          ok (r5, scratch5, parts5)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r4 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                      ok (r4, scratch4, parts4)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r3 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r3, scratch3, parts3)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r2, scratch2, parts2)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+          ok (r1, scratch1, parts1)) =
+    ok (core.result.Result.Ok (), scratchOut, partsOut)
+s1 : alloc.vec.Vec aspis_core.field.QM31
+p1 : Std.Array aspis_core.field.wide_exact.WideExact 7#usize
+hc1 :
+  weights.process_kind self 1#usize alpha f folds n ap0 ap1 scratch parts =
+    ok (core.result.Result.Ok PUnit.unit, s1, p1)
+tail1 :
+  (let (r, scratch1, parts1) := (core.result.Result.Ok PUnit.unit, s1, p1)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let (r1, scratch2, parts2) ← weights.process_kind self 2#usize alpha f folds n ap0 ap1 scratch1 parts1
+        let cf1 ←
+          match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let (r2, scratch3, parts3) ← weights.process_kind self 3#usize alpha f folds n ap0 ap1 scratch2 parts2
+            let cf2 ←
+              match r2 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                let (r3, scratch4, parts4) ← weights.process_kind self 5#usize alpha f folds n ap0 ap1 scratch3 parts3
+                let cf3 ←
+                  match r3 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf3 with
+                  | core.ops.control_flow.ControlFlow.Continue a => do
+                    let (r4, scratch5, parts5) ←
+                      weights.process_kind self 6#usize alpha f folds n ap0 ap1 scratch4 parts4
+                    let cf4 ←
+                      match r4 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf4 with
+                      | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (), scratch5, parts5)
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r5 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame verifier.Error) residual
+                        ok (r5, scratch5, parts5)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r4 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame verifier.Error) residual
+                    ok (r4, scratch4, parts4)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r3 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r3, scratch3, parts3)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame verifier.Error) residual
+            ok (r2, scratch2, parts2)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual
+        ok (r1, scratch1, parts1)) =
+    ok (core.result.Result.Ok (), scratchOut, partsOut)
+hc2 :
+  (match core.result.Result.Ok PUnit.unit with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Continue PUnit.unit)
+tail2 :
+  (match core.ops.control_flow.ControlFlow.Continue PUnit.unit with
+    | core.ops.control_flow.ControlFlow.Continue a => do
+      let (r1, scratch2, parts2) ← weights.process_kind self 2#usize alpha f folds n ap0 ap1 s1 p1
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r2, scratch3, parts3) ← weights.process_kind self 3#usize alpha f folds n ap0 ap1 scratch2 parts2
+          let cf2 ←
+            match r2 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let (r3, scratch4, parts4) ← weights.process_kind self 5#usize alpha f folds n ap0 ap1 scratch3 parts3
+              let cf3 ←
+                match r3 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let (r4, scratch5, parts5) ← weights.process_kind self 6#usize alpha f folds n ap0 ap1 scratch4 parts4
+                  let cf4 ←
+                    match r4 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (), scratch5, parts5)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r5 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                      ok (r5, scratch5, parts5)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r4, scratch4, parts4)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r3 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r3, scratch3, parts3)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+          ok (r2, scratch2, parts2)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r1 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual
+      ok (r1, s1, p1)) =
+    ok (core.result.Result.Ok (), scratchOut, partsOut)
+x✝ : ?m.415
+⊢ RegularTrace self false alpha f folds n ap0 ap1 scratch scratchOut parts partsOut
+/private/tmp/a3-s9-regular-kinds-trace-v1-check-20261023/sources/S9ActualRegularKindsTraceV1.lean:58:60: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at tail1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-regular-kinds-trace-v1-check-20261023/sources/S9ActualRegularKindsTraceV1.lean:105:60: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at tail1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9ActualRegularKindsTraceV1.regular_success_trace' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

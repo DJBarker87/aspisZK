@@ -1,0 +1,5 @@
+# H5 plus explicit Core constructor source reconciliation
+
+CHECKED source identity against the attribute-aware actual V3 constructor cut attempt22, reusing its successful Charon/Aeneas extraction. Exact new/box method spans, inline-never attributes, field/wide/circle files and entire new statement_points function match. Sourcecut's documented root owner normalization is retained. See source-reconciliation.json and retained-sourcecut-check.log.
+
+BOX-BOUNDARY.md distinguishes the standard pinned translator Box erasure from physical allocation/runtime proof, supplies before/after source-cut statements, and explains why no redundant record wrapper proof was added. CFG-AND-TOOLS.md pins the exact feature/tool/body scope and remaining carrier/ABI differences. No novel heap model, Std extraction, source adoption, full release replay or new Lean compile/axioms claim. This evidence supports selecting proof-friendly source; it does not close actual caller/runtime/security. Target not yet established.
