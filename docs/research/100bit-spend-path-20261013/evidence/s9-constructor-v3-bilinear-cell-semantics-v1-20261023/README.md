@@ -1,0 +1,3 @@
+The six actual constructor arithmetic calls for a bilinear statement-factor cell, on canonical inputs, give canonical outputs and the intended four decoded coefficients. This arithmetic bundle alone retains its six child-call premises; the separate actual statement-cell body theorem derives those from its single successful source execution. Exact-tower and source primitive results are reused; full constructor and security remain open.
+
+Focused Lean check: 16.723 seconds; peak aggregate RSS 3200253952 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

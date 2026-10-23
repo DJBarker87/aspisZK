@@ -1,0 +1,3 @@
+Unconditional coordinate transport preserves decoded constructor/native QM31 values and the exact same nested stored-factor lookup, including absent lookups. Constructor ONE decodes to one using the retained native-one theorem. This ties the existing native tensor stored-product interface to the current constructor carrier; it assumes no factor formula and does not prove constructor factor semantics, source/runtime adoption or security composition.
+
+Focused Lean check: 17.229 seconds; peak aggregate RSS 3206168576 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
