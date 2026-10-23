@@ -1,0 +1,131 @@
+Port4C_GeometryStd.lean:21:88: error: unexpected identifier; expected '}'
+Port4C_GeometryStd.lean:28:53: error: Type mismatch
+  rfl
+has type
+  ?m.13 = ?m.13
+but is expected to have type
+  verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut (install ops) () x =
+    ok (decide (x = 0#u32), ())
+Port4C_GeometryStd.lean:26:8: error: Not a definitional equality: the left-hand side
+  verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut (install ops) () x
+is not definitionally equal to the right-hand side
+  ok (decide (x = 0#u32), ())
+Port4C_GeometryStd.lean:67:18: error: Application type mismatch: The argument
+  j
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.42
+of sort `Type (?u.42 + 1)` in the application
+  @PrincipalSeg j
+Port4C_GeometryStd.lean:67:21: error(lean.unknownIdentifier): Unknown identifier `t.slice.val.length`
+Port4C_GeometryStd.lean:67:44: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+CoreError T : Type
+P : T → Bool
+pred : core.ops.function.FnMut Unit T Bool
+callback : ∀ (x : T), pred.call_mut () x = ok (P x, ())
+it after : core.slice.iter.Iter T
+fuel : ℕ
+remaining : it.i + fuel = (↑it.slice).length
+h : Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred it () = ok (false, after)
+j : ℕ
+⊢ j < (↑it.slice).length
+Port4C_GeometryStd.lean:69:23: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case zero
+T : Type
+P : T → Bool
+pred : core.ops.function.FnMut Unit T Bool
+callback : ∀ (x : T), pred.call_mut () x = ok (P x, ())
+it after : core.slice.iter.Iter T
+remaining : it.i + 0 = (↑it.slice).length
+h : Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred it () = ok (false, after)
+j : ℕ
+lo : it.i ≤ j
+⊢ PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+Port4C_GeometryStd.lean:71:18: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.59
+of sort `Type (?u.59 + 1)` in the application
+  @PrincipalSeg it.i
+Port4C_GeometryStd.lean:71:24: error(lean.unknownIdentifier): Unknown identifier `t.slice.len`
+Port4C_GeometryStd.lean:71:49: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.67
+of sort `Type (?u.67 + 1)` in the application
+  @PrincipalSeg it.i
+Port4C_GeometryStd.lean:71:55: error(lean.unknownIdentifier): Unknown identifier `t.slice.val.length`
+Port4C_GeometryStd.lean:71:75: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≤ -1
+where
+ e := ↑fuel
+ f := ↑(↑it.slice).length
+Port4C_GeometryStd.lean:77:11: error: unsolved goals
+case succ.true
+T : Type
+P : T → Bool
+pred : core.ops.function.FnMut Unit T Bool
+callback : ∀ (x : T), pred.call_mut () x = ok (P x, ())
+fuel : ℕ
+ih :
+  (it after : core.slice.iter.Iter T) →
+    it.i + fuel = (↑it.slice).length →
+      Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred it () = ok (false, after) →
+        (j : ℕ) → it.i ≤ j → PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+it after : core.slice.iter.Iter T
+remaining : it.i + (fuel + 1) = (↑it.slice).length
+active : PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+hp : P (↑it.slice)[it.i] = true
+h :
+  (match do
+      let (next, s) ←
+        if h : it.i < (↑it.slice).length then ok (some it.slice[it.i], { slice := it.slice, i := it.i + 1 })
+          else ok (none, it)
+      match next with
+        | none => ok (done (false, s))
+        | some value => if P value = true then ok (done (true, s)) else ok (cont (s, ())) with
+    | ok r =>
+      match r with
+      | cont x => loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorSliceIter.next } pred) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (false, after)
+⊢ (j : ℕ) → it.i ≤ j → PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+Port4C_GeometryStd.lean:77:20: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵p̵]̵ ̵at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_GeometryStd.lean:92:14: error(lean.unknownIdentifier): Unknown identifier `any_false`
+Port4C_GeometryStd.lean:91:59: error: unsolved goals
+CoreError : Type
+ops : Ops CoreError
+values : Slice U32
+after : core.slice.iter.Iter U32
+h :
+  (install ops).op3
+      (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool (install ops))
+      { slice := values, i := 0 } () =
+    ok (false, after)
+⊢ ∀ (j : ℕ) (hj : j < (↑values).length), (↑values)[j] ≠ 0#u32
+'AspisR1.Port4C_GeometryStd.zero_closure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryStd.clone_m31' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port4C_GeometryStd.extend_fields' depends on axioms: [propext, Quot.sound]
+Port4C_GeometryStd.lean:102:14: error(lean.unknownIdentifier): Unknown constant `any_false`
+'AspisR1.Port4C_GeometryStd.zero_test_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
