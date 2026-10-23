@@ -25,4 +25,14 @@ pub fn channels(c:&[E;1024],nodes:&[M31;9])->[E;4] {
  let e=collect(c,4,3,0,256,Vec::new());
  [eval_rec(&a,0,8,nodes),eval_rec(&b,0,8,nodes),eval_rec(&d,0,8,nodes),eval_rec(&e,0,8,nodes)]
 }
+pub fn phi_inverse(x:E,y:E,h:[E;4])->[E;4] {
+ let [h0,h1,h2,h3]=h;
+ let a=y.mul(h1);let b=x.mul(h2);let c=x.mul(y).mul(h3);
+ [h0.add(a).add(b).add(c),h0.sub(a).add(b).sub(c),
+ h0.sub(a).sub(b).add(c),h0.add(a).sub(b).sub(c)]
+}
+pub fn encode_with_nodes(c:&[E;1024],nodes:&[M31;9],x:E,y:E)->[E;4] {
+ let h=channels(c,nodes);
+ phi_inverse(x,y,h)
+}
 }

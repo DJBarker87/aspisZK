@@ -102,12 +102,6 @@ def field.wide_exact.WideExact.add
   let q1 ← field.QM31.add self.c1 rhs.c1
   ok { c0 := q, c1 := q1 }
 
-/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::double]:
-    Source: 'field.rs', lines 183:4-185:5
-    Visibility: public -/
-def field.M31.double (self : field.M31) : Result field.M31 := do
-  field.M31.add self self
-
 /-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::sub]:
     Source: 'field.rs', lines 94:4-119:5
     Visibility: public -/
@@ -118,6 +112,41 @@ def field.M31.sub (self : field.M31) (rhs : field.M31) : Result field.M31 := do
   then let s1 ← lift (Std.U32.wrapping_sub s field.P)
        ok s1
   else ok s
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::CM31}::sub]:
+    Source: 'field.rs', lines 289:4-294:5
+    Visibility: public -/
+def field.CM31.sub
+  (self : field.CM31) (rhs : field.CM31) : Result field.CM31 := do
+  let m ← field.M31.sub self.a rhs.a
+  let m1 ← field.M31.sub self.b rhs.b
+  ok { a := m, b := m1 }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::QM31}::sub]:
+    Source: 'field.rs', lines 906:4-913:5
+    Visibility: public -/
+def field.QM31.sub
+  (self : field.QM31) (rhs : field.QM31) : Result field.QM31 := do
+  let c ← field.CM31.sub self.c0 rhs.c0
+  let c1 ← field.CM31.sub self.c1 rhs.c1
+  ok { c0 := c, c1 }
+
+/-- [aspis_r1_encoder53::field::wide_exact::{aspis_r1_encoder53::field::wide_exact::WideExact}::sub]:
+    Source: 'field/wide_exact.rs', lines 91:4-98:5
+    Visibility: public -/
+def field.wide_exact.WideExact.sub
+  (self : field.wide_exact.WideExact) (rhs : field.wide_exact.WideExact) :
+  Result field.wide_exact.WideExact
+  := do
+  let q ← field.QM31.sub self.c0 rhs.c0
+  let q1 ← field.QM31.sub self.c1 rhs.c1
+  ok { c0 := q, c1 := q1 }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::double]:
+    Source: 'field.rs', lines 183:4-185:5
+    Visibility: public -/
+def field.M31.double (self : field.M31) : Result field.M31 := do
+  field.M31.add self self
 
 /-- [aspis_r1_encoder53::field::mul_by_r]:
     Source: 'field.rs', lines 860:0-866:1 -/
@@ -185,15 +214,6 @@ def field.CM31.mul
   let m4 ← field.M31.sub m3 m1
   ok { a := m, b := m4 }
 
-/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::CM31}::sub]:
-    Source: 'field.rs', lines 289:4-294:5
-    Visibility: public -/
-def field.CM31.sub
-  (self : field.CM31) (rhs : field.CM31) : Result field.CM31 := do
-  let m ← field.M31.sub self.a rhs.a
-  let m1 ← field.M31.sub self.b rhs.b
-  ok { a := m, b := m1 }
-
 /-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::QM31}::mul]:
     Source: 'field.rs', lines 935:4-945:5
     Visibility: public -/
@@ -209,15 +229,6 @@ def field.QM31.mul
   let c4 ← field.CM31.sub m2 m0
   let c5 ← field.CM31.sub c4 m1
   ok { c0 := c3, c1 := c5 }
-
-/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::QM31}::sub]:
-    Source: 'field.rs', lines 906:4-913:5
-    Visibility: public -/
-def field.QM31.sub
-  (self : field.QM31) (rhs : field.QM31) : Result field.QM31 := do
-  let c ← field.CM31.sub self.c0 rhs.c0
-  let c1 ← field.CM31.sub self.c1 rhs.c1
-  ok { c0 := c, c1 }
 
 /-- [aspis_r1_encoder53::field::wide_exact::mul_u]:
     Source: 'field/wide_exact.rs', lines 299:0-304:1 -/
@@ -355,5 +366,45 @@ def encoder54.channels
   let s7 := alloc.vec.Vec.deref e
   let we3 ← encoder54.eval_rec s7 0#usize 8#usize nodes
   ok (Array.make 4#usize [ we, we1, we2, we3 ])
+
+/-- [aspis_r1_encoder53::encoder54::phi_inverse]:
+    Source: 'lib.rs', lines 28:0-33:1
+    Visibility: public -/
+def encoder54.phi_inverse
+  (x : field.wide_exact.WideExact) (y : field.wide_exact.WideExact)
+  (h : Array field.wide_exact.WideExact 4#usize) :
+  Result (Array field.wide_exact.WideExact 4#usize)
+  := do
+  let h0 ← Array.index_usize h 0#usize
+  let h1 ← Array.index_usize h 1#usize
+  let h2 ← Array.index_usize h 2#usize
+  let h3 ← Array.index_usize h 3#usize
+  let a ← field.wide_exact.WideExact.mul y h1
+  let b ← field.wide_exact.WideExact.mul x h2
+  let we ← field.wide_exact.WideExact.mul x y
+  let c ← field.wide_exact.WideExact.mul we h3
+  let we1 ← field.wide_exact.WideExact.add h0 a
+  let we2 ← field.wide_exact.WideExact.add we1 b
+  let we3 ← field.wide_exact.WideExact.add we2 c
+  let we4 ← field.wide_exact.WideExact.sub h0 a
+  let we5 ← field.wide_exact.WideExact.add we4 b
+  let we6 ← field.wide_exact.WideExact.sub we5 c
+  let we7 ← field.wide_exact.WideExact.sub we4 b
+  let we8 ← field.wide_exact.WideExact.add we7 c
+  let we9 ← field.wide_exact.WideExact.sub we1 b
+  let we10 ← field.wide_exact.WideExact.sub we9 c
+  ok (Array.make 4#usize [ we3, we6, we8, we10 ])
+
+/-- [aspis_r1_encoder53::encoder54::encode_with_nodes]:
+    Source: 'lib.rs', lines 34:0-37:1
+    Visibility: public -/
+def encoder54.encode_with_nodes
+  (c : Array field.wide_exact.WideExact 1024#usize)
+  (nodes : Array field.M31 9#usize) (x : field.wide_exact.WideExact)
+  (y : field.wide_exact.WideExact) :
+  Result (Array field.wide_exact.WideExact 4#usize)
+  := do
+  let h ← encoder54.channels c nodes
+  encoder54.phi_inverse x y h
 
 end AspisR1Encoder54

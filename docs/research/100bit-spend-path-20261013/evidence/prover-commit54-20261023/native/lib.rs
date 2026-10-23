@@ -1,0 +1,56 @@
+#![allow(dead_code,unexpected_cfgs)]
+// Source adapter one-transition contract at the current unconsumed suffix.
+// k is the externally selected consumed-pair counter; full iterator-state
+// induction is separate from these local contracts. Values are arbitrary u32 cells;
+// no field operation or value restriction participates in collection.
+#[kani::requires(c.len()<=256 && c.len()%2==0 && k<c.len()/2)]
+#[kani::ensures(|r| *r==c[2*k])]
+fn native_even(c:&[u32],k:usize)->u32 {
+ c[2*k..].iter().step_by(2).copied().next().unwrap()
+}
+#[kani::requires(c.len()<=256 && c.len()%2==0 && k<c.len()/2)]
+#[kani::ensures(|r| *r==c[2*k+1])]
+fn native_odd(c:&[u32],k:usize)->u32 {
+ c[2*k..].iter().skip(1).step_by(2).copied().next().unwrap()
+}
+#[kani::requires(c.len()<=1024 && s<4 && k<256 && c.len()==1024)]
+#[kani::ensures(|r| *r==c[4*k+s])]
+fn native_channel(c:&[u32],s:usize,k:usize)->u32 {
+ (k..256).map(|d|c[4*d+s]).next().unwrap()
+}
+fn owned_read(c:&[u32],stride:usize,offset:usize,i:usize)->u32 {
+ c[stride*i+offset]
+}
+#[cfg(kani)] mod proofs {
+ use super::*;
+ #[kani::proof_for_contract(native_even)] #[kani::unwind(5)]
+ fn even_contract() {
+  let c:[u32;256]=kani::any();let n:usize=kani::any();let k:usize=kani::any();
+  kani::assume(n<=256 && n%2==0 && k<n/2);native_even(&c[..n],k);
+ }
+ #[kani::proof_for_contract(native_odd)] #[kani::unwind(5)]
+ fn odd_contract() {
+  let c:[u32;256]=kani::any();let n:usize=kani::any();let k:usize=kani::any();
+  kani::assume(n<=256 && n%2==0 && k<n/2);native_odd(&c[..n],k);
+ }
+ #[kani::proof_for_contract(native_channel)] #[kani::unwind(5)]
+ fn channel_contract() {
+  let c:[u32;1024]=kani::any();let s:usize=kani::any();let k:usize=kani::any();
+  kani::assume(s<4 && k<256);native_channel(&c,s,k);
+ }
+ #[kani::proof] #[kani::stub_verified(native_even)] #[kani::stub_verified(native_odd)]
+ #[kani::unwind(3)]
+ fn split_iteration() {
+  let c:[u32;256]=kani::any();let n:usize=kani::any();let k:usize=kani::any();
+  kani::assume(n<=256 && n%2==0 && k<n/2);
+  let c=&c[..n];
+  assert_eq!(native_even(c,k),owned_read(c,2,0,k));
+  assert_eq!(native_odd(c,k),owned_read(c,2,1,k));
+ }
+ #[kani::proof] #[kani::stub_verified(native_channel)] #[kani::unwind(3)]
+ fn channel_iteration() {
+  let c:[u32;1024]=kani::any();let s:usize=kani::any();let k:usize=kani::any();
+  kani::assume(s<4 && k<256);
+  assert_eq!(native_channel(&c,s,k),owned_read(&c,4,s,k));
+ }
+}
