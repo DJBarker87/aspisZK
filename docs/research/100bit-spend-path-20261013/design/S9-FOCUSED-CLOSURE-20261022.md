@@ -1512,3 +1512,46 @@ explicitly pinned; final joint closure selection/replay is still required.
 Complete paired value/relation, actual current finish installer, global
 source/runtime/artifact and security-experiment obligations remain open.
 **The >=100-bit target is not yet established.**
+
+
+### 2026-10-23 continuation: same execution and actual finish value
+
+The owner confirmed the +12,214 CU allowance per verification/settlement
+transaction. The source adopted at 60cb14bde2 remains unchanged in crates/
+and programs/ through this continuation; the new work consists of proofs
+and evidence.
+
+The SAME complete extracted tx2 operation-cut now supplies its original
+resume result, internally constructed final View and actual submitted-byte
+range of exactly 2,048 bytes (`s9-tx2-same-final-view-span-v1-20261023`).
+`S9Stage2NativeFinishSlotsV1` and `S9Tx2SourceNativePairV1` then install the
+native constructor/Pair in the emitted finish control and derive the SAME
+native S2 receiver and Pair success from that event. The independently
+supplied Current View/finish premise is removed at this boundary. Other
+operation installers, runtime effects and the StoredCarrierBinding security
+experiment transport are still explicit open boundaries; this does not
+establish the whole runtime or an arbitrary-view equivalence.
+
+`S9ActualPairSharedFinalTraceV1.actual_pair_success_shared_final_trace`
+derives the complete same accepted shared two-fold Pair trace through
+regular/common/partials/high/low/inactive/private-four/active-four/powers-seven
+and the returned final sum. Its actual shared-guard result and two-fold
+alpha length remain premises. `S9ActiveFourCanonicalV1` proves both active
+source loops preserve canonical parts from canonical actual coefficients
+and incoming parts, obtaining field/arithmetic success from that same loop.
+Whole-parent parts canonicality and its kappa polynomial composition are
+candidates in progress, not closure claims in this checkpoint.
+
+`S9ActualFinishDecodedStateV1.actual_finish_success_decodes_state` establishes
+that the actual successful native finish output decodes to the SAME final
+accumulator's field value, universally over that final state. No independent
+history, state/count bounds, input canonicality or model-finish success is a
+premise. Its product-sum corollary consumes the separately proved SAME-state
+product equation. The focused NUC target passed with standard axioms and zero
+swap. This reuses retained arithmetic math; it does not attribute historical
+Std Array.map source semantics to the adopted source.
+
+The actual Pair returned value still needs its final parts connected to the
+spend relation and its concrete caller guards discharged. The final coherent
+dependency replay, remaining source/runtime/artifact bindings and composed
+security experiment remain open. **The 100-bit target is not established.**
