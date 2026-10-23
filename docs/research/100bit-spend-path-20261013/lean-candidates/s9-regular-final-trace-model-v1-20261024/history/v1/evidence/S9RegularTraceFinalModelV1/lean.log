@@ -1,0 +1,96 @@
+/home/dombarker/project-offloads/pair-regular-trace-final-model-v1-20261024/sources/S9RegularTraceFinalModelV1.lean:98:78: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑j = 0 then ?m.430 else ?m.431
+in the target expression
+  (if ↑j = ↑0#usize then inactive else atN partsRegular j hj) = atN partsRegular j hj
+
+allocation : AspisR1S9AllocationInterfaceV1.Allocation
+w : Ctor
+model : Table
+hm : Meaning w.factors model
+hc : AspisR1S9ConstructorNativeReceiverCanonicalV1.FactorsCanonical (fromCtor w)
+hs2 : (fromCtor w).variant = transport.Variant.S2
+alpha : Slice NativeW
+f : Slice U8
+kappa out : NativeW
+partsFinal : Parts
+k : Std.Array NativeW 7#usize
+halpha : ∀ (i : Usize) (a : NativeW), alpha.index_usize i = ok a → Can a
+hfold : alpha.len = 2#usize
+hguard : weights.shared_two_point_guard (fromCtor w) 2#usize = ok false
+hpair : weights.Weights.pair (fromCtor w) alpha f kappa = ok (core.result.Result.Ok out)
+n : Usize
+a0 a1 : AspisR1S9ActualProcessKindTensorReachedV1.W
+ap0 ap1 : AspisR1S9ActualProcessKindTensorReachedV1.Powers
+scratch scratchOut : AspisR1S9ActualProcessKindTensorReachedV1.Scratch
+partsRegular : AspisR1S9ActualProcessKindTensorReachedV1.Parts
+low : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 16#usize
+inactive : AspisR1S9ActualProcessKindTensorReachedV1.W
+partsInactive : AspisR1S9ActualProcessKindTensorReachedV1.Parts
+useFactored : Bool
+libra : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 4#usize
+hn : f.len / 32#usize = ok n
+hn64 : n = 64#usize
+ha0 : alpha.index_usize 0#usize = ok a0
+hap0 : weights.powers 4#usize a0 = ok ap0
+ha1 : alpha.index_usize 1#usize = ok a1
+hap1 : weights.powers 4#usize a1 = ok ap1
+hreserved :
+  aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok scratch)
+hregular :
+  weights.process_regular_kinds (fromCtor w) false alpha f 2#usize n ap0 ap1 scratch
+      (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok (core.result.Result.Ok (), scratchOut, partsRegular)
+hlow :
+  weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1
+      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok low
+hinactive : weights.grouped_inactive_pair (fromCtor w) f low = ok inactive
+hpartsInactive : Array.update partsRegular 0#usize inactive = ok partsInactive
+huse : transport.Variant.Insts.CoreCmpPartialEqVariant.eq (fromCtor w).variant transport.Variant.S2 = ok useFactored
+hlibra :
+  (if useFactored = true then weights.factored_s2_libra_weights ap0 ap1 (fromCtor w).extra
+    else weights.twofold_libra_weights low (fromCtor w).extra) =
+    ok libra
+hactive : weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f partsInactive libra = ok partsFinal
+hk : weights.powers 7#usize kappa = ok k
+hsum :
+  weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } partsFinal k
+      aspis_core.field.wide_exact.WideExact.ZERO =
+    ok out
+hregular' :
+  weights.process_regular_kinds (fromCtor w) false alpha f 2#usize 64#usize ap0 ap1 scratch
+      (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok (core.result.Result.Ok (), scratchOut, partsRegular)
+hn' : f.len / 32#usize = ok 64#usize
+hp :
+  Means model (decodeNative a0) (decodeNative a1) f partsRegular 1#usize ⋯ 0 ∧
+    Means model (decodeNative a0) (decodeNative a1) f partsRegular 2#usize ⋯ 1 ∧
+      Means model (decodeNative a0) (decodeNative a1) f partsRegular 3#usize ⋯ 2 ∧
+        Means model (decodeNative a0) (decodeNative a1) f partsRegular 5#usize ⋯ 3 ∧
+          Means model (decodeNative a0) (decodeNative a1) f partsRegular 6#usize ⋯ 4
+af : AspisR1S9ActiveFourFrameV1.SameOutside4 partsInactive partsFinal
+hu : partsInactive = Std.Array.set partsRegular 0#usize inactive
+j : Usize
+hj : ↑j < 7
+hn0 : ↑j ≠ 0
+hn4 : ↑j ≠ 4
+⊢ (if ↑j = ↑0#usize then inactive else atN partsRegular j hj) = atN partsRegular j hj
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1S9RegularTraceFinalModelV1.shared_trace_final_regular_parts' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9RegularTraceFinalModelV1.unshared_trace_final_regular_parts' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
