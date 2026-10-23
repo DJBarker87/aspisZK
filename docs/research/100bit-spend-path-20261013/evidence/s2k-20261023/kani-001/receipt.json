@@ -1,0 +1,71 @@
+{
+  "attempt": "kani-001",
+  "kind": "kani",
+  "source_revision": "7dcf57513decf8c53822c623f015fe5561ba13a4",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2K-native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "S2K_construct_exact",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2K-native/Cargo.toml",
+    "S2K-native/src/S2K_canonical.rs",
+    "S2K-native/src/S2K_construct.rs",
+    "S2K-native/src/S2K_frontier_step.rs",
+    "S2K-native/src/S2K_validate.rs",
+    "S2K-native/src/lib.rs",
+    "S2K-native/src/statement.rs"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "deps_fingerprint": {
+    "native_source_manifest_sha256": "eb6b5ef5cbe21b14dbccb4a5bca23bb5149812a00f373248c3ec2e531f435777",
+    "source_cuts_sha256": "fee5bf4b504fe6f7b9b1119d501cdcdba34447ce788a89bdae1e6da30b8803aa",
+    "scope": "source-exact individual emitter/encoding steps; no whole-function emit harness; no success stubs"
+  },
+  "expected_time": "optimized compilation then SAT for one named source step; no arithmetic elimination",
+  "exit_status": 0,
+  "wall_seconds": 64.28529053600505,
+  "peak_rss_kib": "3176976",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r97f85d126b1b4b87b239b658af2f6632.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "3707518976",
+  "source_hashes": {
+    "S2K-native/Cargo.toml": "14acaaed340f42bce9cbff548ad153f68cd4ecfa66f6d19cf8116cee2d975bd4",
+    "S2K-native/src/S2K_canonical.rs": "cd5ce09a3d2c428d65254dfa4b6ea857f353befe97379014f8276d34c463b484",
+    "S2K-native/src/S2K_construct.rs": "af83886176583e175e7bcaf7285207fd2e12fed9f2be3ee53f7c2b1d80a6e2d7",
+    "S2K-native/src/S2K_frontier_step.rs": "226a738c14b073124adc56add6a22a8d2f40947a3a1bc675ad1bdb098d9eff22",
+    "S2K-native/src/S2K_validate.rs": "60a89301c5a3e9ec5204eb3cb0a89b89b4e3b9bcc37a342261e929ade29deebd",
+    "S2K-native/src/lib.rs": "6976d1b7d0c0cd7d856192af2bdb2b3c386124b9a2f1e59c57fd958fd678fb40",
+    "S2K-native/src/statement.rs": "777879c2aacdc660ebb8425a80722ab2ba18233ca2af339f1f310bdc4b42cffb"
+  },
+  "print_axioms": "N/A: kani"
+}

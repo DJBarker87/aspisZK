@@ -1,0 +1,23 @@
+S2K_AfterstatePrefix.lean:35:99: error: unsolved goals
+afterstate : Afterstate
+output : Std.Array U8 688#usize
+root : Std.Array U8 32#usize
+encoded : atomic_statement.encode_digest_canonical afterstate.next_root = ok root
+⊢ ∃ out,
+    (do
+        let iter ←
+          core.iter.traits.iterator.Iterator.enumerate.default { slice := ⟨↑afterstate.next_frontier, ⋯⟩, i := 0 }
+        ok
+            (iter,
+              ⟨(((((((↑output).setSlice! 0
+                                          ↑(Array.make 4#usize [65#u8, 83#u8, 74#u8, 65#u8]
+                                              pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC._proof_2)).set
+                                      4 pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION).set
+                                  5 pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION).set
+                              6 pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                          7 1#u8).setSlice!
+                      8 ↑(core.num.U64.to_le_bytes afterstate.next_pair_index)).setSlice!
+                  16 ↑root,
+                ⋯⟩)) =
+      ok ({ iter := { slice := ⟨↑afterstate.next_frontier, ⋯⟩, i := 0 }, count := 0#usize }, out)
+'AspisR1.S2K.AfterstatePrefix.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

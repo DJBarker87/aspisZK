@@ -1,0 +1,75 @@
+{
+  "attempt": "kani-024",
+  "kind": "kani",
+  "source_revision": "32129cbd389b994c6ccf9912de16d104f4b9881f",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2K-native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "S2K_frontier_level_14",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2K-native/Cargo.toml",
+    "S2K-native/src/S2K_canonical.rs",
+    "S2K-native/src/S2K_concrete.rs",
+    "S2K-native/src/S2K_construct.rs",
+    "S2K-native/src/S2K_frontier_step.rs",
+    "S2K-native/src/S2K_validate.rs",
+    "S2K-native/src/lib.rs",
+    "S2K-native/src/statement.rs"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "deps_fingerprint": {
+    "native_source_manifest_sha256": "eb6b5ef5cbe21b14dbccb4a5bca23bb5149812a00f373248c3ec2e531f435777",
+    "source_cuts_sha256": "fee5bf4b504fe6f7b9b1119d501cdcdba34447ce788a89bdae1e6da30b8803aa",
+    "scope": "source-exact individual emitter/encoding steps; concrete levels use separately verified S2K_copy32 specialization of S2G_copy; no whole-function or success stub"
+  },
+  "expected_time": "optimized compilation then SAT for one named source step; no arithmetic elimination",
+  "exit_status": 0,
+  "wall_seconds": 6.342241346996161,
+  "peak_rss_kib": "405680",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r75d8ee36fe744435b91e65bf8fd8793b.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "426598400",
+  "source_hashes": {
+    "S2K-native/Cargo.toml": "14acaaed340f42bce9cbff548ad153f68cd4ecfa66f6d19cf8116cee2d975bd4",
+    "S2K-native/src/S2K_canonical.rs": "cd5ce09a3d2c428d65254dfa4b6ea857f353befe97379014f8276d34c463b484",
+    "S2K-native/src/S2K_concrete.rs": "75d7efec074a18c4e7c8e4c58bbd9c46f14c22a6deef72fcfd478ebb980858f1",
+    "S2K-native/src/S2K_construct.rs": "af83886176583e175e7bcaf7285207fd2e12fed9f2be3ee53f7c2b1d80a6e2d7",
+    "S2K-native/src/S2K_frontier_step.rs": "226a738c14b073124adc56add6a22a8d2f40947a3a1bc675ad1bdb098d9eff22",
+    "S2K-native/src/S2K_validate.rs": "60a89301c5a3e9ec5204eb3cb0a89b89b4e3b9bcc37a342261e929ade29deebd",
+    "S2K-native/src/lib.rs": "8637f157d0c0ec2f73faf21e1436c662bf571a030e9815eacdda52536ba4971b",
+    "S2K-native/src/statement.rs": "777879c2aacdc660ebb8425a80722ab2ba18233ca2af339f1f310bdc4b42cffb"
+  },
+  "print_axioms": "N/A: kani"
+}

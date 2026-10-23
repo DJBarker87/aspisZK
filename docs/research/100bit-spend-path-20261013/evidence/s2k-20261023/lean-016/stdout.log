@@ -1,0 +1,27 @@
+S2K_LoopStep.lean:75:2: error: Type mismatch: After simplification, term
+  lifted
+ has type
+  (do
+      let x ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output
+            { start := Usize.ofNatCore (48 + 32 * ↑level) ⋯, «end» := Usize.ofNatCore (80 + 32 * ↑level) ⋯ }
+      let a ←
+        let (s, back) := x
+          do
+          let src ← lift bytes.to_slice
+          let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s src
+          ok (back copied)
+      ok (ControlFlow.cont (iter', a))) =
+    ok (ControlFlow.cont (iter', output.setSlice! ↑(Usize.ofNatCore (48 + 32 * ↑level) ⋯) ↑bytes))
+but is expected to have type
+  (do
+      let __x ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output
+            { start := Usize.ofNatCore (48 + 32 * ↑level) ⋯, «end» := Usize.ofNatCore (80 + 32 * ↑level) ⋯ }
+      let src ← lift bytes.to_slice
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 __x.1 src
+      ok (ControlFlow.cont (iter', __x.2 copied))) =
+    ok (ControlFlow.cont (iter', output.setSlice! (48 + 32 * ↑level) ↑bytes))
+'_private.S2K_LoopStep.0.AspisR1.S2K.LoopStep.mk' depends on axioms: [propext]
+'AspisR1.S2K.LoopStep.body_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2K.LoopStep.body_write' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

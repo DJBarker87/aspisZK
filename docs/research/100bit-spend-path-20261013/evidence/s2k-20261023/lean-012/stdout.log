@@ -1,0 +1,132 @@
+S2K_LoopStep.lean:15:55: error: unsolved goals
+iter iter' : Iter
+output : Std.Array U8 688#usize
+done : next iter = ok (none, iter')
+⊢ (let (o, iter1) := (none, iter')
+    match o with
+    | none => ok (ControlFlow.done output)
+    | some p =>
+      let (level, node) := p
+      do
+      let i ← 32#usize * level
+      let start ← 48#usize + i
+      let i1 ← start + 32#usize
+      let (s, index_mut_back) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output
+            { start := start, «end» := i1 }
+      let a ← atomic_statement.encode_digest_canonical node
+      let s1 ← lift a.to_slice
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+      ok (ControlFlow.cont (iter1, index_mut_back s2))) =
+    ok (ControlFlow.done output)
+S2K_LoopStep.lean:26:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+iter iter' : Iter
+output : Std.Array U8 688#usize
+level : Usize
+node : Digest
+bytes : Std.Array U8 32#usize
+reached : next iter = ok (some (level, node), iter')
+range : ↑level < 20
+encoded : atomic_statement.encode_digest_canonical node = ok bytes
+⊢ 32#usize * level = ok (Usize.ofNatCore (32 * ↑level) ⋯)
+S2K_LoopStep.lean:28:67: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+iter iter' : Iter
+output : Std.Array U8 688#usize
+level : Usize
+node : Digest
+bytes : Std.Array U8 32#usize
+reached : next iter = ok (some (level, node), iter')
+range : ↑level < 20
+encoded : atomic_statement.encode_digest_canonical node = ok bytes
+mul : 32#usize * level = ok (Usize.ofNatCore (32 * ↑level) ⋯)
+⊢ 48#usize + Usize.ofNatCore (32 * ↑level) ⋯ = ok (Usize.ofNatCore (48 + 32 * ↑level) ⋯)
+S2K_LoopStep.lean:30:67: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+iter iter' : Iter
+output : Std.Array U8 688#usize
+level : Usize
+node : Digest
+bytes : Std.Array U8 32#usize
+reached : next iter = ok (some (level, node), iter')
+range : ↑level < 20
+encoded : atomic_statement.encode_digest_canonical node = ok bytes
+mul : 32#usize * level = ok (Usize.ofNatCore (32 * ↑level) ⋯)
+add : 48#usize + Usize.ofNatCore (32 * ↑level) ⋯ = ok (Usize.ofNatCore (48 + 32 * ↑level) ⋯)
+⊢ Usize.ofNatCore (48 + 32 * ↑level) ⋯ + 32#usize = ok (Usize.ofNatCore (80 + 32 * ↑level) ⋯)
+S2K_LoopStep.lean:40:2: error: 'change' tactic failed, pattern
+  (do
+      let __x ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output
+            { start := Usize.ofNatCore (48 + 32 * ↑level) ?m.1639, «end» := Usize.ofNatCore (80 + 32 * ↑level) ?m.1653 }
+      match __x with
+        | (s, back) => do
+          let src ← lift bytes.to_slice
+          let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s src
+          ok (ControlFlow.cont (iter', back copied))) =
+    ?m.1613
+is not definitionally equal to target
+  (let (o, iter1) := (some (level, node), iter')
+    match o with
+    | none => ok (ControlFlow.done output)
+    | some p =>
+      let (level, node) := p
+      do
+      let i ← 32#usize * level
+      let start ← 48#usize + i
+      let i1 ← start + 32#usize
+      let (s, index_mut_back) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output
+            { start := start, «end» := i1 }
+      let a ← atomic_statement.encode_digest_canonical node
+      let s1 ← lift a.to_slice
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+      ok (ControlFlow.cont (iter1, index_mut_back s2))) =
+    ok (ControlFlow.cont (iter', output.setSlice! (48 + 32 * ↑level) ↑bytes))
+S2K_LoopStep.lean:32:25: warning: This simp argument is unused:
+  mul
+
+Hint: Omit it from the simp argument list.
+  simp only [body, pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1_loop.body,
+      reached, bind_tc_ok, m̵u̵l̵,̵ ̵add, stop, encoded]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2K_LoopStep.lean:32:30: warning: This simp argument is unused:
+  add
+
+Hint: Omit it from the simp argument list.
+  simp only [body, pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1_loop.body,
+      reached, bind_tc_ok, mul, a̵d̵d̵,̵ ̵stop, encoded]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2K_LoopStep.lean:32:35: warning: This simp argument is unused:
+  stop
+
+Hint: Omit it from the simp argument list.
+  simp only [body, pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1_loop.body,
+      reached, bind_tc_ok, mul, add, s̵t̵o̵p̵,̵ ̵encoded]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2K_LoopStep.lean:32:41: warning: This simp argument is unused:
+  encoded
+
+Hint: Omit it from the simp argument list.
+  simp only [body, pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1_loop.body,
+      reached, bind_tc_ok, mul, add, stop,̵ ̵e̵n̵c̵o̵d̵e̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2K.LoopStep.body_done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2K.LoopStep.body_write' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

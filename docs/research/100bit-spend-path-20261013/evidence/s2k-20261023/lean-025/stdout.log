@@ -1,0 +1,54 @@
+S2K_DigestTotal.lean:69:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ←
+      if 4 * ↑count ≤ 28 then
+          ok (⟨List.take 4 (List.drop (4 * ↑count) ↑output), ⋯⟩, fun s' => ⟨(↑output).setSlice! (4 * ↑count) ↑s', ⋯⟩)
+        else fail Error.panic
+    let copied ←
+      if Usize.ofNatCore (↑x.1).length ⋯ = Usize.ofNatCore 4 ⋯ then ok ⟨↑(core.num.U32.to_le_bytes (↑rows)[↑count]), ⋯⟩
+        else fail Error.panic
+    ok
+        (cont
+          (cursor rows (Usize.ofNatCore (↑count + 1) ⋯),
+            if h : (↑(x.2 copied)).length = 32 then ⟨↑(x.2 copied), ⋯⟩ else output))
+is not definitionally equal to the right-hand side
+  ok
+    (cont
+      (cursor rows (Usize.ofNatCore (↑count + 1) ⋯),
+        output.setSlice! (4 * ↑count) ↑(core.num.U32.to_le_bytes (↑rows)[↑count])))
+
+rows : Digest
+count : Usize
+range : ↑count < 8
+output : Std.Array U8 32#usize
+mul : count * 4#usize = ok (Usize.ofNatCore (4 * ↑count) ⋯)
+stop : Usize.ofNatCore (4 * ↑count) ⋯ + 4#usize = ok (Usize.ofNatCore (4 * ↑count + 4) ⋯)
+room : 4 ≤ 32 - 4 * ↑count
+⊢ (do
+      let x ←
+        if 4 * ↑count ≤ 28 then
+            ok (⟨List.take 4 (List.drop (4 * ↑count) ↑output), ⋯⟩, fun s' => ⟨(↑output).setSlice! (4 * ↑count) ↑s', ⋯⟩)
+          else fail Error.panic
+      let copied ←
+        if Usize.ofNatCore (↑x.1).length ⋯ = Usize.ofNatCore 4 ⋯ then
+            ok ⟨↑(core.num.U32.to_le_bytes (↑rows)[↑count]), ⋯⟩
+          else fail Error.panic
+      ok
+          (cont
+            (cursor rows (Usize.ofNatCore (↑count + 1) ⋯),
+              if h : (↑(x.2 copied)).length = 32 then ⟨↑(x.2 copied), ⋯⟩ else output))) =
+    ok
+      (cont
+        (cursor rows (Usize.ofNatCore (↑count + 1) ⋯),
+          output.setSlice! (4 * ↑count) ↑(core.num.U32.to_le_bytes (↑rows)[↑count])))
+S2K_DigestTotal.lean:68:40: warning: This simp argument is unused:
+  Nat.min_eq_left room
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.length, Slice.len, output.property, core.slice.Slice.copy_from_slice, List.slice,
+  ̲  ̲ ̲ ̲Array.from_slice, l̵i̵f̵t̵,̵ ̵N̵a̵t̵.̵m̵i̵n̵_̵e̵q̵_̵l̵e̵f̵t̵ ̵r̵o̵o̵m̵]̵l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private.S2K_DigestTotal.0.AspisR1.S2K.DigestTotal.mk' depends on axioms: [propext]
+'AspisR1.S2K.DigestTotal.next_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2K.DigestTotal.body_word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
