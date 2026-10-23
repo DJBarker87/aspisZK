@@ -641,4 +641,26 @@ def leaves54.opened_values
   let a1 := Array.repeat 4#usize a
   leaves54.opened c j 0#usize 29#u8 a1
 
+/-- [aspis_r1_encoder53::leaves54::folded_query]:
+    Source: 'lib.rs', lines 108:0-108:76
+    Visibility: public -/
+def leaves54.folded_query
+  (c : Array field.wide_exact.WideExact 256#usize) (q : Std.U32) :
+  Result (Array field.wide_exact.WideExact 4#usize)
+  := do
+  let i ← lift (UScalar.cast .Usize q)
+  let i1 ← i / 4#usize
+  leaves54.folded_values c i1
+
+/-- [aspis_r1_encoder53::leaves54::opened_query]:
+    Source: 'lib.rs', lines 109:0-109:85
+    Visibility: public -/
+def leaves54.opened_query
+  (c : Array (Array field.wide_exact.WideExact 1024#usize) 29#usize)
+  (q : Std.U32) :
+  Result (Array (Array field.wide_exact.WideExact 29#usize) 4#usize)
+  := do
+  let i ← lift (UScalar.cast .Usize q)
+  leaves54.opened_values c i
+
 end AspisR1Complete54

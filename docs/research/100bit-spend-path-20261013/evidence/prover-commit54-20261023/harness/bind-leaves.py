@@ -25,7 +25,7 @@ for k,v in new.items():
  if k in old:
   assert v==old[k],(k,v,old[k])
   reuse.append(k)
-extra=[k for k in new if k.startswith("leaves54.")]
+extra=["leaves54.folded_values","leaves54.column","leaves54.opened","leaves54.opened_values"]
 text='''import AspisR1ProducerRelease47.EncoderComplete54
 import AspisR1ProducerRelease47.Encoder54
 import AspisR1ProducerRelease47.EncoderLeaf54

@@ -253,3 +253,92 @@ Accepted compiles, all exit 0 and standard-only printed axioms:
 | J10685 | R1Z.ProverCommitOpenedModel54 | 0:01.75 | 4255808 | 0 |
 | J10687 | R1Z.ProverCommitOpeningFolded54 | 0:01.98 | 4280420 | 0 |
 | J10688 | R1Z.ProverCommitOpenedBytes54 | 0:01.76 | 4261792 | 0 |
+
+## Stage 7: actual iterator states and query interfaces
+
+The Stage-5 iterator-state limitation is narrowed here. Verification-only,
+compiler-specific representation observers check the actual public constructors
+and universally quantified next-state transitions of Copied<StepBy<Iter<T>>>
+and Copied<StepBy<Skip<Iter<T>>>>. The element types are the byte-identical
+shipped M31, QM31 and WideExact definitions, with arbitrary raw words, not just
+canonical representatives. Constructor proofs establish pointer/end, stride,
+first-item and skip state; transitions preserve the schema and return the exact
+indexed value. Separate stub_verified harnesses compare that value and state
+with owned_read. Exhaustion checks cover every even length through 256.
+All raw proofs are pinned to Kani's rustc 1.93.0-nightly
+(53732d5e0 2025-11-20), not a different installed rust-src tree.
+The compiler and libcore hashes are in native-toolchain.txt; field/scalar pins
+and the selected-limb body comparison are in native-source-pins.json.
+These private-layout observers are not shipped or portable library theorems.
+
+The full WideExact odd-value comparison was stopped after memory growth;
+e-copied-odd-transition-v6 exits 1, 183.572 s, 6553352 KiB, swaps 0.
+Its replacement checks an arbitrary limb in 0..8, with the same function body
+and an unused selector parameter. The verified-stub comparison is correspondingly
+pointwise. Universality over the selector yields all eight word equalities;
+no full-record stub contract is claimed for that replacement. The retained
+representation and source-body checks make the boundary reviewable.
+No memory cap was raised and no failed input was rerun unchanged.
+
+J10691 establishes the symbolic successful-step, exhaustion and finite sequence
+induction. J10692 additionally identifies this finite sequence with the extracted
+owned strided collector. This connects the state schema and owned list model;
+Vec allocation and specialized native collect/fold assembly still need binding.
+It is not a theorem about the entire native simulator.
+
+The new complete-owner query wrappers are structurally extracted in v3.
+J10694 checks the exact query declarations. J10698 proves the U32-to-Usize casts,
+folded q/4 parent selection, and both opened C1/C2 and folded byte images at
+those query indices, from the derived coefficient producer. No leaf-array
+image is assumed. The complete opening producer remains composed at J10687,
+with its explicit challenge-representation identities.
+
+J10695/96 were stopped at 64.01/35.34 s, 5979700/5342072 KiB, zero swap,
+when definal equality began expanding leaf callers. Opaque source/model
+interfaces and an explicit cast equality replace that expansion. J10697 then
+finishes in 1.67 s with a scalar-literal type mismatch; J10698 explicitly proves
+the denominator value is 4 and removes the diagnostic trace tactics.
+Failed snapshots contain elaborator placeholders; no accepted source does.
+
+Accepted native scopes below all exit 0, swaps 0; MemoryHigh=6G,
+MemoryMax=8G, MemorySwapMax=0, TasksMax=64. Each exact command, wall time,
+peak RSS, source revision/hash snapshot, reservations, and cgroup are retained
+in receipts/<name>/receipt.json, <name>-inputs.json and input-snapshots/<name>.
+RUSTFLAGS is -C opt-level=3 -C link-arg=-Wl,--threads=4; expected time is
+optimized verification compilation plus one named transition/contract check.
+#print axioms is not applicable to Rust verification.
+
+| Exact native receipt | Wall s | Peak RSS KiB |
+|---|---:|---:|
+| m-copied-layout-v4 | 1.91 | 301000 |
+| m-copied-transition-v4 | 6.979 | 579276 |
+| m-copied-owned-v5 | 2.721 | 312112 |
+| m-copied-odd-layout-v5 | 1.887 | 300860 |
+| m-copied-odd-transition-v5 | 15.411 | 1728756 |
+| m-copied-odd-owned-v5 | 2.49 | 314232 |
+| m-copied-exhausted-v5 | 2.337 | 313768 |
+| q-copied-layout-v6 | 1.964 | 300996 |
+| q-copied-transition-v6 | 25.517 | 1785848 |
+| q-copied-owned-v6 | 37.873 | 664872 |
+| q-copied-odd-layout-v6 | 1.941 | 301520 |
+| q-copied-odd-transition-v6 | 36.645 | 2842936 |
+| q-copied-odd-owned-v6 | 15.994 | 658416 |
+| q-copied-exhausted-v6 | 2.469 | 313372 |
+| e-copied-layout-v6 | 1.951 | 301156 |
+| e-copied-transition-v6 | 92.873 | 5973564 |
+| e-copied-owned-v6 | 68.929 | 2596736 |
+| e-copied-odd-layout-v6 | 2.078 | 301176 |
+| e-copied-odd-selected-v7 | 60.59 | 4516864 |
+| e-copied-odd-selected-owned-v7 | 19.561 | 316992 |
+| e-copied-exhausted-v7 | 2.53 | 315384 |
+
+Accepted Lean compiles below all exit 0 and swaps 0. Every theorem prints only
+a subset of propext, Classical.choice, Quot.sound. Exact revision, source and
+dependency hashes, command, cap, raw output and errors are in lean/J*.json.
+
+| Attempt | Exact module | Wall | Peak RSS KiB |
+|---|---|---|---:|
+| J10691 | R1Z.ProverCommitEncoderIterator54 | 0:01.92 | 4116012 |
+| J10692 | R1Z.ProverCommitEncoderIterator54 | 0:02.12 | 4116224 |
+| J10694 | AspisR1ProducerRelease47.EncoderQuery54 | 0:01.26 | 2628928 |
+| J10698 | R1Z.ProverCommitLeafQuery54 | 0:01.81 | 4274336 |

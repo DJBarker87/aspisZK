@@ -105,4 +105,6 @@ pub fn opened(c:&[[E;1024];29],j:usize,l:usize,left:u8,out:[[E;29];4])->[[E;29];
 pub fn opened_values(c:&[[E;1024];29],j:usize)->[[E;29];4] {
  opened(c,j,0,29,[[E::ZERO;29];4])
 }
+pub fn folded_query(c:&[E;256],q:u32)->[E;4] {folded_values(c,q as usize/4)}
+pub fn opened_query(c:&[[E;1024];29],q:u32)->[[E;29];4] {opened_values(c,q as usize)}
 }

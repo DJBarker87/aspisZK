@@ -99,3 +99,17 @@ mod state_e;
 
 pub mod field;
 mod state_m;
+// Verification-only arbitrary raw representations for verified-stub return
+// values. All words remain universal; no canonicality restriction is imposed.
+#[cfg(kani)] impl kani::Arbitrary for field::M31 {
+ fn any()->Self {Self(kani::any())}
+}
+#[cfg(kani)] impl kani::Arbitrary for field::CM31 {
+ fn any()->Self {Self{a:kani::any(),b:kani::any()}}
+}
+#[cfg(kani)] impl kani::Arbitrary for field::QM31 {
+ fn any()->Self {Self{c0:kani::any(),c1:kani::any()}}
+}
+#[cfg(kani)] impl kani::Arbitrary for field::WideExact {
+ fn any()->Self {let raw:[u32;8]=kani::any();unsafe{std::mem::transmute(raw)}}
+}
