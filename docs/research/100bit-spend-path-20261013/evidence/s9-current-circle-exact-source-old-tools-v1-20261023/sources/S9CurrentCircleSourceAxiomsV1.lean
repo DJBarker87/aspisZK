@@ -1,0 +1,9 @@
+import AspisR1S9CurrentCircleProducerV1.Funs
+
+#print axioms AspisR1S9CurrentCircleProducerV1.secure_circle_producer
+#print axioms AspisR1S9CurrentCircleProducerV1.circle.secure_ood_circle_point_from_parameter
+#print axioms AspisR1S9CurrentCircleProducerV1.circle.secure_circle_point_from_parameter
+#print axioms AspisR1S9CurrentCircleProducerV1.field.CM31.inv_with
+#print axioms AspisR1S9CurrentCircleProducerV1.field.CM31.inv
+#print axioms AspisR1S9CurrentCircleProducerV1.field.M31.inv
+#print axioms AspisR1S9CurrentCircleProducerV1.field.QM31.try_inv
