@@ -1,0 +1,440 @@
+S2K_StatementAdmission.lean:17:63: error: unsolved goals
+case h_1
+a✝² : PoolV1PairForestTerminalCommonV1
+a✝¹ : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+x✝ : Result Bool
+a✝ : Bool
+heq✝ :
+  core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a✝².master_account (Array.repeat 32#usize 0#u8) = ok a✝
+h :
+  (if a✝ = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      match
+        core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a✝².checkpoint_account
+          (Array.repeat 32#usize 0#u8) with
+      | ok v =>
+        if v = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+        else
+          match
+            core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a✝².selected_lane_account
+              (Array.repeat 32#usize 0#u8) with
+          | ok v =>
+            if v = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+            else
+              match lift (core.convert.num.FromUsizeU8.from a✝².output_lane) with
+              | ok v =>
+                if v ≥ pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_LANE_COUNT then
+                  ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane)
+                else
+                  match pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1 a✝¹ with
+                  | ok v =>
+                    match
+                      match v with
+                      | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                      | core.result.Result.Err e =>
+                        match
+                          validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1.call_once
+                            () e with
+                        | ok v => ok (core.result.Result.Err v)
+                        | fail v => fail v
+                        | div => div with
+                    | ok v =>
+                      match
+                        match v with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)) with
+                      | ok v =>
+                        match v with
+                        | core.ops.control_flow.ControlFlow.Continue a =>
+                          match
+                            core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 a✝¹.pool a✝².master_account with
+                          | ok v =>
+                            if v = true then
+                              ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+                            else
+                              match
+                                core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 a✝¹.deployment_domain
+                                  a✝².lane_transition.live_snapshot.deployment_domain with
+                              | ok v =>
+                                if v = true then
+                                  ok
+                                    (core.result.Result.Err
+                                      PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+                                else
+                                  match
+                                    core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                                      a✝².lane_transition.live_snapshot.pool a✝².master_account with
+                                  | ok v =>
+                                    if v = true then
+                                      ok
+                                        (core.result.Result.Err
+                                          PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+                                    else
+                                      if (a✝¹.anchor_sequence != a✝².checkpoint_sequence) = true then
+                                        ok
+                                          (core.result.Result.Err
+                                            PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+                                      else
+                                        match
+                                          core.array.equality.PartialEqArray.ne
+                                            aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a✝¹.anchor_root
+                                            a✝².historical_global_anchor with
+                                        | ok v =>
+                                          if v = true then
+                                            ok
+                                              (core.result.Result.Err
+                                                PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                                          else
+                                            match
+                                              pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1
+                                                a✝¹.nullifier with
+                                            | ok v =>
+                                              match
+                                                match v with
+                                                | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                                                | core.result.Result.Err e =>
+                                                  match
+                                                    validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                                      () e with
+                                                  | ok v => ok (core.result.Result.Err v)
+                                                  | fail v => fail v
+                                                  | div => div with
+                                              | ok v =>
+                                                match
+                                                  match v with
+                                                  | core.result.Result.Ok v =>
+                                                    ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                  | core.result.Result.Err e =>
+                                                    ok
+                                                      (core.ops.control_flow.ControlFlow.Break
+                                                        (core.result.Result.Err e)) with
+                                                | ok v =>
+                                                  match v with
+                                                  | core.ops.control_flow.ControlFlow.Continue val =>
+                                                    if (val != a✝².output_lane) = true then
+                                                      ok
+                                                        (core.result.Result.Err
+                                                          PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                                                    else
+                                                      match lift (Array.repeat 1520#usize 0#u8).to_slice_mut with
+                                                      | ok v =>
+                                                        match
+                                                          encode_pool_v1_pair_late_public_statement_v1
+                                                            a✝².lane_transition v.1 with
+                                                        | ok v =>
+                                                          match
+                                                            match v.1 with
+                                                            | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                                                            | core.result.Result.Err e =>
+                                                              match
+                                                                validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                                                  () e with
+                                                              | ok v => ok (core.result.Result.Err v)
+                                                              | fail v => fail v
+                                                              | div => div with
+                                                          | ok v =>
+                                                            match
+                                                              match v with
+                                                              | core.result.Result.Ok v =>
+                                                                ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                              | core.result.Result.Err e =>
+                                                                ok
+                                                                  (core.ops.control_flow.ControlFlow.Break
+                                                                    (core.result.Result.Err e)) with
+                                                            | ok v =>
+                                                              match v with
+                                                              | core.ops.control_flow.ControlFlow.Continue a =>
+                                                                ok (core.result.Result.Ok ())
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                match residual with
+                                                                | core.result.Result.Ok x =>
+                                                                  core.convert.Infallible.rec
+                                                                    (fun x =>
+                                                                      Result
+                                                                        (core.result.Result Unit
+                                                                          PoolV1PairForestTerminalFormatErrorV1))
+                                                                    x
+                                                                | core.result.Result.Err v =>
+                                                                  ok (core.result.Result.Err v)
+                                                            | fail v => fail v
+                                                            | div => div
+                                                          | fail v => fail v
+                                                          | div => div
+                                                        | fail v => fail v
+                                                        | div => div
+                                                      | fail v => fail v
+                                                      | div => div
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    match residual with
+                                                    | core.result.Result.Ok x =>
+                                                      core.convert.Infallible.rec
+                                                        (fun x =>
+                                                          Result
+                                                            (core.result.Result Unit
+                                                              PoolV1PairForestTerminalFormatErrorV1))
+                                                        x
+                                                    | core.result.Result.Err v => ok (core.result.Result.Err v)
+                                                | fail v => fail v
+                                                | div => div
+                                              | fail v => fail v
+                                              | div => div
+                                            | fail v => fail v
+                                            | div => div
+                                        | fail v => fail v
+                                        | div => div
+                                  | fail v => fail v
+                                  | div => div
+                              | fail v => fail v
+                              | div => div
+                          | fail v => fail v
+                          | div => div
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          match residual with
+                          | core.result.Result.Ok x =>
+                            core.convert.Infallible.rec
+                              (fun x => Result (core.result.Result Unit PoolV1PairForestTerminalFormatErrorV1)) x
+                          | core.result.Result.Err v => ok (core.result.Result.Err v)
+                      | fail v => fail v
+                      | div => div
+                    | fail v => fail v
+                    | div => div
+                  | fail v => fail v
+                  | div => div
+              | fail v => fail v
+              | div => div
+          | fail v => fail v
+          | div => div
+      | fail v => fail v
+      | div => div) =
+    ok (core.result.Result.Ok ())
+⊢ ∃ before after,
+    encode_pool_v1_pair_late_public_statement_v1 a✝².lane_transition before = ok (core.result.Result.Ok (), after)
+
+case h_1
+a✝² : PoolV1PairForestTerminalCommonV1
+a✝¹ : pool_v1.payment_relation.PoolV1WithdrawalPublicV1
+x✝ : Result Bool
+a✝ : Bool
+heq✝ :
+  core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a✝².master_account (Array.repeat 32#usize 0#u8) = ok a✝
+h :
+  (if a✝ = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      match
+        core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a✝².checkpoint_account
+          (Array.repeat 32#usize 0#u8) with
+      | ok v =>
+        if v = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+        else
+          match
+            core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a✝².selected_lane_account
+              (Array.repeat 32#usize 0#u8) with
+          | ok v =>
+            if v = true then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+            else
+              match lift (core.convert.num.FromUsizeU8.from a✝².output_lane) with
+              | ok v =>
+                if v ≥ pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_LANE_COUNT then
+                  ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane)
+                else
+                  match pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1 a✝¹ with
+                  | ok v =>
+                    match
+                      match v with
+                      | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                      | core.result.Result.Err e =>
+                        match
+                          validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1.call_once
+                            () e with
+                        | ok v => ok (core.result.Result.Err v)
+                        | fail v => fail v
+                        | div => div with
+                    | ok v =>
+                      match
+                        match v with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)) with
+                      | ok v =>
+                        match v with
+                        | core.ops.control_flow.ControlFlow.Continue a =>
+                          match
+                            core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 a✝¹.pool a✝².master_account with
+                          | ok v =>
+                            if v = true then
+                              ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+                            else
+                              match
+                                core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 a✝¹.deployment_domain
+                                  a✝².lane_transition.live_snapshot.deployment_domain with
+                              | ok v =>
+                                if v = true then
+                                  ok
+                                    (core.result.Result.Err
+                                      PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+                                else
+                                  match
+                                    core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                                      a✝².lane_transition.live_snapshot.pool a✝².master_account with
+                                  | ok v =>
+                                    if v = true then
+                                      ok
+                                        (core.result.Result.Err
+                                          PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+                                    else
+                                      if (a✝¹.anchor_sequence != a✝².checkpoint_sequence) = true then
+                                        ok
+                                          (core.result.Result.Err
+                                            PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+                                      else
+                                        match
+                                          core.array.equality.PartialEqArray.ne
+                                            aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a✝¹.anchor_root
+                                            a✝².historical_global_anchor with
+                                        | ok v =>
+                                          if v = true then
+                                            ok
+                                              (core.result.Result.Err
+                                                PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                                          else
+                                            match
+                                              pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1
+                                                a✝¹.nullifier with
+                                            | ok v =>
+                                              match
+                                                match v with
+                                                | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                                                | core.result.Result.Err e =>
+                                                  match
+                                                    validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                                      () e with
+                                                  | ok v => ok (core.result.Result.Err v)
+                                                  | fail v => fail v
+                                                  | div => div with
+                                              | ok v =>
+                                                match
+                                                  match v with
+                                                  | core.result.Result.Ok v =>
+                                                    ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                  | core.result.Result.Err e =>
+                                                    ok
+                                                      (core.ops.control_flow.ControlFlow.Break
+                                                        (core.result.Result.Err e)) with
+                                                | ok v =>
+                                                  match v with
+                                                  | core.ops.control_flow.ControlFlow.Continue val =>
+                                                    if (val != a✝².output_lane) = true then
+                                                      ok
+                                                        (core.result.Result.Err
+                                                          PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                                                    else
+                                                      match lift (Array.repeat 1520#usize 0#u8).to_slice_mut with
+                                                      | ok v =>
+                                                        match
+                                                          encode_pool_v1_pair_late_public_statement_v1
+                                                            a✝².lane_transition v.1 with
+                                                        | ok v =>
+                                                          match
+                                                            match v.1 with
+                                                            | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                                                            | core.result.Result.Err e =>
+                                                              match
+                                                                validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                                                  () e with
+                                                              | ok v => ok (core.result.Result.Err v)
+                                                              | fail v => fail v
+                                                              | div => div with
+                                                          | ok v =>
+                                                            match
+                                                              match v with
+                                                              | core.result.Result.Ok v =>
+                                                                ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                              | core.result.Result.Err e =>
+                                                                ok
+                                                                  (core.ops.control_flow.ControlFlow.Break
+                                                                    (core.result.Result.Err e)) with
+                                                            | ok v =>
+                                                              match v with
+                                                              | core.ops.control_flow.ControlFlow.Continue a =>
+                                                                ok (core.result.Result.Ok ())
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                match residual with
+                                                                | core.result.Result.Ok x =>
+                                                                  core.convert.Infallible.rec
+                                                                    (fun x =>
+                                                                      Result
+                                                                        (core.result.Result Unit
+                                                                          PoolV1PairForestTerminalFormatErrorV1))
+                                                                    x
+                                                                | core.result.Result.Err v =>
+                                                                  ok (core.result.Result.Err v)
+                                                            | fail v => fail v
+                                                            | div => div
+                                                          | fail v => fail v
+                                                          | div => div
+                                                        | fail v => fail v
+                                                        | div => div
+                                                      | fail v => fail v
+                                                      | div => div
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    match residual with
+                                                    | core.result.Result.Ok x =>
+                                                      core.convert.Infallible.rec
+                                                        (fun x =>
+                                                          Result
+                                                            (core.result.Result Unit
+                                                              PoolV1PairForestTerminalFormatErrorV1))
+                                                        x
+                                                    | core.result.Result.Err v => ok (core.result.Result.Err v)
+                                                | fail v => fail v
+                                                | div => div
+                                              | fail v => fail v
+                                              | div => div
+                                            | fail v => fail v
+                                            | div => div
+                                        | fail v => fail v
+                                        | div => div
+                                  | fail v => fail v
+                                  | div => div
+                              | fail v => fail v
+                              | div => div
+                          | fail v => fail v
+                          | div => div
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          match residual with
+                          | core.result.Result.Ok x =>
+                            core.convert.Infallible.rec
+                              (fun x => Result (core.result.Result Unit PoolV1PairForestTerminalFormatErrorV1)) x
+                          | core.result.Result.Err v => ok (core.result.Result.Err v)
+                      | fail v => fail v
+                      | div => div
+                    | fail v => fail v
+                    | div => div
+                  | fail v => fail v
+                  | div => div
+              | fail v => fail v
+              | div => div
+          | fail v => fail v
+          | div => div
+      | fail v => fail v
+      | div => div) =
+    ok (core.result.Result.Ok ())
+⊢ ∃ before after,
+    encode_pool_v1_pair_late_public_statement_v1 a✝².lane_transition before = ok (core.result.Result.Ok (), after)
+S2K_StatementAdmission.lean:20:28: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [common, ̲PoolV1PairForestTerminalStatementV1.common,
+  ̵  ̵ ̵ ̵statement_public_common,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̲ ̲ ̲ ̲ ̲Bind.bind, ̲Aeneas.Std.bind,
+  ̵  ̵ ̵ ̵core.result.Result.map_err,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      core.convert.FromSame.from] at h ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2K.StatementAdmission.late' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2K.StatementAdmission.afterstate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2K.StatementAdmission.payload' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

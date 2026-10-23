@@ -1,0 +1,567 @@
+S2K_LateAdmission.lean:21:99: error: unsolved goals
+case h_1
+s : PoolV1PairLatePublicStatementV1
+before after : Slice U8
+x✝⁴⁰ : Result Usize
+a✝³¹ : Usize
+heq✝⁴⁰ : POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES = ok a✝³¹
+h✝¹ : ¬(before.len != a✝³¹) = true
+x✝³⁹ : Result (Option U64)
+a✝³⁰ : Option U64
+heq✝³⁹ : lift (s.live_snapshot.next_pair_index.checked_add 1#u64) = ok a✝³⁰
+x✝³⁸ : Result Bool
+a✝²⁹ : Bool
+heq✝³⁸ :
+  core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64) a✝³⁰
+      (some s.candidate_afterstate.next_pair_index) =
+    ok a✝²⁹
+h✝ : ¬a✝²⁹ = true
+x✝³⁷ : Result (Slice U8)
+a✝²⁸ : Slice U8
+heq✝³⁷ : core.slice.Slice.fill core.clone.CloneU8 before 0#u8 = ok a✝²⁸
+x✝³⁶ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁷ : Slice U8
+snd✝⁷ : Slice U8 → Slice U8
+heq✝³⁶ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝²⁸ { «end» := 8#usize } =
+    ok (fst✝⁷, snd✝⁷)
+x✝³⁵ : Result (Slice U8)
+a✝²⁷ : Slice U8
+heq✝³⁵ : lift POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice = ok a✝²⁷
+x✝³⁴ : Result (Slice U8)
+a✝²⁶ : Slice U8
+heq✝³⁴ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁷ a✝²⁷ = ok a✝²⁶
+x✝³³ : Result (Slice U8)
+a✝²⁵ : Slice U8
+heq✝³³ : (snd✝⁷ a✝²⁶).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION = ok a✝²⁵
+x✝³² : Result (Slice U8)
+a✝²⁴ : Slice U8
+heq✝³² : a✝²⁵.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT = ok a✝²⁴
+x✝³¹ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁶ : Slice U8
+snd✝⁶ : Slice U8 → Slice U8
+heq✝³¹ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝²⁴
+      { start := 10#usize, «end» := 12#usize } =
+    ok (fst✝⁶, snd✝⁶)
+x✝³⁰ : Result (UScalar UScalarTy.U16)
+a✝²³ : UScalar UScalarTy.U16
+heq✝³⁰ : lift (UScalar.cast UScalarTy.U16 POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_HEADER_BYTES) = ok a✝²³
+x✝²⁹ : Result (Std.Array U8 2#usize)
+a✝²² : Std.Array U8 2#usize
+heq✝²⁹ : lift (core.num.U16.to_le_bytes a✝²³) = ok a✝²²
+x✝²⁸ : Result (Slice U8)
+a✝²¹ : Slice U8
+heq✝²⁸ : lift a✝²².to_slice = ok a✝²¹
+x✝²⁷ : Result (Slice U8)
+a✝²⁰ : Slice U8
+heq✝²⁷ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁶ a✝²¹ = ok a✝²⁰
+x✝²⁶ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁵ : Slice U8
+snd✝⁵ : Slice U8 → Slice U8
+heq✝²⁶ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝⁶ a✝²⁰)
+      { start := 12#usize, «end» := 16#usize } =
+    ok (fst✝⁵, snd✝⁵)
+x✝²⁵ : Result (UScalar UScalarTy.U32)
+a✝¹⁹ : UScalar UScalarTy.U32
+heq✝²⁵ : lift (UScalar.cast UScalarTy.U32 POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES) = ok a✝¹⁹
+x✝²⁴ : Result (Std.Array U8 4#usize)
+a✝¹⁸ : Std.Array U8 4#usize
+heq✝²⁴ : lift (core.num.U32.to_le_bytes a✝¹⁹) = ok a✝¹⁸
+x✝²³ : Result (Slice U8)
+a✝¹⁷ : Slice U8
+heq✝²³ : lift a✝¹⁸.to_slice = ok a✝¹⁷
+x✝²² : Result (Slice U8)
+a✝¹⁶ : Slice U8
+heq✝²² : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁵ a✝¹⁷ = ok a✝¹⁶
+x✝²¹ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁴ : Slice U8
+snd✝⁴ : Slice U8 → Slice U8
+heq✝²¹ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝⁵ a✝¹⁶)
+      { start := 16#usize, «end» := 20#usize } =
+    ok (fst✝⁴, snd✝⁴)
+x✝²⁰ : Result Usize
+a✝¹⁵ : Usize
+heq✝²⁰ : POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES = ok a✝¹⁵
+x✝¹⁹ : Result (UScalar UScalarTy.U32)
+a✝¹⁴ : UScalar UScalarTy.U32
+heq✝¹⁹ : lift (UScalar.cast UScalarTy.U32 a✝¹⁵) = ok a✝¹⁴
+x✝¹⁸ : Result (Std.Array U8 4#usize)
+a✝¹³ : Std.Array U8 4#usize
+heq✝¹⁸ : lift (core.num.U32.to_le_bytes a✝¹⁴) = ok a✝¹³
+x✝¹⁷ : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹⁷ : lift a✝¹³.to_slice = ok a✝¹²
+x✝¹⁶ : Result (Slice U8)
+a✝¹¹ : Slice U8
+heq✝¹⁶ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁴ a✝¹² = ok a✝¹¹
+x✝¹⁵ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝³ : Slice U8
+snd✝³ : Slice U8 → Slice U8
+heq✝¹⁵ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝⁴ a✝¹¹)
+      { start := 20#usize, «end» := 24#usize } =
+    ok (fst✝³, snd✝³)
+x✝¹⁴ : Result (UScalar UScalarTy.U32)
+a✝¹⁰ : UScalar UScalarTy.U32
+heq✝¹⁴ : lift (UScalar.cast UScalarTy.U32 a✝³¹) = ok a✝¹⁰
+x✝¹³ : Result (Std.Array U8 4#usize)
+a✝⁹ : Std.Array U8 4#usize
+heq✝¹³ : lift (core.num.U32.to_le_bytes a✝¹⁰) = ok a✝⁹
+x✝¹² : Result (Slice U8)
+a✝⁸ : Slice U8
+heq✝¹² : lift a✝⁹.to_slice = ok a✝⁸
+x✝¹¹ : Result (Slice U8)
+a✝⁷ : Slice U8
+heq✝¹¹ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝³ a✝⁸ = ok a✝⁷
+x✝¹⁰ : Result (UScalar UScalarTy.Usize)
+a✝⁶ : UScalar UScalarTy.Usize
+heq✝¹⁰ : 32#usize + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES = ok a✝⁶
+x✝⁹ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝² : Slice U8
+snd✝² : Slice U8 → Slice U8
+heq✝⁹ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝³ a✝⁷)
+      { start := 32#usize, «end» := a✝⁶ } =
+    ok (fst✝², snd✝²)
+x✝⁸ : Result (core.result.Result Unit PoolV1PairLiveSnapshotErrorV1 × Slice U8)
+fst✝¹ : core.result.Result Unit PoolV1PairLiveSnapshotErrorV1
+snd✝¹ : Slice U8
+heq✝⁸ : encode_pool_v1_pair_live_snapshot_v1 s.live_snapshot fst✝² = ok (fst✝¹, snd✝¹)
+x✝⁷ : Result (core.result.Result Unit PoolV1PairLatePublicStatementErrorV1)
+a✝⁵ : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+heq✝⁷ :
+  (match fst✝¹ with
+    | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+    | core.result.Result.Err e =>
+      match
+        encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+          () e with
+      | ok v => ok (core.result.Result.Err v)
+      | fail v => fail v
+      | div => div) =
+    ok a✝⁵
+x✝⁶ :
+  Result
+    (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+      Unit)
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    Unit
+a✝⁴ : Unit
+heq✝⁶ :
+  (match a✝⁵ with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Continue a✝⁴)
+x✝⁵ : Result (core.result.Result (Std.Array U8 688#usize) PoolV1PairVerifierTransportErrorV1)
+a✝³ : core.result.Result (Std.Array U8 688#usize) PoolV1PairVerifierTransportErrorV1
+heq✝⁵ : encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate = ok a✝³
+x✝⁴ : Result (core.result.Result (Std.Array U8 688#usize) PoolV1PairLatePublicStatementErrorV1)
+a✝² : core.result.Result (Std.Array U8 688#usize) PoolV1PairLatePublicStatementErrorV1
+heq✝⁴ :
+  (match a✝³ with
+    | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+    | core.result.Result.Err e =>
+      match
+        encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+          () e with
+      | ok v => ok (core.result.Result.Err v)
+      | fail v => fail v
+      | div => div) =
+    ok a✝²
+x✝³ :
+  Result
+    (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+      (Std.Array U8 688#usize))
+cf1✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    (Std.Array U8 688#usize)
+val✝ : Std.Array U8 688#usize
+heq✝³ :
+  (match a✝² with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Continue val✝)
+x✝² : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝ : Slice U8
+snd✝ : Slice U8 → Slice U8
+heq✝² :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (snd✝² snd✝¹) { start := a✝⁶ } =
+    ok (fst✝, snd✝)
+x✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ : lift val✝.to_slice = ok a✝¹
+x✝ : Result (Slice U8)
+a✝ : Slice U8
+heq✝ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝ a✝¹ = ok a✝
+h : ok (core.result.Result.Ok (), snd✝ a✝) = ok (core.result.Result.Ok (), after)
+⊢ ∃ bytes, encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate = ok (core.result.Result.Ok bytes)
+
+case h_1
+s : PoolV1PairLatePublicStatementV1
+before after : Slice U8
+x✝³⁸ : Result Usize
+a✝³⁰ : Usize
+heq✝³⁸ : POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES = ok a✝³⁰
+h✝¹ : ¬(before.len != a✝³⁰) = true
+x✝³⁷ : Result (Option U64)
+a✝²⁹ : Option U64
+heq✝³⁷ : lift (s.live_snapshot.next_pair_index.checked_add 1#u64) = ok a✝²⁹
+x✝³⁶ : Result Bool
+a✝²⁸ : Bool
+heq✝³⁶ :
+  core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64) a✝²⁹
+      (some s.candidate_afterstate.next_pair_index) =
+    ok a✝²⁸
+h✝ : ¬a✝²⁸ = true
+x✝³⁵ : Result (Slice U8)
+a✝²⁷ : Slice U8
+heq✝³⁵ : core.slice.Slice.fill core.clone.CloneU8 before 0#u8 = ok a✝²⁷
+x✝³⁴ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁶ : Slice U8
+snd✝⁶ : Slice U8 → Slice U8
+heq✝³⁴ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝²⁷ { «end» := 8#usize } =
+    ok (fst✝⁶, snd✝⁶)
+x✝³³ : Result (Slice U8)
+a✝²⁶ : Slice U8
+heq✝³³ : lift POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice = ok a✝²⁶
+x✝³² : Result (Slice U8)
+a✝²⁵ : Slice U8
+heq✝³² : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁶ a✝²⁶ = ok a✝²⁵
+x✝³¹ : Result (Slice U8)
+a✝²⁴ : Slice U8
+heq✝³¹ : (snd✝⁶ a✝²⁵).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION = ok a✝²⁴
+x✝³⁰ : Result (Slice U8)
+a✝²³ : Slice U8
+heq✝³⁰ : a✝²⁴.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT = ok a✝²³
+x✝²⁹ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁵ : Slice U8
+snd✝⁵ : Slice U8 → Slice U8
+heq✝²⁹ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝²³
+      { start := 10#usize, «end» := 12#usize } =
+    ok (fst✝⁵, snd✝⁵)
+x✝²⁸ : Result (UScalar UScalarTy.U16)
+a✝²² : UScalar UScalarTy.U16
+heq✝²⁸ : lift (UScalar.cast UScalarTy.U16 POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_HEADER_BYTES) = ok a✝²²
+x✝²⁷ : Result (Std.Array U8 2#usize)
+a✝²¹ : Std.Array U8 2#usize
+heq✝²⁷ : lift (core.num.U16.to_le_bytes a✝²²) = ok a✝²¹
+x✝²⁶ : Result (Slice U8)
+a✝²⁰ : Slice U8
+heq✝²⁶ : lift a✝²¹.to_slice = ok a✝²⁰
+x✝²⁵ : Result (Slice U8)
+a✝¹⁹ : Slice U8
+heq✝²⁵ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁵ a✝²⁰ = ok a✝¹⁹
+x✝²⁴ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁴ : Slice U8
+snd✝⁴ : Slice U8 → Slice U8
+heq✝²⁴ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝⁵ a✝¹⁹)
+      { start := 12#usize, «end» := 16#usize } =
+    ok (fst✝⁴, snd✝⁴)
+x✝²³ : Result (UScalar UScalarTy.U32)
+a✝¹⁸ : UScalar UScalarTy.U32
+heq✝²³ : lift (UScalar.cast UScalarTy.U32 POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES) = ok a✝¹⁸
+x✝²² : Result (Std.Array U8 4#usize)
+a✝¹⁷ : Std.Array U8 4#usize
+heq✝²² : lift (core.num.U32.to_le_bytes a✝¹⁸) = ok a✝¹⁷
+x✝²¹ : Result (Slice U8)
+a✝¹⁶ : Slice U8
+heq✝²¹ : lift a✝¹⁷.to_slice = ok a✝¹⁶
+x✝²⁰ : Result (Slice U8)
+a✝¹⁵ : Slice U8
+heq✝²⁰ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁴ a✝¹⁶ = ok a✝¹⁵
+x✝¹⁹ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝³ : Slice U8
+snd✝³ : Slice U8 → Slice U8
+heq✝¹⁹ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝⁴ a✝¹⁵)
+      { start := 16#usize, «end» := 20#usize } =
+    ok (fst✝³, snd✝³)
+x✝¹⁸ : Result Usize
+a✝¹⁴ : Usize
+heq✝¹⁸ : POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES = ok a✝¹⁴
+x✝¹⁷ : Result (UScalar UScalarTy.U32)
+a✝¹³ : UScalar UScalarTy.U32
+heq✝¹⁷ : lift (UScalar.cast UScalarTy.U32 a✝¹⁴) = ok a✝¹³
+x✝¹⁶ : Result (Std.Array U8 4#usize)
+a✝¹² : Std.Array U8 4#usize
+heq✝¹⁶ : lift (core.num.U32.to_le_bytes a✝¹³) = ok a✝¹²
+x✝¹⁵ : Result (Slice U8)
+a✝¹¹ : Slice U8
+heq✝¹⁵ : lift a✝¹².to_slice = ok a✝¹¹
+x✝¹⁴ : Result (Slice U8)
+a✝¹⁰ : Slice U8
+heq✝¹⁴ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝³ a✝¹¹ = ok a✝¹⁰
+x✝¹³ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝² : Slice U8
+snd✝² : Slice U8 → Slice U8
+heq✝¹³ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝³ a✝¹⁰)
+      { start := 20#usize, «end» := 24#usize } =
+    ok (fst✝², snd✝²)
+x✝¹² : Result (UScalar UScalarTy.U32)
+a✝⁹ : UScalar UScalarTy.U32
+heq✝¹² : lift (UScalar.cast UScalarTy.U32 a✝³⁰) = ok a✝⁹
+x✝¹¹ : Result (Std.Array U8 4#usize)
+a✝⁸ : Std.Array U8 4#usize
+heq✝¹¹ : lift (core.num.U32.to_le_bytes a✝⁹) = ok a✝⁸
+x✝¹⁰ : Result (Slice U8)
+a✝⁷ : Slice U8
+heq✝¹⁰ : lift a✝⁸.to_slice = ok a✝⁷
+x✝⁹ : Result (Slice U8)
+a✝⁶ : Slice U8
+heq✝⁹ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝² a✝⁷ = ok a✝⁶
+x✝⁸ : Result (UScalar UScalarTy.Usize)
+a✝⁵ : UScalar UScalarTy.Usize
+heq✝⁸ : 32#usize + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES = ok a✝⁵
+x✝⁷ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝¹ : Slice U8
+snd✝¹ : Slice U8 → Slice U8
+heq✝⁷ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝² a✝⁶)
+      { start := 32#usize, «end» := a✝⁵ } =
+    ok (fst✝¹, snd✝¹)
+x✝⁶ : Result (core.result.Result Unit PoolV1PairLiveSnapshotErrorV1 × Slice U8)
+fst✝ : core.result.Result Unit PoolV1PairLiveSnapshotErrorV1
+snd✝ : Slice U8
+heq✝⁶ : encode_pool_v1_pair_live_snapshot_v1 s.live_snapshot fst✝¹ = ok (fst✝, snd✝)
+x✝⁵ : Result (core.result.Result Unit PoolV1PairLatePublicStatementErrorV1)
+a✝⁴ : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+heq✝⁵ :
+  (match fst✝ with
+    | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+    | core.result.Result.Err e =>
+      match
+        encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+          () e with
+      | ok v => ok (core.result.Result.Err v)
+      | fail v => fail v
+      | div => div) =
+    ok a✝⁴
+x✝⁴ :
+  Result
+    (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+      Unit)
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    Unit
+a✝³ : Unit
+heq✝⁴ :
+  (match a✝⁴ with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Continue a✝³)
+x✝³ : Result (core.result.Result (Std.Array U8 688#usize) PoolV1PairVerifierTransportErrorV1)
+a✝² : core.result.Result (Std.Array U8 688#usize) PoolV1PairVerifierTransportErrorV1
+heq✝³ : encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate = ok a✝²
+x✝² : Result (core.result.Result (Std.Array U8 688#usize) PoolV1PairLatePublicStatementErrorV1)
+a✝¹ : core.result.Result (Std.Array U8 688#usize) PoolV1PairLatePublicStatementErrorV1
+heq✝² :
+  (match a✝² with
+    | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+    | core.result.Result.Err e =>
+      match
+        encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+          () e with
+      | ok v => ok (core.result.Result.Err v)
+      | fail v => fail v
+      | div => div) =
+    ok a✝¹
+x✝¹ :
+  Result
+    (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+      (Std.Array U8 688#usize))
+cf1✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    (Std.Array U8 688#usize)
+residual✝ : core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1
+heq✝¹ :
+  (match a✝¹ with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Break residual✝)
+x✝ : Result (core.result.Result Unit PoolV1PairLatePublicStatementErrorV1)
+a✝ : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+heq✝ :
+  (match residual✝ with
+    | core.result.Result.Ok x =>
+      core.convert.Infallible.rec (fun x => Result (core.result.Result Unit PoolV1PairLatePublicStatementErrorV1)) x
+    | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok a✝
+h : ok (a✝, snd✝¹ snd✝) = ok (core.result.Result.Ok (), after)
+⊢ ∃ bytes, encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate = ok (core.result.Result.Ok bytes)
+
+case h_1
+s : PoolV1PairLatePublicStatementV1
+before after : Slice U8
+x✝³⁵ : Result Usize
+a✝²⁷ : Usize
+heq✝³⁵ : POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES = ok a✝²⁷
+h✝¹ : ¬(before.len != a✝²⁷) = true
+x✝³⁴ : Result (Option U64)
+a✝²⁶ : Option U64
+heq✝³⁴ : lift (s.live_snapshot.next_pair_index.checked_add 1#u64) = ok a✝²⁶
+x✝³³ : Result Bool
+a✝²⁵ : Bool
+heq✝³³ :
+  core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64) a✝²⁶
+      (some s.candidate_afterstate.next_pair_index) =
+    ok a✝²⁵
+h✝ : ¬a✝²⁵ = true
+x✝³² : Result (Slice U8)
+a✝²⁴ : Slice U8
+heq✝³² : core.slice.Slice.fill core.clone.CloneU8 before 0#u8 = ok a✝²⁴
+x✝³¹ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁶ : Slice U8
+snd✝⁶ : Slice U8 → Slice U8
+heq✝³¹ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) a✝²⁴ { «end» := 8#usize } =
+    ok (fst✝⁶, snd✝⁶)
+x✝³⁰ : Result (Slice U8)
+a✝²³ : Slice U8
+heq✝³⁰ : lift POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice = ok a✝²³
+x✝²⁹ : Result (Slice U8)
+a✝²² : Slice U8
+heq✝²⁹ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁶ a✝²³ = ok a✝²²
+x✝²⁸ : Result (Slice U8)
+a✝²¹ : Slice U8
+heq✝²⁸ : (snd✝⁶ a✝²²).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION = ok a✝²¹
+x✝²⁷ : Result (Slice U8)
+a✝²⁰ : Slice U8
+heq✝²⁷ : a✝²¹.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT = ok a✝²⁰
+x✝²⁶ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁵ : Slice U8
+snd✝⁵ : Slice U8 → Slice U8
+heq✝²⁶ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) a✝²⁰
+      { start := 10#usize, «end» := 12#usize } =
+    ok (fst✝⁵, snd✝⁵)
+x✝²⁵ : Result (UScalar UScalarTy.U16)
+a✝¹⁹ : UScalar UScalarTy.U16
+heq✝²⁵ : lift (UScalar.cast UScalarTy.U16 POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_HEADER_BYTES) = ok a✝¹⁹
+x✝²⁴ : Result (Std.Array U8 2#usize)
+a✝¹⁸ : Std.Array U8 2#usize
+heq✝²⁴ : lift (core.num.U16.to_le_bytes a✝¹⁹) = ok a✝¹⁸
+x✝²³ : Result (Slice U8)
+a✝¹⁷ : Slice U8
+heq✝²³ : lift a✝¹⁸.to_slice = ok a✝¹⁷
+x✝²² : Result (Slice U8)
+a✝¹⁶ : Slice U8
+heq✝²² : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁵ a✝¹⁷ = ok a✝¹⁶
+x✝²¹ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝⁴ : Slice U8
+snd✝⁴ : Slice U8 → Slice U8
+heq✝²¹ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝⁵ a✝¹⁶)
+      { start := 12#usize, «end» := 16#usize } =
+    ok (fst✝⁴, snd✝⁴)
+x✝²⁰ : Result (UScalar UScalarTy.U32)
+a✝¹⁵ : UScalar UScalarTy.U32
+heq✝²⁰ : lift (UScalar.cast UScalarTy.U32 POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES) = ok a✝¹⁵
+x✝¹⁹ : Result (Std.Array U8 4#usize)
+a✝¹⁴ : Std.Array U8 4#usize
+heq✝¹⁹ : lift (core.num.U32.to_le_bytes a✝¹⁵) = ok a✝¹⁴
+x✝¹⁸ : Result (Slice U8)
+a✝¹³ : Slice U8
+heq✝¹⁸ : lift a✝¹⁴.to_slice = ok a✝¹³
+x✝¹⁷ : Result (Slice U8)
+a✝¹² : Slice U8
+heq✝¹⁷ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝⁴ a✝¹³ = ok a✝¹²
+x✝¹⁶ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝³ : Slice U8
+snd✝³ : Slice U8 → Slice U8
+heq✝¹⁶ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝⁴ a✝¹²)
+      { start := 16#usize, «end» := 20#usize } =
+    ok (fst✝³, snd✝³)
+x✝¹⁵ : Result Usize
+a✝¹¹ : Usize
+heq✝¹⁵ : POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES = ok a✝¹¹
+x✝¹⁴ : Result (UScalar UScalarTy.U32)
+a✝¹⁰ : UScalar UScalarTy.U32
+heq✝¹⁴ : lift (UScalar.cast UScalarTy.U32 a✝¹¹) = ok a✝¹⁰
+x✝¹³ : Result (Std.Array U8 4#usize)
+a✝⁹ : Std.Array U8 4#usize
+heq✝¹³ : lift (core.num.U32.to_le_bytes a✝¹⁰) = ok a✝⁹
+x✝¹² : Result (Slice U8)
+a✝⁸ : Slice U8
+heq✝¹² : lift a✝⁹.to_slice = ok a✝⁸
+x✝¹¹ : Result (Slice U8)
+a✝⁷ : Slice U8
+heq✝¹¹ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝³ a✝⁸ = ok a✝⁷
+x✝¹⁰ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝² : Slice U8
+snd✝² : Slice U8 → Slice U8
+heq✝¹⁰ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝³ a✝⁷)
+      { start := 20#usize, «end» := 24#usize } =
+    ok (fst✝², snd✝²)
+x✝⁹ : Result (UScalar UScalarTy.U32)
+a✝⁶ : UScalar UScalarTy.U32
+heq✝⁹ : lift (UScalar.cast UScalarTy.U32 a✝²⁷) = ok a✝⁶
+x✝⁸ : Result (Std.Array U8 4#usize)
+a✝⁵ : Std.Array U8 4#usize
+heq✝⁸ : lift (core.num.U32.to_le_bytes a✝⁶) = ok a✝⁵
+x✝⁷ : Result (Slice U8)
+a✝⁴ : Slice U8
+heq✝⁷ : lift a✝⁵.to_slice = ok a✝⁴
+x✝⁶ : Result (Slice U8)
+a✝³ : Slice U8
+heq✝⁶ : core.slice.Slice.copy_from_slice core.marker.CopyU8 fst✝² a✝⁴ = ok a✝³
+x✝⁵ : Result (UScalar UScalarTy.Usize)
+a✝² : UScalar UScalarTy.Usize
+heq✝⁵ : 32#usize + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES = ok a✝²
+x✝⁴ : Result (Slice U8 × (Slice U8 → Slice U8))
+fst✝¹ : Slice U8
+snd✝¹ : Slice U8 → Slice U8
+heq✝⁴ :
+  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (snd✝² a✝³)
+      { start := 32#usize, «end» := a✝² } =
+    ok (fst✝¹, snd✝¹)
+x✝³ : Result (core.result.Result Unit PoolV1PairLiveSnapshotErrorV1 × Slice U8)
+fst✝ : core.result.Result Unit PoolV1PairLiveSnapshotErrorV1
+snd✝ : Slice U8
+heq✝³ : encode_pool_v1_pair_live_snapshot_v1 s.live_snapshot fst✝¹ = ok (fst✝, snd✝)
+x✝² : Result (core.result.Result Unit PoolV1PairLatePublicStatementErrorV1)
+a✝¹ : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+heq✝² :
+  (match fst✝ with
+    | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+    | core.result.Result.Err e =>
+      match
+        encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+          () e with
+      | ok v => ok (core.result.Result.Err v)
+      | fail v => fail v
+      | div => div) =
+    ok a✝¹
+x✝¹ :
+  Result
+    (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+      Unit)
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1)
+    Unit
+residual✝ : core.result.Result core.convert.Infallible PoolV1PairLatePublicStatementErrorV1
+heq✝¹ :
+  (match a✝¹ with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Break residual✝)
+x✝ : Result (core.result.Result Unit PoolV1PairLatePublicStatementErrorV1)
+a✝ : core.result.Result Unit PoolV1PairLatePublicStatementErrorV1
+heq✝ :
+  (match residual✝ with
+    | core.result.Result.Ok x =>
+      core.convert.Infallible.rec (fun x => Result (core.result.Result Unit PoolV1PairLatePublicStatementErrorV1)) x
+    | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok a✝
+h : ok (a✝, snd✝¹ snd✝) = ok (core.result.Result.Ok (), after)
+⊢ ∃ bytes, encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate = ok (core.result.Result.Ok bytes)
+'AspisR1.S2K.LateAdmission.candidate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

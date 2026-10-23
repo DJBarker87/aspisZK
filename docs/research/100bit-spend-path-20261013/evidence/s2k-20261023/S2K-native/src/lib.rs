@@ -238,3 +238,5 @@ fn S2K_copy688_contract() {
 }
 
 include!("S2K_result_fields.rs");
+
+include!("S2K_admission.rs");

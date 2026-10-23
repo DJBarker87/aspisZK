@@ -1,0 +1,297 @@
+S2K_LateAdmission.lean:23:26: error: unexpected token ':'; expected '=>'
+S2K_LateAdmission.lean:13:99: error: unsolved goals
+s : PoolV1PairLatePublicStatementV1
+before after : Slice U8
+h :
+  (match POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES with
+    | ok v =>
+      if (before.len != v) = true then
+        ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.WrongLength, before)
+      else
+        match lift (s.live_snapshot.next_pair_index.checked_add 1#u64) with
+        | ok v_1 =>
+          match
+            core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64)
+              v_1 (some s.candidate_afterstate.next_pair_index) with
+          | ok v_2 =>
+            if v_2 = true then
+              ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch, before)
+            else
+              match core.slice.Slice.fill core.clone.CloneU8 before 0#u8 with
+              | ok v_3 =>
+                match
+                  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) v_3
+                    { «end» := 8#usize } with
+                | ok v_4 =>
+                  let (s, index_mut_back) := v_4
+                  match lift POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice with
+                  | ok v_5 =>
+                    match core.slice.Slice.copy_from_slice core.marker.CopyU8 s v_5 with
+                    | ok v_6 =>
+                      match (index_mut_back v_6).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION with
+                      | ok v_7 =>
+                        match v_7.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT with
+                        | ok v_8 =>
+                          match
+                            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) v_8
+                              { start := 10#usize, «end» := 12#usize } with
+                          | ok v_9 =>
+                            let (s3, index_mut_back1) := v_9
+                            match lift (UScalar.cast UScalarTy.U16 POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_HEADER_BYTES) with
+                            | ok v_10 =>
+                              match lift (core.num.U16.to_le_bytes v_10) with
+                              | ok v_11 =>
+                                match lift v_11.to_slice with
+                                | ok v_12 =>
+                                  match core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 v_12 with
+                                  | ok v_13 =>
+                                    match
+                                      core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                        (index_mut_back1 v_13) { start := 12#usize, «end» := 16#usize } with
+                                    | ok v_14 =>
+                                      let (s6, index_mut_back2) := v_14
+                                      match lift (UScalar.cast UScalarTy.U32 POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES) with
+                                      | ok v_15 =>
+                                        match lift (core.num.U32.to_le_bytes v_15) with
+                                        | ok v_16 =>
+                                          match lift v_16.to_slice with
+                                          | ok v_17 =>
+                                            match core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 v_17 with
+                                            | ok v_18 =>
+                                              match
+                                                core.slice.index.Slice.index_mut
+                                                  (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back2 v_18)
+                                                  { start := 16#usize, «end» := 20#usize } with
+                                              | ok v_19 =>
+                                                let (s9, index_mut_back3) := v_19
+                                                match POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES with
+                                                | ok v_20 =>
+                                                  match lift (UScalar.cast UScalarTy.U32 v_20) with
+                                                  | ok v_21 =>
+                                                    match lift (core.num.U32.to_le_bytes v_21) with
+                                                    | ok v_22 =>
+                                                      match lift v_22.to_slice with
+                                                      | ok v_23 =>
+                                                        match
+                                                          core.slice.Slice.copy_from_slice core.marker.CopyU8 s9
+                                                            v_23 with
+                                                        | ok v_24 =>
+                                                          match
+                                                            core.slice.index.Slice.index_mut
+                                                              (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                              (index_mut_back3 v_24)
+                                                              { start := 20#usize, «end» := 24#usize } with
+                                                          | ok v_25 =>
+                                                            let (s12, index_mut_back4) := v_25
+                                                            match lift (UScalar.cast UScalarTy.U32 v) with
+                                                            | ok v =>
+                                                              match lift (core.num.U32.to_le_bytes v) with
+                                                              | ok v =>
+                                                                match lift v.to_slice with
+                                                                | ok v =>
+                                                                  match
+                                                                    core.slice.Slice.copy_from_slice core.marker.CopyU8
+                                                                      s12 v with
+                                                                  | ok v =>
+                                                                    match
+                                                                      32#usize + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES with
+                                                                    | ok v_26 =>
+                                                                      match
+                                                                        core.slice.index.Slice.index_mut
+                                                                          (core.slice.index.SliceIndexRangeUsizeSlice
+                                                                            U8)
+                                                                          (index_mut_back4 v)
+                                                                          { start := 32#usize, «end» := v_26 } with
+                                                                      | ok v =>
+                                                                        let (s15, index_mut_back5) := v
+                                                                        match
+                                                                          encode_pool_v1_pair_live_snapshot_v1
+                                                                            s.live_snapshot s15 with
+                                                                        | ok v =>
+                                                                          let (r, s16) := v
+                                                                          match
+                                                                            match r with
+                                                                            | core.result.Result.Ok t =>
+                                                                              ok (core.result.Result.Ok t)
+                                                                            | core.result.Result.Err e =>
+                                                                              match
+                                                                                encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+                                                                                  () e with
+                                                                              | ok v => ok (core.result.Result.Err v)
+                                                                              | fail v => fail v
+                                                                              | div => div with
+                                                                          | ok v =>
+                                                                            match
+                                                                              match v with
+                                                                              | core.result.Result.Ok v =>
+                                                                                ok
+                                                                                  (core.ops.control_flow.ControlFlow.Continue
+                                                                                    v)
+                                                                              | core.result.Result.Err e =>
+                                                                                ok
+                                                                                  (core.ops.control_flow.ControlFlow.Break
+                                                                                    (core.result.Result.Err e)) with
+                                                                            | ok v =>
+                                                                              match v with
+                                                                              |
+                                                                              core.ops.control_flow.ControlFlow.Continue
+                                                                                  a =>
+                                                                                match
+                                                                                  encode_pool_v1_pair_verified_afterstate_v1
+                                                                                    s.candidate_afterstate with
+                                                                                | ok v =>
+                                                                                  match
+                                                                                    match v with
+                                                                                    | core.result.Result.Ok t =>
+                                                                                      ok (core.result.Result.Ok t)
+                                                                                    | core.result.Result.Err e =>
+                                                                                      match
+                                                                                        encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1.call_once
+                                                                                          () e with
+                                                                                      | ok v =>
+                                                                                        ok (core.result.Result.Err v)
+                                                                                      | fail v => fail v
+                                                                                      | div => div with
+                                                                                  | ok v =>
+                                                                                    match
+                                                                                      match v with
+                                                                                      | core.result.Result.Ok v =>
+                                                                                        ok
+                                                                                          (core.ops.control_flow.ControlFlow.Continue
+                                                                                            v)
+                                                                                      | core.result.Result.Err e =>
+                                                                                        ok
+                                                                                          (core.ops.control_flow.ControlFlow.Break
+                                                                                            (core.result.Result.Err
+                                                                                              e)) with
+                                                                                    | ok v =>
+                                                                                      match v with
+                                                                                      |
+                                                                                      core.ops.control_flow.ControlFlow.Continue
+                                                                                          val =>
+                                                                                        match
+                                                                                          core.slice.index.Slice.index_mut
+                                                                                            (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                                              U8)
+                                                                                            (index_mut_back5 s16)
+                                                                                            { start := v_26 } with
+                                                                                        | ok v => ⋯
+                                                                                        | fail v => fail v
+                                                                                        | div => div
+                                                                                      |
+                                                                                      core.ops.control_flow.ControlFlow.Break
+                                                                                          residual =>
+                                                                                        match
+                                                                                          match residual with
+                                                                                          | core.result.Result.Ok x =>
+                                                                                            core.convert.Infallible.rec
+                                                                                              (fun x =>
+                                                                                                Result
+                                                                                                  (core.result.Result
+                                                                                                    Unit
+                                                                                                    PoolV1PairLatePublicStatementErrorV1))
+                                                                                              x
+                                                                                          | core.result.Result.Err v =>
+                                                                                            ok
+                                                                                              (core.result.Result.Err
+                                                                                                v) with
+                                                                                        | ok v =>
+                                                                                          ok (v, index_mut_back5 s16)
+                                                                                        | fail v => fail v
+                                                                                        | div => div
+                                                                                    | fail v => fail v
+                                                                                    | div => div
+                                                                                  | fail v => fail v
+                                                                                  | div => div
+                                                                                | fail v => fail v
+                                                                                | div => div
+                                                                              |
+                                                                              core.ops.control_flow.ControlFlow.Break
+                                                                                  residual =>
+                                                                                match
+                                                                                  match residual with
+                                                                                  | core.result.Result.Ok x =>
+                                                                                    core.convert.Infallible.rec
+                                                                                      (fun x =>
+                                                                                        Result
+                                                                                          (core.result.Result Unit
+                                                                                            PoolV1PairLatePublicStatementErrorV1))
+                                                                                      x
+                                                                                  | core.result.Result.Err v =>
+                                                                                    ok (core.result.Result.Err v) with
+                                                                                | ok v => ok (v, index_mut_back5 s16)
+                                                                                | fail v => fail v
+                                                                                | div => div
+                                                                            | fail v => fail v
+                                                                            | div => div
+                                                                          | fail v => fail v
+                                                                          | div => div
+                                                                        | fail v => fail v
+                                                                        | div => div
+                                                                      | fail v => fail v
+                                                                      | div => div
+                                                                    | fail v => fail v
+                                                                    | div => div
+                                                                  | fail v => fail v
+                                                                  | div => div
+                                                                | fail v => fail v
+                                                                | div => div
+                                                              | fail v => fail v
+                                                              | div => div
+                                                            | fail v => fail v
+                                                            | div => div
+                                                          | fail v => fail v
+                                                          | div => div
+                                                        | fail v => fail v
+                                                        | div => div
+                                                      | fail v => fail v
+                                                      | div => div
+                                                    | fail v => fail v
+                                                    | div => div
+                                                  | fail v => fail v
+                                                  | div => div
+                                                | fail v => fail v
+                                                | div => div
+                                              | fail v => fail v
+                                              | div => div
+                                            | fail v => fail v
+                                            | div => div
+                                          | fail v => fail v
+                                          | div => div
+                                        | fail v => fail v
+                                        | div => div
+                                      | fail v => fail v
+                                      | div => div
+                                    | fail v => fail v
+                                    | div => div
+                                  | fail v => fail v
+                                  | div => div
+                                | fail v => fail v
+                                | div => div
+                              | fail v => fail v
+                              | div => div
+                            | fail v => fail v
+                            | div => div
+                          | fail v => fail v
+                          | div => div
+                        | fail v => fail v
+                        | div => div
+                      | fail v => fail v
+                      | div => div
+                    | fail v => fail v
+                    | div => div
+                  | fail v => fail v
+                  | div => div
+                | fail v => fail v
+                | div => div
+              | fail v => fail v
+              | div => div
+          | fail v => fail v
+          | div => div
+        | fail v => fail v
+        | div => div
+    | fail v => fail v
+    | div => div) =
+    ok (core.result.Result.Ok (), after)
+⊢ ∃ bytes, encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate = ok (core.result.Result.Ok bytes)
+'AspisR1.S2K.LateAdmission.candidate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
