@@ -1,0 +1,59 @@
+/home/dombarker/project-offloads/pair-zero-scanner-proof-v1-20261023/sources/ZeroScannerSourceStepsV1.lean:28:45: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+/home/dombarker/project-offloads/pair-zero-scanner-proof-v1-20261023/sources/ZeroScannerSourceStepsV1.lean:28:71: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.fail` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `OptionT.fail`
+  [apply] `fail`
+  [apply] `Lean.Parser.Tactic.fail`
+  [apply] `Std.Internal.Parsec.fail`
+  [apply] `Lean.Parser.Tactic.Grind.fail`
+  [apply] `Std.Http.Protocol.H1.Reader.fail`
+/home/dombarker/project-offloads/pair-zero-scanner-proof-v1-20261023/sources/ZeroScannerSourceStepsV1.lean:32:2: error: unsolved goals
+case neg
+s : Slice U8
+b : U8
+bs : List U8
+hs : ↑s = b :: bs
+hidx : s.index_usize 0#usize = ok b
+hbound : ↑1#usize ≤ s.length
+hsub :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) s { start := 1#usize } =
+    ok (s.drop 1#usize)
+hb : ¬b = 0#u8
+⊢ ¬↑b = 0
+/home/dombarker/project-offloads/pair-zero-scanner-proof-v1-20261023/sources/ZeroScannerSourceStepsV1.lean:66:2: error: unsolved goals
+case neg
+s : Slice U8
+index : Usize
+b : U8
+hi : ↑index < (↑s).length
+hget : (↑s)[↑index]? = some b
+hmax : (↑s).length ≤ Usize.max
+hb : ↑index + 1 ≤ Usize.max
+hs : index + 1#usize ⦃ next => ↑next = ↑index + 1 ⦄
+next : UScalar UScalarTy.Usize
+hadd : index + 1#usize = ok next
+hnext : ↑next = ↑index + 1
+hguard : index < s.len
+hidx : s.index_usize index = ok b
+hz : ¬b = 0#u8
+⊢ ↑b = 0 →
+    (do
+        let index1 ← index + 1#usize
+        ok (cont index1)) =
+      ok (done (core.result.Result.Err solana_program_error.ProgramError.AccountAlreadyInitialized))
+'AspisR1ZeroScannerSourceStepsV1.tail_body_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1ZeroScannerSourceStepsV1.tail_body_cons' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1ZeroScannerSourceStepsV1.indexed_body_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1ZeroScannerSourceStepsV1.indexed_body_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1ZeroScannerSourceStepsV1.drop_cons_at' depends on axioms: [propext, Classical.choice, Quot.sound]

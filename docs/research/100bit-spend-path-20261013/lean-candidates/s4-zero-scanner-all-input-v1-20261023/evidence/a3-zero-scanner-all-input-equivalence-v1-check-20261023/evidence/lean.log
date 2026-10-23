@@ -1,0 +1,67 @@
+/private/tmp/a3-zero-scanner-all-input-equivalence-v1-check-20261023/sources/ZeroScannerAllInputEquivalenceV1.lean:22:8: error: Type mismatch: After simplification, term
+  ih (s.drop 1#usize) (tail_drop_cons s b bs hs)
+ has type
+  @Eq (Result (core.result.Result Unit solana_program_error.ProgramError)) (tail.require_zero_loop (s.drop 1#usize))
+    (ok (scanList bs))
+but is expected to have type
+  @Eq (Result (core.result.Result Unit solana_program_error.ProgramError))
+    (loop (fun remaining1 => tail.require_zero_loop.body remaining1) (s.drop 1#usize)) (ok (scanList bs))
+/private/tmp/a3-zero-scanner-all-input-equivalence-v1-check-20261023/sources/ZeroScannerAllInputEquivalenceV1.lean:48:10: error: Type mismatch: After simplification, term
+  hrec
+ has type
+  @Eq (Result (core.result.Result Unit solana_program_error.ProgramError)) (indexed.require_zero_loop s next)
+    (ok (scanList (List.drop ↑next ↑s)))
+but is expected to have type
+  @Eq (Result (core.result.Result Unit solana_program_error.ProgramError))
+    (loop (fun index1 => indexed.require_zero_loop.body s index1) next) (ok (scanList (List.drop ↑next ↑s)))
+/private/tmp/a3-zero-scanner-all-input-equivalence-v1-check-20261023/sources/ZeroScannerAllInputEquivalenceV1.lean:58:2: error: Type mismatch: After simplification, term
+  indexed_loop_total_exact s 0#usize (id (Decidable.byContradiction fun a => indexed_total_exact._proof_1_1 s a))
+ has type
+  @Eq (Result (core.result.Result Unit solana_program_error.ProgramError)) (indexed.require_zero_loop s 0#usize)
+    (ok (scanList (List.drop ↑0#usize ↑s)))
+but is expected to have type
+  @Eq (Result (core.result.Result Unit solana_program_error.ProgramError)) (indexed.require_zero_loop s 0#usize)
+    (ok (scanList ↑s))
+/private/tmp/a3-zero-scanner-all-input-equivalence-v1-check-20261023/sources/ZeroScannerAllInputEquivalenceV1.lean:90:4: error: unsolved goals
+case neg
+b : U8
+bs : List U8
+ih : scanList bs = rejected ↔ ∃ b ∈ bs, b ≠ 0#u8
+hb : ¬b = 0#u8
+⊢ ¬↑b = 0 ∨ ∃ a ∈ bs, ¬↑a = 0
+/private/tmp/a3-zero-scanner-all-input-equivalence-v1-check-20261023/sources/ZeroScannerAllInputEquivalenceV1.lean:95:26: error(lean.invalidField): Invalid field `trans`: The environment does not contain `Function.trans`, so it is not possible to project the field `trans` from an expression
+  ok.injEq
+of type
+  ∀ (v v_1 : ?m.22), (ok v = ok v_1) = (v = v_1)
+/private/tmp/a3-zero-scanner-all-input-equivalence-v1-check-20261023/sources/ZeroScannerAllInputEquivalenceV1.lean:101:26: error(lean.invalidField): Invalid field `trans`: The environment does not contain `Function.trans`, so it is not possible to project the field `trans` from an expression
+  ok.injEq
+of type
+  ∀ (v v_1 : ?m.23), (ok v = ok v_1) = (v = v_1)
+'AspisR1ZeroScannerAllInputEquivalenceV1.tail_loop_total_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1ZeroScannerAllInputEquivalenceV1.indexed_loop_total_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1ZeroScannerAllInputEquivalenceV1.all_input_source_equivalence' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1ZeroScannerAllInputEquivalenceV1.actual_acceptance_iff' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1ZeroScannerAllInputEquivalenceV1.actual_rejection_iff' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1ZeroScannerAllInputEquivalenceV1.empty_slice_succeeds' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1ZeroScannerAllInputEquivalenceV1.every_nonzero_position_rejected' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
