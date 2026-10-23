@@ -45,3 +45,51 @@ The source revision is the task base in revision.txt (the first native input
 receipts abbreviate it as 341584654f). Exact source snapshots and hashes are
 retained. No shared object was overwritten; cache links are read-only.
 
+
+## Stage 2: guarded values, interpolation, prefix and optimized power
+
+J10704 proves complete canonical guarded evaluation by composing the guard
+equivalence with the retained generic evaluator. J10705 derives all owned
+partial sums and the standard round polynomial from the per-call oracle
+results at actual source sample points; no polynomial or sample-sum array
+image is a premise. Per-oracle result correctness and the prefix relation
+remain explicit. J10710 derives the semantic index relation and source
+sample/tail/next-alpha prefix preservation. Initial prefix is unconditional;
+the source update reads exactly semantic position 15+r. These local results
+do not yet bind the entire native round driver or its semantic oracle.
+
+J10706 checks an exact recursive owner of CM31 power using the native bit
+condition, optimized square, and right shift. J10711 proves success,
+canonicality and acc*base^exp for every u64 exponent. Unlike the previous
+multiply-square owner, this owner calls the actual optimized CM31.square.
+Every reused extraction declaration is byte-identical, recorded in
+encoder-native-nodes-callee-binding.json. Native while-loop composition
+remains a distinct step. J10707/09 are failed shift-transparency/let-rewrite
+drafts; J10708 is a failed platform-dependent usize addition draft. The
+replacements use a concrete one-bit shift and the proved bounded addition.
+All accepted printed axioms are standard only.
+
+| Attempt | Exact module | Exit | Wall s | Peak RSS KiB | Swaps |
+|---|---|---:|---:|---:|---:|
+| J10704 | R1Z.ProverCommitEncoderGuardValue55 | 0 | 1.72 | 4100224 | 0 |
+| J10705 | R1Z.ProverCommitSemanticInterpolation55 | 0 | 2.28 | 4131836 | 0 |
+| J10706 | AspisR1ProducerRelease47.EncoderNativeNodes55 | 0 | 1.30 | 2635072 | 0 |
+| J10710 | R1Z.ProverCommitChallengePrefix55 | 0 | 1.97 | 4125740 | 0 |
+| J10711 | R1Z.ProverCommitEncoderNativePower55 | 0 | 2.51 | 4116108 | 0 |
+
+The optimized power extraction exits 0/0 (1.133/0.313 s,
+213520/61776 KiB RSS, zero swap). The reservation preflight waited before
+launching when another 8-GiB scope would exceed the 55-GiB reservation.
+
+All native smaller even/odd collections now pass at lengths 2,4,8,16,32,64,
+128 for M31, QM31 and WideExact. No allocator, Vec, iterator or callee is
+stubbed. The largest smaller check, WideExact-128, exits 0 in 177.963 s at
+5575076 KiB RSS with zero swap. Exact commands, scope limits, source revision,
+hashes, snapshots, wall/RSS/swap and raw logs are in the named receipts.
+
+The full-record WideExact-256 check was stopped during memory growth at
+6456720 KiB (71.837 s), exit 1, zero swap; no cap was raised and it was not
+retried unchanged. The replacement verifies output words separately, while
+retaining the complete allocation and both native collect paths. Word 0
+passes in 88.255 s at 4333640 KiB, exit 0, zero swap. Remaining words are
+being checked independently; no complete WideExact-256 claim is made yet.

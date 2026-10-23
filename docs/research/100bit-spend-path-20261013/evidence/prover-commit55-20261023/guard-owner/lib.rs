@@ -102,3 +102,13 @@ pub fn eval_rec<T:CodeField>(c:&[T],depth:usize,height:usize,nodes:&[M31;9])->T 
  a.add(T::from_m31(nodes[depth]).mul(b))
 }
 }
+
+pub mod nodes55 {
+use super::field::CM31;
+pub fn pow(base:CM31,exp:u64,acc:CM31)->CM31 {
+ if exp==0 {acc} else {
+  let next=if exp&1==1 {acc.mul(base)} else {acc};
+  pow(base.square(),exp>>1u32,next)
+ }
+}
+}

@@ -164,3 +164,63 @@ fn split<T:Copy>(c:&[T])->(Vec<T>,Vec<T>) {
   assert_eq!(a[k as usize],c[2*k as usize]);assert_eq!(b[k as usize],c[2*k as usize+1]);
  }
 }
+
+#[cfg(kani)] mod wide_components {
+ use super::*;
+ #[kani::proof] #[kani::unwind(260)] fn split_256_word0() {
+  let raw:[[u32;8];256]=kani::any();let c:[field::WideExact;256]=unsafe{std::mem::transmute(raw)};
+  let (a,b)=split(&c);let k:u8=kani::any();kani::assume(k<128);
+  assert_eq!(a.len(),128);assert_eq!(b.len(),128);
+  assert_eq!(a[k as usize].to_limbs()[0],c[2*k as usize].to_limbs()[0]);
+  assert_eq!(b[k as usize].to_limbs()[0],c[2*k as usize+1].to_limbs()[0]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn split_256_word1() {
+  let raw:[[u32;8];256]=kani::any();let c:[field::WideExact;256]=unsafe{std::mem::transmute(raw)};
+  let (a,b)=split(&c);let k:u8=kani::any();kani::assume(k<128);
+  assert_eq!(a.len(),128);assert_eq!(b.len(),128);
+  assert_eq!(a[k as usize].to_limbs()[1],c[2*k as usize].to_limbs()[1]);
+  assert_eq!(b[k as usize].to_limbs()[1],c[2*k as usize+1].to_limbs()[1]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn split_256_word2() {
+  let raw:[[u32;8];256]=kani::any();let c:[field::WideExact;256]=unsafe{std::mem::transmute(raw)};
+  let (a,b)=split(&c);let k:u8=kani::any();kani::assume(k<128);
+  assert_eq!(a.len(),128);assert_eq!(b.len(),128);
+  assert_eq!(a[k as usize].to_limbs()[2],c[2*k as usize].to_limbs()[2]);
+  assert_eq!(b[k as usize].to_limbs()[2],c[2*k as usize+1].to_limbs()[2]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn split_256_word3() {
+  let raw:[[u32;8];256]=kani::any();let c:[field::WideExact;256]=unsafe{std::mem::transmute(raw)};
+  let (a,b)=split(&c);let k:u8=kani::any();kani::assume(k<128);
+  assert_eq!(a.len(),128);assert_eq!(b.len(),128);
+  assert_eq!(a[k as usize].to_limbs()[3],c[2*k as usize].to_limbs()[3]);
+  assert_eq!(b[k as usize].to_limbs()[3],c[2*k as usize+1].to_limbs()[3]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn split_256_word4() {
+  let raw:[[u32;8];256]=kani::any();let c:[field::WideExact;256]=unsafe{std::mem::transmute(raw)};
+  let (a,b)=split(&c);let k:u8=kani::any();kani::assume(k<128);
+  assert_eq!(a.len(),128);assert_eq!(b.len(),128);
+  assert_eq!(a[k as usize].to_limbs()[4],c[2*k as usize].to_limbs()[4]);
+  assert_eq!(b[k as usize].to_limbs()[4],c[2*k as usize+1].to_limbs()[4]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn split_256_word5() {
+  let raw:[[u32;8];256]=kani::any();let c:[field::WideExact;256]=unsafe{std::mem::transmute(raw)};
+  let (a,b)=split(&c);let k:u8=kani::any();kani::assume(k<128);
+  assert_eq!(a.len(),128);assert_eq!(b.len(),128);
+  assert_eq!(a[k as usize].to_limbs()[5],c[2*k as usize].to_limbs()[5]);
+  assert_eq!(b[k as usize].to_limbs()[5],c[2*k as usize+1].to_limbs()[5]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn split_256_word6() {
+  let raw:[[u32;8];256]=kani::any();let c:[field::WideExact;256]=unsafe{std::mem::transmute(raw)};
+  let (a,b)=split(&c);let k:u8=kani::any();kani::assume(k<128);
+  assert_eq!(a.len(),128);assert_eq!(b.len(),128);
+  assert_eq!(a[k as usize].to_limbs()[6],c[2*k as usize].to_limbs()[6]);
+  assert_eq!(b[k as usize].to_limbs()[6],c[2*k as usize+1].to_limbs()[6]);
+ }
+ #[kani::proof] #[kani::unwind(260)] fn split_256_word7() {
+  let raw:[[u32;8];256]=kani::any();let c:[field::WideExact;256]=unsafe{std::mem::transmute(raw)};
+  let (a,b)=split(&c);let k:u8=kani::any();kani::assume(k<128);
+  assert_eq!(a.len(),128);assert_eq!(b.len(),128);
+  assert_eq!(a[k as usize].to_limbs()[7],c[2*k as usize].to_limbs()[7]);
+  assert_eq!(b[k as usize].to_limbs()[7],c[2*k as usize+1].to_limbs()[7]);
+ }
+}
