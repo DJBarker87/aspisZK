@@ -999,3 +999,21 @@ The failure is in raw generated output, not introduced by the Q.raw slot
 implementation. Minimal proof-friendly powers-loop candidates are being
 checked through both code generation and Lean compilation before any caller
 source feasibility claim is accepted. No unchanged failing replay is planned.
+
+
+MEASURED combined candidate CU gates:
+`s9-combined-helper-constructor-cu-gates-v1-20261023` layers only the split
+constructor onto the exact helper933 candidate. All six fixture outputs match.
+Relative to helper933, stage 1 adds zero CU and settlement adds 244 CU. Against
+the S4-approved stage1_cu/settlement_cu comparator, the largest increases are
+10,817/8,343 CU, within the user's 12,000-CU allowance. The separate legacy
+b1_* comparator does not pass and is retained as such. Historical baseline
+runner source/path pins exist but an execution-time baseline ELF digest was
+not recorded; the current same-path digest is distinguished from that fact.
+
+One reused OS-origin full-mask proof passes both verification/settlement legs
+on the exact combined candidate ELF: 1,206,885/1,148,259 CU, 295/882 bytes.
+This is one retained full-mask control, not a fresh draw or a constant/worst-case
+CU proof. Keys created by the test driver are retained securely outside Git;
+no key material or binaries are included in the packet. Source re-extraction,
+actual caller refinement and full release gates remain OPEN.
