@@ -39,31 +39,35 @@
         out
     }
 
+pub(crate) trait Oracle:Sync {
+    fn evaluate(&self,point:&[QM31;10])->Result<QM31,Error>;
+}
+
     pub fn prove_sumcheck<H: aspis_core::Digest32>(
         transcript: &mut SemanticTranscript<H>,
         output: &mut Vec<u8>,
         initial_claim: QM31,
-        oracle: impl Fn(&[QM31; 10]) -> Result<QM31, Error> + Sync,
+        oracle: &impl Oracle,
     ) -> Result<([QM31; 10], QM31), Error> {
-        let mut point = [QM31::ZERO; 10];
-        let mut running = initial_claim;
-        let mut round=0;
-        while round<10 {
+        prove_sumcheck_rounds(transcript,output,[QM31::ZERO;10],initial_claim,0,oracle)
+    }
+
+fn prove_sumcheck_rounds<H:aspis_core::Digest32,F:Oracle>(transcript:&mut SemanticTranscript<H>,output:&mut Vec<u8>,point:[QM31;10],running:QM31,round:usize,oracle:&F)->Result<([QM31;10],QM31),Error> {
+    if round==10 {
+        if oracle.evaluate(&point)?!=running {return Err(Error::Terminal);}
+        return Ok((point,running));
+    }
+    let (point,running)=prove_sumcheck_round(transcript,output,point,running,round,oracle)?;
+    prove_sumcheck_rounds(transcript,output,point,running,round+1,oracle)
+}
+fn prove_sumcheck_round<H:aspis_core::Digest32,F:Oracle>(transcript:&mut SemanticTranscript<H>,output:&mut Vec<u8>,mut point:[QM31;10],mut running:QM31,round:usize,oracle:&F)->Result<([QM31;10],QM31),Error> {
             let remaining = 9 - round;
             let mut values = [QM31::ZERO; 28];
             #[cfg(feature="ct-host-prover")]
             {
                 let assignments=1usize<<remaining;
                 let evaluations=crate::host_work::map(100+round,28*assignments,|i| {
-                    let sample=i/assignments;let assignment=i%assignments;
-                    let mut at=point;
-                    at[round]=QM31::from_cm31(CM31::from_m31(M31(sample as u32)));
-                    let mut offset=0;
-                    while offset<remaining {
-                        at[round+1+offset]=if (assignment>>(remaining-1-offset))&1==0 {QM31::ZERO}else{QM31::ONE};
-                        offset+=1;
-                    }
-                    oracle(&at)
+                    evaluate_assignment(oracle,point,round,assignments,i)
                 });
                 // Same sample and assignment order, including error selection.
                 let mut i=0;
@@ -85,7 +89,7 @@
                                 QM31::ONE
                             };
                     }
-                    *value = value.add(oracle(&point)?);
+                    *value = value.add(oracle.evaluate(&point)?);
                 }
             }
             }
@@ -93,20 +97,32 @@
             if state_only_boundary_sum(&polynomial) != running {
                 return Err(Error::Boundary { round });
             }
-            let mut polynomial_bytes=Vec::with_capacity(896);
-            let mut i=0;
-            while i<28 {
-                polynomial_bytes.extend_from_slice(&WideExact::from_qm31(polynomial[i]).to_le_bytes());
-                i+=1;
-            }
+            let polynomial_bytes=encode_polynomial(&polynomial);
             let framed=wire::record(15+round as u8,&polynomial_bytes)?;
             point[round] = transcript.semantic(15 + round as u8, &framed)?;
             output.extend_from_slice(&framed);
             running = evaluate_state_only_polynomial(&polynomial, point[round]);
-            round+=1;
-        }
-        if oracle(&point)? != running {
-            return Err(Error::Terminal);
-        }
-        Ok((point, running))
+    Ok((point,running))
+}
+
+fn evaluate_assignment<F:Oracle>(oracle:&F,point:[QM31;10],round:usize,assignments:usize,i:usize)->Result<QM31,Error> {
+    let remaining=9-round;
+                    let sample=i/assignments;let assignment=i%assignments;
+                    let mut at=point;
+                    at[round]=QM31::from_cm31(CM31::from_m31(M31(sample as u32)));
+                    let mut offset=0;
+                    while offset<remaining {
+                        at[round+1+offset]=if (assignment>>(remaining-1-offset))&1==0 {QM31::ZERO}else{QM31::ONE};
+                        offset+=1;
+                    }
+                    oracle.evaluate(&at)
+}
+
+fn encode_polynomial(polynomial:&[QM31;28])->Vec<u8> {
+    let mut bytes=Vec::with_capacity(896);let mut i=0;
+    while i<28 {
+        let encoded=WideExact::from_qm31(polynomial[i]).to_le_bytes();
+        bytes.extend_from_slice(&encoded);i+=1;
     }
+    bytes
+}

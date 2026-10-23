@@ -28,19 +28,21 @@ use aspis_statement::{multilinear_evaluate_qm31,state_only_copy_helper_sum,State
         columns: &[Vec<QM31>; 29],
         point: &[QM31; 10],
     ) -> Result<[[QM31; 29]; 3], Error> {
-        let mut claims = [[QM31::ZERO; 29]; 3];
         let points=wire::statement_points(point);
-        let mut p=0;
-        while p<3 {
-            let mut lane=0;
-            while lane<29 {
-                claims[p][lane]=multilinear_evaluate_qm31(&columns[lane],&points[p]).ok_or(Error::Public)?;
-                lane+=1;
-            }
-            p+=1;
-        }
-        Ok(claims)
+        let first=claims_at_point(columns,&points[0])?;
+        let second=claims_at_point(columns,&points[1])?;
+        let third=claims_at_point(columns,&points[2])?;
+        Ok([first,second,third])
     }
+#[inline(always)]
+fn claims_at_point(columns:&[Vec<QM31>;29],point:&[QM31;10])->Result<[QM31;29],Error> {
+    let mut claims=[QM31::ZERO;29];let mut lane=0;
+    while lane<29 {
+        let value=multilinear_evaluate_qm31(&columns[lane],point).ok_or(Error::Public)?;
+        claims[lane]=value;lane+=1;
+    }
+    Ok(claims)
+}
 
     #[allow(clippy::too_many_arguments)]
     fn build_with_helper_mode<H: Digest32>(
@@ -94,16 +96,9 @@ use aspis_statement::{multilinear_evaluate_qm31,state_only_copy_helper_sum,State
             mu,
             eta,
         };
+        let oracle=SemanticOracle{public:&public,columns:&columns,challenges:&challenges,eta,d:&dc};
         let (alpha, _) = crate::host_sumcheck::prove_sumcheck(
-            &mut transcript,
-            &mut bytes,
-            mask_sum,
-            |point| {
-                let claims = point_claims(&columns, point)?;
-                let terminal = public.terminal_qm31(&claims, point, &challenges).map_err(|_|Error::Public)?;
-                let mask=claim_mask_value(claims[0],point);
-                Ok(mask.add(eta.mul(terminal)).add(extra(&dc,point[8],point[9])))
-            },
+            &mut transcript,&mut bytes,mask_sum,&oracle,
         )?;
         let claims = point_claims(&columns, &alpha)?;
         let state_before_z0 = transcript.state();
@@ -130,25 +125,49 @@ use aspis_statement::{multilinear_evaluate_qm31,state_only_copy_helper_sum,State
     }
 
 
+struct SemanticOracle<'a,'p> {
+    public:&'a Public<'p>,
+    columns:&'a[Vec<QM31>;29],
+    challenges:&'a Challenges,
+    eta:QM31,
+    d:&'a[QM31;1024],
+}
+impl crate::host_sumcheck::Oracle for SemanticOracle<'_,'_> {
+    fn evaluate(&self,point:&[QM31;10])->Result<QM31,Error> {
+        let claims=point_claims(self.columns,point)?;
+        let terminal=self.public.terminal_qm31(&claims,point,self.challenges).map_err(|_|Error::Public)?;
+        let mask=claim_mask_value(claims[0],point);
+        Ok(mask.add(self.eta.mul(terminal)).add(extra(self.d,point[8],point[9])))
+    }
+}
+
 fn check_semantic_columns(c1:&[Vec<M31>;26],d:&[QM31;1024],g:&[QM31;1024])->Result<(),Error> {
-        let mut lane=0;
-        while lane<26 {
-            if c1[lane].len()!=1024 {return Err(Error::Public);}
-            let mut row=0;
-            while row<1024 {
-                if c1[lane][row].0>=P {return Err(Error::Public);}
-                row+=1;
-            }
-            lane+=1;
-        }
-        let mut at=0;
-        while at<2048 {
-            let x=if at<1024 {d[at]} else {g[at-1024]};
-            let mut b=[0;16];
-            x.write_le_bytes(&mut b);
-            if QM31::from_le_bytes(&b).is_none() {return Err(Error::Public);}
-            at+=1;
-        }
+    check_base_columns(c1)?;
+    check_secure_column(d)?;
+    check_secure_column(g)
+}
+fn check_base_columns(c1:&[Vec<M31>;26])->Result<(),Error> {
+    let mut lane=0;
+    while lane<26 {check_base_column(&c1[lane])?;lane+=1;}
+    Ok(())
+}
+fn check_base_column(column:&[M31])->Result<(),Error> {
+    if column.len()!=1024 {return Err(Error::Public);}
+    let mut row=0;
+    while row<1024 {
+        if column[row].0>=P {return Err(Error::Public);}
+        row+=1;
+    }
+    Ok(())
+}
+fn check_secure_column(column:&[QM31;1024])->Result<(),Error> {
+    let mut row=0;
+    while row<1024 {
+        let mut b=[0;16];
+        column[row].write_le_bytes(&mut b);
+        if QM31::from_le_bytes(&b).is_none() {return Err(Error::Public);}
+        row+=1;
+    }
     Ok(())
 }
 fn zc_rows<H:Digest32>(transcript:&mut SemanticTranscript<H>,bytes:&mut Vec<u8>)->Result<[QM31;10],Error> {
@@ -156,16 +175,20 @@ fn zc_rows<H:Digest32>(transcript:&mut SemanticTranscript<H>,bytes:&mut Vec<u8>)
     while i<10 {zc[i]=semantic_row(3+i as u8,&[],transcript,bytes)?;i+=1;}
     Ok(zc)
 }
-fn add_d_tail(mut mask_sum:QM31,dc:&[QM31;1024])->QM31 {
-        let mut side=0;
-        while side<2 {
-            let mut sum=dc[28*side];
-            let mut j=0;
-            while j<28 {sum=sum.add(dc[28*side+j]);j+=1;}
-            mask_sum=mask_sum.add(sum.mul_m31(M31(512)));
-            side+=1;
-        }
-    mask_sum
+fn add_d_tail(mask_sum:QM31,dc:&[QM31;1024])->QM31 {
+    let first=d_tail_side(dc,0).mul_m31(M31(512));
+    let mask_sum=mask_sum.add(first);
+    let second=d_tail_side(dc,28).mul_m31(M31(512));
+    mask_sum.add(second)
+}
+fn d_tail_side(dc:&[QM31;1024],offset:usize)->QM31 {
+    // Preserve the shipped h0 term in addition to the j=0 summand.
+    d_tail_sum(dc,offset,0,dc[offset])
+}
+fn d_tail_sum(dc:&[QM31;1024],offset:usize,j:usize,sum:QM31)->QM31 {
+    if j==28 {return sum;}
+    let next=sum.add(dc[offset+j]);
+    d_tail_sum(dc,offset,j+1,next)
 }
 fn lift_columns(c1:&[Vec<M31>;26],h1:Vec<QM31>,g:&[QM31;1024],d:&[QM31;1024])->[Vec<QM31>;29] {
     let mut columns:[Vec<QM31>;29]=Default::default();
@@ -214,14 +237,18 @@ fn extra_claims(columns:&[Vec<QM31>;29],variant:crate::transport::Variant,a:QM31
     extras
 }
 fn claim_bytes(claims:[[QM31;29];3],extras:[QM31;29])->Vec<u8> {
-    let mut bytes=Vec::with_capacity(3712);let mut p=0;
-    while p<3 {
-        let mut lane=0;
-        while lane<29 {bytes.extend_from_slice(&WideExact::from_qm31(claims[p][lane]).to_le_bytes());lane+=1;}
-        p+=1;
-    }
+    let bytes=Vec::with_capacity(3712);
+    let bytes=append_claim_bytes(bytes,&claims[0]);
+    let bytes=append_claim_bytes(bytes,&claims[1]);
+    let bytes=append_claim_bytes(bytes,&claims[2]);
+    append_claim_bytes(bytes,&extras)
+}
+fn append_claim_bytes(mut bytes:Vec<u8>,claims:&[QM31;29])->Vec<u8> {
     let mut lane=0;
-    while lane<29 {bytes.extend_from_slice(&WideExact::from_qm31(extras[lane]).to_le_bytes());lane+=1;}
+    while lane<29 {
+        let encoded=WideExact::from_qm31(claims[lane]).to_le_bytes();
+        bytes.extend_from_slice(&encoded);lane+=1;
+    }
     bytes
 }
 fn endpoint_bytes(columns:&[Vec<QM31>;29],variant:crate::transport::Variant,z:aspis_core::circle::SecureCirclePoint)->Vec<u8> {

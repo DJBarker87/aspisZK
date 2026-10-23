@@ -16,24 +16,13 @@ impl EncodingDomain {
         let levels=domain_append_levels(levels,0)?;
         Ok(Self{xy,levels})
     }
-    pub fn evaluate<T: CodeField>(&self, coefficients: &[T], depth: usize) -> Result<Vec<T>, Error> {
-        let nodes = &self.levels[depth];
-        if coefficients.len() == 1 {
-            return filled(nodes.len(), coefficients[0]);
-        }
-        let mut even = filled(coefficients.len() / 2, T::ZERO)?;
-        let mut odd = filled(even.len(), T::ZERO)?;
-        let mut j=0;
-        while j<even.len() {
-            even[j]=coefficients[2*j];odd[j]=coefficients[2*j+1];
-            j+=1;
-        }
-        let a = self.evaluate(&even, depth + 1)?;
-        let b = self.evaluate(&odd, depth + 1)?;
-        let mut out = filled(nodes.len(), T::ZERO)?;
-        j=0;
-        while j<nodes.len() {out[j]=a[j/2].add(T::from_m31(nodes[j]).mul(b[j/2]));j+=1;}
-        Ok(out)
+    pub fn evaluate<T: CodeField>(&self,coefficients:&[T],depth:usize)->Result<Vec<T>,Error> {
+        let count=self.levels[depth].len();
+        if coefficients.len()==1 {return filled(count,coefficients[0]);}
+        let (even,odd)=split_coefficients(coefficients)?;
+        let a=self.evaluate(&even,depth+1)?;
+        let b=self.evaluate(&odd,depth+1)?;
+        merge_evaluations(&self.levels[depth],&a,&b)
     }
     /// Exact §3 encoder at every stored index, O(N log 1024), using
     /// N_(2j)(x)=N_j(2x²−1), N_(2j+1)(x)=x*N_j(2x²−1).
@@ -63,6 +52,19 @@ impl EncodingDomain {
     }
 }
 
+fn split_coefficients<T:CodeField>(coefficients:&[T])->Result<(Vec<T>,Vec<T>),Error> {
+    let mut even=filled(coefficients.len()/2,T::ZERO)?;
+    let mut odd=filled(even.len(),T::ZERO)?;
+    let mut j=0;
+    while j<even.len() {even[j]=coefficients[2*j];odd[j]=coefficients[2*j+1];j+=1;}
+    Ok((even,odd))
+}
+fn merge_evaluations<T:CodeField>(nodes:&[M31],a:&[T],b:&[T])->Result<Vec<T>,Error> {
+    let mut out=filled(nodes.len(),T::ZERO)?;let mut j=0;
+    while j<nodes.len() {out[j]=a[j/2].add(T::from_m31(nodes[j]).mul(b[j/2]));j+=1;}
+    Ok(out)
+}
+
 fn domain_points()->Result<Vec<Point<M31>>,Error> {
     let count=FIBRE_COUNT;
     let mut xy=filled(count,Point{x:M31::ZERO,y:M31::ZERO})?;
@@ -71,9 +73,11 @@ fn domain_points()->Result<Vec<Point<M31>>,Error> {
     Ok(xy)
 }
 fn domain_first_level(xy:&[Point<M31>])->Result<Vec<M31>,Error> {
+    let count=FIBRE_COUNT;
+
     let mut first=filled(FIBRE_COUNT,M31::ZERO)?;
     let mut u=0;
-    while u<FIBRE_COUNT {first[u]=xy[u].x.mul(xy[u].x).double().sub(M31::ONE);u+=1;}
+    while u<count {first[u]=xy[u].x.mul(xy[u].x).double().sub(M31::ONE);u+=1;}
     Ok(first)
 }
 fn domain_next_level(previous:&[M31])->Result<Vec<M31>,Error> {
@@ -127,11 +131,17 @@ impl PrivateSalts {
     pub fn get(&self, index: usize) -> &[u8; 32] { &self.0[index] }
     fn len(&self) -> usize { self.0.len() }
 }
+#[inline(always)]
+pub(crate) fn clear_private_salt(salt:&mut[u8;32]) {
+    // SAFETY: the caller supplies a uniquely borrowed salt cell.
+    unsafe {core::ptr::write_volatile(salt,[0;32]);}
+}
 impl Drop for PrivateSalts {
     fn drop(&mut self) {
-        for salt in &mut self.0 {
-            // SAFETY: this buffer is uniquely owned while Drop runs.
-            unsafe { core::ptr::write_volatile(salt, [0; 32]); }
+        let mut index=0;
+        while index<self.0.len() {
+            clear_private_salt(&mut self.0[index]);
+            index+=1;
         }
         core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
     }
@@ -161,15 +171,7 @@ impl Commitment {
         if private_salts.as_ref().is_some_and(|salts| salts.len() != FIBRE_COUNT) {
             return Err(Error::WrongLength);
         }
-        let indices: &[usize] = match time {
-            CommitmentTime::C1 => &[
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-                23, 24, 25, 28,
-            ],
-            CommitmentTime::C2 => &[26, 27],
-        };
-        let mut lanes = filled(indices.len(), 0)?;
-        lanes.copy_from_slice(indices);
+        let lanes=commitment_lanes(time)?;
         let words=encode_commitment_words(domain,messages,variant,&lanes)?;
         let leaves=commitment_leaves(hash,time,&lanes,&words,private_salts.as_ref())?;
         Ok(Self {
@@ -189,10 +191,15 @@ impl Commitment {
         self.tree.multiproof(indices)
     }
     pub(crate) fn fill_opening(&self, u: FibreIndex, out: &mut FibreOpening) {
+        let count=self.lanes.len();
         let mut j=0;
-        while j<self.lanes.len() {
-            let mut s=0;
-            while s<4 {out.values[s][self.lanes[j]]=self.words[j].value(4*u.get()+s);s+=1;}
+        while j<count {
+            let values=opening_lane_values(&self.words[j],u);
+            let lane=self.lanes[j];
+            out.values[0][lane]=values[0];
+            out.values[1][lane]=values[1];
+            out.values[2][lane]=values[2];
+            out.values[3][lane]=values[3];
             j+=1;
         }
         // No per-query path: authentication is the batch multiproof.
@@ -207,6 +214,21 @@ impl Commitment {
     }
 }
 
+
+fn commitment_lanes(time:CommitmentTime)->Result<Vec<usize>,Error> {
+    match time {
+        CommitmentTime::C1=>{
+            let mut lanes=filled(27,0)?;
+            lanes.copy_from_slice(&[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,28]);
+            Ok(lanes)
+        }
+        CommitmentTime::C2=>{
+            let mut lanes=filled(2,0)?;
+            lanes.copy_from_slice(&[26,27]);
+            Ok(lanes)
+        }
+    }
+}
 
 fn validate_commitment_lanes(messages:&[Message<E>],lanes:&[usize])->Result<(),Error> {
             let mut i=0;
@@ -267,9 +289,11 @@ fn encode_commitment_words(domain:&EncodingDomain,messages:&[Message<E>],variant
     Ok(words)
 }
 fn commitment_leaves(hash:HashFn,time:CommitmentTime,lanes:&[usize],words:&[Word],private_salts:Option<&PrivateSalts>)->Result<Vec<[u8;32]>,Error> {
+    let count=FIBRE_COUNT;
+
         let mut leaves = filled(FIBRE_COUNT, [0; 32])?;
         let mut u=0;
-        while u<FIBRE_COUNT {
+        while u<count {
             let (bytes,at)=commitment_leaf_bytes(words,lanes,u);
             let tag = if time == CommitmentTime::C1 { merkle::C1_TAG } else { merkle::C2_TAG };
             leaves[u] = if let Some(salts) = private_salts {
@@ -308,4 +332,9 @@ fn validate_lane(message:&Message<E>,lane:usize)->Result<(),Error> {
         row+=1;
     }
     Ok(())
+}
+
+fn opening_lane_values(word:&Word,u:FibreIndex)->[E;4] {
+    let at=4*u.get();
+    [word.value(at),word.value(at+1),word.value(at+2),word.value(at+3)]
 }

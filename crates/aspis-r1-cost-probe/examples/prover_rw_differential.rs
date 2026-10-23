@@ -84,6 +84,7 @@ fn main() {
                 row["published_bytes"]=json!(r.proof.len());
             }
             Err(e)=>{
+                assert!(matches!(mode,0|1|2|4),"unexpected error on a successful tape class: {e:?}");
                 row["status"]=json!(format!("{e:?}"));row["published_bytes"]=json!(0);
                 if mode==0 {assert_eq!(e,verifier::Error::Entropy);}
                 if mode==1 {assert_eq!(e,verifier::Error::Semantic);}

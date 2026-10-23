@@ -19,6 +19,19 @@ for arg in cmd:
   data=p.read_bytes();(O/'inputs').mkdir(exist_ok=True)
   (O/'inputs'/p.name).write_bytes(data)
   input_artifacts[str(p)]={'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'retained':str(O/'inputs'/p.name)}
+  llbc=json.loads(data)['translated'];bindings={}
+  for f in llbc['files']:
+   local=f['name'].get('Local')
+   if not local or f.get('contents') is None:continue
+   source=Path(local)
+   if not source.is_absolute():source=R/source
+   try:relative=str(source.resolve().relative_to(R.resolve()))
+   except ValueError:continue
+   digest=hashlib.sha256(f['contents'].encode()).hexdigest()
+   bindings[relative]=dict(llbc_source_sha256=digest,live_source_sha256=pins.get(relative),matches_live_source=digest==pins.get(relative))
+  input_artifacts[str(p)]['source_bindings']=bindings
+  input_artifacts[str(p)]['source_map_consistent_with_live_tree']=bool(bindings) and all(v['matches_live_source'] for v in bindings.values())
+
 (O/'preflight.json').write_text(json.dumps(dict(target=cmd,input_artifacts=input_artifacts,source_revision=(R/'source-revision.txt').read_text().strip(),source_sha256=pins,limits=limits,cgroup=str(cg),utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),loadavg=Path('/proc/loadavg').read_text().strip(),expected_work=os.getenv('CT_EXPECTED')),indent=2)+'\n')
 start=time.monotonic()
 with (O/'stdout.log').open('w') as so,(O/'stderr.log').open('w') as se:
@@ -27,5 +40,5 @@ with (O/'stdout.log').open('w') as so,(O/'stderr.log').open('w') as se:
  except KeyboardInterrupt:
   ret=130
 log=(O/'time.log').read_text();metric=lambda n:int(re.search(re.escape(n)+r':\s*(\d+)',log)[1]) if re.search(re.escape(n)+r':\s*(\d+)',log) else None
-rec={'schema':'focused-extractor-proof-packet-v1','attempt':name,'target':cmd,'input_artifacts':input_artifacts,'source_revision':(R/'source-revision.txt').read_text().strip(),'source_sha256':pins,'deps_fingerprint':hashlib.sha256(json.dumps(pins,sort_keys=True).encode()).hexdigest(),'exit_status':ret,'wall_seconds':time.monotonic()-start,'peak_rss_kib':metric('Maximum resident set size (kbytes)'),'swaps':metric('Swaps'),'print_axioms':'N/A: Rust or translation; no Lean theorem checked','cgroup':str(cg),'cgroup_memory_peak_bytes':int((cg/'memory.peak').read_text()),'cgroup_swap_peak_bytes':int((cg/'memory.swap.peak').read_text()),'rss_measurement':'GNU time maximum resident set size; timeout descendants may not be reaped and this RSS can undercount; cgroup peak is separate','limits':limits,'environment':{k:os.getenv(k) for k in ['CARGO_PROFILE_DEV_OPT_LEVEL','CARGO_BUILD_JOBS','CARGO_TARGET_DIR','RUSTFLAGS']},'expected_work':os.getenv('CT_EXPECTED','compilation then named harness; no elimination'),'errors_log':'stderr.log','toolchain':subprocess.run(['rustc','-Vv'],capture_output=True,text=True).stdout,'loadavg':Path('/proc/loadavg').read_text().strip(),'cpu':subprocess.run(['lscpu'],capture_output=True,text=True).stdout}
+rec={'schema':'focused-extractor-proof-packet-v1','attempt':name,'target':cmd,'input_artifacts':input_artifacts,'source_revision':(R/'source-revision.txt').read_text().strip(),'source_sha256':pins,'deps_fingerprint':hashlib.sha256(json.dumps(pins,sort_keys=True).encode()).hexdigest(),'exit_status':ret,'wall_seconds':time.monotonic()-start,'peak_rss_kib':metric('Maximum resident set size (kbytes)'),'swaps':metric('Swaps'),'print_axioms':'N/A: Rust or translation; no Lean theorem checked','cgroup':str(cg),'cgroup_memory_peak_bytes':int((cg/'memory.peak').read_text()),'cgroup_swap_peak_bytes':int((cg/'memory.swap.peak').read_text()),'cgroup_memory_events':dict(line.split() for line in (cg/'memory.events').read_text().splitlines()),'cgroup_pids_peak':int((cg/'pids.peak').read_text()) if (cg/'pids.peak').exists() else None,'rss_measurement':'GNU time maximum resident set size; timeout descendants may not be reaped and this RSS can undercount; cgroup peak is separate','limits':limits,'environment':{k:os.getenv(k) for k in ['CARGO_PROFILE_DEV_OPT_LEVEL','CARGO_BUILD_JOBS','CARGO_TARGET_DIR','RUSTFLAGS']},'expected_work':os.getenv('CT_EXPECTED','compilation then named harness; no elimination'),'errors_log':'stderr.log','toolchain':subprocess.run(['rustc','-Vv'],capture_output=True,text=True).stdout,'loadavg':Path('/proc/loadavg').read_text().strip(),'cpu':subprocess.run(['lscpu'],capture_output=True,text=True).stdout}
 (O/'receipt.json').write_text(json.dumps(rec,indent=2)+'\n');print(json.dumps({k:rec[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));sys.exit(ret)

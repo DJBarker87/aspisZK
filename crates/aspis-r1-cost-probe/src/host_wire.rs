@@ -116,4 +116,3 @@ impl<H: Digest32> SemanticTranscript<H> {
         Ok(circle_sample(&self.sample_block(row, framed)?, circle_row))
     }
 }
-

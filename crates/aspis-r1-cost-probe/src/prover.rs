@@ -60,14 +60,19 @@ pub fn fold(q:&[E],alpha:E,dual:bool)->Vec<E> {
     let mut i=0;
     while i<q.len()/4 {
         let h=[q[4*i],q[4*i+1],q[4*i+2],q[4*i+3]];
-        let value=if dual {
-            h[0].add(alpha.mul(h[3].add(alpha.mul(h[2].add(alpha.mul(h[1])))))).mul_m31(QUARTER)
-        } else {
-            h[0].add(alpha.mul(h[1].add(alpha.mul(h[2].add(alpha.mul(h[3]))))))
-        };
+        let value=fold_cell(h,alpha,dual);
         out.push(value);i+=1;
     }
     out
+}
+
+#[inline(always)]
+fn fold_cell(h:[E;4],alpha:E,dual:bool)->E {
+    if dual {
+            h[0].add(alpha.mul(h[3].add(alpha.mul(h[2].add(alpha.mul(h[1])))))).mul_m31(QUARTER)
+        } else {
+            h[0].add(alpha.mul(h[1].add(alpha.mul(h[2].add(alpha.mul(h[3]))))))
+        }
 }
 
 /// Ordered byte assembly used by the real pipeline; each field encoding is a leaf.
@@ -266,10 +271,12 @@ fn semantic_error(e:SError)->Error {
 }
 
 fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateOnlyHidingContext,hash:HashFn,tag:u8)->Result<PrivateSalts,Error> {
+    let count=aspis_core::r0::FIBRE_COUNT;
+
     let mut salts=Vec::new();salts.try_reserve_exact(aspis_core::r0::FIBRE_COUNT).map_err(|_|Error::Allocation)?;
     let mut result=Ok(salts);
     let mut index=0usize;
-    while index<aspis_core::r0::FIBRE_COUNT {
+    while index<count {
         result=match result {
             Ok(salts)=>derive_private_salt_step(reserved,context,hash,tag,index as u32,salts),
             Err(error)=>Err(error),
@@ -339,15 +346,15 @@ fn opening_claim_bytes(coefficients:&[Message<E>],z1:Point<E>)->Vec<u8> {
 }
 fn opening_batch(coefficients:&[Message<E>],gamma:E)->Vec<E> {
     let gp=crate::weights::powers::<29>(gamma);
-    let mut q=Vec::with_capacity(1024);
-    let mut row=0;
-    while row<1024 {
-        let mut value=E::ZERO;
-        let mut lane=0;
-        while lane<29 {value=value.add(gp[lane].mul(coefficients[lane][row]));lane+=1;}
-        q.push(value);row+=1;
-    }
+    let mut q=Vec::with_capacity(1024);let mut row=0;
+    while row<1024 {let value=opening_row(coefficients,&gp,row);q.push(value);row+=1;}
     q
+}
+#[inline(always)]
+fn opening_row(coefficients:&[Message<E>],gp:&[E;29],row:usize)->E {
+    let mut value=E::ZERO;let mut lane=0;
+    while lane<29 {value=value.add(gp[lane].mul(coefficients[lane][row]));lane+=1;}
+    value
 }
 fn opening_inactive(q:&[E],w:&Weights)->E {
     let mut inactive=E::ZERO;
@@ -416,7 +423,7 @@ fn finish_opening(variant:Variant,hash:HashFn,prepared:PreparedOpening,folded_sa
 /// Counted insertion and dedup on at most 22 public query indices. Sorting is
 /// explicit so publication does not depend on an opaque standard sort adapter.
 fn publication_indices(queries:&[u32;22],begin:usize,end:usize,folded:bool)->Vec<u32> {
-    let mut out=Vec::new();
+    let mut out=Vec::with_capacity(end-begin);
     let mut i=begin;
     while i<end {
         let value=if folded {queries[i]/4} else {queries[i]};
@@ -449,14 +456,13 @@ fn publish_compact(variant:Variant,p:Publication)->Result<Vec<u8>,Error> {
     Ok(out)
 }
 
-fn append_node_slots(mut out:Vec<u8>,cc1:&Commitment,cc2:&Commitment,tree:&crate::host_tree::BinaryTree,queries:&[u32;22])->Result<Vec<u8>,Error> {
-    let mut batch=0;
-    while batch<2 {
-        let mut t=0;
-        while t<3 {out=append_node_slot(out,cc1,cc2,tree,queries,batch,t)?;t+=1;}
-        batch+=1;
-    }
-    Ok(out)
+fn append_node_slots(out:Vec<u8>,cc1:&Commitment,cc2:&Commitment,tree:&crate::host_tree::BinaryTree,queries:&[u32;22])->Result<Vec<u8>,Error> {
+    let out=append_node_slot(out,cc1,cc2,tree,queries,0,0)?;
+    let out=append_node_slot(out,cc1,cc2,tree,queries,0,1)?;
+    let out=append_node_slot(out,cc1,cc2,tree,queries,0,2)?;
+    let out=append_node_slot(out,cc1,cc2,tree,queries,1,0)?;
+    let out=append_node_slot(out,cc1,cc2,tree,queries,1,1)?;
+    append_node_slot(out,cc1,cc2,tree,queries,1,2)
 }
 fn append_node_slot(mut out:Vec<u8>,cc1:&Commitment,cc2:&Commitment,tree:&crate::host_tree::BinaryTree,queries:&[u32;22],batch:usize,t:usize)->Result<Vec<u8>,Error> {
     use crate::compact;
@@ -466,7 +472,9 @@ fn append_node_slot(mut out:Vec<u8>,cc1:&Commitment,cc2:&Commitment,tree:&crate:
     let nodes=match t {0=>cc1.multiproof(&idx),1=>cc2.multiproof(&idx),_=>tree.multiproof(&idx)}.ok_or(Error::Allocation)?;
     let cap=32*compact::SLOT_NODES[3*batch+t];
     assert!(nodes.len()<=cap);
-    out.extend_from_slice(&nodes);out.resize(out.len()+cap-nodes.len(),0);
+    out.extend_from_slice(&nodes);
+    let padded=out.len()+cap-nodes.len();
+    out.resize(padded,0);
     Ok(out)
 }
 

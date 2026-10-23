@@ -17,6 +17,20 @@ unchanged={}
 for f in ['crates/aspis-core/src/r0_transcript.rs','crates/aspis-core/src/state_only_private_merkle.rs','crates/aspis-r1-cost-probe/src/weights.rs','crates/aspis-r1-cost-probe/src/ct_pole.rs','crates/aspis-r1-cost-probe/src/compact.rs','crates/aspis-r1-cost-probe/src/r1_wire.rs','docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs']:
     before=subprocess.check_output(['git','show','084f714ccd:'+f],cwd=R)
     unchanged[f]=dict(sha256=sha(R/f),unchanged_from_v2=before==(R/f).read_bytes())
-result=dict(reused_passing_receipts=rows,unchanged_selected_sources=unchanged,new_kani_runs=0,whole_leaf_contract_gate_complete=False,remaining='Complete the extracted external-call inventory and map every arithmetic/hash/codec/parallel boundary to its exact checked contract and domain; unchanged source alone is not contract evidence. Reused CT and pole receipts are verified above; no claim that they cover the entire external inventory.',print_axioms='N/A: source/domain receipt audit; no new Lean theorem')
+new=[]
+for p in sorted((O/'continuation/receipts/candidate').glob('*kani*/receipt.json')):
+    r=json.loads(p.read_text())
+    if r.get('exit_status')!=0:continue
+    new.append(dict(receipt=str(p.relative_to(R)),receipt_sha256=sha(p),target=r['target'],exit_status=0,wall_seconds=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],swaps=r['swaps'],qualification='Bounded codec comparisons, parametric digest framing, or single-cell volatile frames only; read the exact selected harness. Not a complete pipeline leaf contract.'))
+cell_bindings=[]
+pins=R/'tools/prover-rw-20261023/contracts/clear-bindings.json'
+if pins.exists():
+    for b in json.loads(pins.read_text()):
+        source=(R/b['source']).read_text();a=source.index('pub(crate) fn '+b['function']);at=source.index('{',a);depth=1;end=at+1
+        while depth:
+            depth+=(source[end]=='{')-(source[end]=='}');end+=1
+        body=source[a:end]
+        cell_bindings.append(dict(**b,current_verbatim_sha256=hashlib.sha256(body.encode()).hexdigest(),selected_body_unchanged=hashlib.sha256(body.encode()).hexdigest()==b['verbatim_sha256']))
+result=dict(new_passing_receipts=new,volatile_cell_source_bindings=cell_bindings,new_kani_invocations=13,reused_passing_receipts=rows,unchanged_selected_sources=unchanged,new_kani_runs=13,whole_leaf_contract_gate_complete=False,remaining='Complete the extracted external-call inventory and map every arithmetic/hash/codec/parallel boundary to its exact checked contract and domain; unchanged source alone is not contract evidence. Reused CT and pole receipts are verified above; no claim that they cover the entire external inventory.',print_axioms='N/A: source/domain receipt audit; no new Lean theorem')
 (O/'leaf-contract-audit.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps(dict(reused_receipts=len(rows),unchanged_all=all(x['unchanged_from_v2'] for x in unchanged.values()),whole_leaf_contract_gate_complete=False)))

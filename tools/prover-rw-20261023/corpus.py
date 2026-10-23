@@ -32,3 +32,7 @@ for coin in range(1000,2000):
     if time.monotonic()-review>=600:
         print('RESOURCE_REVIEW: expected runtime is named P_R1 elimination in optimized binaries; cases continue to complete, original 6G/8G/no-swap cap retained; no cap increase.',flush=True)
         review=time.monotonic()
+
+assert summary['complete'] and summary['completed_pairs']==1000
+assert summary['fully_executed_proof_pairs']==600
+assert summary['rejected_prefix_pairs']==100

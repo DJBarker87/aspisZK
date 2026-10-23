@@ -202,11 +202,13 @@ impl StateOnlyAttemptSecrets {
     pub fn generate_for_mask_nonce(
         mask_nonce: [u8; 32],
     ) -> Result<Self, StateOnlyAttemptEntropyError> {
+        let limit=ENTROPY_RETRY_LIMIT;
+
         if mask_nonce == [0; 32] {
             return Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock);
         }
         let mut retry=0;
-        while retry<ENTROPY_RETRY_LIMIT {
+        while retry<limit {
             let mut bytes = Zeroizing::new([0u8; 64]);
             getrandom::fill(bytes.as_mut())?;
 
@@ -735,29 +737,50 @@ impl ReservedStateOnlyAttemptSecrets {
 }
 
 fn sample_source_d(expander:&mut Profile21SourceExpander)->Result<SensitiveQm31Vec,StateOnlyMaskBuildError> {
-    let mut d=SensitiveQm31Vec(Vec::with_capacity(STATE_ONLY_POSEIDON_TRACE_ROWS));
+    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;
+    let mut d=SensitiveQm31Vec(Vec::with_capacity(rows));
     let mut row=0;
-    while row<STATE_ONLY_POSEIDON_TRACE_ROWS {let value=expander.qm31()?;d.0.push(value);row+=1;}
+    while row<rows {
+        let value=expander.qm31()?;
+        d.0.push(value);row+=1;
+    }
     Ok(d)
 }
 fn source_active_flags(masks:&[u16;64])->[bool;STATE_ONLY_POSEIDON_TRACE_ROWS] {
+    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;
+
     let mut active=[false;STATE_ONLY_POSEIDON_TRACE_ROWS];let mut row=0;
-    while row<STATE_ONLY_POSEIDON_TRACE_ROWS {
+    while row<rows {
         active[row]=masks[row>>4]&(1<<(row&15))!=0;row+=1;
     }
     active
 }
 fn balance_source_d(d:&mut[aspis_core::field::QM31],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->Result<(),StateOnlyMaskBuildError> {
-    let mut dependent=0;
-    while dependent<STATE_ONLY_POSEIDON_TRACE_ROWS && active[dependent] {dependent+=1;}
-    if dependent==STATE_ONLY_POSEIDON_TRACE_ROWS {return Err(StateOnlyMaskBuildError::Layout);}
+    let dependent=source_dependent_row(active)?;
+    let sum=source_inactive_sum(d,active,dependent);
+    let value=aspis_core::field::QM31::ZERO.sub(sum);
+    d[dependent]=value;
+    Ok(())
+}
+fn source_dependent_row(active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->Result<usize,StateOnlyMaskBuildError> {
+    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;let mut dependent=0;
+    while dependent<rows && active[dependent] {dependent+=1;}
+    if dependent==rows {return Err(StateOnlyMaskBuildError::Layout);}
+    Ok(dependent)
+}
+fn source_inactive_sum(d:&[aspis_core::field::QM31],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS],dependent:usize)->aspis_core::field::QM31 {
+    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;
     let mut sum=aspis_core::field::QM31::ZERO;let mut row=0;
-    while row<STATE_ONLY_POSEIDON_TRACE_ROWS {
-        if !active[row] && row!=dependent {sum=sum.add(d[row]);}
+    while row<rows {
+        sum=source_inactive_step(sum,d,active,dependent,row);
         row+=1;
     }
-    d[dependent]=aspis_core::field::QM31::ZERO.sub(sum);
-    Ok(())
+    sum
+}
+
+#[inline(always)]
+fn source_inactive_step(sum:aspis_core::field::QM31,d:&[aspis_core::field::QM31],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS],dependent:usize,row:usize)->aspis_core::field::QM31 {
+    if !active[row] && row!=dependent {sum.add(d[row])} else {sum}
 }
 
 struct Profile21SourceExpander {

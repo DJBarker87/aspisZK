@@ -14,11 +14,13 @@ impl BinaryTree {
     }
     pub(crate) fn root(&self)->[u8;32] {self.levels[LEAF_BITS as usize][0]}
     pub(crate) fn multiproof(&self,indices:&[u32])->Option<Vec<u8>> {
+        let bits=LEAF_BITS as usize;
+
         let count=node_count(indices)?;
         let mut out=Vec::with_capacity(32*count);
         let mut level=indices.to_vec();
         let mut depth=0;
-        while depth<LEAF_BITS as usize {
+        while depth<bits {
             let mut next=Vec::new();
             let mut i=0;
             while i<level.len() {
@@ -52,19 +54,27 @@ fn append_levels<H:Digest32>(hash:H,mut levels:Vec<Vec<[u8;32]>>,depth:usize)->V
     append_levels(hash,levels,depth+1)
 }
 
-fn node_count(indices:&[u32])->Option<usize> {
+fn check_indices(indices:&[u32])->Option<()> {
     if indices.is_empty() || indices.len()>MAX_BATCH {return None;}
     let mut i=0;
     while i<indices.len() {
         if indices[i]>=1<<LEAF_BITS || (i>0 && indices[i-1]>=indices[i]) {return None;}
         i+=1;
     }
+    Some(())
+}
+
+fn node_count(indices:&[u32])->Option<usize> {
+    let bits=LEAF_BITS;
+
+    check_indices(indices)?;
+    let mut i;
     let mut level=[0u32;MAX_BATCH];
     level[..indices.len()].copy_from_slice(indices);
     let mut n=indices.len();
     let mut count=0;
     let mut depth=0;
-    while depth<LEAF_BITS {
+    while depth<bits {
         let mut w=0;
         i=0;
         while i<n {

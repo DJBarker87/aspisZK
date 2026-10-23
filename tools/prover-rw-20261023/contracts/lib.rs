@@ -11,6 +11,10 @@ mod verifier {pub const SEMANTIC_BYTES:usize=12903+29*32;}
 
 #[path="../../../crates/aspis-r1-cost-probe/src/multiproof.rs"] mod multiproof;
 #[cfg(kani)] mod hash_contracts;
+#[cfg(kani)] mod clear_source;
+#[cfg(kani)] mod clear_contracts;
+#[cfg(kani)] mod dtail_source;
+#[cfg(kani)] mod dtail_contracts;
 #[cfg(kani)] mod proofs {
     #[kani::proof]
     #[kani::unwind(40)]
@@ -29,3 +33,5 @@ mod verifier {pub const SEMANTIC_BYTES:usize=12903+29*32;}
         assert_eq!(super::host_wire::record(row,&data[..n]),super::r1_wire::record(row,&data[..n]));
     }
 }
+
+#[cfg(kani)] mod field_codec_contracts;

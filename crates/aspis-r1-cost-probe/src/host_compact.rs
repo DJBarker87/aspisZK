@@ -9,24 +9,21 @@ pub fn compact_semantic(logical: &[u8], out: &mut Vec<u8>) -> Result<(), CodecEr
         return Err(CodecError::Length);
     }
     out.extend_from_slice(&logical[..32]);
-    let mut at = 32;
-    let mut row=0;
-    while row<SEMANTIC_ROWS {
-        let size = row_shape(row).ok_or(CodecError::Length)?.1;
-        out.extend_from_slice(&logical[at..at + 5]);
-        at += 5;
-        if compact_row(row) {
-            compact_values(&logical[at..at + size], out)?;
-        } else {
-            out.extend_from_slice(&logical[at..at + size]);
-        }
-        at += size;
-        row+=1;
-    }
+    let count=SEMANTIC_ROWS;let mut at=32;let mut row=0;
+    while row<count {at=compact_semantic_row(logical,out,row,at)?;row+=1;}
     if at != logical.len() {
         return Err(CodecError::Length);
     }
     Ok(())
+}
+
+fn compact_semantic_row(logical:&[u8],out:&mut Vec<u8>,row:u8,at:usize)->Result<usize,CodecError> {
+    let size=row_shape(row).ok_or(CodecError::Length)?.1;
+    out.extend_from_slice(&logical[at..at+5]);
+    let at=at+5;
+    if compact_row(row) {compact_values(&logical[at..at+size],out)?;}
+    else {out.extend_from_slice(&logical[at..at+size]);}
+    Ok(at+size)
 }
 
 pub fn compact_values(logical: &[u8], out: &mut Vec<u8>) -> Result<(), CodecError> {
@@ -45,4 +42,3 @@ pub fn compact_values(logical: &[u8], out: &mut Vec<u8>) -> Result<(), CodecErro
     }
     Ok(())
 }
-
