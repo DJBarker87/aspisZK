@@ -58,3 +58,26 @@ spend-relation or 100-bit claim follows from the untraced endpoint.
 This is a correction to reporting and the exported proof interface. It does
 not change the protocol, implementation, proof format, artifact, CU allowance,
 adversary, security contract or 100-bit release target.
+
+
+## Verified repair after the correction
+
+The three dependency-ordered replacement targets passed focused checks with
+standard axioms and zero swap. Commit6065bf73db supplies
+`SharedTrace`/`UnsharedTrace`, their same-array canonicality, and
+`actual_pair_traced_kappa_polynomial`. Its exported final parts and k array
+are parameters of the actual source events, rather than detached witnesses.
+
+Commitf593687d3a carries that exact trace through the SAME source-created
+View/resume/constructor/native Pair and through concrete comparison to the
+actual round claim. `S9Tx2ComparedTracedKappaEndpointV1` retains the same
+`parts`, `k`, native output, phase/write trace, source claim and kappa equation
+in its public conclusion. It does not assume another Current finish or any
+independent caller canonicality/span condition.
+
+This repairs the identified operational-provenance interface gap at the
+Pair and extracted source-caller levels. Historical untraced statements and
+receipts remain unchanged and retain their weaker scope. Actual traced parts
+still need their spend-relation meanings; other source operation, runtime,
+artifact, security-experiment and final coherent-replay obligations remain.
+**The 100-bit target is not established.**
