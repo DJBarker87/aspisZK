@@ -1,0 +1,72 @@
+/private/tmp/root-s9-array-two-prefix-source-v2-check-20261023/sources/S9ArrayTwoPrefixSourceV1.lean:23:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => List.take _a ↑a = ↑a
+Error: Application type mismatch: The argument
+  Eq.refl true
+has type
+  true = true
+but is expected to have type
+  decide (_a ≤ UScalar.cMax UScalarTy.Usize) = true
+in the application
+  id (Eq.refl true)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+A : Type
+a : Std.Array A 2#usize
+hn : (↑a).length = 2
+⊢ List.take 2 ↑a = ↑a
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/private/tmp/root-s9-array-two-prefix-source-v2-check-20261023/sources/S9ArrayTwoPrefixSourceV1.lean:17:37: warning: This simp argument is unused:
+  core.slice.index.SliceIndexRangeToUsizeSlice
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵,̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ core.slice.index.SliceIndexRangeToUsizeSlice.index,
+      c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵U̵S̵c̵a̵l̵a̵r̵.̵l̵e̵_̵e̵q̵u̵i̵v̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵h̵n̵]̵c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲U̲S̲c̲a̲l̲a̲r̲.̲l̲e̲_̲e̲q̲u̲i̲v̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲h̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/root-s9-array-two-prefix-source-v2-check-20261023/sources/S9ArrayTwoPrefixSourceV1.lean:19:4: warning: This simp argument is unused:
+  core.slice.index.SliceIndexRangeUsizeSlice.index
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵,̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲T̲o̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲,̲
+      core.slice.index.SliceIndexRangeToUsizeSlice.index, c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵U̵S̵c̵a̵l̵a̵r̵.̵l̵e̵_̵e̵q̵u̵i̵v̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵h̵n̵]̵S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲U̲S̲c̲a̲l̲a̲r̲.̲l̲e̲_̲e̲q̲u̲i̲v̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲h̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/root-s9-array-two-prefix-source-v2-check-20261023/sources/S9ArrayTwoPrefixSourceV1.lean:20:4: warning: This simp argument is unused:
+  UScalar.le_equiv
+
+Hint: Omit it from the simp argument list.
+  simp [core.slice.index.Slice.index, ̲core.slice.index.SliceIndexRangeToUsizeSlice,
+      core.slice.index.SliceIndexRangeToUsizeSlice.index,
+      core.slice.index.SliceIndexRangeUsizeSlice.index, ̲Slice.length, ̲List.slice,
+  ̵  ̵ ̵ ̵U̵S̵c̵a̵l̵a̵r̵.̵l̵e̵_̵e̵q̵u̵i̵v̵,̵Array.to_slice, ̲hn]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9ArrayTwoPrefixSourceV1.array_two_prefix_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9ArrayTwoPrefixSourceV1.successful_array_two_prefix_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9ArrayTwoPrefixSourceV1.successful_array_two_prefix_read' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
