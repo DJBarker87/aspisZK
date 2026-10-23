@@ -1,0 +1,130 @@
+S2F_Stage2Cuts.lean:21:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have i := original.sdk.accounts.len;
+    if (i != 7#usize) = true then
+      ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData, original.state, original.sdk)
+    else do
+      let o ← core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) original.data { «end» := 4#usize }
+      let a ← ops.op13
+      let s ←
+        core.array.Array.index
+            (core.ops.index.IndexSlice
+              (S2E_Reference.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+            a ()
+      let b ←
+        core.cmp.PartialEq.ne.trait_default
+            (S2E_Reference.core.option.Option.Insts.CoreCmpPartialEqOption ops
+              (core.cmp.PartialEqShared (S2E_Reference.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+            o (some s)
+      if b = true then
+          ok
+            (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData, original.state,
+              original.sdk)
+        else do
+          let state1 ← children.clear_return_data original.state
+          let (r, state2) ← children.validate_asq8 state1 original.program original.sdk original.data
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (result, state3, sdk1) ← stage2_proof ops children state2 original.sdk val
+              let state4 ← children.drop_statement state3 val.statement
+              ok (result, state4, sdk1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let result ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame solana_program_error.ProgramError) residual
+              ok (result, state2, original.sdk)) =
+    ok (core.result.Result.Ok (), finalState, finalSdk)
+of `accepted`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+C S : Type
+ops : S2E_Reference.Ops
+children : Children C S
+original : Original S
+finalState : S
+finalSdk : SDK
+accepted :
+  (have i := original.sdk.accounts.len;
+    if (i != 7#usize) = true then
+      ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData, original.state, original.sdk)
+    else do
+      let o ← core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) original.data { «end» := 4#usize }
+      let a ← ops.op13
+      let s ←
+        core.array.Array.index
+            (core.ops.index.IndexSlice
+              (S2E_Reference.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+            a ()
+      let b ←
+        core.cmp.PartialEq.ne.trait_default
+            (S2E_Reference.core.option.Option.Insts.CoreCmpPartialEqOption ops
+              (core.cmp.PartialEqShared (S2E_Reference.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+            o (some s)
+      if b = true then
+          ok
+            (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData, original.state,
+              original.sdk)
+        else do
+          let state1 ← children.clear_return_data original.state
+          let (r, state2) ← children.validate_asq8 state1 original.program original.sdk original.data
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (result, state3, sdk1) ← stage2_proof ops children state2 original.sdk val
+              let state4 ← children.drop_statement state3 val.statement
+              ok (result, state4, sdk1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let result ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame solana_program_error.ProgramError) residual
+              ok (result, state2, original.sdk)) =
+    ok (core.result.Result.Ok (), finalState, finalSdk)
+⊢ ∃ cleared validatedState validated beforeDrop,
+    children.clear_return_data original.state = ok cleared ∧
+      children.validate_asq8 cleared original.program original.sdk original.data =
+          ok (core.result.Result.Ok validated, validatedState) ∧
+        stage2_proof ops children validatedState original.sdk validated =
+            ok (core.result.Result.Ok (), beforeDrop, finalSdk) ∧
+          children.drop_statement beforeDrop validated.statement = ok finalState
+S2F_Stage2Cuts.lean:66:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+S2F_Stage2Cuts.lean:64:6: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵] at rest
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2F_Stage2Cuts.lean:68:58: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at rest
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2F_Stage2Cuts.lean:94:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+S2F_Stage2Cuts.lean:92:6: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵] at rest
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2F_Stage2Cuts.lean:96:58: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at rest
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2F.stage2_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2F.stage2_proof_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2F.stage2_checkpoint_cut' depends on axioms: [propext, Classical.choice, Quot.sound]

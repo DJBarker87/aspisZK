@@ -1,0 +1,44 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling version_check v0.9.5
+   Compiling serde_core v1.0.229
+   Compiling typenum v1.20.1
+   Compiling cfg-if v1.0.5
+   Compiling generic-array v0.14.7
+   Compiling zerocopy v0.8.56
+   Compiling libc v0.2.190
+   Compiling serde v1.0.229
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "-m64" "/tmp/rustcorWErq/symbols.o" "<3 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/tmp/rustcorWErq/raw-dylibs" "-B<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld" "-fuse-ld=lld" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/home/dombarker/project-offloads/codex-cx-s2f-20261023/kani-target/kani/debug/build/proc-macro2-c501bb1164ac8750/build_script_build-c501bb1164ac8750" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-Wl,--strip-debug" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: terminate called after throwing an instance of 'std::system_error'
+            what():  Resource temporarily unavailable
+          PLEASE submit a bug report to https://github.com/llvm/llvm-project/issues/ and include the crash backtrace.
+          Stack dump without symbol names (ensure you have llvm-symbolizer in your PATH or set the environment var `LLVM_SYMBOLIZER_PATH` to point to it):
+          0  libLLVM.so.21.1-rust-1.93.0-nightly 0x0000786e05245297 llvm::sys::PrintStackTrace(llvm::raw_ostream&, int) + 39
+          1  libLLVM.so.21.1-rust-1.93.0-nightly 0x0000786e05245b8d
+          2  libc.so.6                           0x0000786dff845330
+          3  libc.so.6                           0x0000786dff89ec0c pthread_kill + 284
+          4  libc.so.6                           0x0000786dff84527e gsignal + 30
+          5  libc.so.6                           0x0000786dff8288ff abort + 223
+          6  libLLVM.so.21.1-rust-1.93.0-nightly 0x0000786e050ec355 __gnu_cxx::__verbose_terminate_handler() + 245
+          7  libLLVM.so.21.1-rust-1.93.0-nightly 0x0000786e050ebab6 __cxxabiv1::__terminate(void (*)()) + 6
+          8  libLLVM.so.21.1-rust-1.93.0-nightly 0x0000786e050ebb21
+          9  libLLVM.so.21.1-rust-1.93.0-nightly 0x0000786e050ebc75
+          10 libLLVM.so.21.1-rust-1.93.0-nightly 0x0000786e04ec09b5 std::__throw_system_error(int) + 129
+          11 libLLVM.so.21.1-rust-1.93.0-nightly 0x0000786e0516af79
+          12 libLLVM.so.21.1-rust-1.93.0-nightly 0x0000786e051f445c
+          13 libLLVM.so.21.1-rust-1.93.0-nightly 0x0000786e051f4151
+          14 libLLVM.so.21.1-rust-1.93.0-nightly 0x0000786e0516ace0
+          15 libc.so.6                           0x0000786dff89cb84
+          16 libc.so.6                           0x0000786dff929ecc
+          collect2: fatal error: ld terminated with signal 6 [Aborted], core dumped
+          compilation terminated.
+          
+
+error: could not compile `proc-macro2` (build script) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
