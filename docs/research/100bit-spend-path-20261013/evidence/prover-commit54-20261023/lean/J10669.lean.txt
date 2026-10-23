@@ -1,0 +1,58 @@
+import R1Z.ProverCommitEncoderLift54
+import R1Z.ProverCommitEncoderPhiModel53
+/-! Field embeddings commute with both exact encoders. This connects the
+native base/QM31 encodings to the wide payload carrier without changing lanes. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitEncoderHom54
+open AspisCircleTensorBinding AspisCircleGroupOrder
+open AspisWide.InitialEncoder AspisWide.FinalEncoder
+variable {K L : Type} [Field K] [Field L] [Fintype K] [Fintype L]
+  [DecidableEq K] [DecidableEq L] [Algebra (ZMod P) K] [Algebra (ZMod P) L]
+
+theorem natural_map (f : K →+* L) (x : K) (i : Nat) :
+    f (naturalLineValue x i)=naturalLineValue (f x) i := by
+  simp only [naturalLineValue,map_prod,ProverCommitEncoderLift54.map_doubled]
+
+theorem final_map (f : K →+* L)
+    (hbase : ∀ x : ZMod P, f (algebraMap (ZMod P) K x)=algebraMap (ZMod P) L x)
+    (q : Fin 256 → K) (u : Fin 262144) :
+    f (exactFinalEncoder q u)=exactFinalEncoder (fun i => f (q i)) u := by
+  rw [exactFinalEncoder,exactFinalLinear_apply,
+    AspisV5FriConcreteEncoderApplicability.naturalCoefficientPolynomial_eval_eq_sum (by decide),
+    exactFinalEncoder,exactFinalLinear_apply,
+    AspisV5FriConcreteEncoderApplicability.naturalCoefficientPolynomial_eval_eq_sum (by decide),map_sum]
+  apply Finset.sum_congr rfl
+  intro i hi
+  rw [map_mul,natural_map,hbase]
+
+theorem phi_map (f : K →+* L) (x y : K) (h : Fin 4 → K) (s : Fin 4) :
+    f (ProverCommitEncoderPhi53.phi x y h s)=
+      ProverCommitEncoderPhi53.phi (f x) (f y) (fun i => f (h i)) s := by
+  fin_cases s <;>
+    simp only [ProverCommitEncoderPhi53.phi,Matrix.cons_val_zero,Matrix.cons_val_succ,
+      map_add,map_sub,map_mul]
+
+theorem initial_map (f : K →+* L)
+    (hbase : ∀ x : ZMod P, f (algebraMap (ZMod P) K x)=algebraMap (ZMod P) L x)
+    (q : Fin 1024 → K) (u : Fin 262144) (s : Fin 4) :
+    f (exactInitialEncoder q (AspisV5ComponentCConcreteFoldLinearity.childIndex u s))=
+      exactInitialEncoder (fun i => f (q i)) (AspisV5ComponentCConcreteFoldLinearity.childIndex u s) := by
+  have heK := congrFun (AspisR1.FirstFold.encoded_fibre q u) s
+  have heL := congrFun (AspisR1.FirstFold.encoded_fibre (fun i => f (q i)) u) s
+  change exactInitialEncoder q (AspisV5ComponentCConcreteFoldLinearity.childIndex u s)=_ at heK
+  change exactInitialEncoder (fun i => f (q i)) (AspisV5ComponentCConcreteFoldLinearity.childIndex u s)=_ at heL
+  rw [heK,heL]
+  rw [←ProverCommitEncoderPhiModel53.phi_fibre,←ProverCommitEncoderPhiModel53.phi_fibre,phi_map]
+  have hx : f (exactCircleX (K:=K) u)=exactCircleX (K:=L) u := hbase _
+  have hy : f (exactCircleY (K:=K) u)=exactCircleY (K:=L) u := hbase _
+  rw [hx,hy]
+  congr 1
+  funext t
+  exact final_map f hbase (AspisV5FriConcreteEncoderCommutation.coefficientLane 256 t q) u
+
+#print axioms natural_map
+#print axioms final_map
+#print axioms phi_map
+#print axioms initial_map
+end R1Z.ProverCommitEncoderHom54

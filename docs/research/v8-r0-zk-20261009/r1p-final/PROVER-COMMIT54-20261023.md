@@ -211,3 +211,45 @@ Accepted compiles, all exit 0:
 | J10666 | AspisR1ProducerRelease47.EncoderGenericAt54 | 0:01.38 | 2630052 | 0 |
 | J10667 | R1Z.ProverCommitEncoderGenericExact54 | 0:01.86 | 4109336 | 0 |
 | J10668 | R1Z.ProverCommitEncoderSpecialized54 | 0:01.86 | 4105916 | 0 |
+
+## Stage 6: retained opened/folded leaf values and bytes
+
+J10670 checks new finite leaf-caller extraction. J10673 proves both exact
+encoders commute with field embeddings. J10674 derives all four consecutive
+folded values; J10682 derives their complete ordered 128-byte model image.
+J10681 proves the source nested-array writes for a full opened column.
+J10684 proves all 29 columns and all four slots, including canonicality and
+exact initial encoder values. J10685 composes the actual per-column coefficient
+Results with the opened matrix; no coefficient-array image is a premise.
+J10688 derives both C1/C2 ordered byte images at the shipped slot/lane widths.
+J10687 composes the complete retained part-53 opening producer with the folded
+leaf owner and identifies its 128 bytes with foldedLeaf (Batched.q1 ...).
+The existing challenge-representation identities remain explicit. This does
+not assert the complete native semantic/opening caller or allocation layer.
+
+The byte results use the retained canonical source-cell codec and its existing
+byte gates; native Vec/chain assembly is separate. The owner and composed
+source cuts are named explicitly. No whole simulator equality is inferred.
+
+Rejected drafts J10669/71/72/75/76/77/78/79/80/83/86 are retained. They expose
+finite-vector elaboration, a shadowed bound, namespace/Array.set ambiguity,
+a tuple projection reduction, codec-list helper naming/composition, a source
+zero name and opaque-symbol conversion. Replacements use explicit symbolic
+extensionality and tuple equalities. No recursion/heartbeat limit is raised.
+The source revision and every exact source/dependency hash are in receipts.
+The unused inverse template is retained only as diagnostic .lean.txt and is
+not installed or imported by any accepted source.
+
+Accepted compiles, all exit 0 and standard-only printed axioms:
+
+| Attempt | Exact module | Wall | Peak RSS KiB | Swaps |
+|---|---|---|---:|---:|
+| J10670 | AspisR1ProducerRelease47.EncoderLeaves54 | 0:01.18 | 2639680 | 0 |
+| J10673 | R1Z.ProverCommitEncoderHom54 | 0:02.24 | 4110280 | 0 |
+| J10674 | R1Z.ProverCommitFoldedValues54 | 0:01.95 | 4118060 | 0 |
+| J10681 | R1Z.ProverCommitOpenedColumn54 | 0:02.09 | 4123064 | 0 |
+| J10682 | R1Z.ProverCommitFoldedBytes54 | 0:01.84 | 4188536 | 0 |
+| J10684 | R1Z.ProverCommitOpenedValues54 | 0:02.35 | 4124896 | 0 |
+| J10685 | R1Z.ProverCommitOpenedModel54 | 0:01.75 | 4255808 | 0 |
+| J10687 | R1Z.ProverCommitOpeningFolded54 | 0:01.98 | 4280420 | 0 |
+| J10688 | R1Z.ProverCommitOpenedBytes54 | 0:01.76 | 4261792 | 0 |

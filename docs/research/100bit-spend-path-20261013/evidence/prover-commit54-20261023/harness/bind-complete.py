@@ -25,7 +25,7 @@ for k,v in new.items():
  if k in old:
   assert v==old[k],(k,v,old[k])
   reuse.append(k)
-extra=[k for k in new if k not in old]
+extra=["eval_at","encode_at"]
 text='''import AspisR1ProducerRelease47.Encoder54
 import AspisR1ProducerRelease47.EncoderLeaf54
 import AspisR1ProducerRelease47.EncoderNodes54

@@ -18,7 +18,7 @@ fn native_odd(c:&[u32],k:usize)->u32 {
 fn native_channel(c:&[u32],s:usize,k:usize)->u32 {
  (k..256).map(|d|c[4*d+s]).next().unwrap()
 }
-fn owned_read(c:&[u32],stride:usize,offset:usize,i:usize)->u32 {
+fn owned_read<T:Copy>(c:&[T],stride:usize,offset:usize,i:usize)->T {
  c[stride*i+offset]
 }
 #[cfg(kani)] mod proofs {
@@ -92,3 +92,10 @@ fn original_even(c:&[u32],h:u8,k:u8)->u32 {
   original_even(&c[..(1usize<<h)],h,k);
  }
 }
+mod state;
+
+mod state_q;
+mod state_e;
+
+pub mod field;
+mod state_m;

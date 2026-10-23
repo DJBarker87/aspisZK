@@ -22,6 +22,13 @@ namespace AspisR1Complete54
 def field.QM31.ZERO : field.QM31 :=
   { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }
 
+/-- [aspis_r1_encoder53::field::wide_exact::{aspis_r1_encoder53::field::wide_exact::WideExact}::ZERO]
+    Source: 'field/wide_exact.rs', lines 41:4-44:6
+    Visibility: public -/
+@[global_simps, irreducible]
+def field.wide_exact.WideExact.ZERO : field.wide_exact.WideExact :=
+  { c0 := field.QM31.ZERO, c1 := field.QM31.ZERO }
+
 /-- [aspis_r1_encoder53::field::P]
     Source: 'field.rs', lines 19:0-19:31
     Visibility: public -/
@@ -556,5 +563,82 @@ def encode_at
   let q1 ← field.QM31.from_cm31 c2
   let y ← field.wide_exact.WideExact.from_qm31 q1
   encoder54.encode_with_nodes c nodes x y
+
+/-- [aspis_r1_encoder53::leaves54::folded_values]:
+    Source: 'lib.rs', lines 88:0-91:1
+    Visibility: public -/
+def leaves54.folded_values
+  (c : Array field.wide_exact.WideExact 256#usize) (v : Std.Usize) :
+  Result (Array field.wide_exact.WideExact 4#usize)
+  := do
+  let s ← lift (Array.to_slice c)
+  let i ← lift (Std.Usize.wrapping_mul 4#usize v)
+  let we ← eval_at s i 8#usize
+  let s1 ← lift (Array.to_slice c)
+  let i1 ← lift (Std.Usize.wrapping_mul 4#usize v)
+  let i2 ← lift (Std.Usize.wrapping_add i1 1#usize)
+  let we1 ← eval_at s1 i2 8#usize
+  let s2 ← lift (Array.to_slice c)
+  let i3 ← lift (Std.Usize.wrapping_mul 4#usize v)
+  let i4 ← lift (Std.Usize.wrapping_add i3 2#usize)
+  let we2 ← eval_at s2 i4 8#usize
+  let s3 ← lift (Array.to_slice c)
+  let i5 ← lift (Std.Usize.wrapping_mul 4#usize v)
+  let i6 ← lift (Std.Usize.wrapping_add i5 3#usize)
+  let we3 ← eval_at s3 i6 8#usize
+  ok (Array.make 4#usize [ we, we1, we2, we3 ])
+
+/-- [aspis_r1_encoder53::leaves54::column]:
+    Source: 'lib.rs', lines 92:0-97:1
+    Visibility: public -/
+def leaves54.column
+  (out : Array (Array field.wide_exact.WideExact 29#usize) 4#usize)
+  (h : Array field.wide_exact.WideExact 4#usize) (l : Std.Usize)
+  (s : Std.Usize) (left : Std.U8) :
+  Result (Array (Array field.wide_exact.WideExact 29#usize) 4#usize)
+  := do
+  if left = 0#u8
+  then ok out
+  else
+    let we ← Array.index_usize h s
+    let (a, index_mut_back) ← Array.index_mut_usize out s
+    let a1 ← Array.update a l we
+    let out1 := index_mut_back a1
+    let i ← lift (Std.Usize.wrapping_add s 1#usize)
+    let i1 ← lift (Std.U8.wrapping_sub left 1#u8)
+    leaves54.column out1 h l i i1
+partial_fixpoint
+
+/-- [aspis_r1_encoder53::leaves54::opened]:
+    Source: 'lib.rs', lines 98:0-104:1
+    Visibility: public -/
+def leaves54.opened
+  (c : Array (Array field.wide_exact.WideExact 1024#usize) 29#usize)
+  (j : Std.Usize) (l : Std.Usize) (left : Std.U8)
+  (out : Array (Array field.wide_exact.WideExact 29#usize) 4#usize) :
+  Result (Array (Array field.wide_exact.WideExact 29#usize) 4#usize)
+  := do
+  if left = 0#u8
+  then ok out
+  else
+    let a ← Array.index_usize c l
+    let h ← encode_at a j
+    let out1 ← leaves54.column out h l 0#usize 4#u8
+    let i ← lift (Std.Usize.wrapping_add l 1#usize)
+    let i1 ← lift (Std.U8.wrapping_sub left 1#u8)
+    leaves54.opened c j i i1 out1
+partial_fixpoint
+
+/-- [aspis_r1_encoder53::leaves54::opened_values]:
+    Source: 'lib.rs', lines 105:0-107:1
+    Visibility: public -/
+def leaves54.opened_values
+  (c : Array (Array field.wide_exact.WideExact 1024#usize) 29#usize)
+  (j : Std.Usize) :
+  Result (Array (Array field.wide_exact.WideExact 29#usize) 4#usize)
+  := do
+  let a := Array.repeat 29#usize field.wide_exact.WideExact.ZERO
+  let a1 := Array.repeat 4#usize a
+  leaves54.opened c j 0#usize 29#u8 a1
 
 end AspisR1Complete54

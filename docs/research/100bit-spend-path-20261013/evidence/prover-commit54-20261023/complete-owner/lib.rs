@@ -83,3 +83,26 @@ pub fn encode_at(c:&[field::WideExact;1024],j:usize)->[field::WideExact;4] {
  let y=field::WideExact::from_qm31(field::QM31::from_cm31(field::CM31::from_m31(z.b)));
  encoder54::encode_with_nodes(c,&nodes,x,y)
 }
+pub mod leaves54 {
+use super::field::WideExact as E;
+pub fn folded_values(c:&[E;256],v:usize)->[E;4] {
+ [super::eval_at(c,4*v,8),super::eval_at(c,4*v+1,8),
+  super::eval_at(c,4*v+2,8),super::eval_at(c,4*v+3,8)]
+}
+pub fn column(mut out:[[E;29];4],h:&[E;4],l:usize,s:usize,left:u8)->[[E;29];4] {
+ if left==0 {out} else {
+  out[s][l]=h[s];
+  column(out,h,l,s+1,left-1)
+ }
+}
+pub fn opened(c:&[[E;1024];29],j:usize,l:usize,left:u8,out:[[E;29];4])->[[E;29];4] {
+ if left==0 {out} else {
+  let h=super::encode_at(&c[l],j);
+  let out=column(out,&h,l,0,4);
+  opened(c,j,l+1,left-1,out)
+ }
+}
+pub fn opened_values(c:&[[E;1024];29],j:usize)->[[E;29];4] {
+ opened(c,j,0,29,[[E::ZERO;29];4])
+}
+}
