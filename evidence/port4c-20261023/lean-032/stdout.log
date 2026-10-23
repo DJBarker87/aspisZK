@@ -1,0 +1,47 @@
+Port4C_RowStd.lean:35:64: error: unsolved goals
+ops : Ops
+v : alloc.vec.Vec K
+power : K
+next width : Usize
+basis : Std.Array M 256#usize
+iter iter1 : core.ops.range.Range Usize
+b bout : verifier.BatchedWeights
+j : Usize
+m : M
+q : K
+hi : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some j, iter1)
+hm : basis.index_usize j = ok m
+hq : v.deref.index_usize j = ok q
+hp : Port3_NativeRowFrame.push b j power m = ok bout
+⊢ (let (o, iter1) := (some j, iter1)
+    match o with
+    | none => ok (done b)
+    | some j => do
+      let m ← basis.index_usize j
+      let weights1 ← Port3_NativeRowFrame.push b j power m
+      let _ ← v.deref.index_usize j
+      ok (cont (iter1, weights1))) =
+    ok (cont (iter1, bout))
+Port4C_RowStd.lean:38:50: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [install, ̲Port3_NativeRowFrame.install, ̲hm̵,̵h̵p, ̲lift, ̲bind_tc_ok, ̲hq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_RowStd.lean:38:53: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [install, ̲Port3_NativeRowFrame.install, ̲hm,h̵p̵,̵ ̲lift, ̲bind_tc_ok, ̲hq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_RowStd.lean:38:72: warning: This simp argument is unused:
+  hq
+
+Hint: Omit it from the simp argument list.
+  simp only [install, ̲Port3_NativeRowFrame.install, ̲hm, ̲hp, ̲lift, ̲bind_tc_ok,̵h̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4C_RowStd.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4C_RowStd.reads' depends on axioms: [propext, Classical.choice, Quot.sound]
