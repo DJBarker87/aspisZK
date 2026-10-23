@@ -1,0 +1,107 @@
+Port4C_BasisOuter.lean:68:53: error: unexpected token 'let'; expected ')', ',' or ':'
+Port4C_BasisOuter.lean:52:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 1
+  e ≥ 33
+  e - g ≤ 0
+where
+ e := ↑↑n
+ f := ↑2 ^ fuel
+ g := ↑↑n * ↑(2 ^ fuel)
+Port4C_BasisOuter.lean:68:20: error: invalid `do` notation, expected type is not a monad application
+  Sort ?u.147
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+Port4C_BasisOuter.lean:47:17: error: unsolved goals
+case nodeRun
+ops : Ops
+backend : SessionABasis ops
+out : Basis
+fuel : ℕ
+ih :
+  ∀ (basis : Basis) (node : U32) (n : Usize),
+    0 < ↑n →
+      ↑n * 2 ^ fuel = 64 →
+        S7Kani3BasisOuter.levels fuel basis node n = ok out →
+          verifier.accumulate_batched_with_node_loop0 ops 1#u32 node 64#usize basis n = ok out
+basis : Basis
+node : U32
+n : Usize
+positive : 0 < ↑n
+schedule : ↑n * 2 ^ (fuel + 1) = 64
+powpos : 0 < 2 ^ fuel
+small : ↑n * 2 ≤ 64
+active : n < 64#usize
+h✝¹ :
+  (do
+      let basis1 ← S7Kani2BasisLoop.basis_block_owned AspisR1Qm31ArithmeticProbe.field.M31.mul basis node n 0#usize
+      let node1 ← S7Kani3BasisOuter.t2 node
+      let n1 ← n * 2#usize
+      S7Kani3BasisOuter.levels fuel basis1 node1 n1) =
+    ok out
+basis1 : Std.Array U32 256#usize
+hblock :
+  S7Kani2BasisLoop.iterate (S7Kani2BasisLoop.step AspisR1Qm31ArithmeticProbe.field.M31.mul node n) (↑n) 0#usize basis =
+    ok basis1
+h✝ :
+  (do
+      let node1 ← S7Kani3BasisOuter.t2 node
+      let n1 ← n * 2#usize
+      S7Kani3BasisOuter.levels fuel basis1 node1 n1) =
+    ok out
+node1 : U32
+hnode : S7Kani3BasisOuter.t2 node = ok node1
+h : S7Kani3BasisOuter.levels fuel basis1 node1 (n.wrapping_mul 2#usize) = ok out
+mul : n * 2#usize = ok (n.wrapping_mul 2#usize)
+nextValue : ↑(n.wrapping_mul 2#usize) = ↑n * ↑2#usize
+tail : verifier.accumulate_batched_with_node_loop0 ops 1#u32 node1 64#usize basis1 (n.wrapping_mul 2#usize) = ok out
+block : verifier.accumulate_batched_with_node_loop0_loop0 ops { start := 0#usize, «end» := n } node basis n = ok basis1
+⊢ sorry
+
+case succ
+ops : Ops
+backend : SessionABasis ops
+out : Basis
+fuel : ℕ
+ih :
+  ∀ (basis : Basis) (node : U32) (n : Usize),
+    0 < ↑n →
+      ↑n * 2 ^ fuel = 64 →
+        S7Kani3BasisOuter.levels fuel basis node n = ok out →
+          verifier.accumulate_batched_with_node_loop0 ops 1#u32 node 64#usize basis n = ok out
+basis : Basis
+node : U32
+n : Usize
+positive : 0 < ↑n
+schedule : ↑n * 2 ^ (fuel + 1) = 64
+powpos : 0 < 2 ^ fuel
+small : ↑n * 2 ≤ 64
+active : n < 64#usize
+h✝¹ :
+  (do
+      let basis1 ← S7Kani2BasisLoop.basis_block_owned AspisR1Qm31ArithmeticProbe.field.M31.mul basis node n 0#usize
+      let node1 ← S7Kani3BasisOuter.t2 node
+      let n1 ← n * 2#usize
+      S7Kani3BasisOuter.levels fuel basis1 node1 n1) =
+    ok out
+basis1 : Std.Array U32 256#usize
+hblock :
+  S7Kani2BasisLoop.iterate (S7Kani2BasisLoop.step AspisR1Qm31ArithmeticProbe.field.M31.mul node n) (↑n) 0#usize basis =
+    ok basis1
+h✝ :
+  (do
+      let node1 ← S7Kani3BasisOuter.t2 node
+      let n1 ← n * 2#usize
+      S7Kani3BasisOuter.levels fuel basis1 node1 n1) =
+    ok out
+node1 : U32
+hnode : S7Kani3BasisOuter.t2 node = ok node1
+h : S7Kani3BasisOuter.levels fuel basis1 node1 (n.wrapping_mul 2#usize) = ok out
+mul : n * 2#usize = ok (n.wrapping_mul 2#usize)
+nextValue : ↑(n.wrapping_mul 2#usize) = ↑n * ↑2#usize
+tail : verifier.accumulate_batched_with_node_loop0 ops 1#u32 node1 64#usize basis1 (n.wrapping_mul 2#usize) = ok out
+block : verifier.accumulate_batched_with_node_loop0_loop0 ops { start := 0#usize, «end» := n } node basis n = ok basis1
+nodeRun : sorry
+⊢ verifier.accumulate_batched_with_node_loop0 ops 1#u32 node 64#usize basis n = ok out
+'AspisR1.Port4C_BasisOuter.checked_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_BasisOuter.from_levels' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
