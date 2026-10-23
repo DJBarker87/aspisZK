@@ -1,0 +1,61 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR1_ReachableRetry.lean:76:16: error: 'change' tactic failed, pattern
+  (match ProverCommitLedger36.reserve schedule unix path generated.1 with
+    | (Except.error a, after) => ok (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic, after, extra)
+    | (Except.ok a, after) => left secret bytes (after, extra)) =
+    match ProverCommitLedger36.reserve schedule unix path generated.1 with
+    | (Except.error a, after) => ok (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic, after, extra)
+    | (Except.ok a, after) => right secret bytes (after, extra)
+is not definitionally equal to target
+  (do
+      let (address, extra) ← ok (core.result.Result.Ok path, extra)
+      match address with
+        | core.result.Result.Err e => ok (core.result.Result.Err e, generated.1, extra)
+        | core.result.Result.Ok path =>
+          let (result, after) := ProverCommitLedger36.reserve schedule unix path generated.1
+          match result with
+          | Except.error a => ok (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic, after, extra)
+          | Except.ok a => left secret bytes (after, extra)) =
+    do
+    let (address, extra) ← ok (core.result.Result.Ok path, extra)
+    match address with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, generated.1, extra)
+      | core.result.Result.Ok path =>
+        let (result, after) := ProverCommitLedger36.reserve schedule unix path generated.1
+        match result with
+        | Except.error a => ok (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic, after, extra)
+        | Except.ok a => right secret bytes (after, extra)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR1_ReachableRetry.lean:64:19: error: unsolved goals
+case ok.Ok.ok.Ok
+Extra Proof : Type
+pub : Pub
+entropy : Entropy (Store Extra) Secret
+pre : Prefix Extra
+schedule : ProverCommitLedger36.Schedule
+unix : Bool
+Inv : ℕ → Store Extra → Prop
+left right : Body Extra Proof
+contract : PreparedBodyContract pub entropy pre schedule unix Inv left right
+index : ℕ
+start : Store Extra
+bound : index < 8
+safe : Inv index start
+generated : Store Extra
+secret : Secret
+he : entropy index start = ok (core.result.Result.Ok secret, generated)
+bytes : alloc.vec.Vec U8
+hs :
+  AspisR1PublicSerializer.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes pub =
+    ok (core.result.Result.Ok bytes)
+eq : reserved pre schedule unix left secret bytes generated = reserved pre schedule unix right secret bytes generated
+⊢ (do
+      let __x ← reserved pre schedule unix right secret bytes generated
+      match __x with
+        | (status, after) => ok (classify status, after)) =
+    do
+    let (status, after) ← reserved pre schedule unix right secret bytes generated
+    ok (classify status, after)
+'R1Z.RealR1_ReachableRetry.prepared_attempt' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.RealR1_ReachableRetry.run_reachable' depends on axioms: [propext, Quot.sound]
+'R1Z.RealR1_ReachableRetry.outer_owner_reachable' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
