@@ -1,0 +1,99 @@
+import R1Z.ProverCommitTerminalZero55
+import R1Z.ProverCommitClaims53
+/-! Exact 3×28 terminal claim carrier from the 3×29 owned claim producer.
+The terminal ignores claim column 28, which is emitted separately as an extra. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitTerminalClaims55
+open Aeneas Aeneas.Std Result
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47 ProverCommitTerminalCarrier55
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open ProverCommitTerminalZero55 (Statement publicModel zc)
+open AspisR1TerminalDigestBindingCandidate.SemanticPublicPreparationCopy
+
+def words (q : Fin 3 → Nat → Old.Q) (i : Nat) : Old.Q :=
+  if h : i<84 then q ⟨i/28,by omega⟩ (i%28) else zero
+
+theorem words_canonical (q : Fin 3 → Nat → Old.Q) (hq : ∀ r i, i<29 → Canonical (q r i)) :
+    ∀ i, i<84 → Canonical (words q i) := by
+  intro i hi
+  rw [words,dif_pos hi]
+  apply hq
+  have := Nat.mod_lt i (by decide : 0<28)
+  omega
+
+theorem words_read (q : Fin 3 → Nat → Old.Q) (r : Fin 3) (c : Fin 28) :
+    words q (r.val*28+c.val)=q r c.val := by
+  rw [words,dif_pos (by have := r.isLt;have := c.isLt;omega)]
+  congr 1
+  · apply Fin.ext
+    have hc := c.isLt
+    omega
+  · have hc := c.isLt
+    omega
+
+theorem claims_read (q : Fin 3 → Nat → Old.Q) (r : Fin 3) (c : Fin 29) (hc : c.val<28) :
+    AspisR1.TerminalClaimModel53.claims (array 84#usize (words q)) r c=decode (q r c.val) := by
+  simp only [AspisR1.TerminalClaimModel53.claims,dif_pos hc,array,
+    ProverCommitArray49.array,List.getElem_ofFn,decode_to]
+  rw [words_read q r ⟨c.val,hc⟩]
+
+theorem terminal_congr (pub : R0P.Public QM31Exact) (lam chi theta mu : QM31Exact)
+    (z p : Fin 10 → QM31Exact) {F : Subfield QM31Exact} (B : R0P.PackBasis F)
+    (x y : Fin 3 → Fin 29 → QM31Exact) (h : ∀ r c, c.val<28 → x r c=y r c) :
+    R0P.SemSource.terminalValue pub lam chi theta mu z B x p=
+      R0P.SemSource.terminalValue pub lam chi theta mu z B y p := by
+  have ho : (⟨fun c => x 0 (Fin.castLE (by omega) c),fun c => x 1 (Fin.castLE (by omega) c),
+        fun c => x 2 (Fin.castLE (by omega) c)⟩ : R0P.Openings QM31Exact)=
+      ⟨fun c => y 0 (Fin.castLE (by omega) c),fun c => y 1 (Fin.castLE (by omega) c),
+        fun c => y 2 (Fin.castLE (by omega) c)⟩ := by
+    congr 1 <;> funext c <;> apply h <;> have := c.isLt <;> omega
+  simp only [R0P.SemSource.terminalValue,ho,h 0 26 (by decide)]
+
+def run (s : Statement) (sem p : Nat → Old.Q) (q : Fin 3 → Nat → Old.Q) :=
+  ProverCommitTerminalQName55.run (copyFromStatement s) (array 84#usize (words q)) (array 10#usize p)
+    (toSelected (sem 0)) (toSelected (sem 1)) (toSelected (sem 2)) (zc sem) (toSelected (sem 13))
+
+attribute [local irreducible] ProverCommitQBasis51.basis publicModel R0P.SemSource.terminalValue
+
+theorem exact_result (s : Statement) (sem p : Nat → Old.Q)
+    (hs : ∀ i, i<25 → Canonical (sem i)) (hp : ∀ i, i<10 → Canonical (p i))
+    (q : Fin 3 → Nat → Old.Q) (hq : ∀ r i, i<29 → Canonical (q r i))
+    (model : Fin 3 → Fin 29 → QM31Exact) (hmodel : ∀ r c, decode (q r c.val)=model r c)
+    {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+    (hash : H) (c1 : Array U8 32#usize)
+    (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+    (hprep : AspisR1PublicPreparation.r1_semantic.public_transcript D
+      (AspisR1PublicPreparation.PreparationBinding.preparationPublic s) hash c1=ok (.Ok transcript)) :
+    ∃ (z : Array Selected 16#usize) (mask : Array Selected 10#usize) (g terminal : Selected),
+      run s sem p q=ok (.Ok (terminal,z,mask,g)) ∧ Canonical (fromSelected terminal) ∧
+      decode (fromSelected terminal)=R0P.SemSource.terminalValue (publicModel s)
+        (decode (sem 0)) (decode (sem 1)) (decode (sem 2)) (decode (sem 13))
+        (fun i : Fin 10 => decode (sem (3+i.val))) ProverCommitQBasis51.basis
+        model (ProverCommitSuccessorPoint49.decoded p) := by
+  have hzc : AspisR1.SemanticCompositionCoefficients.CanonicalArray (zc sem) :=
+    array_canonical 10#usize (fun i => sem (3+i)) (by intro i hi;apply hs;change 3+i<25;change i<10 at hi;omega)
+  obtain ⟨z,mask,g,terminal,hrun,hcan,hvalue⟩ := ProverCommitTerminalQName55.source_success
+    (array 10#usize p) (zc sem) s (array 84#usize (words q))
+    (toSelected (sem 0)) (toSelected (sem 1)) (toSelected (sem 2)) (toSelected (sem 13))
+    (array_canonical 10#usize p hp) hzc (array_canonical 84#usize _ (words_canonical q hq))
+    (canonical_to _ (hs 0 (by decide))) (canonical_to _ (hs 1 (by decide)))
+    (canonical_to _ (hs 2 (by decide))) (canonical_to _ (hs 13 (by decide)))
+    D hash c1 transcript hprep
+  refine ⟨z,mask,g,terminal,hrun,canonical_from terminal hcan,?_⟩
+  rw [decode_from]
+  rw [point_model] at hvalue
+  have hzcpoint : AspisR1.SelectorMarginalModel.modelPoint (zc sem)=
+      (fun i : Fin 10 => decode (sem (3+i.val))) := point_model (fun i => sem (3+i))
+  rw [hzcpoint] at hvalue
+  simp only [decode_to] at hvalue
+  refine hvalue.trans (terminal_congr _ _ _ _ _ _ _ _ _ _ ?_)
+  intro r c hc
+  rw [claims_read q r c hc,hmodel]
+
+#print axioms words_canonical
+#print axioms words_read
+#print axioms claims_read
+#print axioms terminal_congr
+#print axioms exact_result
+end R1Z.ProverCommitTerminalClaims55

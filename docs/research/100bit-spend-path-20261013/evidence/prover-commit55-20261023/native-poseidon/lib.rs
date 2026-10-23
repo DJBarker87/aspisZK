@@ -378,6 +378,18 @@ sums
 
 #[cfg(kani)] mod proofs {
  use super::*;
+ #[kani::proof] #[kani::unwind(100)] fn external_group_frame() {
+  let raw:[[u32;4];16]=kani::any();let group:u8=kani::any();kani::assume(group<4);
+  let mut n:[field::QM31;16]=unsafe{std::mem::transmute(raw)};let mut r=n;
+  let rowwords:[[u32;4];4]=kani::any();let rows:[field::QM31;4]=unsafe{std::mem::transmute(rowwords)};let start=4*group as usize;
+  let ni=[n[start],n[start+1],n[start+2],n[start+3]];
+  let ri=[r[start],r[start+1],r[start+2],r[start+3]];
+  for k in 0..4 {assert_eq!(ni[k],ri[k]);}
+  let mut output=0usize;
+  while output<4 {n[start+output]=rows[output];output+=1;}
+  r[start]=rows[0];r[start+1]=rows[1];r[start+2]=rows[2];r[start+3]=rows[3];
+  let k:u8=kani::any();kani::assume(k<16);assert_eq!(n[k as usize],r[k as usize]);
+ }
  #[kani::proof] #[kani::unwind(100)] fn external_group_cut() {
   let raw:[[u32;4];16]=kani::any();let group:u8=kani::any();kani::assume(group<4);
   let mut n:[field::QM31;16]=unsafe{std::mem::transmute(raw)};let mut r=n;
@@ -386,7 +398,10 @@ sums
  }
  #[kani::proof] #[kani::unwind(100)] fn external_sums_cut() {
   let raw:[[u32;4];16]=kani::any();let n:[field::QM31;16]=unsafe{std::mem::transmute(raw)};
-  assert_eq!(native::sums_cut(&n),retained::sums_cut(&n));
+  let a=native::sums_cut(&n);let b=retained::sums_cut(&n);
+  let c:u8=kani::any();let w:u8=kani::any();kani::assume(c<4);kani::assume(w<4);
+  assert_eq!(a[c as usize][w as usize],b[c as usize][w as usize]);
+  assert!(a[c as usize][w as usize] < (1u64<<34));
  }
  #[kani::proof] #[kani::unwind(100)] fn external_finish_cut() {
   let raw:[[u32;4];16]=kani::any();let sums:[[u64;4];4]=kani::any();

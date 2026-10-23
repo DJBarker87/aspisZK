@@ -280,3 +280,54 @@ each JSON receipt; all printed axioms are subsets of the standard three):
 | J10750 | R1Z.ProverCommitGuardedAt55 | 0 | 0:01.67 | 4104752 | 0 |
 | J10753 | R1Z.ProverCommitOracle55 | 0 | 0:01.91 | 4306240 | 0 |
 | J10756 | R1Z.ProverCommitOracleRounds55 | 0 | 0:01.90 | 4305456 | 0 |
+
+## Stage 6: original terminal, complete final shift and final guard
+
+J10758 specializes both optimized-node/length-guarded encoder entry points
+to M31/QM31, discharging the cast-success premise with exact used methods.
+Unused trait fields remain arbitrary, as in part 54. J10757 is rejected for
+concrete-array reduction; symbolic list-length normalization fixes it.
+
+J10760 proves row-major 3×28 terminal claim transport from the 3×29 owned
+claim producer and proves that terminalValue is insensitive to column 28.
+J10763 produces honest claims at sem[15..24], runs the nonzero-claim terminal,
+and multiplies by eta=sem[14]. The result is exactly fOrig on the actual tape.
+No assumed claim or original-result image remains. J10759/61/62 are rejected
+index normalization/import/definitional equality drafts, retained in full.
+
+J10768 composes the actual per-sample oracle, every round-9 partial sum,
+interpolation, both produced terminal values, actual half/inverse and final
+shift. The complete output polynomial equals the shifted reference payload's
+round 9. It also proves the actual optimized polynomial evaluation equals
+mask+original+extra using two source-ordered additions and canonical raw
+equality, so the final semantic comparison returns true. J10767 supplies
+that final-guard theorem. The proof retains canonical input tapes/challenges,
+round-prefix provenance, alpha9≠1/2 and successful public preparation. It has
+no per-oracle, claim, terminal, sample-array or polynomial image premise.
+It remains an owned caller cut, not native simulator output equality.
+
+J10765 is a reserved-identifier draft. J10766 reaches the unchanged heartbeat
+limit while elaborating source predicates. J10767 makes those predicates and
+large model maps opaque; it raises no limits. Accepted diagnostics contain no
+sorryAx. J10764 is the earlier final-caller version before adding final-guard
+success; J10768 is its current-source receipt.
+
+The native external four-row arithmetic gate also times out (181.044 s,
+333084 KiB, zero swap). The replacement separates previously proved row
+arithmetic from the saved-input/output-placement frame. The frame passes
+5.668 s/221404 KiB. Column sums pass 3.640 s/194176 KiB and prove their <2^34
+bound for arbitrary raw u32 limbs. Finishing writes pass 12.901 s/217764 KiB,
+with arbitrary raw input limbs and sums bounded by 2^34. The first sums check
+fails only in builtin memcmp unwinding; the replacement compares an arbitrary
+selected output cell. These focused checks are not silently promoted to a
+whole native external-layer theorem.
+
+| Attempt | Exact module | Exit | Wall | Peak RSS KiB | Swaps |
+|---|---|---:|---:|---:|---:|
+| J10758 | R1Z.ProverCommitGuardedSpecialized55 | 0 | 0:01.87 | 4109252 | 0 |
+| J10760 | R1Z.ProverCommitTerminalClaims55 | 0 | 0:02.09 | 4276552 | 0 |
+| J10763 | R1Z.ProverCommitOriginal55 | 0 | 0:01.79 | 4281092 | 0 |
+| J10767 | R1Z.ProverCommitSemanticTerminal55 | 0 | 0:02.16 | 4316292 | 0 |
+| J10768 | R1Z.ProverCommitFinalCaller55 | 0 | 0:02.54 | 4372692 | 0 |
+
+All successful theorem axioms are subsets of [propext, Classical.choice, Quot.sound]. Each JSON records exact source revision, SHA, dependencies, command and full output.

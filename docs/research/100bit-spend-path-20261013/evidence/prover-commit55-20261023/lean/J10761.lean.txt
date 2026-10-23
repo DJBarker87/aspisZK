@@ -1,0 +1,58 @@
+import R1Z.ProverCommitTerminalClaims55
+import R1Z.ProverCommitChallengePrefix55
+/-! Produce honest claims, call the nonzero-claim terminal and multiply by eta
+at the actual sem[15..24] alpha. No claim or original-result image is assumed. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitOriginal55
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47 ProverCommitTerminalCarrier55
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+open ProverCommitTerminalZero55 (Statement publicModel)
+open ProverCommitChallengePrefix55
+
+def point (sem : Nat → Old.Q) : Nat → Old.Q := fun i => sem (15+i)
+
+theorem point_canonical (sem : Nat → Old.Q) (hs : ∀ i, i<25 → Canonical (sem i)) :
+    ∀ i, i<10 → Canonical (point sem i) := by
+  intro i hi;apply hs;omega
+
+theorem point_image (template : R0Z.HonestView.Challenges QM31Exact) (sem : Nat → Old.Q) :
+    ProverCommitSuccessorPoint49.decoded (point sem)=R0Z.HonestView.alpha (withSemantic template sem) := rfl
+
+attribute [local irreducible] ProverCommitQBasis51.basis publicModel ProverCommitClaims53.trace
+  R0P.SemSource.terminalValue ProverCommitNativeQ48.source ProverCommitQArray48.array
+
+theorem exact_result (s : Statement) (sem : Nat → Old.Q)
+    (hs : ∀ i, i<25 → Canonical (sem i))
+    (c : Nat → Nat → Old.Q) (hc : ∀ l, l<29 → ∀ i, i<1024 → Canonical (c l i))
+    (template : R0Z.HonestView.Challenges QM31Exact)
+    {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+    (hash : H) (c1 : Array U8 32#usize)
+    (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+    (hprep : AspisR1PublicPreparation.r1_semantic.public_transcript D
+      (AspisR1PublicPreparation.PreparationBinding.preparationPublic s) hash c1=ok (.Ok transcript)) :
+    ∃ (q : Fin 3 → Nat → Old.Q) (z : Array Selected 16#usize)
+      (mask : Array Selected 10#usize) (g terminal : Selected) (original : Old.Q),
+      claims53.all (ProverCommitQArray48.array 10#usize (point sem)) (ProverCommitClaimsColumn53.columns c)=
+        ok (Array.make 3#usize [ProverCommitQArray48.array 29#usize (q 0),
+          ProverCommitQArray48.array 29#usize (q 1),ProverCommitQArray48.array 29#usize (q 2)]) ∧
+      ProverCommitTerminalClaims55.run s sem (point sem) q=ok (.Ok (terminal,z,mask,g)) ∧
+      field.QM31.mul (ProverCommitNativeQ48.source (sem 14))
+        (ProverCommitNativeQ48.source (fromSelected terminal))=ok (ProverCommitNativeQ48.source original) ∧
+      Canonical original ∧ decode original=R0Z.Shift.fOrig (publicModel s) ProverCommitQBasis51.basis
+        (withSemantic template sem) (ProverCommitClaims53.trace c)
+        (R0Z.HonestView.alpha (withSemantic template sem)) := by
+  obtain ⟨q,hq,hcq,hdq⟩ := ProverCommitClaims53.exact_result (point sem) (point_canonical sem hs) c hc
+  obtain ⟨z,mask,g,terminal,ht,hct,hdt⟩ := ProverCommitTerminalClaims55.exact_result s sem (point sem)
+    hs (point_canonical sem hs) q hcq _ hdq D hash c1 transcript hprep
+  obtain ⟨original,ho,hco,hdo⟩ := ProverCommitNativeQ48.mul (sem 14) (fromSelected terminal)
+    (hs 14 (by decide)) hct
+  refine ⟨q,z,mask,g,terminal,original,hq,ht,ho,hco,?_⟩
+  rw [hdo,hdt,point_image template sem]
+  simp only [R0Z.Shift.fOrig,withSemantic,R0Z.HonestView.zc]
+
+#print axioms point_canonical
+#print axioms point_image
+#print axioms exact_result
+end R1Z.ProverCommitOriginal55
