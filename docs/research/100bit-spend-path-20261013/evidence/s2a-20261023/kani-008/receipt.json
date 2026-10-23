@@ -1,0 +1,54 @@
+{
+  "attempt": "kani-008",
+  "kind": "kani",
+  "source_revision": "7eb0ac8dbbf4ec238eeef81e259167eb7706f882",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2A-spec/Cargo.toml",
+    "--target-dir",
+    "S2A-target",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness",
+    "S2A_schedule::successful_prefix_admission",
+    "--exact",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2A-spec/S2A_Primitives.rs",
+    "S2A-spec/Cargo.toml"
+  ],
+  "timeout": 180,
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  },
+  "deps_fingerprint": "standalone spec, no dependencies; Kani0.67.0/CBMC6.8.0; explicit three-cell/two-coordinate projection",
+  "expected_time": "optimized compilation then three-borrow schedule using checked primitive contracts",
+  "replacement_reason": "kani-006 failed builtin memcmp unwind5 on new consumer array equality. Replace the three array comparisons with bounded elementwise array_eq; contract/primitive unchanged, no cap/unwind increase.",
+  "exit_status": 0,
+  "wall_seconds": 144.97676965600112,
+  "peak_rss_kib": "5812224",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r2bb502cf4db447ef87ea19151de81246.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "5977219072",
+  "source_hashes": {
+    "S2A-spec/S2A_Primitives.rs": "e517d1b55d99ef3aa94df48bb8e6905f69816df8f6077f1f165e8fd874b27b2a",
+    "S2A-spec/Cargo.toml": "c4c4860fb910ce80c3febae62b71d0e529f8b5b29d5eb05c18fa6121672b3cbe"
+  },
+  "print_axioms": "N/A: Kani"
+}

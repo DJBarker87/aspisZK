@@ -1,0 +1,35 @@
+{
+  "attempt": "kani-003",
+  "kind": "kani",
+  "source_revision": "7eb0ac8dbbf4ec238eeef81e259167eb7706f882",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2A-spec/Cargo.toml",
+    "--target-dir",
+    "S2A-target",
+    "-Z",
+    "function-contracts",
+    "--harness",
+    "S2A_checks::step_contract",
+    "--exact",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2A-spec/S2A_Primitives.rs",
+    "S2A-spec/Cargo.toml"
+  ],
+  "timeout": 180,
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  },
+  "deps_fingerprint": "standalone spec, no dependencies; Kani0.67.0/CBMC6.8.0; explicit three-cell/two-coordinate projection",
+  "expected_time": "optimized compilation then primitive relation contract verification",
+  "replacement_reason": "kani-001 failed before rustc/metadata: SSH PATH omitted rustc; explicit executable search path added. No solver/memory timeout."
+}
