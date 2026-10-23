@@ -28,7 +28,7 @@ def build():
   declarations=rows,unassigned=unresolved,assigned_twice=[r['id'] for r in rows if len(r['owners'])>1],
   ownership_overlay=overlay,
   ownership_overlay_status='Retained source-level proposal only; historical closure/constant/span/compiler IDs are not adopted identities. New frozen MIR census and deltas are separate.',
-  direct_reachability={m:dict(roots=g['roots'],direct_reachable=g['direct_reachable'],indirect_calls=g['indirect_calls']) for m,g in graphs.items()},
+  direct_reachability={m:dict(roots=g['roots'],direct_reachable=g['direct_reachable'],indirect_calls=len({c['address'] for c in g['calls'] if c['kind']=='indirect'}),symbol_alias_indirect_records=g['indirect_calls']) for m,g in graphs.items()},
   complete=False,status='INCOMPLETE',
   residuals=['S2 caller identities','complete final instance/inline correspondence','owner acceptance','concrete source Calls tree/carriers','source/model ordered identities','coherent final release replay'],
   print_axioms='N/A: no Lean theorem added')

@@ -73,3 +73,58 @@ stage1/stage2 caller is outside these 140 child/wrapper facts: no new caller
 ordering is inferred from their preservation. Generic Lean graph mathematics
 is reused at its old scope; no Lean specialization or source/model execution
 identity is proved here.
+
+## Stage 3: exact declaration/instance/edge delta and ownership
+
+Comparison baseline is the immediately previous S10 re-pin, not pass 1.
+`mir-diff.json` lists all 193 changed signature groups per verifier: 111
+added, 81 removed and one same-signature raw body change. All belong to the
+program crate; core, statement and verifier generic bodies are unchanged.
+The supplemental explicit-alias comparison (`alias-mir-diff.json`) matches
+76 groups whose body text changes only by aliases/source coordinates, leaving
+34 added owned support groups, four removed caller closures and two replaced
+stage bodies. These 40 groups are all adapter caller/glue declarations.
+Old/new raw signatures, hashes, inline scopes and call operands are retained;
+normalization is never substituted for semantic equivalence. The first alias
+comparison and its exact residuals are retained as historical diagnostic data.
+The final version adds individually listed statement/SDK qualification aliases.
+
+Every one of the 32 exact mono-record deltas, 94 LLVM emitted declaration/
+definition text groups, 309 ELF symbol-name groups and 97 endpoint-name edge
+multiset deltas per verifier is listed in the corresponding `*-diff.json`.
+Symbol aliases and duplicate same-name instances remain separate records;
+addresses/layout are not guessed equal. Pool has zero deltas in every view.
+`call-alias-audit.json` explicitly distinguishes raw symbol-alias call records
+(1,640/1,640/2,220) from physical instructions (1,633/1,633/2,202), and raw
+callx records (37/37/81) from physical callx instructions (36/36/80).
+All duplicate-site instruction records agree exactly.
+
+The narrow substantive **source/project MIR** delta is adapter caller glue.
+All 27 top-level helper cuts in the byte-identical pre-stage prefix are
+individually pinned in `child-pins.json`, in addition to the unchanged child
+workspace files. The whole source diff also includes test wiring/tests, and
+the machine delta is not literally only adapter files plus inlined code:
+new out-of-line `ProgramError::clone` and `String::clone` functions are emitted
+for the owned caller's library support. Those library call edges are listed
+separately in `change-assessment.json`; other changed edge callers are the
+old/new adapter. Raw ELF instruction hashes also change with relocations and
+layout. No child-source or child-generic-MIR semantic change is observed.
+This is compiler/source evidence, not a compiler semantic correctness proof.
+
+`inventory.json` contains 1,046 nonzero ELF symbol occurrences with one
+proposed owner or existing library boundary each (zero unassigned/double).
+It retains direct-entrypoint reachability lower bounds and all open callx
+sites, not a complete deployed reachable/inlined declaration set.
+`declaration-ownership.json` pins 14,249 emitted generic bodies
+(4,664/4,664/4,921) and their host-only 8.7 MB ownership JSONL.
+The full 32.2 MB MIR calls/inline census also remains host-only, hash/size-pinned.
+The lead's 161-record ownership overlay is retained at its actual proposal
+scope; new compiler IDs are regenerated. Owned caller/glue inherits S2;
+first/first_decoded retains S6. New library support keeps the existing
+library-boundary proposals; no trust item is introduced or discharged.
+
+Both `inventory.py --check --require-complete` and
+`reconcile.py --check --require-complete` still exit **2**.
+S2 caller identities, final inline/source correspondence, owner acceptance,
+concrete source Calls tree/carriers, source_order/model_order and the coherent
+final release replay remain open. No headline premise is removed.
