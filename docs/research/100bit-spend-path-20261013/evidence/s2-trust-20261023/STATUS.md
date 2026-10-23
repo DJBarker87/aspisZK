@@ -44,3 +44,15 @@ Exact command/source SHA/exit/wall/RSS/swap/axiom lines are in lean-*/receipt.js
 All runs used pinned Lean 4.32.0 via lake env lean, one module per capped scope.
 No full manifest replay is appropriate for these independent new modules.
 Budget used: Lean 3/100, Kani 0/60. Next: inhabited consistency schedules and Kani.
+
+# Stage 3: inhabited consistency and schedules
+
+S2TrustConsistency.lean proves initial_valid for every signed admitted external
+counter (including negative conflicts and MAX), shared schedules with two aliases,
+failed exclusive acquisition, one move, reverse drops, exclusive move/write/drop,
+shared conflict, saturation and error movement/drop. consistency combines the
+fifteen-field model witness with a valid concrete initial state. No SDK relation
+is discharged. Axioms: initial_valid/consistency use only propext,
+Classical.choice, Quot.sound; three schedule theorems have no axioms.
+Attempt 004 had local syntax/lemma-name errors; repaired module passed 005.
+No timeout or memory kill. Budget used: Lean 5/100, Kani 0/60.
