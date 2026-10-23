@@ -1,0 +1,46 @@
+{
+  "attempt": "kani-012",
+  "kind": "kani",
+  "source_revision": "74daadf5724bb2d990543cd0fd4af324ab4c6ae0",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2W_cell/Cargo.toml",
+    "--target-dir",
+    "cell-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "60s",
+    "--exact",
+    "--harness",
+    "S2W_cell_consumer",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2W_cell/src/lib.rs",
+    "S2W_cell/Cargo.toml"
+  ],
+  "timeout": 100,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "deps_fingerprint": {
+    "scope": "Native single-byte assignment with ghost arbitrary index/length and selected-source equality. No native bulk-copy or snapshot association claimed."
+  },
+  "expected_time": "Optimized tiny symbolic-cell contract/verified-stub consumer, no allocation or bulk copy",
+  "change": "After010 bulk timeout, remove bulk copy and array allocation; verify only a single arbitrary native byte cell"
+}

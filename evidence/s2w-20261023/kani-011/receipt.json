@@ -1,0 +1,63 @@
+{
+  "attempt": "kani-011",
+  "kind": "kani",
+  "source_revision": "74daadf5724bb2d990543cd0fd4af324ab4c6ae0",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2W_cell/Cargo.toml",
+    "--target-dir",
+    "cell-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "60s",
+    "--exact",
+    "--harness",
+    "S2W_cell_contract",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2W_cell/src/lib.rs",
+    "S2W_cell/Cargo.toml"
+  ],
+  "timeout": 100,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "deps_fingerprint": {
+    "scope": "Native single-byte assignment with ghost arbitrary index/length and selected-source equality. No native bulk-copy or snapshot association claimed."
+  },
+  "expected_time": "Optimized tiny symbolic-cell contract/verified-stub consumer, no allocation or bulk copy",
+  "change": "After010 bulk timeout, remove bulk copy and array allocation; verify only a single arbitrary native byte cell",
+  "exit_status": 0,
+  "wall_seconds": 0.5283303839969449,
+  "peak_rss_kib": "122176",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r447152be3f86476daff03661a6e1f6d4.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "37269504",
+  "source_hashes": {
+    "S2W_cell/src/lib.rs": "d7305e868d3c10c4856a90cd7455cff59bd769fab8cc1a2fc9215306a911929e",
+    "S2W_cell/Cargo.toml": "c9274d501866c19ea0de18a23e3854cbcd514cbae2f382c0925a6d23b3d38431"
+  },
+  "print_axioms": "N/A: kani"
+}
