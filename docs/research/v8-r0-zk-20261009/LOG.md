@@ -8806,3 +8806,22 @@ the meantime. Limits the lead keeps: no lowering of the security target, metric 
 adversary; no change to frozen verifier bytes or the protocol; any new trust item is
 named in the headline and logged with its reasons, so the user can reverse it; every
 such decision is listed in a morning summary.
+
+## D178 (lead, 2026-10-23 02:50): import-union fix merged (release gate 1)
+
+Merged `codex/cx-import-union-20261022` (`evidence/import-union-20261022/summary.json`).
+The prototyped adapter is promoted. 46 files and 130 generated discriminant
+attributes under `lean/` are migrated to type-qualified instance names, with hash
+manifests. 851 targets compiled, covering all 807 affected roots and consumers
+plus the terminal bridge that blocked part 52. Release gate
+`ImportUnionReleaseGate` (IU-1328): exit 0, 1.75 s, 4.59 GB, zero swap, 77
+standard-only axiom audits. A census over 8,164 modules and 566,510 declarations
+found zero duplicate definitions or instances; all 614 repeated theorem names have
+identical types. Lead audit of the diff: no existing theorem statement changed (only
+added helper lemmas and proof-script normalisations). Recorded separately: two unchanged
+`AspisV8R19.SamplerWordRead` audits list the extraction opaque `core.fmt.Formatter`.
+These are not in the frozen2 headline closure, but are to be eliminated or justified
+before release. Not migrated: 56 `lean-candidates` files (session A's, with the script and
+instructions in their handoff; the s126 S2 candidates are now the lead's and are migrated
+when S2 imports them). The worker committed a 57.6 MB raw scan against the 5 MB rule;
+it is replaced in the tree by its hash record (it remains in history).
