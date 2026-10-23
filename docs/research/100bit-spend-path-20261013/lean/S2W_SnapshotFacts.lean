@@ -68,9 +68,71 @@ theorem borrow_error (C : Carriers) (ops : Ops C) (account : AccountInfo C)
       ok (projected C account (.Err cloned) (.Err error)) := by
   simp [snapshot, borrow, clone, projected]
 
+/-- Acceptance of a snapshot's data projection implies admitted length and
+consistent length/bytes, without an assumed OwnedSnapshotShape or entrySize.
+This statement covers the extracted snapshot only, prior to native reification. -/
+theorem successful_shape (C : Carriers) (ops : Ops C) (account : AccountInfo C)
+    (length1 length2 : Usize) (out : OwnedAccount) (bytes : alloc.vec.Vec U8)
+    (returned : snapshot C ops account length1 length2 = ok out)
+    (successful : out.bytes = .Ok bytes) :
+    out.length = .Ok (alloc.vec.Vec.len bytes) ∧
+    (alloc.vec.Vec.len bytes = length1 ∨ alloc.vec.Vec.len bytes = length2) := by
+  unfold snapshot at returned
+  cases borrowed : ops.borrow account with
+  | fail error => simp [borrowed] at returned
+  | div => simp [borrowed] at returned
+  | ok pair =>
+    rcases pair with ⟨result,back⟩
+    cases result with
+    | Err error =>
+      cases cloned : ops.cloneError error with
+      | fail e => simp [borrowed,cloned] at returned
+      | div => simp [borrowed,cloned] at returned
+      | ok e =>
+        simp [borrowed,cloned] at returned
+        subst out
+        cases successful
+    | Ok guard =>
+      cases read : ops.deref guard with
+      | fail e => simp [borrowed,read] at returned
+      | div => simp [borrowed,read] at returned
+      | ok data =>
+        by_cases first : Slice.len data = length1
+        · simp [borrowed,read,first,to_vec_identity] at returned
+          have outEq : projected C account (.Ok length1) (.Ok data) = out :=
+            Result.ok.inj returned
+          subst out
+          have same : data = bytes := core.result.Result.Ok.inj successful
+          subst bytes
+          exact ⟨congrArg core.result.Result.Ok first.symm, Or.inl first⟩
+        · by_cases second : Slice.len data = length2
+          · simp [borrowed,read,first,second,to_vec_identity] at returned
+            have outEq : projected C account (.Ok length2) (.Ok data) = out :=
+              Result.ok.inj returned
+            subst out
+            have same : data = bytes := core.result.Result.Ok.inj successful
+            subst bytes
+            exact ⟨congrArg core.result.Result.Ok second.symm, Or.inr second⟩
+          · simp [borrowed,read,first,second] at returned
+            subst out
+            cases successful
+
+/-- Exact1768-byte entry length follows from the wrapper's admitted bounds,
+not an independent entrySize premise. Native output association stays open. -/
+theorem checkpoint_entry_size (C : Carriers) (ops : Ops C) (account : AccountInfo C)
+    (out : OwnedAccount) (bytes : alloc.vec.Vec U8)
+    (returned : snapshot C ops account 1768#usize 1768#usize = ok out)
+    (successful : out.bytes = .Ok bytes) : bytes.val.length = 1768 := by
+  have shape := successful_shape C ops account 1768#usize 1768#usize out bytes
+    returned successful
+  have len : alloc.vec.Vec.len bytes = 1768#usize := shape.2.elim id id
+  exact congrArg UScalar.val len
+
 #print axioms to_vec_identity
 #print axioms admitted_snapshot
 #print axioms rejected_length
 #print axioms borrow_error
+#print axioms successful_shape
+#print axioms checkpoint_entry_size
 end AspisR1.S2W.Snapshot
 end

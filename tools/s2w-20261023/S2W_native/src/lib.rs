@@ -41,10 +41,8 @@ fn snapshot(account: &AccountInfo<'_>, length1: usize, length2: usize) -> OwnedA
 }
 
 
-#[kani::proof]
-#[kani::unwind(34)]
-fn S2W_snapshot_proof_account() {
-    let mut input: [u8; 58295] = kani::any();
+fn S2W_snapshot_size<const WIDTH: usize>() {
+    let mut input: [u8; WIDTH] = kani::any();
     let i: usize = kani::any();
     kani::assume(i < input.len());
     let original = input[i];
@@ -58,20 +56,29 @@ fn S2W_snapshot_proof_account() {
     let epoch: u64 = kani::any();
     let account = AccountInfo::new(&key, signer, writable, &mut lamports,
         &mut input, &owner, executable, epoch);
-    let snap = snapshot(&account, 58295, 58295);
+    let snap = snapshot(&account, WIDTH, WIDTH);
     assert!(snap.key == key && snap.owner == owner);
     assert!(snap.is_signer == signer && snap.is_writable == writable
         && snap.executable == executable);
-    assert!(snap.length == Ok(58295));
+    assert!(snap.length == Ok(WIDTH));
     let copied = snap.bytes.unwrap();
-    assert!(copied.len() == 58295);
+    assert!(copied.len() == WIDTH);
     assert!(copied[i] == original);
     assert!(**account.try_borrow_lamports().unwrap() == old_lamports);
     let mut live = account.try_borrow_mut_data().unwrap();
-    assert!(live.len() == 58295 && live[i] == original);
+    assert!(live.len() == WIDTH && live[i] == original);
     live[i] = original.wrapping_add(1);
     assert!(copied[i] == original);
 }
+#[kani::proof]
+#[kani::unwind(34)]
+fn S2W_snapshot_proof_account() { S2W_snapshot_size::<58295>(); }
+#[kani::proof]
+#[kani::unwind(34)]
+fn S2W_snapshot_public_account() { S2W_snapshot_size::<1880>(); }
+#[kani::proof]
+#[kani::unwind(34)]
+fn S2W_snapshot_checkpoint_account() { S2W_snapshot_size::<1768>(); }
 
 fn S2W_write(accounts: &[AccountInfo<'_>], checkpoint: Vec<u8>) -> Result<(),ProgramError> {
     accounts[2].try_borrow_mut_data()?.copy_from_slice(&checkpoint);
