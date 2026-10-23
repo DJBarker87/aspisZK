@@ -1,0 +1,3 @@
+Generic two radix-four dual folds of a row with the same symbolic child factorization equal the product of its two source-ordered factor polynomials and remaining factor. Reuses existing RoundPairing.dualFold_horner, evaluates no 1024-coordinate recurrence and asserts no Rust/source/runtime correspondence. Its child equalities and actual quarter normalization must be supplied by the separate same-constructor source/model join. This is model algebra only, not S9 or release security closure.
+
+Focused Lean check: 11.24 seconds; peak aggregate RSS 1849360384 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
