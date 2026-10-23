@@ -1,0 +1,182 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6AfterstateDecoderPart12FramesV1.lean:16:19: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+bytes : Slice U8
+val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 : Digest
+hlen : bytes.length = 688
+s15 : Slice U8
+_✝²³ : [> let s15 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 432#usize, «end» := 464#usize } bytes <]
+s15_post1 : ↑s15 = List.slice 432 464 ↑bytes
+s15_post2 : s15.length = 464 - 432
+r39 : core.result.Result (Std.Array U8 32#usize) PoolV1PairVerifierTransportErrorV1
+_✝²² : [> let r39 ← exact 32#usize s15 <]
+r39_post :
+  match r39 with
+  | core.result.Result.Ok array => ↑array = ↑s15 ∧ s15.length = 32
+  | core.result.Result.Err error => s15.length ≠ 32 ∧ error = PoolV1PairVerifierTransportErrorV1.WrongLength
+cf26 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairVerifierTransportErrorV1)
+    (Std.Array U8 32#usize)
+_✝²¹ : [> let cf26 ← core.result.Result.Insts.CoreOpsTry.branch r39 <]
+cf26_post :
+  ∀ (value : Std.Array U8 32#usize),
+    cf26 = core.ops.control_flow.ControlFlow.Continue value → r39 = core.result.Result.Ok value
+val26 : Std.Array U8 32#usize
+h✝⁷ : cf26 = core.ops.control_flow.ControlFlow.Continue val26
+r40 : core.result.Result (Std.Array U32 8#usize) aspis_statement.atomic_statement.AtomicStatementError
+_✝²⁰ : [> let r40 ← aspis_statement.atomic_statement.decode_digest_canonical val26 <]
+r40_post :
+  ∀ (digest : Std.Array U32 8#usize),
+    r40 = core.result.Result.Ok digest → aspis_statement.atomic_statement.encode_digest_canonical digest = ok val26
+r41 : core.result.Result (Std.Array U32 8#usize) PoolV1PairVerifierTransportErrorV1
+_✝¹⁹ :
+  [> let r41 ←
+    core.result.Result.map_err
+      decode_pool_v1_pair_verified_afterstate_v1.closure_13.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1
+      r40 () <]
+r41_post : ∀ (value : Std.Array U32 8#usize), r41 = core.result.Result.Ok value → r40 = core.result.Result.Ok value
+cf27 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairVerifierTransportErrorV1)
+    (Std.Array U32 8#usize)
+_✝¹⁸ : [> let cf27 ← core.result.Result.Insts.CoreOpsTry.branch r41 <]
+cf27_post :
+  ∀ (value : Std.Array U32 8#usize),
+    cf27 = core.ops.control_flow.ControlFlow.Continue value → r41 = core.result.Result.Ok value
+val27 : Std.Array aspis_core.field.M31 8#usize
+h✝⁶ : cf27 = core.ops.control_flow.ControlFlow.Continue val27
+s16 : Slice U8
+_✝¹⁷ : [> let s16 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 464#usize, «end» := 496#usize } bytes <]
+s16_post1 : ↑s16 = List.slice 464 496 ↑bytes
+s16_post2 : s16.length = 496 - 464
+r42 : core.result.Result (Std.Array U8 32#usize) PoolV1PairVerifierTransportErrorV1
+_✝¹⁶ : [> let r42 ← exact 32#usize s16 <]
+r42_post :
+  match r42 with
+  | core.result.Result.Ok array => ↑array = ↑s16 ∧ s16.length = 32
+  | core.result.Result.Err error => s16.length ≠ 32 ∧ error = PoolV1PairVerifierTransportErrorV1.WrongLength
+cf28 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairVerifierTransportErrorV1)
+    (Std.Array U8 32#usize)
+_✝¹⁵ : [> let cf28 ← core.result.Result.Insts.CoreOpsTry.branch r42 <]
+cf28_post :
+  ∀ (value : Std.Array U8 32#usize),
+    cf28 = core.ops.control_flow.ControlFlow.Continue value → r42 = core.result.Result.Ok value
+val28 : Std.Array U8 32#usize
+h✝⁵ : cf28 = core.ops.control_flow.ControlFlow.Continue val28
+r43 : core.result.Result (Std.Array U32 8#usize) aspis_statement.atomic_statement.AtomicStatementError
+_✝¹⁴ : [> let r43 ← aspis_statement.atomic_statement.decode_digest_canonical val28 <]
+r43_post :
+  ∀ (digest : Std.Array U32 8#usize),
+    r43 = core.result.Result.Ok digest → aspis_statement.atomic_statement.encode_digest_canonical digest = ok val28
+r44 : core.result.Result (Std.Array U32 8#usize) PoolV1PairVerifierTransportErrorV1
+_✝¹³ :
+  [> let r44 ←
+    core.result.Result.map_err
+      decode_pool_v1_pair_verified_afterstate_v1.closure_14.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1
+      r43 () <]
+r44_post : ∀ (value : Std.Array U32 8#usize), r44 = core.result.Result.Ok value → r43 = core.result.Result.Ok value
+cf29 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairVerifierTransportErrorV1)
+    (Std.Array U32 8#usize)
+_✝¹² : [> let cf29 ← core.result.Result.Insts.CoreOpsTry.branch r44 <]
+cf29_post :
+  ∀ (value : Std.Array U32 8#usize),
+    cf29 = core.ops.control_flow.ControlFlow.Continue value → r44 = core.result.Result.Ok value
+val29 : Std.Array aspis_core.field.M31 8#usize
+h✝⁴ : cf29 = core.ops.control_flow.ControlFlow.Continue val29
+s17 : Slice U8
+_✝¹¹ : [> let s17 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 496#usize, «end» := 528#usize } bytes <]
+s17_post1 : ↑s17 = List.slice 496 528 ↑bytes
+s17_post2 : s17.length = 528 - 496
+r45 : core.result.Result (Std.Array U8 32#usize) PoolV1PairVerifierTransportErrorV1
+_✝¹⁰ : [> let r45 ← exact 32#usize s17 <]
+r45_post :
+  match r45 with
+  | core.result.Result.Ok array => ↑array = ↑s17 ∧ s17.length = 32
+  | core.result.Result.Err error => s17.length ≠ 32 ∧ error = PoolV1PairVerifierTransportErrorV1.WrongLength
+cf30 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairVerifierTransportErrorV1)
+    (Std.Array U8 32#usize)
+_✝⁹ : [> let cf30 ← core.result.Result.Insts.CoreOpsTry.branch r45 <]
+cf30_post :
+  ∀ (value : Std.Array U8 32#usize),
+    cf30 = core.ops.control_flow.ControlFlow.Continue value → r45 = core.result.Result.Ok value
+val30 : Std.Array U8 32#usize
+h✝³ : cf30 = core.ops.control_flow.ControlFlow.Continue val30
+r46 : core.result.Result (Std.Array U32 8#usize) aspis_statement.atomic_statement.AtomicStatementError
+_✝⁸ : [> let r46 ← aspis_statement.atomic_statement.decode_digest_canonical val30 <]
+r46_post :
+  ∀ (digest : Std.Array U32 8#usize),
+    r46 = core.result.Result.Ok digest → aspis_statement.atomic_statement.encode_digest_canonical digest = ok val30
+r47 : core.result.Result (Std.Array U32 8#usize) PoolV1PairVerifierTransportErrorV1
+_✝⁷ :
+  [> let r47 ←
+    core.result.Result.map_err
+      decode_pool_v1_pair_verified_afterstate_v1.closure_15.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1
+      r46 () <]
+r47_post : ∀ (value : Std.Array U32 8#usize), r47 = core.result.Result.Ok value → r46 = core.result.Result.Ok value
+cf31 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairVerifierTransportErrorV1)
+    (Std.Array U32 8#usize)
+_✝⁶ : [> let cf31 ← core.result.Result.Insts.CoreOpsTry.branch r47 <]
+cf31_post :
+  ∀ (value : Std.Array U32 8#usize),
+    cf31 = core.ops.control_flow.ControlFlow.Continue value → r47 = core.result.Result.Ok value
+val31 : Std.Array aspis_core.field.M31 8#usize
+h✝² : cf31 = core.ops.control_flow.ControlFlow.Continue val31
+s18 : Slice U8
+_✝⁵ : [> let s18 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 528#usize, «end» := 560#usize } bytes <]
+s18_post1 : ↑s18 = List.slice 528 560 ↑bytes
+s18_post2 : s18.length = 560 - 528
+r48 : core.result.Result (Std.Array U8 32#usize) PoolV1PairVerifierTransportErrorV1
+_✝⁴ : [> let r48 ← exact 32#usize s18 <]
+r48_post :
+  match r48 with
+  | core.result.Result.Ok array => ↑array = ↑s18 ∧ s18.length = 32
+  | core.result.Result.Err error => s18.length ≠ 32 ∧ error = PoolV1PairVerifierTransportErrorV1.WrongLength
+cf32 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairVerifierTransportErrorV1)
+    (Std.Array U8 32#usize)
+_✝³ : [> let cf32 ← core.result.Result.Insts.CoreOpsTry.branch r48 <]
+cf32_post :
+  ∀ (value : Std.Array U8 32#usize),
+    cf32 = core.ops.control_flow.ControlFlow.Continue value → r48 = core.result.Result.Ok value
+val32 : Std.Array U8 32#usize
+h✝¹ : cf32 = core.ops.control_flow.ControlFlow.Continue val32
+r49 : core.result.Result (Std.Array U32 8#usize) aspis_statement.atomic_statement.AtomicStatementError
+_✝² : [> let r49 ← aspis_statement.atomic_statement.decode_digest_canonical val32 <]
+r49_post :
+  ∀ (digest : Std.Array U32 8#usize),
+    r49 = core.result.Result.Ok digest → aspis_statement.atomic_statement.encode_digest_canonical digest = ok val32
+r50 : core.result.Result (Std.Array U32 8#usize) PoolV1PairVerifierTransportErrorV1
+_✝¹ :
+  [> let r50 ←
+    core.result.Result.map_err
+      decode_pool_v1_pair_verified_afterstate_v1.closure_16.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1
+      r49 () <]
+r50_post : ∀ (value : Std.Array U32 8#usize), r50 = core.result.Result.Ok value → r49 = core.result.Result.Ok value
+cf33 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairVerifierTransportErrorV1)
+    (Std.Array U32 8#usize)
+_✝ : [> let cf33 ← core.result.Result.Insts.CoreOpsTry.branch r50 <]
+cf33_post :
+  ∀ (value : Std.Array U32 8#usize),
+    cf33 = core.ops.control_flow.ControlFlow.Continue value → r50 = core.result.Result.Ok value
+val33 : Std.Array aspis_core.field.M31 8#usize
+h✝ : cf33 = core.ops.control_flow.ControlFlow.Continue val33
+result : core.result.Result PoolV1PairVerifiedAfterstateV1 PoolV1PairVerifierTransportErrorV1
+_ :
+  [> let result ←
+    part_16 bytes val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 val27 val29 val31 val33 <]
+result_post1 :
+  ∀ (afterstate : PoolV1PairVerifiedAfterstateV1),
+    result = core.result.Result.Ok afterstate →
+      part_frame bytes val1
+        [val3, val5, val7, val9, val11, val13, val15, val17, val19, val21, val23, val25, val27, val29, val31, val33]
+        afterstate
+x✝ : PoolV1PairVerifiedAfterstateV1
+result_post2 : result = core.result.Result.Ok x✝
+⊢ part_frame bytes val1 [val3, val5, val7, val9, val11, val13, val15, val17, val19, val21, val23, val25] x✝
+'AspisS6SourceCodec.AfterstateFactored.Frames.part12_frames' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
