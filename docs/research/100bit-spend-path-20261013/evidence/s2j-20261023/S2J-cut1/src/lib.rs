@@ -86,3 +86,23 @@ fn S2J_cut3_preserve_proof_select_public() {
     assert_eq!(*proof_account, owned[0]);
     assert_eq!(*public_account, owned[1]);
 }
+
+fn native_cut4(accounts: &[AccountRecord]) -> &AccountRecord {
+    let checkpoint_account = &accounts[2];
+    checkpoint_account
+}
+#[kani::proof]
+#[kani::unwind(35)]
+fn S2J_cut4_preserve_prior_select_checkpoint() {
+    let accounts: [AccountRecord;3] = kani::any();
+    let owned = accounts.to_vec();
+    let proof_account = &accounts[0];
+    let public_account = &accounts[1];
+    let checkpoint_account = native_cut4(&accounts);
+    assert!(std::ptr::eq(proof_account, &accounts[0]));
+    assert!(std::ptr::eq(public_account, &accounts[1]));
+    assert!(std::ptr::eq(checkpoint_account, &accounts[2]));
+    assert_eq!(*proof_account, owned[0]);
+    assert_eq!(*public_account, owned[1]);
+    assert_eq!(*checkpoint_account, owned[2]);
+}
