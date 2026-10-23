@@ -21,6 +21,20 @@ for line in (E/'raw-union.jsonl').read_text().splitlines():
 for name in ['plan.json','companion-pins.json']:
     if (W/name).exists():
         (E/name).write_bytes((W/name).read_bytes())
+plan=json.loads((W/'plan.json').read_text())
+paths=[W/'objects']+[Path(p) for p in plan['lean_paths']]
+checks=[]
+for rec in plan['ordered']:
+    r=latest[rec['module']]
+    assert r['exit']==0, ('unfinished target',rec['module'])
+    obj=W/'objects'/(rec['module'].replace('.','/')+'.olean')
+    assert hashlib.sha256(obj.read_bytes()).hexdigest()==r['object_sha256'], ('output drift',rec['module'])
+    for dep,old_path,expected in r['deps']:
+        selected=next(p/(dep.replace('.','/')+'.olean') for p in paths if (p/(dep.replace('.','/')+'.olean')).is_file())
+        actual=hashlib.sha256(selected.read_bytes()).hexdigest()
+        assert actual==expected, ('dependency drift',rec['module'],dep,old_path,str(selected))
+        checks.append({'consumer':rec['module'],'dependency':dep,'selected_path':str(selected),'sha256':actual})
+(E/'final-dependency-check.json').write_text(json.dumps(checks,indent=2,sort_keys=True)+'\n')
 artifacts=[]
 for name in ['host-build.py','launch-host.sh','complete-overlay.py','sources/ImportUnionNamedDiscriminant.lean','sources/ImportUnionReleaseGate.lean','sources/RawUnionScan.lean']:
     p=W/name

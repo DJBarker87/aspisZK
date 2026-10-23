@@ -64,7 +64,11 @@ def visit(m):
 for r in plan['ordered']:
  if r['module'] in existing:visit(r['module'])
 for m in sorted(required):visit(m)
-plan['ordered']=ordered;plan['changed_modules']=sorted(set(plan['changed_modules'])|set(canonical)-{'RawUnionScan','R1SpendRelationExtraction'})
+plan['ordered']=ordered
+plan['affected_in_selected_union']=sorted(set(plan['affected_in_selected_union'])|affected)
+plan['reused']={m:r for m,r in plan['reused'].items() if m not in existing}
+plan['cache_pin_note']='Initial cache lineage; final providers are raw-object-pins.json, including modular companions.'
+plan['changed_modules']=sorted(set(plan['changed_modules'])|set(canonical)-{'RawUnionScan','R1SpendRelationExtraction'})
 plan['revision']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
 a.staging.mkdir(parents=True,exist_ok=True)
 for m in required:
