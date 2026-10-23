@@ -1,0 +1,37 @@
+{
+  "attempt": "kani-004",
+  "kind": "kani",
+  "source_revision": "68dbe0c52707bf351ac610175a66cf71ed47dbbf",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2J-cut1/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "--exact",
+    "--harness",
+    "S2J_cut3_preserve_proof_select_public",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2J-cut1/Cargo.lock",
+    "S2J-cut1/Cargo.toml",
+    "S2J-cut1/src/lib.rs"
+  ],
+  "timeout": 120,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "deps_fingerprint": {
+    "scope": "cut3 indexing on 3 complete symbolic account records; same original slots/keys permitted to alias; reference identity and record association; EntrypointDeserialization retained"
+  },
+  "expected_time": "optimized tiny-crate compilation then symbolic bound-input guard and TrustedStd comparison port; no proof generation or elimination"
+}

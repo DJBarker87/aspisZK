@@ -69,3 +69,20 @@ fn S2J_cut2_select_original_record() {
     assert_eq!(selected.data_slot, accounts[0].data_slot);
     assert_eq!(selected.lamports_slot, accounts[0].lamports_slot);
 }
+
+fn native_cut3(accounts: &[AccountRecord]) -> &AccountRecord {
+    let public_account = &accounts[1];
+    public_account
+}
+#[kani::proof]
+#[kani::unwind(35)]
+fn S2J_cut3_preserve_proof_select_public() {
+    let accounts: [AccountRecord;3] = kani::any();
+    let owned = accounts.to_vec();
+    let proof_account = &accounts[0];
+    let public_account = native_cut3(&accounts);
+    assert!(std::ptr::eq(proof_account, &accounts[0]));
+    assert!(std::ptr::eq(public_account, &accounts[1]));
+    assert_eq!(*proof_account, owned[0]);
+    assert_eq!(*public_account, owned[1]);
+}
