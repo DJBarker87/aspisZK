@@ -23,7 +23,7 @@ for name in needed:
  assert accepted[-1]['source_hashes'][name+'.lean']==hashlib.sha256((D/'lean'/(name+'.lean')).read_bytes()).hexdigest(), 'Changed predecessor: '+name
 sources=sorted((D/'lean').glob('S2H_*.lean'))
 for p in sources:subprocess.run(['scp',str(p),HOST+':'+H+'/'+p.name],check=True,stdout=subprocess.DEVNULL)
-for src,dst in [(R/'tools/s2e-20261023/S2E_run_host.py','S2H_run_host.py'),(R/'tools/s2e-20261023/S2E_reservation.py','S2H_reservation.py'),(Path(__file__).parent/'S2H_pins.py','S2H_pins.py')]:subprocess.run(['scp',str(src),HOST+':'+H+'/'+dst],check=True,stdout=subprocess.DEVNULL)
+for src,dst in [(Path(__file__).parent/'S2H_run_host.py','S2H_run_host.py'),(Path(__file__).parent/'S2H_reservation.py','S2H_reservation.py'),(Path(__file__).parent/'S2H_pins.py','S2H_pins.py')]:subprocess.run(['scp',str(src),HOST+':'+H+'/'+dst],check=True,stdout=subprocess.DEVNULL)
 cfg=dict(attempt=a,kind='lean',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M4400','-DElab.async=false','-o',target+'.olean',target+'.lean'],sources=[p.name for p in sources],timeout=180,env={'LEAN_PATH':H+':'+':'.join(paths)},expected_time='focused symbolic child-contract elaboration from cached dependencies; no arithmetic generation')
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n');subprocess.run(['scp',str(E/(a+'.json')),HOST+':'+H+'/'+a+'.json'],check=True,stdout=subprocess.DEVNULL)
 command=f'cd {H} && python3 S2H_reservation.py {a}-reservation.json && systemd-run --user --scope -q -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2H_pins.py {a}.json'
