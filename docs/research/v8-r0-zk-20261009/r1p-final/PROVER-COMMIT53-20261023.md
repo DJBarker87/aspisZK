@@ -242,3 +242,24 @@ successful reserve for arbitrary producer outputs. Allocation failure is
 retained as an error; this cut does not prove the full native constructor
 or connect native arithmetic producer calls. Complete payload equality
 remains open, and the deployed endpoint remains unchanged.
+
+
+## Stage 7: opening cells and ordered bytes with producer provenance
+
+J10558 identifies stored materialization with `Batched.weightsR1` on the
+same decoded challenge inputs. J10559 composes this with the complete
+coefficient/gamma producer and the owned two-round opening kernel. J10560
+identifies the primal fold with `Batched.q1` and both round/final outputs
+with the exact `BatchedLayer.read` cells. J10561 adds the complete ordered
+7/7/64 byte images. These are new conclusions of one composed retained
+caller; no batch-array or weight-array model image is an input.
+Caller challenge representation identities remain explicit, as do the
+separate native Vec and entry/callee binding obligations. The folded leaf
+encoding and semantic caller remain open; this is not full payload equality.
+
+All four attempts exit 0, zero swaps, 6G/8G/no-swap/64 tasks; printed axioms
+are exactly `[propext, Classical.choice, Quot.sound]`. Wall/peak RSS KiB:
+J10558 2.45 s/4148684; J10559 2.48 s/4277956;
+J10560 3.30 s/4277740; J10561 3.78 s/4280180.
+Receipts identify revision `11b5c5c38e` and exact changed-source/dependency
+hashes. The endpoint remains byte-identical and retains RustProverRefinement.
