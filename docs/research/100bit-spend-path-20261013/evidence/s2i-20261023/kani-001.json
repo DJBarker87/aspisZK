@@ -1,0 +1,45 @@
+{
+  "attempt": "kani-001",
+  "kind": "kani",
+  "source_revision": "c70896ae34da414250043d36d579f9f633067351",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2I-native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "S2I_emit_native",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2I-native/Cargo.toml",
+    "S2I-native/src/S2I_emit.rs",
+    "S2I-native/src/lib.rs",
+    "S2I-native/src/statement.rs"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "deps_fingerprint": {
+    "native_source_manifest": "eb6b5ef5cbe21b14dbccb4a5bca23bb5149812a00f373248c3ec2e531f435777",
+    "scope": "verbatim emit_result body; runtime set_return_data semantics explicit; no SDK native allocation port"
+  },
+  "expected_time": "optimized compilation then native emit validation/encoding control SAT; no finite-field elimination"
+}

@@ -1,0 +1,64 @@
+{
+  "attempt": "kani-005",
+  "kind": "kani",
+  "source_revision": "1b6c79c98e1b9e5b803c3b92746af8255bb1761b",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2I-native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "S2I_direct_result_encoder_header",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2I-native/Cargo.toml",
+    "S2I-native/src/S2I_emit.rs",
+    "S2I-native/src/lib.rs",
+    "S2I-native/src/statement.rs"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "deps_fingerprint": {
+    "native_source_manifest": "eb6b5ef5cbe21b14dbccb4a5bca23bb5149812a00f373248c3ec2e531f435777",
+    "scope": "verbatim emit_result body; runtime set_return_data semantics explicit; no SDK native allocation port"
+  },
+  "expected_time": "optimized compilation then native emit validation/encoding control SAT; no finite-field elimination",
+  "exit_status": 1,
+  "wall_seconds": 121.76578164999955,
+  "peak_rss_kib": "2490896",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rac1c636893a74b9289f30f0eae455ab2.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "2562174976",
+  "source_hashes": {
+    "S2I-native/Cargo.toml": "8e93098351d4e5f803a667066a63a4432ab51d33e5e6f7098b52446b08b1ab29",
+    "S2I-native/src/S2I_emit.rs": "d6e478b28d58c809b72ceacf9b74419a2200da828f0ad200e36af8eed28c3c03",
+    "S2I-native/src/lib.rs": "9a7197a3c3516086fcd6c095dad47445b8c1080aca9b25f3b8898b2d1a1237ee",
+    "S2I-native/src/statement.rs": "777879c2aacdc660ebb8425a80722ab2ba18233ca2af339f1f310bdc4b42cffb"
+  },
+  "print_axioms": "N/A: kani"
+}
