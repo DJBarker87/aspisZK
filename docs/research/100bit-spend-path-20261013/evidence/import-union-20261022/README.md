@@ -186,3 +186,7 @@ serialized fields or tag values. During the consumer replay, the newly rebuilt
 `ExtractedPublicCheckedBridge432` also required the explicit pure
 `PublicCodecAgreement` import (IU-545 failure, focused IU-546 success). No
 statement or hypothesis changed.
+
+### Model alias preflight (IU-738)
+
+Raw full modular-object census found duplicate definition owners in D18Transport/R1D18Transport, PoseidonMap/R1PoseidonMap and SpendRelation/R1SpendRelation. The first two source pairs are byte-identical. The selected old R1SpendRelation object omits AppendBinding in both Rspend and check; canonical SpendRelation retains it. New compatibility imports give each model one owner. The canonical existing R1SpendRelation wrapper is replayed with the stronger source; no security condition is removed. The raw-preflight-collisions receipt records all name/type overlaps and definition dependencies. The model-alias-repin plan forces the complete retained reverse closure, including the existing append-aware extraction source. This replay is required due to changed providers, not an unchanged regression.
