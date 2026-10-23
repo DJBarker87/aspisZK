@@ -1,0 +1,34 @@
+{
+  "attempt": "rust-001",
+  "kind": "rust",
+  "source_revision": "544647a8039cdea69f08535f389d9795d1d7fe48",
+  "command": [
+    "cargo",
+    "check",
+    "--release",
+    "--manifest-path",
+    "S2E-reference/Cargo.toml",
+    "--target-dir",
+    "rust-target",
+    "-j",
+    "4"
+  ],
+  "sources": [
+    "S2E-reference/src/lib.rs",
+    "S2E-reference/src/S2E_Reference.rs",
+    "S2E-reference/Cargo.toml"
+  ],
+  "timeout": 180,
+  "deps_fingerprint": {
+    "scope": "owned reference candidate; actual child/native bindings not certified"
+  },
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "--cfg aeneas_ref -C link-arg=-Wl,--threads=1"
+  },
+  "expected_time": "cached optimized compilation/translation of owned caller; no cryptographic arithmetic"
+}
