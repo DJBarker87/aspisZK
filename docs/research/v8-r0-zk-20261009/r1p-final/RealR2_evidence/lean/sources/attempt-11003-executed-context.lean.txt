@@ -1,0 +1,18 @@
+import R1Z.ProverCommitStreamSource
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.RealR2_Context
+open Aeneas Aeneas.Std Result WP
+open AspisR1ProverStreams
+
+/-- Encoding is total for every context, including adversarial nonces and
+fingerprints; it makes no hash calls and requires no admission premise. -/
+theorem encode_total (c : aspis_core.state_only_hiding.StateOnlyHidingContext) :
+    ∃ encoded, aspis_core.state_only_hiding.StateOnlyHidingContext.encode c = ok encoded := by
+  have h : aspis_core.state_only_hiding.StateOnlyHidingContext.encode c ⦃ _ => True ⦄ := by
+    unfold aspis_core.state_only_hiding.StateOnlyHidingContext.encode
+    step* <;> scalar_tac
+  exact (spec_imp_exists h).imp (fun _ h => h.1)
+
+#print axioms encode_total
+end R1Z.RealR2_Context

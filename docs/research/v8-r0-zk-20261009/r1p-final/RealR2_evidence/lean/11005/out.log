@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR2_SeedGuard.lean:23:48: warning: This simp argument is unused:
+  core.cmp.PartialEqU8
+
+Hint: Omit it from the simp argument list.
+  simp only [List.zip_cons_cons, List.allM, c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵ ̵liftFun2, lift, core.cmp.impls.PartialEqU8.ne,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR2_SeedGuard.lean:23:80: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [List.zip_cons_cons, List.allM, core.cmp.PartialEqU8, liftFun2, ̵l̵i̵f̵t̵,̵
+          core.cmp.impls.PartialEqU8.ne, bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR2_SeedGuard.lean:37:2: error: 'change' tactic failed, pattern
+  List.allM
+      (fun p => do
+        let b ← core.cmp.PartialEqU8.ne p.1 p.2
+        ok !b)
+      ((↑xs).zip ↑ys) =
+    ?m.44
+is not definitionally equal to target
+  List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← core.cmp.PartialEqU8.ne x y
+          ok (decide ¬b = true))
+      ((↑xs).zip ↑ys) =
+    ok (decide (xs = ys))
+'R1Z.RealR2_SeedGuard.allM_ne' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR2_SeedGuard.array_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
