@@ -198,3 +198,21 @@ fn S2K_late_afterstate_admission() {
 include!("S2K_status_contract.rs");
 
 include!("S2K_fields.rs");
+
+// Actual iterator value/schedule, separated from encoding and buffer writes.
+#[kani::proof]
+#[kani::unwind(22)]
+fn S2K_frontier_iterator_value() {
+    let rows:[Digest;20]=core::array::from_fn(|_|digest());
+    let selected:usize=kani::any(); kani::assume(selected<20);
+    let word:usize=kani::any(); kani::assume(word<8);
+    let mut iter=rows.iter().enumerate();
+    for k in 0..20 {
+        let (level,node)=iter.next().unwrap();
+        assert_eq!(level,k);
+        if k==selected { assert_eq!(node[word].0,rows[selected][word].0); }
+    }
+    assert!(iter.next().is_none());
+    kani::cover!(selected==0 && word==0);
+    kani::cover!(selected==19 && word==7);
+}
