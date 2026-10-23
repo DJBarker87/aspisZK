@@ -1,3 +1,4 @@
+import Port4C_CollectStd
 import Port3_Parents
 import Port4C_Pending
 import Port4C_GeometryInverse
@@ -13,7 +14,7 @@ def installed (base : Ops) (reserved : Bool) (batch : Port3_NativeBatchBody.Ops)
     (geometry : Port3_NativeGeometryBody.Ops CoreError) (query : Port3_NativeQueryBody.Ops)
     (finish : AspisR1Stage2.Stage2Finish.FinishOps W) : Ops :=
   Port3_Parents.installed base reserved batch
-    (Port4C_GeometryInverse.install {geometry with op0 := OraclePortStdBuilder.fromFn})
+    (Port4C_GeometryInverse.install (Port4C_CollectStd.install geometry))
     (Port4C_RowStd.install query) finish
 
 /-- This SAME installed prefix derives writer rhs/power and all weight
