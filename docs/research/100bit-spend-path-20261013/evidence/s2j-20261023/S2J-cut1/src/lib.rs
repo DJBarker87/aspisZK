@@ -155,3 +155,10 @@ fn S2J_cut6_proof_readonly_value() {
     let accounts: [AccountRecord;3] = kani::any();
     assert_eq!(native_cut6(&accounts[0]), owned_readonly(accounts[0]));
 }
+
+#[kani::proof]
+#[kani::unwind(35)]
+fn S2J_cut7_public_readonly_value() {
+    let accounts: [AccountRecord;3] = kani::any();
+    assert_eq!(native_cut6(&accounts[1]), owned_readonly(accounts[1]));
+}
