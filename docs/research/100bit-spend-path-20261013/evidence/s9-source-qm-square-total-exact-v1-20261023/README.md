@@ -1,0 +1,3 @@
+The actual extracted QM square call on a mapped canonical helper operand succeeds, returns the same source output with canonical mapped representation, and decodes exactly to the square of the input. Derived from the complete source-to-helper Result map and existing checked square semantics using generic same-run success reflection. No separate source-success premise is assumed; surrounding caller/runtime correspondence remains open.
+
+Focused Lean check: 15.275 seconds; peak aggregate RSS 3199238144 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
