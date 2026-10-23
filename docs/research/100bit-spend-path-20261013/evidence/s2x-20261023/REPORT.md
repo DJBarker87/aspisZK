@@ -41,3 +41,28 @@ source revision, wall/RSS/swap and complete axiom reports are retained per
 attempt. Host scopes: MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0,
 TasksMax=64; -j1 -M4400, cached dependencies, no cap changes.
 Kani: 0/60. Full release replay not justified while source joins remain open.
+
+## Stage 2: SDK write and accepted checkpoint length
+
+S2X_SnapshotWrite.owned_data proves the actual extracted OwnedAccount.data
+success branch projects the same owned vector without consulting Ops.
+full_copy proves the existing Aeneas std full-slice copy returns exactly its
+source when lengths agree, symbolically (no concrete 1768-byte evaluation).
+accepted_checkpoint_length uses the actual whole-stage1 accepted-return
+inversion and the fixed account2 snapshot to derive returned length 1768.
+Its remaining condition is OwnedSnapshotShape plus entrySize on the snapshot:
+the native snapshot wrapper still must establish its data/length representation.
+
+sdk_write instantiates exactly the existing exclusive_deref SDK trust field;
+sdk_write_frame proves its mathematical byte update preserves ambient state,
+account-cell mapping, counters, guards, all descriptors and other payloads.
+commit_frame/commit_metadata/commit_bytes prove the complete Account-record
+properties of a CP-only commit. This is a logical commit specification, not a
+claim that the native memcpy/write wrapper has been extracted or joined.
+The actual source-to-spec copy/metadata/child effects remain open.
+
+Lean002 failed on elaboration errors (constructor namespace, deref projection,
+projection syntax and conditional simplification). It is retained and excluded;
+Lean003 changed the source and passed: exit0, 2.318372s, 4394168KiB, swap0,
+eight standard-only axiom reports. Lean001: exit0, 2.005779s, 4382484KiB,
+swap0, four standard-only reports. No timeout/memory-kill or cap increase.
