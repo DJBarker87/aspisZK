@@ -1,0 +1,43 @@
+--- a/crates/aspis-r1-cost-probe/src/weights.rs
++++ b/crates/aspis-r1-cost-probe/src/weights.rs
+@@ -126,25 +126,21 @@
+ impl Weights {
+     #[inline(never)]
+     pub fn new(variant:Variant,alpha:&[K;10],z:&[SecureCirclePoint;2])->Result<Box<Self>,Error> {
+-        let mut out=aspis_core::r0::heap::uninit::<Self>().map_err(|_|Error::Allocation)?;
+-        unsafe {
+-            let p=out.as_mut_ptr();
+-            core::ptr::addr_of_mut!((*p).variant).write(variant);
+-            core::ptr::addr_of_mut!((*p).points).write(aspis_core::state_only_prefix::r0::statement_points(alpha));
+-            core::ptr::addr_of_mut!((*p).extra).write([alpha[8],alpha[9]]);
+-            for k in 0..3 { for d in 0..5 {
+-                let a=(*p).points[k][9-2*TAU[d]]; let b=(*p).points[k][8-2*TAU[d]];
+-                (*p).factors[k][d]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
+-            }}
+-            for k in 0..2 {
+-                (*p).factors[3+k][0]=[K::ONE,z[k].y,z[k].x,z[k].x.mul(z[k].y)];
+-                let mut x=double(z[k].x);
+-                for d in 1..5 {
+-                    let y=double(x); (*p).factors[3+k][d]=[K::ONE,x,y,x.mul(y)]; x=double(y);
+-                }
+-            }
+-            Ok(out.assume_init())
+-        }
++        let points=aspis_core::state_only_prefix::r0::statement_points(alpha);
++        let extra=[alpha[8],alpha[9]];
++        let mut factors=[[[K::ZERO;4];5];5];
++        for k in 0..3 { for d in 0..5 {
++            let a=points[k][9-2*TAU[d]]; let b=points[k][8-2*TAU[d]];
++            factors[k][d]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
++        }}
++        for k in 0..2 {
++            factors[3+k][0]=[K::ONE,z[k].y,z[k].x,z[k].x.mul(z[k].y)];
++            let mut x=double(z[k].x);
++            for d in 1..5 {
++                let y=double(x); factors[3+k][d]=[K::ONE,x,y,x.mul(y)]; x=double(y);
++            }
++        }
++        Ok(Box::new(Self { variant, factors, points, extra }))
+     }
+     pub fn raw(&self,kind:usize,j:usize)->K {
+         match kind {
