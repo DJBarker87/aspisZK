@@ -263,3 +263,59 @@ J10558 2.45 s/4148684; J10559 2.48 s/4277956;
 J10560 3.30 s/4277740; J10561 3.78 s/4280180.
 Receipts identify revision `11b5c5c38e` and exact changed-source/dependency
 hashes. The endpoint remains byte-identical and retains RustProverRefinement.
+
+
+## Stage 8: native inverse fibre transform and direct encoder obstruction
+
+J10562 proves full eight-limb WideExact subtraction. J10564 checks the
+selected `encoder53.phi_inverse` extraction (J10563 omitted its retained
+Basis import and is rejected). J10570 proves success, canonicality and all
+four values for arbitrary canonical wide x/y and channels. J10571 proves
+its algebraic image is exactly `FirstFold.fibreEvaluate`, including slot
+order. `encoder-native-pins.json` checks the native generic function and
+specialized owner bodies agree after whitespace/trailing-comma normalization;
+both Rust field files are byte-identical to the native files. Only the
+phi declaration and byte-identical retained arithmetic are imported. No
+external template is installed and no new trust field is added.
+
+J10565 is a numeral-argument simplification draft. J10566–68 expose a
+concrete field-instance elaboration timeout at the original 200000
+heartbeats. J10569 replaces Field in the purely syntactic phi formula with
+its actual Add/Mul/Sub requirements, avoiding reduction of the concrete
+field hierarchy. It leaves four redundant `rfl` commands after goals close;
+J10570 removes those commands. No limit is raised and no unchanged input
+is replayed. Every accepted axiom report is standard only.
+
+| Attempt | Exact module suffix | Exit | Wall s | Peak RSS KiB | Swaps |
+|---|---|---:|---:|---:|---:|
+| J10562 | R1Z.ProverCommitWideSub53 | 0 | 1.63 | 4090744 | 0 |
+| J10564 | AspisR1ProducerRelease47.EncoderPhi53 | 0 | 1.09 | 2635468 | 0 |
+| J10570 | R1Z.ProverCommitEncoderPhi53 | 0 | 3.27 | 4117860 | 0 |
+| J10571 | R1Z.ProverCommitEncoderPhiModel53 | 0 | 3.79 | 4116160 | 0 |
+
+Receipts pin revision `418ec0676e` plus exact source/dependency hashes;
+all compiles use the 6G/8G/no-swap/64-task scope. The five phi theorems
+print subsets of `[propext, Classical.choice, Quot.sound]`.
+
+**Demonstrated direct-source obstruction:** the exact specialized native
+`eval_rec` iterator/Vec body extracts in v3, but Aeneas emits external
+axioms for Copied/Skip types, constructors and next methods. v5 selectively
+extracts the constructors but still emits opaque types and next methods.
+Broad body extraction v4 and monomorphic body extraction v6 both set
+Charon's `has_errors` with mismatched iterator trait clauses; the driver
+stops before Aeneas. Their Charon exit code is 0, which is explicitly NOT
+accepted as a successful translation. No opaque adapter is admitted.
+v1/v2 are Rust specialization preflight errors, corrected in v3.
+All attempt receipts, input hashes and diagnostics are retained under
+`encoder-diagnostics/`; the v3 templates are diagnostic `.lean.txt` files.
+Every extraction job is optimized and capped, zero swaps; exact tool
+pins, wall/RSS and error output are retained. Aeneas v3/v5 exits 0 but its
+external templates prevent an accepted source-recursion theorem.
+
+Consequently native eval_at/encode_at, exact nodes_for geometry and
+opened/folded leaf images remain unproved. Repairing the iterator adapter
+extraction (or proving a source-equivalent explicit collector) is the next
+concrete deliverable. The phi result alone does not establish the leaf
+encoder. Remaining semantic guards/interpolation/whole native caller and
+complete simulator payload equality are also open. The target is not yet
+established; no FSExperiments conversion or join is attempted.
