@@ -30,7 +30,7 @@ def bindBlock (initial : Array QM 8#usize) (opened : Array QM 16#usize)
 theorem false_target (expected : Array M31 8#usize) (j : Fin 8) :
     (targetValue expected false j.val : ExactQM) =
       SemanticPublicModel.digest expected j := by
-  simp only [targetValue, j.isLt, dite_true, Bool.false_eq_true, false_and, if_false,
+  simp only [targetValue, j.isLt, _root_.dite_true, Bool.false_eq_true, false_and, if_false,
     SemanticPublicModel.digest]
 
 /-- No checked-arithmetic, selector-row or binding success is assumed. -/

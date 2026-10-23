@@ -66,7 +66,7 @@ theorem loop_success_fuel
       · change AspisR1TerminalDigestPublicLoop.Source.public_digest_lanes_loop
           iter openings.z selectors digests source = .ok (digests, source)
         rw [AspisR1TerminalDigestPublicLoop.Source.public_digest_lanes_loop.eq_def]
-        simp only [hnext, bind_tc_ok]
+        simp only [hnext, bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
       · rw [hstart] at hmodel
         simpa using hmodel
   | succ fuel ih =>
@@ -116,7 +116,7 @@ theorem loop_success_fuel
       change AspisR1TerminalDigestPublicLoop.Source.public_digest_lanes_loop
         iter openings.z selectors digests source = .ok (out, source)
       rw [AspisR1TerminalDigestPublicLoop.Source.public_digest_lanes_loop.eq_def]
-      simp only [hnext, bind_tc_ok]
+      simp only [hnext, bind_tc_ok, Aeneas.Std.uncurry_apply_pair]
       simpa only [AspisR1TerminalDigestPublicLoop.BranchRun.run,
         bind_assoc_eq, bind_assoc, bind_if, bind_tc_ok] using hcontinue
 

@@ -1,4 +1,5 @@
 import Aeneas
+import ImportUnionNamedDiscriminant
 import Aeneas.Tactic.RustAttributes
 import TerminalCompositionPolynomial
 import SelectedClaimProofs
@@ -9,7 +10,7 @@ binding of those inputs are separate enclosing-caller obligations. -/
 set_option autoImplicit false
 namespace AspisR1CompositionTailCandidateTypes
 open Aeneas Aeneas.Std Result
-@[discriminant isize]
+@[import_union_discriminant isize]
 inductive pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1
   where
 | InvalidPublicAmount :

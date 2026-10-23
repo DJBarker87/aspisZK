@@ -1,4 +1,5 @@
 import Aeneas
+import ImportUnionNamedDiscriminant
 import CopyEndpointSource
 import CopyLinkBitArithmetic
 
@@ -9,7 +10,7 @@ namespace AspisR1CopyLinkWeightCandidate
 open Aeneas Aeneas.Std Result Error
 open AspisR1SelectedMaskProbe
 
-@[discriminant isize]
+@[import_union_discriminant isize]
 inductive pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1
   where
 | PrivateTransfer :

@@ -141,3 +141,108 @@ closure is claimed.
 Focused local compile passed (attempt6): exit0, 28.946s, peak RSS3.65GB,
 swaps0; all six theorem audits standard-only. No further Lean compile is
 needed for this handoff. No shipped source/ELF change or push.
+
+## Import-union adapter adoption (release gate 1, 2026-10-22)
+
+The real adapter is now `lean/ImportUnionNamedDiscriminant.lean`. It delegates
+reader and instance generation to the pinned Aeneas generator, then gives the
+instance the name `<fully-qualified-enum>.instDiscriminant`. It preserves the
+scalar, explicit tags (including `u8 [1,2]`), and generic binders. The pinned
+Aeneas library itself is unchanged. Rebuild this adapter if that library changes.
+
+The deterministic migration tool is `tools/import-union/migrate.py` at repository
+root. This worker applied its default scope only (`docs/research/**/lean/`),
+including generated standalone type-bearing modules. No `lean-candidates` file
+was edited. Session A should apply the **same script** to its chosen adopted
+candidate roots, each explicitly listed, for example:
+
+```sh
+python3 tools/import-union/migrate.py --apply \
+  --candidate-root docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020 \
+  --manifest /tmp/session-a-import-union-before-after.json
+python3 tools/import-union/migrate.py --check \
+  --candidate-root docs/research/100bit-spend-path-20261013/lean-candidates/s3-s9-current-repin-20261020 \
+  --manifest /tmp/session-a-import-union-check.json
+```
+
+Repeat `--candidate-root` for each adopted extraction. The script changes only
+`@[discriminant ...]` to `@[import_union_discriminant ...]` and adds one
+`import ImportUnionNamedDiscriminant`; all other bytes remain unchanged. Keep
+the before/after manifest from the **first** apply; a second apply is a no-op
+and produces an empty manifest. Commit the manifests with the adopted pins.
+Do not migrate alternative source variants into the same environment as if
+they were separate modules: one selected provider owns each Lean module name.
+
+Compile the adapter first, then changed Types roots, then all transitive
+consumers in the selected S10 manifest bottom-up using a private object overlay.
+Include both `AspisR1TerminalDecoder.Types` and `AspisR1WithdrawalCaller.Types`:
+their old `instDiscriminantPoolV1TransitionKindU8` collision stopped part 52 at
+`ExtractedDecoderCallerBridge`. Re-pin source and object hashes and audit raw
+`ModuleData.constants` across the final union, since environment enumeration
+alone suppresses accepted duplicate equation theorems. Duplicate definitions
+are errors; duplicate generated equation theorems with the same type are allowed.
+Use the existing host caps (6G high, 8G max, zero swap), retain the cache, and
+record all AGENTS formal-release fields. Keep this import-compatibility result
+separate from discharge of soundness or privacy premises.
+
+Worker receipts: `evidence/import-union-20261022/`; migration hashes are in
+`migration.json`, exact-byte validation in `migration-validation.json`, and
+focused adapter checks in `adapter-host/`. The final union source is
+`lean/ImportUnionReleaseGate.lean`. This handoff requests Session A's candidate
+adoption and S10 re-pinning; the worker does not claim those edits are done.
+
+The full gate also exposed stale-provider collisions beyond discriminant
+attributes. Use the canonical `AspisR1PublicSerializer.Types` from
+`lean/bridge-verify-prefix-fe80-20261017/` (already named readers); an older host
+object still generated anonymous Error instances. `R1D18Transport` and
+`R1PoseidonMap` are now compatibility imports of their single canonical model
+owners. The current `R1SpendRelation` already imports `SpendRelation`; do not
+reuse the older full cached model: its Rspend/check omit AppendBinding.
+`tools/import-union/repin-model-aliases.py` records the canonical source choices
+and forces their entire retained consumer closure. In particular use the
+append-aware R1SpendRelationExtraction source pinned in model-alias-repin.json.
+These provider changes require consumer replay, even when a module's own source
+bytes are unchanged.
+
+Raw census must read `.olean`, `.olean.server`, and `.olean.private` together.
+Exported theorem stubs in the public part alone can look like axioms.
+`tools/import-union/RawUnionScan.lean` streams the complete module metadata and
+compares duplicate types as expressions, without expanding shared expression
+DAGs into text. Keep compatible same-type theorem overlaps in the report;
+instances, definitions, and incompatible types remain blockers. A successful
+import does not replace this census.
+
+Re-enumerate the **final** object graph after changing providers. Canonical
+imports can expose retained consumers absent from the starting cache graph.
+`tools/import-union/complete-rebuild-closure.py` checks the final graph against
+the source rebuild plan and prepares missing consumers plus their reverse
+closure; it refuses an unchanged closure replay with no missing consumers.
+
+The complete raw census includes upstream libraries. Run enumeration with
+`RawUnionScan.lean`, then `prepare-raw-batches.py`, the generated capped Lean
+batch targets, and `merge-raw-batches.py`. Each type-comparison job checks at
+most 100 names as exact expressions. Reading all 8,164 modules twice in one
+interpreter exceeded the 7GB guard; splitting enumeration/comparison fixed it.
+Metadata tools read object files at runtime: bind their rebuild epoch to the
+provider/closure snapshot when adopting a new candidate, rather than reusing
+metadata solely because the `Lean` import is unchanged.
+
+The two unchanged `SamplerWordRead.unwrap_success` / `read_success` helper
+audits mention the existing opaque `core.fmt.Formatter` type. Preserve this
+exception inventory; they are not standard-only audits. The requested combined
+release audits and new theorem audits are standard-only. This import gate does
+not discharge any soundness, privacy, decoder, or efficiency premise.
+
+Final worker result: 851 targets accepted; all 807 affected roots/consumers
+rebuilt. Aggregate IU-1328 exited 0 (1.753723s, peak
+4,587,852 KiB, swap 0), with 77 standard-only release audits.
+Full census: 8,164 modules / 566,510 declarations, zero duplicate definitions
+or instances; all 614 theorem-name overlaps have exactly identical types.
+See evidence/import-union-20261022/summary.json for source revisions, resource
+fields, the two unchanged Formatter helper-audit exceptions, and full receipts.
+Candidate adoption remains Session A's work; no lean-candidates source was edited.
+
+When adopting S3, update the aggregate diagnostic check of the old anonymous
+`instDiscriminantErrorIsize` to the new qualified S3 instance name (or use
+`#synth Aeneas.Std.Discriminant AspisR1S3InactiveSource.r0.Error Aeneas.Std.Isize`).
+That old-name check intentionally describes the retained, untouched candidate.

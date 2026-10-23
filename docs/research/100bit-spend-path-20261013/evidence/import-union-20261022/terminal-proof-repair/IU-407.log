@@ -1,0 +1,113 @@
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/TerminalDigestPublicLoopFuel.lean:43:10: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/TerminalDigestPublicLoopFuel.lean:66:6: error: unsolved goals
+case zero.refine_1
+public1 : pool_v1.pair_forest_semantic_terminal.SemanticPublic
+point : Std.Array QM 10#usize
+selectors : Selectors
+source : Snapshot
+openings : Openings
+base : Std.Array QM 8#usize
+hsource : source = public1.transition.live_snapshot
+hpoint : AspisR1.SelectorExpansionCorrectness.canonicalArray point
+hbox : pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = ok selectors
+hopened : CanonicalArray openings.z
+hfrontierCanonical : ∀ (k : Fin 20), TargetActual.CanonicalM31 (↑source.frontier)[↑k]
+hbase : CanonicalArray base
+iter : Range
+digests : Std.Array QM 8#usize
+hend : ↑iter.end = 20
+hspan : ↑iter.start + 0 = 20
+hdigests : CanonicalArray digests
+hmodel :
+  decodedDigest digests =
+    Model.frontierPrefix (AspisR1.SemanticPublicModel.exactPublic public1)
+      (AspisR1.SelectorValueLanePreprocessRangeValues.exactOpenings openings)
+      (fun i => AspisR1.SelectorValueLaneModelComposition.pointSelector point i) (↑iter.start) (decodedDigest base)
+hstop : ↑iter.start ≥ ↑iter.end
+hstart : ↑iter.start = 20
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter)
+⊢ (let (o, iter1) := (none, iter)
+    match o with
+    | none => ok (digests, source)
+    | some level => do
+      let block ← 34#usize + level
+      let i ← source.next_pair_index >>> level
+      let i1 ← lift (i &&& 1#u64)
+      if i1 = 0#u64 then do
+          let i2 ← block * 16#usize
+          let q ← pool_v1.pair_forest_copy_terminal.Selectors.row selectors i2
+          let a1 ← AspisR1EmptyRootCandidate.pool_v1.pair_forest_semantic_terminal.empty_root level
+          let digests1 ←
+            AspisR1TerminalDigestBindingCandidate.add_digest_binding digests q openings.z
+                AspisR1AbsorptionCandidate.poseidon2.RATE a1 true
+          Source.public_digest_lanes_loop iter1 openings.z selectors digests1 source
+        else do
+          let i2 ← block * 16#usize
+          let i3 ← i2 + 12#usize
+          let q ← pool_v1.pair_forest_copy_terminal.Selectors.row selectors i3
+          let a1 ← source.frontier.index_usize level
+          let digests1 ← AspisR1TerminalDigestBindingCandidate.add_digest_binding digests q openings.z 0#usize a1 false
+          Source.public_digest_lanes_loop iter1 openings.z selectors digests1 source) =
+    ok (digests, source)
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/TerminalDigestPublicLoopFuel.lean:120:6: error: Type mismatch: After simplification, term
+  hcontinue
+ has type
+  @Eq (Result (Std.Array field.QM31 8#usize × pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1))
+    (do
+      let x ← 34#usize + iter.start
+      let x_1 ← source.next_pair_index >>> iter.start
+      let x_2 ← lift (x_1 &&& 1#u64)
+      if x_2 = 0#u64 then do
+          let x ← x * 16#usize
+          let x ← pool_v1.pair_forest_copy_terminal.Selectors.row selectors x
+          let x_3 ← AspisR1EmptyRootCandidate.pool_v1.pair_forest_semantic_terminal.empty_root iter.start
+          let d ←
+            AspisR1TerminalDigestBindingCandidate.add_digest_binding digests x openings.z
+                AspisR1AbsorptionCandidate.poseidon2.RATE x_3 true
+          Source.public_digest_lanes_loop iter1 openings.z selectors d source
+        else do
+          let x ← x * 16#usize
+          let x ← x + 12#usize
+          let x ← pool_v1.pair_forest_copy_terminal.Selectors.row selectors x
+          let x_3 ← source.frontier.index_usize iter.start
+          let d ← AspisR1TerminalDigestBindingCandidate.add_digest_binding digests x openings.z 0#usize x_3 false
+          Source.public_digest_lanes_loop iter1 openings.z selectors d source)
+    (ok (out, source))
+but is expected to have type
+  @Eq (Result (Std.Array field.QM31 8#usize × pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1))
+    (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (digests, source)
+    | some level => do
+      let block ← 34#usize + level
+      let i ← source.next_pair_index >>> level
+      let i1 ← lift (i &&& 1#u64)
+      if i1 = 0#u64 then do
+          let i2 ← block * 16#usize
+          let q ← pool_v1.pair_forest_copy_terminal.Selectors.row selectors i2
+          let a1 ← AspisR1EmptyRootCandidate.pool_v1.pair_forest_semantic_terminal.empty_root level
+          let digests1 ←
+            AspisR1TerminalDigestBindingCandidate.add_digest_binding digests q openings.z
+                AspisR1AbsorptionCandidate.poseidon2.RATE a1 true
+          Source.public_digest_lanes_loop iter1 openings.z selectors digests1 source
+        else do
+          let i2 ← block * 16#usize
+          let i3 ← i2 + 12#usize
+          let q ← pool_v1.pair_forest_copy_terminal.Selectors.row selectors i3
+          let a1 ← source.frontier.index_usize level
+          let digests1 ← AspisR1TerminalDigestBindingCandidate.add_digest_binding digests q openings.z 0#usize a1 false
+          Source.public_digest_lanes_loop iter1 openings.z selectors digests1 source)
+    (ok (out, source))
+/home/dombarker/project-offloads/codex-cx-import-union-20261022/sources/TerminalDigestPublicLoopFuel.lean:136:10: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+'AspisR1TerminalDigestPublicLoop.Fuel.loop_success_fuel' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1TerminalDigestPublicLoop.Fuel.public_loop_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

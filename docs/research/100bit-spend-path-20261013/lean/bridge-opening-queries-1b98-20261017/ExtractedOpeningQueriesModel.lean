@@ -1,10 +1,11 @@
 import AspisR1PublicPreparation.Funs
+import ImportUnionNamedDiscriminant
 open Aeneas Aeneas.Std Result ControlFlow Error
 set_option autoImplicit false
 set_option maxHeartbeats 1000000
 set_option maxRecDepth 2048
 namespace AspisR1PublicPreparation
-@[discriminant isize]
+@[import_union_discriminant isize]
 inductive aspis_core.transcript.QuerySampleError where
 | BoundNotPowerOfTwo : Std.U32 → aspis_core.transcript.QuerySampleError
 | CountExceedsBound :
