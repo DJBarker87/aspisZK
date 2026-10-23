@@ -8890,3 +8890,27 @@ the current adapter's. S2-J and S2-K were stopped. Their work is merged as
 evidence: cuts 1–7, emit pieces and child contracts. Proved cones (checkpoint bytes,
 multiproof, S7/S8, parser) are unaffected unless the rewrite touches their pinned
 functions.
+
+## D183 (lead, 2026-10-23 07:50): adapter rewrite: runtime-admission domain and error precedence
+
+The rewrite's stage-1 note (`design/ADAPTER-RW-20261023.md`) shows that copy-then-drop
+borrowing is not equivalent to the current adapter on the *raw SDK* input domain
+(arbitrary borrow counters, distinct keys sharing a data cell, externally held borrows).
+Lead ruling:
+1. **Domain = runtime admission.** Equivalence is required on the inputs the Solana
+   runtime can actually produce at the program entrypoint: each distinct account has its
+   own freshly created data cell with borrow counter 0, no borrow is held outside the
+   program, and duplicate account entries share a cell only when their keys are equal
+   (rejected by the existing distinct-key check). This is a fact about the runtime's
+   entrypoint deserialisation. It is stated as a named runtime premise beside P2–P4,
+   checked against the pinned runtime/SDK entrypoint source, and not inferred from distinct keys or
+   adapter acceptance. It does not restrict the adversary, who still chooses every
+   account, key, owner, flag, length and byte of data.
+2. **Accept set identical, errors may reorder.** On that domain the new adapter must
+   accept exactly the transactions the old one accepts, with identical return data,
+   checkpoint bytes and account effects. Rejection is rejection for soundness, so a
+   different error code or precedence on a rejected input is allowed, but each
+   difference must be listed. Where cheap, keep the original order (capture copy
+   results, consume errors in source order).
+3. **Resources:** the copies' heap use within the 256 KiB SBF bump heap and the CU cost
+   are measured and gated. Allocation failure aborts the transaction (no effects).
