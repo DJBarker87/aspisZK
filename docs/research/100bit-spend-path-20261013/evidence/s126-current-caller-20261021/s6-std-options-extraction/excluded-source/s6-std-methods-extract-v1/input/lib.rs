@@ -1,0 +1,3 @@
+pub fn option_ok_or<T,E>(value:Option<T>,error:E)->Result<T,E>{value.ok_or(error)}
+pub fn option_eq<T:PartialEq>(a:&Option<T>,b:&Option<T>)->bool{a.eq(b)}
+pub fn slice_array_eq<T:PartialEq<U>,U,const N:usize>(a:&[T],b:&[U;N])->bool{a.eq(b)}

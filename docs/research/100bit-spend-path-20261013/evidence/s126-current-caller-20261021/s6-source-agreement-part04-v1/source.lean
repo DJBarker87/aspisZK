@@ -1,0 +1,167 @@
+import S6FullSourceCodecV1
+import S6SourceAgreementPart03V1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisS6SourceCodec.Links
+
+theorem link_80 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_NOTE_DEPTH = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_NOTE_DEPTH := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_NOTE_DEPTH AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_NOTE_DEPTH
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops, link_74 unused]
+  all_goals rfl
+
+#print axioms link_80
+
+theorem link_81 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops]
+  all_goals rfl
+
+#print axioms link_81
+
+theorem link_82 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_FORMAT_BINDING = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_FORMAT_BINDING := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_FORMAT_BINDING AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_FORMAT_BINDING
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops, link_74 unused, link_79 unused, link_80 unused, link_81 unused]
+  all_goals rfl
+
+#print axioms link_82
+
+theorem link_83 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1 = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1 := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1 AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops, link_10 unused, link_26 unused, link_76 unused, link_77 unused, link_78 unused, link_82 unused]
+  all_goals rfl
+
+#print axioms link_83
+
+theorem link_84 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops]
+  all_goals rfl
+
+#print axioms link_84
+
+theorem link_85 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops]
+  all_goals rfl
+
+#print axioms link_85
+
+theorem link_86 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops]
+  all_goals rfl
+
+#print axioms link_86
+
+theorem link_87 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_terminal.validate_verified_afterstate = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_terminal.validate_verified_afterstate := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_terminal.validate_verified_afterstate AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_terminal.validate_verified_afterstate
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops, link_73 unused, link_75 unused]
+  all_goals rfl
+
+#print axioms link_87
+
+theorem link_88 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops]
+  all_goals rfl
+
+#print axioms link_88
+
+theorem link_89 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops]
+  all_goals rfl
+
+#print axioms link_89
+
+theorem link_90 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops, link_10 unused, link_13 unused, link_81 unused, link_87 unused, link_88 unused, link_89 unused]
+  all_goals rfl
+
+#print axioms link_90
+
+theorem link_91 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 (AspisS6FiveUnrolledCodec.StdOptions.ops unused) := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops, link_2 unused, link_3 unused, link_25 unused, link_26 unused, link_28 unused, link_29 unused, link_68 unused, link_70 unused, link_83 unused, link_84 unused, link_85 unused, link_86 unused, link_90 unused]
+  all_goals rfl
+
+#print axioms link_91
+
+theorem link_92 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops]
+  all_goals rfl
+
+#print axioms link_92
+
+theorem link_93 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1 = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1 := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1 AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops, link_92 unused]
+  all_goals rfl
+
+#print axioms link_93
+
+theorem link_94 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops]
+  all_goals rfl
+
+#print axioms link_94
+
+theorem link_95 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1 = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1 := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1 AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops, link_94 unused]
+  all_goals rfl
+
+#print axioms link_95
+
+theorem link_96 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1.call_once = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1.call_once := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1.call_once AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1.call_once
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops]
+  all_goals rfl
+
+#print axioms link_96
+
+theorem link_97 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1 = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1 := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1 AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops, link_96 unused]
+  all_goals rfl
+
+#print axioms link_97
+
+theorem link_98 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1.call_once = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1.call_once := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1.call_once AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1.call_once
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops]
+  all_goals rfl
+
+#print axioms link_98
+
+theorem link_99 (unused : AspisS6FiveUnrolledCodec.StdOptions.SliceArrayEq) :
+    @AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1 = @AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1 := by
+  unfold AspisS6SourceCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1 AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+  try simp only [AspisS6FiveUnrolledCodec.StdOptions.ops, link_98 unused]
+  all_goals rfl
+
+#print axioms link_99
+
+end AspisS6SourceCodec.Links

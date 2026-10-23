@@ -235,3 +235,14 @@ above policy; no compiler ran and no cap was bypassed. No full codec native
 module is accepted. Whole S1/S6 remain OPEN. The committed validator equality
 results remove two native loop-equivalence obligations, not an enclosing
 soundness or SDK premise.
+
+## Superseding concrete evaluator checkpoint
+
+The earlier statement that no complete module was accepted is historical.
+See [S6-CONCRETE-CODEC-EVALUATOR-20261023.md](S6-CONCRETE-CODEC-EVALUATOR-20261023.md)
+for the now-checked complete evaluator, actual std Option installation, zero
+free child-operation interface, enclosing source control/range results and
+local TOTAL word/digest/canonicality/snapshot/afterstate results. The complete
+roundtrip, whole encoder/decoder totality, contextual transport of the five
+transformations and actual SDK/caller joins remain OPEN. Source-only checker:
+`python3 -B tools/s6-full-forest-roundtrip-20261023/check-concrete-codec.py`.

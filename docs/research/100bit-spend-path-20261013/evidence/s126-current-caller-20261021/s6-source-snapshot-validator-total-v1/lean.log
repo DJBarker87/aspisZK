@@ -1,0 +1,176 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourceSnapshotValidatorTotalV1.lean:27:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+snapshot : PoolV1PairLiveSnapshotV1
+⊢ (do
+      let b ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 snapshot.pool (Array.repeat 32#usize 0#u8)
+      if b = true then ok (core.result.Result.Err PoolV1PairLiveSnapshotErrorV1.ZeroRequiredBinding)
+        else do
+          let b1 ←
+            core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 snapshot.deployment_domain
+                (Array.repeat 32#usize 0#u8)
+          if b1 = true then ok (core.result.Result.Err PoolV1PairLiveSnapshotErrorV1.ZeroRequiredBinding)
+            else
+              if (snapshot.sequence != snapshot.next_pair_index) = true then
+                ok (core.result.Result.Err PoolV1PairLiveSnapshotErrorV1.SequenceIndexMismatch)
+              else do
+                let i ← POOL_V1_PAIR_CAPACITY
+                if snapshot.next_pair_index ≥ i then ok (core.result.Result.Err PoolV1PairLiveSnapshotErrorV1.TreeFull)
+                  else do
+                    let b2 ← digest_is_canonical snapshot.current_root
+                    if b2 = true then do
+                        let a2 ← snapshot.frontier.index_usize 0#usize
+                        let b3 ← digest_is_canonical a2
+                        if b3 = true then do
+                            let a3 ← snapshot.frontier.index_usize 1#usize
+                            let b4 ← digest_is_canonical a3
+                            if b4 = true then do
+                                let a4 ← snapshot.frontier.index_usize 2#usize
+                                let b5 ← digest_is_canonical a4
+                                if b5 = true then do
+                                    let a5 ← snapshot.frontier.index_usize 3#usize
+                                    let b6 ← digest_is_canonical a5
+                                    if b6 = true then do
+                                        let a6 ← snapshot.frontier.index_usize 4#usize
+                                        let b7 ← digest_is_canonical a6
+                                        if b7 = true then do
+                                            let a7 ← snapshot.frontier.index_usize 5#usize
+                                            let b8 ← digest_is_canonical a7
+                                            if b8 = true then do
+                                                let a8 ← snapshot.frontier.index_usize 6#usize
+                                                let b9 ← digest_is_canonical a8
+                                                if b9 = true then do
+                                                    let a9 ← snapshot.frontier.index_usize 7#usize
+                                                    let b10 ← digest_is_canonical a9
+                                                    if b10 = true then do
+                                                        let a10 ← snapshot.frontier.index_usize 8#usize
+                                                        let b11 ← digest_is_canonical a10
+                                                        if b11 = true then do
+                                                            let a11 ← snapshot.frontier.index_usize 9#usize
+                                                            let b12 ← digest_is_canonical a11
+                                                            if b12 = true then do
+                                                                let a12 ← snapshot.frontier.index_usize 10#usize
+                                                                let b13 ← digest_is_canonical a12
+                                                                if b13 = true then do
+                                                                    let a13 ← snapshot.frontier.index_usize 11#usize
+                                                                    let b14 ← digest_is_canonical a13
+                                                                    if b14 = true then do
+                                                                        let a14 ← snapshot.frontier.index_usize 12#usize
+                                                                        let b15 ← digest_is_canonical a14
+                                                                        if b15 = true then do
+                                                                            let a15 ←
+                                                                              snapshot.frontier.index_usize 13#usize
+                                                                            let b16 ← digest_is_canonical a15
+                                                                            if b16 = true then do
+                                                                                let a16 ←
+                                                                                  snapshot.frontier.index_usize 14#usize
+                                                                                let b17 ← digest_is_canonical a16
+                                                                                if b17 = true then do
+                                                                                    let a17 ←
+                                                                                      snapshot.frontier.index_usize
+                                                                                          15#usize
+                                                                                    let b18 ← digest_is_canonical a17
+                                                                                    if b18 = true then do
+                                                                                        let a18 ←
+                                                                                          snapshot.frontier.index_usize
+                                                                                              16#usize
+                                                                                        let b19 ←
+                                                                                          digest_is_canonical a18
+                                                                                        if b19 = true then do
+                                                                                            let a19 ←
+                                                                                              snapshot.frontier.index_usize
+                                                                                                  17#usize
+                                                                                            let b20 ←
+                                                                                              digest_is_canonical a19
+                                                                                            if b20 = true then do
+                                                                                                let a20 ←
+                                                                                                  snapshot.frontier.index_usize
+                                                                                                      18#usize
+                                                                                                let b21 ←
+                                                                                                  digest_is_canonical
+                                                                                                      a20
+                                                                                                if b21 = true then do
+                                                                                                    let a21 ←
+                                                                                                      snapshot.frontier.index_usize
+                                                                                                          19#usize
+                                                                                                    let b22 ←
+                                                                                                      digest_is_canonical
+                                                                                                          a21
+                                                                                                    if b22 = true then
+                                                                                                        ok
+                                                                                                          (core.result.Result.Ok
+                                                                                                            ())
+                                                                                                      else
+                                                                                                        ok
+                                                                                                          (core.result.Result.Err
+                                                                                                            PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                                                                  else
+                                                                                                    ok
+                                                                                                      (core.result.Result.Err
+                                                                                                        PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                                                              else
+                                                                                                ok
+                                                                                                  (core.result.Result.Err
+                                                                                                    PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                                                          else
+                                                                                            ok
+                                                                                              (core.result.Result.Err
+                                                                                                PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                                                      else
+                                                                                        ok
+                                                                                          (core.result.Result.Err
+                                                                                            PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                                                  else
+                                                                                    ok
+                                                                                      (core.result.Result.Err
+                                                                                        PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                                              else
+                                                                                ok
+                                                                                  (core.result.Result.Err
+                                                                                    PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                                          else
+                                                                            ok
+                                                                              (core.result.Result.Err
+                                                                                PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                                      else
+                                                                        ok
+                                                                          (core.result.Result.Err
+                                                                            PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                                  else
+                                                                    ok
+                                                                      (core.result.Result.Err
+                                                                        PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                              else
+                                                                ok
+                                                                  (core.result.Result.Err
+                                                                    PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                          else
+                                                            ok
+                                                              (core.result.Result.Err
+                                                                PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                      else
+                                                        ok
+                                                          (core.result.Result.Err
+                                                            PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                                  else
+                                                    ok
+                                                      (core.result.Result.Err
+                                                        PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                              else
+                                                ok
+                                                  (core.result.Result.Err
+                                                    PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                          else
+                                            ok (core.result.Result.Err PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                      else ok (core.result.Result.Err PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                                  else ok (core.result.Result.Err PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                              else ok (core.result.Result.Err PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                          else ok (core.result.Result.Err PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+                      else ok (core.result.Result.Err PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)) ⦃
+    x✝ => True ⦄
+'AspisS6SourceCodec.SnapshotTotal.canonical_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6SourceCodec.SnapshotTotal.canonical_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6SourceCodec.SnapshotTotal.snapshot_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
