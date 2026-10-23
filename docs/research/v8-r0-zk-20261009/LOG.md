@@ -8981,3 +8981,19 @@ into owned, Aeneas-extractable code, with heavy arithmetic as small verified lea
 Base it on the v2 constant-time candidate, which is the intended host prover. Gates: design
 note first; byte-identical proofs on fixtures for identical coins; at least 1,000 differential runs;
 median prover time under 15 s on the build host (D168/D169); the verifier untouched. Host-only.
+
+## D188 (lead, 2026-10-23 16:40): what "native" means for extracted code (S2 closure ruling)
+
+S2-W keeps listing a residual "native-to-owned association" for code that Aeneas has
+already extracted. Lead ruling: the project's source semantics are the Charon/Aeneas
+extractions, as for every soundness cone (S1–S10, checkpoint, multiproof). Correspondence
+between Rust source and its extraction is the existing extraction trust boundary (named
+`AeneasExtraction`, beside rustc/P7). Correspondence between source and the deployed binary
+is S10's ELF certificates plus P7. So for the extracted owned adapter, "native = extracted"
+is not a new S2 obligation, and no per-call re-proof is needed. What S2 must still prove:
+(i) the non-extracted wrappers, by their Kani contracts, which pass; (ii) composition of
+the traced outer execution. Child-internal site events (verifier stage internals, the nine
+internal sites) belong to the child cones and are carried as the named per-child cone-join
+hypotheses. Multiproof's separate P6 total-oracle premise stays with the multiproof cone. With
+this, the consolidated `S2CallerFacts` theorem should be statable. `AeneasExtraction` is added
+to the headline trust list explicitly; it has always been implicit in every cone.
