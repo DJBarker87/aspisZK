@@ -1,0 +1,30 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "properties": 2809,
+  "noncover_successes": 2807,
+  "reached_covers": [
+    "aspis_r1_cost_probe::verifier::tx1::<SolanaDigest>.cover.1",
+    "aspis_r1_cost_probe::verifier::tx1::<SolanaDigest>.cover.2"
+  ],
+  "source_cut": {
+    "schema": "focused-extractor-proof-packet-v1",
+    "source_sha256": "a569d09bbaeeaba6426c5c5d974000dd8d4a508c9164612b0e5380cd9b72c65f",
+    "qualification": "Native source first entry supplies the reference-constructor control facts.\nOne native execution, real SDK/guards/full statement and full original buffers.\nThe original scan is ghost-factored, evaluated once and its result recorded;\nits iterator constructor is checked at the actual source site. The ordinary\nread-only std-any and comparison abstractions stay unconstrained. Existing\nexact source loop/gate laws, rather than new loop evaluation, must supply byte\nzero/equality consequences. No complete reference execution is assumed.\n",
+    "scan_fission": {
+      "original": "checkpoint_data.iter().any(|byte| *byte != 0)",
+      "replacement": "{\n        let mut source_iter=checkpoint_data.iter();\n        crate::proofs::scan_enter(&source_iter);\n        let hit=source_iter.any(|byte| *byte != 0);\n        crate::proofs::scan_leave(hit);\n        hit\n    }",
+      "qualification": "Let-introduction around exactly one native iterator/any call. Additional calls only read/check or update tagged ghost storage; iterator has no destructor. Explicit equivalence/noninterference is a required certificate gate, not silently assumed."
+    },
+    "remaining": "All assertions and both covers must pass; instantiate existing concrete SDK iterator/std-any and exact prefix-gate laws at these checked native arguments. Construct the full reference execution from native-produced metadata/byte/child facts; actual child/oracle, continuation and runtime/TX2 transport remain. No whole S2."
+  },
+  "pins": {
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-constructor-ready-v4/property-inventory.json": "5b06ee8a8367ffa266eb8a9e28a1ea65b488ac069975cca8fbf7b8bf437ea488",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-constructor-ready-v4/step9.log": "7ef2f9352b1c462ff24d1b28d69b42f9aba5ff67e1ee70b75391ffdf2eed4481",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-constructor-ready-v4-input.json": "efcd5e122ae7af49074ae9a61bbad7d868398b2e831c81bb754ecc4ade2d85ef",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/receipts/sdk-constructor-ready-v4/receipt.json": "91bd40c1e84ab68a14cab18b9894d5abf44eaec0d0d7acbe63ab362de108374c",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-shared-prefix-constructor-ready-v4/src/lib.rs": "a569d09bbaeeaba6426c5c5d974000dd8d4a508c9164612b0e5380cd9b72c65f",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-shared-prefix-constructor-ready-v4/source-cut.json": "90814ad111603aba898179cd949ee6313777b06752f6b87dfe2ecf91b241b440",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/kit/audit-native-constructor-host.py": "8caff0f6c1afbd2c5d764bd321d5489469be99be23951fb1f1064c498f9e4130"
+  },
+  "qualification": "Constructor-entry audit supersedes generic inherited runner prose. Source scan fission requires a noninterference/equivalence certificate; this report does not supply one. Original SDK, one initial byte coordinate and typed/counter/slot facts at first entry only. No returned first result, post-frame or termination. Pure scan/comparison overapproximation and typed child cuts require actual source/runtime/caller installation; not whole S2."
+}

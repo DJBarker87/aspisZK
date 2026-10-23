@@ -1,0 +1,12 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "mode": "length",
+  "method": "try_data_len",
+  "source_sha256": "65527b1eb020412cd519e8db6828c512a2eb0a9f88e87303854db28da296f98f",
+  "model_sha256": "fdb502dc483cbb13b0dc7d18fa17548af3bb7af0d5b05eee6d663f648198ebce",
+  "actual_sdk_contract_source_sha256": "46422e0d1793eff8360eaccbd0600aca5319c334648420b8bd6de830c4243e0b",
+  "actual_contract_annotation": "    #[cfg_attr(kani,kani::modifies(Rc::as_ptr(&self.data).cast_mut().cast::<isize>()))]\n    #[cfg_attr(kani,kani::ensures(|result| {\n        let before=old(unsafe{(*Rc::as_ptr(&self.data).cast::<std::cell::Cell<isize>>()).get()});let now=unsafe{(*Rc::as_ptr(&self.data).cast::<std::cell::Cell<isize>>()).get()};\n        match result {\n            Ok(n)=>before>=0 && before<isize::MAX && *n==unsafe{(&*self.data.as_ptr()).len()} && now==before,\n            Err(e)=>matches!(e,ProgramError::AccountBorrowFailed) && (before<0 || before==isize::MAX) && now==before,\n        }\n    }))]\n",
+  "model_contract_annotation": "    #[cfg_attr(kani,kani::modifies(Rc::as_ptr(&account.data).cast_mut().cast::<isize>()))]\n    #[cfg_attr(kani,kani::ensures(|result| {\n        let before=old(unsafe{(*Rc::as_ptr(&account.data).cast::<std::cell::Cell<isize>>()).get()});let now=unsafe{(*Rc::as_ptr(&account.data).cast::<std::cell::Cell<isize>>()).get()};\n        match result {\n            Ok(n)=>before>=0 && before<isize::MAX && *n==unsafe{(&*account.data.as_ptr()).len()} && now==before,\n            Err(e)=>matches!(e,ProgramError::AccountBorrowFailed) && (before<0 || before==isize::MAX) && now==before,\n        }\n    }))]\n",
+  "qualification": "Check an experimental real-guard reference against the actual method spec.\n\nSeparate satisfaction of a complete specification avoids a paired execution.\nThis is NOT equivalence until uniqueness/representation and enclosing use are\nproved. Original actual SDK contracts remain independent checked obligations.\n",
+  "remaining": "All model and actual method properties, complete spec uniqueness in pinned ABI including live guard drop and pointer representation, external ordinary-stub transport, actual native caller/error/trace/state/runtime join. No equivalence or S2 closure follows from this unary model contract alone."
+}

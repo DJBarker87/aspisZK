@@ -1,0 +1,19 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "protocol_freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "source_sha256": "b5e9dd7862d42bc83a628c476a67d260e6c709c7cc7f73c9c04ba157e6437262",
+  "mode": "normalized",
+  "native_finish_source": "    if checkpoint.len() != checkpoint_data.len() {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    checkpoint_data.copy_from_slice(&checkpoint);\n    #[cfg(feature=\"cu-profiling\")]\n    {\n    msg!(\"r1:pool-adapter-stage1-checkpoint-written\");\n    solana_program::log::sol_log_compute_units();\n    }\n    Ok(())\n}",
+  "native_finish_sha256": "14185708e043dae0f7116752dbf54d8dfa461d71d4bb2168764ba0c037f49208",
+  "owned_finish_source": " if result.len()!=sdk.data_cells[checkpoint.data_slot].bytes.len() {return Err(ProgramError::InvalidAccountData);}\n // Owned heap bytes, not an SDK slice descriptor or pointer, are replaced.\n // The actual SDK copy/write frame is a separate concrete operation certificate.\n sdk.data_cells[checkpoint.data_slot].bytes=result;\n Ok(())\n}",
+  "owned_finish_sha256": "0e05f59d0934a02bb32289e007421f45ebf0b4cfe4c833aa74ab5c0f5f81c07d",
+  "max_buffer_bytes": 58295,
+  "reply_max_bytes": 1769,
+  "qualification": "Exact native post-child copy/drop versus full owned heap using a proved std\nprimitive. The reached descriptor normalization and prior caller are explicit\nremaining transports; no complete stage1 or release result is inferred.\n",
+  "domain": "Actual SDK accounts/full owned heap with exact58295/1880/1768 buffers, all contents, distinct data identities and independent lamport alias maps, all signed data/lamport counters, metadata and actual Rc headers. Every reply length0..1769/all bytes; all ordinary statuses, acquisition traces, guard drops and arbitrary byte in any actual root are compared. The specialized copy preconditions must be checked at actual calls. Frozen native finish block is unchanged. Earlier source normalization/children and runtime heap embedding remain explicit.",
+  "remaining": "Discharge this normalized-entry premise from the earlier native source metadata/decoder/proof framing/tx1-entry cuts, and compose the actual child returned-reply and SDK embedding transports. No global adversary restriction or whole S2 closure follows from this candidate.",
+  "std_copy_definitions_sha256": "1b3c9ca6c89a91c7e89b400080485a5cd6b6d5ed4d6c71d8ce5bdc930f488f9c",
+  "std_copy_primitive_source_sha256": "de5f3dc10d144541935f525099a76665f53f6328498ac0333e005ed3b1e796ca",
+  "std_copy_leaf_proof": "sdk-std-copy-frame-join-v1",
+  "std_copy_bridge_proof": "sdk-std-copy-bridge-join-v1"
+}

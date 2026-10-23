@@ -1,0 +1,13 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "mode": "length",
+  "method": "try_data_len",
+  "original_sdk_source_sha256": "6b59aba664bb70fda6e17bcc8cf6eb41fc0bc9d8bcbb797bd70c1b107809c29a",
+  "annotated_sdk_source_sha256": "46422e0d1793eff8360eaccbd0600aca5319c334648420b8bd6de830c4243e0b",
+  "annotation": "    #[cfg_attr(kani,kani::modifies(Rc::as_ptr(&self.data).cast_mut().cast::<isize>()))]\n    #[cfg_attr(kani,kani::ensures(|result| {\n        let before=old(unsafe{(*Rc::as_ptr(&self.data).cast::<std::cell::Cell<isize>>()).get()});let now=unsafe{(*Rc::as_ptr(&self.data).cast::<std::cell::Cell<isize>>()).get()};\n        match result {\n            Ok(n)=>before>=0 && before<isize::MAX && *n==unsafe{(&*self.data.as_ptr()).len()} && now==before,\n            Err(e)=>matches!(e,ProgramError::AccountBorrowFailed) && (before<0 || before==isize::MAX) && now==before,\n        }\n    }))]\n",
+  "strip_annotations_restores_exact_original": true,
+  "harness_source_sha256": "4e64deb1573d74c94a062080f6fd2f83322c869eaedf1f1b1fc54651c0d00309",
+  "domain": "One actual typed SDK AccountInfo, storage10MiB and every view length0..10MiB, all byte values and metadata, every signed data/lamport borrow flag, every nonzero usize Rc header. Checked body is the unchanged SDK method; returned guard is dropped by the harness only after checking the method postcondition.",
+  "qualification": "Annotate an isolated SDK copy, retaining exact original method bodies.\nContracts are candidates until their actual-method harnesses pass. No production\nSDK/source is edited; stripping inserted cfg(kani) annotations restores all\noriginal SDK source bytes. The live-guard representation is checked explicitly.\n",
+  "remaining": "Annotations and successful codegen alone prove nothing. Need every method contract property checked before use in actual native caller; source/heap embedding, error/log/oracle and child installation remain separate."
+}

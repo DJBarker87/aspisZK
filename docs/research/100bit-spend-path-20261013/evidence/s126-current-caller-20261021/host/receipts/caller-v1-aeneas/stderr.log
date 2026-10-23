@@ -1,0 +1,215 @@
+Uncaught exception:
+  
+  (Invalid_argument
+    "Can't get the list of fields of this adt:\
+   \n{ Generated_Types.def_id = 7;\
+   \n  item_meta =\
+   \n  { Generated_Types.name =\
+   \n    [(Generated_Types.PeIdent (\"aspis_r1_cost_probe\", 0));\
+   \n      (Generated_Types.PeIdent (\"transport\", 0));\
+   \n      (Generated_Types.PeIdent (\"Variant\", 0))];\
+   \n    span =\
+   \n    { Generated_Meta.data =\
+   \n      { Generated_Meta.file =\
+   \n        { Generated_Meta.name =\
+   \n          (Generated_Meta.Local \"crates/aspis-r1-cost-probe/src/transport.rs\");\
+   \n          crate_name = \"aspis_r1_cost_probe\";\
+   \n          contents =\
+   \n          (Some \"//! UNPROVED COST PROBE. S uses the D18 digit permutation; D uses retained D13.\\n#[derive(Clone,Copy,Debug,PartialEq,Eq)]\\npub enum Variant { S1, S2, D }\\npub const TAU: [usize; 5] = [3, 4, 2, 0, 1];\\nimpl Variant {\\n    pub fn tag(self) -> u8 { match self { Self::S1=>1,Self::S2=>2,Self::D=>3 } }\\n    pub fn from_tag(tag:u8) -> Option<Self> { match tag {1=>Some(Self::S1),2=>Some(Self::S2),3=>Some(Self::D),_=>None} }\\n    pub fn folds(self) -> usize { if self == Self::S1 { 1 } else { 2 } }\\n    pub fn final_len(self) -> usize { 1024 >> (2*self.folds()) }\\n    pub fn row(self, j:usize) -> usize {\\n        if self == Self::D { return aspis_core::r0::transport::COEFFICIENT_TO_ROW[j] as usize; }\\n        let mut out=0;\\n        for d in 0..5 { out |= ((j>>(2*d))&3) << (2*TAU[d]); }\\n        out\\n    }\\n    pub fn coefficients<T:Copy>(self, rows: &[T;1024]) -> [T;1024] {\\n        core::array::from_fn(|j|rows[self.row(j)])\\n    }\\n    pub fn rows<T:Copy>(self, coefficients: &[T;1024]) -> [T;1024] {\\n        let mut out=*coefficients;\\n        for j in 0..1024 { out[self.row(j)]=coefficients[j]; }\\n        out\\n    }\\n}\\n\")\
+   \n          };\
+   \n        beg_loc = { Generated_Meta.line = 3; col = 0 };\
+   \n        end_loc = { Generated_Meta.line = 3; col = 30 } };\
+   \n      generated_from_span = None };\
+   \n    source_text = (Some \"pub enum Variant { S1, S2, D }\");\
+   \n    attr_info =\
+   \n    { Generated_Meta.attributes = []; inline = None; rename = None;\
+   \n      public = true };\
+   \n    is_local = true; opacity = Generated_Types.ItemOpaque; lang_item = None };\
+   \n  generics =\
+   \n  { Generated_Types.regions = []; types = []; const_generics = [];\
+   \n    trait_clauses = []; regions_outlive = []; types_outlive = [];\
+   \n    trait_type_constraints = [] };\
+   \n  src = Generated_Types.TopLevelItem; kind = Generated_Types.Opaque;\
+   \n  layout =\
+   \n  [(\"x86_64-unknown-linux-gnu\",\
+   \n    { Generated_Types.size = (Some 1); align = (Some 1);\
+   \n      discriminator =\
+   \n      (Some (Generated_Types.Branch (0,\
+   \n               (Generated_Values.Unsigned Generated_Values.U8),\
+   \n               [(((Generated_Values.UnsignedScalar (Generated_Values.U8, 0)),\
+   \n                  (Generated_Values.UnsignedScalar (Generated_Values.U8, 0))),\
+   \n                 (Generated_Types.Known 0));\
+   \n                 (((Generated_Values.UnsignedScalar (Generated_Values.U8, 1)),\
+   \n                   (Generated_Values.UnsignedScalar (Generated_Values.U8, 1))),\
+   \n                  (Generated_Types.Known 1));\
+   \n                 (((Generated_Values.UnsignedScalar (Generated_Values.U8, 2)),\
+   \n                   (Generated_Values.UnsignedScalar (Generated_Values.U8, 2))),\
+   \n                  (Generated_Types.Known 2))\
+   \n                 ],\
+   \n               Generated_Types.Invalid)));\
+   \n      uninhabited = false;\
+   \n      variant_layouts =\
+   \n      [(Some { Generated_Types.field_offsets = []; uninhabited = false;\
+   \n               tagger =\
+   \n               [(0,\
+   \n                 (Generated_Values.UnsignedScalar (Generated_Values.U8, 0)))]\
+   \n               });\
+   \n        (Some { Generated_Types.field_offsets = []; uninhabited = false;\
+   \n                tagger =\
+   \n                [(0,\
+   \n                  (Generated_Values.UnsignedScalar (Generated_Values.U8, 1)))\
+   \n                  ]\
+   \n                });\
+   \n        (Some { Generated_Types.field_offsets = []; uninhabited = false;\
+   \n                tagger =\
+   \n                [(0,\
+   \n                  (Generated_Values.UnsignedScalar (Generated_Values.U8, 2)))\
+   \n                  ]\
+   \n                })\
+   \n        ];\
+   \n      repr =\
+   \n      { Generated_Types.repr_algo = Generated_Types.Rust; align_modif = None;\
+   \n        transparent = false; explicit_discr_type = false }\
+   \n      })\
+   \n    ];\
+   \n  ptr_metadata = Generated_Types.NoMetadata }")
+
+Raised at Charon__TypesUtils.type_decl_get_fields in file "charon-ml/src/TypesUtils.ml", lines 66-68, characters 6-80
+Called from Charon__Substitute.type_decl_get_instantiated_field_types in file "charon-ml/src/Substitute.ml", line 392, characters 15-54
+Called from Aeneas__Contexts.ctx_type_get_instantiated_field_types in file "llbc/Contexts.ml" (inlined), line 635, characters 2-79
+Called from Aeneas__Contexts.ctx_type_get_instantiated_field_etypes in file "llbc/Contexts.ml" (inlined), lines 643-644, characters 4-14
+Called from Aeneas__InterpExpressions.eval_rvalue_aggregate in file "interp/InterpExpressions.ml", lines 1329-1330, characters 14-39
+Called from Aeneas__InterpExpressions.eval_rvalue_not_global in file "interp/InterpExpressions.ml", line 1501, characters 21-79
+Called from Aeneas__InterpStatements.eval_statement_raw.(fun) in file "interp/InterpStatements.ml", line 922, characters 27-75
+Called from Aeneas__InterpStatements.eval_statement.(fun) in file "interp/InterpStatements.ml", line 866, characters 10-44
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", line 875, characters 29-57
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Aeneas__InterpStatements.eval_switch_raw.(fun) in file "interp/InterpStatements.ml", line 1253, characters 31-56
+Called from Aeneas__InterpStatements.eval_switch.(fun) in file "interp/InterpStatements.ml", line 1060, characters 10-50
+Called from Stdlib__List.map in file "list.ml", line 86, characters 15-19
+Called from Aeneas__InterpStatements.eval_switch_raw.(fun) in file "interp/InterpStatements.ml", line 1262, characters 14-77
+Called from Aeneas__InterpStatements.eval_switch.(fun) in file "interp/InterpStatements.ml", line 1060, characters 10-50
+Called from Aeneas__InterpStatements.eval_statement.(fun) in file "interp/InterpStatements.ml", line 866, characters 10-44
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", line 875, characters 29-57
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 86, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 86, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Aeneas__InterpStatements.eval_switch_raw.(fun) in file "interp/InterpStatements.ml", line 1111, characters 29-68
+Called from Aeneas__InterpStatements.eval_switch.(fun) in file "interp/InterpStatements.ml", line 1060, characters 10-50
+Called from Aeneas__InterpStatements.eval_statement.(fun) in file "interp/InterpStatements.ml", line 866, characters 10-44
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", line 875, characters 29-57
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Stdlib__List.map in file "list.ml", line 83, characters 15-19
+Called from Aeneas__InterpStatements.eval_statement_list.(fun) in file "interp/InterpStatements.ml", lines 880-888, characters 8-18
+Called from Aeneas__InterpStatements.eval_function_body.(fun) in file "interp/InterpStatements.ml", line 1842, characters 26-52
+Called from Aeneas__Interp.evaluate_function_symbolic in file "interp/Interp.ml", line 605, characters 25-64
+Called from Aeneas__Translate.translate_function_to_symbolics in file "Translate.ml", line 35, characters 8-71
+Called from Aeneas__Translate.translate_function_to_pure_aux in file "Translate.ml", line 132, characters 4-61
+Called from Aeneas__Translate.translate_function_to_pure in file "Translate.ml", lines 288-289, characters 6-41
+Called from Aeneas__Translate.translate_crate_to_pure.process.(fun) in file "Translate.ml", lines 501-502, characters 16-45
+Called from Stdlib__List.filter_map in file "list.ml", line 280, characters 12-15
+Called from Aeneas__Parallel.catch_reraise in file "Parallel.ml", line 17, characters 6-9
+Called from Aeneas__Translate.translate_crate_to_pure in file "Translate.ml", line 519, characters 22-62
+Called from Aeneas__Translate.translate_crate in file "Translate.ml", line 2199, characters 31-71
+Called from Dune__exe__Main in file "Main.ml", lines 743-744, characters 8-37

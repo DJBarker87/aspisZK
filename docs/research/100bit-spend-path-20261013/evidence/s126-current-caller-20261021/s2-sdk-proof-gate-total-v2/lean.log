@@ -1,0 +1,37 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofGateTotalV1.lean:47:14: warning: This simp argument is unused:
+  tag
+
+Hint: Omit it from the simp argument list.
+  simp [t̵a̵g̵,̵value]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofGateTotalV1.lean:50:17: warning: This simp argument is unused:
+  value
+
+Hint: Omit it from the simp argument list.
+  simp [length,̵v̵a̵l̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS2OwnedStage1.SdkReference.ProofGate.gate_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.eq : {T U : Type} →
+  core.cmp.PartialEq T U → Slice T → Slice U → Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          ok (decide ¬b = true))
+      ((↑s0).zip ↑s1)
+  else ok false
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.ne : {T U : Type} →
+  core.cmp.PartialEq T U → Slice T → Slice U → Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.anyM
+      (fun x =>
+        match x with
+        | (x, y) => partialEqInst.ne x y)
+      ((↑s0).zip ↑s1)
+  else ok true

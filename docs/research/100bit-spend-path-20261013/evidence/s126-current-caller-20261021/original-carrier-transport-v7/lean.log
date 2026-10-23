@@ -1,0 +1,799 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:199:61: error: unsolved goals
+case h_1
+B : Boundaries
+H : Type
+D : aspis_core.digest.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+x✝ : Result (Std.Array U8 32#usize)
+a✝ : Std.Array U8 32#usize
+heq✝ :
+  AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state (retainedDigest D)
+      { state := sem.transcript.state, hash := sem.transcript.hash, next_row := sem.transcript.next_row } =
+    ok a✝
+⊢ (match
+      match
+        AspisR1PublicPreparation.transcript.Transcript.new (retainedDigest D) hash a✝ (retainedVariant v.variant) with
+      | ok v => ok { state := v.state, hash := v.hash }
+      | fail v => fail v
+      | div => div with
+    | ok v_1 =>
+      match
+        match
+          AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D)
+            { state := v_1.state, hash := v_1.hash } 27#u8 v.y1 true with
+        | ok v =>
+          let (a, t) := v
+          ok (currentE a, { state := t.state, hash := t.hash })
+        | fail v => fail v
+        | div => div with
+      | ok v_2 =>
+        let (gamma, t1) := v_2
+        match B.sampling.toBytes (retainedE v.inactive) with
+        | ok v_3 =>
+          match lift v_3.to_slice with
+          | ok v_4 =>
+            match
+              match
+                AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D)
+                  { state := t1.state, hash := t1.hash } 28#u8 v_4 false with
+              | ok v =>
+                let (a, t) := v
+                ok (currentE a, { state := t.state, hash := t.hash })
+              | fail v => fail v
+              | div => div with
+            | ok v_5 =>
+              let (kappa, t2) := v_5
+              match
+                match
+                  AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D)
+                    { state := t2.state, hash := t2.hash } 29#u8 v.round0 false with
+                | ok v =>
+                  let (a, t) := v
+                  ok (currentE a, { state := t.state, hash := t.hash })
+                | fail v => fail v
+                | div => div with
+              | ok v_6 =>
+                let (alpha0, t3) := v_6
+                match (retainedVariant v.variant).folds with
+                | ok v_7 =>
+                  if v_7 = 2#usize then
+                    match 32#usize + 224#usize with
+                    | ok v_8 =>
+                      match core.option.Option.unwrap v.folded_root with
+                      | ok v_9 =>
+                        match lift v_9.to_slice with
+                        | ok v_10 =>
+                          match
+                            alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 v_8)
+                              v_10 with
+                          | ok v_11 =>
+                            match alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v_11 v.round1 with
+                            | ok v_12 =>
+                              match
+                                match
+                                  AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D)
+                                    { state := t3.state, hash := t3.hash } 30#u8 v_12.deref false with
+                                | ok v =>
+                                  let (a, t) := v
+                                  ok (currentE a, { state := t.state, hash := t.hash })
+                                | fail v => fail v
+                                | div => div with
+                              | ok v_13 =>
+                                let (we, t4) := v_13
+                                match
+                                  match
+                                    B.sampling.queries (retainedDigest D) { state := t4.state, hash := t4.hash } 31#u8
+                                      v.final_message with
+                                  | ok v =>
+                                    let (a, t) := v
+                                    ok
+                                      (match a with
+                                        | core.result.Result.Ok x => core.result.Result.Ok x
+                                        | core.result.Result.Err e => core.result.Result.Err (currentError e),
+                                        { state := t.state, hash := t.hash })
+                                  | fail v => fail v
+                                  | div => div with
+                                | ok v_14 =>
+                                  let (r, t5) := v_14
+                                  match
+                                    match r with
+                                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                    | core.result.Result.Err e =>
+                                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)) with
+                                  | ok v_15 =>
+                                    match v_15 with
+                                    | core.ops.control_flow.ControlFlow.Continue val =>
+                                      match 31#u8 + 1#u8 with
+                                      | ok v_16 =>
+                                        match lift (Std.Array.empty U8).to_slice with
+                                        | ok v_17 =>
+                                          match
+                                            match
+                                              AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling
+                                                (retainedDigest D) { state := t5.state, hash := t5.hash } v_16 v_17 with
+                                            | ok v =>
+                                              let (a, t) := v
+                                              ok (currentQ a, { state := t.state, hash := t.hash })
+                                            | fail v => fail v
+                                            | div => div with
+                                          | ok v_18 =>
+                                            let (rho, t6) := v_18
+                                            match
+                                              match B.powers 29#usize (retainedE gamma) with
+                                              | ok v => ok ⟨List.map currentE ↑v, ⋯⟩
+                                              | fail v => fail v
+                                              | div => div with
+                                            | ok v_19 =>
+                                              match
+                                                match
+                                                  B.claim (retainedDigest D)
+                                                    { roots := sem.roots,
+                                                      challenges :=
+                                                        { lambda := retainedQ sem.challenges.lambda,
+                                                          chi := retainedQ sem.challenges.chi,
+                                                          theta := retainedQ sem.challenges.theta,
+                                                          zc := ⟨List.map retainedQ ↑sem.challenges.zc, ⋯⟩,
+                                                          mu := retainedQ sem.challenges.mu,
+                                                          eta := retainedQ sem.challenges.eta },
+                                                      alpha := ⟨List.map retainedQ ↑sem.alpha, ⋯⟩,
+                                                      claims := ⟨List.map (mapArray retainedQ) ↑sem.claims, ⋯⟩,
+                                                      extra := ⟨List.map retainedQ ↑sem.extra, ⋯⟩,
+                                                      before_z1 := ⟨List.map retainedQ ↑sem.before_z1, ⋯⟩,
+                                                      state_before_z0 := sem.state_before_z0,
+                                                      z := ⟨List.map retainedPoint ↑sem.z, ⋯⟩,
+                                                      transcript :=
+                                                        { state := sem.transcript.state, hash := sem.transcript.hash,
+                                                          next_row := sem.transcript.next_row } }
+                                                    v.y1 (retainedE v.inactive) ⟨List.map retainedE ↑v_19, ⋯⟩
+                                                    (retainedE kappa) with
+                                                | ok v =>
+                                                  ok
+                                                    (match v with
+                                                    | core.result.Result.Ok a => core.result.Result.Ok (currentE a)
+                                                    | core.result.Result.Err e =>
+                                                      core.result.Result.Err (currentError e))
+                                                | fail v => fail v
+                                                | div => div with
+                                              | ok v_20 =>
+                                                match
+                                                  match v_20 with
+                                                  | core.result.Result.Ok v =>
+                                                    ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                  | core.result.Result.Err e =>
+                                                    ok
+                                                      (core.ops.control_flow.ControlFlow.Break
+                                                        (core.result.Result.Err e)) with
+                                                | ok v_21 =>
+                                                  match v_21 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                                    ok
+                                                      (core.result.Result.Ok
+                                                          { variant := v.variant, roots := sem.roots, gamma := gamma,
+                                                            kappa := kappa, alpha := Array.make 2#usize [alpha0, we] ⋯,
+                                                            rho := rho, queries := val, semantic_alpha := sem.alpha,
+                                                            z := sem.z, claim := val1, state := t6.state },
+                                                        v_19)
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    match
+                                                      match residual with
+                                                      | core.result.Result.Ok x =>
+                                                        core.convert.Infallible.rec
+                                                          (fun x =>
+                                                            Result
+                                                              (core.result.Result verifier.Prepared verifier.Error))
+                                                          x
+                                                      | core.result.Result.Err e => ok (core.result.Result.Err e) with
+                                                    | ok v => ok (v, v_19)
+                                                    | fail v => fail v
+                                                    | div => div
+                                                | fail v => fail v
+                                                | div => div
+                                              | fail v => fail v
+                                              | div => div
+                                            | fail v => fail v
+                                            | div => div
+                                          | fail v => fail v
+                                          | div => div
+                                        | fail v => fail v
+                                        | div => div
+                                      | fail v => fail v
+                                      | div => div
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      match
+                                        match residual with
+                                        | core.result.Result.Ok x =>
+                                          core.convert.Infallible.rec
+                                            (fun x => Result (core.result.Result verifier.Prepared verifier.Error)) x
+                                        | core.result.Result.Err e => ok (core.result.Result.Err e) with
+                                      | ok v => ok (v, g)
+                                      | fail v => fail v
+                                      | div => div
+                                  | fail v => fail v
+                                  | div => div
+                                | fail v => fail v
+                                | div => div
+                              | fail v => fail v
+                              | div => div
+                            | fail v => fail v
+                            | div => div
+                          | fail v => fail v
+                          | div => div
+                        | fail v => fail v
+                        | div => div
+                      | fail v => fail v
+                      | div => div
+                    | fail v => fail v
+                    | div => div
+                  else
+                    match
+                      match
+                        B.sampling.queries (retainedDigest D) { state := t3.state, hash := t3.hash } 30#u8
+                          v.final_message with
+                      | ok v =>
+                        let (a, t) := v
+                        ok
+                          (match a with
+                            | core.result.Result.Ok x => core.result.Result.Ok x
+                            | core.result.Result.Err e => core.result.Result.Err (currentError e),
+                            { state := t.state, hash := t.hash })
+                      | fail v => fail v
+                      | div => div with
+                    | ok v_8 =>
+                      let (r, t4) := v_8
+                      match
+                        match r with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)) with
+                      | ok v_9 =>
+                        match v_9 with
+                        | core.ops.control_flow.ControlFlow.Continue val =>
+                          match 30#u8 + 1#u8 with
+                          | ok v_10 =>
+                            match lift (Std.Array.empty U8).to_slice with
+                            | ok v_11 =>
+                              match
+                                match
+                                  AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling (retainedDigest D)
+                                    { state := t4.state, hash := t4.hash } v_10 v_11 with
+                                | ok v =>
+                                  let (a, t) := v
+                                  ok (currentQ a, { state := t.state, hash := t.hash })
+                                | fail v => fail v
+                                | div => div with
+                              | ok v_12 =>
+                                let (rho, t5) := v_12
+                                match
+                                  match B.powers 29#usize (retainedE gamma) with
+                                  | ok v => ok ⟨List.map currentE ↑v, ⋯⟩
+                                  | fail v => fail v
+                                  | div => div with
+                                | ok v_13 =>
+                                  match
+                                    match
+                                      B.claim (retainedDigest D)
+                                        { roots := sem.roots,
+                                          challenges :=
+                                            { lambda := retainedQ sem.challenges.lambda,
+                                              chi := retainedQ sem.challenges.chi,
+                                              theta := retainedQ sem.challenges.theta,
+                                              zc := ⟨List.map retainedQ ↑sem.challenges.zc, ⋯⟩,
+                                              mu := retainedQ sem.challenges.mu, eta := retainedQ sem.challenges.eta },
+                                          alpha := ⟨List.map retainedQ ↑sem.alpha, ⋯⟩,
+                                          claims := ⟨List.map (mapArray retainedQ) ↑sem.claims, ⋯⟩,
+                                          extra := ⟨List.map retainedQ ↑sem.extra, ⋯⟩,
+                                          before_z1 := ⟨List.map retainedQ ↑sem.before_z1, ⋯⟩,
+                                          state_before_z0 := sem.state_before_z0,
+                                          z := ⟨List.map retainedPoint ↑sem.z, ⋯⟩,
+                                          transcript :=
+                                            { state := sem.transcript.state, hash := sem.transcript.hash,
+                                              next_row := sem.transcript.next_row } }
+                                        v.y1 (retainedE v.inactive) ⟨List.map retainedE ↑v_13, ⋯⟩ (retainedE kappa) with
+                                    | ok v =>
+                                      ok
+                                        (match v with
+                                        | core.result.Result.Ok a => core.result.Result.Ok (currentE a)
+                                        | core.result.Result.Err e => core.result.Result.Err (currentError e))
+                                    | fail v => fail v
+                                    | div => div with
+                                  | ok v_14 =>
+                                    match
+                                      match v_14 with
+                                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                      | core.result.Result.Err e =>
+                                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)) with
+                                    | ok v_15 =>
+                                      match v_15 with
+                                      | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                        ok
+                                          (core.result.Result.Ok
+                                              { variant := v.variant, roots := sem.roots, gamma := gamma,
+                                                kappa := kappa,
+                                                alpha :=
+                                                  Array.make 2#usize
+                                                    [alpha0,
+                                                      currentE AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO]
+                                                    ⋯,
+                                                rho := rho, queries := val, semantic_alpha := sem.alpha, z := sem.z,
+                                                claim := val1, state := t5.state },
+                                            v_13)
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        match
+                                          match residual with
+                                          | core.result.Result.Ok x =>
+                                            core.convert.Infallible.rec
+                                              (fun x => Result (core.result.Result verifier.Prepared verifier.Error)) x
+                                          | core.result.Result.Err e => ok (core.result.Result.Err e) with
+                                        | ok v => ok (v, v_13)
+                                        | fail v => fail v
+                                        | div => div
+                                    | fail v => fail v
+                                    | div => div
+                                  | fail v => fail v
+                                  | div => div
+                                | fail v => fail v
+                                | div => div
+                              | fail v => fail v
+                              | div => div
+                            | fail v => fail v
+                            | div => div
+                          | fail v => fail v
+                          | div => div
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          match
+                            match residual with
+                            | core.result.Result.Ok x =>
+                              core.convert.Infallible.rec
+                                (fun x => Result (core.result.Result verifier.Prepared verifier.Error)) x
+                            | core.result.Result.Err e => ok (core.result.Result.Err e) with
+                          | ok v => ok (v, g)
+                          | fail v => fail v
+                          | div => div
+                      | fail v => fail v
+                      | div => div
+                    | fail v => fail v
+                    | div => div
+                | fail v => fail v
+                | div => div
+              | fail v => fail v
+              | div => div
+            | fail v => fail v
+            | div => div
+          | fail v => fail v
+          | div => div
+        | fail v => fail v
+        | div => div
+      | fail v => fail v
+      | div => div
+    | fail v => fail v
+    | div => div) =
+    match
+      match
+        AspisR1PublicPreparation.transcript.Transcript.new (retainedDigest D) hash a✝ (retainedVariant v.variant) with
+      | ok v_1 =>
+        match AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D) v_1 27#u8 v.y1 true with
+        | ok v_2 =>
+          let (gamma, t1) := v_2
+          match B.sampling.toBytes (retainedE v.inactive) with
+          | ok v_3 =>
+            match lift v_3.to_slice with
+            | ok v_4 =>
+              match AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D) t1 28#u8 v_4 false with
+              | ok v_5 =>
+                let (kappa, t2) := v_5
+                match
+                  AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D) t2 29#u8 v.round0
+                    false with
+                | ok v_6 =>
+                  let (alpha0, t3) := v_6
+                  match (retainedVariant v.variant).folds with
+                  | ok v_7 =>
+                    if v_7 = 2#usize then
+                      match 32#usize + 224#usize with
+                      | ok v_8 =>
+                        match core.option.Option.unwrap v.folded_root with
+                        | ok v_9 =>
+                          match lift v_9.to_slice with
+                          | ok v_10 =>
+                            match
+                              alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 v_8)
+                                v_10 with
+                            | ok v_11 =>
+                              match alloc.vec.Vec.extend_from_slice core.clone.CloneU8 v_11 v.round1 with
+                              | ok v_12 =>
+                                match
+                                  AspisR1PublicPreparation.PreparedModel.scalar B.sampling (retainedDigest D) t3 30#u8
+                                    v_12.deref false with
+                                | ok v_13 =>
+                                  let (we, t4) := v_13
+                                  match B.sampling.queries (retainedDigest D) t4 31#u8 v.final_message with
+                                  | ok v_14 =>
+                                    let (r, t5) := v_14
+                                    match
+                                      match r with
+                                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                      | core.result.Result.Err e =>
+                                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)) with
+                                    | ok v_15 =>
+                                      match v_15 with
+                                      | core.ops.control_flow.ControlFlow.Continue val =>
+                                        match 31#u8 + 1#u8 with
+                                        | ok v_16 =>
+                                          match lift (Std.Array.empty U8).to_slice with
+                                          | ok v_17 =>
+                                            match
+                                              AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling
+                                                (retainedDigest D) t5 v_16 v_17 with
+                                            | ok v_18 =>
+                                              let (rho, t6) := v_18
+                                              match B.powers 29#usize gamma with
+                                              | ok v_19 =>
+                                                match
+                                                  B.claim (retainedDigest D)
+                                                    { roots := sem.roots,
+                                                      challenges :=
+                                                        { lambda := retainedQ sem.challenges.lambda,
+                                                          chi := retainedQ sem.challenges.chi,
+                                                          theta := retainedQ sem.challenges.theta,
+                                                          zc := ⟨List.map retainedQ ↑sem.challenges.zc, ⋯⟩,
+                                                          mu := retainedQ sem.challenges.mu,
+                                                          eta := retainedQ sem.challenges.eta },
+                                                      alpha := ⟨List.map retainedQ ↑sem.alpha, ⋯⟩,
+                                                      claims := ⟨List.map (mapArray retainedQ) ↑sem.claims, ⋯⟩,
+                                                      extra := ⟨List.map retainedQ ↑sem.extra, ⋯⟩,
+                                                      before_z1 := ⟨List.map retainedQ ↑sem.before_z1, ⋯⟩,
+                                                      state_before_z0 := sem.state_before_z0,
+                                                      z := ⟨List.map retainedPoint ↑sem.z, ⋯⟩,
+                                                      transcript :=
+                                                        { state := sem.transcript.state, hash := sem.transcript.hash,
+                                                          next_row := sem.transcript.next_row } }
+                                                    v.y1 (retainedE v.inactive) v_19 kappa with
+                                                | ok v_20 =>
+                                                  match
+                                                    match v_20 with
+                                                    | core.result.Result.Ok v =>
+                                                      ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                    | core.result.Result.Err e =>
+                                                      ok
+                                                        (core.ops.control_flow.ControlFlow.Break
+                                                          (core.result.Result.Err e)) with
+                                                  | ok v_21 =>
+                                                    match v_21 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                                      ok
+                                                        (core.result.Result.Ok
+                                                            { variant := retainedVariant v.variant, roots := sem.roots,
+                                                              gamma := gamma, kappa := kappa,
+                                                              alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho,
+                                                              queries := val,
+                                                              semantic_alpha := ⟨List.map retainedQ ↑sem.alpha, ⋯⟩,
+                                                              z := ⟨List.map retainedPoint ↑sem.z, ⋯⟩, claim := val1,
+                                                              state := t6.state },
+                                                          v_19)
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      match
+                                                        match residual with
+                                                        | core.result.Result.Ok x =>
+                                                          core.convert.Infallible.rec
+                                                            (fun x =>
+                                                              Result
+                                                                (core.result.Result
+                                                                  AspisR1PublicPreparation.verifier.Prepared
+                                                                  AspisR1PublicPreparation.verifier.Error))
+                                                            x
+                                                        | core.result.Result.Err e => ok (core.result.Result.Err e) with
+                                                      | ok v => ok (v, v_19)
+                                                      | fail v => fail v
+                                                      | div => div
+                                                  | fail v => fail v
+                                                  | div => div
+                                                | fail v => fail v
+                                                | div => div
+                                              | fail v => fail v
+                                              | div => div
+                                            | fail v => fail v
+                                            | div => div
+                                          | fail v => fail v
+                                          | div => div
+                                        | fail v => fail v
+                                        | div => div
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        match
+                                          match residual with
+                                          | core.result.Result.Ok x =>
+                                            core.convert.Infallible.rec
+                                              (fun x =>
+                                                Result
+                                                  (core.result.Result AspisR1PublicPreparation.verifier.Prepared
+                                                    AspisR1PublicPreparation.verifier.Error))
+                                              x
+                                          | core.result.Result.Err e => ok (core.result.Result.Err e) with
+                                        | ok v => ok (v, ⟨List.map retainedE ↑g, ⋯⟩)
+                                        | fail v => fail v
+                                        | div => div
+                                    | fail v => fail v
+                                    | div => div
+                                  | fail v => fail v
+                                  | div => div
+                                | fail v => fail v
+                                | div => div
+                              | fail v => fail v
+                              | div => div
+                            | fail v => fail v
+                            | div => div
+                          | fail v => fail v
+                          | div => div
+                        | fail v => fail v
+                        | div => div
+                      | fail v => fail v
+                      | div => div
+                    else
+                      match B.sampling.queries (retainedDigest D) t3 30#u8 v.final_message with
+                      | ok v_8 =>
+                        let (r, t4) := v_8
+                        match
+                          match r with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)) with
+                        | ok v_9 =>
+                          match v_9 with
+                          | core.ops.control_flow.ControlFlow.Continue val =>
+                            match 30#u8 + 1#u8 with
+                            | ok v_10 =>
+                              match lift (Std.Array.empty U8).to_slice with
+                              | ok v_11 =>
+                                match
+                                  AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling (retainedDigest D) t4 v_10
+                                    v_11 with
+                                | ok v_12 =>
+                                  let (rho, t5) := v_12
+                                  match B.powers 29#usize gamma with
+                                  | ok v_13 =>
+                                    match
+                                      B.claim (retainedDigest D)
+                                        { roots := sem.roots,
+                                          challenges :=
+                                            { lambda := retainedQ sem.challenges.lambda,
+                                              chi := retainedQ sem.challenges.chi,
+                                              theta := retainedQ sem.challenges.theta,
+                                              zc := ⟨List.map retainedQ ↑sem.challenges.zc, ⋯⟩,
+                                              mu := retainedQ sem.challenges.mu, eta := retainedQ sem.challenges.eta },
+                                          alpha := ⟨List.map retainedQ ↑sem.alpha, ⋯⟩,
+                                          claims := ⟨List.map (mapArray retainedQ) ↑sem.claims, ⋯⟩,
+                                          extra := ⟨List.map retainedQ ↑sem.extra, ⋯⟩,
+                                          before_z1 := ⟨List.map retainedQ ↑sem.before_z1, ⋯⟩,
+                                          state_before_z0 := sem.state_before_z0,
+                                          z := ⟨List.map retainedPoint ↑sem.z, ⋯⟩,
+                                          transcript :=
+                                            { state := sem.transcript.state, hash := sem.transcript.hash,
+                                              next_row := sem.transcript.next_row } }
+                                        v.y1 (retainedE v.inactive) v_13 kappa with
+                                    | ok v_14 =>
+                                      match
+                                        match v_14 with
+                                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                        | core.result.Result.Err e =>
+                                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)) with
+                                      | ok v_15 =>
+                                        match v_15 with
+                                        | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                          ok
+                                            (core.result.Result.Ok
+                                                { variant := retainedVariant v.variant, roots := sem.roots,
+                                                  gamma := gamma, kappa := kappa,
+                                                  alpha :=
+                                                    Array.make 2#usize
+                                                      [alpha0, AspisR1PublicPreparation.aspis_core.field.WideExact.ZERO]
+                                                      ⋯,
+                                                  rho := rho, queries := val,
+                                                  semantic_alpha := ⟨List.map retainedQ ↑sem.alpha, ⋯⟩,
+                                                  z := ⟨List.map retainedPoint ↑sem.z, ⋯⟩, claim := val1,
+                                                  state := t5.state },
+                                              v_13)
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          match
+                                            match residual with
+                                            | core.result.Result.Ok x =>
+                                              core.convert.Infallible.rec
+                                                (fun x =>
+                                                  Result
+                                                    (core.result.Result AspisR1PublicPreparation.verifier.Prepared
+                                                      AspisR1PublicPreparation.verifier.Error))
+                                                x
+                                            | core.result.Result.Err e => ok (core.result.Result.Err e) with
+                                          | ok v => ok (v, v_13)
+                                          | fail v => fail v
+                                          | div => div
+                                      | fail v => fail v
+                                      | div => div
+                                    | fail v => fail v
+                                    | div => div
+                                  | fail v => fail v
+                                  | div => div
+                                | fail v => fail v
+                                | div => div
+                              | fail v => fail v
+                              | div => div
+                            | fail v => fail v
+                            | div => div
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            match
+                              match residual with
+                              | core.result.Result.Ok x =>
+                                core.convert.Infallible.rec
+                                  (fun x =>
+                                    Result
+                                      (core.result.Result AspisR1PublicPreparation.verifier.Prepared
+                                        AspisR1PublicPreparation.verifier.Error))
+                                  x
+                              | core.result.Result.Err e => ok (core.result.Result.Err e) with
+                            | ok v => ok (v, ⟨List.map retainedE ↑g, ⋯⟩)
+                            | fail v => fail v
+                            | div => div
+                        | fail v => fail v
+                        | div => div
+                      | fail v => fail v
+                      | div => div
+                  | fail v => fail v
+                  | div => div
+                | fail v => fail v
+                | div => div
+              | fail v => fail v
+              | div => div
+            | fail v => fail v
+            | div => div
+          | fail v => fail v
+          | div => div
+        | fail v => fail v
+        | div => div
+      | fail v => fail v
+      | div => div with
+    | ok v =>
+      let (r, g) := v
+      ok
+        (match r with
+          | core.result.Result.Ok x =>
+            core.result.Result.Ok
+              { variant := currentVariant x.variant, roots := x.roots, gamma := currentE x.gamma,
+                kappa := currentE x.kappa, alpha := ⟨List.map currentE ↑x.alpha, ⋯⟩, rho := currentQ x.rho,
+                queries := x.queries, semantic_alpha := ⟨List.map currentQ ↑x.semantic_alpha, ⋯⟩,
+                z := ⟨List.map currentPoint ↑x.z, ⋯⟩, claim := currentE x.claim, state := x.state }
+          | core.result.Result.Err e => core.result.Result.Err (currentError e),
+          ⟨List.map currentE ↑g, ⋯⟩)
+    | fail v => fail v
+    | div => div
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:202:67: warning: This simp argument is unused:
+  instBindResult
+
+Hint: Omit it from the simp argument list.
+  simp only [semanticState, ̲newT, ̲scalar, ̲toBytes, ̲folds, ̲queries, ̲scalarK, ̲powers, ̲claim, ̲zero,
+      AspisR1PublicPreparation.OriginalPreparedNative.zero, ̲Bind.bind,i̵n̵s̵t̵B̵i̵n̵d̵R̵e̵s̵u̵l̵t̵,̵ ̲Aeneas.Std.bind,
+      core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      core.convert.FromSame.from, ̲currentR, ̲retainedView, ̲currentPrepared]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:208:32: warning: This simp argument is unused:
+  Bind.bind
+
+Hint: Omit it from the simp argument list.
+  simp_all only [B̵ind̵.̵b̵i̵n̵d̵,̵i̵n̵stBindResult, ̲Aeneas.Std.bind, ̲t_round, ̲e_round, ̲e_array_round,
+         ̵ ̵q_array_round_current, ̲point_array_round_current, ̲variant_round,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵currentT, ̲retainedT,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲retainedSem, ̲currentR, ̲currentPrepared, ̲mapArray]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:208:42: warning: This simp argument is unused:
+  instBindResult
+
+Hint: Omit it from the simp argument list.
+  simp_all only [Bind.bind,i̵n̵s̵t̵B̵i̵n̵d̵R̵e̵s̵u̵l̵t̵,̵ ̲Aeneas.Std.bind, ̲t_round, ̲e_round, ̲e_array_round,
+         ̵ ̵q_array_round_current, ̲point_array_round_current, ̲variant_round,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵currentT, ̲retainedT,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲retainedSem, ̲currentR, ̲currentPrepared, ̲mapArray]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:208:57: warning: This simp argument is unused:
+  Aeneas.Std.bind
+
+Hint: Omit it from the simp argument list.
+  simp_all only [Bind.bind, ̲instBindResult,A̵e̵n̵e̵a̵s̵.̵S̵ ̲td̵.̵b̵i̵n̵d̵,̵t̵_round, ̲e_round, ̲e_array_round,
+         ̵ ̵q_array_round_current, ̲point_array_round_current, ̲variant_round,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵currentT, ̲retainedT,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲retainedSem, ̲currentR, ̲currentPrepared, ̲mapArray]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:208:73: warning: This simp argument is unused:
+  t_round
+
+Hint: Omit it from the simp argument list.
+  simp_all only [Bind.bind, ̲instBindResult, ̲Aeneas.Std.bind,t̵_̵r̵o̵u̵n̵d̵,̵ ̲e_round, ̲e_array_round,
+         ̵ ̵q_array_round_current, ̲point_array_round_current, ̲variant_round,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵currentT, ̲retainedT,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲retainedSem, ̲currentR, ̲currentPrepared, ̲mapArray]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:208:81: warning: This simp argument is unused:
+  e_round
+
+Hint: Omit it from the simp argument list.
+  simp_all only [Bind.bind, ̲instBindResult, ̲Aeneas.Std.bind, ̲t_round, ̲e_r̵o̵u̵n̵d̵,̵e̵_̵array_round,
+         ̵ ̵q_array_round_current, ̲point_array_round_current, ̲variant_round,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵currentT, ̲retainedT,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲retainedSem, ̲currentR, ̲currentPrepared, ̲mapArray]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:208:89: warning: This simp argument is unused:
+  e_array_round
+
+Hint: Omit it from the simp argument list.
+  simp_all only [Bind.bind, ̲instBindResult, ̲Aeneas.Std.bind, ̲t_round, ̲e_round,e̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵,̵
+         ̵ ̵q_array_round_current, ̲point_array_round_current, ̲variant_round,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵currentT, ̲retainedT,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲retainedSem, ̲currentR, ̲currentPrepared, ̲mapArray]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:209:8: warning: This simp argument is unused:
+  q_array_round_current
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵i̵n̵s̵t̵B̵i̵n̵d̵R̵e̵s̵u̵l̵t̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵t̵_̵r̵o̵u̵n̵d̵,̵e̵_̵r̵o̵u̵n̵d̵,̵e̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵q̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵_̵c̵u̵r̵r̵e̵n̵t̵,̵p̵o̵i̵n̵t̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵_̵c̵u̵r̵r̵e̵n̵t̵,̵v̵a̵r̵i̵a̵n̵t̵_̵r̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵r̵r̵e̵n̵t̵T̵,̵r̵e̵t̵a̵i̵n̵e̵d̵T̵,̵r̵e̵t̵a̵i̵n̵e̵d̵S̵e̵m̵,̵c̵u̵r̵r̵e̵n̵t̵R̵,̵c̵u̵r̵r̵e̵n̵t̵P̵r̵e̵p̵a̵r̵e̵d̵,̵m̵a̵p̵A̵r̵r̵a̵y̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲i̲n̲s̲t̲B̲i̲n̲d̲R̲e̲s̲u̲l̲t̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ ̲t̲_̲r̲o̲u̲n̲d̲,̲ ̲e̲_̲r̲o̲u̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲,̲ ̲p̲o̲i̲n̲t̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲_̲c̲u̲r̲r̲e̲n̲t̲,̲ ̲v̲a̲r̲i̲a̲n̲t̲_̲r̲o̲u̲n̲d̲,̲ ̲c̲u̲r̲r̲e̲n̲t̲T̲,̲ ̲r̲e̲t̲a̲i̲n̲e̲d̲T̲,̲ ̲r̲e̲t̲a̲i̲n̲e̲d̲S̲e̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲r̲r̲e̲n̲t̲R̲,̲ ̲c̲u̲r̲r̲e̲n̲t̲P̲r̲e̲p̲a̲r̲e̲d̲,̲ ̲m̲a̲p̲A̲r̲r̲a̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:209:30: warning: This simp argument is unused:
+  point_array_round_current
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵i̵n̵s̵t̵B̵i̵n̵d̵R̵e̵s̵u̵l̵t̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵t̵_̵r̵o̵u̵n̵d̵,̵e̵_̵r̵o̵u̵n̵d̵,̵e̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵q̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵_̵c̵u̵r̵r̵e̵n̵t̵,̵p̵o̵i̵n̵t̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵_̵c̵u̵r̵r̵e̵n̵t̵,̵v̵a̵r̵i̵a̵n̵t̵_̵r̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵r̵r̵e̵n̵t̵T̵,̵r̵e̵t̵a̵i̵n̵e̵d̵T̵,̵r̵e̵t̵a̵i̵n̵e̵d̵S̵e̵m̵,̵c̵u̵r̵r̵e̵n̵t̵R̵,̵c̵u̵r̵r̵e̵n̵t̵P̵r̵e̵p̵a̵r̵e̵d̵,̵m̵a̵p̵A̵r̵r̵a̵y̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲i̲n̲s̲t̲B̲i̲n̲d̲R̲e̲s̲u̲l̲t̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ ̲t̲_̲r̲o̲u̲n̲d̲,̲ ̲e̲_̲r̲o̲u̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲,̲ ̲q̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲_̲c̲u̲r̲r̲e̲n̲t̲,̲ ̲v̲a̲r̲i̲a̲n̲t̲_̲r̲o̲u̲n̲d̲,̲ ̲c̲u̲r̲r̲e̲n̲t̲T̲,̲ ̲r̲e̲t̲a̲i̲n̲e̲d̲T̲,̲ ̲r̲e̲t̲a̲i̲n̲e̲d̲S̲e̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲u̲r̲r̲e̲n̲t̲R̲,̲ ̲c̲u̲r̲r̲e̲n̲t̲P̲r̲e̲p̲a̲r̲e̲d̲,̲ ̲m̲a̲p̲A̲r̲r̲a̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:209:56: warning: This simp argument is unused:
+  variant_round
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵i̵n̵s̵t̵B̵i̵n̵d̵R̵e̵s̵u̵l̵t̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵t̵_̵r̵o̵u̵n̵d̵,̵e̵_̵r̵o̵u̵n̵d̵,̵e̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵q̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵_̵c̵u̵r̵r̵e̵n̵t̵,̵p̵o̵i̵n̵t̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵_̵c̵u̵r̵r̵e̵n̵t̵,̵v̵a̵r̵i̵a̵n̵t̵_̵r̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵r̵r̵e̵n̵t̵T̵,̵r̵e̵t̵a̵i̵n̵e̵d̵T̵,̵r̵e̵t̵a̵i̵n̵e̵d̵S̵e̵m̵,̵c̵u̵r̵r̵e̵n̵t̵R̵,̵c̵u̵r̵r̵e̵n̵t̵P̵r̵e̵p̵a̵r̵e̵d̵,̵m̵a̵p̵A̵r̵r̵a̵y̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲i̲n̲s̲t̲B̲i̲n̲d̲R̲e̲s̲u̲l̲t̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ ̲t̲_̲r̲o̲u̲n̲d̲,̲ ̲e̲_̲r̲o̲u̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲,̲ ̲q̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲_̲c̲u̲r̲r̲e̲n̲t̲,̲ ̲p̲o̲i̲n̲t̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲_̲c̲u̲r̲r̲e̲n̲t̲,̲ ̲c̲u̲r̲r̲e̲n̲t̲T̲,̲ ̲r̲e̲t̲a̲i̲n̲e̲d̲T̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲e̲t̲a̲i̲n̲e̲d̲S̲e̲m̲,̲ ̲c̲u̲r̲r̲e̲n̲t̲R̲,̲ ̲c̲u̲r̲r̲e̲n̲t̲P̲r̲e̲p̲a̲r̲e̲d̲,̲ ̲m̲a̲p̲A̲r̲r̲a̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:210:39: warning: This simp argument is unused:
+  currentR
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵i̵n̵s̵t̵B̵i̵n̵d̵R̵e̵s̵u̵l̵t̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵t̵_̵r̵o̵u̵n̵d̵,̵e̵_̵r̵o̵u̵n̵d̵,̵e̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵q̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵_̵c̵u̵r̵r̵e̵n̵t̵,̵p̵o̵i̵n̵t̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵_̵c̵u̵r̵r̵e̵n̵t̵,̵v̵a̵r̵i̵a̵n̵t̵_̵r̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵r̵r̵e̵n̵t̵T̵,̵r̵e̵t̵a̵i̵n̵e̵d̵T̵,̵r̵e̵t̵a̵i̵n̵e̵d̵S̵e̵m̵,̵c̵u̵r̵r̵e̵n̵t̵R̵,̵c̵u̵r̵r̵e̵n̵t̵P̵r̵e̵p̵a̵r̵e̵d̵,̵m̵a̵p̵A̵r̵r̵a̵y̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲i̲n̲s̲t̲B̲i̲n̲d̲R̲e̲s̲u̲l̲t̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ ̲t̲_̲r̲o̲u̲n̲d̲,̲ ̲e̲_̲r̲o̲u̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲,̲ ̲q̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲_̲c̲u̲r̲r̲e̲n̲t̲,̲ ̲p̲o̲i̲n̲t̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲_̲c̲u̲r̲r̲e̲n̲t̲,̲ ̲v̲a̲r̲i̲a̲n̲t̲_̲r̲o̲u̲n̲d̲,̲ ̲c̲u̲r̲r̲e̲n̲t̲T̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲e̲t̲a̲i̲n̲e̲d̲T̲,̲ ̲r̲e̲t̲a̲i̲n̲e̲d̲S̲e̲m̲,̲ ̲c̲u̲r̲r̲e̲n̲t̲P̲r̲e̲p̲a̲r̲e̲d̲,̲ ̲m̲a̲p̲A̲r̲r̲a̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedCarrierTransportV1.lean:210:48: warning: This simp argument is unused:
+  currentPrepared
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵i̵n̵s̵t̵B̵i̵n̵d̵R̵e̵s̵u̵l̵t̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵t̵_̵r̵o̵u̵n̵d̵,̵e̵_̵r̵o̵u̵n̵d̵,̵e̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵q̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵_̵c̵u̵r̵r̵e̵n̵t̵,̵p̵o̵i̵n̵t̵_̵a̵r̵r̵a̵y̵_̵r̵o̵u̵n̵d̵_̵c̵u̵r̵r̵e̵n̵t̵,̵v̵a̵r̵i̵a̵n̵t̵_̵r̵o̵u̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵u̵r̵r̵e̵n̵t̵T̵,̵r̵e̵t̵a̵i̵n̵e̵d̵T̵,̵r̵e̵t̵a̵i̵n̵e̵d̵S̵e̵m̵,̵c̵u̵r̵r̵e̵n̵t̵R̵,̵c̵u̵r̵r̵e̵n̵t̵P̵r̵e̵p̵a̵r̵e̵d̵,̵m̵a̵p̵A̵r̵r̵a̵y̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲i̲n̲s̲t̲B̲i̲n̲d̲R̲e̲s̲u̲l̲t̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ ̲t̲_̲r̲o̲u̲n̲d̲,̲ ̲e̲_̲r̲o̲u̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲,̲ ̲q̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲_̲c̲u̲r̲r̲e̲n̲t̲,̲ ̲p̲o̲i̲n̲t̲_̲a̲r̲r̲a̲y̲_̲r̲o̲u̲n̲d̲_̲c̲u̲r̲r̲e̲n̲t̲,̲ ̲v̲a̲r̲i̲a̲n̲t̲_̲r̲o̲u̲n̲d̲,̲ ̲c̲u̲r̲r̲e̲n̲t̲T̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲e̲t̲a̲i̲n̲e̲d̲T̲,̲ ̲r̲e̲t̲a̲i̲n̲e̲d̲S̲e̲m̲,̲ ̲c̲u̲r̲r̲e̲n̲t̲R̲,̲ ̲m̲a̲p̲A̲r̲r̲a̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1CurrentCaller.OriginalPreparedSource.prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CurrentCaller.OriginalPreparedSource.prepare_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

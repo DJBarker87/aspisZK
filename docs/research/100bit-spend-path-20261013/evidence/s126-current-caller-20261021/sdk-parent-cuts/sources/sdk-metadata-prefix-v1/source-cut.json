@@ -1,0 +1,18 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "protocol_freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "source_sha256": "52996b12cc888e85efaa1d91ed78e99e8af95cac7d36da16000294b9c1205a64",
+  "native_prefix_sha256": "790518d151f4125d8150da0d75cf29a302498706feccfbc8287f92e57da05e9d",
+  "native_prefix": "fn native_metadata_prefix(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {\n    if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    let proof_account = &accounts[0];\n    let public_account = &accounts[1];\n    let checkpoint_account = &accounts[2];\n    require_distinct_accounts(&[proof_account, public_account, checkpoint_account])?;\n    require_readonly_buffer(proof_account)?;\n    require_readonly_buffer(public_account)?;\n    require_verifier_checkpoint(checkpoint_account, program_id, true)?;\n    Ok(())\n}",
+  "owned_prefix_sha256": "da5c2aaea71dba3c42ef3366618b14a1498dbca7f59cb3ca536ed171404b0f1e",
+  "owned_prefix": "fn owned_metadata_prefix(program_id:[u8;32],sdk:&OwnedSdk,data:&[u8])->ProgramResult {\n if !(data == &[3,10] || data == &[3,11]) || sdk.accounts.len()!=3 {\n  return Err(ProgramError::InvalidInstructionData);\n }\n let proof=sdk.accounts[0];let public=sdk.accounts[1];let checkpoint=sdk.accounts[2];\n // Exact three-key comparison order of require_distinct_accounts on 3 inputs.\n if proof.key==public.key || proof.key==checkpoint.key || public.key==checkpoint.key {\n  return Err(ProgramError::InvalidArgument);\n }\n if proof.is_signer || proof.is_writable || proof.executable {return Err(ProgramError::InvalidAccountData);}\n if public.is_signer || public.is_writable || public.executable {return Err(ProgramError::InvalidAccountData);}\n if checkpoint.owner!=program_id || checkpoint.is_signer || checkpoint.executable\n  || !checkpoint.is_writable || owned_data_len(sdk,checkpoint.data_slot)?!=verifier::checkpoint_size(Variant::S2) {\n  return Err(ProgramError::InvalidAccountData);\n }\n Ok(())\n}",
+  "helpers": {
+    "readonly_buffer_meta_ok": "fb1a50c27b8a73553a130024316b58c6f5010a981ed7d478decb7e34a4ba26cc",
+    "require_readonly_buffer": "a689595c5dc95f770b6edf68d7382f399421362463dc6532718df003d79806b2",
+    "require_verifier_checkpoint": "ab13ba4bbf7637fe2b1f76b049a00e904b77e3b93689ffbc1539d8fa018e1228",
+    "require_distinct_accounts": "680f454a76b667753d57ef2a36681edfa737f1ddc38f6f81af0632ad944722cb"
+  },
+  "max_buffer_bytes": 10485760,
+  "qualification": "Exact source metadata prefix: all rejection statuses before persistent guards.\nThis cut contains the actual SDK checkpoint try_data_len. No decoder, scanner,\nparser or oracle is executed or assumed. Full parent continuation remains open.\n",
+  "remaining": "Three-account SDK construction domain. Exact source prefix only; persistent guard/scan/child/writeback continuation and runtime-to-heap embedding must still be composed."
+}

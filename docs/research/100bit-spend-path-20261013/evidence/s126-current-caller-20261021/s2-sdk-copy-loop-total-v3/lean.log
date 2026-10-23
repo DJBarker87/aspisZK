@@ -1,0 +1,92 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCopyLoopTotalV1.lean:38:10: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  d - f ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+  b ≥ 0
+  b - e ≤ -1
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑(↑sdk.data_cells).length
+ b := ↑↑slot
+ c := ↑(↑bytes).length
+ d := ↑↑offset
+ e := ↑(↑(replaceBytes sdk slot cell bytes).data_cells).length
+ f := ↑(↑{ bytes := bytes, borrowed := cell.borrowed, strong := cell.strong, weak := cell.weak }.bytes).length
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkCopyLoopTotalV1.lean:43:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  replaceBytes (replaceBytes ?sdk ?slot ?cell ?before) ?slot
+    { bytes := ?before, borrowed := OwnedDataCell.borrowed ?cell, strong := OwnedDataCell.strong ?cell,
+      weak := OwnedDataCell.weak ?cell }
+    ?after
+in the target expression
+  copy_step (replaceBytes sdk slot cell bytes) slot source offset =
+    ok
+      (replaceBytes (replaceBytes sdk slot cell bytes) slot (↑(replaceBytes sdk slot cell bytes).data_cells)[↑slot]
+        ((↑(replaceBytes sdk slot cell bytes).data_cells)[↑slot].bytes.set offset byte))
+
+case pos
+sdk : OwnedSdk
+slot : Usize
+source : Slice U8
+cell : OwnedDataCell
+valid : ↑slot < (↑sdk.data_cells).length
+actual : cell = (↑sdk.data_cells)[↑slot]
+sameLength : (↑cell.bytes).length = (↑source).length
+inv : OwnedSdk × Usize → Prop :=
+  fun state =>
+    ∃ bytes,
+      state.1 = replaceBytes sdk slot cell bytes ∧
+        (↑bytes).length = (↑source).length ∧ ↑state.2 ≤ (↑source).length ∧ PrefixEq bytes source ↑state.2
+heap : OwnedSdk
+offset : Usize
+bytes : alloc.vec.Vec U8
+heapEq : heap = replaceBytes sdk slot cell bytes
+length : (↑bytes).length = (↑source).length
+ordered : ↑offset ≤ (↑source).length
+copied : PrefixEq bytes source ↑offset
+bodySwap :
+  copy_in_place_loop.body slot source heap offset =
+    copy_in_place_loop.body slot source (replaceBytes sdk slot cell bytes) offset
+range : ↑offset < (↑source).length
+currentValid : ↑slot < (↑(replaceBytes sdk slot cell bytes).data_cells).length
+currentCell :
+  (↑(replaceBytes sdk slot cell bytes).data_cells)[↑slot] =
+    { bytes := bytes, borrowed := cell.borrowed, strong := cell.strong, weak := cell.weak }
+targetRange : ↑offset < (↑(↑(replaceBytes sdk slot cell bytes).data_cells)[↑slot].bytes).length
+byte : U8
+hbyte : byte = (↑source)[↑offset]
+hstep :
+  copy_step (replaceBytes sdk slot cell bytes) slot source offset =
+    ok
+      (replaceBytes (replaceBytes sdk slot cell bytes) slot (↑(replaceBytes sdk slot cell bytes).data_cells)[↑slot]
+        ((↑(replaceBytes sdk slot cell bytes).data_cells)[↑slot].bytes.set offset byte))
+rowEq :
+  (↑(replaceBytes sdk slot cell bytes).data_cells)[↑slot] =
+    { bytes := bytes, borrowed := cell.borrowed, strong := cell.strong, weak := cell.weak }
+⊢ copy_in_place_loop.body slot source (replaceBytes sdk slot cell bytes) offset ⦃ r =>
+    match r with
+    | done y => y = replaceBytes sdk slot cell source
+    | cont x' => inv x' ∧ (↑source).length - ↑x'.2 < (↑source).length - ↑offset ⦄
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (replaceBytes sdk slot cell bytes).data_cells
+  has type
+    alloc.vec.Vec OwnedDataCell
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑(replaceBytes sdk slot cell bytes).data_cells
+'AspisS2OwnedStage1.SdkReference.CopyLoop.copy_loop_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.CopyLoop.copy_in_place_total' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

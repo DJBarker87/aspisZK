@@ -1,0 +1,29 @@
+{
+ "source_revision": "d8fc9db732c70ef8dd1dd548184326318d5e1ad1",
+ "command": [
+  "python3",
+  "-c",
+  "import pathlib,subprocess,hashlib,json; h=pathlib.Path(\"/home/dombarker/project-offloads/s126-real-sdk-20261021/z3-tool-v1\");subprocess.run([\"python3\",\"-m\",\"venv\",str(h)],check=True);subprocess.run([str(h/\"bin/pip\"),\"download\",\"--only-binary=:all:\",\"--no-deps\",\"--dest\",str(h/\"wheel\"),\"z3-solver==4.15.4.0\"],check=True);w=list((h/\"wheel\").glob(\"*.whl\"));assert len(w)==1;subprocess.run([str(h/\"bin/pip\"),\"install\",\"--no-index\",\"--no-deps\",str(w[0])],check=True);p=h/\"bin/z3\";v=subprocess.check_output([str(p),\"--version\"],text=True);(h/\"tool-pins.json\").write_text(json.dumps(dict(version=v,wheel_sha256=hashlib.sha256(w[0].read_bytes()).hexdigest(),tool_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),qualification=\"Private build-host tool only; no binary exported\"),indent=2)+\"\\n\");print(v)"
+ ],
+ "cwd": "/home/dombarker",
+ "expected_time": "Private pinned Z3 binary wheel setup for bounded-array SMT check; no compilation or elimination",
+ "exit_status": 0,
+ "wall_seconds": 3.661,
+ "peak_rss_kib": 78260,
+ "swaps": 0,
+ "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r1065c8434c0e4c6b92c187bcdd8f0fe0.scope",
+ "limits": {
+  "memory.high": "1073741824",
+  "memory.max": "2147483648",
+  "memory.swap.max": "0",
+  "pids.max": "32"
+ },
+ "cgroup_memory_peak_bytes": 232751104,
+ "env": {
+  "CARGO_TARGET_DIR": null,
+  "CARGO_BUILD_JOBS": null,
+  "CARGO_NET_OFFLINE": null,
+  "SBF_TRACE_DIR": null
+ },
+ "print_axioms": "N/A: no Lean compilation"
+}

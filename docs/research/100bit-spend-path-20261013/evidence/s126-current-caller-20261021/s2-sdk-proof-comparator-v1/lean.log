@@ -1,0 +1,82 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofComparatorV1.lean:10:23: warning: This simp argument is unused:
+  core.cmp.PartialEqU8
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofComparatorV1.lean:12:10: warning: This simp argument is unused:
+  core.cmp.PartialEqU8
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵s̵a̵m̵e̵,̵u̵n̵e̵q̵u̵a̵l̵]̵[̲s̲a̲m̲e̲,̲ ̲u̲n̲e̲q̲u̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofComparatorV1.lean:12:36: warning: This simp argument is unused:
+  unequal
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵,̵s̵a̵m̵e̵,̵u̵n̵e̵q̵u̵a̵l̵]̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲,̲ ̲s̲a̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofComparatorV1.lean:20:8: error: unsolved goals
+case nil.nil
+⊢ pure false = ok false
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofComparatorV1.lean:29:8: error: unsolved goals
+case pos
+a : U8
+rest : List U8
+ih :
+  ∀ (right : List U8),
+    (if rest.length = right.length then List.anyM (fun pair => core.cmp.PartialEqU8.ne pair.1 pair.2) (rest.zip right)
+      else ok true) =
+      ok (decide (rest ≠ right))
+tail : List U8
+length : rest.length = tail.length
+tailEq :
+  List.anyM (fun pair => liftFun2 core.cmp.impls.PartialEqU8.ne pair.1 pair.2) (rest.zip tail) =
+    ok (decide (rest ≠ tail))
+⊢ List.anyM (fun pair => ok !decide (↑pair.1 = ↑pair.2)) (rest.zip tail) = ok !decide (rest = tail)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofComparatorV1.lean:31:8: error: unsolved goals
+case neg
+a : U8
+rest : List U8
+ih :
+  ∀ (right : List U8),
+    (if rest.length = right.length then List.anyM (fun pair => core.cmp.PartialEqU8.ne pair.1 pair.2) (rest.zip right)
+      else ok true) =
+      ok (decide (rest ≠ right))
+b : U8
+tail : List U8
+length : rest.length = tail.length
+tailEq :
+  List.anyM (fun pair => liftFun2 core.cmp.impls.PartialEqU8.ne pair.1 pair.2) (rest.zip tail) =
+    ok (decide (rest ≠ tail))
+same : ¬a = b
+⊢ (if ↑a = ↑b then List.anyM (fun pair => ok !decide (↑pair.1 = ↑pair.2)) (rest.zip tail) else pure true) = ok true
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofComparatorV1.lean:30:38: warning: This simp argument is unused:
+  u8_ne
+
+Hint: Omit it from the simp argument list.
+  simp [length, ̲List.anyM_cons,u̵8̵_̵n̵e̵,̵ ̲bind_tc_ok, ̲tailEq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofComparatorV1.lean:30:55: warning: This simp argument is unused:
+  tailEq
+
+Hint: Omit it from the simp argument list.
+  simp [̵l̵e̵n̵g̵t̵h̵,̵L̵i̵s̵t̵.̵a̵n̵y̵M̵_̵c̵o̵n̵s̵,̵u̵8̵_̵n̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵t̵a̵i̵l̵E̵q̵]̵[̲l̲e̲n̲g̲t̲h̲,̲ ̲L̲i̲s̲t̲.̲a̲n̲y̲M̲_̲c̲o̲n̲s̲,̲ ̲u̲8̲_̲n̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofComparatorV1.lean:31:38: warning: This simp argument is unused:
+  u8_ne
+
+Hint: Omit it from the simp argument list.
+  simp [length, ̲List.anyM_cons,u̵8̵_̵n̵e̵,̵ ̲bind_tc_ok, ̲same]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS2OwnedStage1.SdkReference.ProofGate.standard_ne' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ProofGate.scalarNe_eq_standard' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,41 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedGuardBodyV1.lean:228:2: warning: 'all_goals
+  have impossible : core.convert.Infallible := by assumption
+  cases impossible' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedGuardBodyV1.lean:229:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedGuardBodyV1.lean:230:4: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedGuardBodyV1.lean:241:70: error: unsolved goals
+ops : Ops
+program : Std.Array U8 32#usize
+sdk sdkBody : OwnedSdk
+data : alloc.vec.Vec U8
+status : core.result.Result Unit solana_program_error.ProgramError
+guards : LiveGuards
+body : owned_stage1_body ops program sdk data.deref noGuards = ok (status, sdkBody, guards)
+held : LiveInvariant sdkBody guards
+sdkOut : OwnedSdk
+released : owned_release_guards sdkBody guards = ok sdkOut
+⊢ (let (result, sdk1, guards) := (status, sdkBody, guards)
+    do
+    let sdk2 ← owned_release_guards sdk1 guards
+    ok (result, sdk2)) =
+    ok (status, sdkOut)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkOwnedGuardBodyV1.lean:246:42: warning: This simp argument is unused:
+  released
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵w̵n̵e̵d̵_̵s̵t̵a̵g̵e̵1̵,̵b̵o̵d̵y̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵l̵e̵a̵s̵e̵d̵]̵[̲o̲w̲n̲e̲d̲_̲s̲t̲a̲g̲e̲1̲,̲ ̲b̲o̲d̲y̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS2OwnedStage1.SdkReference.GuardBody.body_live_invariant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.GuardBody.body_return_finalizes' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

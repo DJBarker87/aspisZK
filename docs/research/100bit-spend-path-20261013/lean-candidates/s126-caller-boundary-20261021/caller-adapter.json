@@ -1,0 +1,146 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "raw_types_sha256": "3f610bbbe8b84d7a77e559abe4ec01231113a2b6e7a4b13d83375711abae58f0",
+  "raw_funs_sha256": "a0e806d4f28840dffde1fd436b208e2fbf717157b74432bcc5c4721445f50a25",
+  "external_sha256": "b703410eaf869b3ce712c87c492741d9e52ce698002bfbd699527e57150bcf18",
+  "types_sha256": "dd338a7e3a4d4ad4662b40ce64bcb0eeae8f0208b0747803e03a8a27e0b517b4",
+  "model_sha256": "ccf914b16ea667c701da3c1786e4d89ee1625d414b5787468dccf29f598dd85c",
+  "boundaries": {
+    "aspis_core.field.QM31.ZERO": "op0",
+    "aspis_core.r0.heap.filled": "op1",
+    "verifier.Error.Insts.CoreConvertFromCodecError.from": "op2",
+    "verifier.candidate.parse_shape": "op3",
+    "verifier.candidate.canonical_scan": "op4",
+    "verifier.candidate.wide_view": "op5",
+    "verifier.candidate.batch_merkle": "op6",
+    "verifier.candidate.query_loop": "op7",
+    "verifier.Prepared.new": "op8",
+    "r1_semantic.verify_observed": "op9",
+    "compact.expand_semantic": "op10",
+    "compact.expand_values": "op11",
+    "compact.HEADER": "op12",
+    "compact.COMPACT_SEMANTIC": "op13",
+    "compact.COMPACT_Y1": "op14",
+    "verifier.SEMANTIC_BYTES": "op15",
+    "verifier.checkpoint": "op16",
+    "verifier.BatchedWeights.finish": "op17",
+    "verifier.BatchedWeights.new": "op18",
+    "verifier.QueryGeometry.for_range": "op19",
+    "verifier.Accumulator.new": "op20",
+    "compact.OFF_ROUND0": "op21"
+  },
+  "discriminant_names": [
+    {
+      "name": "aspis_core.r0.Error",
+      "before": "@[discriminant isize, rust_type \"aspis_core::r0::Error\"]\ninductive aspis_core.r0.Error where\n| IndexOutOfRange : aspis_core.r0.Error\n| WrongLength : aspis_core.r0.Error\n| ZeroDenominator : aspis_core.r0.Error\n| Allocation : aspis_core.r0.Error\n| NonCanonical : aspis_core.r0.Error\n| WrongField : aspis_core.r0.Error\n| InvalidPoints : aspis_core.r0.Error\n| QuotientNotInImage : aspis_core.r0.Error\n| RankDeficient : aspis_core.r0.Error\n| Parse : aspis_core.r0.Error\n| Semantic : aspis_core.r0.Error\n| Schedule : aspis_core.r0.Error\n| Sampler : aspis_core.r0.Error\n| Commitment : aspis_core.r0.Error\n| Authentication : aspis_core.r0.Error\n| V1 : aspis_core.r0.Error\n| V2 : aspis_core.r0.Error\n",
+      "after": "@[rust_type \"aspis_core::r0::Error\"]\ninductive aspis_core.r0.Error where\n| IndexOutOfRange : aspis_core.r0.Error\n| WrongLength : aspis_core.r0.Error\n| ZeroDenominator : aspis_core.r0.Error\n| Allocation : aspis_core.r0.Error\n| NonCanonical : aspis_core.r0.Error\n| WrongField : aspis_core.r0.Error\n| InvalidPoints : aspis_core.r0.Error\n| QuotientNotInImage : aspis_core.r0.Error\n| RankDeficient : aspis_core.r0.Error\n| Parse : aspis_core.r0.Error\n| Semantic : aspis_core.r0.Error\n| Schedule : aspis_core.r0.Error\n| Sampler : aspis_core.r0.Error\n| Commitment : aspis_core.r0.Error\n| Authentication : aspis_core.r0.Error\n| V1 : aspis_core.r0.Error\n| V2 : aspis_core.r0.Error\n\ndef aspis_core.r0.Error.read_discriminant (x : aspis_core.r0.Error) : Isize :=\n  match x with\n  | .IndexOutOfRange => 0#isize\n  | .WrongLength => 1#isize\n  | .ZeroDenominator => 2#isize\n  | .Allocation => 3#isize\n  | .NonCanonical => 4#isize\n  | .WrongField => 5#isize\n  | .InvalidPoints => 6#isize\n  | .QuotientNotInImage => 7#isize\n  | .RankDeficient => 8#isize\n  | .Parse => 9#isize\n  | .Semantic => 10#isize\n  | .Schedule => 11#isize\n  | .Sampler => 12#isize\n  | .Commitment => 13#isize\n  | .Authentication => 14#isize\n  | .V1 => 15#isize\n  | .V2 => 16#isize\n\ninstance _root_.AspisR1CurrentCaller.aspis_core.r0.Error.instDiscriminant :\n    Aeneas.Std.Discriminant aspis_core.r0.Error Isize where\n  read_discriminant := aspis_core.r0.Error.read_discriminant\n",
+      "codes": {
+        "IndexOutOfRange": 0,
+        "WrongLength": 1,
+        "ZeroDenominator": 2,
+        "Allocation": 3,
+        "NonCanonical": 4,
+        "WrongField": 5,
+        "InvalidPoints": 6,
+        "QuotientNotInImage": 7,
+        "RankDeficient": 8,
+        "Parse": 9,
+        "Semantic": 10,
+        "Schedule": 11,
+        "Sampler": 12,
+        "Commitment": 13,
+        "Authentication": 14,
+        "V1": 15,
+        "V2": 16
+      }
+    },
+    {
+      "name": "verifier.Error",
+      "before": "@[discriminant isize]\ninductive verifier.Error where\n| Parse : verifier.Error\n| Semantic : verifier.Error\n| Transcript : verifier.Error\n| Relation : verifier.Error\n| Merkle : verifier.Error\n| Query : verifier.Error\n| Checkpoint : verifier.Error\n| Allocation : verifier.Error\n",
+      "after": "inductive verifier.Error where\n| Parse : verifier.Error\n| Semantic : verifier.Error\n| Transcript : verifier.Error\n| Relation : verifier.Error\n| Merkle : verifier.Error\n| Query : verifier.Error\n| Checkpoint : verifier.Error\n| Allocation : verifier.Error\n\ndef verifier.Error.read_discriminant (x : verifier.Error) : Isize :=\n  match x with\n  | .Parse => 0#isize\n  | .Semantic => 1#isize\n  | .Transcript => 2#isize\n  | .Relation => 3#isize\n  | .Merkle => 4#isize\n  | .Query => 5#isize\n  | .Checkpoint => 6#isize\n  | .Allocation => 7#isize\n\ninstance _root_.AspisR1CurrentCaller.verifier.Error.instDiscriminant :\n    Aeneas.Std.Discriminant verifier.Error Isize where\n  read_discriminant := verifier.Error.read_discriminant\n",
+      "codes": {
+        "Parse": 0,
+        "Semantic": 1,
+        "Transcript": 2,
+        "Relation": 3,
+        "Merkle": 4,
+        "Query": 5,
+        "Checkpoint": 6,
+        "Allocation": 7
+      }
+    },
+    {
+      "name": "r1_wire.Error",
+      "before": "@[discriminant isize]\ninductive r1_wire.Error where\n| Allocation : r1_wire.Error\n| RowOrder : Std.U8 \u2192 Std.U8 \u2192 r1_wire.Error\n| InvalidRow : r1_wire.Error\n| Tag : Std.U8 \u2192 r1_wire.Error\n| Length : Std.U8 \u2192 r1_wire.Error\n| NonCanonical : Std.U8 \u2192 Std.Usize \u2192 r1_wire.Error\n| Boundary : Std.Usize \u2192 r1_wire.Error\n| Terminal : r1_wire.Error\n| EqualCirclePoints : r1_wire.Error\n| TrailingBytes : r1_wire.Error\n| Public : r1_wire.Error\n",
+      "after": "inductive r1_wire.Error where\n| Allocation : r1_wire.Error\n| RowOrder : Std.U8 \u2192 Std.U8 \u2192 r1_wire.Error\n| InvalidRow : r1_wire.Error\n| Tag : Std.U8 \u2192 r1_wire.Error\n| Length : Std.U8 \u2192 r1_wire.Error\n| NonCanonical : Std.U8 \u2192 Std.Usize \u2192 r1_wire.Error\n| Boundary : Std.Usize \u2192 r1_wire.Error\n| Terminal : r1_wire.Error\n| EqualCirclePoints : r1_wire.Error\n| TrailingBytes : r1_wire.Error\n| Public : r1_wire.Error\n\ndef r1_wire.Error.read_discriminant (x : r1_wire.Error) : Isize :=\n  match x with\n  | .Allocation => 0#isize\n  | .RowOrder _ _ => 1#isize\n  | .InvalidRow => 2#isize\n  | .Tag _ => 3#isize\n  | .Length _ => 4#isize\n  | .NonCanonical _ _ => 5#isize\n  | .Boundary _ => 6#isize\n  | .Terminal => 7#isize\n  | .EqualCirclePoints => 8#isize\n  | .TrailingBytes => 9#isize\n  | .Public => 10#isize\n\ninstance _root_.AspisR1CurrentCaller.r1_wire.Error.instDiscriminant :\n    Aeneas.Std.Discriminant r1_wire.Error Isize where\n  read_discriminant := r1_wire.Error.read_discriminant\n",
+      "codes": {
+        "Allocation": 0,
+        "RowOrder": 1,
+        "InvalidRow": 2,
+        "Tag": 3,
+        "Length": 4,
+        "NonCanonical": 5,
+        "Boundary": 6,
+        "Terminal": 7,
+        "EqualCirclePoints": 8,
+        "TrailingBytes": 9,
+        "Public": 10
+      }
+    },
+    {
+      "name": "verifier.Phase",
+      "before": "@[discriminant isize]\ninductive verifier.Phase where\n| Parsed : verifier.Phase\n| Semantic : verifier.Phase\n| SemanticPart : Std.U8 \u2192 verifier.Phase\n| Prepare : verifier.Phase\n| CheckpointRead : verifier.Phase\n| Merkle : Std.Usize \u2192 verifier.Phase\n| Query : Std.Usize \u2192 verifier.Phase\n| QueryPart : Std.Usize \u2192 Std.U8 \u2192 verifier.Phase\n| CheckpointWrite : verifier.Phase\n| Relation : verifier.Phase\n| Final : verifier.Phase\n",
+      "after": "inductive verifier.Phase where\n| Parsed : verifier.Phase\n| Semantic : verifier.Phase\n| SemanticPart : Std.U8 \u2192 verifier.Phase\n| Prepare : verifier.Phase\n| CheckpointRead : verifier.Phase\n| Merkle : Std.Usize \u2192 verifier.Phase\n| Query : Std.Usize \u2192 verifier.Phase\n| QueryPart : Std.Usize \u2192 Std.U8 \u2192 verifier.Phase\n| CheckpointWrite : verifier.Phase\n| Relation : verifier.Phase\n| Final : verifier.Phase\n\ndef verifier.Phase.read_discriminant (x : verifier.Phase) : Isize :=\n  match x with\n  | .Parsed => 0#isize\n  | .Semantic => 1#isize\n  | .SemanticPart _ => 2#isize\n  | .Prepare => 3#isize\n  | .CheckpointRead => 4#isize\n  | .Merkle _ => 5#isize\n  | .Query _ => 6#isize\n  | .QueryPart _ _ => 7#isize\n  | .CheckpointWrite => 8#isize\n  | .Relation => 9#isize\n  | .Final => 10#isize\n\ninstance _root_.AspisR1CurrentCaller.verifier.Phase.instDiscriminant :\n    Aeneas.Std.Discriminant verifier.Phase Isize where\n  read_discriminant := verifier.Phase.read_discriminant\n",
+      "codes": {
+        "Parsed": 0,
+        "Semantic": 1,
+        "SemanticPart": 2,
+        "Prepare": 3,
+        "CheckpointRead": 4,
+        "Merkle": 5,
+        "Query": 6,
+        "QueryPart": 7,
+        "CheckpointWrite": 8,
+        "Relation": 9,
+        "Final": 10
+      }
+    },
+    {
+      "name": "transport.Variant",
+      "before": "@[discriminant isize]\ninductive transport.Variant where\n| S1 : transport.Variant\n| S2 : transport.Variant\n| D : transport.Variant\n",
+      "after": "inductive transport.Variant where\n| S1 : transport.Variant\n| S2 : transport.Variant\n| D : transport.Variant\n\ndef transport.Variant.read_discriminant (x : transport.Variant) : Isize :=\n  match x with\n  | .S1 => 0#isize\n  | .S2 => 1#isize\n  | .D => 2#isize\n\ninstance _root_.AspisR1CurrentCaller.transport.Variant.instDiscriminant :\n    Aeneas.Std.Discriminant transport.Variant Isize where\n  read_discriminant := transport.Variant.read_discriminant\n",
+      "codes": {
+        "S1": 0,
+        "S2": 1,
+        "D": 2
+      }
+    },
+    {
+      "name": "compact.CodecError",
+      "before": "@[discriminant isize]\ninductive compact.CodecError where\n| Length : compact.CodecError\n| NonZeroHigh : compact.CodecError\n| NonCanonical : compact.CodecError\n",
+      "after": "inductive compact.CodecError where\n| Length : compact.CodecError\n| NonZeroHigh : compact.CodecError\n| NonCanonical : compact.CodecError\n\ndef compact.CodecError.read_discriminant (x : compact.CodecError) : Isize :=\n  match x with\n  | .Length => 0#isize\n  | .NonZeroHigh => 1#isize\n  | .NonCanonical => 2#isize\n\ninstance _root_.AspisR1CurrentCaller.compact.CodecError.instDiscriminant :\n    Aeneas.Std.Discriminant compact.CodecError Isize where\n  read_discriminant := compact.CodecError.read_discriminant\n",
+      "codes": {
+        "Length": 0,
+        "NonZeroHigh": 1,
+        "NonCanonical": 2
+      }
+    },
+    {
+      "name": "aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public",
+      "before": "@[discriminant isize, rust_type\n  \"aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public\"]\ninductive aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public where\n| Transfer :\n  aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 \u2192\n  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 \u2192\n  aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public\n| Withdrawal :\n  aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 \u2192\n  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 \u2192\n  aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public\n",
+      "after": "@[rust_type\n  \"aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public\"]\ninductive aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public where\n| Transfer :\n  aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 \u2192\n  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 \u2192\n  aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public\n| Withdrawal :\n  aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 \u2192\n  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 \u2192\n  aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public\n\ndef aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.read_discriminant (x : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) : Isize :=\n  match x with\n  | .Transfer _ _ => 0#isize\n  | .Withdrawal _ _ => 1#isize\n\ninstance _root_.AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.instDiscriminant :\n    Aeneas.Std.Discriminant aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public Isize where\n  read_discriminant := aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.read_discriminant\n",
+      "codes": {
+        "Transfer": 0,
+        "Withdrawal": 1
+      }
+    }
+  ],
+  "changes": [
+    "import selected concrete source type module",
+    "remove generated resource settings",
+    "qualify seven potentially-colliding generated discriminant instances with identical codes",
+    "replace external operation declarations with explicit typed Ops fields",
+    "pass Ops through dependent functions"
+  ],
+  "scope": "Complete emitted current compact prepare/tx1, actual carriers. Not an installation proof of retained child operations."
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_sha256": "a569d09bbaeeaba6426c5c5d974000dd8d4a508c9164612b0e5380cd9b72c65f",
+  "qualification": "Native source first entry supplies the reference-constructor control facts.\nOne native execution, real SDK/guards/full statement and full original buffers.\nThe original scan is ghost-factored, evaluated once and its result recorded;\nits iterator constructor is checked at the actual source site. The ordinary\nread-only std-any and comparison abstractions stay unconstrained. Existing\nexact source loop/gate laws, rather than new loop evaluation, must supply byte\nzero/equality consequences. No complete reference execution is assumed.\n",
+  "scan_fission": {
+    "original": "checkpoint_data.iter().any(|byte| *byte != 0)",
+    "replacement": "{\n        let mut source_iter=checkpoint_data.iter();\n        crate::proofs::scan_enter(&source_iter);\n        let hit=source_iter.any(|byte| *byte != 0);\n        crate::proofs::scan_leave(hit);\n        hit\n    }",
+    "qualification": "Let-introduction around exactly one native iterator/any call. Additional calls only read/check or update tagged ghost storage; iterator has no destructor. Explicit equivalence/noninterference is a required certificate gate, not silently assumed."
+  },
+  "remaining": "All assertions and both covers must pass; instantiate existing concrete SDK iterator/std-any and exact prefix-gate laws at these checked native arguments. Construct the full reference execution from native-produced metadata/byte/child facts; actual child/oracle, continuation and runtime/TX2 transport remain. No whole S2."
+}

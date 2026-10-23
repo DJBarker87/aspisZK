@@ -1,0 +1,39 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkSnapshotEquivalenceV1.lean:40:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  owned_stage1_body ?ops ?program ?sdk ?data ?guards
+in the target expression
+  (have s := data.deref;
+    do
+    let (result, sdk1, guards) ←
+      owned_stage1_body ops program sdk s { checkpoint := none, «public» := none, proof := none }
+    let sdk2 ← owned_release_guards sdk1 guards
+    ok (result, sdk2)) =
+    have s := data.deref;
+    do
+    let (result, sdk1, guards) ←
+      SdkReference.owned_stage1_body ops program sdk s { checkpoint := none, «public» := none, proof := none }
+    let sdk2 ← SdkReference.owned_release_guards sdk1 guards
+    ok (result, sdk2)
+
+ops : Ops
+program : Std.Array U8 32#usize
+sdk : OwnedSdk
+data : alloc.vec.Vec U8
+⊢ (have s := data.deref;
+    do
+    let (result, sdk1, guards) ←
+      owned_stage1_body ops program sdk s { checkpoint := none, «public» := none, proof := none }
+    let sdk2 ← owned_release_guards sdk1 guards
+    ok (result, sdk2)) =
+    have s := data.deref;
+    do
+    let (result, sdk1, guards) ←
+      SdkReference.owned_stage1_body ops program sdk s { checkpoint := none, «public» := none, proof := none }
+    let sdk2 ← SdkReference.owned_release_guards sdk1 guards
+    ok (result, sdk2)
+'AspisS2OwnedStage1.SdkReference.SnapshotReference.public_snapshot_eq' depends on axioms: [propext, Quot.sound]
+'AspisS2OwnedStage1.SdkReference.SnapshotReference.proof_snapshot_eq' depends on axioms: [propext, Quot.sound]
+'AspisS2OwnedStage1.SdkReference.SnapshotReference.body_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS2OwnedStage1.SdkReference.SnapshotReference.stage1_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

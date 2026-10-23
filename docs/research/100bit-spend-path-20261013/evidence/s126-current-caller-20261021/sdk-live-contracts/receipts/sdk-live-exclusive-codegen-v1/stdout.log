@@ -1,0 +1,77 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-account-info-exclusive-v1/src/lib.rs:109:32
+    |
+109 |     pub fn try_borrow_lamports(&self) -> Result<Ref<&mut u64>, ProgramError> {
+    |                                ^^^^^            ^^^^^^^^^^^^^
+    |                                |                |   |
+    |                                |                |   the same lifetime is elided here
+    |                                |                the same lifetime is hidden here
+    |                                the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+109 |     pub fn try_borrow_lamports(&self) -> Result<Ref<'_, &mut u64>, ProgramError> {
+    |                                                     +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-account-info-exclusive-v1/src/lib.rs:115:36
+    |
+115 |     pub fn try_borrow_mut_lamports(&self) -> Result<RefMut<&'a mut u64>, ProgramError> {
+    |                                    ^^^^^            ^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                                    |
+    |                                    the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+115 |     pub fn try_borrow_mut_lamports(&self) -> Result<RefMut<'_, &'a mut u64>, ProgramError> {
+    |                                                            +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-account-info-exclusive-v1/src/lib.rs:121:28
+    |
+121 |     pub fn try_borrow_data(&self) -> Result<Ref<&mut [u8]>, ProgramError> {
+    |                            ^^^^^            ^^^^^^^^^^^^^^
+    |                            |                |   |
+    |                            |                |   the same lifetime is elided here
+    |                            |                the same lifetime is hidden here
+    |                            the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+121 |     pub fn try_borrow_data(&self) -> Result<Ref<'_, &mut [u8]>, ProgramError> {
+    |                                                 +++
+
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> /home/dombarker/project-offloads/s126-real-sdk-20261021/sdk-account-info-exclusive-v1/src/lib.rs:137:32
+    |
+137 |     pub fn try_borrow_mut_data(&self) -> Result<RefMut<&'a mut [u8]>, ProgramError> {
+    |                                ^^^^^            ^^^^^^^^^^^^^^^^^^^^ the same lifetime is hidden here
+    |                                |
+    |                                the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+help: use `'_` for type paths
+    |
+137 |     pub fn try_borrow_mut_data(&self) -> Result<RefMut<'_, &'a mut [u8]>, ProgramError> {
+    |                                                        +++
+
+warning: unused import: `program_error::ProgramError`
+ --> src/lib.rs:2:63
+  |
+2 | use solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError};
+  |                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+

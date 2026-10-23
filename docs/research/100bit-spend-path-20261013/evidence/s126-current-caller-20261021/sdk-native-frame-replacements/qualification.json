@@ -1,0 +1,88 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "targets": {
+    "sdk-native-success-fixed-input-pair-v1": {
+      "accepted": false,
+      "version": "success-fixed-input-pair-v1",
+      "source_sha256": "08dfa004d41601199c58214d233708107a8cb9dba659058f7066e113cdbad211",
+      "receipt": {
+        "source_revision": "d8fc9db732c70ef8dd1dd548184326318d5e1ad1",
+        "command": [
+          "python3",
+          "/home/dombarker/project-offloads/s126-real-sdk-20261021/kit/run-sdk-shared-prefix-host.py",
+          "sdk-native-success-fixed-input-pair-v1",
+          "success-fixed-input-pair-v1",
+          "run",
+          "pointwise",
+          "plain",
+          "separated-pair",
+          "first-coupling",
+          "coupled-cmp"
+        ],
+        "cwd": "/home/dombarker",
+        "expected_time": "Native prefix: native/reference pair, frame certified separately, pure scan overapproximation and one180s CBMC check; no arithmetic evaluation",
+        "exit_status": 1,
+        "wall_seconds": 190.584,
+        "peak_rss_kib": 6504172,
+        "swaps": 0,
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rf31519e2f4e24df5b1fdf82610b3b2b0.scope",
+        "limits": {
+          "memory.high": "6442450944",
+          "memory.max": "8589934592",
+          "memory.swap.max": "0",
+          "pids.max": "64"
+        },
+        "cgroup_memory_peak_bytes": 6719184896,
+        "env": {
+          "CARGO_TARGET_DIR": null,
+          "CARGO_BUILD_JOBS": null,
+          "CARGO_NET_OFFLINE": null,
+          "SBF_TRACE_DIR": null
+        },
+        "print_axioms": "N/A: no Lean compilation"
+      }
+    },
+    "sdk-native-write-frame-v1": {
+      "accepted": false,
+      "version": "native-write-frame-v1",
+      "source_sha256": "d912f012ba7d731b0edb6f063b0889f2095ed96cb92261636b326495bc5cf36d",
+      "receipt": {
+        "source_revision": "d8fc9db732c70ef8dd1dd548184326318d5e1ad1",
+        "command": [
+          "python3",
+          "/home/dombarker/project-offloads/s126-real-sdk-20261021/kit/run-sdk-shared-prefix-host.py",
+          "sdk-native-write-frame-v1",
+          "native-write-frame-v1",
+          "run",
+          "plain",
+          "first-coupling",
+          "coupled-cmp"
+        ],
+        "cwd": "/home/dombarker",
+        "expected_time": "Native prefix: explicit DFCC frame, pure scan overapproximation and one180s CBMC check; no arithmetic evaluation",
+        "exit_status": 1,
+        "wall_seconds": 202.587,
+        "peak_rss_kib": 6514536,
+        "swaps": 0,
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-re6443ef39efe40f6877b8f8872dad2e7.scope",
+        "limits": {
+          "memory.high": "6442450944",
+          "memory.max": "8589934592",
+          "memory.swap.max": "0",
+          "pids.max": "64"
+        },
+        "cgroup_memory_peak_bytes": 6707249152,
+        "env": {
+          "CARGO_TARGET_DIR": null,
+          "CARGO_BUILD_JOBS": null,
+          "CARGO_NET_OFFLINE": null,
+          "SBF_TRACE_DIR": null
+        },
+        "print_axioms": "N/A: no Lean compilation"
+      }
+    }
+  },
+  "dependency_evidence": "../sdk-native-first-pair/dependencies",
+  "scope": "Two source-changed focused replacements of the original-input-frame obligation. Coordinate-value strengthening and original native whole-write-footprint enforcement both stalled at SSA conversion and timed out under unchanged6G/8G/Swap0 caps. No proof credit and no counterexample inferred. Existing complete unseeded successful pair remains accepted separately.",
+  "next": "Compose checked per-step SDK, copy and destructor footprints with actual source call-site instances; do not rerun these unchanged or raise caps."
+}

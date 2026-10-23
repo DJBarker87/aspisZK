@@ -1,0 +1,45 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkGateAdmittedImageV1.lean:57:67: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑proof)[↑696#usize]
+in the target expression
+  some (↑proof)[696] = some 2#u8
+
+case false
+proof : Slice U8
+candidate : Std.Array U8 688#usize
+length : proof.len = 58295#usize
+lenVal : (↑proof).length = 58295
+run : prefix_different proof candidate.to_slice = ok false
+spec :
+  false = false ↔
+    (↑candidate.to_slice).length ≤ (↑proof).length ∧
+      ∀ j < (↑candidate.to_slice).length, CellEq proof candidate.to_slice j
+cells : ∀ j < (↑candidate.to_slice).length, CellEq proof candidate.to_slice j
+prefix688 : ∀ j < 688, CellEq proof candidate.to_slice j
+byte : U8
+read : proof.index_usize 696#usize = ok byte
+cell : byte = (↑proof)[↑696#usize]
+accepted :
+  (if ↑byte = 2 then ok (core.result.Result.Ok (688#usize, 58295#usize))
+    else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)) =
+    ok (core.result.Result.Ok (688#usize, 58295#usize))
+tag : byte = 2#u8
+⊢ some (↑proof)[696] = some 2#u8
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    proof
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑proof
+'AspisS2OwnedStage1.SdkReference.ProofGate.admitted_cells' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ProofGate.admitted_seed_fixed' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

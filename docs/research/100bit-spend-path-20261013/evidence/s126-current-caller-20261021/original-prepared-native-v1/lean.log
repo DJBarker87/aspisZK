@@ -1,0 +1,159 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentOriginalPreparedNativeV1.lean:137:55: error: unsolved goals
+B : PreparedScratchModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+g : Std.Array aspis_core.field.WideExact 29#usize
+⊢ (do
+      let a ← r1_wire.SemanticTranscript.impl.state D sem.transcript
+      let t ← transcript.Transcript.new D hash a v.variant
+      let (gamma, t1) ← PreparedModel.scalar B.sampling D t 27#u8 v.y1 true
+      let a1 ← B.sampling.toBytes v.inactive
+      let s ← lift a1.to_slice
+      let (kappa, t2) ← PreparedModel.scalar B.sampling D t1 28#u8 s false
+      let (alpha0, t3) ← PreparedModel.scalar B.sampling D t2 29#u8 v.round0 false
+      let i ← v.variant.folds
+      if i = 2#usize then do
+          let i1 ← 32#usize + 224#usize
+          let a2 ← core.option.Option.unwrap v.folded_root
+          let s1 ← lift a2.to_slice
+          let bytes1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) s1
+          let bytes2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1
+          let (we, t4) ← PreparedModel.scalar B.sampling D t3 30#u8 bytes2.deref false
+          let (r, t5) ← B.sampling.queries D t4 31#u8 v.final_message
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let i2 ← 31#u8 + 1#u8
+              let s3 ← lift (Std.Array.empty U8).to_slice
+              let (rho, t6) ← PreparedModel.scalar_k B.sampling D t5 i2 s3
+              let g1 ← B.powers 29#usize gamma
+              let r1 ← B.claim D sem v.y1 v.inactive g1 kappa
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                  ok
+                    (core.result.Result.Ok
+                        { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                          alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                          semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state },
+                      g1)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r2, g1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r1, g)
+        else do
+          let (r, t4) ← B.sampling.queries D t3 30#u8 v.final_message
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let i1 ← 30#u8 + 1#u8
+              let s1 ← lift (Std.Array.empty U8).to_slice
+              let (rho, t5) ← PreparedModel.scalar_k B.sampling D t4 i1 s1
+              let g1 ← B.powers 29#usize gamma
+              let r1 ← B.claim D sem v.y1 v.inactive g1 kappa
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                  ok
+                    (core.result.Result.Ok
+                        { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                          alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho,
+                          queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state },
+                      g1)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r2, g1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r1, g)) =
+    do
+    let a ← r1_wire.SemanticTranscript.impl.state D sem.transcript
+    let t ← transcript.Transcript.new D hash a v.variant
+    let (gamma, t1) ← PreparedModel.scalar B.sampling D t 27#u8 v.y1 true
+    let a1 ← B.sampling.toBytes v.inactive
+    let s ← lift a1.to_slice
+    let (kappa, t2) ← PreparedModel.scalar B.sampling D t1 28#u8 s false
+    let (alpha0, t3) ← PreparedModel.scalar B.sampling D t2 29#u8 v.round0 false
+    let i ← v.variant.folds
+    if i = 2#usize then do
+        let i1 ← 32#usize + 224#usize
+        let a2 ← core.option.Option.unwrap v.folded_root
+        let s1 ← lift a2.to_slice
+        let bytes1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) s1
+        let bytes2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1
+        let (we, t4) ← PreparedModel.scalar B.sampling D t3 30#u8 bytes2.deref false
+        let (r, t5) ← B.sampling.queries D t4 31#u8 v.final_message
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let i2 ← 31#u8 + 1#u8
+            let s3 ← lift (Std.Array.empty U8).to_slice
+            let (rho, t6) ← PreparedModel.scalar_k B.sampling D t5 i2 s3
+            let g1 ← B.powers 29#usize gamma
+            let r1 ← B.claim D sem v.y1 v.inactive g1 kappa
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 =>
+                ok
+                  (core.result.Result.Ok
+                      { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                        alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                        semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state },
+                    g1)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r2 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r2, g1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  (core.convert.FromSame verifier.Error) residual
+            ok (r1, g)
+      else do
+        let (r, t4) ← B.sampling.queries D t3 30#u8 v.final_message
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let i1 ← 30#u8 + 1#u8
+            let s1 ← lift (Std.Array.empty U8).to_slice
+            let (rho, t5) ← PreparedModel.scalar_k B.sampling D t4 i1 s1
+            let g1 ← B.powers 29#usize gamma
+            let r1 ← B.claim D sem v.y1 v.inactive g1 kappa
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 =>
+                ok
+                  (core.result.Result.Ok
+                      { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                        alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho,
+                        queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state },
+                    g1)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r2 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                      (core.convert.FromSame verifier.Error) residual
+                ok (r2, g1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  (core.convert.FromSame verifier.Error) residual
+            ok (r1, g)
+'AspisR1PublicPreparation.OriginalPreparedNative.prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.OriginalPreparedNative.eq_prepare' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

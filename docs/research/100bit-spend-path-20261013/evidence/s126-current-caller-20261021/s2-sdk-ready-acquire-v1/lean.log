@@ -1,0 +1,100 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkReadyAcquireV1.lean:21:2: error: Tactic `rfl` failed: The left-hand side
+  if false = true then ok (core.result.Result.Err solana_program_error.ProgramError.AccountBorrowFailed, sdk, guards)
+  else
+    let (odc1, index_mut_back) := ((↑sdk.data_cells)[↑slot], sdk.data_cells.set slot)
+    ok
+      (core.result.Result.Ok (),
+        { accounts := sdk.accounts,
+          data_cells :=
+            index_mut_back { bytes := odc1.bytes, borrowed := (-1)#isize, strong := odc1.strong, weak := odc1.weak },
+          lamports_cells := sdk.lamports_cells },
+        { checkpoint := some slot, «public» := guards.public, proof := guards.proof })
+is not definitionally equal to the right-hand side
+  ok
+    (core.result.Result.Ok (), GuardRelease.counterUpdate sdk slot cell (-1)#isize,
+      { checkpoint := some slot, «public» := guards.public, proof := guards.proof })
+
+sdk : OwnedSdk
+guards : LiveGuards
+slot : Usize
+cell : OwnedDataCell
+read : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+zero : cell.borrowed = 0#isize
+valid : ↑slot < (↑sdk.data_cells).length
+hread :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (↑sdk.data_cells)[↑slot]
+hmut :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok ((↑sdk.data_cells)[↑slot], sdk.data_cells.set slot)
+equal : (↑sdk.data_cells)[↑slot] = cell
+⊢ (if false = true then ok (core.result.Result.Err solana_program_error.ProgramError.AccountBorrowFailed, sdk, guards)
+    else
+      let (odc1, index_mut_back) := ((↑sdk.data_cells)[↑slot], sdk.data_cells.set slot)
+      ok
+        (core.result.Result.Ok (),
+          { accounts := sdk.accounts,
+            data_cells :=
+              index_mut_back { bytes := odc1.bytes, borrowed := (-1)#isize, strong := odc1.strong, weak := odc1.weak },
+            lamports_cells := sdk.lamports_cells },
+          { checkpoint := some slot, «public» := guards.public, proof := guards.proof })) =
+    ok
+      (core.result.Result.Ok (), GuardRelease.counterUpdate sdk slot cell (-1)#isize,
+        { checkpoint := some slot, «public» := guards.public, proof := guards.proof })
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkReadyAcquireV1.lean:20:77: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [owned_acquire_checkpoint, ̲read, ̲bind_tc_ok, ̲zero, ̲bne_self_eq_false,i̵f̵_̵f̵a̵l̵s̵e̵,̵ ̲hmut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkReadyAcquireV1.lean:42:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let o ← lift (some next)
+    let i ← ofOption o Error.panic
+    let (odc1, index_mut_back) := ((↑sdk.data_cells)[↑slot], sdk.data_cells.set slot)
+      ok
+        (core.result.Result.Ok (),
+          { accounts := sdk.accounts,
+            data_cells :=
+              index_mut_back { bytes := odc1.bytes, borrowed := i, strong := odc1.strong, weak := odc1.weak },
+            lamports_cells := sdk.lamports_cells })
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok (), GuardRelease.counterUpdate sdk slot cell next)
+
+sdk : OwnedSdk
+slot : Usize
+cell : OwnedDataCell
+read : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok cell
+allowed : shared_allowed cell.borrowed = ok true
+valid : ↑slot < (↑sdk.data_cells).length
+hread :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok (↑sdk.data_cells)[↑slot]
+hmut :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot =
+    ok ((↑sdk.data_cells)[↑slot], sdk.data_cells.set slot)
+equal : (↑sdk.data_cells)[↑slot] = cell
+next : Isize
+left✝ : cell.borrowed + 1#isize = ok next
+checked : cell.borrowed.checked_add 1#isize = some next
+value : ↑next = ↑cell.borrowed + 1
+⊢ (do
+      let o ← lift (some next)
+      let i ← ofOption o Error.panic
+      let (odc1, index_mut_back) := ((↑sdk.data_cells)[↑slot], sdk.data_cells.set slot)
+        ok
+          (core.result.Result.Ok (),
+            { accounts := sdk.accounts,
+              data_cells :=
+                index_mut_back { bytes := odc1.bytes, borrowed := i, strong := odc1.strong, weak := odc1.weak },
+              lamports_cells := sdk.lamports_cells })) =
+    ok (core.result.Result.Ok (), GuardRelease.counterUpdate sdk slot cell next)
+'AspisS2OwnedStage1.SdkReference.ReadyAcquire.checkpoint_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ReadyAcquire.shared_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

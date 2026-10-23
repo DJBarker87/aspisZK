@@ -1,0 +1,175 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkReadyBodyV1.lean:133:21: error: unexpected identifier; expected '}'
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkReadyBodyV1.lean:133:4: error: Type mismatch
+  alloc.vec.Vec.set
+has type
+  alloc.vec.Vec ?m.601 → Usize → ?m.601 → alloc.vec.Vec ?m.601
+but is expected to have type
+  alloc.vec.Vec OwnedDataCell
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkReadyBodyV1.lean:63:108: error: unsolved goals
+case refl
+ops : Ops
+verifierOps : AspisR1CurrentCaller.Ops
+program : Std.Array U8 32#usize
+pa ua ca : OwnedAccount
+lamports : alloc.vec.Vec OwnedLamportsCell
+p u c : OwnedDataCell
+ten : Bool
+statement : Statement
+common : Common
+pub : Public
+candidate : Std.Array U8 688#usize
+checkpointBytes : alloc.vec.Vec U8
+distinctPU : pa.key ≠ ua.key
+distinctPC : pa.key ≠ ca.key
+distinctUC : ua.key ≠ ca.key
+proofLength : (↑p.bytes).length = 58295
+checkpointLength : (↑c.bytes).length = 1768
+outputLength : (↑checkpointBytes).length = 1768
+proofAllowed : shared_allowed p.borrowed = ok true
+publicAllowed : shared_allowed u.borrowed = ok true
+scanned : owned_checkpoint_nonzero c.bytes = ok false
+decoded :
+  decode_public_statement_box (Installation.install ops verifierOps) u.bytes.deref =
+    ok (core.result.Result.Ok statement)
+validated : (Installation.install ops verifierOps).op5 statement = ok (core.result.Result.Ok ())
+commonRead :
+  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common statement = ok common
+encoded :
+  (Installation.install ops verifierOps).op8 common.lane_transition.candidate_afterstate =
+    ok (core.result.Result.Ok candidate)
+compared :
+  (Installation.install ops verifierOps).op0 core.cmp.PartialEqU8
+      (FrameOperationsTotal.segment p.bytes.deref 0#usize 688#usize) candidate =
+    ok false
+projected :
+  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public statement = ok pub
+firstReturned :
+  first_decoded (Installation.install ops verifierOps) pub u.bytes.deref
+      (FrameOperationsTotal.segment p.bytes.deref 688#usize 58295#usize) (splitIndex ten) =
+    ok (core.result.Result.Ok checkpointBytes)
+accs : alloc.vec.Vec OwnedAccount := accounts3 program pa ua ca
+liveC : OwnedDataCell := { bytes := c.bytes, borrowed := (-1)#isize, strong := c.strong, weak := c.weak }
+cpAcquire :
+  owned_acquire_checkpoint
+      (state accs lamports p u { bytes := c.bytes, borrowed := 0#isize, strong := c.strong, weak := c.weak })
+      GuardAcquire.noGuards 2#usize =
+    ok
+      (core.result.Result.Ok (),
+        state accs lamports p u
+          { bytes := { bytes := c.bytes, borrowed := 0#isize, strong := c.strong, weak := c.weak }.bytes,
+            borrowed := (-1)#isize,
+            strong := { bytes := c.bytes, borrowed := 0#isize, strong := c.strong, weak := c.weak }.strong,
+            weak := { bytes := c.bytes, borrowed := 0#isize, strong := c.strong, weak := c.weak }.weak },
+        { checkpoint := some 2#usize, «public» := GuardAcquire.noGuards.public, proof := GuardAcquire.noGuards.proof })
+nextU : Isize
+nextUValue : ↑nextU = ↑u.borrowed + 1
+pubAcquire :
+  owned_acquire_shared (state accs lamports p u liveC) 1#usize =
+    ok
+      (core.result.Result.Ok (),
+        state accs lamports p { bytes := u.bytes, borrowed := nextU, strong := u.strong, weak := u.weak } liveC)
+nextP : Isize
+nextPValue : ↑nextP = ↑p.borrowed + 1
+proofAcquire :
+  owned_acquire_shared
+      (state accs lamports p { bytes := u.bytes, borrowed := nextU, strong := u.strong, weak := u.weak } liveC)
+      0#usize =
+    ok
+      (core.result.Result.Ok (),
+        state accs lamports { bytes := p.bytes, borrowed := nextP, strong := p.strong, weak := p.weak }
+          { bytes := u.bytes, borrowed := nextU, strong := u.strong, weak := u.weak } liveC)
+finalSdk : OwnedSdk :=
+  state accs lamports { bytes := p.bytes, borrowed := nextP, strong := p.strong, weak := p.weak }
+    { bytes := u.bytes, borrowed := nextU, strong := u.strong, weak := u.weak } liveC
+valid : ↑2#usize < (↑finalSdk.data_cells).length
+left✝ : liveC = (↑finalSdk.data_cells)[↑2#usize]
+actualRead :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) finalSdk.data_cells 2#usize = ok liveC
+cpLen : c.bytes.len = 1768#usize
+pLen : p.bytes.len = 58295#usize
+outLen : checkpointBytes.len = 1768#usize
+baseCpRead :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell)
+      (initialSdk program pa ua ca lamports p u c).data_cells 2#usize =
+    ok { bytes := c.bytes, borrowed := 0#isize, strong := c.strong, weak := c.weak }
+cpHeader : owned_data_len (initialSdk program pa ua ca lamports p u c) 2#usize = ok (core.result.Result.Ok 1768#usize)
+accountLength : (initialSdk program pa ua ca lamports p u c).accounts.len = 3#usize
+proofAccountRead :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount)
+      (initialSdk program pa ua ca lamports p u c).accounts 0#usize =
+    ok (readonlyMeta pa 0#usize)
+publicAccountRead :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount)
+      (initialSdk program pa ua ca lamports p u c).accounts 1#usize =
+    ok (readonlyMeta ua 1#usize)
+checkpointAccountRead :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount)
+      (initialSdk program pa ua ca lamports p u c).accounts 2#usize =
+    ok (checkpointMeta program ca)
+cpAcquireN :
+  owned_acquire_checkpoint (initialSdk program pa ua ca lamports p u c) GuardAcquire.noGuards 2#usize =
+    ok
+      (core.result.Result.Ok (), state accs lamports p u liveC,
+        let __src := GuardAcquire.noGuards;
+        { checkpoint := some 2#usize, «public» := __src.public, proof := __src.proof })
+pref :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) p.bytes { «end» := 688#usize } =
+    ok (FrameOperationsTotal.segment p.bytes.deref 0#usize 688#usize)
+suff :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexRangeUsizeSlice U8) p.bytes
+      { start := 688#usize, «end» := 58295#usize } =
+    ok (FrameOperationsTotal.segment p.bytes.deref 688#usize 58295#usize)
+i10 :
+  (Installation.install ops verifierOps).op1 core.cmp.PartialEqU8 (instruction ten).deref
+      (Array.make 2#usize [3#u8, 10#u8] ⋯) =
+    ok ten
+i11 :
+  (Installation.install ops verifierOps).op1 core.cmp.PartialEqU8 (instruction ten).deref
+      (Array.make 2#usize [3#u8, 11#u8] ⋯) =
+    ok !ten
+constants4 : (Installation.install ops verifierOps).op4 = ok 57607#usize
+constants7 : (Installation.install ops verifierOps).op7 = ok 688#usize
+optionEnd :
+  (Installation.install ops verifierOps).op2 (some 58295#usize) solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok 58295#usize)
+liveCBytes : liveC.bytes = c.bytes
+liveCpRead : (state accs lamports p u liveC).data_cells.index_usize 2#usize = ok liveC
+publicCellRead :
+  (state accs lamports p { bytes := u.bytes, borrowed := nextU, strong := u.strong, weak := u.weak }
+            liveC).data_cells.index_usize
+      1#usize =
+    ok { bytes := u.bytes, borrowed := nextU, strong := u.strong, weak := u.weak }
+proofCellRead :
+  (state accs lamports { bytes := p.bytes, borrowed := nextP, strong := p.strong, weak := p.weak }
+            { bytes := u.bytes, borrowed := nextU, strong := u.strong, weak := u.weak } liveC).data_cells.index_usize
+      0#usize =
+    ok { bytes := p.bytes, borrowed := nextP, strong := p.strong, weak := p.weak }
+cpRead :
+  (state accs lamports { bytes := p.bytes, borrowed := nextP, strong := p.strong, weak := p.weak }
+            { bytes := u.bytes, borrowed := nextU, strong := u.strong, weak := u.weak } liveC).data_cells.index_usize
+      2#usize =
+    ok liveC
+mutableRead :
+  (state accs lamports { bytes := p.bytes, borrowed := nextP, strong := p.strong, weak := p.weak }
+            { bytes := u.bytes, borrowed := nextU, strong := u.strong, weak := u.weak }
+            liveC).data_cells.index_mut_usize
+      2#usize =
+    ok
+      (liveC,
+        (state accs lamports { bytes := p.bytes, borrowed := nextP, strong := p.strong, weak := p.weak }
+                { bytes := u.bytes, borrowed := nextU, strong := u.strong, weak := u.weak } liveC).data_cells.set
+          2#usize)
+tagRead : p.bytes.index_usize 696#usize = ok 2#u8
+castValue : UScalar.cast UScalarTy.Usize (splitByte ten) = splitIndex ten
+savedSdk : OwnedSdk := { accounts := finalSdk.accounts, data_cells := sorry, lamports_cells := finalSdk.lamports_cells }
+⊢ ∃ out,
+    BorrowedReference.owned_stage1 (Installation.install ops verifierOps) program
+          (initialSdk program pa ua ca lamports p u c) (instruction ten) =
+        ok (core.result.Result.Ok (), out) ∧
+      BorrowedBufferFrame.readBytes out 2#usize = ok checkpointBytes ∧
+        BorrowedBufferFrame.buffers out =
+          (BorrowedBufferFrame.buffers (initialSdk program pa ua ca lamports p u c)).set 2 checkpointBytes
+'AspisS2OwnedStage1.SdkReference.ReadyBody.construct' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

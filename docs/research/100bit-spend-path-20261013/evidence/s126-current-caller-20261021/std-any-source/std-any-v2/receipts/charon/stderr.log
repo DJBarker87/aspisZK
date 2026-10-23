@@ -1,0 +1,81 @@
+   Compiling aspis-s126-std-any v0.0.0 (/home/dombarker/project-offloads/s126-real-sdk-20261021/std-any-v2)
+warning: Unsupported constant: "Cannot translate constant of union type"
+ --> /rustc/library/core/src/slice/iter/macros.rs:207:33
+
+note: the error occurred when translating `core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}::next_chunk`, which is (transitively) used at the following location(s):
+ --> src/lib.rs:1:51
+  |
+1 | pub fn checkpoint_nonzero(bytes: &[u8]) -> bool { bytes.iter().any(|byte| *byte != 0) }
+  |                                                   -----------------------------------
+error: Type error after transformations:
+       Mismatched trait clause:
+       expected: TraitClause0_1: (Iter<'a, T>: Iterator<&'a mut T>)
+            got: impl_Iterator_for_Iter<'a, T>: Iterator<Iter<'a, T>, &'a T>
+       Visitor stack:
+         charon_lib::ast::gast::FunDeclRef
+         charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>
+         charon_lib::ids::index_map::IndexMap<charon_lib::ast::gast::TraitMethodId, charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>>
+         charon_lib::ast::gast::TraitImpl
+       Binding stack (depth 2):
+         0: <'a, T, P, Clause0_Clause0_Item, TraitClause0: (@Adt0<missing('_Bound(2, 0)), missing(@TypeBound(2, 0))>: @TraitDecl12<missing(@TypeBound(1, 2))>), TraitClause1: for<'_0> (missing(@TypeBound(1, 1)): @TraitDecl0<(&'_0 missing(@TypeBound(1, 0)),), bool>), TypeOutlives0: missing(@TypeBound(1, 0)): missing('_Bound(1, 0)), TypeConstraint0: @TraitImpl2<missing('_Bound(2, 0)), missing(@TypeBound(2, 0))>::@AssocType0 = &missing('_Bound(1, 0)) mut missing(@TypeBound(1, 0))>
+         1: <'a, T>
+ --> /rustc/library/core/src/slice/iter/macros.rs:153:9
+
+error: Type error after transformations:
+       Mismatched trait clause:
+       expected: TraitClause0_1: (Iter<'a, T>: Iterator<(A, B)>)
+            got: impl_Iterator_for_Iter<'a, T>: Iterator<Iter<'a, T>, &'a T>
+       Visitor stack:
+         charon_lib::ast::gast::FunDeclRef
+         charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>
+         charon_lib::ids::index_map::IndexMap<charon_lib::ast::gast::TraitMethodId, charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>>
+         charon_lib::ast::gast::TraitImpl
+       Binding stack (depth 2):
+         0: <A, B, FromA, FromB, Clause4_Item, TraitClause0: (missing(@TypeBound(1, 2)): @TraitDecl11), TraitClause1: (missing(@TypeBound(1, 2)): @TraitDecl10<missing(@TypeBound(1, 0))>), TraitClause2: (missing(@TypeBound(1, 3)): @TraitDecl11), TraitClause3: (missing(@TypeBound(1, 3)): @TraitDecl10<missing(@TypeBound(1, 1))>), TraitClause4: (@Adt0<missing('_Bound(2, 0)), missing(@TypeBound(2, 0))>: @TraitDecl2<missing(@TypeBound(1, 4))>), TypeConstraint0: @TraitImpl2<missing('_Bound(2, 0)), missing(@TypeBound(2, 0))>::@AssocType0 = (missing(@TypeBound(1, 0)), missing(@TypeBound(1, 1)))>
+         1: <'a, T>
+ --> /rustc/library/core/src/slice/iter/macros.rs:153:9
+
+error: Type error after transformations:
+       Mismatched trait clause:
+       expected: TraitClause0_1: (ArrayWindows<'a, T, N>: Iterator<&'a mut T>)
+            got: impl_Iterator_for_ArrayWindows<'a, T, N>: Iterator<ArrayWindows<'a, T, N>, &'a [T; N]>
+       Visitor stack:
+         charon_lib::ast::gast::FunDeclRef
+         charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>
+         charon_lib::ids::index_map::IndexMap<charon_lib::ast::gast::TraitMethodId, charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>>
+         charon_lib::ast::gast::TraitImpl
+       Binding stack (depth 2):
+         0: <'a, T, P, Clause0_Clause0_Item, TraitClause0: (@Adt96<missing('_Bound(2, 0)), missing(@TypeBound(2, 0)), missing(@ConstGenericBound(2, 0))>: @TraitDecl12<missing(@TypeBound(1, 2))>), TraitClause1: for<'_0> (missing(@TypeBound(1, 1)): @TraitDecl0<(&'_0 missing(@TypeBound(1, 0)),), bool>), TypeOutlives0: missing(@TypeBound(1, 0)): missing('_Bound(1, 0)), TypeConstraint0: @TraitImpl118<missing('_Bound(2, 0)), missing(@TypeBound(2, 0)), missing(@ConstGenericBound(2, 0))>::@AssocType0 = &missing('_Bound(1, 0)) mut missing(@TypeBound(1, 0))>
+         1: <'a, T, const N : usize>
+ --> /rustc/library/core/src/slice/iter.rs:2199:1
+
+error: Type error after transformations:
+       Mismatched trait clause:
+       expected: TraitClause0_1: (ArrayWindows<'a, T, N>: Iterator<(A, B)>)
+            got: impl_Iterator_for_ArrayWindows<'a, T, N>: Iterator<ArrayWindows<'a, T, N>, &'a [T; N]>
+       Visitor stack:
+         charon_lib::ast::gast::FunDeclRef
+         charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>
+         charon_lib::ids::index_map::IndexMap<charon_lib::ast::gast::TraitMethodId, charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>>
+         charon_lib::ast::gast::TraitImpl
+       Binding stack (depth 2):
+         0: <A, B, FromA, FromB, Clause4_Item, TraitClause0: (missing(@TypeBound(1, 2)): @TraitDecl11), TraitClause1: (missing(@TypeBound(1, 2)): @TraitDecl10<missing(@TypeBound(1, 0))>), TraitClause2: (missing(@TypeBound(1, 3)): @TraitDecl11), TraitClause3: (missing(@TypeBound(1, 3)): @TraitDecl10<missing(@TypeBound(1, 1))>), TraitClause4: (@Adt96<missing('_Bound(2, 0)), missing(@TypeBound(2, 0)), missing(@ConstGenericBound(2, 0))>: @TraitDecl2<missing(@TypeBound(1, 4))>), TypeConstraint0: @TraitImpl118<missing('_Bound(2, 0)), missing(@TypeBound(2, 0)), missing(@ConstGenericBound(2, 0))>::@AssocType0 = (missing(@TypeBound(1, 0)), missing(@TypeBound(1, 1)))>
+         1: <'a, T, const N : usize>
+ --> /rustc/library/core/src/slice/iter.rs:2199:1
+
+error: Type error after transformations:
+       Mismatched trait clause:
+       expected: TraitClause0_1: (Zip<A, B>: Iterator<&'a mut T>)
+            got: impl_Iterator_for_Zip<A, B, Clause0_Item, Clause1_Item>[TraitClause0, TraitClause1]: Iterator<Zip<A, B>, (Clause0_Item, Clause1_Item)>
+       Visitor stack:
+         charon_lib::ast::gast::FunDeclRef
+         charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>
+         charon_lib::ids::index_map::IndexMap<charon_lib::ast::gast::TraitMethodId, charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>>
+         charon_lib::ast::gast::TraitImpl
+       Binding stack (depth 2):
+         0: <'a, T, P, Clause0_Clause0_Item, TraitClause0: (@Adt11<missing(@TypeBound(2, 0)), missing(@TypeBound(2, 1))>: @TraitDecl12<missing(@TypeBound(1, 2))>), TraitClause1: for<'_0> (missing(@TypeBound(1, 1)): @TraitDecl0<(&'_0 missing(@TypeBound(1, 0)),), bool>), TypeOutlives0: missing(@TypeBound(1, 0)): missing('_Bound(1, 0)), TypeConstraint0: @TraitImpl158<missing(@TypeBound(2, 0)), missing(@TypeBound(2, 1)), missing(@TypeBound(2, 2)), missing(@TypeBound(2, 3))>[missing(TraitClauseBound(2, 0)), missing(TraitClauseBound(2, 1))]::@AssocType0 = &missing('_Bound(1, 0)) mut missing(@TypeBound(1, 0))>
+         1: <A, B, Clause0_Item, Clause1_Item, TraitClause0: (missing(@TypeBound(1, 0)): @TraitDecl2<missing(@TypeBound(1, 2))>), TraitClause1: (missing(@TypeBound(1, 1)): @TraitDecl2<missing(@TypeBound(1, 3))>)>
+ --> /rustc/library/core/src/iter/adapters/zip.rs:74:1
+
+warning: The extraction generated 6 warnings
+    Finished `release` profile [optimized] target(s) in 0.37s

@@ -1,0 +1,6 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_sha256": "e2b4dfcab73d51d6131d48c4526965b29eb33571b5ddf2176ab629c1db0c0f28",
+  "qualification": "Specialized688-byte equality case of the actual CBMC/libc memcmp boundary.\nScalar content equality is the precondition, not a second call to memcmp.\nSame-pointer and distinct owned-array instances are checked; transport to every\ncaller/heap layout and any eventual replacement must remain explicit.\n",
+  "domain": "Every688-byte value; one same-start pointer or two distinct owned array objects carrying equal values. Precondition uses the previously extracted scalar prefix loop. Actual native C ABI memcmp and its normal Kani library model execute, with an empty-write-set/zero-return contract. Other pointer/overlap layouts, source caller installation and any C-model replacement remain unproved by this leaf."
+}

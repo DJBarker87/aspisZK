@@ -1,0 +1,75 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkBorrowedBufferFrameV1.lean:20:18: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+sdk : OwnedSdk
+slot : Usize
+next : Isize
+valid : ↑slot < (↑sdk.data_cells).length
+⊢ ↑slot < (List.map OwnedDataCell.bytes ↑sdk.data_cells).length
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkBorrowedBufferFrameV1.lean:23:8: error: Function expected at
+  List.set_getElem_self ?m.61
+but this term has type
+  List.set ?m.59 ?m.60 ?m.59[?m.60] = ?m.59
+
+Note: Expected a function because this term is being applied to the argument
+  _
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkBorrowedBufferFrameV1.lean:48:4: error: Tactic `subst` failed: did not find equation for eliminating 'reply'
+
+case ok
+sdk out : OwnedSdk
+slot : Usize
+result : core.result.Result Unit solana_program_error.ProgramError
+execution : owned_acquire_shared sdk slot = ok (result, out)
+step :
+  (do
+      let odc ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot
+      let b ← shared_allowed odc.borrowed
+      if b = true then do
+          let o ← lift (odc.borrowed.checked_add 1#isize)
+          let i ← core.option.Option.unwrap o
+          let (odc1, index_mut_back) ←
+            alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot
+          have v : alloc.vec.Vec OwnedDataCell :=
+            index_mut_back { bytes := odc1.bytes, borrowed := i, strong := odc1.strong, weak := odc1.weak }
+          ok
+              (core.result.Result.Ok (),
+                { accounts := sdk.accounts, data_cells := v, lamports_cells := sdk.lamports_cells })
+        else ok (core.result.Result.Err solana_program_error.ProgramError.AccountBorrowFailed, sdk)) =
+    ok (result, out)
+first : OwnedDataCell
+read : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) sdk.data_cells slot = ok first
+valid : ↑slot < (↑sdk.data_cells).length
+cell : OwnedDataCell
+reply : core.result.Result Unit solana_program_error.ProgramError
+state : OwnedSdk
+actual : cell = (↑sdk.data_cells)[↑slot]
+run : owned_acquire_shared sdk slot = ok (reply, state)
+alternatives :
+  reply = core.result.Result.Err solana_program_error.ProgramError.AccountBorrowFailed ∧
+      state = sdk ∧ ¬(cell.borrowed ≥ 0#isize ∧ cell.borrowed < core.num.Isize.MAX) ∨
+    ∃ next,
+      reply = core.result.Result.Ok () ∧
+        cell.borrowed ≥ 0#isize ∧
+          cell.borrowed < core.num.Isize.MAX ∧
+            ↑next = ↑cell.borrowed + 1 ∧
+              state =
+                { accounts := sdk.accounts,
+                  data_cells :=
+                    sdk.data_cells.set slot
+                      { bytes := cell.bytes, borrowed := next, strong := cell.strong, weak := cell.weak },
+                  lamports_cells := sdk.lamports_cells }
+equal : reply = result ∧ state = out
+⊢ buffers out = buffers sdk
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.counter_update_buffers' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.acquire_source_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.BorrowedBufferFrame.acquire_buffers' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,136 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentCompactPrepareReachabilityV1.lean:58:6: error: 'change' tactic failed, pattern
+  (do
+      let e1 ← ops.op2 e
+      ok (core.result.Result.Err e1, scratchIn)) =
+    ok (core.result.Result.Ok out, scratchOut)
+is not definitionally equal to target
+  (let (r2, semantic1) := (core.result.Result.Err e, semantic1)
+    do
+    let cf1 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let i5 ← compact.OFF_INACTIVE ops
+        let s2 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+              { start := off1, «end» := i5 }
+        let (r3, y11) ← ops.op11 s2 split.1.2
+        let cf2 ←
+          match r3 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf2 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let s4 ←
+              alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (deref.2 (split.2 (semantic1, y11)))
+                  { «end» := i }
+            let s5 ←
+              alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                  (deref.2 (split.2 (semantic1, y11))) { start := i }
+            let r4 ← ops.op5 proof s4 s5
+            let cf3 ←
+              match r4 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf3 with
+              | core.ops.control_flow.ControlFlow.Continue v => do
+                let r5 ← ops.op9 D pub v.semantic hash none
+                let r6 ←
+                  match r5 with
+                    | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                    | core.result.Result.Err e => do
+                      let t ←
+                        verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once D () e
+                      ok (core.result.Result.Err t)
+                let cf4 ←
+                  match r6 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf4 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    verifier.mark none verifier.Phase.Semantic
+                    ops.op8 D val2 v hash scratchIn
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r7 ←
+                      match residual with
+                        | core.result.Result.Ok x =>
+                          core.convert.Infallible.rec
+                            (fun x => Result (core.result.Result verifier.Prepared verifier.Error)) x
+                        | core.result.Result.Err e => ok (core.result.Result.Err (core.convert.FromSame.from e))
+                    ok (r7, scratchIn)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r7 ←
+                  match residual with
+                    | core.result.Result.Ok x =>
+                      core.convert.Infallible.rec
+                        (fun x => Result (core.result.Result verifier.Prepared verifier.Error)) x
+                    | core.result.Result.Err e => ok (core.result.Result.Err (core.convert.FromSame.from e))
+                ok (r7, scratchIn)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r7 ←
+              match residual with
+                | core.result.Result.Ok x =>
+                  core.convert.Infallible.rec (fun x => Result (core.result.Result verifier.Prepared verifier.Error)) x
+                | core.result.Result.Err e => do
+                  let v ← ops.op2 e
+                  ok (core.result.Result.Err v)
+            ok (r7, scratchIn)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r7 ←
+          match residual with
+            | core.result.Result.Ok x =>
+              core.convert.Infallible.rec (fun x => Result (core.result.Result verifier.Prepared verifier.Error)) x
+            | core.result.Result.Err e => do
+              let v ← ops.op2 e
+              ok (core.result.Result.Err v)
+        ok (r7, scratchIn)) =
+    ok (core.result.Result.Ok out, scratchOut)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentCompactPrepareReachabilityV1.lean:64:6: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentCompactPrepareReachabilityV1.lean:37:6: warning: This simp argument is unused:
+  verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.map_err,
+        v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵p̵r̵e̵p̵a̵r̵e̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+        b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+        core.convert.FromSame.from] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentCompactPrepareReachabilityV1.lean:55:17: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+          verifier.Error.Insts.CoreConvertFromCodecError] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/CurrentCompactPrepareReachabilityV1.lean:57:8: warning: This simp argument is unused:
+  verifier.Error.Insts.CoreConvertFromCodecError
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵v̵e̵r̵i̵f̵i̵e̵r̵.̵E̵r̵r̵o̵r̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵o̵n̵v̵e̵r̵t̵F̵r̵o̵m̵C̵o̵d̵e̵c̵E̵r̵r̵o̵r̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1CurrentCaller.PrepareReachability.prepare_success' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,36 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+  "source_sha256": "6a8e5799035458ed4c0093709da6da86fb29100303861ddd15212d3ad7dcdcfb",
+  "declarations": {
+    "readonly_buffer_meta_ok": {
+      "source": "fn readonly_buffer_meta_ok(\n    is_signer: bool,\n    is_writable: bool,\n    executable: bool,\n) -> ProgramResult {\n    if is_signer || is_writable || executable {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    Ok(())\n}",
+      "sha256": "fb1a50c27b8a73553a130024316b58c6f5010a981ed7d478decb7e34a4ba26cc"
+    },
+    "require_readonly_buffer": {
+      "source": "fn require_readonly_buffer(account: &AccountInfo<'_>) -> ProgramResult {\n    readonly_buffer_meta_ok(account.is_signer, account.is_writable, account.executable)\n}",
+      "sha256": "a689595c5dc95f770b6edf68d7382f399421362463dc6532718df003d79806b2"
+    },
+    "require_verifier_checkpoint": {
+      "source": "fn require_verifier_checkpoint(\n    account: &AccountInfo<'_>,\n    program_id: &Pubkey,\n    writable: bool,\n) -> ProgramResult {\n    if account.owner != program_id || account.is_signer || account.executable\n        || account.is_writable != writable\n        || account.try_data_len()? != verifier::checkpoint_size(Variant::S2)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    Ok(())\n}",
+      "sha256": "ab13ba4bbf7637fe2b1f76b049a00e904b77e3b93689ffbc1539d8fa018e1228"
+    },
+    "require_distinct_accounts": {
+      "source": "fn require_distinct_accounts<const N: usize>(accounts: &[&AccountInfo<'_>; N]) -> ProgramResult {\n    for (index, account) in accounts.iter().enumerate() {\n        if accounts[..index]\n            .iter()\n            .any(|previous| previous.key == account.key)\n        {\n            return Err(ProgramError::InvalidArgument);\n        }\n    }\n    Ok(())\n}",
+      "sha256": "680f454a76b667753d57ef2a36681edfa737f1ddc38f6f81af0632ad944722cb"
+    },
+    "stage1": {
+      "source": "fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {\n    if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    let proof_account = &accounts[0];\n    let public_account = &accounts[1];\n    let checkpoint_account = &accounts[2];\n    require_distinct_accounts(&[proof_account, public_account, checkpoint_account])?;\n    require_readonly_buffer(proof_account)?;\n    require_readonly_buffer(public_account)?;\n    require_verifier_checkpoint(checkpoint_account, program_id, true)?;\n    let mut checkpoint_data = checkpoint_account.try_borrow_mut_data()?;\n    if checkpoint_data.iter().any(|byte| *byte != 0) {\n        return Err(ProgramError::AccountAlreadyInitialized);\n    }\n    let public_data = public_account.try_borrow_data()?;\n    let statement = decode_public_statement_box(&public_data)?;\n    validate_pool_v1_pair_forest_terminal_statement_v1(&statement)\n        .map_err(|_| ProgramError::InvalidAccountData)?;\n    let candidate = encode_pool_v1_pair_verified_afterstate_v1(\n        &statement.common().lane_transition.candidate_afterstate,\n    )\n    .map_err(|_| ProgramError::InvalidAccountData)?;\n\n    let proof_data = proof_account.try_borrow_data()?;\n    let proof_length = verifier::PROOF_BYTES;\n    let proof_start = POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;\n    let proof_end = proof_start.checked_add(proof_length)\n        .ok_or(ProgramError::InvalidAccountData)?;\n    if proof_data.len() != proof_end\n        || proof_data[..proof_start] != candidate\n        || proof_data[proof_start + 8] != Variant::S2.tag()\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    let checkpoint = super::first_decoded(statement.semantic_public(), &public_data, &proof_data[proof_start..proof_end], data[1] as usize)?;\n    if checkpoint.len() != checkpoint_data.len() {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    checkpoint_data.copy_from_slice(&checkpoint);\n    #[cfg(feature=\"cu-profiling\")]\n    {\n    msg!(\"r1:pool-adapter-stage1-checkpoint-written\");\n    solana_program::log::sol_log_compute_units();\n    }\n    Ok(())\n}",
+      "sha256": "e7fe2894cc6bcd96bce6edb4c27d712e65eb0628b7cac3640d0f3b79046d0d54"
+    }
+  },
+  "code_sha256": "413217164dc6e32c228a4ac8748accbc3ed0748fa9c71663a508a42a072537bf",
+  "boundaries": [
+    "decoder",
+    "statement validator",
+    "afterstate encoder",
+    "tx1/checkpoint size"
+  ],
+  "qualification": "Real solana-program AccountInfo/Rc/RefCell/Ref/RefMut, real ProgramError and actual statement/Public carriers. Child semantics remain explicit. This is not an Aeneas SDK translation or global soundness proof."
+}

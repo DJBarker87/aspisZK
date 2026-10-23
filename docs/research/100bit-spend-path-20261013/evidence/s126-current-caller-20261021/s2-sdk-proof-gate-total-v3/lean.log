@@ -1,0 +1,27 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofGateTotalV1.lean:57:90: error: unsolved goals
+proof : Slice U8
+candidate : Std.Array U8 688#usize
+length : proof.len ≠ 58295#usize
+⊢ (↑proof).length = 58295 →
+    (do
+        let b ← prefix_different proof candidate.to_slice
+        if b = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+          else do
+            let i1 ← 688#usize + 8#usize
+            let i2 ← proof.index_usize i1
+            if ↑i2 = 2 then ok (core.result.Result.Ok (688#usize, 58295#usize))
+              else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)) =
+      ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkProofGateTotalV1.lean:59:47: warning: This simp argument is unused:
+  length
+
+Hint: Omit it from the simp argument list.
+  simp [reference_gate, ̲checked_end, ̲lift, ̲SourceInstallation.stdOption,
+      core.result.Result.Insts.CoreOpsTry.branch,̵l̵e̵n̵g̵t̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS2OwnedStage1.SdkReference.ProofGate.wrong_length_reject' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ProofGate.gate_total' depends on axioms: [propext, Classical.choice, Quot.sound]

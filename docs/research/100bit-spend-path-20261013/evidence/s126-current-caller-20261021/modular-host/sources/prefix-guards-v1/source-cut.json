@@ -1,0 +1,8 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+  "prefix": "fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {\n    if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    let proof_account = &accounts[0];\n    let public_account = &accounts[1];\n    let checkpoint_account = &accounts[2];\n    require_distinct_accounts(&[proof_account, public_account, checkpoint_account])?;\n    require_readonly_buffer(proof_account)?;\n    require_readonly_buffer(public_account)?;\n    require_verifier_checkpoint(checkpoint_account, program_id, true)?;\n    let mut checkpoint_data = checkpoint_account.try_borrow_mut_data()?;\n    drop(checkpoint_data);\n    Ok(())\n}\n",
+  "source_sha256": "223fc021554b92360360729ed1be39d5d50183480f38a572ab878fa90c4d6705",
+  "qualification": "Exact stage1 prefix through the checkpoint exclusive acquisition. Replaced suffix by drop+Ok at modular exit. Domain data/account lengths 0..3, CP length0..1768; longer lengths reject at the same initial equality/length tests but are not separately model checked. Proof/public readonly errors represented by one metadata bit each; full individual metadata guards separately certified. Initial checkpoint shared/exclusive guards exercise both RefCell error positions."
+}

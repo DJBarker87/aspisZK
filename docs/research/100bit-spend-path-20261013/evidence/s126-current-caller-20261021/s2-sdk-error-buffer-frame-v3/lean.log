@@ -1,0 +1,155 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S2SdkErrorBufferFrameV1.lean:162:78: error: unsolved goals
+case none.none.none
+sdk out : OwnedSdk
+h✝¹ :
+  (do
+      let sdk1 ← ok sdk
+      let sdk2 ← ok sdk1
+      ok sdk2) =
+    ok out
+value✝¹ : OwnedSdk
+called✝¹ : ok sdk = ok value✝¹
+h✝ :
+  (do
+      let sdk2 ← ok value✝¹
+      ok sdk2) =
+    ok out
+value✝ : OwnedSdk
+called✝ : ok value✝¹ = ok value✝
+h : ok value✝ = ok out
+⊢ buffers out = buffers sdk
+
+case none.none.some
+sdk out : OwnedSdk
+val✝ : Usize
+h✝¹ :
+  (do
+      let sdk1 ← ok sdk
+      let sdk2 ← ok sdk1
+      dropCheckpoint sdk2 val✝) =
+    ok out
+value✝¹ : OwnedSdk
+called✝¹ : ok sdk = ok value✝¹
+h✝ :
+  (do
+      let sdk2 ← ok value✝¹
+      dropCheckpoint sdk2 val✝) =
+    ok out
+value✝ : OwnedSdk
+called✝ : ok value✝¹ = ok value✝
+h : dropCheckpoint value✝ val✝ = ok out
+bufferFrame✝ : buffers out = buffers value✝
+⊢ buffers out = buffers sdk
+
+case none.some.none
+sdk out : OwnedSdk
+val✝ : Usize
+h✝¹ :
+  (do
+      let sdk1 ← ok sdk
+      let sdk2 ← dropShared sdk1 val✝
+      ok sdk2) =
+    ok out
+value✝¹ : OwnedSdk
+called✝¹ : ok sdk = ok value✝¹
+h✝ :
+  (do
+      let sdk2 ← dropShared value✝¹ val✝
+      ok sdk2) =
+    ok out
+value✝ : OwnedSdk
+called✝ : dropShared value✝¹ val✝ = ok value✝
+h : ok value✝ = ok out
+bufferFrame✝ : buffers value✝ = buffers value✝¹
+⊢ buffers out = buffers sdk
+
+case none.some.some
+sdk out : OwnedSdk
+val✝¹ val✝ : Usize
+h✝¹ :
+  (do
+      let sdk1 ← ok sdk
+      let sdk2 ← dropShared sdk1 val✝¹
+      dropCheckpoint sdk2 val✝) =
+    ok out
+value✝¹ : OwnedSdk
+called✝¹ : ok sdk = ok value✝¹
+h✝ :
+  (do
+      let sdk2 ← dropShared value✝¹ val✝¹
+      dropCheckpoint sdk2 val✝) =
+    ok out
+value✝ : OwnedSdk
+called✝ : dropShared value✝¹ val✝¹ = ok value✝
+h : dropCheckpoint value✝ val✝ = ok out
+bufferFrame✝¹ : buffers value✝ = buffers value✝¹
+bufferFrame✝ : buffers out = buffers value✝
+⊢ buffers out = buffers sdk
+
+case some.none.none
+sdk out : OwnedSdk
+val✝ : Usize
+h✝¹ :
+  (do
+      let sdk1 ← dropShared sdk val✝
+      let sdk2 ← ok sdk1
+      ok sdk2) =
+    ok out
+value✝¹ : OwnedSdk
+called✝¹ : dropShared sdk val✝ = ok value✝¹
+h✝ :
+  (do
+      let sdk2 ← ok value✝¹
+      ok sdk2) =
+    ok out
+bufferFrame✝ : buffers value✝¹ = buffers sdk
+value✝ : OwnedSdk
+called✝ : ok value✝¹ = ok value✝
+h : ok value✝ = ok out
+⊢ buffers out = buffers sdk
+
+case some.none.some
+sdk out : OwnedSdk
+val✝¹ val✝ : Usize
+h✝¹ :
+  (do
+      let sdk1 ← dropShared sdk val✝¹
+      let sdk2 ← ok sdk1
+      dropCheckpoint sdk2 val✝) =
+    ok out
+value✝¹ : OwnedSdk
+called✝¹ : dropShared sdk val✝¹ = ok value✝¹
+h✝ :
+  (do
+      let sdk2 ← ok value✝¹
+      dropCheckpoint sdk2 val✝) =
+    ok out
+bufferFrame✝¹ : buffers value✝¹ = buffers sdk
+value✝ : OwnedSdk
+called✝ : ok value✝¹ = ok value✝
+h : dropCheckpoint value✝ val✝ = ok out
+bufferFrame✝ : buffers out = buffers value✝
+⊢ buffers out = buffers sdk
+'AspisS2OwnedStage1.SdkReference.ErrorBufferFrame.checkpoint_buffers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ErrorBufferFrame.shared_buffers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ErrorBufferFrame.drop_shared_buffers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ErrorBufferFrame.drop_checkpoint_buffers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ErrorBufferFrame.release_buffers' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ErrorBufferFrame.body_error_buffers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.ErrorBufferFrame.stage1_error_buffers' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

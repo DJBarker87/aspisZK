@@ -1,0 +1,211 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "freeze": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "source_constants": {
+    "HEADER": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const HEADER: usize = 16;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    },
+    "SEMANTIC_BYTES": {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "source": "pub const SEMANTIC_BYTES:usize=12903+29*32;",
+      "source_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756"
+    },
+    "LOGICAL_SEMANTIC": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const LOGICAL_SEMANTIC: usize = crate::verifier::SEMANTIC_BYTES;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    },
+    "SEMANTIC_COMPACT_VALUES": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const SEMANTIC_COMPACT_VALUES: usize = 1 + 10 * 28 + (87 + 29) + 29;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    },
+    "COMPACT_SEMANTIC": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const COMPACT_SEMANTIC: usize = LOGICAL_SEMANTIC - 16 * SEMANTIC_COMPACT_VALUES;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    },
+    "COMPACT_Y1": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const COMPACT_Y1: usize = 29 * 16;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    },
+    "OFF_SEMANTIC": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const OFF_SEMANTIC: usize = HEADER;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    },
+    "OFF_Y1": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const OFF_Y1: usize = OFF_SEMANTIC + COMPACT_SEMANTIC;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    },
+    "OFF_INACTIVE": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const OFF_INACTIVE: usize = OFF_Y1 + COMPACT_Y1;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    },
+    "OFF_ROUND0": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const OFF_ROUND0: usize = OFF_INACTIVE + 32;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    },
+    "LOGICAL_Y1": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const LOGICAL_Y1: usize = 29 * 32;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    },
+    "OFF_FOLDED_ROOT": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const OFF_FOLDED_ROOT: usize = OFF_ROUND0 + 224;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    },
+    "OFF_ROUND1": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const OFF_ROUND1: usize = OFF_FOLDED_ROOT + 32;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    },
+    "SPLIT": {
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+      "source": "pub const SPLIT: usize = 10;",
+      "source_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7"
+    }
+  },
+  "values": {
+    "HEADER": 16,
+    "SEMANTIC_BYTES": 13831,
+    "LOGICAL_SEMANTIC": 13831,
+    "SEMANTIC_COMPACT_VALUES": 426,
+    "COMPACT_SEMANTIC": 7015,
+    "COMPACT_Y1": 464,
+    "OFF_SEMANTIC": 16,
+    "OFF_Y1": 7031,
+    "OFF_INACTIVE": 7495,
+    "OFF_ROUND0": 7527,
+    "LOGICAL_Y1": 928,
+    "OFF_FOLDED_ROOT": 7751,
+    "OFF_ROUND1": 7783,
+    "SPLIT": 10
+  },
+  "arithmetic_nodes": [
+    {
+      "expression": "29 * 32",
+      "left": 29,
+      "right": 32,
+      "result": 928
+    },
+    {
+      "expression": "12903 + 29 * 32",
+      "left": 12903,
+      "right": 928,
+      "result": 13831
+    },
+    {
+      "expression": "10 * 28",
+      "left": 10,
+      "right": 28,
+      "result": 280
+    },
+    {
+      "expression": "1 + 10 * 28",
+      "left": 1,
+      "right": 280,
+      "result": 281
+    },
+    {
+      "expression": "87 + 29",
+      "left": 87,
+      "right": 29,
+      "result": 116
+    },
+    {
+      "expression": "1 + 10 * 28 + (87 + 29)",
+      "left": 281,
+      "right": 116,
+      "result": 397
+    },
+    {
+      "expression": "1 + 10 * 28 + (87 + 29) + 29",
+      "left": 397,
+      "right": 29,
+      "result": 426
+    },
+    {
+      "expression": "16 * SEMANTIC_COMPACT_VALUES",
+      "left": 16,
+      "right": 426,
+      "result": 6816
+    },
+    {
+      "expression": "LOGICAL_SEMANTIC - 16 * SEMANTIC_COMPACT_VALUES",
+      "left": 13831,
+      "right": 6816,
+      "result": 7015
+    },
+    {
+      "expression": "29 * 16",
+      "left": 29,
+      "right": 16,
+      "result": 464
+    },
+    {
+      "expression": "OFF_SEMANTIC + COMPACT_SEMANTIC",
+      "left": 16,
+      "right": 7015,
+      "result": 7031
+    },
+    {
+      "expression": "OFF_Y1 + COMPACT_Y1",
+      "left": 7031,
+      "right": 464,
+      "result": 7495
+    },
+    {
+      "expression": "OFF_INACTIVE + 32",
+      "left": 7495,
+      "right": 32,
+      "result": 7527
+    },
+    {
+      "expression": "29 * 32",
+      "left": 29,
+      "right": 32,
+      "result": 928
+    },
+    {
+      "expression": "OFF_ROUND0 + 224",
+      "left": 7527,
+      "right": 224,
+      "result": 7751
+    },
+    {
+      "expression": "OFF_FOLDED_ROOT + 32",
+      "left": 7751,
+      "right": 32,
+      "result": 7783
+    }
+  ],
+  "machine_bound": 4294967295,
+  "zero_constructor_chain": [
+    {
+      "type": "M31",
+      "source": "pub const ZERO: M31 = M31(0);"
+    },
+    {
+      "type": "CM31",
+      "source": "pub const ZERO: CM31 = CM31 {\n        a: M31(0),\n        b: M31(0),\n    };"
+    },
+    {
+      "type": "QM31",
+      "source": "pub const ZERO: QM31 = QM31 {\n        c0: CM31 {\n            a: M31(0),\n            b: M31(0),\n        },\n        c1: CM31 {\n            a: M31(0),\n            b: M31(0),\n        },\n    };"
+    },
+    {
+      "type": "WideExact",
+      "source": "pub const ZERO: Self = Self {\n        c0: QM31::ZERO,\n        c1: QM31::ZERO,\n    };"
+    }
+  ],
+  "codec_error_mapper": "impl From<CodecError> for Error {\n    fn from(_: CodecError) -> Self {\n        Error::Parse\n    }\n}",
+  "classification": "Exact source expression/leaf inventory, checked scalar execution is proved in CurrentCompactCallerConstantsV1.constants_total; not whole-caller TOTAL"
+}
