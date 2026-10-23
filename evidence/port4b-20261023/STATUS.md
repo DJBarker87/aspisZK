@@ -247,3 +247,46 @@ revision, wall/RSS/source/dependency fields in receipts.079/081–082/084
 are excluded local parser/elaboration errors. No resource failures, no cap
 changes. Actual budget84/100 Lean,0/60 Kani;033/036 never launched Lean.
 No shipped file, key, ELF, other worktree or sibling cone was changed.
+
+Stage 12: BatchJoin.accepted composes the THREE native slot returns into
+sourceBatch with exact ordered logs, physical roots/queries and scratch.
+KeyInstall supplies the explicit CANONICAL REACHED P6 owned-key lowering;
+queries_bound derives canonical numeric binding from the SAME BodyMatches,
+and packed discharges PackedKeys for that installation. Install.leaves fixes
+EVERY child; installation proves no free base child survives the native
+parent's Std installation. These remain named P6 source/control/library
+lowerings, not newly extracted shipped helper bodies.
+
+CallerJoin.accepted instantiates nodeViews, proof length and oracle directly
+from Required14, consumes the actual physical Prepared/model fields and
+applies P6 both_batches. FoldedCut.tx1/tx2 derive the original native folded
+range/copy and batch success from the SAME accepted TX call; model discharges
+the folded-root model input without hash equality or another read.
+PrepareCut.tx1 additionally preserves the SAME prepare success and zero
+input. StageRows.tx1/tx2 connect these same-execution cuts to the row, keeping
+only explicit S1 PreparedBinding on that actual prepare/resume return, plus
+caller parser/model provenance and the named P6 boundary. No independent
+successful batch, reader, root, height or observation equality is assumed.
+
+CRITICAL SCOPE: the concrete S1 PreparedBinding instance is NOT proved here.
+It is a source-refinement obligation, not a cryptographic assumption, and
+must be instantiated on the actual native prepare/resume children before
+claiming the requested unconditional concrete row or global AcceptedRunJoin.
+Likewise, explicit P6 source/library/control lowering is not a new Charon
+extraction or ELF refinement. Target not yet established.
+
+Accepted087/088/089/090/092/098/101: exits0,swap0,all16 theorem audits standard;
+exact target/revision/source/dependency/wall/RSS fields are in receipts.
+091,093–094,096–097,099–100 are excluded parser/elaboration attempts.
+095 was voluntarily stopped on a non-progressing tactic branch: exit143,
+37.060865915s,peak5332780KiB,swap0; source was changed to guarded single
+pair decomposition and split helpers before the successful098. No cap was
+raised, and no timed-out/memory-killed job was rerun unchanged.
+Actual budget99/100 Lean,0/60 Kani (033/036 never started Lean).
+
+lowering-audit.json statically pins six unchanged local Rust cuts and the
+inherited successful cone4-keys-1 receipt. No Kani replay, source adoption or
+new ELF measurement is inferred from body identity. No shipped files changed;
+inherited default f8c0ec72…/devnet63ad3e9c…/Pool121f3e29… remain historical.
+No keys, other worktrees, sibling candidates, source features or parameters
+were changed. All substantive stages are committed locally; no push.
