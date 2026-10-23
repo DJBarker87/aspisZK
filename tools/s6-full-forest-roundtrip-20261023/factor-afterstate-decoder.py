@@ -3,7 +3,13 @@
 from pathlib import Path
 import hashlib,json,re,sys
 R=Path(__file__).resolve().parents[2];B=R/'docs/research/100bit-spend-path-20261013';S=B/'lean-candidates/s126-caller-boundary-20261021';E=B/'evidence/s126-current-caller-20261021'
-p=S/'S6FullSourceCodecV1.lean';source=p.read_text();name='aspis_statement.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1';a=source.index('def '+name+' (');b=source.index('\ndef ',a+4);decl=source[a:b];lines=decl.splitlines();body=lines[1:];parts={}
+native='--native' in sys.argv
+p=(B/'lean/extracted-terminal-decoder-20261016/AspisR1TerminalDecoder/Funs.lean') if native else S/'S6FullSourceCodecV1.lean'
+source=p.read_text()
+if native:
+ from generated_syntax import clean
+ source=clean(source)
+name=('pool_v1.pair_terminal.' if native else 'aspis_statement.pool_v1.pair_terminal.')+'decode_pool_v1_pair_verified_afterstate_v1';a=source.index('def '+name+' (');b=source.index('\ndef ',a+4);decl=source[a:b];lines=decl.splitlines();body=lines[1:];parts={}
 for j in [0,4,8,12,16]:
  start=48+32*j
  ix=[i for i,l in enumerate(lines) if re.search(r'let s\d+ ←.*bytes \{ start := '+str(start)+r'#usize,',l)]
@@ -66,6 +72,13 @@ theorem decode_source (bytes : Slice U8) :
 #print axioms decode_source
 end AspisS6SourceCodec.AfterstateFactored
 '''
-q=S/'S6AfterstateDecoderFactoredV1.lean';m=E/'s6-afterstate-decoder-factoring-v1.json';meta=dict(schema='focused-extractor-proof-packet-v1',source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),declaration=name,source_fragment_sha256=hashlib.sha256(decl.encode()).hexdigest(),candidate_sha256=hashlib.sha256(out.encode()).hexdigest(),parts={str(k):v for k,v in parts.items()},textual_expansion_equal=True,qualification='Lean-only continuation factoring of the complete concrete decoder reference. Kernel full Result equality must compile; no Rust rewrite, free child operations, simplified carriers, SDK or release closure.')
+if native:
+ out=out.replace('import S6FullSourceCodecV1','import S6NativeAfterstateEncoderReuseV1')
+ out=out.replace('AspisS6SourceCodec.AfterstateFactored','AspisS6NativeAfterstateDecoderFactored')
+ out=out.replace('open AspisS6FiveUnrolledCodec','open AspisR1TerminalDecoder')
+ out=out.replace('open aspis_statement.pool_v1.pair_terminal','open pool_v1.pair_terminal')
+ out=out.replace('s.startsWith "AspisS6SourceCodec."','(s.startsWith "AspisR1TerminalDecoder." || s.startsWith "AspisS6NativeAfterstateDecoderFactored.")')
+q=S/('S6NativeAfterstateDecoderFactoredV1.lean' if native else 'S6AfterstateDecoderFactoredV1.lean');m=E/('s6-native-afterstate-decoder-factoring-v1.json' if native else 's6-afterstate-decoder-factoring-v1.json');meta=dict(schema='focused-extractor-proof-packet-v1',source_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),declaration=name,source_fragment_sha256=hashlib.sha256(decl.encode()).hexdigest(),candidate_sha256=hashlib.sha256(out.encode()).hexdigest(),parts={str(k):v for k,v in parts.items()},textual_expansion_equal=True,qualification='Lean-only continuation factoring of the complete concrete decoder reference. Kernel full Result equality must compile; no Rust rewrite, free child operations, simplified carriers, SDK or release closure.')
+if native:meta['qualification']='Lean-only continuation factoring of the complete actual AspisR1TerminalDecoder native decoder. All original native carriers and callees are retained. Full Result source equality must compile; no Rust rewrite, free child operations, SDK or release closure.'
 if '--check' in sys.argv:assert q.read_text()==out and json.loads(m.read_text())==meta
 else:q.write_text(out);m.write_text(json.dumps(meta,indent=2)+'\n')

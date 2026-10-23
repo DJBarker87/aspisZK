@@ -127,3 +127,13 @@ and proof slices, release observer None, errors, state/ownership, allocations,
 abort prefixes and ordered reads. S1 preparation/gamma scratch/challenge and
 resumed-powers caller ports also remain. S2 is externally owned. The 100-bit
 per-attempt target is not yet established.
+
+
+## Addendum: native decoder gap discharged
+
+`S6-NATIVE-AFTERSTATE-CODEC-20261023.md` supersedes this packet's remaining
+688-byte native-decoder gap. The original native decoder and encoder are now
+TOTAL, and actual native decode success alone derives successful native encoding
+and exact input-byte recovery. The same native full carrier is used directly;
+no reference-decoder association remains in that theorem. Full forest/SDK/caller
+transport remains open as before.
