@@ -216,3 +216,25 @@ fn S2K_frontier_iterator_value() {
     kani::cover!(selected==0 && word==0);
     kani::cover!(selected==19 && word==7);
 }
+
+// Result encoder's one688-byte sub-encoder copy, independently specialized
+// from S2G's1768-byte contract. Not a whole result/emitter harness.
+#[kani::requires(destination.len() == 688 && source.len() == 688)]
+#[kani::requires(observed < 688)]
+#[kani::requires(expected == source[observed])]
+#[kani::modifies(destination.as_mut_ptr().cast::<[u8;688]>())]
+#[kani::ensures(|_| destination[observed] == expected)]
+pub fn S2K_copy688(destination: &mut [u8], source: &[u8], observed: usize, expected: u8) {
+    destination.copy_from_slice(source);
+}
+#[kani::proof_for_contract(S2K_copy688)]
+#[kani::unwind(34)]
+fn S2K_copy688_contract() {
+    let mut destination:[u8;688]=kani::any();
+    let source:[u8;688]=kani::any();
+    let observed:usize=kani::any(); kani::assume(observed<688);
+    S2K_copy688(&mut destination,&source,observed,source[observed]);
+    kani::cover!(observed==0); kani::cover!(observed==687);
+}
+
+include!("S2K_result_fields.rs");
