@@ -1,0 +1,75 @@
+/home/dombarker/project-offloads/pair-regular-kind-constructor-model-v1-20261023/sources/S9RegularKindConstructorModelV1.lean:53:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  finIndex ⋯ i
+in the target expression
+  (match weights.field f (finIndex ⋯ i) with
+    | ok w => decodeNative w
+    | x => 0) =
+    decodeNative (ps.get (Fin.cast ⋯ i)).1
+
+allocation : AspisR1S9AllocationInterfaceV1.Allocation
+w : CW
+model : Table
+hm : Meaning w.factors model
+hc : AspisR1S9ConstructorNativeReceiverCanonicalV1.FactorsCanonical (fromCtorWeights w)
+kind : Usize
+hk : ↑(rowOfKind kind) < 5
+alpha : Slice W
+f : Slice U8
+ap0 ap1 : Powers
+scratch scratchOut : Scratch
+parts partsOut : Parts
+hs2 : (fromCtorWeights w).variant = transport.Variant.S2
+hdiv : f.len / 32#usize = ok 64#usize
+hcall :
+  weights.process_kind (fromCtorWeights w) kind alpha f 2#usize 64#usize ap0 ap1 scratch parts =
+    ok (core.result.Result.Ok (), scratchOut, partsOut)
+e : Execution (fromCtorWeights w) kind f 64#usize ap0 ap1 scratch scratchOut parts partsOut
+js : List Usize
+ps : List AspisR1S9NativeInputProductWitnessV1.NativePair
+hlen : ps.length = ↑64#usize
+horder : List.map (fun j => ↑j) js = List.range' 0 ↑64#usize
+hreads : List.Forall₂ (AspisR1S9RegularReturnedFinProductsV1.actualReads f (alloc.vec.Vec.deref scratchOut)) js ps
+hpositions :
+  ∀ (i : Fin ↑64#usize),
+    ∃ j,
+      ↑j = ↑i ∧
+        AspisR1S9RegularReturnedFinProductsV1.actualReads f (alloc.vec.Vec.deref scratchOut) j (ps.get (Fin.cast ⋯ i))
+hvalue :
+  decodeNative e.dotValue =
+    ∑ i,
+      decodeNative (ps.get (Fin.cast ⋯ i)).1 *
+        AspisR1S9NativeDecodedScalarProductV1.scalarEmbed (ps.get (Fin.cast ⋯ i)).2
+hraw :
+  ∀ (i : Fin ↑64#usize) (dot : fast_pairing.EbyKDot) (scalar : aspis_core.field.QM31),
+    AspisR1S9ActualRawEbyKBodyV1.pushWithRaw AspisR1S9ActualRawCutV1.fast_pairing.canonical.Q.raw dot
+        (ps.get (Fin.cast ⋯ i)).1 scalar =
+      dot.push (ps.get (Fin.cast ⋯ i)).1 scalar
+i : Fin ↑64#usize
+a✝ : i ∈ Finset.univ
+j : Usize
+hj : ↑j = ↑i
+hread : AspisR1S9RegularReturnedFinProductsV1.actualReads f (alloc.vec.Vec.deref scratchOut) j (ps.get (Fin.cast ⋯ i))
+hi : ↑j < 64
+hscalar :
+  AspisR1S9NativeDecodedScalarProductV1.scalarEmbed (ps.get (Fin.cast ⋯ i)).2 =
+    (algebraMap AspisR1CurrentWide.Proof.ExactQM AspisWideTower.WideExact) (highProduct (model ↑(rowOfKind kind)) ↑i)
+he : j = finIndex ⋯ i
+⊢ (match weights.field f (finIndex ⋯ i) with
+    | ok w => decodeNative w
+    | x => 0) =
+    decodeNative (ps.get (Fin.cast ⋯ i)).1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (64 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1S9RegularKindConstructorModelV1.actual_regular_kind_constructor_model_sum' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
