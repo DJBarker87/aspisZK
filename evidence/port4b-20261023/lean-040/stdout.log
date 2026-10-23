@@ -1,0 +1,213 @@
+Port4B_LeafLoop.lean:18:5: error: unexpected token 'at'; expected '_' or identifier
+Port4B_LeafLoop.lean:56:6: error: Function expected at
+  stream
+but this term has type
+  KeyStream q batch (↑kind) keys pos (selected :: rest)
+
+Note: Expected a function because this term is being applied to the argument
+  pos
+Port4B_LeafLoop.lean:72:8: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+law : ∀ (input : Slice (Slice U8)), D.digest hash input = ok (MultiproofConePhysicalTransport.rawOracle H input)
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = bytesOf ↑proof
+q : Fin 22 → Fin 262144
+batch : ℕ
+kind lo n slot : Usize
+root : Std.Array U8 32#usize
+keys : Std.Array U64 16#usize
+outIdx : Indices
+outVal : Values
+loValue : ↑lo = if batch = 0 then 0 else 10
+small : ↑n ≤ 16
+selected : ℕ
+rest : List ℕ
+ih :
+  ∀ (s : reference.Scratch) (pos : Usize),
+    (∀ p ∈ rest, p ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+      ↑pos + rest.length = ↑n →
+        ↑s.n + rest.length ≤ 16 →
+          KeyStream q batch (↑kind) keys pos rest →
+            Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                  (Port3_BatchStd.install (Port4B_LeafInstall.install base)) D proof root kind s.idx s.val hash lo n
+                  slot keys s.n pos =
+                ok (outIdx, outVal, some (core.result.Result.Ok ())) →
+              ∃ t,
+                eval H (MultiproofConeP6Batch.leaves MultiproofConeP6Batch.referenceLeaf parsed q (↑kind) rest s) =
+                    (List.map
+                        (fun p =>
+                          (OraclePortSelectedDraft.leaf parsed (↑kind) p,
+                            H (OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+                        rest,
+                      ok (some t)) ∧
+                  Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                      (Port3_BatchStd.install (Port4B_LeafInstall.install base)) D proof root kind t.idx t.val hash lo n
+                      slot keys t.n n =
+                    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+s : reference.Scratch
+pos : Usize
+positions : ∀ p ∈ selected :: rest, p ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind
+span : ↑pos + (selected :: rest).length = ↑n
+room : ↑s.n + (selected :: rest).length ≤ 16
+stream : KeyStream q batch (↑kind) keys pos (selected :: rest)
+more : pos < n
+bound : ↑s.n < 16
+headRead : keys.index_usize pos = ok (MultiproofConeSortOrder.packed q batch (↑kind) selected)
+view : Slice U8
+viewRead :
+  (Port4B_LeafInstall.install base).op2 proof
+      (Port4B_NativeLeaf.openingIndex lo (MultiproofConeSortOrder.packed q batch (↑kind) selected)) =
+    ok view
+address : flatten (Port4B_LeafCode.input kind view) = OraclePortSelectedDraft.leaf parsed (↑kind) selected
+reads :
+  CheckpointBytes5Effect.run D hash (Port4B_LeafCode.code kind view) [] =
+    ok
+      (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)),
+        [] ++
+          [(Port4B_LeafCode.input kind view, encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)))])
+body :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+      (Port3_BatchStd.install (Port4B_LeafInstall.install base)) D proof root kind hash lo n slot keys s.idx s.val s.n
+      pos =
+    do
+    let out ← (eval H (MultiproofConeP6Batch.referenceLeaf parsed q (↑kind) selected s)).2
+    ok (Port4B_LeafStep.project s (pos.wrapping_add 1#usize) out)
+t : reference.Scratch
+choice :
+  MultiproofConeLeafContent.next s (MultiproofConeLeafFold.key q (↑kind) selected)
+      (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) bound =
+    some t
+run :
+  (match Port4B_LeafStep.project s (pos.wrapping_add 1#usize) (some t) with
+    | cont x =>
+      loop
+        (fun x =>
+          Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+            (Port3_BatchStd.install (Port4B_LeafInstall.install base)) D proof root kind hash lo n slot keys x.1 x.2.1
+            x.2.2.1 x.2.2.2)
+        x
+    | done x => ok x) =
+    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+advance : ↑(pos.wrapping_add 1#usize) = ↑pos + 1
+tb : ↑t.n ≤ ↑s.n + 1
+⊢ KeyStream q batch (↑kind) keys (pos.wrapping_add 1#usize) rest
+Port4B_LeafLoop.lean:68:13: error: unsolved goals
+case cons.some
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+law : ∀ (input : Slice (Slice U8)), D.digest hash input = ok (MultiproofConePhysicalTransport.rawOracle H input)
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = bytesOf ↑proof
+q : Fin 22 → Fin 262144
+batch : ℕ
+kind lo n slot : Usize
+root : Std.Array U8 32#usize
+keys : Std.Array U64 16#usize
+outIdx : Indices
+outVal : Values
+loValue : ↑lo = if batch = 0 then 0 else 10
+small : ↑n ≤ 16
+selected : ℕ
+rest : List ℕ
+ih :
+  ∀ (s : reference.Scratch) (pos : Usize),
+    (∀ p ∈ rest, p ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+      ↑pos + rest.length = ↑n →
+        ↑s.n + rest.length ≤ 16 →
+          KeyStream q batch (↑kind) keys pos rest →
+            Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                  (Port3_BatchStd.install (Port4B_LeafInstall.install base)) D proof root kind s.idx s.val hash lo n
+                  slot keys s.n pos =
+                ok (outIdx, outVal, some (core.result.Result.Ok ())) →
+              ∃ t,
+                eval H (MultiproofConeP6Batch.leaves MultiproofConeP6Batch.referenceLeaf parsed q (↑kind) rest s) =
+                    (List.map
+                        (fun p =>
+                          (OraclePortSelectedDraft.leaf parsed (↑kind) p,
+                            H (OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+                        rest,
+                      ok (some t)) ∧
+                  Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+                      (Port3_BatchStd.install (Port4B_LeafInstall.install base)) D proof root kind t.idx t.val hash lo n
+                      slot keys t.n n =
+                    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+s : reference.Scratch
+pos : Usize
+positions : ∀ p ∈ selected :: rest, p ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind
+span : ↑pos + (selected :: rest).length = ↑n
+room : ↑s.n + (selected :: rest).length ≤ 16
+stream : KeyStream q batch (↑kind) keys pos (selected :: rest)
+more : pos < n
+bound : ↑s.n < 16
+headRead : keys.index_usize pos = ok (MultiproofConeSortOrder.packed q batch (↑kind) selected)
+view : Slice U8
+viewRead :
+  (Port4B_LeafInstall.install base).op2 proof
+      (Port4B_NativeLeaf.openingIndex lo (MultiproofConeSortOrder.packed q batch (↑kind) selected)) =
+    ok view
+address : flatten (Port4B_LeafCode.input kind view) = OraclePortSelectedDraft.leaf parsed (↑kind) selected
+reads :
+  CheckpointBytes5Effect.run D hash (Port4B_LeafCode.code kind view) [] =
+    ok
+      (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)),
+        [] ++
+          [(Port4B_LeafCode.input kind view, encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)))])
+body :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+      (Port3_BatchStd.install (Port4B_LeafInstall.install base)) D proof root kind hash lo n slot keys s.idx s.val s.n
+      pos =
+    do
+    let out ← (eval H (MultiproofConeP6Batch.referenceLeaf parsed q (↑kind) selected s)).2
+    ok (Port4B_LeafStep.project s (pos.wrapping_add 1#usize) out)
+t : reference.Scratch
+choice :
+  MultiproofConeLeafContent.next s (MultiproofConeLeafFold.key q (↑kind) selected)
+      (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) bound =
+    some t
+run :
+  (match Port4B_LeafStep.project s (pos.wrapping_add 1#usize) (some t) with
+    | cont x =>
+      loop
+        (fun x =>
+          Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+            (Port3_BatchStd.install (Port4B_LeafInstall.install base)) D proof root kind hash lo n slot keys x.1 x.2.1
+            x.2.2.1 x.2.2.2)
+        x
+    | done x => ok x) =
+    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+advance : ↑(pos.wrapping_add 1#usize) = ↑pos + 1
+tb : ↑t.n ≤ ↑s.n + 1
+tailStream : KeyStream q batch (↑kind) keys (pos.wrapping_add 1#usize) rest
+⊢ ∃ t,
+    eval H (MultiproofConeP6Batch.leaves MultiproofConeP6Batch.referenceLeaf parsed q (↑kind) (selected :: rest) s) =
+        (List.map
+            (fun p =>
+              (OraclePortSelectedDraft.leaf parsed (↑kind) p, H (OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+            (selected :: rest),
+          ok (some t)) ∧
+      Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+          (Port3_BatchStd.install (Port4B_LeafInstall.install base)) D proof root kind t.idx t.val hash lo n slot keys
+          t.n n =
+        ok (outIdx, outVal, some (core.result.Result.Ok ()))
+Port4B_LeafLoop.lean:62:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵body, ̲MultiproofConeP6Batch.referenceLeaf, ̲eval,
+        MultiproofConeLeafContent.step_exact s _ _ bound, ̲bind_tc_ok] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4B_LeafLoop.lean:72:14: error: unexpected token 'at'; expected command
+'AspisR1.Port4B_LeafLoop.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,40 @@
+Port4B_TreeCuts.lean:36:12: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  Nat.pow 2 UScalarTy.Usize.numBits = afterIdx.succ
+at case `Nat.le.refl`
+Port4B_TreeCuts.lean:36:12: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  Nat.pow 2 UScalarTy.Usize.numBits = afterIdx.succ
+at case `Nat.le.refl`
+Port4B_TreeCuts.lean:74:67: error: Application type mismatch: The argument
+  accepted
+has type
+  (match
+      match (idx, val, d, n) with
+      | (idx1, val1, d1, key_position1) =>
+        Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (Port3_BatchStd.install leaves) D proof root kind
+          hash lo n slot keys idx1 val1 d1 key_position1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (idx1, val1, d1, key_position1) =>
+              Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (Port3_BatchStd.install leaves) D proof root
+                kind hash lo n slot keys idx1 val1 d1 key_position1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+but is expected to have type
+  (do
+      let x ← ?m.43
+      ?m.44 x) =
+    ok ?m.45
+in the application
+  Port3_PushFrame.bind_success ?m.43 ?m.44 ?m.45 accepted
+'AspisR1.Port4B_TreeCuts.keys' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4B_TreeCuts.terminal_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_TreeCuts.terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

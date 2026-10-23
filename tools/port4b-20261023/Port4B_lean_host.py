@@ -1,7 +1,12 @@
 from pathlib import Path
-import hashlib,json,subprocess,sys
-probe=subprocess.run(['pgrep','-a','-x','lean'],capture_output=True,text=True)
-assert probe.returncode==1, 'Another Lean process is active: '+probe.stdout
+import hashlib,json,subprocess,sys,time
+# Other host workers do not all use the global flock. Keep the expired-night
+# serialization gate and wait, without launching or counting a Lean compile.
+while True:
+ probe=subprocess.run(['pgrep','-a','-x','lean'],capture_output=True,text=True)
+ if probe.returncode==1: break
+ print('Waiting for existing Lean process: '+probe.stdout,flush=True)
+ time.sleep(10)
 B=Path(__file__).resolve().parent;c=B/sys.argv[1];x=json.loads(c.read_text());paths=x['env']['LEAN_PATH'].split(':');seen={}
 def visit(module):
  key=module.replace('.','/')+'.olean'

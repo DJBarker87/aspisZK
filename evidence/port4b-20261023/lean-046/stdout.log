@@ -1,0 +1,36 @@
+Port4B_SortInstall.lean:30:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  min (↑n) 16
+in the target expression
+  min ↑n ↑16#usize = (OraclePortSelectedDraft.batchPositions batch).length
+
+base : Port3_NativeBatchBody.Ops
+q : Fin 22 → Fin 262144
+batch kind : ℕ
+raw sorted : Std.Array U64 16#usize
+n : Usize
+bound : ↑n ≤ 16
+positive : 0 < ↑n
+initial :
+  List.take ↑n ↑raw =
+    List.map (MultiproofConeSortOrder.packed q batch kind) (OraclePortSelectedDraft.batchPositions batch)
+returned : (install base).op5 raw n = ok sorted
+run : sort_reference.sort_rows raw 1#usize n = ok sorted
+front :
+  List.take ↑n ↑sorted =
+    List.map (MultiproofConeSortOrder.packed q batch kind) (OraclePortFrozenOrder.sortedPositions q batch kind)
+suffix : List.drop ↑n ↑sorted = List.drop ↑n ↑raw
+length : min ↑n ↑16#usize = (OraclePortSelectedDraft.batchPositions batch).length
+⊢ (OraclePortFrozenOrder.sortedPositions q batch kind).length = ↑n ∧
+    Port4B_LeafLoop.KeyStream q batch kind sorted 0#usize (OraclePortFrozenOrder.sortedPositions q batch kind)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.Port4B_SortInstall.key_stream' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

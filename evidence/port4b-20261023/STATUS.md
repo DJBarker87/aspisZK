@@ -162,3 +162,29 @@ are excluded elaboration failures;025 exposed shadowed do-binder codegen,
 repaired with fresh names. No cap rise, timeout or memory kill.
 Budget30/100 Lean,0/60 Kani. Full native-loop induction and terminal P6
 count/padding/verifier carrier/effect transport remain before both_batches.
+
+Stage 8: Port4B_NativeLeaf.active/step connect the proved post-hash updates
+to the ACTUAL emitted body. Port4B_KeyDecode proves physical wrapping-shift,
+cast and low-byte rebasing equal the packed-model projections. LeafCut.iteration
+then binds the actual native body's return to the exact P6 referenceLeaf
+result and SAME physical one-read leaf Code, with no whole-row equality input.
+LeafLoop.accepted symbolically composes the native traversal: on acceptance
+the entire P6 leaf fold succeeds with exact ordered reads (duplicates kept)
+and leaves a success of the SAME native terminal call. Its key-stream and
+wire equations remain explicit physical caller/child gates, not discharged.
+
+TreeCuts.keys derives the raw builder, sorter and loop returns from the
+accepted tree itself; terminal derives the actual done body from the same
+terminal loop success. SortInstall fixes op5 to the P6 owned insertion sorter;
+key_stream derives every sorted physical array read from its actual returned
+array and the raw packed prefix. This remains P6 owned-control lowering, not
+new source extraction or complete native batch transport.
+
+Accepted032/038/039/042/045/048: exits0,swap0,standard axioms only; exact
+wall/RSS/revisions and all theorem audits in their receipts.031,034,035,037,
+040,041,043,044,046,047 are excluded elaboration errors (034's recursion-depth
+simp was replaced by direct symbolic bit-vector/natural projections; no
+options or resource caps changed).033/036 were admission failures before
+Lean started, not attempts. Host checker now waits for other workers' Lean
+processes under the existing capped serialized launch instead of aborting
+admission. Actual budget46/100 Lean,0/60 Kani. No shipped changes or ELF trigger.
