@@ -1,0 +1,49 @@
+{"attempt": "lean-026", "exit_status": 1, "wall_seconds": 3.470102349994704, "peak_rss_kib": "4413500", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_LeafStep.predecessor' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_LeafStep.post_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port4B_LeafStep.reference_post' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4B_LeafStep.lean:67:74: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  0 ≤ e ≤ 14
+where
+ e := ↑(↑s.n - 1)
+ f := ↑?m.279
+ g := ↑(List.length ?m.278)
+Port4B_LeafStep.lean:65:102: error: unsolved goals
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+room : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+writeI : s.idx.update s.n index = ok (s.idx.set s.n index)
+writeV : s.val.update s.n leaf = ok (s.val.set s.n leaf)
+inc : s.n.wrapping_add 1#usize = UScalar.ofNat (↑s.n + 1) ⋯
+positive : 0 < ↑s.n
+prev : ↑(s.n.wrapping_sub 1#usize) = ↑s.n - 1
+getI : (↑s.idx)[↑s.n - 1]! = (↑
+...
+ed:
+  readI
+
+Hint: Omit it from the simp argument list.
+  simp [̵p̵o̵s̵t̵,̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵L̵e̵a̵f̵C̵o̵n̵t̵e̵n̵t̵.̵n̵e̵x̵t̵,̵P̵o̵r̵t̵3̵_̵B̵a̵t̵c̵h̵S̵t̵d̵.̵s̵a̵m̵e̵I̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵o̵r̵t̵3̵_̵B̵a̵t̵c̵h̵S̵t̵d̵.̵s̵a̵m̵e̵L̵e̵a̵f̵,̵p̵o̵s̵i̵t̵i̵v̵e̵,̵r̵e̵a̵d̵I̵,̵r̵e̵a̵d̵V̵,̵w̵r̵i̵t̵e̵I̵,̵w̵r̵i̵t̵e̵V̵,̵i̵n̵c̵,̵p̵r̵o̵j̵e̵c̵t̵]̵[̲p̲o̲s̲t̲,̲ ̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲L̲e̲a̲f̲C̲o̲n̲t̲e̲n̲t̲.̲n̲e̲x̲t̲,̲ ̲P̲o̲r̲t̲3̲_̲B̲a̲t̲c̲h̲S̲t̲d̲.̲s̲a̲m̲e̲I̲n̲d̲e̲x̲,̲ ̲P̲o̲r̲t̲3̲_̲B̲a̲t̲c̲h̲S̲t̲d̲.̲s̲a̲m̲e̲L̲e̲a̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲p̲o̲s̲i̲t̲i̲v̲e̲,̲ ̲r̲e̲a̲d̲V̲,̲ ̲w̲r̲i̲t̲e̲I̲,̲ ̲w̲r̲i̲t̲e̲V̲,̲ ̲i̲n̲c̲,̲ ̲p̲r̲o̲j̲e̲c̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4B_LeafStep.lean:72:45: warning: This simp argument is unused:
+  readV
+
+Hint: Omit it from the simp argument list.
+  simp [̵p̵o̵s̵t̵,̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵L̵e̵a̵f̵C̵o̵n̵t̵e̵n̵t̵.̵n̵e̵x̵t̵,̵P̵o̵r̵t̵3̵_̵B̵a̵t̵c̵h̵S̵t̵d̵.̵s̵a̵m̵e̵I̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵o̵r̵t̵3̵_̵B̵a̵t̵c̵h̵S̵t̵d̵.̵s̵a̵m̵e̵L̵e̵a̵f̵,̵p̵o̵s̵i̵t̵i̵v̵e̵,̵r̵e̵a̵d̵I̵,̵r̵e̵a̵d̵V̵,̵w̵r̵i̵t̵e̵I̵,̵w̵r̵i̵t̵e̵V̵,̵i̵n̵c̵,̵p̵r̵o̵j̵e̵c̵t̵]̵[̲p̲o̲s̲t̲,̲ ̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲L̲e̲a̲f̲C̲o̲n̲t̲e̲n̲t̲.̲n̲e̲x̲t̲,̲ ̲P̲o̲r̲t̲3̲_̲B̲a̲t̲c̲h̲S̲t̲d̲.̲s̲a̲m̲e̲I̲n̲d̲e̲x̲,̲ ̲P̲o̲r̲t̲3̲_̲B̲a̲t̲c̲h̲S̲t̲d̲.̲s̲a̲m̲e̲L̲e̲a̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲p̲o̲s̲i̲t̲i̲v̲e̲,̲ ̲r̲e̲a̲d̲I̲,̲ ̲w̲r̲i̲t̲e̲I̲,̲ ̲w̲r̲i̲t̲e̲V̲,̲ ̲i̲n̲c̲,̲ ̲p̲r̲o̲j̲e̲c̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4B_LeafStep.predecessor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_LeafStep.post_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4B_LeafStep.reference_post' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r21bd367e2c244dbfb3615d3066e4520d.scope; invocation ID: 4d9965e88b7f41b680db8f7ef45303ed

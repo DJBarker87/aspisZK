@@ -140,3 +140,25 @@ No op2 implementation or Parsed.wire provenance is silently inferred:
 the explicit source expression and wire equality are in its statement.
 Accepted020: exit0,wall4.014771419s,peak4398032KiB,swap0; both audits
 standard axioms. Budget20/100 Lean,0/60 Kani.
+
+Stage 7: Port4B_LeafCode proves exact physical leaf components, result and
+one ordered digest read on every prefix log for an832-byte opening.
+Port4B_LeafInstall fixes op2/op6 to these concrete local implementations;
+selected_call binds the hash result and log to the SAME selected P6 leaf
+address. Port4B_LeafStep proves the native post-hash duplicate/write control
+agrees with extracted reference.leaf_step, including immediate duplicate
+rejection and arbitrary untouched suffixes, under the local derived-room
+obligation n<16. No duplicate-consistency assumption is used.
+
+This is explicitly the existing P6 local leaf lowering, not new Charon
+extraction: salt array-copy erasure is part of that cut. The static
+leaf-source-audit pins opening/batch_leaf/private_leaf_hash bodies identical
+to b2727acd3; it is not alone a source-refinement proof.
+Accepted023/024/030: exits0,wall4.322253995/2.951521529/3.555093491s,
+peak4395496/4413732/4437360KiB,swap0; all7 theorem audits standard axioms.
+021's syntactic Code equality was false (pure step nodes remain in Code);
+replacement023 proves erasure AND run observations instead.022 and025–029
+are excluded elaboration failures;025 exposed shadowed do-binder codegen,
+repaired with fresh names. No cap rise, timeout or memory kill.
+Budget30/100 Lean,0/60 Kani. Full native-loop induction and terminal P6
+count/padding/verifier carrier/effect transport remain before both_batches.
