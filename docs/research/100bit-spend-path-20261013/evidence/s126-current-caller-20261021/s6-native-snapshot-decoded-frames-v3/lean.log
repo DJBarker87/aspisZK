@@ -1,0 +1,201 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotDecodedFramesV1.lean:44:6: error: Tactic `assumption` failed
+
+case left
+bytes : Slice U8
+h✝¹¹ : ¬(bytes.len != 800#usize) = true
+s : Slice U8
+_✝¹⁸ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 8#usize } bytes <]
+s1 : Slice U8
+_✝¹⁷ :
+  [> let s1 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 8#usize }
+      POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice <]
+b : Bool
+_✝¹⁶ : [> let b ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s s1 <]
+i1 : U8
+_✝¹⁵ : [> let i1 ← bytes.index_usize 8#usize <]
+i2 : U8
+_✝¹⁴ : [> let i2 ← bytes.index_usize 9#usize <]
+i3 : U8
+_✝¹³ : [> let i3 ← bytes.index_usize 10#usize <]
+i4 : U8
+_✝¹² : [> let i4 ← bytes.index_usize 11#usize <]
+i5 : U8
+_✝¹¹ : [> let i5 ← bytes.index_usize 12#usize <]
+i6 : U8
+_✝¹⁰ : [> let i6 ← bytes.index_usize 13#usize <]
+i7 : U8
+_✝⁹ : [> let i7 ← bytes.index_usize 14#usize <]
+i8 : U8
+_✝⁸ : [> let i8 ← bytes.index_usize 15#usize <]
+s2 : Slice U8
+_✝⁷ : [> let s2 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 16#usize, «end» := 48#usize } bytes <]
+a : Std.Array U8 32#usize
+_✝⁶ : [> let a ← POOL_V1_PAIR_TREE_FORMAT_BINDING <]
+s3 : Slice U8
+_✝⁵ : [> let s3 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 32#usize } a.to_slice <]
+b1 : Bool
+_✝⁴ : [> let b1 ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s2 s3 <]
+s4 : Slice U8
+_✝³ : [> let s4 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 128#usize, «end» := 160#usize } bytes <]
+r1 : core.result.Result (Std.Array U32 8#usize) atomic_statement.AtomicStatementError
+_✝² : [> let r1 ← AspisS6NativeSnapshotReadDigest.read_digest s4 <]
+r2 : core.result.Result (Std.Array U32 8#usize) PoolV1PairLiveSnapshotErrorV1
+_✝¹ :
+  [> let r2 ←
+    core.result.Result.map_err
+      decode_pool_v1_pair_live_snapshot_v1.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+      r1 () <]
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLiveSnapshotErrorV1)
+    (Std.Array U32 8#usize)
+_✝ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r2 <]
+val : Std.Array U32 8#usize
+result : core.result.Result PoolV1PairLiveSnapshotV1 PoolV1PairLiveSnapshotErrorV1
+_ : [> let result ← part_0 bytes val <]
+x✝ : PoolV1PairLiveSnapshotV1
+s_post1 : List.take 8 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC = List.take 8 ↑bytes
+b_post : s = s1
+h✝¹⁰ : b = false
+i1_post : i1 = (↑bytes)[8]
+h✝⁹ : ↑(↑bytes)[8] = ↑POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION
+i2_post : i2 = (↑bytes)[9]
+h✝⁸ : ↑(↑bytes)[9] = 0
+i3_post : i3 = (↑bytes)[10]
+h✝⁷ : ↑(↑bytes)[10] = 0
+i4_post : i4 = (↑bytes)[11]
+h✝⁶ : ↑(↑bytes)[11] = 0
+i5_post : i5 = (↑bytes)[12]
+h✝⁵ : ↑(↑bytes)[12] = 0
+i6_post : i6 = (↑bytes)[13]
+h✝⁴ : ↑(↑bytes)[13] = 0
+i7_post : i7 = (↑bytes)[14]
+h✝³ : ↑(↑bytes)[14] = 0
+i8_post : i8 = (↑bytes)[15]
+h✝² : ↑(↑bytes)[15] = 0
+hlen : (↑bytes).length = 800
+s2_post1 : List.take 32 ↑a = List.take 32 (List.drop 16 ↑bytes)
+a_post : POOL_V1_PAIR_TREE_FORMAT_BINDING = ok a
+b1_post : s2 = s3
+h✝¹ : b1 = false
+s4_post1 : ↑s4 = List.take 32 (List.drop 128 ↑bytes)
+r1_post : AspisS6SourceCodec.DigestContents.chunks val = List.take 32 (List.drop 128 ↑bytes)
+r2_post : r1 = core.result.Result.Ok val
+cf_post : r2 = core.result.Result.Ok val
+h✝ : cf = core.ops.control_flow.ControlFlow.Continue val
+result_post1 :
+  x✝.current_root = val ∧
+    chunk_frames bytes 160 ↑x✝.frontier ∧
+      ↑x✝.pool = List.take 32 (List.drop 48 ↑bytes) ∧
+        ↑x✝.deployment_domain = List.take 32 (List.drop 80 ↑bytes) ∧
+          ↑(core.num.U64.to_le_bytes x✝.sequence) = List.take 8 (List.drop 112 ↑bytes) ∧
+            ↑(core.num.U64.to_le_bytes x✝.next_pair_index) = List.take 8 (List.drop 120 ↑bytes) ∧
+              validate_pool_v1_pair_live_snapshot_v1 x✝ = ok (core.result.Result.Ok ())
+result_post2 : result = core.result.Result.Ok x✝
+⊢ List.take 8 ↑bytes = ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotDecodedFramesV1.lean:44:6: error: Tactic `assumption` failed
+
+case right.right.right.right.right.right.right.right.right
+bytes : Slice U8
+h✝¹¹ : ¬(bytes.len != 800#usize) = true
+s : Slice U8
+_✝¹⁸ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 8#usize } bytes <]
+s1 : Slice U8
+_✝¹⁷ :
+  [> let s1 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 8#usize }
+      POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.to_slice <]
+b : Bool
+_✝¹⁶ : [> let b ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s s1 <]
+i1 : U8
+_✝¹⁵ : [> let i1 ← bytes.index_usize 8#usize <]
+i2 : U8
+_✝¹⁴ : [> let i2 ← bytes.index_usize 9#usize <]
+i3 : U8
+_✝¹³ : [> let i3 ← bytes.index_usize 10#usize <]
+i4 : U8
+_✝¹² : [> let i4 ← bytes.index_usize 11#usize <]
+i5 : U8
+_✝¹¹ : [> let i5 ← bytes.index_usize 12#usize <]
+i6 : U8
+_✝¹⁰ : [> let i6 ← bytes.index_usize 13#usize <]
+i7 : U8
+_✝⁹ : [> let i7 ← bytes.index_usize 14#usize <]
+i8 : U8
+_✝⁸ : [> let i8 ← bytes.index_usize 15#usize <]
+s2 : Slice U8
+_✝⁷ : [> let s2 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 16#usize, «end» := 48#usize } bytes <]
+a : Std.Array U8 32#usize
+_✝⁶ : [> let a ← POOL_V1_PAIR_TREE_FORMAT_BINDING <]
+s3 : Slice U8
+_✝⁵ : [> let s3 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 32#usize } a.to_slice <]
+b1 : Bool
+_✝⁴ : [> let b1 ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s2 s3 <]
+s4 : Slice U8
+_✝³ : [> let s4 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 128#usize, «end» := 160#usize } bytes <]
+r1 : core.result.Result (Std.Array U32 8#usize) atomic_statement.AtomicStatementError
+_✝² : [> let r1 ← AspisS6NativeSnapshotReadDigest.read_digest s4 <]
+r2 : core.result.Result (Std.Array U32 8#usize) PoolV1PairLiveSnapshotErrorV1
+_✝¹ :
+  [> let r2 ←
+    core.result.Result.map_err
+      decode_pool_v1_pair_live_snapshot_v1.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+      r1 () <]
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairLiveSnapshotErrorV1)
+    (Std.Array U32 8#usize)
+_✝ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r2 <]
+val : Std.Array U32 8#usize
+result : core.result.Result PoolV1PairLiveSnapshotV1 PoolV1PairLiveSnapshotErrorV1
+_ : [> let result ← part_0 bytes val <]
+x✝ : PoolV1PairLiveSnapshotV1
+s_post1 : List.take 8 ↑POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC = List.take 8 ↑bytes
+b_post : s = s1
+h✝¹⁰ : b = false
+i1_post : i1 = (↑bytes)[8]
+h✝⁹ : ↑(↑bytes)[8] = ↑POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION
+i2_post : i2 = (↑bytes)[9]
+h✝⁸ : ↑(↑bytes)[9] = 0
+i3_post : i3 = (↑bytes)[10]
+h✝⁷ : ↑(↑bytes)[10] = 0
+i4_post : i4 = (↑bytes)[11]
+h✝⁶ : ↑(↑bytes)[11] = 0
+i5_post : i5 = (↑bytes)[12]
+h✝⁵ : ↑(↑bytes)[12] = 0
+i6_post : i6 = (↑bytes)[13]
+h✝⁴ : ↑(↑bytes)[13] = 0
+i7_post : i7 = (↑bytes)[14]
+h✝³ : ↑(↑bytes)[14] = 0
+i8_post : i8 = (↑bytes)[15]
+h✝² : ↑(↑bytes)[15] = 0
+hlen : (↑bytes).length = 800
+s2_post1 : List.take 32 ↑a = List.take 32 (List.drop 16 ↑bytes)
+a_post : POOL_V1_PAIR_TREE_FORMAT_BINDING = ok a
+b1_post : s2 = s3
+h✝¹ : b1 = false
+s4_post1 : ↑s4 = List.take 32 (List.drop 128 ↑bytes)
+r1_post : AspisS6SourceCodec.DigestContents.chunks val = List.take 32 (List.drop 128 ↑bytes)
+r2_post : r1 = core.result.Result.Ok val
+cf_post : r2 = core.result.Result.Ok val
+h✝ : cf = core.ops.control_flow.ControlFlow.Continue val
+result_post1 :
+  x✝.current_root = val ∧
+    chunk_frames bytes 160 ↑x✝.frontier ∧
+      ↑x✝.pool = List.take 32 (List.drop 48 ↑bytes) ∧
+        ↑x✝.deployment_domain = List.take 32 (List.drop 80 ↑bytes) ∧
+          ↑(core.num.U64.to_le_bytes x✝.sequence) = List.take 8 (List.drop 112 ↑bytes) ∧
+            ↑(core.num.U64.to_le_bytes x✝.next_pair_index) = List.take 8 (List.drop 120 ↑bytes) ∧
+              validate_pool_v1_pair_live_snapshot_v1 x✝ = ok (core.result.Result.Ok ())
+result_post2 : result = core.result.Result.Ok x✝
+⊢ ↑a = List.take 32 (List.drop 16 ↑bytes)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeSnapshotDecodedFramesV1.lean:41:47: warning: This simp argument is unused:
+  POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC.property
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵h̵e̵a̵d̵e̵r̵_̵f̵r̵a̵m̵e̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵P̵O̵O̵L̵_̵V̵1̵_̵P̵A̵I̵R̵_̵L̵I̵V̵E̵_̵S̵N̵A̵P̵S̵H̵O̵T̵_̵M̵A̵G̵I̵C̵.̵p̵r̵o̵p̵e̵r̵t̵y̵]̵[̲h̲e̲a̲d̲e̲r̲_̲f̲r̲a̲m̲e̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS6NativeSnapshotDecoderFactored.Frames.decode_frames' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
