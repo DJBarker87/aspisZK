@@ -1395,3 +1395,64 @@ bounds, then compose the remaining weighted dot/shared-high/grouped-inactive
 and final kappa sum. Wrapping source offsets and checked model offsets must
 not be equated for arbitrary indices. Complete source/runtime/artifact and
 security-experiment obligations remain open under the authoritative gap map.
+
+
+## 2026-10-23 working-source freeze and actual scalar joins
+
+The isolated-candidate status above is superseded by working-source adoption
+commit `60cb14bde2`. All four before/after file hashes were checked against the
+measured H5 plus explicit-Core candidate. The existing final-ELF six fixtures,
+stack audit, retained full-mask sample, affected rebuilt native suites and
+final readonly 13-negative/two-control gate passed. No deployment occurred.
+See `design/H5-SOURCE-ADOPTION-20261023.md` and
+`evidence/s9-h5-source-application-v1-20261023/`. Full source-cone/S10, runtime,
+artifact and coherent-release proof obligations remain open.
+
+**Proved, actual reader correspondence with the real domain.** Any successful
+actual native wide-field read is canonical, without a data-canonicality or
+index-safety hypothesis. The full decoder Result maps to the retained decoder.
+The native wrapping field reader equals the EXISTING S5 checked reader on its
+fitting window domain, preserving success, errors and divergence. The same
+accepted Pair supplies its actual length quotient; every index below that
+quotient has a fitting window and this reader equality. Actual loop-index
+membership is a separate consumer, not silently assumed closed. An unrestricted
+reader equality would be false due to wrapping aliases; the retained arithmetic
+counterexample is explicitly not a full-reader Lean theorem. Packets:
+`evidence/s9-native-field-current-decoder-canonical-v1-20261023/` and
+`evidence/s9-native-field-existing-s5-reader-bounded-v1-20261023/`.
+
+**Proved, same actual tensor/scalar model.** The same accepted current resume
+and finish derive one constructor model, the actual three shared or five
+unshared regular-kind call traces, exact native tensor products and both
+scalar-factor PERM/quarter formulas. Receiver/factor canonicality, power
+canonicality and independent successful child tensor/scalar/power calls are
+not premises of the final composition. The selected current-alpha prefix
+binding remains explicit. The formula reuses the existing scalar theorem;
+PERM is `[0,3,2,1]`, with the exact quarter scaling. See
+`evidence/s9-current-resume-finish-real-tensor-scalar-model-v1-20261023/`,
+`evidence/s9-process-kind-same-scalar-meanings-v1-20261023/` and
+`evidence/s9-native-scalar-factor-decoded-meaning-v1-20261023/`.
+
+**Proved, actual shared guard.** Actual guard success true supplies raw row0/2
+factor equality at dimensions 2 and 3. The same constructor's table model
+therefore shares these factors, while retaining row2's OWN dimension4 factor.
+No independent raw/model equality or table-meaning assumption remains in that
+constructor composition. This is not yet the optimized shared-dot value
+proof. See `lean-candidates/s9-actual-shared-guard-semantics-v1-20261023/`.
+
+**Proved, actual final sum loop.** The actual final sum loops in both two-fold
+branches compute the seven-term decoded product sum; their loop bodies are
+definitionally identical. The proof recovers its own actual read/multiply/add
+calls and reuses the existing loop-invariant theorem and S1 weighted-sum proof
+pattern. Canonical input arrays and initial prefix meaning remain explicit in
+this generic result. The separate actual kappa-seven powers/initial-zero bridge
+is in progress; no complete Pair polynomial conclusion is inferred yet. See
+`evidence/s9-actual-seven-term-final-sum-v1-20261023/` and
+`evidence/s9-native-wide-decoded-arithmetic-v1-20261023/`.
+
+All accepted results above have focused receipts and standard-axiom audits;
+unchanged pinned dependencies were reused. The continuing mathematical work
+is concrete native EbyK accumulator transport to the existing S5 product proof,
+actual dot-loop read/index traces, shared-common contraction, and kappa/parts
+assembly. This entry does not close S9, the source/runtime security experiment,
+or the >=100-bit target. **Target not yet established.**

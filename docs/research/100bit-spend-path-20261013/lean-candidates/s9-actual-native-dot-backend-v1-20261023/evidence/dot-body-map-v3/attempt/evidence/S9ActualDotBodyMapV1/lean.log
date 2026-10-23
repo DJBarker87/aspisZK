@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/pair-dot-body-map-v3-20261023/sources/S9ActualDotBodyMapV1.lean:38:11: error: unsolved goals
+case e_a.some
+raw : Std.Array U64 4#usize
+iter : Iter
+s : NativeDot
+iterNext : core.ops.range.Range (UScalar UScalarTy.Usize)
+j : UScalar UScalarTy.Usize
+⊢ (match
+      let (o, iter1) := (some j, iterNext)
+      match o with
+      | none => ok (done s)
+      | some j => do
+        let i ← s.sums.index_usize j
+        let i1 ← raw.index_usize j
+        let a ←
+          s.sums.update j
+              (core.num.U64.wrapping_add i
+                (core.num.U64.wrapping_add (i1 &&& core.convert.num.FromU64U32.from 2147483647#u32)
+                  (i1.wrapping_shr 31#u32)))
+        ok (cont (iter1, { sums := a })) with
+    | ok x =>
+      ok
+        (match x with
+        | cont a => cont (a.1, { sums := a.2.sums })
+        | done b => done { sums := b.sums })
+    | fail e => fail e
+    | div => div) =
+    let (o, iter1) := (some j, iterNext)
+    match o with
+    | none => ok (done { sums := s.sums })
+    | some j => do
+      let i ← s.sums.index_usize j
+      let i1 ← raw.index_usize j
+      let a ←
+        s.sums.update j
+            (core.num.U64.wrapping_add i
+              (core.num.U64.wrapping_add (i1 &&& core.convert.num.FromU64U32.from 2147483647#u32)
+                (i1.wrapping_shr 31#u32)))
+      ok (cont (iter1, { sums := a }))
+/home/dombarker/project-offloads/pair-dot-body-map-v3-20261023/sources/S9ActualDotBodyMapV1.lean:41:6: warning: This simp argument is unused:
+  mapResult_bind_id
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵o̵O̵l̵d̵,̵A̵s̵p̵i̵s̵R̵1̵S̵9̵P̵r̵o̵d̵u̵c̵t̵i̵o̵n̵P̵a̵i̵r̵C̵u̵t̵V̵1̵.̵f̵a̵s̵t̵_̵p̵a̵i̵r̵i̵n̵g̵.̵c̵a̵n̵o̵n̵i̵c̵a̵l̵.̵P̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵E̵b̵y̵K̵D̵o̵t̵P̵u̵s̵h̵S̵o̵u̵r̵c̵e̵V̵1̵.̵f̵a̵s̵t̵_̵p̵a̵i̵r̵i̵n̵g̵.̵c̵a̵n̵o̵n̵i̵c̵a̵l̵.̵P̵,̵l̵i̵f̵t̵,̵s̵h̵i̵f̵t̵3̵1̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵b̵i̵n̵d̵_̵i̵d̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵,̵m̵a̵p̵F̵l̵o̵w̵,̵s̵t̵a̵t̵e̵T̵o̵O̵l̵d̵]̵[̲t̲o̲O̲l̲d̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲S̲9̲P̲r̲o̲d̲u̲c̲t̲i̲o̲n̲P̲a̲i̲r̲C̲u̲t̲V̲1̲.̲f̲a̲s̲t̲_̲p̲a̲i̲r̲i̲n̲g̲.̲c̲a̲n̲o̲n̲i̲c̲a̲l̲.̲P̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲E̲b̲y̲K̲D̲o̲t̲P̲u̲s̲h̲S̲o̲u̲r̲c̲e̲V̲1̲.̲f̲a̲s̲t̲_̲p̲a̲i̲r̲i̲n̲g̲.̲c̲a̲n̲o̲n̲i̲c̲a̲l̲.̲P̲,̲ ̲l̲i̲f̲t̲,̲ ̲s̲h̲i̲f̲t̲3̲1̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲m̲a̲p̲F̲l̲o̲w̲,̲ ̲s̲t̲a̲t̲e̲T̲o̲O̲l̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9ActualDotBodyMapV1.actual_dot_body_map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
