@@ -1,19 +1,19 @@
 {
   "schema": "focused-extractor-proof-packet-v1",
-  "source_revision": "8a68c8ddbc9a6a0bee688fbdea3c206e99e9531a",
-  "qualification": "Focused cached source and child-boundary proofs, authorized pure std copy contract, and native leaf gates. All owned helper bodies already extracted. Native entry extraction still unsupported; no native S2CallerFacts or coherent release replay. Required14 oracle implies unrestricted backend return, not derived from successful-return RuntimeSyscall. Failed recovery axioms excluded. GNU time peak for timeout kani005 is parent-only; cgroup peak retained.",
+  "source_revision": "e918c061e71e322d4caf23e41406548ff22fd637",
+  "qualification": "Focused cached proofs, projected per-wrapper Kani checks, full interpreted SDK/std copy laws and entry-write-history composition. Revised success-conditioned oracle and all consumers checked; historical total interface preserved. Native-to-projection/ABI and opaque child event ports remain open; no native S2CallerFacts or coherent release replay. Failed recovery axioms excluded. GNU time peak for timeout kani005 is parent-only; cgroup peak retained.",
   "budget": {
-    "lean_used": 42,
-    "lean_compile_invocations": 41,
+    "lean_used": 53,
+    "lean_compile_invocations": 52,
     "lean_preflight_failures": [
       "lean-039"
     ],
     "lean_limit": 100,
-    "kani_used": 12,
+    "kani_used": 19,
     "kani_limit": 60
   },
   "new_trust": [
-    "S2W_TrustedStd.TrustedStd.slice_copy_from_slice"
+    "S2W_TrustedStd.TrustedStd.slice_copy_from_slice (inherited continuation2; unchanged)"
   ],
   "child_join_structures": [
     "FirstEntryVerifierConeJoin",
@@ -38,23 +38,28 @@
     "S2W_ContinuationAudit": "lean-037",
     "S2W_TrustedStd": "lean-038",
     "S2W_ChildJoins": "lean-040",
-    "S2W_ClosureAudit": "lean-042"
+    "S2W_ClosureAudit": "lean-042",
+    "S2W_LeadInterface": "lean-045",
+    "S2W_SuccessOracle": "lean-046",
+    "S2W_WrapperLaws": "lean-050",
+    "S2W_EntryWriteHistory": "lean-052",
+    "S2W_FinalAudit": "lean-053"
   },
   "fields": {
     "proofBytes": "Conditional inherited; same native invocation/site observations and authenticated TX2 proof identity open",
     "publicBytes": "Conditional inherited; FullForestAcceptedRoundtrip, reconstruction identity/source installation and native site retention open",
     "proofSuffix": "Conditional inherited; outer accepted source cuts proved; native observed1/2 and written/current digest binding open",
     "proofLength": "Discharged by inherited AdapterRw accepted TX1 proof shapes (actual native association still enclosing obligation)",
-    "checkpointBytes": "Conditional inherited; CheckpointVersionBinding plus save/tx2/resume native cuts open",
+    "checkpointBytes": "EntryWriteHistory composes interpreted computed write, CheckpointVersionBinding and native SDK read protocol; native wrapper/account association and internal save/tx2/resume site projection open",
     "checkpointLength": "Improved local source join: snapshot return + accepted owned TX1 derive1768 without OwnedSnapshotShape/entrySize; native association/savedAtWrite open",
     "nodeViews": "Child conditional via S2W_ChildJoins.internal_geometry; parser and NodeRanges are named first-entry/multiproof child boundaries, not S2 obligations; native embedding and runtime proof identity open",
     "y1Input": "Child conditional via S2W_ChildJoins.internal_geometry; primitive y1 range is S8 boundary, not S2 obligation; native tx1 argument projection open",
     "observerNone": "Conditional inherited; extracted observer=None; propagation into actual internal reached sites open",
     "reachedPrefix": "Open at native/internal sites; one accepted extracted outer trace and exact append-prefix split proved",
     "callOrder": "Open at nine native/internal sites; actual extracted TX1/TX2 trace segments are ordered, not synthetic rank clocks",
-    "accountFrame": "Open native wrapper composition; authorized std-copy full frame and local write leaf proved; account allocation/child-to-wrapper association remains",
-    "writtenMetadata": "Open globally; per-operation destination metadata/lamports preservation passed; native site join open",
-    "oracle": "Conditional; NativeBinding open, RuntimeSyscall successful-return law insufficient for exact unrestricted field; independently proved total-return/source theorem needed"
+    "accountFrame": "Projected native entry/write checks and full interpreted SDK/std write frame proved; native-to-projection association, allocation frame and child native effects remain open",
+    "writtenMetadata": "Projected wrapper metadata frame and full interpreted ambient frame proved; actual native site join remains open",
+    "oracle": "Revised success-conditioned field proved under NativeBinding, RuntimeSyscall, P1Realization; no backend totality. NativeBinding source instance remains open. Multiproof consumer retains its existing P6Boundary total law"
   },
   "receipts": [
     {
@@ -1420,6 +1425,256 @@
       "peak_rss_kib": "123916",
       "swaps": "0",
       "cgroup_memory_peak_bytes": "38174720",
+      "print_axioms": "N/A: kani"
+    },
+    {
+      "attempt": "kani-013",
+      "kind": "kani",
+      "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+      "source_hashes": {
+        "S2W_wrapper/src/lib.rs": "e4719edf8fd9aeec5b02c4d116fce1ca381570b7ff2a741205d6fc49269002eb",
+        "S2W_wrapper/Cargo.toml": "b1df6ca4fdfc00706607e652f0cc386599d83c1b66431b194236a79be60b35e6"
+      },
+      "deps_fingerprint": {
+        "scope": "Verbatim native snapshot and checkpoint-write expression under selected-cell SDK/std semantic interpretation; no foreign guard or native ABI claim"
+      },
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "--manifest-path",
+        "S2W_wrapper/Cargo.toml",
+        "--target-dir",
+        "wrapper-target",
+        "-j",
+        "4",
+        "--harness-timeout",
+        "30s",
+        "--harness",
+        "S2W_",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 2,
+      "wall_seconds": 0.00426804598828312,
+      "peak_rss_kib": "4928",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "9011200",
+      "print_axioms": "N/A: kani"
+    },
+    {
+      "attempt": "kani-014",
+      "kind": "kani",
+      "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+      "source_hashes": {
+        "S2W_wrapper/src/lib.rs": "e4719edf8fd9aeec5b02c4d116fce1ca381570b7ff2a741205d6fc49269002eb",
+        "S2W_wrapper/Cargo.toml": "b1df6ca4fdfc00706607e652f0cc386599d83c1b66431b194236a79be60b35e6"
+      },
+      "deps_fingerprint": {
+        "scope": "Verbatim native snapshot and checkpoint-write expression under selected-cell SDK/std semantic interpretation; no foreign guard or native ABI claim"
+      },
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "-Z",
+        "unstable-options",
+        "--manifest-path",
+        "S2W_wrapper/Cargo.toml",
+        "--target-dir",
+        "wrapper-target",
+        "-j",
+        "4",
+        "--harness-timeout",
+        "30s",
+        "--harness",
+        "S2W_",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 0.15469872299581766,
+      "peak_rss_kib": "135588",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "45658112",
+      "print_axioms": "N/A: kani"
+    },
+    {
+      "attempt": "kani-015",
+      "kind": "kani",
+      "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+      "source_hashes": {
+        "S2W_wrapper/src/lib.rs": "57dc356b544109ec5d521f3ecc23daa6562db60e9c445a43121aba39be08bc18",
+        "S2W_wrapper/Cargo.toml": "b1df6ca4fdfc00706607e652f0cc386599d83c1b66431b194236a79be60b35e6"
+      },
+      "deps_fingerprint": {
+        "scope": "Verbatim native snapshot and checkpoint-write expression under selected-cell SDK/std semantic interpretation; no foreign guard or native ABI claim"
+      },
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "-Z",
+        "unstable-options",
+        "--manifest-path",
+        "S2W_wrapper/Cargo.toml",
+        "--target-dir",
+        "wrapper-target",
+        "-j",
+        "4",
+        "--harness-timeout",
+        "30s",
+        "--harness",
+        "S2W_",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 2.8630275479954435,
+      "peak_rss_kib": "379404",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "296673280",
+      "print_axioms": "N/A: kani"
+    },
+    {
+      "attempt": "kani-016",
+      "kind": "kani",
+      "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+      "source_hashes": {
+        "S2W_wrapper/src/lib.rs": "9616fdf13c9edd44c4230d374e84770bfbd9354bf6231d5bc82bd7aa63a22199",
+        "S2W_wrapper/Cargo.toml": "b1df6ca4fdfc00706607e652f0cc386599d83c1b66431b194236a79be60b35e6"
+      },
+      "deps_fingerprint": {
+        "scope": "Verbatim native snapshot and checkpoint-write expression under selected-cell SDK/std semantic interpretation; no foreign guard or native ABI claim"
+      },
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "-Z",
+        "unstable-options",
+        "--manifest-path",
+        "S2W_wrapper/Cargo.toml",
+        "--target-dir",
+        "wrapper-target",
+        "-j",
+        "4",
+        "--harness-timeout",
+        "30s",
+        "--harness",
+        "S2W_",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 3.0032417890033685,
+      "peak_rss_kib": "373100",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "295059456",
+      "print_axioms": "N/A: kani"
+    },
+    {
+      "attempt": "kani-017",
+      "kind": "kani",
+      "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+      "source_hashes": {
+        "S2W_wrapper/src/lib.rs": "e2f34e0fa1fcd52dd76ebd41e0b7c51dc1aa27fc743b90da326958bc31c4b910",
+        "S2W_wrapper/Cargo.toml": "b1df6ca4fdfc00706607e652f0cc386599d83c1b66431b194236a79be60b35e6"
+      },
+      "deps_fingerprint": {
+        "scope": "Verbatim native snapshot and checkpoint-write expression under selected-cell SDK/std semantic interpretation; no foreign guard or native ABI claim"
+      },
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "-Z",
+        "unstable-options",
+        "--manifest-path",
+        "S2W_wrapper/Cargo.toml",
+        "--target-dir",
+        "wrapper-target",
+        "-j",
+        "4",
+        "--harness-timeout",
+        "30s",
+        "--harness",
+        "S2W_entry",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 33.46076414399431,
+      "peak_rss_kib": "2670228",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "5048172544",
+      "print_axioms": "N/A: kani"
+    },
+    {
+      "attempt": "kani-018",
+      "kind": "kani",
+      "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+      "source_hashes": {
+        "S2W_wrapper/src/lib.rs": "693723226f252a791acdb373238b03b244aa80d3c1d6f5dc87c35a5590efb98a",
+        "S2W_wrapper/Cargo.toml": "b1df6ca4fdfc00706607e652f0cc386599d83c1b66431b194236a79be60b35e6"
+      },
+      "deps_fingerprint": {
+        "scope": "Verbatim native snapshot and checkpoint-write expression under selected-cell SDK/std semantic interpretation; no foreign guard or native ABI claim"
+      },
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "-Z",
+        "unstable-options",
+        "--manifest-path",
+        "S2W_wrapper/Cargo.toml",
+        "--target-dir",
+        "wrapper-target",
+        "-j",
+        "4",
+        "--harness-timeout",
+        "30s",
+        "--harness",
+        "S2W_entry",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 13.011422544004745,
+      "peak_rss_kib": "1058536",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "1096683520",
+      "print_axioms": "N/A: kani"
+    },
+    {
+      "attempt": "kani-019",
+      "kind": "kani",
+      "source_revision": "6f1d316460604a633d76a1bf4b1c383cbf0c461c",
+      "source_hashes": {
+        "S2W_wrapper/src/lib.rs": "693723226f252a791acdb373238b03b244aa80d3c1d6f5dc87c35a5590efb98a",
+        "S2W_wrapper/Cargo.toml": "b1df6ca4fdfc00706607e652f0cc386599d83c1b66431b194236a79be60b35e6"
+      },
+      "deps_fingerprint": {
+        "scope": "Verbatim native snapshot and checkpoint-write expression under selected-cell SDK/std semantic interpretation; no foreign guard or native ABI claim"
+      },
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "-Z",
+        "unstable-options",
+        "--manifest-path",
+        "S2W_wrapper/Cargo.toml",
+        "--target-dir",
+        "wrapper-target",
+        "-j",
+        "4",
+        "--harness-timeout",
+        "30s",
+        "--harness",
+        "S2W_",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 15.855304533004528,
+      "peak_rss_kib": "1117880",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "1170915328",
       "print_axioms": "N/A: kani"
     },
     {
@@ -3283,6 +3538,579 @@
         "'AspisR1.S2W_TrustedStd.accepted_copy' does not depend on any axioms",
         "'AspisR1.S2W_TrustedStd.mismatched_copy' does not depend on any axioms",
         "'AspisR1.S2W_TrustedStd.copy_frame' depends on axioms: [propext]"
+      ]
+    },
+    {
+      "attempt": "lean-043",
+      "kind": "lean",
+      "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+      "source_hashes": {
+        "S2W_LeadInterface.lean": "8db781f65cb61d926f6683868216d430ecdfc5689ca6346b0a7286301859e207"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "CheckpointBytes5Decision.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2i-20261023/merged-objects/CheckpointBytes5Decision.olean",
+            "sha256": "daf2128323169af710397e79ef2d7f1b99a30e06f6543fb8948cf32c9a638188",
+            "bytes": 114088
+          },
+          "MultiproofConeP6Frozen2Stage.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2i-20261023/merged-objects/MultiproofConeP6Frozen2Stage.olean",
+            "sha256": "8f234ec8d5dbb0e457c248dd0486c87de3e181bb976d2e59640feb78ad5bbbac",
+            "bytes": 283848
+          },
+          "S7JoinQueryRows.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2i-20261023/merged-objects/S7JoinQueryRows.olean",
+            "sha256": "1a8c6752fb52c3325c2771be7b6437d3dfcc2a1dc22a1dd744f0390cf2a635d4",
+            "bytes": 202184
+          },
+          "S8JoinFrozenScan.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2i-20261023/merged-objects/S8JoinFrozenScan.olean",
+            "sha256": "6434287252d221ce08988af71bc81ed2ad7f358393dcb48c376ca8df1b16131e",
+            "bytes": 83424
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_LeadInterface.olean",
+        "S2W_LeadInterface.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 2.1697136750008212,
+      "peak_rss_kib": "4391000",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "474861568",
+      "print_axioms": [
+        "'AspisR1.S2W_LeadInterface.proof_suffix_bytes' depends on axioms: [propext]",
+        "'AspisR1.S2W_LeadInterface.checkpoint_oracle' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_LeadInterface.checkpoint_binding' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_LeadInterface.compose' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_LeadInterface.multiproof_join' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_LeadInterface.y1_join' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-044",
+      "kind": "lean",
+      "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+      "source_hashes": {
+        "S2W_SuccessOracle.lean": "954645bbda98caebd6eb6b0e40c3d26e8715fc95da086c78e109f4c1bf39a564"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "S2W_LeadInterface.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_LeadInterface.olean",
+            "sha256": "24d0d535ba2c313eabedcdb384910fe37acc6b4acd26ee04aed97eedfa8d1c5e",
+            "bytes": 364832
+          },
+          "S2W_OracleAudit.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_OracleAudit.olean",
+            "sha256": "8016aa974e1c923d0ab2c93477375ff67fbe13ea79ca08dac10807162434c69e",
+            "bytes": 80456
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_SuccessOracle.olean",
+        "S2W_SuccessOracle.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 2.0463044509961037,
+      "peak_rss_kib": "4382088",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "461393920",
+      "print_axioms": [
+        "'AspisR1.S2W_SuccessOracle.returned_raw' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_SuccessOracle.native_success_field' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_SuccessOracle.before_to_after' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_SuccessOracle.masked_success' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-045",
+      "kind": "lean",
+      "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+      "source_hashes": {
+        "S2W_LeadInterface.lean": "eb9ea00d5bcbe6092e993b162974ff02b0cd96d3c504e3072856b43bd2de4f13"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "S2LeadInterface.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2i-20261023/merged-objects/S2LeadInterface.olean",
+            "sha256": "5734637c0a70d8115439771801444429c55e97f718ecfec249f31cadcff999ca",
+            "bytes": 373784
+          },
+          "CheckpointBytes5Decision.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2i-20261023/merged-objects/CheckpointBytes5Decision.olean",
+            "sha256": "daf2128323169af710397e79ef2d7f1b99a30e06f6543fb8948cf32c9a638188",
+            "bytes": 114088
+          },
+          "MultiproofConeP6Frozen2Stage.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2i-20261023/merged-objects/MultiproofConeP6Frozen2Stage.olean",
+            "sha256": "8f234ec8d5dbb0e457c248dd0486c87de3e181bb976d2e59640feb78ad5bbbac",
+            "bytes": 283848
+          },
+          "S7JoinQueryRows.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2i-20261023/merged-objects/S7JoinQueryRows.olean",
+            "sha256": "1a8c6752fb52c3325c2771be7b6437d3dfcc2a1dc22a1dd744f0390cf2a635d4",
+            "bytes": 202184
+          },
+          "S8JoinFrozenScan.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2i-20261023/merged-objects/S8JoinFrozenScan.olean",
+            "sha256": "6434287252d221ce08988af71bc81ed2ad7f358393dcb48c376ca8df1b16131e",
+            "bytes": 83424
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_LeadInterface.olean",
+        "S2W_LeadInterface.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 1.99412931498955,
+      "peak_rss_kib": "4379740",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "462823424",
+      "print_axioms": [
+        "'AspisR1.S2W_LeadInterface.proof_suffix_bytes' depends on axioms: [propext]",
+        "'AspisR1.S2W_LeadInterface.checkpoint_oracle' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_LeadInterface.checkpoint_binding' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_LeadInterface.compose' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_LeadInterface.multiproof_join' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_LeadInterface.y1_join' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-046",
+      "kind": "lean",
+      "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+      "source_hashes": {
+        "S2W_SuccessOracle.lean": "94f2755d15e9f70f76fd71c8621ab03ab4390c2f931323d3bbb8055507580300"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "S2W_LeadInterface.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_LeadInterface.olean",
+            "sha256": "b27d340acc060a0af2c5a5f21707ab89698671df6ee5d3e7eedfef1651a4ba3d",
+            "bytes": 144696
+          },
+          "S2W_OracleAudit.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_OracleAudit.olean",
+            "sha256": "8016aa974e1c923d0ab2c93477375ff67fbe13ea79ca08dac10807162434c69e",
+            "bytes": 80456
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_SuccessOracle.olean",
+        "S2W_SuccessOracle.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 2.0387718489946565,
+      "peak_rss_kib": "4383144",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "463716352",
+      "print_axioms": [
+        "'AspisR1.S2W_SuccessOracle.returned_raw' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_SuccessOracle.native_success_field' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_SuccessOracle.before_to_after' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_SuccessOracle.masked_success' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-047",
+      "kind": "lean",
+      "source_revision": "6f1d316460604a633d76a1bf4b1c383cbf0c461c",
+      "source_hashes": {
+        "S2W_WrapperLaws.lean": "2c03fad2cbce184d8270d3d2db1db86237acaff7d560d8c4ef3a1a523d7c54ff"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "S2W_TrustedStd.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_TrustedStd.olean",
+            "sha256": "188190d1f3267f654bfb4895212007386d2882532fd20ac808ed354567a5a842",
+            "bytes": 150432
+          },
+          "AdapterRwSdkSnapshots.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/AdapterRwSdkSnapshots.olean",
+            "sha256": "64a7dfd61fb4c79556b5020bc247abe24b24b2a1f20b9fd0fa6759885976c102",
+            "bytes": 262440
+          },
+          "S2X_RuntimeRetention.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2x-20261023/S2X_RuntimeRetention.olean",
+            "sha256": "a60a8cdd19ecf6afde11bbb46cd2e35b2be327eab78c0c9cb6b30df989bdc5a8",
+            "bytes": 228856
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_WrapperLaws.olean",
+        "S2W_WrapperLaws.lean"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 0.6534054089861456,
+      "peak_rss_kib": "1384456",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "183312384",
+      "print_axioms": []
+    },
+    {
+      "attempt": "lean-048",
+      "kind": "lean",
+      "source_revision": "6f1d316460604a633d76a1bf4b1c383cbf0c461c",
+      "source_hashes": {
+        "S2W_WrapperLaws.lean": "bf5ac5c2b9823ce6d3676171bb066ce2a08843e10b0b4d62fbd6e4ff31fb47c6"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "S2W_TrustedStd.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_TrustedStd.olean",
+            "sha256": "188190d1f3267f654bfb4895212007386d2882532fd20ac808ed354567a5a842",
+            "bytes": 150432
+          },
+          "AdapterRwSdkSnapshots.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/AdapterRwSdkSnapshots.olean",
+            "sha256": "64a7dfd61fb4c79556b5020bc247abe24b24b2a1f20b9fd0fa6759885976c102",
+            "bytes": 262440
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_WrapperLaws.olean",
+        "S2W_WrapperLaws.lean"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 0.37072604399872944,
+      "peak_rss_kib": "760932",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "125419520",
+      "print_axioms": [
+        "'AspisR1.S2W_WrapperLaws.copy_projection' depends on axioms: [propext]",
+        "'AspisR1.S2W_WrapperLaws.lift_projection' depends on axioms: [Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.native_snapshot_protocol' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.write_bracket' depends on axioms: [propext, sorryAx, Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.checkpoint_write' depends on axioms: [propext, sorryAx, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-049",
+      "kind": "lean",
+      "source_revision": "6f1d316460604a633d76a1bf4b1c383cbf0c461c",
+      "source_hashes": {
+        "S2W_WrapperLaws.lean": "466761d9ca08d765f539520f0501ed4a71629c6e151dd6589f51e2fdf300a676"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "S2W_TrustedStd.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_TrustedStd.olean",
+            "sha256": "188190d1f3267f654bfb4895212007386d2882532fd20ac808ed354567a5a842",
+            "bytes": 150432
+          },
+          "AdapterRwSdkSnapshots.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/AdapterRwSdkSnapshots.olean",
+            "sha256": "64a7dfd61fb4c79556b5020bc247abe24b24b2a1f20b9fd0fa6759885976c102",
+            "bytes": 262440
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_WrapperLaws.olean",
+        "S2W_WrapperLaws.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 0.34598367199942004,
+      "peak_rss_kib": "769448",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "133636096",
+      "print_axioms": [
+        "'AspisR1.S2W_WrapperLaws.copy_projection' depends on axioms: [propext]",
+        "'AspisR1.S2W_WrapperLaws.lift_projection' depends on axioms: [Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.native_snapshot_protocol' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.write_bracket' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.checkpoint_write' depends on axioms: [propext, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-050",
+      "kind": "lean",
+      "source_revision": "6f1d316460604a633d76a1bf4b1c383cbf0c461c",
+      "source_hashes": {
+        "S2W_WrapperLaws.lean": "6a7546630fcbff08fc989ae019d60ac2cead12ba17966a3006437960a3bd904d"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "S2W_TrustedStd.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_TrustedStd.olean",
+            "sha256": "188190d1f3267f654bfb4895212007386d2882532fd20ac808ed354567a5a842",
+            "bytes": 150432
+          },
+          "AdapterRwSdkSnapshots.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/AdapterRwSdkSnapshots.olean",
+            "sha256": "64a7dfd61fb4c79556b5020bc247abe24b24b2a1f20b9fd0fa6759885976c102",
+            "bytes": 262440
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_WrapperLaws.olean",
+        "S2W_WrapperLaws.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 0.33602459299436305,
+      "peak_rss_kib": "769540",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "133767168",
+      "print_axioms": [
+        "'AspisR1.S2W_WrapperLaws.copy_projection' depends on axioms: [propext]",
+        "'AspisR1.S2W_WrapperLaws.lift_projection' depends on axioms: [Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.native_snapshot_protocol' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.write_bracket' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.checkpoint_write' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.trusted_write_protocol' depends on axioms: [propext, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-051",
+      "kind": "lean",
+      "source_revision": "6f1d316460604a633d76a1bf4b1c383cbf0c461c",
+      "source_hashes": {
+        "S2W_EntryWriteHistory.lean": "cbe8e704aa26dcc05b6182ff1348ae2d2f68a9031335ea19d4f5e6aea19127c7"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "S2W_WrapperLaws.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_WrapperLaws.olean",
+            "sha256": "b9a43f7e94785a2c89d0910d83cdc5628aa1fcaa995b0edd66c3b149b6b5b5a7",
+            "bytes": 200216
+          },
+          "S2X_RuntimeRetention.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2x-20261023/S2X_RuntimeRetention.olean",
+            "sha256": "a60a8cdd19ecf6afde11bbb46cd2e35b2be327eab78c0c9cb6b30df989bdc5a8",
+            "bytes": 228856
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_EntryWriteHistory.olean",
+        "S2W_EntryWriteHistory.lean"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 1.919034869002644,
+      "peak_rss_kib": "4365472",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "456888320",
+      "print_axioms": [
+        "'AspisR1.S2W_EntryWriteHistory.written_bytes' depends on axioms: [sorryAx, Quot.sound]",
+        "'AspisR1.S2W_EntryWriteHistory.entry_write_history' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-052",
+      "kind": "lean",
+      "source_revision": "6f1d316460604a633d76a1bf4b1c383cbf0c461c",
+      "source_hashes": {
+        "S2W_EntryWriteHistory.lean": "4b70d38c879e8597e7b127e47343142457c06e0151c88759db66b310debc0419"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "S2W_WrapperLaws.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_WrapperLaws.olean",
+            "sha256": "b9a43f7e94785a2c89d0910d83cdc5628aa1fcaa995b0edd66c3b149b6b5b5a7",
+            "bytes": 200216
+          },
+          "S2X_RuntimeRetention.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2x-20261023/S2X_RuntimeRetention.olean",
+            "sha256": "a60a8cdd19ecf6afde11bbb46cd2e35b2be327eab78c0c9cb6b30df989bdc5a8",
+            "bytes": 228856
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_EntryWriteHistory.olean",
+        "S2W_EntryWriteHistory.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 2.03329267600202,
+      "peak_rss_kib": "4383144",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "464171008",
+      "print_axioms": [
+        "'AspisR1.S2W_EntryWriteHistory.written_bytes' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.S2W_EntryWriteHistory.entry_write_history' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-053",
+      "kind": "lean",
+      "source_revision": "6f1d316460604a633d76a1bf4b1c383cbf0c461c",
+      "source_hashes": {
+        "S2W_FinalAudit.lean": "3815345fed4957ad7a2f95dc71004f405bb905c33ac9b19fae39563d408eb956"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "S2W_SuccessOracle.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_SuccessOracle.olean",
+            "sha256": "e1a3bbab8cff879da0e3c6a17dce4b1c62687e394cf9230bedd8137762393023",
+            "bytes": 76952
+          },
+          "S2W_EntryWriteHistory.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_EntryWriteHistory.olean",
+            "sha256": "68a705c2d434e4a98b56dee27100949f404808e4111af23a1a1511f63d4f8bd7",
+            "bytes": 43384
+          },
+          "S2W_ChildJoins.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_ChildJoins.olean",
+            "sha256": "a76131665a28c545d4b9e8bdeefaa8f42395f55f9e1da62639cca4878b5b2c25",
+            "bytes": 124728
+          },
+          "S2W_Observation.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-s2w-20261023/S2W_Observation.olean",
+            "sha256": "8f9eeeb5844086287ab960cb767211b6cbc12906a81623690db25bb6bd5333e1",
+            "bytes": 614584
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_FinalAudit.olean",
+        "S2W_FinalAudit.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 1.8897319490060909,
+      "peak_rss_kib": "4378028",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "474427392",
+      "print_axioms": [
+        "'AspisR1.S2W_LeadInterface.proof_suffix_bytes' depends on axioms: [propext]",
+        "'AspisR1.S2W_LeadInterface.checkpoint_oracle' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_LeadInterface.checkpoint_binding' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_LeadInterface.compose' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_LeadInterface.multiproof_join' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_LeadInterface.y1_join' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_SuccessOracle.returned_raw' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_SuccessOracle.native_success_field' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_SuccessOracle.before_to_after' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_SuccessOracle.masked_success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.copy_projection' depends on axioms: [propext]",
+        "'AspisR1.S2W_WrapperLaws.lift_projection' depends on axioms: [Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.native_snapshot_protocol' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.write_bracket' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.checkpoint_write' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.S2W_WrapperLaws.trusted_write_protocol' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.S2W_EntryWriteHistory.written_bytes' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.S2W_EntryWriteHistory.entry_write_history' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_ChildJoins.internal_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Observation.accepted_observation' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Observation.accepted_segments' depends on axioms: [propext, Classical.choice, Quot.sound]"
       ]
     },
     {
