@@ -1,0 +1,9 @@
+# Same strict resume, concrete receiver, exact powers and helper
+
+**Proved:** strict checkpoint semantic-alpha/coordinate readers on the SAME successful resume derive the EXACT actual constructor input contracts. The SAME concrete constructor accepted result produces native all5x5x4 factor reads, all3x10 point reads and extra2 reads canonical, using existing complete nested mapArray coordinate transport. Their predicate is exactly the native tensor/helper toProbe canonicality predicate.
+
+The accepted finish on that exact Prepared transport, with concrete constructor/Pair slots, now supplies the same S2 native receiver, source-selected/native alpha input, actual Pair acceptance, same powers4 calls with canonical arrays AND decoded x^i relations, and the same factored-helper success using original self.extra. No independent canonical-input, receiver, length, variant or child-success contract remains.
+
+These claims do NOT establish that constructor factors/statement-points or tensor values are the mathematically correct coefficients; canonicality is kept separate from those semantic obligations. Helper output arithmetic/semantic composition is separate. Other FinishOps, raw/decoder/callback/Box source-runtime normalization, checkpoint/oracle/whole caller preservation and frozen artifact binding remain OPEN. Current-decoder source transport is being proved separately. No100-bit release claim.
+
+Three focused targets passed with standard axioms, zero swap, M4400/one thread, root atomic mutex,7.5GiB global stop and120s watchdog. Exact source/revision/object pins/commands/profiles/limits retained; prior missing Allocation interface diagnostic retained as unaccepted. Universal allocator interface is inherited unchanged with no law. No binaries/full inventories/final release replay.

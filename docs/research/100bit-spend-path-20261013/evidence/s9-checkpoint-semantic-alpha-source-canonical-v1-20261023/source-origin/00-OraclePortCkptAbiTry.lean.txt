@@ -1,0 +1,6 @@
+theorem bind_success {A B : Type} (m : Result A) (k : A → Result B) (out : B)
+    (h : (do let x ← m; k x) = ok out) : ∃ x, m = ok x ∧ k x = ok out := by
+  cases m with
+  | ok x => exact ⟨x,rfl,h⟩
+  | fail e => simp only [bind_tc_fail] at h; cases h
+  | div => simp only [bind_tc_div] at h; cases h

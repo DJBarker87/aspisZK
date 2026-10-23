@@ -1,0 +1,7 @@
+def withK {T : Type} (read : ReadK) (r : verifier.Reader)
+    (next : K → verifier.Reader → Result (core.result.Result T verifier.Error)) :
+    Result (core.result.Result T verifier.Error) := do
+  let (value,out) ← read r
+  match value with
+  | .Err e => ok (.Err e)
+  | .Ok x => next x out

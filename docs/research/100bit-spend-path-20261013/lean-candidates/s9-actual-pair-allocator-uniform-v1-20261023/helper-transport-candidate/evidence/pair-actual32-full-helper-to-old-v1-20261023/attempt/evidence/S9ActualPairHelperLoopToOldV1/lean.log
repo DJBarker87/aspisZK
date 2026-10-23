@@ -1,0 +1,119 @@
+/home/dombarker/project-offloads/pair-actual32-full-helper-to-old-v1-20261023/sources/S9ActualPairHelperLoopToOldV1.lean:68:29: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop.body (mapArray toOldW ap0) (mapArray toOldW ap1)
+    (mapArray toOldQ extra) start0 (mapArray toOldW initial)
+in the target expression
+  (match
+      match (start0, mapArray toOldW initial) with
+      | (iter1, weights1) =>
+        AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop.body (mapArray toOldW ap0)
+          (mapArray toOldW ap1) (mapArray toOldQ extra) iter1 weights1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, weights1) =>
+              AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop.body (mapArray toOldW ap0)
+                (mapArray toOldW ap1) (mapArray toOldQ extra) iter1 weights1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (mapArray toOldW output)
+
+ap0 ap1 : WA
+extra : Std.Array Q 2#usize
+initial output : WA
+hp0 : GoodArray ap0
+hp1 : GoodArray ap1
+hi : GoodArray initial
+he : ∀ (i : Usize) (q : Q), extra.index_usize i = ok q → QC q
+h : weights.factored_s2_libra_weights_loop start0 ap0 ap1 extra initial = ok output
+iter1 iter2 : AspisR1S9ActualPairHelperTwoBodyCallsV1.R
+middle : AspisR1S9ActualPairHelperTwoBodyCallsV1.W
+hn0 :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize AspisR1S9ActualPairHelperTwoBodyCallsV1.start0 =
+    ok (some 0#usize, iter1)
+left✝³ : ↑iter1.start = 1
+left✝² : iter1.end = 2#usize
+hb0 :
+  AspisR1S9ActualPairHelperTwoBodyCallsV1.body ap0 ap1 extra (AspisR1S9ActualPairHelperTwoBodyCallsV1.start0, initial) =
+    ok (cont (iter1, middle))
+hn1 : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter1 = ok (some iter1.start, iter2)
+left✝¹ : ↑iter2.start = 2
+left✝ : iter2.end = 2#usize
+hb1 : AspisR1S9ActualPairHelperTwoBodyCallsV1.body ap0 ap1 extra (iter1, middle) = ok (cont (iter2, output))
+hn2 : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter2 = ok (none, iter2)
+right✝ : AspisR1S9ActualPairHelperTwoBodyCallsV1.body ap0 ap1 extra (iter2, output) = ok (done output)
+ha0 :
+  AspisR1S9ActualPairHelperBodyPrefixV1.pairActiveBody ap0 ap1 extra 0#usize iter1 initial = ok (cont (iter1, middle))
+middle' : AspisR1S9ActualPairActiveMapV1.W
+hmflow : cont (iter1, middle) = cont (iter1, middle')
+hcm : AspisR1S9ActualPairActiveMapV1.GoodArray middle
+hm0 :
+  AspisR1S9PairCallerBodyPrefixV1.pairActiveBody (mapArray toOldW ap0) (mapArray toOldW ap1) (mapArray toOldQ extra)
+      0#usize iter1 (mapArray toOldW initial) =
+    ok (cont (iter1, mapArray toOldW middle))
+hm : middle = middle'
+ha1 :
+  AspisR1S9ActualPairHelperBodyPrefixV1.pairActiveBody ap0 ap1 extra iter1.start iter2 middle =
+    ok (cont (iter2, output))
+output' : AspisR1S9ActualPairActiveMapV1.W
+hoflow : cont (iter2, output) = cont (iter2, output')
+hco : AspisR1S9ActualPairActiveMapV1.GoodArray output
+hm1 :
+  AspisR1S9PairCallerBodyPrefixV1.pairActiveBody (mapArray toOldW ap0) (mapArray toOldW ap1) (mapArray toOldQ extra)
+      iter1.start iter2 (mapArray toOldW middle) =
+    ok (cont (iter2, mapArray toOldW output))
+ho : output = output'
+ht0 :
+  AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop.body (mapArray toOldW ap0) (mapArray toOldW ap1)
+      (mapArray toOldQ extra) start0 (mapArray toOldW initial) =
+    ok (cont (iter1, mapArray toOldW middle))
+ht1 :
+  AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop.body (mapArray toOldW ap0) (mapArray toOldW ap1)
+      (mapArray toOldQ extra) iter1 (mapArray toOldW middle) =
+    ok (cont (iter2, mapArray toOldW output))
+ht2 :
+  AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop.body (mapArray toOldW ap0) (mapArray toOldW ap1)
+      (mapArray toOldQ extra) iter2 (mapArray toOldW output) =
+    ok (done (mapArray toOldW output))
+⊢ (match
+      match (start0, mapArray toOldW initial) with
+      | (iter1, weights1) =>
+        AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop.body (mapArray toOldW ap0)
+          (mapArray toOldW ap1) (mapArray toOldQ extra) iter1 weights1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, weights1) =>
+              AspisR1S9PairCallerStepV1.weights.factored_s2_libra_weights_loop.body (mapArray toOldW ap0)
+                (mapArray toOldW ap1) (mapArray toOldQ extra) iter1 weights1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (mapArray toOldW output)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1S9ActualPairHelperLoopToOldV1.actual_helper_loop_success_to_old' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9ActualPairHelperLoopToOldV1.actual_helper_success_to_old' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
