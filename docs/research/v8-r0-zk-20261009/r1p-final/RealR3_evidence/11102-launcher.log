@@ -1,0 +1,32 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 0927); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR3_EmissionPrefix.lean:29:8: error: Type mismatch: After simplification, term
+  ih next (acc ++ ↑framed) after
+ has type
+  @Eq (Result ((ScalarResult × State × List U8) × S)) (rows effect tail next (lead ++ (acc ++ ↑framed)) after) do
+    let ((value, next, bytes), after) ← rows effect tail next (acc ++ ↑framed) after
+    ok ((value, next, lead ++ bytes), after)
+but is expected to have type
+  @Eq (Result ((ScalarResult × State × List U8) × S))
+    (do
+      let (value, next) ← pure (core.result.Result.Ok q, next, lead ++ (acc ++ ↑framed)) after
+      (match value.1 with
+          | core.result.Result.Err e => pure (core.result.Result.Err e, value.2.1, value.2.2)
+          | core.result.Result.Ok a => rows effect tail value.2.1 value.2.2)
+          next)
+    do
+    let ((value, next, bytes), after) ←
+      do
+        let (value, next) ← pure (core.result.Result.Ok q, next, acc ++ ↑framed) after
+        (match value.1 with
+            | core.result.Result.Err e => pure (core.result.Result.Err e, value.2.1, value.2.2)
+            | core.result.Result.Ok a => rows effect tail value.2.1 value.2.2)
+            next
+    ok ((value, next, lead ++ bytes), after)
+'R1Z.RealR3_EmissionPrefix.prepend' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.96
+	Maximum resident set size (kbytes): 4197328
+	Swaps: 0
+	Exit status: 1
