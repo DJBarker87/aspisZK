@@ -1,0 +1,279 @@
+'AspisR1.VTop_ObservationBoundary.extraRead_value' does not depend on any axioms
+'AspisR1.VTop_ObservationBoundary.extraRead_observation' depends on axioms: [propext, Quot.sound]
+'AspisR1.VTop_ObservationBoundary.reads_value' does not depend on any axioms
+'AspisR1.VTop_ObservationBoundary.reads_length' depends on axioms: [propext, Quot.sound]
+'AspisR1.VTop_ObservationBoundary.no_unbound_verifier_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_OracleCode.accepted_interpret_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_OracleStages.all_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_OracleStages.accepted_tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_OracleStages.accepted_tx2_common' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_OracleStages.accepted_tx2_authenticated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Annotation.two_pass' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.VTop_OracleStages.ConeJoins (source model : AspisR1.VTop_OracleCode.Implementation) : Prop
+number of parameters: 2
+fields:
+  AspisR1.VTop_OracleStages.ConeJoins.shape : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 3
+  AspisR1.VTop_OracleStages.ConeJoins.scan : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 4
+  AspisR1.VTop_OracleStages.ConeJoins.batch : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 5
+  AspisR1.VTop_OracleStages.ConeJoins.query : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 6
+  AspisR1.VTop_OracleStages.ConeJoins.prepare : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 7
+  AspisR1.VTop_OracleStages.ConeJoins.writer : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 8
+  AspisR1.VTop_OracleStages.ConeJoins.flush : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 9
+  AspisR1.VTop_OracleStages.ConeJoins.pending : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 10
+  AspisR1.VTop_OracleStages.ConeJoins.geometry : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 11
+  AspisR1.VTop_OracleStages.ConeJoins.initial : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 12
+  AspisR1.VTop_OracleStages.ConeJoins.powers : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 17
+  AspisR1.VTop_OracleStages.ConeJoins.reader : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 18
+  AspisR1.VTop_OracleStages.ConeJoins.finish : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 19
+  AspisR1.VTop_OracleStages.ConeJoins.library : ∀ {A : Type} (call : AspisR1.VTop_Trace.Call A),
+      AspisR1.VTop_Trace.operationId call ∈ AspisR1.VTop_OracleStages.libraryIds →
+        ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (value : A),
+          (AspisV8R19.MemoizedProgramLaw.eval H (source call)).2 = Aeneas.Std.Result.ok value →
+            AspisV8R19.MemoizedProgramLaw.eval H (source call) = AspisV8R19.MemoizedProgramLaw.eval H (model call)
+constructor:
+  AspisR1.VTop_OracleStages.ConeJoins.mk {source model : AspisR1.VTop_OracleCode.Implementation}
+    (shape : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 3)
+    (scan : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 4)
+    (batch : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 5)
+    (query : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 6)
+    (prepare : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 7)
+    (writer : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 8)
+    (flush : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 9)
+    (pending : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 10)
+    (geometry : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 11)
+    (initial : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 12)
+    (powers : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 17)
+    (reader : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 18)
+    (finish : AspisR1.VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 19)
+    (library :
+      ∀ {A : Type} (call : AspisR1.VTop_Trace.Call A),
+        AspisR1.VTop_Trace.operationId call ∈ AspisR1.VTop_OracleStages.libraryIds →
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (value : A),
+            (AspisV8R19.MemoizedProgramLaw.eval H (source call)).2 = Aeneas.Std.Result.ok value →
+              AspisV8R19.MemoizedProgramLaw.eval H (source call) = AspisV8R19.MemoizedProgramLaw.eval H (model call)) :
+    AspisR1.VTop_OracleStages.ConeJoins source model
+def AspisR1.VTop_OracleCode.CallJoin : AspisR1.VTop_OracleCode.Implementation →
+  AspisR1.VTop_OracleCode.Implementation → Prop :=
+fun source model =>
+  ∀ {A : Type} (call : AspisR1.VTop_Trace.Call A)
+    (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (value : A),
+    (AspisV8R19.MemoizedProgramLaw.eval H (source call)).2 = Aeneas.Std.Result.ok value →
+      AspisV8R19.MemoizedProgramLaw.eval H (source call) = AspisV8R19.MemoizedProgramLaw.eval H (model call)
+theorem AspisR1.VTop_Annotation.two_pass : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier),
+  AspisR1.OraclePortFrozen2Join.AcceptedVerifierJoin rust
+      (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2) →
+    (∀ (w : AspisR1.CanonicalCutEnrichedTranscript.Words) (i : AspisR1.OraclePortStoredExperimentC4.Input)
+        (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.OraclePortStoredExperimentC4.enrich w i))).2 = true →
+          (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).2 = true) →
+      AspisR1.OraclePortFrozen2Join.AcceptedRunJoin D rust :=
+fun D rust raw backward =>
+  { verifier := raw,
+    annotated := fun P H accepted =>
+      have before :=
+        have second := accepted;
+        Eq.mpr (id (congrArg (fun _a => _a.2.2 = true) (AspisR1.OraclePortFrozen2Join.originalWith_eval rust P H)))
+          (backward
+            (AspisR1.OraclePortStoredAdmissionC4.build D
+              (AspisR1.OraclePortStoredExperimentC4.view
+                ((AspisV8R19.MemoizedProgramLaw.eval H P).1 ++
+                    (AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisV8R19.MemoizedProgramLaw.eval H P).2)).1,
+                  (AspisV8R19.MemoizedProgramLaw.eval H P).2,
+                  (AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisV8R19.MemoizedProgramLaw.eval H P).2)).2)))
+            (AspisV8R19.MemoizedProgramLaw.eval H P).2 H
+            (Eq.mp
+              (congrArg
+                (fun _a =>
+                  (have v := _a;
+                        have i :=
+                          AspisR1.OraclePortStoredExperimentC4.enrich
+                            (AspisR1.OraclePortStoredAdmissionC4.build D (AspisR1.OraclePortStoredExperimentC4.view v))
+                            v.2.1;
+                        (v.1 ++ (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).1, i,
+                          (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).2)).2.2 =
+                    true)
+                (AspisR1.OraclePortFrozen2Join.originalWith_eval rust P H))
+              (Eq.mp (congrArg (fun _a => _a.2.2 = true) (AspisR1.OraclePortFrozen2Join.annotatedWith_eval D rust P H))
+                second)));
+      have firstPass :=
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans (AspisR1.OraclePortFrozen2Join.originalWith_eval rust P H)
+                  (congr
+                    (congrArg Prod.mk
+                      (congrArg (HAppend.hAppend (AspisV8R19.MemoizedProgramLaw.eval H P).1)
+                        (congrArg Prod.fst
+                          (raw H (AspisV8R19.MemoizedProgramLaw.eval H P).2
+                            (Eq.mp
+                              (congrArg (fun _a => _a.2.2 = true)
+                                (AspisR1.OraclePortFrozen2Join.originalWith_eval rust P H))
+                              before)))))
+                    (congrArg (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval H P).2)
+                      (congrArg Prod.snd
+                        (raw H (AspisV8R19.MemoizedProgramLaw.eval H P).2
+                          (Eq.mp
+                            (congrArg (fun _a => _a.2.2 = true)
+                              (AspisR1.OraclePortFrozen2Join.originalWith_eval rust P H))
+                            before)))))))
+              (AspisR1.OraclePortFrozen2Join.originalWith_eval
+                (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2) P H))
+            (eq_self
+              ((AspisV8R19.MemoizedProgramLaw.eval H P).1 ++
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2
+                        (AspisV8R19.MemoizedProgramLaw.eval H P).2)).1,
+                (AspisV8R19.MemoizedProgramLaw.eval H P).2,
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2
+                      (AspisV8R19.MemoizedProgramLaw.eval H P).2)).2)));
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a =
+                AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P))
+            (AspisR1.OraclePortFrozen2Join.annotatedWith_eval D rust P H)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (have v := _a;
+                  have i :=
+                    AspisR1.OraclePortStoredExperimentC4.enrich
+                      (AspisR1.OraclePortStoredAdmissionC4.build D (AspisR1.OraclePortStoredExperimentC4.view v)) v.2.1;
+                  (v.1 ++ (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).1, i,
+                    (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).2)) =
+                  AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P))
+              firstPass))
+          (have secondPass :=
+            raw H
+              (AspisR1.OraclePortStoredExperimentC4.enrich
+                (AspisR1.OraclePortStoredAdmissionC4.build D
+                  (AspisR1.OraclePortStoredExperimentC4.view
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.OraclePortRuntimeBindingC7.originalWith
+                        (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2) P))))
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.OraclePortRuntimeBindingC7.originalWith
+                        (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2) P)).2.1)
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    (have v := _a;
+                          have i :=
+                            AspisR1.OraclePortStoredExperimentC4.enrich
+                              (AspisR1.OraclePortStoredAdmissionC4.build D
+                                (AspisR1.OraclePortStoredExperimentC4.view v))
+                              v.2.1;
+                          (v.1 ++ (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).1, i,
+                            (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).2)).2.2 =
+                      true)
+                  firstPass)
+                (Eq.mp
+                  (congrArg (fun _a => _a.2.2 = true) (AspisR1.OraclePortFrozen2Join.annotatedWith_eval D rust P H))
+                  accepted));
+          id
+            (of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Eq
+                    (congr
+                      (congrArg Prod.mk
+                        (congrArg
+                          (HAppend.hAppend
+                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.OraclePortRuntimeBindingC7.originalWith
+                                  (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2)
+                                  P)).1)
+                          (congrArg Prod.fst secondPass)))
+                      (congrArg
+                        (Prod.mk
+                          (AspisR1.OraclePortStoredExperimentC4.enrich
+                            (AspisR1.OraclePortStoredAdmissionC4.build D
+                              (AspisR1.OraclePortStoredExperimentC4.view
+                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.OraclePortRuntimeBindingC7.originalWith
+                                    (AspisR1.OraclePortStoredExperimentC4.verifier D
+                                      AspisR1.OraclePortFrozen2.dV_frozen2)
+                                    P))))
+                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.OraclePortRuntimeBindingC7.originalWith
+                                    (AspisR1.OraclePortStoredExperimentC4.verifier D
+                                      AspisR1.OraclePortFrozen2.dV_frozen2)
+                                    P)).2.1))
+                        (congrArg Prod.snd secondPass))))
+                  (AspisR1.OraclePortFrozen2Join.annotatedWith_eval D
+                    (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2) P H))
+                (eq_self
+                  ((AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.OraclePortRuntimeBindingC7.originalWith
+                            (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2)
+                            P)).1 ++
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2
+                            (AspisR1.OraclePortStoredExperimentC4.enrich
+                              (AspisR1.OraclePortStoredAdmissionC4.build D
+                                (AspisR1.OraclePortStoredExperimentC4.view
+                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                    (AspisR1.OraclePortRuntimeBindingC7.originalWith
+                                      (AspisR1.OraclePortStoredExperimentC4.verifier D
+                                        AspisR1.OraclePortFrozen2.dV_frozen2)
+                                      P))))
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                    (AspisR1.OraclePortRuntimeBindingC7.originalWith
+                                      (AspisR1.OraclePortStoredExperimentC4.verifier D
+                                        AspisR1.OraclePortFrozen2.dV_frozen2)
+                                      P)).2.1))).1,
+                    AspisR1.OraclePortStoredExperimentC4.enrich
+                      (AspisR1.OraclePortStoredAdmissionC4.build D
+                        (AspisR1.OraclePortStoredExperimentC4.view
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.OraclePortRuntimeBindingC7.originalWith
+                              (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2)
+                              P))))
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.OraclePortRuntimeBindingC7.originalWith
+                              (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2)
+                              P)).2.1,
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2
+                          (AspisR1.OraclePortStoredExperimentC4.enrich
+                            (AspisR1.OraclePortStoredAdmissionC4.build D
+                              (AspisR1.OraclePortStoredExperimentC4.view
+                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.OraclePortRuntimeBindingC7.originalWith
+                                    (AspisR1.OraclePortStoredExperimentC4.verifier D
+                                      AspisR1.OraclePortFrozen2.dV_frozen2)
+                                    P))))
+                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.OraclePortRuntimeBindingC7.originalWith
+                                    (AspisR1.OraclePortStoredExperimentC4.verifier D
+                                      AspisR1.OraclePortFrozen2.dV_frozen2)
+                                    P)).2.1))).2)))))) }
+AspisR1.OraclePortHeadlineFrozen2PerAttempt.final_soundness (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.OraclePortStoredExperimentC4.Prover) (Q : ℕ)
+  (hqueries :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime)
+  (h_Rust_equals_dV : AspisR1.OraclePortFrozen2Join.AcceptedRunJoin D rust)
+  (h_stored_runtime : AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust P runtime) :
+  AspisR1.OraclePortHeadlineFrozen2PerAttempt.Claims D P Q runtime
