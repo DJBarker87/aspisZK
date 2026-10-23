@@ -1,0 +1,9 @@
+# S9 combined constructor v2 source cut (attempt22)
+
+This is an isolated Charon/Aeneas cut of the exact `Weights::new` and `Weights::box_from_parts` method bodies from the pinned combined candidate source (file hash `241a4f7dfe57666576b7653556c09d3dedef8606cf02f4ac4cd4cddf5c7663f8`). A small free-function root `weights_new` exposes the constructor to Charon. Its body matches the source method after only `Self::box_from_parts` is spelled `Weights::box_from_parts`; a self-alias `extern crate self as aspis_core` preserves the original crate-qualified statement-points path. The exact `#[inline(never)]` on `box_from_parts` is retained.
+
+The gated Charon/Aeneas run succeeded with the pinned binaries and warm target. The compact declaration inventory records both target functions as transparent. Generated Lean Types/Funs are included both raw and with only Aeneas's `maxHeartbeats` and `maxRecDepth` override lines removed. No raw LLBC, Aeneas JSON translation, `.olean`, executable, object, cache, key, or SBF is included.
+
+The source cut is deliberately narrow. It does not claim the helper933 body or the full production caller is in the generated reachable closure. The reused `state_only_prefix` cut replaces the source loop over `[7,6]` with two ordered writes; that source-normalization identity remains open. `Box::new` also aborts on allocation failure whereas the surrounding original API returns `Error::Allocation`; any refinement is limited to accepted allocation runs and remains open. The extracted constructor therefore proves neither production adoption nor the full helper path.
+
+`S9ActualWeightsNewExtraExactV4.lean` is a fresh proof draft against this V3 output. It has not been accepted until a focused Lean compile and `#print axioms` receipt are added by the centralized compiler owner.
