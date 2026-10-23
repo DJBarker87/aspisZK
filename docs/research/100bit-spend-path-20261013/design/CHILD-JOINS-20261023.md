@@ -1,6 +1,10 @@
 # Child join instantiation audit — 23 October 2026
 
-Status: requested premise removal is obstructed by the actual interfaces.
+Current continuation: fixed C5 decoder and concrete checkpoint endpoint header
+proofs compile; adapter op10/op11 source installation remains open. See the
+continuation sections below. The earlier free-decoder audit is historical.
+
+Historical status: requested premise removal is obstructed by the actual interfaces.
 Target not yet established. Branch `codex/cx-child-joins-20261023`, initial
 revision `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. No shipped files changed.
 The rule to stop an ill-typed or false item applies; no replacement assumptions
@@ -197,3 +201,104 @@ wire/parameter/feature/security-contract change was introduced (stored suffix
 No existing Lean module, session A candidate or other worktree was edited.
 No whole frozen manifest or release-security replay was warranted by these
 obstruction/model-only modules. `git diff --check` passed.
+
+## Lead continuation: fixed C5 decoder
+
+`ChildJoin_Decoder.checkpointHeader` now fixes the digest header interpretation
+to C5 byte fields `[16,48)` and `[48,80)`, each decoded as a 32-byte State.
+It deliberately decodes those two fields only, as required by HeaderDecode;
+frame/checksum validation remains the executed reader's responsibility.
+`encoded_header` proves its result on every `OraclePortCheckpointAbiC5.encode`.
+`ChildJoin_Accepted.accepted_run` specializes the complete native accepted-run
+theorem to this decoder, including the full Required14 conclusion. The original
+module is untouched (new-modules-only rule); consumers should use the new
+entry point. All other quantifiers, success conditions and remaining child
+premises are unchanged. This closes the free-parameter item, not a child
+source-refinement obligation.
+
+Validation: lean-005/006 were local theorem-elaboration failures (retained,
+excluded); lean-007/008 pass. Each host attempt uses lake env lean, -j1 -M4400,
+MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64. Receipt JSON contains
+exact target, revision, source/dependency hashes, wall/RSS/swap and complete
+axiom lines. New top theorems use standard axioms only. Historical imports are
+reused, not claimed to be a coherent H5 release replay. No shipped source or
+artifact changed.
+
+## Lead continuation: checkpoint endpoint proofs and precise stop
+
+New `ChildJoin_Checkpoint.writer_header` applies exactly
+`CheckpointBytes5Writer.writer_effects` and `ChildJoin_Decoder.encoded_header`.
+It proves the fixed decoder equation AND 1768-byte length for the writer's
+actual returned slice. Inputs retained: successful writer execution, per-call
+Oracle, and `S1S7S8StateProvenance`. It does not assume returned encoding.
+
+New `ChildJoin_Checkpoint.reader_header` proves the fixed decoder equation
+from successful concrete `verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved)`.
+It applies `CheckpointBytes4Comparison.successful_calls`, then extracts the
+actual checked `[16,48)` and `[48,80)` calls (`checked_wire`), concrete byte
+comparison equalities and the executed digest calls. No encoded-checkpoint
+input, saved-state provenance, hash injectivity or whole-caller fact is assumed.
+`resume_program_header` discharges the effect-program/source identity using
+`CheckpointBytes5Effect.run_success` and `CheckpointBytes5Resume.source`.
+This proves reader authentication independently of the saved-fields theorem;
+`successful_saved_fields` needs an input encoding equality and only returns
+body/state agreement, next and allocation success.
+
+**Still missing at this depth:** identity of adapter `op10/op11` with those
+cone endpoint executions. `AdapterRw.Cuts.first_decoded_call` proves exactly
+the call to opaque op10 plus error mapping. `S2W_DigestExtraction.AeneasExtraction`
+has only stage1, stage2 and digestSource fields: it contains no concrete
+op10/op11 interpretation. `CheckpointBytes5Writer.writer` is a digest-read
+program materializing `sourceBody`; its own module explicitly retains native
+allocation/Vec materialization at P6. The emitted ABI2 function is `body_byte`,
+not `verifier.checkpoint`. Native `verifier.rs:326` instead contains Vec
+allocation, append and field loops; these are not definitionally the selector
+program. `CheckpointBytes5Resume.source` identifies program with
+`resumeWithOps`, not adapter op11 with `candidate.tx2_authenticated` or its
+`tx2_common` resume prefix. Lexically unchanged Rust is necessary evidence,
+but cannot supply either missing Lean equality.
+
+The new fixed-decoder counterexamples `opaque_writer` and `opaque_reader`
+prove that arbitrary adapter Ops still permit successful children violating
+the requested contracts. They are interface witnesses, not counterexamples
+to native Rust. Thus this continuation does NOT claim a concrete checkpoint
+cone join or remove those premises from accepted_run. No source identity is
+postulated as a new trust field. `S2LeadInterface.checkpoint_binding` continues
+to discharge S2S10CallerBinding from facts downstream; using those facts to
+prove the joins needed to obtain them would be circular.
+
+Next concrete deliverable: extract/bind the native candidate tx1 checkpoint
+suffix and candidate tx2_common resume prefix, preserving their exact returned
+carriers and errors; prove native Vec materialization equals the selector,
+then use the two endpoint theorems above to construct the adapter records.
+This is missing source refinement, not a cryptographic assumption or an H5
+field law. Under the requested depth-first order, no new multiproof/S8 stage
+or composed closure theorem is claimed while this checkpoint bridge is open.
+Remaining after it: actual multiproof NodeRanges/source carrier installation;
+S8 Y1Range/source carrier installation; session A's FirstEntryVerifierConeJoin
+(and FullForestAcceptedRoundtrip for any separate route consuming it);
+S1S7S8StateProvenance; named runtime/trust premises; coherent final source and
+artifact correspondence. The authentication route of accepted_run itself does
+not require FullForestAcceptedRoundtrip, as its statement explicitly records.
+
+Validation: lean-009/011 failed elaboration and are excluded; lean-010 proved
+three endpoint lemmas; lean-012 proves the final six declarations, all using
+only standard axioms. Fresh continuation totals: 8 Lean attempts, 0 Kani runs.
+No timeout, memory kill or cap increase. No shipped source changes, ELF rebuild,
+full manifest replay or claim about the three historical ELF hashes.
+
+## Updated source pin review
+
+`source-pins.json` and `function-pins.json` were refreshed at revision 94cc5cb4b5
+against 544d40b596017f5b1d9644dd19acab0cb5f98a7d. The audit now includes
+candidate.rs and the native lib.rs wrappers. All 299 function spans are
+inventoried with hashes. In particular candidate `slot`, `parse_shape`,
+`canonical_scan`, `tx1`, `tx2_common`, `tx2_authenticated`, verifier `checkpoint`,
+`resume`, compact functions and lib `first_decoded` are unchanged.
+H5-changed weights/fast_pairing declarations, Core state_only_statement_points
+and owned-adapter require_zero remain explicitly marked changed. No old S8
+arithmetic/finisher theorem is attributed to these changed bodies. The new
+checkpoint endpoint proofs use the unchanged selector/reader boundaries and
+make no claim to discharge Q::from_limbs or the H5 arithmetic source bridge.
+Source-span equality, reuse of cached imported theorems and release replay
+remain separate evidence categories.
