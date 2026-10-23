@@ -73,7 +73,9 @@ import ExtractedDecoderCallerBridge
 #print axioms AspisR1.R22TotalStage2Constants.compact_PROOF_BYTES_R22
 #print axioms AspisR1.R22TotalStage2Constants.verifier_CHECKPOINT_FIXED_R22
 
-#check AspisR1S3InactiveSource.r0.Error.instDiscriminant
+-- Session A owns S3 candidate adoption; its existing anonymous instance remains.
+#check AspisR1TerminalDecoder.pool_v1.historical_anchor.PoolV1TransitionKind.instDiscriminant
+#check AspisR1WithdrawalCaller.pool_v1.historical_anchor.PoolV1TransitionKind.instDiscriminant
 #check AspisR1Stage2.verifier.Error.instDiscriminant
 #check AspisR1Stage2.transport.Variant.instDiscriminant
 #check AspisR1Stage2.verifier.Phase.instDiscriminant
