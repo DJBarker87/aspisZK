@@ -1,0 +1,57 @@
+{
+  "attempt": "kani-007",
+  "kind": "kani",
+  "source_revision": "bdeb6c700a4a4722b57346347b19149d50b7e925",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2W_native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "--exact",
+    "--harness",
+    "S2W_snapshot_checkpoint_account",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2W_native/src/lib.rs",
+    "S2W_native/Cargo.toml",
+    "S2W_native/Cargo.lock"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "deps_fingerprint": {
+    "scope": "Verbatim snapshot/OwnedAccount on actual1768 checkpoint bytes, arbitrary content/index/metadata; SDK2.3.0 no stubs"
+  },
+  "expected_time": "Cached optimized compilation then isolated1768-byte checkpoint snapshot selected-byte and metadata gate",
+  "change": "Independent actual1768 checkpoint-account native snapshot after split; full proof-account timeout retained",
+  "exit_status": 0,
+  "wall_seconds": 12.485980972996913,
+  "peak_rss_kib": "591360",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r42bcc367bdbc4c91a85d5ec0ba4d26f1.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "619012096",
+  "source_hashes": {
+    "S2W_native/src/lib.rs": "765b7f48e28184e15be12bfaadcdd89243593f1a8d6a9c884d7cb527613d7fc9",
+    "S2W_native/Cargo.toml": "974bd7e38450bb108d2fdc3ca1c863c597c99cc2876cbf539b69e3abd33fa541",
+    "S2W_native/Cargo.lock": "659aedb0c50c8049a44ba0daf3c105e707c497b870820691f3af837caaaf42d1"
+  },
+  "print_axioms": "N/A: kani"
+}

@@ -1,0 +1,39 @@
+{
+  "attempt": "kani-005",
+  "kind": "kani",
+  "source_revision": "bdeb6c700a4a4722b57346347b19149d50b7e925",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2W_native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "--exact",
+    "--harness",
+    "S2W_snapshot_proof_account",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2W_native/src/lib.rs",
+    "S2W_native/Cargo.toml",
+    "S2W_native/Cargo.lock"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "deps_fingerprint": {
+    "scope": "Verbatim native snapshot and OwnedAccount, SDK2.3.0, full58295 arbitrary bytes/index and metadata, no stubs"
+  },
+  "expected_time": "Cached optimized compilation then full58295 snapshot selected-byte/metadata/guard gate",
+  "change": "Unwind34 covers32-byte key memcmp after insufficient-unwind kani002; verbatim full58295 snapshot scope unchanged"
+}

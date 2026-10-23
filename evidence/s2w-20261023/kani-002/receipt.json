@@ -1,0 +1,55 @@
+{
+  "attempt": "kani-002",
+  "kind": "kani",
+  "source_revision": "bdeb6c700a4a4722b57346347b19149d50b7e925",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2W_native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "--exact",
+    "--harness",
+    "S2W_snapshot_proof_account",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2W_native/src/lib.rs",
+    "S2W_native/Cargo.toml"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "deps_fingerprint": {
+    "scope": "Standalone verbatim native snapshot on SDK2.3.0; full admitted58295 payload; no stubs; repository shipped files unchanged"
+  },
+  "expected_time": "Optimized SDK compilation then symbolic full proof-account snapshot/copy, selected-byte frame and restoration check; no cryptographic elimination",
+  "change": "Fix double dereference of actual SDK Ref<&mut u64>; unchanged native snapshot and full58295 input scope",
+  "exit_status": 1,
+  "wall_seconds": 42.74619249800162,
+  "peak_rss_kib": "3901328",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rb176efb44e314b59b2fee337f12b3632.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "6082666496",
+  "source_hashes": {
+    "S2W_native/src/lib.rs": "c28160011b33c1ac38151bc8122693a96a5358c09a8f6574736c52235092785c",
+    "S2W_native/Cargo.toml": "974bd7e38450bb108d2fdc3ca1c863c597c99cc2876cbf539b69e3abd33fa541"
+  },
+  "print_axioms": "N/A: kani"
+}

@@ -1,0 +1,39 @@
+S2W_SnapshotJoin.lean:24:18: error: Application type mismatch: The argument
+  stored
+has type
+  account.bytes = core.result.Result.Ok bytes
+but is expected to have type
+  core.result.Result.Ok bytes = core.result.Result.Ok bytes
+in the application
+  And.intro stored
+S2W_SnapshotJoin.lean:40:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+C : Carriers
+ops : Ops C
+ownedOps : AdapterRw.Ops
+account : AccountInfo C
+length1 length2 : Usize
+out : OwnedAccount
+data : Slice U8
+returned : snapshot C ops account length1 length2 = ok out
+read : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ownedOps out = ok (core.result.Result.Ok data)
+x✝ : ∃ bytes, out.bytes = core.result.Result.Ok bytes ∧ bytes.deref = data
+⊢ S2X.OwnedSnapshotShape ownedOps out
+S2W_SnapshotJoin.lean:34:0: error: type of theorem `AspisR1.S2W.SnapshotJoin.snapshot_shape` is not a proposition
+  (C : Carriers) →
+    (ops : Ops C) →
+      (ownedOps : AdapterRw.Ops) →
+        (account : AccountInfo C) →
+          (length1 length2 : Usize) →
+            (out : OwnedAccount) →
+              (data : Slice U8) →
+                snapshot C ops account length1 length2 = ok out →
+                  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ownedOps out = ok (core.result.Result.Ok data) →
+                    S2X.OwnedSnapshotShape ownedOps out
+'AspisR1.S2W.SnapshotJoin.data_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+S2W_SnapshotJoin.lean:68:14: error(lean.unknownIdentifier): Unknown constant `snapshot_shape`
+'AspisR1.S2W.SnapshotJoin.accepted_checkpoint_length' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

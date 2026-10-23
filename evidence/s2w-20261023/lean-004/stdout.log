@@ -1,0 +1,246 @@
+S2W_SnapshotFacts.lean:16:2: error: Type mismatch: After simplification, term
+  call
+ has type
+  @Eq (Result (alloc.vec.Vec U8)) (alloc.slice.Slice.to_vec core.clone.CloneU8 data) (ok data)
+but is expected to have type
+  @Eq (Result (alloc.vec.Vec U8)) (alloc.slice.Slice.to_vec core.clone.CloneU8 data) (ok data)
+S2W_SnapshotFacts.lean:41:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ops.deref guard
+in the target expression
+  (let (r, _) := (core.result.Result.Ok guard, back)
+    match r with
+    | core.result.Result.Ok data => do
+      let s ← ops.deref data
+      if s.len = length1 then do
+          let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+          ok
+              { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                is_writable := account.is_writable, executable := account.executable,
+                length := core.result.Result.Ok s.len, bytes := core.result.Result.Ok v }
+        else
+          if s.len = length2 then do
+            let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+            ok
+                { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                  is_writable := account.is_writable, executable := account.executable,
+                  length := core.result.Result.Ok s.len, bytes := core.result.Result.Ok v }
+          else
+            ok
+              { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                is_writable := account.is_writable, executable := account.executable,
+                length := core.result.Result.Ok s.len,
+                bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData }
+    | core.result.Result.Err error => do
+      let pe ← ops.cloneError error
+      ok
+          { key := account.key, owner := account.owner, is_signer := account.is_signer,
+            is_writable := account.is_writable, executable := account.executable, length := core.result.Result.Err pe,
+            bytes := core.result.Result.Err error }) =
+    ok (projected C account (core.result.Result.Ok data.len) (core.result.Result.Ok data))
+
+C : Carriers
+ops : Ops C
+account : AccountInfo C
+length1 length2 : Usize
+guard : C.Ref (Slice U8)
+back : core.result.Result (C.Ref (Slice U8)) PE → Unit
+data : Slice U8
+borrow : ops.borrow account = ok (core.result.Result.Ok guard, back)
+deref : ops.deref guard = ok data
+admitted : data.len = length1 ∨ data.len = length2
+⊢ (let (r, _) := (core.result.Result.Ok guard, back)
+    match r with
+    | core.result.Result.Ok data => do
+      let s ← ops.deref data
+      if s.len = length1 then do
+          let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+          ok
+              { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                is_writable := account.is_writable, executable := account.executable,
+                length := core.result.Result.Ok s.len, bytes := core.result.Result.Ok v }
+        else
+          if s.len = length2 then do
+            let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+            ok
+                { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                  is_writable := account.is_writable, executable := account.executable,
+                  length := core.result.Result.Ok s.len, bytes := core.result.Result.Ok v }
+          else
+            ok
+              { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                is_writable := account.is_writable, executable := account.executable,
+                length := core.result.Result.Ok s.len,
+                bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData }
+    | core.result.Result.Err error => do
+      let pe ← ops.cloneError error
+      ok
+          { key := account.key, owner := account.owner, is_signer := account.is_signer,
+            is_writable := account.is_writable, executable := account.executable, length := core.result.Result.Err pe,
+            bytes := core.result.Result.Err error }) =
+    ok (projected C account (core.result.Result.Ok data.len) (core.result.Result.Ok data))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    data
+  has type
+    Slice U8
+  but is expected to have type
+    alloc.vec.Vec U8
+  in the application
+    core.result.Result.Ok data
+S2W_SnapshotFacts.lean:63:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ops.deref guard
+in the target expression
+  (let (r, _) := (core.result.Result.Ok guard, back)
+    match r with
+    | core.result.Result.Ok data => do
+      let s ← ops.deref data
+      if s.len = length1 then do
+          let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+          ok
+              { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                is_writable := account.is_writable, executable := account.executable,
+                length := core.result.Result.Ok s.len, bytes := core.result.Result.Ok v }
+        else
+          if s.len = length2 then do
+            let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+            ok
+                { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                  is_writable := account.is_writable, executable := account.executable,
+                  length := core.result.Result.Ok s.len, bytes := core.result.Result.Ok v }
+          else
+            ok
+              { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                is_writable := account.is_writable, executable := account.executable,
+                length := core.result.Result.Ok s.len,
+                bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData }
+    | core.result.Result.Err error => do
+      let pe ← ops.cloneError error
+      ok
+          { key := account.key, owner := account.owner, is_signer := account.is_signer,
+            is_writable := account.is_writable, executable := account.executable, length := core.result.Result.Err pe,
+            bytes := core.result.Result.Err error }) =
+    ok
+      (projected C account (core.result.Result.Ok data.len)
+        (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+
+C : Carriers
+ops : Ops C
+account : AccountInfo C
+length1 length2 : Usize
+guard : C.Ref (Slice U8)
+back : core.result.Result (C.Ref (Slice U8)) PE → Unit
+data : Slice U8
+borrow : ops.borrow account = ok (core.result.Result.Ok guard, back)
+deref : ops.deref guard = ok data
+first : data.len ≠ length1
+second : data.len ≠ length2
+⊢ (let (r, _) := (core.result.Result.Ok guard, back)
+    match r with
+    | core.result.Result.Ok data => do
+      let s ← ops.deref data
+      if s.len = length1 then do
+          let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+          ok
+              { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                is_writable := account.is_writable, executable := account.executable,
+                length := core.result.Result.Ok s.len, bytes := core.result.Result.Ok v }
+        else
+          if s.len = length2 then do
+            let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+            ok
+                { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                  is_writable := account.is_writable, executable := account.executable,
+                  length := core.result.Result.Ok s.len, bytes := core.result.Result.Ok v }
+          else
+            ok
+              { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                is_writable := account.is_writable, executable := account.executable,
+                length := core.result.Result.Ok s.len,
+                bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData }
+    | core.result.Result.Err error => do
+      let pe ← ops.cloneError error
+      ok
+          { key := account.key, owner := account.owner, is_signer := account.is_signer,
+            is_writable := account.is_writable, executable := account.executable, length := core.result.Result.Err pe,
+            bytes := core.result.Result.Err error }) =
+    ok
+      (projected C account (core.result.Result.Ok data.len)
+        (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+S2W_SnapshotFacts.lean:78:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ops.cloneError error
+in the target expression
+  (let (r, _) := (core.result.Result.Err error, back)
+    match r with
+    | core.result.Result.Ok data => do
+      let s ← ops.deref data
+      if s.len = length1 then do
+          let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+          ok
+              { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                is_writable := account.is_writable, executable := account.executable,
+                length := core.result.Result.Ok s.len, bytes := core.result.Result.Ok v }
+        else
+          if s.len = length2 then do
+            let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+            ok
+                { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                  is_writable := account.is_writable, executable := account.executable,
+                  length := core.result.Result.Ok s.len, bytes := core.result.Result.Ok v }
+          else
+            ok
+              { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                is_writable := account.is_writable, executable := account.executable,
+                length := core.result.Result.Ok s.len,
+                bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData }
+    | core.result.Result.Err error => do
+      let pe ← ops.cloneError error
+      ok
+          { key := account.key, owner := account.owner, is_signer := account.is_signer,
+            is_writable := account.is_writable, executable := account.executable, length := core.result.Result.Err pe,
+            bytes := core.result.Result.Err error }) =
+    ok (projected C account (core.result.Result.Err cloned) (core.result.Result.Err error))
+
+C : Carriers
+ops : Ops C
+account : AccountInfo C
+length1 length2 : Usize
+error cloned : PE
+back : core.result.Result (C.Ref (Slice U8)) PE → Unit
+borrow : ops.borrow account = ok (core.result.Result.Err error, back)
+clone : ops.cloneError error = ok cloned
+⊢ (let (r, _) := (core.result.Result.Err error, back)
+    match r with
+    | core.result.Result.Ok data => do
+      let s ← ops.deref data
+      if s.len = length1 then do
+          let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+          ok
+              { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                is_writable := account.is_writable, executable := account.executable,
+                length := core.result.Result.Ok s.len, bytes := core.result.Result.Ok v }
+        else
+          if s.len = length2 then do
+            let v ← alloc.slice.Slice.to_vec core.clone.CloneU8 s
+            ok
+                { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                  is_writable := account.is_writable, executable := account.executable,
+                  length := core.result.Result.Ok s.len, bytes := core.result.Result.Ok v }
+          else
+            ok
+              { key := account.key, owner := account.owner, is_signer := account.is_signer,
+                is_writable := account.is_writable, executable := account.executable,
+                length := core.result.Result.Ok s.len,
+                bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData }
+    | core.result.Result.Err error => do
+      let pe ← ops.cloneError error
+      ok
+          { key := account.key, owner := account.owner, is_signer := account.is_signer,
+            is_writable := account.is_writable, executable := account.executable, length := core.result.Result.Err pe,
+            bytes := core.result.Result.Err error }) =
+    ok (projected C account (core.result.Result.Err cloned) (core.result.Result.Err error))
+'AspisR1.S2W.Snapshot.to_vec_identity' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.S2W.Snapshot.admitted_snapshot' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W.Snapshot.rejected_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W.Snapshot.borrow_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
