@@ -1196,3 +1196,66 @@ old scratch when constructor factors are canonical. This removes allocator-
 content dependence; primitive effects/runtime correspondence and full actual
 Pair-to-helper/source transport remain OPEN. No Rust/CU change was needed
 for the scratch proof.
+
+
+2026-10-23 continuation: actual producer and caller joins
+
+Target not yet established. These are focused accepted-run/source-model
+results for the retained constructor and extracted candidate Pair, not an
+adopted deployment or a complete S9/security theorem.
+
+The constructor now derives canonical statement points from its same-run
+reverse-carry and complement producer, then canonical factors from both
+factor phases. Independent point-producer canonicality was removed. Its
+remaining input guards are canonical semantic alpha and circle inputs, plus
+the same successful constructor execution. Seven concrete scalar/QM
+primitive totality results are included; unconditional constructor/loop
+totality is not inferred. See
+`evidence/s9-constructor-v3-factors-points-total-primitives-v1-20261023/`.
+The emitted semantic-round caller supplies the exact mapped alpha guard for
+this constructor: `evidence/s9-emitted-rounds-constructor-factors-v1-20261023/`.
+Semantic hooks and the source/runtime boundary remain explicit.
+
+The strict source resume supplies both exact fold challenges and their
+canonical limbs. The actual Array2 RangeTo2 operation is proved equal to
+the full array slice, with exact readback. Copying those same coordinates
+into the native candidate Pair carrier derives its canonical-alpha guard.
+The accepted same-input Pair theorem now obtains canonical powers and the
+same helper success without an independent alpha guard, length guard,
+powers-success premise or helper-success premise. See the packets
+`s9-resume-alpha-source-canonical-v1-20261023`,
+`s9-array-two-prefix-source-v1-20261023`,
+`s9-resume-alpha-native-pair-input-v1-20261023`, and
+`s9-resume-same-pair-canonical-powers-v1-20261023`.
+The enclosing concrete finish/newWeights installation is being composed;
+it must supply the same receiver and its S2 variant rather than assume them.
+
+Candidate Pair Wide addition now has full Result transport to the installed
+concrete helper on canonical inputs. Candidate Wide-by-M31 multiplication
+has unconditional full Result transport for arbitrary U32 scalars and
+operands, retaining its modulo reduction. Both reuse earlier checked
+arithmetic, preserve failures/divergence, and add no successful-child or
+output-contract hypothesis. See `s9-actual-pair-wide-add-*-v1-20261023` and
+`s9-actual-pair-mulm31-*-v1-20261023`. Other operation transports and the
+complete actual helper body are under composition; individual transports
+do not establish the helper or Pair as a whole.
+
+The original extracted fixed-[7,6] complement loop equals the two ordered
+writes as a complete Result computation under exactly three iterator
+observations (7,6,exhaustion). Arithmetic/index errors and divergence are
+retained; concrete Std iterator correspondence remains open. See
+`s9-complement-two-step-normalization-v1-20261023`.
+The retained circle wrapper also has a checked canonical-coordinate result
+covering secure and fallback branches, reusing existing R72 mathematics.
+Its current Rust callee/caller refinement remains open. Current-source
+circle Charon extraction succeeded; its new Aeneas run rejected a function
+pointer type in CM31::inv_with. A separately pinned older working toolchain
+is being tested without changing current Rust source.
+
+Focused checks use standard axioms with exact targets, source hashes,
+resource limits, timing/RSS/swap and retained failures in each packet.
+Cached dependencies were reused; no coherent final release replay,
+source adoption, new CU gate or compiled artifact pin is claimed here.
+Source normalization, Box/allocation effects, caller installation, whole
+constructor totality, the remaining source/refinement obligations and the
+composed security contract all remain required.
