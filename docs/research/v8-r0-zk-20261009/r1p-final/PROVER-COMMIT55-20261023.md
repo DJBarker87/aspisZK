@@ -151,3 +151,66 @@ The channel-0 v3 failure is confined to generating 1024 arbitrary input cells:
 its 260 unwind bound covers the collector but not that input constructor.
 The revised harness explicitly covers that 1024-step setup; memory caps stay
 fixed. No failed native input is replayed unchanged.
+
+## Stage 4: native node output and instantiated retained Poseidon caller
+
+J10729 proves literal canonical point and individual-node result equality
+between the optimized square-based owner and the previous geometry owner.
+J10732 derives the entire nine-cell source array on valid native indices,
+including canonicality and exact node values. Its inputs satisfy j<262144
+and d+left≤9. The earlier broader arbitrary-state fill-equivalence drafts
+(J10728/31) are not claimed: unknown result continuations caused kernel memory
+failures at 7169504/7169024 KiB. The replacement proves the real bounded
+successful caller by consuming named per-node results and symbolic array
+updates; it finishes in 2.15 s at 4125248 KiB, zero swap. No cap is raised.
+J10723 checks the new exact geometry extraction, with all retained declarations
+byte-equal. J10728 also exposes an omitted U8 subtraction import/incorrect
+counter type; those failed snapshots are retained.
+
+The retained evaluator source cut V12 is checked at J10724 (3.97 s,
+4127652 KiB), using its exact unchanged source. No shared object is overwritten.
+J10725 is retired without compiler invocation because the first proposed import
+was uncached. J10726/27 are qualification/transparency drafts. J10730 proves
+the callable retained Poseidon evaluator contract directly over QM31, deriving
+leading/full/internal calls, output canonicality and the packed scalar residual
+from canonical inputs. No leading/full source-call or model hypothesis remains.
+J10733 instantiates the complete retained composition continue branch with
+this concrete callable, removing its hposeidon callback premise. Public
+preparation success and the source-cut/frozen-source binding remain explicit.
+This is genuine source-cut composition, not a whole native terminal claim.
+
+Accepted Lean results:
+
+| Attempt | Exact module | Exit | Wall s | Peak RSS KiB | Swaps |
+|---|---|---:|---:|---:|---:|
+| J10723 | AspisR1ProducerRelease47.EncoderNativeGeometry55 | 0 | 1.11 | 2637584 | 0 |
+| J10724 | PoseidonCandidateProjectedEvaluatorSourceV12 | 0 | 3.97 | 4127652 | 0 |
+| J10729 | R1Z.ProverCommitNativeGeometry55 | 0 | 1.83 | 4103904 | 0 |
+| J10730 | R1Z.ProverCommitPoseidonCallable55 | 0 | 2.35 | 4151588 | 0 |
+| J10732 | R1Z.ProverCommitNativeNodes55 | 0 | 2.15 | 4125248 | 0 |
+| J10733 | R1Z.ProverCommitComposition55 | 0 | 1.91 | 4203144 | 0 |
+
+All accepted axioms are standard only. The optimized geometry extraction
+exits 0/0 (1.342/0.370 s, 212180/65120 KiB, zero swap). Full exact source,
+dependency, revision and output evidence is retained per receipt.
+
+power-control-trace-v4 passes in 1.500 s at 155988 KiB, zero swap. It checks
+branching, operation operands/order and returned-state use with open arithmetic
+calls; it does not replace the timed-out full arithmetic comparison. The actual
+square and power operations are proved separately in Lean.
+
+All four complete native M31 1024→256 channel collections pass (receipts
+m-channel-0-v4 through m-channel-3-v4), approximately 99–110 s and 2.76 GiB,
+zero swap. The full-record QM31 channel-0 gate is stopped during memory growth
+at 6484584 KiB (146.175 s), zero swap, and is not retried unchanged. Its
+replacement checks separate output words while preserving the full native
+collection. Those checks are ongoing; no complete QM31 channel claim yet.
+
+The frozen/candidate Poseidon function inventory identifies 19 reachable
+local functions. Fifteen match after removing comments/whitespace; four
+have explicit diffs in source-diffs/. They are the two low folds/constructor,
+external local constructor, external linear row loop, and internal constructor
+uses. Field.rs and field/wide_exact.rs are byte-identical between frozen and
+retained inputs. The Poseidon constants file differs only by an appended
+proof-only reference module. Token equality is an inventory, not a semantic
+proof of those four changed functions. Native focused bindings are ongoing.

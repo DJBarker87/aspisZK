@@ -1,0 +1,36 @@
+import R1Z.ProverCommitNativeGeometry55
+/-! Finite node-array induction using opaque source continuations. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitNativeNodes55
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitNativeGeometry55
+attribute [local irreducible] nodes55.fill nodes54.fill nodes55.node nodes54.node
+
+theorem fill_same (n : Nat) (j : Usize) (d left : U8) (hl : left.val=n)
+    (out : Array field.M31 9#usize) : nodes55.fill j d left out=nodes54.fill j d left out := by
+  induction n generalizing d left out with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    rw [nodes55.fill,nodes54.fill,hz]
+    rfl
+  | succ n ih =>
+    have hn : left≠0#u8 := by scalar_tac
+    have hdec : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [U8.wrapping_sub_val_eq,ProverCommitInterpolationIndices48.size_u8]
+      have hs := left.hSize
+      rw [ProverCommitInterpolationIndices48.size_u8] at hs
+      change (left.val+(256-1))%256=n
+      omega
+    have hnext : ∀ out, nodes55.fill j (U8.wrapping_add d 1#u8) (U8.wrapping_sub left 1#u8) out=
+        nodes54.fill j (U8.wrapping_add d 1#u8) (U8.wrapping_sub left 1#u8) out :=
+      fun out => ih _ _ hdec out
+    rw [nodes55.fill,nodes54.fill]
+    simp only [hn,if_false,node_same,lift,bind_tc_ok,hnext]
+
+theorem nodes_same (j : Usize) : nodes55.nodes j=nodes54.nodes j := by
+  rw [nodes55.nodes,nodes54.nodes]
+  exact fill_same 9 j 0#u8 9#u8 rfl _
+
+#print axioms fill_same
+#print axioms nodes_same
+end R1Z.ProverCommitNativeNodes55

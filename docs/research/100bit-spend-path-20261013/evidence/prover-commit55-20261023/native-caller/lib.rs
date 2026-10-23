@@ -131,3 +131,87 @@ fn owned_power_step(base:field::CM31,exp:u64,acc:field::CM31)->(field::CM31,u64,
   assert_eq!(native.2.a,owned.2.a);assert_eq!(native.2.b,owned.2.b);
  }
 }
+
+#[cfg(kani)] mod channel_components {
+ use super::*;
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_0_word_0() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,0);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c0.a.0,c[4*k as usize+0].c0.a.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_0_word_1() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,0);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c0.b.0,c[4*k as usize+0].c0.b.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_0_word_2() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,0);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c1.a.0,c[4*k as usize+0].c1.a.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_0_word_3() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,0);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c1.b.0,c[4*k as usize+0].c1.b.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_1_word_0() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,1);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c0.a.0,c[4*k as usize+1].c0.a.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_1_word_1() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,1);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c0.b.0,c[4*k as usize+1].c0.b.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_1_word_2() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,1);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c1.a.0,c[4*k as usize+1].c1.a.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_1_word_3() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,1);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c1.b.0,c[4*k as usize+1].c1.b.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_2_word_0() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,2);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c0.a.0,c[4*k as usize+2].c0.a.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_2_word_1() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,2);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c0.b.0,c[4*k as usize+2].c0.b.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_2_word_2() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,2);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c1.a.0,c[4*k as usize+2].c1.a.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_2_word_3() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,2);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c1.b.0,c[4*k as usize+2].c1.b.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_3_word_0() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,3);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c0.a.0,c[4*k as usize+3].c0.a.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_3_word_1() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,3);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c0.b.0,c[4*k as usize+3].c0.b.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_3_word_2() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,3);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c1.a.0,c[4*k as usize+3].c1.a.0);
+ }
+ #[kani::proof] #[kani::unwind(1030)] fn q_channel_3_word_3() {
+  let raw:[[u32;4];1024]=kani::any();let c:[field::QM31;1024]=unsafe{std::mem::transmute(raw)};
+  let k:u8=kani::any();let out=channel(&c,3);
+  assert_eq!(out.len(),256);assert_eq!(out[k as usize].c1.b.0,c[4*k as usize+3].c1.b.0);
+ }
+}

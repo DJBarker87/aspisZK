@@ -31,9 +31,21 @@ fp=hashlib.sha256(json.dumps(dict(imports=deps,core_artifacts=core),sort_keys=Tr
 output=root/'objects'/(module.replace('.','/')+'.olean')
 assert not output.is_symlink(),'refuse to overwrite shared cache link'
 cmd=['sh',str(W/'proof-launcher.sh'),attempt,module.replace('.','/'),'J','7000','8',fp]
+reservations=[]
+while True:
+ reservations=[]
+ for limit in Path('/sys/fs/cgroup').rglob('memory.max'):
+  try:
+   cap=limit.read_text().strip()
+   if cap!='max' and (limit.parent/'cgroup.procs').read_text().strip():
+    reservations.append(dict(path=str(limit.parent),bytes=int(cap)))
+  except OSError:pass
+ if sum(row['bytes'] for row in reservations)+8*2**30<=55*2**30:break
+ print('Reservation hold before Lean compiler; no attempt launched',flush=True)
+ time.sleep(15)
 start=time.monotonic();p=subprocess.run(cmd,text=True,capture_output=True)
 evidence=Path('/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence')
-receipt={'module':module,'attempt':'J'+attempt,'source_sha256':sha(src),'source_revision':revision,'dependencies':deps,'core_artifacts':core,'deps_fingerprint':fp,'command':cmd,'controller_exit':p.returncode,'controller_wall_seconds':time.monotonic()-start,'stdout':p.stdout,'stderr':p.stderr}
+receipt={'module':module,'attempt':'J'+attempt,'source_sha256':sha(src),'source_revision':revision,'dependencies':deps,'core_artifacts':core,'deps_fingerprint':fp,'command':cmd,'reservations':reservations,'controller_exit':p.returncode,'controller_wall_seconds':time.monotonic()-start,'stdout':p.stdout,'stderr':p.stderr}
 for stem,suffix in [('out','.log'),('time','.log'),('sha','.txt')]:
  f=evidence/(stem+'-'+attempt+suffix)
  if f.exists():receipt[stem]=f.read_text()

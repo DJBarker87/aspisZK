@@ -1,0 +1,92 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+error[E0433]: failed to resolve: use of undeclared type `CM31`
+  --> lib.rs:16:13
+   |
+16 |         c0: CM31::new(M31::reduce_u62(limbs[0]), M31::reduce_u62(limbs[1])),
+   |             ^^^^ use of undeclared type `CM31`
+   |
+help: a struct with a similar name exists
+   |
+16 -         c0: CM31::new(M31::reduce_u62(limbs[0]), M31::reduce_u62(limbs[1])),
+16 +         c0: M31::new(M31::reduce_u62(limbs[0]), M31::reduce_u62(limbs[1])),
+   |
+help: consider importing this struct
+   |
+ 9 + use crate::field::CM31;
+   |
+
+error[E0433]: failed to resolve: use of undeclared type `CM31`
+  --> lib.rs:17:13
+   |
+17 |         c1: CM31::new(M31::reduce_u62(limbs[2]), M31::reduce_u62(limbs[3])),
+   |             ^^^^ use of undeclared type `CM31`
+   |
+help: a struct with a similar name exists
+   |
+17 -         c1: CM31::new(M31::reduce_u62(limbs[2]), M31::reduce_u62(limbs[3])),
+17 +         c1: M31::new(M31::reduce_u62(limbs[2]), M31::reduce_u62(limbs[3])),
+   |
+help: consider importing this struct
+   |
+ 9 + use crate::field::CM31;
+   |
+
+error[E0425]: cannot find value `EXTERNAL_LOCAL_LIMB_MODULUS_BOUND` in this scope
+  --> lib.rs:42:62
+   |
+42 |             all_local_limbs_bounded &= local[output][limb] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+   |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `EXTERNAL_LOCAL_LIMB_MODULUS_BOUND` in this scope
+  --> lib.rs:49:17
+   |
+49 |     let bound = EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0433]: failed to resolve: use of undeclared type `CM31`
+   --> lib.rs:154:13
+    |
+154 |         c0: CM31::new(M31::reduce_u62(limbs[0]), M31::reduce_u62(limbs[1])),
+    |             ^^^^ use of undeclared type `CM31`
+    |
+help: a struct with a similar name exists
+    |
+154 -         c0: CM31::new(M31::reduce_u62(limbs[0]), M31::reduce_u62(limbs[1])),
+154 +         c0: M31::new(M31::reduce_u62(limbs[0]), M31::reduce_u62(limbs[1])),
+    |
+help: consider importing this struct
+    |
+147 + use crate::field::CM31;
+    |
+
+error[E0433]: failed to resolve: use of undeclared type `CM31`
+   --> lib.rs:155:13
+    |
+155 |         c1: CM31::new(M31::reduce_u62(limbs[2]), M31::reduce_u62(limbs[3])),
+    |             ^^^^ use of undeclared type `CM31`
+    |
+help: a struct with a similar name exists
+    |
+155 -         c1: CM31::new(M31::reduce_u62(limbs[2]), M31::reduce_u62(limbs[3])),
+155 +         c1: M31::new(M31::reduce_u62(limbs[2]), M31::reduce_u62(limbs[3])),
+    |
+help: consider importing this struct
+    |
+147 + use crate::field::CM31;
+    |
+
+error[E0425]: cannot find value `EXTERNAL_LOCAL_LIMB_MODULUS_BOUND` in this scope
+   --> lib.rs:180:62
+    |
+180 |             all_local_limbs_bounded &= local[output][limb] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+    |                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find value `EXTERNAL_LOCAL_LIMB_MODULUS_BOUND` in this scope
+   --> lib.rs:187:17
+    |
+187 |     let bound = EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+Some errors have detailed explanations: E0425, E0433.
+For more information about an error, try `rustc --explain E0425`.
+error: Failed to execute cargo (exit status: 101). Found 8 compilation errors.
