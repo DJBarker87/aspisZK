@@ -1,0 +1,39 @@
+S2W_ExpandedChildren.lean:40:50: error: Application type mismatch: The argument
+  erased
+has type
+  (thenResult (port.execute call) fun answer => ok answer.1) = ok value
+but is expected to have type
+  ok answer.1 = ok value
+in the application
+  ok.inj erased
+S2W_ExpandedChildren.lean:41:4: error: Tactic `assumption` failed
+
+case ok
+E A : Type
+ops : AdapterRw.Ops
+port : ChildConeJoin E ops
+call : Call A
+value : A
+valid : invoke ops call = ok value
+erased : (thenResult (port.execute call) fun answer => ok answer.1) = ok value
+answer : A × List (S2W_ExpandedTrace.Event E)
+execution : port.execute call = ok answer
+same : answer.1 = value
+⊢ ok answer = ok (value, answer.2)
+'AspisR1.S2W_ExpandedChildren.returned_child' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_ExpandedChildren.accepted_native_children' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+structure AspisR1.S2W_ExpandedChildren.ChildConeJoin (E : Type) (ops : AdapterRw.Ops) : Type 1
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.execute : {A : Type} →
+      Call A → Result (A × List (S2W_ExpandedTrace.Event E))
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.erasure : ∀ {A : Type} (call : Call A),
+      (thenResult (self.execute call) fun answer => ok answer.1) = invoke ops call
+constructor:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.mk {E : Type} {ops : AdapterRw.Ops}
+    (execute : {A : Type} → Call A → Result (A × List (S2W_ExpandedTrace.Event E)))
+    (erasure : ∀ {A : Type} (call : Call A), (thenResult (execute call) fun answer => ok answer.1) = invoke ops call) :
+    ChildConeJoin E ops
