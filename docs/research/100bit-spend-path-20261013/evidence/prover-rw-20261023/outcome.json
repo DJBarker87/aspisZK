@@ -1,0 +1,54 @@
+{
+  "adoption_candidate": true,
+  "stage1": "committed eb362eae2b before source changes",
+  "stage2": "STOP: intermediate retry/opening implementation; incomplete",
+  "stage3": "not started: performance stop",
+  "gate_a": {
+    "paired_full_runs": 10,
+    "full_bytes_status_audit_counts_identical": true,
+    "strict_verifier_acceptance": true,
+    "required_runs": 1000,
+    "rejected_attempt_coverage": false,
+    "complete": false
+  },
+  "gate_b": {
+    "pass_gate": false,
+    "comparison_exit_status": 3,
+    "results": [
+      {
+        "fixture": "transfer",
+        "samples": 5,
+        "workers": 16,
+        "baseline_median_seconds": 15.205470563,
+        "candidate_median_seconds": 16.415735081,
+        "ratio": 1.0795940193357105,
+        "under_15_seconds": false,
+        "within_10_percent": true
+      },
+      {
+        "fixture": "withdrawal",
+        "samples": 5,
+        "workers": 16,
+        "baseline_median_seconds": 15.678505408,
+        "candidate_median_seconds": 17.112834344,
+        "ratio": 1.0914837797784047,
+        "under_15_seconds": false,
+        "within_10_percent": true
+      }
+    ],
+    "measurement": "shared host, 16 workers; no causal slowdown attribution"
+  },
+  "gate_c": "not rebuilt; host-only source assessment and full inherited pins in source-scope.json",
+  "gate_d": "not run; unchanged arithmetic is not a substitute for a complete leaf-contract audit",
+  "l1": "not gated",
+  "lean_compiles": 0,
+  "kani_runs": 0,
+  "aeneas_runs": 0,
+  "assumptions_changed": [],
+  "security_target": "not yet established",
+  "merged": false,
+  "pushed": false,
+  "host_workspace": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023",
+  "retained": "all host ledgers, native binaries, full proof outputs; no account keys generated or deleted",
+  "print_axioms": "N/A: no formal proof attempted"
+}

@@ -23,16 +23,49 @@ impl Commitments for Backend {
     }
 }
 pub fn round(q:&[E],w:&[E])->[E;7] {
-    assert_eq!(q.len(),w.len());let mut c=[E::ZERO;7];
-    for d in 0..q.len()/4 {for s in 0..4 {for t in 0..4 {c[s+PERM[t]]=c[s+PERM[t]].add(q[4*d+s].mul(w[4*d+t]));}}}
-    c.map(|x|x.mul_m31(QUARTER))
+    assert_eq!(q.len(),w.len());
+    let mut c=[E::ZERO;7];
+    let mut d=0;
+    while d<q.len()/4 {
+        let mut s=0;
+        while s<4 {
+            let mut t=0;
+            while t<4 {
+                let at=s+PERM[t];
+                c[at]=c[at].add(q[4*d+s].mul(w[4*d+t]));
+                t+=1;
+            }
+            s+=1;
+        }
+        d+=1;
+    }
+    let mut i=0;
+    while i<7 {c[i]=c[i].mul_m31(QUARTER);i+=1;}
+    c
 }
 pub fn fold(q:&[E],alpha:E,dual:bool)->Vec<E> {
-    q.chunks_exact(4).map(|h| {
-        if dual {h[0].add(alpha.mul(h[3].add(alpha.mul(h[2].add(alpha.mul(h[1])))))).mul_m31(QUARTER)}
-        else {h[0].add(alpha.mul(h[1].add(alpha.mul(h[2].add(alpha.mul(h[3]))))))}
-    }).collect()
+    let mut out=Vec::with_capacity(q.len()/4);
+    let mut i=0;
+    while i<q.len()/4 {
+        let h=[q[4*i],q[4*i+1],q[4*i+2],q[4*i+3]];
+        let value=if dual {
+            h[0].add(alpha.mul(h[3].add(alpha.mul(h[2].add(alpha.mul(h[1])))))).mul_m31(QUARTER)
+        } else {
+            h[0].add(alpha.mul(h[1].add(alpha.mul(h[2].add(alpha.mul(h[3]))))))
+        };
+        out.push(value);i+=1;
+    }
+    out
 }
+
+/// Ordered byte assembly used by the real pipeline; each field encoding is a leaf.
+fn encoded_slice(values:&[E])->Vec<u8> {
+    let mut out=Vec::new();
+    let mut i=0;
+    while i<values.len() {out.extend_from_slice(&values[i].to_le_bytes());i+=1;}
+    out
+}
+
 pub fn encoded(values:impl IntoIterator<Item=E>)->Vec<u8> {values.into_iter().flat_map(E::to_le_bytes).collect()}
 
 /// Deterministic fixture-only rejection sampling of K limbs. No distribution
@@ -205,75 +238,193 @@ fn derive_private_salts(reserved:&ReservedStateOnlyAttemptSecrets,context:StateO
 /// compact stored format of `crate::compact` (57,607 bytes). Every transcript
 /// message is the logical byte string of the retired eight-way format; only
 /// the roots (binary trees) and the stored encoding differ. R1 is variant S2.
-fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext))->Result<Vec<u8>,Error> {
-    use crate::{compact,multiproof};
-    let _=public;
-    if variant!=Variant::S2 { return Err(Error::Semantic); }
-    let coefficients:Vec<Message<E>>=backend.messages.iter().map(|m|variant.coefficients(m)).collect();
-    let z1=Point{x:E::from_qm31(sem.z[1].x),y:E::from_qm31(sem.z[1].y)};
-    let y1=encoded(coefficients.iter().map(|m|r0::encoder::eval_message(m,z1)));
-    let mut t=Transcript::new(LegacyHashFn(hash),sem.transcript.state(),variant);
-    let gamma=t.scalar(27,&y1,true);let gp=crate::weights::powers::<29>(gamma);
-    let q:Vec<E>=(0..1024).map(|j|(0..29).fold(E::ZERO,|s,l|s.add(gp[l].mul(coefficients[l][j])))).collect();
-    let w=Weights::new(variant,&sem.alpha,&sem.z)?;
-    let inactive=(0..1024).fold(E::ZERO,|s,j|s.add(q[j].mul_qm31(w.raw(0,j))));
-    let kappa=t.scalar(28,&inactive.to_le_bytes(),false);
-    let weights=w.materialize(kappa)?;
-    let c0=round(&q,&weights);let c0bytes=encoded(c0);
-    let alpha0=t.scalar(29,&c0bytes,false);let q1=fold(&q,alpha0,false);let w1=fold(&weights,alpha0,true);
-    let folded_word=backend.domain.evaluate(&q1,0).map_err(|_|Error::Allocation)?;
-    let (reserved,context)=salts;
-    let folded_salts=derive_private_salts(reserved,context,hash,0x72)?;
-    let mut leaves=Vec::with_capacity(1<<18);
-    for u in 0..1<<18 {
-        let values=if u<1<<16 {encoded(folded_word[4*u..4*u+4].iter().copied())}else{vec![0;128]};
-        leaves.push(aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,&values,folded_salts.get(u)));
+/// Owned result of rows 27–29. No transcript loan or iterator survives a phase.
+struct PreparedOpening {
+    backend:Backend,
+    sem:BuiltSemantics<LegacyHashFn>,
+    transcript:Transcript<LegacyHashFn>,
+    y1:Vec<u8>,
+    gamma:E,
+    inactive:E,
+    kappa:E,
+    alpha0:E,
+    c0bytes:Vec<u8>,
+    q1:Vec<E>,
+    w1:Vec<E>,
+    folded_word:Vec<E>,
+}
+
+fn prepare_opening(variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>)->Result<PreparedOpening,Error> {
+    if variant!=Variant::S2 {return Err(Error::Semantic);}
+    let mut coefficients=Vec::new();
+    let mut lane=0;
+    while lane<backend.messages.len() {
+        coefficients.push(variant.coefficients(&backend.messages[lane]));lane+=1;
     }
-    let tree=multiproof::BinaryTree::new(LegacyHashFn(hash),leaves).ok_or(Error::Allocation)?;
+    let z1=Point{x:E::from_qm31(sem.z[1].x),y:E::from_qm31(sem.z[1].y)};
+    let mut y1=Vec::new();
+    lane=0;
+    while lane<coefficients.len() {
+        let value=r0::encoder::eval_message(&coefficients[lane],z1);
+        y1.extend_from_slice(&value.to_le_bytes());lane+=1;
+    }
+    let mut transcript=Transcript::new(LegacyHashFn(hash),sem.transcript.state(),variant);
+    let gamma=transcript.scalar(27,&y1,true);
+    let gp=crate::weights::powers::<29>(gamma);
+    let mut q=Vec::with_capacity(1024);
+    let mut row=0;
+    while row<1024 {
+        let mut value=E::ZERO;
+        lane=0;
+        while lane<29 {value=value.add(gp[lane].mul(coefficients[lane][row]));lane+=1;}
+        q.push(value);row+=1;
+    }
+    let w=Weights::new(variant,&sem.alpha,&sem.z)?;
+    let mut inactive=E::ZERO;
+    row=0;
+    while row<1024 {inactive=inactive.add(q[row].mul_qm31(w.raw(0,row)));row+=1;}
+    let kappa=transcript.scalar(28,&inactive.to_le_bytes(),false);
+    let weights=w.materialize(kappa)?;
+    let c0=round(&q,&weights);
+    let c0bytes=encoded_slice(&c0);
+    let alpha0=transcript.scalar(29,&c0bytes,false);
+    let q1=fold(&q,alpha0,false);
+    let w1=fold(&weights,alpha0,true);
+    let folded_word=backend.domain.evaluate(&q1,0).map_err(|_|Error::Allocation)?;
+    Ok(PreparedOpening{backend,sem,transcript,y1,gamma,inactive,kappa,alpha0,c0bytes,q1,w1,folded_word})
+}
+
+/// Owned input to the publication phase. Constructed only after P_R1 accepts.
+struct Publication {
+    backend:Backend,
+    semantic_bytes:Vec<u8>,
+    y1:Vec<u8>,
+    inactive:E,
+    c0bytes:Vec<u8>,
+    root:[u8;32],
+    c1bytes:Vec<u8>,
+    fbytes:Vec<u8>,
+    queries:[u32;22],
+    folded_word:Vec<E>,
+    folded_salts:PrivateSalts,
+    tree:crate::multiproof::BinaryTree,
+}
+
+fn folded_leaves(hash:HashFn,word:&[E],salts:&PrivateSalts)->Vec<[u8;32]> {
+    let mut leaves=Vec::with_capacity(1<<18);
+    let mut u=0;
+    while u<1<<18 {
+        let values=if u<1<<16 {encoded_slice(&word[4*u..4*u+4])} else {vec![0;128]};
+        leaves.push(aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,&values,salts.get(u)));
+        u+=1;
+    }
+    leaves
+}
+
+fn finish_opening(variant:Variant,hash:HashFn,prepared:PreparedOpening,folded_salts:PrivateSalts)->Result<Publication,Error> {
+    let PreparedOpening{backend,sem,mut transcript,y1,gamma,inactive,kappa,alpha0,c0bytes,q1,w1,folded_word}=prepared;
+    let leaves=folded_leaves(hash,&folded_word,&folded_salts);
+    let tree=crate::multiproof::BinaryTree::new(LegacyHashFn(hash),leaves).ok_or(Error::Allocation)?;
     let root=tree.root();
-    let c1=round(&q1,&w1);let c1bytes=encoded(c1);
+    let c1=round(&q1,&w1);
+    let c1bytes=encoded_slice(&c1);
     let mut payload=root.to_vec();payload.extend_from_slice(&c1bytes);
-    let alpha1=t.scalar(30,&payload,false);
+    let alpha1=transcript.scalar(30,&payload,false);
     let final_message=fold(&q1,alpha1,false);
-    let fbytes=encoded(final_message.iter().copied());
-    let queries=t.queries(31,&fbytes)?;let _rho=t.scalar_k(32,&[]);
+    let fbytes=encoded_slice(&final_message);
+    let queries=transcript.queries(31,&fbytes)?;
+    let _rho=transcript.scalar_k(32,&[]);
     #[cfg(feature="r1p-check")]
     public_check(variant,&R1PublicChallenges{
         alpha:sem.alpha,z:[[sem.z[0].x,sem.z[0].y],[sem.z[1].x,sem.z[1].y]],
         gamma,kappa,alpha0,alpha1,queries:queries.to_vec(),
     },sem.roots[0])?;
+    Ok(Publication{backend,semantic_bytes:sem.bytes,y1,inactive,c0bytes,root,c1bytes,fbytes,
+        queries,folded_word,folded_salts,tree})
+}
+
+/// Counted insertion and dedup on at most 22 public query indices. Sorting is
+/// explicit so publication does not depend on an opaque standard sort adapter.
+fn publication_indices(queries:&[u32;22],begin:usize,end:usize,folded:bool)->Vec<u32> {
+    let mut out=Vec::new();
+    let mut i=begin;
+    while i<end {
+        let value=if folded {queries[i]/4} else {queries[i]};
+        let mut at=0;
+        while at<out.len() && out[at]<value {at+=1;}
+        if at==out.len() || out[at]!=value {out.insert(at,value);}
+        i+=1;
+    }
+    out
+}
+
+fn publish_compact(variant:Variant,p:Publication)->Result<Vec<u8>,Error> {
+    use crate::compact;
     let mut out=Vec::with_capacity(compact::PROOF_BYTES);
     out.extend_from_slice(compact::MAGIC);
     out.extend_from_slice(&[variant.tag(),0,0,0,0,0,0,0]);
-    compact::compact_semantic(&sem.bytes,&mut out).map_err(|_|Error::Semantic)?;
-    compact::compact_values(&y1,&mut out).map_err(|_|Error::Semantic)?;
-    out.extend_from_slice(&inactive.to_le_bytes());out.extend_from_slice(&c0bytes);
-    out.extend_from_slice(&root);out.extend_from_slice(&c1bytes);out.extend_from_slice(&fbytes);
+    compact::compact_semantic(&p.semantic_bytes,&mut out).map_err(|_|Error::Semantic)?;
+    compact::compact_values(&p.y1,&mut out).map_err(|_|Error::Semantic)?;
+    out.extend_from_slice(&p.inactive.to_le_bytes());out.extend_from_slice(&p.c0bytes);
+    out.extend_from_slice(&p.root);out.extend_from_slice(&p.c1bytes);out.extend_from_slice(&p.fbytes);
     assert_eq!(out.len(),compact::OFF_OPENINGS);
-    let (cc1,cc2)=(backend.c1.as_ref().unwrap(),backend.c2.as_ref().unwrap());
-    for &u in &queries {
-        let u=FibreIndex::new(u as usize).unwrap();
+    let cc1=p.backend.c1.as_ref().unwrap();
+    let cc2=p.backend.c2.as_ref().unwrap();
+    let mut i=0;
+    while i<22 {
+        let u=FibreIndex::new(p.queries[i] as usize).unwrap();
         let mut opening=FibreOpening{values:[[E::ZERO;29];4],paths:[[[[0;32];7];6];2]};
         cc1.fill_opening(u,&mut opening);cc2.fill_opening(u,&mut opening);
-        for s in 0..4 {for l in (0..26).chain(core::iter::once(28)){out.extend_from_slice(&opening.values[s][l].to_le_bytes()[..if l<26 {4}else{16}]);}}
-        for s in 0..4 {for l in 26..28 {out.extend_from_slice(&opening.values[s][l].to_le_bytes()[..16]);}}
+        let mut s=0;
+        while s<4 {
+            let mut l=0;
+            while l<27 {
+                let lane=if l<26 {l} else {28};
+                let width=if lane<26 {4} else {16};
+                out.extend_from_slice(&opening.values[s][lane].to_le_bytes()[..width]);l+=1;
+            }
+            s+=1;
+        }
+        s=0;
+        while s<4 {
+            let mut l=26;
+            while l<28 {out.extend_from_slice(&opening.values[s][l].to_le_bytes()[..16]);l+=1;}
+            s+=1;
+        }
         out.extend_from_slice(cc1.opening_salt(u).unwrap());
         out.extend_from_slice(cc2.opening_salt(u).unwrap());
-        out.extend_from_slice(&encoded(folded_word[4*(u.get()/4)..4*(u.get()/4)+4].iter().copied()));
-        out.extend_from_slice(folded_salts.get(u.get()/4));
+        let at=4*(u.get()/4);
+        out.extend_from_slice(&encoded_slice(&p.folded_word[at..at+4]));
+        out.extend_from_slice(p.folded_salts.get(u.get()/4));
+        i+=1;
     }
     assert_eq!(out.len(),compact::OFF_NODES);
-    for (batch,range) in [(0usize,0..compact::SPLIT),(1,compact::SPLIT..22)] {
-        for t in 0..3 {
-            let mut idx:Vec<u32>=queries[range.clone()].iter().map(|&u|if t==2 {u/4} else {u}).collect();
-            idx.sort();idx.dedup();
-            let nodes=match t {0=>cc1.multiproof(&idx),1=>cc2.multiproof(&idx),_=>tree.multiproof(&idx)}.ok_or(Error::Allocation)?;
+    let mut batch=0;
+    while batch<2 {
+        let begin=if batch==0 {0} else {compact::SPLIT};
+        let end=if batch==0 {compact::SPLIT} else {22};
+        let mut t=0;
+        while t<3 {
+            let idx=publication_indices(&p.queries,begin,end,t==2);
+            let nodes=match t {0=>cc1.multiproof(&idx),1=>cc2.multiproof(&idx),_=>p.tree.multiproof(&idx)}.ok_or(Error::Allocation)?;
             let cap=32*compact::SLOT_NODES[3*batch+t];
             assert!(nodes.len()<=cap);
             out.extend_from_slice(&nodes);out.resize(out.len()+cap-nodes.len(),0);
+            t+=1;
         }
+        batch+=1;
     }
-    assert_eq!(out.len(),compact::PROOF_BYTES);Ok(out)
+    assert_eq!(out.len(),compact::PROOF_BYTES);
+    Ok(out)
+}
+
+fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext))->Result<Vec<u8>,Error> {
+    let _=public;
+    let prepared=prepare_opening(variant,hash,backend,sem)?;
+    let (reserved,context)=salts;
+    let folded_salts=derive_private_salts(reserved,context,hash,0x72)?;
+    let publication=finish_opening(variant,hash,prepared,folded_salts)?;
+    publish_compact(variant,publication)
 }
 
 // ---------------------------------------------------------------------------
@@ -360,11 +511,12 @@ pub fn prove_masked_retrying_with(
     mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,
 )->Result<RetriedProof,Error> {
     if variant!=Variant::S2 { return Err(Error::Semantic); }
-    for k in 0..ATTEMPT_CAP {
+    let mut k=0;
+    while k<ATTEMPT_CAP {
         let attempt=next_attempt(k)?;
         match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {
             Ok((proof,audit))=>return Ok(RetriedProof{proof,audit,attempts:k+1}),
-            Err(Error::Rejected)=>continue,
+            Err(Error::Rejected)=>{k+=1;},
             Err(e)=>return Err(e),
         }
     }
