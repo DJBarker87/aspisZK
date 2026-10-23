@@ -194,3 +194,10 @@ Raw full modular-object census found duplicate definition owners in D18Transport
 IU-794 rejected the selected historical R1LiteralByteRunFacts source against the j1-r7-r8 protocol source (missing extractor argument). The current canonical LiteralByteProtocol already supplies the documented specification-level default extractor and retains the explicit-extractor interface. Re-pin that existing source, not a new premise or proof repair. The default is choice, not an efficient extraction implementation. Failed elaboration printed sorryAx; that failed object is not accepted.
 
 IU-1196 loaded the complete aggregate and printed standard-only audits, then exited 1 because its diagnostic #check wrongly expected Session A’s untouched S3 candidate to have adopted the adapter. Correct the check to the actual qualified Pool transition instances of both part-52 roots. The existing anonymous S3 instance is still checked separately; no candidate is edited. No failed aggregate is accepted as a release result.
+
+IU-1231 enumerated all 8,164 modules / 566,510 declarations, then hit Lean's
+7GB interpreter guard during the second duplicate-type pass (exit 134).
+The enumeration and comparison are now separate. Enumeration retains no global
+name/type map; exact comparisons run in source-pinned batches of at most 100
+candidate names. No cap or heartbeat change. The failed streamed file's final
+partial RAW_DUP_TYPE line is not accepted; it is retained as failure evidence.
