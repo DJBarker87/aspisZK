@@ -1,0 +1,62 @@
+{
+  "attempt": "native-002",
+  "kind": "rust",
+  "timeout": 480,
+  "command": [
+    "cargo",
+    "test",
+    "--release",
+    "--offline",
+    "--locked",
+    "-j",
+    "4",
+    "--manifest-path",
+    "src/Cargo.toml",
+    "-p",
+    "aspis-r1-cost-probe-program",
+    "--features",
+    "pool-adapter,private-leaf-salts",
+    "--lib",
+    "owned_adapter_native_differential",
+    "--",
+    "--test-threads=1",
+    "--nocapture"
+  ],
+  "sources": [
+    "src/programs/r1-cost-probe/src/adapter_rw_tests.rs",
+    "src/programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+    "src/programs/r1-cost-probe/src/r1_pool_adapter_original.rs",
+    "src/programs/r1-cost-probe/src/lib.rs",
+    "src/Cargo.lock"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/native-target",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "expected_time": "optimized native compilation then fixed-fixture validation and differential caller execution; no proof generation",
+  "change": "Native fixture SDK duplicate entries now clone first AccountInfo, preserving runtime shared-cell premise; focused differential only",
+  "exit_status": 0,
+  "wall_seconds": 25.375814763989183,
+  "peak_rss_kib": "566176",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r305567d1335544e9a658c447bce49755.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "885583872",
+  "source_hashes": {
+    "src/programs/r1-cost-probe/src/adapter_rw_tests.rs": "19cc9c030e4824f9c6423c1a7cfad9bf9921401ff4a47076b7a6b182c7338886",
+    "src/programs/r1-cost-probe/src/r1_pool_adapter.rs": "09ce3b480cf772c843315b9bcdabd9bf266f4065e5a524ae2a4d5560ea4feaf3",
+    "src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs": "11e4a5e3ea31795b0c55fe5c22d74ffb7496454c1307112004b6a69be55fb628",
+    "src/programs/r1-cost-probe/src/r1_pool_adapter_original.rs": "6a8e5799035458ed4c0093709da6da86fb29100303861ddd15212d3ad7dcdcfb",
+    "src/programs/r1-cost-probe/src/lib.rs": "e56fd18185d72d5b925da56fdd168a05c9bfea2da1c2d17058d097f74c66d4d8",
+    "src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+  },
+  "deps_fingerprint": "Std from pinned Lean sysroot only",
+  "print_axioms": "N/A: rust"
+}

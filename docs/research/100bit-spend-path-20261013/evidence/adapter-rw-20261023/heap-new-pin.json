@@ -1,0 +1,24 @@
+{
+  "mode": "new",
+  "sha256": "4f3fe085058dad5600d5529180285512453dd236cf5836875cc158f7422ab18a",
+  "bytes": 1511360,
+  "diagnostic_only": true,
+  "lib_before_sha256": "e56fd18185d72d5b925da56fdd168a05c9bfea2da1c2d17058d097f74c66d4d8",
+  "lib_after_sha256": "8be59ada8111e206ed422c6237d26540f24fce5b0537ec4b26e04e6e836ca180",
+  "change": "let result = r1_pool_adapter::process(program_id,accounts,data);\n        #[cfg(target_os=\"solana\")]\n        unsafe {\n            let start=solana_program::entrypoint::HEAP_START_ADDRESS as usize;\n            let cursor=*(start as *const usize);\n            let used=start+256*1024-cursor+core::mem::size_of::<usize>();\n            solana_program::log::sol_log_64(0xada, used as u64, 256*1024, 0, 0);\n        }\n        return result;",
+  "command": [
+    "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/heap-src-new/programs/r1-cost-probe/Cargo.toml",
+    "--sbf-out-dir",
+    "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/heap-artifacts-new",
+    "--features",
+    "pool-adapter,private-leaf-salts",
+    "--skip-tools-install",
+    "--offline",
+    "-j",
+    "4",
+    "--",
+    "--locked"
+  ]
+}

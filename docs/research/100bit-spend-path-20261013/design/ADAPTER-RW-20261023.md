@@ -1,6 +1,11 @@
 # Adapter owned caller candidate — 23 October 2026
 
-Status: STAGE 1 DESIGN; ADOPTION CANDIDATE, NOT ADOPTED.
+Status: historical STAGE 1 DESIGN; ADOPTION CANDIDATE, NOT ADOPTED.
+
+D183 resolves the pending domain/error decision below. Stage2 implementation,
+measurements and updated pins: [stage2 report](ADAPTER-RW-STAGE2-20261023.md).
+The original stage1 reasoning is retained as history; its pending-approval
+language is superseded by D183.
 Branch: `codex/cx-adapter-rw-20261023`.
 Evidence: `../evidence/adapter-rw-20261023/`.
 

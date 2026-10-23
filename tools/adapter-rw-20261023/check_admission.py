@@ -9,7 +9,7 @@ import time
 started = time.monotonic()
 root = Path(__file__).resolve().parents[2]
 source = root / 'programs/r1-cost-probe/src/r1_pool_adapter.rs'
-text = source.read_text()
+text = subprocess.check_output(['git', 'show', '81521c77f7:programs/r1-cost-probe/src/r1_pool_adapter.rs'], cwd=root, text=True)
 body = text.split('fn stage1(', 1)[1].split('fn stage2(', 1)[0]
 anchors = [
     'let mut checkpoint_data = checkpoint_account.try_borrow_mut_data()?;',

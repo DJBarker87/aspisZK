@@ -164,3 +164,7 @@ mod tests {
         assert_eq!(&**accounts[2].try_borrow_data().unwrap(), &[0]);
     }
 }
+
+#[cfg(all(test, feature="pool-adapter"))]
+#[path="r1_pool_adapter_original.rs"]
+mod r1_pool_adapter_original;

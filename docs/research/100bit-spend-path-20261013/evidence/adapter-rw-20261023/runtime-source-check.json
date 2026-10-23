@@ -1,0 +1,49 @@
+{
+  "premise": "AspisR1.AdapterRw.RuntimeEntrypointAdmission",
+  "source_check": {
+    "entrypoint": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-entrypoint-2.3.0/src/lib.rs",
+      "sha256": "027efed4018bc8f1a340e576bbb0135cb70ba31fc465a23f4732ff8d5196d919",
+      "anchors": {
+        "let data = Rc::new(RefCell::new({": 424,
+        "accounts.push(accounts[dup_info as usize].clone());": 480,
+        "deserialize_account_info(input, offset)": 473
+      }
+    },
+    "account": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-account-info-2.3.0/src/lib.rs",
+      "sha256": "6b59aba664bb70fda6e17bcc8cf6eb41fc0bc9d8bcbb797bd70c1b107809c29a",
+      "anchors": {
+        "pub data: Rc<RefCell<&'a mut [u8]>>": 28
+      }
+    },
+    "serializer": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-runtime-4.2.1/src/serialization.rs",
+      "sha256": "142dceb5753f24b8b42961f9bd03a4c9f47d5391569d6b280aa3c4397a39915b",
+      "anchors": {
+        ".is_instruction_account_duplicate(instruction_account_index)": 247,
+        "SerializeAccount::Duplicate(index)": 250
+      }
+    },
+    "instruction": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-transaction-context-4.2.1/src/instruction.rs",
+      "sha256": "135a676336af2110a467905c8a334b288a7e4f1980cf38f104e3034c1d9dc1bc",
+      "anchors": {
+        "None` if it is the first account with this key": 166,
+        "self.get_index_of_account_in_instruction(index_in_transaction)?": 174
+      }
+    }
+  },
+  "scope": "source inspection only; runtime/SDK interpretation retained as named premise independent of acceptance",
+  "derivation": [
+    "deserialize_account_info creates fresh Rc<RefCell> for each nonduplicate record",
+    "RefCell::new starts unborrowed; deserialize returns with no guards",
+    "duplicate instruction account = earlier occurrence of same transaction account/key",
+    "SDK duplicate branch clones AccountInfo, hence Rc data cell identity",
+    "normal runtime serialization partitions separate account byte allocations; no external SDK borrows enter program memory"
+  ],
+  "runtime": "measurement runtime Agave 4.2.1 / LiteSVM 0.16.0; production SDK entrypoint 2.3.0 pinned by Cargo.lock",
+  "restriction_on_account_bytes_keys_owners_flags_lengths": false,
+  "allocation_and_CU": "separate runtime/resource gates; not part of this premise",
+  "print_axioms": "N/A: source inspection"
+}
