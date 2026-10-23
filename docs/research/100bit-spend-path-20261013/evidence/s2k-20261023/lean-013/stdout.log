@@ -1,0 +1,62 @@
+S2K_LoopStep.lean:27:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+iter iter' : Iter
+output : Std.Array U8 688#usize
+level : Usize
+node : Digest
+bytes : Std.Array U8 32#usize
+reached : next iter = ok (some (level, node), iter')
+range : ↑level < 20
+encoded : atomic_statement.encode_digest_canonical node = ok bytes
+⊢ 32#usize * level = ok (Usize.ofNatCore (32 * ↑level) ⋯)
+S2K_LoopStep.lean:29:67: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+iter iter' : Iter
+output : Std.Array U8 688#usize
+level : Usize
+node : Digest
+bytes : Std.Array U8 32#usize
+reached : next iter = ok (some (level, node), iter')
+range : ↑level < 20
+encoded : atomic_statement.encode_digest_canonical node = ok bytes
+mul : 32#usize * level = ok (Usize.ofNatCore (32 * ↑level) ⋯)
+⊢ 48#usize + Usize.ofNatCore (32 * ↑level) ⋯ = ok (Usize.ofNatCore (48 + 32 * ↑level) ⋯)
+S2K_LoopStep.lean:31:67: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+iter iter' : Iter
+output : Std.Array U8 688#usize
+level : Usize
+node : Digest
+bytes : Std.Array U8 32#usize
+reached : next iter = ok (some (level, node), iter')
+range : ↑level < 20
+encoded : atomic_statement.encode_digest_canonical node = ok bytes
+mul : 32#usize * level = ok (Usize.ofNatCore (32 * ↑level) ⋯)
+add : 48#usize + Usize.ofNatCore (32 * ↑level) ⋯ = ok (Usize.ofNatCore (48 + 32 * ↑level) ⋯)
+⊢ Usize.ofNatCore (48 + 32 * ↑level) ⋯ + 32#usize = ok (Usize.ofNatCore (80 + 32 * ↑level) ⋯)
+S2K_LoopStep.lean:34:2: error: `dsimp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.S2K.LoopStep.body_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2K.LoopStep.body_write' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
