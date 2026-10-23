@@ -162,3 +162,20 @@ fn S2J_cut7_public_readonly_value() {
     let accounts: [AccountRecord;3] = kani::any();
     assert_eq!(native_cut6(&accounts[1]), owned_readonly(accounts[1]));
 }
+
+#[allow(non_snake_case)]
+mod S2J_TrustedDomain;
+// Admission diagnostic ONLY. No SDK/child is called outside the verified stub's
+// domain, and this is not a native caller/refinement counterexample.
+#[kani::proof]
+#[kani::unwind(5)]
+fn S2J_cut8_checkpoint_stub_admission() {
+    use S2J_TrustedDomain::{State, Payload, Descriptor, WIDTH, valid};
+    let tiny = Payload { descriptor: Descriptor { base:0, len:WIDTH, provenance:0 }, contents:[0;WIDTH] };
+    let checkpoint = Payload { descriptor: Descriptor { base:2, len:1768, provenance:2 }, contents:[0;WIDTH] };
+    let state = State {
+        accounts:[0,1,2], lamports:[3,4,5], owner_live:[true;3], allocated:[true;3],
+        payload:[tiny,tiny,checkpoint], counter:[0;3], external:[0;3], guards:[None;3], ambient:[0;4],
+    };
+    assert!(valid(&state), "inherited verified SDK stub admits actual checkpoint length1768");
+}
