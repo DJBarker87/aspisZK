@@ -3,7 +3,7 @@ from pathlib import Path
 import hashlib,json,subprocess,sys
 R=Path(__file__).resolve().parents[2];D=R/'docs/research/100bit-spend-path-20261013';E=D/'evidence/s2k-20261023';T=Path(__file__).parent
 H='/home/dombarker/project-offloads/codex-cx-s2k-20261023';HOST='dombarker@100.108.41.90'
-n=int(sys.argv[1]);target=sys.argv[2];assert 1<=n<=100 and target.startswith('S2K_');a=f'lean-{n:03d}';assert not (E/a).exists()
+n=int(sys.argv[1]);target=sys.argv[2];assert 77<=n<=176 and target.startswith('S2K_');a=f'lean-{n:03d}';assert not (E/a).exists()
 p=D/'lean'/(target+'.lean');subprocess.run(['scp',str(p),HOST+':'+H+'/'+p.name],check=True)
 # Existing merged overlay is read only and carries all split-olean companions.
 prior=D/'evidence/s2i-20261023/lean-011/receipt.json';old=json.loads(prior.read_text())

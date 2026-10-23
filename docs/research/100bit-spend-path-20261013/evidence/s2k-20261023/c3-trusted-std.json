@@ -1,0 +1,85 @@
+{
+  "field": "AspisR1.S2K.StdCopy.TrustedStd.slice_copy_from_slice",
+  "authority": "LOG D157 and continuation 3 explicit user authorization",
+  "semantics": "Equal lengths: exact source snapshot copied to destination; unequal lengths: panic before writes. Only destination may change; all supplied outside state preserved.",
+  "scope": "Valid exclusively borrowed destination and shared source; native carrier/provenance/allocator/runtime admission remains separate. No syscall or whole-child success.",
+  "call_sites": [
+    {
+      "path": "crates/aspis-statement/src/atomic_statement.rs",
+      "line": 76,
+      "statement": "bytes[index * 4..index * 4 + 4].copy_from_slice(&value.to_le_bytes());",
+      "function": "pub fn encode_digest_canonical",
+      "source_sha256": "c73fc9a55dd3493ae264231eaaf495c886c42cf0e58412bdb11053a191eb860a"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+      "line": 147,
+      "statement": "output[..4].copy_from_slice(&POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC);",
+      "function": "pub fn encode_pool_v1_pair_verified_afterstate_v1",
+      "source_sha256": "03fc14126dab7d78688d6fab1d954cc116357f349652a37dee5b044d45e0bbea"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+      "line": 152,
+      "statement": "output[8..16].copy_from_slice(&afterstate.next_pair_index.to_le_bytes());",
+      "function": "pub fn encode_pool_v1_pair_verified_afterstate_v1",
+      "source_sha256": "03fc14126dab7d78688d6fab1d954cc116357f349652a37dee5b044d45e0bbea"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+      "line": 153,
+      "statement": "output[16..48].copy_from_slice(&encode_digest_canonical(&afterstate.next_root));",
+      "function": "pub fn encode_pool_v1_pair_verified_afterstate_v1",
+      "source_sha256": "03fc14126dab7d78688d6fab1d954cc116357f349652a37dee5b044d45e0bbea"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+      "line": 156,
+      "statement": "output[start..start + 32].copy_from_slice(&encode_digest_canonical(node));",
+      "function": "pub fn encode_pool_v1_pair_verified_afterstate_v1",
+      "source_sha256": "03fc14126dab7d78688d6fab1d954cc116357f349652a37dee5b044d45e0bbea"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+      "line": 582,
+      "statement": "output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC);",
+      "function": "pub fn encode_pool_v1_pair_forest_terminal_result_v1",
+      "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+      "line": 588,
+      "statement": ".copy_from_slice(&result.master_account);",
+      "function": "pub fn encode_pool_v1_pair_forest_terminal_result_v1",
+      "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+      "line": 590,
+      "statement": ".copy_from_slice(&result.selected_lane_account);",
+      "function": "pub fn encode_pool_v1_pair_forest_terminal_result_v1",
+      "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+      "line": 592,
+      "statement": ".copy_from_slice(&encode_digest_canonical(&result.nullifier));",
+      "function": "pub fn encode_pool_v1_pair_forest_terminal_result_v1",
+      "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+      "line": 593,
+      "statement": "output[RESULT_AFTERSTATE_OFFSET..].copy_from_slice(",
+      "function": "pub fn encode_pool_v1_pair_forest_terminal_result_v1",
+      "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8"
+    }
+  ],
+  "source_revision": "5b32542ba2d33f910b408f376508959fafffead3",
+  "prior_tool_failures": [
+    "kani-060",
+    "kani-061"
+  ],
+  "lean": "lean-077/receipt.json",
+  "native_index_gate": "kani-062/receipt.json"
+}
