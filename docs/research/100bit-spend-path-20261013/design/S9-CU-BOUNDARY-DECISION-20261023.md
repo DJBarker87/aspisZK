@@ -1,7 +1,8 @@
 # S9 compute allowance and source-proof choice
 
-Status: measured candidates; neither adopted. Owner decision pending. The
-current allowance remains +12,000 CU relative to the approved S4 artifact.
+Status: owner approved +12,214 CU on 2026-10-23 and selected callback-free
+H5 as the preferred candidate. Neither candidate is adopted in production
+yet. The allowance is relative to the same approved S4 artifact.
 The 100-bit security target is unchanged and is not yet established.
 
 Both options below use C weights
@@ -48,14 +49,15 @@ immutable retained evidence is
 The attribution worker is packaging exact source deltas, build/recompile
 logs, cgroup receipts and fixture data without binaries or task keys.
 
-## Recommendation
+## Approved decision
 
-Allow a measured increase of +12,214 CU, 214 beyond the current allowance,
-and retain H5's callback-free fast-pairing bodies. This avoids reopening
+The owner answered “Allow +12,214 CU (recommended)”. Retain H5's
+callback-free fast-pairing bodies with that measured allowance, an increase
+of 214 CU over the previous approval. This avoids reopening
 Std `Array.map` source refinement after the explicit C bodies were proved.
 The C arithmetic bodies and their existing proof work stay applicable.
 
-H11 is a real alternative within the existing allowance. Its original
+H11 remains a retained alternative within the previous allowance. Its original
 Dot::finish source matches an older checked emitted cut, and the four
 coordinate reduction equations are already proved. That historical packet
 explicitly leaves actual Rust Std `Array.map` correspondence open. It must
@@ -72,4 +74,5 @@ recompiled both cost-probe and program crates.
 Either choice still requires scanner equivalence, relevant source re-pins,
 release integration gates and final artifact linkage. A change to the CU
 allowance establishes no additional soundness, privacy or runtime theorem.
-No allowance change is inferred without an actual owner response.
+The explicit owner response changes only the CU allowance. It does not
+authorize skipping any source/equivalence or adoption gate.
