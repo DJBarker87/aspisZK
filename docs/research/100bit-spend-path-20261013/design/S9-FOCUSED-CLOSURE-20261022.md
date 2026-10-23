@@ -942,3 +942,11 @@ execution and identifies the returned extra array. Focused check: 13.570 s,
 2,186,166,272 bytes peak aggregate RSS, zero swap, standard axioms only.
 The candidate generated Types and Funs also compiled independently. The
 native allocator, alpha provenance, SBF feasibility and adoption gaps remain.
+
+
+PROVED candidate-only follow-on:
+`s9-candidate-constructor-extra-current-canonical-v1-20261023` derives the
+full mapped-read canonicality contract for the returned extra array from that
+same constructor execution and the explicit mapped-alpha input contract.
+Focused check: 22.384 s, 3,255,173,120 bytes peak aggregate RSS, zero swap,
+standard axioms only. It does not establish actual alpha caller provenance.

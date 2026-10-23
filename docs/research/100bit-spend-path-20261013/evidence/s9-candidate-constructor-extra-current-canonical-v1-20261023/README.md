@@ -1,0 +1,3 @@
+PROVED for the initialized Box::new constructor candidate: its successful run and a canonical-read contract on the mapped input alpha array imply canonicality of every successful mapped read of the returned extra array. The proof derives the two actual alpha[8]/alpha[9] reads from that same constructor execution. The input alpha provenance, equivalence to the shipped raw-pointer constructor, SBF stack/CU feasibility and deployment source composition remain open.
+
+Focused Lean check: 22.384 seconds; peak aggregate RSS 3255173120 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
