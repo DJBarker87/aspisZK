@@ -54,3 +54,31 @@ through the existing shared memory policy; completed own scopes were verified
 inactive, and no live foreign job, cap, key or immutable receipt was altered.
 Focused local proof checks continue. The source/runtime/artifact, global
 experiment and other security-contract obligations remain separate.
+
+
+## Canonical-domain source refinement established
+
+The body-level frontier above has advanced. The freshly extracted unchanged
+C raw method is now proved equal, as a complete Result, to the retained
+checked raw kernel on canonical operands (all eight u32 limbs <=2^31-2).
+`AspisR1S9ActualRawCanonicalRefinementV1.actual_raw_eq_checked_of_canonical` has source
+SHA256 `40240ec4caa91fc981a301804866de6ce231fa06d7016988918e7f18d0795c96`;
+the focused NUC check passed in 3.610 seconds, peak RSS 2,718,828 KiB, zero
+swap, standard axioms. All 23 intermediate checked-success conditions were
+discharged using existing S5 totality. See
+`lean-candidates/s9-current-qraw-canonical-refinement-v1-20261023/` and the
+fresh extraction packet `lean-candidates/s9-current-qraw-source-extraction-v1-20261023/`.
+
+The direct same-operands theorem also derives the two fromWide lane identities
+and scalar bounds from the SAME accepted checked_q call, removing an
+independent scalar-canonicality guard. Its remaining native Wide eight-word
+bounds are supplied by the existing strict-reader/native-canonicality theorem.
+See `lean-candidates/s9-current-qraw-native-operands-v1-20261023/`.
+
+The complete native EbyK parent/body substitution is being composed explicitly,
+including count and scalar rejection branches. Until that consumer is checked,
+do not silently relabel the earlier broad arbitrary-input model-cut theorem
+as an arbitrary-input actual Rust refinement. The actual raw source proof has
+a canonical-operand domain; invalid carriers remain outside its equality
+claim. Full pairing value, runtime/artifact and release security composition
+remain open; no 100-bit release claim follows from these local results.

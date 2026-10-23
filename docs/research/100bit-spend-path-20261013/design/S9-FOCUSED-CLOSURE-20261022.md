@@ -1456,3 +1456,59 @@ is concrete native EbyK accumulator transport to the existing S5 product proof,
 actual dot-loop read/index traces, shared-common contraction, and kappa/parts
 assembly. This entry does not close S9, the source/runtime security experiment,
 or the >=100-bit target. **Target not yet established.**
+
+
+## 2026-10-23 continued composition and actual raw-body refinement
+
+The actual current shared branch now has a SAME-resume/SAME-Pair composition
+for its real common16 producer and shared-high writes: one constructor model,
+actual powers, exact four scalar PERM/quarter formulas, scale-times-actual-dot
+values, canonical parts1/3 and all-other-cell frame. Independent initial
+parts/model/factor/power/common/child-success guards are discharged at the
+current-model caller. See
+`evidence/s9-current-resume-same-shared-common-model-v1-20261023/` and
+`evidence/s9-current-resume-shared-high-scalar-assembly-v1-20261023/`.
+This starts from the current finish model; its concrete Stage2.View installer
+and other runtime/source boundaries are not silently supplied.
+
+The actual regular push loop now yields its exact ordered source operands
+and accumulator trace, reusing existing S5 product mathematics. The partial-dot
+trace has 16 entries; the accepted two-fold Pair fixes the regular quotient at 64.
+Fresh native new discharges initial-history guards. Partial-dot source/value
+consumers and universal actual partial/high finish canonicality are pinned
+separately. The stored partials theorem ties each actual partial call to the
+SAME stored output, removing an independent partial-array canonicality guard.
+These results do not infer a finished-Wide value equation before the finish
+transport is composed. Their raw external-binding scope is qualified by
+`design/S9-RAW-SOURCE-BOUNDARY-20261023.md`.
+
+The actual C raw body was freshly extracted without opacity, and canonical
+source-to-retained-kernel complete Result equality now passes with all 23
+checked-operation successes discharged by existing S5 totality. No arithmetic,
+protocol, source implementation or compute allowance changed. The same actual
+fromWide/checked_q operand-domain and installed-hook/EbyK substitution joins
+are being checked explicitly. Earlier broad arbitrary-input model-cut results
+are not retroactively arbitrary-input Rust theorems. The failed whole-DAG
+specialization hit the existing M4400 guard; generic factoring over opaque
+scalar variables fixed it without increasing resource limits.
+
+Native parts canonicality now has proved generic array frames, actual regular
+S2 calls from zero, the optimized S2 coefficient64/mask16/outer12 helper, and
+the final kappa polynomial loop. The optimized dispatch requires EXACT final
+span 64*32; floor(length/32)=64 alone is insufficient and admits trailing bytes.
+The existing tx2_common emitted constructor explicitly supplies that fixed
+View span, with candidate.rs/compact.rs unchanged from 2ec373; its SAME-view
+suffix/finish installer is a separate source binding being proved. The low16
+source formula includes PERM and QUARTER squared; the earlier requested plain
+product was incorrect and was never an accepted result.
+
+Shared dependency directories and split Lean cache companions are now staged
+by `scripts/r1_stage_selected_lean_cache.py`: selected .olean owners plus
+same-owner private/server/IR companions, all hashed. This fixes repeated
+preflight companion failures. No green theorem or unchanged full regression
+was rerun for that tooling repair. Different historical math cohorts remain
+explicitly pinned; final joint closure selection/replay is still required.
+
+Complete paired value/relation, actual current finish installer, global
+source/runtime/artifact and security-experiment obligations remain open.
+**The >=100-bit target is not yet established.**
