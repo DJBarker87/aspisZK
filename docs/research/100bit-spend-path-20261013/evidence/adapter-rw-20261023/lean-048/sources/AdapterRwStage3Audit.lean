@@ -1,0 +1,56 @@
+import AdapterRwLeadInputs
+import AdapterRwSdkSnapshots
+
+/-! Focused compatible union, not a full frozen release replay. -/
+#print axioms AspisR1.AdapterRw.distinct_keys_distinct_cells
+#print axioms AspisR1.AdapterRw.entry_shared_available
+#print axioms AspisR1.AdapterRw.entry_exclusive_available
+#print axioms AspisR1.AdapterRw.Snapshots.shared_bracket_restores
+#print axioms AspisR1.AdapterRw.Snapshots.entry_bracket_restores
+#print axioms AspisR1.AdapterRw.Snapshots.acquired_valid
+#print axioms AspisR1.AdapterRw.Snapshots.native_entry_shared
+#print axioms AspisR1.AdapterRw.Snapshots.native_entry_read
+#print axioms AspisR1.AdapterRw.Snapshots.native_entry_drop
+#print axioms AspisR1.AdapterRw.Scalar.add_eq
+#print axioms AspisR1.AdapterRw.Scalar.mul_eq
+#print axioms AspisR1.AdapterRw.Scalar.sub_eq
+#print axioms AspisR1.AdapterRw.Scalar.checked_add_eq
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_MAX_NODES
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_OPENING
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_QUERIES
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_FINAL_LEN
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_SEMANTIC_COMPACT_VALUES
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_verifier_SEMANTIC_BYTES
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_LOGICAL_SEMANTIC
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_COMPACT_SEMANTIC
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_OFF_SEMANTIC
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_OFF_Y1
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_COMPACT_Y1
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_OFF_INACTIVE
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_OFF_ROUND0
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_OFF_FOLDED_ROOT
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_OFF_ROUND1
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_OFF_FINAL
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_OFF_OPENINGS
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_OFF_NODES
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_FIXED
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_MAX_PROOF
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_compact_PROOF_BYTES
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_r1_cost_probe_verifier_PROOF_BYTES
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_statement_pool_v1_pair_terminal_POOL_V1_PAIR_VERIFIED_AFTERSTATE_PAYLOAD_BYTES
+#print axioms AspisR1.AdapterRw.Constants.constant_aspis_statement_pool_v1_pair_terminal_POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+#print axioms AspisR1.AdapterRw.Cuts.bind_success
+#print axioms AspisR1.AdapterRw.Cuts.observer_none
+#print axioms AspisR1.AdapterRw.Cuts.first_decoded_call
+#print axioms AspisR1.AdapterRw.Cuts.error_bind_ne_ok
+#print axioms AspisR1.AdapterRw.Cuts.range_end_of_length
+#print axioms AspisR1.AdapterRw.Cuts.stage1_checkpoint_length
+#print axioms AspisR1.AdapterRw.Cuts.stage1_call
+#print axioms AspisR1.AdapterRw.Cuts.stage2_call
+#print axioms AspisR1.AdapterRw.Ranges.selected_exact
+#print axioms AspisR1.AdapterRw.Ranges.suffix_exact
+#print axioms AspisR1.AdapterRw.Accepted.first_call
+#print axioms AspisR1.AdapterRw.Accepted.first_proof_shapes
+#print axioms AspisR1.AdapterRw.LeadInputs.input_fields
+#print axioms AspisR1.AdapterRw.LeadInputs.observer_field
+#print axioms AspisR1.AdapterRw.LeadInputs.first_byte_fields

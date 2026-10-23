@@ -1,0 +1,51 @@
+{
+  "attempt": "rust-002",
+  "kind": "rust",
+  "timeout": 480,
+  "command": [
+    "cargo",
+    "build",
+    "--release",
+    "--offline",
+    "--locked",
+    "-j",
+    "4",
+    "--manifest-path",
+    "src/tools/r1-cost-probe/Cargo.toml",
+    "--bin",
+    "adapter_rw_replay",
+    "--features",
+    "private-leaf-salts"
+  ],
+  "sources": [
+    "src/tools/r1-cost-probe/src/bin/adapter_rw_replay.rs",
+    "src/tools/r1-cost-probe/src/bin/readonly_runtime.rs",
+    "src/tools/r1-cost-probe/Cargo.lock"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/replay-target",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "expected_time": "optimized harness compilation/linking; no proof generation",
+  "change": "Add previously missing harness Cargo.lock; previous attempt stopped at source snapshot, before compiler",
+  "exit_status": 101,
+  "wall_seconds": 129.93509580098907,
+  "peak_rss_kib": "639140",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r550bca1e72f54d3fa4ec50e2b25a00c6.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "2181509120",
+  "source_hashes": {
+    "src/tools/r1-cost-probe/src/bin/adapter_rw_replay.rs": "0cf01bf9f8dceb25f148234b9eb97fc7d1546a9a98f8f4133aec38539e093c65",
+    "src/tools/r1-cost-probe/src/bin/readonly_runtime.rs": "008b059cec20c315bd9d61348b01610581796536f257e5be21c946a2d1d74ac3",
+    "src/tools/r1-cost-probe/Cargo.lock": "08de51efc17d86e1c371191bf3e8892c3cee86bf56dd3e10aea79d228a57b3f9"
+  },
+  "deps_fingerprint": "Std from pinned Lean sysroot only",
+  "print_axioms": "N/A: rust"
+}
