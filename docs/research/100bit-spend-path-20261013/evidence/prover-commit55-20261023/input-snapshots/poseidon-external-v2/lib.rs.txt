@@ -1,0 +1,319 @@
+#![allow(dead_code,unexpected_cfgs)]
+pub mod field;
+fn array_from_fn_copy<T:Copy,const N:usize>(init:T,mut f:impl FnMut(usize)->T)->[T;N] {
+ let mut out=[init;N];let mut i=0;
+ while i<N {out[i]=f(i);i+=1;}out
+}
+
+mod native {
+use crate::field::{M31,QM31,CM31,P};
+const EXTERNAL_LOCAL_LIMB_MODULUS_BOUND:u64=7*P as u64;
+const POSEIDON2_WIDTH:usize=16;
+fn extension_limbs(value: QM31) -> [u32; 4] {
+    [value.c0.a.0, value.c0.b.0, value.c1.a.0, value.c1.b.0]
+}
+fn extension_from_raw_limbs(limbs: [u64; 4]) -> QM31 {
+    QM31 {
+        c0: CM31::new(M31::reduce_u62(limbs[0]), M31::reduce_u62(limbs[1])),
+        c1: CM31::new(M31::reduce_u62(limbs[2]), M31::reduce_u62(limbs[3])),
+    }
+}
+fn external_local_packed_raw(input: [QM31; 4]) -> [u64; 4] {
+    let input = input.map(extension_limbs);
+    let local: [[u64; 4]; 4] = core::array::from_fn(|output| {
+        core::array::from_fn(|limb| {
+            let a = u64::from(input[0][limb]);
+            let b = u64::from(input[1][limb]);
+            let c = u64::from(input[2][limb]);
+            let d = u64::from(input[3][limb]);
+            match output {
+                0 => 2 * a + 3 * b + c + d,
+                1 => a + 2 * b + 3 * c + d,
+                2 => a + b + 2 * c + 3 * d,
+                3 => 3 * a + b + c + 2 * d,
+                _ => unreachable!(),
+            }
+        })
+    });
+    let mut all_local_limbs_bounded = true;
+    let mut output = 0usize;
+    while output < 4 {
+        let mut limb = 0usize;
+        while limb < 4 {
+            all_local_limbs_bounded &= local[output][limb] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            limb += 1;
+        }
+        output += 1;
+    }
+    debug_assert!(all_local_limbs_bounded);
+
+    let bound = EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+    let packed = [
+        local[0][0] + 5 * bound - local[1][1] + 2 * local[2][2]
+            - local[2][3]
+            - local[3][2]
+            - 2 * local[3][3],
+        local[0][1] + local[1][0] + local[2][2] + 2 * local[2][3] + 2 * local[3][2] + bound
+            - local[3][3],
+        local[0][2] + 2 * bound - local[1][3] + local[2][0] - local[3][1],
+        local[0][3] + local[1][2] + local[2][1] + local[3][0],
+    ];
+    debug_assert!(packed[0] < 8 * bound);
+    debug_assert!(packed[1] < 8 * bound);
+    debug_assert!(packed[2] < 4 * bound);
+    debug_assert!(packed[3] < 4 * bound);
+    packed
+}
+fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
+    let mut group = 0usize;
+    while group < 4 {
+        let start = 4 * group;
+        let input = [
+            state[start],
+            state[start + 1],
+            state[start + 2],
+            state[start + 3],
+        ];
+        let input = input.map(extension_limbs);
+        let mut output = 0usize;
+        while output < 4 {
+            let raw = core::array::from_fn(|limb| {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                match output {
+                    0 => 2 * a + 3 * b + c + d,
+                    1 => a + 2 * b + 3 * c + d,
+                    2 => a + b + 2 * c + 3 * d,
+                    3 => 3 * a + b + c + 2 * d,
+                    _ => unreachable!(),
+                }
+            });
+            state[start + output] = extension_from_raw_limbs(raw);
+            output += 1;
+        }
+        group += 1;
+    }
+    let sums: [[u64; 4]; 4] = core::array::from_fn(|column| {
+        core::array::from_fn(|limb| {
+            u64::from(extension_limbs(state[column])[limb])
+                + u64::from(extension_limbs(state[4 + column])[limb])
+                + u64::from(extension_limbs(state[8 + column])[limb])
+                + u64::from(extension_limbs(state[12 + column])[limb])
+        })
+    });
+    let mut index = 0usize;
+    while index < POSEIDON2_WIDTH {
+        let limbs = extension_limbs(state[index]);
+        state[index] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+            u64::from(limbs[limb]) + sums[index & 3][limb]
+        }));
+        index += 1;
+    }
+}
+fn internal_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
+    const SHIFTS: [u8; 15] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 13, 14, 15, 16];
+    let old_zero = extension_limbs(state[0]);
+    let mut part_sum = [0u64; 4];
+    let mut lane = 1usize;
+    while lane < POSEIDON2_WIDTH {
+        let limbs = extension_limbs(state[lane]);
+        let mut limb = 0usize;
+        while limb < 4 {
+            part_sum[limb] += u64::from(limbs[limb]);
+            limb += 1;
+        }
+        lane += 1;
+    }
+    let full_sum: [u64; 4] =
+        core::array::from_fn(|limb| part_sum[limb] + u64::from(old_zero[limb]));
+    state[0] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+        part_sum[limb] + u64::from(P) - u64::from(old_zero[limb])
+    }));
+    for lane in 1..POSEIDON2_WIDTH {
+        let limbs = extension_limbs(state[lane]);
+        state[lane] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[lane - 1])
+        }));
+    }
+}
+
+ pub fn local(c:[QM31;4])->[u64;4] {external_local_packed_raw(c)}
+ pub fn external(s:&mut [QM31;16]) {external_linear_lazy(s)}
+ pub fn internal(s:&mut [QM31;16]) {internal_linear_lazy(s)}
+}
+
+mod retained {
+use crate::field::{M31,QM31,CM31,P};
+const EXTERNAL_LOCAL_LIMB_MODULUS_BOUND:u64=7*P as u64;
+const POSEIDON2_WIDTH:usize=16;
+fn extension_limbs(value: QM31) -> [u32; 4] {
+    [value.c0.a.0, value.c0.b.0, value.c1.a.0, value.c1.b.0]
+}
+fn extension_from_raw_limbs(limbs: [u64; 4]) -> QM31 {
+    QM31 {
+        c0: CM31::new(M31::reduce_u62(limbs[0]), M31::reduce_u62(limbs[1])),
+        c1: CM31::new(M31::reduce_u62(limbs[2]), M31::reduce_u62(limbs[3])),
+    }
+}
+fn external_local_packed_raw(input: [QM31; 4]) -> [u64; 4] {
+    let input = input.map(extension_limbs);
+    let local: [[u64; 4]; 4] = crate::array_from_fn_copy::<_, 4>([0u64; 4], |output| {
+        crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+            let a = u64::from(input[0][limb]);
+            let b = u64::from(input[1][limb]);
+            let c = u64::from(input[2][limb]);
+            let d = u64::from(input[3][limb]);
+            match output {
+                0 => 2 * a + 3 * b + c + d,
+                1 => a + 2 * b + 3 * c + d,
+                2 => a + b + 2 * c + 3 * d,
+                3 => 3 * a + b + c + 2 * d,
+                _ => unreachable!(),
+            }
+        })
+    });
+    let mut all_local_limbs_bounded = true;
+    let mut output = 0usize;
+    while output < 4 {
+        let mut limb = 0usize;
+        while limb < 4 {
+            all_local_limbs_bounded &= local[output][limb] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            limb += 1;
+        }
+        output += 1;
+    }
+    debug_assert!(all_local_limbs_bounded);
+
+    let bound = EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+    let packed = [
+        local[0][0] + 5 * bound - local[1][1] + 2 * local[2][2]
+            - local[2][3]
+            - local[3][2]
+            - 2 * local[3][3],
+        local[0][1] + local[1][0] + local[2][2] + 2 * local[2][3] + 2 * local[3][2] + bound
+            - local[3][3],
+        local[0][2] + 2 * bound - local[1][3] + local[2][0] - local[3][1],
+        local[0][3] + local[1][2] + local[2][1] + local[3][0],
+    ];
+    debug_assert!(packed[0] < 8 * bound);
+    debug_assert!(packed[1] < 8 * bound);
+    debug_assert!(packed[2] < 4 * bound);
+    debug_assert!(packed[3] < 4 * bound);
+    packed
+}
+fn external_linear_lazy_row(input: [[u32; 4]; 4], output: usize) -> QM31 {
+            let raw = crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                match output {
+                    0 => 2 * a + 3 * b + c + d,
+                    1 => a + 2 * b + 3 * c + d,
+                    2 => a + b + 2 * c + 3 * d,
+                    3 => 3 * a + b + c + 2 * d,
+                    _ => unreachable!(),
+                }
+            });
+    extension_from_raw_limbs(raw)
+}
+fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
+    let mut group = 0usize;
+    while group < 4 {
+        let start = 4 * group;
+        let input = [
+            state[start],
+            state[start + 1],
+            state[start + 2],
+            state[start + 3],
+        ];
+        let input = input.map(extension_limbs);
+        state[start] = external_linear_lazy_row(input, 0);
+        state[start + 1] = external_linear_lazy_row(input, 1);
+        state[start + 2] = external_linear_lazy_row(input, 2);
+        state[start + 3] = external_linear_lazy_row(input, 3);
+        group += 1;
+    }
+    let sums: [[u64; 4]; 4] = crate::array_from_fn_copy::<_, 4>([0u64; 4], |column| {
+        crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+            u64::from(extension_limbs(state[column])[limb])
+                + u64::from(extension_limbs(state[4 + column])[limb])
+                + u64::from(extension_limbs(state[8 + column])[limb])
+                + u64::from(extension_limbs(state[12 + column])[limb])
+        })
+    });
+    let mut index = 0usize;
+    while index < POSEIDON2_WIDTH {
+        let limbs = extension_limbs(state[index]);
+        state[index] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+            u64::from(limbs[limb]) + sums[index & 3][limb]
+        }));
+        index += 1;
+    }
+}
+fn internal_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
+    const SHIFTS: [u8; 15] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 13, 14, 15, 16];
+    let old_zero = extension_limbs(state[0]);
+    let mut part_sum = [0u64; 4];
+    let mut lane = 1usize;
+    while lane < POSEIDON2_WIDTH {
+        let limbs = extension_limbs(state[lane]);
+        let mut limb = 0usize;
+        while limb < 4 {
+            part_sum[limb] += u64::from(limbs[limb]);
+            limb += 1;
+        }
+        lane += 1;
+    }
+    let full_sum: [u64; 4] =
+        crate::array_from_fn_copy::<_, 4>(0u64, |limb| part_sum[limb] + u64::from(old_zero[limb]));
+    state[0] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+        part_sum[limb] + u64::from(P) - u64::from(old_zero[limb])
+    }));
+    for lane in 1..POSEIDON2_WIDTH {
+        let limbs = extension_limbs(state[lane]);
+        state[lane] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[lane - 1])
+        }));
+    }
+}
+
+ pub fn local(c:[QM31;4])->[u64;4] {external_local_packed_raw(c)}
+ pub fn external(s:&mut [QM31;16]) {external_linear_lazy(s)}
+ pub fn internal(s:&mut [QM31;16]) {internal_linear_lazy(s)}
+}
+
+#[cfg(kani)] mod proofs {
+ use super::*;
+ #[kani::proof] #[kani::unwind(300)] fn local_constructor() {
+  let raw:[[u32;4];4]=kani::any();
+  for i in 0..4 {for w in 0..4 {kani::assume(raw[i][w]<field::P);}}
+  let c:[field::QM31;4]=unsafe{std::mem::transmute(raw)};
+  assert_eq!(native::local(c),retained::local(c));
+ }
+ #[kani::proof] #[kani::unwind(300)] fn external() {
+  let raw:[[u32;4];16]=kani::any();
+  for i in 0..16 {for w in 0..4 {kani::assume(raw[i][w]<field::P);}}
+  let mut n:[field::QM31;16]=unsafe{std::mem::transmute(raw)};let mut c=n;
+  native::external(&mut n);retained::external(&mut c);
+  let k:u8=kani::any();kani::assume(k<16);assert_eq!(n[k as usize],c[k as usize]);
+ }
+ #[kani::proof] #[kani::unwind(300)] fn internal() {
+  let raw:[[u32;4];16]=kani::any();
+  for i in 0..16 {for w in 0..4 {kani::assume(raw[i][w]<field::P);}}
+  let mut n:[field::QM31;16]=unsafe{std::mem::transmute(raw)};let mut c=n;
+  native::internal(&mut n);retained::internal(&mut c);
+  let k:u8=kani::any();kani::assume(k<16);assert_eq!(n[k as usize],c[k as usize]);
+ }
+ #[kani::proof] #[kani::unwind(100)] fn low_folds() {
+  let raw:[[u32;4];16]=kani::any();
+  for i in 0..16 {for w in 0..4 {kani::assume(raw[i][w]<field::P);}}
+  let local:[field::QM31;16]=unsafe{std::mem::transmute(raw)};
+  let full=[1usize,9,10].into_iter().fold(field::QM31::ZERO,|sum,row|sum.add(local[row]));
+  let internal=(2usize..=8).fold(field::QM31::ZERO,|sum,row|sum.add(local[row]));
+  assert_eq!(full,field::QM31::ZERO.add(local[1]).add(local[9]).add(local[10]));
+  assert_eq!(internal,field::QM31::ZERO.add(local[2]).add(local[3]).add(local[4]).add(local[5]).add(local[6]).add(local[7]).add(local[8]));
+ }
+}

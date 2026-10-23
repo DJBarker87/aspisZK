@@ -1,0 +1,19 @@
+--- retained candidate
++++ frozen native
+@@ -13,13 +13,13 @@
+         lane += 1;
+     }
+     let full_sum: [u64; 4] =
+-        crate::array_from_fn_copy::<_, 4>(0u64, |limb| part_sum[limb] + u64::from(old_zero[limb]));
+-    state[0] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
++        core::array::from_fn(|limb| part_sum[limb] + u64::from(old_zero[limb]));
++    state[0] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+         part_sum[limb] + u64::from(P) - u64::from(old_zero[limb])
+     }));
+     for lane in 1..POSEIDON2_WIDTH {
+         let limbs = extension_limbs(state[lane]);
+-        state[lane] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
++        state[lane] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+             full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[lane - 1])
+         }));
+     }

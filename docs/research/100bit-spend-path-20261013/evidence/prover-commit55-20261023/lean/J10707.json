@@ -1,0 +1,61 @@
+{
+  "module": "R1Z.ProverCommitEncoderNativePower55",
+  "attempt": "J10707",
+  "source_sha256": "7d029a0765cf894f8c74fca23d3696b7f5a6f19119b717c6a9a4653842f97586",
+  "source_revision": "9293b754b1928335b66c173a6db3f9ac29fbf7fc",
+  "dependencies": [
+    [
+      "AspisR1ProducerRelease47.EncoderNativeNodes55",
+      "/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/objects/AspisR1ProducerRelease47/EncoderNativeNodes55.olean",
+      "a3a8a710c285b3be7cea6e45d3fccf220011dfe9bc2ec1cf446c5c4f2559a8ba"
+    ],
+    [
+      "R1Z.ProverCommitEncoderPower54",
+      "/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/objects/R1Z/ProverCommitEncoderPower54.olean",
+      "0aa5ae7266b861b47d59d5681f94f0ef11d879e4f68106bd4496b402db87c709"
+    ],
+    [
+      "R1Z.ProverCommitNativeSquare49",
+      "/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/objects/R1Z/ProverCommitNativeSquare49.olean",
+      "337112f615aa8eb3f7f34855513e6badee7d3cf49e62a939e44e0c197f15ca31"
+    ],
+    [
+      "R1Z.ProverCommitNativeC49",
+      "/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/objects/R1Z/ProverCommitNativeC49.olean",
+      "3fe4f46c70a90a92bb0b48a03933d88cb97438df4427d0e8b4376529e8a09154"
+    ]
+  ],
+  "core_artifacts": [
+    [
+      "Init.olean",
+      "d2e85d72099f9d869c9582aad5fb13079968d9d121ac6061e8326b00800b306e"
+    ],
+    [
+      "Init.olean.server",
+      "69b6bef637350cb34abdfdd40748de5f5098567cf21673d74497b700344954bd"
+    ],
+    [
+      "Init.olean.private",
+      "ee2465850125d8857c69cee947e7416dc1569eb22dc9f9bcb98bd9f8224ace5b"
+    ]
+  ],
+  "deps_fingerprint": "6315189420e26caeb9a32fa25b7a012c6cdc113d98e6b8cd97e8524a51bedf4a",
+  "command": [
+    "sh",
+    "/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/build/proof-launcher.sh",
+    "10707",
+    "R1Z/ProverCommitEncoderNativePower55",
+    "J",
+    "7000",
+    "8",
+    "6315189420e26caeb9a32fa25b7a012c6cdc113d98e6b8cd97e8524a51bedf4a"
+  ],
+  "controller_exit": 0,
+  "controller_wall_seconds": 2.3660577569971792,
+  "stdout": "reservation: populated 24 GiB + 8 GiB; window=1 (London 0631); env=J\n    id (Eq.refl true)\n/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/sources/R1Z/ProverCommitEncoderNativePower55.lean:54:6: error: unsolved goals\ncase neg.refine_1\nn : \u2115\nih :\n  \u2200 m < n,\n    \u2200 (exp : U64),\n      \u2191exp = m \u2192\n        \u2200 (base acc : Old.C),\n          Canonical base \u2192\n            Canonical acc \u2192\n              \u2203 z,\n                nodes55.pow (source base) exp (source acc) = ok (source z) \u2227\n                  Canonical z \u2227 value z = value acc * value base ^ m\nexp : U64\nhe : \u2191exp = n\nbase acc : Old.C\nhb : Canonical base\nha : Canonical acc\nhn : \u00acn = 0\nhne : exp \u2260 0#u64\nr : UScalar UScalarTy.U64 := exp &&& 1#u64\nd : U64 := exp.wrapping_shr 1#u32\nhrv' : \u2191r = n % 2\nhdv' : \u2191d = n / 2\nsquare : Old.C\nhsquare : (source base).square = ok (source square)\nhcsquare : Canonical square\nhdsquare : value square = value base * value base\nnext : Old.C\nhnext : (if r = 1#u64 then (source acc).mul (source base) else ok (source acc)) = ok (source next)\nhcnext : Canonical next\nhdnext : value next = value acc * value base ^ (n % 2)\nz : Old.C\nhz : nodes55.pow (source square) d (source next) = ok (source z)\nhcz : Canonical z\nhdz : value z = value next * value square ^ (n / 2)\n\u22a2 (do\n      let next \u2190 if exp &&& 1#u64 = 1#u64 then (source acc).mul (source base) else ok (source acc)\n      nodes55.pow (source square) (exp.wrapping_shr 1#u32) next) =\n    ok (source z)\n/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/sources/R1Z/ProverCommitEncoderNativePower55.lean:55:48: warning: This simp argument is unused:\n  hnext\n\nHint: Omit it from the simp argument list.\n  simp only [hne, \u0332if_false, \u0332lift, \u0332bind_tc_ok, \u0332hn\u0335e\u0335x\u0335t\u0335,\u0335h\u0335square, \u0332hz]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/sources/R1Z/ProverCommitEncoderNativePower55.lean:55:62: warning: This simp argument is unused:\n  hz\n\nHint: Omit it from the simp argument list.\n  simp only [hne, \u0332if_false, \u0332lift, \u0332bind_tc_ok, \u0332hnext, \u0332hsquare,\u0335h\u0335z\u0335]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'R1Z.ProverCommitEncoderNativePower55.bit_val' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.ProverCommitEncoderNativePower55.shift_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'R1Z.ProverCommitEncoderNativePower55.exact_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\nexit=1\nwindow=1 slot=global env=J launcher=run-joint.sh\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:02.28\n\tMaximum resident set size (kbytes): 4097368\n\tSwaps: 0\n\tExit status: 1\n",
+  "stderr": "",
+  "out": "/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/sources/R1Z/ProverCommitEncoderNativePower55.lean:21:2: error: `simp` made no progress\n\nNote: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    Eq.refl true\n  has type\n    @Eq Bool true true\n  but is expected to have type\n    @Eq Bool (decide (1 \u2264 UScalar.cMax UScalarTy.U32)) true\n  in the application\n    id (Eq.refl true)\n/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/sources/R1Z/ProverCommitEncoderNativePower55.lean:54:6: error: unsolved goals\ncase neg.refine_1\nn : \u2115\nih :\n  \u2200 m < n,\n    \u2200 (exp : U64),\n      \u2191exp = m \u2192\n        \u2200 (base acc : Old.C),\n          Canonical base \u2192\n            Canonical acc \u2192\n              \u2203 z,\n                nodes55.pow (source base) exp (source acc) = ok (source z) \u2227\n                  Canonical z \u2227 value z = value acc * value base ^ m\nexp : U64\nhe : \u2191exp = n\nbase acc : Old.C\nhb : Canonical base\nha : Canonical acc\nhn : \u00acn = 0\nhne : exp \u2260 0#u64\nr : UScalar UScalarTy.U64 := exp &&& 1#u64\nd : U64 := exp.wrapping_shr 1#u32\nhrv' : \u2191r = n % 2\nhdv' : \u2191d = n / 2\nsquare : Old.C\nhsquare : (source base).square = ok (source square)\nhcsquare : Canonical square\nhdsquare : value square = value base * value base\nnext : Old.C\nhnext : (if r = 1#u64 then (source acc).mul (source base) else ok (source acc)) = ok (source next)\nhcnext : Canonical next\nhdnext : value next = value acc * value base ^ (n % 2)\nz : Old.C\nhz : nodes55.pow (source square) d (source next) = ok (source z)\nhcz : Canonical z\nhdz : value z = value next * value square ^ (n / 2)\n\u22a2 (do\n      let next \u2190 if exp &&& 1#u64 = 1#u64 then (source acc).mul (source base) else ok (source acc)\n      nodes55.pow (source square) (exp.wrapping_shr 1#u32) next) =\n    ok (source z)\n/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/sources/R1Z/ProverCommitEncoderNativePower55.lean:55:48: warning: This simp argument is unused:\n  hnext\n\nHint: Omit it from the simp argument list.\n  simp only [hne, \u0332if_false, \u0332lift, \u0332bind_tc_ok, \u0332hn\u0335e\u0335x\u0335t\u0335,\u0335h\u0335square, \u0332hz]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/sources/R1Z/ProverCommitEncoderNativePower55.lean:55:62: warning: This simp argument is unused:\n  hz\n\nHint: Omit it from the simp argument list.\n  simp only [hne, \u0332if_false, \u0332lift, \u0332bind_tc_ok, \u0332hnext, \u0332hsquare,\u0335h\u0335z\u0335]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'R1Z.ProverCommitEncoderNativePower55.bit_val' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.ProverCommitEncoderNativePower55.shift_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'R1Z.ProverCommitEncoderNativePower55.exact_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\nexit=1\nwindow=1 slot=global env=J launcher=run-joint.sh\n",
+  "time": "Command exited with non-zero status 1\n\tCommand being timed: \"timeout 900 python3 /home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py /home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/build/J.json /home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/objects /home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/sources /home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/objects/R1Z/ProverCommitEncoderNativePower55.olean /home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/sources/R1Z/ProverCommitEncoderNativePower55.lean 7000\"\n\tUser time (seconds): 1.80\n\tSystem time (seconds): 0.49\n\tPercent of CPU this job got: 100%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:02.28\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 4097368\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 90989\n\tVoluntary context switches: 359\n\tInvoluntary context switches: 62\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 8\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 1\n",
+  "sha": "7d029a0765cf894f8c74fca23d3696b7f5a6f19119b717c6a9a4653842f97586  /home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/sources/R1Z/ProverCommitEncoderNativePower55.lean\n",
+  "exit": 1
+}

@@ -1,0 +1,12 @@
+--- retained candidate
++++ frozen native
+@@ -1,7 +1,7 @@
+ fn external_local_packed_raw(input: [QM31; 4]) -> [u64; 4] {
+     let input = input.map(extension_limbs);
+-    let local: [[u64; 4]; 4] = crate::array_from_fn_copy::<_, 4>([0u64; 4], |output| {
+-        crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
++    let local: [[u64; 4]; 4] = core::array::from_fn(|output| {
++        core::array::from_fn(|limb| {
+             let a = u64::from(input[0][limb]);
+             let b = u64::from(input[1][limb]);
+             let c = u64::from(input[2][limb]);

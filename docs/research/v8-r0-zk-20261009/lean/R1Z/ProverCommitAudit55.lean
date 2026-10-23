@@ -1,0 +1,117 @@
+import AspisR1ProducerRelease47.EncoderGuard55
+import AspisR1ProducerRelease47.EncoderGuardComplete55
+import AspisR1ProducerRelease47.EncoderNativeGeometry55
+import AspisR1ProducerRelease47.EncoderNativeNodes55
+import R1Z.ProverCommitChallengePrefix55
+import R1Z.ProverCommitCollection55
+import R1Z.ProverCommitComposition55
+import R1Z.ProverCommitEncoderGuard55
+import R1Z.ProverCommitEncoderGuardValue55
+import R1Z.ProverCommitEncoderNativePower55
+import R1Z.ProverCommitFinalCaller55
+import R1Z.ProverCommitGuardedAt55
+import R1Z.ProverCommitGuardedChannels55
+import R1Z.ProverCommitGuardedSpecialized55
+import R1Z.ProverCommitInitialExtra55
+import R1Z.ProverCommitNativeGeometry55
+import R1Z.ProverCommitNativeNodes55
+import R1Z.ProverCommitOpeningChallenges55
+import R1Z.ProverCommitOracle55
+import R1Z.ProverCommitOracleRounds55
+import R1Z.ProverCommitOriginal55
+import R1Z.ProverCommitPoseidonCallable55
+import R1Z.ProverCommitSemanticFinal55
+import R1Z.ProverCommitSemanticGuards55
+import R1Z.ProverCommitSemanticInterpolation55
+import R1Z.ProverCommitSemanticModel55
+import R1Z.ProverCommitSemanticRounds55
+import R1Z.ProverCommitSemanticTerminal55
+import R1Z.ProverCommitTerminalCarrier55
+import R1Z.ProverCommitTerminalClaims55
+import R1Z.ProverCommitTerminalQName55
+import R1Z.ProverCommitTerminalZero55
+import R1Z.ProverCommitAudit54
+/-! One final import/axioms manifest over current source-pinned cached objects.
+This is not a clean rebuild or a release claim. -/
+#print axioms R1Z.ProverCommitChallengePrefix55.alpha_source
+#print axioms R1Z.ProverCommitChallengePrefix55.initial
+#print axioms R1Z.ProverCommitChallengePrefix55.model_prefix
+#print axioms R1Z.ProverCommitChallengePrefix55.preserved
+#print axioms R1Z.ProverCommitChallengePrefix55.source_advance
+#print axioms R1Z.ProverCommitCollection55.raw_ext
+#print axioms R1Z.ProverCommitCollection55.list_image
+#print axioms R1Z.ProverCommitCollection55.matches_owner
+#print axioms R1Z.ProverCommitComposition55.source_success
+#print axioms R1Z.ProverCommitEncoderGuard55.equivalent
+#print axioms R1Z.ProverCommitEncoderGuardValue55.exact_result
+#print axioms R1Z.ProverCommitEncoderNativePower55.bit_val
+#print axioms R1Z.ProverCommitEncoderNativePower55.shift_val
+#print axioms R1Z.ProverCommitEncoderNativePower55.exact_result
+#print axioms R1Z.ProverCommitFinalCaller55.exact_result
+#print axioms R1Z.ProverCommitGuardedAt55.eval_same
+#print axioms R1Z.ProverCommitGuardedAt55.encode_same
+#print axioms R1Z.ProverCommitGuardedChannels55.collected_length
+#print axioms R1Z.ProverCommitGuardedChannels55.channels_same
+#print axioms R1Z.ProverCommitGuardedSpecialized55.m31_encode
+#print axioms R1Z.ProverCommitGuardedSpecialized55.qm31_encode
+#print axioms R1Z.ProverCommitGuardedSpecialized55.m31_eval
+#print axioms R1Z.ProverCommitGuardedSpecialized55.qm31_eval
+#print axioms R1Z.ProverCommitInitialExtra55.at_zero
+#print axioms R1Z.ProverCommitInitialExtra55.at_one
+#print axioms R1Z.ProverCommitInitialExtra55.boolean_coordinate
+#print axioms R1Z.ProverCommitInitialExtra55.initial_extra
+#print axioms R1Z.ProverCommitNativeGeometry55.canonical_injective
+#print axioms R1Z.ProverCommitNativeGeometry55.power_same
+#print axioms R1Z.ProverCommitNativeGeometry55.point_same
+#print axioms R1Z.ProverCommitNativeGeometry55.node_same
+#print axioms R1Z.ProverCommitNativeNodes55.fill
+#print axioms R1Z.ProverCommitNativeNodes55.exact_result
+#print axioms R1Z.ProverCommitNativeNodes55.word_injective
+#print axioms R1Z.ProverCommitNativeNodes55.nodes_same
+#print axioms R1Z.ProverCommitOpeningChallenges55.circle_map
+#print axioms R1Z.ProverCommitOpeningChallenges55.exact_images
+#print axioms R1Z.ProverCommitOracle55.zero_claims
+#print axioms R1Z.ProverCommitOracle55.exact_result
+#print axioms R1Z.ProverCommitOracleRounds55.point_canonical
+#print axioms R1Z.ProverCommitOracleRounds55.exact_result
+#print axioms R1Z.ProverCommitOriginal55.point_canonical
+#print axioms R1Z.ProverCommitOriginal55.point_image
+#print axioms R1Z.ProverCommitOriginal55.exact_result
+#print axioms R1Z.ProverCommitPoseidonCallable55.source_same
+#print axioms R1Z.ProverCommitPoseidonCallable55.model_same
+#print axioms R1Z.ProverCommitPoseidonCallable55.callable
+#print axioms R1Z.ProverCommitSemanticFinal55.poly_eq_qpoly
+#print axioms R1Z.ProverCommitSemanticFinal55.exact_result
+#print axioms R1Z.ProverCommitSemanticGuards55.qpoly_boundary
+#print axioms R1Z.ProverCommitSemanticGuards55.no_rejection
+#print axioms R1Z.ProverCommitSemanticGuards55.initial
+#print axioms R1Z.ProverCommitSemanticGuards55.chain
+#print axioms R1Z.ProverCommitSemanticInterpolation55.exact_result
+#print axioms R1Z.ProverCommitSemanticModel55.degree
+#print axioms R1Z.ProverCommitSemanticModel55.original_rounds
+#print axioms R1Z.ProverCommitSemanticModel55.initial_guard
+#print axioms R1Z.ProverCommitSemanticModel55.chain_guard
+#print axioms R1Z.ProverCommitSemanticModel55.terminal_guard
+#print axioms R1Z.ProverCommitSemanticModel55.original_image
+#print axioms R1Z.ProverCommitSemanticRounds55.payload_rounds
+#print axioms R1Z.ProverCommitSemanticRounds55.shifted_boundary
+#print axioms R1Z.ProverCommitSemanticRounds55.shifted_terminal
+#print axioms R1Z.ProverCommitSemanticTerminal55.no_rejection
+#print axioms R1Z.ProverCommitTerminalCarrier55.from_to
+#print axioms R1Z.ProverCommitTerminalCarrier55.to_from
+#print axioms R1Z.ProverCommitTerminalCarrier55.canonical_to
+#print axioms R1Z.ProverCommitTerminalCarrier55.canonical_from
+#print axioms R1Z.ProverCommitTerminalCarrier55.decode_to
+#print axioms R1Z.ProverCommitTerminalCarrier55.decode_from
+#print axioms R1Z.ProverCommitTerminalCarrier55.array_canonical
+#print axioms R1Z.ProverCommitTerminalCarrier55.point_model
+#print axioms R1Z.ProverCommitTerminalClaims55.words_canonical
+#print axioms R1Z.ProverCommitTerminalClaims55.words_read
+#print axioms R1Z.ProverCommitTerminalClaims55.claims_read
+#print axioms R1Z.ProverCommitTerminalClaims55.terminal_congr
+#print axioms R1Z.ProverCommitTerminalClaims55.exact_result
+#print axioms R1Z.ProverCommitTerminalQName55.run_same
+#print axioms R1Z.ProverCommitTerminalQName55.source_success
+#print axioms R1Z.ProverCommitTerminalZero55.claims_zero
+#print axioms R1Z.ProverCommitTerminalZero55.exact_result
+#print axioms R1Z.ProverCommitDeployedFuel22.privacy_headline_deployed

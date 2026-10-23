@@ -1,0 +1,42 @@
+import AspisR1ProducerRelease47.EncoderGuardComplete55
+import R1Z.ProverCommitEncoderGuard55
+/-! All four complete channel computations use the same native length guard.
+Collector lengths are derived for every coefficient array and trait record. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitGuardedChannels55
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitEncoderCollect54
+
+theorem collected_length {E : Type} (inst : scalar.CodeField E) (c : Array E 1024#usize)
+    (offset : Usize) (ho : offset.val<4) :
+    ∃ out : alloc.vec.Vec E,
+      generic54.collect inst (Array.to_slice c) 4#usize offset 0#usize 256#usize (alloc.vec.Vec.new E)=ok out ∧
+      out.val.length=256 := by
+  obtain ⟨out,hout,hlist⟩ := ProverCommitEncoderGenericCollect54.collect inst (Array.to_slice c)
+    4#usize offset 0#usize 256#usize 256 rfl (by decide) (by decide) ho
+    (by intro k hk;change 4*(0+k)+offset.val<c.val.length;rw [c.property];change 4*(0+k)+offset.val<1024;omega)
+    (alloc.vec.Vec.new E) (by decide)
+  refine ⟨out,hout,?_⟩
+  rw [hlist]
+  simp
+
+theorem channels_same {E : Type} (inst : scalar.CodeField E) (c : Array E 1024#usize)
+    (nodes : Array field.M31 9#usize) : guarded55.channels inst c nodes=generic54.channels inst c nodes := by
+  obtain ⟨a,ha,hla⟩ := collected_length inst c 0#usize (by decide)
+  obtain ⟨b,hb,hlb⟩ := collected_length inst c 1#usize (by decide)
+  obtain ⟨d,hd,hld⟩ := collected_length inst c 2#usize (by decide)
+  obtain ⟨e,he,hle⟩ := collected_length inst c 3#usize (by decide)
+  have hga := ProverCommitEncoderGuard55.equivalent inst 8 (by decide) 8#usize 0#usize rfl
+    (alloc.vec.Vec.deref a) hla nodes
+  have hgb := ProverCommitEncoderGuard55.equivalent inst 8 (by decide) 8#usize 0#usize rfl
+    (alloc.vec.Vec.deref b) hlb nodes
+  have hgd := ProverCommitEncoderGuard55.equivalent inst 8 (by decide) 8#usize 0#usize rfl
+    (alloc.vec.Vec.deref d) hld nodes
+  have hge := ProverCommitEncoderGuard55.equivalent inst 8 (by decide) 8#usize 0#usize rfl
+    (alloc.vec.Vec.deref e) hle nodes
+  rw [guarded55.channels,generic54.channels]
+  simp only [lift,bind_tc_ok,ha,hb,hd,he,hga,hgb,hgd,hge]
+
+#print axioms collected_length
+#print axioms channels_same
+end R1Z.ProverCommitGuardedChannels55

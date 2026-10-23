@@ -1,0 +1,65 @@
+import AspisR1ProducerRelease47.EncoderGuard55
+import R1Z.ProverCommitEncoderGenericCollect54
+/-! The native length guard and the retained height guard select the same
+branches on every recursive caller length. Fuel exhaustion is unreachable.
+This theorem is about the extracted owner; native allocation gates are separate. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitEncoderGuard55
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitEncoderCollect54
+
+theorem equivalent {E : Type} (inst : scalar.CodeField E) (h : Nat) (hh : h≤8)
+    (height depth : Usize) (hheight : height.val=h)
+    (c : Slice E) (hc : c.val.length=2^h) (nodes : Array field.M31 9#usize) :
+    guarded55.eval_rec inst c depth height nodes=generic54.eval_rec inst c depth height nodes := by
+  induction h generalizing height depth c with
+  | zero =>
+    have hz : height=0#usize := by scalar_tac
+    have hl : Slice.len c=1#usize := by apply UScalar.eq_of_val_eq;simpa using hc
+    rw [guarded55.eval_rec,generic54.eval_rec,hz,hl]
+    simp
+  | succ h ih =>
+    have hne : height≠0#usize := by scalar_tac
+    have hpos : height>0#usize := by scalar_tac
+    have hpow : 2^(h+1)=2*2^h := by rw [pow_succ,Nat.mul_comm]
+    have hlen : c.val.length=2*2^h := hc.trans hpow
+    have hsmall : 2^h≤256 := Nat.pow_le_pow_right (by decide : 1≤2) (show h≤8 by omega)
+    have hpositive : 0<2^h := pow_pos (by decide) h
+    have hlne : Slice.len c≠1#usize := by
+      intro he
+      have he' := congrArg UScalar.val he
+      change c.val.length=1 at he'
+      omega
+    let n : Usize := Usize.ofNatCore (2^h) (by have hs:=usize_bound;scalar_tac)
+    have hn : n.val=2^h := rfl
+    have hdiv : Slice.len c / 2#usize=ok n := by
+      obtain ⟨z,hz,hval,hbv⟩ := UScalar.div_bv_spec (y:=2#usize) (Slice.len c) (by decide)
+      rw [hz]
+      congr 1
+      apply UScalar.eq_of_val_eq
+      have hlenv : (Slice.len c).val=2*2^h := hlen
+      rw [hval,hlenv]
+      change (2*2^h)/2=2^h
+      omega
+    obtain ⟨even,heven,hevenval⟩ := ProverCommitEncoderGenericCollect54.collect inst c 2#usize 0#usize 0#usize n (2^h) hn
+      (by change 0+2^h<1025;omega) (by decide) (by decide)
+      (by intro k hk;change 2*(0+k)+0<c.val.length;rw [hlen];omega)
+      (alloc.vec.Vec.new _) (by change 0+2^h≤1024;omega)
+    obtain ⟨odd,hodd,hoddval⟩ := ProverCommitEncoderGenericCollect54.collect inst c 2#usize 1#usize 0#usize n (2^h) hn
+      (by change 0+2^h<1025;omega) (by decide) (by decide)
+      (by intro k hk;change 2*(0+k)+1<c.val.length;rw [hlen];omega)
+      (alloc.vec.Vec.new _) (by change 0+2^h≤1024;omega)
+    have hevenlen : (alloc.vec.Vec.deref even).val.length=2^h := by
+      rw [hevenval];simp [alloc.vec.Vec.new]
+    have hoddlen : (alloc.vec.Vec.deref odd).val.length=2^h := by
+      rw [hoddval];simp [alloc.vec.Vec.new]
+    have hdec : (Usize.wrapping_sub height 1#usize).val=h := by
+      rw [sub_one height (by omega)];omega
+    have ha := ih (by omega) _ (Usize.wrapping_add depth 1#usize) hdec _ hevenlen
+    have hb := ih (by omega) _ (Usize.wrapping_add depth 1#usize) hdec _ hoddlen
+    rw [guarded55.eval_rec,generic54.eval_rec]
+    simp only [hlne,hne,hpos,if_false,massert,bind_tc_ok,hdiv,heven,hodd,lift,ha,hb]
+    rfl
+
+#print axioms equivalent
+end R1Z.ProverCommitEncoderGuard55
