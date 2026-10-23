@@ -843,3 +843,29 @@ Aeneas. A separately extracted pure extra projection is only a candidate and
 does not discharge the actual constructor. Semantic sampler/caller links are
 being proved independently. Production Rust and CU artifacts are unchanged.
 S9 and the 100-bit release target remain not yet established.
+
+
+## Same-execution four-term and sampler links
+
+PROVED: `s9-pair-prefix-four-calls-v1-20261023` exposes all four actual
+term-prefix calls with exact reads, mixed products, quarter products and term
+output identities. `s9-pair-four-mixed-reflections-v1-20261023` connects each
+observed mixed product to its source-cut successful result. The canonical
+mapped-ap1 read contract remains an explicit premise; no fresh arithmetic
+call-success or canonical coefficient premise was added.
+
+PROVED: `s9-semantic-validated-canonical-v1-20261023` reflects the sampler
+success in the same extracted semantic_validated call and derives canonicality
+from the already-proved universal byte sampler. The digest block is arbitrary.
+This local method theorem does not supply current semantic_rounds or the
+unsafe Weights::new constructor correspondence.
+
+PROVED: `s9-pair-sidezero-mul-call-v1-20261023` exposes the actual side-zero
+continuation's three additions and full multiplication success.
+`s9-pair-wide-mul-same-call-v1-20261023` derives the raw source multiplication
+success from an observed Pair multiplication on corresponding canonical
+operands. Canonicality of the actual low/sum operands is being connected.
+
+All these focused checks passed with standard axioms and zero swap. No whole
+manifest replay, production Rust change or new CU benchmark was run. S9 and
+the full 100-bit soundness target remain OPEN.
