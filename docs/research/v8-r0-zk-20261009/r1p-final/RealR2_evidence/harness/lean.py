@@ -13,6 +13,8 @@ snapshot=Path(__file__).resolve().parent.parent/'lean'/'sources'/('attempt-'+att
 snapshot.parent.mkdir(parents=True,exist_ok=True)
 assert not snapshot.exists()
 snapshot.write_bytes(p.read_bytes())
+import json
+snapshot.with_suffix('.metadata.json').write_text(json.dumps(dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()),indent=2)+'\n')
 host='dombarker@100.108.41.90'
 R='/home/dombarker/project-offloads/codex-cx-real-r2-20261023'
 subprocess.run(['scp',str(p),host+':'+R+'/incoming-'+attempt+'.lean'],check=True,stdout=subprocess.DEVNULL)
