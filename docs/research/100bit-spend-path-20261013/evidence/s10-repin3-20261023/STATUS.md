@@ -117,3 +117,22 @@ Both deterministic completeness gates exit **2**, recorded in
 binding, source Calls tree/carriers, owner acceptance, source/model ordered
 identities and coherent final release replay remain open. Zero assumptions
 or headline premises are removed. Target not yet established.
+
+## Stage 4: dated inventory and focused final integrity audit
+
+S10-INVENTORY now includes a dated H5 section with full artifact hashes,
+ordering facts, ownership, exact delta counts and the child-change correction.
+`audit.py` passes eight focused integrity groups, including all current CFG
+cuts/bypass mutations, independent call decoding, original/adapted generator
+pins, resource caps/reservations and callback negative controls. Both
+completeness gates remain exit 2. `validation.json` records target, revision,
+wall time, peak RSS, swap and N/A axioms; `final-pins.json` binds scripts,
+reports and retained inputs. This is not a full frozen-manifest replay.
+
+`receipt-target-corrections.json` documents the callback algorithm's inherited
+historical target label; its actual adapted script is bound by source hash and
+the audit command. Raw receipts remain unchanged. `comparison-provenance.json`
+pins host harnesses, ownership policy/overlay, frontier input and exact old
+comparison inputs. `host-final-scopes.json` confirms every task scope is empty.
+No keys are removed, no shipped or Lean source changes, and nothing is pushed.
+S10 remains incomplete; target not yet established.
