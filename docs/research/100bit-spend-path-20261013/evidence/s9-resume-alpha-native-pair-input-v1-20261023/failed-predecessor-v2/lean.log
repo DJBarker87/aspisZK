@@ -1,0 +1,44 @@
+/private/tmp/root-s9-resume-alpha-pair-input-v2-check-20261023/sources/S9ResumeAlphaPairInputV1.lean:64:23: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  v = toNative a1 ∨ v ∈ []
+
+case inr
+ops : AspisR1Stage2.ResumeOps
+H : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 H
+bytes proof publicInput : Slice U8
+variant : AspisR1Stage2.transport.Variant
+hash : H
+p : AspisR1Stage2.verifier.Prepared
+acc : AspisR1Stage2.verifier.Accumulator
+hresume :
+  AspisR1Stage2.verifier.resumeWithOps (AspisR1S4ResumeGammaActualCanonicalV1.withReaderE ops) D bytes proof publicInput
+      variant hash =
+    ok (core.result.Result.Ok (p, acc))
+a0 a1 : AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+r0 r1 r2 : AspisR1Stage2.verifier.Reader
+halpha : p.alpha = Array.make 2#usize [a0, a1] ⋯
+hr0 : AspisR1S4ReaderEActualWideCanonicalV1.readerE ops.raw r0 = ok (core.result.Result.Ok a0, r1)
+hr1 : AspisR1S4ReaderEActualWideCanonicalV1.readerE ops.raw r1 = ok (core.result.Result.Ok a1, r2)
+h0 : AspisR1S4ReaderEActualWideCanonicalV1.currentWideCanonical a0
+h1 : AspisR1S4ReaderEActualWideCanonicalV1.currentWideCanonical a1
+hselected :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice SW)) p.alpha
+      { «end» := 2#usize } =
+    ok p.alpha.to_slice
+i : Usize
+v : NW
+hread : (toNativeSlice p.alpha.to_slice).index_usize i = ok v
+h✝ : v = toNative a1 ∨ v ∈ []
+⊢ Can v
+/private/tmp/root-s9-resume-alpha-pair-input-v2-check-20261023/sources/S9ResumeAlphaPairInputV1.lean:63:27: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [List.mem_cons,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵] at hm
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9ResumeAlphaPairInputV1.toNative_canonical' does not depend on any axioms
+'AspisR1S9ResumeAlphaPairInputV1.resume_finish_prefix_native_alpha_canonical' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
