@@ -128,3 +128,19 @@ Both `inventory.py --check --require-complete` and
 S2 caller identities, final inline/source correspondence, owner acceptance,
 concrete source Calls tree/carriers, source_order/model_order and the coherent
 final release replay remain open. No headline premise is removed.
+
+## Stage 4: dated inventory and focused integrity audit
+
+The 23 October S10-INVENTORY section records current pins, historical scope,
+all ordering facts, exact delta counts, ownership and the out-of-line library
+support qualification. `audit.py` checks current source/output/generator pins,
+all scoped resource receipts and reservations, the independent CFG cuts and
+bypass mutations, callback replay, alias consistency and deterministic gates.
+`validation.json` records its target, revision, exit, wall, peak RSS, swap and
+N/A axioms status; `final-pins.json` binds final scripts, inputs and report.
+This focused Python audit is not a frozen-manifest or formal release replay.
+
+No Lean theorem is added or compiled, no unrelated runtime/adversarial suite
+is repeated, no task build scope remains running, no key is removed and no
+push occurs. The headline target and all remaining source/execution joins are
+unchanged. Both completeness gates remain exit 2; target not yet established.
