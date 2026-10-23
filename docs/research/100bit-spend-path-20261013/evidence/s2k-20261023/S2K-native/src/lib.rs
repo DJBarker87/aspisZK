@@ -196,3 +196,5 @@ fn S2K_late_afterstate_admission() {
 }
 
 include!("S2K_status_contract.rs");
+
+include!("S2K_fields.rs");

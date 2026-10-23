@@ -1,0 +1,23 @@
+S2K_SourceStore.lean:24:81: error: unsolved goals
+output : Std.Array U8 688#usize
+start stop : Usize
+bytes : Std.Array U8 32#usize
+order : ↑start ≤ ↑stop
+bound : ↑stop ≤ 688
+width : ↑stop - ↑start = 32
+size : (↑output).length = ↑688#usize
+bs : (↑bytes).length = ↑32#usize
+⊢ (do
+      let copied ←
+        if Usize.ofNatCore (min 32 (688 - ↑start)) ⋯ = Usize.ofNatCore 32 ⋯ then ok ⟨↑bytes, ⋯⟩ else fail Error.panic
+      ok ⟨(↑output).setSlice! ↑start ↑copied, ⋯⟩) =
+    ok (output.setSlice! ↑start ↑bytes)
+S2K_SourceStore.lean:31:45: warning: This simp argument is unused:
+  Array.setSlice!
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.length, Slice.len, order, bound, size, core.slice.Slice.copy_from_slice, List.slice,
+  ̲  ̲ ̲ ̲width, bs, Array.from_slice, A̵r̵r̵a̵y̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵ ̵lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2K.SourceStore.store_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
