@@ -1,0 +1,25 @@
+info: s2_trust_consistency: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+S2TrustedSdkBorrow.lean:25:2: error: unexpected token 'at'; expected command
+S2TrustedSdkBorrow.lean:106:41: error: unexpected token '{'; expected '}'
+S2TrustedSdkBorrow.lean:240:28: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+S2TrustedSdkBorrow.lean:240:4: error: Type mismatch: After simplification, term
+  model_matches w (Op.shared a t o)
+ has type
+  Matches (model F) w (Op.shared a t o)
+    (if 0 ≤ w.counter (w.accounts a).fst ∧ w.counter (w.accounts a).fst < maxCounter then
+      (acquire w (w.accounts a).fst t o Kind.shared, Reply.guard t)
+    else (w, Reply.borrowFailed))
+but is expected to have type
+  Matches (model F) w (Op.shared a t o) (acquire w (w.accounts a).fst t o Kind.shared, Reply.guard t)
+S2TrustedSdkBorrow.lean:264:34: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+S2TrustedSdkBorrow.lean:264:6: error: Type mismatch: After simplification, term
+  model_matches w (Op.write t i v)
+ has type
+  Matches (model F) w (Op.write t i v)
+    (if g.kind = Kind.exclusive ∧ i < (w.payload g.cell).descriptor.length then (writeAt w g i v, Reply.unit)
+    else (w, Reply.unit))
+but is expected to have type
+  Matches (model F) w (Op.write t i v) (writeAt w g i v, Reply.unit)
+'_private.S2TrustedSdkBorrow.0.AspisR1.S2Trust.model_matches' depends on axioms: [sorryAx]
+'AspisR1.S2Trust.model_satisfies' depends on axioms: [propext, sorryAx, Quot.sound]

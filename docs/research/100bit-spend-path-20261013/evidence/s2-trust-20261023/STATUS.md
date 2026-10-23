@@ -23,3 +23,24 @@ No assumptions discharged. Route B retains the newly authorized SDK trust
 boundary and P6/runtime/library-source correspondence. Next: exact universal
 fifteen-field interface, concrete consistency model, Kani spec and audit.
 Budget used: Lean 0/100, Kani 0/60. No shipped-file changes.
+
+# Stage 2: universal fifteen-field interface
+
+S2TrustedSdkBorrow.lean defines the exact fifteen names over a typed Library
+interpretation relation, Valid heap/counter/external-borrow/linear-token ledger,
+and Enabled operations. The record supplies primitive observations and operation
+simulation, not any adapter conclusion. The ambient carrier is arbitrary and
+unchanged by the reference primitives. Only bounded exclusive element writes
+change payload contents. Aliased data cells are supported; runtime admission
+separately supplies data/lamports separation. No production Library instance or
+initial relatedness theorem is claimed.
+
+model_satisfies proves all fifteen fields jointly for the identity interpretation
+on mathematical heaps, universally over valid local states. This is consistency,
+not SDK certification. Its axioms are [propext, Quot.sound]; model_matches has none.
+Lean attempts 001/002 failed on syntax/inference (their sorryAx diagnostics are
+error-recovery artifacts, not accepted proofs); corrected source passed 003.
+Exact command/source SHA/exit/wall/RSS/swap/axiom lines are in lean-*/receipt.json.
+All runs used pinned Lean 4.32.0 via lake env lean, one module per capped scope.
+No full manifest replay is appropriate for these independent new modules.
+Budget used: Lean 3/100, Kani 0/60. Next: inhabited consistency schedules and Kani.
