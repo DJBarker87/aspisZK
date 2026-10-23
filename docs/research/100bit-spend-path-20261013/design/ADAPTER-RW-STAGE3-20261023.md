@@ -201,3 +201,10 @@ with no swap. `stage3-manifest.json` retains all attempts, complete multiline
 axiom reports, exact limits and current-object pins; source matches are checked
 for all11 final modules. Native source capture equality and mechanical adaptation
 reproduction also pass. Failed attempts remain excluded from theorem evidence.
+
+Final proved source commit: `fe22b243e8411c899b29aa0bf0d7ddb77a1b3db2`. The post-commit read-only audit
+rechecks all current source/dependency/artifact pins without repeating any Lean
+or runtime build. Full inherited history is retained in
+`evidence/adapter-rw-20261023/git-log-from-common-base.txt`. Raw generator outputs
+and failed-prover logs retain their original whitespace; active proof/tool/design
+sources pass the whitespace check.
