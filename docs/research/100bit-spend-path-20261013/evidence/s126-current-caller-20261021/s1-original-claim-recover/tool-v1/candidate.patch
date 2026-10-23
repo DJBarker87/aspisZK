@@ -1,0 +1,52 @@
+--- /home/dombarker/project-offloads/d18-aeneas-collapse-remap-v1-20261022/source/src/interp/InterpReduceCollapse.ml	2026-10-22 02:11:57.000000000 +0000
++++ /home/dombarker/project-offloads/s126-real-sdk-20261021/s1-collapse-tool-recover-v1/source/src/interp/InterpReduceCollapse.ml	2026-10-23 00:31:30.162720680 +0000
+@@ -1916,7 +1916,7 @@
+ 
+ (** Collapse a context following a sequence *)
+ let collapse_ctx_following_sequence (span : Meta.span)
+-    (sequence : (abs_id * abs_id * abs_id) list)
++    ~(recoverable : bool)     (sequence : (abs_id * abs_id * abs_id) list)
+     (shared_borrows_seq :
+       (abs_id * int * proj_marker * borrow_or_proj * ty) list)
+     (fresh_abs_kind : abs_kind) ~(with_abs_conts : bool) (ctx0 : eval_ctx) :
+@@ -1988,7 +1988,13 @@
+   let shared_borrows_seq =
+     List.map
+       (fun (abs_id, i, pm, bid, ty) ->
+-        (AbsId.Map.find abs_id !nabs_map, i, pm, bid, ty))
++        match AbsId.Map.find_opt abs_id !nabs_map with
++        | Some mapped_abs -> (mapped_abs, i, pm, bid, ty)
++        | None ->
++            Errors.craise_recover __FILE__ __LINE__ recoverable span
++              ("Cannot replay shared borrow for abstraction "
++              ^ AbsId.to_string abs_id
++              ^ ": no projected abstraction was produced by the recorded merge sequence"))
+       shared_borrows_seq
+   in
+   let ctx = add_shared_borrows span shared_borrows_seq ctx in
+@@ -2000,12 +2006,12 @@
+   ctx
+ 
+ let collapse_ctx_no_markers_following_sequence (span : Meta.span)
+-    (sequence : (abs_id * abs_id * abs_id) list)
++    ~(recoverable : bool)     (sequence : (abs_id * abs_id * abs_id) list)
+     (shared_borrows_seq :
+       (abs_id * int * proj_marker * borrow_or_proj * ty) list)
+     (fresh_abs_kind : abs_kind) ~(with_abs_conts : bool) (ctx : eval_ctx) :
+     eval_ctx =
+   try
+-    collapse_ctx_following_sequence span ~with_abs_conts sequence
++    collapse_ctx_following_sequence span ~recoverable ~with_abs_conts sequence
+       shared_borrows_seq fresh_abs_kind ctx
+   with ValueMatchFailure _ -> [%internal_error] span
+--- /home/dombarker/project-offloads/d18-aeneas-collapse-remap-v1-20261022/source/src/interp/InterpJoin.ml	2026-10-22 02:11:57.000000000 +0000
++++ /home/dombarker/project-offloads/s126-real-sdk-20261021/s1-collapse-tool-recover-v1/source/src/interp/InterpJoin.ml	2026-10-23 00:31:30.162720680 +0000
+@@ -1806,7 +1806,7 @@
+ 
+   (* Apply the sequence of merges to the projected context *)
+   let joined_ctx =
+-    collapse_ctx_no_markers_following_sequence span merge_seq add_borrows_seq
++    collapse_ctx_no_markers_following_sequence span ~recoverable merge_seq add_borrows_seq
+       ~with_abs_conts:true fresh_abs_kind joined_ctx
+   in
+   [%ltrace
