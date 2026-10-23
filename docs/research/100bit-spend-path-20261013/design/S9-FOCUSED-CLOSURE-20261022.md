@@ -1259,3 +1259,72 @@ source adoption, new CU gate or compiled artifact pin is claimed here.
 Source normalization, Box/allocation effects, caller installation, whole
 constructor totality, the remaining source/refinement obligations and the
 composed security contract all remain required.
+
+## 2026-10-23 accepted-run coefficient and tensor update
+
+This update supersedes the preceding descriptions of the complete helper
+and stored tensor product as still under composition. It does not supersede
+the remaining source-adoption/runtime/security boundaries.
+
+**Proved, candidate C.**
+`AspisR1S9StrictResumeFinishOriginalCoefficientsV1.strict_resume_finish_same_original_coefficients`
+derives the original four S2 helper coefficient equations from the same
+accepted strict-resume/finish execution with the concrete constructor/Pair
+slots installed. The receiver, S2 variant, canonical native inputs, indexed
+powers and child helper success come from that execution; independent
+canonicality and child-success premises are not added. The actual helper
+is transported to the already-proved old helper and reuses its original
+coefficient algebra. Source-only packets are in
+`lean-candidates/s9-actual-pair-allocator-uniform-v1-20261023/{scalar-factor-candidate,helper-transport-candidate,original-coefficients-candidate}/`.
+Their exact candidate weights source is
+`ab55509e54218a2bfe7dd2d5e1b14216e3303961c16c181ce2e03d40f6b7678b`.
+
+**Proved, same stored factors.**
+`AspisR1S9ActualTensorStoredProductV1.actual_tensor_success_stored_product`
+establishes that the accepted actual S2 tensor loop returns the product of
+its own stored factors at the three base-four digits. Existing native
+factor canonicality and that same tensor success suffice; an independently
+assumed factor-meaning contract was removed. See
+`evidence/s9-actual-tensor-product-semantics-v1-20261023/` and
+`evidence/s9-actual-tensor-stored-product-v1-20261023/`.
+This does **not** prove that the constructor stores the required protocol
+factor formulas; that is the next mathematical join.
+
+**Proved, constructor arithmetic semantics.** The exact V3 constructor's
+accepted multiplication, addition and subtraction calls now give the
+corresponding decoded exact-tower product, sum and difference, with
+canonical output. These reuse existing checked/wrapping arithmetic and the
+exact tower, rather than replacing it with new arithmetic assumptions. See
+`evidence/s9-constructor-v3-qmul-semantics-v1-20261023/`,
+`evidence/s9-constructor-v3-qm-add-sub-map-v1-20261023/` and
+`evidence/s9-constructor-v3-qm-add-sub-semantics-v1-20261023/`.
+All accepted focused checks report only standard axioms and zero swap;
+the packets retain exact source/object hashes, target, revision, command,
+wall time and RSS. Unchanged cached dependencies were reused. This is not
+a final dependency-closure replay.
+
+**Measured, not adopted.** Candidate C passed six fixtures and the retained
+full-OS-mask proof in its historical caller context against the approved
+S4 comparator: maximum six-fixture stage-1 increase 11,689 CU, maximum
+settlement increase 1,491 CU; the retained full-mask sample increases were
+11,689 and 1,496 CU. That full-mask check reuses one retained OS-random
+proof, not a new sample or a proof of value-independent worst-case cost.
+The actual current owned-adapter snapshot at source revision
+`76d32f4680a19b9609522decfdb6cdbc3e5e923b` plus C is more expensive:
+maximum stage-1 increase **13,982 CU**, settlement increase **2,294 CU**.
+All six fixtures accepted and matched their checkpoint tails/return data,
+but stage 1 exceeds the authorized +12,000 CU allowance by **1,982 CU**.
+The comparator and allowance have not been changed. An isolated initialized
+Box experiment gave no stage-1 saving and worsened settlement by 20 CU;
+it is rejected as a solution to this regression. Further performance
+attribution is isolated on the NUC. No candidate C/D production source
+adoption, new release artifact, or CU-budget pass is claimed for the current
+owned adapter. Exact runtime receipts remain in the named private NUC job
+directories pending source-only evidence packaging.
+
+Remaining local joins include actual constructor stored-factor/statement
+point semantics, the current checkpoint-reader accepted-run bridge,
+source normalization and allocation effects, and concrete runtime/artifact
+refinement. The global source-to-model and security-experiment obligations
+remain governed by the gap map and security contract. **The 100-bit target
+is not yet established.**

@@ -1,0 +1,3 @@
+Unconditional full-Result coordinate transport of both exact extracted V3 constructor QM31 addition and subtraction to the existing QMMul-cut component operations, including failure and divergence. Both component CM calls reuse the pinned current constructor CM maps. This is a local source transport, not complete constructor/runtime equivalence or S9/security closure.
+
+Focused Lean check: 9.853 seconds; peak aggregate RSS 2197389312 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
