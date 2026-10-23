@@ -1,0 +1,99 @@
+S2K_AfterstateStatus.lean:44:2: error: Type mismatch
+  finish_total a.next_frontier ?m.37
+has type
+  ∃ bytes,
+    (do
+        let result ← encode_pool_v1_pair_verified_afterstate_v1_loop (Iterator.cursor a.next_frontier 0#usize) ?m.37
+        ok (core.result.Result.Ok result)) =
+      ok (core.result.Result.Ok bytes)
+but is expected to have type
+  ∃ bytes,
+    (do
+        let (s, index_mut_back) ←
+          do
+            let __x ←
+              if ↑4#usize ≤ ↑688#usize then
+                  ok (⟨List.take (↑4#usize - 0) (List.drop 0 ↑output), ⋯⟩, fun s' => ⟨(↑output).setSlice! 0 ↑s', ⋯⟩)
+                else fail Error.panic
+            ok (__x.1, fun o => if h : (↑(__x.2 o)).length = ↑688#usize then ⟨↑(__x.2 o), ⋯⟩ else output)
+        let s2 ←
+          if
+                Usize.ofNatCore (↑s).length ⋯ =
+                  Usize.ofNatCore
+                    (↑(Array.make 4#usize [65#u8, 83#u8, 74#u8, 65#u8]
+                          POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC._proof_2)).length
+                    ⋯ then
+              ok ⟨↑(Array.make 4#usize [65#u8, 83#u8, 74#u8, 65#u8] POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC._proof_2), ⋯⟩
+            else fail Error.panic
+        let output2 ←
+          match (index_mut_back s2)[4#usize]? with
+            | none => fail Error.arrayOutOfBounds
+            | some val => ok ⟨(↑(index_mut_back s2)).set (↑4#usize) POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION, ⋯⟩
+        let output3 ←
+          match output2[5#usize]? with
+            | none => fail Error.arrayOutOfBounds
+            | some val =>
+              ok ⟨(↑output2).set (↑5#usize) pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION, ⋯⟩
+        let output4 ←
+          match output3[6#usize]? with
+            | none => fail Error.arrayOutOfBounds
+            | some val => ok ⟨(↑output3).set (↑6#usize) pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION, ⋯⟩
+        let output5 ←
+          match output4[7#usize]? with
+            | none => fail Error.arrayOutOfBounds
+            | some val => ok ⟨(↑output4).set (↑7#usize) 1#u8, ⋯⟩
+        let (s3, index_mut_back1) ←
+          do
+            let __x ←
+              if 8#usize ≤ 16#usize ∧ ↑16#usize ≤ (↑output5).length then
+                  ok
+                    (⟨List.take (↑16#usize - ↑8#usize) (List.drop ↑8#usize ↑output5), ⋯⟩, fun s' =>
+                      ⟨(↑output5).setSlice! ↑8#usize ↑s', ⋯⟩)
+                else fail Error.panic
+            ok (__x.1, fun o => if h : (↑(__x.2 o)).length = ↑688#usize then ⟨↑(__x.2 o), ⋯⟩ else output5)
+        let s5 ←
+          if
+                Usize.ofNatCore (↑s3).length ⋯ =
+                  Usize.ofNatCore (↑(core.num.U64.to_le_bytes a.next_pair_index)).length ⋯ then
+              ok ⟨↑(core.num.U64.to_le_bytes a.next_pair_index), ⋯⟩
+            else fail Error.panic
+        let (s6, index_mut_back2) ←
+          do
+            let __x ←
+              if 16#usize ≤ 48#usize ∧ ↑48#usize ≤ (↑(index_mut_back1 s5)).length then
+                  ok
+                    (⟨List.take (↑48#usize - ↑16#usize) (List.drop ↑16#usize ↑(index_mut_back1 s5)), ⋯⟩, fun s' =>
+                      ⟨(↑(index_mut_back1 s5)).setSlice! ↑16#usize ↑s', ⋯⟩)
+                else fail Error.panic
+            ok (__x.1, fun o => if h : (↑(__x.2 o)).length = ↑688#usize then ⟨↑(__x.2 o), ⋯⟩ else index_mut_back1 s5)
+        let s8 ←
+          if Usize.ofNatCore (↑s6).length ⋯ = Usize.ofNatCore (↑root).length ⋯ then ok ⟨↑root, ⋯⟩ else fail Error.panic
+        let i ← ok { slice := ⟨↑a.next_frontier, ⋯⟩, i := 0 }
+        let iter ← ok { iter := i, count := 0#usize }
+        let output8 ← encode_pool_v1_pair_verified_afterstate_v1_loop iter (index_mut_back2 s8)
+        ok (core.result.Result.Ok output8)) =
+      ok (core.result.Result.Ok bytes)
+S2K_AfterstateStatus.lean:42:58: warning: This simp argument is unused:
+  Iterator.cursor
+
+Hint: Omit it from the simp argument list.
+  simp only [core.array.Array.index_mut, core.ops.index.IndexMutSlice,
+      core.slice.index.Slice.index_mut, core.slice.index.SliceIndexRangeToUsizeSlice,
+      core.slice.index.SliceIndexRangeToUsizeSlice.index_mut,
+      core.slice.index.SliceIndexRangeUsizeSlice,
+      core.slice.index.SliceIndexRangeUsizeSlice.index_mut,
+  ̵  ̵ ̵ ̵Array.to_slice, Array.from_slice,
+  ̲  ̲ ̲ ̲core.slice.Slice.copy_from_slice,
+  ̵  ̵ ̵ ̵Slice.length, Slice.len, Array.update, output.property,
+  ̲  ̲ ̲ ̲List.slice,
+  ̵  ̵ ̵ ̵pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC,
+  ̵  ̵ ̵ ̵core.slice.Slice.iter,
+  ̲  ̲ ̲ ̲core.iter.traits.iterator.Iterator.enumerate.trait_default,
+      core.iter.traits.iterator.Iterator.enumerate.default,̵ ̵I̵t̵e̵r̵a̵t̵o̵r̵.̵c̵u̵r̵s̵o̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private.S2K_AfterstateStatus.0.AspisR1.S2K.AfterstateStatus.finish_total' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.S2K.AfterstateStatus.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2K.AfterstateStatus.rejection' depends on axioms: [propext, Classical.choice, Quot.sound]

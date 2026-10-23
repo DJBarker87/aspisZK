@@ -12,8 +12,9 @@ for p in sorted(E.glob('*/receipt.json')):
  assert x['wall_seconds']>=0 and int(x['peak_rss_kib'])>0
  if kind=='lean' and x['exit_status']==0:
   assert x['print_axioms']
-  assert all('sorryAx' not in line and 'axioms:' in line for line in x['print_axioms'])
+  assert all('sorryAx' not in line and ('axioms:' in line or 'does not depend on any axioms' in line) for line in x['print_axioms'])
   for line in x['print_axioms']:
+   if 'does not depend on any axioms' in line:continue
    names=line.split('[')[1].rstrip(']').split(', ');assert set(names)<= {'propext','Classical.choice','Quot.sound'}
  if kind=='kani':
   log=(p.parent/'stdout.log').read_text()
