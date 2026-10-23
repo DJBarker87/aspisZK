@@ -1091,3 +1091,23 @@ PENDING labels in the frozen extraction are preserved; the later focused
 proof packets supply the current checked projection/canonicality results.
 Fixed [7,6] source normalization and allocation/error refinement remain
 explicit boundaries.
+
+PROVED ten-round source-model producer: successful execution of the actual-
+carrier ten-round model yields the exact final array of ten same-run challenge
+values and canonicality of every successful read, with no independent alpha
+canonicality or per-round success premise (14.698 s, 3,259,482,112-byte aggregate
+RSS, zero swap, standard axioms). Its four external operation slots remain
+uniformly quantified; a complete Rust caller extraction/runtime link is open.
+
+PROVED remaining constructor arithmetic leaves: generated addition/subtraction
+(11.971 s, 2,212,446,208 bytes) and the double body (14.332 s, 2,204,827,648 bytes)
+are canonical on the same successful executions with canonical inputs. They
+reuse the existing checked primitive bounds and multiplication theorem. No
+wrapping-arithmetic canonicality is assumed for arbitrary inputs.
+
+PROVED generic loop tools: output-property and invariant-property lemmas
+compile with standard axioms (12.495/12.171 s, approximately 2.2 GB aggregate
+RSS, zero swap). Their concrete body invariants and measure decrease remain
+obligations in the constructor and Pair instances. The actual factor-loop
+instance, challenge-to-constructor connection and full Pair binding remain
+in flight; these generic tools are not counted as source-cone closure.

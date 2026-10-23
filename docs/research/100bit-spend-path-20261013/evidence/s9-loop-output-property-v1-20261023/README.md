@@ -1,0 +1,3 @@
+PROVED generic reusable loop lemma: a successful Aeneas loop output satisfies a property when every successful terminal body output satisfies it and every successful continuation strictly decreases a supplied natural measure. Failure and divergence are rejected by the success premise. A concrete body invariant and measure instance are not supplied by this generic lemma; actual Pair-loop preservation remains open.
+
+Focused Lean check: 12.495 seconds; peak aggregate RSS 2199453696 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

@@ -1,0 +1,3 @@
+PROVED: the fresh constructor V3 generated M31, CM31 and QM31 addition/subtraction return canonical outputs on the same successful calls with canonical inputs. These lemmas reuse the existing wrapping primitive bounds and the already-checked V3 operation maps; they do not assume arbitrary wrapping arithmetic is canonical. Full factor loops, actual Pair caller refinement and overall soundness remain open.
+
+Focused Lean check: 11.971 seconds; peak aggregate RSS 2212446208 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

@@ -1,0 +1,3 @@
+PROVED generic reusable loop lemma: an initial state invariant, its preservation at every successful continuation, a strictly decreasing natural measure, and a terminal-output property together imply that every successful Aeneas loop output has that property. It preserves explicit success premises and supplies no concrete source body or measure instance. This lemma supports constructor-factor and caller-loop proofs; it alone closes no soundness gap.
+
+Focused Lean check: 12.171 seconds; peak aggregate RSS 2198716416 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
