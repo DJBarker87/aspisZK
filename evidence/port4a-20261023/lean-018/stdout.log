@@ -1,0 +1,31 @@
+Port4A_PhysicalReads.lean:71:2: error: Type mismatch: After simplification, term
+  readerRun
+ has type
+  run (VTop_Checkpoint.digest D) hash
+      (CheckpointBytes5Resume.program (CheckpointBytes4Ops.ops reserved) (VTop_Checkpoint.checkpointSlice saved) proof
+        pub AspisR1Stage2.transport.Variant.S2)
+      ?m.159 =
+    ok
+      (core.result.Result.Ok (p, a),
+        ?m.159 ++ [(c.proofParts, c.proofDigest), (c.publicParts, c.publicDigest), (c.checksumParts, c.checksumDigest)])
+but is expected to have type
+  run (VTop_Checkpoint.digest D) hash
+      (CheckpointBytes5Resume.program (CheckpointBytes4Ops.ops reserved) (VTop_Checkpoint.checkpointSlice saved) proof
+        pub AspisR1Stage2.transport.Variant.S2)
+      (before ++
+        [(singletonParts proof, hp), (singletonParts pub, hu),
+          (checksumParts
+              (CheckpointBytes5Writer.bodySlice (CheckpointBytes3Namespaces.toPrepared wp)
+                (CheckpointBytes3Namespaces.toAccumulator wa) hp hu),
+            hc)]) =
+    ok
+      (core.result.Result.Ok (p, a),
+        before ++
+          [(singletonParts proof, hp), (singletonParts pub, hu),
+            (checksumParts
+                (CheckpointBytes5Writer.bodySlice (CheckpointBytes3Namespaces.toPrepared wp)
+                  (CheckpointBytes3Namespaces.toAccumulator wa) hp hu),
+              hc),
+            (c.proofParts, c.proofDigest), (c.publicParts, c.publicDigest), (c.checksumParts, c.checksumDigest)])
+'AspisR1.Port4A_PhysicalReads.writer_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_PhysicalReads.six_reads' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
