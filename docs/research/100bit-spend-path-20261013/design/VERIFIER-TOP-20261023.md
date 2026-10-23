@@ -48,3 +48,65 @@ source hashes, limits and logs are in the respective receipt directories.
 `host-overlay.json` pins 540 overlaid Rust/Cargo inputs; all hashes checked on
 host before extraction. `toolchain.txt` pins both translator binaries and rustc.
 No Lean theorem or op10/op11 installation is established by extraction alone.
+
+## Stage 2: installed source identities and ordered accepted calls
+
+`VTop_Types` shares already extracted Rust value layouts with AdapterRw and
+AspisR1Stage2. This is a namespace/carrier adapter, not a new representation
+or a cone proof. `VTop_Model` preserves the generated stage bodies and takes
+24 generated external operations plus one pure std array-unwrap operation as
+explicit `Ops` fields. No generated template axiom is installed. The unwrap
+boundary is necessary because the backend's direct `DebugTryFromSliceError`
+instance pulls `core.fmt.Formatter` into the axiom set (lean-003, excluded).
+The accepted model (lean-004) uses standard axioms only. This boundary remains
+part of the existing std/extraction interpretation, not a proved concrete std
+instance. Remaining opaque nested public-layout templates are likewise not
+installed; their already extracted complete carriers are shared explicitly.
+
+`VTop_Entry.install adapter stage` sets only adapter op10 and op11 to the exact
+extracted tx1/tx2_authenticated definitions. `op10_source` and `op11_source`
+prove their identities for this installed dictionary, at every hash type and
+digest dictionary. They do **not** assert equality of an arbitrary pre-existing
+`AdapterRw.Ops` dictionary with this instance. `first_accepted` inverts the
+actual adapter error map: its successful checkpoint is the same successful
+stage return, with unit hash and observer None. Source span/hash checks in
+`source-identities.json` identify all three extracted bodies with this
+worktree's `candidate.rs`; they do not establish SBF lowering.
+
+`VTop_Flow` lifts these exact bodies into typed operation syntax.
+`VTop_Erasure.{tx1,tx2_common,tx2_authenticated}_source` and `_erasure` prove
+full Result equality, including failure/divergence and inner Rust errors.
+`VTop_Trace.Call` retains each operation's actual typed arguments;
+`Event.returned` retains its actual return. `accepted_execution` derives an
+execution trace from source acceptance, rather than assuming successful cuts.
+`VTop_Order.accepted_tx1` / `accepted_tx2` derive those same-value traces and
+the exact operation schedules below. They are not independent successful
+executions selected to fill desired inputs.
+
+- TX1: split guard → shape → canonical scan → Parsed mark → zero scratch →
+  preparation (returned scratch included) → initial accumulator → Prepare mark
+  → folded-root range/conversion → batch 0 → Merkle mark → geometry → pending
+  weights → query loop → weight flush/back-write → checkpoint → write mark.
+- Authenticated TX2: shape → Parsed mark → resume → split check → powers →
+  read mark → inactive range/decode → folded-root range/conversion → batch 1
+  → Merkle mark → geometry → pending weights → query loop → weight flush →
+  relation-view construction → finish_relation.
+
+All checked slice calls and pure array materializations remain in the tree.
+`VTop_Cuts.writer_reached` and `resume_reached` independently invert acceptance
+to the exact writer/resume child invocation on the original proof/public/CP
+arguments. They supply no assumed checkpoint encoding or returned state.
+
+The combined TX2-order proof hit the fixed 200,000-heartbeat limit in
+lean-023 and, after a first smaller split, lean-030. Neither was rerun
+unchanged. `VTop_SecondFlow` factors only the *Lean proof definition* at the
+query-return continuation; `common_source` proves definitional equality with
+the original monadic body. `VTop_SecondOrder` checks the four-operation tail
+and the prefix separately (lean-032); the authenticated wrapper then composes
+them (lean-033). No Rust/LLBC rewrite, cap or heartbeat increase occurred.
+
+**Task (2) is partial:** source identities and accepted typed call order are
+proved. The complete `OraclePortFrozen2Join.AcceptedRunJoin` observation is
+not proved. An operation-return log is not a digest-query log. No theorem here
+claims equality to `verifier D dV_frozen2`, equality of its two enriched
+annotation passes, or inhabitants of the thirteen `PerConeJoins` fields.

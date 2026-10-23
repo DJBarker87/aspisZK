@@ -1,0 +1,46 @@
+{"attempt": "lean-018", "exit_status": 1, "wall_seconds": 1.255194929006393, "peak_rss_kib": "2637320", "swaps": "0", "print_axioms": ["'AspisR1.VTop_Order.tx1_order' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+VTop_Order.lean:27:50: error: Application type mismatch: The argument
+  accepted
+has type
+  run ops
+      ((fun b =>
+          VTop_Trace.bind (Code.done b) fun i =>
+            if (split != i) = true then pure (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse)
+            else do
+              let r ← traceEffects.op3 proof
+              let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let r1 ← traceEffects.op4 proof
+                  let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                  match cf1 with
+          
+...
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual))
+        a✝)
+      (before ++ [Event.returned Call.op16 a✝]) =
+    ok (core.result.Result.Ok saved, after)
+but is expected to have type
+  ok ?m.122 = ok ?m.123
+in the application
+  ok.inj accepted
+'AspisR1.VTop_Order.tx1_order' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0e33d4026d644de881faec21b76fbc90.scope; invocation ID: e9a3578cb41d46329ef35e7bec16908a
