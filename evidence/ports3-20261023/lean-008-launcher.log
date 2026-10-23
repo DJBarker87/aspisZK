@@ -1,0 +1,41 @@
+{"attempt": "lean-008", "exit_status": 1, "wall_seconds": 2.242471675010165, "peak_rss_kib": "4332972", "swaps": "0", "print_axioms": ["'AspisR1.Port3_WriterBoundary.selector_tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_WriterBoundary.not_shipped_tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_WriterBoundary.not_shipped_d_tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port3_WriterBoundary.lean:17:45: error: unsolved goals
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+⊢ (do
+      let i2 ← 8#usize - 8#usize
+      match [2#u8, UScalar.cast UScalarTy.U8 a.next, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8][↑i2]? with
+        | none => fail Error.arrayOutOfBounds
+        | some x => ok x) =
+    ok 2#u8
+Port3_WriterBoundary.lean:26:2: error: failed to synthesize
+  Decidable (ok 2#u8 ≠ ok (shippedTag aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S1))
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port3_WriterBoundary.lean:33:2: error: failed to synthesize
+  Decidable (ok 2#u8 ≠ ok (shippedTag a
+...
+Port3_WriterBoundary.lean:17:45: error: unsolved goals
+p : Prepared
+a : Accumulator
+hp hu : Std.Array U8 32#usize
+⊢ (do
+      let i2 ← 8#usize - 8#usize
+      match [2#u8, UScalar.cast UScalarTy.U8 a.next, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8][↑i2]? with
+        | none => fail Error.arrayOutOfBounds
+        | some x => ok x) =
+    ok 2#u8
+Port3_WriterBoundary.lean:26:2: error: failed to synthesize
+  Decidable (ok 2#u8 ≠ ok (shippedTag aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S1))
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port3_WriterBoundary.lean:33:2: error: failed to synthesize
+  Decidable (ok 2#u8 ≠ ok (shippedTag aspis_r1_cost_probe.transport.CheckpointAbi2Variant.D))
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.Port3_WriterBoundary.selector_tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_WriterBoundary.not_shipped_tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_WriterBoundary.not_shipped_d_tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9bffd637171a43baa2995bbe36e2d24e.scope; invocation ID: d915ee680bb647fb9c665234fc507e91
