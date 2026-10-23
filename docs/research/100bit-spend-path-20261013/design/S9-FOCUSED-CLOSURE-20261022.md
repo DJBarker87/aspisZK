@@ -981,3 +981,21 @@ A second candidate moves final packing into a non-inlined helper. Its focused
 constructor diagnostics clear in the fresh optimized build; full stack audit,
 source re-extraction/proof and CU gates remain pending. Neither constructor
 candidate changes shipped source or establishes the 100-bit release claim.
+
+
+MEASURED candidate-v2 stack result:
+`s9-constructor-box-new-sbf-gate-v2-20261023` retains optimized disassembly
+and relocation proving the constructor reaches its out-of-line packing helper.
+The candidate constructor warning is removed; the other 34 function warnings
+are identical to v1. This is a constructor-specific pass only: the whole
+program stack gate is still failed. No CU or proof re-pin result is inferred.
+The next cost comparison layers this constructor onto the exact prior S9
+helper candidate 9338607a, against the existing B1 fixture baseline; it must
+fit the remaining +1,183/+3,901 headroom within the user's +12k allowance.
+
+OPEN new extraction blocker: full Pair source-cut Aeneas emission succeeds
+but the emitted Lean fails at mutable-capture FnOnce/FnMut and typed shifts.
+The failure is in raw generated output, not introduced by the Q.raw slot
+implementation. Minimal proof-friendly powers-loop candidates are being
+checked through both code generation and Lean compilation before any caller
+source feasibility claim is accepted. No unchanged failing replay is planned.
