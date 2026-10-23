@@ -1,0 +1,61 @@
+Port1_Driver.lean:20:20: error(lean.unknownIdentifier): Unknown identifier `AspisV8R19.SqueezeOracleBridge.encodeByte`
+Port1_Driver.lean:94:18: error: unsolved goals
+case ok.Ok.ok.Ok.unit
+source model : Implementation
+joins : VTop_OracleStages.ConeJoins (fun {A} => source) fun {A} => model
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+semantic : Semantic
+pub proof : Slice U8
+H : Bytes → State
+saved : alloc.vec.Vec U8
+first :
+  (eval H
+        (interpret (fun {A} => source)
+          (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))).2 =
+    ok (core.result.Result.Ok saved)
+one :
+  eval H
+      (interpret (fun {A} => source) (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none)) =
+    eval H (interpret (fun {A} => model) (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))
+accepted :
+  verdict
+      (eval H
+          (interpret (fun {A} => source)
+            (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof saved.deref hash none))).2 =
+    true
+second :
+  (eval H
+        (interpret (fun {A} => source)
+          (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof saved.deref hash none))).2 =
+    ok (core.result.Result.Ok PUnit.unit)
+two :
+  eval H
+      (interpret (fun {A} => source)
+        (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof saved.deref hash none)) =
+    eval H
+      (interpret (fun {A} => model)
+        (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof saved.deref hash none))
+⊢ ((eval H
+            (interpret (fun {A} => source)
+              (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))).1 ++
+        (eval H
+            (interpret (fun {A} => source)
+              (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof saved.deref hash none))).1,
+      verdict (ok (core.result.Result.Ok PUnit.unit))) =
+    ((eval H
+            (interpret (fun {A} => source)
+              (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))).1 ++
+        (eval H
+            (interpret (fun {A} => source)
+              (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof saved.deref hash none))).1,
+      verdict
+        (eval H
+            (interpret (fun {A} => source)
+              (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof saved.deref hash none))).2)
+Port1_Driver.lean:94:13: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisR1.Port1_Driver.decodeSemantic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_Driver.stages_substitute' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
