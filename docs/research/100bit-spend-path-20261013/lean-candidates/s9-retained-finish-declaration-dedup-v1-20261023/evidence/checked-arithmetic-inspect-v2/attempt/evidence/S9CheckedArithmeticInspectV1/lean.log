@@ -1,0 +1,82 @@
+def Aeneas.Std.UScalar.tryMkOpt : (ty : Aeneas.Std.UScalarTy) → ℕ → Option (Aeneas.Std.UScalar ty) :=
+fun ty x => if h : Aeneas.Std.UScalar.check_bounds ty x = true then some (Aeneas.Std.UScalar.ofNatCore x ⋯) else none
+theorem Aeneas.Std.UScalar.wrapping_sub_val_eq : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  ↑(x.wrapping_sub y) = (↑x + (Aeneas.Std.UScalar.size ty - ↑y)) % Aeneas.Std.UScalar.size ty :=
+fun {ty} x y =>
+  Eq.mpr
+    (id
+      (congrArg (Eq (x.bv - y.bv).toNat)
+        (congr
+          (congrArg HMod.hMod
+            (congrArg (HAdd.hAdd x.bv.toNat)
+              (congrFun' (congrArg HSub.hSub (Aeneas.Std.UScalar.size_def ty)) y.bv.toNat)))
+          (Aeneas.Std.UScalar.size_def ty))))
+    (have this := of_eq_true (pow_pos._simp_1 (of_eq_true Nat.ofNat_pos._simp_1) ty.numBits);
+    have this := Decidable.byContradiction fun a => Aeneas.Std.UScalar.wrapping_sub_val_eq._proof_1_2 this a;
+    Eq.mpr
+      (id
+        (congr
+          (congrArg Eq
+            (congrFun'
+              (congrArg HMod.hMod
+                (congr (congrArg HAdd.hAdd (congrArg (HSub.hSub (2 ^ ty.numBits)) (Aeneas.Std.UScalar.bv_toNat y)))
+                  (Aeneas.Std.UScalar.bv_toNat x)))
+              (2 ^ ty.numBits)))
+          (congrFun'
+            (congrArg HMod.hMod
+              (congr (congrArg HAdd.hAdd (Aeneas.Std.UScalar.bv_toNat x))
+                (congrArg (HSub.hSub (2 ^ ty.numBits)) (Aeneas.Std.UScalar.bv_toNat y))))
+            (2 ^ ty.numBits))))
+      (of_eq_true
+        (Eq.trans
+          (congrArg (Eq ((2 ^ ty.numBits - ↑y + ↑x) % 2 ^ ty.numBits))
+            (congrFun'
+              (congrArg HMod.hMod
+                (Eq.trans
+                  (Mathlib.Tactic.Ring.Common.add_congr
+                    (Mathlib.Tactic.Ring.Common.atom_pf (↑x) rfl
+                      (Eq.mpr
+                        (id
+                          (congrArg (fun _a => ↑x ^ Nat.rawCast 1 * Nat.rawCast 1 = ↑x ^ Nat.rawCast 1 * _a)
+                            (Eq.symm rfl)))
+                        (Eq.refl (↑x ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                    (Mathlib.Tactic.Ring.Common.atom_pf (2 ^ ty.numBits - ↑y) rfl
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              (2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                (2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * _a)
+                            (Eq.symm rfl)))
+                        (Eq.refl ((2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_gt ((2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero (↑x ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+                  (Eq.trans
+                    (Mathlib.Tactic.RingNF.add_assoc_rev ((2 ^ ty.numBits - ↑y) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                      (↑x ^ Nat.rawCast 1 * Nat.rawCast 1) 0)
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg HAdd.hAdd
+                          (congr
+                            (congrArg HAdd.hAdd
+                              (Eq.trans
+                                (congr
+                                  (congrArg HMul.hMul
+                                    (Eq.trans
+                                      (congrArg (HPow.hPow (2 ^ ty.numBits - ↑y)) Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                      (pow_one (2 ^ ty.numBits - ↑y))))
+                                  Mathlib.Tactic.RingNF.nat_rawCast_1)
+                                (mul_one (2 ^ ty.numBits - ↑y))))
+                            (Eq.trans
+                              (congr
+                                (congrArg HMul.hMul
+                                  (Eq.trans (congrArg (HPow.hPow ↑x) Mathlib.Tactic.RingNF.nat_rawCast_1) (pow_one ↑x)))
+                                Mathlib.Tactic.RingNF.nat_rawCast_1)
+                              (mul_one ↑x))))
+                        0)
+                      (add_zero (2 ^ ty.numBits - ↑y + ↑x))))))
+              (2 ^ ty.numBits)))
+          (eq_self ((2 ^ ty.numBits - ↑y + ↑x) % 2 ^ ty.numBits)))))
+theorem Aeneas.Std.UScalar.ofNatCore_val_eq : ∀ {x : ℕ} {ty : Aeneas.Std.UScalarTy} (h : x < 2 ^ ty.numBits),
+  ↑(Aeneas.Std.UScalar.ofNatCore x h) = x :=
+fun {x} {ty} h => of_eq_true (eq_self x)

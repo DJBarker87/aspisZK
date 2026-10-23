@@ -1,0 +1,3 @@
+Proved: the SAME accepted native S2 mask-weight loop returns a canonical weight from canonical actual low entries and canonical starting carry. Its own source reads/add calls are derived; static masks are never unfolded and no Q.raw law is used. Low/carry canonicality remain explicit in this generic loop theorem. Full S2 helper/Pair, decoded inactive value, runtime and security closure remain separate.
+
+Focused Lean check: 21.774 seconds; peak aggregate RSS 3201269760 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

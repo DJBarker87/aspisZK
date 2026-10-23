@@ -1,0 +1,3 @@
+Proved: generic native Wide arrays of any size preserve all-read canonicality through repeat, bounded set, the SAME accepted update and SAME successful mutable-back write. Reuses existing generic atN/set/read/frame and repeated_native_reads proofs. Local written-value/prior-array guards remain explicit; no complete pairing or runtime/security closure is inferred.
+
+Focused Lean check: 21.116 seconds; peak aggregate RSS 3202875392 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

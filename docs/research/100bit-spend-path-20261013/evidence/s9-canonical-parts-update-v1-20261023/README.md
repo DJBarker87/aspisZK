@@ -1,0 +1,3 @@
+Proved: the same successful bounded update of a canonical native seven-entry parts array preserves canonicality of every resulting indexed read. Reuses the existing exact array set/read/frame lemmas. Index bound, canonical prior array and written value remain explicit local premises; this helper alone closes no Pair or security obligation.
+
+Focused Lean check: 24.359 seconds; peak aggregate RSS 3193126912 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

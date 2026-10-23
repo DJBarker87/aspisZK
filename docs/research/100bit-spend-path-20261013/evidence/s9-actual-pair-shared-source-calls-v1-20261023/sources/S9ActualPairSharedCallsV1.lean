@@ -1,0 +1,104 @@
+import S9ActualPairRegularPrefixV1
+import S9ActualPairQuotient64V1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+open AspisR1S9ProductionPairCutV1
+namespace AspisR1S9ActualPairSharedCallsV1
+open AspisR1S9ActualProcessKindTensorReachedV1
+variable [allocation : AspisR1S9AllocationInterfaceV1.Allocation]
+private theorem bind_success {A B : Type} (m : Result A) (next : A → Result B) (out : B)
+    (h : (do let x ← m; next x)=.ok out) : ∃ x,m=.ok x ∧ next x=.ok out := by
+  cases m with
+  | fail e => simp only [bind_tc_fail] at h; cases h
+  | div => simp only [bind_tc_div] at h; cases h
+  | ok x => exact ⟨x,rfl,h⟩
+
+/-- Same accepted Pair in its actually selected shared branch derives the
+same common-buffer producer, successful four partial dots and shared-high
+call. The only branch premise is the actual source guard result; no desired
+child success or alternate receiver is assumed. -/
+theorem actual_pair_success_shared_calls
+    (self : weights.Weights) (alpha : Slice W) (f : Slice U8) (kappa out : W)
+    (hfold : Slice.len alpha=2#usize)
+    (hguard : weights.shared_two_point_guard self 2#usize=.ok true)
+    (h : weights.Weights.pair self alpha f kappa=.ok (.Ok out)) :
+    ∃ (n : Usize) (a0 a1 : W) (ap0 ap1 : Powers)
+      (scratch scratchOut : Scratch) (partsRegular partsShared : Parts)
+      (selfCommon : weights.Weights) (common : Array aspis_core.field.QM31 16#usize)
+      (partials : Array W 4#usize),
+      (Slice.len f /32#usize : Result Usize)=.ok n ∧ n=64#usize ∧
+      Slice.index_usize alpha 0#usize=.ok a0 ∧ weights.powers 4#usize a0=.ok ap0 ∧
+      Slice.index_usize alpha 1#usize=.ok a1 ∧ weights.powers 4#usize a1=.ok ap1 ∧
+      aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO=.ok (.Ok scratch) ∧
+      weights.process_regular_kinds self true alpha f 2#usize n ap0 ap1 scratch
+        (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO)=.ok (.Ok (),scratchOut,partsRegular) ∧
+      weights.Weights.pair_loop1 {start:=0#usize,«end»:=16#usize} self
+        (Array.repeat 16#usize aspis_core.field.QM31.ZERO)=.ok (selfCommon,common) ∧
+      weights.shared_partials f common=.ok (.Ok partials) ∧
+      weights.shared_high partials selfCommon ap0 ap1 partsRegular=.ok (.Ok (),partsShared) := by
+  have hquot := AspisR1S9ActualPairQuotient64V1.actual_pair_success_quotient64 self alpha f kappa out hfold h
+  unfold weights.Weights.pair at h
+  obtain ⟨n,hn,h⟩ := bind_success _ _ _ h
+  have hn64 : n=64#usize := Result.ok.inj (hn.symm.trans hquot)
+  obtain ⟨expectedN,he,h⟩ := bind_success _ _ _ h
+  cases hg : (n != expectedN) with
+  | true => simp only [hg,↓reduceIte] at h; cases h
+  | false =>
+    simp only [hg,Bool.false_eq_true,↓reduceIte] at h
+    obtain ⟨a0,ha0,h⟩ := bind_success _ _ _ h
+    obtain ⟨ap0,hap0,h⟩ := bind_success _ _ _ h
+    simp only [hfold,↓reduceIte] at h
+    obtain ⟨ap1,hap1producer,h⟩ := bind_success _ _ _ h
+    obtain ⟨a1,ha1,hap1⟩ := bind_success _ _ _ hap1producer
+    obtain ⟨reserved,hreserved,h⟩ := bind_success _ _ _ h
+    cases reserved with
+    | Err e => cases h
+    | Ok scratch =>
+      obtain ⟨shared,hshared,h⟩ := bind_success _ _ _ h
+      have hshared' : shared=true := Result.ok.inj (hshared.symm.trans hguard)
+      subst shared
+      obtain ⟨processed,hprocessed,h⟩ := bind_success _ _ _ h
+      rcases processed with ⟨r,scratchOut,partsRegular⟩
+      cases r with
+      | Err e =>
+        simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+          core.convert.FromSame.from] at h
+        cases h
+      | Ok u =>
+        cases u
+        obtain ⟨cf,hcf,h⟩ := bind_success
+          (core.result.Result.Insts.CoreOpsTry.branch (E:=verifier.Error) (.Ok ())) _ _ h
+        have hcfEq : cf=core.ops.control_flow.ControlFlow.Continue () := (Result.ok.inj hcf).symm
+        cases hcfEq
+        simp only [↓reduceIte] at h
+        obtain ⟨commonResult,hcommon,h⟩ := bind_success _ _ _ h
+        rcases commonResult with ⟨selfCommon,common⟩
+        obtain ⟨partialResult,hpartials,h⟩ := bind_success _ _ _ h
+        cases partialResult with
+        | Err e =>
+          simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+            core.convert.FromSame.from] at h
+          cases h
+        | Ok partials =>
+          obtain ⟨cfPartial,hcfPartial,h⟩ := bind_success
+            (core.result.Result.Insts.CoreOpsTry.branch (E:=verifier.Error) (.Ok partials)) _ _ h
+          have hcfPartialEq : cfPartial=core.ops.control_flow.ControlFlow.Continue partials :=
+            (Result.ok.inj hcfPartial).symm
+          cases hcfPartialEq
+          obtain ⟨highResult,hhigh,h⟩ := bind_success _ _ _ h
+          rcases highResult with ⟨rHigh,partsShared⟩
+          cases rHigh with
+          | Err e =>
+            simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+              core.convert.FromSame.from] at h
+            cases h
+          | Ok u =>
+            cases u
+            exact ⟨n,a0,a1,ap0,ap1,scratch,scratchOut,partsRegular,partsShared,
+              selfCommon,common,partials,hn,hn64,ha0,hap0,ha1,hap1,hreserved,hprocessed,hcommon,hpartials,hhigh⟩
+
+#print axioms actual_pair_success_shared_calls
+end AspisR1S9ActualPairSharedCallsV1

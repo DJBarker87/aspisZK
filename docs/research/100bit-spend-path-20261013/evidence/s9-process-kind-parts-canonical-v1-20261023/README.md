@@ -1,0 +1,3 @@
+Proved at the pinned qualified Pair-cut boundary: the same accepted S2 two-fold process_kind preserves native parts canonicality. Power arrays, incoming parts canonicality and kind<7 are explicit guards. Factor-vector/data canonicality and a dot-value meaning are not premises; the same actual finish supplies its own canonicality for arbitrary state. The Q.raw mathematical external binding still requires actual Rust source refinement, and caller/runtime/artifact/security obligations remain open.
+
+Focused Lean check: 22.456 seconds; peak aggregate RSS 3214671872 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

@@ -1,0 +1,86 @@
+import S9NativePushRangeTraceV1
+import S9ActualEbyKRawAliasV1
+import FourDotsPushProductTraceRootV1
+import S4TailFieldProductRootV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+open AspisR1S9ProductionPairCutV1
+namespace AspisR1S9NativePushProductSumV1
+open AspisR1S9NativePushRangeTraceV1
+open AspisR1S9PushByteProductsReaderCallsV1 (Iter Dot)
+open AspisR1S9ActualEbyKBackendTransportV1
+open AspisR1FastDotsPushProductTraceRootV1
+open AspisR1FastDotsTailFieldProductRootV1
+abbrev Inputs := List (AspisR1EbyKPushDotBackend.PushWide × AspisR1EbyKPushDotBackend.PushQm)
+
+/-- The exact native-to-backend coordinate map agrees with the EXISTING S5
+reader/push map. No arithmetic or canonicality premise is required. -/
+theorem native_reader_value_to_source (w : aspis_core.field.wide_exact.WideExact) :
+    AspisR1WeightsPairCutEbyKDotOpsV1.wideToSource
+      (AspisR1S9NativeFieldS5BoundedReaderV1.toS5 w)=toSourceWide w := by rfl
+
+/-- Map the actual ordered source trace into the EXISTING concrete S5 backend
+trace. Input canonicality follows from the SAME strict reader success at each
+step, not a separate data/decoder/dot-meaning assumption. -/
+theorem actual_trace_source_products (bytes : Slice U8) (scratch : Slice aspis_core.field.QM31)
+    (n : Usize) (iter : Iter) (dot out : Dot) (js : List Usize)
+    (htrace : Trace bytes scratch n iter dot js out) :
+    ∃ xs : Inputs,
+      AspisR1DotCountBoundV1.AcceptedPushTrace AspisR1EbyKPushDecodedProductUpdate.QRaw
+        (toSourceState dot) xs (toSourceState out) ∧
+      (∀ p ∈ xs,AspisR1EbyKPowerValueCanonicalToPush.pushCanonical p.1) ∧
+      List.Forall₂ (fun j p => ∃ w q,
+        weights.field bytes j=.ok w ∧ Slice.index_usize scratch j=.ok q ∧
+        p=(toSourceWide w,toSourceQ q)) js xs := by
+  induction htrace with
+  | done iter dot hend hat =>
+    exact ⟨[],AspisR1DotCountBoundV1.AcceptedPushTrace.nil _,by simp,List.Forall₂.nil⟩
+  | @step iter it dot d out j js w q hn hj hw hr hq hp ht ih =>
+    obtain ⟨xs,haccepted,hcanonical,hcorr⟩ := ih
+    have hpush := AspisR1S9ActualEbyKRawAliasV1.actual_push_success_s5_backend dot d w q hp
+    have hr' := hr
+    rw [AspisR1S5PairCutTransparentReaderV1.actualReader_eq_checkedCallback] at hr'
+    have hc := AspisR1S5PairCutFieldCallbackV1.checkedFieldCallback_success_push_canonical
+      bytes j (AspisR1S9NativeFieldS5BoundedReaderV1.toS5 w) hr'
+    rw [native_reader_value_to_source] at hc
+    refine ⟨(toSourceWide w,toSourceQ q)::xs,
+      AspisR1DotCountBoundV1.AcceptedPushTrace.cons _ _ _ _ _ _ hpush haccepted,?_,
+      List.Forall₂.cons ⟨w,q,hw,hq,rfl⟩ hcorr⟩
+    intro p hmem
+    simp only [List.mem_cons] at hmem
+    rcases hmem with he | hm
+    · cases he; exact hc
+    · exact hcanonical p hm
+
+/-- Actual source-loop acceptance now has the EXISTING S5 exact decoded
+ordered product sum. Only invariants of the INITIAL accumulator are retained;
+all input and intermediate update obligations come from the actual run. -/
+theorem actual_loop_decoded_product_sum
+    (bytes : Slice U8) (scratch : Slice aspis_core.field.QM31)
+    (n : Usize) (iter : Iter) (dot out : Dot)
+    (hdiv : (Slice.len bytes /32#usize : Result Usize)=.ok n)
+    (hend : iter.end.val=n.val) (hstart : iter.start.val ≤ n.val)
+    (hrun : weights.push_byte_products_loop iter dot bytes scratch=.ok (.Ok (),out))
+    (h0 : AspisR1DotCountBoundV1.sumsBelowCount
+      (toSourceState dot).count.val (toSourceState dot).c0.sums)
+    (h1 : AspisR1DotCountBoundV1.sumsBelowCount
+      (toSourceState dot).count.val (toSourceState dot).c1.sums) :
+    ∃ (js : List Usize) (xs : Inputs), Trace bytes scratch n iter dot js out ∧
+      js.length=n.val-iter.start.val ∧
+      List.Forall₂ (fun j p => ∃ w q,
+        weights.field bytes j=.ok w ∧ Slice.index_usize scratch j=.ok q ∧
+        p=(toSourceWide w,toSourceQ q)) js xs ∧
+      decodeState (stateValue (toSourceState out))=
+        decodeState (stateValue (toSourceState dot))+productSum xs := by
+  obtain ⟨js,htrace,hlen⟩ := actual_loop_success_trace bytes scratch n iter dot out hdiv hend hstart hrun
+  obtain ⟨xs,haccepted,hcanonical,hcorr⟩ := actual_trace_source_products
+    bytes scratch n iter dot out js htrace
+  have hp := accepted_trace_product_sum (toSourceState dot) (toSourceState out) xs h0 h1 hcanonical haccepted
+  have hd := decode_product_fold xs (stateValue (toSourceState dot))
+  rw [←hp] at hd
+  exact ⟨js,xs,htrace,hlen,hcorr,hd⟩
+
+#print axioms native_reader_value_to_source
+#print axioms actual_trace_source_products
+#print axioms actual_loop_decoded_product_sum
+end AspisR1S9NativePushProductSumV1

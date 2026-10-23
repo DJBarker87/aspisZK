@@ -1,0 +1,159 @@
+import S9PushByteProductsReaderCallsV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result ControlFlow
+open AspisR1S9ProductionPairCutV1
+namespace AspisR1S9NativePushRangeTraceV1
+open AspisR1S9PushByteProductsReaderCallsV1 (Iter Dot State Output)
+open AspisR1S9NativeFieldS5BoundedReaderV1
+open AspisR1S9NativeFieldDivisionBoundV1
+private theorem bind_success {A B : Type} (m : Result A) (next : A → Result B) (out : B)
+    (h : (do let x ← m; next x)=.ok out) : ∃ x,m=.ok x ∧ next x=.ok out := by
+  cases m with
+  | fail e => simp only [bind_tc_fail] at h; cases h
+  | div => simp only [bind_tc_div] at h; cases h
+  | ok x => exact ⟨x,rfl,h⟩
+
+private theorem body_cont_inv (bytes : Slice U8) (scratch : Slice aspis_core.field.QM31)
+    (iter iterNext : Iter) (dot dotNext : Dot)
+    (hb : weights.push_byte_products_loop.body bytes scratch iter dot=.ok (.cont (iterNext,dotNext))) :
+    ∃ j w q, core.iter.range.IteratorRange.next core.iter.range.StepUsize iter=.ok (some j,iterNext) ∧
+      weights.field bytes j=.ok w ∧ Slice.index_usize scratch j=.ok q ∧
+      fast_pairing.EbyKDot.push dot w q=.ok (.Ok (),dotNext) := by
+  unfold weights.push_byte_products_loop.body at hb
+  obtain ⟨next,hn,hb⟩ := bind_success _ _ _ hb
+  rcases next with ⟨o,it⟩
+  cases o with
+  | none => cases hb
+  | some j =>
+    obtain ⟨w,hw,hb⟩ := bind_success _ _ _ hb
+    obtain ⟨q,hq,hb⟩ := bind_success _ _ _ hb
+    obtain ⟨p,hp,hb⟩ := bind_success _ _ _ hb
+    rcases p with ⟨r,d⟩
+    cases r with
+    | Err e => cases hb
+    | Ok u =>
+      cases u
+      have he : (it,d)=(iterNext,dotNext) := ControlFlow.cont.inj (Result.ok.inj hb)
+      have hit : it=iterNext := congrArg Prod.fst he
+      have hd : d=dotNext := congrArg Prod.snd he
+      subst it; subst d
+      exact ⟨j,w,q,hn,hw,hq,hp⟩
+
+private theorem body_done_inv (bytes : Slice U8) (scratch : Slice aspis_core.field.QM31)
+    (iter : Iter) (dot out : Dot)
+    (hb : weights.push_byte_products_loop.body bytes scratch iter dot=.ok (.done (.Ok (),out))) :
+    ∃ it, core.iter.range.IteratorRange.next core.iter.range.StepUsize iter=.ok (none,it) ∧ dot=out := by
+  unfold weights.push_byte_products_loop.body at hb
+  obtain ⟨next,hn,hb⟩ := bind_success _ _ _ hb
+  rcases next with ⟨o,it⟩
+  cases o with
+  | none =>
+    have he : ((core.result.Result.Ok () : core.result.Result Unit verifier.Error),dot)=
+        (core.result.Result.Ok (),out) :=
+      ControlFlow.done.inj (Result.ok.inj hb)
+    exact ⟨it,hn,congrArg Prod.snd he⟩
+  | some j =>
+    obtain ⟨w,hw,hb⟩ := bind_success _ _ _ hb
+    obtain ⟨q,hq,hb⟩ := bind_success _ _ _ hb
+    obtain ⟨p,hp,hb⟩ := bind_success _ _ _ hb
+    rcases p with ⟨r,d⟩
+    cases r with
+    | Err e => cases hb
+    | Ok u => cases u; cases hb
+
+private theorem next_none_bound (iter it : Iter)
+    (hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter=.ok (none,it)) :
+    iter.end.val ≤ iter.start.val := by
+  have hs := core.iter.range.IteratorRange.next_UScalar_spec
+    (cloneInst:=core.clone.CloneUsize) (partialOrdInst:=core.cmp.PartialOrdUsize)
+    (by intros; rfl) (by intros; rfl) iter
+  rw [hn,WP.spec_ok] at hs
+  by_cases hlt : iter.start.val < iter.end.val
+  · simp only [hlt,↓reduceIte] at hs
+    rcases hs with ⟨⟨hopt,_⟩,_⟩
+    cases hopt
+  · omega
+
+private theorem loop_success_cases {A B : Type}
+    (step : A → Result (ControlFlow A B)) (s : A) (out : B)
+    (h : Aeneas.Std.loop step s=.ok out) :
+    step s=.ok (.done out) ∨ ∃ t,step s=.ok (.cont t) ∧ Aeneas.Std.loop step t=.ok out := by
+  rw [Aeneas.Std.loop.eq_def] at h
+  cases hs : step s with
+  | fail e => rw [hs] at h; cases h
+  | div => rw [hs] at h; cases h
+  | ok flow =>
+    rw [hs] at h
+    cases flow with
+    | done value =>
+      change Result.ok value=Result.ok out at h
+      have he := Result.ok.inj h
+      subst value
+      exact Or.inl hs
+    | cont t => exact Or.inr ⟨t,hs,h⟩
+
+/-- Ordered same-execution trace over the actual native accumulator. Each
+step includes the already established EXISTING S5 concrete reader at the
+same index/value; no dot meaning is assumed. -/
+inductive Trace (bytes : Slice U8) (scratch : Slice aspis_core.field.QM31) (n : Usize) :
+    Iter → Dot → List Usize → Dot → Prop
+  | done (iter : Iter) (dot : Dot) (hend : iter.end.val=n.val) (hat : iter.start.val=n.val) :
+      Trace bytes scratch n iter dot [] dot
+  | step {iter iterNext : Iter} {dot dotNext out : Dot} {j : Usize} {js : List Usize}
+      {w : aspis_core.field.wide_exact.WideExact} {q : aspis_core.field.QM31}
+      (hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter=.ok (some j,iterNext))
+      (hj : j.val < n.val) (hw : weights.field bytes j=.ok w)
+      (hr : AspisR1S5PairCutTransparentReaderV1.readerBody
+        AspisR1S5PairCutTransparentReaderV1.actualPairDecoder bytes j=.ok (toS5 w))
+      (hq : Slice.index_usize scratch j=.ok q)
+      (hp : fast_pairing.EbyKDot.push dot w q=.ok (.Ok (),dotNext))
+      (ht : Trace bytes scratch n iterNext dotNext js out) :
+      Trace bytes scratch n iter dot (j::js) out
+
+/-- Accepted actual source loop yields its complete ordered native push trace
+and exact call count. All field, scalar and push successes come from that run. -/
+theorem actual_loop_success_trace (bytes : Slice U8) (scratch : Slice aspis_core.field.QM31)
+    (n : Usize) (iter : Iter) (dot out : Dot)
+    (hdiv : (Slice.len bytes /32#usize : Result Usize)=.ok n)
+    (hend : iter.end.val=n.val) (hstart : iter.start.val ≤ n.val)
+    (hrun : weights.push_byte_products_loop iter dot bytes scratch=.ok (.Ok (),out)) :
+    ∃ js,Trace bytes scratch n iter dot js out ∧ js.length=n.val-iter.start.val := by
+  let step : State → Result (ControlFlow State Output) :=
+    fun s => weights.push_byte_products_loop.body bytes scratch s.1 s.2
+  have hloop : Aeneas.Std.loop step (iter,dot)=.ok (.Ok (),out) := hrun
+  induction hfuel : n.val-iter.start.val generalizing iter dot with
+  | zero =>
+    have hat : iter.start.val=n.val := by omega
+    rcases loop_success_cases step (iter,dot) (.Ok (),out) hloop with hd | ⟨t,hc,ht⟩
+    · obtain ⟨it,hn,he⟩ := body_done_inv bytes scratch iter dot out hd
+      subst out
+      exact ⟨[],Trace.done iter dot hend hat,by simp⟩
+    · rcases t with ⟨it,d⟩
+      obtain ⟨j,w,q,hn,hw,hq,hp⟩ := body_cont_inv bytes scratch iter it dot d hc
+      have hlt := (AspisR1S9ActualDotRangeBoundsV1.range_next_index_bounds iter it j hn).2.1
+      omega
+  | succ fuel ih =>
+    rcases loop_success_cases step (iter,dot) (.Ok (),out) hloop with hd | ⟨t,hc,ht⟩
+    · obtain ⟨it,hn,he⟩ := body_done_inv bytes scratch iter dot out hd
+      have hstop := next_none_bound iter it hn
+      have hat : iter.start.val=n.val := by omega
+      subst out
+      exact ⟨[],Trace.done iter dot hend hat,by omega⟩
+    · rcases t with ⟨it,d⟩
+      obtain ⟨j,w,q,hn,hw,hq,hp⟩ := body_cont_inv bytes scratch iter it dot d hc
+      obtain ⟨hj,hlt,hs,he⟩ := AspisR1S9ActualDotRangeBoundsV1.range_next_index_bounds iter it j hn
+      have hfuel' : n.val-it.start.val=fuel := by omega
+      have hend' : it.end.val=n.val := by rw [he]; exact hend
+      have hstart' : it.start.val ≤ n.val := by omega
+      have hrun' : weights.push_byte_products_loop it d bytes scratch=.ok (.Ok (),out) := ht
+      obtain ⟨js,htrace,hlen⟩ := ih it d hend' hstart' hrun' ht hfuel'
+      have hjn : j.val < n.val := by omega
+      have hm := quotient_index_maps_s5_reader bytes n j hdiv hjn
+      have hr : AspisR1S5PairCutTransparentReaderV1.readerBody
+          AspisR1S5PairCutTransparentReaderV1.actualPairDecoder bytes j=.ok (toS5 w) := by
+        rw [hw] at hm
+        exact hm.symm
+      exact ⟨j::js,Trace.step hn hjn hw hr hq hp htrace,by simp only [List.length_cons]; omega⟩
+
+#print axioms actual_loop_success_trace
+end AspisR1S9NativePushRangeTraceV1

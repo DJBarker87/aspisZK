@@ -1,0 +1,3 @@
+Proved at the pinned qualified Pair-cut boundary: actual regular3/5-kind calls preserve all native parts canonicality, deriving their own child source successes. The fresh seven-ZERO initial parts guard is discharged using the existing generic repeated_native_reads theorem. S2 and both canonical actual power arrays remain explicit until current-reader/Pair assembly. This is not a decoded dot-product theorem or complete actual Rust/Q.raw/runtime/security closure.
+
+Focused Lean check: 20.063 seconds; peak aggregate RSS 3211345920 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

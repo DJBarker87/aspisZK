@@ -1,0 +1,3 @@
+Proved: every SAME accepted native S2 coefficient-accumulation loop preserves all12 coefficient canonicalities; the actual successful coefficient read supplies group bounds and strict field success supplies each decoded input canonicality. Source64-group table is never unfolded. The actual zero seed removes incoming-array canonicality at the concrete entry. No independent field/read/child-success hypothesis or Q.raw product law is used. Other source/runtime/artifact/security obligations remain separate.
+
+Focused Lean check: 16.573 seconds; peak aggregate RSS 3193307136 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
