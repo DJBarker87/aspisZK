@@ -1,0 +1,3 @@
+The fourth mixed-product call reached by the actual Pair afterLow success reflects to the pinned source cut, retaining the same PERM/ap1/high read witnesses, quarter scaling, and post-term continuation. Canonicality is supplied by the existing public mapped-ap1 read contract, which remains a premise. No independent arithmetic-success premise is introduced; upstream ap1 provenance and S9 remain open.
+
+Focused Lean check: 13.896 seconds; peak aggregate RSS 3236413440 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
