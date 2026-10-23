@@ -1,3 +1,53 @@
+# Final gate result
+
+Release gate 1 passed. Source pins: `104e73a7aefcb5b727d4e05b072d5b51fb249098`. The final aggregate
+`ImportUnionReleaseGate` compiled as IU-1328 at
+`aa7698be5fa6f3430817b1106e5c3f8fc79cc7a9`: exit 0, wall 1.753723s,
+peak RSS 4,587,852 KiB, swaps 0, swap bytes 0.
+All 77 requested aggregate audits use only propext, Classical.choice,
+and Quot.sound (or no axioms). Exact output is in build-host/IU-1328.log.
+
+The accepted plan has 851 targets: 843 proof/support modules and eight
+metadata census modules. All 807 affected roots/consumers in the final raw graph
+were rebuilt. Final selected-target compile wall sum: 1876.138713s;
+maximum accepted per-process RSS: 6,258,344 KiB; swaps zero. These
+are final accepted attempts, not an elapsed-time claim for the whole repair task.
+Every attempt, including failures and superseded provider replays, retains its
+source/dependency hashes, revision, command, exit, timing, RSS and axiom output
+in build-host/modules.jsonl and the associated IU logs/time files.
+
+The raw census includes all 8,164 imported modules, including upstream
+libraries, and 566,510 declarations. There are zero duplicate definitions,
+instances, or incompatible theorem types. All 614 repeated names are theorems
+with exactly identical Expr types: 564 equation/congruence-name matches and 50
+other compatible theorem overlaps, explicitly inventoried in raw-duplicates.json.
+Enumeration and seven bounded comparison batches avoid the failed two-pass
+interpreter memory shape. Full raw rows are retained once in
+build-host/raw-union.jsonl; raw-declarations.json is its index.
+
+Two **unchanged incidental helper audits** (SamplerWordRead.unwrap_success and
+read_success) mention the existing opaque core.fmt.Formatter type. They are not
+standard-only audits; summary.json records them separately. None of the 77
+requested aggregate audits or newly added theorem audits has that dependency.
+No statement or opaque carrier was altered to remove this inventory.
+
+Migration: 46 files / 130 attributes, with exact before/after hashes and a zero-delta
+final check. No candidate or shipped file was edited. Existing theorem statements,
+model definitions and frozen headline sources are preserved; source-boundary-check.json
+checks the exact migration and 12 proof/import-only repairs. The canonical spend
+provider retains AppendBinding in Rspend and appendCheck in check; the weaker
+legacy cached provider is absent. Soundness, privacy and extractor-efficiency
+premises remain unchanged.
+
+Primary receipts: summary.json, release-targets.json, closure-check.json,
+source-boundary-check.json, build-host/final-dependency-check.json and
+build-host/raw-object-pins.json. Session A instructions are appended to
+../../design/HANDOFF-SESSION-A-20261021.md. No push was performed. The private
+host cache is retained; only this worker's temporary local Lean object copies
+were removed.
+
+---
+
 # Import-union release gate, 22 October 2026
 
 This packet checks coexistence of the retained R22 groups, frozen2 soundness

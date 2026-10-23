@@ -232,3 +232,12 @@ audits mention the existing opaque `core.fmt.Formatter` type. Preserve this
 exception inventory; they are not standard-only audits. The requested combined
 release audits and new theorem audits are standard-only. This import gate does
 not discharge any soundness, privacy, decoder, or efficiency premise.
+
+Final worker result: 851 targets accepted; all 807 affected roots/consumers
+rebuilt. Aggregate IU-1328 exited 0 (1.753723s, peak
+4,587,852 KiB, swap 0), with 77 standard-only release audits.
+Full census: 8,164 modules / 566,510 declarations, zero duplicate definitions
+or instances; all 614 theorem-name overlaps have exactly identical types.
+See evidence/import-union-20261022/summary.json for source revisions, resource
+fields, the two unchanged Formatter helper-audit exceptions, and full receipts.
+Candidate adoption remains Session A's work; no lean-candidates source was edited.

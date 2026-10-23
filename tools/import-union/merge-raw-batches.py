@@ -12,7 +12,7 @@ latest={r['module']:r for r in records}
 parts=[enumeration];found={};types={}
 for batch in manifest['batches']:
  r=latest[batch['module']]
- assert r['exit']==0 and r['source_sha256']==batch['source']['sha256'],r
+ assert r['exit']==0 and r['source_sha256']==batch['source']['sha256'] and r.get('rebuild_epoch')==batch['source']['rebuild_epoch'],r
  content=(W/batch['output']).read_bytes()
  local=[]
  for l in content.decode().splitlines():
