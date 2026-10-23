@@ -1,0 +1,3 @@
+One accepted shared two-fold native Pair derives its same regular/common/partial/high/low/inactive/private4/active4/powers7/finalsum source events and returned output. The actual shared guard true and twofold input length remain explicit. No child event, intermediate array or alternate output is a premise. Canonicality, polynomial semantics, source operation installers, release artifact and complete soundness composition remain separate obligations.
+
+Focused Lean check: 12.909 seconds; peak aggregate RSS 2258092032 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
