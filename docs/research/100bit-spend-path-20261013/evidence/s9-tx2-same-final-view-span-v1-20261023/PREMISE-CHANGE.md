@@ -1,0 +1,3 @@
+Before: optimized S2 helper wrapper required exact final field length2048, while accepted Pair quotient64 permitted extra trailing bytes. A separate arbitrary View length premise would not bind the actual caller.
+
+After: accepted SAME complete tx2 source-cut execution supplies SAME initial resume, SAME final View/range and SAME finish event; exact2048 follows from successful source constants and slice range. No premise was added. Remaining operation installers and actual finish-slot/Pair source binding are explicit upstream integration work. This theorem is not a claim about arbitrary Pair inputs or arbitrary Views.
