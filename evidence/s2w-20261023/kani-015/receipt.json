@@ -1,0 +1,58 @@
+{
+  "attempt": "kani-015",
+  "kind": "kani",
+  "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "S2W_wrapper/Cargo.toml",
+    "--target-dir",
+    "wrapper-target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "30s",
+    "--harness",
+    "S2W_",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2W_wrapper/src/lib.rs",
+    "S2W_wrapper/Cargo.toml"
+  ],
+  "timeout": 120,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "deps_fingerprint": {
+    "scope": "Verbatim native snapshot and checkpoint-write expression under selected-cell SDK/std semantic interpretation; no foreign guard or native ABI claim"
+  },
+  "expected_time": "Optimized tiny projected wrapper source checks, no bulk copy or arithmetic gate",
+  "change": "Exclude unrelated unused OwnedAccount.data method requiring actual slice type; snapshot and write bodies remain verbatim",
+  "exit_status": 1,
+  "wall_seconds": 2.8630275479954435,
+  "peak_rss_kib": "379404",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9011a9f9d700400f92a61da0ebb1323c.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "296673280",
+  "source_hashes": {
+    "S2W_wrapper/src/lib.rs": "57dc356b544109ec5d521f3ecc23daa6562db60e9c445a43121aba39be08bc18",
+    "S2W_wrapper/Cargo.toml": "b1df6ca4fdfc00706607e652f0cc386599d83c1b66431b194236a79be60b35e6"
+  },
+  "print_axioms": "N/A: kani"
+}

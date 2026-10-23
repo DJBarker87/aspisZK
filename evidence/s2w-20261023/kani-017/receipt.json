@@ -1,0 +1,58 @@
+{
+  "attempt": "kani-017",
+  "kind": "kani",
+  "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "S2W_wrapper/Cargo.toml",
+    "--target-dir",
+    "wrapper-target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "30s",
+    "--harness",
+    "S2W_entry",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2W_wrapper/src/lib.rs",
+    "S2W_wrapper/Cargo.toml"
+  ],
+  "timeout": 120,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "deps_fingerprint": {
+    "scope": "Verbatim native snapshot and checkpoint-write expression under selected-cell SDK/std semantic interpretation; no foreign guard or native ABI claim"
+  },
+  "expected_time": "Optimized tiny projected wrapper source checks, no bulk copy or arithmetic gate",
+  "change": "Add verbatim stage1/stage2 entry array expressions, arbitrary account index, all exact admitted lengths and registry versions",
+  "exit_status": 1,
+  "wall_seconds": 33.46076414399431,
+  "peak_rss_kib": "2670228",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r3f31fb1960e14c848c809d1f79d83ecc.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "5048172544",
+  "source_hashes": {
+    "S2W_wrapper/src/lib.rs": "e2f34e0fa1fcd52dd76ebd41e0b7c51dc1aa27fc743b90da326958bc31c4b910",
+    "S2W_wrapper/Cargo.toml": "b1df6ca4fdfc00706607e652f0cc386599d83c1b66431b194236a79be60b35e6"
+  },
+  "print_axioms": "N/A: kani"
+}

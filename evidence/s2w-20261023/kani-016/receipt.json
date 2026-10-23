@@ -1,0 +1,58 @@
+{
+  "attempt": "kani-016",
+  "kind": "kani",
+  "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "S2W_wrapper/Cargo.toml",
+    "--target-dir",
+    "wrapper-target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "30s",
+    "--harness",
+    "S2W_",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2W_wrapper/src/lib.rs",
+    "S2W_wrapper/Cargo.toml"
+  ],
+  "timeout": 120,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "deps_fingerprint": {
+    "scope": "Verbatim native snapshot and checkpoint-write expression under selected-cell SDK/std semantic interpretation; no foreign guard or native ABI claim"
+  },
+  "expected_time": "Optimized tiny projected wrapper source checks, no bulk copy or arithmetic gate",
+  "change": "Isolated memcmp loop over32-byte key metadata requires34 unwind; projection stays one byte, no timeout or memory failure",
+  "exit_status": 0,
+  "wall_seconds": 3.0032417890033685,
+  "peak_rss_kib": "373100",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9ec067035cab4a46a2bbc6d828504c02.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "295059456",
+  "source_hashes": {
+    "S2W_wrapper/src/lib.rs": "9616fdf13c9edd44c4230d374e84770bfbd9354bf6231d5bc82bd7aa63a22199",
+    "S2W_wrapper/Cargo.toml": "b1df6ca4fdfc00706607e652f0cc386599d83c1b66431b194236a79be60b35e6"
+  },
+  "print_axioms": "N/A: kani"
+}
