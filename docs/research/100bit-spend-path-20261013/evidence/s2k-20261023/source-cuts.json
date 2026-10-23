@@ -1,0 +1,26 @@
+{
+  "src/S2K_construct.rs": {
+    "source": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "cut": "    let result = PoolV1PairForestTerminalResultV1 {\n        transition_kind: statement.transition_kind(),\n        master_account: statement.common().master_account,\n        selected_lane_account: statement.common().selected_lane_account,\n        output_lane: statement.common().output_lane,\n        nullifier: *statement.nullifier(),\n        verified_afterstate: statement.common().lane_transition.candidate_afterstate,\n    };\n",
+    "source_sha256": "6a8e5799035458ed4c0093709da6da86fb29100303861ddd15212d3ad7dcdcfb",
+    "cut_sha256": "bdfbc9a347663184ec36ba69cb4e4fa760f16d8f9d39c9b66b9d544d6d269da0"
+  },
+  "src/S2K_validate.rs": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+    "cut": "fn validate_verified_afterstate(\n    afterstate: &PoolV1PairVerifiedAfterstateV1,\n) -> Result<(), PoolV1PairVerifierTransportErrorV1> {\n    if afterstate.next_pair_index == 0 || afterstate.next_pair_index > super::POOL_V1_PAIR_CAPACITY\n    {\n        return Err(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex);\n    }\n    if !super::pair_tree_profile::digest_is_canonical(&afterstate.next_root) {\n        return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);\n    }\n    let mut level = 0;\n    while level < afterstate.next_frontier.len() {\n        if !super::pair_tree_profile::digest_is_canonical(&afterstate.next_frontier[level]) {\n            return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);\n        }\n        level += 1;\n    }\n    Ok(())\n}\n\n",
+    "source_sha256": "03fc14126dab7d78688d6fab1d954cc116357f349652a37dee5b044d45e0bbea",
+    "cut_sha256": "60a89301c5a3e9ec5204eb3cb0a89b89b4e3b9bcc37a342261e929ade29deebd"
+  },
+  "src/S2K_canonical.rs": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+    "cut": "pub(crate) fn digest_is_canonical(value: &Digest) -> bool {\n    let mut i = 0;\n    while i < value.len() {\n        if value[i].0 >= P {\n            return false;\n        }\n        i += 1;\n    }\n    true\n}\n",
+    "source_sha256": "660f00d91fb08e809b8f00a7e3917d546cf2097e6ea4b59b951e0dc8cc03e7af",
+    "cut_sha256": "cd5ce09a3d2c428d65254dfa4b6ea857f353befe97379014f8276d34c463b484"
+  },
+  "src/S2K_frontier_step.rs": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+    "cut": "        let start = 48 + 32 * level;\n        output[start..start + 32].copy_from_slice(&encode_digest_canonical(node));\n",
+    "source_sha256": "03fc14126dab7d78688d6fab1d954cc116357f349652a37dee5b044d45e0bbea",
+    "cut_sha256": "5621a845f13ab5db71dbc845a7be6eaa68411716c85866e3bc9e4cd3622fe300"
+  }
+}
