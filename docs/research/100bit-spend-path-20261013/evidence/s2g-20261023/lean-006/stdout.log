@@ -1,0 +1,19 @@
+S2G_Copy.lean:22:48: error: unsolved goals
+sdk : OwnedSdk
+slot : Usize
+source : Slice U8
+valid : ↑slot < (↑sdk.data_cells).length
+sameLength : (↑(↑sdk.data_cells)[↑slot].bytes).length = (↑source).length
+run :
+  CopyLoop.copy_in_place sdk slot source =
+    ok
+      (if (↑(↑sdk.data_cells)[↑slot].bytes).length = (↑source).length then
+        (core.result.Result.Ok (), CopyLoop.replaceBytes sdk slot (↑sdk.data_cells)[↑slot] source)
+      else (core.result.Result.Err AspisS2OwnedStage1.solana_program_error.ProgramError.InvalidAccountData, sdk))
+⊢ (let (reply, after) := (core.result.Result.Ok (), CopyLoop.replaceBytes sdk slot (↑sdk.data_cells)[↑slot] source)
+    match reply with
+    | core.result.Result.Ok PUnit.unit => ok after
+    | core.result.Result.Err a => fail Error.panic) =
+    ok (CopyLoop.replaceBytes sdk slot (↑sdk.data_cells)[↑slot] source)
+'AspisR1.S2G.Copy.contract' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2G.Copy.records_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
