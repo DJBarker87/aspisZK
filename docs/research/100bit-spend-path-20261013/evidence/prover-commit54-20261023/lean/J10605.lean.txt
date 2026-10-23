@@ -1,0 +1,80 @@
+import AspisR1ProducerRelease47.Encoder54
+import R1Z.ProverCommitPairCounter47
+/-! Finite strided collection: exact source reads and exact output list.
+Bounds rule out release-mode wrapping and vector size errors. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitEncoderCollect54
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+abbrev E := field.wide_exact.WideExact
+
+theorem wp_exists {α : Type} (r : Result α) (p : α → Prop) (h : WP.spec r p) :
+    ∃ v, r=ok v ∧ p v := by
+  cases r <;> simp_all [WP.spec,WP.theta,WP.wp_return]
+
+theorem sub_one (left : Usize) (positive : 0<left.val) :
+    (Usize.wrapping_sub left 1#usize).val=left.val-1 := by
+  rw [Usize.wrapping_sub_val_eq]
+  have one : (1#usize).val=1 := rfl
+  rw [one]
+  have bound := left.hSize
+  have size : 0<UScalar.size .Usize := by scalar_tac
+  have shift : left.val+(UScalar.size .Usize-1)=(left.val-1)+UScalar.size .Usize := by omega
+  rw [shift,Nat.add_mod_right,Nat.mod_eq_of_lt (by omega)]
+
+theorem collect (c : Slice E) (stride offset i left : Usize) (n : Nat)
+    (hn : left.val=n) (hcounter : i.val+n<1025)
+    (hstride : stride.val≤4) (hoff : offset.val<4)
+    (hread : ∀ k, k<n → stride.val*(i.val+k)+offset.val<c.val.length)
+    (out : alloc.vec.Vec E) (hcapacity : out.val.length+n≤1024) :
+    ∃ result, encoder54.collect c stride offset i left out=ok result ∧
+      result.val=out.val ++ List.ofFn (fun k : Fin n => c.val[stride.val*(i.val+k.val)+offset.val]'(hread k.val k.isLt)) := by
+  induction n generalizing i left out with
+  | zero =>
+    have hz : left=0#usize := by scalar_tac
+    refine ⟨out,?_,?_⟩
+    · rw [encoder54.collect,hz];rfl
+    · simp
+  | succ n ih =>
+    have hne : left≠0#usize := by scalar_tac
+    have hinc : (Usize.wrapping_add i 1#usize).val=i.val+1 :=
+      ProverCommitPairCounter47.next_val i (by omega)
+    have hdec : (Usize.wrapping_sub left 1#usize).val=n := by
+      rw [sub_one left (by omega)];omega
+    let idx := Usize.wrapping_add (Usize.wrapping_mul stride i) offset
+    have hidx : idx.val=stride.val*i.val+offset.val := by
+      dsimp only [idx]
+      rw [Usize.wrapping_add_val_eq,Usize.wrapping_mul_val_eq]
+      have hb : stride.val*i.val≤4096 := Nat.mul_le_mul hstride (show i.val≤1024 by omega)
+      have hm : stride.val*i.val<Usize.size := by scalar_tac
+      rw [Nat.mod_eq_of_lt hm]
+      have ha : stride.val*i.val+offset.val<Usize.size := by scalar_tac
+      exact Nat.mod_eq_of_lt ha
+    have hr : idx.val<c.val.length := by simpa only [hidx,Nat.add_zero] using hread 0 (by omega)
+    obtain ⟨v,hv,hval⟩ := wp_exists _ _ (Slice.index_usize_spec c idx hr)
+    obtain ⟨p,hp,hpval⟩ := wp_exists _ _ (alloc.vec.Vec.push_spec out v (by scalar_tac))
+    obtain ⟨result,hresult,hlist⟩ := ih (Usize.wrapping_add i 1#usize) _ hdec
+      (by rw [hinc];omega) (by intro k hk;rw [hinc];convert hread (k+1) (by omega) using 1 <;> omega)
+      p (by rw [hpval,List.length_append];simp only [List.length_singleton];omega)
+    refine ⟨result,?_,?_⟩
+    · rw [encoder54.collect]
+      simp only [hne,if_false,lift,bind_tc_ok]
+      change (do
+        let v ← Slice.index_usize c idx
+        let p ← alloc.vec.Vec.push out v
+        encoder54.collect c stride offset (Usize.wrapping_add i 1#usize)
+          (Usize.wrapping_sub left 1#usize) p)=_
+      rw [hv];simp only [bind_tc_ok];rw [hp];simp only [bind_tc_ok];exact hresult
+    · rw [hlist,hpval,hval,List.ofFn_succ,List.append_assoc]
+      congr 1
+      simp only [List.singleton_append,List.cons.injEq]
+      constructor
+      · simp only [hidx,Nat.add_zero]
+      · apply List.ofFn_congr
+        intro k
+        simp only [hinc,Fin.val_succ]
+        congr 1 <;> omega
+
+#print axioms wp_exists
+#print axioms sub_one
+#print axioms collect
+end R1Z.ProverCommitEncoderCollect54

@@ -1,0 +1,68 @@
+import R1Z.ProverCommitOpenedModel54
+import R1Z.ProverCommitWideBytes48
+/-! Ordered C1/C2 byte images from the fully derived opened matrix. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitOpenedBytes54
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitWideOps48 ProverCommitMix48
+open R0Z.MaskLayout PhaseBuilderDependenciesBin
+attribute [local irreducible] ProverCommitWideOps48.value ProverCommitWideBytes48.sourceCell
+  PhaseLeafEncodingBin.initialSymbol PhaseMessageEncodingBin.wideBytes List.ofFn
+
+def c1 (out : Nat → Nat → Raw) (hc : ∀ s, s<4 → ∀ l, l<29 → canonical (out s l)) : List UInt8 :=
+  (List.ofFn (fun s : Fin 4 => (List.ofFn (fun c : Fin 27 =>
+    (List.ofFn (ProverCommitWideBytes48.sourceCell (out s.val (c1Column c).val)
+      (hc s.val s.isLt (c1Column c).val (c1Column c).isLt))).take
+        (if c.val<26 then 4 else 16))).flatten)).flatten
+
+def c2 (out : Nat → Nat → Raw) (hc : ∀ s, s<4 → ∀ l, l<29 → canonical (out s l)) : List UInt8 :=
+  (List.ofFn (fun s : Fin 4 => (List.ofFn (fun c : Fin 2 =>
+    (List.ofFn (ProverCommitWideBytes48.sourceCell (out s.val (26+c.val))
+      (hc s.val s.isLt (26+c.val) (by have := c.isLt;omega)))).take 16)).flatten)).flatten
+
+theorem value_bytes (x : Raw) (hx : canonical x) :
+    List.ofFn (ProverCommitWideBytes48.sourceCell x hx)=PhaseMessageEncodingBin.wideBytes (value x) := by
+  rw [ProverCommitWideBytes48.source_image]
+  simp only [PhaseMessageEncodingBin.wideBytes,AspisR1.FoldedLeafCodec.encodeWide,List.map_ofFn]
+  unfold ProverCommitValueRange47.bytes
+  rfl
+
+theorem c1_image (out : Nat → Nat → Raw) (hc : ∀ s, s<4 → ∀ l, l<29 → canonical (out s l))
+    (t : R0P.Trace Exact) (u : Fin 262144)
+    (hv : ∀ (s : Fin 4) (l : Fin 29), value (out s.val l.val)=PhaseLeafEncodingBin.initialSymbol (t l) u s) :
+    c1 out hc=PhaseLeafEncodingBin.c1Leaf t u := by
+  unfold c1 PhaseLeafEncodingBin.c1Leaf
+  apply congrArg (fun f : Fin 4 → List UInt8 => (List.ofFn f).flatten)
+  funext s
+  apply congrArg (fun f : Fin 27 → List UInt8 => (List.ofFn f).flatten)
+  funext c
+  rw [value_bytes,hv s (c1Column c)]
+
+theorem c2_image (out : Nat → Nat → Raw) (hc : ∀ s, s<4 → ∀ l, l<29 → canonical (out s l))
+    (t : R0P.Trace Exact) (u : Fin 262144)
+    (hv : ∀ (s : Fin 4) (l : Fin 29), value (out s.val l.val)=PhaseLeafEncodingBin.initialSymbol (t l) u s) :
+    c2 out hc=PhaseLeafEncodingBin.c2Leaf t u := by
+  unfold c2 PhaseLeafEncodingBin.c2Leaf
+  apply congrArg (fun f : Fin 4 → List UInt8 => (List.ofFn f).flatten)
+  funext s
+  apply congrArg (fun f : Fin 2 → List UInt8 => (List.ofFn f).flatten)
+  funext c
+  rw [value_bytes,hv s ⟨26+c.val,by have := c.isLt;omega⟩]
+
+theorem exact_result (c : Nat → Nat → ProverCommitPrimitive47.Old.Q)
+    (hc : ∀ l, l<29 → ∀ i, i<1024 → ProverCommitSubfieldOps47.Canonical (c l i))
+    (j : Usize) (u : Fin 262144) (hj : j.val=u.val) :
+    ∃ (out : Nat → Nat → Raw) (hcout : ∀ s, s<4 → ∀ l, l<29 → canonical (out s l)),
+      leaves54.opened_values (ProverCommitOpenedValues54.coefficients (ProverCommitGammaCoefficients53.wide c hc)) j=
+        ok (ProverCommitOpenedColumn54.matrix out) ∧
+      c1 out hcout=PhaseLeafEncodingBin.c1Leaf (ProverCommitGammaCoefficients53.wideTrace c) u ∧
+      c2 out hcout=PhaseLeafEncodingBin.c2Leaf (ProverCommitGammaCoefficients53.wideTrace c) u := by
+  obtain ⟨out,hout,hcout,hcoeff,hvalue⟩ := ProverCommitOpenedModel54.exact_result c hc j u hj
+  exact ⟨out,hcout,hout,c1_image out hcout _ u hvalue,c2_image out hcout _ u hvalue⟩
+
+#print axioms value_bytes
+#print axioms c1_image
+#print axioms c2_image
+#print axioms exact_result
+end R1Z.ProverCommitOpenedBytes54

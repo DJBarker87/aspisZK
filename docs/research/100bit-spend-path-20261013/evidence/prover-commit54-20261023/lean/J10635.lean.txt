@@ -1,0 +1,58 @@
+import R1Z.ProverCommitEncoderPoint54
+import AspisFormal.V7ExactOneFoldDomains
+import AspisFormal.CircleNaturalBasisEval
+/-! Exact CM31 interpretation of the stored domain generator and powers. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitEncoderCircle54
+open AspisCircleGroupOrder AspisCircleTensorBinding
+open AspisV8R15.ExactTowerBase
+
+def embed : C →* CM31Exact where
+  toFun z := ⟨z.1.1,z.1.2⟩
+  map_one' := rfl
+  map_mul' z w := by
+    apply QuadraticAlgebra.ext <;> simp <;> ring
+
+theorem generator_value : ProverCommitNativeC49.value ProverCommitEncoderPoint54.generator=embed g := rfl
+
+theorem stored_power (u : Fin 262144) :
+    AspisV7ExactOneFoldDomains.storedInitialFibrePoint20 u=
+      g^(1024+4096*AspisV5FriBitReverse.reverseBits 18 u.val) := by
+  rw [AspisV7ExactOneFoldDomains.storedInitialFibrePoint20_eq_zpow,
+    AspisV6EncoderDistance.initialCircleExponent,
+    AspisV7ExactOneFoldDomains.storedInitialNaturalIndex20_child_zero]
+  have he : (2 : Int)^10*(2*(2*(AspisV5FriBitReverse.reverseFin 18 u).val)+1)=
+      ((1024+4096*AspisV5FriBitReverse.reverseBits 18 u.val : Nat) : Int) := by
+    simp only [AspisV5FriBitReverse.reverseFin,Nat.cast_add,Nat.cast_mul,Nat.cast_ofNat]
+    ring
+  rw [he,zpow_natCast]
+
+theorem x_square (z : C) : X (z^2)=2*(X z)^2-1 := by
+  rw [pow_two]
+  change z.1.1*z.1.1-z.1.2*z.1.2=2*z.1.1^2-1
+  have hn : z.1.1^2+z.1.2^2=1 := z.2
+  linear_combination -hn
+
+theorem doubled_circle (z : C) (n : Nat) :
+    doubledFactor (X z) n=X (z^(2^n)) := by
+  induction n with
+  | zero => simp only [doubledFactor,pow_zero,pow_one]
+  | succ n ih =>
+    rw [doubledFactor,ih,←x_square,←pow_mul,pow_succ]
+
+theorem point_model (j : Aeneas.Std.Usize) (u : Fin 262144) (hj : j.val=u.val) :
+    ∃ z : ProverCommitPrimitive47.Old.C,
+      AspisR1ProducerRelease47.nodes54.point j=Aeneas.Std.Result.ok (ProverCommitNativeC49.source z) ∧
+      ProverCommitNativeC49.Canonical z ∧
+      ProverCommitNativeC49.value z=embed (AspisV7ExactOneFoldDomains.storedInitialFibrePoint20 u) := by
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitEncoderPoint54.exact_result j
+  refine ⟨z,hz,hcz,?_⟩
+  rw [hdz,hj,generator_value,stored_power,map_pow]
+
+#print axioms generator_value
+#print axioms stored_power
+#print axioms x_square
+#print axioms doubled_circle
+#print axioms point_model
+end R1Z.ProverCommitEncoderCircle54

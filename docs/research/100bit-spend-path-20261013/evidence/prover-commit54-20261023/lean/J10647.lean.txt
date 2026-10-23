@@ -1,0 +1,66 @@
+import R1Z.ProverCommitEncoderExact54
+/-! Complete owned encode_at: actual derived point/nodes and all four
+outputs equal the exact initial encoder in stored slot order. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitEncoderInitial54
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitWideOps48 ProverCommitMix48 ProverCommitEncoderEval54
+open ProverCommitEncoderExact54 AspisCircleGroupOrder
+
+attribute [local irreducible] source value sourceArray eval
+
+theorem point_lift (j : Usize) (u : Fin 262144) (hj : j.val=u.val) :
+    ∃ c : ProverCommitPrimitive47.Old.C,
+      nodes54.point j=ok (ProverCommitNativeC49.source c) ∧ ProverCommitNativeC49.Canonical c ∧
+      value (base c.a)=AspisWide.FinalEncoder.exactCircleX u ∧
+      value (base c.b)=AspisWide.FinalEncoder.exactCircleY u := by
+  obtain ⟨c,hc,hcc,hdc⟩ := ProverCommitEncoderCircle54.point_model j u hj
+  refine ⟨c,hc,hcc,?_,?_⟩
+  · have hre := congrArg (fun z : AspisV8R15.ExactTowerBase.CM31Exact => z.re) hdc
+    have he : ProverCommitM31Ops48.decode c.a=X (AspisV7ExactOneFoldDomains.storedInitialFibrePoint20 u) := hre
+    rw [ProverCommitEncoderLift54.base_value,he]
+    rfl
+  · have him := congrArg (fun z : AspisV8R15.ExactTowerBase.CM31Exact => z.im) hdc
+    have he : ProverCommitM31Ops48.decode c.b=(AspisV7ExactOneFoldDomains.storedInitialFibrePoint20 u).1.2 := him
+    rw [ProverCommitEncoderLift54.base_value,he]
+    rfl
+
+theorem exact_result (f : Nat → Raw) (hf : ∀ i, i<1024 → canonical (f i))
+    (j : Usize) (u : Fin 262144) (hj : j.val=u.val) :
+    ∃ out : Nat → Raw, encode_at (sourceArray 1024#usize f) j=ok (sourceArray 4#usize out) ∧
+      (∀ s, s<4 → canonical (out s)) ∧
+      ∀ s : Fin 4, value (out s.val)=AspisWide.InitialEncoder.exactInitialEncoder
+        (fun i => value (f i.val)) (AspisV5ComponentCConcreteFoldLinearity.childIndex u s) := by
+  obtain ⟨p,hp,hcp,hdp⟩ := ProverCommitEncoderLift54.nodes_image j u hj
+  obtain ⟨c,hc,hcc,hx,hy⟩ := point_lift j u hj
+  obtain ⟨out,hout,hcout,hdout⟩ := ProverCommitEncoderLeaf54.exact_result f hf p hcp
+    (base c.a) (base c.b) (base_canonical _ hcc.1) (base_canonical _ hcc.2)
+  refine ⟨out,?_,hcout,?_⟩
+  · rw [encode_at,hc]
+    simp only [bind_tc_ok,hp]
+    have ha : (ProverCommitNativeC49.source c).a=c.a := rfl
+    have hb : (ProverCommitNativeC49.source c).b=c.b := rfl
+    simp only [ha,hb]
+    have hxa := base_source c.a hcc.1
+    have hya := base_source c.b hcc.2
+    simp only [field.CM31.from_m31,field.QM31.from_cm31,bind_tc_ok] at hxa hya ⊢
+    rw [hxa];simp only [bind_tc_ok]
+    rw [hya];simp only [bind_tc_ok]
+    exact hout
+  · intro s
+    rw [hdout s,hx,hy]
+    let q : AspisWide.InitialEncoder.InitialMessage Exact := fun i => value (f i.val)
+    have he : (fun s : Fin 4 => eval 8 (fun i => value (f (4*i+s.val)))
+        (fun i => value (base (p i))) 0)=
+        (fun s => AspisWide.FinalEncoder.exactFinalEncoder
+          (AspisV5FriConcreteEncoderCommutation.coefficientLane 256 s q) u) := by
+      funext s
+      rw [recurrence_value (fun i => value (f (4*i+s.val))) p u (by intro k hk;exact hdp k (by omega))]
+      rfl
+    rw [he,ProverCommitEncoderPhiModel53.phi_fibre]
+    exact (congrFun (AspisR1.FirstFold.encoded_fibre q u) s).symm
+
+#print axioms point_lift
+#print axioms exact_result
+end R1Z.ProverCommitEncoderInitial54
