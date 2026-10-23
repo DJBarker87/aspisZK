@@ -1,0 +1,163 @@
+S2W_Trace.lean:66:49: error(lean.unknownIdentifier): Unknown identifier `T`
+S2W_Trace.lean:66:58: error(lean.unknownIdentifier): Unknown identifier `U`
+S2W_Trace.lean:66:67: error(lean.unknownIdentifier): Unknown identifier `N`
+S2W_Trace.lean:67:49: error(lean.unknownIdentifier): Unknown identifier `T`
+S2W_Trace.lean:67:58: error(lean.unknownIdentifier): Unknown identifier `U`
+S2W_Trace.lean:67:67: error(lean.unknownIdentifier): Unknown identifier `N`
+S2W_Trace.lean:68:49: error(lean.unknownIdentifier): Unknown identifier `T`
+S2W_Trace.lean:69:32: error(lean.unknownIdentifier): Unknown identifier `T`
+S2W_Trace.lean:70:32: error(lean.unknownIdentifier): Unknown identifier `T`
+S2W_Trace.lean:71:32: error(lean.unknownIdentifier): Unknown identifier `T`
+S2W_Trace.lean:72:32: error(lean.unknownIdentifier): Unknown identifier `T`
+S2W_Trace.lean:73:32: error(lean.unknownIdentifier): Unknown identifier `T`
+S2W_Trace.lean:74:32: error(lean.unknownIdentifier): Unknown identifier `T`
+S2W_Trace.lean:75:29: error(lean.unknownIdentifier): Unknown identifier `T`
+S2W_Trace.lean:76:75: error(lean.unknownIdentifier): Unknown identifier `H`
+S2W_Trace.lean:77:72: error(lean.unknownIdentifier): Unknown identifier `H`
+S2W_Trace.lean:204:25: error: unknown universe level `u`
+S2W_Trace.lean:204:38: error: unknown universe level `v`
+S2W_Trace.lean:211:28: error: Invalid projection: Type of
+  x
+is not known; cannot resolve projection `1`
+S2W_Trace.lean:213:4: warning: declaration uses `sorry`
+S2W_Trace.lean:222:14: error: Tactic `rfl` failed: The left-hand side
+  forget (run ops (Code.done a) log)
+is not definitionally equal to the right-hand side
+  erase ops (Code.done a)
+
+case done
+ops : Ops
+A : Type
+a : A
+log : Log
+⊢ forget (run ops (Code.done a) log) = erase ops (Code.done a)
+S2W_Trace.lean:225:16: error: Tactic `rfl` failed: The left-hand side
+  forget (run ops (Code.step (fail e) k) log)
+is not definitionally equal to the right-hand side
+  erase ops (Code.step (fail e) k)
+
+case step.fail
+ops : Ops
+A B✝ : Type
+k : B✝ → Code A
+ih : ∀ (a : B✝) (log : Log), forget (run ops (k a) log) = erase ops (k a)
+log : Log
+e : Error
+⊢ forget (run ops (Code.step (fail e) k) log) = erase ops (Code.step (fail e) k)
+S2W_Trace.lean:226:13: error: Tactic `rfl` failed: The left-hand side
+  forget (run ops (Code.step div k) log)
+is not definitionally equal to the right-hand side
+  erase ops (Code.step div k)
+
+case step.div
+ops : Ops
+A B✝ : Type
+k : B✝ → Code A
+ih : ∀ (a : B✝) (log : Log), forget (run ops (k a) log) = erase ops (k a)
+log : Log
+⊢ forget (run ops (Code.step div k) log) = erase ops (Code.step div k)
+S2W_Trace.lean:230:13: error: unsolved goals
+case call.fail
+ops : Ops
+A B✝ : Type
+op : Call B✝
+k : B✝ → Code A
+ih : ∀ (a : B✝) (log : Log), forget (run ops (k a) log) = erase ops (k a)
+log : Log
+e : Error
+h : invoke ops op = fail e
+⊢ forget sorry = fail e
+S2W_Trace.lean:231:10: error: unsolved goals
+case call.div
+ops : Ops
+A B✝ : Type
+op : Call B✝
+k : B✝ → Code A
+ih : ∀ (a : B✝) (log : Log), forget (run ops (k a) log) = erase ops (k a)
+log : Log
+h : invoke ops op = div
+⊢ forget sorry = div
+S2W_Trace.lean:230:31: warning: This simp argument is unused:
+  thenResult
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵t̵h̵e̵n̵R̵e̵s̵u̵l̵t̵,̵e̵r̵a̵s̵e̵,̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵]̵[̲r̲u̲n̲,̲ ̲e̲r̲a̲s̲e̲,̲ ̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲f̲a̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_Trace.lean:231:28: warning: This simp argument is unused:
+  thenResult
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵t̵h̵e̵n̵R̵e̵s̵u̵l̵t̵,̵e̵r̵a̵s̵e̵,̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵[̲r̲u̲n̲,̲ ̲e̲r̲a̲s̲e̲,̲ ̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲d̲i̲v̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_Trace.lean:230:27: warning: declaration uses `sorry`
+S2W_Trace.lean:230:27: warning: declaration uses `sorry`
+S2W_Trace.lean:230:31: warning: declaration uses `sorry`
+S2W_Trace.lean:230:31: warning: declaration uses `sorry`
+S2W_Trace.lean:230:31: warning: declaration uses `sorry`
+S2W_Trace.lean:230:31: warning: declaration uses `sorry`
+S2W_Trace.lean:230:31: warning: declaration uses `sorry`
+S2W_Trace.lean:230:31: warning: declaration uses `sorry`
+S2W_Trace.lean:230:31: warning: declaration uses `sorry`
+S2W_Trace.lean:245:38: error: Application type mismatch: The argument
+  success
+has type
+  run ops (Code.step (ok b) k) before = ok (a, after)
+but is expected to have type
+  run ops (k b) before = ok (a, after)
+in the application
+  ih b before after success
+S2W_Trace.lean:253:42: error: Type mismatch: After simplification, term
+  hs
+ has type
+  after = ?m.231 ++ suffix
+but is expected to have type
+  after = before ++ Event.returned op b :: suffix
+S2W_Trace.lean:248:31: warning: This simp argument is unused:
+  thenResult
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵t̵h̵e̵n̵R̵e̵s̵u̵l̵t̵,̵h̵]̵[̲r̲u̲n̲,̲ ̲h̲]̲  ̵at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_Trace.lean:248:42: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵t̵h̵e̵n̵R̵e̵s̵u̵l̵t̵,̵h̵]̵[̲r̲u̲n̲,̲ ̲t̲h̲e̲n̲R̲e̲s̲u̲l̲t̲]̲  ̵at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_Trace.lean:249:28: warning: This simp argument is unused:
+  thenResult
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵t̵h̵e̵n̵R̵e̵s̵u̵l̵t̵,̵h̵]̵[̲r̲u̲n̲,̲ ̲h̲]̲  ̵at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_Trace.lean:249:39: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵t̵h̵e̵n̵R̵e̵s̵u̵l̵t̵,̵h̵]̵[̲r̲u̲n̲,̲ ̲t̲h̲e̲n̲R̲e̲s̲u̲l̲t̲]̲  ̵at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_Trace.lean:251:21: warning: This simp argument is unused:
+  thenResult
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵t̵h̵e̵n̵R̵e̵s̵u̵l̵t̵,̵h̵]̵[̲r̲u̲n̲,̲ ̲h̲]̲ at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_Trace.lean:251:32: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [run, ̲thenResult,̵h̵] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2W_Trace.erase_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_Trace.run_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_Trace.erase_perform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_Trace.erase_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_Trace.erase_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

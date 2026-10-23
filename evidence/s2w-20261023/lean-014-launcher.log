@@ -1,0 +1,86 @@
+{"attempt": "lean-014", "exit_status": 1, "wall_seconds": 2.015532916004304, "peak_rss_kib": "2660532", "swaps": "0", "print_axioms": ["'AspisR1.S2W_Trace.run_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.S2W_Trace.erase_perform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.S2W_Trace.erase_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.S2W_Trace.erase_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+S2W_Trace.lean:65:44: error: `T` is not a field of structure `core.cmp.PartialEq`
+S2W_Trace.lean:65:43: error: Fields missing: `eq`
+
+Hint: Add missing fields:
+  
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲q̲ ̲:̲=̲ ̲_̲
+S2W_Trace.lean:65:53: error: `U` is not a field of structure `Subtype`
+S2W_Trace.lean:65:52: error: Fields missing: `val`, `property`
+
+Hint: Add missing fields:
+  
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲v̲a̲l̲ ̲:̲=̲ ̲_̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲p̲r̲o̲p̲e̲r̲t̲y̲ ̲:̲=̲ ̲_̲
+S2W_Tr
+...
+ih :
+  ∀ (a : B✝),
+    erase ops (c a >>= k) = do
+      let a ← erase ops (c a)
+      erase ops (k a)
+v✝ : B✝
+⊢ (do
+      let b ← ok v✝
+      erase ops (bind (c b) k)) =
+    do
+    let a ←
+      do
+        let b ← ok v✝
+        erase ops (c b)
+    erase ops (k a)
+S2W_Trace.lean:264:28: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b ← ok v✝
+    erase ops (bind (c b) k)
+is not definitionally equal to the right-hand side
+  do
+    let a ←
+      do
+        let b ← ok v✝
+        erase ops (c b)
+    erase ops (k a)
+
+case call.ok
+ops : Ops
+A B : Type
+k : A → Code B
+B✝ : Type
+op : Call B✝
+c : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    erase ops (c a >>= k) = do
+      let a ← erase ops (c a)
+      erase ops (k a)
+v✝ : B✝
+⊢ (do
+      let b ← ok v✝
+      erase ops (bind (c b) k)) =
+    do
+    let a ←
+      do
+        let b ← ok v✝
+        erase ops (c b)
+    erase ops (k a)
+S2W_Trace.lean:259:15: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [i̵h̵,̵erase]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_Trace.lean:263:15: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [i̵h̵,̵erase]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_Trace.lean:266:14: error(lean.unknownIdentifier): Unknown constant `erase_run`
+'AspisR1.S2W_Trace.run_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_Trace.erase_perform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_Trace.erase_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_Trace.erase_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5941188678f149eabaeaa9d1de55d53d.scope; invocation ID: 7854cc99bdd947afb618406094dd5744

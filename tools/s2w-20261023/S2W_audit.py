@@ -14,7 +14,7 @@ assert native.count('accounts[2].try_borrow_mut_data()?.copy_from_slice(&checkpo
 assert harness.count('accounts[2].try_borrow_mut_data()?.copy_from_slice(&checkpoint);')==1
 assert sha(L/'S2W_Snapshot.lean')==json.loads((E/'snapshot-emission/adaptation.json').read_text())['adapted_sha256']
 allowed={'propext','Classical.choice','Quot.sound'}
-current={'S2W_OracleAudit':'lean-001','S2W_Snapshot':'lean-003','S2W_SnapshotFacts':'lean-010','S2W_SnapshotJoin':'lean-012','S2W_Audit':'lean-013'}
+current={'S2W_OracleAudit':'lean-001','S2W_Snapshot':'lean-003','S2W_SnapshotFacts':'lean-010','S2W_SnapshotJoin':'lean-012','S2W_Audit':'lean-013','S2W_Trace':'lean-016','S2W_Outer':'lean-021','S2W_OuterErasure':'lean-032','S2W_TraceFacts':'lean-026','S2W_Observation':'lean-033','S2W_ChildTrace':'lean-035','S2W_ContinuationAudit':'lean-037'}
 for module,a in current.items():
  p=E/a/'receipt.json';v=json.loads(p.read_text());assert v['exit_status']==0
  assert v['source_hashes'][module+'.lean']==sha(L/(module+'.lean'))
@@ -44,12 +44,12 @@ fields={
  'nodeViews':'Conditional inherited; NodeRanges, sameStoredProof and actual parser/physical internal sites open',
  'y1Input':'Conditional inherited; firstChildY1Range, tx1ProofObservation and actual parser/internal site open',
  'observerNone':'Conditional inherited; extracted observer=None; propagation into actual internal reached sites open',
- 'reachedPrefix':'Open; no native ordered child/site observation constructed',
- 'callOrder':'Open; no native clocks/order constructed',
+ 'reachedPrefix':'Open at native/internal sites; one accepted extracted outer trace and exact append-prefix split proved',
+ 'callOrder':'Open at nine native/internal sites; actual extracted TX1/TX2 trace segments are ordered, not synthetic rank clocks',
  'accountFrame':'Open globally; native checkpoint-write destination leaf passed; other allocations/children/composition open',
  'writtenMetadata':'Open globally; per-operation destination metadata/lamports preservation passed; native site join open',
  'oracle':'Conditional; NativeBinding open, RuntimeSyscall successful-return law insufficient for exact unrestricted field; independently proved total-return/source theorem needed'}
-manifest={'schema':'focused-extractor-proof-packet-v1','source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'qualification':'Focused cached new modules and standalone native leaf gates. No S2CallerFacts/native-observation theorem or coherent release replay. Failed recovery axioms excluded. GNU time peak for timeout kani005 is parent-only; cgroup peak retained.','budget':{'lean_used':lean,'lean_limit':100,'kani_used':kani,'kani_limit':60},'current_lean':current,'fields':fields,'receipts':receipts,'production_source_pins':inv['sources'],'release_pins_reused':inv['release_pins']}
+manifest={'schema':'focused-extractor-proof-packet-v1','source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'qualification':'Focused cached new modules and standalone native leaf gates. Extracted outer trace/erasure proved; no full native/internal-site observation, S2CallerFacts theorem or coherent release replay. Failed recovery axioms excluded. GNU time peak for timeout kani005 is parent-only; cgroup peak retained.','budget':{'lean_used':lean,'lean_limit':100,'kani_used':kani,'kani_limit':60},'current_lean':current,'fields':fields,'receipts':receipts,'production_source_pins':inv['sources'],'release_pins_reused':inv['release_pins']}
 text=json.dumps(manifest,indent=2)+'\n'
 if '--check' in sys.argv:
  old=json.loads((E/'manifest.json').read_text());assert {k:v for k,v in old.items() if k!='source_revision'}=={k:v for k,v in manifest.items() if k!='source_revision'}
