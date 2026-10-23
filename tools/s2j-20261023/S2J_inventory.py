@@ -13,12 +13,18 @@ def restore(p):
  raw=encoded(base);assert sha(raw)==x['original_sha256'];return raw
 if __name__=='__main__':
  candidates=sorted(E.glob('lean-*/objects.json'))
+ existing=sorted(E.glob('lean-*/objects-delta.json'))
  if candidates:
-  base=json.loads(candidates[-1].read_text());entries=sorted(base.items());parts=[]
-  out=E/'object-base';out.mkdir(exist_ok=True)
-  for i in range(0,len(entries),3000):
-   p=out/f'part-{i//3000:03d}.json';raw=encoded(dict(entries[i:i+3000]));p.write_bytes(raw)
-   parts.append(dict(file=str(p.relative_to(E)),sha256=sha(raw)))
+  if existing:
+   prior=json.loads(existing[-1].read_text());parts=prior['base_parts'];base={}
+   for part in parts:
+    raw=(E/part['file']).read_bytes();assert sha(raw)==part['sha256'];base.update(json.loads(raw))
+  else:
+   base=json.loads(candidates[0].read_text());entries=sorted(base.items());parts=[]
+   out=E/'object-base';out.mkdir(exist_ok=True)
+   for i in range(0,len(entries),3000):
+    p=out/f'part-{i//3000:03d}.json';raw=encoded(dict(entries[i:i+3000]));p.write_bytes(raw)
+    parts.append(dict(file=str(p.relative_to(E)),sha256=sha(raw)))
   for p in candidates:
    values=json.loads(p.read_text());delta=dict(base_parts=parts,original_sha256=sha(p.read_bytes()),changed={k:v for k,v in values.items() if base.get(k)!=v},removed=[k for k in base if k not in values])
    (p.parent/'objects-delta.json').write_bytes(encoded(delta));assert restore(p.parent)==p.read_bytes();p.unlink()
