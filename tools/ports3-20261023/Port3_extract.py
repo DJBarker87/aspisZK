@@ -11,11 +11,15 @@ if kind=='charon':
  layouts=c[idx:end]; kept=[]
  for i in range(0,len(layouts)):
   if layouts[i]=='--include' and 'candidate::tx' not in layouts[i+1]:kept+=layouts[i:i+2]
- roots=['crate::verifier::candidate::'+n for n in ['batch_merkle','batch_merkle_values','batch_tree','query_loop','query_values']]
+ roots=['crate::verifier::candidate::'+n for n in ['tx1','tx2_common','tx2_authenticated','batch_merkle','batch_merkle_values','batch_tree','query_loop','query_values']]
  roots+=['crate::verifier::'+n for n in ['checkpoint','finish_relation','accumulate_batched_with_node']]
  roots+=['crate::verifier::{crate::verifier::'+ty+'}::'+fn for ty,fn in [('Accumulator','new'),('BatchedWeights','new'),('BatchedWeights','finish'),('QueryGeometry','for_range')]]
  cmd=c[:idx]
- for root in roots:cmd+=['--include',root,'--start-from',root.replace('crate::verifier::{','{')]
+ for root in roots:
+  cmd+=['--include',root]
+  if '{' not in root:cmd+=['--start-from',root]
+ for layout in ['crate::multiproof::Arity','crate::verifier::Reader','aspis_core::r0::domain::FibreIndex','aspis_core::r0::domain::Point']:
+  kept+=['--include',layout]
  cmd+=kept+c[end:]
  cmd=[s.replace('/home/dombarker/project-offloads/codex-cx-verifier-top-20261023',B).replace('VTop_Stages.llbc','Port3_StageChildren.llbc') for s in cmd]
  cfg={**old,'attempt':a,'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'command':cmd,'sources':old['sources'],'timeout':300,
