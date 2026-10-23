@@ -1,0 +1,3 @@
+PROVED: a successful execution of the actual generated inner constructor factor loop preserves canonical reads of all factor rows and canonicality of its carried x, from the exact initial invariant. The proof composes the same-call cell update theorem with the generic loop invariant and checked iterator progress; it adds no independent child arithmetic success premises. Outer constructor scans, point producers, full source/runtime refinement and soundness remain open.
+
+Focused Lean check: 12.601 seconds; peak aggregate RSS 2241626112 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

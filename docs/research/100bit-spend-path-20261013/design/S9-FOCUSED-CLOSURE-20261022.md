@@ -1155,3 +1155,16 @@ old PublicPrep Types object has no retained source identity. A new source-
 pinned numerical cohort and focused affected dependency replay are required;
 no reversible source-identity claim is made about that unknown old object.
 This does not justify a release-coherent proof claim from cached imports.
+
+PROVED whole inner constructor loop: actual generated inner-loop success
+preserves the initial canonical factor-row/x invariant through every step
+(12.601 s, 2,241,626,112-byte aggregate RSS, zero swap, standard axioms).
+The actual outer scans and first-phase statement-point producer remain open.
+
+PROVED arbitrary initial alpha generalization: the ten-round source model
+requires no canonicality of its initial repeated value; the final successful
+array reads are canonical because all ten values come from their same-round
+transcript calls (16.501 s, 3,271,491,584-byte aggregate RSS, zero swap, standard
+axioms). This handles the new emitted caller's explicit ZERO Result bind by
+same-call success inversion rather than replacing it and assuming trace
+equivalence. The emitted-caller proof itself is undergoing focused checks.

@@ -1,0 +1,3 @@
+PROVED: the Actual-carrier ten-round source model yields canonical reads of the final alpha array from arbitrary initial alpha value, with no initial-value canonicality assumption. Every cell is derived from the same successful round/transcript execution and overwritten. This generalization supports the actual emitted caller constant Result bind without assuming acceptance/oracle equivalence under replacing the constant. Actual caller/refinement and full security theorem remain open.
+
+Focused Lean check: 16.501 seconds; peak aggregate RSS 3271491584 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
