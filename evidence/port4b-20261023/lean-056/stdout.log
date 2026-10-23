@@ -1,0 +1,33 @@
+Port4B_ByteWord.lean:20:29: error: Type mismatch
+  Eq.trans (getElem!_pos bs j ?m.154) same
+has type
+  bs[j]! = b
+but is expected to have type
+  (bs[j] != b) = true
+Port4B_ByteWord.lean:21:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  bs[j] != b
+in the target expression
+  bs[j]!.testBit k = 0[8 * j + k]!
+
+bs : List (BitVec 8)
+zero : BitVec.fromLEBytes bs = 0
+b : BitVec 8
+mem : b ∈ bs
+j : ℕ
+hj : j < bs.length
+same : bs[j] = b
+k : ℕ
+hk : k < 8
+read : bs[j]!.testBit k = 0[8 * j + k]!
+div : (8 * j + k) / 8 = j
+mod : (8 * j + k) % 8 = k
+element : (bs[j] != b) = true
+⊢ Byte.testBit b k = Byte.testBit 0 k
+Port4B_ByteWord.lean:34:4: error: Type mismatch: After simplification, term
+  read
+ has type
+  (BitVec.fromLEBytes (List.map U8.bv ↑word))[k]! = (0 : BitVec 64)[k]!
+but is expected to have type
+  (BitVec.fromLEBytes (List.map U8.bv ↑word))[k]! = (0 : BitVec (8 * (List.map U8.bv ↑word).length))[k]!
+'AspisR1.Port4B_ByteWord.fromLE_zero' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.Port4B_ByteWord.u64_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -188,3 +188,23 @@ options or resource caps changed).033/036 were admission failures before
 Lean started, not attempts. Host checker now waits for other workers' Lean
 processes under the existing capped serialized launch instead of aborting
 admission. Actual budget46/100 Lean,0/60 Kani. No shipped changes or ELF trigger.
+
+Stage 9: AnyFalse.all_chunks proves a false native any-scan reached EVERY
+chunk and returned false from each actual predicate call. ByteWord proves
+symbolic little-endian zero decoding; PaddingWord applies it to the ACTUAL
+emitted padding closure and checked original bytes. Padding.native_zero
+composes the actual chunks_exact iterator with these cuts, deriving zero
+bytes for the complete divisible-by-eight suffix. No total scan/error
+transport, fixed oracle answer, concrete large enumeration or memory-cap
+change is used. CountInstall supplies a visibly named P6 count-lowering
+adapter and derives well-formedness, exact binary recurrence and count≤288
+from its accepted return; it is not a new extraction of shipped node_count.
+
+Accepted052/059/060/063/064: exits0,swap0,all9 theorem audits standard.
+Exact wall/RSS/revision/dependency/source fields are in their receipts.
+049–051,053–058,061–062 are excluded local elaboration/proof errors;
+none timed out or hit memory ceilings. The endian replacement uses one-bit
+projection and casts, never normalizes arbitrary generated words.
+Actual budget62/100 Lean,0/60 Kani (033/036 never entered Lean).
+Whole terminal count/padding/verifier composition, concrete key builder,
+Prepared/model provenance and final accepted batch join remain unproved.
