@@ -12,7 +12,7 @@ def split_top(s,sep):
   if c in ')}]':depth-=1
   if depth==0 and s.startswith(sep,i):out.append(s[last:i].strip());last=i+len(sep)
  out.append(s[last:].strip());return out
-constructors=[];evals=[];ids=[];dictfields=[];dictvalues=[]
+constructors=[];evals=[];ids=[]
 for n,typ in fields:
  typ=' '.join(typ.split());binders='';args=[];tyargs=[]
  if typ.startswith('∀ '):
@@ -27,8 +27,6 @@ for n,typ in fields:
  pattern=' '.join(['@Call.'+n]+[name for _,name in re.findall(r'([({])([A-Za-z_][A-Za-z_0-9]*)\s*:',prefix)]+args) if tyargs else ' '.join(['.'+n]+args)
  evals.append(f'  | {pattern} => ops.{n} '+ ' '.join(tyargs+args))
  ids.append(f'  | {pattern} => {n[2:]}')
- dictfields.append('  '+n+' : '+('∀ '+binders.split(' (a0',1)[0]+', ' if False else ''))
- dictvalues.append(f'  {n} := fun '+ ' '.join(tyargs+args)+' => sorry')
 header='''import AdapterRwModel
 /-! Typed operation syntax for the adopted dictionary. No argument is serialized,
 hashed or replaced by an identifier: Call retains the original typed values.

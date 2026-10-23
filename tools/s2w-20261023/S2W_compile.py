@@ -6,12 +6,14 @@ TOOLS=ROOT/'tools/s2w-20261023'; E=ROOT/'evidence/s2w-20261023'
 HOST='dombarker@100.108.41.90'; REMOTE='/home/dombarker/project-offloads/codex-cx-s2w-20261023'
 module=sys.argv[1]; assert module.startswith('S2W_')
 source=ROOT/'docs/research/100bit-spend-path-20261013/lean'/f'{module}.lean'
-number=1+len(list(E.glob('lean-*/receipt.json'))); assert number<=100
+number=1+max((int(p.stem.split('-')[1]) for p in TOOLS.glob('lean-*.json')),default=0); assert number<=100
 attempt=f'lean-{number:03d}'
 base=ROOT/'docs/research/100bit-spend-path-20261013/evidence/adapter-rw-20261023/lean-048/receipt.json'
 inherited=json.loads(base.read_text())
 cfg={'attempt':attempt,'kind':'lean','source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'source_tree_dirty':True,'command':['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M4400','-DElab.async=false','-o',f'{module}.olean',f'{module}.lean'],'sources':[f'{module}.lean'],'timeout':180,'env':{'LEAN_PATH':REMOTE+':/home/dombarker/project-offloads/codex-cx-s2z-20261023:/home/dombarker/project-offloads/codex-cx-s2x-20261023:'+inherited['env']['LEAN_PATH']},'deps_fingerprint':{'inherited_receipt_sha256':hashlib.sha256(base.read_bytes()).hexdigest(),'scope':'Selected direct objects pinned; AdapterRw stage3 inherited closure reused'},'expected_time':'Focused cached Lean module, no cold dependency build, generation or elimination'}
-c=TOOLS/f'{attempt}.json';c.write_text(json.dumps(cfg,indent=2)+'\n')
+c=TOOLS/f'{attempt}.json'
+# Reserve before any remote work; an in-flight receipt is not yet present.
+with c.open('x') as handle: handle.write(json.dumps(cfg,indent=2)+'\n')
 def run(args,**kw):return subprocess.run(args,check=True,**kw)
 run(['ssh',HOST,'mkdir','-p',REMOTE])
 run(['scp','-q',str(source),str(c),str(TOOLS/'S2W_run_host.py'),str(TOOLS/'S2W_lean_host.py'),HOST+':'+REMOTE+'/'])
