@@ -1,0 +1,7 @@
+# Actual active phase preserves source parts outside index4
+
+Three complete statements in sources/S9ActiveFourFrameV1.lean prove: SAME accepted actual active loop8 preserves every part j<7 with j≠4; the identical unshared source loop16 has the same property; an actual write of inactive into index0 followed by active loop8 preserves all incoming j≠0,4. The arbitrary input parts and actual output array remain parameters. No canonicality, field/arithmetic interpretation, desired part meaning or independently assumed child call is required.
+
+Existing accepted active-body source witness supplies the real update at index4, generic atN_set supplies its frame, and existing actual loop progress/control plus loop_invariant_property propagate equality. The source equivalence to loop16 is reused. This is source frame preservation only; it does not establish the values written at0/4 or identify any unrelated existential vector. Operational final-parts Trace joins must thread the SAME arrays and writes.
+
+V1 failed only rewrite aliases between literal Usize.val and Nat0/4. V2 introduces typed inequality aliases and leaves statements/source/model/math unchanged. Rejected source/log/receipt retained. Accepted focused exit0,20.832s,3.252GB aggregate RSS,zero swap; all three audits use only standard axioms. No binary/full inventory/final replay included. Existing source helpers are reused unchanged. The complete spend relation, concrete operation bindings/runtime/artifact transport and security theorem remain separate; 100-bit target not yet established.
