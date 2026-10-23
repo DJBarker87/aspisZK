@@ -819,3 +819,27 @@ exact four mixed-product calls through actual afterLow read witnesses,
 constructor/challenge and other upstream canonical-input provenance, and the
 composed source/caller/release result. No production Rust/CU artifact changed;
 S9 and the full 100-bit release claim remain OPEN.
+
+
+## Installed full multiplication and same-execution term children
+
+PROVED in `s9-wide-mul-pair-helper-bridge-v1-20261023`: the exact source
+WideExact.mul full Result maps to the installed concreteFieldOps.wideMul and
+the actual Pair caller arithmetic slot on corresponding canonical operands.
+The focused check passed in 16.206 seconds, aggregate RSS 3,214,835,712 bytes,
+zero swap, standard axioms only. The canonical operand domain remains explicit.
+
+PROVED in `s9-pair-term-children-v1-20261023`: success of an actual Pair term
+exposes that execution's PERM/ap1/high reads, mixed multiplication and quarter
+scaling successes. This supplies child-call witnesses rather than assuming
+independent executions succeed. Focused check: 22.232 seconds, aggregate RSS
+3,239,313,408 bytes, zero swap, standard axioms only.
+
+OPEN: use those child witnesses to connect all actual mixed-product reads;
+connect the actual full-width tail calls; establish upstream challenge and
+constructor provenance; compose the source/caller/release result. The actual
+Weights::new extraction reaches an unsupported raw-pointer field write in
+Aeneas. A separately extracted pure extra projection is only a candidate and
+does not discharge the actual constructor. Semantic sampler/caller links are
+being proved independently. Production Rust and CU artifacts are unchanged.
+S9 and the 100-bit release target remain not yet established.
