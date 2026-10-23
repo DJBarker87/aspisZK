@@ -1,0 +1,3 @@
+The actual source QUARTER decodes through the existing exact embedding to inverse4 in WideExact, the same normalization used by model radix-four dual folds. The only concrete arithmetic is4*536870912=2147483647+1 and explicit modulus-casts-to-zero; all inverse/product transport is proved first on generic opaque ring-hom variables. No input canonicality, desired scalar value or cryptographic assumption is added. This normalization supports source-row/model composition and is not a soundness closure.
+
+Focused Lean check: 26.891 seconds; peak aggregate RSS 3255156736 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
