@@ -40,3 +40,27 @@ S2 caller identities and final source/model correspondence remain open.
 snapshot, including the cfg-excluded host client/tests and xtask non-build
 files. This snapshot is a selected SBF build input set, not a complete source
 repository census.
+
+## Stage 2: regenerated machine/compiler and ordering evidence
+
+The same retained algorithms regenerate linked/deployed ELF call tables,
+raw aliases, relocations, independent LLVM disassembly, frontier observations,
+MIR CFGs, typed instances and constant-callback analysis. Physical calls are
+1,637/1,637/2,202 (default/devnet/Pool); callx stays 36/36/80. Raw alias call
+records are 1,644/1,644/2,220 and are checked separately. No final DWARF inline
+map is available. Fifteen constant SHA targets and six null observers retain
+their explicit scope; 131 library sites stay open. All 189 callback negative
+controls reject.
+
+Every one of the **140** selected-call dominance facts survives against
+re-pin2, with **zero re-selections, zero changed block coordinates and zero
+changed selected-body hashes**. `ordering-repin-map.json` retains exact
+old/new selected call keys and independently checked current graph cuts.
+The owned stage caller is outside these selected child/wrapper observations.
+No source_order/model_order or new Lean graph specialization is inferred.
+
+Two collector setup failures are retained: collect-host-v2 read Pool before
+its capture finished, and elf-symbol-kinds-host retained old directory labels.
+The completed Pool build and a corrected path adapter allow replacement runs;
+no SBF rebuild or cap increase was needed. The failed script is retained under
+`tools/s10-repin3-20261023/historical/` where its bytes differ.
