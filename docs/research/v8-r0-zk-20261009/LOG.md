@@ -8861,3 +8861,13 @@ cleanup, error and rejection laws, return-data events, emitter constructor and i
 writes). The native step simulation is at cut 1 of 30: the cut relation needed an
 invocation binding, and that job is now running. Privacy: parts 53–54 proved the terminal, weights,
 encoder and leaf bytes, and part 55 is running. Neither deployed target is established.
+
+## D180 (lead, 2026-10-23 06:25): part 54 merged
+
+Merged `codex/cx-prover-commit54-20261023` (report `r1p-final/PROVER-COMMIT54-20261023.md`;
+budget J10600–10699 used). The owned encoder is extracted and proved by induction. Proved:
+exact node geometry; encoder model identities; opened and folded leaf values with
+ordered bytes. Kani verifies the actual M31/QM31/WideExact iterator transitions through
+length 256 with verified stubs. 46 modules, 99 new theorems, standard axioms only.
+Remaining before native simulator output = payload: native allocation/collection and
+complete caller bindings; semantic guards; interpolation and challenge provenance.
