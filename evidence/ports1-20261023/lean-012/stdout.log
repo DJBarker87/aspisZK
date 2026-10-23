@@ -1,0 +1,109 @@
+structure AspisR1.Port1_Library.TrustedStd (ops : VTop_Stages.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port1_Library.TrustedStd.option_ok_or : ∀ {T E : Type} (x : Option T) (e : E),
+      ops.op0 x e = Port1_LibrarySource.okOr x e
+  AspisR1.Port1_Library.TrustedStd.result_unwrap32 : ∀
+      (x :
+        Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+          Aeneas.Std.core.array.TryFromSliceError),
+      ops.unwrap32 x = Port1_LibrarySource.unwrap32 x
+constructor:
+  AspisR1.Port1_Library.TrustedStd.mk {ops : VTop_Stages.Ops}
+    (option_ok_or : ∀ {T E : Type} (x : Option T) (e : E), ops.op0 x e = Port1_LibrarySource.okOr x e)
+    (result_unwrap32 :
+      ∀
+        (x :
+          Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+            Aeneas.Std.core.array.TryFromSliceError),
+        ops.unwrap32 x = Port1_LibrarySource.unwrap32 x) :
+    Port1_Library.TrustedStd ops
+structure AspisR1.Port1_DriverSubstitution.BodyJoins (source model : VTop_OracleCode.Implementation) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port1_DriverSubstitution.BodyJoins.shape : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 3
+  AspisR1.Port1_DriverSubstitution.BodyJoins.scan : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 4
+  AspisR1.Port1_DriverSubstitution.BodyJoins.batch : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 5
+  AspisR1.Port1_DriverSubstitution.BodyJoins.query : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 6
+  AspisR1.Port1_DriverSubstitution.BodyJoins.prepare : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 7
+  AspisR1.Port1_DriverSubstitution.BodyJoins.writer : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 8
+  AspisR1.Port1_DriverSubstitution.BodyJoins.flush : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 9
+  AspisR1.Port1_DriverSubstitution.BodyJoins.pending : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 10
+  AspisR1.Port1_DriverSubstitution.BodyJoins.geometry : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 11
+  AspisR1.Port1_DriverSubstitution.BodyJoins.initial : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 12
+  AspisR1.Port1_DriverSubstitution.BodyJoins.powers : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 17
+  AspisR1.Port1_DriverSubstitution.BodyJoins.reader : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 18
+  AspisR1.Port1_DriverSubstitution.BodyJoins.finish : VTop_OracleStages.OperationJoin (fun {A} => source)
+      (fun {A} => model) 19
+constructor:
+  AspisR1.Port1_DriverSubstitution.BodyJoins.mk {source model : VTop_OracleCode.Implementation}
+    (shape : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 3)
+    (scan : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 4)
+    (batch : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 5)
+    (query : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 6)
+    (prepare : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 7)
+    (writer : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 8)
+    (flush : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 9)
+    (pending : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 10)
+    (geometry : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 11)
+    (initial : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 12)
+    (powers : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 17)
+    (reader : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 18)
+    (finish : VTop_OracleStages.OperationJoin (fun {A} => source) (fun {A} => model) 19) :
+    Port1_DriverSubstitution.BodyJoins source model
+theorem AspisR1.Port1_Annotation.backward : ∀ (adapter : AdapterRw.Ops) (impl : VTop_OracleCode.Implementation)
+  {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (words : CanonicalCutEnrichedTranscript.Words) (i : OraclePortStoredExperimentC4.Input)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (Port1_Driver.rust adapter (fun {A} => impl) D hash (OraclePortStoredExperimentC4.enrich words i))).2 =
+      true →
+    (AspisV8R19.MemoizedProgramLaw.eval H (Port1_Driver.rust adapter (fun {A} => impl) D hash i)).2 = true :=
+fun adapter impl {Hash} D hash words i H accepted =>
+  Eq.mp
+    (congrArg (fun _a => (AspisV8R19.MemoizedProgramLaw.eval H _a).2 = true)
+      (Port1_Annotation.source_enrich adapter impl D hash words i))
+    accepted
+AspisR1.VTop_Annotation.two_pass (D : LiteralByteProtocol.Decoder) (rust : OraclePortRuntimeBindingC7.Verifier)
+  (raw :
+    OraclePortFrozen2Join.AcceptedVerifierJoin rust
+      (OraclePortStoredExperimentC4.verifier D OraclePortFrozen2.dV_frozen2))
+  (backward :
+    ∀ (w : CanonicalCutEnrichedTranscript.Words) (i : OraclePortStoredExperimentC4.Input)
+      (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H (rust (OraclePortStoredExperimentC4.enrich w i))).2 = true →
+        (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).2 = true) :
+  OraclePortFrozen2Join.AcceptedRunJoin D rust
+'AspisR1.Port1_LibrarySource.mark_none' does not depend on any axioms
+'AspisR1.Port1_LibraryDecode.map_bind' does not depend on any axioms
+'AspisR1.Port1_LibraryDecode.map_ite' does not depend on any axioms
+'AspisR1.Port1_LibraryDecode.limbs_agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_LibraryDecode.decoder_agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_LibraryDecode.strict_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_LibraryDecode.wrong_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_Library.std_semantics' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_Library.library_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_Library.library_no_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_Library.library_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_Library.release_mark' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_Driver.stages_substitute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_DriverSubstitution.body_operation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_DriverSubstitution.ports' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_DriverSubstitution.driver_substitute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_CarrierObstruction.constant_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_CarrierObstruction.proof_irrelevant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_CarrierObstruction.raw_join_forces_rejection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_Annotation.source_enrich' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_Annotation.backward' depends on axioms: [propext, Classical.choice, Quot.sound]
