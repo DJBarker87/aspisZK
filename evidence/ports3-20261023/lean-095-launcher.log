@@ -1,0 +1,73 @@
+{"attempt": "lean-095", "exit_status": 1, "wall_seconds": 3.7033672200050205, "peak_rss_kib": "4391404", "swaps": "0", "print_axioms": ["'AspisR1.Port3_NativeRowLoop.stopped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_NativeRowLoop.fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port3_NativeRowLoop.lean:12:12: error: Application type mismatch: The argument
+  ↑iter.end
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.16
+of sort `Type (?u.16 + 1)` in the application
+  @InitialSeg ↑iter.end
+Port3_NativeRowLoop.lean:12:26: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+Port3_NativeRowLoop.lean:36:92: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≤ 0
+where
+ e := ↑↑iter.end
+ f := ↑(↑b.raw).length
+Port3_NativeRowLoop.lean:45:41: error: Application type mismatch: The argument
+  accepted
+has type
+  (match
+      match (iter, b) with
+      | (iter1, weights1) =>
+        
+...
+41: error: Application type mismatch: The argument
+  accepted
+has type
+  (match
+      match (iter, b) with
+      | (iter1, weights1) =>
+        verifier.accumulate_batched_with_node_loop1.body (Port3_NativeRowFrame.install ops) v q next width basis iter1
+          weights1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, weights1) =>
+              verifier.accumulate_batched_with_node_loop1.body (Port3_NativeRowFrame.install ops) v q next width basis
+                iter1 weights1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+but is expected to have type
+  (do
+      let x ←
+        verifier.accumulate_batched_with_node_loop1.body (Port3_NativeRowFrame.install ops) v q next width basis iter b
+      ?m.122 x) =
+    ok ?m.123
+in the application
+  Port3_PushFrame.bind_success
+    (verifier.accumulate_batched_with_node_loop1.body (Port3_NativeRowFrame.install ops) v q next width basis iter b)
+    ?m.122 ?m.123 accepted
+Port3_NativeRowLoop.lean:49:4: error: 'change' tactic failed, pattern
+  verifier.accumulate_batched_with_node_loop1 (Port3_NativeRowFrame.install ops) iter1 v q next b1 width basis = ok out
+is not definitionally equal to target
+  ?m.122 (cont (iter1, b1)) = ok ?m.123
+Port3_NativeRowLoop.lean:37:20: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [halt,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at accepted
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port3_NativeRowLoop.stopped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_NativeRowLoop.fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r70b88ecf6d6e4d1cb3517cf301a637f4.scope; invocation ID: 732ce69643f5494a9459be9a213e7aa0

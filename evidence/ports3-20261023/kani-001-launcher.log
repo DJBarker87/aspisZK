@@ -1,0 +1,34 @@
+{"attempt": "kani-001", "exit_status": 0, "wall_seconds": 95.35936141099955, "peak_rss_kib": "2028928", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-ports3-20261023/src/crates/aspis-core)
+   Compiling aspis-r0-block-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-ports3-20261023/src/docs/research/v8-r0-zk-20261009/refine/blockwriters)
+   Compiling aspis-r0-poseidon-copy v0.0.0 (/home/dombarker/project-offloads/codex-cx-ports3-20261023/src/docs/research/v8-r0-zk-20261009/refine/poseidon)
+   Compiling aspis-r0-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-ports3-20261023/src/docs/research/v8-r0-zk-20261009/refine/writers)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombark
+...
+fers_writer
+[proofs::production_buffers_writer.assertion.1] line 122 assertion failed: step.get() == 3: SUCCESS
+[proofs::production_buffers_writer.assertion.2] line 122 assertion failed: got.len() == 1768: SUCCESS
+[proofs::production_buffers_writer.array_bounds.1] line 123 array 'answers'[] upper bound in answers[2][var_63]: SUCCESS
+[proofs::production_buffers_writer.assertion.3] line 123 attempt to subtract with overflow: SUCCESS
+[proofs::production_buffers_writer.assertion.4] line 123 index out of bounds: the length is less than or equal to the given index: SUCCESS
+[proofs::production_buffers_writer.assertion.5] line 123 assertion failed: got[j] ==
+if j<1736 {body_byte(&p,&a,&answers[0],&answers[1],j)} else
+{answers[2][j-1736]}: SUCCESS
+[proofs::production_buffers_writer.pointer_dereference.1] line 123 dereference failure: pointer NULL in *var_55: SUCCESS
+[proofs::production_buffers_writer.pointer_dereference.2] line 123 dereference failure: pointer invalid in *var_55: SUCCESS
+[proofs::production_buffers_writer.pointer_dereference.3] line 123 dereference failure: deallocated dynamic object in *var_55: SUCCESS
+[proofs::production_buffers_writer.pointer_dereference.4] line 123 dereference failure: dead object in *var_55: SUCCESS
+[proofs::production_buffers_writer.pointer_dereference.5] line 123 dereference failure: pointer outside object bounds in *var_55: SUCCESS
+[proofs::production_buffers_writer.pointer_dereference.6] line 123 dereference failure: invalid integer address in *var_55: SUCCESS
+
+src/lib.rs function std::alloc::Global::grow_impl
+[std::alloc::Global::grow_impl.unreachable.1] line 0 unreachable code: SUCCESS
+
+** 0 of 1688 failed (1 iterations)
+VERIFICATION SUCCESSFUL
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r816b9e1297d640dda6d0297f31c8b58e.scope; invocation ID: 1f59890f8aa242a2bbe605521aab6870

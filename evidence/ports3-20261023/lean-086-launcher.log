@@ -1,0 +1,45 @@
+{"attempt": "lean-086", "exit_status": 1, "wall_seconds": 5.7721501649939455, "peak_rss_kib": "4426536", "swaps": "0", "print_axioms": ["'AspisR1.Port3_ResumeVariant.source_variant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_ResumeVariant.installed_variant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port3_ResumeVariant.lean:61:58: error: Application type mismatch: The argument
+  accepted
+has type
+  (let (b1, _) := (x, y)
+    if b1 = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+    else
+      have i7 := ck.len;
+      do
+      let end1 ← i7 - 32#usize
+      let s2 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+            { start := 16#usize, «end» := 48#usize }
+      let s3 ← lift (Array.make 1#usize [proof] ⋯).to_slice
+      let a ← D.digest hash s3
+      let b2 ← ops.ne core.cmp.PartialEqU8 s2 a
+      if b2 = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+        else do
+          let s4 ←
+            core.s
+...
+                            (core.convert.FromSame verifier.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                    residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+but is expected to have type
+  ok (core.result.Result.Ok ?m.867) = ok (core.result.Result.Ok ?m.868)
+in the application
+  ok.inj accepted
+'AspisR1.Port3_ResumeVariant.source_variant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_ResumeVariant.installed_variant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r85b11b1a65064d4492ba80fa68ef3af6.scope; invocation ID: fe039597e8cc45dcb014c1da00e7bf43

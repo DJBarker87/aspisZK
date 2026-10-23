@@ -1,0 +1,73 @@
+Port3_NativeRowFrame.lean:34:14: error: Application type mismatch: The argument
+  ↑iter.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.16
+of sort `Type (?u.16 + 1)` in the application
+  @PrincipalSeg ↑iter.start
+Port3_NativeRowFrame.lean:34:30: error(lean.unknownIdentifier): Unknown identifier `ter.end.val`
+Port3_NativeRowFrame.lean:42:32: error: Tactic `rfl` failed: The left-hand side
+  core.clone.Clone.clone ?m.58 x
+is not definitionally equal to the right-hand side
+  ok x
+
+ops : Port3_NativeQueryBody.Ops
+v : alloc.vec.Vec aspis_core.field.QM31
+q : aspis_core.field.QM31
+next width : Usize
+basis : Std.Array U32 256#usize
+iter : core.ops.range.Range Usize
+b : verifier.BatchedWeights
+active : PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+bound : ↑iter.end ≤ (↑b.raw).length
+out : ControlFlow (core.ops.range.Range Usize × verifier.BatchedWeights) verifier.BatchedWeights
+h :
+  Port3_NativeQueryBody.verifier.accumulate_batched_with_node_loop1.body (install ops) v q next width basis iter b =
+    ok out
+x : UScalar UScalarTy.Usize
+⊢ core.clone.Clone.clone ?m.58 x = ok x
+Port3_NativeRowFrame.lean:42:52: error: Tactic `rfl` failed: The left-hand side
+  core.cmp.PartialOrd.lt ?m.59 a b
+is not definitionally equal to the right-hand side
+  ok (decide (↑a < ↑b))
+
+ops : Port3_NativeQueryBody.Ops
+v : alloc.vec.Vec aspis_core.field.QM31
+q : aspis_core.field.QM31
+next width : Usize
+basis : Std.Array U32 256#usize
+iter : core.ops.range.Range Usize
+b✝ : verifier.BatchedWeights
+active : PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+bound : ↑iter.end ≤ (↑b✝.raw).length
+out : ControlFlow (core.ops.range.Range Usize × verifier.BatchedWeights) verifier.BatchedWeights
+h :
+  Port3_NativeQueryBody.verifier.accumulate_batched_with_node_loop1.body (install ops) v q next width basis iter b✝ =
+    ok out
+a b : UScalar UScalarTy.Usize
+⊢ core.cmp.PartialOrd.lt ?m.59 a b = ok (decide (↑a < ↑b))
+Port3_NativeRowFrame.lean:49:53: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 0
+  e - g ≤ 0
+where
+ e := ↑(↑b.raw).length
+ f := ↑↑iter.end
+ g := ↑↑iter.start
+Port3_NativeRowFrame.lean:50:67: error: Application type mismatch: The argument
+  h
+has type
+  ok (cont (iter1, b1)) = ok out
+but is expected to have type
+  (do
+      let x ← ?m.383
+      ?m.384 x) =
+    ok ?m.385
+in the application
+  Port3_PushFrame.bind_success ?m.383 ?m.384 ?m.385 h
+'AspisR1.Port3_NativeRowFrame.push_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_NativeRowFrame.body_fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

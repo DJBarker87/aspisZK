@@ -1,0 +1,40 @@
+{"attempt": "kani-002", "exit_status": 0, "wall_seconds": 19.14337832700403, "peak_rss_kib": "3893876", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-ports3-20261023/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 mo
+...
+ in *var_8: SUCCESS
+
+src/lib.rs function encode_k::{closure#3}
+[encode_k::{closure#3}.unreachable.1] line 28 unreachable code: SUCCESS
+
+src/lib.rs function encode_k_spec
+[encode_k_spec.arithmetic_overflow.1] line 25 attempt to divide by zero: SUCCESS
+[encode_k_spec.arithmetic_overflow.2] line 25 attempt to calculate the remainder with a divisor of zero: SUCCESS
+[encode_k_spec.array_bounds.1] line 25 array 'limbs' upper bound in limbs[var_11]: SUCCESS
+[encode_k_spec.array_bounds.2] line 25 array 'out' upper bound in out[i]: SUCCESS
+[encode_k_spec.assertion.1] line 25 index out of bounds: the length is less than or equal to the given index: SUCCESS
+[encode_k_spec.assertion.2] line 25 attempt to multiply with overflow: SUCCESS
+[encode_k_spec.assertion.3] line 25 attempt to shift right with overflow: SUCCESS
+[encode_k_spec.assertion.4] line 25 index out of bounds: the length is less than or equal to the given index: SUCCESS
+[encode_k_spec.unreachable.1] line 25 unreachable code: SUCCESS
+
+src/lib.rs function proofs::encode_k_contract
+[proofs::encode_k_contract.precondition_instance.1] line 90 free argument must be NULL or valid pointer: SUCCESS
+[proofs::encode_k_contract.precondition_instance.2] line 90 free argument must be dynamic object: SUCCESS
+[proofs::encode_k_contract.precondition_instance.3] line 90 free argument has offset zero: SUCCESS
+[proofs::encode_k_contract.precondition_instance.4] line 90 double free: SUCCESS
+[proofs::encode_k_contract.precondition_instance.5] line 90 free called for new[] object: SUCCESS
+[proofs::encode_k_contract.precondition_instance.6] line 90 free called for stack-allocated object: SUCCESS
+
+** 0 of 182 failed (1 iterations)
+VERIFICATION SUCCESSFUL
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r77ac1842a58f4d06ab8c64f440679c1a.scope; invocation ID: 71a7995834ba42d689da2a0538465410

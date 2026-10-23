@@ -1,0 +1,49 @@
+{"attempt": "lean-064", "exit_status": 1, "wall_seconds": 2.0871904020023067, "peak_rss_kib": "4393332", "swaps": "0", "print_axioms": ["'AspisR1.Port3_GeometryStage.queries_length' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_GeometryStage.invalid_start' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_GeometryStage.invalid_end' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_GeometryStage.accepted_range' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port3_GeometryStage.lean:25:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑start > ↑end1 then ?m.20 else ?m.21
+in the target expression
+  Port3_QueryInstall.result
+      (if start > end1 then ok (core.result.Result.Err verifier.Error.Query)
+      else do
+        let s ← lift queries.to_slice
+        have i : Usize := s.len
+        if end1 > i then ok (core.result.Result.Err verifier.Error.Query)
+          else do
+            let i1 ← lift (end1.wrapping_sub start)
+            have line_z_values : alloc.vec.Vec aspis_core.field.M31 :=
+              alloc.vec.Vec.with_capacity aspis_core.field.M31 i1
+            let i2 ← lift (end1.wrapping_sub start)
+      
+...
+terRw.aspis_r1_cost_probe.verifier.Error.Query)
+
+CoreError : Type
+ops : Port3_NativeGeometryBody.Ops CoreError
+queries : Std.Array U32 22#usize
+start end1 : Usize
+bad : ↑start > ↑end1
+⊢ Port3_QueryInstall.result
+      (if start > end1 then ok (core.result.Result.Err verifier.Error.Query)
+      else do
+        let s ← lift queries.to_slice
+        have i : Usize := s.len
+        if end1 > i then ok (core.result.Result.Err verifier.Error.Query)
+          else do
+            let i1 ← lift (end1.wrapping_sub start)
+            have line_z_values : alloc.vec.Vec aspis_core.field.M31 :=
+              alloc.vec.Vec.with_capacity aspis_core.field.M31 i1
+            let i2 ← lift (end1.wrapping_sub start)
+            let i3 ← lift (i2.wrapping_mul 5#usize)
+            have flat : alloc.vec.Vec aspis_core.field.M31 := alloc.vec.Vec.with_capacity aspis_core.field.M31 i3
+            let s1 ←
+              core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U32))
+                  queries { start := start, «end» := end1 }
+            let iter ← SharedSlice.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter s1
+            Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0 ops iter start line_z_values flat) =
+    ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Query)
+'AspisR1.Port3_GeometryStage.queries_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_GeometryStage.invalid_start' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_GeometryStage.invalid_end' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_GeometryStage.accepted_range' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6418a489bd3847599791a28217e57cc3.scope; invocation ID: b604d85867cd4589b9cdacdea61f243b
