@@ -1,0 +1,24 @@
+Port2_QueryLoop.lean:62:8: error: Type mismatch: After simplification, term
+  success
+ has type
+  @Eq (Result (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error))
+    (loop
+      (fun state1 =>
+        match state1 with
+        | core.result.Result.Ok p1 =>
+          let (a, pending) := p1
+          if ↑end1 ≤ ↑a.next then ok (done state1)
+          else do
+            let state1 ← call proof p a g obs geometry pending
+            ok (cont state1)
+        | core.result.Result.Err a => ok (done state1))
+      r)
+    (ok (core.result.Result.Ok (out, bout)))
+but is expected to have type
+  @Eq (Result (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error))
+    (loop (fun state1 => verifier.candidate.query_loop_loop.body call proof p g obs geometry end1 state1) r)
+    (ok (core.result.Result.Ok (out, bout)))
+'AspisR1.Port2_QueryLoop.error_stops' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port2_QueryLoop.source_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port2_QueryLoop.query_body_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port2_QueryLoop.returned_next' depends on axioms: [propext, Classical.choice, Quot.sound]
