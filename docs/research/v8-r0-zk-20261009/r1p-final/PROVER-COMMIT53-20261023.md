@@ -67,3 +67,27 @@ Rust and the frozen native Rust have different low-fold and array-construction
 syntax, and the leading external layer is factored differently. Native
 correspondence, guards, terminal model identification and complete payload
 equality are not inferred from these theorems.
+
+## Resume audit and terminal lane identification
+
+The WIP snapshot `fc05fed270` contains no proof holes. J10506 checks
+`TerminalCallable53.run_success`: retained composition and terminal arithmetic
+return successfully with the explicit 29-lane formula. J10508 checks
+`TerminalLaneModel53.lanes_eq`: all 29 lanes equal `R0P.SemSource.laneAt`
+for the concrete tower basis. Selector marginals and Copy/Poseidon/semantic
+lanes are proved rather than supplied. Every accepted printed axiom report
+uses a subset of `[propext, Classical.choice, Quot.sound]`.
+
+Receipts J10504–J10508 were recovered from the pinned host workspace after
+the capacity relaunch, including rejected drafts and exact source snapshots.
+J10504/05 are carrier-transparency drafts replaced by J10506; J10507 is a
+selector/variant simplification draft replaced by J10508. `sorryAx` in those
+failed elaborations is retained as failed evidence, not an accepted proof.
+No unchanged input is replayed. A repository-wide Lean token search outside
+evidence finds only 19 comment/documentation mentions of `sorry`; the
+100bit-spend-path Lean source tree has zero occurrences.
+
+The terminal theorem still needs the Copy active output identity, selected
+claim carrier binding, and actual native caller correspondence. The next
+focused step retains the active identity discarded by the prior composition
+interface; the current endpoint remains unchanged.
