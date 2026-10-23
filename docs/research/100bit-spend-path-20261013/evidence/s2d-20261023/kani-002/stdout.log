@@ -1,0 +1,52 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling s2d-release-observer v0.1.0 (/home/dombarker/project-offloads/codex-cx-s2d-20261023/kani-spec)
+warning: unexpected `cfg` condition value: `cu-profiling`
+ --> src/lib.rs:8:11
+  |
+8 |     #[cfg(feature="cu-profiling")] {Some(mark)}
+  |           ^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+  |
+  = note: no expected values for `feature`
+  = help: consider adding `cu-profiling` as a feature in `Cargo.toml`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+  = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: unexpected `cfg` condition value: `cu-profiling`
+ --> src/lib.rs:9:15
+  |
+9 |     #[cfg(not(feature="cu-profiling"))] {None}
+  |               ^^^^^^^^^^^^^^^^^^^^^^ help: remove the condition
+  |
+  = note: no expected values for `feature`
+  = help: consider adding `cu-profiling` as a feature in `Cargo.toml`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: multiple variants are never constructed
+ --> src/lib.rs:3:18
+  |
+3 | ...um Phase { Parsed,Semantic,SemanticPart(u8),Prepare,CheckpointRead,Merkle(usize),Query(usize),QueryPart(usize,u8),CheckpointWrite,Relation,Final }
+  |       -----   ^^^^^^ ^^^^^^^^ ^^^^^^^^^^^^     ^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^        ^^^^^        ^^^^^^^^^           ^^^^^^^^^^^^^^^ ^^^^^^^^ ^^^^^
+  |       |
+  |       variants in this enum
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: module `S2D_checks` should have a snake case name
+  --> src/lib.rs:12:5
+   |
+12 | mod S2D_checks {
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `s2_d_checks`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+    Finished `dev` profile [optimized] target(s) in 0.07s
+Checking harness S2D_checks::actual_release_observer_is_typed_none...
+
+VERIFICATION RESULT:
+ ** 0 of 3 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.019158892s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
