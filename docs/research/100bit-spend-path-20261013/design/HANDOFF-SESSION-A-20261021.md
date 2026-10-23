@@ -211,3 +211,24 @@ compares duplicate types as expressions, without expanding shared expression
 DAGs into text. Keep compatible same-type theorem overlaps in the report;
 instances, definitions, and incompatible types remain blockers. A successful
 import does not replace this census.
+
+Re-enumerate the **final** object graph after changing providers. Canonical
+imports can expose retained consumers absent from the starting cache graph.
+`tools/import-union/complete-rebuild-closure.py` checks the final graph against
+the source rebuild plan and prepares missing consumers plus their reverse
+closure; it refuses an unchanged closure replay with no missing consumers.
+
+The complete raw census includes upstream libraries. Run enumeration with
+`RawUnionScan.lean`, then `prepare-raw-batches.py`, the generated capped Lean
+batch targets, and `merge-raw-batches.py`. Each type-comparison job checks at
+most 100 names as exact expressions. Reading all 8,164 modules twice in one
+interpreter exceeded the 7GB guard; splitting enumeration/comparison fixed it.
+Metadata tools read object files at runtime: bind their rebuild epoch to the
+provider/closure snapshot when adopting a new candidate, rather than reusing
+metadata solely because the `Lean` import is unchanged.
+
+The two unchanged `SamplerWordRead.unwrap_success` / `read_success` helper
+audits mention the existing opaque `core.fmt.Formatter` type. Preserve this
+exception inventory; they are not standard-only audits. The requested combined
+release audits and new theorem audits are standard-only. This import gate does
+not discharge any soundness, privacy, decoder, or efficiency premise.
