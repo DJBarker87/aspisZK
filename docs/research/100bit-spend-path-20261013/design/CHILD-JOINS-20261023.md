@@ -89,3 +89,111 @@ namespace was not open; its error-generated sorryAx is excluded evidence.
 Source changed by opening AspisR1Stage2. Attempt lean-003 passed: exit 0,
 2.077 s wall, 4,385,932 KiB peak RSS, zero swaps; all three new theorems use
 exactly `[propext, Classical.choice, Quot.sound]`. No unchanged retry occurred.
+
+## Stage 3: current source pins and composition boundary
+
+`source-pins.json` compares eight relevant current files with S2's recorded
+snapshot `544d40b596017f5b1d9644dd19acab0cb5f98a7d`.
+`function-pins.json` records 269 declaration spans with before/after hashes,
+line locations and changed flags (duplicate method names use occurrence ordinals).
+These are source inspections, not source-to-model proofs.
+
+Unchanged files: compact.rs, multiproof.rs, verifier.rs and the SDK adapter
+r1_pool_adapter.rs. Thus the inspected checkpoint, resume, scan and multiproof
+bodies have no direct H5 delta against that snapshot; transitive dependencies
+still require assessment. Changed files: weights.rs, fast_pairing.rs,
+state_only_prefix.rs and owned adapter require_zero. Every changed declaration
+is explicitly marked in the machine-readable inventory. No source theorem
+from the old snapshot is asserted to bind all of H5.
+
+Current canonical Q::from_limbs destructures [a,b,c,d], checks four ordered
+strict bounds, and returns Some(Self([a,b,c,d])) or None. It is unchanged
+against the post-S4 S2 snapshot. The historical freeze b2727acd instead uses
+x.iter().all and Some(Self(x)); that old body cannot be re-pinned by name.
+The isolated S4 checked-q source-cut also differs textually in its returned
+array expression and formatting, so no byte-identical extracted source claim
+is made here. Current checked_q uses explicit match on this constructor (H5
+changed the former ok_or call). EbyKDot::push and EbyKDot::finish themselves
+are unchanged against the S2 snapshot; canonical Dot::push/Dot::finish, raw,
+reduce and reduce_pair are changed reachable bodies. Current EbyKDot::finish
+constructs E from eight reduced limbs and unwraps; the existence of a model
+finisher theorem is not its H5 arithmetic or panic-freedom certificate.
+`state_only_statement_points` changed to explicit complement writes. The owned
+adapter's require_zero changed to a tail loop; all other inspected owned
+adapter function spans are unchanged. Existing scanner equivalence is reusable
+only under its exact source/extraction qualifications, not as whole-caller closure.
+
+The requested stronger theorem would be:
+
+> Under native/runtime/trust admission and the remaining child premises,
+> an accepted native wrapper pair yields one execution-indexed observation
+> with S2CallerFacts AND the checkpoint, multiproof and S8 joins.
+
+This is **not proved**, and no Lean declaration claims it. The exact currently
+available theorem remains `S2W_D189Consolidation.accepted_run`:
+
+> accepted wrappers + SDK/std/extraction/runtime/oracle/event admission yield
+> cuts and one execution, whose continuation takes writer, reader, protected
+> checkpoint history, P2Prime, first-entry parser, physical node-range and
+> physical y1-range joins, then yields parsed and S2CallerFacts on that observation.
+
+The new downstream batch theorem can be applied after that continuation;
+checkpoint_binding then discharges S2S10CallerBinding. Neither removes an
+input needed to construct the facts. Before/after quantifiers, carriers and
+success conditioning are unchanged in the proved downstream theorem; no
+premise-removal claim is made.
+
+Remaining named work:
+
+- Lead-owned actual writer serialization/header parser and resume digest-check
+  correspondence for the fixed ops calls, including writer length; independent
+  physical node and y1 range observations for the actual reached calls.
+- S1S7S8StateProvenance for the checkpoint stage; reached model context and
+  success of that stage must be tied to the same actual calls.
+- Session A's FirstEntryVerifierConeJoin. FullForestAcceptedRoundtrip remains
+  a separate session A source theorem, but is **not a premise of accepted_run**:
+  its comment explicitly says the stronger authentication route avoids it.
+  Do not add it to this theorem or claim it discharged.
+- S2TrustedSdkBorrow (all named fields), TrustedStd copy semantics,
+  AeneasExtraction, Allocator, both RuntimeEntrypointAdmission instances,
+  RuntimeSyscall, P1, P2Prime and CheckpointVersionBinding; ChildConeJoin erasure
+  and FirstMarks/SecondMarks; P6 total oracle/callback/lowering and P7/compiler,
+  runtime/ABI/allocator and current source-to-ELF correspondence.
+- H5 actual EbyKDot/finisher arithmetic and constructor/dependency binding;
+  full frozen headline/security experiment composition, including rejected
+  oracle-query prefixes. No 100-bit conclusion follows from this packet.
+
+Next concrete deliverable: a fixed-invocation actual checkpoint codec/header
+parser and ops lowering theorem, proved without S2CallerFacts, followed by
+physical range theorems on the same child calls. Then feed these into
+accepted_run; only afterwards consume facts in checkpoint and batch stage joins.
+
+## Validation, frozen target and resource receipt
+
+Final focused union: `ChildJoin_Audit.lean`, lean-004, exit 0, 2.195 s wall,
+4,378,464 KiB peak RSS, swap 0. It imports both new modules, audits all five
+new top theorems, and prints the actual required/consumer statements. All five
+final axiom sets are exactly `[propext, Classical.choice, Quot.sound]`.
+Budget consumed: **4/100 Lean compile attempts, 0/60 Kani runs**. One elaboration
+failure retained/excluded, three green attempts. No timeout or memory kill.
+
+Every attempt used `lake env lean -j1 -M4400 -DElab.async=false` on the host,
+in its own scope with MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0,
+TasksMax=64, plus populated-scope reservation below 55 GiB and the shared global
+Lean lock (the observed time was outside the 14:00 UK parallel window).
+Own objects live only in the isolated child-joins host directory; inherited
+caches were read, not overwritten. Full command, toolchain binary hash,
+selected import object hashes, exact dirty-source hashes, source revision,
+wall/RSS/swap/limits and full axioms output are committed per attempt.
+
+No Rust/Kani/ELF build ran; no shipped source changed. Therefore the conditional
+three-ELF rebuild trigger did not fire. Requested historical pins remain
+recorded as default d7d42f770883401e0104fb6e044f61a132fea7359943db225d581c5740fcffd0,
+devnet 2b2a9f0e7a2f93004ddbf207d02f5c5d5155d5c9bfdaeed21a78d638ae9be922,
+Pool 121f3e29…; these were **not rebuilt or re-confirmed for H5**. Current
+H5 adoption/source and historical compiled artifacts remain distinct. No
+wire/parameter/feature/security-contract change was introduced (stored suffix
+57607 bytes, checkpoint 1768 bytes, y1 [7031,7495), two batches of three slots).
+No existing Lean module, session A candidate or other worktree was edited.
+No whole frozen manifest or release-security replay was warranted by these
+obstruction/model-only modules. `git diff --check` passed.

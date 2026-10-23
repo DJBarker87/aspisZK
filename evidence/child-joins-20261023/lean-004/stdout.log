@@ -1,0 +1,471 @@
+'AspisR1.ChildJoin_CheckpointObstruction.reader_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ChildJoin_CheckpointObstruction.writer_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ChildJoin_Geometry.batches_from_facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ChildJoin_Geometry.scan_short' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ChildJoin_Geometry.scan_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin (ops : AdapterRw.Ops)
+  (decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (semantic : AspisR1.S2W_AuthenticatedInputs.Public) (pub proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (split : Aeneas.Std.Usize) : Prop
+number of parameters: 7
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.header : ∀
+      (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      AdapterRw.first_decoded ops semantic pub proof split =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+        decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+          some (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub))
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.size : ∀
+      (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      AdapterRw.first_decoded ops semantic pub proof split =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+        (↑checkpoint).length = 1768
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin.mk {ops : AdapterRw.Ops}
+    {decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {semantic : AspisR1.S2W_AuthenticatedInputs.Public} {pub proof : Aeneas.Std.Slice Aeneas.Std.U8}
+    {split : Aeneas.Std.Usize}
+    (header :
+      ∀ (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+        AdapterRw.first_decoded ops semantic pub proof split =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+          decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+            some (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub)))
+    (size :
+      ∀ (checkpoint : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+        AdapterRw.first_decoded ops semantic pub proof split =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok checkpoint) →
+          (↑checkpoint).length = 1768) :
+    AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin ops decode H semantic pub proof split
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin (ops : AdapterRw.Ops)
+  (decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 6
+fields:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.checkedHeader : ops.op11
+          (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () none =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+      decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+        some (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub))
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin.mk {ops : AdapterRw.Ops}
+    {decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8}
+    (checkedHeader :
+      ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub proof checkpoint () none =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+        decode (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint) =
+          some (H (AspisR1.MultiproofConeCanonical.bytesOf ↑proof), H (AspisR1.MultiproofConeCanonical.bytesOf ↑pub))) :
+    AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin ops decode H pub proof checkpoint
+structure AspisR1.S2W_ChildJoins.MultiproofConeJoin (proof0 proof1 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.batch0Ranges : AspisR1.S2Y_OwnedChildren.NodeRanges proof0 nodes 0
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.batch1Ranges : AspisR1.S2Y_OwnedChildren.NodeRanges proof1 nodes 1
+constructor:
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.mk {proof0 proof1 : Aeneas.Std.Slice Aeneas.Std.U8}
+    {nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8}
+    (batch0Ranges : AspisR1.S2Y_OwnedChildren.NodeRanges proof0 nodes 0)
+    (batch1Ranges : AspisR1.S2Y_OwnedChildren.NodeRanges proof1 nodes 1) :
+    AspisR1.S2W_ChildJoins.MultiproofConeJoin proof0 proof1 nodes
+structure AspisR1.S2W_ChildJoins.S8StageConeJoin (proof y1 : Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ChildJoins.S8StageConeJoin.scanArgument : AspisR1.S2Y_OwnedChildren.Y1Range proof y1
+constructor:
+  AspisR1.S2W_ChildJoins.S8StageConeJoin.mk {proof y1 : Aeneas.Std.Slice Aeneas.Std.U8}
+    (scanArgument : AspisR1.S2Y_OwnedChildren.Y1Range proof y1) : AspisR1.S2W_ChildJoins.S8StageConeJoin proof y1
+theorem AspisR1.CheckpointBytes5Decision.decision_success_join : ∀ {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (reserved : Bool)
+  (wp : AspisR1.CheckpointBytes5Writer.Prepared) (wa : AspisR1.CheckpointBytes5Writer.Accumulator)
+  (proof public1 : Aeneas.Std.Slice Aeneas.Std.U8) (stored : AspisV8R19.DuplexFrames.Bytes)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (m : AspisR1.RawCutTranscriptRun.ErasedMessage)
+  (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs) (v : AspisR1.LiteralOpeningView.View),
+  AspisR1.OraclePortAdmission.Guard tr →
+    AspisR1.OraclePortStoredParserC4.parseReached stored tr = some parsed →
+      AspisR1.OraclePortSelectedDraft.queries tr = some q →
+        AspisR1.OraclePortStoredDecisionDraftC4.input parsed q tr = some i →
+          AspisR1.LiteralOpeningView.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) = some v →
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.OraclePortFrozen2.batch parsed q AspisR1.OraclePortFrozen2.batch0)).2 =
+                true →
+              AspisR1.CheckpointBytes5Join.S2S10CallerBinding D hash H proof public1 stored tr.statement.pubBytes →
+                AspisR1.CheckpointBytes5Join.S1S7S8StateProvenance wp wa
+                    (AspisR1.OraclePortCheckpointResumeC5.prepared
+                      (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                      (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                    (AspisR1.OraclePortCheckpointStateC3.write
+                        (AspisR1.OraclePortCheckpointResumeC5.model i.data (AspisR1.SelectedChallengeMap.rhoOf i.rho)
+                          q)).accumulator →
+                  ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+                    (after : AspisR1.CheckpointBytes5Effect.Log),
+                    AspisR1.CheckpointBytes5Effect.run D hash
+                          (AspisR1.CheckpointBytes5Join.stage reserved wp wa proof public1) [] =
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a), after) →
+                      have suffix :=
+                        AspisR1.CheckpointBytes5Decision.bindObservation H
+                          (AspisR1.CheckpointBytes5Inputs.observe after,
+                            some (AspisR1.CheckpointBytes5Join.resumedSource i.data p a))
+                          fun resumed =>
+                          match resumed with
+                          | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                          | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state;
+                      ((AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.OraclePortFrozen2.batch parsed q AspisR1.OraclePortFrozen2.batch0)).1 ++
+                            suffix.1,
+                          suffix.2) =
+                        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.dV_frozen2 stored tr m) :=
+fun {Hash} D hash H reserved wp wa proof public1 stored parsed q tr m i v guard parser query input view batchOk caller
+    provenance p a after success =>
+  have checkpoint :=
+    AspisR1.CheckpointBytes5Join.success_conditioned_checkpoint_stage_join D hash H reserved wp wa proof public1 stored
+      parsed q tr i v input query caller provenance p a after success;
+  have reached := AspisR1.OraclePortCkptAbi5Stage.reached_stage H stored parsed q tr i v input query;
+  have strict := Eq.trans checkpoint (Eq.symm reached);
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          let suffix :=
+            AspisR1.CheckpointBytes5Decision.bindObservation H
+              (AspisR1.CheckpointBytes5Inputs.observe after,
+                some (AspisR1.CheckpointBytes5Join.resumedSource i.data p a))
+              fun resumed =>
+              match resumed with
+              | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+              | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state;
+          ((AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.OraclePortFrozen2.batch parsed q AspisR1.OraclePortFrozen2.batch0)).1 ++
+                suffix.1,
+              suffix.2) =
+            _a)
+        (Eq.symm (AspisR1.OraclePortCkptAbi5Decision.decision_observation H stored tr m))))
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              ((AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.OraclePortFrozen2.batch parsed q AspisR1.OraclePortFrozen2.batch0)).1 ++
+                    (AspisR1.CheckpointBytes5Decision.bindObservation H _a fun resumed =>
+                        match resumed with
+                        | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                        | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state).1,
+                  (AspisR1.CheckpointBytes5Decision.bindObservation H _a fun resumed =>
+                      match resumed with
+                      | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                      | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state).2) =
+                AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortCkptAbi5Decision.strictDecision stored tr m))
+            strict))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                ((AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.OraclePortFrozen2.batch parsed q AspisR1.OraclePortFrozen2.batch0)).1 ++
+                      _a.1,
+                    _a.2) =
+                  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortCkptAbi5Decision.strictDecision stored tr m))
+              (AspisR1.CheckpointBytes5Decision.bindObservation_eval H
+                (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                  (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                  (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                fun resumed =>
+                match resumed with
+                | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state)))
+          (Eq.mpr
+            (id
+              (congr
+                (congrArg Eq
+                  (congr
+                    (congrArg Prod.mk
+                      (congrArg
+                        (HAppend.hAppend
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                              (AspisR1.OraclePortFrozen2.batch parsed q AspisR1.OraclePortFrozen2.batch0)).1)
+                        (congrArg Prod.fst
+                          (AspisV8R19.OracleProgramOps.eval_bind
+                            (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                              (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                              (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                            (fun resumed =>
+                              match resumed with
+                              | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                              | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state)
+                            H))))
+                    (congrArg Prod.snd
+                      (AspisV8R19.OracleProgramOps.eval_bind
+                        (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                          (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                          (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                        (fun resumed =>
+                          match resumed with
+                          | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                          | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state)
+                        H))))
+                (Eq.trans
+                  (Eq.trans
+                    (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                      (Eq.trans
+                        (ite_congr (Eq.refl (AspisR1.OraclePortAdmission.Guard tr))
+                          (fun a =>
+                            Eq.trans
+                              (congrArg
+                                (fun x =>
+                                  x
+                                    (fun p q =>
+                                      AspisV8R19.OracleProgramOps.bind
+                                        (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch0) fun ok =>
+                                        if ok = true then AspisR1.OraclePortCkptAbi5Decision.strictAfter stored p q tr
+                                        else AspisV8R19.MemoizedProgramLaw.Program.done false)
+                                    fun x x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                                (congr
+                                  (congrArg
+                                    (AspisR1.OraclePortCkptAbi5Decision.strictDecision.match_1 fun x x_1 =>
+                                      AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                        AspisV8R19.SourceDuplexStep.State Bool)
+                                    parser)
+                                  query))
+                              (congrArg
+                                (AspisV8R19.OracleProgramOps.bind
+                                  (AspisR1.OraclePortFrozen2.batch parsed q AspisR1.OraclePortFrozen2.batch0))
+                                (funext fun ok =>
+                                  ite_congr (Eq.refl (ok = true))
+                                    (fun a =>
+                                      congrArg
+                                        (fun x =>
+                                          x
+                                            (fun i v =>
+                                              AspisV8R19.OracleProgramOps.bind
+                                                (AspisR1.OraclePortCkptAbi5Stage.strictStage stored
+                                                  tr.statement.pubBytes
+                                                  (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                                                  (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                                                fun resumed =>
+                                                match resumed with
+                                                | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                                                | some a => AspisR1.OraclePortFrozen2.stage2 parsed q tr i a)
+                                            fun x x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                                        (congr
+                                          (congrArg
+                                            (AspisR1.OraclePortCkptAbi5Decision.strictAfter.match_2 fun x x_1 =>
+                                              AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                                AspisV8R19.SourceDuplexStep.State Bool)
+                                            input)
+                                          view))
+                                    fun a => Eq.refl (AspisV8R19.MemoizedProgramLaw.Program.done false))))
+                          fun a => Eq.refl (AspisV8R19.MemoizedProgramLaw.Program.done false))
+                        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos guard) x_0 x_1 x_2 x_3)
+                          (Classical.propDecidable (AspisR1.OraclePortAdmission.Guard tr))
+                          (AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                            AspisV8R19.SourceDuplexStep.State Bool)
+                          (AspisV8R19.OracleProgramOps.bind
+                            (AspisR1.OraclePortFrozen2.batch parsed q AspisR1.OraclePortFrozen2.batch0) fun ok =>
+                            if ok = true then
+                              AspisV8R19.OracleProgramOps.bind
+                                (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                                  (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                                  (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                                fun resumed =>
+                                match resumed with
+                                | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                                | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state
+                            else AspisV8R19.MemoizedProgramLaw.Program.done false)
+                          (AspisV8R19.MemoizedProgramLaw.Program.done false))))
+                    (AspisV8R19.OracleProgramOps.eval_bind
+                      (AspisR1.OraclePortFrozen2.batch parsed q AspisR1.OraclePortFrozen2.batch0)
+                      (fun ok =>
+                        if ok = true then
+                          AspisV8R19.OracleProgramOps.bind
+                            (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                              (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                              (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                            fun resumed =>
+                            match resumed with
+                            | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                            | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state
+                        else AspisV8R19.MemoizedProgramLaw.Program.done false)
+                      H))
+                  (congr
+                    (congrArg Prod.mk
+                      (congrArg
+                        (HAppend.hAppend
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                              (AspisR1.OraclePortFrozen2.batch parsed q AspisR1.OraclePortFrozen2.batch0)).1)
+                        (congrArg Prod.fst
+                          (Eq.trans
+                            (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                              (Eq.trans
+                                (ite_congr (Eq.trans (congrFun' (congrArg Eq batchOk) true) (eq_self true))
+                                  (fun a =>
+                                    Eq.refl
+                                      (AspisV8R19.OracleProgramOps.bind
+                                        (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                                          (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                                          (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                                        fun resumed =>
+                                        match resumed with
+                                        | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                                        | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state))
+                                  fun a => Eq.refl (AspisV8R19.MemoizedProgramLaw.Program.done false))
+                                (if_true
+                                  (AspisV8R19.OracleProgramOps.bind
+                                    (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                                      (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                                      (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                                    fun resumed =>
+                                    match resumed with
+                                    | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                                    | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state)
+                                  (AspisV8R19.MemoizedProgramLaw.Program.done false))))
+                            (AspisV8R19.OracleProgramOps.eval_bind
+                              (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                                (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                                (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                              (fun resumed =>
+                                match resumed with
+                                | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                                | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state)
+                              H)))))
+                    (congrArg Prod.snd
+                      (Eq.trans
+                        (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                          (Eq.trans
+                            (ite_congr (Eq.trans (congrFun' (congrArg Eq batchOk) true) (eq_self true))
+                              (fun a =>
+                                Eq.refl
+                                  (AspisV8R19.OracleProgramOps.bind
+                                    (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                                      (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                                      (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                                    fun resumed =>
+                                    match resumed with
+                                    | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                                    | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state))
+                              fun a => Eq.refl (AspisV8R19.MemoizedProgramLaw.Program.done false))
+                            (if_true
+                              (AspisV8R19.OracleProgramOps.bind
+                                (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                                  (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                                  (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                                fun resumed =>
+                                match resumed with
+                                | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                                | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state)
+                              (AspisV8R19.MemoizedProgramLaw.Program.done false))))
+                        (AspisV8R19.OracleProgramOps.eval_bind
+                          (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                            (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                            (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                          (fun resumed =>
+                            match resumed with
+                            | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                            | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state)
+                          H)))))))
+            (Eq.refl
+              ((AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.OraclePortFrozen2.batch parsed q AspisR1.OraclePortFrozen2.batch0)).1 ++
+                  ((AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                          (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                          (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)).1 ++
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (match
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                              (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                                (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                                (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)).2 with
+                        | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                        | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state)).1),
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                    (match
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.OraclePortCkptAbi5Stage.strictStage stored tr.statement.pubBytes
+                            (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data
+                            (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)).2 with
+                    | none => AspisV8R19.MemoizedProgramLaw.Program.done false
+                    | some state => AspisR1.OraclePortFrozen2.stage2 parsed q tr i state)).2))))))
+theorem AspisR1.CheckpointBytes5Join.success_conditioned_checkpoint_stage_join : ∀ {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (reserved : Bool)
+  (wp : AspisR1.CheckpointBytes5Writer.Prepared) (wa : AspisR1.CheckpointBytes5Writer.Accumulator)
+  (proof public1 : Aeneas.Std.Slice Aeneas.Std.U8) (stored : AspisV8R19.DuplexFrames.Bytes)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs)
+  (v : AspisR1.LiteralOpeningView.View),
+  AspisR1.OraclePortStoredDecisionDraftC4.input parsed q tr = some i →
+    AspisR1.OraclePortSelectedDraft.queries tr = some q →
+      AspisR1.CheckpointBytes5Join.S2S10CallerBinding D hash H proof public1 stored tr.statement.pubBytes →
+        AspisR1.CheckpointBytes5Join.S1S7S8StateProvenance wp wa
+            (AspisR1.OraclePortCheckpointResumeC5.prepared (AspisR1.OraclePortAcceptedContextC6.context parsed i v)
+              i.data (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+            (AspisR1.OraclePortCheckpointStateC3.write
+                (AspisR1.OraclePortCheckpointResumeC5.model i.data (AspisR1.SelectedChallengeMap.rhoOf i.rho)
+                  q)).accumulator →
+          ∀ (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+            (after : AspisR1.CheckpointBytes5Effect.Log),
+            AspisR1.CheckpointBytes5Effect.run D hash (AspisR1.CheckpointBytes5Join.stage reserved wp wa proof public1)
+                  [] =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a), after) →
+              (AspisR1.CheckpointBytes5Inputs.observe after,
+                  some (AspisR1.CheckpointBytes5Join.resumedSource i.data p a)) =
+                AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.checkpoint stored parsed q tr i v) :=
+fun {Hash} D hash H reserved wp wa proof public1 stored parsed q tr i v input query caller provenance p a after
+    success =>
+  have fields := (AspisR1.OraclePortStoredDecisionDraftC4.input_fields parsed q tr i input).left;
+  have decoded :=
+    Eq.mp
+      (congrFun'
+        (congrArg Eq
+          (congrFun' (congrArg bind fields.right.left) fun __x =>
+            match __x.2.1 with
+            | AspisR1.TranscriptView.Value.queries (Except.ok bs) => AspisR1.LiteralQueryRead.decode bs
+            | x => none))
+        (some q))
+      query;
+  have unique := (AspisR1.LiteralQueryRead.decode_success i.queryBytes q decoded).right;
+  Eq.trans
+    (AspisR1.CheckpointBytes5Join.successful_stage D hash H reserved wp wa proof public1 stored tr.statement.pubBytes
+      (AspisR1.OraclePortAcceptedContextC6.context parsed i v) i.data (AspisR1.SelectedChallengeMap.rhoOf i.rho) q
+      caller provenance unique p a after success)
+    (AspisR1.OraclePortCkptAbi5Stage.reached_stage H stored parsed q tr i v input query)
+theorem AspisR1.MultiproofConeFrozen2Stage.both_batches : ∀ {X : Type}
+  (D : MultiproofConeRef.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)) →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+      (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8),
+      (∀ (b k : ℕ),
+          b < 2 →
+            k < 3 →
+              AspisR1.MultiproofConeCanonical.bytesOf ↑(nodes b k) =
+                AspisR1.OraclePortCompactDraft.slice p.wire (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+                  (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k))) →
+        (∀ (s : MultiproofConeRef.reference.Scratch),
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeFrozen2Stage.sourceBatch p q nodes 0 s)).2 =
+                true →
+              AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeFrozen2Stage.sourceBatch p q nodes 0 s) =
+                AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch0)) ∧
+          ∀ (s : MultiproofConeRef.reference.Scratch),
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeFrozen2Stage.sourceBatch p q nodes 1 s)).2 =
+                true →
+              AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeFrozen2Stage.sourceBatch p q nodes 1 s) =
+                AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch1) :=
+fun {X} D hash H law p q nodes views =>
+  ⟨fun s accepted =>
+    AspisR1.MultiproofConeFrozen2Stage.accepted_batch D hash H law p q nodes 0 s
+      (fun k hk => views 0 k (of_decide_eq_true (id (Eq.refl true))) hk) accepted,
+    fun s accepted =>
+    AspisR1.MultiproofConeFrozen2Stage.accepted_batch D hash H law p q nodes 1 s
+      (fun k hk => views 1 k (of_decide_eq_true (id (Eq.refl true))) hk) accepted⟩
