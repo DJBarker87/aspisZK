@@ -155,3 +155,25 @@ IU-528 found the prepared-input tuple in `AspisR1.PoseidonSamePointArray`.
 Adding `uncurry_apply_pair` to its existing source-success simplification is
 the only change; focused IU-529 passes in 2.51 s. The arithmetic model,
 quantifiers and canonicality hypotheses are unchanged.
+
+## Serializer cache-provider correction
+
+The first combined import (IU-535) found `instDiscriminantErrorIsize` in the
+host's cached `AspisR1PublicSerializer.Types`, conflicting with unchanged S3.
+The existing canonical `lean/bridge-verify-prefix-fe80-20261017/` Types source
+already names all three discriminant instances explicitly. It has no
+`@[discriminant ...]` left to migrate; the problem was reuse of an older
+anonymous-instance object. No historical source file is edited for this fix.
+
+Raw provider-header snapshot IU-536 identifies a 198-module retained consumer
+closure. `repin-serializer-provider.py` pins the canonical source, source
+selection for its consumers, and this exact closure in `provider-repin.json`.
+Types and its generated Funs pass focused IU-537/538. Existing shared objects
+remain read-only; old private outputs are snapshotted on the host. The runner
+records a source-hash-bound rebuild epoch for this closure, forcing its
+consumers to replay even if an immediate object's bytes happen to remain
+unchanged. Previously accepted targets outside that closure are reused.
+
+This is a changed provider/dependency-input replay following a failed union,
+not an unchanged full regression. The final union and raw inventory must
+succeed against these corrected provider pins before this gate is accepted.

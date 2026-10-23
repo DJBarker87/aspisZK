@@ -90,6 +90,11 @@ def main():
         rawgraph.update(json.loads((stage / 'raw-host-graph.json').read_text()))
     migrated_paths = {r['path'] for r in migration['files']}
     changed = {m for m,p in selected.items() if str(p.relative_to(ROOT)) in migrated_paths}
+    # This canonical source already names its instances, but the retained host
+    # cache can still contain its older anonymous-instance provider.
+    selected['AspisR1PublicSerializer.Types'] = BASE / 'lean/bridge-verify-prefix-fe80-20261017/AspisR1PublicSerializer/Types.lean'
+    selected['AspisR1PublicSerializer.Funs'] = BASE / 'evidence/lean-public-serializer-source-20261015/AspisR1PublicSerializer/Funs.lean'
+    changed.add('AspisR1PublicSerializer.Types')
     # Reverse closure restricted to the selected retained environment. Archived
     # alternate providers are pinned by migration.json, not imported simultaneously.
     graph = {m: imports(p) for m, p in selected.items() if p.is_file()}
