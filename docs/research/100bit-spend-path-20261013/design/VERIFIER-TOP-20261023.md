@@ -299,3 +299,64 @@ Rust `Err` remains a returned value, so this mechanism's local law covers it
 as well. It must not be advertised as the weakest accepted-inner-run cone
 interface. The theorem checks in lean-052: exit0, 2.152566s, 4332744KiB RSS,
 swap0; standard axioms only, exact target/dependencies/revision in its receipt.
+
+## Continuation stage 6: named actual call-site ports
+
+`VTop_OracleStages.ConeJoins` names the thirteen external *body* operations
+reached by the extracted stage glue. This is not the thirteen-owner enum of
+JOIN-SPLIT: S3/S4/S5/S9 are nested inside these bodies. The separate `library`
+field covers the twelve remaining generated operations/constants. `all_calls`
+proves this inventory exhaustive by cases on the actual dependent `Call`.
+`accepted_tx1`, `accepted_tx2_common`, and `accepted_tx2_authenticated` apply
+ordered oracle substitution directly to each extracted typed stage tree with
+observer None. They compare the two supplied interpretations; neither is yet
+identified with the source ROM execution or the corresponding frozen2 model
+stage. There is no assumed caller/model-order identity in these theorems.
+
+Focused validation lean-053: exit0, 3.361611s, 4340500KiB RSS, swap0;
+all four theorem axiom reports are standard. The `OperationJoin` law is still
+outer-success conditioned, including inner errors as values, as explained
+above. None of these new ports is claimed discharged merely because its
+owner has a local helper theorem. The following table is the concrete
+**remaining delivery inventory**, not the premise list of a proved deployed
+soundness theorem. Owner means coordinating owner in the lead/session-A
+split; it does not transfer another worker's worktree or certificate.
+
+| Named body port / actual call site | Owner | Existing result and exact gap to a frozen2 observation |
+|---|---|---|
+| `shape` / op3, TX1 and authenticated TX2 | lead | `S2W_ChildJoins.FirstEntryVerifierConeJoin`, `OraclePortJoinSplitS2.header_total`: physical size/header facts; full `parseReached`/transcript correspondence still needed. |
+| `scan` / op4, TX1 | lead | `S8JoinFrozenScan.parsed_y1`, consumed by `S2LeadInterface.y1_join`: selected y1 canonical scan; full source `canonical_scan` accepted interpretation still needed. |
+| `prepare` / op7, TX1, returned gamma scratch included | session A | `AspisR1ClaimPreparedBridge.InstalledMeaning.prepared_installed_meaning`: local successful preparation meaning; bind the actual returned Prepared, scratch, full transcript driver reads, parser and queries. S3/S4/S5/S9 are dependencies here, not separately ordered top-stage calls. |
+| `initial` / op12, TX1 | lead | `S7JoinQueryRows.initial_progress`: row-state initialization only; identify complete initial accumulator and state conversion. |
+| `batch` / op5, batch0 TX1 and batch1 TX2 | lead | `S2LeadInterface.multiproof_join`, `MultiproofConeP6Frozen2Stage.both_batches`: ordered frozen2 batch join at supplied physical callbacks/node views; bind actual `candidate::batch_merkle` operation and returned/error semantics. |
+| `geometry` / op11, both query blocks | lead | `S7JoinQueryRows.query_rows_exact` consumes query/cadence bounds; actual `QueryGeometry::for_range` result and both ranges still need interpretation. |
+| `pending` / op10 of **stage** dictionary, both blocks | lead | `S7JoinQueryRows.initial_progress`, `S7Kani3CallerTrace.initialRaw`: row representation; bind actual `BatchedWeights::new` and complete returned state. This is distinct from adapter op10. |
+| `query` / op6, ten and twelve steps | lead | `S7JoinQueryRows.query_rows_exact` / `initial_query_rows`: basis/64-row/terms part only; full source loop, opening/fold, rhs/power/next and state to `advance` remain. |
+| `flush` / op9, both blocks | lead | `S8OwnedP6Finish` and `S7Kani3CallerTrace.reached_invariant`, consumed by `S2LeadInterface.compose`: local raw/caller algebra; identify actual finish and Vec back-write state. |
+| `writer` / op8, after ten steps | lead | `VTop_Checkpoint.writer_join` and `CheckpointBytes5Join.success_conditioned_checkpoint_stage_join`: header and full checkpoint composition respectively, conditional on source transport and reached state provenance. Bind actual op8 ordered reads/bytes and reached mathematical state; header alone is insufficient. |
+| `reader` / op18, TX2 resume | lead | `VTop_Checkpoint.reader_join`, `ChildJoin_Checkpoint.reader_header`, `CheckpointBytes5Join.successful_fields_and_reads`: conditional source/physical-byte endpoints; bind actual op18 full returned Prepared/Accumulator and retained same checkpoint. |
+| `powers` / op17, TX2 | session A | `AspisR1LoopPowers.early_powers_total_exact`: canonical-input power result; actual resumed gamma, full array and no-read interpretation remain. |
+| `finish` / op19, TX2 | lead | `S8Kani2CallerJoin.CallerInvariant`, `OraclePortFrozen2.finish_value`: source invariant/model finish separately; actual `finish_relation` on returned twelve-step state must bridge them, including S3/S4/S5/S9 dependencies. |
+| `library` / ops0,1,2,13–16,20–23,unwrap32 | lead | Existing TrustedStd/extraction carries ordinary library semantics but does not instantiate this new oracle law. Pin constants, strict decode, release observer None and exact no-read implementations; do not silently add it as runtime trust. |
+| Nested S3/S4/S5/S9 backend refinements | session A | JOIN-SPLIT table's grouped-pair/dot/strict-codec/reducer/factored identities; complete parent-body instances, reached operand bounds and source pins still required. |
+| S6 first-decoded/semantic/public input transport | session A | `AspisR1PublicPreparation.RepinS6First.{first_eq_historical,first_success,reuse_decoded}`; actual downstream cone instances and source/byte carrier binding remain. |
+| S2 adapter/native input and frame facts | lead | `S2W_D189Consolidation.accepted_run`, `ChildJoin_Accepted.accepted_run`, `VTop_Accepted.accepted_run`: complete Required14 under their explicit runtime/trust/history/child premises, not a headline oracle-program binding. |
+| Cross-TX checkpoint and Pool/ASQ8 retention | lead | D189's `CheckpointVersionBinding`/`P2Prime` remain explicit. No hash-injectivity or independently selected byte snapshot is introduced. Pool caller remains outside these stage bodies. |
+| S10 source/inventory/artifact correspondence | session A | `VTop_Order` fixes stage call order; source-span audit fixes source identity. Neither proves lowering to the pinned ELF; current declaration coverage and artifact/runtime port remain. |
+| Actual headline `rust` binding and substituted model order | lead | Newly explicit typed interpreter and stage substitution above. Still construct the source verifier/decoder/transcript driver on these carriers, and prove its substituted interpretation is `verifier D dV_frozen2`; no existing theorem closes these identities. |
+| Both annotation passes | lead | Existing `acceptedRunJoin_of_stable` is sufficient only with an independently proved source enrichment law. The new `VTop_Annotation.two_pass` uses just backward acceptance plus raw join; that source backward law is still uninstantiated. |
+| Deployed runtime carrier / query budget | lead | `StoredCarrierBinding D rust P runtime` and `hqueries` remain independent premises of `OraclePortHeadlineFrozen2PerAttempt.final_soundness`; D189 alone does not discharge them. |
+
+The checkpoint combined model observation advances the twelve pure arithmetic
+steps before returning to batch1; extracted TX2 executes batch1 before those
+steps. A completed model-order proof must justify this transport from the
+query/flush no-read laws and returned-state equations. Neither operation-ID
+order nor an equality of checkpoint headers establishes it.
+
+No `AcceptedRunJoinFromCones` or deployed endpoint with the requested exact
+premises is claimed. Adding `h_source`, `h_model`, `stable`, an arbitrary
+whole-run certificate, or these claims inside a record would not complete
+that request. The next missing declaration is the concrete interpretation
+of the native two-stage execution as the headline `Verifier`, followed by
+its model-order proof with these per-call stage observations. This is still
+lead-owned proof work, not an additional cryptographic assumption.
