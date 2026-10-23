@@ -1,0 +1,46 @@
+Port4B_NativeReject.lean:56:2: error: 'change' tactic failed, pattern
+  (do
+      let o ← leaves.op11 Port3_NativeBatchBody.multiproof.Arity.Two prefixIdx
+      let r ← Port3_BatchStd.okOr o verifier.Error.Merkle
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      ?m.157 o PUnit.unit r PUnit.unit cf PUnit.unit) =
+    ?m.130
+is not definitionally equal to target
+  (do
+      let o ← (Port3_BatchStd.install leaves).op11 Port3_NativeBatchBody.multiproof.Arity.Two prefixIdx
+      let r ← (Port3_BatchStd.install leaves).op1 o verifier.Error.Merkle
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let nodes ← (Port3_BatchStd.install leaves).op3 proof s
+          let a ← (Port3_BatchStd.install leaves).op12
+          let i ← a.index_usize s
+          if val1 > i then ok (done (idx, val, none))
+            else do
+              let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes { start := i1 }
+              let ce ← core.slice.Slice.chunks_exact s2 8#usize
+              let (b, _) ←
+                (Port3_BatchStd.install leaves).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                    (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                      (Port3_BatchStd.install leaves) D)
+                    ce ()
+              if b = true then ok (done (idx, val, none))
+                else do
+                  let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes { «end» := i2 }
+                  let (b1, idx1, val2) ←
+                    (Port3_BatchStd.install leaves).op10 D hash Port3_NativeBatchBody.multiproof.Arity.Two root idx val
+                        d s3
+                  if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                    else ok (done (idx1, val2, none))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let _ ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+          ok (done (idx, val, none))) =
+    ok (done (idx, val, none))
+'AspisR1.Port4B_NativeReject.missing_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_NativeReject.nonzero_padding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

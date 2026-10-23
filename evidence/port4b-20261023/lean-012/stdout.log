@@ -1,0 +1,60 @@
+Port4B_NativeReject.lean:52:35: error: unsolved goals
+leaves : Port3_NativeBatchBody.Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+proof : Slice U8
+root : Std.Array U8 32#usize
+tree lo n s d : Usize
+keys : Std.Array U64 16#usize
+idx : Indices
+val : Values
+prefixIdx : Slice U32
+count cap scaled : Usize
+nodes padding : Slice U8
+read :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+      { «end» := d } =
+    ok prefixIdx
+counted : leaves.op11 Port3_NativeBatchBody.multiproof.Arity.Two prefixIdx = ok (some count)
+slotRead : leaves.op3 proof s = ok nodes
+capRead :
+  (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize] ⋯).index_usize s = ok cap
+bound : ¬count > cap
+multiply : lift (Usize.wrapping_mul 32#usize count) = ok scaled
+suffixRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes { start := scaled } =
+    ok padding
+ce after : core.slice.iter.ChunksExact U8
+chunks : core.slice.Slice.chunks_exact padding 8#usize = ok ce
+scan :
+  Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorChunksExact U8)
+      (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+        { op0 := fun {Self F Clause0_Item} => Port3_BatchStd.anyDefault, op1 := fun {T E} => Port3_BatchStd.okOr,
+          op2 := leaves.op2, op3 := leaves.op3, op4 := leaves.op4, op5 := leaves.op5,
+          op6 := @Port3_NativeBatchBody.Ops.op6 leaves, op7 := Port3_BatchStd.sameLeaf, op8 := Port3_BatchStd.sameIndex,
+          op9 := Array.index_usize, op10 := @Port3_NativeBatchBody.Ops.op10 leaves, op11 := leaves.op11,
+          op12 :=
+            ok
+              (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                Port3_BatchStd.install._proof_6),
+          op13 := ok 10#usize, unwrap8 := Port3_BatchStd.unwrap8 }
+        D)
+      ce () =
+    ok (true, after)
+⊢ (let (b, _) := (true, after)
+    if b = true then ok (done (idx, val, none))
+    else do
+      let s3 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes { «end» := scaled }
+      let (b1, idx1, val2) ← leaves.op10 D hash Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+      if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ()))) else ok (done (idx1, val2, none))) =
+    ok (done (idx, val, none))
+Port4B_NativeReject.lean:58:86: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵s̵l̵o̵t̵R̵e̵a̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵a̵p̵R̵e̵a̵d̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵o̵u̵n̵d̵,̵m̵u̵l̵t̵i̵p̵l̵y̵,̵s̵u̵f̵f̵i̵x̵R̵e̵a̵d̵,̵c̵h̵u̵n̵k̵s̵,̵s̵c̵a̵n̵,̵i̵f̵_̵t̵r̵u̵e̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲s̲l̲o̲t̲R̲e̲a̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲a̲p̲R̲e̲a̲d̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲o̲u̲n̲d̲,̲ ̲m̲u̲l̲t̲i̲p̲l̲y̲,̲ ̲s̲u̲f̲f̲i̲x̲R̲e̲a̲d̲,̲ ̲c̲h̲u̲n̲k̲s̲,̲ ̲s̲c̲a̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4B_NativeReject.missing_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_NativeReject.nonzero_padding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

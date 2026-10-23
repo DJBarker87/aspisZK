@@ -62,3 +62,30 @@ views version before the helper's explicit axioms audit;005 is an excluded
 reserved-identifier parser error. Full receipts retain every failure.
 No theorem identifies Prepared roots/queries with parsed/model roots/queries;
 that remains the exact S1/caller gate, as do native leaf/slot/verify effects.
+
+Stage 4: `Port4B_NativeReject` now checks the ACTUAL installed loop body.
+`missing_count` proves that a physical prefix read followed by node_count=None
+is discarded as a missing pending return. `nonzero_padding` proves the same
+for the actual nonzero-padding branch, from its precise local prefix/count/
+slot/capacity/multiplication/suffix/chunks/any reads. `exit_loop` proves a done
+branch is the whole emitted loop return, with no suffix calls. Together with
+`Port4B_Rejection.padding_result_differs` and the literal Rust branch audit,
+this identifies the exact erroneous error-lowering branch, rather than merely
+comparing unrelated simplified models. It does not assert that the local
+premises were derived from a complete admitted TX1/TX2 execution.
+
+Accepted013: exit0,wall3.467134033s,peak4416680KiB,swap0; all3 audits standard
+axioms.008 had a redundant tactic after completion;010/011/012 are excluded
+parser/change/reduction failures, fixed by restricting unfolding to the actual
+local branch and explicit reads. None timed out or hit a memory ceiling.
+No failed recovery axiom is imported into a final module.
+
+The requested exact FULL error-preserving native/candidate/P6 identification
+is not available: the installed emitted branch differs from Rust and
+sourceBatch's Bool carrier itself erases Parse/Merkle/failure distinctions.
+Corrected forms: (a) repair/re-extract the explicit error returns and use an
+error-preserving effect carrier for a total port; or (b) state accepted-only
+native→sourceBatch log/true transport, with the named P6Boundary and exact
+physical Prepared/query/root bindings. (b) remains UNPROVED here; rejected
+query prefixes still require explicit treatment in the security experiment.
+The checked independent batch cut and caller-node work above is retained.
