@@ -228,3 +228,22 @@ Accepted066/068/071/075/077/078: exits0,swap0,all15 audits standard axioms;
 exact wall/RSS/revision/dependency fields in receipts.065/067/069–070/
 072–074/076 are excluded local parser/elaboration errors, no timeout or
 memory kill. Actual budget76/100 Lean,0/60 Kani. No shipped edits/ELF trigger.
+
+Stage 11: TailRun.accepted composes ALL actual terminal reads, accepted-only
+padding, exact count/slot/prefix carriers and P6 verifier return into the
+complete P6 tail on the SAME scratch. TreeJoin.accepted composes the native
+leaf traversal and terminal tail, retaining ordered leaf requests followed
+by every verifier request and the same output arrays. No whole-tree success/
+observation agreement is assumed. PackedKeys is a VISIBLE remaining LOCAL
+raw-builder gate; root/wire provenance is also explicit. This conditional
+tree result does NOT discharge the concrete batch row.
+Prepared.roots/query_value project exact physical root arrays and canonical
+query words from existing SAME-Prepared BodyMatches, with no modulo weakening
+of raw queries. Existence of that provenance from the accepted TX1/TX2 cuts
+is still an upstream binding obligation. Bounds checks actual split and
+slot arithmetic symbolically.
+Accepted080/083/085/086: exits0,swap0,all7 audits standard; exact command,
+revision, wall/RSS/source/dependency fields in receipts.079/081–082/084
+are excluded local parser/elaboration errors. No resource failures, no cap
+changes. Actual budget84/100 Lean,0/60 Kani;033/036 never launched Lean.
+No shipped file, key, ELF, other worktree or sibling cone was changed.
