@@ -1,0 +1,62 @@
+{
+  "attempt": "kani-002",
+  "kind": "kani",
+  "source_revision": "0ac6c097d0d18296c101a3cdb0f9048417da53ce",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "kani-native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "S2C_native::vec_drop_checkpoint",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "kani-native/src/lib.rs",
+    "kani-native/src/statement.rs",
+    "kani-native/Cargo.toml"
+  ],
+  "timeout": 180,
+  "deps_fingerprint": {
+    "native_source_manifest": "06a09167609ccf6109c6c1bb69c3fb949b183909917cf29c3a408fba86abf4a5",
+    "expected_time": "optimized compilation then one named native operation SAT check",
+    "tools": "Kani 0.67.0 / CBMC 6.8.0"
+  },
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  },
+  "exit_status": 1,
+  "wall_seconds": 3.9390522050016443,
+  "peak_rss_kib": "533172",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r299e2ec18f93476589368e45feec55f8.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "604164096",
+  "source_hashes": {
+    "kani-native/src/lib.rs": "b331ae5f84578e70e3af37c366928c357cf8a08006e5fd1c9e0d3a570750805b",
+    "kani-native/src/statement.rs": "777879c2aacdc660ebb8425a80722ab2ba18233ca2af339f1f310bdc4b42cffb",
+    "kani-native/Cargo.toml": "4e17790b73e1fe425161210cbbca75f5c1ff93ea6da15d25c90093a9f694638f"
+  },
+  "print_axioms": "N/A: Kani"
+}

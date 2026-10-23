@@ -1,0 +1,65 @@
+info: s2c: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+S2C_CopyRegions.lean:54:4: error: unsolved goals
+case pos
+F : Type
+s : Heap F
+g : Guard
+source : Nat → UInt8
+n : Nat
+ih : ((copyPrefix s g source n).payload g.cell).contents n = if n < n then source n else (s.payload g.cell).contents n
+⊢ (if True then
+          { descriptor := ((copyPrefix s g source n).payload g.cell).descriptor,
+            contents := put ((copyPrefix s g source n).payload g.cell).contents n (source n) }
+        else (copyPrefix s g source n).payload g.cell).contents
+      n =
+    if True then source n else (s.payload g.cell).contents n
+S2C_CopyRegions.lean:55:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if i = n then ?m.44 else ?m.45
+in the target expression
+  (if True then
+          { descriptor := ((copyPrefix s g source n).payload g.cell).descriptor,
+            contents := put ((copyPrefix s g source n).payload g.cell).contents n (source n) }
+        else (copyPrefix s g source n).payload g.cell).contents
+      i =
+    if i < n + 1 then source i else (s.payload g.cell).contents i
+
+case neg
+F : Type
+s : Heap F
+g : Guard
+source : Nat → UInt8
+i n : Nat
+ih : ((copyPrefix s g source n).payload g.cell).contents i = if i < n then source i else (s.payload g.cell).contents i
+eq : ¬i = n
+⊢ (if True then
+          { descriptor := ((copyPrefix s g source n).payload g.cell).descriptor,
+            contents := put ((copyPrefix s g source n).payload g.cell).contents n (source n) }
+        else (copyPrefix s g source n).payload g.cell).contents
+      i =
+    if i < n + 1 then source i else (s.payload g.cell).contents i
+S2C_CopyRegions.lean:52:38: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵p̵y̵P̵r̵e̵f̵i̵x̵,̵w̵r̵i̵t̵e̵A̵t̵,̵p̵u̵t̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵[̲c̲o̲p̲y̲P̲r̲e̲f̲i̲x̲,̲ ̲w̲r̲i̲t̲e̲A̲t̲,̲ ̲p̲u̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2C_CopyRegions.lean:54:26: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵ ̵Nat.lt_succ_self]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2C_CopyRegions.lean:64:33: error: unexpected token 'public'; expected ')'
+S2C_CopyRegions.lean:64:40: error: unexpected token ':'; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'section', 'structure', 'syntax' or 'theorem'
+S2C_CopyRegions.lean:65:61: error: unexpected token '≠'; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'section', 'structure', 'syntax' or 'theorem'
+S2C_CopyRegions.lean:68:47: error: unexpected token '='; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'section', 'structure', 'syntax' or 'theorem'
+S2C_CopyRegions.lean:68:66: error: unexpected token '∧'; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'section', 'structure', 'syntax' or 'theorem'
+S2C_CopyRegions.lean:72:42: error: unexpected identifier; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'section', 'structure', 'syntax' or 'theorem'
+'AspisR1.S2C.copy_structural_frame' does not depend on any axioms
+'AspisR1.S2C.copy_descriptor' depends on axioms: [propext]
+'AspisR1.S2C.copy_other_cell' does not depend on any axioms
+'AspisR1.S2C.copy_exact_byte' depends on axioms: [propext, sorryAx]
+S2C_CopyRegions.lean:79:14: error(lean.unknownIdentifier): Unknown constant `checkpoint_copy_regions`

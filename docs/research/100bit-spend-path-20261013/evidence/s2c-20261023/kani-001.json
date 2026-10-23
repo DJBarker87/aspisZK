@@ -1,0 +1,44 @@
+{
+  "attempt": "kani-001",
+  "kind": "kani",
+  "source_revision": "0ac6c097d0d18296c101a3cdb0f9048417da53ce",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "kani-native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "S2C_native::vec_drop_checkpoint",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "kani-native/src/lib.rs",
+    "kani-native/src/statement.rs",
+    "kani-native/Cargo.toml"
+  ],
+  "timeout": 180,
+  "deps_fingerprint": {
+    "native_source_manifest": "539f4a8cbb9c2c042d99de592f93fcc5047052bb47a7c5fe355cc1a52547a985",
+    "expected_time": "optimized compilation then one named native operation SAT check",
+    "tools": "Kani 0.67.0 / CBMC 6.8.0"
+  },
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  }
+}

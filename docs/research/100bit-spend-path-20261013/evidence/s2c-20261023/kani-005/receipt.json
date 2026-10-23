@@ -1,0 +1,66 @@
+{
+  "attempt": "kani-005",
+  "kind": "kani",
+  "source_revision": "0ac6c097d0d18296c101a3cdb0f9048417da53ce",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "kani-native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "S2C_native::vec_drop_public",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "kani-native/src/lib.rs",
+    "kani-native/src/statement.rs",
+    "kani-native/src/S2C_trusted.rs",
+    "kani-native/Cargo.toml"
+  ],
+  "timeout": 180,
+  "deps_fingerprint": {
+    "native_source_manifest": "23ea6f7f9007615597d4172f4021fa467dd8d79af682c46b44b97a046ef734a0",
+    "expected_time": "optimized compilation then one named native operation SAT check",
+    "tools": "Kani 0.67.0 / CBMC 6.8.0"
+  },
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  },
+  "exit_status": 0,
+  "wall_seconds": 0.5688311249978142,
+  "peak_rss_kib": "179728",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9af5f8fc42bc44fdb009235b3ba9ab2c.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "87461888",
+  "source_hashes": {
+    "kani-native/src/lib.rs": "560b50d2d72b481d6eba64f862447d9339cf803f392a57110cc255bfbbc0d802",
+    "kani-native/src/statement.rs": "777879c2aacdc660ebb8425a80722ab2ba18233ca2af339f1f310bdc4b42cffb",
+    "kani-native/src/S2C_trusted.rs": "e25a5f8ab1b3ebb984fe589cb828a7bf416299a28e9284ee19c53535339c59e4",
+    "kani-native/Cargo.toml": "4e17790b73e1fe425161210cbbca75f5c1ff93ea6da15d25c90093a9f694638f"
+  },
+  "print_axioms": "N/A: Kani"
+}

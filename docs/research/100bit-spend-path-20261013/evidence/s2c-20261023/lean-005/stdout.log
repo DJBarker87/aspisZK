@@ -1,0 +1,49 @@
+S2C_Cleanup.lean:31:5: error: unexpected token 'meta'; expected '_' or identifier
+S2C_Cleanup.lean:31:9: error: unexpected token ':'; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'section', 'structure' or 'theorem'
+S2C_Cleanup.lean:32:24: error: unexpected token '('; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'section', 'structure' or 'theorem'
+S2C_Cleanup.lean:32:39: error: unexpected identifier; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'section', 'structure' or 'theorem'
+S2C_Cleanup.lean:33:24: error: unexpected token '('; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'section', 'structure' or 'theorem'
+S2C_Cleanup.lean:33:39: error: unexpected identifier; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'section', 'structure' or 'theorem'
+S2C_Cleanup.lean:34:8: error: unexpected token '('; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'section', 'structure' or 'theorem'
+S2C_Cleanup.lean:34:69: error: unexpected identifier; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'section', 'structure' or 'theorem'
+S2C_Cleanup.lean:52:2: error: unsolved goals
+case pos
+F : Type
+original s : Heap F
+vec box : F → F
+proof pubGuard checkpoint : Guard
+pk : proof.kind = Kind.shared
+uk : pubGuard.kind = Kind.shared
+ck : checkpoint.kind = Kind.exclusive
+pc : proof.cell ≠ checkpoint.cell
+uc : pubGuard.cell ≠ checkpoint.cell
+initialCP : original.counter checkpoint.cell = 0
+counts :
+  ∀ (c : Nat),
+    s.counter c =
+      if c = checkpoint.cell then -1
+      else (original.counter c + if c = pubGuard.cell then 1 else 0) + if c = proof.cell then 1 else 0
+⊢ (if True then
+      if Kind.exclusive = Kind.shared then
+        (if checkpoint.cell = pubGuard.cell then
+            (if pubGuard.cell = proof.cell then s.counter proof.cell - 1 else s.counter pubGuard.cell) - 1
+          else if checkpoint.cell = proof.cell then s.counter proof.cell - 1 else s.counter checkpoint.cell) -
+          1
+      else 0
+    else
+      if checkpoint.cell = pubGuard.cell then
+        (if pubGuard.cell = proof.cell then s.counter proof.cell - 1 else s.counter pubGuard.cell) - 1
+      else if checkpoint.cell = proof.cell then s.counter proof.cell - 1 else s.counter checkpoint.cell) =
+    0
+S2C_Cleanup.lean:53:15: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [if̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵ ̵i̵nitialCP]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2C.cleanup_frame' does not depend on any axioms
+S2C_Cleanup.lean:117:14: error(lean.unknownIdentifier): Unknown constant `cleanup_metadata`
+'AspisR1.S2C.cleanup_counters' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.S2C.native_cleanup_cuts' does not depend on any axioms
+'AspisR1.S2C.copy_cleanup_regions' depends on axioms: [propext, Quot.sound]

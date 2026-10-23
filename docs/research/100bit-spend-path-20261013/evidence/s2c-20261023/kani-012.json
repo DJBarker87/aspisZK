@@ -1,0 +1,47 @@
+{
+  "attempt": "kani-012",
+  "kind": "kani",
+  "source_revision": "0ac6c097d0d18296c101a3cdb0f9048417da53ce",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "kani-native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "S2C_guard::exclusive_drop_region",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "kani-native/src/lib.rs",
+    "kani-native/src/statement.rs",
+    "kani-native/src/S2C_trusted.rs",
+    "kani-native/Cargo.toml"
+  ],
+  "timeout": 180,
+  "deps_fingerprint": {
+    "native_source_manifest": "23ea6f7f9007615597d4172f4021fa467dd8d79af682c46b44b97a046ef734a0",
+    "expected_time": "optimized compilation then one named native operation SAT check",
+    "tools": "Kani 0.67.0 / CBMC 6.8.0"
+  },
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  }
+}
