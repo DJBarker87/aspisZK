@@ -1,0 +1,74 @@
+Port4C_GeometryStd.lean:21:88: error: unexpected identifier; expected '}'
+Port4C_GeometryStd.lean:28:53: error: Type mismatch
+  rfl
+has type
+  ?m.13 = ?m.13
+but is expected to have type
+  verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut (install ops) () x =
+    ok (decide (x = 0#u32), ())
+Port4C_GeometryStd.lean:26:8: error: Not a definitional equality: the left-hand side
+  verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut (install ops) () x
+is not definitionally equal to the right-hand side
+  ok (decide (x = 0#u32), ())
+Port4C_GeometryStd.lean:77:11: error: unsolved goals
+case succ.true
+T : Type
+P : T → Bool
+pred : core.ops.function.FnMut Unit T Bool
+callback : ∀ (x : T), pred.call_mut () x = ok (P x, ())
+fuel : ℕ
+ih :
+  ∀ (it after : core.slice.iter.Iter T),
+    it.i + fuel = (↑it.slice).length →
+      Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred it () = ok (false, after) →
+        ∀ (j : ℕ), it.i ≤ j → ∀ (hj : j < (↑it.slice).length), P (↑it.slice)[j] = false
+it after : core.slice.iter.Iter T
+remaining : it.i + (fuel + 1) = (↑it.slice).length
+active : it.i < ↑it.slice.len
+hp : P (↑it.slice)[it.i] = true
+h :
+  (match
+      if P it.slice[it.i] = true then ok (done (true, { slice := it.slice, i := it.i + 1 }))
+      else ok (cont ({ slice := it.slice, i := it.i + 1 }, ())) with
+    | ok r =>
+      match r with
+      | cont x => loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorSliceIter.next } pred) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (false, after)
+⊢ ∀ (j : ℕ), it.i ≤ j → ∀ (hj : j < (↑it.slice).length), P (↑it.slice)[j] = false
+Port4C_GeometryStd.lean:79:6: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    it.slice
+  has type
+    Slice T
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑it.slice
+Port4C_GeometryStd.lean:77:20: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵p̵]̵ ̵at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_GeometryStd.lean:94:58: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.55 = ?m.55
+but is expected to have type
+  { slice := values, i := 0 }.i + (↑values).length = (↑{ slice := values, i := 0 }.slice).length
+in the application
+  any_false (fun x => decide (x = 0#u32))
+    (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool (install ops))
+    (zero_closure ops) { slice := values, i := 0 } after (↑values).length rfl
+'AspisR1.Port4C_GeometryStd.zero_closure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryStd.clone_m31' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port4C_GeometryStd.extend_fields' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port4C_GeometryStd.any_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryStd.zero_test_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

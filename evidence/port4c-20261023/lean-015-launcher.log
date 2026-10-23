@@ -1,0 +1,47 @@
+{"attempt": "lean-015", "exit_status": 1, "wall_seconds": 6.190516385991941, "peak_rss_kib": "4401708", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_GeometryStd.zero_closure' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4C_GeometryStd.clone_m31' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port4C_GeometryStd.extend_fields' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port4C_GeometryStd.any_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port4C_GeometryStd.zero_test_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_GeometryStd.lean:91:6: error: 'change' tactic failed, pattern
+  (if P (↑it.slice)[it.i] = true then ok (true, { slice := it.slice, i := it.i + 1 })
+    else
+      Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred
+        { slice := it.slice, i := it.i + 1 } ()) =
+    ok (false, after)
+is not definitionally equal to target
+  (match
+      let (next, s) := (some (↑it.slice)[it.i], { slice := it.slice, i := it.i + 1 })
+      match next with
+      | none => ok (done (false, s))
+      | some value =>
+        let (stop, f) := (P value, ())
+        if stop = true then ok (done (true, s)) else ok (cont (s, f)) with
+    | ok r =>
+      match r with
+      | cont x =>
+...
+Port4C_GeometryStd.lean:91:6: error: 'change' tactic failed, pattern
+  (if P (↑it.slice)[it.i] = true then ok (true, { slice := it.slice, i := it.i + 1 })
+    else
+      Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred
+        { slice := it.slice, i := it.i + 1 } ()) =
+    ok (false, after)
+is not definitionally equal to target
+  (match
+      let (next, s) := (some (↑it.slice)[it.i], { slice := it.slice, i := it.i + 1 })
+      match next with
+      | none => ok (done (false, s))
+      | some value =>
+        let (stop, f) := (P value, ())
+        if stop = true then ok (done (true, s)) else ok (cont (s, f)) with
+    | ok r =>
+      match r with
+      | cont x => loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorSliceIter.next } pred) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (false, after)
+'AspisR1.Port4C_GeometryStd.zero_closure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryStd.clone_m31' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port4C_GeometryStd.extend_fields' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port4C_GeometryStd.any_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryStd.zero_test_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2fb4ab72fb6849bb89f03a097bd35689.scope; invocation ID: 220b123a08124b5b8236ecd59c07c8cf

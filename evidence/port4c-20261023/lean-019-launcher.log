@@ -1,0 +1,68 @@
+{"attempt": "lean-019", "exit_status": 1, "wall_seconds": 7.121851209987653, "peak_rss_kib": "4398816", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_QueryStd.closure_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port4C_QueryStd.indices_four' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4C_QueryStd.four_reads' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_QueryStd.lean:25:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) opening
+          { start := 672#usize, «end» := 800#usize }
+    let we ← (install ops).op21 s j
+    ok (we, opening)
+is not definitionally equal to the right-hand side
+  do
+    let value ←
+      do
+        let values ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) opening
+              { start := 672#usize, «end» := 800#usize }
+        ops.op21 values j
+    ok (value, opening)
+
+ops : Ops
+opening : Slice U8
+j : Usize
+⊢ (do
+      let s ←
+        core.slice.index.Slice.index (core.s
+...
+install ops).op21 s j
+      ok (we, opening)) =
+    do
+    let value ←
+      do
+        let values ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) opening
+              { start := 672#usize, «end» := 800#usize }
+        ops.op21 values j
+    ok (value, opening)
+Port4C_QueryStd.lean:48:22: error: Application type mismatch: The argument
+  h
+has type
+  (do
+      let x ← readValue ops v3.2 2#usize
+      let x_1 ← readValue ops v3.2 3#usize
+      if h : [v1.1, v3.1, x, x_1].length = ↑4#usize then ok ⟨[v1.1, v3.1, x, x_1], ⋯⟩ else fail Error.panic) =
+    ok out
+but is expected to have type
+  ok ?m.182 = ok ?m.183
+in the application
+  ok.inj h
+Port4C_QueryStd.lean:49:12: error: Application type mismatch: The argument
+  v1
+has type
+  E × Slice U8
+but is expected to have type
+  E
+in the application
+  Exists.intro v1
+Port4C_QueryStd.lean:41:4: warning: This simp argument is unused:
+  verifier.candidate.query_values.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+
+Hint: Omit it from the simp argument list.
+  simp only [OraclePortStdBuilder.fromFnLoop, v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵q̵u̵e̵r̵y̵_̵v̵a̵l̵u̵e̵s̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵M̵u̵t̵T̵u̵p̵l̵e̵U̵s̵i̵z̵e̵W̵i̵d̵e̵E̵x̵a̵c̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵l̵o̵s̵u̵r̵e̵_̵e̵x̵a̵c̵t̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵c̲l̲o̲s̲u̲r̲e̲_̲e̲x̲a̲c̲t̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4C_QueryStd.closure_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4C_QueryStd.indices_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_QueryStd.four_reads' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3d055468f5a04c37b01cebfbfc411fc3.scope; invocation ID: d1543439f5fb4b8b98a0fe16b4ac2759

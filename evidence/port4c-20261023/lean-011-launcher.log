@@ -1,0 +1,60 @@
+{"attempt": "lean-011", "exit_status": 1, "wall_seconds": 6.866768858002615, "peak_rss_kib": "4401504", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_GeometryStd.zero_closure' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4C_GeometryStd.clone_m31' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port4C_GeometryStd.extend_fields' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port4C_GeometryStd.any_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port4C_GeometryStd.zero_test_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_GeometryStd.lean:82:11: error: unsolved goals
+case succ.true
+T : Type
+P : T → Bool
+pred : core.ops.function.FnMut Unit T Bool
+callback : ∀ (x : T), pred.call_mut () x = ok (P x, ())
+fuel : ℕ
+ih :
+  ∀ (it after : core.slice.iter.Iter T),
+    it.i + fuel = (↑it.slice).length →
+      Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred it () = ok (false, after) →
+        ∀ (j : ℕ), it.i ≤ j → ∀ (hj : j < (↑it.slice).length), P (↑it.slice)[j] = false
+it after : core.slice.iter.Iter T
+remaining : it.i + (fuel + 1) = (↑it.slice).length
+active : it.i < (↑it.slice).length
+hp : P it.slice[it.i] = true
+h :
+  (match do
+      let (next, s) ←
+        if h : it.i < (↑it.sl
+...
+e => fail e
+    | div => div) =
+    ok (false, after)
+⊢ ∀ (j : ℕ), it.i ≤ j → ∀ (hj : j < (↑it.slice).length), P (↑it.slice)[j] = false
+Port4C_GeometryStd.lean:84:6: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    it.slice
+  has type
+    Slice T
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑it.slice
+Port4C_GeometryStd.lean:80:45: warning: This simp argument is unused:
+  dif_pos active
+
+Hint: Omit it from the simp argument list.
+  simp only [Port3_BatchStd.anyBody, ̲core.iter.traits.iterator.IteratorSliceIter,
+        core.slice.iter.IteratorSliceIter.next,d̵i̵f̵_̵p̵o̵s̵ a̵c̵t̵i̵v̵e̵,̵bind_tc_ok, ̲callback] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_GeometryStd.lean:82:20: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵p̵]̵ ̵at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4C_GeometryStd.zero_closure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryStd.clone_m31' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port4C_GeometryStd.extend_fields' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port4C_GeometryStd.any_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryStd.zero_test_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7b40f33b322f4fa9a16d0ec573ce0b9e.scope; invocation ID: 6e436dab16c94be680db38d6d9da37d9
