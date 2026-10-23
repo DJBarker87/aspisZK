@@ -1057,3 +1057,20 @@ These results reuse the existing public sampler theorem and the previous
 same-execution readback. Their source owner retains the explicitly typed
 shift-count compatibility port; semantic-round/caller correspondence and
 release artifact refinement are not thereby closed.
+
+PROVED same-round producer/write: the parameterized emitted semantic-round
+body's success now implies a canonical challenge and the exact same-run
+alpha-array write (13.123 s, 3,255,566,336-byte aggregate RSS, zero swap,
+standard axioms). The enclosing whole-round success is inverted; no separate
+semantic_validated or sampler success assumption is introduced. Four external
+operations remain uniformly quantified Hooks. The checked definitional link
+to the parameterized emitted body and the strict source-shape checker are
+retained in s9-same-round-challenge-write-canonical-v1-20261023. The checker
+pins Rust/generated spans and compares the body after exactly the listed
+slot substitutions. This is not a MIR/ELF/runtime refinement theorem. The
+actual-only ten-call model and constructor input connection remain in flight.
+
+Coherent source retention: c33b6acfbe adds the sampler owner, reversible
+discriminant-name adapter, raw generated source, all focused dependency
+sources/receipts and an exact selected-span checker (blank lines ignored,
+one explicit typed shift-count port). No compiled binaries are included.
