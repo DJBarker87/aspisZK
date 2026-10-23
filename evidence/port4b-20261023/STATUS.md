@@ -112,3 +112,21 @@ bindings to P6 from this same stage execution. Apply both_batches only after
 that bridge; this packet's source_rows is deliberately not that bridge.
 Target not yet established. No push, shipped change, ELF rebuild, key cleanup,
 other worktree edit or other cone candidate change occurred.
+
+Continuation ruling: the lead explicitly adopts accepted-only transport;
+the panic/Parse rejection mismatch is outside AcceptedRunJoin's accepted
+class. No total error-preserving transport or repair is pursued.
+
+Stage 5: Port4B_AcceptedTail.verify_call inverts the ACTUAL installed
+terminal loop iteration. It derives the successful native verifier return
+on the SAME root, idx/val/d, counted index prefix and physical node prefix;
+count, slot, capacity and prefix-range reads come from that iteration.
+It introduces no independent successful verifier or model/log equality.
+This is a local cut, not the full native-to-P6 row transport.
+
+Accepted019: exit0,wall6.539460549s,peak4429032KiB,swap0,standard axioms
+only.015–018 are excluded parser/elaboration failures; none timed out or
+hit a memory ceiling. Budget19/100 Lean,0/60 Kani. All exact commands,
+source revisions/SHA/dependency pins, caps and audits are in lean-015..019.
+The night window has elapsed (clock21:42UTC); serialized host admission
+continues, with6G/8G/Swap0/Tasks64. No shipped change or ELF trigger.
