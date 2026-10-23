@@ -1,0 +1,60 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimBoundedResultCompositionV1.lean:79:74: error: unsolved goals
+D H : Type
+ops : ClaimDotOps D
+inst : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+g : Std.Array aspis_core.field.WideExact 29#usize
+k : Std.Array aspis_core.field.WideExact 7#usize
+iter : ClaimScalar.Range
+parts : Std.Array aspis_core.field.WideExact 7#usize
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => do
+          let we ← verifier.prepared_claim_sum k parts
+          ok (done (core.result.Result.Ok we))
+        | some point => do
+          let r ← dot ops inst sem y1 g point
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let i ← point + 1#usize
+              let a ← parts.update i val
+              ok (cont (iter1, a))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    aspis_core.field.WideExact (core.convert.FromSame verifier.Error) residual
+              ok (done r1)) =
+    do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => do
+        let we ← verifier.prepared_claim_sum k parts
+        ok (done (core.result.Result.Ok we))
+      | some point => do
+        let r ← dot ops inst sem y1 g point
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let i ← point + 1#usize
+            let a ← parts.update i val
+            ok (cont (iter1, a))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  aspis_core.field.WideExact (core.convert.FromSame verifier.Error) residual
+            ok (done r1)
+'AspisR1CurrentPreparedClaim.ClaimDotBoundedResult.outerBody_eq_source' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.ClaimDotBoundedResult.outerLoop_eq_source' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.ClaimDotBoundedResult.claim_eq_source' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

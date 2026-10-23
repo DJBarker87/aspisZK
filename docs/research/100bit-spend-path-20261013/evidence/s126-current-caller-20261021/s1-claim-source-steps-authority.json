@@ -1,0 +1,16 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "qualification": "Read-only authority snapshot; no new TrustedStd field or source adoption is made. Root dirty-state contents are not silently attributed to HEAD.",
+  "root_head": "8cc1483125a0f634ac771afd67f4a38c2df134af",
+  "files": {
+    "docs/research/v8-r0-zk-20261009/LOG.md": {
+      "sha256": "3366df6dea085a6e5a6f383757a708e2f8aa3be5889990e177cf5abe995e2c9f",
+      "differs_from_head": false
+    },
+    "docs/research/100bit-spend-path-20261013/design/C3-BIN-20261021.md": {
+      "sha256": "14e55fb30bb0a81517325c3594aa4d806efedb6656887855ff460565be45382e",
+      "differs_from_head": false
+    }
+  },
+  "D157_excerpt": "**Standing rule (to stop one ruling per std method).** Extending D133/D145/D156:\na worker may add a named TrustedStd field, without waiting for a lead ruling,\nfor any **pure** std collection or slice method the shipped code actually\ncalls (constructors, observers, `len`, `sort`, `sort_unstable`, `dedup`,\n`from_iter`, `iter`/`into_iter`, `contains`, `get`, `insert`, `remove`). The\nfield must state exactly the method's documented semantics against the Lean model\n(`Std.TreeMap`/`TreeSet`, `List`), and the report must list every field added,\nwith the call site. Not covered by this rule: anything with I/O, allocation\nfailure, concurrency, interior mutability, hashing (`HashMap` ordering) or\nunsafe code. Those still need a ruling. So `BTreeMap::len` (= model size) and\n`slice::sort` + `Vec::dedup` (= sorted dedup list) are covered.\n"
+}

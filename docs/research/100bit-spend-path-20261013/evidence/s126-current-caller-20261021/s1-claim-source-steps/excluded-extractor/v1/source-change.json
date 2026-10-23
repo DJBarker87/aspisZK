@@ -1,0 +1,9 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "base_sha256": "78fe84dbf482a442ab8ea254b5a3bd9502f11bc4abe24854ddc1d7ca2ade7972",
+  "candidate_sha256": "e673f244631540acb1de0aefdb92f8c450886269ed5bf50197a9e892d1d467d2",
+  "original_statement": "let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};",
+  "replacement": "let scalar=prepared_claim_scalar(sem,y1,point,l);",
+  "helper": "fn prepared_claim_scalar<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],point:usize,l:usize)->K { match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()} }\n",
+  "qualification": "Isolated pure scalar-selector helper candidate; original loops are retained.\nExtraction feasibility only: original/source inlining equivalence, concrete\ncallee and carrier installation remain explicit proof obligations.\n"
+}

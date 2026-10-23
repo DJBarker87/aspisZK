@@ -127,3 +127,19 @@ All jobs launched by this continuation are terminal. A final process query
 found no live SDK output-slot or copy/cleanup composition jobs. No source
 adoption decision is needed for this handoff. S1/S6 continue in this session;
 their eventual enclosing closure still requires the S2 owner's actual binding.
+
+## Follow-up for the new owner: MIR-sensitive stub result (S1 worker)
+
+See `design/S1-CLAIM-SOURCE-STEPS-20261023.md`, MIR diagnostic section, and
+`evidence/s126-current-caller-20261021/s1-claim-source-steps/attempts/`.
+Same source/harness/Kani0.67: `s1-push-maperr-result-preflight-v1` fails the
+explicit expected Error::Parse result under the existing opt3 flags;
+`s1-push-maperr-mir0-v1` passes both success/error covers with added
+`-Z mir-opt-level=0`, retaining opt3/overflow checks. Full all-six-point
+one-step coupling also passes with that setting, including arbitrary Err and
+post-state. This is a concrete MIR/instrumentation sensitivity worth reviewing
+for source-level stubs. It does NOT establish the cause of the earlier SDK
+representation counterexample, and does not reverse route B or change S2.
+No new S2 job was launched. Scripts and exact source/tool/resource pins are
+available on this branch; do not silently reuse older optimized-stub claims
+as proofs of a different operation interpretation.
