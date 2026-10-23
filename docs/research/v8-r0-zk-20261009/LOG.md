@@ -8997,3 +8997,19 @@ internal sites) belong to the child cones and are carried as the named per-child
 hypotheses. Multiproof's separate P6 total-oracle premise stays with the multiproof cone. With
 this, the consolidated `S2CallerFacts` theorem should be statable. `AeneasExtraction` is added
 to the headline trust list explicitly; it has always been implicit in every cone.
+
+## D189 (lead, 2026-10-23 17:35): S2: the native AccountInfo ↔ heap association is the trust item's job
+
+S2-W composed every field at the interpreted heap boundary: `callOrder`/`reachedPrefix`
+by flatMap over the outer log; returned vector → write → checkpoint version; full account
+frame and metadata. It stops at identifying native `AccountInfo` wrapper pre/post states
+with the interpreted heap. Lead ruling: that identification is exactly what
+`S2TrustedSdkBorrow` supplies. Its fields `account_data_cell`, `cell_payload`, `cell_counter`
+and `borrow_frame` *are* the explicit trusted relation between the actual typed Rust carrier
+and the abstract heap (plan, route B; C3-BIN 01:20), and the wrapper Kani contracts check the
+native wrapper code against it. Vec snapshot allocation and cleanup are TrustedStd plus the
+runtime allocator premise (allocation failure aborts the transaction). Child frames are empty on account
+state because the owned design passes children only owned values and never an
+`AccountInfo`. This is to be proved from the extracted signatures, not assumed. With these, the full
+`S2CallerFacts` theorem follows. No new assumption is introduced. These are the existing items,
+used for their stated purpose.
