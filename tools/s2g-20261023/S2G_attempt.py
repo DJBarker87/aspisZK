@@ -7,6 +7,8 @@ a=f'lean-{n:03d}';assert not (E/a).exists()
 prior=json.loads((D/'evidence/s2e-20261023/lean-023/receipt.json').read_text())
 paths=prior['env']['LEAN_PATH'].split(':');base='/home/dombarker/project-offloads/codex-cx-s2e-20261023'
 paths=[base if p=='.' else base+'/'+p if not p.startswith('/') else p for p in paths]
+paths += ['/home/dombarker/project-offloads/codex-cx-s2b-20261023/lead-overlay','/home/dombarker/project-offloads/codex-cx-s2b-20261023/objects']
+paths.insert(0,'/home/dombarker/project-offloads/codex-cx-import-union-20261022/objects')
 subprocess.run(['ssh',HOST,'mkdir','-p',H],check=True)
 sources=sorted((D/'lean').glob('S2G_*.lean'))
 for p in sources:subprocess.run(['scp',str(p),HOST+':'+H+'/'+p.name],check=True,stdout=subprocess.DEVNULL)
