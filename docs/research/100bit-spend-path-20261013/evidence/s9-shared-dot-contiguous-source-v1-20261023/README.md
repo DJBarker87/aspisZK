@@ -1,0 +1,3 @@
+Actual shared-partials producer and high-dot output equal the exact flat64 contiguous source-field/common/high tensor contraction, with SAME stored partial children and bounded index equality proved. No desired operand values, model, finish or canonicality premises. Uses compiled generic symbolic transport; rejected v1/v2 unifier heartbeat attempts did not change caps/options or mathematical target.
+
+Focused Lean check: 20.521 seconds; peak aggregate RSS 3205103616 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

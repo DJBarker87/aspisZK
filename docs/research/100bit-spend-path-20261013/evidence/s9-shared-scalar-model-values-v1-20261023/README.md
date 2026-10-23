@@ -1,0 +1,3 @@
+The SAME actual common loop and SAME actual constructor receiver row/cell reads supply scalar embedding meanings in ONE existing constructor table. Canonical receiver/table meaning remain honest helper inputs, supplied by the same source resume/constructor bridge; no per-entry model or desired scalar value is assumed. Source/runtime/security transport remains separate.
+
+Focused Lean check: 27.037 seconds; peak aggregate RSS 3195895808 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
