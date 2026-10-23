@@ -1,0 +1,27 @@
+ChildJoin_Decoder.lean:21:64: error: unsolved goals
+s : State
+j : Fin 32
+⊢ [s 0, s 1, s 2, s 3, s 4, s 5, s 6, s 7, s 8, s 9, s 10, s 11, s 12, s 13, s 14, s 15, s 16, s 17, s 18, s 19, s 20,
+        s 21, s 22, s 23, s 24, s 25, s 26, s 27, s 28, s 29, s 30, s 31][↑j] =
+    s j
+ChildJoin_Decoder.lean:30:80: error: unsolved goals
+H : Bytes → State
+proof public1 : Bytes
+p : Prepared
+a : QueryAccumulator.State K E
+hp : slice (encode H proof public1 p a) 16 32 = bytes (H proof)
+hu : slice (encode H proof public1 p a) 48 32 = bytes (H public1)
+⊢ (do
+      let hp ← some (H proof)
+      let hu ← some (H public1)
+      some (hp, hu)) =
+    some (H proof, H public1)
+ChildJoin_Decoder.lean:35:49: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵h̵e̵c̵k̵p̵o̵i̵n̵t̵H̵e̵a̵d̵e̵r̵,̵h̵p̵,̵h̵u̵,̵d̵i̵g̵e̵s̵t̵_̵b̵y̵t̵e̵s̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵p̵u̵r̵e̵]̵[̲c̲h̲e̲c̲k̲p̲o̲i̲n̲t̲H̲e̲a̲d̲e̲r̲,̲ ̲h̲p̲,̲ ̲h̲u̲,̲ ̲d̲i̲g̲e̲s̲t̲_̲b̲y̲t̲e̲s̲,̲ ̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ChildJoin_Decoder.digest_bytes' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.ChildJoin_Decoder.encoded_header' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

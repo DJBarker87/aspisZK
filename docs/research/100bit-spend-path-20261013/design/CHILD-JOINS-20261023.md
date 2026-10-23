@@ -197,3 +197,25 @@ wire/parameter/feature/security-contract change was introduced (stored suffix
 No existing Lean module, session A candidate or other worktree was edited.
 No whole frozen manifest or release-security replay was warranted by these
 obstruction/model-only modules. `git diff --check` passed.
+
+## Lead continuation: fixed C5 decoder
+
+`ChildJoin_Decoder.checkpointHeader` now fixes the digest header interpretation
+to C5 byte fields `[16,48)` and `[48,80)`, each decoded as a 32-byte State.
+It deliberately decodes those two fields only, as required by HeaderDecode;
+frame/checksum validation remains the executed reader's responsibility.
+`encoded_header` proves its result on every `OraclePortCheckpointAbiC5.encode`.
+`ChildJoin_Accepted.accepted_run` specializes the complete native accepted-run
+theorem to this decoder, including the full Required14 conclusion. The original
+module is untouched (new-modules-only rule); consumers should use the new
+entry point. All other quantifiers, success conditions and remaining child
+premises are unchanged. This closes the free-parameter item, not a child
+source-refinement obligation.
+
+Validation: lean-005/006 were local theorem-elaboration failures (retained,
+excluded); lean-007/008 pass. Each host attempt uses lake env lean, -j1 -M4400,
+MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64. Receipt JSON contains
+exact target, revision, source/dependency hashes, wall/RSS/swap and complete
+axiom lines. New top theorems use standard axioms only. Historical imports are
+reused, not claimed to be a coherent H5 release replay. No shipped source or
+artifact changed.

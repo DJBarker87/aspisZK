@@ -1,0 +1,40 @@
+{"attempt": "lean-008", "exit_status": 0, "wall_seconds": 2.2141551749955397, "peak_rss_kib": "4406952", "swaps": "0", "print_axioms": ["'AspisR1.ChildJoin_Accepted.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.ChildJoin_Accepted.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.ChildJoin_Accepted.accepted_run : ∀ {W A E : Type} (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (ops : AdapterRw.Ops) (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_Diges
+...
+
+                                      (congrArg
+                                        (fun _a =>
+                                          S2X.CheckpointVersionBinding
+                                            (payloadBytes encode (_a.payload (e1.heap.accounts 2).1) 1768)
+                                            (bytesOf ↑s.checkpoint))
+                                        (Eq.symm written))).mpr
+                                  history;
+                              let ⟨left✝, right✝³⟩ :=
+                                returned_committed e1.heap 2 0 0 saved (bytesOf ↑s.checkpoint) rfl rfl destinationSize
+                                  (writer.size saved cuts.first) versionAtWrite
+                              let ⟨version⟩ := right✝³
+                              let ⟨parsed, h✝⁷⟩ :=
+                                projectedInputs checkpointHeader nodes y1 writer reader version p2prime entry multiproof
+                                  scan (before e1 e2) (after e1 e2 post1)
+                              let ⟨partialFacts, sites⟩ := h✝⁷
+                              have frames := wrapper_frames e1 e2 ops program data1 saved source1 post1 written;
+                              Exists.intro parsed
+                                ⟨(S2W_TwoFieldAudit.full_fields_iff
+                                        (observation f s saved nodes y1 pre middle fs ss (before e1 e2)
+                                          (after e1 e2 post1))
+                                        ops H (bytesOf ↑f.proof) (bytesOf ↑f.pub) (bytesOf ↑saved) parsed
+                                        partialFacts).mpr
+                                    ⟨fun site x a allowed => frames.left site a allowed, fun x => frames.right⟩,
+                                  sites⟩⟩⟩⟩⟩⟩⟩⟩))))))
+
+Running as unit: run-r105eea43d9b64503a2b89105469c5d38.scope; invocation ID: 63b32609d07e47c7bbd4c3406cfe15bd
