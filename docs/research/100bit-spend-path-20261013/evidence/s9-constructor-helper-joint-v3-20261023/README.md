@@ -1,0 +1,3 @@
+PROVED: fresh split-constructor V3 success supplies the exact extra-array canonical input contract to the existing two-body Pair helper adapter, deriving canonical reads of that same helper output. Canonical alpha and ap0/ap1 reads and success of the same helper call remain explicit premises. This theorem concerns the helper adapter, not the entire shipped Pair caller; source caller refinement and the full soundness theorem remain open.
+
+Focused Lean check: 20.54 seconds; peak aggregate RSS 3263758336 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

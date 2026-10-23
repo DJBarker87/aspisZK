@@ -1017,3 +1017,31 @@ This is one retained full-mask control, not a fresh draw or a constant/worst-cas
 CU proof. Keys created by the test driver are retained securely outside Git;
 no key material or binaries are included in the packet. Source re-extraction,
 actual caller refinement and full release gates remain OPEN.
+
+
+PROVED focused constructor/sampler update (2026-10-23): commit 0499b04e22
+contains three checked proof packets against the fresh split-constructor V3
+extraction: exact extra projection, canonical reads of the complete extra
+array, and the corresponding Pair input contract. The extraction is from
+the candidate that passed the recorded constructor-specific stack and CU
+gates; it does not reuse the earlier stack-failing constructor as its source.
+All three focused checks report only standard axioms and zero swap. The
+sampler packet proves guarded subtraction and shift-count agreement; it is
+a primitive bridge, not yet the complete sampler transport.
+
+OPEN current arithmetic work: the new constructor QM multiplication carrier
+map and the sampler digit-loop transport each failed a focused check and
+have isolated proof goals under repair. No failing target is promoted as
+proved. Full Pair Lean compilation also exposed library-operation axioms,
+so compilation alone is not accepted as a proof result. A fresh source
+candidate removes those operations and must pass one coherent extraction,
+axiom audit and runtime-cost chain. S9 and the 100-bit theorem remain open.
+
+PROVED subsequent focused checks: the complete digit-loop callback equality
+now passes (7.571 s, 3,203,072,000-byte peak aggregate RSS, zero swap), after
+isolating the checked/wrapping final increment. The V3 constructor/helper
+composition also passes (20.54 s, 3,263,758,336-byte peak aggregate RSS, zero
+swap), with only standard axioms. Its canonical alpha and ap0/ap1 input
+contracts and the same helper success remain explicit; it does not assert
+whole Pair caller refinement. Packets: s9-sampler-digit-loop-transport-v1-20261023
+and s9-constructor-helper-joint-v3-20261023.

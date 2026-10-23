@@ -1,0 +1,3 @@
+PROVED: both digit-loop callback bodies in the focused actual sampler owner agree with the existing public preparation sampler for every input state, including failure/divergence. Bounds follow from each callback branch guard; checked versus wrapping additions and multiplication are proved equal under those bounds. This is not yet the whole sampler or source-to-runtime theorem. The owner uses the explicitly recorded typed shift-count compatibility port.
+
+Focused Lean check: 7.571 seconds; peak aggregate RSS 3203072000 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
