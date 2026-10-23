@@ -66,3 +66,58 @@ projection syntax and conditional simplification). It is retained and excluded;
 Lean003 changed the source and passed: exit0, 2.318372s, 4394168KiB, swap0,
 eight standard-only axiom reports. Lean001: exit0, 2.005779s, 4382484KiB,
 swap0, four standard-only reports. No timeout/memory-kill or cap increase.
+
+## Stage 3: transaction runtime split and opaque effects
+
+S2X_RuntimeRetention.tx2_proof_binding applies the EXISTING
+R9PoolRuntimeBinding.P2Prime to the EXISTING digestMatches on complete
+consumed proof/public inputs. It does not assert proof-account owner sealing
+or immutable raw account contents between transactions. tx2_suffix combines
+that premise with the actual checked source range, original byte projection
+and raw account length; the candidate prefix may change.
+
+history_retains proves account persistence under a transaction history with
+no intervening committed write to the protected key; rollback is an identity
+step. CheckpointVersionBinding names the exact still-uninstantiated operational
+interpretation for a saved/loaded checkpoint: authenticated ledger key/version,
+savedAtCommit, loadedAtEntry and noInterveningWrite. checkpoint_persistence
+proves loaded=saved from it. checkpoint_sites propagates that to the actual
+Required14 field type under the separately named saveCut/tx2Cut/resumeCut
+observations. None of these premises is inferred from TX2 readonly flags.
+
+P2 covers physical persistence, permission enforcement and rollback; P3 covers
+the authentic address/System semantics used by the source; P4 covers faithful
+runtime metadata observations. The source must still show that its authenticated
+save/load cuts select this same protected account version. BoundaryStatements
+P2/P2_prime/P3/P4 remain opaque Prop slots: no implication from those slots to
+these operational statements is claimed. CheckpointVersionBinding is an explicit
+missing interpretation/history obligation, not an adopted new runtime axiom.
+In particular P2 cannot itself forbid an authorized intervening write. No SHA
+injectivity or new collision budget is introduced. R10 observation/log provenance
+remains a separate source obligation, as in STORED-CARRIER-20261021.md.
+
+OpaqueChildFrame names the native frame still needed for opaque calls: all full
+account records, all runtime data-borrow counters and caller guard ownership,
+and contents/descriptors/liveness of every caller-owned input allocation.
+Child-private allocation and ordered oracle state may change. The frame is not
+asserted from the pure Ops type. It is a source refinement obligation, not SDK
+trust. The pure retained-argument result does apply even to an opaque Ops value,
+but supplies no native effect or internal reached-site observation.
+
+ChildRetention additionally contains constant_second_obstruction: replacing op11
+with a constant successful PURE function (permitted by the actual extracted Ops
+type) contradicts universal ChildInputRetention at a reached late site with two
+distinct proof arguments, with no successful-call hypotheses left to assume.
+This is a concrete interface-model counterexample, not a deployed runtime attack.
+Fix the port to quantify the invocation arguments outside its site assertions,
+and derive the observations from that SAME child execution before installing it.
+
+Lean004 was a preflight-only cache miss, not a Lean launch. Existing R9 proof
+objects were copied from recorded local cache roots into this worker's PRIVATE
+host cache; top R9 object SHA256 matches the stored-carrier receipt's direct pin.
+Their hashes/sizes and current source hashes are in reused-cache.json; this is
+reuse, not a coherent source/dependency rebuild. No shared object was overwritten.
+Lean005 (stronger child obstruction) passed. Lean006/007 failed on name/parser
+and scalar-notation elaboration, respectively; changed Lean008 passed with five
+standard-only reports: exit0, 2.387586s, 4400492KiB, swap0. Failed recovery
+sorryAx output is retained and excluded from accepted evidence.

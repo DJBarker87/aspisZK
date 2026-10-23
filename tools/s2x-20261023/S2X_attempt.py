@@ -6,7 +6,7 @@ H='/home/dombarker/project-offloads/codex-cx-s2x-20261023';HOST='dombarker@100.1
 n=int(sys.argv[1]);target=sys.argv[2];assert 1<=n<=100 and target.startswith('S2X_');a=f'lean-{n:03d}';assert not (E/a).exists()
 p=D/'lean'/(target+'.lean')
 old=json.loads((D/'evidence/s2i-20261023/lean-011/receipt.json').read_text())
-paths='/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023:'+old['env']['LEAN_PATH']
+paths=H+'/reused-objects:/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023:'+old['env']['LEAN_PATH']
 x=dict(attempt=a,kind='lean',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M4400','-DElab.async=false','-o',target+'.olean',target+'.lean'],sources=[p.name],timeout=180,env={'LEAN_PATH':H+':'+paths},deps_fingerprint={'inherited_receipt_sha256':hashlib.sha256((D/'evidence/s2i-20261023/lean-011/receipt.json').read_bytes()).hexdigest(),'scope':'selected direct objects and companions pinned; inherited S2I union closure retained'},source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'],cwd=R,text=True)),expected_time='focused cached extraction/proof compilation; no dependency build or arithmetic aggregation')
 subprocess.run(['ssh',HOST,'mkdir -p '+H],check=True)
 for f in ['S2X_run_host.py','S2X_reservation.py','S2X_lean_host.py']:subprocess.run(['scp',str(T/f),HOST+':'+H+'/'+f],check=True)

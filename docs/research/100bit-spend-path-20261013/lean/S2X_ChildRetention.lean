@@ -51,6 +51,21 @@ theorem retention_obstruction (ops : AdapterRw.Ops) (c : Inputs Observer)
   exact different (retention_requires_unique_second_proof ops c h
     pub1 proof1 cp1 pub2 proof2 cp2 ok1 ok2 s reached late)
 
+/-- A concrete pure external operation allowed by the extracted Ops type.
+No runtime state, unsafe mutation or cryptographic collision is involved. -/
+def constantSecond (ops : AdapterRw.Ops) : AdapterRw.Ops :=
+  {ops with op11 := fun _ _ _ _ _ _ => ok (.Ok ())}
+
+/-- Purity alone cannot discharge the universal port, even without any
+hypotheses about child successes. Distinct arguments always succeed here. -/
+theorem constant_second_obstruction (ops : AdapterRw.Ops) (c : Inputs Observer)
+    (pub proof1 proof2 checkpoint : Slice U8) (different : proof1 ≠ proof2)
+    (s : Site) (reached : c.reached s) (late : 3 < s.rank) :
+    ¬ ChildInputRetention (constantSecond ops) c :=
+  retention_obstruction (constantSecond ops) c pub proof1 checkpoint pub proof2 checkpoint
+    rfl rfl different s reached late
+
+#print axioms constant_second_obstruction
 #print axioms owned_retained
 #print axioms second_owned_retained
 #print axioms retention_requires_unique_second_proof
