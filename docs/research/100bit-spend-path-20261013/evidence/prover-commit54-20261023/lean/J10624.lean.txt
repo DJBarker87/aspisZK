@@ -1,0 +1,64 @@
+import AspisR1ProducerRelease47.EncoderNodes54
+import R1Z.ProverCommitBasisCounter47
+import AspisFormal.V5FriBitReverse
+/-! Source reversal computes the exact model's low-bit reversal. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitEncoderReverse54
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open AspisV5FriBitReverse
+
+theorem shift_one (s : U32) (hs : s.val<32) :
+    (Usize.wrapping_shl 1#usize s).val=2^s.val := by
+  change ((1#usize).bv.shiftLeft (s.val%UScalarTy.Usize.numBits)).toNat=_
+  rw [BitVec.toNat_shiftLeft]
+  have hbits : 32≤UScalarTy.Usize.numBits := System.Platform.le_numBits
+  rw [Nat.mod_eq_of_lt (by omega : s.val<UScalarTy.Usize.numBits)]
+  change (1 <<< s.val)%2^UScalarTy.Usize.numBits=2^s.val
+  rw [Nat.one_shiftLeft,Nat.mod_eq_of_lt (Nat.pow_lt_pow_right (by decide) (by omega))]
+
+theorem size_large : 2^18<UScalar.size .Usize := by
+  rw [UScalar.size_def]
+  exact Nat.pow_lt_pow_right (by decide) (by have := System.Platform.le_numBits;omega)
+
+theorem exact_result (n : Nat) (hn : n≤18) (width : U8) (hw : width.val=n) (x : Usize) :
+    ∃ z : Usize, nodes54.reverse width x=ok z ∧ z.val=reverseBits n x.val := by
+  induction n generalizing width x with
+  | zero =>
+    have hz : width=0#u8 := by scalar_tac
+    exact ⟨0#usize,by rw [nodes54.reverse,hz];rfl,rfl⟩
+  | succ n ih =>
+    have hne : width≠0#u8 := by scalar_tac
+    let w := U8.wrapping_sub width 1#u8
+    have hw' : w.val=n := by
+      rw [ProverCommitBasisCounter47.sub_one width (by omega)];omega
+    obtain ⟨r,hr,hrv⟩ := WP.spec_imp_exists (UScalar.rem_spec x (show (2#usize).val≠0 by decide))
+    obtain ⟨d,hd,hdv,_⟩ := UScalar.div_bv_spec (y:=2#usize) x (by decide)
+    have hrv' : r.val=x.val%2 := hrv
+    have hdv' : d.val=x.val/2 := hdv
+    have hc : (UScalar.cast .U32 w).val=n := by scalar_tac
+    have hshift : (Usize.wrapping_shl 1#usize (UScalar.cast .U32 w)).val=2^n := by
+      rw [shift_one _ (by rw [hc];omega),hc]
+    obtain ⟨z,hz,hzv⟩ := ih (by omega) w hw' d
+    have hzn : z.val=reverseBits n (x.val/2) := by rw [hzv,hdv']
+    have hbound : r.val*2^n+z.val<2^(n+1) := by
+      rw [hrv',hzn]
+      exact reverseBits_lt_two_pow (n+1) x.val
+    have hsmall : r.val*2^n+z.val<UScalar.size .Usize := by
+      have hpow : 2^(n+1)≤2^18 := Nat.pow_le_pow_right (by decide) hn
+      have hs := size_large
+      omega
+    let term := Usize.wrapping_mul r (Usize.wrapping_shl 1#usize (UScalar.cast .U32 w))
+    have hterm : term.val=r.val*2^n := by
+      dsimp only [term]
+      rw [Usize.wrapping_mul_val_eq,hshift,Nat.mod_eq_of_lt (by omega)]
+    refine ⟨Usize.wrapping_add term z,?_,?_⟩
+    · rw [nodes54.reverse]
+      simp only [hne,if_false,hr,hd,lift,bind_tc_ok]
+      change (do let z ← nodes54.reverse w d;ok (Usize.wrapping_add term z))=_
+      rw [hz];rfl
+    · rw [Usize.wrapping_add_val_eq,hterm,Nat.mod_eq_of_lt hsmall,hrv',hzn,reverseBits]
+
+#print axioms shift_one
+#print axioms size_large
+#print axioms exact_result
+end R1Z.ProverCommitEncoderReverse54

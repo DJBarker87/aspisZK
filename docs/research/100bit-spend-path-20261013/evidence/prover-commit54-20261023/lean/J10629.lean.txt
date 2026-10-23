@@ -1,0 +1,33 @@
+import AspisFormal.V5FriBitReverse
+/-! Clearing low index bits removes exactly the high reversed bits. This
+is the symbolic identity needed before comparing node powers modulo 2^31. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitEncoderAlignment54
+open AspisV5FriBitReverse
+
+theorem reverse_even (w j : Nat) : reverseBits (w+1) (2*j)=reverseBits w j := by
+  simp [reverseBits]
+
+theorem aligned_reverse (d w j : Nat) (hd : d≤w) :
+    reverseBits w (j/2^d*2^d)=reverseBits w j%2^(w-d) := by
+  induction d generalizing w j with
+  | zero =>
+    simp only [pow_zero,Nat.div_one,Nat.mul_one,Nat.sub_zero]
+    exact (Nat.mod_eq_of_lt (reverseBits_lt_two_pow w j)).symm
+  | succ d ih =>
+    cases w with
+    | zero => omega
+    | succ w =>
+      have hdw : d≤w := by omega
+      have harg : j/2^(d+1)*2^(d+1)=2*((j/2)/2^d*2^d) := by
+        rw [Nat.div_div_eq_div_mul,pow_succ]
+        simp only [Nat.mul_comm,Nat.mul_left_comm,Nat.mul_assoc]
+      rw [harg,reverse_even,ih w (j/2) hdw,reverseBits]
+      rw [Nat.succ_sub_succ_eq_sub]
+      have hmod : 2^w%2^(w-d)=0 :=
+        Nat.mod_eq_zero_of_dvd (Nat.pow_dvd_pow 2 (Nat.sub_le w d))
+      simp only [Nat.add_mod,Nat.mul_mod,hmod,Nat.mul_zero,Nat.zero_add,Nat.mod_mod]
+
+#print axioms reverse_even
+#print axioms aligned_reverse
+end R1Z.ProverCommitEncoderAlignment54

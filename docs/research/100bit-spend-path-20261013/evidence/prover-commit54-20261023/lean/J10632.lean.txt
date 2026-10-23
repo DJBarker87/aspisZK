@@ -1,0 +1,57 @@
+import R1Z.ProverCommitEncoderPoint54
+import R1Z.ProverCommitEncoderDoubling54
+/-! All scalar arithmetic and canonical source output of one nodes_for cell. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitEncoderNode54
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 AspisV5FriBitReverse
+open AspisCircleTensorBinding
+
+def aligned (j d : Nat) : Nat := j/2^d*2^d
+
+def nodeValue (j d : Nat) : ProverCommitM31Ops48.M :=
+  doubledFactor ((ProverCommitNativeC49.value ProverCommitEncoderPoint54.generator^
+    (1024+4096*reverseBits 18 (aligned j d))).re) (d+1)
+
+theorem exact_result (j : Usize) (hj : j.val<262144) (d : U8) (hd : d.val<9) :
+    ∃ z : U32, nodes54.node j d=ok z ∧ ProverCommitM31Ops48.canonical z ∧
+      ProverCommitM31Ops48.decode z=nodeValue j.val d.val := by
+  let step := Usize.wrapping_shl 1#usize (UScalar.cast .U32 d)
+  have hc : (UScalar.cast .U32 d).val=d.val := by scalar_tac
+  have hstep : step.val=2^d.val := by
+    rw [ProverCommitEncoderReverse54.shift_one _ (by rw [hc];omega),hc]
+  have hpos : 0<step.val := by rw [hstep];positivity
+  obtain ⟨q,hq,hqv,_⟩ := UScalar.div_bv_spec (y:=step) j (by omega)
+  let a := Usize.wrapping_mul q step
+  have hav : a.val=aligned j.val d.val := by
+    have hbound : q.val*step.val≤j.val := by rw [hqv];exact Nat.div_mul_le_self _ _
+    have hs := ProverCommitEncoderReverse54.size_large
+    dsimp only [a]
+    rw [Usize.wrapping_mul_val_eq,Nat.mod_eq_of_lt (by omega),hqv,hstep]
+    rfl
+  obtain ⟨c,hc,hcc,hdc⟩ := ProverCommitEncoderPoint54.exact_result a
+  have hnext : (U8.wrapping_add d 1#u8).val=d.val+1 := by
+    rw [U8.wrapping_add_val_eq,show (1#u8).val=1 from rfl,
+      show UScalar.size .U8=256 by rw [UScalar.size_def];rfl]
+    change (d.val+1)%256=d.val+1
+    omega
+  obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitEncoderDoubling54.repeat_result (d.val+1)
+    (U8.wrapping_add d 1#u8) hnext c.a hcc.1
+  refine ⟨z,?_,hcz,?_⟩
+  · rw [nodes54.node]
+    simp only [lift,bind_tc_ok]
+    change (do
+      let q ← j/step
+      let c ← nodes54.point (Usize.wrapping_mul q step)
+      nodes54.repeat c.a (U8.wrapping_add d 1#u8))=ok z
+    rw [hq];simp only [bind_tc_ok]
+    change (do let c ← nodes54.point a; nodes54.repeat c.a (U8.wrapping_add d 1#u8))=ok z
+    rw [hc];simp only [bind_tc_ok]
+    exact hz
+  · rw [hdz]
+    have hcoord : ProverCommitM31Ops48.decode c.a=(ProverCommitNativeC49.value c).re := rfl
+    rw [hcoord,hdc,hav]
+    rfl
+
+#print axioms exact_result
+end R1Z.ProverCommitEncoderNode54

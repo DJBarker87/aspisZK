@@ -1,0 +1,45 @@
+import AspisR1ProducerRelease47.EncoderNodes54
+import R1Z.ProverCommitM31Ops48
+import R1Z.ProverCommitBasisMath47
+import R1Z.ProverCommitBasisCounter47
+/-! Actual source repeated Chebyshev doubling with canonical outputs. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitEncoderDoubling54
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitM31Ops48 AspisCircleTensorBinding
+
+theorem tcheb (x : U32) :
+    ∃ z : U32, nodes54.tcheb x=ok z ∧ canonical z ∧
+      decode z=doubledFactor (decode x) 1 := by
+  obtain ⟨a,ha,hca,hda⟩ := mul_exact x x
+  obtain ⟨b,hb,hcb,hdb⟩ := add_exact a a hca hca
+  obtain ⟨z,hz,hcz,hdz⟩ := sub_exact b 1#u32 hcb (by decide)
+  refine ⟨z,?_,hcz,?_⟩
+  · simp only [nodes54.tcheb,ha,field.M31.double,hb,field.M31.ONE,bind_tc_ok,hz]
+  · rw [hdz,hdb,hda]
+    change decode x*decode x+decode x*decode x-(1 : M)=2*(decode x)^2-1
+    ring
+
+theorem repeat_result (n : Nat) (left : U8) (hn : left.val=n)
+    (x : U32) (hx : canonical x) :
+    ∃ z : U32, nodes54.repeat x left=ok z ∧ canonical z ∧
+      decode z=doubledFactor (decode x) n := by
+  induction n generalizing left x with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    exact ⟨x,by rw [nodes54.repeat,hz];rfl,hx,rfl⟩
+  | succ n ih =>
+    have hne : left≠0#u8 := by scalar_tac
+    have hdec : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    obtain ⟨a,ha,hca,hda⟩ := tcheb x
+    obtain ⟨z,hz,hcz,hdz⟩ := ih _ hdec a hca
+    refine ⟨z,?_,hcz,?_⟩
+    · rw [nodes54.repeat]
+      simp only [hne,if_false,ha,lift,bind_tc_ok,hz]
+    · rw [hdz,hda,←AspisV5FriNaturalBasisRadix4.doubledFactor_add]
+      rw [Nat.add_comm 1 n]
+
+#print axioms tcheb
+#print axioms repeat_result
+end R1Z.ProverCommitEncoderDoubling54

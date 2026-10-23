@@ -54,3 +54,24 @@ fn owned_read(c:&[u32],stride:usize,offset:usize,i:usize)->u32 {
   assert_eq!(native_channel(&c,s,k),owned_read(&c,4,s,k));
  }
 }
+
+fn owned_reverse(width:u8,value:usize)->usize {
+ if width==0 {0} else {
+  let w=width-1;
+  (value%2)*(1usize<<(w as u32))+owned_reverse(w,value/2)
+ }
+}
+fn native_rev18(u:usize)->usize {(u as u32).reverse_bits() as usize >> 14}
+#[cfg(kani)] mod geometry {
+ use super::*;
+ #[kani::proof] #[kani::unwind(20)] fn reversal() {
+  let j:usize=kani::any();kani::assume(j<262144);
+  assert_eq!(native_rev18(j),owned_reverse(18,j));
+ }
+ #[kani::proof] #[kani::unwind(20)] fn alignment() {
+  let j:usize=kani::any();let d:u8=kani::any();kani::assume(j<262144 && d<9);
+  let native=(j>>d)<<d;let step=1usize<<(d as u32);let owner=j/step*step;
+  assert_eq!(native,owner);
+  assert_eq!(native_rev18(owner),native_rev18(j)%(1usize<<(18-d)));
+ }
+}
