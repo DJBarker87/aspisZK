@@ -13,6 +13,7 @@ abbrev Q := aspis_core.field.QM31
 abbrev Error := r1_wire.Error
 abbrev State := r1_wire.SemanticTranscript Unit
 abbrev ScalarResult := core.result.Result Q Error
+abbrev RowsResult := core.result.Result Unit Error
 
 /-- The framed record is appended only after a successful challenge. The
 returned transcript and complete oracle machine survive semantic rejection. -/
@@ -43,8 +44,9 @@ theorem rejected {S : Type} (effect : Unit → Parts → Port S Bytes32)
   simp only [emit,bind_run,called,bind_tc_ok]
   rfl
 
-/-- Installs the already proved concrete CoinOracle equation, preserving the
-ordered call/answer history as well as the transcript and publication bytes. -/
+/-- Mathematical CoinOracle instantiation of the emission owner. The real
+caller uses LegacyHashFn, not CoinOracle: this is not its native hash binding.
+The ordered call/answer history is retained in this model instantiation. -/
 theorem ordered_effects (state : State) (row : U8) (framed : Bytes)
     (outputPrefix : List U8) (machine : ProverCommitLogged28.LoggedMachine) :
     emit (ProverCommitLogged28.dictionary ProverCommitControl28.extracted)
@@ -57,16 +59,16 @@ theorem ordered_effects (state : State) (row : U8) (framed : Bytes)
 /-- A recursive real emission owner consumes an ordered frame list. A failed
 row stops immediately; no suffix is queried or appended. -/
 def rows {S : Type} (effect : Unit → Parts → Port S Bytes32) :
-    List (U8 × Bytes) → State → List U8 → Port S (ScalarResult × State × List U8)
-  | [],state,outputPrefix => pure (.Ok aspis_core.field.QM31.ZERO,state,outputPrefix)
+    List (U8 × Bytes) → State → List U8 → Port S (RowsResult × State × List U8)
+  | [],state,outputPrefix => pure (.Ok (),state,outputPrefix)
   | (row,framed)::tail,state,outputPrefix => do
     let (value,next,bytes) ← emit effect state row framed outputPrefix
     match value with
     | .Err e => pure (.Err e,next,bytes)
     | .Ok _ => rows effect tail next bytes
 
-/-- The actual effect interpreter is installed through every row, including
-partial outputPrefixes and errors. This is a local source-owner law, not RunJoin. -/
+/-- The mathematical CoinOracle interpreter is installed through every row.
+This does not identify LegacyHashFn with that machine or establish RunJoin. -/
 theorem rows_ordered_effects (frames : List (U8 × Bytes)) (state : State)
     (outputPrefix : List U8) (machine : ProverCommitLogged28.LoggedMachine) :
     rows (ProverCommitLogged28.dictionary ProverCommitControl28.extracted)

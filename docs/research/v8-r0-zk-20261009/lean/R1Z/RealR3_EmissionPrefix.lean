@@ -1,6 +1,7 @@
 import R1Z.RealR3_SemanticEmission
 /-! Byte-prefix transport by induction. Every error and returned state is
-retained; no recurrence over concrete challenge values is reduced. -/
+retained; no recurrence over concrete challenge values is reduced. The byte
+prefix law is independent of any LegacyHashFn-to-oracle-machine binding. -/
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.RealR3_EmissionPrefix

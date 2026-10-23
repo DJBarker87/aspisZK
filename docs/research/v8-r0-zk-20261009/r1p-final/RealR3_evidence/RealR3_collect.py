@@ -15,13 +15,14 @@ for remote in available:
  for kind in ['out','time','sha']:
   f=f'{kind}-{a}.'+('txt' if kind=='sha' else 'log')
   subprocess.run(['scp','-q',HOST+':/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/'+f,str(E/f)],check=True)
-for f in ['snapshots','scalar-empty-v1-inputs.json','scalar-empty-v2-inputs.json','scalar-empty-fixed-v3-inputs.json']:
+for f in ['snapshots','scalar-*-inputs.json']:
  subprocess.run(['rsync','-a',HOST+':'+H+'/'+f,str(E)+'/'],check=False)
 rows=[]
 for p in sorted(E.glob('111*-input.json')):
  a=int(p.name.split('-')[0]);i=json.loads(p.read_text());o=(E/f'out-{a}.log').read_text();t=(E/f'time-{a}.log').read_text();s=(E/'lean-snapshots'/f'{a}.lean.txt').read_bytes()
  def val(pat):return re.search(pat,t).group(1).strip()
  axioms=re.findall(r"^'[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",o,re.M)
- rows.append(dict(attempt=a,**i,command=f'sh RealR3_run-joint.sh {a} R1Z/{"RealR3_SemanticEmission" if a<=11101 else "RealR3_EmissionPrefix"} J 7000 8 {i["deps_fingerprint"]}',exit=int(re.search(r'^exit=(\d+)',o,re.M)[1]),wall=val(r'Elapsed .*: (\S+)'),peak_rss_kib=int(val(r'Maximum resident set size \(kbytes\): (\d+)')),swaps=int(val(r'Swaps: (\d+)')),axioms=axioms,errors=[l for l in o.splitlines() if 'error:' in l or 'error(' in l],memory_high_gib=6,memory_max_gib=8,memory_swap_max=0,tasks_max=64,lean_memory_limit_mb=7000,snapshot_sha256=hashlib.sha256(s).hexdigest()))
+ module=re.search(r'namespace R1Z\.(\w+)',s.decode())[1]
+ rows.append(dict(attempt=a,**i,module='R1Z.'+module,command=f'sh RealR3_run-joint.sh {a} R1Z/{module} J 7000 8 {i["deps_fingerprint"]}',exit=int(re.search(r'^exit=(\d+)',o,re.M)[1]),wall=val(r'Elapsed .*: (\S+)'),peak_rss_kib=int(val(r'Maximum resident set size \(kbytes\): (\d+)')),swaps=int(val(r'Swaps: (\d+)')),axioms=axioms,errors=[l for l in o.splitlines() if 'error:' in l or 'error(' in l],memory_high_gib=6,memory_max_gib=8,memory_swap_max=0,tasks_max=64,lean_memory_limit_mb=7000,snapshot_sha256=hashlib.sha256(s).hexdigest()))
 (E/'RealR3_attempts.jsonl').write_text(''.join(json.dumps(x)+'\n' for x in rows))
 print(json.dumps([{k:r[k] for k in ['attempt','exit','wall','peak_rss_kib','swaps']} for r in rows],indent=2))

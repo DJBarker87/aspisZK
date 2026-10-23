@@ -1,15 +1,22 @@
 from pathlib import Path
-import os,sys,subprocess,json,hashlib
+import os,sys,subprocess,json,hashlib,time
 H=Path('/home/dombarker/project-offloads/codex-cx-real-r3-20261023');E=H/'evidence';N=E/'RealR3_native'
 name,harness=sys.argv[1:];os.chdir(N)
 os.environ.update(PATH='/home/dombarker/.cargo/bin:'+os.environ['PATH'],CARGO_BUILD_JOBS='4',CARGO_TARGET_DIR=str(H/'kani-target'),RUSTFLAGS='-C opt-level=3 -C link-arg=-Wl,--threads=4')
-caps=[]
-for p in Path('/sys/fs/cgroup').rglob('memory.max'):
- try:
-  v=p.read_text().strip()
-  if v!='max' and (p.parent/'cgroup.procs').read_text().strip():caps.append({'path':str(p.parent),'bytes':int(v)})
- except OSError:pass
-assert sum(x['bytes'] for x in caps)+8*2**30<=55*2**30,caps
+def reservations():
+ caps=[]
+ for p in Path('/sys/fs/cgroup').rglob('memory.max'):
+  try:
+   v=p.read_text().strip()
+   if v!='max' and (p.parent/'cgroup.procs').read_text().strip():caps.append({'path':str(p.parent),'bytes':int(v)})
+  except OSError:pass
+ return caps
+caps=reservations();holds=[]
+while sum(x['bytes'] for x in caps)+8*2**30>55*2**30:
+ holds.append({'utc':time.time(),'reservations':caps})
+ (E/(name+'-reservation-holds.json')).write_text(json.dumps(holds,indent=2)+'\n')
+ print('Reservation hold:',sum(x['bytes'] for x in caps)/2**30,'+ 8 GiB > 55',flush=True)
+ time.sleep(20);caps=reservations()
 snap=E/'snapshots'/name;snap.mkdir(parents=True,exist_ok=False)
 inputs={}
 for p in N.rglob('*'):

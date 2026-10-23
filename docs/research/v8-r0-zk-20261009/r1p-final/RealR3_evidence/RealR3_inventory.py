@@ -3,7 +3,7 @@ import subprocess, hashlib, json
 R=Path(__file__).resolve().parents[5]
 E=Path(__file__).resolve().parent
 base=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip()
-paths=['crates/aspis-r1-cost-probe/src/'+p for p in ['host_semantic.rs','host_sumcheck.rs','r1_wire.rs','transcript.rs','prover.rs','weights.rs','compact.rs']]
+paths=['crates/aspis-r1-cost-probe/src/'+p for p in ['host_semantic.rs','host_sumcheck.rs','r1_wire.rs','transcript.rs','prover.rs','weights.rs','compact.rs','sampler.rs']]
 # Historical bodies must match, not just theorem/helper names.
 refs={'part28':'f53e30fc4e26375c1bd0623532dafaf49571dc9d','part48':'617fc58aaf','part55':'341584654f'}
 def sha(b):return hashlib.sha256(b).hexdigest()
