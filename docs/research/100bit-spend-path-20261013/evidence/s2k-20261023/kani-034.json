@@ -1,0 +1,55 @@
+{
+  "attempt": "kani-034",
+  "kind": "kani",
+  "source_revision": "5d98568f8cd18c27abb49b458c240496dfbf0d54",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2K-native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "S2K_encode_status_contract",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2K-native/Cargo.toml",
+    "S2K-native/src/S2K_canonical.rs",
+    "S2K-native/src/S2K_concrete.rs",
+    "S2K-native/src/S2K_construct.rs",
+    "S2K-native/src/S2K_frontier_step.rs",
+    "S2K-native/src/S2K_header.rs",
+    "S2K-native/src/S2K_result_validate.rs",
+    "S2K-native/src/S2K_status_contract.rs",
+    "S2K-native/src/S2K_validate.rs",
+    "S2K-native/src/lib.rs",
+    "S2K-native/src/statement.rs"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0"
+  },
+  "deps_fingerprint": {
+    "native_source_manifest_sha256": "eb6b5ef5cbe21b14dbccb4a5bca23bb5149812a00f373248c3ec2e531f435777",
+    "source_cuts_sha256": "e37b5ecb19ff66b6767c6071b2ac66dbc9ebbd9925bd767253d6dc921899ae4a",
+    "scope": "source-exact individual emitter/encoding steps; concrete levels use separately verified S2K_copy32 specialization of S2G_copy; no whole-function or success stub"
+  },
+  "expected_time": "optimized compilation then SAT for one named source step; no arithmetic elimination"
+}

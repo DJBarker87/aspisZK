@@ -139,3 +139,60 @@ fn S2K_frontier_bounds() {
 }
 
 include!("S2K_concrete.rs");
+
+include!("S2K_result_validate.rs");
+
+// One result-validation child, not an enclosing emitter harness.
+#[kani::proof]
+#[kani::unwind(34)]
+fn S2K_result_validation_step() {
+    let statement=statement::statement();
+    let result=construct(&statement);
+    let expected=if result.master_account==[0;32] || result.selected_lane_account==[0;32] {
+        Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding)
+    } else {
+        match pool_v1_pair_forest_output_lane_v1(&result.nullifier) {
+            Err(e)=>Err(PoolV1PairForestTerminalFormatErrorV1::Account(e)),
+            Ok(lane) if lane!=result.output_lane=>Err(PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch),
+            Ok(_)=>validator_parent::inner::run(&result.verified_afterstate)
+                .map_err(PoolV1PairForestTerminalFormatErrorV1::Afterstate),
+        }
+    };
+    assert_eq!(validate_result(&result),expected);
+    kani::cover!(expected.is_ok());
+}
+
+// The remaining SAME-statement admission cut: no whole emit call and no
+// full result re-encoding. Actual statement validation must supply the
+// antecedents of kani031 on the constructor's SAME candidate afterstate.
+#[kani::proof]
+#[kani::unwind(34)]
+fn S2K_statement_result_admission() {
+    let statement=statement::statement();
+    let valid=validate_pool_v1_pair_forest_terminal_statement_v1(&statement);
+    if valid.is_ok() {
+        let result=construct(&statement);
+        assert!(result.master_account!=[0;32]);
+        assert!(result.selected_lane_account!=[0;32]);
+        assert_eq!(pool_v1_pair_forest_output_lane_v1(&result.nullifier),Ok(result.output_lane));
+        assert_eq!(validator_parent::inner::run(&result.verified_afterstate),Ok(()));
+    }
+    kani::cover!(valid.is_ok() && statement.transition_kind()==PoolV1TransitionKind::PrivateTransfer);
+    kani::cover!(valid.is_ok() && statement.transition_kind()==PoolV1TransitionKind::Withdrawal);
+}
+
+// Isolation of kani032: just the native lane-transition encoder and the
+// candidate-afterstate consequence; no payment, common bindings, or result.
+#[kani::proof]
+#[kani::unwind(34)]
+fn S2K_late_afterstate_admission() {
+    let statement=statement::statement().common().lane_transition;
+    let mut bytes=[0;POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES];
+    let valid=encode_pool_v1_pair_late_public_statement_v1(&statement,&mut bytes);
+    if valid.is_ok() {
+        assert_eq!(validator_parent::inner::run(&statement.candidate_afterstate),Ok(()));
+    }
+    kani::cover!(valid.is_ok());
+}
+
+include!("S2K_status_contract.rs");

@@ -22,5 +22,11 @@
     "cut": "        let start = 48 + 32 * level;\n        output[start..start + 32].copy_from_slice(&encode_digest_canonical(node));\n",
     "source_sha256": "03fc14126dab7d78688d6fab1d954cc116357f349652a37dee5b044d45e0bbea",
     "cut_sha256": "5621a845f13ab5db71dbc845a7be6eaa68411716c85866e3bc9e4cd3622fe300"
+  },
+  "src/S2K_result_validate.rs": {
+    "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+    "cut": "fn validate_result(\n    result: &PoolV1PairForestTerminalResultV1,\n) -> Result<(), PoolV1PairForestTerminalFormatErrorV1> {\n    if result.master_account == [0u8; 32] || result.selected_lane_account == [0u8; 32] {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);\n    }\n    let expected = pool_v1_pair_forest_output_lane_v1(&result.nullifier)\n        .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Account(error))?;\n    if result.output_lane != expected {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch);\n    }\n    encode_pool_v1_pair_verified_afterstate_v1(&result.verified_afterstate)\n        .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Afterstate(error))?;\n    Ok(())\n}\n",
+    "source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+    "cut_sha256": "62f04364a12d4a2e5d14400f17d337b5a2ba767ad4dd6d2c393fe0053ada8ee7"
   }
 }
