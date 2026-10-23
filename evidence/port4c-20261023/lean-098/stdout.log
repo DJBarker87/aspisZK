@@ -1,0 +1,17 @@
+Port4C_CollectLoop.lean:50:4: error: 'change' tactic failed, pattern
+  (do
+      let p ← (iterator ops).next { iter := iter, f := flat }
+      match p.1 with
+        | none => ok acc.reverse
+        | some item => alloc.vec.FromIteratorVec.iterToList (iterator ops) p.2 (item :: acc)) =
+    ?m.226
+is not definitionally equal to target
+  (do
+      let __x ← (iterator ops).next { iter := iter, f := flat }
+      match __x with
+        | (opt, iter) =>
+          match opt with
+          | none => ok acc.reverse
+          | some item => alloc.vec.FromIteratorVec.iterToList (iterator ops) iter (item :: acc)) =
+    ok (acc.reverse ++ List.map (record flat) (List.range' (↑iter.start) (fuel + 1)))
+'AspisR1.Port4C_CollectLoop.list_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

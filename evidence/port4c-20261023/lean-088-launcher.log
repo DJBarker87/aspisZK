@@ -1,0 +1,17 @@
+{"attempt": "lean-088", "exit_status": 0, "wall_seconds": 3.88767830299912, "peak_rss_kib": "4402548", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.alloc.vec.FromIteratorVec.from_iter : {T I IntoIter : Type} →
+  core.iter.traits.collect.IntoIterator I T IntoIter → I → Result (alloc.vec.Vec T) :=
+fun {T I IntoIter} IntoIteratorInst input => do
+  let iter ← IntoIteratorInst.into_iter input
+  let list ← alloc.vec.FromIteratorVec.iterToList IntoIteratorInst.iteratorInst iter []
+  if h : list.length ≤ Usize.max then ok ⟨list, h⟩ else fail Error.panic
+
+...
+def Aeneas.Std.alloc.vec.FromIteratorVec.from_iter : {T I IntoIter : Type} →
+  core.iter.traits.collect.IntoIterator I T IntoIter → I → Result (alloc.vec.Vec T) :=
+fun {T I IntoIter} IntoIteratorInst input => do
+  let iter ← IntoIteratorInst.into_iter input
+  let list ← alloc.vec.FromIteratorVec.iterToList IntoIteratorInst.iteratorInst iter []
+  if h : list.length ≤ Usize.max then ok ⟨list, h⟩ else fail Error.panic
+
+Running as unit: run-r0cefc86577dd446aaeaf39cb4bc6413f.scope; invocation ID: f81afd0ed0054f209af734a258c58ee7
