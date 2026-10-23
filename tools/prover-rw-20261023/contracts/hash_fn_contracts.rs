@@ -21,3 +21,19 @@ fn private_hash_fn_frame() {
     let out=aspis_core::state_only_private_merkle::private_leaf_hash(check_hash,tag,&value[..n],&salt);
     assert_eq!(out,answer);assert_eq!(unsafe{CALLS},1);
 }
+
+fn check_plain_hash(parts:&[&[u8]])->[u8;32] {
+    assert_eq!(unsafe{CALLS},0);unsafe{CALLS=1;}
+    assert_eq!(parts.len(),2);assert_eq!(parts[0],&[0x10,unsafe{TAG}]);
+    assert_eq!(parts[1].as_ptr(),unsafe{VALUE});assert_eq!(parts[1].len(),unsafe{LENGTH});
+    unsafe{ANSWER}
+}
+#[kani::proof]
+#[kani::unwind(36)]
+fn plain_hash_fn_frame() {
+    let value:[u8;480]=kani::any();let tag:u8=kani::any();let answer:[u8;32]=kani::any();
+    let n:usize=kani::any();kani::assume(n<=480);
+    unsafe{CALLS=0;TAG=tag;VALUE=value.as_ptr();LENGTH=n;ANSWER=answer;}
+    let out=aspis_core::r0::merkle::leaf(check_plain_hash,tag,&value[..n]);
+    assert_eq!(out,answer);assert_eq!(unsafe{CALLS},1);
+}

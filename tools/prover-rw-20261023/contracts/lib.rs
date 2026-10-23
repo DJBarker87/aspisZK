@@ -53,3 +53,8 @@ mod verifier {pub const SEMANTIC_BYTES:usize=12903+29*32;}
 #[cfg(kani)] mod scalar_adapter_contracts;
 
 #[cfg(kani)] mod raw_writer_contracts;
+
+#[cfg(kani)] mod reference_scalar;
+#[cfg(kani)] mod tower_inverse_contracts;
+
+#[cfg(kani)] mod reference_tower_field;

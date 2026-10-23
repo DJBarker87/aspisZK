@@ -426,3 +426,62 @@ and enumerates 287 unbound template holes. This is translation acceptance,
 not a Lean theorem or the source/model equality. Local production source
 pins were compared against the accepted translation receipt. The source is
 being frozen for pipeline-003 relative timing and corpus-1000-002.
+
+### Frozen source relative gate
+
+Production source checkpoint: 9c131667ca00f4daae78da6299b09a9fe0d00da9.
+Both optimized final harness builds pass. pipeline-003 performs five
+interleaved v2/candidate runs per fixture, 16 workers per process. Transfer
+medians: v2 17.196330087 s, candidate 17.349946833 s (ratio 1.0089331122).
+Withdrawal: v2 18.316932724 s, candidate 17.042244310 s (ratio 0.9304092867).
+Both satisfy the lead's relative 1.10 gate. Full returned fields and proof/public
+bytes match. Scope wall 350.007 s, peak RSS 688980 KiB, zero swap. Load samples
+and all ten paired timings are in interleaved-pipeline-003.json. No absolute
+under-15 conclusion is drawn from these contended-host values.
+
+corpus-1000-002 starts only after that relative pass. It uses the complete
+retry owner, varied genuine transfer/withdrawal statements and ten tape/error
+classes, including rejected prefixes. All cases compare status, audit, proof,
+public bytes, actual L1 records/events and public worker events; four selected
+pairs also compare complete supplied-oracle streams. Its progress is partial
+until completed_pairs=1000 and complete=true. Production source remains frozen
+while independent contract and diagnostic allocation jobs run under separate
+original resource caps. The generic tower inverse contract is Kani invocation
+30/60; its result is pending.
+
+### Final allocation counts and inverse adapter contract
+
+The frozen source allocation profile runs once; the unchanged v2 profile
+is reused rather than replayed. Transfer: 262147 fewer allocations, 62 fewer
+reallocations and 34537821 fewer cumulative requested bytes. Withdrawal:
+262161 / 62 / 34546109 fewer respectively. Returned status/callbacks/audit
+and complete proof/public bytes match. This is allocation instrumentation,
+not a timing or peak-memory measurement (scope 56.222 s, 687084 KiB RSS,
+zero swaps). See allocations-candidate-002-comparison.json.
+
+The first generic inverse-adapter encoding fails compilation at Rust's
+stub-attribute macro recursion limit. Reducing attribute expansion compiles,
+but the combined 61-product lower chain times out at 120 seconds. The next
+encoding composes the already checked canonical M31 generic inverse contract;
+its first form still exceeds the macro limit, so unused stub attributes are
+removed without changing the contract or raising limits. tower-inverse-kani-004
+passes (exit 0, 48.979 s, 953464 KiB RSS, zero swaps). It compares actual
+CodeField C/Q/E inverse control, lower operation operands, order, errors and
+outputs against the retained generic scalar algorithm. Lower arithmetic and
+base inverse are supplied by their previously checked canonical contracts;
+answers remain arbitrary canonical values. This is not a new unconditional
+inverse field-law theorem. The rejected encodings and all failures are retained.
+Usage: 33/60 Kani invocations, 20 passes, eight timeouts, three compilation
+failures, one CLI rejection and one rejected short-input contract. Lean 0/100.
+
+The ordinary leaf HashFn path also passes plain-hash-fn-kani-001: arbitrary
+tag, arbitrary 480-byte backing array and arbitrary length 0..480, exact
+one-call two-slice frame and arbitrary returned answer (exit 0, 2.739 s,
+317888 KiB RSS, zero swap). This covers the actual plain leaf entry point,
+including its LegacyHashFn delegation; it adds no SHA-256 or privacy claim.
+The complete caller inventory contains 104 opaque project functions and
+28 constant initializers. It is recorded separately from all 287 external
+template holes, which also include types and standard/environment operations.
+The complete leaf-contract gate remains open. budget-audit.json derives the
+actual 34/60 invocation count from immutable receipts: 21 pass, eight timeout,
+three compile failures, one CLI rejection and one rejected draft contract.
