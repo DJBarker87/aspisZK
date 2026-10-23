@@ -1,0 +1,63 @@
+import AspisR1ProducerRelease47.GammaBatch53
+import R1Z.ProverCommitBatchMix48
+/-! The source coefficient matrix is read column-first at the same index j.
+A symbolic loop equivalence reuses the established 29-lane arithmetic proof. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitGammaCell53
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitWideOps48 ProverCommitMix48
+
+def table (c : Nat → Nat → Raw) : Array (Array Source 1024#usize) 29#usize :=
+  ⟨List.ofFn (fun l : Fin (29#usize).val => sourceArray 1024#usize (c l.val)),by simp⟩
+
+theorem table_index (c : Nat → Nat → Raw) (l : Usize) (hl : l.val<29) :
+    Array.index_usize (table c) l=ok (sourceArray 1024#usize (c l.val)) := by
+  rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ hl]
+  simp only [table,List.getElem_ofFn]
+
+attribute [local irreducible] table sourceArray source
+
+theorem cell_eq (c : Nat → Nat → Raw) (powers : Array Source 29#usize)
+    (j : Usize) (hj : j.val<1024) (n : Nat) (left : U8) (hl : left.val=n)
+    (l : Usize) (bound : l.val+n≤29) (acc : Source) :
+    gamma53.cell (table c) powers j l left acc=
+      mix (sourceArray 29#usize (fun lane => c lane j.val)) powers l left acc := by
+  induction n generalizing left l acc with
+  | zero =>
+    have hz : left=0#u8 := by scalar_tac
+    rw [gamma53.cell,mix,hz]
+    rfl
+  | succ n ih =>
+    have hne : left≠0#u8 := by scalar_tac
+    have hdec : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)];omega
+    have hinc : (Usize.wrapping_add l 1#usize).val=l.val+1 :=
+      ProverCommitPairCounter47.next_val l (by omega)
+    have hb : (Usize.wrapping_add l 1#usize).val+n≤29 := by rw [hinc];omega
+    rw [gamma53.cell,mix]
+    simp only [hne,if_false,lift,bind_tc_ok]
+    rw [table_index c l (by omega),index 1024#usize (c l.val) j hj,
+      index 29#usize (fun lane => c lane j.val) l (by omega)]
+    simp only [bind_tc_ok]
+    have tail : ∀ v, gamma53.cell (table c) powers j (Usize.wrapping_add l 1#usize)
+        (U8.wrapping_sub left 1#u8) v =
+      mix (sourceArray 29#usize (fun lane => c lane j.val)) powers
+        (Usize.wrapping_add l 1#usize) (U8.wrapping_sub left 1#u8) v :=
+      fun v => ih _ hdec _ hb v
+    simp only [tail]
+
+theorem exact_result (c : Nat → Nat → Raw) (p : Nat → Raw)
+    (hc : ∀ l, l<29 → ∀ j, j<1024 → canonical (c l j))
+    (hp : ∀ l, l<29 → canonical (p l)) (j : Usize) (hj : j.val<1024) :
+    ∃ z : Raw, gamma53.cell (table c) (sourceArray 29#usize p) j 0#usize 29#u8
+      field.wide_exact.WideExact.ZERO=ok (source z) ∧ canonical z ∧
+      value z=ProverCommitMix48.sum (fun l => c l j.val) p 29 0 := by
+  rw [cell_eq c _ j hj 29 _ rfl _ (by decide),ProverCommitGamma48.source_zero]
+  obtain ⟨z,hz,hcz,hdz⟩ := owner_value (fun l => c l j.val) p (fun l hl => hc l hl j.val hj)
+    hp ProverCommitGamma48.zero ProverCommitGamma48.zero_canonical
+  exact ⟨z,hz,hcz,by simpa only [ProverCommitGamma48.zero_value,zero_add] using hdz⟩
+
+#print axioms table_index
+#print axioms cell_eq
+#print axioms exact_result
+end R1Z.ProverCommitGammaCell53

@@ -126,3 +126,51 @@ The receipt revision `1fb1793c05` denotes the unique parent commit of this
 stage; each receipt separately pins the exact compiled working source.
 No preexisting shared source/object is overwritten. The endpoint and shipped
 sources are unchanged.
+
+## Stage 4: complete gamma batch and coefficient provenance
+
+The new `gamma-owner` is an explicit counter cut of the native selected-j
+29-lane fold and 1024-output map. Charon/Aeneas run optimized and capped:
+exit 0/0, wall 1.48/0.346 s, peak RSS 205580/67056 KiB, swaps 0/0.
+The extracted arithmetic declarations are compared byte-for-byte before
+reuse; `gamma-callee-binding.json` records every reused declaration and exact
+new declaration. No external template or trust field is added.
+
+J10524 proves the complete source matrix cell equals the established
+29-lane arithmetic owner. J10526 proves the entire 1024-cell update interval,
+including preservation outside it. J10527 composes one shared gamma-power
+producer with all 1024 cells. J10529 identifies that result with
+`Batched.batchR1` given coefficient provenance. J10530 discharges that
+provenance with actual per-column `coefficients51.eval` Results via
+`ProverCommitGammaCoefficients53.column_spec`; its `exact_result` concludes
+the complete batch image without an assumed coefficient-array/model identity.
+The input is arbitrary canonical tape columns (the trace is defined from
+them), with the existing source gamma/challenge representation `value x =
+ch.opening 0` retained. Native Vec allocation/map assembly and complete
+Weights construction are separate, not inferred from the owned counter.
+
+J10518 is retired without compiler invocation after a missing private source
+directory prevented upload; J10519 then checks the extracted declarations.
+J10520 exposes duplicate ZERO from the binding script; J10521 reuses the
+retained Pairs declaration. J10522/23 are sequencing/numeral-bound drafts,
+J10525 a copied-loop draft, and J10528 a missing rowEquiv import draft.
+Accepted proofs all print only standard axioms. No source is retried unchanged
+with the same dependencies; no shared object is overwritten.
+
+| Attempt | Target | Exit | Wall | Peak RSS (KiB) | Swaps |
+|---|---|---:|---|---:|---:|
+| J10519 | AspisR1ProducerRelease47.GammaBatch53 | 0 | 0:01.09 | 2638016 | 0 |
+| J10521 | AspisR1ProducerRelease47.GammaBatch53 | 0 | 0:01.11 | 2635176 | 0 |
+| J10524 | R1Z.ProverCommitGammaCell53 | 0 | 0:02.34 | 4115024 | 0 |
+| J10526 | R1Z.ProverCommitGammaFill53 | 0 | 0:02.11 | 4104640 | 0 |
+| J10527 | R1Z.ProverCommitGammaOutput53 | 0 | 0:01.92 | 4103140 | 0 |
+| J10529 | R1Z.ProverCommitGammaModel53 | 0 | 0:02.05 | 4135164 | 0 |
+| J10530 | R1Z.ProverCommitGammaCoefficients53 | 0 | 0:01.97 | 4253916 | 0 |
+
+Exact source hashes, dependencies, revision, rejected errors and all printed
+axioms are in `lean/J10518`–`J10530` receipts. Native trace diagnostics are
+recorded separately and are not yet accepted evidence for the caller. The
+whole-29 trace diagnostic was stopped during Kani report processing at
+6568672 KiB RSS (276.747 s, zero swap), without raising caps. It is replaced
+by a universally quantified one-iteration trace check; the Lean induction
+already covers the full arithmetic sequence.
