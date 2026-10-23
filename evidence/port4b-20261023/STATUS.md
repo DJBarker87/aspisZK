@@ -290,3 +290,28 @@ new ELF measurement is inferred from body identity. No shipped files changed;
 inherited default f8c0ec72…/devnet63ad3e9c…/Pool121f3e29… remain historical.
 No keys, other worktrees, sibling candidates, source features or parameters
 were changed. All substantive stages are committed locally; no push.
+
+Final focused union102: Port4B_Final.lean, exit0,wall3.313747665s,
+peak4402668KiB,swap0,source revision6c5d5298b2 (full revision in receipt).
+All16 final top-theorem audits use only propext/Classical.choice/Quot.sound.
+The final log also prints the exact installed leaves, PreparedBinding,
+CallerJoin and both StageRows statements, so the remaining premises are
+reviewable. All40 final module source hashes match successful receipts.
+No frozen release manifest, adversarial/runtime suite or ELF rebuild was run.
+
+STOP:100/100 ACTUAL Lean compile attempts exhausted;0/60 Kani runs.
+Reserved033/036 never launched Lean and are not counted. The one voluntarily
+stopped search095 was source-changed before replacement; no resource cap was
+raised. Every actual attempt has its exact command/source/dependency/revision,
+exit/wall/RSS/swap/cgroup/axiom record. All accepted modules contain no proof
+holes or nonstandard axioms. No active job remains from this continuation.
+
+Final handoff: use Port4B_StageRows.tx1/tx2 with the fixed Port4B_FoldedCut.install
+batch-related caller leaves and Port4B_Install.leaves batch children. Their
+prepare/resume source contract must establish PreparedBinding for the SAME
+returned p; wireStored and model roots also remain explicit caller/S1
+provenance. Existing P6 source/control/library adoption stays named, with
+owned canonical key/count/slot/verifier lowerings clearly distinguished from
+fresh native extractions. Instantiating those concrete source bindings is the
+next deliverable. This packet does not construct global AcceptedRunJoin or
+establish the security/release target. No push or shipped/artifact/key changes.
