@@ -27,3 +27,43 @@ Complete verbatim endpoint modules are retained in `endpoint/before.lean.txt`
 and `endpoint/after.lean.txt` with pins. They are unchanged. The deployed
 `RustProverRefinement` premise, quantifiers, failure events and bound remain
 explicit and unchanged. No FSExperiments join or release claim is made.
+
+## Stage 2: retained source Poseidon callable
+
+The additional leading/full-pair dependency preflight schedules 55 retained
+modules. BUILD-53-2 builds six, then exposes Lean's namespace-directory
+resolution at module 7: `AspisR1.PoseidonGroupSliceModel` exists in D178's
+cache but is hidden by the new private `AspisR1` directory. This is a missing
+artifact in the selected search directory, not a theorem failure. The exact
+failed output and source/dependency hashes are retained.
+
+The D178 read-only link completion pattern repairs the environment. It links
+14696 existing cache objects and excludes all 55 planned compile outputs; no
+shared object is overwritten. BUILD-53-3 then builds the remaining 49 modules
+successfully, sequentially under 6G/8G/zero-swap/64 limits, with aggregate RSS
+and ten-minute no-progress stops. Every printed accepted axiom report is
+standard. Exact per-module targets, revision, hashes, dependency fingerprints,
+exit, wall, RSS, swaps and full axiom reports are in
+`poseidon-build/modules-audited.json` and the accompanying raw logs.
+
+J10502 proves `AspisR1.PoseidonCallable53.source_success`: from the actual
+boxed point and canonical z/successor/xor12 arrays, the retained source cut
+succeeds canonically and returns all four packed scalar residuals. No leading,
+full or internal branch success/model image is assumed. J10503 proves
+`AspisR1.CompositionCallable53.run_success`, discharging the previously explicit
+Poseidon callable contract from the retained composition continue branch.
+The original public transcript preparation input remains.
+
+J10501 is a rejected alias-elaboration draft (implicit array size); J10502
+adds that size binder without changing the intended proposition or limits.
+J10502: exit 0, wall 1.89 s, peak RSS 4147548 KiB, zero swaps. J10503: exit 0,
+wall 1.69 s, peak RSS 4202536 KiB, zero swaps. Both top theorems print exactly
+`[propext, Classical.choice, Quot.sound]`; full source snapshots and receipts
+are in `lean/J1050{1,2,3}.*`. Source revision is the stage-1 commit plus
+the exact compiled source hashes in the receipts.
+
+These are retained source-cut results. The wrapper's extraction-candidate
+Rust and the frozen native Rust have different low-fold and array-construction
+syntax, and the leading external layer is factored differently. Native
+correspondence, guards, terminal model identification and complete payload
+equality are not inferred from these theorems.
