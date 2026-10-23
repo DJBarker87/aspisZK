@@ -162,3 +162,39 @@ join, deployed StoredCarrierBinding discharge or 100-bit release conclusion
 is established. The next concrete deliverable is extraction/source refinement
 of snapshot and the single write wrapper, plus the fixed-invocation child
 observation port. Neither gap is an SDK guard-internals proof obligation.
+
+## Final focused audit
+
+S2X_Audit at Lean014 imports the six new S2X modules' dependency union and
+prints all 23 new theorem axioms: standard subsets only. Exit0,
+1.754677s, peak RSS4365512KiB, swap0; source revision
+26b4dc950c (full revision and dirty-source snapshot SHA256 in receipt).
+Lean013 field implications: exit0,1.864541s,4384744KiB,swap0.
+No complete frozen manifest was launched: the native wrapper and observation
+predecessors remain open. This is one focused union audit against reused cached
+objects, not a coherent release rebuild. No unchanged proof was rerun.
+
+Budget used: 13 Lean compilations plus one cache-preflight failure, charged
+conservatively as14/100; Kani0/60. Eight successful focused compilations,
+five failed compilations retained and excluded. Maximum RSS4436912KiB;
+all swaps0, no timeout/memory kill, no raised cap. Each attempt has exact
+command, revision, source/dependency fingerprints, full output, metrics,
+reservation and cgroup limits. Cache-preflight failure has no Lean metrics.
+
+Protocol/wire parameters are unchanged: candidate688, proof57607,
+raw proof account58295, verifier checkpoint1768 and full public1880 bytes.
+Lean toolchain is4.32.0 (binary hashes in receipts); release features and
+three ELF pins are inherited from D182. boundary-inventory.json also pins
+the owned/native source, Cargo.lock and program manifest. No production
+Rust, runtime, toolchain or feature configuration changed, so existing
+runtime/reproducible/SBF results were reused and no three-ELF rebuild was
+triggered. S2TrustedSdkBorrow and RuntimeEntrypointAdmission retain their
+original statements; native_entry_shared/read/drop and shared bracket
+restoration are reused from AdapterRwSdkSnapshots, without treating owned
+allocation as an inert ambient step. No keys or account funds were touched.
+
+Read-only verification (no prover replay):
+`python3 tools/s2x-20261023/S2X_audit.py --check`.
+The manifest includes all selected current-source receipts and field status.
+All new Lean modules use S2X_ filenames; no existing Lean file changed.
+No pushes or merges. **S2 and the release target remain open.**
