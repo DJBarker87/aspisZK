@@ -1130,3 +1130,28 @@ calls. Fresh full Pair extraction now includes actual core field bodies;
 remaining actual r0 dependency bodies are being included before accepting
 its Lean source owner. Neither full Pair nor the source-to-release security
 statement is closed.
+
+PROVED constructor cell update: the same successful generated inner body
+provides all child arithmetic and mutable-array update witnesses; canonical
+input x and exact row-read contract imply canonical intermediate/output
+values and exact updated-row reads (18.041 s, 2,203,942,912-byte aggregate
+RSS, zero swap, standard axioms). Inner/outer loop instances remain pending.
+
+EXTRACTED actual private semantic_rounds caller: new source-only packet
+s9-actual-ten-round-caller-extraction-v1-20261023 retains nonempty source
+133–179 emission, exactly reused Types and single-round bytes, original
+tool output and the honestly recovered Charon wrapper receipt. The pinned
+source cut is current c66eba source plus an unused forwarding shim; it is
+not claimed byte-identical to the complete deployed source file. The new
+caller ZERO Result bind is being handled by a theorem uniform in its actual
+returned initial value, which all ten rounds overwrite. Caller acceptance
+or oracle-trace equivalence under replacing that value is not assumed.
+
+OPEN composition environment issue: importing the full helper chain with
+the semantic chain exposes the historical global Error-instance name
+collision (PublicPreparation.Types versus FinishRelationCurrent.Types).
+The existing qualified discriminant adapter is available, but the selected
+old PublicPrep Types object has no retained source identity. A new source-
+pinned numerical cohort and focused affected dependency replay are required;
+no reversible source-identity claim is made about that unknown old object.
+This does not justify a release-coherent proof claim from cached imports.

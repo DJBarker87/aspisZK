@@ -1,0 +1,3 @@
+PROVED: the exact successful generated constructor inner cell-body execution supplies its same-run double, multiply, mutable-row lookup, row update and next-double witnesses. Canonical input x and canonical reads of the exact input row imply canonical intermediate/output values and reads of the exact updated row. No independent child-call success is assumed. Whole inner/outer loop instances, input point producers and complete source/runtime soundness remain open.
+
+Focused Lean check: 18.041 seconds; peak aggregate RSS 2203942912 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

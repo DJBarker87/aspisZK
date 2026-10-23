@@ -1,0 +1,273 @@
+{
+  "phase": "charon",
+  "argv": [
+    "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--start-from",
+    "crate::r1_semantic::semantic_rounds",
+    "--opaque",
+    "crate::r1_wire::_::decode_k",
+    "--opaque",
+    "crate::r1_semantic::semantic_boundary",
+    "--opaque",
+    "crate::r1_semantic::semantic_value",
+    "--dest-file",
+    "/home/dombarker/project-offloads/s9-actual-semantic-rounds-caller-source-v1-20261023/attempt1/runs/charon/actual-semantic-rounds.llbc",
+    "--",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/s9-actual-semantic-rounds-source-cut-v1-20261023/attempt25/input/Cargo.toml",
+    "--locked",
+    "--offline",
+    "--release",
+    "--lib",
+    "--no-default-features",
+    "--features",
+    "private-leaf-salts",
+    "-p",
+    "aspis-r1-cost-probe",
+    "--jobs",
+    "1"
+  ],
+  "cwd": "/home/dombarker/project-offloads/s9-actual-semantic-rounds-source-cut-v1-20261023/attempt25/input",
+  "limits": {
+    "memory.high": "2147483648",
+    "memory.max": "2147483648",
+    "memory.swap.max": "0"
+  },
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/a3-s9-semantic-rounds-charon-2724521-1792735091006322360.scope",
+  "source_manifest_sha256": "fca361a919d2106fa6b480872b254b1f1d0ca9f81f0c50f8a00f027d5792ddc8",
+  "source_revision_at_launch": "cf12c47470158071d9b3dd7ba4fb7e9cdba4cc20",
+  "expected_work": "warm release MIR extraction of actual private semantic_rounds caller from untouched existing complete semantic source; no cold dependency build intended",
+  "tool_pins": {
+    "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+    "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/bin/aeneas": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3"
+  },
+  "exit_status": 0,
+  "wrapper_exit_status": 1,
+  "tool_status_source": "GNU time exit status",
+  "wall_time_reported_by_time": "1:14.64",
+  "peak_process_rss_kib": 537296,
+  "process_swaps": 0,
+  "scope_memory_peak_bytes": null,
+  "scope_swap_current_bytes": null,
+  "scope_metrics_status": "not persisted: wrapper failed in post-run metadata parsing before writing receipt; verified memory.swap.max=0 cap and GNU time zero swaps retained",
+  "recovery_reason": "fun_decls contains null entries; original walker attempted f.get on None after child success. Original runner preserved unchanged; no extraction rerun.",
+  "llbc_sha256": "14b66bb3a2c157faf8198d690490c3381ebbfa2465984a09fca7467c9a143533",
+  "llbc_bytes": 792936,
+  "llbc_has_errors": false,
+  "llbc_nonnull_fun_decl_count": 25,
+  "semantic_rounds_root_count": 1,
+  "root_body_nonempty": true,
+  "root_metadata": [
+    {
+      "def_id": 0,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "aspis_r1_cost_probe",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "r1_semantic",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "semantic_rounds",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 0,
+            "beg": {
+              "line": 133,
+              "col": 0
+            },
+            "end": {
+              "line": 179,
+              "col": 1
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": "fn semantic_rounds<H: Digest32>(prefix: &Prefix<'_>, mut transcript: SemanticTranscript<H>) -> Result<(QM31, [QM31; 10], SemanticTranscript<H>), Error> {\n    let mut running = prefix.validated_record(14)?.decode_k::<1>(0)?[0];\n    let mut alpha = [QM31::ZERO; 10];\n    #[cfg(feature = \"prover\")]\n    let mut round_checks = [[QM31::ZERO; 3]; 10];\n    {\n        let round = 0usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 1usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 2usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 3usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 4usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 5usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 6usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 7usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 8usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    {\n        let round = 9usize;\n        (running, alpha, transcript) = semantic_round(prefix, transcript, alpha, running, round)?;\n    }\n    Ok((running, alpha, transcript))\n}",
+        "attr_info": {
+          "attributes": [],
+          "inline": "Never",
+          "rename": null,
+          "public": false
+        },
+        "is_local": true,
+        "opacity": "Transparent",
+        "lang_item": null
+      },
+      "signature": {
+        "is_unsafe": false,
+        "abi": "Rust",
+        "is_variadic": false,
+        "inputs": [
+          {
+            "HashConsedValue": [
+              2432,
+              {
+                "Ref": [
+                  {
+                    "Var": {
+                      "Free": 0
+                    }
+                  },
+                  {
+                    "HashConsedValue": [
+                      2431,
+                      {
+                        "Adt": {
+                          "id": {
+                            "Adt": 0
+                          },
+                          "generics": {
+                            "regions": [
+                              {
+                                "Var": {
+                                  "Free": 1
+                                }
+                              }
+                            ],
+                            "types": [],
+                            "const_generics": [],
+                            "trait_refs": []
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "Shared"
+                ]
+              }
+            ]
+          },
+          {
+            "HashConsedValue": [
+              2433,
+              {
+                "Adt": {
+                  "id": {
+                    "Adt": 1
+                  },
+                  "generics": {
+                    "regions": [],
+                    "types": [
+                      {
+                        "Deduplicated": 2406
+                      }
+                    ],
+                    "const_generics": [],
+                    "trait_refs": []
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "output": {
+          "HashConsedValue": [
+            2435,
+            {
+              "Adt": {
+                "id": {
+                  "Adt": 2
+                },
+                "generics": {
+                  "regions": [],
+                  "types": [
+                    {
+                      "HashConsedValue": [
+                        2434,
+                        {
+                          "Adt": {
+                            "id": "Tuple",
+                            "generics": {
+                              "regions": [],
+                              "types": [
+                                {
+                                  "Deduplicated": 509
+                                },
+                                {
+                                  "HashConsedValue": [
+                                    511,
+                                    {
+                                      "Array": [
+                                        {
+                                          "Deduplicated": 509
+                                        },
+                                        {
+                                          "kind": {
+                                            "Literal": {
+                                              "Scalar": {
+                                                "Unsigned": [
+                                                  "Usize",
+                                                  "10"
+                                                ]
+                                              }
+                                            }
+                                          },
+                                          "ty": {
+                                            "Deduplicated": 510
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Deduplicated": 2433
+                                }
+                              ],
+                              "const_generics": [],
+                              "trait_refs": []
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "HashConsedValue": [
+                        538,
+                        {
+                          "Adt": {
+                            "id": {
+                              "Adt": 4
+                            },
+                            "generics": {
+                              "regions": [],
+                              "types": [],
+                              "const_generics": [],
+                              "trait_refs": []
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "const_generics": [],
+                  "trait_refs": []
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
