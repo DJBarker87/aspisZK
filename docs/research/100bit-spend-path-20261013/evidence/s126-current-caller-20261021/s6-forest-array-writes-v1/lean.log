@@ -1,0 +1,33 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6ForestArrayWritesV1.lean:32:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.slice.Slice.copy_from_slice core.marker.CopyU8 slice source
+in the target expression
+  (let (slice, back) := (slice, back)
+    do
+    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 slice source
+    ok (back copied)) =
+    ok (back source)
+
+N : Usize
+a : Std.Array U8 N
+first last : Usize
+source : Slice U8
+horder : ↑first ≤ ↑last
+hbound : ↑last ≤ ↑N
+hwidth : (↑source).length = ↑last - ↑first
+slice : Slice U8
+back : Slice U8 → Std.Array U8 N
+hindex :
+  core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) a
+      { start := first, «end» := last } =
+    ok (slice, back)
+hvalue : ↑slice = List.slice ↑{ start := first, «end» := last }.start ↑{ start := first, «end» := last }.end ↑a
+hlength : slice.length = ↑{ start := first, «end» := last }.end - ↑{ start := first, «end» := last }.start
+hback : ∀ (s' : Slice U8), ↑(back s') = (↑a).setSlice! ↑{ start := first, «end» := last }.start ↑s'
+sameLength : slice.length = source.length
+hcopy : core.slice.Slice.copy_from_slice core.marker.CopyU8 slice source = ok source
+⊢ (let (slice, back) := (slice, back)
+    do
+    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 slice source
+    ok (back copied)) =
+    ok (back source)
+'AspisS6ForestArrayWrites.copyRange_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

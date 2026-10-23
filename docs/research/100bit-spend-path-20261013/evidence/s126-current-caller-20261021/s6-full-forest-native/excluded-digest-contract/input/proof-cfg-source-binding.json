@@ -1,0 +1,10 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_file": "frozen-source/crates/aspis-statement/src/atomic_statement.rs",
+  "original_sha256": "c73fc9a55dd3493ae264231eaaf495c886c42cf0e58412bdb11053a191eb860a",
+  "proof_cfg_sha256": "4d7a84ce2598bd6ae98e3d565fdd611c65e17a0ff8433a79961ab9e27c14df67",
+  "attribute": "#[cfg_attr(kani, kani::ensures(|result: &[u8;32]| *result == kani_digest_reference(digest)))]\n",
+  "reference": "\n#[cfg(kani)]\nfn kani_digest_reference(d:&Digest)->[u8;32] {let mut b=[0u8;32];\nb[0..4].copy_from_slice(&d[0].to_le_bytes());\nb[4..8].copy_from_slice(&d[1].to_le_bytes());\nb[8..12].copy_from_slice(&d[2].to_le_bytes());\nb[12..16].copy_from_slice(&d[3].to_le_bytes());\nb[16..20].copy_from_slice(&d[4].to_le_bytes());\nb[20..24].copy_from_slice(&d[5].to_le_bytes());\nb[24..28].copy_from_slice(&d[6].to_le_bytes());\nb[28..32].copy_from_slice(&d[7].to_le_bytes());\nb}\n",
+  "release_source_unchanged_after_stripping_proof_cfg": true,
+  "qualification": "Proof-only Kani contract attribute/helper on a private copied dependency. Function body and ordinary release source are unchanged; original function contract is checked before summary use. No production adoption or new release artifact."
+}

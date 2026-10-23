@@ -1,0 +1,8 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "reference": "fn reference(d:&Digest)->[u8;32] {let mut b=[0u8;32];\nb[0..4].copy_from_slice(&d[0].to_le_bytes());\nb[4..8].copy_from_slice(&d[1].to_le_bytes());\nb[8..12].copy_from_slice(&d[2].to_le_bytes());\nb[12..16].copy_from_slice(&d[3].to_le_bytes());\nb[16..20].copy_from_slice(&d[4].to_le_bytes());\nb[20..24].copy_from_slice(&d[5].to_le_bytes());\nb[24..28].copy_from_slice(&d[6].to_le_bytes());\nb[28..32].copy_from_slice(&d[7].to_le_bytes());\nb}\n",
+  "reference_sha256": "aafd34523dddd3010444eb331d7c5b71ae3065855600153b0a577f69b5492183",
+  "predecessor": "s6-native-digest-encoder-v2",
+  "predecessor_reference_source_sha256": "850647d8af7b85fbfb303db69878eb01f806032c02ae2b00273ca59280ca1724",
+  "qualification": "Only native digest encoder replaced by the exact complete unrolled implementation already checked equal for every native8-limb input; no opaque/arbitrary output stub. Caller source inventories and reference bytes must match the green predecessor. Remaining native full-forest code unchanged; no assumed whole roundtrip or SDK claim."
+}

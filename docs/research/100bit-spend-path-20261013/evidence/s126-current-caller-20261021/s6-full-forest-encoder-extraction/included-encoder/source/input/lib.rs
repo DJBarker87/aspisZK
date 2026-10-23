@@ -1,0 +1,1 @@
+pub fn encode(statement:&aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalStatementV1)->Result<[u8;1880],aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1>{aspis_statement::pool_v1::pair_forest_terminal::encode_pool_v1_pair_forest_terminal_statement_v1(statement)}
