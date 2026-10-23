@@ -14,7 +14,7 @@ assert native.count('accounts[2].try_borrow_mut_data()?.copy_from_slice(&checkpo
 assert harness.count('accounts[2].try_borrow_mut_data()?.copy_from_slice(&checkpoint);')==1
 assert sha(L/'S2W_Snapshot.lean')==json.loads((E/'snapshot-emission/adaptation.json').read_text())['adapted_sha256']
 allowed={'propext','Classical.choice','Quot.sound'}
-current={'S2W_OracleAudit':'lean-001','S2W_Snapshot':'lean-003','S2W_SnapshotFacts':'lean-010','S2W_SnapshotJoin':'lean-012','S2W_Audit':'lean-013'}
+current={'S2W_OracleAudit':'lean-001','S2W_Snapshot':'lean-003','S2W_SnapshotFacts':'lean-010','S2W_SnapshotJoin':'lean-012','S2W_Audit':'lean-013','S2W_Trace':'lean-016'}
 for module,a in current.items():
  p=E/a/'receipt.json';v=json.loads(p.read_text());assert v['exit_status']==0
  assert v['source_hashes'][module+'.lean']==sha(L/(module+'.lean'))

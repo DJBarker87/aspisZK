@@ -1,11 +1,11 @@
 {
   "schema": "focused-extractor-proof-packet-v1",
-  "source_revision": "becfa14dc626ecb6c5c9cd6062201fdfc75c4090",
+  "source_revision": "76d32f4680a19b9609522decfdb6cdbc3e5e923b",
   "qualification": "Focused cached new modules and standalone native leaf gates. No S2CallerFacts/native-observation theorem or coherent release replay. Failed recovery axioms excluded. GNU time peak for timeout kani005 is parent-only; cgroup peak retained.",
   "budget": {
-    "lean_used": 13,
+    "lean_used": 16,
     "lean_limit": 100,
-    "kani_used": 9,
+    "kani_used": 10,
     "kani_limit": 60
   },
   "current_lean": {
@@ -13,7 +13,8 @@
     "S2W_Snapshot": "lean-003",
     "S2W_SnapshotFacts": "lean-010",
     "S2W_SnapshotJoin": "lean-012",
-    "S2W_Audit": "lean-013"
+    "S2W_Audit": "lean-013",
+    "S2W_Trace": "lean-016"
   },
   "fields": {
     "proofBytes": "Conditional inherited; same native invocation/site observations and authenticated TX2 proof identity open",
@@ -970,6 +971,47 @@
       "print_axioms": "N/A: kani-selected"
     },
     {
+      "attempt": "kani-010",
+      "kind": "kani",
+      "source_revision": "76d32f4680a19b9609522decfdb6cdbc3e5e923b",
+      "source_hashes": {
+        "S2W_copy/src/lib.rs": "1ac568c957c716ec03cbf6f4ce4abeced0f6439cf20cb567f415052b85419eb6",
+        "S2W_copy/Cargo.toml": "b225df54a161c1210a62b12d039d64a6c3eead4932154939281a4922c4432a65"
+      },
+      "deps_fingerprint": {
+        "scope": "S2G selected-byte actual copy contract instantiated at57607, arbitrary observed index, expected bound to source[index], destination-only modifies"
+      },
+      "command": [
+        "/home/dombarker/.cargo/bin/cargo-kani",
+        "kani",
+        "--manifest-path",
+        "S2W_copy/Cargo.toml",
+        "--target-dir",
+        "copy-target",
+        "-j",
+        "4",
+        "-Z",
+        "stubbing",
+        "-Z",
+        "function-contracts",
+        "-Z",
+        "unstable-options",
+        "--harness-timeout",
+        "60s",
+        "--exact",
+        "--harness",
+        "S2W_copy_contract",
+        "--output-format",
+        "terse"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 62.367983118994744,
+      "peak_rss_kib": "4722972",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "4847222784",
+      "print_axioms": "N/A: kani"
+    },
+    {
       "attempt": "lean-001",
       "kind": "lean",
       "source_revision": "73e3cda3c86cd80edb8e117be73a7a474143e4b9",
@@ -1531,6 +1573,134 @@
         "'AspisR1.S2W.SnapshotJoin.data_success' depends on axioms: [propext, Classical.choice, Quot.sound]",
         "'AspisR1.S2W.SnapshotJoin.snapshot_shape' depends on axioms: [propext, Classical.choice, Quot.sound]",
         "'AspisR1.S2W.SnapshotJoin.accepted_checkpoint_length' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-014",
+      "kind": "lean",
+      "source_revision": "76d32f4680a19b9609522decfdb6cdbc3e5e923b",
+      "source_hashes": {
+        "S2W_Trace.lean": "709b99062d0d481ca75e2127d2917a1be9e94f9450bc3cec68eb109b7c6a4a0d"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "AdapterRwModel.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/AdapterRwModel.olean",
+            "sha256": "5f86bd6022a38920b7d2cd13aedeb1385844a40b0830df5cb6340fe3f9756efc",
+            "bytes": 2804048
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_Trace.olean",
+        "S2W_Trace.lean"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 2.015532916004304,
+      "peak_rss_kib": "2660532",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "323571712",
+      "print_axioms": [
+        "'AspisR1.S2W_Trace.run_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Trace.erase_perform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Trace.erase_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Trace.erase_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-015",
+      "kind": "lean",
+      "source_revision": "76d32f4680a19b9609522decfdb6cdbc3e5e923b",
+      "source_hashes": {
+        "S2W_Trace.lean": "44f712231fb18de595bd08a8b8d8cc423027be5c0916bf3843f9b92b7c06c34f"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "AdapterRwModel.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/AdapterRwModel.olean",
+            "sha256": "5f86bd6022a38920b7d2cd13aedeb1385844a40b0830df5cb6340fe3f9756efc",
+            "bytes": 2804048
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_Trace.olean",
+        "S2W_Trace.lean"
+      ],
+      "exit_status": 1,
+      "wall_seconds": 2.57030553300865,
+      "peak_rss_kib": "2661500",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "327114752",
+      "print_axioms": [
+        "'AspisR1.S2W_Trace.erase_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Trace.run_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Trace.erase_perform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Trace.erase_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Trace.erase_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-016",
+      "kind": "lean",
+      "source_revision": "76d32f4680a19b9609522decfdb6cdbc3e5e923b",
+      "source_hashes": {
+        "S2W_Trace.lean": "1354357d69dc7f9f1d3e0e713d93e4ac7fd92b8cf34ccb1c89b87361e2ec4048"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "selected_objects": {
+          "AdapterRwModel.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/AdapterRwModel.olean",
+            "sha256": "5f86bd6022a38920b7d2cd13aedeb1385844a40b0830df5cb6340fe3f9756efc",
+            "bytes": 2804048
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "S2W_Trace.olean",
+        "S2W_Trace.lean"
+      ],
+      "exit_status": 0,
+      "wall_seconds": 2.5963179230020614,
+      "peak_rss_kib": "2681096",
+      "swaps": "0",
+      "cgroup_memory_peak_bytes": "350531584",
+      "print_axioms": [
+        "'AspisR1.S2W_Trace.erase_run' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Trace.run_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Trace.erase_perform' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Trace.erase_lift' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.S2W_Trace.erase_bind' depends on axioms: [propext, Classical.choice, Quot.sound]"
       ]
     },
     {
