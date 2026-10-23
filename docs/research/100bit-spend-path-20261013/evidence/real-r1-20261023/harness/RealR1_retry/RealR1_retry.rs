@@ -1,0 +1,71 @@
+#![allow(dead_code, static_mut_refs)]
+// Verified control boundary only: entropy and complete body effects are
+// explicit contracts, not implementations of RNG, crypto or filesystem.
+use core::marker::PhantomData;
+#[derive(Clone,Copy)] struct Public<'a>(PhantomData<&'a ()>);
+type PoolV1PairForestMergedC1CompilationV1 = ();
+type HashFn = ();
+#[derive(Clone,Copy,PartialEq,Eq,Debug)] enum Error { Rejected, Semantic, Entropy, AttemptsExhausted }
+#[derive(Clone,Copy,PartialEq,Eq)] enum Variant { S1, S2 }
+#[derive(Clone,Copy)] struct StateOnlyAttemptSecrets { nonce: [u8;32], index: usize }
+#[derive(Clone,Copy,Debug,PartialEq,Eq)] struct RetriedProof { proof:u8, audit:u8, attempts:usize }
+#[derive(Clone,Copy)] struct DurableStateOnlyMaskNonceStore { effects: [u8;8], calls: usize }
+#[derive(Clone,Copy)] struct State {
+    keys:[[u8;32];8], entropy_errors:[bool;8], outcomes:[u8;8],
+    events:[u8;24], count:usize, index:usize,
+}
+static mut STATE:Option<State> = None;
+fn access<T>(f:impl FnOnce(&mut State)->T)->T { unsafe {f(STATE.as_mut().unwrap())} }
+fn event(s:&mut State,kind:u8) { assert!(s.count<24);s.events[s.count]=kind;s.count+=1; }
+fn account(k:usize)->[u8;32] { access(|s| {s.index=k;event(s,1);s.keys[k]}) }
+impl StateOnlyAttemptSecrets {
+    fn generate_for_mask_nonce(nonce:[u8;32])->Result<Self,()> {
+        access(|s| {event(s,2); if s.entropy_errors[s.index] {Err(())} else {Ok(Self{nonce,index:s.index})}})
+    }
+}
+const ATTEMPT_CAP:usize=8;
+fn prove_masked_attempt(_:Public<'_>,_:&(),_:Variant,_:HashFn,attempt:StateOnlyAttemptSecrets,store:&mut DurableStateOnlyMaskNonceStore)->Result<(u8,u8),Error> {
+    // The opaque body contract returns its full effects, including rejected
+    // prefixes. The reservation/body gates must instantiate this separately.
+    access(|s| {
+        for i in 0..32 {assert_eq!(attempt.nonce[i],s.keys[attempt.index][i]);}
+        event(s,3); let k=attempt.index;
+        store.effects[store.calls]=s.outcomes[k];store.calls+=1;
+        match s.outcomes[k] {0=>Ok((k as u8,11)),1=>Err(Error::Rejected),2=>Err(Error::Semantic),3=>Err(Error::Entropy),_=>Err(Error::AttemptsExhausted)}
+    })
+}
+mod prover { use super::*; include!("RealR1_native_retry.rs"); }
+include!("RealR1_native_client.rs");
+
+// Owned structural counterpart of Retry34.run (stop on entropy errors even
+// if a callback's error could otherwise be classified as retryable).
+fn owned(fuel:usize,k:usize,store:&mut DurableStateOnlyMaskNonceStore)->Result<RetriedProof,Error> {
+    if fuel==0 {return Err(Error::AttemptsExhausted)}
+    let key=account(k);
+    let attempt=StateOnlyAttemptSecrets::generate_for_mask_nonce(key).map_err(|_|Error::Entropy)?;
+    match prove_masked_attempt(Public(PhantomData),&(),Variant::S2,(),attempt,store) {
+        Ok((proof,audit))=>Ok(RetriedProof{proof,audit,attempts:k+1}),
+        Err(Error::Rejected)=>owned(fuel-1,k+1,store),
+        Err(e)=>Err(e),
+    }
+}
+#[cfg(kani)] mod proofs {
+    use super::*;
+    #[kani::proof]
+    #[kani::unwind(34)]
+    fn selected_client_owned() {
+        let initial=State{keys:kani::any(),entropy_errors:kani::any(),outcomes:kani::any(),events:[0;24],count:0,index:0};
+        unsafe {STATE=Some(initial)};
+        let mut native_store=DurableStateOnlyMaskNonceStore{effects:[0;8],calls:0};
+        let native=prove_for_proof_accounts(Public(PhantomData),&(),(),&mut native_store,account);
+        let after=access(|s|*s);
+        unsafe {STATE=Some(initial)};
+        let mut owned_store=DurableStateOnlyMaskNonceStore{effects:[0;8],calls:0};
+        let reference=owned(8,0,&mut owned_store);
+        assert_eq!(native,reference);
+        assert_eq!(native_store.calls,owned_store.calls);
+        for i in 0..8 {assert_eq!(native_store.effects[i],owned_store.effects[i]);}
+        access(|s| {assert_eq!(after.count,s.count);assert_eq!(after.index,s.index);
+            for i in 0..24 {assert_eq!(after.events[i],s.events[i]);}});
+    }
+}

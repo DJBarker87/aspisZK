@@ -19,6 +19,10 @@ pub mod transcript;
 pub mod verifier;
 #[cfg(feature = "prover")]
 pub mod prover;
+/// Host client for the selected public proof-account nonce route (D162).
+#[cfg(feature = "r1p-check")]
+#[allow(non_snake_case)]
+pub mod RealR1_client;
 #[cfg(feature = "prover")]
 pub mod dense;
 /// G-sim (LOG D44.3): the explicit R1 simulator simE in the ideal game.
