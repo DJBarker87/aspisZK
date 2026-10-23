@@ -208,3 +208,37 @@ selected-operand interface and disables assertion-reach reporting.
 The current Weights constructor extraction is a separate work-in-progress
 continuation. J10535 is retired before compilation for a wrong retained
 module path; J10536 uses the actual retained inactive-source import.
+
+
+## Stage 6: stored Weights and complete materialization
+
+The second resume recovers host receipts J10536–J10554. J10537 checks
+extracted Weights declarations; J10546 proves storage/row reuse; J10551
+proves `ProverCommitWeights53.exact_result`. J10550 checks the extracted
+materialization owner. Rejected drafts are retained verbatim. J10549 has
+no compiler receipt and is retired unused, rather than reused.
+
+J10554 failed on the zero-counter case: the unfolded condition was already
+`True`, so a scalar-equality simp rule did not close it. J10555 replaces
+that rule with `ite_true`. All three binding theorems then compile with
+exactly `[propext, Classical.choice, Quot.sound]`, exit 0, wall 1.81 s,
+peak RSS 4147356 KiB, zero swap. No literal sorry was present; the failed
+elaboration had inserted `sorryAx`. The accepted replacement has none.
+
+J10556 exposes omitted section hypotheses in the unfinished top theorem;
+J10557 explicitly includes canonicality hypotheses and proves
+`ProverCommitWeightsMaterial53.exact_result`: a single initialized object,
+all five stored factor matrices, all 1024 rows, and all seven kappa terms
+produce canonical materialized outputs with the complete wide-row model
+value. No stored factor or raw table image is assumed. J10557 exits 0,
+wall 2.07 s, peak RSS 4156548 KiB, zero swap. All four printed theorems
+have exactly the standard axiom set. Revision `bb69037133` plus the exact
+source/dependency hashes in receipts identifies these inputs.
+
+The separately recovered `weights-storage-native-v1` Kani check succeeds:
+exit 0, wall 98.31 s, peak RSS 4631592 KiB, zero swap, explicit opt-level=3,
+6G/8G/no-swap/64 scope. It verifies the unsafe allocation/write layout on
+successful reserve for arbitrary producer outputs. Allocation failure is
+retained as an error; this cut does not prove the full native constructor
+or connect native arithmetic producer calls. Complete payload equality
+remains open, and the deployed endpoint remains unchanged.

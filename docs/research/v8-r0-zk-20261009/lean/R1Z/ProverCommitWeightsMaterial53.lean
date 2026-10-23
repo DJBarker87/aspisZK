@@ -66,6 +66,7 @@ def run (point : Array field.QM31 10#usize) (a b c d : field.QM31) (x : Source) 
   let state ← weights53.new point a b c d
   ProverCommitWeightsMaterialBinding53.run state x
 
+include hp hx0 hy0 hx1 hy1 in
 theorem exact_result (kappa : Raw) (hk : canonical kappa) :
     ∃ out : Nat → Raw,
       run (ProverCommitQArray48.array 10#usize p) (ProverCommitNativeQ48.source x0)

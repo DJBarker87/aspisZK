@@ -1,0 +1,56 @@
+import R1Z.ProverCommitWeightsStorage53
+/-! Build the five factor matrices once, then reuse the actual stored object
+for every raw row. Native heap allocation and its unsafe writes are separate. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitWeights53
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode)
+open ProverCommitCircleRows49 (matrix)
+open ProverCommitWeightsStorage53
+
+attribute [local irreducible] matrix ProverCommitQArray48.array ProverCommitNativeQ48.source
+
+theorem exact_result (p : Nat → Old.Q) (hp : ∀ i, i<10 → Canonical (p i))
+    (x0 y0 x1 y1 : Old.Q) (hx0 : Canonical x0) (hy0 : Canonical y0)
+    (hx1 : Canonical x1) (hy1 : Canonical y1) :
+    ∃ st : State,
+      weights53.new (ProverCommitQArray48.array 10#usize p) (ProverCommitNativeQ48.source x0)
+        (ProverCommitNativeQ48.source y0) (ProverCommitNativeQ48.source x1) (ProverCommitNativeQ48.source y1)=ok st ∧
+      ∀ j : Usize, j.val<1024 → ∃ out : Nat → Old.Q,
+        weights53.row st j=ok (ProverCommitQArray48.array 7#usize out) ∧
+        (∀ k, k<7 → Canonical (out k)) ∧
+        ∀ k : Fin 7, decode (out k.val)=ProverCommitRawSource49.model
+          (ProverCommitSuccessorPoint49.decoded p) (decode x0) (decode y0) (decode x1) (decode y1)
+          ⟨j.val,by assumption⟩ k := by
+  obtain ⟨s,a,hpoints,hcs,hca,hmodel⟩ := ProverCommitStatementPoints49.points_exact p hp
+  obtain ⟨r0,h0,hc0,hd0⟩ := ProverCommitPointRowsOutput49.all p hp
+  obtain ⟨r1,h1,hc1,hd1⟩ := ProverCommitPointRowsOutput49.all s hcs
+  obtain ⟨r2,h2,hc2,hd2⟩ := ProverCommitPointRowsOutput49.all a hca
+  obtain ⟨r3,h3,hc3,hd3⟩ := ProverCommitCircleOutput49.rows_exact x0 y0 hx0 hy0
+  obtain ⟨r4,h4,hc4,hd4⟩ := ProverCommitCircleOutput49.rows_exact x1 y1 hx1 hy1
+  let st := state (ProverCommitQArray48.array 10#usize p) (ProverCommitQArray48.array 10#usize s)
+    (ProverCommitQArray48.array 10#usize a) (matrix r0) (matrix r1) (matrix r2) (matrix r3) (matrix r4)
+    (ProverCommitNativeQ48.source (p 8)) (ProverCommitNativeQ48.source (p 9))
+  refine ⟨st,?_,?_⟩
+  · simp only [weights53.new,hpoints,bind_tc_ok,ProverCommitRawSource49.index3_0,
+      ProverCommitRawSource49.index3_1,ProverCommitRawSource49.index3_2,h0,h1,h2,h3,h4,
+      ProverCommitQArray48.index 10#usize p 8#usize (by decide),
+      ProverCommitQArray48.index 10#usize p 9#usize (by decide)]
+    rfl
+  · intro j hj
+    obtain ⟨out,hout,hcout,hdout⟩ := ProverCommitRawSource49.exact_result p hp x0 y0 x1 y1
+      hx0 hy0 hx1 hy1 j hj
+    have heq : weights53.row st j=ProverCommitRawSource49.run
+        (ProverCommitQArray48.array 10#usize p) (ProverCommitNativeQ48.source x0)
+        (ProverCommitNativeQ48.source y0) (ProverCommitNativeQ48.source x1) (ProverCommitNativeQ48.source y1) j := by
+      rw [ProverCommitWeightsStorage53.row_eq _ _ _ _ _ _ _ _ _ _ _ _ _ _ h0 h1 h2 h3 h4]
+      simp only [ProverCommitRawSource49.run,hpoints,bind_tc_ok,ProverCommitRawSource49.index3_0,
+        ProverCommitRawSource49.index3_1,ProverCommitRawSource49.index3_2,
+        ProverCommitQArray48.index 10#usize p 8#usize (by decide),
+        ProverCommitQArray48.index 10#usize p 9#usize (by decide)]
+    exact ⟨out,heq.trans hout,hcout,hdout⟩
+
+#print axioms exact_result
+end R1Z.ProverCommitWeights53

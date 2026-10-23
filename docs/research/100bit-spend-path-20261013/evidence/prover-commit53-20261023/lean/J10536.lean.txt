@@ -1,0 +1,71 @@
+import AspisR1ProducerRelease47.PointRows49
+import AspisR1ProducerRelease47.Points49
+import AspisR1ProducerRelease47.Stored49
+import AspisR1ProducerRelease47.Kernels49
+import R1Z.ProverCommitInactiveSource49
+/-! Extracted counter owner, with identical arithmetic callees rebound to the
+previously proved release extraction. bind-counter.py checks every reused
+callee declaration body byte-for-byte. No external template is installed. -/
+open Aeneas Aeneas.Std Result ControlFlow Error
+noncomputable section
+namespace AspisR1ProducerRelease47
+def weights53.new
+  (alpha : Array field.QM31 10#usize) (x0 : field.QM31) (y0 : field.QM31)
+  (x1 : field.QM31) (y1 : field.QM31) :
+  Result (Std.U8 × (Array (Array (Array field.QM31 4#usize) 5#usize) 5#usize)
+    × (Array (Array field.QM31 10#usize) 3#usize) × (Array field.QM31
+    2#usize))
+  := do
+  let p ← points.all alpha
+  let a ← Array.index_usize p 0#usize
+  let r0 ← point_rows.all a
+  let a1 ← Array.index_usize p 1#usize
+  let r1 ← point_rows.all a1
+  let a2 ← Array.index_usize p 2#usize
+  let r2 ← point_rows.all a2
+  let r3 ← factors.circle_rows x0 y0
+  let r4 ← factors.circle_rows x1 y1
+  let q ← Array.index_usize alpha 8#usize
+  let q1 ← Array.index_usize alpha 9#usize
+  ok (2#u8, Array.make 5#usize [ r0, r1, r2, r3, r4 ], p,
+    Array.make 2#usize [ q, q1 ])
+
+def weights53.raw
+  (s : (Std.U8 × (Array (Array (Array field.QM31 4#usize) 5#usize) 5#usize) ×
+  (Array (Array field.QM31 10#usize) 3#usize) × (Array field.QM31 2#usize)))
+  (kind : Std.Usize) (j : Std.Usize) :
+  Result field.QM31
+  := do
+  match kind.val with
+  | 0 =>
+    let b ← AspisR1InactiveOwner49.owned.inactive j
+    if b
+    then ok field.QM31.ONE
+    else ok field.QM31.ZERO
+  | 4 => let (_, _, _, a) := s
+         extras.libra a j
+  | _ =>
+    let k ←
+      if kind < 4#usize
+      then ok (Std.Usize.wrapping_sub kind 1#usize)
+      else ok (Std.Usize.wrapping_sub kind 2#usize)
+    let (_, a, _, _) := s
+    let a1 ← Array.index_usize a k
+    stored.product a1 j 0#usize 5#u8 field.QM31.ONE
+
+def weights53.row
+  (s : (Std.U8 × (Array (Array (Array field.QM31 4#usize) 5#usize) 5#usize) ×
+  (Array (Array field.QM31 10#usize) 3#usize) × (Array field.QM31 2#usize)))
+  (j : Std.Usize) :
+  Result (Array field.QM31 7#usize)
+  := do
+  let q ← weights53.raw s 0#usize j
+  let q1 ← weights53.raw s 1#usize j
+  let q2 ← weights53.raw s 2#usize j
+  let q3 ← weights53.raw s 3#usize j
+  let q4 ← weights53.raw s 4#usize j
+  let q5 ← weights53.raw s 5#usize j
+  let q6 ← weights53.raw s 6#usize j
+  ok (Array.make 7#usize [ q, q1, q2, q3, q4, q5, q6 ])
+
+end AspisR1ProducerRelease47

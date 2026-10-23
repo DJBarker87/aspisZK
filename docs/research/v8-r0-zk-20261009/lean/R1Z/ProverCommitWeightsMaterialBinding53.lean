@@ -21,7 +21,7 @@ theorem fill_eq (st : State) (raw : Nat → Nat → Old.Q)
     have hz : left=0#u16 := by scalar_tac
     subst left
     rw [weights_material53.fill,materialization.fill]
-    simp only [if_pos (rfl : 0#u16=0#u16)]
+    simp only [ite_true]
   | succ n ih =>
     have hn : left≠0#u16 := by scalar_tac
     have hj : j.val<1024 := by omega
