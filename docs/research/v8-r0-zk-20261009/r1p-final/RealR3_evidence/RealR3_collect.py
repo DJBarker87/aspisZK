@@ -7,7 +7,7 @@ HOST='dombarker@100.108.41.90';H='/home/dombarker/project-offloads/codex-cx-real
 filters=['--include=/receipts/***','--include=/snapshots/***','--include=/lean-snapshots/***',
  '--include=/*-inputs.json','--include=/111*-input.json','--include=/111*-launcher.log','--exclude=*']
 subprocess.run(['rsync','-a',*filters,HOST+':'+H+'/',str(E)+'/'],check=True)
-subprocess.run(['rsync','-a','--include=/out-111*.log','--include=/time-111*.log','--include=/sha-111*.txt','--exclude=*',
+subprocess.run(['rsync','-a','--include=/out-111[0-9][0-9].log','--include=/time-111[0-9][0-9].log','--include=/sha-111[0-9][0-9].txt','--exclude=*',
  HOST+':/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/',str(E)+'/'],check=True)
 rows=[]
 for p in sorted(E.glob('111*-input.json')):
