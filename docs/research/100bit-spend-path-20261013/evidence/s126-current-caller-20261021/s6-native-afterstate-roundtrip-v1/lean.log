@@ -1,0 +1,53 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeAfterstateRoundtripV1.lean:12:6: error(lean.unknownIdentifier): Unknown identifier `AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.val`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeAfterstateRoundtripV1.lean:31:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.take 48 ↑bytes ++ List.slice 48 688 ↑bytes
+in the target expression
+  List.take 48 ↑bytes ++ List.slice 48 (48 + 32 * ↑20#usize) ↑bytes = ↑bytes
+
+bytes : Slice U8
+a : ReferenceAfterstate
+raw : Std.Array U8 688#usize
+rawbytes : ↑raw = ↑bytes
+header : header_frame raw
+root : digest_frame bytes 16 a.next_root
+frontier : frontier_frames bytes 48 ↑a.next_frontier
+index : ↑(core.num.U64.to_le_bytes a.next_pair_index) = List.slice 8 16 ↑bytes
+validated : aspis_statement.pool_v1.pair_terminal.validate_verified_afterstate a = ok (core.result.Result.Ok ())
+hheader : header_bytes = List.take 8 ↑bytes
+hroot : DigestContents.chunks a.next_root = List.slice 16 (16 + 32) ↑bytes
+hfrontier : List.flatMap DigestContents.chunks ↑a.next_frontier = List.slice 48 (48 + 32 * ↑20#usize) ↑bytes
+⊢ List.take 48 ↑bytes ++ List.slice 48 (48 + 32 * ↑20#usize) ↑bytes = ↑bytes
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑bytes
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeAfterstateRoundtripV1.lean:26:38: warning: This simp argument is unused:
+  Nat.reduceMul
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵.̵n̵e̵x̵t̵_̵f̵r̵o̵n̵t̵i̵e̵r̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵M̵u̵l̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵A̵d̵d̵]̵[̲a̲.̲n̲e̲x̲t̲_̲f̲r̲o̲n̲t̲i̲e̲r̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲A̲d̲d̲]̲ at hfrontier
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeAfterstateRoundtripV1.lean:26:52: warning: This simp argument is unused:
+  Nat.reduceAdd
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵.̵n̵e̵x̵t̵_̵f̵r̵o̵n̵t̵i̵e̵r̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵M̵u̵l̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵A̵d̵d̵]̵[̲a̲.̲n̲e̲x̲t̲_̲f̲r̲o̲n̲t̲i̲e̲r̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲M̲u̲l̲]̲ at hfrontier
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS6NativeAfterstateEncoderReuse.accepted_header_prefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS6NativeAfterstateEncoderReuse.decoded_layout' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS6NativeAfterstateEncoderReuse.accepted_roundtrip' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -18,7 +18,9 @@ def emit(p,s):
  if '--check' in sys.argv:assert p.read_text()==s,str(p)
  else:p.write_text(s)
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
-types='import Aeneas\nset_option autoImplicit false\n'+clean((G/'Types.lean').read_text())
+types='import Aeneas\nimport S6NamedDiscriminantV1\nset_option autoImplicit false\n'+clean((G/'Types.lean').read_text())
+assert types.count('@[discriminant u8 [1,2]]')==1
+types=types.replace('@[discriminant u8 [1,2]]','@[s6_u8_discriminant]')
 types+='\n#print axioms AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1\n'
 emit(S/'S6FiveCodecTypesV1.lean',types)
 base='aspis_statement.'
@@ -67,7 +69,7 @@ for q in [base+'pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal
  f+='\n#print axioms AspisS6FiveUnrolledCodec.'+q+'\n'
 assert not re.search(r'\b(axiom|opaque|sorry|native_decide)\b|set_option\s+(maxHeartbeats|maxRecDepth)',f)
 emit(S/'S6FiveCodecNativeV1.lean',f)
-emit(E/'materialization.json',json.dumps(dict(schema='focused-extractor-proof-packet-v1',raw={n:sha(G/n) for n in ['Types.lean','FunsExternal_Template.lean']},wide_funs_sha256=sha(W/'Funs.lean'),candidates={n:sha(S/n) for n in ['S6FiveCodecTypesV1.lean','S6FiveCodecNativeV1.lean']},explicit_child_ports=ports,parameterized_definitions=sorted(needed),formatting_only_globals=repairs,qualification='Complete codec extraction reference with five checked loop replacements, full carriers and source control. Exactly three standard-library operations remain explicit; no codec/validator ports. Comments/metadata attributes/resource options removed, discriminants retained. Standard-library installation, contextual transport, allocator/runtime effects, native SDK and full codec roundtrip remain unproved.'),indent=2)+'\n')
+emit(E/'materialization.json',json.dumps(dict(schema='focused-extractor-proof-packet-v1',raw={n:sha(G/n) for n in ['Types.lean','FunsExternal_Template.lean']},wide_funs_sha256=sha(W/'Funs.lean'),candidates={n:sha(S/n) for n in ['S6FiveCodecTypesV1.lean','S6FiveCodecNativeV1.lean']},explicit_child_ports=ports,parameterized_definitions=sorted(needed),formatting_only_globals=repairs,qualification='Complete codec extraction reference with five checked loop replacements, full carriers and source control. Exactly three standard-library operations remain explicit; no codec/validator ports. Comments/metadata attributes/resource options removed, discriminant readers and values retained; the closed u8 1/2 instance uses a type-qualified name via the original Aeneas reader generator. Standard-library installation, contextual transport, allocator/runtime effects, native SDK and full codec roundtrip remain unproved.'),indent=2)+'\n')
 
 # Materialize the complete evaluator with actual current std Option bodies.
 # The third external template is not referenced by any emitted function.

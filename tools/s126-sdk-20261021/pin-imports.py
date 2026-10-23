@@ -32,7 +32,8 @@ receipts=[json.loads((E/row['receipt']).read_text()) for row in manifest['target
 accepted={}
 for r in receipts:
  if r['exit_status']==0:
-  source=B/'lean-candidates/s126-caller-boundary-20261021'/(r['target']+'.lean')
+  source=Path(r.get('source_path',r['command'][-1]))
+  assert source.resolve().is_relative_to(B.parents[2])
   if hashlib.sha256(source.read_bytes()).hexdigest()==r['source_sha256']:
    obj=Path('/tmp/s126-current-caller-20261021-objects')/(r['target']+'.olean')
    if obj.exists() and hashlib.sha256(obj.read_bytes()).hexdigest()==r.get('object_sha256'):

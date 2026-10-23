@@ -4,6 +4,9 @@ import hashlib,json,os,re,subprocess,sys,time
 R=Path(__file__).resolve().parents[2];B=R/'docs/research/100bit-spend-path-20261013'
 module=sys.argv[1];attempt=sys.argv[2]
 src=B/'lean-candidates/s126-caller-boundary-20261021'/(module+'.lean')
+if len(sys.argv)>4:
+ source_root=Path(sys.argv[4]).resolve();assert source_root.is_relative_to(R)
+ src=source_root/(module+'.lean')
 E=B/'evidence/s126-current-caller-20261021'/attempt;E.mkdir(parents=True,exist_ok=False)
 objects=Path('/tmp/s126-current-caller-20261021-objects');objects.mkdir(exist_ok=True)
 ref=json.loads((B/'evidence/repin-s6-20261020/proofs/first-v2/command.json').read_text())

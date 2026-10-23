@@ -1,0 +1,28 @@
+import Aeneas
+
+/- Evidence-only discriminant naming adapter. The original Aeneas generator
+   supplies the reader verbatim; only the instance declaration is named.
+   Restricted deliberately to the closed, u8 enums in this prototype. -/
+open Lean Elab Term Meta
+open Lean.Parser.Term Lean.Parser.Command
+namespace AspisS6NamedDiscriminant
+syntax (name := s6NamedU8Discriminant) "s6_u8_discriminant" : attr
+initialize s6NamedU8DiscriminantAttribute : AttributeImpl ← do
+  let attrImpl : AttributeImpl := {
+    «name» := `s6NamedU8Discriminant,
+    descr := "Emit the Aeneas u8 reader with a type-qualified instance name",
+    add := fun declName _ _ => do
+      liftCommandElabM do
+        let cmds ← Lean.Elab.Command.liftTermElabM
+          (Aeneas.Discriminant.generateReadDiscriminantCmds declName .U8 (some [1,2]))
+        Lean.Elab.Command.elabCommand cmds[0]!
+        let instName := mkIdent (declName ++ `instDiscriminant)
+        let target := mkIdent declName
+        let reader := mkIdent (declName ++ `read_discriminant)
+        Lean.Elab.Command.elabCommand (← `(command| instance $instName:ident :
+          Aeneas.Std.Discriminant $target:ident Aeneas.Std.U8 where
+            read_discriminant := $reader:ident))
+  }
+  registerBuiltinAttribute attrImpl
+  pure attrImpl
+end AspisS6NamedDiscriminant

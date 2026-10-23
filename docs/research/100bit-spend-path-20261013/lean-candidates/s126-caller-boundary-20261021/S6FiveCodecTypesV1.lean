@@ -1,4 +1,5 @@
 import Aeneas
+import S6NamedDiscriminantV1
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result ControlFlow Error
 
@@ -26,7 +27,7 @@ inductive aspis_statement.atomic_statement.AtomicStatementError where
 | OutputAnchorMismatch : aspis_statement.atomic_statement.AtomicStatementError
 
 
-@[discriminant u8 [1,2]]
+@[s6_u8_discriminant]
 inductive aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind where
 | PrivateTransfer :
   aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind
