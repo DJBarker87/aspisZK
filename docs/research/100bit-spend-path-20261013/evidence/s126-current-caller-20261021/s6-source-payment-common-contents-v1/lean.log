@@ -1,0 +1,251 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourcePaymentCommonContentsV1.lean:17:30: warning: This simp argument is unused:
+  array_length
+
+Hint: Omit it from the simp argument list.
+  simp [DigestContents.chunks,̵a̵r̵r̵a̵y̵_̵l̵e̵n̵g̵t̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourcePaymentCommonContentsV1.lean:43:90: error: unsolved goals
+magic : Std.Array U8 4#usize
+kind : aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind
+common : CommonPublicV1
+s : Slice U8
+index_mut_back : Slice U8 → Std.Array U8 216#usize
+_✝²⁶ :
+  [> let(s, index_mut_back) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8))
+      (Array.repeat 216#usize 0#u8) { «end» := 4#usize } <]
+s_post3 : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑(Array.repeat 216#usize 0#u8)).setSlice! 0 ↑s'
+s_post1 : ↑s = List.slice 0 4 ↑(Array.repeat 216#usize 0#u8)
+s_post2 : s.length = 4
+s1 : Slice U8
+_✝²⁵ : [> let s1 ← lift magic.to_slice <]
+s1_post : s1 = magic.to_slice
+s2 : Slice U8
+_✝²⁴ : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1 <]
+output2 : Std.Array U8 216#usize
+_✝²³ : [> let output2 ← (index_mut_back s2).update 4#usize 1#u8 <]
+i : U8
+_✝²² : [> let i ← lift (UScalar.cast UScalarTy.U8 (read_discriminant kind)) <]
+output3 : Std.Array U8 216#usize
+_✝²¹ : [> let output3 ← output2.update 5#usize i <]
+output4 : Std.Array U8 216#usize
+_✝²⁰ : [> let output4 ← output3.update 6#usize 1#u8 <]
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Std.Array U8 216#usize
+_✝¹⁹ :
+  [> let(s3, index_mut_back1) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output4
+      { start := 8#usize, «end» := 40#usize } <]
+s4 : Slice U8
+_✝¹⁸ : [> let s4 ← lift common.pool.to_slice <]
+s5 : Slice U8
+_✝¹⁷ : [> let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4 <]
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Std.Array U8 216#usize
+_✝¹⁶ :
+  [> let(s6, index_mut_back2) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back1 s5) { start := 40#usize, «end» := 72#usize } <]
+s7 : Slice U8
+_✝¹⁵ : [> let s7 ← lift common.deployment_domain.to_slice <]
+s8 : Slice U8
+_✝¹⁴ : [> let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7 <]
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Std.Array U8 216#usize
+_✝¹³ :
+  [> let(s9, index_mut_back3) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back2 s8) { start := 72#usize, «end» := 80#usize } <]
+a : Std.Array U8 8#usize
+_✝¹² : [> let a ← lift (core.num.U64.to_le_bytes common.anchor_sequence) <]
+s10 : Slice U8
+_✝¹¹ : [> let s10 ← lift a.to_slice <]
+s11 : Slice U8
+_✝¹⁰ : [> let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10 <]
+s12 : Slice U8
+index_mut_back4 : Slice U8 → Std.Array U8 216#usize
+_✝⁹ :
+  [> let(s12, index_mut_back4) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back3 s11) { start := 80#usize, «end» := 112#usize } <]
+a1 : Std.Array U8 32#usize
+_✝⁸ : [> let a1 ← aspis_statement.atomic_statement.encode_digest_canonical common.anchor_root <]
+s13 : Slice U8
+_✝⁷ : [> let s13 ← lift a1.to_slice <]
+s14 : Slice U8
+_✝⁶ : [> let s14 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 s13 <]
+s15 : Slice U8
+index_mut_back5 : Slice U8 → Std.Array U8 216#usize
+_✝⁵ :
+  [> let(s15, index_mut_back5) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back4 s14) { start := 112#usize, «end» := 144#usize } <]
+a2 : Std.Array U8 32#usize
+_✝⁴ : [> let a2 ← aspis_statement.atomic_statement.encode_digest_canonical common.nullifier <]
+s16 : Slice U8
+_✝³ : [> let s16 ← lift a2.to_slice <]
+s17 : Slice U8
+_✝² : [> let s17 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 s16 <]
+s18 : Slice U8
+index_mut_back6 : Slice U8 → Std.Array U8 216#usize
+_✝¹ :
+  [> let(s18, index_mut_back6) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back5 s17) { start := 144#usize, «end» := 148#usize } <]
+s19 : Slice U8
+_✝ : [> let s19 ← lift (core.num.U32.to_le_bytes common.asset_id).to_slice <]
+s20 : Slice U8
+_ : [> let s20 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s18 s19 <]
+s2_post : s2 = magic.to_slice
+output2_post : output2 = (index_mut_back magic.to_slice).set 4#usize 1#u8
+i_post : i = UScalar.cast UScalarTy.U8 (read_discriminant kind)
+output3_post :
+  output3 =
+    ((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize (UScalar.cast UScalarTy.U8 (read_discriminant kind))
+output4_post :
+  output4 =
+    (((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+          (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+      6#usize 1#u8
+s3_post1 :
+  ↑s3 =
+    List.slice 8 40
+      ↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+              (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+          6#usize 1#u8)
+s3_post2 : s3.length = 40 - 8
+s3_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back1 s') =
+      (↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+                  (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+              6#usize 1#u8)).setSlice!
+        8 ↑s'
+s4_post : s4 = common.pool.to_slice
+s5_post : s5 = common.pool.to_slice
+s6_post1 :
+  ↑s6 =
+    List.slice 40 72
+      ((↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+                  (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+              6#usize 1#u8)).setSlice!
+        8 ↑common.pool.to_slice)
+s6_post2 : s6.length = 72 - 40
+s6_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back2 s') =
+      ((↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+                      (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+                  6#usize 1#u8)).setSlice!
+            8 ↑common.pool.to_slice).setSlice!
+        40 ↑s'
+s7_post : s7 = common.deployment_domain.to_slice
+s8_post : s8 = common.deployment_domain.to_slice
+s9_post1 :
+  ↑s9 =
+    List.slice 72 80
+      (((↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+                      (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+                  6#usize 1#u8)).setSlice!
+            8 ↑common.pool.to_slice).setSlice!
+        40 ↑common.deployment_domain.to_slice)
+s9_post2 : s9.length = 80 - 72
+s9_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back3 s') =
+      (((↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+                          (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+                      6#usize 1#u8)).setSlice!
+                8 ↑common.pool.to_slice).setSlice!
+            40 ↑common.deployment_domain.to_slice).setSlice!
+        72 ↑s'
+a_post : a = core.num.U64.to_le_bytes common.anchor_sequence
+s10_post : s10 = (core.num.U64.to_le_bytes common.anchor_sequence).to_slice
+s11_post : s11 = (core.num.U64.to_le_bytes common.anchor_sequence).to_slice
+s12_post1 :
+  ↑s12 =
+    List.slice 80 112
+      ((((↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+                          (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+                      6#usize 1#u8)).setSlice!
+                8 ↑common.pool.to_slice).setSlice!
+            40 ↑common.deployment_domain.to_slice).setSlice!
+        72 ↑(core.num.U64.to_le_bytes common.anchor_sequence).to_slice)
+s12_post2 : s12.length = 112 - 80
+s12_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back4 s') =
+      ((((↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+                              (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+                          6#usize 1#u8)).setSlice!
+                    8 ↑common.pool.to_slice).setSlice!
+                40 ↑common.deployment_domain.to_slice).setSlice!
+            72 ↑(core.num.U64.to_le_bytes common.anchor_sequence).to_slice).setSlice!
+        80 ↑s'
+a1_post : ↑a1 = DigestContents.chunks common.anchor_root
+s13_post : s13 = a1.to_slice
+s14_post : s14 = a1.to_slice
+s15_post1 :
+  ↑s15 =
+    List.slice 112 144
+      (((((↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+                              (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+                          6#usize 1#u8)).setSlice!
+                    8 ↑common.pool.to_slice).setSlice!
+                40 ↑common.deployment_domain.to_slice).setSlice!
+            72 ↑(core.num.U64.to_le_bytes common.anchor_sequence).to_slice).setSlice!
+        80 ↑a1.to_slice)
+s15_post2 : s15.length = 144 - 112
+s15_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back5 s') =
+      (((((↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+                                  (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+                              6#usize 1#u8)).setSlice!
+                        8 ↑common.pool.to_slice).setSlice!
+                    40 ↑common.deployment_domain.to_slice).setSlice!
+                72 ↑(core.num.U64.to_le_bytes common.anchor_sequence).to_slice).setSlice!
+            80 ↑a1.to_slice).setSlice!
+        112 ↑s'
+a2_post : ↑a2 = DigestContents.chunks common.nullifier
+s16_post : s16 = a2.to_slice
+s17_post : s17 = a2.to_slice
+s18_post1 :
+  ↑s18 =
+    List.slice 144 148
+      ((((((↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+                                  (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+                              6#usize 1#u8)).setSlice!
+                        8 ↑common.pool.to_slice).setSlice!
+                    40 ↑common.deployment_domain.to_slice).setSlice!
+                72 ↑(core.num.U64.to_le_bytes common.anchor_sequence).to_slice).setSlice!
+            80 ↑a1.to_slice).setSlice!
+        112 ↑a2.to_slice)
+s18_post2 : s18.length = 148 - 144
+s18_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back6 s') =
+      ((((((↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+                                      (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+                                  6#usize 1#u8)).setSlice!
+                            8 ↑common.pool.to_slice).setSlice!
+                        40 ↑common.deployment_domain.to_slice).setSlice!
+                    72 ↑(core.num.U64.to_le_bytes common.anchor_sequence).to_slice).setSlice!
+                80 ↑a1.to_slice).setSlice!
+            112 ↑a2.to_slice).setSlice!
+        144 ↑s'
+s19_post : s19 = (core.num.U32.to_le_bytes common.asset_id).to_slice
+s20_post : s20 = (core.num.U32.to_le_bytes common.asset_id).to_slice
+⊢ ((((((↑((((index_mut_back magic.to_slice).set 4#usize 1#u8).set 5#usize
+                                    (UScalar.cast UScalarTy.U8 (read_discriminant kind))).set
+                                6#usize 1#u8)).setSlice!
+                          8 ↑common.pool.to_slice).setSlice!
+                      40 ↑common.deployment_domain.to_slice).setSlice!
+                  72 ↑(core.num.U64.to_le_bytes common.anchor_sequence).to_slice).setSlice!
+              80 ↑a1.to_slice).setSlice!
+          112 ↑a2.to_slice).setSlice!
+      144 ↑(core.num.U32.to_le_bytes common.asset_id).to_slice =
+    common_prefix magic kind common ++ List.replicate 68 0#u8
+'AspisS6SourceCodec.PaymentContents.digest_chunks_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6SourceCodec.PaymentContents.common_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

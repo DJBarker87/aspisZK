@@ -1,0 +1,18 @@
+AspisS6SourceCodec.PaymentContents.common_contents (magic : Aeneas.Std.Array Aeneas.Std.U8 4#usize)
+  (kind : AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind)
+  (common : AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.payment_relation.CommonPublicV1) :
+  AspisS6SourceCodec.aspis_statement.pool_v1.payment_relation.encode_common (Aeneas.Std.Array.repeat 216#usize 0#u8)
+      magic kind common ⦃
+    output => ↑output = AspisS6SourceCodec.PaymentContents.common_prefix magic kind common ++ List.replicate 68 0#u8 ⦄
+AspisS6SourceCodec.aspis_statement.pool_v1.payment_relation.encode_common
+  (output : Aeneas.Std.Array Aeneas.Std.U8 216#usize) (magic : Aeneas.Std.Array Aeneas.Std.U8 4#usize)
+  (kind : AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind)
+  (common : AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.payment_relation.CommonPublicV1) :
+  Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 216#usize)
+AspisS6SourceCodec.PaymentEncodeTotal.common_write_total : ∀ (output : Aeneas.Std.Array Aeneas.Std.U8 216#usize)
+  (magic : Aeneas.Std.Array Aeneas.Std.U8 4#usize)
+  (kind : AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind)
+  (common : AspisS6FiveUnrolledCodec.aspis_statement.pool_v1.payment_relation.CommonPublicV1),
+  ∃ out,
+    AspisS6SourceCodec.aspis_statement.pool_v1.payment_relation.encode_common output magic kind common =
+      Aeneas.Std.Result.ok out
