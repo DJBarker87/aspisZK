@@ -1,0 +1,3 @@
+One accepted actual unshared two-fold Pair supplies its own complete regular/low/inactive/private4/active4/powers7/final-sum source trace and same returned output. Actual false shared guard and twofold alpha length remain explicit. No intermediate source call or output is an input premise; canonicality, relation meaning, source/runtime installation and global soundness remain separate. Predecessor v1 failed simplification only and is rejected, not accepted evidence.
+
+Focused Lean check: 22.081 seconds; peak aggregate RSS 2198798336 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
