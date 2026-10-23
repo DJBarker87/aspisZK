@@ -27,4 +27,31 @@ theorem prefix_from_windows {Byte : Type} (proof candidate : List Byte)
 
 #print axioms prefix_window
 #print axioms prefix_from_windows
+
+/-- The isolated final176-byte interval is covered by two128-offset cuts. -/
+theorem tail_window (i : Nat) (lower : 512 ≤ i) (upper : i < 688) :
+    ∃ w offset : Nat, w < 2 ∧ offset < 128 ∧ i = 512+128*w+offset := by
+  refine ⟨(i-512)/128, (i-512)%128, ?_, ?_, ?_⟩ <;> omega
+
+/-- Assemble the four checked native contexts on one fixed pair of carriers.
+The tail split changes observation selection only, not the execution inputs. -/
+theorem prefix_from_split_windows {Byte : Type} (proof candidate : List Byte)
+    (candidateLength : candidate.length = 688)
+    (head : ∀ w offset, w < 2 → offset < 256 →
+      proof[256*w+offset]? = candidate[256*w+offset]?)
+    (tail : ∀ w offset, w < 2 → offset < 128 → 512+128*w+offset < 688 →
+      proof[512+128*w+offset]? = candidate[512+128*w+offset]?) :
+    proof.take 688 = candidate := by
+  apply prefix_from_windows proof candidate candidateLength
+  intro w offset hw ho bound
+  by_cases first : w < 2
+  · exact head w offset first ho
+  · have last : w = 2 := by omega
+    subst w
+    obtain ⟨t, o, ht, hto, same⟩ := tail_window (256*2+offset) (by omega) bound
+    rw [same]
+    exact tail t o ht hto (by omega)
+
+#print axioms tail_window
+#print axioms prefix_from_split_windows
 end AspisR1.S2A

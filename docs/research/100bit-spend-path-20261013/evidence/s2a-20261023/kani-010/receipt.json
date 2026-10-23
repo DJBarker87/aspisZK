@@ -1,0 +1,54 @@
+{
+  "attempt": "kani-010",
+  "kind": "kani",
+  "source_revision": "56e9f046f3642739a117f87fc925ad443f3a0eeb",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "stubbing",
+    "--manifest-path",
+    "S2A-native-v2/Cargo.toml",
+    "--target-dir",
+    "S2A-native-target",
+    "--harness",
+    "S2A_native::S2A_prefix_window",
+    "--only-codegen",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2A-native-v2/src/lib.rs",
+    "S2A-native-v2/Cargo.toml",
+    "S2A-native-v2/source-cut.json"
+  ],
+  "timeout": 180,
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  },
+  "deps_fingerprint": "dependency source hashes to be recorded by host before launch; inherited repin-s6 typed child crate and solana-program2.3.0",
+  "expected_time": "optimized cold dependency compilation and GOTO/property generation only; actual solver will be a separate named entry-prefix gate",
+  "replacement_reason": "isolate broad native prefix comparison coordinate after kani-009 timeout; three bounded u8-offset windows, no cap/time increase.",
+  "exit_status": 0,
+  "wall_seconds": 3.951142985999468,
+  "peak_rss_kib": "913200",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rbbf8a4c3ac9f48aea5c6b124426bb2de.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1094856704",
+  "source_hashes": {
+    "S2A-native-v2/src/lib.rs": "61b1e902a8bbc52a1b4a897769e5dccee2b34452d5ffeb7ceda9d223596eccd5",
+    "S2A-native-v2/Cargo.toml": "cf12f9bd64d529c85a033049ca6e229cf0e64f4ef8a5a8c70ded5412aede33f7",
+    "S2A-native-v2/source-cut.json": "da6b569af6e4e66c26748a90fcbe0645666bf5b179b419d313400bc6f448015f"
+  },
+  "print_axioms": "N/A: Kani"
+}

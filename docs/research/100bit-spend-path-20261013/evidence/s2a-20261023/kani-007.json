@@ -1,0 +1,37 @@
+{
+  "attempt": "kani-007",
+  "kind": "kani",
+  "source_revision": "7eb0ac8dbbf4ec238eeef81e259167eb7706f882",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "stubbing",
+    "--manifest-path",
+    "S2A-native-v1/Cargo.toml",
+    "--target-dir",
+    "S2A-native-target",
+    "--harness",
+    "S2A_native::S2A_native_prefix",
+    "--exact",
+    "--only-codegen",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2A-native-v1/src/lib.rs",
+    "S2A-native-v1/Cargo.toml",
+    "S2A-native-v1/source-cut.json"
+  ],
+  "timeout": 180,
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  },
+  "deps_fingerprint": "dependency source hashes to be recorded by host before launch; inherited repin-s6 typed child crate and solana-program2.3.0",
+  "expected_time": "optimized cold dependency compilation and GOTO/property generation only; actual solver will be a separate named entry-prefix gate",
+  "replacement_reason": "kani-005 CLI rejected --show-properties; use documented --only-codegen and -Z stubbing. No codegen/solver ran."
+}

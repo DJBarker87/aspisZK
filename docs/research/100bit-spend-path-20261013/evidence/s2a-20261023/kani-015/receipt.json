@@ -1,0 +1,46 @@
+{
+  "attempt": "kani-015",
+  "kind": "kani-cbmc",
+  "source_revision": "56e9f046f3642739a117f87fc925ad443f3a0eeb",
+  "command": [
+    "python3",
+    "S2A_native_gate.py",
+    "0"
+  ],
+  "sources": [
+    "S2A_native_gate.py",
+    "S2A-native-v3/src/lib.rs",
+    "S2A-native-v3/Cargo.toml",
+    "S2A-native-v3/source-cut.json"
+  ],
+  "timeout": 180,
+  "env": {
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin"
+  },
+  "deps_fingerprint": "dependency source hashes to be recorded by host before launch; inherited repin-s6 typed child crate and solana-program2.3.0",
+  "expected_time": "cached GOTO preparation then one named native first-entry prefix SAT gate; no Rust arithmetic or recompilation",
+  "replacement_reason": "kani-013 tail timeout; split native last176-coordinates into two128-offset windows; no cap/time increases.",
+  "exit_status": 10,
+  "wall_seconds": 123.36128008600645,
+  "peak_rss_kib": "6451500",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9a98dbfe82e445a2abe865738490d41e.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "6627852288",
+  "source_hashes": {
+    "S2A_native_gate.py": "e745d39186d97f813d03f3a29cf17c281d1b08ed8d289066799ec90e4b34c233",
+    "S2A-native-v3/src/lib.rs": "41fe1db57cd02c4a5d04a046a31e4c0a11d39a09652112f2c1625d22bc799186",
+    "S2A-native-v3/Cargo.toml": "217550ac25926d455a16a7271045e768d6e12cfa2f4fa9e074b0862d10d08885",
+    "S2A-native-v3/source-cut.json": "28e252db5ebdb92c5084eb154fa20d9e55dcec2fcba5911c215e6798c04fd1d7"
+  },
+  "print_axioms": "N/A: Kani"
+}
