@@ -8838,3 +8838,26 @@ Stopped on the shipped encoder (`encode_at`): its iterator adapters are opaque a
 extraction gives Charon trait errors. Direction, as in D144/D164: never extract shipped
 iterator code. Write a D144-style owned encoder, then per-iteration Kani shipped = owned,
 then Lean induction.
+
+## D181 (lead, 2026-10-23 06:30): overnight summary for the user (decisions under D177)
+
+Decisions taken by the lead overnight, each reversible by the user:
+1. **S2 route B adopted** (C3-BIN 01:20): one new named trust item,
+   `S2TrustedSdkBorrow`, covering the Solana SDK `AccountInfo` data-borrow semantics and the `RefCell` guard
+   semantics in fifteen fields, pinned to solana-account-info 2.3.0. It is shown in the
+   headline trust list. Its fields are proved mutually consistent, and its Kani spec is checked.
+2. **Session A's S2 branch merged into research** (their handoff tip `0182d4eb4f`).
+3. **Import-union naming fix applied to all of `lean/`** (D178, release gate 1). Session A's
+   `lean-candidates` are untouched; they have the script. A 57.6 MB scan file was removed from the
+   tree (it remains in history).
+4. **Runtime abort and rollback** on allocation failure is to be stated under the existing runtime
+   premises P2–P4 and checked against the pinned runtime (C3-BIN 02:40).
+5. **S2 restructured depth-first** (C3-BIN 04:30), after five breadth jobs had not closed
+   the native step simulation.
+No security target, metric, adversary, protocol or verifier byte changed.
+Status: S2 is open with 0/14 Required14 fields discharged. A large conditional
+structure is proved (reference execution E for both stages, child value contracts, copy,
+cleanup, error and rejection laws, return-data events, emitter constructor and indexed
+writes). The native step simulation is at cut 1 of 30: the cut relation needed an
+invocation binding, and that job is now running. Privacy: parts 53–54 proved the terminal, weights,
+encoder and leaf bytes, and part 55 is running. Neither deployed target is established.
