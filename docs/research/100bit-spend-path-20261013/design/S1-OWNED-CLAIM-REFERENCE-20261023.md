@@ -165,3 +165,45 @@ S1/S6 obligation or global 100-bit soundness conclusion is claimed here.
 No frozen-source decision is adopted by this packet. Adopting any refactor
 would separately require source equivalence, affected proof/import re-pins,
 CU/integration gates and exact source/artifact adoption.
+
+
+## Borrowed ABI follow-up
+
+The new `S1ClaimBorrowedAbiTransportV1.borrowed_claim_eq_source` proves full
+Result equality between the extracted borrowed reference and the retained claim
+model for arbitrary byte slices, arbitrary shared `ClaimDotOps`, and the same
+semantic input, gamma powers, inactive claim and kappa. There is no fixed928,
+child-success, canonicality or accepted-run premise. The internal array witness
+is a logical view of the same list, not a runtime allocation. This removes the
+owned-y1 interface restriction from the reference theorem; it does not establish
+original native whole-function correspondence.
+
+The three new focused targets passed with Lean 4.32.0, `-j1 -M4400`, zero swap:
+
+| Target | Wall seconds | Peak RSS bytes | Axioms reports |
+| --- | ---: | ---: | ---: |
+| S1ClaimSliceCarrierV1 | 4.968222333 | 3171762176 | 2 |
+| S1ClaimBorrowedAbiNativeV1 | 12.087661708 | 3184934912 | 1 |
+| S1ClaimBorrowedAbiTransportV1 | 19.942321167 | 3213950976 | 9 |
+
+All reports use only propext, Classical.choice and Quot.sound (the carrier uses
+only propext and Quot.sound). Exact source/tool/command/import hashes are in
+`s1-claim-borrowed-abi-import-pins.json` and the accepted target receipts. No
+unchanged full replay ran. The failed initial transport edit remains evidence.
+
+The original native one-step check against this borrowed reference passed all
+824 assertions and 3 covers: `s1-original-borrowed-step-v1`, exit 0,
+66.851 seconds, 1575724 KiB RSS, zero swap, cgroup 6/8 GiB and SwapMax=0.
+Its complete source, admission, dependency checks, commands and logs are under
+`evidence/s126-current-caller-20261021/s1-claim-owned-reference/native-borrowed-step`.
+It uses coupled arbitrary normal-return child operations. This check does not
+prove actual child totality, panic/abort behavior, the original complete loops,
+or the enclosing Prepared::new / tx1 caller.
+
+S1 and S6 remain OPEN. Remaining S1 obligations include the original complete
+native execution/caller connection, actual child range/totality and mutable
+serialization binding. S6 still requires the actual stage-1 caller connection
+and full ASF8 public-statement encoder/decoder contract identified by session A;
+existing decoded-public reuse alone does not discharge them. No production
+source was changed or adopted. Any candidate adoption requires source
+equivalence and explicit source/artifact re-pinning.

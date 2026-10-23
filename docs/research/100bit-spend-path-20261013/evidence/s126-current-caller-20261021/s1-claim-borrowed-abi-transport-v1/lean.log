@@ -1,0 +1,131 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimBorrowedAbiTransportV1.lean:27:100: error: unsolved goals
+D : Type
+N : Usize
+ops : ClaimDotOps D
+claims : Rows
+extra before : Row
+bytes : Std.Array U8 N
+g : Std.Array E 29#usize
+point : Usize
+iter : Range
+dot : D
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done (dot, none))
+        | some l => do
+          let scalar ← verifier.owned_scalar ops claims extra before bytes point l
+          let (r, next) ← verifier.owned_push ops dot g l scalar
+          let b ← ownedIsErr r
+          if b = true then ok (done (next, some (core.result.Result.Err verifier.Error.Parse)))
+            else ok (cont (iter1, next))) =
+    do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => ok (done (dot, none))
+      | some l => do
+        let scalar ← verifier.owned_scalar ops claims extra before bytes point l
+        let (r, next) ← verifier.owned_push ops dot g l scalar
+        let b ← ownedIsErr r
+        if b = true then ok (done (next, some (core.result.Result.Err verifier.Error.Parse)))
+          else ok (cont (iter1, next))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimBorrowedAbiTransportV1.lean:38:2: error: No goals to be solved
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimBorrowedAbiTransportV1.lean:46:90: error: unsolved goals
+D : Type
+N : Usize
+ops : ClaimDotOps D
+claims : Rows
+extra before : Row
+bytes : Std.Array U8 N
+g : Std.Array E 29#usize
+iter : Range
+parts : Parts
+⊢ (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+      match o with
+        | none => ok (done (parts, none))
+        | some point => do
+          let dot ← ops.newDot
+          let (dot1, pending_return) ←
+            verifier.owned_claim_loops_loop0_loop0 ops { start := 0#usize, «end» := 29#usize } claims extra before bytes
+                g point dot
+          match pending_return with
+            | none => do
+              let we ← ops.finishDot dot1
+              let i ← point + 1#usize
+              let parts1 ← Array.update parts i we
+              ok (cont (iter1, parts1))
+            | some val => ok (done (parts, pending_return))) =
+    do
+    let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+    match o with
+      | none => ok (done (parts, none))
+      | some point => do
+        let dot ← ops.newDot
+        let (dot1, pending_return) ←
+          verifier.owned_claim_loops_loop0_loop0 ops { start := 0#usize, «end» := 29#usize } claims extra before bytes g
+              point dot
+        match pending_return with
+          | none => do
+            let we ← ops.finishDot dot1
+            let i ← point + 1#usize
+            let parts1 ← Array.update parts i we
+            ok (cont (iter1, parts1))
+          | some val => ok (done (parts, pending_return))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimBorrowedAbiTransportV1.lean:57:2: error: No goals to be solved
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimBorrowedAbiTransportV1.lean:65:83: error: unsolved goals
+D : Type
+N : Usize
+ops : ClaimDotOps D
+claims : Rows
+extra before : Row
+bytes : Std.Array U8 N
+inactive kappa : E
+g : Std.Array E 29#usize
+⊢ (do
+      let k ← ops.powers 7#usize kappa
+      let parts1 ← (Array.repeat 7#usize aspis_core.field.WideExact.ZERO).update 0#usize inactive
+      let (parts2, pending_return) ←
+        verifier.owned_claim_loops_loop0 ops { start := 0#usize, «end» := 6#usize } claims extra before bytes g parts1
+      match pending_return with
+        | none => do
+          let we ← verifier.owned_sum k parts2
+          ok (core.result.Result.Ok we)
+        | some r => ok r) =
+    do
+    let k ← ops.powers 7#usize kappa
+    let parts1 ← (Array.repeat 7#usize aspis_core.field.WideExact.ZERO).update 0#usize inactive
+    let (parts2, pending_return) ←
+      verifier.owned_claim_loops_loop0 ops { start := 0#usize, «end» := 6#usize } claims extra before bytes g parts1
+    match pending_return with
+      | none => do
+        let we ← verifier.owned_sum k parts2
+        ok (core.result.Result.Ok we)
+      | some r => ok r
+'AspisR1CurrentPreparedClaim.BorrowedAbiTransport.scalar_array' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.BorrowedAbiTransport.push_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CurrentPreparedClaim.BorrowedAbiTransport.sum_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CurrentPreparedClaim.BorrowedAbiTransport.inner_body_array' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.BorrowedAbiTransport.inner_loop_array' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.BorrowedAbiTransport.outer_body_array' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.BorrowedAbiTransport.outer_loop_array' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.BorrowedAbiTransport.claim_loops_array' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.BorrowedAbiTransport.borrowed_claim_eq_source' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
