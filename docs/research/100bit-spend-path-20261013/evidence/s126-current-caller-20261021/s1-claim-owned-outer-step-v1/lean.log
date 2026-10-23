@@ -1,0 +1,191 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimOwnedOuterStepV1.lean:61:69: error: Tactic `rfl` failed: The left-hand side
+  do
+    let value ← verifier.prepared_claim_sum k parts
+    ok (core.result.Result.Ok value)
+is not definitionally equal to the right-hand side
+  do
+    let cf ←
+      let (o, iter1) := (none, iter1)
+        match o with
+        | none => do
+          let we ← verifier.prepared_claim_sum k parts
+          ok (done (core.result.Result.Ok we))
+        | some point => do
+          let r ← verifier.prepared_claim_dot ops inst sem y1.to_slice g point
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let i ← point + 1#usize
+              let a ← Array.update parts i val
+              ok (cont (iter1, a))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    aspis_core.field.WideExact (core.convert.FromSame verifier.Error) residual
+              ok (done r1)
+    match cf with
+      | done result => ok result
+      | cont next => kont next
+
+case ok.none
+D H : Type
+N : Usize
+ops : ClaimDotOps D
+inst : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Std.Array U8 N
+g : Std.Array E 29#usize
+k parts : Parts
+iter : Range
+kont : OuterState → Result RustClaim
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter1)
+ho : ownedOuterStep ops sem y1 g (iter, parts) = ok (done (parts, none))
+⊢ (do
+      let value ← verifier.prepared_claim_sum k parts
+      ok (core.result.Result.Ok value)) =
+    do
+    let cf ←
+      let (o, iter1) := (none, iter1)
+        match o with
+        | none => do
+          let we ← verifier.prepared_claim_sum k parts
+          ok (done (core.result.Result.Ok we))
+        | some point => do
+          let r ← verifier.prepared_claim_dot ops inst sem y1.to_slice g point
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let i ← point + 1#usize
+              let a ← Array.update parts i val
+              ok (cont (iter1, a))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    aspis_core.field.WideExact (core.convert.FromSame verifier.Error) residual
+              ok (done r1)
+    match cf with
+      | done result => ok result
+      | cont next => kont next
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimOwnedOuterStepV1.lean:104:14: error: Tactic `apply` failed: could not unify the conclusion of `@bind_congr`
+  ?x >>= ?f = ?x >>= ?g
+with the goal
+  (do
+      let cf ←
+        let (dot1, pending) := (dot1, none)
+          match pending with
+          | none => do
+            let value ← ops.finishDot dot1
+            let i ← point + 1#usize
+            let next ← Array.update parts i value
+            ok (cont (iter1, next))
+          | some val => ok (done (parts, pending))
+      match cf with
+        | done out => finishOuter k out
+        | cont next => kont next) =
+    do
+    let value ← ops.finishDot dot1
+    let i ← point + 1#usize
+    let next ← Array.update parts i value
+    kont (iter1, next)
+
+Note: The full type of `@bind_congr` is
+  ∀ {m : Type ?u.161 → Type ?u.160} {α β : Type ?u.161} [inst : Bind m] {x : m α} {f g : α → m β},
+    (∀ (a : α), f a = g a) → x >>= f = x >>= g
+
+case none
+D H : Type
+N : Usize
+ops : ClaimDotOps D
+inst : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Std.Array U8 N
+g : Std.Array E 29#usize
+k parts : Parts
+iter : Range
+kont : OuterState → Result RustClaim
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+point : UScalar UScalarTy.Usize
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some point, iter1)
+ho :
+  ownedOuterStep ops sem y1 g (iter, parts) = do
+    let dot ← ops.newDot
+    let (dot1, pending) ←
+      verifier.owned_claim_loops_loop0_loop0 ops { start := 0#usize, «end» := 29#usize } sem.claims sem.extra
+          sem.before_z1 y1 g point dot
+    match pending with
+      | none => do
+        let value ← ops.finishDot dot1
+        let i ← point + 1#usize
+        let next ← Array.update parts i value
+        ok (cont (iter1, next))
+      | some val => ok (done (parts, pending))
+hr :
+  verifier.prepared_claim_loop.body ops inst sem y1.to_slice g k iter parts = do
+    let r ← verifier.prepared_claim_dot ops inst sem y1.to_slice g point
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue value => do
+        let i ← point + 1#usize
+        let next ← Array.update parts i value
+        ok (cont (iter1, next))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual E
+              (core.convert.FromSame verifier.Error) residual
+        ok (done r1)
+dot dot1 : D
+⊢ (do
+      let cf ←
+        let (dot1, pending) := (dot1, none)
+          match pending with
+          | none => do
+            let value ← ops.finishDot dot1
+            let i ← point + 1#usize
+            let next ← Array.update parts i value
+            ok (cont (iter1, next))
+          | some val => ok (done (parts, pending))
+      match cf with
+        | done out => finishOuter k out
+        | cont next => kont next) =
+    do
+    let value ← ops.finishDot dot1
+    let i ← point + 1#usize
+    let next ← Array.update parts i value
+    kont (iter1, next)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimOwnedOuterStepV1.lean:61:50: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵e̵r̵i̵f̵i̵e̵r̵.̵p̵r̵e̵p̵a̵r̵e̵d̵_̵c̵l̵a̵i̵m̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵o̵u̵t̵e̵r̵P̵o̵s̵t̵,̵r̵e̵f̵O̵u̵t̵e̵r̵P̵o̵s̵t̵,̵f̵i̵n̵i̵s̵h̵O̵u̵t̵e̵r̵,̵s̵u̵m̵_̵e̵q̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲v̲e̲r̲i̲f̲i̲e̲r̲.̲p̲r̲e̲p̲a̲r̲e̲d̲_̲c̲l̲a̲i̲m̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲o̲u̲t̲e̲r̲P̲o̲s̲t̲,̲ ̲r̲e̲f̲O̲u̲t̲e̲r̲P̲o̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲f̲i̲n̲i̲s̲h̲O̲u̲t̲e̲r̲,̲ ̲s̲u̲m̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimOwnedOuterStepV1.lean:103:65: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵n̵t̵e̵r̵p̵r̵e̵t̵P̵e̵n̵d̵i̵n̵g̵,̵c̵o̵n̵t̵i̵n̵u̵e̵P̵a̵r̵t̵,̵o̵u̵t̵e̵r̵P̵o̵s̵t̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲i̲n̲t̲e̲r̲p̲r̲e̲t̲P̲e̲n̲d̲i̲n̲g̲,̲ ̲c̲o̲n̲t̲i̲n̲u̲e̲P̲a̲r̲t̲,̲ ̲o̲u̲t̲e̲r̲P̲o̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimOwnedOuterStepV1.lean:112:89: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵n̵t̵e̵r̵p̵r̵e̵t̵P̵e̵n̵d̵i̵n̵g̵,̵c̵o̵n̵t̵i̵n̵u̵e̵P̵a̵r̵t̵,̵o̵u̵t̵e̵r̵P̵o̵s̵t̵,̵f̵i̵n̵i̵s̵h̵O̵u̵t̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲i̲n̲t̲e̲r̲p̲r̲e̲t̲P̲e̲n̲d̲i̲n̲g̲,̲ ̲c̲o̲n̲t̲i̲n̲u̲e̲P̲a̲r̲t̲,̲ ̲o̲u̲t̲e̲r̲P̲o̲s̲t̲,̲ ̲f̲i̲n̲i̲s̲h̲O̲u̲t̲e̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimOwnedOuterStepV1.lean:124:12: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp [continuePart, ̲refOuterPost, ̲core.result.Result.Insts.CoreOpsTry.branch,
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.outer_step_cps' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

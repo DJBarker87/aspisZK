@@ -1,0 +1,107 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimOwnedNestedLoopsV1.lean:47:6: error: Tactic `apply` failed: could not unify the conclusion of `@bind_congr`
+  ?x >>= ?f = ?x >>= ?g
+with the goal
+  (do
+      let x ←
+        let (o, iter1) := (some l, iter1)
+          match o with
+          | none => ok (done (dot, none))
+          | some l => do
+            let scalar ← ClaimScalar.read ops sem y1.to_slice point l
+            let coeff ← g.index_usize l
+            let (r, next) ← ops.pushDot dot coeff scalar
+            let b ← ownedIsErr r
+            if b = true then ok (done (next, some (core.result.Result.Err verifier.Error.Parse)))
+              else ok (cont (iter1, next))
+      let r ←
+        match x with
+          | done out => ok out
+          | cont next => ClaimDotBoundedResult.bounded (ownedStep ops sem y1 g point) n next
+      finishPending ops r) =
+    do
+    let x ← ClaimScalar.read ops sem y1.to_slice point l
+    let x_1 ← g.index_usize l
+    let x ← ops.pushDot dot x_1 x
+    let x_2 ←
+      core.result.Result.map_err (verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError inst)
+          x.1 ()
+    let x_3 ← core.result.Result.Insts.CoreOpsTry.branch x_2
+    let cf ←
+      match x_3 with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, sem, point, x.2))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Concrete.E
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r2)
+    match cf with
+      | done out => ok out
+      | cont next => ClaimDotBoundedResult.bounded (ClaimDotBoundedResult.step ops inst y1.to_slice g) n next
+
+Note: The full type of `@bind_congr` is
+  ∀ {m : Type ?u.45 → Type ?u.44} {α β : Type ?u.45} [inst : Bind m] {x : m α} {f g : α → m β},
+    (∀ (a : α), f a = g a) → x >>= f = x >>= g
+
+case succ.some
+D H : Type
+N : Usize
+ops : ClaimDotOps D
+inst : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Std.Array U8 N
+g : Std.Array E 29#usize
+point : Usize
+n : ℕ
+ih :
+  ∀ (iter : Range) (dot : D),
+    (do
+        let r ← ClaimDotBoundedResult.bounded (ownedStep ops sem y1 g point) n (iter, dot)
+        finishPending ops r) =
+      ClaimDotBoundedResult.bounded (ClaimDotBoundedResult.step ops inst y1.to_slice g) n (iter, sem, point, dot)
+iter : Range
+dot : D
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+l : UScalar UScalarTy.Usize
+⊢ (do
+      let x ←
+        let (o, iter1) := (some l, iter1)
+          match o with
+          | none => ok (done (dot, none))
+          | some l => do
+            let scalar ← ClaimScalar.read ops sem y1.to_slice point l
+            let coeff ← g.index_usize l
+            let (r, next) ← ops.pushDot dot coeff scalar
+            let b ← ownedIsErr r
+            if b = true then ok (done (next, some (core.result.Result.Err verifier.Error.Parse)))
+              else ok (cont (iter1, next))
+      let r ←
+        match x with
+          | done out => ok out
+          | cont next => ClaimDotBoundedResult.bounded (ownedStep ops sem y1 g point) n next
+      finishPending ops r) =
+    do
+    let x ← ClaimScalar.read ops sem y1.to_slice point l
+    let x_1 ← g.index_usize l
+    let x ← ops.pushDot dot x_1 x
+    let x_2 ←
+      core.result.Result.map_err (verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError inst)
+          x.1 ()
+    let x_3 ← core.result.Result.Insts.CoreOpsTry.branch x_2
+    let cf ←
+      match x_3 with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont (iter1, sem, point, x.2))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Concrete.E
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r2)
+    match cf with
+      | done out => ok out
+      | cont next => ClaimDotBoundedResult.bounded (ClaimDotBoundedResult.step ops inst y1.to_slice g) n next
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.ownedStep_normal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.bounded_inner_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

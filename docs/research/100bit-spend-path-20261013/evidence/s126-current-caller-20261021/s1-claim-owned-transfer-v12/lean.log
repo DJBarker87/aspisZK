@@ -1,0 +1,34 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimOwnedNestedTransferV1.lean:60:92: error: unsolved goals
+D H : Type
+N : Usize
+ops : ClaimDotOps D
+sem : r1_semantic.Verified H
+y1 : Std.Array U8 N
+g : Std.Array E 29#usize
+point l : Usize
+iter iter1 : Range
+dot : D
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some l, iter1)
+⊢ (let (o, iter1) := (some l, iter1)
+    match o with
+    | none => ok (done (dot, none))
+    | some l => do
+      let scalar ← ClaimScalar.read ops sem y1.to_slice point l
+      let x ← g.index_usize l
+      let (r, next) ← ops.pushDot dot x scalar
+      let b ← ownedIsErr r
+      if b = true then ok (done (next, some (core.result.Result.Err verifier.Error.Parse)))
+        else ok (cont (iter1, next))) =
+    do
+    let scalar ← ClaimScalar.read ops sem y1.to_slice point l
+    let coeff ← g.index_usize l
+    let (r, next) ← ops.pushDot dot coeff scalar
+    let b ← ownedIsErr r
+    if b = true then ok (done (next, some (core.result.Result.Err verifier.Error.Parse))) else ok (cont (iter1, next))
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.scalar_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.sum_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.owner_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.owned_step_some' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

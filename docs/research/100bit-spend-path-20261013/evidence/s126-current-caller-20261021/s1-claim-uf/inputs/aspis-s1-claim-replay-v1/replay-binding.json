@@ -1,0 +1,10 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "qualification": "Replay every reached leaf's complete numeric inputs and output.\nThis is a source-control coupling certificate, not actual leaf installation.\n",
+  "proof_sha256": "61c12c27a1609e03ae92d3d2f4e01097cebccd0de072f0706bb7e689dd6ace6d",
+  "source_sha256": "dd570b30695f89d7c6101949d8d4fa1e2e4030dc62295709a7a2a7e2c2f6b6cd",
+  "ghost_constructor": "\n#[cfg(kani)] impl<H: Digest32> SemanticTranscript<H> { pub fn proof_input(hash:H,state:[u8;32],next_row:u8)->Self { Self{state,hash,next_row} } }\n",
+  "leaf_port": "push: all9 state u64 words +8 value u32 words +4 scalar u32 words, all9 output state words; finish: all9 state words; field: same exact slice pointer/length and ordered index",
+  "rejection_schedule": "stop in0..=29: first Err at stop<29, or29 successful pushes; every possible first rejection is represented",
+  "remaining": "Actual leaf interpretation and source/P6/caller transport; field aborts outside the fixed admitted928-byte input are not represented."
+}

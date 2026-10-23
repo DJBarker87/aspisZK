@@ -1,0 +1,56 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimOwnedNestedTransferV1.lean:81:6: error: 'change' tactic failed, pattern
+  (ownedActive ops sem y1 g iter1 point l dot >>= fun x =>
+      (match x with
+        | done out => ok out
+        | cont next => ClaimDotBoundedResult.bounded (ownedStep ops sem y1 g point) n next) >>=
+        finishPending ops) =
+    ?m.156
+is not definitionally equal to target
+  (do
+      let x ←
+        let (o, iter1) := (some l, iter1)
+          match o with
+          | none => ok (done (dot, none))
+          | some l => do
+            let scalar ← ClaimScalar.read ops sem y1.to_slice point l
+            let x ← g.index_usize l
+            let (r, next) ← ops.pushDot dot x scalar
+            let b ← ownedIsErr r
+            if b = true then ok (done (next, some (core.result.Result.Err verifier.Error.Parse)))
+              else ok (cont (iter1, next))
+      let r ←
+        match x with
+          | done out => ok out
+          | cont next => ClaimDotBoundedResult.bounded (ownedStep ops sem y1 g point) n next
+      finishPending ops r) =
+    do
+    let cf ←
+      match (some l, iter1).1 with
+        | none => do
+          let out ← ops.finishDot dot
+          ok (done (core.result.Result.Ok out))
+        | some l_1 => do
+          let scalar ← ClaimScalar.read ops sem y1.to_slice point l_1
+          let coeff ← g.index_usize l_1
+          let __x ← ops.pushDot dot coeff scalar
+          let r1 ←
+            core.result.Result.map_err
+                (verifier.prepared_claim_dot.closure.Insts.CoreOpsFunctionFnOnceTupleTupleError inst) __x.1 ()
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (cont ((some l, iter1).2, sem, point, __x.2))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Concrete.E
+                    (core.convert.FromSame verifier.Error) residual
+              ok (done r2)
+    match cf with
+      | done out => ok out
+      | cont next => ClaimDotBoundedResult.bounded (ClaimDotBoundedResult.step ops inst y1.to_slice g) n next
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.scalar_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.sum_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.owner_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.bounded_inner_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

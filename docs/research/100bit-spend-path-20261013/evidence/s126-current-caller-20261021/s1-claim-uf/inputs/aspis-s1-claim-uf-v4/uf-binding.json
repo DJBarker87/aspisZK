@@ -1,0 +1,19 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "qualification": "Pure leaf-function overapproximation, on complete actual numeric carriers.\nC UF arguments include every input bit; no tables, hashes or reduced state.\nOriginal source algorithms are not adopted/edited in production.\n",
+  "leaf_input_fields": {
+    "raw": "all eight u32 coordinates of Q,Q",
+    "finish": "all nine u64 words of complete EbyKDot",
+    "field": "all eight u32 little-endian words of the exact32-byte field frame",
+    "mul": "all sixteen u32 words of two complete WideExact values",
+    "add": "all sixteen u32 words of two complete WideExact values"
+  },
+  "source_sha256": "dd570b30695f89d7c6101949d8d4fa1e2e4030dc62295709a7a2a7e2c2f6b6cd",
+  "pairing_sha256": "27a225074a9957ed5ba069b365c519c8e50bf902b195caca9395eceebd13d504",
+  "proof_sha256": "4990f8421ba55660057e5ab8d61b3b4cb730b9d5d04933e33b6933c6c39c4ac3",
+  "c_sha256": "16b466b9ccf73763f72e8236741f7065c3ddeb8b5c0a8c92925af15dd9c08be9",
+  "primary_reference": "https://github.com/diffblue/cbmc/blob/8fcda333650440a60d3a054552a7ad318255b95d/regression/cbmc/uninterpreted_function/uf2.c",
+  "proof_only_input_constructor": "\n#[cfg(kani)] impl<H: Digest32> SemanticTranscript<H> { pub fn proof_input(hash:H,state:[u8;32],next_row:u8)->Self { Self{state,hash,next_row} } }\n",
+  "push_port": "all nine full state u64 words, eight value u32 words and four scalar u32 words, zero-extended injectively; nine state words and a one-bit result",
+  "remaining": "Pure actual-leaf instantiation, source/P6 and release binding; parser aborts not represented by the total field port. No whole-source closure is presumed."
+}

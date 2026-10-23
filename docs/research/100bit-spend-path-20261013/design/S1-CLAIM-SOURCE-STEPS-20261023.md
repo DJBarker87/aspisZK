@@ -180,3 +180,18 @@ promote their partial assertions to accepted proof evidence.
 
 Audit without replay:
 `python3 tools/s1-claim-source-steps-20261023/check.py`.
+
+## Dependency-freeze qualification (2026-10-23 continuation)
+
+The later owned-reference audit compared the active cached dependencies to
+adopted git sources, in addition to checking before/after stability. It found
+six differing Rust files in cached `aspis-statement`. The earlier seven-path
+postchecks establish stability, not equality to the entire adopted dependency
+freeze. The reached claim selector/push statements and complete native carriers
+remain pinned to their recorded inputs; do not promote this to a coherent
+frozen-library/release execution claim. The new owned-reference source-step
+v6 isolates the complete frozen statement crate and its repository-relative
+Rust imports, and rechecks its DISTINCT native source/owned helper statement.
+That result does not silently reattribute old receipts to new dependencies.
+See `S1-OWNED-CLAIM-REFERENCE-20261023.md` and the explicit v1 dependency
+comparison retained there. Production source and ELF pins remain unchanged.

@@ -1,0 +1,45 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimOwnedOuterCompleteV1.lean:113:2: error: Type mismatch
+  outer_step_cps ops inst sem y1 g k parts iter kont
+has type
+  (do
+      let cf ← ownedOuterStep ops sem y1 g (iter, parts)
+      outerPost k kont cf) =
+    do
+    let cf ← verifier.prepared_claim_loop.body ops inst sem y1.to_slice g k iter parts
+    refOuterPost kont cf
+but is expected to have type
+  (do
+      let cf ← ownedOuterStep ops sem y1 g (iter, parts)
+      match cf with
+        | done out => finishOuter k out
+        | cont next => kont next) =
+    do
+    let cf ← refOuterStep ops inst sem y1 g k (iter, parts)
+    match cf with
+      | done out => ok out
+      | cont next => kont next
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.owned_outer_cont_next' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.owned_outer_progress' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.owned_outer_loop_eq_bounded' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.bounded_outer_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.complete_outer_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.owned_claim_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentPreparedClaim.OwnedNestedTransfer.complete_owner_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

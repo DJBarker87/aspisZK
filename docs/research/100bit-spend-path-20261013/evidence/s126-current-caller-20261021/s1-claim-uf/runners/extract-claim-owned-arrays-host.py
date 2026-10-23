@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+"""Owned nested-loop extraction candidate on the complete original semantic carrier.
+Returns the same semantic owner on success and error; no Box clone or free.
+Feasibility only, not adopted source or source equivalence evidence.
+"""
+from pathlib import Path
+import sys,json,hashlib,subprocess,os,shutil
+H=Path('/home/dombarker/project-offloads/s126-real-sdk-20261021');P=H/'s1-claim-owned-nested-v2';base=Path('/home/dombarker/project-offloads/s1-current-claim-extraction-v2-20261020/input');phase=sys.argv[1];assert phase in ['charon','aeneas'];sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+if phase=='charon':
+ P.mkdir(exist_ok=False);shutil.copytree(base,P/'input')
+ src=(base/'lib.rs').read_text()
+ start=src.index('fn prepared_claim<');end=src.index(' impl Prepared',start)
+ original=src[start:end]
+ owned=original.replace('fn prepared_claim<','pub fn prepared_claim_owned<',1)
+ owned=owned.replace('sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error>', 'sem:crate::r1_semantic::Verified<H>,y1:[u8;928],inactive:E,g:[E;29],kappa:E)->(Result<E,Error>,crate::r1_semantic::Verified<H>)',1)
+ assert owned!=original
+ owned=owned.replace('field(y1,l)', 'field(&y1,l)')
+ owned=owned.replace('let k=powers::<7>(kappa);','let k=powers::<7>(kappa); let claims=*sem.claims; let extra=sem.extra; let before_z1=sem.before_z1;')
+ owned=owned.replace('sem.claims[point][l]','claims[point][l]').replace('sem.extra[l]','extra[l]').replace('sem.before_z1[l]','before_z1[l]')
+ statement='dot.push(g[l],scalar).map_err(|_|Error::Parse)?;'
+ assert owned.count(statement)==1
+ owned=owned.replace(statement,'if dot.push(g[l],scalar).is_err() { return (Err(Error::Parse),sem); }')
+ assert owned.count('Ok(claim)')==1
+ owned=owned.replace('Ok(claim)','(Ok(claim),sem)')
+ changed=src[:start]+owned+src[start:]
+ (P/'input/lib.rs').write_text(changed)
+ (P/'source-change.json').write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',base_sha256=sha(base/'lib.rs'),candidate_sha256=sha(P/'input/lib.rs'),original=original,owned=owned,qualification=__doc__,remaining='Source equivalence, exact fixed frame admission, owned return/frame preservation and concrete opaque leaf installation must be proved. This is only extractor feasibility.'),indent=2)+'\n')
+ pins=json.loads((base/'source-pins.json').read_text());T=Path('/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release')
+ cmd=[str(T/'charon'),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::result::_::map_err','--start-from','crate::verifier::prepared_claim_owned',*sum((['--opaque',p] for p in pins['opaque_paths']),[]),'--dest-file',str(P/'ClaimOwned.llbc'),'--','--manifest-path',str(P/'input/Cargo.toml'),'--offline','--release','--lib','--no-default-features','--features','r0,private-leaf-salts','--jobs','1']
+else:
+ assert not json.loads((P/'ClaimOwned.llbc').read_text())['has_errors']
+ A=H/'s1-collapse-tool-recover-v2/source/src/_build/default/main.exe'
+ cmd=[str(A),'-sequential','-no-progress-bar','-abort-on-error','-print-error-emitters','-loops-no-rec','-backend','lean','-namespace','AspisS1OwnedNestedClaim','-dest',str(P/'generated'),'-subdir','AspisS1OwnedNestedClaim','-split-files','-emit-json',str(P/'ClaimOwned.llbc')]
+os.environ.update(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',RUSTUP_TOOLCHAIN='nightly-2026-06-01',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(H/'owned-charon-target'),CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true')
+for n in ['RUSTFLAGS','RUSTC_WRAPPER','RUSTC_WORKSPACE_WRAPPER','CARGO_ENCODED_RUSTFLAGS','CHARON_TOOLCHAIN_IS_IN_PATH']:os.environ.pop(n,None)
+tag='s1-claim-owned-nested-'+phase+'-v2';subprocess.run(['python3',str(H/'kit/reservation.py'),str(H/(tag+'-admission.json'))],check=True,stdout=subprocess.DEVNULL)
+(H/(tag+'-input.json')).write_text(json.dumps(dict(schema='focused-extractor-proof-packet-v1',command=cmd,source_sha256=sha(P/'input/lib.rs'),source_change_sha256=sha(P/'source-change.json'),tool_sha256=sha(Path(cmd[0])),llbc_sha256=sha(P/'ClaimOwned.llbc') if phase=='aeneas' else None,qualification=__doc__,expected_time='Cached optimized compilation/owned nested source cut, then focused Aeneas extraction; no arithmetic evaluation or Lean replay.'),indent=2)+'\n');os.chdir(P/'input')
+raise SystemExit(subprocess.call(['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'kit/capped.py'),str(H/'receipts'/tag),'Owned complete semantic carrier, original nested loops, returned owner on both paths; feasibility only','--','timeout','180',*cmd]))
