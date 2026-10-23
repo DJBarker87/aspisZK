@@ -1,0 +1,10 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "original": "pub fn encode_digest_canonical(digest: &Digest) -> [u8; 32] {\n    let mut bytes = [0u8; 32];\n    for (index, value) in digest.iter().enumerate() {\n        bytes[index * 4..index * 4 + 4].copy_from_slice(&value.to_le_bytes());\n    }\n    bytes\n}",
+  "reference": "fn reference(d:&Digest)->[u8;32] {let mut b=[0u8;32];\nb[0..4].copy_from_slice(&d[0].to_le_bytes());\nb[4..8].copy_from_slice(&d[1].to_le_bytes());\nb[8..12].copy_from_slice(&d[2].to_le_bytes());\nb[12..16].copy_from_slice(&d[3].to_le_bytes());\nb[16..20].copy_from_slice(&d[4].to_le_bytes());\nb[20..24].copy_from_slice(&d[5].to_le_bytes());\nb[24..28].copy_from_slice(&d[6].to_le_bytes());\nb[28..32].copy_from_slice(&d[7].to_le_bytes());\nb}\n",
+  "candidate": "pub fn encode_digest_canonical(d:&Digest)->[u8;32] {let mut b=[0u8;32];\nb[0..4].copy_from_slice(&d[0].to_le_bytes());\nb[4..8].copy_from_slice(&d[1].to_le_bytes());\nb[8..12].copy_from_slice(&d[2].to_le_bytes());\nb[12..16].copy_from_slice(&d[3].to_le_bytes());\nb[16..20].copy_from_slice(&d[4].to_le_bytes());\nb[20..24].copy_from_slice(&d[5].to_le_bytes());\nb[24..28].copy_from_slice(&d[6].to_le_bytes());\nb[28..32].copy_from_slice(&d[7].to_le_bytes());\nb}",
+  "original_file_sha256": "c73fc9a55dd3493ae264231eaaf495c886c42cf0e58412bdb11053a191eb860a",
+  "candidate_file_sha256": "86385098f5c9edc8bfd9120066c37738504e73a68d0038e4539e33b94da6bca8",
+  "native_equivalence_predecessor": "s6-native-digest-encoder-v2",
+  "qualification": "Isolated extraction reference: only the digest encoder is replaced by the EXACT unrolled function verified equal on every native8-limb input, function name/publicity only changed. No allocation/ownership/carrier changes; original enclosing production source untouched. Full enclosing/contextual source transport and any adoption/re-pin gates remain explicit."
+}

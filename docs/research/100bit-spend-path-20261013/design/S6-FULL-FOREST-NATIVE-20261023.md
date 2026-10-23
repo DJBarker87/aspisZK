@@ -155,3 +155,83 @@ Remaining is still the complete FullForestAcceptedRoundtrip instance, all
 nested source child instances, current decoder/encoder/runtime joins, actual
 first/first_decoded/adapter stage1 connection and S2 native observation. These
 results do not construct S2CallerFacts or establish the100-bit target.
+
+## Addendum: native validator steps (23 October)
+
+The complete frozen snapshot and afterstate validators now have checked
+concrete unrolled equivalents, including every original rejection and its
+exact Rust error variant. Neither check assumes canonical inputs, successful
+validation or child success; neither uses stubs. Proof-only cfg(kani) wrappers
+expose private functions without changing their bodies. The full native
+carriers are retained. These are TOTAL finite native equality/safety checks,
+not Lean whole-codec totality or an SDK execution proof.
+
+| Target | Exit | Wall seconds | Peak RSS KiB | Swap | Checks |
+|---|---:|---:|---:|---:|---:|
+| s6-native-snapshot-validator-v1 | 0 | 10.941 | 536228 | 0 | 151 |
+| s6-native-afterstate-validator-v1 | 0 | 2.115 | 159104 | 0 | 125 |
+
+Both used Kani0.67, MIR0/explicit opt3, one job, MemoryHigh6G/Max8G/SwapMax0.
+Source-only packets are under s6-full-forest-native/{snapshot,afterstate}-validator;
+check-validators.py audits source hashes, proof-only wrapper removal against
+the original freeze, exact commands/tool pins, successful receipts and
+unchanged dependency inventories. #print axioms is not applicable to Kani.
+
+The extraction using only the three serialization replacements is retained
+as EXCLUDED in s6-full-forest-exploration-three: Charon exit0,58.785s,
+490780KiB,swap0; Aeneas exit2,8.138s,384560KiB,swap0 at the original snapshot
+validation loop. No generated proof from that attempt is imported.
+
+The next isolated extraction uses the five exact checked loop references.
+All other source, full types and error paths remain present. This is an
+extraction candidate; contextual transport, complete roundtrip, child source
+instances, allocator/runtime and actual caller/SDK connections remain open.
+Production is unchanged and any adoption requires explicit equivalence and
+source/artifact re-pin gates. Whole S1/S6 and the100-bit target remain open.
+
+### Five-loop extraction result and excluded Lean attempts
+
+The five-loop reference extraction completed: Charon exit0,57.662s,
+479972KiB,swap0; Aeneas exit0,68.167s,3379552KiB,swap0. No explicit
+codec or validator children are opaque. Raw templates contain exactly three
+standard-library declarations: slice/array equality, Option.ok_or and
+Option equality. They are diagnostic templates and are never imported as
+axioms. Source/tool/LLBC pins and complete generated sources are retained in
+s6-five-codec-extraction. Five checked replacements and contextual source
+transport remain explicit candidate boundaries; extraction is not a proof.
+
+S6FiveCodecTypesV1 focused check v2 passed in10.227378s,2294448128bytes RSS,
+zero swaps, standard axioms. The full module attempts v2/v3 are EXCLUDED: v2
+exposed missing trait-definition parameterization and dropped reducibility
+metadata in materialization; v3 corrects those but the generated deeply nested
+decoders still have layout/parse errors. Compiler recovery sorryAx reports
+from those failed attempts are not accepted. No resource options were raised.
+The raw generated whole-encoder audits in a failing module do not promote
+that module to accepted evidence. The next repair concerns printing layout,
+with the same LLBC and unchanged translation rules.
+
+The formatting repair uses a private copied tool with the single change
+Format.pp_set_margin80→1000, built optimized in its own admitted Docker
+cgroup (High6G/Max8G/SwapMax0). Build exit0,6.205359s,802684928bytes cgroup
+peak,swap0; binary SHA554b4f705f18fedfcd8ad443d820f58d364b0425931ec5f4bf983c90fa2b6690.
+The unchanged LLBC rerender passed in59.807s,3368464KiB,swap0. Stripping
+comments/metadata and whitespace gives identical source token content.
+Full before/after Translate.ml, exact patch, command/image/source pins,
+receipts and generated sources are retained in s6-five-codec-wide.
+The first tool setup used a nonexistent host opam path and launched no
+compiler (exit127); that failure is retained and excluded. Native module
+v4 accidentally repeated the v3 source after the formatter-comparison
+preflight failed; it is excluded and supplies no additional evidence.
+The materializer now compares formatting before selective carrier metadata
+restoration, preserving reducibility only for the native M31 scalar alias.
+
+Current accepted native full-type target is types-v3: exit0,11.561250s,
+2293547008bytes RSS,swap0, standard axioms. The width1000 native attempt v5
+is EXCLUDED: widening the margin alone retains the OCaml formatter's old
+maximum indentation, producing further layout errors. The pending tool
+repair adds maximum indentation999 without changing translation rules. Its
+fresh global admission refused launch because the reserved-memory sum was
+above policy; no compiler ran and no cap was bypassed. No full codec native
+module is accepted. Whole S1/S6 remain OPEN. The committed validator equality
+results remove two native loop-equivalence obligations, not an enclosing
+soundness or SDK premise.
