@@ -131,9 +131,8 @@ fn copy_active_rows() -> [bool; STATE_ONLY_POSEIDON_TRACE_ROWS] {
 
 fn active_rows(rows: &[u16]) -> [bool; STATE_ONLY_POSEIDON_TRACE_ROWS] {
     let mut active = [false; STATE_ONLY_POSEIDON_TRACE_ROWS];
-    for &row in rows {
-        active[usize::from(row)] = true;
-    }
+    let mut i=0;
+    while i<rows.len() {active[usize::from(rows[i])]=true;i+=1;}
     active
 }
 
@@ -161,9 +160,12 @@ fn pool_v1_pair_forest_copy_active_rows(
 }
 
 fn first_inactive_row(active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS]) -> usize {
-    (0..STATE_ONLY_POSEIDON_TRACE_ROWS)
-        .find(|row| !active[*row])
-        .expect("generated layout has an inactive row")
+    let mut row=0;
+    while row<STATE_ONLY_POSEIDON_TRACE_ROWS {
+        if !active[row] {return row;}
+        row+=1;
+    }
+    panic!("generated layout has an inactive row")
 }
 
 fn balance_m31_copy_inactive(
@@ -174,9 +176,12 @@ fn balance_m31_copy_inactive(
     if table.len() != STATE_ONLY_POSEIDON_TRACE_ROWS || active[dependent] {
         return Err(StateOnlyMaskBuildError::TraceShape);
     }
-    let sum = (0..STATE_ONLY_POSEIDON_TRACE_ROWS)
-        .filter(|row| !active[*row] && *row != dependent)
-        .fold(M31::ZERO, |sum, row| sum.add(table[row]));
+    let mut sum=M31::ZERO;
+    let mut row=0;
+    while row<STATE_ONLY_POSEIDON_TRACE_ROWS {
+        if !active[row] && row!=dependent {sum=sum.add(table[row]);}
+        row+=1;
+    }
     table[dependent] = M31::ZERO.sub(sum);
     Ok(())
 }
@@ -189,9 +194,12 @@ fn balance_qm31_copy_inactive(
     if table.len() != STATE_ONLY_POSEIDON_TRACE_ROWS || active[dependent] {
         return Err(StateOnlyMaskBuildError::TraceShape);
     }
-    let sum = (0..STATE_ONLY_POSEIDON_TRACE_ROWS)
-        .filter(|row| !active[*row] && *row != dependent)
-        .fold(QM31::ZERO, |sum, row| sum.add(table[row]));
+    let mut sum=QM31::ZERO;
+    let mut row=0;
+    while row<STATE_ONLY_POSEIDON_TRACE_ROWS {
+        if !active[row] && row!=dependent {sum=sum.add(table[row]);}
+        row+=1;
+    }
     table[dependent] = QM31::ZERO.sub(sum);
     Ok(())
 }
@@ -250,27 +258,33 @@ fn apply_h1_padding_mask_for_active(
     padding: &[QM31],
     active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
 ) -> Result<(), StateOnlyMaskBuildError> {
-    if h1.len() != STATE_ONLY_POSEIDON_TRACE_ROWS
-        || padding.len() != STATE_ONLY_POSEIDON_TRACE_ROWS
-        || active
-            .iter()
-            .copied()
-            .zip(padding)
-            .any(|(active, value)| active && *value != QM31::ZERO)
-        || padding
-            .iter()
-            .copied()
-            .enumerate()
-            .filter(|(row, _)| !active[*row])
-            .fold(QM31::ZERO, |sum, (_, value)| sum.add(value))
-            != QM31::ZERO
-    {
+    if h1.len()!=STATE_ONLY_POSEIDON_TRACE_ROWS || padding.len()!=STATE_ONLY_POSEIDON_TRACE_ROWS {
         return Err(StateOnlyMaskBuildError::TraceShape);
     }
-    for (value, mask) in h1.iter_mut().zip(padding) {
-        *value = value.add(*mask);
+    check_h1_padding_active(padding,active)?;
+    if h1_padding_inactive_sum(padding,active)!=QM31::ZERO {return Err(StateOnlyMaskBuildError::TraceShape);}
+    add_h1_padding(h1,padding);
+    Ok(())
+}
+fn check_h1_padding_active(padding:&[QM31],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->Result<(),StateOnlyMaskBuildError> {
+    let mut row=0;
+    while row<STATE_ONLY_POSEIDON_TRACE_ROWS {
+        if active[row] && padding[row]!=QM31::ZERO {return Err(StateOnlyMaskBuildError::TraceShape);}
+        row+=1;
     }
     Ok(())
+}
+fn h1_padding_inactive_sum(padding:&[QM31],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->QM31 {
+    let mut sum=QM31::ZERO;let mut row=0;
+    while row<STATE_ONLY_POSEIDON_TRACE_ROWS {
+        if !active[row] {sum=sum.add(padding[row]);}
+        row+=1;
+    }
+    sum
+}
+fn add_h1_padding(h1:&mut[QM31],padding:&[QM31]) {
+    let mut row=0;
+    while row<STATE_ONLY_POSEIDON_TRACE_ROWS {h1[row]=h1[row].add(padding[row]);row+=1;}
 }
 
 pub fn apply_atomic_state_only_h1_padding_mask_v3(
@@ -359,11 +373,11 @@ impl SeedExpander {
     }
 
     fn m31(&mut self) -> Result<M31, StateOnlyMaskBuildError> {
-        for _ in 0..MASK_SAMPLE_RETRY_LIMIT {
-            let candidate = self.next_word() & 0x7fff_ffff;
-            if candidate < P {
-                return Ok(M31(candidate));
-            }
+        let mut retry=0;
+        while retry<MASK_SAMPLE_RETRY_LIMIT {
+            let candidate=self.next_word() & 0x7fff_ffff;
+            if candidate<P {return Ok(M31(candidate));}
+            retry+=1;
         }
         Err(StateOnlyMaskBuildError::MaskSampleExhausted)
     }
@@ -455,30 +469,10 @@ fn build_mask_material_for_layout(
     )?;
     let mut expander = SeedExpander::new(hash, seed);
     let inactive_dependent = first_inactive_row(active);
-    let mut c1 = Vec::with_capacity(cells.len());
-    for _ in 0..cells.len() {
-        c1.push(expander.m31()?);
-    }
-    let mut mask_only_c1: [Vec<M31>; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS] =
-        core::array::from_fn(|_| Vec::with_capacity(STATE_ONLY_POSEIDON_TRACE_ROWS));
-    for column in &mut mask_only_c1 {
-        for _ in 0..STATE_ONLY_POSEIDON_TRACE_ROWS {
-            column.push(expander.m31()?);
-        }
-        balance_m31_copy_inactive(column, inactive_dependent, active)?;
-    }
-    let mut g = Vec::with_capacity(STATE_ONLY_POSEIDON_TRACE_ROWS);
-    for _ in 0..STATE_ONLY_POSEIDON_TRACE_ROWS {
-        g.push(expander.qm31()?);
-    }
-    balance_qm31_copy_inactive(&mut g, inactive_dependent, active)?;
-    let mut h1_padding = vec![QM31::ZERO; STATE_ONLY_POSEIDON_TRACE_ROWS];
-    for row in 0..STATE_ONLY_POSEIDON_TRACE_ROWS {
-        if !active[row] && row != inactive_dependent {
-            h1_padding[row] = expander.qm31()?;
-        }
-    }
-    balance_qm31_copy_inactive(&mut h1_padding, inactive_dependent, active)?;
+    let c1=sample_mask_cells(&mut expander,cells.len())?;
+    let mask_only_c1=sample_mask_columns(&mut expander,inactive_dependent,active)?;
+    let g=sample_mask_g(&mut expander,inactive_dependent,active)?;
+    let h1_padding=sample_mask_h1_padding(&mut expander,inactive_dependent,active)?;
     Ok(StateOnlyMaskMaterial {
         c1,
         mask_only_c1,
@@ -486,6 +480,37 @@ fn build_mask_material_for_layout(
         h1_padding,
         mask_nonce: context.mask_nonce,
     })
+}
+
+fn sample_mask_cells(expander:&mut SeedExpander,count:usize)->Result<Vec<M31>,StateOnlyMaskBuildError> {
+    let mut values=Vec::with_capacity(count);let mut i=0;
+    while i<count {let value=expander.m31()?;values.push(value);i+=1;}
+    Ok(values)
+}
+fn sample_mask_columns(expander:&mut SeedExpander,inactive:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->Result<[Vec<M31>;STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],StateOnlyMaskBuildError> {
+    let mut columns:[Vec<M31>;STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS]=Default::default();
+    let mut column=0;
+    while column<STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS {
+        let mut values=sample_mask_cells(expander,STATE_ONLY_POSEIDON_TRACE_ROWS)?;
+        balance_m31_copy_inactive(&mut values,inactive,active)?;
+        columns[column]=values;column+=1;
+    }
+    Ok(columns)
+}
+fn sample_mask_g(expander:&mut SeedExpander,inactive:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->Result<Vec<QM31>,StateOnlyMaskBuildError> {
+    let mut values=Vec::with_capacity(STATE_ONLY_POSEIDON_TRACE_ROWS);let mut row=0;
+    while row<STATE_ONLY_POSEIDON_TRACE_ROWS {let value=expander.qm31()?;values.push(value);row+=1;}
+    balance_qm31_copy_inactive(&mut values,inactive,active)?;
+    Ok(values)
+}
+fn sample_mask_h1_padding(expander:&mut SeedExpander,inactive:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->Result<Vec<QM31>,StateOnlyMaskBuildError> {
+    let mut values=vec![QM31::ZERO;STATE_ONLY_POSEIDON_TRACE_ROWS];let mut row=0;
+    while row<STATE_ONLY_POSEIDON_TRACE_ROWS {
+        if !active[row] && row!=inactive {values[row]=expander.qm31()?;}
+        row+=1;
+    }
+    balance_qm31_copy_inactive(&mut values,inactive,active)?;
+    Ok(values)
 }
 
 pub fn build_atomic_state_only_mask_material_v3(
@@ -688,47 +713,87 @@ fn apply_mask_material_for_layout(
     cells: &[aspis_statement::TraceCell],
     active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],
 ) -> Result<AppliedStateOnlyMasks, StateOnlyMaskBuildError> {
-    if trace
-        .c1
-        .iter()
-        .any(|column| column.len() != STATE_ONLY_POSEIDON_TRACE_ROWS)
-    {
-        return Err(StateOnlyMaskBuildError::TraceShape);
-    }
-    if material.c1.len() != cells.len()
-        || material
-            .mask_only_c1
-            .iter()
-            .any(|column| column.len() != STATE_ONLY_POSEIDON_TRACE_ROWS)
-        || material.g.len() != STATE_ONLY_POSEIDON_TRACE_ROWS
-        || material.h1_padding.len() != STATE_ONLY_POSEIDON_TRACE_ROWS
-    {
-        return Err(StateOnlyMaskBuildError::TraceShape);
-    }
-    let mut inactive_dependents = [None; STATE_ONLY_HIDING_C1_COLUMNS];
-    for cell in cells {
-        let row = usize::from(cell.row);
-        let column = usize::from(cell.column);
-        if !active[row] {
-            inactive_dependents[column] = Some(row);
-        }
-    }
-    if inactive_dependents.iter().any(Option::is_none) {
-        return Err(StateOnlyMaskBuildError::Layout);
-    }
-    for (cell, mask) in cells.iter().copied().zip(core::mem::take(&mut material.c1)) {
-        let value = &mut trace.c1[usize::from(cell.column)][usize::from(cell.row)];
-        *value = value.add(mask);
-    }
-    for (column, dependent) in trace.c1.iter_mut().zip(inactive_dependents) {
-        balance_m31_copy_inactive(column, dependent.unwrap(), active)?;
-    }
+    check_apply_shape(&trace.c1,&material,cells.len())?;
+    let inactive_dependents=mask_inactive_dependents(cells,active)?;
+    let masks=core::mem::take(&mut material.c1);
+    apply_mask_cells(&mut trace.c1,masks,cells);
+    let columns=core::mem::take(&mut trace.c1);
+    let (balanced,columns)=balance_mask_columns(columns,inactive_dependents,active);
+    trace.c1=columns;
+    balanced?;
     Ok(AppliedStateOnlyMasks {
         mask_only_c1: core::mem::take(&mut material.mask_only_c1),
         g: core::mem::take(&mut material.g),
         h1_padding: core::mem::take(&mut material.h1_padding),
         mask_nonce: material.mask_nonce,
     })
+}
+
+fn check_apply_shape(columns:&[Vec<M31>],material:&StateOnlyMaskMaterial,cells:usize)->Result<(),StateOnlyMaskBuildError> {
+    check_trace_columns(columns)?;
+    if material.c1.len()!=cells {return Err(StateOnlyMaskBuildError::TraceShape);}
+    check_trace_columns(&material.mask_only_c1)?;
+    if material.g.len()!=STATE_ONLY_POSEIDON_TRACE_ROWS || material.h1_padding.len()!=STATE_ONLY_POSEIDON_TRACE_ROWS {
+        return Err(StateOnlyMaskBuildError::TraceShape);
+    }
+    Ok(())
+}
+fn check_trace_columns(columns:&[Vec<M31>])->Result<(),StateOnlyMaskBuildError> {
+    let mut column=0;
+    while column<columns.len() {
+        if columns[column].len()!=STATE_ONLY_POSEIDON_TRACE_ROWS {return Err(StateOnlyMaskBuildError::TraceShape);}
+        column+=1;
+    }
+    Ok(())
+}
+fn mask_inactive_dependents(cells:&[aspis_statement::TraceCell],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->Result<[Option<usize>;STATE_ONLY_HIDING_C1_COLUMNS],StateOnlyMaskBuildError> {
+    let mut dependents=[None;STATE_ONLY_HIDING_C1_COLUMNS];let mut i=0;
+    while i<cells.len() {
+        let row=usize::from(cells[i].row);let column=usize::from(cells[i].column);
+        dependents=mask_dependent_step(dependents,column,row,active[row]);
+        i+=1;
+    }
+    check_mask_dependents(&dependents)?;
+    Ok(dependents)
+}
+fn mask_dependent_step(mut dependents:[Option<usize>;STATE_ONLY_HIDING_C1_COLUMNS],column:usize,row:usize,active:bool)->[Option<usize>;STATE_ONLY_HIDING_C1_COLUMNS] {
+    if !active {dependents[column]=Some(row);}
+    dependents
+}
+fn check_mask_dependents(dependents:&[Option<usize>;STATE_ONLY_HIDING_C1_COLUMNS])->Result<(),StateOnlyMaskBuildError> {
+    let mut column=0;
+    while column<STATE_ONLY_HIDING_C1_COLUMNS {
+        if dependents[column].is_none() {return Err(StateOnlyMaskBuildError::Layout);}
+        column+=1;
+    }
+    Ok(())
+}
+fn apply_mask_cells(columns:&mut[Vec<M31>],masks:Vec<M31>,cells:&[aspis_statement::TraceCell]) {
+    let mut i=0;
+    while i<cells.len() {
+        let row=usize::from(cells[i].row);let column=usize::from(cells[i].column);
+        columns[column][row]=columns[column][row].add(masks[i]);i+=1;
+    }
+    // The consumed buffer drops before column balancing, as in the old zip.
+}
+fn balance_mask_columns(columns:[Vec<M31>;STATE_ONLY_HIDING_C1_COLUMNS],dependents:[Option<usize>;STATE_ONLY_HIDING_C1_COLUMNS],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->(Result<(),StateOnlyMaskBuildError>,[Vec<M31>;STATE_ONLY_HIDING_C1_COLUMNS]) {
+    balance_mask_columns_from(columns,dependents,active,0)
+}
+// At most sixteen frames; moves the owner across the recursive boundary.
+fn balance_mask_columns_from(columns:[Vec<M31>;STATE_ONLY_HIDING_C1_COLUMNS],dependents:[Option<usize>;STATE_ONLY_HIDING_C1_COLUMNS],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS],column:usize)->(Result<(),StateOnlyMaskBuildError>,[Vec<M31>;STATE_ONLY_HIDING_C1_COLUMNS]) {
+    if column==STATE_ONLY_HIDING_C1_COLUMNS {return (Ok(()),columns);}
+    let dependent=dependents[column].unwrap();
+    let (result,columns)=balance_mask_column(columns,column,dependent,active);
+    match result {
+        Err(error)=>(Err(error),columns),
+        Ok(())=>balance_mask_columns_from(columns,dependents,active,column+1),
+    }
+}
+fn balance_mask_column(mut columns:[Vec<M31>;STATE_ONLY_HIDING_C1_COLUMNS],column:usize,dependent:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->(Result<(),StateOnlyMaskBuildError>,[Vec<M31>;STATE_ONLY_HIDING_C1_COLUMNS]) {
+    let mut values=core::mem::take(&mut columns[column]);
+    let result=balance_m31_copy_inactive(&mut values,dependent,active);
+    columns[column]=values;
+    (result,columns)
 }
 
 pub fn apply_atomic_state_only_mask_material_v3(

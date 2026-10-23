@@ -32,6 +32,10 @@ pub mod sim;
 #[cfg(feature="prover")] mod host_sumcheck;
 #[cfg(feature="prover")] mod host_semantic;
 #[cfg(feature="prover")] mod host_commitment;
+#[cfg(feature="prover")] mod host_tree;
+#[cfg(feature="prover")] mod host_transcript;
+#[cfg(feature="prover")] mod host_wire;
+#[cfg(feature="prover")] mod host_compact;
 
 // Adopted R1 proof format (PREREG-PROOF-SIZE-2, 2026-10-19): compact QM31
 // storage and binary multiproofs. UNPROVED: see PROOF-SIZE-OBLIGATIONS.

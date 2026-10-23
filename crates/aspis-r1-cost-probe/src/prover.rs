@@ -4,19 +4,31 @@ use aspis_core::{digest::LegacyHashFn,HashFn,field::{WideExact as E,M31,QM31 as 
 use aspis_statement::pool_v1::{pair_forest_semantic_terminal::r0::Public,pair_forest_trace::PoolV1PairForestMergedC1CompilationV1};
 use aspis_statement::pool_v1::pool_v1_pair_forest_copy_active_row_masks_v1;
 use aspis_prover::{state_only_entropy::{StateOnlyAttemptSecrets,ReservedStateOnlyAttemptSecrets,DurableStateOnlyMaskNonceStore},state_only_hiding::{apply_pool_v1_pair_forest_mask_material_v1,InMemoryStateOnlyMaskNonceStore,StateOnlyMaskBuildError,StateOnlyMaskNonceStore}};
-use crate::{transport::Variant,verifier::{Error},weights::{Weights,QUARTER,PERM},transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain,PrivateSalts},host_semantic::{BuiltSemantics,Column,Commitments},r1_wire::Error as SError};
+use crate::{transport::Variant,verifier::{Error},weights::{Weights,QUARTER,PERM},host_transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain,PrivateSalts},host_semantic::{BuiltSemantics,Commitments},r1_wire::Error as SError};
 /// Host commitment backend. Adopted format (PREREG-PROOF-SIZE-2): salted
 /// leaves under binary trees; there is no unsalted or eight-way commitment.
 pub struct Backend {pub hash:HashFn,pub variant:Variant,pub domain:EncodingDomain,pub messages:Vec<Message<E>>,pub c1:Option<Commitment>,pub c2:Option<Commitment>,c1_salts:Option<crate::host_commitment::PrivateSalts>,c2_salts:Option<crate::host_commitment::PrivateSalts>}
 impl Commitments for Backend {
-    fn c1(&mut self,columns:[Column<'_>;27])->Result<[u8;32],SError>{
-        for (i,c) in columns.into_iter().enumerate(){self.messages[if i<26{i}else{28}]=match c {Column::Base(v)=>v.map(E::from_m31),Column::Extension(v)=>v.map(E::from_qm31)};}
+    fn c1(&mut self,columns:&[Vec<M31>;26],d:&[K;1024])->Result<[u8;32],SError>{
+        let mut lane=0;
+        while lane<26 {
+            let mut row=0;
+            while row<1024 {self.messages[lane][row]=E::from_m31(columns[lane][row]);row+=1;}
+            lane+=1;
+        }
+        let mut row=0;
+        while row<1024 {self.messages[28][row]=E::from_qm31(d[row]);row+=1;}
+
         let salts=self.c1_salts.take().ok_or(SError::Public)?;
         let c=Commitment::new_salted(self.hash,&self.domain,CommitmentTime::C1,&self.messages,self.variant,salts).map_err(|_|SError::Public)?;
         let root=c.root();self.c1=Some(c);Ok(root)
     }
-    fn c2(&mut self,columns:[&[K;1024];2])->Result<[u8;32],SError>{
-        for (i,c) in columns.into_iter().enumerate(){self.messages[26+i]=c.map(E::from_qm31);}
+    fn c2(&mut self,h1:&[K],g:&[K;1024])->Result<[u8;32],SError>{
+        let mut row=0;
+        while row<1024 {self.messages[26][row]=E::from_qm31(h1[row]);row+=1;}
+        row=0;
+        while row<1024 {self.messages[27][row]=E::from_qm31(g[row]);row+=1;}
+
         let salts=self.c2_salts.take().ok_or(SError::Public)?;
         let c=Commitment::new_salted(self.hash,&self.domain,CommitmentTime::C2,&self.messages,self.variant,salts).map_err(|_|SError::Public)?;
         let root=c.root();self.c2=Some(c);Ok(root)
@@ -60,7 +72,7 @@ pub fn fold(q:&[E],alpha:E,dual:bool)->Vec<E> {
 
 /// Ordered byte assembly used by the real pipeline; each field encoding is a leaf.
 fn encoded_slice(values:&[E])->Vec<u8> {
-    let mut out=Vec::new();
+    let mut out=Vec::with_capacity(32*values.len());
     let mut i=0;
     while i<values.len() {out.extend_from_slice(&values[i].to_le_bytes());i+=1;}
     out
@@ -103,11 +115,23 @@ fn fixture_secret(hash:HashFn,domain:&[u8],seed:&[u8;32],public:&[u8],variant:Va
 }
 
 fn inactive_sum_m31(values:&[M31],masks:&[u16;64])->M31 {
-    values.iter().copied().enumerate().filter(|(row,_)| masks[row>>4]&(1<<(row&15))==0).fold(M31::ZERO,|sum,(_,value)|sum.add(value))
+    let mut sum=M31::ZERO;
+    let mut row=0;
+    while row<values.len() {
+        if masks[row>>4]&(1<<(row&15))==0 {sum=sum.add(values[row]);}
+        row+=1;
+    }
+    sum
 }
 
 fn inactive_sum_k(values:&[K],masks:&[u16;64])->K {
-    values.iter().copied().enumerate().filter(|(row,_)| masks[row>>4]&(1<<(row&15))==0).fold(K::ZERO,|sum,(_,value)|sum.add(value))
+    let mut sum=K::ZERO;
+    let mut row=0;
+    while row<values.len() {
+        if masks[row>>4]&(1<<(row&15))==0 {sum=sum.add(values[row]);}
+        row+=1;
+    }
+    sum
 }
 
 /// Deterministic, insecure masked fixture path. Its derivations exist only for
@@ -167,18 +191,9 @@ fn prove_masked_with_attempt(
     let masks=pool_v1_pair_forest_copy_active_row_masks_v1().map_err(|_|Error::Semantic)?;
     let d: [K;1024]=reserved.derive_pool_v1_pair_forest_zero_factor_d(hash,context).map_err(mask_error)?.try_into().map_err(|_|Error::Semantic)?;
     if applied.g.len()!=1024 || applied.h1_padding.len()!=1024 { return Err(Error::Semantic); }
-    let g: [K;1024]=core::array::from_fn(|i|applied.g[i]);
-    let h1_padding: [K;1024]=core::array::from_fn(|i|applied.h1_padding[i]);
-    let c1_columns_inactive_balanced=noised_c1.c1.iter().filter(|column|inactive_sum_m31(column,&masks)==M31::ZERO).count();
-    let mask_only_columns_inactive_balanced=applied.mask_only_c1.iter().filter(|column|inactive_sum_m31(column,&masks)==M31::ZERO).count();
-    let audit=MaskedFixtureAudit{
-        c1_columns_inactive_balanced,
-        mask_only_columns_inactive_balanced,
-        d_inactive_balanced:inactive_sum_k(&d,&masks)==K::ZERO,
-        g_inactive_balanced:inactive_sum_k(&g,&masks)==K::ZERO,
-        h1_padding_inactive_balanced:inactive_sum_k(&h1_padding,&masks)==K::ZERO,
-        h1_total_balanced:true,
-    };
+    let g=fixed_k_column(&applied.g);
+    let h1_padding=fixed_k_column(&applied.h1_padding);
+    let audit=audit_masks(&noised_c1.c1,&applied.mask_only_c1,&d,&g,&h1_padding,&masks);
     if audit.c1_columns_inactive_balanced!=16
         || audit.mask_only_columns_inactive_balanced!=10
         || !audit.d_inactive_balanced
@@ -195,6 +210,37 @@ fn prove_masked_with_attempt(
     let audit=MaskedFixtureAudit{h1_total_balanced,..audit};
     let proof=prove_from_semantics(public,variant,hash,backend,sem,(&reserved,context))?;
     Ok((proof,audit))
+}
+
+/// Fixed-size copy with no closure retaining a material-owner loan.
+fn fixed_k_column(values:&[K])->[K;1024] {
+    let mut out=[K::ZERO;1024];
+    let mut i=0;
+    while i<1024 {out[i]=values[i];i+=1;}
+    out
+}
+fn audit_masks(c1:&[Vec<M31>],mask_only:&[Vec<M31>;10],d:&[K;1024],g:&[K;1024],h1_padding:&[K;1024],masks:&[u16;64])->MaskedFixtureAudit {
+    let mut c1_columns_inactive_balanced=0;
+    let mut column=0;
+    while column<c1.len() {
+        if inactive_sum_m31(&c1[column],masks)==M31::ZERO {c1_columns_inactive_balanced+=1;}
+        column+=1;
+    }
+    let mut mask_only_columns_inactive_balanced=0;
+    column=0;
+    while column<10 {
+        if inactive_sum_m31(&mask_only[column],masks)==M31::ZERO {mask_only_columns_inactive_balanced+=1;}
+        column+=1;
+    }
+    MaskedFixtureAudit{
+        c1_columns_inactive_balanced,
+        mask_only_columns_inactive_balanced,
+        d_inactive_balanced:inactive_sum_k(d,masks)==K::ZERO,
+        g_inactive_balanced:inactive_sum_k(g,masks)==K::ZERO,
+        h1_padding_inactive_balanced:inactive_sum_k(h1_padding,masks)==K::ZERO,
+        h1_total_balanced:true,
+    }
+
 }
 
 /// LOG D73.4.2: Lean `realGameP` rejects an attempt whose mask decode is
@@ -256,33 +302,14 @@ struct PreparedOpening {
 
 fn prepare_opening(variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>)->Result<PreparedOpening,Error> {
     if variant!=Variant::S2 {return Err(Error::Semantic);}
-    let mut coefficients=Vec::new();
-    let mut lane=0;
-    while lane<backend.messages.len() {
-        coefficients.push(variant.coefficients(&backend.messages[lane]));lane+=1;
-    }
+    let coefficients=opening_coefficients(variant,&backend.messages);
     let z1=Point{x:E::from_qm31(sem.z[1].x),y:E::from_qm31(sem.z[1].y)};
-    let mut y1=Vec::new();
-    lane=0;
-    while lane<coefficients.len() {
-        let value=r0::encoder::eval_message(&coefficients[lane],z1);
-        y1.extend_from_slice(&value.to_le_bytes());lane+=1;
-    }
+    let y1=opening_claim_bytes(&coefficients,z1);
     let mut transcript=Transcript::new(LegacyHashFn(hash),sem.transcript.state(),variant);
     let gamma=transcript.scalar(27,&y1,true);
-    let gp=crate::weights::powers::<29>(gamma);
-    let mut q=Vec::with_capacity(1024);
-    let mut row=0;
-    while row<1024 {
-        let mut value=E::ZERO;
-        lane=0;
-        while lane<29 {value=value.add(gp[lane].mul(coefficients[lane][row]));lane+=1;}
-        q.push(value);row+=1;
-    }
+    let q=opening_batch(&coefficients,gamma);
     let w=Weights::new(variant,&sem.alpha,&sem.z)?;
-    let mut inactive=E::ZERO;
-    row=0;
-    while row<1024 {inactive=inactive.add(q[row].mul_qm31(w.raw(0,row)));row+=1;}
+    let inactive=opening_inactive(&q,&w);
     let kappa=transcript.scalar(28,&inactive.to_le_bytes(),false);
     let weights=w.materialize(kappa)?;
     let c0=round(&q,&weights);
@@ -292,6 +319,41 @@ fn prepare_opening(variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantic
     let w1=fold(&weights,alpha0,true);
     let folded_word=backend.domain.evaluate(&q1,0).map_err(|_|Error::Allocation)?;
     Ok(PreparedOpening{backend,sem,transcript,y1,gamma,inactive,kappa,alpha0,c0bytes,q1,w1,folded_word})
+}
+
+/// Coefficient permutation is a small unchanged leaf; the vector owner is here.
+fn opening_coefficients(variant:Variant,messages:&[Message<E>])->Vec<Message<E>> {
+    let mut coefficients=Vec::with_capacity(messages.len());
+    let mut lane=0;
+    while lane<messages.len() {let column=variant.coefficients(&messages[lane]);coefficients.push(column);lane+=1;}
+    coefficients
+}
+fn opening_claim_bytes(coefficients:&[Message<E>],z1:Point<E>)->Vec<u8> {
+    let mut bytes=Vec::with_capacity(32*coefficients.len());
+    let mut lane=0;
+    while lane<coefficients.len() {
+        let value=r0::encoder::eval_message(&coefficients[lane],z1);
+        bytes.extend_from_slice(&value.to_le_bytes());lane+=1;
+    }
+    bytes
+}
+fn opening_batch(coefficients:&[Message<E>],gamma:E)->Vec<E> {
+    let gp=crate::weights::powers::<29>(gamma);
+    let mut q=Vec::with_capacity(1024);
+    let mut row=0;
+    while row<1024 {
+        let mut value=E::ZERO;
+        let mut lane=0;
+        while lane<29 {value=value.add(gp[lane].mul(coefficients[lane][row]));lane+=1;}
+        q.push(value);row+=1;
+    }
+    q
+}
+fn opening_inactive(q:&[E],w:&Weights)->E {
+    let mut inactive=E::ZERO;
+    let mut row=0;
+    while row<1024 {inactive=inactive.add(q[row].mul_qm31(w.raw(0,row)));row+=1;}
+    inactive
 }
 
 /// Owned input to the publication phase. Constructed only after P_R1 accepts.
@@ -307,15 +369,23 @@ struct Publication {
     queries:[u32;22],
     folded_word:Vec<E>,
     folded_salts:PrivateSalts,
-    tree:crate::multiproof::BinaryTree,
+    tree:crate::host_tree::BinaryTree,
 }
 
 fn folded_leaves(hash:HashFn,word:&[E],salts:&PrivateSalts)->Vec<[u8;32]> {
     let mut leaves=Vec::with_capacity(1<<18);
     let mut u=0;
     while u<1<<18 {
-        let values=if u<1<<16 {encoded_slice(&word[4*u..4*u+4])} else {vec![0;128]};
-        leaves.push(aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,&values,salts.get(u)));
+        let mut values=[0u8;128];
+        if u<1<<16 {
+            let mut s=0;
+            while s<4 {
+                values[32*s..32*(s+1)].copy_from_slice(&word[4*u+s].to_le_bytes());
+                s+=1;
+            }
+        }
+        let leaf=aspis_core::state_only_private_merkle::private_leaf_hash(hash,0x72,&values,salts.get(u));
+        leaves.push(leaf);
         u+=1;
     }
     leaves
@@ -324,7 +394,7 @@ fn folded_leaves(hash:HashFn,word:&[E],salts:&PrivateSalts)->Vec<[u8;32]> {
 fn finish_opening(variant:Variant,hash:HashFn,prepared:PreparedOpening,folded_salts:PrivateSalts)->Result<Publication,Error> {
     let PreparedOpening{backend,sem,mut transcript,y1,gamma,inactive,kappa,alpha0,c0bytes,q1,w1,folded_word}=prepared;
     let leaves=folded_leaves(hash,&folded_word,&folded_salts);
-    let tree=crate::multiproof::BinaryTree::new(LegacyHashFn(hash),leaves).ok_or(Error::Allocation)?;
+    let tree=crate::host_tree::BinaryTree::new(LegacyHashFn(hash),leaves).ok_or(Error::Allocation)?;
     let root=tree.root();
     let c1=round(&q1,&w1);
     let c1bytes=encoded_slice(&c1);
@@ -359,63 +429,88 @@ fn publication_indices(queries:&[u32;22],begin:usize,end:usize,folded:bool)->Vec
 }
 
 fn publish_compact(variant:Variant,p:Publication)->Result<Vec<u8>,Error> {
-    use crate::compact;
+    use crate::host_compact as compact;
+    let Publication{mut backend,semantic_bytes,y1,inactive,c0bytes,root,c1bytes,fbytes,
+        queries,folded_word,folded_salts,tree}=p;
     let mut out=Vec::with_capacity(compact::PROOF_BYTES);
     out.extend_from_slice(compact::MAGIC);
     out.extend_from_slice(&[variant.tag(),0,0,0,0,0,0,0]);
-    compact::compact_semantic(&p.semantic_bytes,&mut out).map_err(|_|Error::Semantic)?;
-    compact::compact_values(&p.y1,&mut out).map_err(|_|Error::Semantic)?;
-    out.extend_from_slice(&p.inactive.to_le_bytes());out.extend_from_slice(&p.c0bytes);
-    out.extend_from_slice(&p.root);out.extend_from_slice(&p.c1bytes);out.extend_from_slice(&p.fbytes);
+    compact::compact_semantic(&semantic_bytes,&mut out).map_err(|_|Error::Semantic)?;
+    compact::compact_values(&y1,&mut out).map_err(|_|Error::Semantic)?;
+    out.extend_from_slice(&inactive.to_le_bytes());out.extend_from_slice(&c0bytes);
+    out.extend_from_slice(&root);out.extend_from_slice(&c1bytes);out.extend_from_slice(&fbytes);
     assert_eq!(out.len(),compact::OFF_OPENINGS);
-    let cc1=p.backend.c1.as_ref().unwrap();
-    let cc2=p.backend.c2.as_ref().unwrap();
+    let cc1=backend.c1.take().unwrap();
+    let cc2=backend.c2.take().unwrap();
+    out=append_query_openings(out,&cc1,&cc2,&queries,&folded_word,&folded_salts);
+    assert_eq!(out.len(),compact::OFF_NODES);
+    out=append_node_slots(out,&cc1,&cc2,&tree,&queries)?;
+    assert_eq!(out.len(),compact::PROOF_BYTES);
+    Ok(out)
+}
+
+fn append_node_slots(mut out:Vec<u8>,cc1:&Commitment,cc2:&Commitment,tree:&crate::host_tree::BinaryTree,queries:&[u32;22])->Result<Vec<u8>,Error> {
+    let mut batch=0;
+    while batch<2 {
+        let mut t=0;
+        while t<3 {out=append_node_slot(out,cc1,cc2,tree,queries,batch,t)?;t+=1;}
+        batch+=1;
+    }
+    Ok(out)
+}
+fn append_node_slot(mut out:Vec<u8>,cc1:&Commitment,cc2:&Commitment,tree:&crate::host_tree::BinaryTree,queries:&[u32;22],batch:usize,t:usize)->Result<Vec<u8>,Error> {
+    use crate::compact;
+    let begin=if batch==0 {0} else {compact::SPLIT};
+    let end=if batch==0 {compact::SPLIT} else {22};
+    let idx=publication_indices(queries,begin,end,t==2);
+    let nodes=match t {0=>cc1.multiproof(&idx),1=>cc2.multiproof(&idx),_=>tree.multiproof(&idx)}.ok_or(Error::Allocation)?;
+    let cap=32*compact::SLOT_NODES[3*batch+t];
+    assert!(nodes.len()<=cap);
+    out.extend_from_slice(&nodes);out.resize(out.len()+cap-nodes.len(),0);
+    Ok(out)
+}
+
+/// The query loop carries only the output buffer and immutable opening data.
+fn append_query_openings(mut out:Vec<u8>,cc1:&Commitment,cc2:&Commitment,queries:&[u32;22],folded_word:&[E],folded_salts:&PrivateSalts)->Vec<u8> {
     let mut i=0;
     while i<22 {
-        let u=FibreIndex::new(p.queries[i] as usize).unwrap();
+        let u=FibreIndex::new(queries[i] as usize).unwrap();
         let mut opening=FibreOpening{values:[[E::ZERO;29];4],paths:[[[[0;32];7];6];2]};
         cc1.fill_opening(u,&mut opening);cc2.fill_opening(u,&mut opening);
-        let mut s=0;
-        while s<4 {
-            let mut l=0;
-            while l<27 {
-                let lane=if l<26 {l} else {28};
-                let width=if lane<26 {4} else {16};
-                out.extend_from_slice(&opening.values[s][lane].to_le_bytes()[..width]);l+=1;
-            }
-            s+=1;
-        }
-        s=0;
-        while s<4 {
-            let mut l=26;
-            while l<28 {out.extend_from_slice(&opening.values[s][l].to_le_bytes()[..16]);l+=1;}
-            s+=1;
-        }
+        out=append_opening_values(out,opening);
         out.extend_from_slice(cc1.opening_salt(u).unwrap());
         out.extend_from_slice(cc2.opening_salt(u).unwrap());
         let at=4*(u.get()/4);
-        out.extend_from_slice(&encoded_slice(&p.folded_word[at..at+4]));
-        out.extend_from_slice(p.folded_salts.get(u.get()/4));
+        let values=encoded_slice(&folded_word[at..at+4]);
+        out.extend_from_slice(&values);
+        out.extend_from_slice(folded_salts.get(u.get()/4));
         i+=1;
     }
-    assert_eq!(out.len(),compact::OFF_NODES);
-    let mut batch=0;
-    while batch<2 {
-        let begin=if batch==0 {0} else {compact::SPLIT};
-        let end=if batch==0 {compact::SPLIT} else {22};
-        let mut t=0;
-        while t<3 {
-            let idx=publication_indices(&p.queries,begin,end,t==2);
-            let nodes=match t {0=>cc1.multiproof(&idx),1=>cc2.multiproof(&idx),_=>p.tree.multiproof(&idx)}.ok_or(Error::Allocation)?;
-            let cap=32*compact::SLOT_NODES[3*batch+t];
-            assert!(nodes.len()<=cap);
-            out.extend_from_slice(&nodes);out.resize(out.len()+cap-nodes.len(),0);
-            t+=1;
+    out
+}
+
+/// No commitment or publication loan enters this nested byte-assembly loop.
+fn append_opening_values(mut out:Vec<u8>,opening:FibreOpening)->Vec<u8> {
+    let mut s=0;
+    while s<4 {
+        let mut lane=0;
+        while lane<26 {
+            out.extend_from_slice(&opening.values[s][lane].to_le_bytes()[..4]);
+            lane+=1;
         }
-        batch+=1;
+        out.extend_from_slice(&opening.values[s][28].to_le_bytes()[..16]);
+        s+=1;
     }
-    assert_eq!(out.len(),compact::PROOF_BYTES);
-    Ok(out)
+    s=0;
+    while s<4 {
+        let mut lane=26;
+        while lane<28 {
+            out.extend_from_slice(&opening.values[s][lane].to_le_bytes()[..16]);
+            lane+=1;
+        }
+        s+=1;
+    }
+    out
 }
 
 fn prove_from_semantics(public:Public<'_>,variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>,salts:(&ReservedStateOnlyAttemptSecrets,StateOnlyHidingContext))->Result<Vec<u8>,Error> {

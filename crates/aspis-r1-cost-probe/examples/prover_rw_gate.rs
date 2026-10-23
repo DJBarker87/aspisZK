@@ -6,6 +6,13 @@ use serde_json::json;
 use sha2::{Digest, Sha256};
 use std::{fs, path::Path, time::Instant};
 
+#[cfg(prover_rw_allocation_audit)]
+#[path="../../../tools/prover-rw-20261023/allocation-audit.rs"]
+mod allocation_audit;
+#[cfg(prover_rw_allocation_audit)]
+#[global_allocator]
+static ALLOCATOR:allocation_audit::CountingAllocator=allocation_audit::CountingAllocator;
+
 fn main() {
     assert!(!cfg!(debug_assertions));
     let args: Vec<_> = std::env::args().collect();
@@ -24,6 +31,7 @@ fn main() {
             fs::create_dir(&run).unwrap();
             let mut store = DurableStateOnlyMaskNonceStore::open(run.join("ledger")).unwrap();
             let mut callbacks = 0;
+            #[cfg(prover_rw_allocation_audit)] allocation_audit::reset();
             let started = Instant::now();
             let result = prover::prove_masked_retrying_with(fixture.public(), &fixture.compiled,
                 Variant::S2, HOST_HASH, &mut store, |attempt| {
@@ -34,9 +42,11 @@ fn main() {
                         seed(b"nonce"), seed(b"field"), seed(b"leaf")))
                 });
             let seconds = started.elapsed().as_secs_f64();
+            #[cfg(prover_rw_allocation_audit)] let allocation_counts=allocation_audit::counts();
             let mut row = json!({"fixture":name,"coin":coin,"seconds":seconds,
                 "callbacks":callbacks,"workers":16,"entropy":"deterministic fixture only",
                 "scope":"complete retrying prover call including durable reservation and P_R1"});
+            #[cfg(prover_rw_allocation_audit)] {row["allocation_counts_alloc_realloc_requested_bytes"]=json!(allocation_counts);}
             match result {
                 Ok(result) => {
                     assert_eq!(callbacks,result.attempts);

@@ -113,3 +113,100 @@ attempt. After that, complete the owned mask/semantic/commitment/entropy phases,
 all remaining Stage 2 gates, then extracted real-attempt/model correspondence and
 the retry/observable/experiment composition for conjunct 1. There is no new
 security premise, failure-event enlargement or contract change in this packet.
+
+## Continuation after lead performance review
+
+The lead superseded the implementation absolute stop: use the interleaved
+same-session <=110% relative gate during implementation, and reserve the
+single <15 s measurement for a quiet host with load and other capped jobs
+recorded. The original stop and its receipts above remain historical evidence.
+This does not authorize adoption or relax any equivalence/security obligation.
+
+The continued source changes counted mask sampling/application and D expansion,
+semantic guards/claims/transcript assembly, sumcheck accumulation, commitments,
+encoding geometry, host-only binary trees and query scanning. The C1/C2 interface
+no longer constructs arrays of column loans. Geometry/tree levels use structural
+recursion. Opening/publication own their commitments and use small byte-assembly
+helpers. Fixed arithmetic, hashing, P_R1 and parallel numerical kernels retain
+their v2 implementations. Worker-internal TLS remains inside the unchanged
+parallel boundary; there is no claim that the complete runtime is TLS-free.
+
+One intermediate interleaved session measured candidate/v2 ratios 0.970814
+(transfer) and 1.005147 (withdrawal), five samples each, configured 16 workers.
+All ten proof/public byte comparisons and returned fields passed. Later ownership
+fixes still require their final paired gate; these numbers are not attributed to
+untested later source. An earlier diagnostic session briefly overlapped this
+worker's extraction probe; that probe was stopped and its timing pair is not
+release timing evidence.
+
+Allocator instrumentation on the intermediate full pipeline measured about
+262,000 fewer allocations and 34.5 MB fewer cumulative requested bytes per proof
+than v2, with complete proof/public byte equality. These are diagnostic counts,
+not peak memory or timing evidence; later helper splits are separately pinned.
+The three verifiers were actually rebuilt and compared directly with retained
+ELF files: all bytes equal at the required d7d42f77…, 2b2a9f0e… and 121f3e29… pins.
+Host-only later edits do not change that compiled verifier dependency closure.
+
+The first ten-pair differential smoke passed full returned records and supplied
+HashFn input/output streams, including exhaustion, duplicate reservations, entropy
+failure and a rejected prefix followed by a real successful proof. This is seven
+successful proof pairs plus three error pairs, not the required 1,000-run gate.
+The expanded harness varies honest amounts/salts and both statement variants,
+programs a stateless first-attempt mask-expander rejection, and exercises actual
+filesystem permission failure. Linux inotify observes actual ordered ledger
+create/close events between entropy callbacks; final ledger bytes and actual
+public worker records are compared too. A native candidate preflight passed these
+paths on both variants. Its paired corpus and current-source timing are pending.
+The supplied HashFn stream observer does not claim to intercept immutable ledger
+or runtime-internal hashing; whole-experiment oracle transport remains formal work.
+
+Charon accepts the expanded actual generic per-attempt cone. Aeneas accepts the
+small round and folded-leaf probes; full-cone preflights have exposed and guided
+successive ownership fixes. A full accepted extraction and model theorem are not
+yet claimed. The immutable CT/pole receipt audit reuses 24 passing receipts with
+matching selected body hashes; the complete external-call contract inventory is
+still open. No new Kani run or Lean compile has been performed (0/60 and 0/100).
+The common rules require assigned env J attempt numbers; a range was requested.
+
+**Stage 2 and Stage 3 remain incomplete. Target not yet established.** Next:
+finish direct extraction preflight, freeze the tested source, execute the paired
+1,000-run corpus and final interleaved relative gate, complete the leaf contract
+inventory, then prove the per-attempt/model components using the assigned Lean
+range. The real RunJoin, ordered oracle/observer transport and L1/L2 coupling
+remain obligations; output equality alone is not asserted to discharge conjunct 1.
+
+### Additional local contracts and source boundary
+
+Seven new Kani invocations have run: four passed, two timed out at 120 s,
+and one was rejected before compilation because the CBMC argument flag needed
+`-Z unstable-options`. The bounded compact-value comparison covers arbitrary
+32-byte input plus retained output on error (557 properties). The row-14 record
+comparison covers arbitrary 32-byte payloads, including noncanonical encodings
+(942 properties). The parametric private-leaf (128/480-byte value) and binary
+parent contracts check the exact digest slice grammar, single invocation and
+arbitrary returned answer. They do not prove SHA-256 semantics or full-sequence
+codec correctness. Failed broad harness sources are retained under
+`tools/prover-rw-20261023/contracts/timeout-*.rs.txt`. The row-tag/length symbolic
+record query reached 6,707,290,112 bytes cgroup peak before its timeout; it was
+replaced with the fixed-row obligation, without a cap increase.
+
+The selected semantic record owner and compact publication encoder are now
+host-only counted implementations. Shared verifier files remain unchanged. The
+external inventory distinguishes constant initializer opacity from function
+opacity; neither is counted as a discharged contract merely because translation
+can name it. The true conjunct-1 endpoint is the `RunJoin` statement in
+`ProverCommitDeployedFuel22.lean:121`, not literal output equality alone.
+
+Historical extraction receipts before the next source checkpoint retain the
+old design revision label `eb362eae2b`; their actual dirty source is identified
+by the complete per-file SHA map and retained immutable LLBC inputs (which
+include source contents). That label must not be read as a clean-source release
+claim. Later checkpoint receipts will use the actual committed revision.
+
+The subsequent `phase-paired-002` predecessor binary passed all twelve paired
+records, full public/proof bytes and supplied-oracle logs, including both
+variants, rejected-prefix success and real permission failure (143.27 s wall,
+703032 KiB peak RSS, zero swaps). This overlapped a compilation and is functional
+evidence only. The current source has compiled via `extract-attempt-023`; full
+Aeneas translation remains stopped in `sample_source_d`. This checkpoint is
+partial Stage 2, with the 1,000-run and final timing gates still pending.

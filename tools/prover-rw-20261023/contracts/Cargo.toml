@@ -1,0 +1,17 @@
+[package]
+name = "prover-rw-contracts"
+version = "0.1.0"
+edition = "2021"
+[workspace]
+[features]
+default = ["private-leaf-salts"]
+private-leaf-salts = []
+r1p-check = []
+[lib]
+path = "lib.rs"
+[dependencies]
+aspis-core = { path = "../../../crates/aspis-core", features = ["r0", "ct-host-prover"] }
+[profile.dev]
+opt-level = 3
+[profile.release]
+overflow-checks = true
