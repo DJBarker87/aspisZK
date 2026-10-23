@@ -1,0 +1,70 @@
+/private/tmp/a3-s9-actual-pair-quotient64-v1-check-20261023/sources/S9ActualPairQuotient64V1.lean:16:34: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?x >>> ?i).toNat
+in the target expression
+  (x.bv.ushiftRight 2).toNat = ↑x / 4
+
+x : Usize
+hbits : 2 < System.Platform.numBits
+htwo : ↑2#u32 = 2
+⊢ (x.bv.ushiftRight 2).toNat = ↑x / 4
+/private/tmp/a3-s9-actual-pair-quotient64-v1-check-20261023/sources/S9ActualPairQuotient64V1.lean:32:24: error: unsolved goals
+initial : Iter := { start := 0#usize, «end» := 2#usize }
+it1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hs1 : ↑it1.start = ↑initial.start + 1
+he1 : it1.end = initial.end
+hn0 :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) initial =
+    ok (some initial.start, it1)
+h1 : ↑it1.start = 1
+he1' : it1.end = 2#usize
+hlt1 : ↑it1.start < ↑it1.end
+it2 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hs2 : ↑it2.start = ↑it1.start + 1
+he2 : it2.end = it1.end
+hn1 :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) it1 =
+    ok (some it1.start, it2)
+h2 : ↑it2.start = 2
+he2' : it2.end = 2#usize
+hge2 : ↑it2.start ≥ ↑it2.end
+it3 : core.ops.range.Range (UScalar UScalarTy.Usize)
+he3 : it3 = it2
+hn2 :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) it2 =
+    ok (none, it3)
+step : Iter × Usize → Result (ControlFlow (Iter × Usize) Usize) := fun s => weights.Weights.pair_loop0.body s.1 s.2
+⊢ (match
+      let (o, iter1) := (none, it3)
+      match o with
+      | none => ok (done 64#usize)
+      | some val => do
+        let expected_n1 ← lift (Usize.wrapping_shr 64#usize 2#u32)
+        ok (cont (iter1, expected_n1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun s => do
+            let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize s.1
+            match o with
+              | none => ok (done s.2)
+              | some val => do
+                let expected_n1 ← lift (s.2.wrapping_shr 2#u32)
+                ok (cont (iter1, expected_n1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok 64#usize
+'AspisR1S9ActualPairQuotient64V1.shift_two_val' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1S9ActualPairQuotient64V1.expected_length_twofold' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9ActualPairQuotient64V1.actual_pair_success_quotient64' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

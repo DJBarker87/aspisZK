@@ -1,0 +1,5 @@
+Proved: the same actual native powers7 call and actual final-sum loop9 or17 compute the explicit seven-term kappa polynomial of their own parts. Canonical power-array and initial ZERO/prefix guards are discharged using actual powers7 semantics and the existing helper zero theorem. Canonical kappa and parts remain explicit. Deriving these exact child calls and parts canonicality from the complete accepted Pair, the parts relation, runtime/artifact and security composition remain separate obligations.
+
+Focused Lean check: 29.856 seconds; peak aggregate RSS 3208675328 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
+
+V1/V2 frontend failures are retained as rejected evidence. V3 reuses the existing native/helper ZERO identity, normalizes a decode alias, and rewrites ordinary indices before exposing dependent array reads. No mathematical statement, guard, source parameter or resource cap changed; failed-log sorryAx recovery entries are not accepted evidence.
