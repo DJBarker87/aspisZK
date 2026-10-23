@@ -208,3 +208,23 @@ projection and casts, never normalizes arbitrary generated words.
 Actual budget62/100 Lean,0/60 Kani (033/036 never entered Lean).
 Whole terminal count/padding/verifier composition, concrete key builder,
 Prepared/model provenance and final accepted batch join remain unproved.
+
+Stage 10: SlotInstall.physical/caller bind the installed P6 slot-offset
+lowering to exact proof ranges and then to the SAME Required14 node buffer.
+TailReads.reads derives the complete native count/capacity/suffix/chunks/
+scan/prefix/verifier sequence from its accepted terminal body, including
+returned arrays and no independent scan success.
+VerifyInstall normalizes the P6 owned verifier to its exact extracted
+wrapper; wrapper_success derives height success and every root/cursor guard.
+VerifyRun.accepted then derives the complete physical/P6 source return and
+SAME arrays from the installed owned verifier's success, retaining the named
+P6Boundary. SliceReads derives native prefix bounds/contents and exact live
+indices; Capacity.read checks the six physical table entries.
+
+These new adapters are explicitly P6 local source/library/control lowering,
+not a claim of fresh extraction of shipped slot/count/verifier functions.
+The requested enclosing native batch/sourceBatch join still is not claimed.
+Accepted066/068/071/075/077/078: exits0,swap0,all15 audits standard axioms;
+exact wall/RSS/revision/dependency fields in receipts.065/067/069–070/
+072–074/076 are excluded local parser/elaboration errors, no timeout or
+memory kill. Actual budget76/100 Lean,0/60 Kani. No shipped edits/ELF trigger.
