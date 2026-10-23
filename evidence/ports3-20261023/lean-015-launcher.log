@@ -1,0 +1,35 @@
+{"attempt": "lean-015", "exit_status": 0, "wall_seconds": 2.070423686003778, "peak_rss_kib": "4388568", "swaps": "0", "print_axioms": ["'AspisR1.Port3_CheckpointEndpoint.final_checkpoint_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_CheckpointEndpoint.checkpoint_endpoint' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_CheckpointInstall.erase_success_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_CheckpointInstall.writer_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_CheckpointInstall.reader_success' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_CheckpointInstall.source_join' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_CheckpointRows.combined_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_CheckpointRows.fields_and_reads' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constants.source_zero_k' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constants.source_one_k' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constants.source_zero_e' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constants.decode_zero_k' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constants.decode_one_k' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constants.decode_zero_e' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constructor.map_error_exact' depends on axioms: [propext]", "'AspisR1.Port3_Constructor.normalization' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constructor.installed_constructor' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constructor.initial_success' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constructor.allocation_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Initial.constructor_shell' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Initial.accepted_fields' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Initial.allocation_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Initial.accepted_initial' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_Initial.no_reads' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_WriterBoundary.selector_tag' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_WriterBoundary.not_shipped_tag' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_WriterBoundary.not_shipped_d_tag' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.Port3_CheckpointEndpoint.final_checkpoint_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointEndpoint.checkpoint_endpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointInstall.erase_success_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointInstall.writer_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointInstall.reader_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointInstall.source_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointRows.combined_r
+...
+ConePhysicalTransport.rawOracle H input)
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.binary_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.occupied_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.sibling_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource
+constructor:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.mk {X : Type} {D : MultiproofConeRef.aspis_core.digest.Digest32 X}
+    {hash : X} {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent}
+    {leafSource : AspisR1.MultiproofConeP6Batch.Leaf}
+    (oracle :
+      ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input))
+    (binary_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary)
+    (occupied_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied)
+    (sibling_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling)
+    (leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource) :
+    AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary D hash H binary occupied sibling leafSource
+
+Running as unit: run-r6ee94fd1cf874b50b23ff5f0091c2016.scope; invocation ID: 21b2f8770d09476fb507ecc693708d19
