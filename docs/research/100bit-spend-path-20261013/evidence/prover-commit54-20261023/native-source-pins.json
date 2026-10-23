@@ -1,0 +1,12 @@
+{
+  "source_revision": "4af6a0f6bf",
+  "source_sha256": "2594f50a303bd53ea6ed64d0e49cd986794065c32514eadbd32272b9ec9a4460",
+  "owner_sha256": "c65e036bd29e8df3edf1eb9477cecca3665fc89f716545e73053b6210bf39857",
+  "native_contract_sha256": "47ac88a7ec34c64e179296195478d46ecaf740ebb905198f4a1f424254c8f2be",
+  "shipped_spans": {
+    "eval_rec": "fn eval_rec<T:CodeField>(coefficients:&[T],depth:usize,nodes:&[M31;9])->T {\n    if coefficients.len()==1 {return coefficients[0];}\n    let even:Vec<T>=coefficients.iter().step_by(2).copied().collect();\n    let odd:Vec<T>=coefficients.iter().skip(1).step_by(2).copied().collect();\n    eval_rec(&even,depth+1,nodes).add(T::from_m31(nodes[depth]).mul(eval_rec(&odd,depth+1,nodes)))\n}\n",
+    "encode_at": "pub(crate) fn encode_at<T:CodeField>(coefficients:&[T;1024],u:usize)->[T;4] {\n    let z=domain::fibre_point::<M31>(FibreIndex::new(u).unwrap());\n    let nodes=nodes_for(u);\n    let channels=core::array::from_fn(|s|{\n        let c:Vec<T>=(0..256).map(|d|coefficients[4*d+s]).collect();\n        eval_rec(&c,0,&nodes)\n    });\n    phi_inverse(T::from_m31(z.x),T::from_m31(z.y),channels)\n}\n\n// ------------------------------------------------------------ the view\n",
+    "nodes_for": "fn nodes_for(j:usize)->[M31;9] {\n    core::array::from_fn(|depth|{\n        let p=domain::fibre_point::<M31>(FibreIndex::new((j>>depth)<<depth).unwrap());\n        let mut n=tcheb(p.x);\n        for _ in 0..depth {n=tcheb(n);}\n        n\n    })\n}\n"
+  },
+  "scope": "Kani local iterator transition at the externally selected consumed-prefix counter; verified stubs discharge selected read contracts. Full source iterator-state and Vec allocation composition, and M31/QM31 specialization remain separate obligations."
+}
