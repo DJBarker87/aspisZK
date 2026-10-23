@@ -16,7 +16,11 @@ pub fn powers<const N:usize>(x:E)->[E;N]{
  }
  out
 }
-pub fn kpowers<const N:usize>(x:K)->[K;N] { let mut p=K::ONE;core::array::from_fn(|_| {let a=p;p=p.mul(x);a}) }
+pub fn kpowers<const N:usize>(x:K)->[K;N]{
+ let mut out=[K::ZERO;N]; let mut p=K::ONE;
+ for i in 0..N { out[i]=p; p=p.mul(x); }
+ out
+}
 pub fn double(x:K)->K { x.mul(x).add(x.mul(x)).sub(K::ONE) }
 pub fn field(bytes:&[u8],i:usize)->E { E::from_le_bytes(&bytes[i*32..(i+1)*32]).unwrap() }
 
@@ -35,7 +39,8 @@ fn s2_grouped_inactive_pair(f:&[u8],low:&[E;16])->E {
     let mut pair=E::ZERO;
     for group in 0..12 {
         let mut weight=E::ZERO;
-        for (bit,&challenge) in low.iter().enumerate() {
+        for bit in 0..16 {
+            let challenge=low[bit];
             if S2_INACTIVE_MASKS[group]&(1<<bit)!=0 {weight=weight.add(challenge);}
         }
         pair=pair.add(coefficients[group].mul(weight));
@@ -65,7 +70,8 @@ fn grouped_inactive_pair(weights:&Weights,f:&[u8],low:&[E;16])->E {
     for group in 0..groups {
         let mask=group_masks[group];
         let mut weight=E::ZERO;
-        for (s,&challenge) in low.iter().enumerate() {
+        for s in 0..16 {
+            let challenge=low[s];
             if mask&(1<<s)!=0 {weight=weight.add(challenge);}
         }
         pair=pair.add(group_coefficients[group].mul(weight));
@@ -76,20 +82,21 @@ fn grouped_inactive_pair(weights:&Weights,f:&[u8],low:&[E;16])->E {
 /// Build the four two-fold Libra dual weights without per-cell exponentiation.
 #[inline(never)]
 fn twofold_libra_weights(low:&[E;16],extra:[K;2])->[E;4] {
-    let powers:[[K;28];2]=core::array::from_fn(|side| {
+    let mut powers=[[K::ZERO;28];2];
+    for side in 0..2 {
         let mut power=K::ONE;
-        core::array::from_fn(|_| {let value=power;power=power.mul(extra[side]);value})
-    });
-    core::array::from_fn(|j| {
+        for index in 0..28 { powers[side][index]=power; power=power.mul(extra[side]); }
+    }
+    let mut out=[E::ZERO;4];
+    for j in 0..4 {
         let mut weight=E::ZERO;
         for s in 0..16 {
             let index=16*j+s;
-            if index<56 {
-                weight=weight.add(low[s].mul_qm31(powers[index/28][index%28]));
-            }
+            if index<56 { weight=weight.add(low[s].mul_qm31(powers[index/28][index%28])); }
         }
-        weight
-    })
+        out[j]=weight;
+    }
+    out
 }
 
 /// Exact factorization of the existing 56-entry Libra row into two 28-entry
@@ -99,11 +106,20 @@ fn twofold_libra_weights(low:&[E;16],extra:[K;2])->[E;4] {
 fn factored_s2_libra_weights(ap0:&[E;4],ap1:&[E;4],extra:[K;2])->[E;4] {
     let mut weights=[E::ZERO;4];
     for side in 0..2 {
-        let q=kpowers::<4>(extra[side]);
+        let q0=K::ONE;
+        let q1=q0.mul(extra[side]);
+        let q2=q1.mul(extra[side]);
+        let q3=q2.mul(extra[side]);
+        let _q4=q3.mul(extra[side]);
+        let q=[q0,q1,q2,q3];
         let q4=q[2].square();let q8=q4.square();let q12=q8.mul(q4);let q16=q8.square();
         let low=Weights::scalar_factor(&q,ap0);
         let high_powers=[K::ONE,q4,q8,q12];
-        let terms:[E;4]=core::array::from_fn(|r|ap1[PERM[r]].mul_qm31(high_powers[r]).mul_m31(QUARTER));
+        let term0=ap1[PERM[0]].mul_qm31(high_powers[0]).mul_m31(QUARTER);
+        let term1=ap1[PERM[1]].mul_qm31(high_powers[1]).mul_m31(QUARTER);
+        let term2=ap1[PERM[2]].mul_qm31(high_powers[2]).mul_m31(QUARTER);
+        let term3=ap1[PERM[3]].mul_qm31(high_powers[3]).mul_m31(QUARTER);
+        let terms=[term0,term1,term2,term3];
         let first2=terms[0].add(terms[1]);let first3=first2.add(terms[2]);let all=first3.add(terms[3]);
         if side==0 {
             weights[0]=low.mul(all);
@@ -117,6 +133,64 @@ fn factored_s2_libra_weights(ap0:&[E;4],ap1:&[E;4],extra:[K;2])->[E;4] {
     weights
 }
 
+fn shared_two_point_guard(w:&Weights,folds:usize)->bool {
+    w.variant==Variant::S2 && folds==2 && w.factors[0][2]==w.factors[2][2] && w.factors[0][3]==w.factors[2][3]
+ }
+fn push_byte_products(pair:&mut crate::fast_pairing::EbyKDot,f:&[u8],scratch:&[K],n:usize)->Result<(),Error>{
+  for j in 0..n { match pair.push(field(f,j),scratch[j]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
+  Ok(())
+ }
+fn partial_dot(f:&[u8],common:&[K;16],s:usize)->Result<E,Error>{
+  let mut dot=crate::fast_pairing::EbyKDot::new();
+  for j in 0..16 { match dot.push(field(f,16*s+j),common[j]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
+  Ok(dot.finish())
+ }
+fn high_dot(partials:&[E;4],coeffs:&[K;4])->Result<E,Error>{
+  let mut high=crate::fast_pairing::EbyKDot::new();
+  for s in 0..4 { match high.push(partials[s],coeffs[s]) { Ok(()) => {}, Err(_) => return Err(Error::Parse) } }
+  Ok(high.finish())
+ }
+fn process_regular_kinds(w:&Weights,shared_two_point:bool,alpha:&[E],f:&[u8],folds:usize,n:usize,
+     ap0:&[E;4],ap1:&[E;4],scratch:&mut Vec<K>,parts:&mut [E;7])->Result<(),Error>{
+  if !shared_two_point { process_kind(w,1,alpha,f,folds,n,ap0,ap1,scratch,parts)?; }
+  process_kind(w,2,alpha,f,folds,n,ap0,ap1,scratch,parts)?;
+  if !shared_two_point { process_kind(w,3,alpha,f,folds,n,ap0,ap1,scratch,parts)?; }
+  process_kind(w,5,alpha,f,folds,n,ap0,ap1,scratch,parts)?;
+  process_kind(w,6,alpha,f,folds,n,ap0,ap1,scratch,parts)?;
+  Ok(())
+ }
+fn shared_partials(f:&[u8],common:&[K;16])->Result<[E;4],Error>{
+  let mut partials=[E::ZERO;4];
+  for s in 0..4 { partials[s]=partial_dot(f,common,s)?; }
+  Ok(partials)
+ }
+fn shared_high(partials:&[E;4],w:&Weights,ap0:&[E;4],ap1:&[E;4],parts:&mut [E;7])->Result<(),Error>{
+  let high0=high_dot(partials,&w.factors[0][4])?;
+  let scale0=Weights::scalar_factor(&w.factors[0][0],ap0)
+    .mul(Weights::scalar_factor(&w.factors[0][1],ap1));
+  parts[1]=scale0.mul(high0);
+  let high2=high_dot(partials,&w.factors[2][4])?;
+  let scale2=Weights::scalar_factor(&w.factors[2][0],ap0)
+    .mul(Weights::scalar_factor(&w.factors[2][1],ap1));
+  parts[3]=scale2.mul(high2);
+  Ok(())
+ }
+fn process_kind(w:&Weights,kind:usize,alpha:&[E],f:&[u8],folds:usize,n:usize,
+     ap0:&[E;4],ap1:&[E;4],scratch:&mut Vec<K>,parts:&mut [E;7])->Result<(),Error>{
+  if w.variant==Variant::D && kind<4 {
+   parts[kind]=w.dense_point_pair(kind,alpha,f)?;
+  } else {
+   let k=if kind<4 {kind-1}else{kind-2};
+   w.tensor(k,folds,scratch);
+   let mut scale=Weights::scalar_factor(&w.factors[k][0],ap0);
+   if folds==2 {scale=scale.mul(Weights::scalar_factor(&w.factors[k][1],ap1));}
+   let mut pair=crate::fast_pairing::EbyKDot::new();
+   push_byte_products(&mut pair,f,scratch,n)?;
+   parts[kind]=scale.mul(pair.finish());
+  }
+  Ok(())
+ }
+
 pub struct Weights {
     pub variant:Variant,
     pub factors:[[[K;4];5];5],
@@ -125,26 +199,26 @@ pub struct Weights {
 }
 impl Weights {
     #[inline(never)]
+    fn box_from_parts(variant:Variant,factors:[[[K;4];5];5],points:[[K;10];3],extra:[K;2])->Box<Self> {
+        Box::new(Self { variant, factors, points, extra })
+    }
+    #[inline(never)]
     pub fn new(variant:Variant,alpha:&[K;10],z:&[SecureCirclePoint;2])->Result<Box<Self>,Error> {
-        let mut out=aspis_core::r0::heap::uninit::<Self>().map_err(|_|Error::Allocation)?;
-        unsafe {
-            let p=out.as_mut_ptr();
-            core::ptr::addr_of_mut!((*p).variant).write(variant);
-            core::ptr::addr_of_mut!((*p).points).write(aspis_core::state_only_prefix::r0::statement_points(alpha));
-            core::ptr::addr_of_mut!((*p).extra).write([alpha[8],alpha[9]]);
-            for k in 0..3 { for d in 0..5 {
-                let a=(*p).points[k][9-2*TAU[d]]; let b=(*p).points[k][8-2*TAU[d]];
-                (*p).factors[k][d]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
-            }}
-            for k in 0..2 {
-                (*p).factors[3+k][0]=[K::ONE,z[k].y,z[k].x,z[k].x.mul(z[k].y)];
-                let mut x=double(z[k].x);
-                for d in 1..5 {
-                    let y=double(x); (*p).factors[3+k][d]=[K::ONE,x,y,x.mul(y)]; x=double(y);
-                }
+        let points=aspis_core::state_only_prefix::r0::statement_points(alpha);
+        let extra=[alpha[8],alpha[9]];
+        let mut factors=[[[K::ZERO;4];5];5];
+        for k in 0..3 { for d in 0..5 {
+            let a=points[k][9-2*TAU[d]]; let b=points[k][8-2*TAU[d]];
+            factors[k][d]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];
+        }}
+        for k in 0..2 {
+            factors[3+k][0]=[K::ONE,z[k].y,z[k].x,z[k].x.mul(z[k].y)];
+            let mut x=double(z[k].x);
+            for d in 1..5 {
+                let y=double(x); factors[3+k][d]=[K::ONE,x,y,x.mul(y)]; x=double(y);
             }
-            Ok(out.assume_init())
         }
+        Ok(Self::box_from_parts(variant, factors, points, extra))
     }
     pub fn raw(&self,kind:usize,j:usize)->K {
         match kind {
@@ -168,7 +242,10 @@ impl Weights {
         for d in folds..5 {
             for j in (0..n).rev() {
                 let x=output[j];
-                for s in 0..4 { output[j+s*n]=x.mul(self.factors[k][d][s]); }
+                output[j+0*n]=x.mul(self.factors[k][d][0]);
+                output[j+1*n]=x.mul(self.factors[k][d][1]);
+                output[j+2*n]=x.mul(self.factors[k][d][2]);
+                output[j+3*n]=x.mul(self.factors[k][d][3]);
             }
             n*=4;
         }
@@ -190,61 +267,36 @@ impl Weights {
     #[inline(never)]
     pub fn pair(&self,alpha:&[E],f:&[u8],kappa:E)->Result<E,Error> {
         let n=f.len()/32; let folds=alpha.len();
-        if n!=1024>>(2*folds) {return Err(Error::Parse);}
+        let mut expected_n=1024usize; for _ in 0..folds { expected_n=expected_n>>2u32; } if n!=expected_n {return Err(Error::Parse);}
         let ap0=powers::<4>(alpha[0]);
         let ap1=if folds==2 {powers::<4>(alpha[1])}else{[E::ONE;4]};
-        let mut scratch=aspis_core::r0::heap::filled(n,K::ZERO).map_err(|_|Error::Allocation)?;
+        let mut scratch=match aspis_core::r0::heap::filled(n,K::ZERO) { Ok(v) => v, Err(_) => return Err(Error::Allocation) };
         let mut parts=[E::ZERO;7];
         // On S2's two-fold path the high tensor factors for point rows 0 and
         // 2 are identical. Keep the equality guard so arbitrary constructed
         // `Weights` values retain the original per-row fallback.
-        let shared_two_point = self.variant==Variant::S2 && folds==2
-            && self.factors[0][2]==self.factors[2][2]
-            && self.factors[0][3]==self.factors[2][3];
-        for kind in [1usize,2,3,5,6] {
-            if shared_two_point && (kind==1 || kind==3) { continue; }
-            if self.variant==Variant::D && kind<4 {
-                parts[kind]=self.dense_point_pair(kind,alpha,f)?;
-            } else {
-                let k=if kind<4 {kind-1}else{kind-2};
-                self.tensor(k,folds,&mut scratch);
-                let mut scale=Self::scalar_factor(&self.factors[k][0],&ap0);
-                if folds==2 {scale=scale.mul(Self::scalar_factor(&self.factors[k][1],&ap1));}
-                let mut pair=crate::fast_pairing::EbyKDot::new();
-                for j in 0..n {pair.push(field(f,j),scratch[j]).map_err(|_|Error::Parse)?;}
-                parts[kind]=scale.mul(pair.finish());
-            }
-        }
+        let shared_two_point=shared_two_point_guard(self,folds);
+        process_regular_kinds(self,shared_two_point,alpha,f,folds,n,&ap0,&ap1,&mut scratch,&mut parts)?;
         if shared_two_point {
             // The two point rows share the d2/d3 coefficients. Preserve the
             // tensor's least-significant-first order: d2 is j mod 4 and d3
             // is j / 4. Each d4 slice then contracts one 16-term EbyKDot.
-            let common:[K;16]=core::array::from_fn(|j|
-                self.factors[0][2][j&3].mul(self.factors[0][3][j>>2]));
-            let mut partials=[E::ZERO;4];
-            for s in 0..4 {
-                let mut dot=crate::fast_pairing::EbyKDot::new();
-                for j in 0..16 {
-                    dot.push(field(f,16*s+j),common[j]).map_err(|_|Error::Parse)?;
-                }
-                partials[s]=dot.finish();
-            }
-            for (kind,k) in [(1usize,0usize),(3usize,2usize)] {
-                let mut high=crate::fast_pairing::EbyKDot::new();
-                for s in 0..4 {
-                    high.push(partials[s],self.factors[k][4][s]).map_err(|_|Error::Parse)?;
-                }
-                let scale=Self::scalar_factor(&self.factors[k][0],&ap0)
-                    .mul(Self::scalar_factor(&self.factors[k][1],&ap1));
-                parts[kind]=scale.mul(high.finish());
-            }
+            let mut common=[K::ZERO;16];
+            for j in 0..16 { common[j]=self.factors[0][2][j&3].mul(self.factors[0][3][j>>2u32]); }
+            let partials=shared_partials(f,&common)?;
+            shared_high(&partials,self,&ap0,&ap1,&mut parts)?;
         }
         if folds==1 {
-            let dual:[E;16]=core::array::from_fn(|mask|(0..4).filter(|&s|mask&(1<<s)!=0).fold(E::ZERO,|v,s|v.add(ap0[PERM[s]])).mul_m31(QUARTER));
+            let mut dual=[E::ZERO;16];
+            for mask in 0..16 {
+                let mut weight=E::ZERO;
+                for s in 0..4 { if mask&(1usize<<(s as u32))!=0 { weight=weight.add(ap0[PERM[s]]); } }
+                dual[mask]=weight.mul_m31(QUARTER);
+            }
             let mut groups=[E::ZERO;16];
             for j in 0..n {
                 let mut mask=0;
-                for s in 0..4 {if self.raw(0,4*j+s)==K::ONE {mask|=1<<s;}}
+                for s in 0..4 {if self.raw(0,4*j+s)==K::ONE {mask|=1usize<<(s as u32);}}
                 groups[mask]=groups[mask].add(field(f,j));
             }
             for m in 1..16 {parts[0]=parts[0].add(groups[m].mul(dual[m]));}
@@ -258,7 +310,8 @@ impl Weights {
         } else {
             // Two-fold 0/1 row: compute the sixteen challenge products once.
             // Coefficients with the same inactive mask share one subset sum.
-            let low:[E;16]=core::array::from_fn(|s|ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)));
+            let mut low=[E::ZERO;16];
+            for s in 0..16 { low[s]=ap0[PERM[s%4]].mul(ap1[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)); }
             parts[0]=grouped_inactive_pair(self,f,&low);
             let libra=if self.variant==Variant::S2 {factored_s2_libra_weights(&ap0,&ap1,self.extra)}else{twofold_libra_weights(&low,self.extra)};
             for j in 0..4 {parts[4]=parts[4].add(field(f,j).mul(libra[j]));}
@@ -276,7 +329,7 @@ impl Weights {
     fn dense_point_pair(&self,kind:usize,alpha:&[E],f:&[u8])->Result<E,Error> {
         // D keeps the full eq tensor. Hoist the sixteen shared E products
         // before combining its K entries; no tensor factorization is assumed.
-        let mut rows=aspis_core::r0::heap::filled(1024,K::ZERO).map_err(|_|Error::Allocation)?;
+        let mut rows=match aspis_core::r0::heap::filled(1024,K::ZERO) { Ok(v) => v, Err(_) => return Err(Error::Allocation) };
         rows[0]=K::ONE;let mut width=1;
         for b in 0..10 {
             let p=self.points[kind-1][9-b];
@@ -284,7 +337,8 @@ impl Weights {
             width*=2;
         }
         let a=powers::<4>(alpha[0]);let b=powers::<4>(alpha[1]);
-        let low:[E;16]=core::array::from_fn(|s|a[PERM[s%4]].mul(b[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)));
+        let mut low=[E::ZERO;16];
+        for s in 0..16 { low[s]=a[PERM[s%4]].mul(b[PERM[s/4]]).mul_m31(QUARTER.mul(QUARTER)); }
         let mut pair=E::ZERO;
         for j in 0..64 {
             let mut w=E::ZERO;
@@ -295,7 +349,7 @@ impl Weights {
     }
     pub fn materialize(&self,kappa:E)->Result<Vec<E>,Error> {
         let kp=powers::<7>(kappa);
-        let mut w=aspis_core::r0::heap::filled(1024,E::ZERO).map_err(|_|Error::Allocation)?;
+        let mut w=match aspis_core::r0::heap::filled(1024,E::ZERO) { Ok(v) => v, Err(_) => return Err(Error::Allocation) };
         for (j,v) in w.iter_mut().enumerate() {for kind in 0..7 {*v=v.add(kp[kind].mul_qm31(self.raw(kind,j)));}}
         Ok(w)
     }

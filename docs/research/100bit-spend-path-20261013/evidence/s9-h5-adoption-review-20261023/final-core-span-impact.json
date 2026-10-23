@@ -1,0 +1,36 @@
+{
+  "file": "crates/aspis-core/src/state_only_prefix.rs",
+  "before": {
+    "start_line": 600,
+    "end_line": 614,
+    "start_byte": 25585,
+    "end_byte_exclusive": 26131,
+    "declaration_sha256": "3d83486bbd11c7cc9170aefa5f02d267aacda18fe66e243d8cb784bb626c9ac4",
+    "text": "fn state_only_statement_points(z: &[QM31; 10]) -> [[QM31; 10]; 3] {\n    let mut successor = *z;\n    let mut carry = QM31::ONE;\n    for coordinate in (0..z.len()).rev() {\n        let bit = z[coordinate];\n        let bit_and_carry = bit.mul(carry);\n        successor[coordinate] = bit.add(carry).sub(bit_and_carry.add(bit_and_carry));\n        carry = bit_and_carry;\n    }\n    let mut absorption = *z;\n    for coordinate in [7usize, 6] {\n        absorption[coordinate] = QM31::ONE.sub(absorption[coordinate]);\n    }\n    [*z, successor, absorption]\n}"
+  },
+  "candidate": {
+    "start_line": 600,
+    "end_line": 613,
+    "start_byte": 25585,
+    "end_byte_exclusive": 26117,
+    "declaration_sha256": "8346e577ae70dfac7c8a0b5e64005c0f17b47b77d93427dcce7c63dde8af34ba",
+    "text": "fn state_only_statement_points(z: &[QM31; 10]) -> [[QM31; 10]; 3] {\n    let mut successor = *z;\n    let mut carry = QM31::ONE;\n    for coordinate in (0..z.len()).rev() {\n        let bit = z[coordinate];\n        let bit_and_carry = bit.mul(carry);\n        successor[coordinate] = bit.add(carry).sub(bit_and_carry.add(bit_and_carry));\n        carry = bit_and_carry;\n    }\n    let mut absorption = *z;\n    absorption[7] = QM31::ONE.sub(absorption[7]);\n    absorption[6] = QM31::ONE.sub(absorption[6]);\n    [*z, successor, absorption]\n}"
+  },
+  "changed_declarations": [
+    "state_only_statement_points"
+  ],
+  "body_delta": "Original [7usize,6] IntoIter loop replaced by two explicit ordered assignments at7then6; surrounding successor loop and all other source bytes unchanged",
+  "V3_relationship": "V3 source-cut/model used normalized statement-point/two-step iterator interfaces; the original actual Std IntoIter source correspondence was open. This final actual Rust span removes that original iterator dependency. Reuse of V3 mathematical proofs requires fresh actual cut/source pins and exact emitted-body/cohort correspondence; no blanket V3/source-equivalence claim",
+  "reopened": [
+    "Core source span/cut and source-correspondence receipt",
+    "downstream body-hash cones and S10 --require-complete inventory after actual application",
+    "native affected point/weights/shared interface evidence",
+    "final source/toolchain/feature/artifact linkage and coherent proof replay"
+  ],
+  "unchanged_by_scope": [
+    "actual SDK scanner equivalence and unchanged SDK guard source",
+    "C fast-pairing arithmetic bodies and their unchanged typed carriers",
+    "protocol parameters/wire format/commitment grammar",
+    "no new hash/oracle operations in changed pure Core helper"
+  ]
+}
