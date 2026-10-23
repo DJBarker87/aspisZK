@@ -20,6 +20,20 @@ namespace AspisR1Generic54
 @[reducible]
 def field.M31 := Std.U32
 
+/-- [aspis_r1_encoder53::field::CM31]
+    Source: 'field.rs', lines 255:0-258:1
+    Visibility: public -/
+structure field.CM31 where
+  a : field.M31
+  b : field.M31
+
+/-- [aspis_r1_encoder53::field::QM31]
+    Source: 'field.rs', lines 432:0-435:1
+    Visibility: public -/
+structure field.QM31 where
+  c0 : field.CM31
+  c1 : field.CM31
+
 /-- Trait declaration: [aspis_r1_encoder53::scalar::CodeField]
     Source: 'scalar.rs', lines 11:0-20:1
     Visibility: public -/

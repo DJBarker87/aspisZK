@@ -75,3 +75,20 @@ fn native_rev18(u:usize)->usize {(u as u32).reverse_bits() as usize >> 14}
   assert_eq!(native_rev18(owner),native_rev18(j)%(1usize<<(18-d)));
  }
 }
+// Selected output on the original iterator, restricted to the exact recursive
+// lengths used by the simulator. Narrow counter carriers simplify CBMC's
+// arithmetic while retaining every valid height/index.
+#[kani::requires(h>=1 && h<=8 && c.len()==(1usize<<h) && (k as usize)<c.len()/2)]
+#[kani::ensures(|r| *r==c[2*(k as usize)])]
+fn original_even(c:&[u32],h:u8,k:u8)->u32 {
+ c.iter().step_by(2).copied().nth(k as usize).unwrap()
+}
+#[cfg(kani)] mod original {
+ use super::*;
+ #[kani::proof_for_contract(original_even)] #[kani::unwind(260)]
+ fn even_pow2() {
+  let c:[u32;256]=kani::any();let h:u8=kani::any();let k:u8=kani::any();
+  kani::assume(h>=1 && h<=8 && (k as usize)<(1usize<<h)/2);
+  original_even(&c[..(1usize<<h)],h,k);
+ }
+}

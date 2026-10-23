@@ -41,4 +41,48 @@ pub fn m31_channels(c:&[super::field::M31;1024],n:&[M31;9])->[super::field::M31;
 pub fn qm31_channels(c:&[super::field::QM31;1024],n:&[M31;9])->[super::field::QM31;4] {channels(c,n)}
 pub fn m31_phi(x:M31,y:M31,h:[M31;4])->[M31;4] {phi_inverse(x,y,h)}
 pub fn qm31_phi(x:super::field::QM31,y:super::field::QM31,h:[super::field::QM31;4])->[super::field::QM31;4] {phi_inverse(x,y,h)}
+pub fn eval_at<E:CodeField>(c:&[E],j:usize,height:usize)->E {
+ let nodes=super::nodes54::nodes(j);
+ eval_rec(c,0,height,&nodes)
+}
+pub fn encode_at<E:CodeField>(c:&[E;1024],j:usize)->[E;4] {
+ let z=super::nodes54::point(j);
+ let nodes=super::nodes54::nodes(j);
+ encode_with_nodes(c,&nodes,E::from_m31(z.a),E::from_m31(z.b))
+}
+}
+pub mod nodes54 {
+use super::field::{M31,CM31};
+pub fn reverse(width:u8,value:usize)->usize {
+ if width==0 {0} else {
+  let w=width-1;
+  (value%2)*(1usize<<(w as u32))+reverse(w,value/2)
+ }
+}
+pub fn pow(base:CM31,exp:u64,acc:CM31)->CM31 {
+ if exp==0 {acc} else {
+  let next=if exp%2==1 {acc.mul(base)} else {acc};
+  pow(base.mul(base),exp/2,next)
+ }
+}
+pub fn tcheb(x:M31)->M31 {x.mul(x).double().sub(M31::ONE)}
+pub fn repeat(x:M31,left:u8)->M31 {
+ if left==0 {x} else {repeat(tcheb(x),left-1)}
+}
+pub fn point(j:usize)->CM31 {
+ let r=reverse(18,j);
+ pow(CM31::new(M31(2),M31(1268011823)),1024+4096*r as u64,CM31::ONE)
+}
+pub fn node(j:usize,depth:u8)->M31 {
+ let step=1usize<<(depth as u32);
+ let aligned=(j/step)*step;
+ repeat(point(aligned).a,depth+1)
+}
+pub fn fill(j:usize,d:u8,left:u8,mut out:[M31;9])->[M31;9] {
+ if left==0 {out} else {
+  out[d as usize]=node(j,d);
+  fill(j,d+1,left-1,out)
+ }
+}
+pub fn nodes(j:usize)->[M31;9] {fill(j,0,9,[M31::ZERO;9])}
 }

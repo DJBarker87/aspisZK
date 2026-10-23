@@ -2,6 +2,7 @@
 -- [aspis_r1_encoder53]: function definitions
 import Aeneas
 import AspisR1Generic54.Types
+import AspisR1Generic54.FunsExternal
 open Aeneas Aeneas.Std Result ControlFlow Error
 set_option linter.dupNamespace false
 set_option linter.hashCommand false
@@ -13,7 +14,390 @@ set_option maxHeartbeats 1000000
 /- You can set the `maxRecDepth` value with the `-max-recdepth` CLI option -/
 set_option maxRecDepth 2048
 
+/- You can remove the following line by using the CLI option `-all-computable`: -/
+noncomputable section
+
 namespace AspisR1Generic54
+
+/-- [aspis_r1_encoder53::field::P]
+    Source: 'field.rs', lines 19:0-19:31
+    Visibility: public -/
+@[global_simps, irreducible] def field.P : Std.U32 := 2147483647#u32
+
+/-- [aspis_r1_encoder53::field::{impl core::clone::Clone for aspis_r1_encoder53::field::M31}::clone]:
+    Source: 'field.rs', lines 22:9-22:14
+    Visibility: public -/
+def field.M31.Insts.CoreCloneClone.clone
+  (self : field.M31) : Result field.M31 := do
+  ok self
+
+/-- Trait implementation: [aspis_r1_encoder53::field::{impl core::clone::Clone for aspis_r1_encoder53::field::M31}]
+    Source: 'field.rs', lines 22:9-22:14 -/
+@[reducible]
+def field.M31.Insts.CoreCloneClone : core.clone.Clone field.M31 := {
+  clone := field.M31.Insts.CoreCloneClone.clone
+}
+
+/-- Trait implementation: [aspis_r1_encoder53::field::{impl core::marker::Copy for aspis_r1_encoder53::field::M31}]
+    Source: 'field.rs', lines 22:16-22:20 -/
+@[reducible]
+def field.M31.Insts.CoreMarkerCopy : core.marker.Copy field.M31 := {
+  cloneInst := field.M31.Insts.CoreCloneClone
+}
+
+/-- [aspis_r1_encoder53::field::{impl core::cmp::PartialEq<aspis_r1_encoder53::field::M31> for aspis_r1_encoder53::field::M31}::eq]:
+    Source: 'field.rs', lines 22:22-22:31
+    Visibility: public -/
+def field.M31.Insts.CoreCmpPartialEqM31.eq
+  (self : field.M31) (other : field.M31) : Result Bool := do
+  ok (self = other)
+
+/-- Trait implementation: [aspis_r1_encoder53::field::{impl core::cmp::PartialEq<aspis_r1_encoder53::field::M31> for aspis_r1_encoder53::field::M31}]
+    Source: 'field.rs', lines 22:22-22:31 -/
+@[reducible]
+def field.M31.Insts.CoreCmpPartialEqM31 : core.cmp.PartialEq field.M31
+  field.M31 := {
+  eq := field.M31.Insts.CoreCmpPartialEqM31.eq
+}
+
+/-- [aspis_r1_encoder53::field::{impl core::cmp::Eq for aspis_r1_encoder53::field::M31}::assert_fields_are_eq]:
+    Source: 'field.rs', lines 22:33-22:35
+    Visibility: public -/
+def field.M31.Insts.CoreCmpEq.assert_fields_are_eq
+  (self : field.M31) : Result Unit := do
+  ok ()
+
+/-- Trait implementation: [aspis_r1_encoder53::field::{impl core::cmp::Eq for aspis_r1_encoder53::field::M31}]
+    Source: 'field.rs', lines 22:33-22:35 -/
+@[reducible]
+def field.M31.Insts.CoreCmpEq : core.cmp.Eq field.M31 := {
+  partialEqInst := field.M31.Insts.CoreCmpPartialEqM31
+  assert_fields_are_eq := field.M31.Insts.CoreCmpEq.assert_fields_are_eq
+}
+
+/-- [aspis_r1_encoder53::field::reduce_u64]:
+    Source: 'field.rs', lines 31:0-44:1 -/
+def field.reduce_u64 (x : Std.U64) : Result Std.U32 := do
+  let i ← lift (UScalar.cast .U64 field.P)
+  let i1 ← lift (x &&& i)
+  let i2 ← lift (Std.U64.wrapping_shr x 31#u32)
+  let x1 ← lift (Std.U64.wrapping_add i1 i2)
+  let i3 ← lift (UScalar.cast .U64 field.P)
+  let i4 ← lift (x1 &&& i3)
+  let i5 ← lift (Std.U64.wrapping_shr x1 31#u32)
+  let x2 ← lift (Std.U64.wrapping_add i4 i5)
+  let x3 ← lift (UScalar.cast .U32 x2)
+  if x3 >= field.P
+  then ok (Std.U32.wrapping_sub x3 field.P)
+  else ok x3
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::ZERO]
+    Source: 'field.rs', lines 55:4-55:33
+    Visibility: public -/
+@[global_simps, irreducible] def field.M31.ZERO : field.M31 := 0#u32
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::ONE]
+    Source: 'field.rs', lines 56:4-56:32
+    Visibility: public -/
+@[global_simps, irreducible] def field.M31.ONE : field.M31 := 1#u32
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::add]:
+    Source: 'field.rs', lines 62:4-88:5
+    Visibility: public -/
+def field.M31.add (self : field.M31) (rhs : field.M31) : Result field.M31 := do
+  let s ← lift (Std.U32.wrapping_add self rhs)
+  if s >= field.P
+  then let s1 ← lift (Std.U32.wrapping_sub s field.P)
+       ok s1
+  else ok s
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::sub]:
+    Source: 'field.rs', lines 94:4-119:5
+    Visibility: public -/
+def field.M31.sub (self : field.M31) (rhs : field.M31) : Result field.M31 := do
+  let i ← lift (Std.U32.wrapping_add self field.P)
+  let s ← lift (Std.U32.wrapping_sub i rhs)
+  if s >= field.P
+  then let s1 ← lift (Std.U32.wrapping_sub s field.P)
+       ok s1
+  else ok s
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::neg]:
+    Source: 'field.rs', lines 122:4-130:5
+    Visibility: public -/
+def field.M31.neg (self : field.M31) : Result field.M31 := do
+  if self = 0#u32
+  then ok 0#u32
+  else let i ← lift (Std.U32.wrapping_sub field.P self)
+       ok i
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::mul]:
+    Source: 'field.rs', lines 133:4-137:5
+    Visibility: public -/
+def field.M31.mul (self : field.M31) (rhs : field.M31) : Result field.M31 := do
+  let i ← lift (UScalar.cast .U64 self)
+  let i1 ← lift (UScalar.cast .U64 rhs)
+  let i2 ← lift (Std.U64.wrapping_mul i i1)
+  let i3 ← field.reduce_u64 i2
+  ok i3
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::reduce_u64]:
+    Source: 'field.rs', lines 153:4-155:5
+    Visibility: public -/
+def field.M31.reduce_u64 (value : Std.U64) : Result field.M31 := do
+  let i ← field.reduce_u64 value
+  ok i
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::double]:
+    Source: 'field.rs', lines 183:4-185:5
+    Visibility: public -/
+def field.M31.double (self : field.M31) : Result field.M31 := do
+  field.M31.add self self
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::pow]: loop body 0:
+    Source: 'field.rs', lines 201:8-207:9
+    Visibility: public -/
+@[rust_loop_body]
+def field.M31.pow_loop.body
+  (exp : Std.U64) (base : field.M31) (acc : field.M31) :
+  Result (ControlFlow (Std.U64 × field.M31 × field.M31) field.M31)
+  := do
+  if exp > 0#u64
+  then
+    let i ← lift (exp &&& 1#u64)
+    let acc1 ← if i = 1#u64
+                 then field.M31.mul acc base
+                 else ok acc
+    let base1 ← field.M31.mul base base
+    let exp1 ← lift (Std.U64.wrapping_shr exp 1#i32)
+    ok (cont (exp1, base1, acc1))
+  else ok (done acc)
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::pow]: loop 0:
+    Source: 'field.rs', lines 201:8-207:9
+    Visibility: public -/
+@[rust_loop]
+def field.M31.pow_loop
+  (exp : Std.U64) (base : field.M31) (acc : field.M31) : Result field.M31 := do
+  loop
+    (fun (exp1, base1, acc1) => field.M31.pow_loop.body exp1 base1 acc1)
+    (exp, base, acc)
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::M31}::pow]:
+    Source: 'field.rs', lines 198:4-209:5
+    Visibility: public -/
+@[reducible]
+def field.M31.pow (self : field.M31) (exp : Std.U64) : Result field.M31 := do
+  field.M31.pow_loop exp self field.M31.ONE
+
+/-- [aspis_r1_encoder53::field::{impl core::cmp::PartialEq<aspis_r1_encoder53::field::CM31> for aspis_r1_encoder53::field::CM31}::eq]:
+    Source: 'field.rs', lines 254:22-254:31
+    Visibility: public -/
+def field.CM31.Insts.CoreCmpPartialEqCM31.eq
+  (self : field.CM31) (other : field.CM31) : Result Bool := do
+  let b ← field.M31.Insts.CoreCmpPartialEqM31.eq self.a other.a
+  if b
+  then field.M31.Insts.CoreCmpPartialEqM31.eq self.b other.b
+  else ok false
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::CM31}::ZERO]
+    Source: 'field.rs', lines 261:4-264:6
+    Visibility: public -/
+@[global_simps, irreducible]
+def field.CM31.ZERO : field.CM31 := { a := 0#u32, b := 0#u32 }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::CM31}::ONE]
+    Source: 'field.rs', lines 265:4-268:6
+    Visibility: public -/
+@[global_simps, irreducible]
+def field.CM31.ONE : field.CM31 := { a := 1#u32, b := 0#u32 }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::CM31}::new]:
+    Source: 'field.rs', lines 271:4-273:5
+    Visibility: public -/
+def field.CM31.new (a : field.M31) (b : field.M31) : Result field.CM31 := do
+  ok { a, b }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::CM31}::from_m31]:
+    Source: 'field.rs', lines 276:4-278:5
+    Visibility: public -/
+def field.CM31.from_m31 (a : field.M31) : Result field.CM31 := do
+  ok { a, b := field.M31.ZERO }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::CM31}::add]:
+    Source: 'field.rs', lines 281:4-286:5
+    Visibility: public -/
+def field.CM31.add
+  (self : field.CM31) (rhs : field.CM31) : Result field.CM31 := do
+  let m ← field.M31.add self.a rhs.a
+  let m1 ← field.M31.add self.b rhs.b
+  ok { a := m, b := m1 }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::CM31}::sub]:
+    Source: 'field.rs', lines 289:4-294:5
+    Visibility: public -/
+def field.CM31.sub
+  (self : field.CM31) (rhs : field.CM31) : Result field.CM31 := do
+  let m ← field.M31.sub self.a rhs.a
+  let m1 ← field.M31.sub self.b rhs.b
+  ok { a := m, b := m1 }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::CM31}::neg]:
+    Source: 'field.rs', lines 297:4-302:5
+    Visibility: public -/
+def field.CM31.neg (self : field.CM31) : Result field.CM31 := do
+  let m ← field.M31.neg self.a
+  let m1 ← field.M31.neg self.b
+  ok { a := m, b := m1 }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::CM31}::mul]:
+    Source: 'field.rs', lines 306:4-320:5
+    Visibility: public -/
+def field.CM31.mul
+  (self : field.CM31) (rhs : field.CM31) : Result field.CM31 := do
+  let m0 ← field.M31.mul self.a rhs.a
+  let m1 ← field.M31.mul self.b rhs.b
+  let i := self.a
+  let i1 ← lift (core.convert.num.FromU64U32.from i)
+  let i2 := self.b
+  let i3 ← lift (core.convert.num.FromU64U32.from i2)
+  let i4 ← lift (Std.U64.wrapping_add i1 i3)
+  let i5 := rhs.a
+  let i6 ← lift (core.convert.num.FromU64U32.from i5)
+  let i7 := rhs.b
+  let i8 ← lift (core.convert.num.FromU64U32.from i7)
+  let i9 ← lift (Std.U64.wrapping_add i6 i8)
+  let i10 ← lift (Std.U64.wrapping_mul i4 i9)
+  let m2 ← field.M31.reduce_u64 i10
+  let m ← field.M31.sub m0 m1
+  let m3 ← field.M31.sub m2 m0
+  let m4 ← field.M31.sub m3 m1
+  ok { a := m, b := m4 }
+
+/-- [aspis_r1_encoder53::field::{impl core::clone::Clone for aspis_r1_encoder53::field::QM31}::clone]:
+    Source: 'field.rs', lines 431:9-431:14
+    Visibility: public -/
+def field.QM31.Insts.CoreCloneClone.clone
+  (self : field.QM31) : Result field.QM31 := do
+  ok self
+
+/-- Trait implementation: [aspis_r1_encoder53::field::{impl core::clone::Clone for aspis_r1_encoder53::field::QM31}]
+    Source: 'field.rs', lines 431:9-431:14 -/
+@[reducible]
+def field.QM31.Insts.CoreCloneClone : core.clone.Clone field.QM31 := {
+  clone := field.QM31.Insts.CoreCloneClone.clone
+}
+
+/-- Trait implementation: [aspis_r1_encoder53::field::{impl core::marker::Copy for aspis_r1_encoder53::field::QM31}]
+    Source: 'field.rs', lines 431:16-431:20 -/
+@[reducible]
+def field.QM31.Insts.CoreMarkerCopy : core.marker.Copy field.QM31 := {
+  cloneInst := field.QM31.Insts.CoreCloneClone
+}
+
+/-- [aspis_r1_encoder53::field::{impl core::cmp::PartialEq<aspis_r1_encoder53::field::QM31> for aspis_r1_encoder53::field::QM31}::eq]:
+    Source: 'field.rs', lines 431:22-431:31
+    Visibility: public -/
+def field.QM31.Insts.CoreCmpPartialEqQM31.eq
+  (self : field.QM31) (other : field.QM31) : Result Bool := do
+  let b ← field.CM31.Insts.CoreCmpPartialEqCM31.eq self.c0 other.c0
+  if b
+  then field.CM31.Insts.CoreCmpPartialEqCM31.eq self.c1 other.c1
+  else ok false
+
+/-- Trait implementation: [aspis_r1_encoder53::field::{impl core::cmp::PartialEq<aspis_r1_encoder53::field::QM31> for aspis_r1_encoder53::field::QM31}]
+    Source: 'field.rs', lines 431:22-431:31 -/
+@[reducible]
+def field.QM31.Insts.CoreCmpPartialEqQM31 : core.cmp.PartialEq field.QM31
+  field.QM31 := {
+  eq := field.QM31.Insts.CoreCmpPartialEqQM31.eq
+}
+
+/-- [aspis_r1_encoder53::field::{impl core::cmp::Eq for aspis_r1_encoder53::field::QM31}::assert_fields_are_eq]:
+    Source: 'field.rs', lines 431:33-431:35
+    Visibility: public -/
+def field.QM31.Insts.CoreCmpEq.assert_fields_are_eq
+  (self : field.QM31) : Result Unit := do
+  ok ()
+
+/-- Trait implementation: [aspis_r1_encoder53::field::{impl core::cmp::Eq for aspis_r1_encoder53::field::QM31}]
+    Source: 'field.rs', lines 431:33-431:35 -/
+@[reducible]
+def field.QM31.Insts.CoreCmpEq : core.cmp.Eq field.QM31 := {
+  partialEqInst := field.QM31.Insts.CoreCmpPartialEqQM31
+  assert_fields_are_eq := field.QM31.Insts.CoreCmpEq.assert_fields_are_eq
+}
+
+/-- [aspis_r1_encoder53::field::mul_by_r]:
+    Source: 'field.rs', lines 860:0-866:1 -/
+def field.mul_by_r (x : field.CM31) : Result field.CM31 := do
+  let m ← field.M31.double x.a
+  let m1 ← field.M31.sub m x.b
+  let m2 ← field.M31.double x.b
+  let m3 ← field.M31.add x.a m2
+  ok { a := m1, b := m3 }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::QM31}::ZERO]
+    Source: 'field.rs', lines 869:4-878:6
+    Visibility: public -/
+@[global_simps, irreducible]
+def field.QM31.ZERO : field.QM31 :=
+  { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::QM31}::ONE]
+    Source: 'field.rs', lines 879:4-888:6
+    Visibility: public -/
+@[global_simps, irreducible]
+def field.QM31.ONE : field.QM31 :=
+  { c0 := { a := 1#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::QM31}::from_cm31]:
+    Source: 'field.rs', lines 891:4-893:5
+    Visibility: public -/
+def field.QM31.from_cm31 (c0 : field.CM31) : Result field.QM31 := do
+  ok { c0, c1 := field.CM31.ZERO }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::QM31}::add]:
+    Source: 'field.rs', lines 896:4-903:5
+    Visibility: public -/
+def field.QM31.add
+  (self : field.QM31) (rhs : field.QM31) : Result field.QM31 := do
+  let c ← field.CM31.add self.c0 rhs.c0
+  let c1 ← field.CM31.add self.c1 rhs.c1
+  ok { c0 := c, c1 }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::QM31}::sub]:
+    Source: 'field.rs', lines 906:4-913:5
+    Visibility: public -/
+def field.QM31.sub
+  (self : field.QM31) (rhs : field.QM31) : Result field.QM31 := do
+  let c ← field.CM31.sub self.c0 rhs.c0
+  let c1 ← field.CM31.sub self.c1 rhs.c1
+  ok { c0 := c, c1 }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::QM31}::neg]:
+    Source: 'field.rs', lines 916:4-923:5
+    Visibility: public -/
+def field.QM31.neg (self : field.QM31) : Result field.QM31 := do
+  let c ← field.CM31.neg self.c0
+  let c1 ← field.CM31.neg self.c1
+  ok { c0 := c, c1 }
+
+/-- [aspis_r1_encoder53::field::{aspis_r1_encoder53::field::QM31}::mul]:
+    Source: 'field.rs', lines 935:4-945:5
+    Visibility: public -/
+def field.QM31.mul
+  (self : field.QM31) (rhs : field.QM31) : Result field.QM31 := do
+  let m0 ← field.CM31.mul self.c0 rhs.c0
+  let m1 ← field.CM31.mul self.c1 rhs.c1
+  let c ← field.CM31.add self.c0 self.c1
+  let c1 ← field.CM31.add rhs.c0 rhs.c1
+  let m2 ← field.CM31.mul c c1
+  let c2 ← field.mul_by_r m1
+  let c3 ← field.CM31.add m0 c2
+  let c4 ← field.CM31.sub m2 m0
+  let c5 ← field.CM31.sub c4 m1
+  ok { c0 := c3, c1 := c5 }
 
 /-- [aspis_r1_encoder53::generic54::collect]:
     Source: 'lib.rs', lines 8:0-13:1
@@ -142,5 +526,371 @@ def generic54.encode_with_nodes
   := do
   let h ← generic54.channels scalarCodeFieldInst c nodes
   generic54.phi_inverse scalarCodeFieldInst x y h
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::M31}::try_inv]:
+    Source: 'scalar.rs', lines 46:4-54:5
+    Visibility: public -/
+def field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv
+  (self : field.M31) : Result (Option field.M31) := do
+  let b ← field.M31.Insts.CoreCmpPartialEqM31.eq self field.M31.ZERO
+  if b
+  then ok none
+  else
+    let i ← lift (Std.U32.wrapping_sub field.P 2#u32)
+    let i1 ← lift (core.convert.num.FromU64U32.from i)
+    let m ← field.M31.pow self i1
+    ok (some m)
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::M31}::from_m31]:
+    Source: 'scalar.rs', lines 43:4-45:5
+    Visibility: public -/
+def field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.from_m31
+  (value : field.M31) : Result field.M31 := do
+  let i ← value % field.P
+  ok i
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::M31}::mul]:
+    Source: 'scalar.rs', lines 35:8-37:9
+    Visibility: public -/
+def field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.mul
+  (self : field.M31) (rhs : field.M31) : Result field.M31 := do
+  field.M31.mul self rhs
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::M31}::neg]:
+    Source: 'scalar.rs', lines 32:8-34:9
+    Visibility: public -/
+def field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.neg
+  (self : field.M31) : Result field.M31 := do
+  field.M31.neg self
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::M31}::sub]:
+    Source: 'scalar.rs', lines 29:8-31:9
+    Visibility: public -/
+def field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.sub
+  (self : field.M31) (rhs : field.M31) : Result field.M31 := do
+  field.M31.sub self rhs
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::M31}::add]:
+    Source: 'scalar.rs', lines 26:8-28:9
+    Visibility: public -/
+def field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.add
+  (self : field.M31) (rhs : field.M31) : Result field.M31 := do
+  field.M31.add self rhs
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::M31}::ONE]
+    Source: 'scalar.rs', lines 25:8-25:36
+    Visibility: public -/
+@[global_simps, irreducible]
+def field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.ONE : field.M31 :=
+  field.M31.ONE
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::M31}::ZERO]
+    Source: 'scalar.rs', lines 24:8-24:38
+    Visibility: public -/
+@[global_simps, irreducible]
+def field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.ZERO : field.M31 :=
+  field.M31.ZERO
+
+/-- Trait implementation: [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::M31}]
+    Source: 'scalar.rs', lines 41:0-55:1 -/
+@[reducible]
+def field.M31.Insts.Aspis_r1_encoder53ScalarCodeField : scalar.CodeField
+  field.M31 := {
+  ZERO := ok field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.ZERO
+  ONE := ok field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.ONE
+  coremarkerCopyInst := field.M31.Insts.CoreMarkerCopy
+  corecmpEqInst := field.M31.Insts.CoreCmpEq
+  from_m31 := field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.from_m31
+  add := field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.add
+  sub := field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.sub
+  neg := field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.neg
+  mul := field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.mul
+  try_inv := field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv
+}
+
+/-- [aspis_r1_encoder53::generic54::m31_channels]:
+    Source: 'lib.rs', lines 40:0-40:98
+    Visibility: public -/
+def generic54.m31_channels
+  (c : Array field.M31 1024#usize) (n : Array field.M31 9#usize) :
+  Result (Array field.M31 4#usize)
+  := do
+  generic54.channels field.M31.Insts.Aspis_r1_encoder53ScalarCodeField c n
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::CM31}::try_inv]:
+    Source: 'scalar.rs', lines 61:4-68:5
+    Visibility: public -/
+def field.CM31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv
+  (self : field.CM31) : Result (Option field.CM31) := do
+  let m ← field.M31.mul self.a self.a
+  let m1 ← field.M31.mul self.b self.b
+  let norm ← field.M31.add m m1
+  let o ← field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv norm
+  let cf ← core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+  match cf with
+  | core.ops.control_flow.ControlFlow.Continue val =>
+    let m2 ← field.M31.mul self.a val
+    let m3 ← field.M31.neg self.b
+    let m4 ← field.M31.mul m3 val
+    ok (some { a := m2, b := m4 })
+  | core.ops.control_flow.ControlFlow.Break residual =>
+    core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+      field.CM31 residual
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::QM31}::try_inv]:
+    Source: 'scalar.rs', lines 75:4-85:5
+    Visibility: public -/
+def field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv
+  (self : field.QM31) : Result (Option field.QM31) := do
+  let r ← field.CM31.new 2#u32 field.M31.ONE
+  let c ← field.CM31.mul self.c0 self.c0
+  let c1 ← field.CM31.mul self.c1 self.c1
+  let c2 ← field.CM31.mul r c1
+  let norm ← field.CM31.sub c c2
+  let o ← field.CM31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv norm
+  let cf ← core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+  match cf with
+  | core.ops.control_flow.ControlFlow.Continue val =>
+    let c3 ← field.CM31.mul self.c0 val
+    let c4 ← field.CM31.neg self.c1
+    let c5 ← field.CM31.mul c4 val
+    ok (some { c0 := c3, c1 := c5 })
+  | core.ops.control_flow.ControlFlow.Break residual =>
+    core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+      field.QM31 residual
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::CM31}::from_m31]:
+    Source: 'scalar.rs', lines 58:4-60:5
+    Visibility: public -/
+def field.CM31.Insts.Aspis_r1_encoder53ScalarCodeField.from_m31
+  (value : field.M31) : Result field.CM31 := do
+  let m ← field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.from_m31 value
+  field.CM31.from_m31 m
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::QM31}::from_m31]:
+    Source: 'scalar.rs', lines 72:4-74:5
+    Visibility: public -/
+def field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.from_m31
+  (value : field.M31) : Result field.QM31 := do
+  let c ← field.CM31.Insts.Aspis_r1_encoder53ScalarCodeField.from_m31 value
+  field.QM31.from_cm31 c
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::QM31}::mul]:
+    Source: 'scalar.rs', lines 35:8-37:9
+    Visibility: public -/
+def field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.mul
+  (self : field.QM31) (rhs : field.QM31) : Result field.QM31 := do
+  field.QM31.mul self rhs
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::QM31}::neg]:
+    Source: 'scalar.rs', lines 32:8-34:9
+    Visibility: public -/
+def field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.neg
+  (self : field.QM31) : Result field.QM31 := do
+  field.QM31.neg self
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::QM31}::sub]:
+    Source: 'scalar.rs', lines 29:8-31:9
+    Visibility: public -/
+def field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.sub
+  (self : field.QM31) (rhs : field.QM31) : Result field.QM31 := do
+  field.QM31.sub self rhs
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::QM31}::add]:
+    Source: 'scalar.rs', lines 26:8-28:9
+    Visibility: public -/
+def field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.add
+  (self : field.QM31) (rhs : field.QM31) : Result field.QM31 := do
+  field.QM31.add self rhs
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::QM31}::ONE]
+    Source: 'scalar.rs', lines 25:8-25:36
+    Visibility: public -/
+@[global_simps, irreducible]
+def field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.ONE : field.QM31 :=
+  field.QM31.ONE
+
+/-- [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::QM31}::ZERO]
+    Source: 'scalar.rs', lines 24:8-24:38
+    Visibility: public -/
+@[global_simps, irreducible]
+def field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.ZERO : field.QM31 :=
+  field.QM31.ZERO
+
+/-- Trait implementation: [aspis_r1_encoder53::scalar::{impl aspis_r1_encoder53::scalar::CodeField for aspis_r1_encoder53::field::QM31}]
+    Source: 'scalar.rs', lines 70:0-86:1 -/
+@[reducible]
+def field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField : scalar.CodeField
+  field.QM31 := {
+  ZERO := ok field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.ZERO
+  ONE := ok field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.ONE
+  coremarkerCopyInst := field.QM31.Insts.CoreMarkerCopy
+  corecmpEqInst := field.QM31.Insts.CoreCmpEq
+  from_m31 := field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.from_m31
+  add := field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.add
+  sub := field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.sub
+  neg := field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.neg
+  mul := field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.mul
+  try_inv := field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv
+}
+
+/-- [aspis_r1_encoder53::generic54::qm31_channels]:
+    Source: 'lib.rs', lines 41:0-41:101
+    Visibility: public -/
+def generic54.qm31_channels
+  (c : Array field.QM31 1024#usize) (n : Array field.M31 9#usize) :
+  Result (Array field.QM31 4#usize)
+  := do
+  generic54.channels field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField c n
+
+/-- [aspis_r1_encoder53::generic54::m31_phi]:
+    Source: 'lib.rs', lines 42:0-42:67
+    Visibility: public -/
+def generic54.m31_phi
+  (x : field.M31) (y : field.M31) (h : Array field.M31 4#usize) :
+  Result (Array field.M31 4#usize)
+  := do
+  generic54.phi_inverse field.M31.Insts.Aspis_r1_encoder53ScalarCodeField x y h
+
+/-- [aspis_r1_encoder53::generic54::qm31_phi]:
+    Source: 'lib.rs', lines 43:0-43:128
+    Visibility: public -/
+def generic54.qm31_phi
+  (x : field.QM31) (y : field.QM31) (h : Array field.QM31 4#usize) :
+  Result (Array field.QM31 4#usize)
+  := do
+  generic54.phi_inverse field.QM31.Insts.Aspis_r1_encoder53ScalarCodeField x y
+    h
+
+/-- [aspis_r1_encoder53::nodes54::pow]:
+    Source: 'lib.rs', lines 62:0-67:1
+    Visibility: public -/
+def nodes54.pow
+  (base : field.CM31) (exp : Std.U64) (acc : field.CM31) :
+  Result field.CM31
+  := do
+  if exp = 0#u64
+  then ok acc
+  else
+    let i ← exp % 2#u64
+    let next ← if i = 1#u64
+                 then field.CM31.mul acc base
+                 else ok acc
+    let c ← field.CM31.mul base base
+    let i1 ← exp / 2#u64
+    nodes54.pow c i1 next
+partial_fixpoint
+
+/-- [aspis_r1_encoder53::nodes54::reverse]:
+    Source: 'lib.rs', lines 56:0-61:1
+    Visibility: public -/
+def nodes54.reverse
+  (width : Std.U8) (value : Std.Usize) : Result Std.Usize := do
+  if width = 0#u8
+  then ok 0#usize
+  else
+    let w ← lift (Std.U8.wrapping_sub width 1#u8)
+    let i ← value % 2#usize
+    let i1 ← lift (UScalar.cast .U32 w)
+    let i2 ← lift (Std.Usize.wrapping_shl 1#usize i1)
+    let i3 ← lift (Std.Usize.wrapping_mul i i2)
+    let i4 ← value / 2#usize
+    let i5 ← nodes54.reverse w i4
+    ok (Std.Usize.wrapping_add i3 i5)
+partial_fixpoint
+
+/-- [aspis_r1_encoder53::nodes54::point]:
+    Source: 'lib.rs', lines 72:0-75:1
+    Visibility: public -/
+def nodes54.point (j : Std.Usize) : Result field.CM31 := do
+  let r ← nodes54.reverse 18#u8 j
+  let c ← field.CM31.new 2#u32 1268011823#u32
+  let i ← lift (UScalar.cast .U64 r)
+  let i1 ← lift (Std.U64.wrapping_mul 4096#u64 i)
+  let i2 ← lift (Std.U64.wrapping_add 1024#u64 i1)
+  nodes54.pow c i2 field.CM31.ONE
+
+/-- [aspis_r1_encoder53::nodes54::tcheb]:
+    Source: 'lib.rs', lines 68:0-68:58
+    Visibility: public -/
+def nodes54.tcheb (x : field.M31) : Result field.M31 := do
+  let m ← field.M31.mul x x
+  let m1 ← field.M31.double m
+  field.M31.sub m1 field.M31.ONE
+
+/-- [aspis_r1_encoder53::nodes54::repeat]:
+    Source: 'lib.rs', lines 69:0-71:1
+    Visibility: public -/
+def nodes54.repeat (x : field.M31) (left : Std.U8) : Result field.M31 := do
+  if left = 0#u8
+  then ok x
+  else
+    let m ← nodes54.tcheb x
+    let i ← lift (Std.U8.wrapping_sub left 1#u8)
+    nodes54.repeat m i
+partial_fixpoint
+
+/-- [aspis_r1_encoder53::nodes54::node]:
+    Source: 'lib.rs', lines 76:0-80:1
+    Visibility: public -/
+def nodes54.node (j : Std.Usize) (depth : Std.U8) : Result field.M31 := do
+  let i ← lift (UScalar.cast .U32 depth)
+  let step ← lift (Std.Usize.wrapping_shl 1#usize i)
+  let i1 ← j / step
+  let aligned ← lift (Std.Usize.wrapping_mul i1 step)
+  let c ← nodes54.point aligned
+  let i2 ← lift (Std.U8.wrapping_add depth 1#u8)
+  nodes54.repeat c.a i2
+
+/-- [aspis_r1_encoder53::nodes54::fill]:
+    Source: 'lib.rs', lines 81:0-86:1
+    Visibility: public -/
+def nodes54.fill
+  (j : Std.Usize) (d : Std.U8) (left : Std.U8) (out : Array field.M31 9#usize)
+  :
+  Result (Array field.M31 9#usize)
+  := do
+  if left = 0#u8
+  then ok out
+  else
+    let m ← nodes54.node j d
+    let i ← lift (UScalar.cast .Usize d)
+    let out1 ← Array.update out i m
+    let i1 ← lift (Std.U8.wrapping_add d 1#u8)
+    let i2 ← lift (Std.U8.wrapping_sub left 1#u8)
+    nodes54.fill j i1 i2 out1
+partial_fixpoint
+
+/-- [aspis_r1_encoder53::nodes54::nodes]:
+    Source: 'lib.rs', lines 87:0-87:58
+    Visibility: public -/
+def nodes54.nodes (j : Std.Usize) : Result (Array field.M31 9#usize) := do
+  let a := Array.repeat 9#usize field.M31.ZERO
+  nodes54.fill j 0#u8 9#u8 a
+
+/-- [aspis_r1_encoder53::generic54::eval_at]:
+    Source: 'lib.rs', lines 44:0-47:1
+    Visibility: public -/
+def generic54.eval_at
+  {E : Type} (scalarCodeFieldInst : scalar.CodeField E) (c : Slice E)
+  (j : Std.Usize) (height : Std.Usize) :
+  Result E
+  := do
+  let nodes ← nodes54.nodes j
+  generic54.eval_rec scalarCodeFieldInst c 0#usize height nodes
+
+/-- [aspis_r1_encoder53::generic54::encode_at]:
+    Source: 'lib.rs', lines 48:0-52:1
+    Visibility: public -/
+def generic54.encode_at
+  {E : Type} (scalarCodeFieldInst : scalar.CodeField E)
+  (c : Array E 1024#usize) (j : Std.Usize) :
+  Result (Array E 4#usize)
+  := do
+  let z ← nodes54.point j
+  let nodes ← nodes54.nodes j
+  let t ← scalarCodeFieldInst.from_m31 z.a
+  let t1 ← scalarCodeFieldInst.from_m31 z.b
+  generic54.encode_with_nodes scalarCodeFieldInst c nodes t t1
 
 end AspisR1Generic54

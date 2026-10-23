@@ -156,3 +156,58 @@ unchanged. All accepted printed axioms are standard.
 Complete-owner Charon/Aeneas exit 0/0, 2.054/0.498 s,
 212504/77968 KiB, zero swap, capped and optimized. Full receipts pin source
 revision and hashes. No shared object or shipped crate/program is changed.
+
+## Stage 5: native field method specializations
+
+The generic owner uses the byte-identical native scalar.rs CodeField trait.
+Extraction succeeds, including M31/QM31 used methods and generic entry points.
+J10649 rejects the complete unused inverse records: a native M31 power shift
+is emitted with an i32 operand, and two inverse bodies refer to a missing
+backend Option-branch constant. Those diagnostics are retained; no external
+axiom or template is installed. J10651 selects the exact generic encoder and
+used conversion/add/sub/mul bodies. The unused inverse records are explicitly
+excluded. This is a used-method projection, not a complete full-record port.
+
+J10654/55/58/57/64 prove the generic collector, evaluator, four channels, phi
+and composed leaf. J10661/63 discharge the local arithmetic laws from the
+actual extracted M31/QM31 used methods. Every unused trait field is arbitrary,
+including try_inv; no inverse correctness premise is added. J10665/66/67
+prove the generic model bridge and complete generic entry points. J10668
+specializes both encode_at and eval_at to M31/QM31. These conclusions include
+canonicality and exact initial/final encoder values, with no point/node/
+channel or local arithmetic image hypothesis. They quantify an arbitrary
+unused trait record, replacing only the four methods actually read. Binding
+the unmodified native full CodeField record and standard iterator state to
+this projection remains distinct; no whole native caller claim is inferred.
+
+J10650/53/60 are retired by dependency preflight before compiler invocation.
+J10652 uses an applied function rather than its definition name in rewrite;
+J10656 leaves a generic type in a decide goal; J10659 omits unfolding field.P;
+J10662 retains a WideExact base in the generic statement. Each is replaced
+with a changed source. No unchanged input is retried or limit raised. All
+accepted printed axioms are standard only; exact revision, hashes, dependency
+fingerprints, wall/RSS/swap, outputs and rejected diagnostics are in receipts.
+
+The original iterator nth diagnostic was narrowed to all actual power-of-two
+lengths and narrow counters (original-even-v3), then stopped again as RSS grew:
+exit 1, 175.427 s, 6474100 KiB, zero swap. This is failed evidence, not a
+verified contract. The accepted transition contracts continue to establish
+only their stated local source-suffix interfaces. Full native iterator-state
+and Vec allocation composition remains open.
+
+Accepted compiles, all exit 0:
+
+| Attempt | Exact module | Wall | Peak RSS KiB | Swaps |
+|---|---|---|---:|---:|
+| J10651 | AspisR1ProducerRelease47.EncoderGeneric54 | 0:01.43 | 2649660 | 0 |
+| J10654 | R1Z.ProverCommitEncoderGenericCollect54 | 0:02.31 | 4119232 | 0 |
+| J10655 | R1Z.ProverCommitEncoderGenericEval54 | 0:02.61 | 4132788 | 0 |
+| J10657 | R1Z.ProverCommitEncoderGenericPhi54 | 0:01.93 | 4114828 | 0 |
+| J10658 | R1Z.ProverCommitEncoderGenericChannels54 | 0:01.85 | 4115956 | 0 |
+| J10661 | R1Z.ProverCommitEncoderM31Ops54 | 0:01.62 | 4103764 | 0 |
+| J10663 | R1Z.ProverCommitEncoderQOps54 | 0:01.76 | 4104920 | 0 |
+| J10664 | R1Z.ProverCommitEncoderGenericLeaf54 | 0:01.95 | 4102292 | 0 |
+| J10665 | R1Z.ProverCommitEncoderGenericModel54 | 0:02.16 | 4099364 | 0 |
+| J10666 | AspisR1ProducerRelease47.EncoderGenericAt54 | 0:01.38 | 2630052 | 0 |
+| J10667 | R1Z.ProverCommitEncoderGenericExact54 | 0:01.86 | 4109336 | 0 |
+| J10668 | R1Z.ProverCommitEncoderSpecialized54 | 0:01.86 | 4105916 | 0 |

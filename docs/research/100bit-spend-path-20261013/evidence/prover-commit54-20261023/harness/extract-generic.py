@@ -22,6 +22,6 @@ def run(name,cmd):
  (R/(name+'-inputs.json')).write_text(json.dumps(dict(source_sha256=hashlib.sha256(Path('lib.rs').read_bytes()).hexdigest(),reservations=caps,tools={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in [CHARON,AENEAS]}),indent=2)+'\n')
  subprocess.run(['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(R/'harness/capped.py'),str(R/'receipts'/name),'Optimized compilation and extraction of generic structural encoder with the exact native CodeField interface','--',*cmd],check=True)
 (R/'extraction').mkdir(exist_ok=True)
-run('generic-owner-charon-v2',[CHARON,'cargo','--preset','aeneas','--start-from','crate::generic54','--mir','built','--sysroot','default','--dest-file',str(R/'extraction/generic-owner54.llbc'),'--','--release','--lib','--jobs','4'])
+run('generic-owner-charon-v3',[CHARON,'cargo','--preset','aeneas','--start-from','crate::generic54','--mir','built','--sysroot','default','--dest-file',str(R/'extraction/generic-owner54.llbc'),'--','--release','--lib','--jobs','4'])
 data=json.loads((R/'extraction/generic-owner54.llbc').read_text());assert not data['has_errors']
-run('generic-owner-aeneas-v2',[AENEAS,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR1Generic54','-dest',str(R/'extraction/generic-owner'),'-subdir','AspisR1Generic54','-split-files','-emit-json',str(R/'extraction/generic-owner54.llbc')])
+run('generic-owner-aeneas-v3',[AENEAS,'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','AspisR1Generic54','-dest',str(R/'extraction/generic-owner'),'-subdir','AspisR1Generic54','-split-files','-emit-json',str(R/'extraction/generic-owner54.llbc')])
