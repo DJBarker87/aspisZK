@@ -1,0 +1,3 @@
+Successful side-zero generated Pair adapter body preserves canonicality of every successful mapped output-array read and returns its exact continuation/output identity. All products and array writes are tied to that same execution. The only domain premises are existing ap0/ap1/extra/weights mapped-read contracts; no independent child successes or canonical outputs are assumed. Shipped enclosing Weights::pair correspondence remains open.
+
+Focused Lean check: 16.867 seconds; peak aggregate RSS 3252715520 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

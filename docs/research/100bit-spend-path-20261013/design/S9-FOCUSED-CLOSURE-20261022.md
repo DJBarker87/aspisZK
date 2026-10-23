@@ -869,3 +869,59 @@ operands. Canonicality of the actual low/sum operands is being connected.
 All these focused checks passed with standard axioms and zero swap. No whole
 manifest replay, production Rust change or new CU benchmark was run. S9 and
 the full 100-bit soundness target remain OPEN.
+
+
+## Implementation frontier: adapter versus enclosing shipped Pair
+
+PROVED operation-level source semantics now cover the full Wide multiplication
+from a successful Pair-adapter call, including the exact source result, canonical
+actual mapped output and field-product decode. The mixed-operation proof also
+retains the internal normalized coefficient, its canonicality and exact decoded
+product. Three-add accumulation and generic nested-mapped array-update
+canonicality are checked; the side-zero and side-one adapter compositions use
+the actual same-execution child-call witnesses rather than fresh successes.
+
+Important scope correction: the generated Pair adapter is not yet proved to
+refine the enclosing shipped Weights::pair. The earlier extraction manifest
+explicitly marks its normalized caller candidate source_equivalent=false.
+The green adapter helper/projection decompositions do not remove that gap.
+In these packets, references to an actual Pair call mean the concrete call
+in the generated adapter, not an established whole-method Rust refinement.
+
+The current shipped Pair method and factored helper bodies were isolated
+without synthetic projection shims. Charon succeeded; Aeneas rejected outer
+breaks/returns in nested fallible loops. A guard-only candidate did not fix
+this. Isolating the fallible loops into small helpers is under feasibility
+test; it is not adopted source, and equivalence, artifact identity and CU
+impact are unestablished. Explicit field/parser/helper stub environments in
+the diagnostic cut remain correspondence obligations.
+
+Still OPEN: enclosing shipped Pair correspondence, sampler caller/constructor
+provenance, remaining input contracts and final source/release composition.
+No production Rust change, new CU measurement or full release replay has
+been performed here. S9 and the 100-bit soundness target remain unestablished.
+
+
+## Current focused continuation, 2026-10-23
+
+PROVED: the side-zero body and side-one body adapter packets now establish
+canonicality of every successful mapped read from their output arrays. Each
+uses the same execution's arithmetic and updates. The side-one result derives
+its low-input canonicality from the body prefix. All three packet checks passed;
+these are adapter results, not enclosing shipped Pair correspondence.
+
+CANDIDATE: the factored source caller now translates with the actual field,
+wide field, parser, twofold, grouped helper and accumulator source. The remaining
+explicit canonical Q.raw boundary is being connected to existing body-pinned
+proof owners. The selected path's tensor method is being incorporated; no
+unreachable placeholder is being treated as a proved native implementation.
+The Rust refactor remains isolated, with artifact identity and CU gates open.
+
+CANDIDATE: a fully initialized Box::new constructor extraction avoids the
+unsupported raw-pointer writes and has no external templates after replacing
+one fixed two-element iterator with its ordered writes. Types compiled; Funs
+and the same-execution extra-field theorem are being checked separately. This
+candidate changes allocation-failure behavior and is not adopted native source.
+
+The two-body adapter composition is being checked after correcting an earlier
+failed draft. No result from that failed check is counted as proved.
