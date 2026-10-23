@@ -718,3 +718,33 @@ weights.rs still match the extraction pins. No production code changed.
 The release cone, runtime/artifact correspondence and 100-bit target remain
 open. All four session slots resumed active work after an avoidable idle
 handoff; root owns the serial local compile/integration queue.
+
+
+## Square and product source composition continuation
+
+PROVED `14237698a4`: the genuine combined-cut CM31.square call succeeds
+on canonical coordinates and its mapped Result is the selected checked square.
+Its proof reuses the existing square operand/reducer semantics. PROVED
+`e0dc3bc83a`: checked Probe arithmetic maps to the selected checked CM carrier
+for add/sub/mul/by-r/double, preserving the full Result. These checked-to-checked
+maps do not remove canonicality at the wrapping-to-checked boundary.
+
+PROVED `439786f092`: the combined-cut QM31.mul maps through all nine actual
+source calls to the genuine QM multiplication cut, preserving failure and
+divergence. A deterministic symbolic generator emits the named component
+transport applications and distinct scoped source/target binders; --check
+reproduces the kernel-checked source. The same packet contains a generic
+reached-success bind lemma; it does not itself supply concrete canonicality.
+PROVED `bd27377a5f`: the separate full Wide multiplication extraction's
+QM multiplication body maps to that same actual QM arithmetic cut.
+
+Two earlier QM transport attempts hit the local Lean internal memory cap.
+They were not rerun with more memory: an explicit map-function-head equality
+prevented accidental reduction of the applied generated arithmetic body.
+The replacement isolated subtraction proof passed in 11.578 seconds below
+2.25 GB, zero swaps, standard axioms. Prior failures remain diagnostics.
+
+Outer QM square, actual WideExact.mul_qm31, full WideExact.mul canonical
+semantics and the complete source/caller/release joins remain in progress.
+S9 and the overall 100-bit target are still OPEN. No production source or
+CU artifact changed in these proof checks.
