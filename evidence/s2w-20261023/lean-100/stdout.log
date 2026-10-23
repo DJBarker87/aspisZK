@@ -1,0 +1,34 @@
+S2W_D189Entry.lean:12:5: error: unknown namespace `S2W_ReturnedCheckpoint`
+S2W_D189Entry.lean:29:4: error(lean.unknownIdentifier): Unknown identifier `source`
+S2W_D189Entry.lean:29:2: error: expected structure
+S2W_D189Entry.lean:62:79: error: Expected type must not contain free variables
+  [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880, e.snapshot 2 1768 1768].length ≤ Usize.max
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+S2W_D189Entry.lean:65:90: error: Tactic `decide` failed for proposition
+  7 ≤ Usize.max
+because its `Decidable` instance
+  Nat.decLe 7 Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match Nat.ble 7 Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+S2W_D189Entry.lean:71:2: error: Tactic `rfl` failed: The left-hand side
+  Slice.index_usize e.first 0#usize = ok (e.snapshot 0 58295 58295)
+is not definitionally equal to the right-hand side
+  Slice.index_usize e.first 1#usize = ok (e.snapshot 1 1880 1880) ∧
+    Slice.index_usize e.first 2#usize = ok (e.snapshot 2 1768 1768)
+
+e : Entry
+⊢ Slice.index_usize e.first 0#usize = ok (e.snapshot 0 58295 58295) ∧
+    Slice.index_usize e.first 1#usize = ok (e.snapshot 1 1880 1880) ∧
+      Slice.index_usize e.first 2#usize = ok (e.snapshot 2 1768 1768)
+S2W_D189Entry.lean:104:30: error(lean.unknownIdentifier): Unknown identifier `S2W.SnapshotJoin.data_success`
+S2W_D189Entry.lean:104:9: error: Tactic `rcases` failed: `x✝ : ?m.72` is not an inductive datatype
+'AspisR1.S2W_D189Entry.first_index' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_D189Entry.first_disjoint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_D189Entry.checkpoint_size' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
