@@ -1,0 +1,3 @@
+PROVED: canonical reads of the constructor zero-initialized factor matrix, using one generic repeated-array read theorem at each array level rather than normalization of the concrete matrix. The exact source-model ZERO literal is canonical. This supplies the factor-loop initial invariant; input producers, first/outer constructor loops, source/runtime normalization and the complete soundness theorem remain open.
+
+Focused Lean check: 19.504 seconds; peak aggregate RSS 2173124608 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

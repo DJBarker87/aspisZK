@@ -1168,3 +1168,31 @@ transcript calls (16.501 s, 3,271,491,584-byte aggregate RSS, zero swap, standar
 axioms). This handles the new emitted caller's explicit ZERO Result bind by
 same-call success inversion rather than replacing it and assuming trace
 equivalence. The emitted-caller proof itself is undergoing focused checks.
+
+CHECKED new source-pinned reference replay: all nine numerical reference/
+actual sampler targets passed, followed by the generalized caller, emitted
+caller, constructor alpha contract and helper composition in a complete
+selected-object environment. The former global Error-instance collision is
+resolved there. Independent alpha/sampler-success premises are discharged by
+the same actual emitted-caller execution; the canonical ap0/ap1 producers
+and same helper success remain explicit. Numerical reference origin/rebase
+and exact emitted-body slot substitution checkers pass. No whole source/
+runtime release replay or full Pair/security closure is claimed.
+
+PROVED constructor statement phase: both generated statement loops preserve
+canonical factor reads from their exact factor invariant and statement-point
+read contract (12.938 s, 2,179,317,760-byte aggregate RSS, zero swap, standard
+axioms). Pointscan loop and symbolic initial factors also passed; the actual
+statement-point producer/reverse carry and whole-constructor join remain in
+flight, as do concrete range/totality and source-normalization obligations.
+
+New actual Pair source progress (NUC evidence in the allocator-uniform
+candidate packet): full field+r0 bodies compile with standard-only Pair
+axioms after explicit kernel bounds replace 17 implicit native string proofs.
+The allocator is uniformly parameterized without preservation/content
+premises. Accepted heap fill has exact length for any returned Vec, and the
+actual S2 tensor proof initializes/canonicalizes all64 cells from arbitrary
+old scratch when constructor factors are canonical. This removes allocator-
+content dependence; primitive effects/runtime correspondence and full actual
+Pair-to-helper/source transport remain OPEN. No Rust/CU change was needed
+for the scratch proof.

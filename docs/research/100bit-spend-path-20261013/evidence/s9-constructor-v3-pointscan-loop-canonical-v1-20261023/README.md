@@ -1,0 +1,3 @@
+PROVED: successful execution of the actual generated constructor pointscan loop preserves canonical factor-array reads from canonical factor-array input and canonical successful reads of the exact z input. The proof uses the same-call outer body, verified inner loop and range-progress invariant; it assumes no independent arithmetic/body successes. Point producers, first constructor phase, unconditional totality/source normalization and full runtime/security correspondence remain open.
+
+Focused Lean check: 12.674 seconds; peak aggregate RSS 2188296192 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
