@@ -78,3 +78,50 @@ The native caller instantiates encode_at at M31 and QM31, whereas the
 current extracted owner is WideExact. Embedding those specializations, exact
 nodes_for provenance, leaf assembly and semantic/opening caller remain
 explicit. This stage does not establish native simulator payload equality.
+
+## Stage 3: exact owned node geometry
+
+The nodes owner extracts reversal, binary CM31 powering, repeated base-field
+doubling, one aligned node and the nine-cell array. J10618 rejects the
+backend's U8 shift operand; explicit Rust u32 shift casts repair the owner.
+J10619 accepts the revised extraction. No generated code is patched.
+
+J10622 proves arbitrary canonical CM31 powering for every u64 exponent.
+J10623 proves actual tcheb and its finite repetition. J10625 identifies the
+complete reversal with reverseBits. J10628 derives the deployed generator
+and exponent from owned point execution. J10632 proves one node and J10634
+the nine-cell source array. J10636 identifies the point with the stored circle
+point. J10640 proves nodeValue u d = doubledFactor (storedFirstLineX18 u) d,
+using the cleared-bit identity (J10631) and the existing 2^31 period proof.
+No concrete field-power table or large domain is normalized.
+
+J10620 rejects an annotation on an abbreviation; J10621 uses a keyword as a
+theorem name. J10624/26/30/33/35 are scalar/cast/parser/transparency drafts.
+J10627 is retired by dependency preflight before compiler invocation. J10629
+omits zero_mod. J10637 reaches the unchanged 200000 heartbeat limit while
+reducing a coordinate projection; J10638 replaces it with a named coordinate
+equality. J10638/39 then expose a rewrite syntax issue and a redundant rfl.
+No limit is raised and no unchanged failed input is replayed. Every rejected
+diagnostic is retained. Accepted axioms are standard only.
+
+Kani reversal-v1 proves the complete owned 18-bit reversal equals native
+reverse_bits for every valid index (0.358 s, 130580 KiB). Alignment-v1 proves
+native shift alignment and the cleared-bit reversed index formula for every
+valid index/depth (0.391 s, 131192 KiB). Both exit 0, zero swap, optimized and
+capped. Native power's square/mul binding and complete native node-array
+constructor binding remain separate.
+
+Accepted compiles (all exit 0; revision and exact hashes in each receipt):
+
+| Attempt | Exact module | Wall | Peak RSS KiB | Swaps |
+|---|---|---|---:|---:|
+| J10619 | AspisR1ProducerRelease47.EncoderNodes54 | 0:01.44 | 2641244 | 0 |
+| J10622 | R1Z.ProverCommitEncoderPower54 | 0:02.11 | 4114776 | 0 |
+| J10623 | R1Z.ProverCommitEncoderDoubling54 | 0:01.90 | 4113212 | 0 |
+| J10625 | R1Z.ProverCommitEncoderReverse54 | 0:02.11 | 4117692 | 0 |
+| J10628 | R1Z.ProverCommitEncoderPoint54 | 0:02.20 | 4108880 | 0 |
+| J10631 | R1Z.ProverCommitEncoderAlignment54 | 0:00.74 | 1647784 | 0 |
+| J10632 | R1Z.ProverCommitEncoderNode54 | 0:01.81 | 4114956 | 0 |
+| J10634 | R1Z.ProverCommitEncoderNodes54 | 0:02.12 | 4121100 | 0 |
+| J10636 | R1Z.ProverCommitEncoderCircle54 | 0:01.90 | 4110296 | 0 |
+| J10640 | R1Z.ProverCommitEncoderGeometry54 | 0:01.91 | 4103248 | 0 |
