@@ -1,0 +1,3 @@
+Small symbolic factor-shape, quarter congruence, ring-hom triple-product and scaled-dot transports on abstract field variables. These named facts prevent normalization of concrete source-buffer observations during the actual constructor-row/model dual-fold join. No implementation, source caller, table meaning or security claim is asserted by this generic algebra packet.
+
+Focused Lean check: 5.817 seconds; peak aggregate RSS 1835974656 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
