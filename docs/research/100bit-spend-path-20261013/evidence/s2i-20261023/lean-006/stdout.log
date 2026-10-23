@@ -1,0 +1,27 @@
+S2I_StageJoin.lean:64:2: error: Type mismatch: After simplification, term
+  joined
+ has type
+  @Eq (List (Bytes × State) × Bool)
+    ((eval H (batch parsed q batch0)).1 ++
+        (bindObservation H (observe after, some (resumedSource i.data p a)) fun resumed =>
+            match resumed with
+            | none => Program.done false
+            | some state => stage2 parsed q tr i state).1,
+      (bindObservation H (observe after, some (resumedSource i.data p a)) fun resumed =>
+          match resumed with
+          | none => Program.done false
+          | some state => stage2 parsed q tr i state).2)
+    (eval H (dV_frozen2 stored tr m))
+but is expected to have type
+  @Eq (List (Bytes × State) × Bool)
+    ((eval H (batch parsed q batch0)).1 ++
+        (bindObservation H (observe after, some (resumedSource i.data p a)) fun resumed =>
+            match resumed with
+            | none => Program.done false
+            | some state => stage2 parsed q tr i state).1,
+      (bindObservation H (observe after, some (resumedSource i.data p a)) fun resumed =>
+          match resumed with
+          | none => Program.done false
+          | some state => stage2 parsed q tr i state).2)
+    (eval H (dV_frozen2 stored tr m))
+'AspisR1.S2I.StageJoin.ordered_checkpoint_batches' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -246,3 +246,72 @@ When adopting S3, update the aggregate diagnostic check of the old anonymous
 `instDiscriminantErrorIsize` to the new qualified S3 instance name (or use
 `#synth Aeneas.Std.Discriminant AspisR1S3InactiveSource.r0.Error Aeneas.Std.Isize`).
 That old-name check intentionally describes the retained, untouched candidate.
+
+## S2-I request — 2026-10-23: full forest public and composed first child
+
+S2-I has NOT proved these session-A-owned children. The exact requested
+statement types are `AspisR1.S2I.SessionAStatements.FullForestPublicPort`,
+`FullForestPublicShape`, `ComposedFirstPort`, `ComposedFirstValue` in
+`lean/S2I_SessionAStatements.lean`. These are goal definitions, not assumptions
+adopted by S2 or proved implementation instances. Their complete signatures
+use the existing S2E full Statement, Vec, ProgramError and Result carriers:
+
+```lean
+PublicEval S := S → Statement →
+  Result ((core.result.Result (alloc.vec.Vec U8) PE) × S)
+FirstEval S := S → Statement → Slice U8 → Slice U8 → Usize →
+  Result ((core.result.Result (alloc.vec.Vec U8) PE) × S)
+
+FullForestPublicPort native children :=
+  ∀ state statement,
+    native state statement = children.«public» state statement
+FullForestPublicShape native :=
+  ∀ state statement bytes after,
+    native state statement = ok (.Ok bytes,after) →
+    bytes.val.length = 1880 ∧
+      bytes.val.take 4 = [65#u8,83#u8,70#u8,56#u8]
+ComposedFirstPort native children :=
+  ∀ state statement publicInput proof split,
+    native state statement publicInput proof split =
+      children.first state statement publicInput proof split
+ComposedFirstValue native ops vops :=
+  ∀ state statement publicInput proof split cp after,
+    native state statement publicInput proof split = ok (.Ok cp,after) →
+    S2G.first ops vops statement publicInput proof split = ok (.Ok cp)
+```
+
+Required deliverable: CONCRETE definitions and proofs inhabiting these types,
+not universally quantified arbitrary encoder/verifier callbacks. `native` must
+be the actual source evaluator and `children` its installed S2E child. S must
+be the native/owned admitted cut carrier, with original external byte snapshots,
+Box/Vec owners, allocator and ordered runtime/oracle effects. If S is a subtype,
+its admission predicate must contain only independently derived runtime/cut
+invariants, never child success, output equality or a forest serialization fact.
+The native↔owned relation is S2-H's interface; an inert ghost is insufficient.
+An explicit relation for external execution traces must additionally retain
+query prefixes on outer fail/div/abort, since Result itself returns no state
+in those cases. The equations above preserve inner Err states but do not
+manufacture an abort trace.
+
+For `full_forest_public_port`, provide the full native
+`encode_pool_v1_pair_forest_terminal_statement_v1` serializer, both private
+transfer and withdrawal, all common/live-snapshot/frontier/payment fields,
+complete ASF8 Vec1880 bytes, original format-error mapping to
+InvalidInstructionData, allocation/abort and argument/account frame. The
+concrete reference encoder definition must identify every byte, including
+reserved/header fields; width/magic alone is insufficient. Payment216
+`encoder_eq` and `RepinS6First.reuse_decoded` do not establish this theorem.
+
+For `first_decoded_port`, instantiate the actual adopted candidate.tx1,
+SolanaDigest and release observer None. Bind semantic_public to the SAME full
+statement, original public1880 and proof57607 slices, instruction split10/11,
+parser/node views, S1 prepared/challenge provenance, S3 coefficients, S4 dots,
+S5 finish and S9 side updates. Include batch0, ten reached query callbacks,
+checkpoint writer, exact returned Vec/capacity/ownership and all ordered digest,
+error-log and allocation events. Rejected prefixes and error mapping must agree;
+an accepted batch equality or an independently successful checkpoint is not
+an instance. Do not assert callee-wide length1768 without a separate proof:
+S2's existing first value theorem obtains that length at the later caller gate.
+
+No source adoption, stronger cryptographic assumption, reduced metric or
+new SDK trust field is requested. These goals remain open after this handoff.
