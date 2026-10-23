@@ -420,3 +420,42 @@ A source-indexed carrier construction/transport is the next concrete bridge,
 followed by the same-state body interpretations and model-order proof.
 See `evidence/ports1-20261023/STAGE2.md` for the exact checked statement and
 `STAGE3.md` for the final focused audit and unchanged artifact scope.
+
+## Port1 19:35 ruling continuation — canonical carrier and experiment transport
+
+`Port1_StoredCarrier` now constructs the logical Input from arbitrary submitted
+public/stored bytes. `Port1_ParserCarrier.source_parse` binds its proof to the
+actual owned parser cone's returned semantic rows. `Port1_CanonicalJoin`
+restricts the raw join to those byte-indexed Inputs and proves annotation
+lifting for their erased-message-preserving ghost-word class. Original,
+canonicalized and annotated headline inputs are proved in that class.
+`Port1_CanonicalHeadline.final_soundness` retains the exact old Claims and
+StoredCarrierBinding at `lift P`, with P now returning arbitrary byte pairs;
+query accounting is unchanged. Exact before/after signatures and all remaining
+source/admission boundaries are in `evidence/ports1-20261023/STAGE4.md`.
+
+`Port1_ByteDriver.accepted_transport` connects the original physical byte
+entry to this canonical input under the named S6 decoder size consequence;
+no logical totalization branch becomes a physical gate. `substitute` applies
+the same thirteen body hypotheses and installed library to that byte entry.
+`Port1_ModelOrder.silent_before_batch` closes the total/no-read scheduling
+algebra, retaining rejected batch reads and actual returned states.
+
+| Port row | Continuation status |
+|---|---|
+| library/no-read | Previously closed for installed library and TrustedStd; unchanged |
+| logical carrier / annotation experiment class | Constructed and proved preserved; actual parser-cone linkage checked |
+| canonical headline / StoredCarrierBinding transport | Conditional theorem proved with unchanged Claims, event, bounds and runtime premise |
+| physical byte entry → canonical carrier | Accepted transport proved under explicit S6 PublicAdmission size port |
+| source annotation backward law | Previously closed; Physical law now also derives canonical two-pass lifting |
+| source driver body substitution | Proved on original byte entry, under same per-body hypotheses |
+| frozen2 model order | OPEN: scheduling algebra proved; fixed per-body model interpretation and same-state composition absent |
+| deployed runtime / source adoption / lowering / decoder port | OPEN; no new trust or artifact closure claimed |
+
+The raw canonical join is NOT discharged. `BodyJoins source model` is reflexive
+for every arbitrary model dictionary and by itself cannot identify the second
+dictionary with frozen2. The required next deliverable and exact retained
+boundaries are in `evidence/ports1-20261023/STAGE5.md`. This continuation does
+not replace that obligation by a new global equality premise. The deployed
+soundness target is not yet established. Shipped source and release ELFs are
+unchanged; no new rebuild/reconfirmation is claimed.
