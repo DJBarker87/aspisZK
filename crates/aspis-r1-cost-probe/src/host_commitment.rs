@@ -31,25 +31,30 @@ impl EncodingDomain {
         channels
             .try_reserve_exact(4)
             .map_err(|_| Error::Allocation)?;
-        let mut s=0;
-        while s<4 {
-            let mut coeff=[T::ZERO;256];
-            let mut d=0;
-            while d<256 {coeff[d]=message[4*d+s];d+=1;}
-            let channel=self.evaluate(&coeff,0)?;
-            channels.push(channel);
-            s+=1;
-        }
-        let mut word = filled(WORD_LEN, T::ZERO)?;
-        let mut u=0;
-        while u<self.xy.len() {
-            let values=fold::phi_inverse(T::from_m31(self.xy[u].x),T::from_m31(self.xy[u].y),
-                [channels[0][u],channels[1][u],channels[2][u],channels[3][u]]);
-            word[4*u..4*u+4].copy_from_slice(&values);
-            u+=1;
+        let first=self.encode_channel(message,0)?;channels.push(first);
+        let second=self.encode_channel(message,1)?;channels.push(second);
+        let third=self.encode_channel(message,2)?;channels.push(third);
+        let fourth=self.encode_channel(message,3)?;channels.push(fourth);
+        let mut word=filled(WORD_LEN,T::ZERO)?;
+        let count=self.xy.len();let mut u=0;
+        while u<count {
+            let values=encode_fibre(self.xy[u],&channels,u);
+            word[4*u..4*u+4].copy_from_slice(&values);u+=1;
         }
         Ok(word)
     }
+    fn encode_channel<T:CodeField>(&self,message:&Message<T>,s:usize)->Result<Vec<T>,Error> {
+        let mut coefficients=[T::ZERO;256];let mut d=0;
+        while d<256 {let value=message[4*d+s];coefficients[d]=value;d+=1;}
+        self.evaluate(&coefficients,0)
+    }
+
+}
+
+fn encode_fibre<T:CodeField>(point:Point<M31>,channels:&[Vec<T>],u:usize)->[T;4] {
+    let x=T::from_m31(point.x);let y=T::from_m31(point.y);
+    let values=[channels[0][u],channels[1][u],channels[2][u],channels[3][u]];
+    fold::phi_inverse(x,y,values)
 }
 
 fn split_coefficients<T:CodeField>(coefficients:&[T])->Result<(Vec<T>,Vec<T>),Error> {
@@ -191,26 +196,13 @@ impl Commitment {
         self.tree.multiproof(indices)
     }
     pub(crate) fn fill_opening(&self, u: FibreIndex, out: &mut FibreOpening) {
-        let count=self.lanes.len();
-        let mut j=0;
-        while j<count {
-            let values=opening_lane_values(&self.words[j],u);
-            let lane=self.lanes[j];
-            out.values[0][lane]=values[0];
-            out.values[1][lane]=values[1];
-            out.values[2][lane]=values[2];
-            out.values[3][lane]=values[3];
-            j+=1;
-        }
+        out.values=fill_opening_values(self,u,out.values,0);
         // No per-query path: authentication is the batch multiproof.
-        out.paths[if self.time == CommitmentTime::C1 {
-            0
-        } else {
-            1
-        }] = [[[0; 32]; 7]; 6];
+        let path=opening_path(self.time);
+        out.paths[path]=[[[0;32];7];6];
     }
     pub(crate) fn opening_salt(&self, u: FibreIndex) -> Option<&[u8; 32]> {
-        self.private_salts.as_ref().map(|salts| salts.get(u.get()))
+        match &self.private_salts {Some(salts)=>Some(salts.get(u.get())),None=>None}
     }
 }
 
@@ -248,13 +240,7 @@ fn encode_commitment_words(domain:&EncodingDomain,messages:&[Message<E>],variant
             // Validate in source order before launching a public lane partition.
             validate_commitment_lanes(messages,lanes)?;
             let encoded=crate::host_work::map(200,lanes.len(),|i| {
-                let l=lanes[i];
-                let coefficients=variant.coefficients(&messages[l]);
-                if l<26 {
-                    domain.encode(&coefficients.map(|x|M31(x.to_limbs()[0]))).map(Word::Base)
-                } else {
-                    domain.encode(&coefficients.map(|x|x.c0())).map(Word::Secure)
-                }
+                encode_commitment_lane(domain,messages,variant,lanes[i])
             });
             let mut encoded=encoded;
             // Consume in ascending lane order without copying encoded words.
@@ -288,22 +274,57 @@ fn encode_commitment_words(domain:&EncodingDomain,messages:&[Message<E>],variant
         }
     Ok(words)
 }
-fn commitment_leaves(hash:HashFn,time:CommitmentTime,lanes:&[usize],words:&[Word],private_salts:Option<&PrivateSalts>)->Result<Vec<[u8;32]>,Error> {
-    let count=FIBRE_COUNT;
+fn encode_commitment_lane(domain:&EncodingDomain,messages:&[Message<E>],variant:crate::transport::Variant,lane:usize)->Result<Word,Error> {
+    let coefficients=variant.coefficients(&messages[lane]);
+    if lane<26 {
+        let base=base_coefficients(&coefficients);
+        Ok(Word::Base(domain.encode(&base)?))
+    } else {
+        let secure=secure_coefficients(&coefficients);
+        Ok(Word::Secure(domain.encode(&secure)?))
+    }
+}
+fn base_coefficients(coefficients:&Message<E>)->Message<M31> {
+    let mut out=[M31::ZERO;1024];let mut i=0;
+    while i<1024 {let value=M31(coefficients[i].to_limbs()[0]);out[i]=value;i+=1;}
+    out
+}
+fn secure_coefficients(coefficients:&Message<E>)->Message<QM31> {
+    let mut out=[QM31::ZERO;1024];let mut i=0;
+    while i<1024 {let value=coefficients[i].c0();out[i]=value;i+=1;}
+    out
+}
 
-        let mut leaves = filled(FIBRE_COUNT, [0; 32])?;
-        let mut u=0;
-        while u<count {
-            let (bytes,at)=commitment_leaf_bytes(words,lanes,u);
-            let tag = if time == CommitmentTime::C1 { merkle::C1_TAG } else { merkle::C2_TAG };
-            leaves[u] = if let Some(salts) = private_salts {
-                aspis_core::state_only_private_merkle::private_leaf_hash(hash, tag, &bytes[..at], salts.get(u))
-            } else {
-                merkle::leaf(hash, tag, &bytes[..at])
-            };
-            u+=1;
-        }
+fn commitment_leaves(hash:HashFn,time:CommitmentTime,lanes:&[usize],words:&[Word],private_salts:Option<&PrivateSalts>)->Result<Vec<[u8;32]>,Error> {
+    let leaves=filled(FIBRE_COUNT,[0;32])?;
+    let tag=commitment_tag(time);
+    let leaves=match private_salts {
+        Some(salts)=>salted_commitment_leaves(hash,tag,lanes,words,salts,leaves),
+        None=>plain_commitment_leaves(hash,tag,lanes,words,leaves),
+    };
     Ok(leaves)
+}
+fn commitment_tag(time:CommitmentTime)->u8 {
+    match time {CommitmentTime::C1=>merkle::C1_TAG,CommitmentTime::C2=>merkle::C2_TAG}
+}
+fn salted_commitment_leaves(hash:HashFn,tag:u8,lanes:&[usize],words:&[Word],salts:&PrivateSalts,mut leaves:Vec<[u8;32]>)->Vec<[u8;32]> {
+    let count=leaves.len();let mut u=0;
+    while u<count {
+        let (bytes,at)=commitment_leaf_bytes(words,lanes,u);
+        let salt=salts.get(u);
+        let leaf=aspis_core::state_only_private_merkle::private_leaf_hash(hash,tag,&bytes[..at],salt);
+        leaves[u]=leaf;u+=1;
+    }
+    leaves
+}
+fn plain_commitment_leaves(hash:HashFn,tag:u8,lanes:&[usize],words:&[Word],mut leaves:Vec<[u8;32]>)->Vec<[u8;32]> {
+    let count=leaves.len();let mut u=0;
+    while u<count {
+        let (bytes,at)=commitment_leaf_bytes(words,lanes,u);
+        let leaf=merkle::leaf(hash,tag,&bytes[..at]);
+        leaves[u]=leaf;u+=1;
+    }
+    leaves
 }
 
 fn commitment_leaf_bytes(words:&[Word],lanes:&[usize],u:usize)->([u8;480],usize) {
@@ -324,13 +345,16 @@ fn commitment_leaf_bytes(words:&[Word],lanes:&[usize],u:usize)->([u8;480],usize)
 }
 
 fn validate_lane(message:&Message<E>,lane:usize)->Result<(),Error> {
+    let first=if lane<26 {1} else {4};
     let mut row=0;
     while row<1024 {
         let limbs=message[row].to_limbs();
-        let mut i=if lane<26 {1} else {4};
-        while i<8 {if limbs[i]!=0 {return Err(Error::WrongField);}i+=1;}
-        row+=1;
+        validate_zero_tail(&limbs,first)?;row+=1;
     }
+    Ok(())
+}
+fn validate_zero_tail(limbs:&[u32;8],mut i:usize)->Result<(),Error> {
+    while i<8 {if limbs[i]!=0 {return Err(Error::WrongField);}i+=1;}
     Ok(())
 }
 
@@ -338,3 +362,13 @@ fn opening_lane_values(word:&Word,u:FibreIndex)->[E;4] {
     let at=4*u.get();
     [word.value(at),word.value(at+1),word.value(at+2),word.value(at+3)]
 }
+
+fn fill_opening_values(c:&Commitment,u:FibreIndex,mut values:[[E;29];4],j:usize)->[[E;29];4] {
+    if j==c.lanes.len() {return values;}
+    let lane=c.lanes[j];
+    let row=opening_lane_values(&c.words[j],u);
+    values[0][lane]=row[0];values[1][lane]=row[1];
+    values[2][lane]=row[2];values[3][lane]=row[3];
+    fill_opening_values(c,u,values,j+1)
+}
+fn opening_path(time:CommitmentTime)->usize {match time {CommitmentTime::C1=>0,CommitmentTime::C2=>1}}

@@ -27,3 +27,22 @@ fn raw_qm31_embedding_codec() {
     assert_eq!(QM31::from_le_bytes(&bytes[..16]),Some(e.c0()));
     assert_eq!(e.c1(),QM31::ZERO);
 }
+#[kani::proof]
+#[kani::unwind(40)]
+fn arbitrary_field_decoders_len16() {
+    let bytes:[u8;32]=kani::any();
+    let mut limbs=[0u32;8];
+    let mut valid=true;let mut qvalid=true;
+    for i in 0..8 {
+        limbs[i]=u32::from_le_bytes([bytes[4*i],bytes[4*i+1],bytes[4*i+2],bytes[4*i+3]]);
+        valid &= limbs[i]<P;
+        if i<4 {qvalid &= limbs[i]<P;}
+    }
+    let decoded=E::from_le_bytes(&bytes);
+    assert_eq!(decoded.is_some(),valid);
+    if let Some(e)=decoded {assert_eq!(e.to_limbs(),limbs);}
+    let decoded_q=QM31::from_le_bytes(&bytes[..16]);
+    assert_eq!(decoded_q.is_some(),qvalid);
+    if let Some(q)=decoded_q {assert_eq!([q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0],[limbs[0],limbs[1],limbs[2],limbs[3]]);}
+    assert_eq!(E::from_le_bytes(&bytes[..31]),None);
+}

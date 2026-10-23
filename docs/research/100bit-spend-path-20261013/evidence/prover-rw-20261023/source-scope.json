@@ -1,29 +1,77 @@
 {
   "base": "084f714ccd",
-  "source_revision": "eb362eae2b040a30a7e8ffddbd5d99504b6067e3",
+  "source_revision": "bee5ddbf0e4477a4ebe10f8e1c98fe425b10c75a+working-tree",
   "files": {
+    "crates/aspis-prover/src/state_only_entropy.rs": {
+      "sha256": "1d48a26ba021dae55242f005bf45f4cea311d89fa32bbb064975991b6efbd57d",
+      "bytes": 62542
+    },
+    "crates/aspis-prover/src/state_only_entropy_prover_rw_kani.rs": {
+      "sha256": "4ced420ea96301c87f567ea6cb7c184e36a2114d96bfee91d0c6a8fb15491055",
+      "bytes": 3102
+    },
+    "crates/aspis-prover/src/state_only_hiding.rs": {
+      "sha256": "b02e125623d5a3b8ea97c7f8bf9a3111b9cd3625abf3d7b356e4fbd15aa759e5",
+      "bytes": 73844
+    },
     "crates/aspis-r1-cost-probe/Cargo.toml": {
-      "sha256": "71d7f0ea9b49c9af422a655f2fe4d6e501c72ef217c56063a527be80e02e0b01",
-      "bytes": 4092
+      "sha256": "0b54d0ed5e1ab6a7e74e7eeb39e63f9503c359be7e412ab26e28f86b4d213d23",
+      "bytes": 4171
+    },
+    "crates/aspis-r1-cost-probe/examples/prover_rw_differential.rs": {
+      "sha256": "dee424833e9368ba232b3487c5290a391f7b0c9a75fd18f132696400904fb476",
+      "bytes": 7006
     },
     "crates/aspis-r1-cost-probe/examples/prover_rw_gate.rs": {
-      "sha256": "f7b07155ec4eb02ff540829b3f3e64f0f9b045994f6a80e4c14639c428344b18",
-      "bytes": 3322
+      "sha256": "a3de579cc3c946e5f70b51169f4b0b9d9e82bf0abff5d00984278c518462f4b5",
+      "bytes": 3890
+    },
+    "crates/aspis-r1-cost-probe/src/host_commitment.rs": {
+      "sha256": "ff5cc5bf6e0232ed7fa92a2a15b0cdb86d2e56a6cb4fda56ef3583a39b79f165",
+      "bytes": 14377
+    },
+    "crates/aspis-r1-cost-probe/src/host_compact.rs": {
+      "sha256": "03f2d2ca8a6200467dfc95049f9fb260bba8a515d10978cd951481184e1534e1",
+      "bytes": 1453
+    },
+    "crates/aspis-r1-cost-probe/src/host_semantic.rs": {
+      "sha256": "12cf92baea4d0f664bbd31355dc7f1fbdd39d30b3f997e688009a499ae80d830",
+      "bytes": 19793
+    },
+    "crates/aspis-r1-cost-probe/src/host_sumcheck.rs": {
+      "sha256": "d42126b787299781e33849e49ed8a866fc850ee7b6385b8df8aacc374aafa186",
+      "bytes": 6382
+    },
+    "crates/aspis-r1-cost-probe/src/host_transcript.rs": {
+      "sha256": "037f7fb7bd526c94e155544b09b3ecd17052475a3f72f6c88a0547f7f466f914",
+      "bytes": 4545
+    },
+    "crates/aspis-r1-cost-probe/src/host_tree.rs": {
+      "sha256": "aef29f8add711c38b9b3a6dd07aa65efd08846a16d23a2c35be179eef5062a61",
+      "bytes": 3604
+    },
+    "crates/aspis-r1-cost-probe/src/host_wire.rs": {
+      "sha256": "8802f4c8bba830c748bd22365f6a3372201178628d4e5526fe4133254336f3c0",
+      "bytes": 4055
+    },
+    "crates/aspis-r1-cost-probe/src/lib.rs": {
+      "sha256": "8d03c134841c22b6de8890d32bcffc26527db2abb9cbeeaa92651c27c291be90",
+      "bytes": 2104
     },
     "crates/aspis-r1-cost-probe/src/prover.rs": {
-      "sha256": "0921b91a2e2898a37652fc1571dfc25f0a06ed3b221910dcd4d653ec314ea0f9",
-      "bytes": 29945
+      "sha256": "ec93e05da16f97724340c17f2b15aee03e0bbf118321f503d13912f758737a4e",
+      "bytes": 34067
     }
   },
-  "scope": "One feature-gated host module plus a host-only example declaration. No verifier source changed.",
-  "module_gate": "lib.rs: #[cfg(feature = \"prover\")] pub mod prover; program-build never enables prover",
-  "elf_rebuild_run": false,
-  "elf_identity_claim": false,
+  "scope": "Selected host-only prover modules and optional aspis-prover dependency; shared verifier sources and core field/hash kernels unchanged.",
+  "module_gate": "All changed host_* and prover modules require prover; aspis-prover is optional and prover-gated. Program manifests enable program-build, not prover/ct-host-prover.",
+  "elf_rebuild_run": true,
+  "elf_identity_claim": "See continuation/elf-byte-comparison-proverw002.json for literal full-file comparison; later host-only source edits require closure assessment, not an unchanged SBF replay",
   "expected_elf_sha256": {
     "default": "d7d42f770883401e0104fb6e044f61a132fea7359943db225d581c5740fcffd0",
     "devnet": "2b2a9f0e7a2f93004ddbf207d02f5c5d5155d5c9bfdaeed21a78d638ae9be922",
     "pool": "121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548"
   },
-  "pin_source": "evidence/s2x-20261023/boundary-inventory.json; inherited pins, not rebuilt here",
+  "pin_source": "continuation/elf-identities.json and elf-byte-comparison-proverw002.json; actual capped proverw002 rebuilds and retained S2E artifacts",
   "print_axioms": "N/A: source scope audit"
 }

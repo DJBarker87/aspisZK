@@ -103,12 +103,21 @@ struct SensitiveQm31Vec(Vec<aspis_core::field::QM31>);
 
 impl Drop for SensitiveQm31Vec {
     fn drop(&mut self) {
-        for value in &mut self.0 {
-            // SAFETY: the buffer is uniquely owned by this drop guard.
-            unsafe { core::ptr::write_volatile(value, aspis_core::field::QM31::ZERO) };
+        let zero=aspis_core::field::QM31::ZERO;
+        let count=self.0.len();let mut index=0;
+        while index<count {
+            crate::state_only_hiding::volatile_clear_cell(&mut self.0[index],zero);
+            index+=1;
         }
         core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
     }
+}
+
+#[inline(always)]
+fn entropy_nonzero32(bytes:&[u8;32])->bool {
+    let mut combined=0u8;let mut i=0;
+    while i<32 {combined|=bytes[i];i+=1;}
+    combined!=0
 }
 
 impl StateOnlyAttemptSecrets {
@@ -204,7 +213,7 @@ impl StateOnlyAttemptSecrets {
     ) -> Result<Self, StateOnlyAttemptEntropyError> {
         let limit=ENTROPY_RETRY_LIMIT;
 
-        if mask_nonce == [0; 32] {
+        if !entropy_nonzero32(&mask_nonce) {
             return Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock);
         }
         let mut retry=0;
@@ -216,7 +225,7 @@ impl StateOnlyAttemptSecrets {
             let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);
             field_mask_entropy.copy_from_slice(&bytes[..32]);
             leaf_salt_seed.copy_from_slice(&bytes[32..]);
-            if *field_mask_entropy != [0; 32] && *leaf_salt_seed != [0; 32] {
+            if entropy_nonzero32(&field_mask_entropy) && entropy_nonzero32(&leaf_salt_seed) {
                 return Ok(Self {
                     mask_nonce,
                     field_mask_entropy,
@@ -944,12 +953,7 @@ impl DurableStateOnlyMaskNonceStore {
         hasher.update(ATTEMPT_RESERVATION_DOMAIN);
         hasher.update(mask_nonce);
         let digest: [u8; 32] = hasher.finalize().into();
-        let mut name = String::with_capacity(69);
-        for byte in digest {
-            use std::fmt::Write as _;
-            write!(&mut name, "{byte:02x}").expect("writing to String cannot fail");
-        }
-        name.push_str(".burn");
+        let name = reservation_name(digest,String::with_capacity(69),0);
         self.directory.join(name)
     }
 
@@ -979,6 +983,20 @@ impl DurableStateOnlyMaskNonceStore {
         sync_directory(&self.directory)?;
         Ok(true)
     }
+}
+
+fn reservation_name(digest:[u8;32],mut name:String,i:usize)->String {
+    if i==32 {
+        name.push_str(".burn");
+        return name;
+    }
+    let digits=["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"];
+    let byte=digest[i];
+    let high=digits[(byte>>4) as usize];
+    let low=digits[(byte&15) as usize];
+    name.push_str(high);
+    name.push_str(low);
+    reservation_name(digest,name,i+1)
 }
 
 impl StateOnlyMaskNonceStore for DurableStateOnlyMaskNonceStore {
@@ -1572,3 +1590,7 @@ mod prover_commit_four8 {
         assert_eq!(unsafe { CURSOR }, expected_calls);
     }
 }
+
+#[cfg(kani)]
+#[path="state_only_entropy_prover_rw_kani.rs"]
+mod prover_rw_kani;

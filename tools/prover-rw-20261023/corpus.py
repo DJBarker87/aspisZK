@@ -8,6 +8,7 @@ B=dict(zip(['baseline','candidate'],map(Path,sys.argv[1:3])));O=Path(sys.argv[3]
 pins={k:dict(path=str(b),sha256=hashlib.sha256(b.read_bytes()).hexdigest(),bytes=b.stat().st_size) for k,b in B.items()}
 (O/'binaries.json').write_text(json.dumps(pins,indent=2)+'\n')
 completed=[];started=time.monotonic();review=started
+oracle_cases={1006,1007,1010,1011}
 for coin in range(1000,2000):
     # Functional gate only: two isolated processes, each with 16 fixed workers.
     # Together they stay below TasksMax=64 and the original 8 GiB memory cap.
@@ -15,7 +16,7 @@ for coin in range(1000,2000):
     try:
         for kind in ['baseline','candidate']:
             out=O/f'{coin}-{kind}'
-            children.append(subprocess.Popen([str(B[kind]),str(out),str(coin),'1','0']))
+            children.append(subprocess.Popen([str(B[kind]),str(out),str(coin),'1','1' if coin in oracle_cases else '0']))
         for child in children:
             code=child.wait(timeout=600)
             if code:raise RuntimeError(f'Corpus child exited {code}')
@@ -26,7 +27,7 @@ for coin in range(1000,2000):
     subprocess.run(['python3',str(R/'tools/prover-rw-20261023/compare-corpus.py'),str(O/f'{coin}-baseline'),str(O/f'{coin}-candidate'),str(comparison)],check=True,stdout=subprocess.DEVNULL)
     result=json.loads(comparison.read_text())
     completed.append(dict(coin=coin,utc=time.time(),**{k:v for k,v in result.items() if k!='comparisons'}))
-    summary=dict(required_pairs=1000,completed_pairs=len(completed),passed=all(r['passed'] for r in completed),complete=len(completed)==1000,fully_executed_proof_pairs=sum(r['fully_executed_proof_pairs'] for r in completed),rejected_prefix_pairs=sum(r['rejected_prefix_pairs'] for r in completed),cases=completed,workers_per_process=16,simultaneous_processes=2,scope='All cases call the complete retry owner. Five ordinary tape classes, one rejected-prefix class, four error classes; both variants in every class. Full supplied-oracle streams are a separate smoke gate; all corpus pairs compare actual worker events, callback/ledger-event order, ledger bytes, status, audit and full public/proof bytes.')
+    summary=dict(required_pairs=1000,completed_pairs=len(completed),passed=all(r['passed'] for r in completed),complete=len(completed)==1000,fully_executed_proof_pairs=sum(r['fully_executed_proof_pairs'] for r in completed),rejected_prefix_pairs=sum(r['rejected_prefix_pairs'] for r in completed),oracle_logged_pairs=sum(r['oracle_logged_pairs'] for r in completed),cases=completed,workers_per_process=16,simultaneous_processes=2,scope='All cases call the complete retry owner. Five ordinary tape classes, one rejected-prefix class, four error classes; both variants in every class. Four selected successful/rejected-prefix pairs also compare complete supplied-oracle streams; all corpus pairs compare actual worker events, callback/ledger-event order, ledger bytes, status, audit and full public/proof bytes.')
     (O/'progress.json').write_text(json.dumps(summary,indent=2)+'\n')
     print('CORPUS_PROGRESS',json.dumps({k:summary[k] for k in ['completed_pairs','passed','complete','fully_executed_proof_pairs','rejected_prefix_pairs']}),flush=True)
     if time.monotonic()-review>=600:
@@ -36,3 +37,5 @@ for coin in range(1000,2000):
 assert summary['complete'] and summary['completed_pairs']==1000
 assert summary['fully_executed_proof_pairs']==600
 assert summary['rejected_prefix_pairs']==100
+
+assert summary['oracle_logged_pairs']==4

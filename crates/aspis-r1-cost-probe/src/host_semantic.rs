@@ -210,30 +210,33 @@ fn boolean_point(row:usize)->[QM31;10] {
 fn initial_mask_sum(columns:&[Vec<QM31>;29])->QM31 {
     let mut sum=QM31::ZERO;let mut row=0;
     while row<1024 {
-        let point=boolean_point(row);
-        let mut semantic=[QM31::ZERO;16];let mut mask_only=[QM31::ZERO;10];
-        let mut i=0;
-        while i<16 {semantic[i]=columns[i][row];i+=1;}
-        i=0;while i<10 {mask_only[i]=columns[16+i][row];i+=1;}
-        sum=sum.add(aspis_core::state_only_hiding::state_only_selected_mask_value(&semantic,&mask_only,columns[27][row],&point));
-        row+=1;
+        let value=initial_mask_value(columns,row);
+        sum=sum.add(value);row+=1;
     }
     sum
 }
-fn claim_mask_value(claims:[QM31;29],point:&[QM31;10])->QM31 {
+fn initial_mask_value(columns:&[Vec<QM31>;29],row:usize)->QM31 {
+    let point=boolean_point(row);
     let mut semantic=[QM31::ZERO;16];let mut mask_only=[QM31::ZERO;10];
     let mut i=0;
-    while i<16 {semantic[i]=claims[i];i+=1;}
-    i=0;while i<10 {mask_only[i]=claims[16+i];i+=1;}
+    while i<16 {let value=columns[i][row];semantic[i]=value;i+=1;}
+    i=0;while i<10 {let value=columns[16+i][row];mask_only[i]=value;i+=1;}
+    aspis_core::state_only_hiding::state_only_selected_mask_value(&semantic,&mask_only,columns[27][row],&point)
+}
+fn claim_mask_value(claims:[QM31;29],point:&[QM31;10])->QM31 {
+    let mut semantic=[QM31::ZERO;16];let mut mask_only=[QM31::ZERO;10];
+    semantic.copy_from_slice(&claims[..16]);
+    mask_only.copy_from_slice(&claims[16..26]);
     aspis_core::state_only_hiding::state_only_selected_mask_value(&semantic,&mask_only,claims[27],point)
 }
+
 fn column_coefficients(column:&[QM31],variant:crate::transport::Variant)->[QM31;1024] {
     let rows:&[QM31;1024]=column.try_into().unwrap();
     variant.coefficients(rows)
 }
 fn extra_claims(columns:&[Vec<QM31>;29],variant:crate::transport::Variant,a:QM31,b:QM31)->[QM31;29] {
     let mut extras=[QM31::ZERO;29];let mut lane=0;
-    while lane<29 {extras[lane]=extra(&column_coefficients(&columns[lane],variant),a,b);lane+=1;}
+    while lane<29 {let coefficients=column_coefficients(&columns[lane],variant);let value=extra(&coefficients,a,b);extras[lane]=value;lane+=1;}
     extras
 }
 fn claim_bytes(claims:[[QM31;29];3],extras:[QM31;29])->Vec<u8> {
@@ -401,25 +404,48 @@ pub(crate) fn lean_copy_row_values(
         .map_err(|_| Error::Public)?;
     let mut values = alloc::vec![[[QM31::ZERO; 2]; 2]; 1024];
     let mut arity = alloc::vec![[0usize; 2]; 1024];
-    let mut index=0;
-    while index<registry.len() {
+    let count=registry.len();let mut index=0;
+    while index<count {
         let link=registry[index];
-        let mut side=0;
-        while side<2 {
-            let tuple=if side==0 {link.producer} else {link.consumer};
-            let row=usize::from(tuple.row);
-            if row>=1024 || arity[row][side]>=2 {return Err(Error::Public);}
-            let slot=arity[row][side];arity[row][side]+=1;
-            let mut limbs=[M31::ZERO;16];
-            let mut i=0;
-            while i<16 {limbs[i]=copy_tuple_limb(trace,tuple.limbs[i])?;i+=1;}
-            values[row][side][slot]=values[row][side][slot]
-                .add(aspis_statement::compress_tagged_tuple(link.tag,&limbs,lambda));
-            side+=1;
-        }
+        (values,arity)=copy_endpoint_values(trace,link.producer,link.tag,lambda,0,values,arity)?;
+        (values,arity)=copy_endpoint_values(trace,link.consumer,link.tag,lambda,1,values,arity)?;
         index+=1;
     }
     Ok(values)
+}
+
+#[cfg(feature="r1p-check")]
+fn copy_endpoint_values(trace:&aspis_statement::pool_v1::pair_forest_trace::PoolV1PairForestTraceV1,tuple:aspis_statement::pool_v1::pair_trace::PoolV1PairCopyTupleV1,tag:M31,lambda:QM31,side:usize,mut values:Vec<[[QM31;2];2]>,mut arity:Vec<[usize;2]>)->Result<(Vec<[[QM31;2];2]>,Vec<[usize;2]>),Error> {
+    let row=usize::from(tuple.row);
+    if row>=1024 || arity[row][side]>=2 {return Err(Error::Public);}
+    let slot=arity[row][side];arity[row][side]+=1;
+    let limbs=copy_tuple_values(trace,tuple)?;
+    let compressed=aspis_statement::compress_tagged_tuple(tag,&limbs,lambda);
+    let next=values[row][side][slot].add(compressed);
+    values[row][side][slot]=next;
+    Ok((values,arity))
+}
+
+#[cfg(feature="r1p-check")]
+fn copy_tuple_values(trace:&aspis_statement::pool_v1::pair_forest_trace::PoolV1PairForestTraceV1,tuple:aspis_statement::pool_v1::pair_trace::PoolV1PairCopyTupleV1)->Result<[M31;16],Error> {
+    Ok([
+        copy_tuple_limb(trace,tuple.limbs[0])?,
+        copy_tuple_limb(trace,tuple.limbs[1])?,
+        copy_tuple_limb(trace,tuple.limbs[2])?,
+        copy_tuple_limb(trace,tuple.limbs[3])?,
+        copy_tuple_limb(trace,tuple.limbs[4])?,
+        copy_tuple_limb(trace,tuple.limbs[5])?,
+        copy_tuple_limb(trace,tuple.limbs[6])?,
+        copy_tuple_limb(trace,tuple.limbs[7])?,
+        copy_tuple_limb(trace,tuple.limbs[8])?,
+        copy_tuple_limb(trace,tuple.limbs[9])?,
+        copy_tuple_limb(trace,tuple.limbs[10])?,
+        copy_tuple_limb(trace,tuple.limbs[11])?,
+        copy_tuple_limb(trace,tuple.limbs[12])?,
+        copy_tuple_limb(trace,tuple.limbs[13])?,
+        copy_tuple_limb(trace,tuple.limbs[14])?,
+        copy_tuple_limb(trace,tuple.limbs[15])?,
+    ])
 }
 
 #[cfg(feature="r1p-check")]

@@ -9,12 +9,13 @@ allowed={'crates/aspis-r1-cost-probe/'+p for p in [
  'Cargo.toml','examples/prover_rw_gate.rs','examples/prover_rw_differential.rs',
  'src/lib.rs','src/prover.rs','src/host_commitment.rs','src/host_semantic.rs',
  'src/host_sumcheck.rs','src/host_tree.rs','src/host_transcript.rs','src/host_wire.rs','src/host_compact.rs']}
-allowed.update({'crates/aspis-prover/src/state_only_entropy.rs','crates/aspis-prover/src/state_only_hiding.rs'})
+allowed.update({'crates/aspis-prover/src/state_only_entropy.rs','crates/aspis-prover/src/state_only_hiding.rs','crates/aspis-prover/src/state_only_entropy_prover_rw_kani.rs'})
 paths+=subprocess.check_output(['git','ls-files','--others','--exclude-standard','--','crates','programs'],cwd=r,text=True).splitlines()
 assert set(paths)<=allowed,paths
+assert '#[cfg(kani)]\n#[path="state_only_entropy_prover_rw_kani.rs"]\nmod prover_rw_kani;' in (r/'crates/aspis-prover/src/state_only_entropy.rs').read_text()
 example='crates/aspis-r1-cost-probe/examples/prover_rw_gate.rs'
 paths=sorted(set(paths+[example]))
-record=dict(base=base,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip(),
+record=dict(base=base,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip()+('+working-tree' if subprocess.run(['git','diff','--quiet','HEAD','--','crates','programs'],cwd=r).returncode else ''),
     files={p:dict(sha256=hashlib.sha256((r/p).read_bytes()).hexdigest(),bytes=(r/p).stat().st_size) for p in paths},
     scope='Selected host-only prover modules and optional aspis-prover dependency; shared verifier sources and core field/hash kernels unchanged.',
     module_gate='All changed host_* and prover modules require prover; aspis-prover is optional and prover-gated. Program manifests enable program-build, not prover/ct-host-prover.',

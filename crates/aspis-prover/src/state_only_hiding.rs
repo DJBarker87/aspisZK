@@ -315,16 +315,20 @@ fn h1_padding_inactive_sum(padding:&[QM31],active:&[bool;STATE_ONLY_POSEIDON_TRA
 
     let mut sum=QM31::ZERO;let mut row=0;
     while row<rows {
-        if !active[row] {sum=sum.add(padding[row]);}
+        sum=h1_padding_inactive_step(sum,padding,active,row);
         row+=1;
     }
     sum
+}
+#[inline(always)]
+fn h1_padding_inactive_step(sum:QM31,padding:&[QM31],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS],row:usize)->QM31 {
+    if active[row] {sum} else {sum.add(padding[row])}
 }
 fn add_h1_padding(h1:&mut[QM31],padding:&[QM31]) {
     let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;
 
     let mut row=0;
-    while row<rows {h1[row]=h1[row].add(padding[row]);row+=1;}
+    while row<rows {let next=h1[row].add(padding[row]);h1[row]=next;row+=1;}
 }
 
 pub fn apply_atomic_state_only_h1_padding_mask_v3(

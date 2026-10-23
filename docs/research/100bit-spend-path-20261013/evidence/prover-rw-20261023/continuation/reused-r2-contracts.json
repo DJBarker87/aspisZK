@@ -1,0 +1,71 @@
+{
+  "reused": [
+    {
+      "receipt": "docs/research/v8-r0-zk-20261009/r1p-final/RealR2_evidence/native-receipts/RealR2_context_v1/receipt.json",
+      "receipt_sha256": "3cfe98bee31d1b687f0a3e9b0df309ad84c5abbeb3ea2a51b4c2bf0925dcf971",
+      "target": [
+        "timeout",
+        "180",
+        "cargo",
+        "kani",
+        "-Z",
+        "unstable-options",
+        "-j",
+        "4",
+        "--exact",
+        "--harness",
+        "RealR2_checks::context_frame",
+        "--output-format",
+        "terse",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ],
+      "domain": "All context inputs; independently indexed byte frame over 81 positions",
+      "archive_inputs": {
+        "docs/research/v8-r0-zk-20261009/r1p-final/RealR2_evidence/native/Cargo.toml": "007e9536a5ec883f72cc463dc6d7088ed4624c007363628e5760b996b98b06ea",
+        "docs/research/v8-r0-zk-20261009/r1p-final/RealR2_evidence/native/lib.rs": "25d9556c01125f0b2cf89af69da06705a25e76deccfd5cc0acee4e51c0089290",
+        "docs/research/v8-r0-zk-20261009/r1p-final/RealR2_evidence/native/source.rs": "32ad8a5cd039a40b312b11916e1e79eaeb340ddbb7de117de0311a9b6908fcae"
+      },
+      "wall_seconds": 1.974,
+      "peak_rss_kib": 262284,
+      "swaps": 0
+    },
+    {
+      "receipt": "docs/research/v8-r0-zk-20261009/r1p-final/RealR2_evidence/native-receipts/RealR2_seed_v1/receipt.json",
+      "receipt_sha256": "fae7b948624d371bf0daf9c4a0a250b1ef6380523cc18372f47c603999da4561",
+      "target": [
+        "timeout",
+        "180",
+        "cargo",
+        "kani",
+        "-Z",
+        "unstable-options",
+        "-j",
+        "4",
+        "--exact",
+        "--harness",
+        "RealR2_checks::seed_frame_and_zero_guard",
+        "--output-format",
+        "terse",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ],
+      "domain": "All context/binding/entropy bytes, zero/nonzero guard, exact zero/one hash calls, ordered input slices and arbitrary returned digest",
+      "archive_inputs": {
+        "docs/research/v8-r0-zk-20261009/r1p-final/RealR2_evidence/native/Cargo.toml": "007e9536a5ec883f72cc463dc6d7088ed4624c007363628e5760b996b98b06ea",
+        "docs/research/v8-r0-zk-20261009/r1p-final/RealR2_evidence/native/lib.rs": "25d9556c01125f0b2cf89af69da06705a25e76deccfd5cc0acee4e51c0089290",
+        "docs/research/v8-r0-zk-20261009/r1p-final/RealR2_evidence/native/source.rs": "32ad8a5cd039a40b312b11916e1e79eaeb340ddbb7de117de0311a9b6908fcae"
+      },
+      "wall_seconds": 13.187,
+      "peak_rss_kib": 689040,
+      "swaps": 0
+    }
+  ],
+  "selected_body_sha256": {
+    "StateOnlyHidingContext::encode": "fcbd5c3e0b53e146eb870f28d4a744224131058876be16d1ff816321c2565ccb",
+    "derive_state_only_mask_seed_from_entropy_ref": "d514fe749b89b9ed9e66ee323b401d6aaf640a7280e13f17aa74ad744727b4e8"
+  },
+  "constants_checked": true,
+  "qualification": "Minimal matching context/error types in retained harness, not a full native caller proof; no freshness or random-oracle law established",
+  "whole_leaf_gate_complete": false
+}

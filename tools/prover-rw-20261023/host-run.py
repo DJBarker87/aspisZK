@@ -7,7 +7,7 @@ name=sys.argv[1];cmd=sys.argv[2:];O=H/name;O.mkdir()
 cg=Path('/sys/fs/cgroup'+Path('/proc/self/cgroup').read_text().split('0::')[1].strip())
 limits={n:(cg/n).read_text().strip() for n in ['memory.high','memory.max','memory.swap.max','pids.max']}
 assert limits=={'memory.high':str(6*2**30),'memory.max':str(8*2**30),'memory.swap.max':'0','pids.max':'64'},limits
-pins={str(p.relative_to(R)):hashlib.sha256(p.read_bytes()).hexdigest() for base in ['tools/prover-rw-20261023','tools/ct-kernels-20261022','crates/aspis-core','crates/aspis-r1-cost-probe','crates/aspis-prover','crates/aspis-statement','programs/r1-cost-probe','programs/aspis-pool','docs/research/v8-r0-zk-20261009/z4','docs/research/v8-r0-zk-20261009/c3'] for p in (R/base).rglob('*') if p.is_file() and 'target' not in p.parts and '__pycache__' not in p.parts and p.suffix!='.pyc'}
+pins={str(p.relative_to(R)):hashlib.sha256(p.read_bytes()).hexdigest() for base in ['tools/prover-rw-20261023','tools/ct-kernels-20261022','tools/r1-builder-reference','crates/aspis-core','crates/aspis-r1-cost-probe','crates/aspis-prover','crates/aspis-statement','programs/r1-cost-probe','programs/aspis-pool','docs/research/v8-r0-zk-20261009/z4','docs/research/v8-r0-zk-20261009/c3'] for p in (R/base).rglob('*') if p.is_file() and 'target' not in p.parts and '__pycache__' not in p.parts and p.suffix!='.pyc'}
 
 for q in ['Cargo.toml','Cargo.lock']:
  pins[q]=hashlib.sha256((R/q).read_bytes()).hexdigest()

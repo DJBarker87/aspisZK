@@ -498,25 +498,28 @@ fn append_query_openings(mut out:Vec<u8>,cc1:&Commitment,cc2:&Commitment,queries
 }
 
 /// No commitment or publication loan enters this nested byte-assembly loop.
-fn append_opening_values(mut out:Vec<u8>,opening:FibreOpening)->Vec<u8> {
-    let mut s=0;
-    while s<4 {
-        let mut lane=0;
-        while lane<26 {
-            out.extend_from_slice(&opening.values[s][lane].to_le_bytes()[..4]);
-            lane+=1;
-        }
-        out.extend_from_slice(&opening.values[s][28].to_le_bytes()[..16]);
-        s+=1;
+fn append_opening_values(out:Vec<u8>,opening:FibreOpening)->Vec<u8> {
+    let out=append_opening_base_row(out,&opening.values[0]);
+    let out=append_opening_base_row(out,&opening.values[1]);
+    let out=append_opening_base_row(out,&opening.values[2]);
+    let out=append_opening_base_row(out,&opening.values[3]);
+    let out=append_opening_secure_row(out,&opening.values[0]);
+    let out=append_opening_secure_row(out,&opening.values[1]);
+    let out=append_opening_secure_row(out,&opening.values[2]);
+    append_opening_secure_row(out,&opening.values[3])
+}
+fn append_opening_base_row(mut out:Vec<u8>,row:&[E;29])->Vec<u8> {
+    let mut lane=0;
+    while lane<26 {
+        let bytes=row[lane].to_le_bytes();out.extend_from_slice(&bytes[..4]);lane+=1;
     }
-    s=0;
-    while s<4 {
-        let mut lane=26;
-        while lane<28 {
-            out.extend_from_slice(&opening.values[s][lane].to_le_bytes()[..16]);
-            lane+=1;
-        }
-        s+=1;
+    let bytes=row[28].to_le_bytes();out.extend_from_slice(&bytes[..16]);
+    out
+}
+fn append_opening_secure_row(mut out:Vec<u8>,row:&[E;29])->Vec<u8> {
+    let mut lane=26;
+    while lane<28 {
+        let bytes=row[lane].to_le_bytes();out.extend_from_slice(&bytes[..16]);lane+=1;
     }
     out
 }
@@ -611,19 +614,28 @@ pub fn prove_masked_retrying_with(
     variant:Variant,
     hash:HashFn,
     nonce_store:&mut DurableStateOnlyMaskNonceStore,
-    mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,
+    next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,
 )->Result<RetriedProof,Error> {
     if variant!=Variant::S2 { return Err(Error::Semantic); }
-    let mut k=0;
-    while k<ATTEMPT_CAP {
-        let attempt=next_attempt(k)?;
-        match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {
-            Ok((proof,audit))=>return Ok(RetriedProof{proof,audit,attempts:k+1}),
-            Err(Error::Rejected)=>{k+=1;},
-            Err(e)=>return Err(e),
-        }
+    retry_attempt(public,compiled,variant,hash,nonce_store,next_attempt,0)
+}
+
+fn retry_attempt(
+    public:Public<'_>,
+    compiled:&PoolV1PairForestMergedC1CompilationV1,
+    variant:Variant,
+    hash:HashFn,
+    nonce_store:&mut DurableStateOnlyMaskNonceStore,
+    mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,
+    k:usize,
+)->Result<RetriedProof,Error> {
+    if k>=ATTEMPT_CAP { return Err(Error::AttemptsExhausted); }
+    let attempt=next_attempt(k)?;
+    match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {
+        Ok((proof,audit))=>Ok(RetriedProof{proof,audit,attempts:k+1}),
+        Err(Error::Rejected)=>retry_attempt(public,compiled,variant,hash,nonce_store,next_attempt,k+1),
+        Err(e)=>Err(e),
     }
-    Err(Error::AttemptsExhausted)
 }
 
 /// Test-only injection (cfg(test)): a queue of forced P_R1 verdicts, and a

@@ -31,6 +31,8 @@ if pins.exists():
             depth+=(source[end]=='{')-(source[end]=='}');end+=1
         body=source[a:end]
         cell_bindings.append(dict(**b,current_verbatim_sha256=hashlib.sha256(body.encode()).hexdigest(),selected_body_unchanged=hashlib.sha256(body.encode()).hexdigest()==b['verbatim_sha256']))
-result=dict(new_passing_receipts=new,volatile_cell_source_bindings=cell_bindings,new_kani_invocations=13,reused_passing_receipts=rows,unchanged_selected_sources=unchanged,new_kani_runs=13,whole_leaf_contract_gate_complete=False,remaining='Complete the extracted external-call inventory and map every arithmetic/hash/codec/parallel boundary to its exact checked contract and domain; unchanged source alone is not contract evidence. Reused CT and pole receipts are verified above; no claim that they cover the entire external inventory.',print_axioms='N/A: source/domain receipt audit; no new Lean theorem')
+r2=O/'continuation/reused-r2-contracts.json'
+retained_r2=json.loads(r2.read_text()) if r2.exists() else None
+result=dict(retained_r2_selected_body_audit=retained_r2,new_passing_receipts=new,volatile_cell_source_bindings=cell_bindings,new_kani_invocations=29,reused_passing_receipts=rows,unchanged_selected_sources=unchanged,new_kani_runs=29,whole_leaf_contract_gate_complete=False,remaining='Complete the extracted external-call inventory and map every arithmetic/hash/codec/parallel boundary to its exact checked contract and domain; unchanged source alone is not contract evidence. Reused CT and pole receipts are verified above; no claim that they cover the entire external inventory.',print_axioms='N/A: source/domain receipt audit; no new Lean theorem')
 (O/'leaf-contract-audit.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps(dict(reused_receipts=len(rows),unchanged_all=all(x['unchanged_from_v2'] for x in unchanged.values()),whole_leaf_contract_gate_complete=False)))

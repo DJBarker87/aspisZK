@@ -17,29 +17,33 @@ impl BinaryTree {
         let bits=LEAF_BITS as usize;
 
         let count=node_count(indices)?;
-        let mut out=Vec::with_capacity(32*count);
-        let mut level=indices.to_vec();
-        let mut depth=0;
-        while depth<bits {
-            let mut next=Vec::new();
-            let mut i=0;
-            while i<level.len() {
-                let parent=level[i]>>1;
-                let mut slot=0;
-                while slot<2 {
-                    let child=(parent<<1)|slot;
-                    if i<level.len() && level[i]==child {i+=1;}
-                    else {out.extend_from_slice(&self.levels[depth][child as usize]);}
-                    slot+=1;
-                }
-                next.push(parent);
-            }
-            level=next;
-            depth+=1;
-        }
+        let out=Vec::with_capacity(32*count);
+        let level=indices.to_vec();
+        let out=multiproof_levels(self,out,level,0,bits);
         if out.len()==32*count {Some(out)} else {None}
     }
 }
+fn multiproof_levels(tree:&BinaryTree,out:Vec<u8>,level:Vec<u32>,depth:usize,bits:usize)->Vec<u8> {
+    if depth==bits {return out;}
+    let (out,next)=multiproof_level(&tree.levels[depth],&level,out);
+    drop(level);
+    multiproof_levels(tree,out,next,depth+1,bits)
+}
+fn multiproof_level(nodes:&[[u8;32]],level:&[u32],mut out:Vec<u8>)->(Vec<u8>,Vec<u32>) {
+    let mut next=Vec::new();let count=level.len();let mut i=0;
+    while i<count {
+        let parent=level[i]>>1;
+        (out,i)=multiproof_child(nodes,level,out,i,parent<<1);
+        (out,i)=multiproof_child(nodes,level,out,i,(parent<<1)|1);
+        next.push(parent);
+    }
+    (out,next)
+}
+fn multiproof_child(nodes:&[[u8;32]],level:&[u32],mut out:Vec<u8>,i:usize,child:u32)->(Vec<u8>,usize) {
+    if i<level.len() && level[i]==child {(out,i+1)}
+    else {out.extend_from_slice(&nodes[child as usize]);(out,i)}
+}
+
 fn next_level<H:Digest32>(hash:H,previous:&[[u8;32]])->Vec<[u8;32]> {
     let n=previous.len()/2;
     let mut next=Vec::with_capacity(n);
@@ -65,29 +69,26 @@ fn check_indices(indices:&[u32])->Option<()> {
 }
 
 fn node_count(indices:&[u32])->Option<usize> {
-    let bits=LEAF_BITS;
-
     check_indices(indices)?;
-    let mut i;
     let mut level=[0u32;MAX_BATCH];
     level[..indices.len()].copy_from_slice(indices);
-    let mut n=indices.len();
-    let mut count=0;
-    let mut depth=0;
-    while depth<bits {
-        let mut w=0;
-        i=0;
-        while i<n {
-            let parent=level[i]>>1;
-            let mut j=i;
-            while j<n && level[j]>>1==parent {j+=1;}
-            count+=2-(j-i);
-            level[w]=parent;
-            w+=1;
-            i=j;
-        }
-        n=w;
-        depth+=1;
+    Some(count_levels(level,indices.len(),0,0,LEAF_BITS))
+}
+fn count_levels(level:[u32;MAX_BATCH],n:usize,depth:u32,count:usize,bits:u32)->usize {
+    if depth==bits {return count;}
+    let (level,n,missing)=count_level(level,n);
+    count_levels(level,n,depth+1,count+missing,bits)
+}
+fn count_level(mut level:[u32;MAX_BATCH],n:usize)->([u32;MAX_BATCH],usize,usize) {
+    let mut i=0;let mut w=0;let mut missing=0;
+    while i<n {
+        let (parent,take)=count_parent(&level,i,n);
+        level[w]=parent;w+=1;i+=take;missing+=2-take;
     }
-    Some(count)
+    (level,w,missing)
+}
+fn count_parent(level:&[u32;MAX_BATCH],i:usize,n:usize)->(u32,usize) {
+    let parent=level[i]>>1;
+    let take=if i+1<n && level[i+1]>>1==parent {2} else {1};
+    (parent,take)
 }

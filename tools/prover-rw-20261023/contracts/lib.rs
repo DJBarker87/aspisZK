@@ -35,3 +35,21 @@ mod verifier {pub const SEMANTIC_BYTES:usize=12903+29*32;}
 }
 
 #[cfg(kani)] mod field_codec_contracts;
+
+#[cfg(test)] mod decoder_precondition_tests;
+
+#[cfg(kani)]
+#[path="../../ct-kernels-20261022/reference/field.rs"] mod reference_field;
+#[cfg(kani)] mod inverse_chain_contracts;
+
+#[cfg(kani)] mod hash_fn_contracts;
+
+#[cfg(kani)] mod power_chain_contracts;
+
+#[cfg(kani)] mod generic_inverse_contracts;
+
+#[cfg(kani)] mod representation_contracts;
+
+#[cfg(kani)] mod scalar_adapter_contracts;
+
+#[cfg(kani)] mod raw_writer_contracts;

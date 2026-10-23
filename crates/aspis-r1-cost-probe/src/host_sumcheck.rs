@@ -9,35 +9,47 @@
 
     /// R0 keeps all 28 coefficients on the wire, embedded in E. This is the
     /// same interpolation used by the legacy prover, with a new row driver.
-    pub(crate) fn interpolate(values: &[QM31; 28]) -> [QM31; 28] {
-        let mut out = [QM31::ZERO; 28];
-        let mut i=0;
+    pub(crate) fn interpolate(values:&[QM31;28])->[QM31;28] {
+        let mut out=[QM31::ZERO;28];let mut i=0;
         while i<28 {
-            let mut basis = [M31::ZERO; 28];
-            basis[0] = M31::ONE;
-            let mut degree = 0;
-            let mut denominator = M31::ONE;
-            let mut j=0;
-            while j<28 {
-                if i!=j {
-                    let mut k=degree+2;
-                    while k>0 {
-                        k-=1;
-                        let shifted=if k==0 {M31::ZERO} else {basis[k-1]};
-                        basis[k]=shifted.sub(basis[k].mul(M31(j as u32)));
-                    }
-                    degree+=1;
-                    denominator=denominator.mul(M31(i as u32).sub(M31(j as u32)));
-                }
-                j+=1;
-            }
-            let scale = values[i].mul_m31(denominator.inv());
-            let mut k=0;
-            while k<28 {out[k]=out[k].add(scale.mul_m31(basis[k]));k+=1;}
-            i+=1;
+            let (basis,denominator)=interpolation_basis(i);
+            let scale=values[i].mul_m31(denominator.inv());
+            out=interpolation_accumulate(out,&basis,scale);i+=1;
         }
         out
     }
+fn interpolation_basis(i:usize)->([M31;28],M31) {
+    let mut basis=[M31::ZERO;28];basis[0]=M31::ONE;
+    interpolation_basis_steps(basis,M31::ONE,0,i,0)
+}
+fn interpolation_basis_steps(basis:[M31;28],denominator:M31,degree:usize,i:usize,j:usize)->([M31;28],M31) {
+    if j==28 {return (basis,denominator);}
+    if i==j {return interpolation_basis_steps(basis,denominator,degree,i,j+1);}
+    let basis=interpolation_extend(basis,degree,j);
+    let denominator=denominator.mul(M31(i as u32).sub(M31(j as u32)));
+    interpolation_basis_steps(basis,denominator,degree+1,i,j+1)
+}
+fn interpolation_extend(mut basis:[M31;28],degree:usize,j:usize)->[M31;28] {
+    let mut k=degree+2;
+    while k>0 {k-=1;basis=interpolation_basis_cell(basis,k,j);}
+    basis
+}
+fn interpolation_shift(basis:&[M31;28],k:usize)->M31 {
+    if k==0 {M31::ZERO} else {basis[k-1]}
+}
+fn interpolation_basis_cell(mut basis:[M31;28],k:usize,j:usize)->[M31;28] {
+    let shifted=interpolation_shift(&basis,k);
+    let next=shifted.sub(basis[k].mul(M31(j as u32)));
+    basis[k]=next;basis
+}
+fn interpolation_accumulate(mut out:[QM31;28],basis:&[M31;28],scale:QM31)->[QM31;28] {
+    let mut k=0;
+    while k<28 {
+        let value=out[k];let delta=scale.mul_m31(basis[k]);
+        let next=value.add(delta);out[k]=next;k+=1;
+    }
+    out
+}
 
 pub(crate) trait Oracle:Sync {
     fn evaluate(&self,point:&[QM31;10])->Result<QM31,Error>;
@@ -70,11 +82,7 @@ fn prove_sumcheck_round<H:aspis_core::Digest32,F:Oracle>(transcript:&mut Semanti
                     evaluate_assignment(oracle,point,round,assignments,i)
                 });
                 // Same sample and assignment order, including error selection.
-                let mut i=0;
-                while i<evaluations.len() {
-                    values[i/assignments]=values[i/assignments].add(evaluations[i]?);
-                    i+=1;
-                }
+                values=merge_evaluations(&evaluations,assignments)?;
             }
             #[cfg(not(feature="ct-host-prover"))]
             {
@@ -103,6 +111,18 @@ fn prove_sumcheck_round<H:aspis_core::Digest32,F:Oracle>(transcript:&mut Semanti
             output.extend_from_slice(&framed);
             running = evaluate_state_only_polynomial(&polynomial, point[round]);
     Ok((point,running))
+}
+
+fn merge_evaluations(evaluations:&[Result<QM31,Error>],assignments:usize)->Result<[QM31;28],Error> {
+    let mut values=[QM31::ZERO;28];
+    let count=evaluations.len();let mut i=0;
+    while i<count {
+        let value=evaluations[i]?;
+        let at=i/assignments;
+        let next=values[at].add(value);
+        values[at]=next;i+=1;
+    }
+    Ok(values)
 }
 
 fn evaluate_assignment<F:Oracle>(oracle:&F,point:[QM31;10],round:usize,assignments:usize,i:usize)->Result<QM31,Error> {

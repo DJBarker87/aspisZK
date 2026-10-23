@@ -294,3 +294,135 @@ Five alternating pairs per fixture, 16 workers, all compared return fields and
 full proof/public bytes equal. Host contention is recorded; these numbers do
 not judge the final absolute gate. `corpus-1000-001` is now running its required
 1000 full retry-owner paired cases on the same frozen production source.
+
+### Interrupted predecessor corpus and opening ownership probe
+
+`corpus-1000-001` was deliberately interrupted with SIGINT to its own Python
+driver after 70 matching pairs: 38 complete proof pairs and 8 rejected-prefix
+pairs. Exit 130, wall 897.240 s, GNU-time peak RSS 606544 KiB, cgroup peak
+1222713344 bytes, pids peak 35, zero swap and memory-pressure events. This is
+partial supporting evidence, not the 1000-run gate. Its ledgers and outputs
+remain retained. The reason is a necessary production source change to resolve
+the known opening-owner extraction failure; no unchanged replay is planned.
+
+The minimal opening ownership probe now translates with Charon and Aeneas
+(`opening-owner-probe-004`, `opening-owner-aeneas-004`). It separates recursive
+owned value assembly from an owned enum-to-path selector. This is a shape
+diagnostic with a minimal commitment frame and actual field/opening types,
+not a proof about the complete production commitment. Its replacement is now
+being checked in the actual complete attempt cone before another source freeze.
+Two retained R2 framing gates are additionally reused only after verbatim body,
+constant and archived-harness/input-hash checks; see reused-r2-contracts.json.
+
+### Decoder contract correction
+
+The first arbitrary-input decoder harness incorrectly asserted that a short
+QM31 slice returns None. Kani `field-codec-kani-arbitrary_field_decoders`
+finds a reachable slice-index panic (exit 1). The rejected harness is retained
+verbatim at tools/prover-rw-20261023/contracts/rejected/field_codec_contracts-v1.rs.txt.
+QM31::from_le_bytes requires at least 16 bytes; the selected host-wire caller
+checks its row length and passes a 16-byte cell. No shared decoder source changes.
+The concrete witness [0;15] panics, while WideExact decoding [0;31] returns
+None; `decoder-short-witness-001` checks this in optimized Rust (exit 0, 8.045 s,
+581536 KiB RSS, zero swap).
+
+The corrected full-length arbitrary-byte contract
+`field-codec-kani-arbitrary_field_decoders_len16` passes: full-width and QM31
+decoding succeeds exactly for canonical little-endian limbs, preserves all
+limbs, and WideExact rejects wrong length. Exit 0, 1.905 s, 289884 KiB RSS,
+zero swap. Budget used: 15 Kani invocations, 10 pass, 3 timeout, 1 CLI rejection,
+1 rejected short-input contract. No caller-length invariant is silently assumed
+as a proof of the complete pipeline; that binding remains an explicit obligation.
+
+### Further checked local kernel boundaries
+
+`inverse-chain-kani-001` passes the actual fixed inversion chain's 38 ordered
+multiplication calls against the retained field source, for canonical nonzero
+inputs and arbitrary canonical multiplication answers (3.817 s, 199812 KiB RSS).
+`generic-inverse-kani-001` checks the separate CodeField M31 zero guard and its
+61-call generic exponentiation route (5.119 s, 201620 KiB). These are parametric
+source/control contracts over retained, checked CT multiplication; they do not
+alone assert a new inverse-field-value theorem. The model-side fixed-chain facts
+in ProverCommitInverse48 remain eligible for an explicit typed binding.
+
+`hash-fn-kani-001` checks the complete private_leaf_hash/LegacyHashFn route, one
+call with exact three-slice framing/identity and an arbitrary answer (1.619 s,
+301548 KiB). It adds no SHA-256 or freshness assertion.
+
+Both symbolic-exponent encodings timed out at 90 seconds (power-chain-kani-001,
+public exponent below 1024; power-chain-kani-002, the selected 0..27 range).
+Their original sources are retained in contracts/rejected. No cap/timeout was
+raised. power-chain-kani-003 instead enumerates the tiny public domain 0..27
+while keeping the canonical base and all arithmetic answers symbolic. It passes
+all ordered multiply/square calls and results in 58.600 s, 966952 KiB RSS, no
+swap. This covers the selected weights caller's j % 28 exponent range, not
+arbitrary public exponents or an unconditional power-value theorem.
+
+representation-kani-raw_base_embeddings and
+representation-kani-canonical_scalar_equalities pass the actual F/C/K/E
+embedding/representation boundaries (0.745/1.247 s, 186372/199088 KiB RSS).
+scalar-adapter-kani-001 passes all twelve actual F/K/E CodeField arithmetic
+forwarders with exact operands, one delegated call and returned value, over
+already checked CT scalar contracts (4.549 s, 214248 KiB RSS). All exit 0 with
+zero swaps. The full external-call/domain audit remains open; these checks are
+not a per-attempt/model certificate. Budget: 24 Kani invocations, 17 passes,
+5 timeouts, 1 CLI rejection, 1 rejected short-input contract; Lean 0/100.
+
+### Actual per-attempt extraction accepted
+
+Charon extract-attempt-067 and Aeneas aeneas-attempt-064 accept the complete
+actual prove_masked_with_attempt control cone, through compact publication.
+Aeneas exits 0 in 15.611 s, peak RSS 601472 KiB, zero swaps. Its retained immutable
+LLBC input has 19 embedded source bindings and all match the source map at
+launch. Funs.lean and Types.lean are emitted on the host; external templates
+remain unbound and no generated whole-program module has been Lean-compiled.
+This establishes extractability only, not source/model output equality, the
+complete leaf-contract gate, a RunJoin, or an adoption result. The selected
+proof-account caller/retry root is now being extracted separately.
+
+The added raw-writer gate passes: all raw QM31 limbs, exact 16-byte output,
+unchanged adjacent bytes, and decoding iff every limb is canonical
+(raw-writer-kani-001: 2.542 s, 311396 KiB RSS, zero swap).
+The direct factory preflight initially lacks a pre-existing Kani-only reference
+directory and fails compilation; the unchanged tools/r1-builder-reference
+sources are copied into the host workspace and included in receipt hashing.
+The direct factory success/nonzero test then times out at 90 seconds. Its
+replacement checks the small 32-byte nonzero primitive and equivalent word
+model first (factory-kani-v3-zero32_kernel_contract: exit 0, 4.489 s, 496732 KiB).
+The factory-level test still times out at 90 seconds after that composition.
+These control-loop timeouts are retained and not promoted to kernel results.
+The remaining zero-seed-exhaustion and OS-error factory harnesses have not run.
+No entropy marginal law, factory-wide state theorem, or full caller certificate
+is claimed from these checks. Formal control belongs to the extracted owner.
+
+### Caller integration follow-up
+
+The first full proof-account caller translation stops at the retry callback loop.
+The replacement transfers the callback by value through at most eight recursive
+steps, preserving S2 admission, callback indices, first-success publication,
+Rejected-only retry and other-error propagation. The next translation reaches
+the actual durable reservation path. Its formatter loop also fails the Aeneas
+loop join; a direct hexadecimal loop fails at the same join. The current
+replacement owns the filename through 32 recursive byte steps. It preserves
+the 69-byte lowercase SHA-256 hexadecimal filename with .burn suffix and the
+same reservation hash and filesystem operations. Failed translations are
+retained as aeneas-caller-001 through -003, with corresponding source pins.
+
+The accepted per-attempt translation has 161 unbound type/function template
+holes, enumerated in continuation/translation-attempt-064-audit.json. None
+has been installed as an axiom. Translation acceptance is not Lean checking
+or a proof of the per-attempt/model equality. Kani usage is 29/60 invocations:
+19 passes, seven timeouts, one CLI rejection, one rejected short-input
+contract and one compilation failure. Lean usage remains 0/100.
+
+### Complete caller translation accepted
+
+extract-caller-005 exits 0 (113.734 s, 540160 KiB RSS);
+aeneas-caller-005 exits 0 (20.669 s, 667048 KiB RSS), both zero swap.
+The actual selected proof-account caller now translates through the 64-byte
+factory, durable reservation, recursive retry owner and all per-attempt
+control. continuation/translation-caller-005-audit.json pins emitted files
+and enumerates 287 unbound template holes. This is translation acceptance,
+not a Lean theorem or the source/model equality. Local production source
+pins were compared against the accepted translation receipt. The source is
+being frozen for pipeline-003 relative timing and corpus-1000-002.
