@@ -319,3 +319,39 @@ concrete deliverable. The phi result alone does not establish the leaf
 encoder. Remaining semantic guards/interpolation/whole native caller and
 complete simulator payload equality are also open. The target is not yet
 established; no FSExperiments conversion or join is attempted.
+
+
+## Final coherent import/axioms audit and handoff
+
+J10572 (`R1Z.ProverCommitAudit53`) imports all 30 part-53 live modules
+in one environment and prints all 58 public new theorem axioms plus the
+unchanged deployed headline theorem. Exit 0, wall 1.73 s, peak RSS
+4397276 KiB, zero swaps, source revision `7cbabb93ed`, 6G/8G/no-swap/64
+limits. All 59 reports use only subsets of
+`[propext, Classical.choice, Quot.sound]`; **no sorryAx remains in the
+accepted results**. This is a coherent import/axioms audit against the
+retained dependency closure, not a complete frozen-manifest release replay.
+No unchanged regression is repeated and no release result is claimed.
+
+`final-manifest.json` pins every root and theorem; `final-integrity.json`
+checks each live root source matches a successful compile receipt, scans
+all 31 changed/live audit Lean sources for forbidden proof tokens, and
+confirms no shipped crates/programs file changed from task base
+`3bf0a58481bc98110878803c3d8aacfec2371375`. The endpoint before/after
+snapshots are byte-identical. No ELF rebuild is triggered; no wallet/key
+is touched. No binary, LLBC, olean or archive is committed.
+
+**Stop:** the demonstrated encoder adapter extraction obstruction in stage 8
+prevents the actual native leaf-encoding refinement on this pinned toolchain.
+No new external axiom is accepted to bypass it. Native simulator output =
+`R0Z.RefPayload.simE` payload remains unproved. Semantic caller guards,
+interpolation/original-round provenance, native constructor/Vec bindings,
+challenge representation, node geometry and leaf images remain explicit
+continuation work; the retained terminal, owned complete batch/weights,
+opening cells/bytes and native phi results do not discharge them.
+
+The next free compile number is **J10573**. J10573–J10599 are untouched;
+J10518, J10535 and J10549 are explicitly retired without compiler invocation.
+Continue only with changed source/dependencies; do not replay a failed
+unchanged source, raise limits, install the rejected templates, or infer
+complete payload equality from the accepted local results.
