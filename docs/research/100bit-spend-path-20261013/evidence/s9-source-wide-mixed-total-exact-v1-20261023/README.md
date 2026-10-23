@@ -1,0 +1,3 @@
+The actual extracted WideExact.mul_qm31 call succeeds on canonical left input and arbitrary stored QM right input. Its same recovered source output is canonical after mapping and decodes to the componentwise field product with the exact normalized right operand returned by the four-remainder canonicalizer. The proof consumes the full source-to-Current Result map and existing checked QM semantics, with no separate source-success premise. Enclosing caller/runtime refinement remains open.
+
+Focused Lean check: 17.03 seconds; peak aggregate RSS 3214704640 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

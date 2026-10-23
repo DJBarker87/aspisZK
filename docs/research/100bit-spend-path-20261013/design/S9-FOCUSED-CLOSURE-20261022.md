@@ -776,8 +776,17 @@ PROVED focused mixed-product helper join (19.733 seconds, zero swaps): the
 combined source body maps to installed concrete FieldOps.wideMulQM31.
 This is a source-to-helper relation, not surrounding caller refinement.
 
-Still OPEN: installed-helper square join and mixed-product total/exact consumer,
-full WideExact.mul
+PROVED focused square helper join (8.481 seconds, zero swaps): the actual
+source square maps to installed actualQMSquare under canonical input.
+
+PROVED source square total/exact consumer in `f5e50a17c0`: no independent
+source-success premise, canonical output and exact square decode. The focused
+check took 15.275 seconds, zero swaps, standard axioms. PROVED source mixed
+total/exact consumer (17.030 seconds, zero swaps, standard axioms): arbitrary
+right input is normalized by the same four-remainder call; the recovered source
+output is canonical and has the corresponding exact componentwise product decode.
+
+Still OPEN: full WideExact.mul
 canonical source composition, the actual surrounding caller and input provenance,
 production adoption/refinement and runtime/artifact correspondence. The full
 100-bit release claim remains OPEN. Production Rust and CU artifacts are unchanged.
