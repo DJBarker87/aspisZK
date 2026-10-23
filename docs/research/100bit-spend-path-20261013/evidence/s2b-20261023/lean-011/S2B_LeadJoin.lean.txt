@@ -1,0 +1,63 @@
+import S2B_OriginalInputs
+import S2B_Syscalls
+import S2B_ChildEffects
+import CheckpointBytes5Inputs
+import MultiproofConePhysicalTransport
+
+/-! Source/lead carrier joins. Each theorem has one fixed execution index E.
+These implications do not prove that an admitted native execution supplies
+their frame, range, child or oracle premises. No native certificate is created. -/
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1.S2B_LeadJoin
+open AspisS2OwnedStage1 AspisS2OwnedStage1.SdkReference
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open MultiproofConeCanonical CheckpointBytes5Effect
+
+/-- Transport the actual indexed original-suffix observation into the lead's
+byte carrier. Original account bytes split into prefix688 and this suffix. -/
+theorem proof_bytes {Execution : Type} (E : Execution)
+    (read : Execution → alloc.vec.Vec U8) (selected : Execution → Slice U8)
+    (original : alloc.vec.Vec U8) (frame : read E = original)
+    (length : original.val.length = 58295)
+    (range : alloc.vec.Vec.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+      (read E) {start:=688#usize,«end»:=58295#usize} = ok (selected E)) :
+    bytesOf (selected E).val = OraclePortCompactDraft.slice (bytesOf original.val) 688 57607 ∧
+    (bytesOf (selected E).val).length = 57607 ∧
+    bytesOf original.val = (bytesOf original.val).take 688 ++ bytesOf (selected E).val := by
+  obtain ⟨shape,width,split⟩ := S2B_OriginalInputs.proof_range E read selected original frame length range
+  refine ⟨?_,?_,?_⟩
+  · rw [shape]
+    simp only [bytesOf,OraclePortCompactDraft.slice,List.map_take,List.map_drop]
+  · simpa only [bytesOf,List.length_map] using width
+  · have mapped := congrArg bytesOf split
+    simpa only [bytesOf,List.map_append,List.map_take] using mapped
+
+/-- The adapter syscall field, current trait and Stage2 trait all share the
+same parts/digest carrier. The total per-call oracle premise is explicit; its
+checkpoint weakening is derived, using the lead's installed lemma. -/
+theorem digest_children {Execution : Type} (E : Execution)
+    (ops : SdkReference.Ops) (verifierOps : AspisR1CurrentCaller.Ops)
+    (hashv : Execution → Parts → Result Digest) (H : Bytes → State)
+    (law : ∀ parts, hashv E parts = ok (MultiproofConePhysicalTransport.rawOracle H parts)) :
+    (∀ parts, (SourceInstallation.currentDigest
+      (SolanaDigest.Insts.Aspis_coreDigestDigest32
+        (Installation.install (S2B_Syscalls.withSyscalls ops (hashv E)) verifierOps))).digest () parts =
+          ok (MultiproofConePhysicalTransport.rawOracle H parts)) ∧
+    CheckpointBytes5Inputs.Oracle
+      (S2B_Syscalls.stage2Digest (S2B_Syscalls.withSyscalls ops (hashv E)) verifierOps) () H := by
+  have installed : ∀ parts,
+      (S2B_Syscalls.stage2Digest (S2B_Syscalls.withSyscalls ops (hashv E)) verifierOps).digest () parts =
+        ok (MultiproofConePhysicalTransport.rawOracle H parts) := law
+  refine ⟨law,?_⟩
+  intro parts digest success
+  have same := Result.ok.inj ((installed parts).symm.trans success)
+  subst digest
+  change AspisV8R19.SqueezeOracleBridge.decodeState
+    (AspisV8R19.SqueezeOracleBridge.encodeState
+      (H (AspisV8R19.SqueezeOracleBridge.flatten parts))) = _
+  exact AspisV8R19.SqueezeOracleBridge.state_roundtrip _
+
+#print axioms proof_bytes
+#print axioms digest_children
+end AspisR1.S2B_LeadJoin

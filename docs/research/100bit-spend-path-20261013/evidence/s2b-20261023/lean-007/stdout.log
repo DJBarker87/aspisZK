@@ -1,0 +1,43 @@
+S2B_Syscalls.lean:15:49: error: unexpected identifier; expected '}'
+S2B_Syscalls.lean:25:56: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.7 = ?m.7
+but is expected to have type
+  (withSyscalls ops (hashv E)).op11 = (withSyscalls other (hashv E)).op11
+in the application
+  Installation.install_dependencies (withSyscalls ops (hashv E)) (withSyscalls other (hashv E)) verifierOps rfl rfl
+S2B_Syscalls.lean:35:41: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.10 = ?m.10
+but is expected to have type
+  (Installation.install (withSyscalls ops (hashv E)) verifierOps).op11 err =
+    ok solana_program_error.ProgramError.InvalidInstructionData
+in the application
+  ⟨rfl, rfl⟩
+S2B_Syscalls.lean:62:2: error: 'change' tactic failed, pattern
+  (do
+      let r ←
+        SourceInstallation.currentChild verifierOps
+            (SdkReference.SolanaDigest.Insts.Aspis_coreDigestDigest32
+              (Installation.install (withSyscalls ops (hashv E)) verifierOps))
+            (pub E) (bytes E) (proof E) (split E) () none
+      SdkReference.core.result.Result.map_err
+          (BuiltinFnOnce aspis_r1_cost_probe.verifier.Error solana_program_error.ProgramError) r fun x =>
+          ok solana_program_error.ProgramError.InvalidInstructionData) =
+    ?m.20
+is not definitionally equal to target
+  (do
+      let r ←
+        (Installation.install (withSyscalls ops (hashv E)) verifierOps).op3
+            (SdkReference.SolanaDigest.Insts.Aspis_coreDigestDigest32
+              (Installation.install (withSyscalls ops (hashv E)) verifierOps))
+            (pub E) (bytes E) (proof E) (split E) () none
+      SdkReference.core.result.Result.map_err
+          (BuiltinFnOnce aspis_r1_cost_probe.verifier.Error solana_program_error.ProgramError) r
+          (Installation.install (withSyscalls ops (hashv E)) verifierOps).op11) =
+    ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+'AspisR1.S2B_Syscalls.adapter_seed_irrelevant' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2B_Syscalls.syscall_values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2B_Syscalls.first_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
