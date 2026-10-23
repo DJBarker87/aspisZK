@@ -1,0 +1,57 @@
+{"attempt": "lean-105", "exit_status": 1, "wall_seconds": 2.1152429649955593, "peak_rss_kib": "4392000", "swaps": "0", "print_axioms": ["'AspisR1.S2W_D189Wrappers.allocation_frame' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_D189Wrappers.first_accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.S2W_D189Wrappers.second_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+S2W_D189Wrappers.lean:117:6: error: Tactic `subst` failed: did not find equation for eliminating 'value'
+
+case Ok.returned
+A : Type
+native : S2W_ExtractionBoundary.First
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+std : TrustedStd copy
+allocator : Allocator A
+e : Entry
+program : S2W_ExtractionBoundary.Program
+data : Slice U8
+state final : A
+saved : alloc.vec.Vec U8
+after : Heap (ℕ → Record)
+accepted :
+  (do
+      let allocated ← reserve allocator (admittedSizes e 3 firstSizes) state
+      let result ← native program e.first data
+      match result with
+        | core.result.Result.Err error => ok (core.result.Result.Err error)
+        | core.result.Result.Ok saved =>
+      
+...
+) with
+          | Outcome.panic => fail Error.assertionFailure
+          | Outcome.returned written => do
+            let cleaned ← allocator.cleanup allocated
+            ok (core.result.Result.Ok (saved, release written (exclusiveGuard e.heap 2 0 0), cleaned))) =
+    ok (core.result.Result.Ok (saved, after, final))
+value : alloc.vec.Vec U8
+called : native program e.first data = ok (core.result.Result.Ok value)
+written : Heap (ℕ → Record)
+rest :
+  (match Outcome.returned written with
+    | Outcome.panic => fail Error.assertionFailure
+    | Outcome.returned written => do
+      let cleaned ← allocator.cleanup allocated
+      ok (core.result.Result.Ok (value, release written (exclusiveGuard e.heap 2 0 0), cleaned))) =
+    ok (core.result.Result.Ok (saved, after, final))
+copied :
+  copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1 (source (nativeBytes value)) =
+    Outcome.returned written
+cleaned : A
+left✝ : allocator.cleanup allocated = ok cleaned
+returned :
+  ok (core.result.Result.Ok (value, release written (exclusiveGuard e.heap 2 0 0), cleaned)) =
+    ok (core.result.Result.Ok (saved, after, final))
+equal : (value, release written (exclusiveGuard e.heap 2 0 0), cleaned) = (saved, after, final)
+same : (value, release written (exclusiveGuard e.heap 2 0 0), cleaned).1 = (saved, after, final).1
+⊢ native program e.first data = ok (core.result.Result.Ok saved) ∧
+    after = writeBracket e.heap 2 0 0 (source (nativeBytes saved))
+'AspisR1.S2W_D189Wrappers.allocation_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_D189Wrappers.first_accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_D189Wrappers.second_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r416a87ce269b45af83bdacdeb094ce3b.scope; invocation ID: eaf510aa4f0048b4a61e14e54862992d

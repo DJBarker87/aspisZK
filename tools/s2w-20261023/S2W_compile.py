@@ -6,7 +6,7 @@ TOOLS=ROOT/'tools/s2w-20261023'; E=ROOT/'evidence/s2w-20261023'
 HOST='dombarker@100.108.41.90'; REMOTE='/home/dombarker/project-offloads/codex-cx-s2w-20261023'
 module=sys.argv[1]; assert module.startswith('S2W_')
 source=ROOT/'docs/research/100bit-spend-path-20261013/lean'/f'{module}.lean'
-number=1+max((int(p.stem.split('-')[1]) for p in TOOLS.glob('lean-*.json')),default=0); assert number<=100
+number=1+max((int(p.stem.split('-')[1]) for p in TOOLS.glob('lean-*.json')),default=0); assert number<=169 # Continuations 5/6: fresh100, starts at charged069
 attempt=f'lean-{number:03d}'
 base=ROOT/'docs/research/100bit-spend-path-20261013/evidence/adapter-rw-20261023/lean-048/receipt.json'
 inherited=json.loads(base.read_text())
