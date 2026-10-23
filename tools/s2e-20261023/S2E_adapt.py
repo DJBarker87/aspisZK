@@ -17,21 +17,24 @@ def declarations(text):
   out[m[2]]=(text[begin:end].rstrip(),text[m.start():end].strip())
  return out
 old=declarations(prior);fresh=declarations(raw);shared={};kept=[];adapters=[]
+sdk_prior=(R/'docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/sources/owned-sdk-v3/generated/AspisS2SdkOwned/Types.lean.txt').read_text()
+sdk_types=declarations(sdk_prior)
+sdk_names={'OwnedAccount','OwnedDataCell','OwnedLamportsCell','OwnedSdk','LiveGuards'}
 for name,(full,body) in fresh.items():
  if name.startswith(('aspis_core.','aspis_statement.','aspis_r1_cost_probe.','solana_program_error.')):
   assert name in old,name
   norm=lambda x:re.sub(r'\s+',' ',x).strip()
   assert norm(body)==norm(old[name][1]),('protocol carrier mismatch',name)
   shared[name]=hashlib.sha256(body.encode()).hexdigest()
+ elif name.startswith('S2E_Reference.') and name.split('.')[-1] in sdk_names:
+  short=name.split('.')[-1]
+  norm=lambda text:re.sub(r'\s+',' ',text.replace('S2E_Reference.','')).strip()
+  assert norm(body)==norm(sdk_types[short][1]),('SDK carrier mismatch',name)
+  shared[name]=hashlib.sha256(body.encode()).hexdigest()
+  kept.append('abbrev '+name+' := AspisS2OwnedStage1.SdkReference.'+short)
  else:kept.append(full)
-t='import S2OwnedStage1TypesV1\nopen Aeneas Aeneas.Std Result ControlFlow Error AspisS2OwnedStage1\nnamespace S2E_Reference\n'+'\n\n'.join(kept)+'\nend S2E_Reference\n'
+t='import S2SdkOwnedTypesV1\nopen Aeneas Aeneas.Std Result ControlFlow Error AspisS2OwnedStage1\nnamespace S2E_Reference\n'+'\n\n'.join(kept)+'\nend S2E_Reference\n'
 t+='\n#print axioms S2E_Reference.S2E_Reference.OwnedSdk\n'
-canonical=R/'docs/research/100bit-spend-path-20261013/evidence/s2e-20261023/lean-003/sources/S2E_Types.lean'
-if canonical.exists():
- prior_types=canonical.read_text()
- normalized=lambda text:re.sub(r'\s+',' ',re.sub(r'/\*[\s\S]*?\*/|/--[\s\S]*?-/', '', text)).strip()
- assert normalized(t)==normalized(prior_types),'changed declaration needs fresh type gate'
- t=prior_types # source-location-only shifts reuse the exact checked declaration file
 (O/'S2E_Types.lean').write_text(t)
 fraw=(I/'Funs.lean.txt').read_text();f=fraw.replace('import S2E_Reference.Types','import S2E_Types').replace('import S2E_Reference.FunsExternal\n','')
 f=f.replace('open Aeneas Aeneas.Std Result ControlFlow Error','open Aeneas Aeneas.Std Result ControlFlow Error AspisS2OwnedStage1')

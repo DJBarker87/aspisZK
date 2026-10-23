@@ -134,6 +134,77 @@ theorem public_success {C S : Type} (ops : S2E_Reference.Ops)
     cases rest
     exact ⟨account,acquired,cell,publicBytes,beforeRelease,readAccount,borrowed,readCell,cloned,ran,release⟩
 
+/-- Gate, split byte, first child and proof release are a contiguous reference
+continuation. The returned proof vector is the clone actually used in that run. -/
+theorem proof_success {C S : Type} (ops : S2E_Reference.Ops)
+    (children : Children C S) (state finalState : S) (sdk finalSdk : SDK)
+    (statement : Statement) (publicInput data : Slice U8) (candidate : Array U8 688#usize)
+    (accepted : proof_continuation ops children state sdk statement publicInput data candidate =
+      ok (.Ok (),finalState,finalSdk)) :
+    ∃ proofAccount cpAccount acquired cell proofBytes splitByte split beforeRelease,
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount)
+        sdk.accounts 0#usize = ok proofAccount ∧
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount)
+        sdk.accounts 2#usize = ok cpAccount ∧
+      owned_acquire_shared sdk proofAccount.data_slot = ok (.Ok (),acquired) ∧
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell)
+        acquired.data_cells proofAccount.data_slot = ok cell ∧
+      alloc.vec.CloneVec.clone core.clone.CloneU8 cell.bytes = ok proofBytes ∧
+      proof_gate ops (alloc.vec.Vec.deref proofBytes) candidate = ok (.Ok ()) ∧
+      Slice.index_usize data 1#usize = ok splitByte ∧
+      lift (UScalar.cast .Usize splitByte) = ok split ∧
+      first_and_copy children state acquired statement publicInput (alloc.vec.Vec.deref proofBytes)
+        split cpAccount.data_slot = ok (.Ok (),finalState,beforeRelease) ∧
+      release_shared beforeRelease proofAccount.data_slot = ok finalSdk := by
+  unfold proof_continuation at accepted
+  obtain ⟨pa,readProof,rest⟩ := bind_success
+    (alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount) sdk.accounts 0#usize) _ _ accepted
+  obtain ⟨ca,readCP,rest⟩ := bind_success
+    (alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedAccount) sdk.accounts 2#usize) _ _ rest
+  obtain ⟨⟨reply,acquired⟩,borrowed,rest⟩ := bind_success (owned_acquire_shared sdk pa.data_slot) _ _ rest
+  cases reply with
+  | Err error =>
+    simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual] at rest
+    cases rest
+  | Ok unit =>
+    cases unit
+    simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at rest
+    obtain ⟨cell,readCell,rest⟩ := bind_success
+      (alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice OwnedDataCell) acquired.data_cells pa.data_slot) _ _ rest
+    obtain ⟨proofBytes,cloned,rest⟩ := bind_success (alloc.vec.CloneVec.clone core.clone.CloneU8 cell.bytes) _ _ rest
+    obtain ⟨reply,gated,rest⟩ := bind_success (proof_gate ops (alloc.vec.Vec.deref proofBytes) candidate) _ _ rest
+    cases reply with
+    | Err error =>
+      simp only [bind_tc_ok] at rest
+      obtain ⟨released,release,rest⟩ := bind_success (release_shared acquired pa.data_slot) _ _ rest
+      cases rest
+    | Ok unit =>
+      cases unit
+      let body : Result (S × SDK × core.result.Result Unit PE) := do
+        let byte ← Slice.index_usize data 1#usize
+        let split ← lift (UScalar.cast .Usize byte)
+        let (result,state1,sdk1) ← first_and_copy children state acquired statement publicInput
+          (alloc.vec.Vec.deref proofBytes) split ca.data_slot
+        ok (state1,sdk1,result)
+      change (do
+        let (state1,sdk1,result) ← body
+        let sdk2 ← release_shared sdk1 pa.data_slot
+        ok (result,state1,sdk2)) = ok (.Ok (),finalState,finalSdk) at rest
+      obtain ⟨⟨state1,beforeRelease,result⟩,ranBody,rest⟩ := bind_success body _ _ rest
+      obtain ⟨released,release,rest⟩ := bind_success (release_shared beforeRelease pa.data_slot) _ _ rest
+      cases rest
+      unfold body at ranBody
+      obtain ⟨splitByte,readSplit,rest⟩ := bind_success (Slice.index_usize data 1#usize) _ _ ranBody
+      obtain ⟨split,castSplit,rest⟩ := bind_success (lift (UScalar.cast .Usize splitByte)) _ _ rest
+      obtain ⟨⟨result,state2,sdk2⟩,ran,rest⟩ := bind_success
+        (first_and_copy children state acquired statement publicInput (alloc.vec.Vec.deref proofBytes) split ca.data_slot) _ _ rest
+      cases rest
+      exact ⟨pa,ca,acquired,cell,proofBytes,splitByte,split,beforeRelease,
+        readProof,readCP,borrowed,readCell,cloned,gated,readSplit,castSplit,ran,release⟩
+
+#print axioms proof_success
+
 #print axioms E
 #print axioms execution_prefix
 #print axioms checkpoint_success

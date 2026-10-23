@@ -10,6 +10,9 @@ assert limits=={'memory.high':'6442450944','memory.max':'8589934592','memory.swa
 env=os.environ.copy();env.update(cfg.get('env',{}))
 for f in cfg['sources']:
  p=base/f; target=out/'sources'/f; target.parent.mkdir(parents=True,exist_ok=True); target.write_bytes(p.read_bytes())
+if cfg['kind']=='lean' and 'selected_objects' in cfg['deps_fingerprint']:
+ for obj in cfg['deps_fingerprint']['selected_objects'].values():
+  assert hashlib.sha256(pathlib.Path(obj['path']).read_bytes()).hexdigest()==obj['sha256'],obj['path']
 start=time.monotonic()
 with (out/'stdout.log').open('w') as log:
  r=subprocess.run(['/usr/bin/time','-v','-o',str(out/'time.log'),'timeout',str(cfg.get('timeout',180)),*cfg['command']],cwd=base,env=env,stdout=log,stderr=subprocess.STDOUT)
