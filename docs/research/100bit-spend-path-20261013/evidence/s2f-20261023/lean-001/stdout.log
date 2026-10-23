@@ -1,0 +1,32 @@
+info: s2f: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+S2F_Sequence.lean:72:6: error: Type mismatch: After simplification, term
+  law
+ has type
+  Matches (rel original) (Outcome.error e n') (reference step r)
+but is expected to have type
+  Matches (rel original) (Outcome.error e n')
+    (match reference step r with
+    | Outcome.next t => run reference steps t
+    | Outcome.error e t => Outcome.error e t
+    | Outcome.abort t => Outcome.abort t)
+S2F_Sequence.lean:74:6: error: Type mismatch: After simplification, term
+  law
+ has type
+  Matches (rel original) (Outcome.abort n') (reference step r)
+but is expected to have type
+  Matches (rel original) (Outcome.abort n')
+    (match reference step r with
+    | Outcome.next t => run reference steps t
+    | Outcome.error e t => Outcome.error e t
+    | Outcome.abort t => Outcome.abort t)
+S2F_Sequence.lean:92:44: error: Application type mismatch: The argument
+  hr
+has type
+  run reference steps r = Outcome.next finalReference
+but is expected to have type
+  Outcome.next finalReference = Outcome.next finalReference
+in the application
+  And.intro hr
+'AspisR1.S2F.sequence_simulation' depends on axioms: [propext, sorryAx]
+'AspisR1.S2F.sequence_success' depends on axioms: [propext, sorryAx]
