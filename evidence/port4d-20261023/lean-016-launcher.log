@@ -1,0 +1,46 @@
+{"attempt": "lean-016", "exit_status": 1, "wall_seconds": 14.940932241006522, "peak_rss_kib": "4398564", "swaps": "0", "print_axioms": ["'AspisR1.Port4D_FinishFrozen.query_decision' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port4D_FinishFrozen.accepted_finish' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4D_FinishFrozen.lean:27:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if R15WriterModel.Prefix i.data q 10 then ?m.28 else ?m.29
+in the target expression
+  (match some q with
+    | none => false
+    | some q =>
+      match if R15WriterModel.Prefix i.data q 10 then some (R16DecisionCheckpoint.write i.data q) else none with
+      | none => false
+      | some saved => R16DecisionCheckpoint.tx2 (R16DecisionCheckpoint.resume saved)) =
+    true
+
+i : SourceInputs
+q : Fin 22 → Fin 262144
+decoded : LiteralQueryRead.decode i.queryBytes = some q
+matched : ∀ (j : Fin 22), MatchingSupport.match0 i.data (q j)
+hpref : R15WriterModel.Prefix i.data q 10
+⊢ (match some q wi
+...
+Port4D_FinishFrozen.lean:27:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if R15WriterModel.Prefix i.data q 10 then ?m.28 else ?m.29
+in the target expression
+  (match some q with
+    | none => false
+    | some q =>
+      match if R15WriterModel.Prefix i.data q 10 then some (R16DecisionCheckpoint.write i.data q) else none with
+      | none => false
+      | some saved => R16DecisionCheckpoint.tx2 (R16DecisionCheckpoint.resume saved)) =
+    true
+
+i : SourceInputs
+q : Fin 22 → Fin 262144
+decoded : LiteralQueryRead.decode i.queryBytes = some q
+matched : ∀ (j : Fin 22), MatchingSupport.match0 i.data (q j)
+hpref : R15WriterModel.Prefix i.data q 10
+⊢ (match some q with
+    | none => false
+    | some q =>
+      match if R15WriterModel.Prefix i.data q 10 then some (R16DecisionCheckpoint.write i.data q) else none with
+      | none => false
+      | some saved => R16DecisionCheckpoint.tx2 (R16DecisionCheckpoint.resume saved)) =
+    true
+'AspisR1.Port4D_FinishFrozen.query_decision' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4D_FinishFrozen.accepted_finish' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rcad41b5cd9a9461cb9df8473183780d0.scope; invocation ID: d91d6b9fa6d34f14950308d7f106aab9
