@@ -1,0 +1,3 @@
+Before: the actual source active4 theorem retained canonical incoming4 plus actual source coefficient/helper/active children, and yielded an additive incoming4 term. Its local value alone did not establish actual final array slot4.
+
+After: actual shared/unshared Trace derives those children and incomingZERO through the real regular/shared-high/index0-write frames. The explicit SAME final4 read itself has the original coefficient Fin4 equation on the SAME source stream and actual extra reads. Only source caller S2/alphaCan/extraCan/exactspan and SAME operational Trace/allocator context remain. Phantom numeric proof evidence is chosen internally, with no new security assumption or output data vector.

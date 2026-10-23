@@ -1,0 +1,254 @@
+import S9ActiveIncomingZeroV1
+import S9OriginalDotProofTransportV1
+import S9ActiveOriginalValueV1
+import S9InactiveFinalZeroCellV1
+import S9FinalPartsSourceTraceV1
+import S9PairLoop1SelfComponentV3
+import S9ActualPairPowersProducerV1
+import S9NativeS3OuterBodyV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1S9FinalPartsActiveRowV1
+open AspisR1S9ProductionPairCutV1
+open AspisR1S9ActualProcessKindTensorReachedV1 (Powers Parts)
+open AspisR1S9NativeS3WeightBodyV1 (W Low Can decode)
+open AspisR1S9NativeS3CoefficientBodyV1 (C)
+open AspisR1S9ActiveOriginalCoefficientsV1 (Q)
+open AspisR1S9ActiveFourValueStepV1 (cell4)
+open AspisR1S9ActualPairOldCarrierScalarV1 (toHelperW toHelperQ)
+open AspisR1S9CandidateFoldMapPrimitivesV1 (mapArray)
+open AspisR1S9InactiveFinalZeroCellV1 (exact_span_bytes_bound)
+variable [allocation : AspisR1S9AllocationInterfaceV1.Allocation]
+
+/-- OUTPUT relation: exact actual alpha/powers/inactive/helper/write/active
+source events identify the explicit SAME final parts4 and actual extra reads.
+No input semantic contract or independently chosen data vector is assumed. -/
+def ActiveRowStored (shared : Bool) (self : weights.Weights) (alpha : Slice W)
+    (f : Slice U8) (partsFinal : Parts)
+    (hspan : Slice.len f=Usize.wrapping_mul 64#usize 32#usize) : Prop :=
+  ∃ (a0 a1 : W) (ap0 ap1 : Powers) (low : Low) (inactive : W)
+    (before middle : Parts) (libra : Array W 4#usize) (coefficients : C)
+    (hcoeff : weights.s2_grouped_inactive_pair_loop0 {start:=0#usize,«end»:=64#usize} f
+      (Array.repeat 12#usize aspis_core.field.wide_exact.WideExact.ZERO)=.ok coefficients)
+    (q0 q1 : Q),
+    Slice.index_usize alpha 0#usize=.ok a0 ∧ weights.powers 4#usize a0=.ok ap0 ∧
+    Slice.index_usize alpha 1#usize=.ok a1 ∧ weights.powers 4#usize a1=.ok ap1 ∧
+    (if shared then weights.Weights.pair_loop7 {start:=0#usize,«end»:=16#usize} ap0 ap1
+      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+     else weights.Weights.pair_loop15 {start:=0#usize,«end»:=16#usize} ap0 ap1
+      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO))=.ok low ∧
+    weights.grouped_inactive_pair self f low=.ok inactive ∧
+    Array.update before 0#usize inactive=.ok middle ∧
+    weights.factored_s2_libra_weights ap0 ap1 self.extra=.ok libra ∧
+    (if shared then weights.Weights.pair_loop8 {start:=0#usize,«end»:=4#usize} f middle libra
+     else weights.Weights.pair_loop16 {start:=0#usize,«end»:=4#usize} f middle libra)=.ok partsFinal ∧
+    cell4 middle=aspis_core.field.wide_exact.WideExact.ZERO ∧
+    Array.index_usize self.extra 0#usize=.ok q0 ∧ Array.index_usize self.extra 1#usize=.ok q1 ∧
+    Array.index_usize partsFinal 4#usize=.ok (cell4 partsFinal) ∧ Can (cell4 partsFinal) ∧
+    decode (cell4 partsFinal)=
+      ∑j : Fin 4,AspisR1S9NativeS3ZeroPrefixV1.successfulInput f coefficients
+        (exact_span_bytes_bound f hspan) hcoeff j.val *
+        AspisR1.S2LibraFactoredIdentity.original
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.ScaledBase (mapArray toHelperW ap0))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.ScaledBase (mapArray toHelperW ap1))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.Seed (toHelperQ q0))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.Seed (toHelperQ q1)) j
+
+private theorem bind_success {A B : Type} (m : Result A) (next : A → Result B) (out : B)
+    (h : (do let x ← m;next x)=.ok out) : ∃ x,m=.ok x ∧ next x=.ok out := by
+  cases m with
+  | fail e => simp only [bind_tc_fail] at h;cases h
+  | div => simp only [bind_tc_div] at h;cases h
+  | ok x => exact ⟨x,rfl,h⟩
+
+theorem shared_trace_stored_active_row (self : weights.Weights) (alpha : Slice W)
+    (f : Slice U8) (kappa out : W) (partsFinal : Parts) (k : Array W 7#usize)
+    (hs2 : self.variant=transport.Variant.S2)
+    (halpha : ∀ i x,Slice.index_usize alpha i=.ok x → Can x)
+    (hextra : ∀ i q,Array.index_usize self.extra i=.ok q → AspisR1S9ActualPairQMHelperTransportV1.Canonical q)
+    (hspan : Slice.len f=Usize.wrapping_mul 64#usize 32#usize)
+    (htrace : AspisR1S9FinalPartsSourceTraceV1.SharedTrace self alpha f kappa out partsFinal k) :
+    ActiveRowStored true self alpha f partsFinal hspan := by
+  run_tac Lean.logInfo "active4 shared phase: entered"
+  rcases htrace with ⟨_,_,_,n,a0,a1,ap0,ap1,scratch,scratchOut,partsRegular,partsShared,selfCommon,common,partials,low,inactive,partsInactive,useFactored,libra,hn,hn64,ha0,hap0,ha1,hap1,hreserved,hregular,hcommon,hpartials,hhigh,hlow,hinactive,hpartsInactive,huse,hlibra,hactive,hk,hsum⟩
+  run_tac Lean.logInfo "active4 phase: trace destructed; powers"
+  have hp0 := AspisR1S9ActualPairPowersProducerV1.actual_powers_four_native_reads_canonical
+    a0 ap0 (halpha 0#usize a0 ha0) hap0
+  have hp1 := AspisR1S9ActualPairPowersProducerV1.actual_powers_four_native_reads_canonical
+    a1 ap1 (halpha 1#usize a1 ha1) hap1
+  have hsame := AspisR1S9PairLoop1SelfComponentV3.pair_loop1_first_component
+    {start:=0#usize,«end»:=16#usize} self selfCommon
+    (Array.repeat 16#usize aspis_core.field.QM31.ZERO) common hcommon
+  subst selfCommon
+  run_tac Lean.logInfo "active4 phase: powers/self ready; dispatch"
+  have hhelper := AspisR1S9InactiveFinalZeroCellV1.exact_s2_dispatch_helper
+    self f low inactive hs2 hspan hinactive
+  run_tac Lean.logInfo "active4 phase: dispatch ready; helper unfold"
+  unfold weights.s2_grouped_inactive_pair at hhelper
+  run_tac Lean.logInfo "active4 phase: helper unfolded; producer witness"
+  obtain ⟨coefficients,hcoeff,houter⟩ := bind_success _ _ _ hhelper
+  run_tac Lean.logInfo "active4 phase: producer witness ready; regular frame"
+  have hreg := AspisR1S9ActiveIncomingZeroV1.regular_cell4_zero self true alpha f n ap0 ap1
+    scratch scratchOut partsRegular hs2 hregular
+  have hhigh4 := AspisR1S9ActiveIncomingZeroV1.shared_high_preserves_cell4
+    partials self ap0 ap1 partsRegular partsShared hhigh
+  have hwrite4 := AspisR1S9ActiveIncomingZeroV1.inactive_write_preserves_cell4
+    partsShared partsInactive inactive hpartsInactive
+  have hzero : cell4 partsInactive=aspis_core.field.wide_exact.WideExact.ZERO := hwrite4.trans (hhigh4.trans hreg)
+  run_tac Lean.logInfo "active4 phase: incoming zero ready; canonical carry"
+  have ccarry : Can (cell4 partsInactive) := by
+    rw [hzero]
+    exact AspisR1S9ActualPairWideOutputCanonicalV1.zero_canonical
+  run_tac Lean.logInfo "active4 phase: carry ready; variant"
+  have hv : transport.Variant.Insts.CoreCmpPartialEqVariant.eq self.variant transport.Variant.S2=.ok true := by
+    rw [hs2]
+    simp [transport.Variant.Insts.CoreCmpPartialEqVariant.eq,transport.Variant.read_discriminant]
+  have htrue : useFactored=true := Result.ok.inj (huse.symm.trans hv)
+  subst useFactored
+  simp only [↓reduceIte] at hlibra
+  run_tac Lean.logInfo "active4 phase: helper branch ready; original source value"
+  obtain ⟨q0,q1,hq0,hq1,cfinal,hvalue⟩ := AspisR1S9ActiveOriginalValueV1.actual_active_original_four_term
+    f coefficients (exact_span_bytes_bound f hspan) hcoeff ap0 ap1 self.extra libra partsInactive partsFinal
+    hp0 hp1 hextra hlibra ccarry hactive
+  run_tac Lean.logInfo "active4 phase: original value ready; zero rewrite"
+  rw [hzero,AspisR1S9NativeS3OuterBodyV1.native_zero_decode,zero_add] at hvalue
+  run_tac Lean.logInfo "active4 phase: zero rewrite ready; final output tuple"
+  unfold ActiveRowStored
+  run_tac Lean.logInfo "active4 pack: predicate unfolded"
+  refine ⟨a0,a1,ap0,ap1,low,inactive,partsShared,partsInactive,libra,coefficients,hcoeff,q0,q1,?_⟩
+  run_tac Lean.logInfo "active4 pack: witnesses fixed"
+  refine ⟨ha0,?_⟩
+  run_tac Lean.logInfo "active4 pack: alpha0 fixed"
+  refine ⟨hap0,?_⟩
+  run_tac Lean.logInfo "active4 pack: powers0 fixed"
+  refine ⟨ha1,?_⟩
+  run_tac Lean.logInfo "active4 pack: alpha1 fixed"
+  refine ⟨hap1,?_⟩
+  run_tac Lean.logInfo "active4 pack: powers1 fixed"
+  refine ⟨hlow,?_⟩
+  run_tac Lean.logInfo "active4 pack: low fixed"
+  refine ⟨hinactive,?_⟩
+  run_tac Lean.logInfo "active4 pack: inactive fixed"
+  refine ⟨hpartsInactive,?_⟩
+  run_tac Lean.logInfo "active4 pack: write0 fixed"
+  refine ⟨hlibra,?_⟩
+  run_tac Lean.logInfo "active4 pack: private helper fixed"
+  refine ⟨hactive,?_⟩
+  run_tac Lean.logInfo "active4 pack: active run fixed"
+  refine ⟨hzero,?_⟩
+  run_tac Lean.logInfo "active4 pack: incoming zero fixed"
+  refine ⟨hq0,?_⟩
+  run_tac Lean.logInfo "active4 pack: extra0 fixed"
+  refine ⟨hq1,?_⟩
+  run_tac Lean.logInfo "active4 pack: extra1 fixed"
+  refine ⟨AspisR1S9ActiveIncomingZeroV1.cell4_read partsFinal,?_⟩
+  run_tac Lean.logInfo "active4 pack: final cell4 read fixed"
+  refine ⟨cfinal,?_⟩
+  run_tac Lean.logInfo "active4 pack: canonical final4 fixed"
+  let sourceBound : 4≤UScalar.cMax .Usize := by decide
+  let input := AspisR1S9NativeS3ZeroPrefixV1.successfulInput f coefficients (exact_span_bytes_bound f hspan) hcoeff
+  run_tac Lean.logInfo "active4 final: name inline-evidence dot"
+  have hsource : decode (cell4 partsFinal)=
+      AspisR1S9OriginalDotProofTransportV1.originalDotWithProof sourceBound input ap0 ap1 q0 q1 := by
+    dsimp only [AspisR1S9OriginalDotProofTransportV1.originalDotWithProof]
+    exact hvalue
+  run_tac Lean.logInfo "active4 final: source dot named"
+  have hd := congrArg (fun fn=>fn input ap0 ap1 q0 q1)
+    (AspisR1S9OriginalDotProofTransportV1.original_dot_bound_proof_irrel sourceBound ActiveRowStored._proof_3)
+  simpa only [AspisR1S9OriginalDotProofTransportV1.originalDotWithProof] using hsource.trans hd
+
+theorem unshared_trace_stored_active_row (self : weights.Weights) (alpha : Slice W)
+    (f : Slice U8) (kappa out : W) (partsFinal : Parts) (k : Array W 7#usize)
+    (hs2 : self.variant=transport.Variant.S2)
+    (halpha : ∀ i x,Slice.index_usize alpha i=.ok x → Can x)
+    (hextra : ∀ i q,Array.index_usize self.extra i=.ok q → AspisR1S9ActualPairQMHelperTransportV1.Canonical q)
+    (hspan : Slice.len f=Usize.wrapping_mul 64#usize 32#usize)
+    (htrace : AspisR1S9FinalPartsSourceTraceV1.UnsharedTrace self alpha f kappa out partsFinal k) :
+    ActiveRowStored false self alpha f partsFinal hspan := by
+  run_tac Lean.logInfo "active4 unshared phase: entered"
+  rcases htrace with ⟨_,_,_,n,a0,a1,ap0,ap1,scratch,scratchOut,partsRegular,low,inactive,partsInactive,useFactored,libra,hn,hn64,ha0,hap0,ha1,hap1,hreserved,hregular,hlow,hinactive,hpartsInactive,huse,hlibra,hactive,hk,hsum⟩
+  run_tac Lean.logInfo "active4 phase: trace destructed; powers"
+  have hp0 := AspisR1S9ActualPairPowersProducerV1.actual_powers_four_native_reads_canonical
+    a0 ap0 (halpha 0#usize a0 ha0) hap0
+  have hp1 := AspisR1S9ActualPairPowersProducerV1.actual_powers_four_native_reads_canonical
+    a1 ap1 (halpha 1#usize a1 ha1) hap1
+  run_tac Lean.logInfo "active4 phase: powers/self ready; dispatch"
+  have hhelper := AspisR1S9InactiveFinalZeroCellV1.exact_s2_dispatch_helper
+    self f low inactive hs2 hspan hinactive
+  run_tac Lean.logInfo "active4 phase: dispatch ready; helper unfold"
+  unfold weights.s2_grouped_inactive_pair at hhelper
+  run_tac Lean.logInfo "active4 phase: helper unfolded; producer witness"
+  obtain ⟨coefficients,hcoeff,houter⟩ := bind_success _ _ _ hhelper
+  run_tac Lean.logInfo "active4 phase: producer witness ready; regular frame"
+  have hreg := AspisR1S9ActiveIncomingZeroV1.regular_cell4_zero self false alpha f n ap0 ap1
+    scratch scratchOut partsRegular hs2 hregular
+  have hwrite4 := AspisR1S9ActiveIncomingZeroV1.inactive_write_preserves_cell4
+    partsRegular partsInactive inactive hpartsInactive
+  have hzero : cell4 partsInactive=aspis_core.field.wide_exact.WideExact.ZERO := hwrite4.trans hreg
+  run_tac Lean.logInfo "active4 phase: incoming zero ready; canonical carry"
+  have ccarry : Can (cell4 partsInactive) := by
+    rw [hzero]
+    exact AspisR1S9ActualPairWideOutputCanonicalV1.zero_canonical
+  run_tac Lean.logInfo "active4 phase: carry ready; variant"
+  have hv : transport.Variant.Insts.CoreCmpPartialEqVariant.eq self.variant transport.Variant.S2=.ok true := by
+    rw [hs2]
+    simp [transport.Variant.Insts.CoreCmpPartialEqVariant.eq,transport.Variant.read_discriminant]
+  have htrue : useFactored=true := Result.ok.inj (huse.symm.trans hv)
+  subst useFactored
+  simp only [↓reduceIte] at hlibra
+  have hactive8 := hactive
+  rw [AspisR1S9ActiveFourCanonicalV1.unshared_active_eq] at hactive8
+  run_tac Lean.logInfo "active4 phase: helper branch ready; original source value"
+  obtain ⟨q0,q1,hq0,hq1,cfinal,hvalue⟩ := AspisR1S9ActiveOriginalValueV1.actual_active_original_four_term
+    f coefficients (exact_span_bytes_bound f hspan) hcoeff ap0 ap1 self.extra libra partsInactive partsFinal
+    hp0 hp1 hextra hlibra ccarry hactive8
+  run_tac Lean.logInfo "active4 phase: original value ready; zero rewrite"
+  rw [hzero,AspisR1S9NativeS3OuterBodyV1.native_zero_decode,zero_add] at hvalue
+  run_tac Lean.logInfo "active4 phase: zero rewrite ready; final output tuple"
+  unfold ActiveRowStored
+  run_tac Lean.logInfo "active4 pack: predicate unfolded"
+  refine ⟨a0,a1,ap0,ap1,low,inactive,partsRegular,partsInactive,libra,coefficients,hcoeff,q0,q1,?_⟩
+  run_tac Lean.logInfo "active4 pack: witnesses fixed"
+  refine ⟨ha0,?_⟩
+  run_tac Lean.logInfo "active4 pack: alpha0 fixed"
+  refine ⟨hap0,?_⟩
+  run_tac Lean.logInfo "active4 pack: powers0 fixed"
+  refine ⟨ha1,?_⟩
+  run_tac Lean.logInfo "active4 pack: alpha1 fixed"
+  refine ⟨hap1,?_⟩
+  run_tac Lean.logInfo "active4 pack: powers1 fixed"
+  refine ⟨hlow,?_⟩
+  run_tac Lean.logInfo "active4 pack: low fixed"
+  refine ⟨hinactive,?_⟩
+  run_tac Lean.logInfo "active4 pack: inactive fixed"
+  refine ⟨hpartsInactive,?_⟩
+  run_tac Lean.logInfo "active4 pack: write0 fixed"
+  refine ⟨hlibra,?_⟩
+  run_tac Lean.logInfo "active4 pack: private helper fixed"
+  refine ⟨hactive,?_⟩
+  run_tac Lean.logInfo "active4 pack: active run fixed"
+  refine ⟨hzero,?_⟩
+  run_tac Lean.logInfo "active4 pack: incoming zero fixed"
+  refine ⟨hq0,?_⟩
+  run_tac Lean.logInfo "active4 pack: extra0 fixed"
+  refine ⟨hq1,?_⟩
+  run_tac Lean.logInfo "active4 pack: extra1 fixed"
+  refine ⟨AspisR1S9ActiveIncomingZeroV1.cell4_read partsFinal,?_⟩
+  run_tac Lean.logInfo "active4 pack: final cell4 read fixed"
+  refine ⟨cfinal,?_⟩
+  run_tac Lean.logInfo "active4 pack: canonical final4 fixed"
+  let sourceBound : 4≤UScalar.cMax .Usize := by decide
+  let input := AspisR1S9NativeS3ZeroPrefixV1.successfulInput f coefficients (exact_span_bytes_bound f hspan) hcoeff
+  run_tac Lean.logInfo "active4 final: name inline-evidence dot"
+  have hsource : decode (cell4 partsFinal)=
+      AspisR1S9OriginalDotProofTransportV1.originalDotWithProof sourceBound input ap0 ap1 q0 q1 := by
+    dsimp only [AspisR1S9OriginalDotProofTransportV1.originalDotWithProof]
+    exact hvalue
+  run_tac Lean.logInfo "active4 final: source dot named"
+  have hd := congrArg (fun fn=>fn input ap0 ap1 q0 q1)
+    (AspisR1S9OriginalDotProofTransportV1.original_dot_bound_proof_irrel sourceBound ActiveRowStored._proof_3)
+  simpa only [AspisR1S9OriginalDotProofTransportV1.originalDotWithProof] using hsource.trans hd
+
+#print axioms shared_trace_stored_active_row
+#print axioms unshared_trace_stored_active_row
+end AspisR1S9FinalPartsActiveRowV1
