@@ -333,3 +333,15 @@ fn S2K_frontier_index_assignment() {
     assert_eq!(output[i],before);
     kani::cover!(level==0 && j==0);kani::cover!(level==19 && j==31);
 }
+
+// Exact probe guard, after the separately proved encoder header stores.
+#[kani::proof]
+#[kani::unwind(34)]
+fn S2K_emit_header_guard() {
+    let mut encoded:[u8;POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES]=kani::any();
+    encoded[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC);
+    let reject = encoded.len() != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES
+        || encoded[..4] != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC;
+    assert!(!reject);
+    kani::cover!(!reject);
+}

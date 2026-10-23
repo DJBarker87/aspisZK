@@ -4,7 +4,9 @@ No opaque declaration is installed: encoder names resolve to existing definition
 from pathlib import Path
 import re,json,hashlib,difflib,sys
 R=Path(__file__).resolve().parents[2];D=R/'docs/research/100bit-spend-path-20261013';E=D/'evidence/s2k-20261023'
-G=E/f'extract-{int(sys.argv[1]):03d}-generated/S2K_ResultValidationSource';old=D/'lean/extracted-terminal-decoder-20261016/AspisR1TerminalDecoder'
+whole=len(sys.argv)>2 and sys.argv[2]=='whole'
+source_name='S2K_ResultWholeSource' if whole else 'S2K_ResultValidationSource'
+G=E/f'extract-{int(sys.argv[1]):03d}-generated'/source_name;old=D/'lean/extracted-terminal-decoder-20261016/AspisR1TerminalDecoder'
 def split(t):
  chunks=re.split(r'(?=/\*\*|/--)',t);out={}
  for b in chunks:
@@ -21,8 +23,9 @@ def canon(b):
  return re.sub(r'\s+','',b)
 kept=[];reused=[];mismatches=[]
 for part in ['Types','Funs']:
- raw=(G/(part+'.lean')).read_text().replace('S2K_ResultValidationSource','AspisR1TerminalDecoder')
+ raw=(G/(part+'.lean')).read_text().replace(source_name,'AspisR1TerminalDecoder')
  ref=split((old/(part+'.lean')).read_text())
+ if whole: ref.update(split((D/'lean/S2K_ResultNativeSource.lean').read_text()))
  for name,b in split(raw).items():
   if name in ref:
    same=canon(b)==canon(ref[name]);reused.append(dict(name=name,exact_modulo_comments_attributes_whitespace=same))
@@ -32,9 +35,9 @@ if mismatches:
  for name,a,b in mismatches:
   print('MISMATCH',name);print(''.join(difflib.unified_diff(b.splitlines(True),a.splitlines(True)))[:4000])
  raise SystemExit(1)
-text='import S2K_ResultEvent\n\n/-! Actual extracted result validator; only names/duplicate dependencies adapted.\nOpaque encoder declarations are replaced by the already-proved exact definitions\non identical carriers. No new opaque constant or successful-child premise. -/\nopen Aeneas Aeneas.Std Result ControlFlow Error\nset_option autoImplicit false\nnamespace AspisR1TerminalDecoder\n'
+text=('import S2K_ResultAdmission\nimport S2K_ByteEquality\n' if whole else '')+'import S2K_ResultEvent\n\n/-! Actual extracted result validator; only names/duplicate dependencies adapted.\nOpaque encoder declarations are replaced by the already-proved exact definitions\non identical carriers. No new opaque constant or successful-child premise. -/\nopen Aeneas Aeneas.Std Result ControlFlow Error\nset_option autoImplicit false\nnamespace AspisR1TerminalDecoder\n'
 for name,b in kept:text+='\n'+re.sub(r'\nend [^\n]*','',b).rstrip()+'\n'
-text+='\n#print axioms pool_v1.pair_forest_terminal.validate_result\nend AspisR1TerminalDecoder\n'
-p=D/'lean/S2K_ResultNativeSource.lean';assert not p.exists();p.write_text(text)
-(E/'c3-result-adapter.json').write_text(json.dumps(dict(reused=reused,kept=[name for name,b in kept],new_module_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),raw={str(f.relative_to(E)):hashlib.sha256(f.read_bytes()).hexdigest() for f in G.glob('*.lean')},replacements='namespace, imports, duplicate declarations; every reused body equal modulo comments/attributes/whitespace; external signatures resolved to existing definitions'),indent=2)+'\n')
+text+=('\n#print axioms pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_result_v1\n#print axioms pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_result_against_statement_v1\n' if whole else '\n#print axioms pool_v1.pair_forest_terminal.validate_result\n')+'end AspisR1TerminalDecoder\n'
+p=D/('lean/S2K_ResultWholeNative.lean' if whole else 'lean/S2K_ResultNativeSource.lean');assert not p.exists();p.write_text(text)
+(E/('c3-whole-result-adapter.json' if whole else 'c3-result-adapter.json')).write_text(json.dumps(dict(reused=reused,kept=[name for name,b in kept],new_module_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),raw={str(f.relative_to(E)):hashlib.sha256(f.read_bytes()).hexdigest() for f in G.glob('*.lean')},replacements='namespace, imports, duplicate declarations; every reused body equal modulo comments/attributes/whitespace; external signatures resolved to existing definitions'),indent=2)+'\n')
 print([n for n,b in kept])

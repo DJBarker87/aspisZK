@@ -7,7 +7,8 @@ sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 phase=sys.argv[1];n=int(sys.argv[2]);a=f'extract-{n:03d}';assert phase in ['charon','aeneas'];assert not (E/a).exists()
 charon='/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon'
 aeneas='/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static'
-name='S2K_ResultValidationSource'
+compose=len(sys.argv)>3 and sys.argv[3]=='compose'
+name='S2K_ResultWholeSource' if compose else 'S2K_ResultValidationSource'
 # The result crate's dev-dependency resolution requires the FULL frozen lock;
 # the Kani harness lock intentionally excludes those dev dependencies.
 subprocess.run(['scp',str(R/'Cargo.lock'),HOST+':'+H+'/S2K-root-Cargo.lock'],check=True)
@@ -18,6 +19,9 @@ if phase=='aeneas' and len(sys.argv)>3: cmd[1:1]=['-log','Translate']
 if phase=='charon' and len(sys.argv)>3:
  cmd[2:2]=['--opaque','crate::pool_v1::pair_terminal::encode_pool_v1_pair_verified_afterstate_v1','--opaque','crate::atomic_statement::encode_digest_canonical','--opaque','crate::pool_v1::pair_forest_accounts::pool_v1_pair_forest_output_lane_v1','--include','core::option::Option']
  deps_note='afterstate encoder body reused from the exact existing extracted source and S2K_AfterstateEncoding; no successful-child stub'
+if phase=='charon' and compose:
+ i=cmd.index('--start-from');cmd[i+1]='crate::pool_v1::pair_forest_terminal::validate_pool_v1_pair_forest_terminal_result_against_statement_v1'
+ cmd[2:2]=['--start-from','crate::pool_v1::pair_forest_terminal::encode_pool_v1_pair_forest_terminal_result_v1','--opaque','crate::pool_v1::pair_forest_terminal::validate_result','--opaque','crate::pool_v1::pair_forest_terminal::validate_pool_v1_pair_forest_terminal_statement_v1']
 pins=json.loads(subprocess.check_output(['ssh',HOST,'python3','-'],input=('from pathlib import Path\nimport hashlib,json\npaths='+repr([charon,charon+'-driver',aeneas])+'\nprint(json.dumps({p:dict(sha256=hashlib.sha256(Path(p).read_bytes()).hexdigest(),bytes=Path(p).stat().st_size) for p in paths}))\n').encode()))
 deps=dict(native_source_manifest_sha256=sha(E/'native-source.json'),cargo_lock=lock,tools=pins,scope='actual native private validate_result and its reachable dependencies; no whole-function Kani harness',reuse_policy='opaque pure children MUST resolve to exact existing extracted definitions; no opaque/axiom declarations may be installed in Lean')
 if phase=='aeneas':
