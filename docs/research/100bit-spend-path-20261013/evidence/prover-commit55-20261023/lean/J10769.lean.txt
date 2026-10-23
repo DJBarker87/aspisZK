@@ -1,0 +1,61 @@
+import R1Z.ProverCommitOpeningModel53
+import R1Z.ProverCommitOriginal55
+/-! All semantic/opening challenge coordinates are read from their actual raw
+caller fields. Circle membership remains an explicit raw decoded equation. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitOpeningChallenges55
+open Aeneas Aeneas.Std Result AspisR1ProducerRelease47
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47 ProverCommitWideOps48 ProverCommitMix48
+open ProverCommitValueRange47 (embed)
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+
+def circle (x y : Old.Q) (h : decode x^2+decode y^2=1) : AspisR0.ChordGeometry.Point Exact :=
+  ⟨(embed (decode x),embed (decode y)),by
+    have hm := congrArg (algebraMap QM31Exact Exact) h
+    simpa only [map_add,map_pow,map_one,embed] using hm⟩
+
+def sourced (sem : Nat → Old.Q) (x0 y0 x1 y1 : Old.Q) (g k a b : Raw)
+    (queries : Finset (Fin 262144)) (h0 : decode x0^2+decode y0^2=1)
+    (h1 : decode x1^2+decode y1^2=1) : R0Z.HonestView.Challenges Exact :=
+  {sem := fun i => embed (decode (sem i.val))
+   circle := ![circle x0 y0 h0,circle x1 y1 h1]
+   opening := ![value g,value k,value a,value b]
+   queries := queries}
+
+variable (c : Nat → Nat → Old.Q) (hc : ∀ l, l<29 → ∀ j, j<1024 → Canonical (c l j))
+attribute [local irreducible] value source sourceArray ProverCommitGammaCoefficients53.wideTrace
+  ProverCommitOpeningBytes49.stream ProverCommitOpeningBytes49.modelStream
+theorem exact_images (sem : Nat → Old.Q) (hs : ∀ i, i<25 → Canonical (sem i))
+    (x0 y0 x1 y1 : Old.Q) (hx0 : Canonical x0) (hy0 : Canonical y0)
+    (hx1 : Canonical x1) (hy1 : Canonical y1) (g k a b : Raw)
+    (hg : canonical g) (hk : canonical k) (hca : canonical a) (hcb : canonical b)
+    (queries : Finset (Fin 262144))
+    (hcircle0 : decode x0^2+decode y0^2=1) (hcircle1 : decode x1^2+decode y1^2=1) :
+    let p := ProverCommitOriginal55.point sem
+    let ch := sourced sem x0 y0 x1 y1 g k a b queries hcircle0 hcircle1
+    ∃ (c0 q1 c1 fin : Nat → Raw) (hc0 : ∀ i, i<7 → canonical (c0 i))
+      (hc1 : ∀ i, i<7 → canonical (c1 i)) (hcfin : ∀ i, i<64 → canonical (fin i)),
+      ProverCommitOpeningModel53.run c hc (ProverCommitQArray48.array 10#usize p)
+        (ProverCommitNativeQ48.source x0) (ProverCommitNativeQ48.source y0)
+        (ProverCommitNativeQ48.source x1) (ProverCommitNativeQ48.source y1)
+        (source g) (source k) (source a) (source b)=
+        ok (List.ofFn (fun i : Fin 7 => source (c0 i.val)),sourceArray 256#usize q1,
+          List.ofFn (fun i : Fin 7 => source (c1 i.val)),sourceArray 64#usize fin) ∧
+      ProverCommitOpeningBytes49.stream 7 c0 hc0=ProverCommitOpeningBytes49.modelStream 7
+        (fun i => R0Z.HonestView.BatchedLayer.read (Bat:=Batched.R1Bat) AspisR1.rowEquiv ch
+          (ProverCommitGammaCoefficients53.wideTrace c) (.round0 i)) ∧
+      ProverCommitOpeningBytes49.stream 7 c1 hc1=ProverCommitOpeningBytes49.modelStream 7
+        (fun i => R0Z.HonestView.BatchedLayer.read (Bat:=Batched.R1Bat) AspisR1.rowEquiv ch
+          (ProverCommitGammaCoefficients53.wideTrace c) (.round1 i)) ∧
+      ProverCommitOpeningBytes49.stream 64 fin hcfin=ProverCommitOpeningBytes49.modelStream 64
+        (fun i => R0Z.HonestView.BatchedLayer.read (Bat:=Batched.R1Bat) AspisR1.rowEquiv ch
+          (ProverCommitGammaCoefficients53.wideTrace c) (.final i)) := by
+  dsimp only
+  exact ProverCommitOpeningModel53.exact_images c hc (ProverCommitOriginal55.point sem)
+    (ProverCommitOriginal55.point_canonical sem hs) x0 y0 x1 y1 hx0 hy0 hx1 hy1 g k a b
+    hg hk hca hcb (sourced sem x0 y0 x1 y1 g k a b queries hcircle0 hcircle1)
+    rfl rfl rfl rfl rfl rfl rfl rfl rfl
+
+#print axioms exact_images
+end R1Z.ProverCommitOpeningChallenges55

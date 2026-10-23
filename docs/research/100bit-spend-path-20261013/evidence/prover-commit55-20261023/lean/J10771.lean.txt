@@ -1,0 +1,46 @@
+import R1Z.ProverCommitExtraMath51
+import R0Z.PureRounds
+/-! The native initial extra's two coefficient folds count the constant term
+twice. This is exactly the Boolean-cube sum, proved without enumerating it. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitInitialExtra55
+open ProverCommitExtraMath51
+open scoped BigOperators
+variable {K : Type} [Field K]
+
+theorem at_zero (q : Nat → K) (offset n : Nat) (hn : 0<n) :
+    polynomial q offset n 0=q offset := by
+  unfold polynomial
+  rw [Finset.sum_eq_single 0]
+  · simp only [Nat.add_zero,pow_zero,mul_one]
+  · intro k hk hk0
+    rw [zero_pow hk0,mul_zero]
+  · intro h
+    exact (h (Finset.mem_range.mpr hn)).elim
+
+theorem at_one (q : Nat → K) (offset n : Nat) :
+    polynomial q offset n 1=∑ k ∈ Finset.range n,q (offset+k) := by
+  simp only [polynomial,one_pow,mul_one]
+
+theorem boolean_coordinate (q : Nat → K) (offset n d : Nat) (hn : 0<n) (k : Fin d) :
+    (∑ b : Fin d → Bool, polynomial q offset n (if b k then 1 else 0))=
+      (2 : K)^(d-1)*(q offset+∑ j ∈ Finset.range n,q (offset+j)) := by
+  rw [R0Z.PureRounds.sum_bool_coordinate d k (fun b => polynomial q offset n (if b then 1 else 0))]
+  simp only [Bool.false_eq_true,if_false,if_true,at_zero q offset n hn,at_one]
+
+theorem initial_extra (q : Nat → K) :
+    (∑ b : Fin 10 → Bool,
+      polynomial q 0 28 (if b 8 then 1 else 0)+polynomial q 28 28 (if b 9 then 1 else 0))=
+      (512 : K)*((q 0+∑ j ∈ Finset.range 28,q j)+(q 28+∑ j ∈ Finset.range 28,q (28+j))) := by
+  rw [Finset.sum_add_distrib,boolean_coordinate q 0 28 10 (by decide) 8,
+    boolean_coordinate q 28 28 10 (by decide) 9]
+  simp only [Nat.zero_add]
+  norm_num
+  ring
+
+#print axioms at_zero
+#print axioms at_one
+#print axioms boolean_coordinate
+#print axioms initial_extra
+end R1Z.ProverCommitInitialExtra55
