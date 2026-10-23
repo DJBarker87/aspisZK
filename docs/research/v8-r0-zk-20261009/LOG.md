@@ -8934,3 +8934,18 @@ weakening. Before/after statements are to be shown verbatim in the restating job
 Consequences: native `sim.rs` binding work stops (its results stay as evidence); privacy work
 goes to the real side (`prove_masked_retrying_with` and the prover, on the v2 candidate
 code paths where they differ), plus the L1/L2 side-channel obligations.
+
+## D185 (lead, 2026-10-23 09:15): privacy comparison contract is the mathematical simulator
+
+The restatement job (`r1p-final/PRIVACY-RESTATE-20261023.md`) correctly stopped. The
+existing deployed conclusion compares rust.real with `rust.ideal`, the ideal game run by a
+Rust implementation. The proposed one compares rust.real with `source.ideal(simE)`. As
+fixed-experiment propositions they differ, so this is a contract choice, not a proof step.
+**Lead ruling (logged for the user, reversible).** The privacy contract is the standard
+simulation definition: for every adversary, the deployed real experiment is within ε of the
+ideal game run with the efficient mathematical simulator `simE`, whose cost bound is proved
+for `simE` itself (the SIM-COST passes). The old conclusion together with conjunct 2 implies the
+new one; the old is stronger only in additionally certifying a Rust implementation of the
+simulator, which is never deployed and says nothing more about deployed outputs. The
+previous theorem is kept unchanged; the new endpoint is added beside it with before/after statements.
+Privacy work proceeds on conjunct 1 (the real side) using the worker's obligation map.
