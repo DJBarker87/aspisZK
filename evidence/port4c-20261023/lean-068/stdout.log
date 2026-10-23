@@ -1,0 +1,209 @@
+Port4C_InverseLoop.lean:33:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port4C_Reverse.next 0#usize
+in the target expression
+  (do
+      let (o, iter1) ←
+        core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) (Port4C_Reverse.reverse 0#usize)
+      match o with
+        | none => ok (done inverse)
+        | some i => do
+          let m ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) prefixes i
+          let m1 ← ops.op9 suffix m
+          let (_, index_mut_back) ←
+            alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) inverse i
+          have flat_inverse1 : alloc.vec.Vec aspis_core.field.M31 := index_mut_back m1
+          let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) flat i
+          let suffix_inverse1 ← ops.op9 suffix m2
+          ok (cont (iter1, suffix_inverse1, flat_inverse1))) =
+    ok (done inverse)
+
+CoreError : Type
+ops : Ops CoreError
+multiply : ops.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+flat prefixes inverse : alloc.vec.Vec U32
+suffix : U32
+bound : 0 ≤ 110
+hn : ↑0#usize = 0
+h :
+  (if True then ok inverse
+    else do
+      let i ← 0#usize - 1#usize
+      let m ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) prefixes i
+      let m1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m
+      let (_, index_mut_back) ← alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice U32) inverse i
+      let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) flat i
+      let suffix1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m2
+      Port4C_OwnedInverse.inverse_owned flat prefixes (index_mut_back m1) suffix1 i) =
+    ok inverse
+⊢ (do
+      let (o, iter1) ←
+        core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) (Port4C_Reverse.reverse 0#usize)
+      match o with
+        | none => ok (done inverse)
+        | some i => do
+          let m ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) prefixes i
+          let m1 ← ops.op9 suffix m
+          let (_, index_mut_back) ←
+            alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) inverse i
+          have flat_inverse1 : alloc.vec.Vec aspis_core.field.M31 := index_mut_back m1
+          let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) flat i
+          let suffix_inverse1 ← ops.op9 suffix m2
+          ok (cont (iter1, suffix_inverse1, flat_inverse1))) =
+    ok (done inverse)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+Port4C_InverseLoop.lean:48:57: error: Application type mismatch: The argument
+  h
+has type
+  Port4C_OwnedInverse.inverse_owned flat prefixes (back newValue) suffix1 i = ok out
+but is expected to have type
+  ↑i = n
+in the application
+  ih (back newValue) suffix1 i ?m.336 h
+Port4C_InverseLoop.lean:53:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port4C_Reverse.next index
+in the target expression
+  (do
+      let (o, iter1) ←
+        core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) (Port4C_Reverse.reverse index)
+      match o with
+        | none => ok (done inverse)
+        | some i => do
+          let m ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) prefixes i
+          let m1 ← ops.op9 suffix m
+          let (_, index_mut_back) ←
+            alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) inverse i
+          have flat_inverse1 : alloc.vec.Vec aspis_core.field.M31 := index_mut_back m1
+          let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) flat i
+          let suffix_inverse1 ← ops.op9 suffix m2
+          ok (cont (iter1, suffix_inverse1, flat_inverse1))) =
+    ok (cont (Port4C_Reverse.reverse i, suffix1, back newValue))
+
+CoreError : Type
+ops : Ops CoreError
+multiply : ops.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+flat prefixes out : alloc.vec.Vec U32
+n : ℕ
+ih :
+  ∀ (inverse : alloc.vec.Vec U32) (suffix : U32) (index : Usize),
+    Port4C_OwnedInverse.inverse_owned flat prefixes inverse suffix index = ok out →
+      ↑index = n →
+        n ≤ 110 →
+          verifier.QueryGeometry.for_range_loop0_loop0 ops (Port4C_Reverse.reverse index) flat prefixes suffix inverse =
+            ok out
+inverse : alloc.vec.Vec U32
+suffix : U32
+index : Usize
+hn : ↑index = n + 1
+bound : n + 1 ≤ 110
+nonzero : index ≠ 0#usize
+i : UScalar UScalarTy.Usize
+h✝⁴ :
+  (do
+      let m ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) prefixes i
+      let m1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m
+      let (_, index_mut_back) ← alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice U32) inverse i
+      have inverse1 : alloc.vec.Vec U32 := index_mut_back m1
+      let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) flat i
+      let suffix1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m2
+      Port4C_OwnedInverse.inverse_owned flat prefixes inverse1 suffix1 i) =
+    ok out
+hsub : index - 1#usize = ok i
+hvalue : ↑i + 1 = ↑index
+hnext : Port4C_Reverse.next index = ok (some i, Port4C_Reverse.reverse i)
+hiv : ↑i = n
+pref : U32
+hpref : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) prefixes i = ok pref
+h✝³ :
+  (do
+      let m1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix pref
+      let (_, index_mut_back) ← alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice U32) inverse i
+      have inverse1 : alloc.vec.Vec U32 := index_mut_back m1
+      let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) flat i
+      let suffix1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m2
+      Port4C_OwnedInverse.inverse_owned flat prefixes inverse1 suffix1 i) =
+    ok out
+newValue : AspisR1Qm31ArithmeticProbe.field.M31
+hnew : AspisR1Qm31ArithmeticProbe.field.M31.mul suffix pref = ok newValue
+h✝² :
+  (do
+      let (_, index_mut_back) ← alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice U32) inverse i
+      have inverse1 : alloc.vec.Vec U32 := index_mut_back newValue
+      let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) flat i
+      let suffix1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m2
+      Port4C_OwnedInverse.inverse_owned flat prefixes inverse1 suffix1 i) =
+    ok out
+old : U32
+back : U32 → alloc.vec.Vec U32
+hmut : alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice U32) inverse i = ok (old, back)
+h✝¹ :
+  (let (_, index_mut_back) := (old, back)
+    have inverse1 := index_mut_back newValue;
+    do
+    let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) flat i
+    let suffix1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m2
+    Port4C_OwnedInverse.inverse_owned flat prefixes inverse1 suffix1 i) =
+    ok out
+x : U32
+hx : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) flat i = ok x
+h✝ :
+  (do
+      let suffix1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix x
+      Port4C_OwnedInverse.inverse_owned flat prefixes (back newValue) suffix1 i) =
+    ok out
+suffix1 : AspisR1Qm31ArithmeticProbe.field.M31
+hsuffix : AspisR1Qm31ArithmeticProbe.field.M31.mul suffix x = ok suffix1
+h : Port4C_OwnedInverse.inverse_owned flat prefixes (back newValue) suffix1 i = ok out
+tail :
+  verifier.QueryGeometry.for_range_loop0_loop0 ops (Port4C_Reverse.reverse i) flat prefixes suffix1 (back newValue) =
+    ok out
+⊢ (do
+      let (o, iter1) ←
+        core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) (Port4C_Reverse.reverse index)
+      match o with
+        | none => ok (done inverse)
+        | some i => do
+          let m ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) prefixes i
+          let m1 ← ops.op9 suffix m
+          let (_, index_mut_back) ←
+            alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) inverse i
+          have flat_inverse1 : alloc.vec.Vec aspis_core.field.M31 := index_mut_back m1
+          let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) flat i
+          let suffix_inverse1 ← ops.op9 suffix m2
+          ok (cont (iter1, suffix_inverse1, flat_inverse1))) =
+    ok (cont (Port4C_Reverse.reverse i, suffix1, back newValue))
+Port4C_InverseLoop.lean:27:15: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵ ̵at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_InverseLoop.lean:37:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵bodyRun]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_InverseLoop.lean:57:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵bodyRun]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4C_InverseLoop.from_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
