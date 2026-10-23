@@ -1,0 +1,11 @@
+--- /home/dombarker/project-offloads/d18-aeneas-collapse-remap-v1-20261022/source/src/interp/InterpReduceCollapse.ml	2026-10-22 02:11:57.000000000 +0000
++++ /home/dombarker/project-offloads/s126-real-sdk-20261021/s1-collapse-tool-v1/source/src/interp/InterpReduceCollapse.ml	2026-10-23 00:01:47.343928445 +0000
+@@ -1988,7 +1988,7 @@
+   let shared_borrows_seq =
+     List.map
+       (fun (abs_id, i, pm, bid, ty) ->
+-        (AbsId.Map.find abs_id !nabs_map, i, pm, bid, ty))
++        (get_id abs_id, i, pm, bid, ty))
+       shared_borrows_seq
+   in
+   let ctx = add_shared_borrows span shared_borrows_seq ctx in
