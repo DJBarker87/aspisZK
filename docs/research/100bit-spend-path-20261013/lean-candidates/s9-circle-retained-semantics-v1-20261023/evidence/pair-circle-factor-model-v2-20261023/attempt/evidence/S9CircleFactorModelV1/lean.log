@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/pair-circle-factor-model-v2-20261023/sources/S9CircleFactorModelV1.lean:35:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (if True then if start ≤ d ∧ d < stop then coefficient x d i else before row d i
+      else if start ≤ d ∧ d < stop then coefficient x d i else before row d i) =
+      if _a then coefficient x d i else before row d i
+Error: Application type mismatch: The argument
+  instDecidableAnd
+has type
+  Decidable (start ≤ d ∧ d < stop + 1)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite ExactQM _a instDecidableAnd
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case neg
+before : Table
+row start stop : ℕ
+x : ExactQM
+h : start ≤ stop
+k d i : ℕ
+hk : k = row
+hd : ¬d = stop
+he : start ≤ d ∧ d < stop + 1 ↔ start ≤ d ∧ d < stop
+⊢ (if True then if start ≤ d ∧ d < stop then coefficient x d i else before row d i
+    else if start ≤ d ∧ d < stop then coefficient x d i else before row d i) =
+    if start ≤ d ∧ d < stop + 1 then coefficient x d i else before row d i
+/home/dombarker/project-offloads/pair-circle-factor-model-v2-20261023/sources/S9CircleFactorModelV1.lean:34:23: warning: This simp argument is unused:
+  if_pos hk
+
+Hint: Omit it from the simp argument list.
+  simp only [̵w̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵h̵k̵,̵i̵f̵_̵n̵e̵g̵ ̵h̵d̵,̵p̵r̵e̵f̵i̵x̵T̵a̵b̵l̵e̵,̵h̵k̵,̵t̵r̵u̵e̵_̵a̵n̵d̵]̵[̲w̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲h̲d̲,̲ ̲p̲r̲e̲f̲i̲x̲T̲a̲b̲l̲e̲,̲ ̲h̲k̲,̲ ̲t̲r̲u̲e̲_̲a̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9CircleFactorModelV1.prefix_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9CircleFactorModelV1.prefix_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1S9CircleFactorModelV1.base_step_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9CircleFactorModelV1.base_step_two' depends on axioms: [propext, Classical.choice, Quot.sound]

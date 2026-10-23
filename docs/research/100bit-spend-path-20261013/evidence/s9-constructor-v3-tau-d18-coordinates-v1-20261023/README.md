@@ -1,0 +1,3 @@
+The exact constructor TAU read and both wrapping coordinate calculations match the retained D18 permutation and 9-2tau/8-2tau indices for every admitted table entry. Named symbolic bounded multiplication and subtraction facts avoid concrete machine-modulus normalization. Existing D18 mathematics is reused; this closes the local source coordinate map, not whole factor loops or security.
+
+Focused Lean check: 12.697 seconds; peak aggregate RSS 2250244096 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

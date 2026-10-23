@@ -1,0 +1,3 @@
+One successful actual V3 circle-factor inner-body execution on canonical x supplies the exact same mutable row write [ONE,x,T2(x),x*T2(x)], decoded T2 expressions, canonical outputs and carry T2(T2(x)). All arithmetic and mutation successes come from the same body. Full circle-loop recurrence/factor preservation, constructor/native runtime adoption and S9/security composition remain open.
+
+Focused Lean check: 19.035 seconds; peak aggregate RSS 3210199040 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

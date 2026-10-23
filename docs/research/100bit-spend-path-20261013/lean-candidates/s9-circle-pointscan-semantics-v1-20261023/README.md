@@ -1,0 +1,7 @@
+# Actual complete circle pointscan semantics
+
+PROVED for the same accepted native constructor outer loop over points0 and1: both complete factor rows3 and4 have row0=[1,y,x,xy] and the retained natural-circle meanings at rows1..4; every statement-row entry is preserved. The body theorem derives the exact point read, multiplication, initial double, mutable writes and inner-loop success from the same source body. The complete outer-loop theorem uses a symbolic decreasing range invariant.
+
+`circle_outer_success_meaning` composes with any existing input-table meaning, such as the proved statement phase. `circle_outer_success_actual_table` derives the input meaning from its actual factors and returns the explicit `circleScanTable` model plus its all-Nat statement-row frame. Only PointsCanonical on the same input z and success of the same actual outer loop remain; no separate arithmetic, child execution, initial inner canonicality or input-table meaning premise is added.
+
+Four focused accepted sources, standard axioms only, capped NUC Lean4.32 j1/M4400, no swap or cold dependencies. Exact hashes, commands, success/failure receipts and reused dependency identities are retained. This is a generated constructor source-cut result. Caller reachability, initial point canonicality, runtime trust boundaries, frozen artifacts and the composed100-bit theorem still require their own joins. No production source or protocol is modified; no binaries are committed.

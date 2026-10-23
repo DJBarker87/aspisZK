@@ -1,0 +1,1 @@
+Two focused standard-axiom read-interface facts over the already proved circle outer-phase model. They hide option/list lookups from constructor factor consumers and expose exact prior statement-row read meaning. No caller, runtime or security conclusion is added. Receipt records capped NUC Lean4.32 execution; no binaries.

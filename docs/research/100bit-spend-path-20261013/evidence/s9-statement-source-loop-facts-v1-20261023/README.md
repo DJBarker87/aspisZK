@@ -1,0 +1,3 @@
+Public actual source range/loop control facts: successful next(None) implies exhaustion; actual statement inner/outer Done supplies the same factor state and exhaustion; actual continuations supply their own successful next and child loop execution. Reuses the retained canonical source proof patterns and iterator specs. No field arithmetic, child correctness contract or whole constructor/security claim is added.
+
+Focused Lean check: 12.858 seconds; peak aggregate RSS 2221211648 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

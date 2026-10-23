@@ -1,0 +1,81 @@
+/private/tmp/a3-s9-statement-factor-inner-semantics-v1-check-20261023/sources/S9StatementFactorInnerSemanticsV1.lean:14:34: warning: Variable name `hi` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/private/tmp/a3-s9-statement-factor-inner-semantics-v1-check-20261023/sources/S9StatementFactorInnerSemanticsV1.lean:58:6: error: unsolved goals
+case pos
+points : StatementPoints
+k : Usize
+factors out : Factors
+initial : Table
+hp : StatementPointsCanonical points
+hm : Meaning factors initial
+hloop : weights_new_loop0_loop0 { start := 0#usize, «end» := 5#usize } points factors k = ok out
+step : R × Factors → Result (ControlFlow (R × Factors) Factors) :=
+  fun s => weights_new_loop0_loop0.body points k s.1 s.2
+measure : R × Factors → ℕ := fun s => ↑s.1.end - ↑s.1.start
+inv : R × Factors → Prop :=
+  fun s =>
+    ↑s.1.end = 5 ∧
+      ↑s.1.start ≤ 5 ∧ ∃ model, Meaning s.2 model ∧ RowPrefix points model ↑k ↑s.1.start ∧ Outside initial model ↑k
+post : Factors → Prop := fun f => ∃ model, Meaning f model ∧ RowPrefix points model (↑k) 5 ∧ Outside initial model ↑k
+hdone : ∀ (s : R × Factors) (result : Factors), inv s → step s = ok (done result) → post result
+it : R
+a : Factors
+itNext : R
+b : Factors
+hb : step (it, a) = ok (cont (itNext, b))
+he : ↑it.end = 5
+hs : ↑it.start ≤ 5
+model : Table
+hmeaning : Meaning a model
+hprefix : RowPrefix points model ↑k ↑it.start
+houtside : Outside initial model ↑k
+d : Usize
+hd : ↑d < 5
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize it = ok (some d, itNext)
+hmNext : Meaning b (write model (↑k) (↑d) (expected points (↑k) d hd))
+hlt : ↑it.start < ↑it.end
+hdEq : d = it.start
+hstart : ↑itNext.start = ↑it.start + 1
+hend : itNext.end = it.end
+hdval : ↑d = ↑it.start
+ii : Usize
+hii : ↑ii < 4
+hdd : ↑d < 5
+hsmall : ↑d < ↑(itNext, b).1.start
+hde : ↑d = ↑d
+⊢ (if True then if True then expected points (↑k) d hd ↑ii else model ↑k ↑d ↑ii else model ↑k ↑d ↑ii) =
+    expected points (↑k) d hdd ↑ii
+/private/tmp/a3-s9-statement-factor-inner-semantics-v1-check-20261023/sources/S9StatementFactorInnerSemanticsV1.lean:62:40: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  0 ≤ f ≤ 3
+  0 ≤ e ≤ 4
+  e - g ≤ -1
+  1 ≤ c ≤ 5
+  c - e ≤ 0
+where
+ c := ↑↑itNext.start
+ e := ↑↑dd
+ f := ↑↑ii
+ g := ↑↑(itNext, b).1.start
+/private/tmp/a3-s9-statement-factor-inner-semantics-v1-check-20261023/sources/S9StatementFactorInnerSemanticsV1.lean:60:25: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [write,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-statement-factor-inner-semantics-v1-check-20261023/sources/S9StatementFactorInnerSemanticsV1.lean:61:25: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵w̵r̵i̵t̵e̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵i̵f̵_̵n̵e̵g̵[̲w̲r̲i̲t̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ hde]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9StatementFactorInnerSemanticsV1.statement_inner_success_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
