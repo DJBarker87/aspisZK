@@ -43,10 +43,14 @@ for p in sorted(E.glob('lean-*/receipt.json')):
  if x['exit_status']!=0: continue
  for f,h in x['source_hashes'].items():
   if (L/f).exists() and sha(L/f)==h:
-   assert all('sorryAx' not in a and 'axiom' in a for a in x['print_axioms'])
+   assert x['print_axioms'], 'Missing axiom audit'
+   for line in x['print_axioms']:
+    names=re.search(r'depends on axioms: \[(.*?)\]',line)
+    if names: assert set(names.group(1).split(', ')) <= {'propext','Classical.choice','Quot.sound'},line
+    else: assert 'does not depend on any axioms' in line,line
    accepted[f]=str(p.relative_to(R))
 for p in L.glob('Port1_*.lean'):
  assert p.name in accepted, f'No final-source accepted receipt: {p.name}'
  assert not re.search(r'\b(sorry|admit|axiom|native_decide)\b|set_option (maxRecDepth|maxHeartbeats)',p.read_text())
-manifest={'schema':'focused-extractor-proof-packet-v1','source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'source_pins':source_pins,'constant_values':values,'accepted_final_modules':accepted,'attempts':attempts,'compiler_free_preflights':['lean-002'],'lean_compiles':len(attempts),'kani_runs':0,'release_replay':False,'source_artifact_binding':'Source identities and inherited extraction only; no new ELF claim'}
+manifest={'schema':'focused-extractor-proof-packet-v1','source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'source_pins':source_pins,'constant_values':values,'accepted_final_modules':accepted,'attempts':attempts,'compiler_free_preflights':['lean-002'],'lean_compiles':len(attempts),'kani_runs':0,'release_replay':False,'source_artifact_binding':'Source identities and inherited extraction only; no new ELF claim','tools':{str(p.relative_to(R)):sha(p) for p in (R/'tools/ports1-20261023').glob('*.py')},'final_focused_audit':'lean-012','source_tree_dirty':bool(subprocess.check_output(['git','status','--porcelain'],cwd=R,text=True).strip())}
 (E/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n'); print(json.dumps({'accepted_final_modules':accepted,'lean_compiles':len(attempts),'kani_runs':0}))

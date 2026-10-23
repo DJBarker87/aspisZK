@@ -337,14 +337,14 @@ split; it does not transfer another worker's worktree or certificate.
 | `reader` / op18, TX2 resume | lead | `VTop_Checkpoint.reader_join`, `ChildJoin_Checkpoint.reader_header`, `CheckpointBytes5Join.successful_fields_and_reads`: conditional source/physical-byte endpoints; bind actual op18 full returned Prepared/Accumulator and retained same checkpoint. |
 | `powers` / op17, TX2 | session A | `AspisR1LoopPowers.early_powers_total_exact`: canonical-input power result; actual resumed gamma, full array and no-read interpretation remain. |
 | `finish` / op19, TX2 | lead | `S8Kani2CallerJoin.CallerInvariant`, `OraclePortFrozen2.finish_value`: source invariant/model finish separately; actual `finish_relation` on returned twelve-step state must bridge them, including S3/S4/S5/S9 dependencies. |
-| `library` / ops0,1,2,13–16,20–23,unwrap32 | lead | Existing TrustedStd/extraction carries ordinary library semantics but does not instantiate this new oracle law. Pin constants, strict decode, release observer None and exact no-read implementations; do not silently add it as runtime trust. |
+| `library` / ops0,1,2,13–16,20–23,unwrap32 | lead | **Closed for the installed Port1 interpretation:** `Port1_Library.library_join`, `library_no_read`, `release_mark`; strict decoder transport `Port1_LibraryDecode.strict_fixed`/`wrong_length`. Two explicit TrustedStd fields: Option::ok_or and Result::unwrap32. Body/runtime/source-carrier binding remains separate. Receipts: `evidence/ports1-20261023/STAGE1.md`. |
 | Nested S3/S4/S5/S9 backend refinements | session A | JOIN-SPLIT table's grouped-pair/dot/strict-codec/reducer/factored identities; complete parent-body instances, reached operand bounds and source pins still required. |
 | S6 first-decoded/semantic/public input transport | session A | `AspisR1PublicPreparation.RepinS6First.{first_eq_historical,first_success,reuse_decoded}`; actual downstream cone instances and source/byte carrier binding remain. |
 | S2 adapter/native input and frame facts | lead | `S2W_D189Consolidation.accepted_run`, `ChildJoin_Accepted.accepted_run`, `VTop_Accepted.accepted_run`: complete Required14 under their explicit runtime/trust/history/child premises, not a headline oracle-program binding. |
 | Cross-TX checkpoint and Pool/ASQ8 retention | lead | D189's `CheckpointVersionBinding`/`P2Prime` remain explicit. No hash-injectivity or independently selected byte snapshot is introduced. Pool caller remains outside these stage bodies. |
 | S10 source/inventory/artifact correspondence | session A | `VTop_Order` fixes stage call order; source-span audit fixes source identity. Neither proves lowering to the pinned ELF; current declaration coverage and artifact/runtime port remain. |
-| Actual headline `rust` binding and substituted model order | lead | Newly explicit typed interpreter and stage substitution above. Still construct the source verifier/decoder/transcript driver on these carriers, and prove its substituted interpretation is `verifier D dV_frozen2`; no existing theorem closes these identities. |
-| Both annotation passes | lead | Existing `acceptedRunJoin_of_stable` is sufficient only with an independently proved source enrichment law. The new `VTop_Annotation.two_pass` uses just backward acceptance plus raw join; that source backward law is still uninstantiated. |
+| Actual headline `rust` binding and substituted model order | lead | **Open.** `Port1_Driver.rust` now constructs the physical public decoder/validator and same-checkpoint two-stage lift; `Port1_DriverSubstitution.driver_substitute` composes body ports with library discharged. `Port1_CarrierObstruction.raw_join_forces_rejection` shows the unrestricted raw join for this lift would force rejection of every input, because Input.proof is independent of the physical source arguments. A source-indexed carrier/experiment transport and the actual frozen2 model-order proof remain. See `evidence/ports1-20261023/STAGE2.md`. |
+| Both annotation passes | lead | **Source backward law closed for `Port1_Driver.rust`:** `Port1_Annotation.source_enrich`/`backward`, with no raw-join premise. This supplies exactly the source law of `VTop_Annotation.two_pass`. Complete two-pass AcceptedRunJoin remains open at the raw source/model carrier and frozen2 model-order boundary above; no vacuous two-pass closure is claimed. |
 | Deployed runtime carrier / query budget | lead | `StoredCarrierBinding D rust P runtime` and `hqueries` remain independent premises of `OraclePortHeadlineFrozen2PerAttempt.final_soundness`; D189 alone does not discharge them. |
 
 The checkpoint combined model observation advances the twelve pure arithmetic
@@ -401,3 +401,22 @@ The lead must still construct the concrete source oracle interpretation,
 prove the substituted frozen2 model order and instantiate annotation backward
 acceptance. Those proof obligations are not converted into trust or hidden
 inside the named cone record.
+
+## Port1 continuation — source library and carrier boundary
+
+The library no-read law and source annotation backward law are checked for
+the explicitly constructed `Port1_Driver.rust` interpretation. These are
+local port closures, not deployed binding or frozen2 model-order closure.
+`Port1_DriverSubstitution.ports` removes the arbitrary library observation
+premise while retaining the thirteen named body laws and two pure std fields.
+
+The raw-join obstruction concerns the exact all-Input quantifier: physical
+source execution ignores an independently supplied logical proof function;
+frozen2 checks its erased constructor schedule and stored-byte alignment.
+A constant-constructor proof violates that schedule without changing physical
+source arguments. No valid physical source forgery, actual accepted fixture,
+new cryptographic assumption, source adoption or contract change is asserted.
+A source-indexed carrier construction/transport is the next concrete bridge,
+followed by the same-state body interpretations and model-order proof.
+See `evidence/ports1-20261023/STAGE2.md` for the exact checked statement and
+`STAGE3.md` for the final focused audit and unchanged artifact scope.
