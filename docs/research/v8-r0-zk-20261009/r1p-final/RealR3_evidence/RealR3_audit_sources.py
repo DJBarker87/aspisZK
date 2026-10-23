@@ -10,7 +10,7 @@ for p in shipped:
  if (R/p).read_bytes()!=before:changes.append(p)
 assert not changes,changes
 untracked=subprocess.check_output(['git','ls-files','--others','--exclude-standard','crates','programs'],cwd=R,text=True).splitlines();assert not untracked
-files=[R/'docs/research/v8-r0-zk-20261009/lean/R1Z'/p for p in ['RealR3_SemanticEmission.lean','RealR3_EmissionPrefix.lean']]
+files=[R/'docs/research/v8-r0-zk-20261009/lean/R1Z'/p for p in ['RealR3_SemanticEmission.lean','RealR3_EmissionPrefix.lean','RealR3_CalleeComposition.lean']]
 for p in files:
  s=p.read_text()
  assert not re.search(r'\b(sorry|admit|axiom|native_decide)\b',s)

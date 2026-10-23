@@ -225,3 +225,127 @@ fn check<const N:usize>(row:u8){check_prefix::<N,8>(row)}
 #[kani::proof] #[kani::unwind(40)] #[kani::stub(crate::sampler::qm31_sample,common)] fn scalar_mask(){check::<32>(14)}
 #[kani::proof] #[kani::unwind(940)] #[kani::stub(crate::sampler::qm31_sample,common)] fn scalar_round(){let row:u8=kani::any();kani::assume(row>=15&&row<=24);check::<896>(row)}
 }
+#[cfg(kani)]
+pub(crate) mod RealR3_context {
+    use super::*;
+    static mut RECORD:Vec<u8>=Vec::new();
+    static mut ROW:u8=0;
+    static mut BEFORE:[u8;32]=[0;32];static mut NEXT:u8=0;
+    static mut AFTER:[u8;32]=[0;32];static mut AFTER_NEXT:u8=0;
+    static mut RESULT:Result<QM31,Error>=Ok(QM31::ZERO);
+    static mut CALLS:usize=0;
+    pub(crate) fn setup(record:Vec<u8>,row:u8,before:[u8;32],next:u8,value:QM31) {unsafe {
+        RECORD=record;ROW=row;BEFORE=before;NEXT=next;CALLS=0;
+        AFTER=kani::any();AFTER_NEXT=kani::any();
+        let error=match kani::any::<u8>() {
+            0=>Error::Allocation,1=>Error::RowOrder{expected:kani::any(),actual:kani::any()},
+            2=>Error::InvalidRow,3=>Error::Tag{row:kani::any()},4=>Error::Length{row:kani::any()},
+            5=>Error::NonCanonical{row:kani::any(),value:kani::any()},6=>Error::Boundary{round:kani::any()},
+            7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,10=>Error::Public,
+            _=>Error::ActivePole,
+        };
+        RESULT=if kani::any() {Ok(value)} else {Err(error)};
+    }}
+    pub(crate) fn count_reset()->usize {unsafe{let n=CALLS;CALLS=0;n}}
+    fn apply<H:Digest32>(st:&mut SemanticTranscript<H>,row:u8,record:&[u8])->Result<QM31,Error> {unsafe {
+        assert_eq!(row,ROW);assert_eq!(st.state,BEFORE);assert_eq!(st.next_row,NEXT);
+        assert_eq!(record.len(),RECORD.len());
+        if !record.is_empty() {let k:usize=kani::any();kani::assume(k<record.len());assert_eq!(record[k],RECORD[k]);}
+        CALLS+=1;st.state=AFTER;st.next_row=AFTER_NEXT;RESULT
+    }}
+    pub(crate) fn native<H:Digest32>(st:&mut SemanticTranscript<H>,row:u8,record:&[u8])->Result<QM31,Error> {
+        apply(st,row,record)
+    }
+    pub(crate) fn owned<H:Digest32>(mut st:SemanticTranscript<H>,row:u8,record:Vec<u8>)
+        ->(Result<QM31,Error>,SemanticTranscript<H>) {
+        let out=apply(&mut st,row,&record);(out,st)
+    }
+    static mut FIELD_RESULT:Result<(),Error>=Ok(());
+    static mut FIELD_CALLS:usize=0;
+    pub(crate) fn setup_fields(){unsafe{
+        assert_eq!(ROW,15);assert_eq!(RECORD.len(),901);FIELD_CALLS=0;
+        FIELD_RESULT=if kani::any(){Ok(())}else{Err(Error::NonCanonical{row:ROW,value:kani::any()})};
+    }}
+    pub(crate) fn field_count_reset()->usize{unsafe{let n=FIELD_CALLS;FIELD_CALLS=0;n}}
+    pub(crate) fn fields(row:u8,payload:&[u8])->Result<(),Error>{unsafe{
+        assert_eq!(row,ROW);assert_eq!(payload.len(),RECORD.len()-5);assert_eq!(payload.len(),896);
+        let j:usize=kani::any();kani::assume(j<payload.len());assert_eq!(payload[j],RECORD[5+j]);
+        FIELD_CALLS+=1;FIELD_RESULT
+    }}
+}
+#[cfg(kani)] mod RealR3_context_proofs {
+use super::*;
+#[derive(Clone,Copy)] struct NoHash;
+impl Digest32 for NoHash {fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("hash outside summarized callee")}}
+// Compare against the existing expected record without a second 896-byte
+// symbolic shadow array or a harness input-copy loop.
+fn fields(row:u8,payload:&[u8])->Result<(),Error>{RealR3_context::fields(row,payload)}
+fn check<const N:usize,const PFX:usize>(row:u8){
+ let initial:[u8;32]=kani::any();let next:u8=kani::any();let payload:[u8;N]=kani::any();let prefix:[u8;PFX]=kani::any();
+  let x:[u32;4]=kani::any();let value=QM31{c0:field::CM31{a:field::M31(x[0]),b:field::M31(x[1])},c1:field::CM31{a:field::M31(x[2]),b:field::M31(x[3])}};
+ // Independently constructed expected frame, not a call to wire::record.
+ let (tag,size)=wire::row_shape(row).unwrap();assert_eq!(size,N);
+ let mut frame=vec![tag];frame.extend_from_slice(&(N as u32).to_le_bytes());frame.extend_from_slice(&payload);
+ RealR3_context::setup(frame,row,initial,next,value);
+ if row==15 {RealR3_context::setup_fields();}
+ let mut st=SemanticTranscript{state:initial,hash:NoHash,next_row:next};let mut bytes=prefix.to_vec();
+ let a=native(row,&payload,&mut st,&mut bytes);let calls=RealR3_context::count_reset();let field_calls=RealR3_context::field_count_reset();
+ let (b,after,out)=owned(row,payload.to_vec(),SemanticTranscript{state:initial,hash:NoHash,next_row:next},prefix.to_vec());
+ assert_eq!(field_calls,RealR3_context::field_count_reset());assert_eq!(calls,RealR3_context::count_reset());assert!(calls<=1);
+ assert_eq!(a,b);assert_eq!(st.state,after.state);assert_eq!(st.next_row,after.next_row);assert_eq!(bytes.len(),out.len());
+ let j:usize=kani::any();kani::assume(j<bytes.len());assert_eq!(bytes[j],out[j]);
+}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::unwind(89)] fn row03(){check::<0,79>(3)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::unwind(94)] fn row04(){check::<0,84>(4)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::unwind(99)] fn row05(){check::<0,89>(5)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::unwind(104)] fn row06(){check::<0,94>(6)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::unwind(109)] fn row07(){check::<0,99>(7)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::unwind(114)] fn row08(){check::<0,104>(8)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::unwind(119)] fn row09(){check::<0,109>(9)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::unwind(124)] fn row10(){check::<0,114>(10)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::unwind(129)] fn row11(){check::<0,119>(11)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::unwind(134)] fn row12(){check::<0,124>(12)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::unwind(139)] fn row13(){check::<0,129>(13)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::unwind(176)] fn row14(){check::<32,134>(14)}
+#[kani::proof]
+#[kani::stub(crate::wire::SemanticTranscript::semantic,crate::RealR3_context::native)]
+#[kani::stub(crate::wire::semantic20::semantic,crate::RealR3_context::owned)]
+#[kani::stub(crate::wire::validate_record_fields,fields)]
+#[kani::unwind(1080)] fn row15(){check::<896,171>(15)}
+}

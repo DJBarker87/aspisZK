@@ -49,8 +49,8 @@ fn owned<H:Digest32>(row:u8,payload:Vec<u8>,transcript:SemanticTranscript<H>,mut
  match out {Err(e)=>(Err(e),next,bytes),Ok(v)=>{bytes.extend_from_slice(&framed);(Ok(v),next,bytes)}}
 }
 '''
-(N/'lib.rs').write_text(text+(E/'RealR3_scalar_harness.rs').read_text())
-(N/'Cargo.toml').write_text('[package]\nname="real-r3-native"\nversion="0.1.0"\nedition="2021"\n[lib]\npath="lib.rs"\n[workspace]\n')
+(N/'lib.rs').write_text(text+(E/'RealR3_scalar_harness.rs').read_text()+(E/'RealR3_context.rs').read_text()+(E/'RealR3_context_harness.rs').read_text())
+(N/'Cargo.toml').write_text('[package]\nname="real-r3-native"\nversion="0.1.0"\nedition="2021"\n[lib]\npath="lib.rs"\n[features]\ndefault=["r1p-check"]\nr1p-check=[]\n[workspace]\n')
 F=R/'docs/research/100bit-spend-path-20261013/evidence/prover-commit55-20261023/native'
 shutil.copy2(F/'field.rs',N/'field.rs');shutil.copytree(F/'field',N/'field',dirs_exist_ok=True)
 (E/'RealR3_native-bindings.json').write_text(json.dumps({'spans':{k:hashlib.sha256(v.encode()).hexdigest() for k,v in spans.items()},'closure':closure,'adjustment':'only use aspis_core -> use crate::aspis_core for standalone namespace; field library copied from part55','sampler_cut':'common pure sampler at equal challenge blocks; arbitrary four-word output is checked by Kani stub','native':'literal scalar closure with actual record/parser/semantic methods','owned':'semantic20 reference plus successful append'},indent=2)+'\n')
