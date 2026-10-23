@@ -41,3 +41,24 @@ credit to the failed whole-parent theorem or its recovery axiom.
 
 Budget after stage 2: Lean2/100, Kani0/60. Exact targets, source revisions,
 source/dependency hashes, limits, full errors and axioms are in lean-*/.
+
+Stage 3: `Port4B_CallerViews.physical_views` derives all six physical views
+and byte length bounds from the existing S2CallerFacts field.
+`callerP6` retains the named three parent gates/leaf gate and installs
+facts.oracle; `source_rows` gives complete log/Boolean equality to the
+retained sourceBatch for either batch index. These do NOT identify native
+op5 with that program. `Port4B_Cuts` derives batch0 from the SAME accepted
+TX1 prefix and batch1 from SAME accepted authenticated TX2; TX2's p is
+explicitly the SAME resume return. `Port4B_PhysicalCalls.tx1_slots/tx2_slots`
+instantiate the ONE Port3_Parents dictionary and derive the three native
+returns with original p.queries, p.roots[0/1], folded argument, and ordered
+scratch threading, without an independently assumed batch success.
+
+Final accepted stage3 targets006(cuts),007(views),009(physical calls):
+exit0; wall5.317299104/5.377760920/4.706138669s;
+peak4449116/4371040/4412584KiB; swap0; standard axioms only.
+003 is an excluded missing-namespace elaboration;004 was the intermediate
+views version before the helper's explicit axioms audit;005 is an excluded
+reserved-identifier parser error. Full receipts retain every failure.
+No theorem identifies Prepared roots/queries with parsed/model roots/queries;
+that remains the exact S1/caller gate, as do native leaf/slot/verify effects.
