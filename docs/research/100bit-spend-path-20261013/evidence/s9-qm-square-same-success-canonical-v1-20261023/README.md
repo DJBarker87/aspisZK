@@ -1,0 +1,3 @@
+Derives canonicality of CM square, mul_by_r and CM multiplication outputs from explicit canonical operands and success of that same extracted source call. Reuses actual square word formulas and checked R22 output bounds. These are conditional intermediate invariants for the enclosing square composition, not an assumption of independent successful arithmetic.
+
+Focused Lean check: 15.918 seconds; peak aggregate RSS 2235777024 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
