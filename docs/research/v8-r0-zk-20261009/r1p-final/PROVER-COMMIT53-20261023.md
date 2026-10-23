@@ -91,3 +91,38 @@ The terminal theorem still needs the Copy active output identity, selected
 claim carrier binding, and actual native caller correspondence. The next
 focused step retains the active identity discarded by the prior composition
 interface; the current endpoint remains unchanged.
+
+## Stage 3: complete retained terminal value
+
+J10510 preserves the Copy active output's model identity in
+`PreparedCopyComposition53.components_and_tail`; J10511 composes it with the
+concrete Poseidon callable and actual caller-selected variant/index. J10513
+proves the row-major claim/opening and decoded-point bridges. J10517 proves
+`AspisR1.TerminalModel53.run_success`: for canonical 84 claims, point,
+zerocheck point and challenges, and the original successful public preparation,
+the retained terminal continue branch succeeds canonically and its decoded
+first output equals **`R0P.SemSource.terminalValue`** on those actual claims
+and points with `ProverCommitQBasis51.basis`. No Poseidon, semantic, Copy,
+active-output or terminal-value image is assumed. The 29th claim column is
+zero-extended, and terminalValue never reads that column. This is the retained
+source cut; native entry validation and native optimized-call binding remain.
+
+J10509 is a rejected placeholder draft; J10512 a numeral-bound/extensionality
+draft; J10514–16 are alias/transparency drafts. J10516 reaches the unchanged
+200000 heartbeat limit; J10517 replaces unfolding with opaque model operations
+and symbolic selector equalities. No limit is raised and no unchanged attempt
+is retried. Every accepted new theorem prints only standard axioms.
+
+| Attempt | Target | Exit | Wall (s) | Peak RSS (KiB) | Swaps |
+|---|---|---:|---:|---:|---:|
+| J10510 | PreparedCopyComposition53 | 0 | 1.63 | 4167788 | 0 |
+| J10511 | CompositionDetailed53 | 0 | 1.74 | 4210592 | 0 |
+| J10513 | TerminalClaimModel53 | 0 | 1.65 | 4237780 | 0 |
+| J10517 | TerminalModel53 | 0 | 5.38 | 4242328 | 0 |
+
+Exact target names, source hashes, dependencies, complete axioms, failed
+diagnostics and GNU-time fields are retained in `lean/J10509`–`J10517` receipts.
+The receipt revision `1fb1793c05` denotes the unique parent commit of this
+stage; each receipt separately pins the exact compiled working source.
+No preexisting shared source/object is overwritten. The endpoint and shipped
+sources are unchanged.
