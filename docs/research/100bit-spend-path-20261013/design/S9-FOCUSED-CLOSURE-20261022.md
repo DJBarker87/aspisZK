@@ -1555,3 +1555,41 @@ The actual Pair returned value still needs its final parts connected to the
 spend relation and its concrete caller guards discharged. The final coherent
 dependency replay, remaining source/runtime/artifact bindings and composed
 security experiment remain open. **The 100-bit target is not established.**
+
+
+### Later continuation: complete Pair canonicality and kappa value
+
+The parent compositions are now proved in both actual source branches:
+`S9ActualSharedParentPartsCanonicalV1` and
+`S9ActualUnsharedParentPartsCanonicalV1` derive canonical final parts and
+the SAME powers-seven/final-sum calls from one accepted native Pair. They
+do not assume intermediate child successes, canonical low/private arrays,
+or initial/intermediate parts. The shared branch retains canonical receiver
+factors; the unshared branch does not require that premise.
+
+`S9ActualPairKappaPolynomialV1.actual_pair_returns_own_kappa_polynomial`
+then proves that the accepted native Pair returns the exact kappa polynomial
+of those own canonical final parts. Its actual shared-guard result is obtained
+from the SAME accepted source prefix and eliminated by cases, rather than
+assumed. The focused target passed with standard axioms, 25.476 seconds,
+3,233,595,392-byte aggregate RSS and zero swap; use its packet receipt as the
+authoritative resource record. The branch and unified packets were committed
+at cedcb1ac1e.
+
+Remaining caller guards are explicit: S2, canonical factors/private extra,
+canonical alpha/kappa, two-fold alpha length and the exact final-message
+span. `S9ResumeKappaAlphaCanonicalV1.resume_kappa_alpha_canonical` proves
+canonical stored kappa and both fold challenges, together with the exact
+Prepared alpha array, from the SAME successful strict Reader.e resume.
+The concrete caller endpoint composing these guards with the accepted tx2
+native Pair event is in progress. No alternate Current finish is supplied.
+
+The final parts still require their spend-relation interpretation. Native
+optimized coefficient64/mask16/outer12 source semantics are being connected
+to the existing S3 grouping theorem and identical tables; the pure grouping
+algebra is reused. Shared partial/high returned values and their exact source
+indices are being joined to the existing tensor-contraction theorem. These
+remain mathematical/source integration obligations, not cryptographic
+assumptions. Other operation/runtime/StoredCarrierBinding experiment ports,
+release artifact linkage and coherent final replay remain open. **The
+100-bit target is not established.**
