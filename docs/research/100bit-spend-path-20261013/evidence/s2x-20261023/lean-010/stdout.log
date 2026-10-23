@@ -1,0 +1,50 @@
+S2X_SecondCut.lean:57:4: error: don't know how to synthesize implicit argument `α`
+  @Exists
+    (Std.Array U8 (?m.80 ops program accounts data slot accepted proofAccount checkpointAccount raw checkpointInput))
+    fun publicArray =>
+    ∃ selected,
+      accounts.index_usize 0#usize = ok proofAccount ∧
+        accounts.index_usize 6#usize = ok checkpointAccount ∧
+          AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops proofAccount = ok (core.result.Result.Ok raw) ∧
+            AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops checkpointAccount =
+                ok (core.result.Result.Ok checkpointInput) ∧
+              ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) publicArray.to_slice selected
+                    checkpointInput () none =
+                  ok (core.result.Result.Ok ()) ∧
+                bytesOf ↑raw = List.take 688 (bytesOf ↑raw) ++ bytesOf ↑selected
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+slot : core.result.Result U64 PE
+accepted : AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot = ok (core.result.Result.Ok ())
+proofAccount checkpointAccount : Account
+raw checkpointInput : Slice U8
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+S2X_SecondCut.lean:63:9: error: don't know how to synthesize implicit argument `n`
+  @Array.to_slice U8 (?m.80 ops program accounts data slot accepted proofAccount checkpointAccount raw checkpointInput)
+    publicArray
+context:
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+slot : core.result.Result U64 PE
+accepted : AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot = ok (core.result.Result.Ok ())
+proofAccount checkpointAccount : Account
+raw checkpointInput : Slice U8
+publicArray :
+  Std.Array U8 (?m.80 ops program accounts data slot accepted proofAccount checkpointAccount raw checkpointInput)
+selected : Slice U8
+⊢ Usize
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+S2X_SecondCut.lean:57:57: error(lean.inferBinderTypeFailed): Failed to infer type of binder `publicArray`
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+'AspisR1.S2X.second_byte_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2X.second_fixed_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2X.successful_range_ordered' depends on axioms: [propext, Quot.sound]

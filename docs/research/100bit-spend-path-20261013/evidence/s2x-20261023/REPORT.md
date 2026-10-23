@@ -121,3 +121,44 @@ Lean005 (stronger child obstruction) passed. Lean006/007 failed on name/parser
 and scalar-notation elaboration, respectively; changed Lean008 passed with five
 standard-only reports: exit0, 2.387586s, 4400492KiB, swap0. Failed recovery
 sorryAx output is retained and excluded from accepted evidence.
+
+## Stage 4: actual TX2 suffix and exact field implications
+
+S2X_SecondCut.second_fixed_range strengthens the old stage2_call output to
+start=688, derived from acceptance of the SAME extracted whole owned TX2.
+successful_range_ordered derives the necessary ordering from checked range
+success without assuming the scanner's proof_length is honest.
+second_byte_fields then proves the exact raw-prefix-plus-selected-suffix
+byte equation at the actual successful second-child argument. TX1's equivalent
+source result is reused unchanged from AdapterRwLeadInputs.first_byte_fields.
+No independent successful child calls are assumed in these accepted inversions.
+
+Lean009 passed the source/range leaves; Lean010/011 retained a missing fixed
+1880-byte array binder annotation and its syntax correction, respectively.
+Their modules are excluded despite some printed standard-only declarations.
+Changed Lean012 passed all three current SecondCut theorems: exit0,
+5.953492s, 4434144KiB, swap0.
+
+S2X_Fields targets the exact Required14 field types:
+checkpoint_length_field adds savedAtWrite (identification of savedBytes with
+that SAME actual returned vector) to accepted_checkpoint_length.
+proof_suffix_field combines both checked source ranges with the existing
+P2Prime/digestMatches and explicit writtenCut/currentCut/observed1/observed2
+input observations. It does not construct those native observations. Unlike
+the old universal child contract, the two invocations' arguments are fixed
+outside their reached-site assertions.
+
+| Requested field | Disposition | Named remaining hypotheses / open source work |
+|---|---|---|
+| proofSuffix | Conditional; TX1 and TX2 local source cuts discharged | proof_suffix_field: range1/range2, length1/length2 (from accepted cuts), writtenCut/currentCut, observed1/observed2, p2prime/matched. Native site reification and instantiation of existing runtime P2′ remain. |
+| checkpointBytes | Conditional | checkpoint_sites: CheckpointVersionBinding, saveCut, tx2Cut, resumeCut. No concrete native history/observation instance supplied. |
+| checkpointLength | Conditional | checkpoint_length_field: actual accepted TX1, at2, OwnedSnapshotShape, entrySize, savedAtWrite. The 1768 premise applies to the entry snapshot, not the returned CP. |
+| accountFrame | Open globally; local laws discharged | sdk_write_frame and commit_frame are proved. Need native snapshot/to_vec/write wrapper refinement, OpaqueChildFrame and full native account observations. |
+| writtenMetadata | Open globally; local law discharged | commit_metadata preserves all full Account fields. Need native account2 write/copy/child-effects composition and faithful runtime metadata observations. |
+| ChildInputRetention | Open / universal port obstructed | Fixed owned-value retention discharged. constant_second_obstruction refutes derivation of the existing universal port from purity alone. Need a fixed-invocation port and actual source internal-site provenance; opaque native calls additionally need OpaqueChildFrame. |
+
+No native Required14 inhabitant, full SDK wrapper extraction, R10 observation
+join, deployed StoredCarrierBinding discharge or 100-bit release conclusion
+is established. The next concrete deliverable is extraction/source refinement
+of snapshot and the single write wrapper, plus the fixed-invocation child
+observation port. Neither gap is an SDK guard-internals proof obligation.
