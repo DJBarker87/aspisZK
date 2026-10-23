@@ -1,0 +1,10 @@
+def Aeneas.Std.core.array.TryFromSharedArraySlice.try_from : {T : Type} →
+  (N : Usize) → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N s =>
+  if h : s.len = N then Result.ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else Result.ok (core.result.Result.Err ())
+def Aeneas.Std.core.array.TryFromArrayCopySlice.try_from : {T : Type} →
+  (N : Usize) →
+    core.marker.Copy T → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N _copyInst s =>
+  if h0 : s.length = ↑N then Result.ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else Result.ok (core.result.Result.Err ())
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SharedArrayProbeV1.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Array.try_from_slice`

@@ -1,0 +1,279 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourceDigestEncodeContentsV1.lean:9:47: error: Tactic `assumption` failed
+
+digest : Std.Array U32 8#usize
+⊢ 0 < ↑8#usize
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourceDigestEncodeContentsV1.lean:10:47: error: Tactic `assumption` failed
+
+digest : Std.Array U32 8#usize
+⊢ 1 < ↑8#usize
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourceDigestEncodeContentsV1.lean:11:47: error: Tactic `assumption` failed
+
+digest : Std.Array U32 8#usize
+⊢ 2 < ↑8#usize
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourceDigestEncodeContentsV1.lean:12:47: error: Tactic `assumption` failed
+
+digest : Std.Array U32 8#usize
+⊢ 3 < ↑8#usize
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourceDigestEncodeContentsV1.lean:13:47: error: Tactic `assumption` failed
+
+digest : Std.Array U32 8#usize
+⊢ 4 < ↑8#usize
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourceDigestEncodeContentsV1.lean:14:47: error: Tactic `assumption` failed
+
+digest : Std.Array U32 8#usize
+⊢ 5 < ↑8#usize
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourceDigestEncodeContentsV1.lean:15:47: error: Tactic `assumption` failed
+
+digest : Std.Array U32 8#usize
+⊢ 6 < ↑8#usize
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourceDigestEncodeContentsV1.lean:16:47: error: Tactic `assumption` failed
+
+digest : Std.Array U32 8#usize
+⊢ 7 < ↑8#usize
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourceDigestEncodeContentsV1.lean:21:2: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourceDigestEncodeContentsV1.lean:26:48: error: unsolved goals
+digest : Std.Array U32 8#usize
+s : Slice U8
+index_mut_back : Slice U8 → Std.Array U8 32#usize
+_✝³⁰ :
+  [> let(s, index_mut_back) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (Array.repeat 32#usize 0#u8) { start := 0#usize, «end» := 4#usize } <]
+s_post1 : ↑s = List.slice 0 4 ↑(Array.repeat 32#usize 0#u8)
+s_post2 : s.length = 4 - 0
+s_post3 : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑s'
+m : U32
+_✝²⁹ : [> let m ← digest.index_usize 0#usize <]
+m_post : m = (↑digest)[0]
+s1 : Slice U8
+_✝²⁸ : [> let s1 ← lift (core.num.U32.to_le_bytes m).to_slice <]
+s2 : Slice U8
+_✝²⁷ : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1 <]
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Std.Array U8 32#usize
+_✝²⁶ :
+  [> let(s3, index_mut_back1) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back s2) { start := 4#usize, «end» := 8#usize } <]
+m1 : U32
+_✝²⁵ : [> let m1 ← digest.index_usize 1#usize <]
+s4 : Slice U8
+_✝²⁴ : [> let s4 ← lift (core.num.U32.to_le_bytes m1).to_slice <]
+s5 : Slice U8
+_✝²³ : [> let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4 <]
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Std.Array U8 32#usize
+_✝²² :
+  [> let(s6, index_mut_back2) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back1 s5) { start := 8#usize, «end» := 12#usize } <]
+m2 : U32
+_✝²¹ : [> let m2 ← digest.index_usize 2#usize <]
+s7 : Slice U8
+_✝²⁰ : [> let s7 ← lift (core.num.U32.to_le_bytes m2).to_slice <]
+s8 : Slice U8
+_✝¹⁹ : [> let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7 <]
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Std.Array U8 32#usize
+_✝¹⁸ :
+  [> let(s9, index_mut_back3) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back2 s8) { start := 12#usize, «end» := 16#usize } <]
+m3 : U32
+_✝¹⁷ : [> let m3 ← digest.index_usize 3#usize <]
+s10 : Slice U8
+_✝¹⁶ : [> let s10 ← lift (core.num.U32.to_le_bytes m3).to_slice <]
+s11 : Slice U8
+_✝¹⁵ : [> let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10 <]
+s12 : Slice U8
+index_mut_back4 : Slice U8 → Std.Array U8 32#usize
+_✝¹⁴ :
+  [> let(s12, index_mut_back4) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back3 s11) { start := 16#usize, «end» := 20#usize } <]
+m4 : U32
+_✝¹³ : [> let m4 ← digest.index_usize 4#usize <]
+s13 : Slice U8
+_✝¹² : [> let s13 ← lift (core.num.U32.to_le_bytes m4).to_slice <]
+s14 : Slice U8
+_✝¹¹ : [> let s14 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 s13 <]
+s15 : Slice U8
+index_mut_back5 : Slice U8 → Std.Array U8 32#usize
+_✝¹⁰ :
+  [> let(s15, index_mut_back5) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back4 s14) { start := 20#usize, «end» := 24#usize } <]
+m5 : U32
+_✝⁹ : [> let m5 ← digest.index_usize 5#usize <]
+s16 : Slice U8
+_✝⁸ : [> let s16 ← lift (core.num.U32.to_le_bytes m5).to_slice <]
+s17 : Slice U8
+_✝⁷ : [> let s17 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 s16 <]
+s18 : Slice U8
+index_mut_back6 : Slice U8 → Std.Array U8 32#usize
+_✝⁶ :
+  [> let(s18, index_mut_back6) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back5 s17) { start := 24#usize, «end» := 28#usize } <]
+m6 : U32
+_✝⁵ : [> let m6 ← digest.index_usize 6#usize <]
+s19 : Slice U8
+_✝⁴ : [> let s19 ← lift (core.num.U32.to_le_bytes m6).to_slice <]
+s20 : Slice U8
+_✝³ : [> let s20 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s18 s19 <]
+s21 : Slice U8
+index_mut_back7 : Slice U8 → Std.Array U8 32#usize
+_✝² :
+  [> let(s21, index_mut_back7) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back6 s20) { start := 28#usize, «end» := 32#usize } <]
+m7 : U32
+_✝¹ : [> let m7 ← digest.index_usize 7#usize <]
+s22 : Slice U8
+_✝ : [> let s22 ← lift (core.num.U32.to_le_bytes m7).to_slice <]
+s23 : Slice U8
+_ : [> let s23 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s21 s22 <]
+s1_post : s1 = (core.num.U32.to_le_bytes (↑digest)[0]).to_slice
+s2_post : s2 = (core.num.U32.to_le_bytes (↑digest)[0]).to_slice
+s3_post1 :
+  ↑s3 = List.slice 4 8 ((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice)
+s3_post2 : s3.length = 8 - 4
+s3_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back1 s') =
+      ((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4 ↑s'
+m1_post : m1 = (↑digest)[1]
+s4_post : s4 = (core.num.U32.to_le_bytes (↑digest)[1]).to_slice
+s5_post : s5 = (core.num.U32.to_le_bytes (↑digest)[1]).to_slice
+s6_post1 :
+  ↑s6 =
+    List.slice 8 12
+      (((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+        ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice)
+s6_post2 : s6.length = 12 - 8
+s6_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back2 s') =
+      (((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+            ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice).setSlice!
+        8 ↑s'
+m2_post : m2 = (↑digest)[2]
+s7_post : s7 = (core.num.U32.to_le_bytes (↑digest)[2]).to_slice
+s8_post : s8 = (core.num.U32.to_le_bytes (↑digest)[2]).to_slice
+s9_post1 :
+  ↑s9 =
+    List.slice 12 16
+      ((((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+            ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice).setSlice!
+        8 ↑(core.num.U32.to_le_bytes (↑digest)[2]).to_slice)
+s9_post2 : s9.length = 16 - 12
+s9_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back3 s') =
+      ((((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+                ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice).setSlice!
+            8 ↑(core.num.U32.to_le_bytes (↑digest)[2]).to_slice).setSlice!
+        12 ↑s'
+m3_post : m3 = (↑digest)[3]
+s10_post : s10 = (core.num.U32.to_le_bytes (↑digest)[3]).to_slice
+s11_post : s11 = (core.num.U32.to_le_bytes (↑digest)[3]).to_slice
+s12_post1 :
+  ↑s12 =
+    List.slice 16 20
+      (((((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+                ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice).setSlice!
+            8 ↑(core.num.U32.to_le_bytes (↑digest)[2]).to_slice).setSlice!
+        12 ↑(core.num.U32.to_le_bytes (↑digest)[3]).to_slice)
+s12_post2 : s12.length = 20 - 16
+s12_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back4 s') =
+      (((((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+                    ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice).setSlice!
+                8 ↑(core.num.U32.to_le_bytes (↑digest)[2]).to_slice).setSlice!
+            12 ↑(core.num.U32.to_le_bytes (↑digest)[3]).to_slice).setSlice!
+        16 ↑s'
+m4_post : m4 = (↑digest)[4]
+s13_post : s13 = (core.num.U32.to_le_bytes (↑digest)[4]).to_slice
+s14_post : s14 = (core.num.U32.to_le_bytes (↑digest)[4]).to_slice
+s15_post1 :
+  ↑s15 =
+    List.slice 20 24
+      ((((((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+                    ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice).setSlice!
+                8 ↑(core.num.U32.to_le_bytes (↑digest)[2]).to_slice).setSlice!
+            12 ↑(core.num.U32.to_le_bytes (↑digest)[3]).to_slice).setSlice!
+        16 ↑(core.num.U32.to_le_bytes (↑digest)[4]).to_slice)
+s15_post2 : s15.length = 24 - 20
+s15_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back5 s') =
+      ((((((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+                        ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice).setSlice!
+                    8 ↑(core.num.U32.to_le_bytes (↑digest)[2]).to_slice).setSlice!
+                12 ↑(core.num.U32.to_le_bytes (↑digest)[3]).to_slice).setSlice!
+            16 ↑(core.num.U32.to_le_bytes (↑digest)[4]).to_slice).setSlice!
+        20 ↑s'
+m5_post : m5 = (↑digest)[5]
+s16_post : s16 = (core.num.U32.to_le_bytes (↑digest)[5]).to_slice
+s17_post : s17 = (core.num.U32.to_le_bytes (↑digest)[5]).to_slice
+s18_post1 :
+  ↑s18 =
+    List.slice 24 28
+      (((((((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+                        ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice).setSlice!
+                    8 ↑(core.num.U32.to_le_bytes (↑digest)[2]).to_slice).setSlice!
+                12 ↑(core.num.U32.to_le_bytes (↑digest)[3]).to_slice).setSlice!
+            16 ↑(core.num.U32.to_le_bytes (↑digest)[4]).to_slice).setSlice!
+        20 ↑(core.num.U32.to_le_bytes (↑digest)[5]).to_slice)
+s18_post2 : s18.length = 28 - 24
+s18_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back6 s') =
+      (((((((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+                            ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice).setSlice!
+                        8 ↑(core.num.U32.to_le_bytes (↑digest)[2]).to_slice).setSlice!
+                    12 ↑(core.num.U32.to_le_bytes (↑digest)[3]).to_slice).setSlice!
+                16 ↑(core.num.U32.to_le_bytes (↑digest)[4]).to_slice).setSlice!
+            20 ↑(core.num.U32.to_le_bytes (↑digest)[5]).to_slice).setSlice!
+        24 ↑s'
+m6_post : m6 = (↑digest)[6]
+s19_post : s19 = (core.num.U32.to_le_bytes (↑digest)[6]).to_slice
+s20_post : s20 = (core.num.U32.to_le_bytes (↑digest)[6]).to_slice
+s21_post1 :
+  ↑s21 =
+    List.slice 28 32
+      ((((((((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+                            ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice).setSlice!
+                        8 ↑(core.num.U32.to_le_bytes (↑digest)[2]).to_slice).setSlice!
+                    12 ↑(core.num.U32.to_le_bytes (↑digest)[3]).to_slice).setSlice!
+                16 ↑(core.num.U32.to_le_bytes (↑digest)[4]).to_slice).setSlice!
+            20 ↑(core.num.U32.to_le_bytes (↑digest)[5]).to_slice).setSlice!
+        24 ↑(core.num.U32.to_le_bytes (↑digest)[6]).to_slice)
+s21_post2 : s21.length = 32 - 28
+s21_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back7 s') =
+      ((((((((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+                                ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice).setSlice!
+                            8 ↑(core.num.U32.to_le_bytes (↑digest)[2]).to_slice).setSlice!
+                        12 ↑(core.num.U32.to_le_bytes (↑digest)[3]).to_slice).setSlice!
+                    16 ↑(core.num.U32.to_le_bytes (↑digest)[4]).to_slice).setSlice!
+                20 ↑(core.num.U32.to_le_bytes (↑digest)[5]).to_slice).setSlice!
+            24 ↑(core.num.U32.to_le_bytes (↑digest)[6]).to_slice).setSlice!
+        28 ↑s'
+m7_post : m7 = (↑digest)[7]
+s22_post : s22 = (core.num.U32.to_le_bytes (↑digest)[7]).to_slice
+s23_post : s23 = (core.num.U32.to_le_bytes (↑digest)[7]).to_slice
+⊢ ((((((((↑(Array.repeat 32#usize 0#u8)).setSlice! 0 ↑(core.num.U32.to_le_bytes (↑digest)[0]).to_slice).setSlice! 4
+                              ↑(core.num.U32.to_le_bytes (↑digest)[1]).to_slice).setSlice!
+                          8 ↑(core.num.U32.to_le_bytes (↑digest)[2]).to_slice).setSlice!
+                      12 ↑(core.num.U32.to_le_bytes (↑digest)[3]).to_slice).setSlice!
+                  16 ↑(core.num.U32.to_le_bytes (↑digest)[4]).to_slice).setSlice!
+              20 ↑(core.num.U32.to_le_bytes (↑digest)[5]).to_slice).setSlice!
+          24 ↑(core.num.U32.to_le_bytes (↑digest)[6]).to_slice).setSlice!
+      28 ↑(core.num.U32.to_le_bytes (↑digest)[7]).to_slice =
+    chunks digest
+'AspisS6SourceCodec.DigestContents.encode_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

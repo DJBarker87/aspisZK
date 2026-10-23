@@ -1,0 +1,48 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourcePaymentHeaderTotalV1.lean:23:4: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourcePaymentHeaderTotalV1.lean:20:78: error: unsolved goals
+case h2.intro
+bytes : Std.Array U8 216#usize
+magic : Std.Array U8 4#usize
+kind : aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind
+s : Slice U8
+_✝⁶ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 4#usize } bytes.to_slice <]
+s1 : Slice U8
+_✝⁵ :
+  [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 4#usize } magic.to_slice <]
+b : Bool
+_✝⁴ : [> let b ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s s1 <]
+i : U8
+_✝³ : [> let i ← bytes.index_usize 4#usize <]
+i1 : U8
+_✝² : [> let i1 ← bytes.index_usize 5#usize <]
+i2 : U8
+_✝¹ : [> let i2 ← lift (UScalar.cast UScalarTy.U8 (read_discriminant kind)) <]
+i3 : U8
+_✝ : [> let i3 ← bytes.index_usize 6#usize <]
+i4 : U8
+_ : [> let i4 ← bytes.index_usize 7#usize <]
+value : Unit
+s_post1 : List.take 4 ↑magic = List.take 4 ↑bytes
+b_post : s = s1
+h✝⁴ : b = false
+i_post : i = (↑bytes)[4]
+h✝³ : ↑(↑bytes)[4] = 1
+i1_post : i1 = (↑bytes)[5]
+i2_post : i2 = UScalar.cast UScalarTy.U8 (read_discriminant kind)
+h✝² : ↑(↑bytes)[5] = ↑(read_discriminant kind)
+i3_post : i3 = (↑bytes)[6]
+h✝¹ : ↑(↑bytes)[6] = 1
+i4_post : i4 = (↑bytes)[7]
+h✝ : ↑(↑bytes)[7] = 0
+⊢ List.take 4 ↑bytes = ↑magic ∧
+    (↑bytes)[4] = 1#u8 ∧ (↑bytes)[5] = read_discriminant kind ∧ (↑bytes)[6] = 1#u8 ∧ (↑bytes)[7] = 0#u8
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourcePaymentHeaderTotalV1.lean:30:62: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp_all [header_frame, ̲List.slice, ̲magic.property,̵h̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS6SourceCodec.PaymentDecode.header_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

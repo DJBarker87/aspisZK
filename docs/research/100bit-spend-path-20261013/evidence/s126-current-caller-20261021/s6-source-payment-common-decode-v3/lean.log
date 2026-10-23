@@ -1,0 +1,129 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourcePaymentCommonDecodeV1.lean:47:19: error(lean.unknownIdentifier): Unknown identifier `r4`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourcePaymentCommonDecodeV1.lean:47:13: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.589
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+bytes : Std.Array U8 216#usize
+s : Slice U8
+_✝¹³ :
+  [> let s ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 144#usize, «end» := 148#usize } bytes.to_slice <]
+a✝³ : Std.Array U8 4#usize
+_✝¹² : [> let core.result.Result.Ok a✝³ ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s <]
+s_post1 : ↑s = List.slice 144 148 ↑bytes
+s_post2 : (List.slice 144 148 ↑bytes).length = 4
+r_post : ↑a✝³ = List.slice 144 148 ↑bytes
+a : Std.Array U8 4#usize
+_✝¹¹ :
+  [> let a ←
+    aspis_statement.atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU8)
+      (core.result.Result.Ok a✝³) <]
+a_post : a = a✝³
+asset : U32
+_✝¹⁰ : [> let asset ← lift (core.num.U32.from_le_bytes a) <]
+s1 : Slice U8
+_✝⁹ :
+  [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 8#usize, «end» := 40#usize } bytes.to_slice <]
+a✝² : Std.Array U8 32#usize
+_✝⁸ : [> let core.result.Result.Ok a✝² ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1 <]
+asset_post : asset = core.num.U32.from_le_bytes a✝³
+h✝ : ↑(core.num.U32.from_le_bytes a✝³) < ↑aspis_core.field.P
+s1_post1 : ↑s1 = List.slice 8 40 ↑bytes
+s1_post2 : (List.slice 8 40 ↑bytes).length = 32
+r1_post : ↑a✝² = List.slice 8 40 ↑bytes
+a1 : Std.Array U8 32#usize
+_✝⁷ :
+  [> let a1 ←
+    aspis_statement.atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 32#usize core.marker.CopyU8)
+      (core.result.Result.Ok a✝²) <]
+a1_post : a1 = a✝²
+s2 : Slice U8
+_✝⁶ :
+  [> let s2 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 40#usize, «end» := 72#usize } bytes.to_slice <]
+a✝¹ : Std.Array U8 32#usize
+_✝⁵ : [> let core.result.Result.Ok a✝¹ ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s2 <]
+s2_post1 : ↑s2 = List.slice 40 72 ↑bytes
+s2_post2 : (List.slice 40 72 ↑bytes).length = 32
+r2_post : ↑a✝¹ = List.slice 40 72 ↑bytes
+a2 : Std.Array U8 32#usize
+_✝⁴ :
+  [> let a2 ←
+    aspis_statement.atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 32#usize core.marker.CopyU8)
+      (core.result.Result.Ok a✝¹) <]
+a2_post : a2 = a✝¹
+s3 : Slice U8
+_✝³ :
+  [> let s3 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 72#usize, «end» := 80#usize } bytes.to_slice <]
+a✝ : Std.Array U8 8#usize
+_✝² : [> let core.result.Result.Ok a✝ ← core.array.TryFromArrayCopySlice.try_from 8#usize core.marker.CopyU8 s3 <]
+s3_post1 : ↑s3 = List.slice 72 80 ↑bytes
+s3_post2 : (List.slice 72 80 ↑bytes).length = 8
+r3_post : ↑a✝ = List.slice 72 80 ↑bytes
+a3 : Std.Array U8 8#usize
+_✝¹ :
+  [> let a3 ←
+    aspis_statement.atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 8#usize core.marker.CopyU8)
+      (core.result.Result.Ok a✝) <]
+a3_post : a3 = a✝
+i : U64
+_✝ : [> let i ← lift (core.num.U64.from_le_bytes a3) <]
+i_post : i = core.num.U64.from_le_bytes a3
+s4 : Slice U8
+_ :
+  [> let s4 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 80#usize, «end» := 112#usize } bytes.to_slice <]
+s4_post1 : ↑s4 = List.slice 80 112 ↑bytes.to_slice
+s4_post2 : s4.length = 112 - 80
+x✝ : ?m.589
+⊢ (do
+      let r4 ← core.array.TryFromSharedArraySlice.try_from 32#usize s4
+      let a4 ←
+        aspis_statement.atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Std.Array U8 32#usize)) r4
+      let r5 ← aspis_statement.atomic_statement.decode_digest_canonical a4
+      let r6 ←
+        core.result.Result.map_err
+            decode_common.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError
+            r5 ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r6
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s5 ←
+            core.slice.index.SliceIndexRangeUsizeSlice.index { start := 112#usize, «end» := 144#usize } bytes.to_slice
+          let r7 ← core.array.TryFromSharedArraySlice.try_from 32#usize s5
+          let a5 ←
+            aspis_statement.atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Std.Array U8 32#usize))
+                r7
+          let r8 ← aspis_statement.atomic_statement.decode_digest_canonical a5
+          let r9 ←
+            core.result.Result.map_err
+                decode_common.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError
+                r8 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r9
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r10 ←
+                validate_common
+                    { pool := a✝², deployment_domain := a✝¹, anchor_sequence := i, anchor_root := val,
+                      nullifier := val1, asset_id := core.num.U32.from_le_bytes a✝³ }
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r10
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  ok
+                    (core.result.Result.Ok
+                      { pool := a✝², deployment_domain := a✝¹, anchor_sequence := i, anchor_root := val,
+                        nullifier := val1, asset_id := core.num.U32.from_le_bytes a✝³ })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual CommonPublicV1
+                    (core.convert.FromSame PoolV1PaymentStatementFormatError) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual CommonPublicV1
+                (core.convert.FromSame PoolV1PaymentStatementFormatError) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual CommonPublicV1
+            (core.convert.FromSame PoolV1PaymentStatementFormatError) residual) ⦃
+    result => ∀ (common : CommonPublicV1), result = core.result.Result.Ok common → common_frame bytes common ⦄
+'AspisS6SourceCodec.PaymentDecode.common_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS6SourceCodec.PaymentDecode.common_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

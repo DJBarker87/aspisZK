@@ -1,0 +1,14 @@
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.eq : {T U : Type} →
+  core.cmp.PartialEq T U → Slice T → Slice U → Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          ok (decide ¬b = true))
+      ((↑s0).zip ↑s1)
+  else ok false
+@[reducible] def Aeneas.Std.core.cmp.impls.PartialEqU8.eq : U8 → U8 → Bool :=
+fun x y => decide (x = y)

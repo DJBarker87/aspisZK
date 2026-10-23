@@ -1,0 +1,56 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourcePaymentHeaderTotalV1.lean:25:19: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case hEq
+bytes : Std.Array U8 216#usize
+magic : Std.Array U8 4#usize
+kind : aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind
+s : Slice U8
+_✝ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 4#usize } bytes.to_slice <]
+s_post1 : ↑s = List.slice 0 4 ↑bytes.to_slice
+s_post2 : s.length = 4
+s1 : Slice U8
+_ :
+  [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 4#usize } magic.to_slice <]
+s1_post1 : ↑s1 = List.slice 0 4 ↑magic.to_slice
+s1_post2 : s1.length = 4 - 0
+⊢ core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8 s s1 ⦃ b => b = true ↔ s = s1 ⦄
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourcePaymentHeaderTotalV1.lean:20:78: error: unsolved goals
+case h2.intro
+bytes : Std.Array U8 216#usize
+magic : Std.Array U8 4#usize
+kind : aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind
+s : Slice U8
+_✝⁶ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 4#usize } bytes.to_slice <]
+s_post1 : ↑s = List.slice 0 4 ↑bytes.to_slice
+s_post2 : s.length = 4
+s1 : Slice U8
+_✝⁵ :
+  [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 4#usize } magic.to_slice <]
+s1_post1 : ↑s1 = List.slice 0 4 ↑magic.to_slice
+s1_post2 : s1.length = 4 - 0
+b : Bool
+_✝⁴ : [> let b ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s s1 <]
+b_post : b = true ↔ s ≠ s1
+h✝⁴ : ¬b = true
+i : U8
+_✝³ : [> let i ← bytes.index_usize 4#usize <]
+i_post : i = (↑bytes)[4]
+h✝³ : ¬(i != 1#u8) = true
+i1 : U8
+_✝² : [> let i1 ← bytes.index_usize 5#usize <]
+i1_post : i1 = (↑bytes)[5]
+i2 : U8
+_✝¹ : [> let i2 ← lift (UScalar.cast UScalarTy.U8 (read_discriminant kind)) <]
+i2_post : i2 = UScalar.cast UScalarTy.U8 (read_discriminant kind)
+h✝² : ¬(i1 != i2) = true
+i3 : U8
+_✝ : [> let i3 ← bytes.index_usize 6#usize <]
+i3_post : i3 = (↑bytes)[6]
+h✝¹ : ¬(i3 != 1#u8) = true
+i4 : U8
+_ : [> let i4 ← bytes.index_usize 7#usize <]
+i4_post : i4 = (↑bytes)[7]
+h✝ : ¬(i4 != 0#u8) = true
+value : Unit
+⊢ header_frame bytes magic kind
+'AspisS6SourceCodec.PaymentDecode.header_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

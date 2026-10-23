@@ -1,0 +1,16 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SourcePaymentHeaderTotalV1.lean:10:53: error: unsolved goals
+case hEq
+bytes : Std.Array U8 216#usize
+magic : Std.Array U8 4#usize
+kind : aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind
+s : Slice U8
+_✝ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 4#usize } bytes.to_slice <]
+s_post1 : ↑s = List.slice 0 4 ↑bytes.to_slice
+s_post2 : s.length = 4
+s1 : Slice U8
+_ :
+  [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 4#usize } magic.to_slice <]
+s1_post1 : ↑s1 = List.slice 0 4 ↑magic.to_slice
+s1_post2 : s1.length = 4 - 0
+⊢ core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8 s s1 ⦃ b => b = true ↔ s = s1 ⦄
+'AspisS6SourceCodec.PaymentDecode.header_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
