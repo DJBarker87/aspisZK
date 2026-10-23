@@ -1074,3 +1074,20 @@ Coherent source retention: c33b6acfbe adds the sampler owner, reversible
 discriminant-name adapter, raw generated source, all focused dependency
 sources/receipts and an exact selected-span checker (blank lines ignored,
 one explicit typed shift-count port). No compiled binaries are included.
+
+PROVED constructor multiplication consumer: the new V3 generated QM31.mul
+now maps through every Result bind to the existing transparent multiplication
+cut, preserving failure/divergence. Reusing its total/canonical theorem proves
+canonical output from canonical inputs and the same successful generated call
+(12.741 s, 2,225,569,792-byte peak aggregate RSS, zero swap, standard axioms).
+Packet: s9-constructor-v3-mul-canonical-v1-20261023. The M31/CM operation map
+predecessor was separately checked (6.79 s) and is retained in the packet.
+This supplies an arithmetic leaf for factor construction; the factor loops
+and their caller inputs remain open.
+
+Source retention: 1c7cf390e4 commits the immutable exact-attributed attempt22
+constructor extraction and its names-only Types/Funs owner packet. Historical
+PENDING labels in the frozen extraction are preserved; the later focused
+proof packets supply the current checked projection/canonicality results.
+Fixed [7,6] source normalization and allocation/error refinement remain
+explicit boundaries.

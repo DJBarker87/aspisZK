@@ -1,0 +1,3 @@
+PROVED: the fresh constructor V3 generated QM31 multiplication maps through all nine same-run result binds to the existing transparent QM multiplication cut, preserving failure/divergence; canonical inputs and success imply canonical output by reuse of the existing total/canonical arithmetic theorem. The source candidate and its extraction boundary remain separate from shipped full Pair/refinement and the 100-bit theorem.
+
+Focused Lean check: 12.741 seconds; peak aggregate RSS 2225569792 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
