@@ -1,0 +1,96 @@
+'AspisR1.S2W_ScheduledConsolidation.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_NativeSchedule.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_ReturnedCheckpoint.returned_committed' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W_AccountObservations.snapshot_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_AccountObservations.admitted_write_frame' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W_AccountObservations.write_metadata' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W_TwoFieldAudit.full_fields_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TwoFieldAudit.changed_metadata_excludes_facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.S2W_ScheduledConsolidation.accepted_run : ∀ {E : Type} (ops : AdapterRw.Ops)
+  (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+  (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+  S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+    ∀ (sha256 H : Bytes → State),
+      S2W_ExtractionBoundary.P1 sha256 H →
+        S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (program : S2W_ExtractionBoundary.Program) (accounts1 accounts2 : S2W_ExtractionBoundary.Accounts)
+            (data1 data2 : Slice U8) (slot : S2W_ExtractionBoundary.Slot) (saved : alloc.vec.Vec U8),
+            native1 program accounts1 data1 = ok (core.result.Result.Ok saved) →
+              native2 program accounts2 data2 slot = ok (core.result.Result.Ok ()) →
+                ∀ (port : ChildConeJoin E ops),
+                  FirstMarks port →
+                    SecondMarks port →
+                      ∃ f s outer pre middle fs ss,
+                        SourceCuts ops accounts1 accounts2 saved f s ∧
+                          S2W_Trace.run ops (S2W_Observation.two ops program accounts1 data1 accounts2 data2 slot) [] =
+                              ok (core.result.Result.Ok saved, outer) ∧
+                            S2W_ExpandedTrace.runExpanded ops (children port)
+                                  (S2W_Observation.two ops program accounts1 data1 accounts2 data2 slot) [] =
+                                ok (core.result.Result.Ok saved, S2W_ExpandedTrace.full (children port) outer) ∧
+                              projected port outer = S2W_SiteSchedule.timeline pre middle fs ss ∧
+                                ∀ (decode : HeaderDecode) (nodes : ℕ → ℕ → Slice U8) (y1 : Slice U8),
+                                  CheckpointWriterConeJoin ops decode H f.semantic f.pub f.proof f.split →
+                                    CheckpointReaderConeJoin ops decode H s.pub s.proof s.checkpoint →
+                                      ∀ (a : CheckpointVersionBinding (bytesOf ↑saved) (bytesOf ↑s.checkpoint)),
+                                        P2Prime H f.proof f.pub s.proof s.pub →
+                                          S2W_ChildJoins.FirstEntryVerifierConeJoin f.proof →
+                                            S2W_ChildJoins.MultiproofConeJoin f.proof s.proof nodes →
+                                              S2W_ChildJoins.S8StageConeJoin f.proof y1 →
+                                                ∀ (before after : S2LeadInterface.Site → ℕ → S2LeadInterface.Account),
+                                                  ∃ parsed,
+                                                    InputScheduleFacts
+                                                        (observation f s saved nodes y1 pre middle fs ss before after)
+                                                        ops H (bytesOf ↑f.proof) (bytesOf ↑f.pub) (bytesOf ↑saved)
+                                                        parsed ∧
+                                                      ∀ (site : S2LeadInterface.Site),
+                                                        (observation f s saved nodes y1 pre middle fs ss before
+                                                                after).reached
+                                                            site ↔
+                                                          S2W_SiteSchedule.Event.site site ∈ projected port outer :=
+fun {E} ops native1 native2 hashv extraction sha256 H p1 runtime program accounts1 accounts2 data1 data2 slot saved
+    accepted1 accepted2 port firstMarks secondMarks =>
+  let boundary := S2W_DigestExtraction.sourceBoundary ops native1 native2 hashv extraction;
+  let ⟨f, h✝⟩ :=
+    cuts_of_acceptance ops native1 native2 hashv boundary program accounts1 accounts2 data1 data2 slot saved accepted1
+      accepted2
+  let ⟨s, cuts⟩ := h✝
+  let ⟨outer, h✝¹⟩ :=
+    S2W_NativeSchedule.accepted_run ops native1 native2 hashv extraction program accounts1 accounts2 data1 data2 slot
+      saved accepted1 accepted2 port firstMarks secondMarks
+  let ⟨pre, h✝²⟩ := h✝¹
+  let ⟨middle, h✝³⟩ := h✝²
+  let ⟨fs, h✝⁴⟩ := h✝³
+  let ⟨ss, h✝⁵⟩ := h✝⁴
+  let ⟨execution, right✝⟩ := h✝⁵
+  let ⟨expanded, right✝¹⟩ := right✝
+  let ⟨left✝, right✝²⟩ := right✝¹
+  let ⟨layout, right✝³⟩ := right✝²
+  let ⟨left✝¹, right✝⁴⟩ := right✝³
+  let ⟨left✝², right✝⁵⟩ := right✝⁴
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro outer
+        (Exists.intro pre
+          (Exists.intro middle
+            (Exists.intro fs
+              (Exists.intro ss
+                ⟨cuts,
+                  ⟨execution,
+                    ⟨expanded,
+                      ⟨layout, fun decode nodes y1 writer reader version p2prime entry multiproof scan before after =>
+                        let ⟨parsed, facts⟩ :=
+                          input_schedule ops H accounts1 accounts2 f s saved cuts decode nodes y1 writer reader version
+                            p2prime entry multiproof scan
+                            (S2W_DigestExtraction.native_oracle ops native1 native2 hashv extraction sha256 H p1
+                              runtime)
+                            pre middle fs ss before after
+                        Exists.intro parsed
+                          ⟨facts, fun site =>
+                            Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    (observation f s saved nodes y1 pre middle fs ss before after).reached site ↔
+                                      S2W_SiteSchedule.Event.site site ∈ _a)
+                                  layout))
+                              Iff.rfl⟩⟩⟩⟩⟩))))))
