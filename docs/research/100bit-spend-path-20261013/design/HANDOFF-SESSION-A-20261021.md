@@ -190,3 +190,24 @@ Worker receipts: `evidence/import-union-20261022/`; migration hashes are in
 focused adapter checks in `adapter-host/`. The final union source is
 `lean/ImportUnionReleaseGate.lean`. This handoff requests Session A's candidate
 adoption and S10 re-pinning; the worker does not claim those edits are done.
+
+The full gate also exposed stale-provider collisions beyond discriminant
+attributes. Use the canonical `AspisR1PublicSerializer.Types` from
+`lean/bridge-verify-prefix-fe80-20261017/` (already named readers); an older host
+object still generated anonymous Error instances. `R1D18Transport` and
+`R1PoseidonMap` are now compatibility imports of their single canonical model
+owners. The current `R1SpendRelation` already imports `SpendRelation`; do not
+reuse the older full cached model: its Rspend/check omit AppendBinding.
+`tools/import-union/repin-model-aliases.py` records the canonical source choices
+and forces their entire retained consumer closure. In particular use the
+append-aware R1SpendRelationExtraction source pinned in model-alias-repin.json.
+These provider changes require consumer replay, even when a module's own source
+bytes are unchanged.
+
+Raw census must read `.olean`, `.olean.server`, and `.olean.private` together.
+Exported theorem stubs in the public part alone can look like axioms.
+`tools/import-union/RawUnionScan.lean` streams the complete module metadata and
+compares duplicate types as expressions, without expanding shared expression
+DAGs into text. Keep compatible same-type theorem overlaps in the report;
+instances, definitions, and incompatible types remain blockers. A successful
+import does not replace this census.

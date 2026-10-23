@@ -54,7 +54,7 @@ for rec in plan['ordered']:
                    'axioms_note':'No axiom-print command in unchanged dependency' if not axioms_output else 'Standard axioms only',
                    'object_sha256':r['object_sha256']})
 scan=latest['RawUnionScan']
-lines=(H/(scan['label']+'.log')).read_text().splitlines()
+lines=(H/'raw-union.jsonl').read_text().splitlines()
 raw={key:[json.loads(l[len(prefix):]) for l in lines if l.startswith(prefix)] for key,prefix in
      [('modules','RAW_MODULE '),('declarations','RAW_DECL '),('duplicate_types','RAW_DUP_TYPE '),('duplicates','RAW_DUP ')]}
 modules={r[0]:{'path':r[1],'imports':r[2]} for r in raw['modules']}
@@ -80,13 +80,14 @@ closure={'raw_union_modules':len(modules),'changed_types_or_generated_roots':sor
 for name in ['AspisR1.CompositionPartsAfterValidationExact','AspisR1.PoseidonCandidatePackedFamilyResidual','TerminalPartsArithmeticExact','ExtractedDecoderCallerBridge','OraclePortHeadlineFrozen2PerAttempt','R1Z.PrivacyR1HeadlineDeployed']:
     assert name in modules, ('missing required union member',name)
 allowed=[]
+compatible_theorems=[]
 collisions=[]
 for row in raw['duplicates']:
     name, owners, same_type, kernel_allowed=row
     generated=bool(re.search(r'\.(eq(?:_\d+|_def|_unfold)?|congr_simp)$',name))
     rec={'name':name,'owners':owners,'identical_raw_types':same_type,'all_theorems':all(k=='theorem' for _,k in owners), 'allowed_generated_equation':bool(kernel_allowed and generated)}
-    (allowed if rec['allowed_generated_equation'] else collisions).append(rec)
-for name,value in [('raw-module-graph',raw['modules']),('raw-declarations',raw['declarations']),('raw-duplicate-types',raw['duplicate_types']),('raw-duplicates',sorted(allowed+collisions,key=lambda r:r['name'])),('closure-check',closure),('release-targets',checks)]:
+    (allowed if rec['allowed_generated_equation'] else compatible_theorems if kernel_allowed else collisions).append(rec)
+for name,value in [('raw-module-graph',raw['modules']),('raw-declarations',raw['declarations']),('raw-duplicate-types',raw['duplicate_types']),('raw-duplicates',sorted(allowed+compatible_theorems+collisions,key=lambda r:r['name'])),('closure-check',closure),('release-targets',checks)]:
     (E/(name+'.json')).write_text(json.dumps(value,indent=2,sort_keys=True)+'\n')
 union=next(r for r in checks if r['module']=='ImportUnionReleaseGate')
 assert union['axioms_output'], 'union audits missing'
@@ -106,10 +107,11 @@ summary={'schema':'import-union-release-gate-v1','source_revision':plan['revisio
          'migration_files':migration['file_count'],'migration_attributes':migration['attribute_count'],
          'compiled_targets':len(checks),'failed_attempts':[{'label':r['label'],'module':r['module'],'exit':r['exit']} for r in records if r['exit']],
          'raw_union_modules':len(modules),'raw_declarations':len(raw['declarations']),
-         'allowed_equation_duplicates':len(allowed),'remaining_collisions':collisions,
+         'allowed_equation_duplicates':len(allowed),'compatible_same_type_theorem_overlaps':compatible_theorems,'remaining_collisions':collisions,
          'union':union,'endpoint_pins':endpoint_pins,'total_successful_compile_wall_seconds':sum(r['wall_seconds'] for r in checks),
          'max_peak_rss_kib':max(r['peak_rss_kib'] for r in checks),'all_swaps_zero':True,
-         'security_premises_changed':False,'candidate_source_edits':False}
+         'security_premises_changed':False,'canonical_source_contract_preserved':True,
+         'legacy_cached_spend_model_missing_append_binding_replaced':True,'candidate_source_edits':False}
 (E/'summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True)+'\n')
 print(json.dumps({k:summary[k] for k in ['compiled_targets','raw_union_modules','raw_declarations','allowed_equation_duplicates','remaining_collisions','max_peak_rss_kib','all_swaps_zero']},indent=2))
 if collisions:

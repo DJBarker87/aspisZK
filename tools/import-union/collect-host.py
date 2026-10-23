@@ -11,10 +11,11 @@ scan=latest.get('RawUnionScan')
 if not scan or scan['exit']:
     raise SystemExit('RawUnionScan has not succeeded')
 rows=[]
-for line in (E/(scan['label']+'.log')).read_text().splitlines():
+for line in (E/'raw-union.jsonl').read_text().splitlines():
     if line.startswith('RAW_MODULE '):
         m,path,imports=json.loads(line[len('RAW_MODULE '):]);p=Path(path)
-        rows.append({'module':m,'selected_path':path,'resolved_path':str(p.resolve()),
+        companions=[{'path':str(q),'sha256':hashlib.sha256(q.read_bytes()).hexdigest(),'bytes':q.stat().st_size} for q in [Path(str(p)+'.server'),Path(str(p)+'.private')] if q.is_file()]
+        rows.append({'companions':companions,'module':m,'selected_path':path,'resolved_path':str(p.resolve()),
                      'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size,'imports':imports})
 (E/'raw-object-pins.json').write_text(json.dumps(sorted(rows,key=lambda r:r['module']),indent=2,sort_keys=True)+'\n')
 for name in ['plan.json','companion-pins.json']:
