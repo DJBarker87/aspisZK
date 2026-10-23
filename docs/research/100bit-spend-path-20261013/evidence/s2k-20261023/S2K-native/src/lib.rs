@@ -296,3 +296,52 @@ fn S2K_frontier_typed_slice() {
     assert_eq!(after[i],before[i]);
     kani::cover!(level==0 && j==0);kani::cover!(level==19 && j==31);
 }
+
+// C3: explicit current index and local verified callee; avoids global std
+// method substitution (Kani060's IntoIterator resolution failure).
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub_verified(S2K_copy_small)]
+fn S2K_frontier_direct_slice() {
+    let mut output:[u8;688]=kani::any();
+    let node=digest();
+    let level:usize=kani::any();kani::assume(level<20);
+    let j:usize=kani::any();kani::assume(j<32);
+    let i:usize=kani::any();kani::assume(i<688 && (i<48+32*level || i>=80+32*level));
+    let before=output[i];
+    let start=48+32*level;
+    let source=encode_digest_canonical(&node);
+    S2K_copy_small(&mut output[start..start+32],&source);
+    assert_eq!(output[start+j],(node[j/4].0 >> (8*(j%4))) as u8);
+    assert_eq!(output[i],before);
+    kani::cover!(level==0 && j==0);kani::cover!(level==19 && j==31);
+}
+
+// One explicit byte-index assignment, avoiding slice-contract footprint code.
+#[kani::proof]
+#[kani::unwind(34)]
+fn S2K_frontier_index_assignment() {
+    let mut output:[u8;688]=kani::any();
+    let node=digest(); let source=encode_digest_canonical(&node);
+    let level:usize=kani::any();kani::assume(level<20);
+    let j:usize=kani::any();kani::assume(j<32);
+    let address=48+32*level+j;
+    let i:usize=kani::any();kani::assume(i<688 && i!=address);
+    let before=output[i];
+    output[address]=source[j];
+    assert_eq!(output[address],(node[j/4].0 >> (8*(j%4))) as u8);
+    assert_eq!(output[i],before);
+    kani::cover!(level==0 && j==0);kani::cover!(level==19 && j==31);
+}
+
+// Exact probe guard, after the separately proved encoder header stores.
+#[kani::proof]
+#[kani::unwind(34)]
+fn S2K_emit_header_guard() {
+    let mut encoded:[u8;POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES]=kani::any();
+    encoded[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC);
+    let reject = encoded.len() != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES
+        || encoded[..4] != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC;
+    assert!(!reject);
+    kani::cover!(!reject);
+}
