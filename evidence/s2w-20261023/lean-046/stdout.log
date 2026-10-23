@@ -1,0 +1,90 @@
+S2W_SuccessOracle.lean:72:34: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [S2W.OracleAudit.mask,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵] at returned
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2W_SuccessOracle.returned_raw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SuccessOracle.native_success_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SuccessOracle.before_to_after' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SuccessOracle.masked_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.S2W_LeadInterface.checkpoint_binding : ∀ {Observer Hash : Type} (c : S2W_LeadInterface.Inputs Observer)
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (H : Bytes → State) (stored pub ck : Bytes)
+  (parsed : Parsed),
+  S2W_LeadInterface.S2CallerFacts c D hash H stored pub ck parsed →
+    ∀ (s : S2W_LeadInterface.Site),
+      c.reached s → CheckpointBytes5Join.S2S10CallerBinding D hash H (c.proof s) (c.publicInput s) stored pub :=
+fun {Observer Hash} c D hash H stored pub ck parsed facts s reached =>
+  { proofBytes := facts.proofBytes s reached, publicBytes := facts.publicBytes s reached,
+    oracle := S2W_LeadInterface.checkpoint_oracle D hash H facts.oracle }
+theorem AspisR1.S2W_LeadInterface.compose : ∀ {Observer Hash : Type} (c : S2W_LeadInterface.Inputs Observer)
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (H : Bytes → State) (stored pub ck : Bytes)
+  (parsed : Parsed),
+  S2W_LeadInterface.S2CallerFacts c D hash H stored pub ck parsed →
+    c.reached S2LeadInterface.Site.save →
+      c.reached S2LeadInterface.Site.resume →
+        ∀ (old : S8OwnedP6Finish.Weights),
+          (↑old).length = 64 →
+            ∀ (state : S7Kani2AccumulatorLoop.BatchedWeights) (sum : S7Kani3CallerTrace.Sum),
+              S7Kani3CallerTrace.PushTrace old state sum →
+                CheckpointBytes5Join.S2S10CallerBinding D hash H (c.proof S2LeadInterface.Site.save)
+                    (c.publicInput S2LeadInterface.Site.save) stored pub ∧
+                  CheckpointBytes5Join.S2S10CallerBinding D hash H (c.proof S2LeadInterface.Site.resume)
+                      (c.publicInput S2LeadInterface.Site.resume) stored pub ∧
+                    (∀ (b k : ℕ),
+                        b < 2 →
+                          k < 3 →
+                            bytesOf ↑(c.nodes b k) =
+                              slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + k))
+                                (32 * OraclePortSelectedDraft.capacity (3 * b + k))) ∧
+                      S7JoinRowsTrace.Progress 0 0 { raw := S7Kani3CallerTrace.initialRaw old, terms := 0#usize } ∧
+                        S8Kani2CallerJoin.CallerInvariant state.raw old sum :=
+fun {Observer Hash} c D hash H stored pub ck parsed facts save resume old size state sum history =>
+  ⟨S2W_LeadInterface.checkpoint_binding c D hash H stored pub ck parsed facts S2LeadInterface.Site.save save,
+    ⟨S2W_LeadInterface.checkpoint_binding c D hash H stored pub ck parsed facts S2LeadInterface.Site.resume resume,
+      ⟨facts.nodeViews,
+        ⟨S7JoinQueryRows.initial_progress old size, S7Kani3CallerTrace.reached_invariant old state sum history⟩⟩⟩⟩
+theorem AspisR1.S2W_LeadInterface.multiproof_join : ∀ {Observer Hash : Type} (c : S2W_LeadInterface.Inputs Observer)
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (H : Bytes → State) (stored pub ck : Bytes)
+  (parsed : Parsed),
+  S2W_LeadInterface.S2CallerFacts c D hash H stored pub ck parsed →
+    ∀ (binary occupied sibling : MultiproofConeP6Callbacks.Parent) (leaf : MultiproofConeP6Batch.Leaf),
+      MultiproofConeP6Frozen2Stage.P6Boundary (S2W_LeadInterface.multiproofDigest D) hash H binary occupied sibling
+          leaf →
+        ∀ (q : Fin 22 → Fin 262144),
+          (∀ (s : MultiproofConeRef.reference.Scratch),
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                      (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q c.nodes 0 s)).2 =
+                  true →
+                AspisV8R19.MemoizedProgramLaw.eval H
+                    (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q c.nodes 0 s) =
+                  AspisV8R19.MemoizedProgramLaw.eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch0)) ∧
+            ∀ (s : MultiproofConeRef.reference.Scratch),
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                      (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q c.nodes 1 s)).2 =
+                  true →
+                AspisV8R19.MemoizedProgramLaw.eval H
+                    (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q c.nodes 1 s) =
+                  AspisV8R19.MemoizedProgramLaw.eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch1) :=
+fun {Observer Hash} c D hash H stored pub ck parsed facts binary occupied sibling leaf p6 q =>
+  MultiproofConeP6Frozen2Stage.both_batches (S2W_LeadInterface.multiproofDigest D) hash H binary occupied sibling leaf
+    p6 parsed q c.nodes facts.nodeViews
+theorem AspisR1.S2W_LeadInterface.y1_join : ∀ {Observer Hash : Type} (c : S2W_LeadInterface.Inputs Observer)
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (H : Bytes → State) (stored pub ck : Bytes)
+  (parsed : Parsed),
+  S2W_LeadInterface.S2CallerFacts c D hash H stored pub ck parsed →
+    c.reached S2LeadInterface.Site.tx1 →
+      ∀ (tr : RawCutTranscriptRun.ErasedPrefix),
+        OraclePortStoredParserC4.parseReached stored tr = some parsed →
+          S8OwnedP6.check_values_owned c.y1 = ok (core.result.Result.Ok ()) :=
+fun {Observer Hash} c D hash H stored pub ck parsed facts reached tr parser =>
+  Eq.mpr
+    (id (congrArg (fun _a => S8OwnedP6.check_values_owned _a = ok (core.result.Result.Ok ())) (facts.y1Input reached)))
+    (S8JoinFrozenScan.parsed_y1 (c.proof S2LeadInterface.Site.tx1) tr parsed
+      (id
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => OraclePortStoredParserC4.parseReached _a tr = some parsed)
+              (facts.proofBytes S2LeadInterface.Site.tx1 reached)))
+          parser)))
