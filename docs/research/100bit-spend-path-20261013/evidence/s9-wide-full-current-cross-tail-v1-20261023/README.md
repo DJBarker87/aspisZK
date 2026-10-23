@@ -1,0 +1,3 @@
+Composes the same source mul_u call and following addition with the already-proved two-subtraction suffix. Canonicality of each intermediate comes from success of its own source call; all arithmetic Result maps use the checked shared mapper adapters. This is a named suffix of the exact Wide multiplication body, not a standalone release claim.
+
+Focused Lean check: 18.167 seconds; peak aggregate RSS 3201236992 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
