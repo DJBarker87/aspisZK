@@ -1,0 +1,3 @@
+The SAME actual shared guard on the constructor receiver identifies its shared low factors with row two. Together with the actual common, partial and high calls, the returned dot value is the weighted 64-field sum for that SAME constructor model row two. Table meaning and canonical receiver are explicit helper guards supplied by the enclosing constructor. No desired dot or independent array-value premise. Final parts and complete source/security composition are separate.
+
+Focused Lean check: 21.614 seconds; peak aggregate RSS 3228663808 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
