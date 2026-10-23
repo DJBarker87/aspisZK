@@ -240,3 +240,42 @@ fn S2K_copy688_contract() {
 include!("S2K_result_fields.rs");
 
 include!("S2K_admission.rs");
+
+// Same-signature small-copy contract for the afterstate encoder's actual
+// 4/8/32-byte calls. The modifies target is the typed mutable slice itself;
+// no oversized raw-pointer region or fabricated pointer identity is used.
+#[kani::requires(destination.len() == source.len())]
+#[kani::requires(matches!(source.len(),4|8|32))]
+#[kani::modifies(destination)]
+#[kani::ensures(|_| destination == source)]
+fn S2K_copy_small(destination: &mut [u8], source: &[u8]) {
+    destination.copy_from_slice(source);
+}
+#[kani::proof_for_contract(S2K_copy_small)]
+#[kani::unwind(34)]
+fn S2K_copy_small_contract() {
+    let mut destination:[u8;32]=kani::any();
+    let source:[u8;32]=kani::any();
+    let width:usize=kani::any();kani::assume(matches!(width,4|8|32));
+    S2K_copy_small(&mut destination[..width],&source[..width]);
+    kani::cover!(width==4);kani::cover!(width==8);kani::cover!(width==32);
+}
+
+
+// Contract verified ONLY at T=u8; consumers below are byte-copy mono instances.
+#[kani::requires(destination.len() == source.len())]
+#[kani::requires(matches!(source.len(),4|8|32))]
+#[kani::modifies(destination)]
+#[kani::ensures(|_| destination == source)]
+fn S2K_copy_small_generic<T: Copy + PartialEq + kani::Arbitrary>(destination: &mut [T], source: &[T]) {
+    destination.copy_from_slice(source);
+}
+#[kani::proof_for_contract(S2K_copy_small_generic)]
+#[kani::unwind(34)]
+fn S2K_copy_small_u8_contract() {
+    let mut destination:[u8;32]=kani::any();
+    let source:[u8;32]=kani::any();
+    let width:usize=kani::any();kani::assume(matches!(width,4|8|32));
+    S2K_copy_small_generic::<u8>(&mut destination[..width],&source[..width]);
+    kani::cover!(width==4);kani::cover!(width==8);kani::cover!(width==32);
+}

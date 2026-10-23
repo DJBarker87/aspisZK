@@ -1,0 +1,16 @@
+// A single ORIGINAL source frontier iteration, now using the checked
+// same-signature std-copy contract. No whole encoder/emitter is harnessed.
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(<[u8]>::copy_from_slice,S2K_copy_small)]
+#[kani::stub_verified(S2K_copy_small)]
+fn S2K_frontier_typed_slice() {
+    let before:[u8;688]=kani::any();
+    let node=digest();let level:usize=kani::any();kani::assume(level<20);
+    let j:usize=kani::any();kani::assume(j<32);
+    let i:usize=kani::any();kani::assume(i<688 && (i<48+32*level || i>=80+32*level));
+    let after=frontier_step(before,level,&node);
+    assert_eq!(after[48+32*level+j],(node[j/4].0 >> (8*(j%4))) as u8);
+    assert_eq!(after[i],before[i]);
+    kani::cover!(level==0 && j==0);kani::cover!(level==19 && j==31);
+}
