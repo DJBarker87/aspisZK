@@ -93,3 +93,61 @@ retried unchanged. The replacement verifies output words separately, while
 retaining the complete allocation and both native collect paths. Word 0
 passes in 88.255 s at 4333640 KiB, exit 0, zero swap. Remaining words are
 being checked independently; no complete WideExact-256 claim is made yet.
+
+## Stage 3: semantic guard and final-round composition
+
+J10714 proves the actual intended semantic model function's degree bound,
+original-round decomposition, initial/chain/terminal guards, and terminal read
+from refPayload+L. J10716 identifies every shifted model round polynomial
+with refPayload+L after shift, and proves its boundary and terminal laws.
+J10718 composes the source partial sums, interpolation and actual inverse/shift
+producers into the entire round-9 polynomial of that model payload. This
+retains explicit per-oracle-call correctness, challenge prefix, non-half, and
+the two source terminal-input images. It does not promote those input cuts
+to a whole native semantic implementation theorem.
+
+J10720 proves the canonical source boundary comparison and composes the
+actual source polynomial evaluator with each next boundary guard. The
+polynomial images and initial running input image remain caller obligations.
+J10722 reassembles all eight independent WideExact component equalities
+into complete ordered list equality and connects that list to the extracted
+strided collector. Native Kani results remain external evidence, not axioms.
+
+| Attempt | Exact module | Exit | Wall s | Peak RSS KiB | Swaps |
+|---|---|---:|---:|---:|---:|
+| J10714 | R1Z.ProverCommitSemanticModel55 | 0 | 2.89 | 3613976 | 0 |
+| J10716 | R1Z.ProverCommitSemanticRounds55 | 0 | 2.80 | 4168316 | 0 |
+| J10718 | R1Z.ProverCommitSemanticFinal55 | 0 | 2.24 | 4183196 | 0 |
+| J10720 | R1Z.ProverCommitSemanticGuards55 | 0 | 2.30 | 4149812 | 0 |
+| J10722 | R1Z.ProverCommitCollection55 | 0 | 1.77 | 4100584 | 0 |
+
+Every printed accepted axiom is standard only. J10712/13 are type/transparency
+drafts; the latter hit the default recursion limit on a payload projection.
+J10715 repeats a rewrite already applied to both occurrences. J10717 hits the
+unchanged heartbeat limit under a polynomial `change`; J10718 uses a named
+identity. J10719 uses a reserved identifier and lacks local equality
+decidability. J10721 needs zero-add normalization before list transitivity.
+All rejected snapshots/diagnostics are retained. No Lean limit is raised.
+
+All eight WideExact-256 selected-word checks now pass with complete native
+allocation/collection, arbitrary raw input words and arbitrary output index.
+The word receipts are e-split-256-word0-v3 through word7-v3, all exit 0, zero
+swap, with peaks approximately 4.13 GiB. This completes the split collection
+checks for every actual recursive length/type used by the caller.
+
+Native constructor-order checks at lengths 4,9,10, semantic challenge arrays,
+and canonical M31/QM31 projection round trips also pass. The constructor
+v3 diagnostic is an intrinsic memcmp unwinding failure; v4 changes the
+comparison to a selected component and covers its remaining tiny comparisons.
+An earlier reservation hold launches no compiler. All native scopes stay
+6G/8G/zero-swap/64 tasks.
+
+The full native CM31 arithmetic-step comparison times out after 180.568 s
+(169536 KiB RSS, zero swap). A different release-flags preflight is rejected
+by Kani because it requires overflow checks; no analysis runs under that
+configuration and it establishes nothing. The symbolic square/power proofs
+remain valid, while the native arithmetic-step gate is not claimed proved.
+The channel-0 v3 failure is confined to generating 1024 arbitrary input cells:
+its 260 unwind bound covers the collector but not that input constructor.
+The revised harness explicitly covers that 1024-step setup; memory caps stay
+fixed. No failed native input is replayed unchanged.

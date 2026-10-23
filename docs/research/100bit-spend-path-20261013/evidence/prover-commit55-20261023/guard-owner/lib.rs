@@ -111,4 +111,21 @@ pub fn pow(base:CM31,exp:u64,acc:CM31)->CM31 {
   pow(base.square(),exp>>1u32,next)
  }
 }
+pub fn point(j:usize)->CM31 {
+ let r=super::nodes54::reverse(18,j);
+ pow(CM31::new(super::field::M31(2),super::field::M31(1268011823)),1024+4096*r as u64,CM31::ONE)
+}
+pub fn node(j:usize,depth:u8)->super::field::M31 {
+ let step=1usize<<(depth as u32);
+ let aligned=(j/step)*step;
+ super::nodes54::repeat(point(aligned).a,depth+1)
+}
+pub fn fill(j:usize,d:u8,left:u8,mut out:[super::field::M31;9])->[super::field::M31;9] {
+ if left==0 {out} else {
+  out[d as usize]=node(j,d);
+  fill(j,d+1,left-1,out)
+ }
+}
+pub fn nodes(j:usize)->[super::field::M31;9] {fill(j,0,9,[super::field::M31::ZERO;9])}
+
 }

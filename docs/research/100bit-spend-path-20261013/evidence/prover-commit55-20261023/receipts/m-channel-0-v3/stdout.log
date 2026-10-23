@@ -1,0 +1,23 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Thread 0: Checking harness fixed_channels::m_channel_0...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 1 of 596 failed (595 undetermined)
+Failed Checks: unwinding assertion loop 0
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs", line 897, in std::array::try_from_fn_erased::<[u32; 1], std::ops::try_trait::NeverShortCircuit<[u32; 1]>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<[u32; 1]>, std::iter::Map<std::array::drain::Drain<'_, ()>, {closure@std::ops::try_trait::NeverShortCircuit<[u32; 1]>::wrap_mut_1<(), {closure@<[u32; 1] as kani::Arbitrary>::any_array<1024>::{closure#0}}>::{closure#0}}>>::{closure#0}}>
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 7.316512s
+
+Manual Harness Summary:
+Verification failed for - fixed_channels::m_channel_0
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
