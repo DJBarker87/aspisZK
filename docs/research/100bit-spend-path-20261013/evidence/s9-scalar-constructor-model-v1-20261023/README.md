@@ -1,0 +1,3 @@
+The SAME actual constructor receiver row and cell reads, accepted native powers4 and scalar calls determine the actual scalar output polynomial with PERM[0,3,2,1] and source quarter. Coefficient canonicality and meanings are derived from receiver canonicality and table meaning. Those receiver/table/alpha guards are supplied by the enclosing source constructor/trace; no independent scalar-value or powers-meaning premise. This helper alone closes neither S9 nor release soundness.
+
+Focused Lean check: 21.587 seconds; peak aggregate RSS 3322036224 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
