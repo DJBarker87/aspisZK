@@ -2,12 +2,13 @@
 use aspis_core::{field::{M31,CM31 as C,QM31 as Q,WideExact as E,P},r0::CodeField};
 use super::{reference_tower_field as r,reference_scalar::CodeField as RefCodeField};
 static mut REPLAY:bool=false;
-static mut COUNT:usize=0;
+pub(crate) static mut COUNT:usize=0;
 static mut TAGS:[u32;32]=[0;32];
 static mut LEFT:[[u32;8];32]=[[0;8];32];
 static mut RIGHT:[[u32;8];32]=[[0;8];32];
 static mut ANSWERS:[[u32;8];32]=[[0;8];32];
 fn op(tag:u32,a:[u32;8],b:[u32;8])->[u32;8] {
+ for x in a {assert!(x<P);}for x in b {assert!(x<P);}
  let i=unsafe{COUNT};assert!(i<32);
  if unsafe{REPLAY} {assert_eq!(unsafe{TAGS[i]},tag);assert_eq!(unsafe{LEFT[i]},a);assert_eq!(unsafe{RIGHT[i]},b);}
  else {unsafe{TAGS[i]=tag;LEFT[i]=a;RIGHT[i]=b;}}
@@ -57,8 +58,8 @@ pub(crate) fn current_minv(x:M31)->Option<M31> {
 pub(crate) fn old_minv(x:r::M31)->Option<r::M31> {
  let answer=op(100,rmraw(x),[0;8]);if x.0==0 {None} else {Some(r::M31(answer[0]))}
 }
-fn begin(answers:[[u32;8];32]) {unsafe{REPLAY=false;COUNT=0;ANSWERS=answers;}}
-fn replay()->usize {let n=unsafe{COUNT};unsafe{REPLAY=true;COUNT=0;}n}
+pub(crate) fn begin(answers:[[u32;8];32]) {unsafe{REPLAY=false;COUNT=0;ANSWERS=answers;}}
+pub(crate) fn replay()->usize {let n=unsafe{COUNT};unsafe{REPLAY=true;COUNT=0;}n}
 #[kani::proof]
 #[kani::stub(<M31 as CodeField>::try_inv,current_minv)]
 #[kani::unwind(40)]

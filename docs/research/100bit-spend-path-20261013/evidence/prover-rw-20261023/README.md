@@ -485,3 +485,45 @@ template holes, which also include types and standard/environment operations.
 The complete leaf-contract gate remains open. budget-audit.json derives the
 actual 34/60 invocation count from immutable receipts: 21 pass, eight timeout,
 three compile failures, one CLI rejection and one rejected draft contract.
+
+### Domain checks and sampler reuse audit
+
+The C/Q/E inverse adapter also passes with every lower-operation input
+explicitly checked canonical (tower-inverse-kani-005: 101.551 s, 2970148 KiB,
+no swap). Adding those domain assertions to the combined cached multiplier
+replay times out at 90 s; the existing complete trace equality is retained,
+and the separate actual-code canonical-domain check passes
+(prepared-domain-kani-001: 50.934 s, 1847132 KiB, no swap). Its constructor
+and multiply use independent arbitrary canonical lower-answer tapes. These
+are separate local facts, not a compiled composition theorem.
+
+Actual S2 row/tag/from-tag and checked index/reversal/child-parent interfaces
+pass two focused Kani harnesses (1.271/1.770 s, 210960/209460 KiB, no swap).
+No full coefficient-copy or circle geometry conclusion is inferred.
+
+One native long-division word-step bit-blast times out at 120 s. The small
+Mersenne arithmetic fact instead passes in 1.494 s, 202132 KiB, no swap: a
+bounded quotient and remainder reconstruct the dividend using shifts and
+subtraction. This alone is not native division equality or a sampler law.
+The failed exact-step harness is retained.
+
+The dependency audit then locates existing complete division-pass and total
+QM31 sampler proofs. All eight archived Rust declaration cuts still occur
+verbatim; the entire sampler.rs hash is unchanged. Four checked Lean modules
+have matching proof-source hashes, exit-0 receipts and standard-axiom audits
+(reused-sampler-proofs.json). This is eligible local reuse, not a new theorem.
+A focused actual sampler extraction accepts (Charon 189.330 s, 538228 KiB;
+Aeneas 0.732 s, 70752 KiB; zero swaps), with no external template holes. Its
+uncompiled emitted Lean sources are retained under generated-sampler.
+The new release lowering uses wrapping integer operations where the retained
+proved program uses checked operations. sampler-lowering-delta.json records
+that explicit transport obligation and the nominal coordinate conversion;
+source-cut identity alone does not discharge it. No sampler-specific Kani
+bit-blast is being repeated with larger limits.
+
+Budget audit: 42/60 Kani invocations (27 pass, ten timeout, three compile
+failures, one CLI rejection, one rejected draft contract); Lean 0/100. The
+assigned env J range is still absent. external-obligations-caller005.json
+records the remaining kernel/model boundaries without assuming their desired
+whole-body equality. The complete leaf-contract and source/model gates remain
+open. Production source remains frozen at 9c131667ca for the active corpus.

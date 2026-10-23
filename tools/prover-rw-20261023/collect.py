@@ -20,4 +20,4 @@ for root,pattern in [('src','reservation-*.json'),('baseline-src','reservation-*
 # Corpus receipts retain metadata; raw proof/oracle bytes stay on the host.
 for label in ['corpus-1000-001','corpus-1000-002']:
  corpus=E/label;corpus.mkdir(exist_ok=True)
- subprocess.run(['rsync','-a','--include=*/','--include=binaries.json','--include=progress.json','--include=comparison-*.json','--exclude=*',host+':'+H+'/'+label+'/',str(corpus)+'/'],check=True)
+ subprocess.run(['rsync','-a','--include=*/','--include=binaries.json','--include=resource-review.json','--include=progress.json','--include=comparison-*.json','--exclude=*',host+':'+H+'/'+label+'/',str(corpus)+'/'],check=True)

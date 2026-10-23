@@ -21,7 +21,7 @@ new=[]
 for p in sorted((O/'continuation/receipts/candidate').glob('*kani*/receipt.json')):
     r=json.loads(p.read_text())
     if r.get('exit_status')!=0:continue
-    new.append(dict(receipt=str(p.relative_to(R)),receipt_sha256=sha(p),target=r['target'],exit_status=0,wall_seconds=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],swaps=r['swaps'],qualification='Bounded codec comparisons, parametric digest framing, or single-cell volatile frames only; read the exact selected harness. Not a complete pipeline leaf contract.'))
+    new.append(dict(receipt=str(p.relative_to(R)),receipt_sha256=sha(p),target=r['target'],exit_status=0,wall_seconds=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],swaps=r['swaps'],qualification='Read the exact pinned harness for its canonical/raw domain, supplied lower contracts and cutoff scope. Local arithmetic, representation, framing, public-index or volatile contract only; not whole pipeline refinement.'))
 cell_bindings=[]
 pins=R/'tools/prover-rw-20261023/contracts/clear-bindings.json'
 if pins.exists():
@@ -33,6 +33,7 @@ if pins.exists():
         cell_bindings.append(dict(**b,current_verbatim_sha256=hashlib.sha256(body.encode()).hexdigest(),selected_body_unchanged=hashlib.sha256(body.encode()).hexdigest()==b['verbatim_sha256']))
 r2=O/'continuation/reused-r2-contracts.json'
 retained_r2=json.loads(r2.read_text()) if r2.exists() else None
-result=dict(retained_r2_selected_body_audit=retained_r2,new_passing_receipts=new,volatile_cell_source_bindings=cell_bindings,new_kani_invocations=34,reused_passing_receipts=rows,unchanged_selected_sources=unchanged,new_kani_runs=34,whole_leaf_contract_gate_complete=False,remaining='Complete the extracted external-call inventory and map every arithmetic/hash/codec/parallel boundary to its exact checked contract and domain; unchanged source alone is not contract evidence. Reused CT and pole receipts are verified above; no claim that they cover the entire external inventory.',print_axioms='N/A: source/domain receipt audit; no new Lean theorem')
+invocations=sum(1 for p in (O/'continuation/receipts/candidate').glob('*/receipt.json') if 'kani' in json.loads(p.read_text())['target'])
+result=dict(retained_r2_selected_body_audit=retained_r2,new_passing_receipts=new,volatile_cell_source_bindings=cell_bindings,new_kani_invocations=invocations,reused_passing_receipts=rows,unchanged_selected_sources=unchanged,new_kani_runs=invocations,whole_leaf_contract_gate_complete=False,remaining='Complete the extracted external-call inventory and map every arithmetic/hash/codec/parallel boundary to its exact checked contract and domain; unchanged source alone is not contract evidence. Reused CT and pole receipts are verified above; no claim that they cover the entire external inventory.',print_axioms='N/A: source/domain receipt audit; no new Lean theorem')
 (O/'leaf-contract-audit.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps(dict(reused_receipts=len(rows),unchanged_all=all(x['unchanged_from_v2'] for x in unchanged.values()),whole_leaf_contract_gate_complete=False)))

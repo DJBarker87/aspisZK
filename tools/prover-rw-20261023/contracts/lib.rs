@@ -58,3 +58,11 @@ mod verifier {pub const SEMANTIC_BYTES:usize=12903+29*32;}
 #[cfg(kani)] mod tower_inverse_contracts;
 
 #[cfg(kani)] mod reference_tower_field;
+
+#[cfg(kani)] mod prepared_contracts;
+
+#[path="../../../crates/aspis-r1-cost-probe/src/transport.rs"] mod transport;
+#[cfg(kani)] mod boundary_contracts;
+
+#[cfg(kani)] mod sampler_word_source;
+#[cfg(kani)] mod sampler_word_contracts;
