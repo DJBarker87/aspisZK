@@ -1,0 +1,148 @@
+import AspisR1ProducerRelease47.Encoder54
+import AspisR1ProducerRelease47.EncoderComplete54
+import AspisR1ProducerRelease47.EncoderGeneric54
+import AspisR1ProducerRelease47.EncoderGenericAt54
+import AspisR1ProducerRelease47.EncoderLeaf54
+import AspisR1ProducerRelease47.EncoderLeaves54
+import AspisR1ProducerRelease47.EncoderNodes54
+import AspisR1ProducerRelease47.EncoderQuery54
+import R1Z.ProverCommitEncoderAlignment54
+import R1Z.ProverCommitEncoderChannels54
+import R1Z.ProverCommitEncoderCircle54
+import R1Z.ProverCommitEncoderCollect54
+import R1Z.ProverCommitEncoderDoubling54
+import R1Z.ProverCommitEncoderEval54
+import R1Z.ProverCommitEncoderExact54
+import R1Z.ProverCommitEncoderGenericChannels54
+import R1Z.ProverCommitEncoderGenericCollect54
+import R1Z.ProverCommitEncoderGenericEval54
+import R1Z.ProverCommitEncoderGenericExact54
+import R1Z.ProverCommitEncoderGenericLeaf54
+import R1Z.ProverCommitEncoderGenericModel54
+import R1Z.ProverCommitEncoderGenericPhi54
+import R1Z.ProverCommitEncoderGeometry54
+import R1Z.ProverCommitEncoderHom54
+import R1Z.ProverCommitEncoderInitial54
+import R1Z.ProverCommitEncoderIterator54
+import R1Z.ProverCommitEncoderLeaf54
+import R1Z.ProverCommitEncoderLift54
+import R1Z.ProverCommitEncoderLine54
+import R1Z.ProverCommitEncoderM31Ops54
+import R1Z.ProverCommitEncoderMath54
+import R1Z.ProverCommitEncoderNode54
+import R1Z.ProverCommitEncoderNodes54
+import R1Z.ProverCommitEncoderPoint54
+import R1Z.ProverCommitEncoderPower54
+import R1Z.ProverCommitEncoderQOps54
+import R1Z.ProverCommitEncoderReverse54
+import R1Z.ProverCommitEncoderSpecialized54
+import R1Z.ProverCommitFoldedBytes54
+import R1Z.ProverCommitFoldedValues54
+import R1Z.ProverCommitLeafQuery54
+import R1Z.ProverCommitOpenedBytes54
+import R1Z.ProverCommitOpenedColumn54
+import R1Z.ProverCommitOpenedModel54
+import R1Z.ProverCommitOpenedValues54
+import R1Z.ProverCommitOpeningFolded54
+import R1Z.ProverCommitAudit53
+/-! Coherent final source audit; every new theorem and the unchanged deployed headline. -/
+#print axioms R1Z.ProverCommitEncoderAlignment54.aligned_reverse
+#print axioms R1Z.ProverCommitEncoderAlignment54.reverse_even
+#print axioms R1Z.ProverCommitEncoderChannels54.channel_value
+#print axioms R1Z.ProverCommitEncoderChannels54.collect_channel
+#print axioms R1Z.ProverCommitEncoderChannels54.exact_result
+#print axioms R1Z.ProverCommitEncoderCircle54.doubled_circle
+#print axioms R1Z.ProverCommitEncoderCircle54.generator_value
+#print axioms R1Z.ProverCommitEncoderCircle54.point_model
+#print axioms R1Z.ProverCommitEncoderCircle54.stored_power
+#print axioms R1Z.ProverCommitEncoderCircle54.x_square
+#print axioms R1Z.ProverCommitEncoderCollect54.collect
+#print axioms R1Z.ProverCommitEncoderCollect54.sub_one
+#print axioms R1Z.ProverCommitEncoderCollect54.usize_bound
+#print axioms R1Z.ProverCommitEncoderCollect54.wp_exists
+#print axioms R1Z.ProverCommitEncoderDoubling54.repeat_result
+#print axioms R1Z.ProverCommitEncoderDoubling54.tcheb
+#print axioms R1Z.ProverCommitEncoderEval54.base_canonical
+#print axioms R1Z.ProverCommitEncoderEval54.base_source
+#print axioms R1Z.ProverCommitEncoderEval54.exact_result
+#print axioms R1Z.ProverCommitEncoderEval54.nodes_index
+#print axioms R1Z.ProverCommitEncoderExact54.eval_at_result
+#print axioms R1Z.ProverCommitEncoderExact54.recurrence_value
+#print axioms R1Z.ProverCommitEncoderGenericChannels54.channel_value
+#print axioms R1Z.ProverCommitEncoderGenericChannels54.collect_channel
+#print axioms R1Z.ProverCommitEncoderGenericChannels54.exact_result
+#print axioms R1Z.ProverCommitEncoderGenericCollect54.collect
+#print axioms R1Z.ProverCommitEncoderGenericEval54.exact_result
+#print axioms R1Z.ProverCommitEncoderGenericExact54.encode_result
+#print axioms R1Z.ProverCommitEncoderGenericExact54.eval_result
+#print axioms R1Z.ProverCommitEncoderGenericLeaf54.exact_result
+#print axioms R1Z.ProverCommitEncoderGenericModel54.node_image
+#print axioms R1Z.ProverCommitEncoderGenericModel54.point_image
+#print axioms R1Z.ProverCommitEncoderGenericModel54.recurrence_value
+#print axioms R1Z.ProverCommitEncoderGenericPhi54.exact_result
+#print axioms R1Z.ProverCommitEncoderGeometry54.aligned_power
+#print axioms R1Z.ProverCommitEncoderGeometry54.node_value
+#print axioms R1Z.ProverCommitEncoderGeometry54.period
+#print axioms R1Z.ProverCommitEncoderHom54.final_map
+#print axioms R1Z.ProverCommitEncoderHom54.initial_map
+#print axioms R1Z.ProverCommitEncoderHom54.natural_map
+#print axioms R1Z.ProverCommitEncoderHom54.phi_map
+#print axioms R1Z.ProverCommitEncoderInitial54.exact_result
+#print axioms R1Z.ProverCommitEncoderInitial54.point_lift
+#print axioms R1Z.ProverCommitEncoderIterator54.exact_sequence
+#print axioms R1Z.ProverCommitEncoderIterator54.exhausted
+#print axioms R1Z.ProverCommitEncoderIterator54.matches_owned
+#print axioms R1Z.ProverCommitEncoderIterator54.successful_step
+#print axioms R1Z.ProverCommitEncoderLeaf54.exact_result
+#print axioms R1Z.ProverCommitEncoderLift54.base_value
+#print axioms R1Z.ProverCommitEncoderLift54.map_doubled
+#print axioms R1Z.ProverCommitEncoderLift54.nodes_image
+#print axioms R1Z.ProverCommitEncoderLine54.final_value
+#print axioms R1Z.ProverCommitEncoderLine54.finite_value
+#print axioms R1Z.ProverCommitEncoderM31Ops54.arithmetic
+#print axioms R1Z.ProverCommitEncoderM31Ops54.from_result
+#print axioms R1Z.ProverCommitEncoderM31Ops54.sub_success
+#print axioms R1Z.ProverCommitEncoderMath54.evaluate_natural
+#print axioms R1Z.ProverCommitEncoderMath54.nodes_congr
+#print axioms R1Z.ProverCommitEncoderMath54.sum_even_odd
+#print axioms R1Z.ProverCommitEncoderMath54.wide_evaluate
+#print axioms R1Z.ProverCommitEncoderNode54.exact_result
+#print axioms R1Z.ProverCommitEncoderNodes54.exact_result
+#print axioms R1Z.ProverCommitEncoderNodes54.fill
+#print axioms R1Z.ProverCommitEncoderPoint54.exact_result
+#print axioms R1Z.ProverCommitEncoderPoint54.generator_canonical
+#print axioms R1Z.ProverCommitEncoderPoint54.one_canonical
+#print axioms R1Z.ProverCommitEncoderPoint54.one_value
+#print axioms R1Z.ProverCommitEncoderPower54.exact_result
+#print axioms R1Z.ProverCommitEncoderPower54.power_step
+#print axioms R1Z.ProverCommitEncoderQOps54.arithmetic
+#print axioms R1Z.ProverCommitEncoderQOps54.from_result
+#print axioms R1Z.ProverCommitEncoderQOps54.raw_source
+#print axioms R1Z.ProverCommitEncoderQOps54.source_raw
+#print axioms R1Z.ProverCommitEncoderQOps54.sub_success
+#print axioms R1Z.ProverCommitEncoderReverse54.exact_result
+#print axioms R1Z.ProverCommitEncoderReverse54.shift_one
+#print axioms R1Z.ProverCommitEncoderReverse54.size_large
+#print axioms R1Z.ProverCommitEncoderSpecialized54.m31_encode
+#print axioms R1Z.ProverCommitEncoderSpecialized54.m31_eval
+#print axioms R1Z.ProverCommitEncoderSpecialized54.qm31_encode
+#print axioms R1Z.ProverCommitEncoderSpecialized54.qm31_eval
+#print axioms R1Z.ProverCommitFoldedBytes54.exact_result
+#print axioms R1Z.ProverCommitFoldedBytes54.model_stream
+#print axioms R1Z.ProverCommitFoldedValues54.exact_result
+#print axioms R1Z.ProverCommitFoldedValues54.four_val
+#print axioms R1Z.ProverCommitFoldedValues54.offset_val
+#print axioms R1Z.ProverCommitLeafQuery54.folded
+#print axioms R1Z.ProverCommitLeafQuery54.opened
+#print axioms R1Z.ProverCommitOpenedBytes54.c1_image
+#print axioms R1Z.ProverCommitOpenedBytes54.c2_image
+#print axioms R1Z.ProverCommitOpenedBytes54.exact_result
+#print axioms R1Z.ProverCommitOpenedBytes54.value_bytes
+#print axioms R1Z.ProverCommitOpenedColumn54.column
+#print axioms R1Z.ProverCommitOpenedColumn54.set_from_update
+#print axioms R1Z.ProverCommitOpenedColumn54.set_row
+#print axioms R1Z.ProverCommitOpenedModel54.exact_result
+#print axioms R1Z.ProverCommitOpenedValues54.exact_result
+#print axioms R1Z.ProverCommitOpenedValues54.opened
+#print axioms R1Z.ProverCommitOpeningFolded54.exact_result
+#print axioms R1Z.ProverCommitDeployedFuel22.privacy_headline_deployed

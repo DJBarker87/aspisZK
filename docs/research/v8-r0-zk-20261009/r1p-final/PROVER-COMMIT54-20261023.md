@@ -342,3 +342,170 @@ dependency hashes, command, cap, raw output and errors are in lean/J*.json.
 | J10692 | R1Z.ProverCommitEncoderIterator54 | 0:02.12 | 4116224 |
 | J10694 | AspisR1ProducerRelease47.EncoderQuery54 | 0:01.26 | 2628928 |
 | J10698 | R1Z.ProverCommitLeafQuery54 | 0:01.81 | 4274336 |
+
+## Final coherent audit, integrity and stopping point
+
+J10699 checks R1Z.ProverCommitAudit54 after the new query roots are green.
+It imports all 46 new roots and the part-53 retained audit, and prints all
+99 new public theorem axioms plus the unchanged deployed headline (100 reports).
+Exit 0; wall 1.71 s; peak RSS 4402824 KiB; swaps 0; source revision
+`578b7788aa224cdec18581ad42a4d576f9a161fb`; source SHA256
+`368a632da087c52c91693e626841679eb8fc4a37af6128b79d251721ba4695af`. Exact dependency hashes, full axioms output,
+command and cap are in lean/J10699.json. All reports use only subsets of
+[propext, Classical.choice, Quot.sound]; two have no axioms.
+
+The prior J10693 audit covered 44 roots/97 theorems. The new query source is
+why J10699 is necessary; no unchanged audit is rerun. This is a coherent
+import/axioms audit against the pinned compiled closure, not a full frozen
+manifest release replay. No formal release or whole native refinement is
+claimed. No unrelated runtime/adversarial suite is repeated.
+
+final-integrity.json and its runnable harness check all 47 live Lean sources
+(the 46 roots plus audit) against successful exact-source receipts; every new
+theorem is included in the final axioms audit. No live proof hole, new axiom,
+native_decide or increased recursion/heartbeat limit is present. The selected
+extraction declarations and the old binding manifests are refreshed from v3;
+retained complete/leaf declaration bodies remain byte-identical to their
+accepted compile snapshots. The one trailing space in an extracted generic
+signature is retained to preserve the exact binding. All committed evidence
+is text; no binaries, objects, LLBC or archives are included.
+
+The endpoint module and both complete before/after snapshots have SHA256
+c263163f19b84438834a6ac25be6164d7e1ad4882fc904813090ca655dfda723.
+No file under crates/ or programs/ changed from the actual task base
+4af6a0f6bf (LOG D179). The shipped-file ELF rebuilding rule is not triggered.
+No wallet or account key is created, destroyed or changed.
+
+**Stop: the assigned J10600–J10699 allocation is exhausted.**
+attempt-inventory.json accounts for all 100 numbers. J10627/50/53/60 are
+retired by dependency preflight without compiler invocation; J10601 is a
+launcher refusal after the missing-cache-artifact failure. No number outside
+the allocation is used. No new Lean attempt is launched after J10699.
+
+The complete owned encoder, exact stored-domain nodes, eval_at/encode_at
+models, generic M31/QM31 used-method specializations, and owned opened/folded
+leaf values/ordered bytes are established. The retained complete opening
+producer composes with the folded owner. The native iterator constructor,
+next and exhaustion checks cover lengths through 256; the 1024-coefficient
+channel check is still a remaining-suffix transition, not the original
+Range/Map/array::from_fn iterator-state/collect proof.
+
+The following native bindings remain before asserting native sim_e_ablated
+output equals R0Z.RefPayload.simE payload:
+
+- Bind native eval_rec/encode_at guarded recursion and complete Vec allocation,
+  optimized collect/fold and four-channel array construction to the extracted
+  owner. The state induction and checked local reads do not themselves prove
+  native allocation or caller composition.
+- Bind the complete native nodes_for constructor and native CM31 power path;
+  owned geometry is proved, while native reversal/alignment are checked cuts.
+- Bind the native 26 base-column projections and three extension-column c0
+  projections, their field embeddings, byte Vec/chain assembly and query maps
+  at sim.rs:435–451 to the proved opened/folded leaf interfaces.
+- Discharge semantic/opening caller guards, interpolation/original-round and
+  challenge provenance, then compose the retained commitment programming and
+  serialization results into the complete native caller.
+
+The demonstrated full CodeField extraction obstruction also remains for a
+literal full native record: unused inverse methods produce the signed shift
+operand and missing Option/residual external template described in Stage 5.
+No such template is admitted. The accepted record projection quantifies over
+unused methods and proves every method actually used by the encoder; it must
+not be described as extraction of that complete native record.
+
+The exact next native consumer is the encode_at calls inside sim_e_ablated's
+opened loop and eval_at calls inside its folded entry closure. Their owned
+query consumers are ProverCommitLeafQuery54.opened/folded, now green. A new
+compile allocation is required for the missing source caller composition.
+RustProverRefinement is unchanged; no premise is silently removed, and the
+full target is **not established**.
+
+## Verbatim endpoint before
+
+The following definition and deployed theorem signature are copied verbatim
+from the full endpoint snapshot; the intervening compatibility lemmas and
+proof body remain in endpoint/before.lean.txt.
+
+```lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad
+      (idealSeedQueries template outputs x rust observer_program adv)))
+```
+
+```lean
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100 := by
+```
+
+## Verbatim endpoint after
+
+These excerpts are byte-identical; the full after module is retained separately
+as endpoint/after.lean.txt and equals the live deployed module.
+
+```lean
+def RustProverRefinement : Prop :=
+  (∀ (adv : rust.Adversary) (w : (h).Instance), (h).public w = x.1 →
+    Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.real h B outputs adv x w r; (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).real h B outputs a x w r
+                (v, (source).observe a v))
+      (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
+      (realSeedQueries template outputs x rust observer_program adv w))) ∧
+  (∀ adv : rust.Adversary, Nonempty (ProverCommitFuelJoin22.RunJoin
+      (fun r => let v := rust.ideal (simE (h).transport B outputs x) adv x r
+                (v, rust.observe adv v))
+      (fun r => let a := RomObserverBin.observerMap rust observer_program adv
+                let v := (source).ideal (simE (h).transport B outputs x) a x r
+                (v, (source).observe a v))
+      QueryScanIdealHistory.selectedBad
+      (idealSeedQueries template outputs x rust observer_program adv)))
+```
+
+```lean
+theorem privacy_headline_deployed
+    (refinement : RustProverRefinement template outputs x rust observer_program)
+ :
+    ZK_FSS h B outputs rust x (simE (R0Z.ZkStatement.HonestProver.transport h) B outputs x)
+      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge) ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100 := by
+```
+
+## Stage commits through the final proof input
+
+```text
+578b7788aa Verify exact iterator state transitions and derive query leaf images
+32b230b07f Derive retained opened and folded leaf values with ordered byte images
+0823787dde Prove generic encoders and native scalar method specializations
+7aa38a6afd Connect complete owned encoders to exact initial and final models
+9fdc4c91fa Record exact node geometry evidence and rejected drafts
+3c77c18fb2 Prove owned node geometry against the exact stored domain
+f7562d6a89 Record encoder stage evidence and native projection boundaries
+9219c71bf9 Prove owned encoder values and verify native adapter transitions
+718e63dc68 Extract owned encoder and prove finite strided collection
+```
+
+The subsequent final commit contains the audit source/receipt, integrity checks
+and this completed handoff. Nothing is pushed.
