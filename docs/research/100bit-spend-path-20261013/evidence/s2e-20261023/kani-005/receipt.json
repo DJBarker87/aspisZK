@@ -1,0 +1,78 @@
+{
+  "attempt": "kani-005",
+  "kind": "kani",
+  "source_revision": "d9b5663dfe862515b14efc3af1efe75fa6431a15",
+  "command": [
+    "cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2E-steps/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "exclusive_cut",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2E-reference/src/lib.rs",
+    "S2E-reference/src/S2E_Reference.rs",
+    "S2E-reference/Cargo.toml",
+    "S2E-steps/src/lib.rs",
+    "S2E-steps/src/S2E_Trusted.rs",
+    "S2E-steps/Cargo.toml"
+  ],
+  "timeout": 180,
+  "deps_fingerprint": {
+    "scope": "owned reference candidate; actual child/native bindings not certified",
+    "trusted_spec": {
+      "trusted_spec_source": "docs/research/100bit-spend-path-20261013/evidence/s2a-20261023/S2A-spec/S2A_Primitives.rs",
+      "sha256": "e517d1b55d99ef3aa94df48bb8e6905f69816df8f6077f1f165e8fd874b27b2a",
+      "reused_contract": "s2a-20261023/kani-003: proof_for_contract(step), 1200 properties, zero failures",
+      "consumer_domain": "selected-cell counter/return projection; owned byte vectors empty (not a byte-frame proof); three cells/handles, three tokens, two payload coordinates, arbitrary signed counters, aliases allowed, Valid and Enabled required",
+      "source_shape_domain": "instruction slices length 0..4; arbitrary account_count usize",
+      "qualification": "SDK primitive projection and bounded pure source guard only; no full source-step simulation, child contract instantiation, metadata/allocator relation or E certificate."
+    }
+  },
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "expected_time": "cached optimized compilation/translation of owned caller; no cryptographic arithmetic",
+  "exit_status": 0,
+  "wall_seconds": 49.69650742199883,
+  "peak_rss_kib": "3015084",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r2c1644928b564be3a66c9cc7dd64c374.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "3106181120",
+  "source_hashes": {
+    "S2E-reference/src/lib.rs": "9451d1d85f68b5c03fe5b41f044e12b4b9a64622b8ca1f77da6391730f5a229d",
+    "S2E-reference/src/S2E_Reference.rs": "8106a3a9b9b3bba65747e70debf5af24325409a8d0b4f93e29066a904b73a371",
+    "S2E-reference/Cargo.toml": "4faa9772c13db2deea7e659b37a87750059a4f3b10fbd829c24f11134cf1774c",
+    "S2E-steps/src/lib.rs": "599ab069b563e61e931b0a1addec524e8149e78b566776d2b0aadd1ff83cecde",
+    "S2E-steps/src/S2E_Trusted.rs": "e517d1b55d99ef3aa94df48bb8e6905f69816df8f6077f1f165e8fd874b27b2a",
+    "S2E-steps/Cargo.toml": "19b5b3ad52be80e2acae8343c7f24a08c6b6aa6d87d5f7121b7858ac1feafaf8"
+  },
+  "print_axioms": "N/A: kani"
+}

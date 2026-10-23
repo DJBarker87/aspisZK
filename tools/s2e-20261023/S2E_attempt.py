@@ -21,7 +21,7 @@ if kind=='rust':
 elif kind=='charon':
  env.update(RUSTUP_TOOLCHAIN='nightly-2026-06-01',CARGO_BUILD_JOBS='1',CARGO_TARGET_DIR=H+'/charon-target')
  command=[charon,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--opaque','crate','--opaque','aspis_core','--opaque','aspis_statement','--opaque','aspis_r1_cost_probe','--opaque','solana_program_error']
- roots=['shape1','admission','proof_gate','nonzero_from','stage1','checkpoint_continuation','public_continuation','decoded_continuation','statement_continuation','proof_continuation','first_and_copy','after_first','stage2','stage2_proof','stage2_checkpoint','stage2_tail','shared_allowed','owned_data_len','owned_acquire_checkpoint','owned_acquire_shared','owned_release_guards']
+ roots=['release_shared','shape1','admission','proof_gate','nonzero_from','stage1','checkpoint_continuation','public_continuation','decoded_continuation','statement_continuation','proof_continuation','first_and_copy','after_first','stage2','stage2_proof','stage2_checkpoint','stage2_tail','shared_allowed','owned_data_len','owned_acquire_checkpoint','owned_acquire_shared','owned_release_guards']
  for name in roots: command+=['--start-from','crate::S2E_Reference::'+name,'--include','crate::S2E_Reference::'+name]
  for name in ['OwnedSdk','OwnedAccount','OwnedDataCell','OwnedLamportsCell','LiveGuards','Children','Validated']:
   command+=['--include','crate::S2E_Reference::'+name]
@@ -41,8 +41,15 @@ elif kind=='aeneas':
 elif kind=='lean':
  source=[target+'.lean']; command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M4400','-DElab.async=false','-o',target+'.olean',target+'.lean']
  env={'LEAN_PATH':'.:generated:/home/dombarker/project-offloads/codex-cx-s2a-20261023/S2A-cache:/home/dombarker/project-offloads/codex-cx-s2a-20261023:/home/dombarker/project-offloads/codex-cx-s2c-20261023:/home/dombarker/project-offloads/codex-cx-s2d-20261023/objects:/home/dombarker/project-offloads/codex-cx-import-union-20261022/objects:/home/dombarker/project-offloads/codex-cx-import-union-20261022/retained-objects:/home/dombarker/project-offloads/aspis-joint-20261019/objects'}
+ prior=json.loads((D/'evidence/s2a-20261023/lean-013/receipt.json').read_text())['env']['LEAN_PATH']
+ env['LEAN_PATH']+=':'+prior.replace('S2A-cache','/home/dombarker/project-offloads/codex-cx-s2a-20261023/S2A-cache')
  subprocess.run(['ssh',HOST,f"cd {H} && printf 'name = \"s2e\"\nversion = \"0.1.0\"\n' > lakefile.toml && printf 'leanprover/lean4:v4.32.0\n' > lean-toolchain"],check=True)
-else: raise SystemExit('Kani runner not yet configured')
+else:
+ subprocess.run(['rsync','-az',str(E/'S2E-steps')+'/',HOST+':'+H+'/S2E-steps/'],check=True)
+ source+=['S2E-steps/src/lib.rs','S2E-steps/src/S2E_Trusted.rs','S2E-steps/Cargo.toml']
+ command=['cargo-kani','kani','--manifest-path','S2E-steps/Cargo.toml','--target-dir','kani-target','-j','4','-Z','stubbing','-Z','function-contracts','-Z','unstable-options','--harness-timeout','120s','--exact','--harness',target,'--output-format','terse']
+ env['RUSTFLAGS']='-C link-arg=-Wl,--threads=1'
+ deps['trusted_spec']=json.loads((E/'S2E-step-domain.json').read_text())
 cfg=dict(attempt=attempt,kind=kind,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),command=command,sources=source,timeout=180,deps_fingerprint=deps,env=env,expected_time='cached optimized compilation/translation of owned caller; no cryptographic arithmetic')
 (E/(attempt+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 subprocess.run(['scp',str(E/(attempt+'.json')),HOST+':'+H+'/'+attempt+'.json'],check=True,stdout=subprocess.DEVNULL)

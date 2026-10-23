@@ -40,6 +40,9 @@ pub trait Children {
 pub struct Validated { pub statement: Box<Statement>, pub proof_length: usize }
 '''
 body='''
+pub fn release_shared(sdk: &mut OwnedSdk,slot: usize) {
+ sdk.data_cells[slot].borrowed=sdk.data_cells[slot].borrowed.checked_sub(1).unwrap();
+}
 // Structural recursion avoids iterator/fixed-point extraction.
 pub fn nonzero_from(bytes: &[u8], remaining: usize) -> bool {
  if remaining == 0 { false }
@@ -90,8 +93,11 @@ pub fn proof_continuation<C: Children>(state: &mut C::State,sdk: &mut OwnedSdk,
  let proof_slot=sdk.accounts[0].data_slot; let cp_slot=sdk.accounts[2].data_slot;
  owned_acquire_shared(sdk,proof_slot)?;
  let proof=sdk.data_cells[proof_slot].bytes.clone();
- let result=proof_gate(&proof,candidate).and_then(|_|first_and_copy::<C>(state,sdk,statement,public,&proof,data[1] as usize,cp_slot));
- sdk.data_cells[proof_slot].borrowed=sdk.data_cells[proof_slot].borrowed.checked_sub(1).unwrap();
+ let result=match proof_gate(&proof,candidate) {
+  Ok(()) => first_and_copy::<C>(state,sdk,statement,public,&proof,data[1] as usize,cp_slot),
+  Err(e) => Err(e),
+ };
+ release_shared(sdk,proof_slot);
  result
 }
 pub fn statement_continuation<C: Children>(state: &mut C::State,sdk: &mut OwnedSdk,
@@ -113,7 +119,7 @@ pub fn public_continuation<C: Children>(state: &mut C::State,sdk: &mut OwnedSdk,
  owned_acquire_shared(sdk,slot)?;
  let public=sdk.data_cells[slot].bytes.clone();
  let result=decoded_continuation::<C>(state,sdk,&public,data);
- sdk.data_cells[slot].borrowed=sdk.data_cells[slot].borrowed.checked_sub(1).unwrap();
+ release_shared(sdk,slot);
  result
 }
 pub fn checkpoint_continuation<C: Children>(state: &mut C::State,sdk: &mut OwnedSdk,data: &[u8]) -> ProgramResult {
@@ -148,14 +154,14 @@ pub fn stage2_checkpoint<C: Children>(state: &mut C::State,sdk: &mut OwnedSdk,
  let slot=sdk.accounts[6].data_slot;
  owned_acquire_shared(sdk,slot)?;
  let result=stage2_tail::<C>(state,sdk,validated,proof_slot,slot);
- sdk.data_cells[slot].borrowed=sdk.data_cells[slot].borrowed.checked_sub(1).unwrap();
+ release_shared(sdk,slot);
  result
 }
 pub fn stage2_proof<C: Children>(state: &mut C::State,sdk: &mut OwnedSdk,validated: &Validated) -> ProgramResult {
  let slot=sdk.accounts[0].data_slot;
  owned_acquire_shared(sdk,slot)?;
  let result=stage2_checkpoint::<C>(state,sdk,validated,slot);
- sdk.data_cells[slot].borrowed=sdk.data_cells[slot].borrowed.checked_sub(1).unwrap();
+ release_shared(sdk,slot);
  result
 }
 pub fn stage2<C: Children>(state: &mut C::State,sdk: &mut OwnedSdk,program: [u8;32],data: &[u8]) -> ProgramResult {

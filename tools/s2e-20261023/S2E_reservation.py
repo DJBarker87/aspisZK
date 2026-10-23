@@ -9,6 +9,6 @@ for p in root.glob('*.scope'):
 assert all(r['memory_max'] is not None for r in rows), 'Unbounded populated scope'
 total=sum(r['memory_max'] or 0 for r in rows)
 out=dict(requested_bytes=8*2**30,allowed=total+8*2**30<=55*2**30,utc=time.time(),populated_scopes=rows,bounded_reserved_bytes=total,all_populated_scopes_bounded=all(r['memory_max'] is not None for r in rows),safe_limit_bytes=55*2**30,print_axioms='N/A: read-only resource preflight')
-Path(sys.argv[1]).write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out))
+Path(sys.argv[1]).write_text(json.dumps(out,indent=2)+'\n');print(json.dumps({k:out[k] for k in ["allowed","bounded_reserved_bytes","requested_bytes"]}))
 
 if not out["allowed"]: raise SystemExit(78)
