@@ -1,0 +1,70 @@
+{"attempt": "lean-044", "exit_status": 1, "wall_seconds": 2.3694659780012444, "peak_rss_kib": "4391376", "swaps": "0", "print_axioms": ["'AspisR1.Port3_NativePendingLoop.read_lookup' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_NativePendingLoop.complete' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_NativePendingLoop.write_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_NativePendingLoop.run_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port3_NativePendingLoop.lean:20:22: error(lean.unknownIdentifier): Unknown identifier `hvalue.symm`
+Port3_NativePendingLoop.lean:71:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  body weights raw index
+in the target expression
+  (match
+      match (raw, index) with
+      | (raw2, index1) => body weights raw2 index1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (raw2, index1) => body weights raw2 index1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+
+case succ
+weights : Slice K
+wsize : (↑weights).length = 64
+n : ℕ
+ih :
+  ∀ (raw : alloc.ve
+...
+ngInstall.row w), index.wrapping_add 1#usize) =
+    ok out
+contents : ↑out = List.map Port3_PendingInstall.row ↑weights
+⊢ (match
+      match (raw, index) with
+      | (raw2, index1) => body weights raw2 index1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (raw2, index1) => body weights raw2 index1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+Port3_NativePendingLoop.lean:58:38: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵i̵f̵_̵n̵e̵g̵ ̵i̵n̵a̵c̵t̵i̵v̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲o̲d̲y̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲i̲n̲a̲c̲t̲i̲v̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port3_NativePendingLoop.read_lookup' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_NativePendingLoop.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_NativePendingLoop.write_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_NativePendingLoop.run_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r53d2ec6076d14f0fb73929c284480f4b.scope; invocation ID: 9e20ad521a34463ca3e81dec240b9233

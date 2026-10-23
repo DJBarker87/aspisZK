@@ -124,3 +124,66 @@ fn production_buffers_writer() {
 }
 }
 
+
+#[cfg(kani)] mod production_reader {
+use super::*;
+use core::cell::Cell;
+#[derive(Clone,Copy)]
+struct Hash<'a> {step:&'a Cell<usize>,answers:[[u8;32];3],proof:&'a[u8],public:&'a[u8],ck:&'a[u8;1768],index:usize}
+impl Digest32 for Hash<'_> {
+ fn digest(&self,parts:&[&[u8]])->[u8;32] {
+    let step=self.step.get();assert!(step<3);
+    match step {
+     0=>{assert_eq!(parts.len(),1);assert_eq!(parts[0].as_ptr(),self.proof.as_ptr());assert_eq!(parts[0].len(),self.proof.len());},
+     1=>{assert_eq!(parts.len(),1);assert_eq!(parts[0].as_ptr(),self.public.as_ptr());assert_eq!(parts[0].len(),self.public.len());},
+     _=>{assert_eq!(parts.len(),2);assert_eq!(parts[0],b"UNPROVED:R1:checkpoint");assert_eq!(parts[1].len(),1736);assert_eq!(parts[1][self.index],self.ck[self.index]);}
+    }
+    self.step.set(step+1);self.answers[step]
+ }
+}
+fn equal_fields(p:&Prepared,a:&Accumulator,q:&Prepared,b:&Accumulator,j:usize) {
+ assert_eq!(p.variant,q.variant);assert_eq!(p.roots,q.roots);assert_eq!(p.gamma,q.gamma);assert_eq!(p.kappa,q.kappa);assert_eq!(p.alpha,q.alpha);assert_eq!(p.rho,q.rho);for i in 0..22 {assert_eq!(p.queries[i],q.queries[i]);}assert_eq!(p.semantic_alpha,q.semantic_alpha);assert_eq!(p.state,q.state);assert_eq!(p.claim,q.claim);
+ for i in 0..2 {assert_eq!(p.z[i].x,q.z[i].x);assert_eq!(p.z[i].y,q.z[i].y);}
+ assert_eq!(a.rhs,b.rhs);assert_eq!(a.power,b.power);assert_eq!(a.next,b.next);assert_eq!(a.weights.len(),64);assert_eq!(b.weights.len(),64);assert_eq!(a.weights[j],b.weights[j]);
+}
+#[kani::proof]
+#[kani::stub_verified(decode_k_words)] #[kani::stub_verified(decode_e_words)]
+#[kani::stub(aspis_core::field::QM31::from_le_bytes,decode_k)]
+#[kani::stub(aspis_core::field::WideExact::from_le_bytes,decode_e)]
+#[kani::unwind(70)]
+fn production_reader_exact_fields_and_reads() {
+ let ck:[u8;1768]=kani::any();let answers:[[u8;32];3]=kani::any();check_reader(ck,answers);
+}
+fn check_reader(ck:[u8;1768],answers:[[u8;32];3]) {
+ let proof:[u8;57607]=kani::any();let public:[u8;1880]=kani::any();
+ let i:usize=kani::any();kani::assume(i<1736);let j:usize=kani::any();kani::assume(j<64);
+ let step=Cell::new(0);let hash=Hash{step:&step,answers,proof:&proof,public:&public,ck:&ck,index:i};
+ let got=verifier::resume(&ck,&proof,&public,Variant::S2,hash);
+ let header=&ck[..8]==b"R1P2CKP2"&&ck[8]==2&&ck[9]<=22&&ck[10]==1&&ck[11..16].iter().all(|b|*b==0);
+ let mut calls=0;
+ let binding=if !header {false} else {calls=1;if ck[16..48]!=answers[0] {false} else {calls=2;if ck[48..80]!=answers[1] {false} else {calls=3;ck[1736..]==answers[2]}}};
+ let want=if binding {decode_body_reference(&ck)} else {Err(Error::Checkpoint)};
+ assert_eq!(step.get(),calls);
+ match (got,want) {(Ok((p,a)),Ok((q,b)))=>equal_fields(&p,&a,&q,&b,j),(Err(a),Err(b))=>assert_eq!(a,b),_=>panic!("reader result mismatch")}
+}
+#[kani::proof]
+#[kani::stub_verified(decode_k_words)] #[kani::stub_verified(decode_e_words)]
+#[kani::stub(aspis_core::field::QM31::from_le_bytes,decode_k)]
+#[kani::stub(aspis_core::field::WideExact::from_le_bytes,decode_e)]
+#[kani::unwind(90)]
+fn production_reader_saved_domain() {
+ let mut ck:[u8;1768]=kani::any();let answers:[[u8;32];3]=kani::any();
+ ck[..8].copy_from_slice(b"R1P2CKP2");ck[8..16].copy_from_slice(&[2,10,1,0,0,0,0,0]);
+ ck[16..48].copy_from_slice(&answers[0]);ck[48..80].copy_from_slice(&answers[1]);ck[1736..].copy_from_slice(&answers[2]);
+ // Every field limb is independently arbitrary and canonical. This covers
+ // the full saved-field domain, without assuming resume itself succeeds.
+ for i in 0..36 {let at=176+4*i;let x=u32::from_le_bytes(ck[at..at+4].try_into().unwrap());kani::assume(x<0x7fffffff);}
+ for field in 0..83 {for limb in 0..4 {let at=408+16*field+4*limb;let x=u32::from_le_bytes(ck[at..at+4].try_into().unwrap());kani::assume(x<0x7fffffff);}}
+ for i in 0..22 {
+   let x=u32::from_le_bytes(ck[320+4*i..324+4*i].try_into().unwrap());kani::assume(x<262144);
+   for j in 0..i {let y=u32::from_le_bytes(ck[320+4*j..324+4*j].try_into().unwrap());kani::assume(x!=y);}
+ }
+ check_reader(ck,answers);
+}
+
+}

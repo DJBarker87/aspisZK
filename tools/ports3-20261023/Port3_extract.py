@@ -12,7 +12,7 @@ if kind=='charon':
  for i in range(0,len(layouts)):
   if layouts[i]=='--include' and 'candidate::tx' not in layouts[i+1]:kept+=layouts[i:i+2]
  roots=['crate::verifier::candidate::'+n for n in ['tx1','tx2_common','tx2_authenticated','batch_merkle','batch_merkle_values','batch_tree','query_loop','query_values']]
- roots+=['crate::verifier::'+n for n in ['checkpoint','finish_relation','accumulate_batched_with_node']]
+ roots+=['crate::verifier::'+n for n in ['resume','finish_relation','accumulate_batched_with_node']]
  roots+=['crate::verifier::{crate::verifier::'+ty+'}::'+fn for ty,fn in [('Accumulator','new'),('BatchedWeights','new'),('BatchedWeights','finish'),('QueryGeometry','for_range')]]
  cmd=c[:idx]
  for root in roots:
@@ -20,6 +20,8 @@ if kind=='charon':
   if '{' not in root:cmd+=['--start-from',root]
  for layout in ['crate::multiproof::Arity','crate::verifier::Reader','aspis_core::r0::domain::FibreIndex','aspis_core::r0::domain::Point']:
   kept+=['--include',layout]
+ for method in ['new','finish','for_range']:
+  kept+=['--include','crate::verifier::_::'+method]
  cmd+=kept+c[end:]
  cmd=[s.replace('/home/dombarker/project-offloads/codex-cx-verifier-top-20261023',B).replace('VTop_Stages.llbc','Port3_StageChildren.llbc') for s in cmd]
  cfg={**old,'attempt':a,'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'command':cmd,'sources':old['sources'],'timeout':300,
@@ -29,6 +31,8 @@ if kind=='charon':
 else:
  old=json.loads((R/'tools/verifier-top-20261023/aeneas-002.json').read_text())
  cmd=[s.replace('/home/dombarker/project-offloads/codex-cx-verifier-top-20261023',B).replace('VTop_Stages','Port3_StageChildren') for s in old['command']]
+ cmd.remove('-abort-on-error')
+ cmd+=['-diagnose-translation']
  cfg={**old,'attempt':a,'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'command':cmd,'sources':['Port3_StageChildren.llbc'],'timeout':180,
  'deps_fingerprint':{'scope':'charon001 current source body extraction; exact LLBC snapshotted'},'expected_time':'Aeneas symbolic translation of current child bodies, no Lean replay or arithmetic aggregation'}
 (T/f'{a}.json').write_text(json.dumps(cfg,indent=2)+'\n')
