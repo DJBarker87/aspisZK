@@ -8949,3 +8949,20 @@ new one; the old is stronger only in additionally certifying a Rust implementati
 simulator, which is never deployed and says nothing more about deployed outputs. The
 previous theorem is kept unchanged; the new endpoint is added beside it with before/after statements.
 Privacy work proceeds on conjunct 1 (the real side) using the worker's obligation map.
+
+## D186 (lead, 2026-10-23 09:25): real-side privacy endpoint proved; real-prover refinement plan
+
+Merged `codex/cx-priv-restate-20261023`. `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed`
+is proved from conjunct 1 alone. It compares deployed `rust.real` with `source.ideal(simE)`,
+with the same error envelope (J10800, standard axioms). The old theorems are unchanged.
+Lead assessment from the obligation map (`PRIVACY-RESTATE-20261023.md`): most of parts 27–55 bound
+simulator code or proved shared helpers. The native refinement of the **real** prover
+(`generate_for_mask_nonce` → `prove_masked_retrying_with` → prover.rs: masks, semantic
+build, commitments/Merkle, transcript/sumcheck, opening, publication) is largely
+unstarted as a whole, though many helper results transfer. Plan: three parallel
+depth-first streams, each budgeted and using the routes that work (D144 owned references,
+per-iteration Kani shipped = owned, Lean induction; never Aeneas on shipped iterator code):
+R1 the retry/entropy/reservation owner on the selected caller (composing parts 34–43); R2 the
+real commitment path (mask material, semantic build, commitments, Merkle, encoding); R3 the
+real transcript, sumcheck, opening and publication. All target the research prover. The v2
+candidate's differences transfer through its proved equivalence gates when it is adopted.
