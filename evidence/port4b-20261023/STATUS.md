@@ -130,3 +130,13 @@ hit a memory ceiling. Budget19/100 Lean,0/60 Kani. All exact commands,
 source revisions/SHA/dependency pins, caps and audits are in lean-015..019.
 The night window has elapsed (clock21:42UTC); serialized host admission
 continues, with6G/8G/Swap0/Tasks64. No shipped change or ELF trigger.
+
+Stage 6: Port4B_Opening.opening_exact proves the source opening expression
+with its release wrapping multiplications/additions and actual checked
+range returns the exact832-byte physical opening on the admitted57607-byte
+proof. selected composes packed_opening with that physical return for both
+batch indices, including equal keys, without a separate successful view.
+No op2 implementation or Parsed.wire provenance is silently inferred:
+the explicit source expression and wire equality are in its statement.
+Accepted020: exit0,wall4.014771419s,peak4398032KiB,swap0; both audits
+standard axioms. Budget20/100 Lean,0/60 Kani.
