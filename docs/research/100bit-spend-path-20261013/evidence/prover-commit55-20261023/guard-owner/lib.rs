@@ -101,6 +101,24 @@ pub fn eval_rec<T:CodeField>(c:&[T],depth:usize,height:usize,nodes:&[M31;9])->T 
  let b=eval_rec(&odd,depth+1,height-1,nodes);
  a.add(T::from_m31(nodes[depth]).mul(b))
 }
+pub fn channels<T:CodeField>(c:&[T;1024],nodes:&[M31;9])->[T;4] {
+ let a=collect(c,4,0,0,256,Vec::new());
+ let b=collect(c,4,1,0,256,Vec::new());
+ let d=collect(c,4,2,0,256,Vec::new());
+ let e=collect(c,4,3,0,256,Vec::new());
+ [eval_rec(&a,0,8,nodes),eval_rec(&b,0,8,nodes),eval_rec(&d,0,8,nodes),eval_rec(&e,0,8,nodes)]
+}
+pub fn eval_at<T:CodeField>(c:&[T],j:usize,height:usize)->T {
+ let nodes=super::nodes55::nodes(j);
+ eval_rec(c,0,height,&nodes)
+}
+pub fn encode_at<T:CodeField>(c:&[T;1024],j:usize)->[T;4] {
+ let z=super::nodes55::point(j);
+ let nodes=super::nodes55::nodes(j);
+ let h=channels(c,&nodes);
+ super::generic54::phi_inverse(T::from_m31(z.a),T::from_m31(z.b),h)
+}
+
 }
 
 pub mod nodes55 {

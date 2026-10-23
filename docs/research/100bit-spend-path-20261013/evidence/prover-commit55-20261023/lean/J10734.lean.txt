@@ -1,0 +1,97 @@
+import R1Z.ProverCommitComposition55
+import TerminalPartsArithmeticExact
+import R1Z.ProverCommitPoseidonCallable55
+
+/-! Same-input caller composition. The Poseidon callable contract is explicit
+until its separate actual source/family bridge is installed. The caller itself
+selects H1, index and variant; those are no longer independently supplied model
+values. Entry guards and whole terminal/verifier reachability remain separate. -/
+set_option autoImplicit false
+namespace R1Z.ProverCommitTerminal55
+noncomputable section
+open Aeneas Aeneas.Std Result
+open AspisR1SelectedMaskProbe
+open AspisR1.CompositionPartsAfterValidation
+open AspisR1.SemanticCompositionCoefficients
+open AspisR1TerminalDigestBindingCandidate.SemanticPublicPreparationCopy
+open scoped BigOperators
+abbrev QM := field.QM31
+abbrev Selectors := pool_v1.pair_forest_copy_terminal.Selectors
+abbrev Openings := state_only_poseidon.StateOnlyPoseidonOpenings
+abbrev CanonicalQM := AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM
+abbrev ExactQM := AspisV8R15.ExactTowerBase.QM31Exact
+abbrev decode := AspisR1.ExtractedMaskQM31Exact.decode
+abbrev Statement := AspisR1TerminalDecoder.PublicBinding.Statement
+abbrev Semantic := Array QM 24#usize
+
+def run (public1 : Public) (claims : Array QM 84#usize) (point : Array QM 10#usize)
+    (lambda chi theta : QM) (zerocheck_point : Array QM 10#usize) (mu : QM) :
+    Result (core.result.Result (QM × Array QM 16#usize × Array QM 10#usize × QM)
+      AspisR1.CompositionPartsTail.Error) := do
+  let result ← AspisR1.CompositionPartsAfterValidation.run ProverCommitPoseidonCallable55.run
+    public1 claims point lambda chi theta
+  match result with
+  | .Err e => ok (.Err e)
+  | .Ok (composition,c1,maskOnly,g,helper,active) => do
+    let terminal ← AspisR1.TerminalPartsArithmeticExact.run zerocheck_point point composition helper active mu
+    ok (.Ok (terminal,c1,maskOnly,g))
+
+theorem source_success
+    (point : Array QM 10#usize) (s : Statement)
+    (claims : Array QM 84#usize) (lambda chi theta : QM)
+    (hpoint : CanonicalArray point) (hclaims : CanonicalArray claims)
+    (hlambda : CanonicalQM lambda) (hchi : CanonicalQM chi) (htheta : CanonicalQM theta)
+    (zerocheck_point : Array QM 10#usize) (mu : QM)
+    (hzc : ∀ i : Fin 10, CanonicalQM (zerocheck_point.val[i.val]'(by simpa [zerocheck_point.property] using i.isLt)))
+    (hmu : CanonicalQM mu)
+    {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+    (hash : H) (c1 : Array U8 32#usize)
+    (outTranscript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+    (hprep : AspisR1PublicPreparation.r1_semantic.public_transcript D
+      (AspisR1PublicPreparation.PreparationBinding.preparationPublic s)
+      hash c1 = .ok (.Ok outTranscript)) :
+    ∃ (openings : Openings) (selectors : Selectors)
+      (maskOnly : Array QM 10#usize) (helper out q active terminal : QM),
+      (∀ i : Fin 16, openings.z.val[i.val]'(by simpa [openings.z.property] using i.isLt) =
+        claims.val[i.val]'(by have := i.isLt; simpa [claims.property] using (show i.val < 84 by omega))) ∧
+      (∀ i : Fin 16, openings.succ_z.val[i.val]'(by simpa [openings.succ_z.property] using i.isLt) =
+        claims.val[28+i.val]'(by have := i.isLt; simpa [claims.property] using (show 28+i.val < 84 by omega))) ∧
+      (∀ i : Fin 16, openings.xor12_z.val[i.val]'(by simpa [openings.xor12_z.property] using i.isLt) =
+        claims.val[56+i.val]'(by have := i.isLt; simpa [claims.property] using (show 56+i.val < 84 by omega))) ∧
+      pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = .ok selectors ∧
+      pool_v1.pair_forest_semantic_terminal.selected_claim claims 0#usize 26#usize = .ok helper ∧
+      AspisR1.CompositionPartsAfterValidation.run ProverCommitPoseidonCallable55.run (copyFromStatement s) claims point lambda chi theta =
+        .ok (.Ok (out, openings.z, maskOnly, q, helper, active)) ∧
+      CanonicalQM out ∧ CanonicalQM q ∧ CanonicalQM active ∧
+      (decode out = ∑ i : Fin 29, decode theta ^ i.val *
+        lanesFromModels (ProverCommitPoseidonCallable55.model point openings)
+          (semanticLane24 (copyFromStatement s) openings point)
+          (R0P.copyEvaluateWithSelectors
+            (AspisR1.CopyEndpointExact.decodedCells openings.z) (decode helper)
+            (AspisR1.CopyEndpointExact.modelSelectors selectors) (decode lambda) (decode chi)
+            (copyFromStatement s).transition.live_snapshot.next_pair_index.val
+            (AspisR1.CopyLinkWeightExact.modelVariant (copyVariant (copyFromStatement s).variant))).1 i) ∧
+      run (copyFromStatement s) claims point lambda chi theta zerocheck_point mu=
+        ok (.Ok (terminal,openings.z,maskOnly,q)) ∧ CanonicalQM terminal ∧
+      decode terminal=R0P.SemSource.eqValue (AspisR1.EqualityValueLoop.decodedArray zerocheck_point)
+        (AspisR1.EqualityValueLoop.decodedArray point)*decode out+
+        decode mu*decode helper+(decode mu*decode mu)*((1-decode active)*decode helper) := by
+  obtain ⟨openings,selectors,maskOnly,helper,out,q,active,hz,hs,hx,hbox,hhelper,hrun,hout,hq,hactive,hvalue⟩ :=
+    ProverCommitComposition55.source_success point s claims lambda chi theta hpoint hclaims hlambda hchi htheta
+      D hash c1 outTranscript hprep
+  obtain ⟨helper',hhelper',hcell,hcan⟩ := selected_claim_success claims 0#usize 26#usize
+    (by decide) (by decide) hclaims
+  have heq : helper'=helper := Result.ok.inj (hhelper'.symm.trans hhelper)
+  have hhelpercan : CanonicalQM helper := by simpa only [heq] using hcan
+  obtain ⟨terminal,hterminal,hcterm,hvterm⟩ := AspisR1.TerminalPartsArithmeticExact.run_exact
+    zerocheck_point point out helper active mu hzc hpoint hout hhelpercan hactive hmu
+  refine ⟨openings,selectors,maskOnly,helper,out,q,active,terminal,
+    hz,hs,hx,hbox,hhelper,hrun,hout,hq,hactive,hvalue,?_,hcterm,hvterm⟩
+  rw [run,hrun]
+  simp only [bind_tc_ok]
+  rw [hterminal]
+  rfl
+
+#print axioms source_success
+end
+end R1Z.ProverCommitTerminal55

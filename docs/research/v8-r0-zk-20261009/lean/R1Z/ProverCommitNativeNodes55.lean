@@ -1,4 +1,5 @@
 import R1Z.ProverCommitNativeGeometry55
+import R1Z.ProverCommitEncoderNodes54
 import R1Z.ProverCommitEncoderNode54
 import R1Z.ProverCommitArray49
 import R1Z.ProverCommitEncoderEval54
@@ -80,6 +81,31 @@ theorem exact_result (j : Usize) (hj : j.val<262144) :
   · intro i hi
     simpa only [show (0#u8).val=0 from rfl,Nat.zero_add,Nat.zero_le,hi,and_self,if_true] using hdout i hi
 
+theorem word_injective (x y : U32) (hx : canonical x) (hy : canonical y)
+    (h : decode x=decode y) : x=y := by
+  apply UScalar.eq_of_val_eq
+  have hv := congrArg (fun z : ZMod AspisCircleGroupOrder.P => z.val) h
+  change (x.val : ZMod AspisCircleGroupOrder.P).val=(y.val : ZMod AspisCircleGroupOrder.P).val at hv
+  rw [ZMod.val_natCast_of_lt hx,ZMod.val_natCast_of_lt hy] at hv
+  exact hv
+
+theorem nodes_same (j : Usize) (hj : j.val<262144) : nodes55.nodes j=nodes54.nodes j := by
+  obtain ⟨xs,hxs,hcxs,hdxs⟩ := exact_result j hj
+  obtain ⟨ys,hys,hcys,hdys⟩ := ProverCommitEncoderNodes54.exact_result j hj
+  have he : ∀ i : Fin 9, xs i.val=ys i.val := by
+    intro i
+    exact word_injective _ _ (hcxs i.val i.isLt) (hcys i.val i.isLt)
+      ((hdxs i.val i.isLt).trans (hdys i.val i.isLt).symm)
+  have ha : ProverCommitEncoderEval54.nodes xs=ProverCommitEncoderEval54.nodes ys := by
+    unfold ProverCommitEncoderEval54.nodes
+    congr 1
+    apply congrArg List.ofFn
+    funext i
+    exact he i
+  rw [hxs,hys,ha]
+
 #print axioms fill
 #print axioms exact_result
+#print axioms word_injective
+#print axioms nodes_same
 end R1Z.ProverCommitNativeNodes55

@@ -139,6 +139,62 @@ fn internal_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
     }
 }
 
+
+ pub fn group_cut(state:&mut [QM31;16],group:usize) {
+        let start = 4 * group;
+        let input = [
+            state[start],
+            state[start + 1],
+            state[start + 2],
+            state[start + 3],
+        ];
+        let input = input.map(extension_limbs);
+        let mut output = 0usize;
+        while output < 4 {
+            let raw = core::array::from_fn(|limb| {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                match output {
+                    0 => 2 * a + 3 * b + c + d,
+                    1 => a + 2 * b + 3 * c + d,
+                    2 => a + b + 2 * c + 3 * d,
+                    3 => 3 * a + b + c + 2 * d,
+                    _ => unreachable!(),
+                }
+            });
+            state[start + output] = extension_from_raw_limbs(raw);
+            output += 1;
+        }
+
+ }
+ pub fn sums_cut(state:&[QM31;16])->[[u64;4];4] {
+    let sums: [[u64; 4]; 4] = core::array::from_fn(|column| {
+        core::array::from_fn(|limb| {
+            u64::from(extension_limbs(state[column])[limb])
+                + u64::from(extension_limbs(state[4 + column])[limb])
+                + u64::from(extension_limbs(state[8 + column])[limb])
+                + u64::from(extension_limbs(state[12 + column])[limb])
+        })
+    });
+sums
+ }
+ pub fn finish_cut(state:&mut [QM31;16],sums:[[u64;4];4],index:usize) {
+        let limbs = extension_limbs(state[index]);
+        state[index] = extension_from_raw_limbs(core::array::from_fn(|limb| {
+            u64::from(limbs[limb]) + sums[index & 3][limb]
+        }));
+
+ }
+ pub fn row(input:[[u32;4];4],output:usize)->QM31 {
+  let raw=core::array::from_fn(|limb| {
+   let a=u64::from(input[0][limb]);let b=u64::from(input[1][limb]);
+   let c=u64::from(input[2][limb]);let d=u64::from(input[3][limb]);
+   match output {0=>2*a+3*b+c+d,1=>a+2*b+3*c+d,2=>a+b+2*c+3*d,3=>3*a+b+c+2*d,_=>unreachable!()}
+  });
+  extension_from_raw_limbs(raw)
+ }
  pub fn local(c:[QM31;4])->[u64;4] {external_local_packed_raw(c)}
  pub fn external(s:&mut [QM31;16]) {external_linear_lazy(s)}
  pub fn internal(s:&mut [QM31;16]) {internal_linear_lazy(s)}
@@ -280,6 +336,41 @@ fn internal_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
     }
 }
 
+
+ pub fn group_cut(state:&mut [QM31;16],group:usize) {
+        let start = 4 * group;
+        let input = [
+            state[start],
+            state[start + 1],
+            state[start + 2],
+            state[start + 3],
+        ];
+        let input = input.map(extension_limbs);
+        state[start] = external_linear_lazy_row(input, 0);
+        state[start + 1] = external_linear_lazy_row(input, 1);
+        state[start + 2] = external_linear_lazy_row(input, 2);
+        state[start + 3] = external_linear_lazy_row(input, 3);
+
+ }
+ pub fn sums_cut(state:&[QM31;16])->[[u64;4];4] {
+    let sums: [[u64; 4]; 4] = crate::array_from_fn_copy::<_, 4>([0u64; 4], |column| {
+        crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+            u64::from(extension_limbs(state[column])[limb])
+                + u64::from(extension_limbs(state[4 + column])[limb])
+                + u64::from(extension_limbs(state[8 + column])[limb])
+                + u64::from(extension_limbs(state[12 + column])[limb])
+        })
+    });
+sums
+ }
+ pub fn finish_cut(state:&mut [QM31;16],sums:[[u64;4];4],index:usize) {
+        let limbs = extension_limbs(state[index]);
+        state[index] = extension_from_raw_limbs(crate::array_from_fn_copy::<_, 4>(0u64, |limb| {
+            u64::from(limbs[limb]) + sums[index & 3][limb]
+        }));
+
+ }
+ pub fn row(input:[[u32;4];4],output:usize)->QM31 {external_linear_lazy_row(input,output)}
  pub fn local(c:[QM31;4])->[u64;4] {external_local_packed_raw(c)}
  pub fn external(s:&mut [QM31;16]) {external_linear_lazy(s)}
  pub fn internal(s:&mut [QM31;16]) {internal_linear_lazy(s)}
@@ -287,6 +378,25 @@ fn internal_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
 
 #[cfg(kani)] mod proofs {
  use super::*;
+ #[kani::proof] #[kani::unwind(100)] fn external_group_cut() {
+  let raw:[[u32;4];16]=kani::any();let group:u8=kani::any();kani::assume(group<4);
+  let mut n:[field::QM31;16]=unsafe{std::mem::transmute(raw)};let mut r=n;
+  native::group_cut(&mut n,group as usize);retained::group_cut(&mut r,group as usize);
+  let k:u8=kani::any();kani::assume(k<16);assert_eq!(n[k as usize],r[k as usize]);
+ }
+ #[kani::proof] #[kani::unwind(100)] fn external_sums_cut() {
+  let raw:[[u32;4];16]=kani::any();let n:[field::QM31;16]=unsafe{std::mem::transmute(raw)};
+  assert_eq!(native::sums_cut(&n),retained::sums_cut(&n));
+ }
+ #[kani::proof] #[kani::unwind(100)] fn external_finish_cut() {
+  let raw:[[u32;4];16]=kani::any();let sums:[[u64;4];4]=kani::any();
+  for c in 0..4 {for w in 0..4 {kani::assume(sums[c][w] < (1u64<<34));}}
+  let index:u8=kani::any();kani::assume(index<16);
+  let mut n:[field::QM31;16]=unsafe{std::mem::transmute(raw)};let mut r=n;
+  native::finish_cut(&mut n,sums,index as usize);retained::finish_cut(&mut r,sums,index as usize);
+  let k:u8=kani::any();kani::assume(k<16);assert_eq!(n[k as usize],r[k as usize]);
+ }
+
  #[kani::proof] #[kani::unwind(300)] fn local_constructor() {
   let raw:[[u32;4];4]=kani::any();
   for i in 0..4 {for w in 0..4 {kani::assume(raw[i][w]<field::P);}}
@@ -316,4 +426,9 @@ fn internal_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
   assert_eq!(full,field::QM31::ZERO.add(local[1]).add(local[9]).add(local[10]));
   assert_eq!(internal,field::QM31::ZERO.add(local[2]).add(local[3]).add(local[4]).add(local[5]).add(local[6]).add(local[7]).add(local[8]));
  }
+ #[kani::proof] #[kani::unwind(100)] fn external_row() {
+  let raw:[[u32;4];4]=kani::any();let output:u8=kani::any();kani::assume(output<4);
+  assert_eq!(native::row(raw,output as usize),retained::row(raw,output as usize));
+ }
+
 }

@@ -1,0 +1,59 @@
+import R1Z.ProverCommitTerminalQName55
+import R1Z.ProverCommitQArray48
+import R1Z.ProverCommitArray49
+import R1Z.ProverCommitSuccessorPoint49
+/-! Exact four-word transport between the encoder-owner and retained terminal
+carriers. Both extractions use the same frozen Rust QM31 declaration. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverCommitTerminalCarrier55
+open Aeneas Aeneas.Std Result
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)
+abbrev Selected := AspisR1SelectedMaskProbe.field.QM31
+
+def toSelected (q : Old.Q) : Selected :=
+  {c0:={a:=q.c0.a,b:=q.c0.b},c1:={a:=q.c1.a,b:=q.c1.b}}
+def fromSelected (q : Selected) : Old.Q :=
+  {c0:={a:=q.c0.a,b:=q.c0.b},c1:={a:=q.c1.a,b:=q.c1.b}}
+
+theorem from_to (q : Old.Q) : fromSelected (toSelected q)=q := by cases q; rfl
+
+theorem to_from (q : Selected) : toSelected (fromSelected q)=q := by cases q; rfl
+
+theorem canonical_to (q : Old.Q) (h : Canonical q) :
+    AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM (toSelected q) := h
+
+theorem canonical_from (q : Selected) (h : AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM q) :
+    Canonical (fromSelected q) := h
+
+theorem decode_to (q : Old.Q) : AspisR1.ExtractedMaskQM31Exact.decode (toSelected q)=decode q := rfl
+
+theorem decode_from (q : Selected) : decode (fromSelected q)=AspisR1.ExtractedMaskQM31Exact.decode q := rfl
+
+def array (n : Usize) (q : Nat → Old.Q) : Array Selected n :=
+  ProverCommitArray49.array n (fun i => toSelected (q i))
+
+theorem array_canonical (n : Usize) (q : Nat → Old.Q) (hq : ∀ i, i<n.val → Canonical (q i)) :
+    AspisR1.SemanticCompositionCoefficients.CanonicalArray (array n q) := by
+  intro i
+  simp only [array,ProverCommitArray49.array,List.getElem_ofFn]
+  exact canonical_to (q i.val) (hq i.val i.isLt)
+
+theorem point_model (q : Nat → Old.Q) :
+    AspisR1.SelectorMarginalModel.modelPoint (array 10#usize q)=ProverCommitSuccessorPoint49.decoded q := by
+  funext i
+  simp only [AspisR1.SelectorMarginalModel.modelPoint,AspisR1.SelectorAtPointModel.exactPoint,
+    show i.val<(10#usize).val from i.isLt,dif_pos,array,ProverCommitArray49.array,
+    List.getElem_ofFn,decode_to]
+  rfl
+
+#print axioms from_to
+#print axioms to_from
+#print axioms canonical_to
+#print axioms canonical_from
+#print axioms decode_to
+#print axioms decode_from
+#print axioms array_canonical
+#print axioms point_model
+end R1Z.ProverCommitTerminalCarrier55

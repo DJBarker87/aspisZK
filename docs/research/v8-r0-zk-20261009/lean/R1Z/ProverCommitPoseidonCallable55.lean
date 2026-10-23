@@ -1,24 +1,16 @@
-import AspisR1.PoseidonSelectorsSource
-import PoseidonLeadingPairExact
-import PoseidonInterpolatedFullPairExact
-import PoseidonCandidateProjectedScalarResidualFromBoxedV4
+import AspisR1.PoseidonCallable53
 import PoseidonCandidateProjectedEvaluatorSourceV12
-/-! A callable Poseidon source-cut contract with every leading/full branch
-constructed internally. Binding the retained source cut to frozen Rust is
-separate; no native full-terminal result is claimed by this module. -/
+/-! Transfer the already proved part-53 callable to the literal evaluator
+QName source cut. Native Rust correspondence remains separate. -/
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.ProverCommitPoseidonCallable55
 open Aeneas Aeneas.Std Result AspisR1SelectedMaskProbe
-open AspisR1.PoseidonFullRoundCellStep (cell)
 open AspisR1.PoseidonSamePointResidualModel
-open AspisR1.ExtractedMaskQmPackBase4Arithmetic (iBasis uBasis)
-
 abbrev QM := field.QM31
 abbrev Exact := AspisV8R15.ExactTowerBase.QM31Exact
 abbrev Decode := AspisR1.ExtractedMaskQM31Exact.decode
 abbrev Canonical := AspisR1.ExtractedMaskTowerAdd.CanonicalQM
-abbrev CanonicalState := AspisR1.PoseidonFullRoundCellStep.CanonicalState
 abbrev Openings := state_only_poseidon.StateOnlyPoseidonOpenings
 abbrev pointSelector := AspisR1.SelectorValueLaneModelComposition.pointSelector
 abbrev lane := AspisR1.PoseidonExternalPackedModel.lane
@@ -35,6 +27,14 @@ def run (openings : Openings) (selectorInput : pool_v1.pair_forest_copy_terminal
   let selectors ← AspisR1.PoseidonSelectorsSource.source selectorInput
   state_only_poseidon.evaluate_state_only_poseidon_oracle_projected openings selectors
 
+theorem source_same (o : Openings) (selectors : pool_v1.pair_forest_copy_terminal.Selectors) :
+    run o selectors=AspisR1.PoseidonCallable53.source o selectors := by
+  simp only [run,AspisR1.PoseidonCallable53.source,AspisR1SelectedMaskProbe.evaluator_qname_eq_factored]
+
+theorem model_same (p : Array QM 10#usize) (o : Openings)
+    (selectors : pool_v1.pair_forest_copy_terminal.Selectors) (g : Fin 4) :
+    model p o g=AspisR1.PoseidonCallable53.model p o selectors g := rfl
+
 theorem callable
     (openings : Openings) (point : Array QM 10#usize)
     (selectorInput : pool_v1.pair_forest_copy_terminal.Selectors)
@@ -46,96 +46,15 @@ theorem callable
     ∃ out : Array QM 4#usize, run openings selectorInput=.ok out ∧
       AspisR1.SumHighInnerLoop.CanonicalArray out ∧
       ∀ g : Fin 4, Decode (out.val[g.val]'(by simpa [out.property] using g.isLt))=model point openings g := by
-  have hz : CanonicalState openings.z := by
-    intro i
-    exact hopenZ i
-  have hs : CanonicalState openings.succ_z := by
-    intro i
-    exact hopenSucc i
-  have hx : CanonicalState openings.xor12_z := by
-    intro i
-    exact hopenXor i
-  obtain ⟨selectors0,hselectors0,hblockCan,hlocalCan,hlocals,hblockModel,hlowModel⟩ :=
-    AspisR1.PoseidonSelectorsSource.boxed_success point selectorInput hpoint hbox
-  have hlocalState : CanonicalState selectors0.local := by
-    intro i
-    exact hlocalCan i
-  obtain ⟨leading,hleadingCall,hleadingPackedCan,hleadingModel0⟩ :=
-    AspisR1.PoseidonLeadingPairExact.source_success openings hz hx
-  obtain ⟨full,hfullCall0,hfullPackedCan,hfullModel0⟩ :=
-    AspisR1.PoseidonInterpolatedFullPairExact.qm_source_success openings.z selectors0.local
-      hz hlocalState
-  have hfullCall : state_only_poseidon.interpolated_full_pair_packed openings.z selectorInput.low = .ok full := by
-    rw [hlocals] at hfullCall0
-    exact hfullCall0
-  have hleadingCan : ∀ i : Fin 4, Canonical
-      (leading.val[i.val]'(by simpa [leading.property] using i.isLt)) := by
-    intro i
-    have h := hleadingPackedCan i
-    change Canonical (leading.val[i.val]'(by simpa [leading.property] using i.isLt)) at h
-    exact h
-  have hfullCan : ∀ i : Fin 4, Canonical
-      (full.val[i.val]'(by simpa [full.property] using i.isLt)) := by
-    intro i
-    have h := hfullPackedCan i
-    change Canonical (full.val[i.val]'(by simpa [full.property] using i.isLt)) at h
-    exact h
-  have hleadingModel : ∀ g : Fin 4, Decode
-      (AspisR1.PoseidonClosure2ArrayExact.cell4 leading g) =
-      R0P.poseidonPackingFormula AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
-        AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis (fun j =>
-          R0P.poseidonLeadingPair
-            (AspisR1.PoseidonSamePointResidualModel.decodedOpenings openings).z
-            (AspisR1.PoseidonSamePointResidualModel.decodedOpenings openings).xor12
-            (lane g j)) := by
-    intro g
-    have h := hleadingModel0 g
-    change Decode (AspisR1.PoseidonClosure2ArrayExact.cell4 leading g) = _ at h
-    exact h
-  have hlow : (fun i : Fin 16 => Decode (cell selectors0.local i)) =
-      R0P.g2Low (pointSelector point) := by
-    funext i
-    have hi : i.val < (16#usize).val := by simpa using i.isLt
-    have h := hlowModel i
-    dsimp only [AspisR1.SelectorExpansionCorrectness.decodedArray,
-      AspisR1.SelectorExpansionCorrectness.decodedAt] at h
-    rw [dif_pos hi] at h
-    exact h
-  have hfullModel : ∀ g : Fin 4, Decode
-      (AspisR1.PoseidonClosure2ArrayExact.cell4 full g) =
-      R0P.poseidonPackingFormula AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
-        AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis (fun j =>
-          R0P.poseidonInterpolatedFullPair
-            (AspisR1.PoseidonSamePointResidualModel.decodedOpenings openings).z
-            (R0P.g2Low (pointSelector point)) (lane g j)) := by
-    intro g
-    have h := hfullModel0 g
-    change Decode (AspisR1.PoseidonExternalPackedGroupCall.packedCell full g) = _ at h
-    have hstateZ : AspisR1.PoseidonInterpolatedFullPairExact.decodedState openings.z =
-        (AspisR1.PoseidonSamePointResidualModel.decodedOpenings openings).z := rfl
-    have hstateLocal : AspisR1.PoseidonInterpolatedFullPairExact.decodedState selectors0.local =
-        R0P.g2Low (pointSelector point) := by
-      funext i
-      exact congrFun hlow i
-    rw [hstateZ,hstateLocal] at h
-    change Decode (AspisR1.PoseidonClosure2ArrayExact.cell4 full g) = _ at h
-    exact h
-  obtain ⟨selectors,internal,out,hselectors,hinternalCall,hout,houtCanonical,hmodel⟩ :=
-    AspisR1.PoseidonCandidateProjectedScalarResidualFromBoxed.boxed_candidate_actual_scalar_residual
-      openings point selectorInput leading full hpoint hopenZ hopenSucc hbox
-      hleadingCall hfullCall hleadingCan hfullCan hleadingModel hfullModel
-  refine ⟨out,?_,houtCanonical,?_⟩
-  · rw [run,hselectors]
-    simp only [bind_tc_ok]
-    rw [AspisR1SelectedMaskProbe.evaluator_qname_eq_factored]
-    exact hout
+  obtain ⟨out,hout,hcan,hmodel⟩ := AspisR1.PoseidonCallable53.source_success
+    openings point selectorInput hpoint hopenZ hopenSucc hopenXor hbox
+  refine ⟨out,?_,hcan,?_⟩
+  · rw [source_same];exact hout
   · intro g
-    simpa only [model,AspisR1.PoseidonClosure2ArrayExact.cell4,Decode,pointSelector,lane,
-      AspisR1.PoseidonCandidateProjectedScalarResidualFromBoxed.Decode,
-      AspisR1.PoseidonCandidateProjectedScalarResidualFromBoxed.pointSelector,
-      AspisR1.PoseidonSamePointResidualModel.iBasis,AspisR1.PoseidonSamePointResidualModel.uBasis,
-      AspisR1.PoseidonSamePointResidualModel.lane,
-      AspisR1.PoseidonResidualPacking.lane,AspisR1.PoseidonExternalPackedModel.lane] using hmodel g
+    rw [model_same point openings selectorInput g]
+    simpa only [AspisR1.PoseidonCallable53.cell,AspisR1.PoseidonClosure2ArrayExact.cell4] using hmodel g
 
+#print axioms source_same
+#print axioms model_same
 #print axioms callable
 end R1Z.ProverCommitPoseidonCallable55

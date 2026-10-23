@@ -170,14 +170,13 @@ counter type; those failed snapshots are retained.
 The retained evaluator source cut V12 is checked at J10724 (3.97 s,
 4127652 KiB), using its exact unchanged source. No shared object is overwritten.
 J10725 is retired without compiler invocation because the first proposed import
-was uncached. J10726/27 are qualification/transparency drafts. J10730 proves
-the callable retained Poseidon evaluator contract directly over QM31, deriving
-leading/full/internal calls, output canonicality and the packed scalar residual
-from canonical inputs. No leading/full source-call or model hypothesis remains.
-J10733 instantiates the complete retained composition continue branch with
-this concrete callable, removing its hposeidon callback premise. Public
-preparation success and the source-cut/frozen-source binding remain explicit.
-This is genuine source-cut composition, not a whole native terminal claim.
+was uncached. J10726/27 are qualification/transparency drafts. J10730 initially duplicates the callable result already established in part 53.
+That duplication is superseded by J10735: a small equality transfer from the
+retained QName evaluator to the existing part-53 callable theorem. J10736
+rechecks the dependent composition. The branch-contract discharge was already
+achieved in part 53; the new result is its QName interface instantiation.
+Public preparation success and the source-cut/frozen-source binding remain
+explicit. No new native terminal or whole simulator closure is claimed.
 
 Accepted Lean results:
 
@@ -214,3 +213,70 @@ uses. Field.rs and field/wide_exact.rs are byte-identical between frozen and
 retained inputs. The Poseidon constants file differs only by an appended
 proof-only reference module. Token equality is an inventory, not a semantic
 proof of those four changed functions. Native focused bindings are ongoing.
+
+## Stage 5: complete owned semantic oracle and guarded entry points
+
+J10740 transfers the existing part-53 complete terminal model through the
+literal QName source interface. J10744 proves both directions of the raw
+QM31 carrier conversion, canonicality and decoded point equality. J10746
+constructs the actual zero-claim terminal call at sem[0,1,2,13], zc=sem[3..12].
+The public-preparation success premise remains explicit. These results reuse
+the part-53 terminal proof; they do not claim it was missing before part 55.
+
+J10753 composes the selected mask, extra coefficient lane, terminal call,
+eta=sem[14] multiplication and both additions. Its output is exactly the
+semantic model oracle at the actual point and coefficient tape. No assumed
+terminal output or per-call oracle image remains. J10756 proves canonicality
+of every prefix/sample/Boolean-tail point, constructs all 28×512 actual owned
+oracle invocations, and feeds their outputs to partial sums and interpolation.
+Its resulting polynomial is `PayloadSplit.rounds` of the complete oracle.
+This eliminates the per-invocation `horacle` premise from J10705. It retains
+canonical inputs, source prefix provenance, and successful public preparation;
+it does not yet run the entire native semantic round driver or opening caller.
+
+J10741 checks the extracted complete guarded encoder. J10748 joins its four
+native stride-4 collections to the old generic channels. J10750 proves the
+full optimized-node guarded eval/encode entry points equal to the old owner.
+The encoder theorem requires successful canonical coordinate conversions to
+justify a different pure operation order (channels before casts versus casts
+before channels). Specialized used-method instances must discharge that premise.
+J10739 adds literal canonical node-array equality on valid native indices.
+
+All sixteen QM31 1024→256 lane/word collection checks now pass with full
+allocation/collection, arbitrary raw inputs and arbitrary selected output
+index. The four lane checks collectively cover every limb. All five actual
+M31/QM31/WideExact constructor checks pass, including callback order and exact
+raw outputs at lengths 4,9,10. All receipts record zero swap and unchanged caps.
+
+Focused Poseidon native checks pass for local raw packing, both low folds,
+external row arithmetic and complete internal linear transformation. The full
+external transformation times out (181.108 s, 1063948 KiB); it is not retried
+unchanged. Group/frame, column sums and finishing cuts replace that monolithic
+gate. The whole frozen/candidate binding is still a separate obligation.
+
+J10734/37/38 are rejected terminal qualification/transparency drafts;
+J10742 is a point-model conditional draft; J10743 retires before invoking Lean
+because a new carrier dependency is not yet compiled. J10745 needs a named
+point model equality. J10747 replaces generic arithmetic reduction by explicit
+list length facts. J10749/51/52 are rejected oracle drafts: result carrier,
+namespace, duplicate alias/transparency and recursion-depth issues. J10753
+uses named/opaque symbolic terms and raises no Lean limits. J10754/55 correct
+an inferred power bound and an explicit finite-index cast. All failures remain
+in the evidence; their `sorryAx` diagnostics are not accepted proof artifacts.
+
+Accepted current-source checks (revision and dependency fingerprints are in
+each JSON receipt; all printed axioms are subsets of the standard three):
+
+| Attempt | Exact module | Exit | Wall s | Peak RSS KiB | Swaps |
+|---|---|---:|---:|---:|---:|
+| J10735 | R1Z.ProverCommitPoseidonCallable55 | 0 | 0:01.70 | 4140172 | 0 |
+| J10736 | R1Z.ProverCommitComposition55 | 0 | 0:01.94 | 4203556 | 0 |
+| J10739 | R1Z.ProverCommitNativeNodes55 | 0 | 0:02.30 | 4125484 | 0 |
+| J10740 | R1Z.ProverCommitTerminalQName55 | 0 | 0:01.77 | 4243220 | 0 |
+| J10741 | AspisR1ProducerRelease47.EncoderGuardComplete55 | 0 | 0:01.11 | 2637840 | 0 |
+| J10744 | R1Z.ProverCommitTerminalCarrier55 | 0 | 0:01.71 | 4257448 | 0 |
+| J10746 | R1Z.ProverCommitTerminalZero55 | 0 | 0:02.35 | 4261848 | 0 |
+| J10748 | R1Z.ProverCommitGuardedChannels55 | 0 | 0:01.90 | 4102892 | 0 |
+| J10750 | R1Z.ProverCommitGuardedAt55 | 0 | 0:01.67 | 4104752 | 0 |
+| J10753 | R1Z.ProverCommitOracle55 | 0 | 0:01.91 | 4306240 | 0 |
+| J10756 | R1Z.ProverCommitOracleRounds55 | 0 | 0:01.90 | 4305456 | 0 |
