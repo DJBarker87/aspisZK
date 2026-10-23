@@ -360,3 +360,44 @@ that request. The next missing declaration is the concrete interpretation
 of the native two-stage execution as the headline `Verifier`, followed by
 its model-order proof with these per-call stage observations. This is still
 lead-owned proof work, not an additional cryptographic assumption.
+
+## Continuation stage 7: annotation lifting and final focused audit
+
+`VTop_Annotation.two_pass` proves the complete `AcceptedRunJoin` (including
+enriched input equality and both concatenated logs) from the raw accepted
+join and the one-way source fact that enriched acceptance implies original
+acceptance. Its proof joins the first accepted pass before building annotation
+words, then joins the second pass at that identical enriched input. This
+weakens the sufficient *lifting-rule* premise from full verdict stability;
+it does not discharge the source fact or create the requested frozen instance.
+Lean-054: exit0, 2.002264s, 4316076KiB RSS, swap0; standard axioms only.
+
+`VTop_ContinuationAudit` imports all previous accepted stage/checkpoint proofs,
+the new oracle-call ports and annotation rule, and the actual per-attempt
+headline together. It audits every new theorem and prints the actual headline
+signature, which still has `AcceptedRunJoin D rust` and `StoredCarrierBinding`.
+Lean-055: exit0, 2.053774s, 4428240KiB peak RSS, swap0; only
+`propext`, `Classical.choice`, `Quot.sound` occur. Source revision is
+`e07b84c182` plus the exact dirty-source hashes in that receipt. This focused
+compatible-import audit is not a coherent frozen release replay.
+
+Continuation used six Lean compiles (one elaboration failure, five successes),
+no Kani runs. Cumulative budget: **54/100 actual Lean attempts, 46 remain;
+0/60 Kani runs**. There are 55 allocated Lean IDs including compiler-free
+lean-010. All six new attempts used the unchanged 6G high/8G max/Swap0/64-task
+scope, admitted reservations and one compiler thread. No cap was increased,
+no memory-killed or timed-out job rerun, no whole frozen replay launched.
+The packet manifest now identifies lean-055 as its final focused audit.
+Manifest/source-span inspections pass; original shipped-source pins remain
+unchanged. Release ELFs are not rebuilt or newly certified by this packet.
+All jobs launched in this continuation are terminal; commits are local only.
+
+The exact requested endpoint and deployed theorem remain **uncompleted**.
+New assumptions discharged: none of the concrete per-cone source/model laws.
+New assumptions added to the existing headline: none. New checked results:
+ordered typed oracle substitution and three concrete stage-tree applications,
+the two-pass lifting rule, and the explicitly scoped interface diagnostics.
+The lead must still construct the concrete source oracle interpretation,
+prove the substituted frozen2 model order and instantiate annotation backward
+acceptance. Those proof obligations are not converted into trust or hidden
+inside the named cone record.
