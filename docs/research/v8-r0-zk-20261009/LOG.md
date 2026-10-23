@@ -8871,3 +8871,22 @@ ordered bytes. Kani verifies the actual M31/QM31/WideExact iterator transitions 
 length 256 with verified stubs. 46 modules, 99 new theorems, standard axioms only.
 Remaining before native simulator output = payload: native allocation/collection and
 complete caller bindings; semantic guards; interpolation and challenge provenance.
+
+## D182 (user decision, 2026-10-23 07:10): rewrite the adapter caller in a proof-friendly shape
+
+The user asked why S2 had taken two days. Lead answer: S2 had been pursued as a proof that the
+existing SDK-borrow-heavy adapter glue equals the model. Kani and Aeneas repeatedly
+failed on that code (timeouts, translation errors, an internal Kani crash). Session A
+spent about two days on SDK internals, and the lead's overnight jobs were too broad
+and stopped at each first obstacle. S2-J did reach cuts 1–7 of 30 before stopping at
+cut 8 (the verified SDK stub's descriptor bound excludes the real 1,768-byte buffer).
+**User decision ("yes"):** rewrite stage 1 and stage 2 of `r1_pool_adapter.rs` in a
+proof-friendly shape. Copy each account buffer into an owned value once at entry, run all
+logic on owned values with no borrow guards held, and write the checkpoint back once at the
+end. Then extract it with Aeneas directly. This is a verifier source change, so there will
+be new ELF pins and a new freeze, with adoption gates; the extra compute units are
+measured first and reported. Its accept/reject behaviour, outputs, checkpoint bytes and account effects must equal
+the current adapter's. S2-J and S2-K were stopped. Their work is merged as
+evidence: cuts 1–7, emit pieces and child contracts. Proved cones (checkpoint bytes,
+multiproof, S7/S8, parser) are unaffected unless the rewrite touches their pinned
+functions.
