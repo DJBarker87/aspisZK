@@ -89,3 +89,26 @@ native→sourceBatch log/true transport, with the named P6Boundary and exact
 physical Prepared/query/root bindings. (b) remains UNPROVED here; rejected
 query prefixes still require explicit treatment in the security experiment.
 The checked independent batch cut and caller-node work above is retained.
+
+Final focused union audit014: exit0,wall2.889572630s,peak4393552KiB,swap0;
+all13 printed theorem axiom sets contain only propext/Classical.choice/
+Quot.sound. No release claim or full frozen manifest replay. Final budget
+14/100 Lean,0/60 Kani; no active proof job remains from this packet.
+The one memory-ceiling attempt was isolated/replaced, never rerun unchanged.
+The final static manifest checks source hashes against accepted receipts,
+allowed axioms, fixed caps and absence of changed shipped/existing modules.
+
+Assumptions: native leaves are still explicit Ops; P6Boundary parent/leaf
+gates retained by name, and its oracle populated by facts.oracle. The caller
+node-view premises are discharged FROM Required14, not a construction of
+Required14 itself. No new axiom/trust item, whole-batch equality premise or
+independent successful batch was added. Runtime/allocator/std/extraction and
+source-to-artifact boundaries are inherited unchanged, not newly verified.
+
+Remaining deliverable: repair the emitted rejected-return lowering (or state
+an explicitly accepted-only port), then derive local native opening/packed-key/
+leaf/dedup/count/padding/verify effects and physical Prepared/query/root
+bindings to P6 from this same stage execution. Apply both_batches only after
+that bridge; this packet's source_rows is deliberately not that bridge.
+Target not yet established. No push, shipped change, ELF rebuild, key cleanup,
+other worktree edit or other cone candidate change occurred.
