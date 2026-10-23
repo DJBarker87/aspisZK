@@ -1,0 +1,3 @@
+Before: the actual native helper returned an exact source-array product prefix, while the valid old algebra described the existing protocol row functional; no same-array bridge had been established.
+
+After: exact coordinate/list/mask/prefix equality connects those values. SAME helper acceptance internally produces the coefficient stream and all meaning events; existing algebra identifies its actual output with the inactive-row functional. LowCan and sufficient same-byte span remain explicit caller conditions. No model-result premise, old Enum run or loose existential data vector is added. This does not establish the complete spend soundness experiment.

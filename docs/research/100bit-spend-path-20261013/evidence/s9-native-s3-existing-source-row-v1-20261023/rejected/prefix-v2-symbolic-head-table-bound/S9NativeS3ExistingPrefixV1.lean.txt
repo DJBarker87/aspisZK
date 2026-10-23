@@ -1,0 +1,72 @@
+import S9NativeS3HelperPrefixV1
+import S3ActualGroupedPairSourceRowV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1S9NativeS3ExistingPrefixV1
+open AspisR1S9ProductionPairCutV1
+open AspisR1S9NativeS3WeightBodyV1 (W Low decode)
+open AspisR1S9NativeS3OuterBodyV1 (Coefficients)
+open AspisR1S9NativeS3FieldReaderV1 (nativeToOld)
+open AspisR1S9CandidateFoldMapPrimitivesV1 (mapArray)
+
+def toOldLow (low : Low) : Array AspisR1GroupedPairActualFieldOpsV3.field.WideExact 16#usize := mapArray nativeToOld low
+
+theorem decode_map (w : W) : AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.decode (nativeToOld w)=decode w := by
+  change AspisR1CurrentWide.Proof.decodeWide (AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.toE (nativeToOld w))=_
+  rw [AspisR1S9NativeS3FieldReaderV1.native_current_coordinates] <;> rfl
+
+theorem mapped_decoded_list {N : Usize} (a : Array W N) :
+    (mapArray nativeToOld a).val.map AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.decode=a.val.map decode := by
+  simp only [mapArray,List.map_map,Function.comp_def,decode_map]
+
+theorem source_mask_tables_same : weights.S2_INACTIVE_MASKS=AspisR1GroupedPairActualFieldOpsV3.weights.S2_INACTIVE_MASKS := by
+  unfold weights.S2_INACTIVE_MASKS AspisR1GroupedPairActualFieldOpsV3.weights.S2_INACTIVE_MASKS
+  rfl
+
+theorem selected_prefix_same (mask n : Nat) (xs : List AspisWideTower.WideExact) :
+    AspisR1S9NativeS3WeightLoopV1.actualSelectedPrefix mask n xs=
+      AspisR1GroupedPairActualFieldOpsV3.ActualLoop1OuterPrefixPublic.actualSelectedPrefix mask n xs := by
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+    rw [AspisR1S9NativeS3WeightLoopV1.actualSelectedPrefix,
+      AspisR1GroupedPairActualFieldOpsV3.ActualLoop1OuterPrefixPublic.actualSelectedPrefix,ih]
+
+theorem group_term_same (low : Low) (coefficients : Coefficients) (n : Nat) (hn : n<12) :
+    AspisR1S9NativeS3OuterLoopV1.groupTerm low coefficients n=
+      AspisR1GroupedPairActualFieldOpsV3.ActualLoop1OuterPrefixPublic.actualGroupTerm (toOldLow low)
+        (AspisR1S9NativeS3CoefficientBodyV1.toOld coefficients) n := by
+  have hc : n<coefficients.val.length := by
+    have hp:=coefficients.property
+    change coefficients.val.length=12 at hp
+    omega
+  have hm : n<weights.S2_INACTIVE_MASKS.val.length := by
+    have hp:=weights.S2_INACTIVE_MASKS.property
+    change weights.S2_INACTIVE_MASKS.val.length=12 at hp
+    omega
+  unfold AspisR1S9NativeS3OuterLoopV1.groupTerm AspisR1GroupedPairActualFieldOpsV3.ActualLoop1OuterPrefixPublic.actualGroupTerm
+  simp only [dif_pos hn,AspisR1S9NativeS3CoefficientBodyV1.toOld,toOldLow,
+    mapArray,List.getElem_map,List.map_map,Function.comp_def,decode_map,mapped_decoded_list]
+  rw [←List.map_drop,List.drop_eq_getElem?_toList_append,
+    List.getElem?_eq_getElem hc]
+  simp only [List.map_cons,List.map_nil,List.cons_append,List.headD_cons,
+    List.getElem?_eq_getElem hm,Option.getD_some,source_mask_tables_same,
+    selected_prefix_same]
+
+theorem outer_prefix_same (low : Low) (coefficients : Coefficients) (n : Nat) (hn : n≤12) :
+    AspisR1S9NativeS3OuterLoopV1.outerPrefix low coefficients n=
+      AspisR1GroupedPairActualFieldOpsV3.ActualLoop1OuterPrefixPublic.actualOuterPrefix (toOldLow low)
+        (AspisR1S9NativeS3CoefficientBodyV1.toOld coefficients) n := by
+  induction n with
+  | zero => rfl
+  | succ n ih =>
+    rw [AspisR1S9NativeS3OuterLoopV1.outerPrefix,AspisR1GroupedPairActualFieldOpsV3.ActualLoop1OuterPrefixPublic.actualOuterPrefix,ih (by omega),
+      group_term_same low coefficients n (by omega)]
+
+#print axioms decode_map
+#print axioms mapped_decoded_list
+#print axioms source_mask_tables_same
+#print axioms selected_prefix_same
+#print axioms group_term_same
+#print axioms outer_prefix_same
+end AspisR1S9NativeS3ExistingPrefixV1

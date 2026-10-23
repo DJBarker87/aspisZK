@@ -1,0 +1,3 @@
+Before: coefficient/inner canonicality alone did not identify the actual helper's decoded value, and independently supplied child runs or meanings would not establish SAME-parent behavior.
+
+After: SAME optimized helper success derives its own coefficient producer and outer run. Source inversions and existing native arithmetic semantics derive all selected inner contributions and the complete source-array product prefix for the actual output. Low canonicality and a sufficient actual byte span remain explicit caller guards. No desired semantic output or old physical iterator run is assumed. Existing protocol-row equality and whole security experiment are not yet claimed here.

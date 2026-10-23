@@ -1,0 +1,9 @@
+# SAME native optimized helper to the existing inactive row functional
+
+The coordinate-only native/old carrier map preserves every decoded low/coefficient value. Exact mask-table identity and generic selected-prefix induction identify the actual native outer prefix with the existing public old actualOuterPrefix on those SAME mapped arrays; no old physical iterator run is assumed.
+
+The SAME actual native optimized helper then supplies its own coefficient run and strict-reader input stream. The existing public actual_outer_prefix_eq_parser_grouped_prefix, parserGroupedPrefix_eq_source_groupedPair and s3_grouped_pair_exact prove the actual output equals the existing protocol's ungrouped inactive-row functional. No new regrouping, rank calculation, independent hfields, desired coefficient meaning or child success premise is introduced.
+
+Retained guards: >=2048 bytes of the SAME native f and canonical actual low inputs. Exact fixed span and low protocol meaning belong to the actual caller; the returned coefficient-run witness exposes all64 same strict fields through the existing zero-prefix theorem. The stream uses an explicitly mathematical noncomputable choice of unique decoded values, not an extractor-cost result. Full source Ops/ABI, runtime/allocation/artifact, stored-carrier security transport and global100-bit soundness remain separate.
+
+Only9 missing exact warm old S3 project objects were copied read-only from the NUC. Today's selected arithmetic owners were preserved. Shared cohort diagnostics found6 identical declaration/non-theorem-body families and a differing Selector matcher; the lead chose CURRENT226c and2 exact source consumers were rechecked. These focused cached checks are NOT the final coherent dependency replay or release-artifact binding. No compiler binary or compiled proof object is included.

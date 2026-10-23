@@ -1,0 +1,51 @@
+/private/tmp/a3-s9-native-s3-outer-body-v1c-check-20261023/sources/S9NativeS3OuterBodyV1.lean:47:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decode weight
+in the target expression
+  AspisR1S9NativeWideDecodedArithmeticV1.decode out =
+    AspisR1S9NativeWideDecodedArithmeticV1.decode pair +
+      AspisR1S9NativeWideDecodedArithmeticV1.decode coefficient * AspisR1S9NativeWideDecodedArithmeticV1.decode weight
+
+low : Low
+coefficients : Coefficients
+iter iterOut : R
+pair out : W
+hend : ↑iter.end ≤ 12
+hlow : AspisR1S9NativeArrayCanonicalV1.ReadsCanonical low
+hcoeff : AspisR1S9NativeArrayCanonicalV1.ReadsCanonical coefficients
+hpair : Can pair
+hbody : weights.s2_grouped_inactive_pair_loop1.body low coefficients iter pair = ok (ControlFlow.cont (iterOut, out))
+group : Usize
+weight coefficient product : AspisR1S9NativeArrayCanonicalV1.W
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some group, iterOut)
+hinner :
+  weights.s2_grouped_inactive_pair_loop1_loop0 { start := 0#usize, «end» := 16#usize } low group
+      aspis_core.field.wide_exact.WideExact.ZERO =
+    ok weight
+hcoefficient : Array.index_usize coefficients group = ok coefficient
+hmul : aspis_core.field.wide_exact.WideExact.mul coefficient weight = ok product
+hadd : aspis_core.field.wide_exact.WideExact.add pair product = ok out
+hg : ↑group < ↑iter.end
+hg12 : ↑group < 12
+cweight : Can weight
+hweight : decode weight = actualSelectedPrefix (↑(sourceMask group)) 16 (List.map decode ↑low)
+cproduct : AspisR1S9NativeWideDecodedArithmeticV1.Canonical product
+hproduct :
+  AspisR1S9NativeWideDecodedArithmeticV1.decode product =
+    AspisR1S9NativeWideDecodedArithmeticV1.decode coefficient * AspisR1S9NativeWideDecodedArithmeticV1.decode weight
+cout : AspisR1S9NativeWideDecodedArithmeticV1.Canonical out
+hout :
+  AspisR1S9NativeWideDecodedArithmeticV1.decode out =
+    AspisR1S9NativeWideDecodedArithmeticV1.decode pair +
+      AspisR1S9NativeWideDecodedArithmeticV1.decode coefficient * AspisR1S9NativeWideDecodedArithmeticV1.decode weight
+⊢ ∃ group coefficient,
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some group, iterOut) ∧
+      Array.index_usize coefficients group = ok coefficient ∧
+        ↑group < 12 ∧
+          Can out ∧
+            decode out =
+              decode pair + decode coefficient * actualSelectedPrefix (↑(sourceMask group)) 16 (List.map decode ↑low)
+'AspisR1S9NativeS3OuterBodyV1.native_zero_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9NativeS3OuterBodyV1.native_outer_cont_decoded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
