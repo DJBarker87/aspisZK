@@ -12,9 +12,9 @@ env={'PATH':'/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','CARGO_BUI
 if kind=='kani':
  env['CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER']=H+'/S2F_cc'
  subprocess.run(['rsync','-az',str(E/'S2F-steps')+'/',HOST+':'+H+'/S2F-steps/'],check=True)
- source=['S2F-steps/Cargo.toml','S2F-steps/src/S2F_Trusted.rs','S2F-steps/src/lib.rs','S2F-steps/src/S2F_NativeCuts.rs']
+ source=['S2F-steps/Cargo.toml','S2F-steps/src/S2F_Trusted.rs','S2F-steps/src/lib.rs','S2F-steps/src/S2F_NativeCuts.rs','S2F-steps/src/S2F_CopyStub.rs']
  command=['cargo-kani','kani','--manifest-path','S2F-steps/Cargo.toml','--target-dir','kani-target','-j','4','-Z','stubbing','-Z','function-contracts','-Z','unstable-options','--harness-timeout','120s','--exact','--harness',target,'--output-format','terse']
- deps={'trusted_spec_sha256':hashlib.sha256((E/'S2F-steps/src/S2F_Trusted.rs').read_bytes()).hexdigest(),'reused_contract':'s2a-20261023/kani-003 (three cells, three tokens, two payload coordinates)','reference_source':json.loads((E/'S2F-stage0.json').read_text())['sources'],'qualification':'Source cut projections only; no typed native Library or SBF admission instance.'}
+ deps={'trusted_spec_sha256':hashlib.sha256((E/'S2F-steps/src/S2F_Trusted.rs').read_bytes()).hexdigest(),'reused_contract':'s2a-20261023/kani-003 (three cells, three tokens, two payload coordinates)','copy_contract_reuse':json.loads((E/'S2F-copy-reuse.json').read_text()),'reference_source':json.loads((E/'S2F-stage0.json').read_text())['sources'],'qualification':'Source cut projections only; no typed native Library or SBF admission instance.'}
 else:
  source=[p.name for p in sorted((D/'lean').glob('S2F_*.lean'))]
  for name in source: subprocess.run(['scp',str(D/'lean'/name),HOST+':'+H+'/'+name],check=True,stdout=subprocess.DEVNULL)

@@ -1,0 +1,99 @@
+{
+  "attempt": "kani-025",
+  "kind": "kani",
+  "source_revision": "cd614580cc9f10e6f428be3b689fb5b8de00d9c4",
+  "command": [
+    "cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2F-steps/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "120s",
+    "--exact",
+    "--harness",
+    "S2F_checkpoint_copy_step",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2F-steps/Cargo.toml",
+    "S2F-steps/src/S2F_Trusted.rs",
+    "S2F-steps/src/lib.rs",
+    "S2F-steps/src/S2F_NativeCuts.rs",
+    "S2F-steps/src/S2F_CopyStub.rs"
+  ],
+  "timeout": 180,
+  "deps_fingerprint": {
+    "trusted_spec_sha256": "e517d1b55d99ef3aa94df48bb8e6905f69816df8f6077f1f165e8fd874b27b2a",
+    "reused_contract": "s2a-20261023/kani-003 (three cells, three tokens, two payload coordinates)",
+    "copy_contract_reuse": {
+      "branch": "codex/cx-s2g-20261023",
+      "revision": "29b580e03a585ab90393ddc475e02f6c2a6589fd",
+      "path": "docs/research/100bit-spend-path-20261013/evidence/s2g-20261023/S2G-contracts/src/lib.rs",
+      "source_sha256": "cabbc5ddc1d825573e1a39f6df1b4a9afc615280a0b243b4ef9596dec8e5bd7e",
+      "callee_and_contract_harness_prefix_sha256": "2e984decb929eb286c63c3dd66bde01953f277c5d480642790e6e5a5f1350e00",
+      "reused_proof": "s2g-20261023/kani-001",
+      "reused_consumer": "s2g-20261023/kani-002",
+      "qualification": "Byte-identical callee/attributes/contract harness in an S2F-prefixed private module. No callee replay. Caller checks only selected byte in admitted safe-slice context; full SDK heap/guard/allocator/effect port remains open."
+    },
+    "reference_source": {
+      "programs/r1-cost-probe/src/r1_pool_adapter.rs": {
+        "sha256": "6a8e5799035458ed4c0093709da6da86fb29100303861ddd15212d3ad7dcdcfb",
+        "bytes": 41100
+      },
+      "docs/research/100bit-spend-path-20261013/evidence/s2e-20261023/S2E-reference/src/S2E_Reference.rs": {
+        "sha256": "8106a3a9b9b3bba65747e70debf5af24325409a8d0b4f93e29066a904b73a371",
+        "bytes": 10499
+      },
+      "docs/research/100bit-spend-path-20261013/lean/S2E_Model.lean": {
+        "sha256": "d787492ea58f67da7afc2b37a201d4706bf1bb9796745113ebba4e703afd55d2",
+        "bytes": 48057
+      },
+      "docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean": {
+        "sha256": "eb9e021c449f4c23b02d8cb68b7022bef4ac743f40918672f9f8816355ccb5e8",
+        "bytes": 12986
+      }
+    },
+    "qualification": "Source cut projections only; no typed native Library or SBF admission instance."
+  },
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER": "/home/dombarker/project-offloads/codex-cx-s2f-20261023/S2F_cc"
+  },
+  "expected_time": "cached optimized compilation then one named source-cut verification; no cryptographic arithmetic",
+  "exit_status": 0,
+  "wall_seconds": 21.06798181299382,
+  "peak_rss_kib": "679644",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-re0588fb09e3f46628ca7ecfb17ba392b.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "709935104",
+  "source_hashes": {
+    "S2F-steps/Cargo.toml": "e6a93bf393665395c196618329f4a439f6474855e3d92a1613cf3c42f40a8301",
+    "S2F-steps/src/S2F_Trusted.rs": "e517d1b55d99ef3aa94df48bb8e6905f69816df8f6077f1f165e8fd874b27b2a",
+    "S2F-steps/src/lib.rs": "62f751771f04bae5c325fae0a3904bef5791bcff5112bc3ddd2ec3039baaa06e",
+    "S2F-steps/src/S2F_NativeCuts.rs": "5af545c4eb9c3e8a66e2e9e0903a2e3ce4e5b2358cf9101f1dc4590404c0bd07",
+    "S2F-steps/src/S2F_CopyStub.rs": "2e984decb929eb286c63c3dd66bde01953f277c5d480642790e6e5a5f1350e00"
+  },
+  "print_axioms": "N/A: kani"
+}

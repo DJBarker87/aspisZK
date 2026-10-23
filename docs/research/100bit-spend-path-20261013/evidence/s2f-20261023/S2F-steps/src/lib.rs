@@ -222,3 +222,22 @@ fn S2F_exclusive_vector_frame() {
  let mut o=S2F_frame_sdk(&bytes,&lengths,&counts);let mut g=LiveGuards{checkpoint:None,public:None,proof:None};
  let _=owned_acquire_checkpoint(&mut o,&mut g,c);S2F_check_frame(&o,&bytes,&lengths);
 }
+
+#[path="S2F_CopyStub.rs"] mod S2F_CopyStub;
+// Native :982-985, one small source group, with G's verified std-copy child.
+// Safe slice domain: fixed destination1768, source length0..1768. The error arm
+// performs no destination write. No owner/allocator/query effect is erased here.
+#[kani::proof] #[kani::unwind(1772)]
+#[kani::stub_verified(S2F_CopyStub::S2G_copy)]
+fn S2F_checkpoint_copy_step() {
+ let mut checkpoint_data:[u8;1768]=kani::any();let source:[u8;1768]=kani::any();
+ let length:usize=kani::any();kani::assume(length<=1768);
+ let observed:usize=kani::any();kani::assume(observed<1768);
+ let checkpoint=&source[..length];let before=checkpoint_data[observed];
+ let outcome=if checkpoint.len()!=checkpoint_data.len() {Err(PE::InvalidAccountData)}else{
+  let expected=checkpoint[observed];
+  S2F_CopyStub::S2G_copy(&mut checkpoint_data,checkpoint,observed,expected);Ok(())
+ };
+ if length==1768 {assert!(outcome.is_ok());assert!(checkpoint_data[observed]==source[observed]);}
+ else {assert!(matches!(outcome,Err(PE::InvalidAccountData)));assert!(checkpoint_data[observed]==before);}
+}
