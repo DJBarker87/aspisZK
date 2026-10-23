@@ -1,0 +1,3 @@
+PROVED: success of the Actual-carrier ten-round source model followed by the same successful V3 constructor with coordinate-mapped alpha implies canonical reads of its exact extra array. The independent alpha-canonicality premise is discharged by the same-run round producer and exact nested mapped-read contract. Hooks/source-model boundary, constructor candidate/source normalizations, and actual Rust caller/MIR/ELF/runtime refinement remain explicit; this is not a complete source or security theorem.
+
+Focused Lean check: 15.218 seconds; peak aggregate RSS 3631284224 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

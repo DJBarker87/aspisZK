@@ -1111,3 +1111,22 @@ RSS, zero swap). Their concrete body invariants and measure decrease remain
 obligations in the constructor and Pair instances. The actual factor-loop
 instance, challenge-to-constructor connection and full Pair binding remain
 in flight; these generic tools are not counted as source-cone closure.
+
+PROVED composition removes constructor alpha premise: the ten-round source
+model now supplies the constructor's exact nested mapped-read alpha contract
+(17.952 s, 3,633,528,832-byte aggregate RSS, zero swap, standard axioms).
+The same successful constructor call then yields canonical reads of its
+extra array (15.218 s, 3,631,284,224 bytes, zero swap, standard axioms).
+This composes actual-carrier model executions and generated constructor
+executions; it does not replace missing Rust caller/runtime refinement with
+a cryptographic assumption. Uniform Hooks and existing constructor source
+normalizations remain explicit. The packet includes the coordinate carrier
+map and contract sources/receipts and explicit selected S9 shared-object pins;
+a coherent release replay is not claimed.
+
+Current next source task: extract the unchanged private semantic_rounds
+caller itself, instead of relying on a source-shape/order check for its ten
+calls. Fresh full Pair extraction now includes actual core field bodies;
+remaining actual r0 dependency bodies are being included before accepting
+its Lean source owner. Neither full Pair nor the source-to-release security
+statement is closed.
