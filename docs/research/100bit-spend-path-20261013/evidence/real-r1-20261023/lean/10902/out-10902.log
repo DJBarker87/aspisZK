@@ -1,0 +1,100 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR1_OuterOwner.lean:137:91: error: unsolved goals
+case left
+Extra Proof : Type
+pre : Prefix Extra
+schedule : ProverCommitLedger36.Schedule
+unix : Bool
+left right : Body Extra Proof
+secret : Secret
+bytes : PubBytes
+s : Store Extra
+extra : Extra
+path : ProverCommitLedger36.Path
+after : LedgerState
+error : ProverCommitEnvironment35.ReservationError
+hp : pre secret.1 bytes s.2 = ok (core.result.Result.Ok path, extra)
+hr : ProverCommitLedger36.reserve schedule unix path s.1 = (Except.error error, after)
+⊢ (let (address, extra) := (core.result.Result.Ok path, extra)
+    match address with
+    | core.result.Result.Err e => ok (core.result.Result.Err e, s.1, extra)
+    | core.result.Result.Ok path =>
+      let (result, after) := ProverCommitLedger36.reserve schedule unix path s.1
+      match result with
+      | Except.error a => ok (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic, after, extra)
+      | Except.ok a => left secret bytes (after, extra)) =
+    ok (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic, after, extra)
+
+case right
+Extra Proof : Type
+pre : Prefix Extra
+schedule : ProverCommitLedger36.Schedule
+unix : Bool
+left right : Body Extra Proof
+secret : Secret
+bytes : PubBytes
+s : Store Extra
+extra : Extra
+path : ProverCommitLedger36.Path
+after : LedgerState
+error : ProverCommitEnvironment35.ReservationError
+hp : pre secret.1 bytes s.2 = ok (core.result.Result.Ok path, extra)
+hr : ProverCommitLedger36.reserve schedule unix path s.1 = (Except.error error, after)
+⊢ (let (address, extra) := (core.result.Result.Ok path, extra)
+    match address with
+    | core.result.Result.Err e => ok (core.result.Result.Err e, s.1, extra)
+    | core.result.Result.Ok path =>
+      let (result, after) := ProverCommitLedger36.reserve schedule unix path s.1
+      match result with
+      | Except.error a => ok (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic, after, extra)
+      | Except.ok a => right secret bytes (after, extra)) =
+    ok (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic, after, extra)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR1_OuterOwner.lean:138:52: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [reserved, ̲hp, ̲bind_tc_ok,̵h̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR1_OuterOwner.lean:148:93: error: unsolved goals
+Extra Proof : Type
+pre : Prefix Extra
+schedule : ProverCommitLedger36.Schedule
+unix : Bool
+body : Body Extra Proof
+secret : Secret
+bytes : PubBytes
+s : Store Extra
+extra : Extra
+path : ProverCommitLedger36.Path
+hp : pre secret.1 bytes s.2 = ok (core.result.Result.Ok path, extra)
+occupied : path ∈ s.1.ledger
+hit :
+  (ProverCommitLedger36.reserve schedule unix path s.1).1 =
+    Except.error ProverCommitEnvironment35.ReservationError.duplicate
+⊢ (let (address, extra) := (core.result.Result.Ok path, extra)
+    match address with
+    | core.result.Result.Err e => ok (core.result.Result.Err e, s.1, extra)
+    | core.result.Result.Ok path =>
+      let (result, after) := ProverCommitLedger36.reserve schedule unix path s.1
+      match result with
+      | Except.error a => ok (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic, after, extra)
+      | Except.ok a => body secret bytes (after, extra)) =
+    ok
+      (core.result.Result.Err AspisR1SimControl21.verifier.Error.Semantic,
+        (ProverCommitLedger36.reserve schedule unix path s.1).2, extra)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/RealR1_OuterOwner.lean:150:36: warning: This simp argument is unused:
+  hit
+
+Hint: Omit it from the simp argument list.
+  simp only [reserved, ̲hp, ̲bind_tc_ok,̵h̵i̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.RealR1_OuterOwner.entropy_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_OuterOwner.reserved_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_OuterOwner.outer_owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_OuterOwner.wrong_variant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_OuterOwner.entropy_failure_stops' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.RealR1_OuterOwner.reservation_failure_closed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.RealR1_OuterOwner.duplicate_closed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
