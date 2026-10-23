@@ -137,9 +137,118 @@ theorem privacy_headline_deployed
 
 ## Stage 2: remaining real-side obligations
 
-Pending independent source-obligation map.
+This map is a source/report audit, not a replay of the historical receipts.
+All part references below are the corresponding `PROVER-COMMIT<n>-<date>.md`
+reports in this directory; LOG acceptance entries distinguish completed local
+results from the source joins they do not establish.
+
+| Parts | Established local result | Consequence and remaining real-side work |
+|---|---|---|
+| [27](PROVER-COMMIT27-20261021.md) | Effectful CoinOracle call/sequence, finite 115-word product marginal, complete cursor/recording/collision effects and ordered history; bounded native control checks. | Reuse only where the real caller actually uses the certified operation. Native wrapping/caller bounds and whole source binding must be retained. Returning only a digest loses state. |
+| [28](PROVER-COMMIT28-20261022.md) | State-transformer semantic/circle/suffix port; complete constructed walk and reset/history laws. | A constructed continuation is not a native outer-owner or deployed retry theorem. Rejected-prefix history cannot be discarded. |
+| [29](PROVER-COMMIT29-20261022.md)–[30](PROVER-COMMIT30-20261022.md) | Semantic rows/validator/callee split, selected-record and counter composition; 25 native caller cases and logged walk. | These principally bind `sim::walk` on prepared records. They do not construct the real masks, perform reservation or publish the real proof. Apply shared helper equations only after checking source identities. |
+| [31](PROVER-COMMIT31-20261022.md)–[32](PROVER-COMMIT32-20261022.md) | Owned simulator publication source checks; recursive ordered-list publication/lookup equations. | Historical extraction/collection obstructions; neither result supplies a real prover publication certificate. Use D144 structural owners and D145 TrustedStd, not another full iterator extraction or BTreeMap-internals gate. |
+| [33](PROVER-COMMIT33-20261022.md) | Lazy entry, folded-loop, query-answer and ordered merge transport; source-image counterexamples. | Install a concrete statement/public-byte/observable projection on D146's representable domain. WideExact fields and unbounded Nat indices cannot all be mapped field-preservingly to Rust M31/u64. This is a visible domain specialization, not part of dropping conjunct 2. |
+| [34](PROVER-COMMIT34-20261022.md) | DeployedStatement/public-byte law, structural eight-attempt owner, OS/zero failures distinguished. | Bind this owner to the actual S2 feature-selected caller; an arbitrary `next_attempt` callback does not guarantee successful-draw law E1 or correct mask construction. |
+| [35](PROVER-COMMIT35-20261022.md)–[36](PROVER-COMMIT36-20261022.md) | Byte-blind faults, fail-closed/replay, reservation retention/extracted bridge; faithful ledger and conditional bounds. | Preserve arbitrary schedules and private ledger state, atomic E2 and E1 successful draws. No error-free OS premise, failure-probability shortcut or implicit ledger cap. E1/E2 alone do not imply a hash address law. |
+| [37](PROVER-COMMIT37-20261022.md)–[38](PROVER-COMMIT38-20261022.md) | ROM coordinate/memo analysis and explicit reservation event; saturated-ledger counterexample to a small universal ledger-hit charge. | Retain as corrections/evidence. Do not charge adversary ledger size or revive the uniform-secret-nonce premise for the selected public-nonce route. |
+| [39](PROVER-COMMIT39-20261022.md) | Shared-ledger prefix coupling; source nonce-ownership finding. | Use public proof-account nonce, chosen by the adversary even after earlier queries; duplicate/fault outcomes couple exactly before witness-dependent work. Native source-to-experiment and successful continuation remain to compose. |
+| [40](PROVER-COMMIT40-20261022.md) | Private raw-seed memo counts, public-nonce model, hash-family classification and conditional numeric envelope. | Both private OS seeds need the actual adaptive law. The extra `4*Q*attempts/2^256 + 16*(3/2^256)` envelope is proved conditionally, **not installed** in the current headline. Do not claim the current fixed realBad/seed/fuel join already contains it. |
+| [41](PROVER-COMMIT41-20261022.md) | Conditional ROM law retaining public-prefix answers, duplicates, adaptive histories; public binding and mixed-read agreement. | Instantiate the actual real commitment continuation; public precommit/attempt binding answers may already be queried. Treating them as fresh has probability-one counterexamples. |
+| [42](PROVER-COMMIT42-20261022.md) | Concrete normalized private-read bounds and honest run agreement; generated 64-byte entropy owner/model/ledger/retry bridge. | Local statements retain RCommitBytes, ROpen, RComLog; global run retains RAddrIn, RCausal, public memo coherence and bad complements. Joint adaptive reservation/oracle histories and the complete native successful continuation are not closed. |
+| [43](PROVER-COMMIT43-20261022.md) | Native full-byte candidate transition plus sixteen-step Lean induction, closing part 42's native entropy-loop obstruction; ordered publication/leaf/padding helpers. | Consume the selected 64-byte callback, including OS payloads and zero exhaustion, in the real retry owner. Publication helpers largely concern simulator-specific synthetic trees; establish the corresponding native real Merkle/encoding path separately. |
+| [44](PROVER-COMMIT44-20261022.md) | Ordered parent set and native parent transition through 18 levels; length-interface countermodel. | Preserve salt/coin order and root guards where the caller matches. Native simulator tree equivalence does not identify real committed trees or proof serialization. |
+| [45](PROVER-COMMIT45-20261022.md) | TrustedStd length/sort/dedup fields, guarded tree/transcript finalization; ProgramOne effect-gap countermodel. | `ProgramOne` is a simulator callback. Its unresolved RefCell effect is not automatically a remaining obligation for a real-only headline; neither can a digest-only callback justify real state changes. Parts 46–55's native simulator binding is explicitly stopped by D184. |
+
+### Concrete real owner and publication deliverable
+
+The selected source path is
+`generate_for_mask_nonce` → `prove_masked_retrying_with` →
+`prove_masked_attempt` → `prove_masked_with_attempt` →
+`host_semantic::build_with_material` → `prove_from_semantics`.
+Actual files: `crates/aspis-prover/src/state_only_entropy.rs` and
+`crates/aspis-r1-cost-probe/src/prover.rs`. The wrapper at prover.rs:327
+uses the different 96-byte `generate()` API; it is not the selected deployed
+proof-account route. At prover.rs:354 the generic callback is invoked
+before each attempt; only `Error::Rejected` continues. Every other error
+aborts; only successful proof/audit returns; eight rejections exhaust.
+The comments' freshness assertions are not proofs of the arbitrary callback.
+
+The next concrete real deliverable should compose the selected 64-byte owner
+and reservation bridge into that actual callback and loop, then bind the
+successful mask/builder/commitment/semantic/checker/serialization path.
+Retain the same public nonce and environment schedule in both worlds,
+reservation before the first witness-dependent trace use, nonzero candidate
+selection and all error exits. Establish that the successful source proof
+bytes equal the model's reencoded observation, including phase-indexed roots,
+semantic messages, openings and verifier/adversary ordered query answers.
+Transport the observer's complete decision and adaptive queries, not only
+acceptance, a root or a successful fixture. Prove the D143 projection removes
+internal audit/timing/attempt/programming data from publication; local function
+return values alone do not establish deployment visibility.
+
+Then construct the concrete real experiment, its exact random marginal,
+and `ProverCommitFuelJoin22.RunJoin` outside the **specified** realBad plus
+seed/fuel predicates. Those predicates are fixed, not implementation-chosen.
+The current source/entropy analysis introduces private-memo and zero events
+not yet visibly composed into that endpoint. Either prove their containment
+with valid mass accounting in the existing event carrier, or explicitly
+report the changed real contract/envelope. Do not silently add exceptions or
+pretend that the conditional part-40 arithmetic is a completed join.
+A generic coupling hypothesis would merely restate this remaining work.
+The retained premise is meaningful and model-satisfiable (an identical real
+model admits an identity coupling and independent seed/tape extension); this
+does not supply the missing shipped instance or assume the security conclusion.
+
+### Candidate v2 differences and adoption
+
+Read-only comparison is pinned to candidate
+`b2f95e269a` (`codex/cx-ct-kernels-v2-20261022`), as in D172.
+`privacy-restate-20261023/candidate-audit.json` records its full revision,
+merge base, relevant changed files and source hashes. This branch has not
+been checked out, modified, merged or adopted here.
+
+| Changed path | Required refinement/adoption consequence |
+|---|---|
+| `aspis-core/src/field/{ct.rs,wide_exact.rs}` and `field.rs` | Constant-time kernels need their recorded arithmetic equivalence composed at each real caller; local Kani kernel checks alone are not the whole real-experiment join. |
+| `host_semantic.rs`, new `ct_pole.rs` | Branch-free equality and eager all-slot pole scan must preserve the exact VR1 rejection law, malformed/error paths and accepted trace. |
+| `prover.rs`, `trace.rs`, feature manifests | CT feature gates TLS value/check-time recording off. Rebind source pins/features and observation projection; do not reuse the old recorder/thread premises unchanged. The retry body itself has no candidate diff in the inspected three-dot comparison. |
+| P_R1 probe implementation (`z4/z9e.rs` plus `z9c.rs`/`z9d.rs`, and `c3/build`/`c3/check`) | D171–D172: blocked exact M31 arithmetic, deterministic bounded workers and first-lift reuse must preserve all check verdicts, early rejection and panic/error handling. Pin these path dependencies under `docs/research/v8-r0-zk-20261009/`; their changed production sources are included in the candidate audit. |
+| `host_sumcheck.rs`, `host_commitment.rs`, new `host_work.rs` | Sixteen public work ranges and deterministic merges change semantic point evaluation/lane encoding callers. Reprove source/model correspondence and joint trace transport; same fixture bytes do not establish equality for every statement/witness/challenge. |
+
+D167/D171/D172 report kernel/control gates, differential challenge checks,
+unchanged fixture proof/public bytes and verifier ELF pins. D172 measures
+13.63/13.98 s medians on the specified 16-core host; those are measurements,
+not universal cost or refinement proofs. Adoption still needs changed-path
+native refinement, D166's simulatable joint L1/L2 trace transport, expanded
+thread/TLS assumptions and the pinned x86_64 Linux L3 receipt. The discarded
+stage-3 fixed-shape rewrite is not v2 and must not be reintroduced as an
+obligation or silently attributed to it. These gates remain independent of
+whether the never-deployed native simulator is bound to simE.
+
 
 ## Validation and handoff
 
-Pending final source audit. No Lean or Rust compiler has run; J10800–10899
-are unconsumed. No shared host source/object was read or overwritten.
+`python3 .../privacy-restate-20261023/audit.py` passes the endpoint/source
+assertions; the checked source SHA-256/size pins are in `source-audit.json`.
+`candidate-audit.json` is read-only git evidence, not candidate verification.
+`git diff --check` passes. Before/after endpoint snapshots match byte for byte.
+Historical proof/build/axioms evidence is referenced, not rerun or promoted
+to validation of a new theorem.
+
+No Lean or Rust compiler ran; assigned J10800–10899 are unconsumed. No new
+theorem, axiom, cost certificate, runtime claim, source join or formal release
+result: target/exit/wall/RSS/swap/axioms for a new formal build are all not
+applicable. No full regression/manifest, local dependency build, ELF rebuild
+or shared host source/object change occurred. All existing `.lean`, `crates/`
+and `programs/` sources are untouched. No wallet/key operation, push or merge.
+
+Stage 1 commit: `0ddade8ebd` (statement audit and stop). Stage 2 commits this
+independent obligation map and read-only candidate/source evidence. Exact
+claim established: the requested raw conclusion equivalence is unsupported
+by the FS interface; the standard real-to-mathematical-ideal simulation
+route is sufficient but is a different fixed-experiment proposition.
+No refinement premise is discharged. Next lead deliverable: decide explicitly
+whether to replace the literal equivalence requirement with that simulation
+contract, and then prove the new two-edge composition without claiming it
+recovers `ZK_FSS ... rust` absent a relation to `rust.ideal`.
