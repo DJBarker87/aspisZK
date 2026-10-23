@@ -8914,3 +8914,23 @@ Lead ruling:
    results, consume errors in source order).
 3. **Resources:** the copies' heap use within the 256 KiB SBF bump heap and the CU cost
    are measured and gated. Allocation failure aborts the transaction (no effects).
+
+## D184 (lead, 2026-10-23 09:10): part 55 merged; native Rust simulator binding stopped as unnecessary
+
+Merged `codex/cx-prover-commit55-20261023` (about 0.87M tokens): the owned semantic oracle
+with partial sums and interpolation; the original terminal and final semantic shift with
+the successful guard; guarded encoders; opening challenge images; standard axioms.
+**Lead finding (cost and scope).** Parts 46–55, and much of 30–33, bound the Rust
+*simulator* `crates/aspis-r1-cost-probe/src/sim.rs` (`simE`/`sim_e_ablated`, "UNPROVED
+COST PROBE", D44.3) to the model simulator. That serves only the *second* conjunct of
+`RustProverRefinement` (rust.ideal = source.ideal). The simulator is a proof device that
+is never deployed. Deployed privacy is a statement about the real prover's observable
+output: its distribution is within ε of the ideal game run with the mathematical simulator
+`simE`, whose efficiency is a property of `simE` (the SIM-COST passes, D116–D142). So the
+deployed headline needs only rust.real = source.real (conjunct 1) plus the model theorem
+source.real ≈ source.ideal. Restating the deployed endpoint as
+"rust.real ≈ source.ideal(simE)" is the same claim about deployed outputs, not a
+weakening. Before/after statements are to be shown verbatim in the restating job.
+Consequences: native `sim.rs` binding work stops (its results stay as evidence); privacy work
+goes to the real side (`prove_masked_retrying_with` and the prover, on the v2 candidate
+code paths where they differ), plus the L1/L2 side-channel obligations.
