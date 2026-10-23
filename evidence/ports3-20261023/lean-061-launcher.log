@@ -1,0 +1,38 @@
+{"attempt": "lean-061", "exit_status": 1, "wall_seconds": 2.1321082649956224, "peak_rss_kib": "4394524", "swaps": "0", "print_axioms": ["'AspisR1.Port3_BatchStage.parent_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_BatchStage.accepted_slot_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port3_BatchStage.lean:12:82: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+Port3_BatchStage.lean:13:82: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ e ≤ 1
+where
+ e := ↑↑2#usize
+Port3_BatchStage.lean:28:8: warning: declaration uses `sorry`
+Port3_BatchStage.lean:36:28: warning: declaration uses `sorry`
+Port3_BatchStage.lean:38:28: warning: declaration uses `sorry`
+Port3_BatchStage.lean:60:2: error: Type mismatch: After simplification, t
+...
+oot0 p, root1 p, folded][↑0] which 0#usize (Array.repeat 16#usize 0#u32)
+          (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) hash =
+        ok (core.result.Result.Ok (), idx1, val1) ∧
+      Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install leaves) (VTop_Checkpoint.digest D)
+            proof p.queries [root0 p, root1 p, folded][↑1] which 1#usize idx1 val1 hash =
+          ok (core.result.Result.Ok (), idx2, val2) ∧
+        Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install leaves) (VTop_Checkpoint.digest D)
+            proof p.queries [root0 p, root1 p, folded][↑2] which 2#usize idx2 val2 hash =
+          ok (core.result.Result.Ok (), idx3, val3)
+but is expected to have type
+  ∃ idx1 idx2 idx3 val1 val2 val3,
+    Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install leaves) (VTop_Checkpoint.digest D) proof
+          p.queries (root0 p) which 0#usize (Array.repeat 16#usize 0#u32)
+          (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) hash =
+        ok (core.result.Result.Ok (), idx1, val1) ∧
+      Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install leaves) (VTop_Checkpoint.digest D)
+            proof p.queries (root1 p) which 1#usize idx1 val1 hash =
+          ok (core.result.Result.Ok (), idx2, val2) ∧
+        Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install leaves) (VTop_Checkpoint.digest D)
+            proof p.queries folded which 2#usize idx2 val2 hash =
+          ok (core.result.Result.Ok (), idx3, val3)
+'AspisR1.Port3_BatchStage.parent_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_BatchStage.accepted_slot_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r78ae5fd9952d49158316320b94dc0a78.scope; invocation ID: 538ea8ff015846d391ca06bd083acd29

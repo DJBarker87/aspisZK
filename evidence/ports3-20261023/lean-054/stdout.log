@@ -1,0 +1,139 @@
+Port3_NativeBatchCalls.lean:14:23: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Port3_NativeBatchCalls.lean:18:33: warning: This simp argument is unused:
+  List.getElem?_eq_getElem
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵r̵o̵o̵t̵A̵t̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵]̵[̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲r̲o̲o̲t̲A̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port3_NativeBatchCalls.lean:44:10: error(lean.unknownIdentifier): Unknown identifier `r1`
+Port3_NativeBatchCalls.lean:44:4: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.408
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case Ok.unit.Continue
+ops : Ops
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+proof : Slice U8
+queries : Std.Array U32 22#usize
+roots : Std.Array (Std.Array U8 32#usize) 3#usize
+batch : Usize
+accepted✝¹ :
+  (do
+      let (r, idx1, val1) ←
+        verifier.candidate.batch_tree ops D proof queries (rootAt roots 0) batch 0#usize (Array.repeat 16#usize 0#u32)
+            (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) hash
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r1, idx2, val2) ←
+            verifier.candidate.batch_tree ops D proof queries (rootAt roots 1) batch 1#usize idx1 val1 hash
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let (r2, _, _) ←
+                verifier.candidate.batch_tree ops D proof queries (rootAt roots 2) batch 2#usize idx2 val2 hash
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+h0 : roots.index_usize 0#usize = ok (rootAt roots 0)
+h1 : roots.index_usize 1#usize = ok (rootAt roots 1)
+h2 : roots.index_usize 2#usize = ok (rootAt roots 2)
+idx1 : Std.Array U32 16#usize
+val1 : Std.Array (Std.Array U8 32#usize) 16#usize
+call0 :
+  verifier.candidate.batch_tree ops D proof queries (rootAt roots 0) batch 0#usize (Array.repeat 16#usize 0#u32)
+      (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) hash =
+    ok (core.result.Result.Ok PUnit.unit, idx1, val1)
+accepted✝ :
+  (do
+      let cf ← ok (core.ops.control_flow.ControlFlow.Continue PUnit.unit)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r1, idx2, val2) ←
+            verifier.candidate.batch_tree ops D proof queries (rootAt roots 1) batch 1#usize idx1 val1 hash
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let (r2, _, _) ←
+                verifier.candidate.batch_tree ops D proof queries (rootAt roots 2) batch 2#usize idx2 val2 hash
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+call1 :
+  ok (core.ops.control_flow.ControlFlow.Continue PUnit.unit) =
+    ok (core.ops.control_flow.ControlFlow.Continue PUnit.unit)
+accepted :
+  (match core.ops.control_flow.ControlFlow.Continue PUnit.unit with
+    | core.ops.control_flow.ControlFlow.Continue a => do
+      let (r1, idx2, val2) ←
+        verifier.candidate.batch_tree ops D proof queries (rootAt roots 1) batch 1#usize idx1 val1 hash
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r2, _, _) ←
+            verifier.candidate.batch_tree ops D proof queries (rootAt roots 2) batch 2#usize idx2 val2 hash
+          let cf2 ←
+            match r2 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+        (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+x✝ : ?m.408
+⊢ ∃ idx1 idx2 idx3 val1 val2 val3,
+    verifier.candidate.batch_tree ops D proof queries (rootAt roots 0) batch 0#usize (Array.repeat 16#usize 0#u32)
+          (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) hash =
+        ok (core.result.Result.Ok (), idx1, val1) ∧
+      verifier.candidate.batch_tree ops D proof queries (rootAt roots 1) batch 1#usize idx1 val1 hash =
+          ok (core.result.Result.Ok (), idx2, val2) ∧
+        verifier.candidate.batch_tree ops D proof queries (rootAt roots 2) batch 2#usize idx2 val2 hash =
+          ok (core.result.Result.Ok (), idx3, val3)
+Port3_NativeBatchCalls.lean:40:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisR1.Port3_NativeBatchCalls.root_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_NativeBatchCalls.values_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
