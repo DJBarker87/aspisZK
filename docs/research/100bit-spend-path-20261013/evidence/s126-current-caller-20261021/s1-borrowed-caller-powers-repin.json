@@ -1,0 +1,22 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "freeze": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+  "observed_research_revision": "b78ce854138cf3feb76b5e74e76e5f3615c4c34a",
+  "source_sha256": {
+    "crates/aspis-r1-cost-probe/src/weights.rs": "28b558ffa9f5b004188c7f50b1597fe681186f54fb4d52a3bd125df4f2481137",
+    "crates/aspis-r1-cost-probe/src/verifier.rs": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756"
+  },
+  "powers_body": "pub fn powers<const N:usize>(x:E)->[E;N]{\n let mut out=[E::ZERO;N];\n let mut p=E::ONE;\n let mut i=0usize;\n while i<N {\n  out[i]=p;\n  i+=1;\n  if i==N { return out; }\n  p=p.mul(x);\n }\n out\n}",
+  "original_prepared_new": "pub fn new<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,hash:H,g:&mut [E;29])->Result<Box<Self>,Error> {\n        let mut t=Transcript::new(hash,sem.transcript.state(),v.variant);\n        let gamma=t.scalar(27,v.y1,true);\n        let kappa=t.scalar(28,&v.inactive.to_le_bytes(),false);\n        let alpha0=t.scalar(29,v.round0,false);\n        let (alpha,row)=if v.variant.folds()==2 {\n            let mut bytes=Vec::with_capacity(32+224);bytes.extend_from_slice(v.folded_root.unwrap());bytes.extend_from_slice(v.round1);\n            ([alpha0,t.scalar(30,&bytes,false)],31)\n        } else {\n            ([alpha0,E::ZERO],30)\n        };\n        let queries=t.queries(row,v.final_message)?;\n        let rho=t.scalar_k(row+1,&[]);\n        // Reuse this caller-owned scratch array in tx1; it is never serialized.\n        *g=powers::<29>(gamma);\n        let claim=prepared_claim(sem,v.y1,v.inactive,g,kappa)?;\n        Ok(Box::new(Self{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))\n    }",
+  "original_prepared_claim": "fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {\n        let k=powers::<7>(kappa);\n        let mut parts=[E::ZERO;7];parts[0]=inactive;\n        for point in 0..6 {\n            let mut dot=crate::fast_pairing::EbyKDot::new();\n            for l in 0..29 {\n                let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};\n                dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n            }\n            parts[point+1]=dot.finish();\n        }\n        let mut claim=E::ZERO;\n        for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}\n        crate::trace::value(14,7,claim);\n        Ok(claim)\n}",
+  "exact_historical_extraction_input_body_equal": true,
+  "one_gamma_power_array": true,
+  "same_scratch_passed_to_claim": true,
+  "kappa_array_size": 7,
+  "reused_modules": [
+    "LoopPowersEarlySteps",
+    "LoopPowersEarlyTotal",
+    "CurrentClaimPowersInstance"
+  ],
+  "qualification": "Exact powers body source re-pin and callsite inspection, not a new native equivalence check. Historical extraction has explicit multiplication boundary; inherited concrete multiplication/carrier interpretation remains part of the proof dependency. No whole native source/caller, SDK, runtime or artifact closure claimed."
+}

@@ -1,0 +1,65 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1BorrowedClaimPreparedBoundaryV1.lean:25:79: error: unsolved goals
+H : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H
+sem : AspisR1PublicPreparation.r1_semantic.Verified H
+y1 : Slice U8
+inactive : PE
+g : Std.Array PE 29#usize
+kappa : PE
+⊢ (do
+      let r ←
+        verifier.prepared_claim (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+            (toClaimDigest D) (toClaimSem sem) y1 (toClaimE inactive) (mapArray toClaimE g) (toClaimE kappa)
+      ok
+          (match r with
+          | core.result.Result.Ok x => core.result.Result.Ok (fromClaimE x)
+          | core.result.Result.Err e => core.result.Result.Err (fromClaimError e))) =
+    do
+    let r ←
+      verifier.prepared_claim (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+          (toClaimDigest D) (toClaimSem sem) y1 (toClaimE inactive) (mapArray toClaimE g) (toClaimE kappa)
+    ok
+        (match r with
+        | core.result.Result.Ok x => core.result.Result.Ok (fromClaimE x)
+        | core.result.Result.Err e => core.result.Result.Err (fromClaimError e))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1BorrowedClaimPreparedBoundaryV1.lean:62:62: error: unsolved goals
+sampling : AspisR1PublicPreparation.PreparedModel.Boundaries
+embed : AspisR1PublicPreparation.aspis_core.field.M31 → Result PE
+H : Type
+D : aspis_core.digest.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+⊢ (do
+      let (r, g) ←
+        AspisR1PublicPreparation.PreparedScratchModel.prepare (concreteBoundaries (installedBoundaries sampling embed))
+            (InstalledPreparation.retainedDigest D) (InstalledPreparation.retainedSem sem)
+            (InstalledPreparation.retainedView v) hash (mapArray InstalledPreparation.retainedE g)
+      ok
+          (match r with
+            | core.result.Result.Ok x => core.result.Result.Ok (InstalledPreparation.currentPrepared x)
+            | core.result.Result.Err e => core.result.Result.Err (InstalledPreparation.currentError e),
+            mapArray InstalledPreparation.currentE g)) =
+    do
+    let (r, scratch) ←
+      AspisR1PublicPreparation.PreparedScratchModel.prepare (concreteBoundaries (installedBoundaries sampling embed))
+          (InstalledPreparation.retainedDigest D) (InstalledPreparation.retainedSem sem)
+          (InstalledPreparation.retainedView v) hash (mapArray InstalledPreparation.retainedE g)
+    ok
+        (match r with
+          | core.result.Result.Ok x => core.result.Result.Ok (InstalledPreparation.currentPrepared x)
+          | core.result.Result.Err e => core.result.Result.Err (InstalledPreparation.currentError e),
+          mapArray InstalledPreparation.currentE scratch)
+'AspisR1CurrentCaller.BorrowedClaimPrepared.claim_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentCaller.BorrowedClaimPrepared.boundaries_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentCaller.BorrowedClaimPrepared.originalNew_eq_transport' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
