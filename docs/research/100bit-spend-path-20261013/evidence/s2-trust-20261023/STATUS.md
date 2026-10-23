@@ -56,3 +56,46 @@ is discharged. Axioms: initial_valid/consistency use only propext,
 Classical.choice, Quot.sound; three schedule theorems have no axioms.
 Attempt 004 had local syntax/lemma-name errors; repaired module passed 005.
 No timeout or memory kill. Budget used: Lean 5/100, Kani 0/60.
+
+# Stage 4: executable Kani specification and verified-stub use
+
+kani-spec is a standalone cfg(kani)-only evidence crate, not a shipped crate
+change. It implements the same primitive transitions in the bounded projection
+CELLS=2, TOKENS=3, WIDTH=2, with arbitrary payload/descriptor/ambient values and
+full i64 counters. step's independently stated primitive_relation contract checks
+exact Result arms, counter/token identity, the complete primitive footprint and
+successor validity. Larger instantiations need their own checks; no production
+buffer or implicit-Drop wrapper is certified by this small model.
+
+All fifteen named property harnesses passed as individual jobs with complete
+wall/RSS/swap receipts, plus step_contract and verified_stub_schedule: 17 unique
+passing checks. The latter uses stub_verified(step) through exclusive acquisition,
+a conflicting shared acquisition, move and drop; its cover is reached. Source v2
+and final primitive/contract/property declarations are identical. The sole final
+source delta adds the missing fresh error-token admission to the consumer harness,
+which was checked on the final source. The audit stage retains that exact diff.
+
+Attempt history is retained, not promoted: 001 could not find rustc until PATH
+was supplied; 002 hit the std aggregate-comparison memcmp unwind bound, repaired
+by explicit bounded field comparisons; 005 required enabling -Z stubbing.
+Batch004 stopped at its 600-second cap after thirteen property successes, during
+cell_payload; account_data_cell had not started. It was never rerun as a batch.
+007/008 isolated the unfinished tail. Because timeout lost trustworthy child RSS,
+009--021 individually repeated ONLY the thirteen completed checks to replace
+missing resource artifacts (the explicit AGENTS.md missing-artifact exception).
+No cap increased; no memory kill occurred. Batch004/measurement-note.json marks
+its misleading wrapper-only time RSS unusable. All accepted property results now
+have complete independent resource receipts; the failed batch remains history.
+
+Rust compilation used explicit optimized dev profile opt-level=3, confirmed by
+Kani's '[optimized]' output. The named expensive step was SAT verification, not
+proof generation/elimination. Every compile/proof was scoped at 6G high/8G max,
+swap0/tasks64; each new scope had resource admission, with at most four 8G scopes
+in the metric pass, below 55G. Maximum accepted Kani peak RSS was 3513488 KiB,
+zero swaps. No key/account cleanup or other worktree mutation occurred.
+
+The final consistency module also replaces the two numeral-bound decide proofs
+with symbolic omega proofs; focused attempt006 passed with the same standard
+axiom set. Budget: Lean 6/100; Kani 21 command invocations, conservatively charged
+35/60 including failed invocations, unstarted batch tails and metric replays.
+Next: final conclusion-hiding/source/release-pin audit and handoff manifest.

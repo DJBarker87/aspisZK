@@ -82,7 +82,7 @@ theorem failure_schedules :
 
 /-- Joint consistency and explicit non-vacuity, NOT SDK/source certification. -/
 theorem consistency : S2TrustedSdkBorrow (model Nat) ∧ Valid (initial 0) :=
-  ⟨model_satisfies Nat, initial_valid 0 (by decide) (by decide)⟩
+  ⟨model_satisfies Nat, initial_valid 0 (by unfold minCounter; omega) (by unfold maxCounter; omega)⟩
 
 #print axioms initial_valid
 #print axioms shared_schedule
