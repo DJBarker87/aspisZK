@@ -1,0 +1,65 @@
+{"attempt": "lean-001", "exit_status": 1, "wall_seconds": 2.7483100540121086, "peak_rss_kib": "4324896", "swaps": "0", "print_axioms": ["'AspisR1.Port2_Initial.newS2_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port2_Initial.newS2_allocation' depends on axioms: [propext, sorryAx]", "'AspisR1.Port2_Initial.initial_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port2_Initial.returned_initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+Port2_Initial.lean:23:8: error: Nested action `← filled` must be nested inside a `do` expression.
+Port2_Initial.lean:24:4: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+Port2_Initial.lean:33:11: error: unsolved goals
+case fail
+AllocError : Type
+a : verifier.Accumulator
+e : Error
+⊢ ¬sorry () = ok (core.result.Result.Ok a)
+Port2_Initial.lean:34:8: error: unsolved goals
+case div
+AllocError : Type
+a : verifier.Accumulator
+⊢ ¬sor
+...
+int: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+Port2_Initial.lean:33:11: error: unsolved goals
+case fail
+AllocError : Type
+a : verifier.Accumulator
+e : Error
+⊢ ¬sorry () = ok (core.result.Result.Ok a)
+Port2_Initial.lean:34:8: error: unsolved goals
+case div
+AllocError : Type
+a : verifier.Accumulator
+⊢ ¬sorry () = ok (core.result.Result.Ok a)
+Port2_Initial.lean:35:9: error: unsolved goals
+case ok.Ok
+AllocError : Type
+a : verifier.Accumulator
+a✝ : alloc.vec.Vec KRaw
+⊢ ok (core.result.Result.Ok a) = sorry () ↔ a = initial a✝
+
+case ok.Err
+AllocError : Type
+a : verifier.Accumulator
+a✝ : AllocError
+⊢ ¬ok (core.result.Result.Ok a) = sorry ()
+Port2_Initial.lean:33:20: warning: declaration uses `sorry`
+Port2_Initial.lean:38:95: error: Type mismatch
+  rfl
+has type
+  ?m.11 = ?m.11
+but is expected to have type
+  newS2 (ok (core.result.Result.Err e)) =
+    ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation)
+Port2_Initial.lean:37:8: error: Not a definitional equality: the left-hand side
+  newS2 (ok (core.result.Result.Err e))
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation)
+Port2_Initial.lean:55:8: error(lean.unknownIdentifier): Unknown constant `AspisR1.QueryAccumulator.State.ext`
+Port2_Initial.lean:56:2: error: No goals to be solved
+'AspisR1.Port2_Initial.newS2_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port2_Initial.newS2_allocation' depends on axioms: [propext, sorryAx]
+'AspisR1.Port2_Initial.initial_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port2_Initial.returned_initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb09ff53fee2a4df38d7423d329726ecf.scope; invocation ID: 3fee880215a84e2198f74355670c33ae
