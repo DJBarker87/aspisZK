@@ -1,0 +1,116 @@
+Port2_Audit.lean:21:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Port2_Audit.lean:23:31: error: Type mismatch: After simplification, term
+  calls
+ has type
+  Calls (fun a b => verifier.candidate.queryWithOps aops ops proof p a g none geometry b) (↑10#usize) a b out bout
+    ↑10#usize
+but is expected to have type
+  Calls (fun a b => verifier.candidate.queryWithOps aops ops proof p a g none geometry b) 10 a b out bout 10
+Port2_Audit.lean:35:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Port2_Audit.lean:37:31: error: Type mismatch: After simplification, term
+  calls
+ has type
+  Calls (fun a b => verifier.candidate.queryWithOps aops ops proof p a g none geometry b) (↑22#usize) a b out bout
+    (↑22#usize - 10)
+but is expected to have type
+  Calls (fun a b => verifier.candidate.queryWithOps aops ops proof p a g none geometry b) 22 a b out bout 12
+'AspisR1.Port2_Audit.ten_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port2_Audit.twelve_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port2_Initial.newS2_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port2_Initial.newS2_allocation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port2_Initial.initial_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port2_Initial.returned_initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port2_ReturnedState.writer_returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port2_ReturnedState.finish_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1Stage2.accumulate_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1Stage2.query_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port2_QueryLoop.error_stops' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port2_QueryLoop.source_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port2_QueryLoop.query_body_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port2_QueryLoop.returned_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.CheckpointBytes5Join.success_conditioned_checkpoint_stage_join : ∀ {Hash : Type}
+  (D : aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (reserved : Bool)
+  (wp : CheckpointBytes5Writer.Prepared) (wa : CheckpointBytes5Writer.Accumulator) (proof public1 : Slice U8)
+  (stored : AspisV8R19.DuplexFrames.Bytes) (parsed : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (tr : RawCutTranscriptRun.ErasedPrefix) (i : RecordedBinaryExperimentBin.SourceInputs) (v : LiteralOpeningView.View),
+  OraclePortStoredDecisionDraftC4.input parsed q tr = some i →
+    OraclePortSelectedDraft.queries tr = some q →
+      CheckpointBytes5Join.S2S10CallerBinding D hash H proof public1 stored tr.statement.pubBytes →
+        CheckpointBytes5Join.S1S7S8StateProvenance wp wa
+            (OraclePortCheckpointResumeC5.prepared (OraclePortAcceptedContextC6.context parsed i v) i.data
+              (SelectedChallengeMap.rhoOf i.rho) q)
+            (OraclePortCheckpointStateC3.write
+                (OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q)).accumulator →
+          ∀ (p : verifier.Prepared) (a : verifier.Accumulator) (after : CheckpointBytes5Effect.Log),
+            CheckpointBytes5Effect.run D hash (CheckpointBytes5Join.stage reserved wp wa proof public1) [] =
+                ok (core.result.Result.Ok (p, a), after) →
+              (CheckpointBytes5Inputs.observe after, some (CheckpointBytes5Join.resumedSource i.data p a)) =
+                AspisV8R19.MemoizedProgramLaw.eval H (OraclePortFrozen2.checkpoint stored parsed q tr i v) :=
+fun {Hash} D hash H reserved wp wa proof public1 stored parsed q tr i v input query caller provenance p a after
+    success =>
+  have fields := (OraclePortStoredDecisionDraftC4.input_fields parsed q tr i input).left;
+  have decoded :=
+    Eq.mp
+      (congrFun'
+        (congrArg Eq
+          (congrFun' (congrArg Bind.bind fields.right.left) fun __x =>
+            match __x.2.1 with
+            | TranscriptView.Value.queries (Except.ok bs) => LiteralQueryRead.decode bs
+            | x => none))
+        (some q))
+      query;
+  have unique := (LiteralQueryRead.decode_success i.queryBytes q decoded).right;
+  Eq.trans
+    (CheckpointBytes5Join.successful_stage D hash H reserved wp wa proof public1 stored tr.statement.pubBytes
+      (OraclePortAcceptedContextC6.context parsed i v) i.data (SelectedChallengeMap.rhoOf i.rho) q caller provenance
+      unique p a after success)
+    (OraclePortCkptAbi5Stage.reached_stage H stored parsed q tr i v input query)
+structure AspisR1.VTop_Checkpoint.CheckpointSourceJoin (stage : VTop_Stages.Ops) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (reserved : Bool) : Prop
+number of parameters: 5
+fields:
+  AspisR1.VTop_Checkpoint.CheckpointSourceJoin.writer : ∀
+      (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (proof pub : Slice U8)
+      (split : Usize) (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator)
+      (saved : alloc.vec.Vec U8),
+      VTop_Provenance.WriterPrefix stage D hash semantic proof split none p a →
+        stage.op8 D p a proof pub hash = ok saved →
+          ∃ before after,
+            CheckpointBytes5Effect.run (VTop_Checkpoint.digest D) hash
+                (CheckpointBytes5Writer.writer (CheckpointBytes3Namespaces.toPrepared p)
+                  (CheckpointBytes3Namespaces.toAccumulator a) proof pub)
+                before =
+              ok (VTop_Checkpoint.checkpointSlice saved, after)
+  AspisR1.VTop_Checkpoint.CheckpointSourceJoin.reader : ∀ (ck proof pub : Slice U8) (p : VTop_Stages.verifier.Prepared)
+      (a : VTop_Stages.verifier.Accumulator),
+      stage.op18 D ck proof pub transport.Variant.S2 hash = ok (core.result.Result.Ok (p, a)) →
+        verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) (VTop_Checkpoint.digest D) ck proof pub
+            transport.Variant.S2 hash =
+          ok (core.result.Result.Ok (p, a))
+constructor:
+  AspisR1.VTop_Checkpoint.CheckpointSourceJoin.mk {stage : VTop_Stages.Ops} {Hash : Type}
+    {D : VTop_Stages.aspis_core.digest.Digest32 Hash} {hash : Hash} {reserved : Bool}
+    (writer :
+      ∀ (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (proof pub : Slice U8)
+        (split : Usize) (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator)
+        (saved : alloc.vec.Vec U8),
+        VTop_Provenance.WriterPrefix stage D hash semantic proof split none p a →
+          stage.op8 D p a proof pub hash = ok saved →
+            ∃ before after,
+              CheckpointBytes5Effect.run (VTop_Checkpoint.digest D) hash
+                  (CheckpointBytes5Writer.writer (CheckpointBytes3Namespaces.toPrepared p)
+                    (CheckpointBytes3Namespaces.toAccumulator a) proof pub)
+                  before =
+                ok (VTop_Checkpoint.checkpointSlice saved, after))
+    (reader :
+      ∀ (ck proof pub : Slice U8) (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator),
+        stage.op18 D ck proof pub transport.Variant.S2 hash = ok (core.result.Result.Ok (p, a)) →
+          verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) (VTop_Checkpoint.digest D) ck proof pub
+              transport.Variant.S2 hash =
+            ok (core.result.Result.Ok (p, a))) :
+    VTop_Checkpoint.CheckpointSourceJoin stage D hash reserved
