@@ -1,0 +1,52 @@
+{"attempt": "lean-033", "exit_status": 1, "wall_seconds": 1.937042917998042, "peak_rss_kib": "4418536", "swaps": "0", "print_axioms": ["'AspisR1.Port8EFF_CheckpointEffects.mapped' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_CheckpointEffects.reader' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port8EFF_CheckpointEffects.lean:53:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval ?H
+    (Port8EFF_CheckpointCode.program ?D ?hash
+      (CheckpointBytes5Effect.bind ?code fun a => CheckpointBytes5Effect.Code.done (?f a)))
+in the target expression
+  eval H
+      (Port8EFF_CheckpointCode.program (VTop_Checkpoint.digest D) hash do
+        let out ←
+          Port8EFF_NativeReader.program (Port6CK_Ops.ops reserved unwrap) ck proof pub
+              AspisR1Stage2.transport.Variant.S2
+        pure
+            (match out with
+            | core.result.Result.Ok pair => core.result.Result.Ok pair
+            | core.result.Result.Err e => core.result.Result.Err (
+...
+eckpointBytes4Ops.ops reserved) ck proof pub
+        AspisR1Stage2.transport.Variant.S2)
+      [] =
+    ok (core.result.Result.Ok (p, a), after)
+pair :
+  CheckpointBytes5Inputs.observe after =
+      CheckpointBytes5Inputs.observe [] ++
+        (eval H
+            (Port8EFF_CheckpointCode.program (VTop_Checkpoint.digest D) hash
+              (CheckpointBytes5Resume.program (Port6CK_Ops.ops reserved unwrap) ck proof pub
+                AspisR1Stage2.transport.Variant.S2))).1 ∧
+    (eval H
+          (Port8EFF_CheckpointCode.program (VTop_Checkpoint.digest D) hash
+            (CheckpointBytes5Resume.program (Port6CK_Ops.ops reserved unwrap) ck proof pub
+              AspisR1Stage2.transport.Variant.S2))).2 =
+      ok (core.result.Result.Ok (p, a))
+full :
+  eval H
+      (Port8EFF_CheckpointCode.program (VTop_Checkpoint.digest D) hash
+        (CheckpointBytes5Resume.program (Port6CK_Ops.ops reserved unwrap) ck proof pub
+          AspisR1Stage2.transport.Variant.S2)) =
+    (CheckpointBytes5Inputs.observe after, ok (core.result.Result.Ok (p, a)))
+⊢ eval H
+      (Port8EFF_CheckpointCode.program (VTop_Checkpoint.digest D) hash do
+        let out ←
+          Port8EFF_NativeReader.program (Port6CK_Ops.ops reserved unwrap) ck proof pub
+              AspisR1Stage2.transport.Variant.S2
+        pure
+            (match out with
+            | core.result.Result.Ok pair => core.result.Result.Ok pair
+            | core.result.Result.Err e => core.result.Result.Err (Port3_CheckpointInstall.error e))) =
+    (CheckpointBytes5Inputs.observe after, ok (core.result.Result.Ok (p, a)))
+'AspisR1.Port8EFF_CheckpointEffects.mapped' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_CheckpointEffects.reader' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r156a2cdfa5d14cd8a16a4b2b71d30fe8.scope; invocation ID: f397d3cf451d4bc5ac4b15534cfbd969

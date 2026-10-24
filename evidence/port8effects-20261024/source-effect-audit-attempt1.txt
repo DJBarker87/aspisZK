@@ -1,0 +1,7 @@
+Command: python3 tools/port8effects-20261024/Port8EFF_source_audit.py
+Exit: 1 (read-only static source check; no Lean/Kani attempt)
+First exact inverse-lift source/control comparison passed. The subsequent
+no-direct-digest check accidentally included resume in the tail substring,
+because these source definitions have no intervening /-- comment. Corrected
+the substring boundary to the named `def resume`; no source/proof was changed.
+Original failure: AssertionError at `assert not re.search(r'\.digest\b',tail)`.

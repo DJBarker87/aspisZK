@@ -1,0 +1,37 @@
+{"attempt": "lean-015", "exit_status": 1, "wall_seconds": 2.055387705011526, "peak_rss_kib": "4412412", "swaps": "0", "print_axioms": ["'AspisR1.Port8EFF_Budget.count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Budget.reader_bounded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Budget.reader_count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port8EFF_Budget.lean:33:6: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+Port8EFF_Budget.lean:47:9: error: unexpected identifier; expected '=>'
+Port8EFF_Budget.lean:39:68: error: unsolved goals
+ops : AspisR1Stage2.ResumeOps
+ck proof pub : Slice U8
+v : AspisR1Stage2.transport.Variant
+⊢ bounded 3 do
+    let i1 ← CheckpointBytes5Effect.Code.step (ops.checkpointSize v) CheckpointBytes5Effect.Code.done
+    if (ck.len != i1) = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error
+...
+                        Port8EFF_NativeReader.program._proof_37).to_slice)
+                                              CheckpointBytes5Effect.Code.done
+                                        let s8 ←
+                                          CheckpointBytes5Effect.Code.step
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := end1 })
+                                              CheckpointBytes5Effect.Code.done
+                                        let s9 ←
+                                          CheckpointBytes5Effect.Code.step
+                                              (lift (Array.make 2#usize [s7, s8] ⋯).to_slice)
+                                              CheckpointBytes5Effect.Code.done
+                                        let a2 ← CheckpointBytes5Effect.Code.read s9 CheckpointBytes5Effect.Code.done
+                                        CheckpointBytes5Effect.Code.step
+                                            (Port4A_NativeReader.tail (Port6CK_Ops.ops reserved unwrap) ck v i4 end1 s6
+                                              a2)
+                                            CheckpointBytes5Effect.Code.done
+    pure
+        (match out with
+        | core.result.Result.Ok pair => core.result.Result.Ok pair
+        | core.result.Result.Err e => core.result.Result.Err (Port3_CheckpointInstall.error e))
+'AspisR1.Port8EFF_Budget.count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_Budget.reader_bounded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_Budget.reader_count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re2ced79e8af443ac93d353862f485cab.scope; invocation ID: 0e382656414e4b57bcba09a9776bd5d2
