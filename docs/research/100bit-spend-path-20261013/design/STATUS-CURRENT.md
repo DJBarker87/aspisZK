@@ -1,30 +1,62 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Current coordinator checkpoint — 2026-10-24 10:55
+## Current coordinator checkpoint — 2026-10-24 18:39 BST
 
 Both deployed security targets are **not yet established**. This checkpoint
-supersedes the older progress descriptions below; their theorem statements
-remain historical evidence.
+supersedes the older status tables and dated progress entries below. The
+binding contract and frozen artifact targets are unchanged.
 
-Soundness: the owned adapter is proved to its named runtime/child boundary
-(`S2W_D189Consolidation.accepted_run`). The merged Q1 packet proves actual
-query/flush state correspondence to frozen2 conditionally; Q2 derives same-TX1
-checkpoint provenance and current reader-helper transports. Remaining lead
-work includes indexed authentication, native op18 and saved-to-resumed state,
-then enclosing oracle/runtime/artifact composition. Session A owns concrete
-prepare/op7, powers/op17, S3/S4/S5/S9 backends, S6 and S10 lowering.
+Soundness: the actual two-transaction source-model driver has an all-outcome
+control bound with explicit delegated-operation budgets. The release-call
+invariant removes obligations for observer values that the unchanged flow
+never uses. Concrete preparation supplies its <=115 read bound, but the
+composed preparation/driver/accounting claims on branch
+`codex/cx-port17release-20261024` remain **withheld** because root/A imported
+declarations differ. Port18COHERENCE is reconciling those dependencies; a
+standard-axiom audit alone does not establish their compatibility. Residual
+other-operation budgets and concrete native/source/artifact joins remain open.
 
-Privacy: current real-side endpoint is
-`PrivacyR1HeadlineDeployedReal.privacy_headline_deployed`, against mathematical
-simE (D185); native simulator refinement is not required. The prover rewrite
-and CT v2 candidates remain unmerged. D190 records a proved obstruction to a
-pure randomness dictionary and authorizes an effect-aware proof repair.
-Real-run refinement, joint L1/L2 coupling, the client proof-account route,
-quiet-host under-15-second timing and final adoption/release audits remain open.
+Session A's committed packets through `9bda7d8595753da5f0d33807b043723282a34967`
+have been reviewed from immutable Git objects. They establish accepted
+source-model preparation effects/count, complete callback/scratch matching,
+actual View.y1 bytes and all29 field parses, concrete extracted semantic-round
+children, and numeric domains derived from reached decode/sample/update calls.
+They retain FinishModel children and native numeric/Std/abort/runtime/release
+boundaries. These packets are not a coherent release replay or whole S1/S6
+closure. No Session A live files were changed.
 
+S2 already has the conditional whole-wrapper producer
+`S2W_D189Consolidation.accepted_run`: all14 caller fields on one derived
+observation under the named approved SDK/std/runtime/extraction and child
+boundaries. Its concrete installation with current children and artifact pins
+still needs checking. It neither proves SDK internals nor requires a new
+universal ChildInputRetention premise. The exact interface is clarified in
+`HANDOFF-SESSION-A-20261021.md`.
 
-Last updated 2026-10-22 02:05 by the lead. This page is the single current
-reference; dated notes keep the history.
+Privacy: the target remains
+`PrivacyR1HeadlineDeployedReal.privacy_headline_deployed` against mathematical
+simE (D185), including L1/L2 side channels and the named L3 platform boundary.
+The prover/CTv2 and selected64 client candidates remain **unadopted**. Actual
+zeroize32/64 component checks and the zero-nonce/first-fill-error factory paths
+have passed in their stated scopes. A one-draw candidate cut now passes exact
+owner/error/retry checks, but actual factory equivalence, finite16 composition
+and caller cleanup-event transport remain unproved. Actual-loop invariant
+attempts timed out and that method is stopped. FactorySource is assigned a
+narrow real host factoring under D187/D191, with source/effect proof and all3
+ELF gates required; no candidate adoption follows from the cut proof.
+
+Still required for privacy: actual complete selected64 owner/caller refinement,
+outer8 adaptive nonce policy and durable ledger, complete retry/error/cleanup
+observables, E1 law and joint L1/L2 transport, native client integration,
+whole-prover identical-coin/differential gates, quiet-host median<15s and<=10%
+slowdown, final artifact audit and coherent replay. Existing fixture and
+component evidence cannot substitute for these obligations.
+
+Live managed tasks: Port18COHERENCE and FactorySource, each on its retained
+isolated candidate branch with its archived hard budget and resource rules.
+Detailed evidence, failures, assumptions and next producers are in the latest
+C3-BIN/LOG D205-D206 entries and `COORDINATOR-20261024.md`. The goal remains
+active. Final security closure has not been claimed.
 
 ## The contract
 
