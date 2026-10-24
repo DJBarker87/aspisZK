@@ -1,0 +1,98 @@
+import R1Z.ProverRwRngMaterialBodyEmission
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwRngMaterialControl
+open Aeneas Aeneas.Std Result ProverRwRngMaterialBody
+open aspis_prover.state_only_entropy aspis_prover.state_only_hiding
+open aspis_core.state_only_hiding
+variable [TypeLeaves] [LocalLeaves]
+abbrev Secrets := StateOnlyAttemptSecrets
+abbrev Context := StateOnlyHidingContext
+abbrev BuildError := StateOnlyMaskBuildError
+abbrev Store (S : Type) := StateOnlyMaskNonceStore S
+abbrev Hash := Slice (Slice U8) → Result (Array U8 32#usize)
+abbrev reserveBuild {S : Type} := @StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1 _ _ S
+abbrev AckStore := PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+abbrev freshAck (c : Context) : PreReservedNonce := ⟨c.statement_digest,c.mask_nonce,false⟩
+abbrev usedAck (c : Context) : PreReservedNonce := ⟨c.statement_digest,c.mask_nonce,true⟩
+abbrev MaterialResult := core.result.Result StateOnlyMaskMaterial BuildError
+abbrev material (hash : Hash) (binding : Array U8 32#usize) (c : Context)
+    (entropy : Array U8 32#usize) :=
+  build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref AckStore hash binding c entropy (freshAck c)
+abbrev derefEntropy (a : Secrets) :=
+  zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+    (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a.field_mask_entropy
+
+def LayoutOk (a : Secrets) (c : Context) : Prop :=
+  c.mask_nonce = a.mask_nonce ∧
+  c.mask_layout_fingerprint = PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1 ∧
+  c.layout_factor_fingerprint = PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1
+
+omit [TypeLeaves] [LocalLeaves] in
+theorem list_compare_self (xs : List U8) :
+    List.allM (fun xy : U8 × U8 => Result.ok (decide (¬ core.cmp.impls.PartialEqU8.ne xy.1 xy.2)))
+      (xs.zip xs) = Result.ok true := by
+  induction xs with
+  | nil => rfl
+  | cons x xs ih => simpa [List.zip_cons_cons,List.allM] using ih
+
+omit [TypeLeaves] [LocalLeaves] in
+theorem array_eq_self {N : Usize} (a : Array U8 N) :
+    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a a = .ok true := by
+  unfold core.array.equality.PartialEqArray.eq
+  simp only [ite_true,list_compare_self]
+
+omit [TypeLeaves] [LocalLeaves] in
+theorem array_ne_self {N : Usize} (a : Array U8 N) :
+    core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 a a = .ok false := by
+  unfold core.array.equality.PartialEqArray.ne
+  rw [array_eq_self]
+  rfl
+
+omit [TypeLeaves] [LocalLeaves] in
+theorem acknowledgment_fresh (c : Context) :
+    AckStore.reserve (freshAck c) c.statement_digest c.mask_nonce = .ok (true,usedAck c) := by
+  simp only [AckStore,PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve,
+    freshAck,usedAck,Bool.false_eq_true,if_false,array_ne_self,bind_tc_ok]
+
+omit [TypeLeaves] [LocalLeaves] in
+theorem acknowledgment_used (c : Context) (statement nonce : Array U8 32#usize) :
+    AckStore.reserve (usedAck c) statement nonce = .ok (false,usedAck c) := by
+  rfl
+
+def seedInput (binding : Array U8 32#usize) (encoded : Array U8 81#usize)
+    (entropy : Array U8 32#usize) : Slice (Slice U8) :=
+  (Array.make 4#usize [MASK_SEED_DOMAIN,binding.to_slice,encoded.to_slice,entropy.to_slice]).to_slice
+
+theorem seed_zero (hash : Hash) (binding : Array U8 32#usize) (c : Context) :
+    derive_state_only_mask_seed_from_entropy_ref hash binding c (Array.repeat 32#usize 0#u8) =
+      .ok (.Err .ZeroPrivateEntropy) := by
+  simp [derive_state_only_mask_seed_from_entropy_ref,array_eq_self]
+
+theorem seed_derived (hash : Hash) (binding entropy seed : Array U8 32#usize)
+    (c : Context) (encoded : Array U8 81#usize)
+    (nonzero : core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 entropy
+      (Array.repeat 32#usize 0#u8) = .ok false)
+    (encode : StateOnlyHidingContext.encode c = .ok encoded)
+    (hashed : hash (seedInput binding encoded entropy) = .ok seed) :
+    derive_state_only_mask_seed_from_entropy_ref hash binding c entropy = .ok (.Ok seed) := by
+  simp only [seedInput] at hashed
+  simp [derive_state_only_mask_seed_from_entropy_ref,nonzero,encode,lift,hashed]
+
+theorem layout_zero_after_ack (hash : Hash) (binding : Array U8 32#usize) (c : Context)
+    (cells : Slice aspis_statement.trace_v4.TraceCell) (active : Array Bool 1024#usize) :
+    build_mask_material_for_layout AckStore hash binding c (Array.repeat 32#usize 0#u8)
+      (freshAck c) cells active = .ok (.Err .ZeroPrivateEntropy,usedAck c) := by
+  simp [build_mask_material_for_layout,acknowledgment_fresh,seed_zero,
+    core.result.Result.Insts.CoreOpsTry.branch]
+  rfl
+
+#print axioms list_compare_self
+#print axioms array_eq_self
+#print axioms array_ne_self
+#print axioms acknowledgment_fresh
+#print axioms acknowledgment_used
+#print axioms seed_zero
+#print axioms seed_derived
+#print axioms layout_zero_after_ack
+end R1Z.ProverRwRngMaterialControl

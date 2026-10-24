@@ -1,0 +1,81 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngMaterialControl.lean:41:81: error: unsolved goals
+N : Usize
+a : Std.Array U8 N
+⊢ List.allM
+      (fun x => do
+        let b ← liftFun2 core.cmp.impls.PartialEqU8.ne x.1 x.2
+        ok (decide ¬b = true))
+      ((↑a).zip ↑a) =
+    ok true
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngMaterialControl.lean:43:22: warning: This simp argument is unused:
+  list_compare_self
+
+Hint: Omit it from the simp argument list.
+  simp only [ite_true,̵l̵i̵s̵t̵_̵c̵o̵m̵p̵a̵r̵e̵_̵s̵e̵l̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngMaterialControl.lean:55:13: warning: This simp argument is unused:
+  AckStore
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵c̵k̵S̵t̵o̵r̵e̵,̵PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve,
+      freshAck, ̲usedAck, ̲Bool.false_eq_true, ̲if_false, ̲array_ne_self, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngMaterialControl.lean:88:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (b, nonce_store1) ←
+      PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve (freshAck c)
+          c.statement_digest c.mask_nonce
+    if b = true then do
+        let r5 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual StateOnlyMaskMaterial
+              (core.convert.FromSame StateOnlyMaskBuildError)
+              (core.result.Result.Err StateOnlyMaskBuildError.ZeroPrivateEntropy)
+        ok (r5, nonce_store1)
+      else ok (core.result.Result.Err StateOnlyMaskBuildError.ReusedMaskNonce, nonce_store1)
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err StateOnlyMaskBuildError.ZeroPrivateEntropy, usedAck c)
+
+inst✝¹ : TypeLeaves
+inst✝ : LocalLeaves
+hash : Hash
+binding : Std.Array U8 32#usize
+c : Context
+cells : Slice aspis_statement.trace_v4.TraceCell
+active : Std.Array Bool 1024#usize
+⊢ (do
+      let (b, nonce_store1) ←
+        PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve (freshAck c)
+            c.statement_digest c.mask_nonce
+      if b = true then do
+          let r5 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual StateOnlyMaskMaterial
+                (core.convert.FromSame StateOnlyMaskBuildError)
+                (core.result.Result.Err StateOnlyMaskBuildError.ZeroPrivateEntropy)
+          ok (r5, nonce_store1)
+        else ok (core.result.Result.Err StateOnlyMaskBuildError.ReusedMaskNonce, nonce_store1)) =
+    ok (core.result.Result.Err StateOnlyMaskBuildError.ZeroPrivateEntropy, usedAck c)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngMaterialControl.lean:86:39: warning: This simp argument is unused:
+  acknowledgment_fresh
+
+Hint: Omit it from the simp argument list.
+  simp [̵b̵u̵i̵l̵d̵_̵m̵a̵s̵k̵_̵m̵a̵t̵e̵r̵i̵a̵l̵_̵f̵o̵r̵_̵l̵a̵y̵o̵u̵t̵,̵a̵c̵k̵n̵o̵w̵l̵e̵d̵g̵m̵e̵n̵t̵_̵f̵r̵e̵s̵h̵,̵s̵e̵e̵d̵_̵z̵e̵r̵o̵,̵[̲b̲u̲i̲l̲d̲_̲m̲a̲s̲k̲_̲m̲a̲t̲e̲r̲i̲a̲l̲_̲f̲o̲r̲_̲l̲a̲y̲o̲u̲t̲,̲ ̲s̲e̲e̲d̲_̲z̲e̲r̲o̲,̲ core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwRngMaterialControl.list_compare_self' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverRwRngMaterialControl.array_eq_self' depends on axioms: [propext, sorryAx]
+'R1Z.ProverRwRngMaterialControl.array_ne_self' depends on axioms: [propext, sorryAx]
+'R1Z.ProverRwRngMaterialControl.acknowledgment_fresh' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverRwRngMaterialControl.acknowledgment_used' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngMaterialControl.seed_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngMaterialControl.seed_derived' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngMaterialControl.layout_zero_after_ack' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
