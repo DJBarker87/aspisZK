@@ -1,6 +1,6 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Current coordinator checkpoint — 2026-10-24 20:32 BST
+## Current coordinator checkpoint — 2026-10-24 22:18 BST
 
 Both deployed security targets are **not yet established**. This checkpoint
 supersedes the older status tables and dated progress entries below. The
@@ -23,20 +23,30 @@ Merged51ff811857 adds conditional accepted-full-stored-run probability
 transport and recovers native parent declarations; all-outcome query charges
 remain separate. Merged438cd6f576 adds allocator word/byte-frame lemmas and
 84 finite-arena Kani checks; deployed SBF/RawVec/shim linkage remains open.
-Port24's current all-three SBF artifact/source association is now reviewed and
-merged cb75d4d9ab; contemporaneous sysroot declaration identity and native
-primitive laws remain open. Default/devnet uses256KiB; Pool uses32KiB.
+Port24's current all-three SBF artifact/source association is reviewed and
+merged cb75d4d9ab. Current SBF toolchain/official source provenance is merged
+009b61e61b; historical contemporaneous build identity and native primitive
+laws remain open. Default/devnet uses256KiB; Pool uses32KiB.
 Merged3e9998bbfc closes complete actual mutable-row versus owned Vec source
 content equality, all carriers/checked errors/frames. Native ordered effects,
 P6/R22/op6/release joins and residual budgets remain open. Current scalar MIR
 roles/flags/loans passed review after one1GiB ordinary compile; no native paired
 projection yet, Kani59/60 final slot reserved. PrivacyLean240/260,Rust2/3charges
-(actual builds1); known soundness347/368. SBFIDENTITY74948 investigates exact
-historical versus current toolchain provenance. ResourceTHREADS76108 reviews
-threaded/full uncovered resource accounting; half-slab proposal NOT adopted.
+(actual builds1); known soundness347/368. SBFRECAPTUREPREP86302 prepares official archive/frozen source/released-cache
+checks with ZERO builds. Resource audit merged25b0b9df48 is NOT ADOPTED.
+Latest complete capture denies all proposed sizes on a4KiB counter mismatch;
+ResourceSTAT87430 investigates primary kernel semantics and conservative
+full-charge/no-credit accounting. No heavy consumer is authorized.
 No production adoption.
 
-Session A640d3ebcf6 caller-range packet is now reviewed: five source modules,
+Session A3ae2507a57 Claims-step packet is now independently reviewed: exact
+extracted owned update, bounded finite composition and complete three-row
+overwrite. Native initializedness probes failed before SAT; full Claims
+allocation/cleanup/unsafe loop and Terminal remain open. Source-only audit
+passed from155 immutable blobs, with3,940 import metadata records checked.
+No A live files/caches or external object bytes read.
+
+Session A640d3ebcf6 caller-range packet is reviewed: five source modules,
 selected receipts and immutable import/source metadata pass independent audit.
 Accepted rounds/semantic/preparation/owned-stage1 calls derive canonical ranges
 on the SAME returned semantic arrays. Claims/Terminal/native/S6 installation and
