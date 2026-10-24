@@ -1,0 +1,65 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "command": [
+    "cargo",
+    "kani",
+    "--lib",
+    "--exact",
+    "--harness",
+    "proofs::shipped_y1_reject_before_body",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--output-format",
+    "terse",
+    "--harness-timeout",
+    "180",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "cwd": "/home/dombarker/project-offloads/s126-real-sdk-20261021/s1-y1-native-v3-20261024",
+  "files": {
+    "shipped_y1_reject_before_body-global-admission.json": "2eae718a446b2ae22826e346721b4c4b2e6af559408fea82c4f9bcd69894c1f3",
+    "Cargo.toml": "cec8572fc67dd9d506f5f3da84c3cc2f467d6b7367ecbc6dfbf099f4ced4111c",
+    "source-binding.json": "401ac1357d72bb053da2ce09ee1e458668a785cd804a859b870544d17ab7c28c",
+    "shipped_y1_reject_before_body-admission.json": "7a94969f07c78706ffcc4260323cbbfcd366ed04cf8177f6d99a4474b47a424e",
+    "src/lib.rs": "44119afb3ef3f2b5e0308b81df9516dc072f0cb8e67a16c040b58cd9ac6ba9e0",
+    "src/proofs.rs": "15f4b1a6783e4bcf3256160eb6ab6ca8086e72a4bb71d8cb5369387a5713dd59"
+  },
+  "tools": {
+    "/home/dombarker/.cargo/bin/cargo-kani": "45c607cda6ed83414c0f7ff2c5f4cab8bda9d48031a035f9197d9ea16674f8f3",
+    "/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler": "f74488368997b6b4e0b417a2f5a3c8e598eccc907288c1a7875d9866056e9ffc",
+    "/home/dombarker/.kani/kani-0.67.0/bin/cbmc": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973"
+  },
+  "runner_sha256": "0eea876e85dd3333a8837332fce1514950540241e363931e2477cab0aee7cb25",
+  "source_binding": {
+    "schema": "focused-extractor-proof-packet-v1",
+    "revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+    "file": "crates/aspis-r1-cost-probe/src/compact.rs",
+    "file_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+    "function": "pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {\n    if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {\n        return Err(CodecError::Length);\n    }\n    for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {\n        o[..16].copy_from_slice(c);\n        o[16..].fill(0);\n    }\n    Ok(())\n}",
+    "function_sha256": "636009f9b16fcea3ca603f86318fdca99f660d541671e688ed3ea4d5e83daf21",
+    "error_enum": "pub enum CodecError {\n    Length,\n    NonZeroHigh,\n    NonCanonical,\n}",
+    "error_enum_sha256": "df9dc500c767b0dd77a74c350d496f34fcf9c8ed63e9ae0f6599097369e2deeb",
+    "files": {
+      "Cargo.toml": "cec8572fc67dd9d506f5f3da84c3cc2f467d6b7367ecbc6dfbf099f4ced4111c",
+      "src/lib.rs": "44119afb3ef3f2b5e0308b81df9516dc072f0cb8e67a16c040b58cd9ac6ba9e0",
+      "src/proofs.rs": "15f4b1a6783e4bcf3256160eb6ab6ca8086e72a4bb71d8cb5369387a5713dd59"
+    },
+    "scope": "Fixed Y1 input, output length <=1856 and !=928. Native rejection/frame with an ASSERTED unreachable chunks constructor cut; positive whole-native/reference proof is separately unstubbed. Not universal metadata/caller closure.",
+    "reference_source": "/// Proof-only owned reference: both complete buffers and the full codec result.\n/// It introduces no digest/query calls and is not adopted production code.\npub fn y1_owned_reference(input:[u8;464],mut output:[u8;928])->(Result<(),CodecError>,[u8;928]) {\n    let mut chunk=0usize;\n    while chunk<29 {\n        let mut byte=0usize;\n        while byte<16 {\n            output[chunk*32+byte]=input[chunk*16+byte];\n            output[chunk*32+16+byte]=0;\n            byte+=1;\n        }\n        chunk+=1;\n    }\n    (Ok(()),output)\n}\n",
+    "reference_sha256": "bb3abb8d669068ef2043b157ceb1dad75567590594e27b9f9e9bf1e728229a50",
+    "stub": {
+      "target": "<[u8]>::chunks_exact",
+      "replacement": "forbidden_chunks<T>",
+      "body": "panic: any reached call fails verification",
+      "not_assumed_unreachable": true
+    }
+  },
+  "expected_time": "Small optimized source-cut compilation, then one named whole-Y1 CBMC gate; no finite-field elimination or whole-stage SDK check.",
+  "qualification": "Fixed-input rejection/frame: chunks constructor has an asserted-panic cut; its unreachability must verify. Positive native/reference proof is separately unstubbed. No universal metadata or caller closure.",
+  "print_axioms": "N/A: Rust/Kani gate"
+}

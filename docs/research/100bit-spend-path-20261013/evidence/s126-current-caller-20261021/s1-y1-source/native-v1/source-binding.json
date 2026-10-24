@@ -1,0 +1,16 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+  "file": "crates/aspis-r1-cost-probe/src/compact.rs",
+  "file_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+  "function": "pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {\n    if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {\n        return Err(CodecError::Length);\n    }\n    for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {\n        o[..16].copy_from_slice(c);\n        o[16..].fill(0);\n    }\n    Ok(())\n}",
+  "function_sha256": "636009f9b16fcea3ca603f86318fdca99f660d541671e688ed3ea4d5e83daf21",
+  "error_enum": "pub enum CodecError {\n    Length,\n    NonZeroHigh,\n    NonCanonical,\n}",
+  "error_enum_sha256": "df9dc500c767b0dd77a74c350d496f34fcf9c8ed63e9ae0f6599097369e2deeb",
+  "files": {
+    "Cargo.toml": "96264456e3a6d89177ef0d47db70c67dce08a8b85c14cf0df04e2c50f31fa914",
+    "src/lib.rs": "b229f5d3f4654e1d4dbb365b07841f82c2de5deb00a2d593a47d02d19b3ac3bb",
+    "src/proofs.rs": "34785f44673255f82814d261ff7a534e9a3ec1ca9f41ffaa93002f6aab56c619"
+  },
+  "scope": "Exact unchanged frozen function and full native CodecError carrier. No refactor or stubs. Fixed Y1 positive case and bounded malformed-length case only, not a universal native/SDK/caller instance."
+}

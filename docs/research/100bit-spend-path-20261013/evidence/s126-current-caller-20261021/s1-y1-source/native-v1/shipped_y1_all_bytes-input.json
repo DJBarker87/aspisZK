@@ -1,0 +1,55 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "command": [
+    "cargo",
+    "kani",
+    "--lib",
+    "--exact",
+    "--harness",
+    "proofs::shipped_y1_all_bytes",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "--output-format",
+    "terse",
+    "--harness-timeout",
+    "180",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "cwd": "/home/dombarker/project-offloads/s126-real-sdk-20261021/s1-y1-native-v1-20261024",
+  "files": {
+    "shipped_y1_all_bytes-admission.json": "97a1a54f58275e16f228ac3a7c404425029d6f57625e2d1af7c77a6a07bc7c6c",
+    "Cargo.toml": "96264456e3a6d89177ef0d47db70c67dce08a8b85c14cf0df04e2c50f31fa914",
+    "source-binding.json": "7f9368ae9029f864ed6d447f1d2baa06dee26a06bc0de309d47783dbed6dcc66",
+    "shipped_y1_all_bytes-global-admission.json": "a70fd7a0dfed0dd46ec7a99d3737055939c82ef4c160251c423aa3075d9d554b",
+    "src/lib.rs": "b229f5d3f4654e1d4dbb365b07841f82c2de5deb00a2d593a47d02d19b3ac3bb",
+    "src/proofs.rs": "34785f44673255f82814d261ff7a534e9a3ec1ca9f41ffaa93002f6aab56c619"
+  },
+  "tools": {
+    "/home/dombarker/.cargo/bin/cargo-kani": "45c607cda6ed83414c0f7ff2c5f4cab8bda9d48031a035f9197d9ea16674f8f3",
+    "/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler": "f74488368997b6b4e0b417a2f5a3c8e598eccc907288c1a7875d9866056e9ffc",
+    "/home/dombarker/.kani/kani-0.67.0/bin/cbmc": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973"
+  },
+  "runner_sha256": "355982234af197e48d464571bfa0c37858686998b0a9d5821c45c71260f41151",
+  "source_binding": {
+    "schema": "focused-extractor-proof-packet-v1",
+    "revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+    "file": "crates/aspis-r1-cost-probe/src/compact.rs",
+    "file_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+    "function": "pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {\n    if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {\n        return Err(CodecError::Length);\n    }\n    for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {\n        o[..16].copy_from_slice(c);\n        o[16..].fill(0);\n    }\n    Ok(())\n}",
+    "function_sha256": "636009f9b16fcea3ca603f86318fdca99f660d541671e688ed3ea4d5e83daf21",
+    "error_enum": "pub enum CodecError {\n    Length,\n    NonZeroHigh,\n    NonCanonical,\n}",
+    "error_enum_sha256": "df9dc500c767b0dd77a74c350d496f34fcf9c8ed63e9ae0f6599097369e2deeb",
+    "files": {
+      "Cargo.toml": "96264456e3a6d89177ef0d47db70c67dce08a8b85c14cf0df04e2c50f31fa914",
+      "src/lib.rs": "b229f5d3f4654e1d4dbb365b07841f82c2de5deb00a2d593a47d02d19b3ac3bb",
+      "src/proofs.rs": "34785f44673255f82814d261ff7a534e9a3ec1ca9f41ffaa93002f6aab56c619"
+    },
+    "scope": "Exact unchanged frozen function and full native CodecError carrier. No refactor or stubs. Fixed Y1 positive case and bounded malformed-length case only, not a universal native/SDK/caller instance."
+  },
+  "expected_time": "Small optimized source-cut compilation, then one named whole-Y1 CBMC gate; no finite-field elimination or whole-stage SDK check.",
+  "qualification": "Fixed 464/928 all-byte native helper check or bounded length-error frame; not universal native length/caller/SDK closure.",
+  "print_axioms": "N/A: Rust/Kani gate"
+}

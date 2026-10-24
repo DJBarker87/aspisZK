@@ -1,0 +1,65 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "command": [
+    "cargo",
+    "kani",
+    "--lib",
+    "--exact",
+    "--harness",
+    "proofs::shipped_row14_vec_owned_equivalent",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "--output-format",
+    "terse",
+    "--harness-timeout",
+    "180",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "cwd": "/home/dombarker/project-offloads/s126-real-sdk-20261021/s1-y1-native-v5-20261024",
+  "files": {
+    "shipped_y1_vec_owned_equivalent-input.json": "e0a3cfcfb23c9131fe6c1cdf22279dce5c1e854143b3cad5ffd54aac7d799fec",
+    "Cargo.lock": "50e5096b1808e7558409473e59f61fece5da96cfe66789e917519400617cd772",
+    "Cargo.toml": "cec8572fc67dd9d506f5f3da84c3cc2f467d6b7367ecbc6dfbf099f4ced4111c",
+    "shipped_y1_vec_owned_equivalent-global-admission.json": "64bf515254d2ca45836e0b56bb68ac9a412acff87f1134f1d430d55a74599b2a",
+    "shipped_row14_vec_owned_equivalent-admission.json": "a61bcdff0655f4277ccf8138ff139d94304f165640ba964f8d70bfe927baaaa8",
+    "source-binding.json": "e765a1633eff465333ffccec6b655c109fd619306e8818257c25078054be1c60",
+    "shipped_y1_vec_owned_equivalent-admission.json": "9b0fd67603aa2502c4703b7a833f71749117b33206dc28166a510901828c1dd8",
+    "shipped_row14_vec_owned_equivalent-global-admission.json": "f6b0bcc186f23003dda9c1d0874a4ffe77eff1608e1a6cc863d4cf36f849aa2d",
+    "src/lib.rs": "85d1e41f3b190bd26736f8a59302c421fba669af7e6323d34328753e611473b9",
+    "src/proofs.rs": "d3d75c6a41856aced55c275193f842ca04553133c2f3859fdc2bd7122c20c868",
+    "shipped_y1_vec_owned_equivalent-receipt/time.log": "cfb6304d129a4d1f14997e103ff79493ffd50aa5e5efd8e3f98a75d146d10016",
+    "shipped_y1_vec_owned_equivalent-receipt/stdout.log": "5704ba1dfd56c9ebfd2a26da513eec0fafc46c3cade2a17512cd1d7748a1e4a3",
+    "shipped_y1_vec_owned_equivalent-receipt/receipt.json": "4a8c19fec2d6d61cf1fc5ef38dea389113c7ba2676667f853f54186427e0ee4c",
+    "shipped_y1_vec_owned_equivalent-receipt/stderr.log": "4696339f2e26e02d4ca0d7ba089aec608e5ec8aadaac8e8b85231ad84f6a8695"
+  },
+  "tools": {
+    "/home/dombarker/.cargo/bin/cargo-kani": "45c607cda6ed83414c0f7ff2c5f4cab8bda9d48031a035f9197d9ea16674f8f3",
+    "/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler": "f74488368997b6b4e0b417a2f5a3c8e598eccc907288c1a7875d9866056e9ffc",
+    "/home/dombarker/.kani/kani-0.67.0/bin/cbmc": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973"
+  },
+  "runner_sha256": "a95725573455801c5cea615316586b7a7561614a10a013685400929acfb5821b",
+  "source_binding": {
+    "schema": "focused-extractor-proof-packet-v1",
+    "revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+    "file": "crates/aspis-r1-cost-probe/src/compact.rs",
+    "file_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+    "function": "pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {\n    if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {\n        return Err(CodecError::Length);\n    }\n    for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {\n        o[..16].copy_from_slice(c);\n        o[16..].fill(0);\n    }\n    Ok(())\n}",
+    "function_sha256": "636009f9b16fcea3ca603f86318fdca99f660d541671e688ed3ea4d5e83daf21",
+    "error_enum": "pub enum CodecError {\n    Length,\n    NonZeroHigh,\n    NonCanonical,\n}",
+    "error_enum_sha256": "df9dc500c767b0dd77a74c350d496f34fcf9c8ed63e9ae0f6599097369e2deeb",
+    "files": {
+      "Cargo.toml": "cec8572fc67dd9d506f5f3da84c3cc2f467d6b7367ecbc6dfbf099f4ced4111c",
+      "src/lib.rs": "85d1e41f3b190bd26736f8a59302c421fba669af7e6323d34328753e611473b9",
+      "src/proofs.rs": "d3d75c6a41856aced55c275193f842ca04553133c2f3859fdc2bd7122c20c868"
+    },
+    "scope": "Unchanged native/complete owned-Vec reference. Per-harness dimensions are exact format call shapes, not a universal native/caller/SDK claim. Input contents, output contents, both lengths and full codec result are compared. No stubs, adoption or allocation-success claim.",
+    "reference_source": "extern crate alloc;\nuse alloc::vec::Vec;\n\n// Complete owned buffers move through helpers; indexing borrows end before\n// loop edges. No byte, result variant or error-frame data is projected away.\n#[inline(always)]\npub fn read_input(input:Vec<u8>,index:usize)->(u8,Vec<u8>) {\n    let value=input[index];\n    (value,input)\n}\n#[inline(always)]\npub fn write_output(mut output:Vec<u8>,index:usize,value:u8)->Vec<u8> {\n    output[index]=value;\n    output\n}\npub fn copy_chunk(mut input:Vec<u8>,mut output:Vec<u8>,chunk:usize)->(Vec<u8>,Vec<u8>) {\n    let mut byte=0usize;\n    while byte<16 {\n        let (value,next)=read_input(input,chunk*16+byte);\n        input=next;\n        output=write_output(output,chunk*32+byte,value);\n        output=write_output(output,chunk*32+16+byte,0);\n        byte+=1;\n    }\n    (input,output)\n}\n/// Proof-only complete owned reference. The original guard order, checked\n/// arithmetic and full input/output/result carriers are retained.\npub fn values_owned_reference(mut input:Vec<u8>,mut output:Vec<u8>)->(Result<(),CodecError>,Vec<u8>,Vec<u8>) {\n    if input.len()%16!=0 || output.len()!=2*input.len() {\n        return (Err(CodecError::Length),input,output);\n    }\n    let count=input.len()/16;\n    let mut chunk=0usize;\n    while chunk<count {\n        let (next_input,next_output)=copy_chunk(input,output,chunk);\n        input=next_input;\n        output=next_output;\n        chunk+=1;\n    }\n    (Ok(()),input,output)\n}\n",
+    "reference_sha256": "a4b9b6664e16c4dc1178e1925fb5064a5de7d76b603d7630a899d1f45853edb2"
+  },
+  "expected_time": "Small optimized source-cut compilation, then one named whole-Y1 CBMC gate; no finite-field elimination or whole-stage SDK check.",
+  "qualification": "Fixed Y1 native/owned-reference byte equality or bounded fixed-input error frame. Complete carriers; no stubs or universal native/caller/SDK closure.",
+  "print_axioms": "N/A: Rust/Kani gate"
+}

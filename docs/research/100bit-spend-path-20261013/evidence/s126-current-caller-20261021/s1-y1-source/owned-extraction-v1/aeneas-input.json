@@ -1,0 +1,94 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "command": [
+    "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
+    "-sequential",
+    "-no-progress-bar",
+    "-abort-on-error",
+    "-print-error-emitters",
+    "-loops-no-rec",
+    "-backend",
+    "lean",
+    "-namespace",
+    "AspisS1Y1Owned",
+    "-dest",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/s1-y1-owned-extraction-v1-20261024/generated",
+    "-subdir",
+    "AspisS1Y1Owned",
+    "-split-files",
+    "-emit-json",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/s1-y1-owned-extraction-v1-20261024/Y1Owned.llbc"
+  ],
+  "source_sha256": "44119afb3ef3f2b5e0308b81df9516dc072f0cb8e67a16c040b58cd9ac6ba9e0",
+  "source_binding": {
+    "schema": "focused-extractor-proof-packet-v1",
+    "revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+    "file": "crates/aspis-r1-cost-probe/src/compact.rs",
+    "file_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+    "function": "pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {\n    if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {\n        return Err(CodecError::Length);\n    }\n    for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {\n        o[..16].copy_from_slice(c);\n        o[16..].fill(0);\n    }\n    Ok(())\n}",
+    "function_sha256": "636009f9b16fcea3ca603f86318fdca99f660d541671e688ed3ea4d5e83daf21",
+    "error_enum": "pub enum CodecError {\n    Length,\n    NonZeroHigh,\n    NonCanonical,\n}",
+    "error_enum_sha256": "df9dc500c767b0dd77a74c350d496f34fcf9c8ed63e9ae0f6599097369e2deeb",
+    "files": {
+      "Cargo.toml": "cec8572fc67dd9d506f5f3da84c3cc2f467d6b7367ecbc6dfbf099f4ced4111c",
+      "src/lib.rs": "44119afb3ef3f2b5e0308b81df9516dc072f0cb8e67a16c040b58cd9ac6ba9e0",
+      "src/proofs.rs": "e5a78b5c6fcbf8c4d355b2d6fb252f1c7c65ba074ef8f5cb7847c3a53c50191e"
+    },
+    "scope": "Fixed Y1 whole native/owned-reference all-byte equality, plus fixed Y1 input and bounded incorrect-output-length frame. Complete buffers/result; no stubs, adoption or universal native/SDK/caller instance.",
+    "reference_source": "/// Proof-only owned reference: both complete buffers and the full codec result.\n/// It introduces no digest/query calls and is not adopted production code.\npub fn y1_owned_reference(input:[u8;464],mut output:[u8;928])->(Result<(),CodecError>,[u8;928]) {\n    let mut chunk=0usize;\n    while chunk<29 {\n        let mut byte=0usize;\n        while byte<16 {\n            output[chunk*32+byte]=input[chunk*16+byte];\n            output[chunk*32+16+byte]=0;\n            byte+=1;\n        }\n        chunk+=1;\n    }\n    (Ok(()),output)\n}\n",
+    "reference_sha256": "bb3abb8d669068ef2043b157ceb1dad75567590594e27b9f9e9bf1e728229a50"
+  },
+  "kani_equivalence_receipt": {
+    "source_revision": "d8fc9db732c70ef8dd1dd548184326318d5e1ad1",
+    "command": [
+      "timeout",
+      "240",
+      "cargo",
+      "kani",
+      "--lib",
+      "--exact",
+      "--harness",
+      "proofs::shipped_y1_owned_equivalent",
+      "-j",
+      "1",
+      "-Z",
+      "unstable-options",
+      "--output-format",
+      "terse",
+      "--harness-timeout",
+      "180",
+      "--cbmc-args",
+      "--unwinding-assertions"
+    ],
+    "cwd": "/home/dombarker/project-offloads/s126-real-sdk-20261021/s1-y1-native-v2-20261024",
+    "expected_time": "Optimized compilation and one named unchanged whole-Y1 helper CBMC gate; 180s harness timeout",
+    "exit_status": 0,
+    "wall_seconds": 12.994,
+    "peak_rss_kib": 862224,
+    "swaps": 0,
+    "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r80427016d4344a49b4ddca81d88dc1a6.scope",
+    "limits": {
+      "memory.high": "6442450944",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "pids.max": "64"
+    },
+    "cgroup_memory_peak_bytes": 1265299456,
+    "env": {
+      "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/s126-real-sdk-20261021/s1-y1-native-v2-20261024/target",
+      "CARGO_BUILD_JOBS": "1",
+      "CARGO_NET_OFFLINE": "true",
+      "SBF_TRACE_DIR": null
+    },
+    "print_axioms": "N/A: no Lean compilation"
+  },
+  "tools": {
+    "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+    "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon-driver": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45",
+    "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static": "4632746db1bf6c3953f2971078965a2a5a8ad6cf5f75636b46b397bc50c550b5"
+  },
+  "runner_sha256": "4d8936b3dc433fbe137be91de7ba6562e077d41382a301c64dc39abca253f2ba",
+  "llbc_sha256": "331f2c9d8b6a621beef0f1b1d09397a3caf6c9ffff83584c3839661bd088e2db",
+  "expected_time": "Small optimized standalone Rust source extraction, then Aeneas translation of two owned array loops; no cryptographic arithmetic or elimination.",
+  "qualification": "Complete owned Y1 reference, with separate unchanged native fixed-Y1 Kani equality. No production adoption or whole SDK/caller closure."
+}
