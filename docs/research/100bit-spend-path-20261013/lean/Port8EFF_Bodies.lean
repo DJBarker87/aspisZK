@@ -1,5 +1,6 @@
 import Port8EFF_CheckpointCode
 import Port1_Library
+import Port8EFF_NativeReader
 
 set_option autoImplicit false
 noncomputable section
@@ -14,7 +15,7 @@ only the existing native error-carrier conversion follows the parent. -/
 def readerCode (reserved : Bool) (unwrap : Unwrap) (ck proof pub : Slice U8)
     (v : transport.Variant) : CheckpointBytes5Effect.Code
       (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error) := do
-  let out ← CheckpointBytes5Resume.program (Port6CK_Ops.ops reserved unwrap) ck proof pub v
+  let out ← Port8EFF_NativeReader.program (Port6CK_Ops.ops reserved unwrap) ck proof pub v
   pure (match out with
     | .Ok pair => .Ok pair
     | .Err e => .Err (Port3_CheckpointInstall.error e))
@@ -43,8 +44,7 @@ theorem reader_value (reserved : Bool) (unwrap : Unwrap) {Hash : Type}
       Port6CK_Reader.reader reserved unwrap D ck proof pub v hash := by
   rw [reader,Port8EFF_CheckpointCode.value]
   simp only [readerCode,CheckpointBytes5Effect.erase_bind,CheckpointBytes5Effect.erase_pure]
-  rw [CheckpointBytes5Resume.source,← Port4A_ReaderNormalize.source
-    (Port6CK_Ops.ops reserved unwrap) (Port6CK_Reader.size_bound reserved unwrap)]
+  rw [Port8EFF_NativeReader.source]
   unfold Port6CK_Reader.reader
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
   intro out _
@@ -77,6 +77,21 @@ theorem reader_effects (reserved : Bool) (unwrap : Unwrap) {Hash : Type}
   have pair := Port8EFF_CheckpointCode.effects _ _ _ H oracle out [] after ran
   exact ⟨after,ran,Prod.ext pair.1.symm pair.2⟩
 
+theorem writer_effects {Hash : Type} (D : aspis_core.digest.Digest32 Hash)
+    (p : verifier.Prepared) (a : verifier.Accumulator) (proof pub : Slice U8)
+    (hash : Hash) (H : Bytes → State)
+    (oracle : CheckpointBytes5Inputs.Oracle (VTop_Checkpoint.digest D) hash H)
+    (saved : alloc.vec.Vec U8)
+    (actual : Port3_CheckpointInstall.writer D p a proof pub hash=ok saved) :
+    ∃ after, CheckpointBytes5Effect.run (VTop_Checkpoint.digest D) hash
+      (writerCode p a proof pub) []=ok (saved,after) ∧
+      eval H (writer D p a proof pub hash)=(CheckpointBytes5Inputs.observe after,ok saved) := by
+  have erased := (Port8EFF_CheckpointCode.value (VTop_Checkpoint.digest D) hash
+    (writerCode p a proof pub) H).symm.trans ((writer_value D p a proof pub hash H).trans actual)
+  obtain ⟨after,ran⟩ := Port3_CheckpointInstall.erase_success_run _ _ _ saved erased []
+  have pair := Port8EFF_CheckpointCode.effects _ _ _ H oracle saved [] after ran
+  exact ⟨after,ran,Prod.ext pair.1.symm pair.2⟩
+
 /-- Only owned checkpoint bodies are replaced. All other thirteen-body
 obligations retain the supplied implementation, including Session A op7. -/
 def body (reserved : Bool) (unwrap : Unwrap) (other : VTop_OracleCode.Implementation) :
@@ -104,6 +119,7 @@ theorem installed_writer (ops : Ops) (reserved : Bool) (unwrap : Unwrap)
       writer D p a proof pub hash := rfl
 
 #print axioms reader_value
+#print axioms writer_effects
 #print axioms writer_value
 #print axioms reader_effects
 #print axioms installed_reader

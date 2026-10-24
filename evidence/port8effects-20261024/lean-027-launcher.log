@@ -1,0 +1,41 @@
+{"attempt": "lean-027", "exit_status": 1, "wall_seconds": 3.6202246059838217, "peak_rss_kib": "4512684", "swaps": "0", "print_axioms": []}
+Port8EFF_ReaderJoin.lean:40:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ck.len - 32#usize
+in the target expression
+  Port8EFF_CheckpointCode.program D hash
+      (have i := ck.len;
+      do
+      let i1 ← CheckpointBytes5Effect.liftResult (ops.checkpointSize v)
+      if (i != i1) = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+        else do
+          let s ←
+            CheckpointBytes5Effect.liftResult
+                (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := 8#usize })
+          let b ←
+            CheckpointBytes5Effect.liftResult
+                (core.cmp.impls.PartialEqShared.ne
+...
+                    (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeFromUsizeSlice U8) ck
+                                                { start := end1 })
+                                        let s7 ←
+                                          CheckpointBytes5Effect.liftResult
+                                              (lift
+                                                (Array.make 22#usize
+                                                    [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8,
+                                                      82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8,
+                                                      111#u8, 105#u8, 110#u8, 116#u8]
+                                                    CheckpointBytes5Resume.program._proof_33).to_slice)
+                                        let s8 ←
+                                          CheckpointBytes5Effect.liftResult
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := end1 })
+                                        let s9 ←
+                                          CheckpointBytes5Effect.liftResult
+                                              (lift (Array.make 2#usize [s7, s8] ⋯).to_slice)
+                                        let a2 ← CheckpointBytes5Effect.read s9
+                                        CheckpointBytes5Effect.liftResult
+                                            (CheckpointBytes5Resume.tail ops ck v i4 end1 s6 a2))
+excessive memory consumption detected at 'interpreter' (potential solution: increase memory consumption threshold)
+
+Running as unit: run-r03bac7d283e048f4a175689f1b4935c8.scope; invocation ID: c83c6498e89f47d0a45ec26b60dc76f8

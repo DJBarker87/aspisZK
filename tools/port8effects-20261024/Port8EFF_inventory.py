@@ -21,6 +21,10 @@ for block in ext.read_text().split('/--')[1:]:
 assert len(rows)==13
 for p in [adapt,ext,*[L/(n+'.lean') for ns in producers.values() for n in ns if (L/(n+'.lean')).is_file()],L/'VTop_OracleStages.lean',L/'VTop_OracleCode.lean']:
  pins[str(p.relative_to(R))]={'sha256':sha(p),'bytes':p.stat().st_size}
+for p in [R/'crates/aspis-r1-cost-probe/src'/n for n in ['compact.rs','r1_semantic.rs','r1_wire.rs','transcript.rs','weights.rs']]:
+ if p.is_file():pins[str(p.relative_to(R))]={'sha256':sha(p),'bytes':p.stat().st_size}
+for p in L.glob('Port8EFF_*.lean'):
+ pins[str(p.relative_to(R))]={'sha256':sha(p),'bytes':p.stat().st_size}
 old=json.loads((R/'evidence/verifier-top-20261023/target.json').read_text())
 assessment={p:{'current':pins[p]['sha256'],'historical':v['sha256'],'unchanged':pins[p]['sha256']==v['sha256']} for p,v in old['files'].items() if p in pins}
 assert all(x['unchanged'] for x in assessment.values())

@@ -1,0 +1,228 @@
+Port8EFF_Budget.lean:33:6: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+Port8EFF_Budget.lean:47:9: error: unexpected identifier; expected '=>'
+Port8EFF_Budget.lean:39:68: error: unsolved goals
+ops : AspisR1Stage2.ResumeOps
+ck proof pub : Slice U8
+v : AspisR1Stage2.transport.Variant
+⊢ bounded 3 do
+    let i1 ← CheckpointBytes5Effect.Code.step (ops.checkpointSize v) CheckpointBytes5Effect.Code.done
+    if (ck.len != i1) = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+      else do
+        let s ←
+          CheckpointBytes5Effect.Code.step
+              (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := 8#usize })
+              CheckpointBytes5Effect.Code.done
+        let b ←
+          CheckpointBytes5Effect.Code.step
+              (core.cmp.impls.PartialEqShared.ne (AspisR1Stage2.slicePartialEq ops 8#usize core.cmp.PartialEqU8) s
+                (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+                  Port8EFF_NativeReader.program._proof_8))
+              CheckpointBytes5Effect.Code.done
+        if b = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+          else do
+            let i2 ← CheckpointBytes5Effect.Code.step (ck.index_usize 8#usize) CheckpointBytes5Effect.Code.done
+            let i3 ← CheckpointBytes5Effect.Code.step (ops.tag v) CheckpointBytes5Effect.Code.done
+            if (i2 != i3) = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+              else do
+                let i4 ← CheckpointBytes5Effect.Code.step (ck.index_usize 9#usize) CheckpointBytes5Effect.Code.done
+                if i4 > 22#u8 then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                  else do
+                    let i5 ← CheckpointBytes5Effect.Code.step (ck.index_usize 10#usize) CheckpointBytes5Effect.Code.done
+                    if (i5 != 1#u8) = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                      else do
+                        let s1 ←
+                          CheckpointBytes5Effect.Code.step
+                              (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+                                { start := 11#usize, «end» := 16#usize })
+                              CheckpointBytes5Effect.Code.done
+                        let i6 ←
+                          CheckpointBytes5Effect.Code.step (core.slice.Slice.iter s1) CheckpointBytes5Effect.Code.done
+                        let __x ← CheckpointBytes5Effect.Code.step (ops.headerAny i6) CheckpointBytes5Effect.Code.done
+                        if __x.1 = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                          else do
+                            let end1 ←
+                              CheckpointBytes5Effect.Code.step (lift (ck.len.wrapping_sub 32#usize))
+                                  CheckpointBytes5Effect.Code.done
+                            let s2 ←
+                              CheckpointBytes5Effect.Code.step
+                                  (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+                                    { start := 16#usize, «end» := 48#usize })
+                                  CheckpointBytes5Effect.Code.done
+                            let s3 ←
+                              CheckpointBytes5Effect.Code.step (lift (Array.make 1#usize [proof] ⋯).to_slice)
+                                  CheckpointBytes5Effect.Code.done
+                            let a ← CheckpointBytes5Effect.Code.read s3 CheckpointBytes5Effect.Code.done
+                            let b2 ←
+                              CheckpointBytes5Effect.Code.step (ops.ne core.cmp.PartialEqU8 s2 a)
+                                  CheckpointBytes5Effect.Code.done
+                            if b2 = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                              else do
+                                let s4 ←
+                                  CheckpointBytes5Effect.Code.step
+                                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+                                        { start := 48#usize, «end» := 80#usize })
+                                      CheckpointBytes5Effect.Code.done
+                                let s5 ←
+                                  CheckpointBytes5Effect.Code.step (lift (Array.make 1#usize [pub] ⋯).to_slice)
+                                      CheckpointBytes5Effect.Code.done
+                                let a1 ← CheckpointBytes5Effect.Code.read s5 CheckpointBytes5Effect.Code.done
+                                let b3 ←
+                                  CheckpointBytes5Effect.Code.step (ops.ne core.cmp.PartialEqU8 s4 a1)
+                                      CheckpointBytes5Effect.Code.done
+                                if b3 = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                                  else do
+                                    let s6 ←
+                                      CheckpointBytes5Effect.Code.step
+                                          (core.slice.index.Slice.index
+                                            (core.slice.index.SliceIndexRangeFromUsizeSlice U8) ck { start := end1 })
+                                          CheckpointBytes5Effect.Code.done
+                                    let s7 ←
+                                      CheckpointBytes5Effect.Code.step
+                                          (lift
+                                            (Array.make 22#usize
+                                                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8,
+                                                  49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8,
+                                                  105#u8, 110#u8, 116#u8]
+                                                Port8EFF_NativeReader.program._proof_37).to_slice)
+                                          CheckpointBytes5Effect.Code.done
+                                    let s8 ←
+                                      CheckpointBytes5Effect.Code.step
+                                          (core.slice.index.Slice.index
+                                            (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := end1 })
+                                          CheckpointBytes5Effect.Code.done
+                                    let s9 ←
+                                      CheckpointBytes5Effect.Code.step (lift (Array.make 2#usize [s7, s8] ⋯).to_slice)
+                                          CheckpointBytes5Effect.Code.done
+                                    let a2 ← CheckpointBytes5Effect.Code.read s9 CheckpointBytes5Effect.Code.done
+                                    CheckpointBytes5Effect.Code.step (Port4A_NativeReader.tail ops ck v i4 end1 s6 a2)
+                                        CheckpointBytes5Effect.Code.done
+Port8EFF_Budget.lean:63:9: error: unexpected identifier; expected '=>'
+Port8EFF_Budget.lean:54:90: error: unsolved goals
+reserved : Bool
+unwrap : Port6CK_Semantic.Unwrap
+Hash : Type
+D : VTop_Stages.aspis_core.digest.Digest32 Hash
+ck proof pub : Slice U8
+v : VTop_Stages.transport.Variant
+hash : Hash
+H : Bytes → State
+⊢ bounded 3 do
+    let out ←
+      do
+        let i1 ←
+          CheckpointBytes5Effect.Code.step ((Port6CK_Ops.ops reserved unwrap).checkpointSize v)
+              CheckpointBytes5Effect.Code.done
+        if (ck.len != i1) = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+          else do
+            let s ←
+              CheckpointBytes5Effect.Code.step
+                  (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck
+                    { «end» := 8#usize })
+                  CheckpointBytes5Effect.Code.done
+            let b ←
+              CheckpointBytes5Effect.Code.step
+                  (core.cmp.impls.PartialEqShared.ne
+                    (AspisR1Stage2.slicePartialEq (Port6CK_Ops.ops reserved unwrap) 8#usize core.cmp.PartialEqU8) s
+                    (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+                      Port8EFF_NativeReader.program._proof_8))
+                  CheckpointBytes5Effect.Code.done
+            if b = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+              else do
+                let i2 ← CheckpointBytes5Effect.Code.step (ck.index_usize 8#usize) CheckpointBytes5Effect.Code.done
+                let i3 ←
+                  CheckpointBytes5Effect.Code.step ((Port6CK_Ops.ops reserved unwrap).tag v)
+                      CheckpointBytes5Effect.Code.done
+                if (i2 != i3) = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                  else do
+                    let i4 ← CheckpointBytes5Effect.Code.step (ck.index_usize 9#usize) CheckpointBytes5Effect.Code.done
+                    if i4 > 22#u8 then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                      else do
+                        let i5 ←
+                          CheckpointBytes5Effect.Code.step (ck.index_usize 10#usize) CheckpointBytes5Effect.Code.done
+                        if (i5 != 1#u8) = true then
+                            pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                          else do
+                            let s1 ←
+                              CheckpointBytes5Effect.Code.step
+                                  (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+                                    { start := 11#usize, «end» := 16#usize })
+                                  CheckpointBytes5Effect.Code.done
+                            let i6 ←
+                              CheckpointBytes5Effect.Code.step (core.slice.Slice.iter s1)
+                                  CheckpointBytes5Effect.Code.done
+                            let __x ←
+                              CheckpointBytes5Effect.Code.step ((Port6CK_Ops.ops reserved unwrap).headerAny i6)
+                                  CheckpointBytes5Effect.Code.done
+                            if __x.1 = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                              else do
+                                let end1 ←
+                                  CheckpointBytes5Effect.Code.step (lift (ck.len.wrapping_sub 32#usize))
+                                      CheckpointBytes5Effect.Code.done
+                                let s2 ←
+                                  CheckpointBytes5Effect.Code.step
+                                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+                                        { start := 16#usize, «end» := 48#usize })
+                                      CheckpointBytes5Effect.Code.done
+                                let s3 ←
+                                  CheckpointBytes5Effect.Code.step (lift (Array.make 1#usize [proof] ⋯).to_slice)
+                                      CheckpointBytes5Effect.Code.done
+                                let a ← CheckpointBytes5Effect.Code.read s3 CheckpointBytes5Effect.Code.done
+                                let b2 ←
+                                  CheckpointBytes5Effect.Code.step
+                                      ((Port6CK_Ops.ops reserved unwrap).ne core.cmp.PartialEqU8 s2 a)
+                                      CheckpointBytes5Effect.Code.done
+                                if b2 = true then pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                                  else do
+                                    let s4 ←
+                                      CheckpointBytes5Effect.Code.step
+                                          (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                            ck { start := 48#usize, «end» := 80#usize })
+                                          CheckpointBytes5Effect.Code.done
+                                    let s5 ←
+                                      CheckpointBytes5Effect.Code.step (lift (Array.make 1#usize [pub] ⋯).to_slice)
+                                          CheckpointBytes5Effect.Code.done
+                                    let a1 ← CheckpointBytes5Effect.Code.read s5 CheckpointBytes5Effect.Code.done
+                                    let b3 ←
+                                      CheckpointBytes5Effect.Code.step
+                                          ((Port6CK_Ops.ops reserved unwrap).ne core.cmp.PartialEqU8 s4 a1)
+                                          CheckpointBytes5Effect.Code.done
+                                    if b3 = true then
+                                        pure (core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+                                      else do
+                                        let s6 ←
+                                          CheckpointBytes5Effect.Code.step
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeFromUsizeSlice U8) ck
+                                                { start := end1 })
+                                              CheckpointBytes5Effect.Code.done
+                                        let s7 ←
+                                          CheckpointBytes5Effect.Code.step
+                                              (lift
+                                                (Array.make 22#usize
+                                                    [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8,
+                                                      82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8,
+                                                      111#u8, 105#u8, 110#u8, 116#u8]
+                                                    Port8EFF_NativeReader.program._proof_37).to_slice)
+                                              CheckpointBytes5Effect.Code.done
+                                        let s8 ←
+                                          CheckpointBytes5Effect.Code.step
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := end1 })
+                                              CheckpointBytes5Effect.Code.done
+                                        let s9 ←
+                                          CheckpointBytes5Effect.Code.step
+                                              (lift (Array.make 2#usize [s7, s8] ⋯).to_slice)
+                                              CheckpointBytes5Effect.Code.done
+                                        let a2 ← CheckpointBytes5Effect.Code.read s9 CheckpointBytes5Effect.Code.done
+                                        CheckpointBytes5Effect.Code.step
+                                            (Port4A_NativeReader.tail (Port6CK_Ops.ops reserved unwrap) ck v i4 end1 s6
+                                              a2)
+                                            CheckpointBytes5Effect.Code.done
+    pure
+        (match out with
+        | core.result.Result.Ok pair => core.result.Result.Ok pair
+        | core.result.Result.Err e => core.result.Result.Err (Port3_CheckpointInstall.error e))
+'AspisR1.Port8EFF_Budget.count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_Budget.reader_bounded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_Budget.reader_count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

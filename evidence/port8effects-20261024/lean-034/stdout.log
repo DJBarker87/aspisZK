@@ -1,0 +1,29 @@
+Port8EFF_CheckpointEffects.lean:56:22: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+Port8EFF_CheckpointEffects.lean:57:20: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+Port8EFF_CheckpointEffects.lean:53:2: error: 'change' tactic failed, pattern
+  eval H
+      (Port8EFF_CheckpointCode.program (VTop_Checkpoint.digest D) hash
+        (CheckpointBytes5Effect.bind
+          (Port8EFF_NativeReader.program (Port6CK_Ops.ops reserved unwrap) ck proof pub
+            AspisR1Stage2.transport.Variant.S2)
+          fun out => CheckpointBytes5Effect.Code.done ?m.156)) =
+    ?m.159
+is not definitionally equal to target
+  eval H
+      (Port8EFF_CheckpointCode.program (VTop_Checkpoint.digest D) hash do
+        let out ←
+          Port8EFF_NativeReader.program (Port6CK_Ops.ops reserved unwrap) ck proof pub
+              AspisR1Stage2.transport.Variant.S2
+        pure
+            (match out with
+            | core.result.Result.Ok pair => core.result.Result.Ok pair
+            | core.result.Result.Err e => core.result.Result.Err (Port3_CheckpointInstall.error e))) =
+    (CheckpointBytes5Inputs.observe after, ok (core.result.Result.Ok (p, a)))
+'AspisR1.Port8EFF_CheckpointEffects.mapped' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_CheckpointEffects.reader' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
