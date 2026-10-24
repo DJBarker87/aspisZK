@@ -43,7 +43,7 @@ its Python child. No privilege/security changes or namespace workaround attempte
 
 Successful extraction: exit0,0.882310s,22232KiB process peak,swap0,512MiB RLIMIT_AS.
 Index+probe helper: exit0,0.163246s,23936KiB process peak,swap0; nested namespace
-probe exit1,0.001805s. Disjoint populated finite reservations observed24375MiB
+probe exit1,0.001805s. Disjoint populated finite reservations observed24960MiB
 before extraction plus512MiB preparation bound, under55GiB; this is not prospective
 or actual build GO and unbounded nonbuild residents are not a build admission proof.
 Exact commands/revisions/helper/input/output hashes/metrics are in *.transport.json,
