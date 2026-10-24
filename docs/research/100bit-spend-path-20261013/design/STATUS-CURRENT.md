@@ -23,13 +23,17 @@ Merged51ff811857 adds conditional accepted-full-stored-run probability
 transport and recovers native parent declarations; all-outcome query charges
 remain separate. Merged438cd6f576 adds allocator word/byte-frame lemmas and
 84 finite-arena Kani checks; deployed SBF/RawVec/shim linkage remains open.
-Port24SBFMAP67250 now follows that exact artifact/source boundary. Port23's
-actual mutable-push outer frame is reviewed but unmerged; Port25ARRAY68143
-resolves its explicit array iterator ABI and row sequencing. Privacy scalar
-observer payload384->12 is reviewed as structural reduction only; native
-erasure/roles/world remain open. ResumeMIR70362 obtains current hook/draw/disposal MIR and source projection;
-the reused success-move association is now recovered. Privacy Kani59/60, final slot reserved;
-privacy Lean240/260; known soundness332/368 before new job usage. No adoption.
+Port24's current all-three SBF artifact/source association is now reviewed and
+merged cb75d4d9ab; contemporaneous sysroot declaration identity and native
+primitive laws remain open. Default/devnet uses256KiB; Pool uses32KiB.
+Port23/25 mutable-push candidate remains unmerged: array continuation/scalar
+lemmas passed, final loop audit failed. Port26ROW71812 continues the actual
+row/Vec proof with8 newly assigned slots inside the same overall ceiling.
+Privacy scalar observer payload384->12 is structural evidence only; reused
+success-move association is recovered, current hook/draw/disposal native
+projection is open. ResumeMIR70362 has one ordinary compile attempt at1GiB
+with fresh gates; Kani59/60 final slot remains reserved. PrivacyLean240/260;
+known soundness339/368 before current jobs' usage. No adoption.
 
 Session A640d3ebcf6 caller-range packet is now reviewed: five source modules,
 selected receipts and immutable import/source metadata pass independent audit.
