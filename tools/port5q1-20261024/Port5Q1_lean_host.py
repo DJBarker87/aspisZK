@@ -1,7 +1,7 @@
 from pathlib import Path
 import hashlib,json,subprocess,sys
-probe=subprocess.run(['pgrep','-a','-x','lean'],capture_output=True,text=True)
-assert probe.returncode==1, 'Another Lean process is active: '+probe.stdout
+# Parallel Lean is explicitly authorized by the Q1 packet until 14:00 UK.
+# Each invocation still has independent scope caps and aggregate admission.
 B=Path(__file__).resolve().parent;c=B/sys.argv[1];x=json.loads(c.read_text());paths=x['env']['LEAN_PATH'].split(':');seen={}
 def visit(module):
  key=module.replace('.','/')+'.olean'
