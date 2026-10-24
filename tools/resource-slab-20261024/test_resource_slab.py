@@ -142,6 +142,9 @@ class CandidateTests(unittest.TestCase):
         for k in ('process_visibility','service_visibility','docker_visibility'):
             old=legacy(s);del old[k]
             self.assertFalse(self.proposal(s,old=old)['allowed'])
+        for k in ('process_visibility','service_visibility','docker_visibility','allowed','reserve_check'):
+            old=legacy(s);old[k]=None
+            self.assertFalse(self.proposal(s,old=old)['allowed'])
         for k in ('error','visibility_error'):
             old=legacy(s);old[k]='failed';old['reserve_check']=False
             self.assertFalse(self.proposal(s,old=old)['allowed'])
@@ -176,10 +179,6 @@ class CandidateTests(unittest.TestCase):
     def test_physical_total_boundary(self):
         s=fixture(node('/cg/a',0));s['meminfo'].update(MemTotal=12*GIB,MemFree=11*GIB,MemAvailable=10*GIB)
         self.assertFalse(self.proposal(s)['allowed']) #4+1+7 ==12
-
-
-if __name__=='__main__':
-    unittest.main(verbosity=2)
 
 class ScannerTests(unittest.TestCase):
     def test_sysfs_missing_stat_and_slab_and_negative(self):
@@ -219,3 +218,25 @@ class ScannerTests(unittest.TestCase):
                 (child/'memory.stat').write_text(files['memory.stat'])
                 (child/'memory.current').write_text('-1')
                 self.assertRaises(ValueError,scan,root)
+
+
+class FailureRetentionTests(unittest.TestCase):
+    def test_unsupported_read_denies_and_keeps_old_visibility(self):
+        from unittest.mock import patch
+        import resource_slab_candidate as candidate
+        s=fixture(node('/cg/a',100));old=legacy(s)
+        with patch.object(candidate,'scan',side_effect=OSError(95,'Operation not supported')):
+            out=candidate.live(lambda requested:old,{})
+        self.assertEqual(out['original_legacy'],old)
+        self.assertIn('Operation not supported',out['collection_error'])
+        self.assertTrue(all(not d['allowed'] for d in out['decisions'].values()))
+        self.assertIsNone(out['snapshots']['before'])
+
+    def test_unaccountable_global_residual_denies(self):
+        s=fixture(node('/cg/a',100))
+        s['meminfo']['MemFree']=s['meminfo']['MemTotal']
+        self.assertRaises(ValueError,accounting,s)
+
+
+if __name__=='__main__':
+    unittest.main(verbosity=2)

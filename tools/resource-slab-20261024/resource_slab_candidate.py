@@ -217,6 +217,12 @@ def propose(old, before, after, requested):
                       'cgroups', 'projected_reserved_bytes', 'allowed', 'reserve_check'):
             if field not in old:
                 raise ValueError('missing legacy visibility: '+field)
+        if (not isinstance(old['process_visibility'], str) or not old['process_visibility'].strip()
+                or not isinstance(old['service_visibility'], str)
+                or not isinstance(old['docker_visibility'], list)
+                or not isinstance(old['cgroups'], list)
+                or type(old['allowed']) is not bool or type(old['reserve_check']) is not bool):
+            raise ValueError('invalid legacy visibility/decision types')
         if before is None or after is None:
             raise ValueError('missing hierarchy snapshot')
         if membership(before) != membership(after):
