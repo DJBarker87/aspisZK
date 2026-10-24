@@ -2,6 +2,13 @@
 """Focused offline receipt/manifest/plan audit; no host reads or build execution."""
 import hashlib,json,pathlib,resource,subprocess,sys,time
 start=time.monotonic();E=pathlib.Path('evidence/sbf-inputs-20261024');T=pathlib.Path('tools/sbf-inputs-20261024');checks=[]
+# Preserve any new failure with process metrics, without rerunning unchanged inputs.
+def failure(tp,value,tb):
+ import traceback
+ u=resource.getrusage(0);r=dict(command=[sys.executable,"-B",__file__],source_revision=subprocess.check_output(["git","rev-parse","HEAD"],text=True).strip(),script_sha256=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),exit=1,error=repr(value),traceback="".join(traceback.format_exception(tp,value,tb)),wall_seconds=time.monotonic()-start,peak_rss_bytes=u.ru_maxrss,swap=u.ru_nswap,print_axioms="N/A")
+ with (E/"audit-failed-v2.json").open("x") as f:json.dump(r,f,indent=2);f.write("\n")
+ traceback.print_exception(tp,value,tb)
+sys.excepthook=failure
 def sha(b):return hashlib.sha256(b).hexdigest()
 def read(name):return json.loads((E/name).read_text())
 def check(name,condition):
@@ -33,7 +40,7 @@ for pkg in p['packages']:
 check('118 public index files for123 selected versions',f['index_files']==118 and len(f['index_rows'])==123 and {r['crate'] for r in f['index_rows']}=={r['crate'] for r in packages})
 lookup={x['crate']:x['archive_sha256'] for x in packages};check('index checksum matches archives',all(r['locked_entry_checksum']==lookup[r['crate']] for r in f['index_rows']))
 check('namespace denied retained',f['namespace_probe']['exit']==1 and 'Operation not permitted' in f['namespace_probe']['stderr'] and not f['namespace_probe']['stdout'])
-check('probe same tested literal',read('finish-tests.json')['namespace_executed']==False and read('finish-tests.json')['inputs'][str(T/'SbfInputs_finish_host.py')]==f['helper_sha256'])
+check('probe same tested literal',read('finish-tests.json')['namespace_executed']==False and {pathlib.Path(k).name:v for k,v in read('finish-tests.json')['inputs'].items()}['SbfInputs_finish_host.py']==f['helper_sha256'])
 oldrev='ed3227f4dae529ed61d7f63c9dbd5adb8028e953'
 for b in plan['builds']:
  mode=b['mode'];name=f'docs/research/100bit-spend-path-20261013/evidence/s10-repin3-20261023/build-{mode}-v1/command.json';raw=subprocess.check_output(['git','show',oldrev+':'+name]);old=json.loads(raw)
