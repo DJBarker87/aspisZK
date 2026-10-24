@@ -1,0 +1,844 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6OuterEncoderContentsV1.lean:50:79: error: unsolved goals
+common : pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+payload : payment_relation.PoolV1PrivateTransferPublicV1
+valid :
+  nativeOps.validate (pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer common payload) =
+    ok (core.result.Result.Ok ())
+late : late_ready common.lane_transition
+r : core.result.Result Unit pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+_✝³⁶ :
+  [> let r ←
+    nativeOps.validate (pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer common payload) <]
+cf :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) Unit
+_✝³⁵ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+a✝¹ : Unit
+s : Slice U8
+index_mut_back : Slice U8 → Std.Array U8 1880#usize
+_✝³⁴ :
+  [> let(s, index_mut_back) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8))
+      (Array.repeat 1880#usize 0#u8) { «end» := 4#usize } <]
+s1 : Slice U8
+_✝³³ : [> let s1 ← lift pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice <]
+s2 : Slice U8
+_✝³² : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1 <]
+output2 : Std.Array U8 1880#usize
+_✝³¹ : [> let output2 ← (index_mut_back s2).update 4#usize pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION <]
+i1 : U8
+_✝³⁰ :
+  [> let i1 ←
+    lift (UScalar.cast UScalarTy.U8 (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer)) <]
+output3 : Std.Array U8 1880#usize
+_✝²⁹ : [> let output3 ← output2.update 5#usize i1 <]
+output4 : Std.Array U8 1880#usize
+_✝²⁸ : [> let output4 ← output3.update 6#usize format.POOL_V1_DIGEST_ENCODING_VERSION <]
+output5 : Std.Array U8 1880#usize
+_✝²⁷ : [> let output5 ← output4.update 7#usize common.output_lane <]
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Std.Array U8 1880#usize
+_✝²⁶ :
+  [> let(s3, index_mut_back1) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output5
+      { start := 8#usize, «end» := 40#usize } <]
+s4 : Slice U8
+_✝²⁵ : [> let s4 ← lift common.master_account.to_slice <]
+s5 : Slice U8
+_✝²⁴ : [> let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4 <]
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Std.Array U8 1880#usize
+_✝²³ :
+  [> let(s6, index_mut_back2) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back1 s5) { start := 40#usize, «end» := 72#usize } <]
+s7 : Slice U8
+_✝²² : [> let s7 ← lift common.checkpoint_account.to_slice <]
+s8 : Slice U8
+_✝²¹ : [> let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7 <]
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Std.Array U8 1880#usize
+_✝²⁰ :
+  [> let(s9, index_mut_back3) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back2 s8) { start := 72#usize, «end» := 104#usize } <]
+s10 : Slice U8
+_✝¹⁹ : [> let s10 ← lift common.selected_lane_account.to_slice <]
+s11 : Slice U8
+_✝¹⁸ : [> let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10 <]
+s12 : Slice U8
+index_mut_back4 : Slice U8 → Std.Array U8 1880#usize
+_✝¹⁷ :
+  [> let(s12, index_mut_back4) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back3 s11) { start := 104#usize, «end» := 112#usize } <]
+a : Std.Array U8 8#usize
+_✝¹⁶ : [> let a ← lift (core.num.U64.to_le_bytes common.checkpoint_sequence) <]
+s13 : Slice U8
+_✝¹⁵ : [> let s13 ← lift a.to_slice <]
+s14 : Slice U8
+_✝¹⁴ : [> let s14 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 s13 <]
+s15 : Slice U8
+index_mut_back5 : Slice U8 → Std.Array U8 1880#usize
+_✝¹³ :
+  [> let(s15, index_mut_back5) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back4 s14) { start := 112#usize, «end» := 144#usize } <]
+a1 : Std.Array U8 32#usize
+_✝¹² : [> let a1 ← nativeOps.digest common.historical_global_anchor <]
+s16 : Slice U8
+_✝¹¹ : [> let s16 ← lift a1.to_slice <]
+s17 : Slice U8
+_✝¹⁰ : [> let s17 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 s16 <]
+i2 : Usize
+_✝⁹ : [> let i2 ← pair_forest_terminal.PAYMENT_STATEMENT_OFFSET <]
+s18 : Slice U8
+index_mut_back6 : Slice U8 → Std.Array U8 1880#usize
+_✝⁸ :
+  [> let(s18, index_mut_back6) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back5 s17) { start := 144#usize, «end» := i2 } <]
+r1 : core.result.Result Unit pair_tree_profile.PoolV1PairLatePublicStatementErrorV1
+s19 : Slice U8
+_✝⁷ : [> let(r1, s19) ← nativeOps.late common.lane_transition s18 <]
+r2 : core.result.Result Unit pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+_✝⁶ :
+  [> let r2 ←
+    AspisS6FullForestEncoderNamed.core.result.Result.map_err
+      pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+      r1 () <]
+cf1 :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) Unit
+_✝⁵ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2 <]
+a✝ : Unit
+r3 : Std.Array U8 216#usize
+_✝⁴ : [> let r3 ← nativeOps.transfer payload <]
+x✝ : core.result.Result (Std.Array U8 216#usize) payment_relation.PoolV1PaymentStatementFormatError
+r4 : core.result.Result (Std.Array U8 216#usize) pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+_✝³ :
+  [> let r4 ←
+    AspisS6FullForestEncoderNamed.core.result.Result.map_err
+      pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+      x✝ () <]
+cf2 :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+    (Std.Array U8 216#usize)
+_✝² : [> let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4 <]
+val : Std.Array U8 216#usize
+s20 : Slice U8
+index_mut_back7 : Slice U8 → Std.Array U8 1880#usize
+_✝¹ :
+  [> let(s20, index_mut_back7) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8))
+      (index_mut_back6 s19) { start := i2 } <]
+s21 : Slice U8
+_✝ : [> let s21 ← lift val.to_slice <]
+s22 : Slice U8
+_ : [> let s22 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s20 s21 <]
+pay : ∃ encoded, ok (core.result.Result.Ok r3) = ok (core.result.Result.Ok encoded)
+r_post : r = core.result.Result.Ok ()
+cf_post :
+  core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok ()) =
+    ok (core.ops.control_flow.ControlFlow.Continue a✝¹)
+h✝² : cf = core.ops.control_flow.ControlFlow.Continue a✝¹
+s_post3 : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑(Array.repeat 1880#usize 0#u8)).setSlice! 0 ↑s'
+s_post1 : ↑s = List.slice 0 4 ↑(Array.repeat 1880#usize 0#u8)
+s_post2 : s.length = 4
+s1_post : s1 = pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice
+s2_post : s2 = pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice
+output2_post :
+  output2 =
+    (index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+      pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION
+i1_post : i1 = UScalar.cast UScalarTy.U8 (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer)
+output3_post :
+  output3 =
+    ((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+          pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+      5#usize (UScalar.cast UScalarTy.U8 (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))
+output4_post :
+  output4 =
+    (((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+              pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+          5#usize
+          (UScalar.cast UScalarTy.U8 (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+      6#usize format.POOL_V1_DIGEST_ENCODING_VERSION
+output5_post :
+  output5 =
+    ((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                  pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+              5#usize
+              (UScalar.cast UScalarTy.U8
+                (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+          6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+      7#usize common.output_lane
+s3_post1 :
+  ↑s3 =
+    List.slice 8 40
+      ↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                      pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                  5#usize
+                  (UScalar.cast UScalarTy.U8
+                    (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+              6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+          7#usize common.output_lane)
+s3_post2 : s3.length = 40 - 8
+s3_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back1 s') =
+      (↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                          pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                      5#usize
+                      (UScalar.cast UScalarTy.U8
+                        (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                  6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+              7#usize common.output_lane)).setSlice!
+        8 ↑s'
+s4_post : s4 = common.master_account.to_slice
+s5_post : s5 = common.master_account.to_slice
+s6_post1 :
+  ↑s6 =
+    List.slice 40 72
+      ((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                          pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                      5#usize
+                      (UScalar.cast UScalarTy.U8
+                        (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                  6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+              7#usize common.output_lane)).setSlice!
+        8 ↑common.master_account.to_slice)
+s6_post2 : s6.length = 72 - 40
+s6_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back2 s') =
+      ((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                              pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                          5#usize
+                          (UScalar.cast UScalarTy.U8
+                            (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                      6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                  7#usize common.output_lane)).setSlice!
+            8 ↑common.master_account.to_slice).setSlice!
+        40 ↑s'
+s7_post : s7 = common.checkpoint_account.to_slice
+s8_post : s8 = common.checkpoint_account.to_slice
+s9_post1 :
+  ↑s9 =
+    List.slice 72 104
+      (((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                              pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                          5#usize
+                          (UScalar.cast UScalarTy.U8
+                            (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                      6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                  7#usize common.output_lane)).setSlice!
+            8 ↑common.master_account.to_slice).setSlice!
+        40 ↑common.checkpoint_account.to_slice)
+s9_post2 : s9.length = 104 - 72
+s9_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back3 s') =
+      (((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                  pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                              5#usize
+                              (UScalar.cast UScalarTy.U8
+                                (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                          6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                      7#usize common.output_lane)).setSlice!
+                8 ↑common.master_account.to_slice).setSlice!
+            40 ↑common.checkpoint_account.to_slice).setSlice!
+        72 ↑s'
+s10_post : s10 = common.selected_lane_account.to_slice
+s11_post : s11 = common.selected_lane_account.to_slice
+s12_post1 :
+  ↑s12 =
+    List.slice 104 112
+      ((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                  pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                              5#usize
+                              (UScalar.cast UScalarTy.U8
+                                (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                          6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                      7#usize common.output_lane)).setSlice!
+                8 ↑common.master_account.to_slice).setSlice!
+            40 ↑common.checkpoint_account.to_slice).setSlice!
+        72 ↑common.selected_lane_account.to_slice)
+s12_post2 : s12.length = 112 - 104
+s12_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back4 s') =
+      ((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                      pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                  5#usize
+                                  (UScalar.cast UScalarTy.U8
+                                    (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                              6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                          7#usize common.output_lane)).setSlice!
+                    8 ↑common.master_account.to_slice).setSlice!
+                40 ↑common.checkpoint_account.to_slice).setSlice!
+            72 ↑common.selected_lane_account.to_slice).setSlice!
+        104 ↑s'
+a_post : a = core.num.U64.to_le_bytes common.checkpoint_sequence
+s13_post : s13 = (core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice
+s14_post : s14 = (core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice
+s15_post1 :
+  ↑s15 =
+    List.slice 112 144
+      (((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                      pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                  5#usize
+                                  (UScalar.cast UScalarTy.U8
+                                    (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                              6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                          7#usize common.output_lane)).setSlice!
+                    8 ↑common.master_account.to_slice).setSlice!
+                40 ↑common.checkpoint_account.to_slice).setSlice!
+            72 ↑common.selected_lane_account.to_slice).setSlice!
+        104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice)
+s15_post2 : s15.length = 144 - 112
+s15_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back5 s') =
+      (((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                          pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                      5#usize
+                                      (UScalar.cast UScalarTy.U8
+                                        (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                                  6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                              7#usize common.output_lane)).setSlice!
+                        8 ↑common.master_account.to_slice).setSlice!
+                    40 ↑common.checkpoint_account.to_slice).setSlice!
+                72 ↑common.selected_lane_account.to_slice).setSlice!
+            104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice).setSlice!
+        112 ↑s'
+a1_post : ↑a1 = AspisS6SourceCodec.DigestContents.chunks common.historical_global_anchor
+s16_post : s16 = a1.to_slice
+s17_post : s17 = a1.to_slice
+i2_post : ↑i2 = 1664
+s18_post1 :
+  ↑s18 =
+    List.slice 144 1664
+      ((((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                          pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                      5#usize
+                                      (UScalar.cast UScalarTy.U8
+                                        (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                                  6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                              7#usize common.output_lane)).setSlice!
+                        8 ↑common.master_account.to_slice).setSlice!
+                    40 ↑common.checkpoint_account.to_slice).setSlice!
+                72 ↑common.selected_lane_account.to_slice).setSlice!
+            104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice).setSlice!
+        112 ↑a1.to_slice)
+s18_post2 : s18.length = 1664 - 144
+s18_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back6 s') =
+      ((((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                              pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                          5#usize
+                                          (UScalar.cast UScalarTy.U8
+                                            (read_discriminant
+                                              historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                                      6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                                  7#usize common.output_lane)).setSlice!
+                            8 ↑common.master_account.to_slice).setSlice!
+                        40 ↑common.checkpoint_account.to_slice).setSlice!
+                    72 ↑common.selected_lane_account.to_slice).setSlice!
+                104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice).setSlice!
+            112 ↑a1.to_slice).setSlice!
+        144 ↑s'
+r1_post1 : r1 = core.result.Result.Ok ()
+r1_post2 : s19.length = 1520
+r1_post3 : nativeOps.late common.lane_transition s18 = ok (core.result.Result.Ok (), s19)
+r2_post : ∀ (value : Unit), True → r2 = core.result.Result.Ok value
+cf1_post : core.result.Result.Insts.CoreOpsTry.branch r2 = ok (core.ops.control_flow.ControlFlow.Continue a✝)
+h✝¹ : cf1 = core.ops.control_flow.ControlFlow.Continue a✝
+r3_post1 : x✝ = core.result.Result.Ok r3
+r3_post2 : nativeOps.transfer payload = ok (core.result.Result.Ok r3)
+r4_post :
+  ∀ (value : Std.Array U8 216#usize),
+    core.result.Result.Ok r3 = core.result.Result.Ok value → r4 = core.result.Result.Ok value
+cf2_post : core.result.Result.Insts.CoreOpsTry.branch r4 = ok (core.ops.control_flow.ControlFlow.Continue val)
+h✝ : cf2 = core.ops.control_flow.ControlFlow.Continue val
+s20_post1 :
+  ↑s20 =
+    List.drop 1664
+      (((((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                                              4#usize pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                          5#usize
+                                          (UScalar.cast UScalarTy.U8
+                                            (read_discriminant
+                                              historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                                      6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                                  7#usize common.output_lane)).setSlice!
+                            8 ↑common.master_account.to_slice).setSlice!
+                        40 ↑common.checkpoint_account.to_slice).setSlice!
+                    72 ↑common.selected_lane_account.to_slice).setSlice!
+                104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice).setSlice!
+            112 ↑a1.to_slice).setSlice!
+        144 ↑s19)
+s20_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back7 s') =
+      (((((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                                                  4#usize pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                              5#usize
+                                              (UScalar.cast UScalarTy.U8
+                                                (read_discriminant
+                                                  historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                                          6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                                      7#usize common.output_lane)).setSlice!
+                                8 ↑common.master_account.to_slice).setSlice!
+                            40 ↑common.checkpoint_account.to_slice).setSlice!
+                        72 ↑common.selected_lane_account.to_slice).setSlice!
+                    104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice).setSlice!
+                112 ↑a1.to_slice).setSlice!
+            144 ↑s19).setSlice!
+        1664 ↑s'
+s20_post2 : s20.length = 1880 - 1664
+s21_post : s21 = val.to_slice
+s22_post : s22 = val.to_slice
+good : r4 = core.result.Result.Ok r3
+same : val = r3
+cast_tag : UScalar.cast UScalarTy.U8 (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer) = 1#u8
+⊢ ((((((((((((List.replicate (↑1880#usize) 0#u8).setSlice! 0
+                                                  ↑pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC).set
+                                              (↑4#usize) pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                          (↑5#usize) 1#u8).set
+                                      (↑6#usize) format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                                  (↑7#usize) common.output_lane).setSlice!
+                              8 ↑common.master_account).setSlice!
+                          40 ↑common.checkpoint_account).setSlice!
+                      72 ↑common.selected_lane_account).setSlice!
+                  104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence)).setSlice!
+              112 (AspisS6SourceCodec.DigestContents.chunks common.historical_global_anchor)).setSlice!
+          144 ↑s19).setSlice!
+      1664 ↑r3 =
+    common_prefix common 1#u8 ++ ↑s19 ++ ↑r3
+common : pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+payload : payment_relation.PoolV1PrivateTransferPublicV1
+valid :
+  nativeOps.validate (pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer common payload) =
+    ok (core.result.Result.Ok ())
+late : late_ready common.lane_transition
+r : core.result.Result Unit pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+_✝³⁶ :
+  [> let r ←
+    nativeOps.validate (pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer common payload) <]
+cf :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) Unit
+_✝³⁵ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+a✝¹ : Unit
+s : Slice U8
+index_mut_back : Slice U8 → Std.Array U8 1880#usize
+_✝³⁴ :
+  [> let(s, index_mut_back) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8))
+      (Array.repeat 1880#usize 0#u8) { «end» := 4#usize } <]
+s1 : Slice U8
+_✝³³ : [> let s1 ← lift pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice <]
+s2 : Slice U8
+_✝³² : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1 <]
+output2 : Std.Array U8 1880#usize
+_✝³¹ : [> let output2 ← (index_mut_back s2).update 4#usize pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION <]
+i1 : U8
+_✝³⁰ :
+  [> let i1 ←
+    lift (UScalar.cast UScalarTy.U8 (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer)) <]
+output3 : Std.Array U8 1880#usize
+_✝²⁹ : [> let output3 ← output2.update 5#usize i1 <]
+output4 : Std.Array U8 1880#usize
+_✝²⁸ : [> let output4 ← output3.update 6#usize format.POOL_V1_DIGEST_ENCODING_VERSION <]
+output5 : Std.Array U8 1880#usize
+_✝²⁷ : [> let output5 ← output4.update 7#usize common.output_lane <]
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Std.Array U8 1880#usize
+_✝²⁶ :
+  [> let(s3, index_mut_back1) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output5
+      { start := 8#usize, «end» := 40#usize } <]
+s4 : Slice U8
+_✝²⁵ : [> let s4 ← lift common.master_account.to_slice <]
+s5 : Slice U8
+_✝²⁴ : [> let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4 <]
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Std.Array U8 1880#usize
+_✝²³ :
+  [> let(s6, index_mut_back2) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back1 s5) { start := 40#usize, «end» := 72#usize } <]
+s7 : Slice U8
+_✝²² : [> let s7 ← lift common.checkpoint_account.to_slice <]
+s8 : Slice U8
+_✝²¹ : [> let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7 <]
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Std.Array U8 1880#usize
+_✝²⁰ :
+  [> let(s9, index_mut_back3) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back2 s8) { start := 72#usize, «end» := 104#usize } <]
+s10 : Slice U8
+_✝¹⁹ : [> let s10 ← lift common.selected_lane_account.to_slice <]
+s11 : Slice U8
+_✝¹⁸ : [> let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10 <]
+s12 : Slice U8
+index_mut_back4 : Slice U8 → Std.Array U8 1880#usize
+_✝¹⁷ :
+  [> let(s12, index_mut_back4) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back3 s11) { start := 104#usize, «end» := 112#usize } <]
+a : Std.Array U8 8#usize
+_✝¹⁶ : [> let a ← lift (core.num.U64.to_le_bytes common.checkpoint_sequence) <]
+s13 : Slice U8
+_✝¹⁵ : [> let s13 ← lift a.to_slice <]
+s14 : Slice U8
+_✝¹⁴ : [> let s14 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 s13 <]
+s15 : Slice U8
+index_mut_back5 : Slice U8 → Std.Array U8 1880#usize
+_✝¹³ :
+  [> let(s15, index_mut_back5) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back4 s14) { start := 112#usize, «end» := 144#usize } <]
+a1 : Std.Array U8 32#usize
+_✝¹² : [> let a1 ← nativeOps.digest common.historical_global_anchor <]
+s16 : Slice U8
+_✝¹¹ : [> let s16 ← lift a1.to_slice <]
+s17 : Slice U8
+_✝¹⁰ : [> let s17 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 s16 <]
+i2 : Usize
+_✝⁹ : [> let i2 ← pair_forest_terminal.PAYMENT_STATEMENT_OFFSET <]
+s18 : Slice U8
+index_mut_back6 : Slice U8 → Std.Array U8 1880#usize
+_✝⁸ :
+  [> let(s18, index_mut_back6) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back5 s17) { start := 144#usize, «end» := i2 } <]
+r1 : core.result.Result Unit pair_tree_profile.PoolV1PairLatePublicStatementErrorV1
+s19 : Slice U8
+_✝⁷ : [> let(r1, s19) ← nativeOps.late common.lane_transition s18 <]
+r2 : core.result.Result Unit pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+_✝⁶ :
+  [> let r2 ←
+    AspisS6FullForestEncoderNamed.core.result.Result.map_err
+      pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+      r1 () <]
+cf1 :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) Unit
+_✝⁵ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2 <]
+a✝ : Unit
+r3 : Std.Array U8 216#usize
+_✝⁴ : [> let r3 ← nativeOps.transfer payload <]
+x✝ : core.result.Result (Std.Array U8 216#usize) payment_relation.PoolV1PaymentStatementFormatError
+r4 : core.result.Result (Std.Array U8 216#usize) pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+_✝³ :
+  [> let r4 ←
+    AspisS6FullForestEncoderNamed.core.result.Result.map_err
+      pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+      x✝ () <]
+cf2 :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+    (Std.Array U8 216#usize)
+_✝² : [> let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4 <]
+val : Std.Array U8 216#usize
+s20 : Slice U8
+index_mut_back7 : Slice U8 → Std.Array U8 1880#usize
+_✝¹ :
+  [> let(s20, index_mut_back7) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8))
+      (index_mut_back6 s19) { start := i2 } <]
+s21 : Slice U8
+_✝ : [> let s21 ← lift val.to_slice <]
+s22 : Slice U8
+_ : [> let s22 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s20 s21 <]
+pay : ∃ encoded, ok (core.result.Result.Ok r3) = ok (core.result.Result.Ok encoded)
+r_post : r = core.result.Result.Ok ()
+cf_post :
+  core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok ()) =
+    ok (core.ops.control_flow.ControlFlow.Continue a✝¹)
+h✝² : cf = core.ops.control_flow.ControlFlow.Continue a✝¹
+s_post3 : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑(Array.repeat 1880#usize 0#u8)).setSlice! 0 ↑s'
+s_post1 : ↑s = List.slice 0 4 ↑(Array.repeat 1880#usize 0#u8)
+s_post2 : s.length = 4
+s1_post : s1 = pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice
+s2_post : s2 = pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice
+output2_post :
+  output2 =
+    (index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+      pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION
+i1_post : i1 = UScalar.cast UScalarTy.U8 (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer)
+output3_post :
+  output3 =
+    ((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+          pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+      5#usize (UScalar.cast UScalarTy.U8 (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))
+output4_post :
+  output4 =
+    (((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+              pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+          5#usize
+          (UScalar.cast UScalarTy.U8 (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+      6#usize format.POOL_V1_DIGEST_ENCODING_VERSION
+output5_post :
+  output5 =
+    ((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                  pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+              5#usize
+              (UScalar.cast UScalarTy.U8
+                (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+          6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+      7#usize common.output_lane
+s3_post1 :
+  ↑s3 =
+    List.slice 8 40
+      ↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                      pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                  5#usize
+                  (UScalar.cast UScalarTy.U8
+                    (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+              6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+          7#usize common.output_lane)
+s3_post2 : s3.length = 40 - 8
+s3_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back1 s') =
+      (↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                          pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                      5#usize
+                      (UScalar.cast UScalarTy.U8
+                        (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                  6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+              7#usize common.output_lane)).setSlice!
+        8 ↑s'
+s4_post : s4 = common.master_account.to_slice
+s5_post : s5 = common.master_account.to_slice
+s6_post1 :
+  ↑s6 =
+    List.slice 40 72
+      ((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                          pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                      5#usize
+                      (UScalar.cast UScalarTy.U8
+                        (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                  6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+              7#usize common.output_lane)).setSlice!
+        8 ↑common.master_account.to_slice)
+s6_post2 : s6.length = 72 - 40
+s6_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back2 s') =
+      ((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                              pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                          5#usize
+                          (UScalar.cast UScalarTy.U8
+                            (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                      6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                  7#usize common.output_lane)).setSlice!
+            8 ↑common.master_account.to_slice).setSlice!
+        40 ↑s'
+s7_post : s7 = common.checkpoint_account.to_slice
+s8_post : s8 = common.checkpoint_account.to_slice
+s9_post1 :
+  ↑s9 =
+    List.slice 72 104
+      (((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                              pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                          5#usize
+                          (UScalar.cast UScalarTy.U8
+                            (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                      6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                  7#usize common.output_lane)).setSlice!
+            8 ↑common.master_account.to_slice).setSlice!
+        40 ↑common.checkpoint_account.to_slice)
+s9_post2 : s9.length = 104 - 72
+s9_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back3 s') =
+      (((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                  pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                              5#usize
+                              (UScalar.cast UScalarTy.U8
+                                (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                          6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                      7#usize common.output_lane)).setSlice!
+                8 ↑common.master_account.to_slice).setSlice!
+            40 ↑common.checkpoint_account.to_slice).setSlice!
+        72 ↑s'
+s10_post : s10 = common.selected_lane_account.to_slice
+s11_post : s11 = common.selected_lane_account.to_slice
+s12_post1 :
+  ↑s12 =
+    List.slice 104 112
+      ((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                  pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                              5#usize
+                              (UScalar.cast UScalarTy.U8
+                                (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                          6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                      7#usize common.output_lane)).setSlice!
+                8 ↑common.master_account.to_slice).setSlice!
+            40 ↑common.checkpoint_account.to_slice).setSlice!
+        72 ↑common.selected_lane_account.to_slice)
+s12_post2 : s12.length = 112 - 104
+s12_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back4 s') =
+      ((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                      pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                  5#usize
+                                  (UScalar.cast UScalarTy.U8
+                                    (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                              6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                          7#usize common.output_lane)).setSlice!
+                    8 ↑common.master_account.to_slice).setSlice!
+                40 ↑common.checkpoint_account.to_slice).setSlice!
+            72 ↑common.selected_lane_account.to_slice).setSlice!
+        104 ↑s'
+a_post : a = core.num.U64.to_le_bytes common.checkpoint_sequence
+s13_post : s13 = (core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice
+s14_post : s14 = (core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice
+s15_post1 :
+  ↑s15 =
+    List.slice 112 144
+      (((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                      pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                  5#usize
+                                  (UScalar.cast UScalarTy.U8
+                                    (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                              6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                          7#usize common.output_lane)).setSlice!
+                    8 ↑common.master_account.to_slice).setSlice!
+                40 ↑common.checkpoint_account.to_slice).setSlice!
+            72 ↑common.selected_lane_account.to_slice).setSlice!
+        104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice)
+s15_post2 : s15.length = 144 - 112
+s15_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back5 s') =
+      (((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                          pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                      5#usize
+                                      (UScalar.cast UScalarTy.U8
+                                        (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                                  6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                              7#usize common.output_lane)).setSlice!
+                        8 ↑common.master_account.to_slice).setSlice!
+                    40 ↑common.checkpoint_account.to_slice).setSlice!
+                72 ↑common.selected_lane_account.to_slice).setSlice!
+            104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice).setSlice!
+        112 ↑s'
+a1_post : ↑a1 = AspisS6SourceCodec.DigestContents.chunks common.historical_global_anchor
+s16_post : s16 = a1.to_slice
+s17_post : s17 = a1.to_slice
+i2_post : ↑i2 = 1664
+s18_post1 :
+  ↑s18 =
+    List.slice 144 1664
+      ((((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                          pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                      5#usize
+                                      (UScalar.cast UScalarTy.U8
+                                        (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                                  6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                              7#usize common.output_lane)).setSlice!
+                        8 ↑common.master_account.to_slice).setSlice!
+                    40 ↑common.checkpoint_account.to_slice).setSlice!
+                72 ↑common.selected_lane_account.to_slice).setSlice!
+            104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice).setSlice!
+        112 ↑a1.to_slice)
+s18_post2 : s18.length = 1664 - 144
+s18_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back6 s') =
+      ((((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set 4#usize
+                                              pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                          5#usize
+                                          (UScalar.cast UScalarTy.U8
+                                            (read_discriminant
+                                              historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                                      6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                                  7#usize common.output_lane)).setSlice!
+                            8 ↑common.master_account.to_slice).setSlice!
+                        40 ↑common.checkpoint_account.to_slice).setSlice!
+                    72 ↑common.selected_lane_account.to_slice).setSlice!
+                104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice).setSlice!
+            112 ↑a1.to_slice).setSlice!
+        144 ↑s'
+r1_post1 : r1 = core.result.Result.Ok ()
+r1_post2 : s19.length = 1520
+r1_post3 : nativeOps.late common.lane_transition s18 = ok (core.result.Result.Ok (), s19)
+r2_post : ∀ (value : Unit), True → r2 = core.result.Result.Ok value
+cf1_post : core.result.Result.Insts.CoreOpsTry.branch r2 = ok (core.ops.control_flow.ControlFlow.Continue a✝)
+h✝¹ : cf1 = core.ops.control_flow.ControlFlow.Continue a✝
+r3_post1 : x✝ = core.result.Result.Ok r3
+r3_post2 : nativeOps.transfer payload = ok (core.result.Result.Ok r3)
+r4_post :
+  ∀ (value : Std.Array U8 216#usize),
+    core.result.Result.Ok r3 = core.result.Result.Ok value → r4 = core.result.Result.Ok value
+cf2_post : core.result.Result.Insts.CoreOpsTry.branch r4 = ok (core.ops.control_flow.ControlFlow.Continue val)
+h✝ : cf2 = core.ops.control_flow.ControlFlow.Continue val
+s20_post1 :
+  ↑s20 =
+    List.drop 1664
+      (((((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                                              4#usize pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                          5#usize
+                                          (UScalar.cast UScalarTy.U8
+                                            (read_discriminant
+                                              historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                                      6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                                  7#usize common.output_lane)).setSlice!
+                            8 ↑common.master_account.to_slice).setSlice!
+                        40 ↑common.checkpoint_account.to_slice).setSlice!
+                    72 ↑common.selected_lane_account.to_slice).setSlice!
+                104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice).setSlice!
+            112 ↑a1.to_slice).setSlice!
+        144 ↑s19)
+s20_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back7 s') =
+      (((((((↑(((((index_mut_back pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                                                  4#usize pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                              5#usize
+                                              (UScalar.cast UScalarTy.U8
+                                                (read_discriminant
+                                                  historical_anchor.PoolV1TransitionKind.PrivateTransfer))).set
+                                          6#usize format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                                      7#usize common.output_lane)).setSlice!
+                                8 ↑common.master_account.to_slice).setSlice!
+                            40 ↑common.checkpoint_account.to_slice).setSlice!
+                        72 ↑common.selected_lane_account.to_slice).setSlice!
+                    104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice).setSlice!
+                112 ↑a1.to_slice).setSlice!
+            144 ↑s19).setSlice!
+        1664 ↑s'
+s20_post2 : s20.length = 1880 - 1664
+s21_post : s21 = val.to_slice
+s22_post : s22 = val.to_slice
+good : r4 = core.result.Result.Ok r3
+same : val = r3
+cast_tag : UScalar.cast UScalarTy.U8 (read_discriminant historical_anchor.PoolV1TransitionKind.PrivateTransfer) = 1#u8
+⊢ ((((((((((((List.replicate (↑1880#usize) 0#u8).setSlice! 0
+                                                  ↑pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC).set
+                                              (↑4#usize) pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                          (↑5#usize) 1#u8).set
+                                      (↑6#usize) format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                                  (↑7#usize) common.output_lane).setSlice!
+                              8 ↑common.master_account).setSlice!
+                          40 ↑common.checkpoint_account).setSlice!
+                      72 ↑common.selected_lane_account).setSlice!
+                  104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence)).setSlice!
+              112 (AspisS6SourceCodec.DigestContents.chunks common.historical_global_anchor)).setSlice!
+          144 ↑s19).setSlice!
+      1664 ↑r3 =
+    common_prefix common 1#u8 ++ ↑s19 ++ ↑r3
+'AspisS6OuterEncoderContents.transfer_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6OuterEncoderContents.withdrawal_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6OuterEncoderContents.late_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6OuterEncoderContents.digest_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6OuterEncoderContents.private_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

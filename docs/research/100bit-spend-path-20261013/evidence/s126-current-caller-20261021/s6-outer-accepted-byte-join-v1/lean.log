@@ -1,0 +1,25 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6OuterAcceptedByteJoinV1.lean:21:121: error: Tactic `rfl` failed: The left-hand side
+  AspisS6OuterByteLayout.common_prefix (fromPoolV1PairForestTerminalCommonV1 common)
+    (AspisS6NativeForestDecode.statement_tag statement)
+is not definitionally equal to the right-hand side
+  AspisS6NativeForestDecode.common_prefix statement common
+
+bytes : Slice U8
+statement : PoolV1PairForestTerminalStatementV1
+accepted : decode_pool_v1_pair_forest_terminal_statement_v1 bytes = ok (core.result.Result.Ok statement)
+common : PoolV1PairForestTerminalCommonV1
+common_run : statement.common = ok common
+raw : Std.Array U8 1880#usize
+raw_bytes : ↑raw = ↑bytes
+header : AspisS6NativeForestDecode.header_frame raw statement
+right✝ :
+  AspisS6NativeForestDecode.payment_frame bytes statement ∧
+    validate_pool_v1_pair_forest_terminal_statement_v1 statement = ok (core.result.Result.Ok ())
+fields : AspisS6NativeForestDecode.common_frame bytes common
+⊢ AspisS6OuterByteLayout.common_prefix (fromPoolV1PairForestTerminalCommonV1 common)
+      (AspisS6NativeForestDecode.statement_tag statement) =
+    AspisS6NativeForestDecode.common_prefix statement common
+'AspisS6OuterAcceptedByteJoin.common_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS6OuterAcceptedByteJoin.late_contents' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6OuterAcceptedByteJoin.transfer_contents' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS6OuterAcceptedByteJoin.withdrawal_contents' depends on axioms: [propext, Classical.choice, Quot.sound]
