@@ -1,0 +1,23 @@
+@AspisR1.SelectedCircleWeights.circleWeight_base4 : ∀ {F : Type u_1} [inst : Field F] [NeZero 2] (x y : F)
+  (j : Fin 1024),
+  AspisR1.SelectedCircleWeightModel.circleWeight x y ↑j =
+    AspisR1.SelectedCircleWeights.firstFactor x y ⟨↑j % 4, ⋯⟩ *
+            AspisR1.SelectedCircleWeights.radixFactor (AspisCircleTensorBinding.doubledFactor x 1) ⟨↑j / 4 % 4, ⋯⟩ *
+          AspisR1.SelectedCircleWeights.radixFactor
+            (AspisCircleTensorBinding.doubledFactor (AspisCircleTensorBinding.doubledFactor x 1) 2) ⟨↑j / 16 % 4, ⋯⟩ *
+        AspisR1.SelectedCircleWeights.radixFactor
+          (AspisCircleTensorBinding.doubledFactor
+            (AspisCircleTensorBinding.doubledFactor (AspisCircleTensorBinding.doubledFactor x 1) 2) 2)
+          ⟨↑j / 64 % 4, ⋯⟩ *
+      AspisR1.SelectedCircleWeights.radixFactor
+        (AspisCircleTensorBinding.doubledFactor
+          (AspisCircleTensorBinding.doubledFactor
+            (AspisCircleTensorBinding.doubledFactor (AspisCircleTensorBinding.doubledFactor x 1) 2) 2)
+          2)
+        ⟨↑j / 256 % 4, ⋯⟩
+'AspisR1S9CircleTensorGenericV1.base_next' depends on axioms: [propext, Quot.sound]
+'AspisR1S9CircleTensorGenericV1.circle_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9CircleTensorGenericV1.circle_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9CircleTensorGenericV1.circle_tensor_eq_circleWeight' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
