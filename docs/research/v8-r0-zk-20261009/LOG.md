@@ -9045,3 +9045,44 @@ release proof is claimed. Stage-3 budget used 60/100 Lean and 42/60 Kani;
 continuation has 40 Lean and 18 Kani remaining, IDs beginning 11262 through
 11399 subject to collision checks. Absolute quiet-host timing remains open.
 See candidate `design/PROVER-RW-20261024-STAGE3-CONTINUATION.md`.
+
+
+## D191 (lead, 2026-10-24 11:29 UK): effect packet reviewed; explicit entropy plumbing preflight
+
+Candidate `748e710252` retains the fixed-pure-dictionary obstruction and adds
+checked factoring of the emitted entropy owner. `ProverRwEffectOwner.pure_owner_eq`
+and `ProverRwEffectRetry.client_retry` connect only the PURE specialization to
+the emitted owner/callback. `owner_zero_then_one` proves the separate world
+interpreter's two-read regression. The lead inspected these complete statements:
+there is no native worldOwner equality or E1/L1/L2 transport theorem. The pinned
+backend inspection finds no implemented implicit-world extraction option.
+
+Read-only final-source/receipt/axiom checks pass. Worker audit 11288: exit 0,
+1.80 s, RSS 4,264,628 KiB, swap 0, source 45e27024aa and exact hashes, standard
+axioms. No new shipped changes or derived files over 5 MB. This remains on the
+unmerged adoption candidate. Existing evidence was reused; no proof replay,
+new native identity, privacy closure or new trust item is accepted.
+
+D187 already authorizes a proof-friendly host prover rewrite as a gated
+candidate. Within that scope, authorize an explicit entropy-state/coin-provider
+interface in the HOST candidate, after a committed design and extraction
+preflight. Preserve actual OS draw order and count, nonce rejection, entropy
+error mapping, zero-buffer/zeroization behaviour, cap16 and outer retry behaviour,
+including errors. State must actually distinguish successive calls and be
+threaded across the complete retry owner; a constant ghost token or a reset
+cursor cannot stand in for fresh effects. The native OS leaf must remain tied
+to the exact existing E1 boundary; do not assume a whole-owner equivalence,
+introduce new freshness/trust, or rename a missing source proof as an assumption.
+The fixed-tape coupling must use the same event sequence, not merely equal
+successful outputs. If this cannot be justified under the existing boundary,
+stop the dependent source change with a concrete minimal decision for review.
+
+First align the candidate with the already-approved H5 source change from
+research. Any host refactor remains UNADOPTED pending source/effect equivalence,
+relevant differential and L1/L2 gates, all three current ELF identities, and
+quiet-host <15 s plus <=10% slowdown. Never change frozen verifier bytes or
+adopt a backend patch/new extraction trust. Preserve all historical source and
+counterexample evidence. Stage-3 budget is 84/100 Lean and 42/60 Kani used;
+this preflight gets only the remaining 16 Lean and 18 Kani, IDs starting11289
+through11399 subject to used-ID checks. A broader follow-up needs lead review
+of this concrete preflight, not an unannounced budget reset.
