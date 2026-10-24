@@ -1,0 +1,61 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngOwnerInduction.lean:14:29: error: unsolved goals
+case ok
+inst✝ : ErasureFns
+A B C : Type
+p : B → Prop
+k : A → Result (ControlFlow B C)
+v✝ : A
+h : ∀ (a : A) (next : B), k a = ok (cont next) → p next
+⊢ ∀ (next : B), k v✝ = ok (cont next) → p next
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngOwnerInduction.lean:28:2: error: Type mismatch: After simplification, term
+  hv
+ has type
+  @Eq ℕ next.bv.toNat (retry.bv.toNat + 1#usize.bv.toNat)
+but is expected to have type
+  @Eq ℕ next.bv.toNat (retry.bv.toNat + 1)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngOwnerInduction.lean:47:21: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngOwnerInduction.lean:47:21: error: `simp` made no progress
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngOwnerInduction.lean:55:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ProverRwRngControl.body ?m.150 nonce 16#usize p retry
+in the target expression
+  Continues (fun next => retry < 16#usize ∧ ↑next.2 = ↑retry + 1)
+    (StateOnlyAttemptSecrets.generate_with_loop.body Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize p retry)
+
+case neg
+inst✝ : ErasureFns
+nonce : Std.Array U8 32#usize
+p : Tape
+retry : Usize
+below : ¬retry < 16#usize
+⊢ Continues (fun next => retry < 16#usize ∧ ↑next.2 = ↑retry + 1)
+    (StateOnlyAttemptSecrets.generate_with_loop.body Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize p retry)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.ProverRwRngOwnerInduction.continues_bind' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverRwRngOwnerInduction.add_progress' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngOwnerInduction.body_progress' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Aeneas.Std.loop.fixpoint_induct.{u, v} {α : Type u} {β : Type v} (body : α → Result (ControlFlow α β))
+  (motive : (α → Result β) → Prop) (adm : Lean.Order.admissible motive)
+  (h :
+    ∀ (loop : α → Result β),
+      motive loop →
+        motive fun x =>
+          match body x with
+          | ok r =>
+            match r with
+            | cont x => loop x
+            | done x => ok x
+          | fail e => fail e
+          | div => div) :
+  motive (loop body)
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

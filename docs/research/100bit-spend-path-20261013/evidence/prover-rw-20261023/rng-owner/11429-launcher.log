@@ -1,0 +1,36 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1215); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngOwnerBridge.lean:44:8: error: Type mismatch: After simplification, term
+  recurse
+ has type
+  @Eq (Result (core.result.Result StateOnlyAttemptSecrets StateOnlyAttemptEntropyError × Tape))
+    (loop (fun x => StateOnlyAttemptSecrets.old_loop.body nonce 16#usize x.1 x.2) (next.1, next.2))
+    (mapResult Prod.swap
+      (loop
+        (fun x =>
+          StateOnlyAttemptSecrets.generate_with_loop.body Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize x.1
+            x.2)
+        (next.1, next.2)))
+but is expected to have type
+  @Eq (Result (Status × Tape))
+    (match mapResult swapDone (ok (cont next)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fun state => StateOnlyAttemptSecrets.old_loop.body nonce 16#usize state.1 state.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div)
+    (mapResult Prod.swap
+      (loop
+        (fun state =>
+          StateOnlyAttemptSecrets.generate_with_loop.body Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize
+            state.1 state.2)
+        next))
+'R1Z.ProverRwRngOwnerBridge.loops_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngOwnerBridge.owners_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.53
+	Maximum resident set size (kbytes): 3844512
+	Swaps: 0
+	Exit status: 1

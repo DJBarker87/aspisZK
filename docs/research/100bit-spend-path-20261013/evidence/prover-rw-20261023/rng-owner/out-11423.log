@@ -1,0 +1,101 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngOwnerBridge.lean:25:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  StateOnlyAttemptSecrets.old_loop.body ?nonce ?limit ?p ?retry
+in the target expression
+  (match
+      match (p, retry) with
+      | (tape1, retry1) => StateOnlyAttemptSecrets.old_loop.body nonce 16#usize tape1 retry1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (tape1, retry1) => StateOnlyAttemptSecrets.old_loop.body nonce 16#usize tape1 retry1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    mapResult Prod.swap
+      (match
+        match (p, retry) with
+        | (provider1, retry1) =>
+          StateOnlyAttemptSecrets.generate_with_loop.body Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize
+            provider1 retry1 with
+      | ok r =>
+        match r with
+        | cont x =>
+          loop
+            (fun x =>
+              match x with
+              | (provider1, retry1) =>
+                StateOnlyAttemptSecrets.generate_with_loop.body Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize
+                  provider1 retry1)
+            x
+        | done x => ok x
+      | fail e => fail e
+      | div => div)
+
+case h
+inst✝ : ErasureFns
+nonce : Std.Array U8 32#usize
+p✝ : Tape
+retry✝ : Usize
+fuel : ℕ
+ih :
+  ∀ m < fuel,
+    ∀ (p : Tape) (retry : Usize),
+      17 - ↑retry = m →
+        StateOnlyAttemptSecrets.old_loop nonce p 16#usize retry =
+          mapResult Prod.swap
+            (StateOnlyAttemptSecrets.generate_with_loop Tape.Insts.Prover_rw_rng_preflightDraw64 nonce p 16#usize retry)
+p : Tape
+retry : Usize
+hf : 17 - ↑retry = fuel
+⊢ (match
+      match (p, retry) with
+      | (tape1, retry1) => StateOnlyAttemptSecrets.old_loop.body nonce 16#usize tape1 retry1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (tape1, retry1) => StateOnlyAttemptSecrets.old_loop.body nonce 16#usize tape1 retry1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    mapResult Prod.swap
+      (match
+        match (p, retry) with
+        | (provider1, retry1) =>
+          StateOnlyAttemptSecrets.generate_with_loop.body Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize
+            provider1 retry1 with
+      | ok r =>
+        match r with
+        | cont x =>
+          loop
+            (fun x =>
+              match x with
+              | (provider1, retry1) =>
+                StateOnlyAttemptSecrets.generate_with_loop.body Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize
+                  provider1 retry1)
+            x
+        | done x => ok x
+      | fail e => fail e
+      | div => div)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.ProverRwRngOwnerBridge.loops_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngOwnerBridge.owners_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

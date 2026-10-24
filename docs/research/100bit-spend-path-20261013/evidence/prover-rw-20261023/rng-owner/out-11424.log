@@ -1,0 +1,53 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngOwnerBridge.lean:25:4: error: 'change' tactic failed, pattern
+  (match StateOnlyAttemptSecrets.old_loop.body nonce 16#usize p retry with
+    | ok (cont next) => StateOnlyAttemptSecrets.old_loop nonce next.1 16#usize next.2
+    | ok (done result) => ok result
+    | fail e => fail e
+    | div => div) =
+    mapResult Prod.swap
+      (match
+        StateOnlyAttemptSecrets.generate_with_loop.body Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize p
+          retry with
+      | ok (cont next) =>
+        StateOnlyAttemptSecrets.generate_with_loop Tape.Insts.Prover_rw_rng_preflightDraw64 nonce next.1 16#usize next.2
+      | ok (done result) => ok result
+      | fail e => fail e
+      | div => div)
+is not definitionally equal to target
+  (match
+      match (p, retry) with
+      | (tape1, retry1) => StateOnlyAttemptSecrets.old_loop.body nonce 16#usize tape1 retry1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (tape1, retry1) => StateOnlyAttemptSecrets.old_loop.body nonce 16#usize tape1 retry1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    mapResult Prod.swap
+      (match
+        match (p, retry) with
+        | (provider1, retry1) =>
+          StateOnlyAttemptSecrets.generate_with_loop.body Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize
+            provider1 retry1 with
+      | ok r =>
+        match r with
+        | cont x =>
+          loop
+            (fun x =>
+              match x with
+              | (provider1, retry1) =>
+                StateOnlyAttemptSecrets.generate_with_loop.body Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize
+                  provider1 retry1)
+            x
+        | done x => ok x
+      | fail e => fail e
+      | div => div)
+'R1Z.ProverRwRngOwnerBridge.loops_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngOwnerBridge.owners_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

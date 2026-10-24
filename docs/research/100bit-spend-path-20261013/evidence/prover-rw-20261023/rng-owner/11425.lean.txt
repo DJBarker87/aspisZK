@@ -1,0 +1,77 @@
+import R1Z.ProverRwRngOwnerInduction
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwRngOwnerBridge
+open Aeneas Aeneas.Std Result ControlFlow ProverRwRng
+open ProverRwRngOwnerStep ProverRwRngOwnerInduction
+variable [ErasureFns]
+
+theorem loops_same (nonce : Array U8 32#usize) (p : Tape) (retry : Usize) :
+    StateOnlyAttemptSecrets.old_loop nonce p 16#usize retry =
+      mapResult Prod.swap (StateOnlyAttemptSecrets.generate_with_loop
+        Tape.Insts.Prover_rw_rng_preflightDraw64 nonce p 16#usize retry) := by
+  suffices ∀ fuel p retry, 17 - retry.val = fuel →
+      StateOnlyAttemptSecrets.old_loop nonce p 16#usize retry =
+        mapResult Prod.swap (StateOnlyAttemptSecrets.generate_with_loop
+          Tape.Insts.Prover_rw_rng_preflightDraw64 nonce p 16#usize retry) by
+    exact this _ p retry rfl
+  intro fuel
+  induction fuel using Nat.strong_induction_on with
+  | h fuel ih =>
+    intro p retry hf
+    unfold StateOnlyAttemptSecrets.old_loop StateOnlyAttemptSecrets.generate_with_loop
+    conv_lhs => rw [loop]
+    conv_rhs => rw [loop]
+    change (match StateOnlyAttemptSecrets.old_loop.body nonce 16#usize p retry with
+      | .ok flow => match flow with
+        | .cont next => StateOnlyAttemptSecrets.old_loop nonce next.1 16#usize next.2
+        | .done result => .ok result
+      | .fail e => .fail e
+      | .div => .div) = mapResult Prod.swap
+        (match StateOnlyAttemptSecrets.generate_with_loop.body
+          Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize p retry with
+        | .ok flow => match flow with
+          | .cont next => StateOnlyAttemptSecrets.generate_with_loop
+              Tape.Insts.Prover_rw_rng_preflightDraw64 nonce next.1 16#usize next.2
+          | .done result => .ok result
+        | .fail e => .fail e
+        | .div => .div)
+    rw [body_same]
+    cases step : StateOnlyAttemptSecrets.generate_with_loop.body
+      Tape.Insts.Prover_rw_rng_preflightDraw64 nonce 16#usize p retry with
+    | fail e => rfl
+    | div => rfl
+    | ok flow =>
+      cases flow with
+      | done result => rcases result with ⟨after,status⟩; rfl
+      | cont next =>
+        obtain ⟨below,increased⟩ := body_progress nonce p retry next step
+        have belowNat : retry.val < 16 := by exact below
+        have less : 17 - next.2.val < fuel := by omega
+        exact ih _ less next.1 next.2 rfl
+
+/-- All nonces and all finite providers, including every u8 OS-error tag and
+arbitrary partial writes. Equality includes the entire returned provider.
+Extraction-level tape unavailability is preserved as extraction failure. -/
+theorem owners_same (nonce : Array U8 32#usize) (p : Tape) :
+    old_owner nonce p = owner nonce p := by
+  unfold old_owner StateOnlyAttemptSecrets.old owner StateOnlyAttemptSecrets.generate_with
+  cases admitted : entropy_nonzero32 nonce with
+  | fail e => rfl
+  | div => rfl
+  | ok b =>
+    cases b with
+    | false => rfl
+    | true =>
+      simp only [bind_tc_ok,if_true]
+      unfold ENTROPY_RETRY_LIMIT
+      rw [loops_same]
+      cases StateOnlyAttemptSecrets.generate_with_loop
+        Tape.Insts.Prover_rw_rng_preflightDraw64 nonce p 16#usize 0#usize with
+      | fail e => rfl
+      | div => rfl
+      | ok result => rcases result with ⟨after,status⟩; rfl
+
+#print axioms loops_same
+#print axioms owners_same
+end R1Z.ProverRwRngOwnerBridge
