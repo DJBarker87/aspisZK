@@ -94,3 +94,20 @@ No production edit before the concrete source/effect proof. All three current
 ELF gates, fixedcoin1000/identical proof bytes/native refinement/events/E1/
 L1/L2/L3/selectedclient/quiet median<15s and <=10% slowdown remain adoption gates.
 Both deployed targets not yet established.
+
+## Optional second focused check: executed erasure comparison
+
+If058 completes, use059 for a concrete paired execution, not a generic premise.
+Compile the same selected native draw/resume source twice: once with the hooked
+job dependency and once with an unmodified zeroize lib source copy (separate
+package name solely to give Cargo two path identities). Both call literal
+getrandom::fill, stubbed to the same arbitrary postbuffer/outcome/error. Both
+execute their original actual Drop/Zeroize operations, including returned-owner
+disposal. Compare exact control/result/error/nonce and all returned payload bytes
+via independent symbolic coordinates. Assert the external provider ledger
+survives both errors. This establishes only a sequential Kani observation relation
+for this concrete one-draw source; no native semantics, cross-move identity,
+whole-driver or probability law is thereby proved. Pairing equal primitive
+inputs is deterministic coupling, not an independence/freshness premise.
+Keep full aliasing/native erasure, panic/unwind and hardware limits explicit.
+Do not run059 after a denied admission; do not rerun058 on resource failure.
